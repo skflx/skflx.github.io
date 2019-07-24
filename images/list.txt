@@ -1,1 +1,1 @@
-me_jpg: image of me
+me_large.jpg: image of me
