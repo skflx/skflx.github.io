@@ -1,3 +1,3 @@
 # skflx.github.io
-### My own (test) personal website
+### My personal website
 ##### I'm still figuring all this out.
