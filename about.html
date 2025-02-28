@@ -1,48 +1,400 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <title> @skflx </title>
-  <!-- link to main stylesheet -->
-  <link rel="stylesheet" type="text/css" href="/css/main.css">
-</head>
-
-  <!--inserted BG color here since didn't work calling it into body{} in the CSS -->
-<body style = "background-color: pink;">
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="https://twitter.com/skflx">Twitter</a></li>
-    </ul>
-  </nav>
-  
-  <br> </br>
-  <div class="container">
-    <div class="blurb">
-      <!–– This is the page header ––>
-      <h1>About Me</h1>
-      <br> </br>
-      <!–– Here are the content paragraphs––>
-      <p>This page is currently under construction. Check back soon!
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Dr. Samip Kafle</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        /* Page-specific styles */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 0;
+        }
         
-       <br>
-      </br>
-      </p>
-  
-      <p>Follow me on <a href="https://twitter.com/skflx">Twitter</a> or <a href="https://www.instagram.com/skflx/"</a> Instagram</a>.</p>
-    </div>
-    <!-- /.blurb -->
-  </div>
-  <!-- /.container -->
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        
+        .timeline-item {
+            padding: 10px 50px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item.left {
+            left: 0;
+        }
+        
+        .timeline-item.right {
+            left: 50%;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: white;
+            border: 4px solid var(--primary);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .timeline-item.right::before {
+            left: -10px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item.right {
+                left: 0;
+            }
+            
+            .timeline-item::before {
+                left: 20px;
+                right: auto;
+            }
+            
+            .timeline-item.right::before {
+                left: 20px;
+            }
+        }
+        
+        .interest-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .interest-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .interest-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .interest-info {
+            padding: var(--spacing-md);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">@skflx</a>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="https://twitter.com/skflx" target="_blank">Twitter</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-<br> </br>
+    <!-- Hero Section -->
+    <section class="hero" style="height: 50vh;">
+        <div class="container">
+            <div class="hero-content">
+                <h1>About Me</h1>
+                <p class="subtitle">My journey in medicine, research, and beyond</p>
+            </div>
+        </div>
+    </section>
 
-  <footer>
-    <ul>
-      <li><a href="mailto:samy360@gmail.com">email</a></li>
-      <li><a href="https://github.com/skflx">Admin: github.com/skflx</a></li>
-    </ul>
-  </footer>
+    <!-- Bio Section -->
+    <section class="section">
+        <div class="container">
+            <div class="grid">
+                <div class="col-4 fade-in">
+                    <img src="images/me_large.jpg" alt="Dr. Samip Kafle" class="profile-img">
+                </div>
+                <div class="col-8 fade-in">
+                    <h2 class="section-title">My Story</h2>
+                    <p>I'm a resident otolaryngologist at Oregon Health and Science University (OHSU), where I blend medical practice with a passion for research and innovation. My journey began in Nepal and has taken me through Michigan, Oregon, Nevada, and Connecticut before bringing me back to the Pacific Northwest.</p>
+                    <p>With a background in neuroscience and a deep interest in hearing technologies, I bring a unique dual perspective as both a physician and someone with personal experience with hearing loss. This drives my commitment to improving patient outcomes through innovative surgical techniques and technology development.</p>
+                    <p>My research focuses on otolaryngology outcomes, particularly in areas related to cochlear implants and craniofacial trauma. I've published multiple peer-reviewed papers and presented at national conferences, always seeking ways to advance our understanding and treatment approaches.</p>
+                    <p>Beyond medicine, I'm an artist, musician, and outdoor enthusiast who values the balance between technical precision and creative expression.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Career Timeline -->
+    <section class="section about-section">
+        <div class="container text-center">
+            <h2 class="section-title">Professional Journey</h2>
+            <div class="timeline">
+                <!-- Timeline items -->
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2024 - Present</div>
+                        <h3>Resident Otolaryngologist</h3>
+                        <p>Oregon Health and Science University (OHSU)</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2020 - 2024</div>
+                        <h3>M.D. Candidate</h3>
+                        <p>Yale School of Medicine</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2017</div>
+                        <h3>B.S. Neuroscience</h3>
+                        <p>University of Nevada, Reno</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right reveal">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2020 - Present</div>
+                        <h3>Clinical Research</h3>
+                        <p>Yale Surgery, Division of Otolaryngology-Head and Neck Surgery</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left reveal">
+                    <div class="timeline-content">
+                        <div class="timeline-date">2022 - Present</div>
+                        <h3>Startup Founder</h3>
+                        <p>Developing technology to improve speech-in-noise processing in hearing devices</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Interests -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center mb-4">Research Interests</h2>
+            <div class="grid">
+                <div class="col-4 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <i class="fas fa-ear-listen interest-icon"></i>
+                            <h3>Cochlear Implants</h3>
+                            <p>Studying outcomes and cortical adaptations in cochlear implant patients using functional near-infrared spectroscopy.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <i class="fas fa-waveform interest-icon"></i>
+                            <h3>Speech Processing</h3>
+                            <p>Developing improved algorithms for speech-in-noise processing in hearing assistive devices.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <i class="fas fa-head-side interest-icon"></i>
+                            <h3>Craniofacial Trauma</h3>
+                            <p>Identifying factors associated with improved outcomes in craniofacial trauma surgery.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <i class="fas fa-graduation-cap interest-icon"></i>
+                            <h3>Medical Education</h3>
+                            <p>Exploring innovative methods for surgical education, including live-streaming procedures.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <i class="fas fa-brain interest-icon"></i>
+                            <h3>Neuroscience</h3>
+                            <p>Investigating the neural basis of sensory processing and adaptation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <i class="fas fa-microscope interest-icon"></i>
+                            <h3>Clinical Outcomes</h3>
+                            <p>Analyzing factors that influence surgical outcomes and complication rates in otolaryngology procedures.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S" target="_blank" class="btn">View Publications on PubMed</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Interests -->
+    <section class="section about-section">
+        <div class="container">
+            <h2 class="section-title text-center">Personal Interests</h2>
+            <div class="grid">
+                <div class="col-6 fade-in">
+                    <h3>Music</h3>
+                    <p>I'm an avid musician who plays guitar and ukulele, with interests in learning bass and drums. My musical tastes span diverse genres including metal (Death, Amon Amarth), electronic (Skrillex, Major Lazer), hip-hop (Kendrick Lamar), and alternative rock (Jacks Mannequin, Sublime, Muse).</p>
+                    
+                    <h3 class="mt-4">Outdoors</h3>
+                    <p>Living in the Pacific Northwest has nurtured my love for outdoor activities. I've developed a comprehensive gear system for exploring the region's diverse natural environments.</p>
+                </div>
+                
+                <div class="col-6 fade-in">
+                    <h3>Art</h3>
+                    <p>I express my creativity through ink and graphite art, finding it a meditative counterbalance to the precision required in surgery.</p>
+                    
+                    <h3 class="mt-4">Fitness</h3>
+                    <p>Powerlifting is my physical discipline of choice, with a power rack being an essential component of my home gym setup.</p>
+                    
+                    <h3 class="mt-4">Chess</h3>
+                    <p>I enjoy the strategic challenge of chess, having placed 3rd in the Yale Invitational Tournament (Unrated Section) in October 2022.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Languages -->
+    <section class="section">
+        <div class="container text-center">
+            <h2 class="section-title">Languages</h2>
+            <div class="grid">
+                <div class="col-3 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <h3>Nepali</h3>
+                            <p>Native</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-3 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <h3>English</h3>
+                            <p>Fluent</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-3 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <h3>Spanish</h3>
+                            <p>Intermediate</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-3 fade-in">
+                    <div class="interest-card">
+                        <div class="interest-info">
+                            <h3>Swiss German</h3>
+                            <p>Intermediate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="index.html" class="footer-logo">@skflx</a>
+                    <ul class="social-links mt-2">
+                        <li><a href="https://twitter.com/skflx" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="mailto:samy360@gmail.com"><i class="far fa-envelope"></i></a></li>
+                        <li><a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i></a></li>
+                    </ul>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Dr. Samip Kafle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
 </body>
+</html>
