@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Dr. Samip Kafle</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            padding: var(--spacing-md);
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: var(--spacing-sm);
+            text-align: center;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">@skflx</a>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="https://twitter.com/skflx" target="_blank">Twitter</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="contact-section" style="background: linear-gradient(135deg, var(--primary) 0%, #fdcbf1 100%);">
+        <div class="container">
+            <div class="grid">
+                <div class="col-6 fade-in">
+                    <h2 class="section-title" style="color: white;">Get In Touch</h2>
+                    <p style="color: white;">I'm always interested in connecting with colleagues, researchers, and innovators in medicine and technology. Please feel free to reach out with questions, collaboration ideas, or just to say hello.</p>
+                    
+                    <div class="contact-info">
+                        <div class="contact-info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>samy360@gmail.com</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Portland, Oregon</span>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-hospital"></i>
+                            <span>Oregon Health and Science University</span>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links mt-4">
+                        <a href="https://twitter.com/skflx" target="_blank" class="btn" style="margin-right: 10px;">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                        <a href="https://www.instagram.com/skflx/" target="_blank" class="btn" style="margin-right: 10px;">
+                            <i class="fab fa-instagram"></i> Instagram
+                        </a>
+                        <a href="https://github.com/skflx" target="_blank" class="btn">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-6 fade-in">
+                    <div class="contact-form">
+                        <h3>Send Me a Message</h3>
+                        <form id="contact-form">
+                            <div class="form-group">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" id="subject" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message" class="form-label">Message</label>
+                                <textarea id="message" class="form-control" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn" style="background-color: var(--primary);">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Contact Info -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title text-center">Contact Options</h2>
+            <div class="grid">
+                <div class="col-4 fade-in">
+                    <div class="contact-card text-center">
+                        <i class="fas fa-flask contact-icon"></i>
+                        <h3>Research Collaboration</h3>
+                        <p>Interested in collaborating on research in otolaryngology, hearing technology, or related fields? Let's connect and explore possibilities.</p>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="contact-card text-center">
+                        <i class="fas fa-lightbulb contact-icon"></i>
+                        <h3>Innovation & Technology</h3>
+                        <p>Have ideas for medical technology innovation or interested in my speech processing work? Reach out to discuss concepts and opportunities.</p>
+                    </div>
+                </div>
+                
+                <div class="col-4 fade-in">
+                    <div class="contact-card text-center">
+                        <i class="fas fa-user-md contact-icon"></i>
+                        <h3>Professional Inquiries</h3>
+                        <p>For speaking engagements, consultations, or other professional inquiries, please contact me with details about your request.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location Map -->
+    <section class="section about-section">
+        <div class="container">
+            <h2 class="section-title text-center">Location</h2>
+            <div class="map-container fade-in">
+                <!-- Replace with actual Google Maps embed code for OHSU -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2797.042118247346!2d-122.68837382363687!3d45.49875583620085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950a2c5d9c539d%3A0x38ebd4e3a90df3c2!2sOregon%20Health%20%26%20Science%20University!5e0!3m2!1sen!2sus!4v1708030111922!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="index.html" class="footer-logo">@skflx</a>
+                    <ul class="social-links mt-2">
+                        <li><a href="https://twitter.com/skflx" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="mailto:samy360@gmail.com"><i class="far fa-envelope"></i></a></li>
+                        <li><a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i></a></li>
+                    </ul>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Dr. Samip Kafle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script>
+        // Simple form submission handler
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! This form is currently set up for demonstration purposes only. Please use the email address provided to get in touch.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Dr. Samip Kafle</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        /* Page-specific styles */
+        .project-detail {
+            margin-bottom: var(--spacing-lg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            background: white;
+        }
+        
+        .project-header {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-header-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .project-body {
+            padding: var(--spacing-md);
+        }
+        
+        .project-meta {
+            display: flex;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9rem;
+        }
+        
+        .project-meta span {
+            margin-right: var(--spacing-md);
+            color: var(--text-light);
+        }
+        
+        .project-meta i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+        
+        .research-list {
+            list-style: none;
+        }
+        
+        .research-item {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--background-alt);
+        }
+        
+        .research-item:last-child {
+            border-bottom: none;
+        }
+        
+        .research-title {
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .research-authors {
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.9rem;
+        }
+        
+        .research-journal {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            font-size: 0.9rem;
+        }
+        
+        .art-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-sm);
+        }
+        
+        .art-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .art-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .art-item:hover .art-img {
+            transform: scale(1.05);
+        }
+        
+        .music-project {
+            display: flex;
+            margin-bottom: var(--spacing-md);
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .music-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .music-info {
+            padding: var(--spacing-md);
+            flex: 1;
+        }
+        
+        .music-title {
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .music-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .music-project {
+                flex-direction: column;
+            }
+            
+            .music-img {
+                width: 100%;
+                height: 200px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                text-align: center;
+                padding: var(--spacing-sm);
+            }
+        }
+        
+        .tech-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+        
+        .tech-header {
+            background: var(--accent);
+            color: white;
+            padding: var(--spacing-sm);
+            text-align: center;
+        }
+        
+        .tech-body {
+            padding: var(--spacing-md);
+        }
+        
+        .tech-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: var(--spacing-sm);
+            text-align: center;
+            display: block;
+        }
+        
+        .clinical-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--spacing-md) 0;
+        }
+        
+        .clinical-timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 30px;
+            margin-left: -2px;
+        }
+        
+        .clinical-item {
+            padding: 0 0 var(--spacing-md) 60px;
+            position: relative;
+        }
+        
+        .clinical-item::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            left: 18px;
+            background-color: white;
+            border: 4px solid var(--primary);
+            top: 0;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .clinical-content {
+            padding: var(--spacing-md);
+            background-color: white;
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .clinical-date {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: var(--spacing-xs);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">@skflx</a>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="https://twitter.com/skflx" target="_blank">Twitter</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" style="height: 50vh;">
+        <div class="container">
+            <div class="hero-content">
+                <h1>My Projects</h1>
+                <p class="subtitle">Explore my work across research, technology, art, music, and clinical practice</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section">
+        <div class="container">
+            <!-- Tabs Navigation -->
+            <div class="tabs">
+                <button class="tab-btn" data-tab="research">Research</button>
+                <button class="tab-btn" data-tab="technology">Emergent Technology</button>
+                <button class="tab-btn" data-tab="art">Art</button>
+                <button class="tab-btn" data-tab="music">Music</button>
+                <button class="tab-btn" data-tab="clinical">Clinical Projects</button>
+            </div>
+            
+            <!-- Research Tab Content -->
+            <div id="research" class="tab-content">
+                <h2 class="section-title">Research Projects</h2>
+                <p class="mb-4">My research focuses on improving surgical outcomes and understanding neurosensory processing in hearing disorders. Below are key research areas I've contributed to:</p>
+                
+                <ul class="research-list">
+                    <li class="research-item fade-in">
+                        <div class="research-title">Cortical Activity Changes in Cochlear Implant Patients</div>
+                        <div class="research-authors">Principal Investigators: Nofrat Schwartz, MD and Vincent L Gracco, PhD</div>
+                        <p>Utilizing functional near-infrared spectroscopy to assess changes in cortical activity of cochlear implant patients over time, combined with retrospective investigation on institutional outcomes.</p>
+                    </li>
+                    
+                    <li class="research-item fade-in">
+                        <div class="research-title">HPV Awareness Intervention in Otolaryngology</div>
+                        <div class="research-authors">Co-first author with Williams LC, under PI: Benjamin L Judson, MD, MBA</div>
+                        <p>Designed and implemented a pilot physician intervention aimed to increase patient HPV awareness and surveyed patients on otolaryngology-centric HPV knowledge pre- and post-intervention.</p>
+                    </li>
+                    
+                    <li class="research-item fade-in">
+                        <div class="research-title">Head and Neck Surgery Complications</div>
+                        <div class="research-authors">Principal Investigator: Benjamin L Judson, MD, MBA</div>
+                        <p>Characterized and identified risk factors for complications in various head and neck surgeries, with specific focus on factors associated with prolonged inpatient stay after total laryngectomy.</p>
+                    </li>
+                    
+                    <li class="research-item fade-in">
+                        <div class="research-title">Craniofacial Trauma Outcomes</div>
+                        <div class="research-authors">Principal Investigator: Yan H Lee, MD</div>
+                        <p>Investigated the effects of alcohol-use in craniofacial traumas and identified factors associated with worse outcomes in craniofacial surgeries.</p>
+                    </li>
+                    
+                    <li class="research-item fade-in">
+                        <div class="research-title">Medical Education via Surgical Livestreaming</div>
+                        <div class="research-authors">Principal Investigator: Yan H Lee, MD</div>
+                        <p>Evaluated the utility of live-streaming surgical electives for medical education, demonstrating enhanced exposure to surgical specialties for preclinical students.</p>
+                    </li>
+                </ul>
+                
+                <div class="text-center mt-4">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S" target="_blank" class="btn">View Publications on PubMed</a>
+                </div>
+            </div>
+            
+            <!-- Technology Tab Content -->
+            <div id="technology" class="tab-content">
+                <h2 class="section-title">Emergent Technology Projects</h2>
+                <p class="mb-4">I'm passionate about developing new technologies to address challenges in hearing healthcare and surgical practice.</p>
+                
+                <div class="grid">
+                    <div class="col-6 fade-in">
+                        <div class="project-detail">
+                            <div class="project-header">
+                                <img src="/api/placeholder/800/400" alt="Speech Processing Technology" class="project-header-img">
+                            </div>
+                            <div class="project-body">
+                                <h3>Speech-in-Noise Processing Technology</h3>
+                                <div class="project-meta">
+                                    <span><i class="fas fa-calendar"></i> 2022 - Present</span>
+                                    <span><i class="fas fa-tag"></i> Hearing Technology</span>
+                                </div>
+                                <p>Leading a startup focused on developing innovative algorithms to improve speech recognition in noisy environments for hearing device users. This technology aims to address one of the most significant challenges for individuals with hearing loss.</p>
+                                <p>The project involves signal processing optimization and machine learning approaches to better isolate speech from background noise, particularly in challenging acoustic environments.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6">
+                        <div class="grid">
+                            <div class="col-12 fade-in">
+                                <div class="tech-card mb-3">
+                                    <div class="tech-header">
+                                        <h3>Cochlear Implant Pulse Modulation</h3>
+                                    </div>
+                                    <div class="tech-body">
+                                        <i class="fas fa-wave-square tech-icon"></i>
+                                        <p>Research on pulse width modulation effects on music perception in cochlear implants, focusing on the balance between neural recruitment and temporal resolution.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 fade-in">
+                                <div class="tech-card">
+                                    <div class="tech-header">
+                                        <h3>Surgical Livestreaming Platform</h3>
+                                    </div>
+                                    <div class="tech-body">
+                                        <i class="fas fa-video tech-icon"></i>
+                                        <p>Designed and implemented a technical system for livestreaming surgical procedures to medical students, including audio/video setup and sterile exoscope mounting for open procedures.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Art Tab Content -->
+            <div id="art" class="tab-content">
+                <h2 class="section-title">Artwork</h2>
+                <p class="mb-4">My artistic expression through ink and graphite provides a creative counterbalance to the precision of surgery. Each piece represents the intersection of technical skill and creative exploration.</p>
+                
+                <div class="art-gallery">
+                    <!-- Art items - replace placeholder images with actual artwork -->
+                    <div class="art-item fade-in">
+                        <img src="/api/placeholder/500/500" alt="Artwork 1" class="art-img">
+                    </div>
+                    <div class="art-item fade-in">
+                        <img src="/api/placeholder/500/500" alt="Artwork 2" class="art-img">
+                    </div>
+                    <div class="art-item fade-in">
+                        <img src="/api/placeholder/500/500" alt="Artwork 3" class="art-img">
+                    </div>
+                    <div class="art-item fade-in">
+                        <img src="/api/placeholder/500/500" alt="Artwork 4" class="art-img">
+                    </div>
+                    <div class="art-item fade-in">
+                        <img src="/api/placeholder/500/500" alt="Artwork 5" class="art-img">
+                    </div>
+                    <div class="art-item fade-in">
+                        <img src="/api/placeholder/500/500" alt="Artwork 6" class="art-img">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Music Tab Content -->
+            <div id="music" class="tab-content">
+                <h2 class="section-title">Musical Projects</h2>
+                <p class="mb-4">Music has been a lifelong passion that provides both creative expression and emotional balance. I play guitar and ukulele, with interests in expanding to bass and drums.</p>
+                
+                <div class="music-project fade-in">
+                    <img src="/api/placeholder/300/300" alt="Yale 4th Year Show" class="music-img">
+                    <div class="music-info">
+                        <h3 class="music-title">Yale 4th Year Show Performance</h3>
+                        <p class="music-description">April 2023</p>
+                        <p>Performed electric guitar as part of the Yale School of Medicine 4th Year Show, a traditional musical production created and performed by graduating medical students.</p>
+                    </div>
+                </div>
+                
+                <div class="music-project fade-in">
+                    <img src="/api/placeholder/300/300" alt="Home Studio" class="music-img">
+                    <div class="music-info">
+                        <h3 class="music-title">Home Studio Development</h3>
+                        <p class="music-description">Ongoing</p>
+                        <p>Converting part of my garage into a music studio to support ongoing practice and recording projects. The space integrates acoustic treatment with a focus on guitar-based music production.</p>
+                    </div>
+                </div>
+                
+                <div class="music-project fade-in">
+                    <img src="/api/placeholder/300/300" alt="Genre Exploration" class="music-img">
+                    <div class="music-info">
+                        <h3 class="music-title">Musical Influences & Style Exploration</h3>
+                        <p class="music-description">Lifelong</p>
+                        <p>My musical tastes and influences span diverse genres including metal (Death, Amon Amarth), electronic (Skrillex, Major Lazer), hip-hop (Kendrick Lamar), and alternative rock (Jacks Mannequin, Sublime, Muse), which all inform my playing style and composition approach.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Clinical Tab Content -->
+            <div id="clinical" class="tab-content">
+                <h2 class="section-title">Clinical Projects</h2>
+                <p class="mb-4">My clinical work focuses on improving patient care through innovative approaches to surgical education, treatment protocols, and interdisciplinary collaboration.</p>
+                
+                <div class="clinical-timeline">
+                    <div class="clinical-item fade-in">
+                        <div class="clinical-content">
+                            <div class="clinical-date">2022 - Present</div>
+                            <h3>Surgery Livestreaming Elective</h3>
+                            <p>Designed and organized curriculum for pre-clerkship medical students to gain exposure to surgical specialties through live-streaming procedures. Responsible for identifying appropriate surgical cases, audio/video setup, mounting sterile video exoscope in open procedures, and facilitating communication between live-streaming and operative teams.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="clinical-item fade-in">
+                        <div class="clinical-content">
+                            <div class="clinical-date">2020 - Present</div>
+                            <h3>HAVEN Free Clinic</h3>
+                            <p>Provided primary care to uninsured and underinsured patients as a Senior Clinical Team Member. Presented assessments and plans to attendings, placed orders, followed-up with patients regarding medical concerns, specialist referrals, and ancillary needs. Supervised and mentored junior clinical team members through their history-taking and physical exam skills.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="clinical-item fade-in">
+                        <div class="clinical-content">
+                            <div class="clinical-date">2021 - Present</div>
+                            <h3>Point of Care Ultrasound Teaching</h3>
+                            <p>Provided hands-on training in essential ultrasound skills to medical students through weekly small-group lessons designed to align with the MS1 curriculum, enhancing diagnostic capabilities for future clinicians.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="clinical-item fade-in">
+                        <div class="clinical-content">
+                            <div class="clinical-date">2023 - Present</div>
+                            <h3>Neuroradiology Rotation Preparation</h3>
+                            <p>Developed systematic approach to rotation preparation focusing on key anatomical regions (temporal bone, sinonasal, neck, and airway imaging) with Dr. Bronwyn Hamilton.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="index.html" class="footer-logo">@skflx</a>
+                    <ul class="social-links mt-2">
+                        <li><a href="https://twitter.com/skflx" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="mailto:samy360@gmail.com"><i class="far fa-envelope"></i></a></li>
+                        <li><a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i></a></li>
+                    </ul>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Dr. Samip Kafle. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
