@@ -9,7 +9,7 @@
 
 :root {
   /* Color Palette */
-  --primary: #ff9fb2;      /* Softer pink */
+  --primary: #ff8ca0;      /* Darker pink as requested */
   --primary-dark: #e57f8f; /* Darker pink for hover states */
   --accent: #6c5ce7;       /* Purple accent */
   --text: #2d3436;         /* Almost black for text */
@@ -232,7 +232,7 @@ nav {
 }
 
 .hero-content {
-  max-width: 600px;
+  max-width: 800px; /* Increased from 600px to allow for longer text */
 }
 
 .hero h1 {
@@ -315,18 +315,22 @@ nav {
 }
 
 .tab-btn {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);  /* Increased padding for larger tabs */
   background: none;
   border: none;
   cursor: pointer;
   font-weight: 600;
+  font-size: 1.2rem; /* Increased font size */
   transition: all 0.3s ease;
   color: var(--text-light);
+  margin-right: 5px; /* Added spacing between tabs */
 }
 
 .tab-btn.active {
   color: var(--accent);
   position: relative;
+  background-color: rgba(108, 92, 231, 0.1); /* Light background for active tab */
+  border-radius: 8px 8px 0 0; /* Rounded top corners */
 }
 
 .tab-btn.active::after {
