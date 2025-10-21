@@ -16,9 +16,10 @@
         .map-container {
             width: 100%;
             height: 300px;
-            border-radius: 8px;
+            border-radius: 4px;
             overflow: hidden;
             margin-bottom: var(--spacing-md);
+            border: 1px solid var(--border);
         }
         
         .map-container iframe {
@@ -29,24 +30,32 @@
         
         .contact-card {
             background: white;
-            border-radius: 8px;
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
             height: 100%;
             padding: var(--spacing-md);
-            transition: transform 0.3s ease;
+            transition: border-color 0.2s ease;
         }
-        
+
         .contact-card:hover {
-            transform: translateY(-5px);
+            border-color: var(--accent-soft);
         }
-        
+
         .contact-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
+            font-size: 2rem;
+            color: var(--accent);
             margin-bottom: var(--spacing-sm);
             text-align: center;
             display: block;
+        }
+
+        .contact-card h3 {
+            font-size: 1.1rem;
+        }
+
+        .contact-card p {
+            font-size: 0.95rem;
         }
     </style>
 </head>
@@ -71,20 +80,20 @@
     </header>
 
     <!-- Contact Section -->
-    <section class="contact-section" style="background: linear-gradient(135deg, var(--primary) 0%, #fdcbf1 100%);">
+    <section class="contact-section" style="min-height: 60vh; display: flex; align-items: center; padding: var(--spacing-lg) 0;">
         <div class="container">
             <div class="grid">
-                <div class="col-6 fade-in">
-                    <h2 class="section-title" style="color: white;">Get In Touch</h2>
-                    <p style="color: white;">I'm always interested in connecting with colleagues, researchers, and innovators in medicine and technology. Please feel free to reach out with questions, collaboration ideas, or just to say hello.</p>
-                    
+                <div class="col-6">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p>Always interested in connecting with colleagues, researchers, and innovators in medicine and technology. Feel free to reach out with questions, collaboration ideas, or to connect.</p>
+
                     <div class="contact-info">
                         <div class="contact-info-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <span>Portland, Oregon</span>
                         </div>
                     </div>
-                    
+
                     <div class="social-links mt-4">
                         <a href="https://twitter.com/skflx" target="_blank" class="btn" style="margin-right: 10px;">
                             <i class="fab fa-twitter"></i> Twitter
@@ -97,32 +106,32 @@
                         </a>
                     </div>
                 </div>
-                
-                <div class="col-6 fade-in">
+
+                <div class="col-6">
                     <div class="contact-form">
-                        <h3>Send Me a Message</h3>
+                        <h3>Send a Message</h3>
                         <form id="contact-form">
                             <div class="form-group">
                                 <label for="name" class="form-label">Name</label>
                                 <input type="text" id="name" class="form-control" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" id="email" class="form-control" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="subject" class="form-label">Subject</label>
                                 <input type="text" id="subject" class="form-control" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="message" class="form-label">Message</label>
                                 <textarea id="message" class="form-control" required></textarea>
                             </div>
-                            
-                            <button type="submit" class="btn" style="background-color: var(--primary);">Send Message</button>
+
+                            <button type="submit" class="btn">Send Message</button>
                         </form>
                     </div>
                 </div>
@@ -131,9 +140,9 @@
     </section>
 
     <!-- Additional Contact Info -->
-    <section class="section">
+    <section class="section" style="background-color: var(--background-alt);">
         <div class="container">
-            <h2 class="section-title text-center">Contact Options</h2>
+            <h2 class="section-title text-center">Areas of Interest</h2>
             <div class="grid">
                 <div class="col-4 fade-in">
                     <div class="contact-card text-center">
@@ -163,7 +172,7 @@
     </section>
 
     <!-- Location Map -->
-    <section class="section about-section">
+    <section class="section">
         <div class="container">
             <h2 class="section-title text-center">Location</h2>
             <div class="map-container fade-in">

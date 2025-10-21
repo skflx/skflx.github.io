@@ -15,26 +15,37 @@
     <style>
         /* Page-specific styles */
         .interest-card {
-            border-radius: 8px;
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s ease;
             height: 100%;
+            background: var(--background);
         }
-        
+
         .interest-card:hover {
-            transform: translateY(-5px);
+            border-color: var(--accent-soft);
         }
-        
+
         .interest-icon {
-            font-size: 3rem;
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: var(--accent);
             margin-bottom: var(--spacing-sm);
         }
-        
+
         .interest-info {
             padding: var(--spacing-md);
             text-align: center;
+        }
+
+        .interest-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .interest-info p {
+            font-size: 0.95rem;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -59,11 +70,11 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" style="height: 50vh;">
+    <section class="hero" style="min-height: 40vh;">
         <div class="container">
             <div class="hero-content">
-                <h1>About Me</h1>
-                <p class="subtitle">My journey in medicine, research, and beyond</p>
+                <h1>About</h1>
+                <p class="subtitle">Medicine · Research · Innovation</p>
             </div>
         </div>
     </section>
@@ -72,14 +83,14 @@
     <section class="section">
         <div class="container">
             <div class="grid">
-                <div class="col-4 fade-in">
+                <div class="col-4">
                     <img src="images/me_large.jpg" alt="@skflx.MD" class="profile-img">
                 </div>
-                <div class="col-8 fade-in">
-                    <h2 class="section-title">My Story</h2>
-                    <p>I'm a resident otolaryngologist in the Pacific Northwest, where I combine medical practice with a passion for research and pedagological and technological innovation. My journey began in Nepal and has taken me through Michigan, Oregon, Nevada, and Connecticut before bringing me back to the Pacific Northwest.</p>
-                    <p>With a background in neuroscience and a deep interest in hearing technologies, I bring a unique perspective as both a physician and someone with personal experience with hearing loss.</p>
-                    <p>My research focuses on surgical outcomes in otolaryngology, with a more recent focus on emergent data technologies in medical education and surgical training. </p>
+                <div class="col-8">
+                    <h2 class="section-title">Background</h2>
+                    <p>Resident otolaryngologist in the Pacific Northwest, combining medical practice with research and technological innovation. My journey began in Nepal, spanning Michigan, Oregon, Nevada, and Connecticut before returning to the Pacific Northwest.</p>
+                    <p>With a background in neuroscience and personal experience with hearing loss, I bring a unique perspective to both clinical practice and research in hearing technologies.</p>
+                    <p>My research focuses on surgical outcomes in otolaryngology and emergent data technologies in medical education and surgical training.</p>
                     <p>Beyond medicine, I'm an artist, musician, and outdoor enthusiast who values the balance between technical precision and creative expression.</p>
                 </div>
             </div>
@@ -87,9 +98,9 @@
     </section>
 
     <!-- Research Interests -->
-    <section class="section">
+    <section class="section" style="background-color: var(--background-alt);">
         <div class="container">
-            <h2 class="section-title text-center mb-4">Research Interests</h2>
+            <h2 class="section-title text-center mb-4">Research Focus</h2>
             <div class="grid">
                 <div class="col-4 fade-in">
                     <div class="interest-card">
@@ -159,9 +170,9 @@
     </section>
 
     <!-- Personal Interests -->
-    <section class="section about-section">
+    <section class="section">
         <div class="container">
-            <h2 class="section-title text-center">Personal Interests</h2>
+            <h2 class="section-title text-center">Beyond Medicine</h2>
             <div class="grid">
                 <div class="col-6 fade-in">
                     <h3>Music</h3>
@@ -186,7 +197,7 @@
     </section>
 
     <!-- Languages -->
-    <section class="section">
+    <section class="section" style="background-color: var(--background-alt);">
         <div class="container text-center">
             <h2 class="section-title">Languages</h2>
             <div class="grid">
