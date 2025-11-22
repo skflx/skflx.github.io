@@ -504,6 +504,7 @@ footer {
     color: var(--accent);
     transform: translateX(5px);
 }
+.social-links a:hover { background-color: var(--accent); border-color: var(--accent); color: white; transform: translateY(-1px); }
 
 .menu-links i {
     width: 25px;
