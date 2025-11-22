@@ -116,8 +116,8 @@ function initThemeSwitcher() {
     });
 
     // Load Saved Preference
-    const savedTheme = localStorage.getItem('sk_theme') || 'theme-sage';
-    const savedType = localStorage.getItem('sk_type') || 'type-modern';
+    const savedTheme = localStorage.getItem('sk_theme') || 'theme-slate';
+    const savedType = localStorage.getItem('sk_type') || 'type-minimal';
 
     applyTheme(savedTheme);
     applyType(savedType);
