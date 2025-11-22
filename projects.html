@@ -353,42 +353,60 @@
             <!-- Research Tab Content -->
             <div id="research" class="tab-content">
                 <h2 class="section-title">Research Projects</h2>
-                <p class="mb-4">My research focuses on improving surgical outcomes and understanding neurosensory processing in hearing disorders. Below are key research areas I've contributed to:</p>
+                <p class="mb-4">My research focuses on improving surgical outcomes and understanding neurosensory processing in hearing disorders. Browse my publications by area of interest:</p>
                 
-                <ul class="research-list">
-                    <li class="research-item fade-in">
-                        <div class="research-title">Cortical Activity Changes in Cochlear Implant Patients</div>
-                        <div class="research-authors">Principal Investigators: Nofrat Schwartz, MD and Vincent L Gracco, PhD</div>
-                        <p>Utilizing functional near-infrared spectroscopy to assess changes in cortical activity of cochlear implant patients over time, combined with retrospective investigation on institutional outcomes.</p>
-                    </li>
-                    
-                    <li class="research-item fade-in">
-                        <div class="research-title">HPV Awareness Intervention in Otolaryngology</div>
-                        <div class="research-authors">Co-first author with Williams LC, under PI: Benjamin L Judson, MD, MBA</div>
-                        <p>Designed and implemented a pilot physician intervention aimed to increase patient HPV awareness and surveyed patients on otolaryngology-centric HPV knowledge pre- and post-intervention.</p>
-                    </li>
-                    
-                    <li class="research-item fade-in">
-                        <div class="research-title">Head and Neck Surgery Complications</div>
-                        <div class="research-authors">Principal Investigator: Benjamin L Judson, MD, MBA</div>
-                        <p>Characterized and identified risk factors for complications in various head and neck surgeries, with specific focus on factors associated with prolonged inpatient stay after total laryngectomy.</p>
-                    </li>
-                    
-                    <li class="research-item fade-in">
-                        <div class="research-title">Craniofacial Trauma Outcomes</div>
-                        <div class="research-authors">Principal Investigator: Yan H Lee, MD</div>
-                        <p>Investigated the effects of alcohol-use in craniofacial traumas and identified factors associated with worse outcomes in craniofacial surgeries.</p>
-                    </li>
-                    
-                    <li class="research-item fade-in">
-                        <div class="research-title">Medical Education via Surgical Livestreaming</div>
-                        <div class="research-authors">Principal Investigator: Yan H Lee, MD</div>
-                        <p>Evaluated the utility of live-streaming surgical electives for medical education, demonstrating enhanced exposure to surgical specialties for preclinical students.</p>
-                    </li>
-                </ul>
+                <div class="grid">
+                    <!-- Card 1: Craniofacial Trauma -->
+                    <div class="col-6 fade-in">
+                        <div class="interest-card">
+                            <div class="interest-info">
+                                <i class="fas fa-head-side interest-icon"></i>
+                                <h3>Craniofacial Trauma</h3>
+                                <p class="mb-2">Investigating injury patterns in sports (skiing, snowboarding, surfing) and identifying factors associated with surgical outcomes.</p>
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S+AND+(Trauma+OR+Fracture+OR+Injury)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Head & Neck Oncology -->
+                    <div class="col-6 fade-in">
+                        <div class="interest-card">
+                            <div class="interest-info">
+                                <i class="fas fa-ribbon interest-icon"></i>
+                                <h3>Head & Neck Oncology</h3>
+                                <p class="mb-2">Characterizing complications, risk factors, and survival outcomes in head and neck cancer surgeries, including total laryngectomy.</p>
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S+AND+(Cancer+OR+Oncology+OR+Tumor+OR+Laryngectomy)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Surgical Education -->
+                    <div class="col-6 fade-in">
+                        <div class="interest-card">
+                            <div class="interest-info">
+                                <i class="fas fa-graduation-cap interest-icon"></i>
+                                <h3>Surgical Education</h3>
+                                <p class="mb-2">Exploring innovative methods for surgical training, including live-streaming procedures and automated feedback systems.</p>
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S+AND+(Education+OR+Training+OR+Student)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Otology & Hearing -->
+                    <div class="col-6 fade-in">
+                        <div class="interest-card">
+                            <div class="interest-info">
+                                <i class="fas fa-ear-listen interest-icon"></i>
+                                <h3>Otology & Hearing Sciences</h3>
+                                <p class="mb-2">Studying cortical adaptations in cochlear implant patients and improving speech processing in hearing devices.</p>
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S+AND+(Cochlear+OR+Hearing+OR+Otology)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="text-center mt-4">
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S" target="_blank" class="btn">View Publications on PubMed</a>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+S" target="_blank" class="btn">View All Publications on PubMed</a>
                 </div>
             </div>
             
@@ -543,6 +561,27 @@
             </div>
         </div>
     </footer>
+
+    <!-- Theme Switcher -->
+    <div class="theme-switcher-toggle" id="themeToggle">
+        <i class="fas fa-palette"></i>
+    </div>
+
+    <div class="theme-panel" id="themePanel">
+        <h4>Color Theme</h4>
+        <div class="theme-options">
+            <div class="theme-btn theme-btn-sage" data-theme="theme-sage" title="Sage"></div>
+            <div class="theme-btn theme-btn-slate" data-theme="theme-slate" title="Slate"></div>
+            <div class="theme-btn theme-btn-sand" data-theme="theme-sand" title="Sand"></div>
+        </div>
+
+        <h4>Typography</h4>
+        <div class="type-options">
+            <button class="type-btn" data-type="type-modern">Modern (Sans)</button>
+            <button class="type-btn" data-type="type-editorial">Editorial (Serif)</button>
+            <button class="type-btn" data-type="type-minimal">Minimal (Mono/Geo)</button>
+        </div>
+    </div>
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
