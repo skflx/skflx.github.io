@@ -6,15 +6,13 @@ This website is a static HTML/CSS/JS site.
 Some features are automated via scripts.
 
 ### Updating Publications
-To update the list of publications on `projects.html` from PubMed:
+**Note:** The previous automated list generator (`scripts/update_from_cv.py`) is deprecated in favor of curated "Research Focus" cards in `projects.html`.
+However, you can still run it to get a raw list of new publications if needed, but you must manually update the cards to reflect new research areas.
 
-1. Ensure you have Python 3 installed.
-2. Run the update script:
-   ```bash
-   python3 scripts/update_from_cv.py
-   ```
-3. Follow the prompts (type 'y' to query PubMed).
-4. The script will fetch the latest articles for "Kafle Samipya" and update the section between `<!-- PUBS_AUTO_START -->` and `<!-- PUBS_AUTO_END -->` in `projects.html`.
+To check for new publications:
+1. Run `python3 scripts/update_from_cv.py`.
+2. Review the output (it will try to update `projects.html` but might fail if markers are missing, which is expected now).
+3. Use the info to update the *Categories* or links in `projects.html` manually.
 
 ### Residency Status
 The PGY level (e.g., "PGY-2") is calculated automatically in `js/main.js`.
