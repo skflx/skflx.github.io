@@ -36,22 +36,32 @@ document.addEventListener('DOMContentLoaded', function() {
             button.addEventListener('click', () => {
                 const targetTab = button.getAttribute('data-tab');
 
-                // TODO: Add crossfade animation between tab content
-                // TODO: Implement sliding indicator bar under active tab
-                // TODO: Update URL hash for shareable links
-
                 // Update active tab button
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
 
-                // Show target tab content
-                tabContents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.getAttribute('id') === targetTab) {
-                        content.classList.add('active');
-                        // TODO: Trigger entrance animation for new content
+                // Crossfade: fade out current, then fade in target
+                const currentActive = document.querySelector('.tab-content.active');
+
+                if (currentActive) {
+                    currentActive.style.animation = 'tabFadeOut 0.2s ease forwards';
+                    setTimeout(() => {
+                        currentActive.classList.remove('active');
+                        currentActive.style.animation = '';
+
+                        // Show target tab content
+                        const targetContent = document.getElementById(targetTab);
+                        if (targetContent) {
+                            targetContent.classList.add('active');
+                        }
+                    }, 200);
+                } else {
+                    // No current active, just show the target
+                    const targetContent = document.getElementById(targetTab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
                     }
-                });
+                }
             });
         });
         

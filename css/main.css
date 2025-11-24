@@ -22,6 +22,11 @@
   --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
   --shadow-high: 0 8px 32px rgba(0, 0, 0, 0.16);
 
+  /* Gradient Accents */
+  --gradient-primary: linear-gradient(135deg, var(--accent), var(--primary));
+  --gradient-soft: linear-gradient(135deg, var(--accent-soft), var(--accent));
+  --gradient-hero: linear-gradient(135deg, rgba(93, 122, 104, 0.05), rgba(44, 51, 46, 0.02));
+
   /* Default Theme: Sage */
   --primary: #2C332E;      /* Dark jungle green */
   --primary-light: #58665C;
@@ -50,6 +55,9 @@ body.theme-slate {
   --background: #F2F4F6;
   --background-alt: #E1E5EB;
   --border: #CED4DA;
+  --gradient-primary: linear-gradient(135deg, #5A7D9A, #283038);
+  --gradient-soft: linear-gradient(135deg, #A3B9CC, #5A7D9A);
+  --gradient-hero: linear-gradient(135deg, rgba(90, 125, 154, 0.05), rgba(40, 48, 56, 0.02));
 }
 
 /* Theme: Sand */
@@ -63,6 +71,9 @@ body.theme-sand {
   --background: #F9F8F4;
   --background-alt: #EFEBE4;
   --border: #E0DCD6;
+  --gradient-primary: linear-gradient(135deg, #8C7B68, #3D3832);
+  --gradient-soft: linear-gradient(135deg, #C4B9AC, #8C7B68);
+  --gradient-hero: linear-gradient(135deg, rgba(140, 123, 104, 0.05), rgba(61, 56, 50, 0.02));
 }
 
 /* TODO: Add Dark Mode - "Midnight" theme */
@@ -100,6 +111,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+  opacity: 0;
+  animation: pageLoadFadeIn 0.6s ease-in-out forwards;
+}
+
+@keyframes pageLoadFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 img {
@@ -129,6 +151,20 @@ img {
   margin-bottom: var(--spacing-sm);
   letter-spacing: -0.02em;
   color: var(--primary);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
 }
 
 /* Grid System */
@@ -216,17 +252,15 @@ p {
 
 /* ===== HEADER & NAVIGATION ===== */
 header {
-  background: var(--background);
   padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(10px);
-  background-color: rgba(255, 255, 255, 0.8);
-  background-color: var(--background);
-  opacity: 0.98;
-  box-shadow: var(--shadow-subtle);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
 }
 
@@ -266,13 +300,26 @@ nav {
   font-size: 0.95rem;
   transition: color 0.2s ease;
   position: relative;
-  /* TODO: Add animated underline on hover */
-  /* TODO: Add active page indicator */
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
 
 .nav-links a:hover {
   color: var(--accent);
-  /* TODO: Underline should expand from center */
+}
+
+.nav-links a:hover::after {
+  width: 100%;
 }
 
 /* TODO: Add active state for current page */
@@ -333,9 +380,23 @@ nav {
   padding: var(--spacing-lg) 0;
   position: relative;
   overflow: hidden;
-  /* TODO: Add animated gradient background */
-  /* TODO: Add subtle particle effect or gradient mesh */
-  /* TODO: Implement parallax effect for depth */
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-hero);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-content {
@@ -345,13 +406,13 @@ nav {
 .hero h1 {
   margin-bottom: var(--spacing-xs);
   font-size: 2.5rem;
-  color: var(--accent);
-  /* TODO: Add text gradient effect */
-  /* background: linear-gradient(135deg, var(--accent), var(--primary));
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text; */
-  /* TODO: Add entrance animation (fade-in + slide-up) */
+  background-clip: text;
+  display: inline-block;
+  opacity: 0;
+  animation: heroFadeInUp 0.8s ease 0.2s forwards;
 }
 
 .hero .subtitle {
@@ -359,18 +420,38 @@ nav {
   font-size: 1.1rem;
   font-weight: 400;
   margin-bottom: var(--spacing-sm);
+  opacity: 0;
+  animation: heroFadeInUp 0.8s ease 0.4s forwards;
 }
 
 .hero p {
   color: var(--text-light);
   line-height: 1.6;
+  opacity: 0;
+  animation: heroFadeInUp 0.8s ease 0.6s forwards;
+}
+
+.hero .btn {
+  opacity: 0;
+  animation: heroFadeInUp 0.8s ease 0.8s forwards;
+}
+
+@keyframes heroFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== BUTTONS ===== */
 .btn {
   display: inline-block;
   padding: 0.5rem 1.25rem;
-  background-color: var(--accent);
+  background: var(--gradient-soft);
   color: white;
   border: none;
   border-radius: 4px;
@@ -384,27 +465,79 @@ nav {
   box-shadow: var(--shadow-low);
 }
 
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.btn:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
   box-shadow: var(--shadow-medium);
 }
 
 .btn:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
   box-shadow: var(--shadow-low);
+}
+
+.btn > * {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-outline {
   background-color: transparent;
-  border: 1px solid var(--accent);
+  background: transparent;
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--background), var(--background)), var(--gradient-soft);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   color: var(--accent);
   box-shadow: none;
 }
 
+.btn-outline::before {
+  background: var(--gradient-soft);
+}
+
 .btn-outline:hover {
-  background-color: var(--accent);
   color: white;
   box-shadow: var(--shadow-medium);
+}
+
+.btn:focus-visible,
+.btn-outline:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ===== CARD COMPONENTS ===== */
@@ -620,8 +753,37 @@ textarea.form-control {
   background-color: var(--accent);
 }
 
-.tab-content { display: none; }
-.tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+.tab-content {
+  display: none;
+  opacity: 0;
+}
+
+.tab-content.active {
+  display: block;
+  animation: tabFadeIn 0.4s ease forwards;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tabFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
 
 /* ===== FOOTER ===== */
 footer {
@@ -757,8 +919,22 @@ footer {
   100% { transform: translateX(100%); }
 } */
 
-/* TODO: Respect user preferences for reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  body {
+    animation: none;
+    opacity: 1;
+  }
+
+  .hero h1,
+  .hero .subtitle,
+  .hero p,
+  .hero .btn,
+  .profile-img {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -773,7 +949,7 @@ footer {
     right: 30px;
     width: 56px;
     height: 56px;
-    background-color: var(--primary);
+    background: var(--gradient-primary);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -783,14 +959,12 @@ footer {
     box-shadow: var(--shadow-high);
     z-index: 2000;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                background-color 0.3s ease,
                 box-shadow 0.3s ease;
     font-size: 1.3rem;
 }
 
 .theme-switcher-toggle:hover {
     transform: scale(1.1) rotate(90deg);
-    background-color: var(--accent);
     box-shadow: 0 12px 40px rgba(93, 122, 104, 0.3);
 }
 
@@ -798,10 +972,13 @@ footer {
     position: fixed;
     bottom: 100px;
     right: 30px;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 16px;
-    box-shadow: var(--shadow-high);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     z-index: 1999;
     width: 280px;
     display: flex;
@@ -820,9 +997,11 @@ footer {
 }
 
 .menu-header {
-    background-color: var(--background-alt);
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     padding: var(--spacing-sm);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -873,7 +1052,9 @@ footer {
 
 .settings-section {
     padding: var(--spacing-sm);
-    background-color: var(--background);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .theme-panel h4 {
@@ -947,11 +1128,24 @@ footer {
   border-radius: 8px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--shadow-low);
+  opacity: 0;
+  animation: profileImageFadeIn 1s ease 0.4s forwards;
 }
 
 .profile-img:hover {
   transform: scale(1.02);
   box-shadow: var(--shadow-medium);
+}
+
+@keyframes profileImageFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ===== PAGE-SPECIFIC STYLES ===== */
