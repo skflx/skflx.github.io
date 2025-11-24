@@ -1,37 +1,60 @@
 // main.js - JS functionality for SK's personal website
 
+// TODO: Add page load animation (fade-in entire page)
+// TODO: Implement Intersection Observer for scroll-triggered animations
+// TODO: Add prefers-reduced-motion check for accessibility
+
 document.addEventListener('DOMContentLoaded', function() {
     // Mobile Navigation Toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    
+
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
             navLinks.classList.toggle('active');
+            // TODO: Animate menu icon to X when open
+            // TODO: Add backdrop blur when mobile menu is open
         });
     }
-    
+
     // Residency Status Update
     updateResidencyStatus();
+
+    // TODO: Initialize scroll-triggered card animations
+    // initScrollAnimations();
+
+    // TODO: Initialize parallax effects for hero section
+    // initParallax();
+
+    // TODO: Add scroll progress indicator
+    // initScrollProgress();
+
+    // TODO: Implement header behavior (hide on scroll down, show on scroll up)
+    // initSmartHeader();
 
     // Project Tabs Functionality
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
-    
+
     if (tabButtons.length > 0) {
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const targetTab = button.getAttribute('data-tab');
-                
+
+                // TODO: Add crossfade animation between tab content
+                // TODO: Implement sliding indicator bar under active tab
+                // TODO: Update URL hash for shareable links
+
                 // Update active tab button
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                
+
                 // Show target tab content
                 tabContents.forEach(content => {
                     content.classList.remove('active');
                     if (content.getAttribute('id') === targetTab) {
                         content.classList.add('active');
+                        // TODO: Trigger entrance animation for new content
                     }
                 });
             });
@@ -70,25 +93,32 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Reveal animations on scroll
     const revealElements = document.querySelectorAll('.reveal');
-    
+
+    // TODO: Replace with Intersection Observer for better performance
+    // TODO: Add stagger effect for multiple cards (delay each by 100ms)
+    // TODO: Extend to all cards, not just elements with .reveal class
+
     function checkReveal() {
         const windowHeight = window.innerHeight;
         const revealPoint = 150;
-        
+
         revealElements.forEach(element => {
             const revealTop = element.getBoundingClientRect().top;
-            
+
             if (revealTop < windowHeight - revealPoint) {
                 element.classList.add('active');
             }
         });
     }
-    
+
     // Run once on page load
     checkReveal();
-    
+
     // Run on scroll
     window.addEventListener('scroll', checkReveal);
+
+    // TODO: Throttle scroll event for better performance
+    // const throttledCheckReveal = throttle(checkReveal, 100);
 
     // Theme Switcher Logic
     initThemeSwitcher();
@@ -102,10 +132,19 @@ function initThemeSwitcher() {
 
     if (!toggle || !panel) return;
 
+    // TODO: Check if first visit and add pulse animation to toggle
+    // if (!localStorage.getItem('sk_visited')) {
+    //     toggle.classList.add('first-visit');
+    //     localStorage.setItem('sk_visited', 'true');
+    // }
+
     // Toggle Panel
     toggle.addEventListener('click', (e) => {
         e.stopPropagation();
         panel.classList.toggle('active');
+
+        // TODO: Morph icon from bars to X when panel opens
+        // TODO: Add sequential fade-in for menu items when opening
     });
 
     // Close panel when clicking outside
@@ -143,12 +182,17 @@ function initThemeSwitcher() {
     function applyTheme(themeClass) {
         // Remove all theme classes
         document.body.classList.remove('theme-sage', 'theme-slate', 'theme-sand');
+        // TODO: Add 'theme-midnight' when dark mode is implemented
         document.body.classList.add(themeClass);
+
+        // TODO: Add smooth color transition animation
+        // document.body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
 
         // Update active state in UI
         themeBtns.forEach(btn => {
             if (btn.getAttribute('data-theme') === themeClass) {
                 btn.classList.add('selected');
+                // TODO: Add success checkmark animation
             } else {
                 btn.classList.remove('selected');
             }
@@ -201,3 +245,135 @@ function updateResidencyStatus() {
 
     statusElement.textContent = `PGY-${pgyLevel}`;
 }
+
+// ===== FUTURE ENHANCEMENT FUNCTIONS =====
+
+// TODO: Implement Intersection Observer for scroll animations
+/*
+function initScrollAnimations() {
+    const cards = document.querySelectorAll('.project-card, .interest-card, .research-item, .art-item');
+
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('card-revealed');
+                }, index * 100); // Stagger by 100ms
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    cards.forEach(card => observer.observe(card));
+}
+*/
+
+// TODO: Implement smart header (hide on scroll down, show on scroll up)
+/*
+function initSmartHeader() {
+    const header = document.querySelector('header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll <= 0) {
+            header.classList.remove('scroll-up');
+            return;
+        }
+
+        if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
+            header.classList.remove('scroll-up');
+            header.classList.add('scroll-down');
+        } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
+            header.classList.remove('scroll-down');
+            header.classList.add('scroll-up');
+        }
+        lastScroll = currentScroll;
+    });
+}
+*/
+
+// TODO: Add scroll progress indicator
+/*
+function initScrollProgress() {
+    const progressBar = document.createElement('div');
+    progressBar.className = 'scroll-progress';
+    document.body.appendChild(progressBar);
+
+    window.addEventListener('scroll', () => {
+        const winScroll = document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        progressBar.style.width = scrolled + '%';
+    });
+}
+*/
+
+// TODO: Add parallax effect for hero section
+/*
+function initParallax() {
+    const hero = document.querySelector('.hero');
+    const heroContent = document.querySelector('.hero-content');
+    const profileImg = document.querySelector('.profile-img');
+
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallaxSpeed = 0.5;
+
+        if (scrolled < hero.offsetHeight) {
+            heroContent.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
+            if (profileImg) {
+                profileImg.style.transform = `translateY(${scrolled * parallaxSpeed * 0.3}px)`;
+            }
+        }
+    });
+}
+*/
+
+// TODO: Add button ripple effect
+/*
+function addRippleEffect() {
+    const buttons = document.querySelectorAll('.btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            this.appendChild(ripple);
+
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+}
+*/
+
+// TODO: Utility function - Throttle
+/*
+function throttle(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+*/
