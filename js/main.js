@@ -1,10 +1,9 @@
 // main.js - JS functionality for SK's personal website
 
-// TODO: Add page load animation (fade-in entire page)
-// TODO: Implement Intersection Observer for scroll-triggered animations
-// TODO: Add prefers-reduced-motion check for accessibility
-
 document.addEventListener('DOMContentLoaded', function() {
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Mobile Navigation Toggle
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
@@ -12,25 +11,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
             navLinks.classList.toggle('active');
-            // TODO: Animate menu icon to X when open
-            // TODO: Add backdrop blur when mobile menu is open
         });
     }
 
     // Residency Status Update
     updateResidencyStatus();
 
-    // TODO: Initialize scroll-triggered card animations
-    // initScrollAnimations();
-
-    // TODO: Initialize parallax effects for hero section
-    // initParallax();
-
-    // TODO: Add scroll progress indicator
-    // initScrollProgress();
-
-    // TODO: Implement header behavior (hide on scroll down, show on scroll up)
-    // initSmartHeader();
+    // Initialize scroll-triggered card animations
+    if (!prefersReducedMotion) {
+        initScrollAnimations();
+    } else {
+        // Immediately reveal all cards if user prefers reduced motion
+        document.querySelectorAll('.project-card, .interest-card, .tech-card, .contact-card, .research-item, .art-item, .music-project').forEach(card => {
+            card.classList.add('card-revealed');
+        });
+    }
 
     // Project Tabs Functionality
     const tabButtons = document.querySelectorAll('.tab-btn');
@@ -91,38 +86,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Reveal animations on scroll
-    const revealElements = document.querySelectorAll('.reveal');
-
-    // TODO: Replace with Intersection Observer for better performance
-    // TODO: Add stagger effect for multiple cards (delay each by 100ms)
-    // TODO: Extend to all cards, not just elements with .reveal class
-
-    function checkReveal() {
-        const windowHeight = window.innerHeight;
-        const revealPoint = 150;
-
-        revealElements.forEach(element => {
-            const revealTop = element.getBoundingClientRect().top;
-
-            if (revealTop < windowHeight - revealPoint) {
-                element.classList.add('active');
-            }
-        });
-    }
-
-    // Run once on page load
-    checkReveal();
-
-    // Run on scroll
-    window.addEventListener('scroll', checkReveal);
-
-    // TODO: Throttle scroll event for better performance
-    // const throttledCheckReveal = throttle(checkReveal, 100);
-
     // Theme Switcher Logic
     initThemeSwitcher();
 });
+
+// Scroll-triggered animations using Intersection Observer
+function initScrollAnimations() {
+    const cards = document.querySelectorAll('.project-card, .interest-card, .tech-card, .contact-card, .research-item, .art-item, .music-project, .project-detail, .clinical-content');
+
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Stagger the animation with a delay
+                setTimeout(() => {
+                    entry.target.classList.add('card-revealed');
+                }, index * 100); // 100ms delay between each card
+
+                // Stop observing once revealed
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    cards.forEach(card => observer.observe(card));
+}
 
 function initThemeSwitcher() {
     const toggle = document.getElementById('themeToggle');
@@ -247,31 +239,6 @@ function updateResidencyStatus() {
 }
 
 // ===== FUTURE ENHANCEMENT FUNCTIONS =====
-
-// TODO: Implement Intersection Observer for scroll animations
-/*
-function initScrollAnimations() {
-    const cards = document.querySelectorAll('.project-card, .interest-card, .research-item, .art-item');
-
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                setTimeout(() => {
-                    entry.target.classList.add('card-revealed');
-                }, index * 100); // Stagger by 100ms
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    cards.forEach(card => observer.observe(card));
-}
-*/
 
 // TODO: Implement smart header (hide on scroll down, show on scroll up)
 /*
