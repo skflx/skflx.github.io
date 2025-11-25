@@ -182,19 +182,17 @@ function initThemeSwitcher() {
     });
 
     function applyTheme(themeClass) {
-        // Remove all theme classes
-        document.body.classList.remove('theme-sage', 'theme-slate', 'theme-sand');
-        // TODO: Add 'theme-midnight' when dark mode is implemented
-        document.body.classList.add(themeClass);
+        // Dynamically remove all theme classes
+        const allThemes = Array.from(themeBtns).map(btn => btn.getAttribute('data-theme'));
+        document.body.classList.remove(...allThemes);
 
-        // TODO: Add smooth color transition animation
-        // document.body.style.transition = 'background-color 0.5s ease, color 0.5s ease';
+        // Add the new theme
+        document.body.classList.add(themeClass);
 
         // Update active state in UI
         themeBtns.forEach(btn => {
             if (btn.getAttribute('data-theme') === themeClass) {
                 btn.classList.add('selected');
-                // TODO: Add success checkmark animation
             } else {
                 btn.classList.remove('selected');
             }
