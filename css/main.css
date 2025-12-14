@@ -128,7 +128,6 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
-  /* TODO: Add lazy loading attribute in HTML: loading="lazy" */
   /* TODO: Implement blur-up effect for progressive loading */
 }
 
