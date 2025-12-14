@@ -1,6 +1,6 @@
-# Samipya Kafle, MD - Personal Website
+# skflx.MD - Personal Website
 
-Personal portfolio website for Dr. Samipya Kafle, otolaryngology resident in the Pacific Northwest.
+Personal portfolio website for an otolaryngology resident in the Pacific Northwest.
 
 ## Live Site
 
@@ -19,8 +19,8 @@ Personal portfolio website for Dr. Samipya Kafle, otolaryngology resident in the
 - User preference persisted via localStorage
 
 ### Pages
-- **Home** (`index.html`) - Combined landing page with hero, about, research focus, and interests
-- **Projects** (`projects.html`) - Tabbed interface for Research, Technology, Art, Music, and Clinical work
+- **Home** (`index.html`) - Landing page with hero, about, and unified "What I Do" section
+- **Projects** (`projects.html`) - Tabbed interface for Research, Technology, Art, Music, and Clinical work with CV download
 - **Contact** (`contact.html`) - Functional contact form with Formspree integration
 
 ### Design
@@ -53,6 +53,8 @@ Personal portfolio website for Dr. Samipya Kafle, otolaryngology resident in the
 │   ├── me_large.jpg    # Hero profile image
 │   ├── art-placeholder.svg
 │   └── music-placeholder.svg
+├── documents/
+│   └── cv.pdf          # CV/Resume (placeholder)
 ├── scripts/
 │   └── update_from_cv.py  # Publication list generator (deprecated)
 ├── README.md           # This file
