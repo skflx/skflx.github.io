@@ -98,7 +98,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Theme Switcher Logic
     initThemeSwitcher();
+
+    // Active Navigation State
+    highlightActiveLink();
 });
+
+// Highlight the current page in the navigation
+function highlightActiveLink() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        const linkPage = link.getAttribute('href');
+        if (linkPage === currentPage) {
+            link.classList.add('active');
+        }
+    });
+}
 
 // Scroll-triggered animations using Intersection Observer
 function initScrollAnimations() {
