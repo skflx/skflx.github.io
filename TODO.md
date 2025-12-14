@@ -114,5 +114,13 @@ The recent redesign implemented many items from this list. The site now features
 
 Focus future work on:
 - Adding real content (artwork, music photos)
+- Adding CV PDF to `documents/cv.pdf`
 - Performance monitoring
 - User feedback integration
+
+### Recently Completed
+- Unified "What I Do" section (merged research focus + interests)
+- Added LinkedIn to social links
+- Added CV download link on Projects page
+- Improved spacing proportions
+- Education cards in About section

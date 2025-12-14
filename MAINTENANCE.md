@@ -85,11 +85,8 @@ Edit `index.html`, look for the `.hero` section.
 ### About Section
 Edit `index.html`, look for the `#about` section.
 
-### Research Focus
-Edit `index.html`, look for the "Research Focus" section with `.grid-3` cards.
-
-### Interests
-Edit `index.html`, look for the "Beyond Medicine" section with `.interests-grid`.
+### What I Do Section
+Edit `index.html`, look for the "What I Do" section with `.grid-3` cards. This unified section combines project categories (Research, Technology, Art, Music) with personal interests (Outdoors, Fitness).
 
 ### Projects
 Edit `projects.html`. Each tab has its own `<div id="tab-name">` section.
@@ -110,8 +107,9 @@ The design uses CSS custom properties defined in `css/main.css`:
 --spacing-xs: 0.5rem;
 --spacing-sm: 1rem;
 --spacing-md: 1.5rem;
---spacing-lg: 2.5rem;
---spacing-xl: 4rem;
+--spacing-lg: 2rem;
+--spacing-xl: 3rem;
+--spacing-2xl: 4rem;
 
 /* Colors (dynamic + fallback) */
 --color-primary, --color-secondary, --color-accent
@@ -167,9 +165,18 @@ Social links appear in:
 - Footer (all pages)
 - Contact page sidebar
 
-To update, search for `instagram.com/skflx` and `github.com/skflx` and replace.
+Current social profiles:
+- LinkedIn (`linkedin.com/in/skflx`)
+- Instagram (`instagram.com/skflx`)
+- GitHub (`github.com/skflx`)
 
-**Note:** Twitter was intentionally removed. Only Instagram and GitHub are linked.
+**Note:** Twitter was intentionally removed.
+
+---
+
+## CV/Resume
+
+A CV download link is available on the Projects page. Place your CV file at `documents/cv.pdf`.
 
 ---
 
