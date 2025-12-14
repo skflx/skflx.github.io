@@ -1,236 +1,382 @@
-// main.js - JS functionality for SK's personal website
+// main.js - Dynamic color extraction and site functionality
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for reduced motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Initialize all functionality
+    initTheme();
+    initMobileMenu();
+    initScrollAnimations();
+    initTabs();
+    initSmoothScroll();
+    initActiveNav();
+    updateResidencyStatus();
 
-    // Mobile Navigation Toggle
+    // Extract colors from hero image
+    const heroImage = document.querySelector('.hero-image');
+    if (heroImage) {
+        if (heroImage.complete) {
+            extractColorsFromImage(heroImage);
+        } else {
+            heroImage.addEventListener('load', () => extractColorsFromImage(heroImage));
+        }
+    }
+});
+
+// ===== DYNAMIC COLOR EXTRACTION =====
+function extractColorsFromImage(img) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Use a smaller size for faster processing
+    const sampleSize = 100;
+    canvas.width = sampleSize;
+    canvas.height = sampleSize;
+
+    try {
+        ctx.drawImage(img, 0, 0, sampleSize, sampleSize);
+        const imageData = ctx.getImageData(0, 0, sampleSize, sampleSize);
+        const pixels = imageData.data;
+
+        // Extract dominant colors using color quantization
+        const colors = extractDominantColors(pixels, 5);
+
+        if (colors.length >= 3) {
+            // Convert to matte (desaturated) versions
+            const matteColors = colors.map(color => toMatteColor(color));
+
+            // Apply colors to CSS variables
+            applyDynamicColors(matteColors);
+        }
+
+        document.body.classList.add('color-loaded');
+        document.body.classList.remove('color-loading');
+    } catch (e) {
+        // CORS or other error - use fallback colors
+        console.log('Using fallback colors');
+        document.body.classList.add('color-loaded');
+    }
+}
+
+function extractDominantColors(pixels, numColors) {
+    const colorCounts = {};
+
+    // Sample every 4th pixel for performance
+    for (let i = 0; i < pixels.length; i += 16) {
+        const r = pixels[i];
+        const g = pixels[i + 1];
+        const b = pixels[i + 2];
+        const a = pixels[i + 3];
+
+        if (a < 128) continue; // Skip transparent pixels
+
+        // Quantize to reduce color space
+        const qr = Math.round(r / 32) * 32;
+        const qg = Math.round(g / 32) * 32;
+        const qb = Math.round(b / 32) * 32;
+
+        const key = `${qr},${qg},${qb}`;
+        colorCounts[key] = (colorCounts[key] || 0) + 1;
+    }
+
+    // Sort by frequency and get top colors
+    const sortedColors = Object.entries(colorCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, numColors * 3) // Get more candidates
+        .map(([key]) => {
+            const [r, g, b] = key.split(',').map(Number);
+            return { r, g, b };
+        });
+
+    // Filter out colors that are too similar, too dark, or too light
+    const distinctColors = [];
+    for (const color of sortedColors) {
+        const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+
+        // Skip very dark or very light colors
+        if (brightness < 30 || brightness > 230) continue;
+
+        // Check if color is distinct from already selected colors
+        const isDistinct = distinctColors.every(existing => {
+            const distance = Math.sqrt(
+                Math.pow(color.r - existing.r, 2) +
+                Math.pow(color.g - existing.g, 2) +
+                Math.pow(color.b - existing.b, 2)
+            );
+            return distance > 50;
+        });
+
+        if (isDistinct) {
+            distinctColors.push(color);
+            if (distinctColors.length >= numColors) break;
+        }
+    }
+
+    // If we don't have enough colors, add some variations
+    while (distinctColors.length < numColors && distinctColors.length > 0) {
+        const base = distinctColors[0];
+        distinctColors.push({
+            r: Math.min(255, base.r + 30),
+            g: Math.min(255, base.g + 30),
+            b: Math.min(255, base.b + 30)
+        });
+    }
+
+    return distinctColors;
+}
+
+function toMatteColor(color) {
+    // Convert to HSL
+    const r = color.r / 255;
+    const g = color.g / 255;
+    const b = color.b / 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+        h = s = 0;
+    } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        switch (max) {
+            case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+            case g: h = ((b - r) / d + 2) / 6; break;
+            case b: h = ((r - g) / d + 4) / 6; break;
+        }
+    }
+
+    // Reduce saturation for matte effect (40-60% of original)
+    s = s * 0.5;
+
+    // Adjust lightness to be in a good range for UI
+    l = Math.max(0.35, Math.min(0.65, l));
+
+    // Convert back to RGB
+    return hslToRgb(h, s, l);
+}
+
+function hslToRgb(h, s, l) {
+    let r, g, b;
+
+    if (s === 0) {
+        r = g = b = l;
+    } else {
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+
+    return {
+        r: Math.round(r * 255),
+        g: Math.round(g * 255),
+        b: Math.round(b * 255)
+    };
+}
+
+function rgbToHex(color) {
+    return '#' + [color.r, color.g, color.b]
+        .map(x => x.toString(16).padStart(2, '0'))
+        .join('');
+}
+
+function applyDynamicColors(colors) {
+    const root = document.documentElement;
+
+    if (colors[0]) {
+        root.style.setProperty('--color-primary', rgbToHex(colors[0]));
+        root.style.setProperty('--color-primary-matte', rgbToHex(lightenColor(colors[0], 10)));
+    }
+
+    if (colors[1]) {
+        root.style.setProperty('--color-secondary', rgbToHex(colors[1]));
+        root.style.setProperty('--color-secondary-matte', rgbToHex(lightenColor(colors[1], 10)));
+    }
+
+    if (colors[2]) {
+        root.style.setProperty('--color-accent', rgbToHex(colors[2]));
+        root.style.setProperty('--color-accent-matte', rgbToHex(lightenColor(colors[2], 10)));
+    }
+
+    // Store colors for persistence
+    localStorage.setItem('sk_dynamic_colors', JSON.stringify(colors.map(rgbToHex)));
+}
+
+function lightenColor(color, percent) {
+    return {
+        r: Math.min(255, Math.round(color.r + (255 - color.r) * (percent / 100))),
+        g: Math.min(255, Math.round(color.g + (255 - color.g) * (percent / 100))),
+        b: Math.min(255, Math.round(color.b + (255 - color.b) * (percent / 100)))
+    };
+}
+
+// ===== DARK MODE =====
+function initTheme() {
+    const themeToggle = document.querySelector('.theme-toggle');
+    if (!themeToggle) return;
+
+    // Check for saved theme preference or system preference
+    const savedTheme = localStorage.getItem('sk_theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('sk_theme')) {
+            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+    });
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('sk_theme', newTheme);
+}
+
+// ===== MOBILE MENU =====
+function initMobileMenu() {
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
+    if (!mobileMenuBtn || !navLinks) return;
+
+    mobileMenuBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+
+        // Toggle icon
+        const icon = mobileMenuBtn.querySelector('svg');
+        if (icon) {
+            const isOpen = navLinks.classList.contains('active');
+            icon.innerHTML = isOpen
+                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>'
+                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+        }
+    });
+
+    // Close menu when clicking on a link
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
         });
+    });
+}
+
+// ===== SCROLL ANIMATIONS =====
+function initScrollAnimations() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+        document.querySelectorAll('.reveal').forEach(el => {
+            el.classList.add('revealed');
+        });
+        return;
     }
 
-    // Residency Status Update
-    updateResidencyStatus();
-
-    // Initialize scroll-triggered card animations
-    if (!prefersReducedMotion) {
-        initScrollAnimations();
-    } else {
-        // Immediately reveal all cards if user prefers reduced motion
-        document.querySelectorAll('.project-card, .interest-card, .tech-card, .contact-card, .research-item, .art-item, .music-project').forEach(card => {
-            card.classList.add('card-revealed');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+            }
         });
-    }
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
 
-    // Project Tabs Functionality
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// ===== TABS =====
+function initTabs() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
-    if (tabButtons.length > 0) {
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetTab = button.getAttribute('data-tab');
+    if (tabButtons.length === 0) return;
 
-                // Update active tab button
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetTab = button.getAttribute('data-tab');
 
-                // Crossfade: fade out current, then fade in target
-                const currentActive = document.querySelector('.tab-content.active');
+            // Update buttons
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
 
-                if (currentActive) {
-                    currentActive.style.animation = 'tabFadeOut 0.2s ease forwards';
-                    setTimeout(() => {
-                        currentActive.classList.remove('active');
-                        currentActive.style.animation = '';
-
-                        // Show target tab content
-                        const targetContent = document.getElementById(targetTab);
-                        if (targetContent) {
-                            targetContent.classList.add('active');
-                        }
-                    }, 200);
-                } else {
-                    // No current active, just show the target
-                    const targetContent = document.getElementById(targetTab);
-                    if (targetContent) {
-                        targetContent.classList.add('active');
-                    }
+            // Update content
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === targetTab) {
+                    content.classList.add('active');
                 }
             });
         });
-        
-        // Set first tab as active by default if none are active
-        const hasActive = Array.from(tabButtons).some(btn => btn.classList.contains('active'));
-        if (!hasActive && tabButtons[0] && tabContents[0]) {
-            tabButtons[0].classList.add('active');
-            tabContents[0].classList.add('active');
-        }
+    });
+
+    // Activate first tab by default
+    if (!document.querySelector('.tab-btn.active')) {
+        tabButtons[0]?.classList.add('active');
+        tabContents[0]?.classList.add('active');
     }
-    
-    // Smooth scrolling for anchor links
+}
+
+// ===== SMOOTH SCROLL =====
+function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
+
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 0;
+                const targetPosition = target.offsetTop - headerHeight - 20;
+
                 window.scrollTo({
-                    top: targetElement.offsetTop - 100,
+                    top: targetPosition,
                     behavior: 'smooth'
                 });
-                
-                // Close mobile menu if open
-                if (navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                }
             }
         });
     });
-    
-    // Theme Switcher Logic
-    initThemeSwitcher();
+}
 
-    // Active Navigation State
-    highlightActiveLink();
-});
-
-// Highlight the current page in the navigation
-function highlightActiveLink() {
+// ===== ACTIVE NAV =====
+function initActiveNav() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.nav-links a');
 
-    navLinks.forEach(link => {
-        const linkPage = link.getAttribute('href');
-        if (linkPage === currentPage) {
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
             link.classList.add('active');
         }
     });
 }
 
-// Scroll-triggered animations using Intersection Observer
-function initScrollAnimations() {
-    const cards = document.querySelectorAll('.project-card, .interest-card, .tech-card, .contact-card, .research-item, .art-item, .music-project, .project-detail, .clinical-content');
-
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Stagger the animation with a delay
-                setTimeout(() => {
-                    entry.target.classList.add('card-revealed');
-                }, index * 100); // 100ms delay between each card
-
-                // Stop observing once revealed
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    cards.forEach(card => observer.observe(card));
-}
-
-function initThemeSwitcher() {
-    const toggle = document.getElementById('themeToggle');
-    const panel = document.getElementById('themePanel');
-    const themeBtns = document.querySelectorAll('.theme-btn');
-    const typeBtns = document.querySelectorAll('.type-btn');
-
-    if (!toggle || !panel) return;
-
-    // TODO: Check if first visit and add pulse animation to toggle
-    // if (!localStorage.getItem('sk_visited')) {
-    //     toggle.classList.add('first-visit');
-    //     localStorage.setItem('sk_visited', 'true');
-    // }
-
-    // Toggle Panel
-    toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        panel.classList.toggle('active');
-
-        // TODO: Morph icon from bars to X when panel opens
-        // TODO: Add sequential fade-in for menu items when opening
-    });
-
-    // Close panel when clicking outside
-    document.addEventListener('click', (e) => {
-        if (!panel.contains(e.target) && !toggle.contains(e.target)) {
-            panel.classList.remove('active');
-        }
-    });
-
-    // Load Saved Preference
-    const savedTheme = localStorage.getItem('sk_theme') || 'theme-slate';
-    const savedType = localStorage.getItem('sk_type') || 'type-minimal';
-
-    applyTheme(savedTheme);
-    applyType(savedType);
-
-    // Theme Buttons
-    themeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const theme = btn.getAttribute('data-theme');
-            applyTheme(theme);
-            localStorage.setItem('sk_theme', theme);
-        });
-    });
-
-    // Type Buttons
-    typeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const type = btn.getAttribute('data-type');
-            applyType(type);
-            localStorage.setItem('sk_type', type);
-        });
-    });
-
-    function applyTheme(themeClass) {
-        // Dynamically remove all theme classes
-        const allThemes = Array.from(themeBtns).map(btn => btn.getAttribute('data-theme'));
-        document.body.classList.remove(...allThemes);
-
-        // Add the new theme
-        document.body.classList.add(themeClass);
-
-        // Update active state in UI
-        themeBtns.forEach(btn => {
-            if (btn.getAttribute('data-theme') === themeClass) {
-                btn.classList.add('selected');
-            } else {
-                btn.classList.remove('selected');
-            }
-        });
-    }
-
-    function applyType(typeClass) {
-        // Remove all type classes
-        document.body.classList.remove('type-modern', 'type-editorial', 'type-minimal');
-        document.body.classList.add(typeClass);
-
-        // Update active state in UI
-        typeBtns.forEach(btn => {
-            if (btn.getAttribute('data-type') === typeClass) {
-                btn.classList.add('selected');
-            } else {
-                btn.classList.remove('selected');
-            }
-        });
-    }
-}
-
+// ===== RESIDENCY STATUS =====
 function updateResidencyStatus() {
     const statusElement = document.getElementById('pgy-status');
     if (!statusElement) return;
@@ -238,140 +384,62 @@ function updateResidencyStatus() {
     const startDate = new Date('2024-07-01');
     const now = new Date();
 
-    // Calculate the difference in years
     let yearDiff = now.getFullYear() - startDate.getFullYear();
-
-    // If we haven't reached July yet in the current year, subtract 1 from the difference
-    // However, since "PGY-1" corresponds to year difference of 0 (2024-2024),
-    // we actually want PGY-1 when diff is 0.
-    // If now is May 2025, diff is 1. But we are still in PGY-1.
-    // If now is July 2025, diff is 1. We are PGY-2.
-
-    // Logic:
-    // PGY Level = (Current Year - Start Year) + 1
-    // IF (Current Month < July), Subtract 1.
-
     let pgyLevel = yearDiff + 1;
-    if (now.getMonth() < 6) { // Month is 0-indexed. 6 is July.
+
+    // If we haven't reached July yet in the current year
+    if (now.getMonth() < 6) {
         pgyLevel--;
     }
 
-    // Safety check for pre-residency
     if (pgyLevel < 1) pgyLevel = 1;
 
     statusElement.textContent = `PGY-${pgyLevel}`;
 }
 
-// ===== FUTURE ENHANCEMENT FUNCTIONS =====
+// ===== CONTACT FORM =====
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
 
-// TODO: Implement smart header (hide on scroll down, show on scroll up)
-/*
-function initSmartHeader() {
-    const header = document.querySelector('header');
-    let lastScroll = 0;
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
 
-        if (currentScroll <= 0) {
-            header.classList.remove('scroll-up');
-            return;
-        }
-
-        if (currentScroll > lastScroll && !header.classList.contains('scroll-down')) {
-            header.classList.remove('scroll-up');
-            header.classList.add('scroll-down');
-        } else if (currentScroll < lastScroll && header.classList.contains('scroll-down')) {
-            header.classList.remove('scroll-down');
-            header.classList.add('scroll-up');
-        }
-        lastScroll = currentScroll;
-    });
-}
-*/
-
-// TODO: Add scroll progress indicator
-/*
-function initScrollProgress() {
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    document.body.appendChild(progressBar);
-
-    window.addEventListener('scroll', () => {
-        const winScroll = document.documentElement.scrollTop;
-        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (winScroll / height) * 100;
-        progressBar.style.width = scrolled + '%';
-    });
-}
-*/
-
-// TODO: Add parallax effect for hero section
-/*
-function initParallax() {
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-    const profileImg = document.querySelector('.profile-img');
-
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallaxSpeed = 0.5;
-
-        if (scrolled < hero.offsetHeight) {
-            heroContent.style.transform = `translateY(${scrolled * parallaxSpeed}px)`;
-            if (profileImg) {
-                profileImg.style.transform = `translateY(${scrolled * parallaxSpeed * 0.3}px)`;
-            }
-        }
-    });
-}
-*/
-
-// TODO: Add button ripple effect
-/*
-function addRippleEffect() {
-    const buttons = document.querySelectorAll('.btn');
-
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-
-            this.appendChild(ripple);
-
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-}
-*/
-
-// Utility function - Throttle
-function throttle(func, limit) {
-    let lastFunc;
-    let lastRan;
-    return function() {
-        const context = this;
-        const args = arguments;
-        if (!lastRan) {
-            func.apply(context, args);
-            lastRan = Date.now();
-        } else {
-            clearTimeout(lastFunc);
-            lastFunc = setTimeout(function() {
-                if ((Date.now() - lastRan) >= limit) {
-                    func.apply(context, args);
-                    lastRan = Date.now();
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
                 }
-            }, limit - (Date.now() - lastRan));
+            });
+
+            if (response.ok) {
+                // Show success message
+                const successEl = document.querySelector('.form-success');
+                if (successEl) {
+                    successEl.classList.add('show');
+                    form.style.display = 'none';
+                }
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            alert('There was an error sending your message. Please try again or use the social links to contact me.');
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
-    };
+    });
+}
+
+// Initialize contact form if on contact page
+if (document.getElementById('contact-form')) {
+    initContactForm();
 }

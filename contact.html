@@ -3,209 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | @skflx.MD</title>
-    <!-- Local Fonts -->
-    <link rel="preload" href="assets/fonts/Montserrat.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/OpenSans.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="css/fonts.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Main Stylesheet -->
+    <title>Contact | Samipya Kafle, MD</title>
+    <meta name="description" content="Get in touch with Dr. Samipya Kafle for research collaborations, professional inquiries, or general questions.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <!-- Header & Navigation -->
-    <header>
+    <!-- Header -->
+    <header class="header">
         <div class="container">
-            <nav>
-                <a href="index.html" class="logo">@skflx.MD</a>
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="https://twitter.com/skflx" target="_blank">Twitter</a></li>
-                </ul>
-            </nav>
+            <div class="header-inner">
+                <a href="index.html" class="logo">Samipya Kafle, MD</a>
+
+                <nav class="nav">
+                    <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+
+                    <button class="theme-toggle" aria-label="Toggle dark mode">
+                        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+
+                    <button class="mobile-menu-btn" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </nav>
+            </div>
         </div>
     </header>
 
     <!-- Contact Section -->
-    <section class="contact-section" style="min-height: 60vh; display: flex; align-items: center; padding: var(--spacing-lg) 0;">
+    <section class="section">
         <div class="container">
-            <div class="grid">
-                <div class="col-6">
-                    <h2 class="section-title">Get In Touch</h2>
-                    <p>Always interested in connecting with colleagues, researchers, and innovators in medicine and technology. Feel free to reach out with questions, collaboration ideas, or to connect.</p>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="section-header">
+                        <h1>Get in Touch</h1>
+                        <p>Let's connect</p>
+                    </div>
 
-                    <div class="contact-info">
-                        <div class="contact-info-item">
+                    <p class="lead">
+                        Always interested in connecting with colleagues, researchers, and innovators in medicine and technology. Feel free to reach out with questions, collaboration ideas, or just to say hello.
+                    </p>
+
+                    <div class="contact-links mt-lg">
+                        <a href="https://www.instagram.com/skflx/" target="_blank" class="contact-link">
+                            <i class="fab fa-instagram"></i>
+                            <span>@skflx</span>
+                        </a>
+                        <a href="https://github.com/skflx" target="_blank" class="contact-link">
+                            <i class="fab fa-github"></i>
+                            <span>skflx</span>
+                        </a>
+                        <div class="contact-link" style="cursor: default;">
                             <i class="fas fa-map-marker-alt"></i>
                             <span>Portland, Oregon</span>
                         </div>
                     </div>
-
-                    <div class="social-links mt-4">
-                        <a href="https://twitter.com/skflx" target="_blank" class="btn" style="margin-right: 10px;">
-                            <i class="fab fa-twitter"></i> Twitter
-                        </a>
-                        <a href="https://www.instagram.com/skflx/" target="_blank" class="btn" style="margin-right: 10px;">
-                            <i class="fab fa-instagram"></i> Instagram
-                        </a>
-                        <a href="https://github.com/skflx" target="_blank" class="btn">
-                            <i class="fab fa-github"></i> GitHub
-                        </a>
-                    </div>
                 </div>
 
-                <div class="col-6">
-                    <div class="contact-form">
-                        <h3>Send a Message</h3>
-                        <form id="contact-form">
+                <div class="contact-form-wrapper">
+                    <h3>Send a Message</h3>
+
+                    <div class="form-success" id="form-success">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: var(--spacing-sm);"></i>
+                        <h4>Message Sent!</h4>
+                        <p style="margin-bottom: 0;">Thank you for reaching out. I'll get back to you as soon as possible.</p>
+                    </div>
+
+                    <form id="contact-form" action="https://formspree.io/f/xpwzgkjd" method="POST">
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="name" class="form-label">Name</label>
-                                <input type="text" id="name" class="form-control" required>
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Your name" required>
                             </div>
-
                             <div class="form-group">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" class="form-control" required>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
                             </div>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="subject" class="form-label">Subject</label>
-                                <input type="text" id="subject" class="form-control" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" id="subject" name="subject" class="form-control" placeholder="What's this about?" required>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea id="message" class="form-control" required></textarea>
-                            </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" name="message" class="form-control" placeholder="Your message..." required></textarea>
+                        </div>
 
-                            <button type="submit" class="btn">Send Message</button>
-                        </form>
-                    </div>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                            Send Message <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Additional Contact Info -->
-    <section class="section" style="background-color: var(--background-alt);">
+    <!-- Areas of Interest Section -->
+    <section class="section section-alt">
         <div class="container">
-            <h2 class="section-title text-center">Areas of Interest</h2>
-            <div class="grid">
-                <div class="col-4 fade-in">
-                    <div class="contact-card text-center">
-                        <i class="fas fa-flask contact-icon"></i>
-                        <h3>Research</h3>
-                        <p>Have questions or ideas about research in otolaryngology or hearing technology? I'm open to discussing potential collaborations.</p>
-                    </div>
-                </div>
-                
-                <div class="col-4 fade-in">
-                    <div class="contact-card text-center">
-                        <i class="fas fa-lightbulb contact-icon"></i>
-                        <h3>Innovation & Technology</h3>
-                        <p>Curious about medical technology innovation or interested in speech processing for hearing devices? Feel free to reach out.</p>
-                    </div>
-                </div>
-                
-                <div class="col-4 fade-in">
-                    <div class="contact-card text-center">
-                        <i class="fas fa-user-md contact-icon"></i>
-                        <h3>General Inquiries</h3>
-                        <p>If you have any other questions or professional inquiries, I'm happy to help. Just let me know what you're looking for.</p>
-                    </div>
-                </div>
+            <div class="section-header text-center">
+                <h2>Areas of Interest</h2>
+                <p>Topics I'm always happy to discuss</p>
             </div>
-        </div>
-    </section>
 
-    <!-- Location Map -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title text-center">Location</h2>
-            <div class="map-container fade-in">
-                <!-- Replace with actual Google Maps embed code for Portland -->
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d178780.60923922984!2d-122.78626977650475!3d45.54761873034282!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54950b0b7da97427%3A0x1c36b9e6f6d18591!2sPortland%2C%20OR!5e0!3m2!1sen!2sus!4v1708030111922!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+            <div class="grid-3">
+                <div class="card reveal text-center">
+                    <div class="card-icon" style="margin-left: auto; margin-right: auto;">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Research</h3>
+                    <p>Questions or ideas about research in otolaryngology, hearing technology, or surgical outcomes.</p>
+                </div>
+
+                <div class="card reveal text-center">
+                    <div class="card-icon" style="margin-left: auto; margin-right: auto;">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Innovation</h3>
+                    <p>Medical technology innovation, speech processing for hearing devices, or surgical education.</p>
+                </div>
+
+                <div class="card reveal text-center">
+                    <div class="card-icon" style="margin-left: auto; margin-right: auto;">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>General</h3>
+                    <p>Professional inquiries, mentorship questions, or just want to connect.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div>
-                    <a href="index.html" class="footer-logo">@skflx.MD</a>
-                    <ul class="social-links mt-2">
-                        <li><a href="https://twitter.com/skflx" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i></a></li>
-                    </ul>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">Samipya Kafle, MD</a>
+                    <p>Otolaryngology resident passionate about technology, surgical education, and innovation in medicine.</p>
                 </div>
-                <ul class="footer-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
+
+                <div class="footer-links">
+                    <div class="footer-links-col">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="projects.html">Projects</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-col">
+                        <h4>Connect</h4>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/skflx/" target="_blank" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://github.com/skflx" target="_blank" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 @skflx.MD. All rights reserved.</p>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Samipya Kafle, MD. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Mega Menu FAB -->
-    <div class="theme-switcher-toggle" id="themeToggle">
-        <i class="fas fa-bars"></i>
-    </div>
-
-    <div class="theme-panel" id="themePanel">
-        <div class="menu-header">
-            <h3>Menu</h3>
-        </div>
-
-        <ul class="menu-links">
-            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="about.html"><i class="fas fa-user"></i> About</a></li>
-            <li><a href="projects.html"><i class="fas fa-flask"></i> Projects</a></li>
-            <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
-        </ul>
-
-        <hr class="menu-divider">
-
-        <div class="settings-section">
-            <h4>Color Theme</h4>
-            <div class="theme-options">
-                <div class="theme-btn theme-btn-sage" data-theme="theme-sage" title="Sage"></div>
-                <div class="theme-btn theme-btn-slate" data-theme="theme-slate" title="Slate"></div>
-                <div class="theme-btn theme-btn-sand" data-theme="theme-sand" title="Sand"></div>
-            </div>
-
-            <h4>Typography</h4>
-            <div class="type-options">
-                <button class="type-btn" data-type="type-modern">Modern</button>
-                <button class="type-btn" data-type="type-editorial">Editorial</button>
-                <button class="type-btn" data-type="type-minimal">Minimal</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript -->
     <script src="js/main.js"></script>
     <script>
-        // Simple form submission handler
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Oops! This form is currently under construction. Please use the social media links provided to get in touch.');
-            this.reset();
-        });
+        // Contact form handler
+        const form = document.getElementById('contact-form');
+        const successMsg = document.getElementById('form-success');
+
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalHTML = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        form.style.display = 'none';
+                        successMsg.classList.add('show');
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                } catch (error) {
+                    alert('There was an error sending your message. Please try again or reach out via social media.');
+                    submitBtn.innerHTML = originalHTML;
+                    submitBtn.disabled = false;
+                }
+            });
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <rect fill="#e2e8f0" width="500" height="500"/>
+  <text x="250" y="240" font-family="system-ui, sans-serif" font-size="18" fill="#94a3b8" text-anchor="middle">Artwork</text>
+  <text x="250" y="270" font-family="system-ui, sans-serif" font-size="14" fill="#cbd5e1" text-anchor="middle">Coming Soon</text>
+</svg>

@@ -3,238 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects | @skflx.MD</title>
-    <!-- Local Fonts -->
-    <link rel="preload" href="assets/fonts/Montserrat.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/OpenSans.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="css/fonts.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Main Stylesheet -->
+    <title>Projects | Samipya Kafle, MD</title>
+    <meta name="description" content="Research projects, technology initiatives, and creative work by Dr. Samipya Kafle.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <!-- Header & Navigation -->
-    <header>
+    <!-- Header -->
+    <header class="header">
         <div class="container">
-            <nav>
-                <a href="index.html" class="logo">@skflx.MD</a>
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="https://twitter.com/skflx" target="_blank">Twitter</a></li>
-                </ul>
-            </nav>
+            <div class="header-inner">
+                <a href="index.html" class="logo">Samipya Kafle, MD</a>
+
+                <nav class="nav">
+                    <ul class="nav-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="projects.html">Projects</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+
+                    <button class="theme-toggle" aria-label="Toggle dark mode">
+                        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+
+                    <button class="mobile-menu-btn" aria-label="Toggle menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </nav>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" style="min-height: 40vh;">
+    <!-- Page Header -->
+    <section class="section">
         <div class="container">
-            <div class="hero-content">
+            <div class="section-header">
                 <h1>Projects</h1>
-                <p class="subtitle">Research · Technology · Clinical Practice</p>
+                <p>Research, technology, and creative work</p>
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section class="section">
+    <section class="section section-alt" style="padding-top: 0;">
         <div class="container">
-            <!-- Improved Tabs Navigation -->
-            <div class="tabs-container">
-                <div class="tabs">
-                    <button class="tab-btn" data-tab="research"><i class="fas fa-flask"></i>Research</button>
-                    <button class="tab-btn" data-tab="technology"><i class="fas fa-microchip"></i>Technology</button>
-                    <button class="tab-btn" data-tab="art"><i class="fas fa-palette"></i>Art</button>
-                    <button class="tab-btn" data-tab="music"><i class="fas fa-music"></i>Music</button>
-                    <button class="tab-btn" data-tab="clinical"><i class="fas fa-user-md"></i>Clinical</button>
+            <!-- Tabs Navigation -->
+            <nav class="tabs-nav">
+                <button class="tab-btn active" data-tab="research">
+                    <i class="fas fa-flask"></i> Research
+                </button>
+                <button class="tab-btn" data-tab="technology">
+                    <i class="fas fa-microchip"></i> Technology
+                </button>
+                <button class="tab-btn" data-tab="art">
+                    <i class="fas fa-palette"></i> Art
+                </button>
+                <button class="tab-btn" data-tab="music">
+                    <i class="fas fa-music"></i> Music
+                </button>
+                <button class="tab-btn" data-tab="clinical">
+                    <i class="fas fa-user-md"></i> Clinical
+                </button>
+            </nav>
+
+            <!-- Research Tab -->
+            <div id="research" class="tab-content active">
+                <div class="section-header">
+                    <h2>Research Projects</h2>
+                    <p>Publications and ongoing research in otolaryngology</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="research-card reveal">
+                        <div class="card-icon">
+                            <i class="fas fa-head-side"></i>
+                        </div>
+                        <h3>Craniofacial Trauma</h3>
+                        <p>Investigating injury patterns in sports (skiing, snowboarding, surfing) and identifying factors associated with surgical outcomes.</p>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Trauma+OR+Fracture+OR+Injury)" target="_blank" class="btn btn-outline btn-sm">
+                            View Papers <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+
+                    <div class="research-card reveal">
+                        <div class="card-icon">
+                            <i class="fas fa-ribbon"></i>
+                        </div>
+                        <h3>Head & Neck Oncology</h3>
+                        <p>Characterizing complications, risk factors, and survival outcomes in head and neck cancer surgeries, including total laryngectomy.</p>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cancer+OR+Oncology+OR+Tumor+OR+Laryngectomy)" target="_blank" class="btn btn-outline btn-sm">
+                            View Papers <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+
+                    <div class="research-card reveal">
+                        <div class="card-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Surgical Education</h3>
+                        <p>Exploring innovative methods for surgical training, including live-streaming procedures and automated feedback systems.</p>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Education+OR+Training+OR+Student)" target="_blank" class="btn btn-outline btn-sm">
+                            View Papers <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+
+                    <div class="research-card reveal">
+                        <div class="card-icon">
+                            <i class="fas fa-ear-listen"></i>
+                        </div>
+                        <h3>Otology & Hearing Sciences</h3>
+                        <p>Studying cortical adaptations in cochlear implant patients and improving speech processing in hearing devices.</p>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cochlear+OR+Hearing+OR+Otology)" target="_blank" class="btn btn-outline btn-sm">
+                            View Papers <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-lg">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]" target="_blank" class="btn btn-primary">
+                        View All Publications <i class="fas fa-external-link-alt"></i>
+                    </a>
                 </div>
             </div>
-            
-            <!-- Research Tab Content -->
-            <div id="research" class="tab-content">
-                <h2 class="section-title">Research Projects</h2>
-                <p class="mb-4">My research focuses on improving surgical outcomes and understanding neurosensory processing in hearing disorders. Browse my publications by area of interest:</p>
-                
-                <div class="grid">
-                    <!-- Card 1: Craniofacial Trauma -->
-                    <div class="col-6 fade-in">
-                        <div class="interest-card">
-                            <div class="interest-info">
-                                <i class="fas fa-head-side interest-icon"></i>
-                                <h3>Craniofacial Trauma</h3>
-                                <p class="mb-2">Investigating injury patterns in sports (skiing, snowboarding, surfing) and identifying factors associated with surgical outcomes.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Trauma+OR+Fracture+OR+Injury)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Card 2: Head & Neck Oncology -->
-                    <div class="col-6 fade-in">
-                        <div class="interest-card">
-                            <div class="interest-info">
-                                <i class="fas fa-ribbon interest-icon"></i>
-                                <h3>Head & Neck Oncology</h3>
-                                <p class="mb-2">Characterizing complications, risk factors, and survival outcomes in head and neck cancer surgeries, including total laryngectomy.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cancer+OR+Oncology+OR+Tumor+OR+Laryngectomy)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Surgical Education -->
-                    <div class="col-6 fade-in">
-                        <div class="interest-card">
-                            <div class="interest-info">
-                                <i class="fas fa-graduation-cap interest-icon"></i>
-                                <h3>Surgical Education</h3>
-                                <p class="mb-2">Exploring innovative methods for surgical training, including live-streaming procedures and automated feedback systems.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Education+OR+Training+OR+Student)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 4: Otology & Hearing -->
-                    <div class="col-6 fade-in">
-                        <div class="interest-card">
-                            <div class="interest-info">
-                                <i class="fas fa-ear-listen interest-icon"></i>
-                                <h3>Otology & Hearing Sciences</h3>
-                                <p class="mb-2">Studying cortical adaptations in cochlear implant patients and improving speech processing in hearing devices.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cochlear+OR+Hearing+OR+Otology)" target="_blank" class="btn-outline" style="font-size: 0.85rem;">View Papers</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-4">
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]" target="_blank" class="btn">View All Publications on PubMed</a>
-                </div>
-            </div>
-            
-            <!-- Technology Tab Content -->
+            <!-- Technology Tab -->
             <div id="technology" class="tab-content">
-                <h2 class="section-title">Emergent Technology Projects</h2>
-                <p class="mb-4">I'm passionate about developing new technologies to address challenges in hearing healthcare and surgical practice.</p>
-                
-                <div class="grid">
-                    <div class="col-6 fade-in">
-                        <div class="project-detail">
-                            <div class="project-header">
-                                <img src="/api/placeholder/800/400" alt="Speech Processing Technology" class="project-header-img" loading="lazy">
-                            </div>
-                            <div class="project-body">
-                                <h3>Speech-in-Noise Processing Technology</h3>
-                                <div class="project-meta">
-                                    <span><i class="fas fa-calendar"></i> 2022 - Present</span>
-                                    <span><i class="fas fa-tag"></i> Hearing Technology</span>
-                                </div>
-                                <p>Working on improving speech recognition in challenging listening environments by enhancing both software and hardware solutions in hearing devices. This technology aims to address one of the most significant challenges for individuals with hearing loss.</p>
-                                <p>The project focuses on finding new approaches to better isolate speech from background noise, particularly in complex acoustic environments with multiple speakers or competing sounds.</p>
-                            </div>
+                <div class="section-header">
+                    <h2>Technology Projects</h2>
+                    <p>Innovation at the intersection of medicine and technology</p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="card reveal">
+                        <div class="card-icon">
+                            <i class="fas fa-waveform"></i>
+                        </div>
+                        <h3>Speech-in-Noise Processing</h3>
+                        <p>Working on improving speech recognition in challenging listening environments by enhancing both software and hardware solutions in hearing devices. This technology aims to address one of the most significant challenges for individuals with hearing loss.</p>
+                        <div class="mt-md">
+                            <span class="hero-badge"><i class="fas fa-calendar"></i> 2022 - Present</span>
                         </div>
                     </div>
-                    
-                    <div class="col-6">
-                        <div class="grid">
-                            <div class="col-12 fade-in">
-                                <div class="tech-card">
-                                    <div class="tech-header">
-                                        <h3>Surgical Livestreaming Platform</h3>
-                                    </div>
-                                    <div class="tech-body">
-                                        <i class="fas fa-video tech-icon"></i>
-                                        <p>Designed and implemented a technical system for livestreaming surgical procedures to medical students, including audio/video setup and sterile exoscope mounting for open procedures.</p>
-                                    </div>
-                                </div>
-                            </div>
+
+                    <div class="card reveal">
+                        <div class="card-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Surgical Livestreaming Platform</h3>
+                        <p>Designed and implemented a technical system for livestreaming surgical procedures to medical students, including audio/video setup and sterile exoscope mounting for open procedures.</p>
+                        <div class="mt-md">
+                            <span class="hero-badge"><i class="fas fa-calendar"></i> 2022 - Present</span>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Art Tab Content -->
+
+            <!-- Art Tab -->
             <div id="art" class="tab-content">
-                <h2 class="section-title">Artwork</h2>
-                <p class="mb-4">My artistic expression through ink and graphite provides a creative counterbalance to the precision of surgery. Each piece represents the intersection of technical skill and creative exploration.</p>
-                
+                <div class="section-header">
+                    <h2>Artwork</h2>
+                    <p>Ink, graphite, and digital art I enjoy creating and sharing</p>
+                </div>
+
                 <div class="art-gallery">
-                    <!-- Art items - replace placeholder images with actual artwork -->
-                    <div class="art-item fade-in">
-                        <img src="/api/placeholder/500/500" alt="Artwork 1" class="art-img" loading="lazy">
-                    </div>
-                    <div class="art-item fade-in">
-                        <img src="/api/placeholder/500/500" alt="Artwork 2" class="art-img" loading="lazy">
-                    </div>
-                    <div class="art-item fade-in">
-                        <img src="/api/placeholder/500/500" alt="Artwork 3" class="art-img" loading="lazy">
-                    </div>
-                    <div class="art-item fade-in">
-                        <img src="/api/placeholder/500/500" alt="Artwork 4" class="art-img" loading="lazy">
-                    </div>
-                    <div class="art-item fade-in">
-                        <img src="/api/placeholder/500/500" alt="Artwork 5" class="art-img" loading="lazy">
-                    </div>
-                    <div class="art-item fade-in">
-                        <img src="/api/placeholder/500/500" alt="Artwork 6" class="art-img" loading="lazy">
+                    <div class="art-item reveal">
+                        <img src="images/art-placeholder.svg" alt="Artwork" loading="lazy">
                     </div>
                 </div>
+
+                <p class="text-center mt-lg" style="color: var(--text-muted);">
+                    More artwork coming soon. Follow me on <a href="https://www.instagram.com/skflx/" target="_blank">Instagram</a> for updates.
+                </p>
             </div>
-            
-            <!-- Music Tab Content -->
+
+            <!-- Music Tab -->
             <div id="music" class="tab-content">
-                <h2 class="section-title">Musical Projects</h2>
-                <p class="mb-4">Music has been a lifelong passion that provides both creative expression and emotional balance. I play guitar and ukulele, with interests in expanding to bass and drums.</p>
-                
-                <div class="music-project fade-in">
-                    <img src="/api/placeholder/300/300" alt="Yale 4th Year Show" class="music-img" loading="lazy">
-                    <div class="music-info">
-                        <h3 class="music-title">Yale 4th Year Show Performance</h3>
-                        <p class="music-description">April 2023</p>
+                <div class="section-header">
+                    <h2>Music</h2>
+                    <p>Musical projects and performances</p>
+                </div>
+
+                <div class="music-card reveal mb-lg">
+                    <img src="images/music-placeholder.svg" alt="Yale 4th Year Show" loading="lazy">
+                    <div class="music-card-content">
+                        <h3>Yale 4th Year Show Performance</h3>
+                        <span class="date">April 2023</span>
                         <p>Performed electric guitar as part of the Yale School of Medicine 4th Year Show, a traditional musical production created and performed by graduating medical students.</p>
                     </div>
                 </div>
-                
-                <div class="music-project fade-in">
-                    <img src="/api/placeholder/300/300" alt="Genre Exploration" class="music-img" loading="lazy">
-                    <div class="music-info">
-                        <h3 class="music-title">Musical Influences & Style Exploration</h3>
-                        <p class="music-description">Lifelong</p>
-                        <p>My musical tastes and influences span diverse genres including metal (Death, Amon Amarth), electronic (Skrillex, Major Lazer), hip-hop (Kendrick Lamar), and alternative rock (Jacks Mannequin, Sublime, Muse), which all inform my playing style and composition approach.</p>
+
+                <div class="music-card reveal">
+                    <img src="images/music-placeholder.svg" alt="Musical Influences" loading="lazy">
+                    <div class="music-card-content">
+                        <h3>Musical Influences & Style</h3>
+                        <span class="date">Ongoing</span>
+                        <p>Guitar and ukulele player with interests in learning bass and drums. My tastes span metal (Death, Amon Amarth), electronic (Skrillex, Major Lazer), hip-hop (Kendrick Lamar), and alternative rock (Jacks Mannequin, Sublime, Muse).</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- Clinical Tab Content -->
+
+            <!-- Clinical Tab -->
             <div id="clinical" class="tab-content">
-                <h2 class="section-title">Clinical Projects</h2>
-                <p class="mb-4">My clinical work focuses on improving patient care through innovative approaches to surgical education, treatment protocols, and interdisciplinary collaboration.</p>
-                
-                <div class="clinical-timeline">
-                    <div class="clinical-item fade-in">
-                        <div class="clinical-content">
-                            <div class="clinical-date">2022 - Present</div>
+                <div class="section-header">
+                    <h2>Clinical Experience</h2>
+                    <p>Clinical projects and teaching initiatives</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item reveal">
+                        <div class="timeline-date">2022 - Present</div>
+                        <div class="timeline-content">
                             <h3>Surgery Livestreaming Elective</h3>
                             <p>Designed and organized curriculum for pre-clerkship medical students to gain exposure to surgical specialties through live-streaming procedures. Responsible for identifying appropriate surgical cases, audio/video setup, mounting sterile video exoscope in open procedures, and facilitating communication between live-streaming and operative teams.</p>
                         </div>
                     </div>
-                    
-                    <div class="clinical-item fade-in">
-                        <div class="clinical-content">
-                            <div class="clinical-date">2020 - Present</div>
+
+                    <div class="timeline-item reveal">
+                        <div class="timeline-date">2020 - Present</div>
+                        <div class="timeline-content">
                             <h3>HAVEN Free Clinic</h3>
-                            <p>Provided primary care to uninsured and underinsured patients as a Senior Clinical Team Member. Presented assessments and plans to attendings, placed orders, followed-up with patients regarding medical concerns, specialist referrals, and ancillary needs. Supervised and mentored junior clinical team members through their history-taking and physical exam skills.</p>
+                            <p>Provided primary care to uninsured and underinsured patients as a Senior Clinical Team Member. Presented assessments and plans to attendings, placed orders, followed-up with patients regarding medical concerns, specialist referrals, and ancillary needs. Supervised and mentored junior clinical team members.</p>
                         </div>
                     </div>
-                    
-                    <div class="clinical-item fade-in">
-                        <div class="clinical-content">
-                            <div class="clinical-date">2021 - Present</div>
+
+                    <div class="timeline-item reveal">
+                        <div class="timeline-date">2021 - Present</div>
+                        <div class="timeline-content">
                             <h3>Point of Care Ultrasound Teaching</h3>
                             <p>Provided hands-on training in essential ultrasound skills to medical students through weekly small-group lessons designed to align with the MS1 curriculum, enhancing diagnostic capabilities for future clinicians.</p>
                         </div>
@@ -245,67 +255,43 @@
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div>
-                    <a href="index.html" class="footer-logo">@skflx.MD</a>
-                    <ul class="social-links mt-2">
-                        <li><a href="https://twitter.com/skflx" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                        <li><a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i></a></li>
-                    </ul>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">Samipya Kafle, MD</a>
+                    <p>Otolaryngology resident passionate about technology, surgical education, and innovation in medicine.</p>
                 </div>
-                <ul class="footer-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
+
+                <div class="footer-links">
+                    <div class="footer-links-col">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="projects.html">Projects</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links-col">
+                        <h4>Connect</h4>
+                        <div class="social-links">
+                            <a href="https://www.instagram.com/skflx/" target="_blank" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://github.com/skflx" target="_blank" aria-label="GitHub">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 @skflx.MD. All rights reserved.</p>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Samipya Kafle, MD. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Mega Menu FAB -->
-    <div class="theme-switcher-toggle" id="themeToggle">
-        <i class="fas fa-bars"></i>
-    </div>
-
-    <div class="theme-panel" id="themePanel">
-        <div class="menu-header">
-            <h3>Menu</h3>
-        </div>
-
-        <ul class="menu-links">
-            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="about.html"><i class="fas fa-user"></i> About</a></li>
-            <li><a href="projects.html"><i class="fas fa-flask"></i> Projects</a></li>
-            <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
-        </ul>
-
-        <hr class="menu-divider">
-
-        <div class="settings-section">
-            <h4>Color Theme</h4>
-            <div class="theme-options">
-                <div class="theme-btn theme-btn-sage" data-theme="theme-sage" title="Sage"></div>
-                <div class="theme-btn theme-btn-slate" data-theme="theme-slate" title="Slate"></div>
-                <div class="theme-btn theme-btn-sand" data-theme="theme-sand" title="Sand"></div>
-            </div>
-
-            <h4>Typography</h4>
-            <div class="type-options">
-                <button class="type-btn" data-type="type-modern">Modern</button>
-                <button class="type-btn" data-type="type-editorial">Editorial</button>
-                <button class="type-btn" data-type="type-minimal">Minimal</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript -->
     <script src="js/main.js"></script>
 </body>
 </html>
