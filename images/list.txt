@@ -1,1 +1,18 @@
-me_large.jpg: image of me
+Image Assets
+============
+
+me_large.jpg
+  - Hero profile image
+  - Used on index.html (hero section)
+  - Colors are extracted from this image to create the site's dynamic color palette
+  - Replacing this image will automatically change the site's color scheme
+
+art-placeholder.svg
+  - Placeholder for artwork gallery
+  - Used in projects.html (Art tab)
+  - Replace with actual artwork images
+
+music-placeholder.svg
+  - Placeholder for music section photos
+  - Used in projects.html (Music tab)
+  - Replace with actual music/performance photos
