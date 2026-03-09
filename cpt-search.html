@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CPT Code Search | skflx.MD</title>
-    <meta name="description" content="Surgical CPT code search tool for otolaryngology residents.">
+    <meta name="description" content="Fast surgical CPT code lookup for otolaryngology residents.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,22 +14,225 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Stylesheet -->
+    <!-- Site Stylesheet -->
     <link rel="stylesheet" href="css/main.css">
 
-    <!-- React & ReactDOM (UMD) -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-
-    <!-- lucide-react (UMD) -->
-    <script src="https://unpkg.com/lucide-react/dist/umd/lucide-react.js"></script>
-
-    <!-- Babel standalone for in-browser JSX transpilation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <style>
-        #root {
-            min-height: 60vh;
+        /* ── CPT Search App ───────────────────────────── */
+        .cpt-wrap {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 1rem 4rem;
+        }
+
+        /* Search input --------------------------------- */
+        .search-row {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            font-size: 1rem;
+        }
+        #cpt-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 1rem 3rem 1rem 2.8rem;
+            font-size: 1.1rem;
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            outline: none;
+            box-shadow: var(--shadow-sm);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+        #cpt-input:focus {
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.18);
+        }
+        #cpt-input::placeholder { color: var(--text-muted); }
+        #cpt-clear {
+            display: none;
+            position: absolute;
+            right: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            line-height: 1;
+        }
+        #cpt-clear:hover { color: var(--text-primary); }
+
+        /* History panel -------------------------------- */
+        .history-panel {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 500px) { .history-panel { grid-template-columns: 1fr; } }
+        .history-panel.hidden { display: none; }
+        .history-section h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin: 0 0 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.45rem 0.6rem;
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            transition: background var(--transition-fast);
+        }
+        .history-item:hover { background: var(--bg-tertiary); }
+        .history-item .badge-count {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            padding: 0.15rem 0.5rem;
+            border-radius: var(--radius-full);
+        }
+        .history-item .badge-code {
+            font-size: 0.72rem;
+            font-family: monospace;
+            color: var(--text-muted);
+        }
+
+        /* Result cards --------------------------------- */
+        #cpt-results { display: flex; flex-direction: column; gap: 0.75rem; }
+        .result-card {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+        }
+        .result-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-accent);
+        }
+        .card-left { flex-shrink: 0; min-width: 68px; }
+        .card-code {
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: monospace;
+            color: var(--color-accent);
+            line-height: 1.1;
+        }
+        .card-body { flex: 1; min-width: 0; }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+        .tag {
+            font-size: 0.72rem;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            padding: 0.2rem 0.55rem;
+            border-radius: var(--radius-sm);
+        }
+        .copy-btn {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0.4rem;
+            border-radius: var(--radius-md);
+            transition: background var(--transition-fast), color var(--transition-fast);
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            line-height: 1;
+        }
+        .copy-btn:hover { background: var(--bg-tertiary); }
+        .copy-btn.copied { color: #16a34a; font-weight: 600; }
+
+        /* Key-indicator badge -------------------------- */
+        .ki-badge {
+            display: inline-block;
+            margin-top: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            border: 1px solid;
+        }
+
+        /* Empty / no-results state -------------------- */
+        .state-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        .state-box .state-icon {
+            font-size: 2.5rem;
+            color: var(--border-color);
+            margin-bottom: 1rem;
+        }
+        .state-box p { color: var(--text-secondary); margin: 0.25rem 0; }
+        .state-box .hint { font-size: 0.85rem; color: var(--text-muted); }
+        .example-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin-top: 0.9rem; }
+        .pill {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: var(--radius-full);
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: background var(--transition-fast);
+        }
+        .pill:hover { background: var(--color-accent); color: #fff; }
+
+        /* Result count --------------------------------- */
+        .result-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
         }
     </style>
 </head>
@@ -39,23 +242,20 @@
         <div class="container">
             <div class="header-inner">
                 <a href="index.html" class="logo">skflx.MD</a>
-
                 <nav class="nav">
                     <ul class="nav-links">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="projects.html">Projects</a></li>
                         <li><a href="contact.html">Contact</a></li>
                     </ul>
-
                     <button class="theme-toggle" aria-label="Toggle dark mode">
                         <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                         <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
                         </svg>
                     </button>
-
                     <button class="mobile-menu-btn" aria-label="Toggle menu">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -66,20 +266,65 @@
         </div>
     </header>
 
-    <!-- Page Header -->
+    <!-- Page header -->
     <section class="section">
         <div class="container">
             <div class="section-header">
                 <h1>CPT Code Search</h1>
-                <p>Search otolaryngology surgical codes by procedure name, description, or CPT number</p>
+                <p>Fast lookup for OR case logging — search by code, procedure, anatomy, or category</p>
             </div>
         </div>
     </section>
 
-    <!-- React App Mount Point -->
-    <section class="section section-alt" style="padding-top: 0;">
+    <!-- App -->
+    <section class="section section-alt" style="padding-top:0">
         <div class="container">
-            <div id="root"></div>
+            <div class="cpt-wrap">
+
+                <!-- Search input -->
+                <div class="search-row">
+                    <span class="search-icon"><i class="fas fa-search"></i></span>
+                    <input id="cpt-input" type="text" autocomplete="off" spellcheck="false"
+                        placeholder="Search by code, procedure, anatomy, or key (e.g. thyroid, 31540, Air, lefort)…">
+                    <button id="cpt-clear" aria-label="Clear search"><i class="fas fa-times"></i></button>
+                </div>
+
+                <!-- History / trending panel -->
+                <div id="cpt-history" class="history-panel hidden">
+                    <div class="history-section" id="hist-recent-wrap">
+                        <h4><i class="fas fa-clock"></i> Recent</h4>
+                        <div id="hist-recent"></div>
+                    </div>
+                    <div class="history-section" id="hist-top-wrap">
+                        <h4><i class="fas fa-fire"></i> Most Searched</h4>
+                        <div id="hist-top"></div>
+                    </div>
+                </div>
+
+                <!-- Result count -->
+                <div id="cpt-count" class="result-count" style="display:none"></div>
+
+                <!-- Results -->
+                <div id="cpt-results"></div>
+
+                <!-- Empty / no-result state -->
+                <div id="cpt-state" class="state-box">
+                    <div class="state-icon"><i class="fas fa-stethoscope"></i></div>
+                    <p>Start typing to find CPT codes</p>
+                    <p class="hint">Try a procedure name, code number, anatomy, or category abbreviation</p>
+                    <div class="example-pills">
+                        <button class="pill" data-q="thyroid">thyroid</button>
+                        <button class="pill" data-q="31540">31540</button>
+                        <button class="pill" data-q="mastoid">mastoid</button>
+                        <button class="pill" data-q="parotid">parotid</button>
+                        <button class="pill" data-q="lefort">lefort</button>
+                        <button class="pill" data-q="tympanoplasty">tympanoplasty</button>
+                        <button class="pill" data-q="flap">flap</button>
+                        <button class="pill" data-q="sinus">sinus</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </section>
 
@@ -91,7 +336,6 @@
                     <a href="index.html" class="logo">skflx.MD</a>
                     <p>Otolaryngology resident passionate about technology, surgical education, and innovation in medicine.</p>
                 </div>
-
                 <div class="footer-links">
                     <div class="footer-links-col">
                         <h4>Navigation</h4>
@@ -104,20 +348,13 @@
                     <div class="footer-links-col">
                         <h4>Connect</h4>
                         <div class="social-links">
-                            <a href="https://linkedin.com/in/skflx" target="_blank" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin"></i>
-                            </a>
-                            <a href="https://www.instagram.com/skflx/" target="_blank" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="https://github.com/skflx" target="_blank" aria-label="GitHub">
-                                <i class="fab fa-github"></i>
-                            </a>
+                            <a href="https://linkedin.com/in/skflx" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://www.instagram.com/skflx/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://github.com/skflx" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="footer-bottom">
                 <p>&copy; 2025 skflx.MD. All rights reserved.</p>
             </div>
@@ -127,7 +364,513 @@
     <!-- Site JS (theme toggle, mobile menu) -->
     <script src="js/main.js"></script>
 
-    <!-- Load and transpile the CPT search component -->
-    <script type="text/babel" src="js/cpt_search.jsx"></script>
+    <!-- CPT Search Logic -->
+    <script>
+    (function () {
+        'use strict';
+
+        /* ── Database ─────────────────────────────────── */
+        var DB = [
+            // Airway
+            { code:'31300', desc:'Laryngotomy (thyrotomy, laryngofissure), with removal of tumor or laryngocele, cordectomy', area:'Head & Neck - Larynx/Trachea', type:'Partial laryngectomy, external or endoscopic', ki:'Air' },
+            { code:'31420', desc:'Epiglottidectomy', area:'Head & Neck - Larynx/Trachea', type:'Partial laryngectomy, external or endoscopic', ki:'Air' },
+            { code:'31527', desc:'Laryngoscopy direct, with or without tracheoscopy; with insertion of obturator', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31528', desc:'Laryngoscopy direct, with or without tracheoscopy; with dilation, initial', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31530', desc:'Laryngoscopy, direct, operative, with foreign body removal', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31531', desc:'Laryngoscopy, direct, operative, with foreign body removal; with operating microscope or telescope', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31540', desc:'Laryngoscopy, direct, operative, with excision of tumor and/or stripping of vocal cords or epiglottis', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31541', desc:'Laryngoscopy, direct, operative, with excision of tumor and/or stripping of vocal cords or epiglottis; with operating microscope or telescope', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31545', desc:'Laryngoscopy, direct, operative, with operating microscope or telescope, with submucosal removal of non-neoplastic lesion(s) of vocal cord; reconstruction with local tissue flap(s)', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31551', desc:'Laryngoplasty; for laryngeal stenosis, with graft, without indwelling stent placement, younger than 12 years of age', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31552', desc:'Laryngoplasty; for laryngeal stenosis, with graft, without indwelling stent placement, age 12 years or older', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31553', desc:'Laryngoplasty; for laryngeal stenosis, with graft, with indwelling stent placement, younger than 12 years of age', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31554', desc:'Laryngoplasty; for laryngeal stenosis, with graft, with indwelling stent placement, age 12 years or older', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31560', desc:'Laryngoscopy, direct, operative, with arytenoidectomy', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31561', desc:'Laryngoscopy, direct, operative, with arytenoidectomy; with operating microscope or telescope', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31570', desc:'Laryngoscopy, direct, with injection into vocal cord(s), therapeutic', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31571', desc:'Laryngoscopy, direct, with injection into vocal cord(s), therapeutic; with operating microscope or telescope', area:'General/Peds - Endoscopy', type:'Rigid laryngoscopy & intervention', ki:'Air' },
+            { code:'31572', desc:'Laryngoscopy, flexible; with ablation or destruction of lesion(s) with laser, unilateral', area:'General/Peds - Endoscopy', type:'Flex laryngoscopy w/wo intervention', ki:'Air' },
+            { code:'31573', desc:'Laryngoscopy, flexible; with therapeutic injection(s) (eg, chemodenervation agent or corticosteroid, injected percutaneous, transoral, or via endoscope channel), unilateral', area:'General/Peds - Endoscopy', type:'Flex laryngoscopy w/wo intervention', ki:'Air' },
+            { code:'31574', desc:'Laryngoscopy, flexible; with injection(s) for augmentation (eg, percutaneous, transoral), unilateral', area:'General/Peds - Endoscopy', type:'Flex laryngoscopy w/wo intervention', ki:'Air' },
+            { code:'31576', desc:'Laryngoscopy, flexible; with biopsy(ies)', area:'General/Peds - Endoscopy', type:'Flex laryngoscopy w/wo intervention', ki:'Air' },
+            { code:'31577', desc:'Laryngoscopy, flexible; with removal of foreign body(s)', area:'General/Peds - Endoscopy', type:'Flex laryngoscopy w/wo intervention', ki:'Air' },
+            { code:'31578', desc:'Laryngoscopy, flexible; with removal of lesion(s), non-laser', area:'General/Peds - Endoscopy', type:'Flex laryngoscopy w/wo intervention', ki:'Air' },
+            { code:'31580', desc:'Laryngoplasty; for laryngeal web, with indwelling keel or stent insertion', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31584', desc:'Laryngoplasty; with open reduction and fixation of (eg, plating) fracture, includes tracheostomy, if performed', area:'General/Peds - Larynx', type:'Laryngeal fracture', ki:'Air' },
+            { code:'31587', desc:'Laryngoplasty, cricoid split, without graft placement', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31591', desc:'Laryngoplasty, medialization, unilateral', area:'General/Peds - Larynx', type:'Laryngoplasty', ki:'Air' },
+            { code:'31592', desc:'Cricotracheal resection', area:'Head & Neck - Larynx/Trachea', type:'Trachea', ki:'Air' },
+            { code:'31780', desc:'Excision tracheal stenosis and anastomosis; cervical', area:'Head & Neck - Larynx/Trachea', type:'Trachea', ki:'Air' },
+            // Bronchoscopy
+            { code:'31615', desc:'Tracheobronchoscopy through established tracheostomy incision', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31622', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; diagnostic, with cell washing, when performed (separate procedure)', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31623', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with brushing or protected brushings', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31624', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with bronchial alveolar lavage', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31625', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with bronchial or endobronchial biopsy(s), single or multiple sites', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31630', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with tracheal/bronchial dilation or closed reduction of fracture', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31631', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with placement of tracheal stent(s) (includes tracheal/bronchial dilation as required)', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31635', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with removal of foreign body', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31636', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with placement of bronchial stent(s) (includes tracheal/bronchial dilation as required), initial bronchus', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31638', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with revision of tracheal or bronchial stent inserted at previous session (includes tracheal/bronchial dilation as required)', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31640', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with excision of tumor', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            { code:'31641', desc:'Bronchoscopy, rigid or flexible, including fluoroscopic guidance, when performed; with destruction of tumor or relief of stenosis by any method other than excision (eg, laser therapy, cryotherapy)', area:'General/Peds - Endoscopy', type:'Bronchoscopy w/wo intervention', ki:'Bron' },
+            // CMF
+            { code:'21110', desc:'Application of interdental fixation device for conditions other than fracture or dislocation, includes removal', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21343', desc:'Open treatment of depressed frontal sinus fracture', area:'Plastic/Trauma', type:'Frontal sinus fracture', ki:'CMF' },
+            { code:'21344', desc:'Open treatment of complicated (eg, comminuted or involving posterior wall) frontal sinus fracture, via coronal or multiple approaches', area:'Plastic/Trauma', type:'Frontal sinus fracture', ki:'CMF' },
+            { code:'21345', desc:'Closed treatment of nasomaxillary complex fracture (LeFort II type), with interdental wire fixation or fixation of denture or splint', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21346', desc:'Open treatment of nasomaxillary complex fracture (LeFort II type); with wiring and/or local fixation', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21347', desc:'Open treatment of nasomaxillary complex fracture (LeFort II type); requiring multiple open approaches', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21348', desc:'Open treatment of nasomaxillary complex fracture (LeFort II type); with bone grafting (includes obtaining graft)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21355', desc:'Percutaneous treatment of fracture of malar area, including zygomatic arch and malar tripod, with manipulation', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21356', desc:'Open treatment of depressed zygomatic arch fracture (eg, Gillies approach)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21360', desc:'Open treatment of depressed malar fracture, including zygomatic arch and malar tripod', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21365', desc:'Open treatment of complicated (eg, comminuted or involving cranial nerve foramina) fracture(s) of malar area, including zygomatic arch and malar tripod; with internal fixation and multiple surgical approaches', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21366', desc:'Open treatment of complicated (eg, comminuted or involving cranial nerve foramina) fracture(s) of malar area, including zygomatic arch and malar tripod; with bone grafting (includes obtaining graft)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21385', desc:'Open treatment of orbital floor blowout fracture; transantral approach (Caldwell-Luc type operation)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21386', desc:'Open treatment of orbital floor blowout fracture; periorbital approach', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21387', desc:'Open treatment of orbital floor blowout fracture; combined approach', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21390', desc:'Open treatment of orbital floor blowout fracture; periorbital approach, with alloplastic or other implant', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21395', desc:'Open treatment of orbital floor blowout fracture; periorbital approach with bone graft (includes obtaining graft)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21401', desc:'Closed treatment of fracture of orbit, except blowout; with manipulation', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21406', desc:'Open treatment of fracture of orbit, except blowout; without implant', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21407', desc:'Open treatment of fracture of orbit, except blowout; with implant', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21408', desc:'Open treatment of fracture of orbit, except blowout; with bone grafting (includes obtaining graft)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21421', desc:'Closed treatment of palatal or maxillary fracture (LeFort I type), with interdental wire fixation or fixation of denture or splint', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21422', desc:'Open treatment of palatal or maxillary fracture (LeFort I type)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21423', desc:'Open treatment of palatal or maxillary fracture (LeFort I type); complicated (comminuted or involving cranial nerve foramina), multiple approaches', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21431', desc:'Closed treatment of craniofacial separation (LeFort III type) using interdental wire fixation of denture or splint', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21432', desc:'Open treatment of craniofacial separation (LeFort III type); with wiring and/or internal fixation', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21433', desc:'Open treatment of craniofacial separation (LeFort III type); complicated (eg, comminuted or involving cranial nerve foramina), multiple surgical approaches', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21435', desc:'Open treatment of craniofacial separation (LeFort III type); complicated, utilizing internal and/or external fixation techniques (eg, head cap, halo device, and/or intermaxillary fixation)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21436', desc:'Open treatment of craniofacial separation (LeFort III type); complicated, multiple surgical approaches, internal fixation, with bone grafting (includes obtaining graft)', area:'Plastic/Trauma', type:'Midface fracture', ki:'CMF' },
+            { code:'21440', desc:'Closed treatment of mandibular or maxillary alveolar ridge fracture (separate procedure)', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21445', desc:'Open treatment of mandibular or maxillary alveolar ridge fracture (separate procedure)', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21451', desc:'Closed treatment of mandibular fracture; with manipulation', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21452', desc:'Percutaneous treatment of mandibular fracture, with external fixation', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21453', desc:'Closed treatment of mandibular fracture with interdental fixation', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21454', desc:'Open treatment of mandibular fracture with external fixation', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21461', desc:'Open treatment of mandibular fracture; without interdental fixation', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21462', desc:'Open treatment of mandibular fracture; with interdental fixation', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21465', desc:'Open treatment of mandibular condylar fracture', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'21470', desc:'Open treatment of complicated mandibular fracture by multiple surgical approaches including internal fixation, interdental fixation, and/or wiring of dentures or splints', area:'Plastic/Trauma', type:'Mandible fracture', ki:'CMF' },
+            { code:'61580', desc:'Craniofacial approach to anterior cranial fossa; extradural, including lateral rhinotomy, ethmoidectomy, sphenoidectomy, without maxillectomy or orbital exenteration', area:'Head & Neck - Nose and Maxilla', type:'Anterior skull base', ki:'CMF' },
+            { code:'61581', desc:'Craniofacial approach to anterior cranial fossa; extradural, including lateral rhinotomy, orbital exenteration, ethmoidectomy, sphenoidectomy and/or maxillectomy', area:'Head & Neck - Nose and Maxilla', type:'Anterior skull base', ki:'CMF' },
+            { code:'61584', desc:'Orbitocranial approach to anterior cranial fossa, extradural, including supraorbital ridge osteotomy and elevation of frontal and/or temporal lobe(s); without orbital exenteration', area:'Head & Neck - Nose and Maxilla', type:'Anterior skull base', ki:'CMF' },
+            { code:'61585', desc:'Orbitocranial approach to anterior cranial fossa, extradural, including supraorbital ridge osteotomy and elevation of frontal and/or temporal lobe(s); with orbital exenteration', area:'Head & Neck - Nose and Maxilla', type:'Anterior skull base', ki:'CMF' },
+            { code:'61586', desc:'Bicoronal, transzygomatic and/or LeFort I osteotomy approach to anterior cranial fossa with or without internal fixation, without bone graft', area:'Head & Neck - Nose and Maxilla', type:'Anterior skull base', ki:'CMF' },
+            // Congenital
+            { code:'21720', desc:'Division of sternocleidomastoid for torticollis, open operation; without cast application', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'30124', desc:'Excision dermoid cyst, nose; simple, skin, subcutaneous', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'30125', desc:'Excision dermoid cyst, nose; complex, under bone or cartilage', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'35180', desc:'Repair, congenital arteriovenous fistula; head and neck', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'38550', desc:'Excision of cystic hygroma, axillary or cervical; without deep neurovascular dissection', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'38555', desc:'Excision of cystic hygroma, axillary or cervical; with deep neurovascular dissection', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'42810', desc:'Excision branchial cleft cyst or vestige, confined to skin and subcutaneous tissues', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'42815', desc:'Excision branchial cleft cyst, vestige, or fistula, extending beneath subcutaneous tissues and/or into pharynx', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'60280', desc:'Excision of thyroglossal duct cyst or sinus', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            { code:'60281', desc:'Excision of thyroglossal duct cyst or sinus; recurrent', area:'General/Peds - Congenital Anomalies', type:'Congenital masses', ki:'CM' },
+            // Flaps & Grafts
+            { code:'14000', desc:'Adjacent tissue transfer or rearrangement, trunk; defect 10 sq cm or less', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14001', desc:'Adjacent tissue transfer or rearrangement, trunk; defect 10.1 sq cm to 30.0 sq cm', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14020', desc:'Adjacent tissue transfer or rearrangement, scalp, arms and/or legs; defect 10 sq cm or less', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14021', desc:'Adjacent tissue transfer or rearrangement, scalp, arms and/or legs; defect 10.1 sq cm to 30.0 sq cm', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14040', desc:'Adjacent tissue transfer or rearrangement, forehead, cheeks, chin, mouth, neck, axillae, genitalia, hands and/or feet; defect 10 sq cm or less', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14041', desc:'Adjacent tissue transfer or rearrangement, forehead, cheeks, chin, mouth, neck, axillae, genitalia, hands and/or feet; defect 10.1 sq cm to 30.0 sq cm', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14060', desc:'Adjacent tissue transfer or rearrangement, eyelids, nose, ears and/or lips; defect 10 sq cm or less', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14061', desc:'Adjacent tissue transfer or rearrangement, eyelids, nose, ears and/or lips; defect 10.1 sq cm to 30.0 sq cm', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14301', desc:'Adjacent tissue transfer or rearrangement, any area; defect 30.1 sq cm to 60.0 sq cm', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'14302', desc:'Adjacent tissue transfer or rearrangement, any area; each additional 30.0 sq cm, or part thereof', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'15572', desc:'Formation of direct or tubed pedicle, with or without transfer; scalp, arms, or legs', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15574', desc:'Formation of direct or tubed pedicle, with or without transfer; forehead, cheeks, chin, mouth, neck, axillae, genitalia, hands or feet', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15576', desc:'Formation of direct or tubed pedicle, with or without transfer; eyelids, nose, ears, lips, or intraoral', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15610', desc:'Delay of flap or sectioning of flap (division and inset); at scalp, arms, or legs', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15620', desc:'Delay of flap or sectioning of flap (division and inset); at forehead, cheeks, chin, neck, axillae, genitalia, hands, or feet', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15630', desc:'Delay of flap or sectioning of flap (division and inset); at eyelids, nose, ears, or lips', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15731', desc:'Forehead flap with preservation of vascular pedicle (eg, axial pattern flap, paramedian forehead flap)', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15734', desc:'Muscle, myocutaneous, or fasciocutaneous flap; trunk', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15740', desc:'Flap; island pedicle requiring identification and dissection of an anatomically named axial vessel', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'15756', desc:'Free muscle or myocutaneous flap with microvascular anastomosis', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            { code:'15757', desc:'Free skin flap with microvascular anastomosis', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            { code:'15758', desc:'Free fascial flap with microvascular anastomosis', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            { code:'15760', desc:'Graft; composite (eg, full thickness of external ear or nasal ala), including primary closure, donor area', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'15770', desc:'Graft; derma-fat-fascia', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'15840', desc:'Graft for facial nerve paralysis; free fascia graft (including obtaining fascia)', area:'Plastic/Reconstruction', type:'Static sling - muscle transfer', ki:'Flap' },
+            { code:'15841', desc:'Graft for facial nerve paralysis; free muscle graft (including obtaining graft)', area:'Plastic/Reconstruction', type:'Static sling - muscle transfer', ki:'Flap' },
+            { code:'15842', desc:'Graft for facial nerve paralysis; free muscle flap by microsurgical technique', area:'Plastic/Reconstruction', type:'Static sling - muscle transfer', ki:'Flap' },
+            { code:'15845', desc:'Graft for facial nerve paralysis; regional muscle transfer', area:'Plastic/Reconstruction', type:'Static sling - muscle transfer', ki:'Flap' },
+            { code:'20902', desc:'Bone graft, any donor area; major or large', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'20910', desc:'Cartilage graft; costochondral', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'20912', desc:'Cartilage graft; nasal septum', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'20922', desc:'Fascia lata graft; by incision and area exposure, complex or sheet', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'20955', desc:'Bone graft with microvascular anastomosis; fibula', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            { code:'20969', desc:'Free osteocutaneous flap with microvascular anastomosis; other than iliac crest, metatarsal, or great toe', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            { code:'20970', desc:'Free osteocutaneous flap with microvascular anastomosis; iliac crest', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            { code:'21210', desc:'Graft, bone; nasal, maxillary or malar areas (includes obtaining graft)', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'21215', desc:'Graft, bone; mandible (includes obtaining graft)', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'21230', desc:'Graft; rib cartilage, autogenous, to face, chin, nose or ear (includes obtaining graft)', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'21235', desc:'Graft; ear cartilage, autogenous, to nose or ear (includes obtaining graft)', area:'Plastic/Reconstruction', type:'Non-skin graft (cartilage, nerve, composite)', ki:'Flap' },
+            { code:'40525', desc:'Excision of lip; full thickness, reconstruction with local flap (eg, Estlander or fan)', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'40527', desc:'Excision of lip; full thickness, reconstruction with cross lip flap (Abbe-Estlander)', area:'Plastic/Reconstruction', type:'Pedicled flap', ki:'Flap' },
+            { code:'40650', desc:'Repair lip, full thickness; vermilion only', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'40700', desc:'Plastic repair of cleft lip/nasal deformity; primary, partial or complete, unilateral', area:'Plastic/Reconstruction', type:'Cleft repair - lip', ki:'Flap' },
+            { code:'40701', desc:'Plastic repair of cleft lip/nasal deformity; primary bilateral, 1-stage procedure', area:'Plastic/Reconstruction', type:'Cleft repair - lip', ki:'Flap' },
+            { code:'40702', desc:'Plastic repair of cleft lip/nasal deformity; primary bilateral, 1 of 2 stages', area:'Plastic/Reconstruction', type:'Cleft repair - lip', ki:'Flap' },
+            { code:'40720', desc:'Plastic repair of cleft lip/nasal deformity; secondary, by recreation of defect and reclosure', area:'Plastic/Reconstruction', type:'Cleft repair - lip', ki:'Flap' },
+            { code:'40761', desc:'Plastic repair of cleft lip/nasal deformity; with cross lip pedicle flap (Abbe-Estlander type), including sectioning and inserting of pedicle', area:'Plastic/Reconstruction', type:'Cleft repair - lip', ki:'Flap' },
+            { code:'42200', desc:'Palatoplasty for cleft palate, soft and/or hard palate only', area:'Plastic/Reconstruction', type:'Cleft repair - palate', ki:'Flap' },
+            { code:'42205', desc:'Palatoplasty for cleft palate, with closure of alveolar ridge; soft tissue only', area:'Plastic/Reconstruction', type:'Cleft repair - palate', ki:'Flap' },
+            { code:'42210', desc:'Palatoplasty for cleft palate, with closure of alveolar ridge; with bone graft to alveolar ridge (includes obtaining graft)', area:'Plastic/Reconstruction', type:'Cleft repair - palate', ki:'Flap' },
+            { code:'42215', desc:'Palatoplasty for cleft palate; major revision', area:'Plastic/Reconstruction', type:'Cleft repair - palate', ki:'Flap' },
+            { code:'42220', desc:'Palatoplasty for cleft palate; secondary lengthening procedure', area:'Plastic/Reconstruction', type:'Cleft repair - palate', ki:'Flap' },
+            { code:'42225', desc:'Palatoplasty for cleft palate; attachment pharyngeal flap', area:'Plastic/Reconstruction', type:'Cleft repair - palate', ki:'Flap' },
+            { code:'42226', desc:'Lengthening of palate, and pharyngeal flap', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'42227', desc:'Lengthening of palate, with island flap', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'42235', desc:'Repair of anterior palate, including vomer flap', area:'Plastic/Reconstruction', type:'Local flap', ki:'Flap' },
+            { code:'43496', desc:'Free jejunum transfer with microvascular anastomosis', area:'Plastic/Reconstruction', type:'Free microvascular flap', ki:'Flap' },
+            // Mastoidectomy
+            { code:'69501', desc:'Transmastoid antrotomy (simple mastoidectomy)', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69502', desc:'Mastoidectomy; complete', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69505', desc:'Mastoidectomy; modified radical', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69511', desc:'Mastoidectomy; radical', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69601', desc:'Revision mastoidectomy; resulting in complete mastoidectomy', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69602', desc:'Revision mastoidectomy; resulting in modified radical mastoidectomy', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69603', desc:'Revision mastoidectomy; resulting in radical mastoidectomy', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            { code:'69670', desc:'Mastoid obliteration (separate procedure)', area:'Otology/Middle Ear', type:'Mastoidectomy', ki:'Mast' },
+            // Neck Dissection
+            { code:'38700', desc:'Suprahyoid lymphadenectomy', area:'Head & Neck - Neck', type:'Neck dissection', ki:'ND' },
+            { code:'38720', desc:'Cervical lymphadenectomy (complete)', area:'Head & Neck - Neck', type:'Neck dissection', ki:'ND' },
+            { code:'38724', desc:'Cervical lymphadenectomy (modified radical neck dissection)', area:'Head & Neck - Neck', type:'Neck dissection', ki:'ND' },
+            { code:'60252', desc:'Thyroidectomy, total or subtotal for malignancy; with limited neck dissection', area:'Head & Neck - Neck', type:'Neck dissection', ki:'ND' },
+            // Oral Cavity
+            { code:'40814', desc:'Excision of lesion of mucosa and submucosa, vestibule of mouth; with complex repair', area:'General/Peds - Oral Cavity', type:'Incision/excision oral cavity', ki:'OC' },
+            { code:'41120', desc:'Glossectomy; less than one-half tongue', area:'Head & Neck - Oral Cavity', type:'Glossectomy', ki:'OC' },
+            { code:'41130', desc:'Glossectomy; hemiglossectomy', area:'Head & Neck - Oral Cavity', type:'Glossectomy', ki:'OC' },
+            { code:'41140', desc:'Glossectomy; complete or total, with or without tracheostomy, without radical neck dissection', area:'Head & Neck - Oral Cavity', type:'Glossectomy', ki:'OC' },
+            { code:'41150', desc:'Glossectomy; composite procedure with resection floor of mouth and mandibular resection, without radical neck dissection', area:'Head & Neck - Oral Cavity', type:'Floor of mouth resection', ki:'OC' },
+            { code:'41153', desc:'Glossectomy; composite procedure with resection floor of mouth, with suprahyoid neck dissection', area:'Head & Neck - Oral Cavity', type:'Floor of mouth resection', ki:'OC' },
+            { code:'42408', desc:'Excision of sublingual salivary cyst (ranula)', area:'Head & Neck - Salivary Gland Excision', type:'Sublingual gland', ki:'OC' },
+            { code:'42450', desc:'Excision of sublingual gland', area:'Head & Neck - Salivary Gland Excision', type:'Sublingual gland', ki:'OC' },
+            // OCR
+            { code:'69632', desc:'Tympanoplasty without mastoidectomy (including canalplasty, atticotomy and/or middle ear surgery), initial or revision; with ossicular chain reconstruction (eg, postfenestration)', area:'Otology/Middle Ear', type:'Ossicular chain reconstruction', ki:'OCS' },
+            { code:'69633', desc:'Tympanoplasty without mastoidectomy (including canalplasty, atticotomy and/or middle ear surgery), initial or revision; with ossicular chain reconstruction and synthetic prosthesis (eg, partial ossicular replacement prosthesis [PORP], total ossicular replacement prosthesis [TORP])', area:'Otology/Middle Ear', type:'Ossicular chain reconstruction', ki:'OCS' },
+            { code:'69650', desc:'Stapes mobilization', area:'Otology/Middle Ear', type:'Stapes surgery', ki:'OCS' },
+            { code:'69660', desc:'Stapedectomy or stapedotomy with reestablishment of ossicular continuity, with or without use of foreign material', area:'Otology/Middle Ear', type:'Stapes surgery', ki:'OCS' },
+            { code:'69661', desc:'Stapedectomy or stapedotomy with reestablishment of ossicular continuity, with or without use of foreign material; with footplate drill out', area:'Otology/Middle Ear', type:'Stapes surgery', ki:'OCS' },
+            { code:'69662', desc:'Revision of stapedectomy or stapedotomy', area:'Otology/Middle Ear', type:'Stapes surgery', ki:'OCS' },
+            // Parotid
+            { code:'42410', desc:'Excision of parotid tumor or parotid gland; lateral lobe, without nerve dissection', area:'Head & Neck - Salivary Gland Excision', type:'Parotid', ki:'Par' },
+            { code:'42415', desc:'Excision of parotid tumor or parotid gland; lateral lobe, with dissection and preservation of facial nerve', area:'Head & Neck - Salivary Gland Excision', type:'Parotid', ki:'Par' },
+            { code:'42420', desc:'Excision of parotid tumor or parotid gland; total, with dissection and preservation of facial nerve', area:'Head & Neck - Salivary Gland Excision', type:'Parotid', ki:'Par' },
+            { code:'42425', desc:'Excision of parotid tumor or parotid gland; total, en bloc removal with sacrifice of facial nerve', area:'Head & Neck - Salivary Gland Excision', type:'Parotid', ki:'Par' },
+            // Rhinoplasty
+            { code:'21325', desc:'Open treatment of nasal fracture; uncomplicated', area:'Plastic/Trauma', type:'Nasal fracture', ki:'Rhin' },
+            { code:'21330', desc:'Open treatment of nasal fracture; complicated, with internal and/or external skeletal fixation', area:'Plastic/Trauma', type:'Nasal fracture', ki:'Rhin' },
+            { code:'21335', desc:'Open treatment of nasal fracture; with concomitant open treatment of fractured septum', area:'Plastic/Trauma', type:'Nasal fracture', ki:'Rhin' },
+            { code:'30400', desc:'Rhinoplasty, primary; lateral and alar cartilages and/or elevation of nasal tip', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30410', desc:'Rhinoplasty, primary; complete, external parts including bony pyramid, lateral and alar cartilages, and/or elevation of nasal tip', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30430', desc:'Rhinoplasty, secondary; minor revision (small amount of nasal tip work)', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30435', desc:'Rhinoplasty, secondary; intermediate revision (bony work with osteotomies)', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30450', desc:'Rhinoplasty, secondary; major revision (nasal tip work and osteotomies)', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30460', desc:'Rhinoplasty for nasal deformity secondary to congenital cleft lip and/or palate, including columellar lengthening; tip only', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30462', desc:'Rhinoplasty for nasal deformity secondary to congenital cleft lip and/or palate, including columellar lengthening; tip, septum, osteotomies', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30465', desc:'Repair of nasal vestibular stenosis (eg, spreader grafting, lateral nasal wall reconstruction)', area:'Plastic/Facial Appearance', type:'Rhinoplasty', ki:'Rhin' },
+            { code:'30469', desc:'Repair of nasal valve collapse with low energy, temperature-controlled (ie, radiofrequency) subcutaneous/submucosal remodeling', area:'Non-Tracked Codes', type:'Non-Tracked Codes', ki:'Rhin' },
+            // Sinus
+            { code:'31254', desc:'Nasal/sinus endoscopy, surgical with ethmoidectomy; partial (anterior)', area:'General/Peds - Sinus', type:'Endoscopic sinus surgery', ki:'Sinus' },
+            { code:'31255', desc:'Nasal/sinus endoscopy, surgical with ethmoidectomy; total (anterior and posterior)', area:'General/Peds - Sinus', type:'Endoscopic sinus surgery', ki:'Sinus' },
+            // Endocrine / Thyroid
+            { code:'60220', desc:'Total thyroid lobectomy, unilateral; with or without isthmusectomy', area:'Head & Neck - Endocrine', type:'Thyroidectomy', ki:'Thy' },
+            { code:'60225', desc:'Total thyroid lobectomy, unilateral; with contralateral subtotal lobectomy, including isthmusectomy', area:'Head & Neck - Endocrine', type:'Thyroidectomy', ki:'Thy' },
+            { code:'60240', desc:'Thyroidectomy, total or complete', area:'Head & Neck - Endocrine', type:'Thyroidectomy', ki:'Thy' },
+            { code:'60260', desc:'Thyroidectomy, removal of all remaining thyroid tissue following previous removal of a portion of thyroid', area:'Head & Neck - Endocrine', type:'Thyroidectomy', ki:'Thy' },
+            { code:'60270', desc:'Thyroidectomy, including substernal thyroid; sternal split or transthoracic approach', area:'Head & Neck - Endocrine', type:'Thyroidectomy', ki:'Thy' },
+            { code:'60271', desc:'Thyroidectomy, including substernal thyroid; cervical approach', area:'Head & Neck - Endocrine', type:'Thyroidectomy', ki:'Thy' },
+            { code:'60500', desc:'Parathyroidectomy or exploration of parathyroid(s)', area:'Head & Neck - Endocrine', type:'Parathyroidectomy', ki:'Thy' },
+            { code:'60502', desc:'Parathyroidectomy or exploration of parathyroid(s); re-exploration', area:'Head & Neck - Endocrine', type:'Parathyroidectomy', ki:'Thy' },
+            // Tympanoplasty
+            { code:'69610', desc:'Tympanic membrane repair, with or without site preparation of perforation for closure, with or without patch', area:'Otology/Middle Ear', type:'Tympanoplasty', ki:'Tymp' },
+            { code:'69620', desc:'Myringoplasty (surgery confined to drumhead and donor area)', area:'Otology/Middle Ear', type:'Tympanoplasty', ki:'Tymp' },
+            { code:'69631', desc:'Tympanoplasty without mastoidectomy (including canalplasty, atticotomy and/or middle ear surgery), initial or revision; without ossicular chain reconstruction', area:'Otology/Middle Ear', type:'Tympanoplasty', ki:'Tymp' },
+        ];
+
+        /* ── Badge colours (bg / text / border) ────── */
+        var KI_COLORS = {
+            Air:  { bg:'#dbeafe', tx:'#1e40af', bd:'#93c5fd' },
+            Bron: { bg:'#f3e8ff', tx:'#6b21a8', bd:'#c084fc' },
+            CMF:  { bg:'#ffedd5', tx:'#9a3412', bd:'#fdba74' },
+            CM:   { bg:'#fce7f3', tx:'#9d174d', bd:'#f9a8d4' },
+            Flap: { bg:'#dcfce7', tx:'#14532d', bd:'#86efac' },
+            Mast: { bg:'#e0e7ff', tx:'#3730a3', bd:'#a5b4fc' },
+            ND:   { bg:'#fee2e2', tx:'#991b1b', bd:'#fca5a5' },
+            OC:   { bg:'#fef9c3', tx:'#713f12', bd:'#fde047' },
+            OCS:  { bg:'#ccfbf1', tx:'#134e4a', bd:'#5eead4' },
+            Par:  { bg:'#cffafe', tx:'#164e63', bd:'#67e8f9' },
+            Rhin: { bg:'#ffe4e6', tx:'#9f1239', bd:'#fda4af' },
+            Sinus:{ bg:'#ecfccb', tx:'#365314', bd:'#bef264' },
+            Thy:  { bg:'#fef3c7', tx:'#92400e', bd:'#fcd34d' },
+            Tymp: { bg:'#ede9fe', tx:'#4c1d95', bd:'#c4b5fd' },
+        };
+
+        /* ── Fuzzy scoring ────────────────────────────── */
+        function score(term, item) {
+            var t = term.toLowerCase();
+            var c = item.code.toLowerCase();
+            var d = item.desc.toLowerCase();
+            var a = item.area.toLowerCase();
+            var tp = item.type.toLowerCase();
+            var k = item.ki.toLowerCase();
+            var s = 0;
+
+            if (c === t)            s += 1000;
+            else if (c.startsWith(t)) s += 500;
+            else if (c.includes(t)) s += 100;
+
+            if (k === t)            s += 800;
+            else if (k.includes(t)) s += 400;
+
+            if (d.includes(t))      s += 100;
+            d.split(' ').forEach(function(w) {
+                if (w.startsWith(t)) s += 50;
+                else if (w.includes(t)) s += 20;
+            });
+
+            if (a.includes(t))  s += 30;
+            if (tp.includes(t)) s += 30;
+
+            // fuzzy subsequence
+            var fi = 0;
+            for (var i = 0; i < d.length && fi < t.length; i++) {
+                if (d[i] === t[fi]) fi++;
+            }
+            if (fi === t.length) s += 10;
+
+            return s;
+        }
+
+        /* ── localStorage helpers ─────────────────────── */
+        function lsGet(key) {
+            try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
+        }
+        function lsSet(key, val) {
+            try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+        }
+
+        /* ── State ────────────────────────────────────── */
+        var history   = lsGet('cpt-history')   || [];
+        var analytics = lsGet('cpt-analytics') || {};
+        var debounce  = null;
+        var copied    = null;
+
+        /* ── DOM refs ─────────────────────────────────── */
+        var input      = document.getElementById('cpt-input');
+        var clearBtn   = document.getElementById('cpt-clear');
+        var histPanel  = document.getElementById('cpt-history');
+        var histRecent = document.getElementById('hist-recent');
+        var histTop    = document.getElementById('hist-top');
+        var resultsEl  = document.getElementById('cpt-results');
+        var stateEl    = document.getElementById('cpt-state');
+        var countEl    = document.getElementById('cpt-count');
+
+        /* ── Render helpers ───────────────────────────── */
+        function esc(s) {
+            return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        function badgeStyle(ki) {
+            var c = KI_COLORS[ki] || { bg:'#f3f4f6', tx:'#374151', bd:'#d1d5db' };
+            return 'background:' + c.bg + ';color:' + c.tx + ';border-color:' + c.bd;
+        }
+
+        function renderHistPanel() {
+            var top = Object.entries(analytics)
+                .sort(function(a,b){ return b[1]-a[1]; })
+                .slice(0,5)
+                .map(function(e){ return { term:e[0], count:e[1] }; });
+
+            var showRecent = history.length > 0;
+            var showTop    = top.length > 0;
+
+            if (!showRecent && !showTop) { histPanel.classList.add('hidden'); return; }
+
+            document.getElementById('hist-recent-wrap').style.display = showRecent ? '' : 'none';
+            document.getElementById('hist-top-wrap').style.display    = showTop    ? '' : 'none';
+
+            histRecent.innerHTML = history.slice(0,5).map(function(h) {
+                return '<button class="history-item" data-term="'+esc(h.term)+'">'
+                     + '<span>'+esc(h.term)+'</span>'
+                     + (h.code ? '<span class="badge-code">'+esc(h.code)+'</span>' : '')
+                     + '</button>';
+            }).join('');
+
+            histTop.innerHTML = top.map(function(t) {
+                return '<button class="history-item" data-term="'+esc(t.term)+'">'
+                     + '<span>'+esc(t.term)+'</span>'
+                     + '<span class="badge-count">'+t.count+'×</span>'
+                     + '</button>';
+            }).join('');
+
+            histPanel.classList.remove('hidden');
+        }
+
+        function renderResults(term) {
+            if (!term.trim()) {
+                resultsEl.innerHTML = '';
+                countEl.style.display = 'none';
+                stateEl.style.display = '';
+                return;
+            }
+
+            var scored = DB
+                .map(function(item) { return Object.assign({}, item, { _s: score(term, item) }); })
+                .filter(function(item) { return item._s > 0; })
+                .sort(function(a,b) { return b._s - a._s; })
+                .slice(0, 20);
+
+            stateEl.style.display = 'none';
+            histPanel.classList.add('hidden');
+
+            if (scored.length === 0) {
+                countEl.style.display = 'none';
+                resultsEl.innerHTML =
+                    '<div class="state-box">'
+                    + '<div class="state-icon"><i class="fas fa-search"></i></div>'
+                    + '<p>No codes found for &ldquo;'+esc(term)+'&rdquo;</p>'
+                    + '<p class="hint">Try a different keyword, code number, or category abbreviation</p>'
+                    + '</div>';
+                return;
+            }
+
+            countEl.textContent = scored.length + ' result' + (scored.length === 1 ? '' : 's');
+            countEl.style.display = '';
+
+            resultsEl.innerHTML = scored.map(function(item) {
+                var isCopied = copied === item.code;
+                return '<div class="result-card" data-code="'+esc(item.code)+'" data-desc="'+esc(item.desc)+'">'
+                     + '<div class="card-left">'
+                     + '<div class="card-code">'+esc(item.code)+'</div>'
+                     + '<span class="ki-badge" style="'+badgeStyle(item.ki)+'">'+esc(item.ki)+'</span>'
+                     + '</div>'
+                     + '<div class="card-body">'
+                     + '<p class="card-desc">'+esc(item.desc)+'</p>'
+                     + '<div class="card-tags">'
+                     + '<span class="tag">'+esc(item.area)+'</span>'
+                     + '<span class="tag">'+esc(item.type)+'</span>'
+                     + '</div>'
+                     + '</div>'
+                     + '<button class="copy-btn'+(isCopied?' copied':'')+'" data-code="'+esc(item.code)+'" data-desc="'+esc(item.desc)+'" aria-label="Copy CPT code">'
+                     + (isCopied ? '<i class="fas fa-check"></i> Copied' : '<i class="fas fa-copy"></i>')
+                     + '</button>'
+                     + '</div>';
+            }).join('');
+        }
+
+        /* ── Copy to clipboard ────────────────────────── */
+        function copyCode(code, desc) {
+            navigator.clipboard.writeText(code).catch(function() {
+                // fallback for older browsers
+                var ta = document.createElement('textarea');
+                ta.value = code;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+            });
+
+            copied = code;
+            saveSearch(input.value.trim(), code);
+            renderResults(input.value.trim());
+
+            setTimeout(function() {
+                if (copied === code) {
+                    copied = null;
+                    renderResults(input.value.trim());
+                }
+            }, 2000);
+        }
+
+        /* ── Save search analytics ────────────────────── */
+        function saveSearch(term, code) {
+            if (!term) return;
+            history = [{ term: term, code: code || null }].concat(history.slice(0, 19));
+            analytics[term] = (analytics[term] || 0) + 1;
+            lsSet('cpt-history',   history);
+            lsSet('cpt-analytics', analytics);
+        }
+
+        /* ── Event handlers ───────────────────────────── */
+        input.addEventListener('input', function() {
+            var val = input.value;
+            clearBtn.style.display = val ? '' : 'none';
+            clearTimeout(debounce);
+            debounce = setTimeout(function() { renderResults(val); }, 60);
+        });
+
+        input.addEventListener('focus', function() {
+            if (!input.value) {
+                renderHistPanel();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            // History item
+            var hi = e.target.closest('.history-item');
+            if (hi) {
+                input.value = hi.dataset.term;
+                clearBtn.style.display = '';
+                histPanel.classList.add('hidden');
+                renderResults(input.value);
+                input.focus();
+                return;
+            }
+
+            // Copy button (stop propagation to card)
+            var cb = e.target.closest('.copy-btn');
+            if (cb) {
+                e.stopPropagation();
+                copyCode(cb.dataset.code, cb.dataset.desc);
+                return;
+            }
+
+            // Card click → copy
+            var card = e.target.closest('.result-card');
+            if (card) {
+                copyCode(card.dataset.code, card.dataset.desc);
+                return;
+            }
+
+            // Example pills
+            var pill = e.target.closest('.pill');
+            if (pill) {
+                input.value = pill.dataset.q;
+                clearBtn.style.display = '';
+                stateEl.style.display = 'none';
+                renderResults(input.value);
+                input.focus();
+                return;
+            }
+
+            // Click outside → hide history
+            if (!histPanel.contains(e.target) && e.target !== input) {
+                histPanel.classList.add('hidden');
+            }
+        });
+
+        clearBtn.addEventListener('click', function() {
+            input.value = '';
+            clearBtn.style.display = 'none';
+            resultsEl.innerHTML = '';
+            countEl.style.display = 'none';
+            stateEl.style.display = '';
+            histPanel.classList.add('hidden');
+            input.focus();
+        });
+
+        /* ── Init ─────────────────────────────────────── */
+        input.focus();
+    }());
+    </script>
 </body>
 </html>
