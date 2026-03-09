@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Search, Copy, Clock, TrendingUp, X } from 'lucide-react';
+const { useState, useEffect, useRef } = React;
+const { Search, Copy, Clock, TrendingUp, X } = LucideReact;
 
 const CPTSearchTool = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -562,4 +562,4 @@ const CPTSearchTool = () => {
   );
 };
 
-export default CPTSearchTool;
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(CPTSearchTool));
