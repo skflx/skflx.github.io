@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art Editor | skflx.MD</title>
+    <meta name="description" content="Browser-based ASCII and Unicode diagram editor. Draw boxes, lines, arrows, and diagrams with Unicode box-drawing characters.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Site Stylesheet -->
+    <link rel="stylesheet" href="css/main.css">
+
+    <style>
+        /* ── ASCII Editor Layout ─────────────────────────── */
+        body { overflow: hidden; }
+
+        .editor-shell {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: var(--bg-primary);
+        }
+
+        /* ── Top bar ────────────────────────────────────── */
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .topbar-brand {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-right: 0.5rem;
+            white-space: nowrap;
+        }
+        .topbar-brand a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .topbar-sep {
+            width: 1px;
+            height: 1.5rem;
+            background: var(--border-color);
+            margin: 0 0.25rem;
+        }
+        .topbar-group {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+        .tb-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.65rem;
+            font-size: 0.78rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .tb-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .tb-btn.active {
+            background: var(--color-accent);
+            color: #fff;
+            border-color: var(--color-accent);
+        }
+        .tb-btn i { font-size: 0.85rem; }
+
+        .topbar-spacer { flex: 1; }
+
+        /* ── Main area ──────────────────────────────────── */
+        .editor-main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ── Sidebar ────────────────────────────────────── */
+        .sidebar {
+            width: 200px;
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .sidebar-section {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sidebar-title {
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.3rem;
+        }
+        .tool-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.5rem 0.3rem;
+            font-size: 0.7rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+            text-align: center;
+            line-height: 1.2;
+        }
+        .tool-btn i { font-size: 1rem; }
+        .tool-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        .tool-btn.active {
+            background: var(--color-accent);
+            color: #fff;
+            border-color: var(--color-accent);
+        }
+
+        /* charset toggle */
+        .charset-toggle {
+            display: flex;
+            gap: 0.25rem;
+        }
+        .charset-btn {
+            flex: 1;
+            padding: 0.3rem 0.4rem;
+            font-size: 0.72rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            text-align: center;
+            transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .charset-btn.active {
+            background: var(--color-accent);
+            color: #fff;
+            border-color: var(--color-accent);
+        }
+
+        /* templates list */
+        .template-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .tpl-btn {
+            padding: 0.35rem 0.5rem;
+            font-size: 0.72rem;
+            font-family: var(--font-sans);
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            text-align: left;
+            transition: background var(--transition-fast), color var(--transition-fast);
+        }
+        .tpl-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* size controls */
+        .size-row {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .size-row label { min-width: 1.5rem; }
+        .size-input {
+            width: 52px;
+            padding: 0.2rem 0.4rem;
+            font-size: 0.75rem;
+            font-family: var(--font-sans);
+            color: var(--text-primary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+        }
+
+        /* ── Canvas area ─────────────────────────────────── */
+        .canvas-wrap {
+            flex: 1;
+            overflow: auto;
+            position: relative;
+            background: var(--bg-primary);
+        }
+        #ascii-canvas {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1;
+            letter-spacing: 0;
+            white-space: pre;
+            border: none;
+            outline: none;
+            resize: none;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            caret-color: var(--color-accent);
+            padding: 1rem;
+            display: block;
+            overflow: hidden;
+        }
+
+        /* ── Status bar ──────────────────────────────────── */
+        .statusbar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.3rem 1rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .status-item { white-space: nowrap; }
+        .status-spacer { flex: 1; }
+
+        /* ── Export modal ────────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-base);
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: 1.5rem;
+            width: min(560px, 90vw);
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+            transition: color var(--transition-fast);
+        }
+        .modal-close:hover { color: var(--text-primary); }
+        .modal-textarea {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre;
+            overflow: auto;
+            flex: 1;
+            min-height: 200px;
+            max-height: 400px;
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            resize: none;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+        .btn-primary {
+            padding: 0.5rem 1rem;
+            font-size: 0.82rem;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            color: #fff;
+            background: var(--color-accent);
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: opacity var(--transition-fast);
+        }
+        .btn-primary:hover { opacity: 0.85; }
+        .btn-secondary {
+            padding: 0.5rem 1rem;
+            font-size: 0.82rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+        .btn-secondary:hover { background: var(--border-color); }
+
+        /* ── Toast notification ──────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(1rem);
+            background: var(--color-dark);
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-full);
+            font-size: 0.82rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity var(--transition-base), transform var(--transition-base);
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* dark-mode override for canvas */
+        [data-theme="dark"] #ascii-canvas {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+<div class="editor-shell">
+
+    <!-- ── Top Bar ──────────────────────────────────────── -->
+    <div class="topbar">
+        <span class="topbar-brand"><a href="projects.html"><i class="fas fa-arrow-left" style="font-size:0.8rem;margin-right:0.25rem;"></i>ASCII Editor</a></span>
+        <div class="topbar-sep"></div>
+
+        <!-- Edit actions -->
+        <div class="topbar-group">
+            <button class="tb-btn" id="btn-undo" title="Undo (Ctrl+Z)"><i class="fas fa-undo"></i> Undo</button>
+            <button class="tb-btn" id="btn-redo" title="Redo (Ctrl+Y)"><i class="fas fa-redo"></i> Redo</button>
+        </div>
+        <div class="topbar-sep"></div>
+
+        <!-- Canvas size -->
+        <div class="topbar-group">
+            <span style="font-size:0.75rem;color:var(--text-muted);">W</span>
+            <input type="number" id="inp-cols" value="120" min="20" max="500" style="width:52px;padding:0.25rem 0.4rem;font-size:0.78rem;font-family:var(--font-sans);background:var(--card-bg);color:var(--text-primary);border:1px solid var(--border-color);border-radius:var(--radius-sm);">
+            <span style="font-size:0.75rem;color:var(--text-muted);">H</span>
+            <input type="number" id="inp-rows" value="40" min="5" max="200" style="width:52px;padding:0.25rem 0.4rem;font-size:0.78rem;font-family:var(--font-sans);background:var(--card-bg);color:var(--text-primary);border:1px solid var(--border-color);border-radius:var(--radius-sm);">
+            <button class="tb-btn" id="btn-resize" title="Apply new canvas size"><i class="fas fa-expand-arrows-alt"></i> Resize</button>
+        </div>
+        <div class="topbar-sep"></div>
+
+        <!-- Clear -->
+        <button class="tb-btn" id="btn-clear" title="Clear canvas"><i class="fas fa-trash-alt"></i> Clear</button>
+
+        <div class="topbar-spacer"></div>
+
+        <!-- Dark mode -->
+        <button class="tb-btn" id="btn-theme" title="Toggle dark mode"><i class="fas fa-moon"></i></button>
+
+        <!-- Export -->
+        <button class="tb-btn" id="btn-export" title="Export / Copy"><i class="fas fa-download"></i> Export</button>
+    </div>
+
+    <!-- ── Main ─────────────────────────────────────────── -->
+    <div class="editor-main">
+
+        <!-- ── Sidebar ──────────────────────────────────── -->
+        <div class="sidebar">
+
+            <!-- Tools -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">Tools</div>
+                <div class="tool-grid">
+                    <button class="tool-btn active" data-tool="select" title="Select & move (S)"><i class="fas fa-mouse-pointer"></i>Select</button>
+                    <button class="tool-btn" data-tool="text" title="Text insert (T)"><i class="fas fa-font"></i>Text</button>
+                    <button class="tool-btn" data-tool="rect" title="Rectangle (R)"><i class="far fa-square"></i>Rect</button>
+                    <button class="tool-btn" data-tool="line" title="Line (L)"><i class="fas fa-minus"></i>Line</button>
+                    <button class="tool-btn" data-tool="arrow" title="Arrow (A)"><i class="fas fa-long-arrow-alt-right"></i>Arrow</button>
+                    <button class="tool-btn" data-tool="erase" title="Eraser (E)"><i class="fas fa-eraser"></i>Erase</button>
+                </div>
+            </div>
+
+            <!-- Charset -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">Box Style</div>
+                <div class="charset-toggle">
+                    <button class="charset-btn active" data-charset="light">Light</button>
+                    <button class="charset-btn" data-charset="heavy">Heavy</button>
+                    <button class="charset-btn" data-charset="double">Double</button>
+                    <button class="charset-btn" data-charset="ascii">ASCII</button>
+                </div>
+            </div>
+
+            <!-- Arrow style -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">Arrow Style</div>
+                <div class="charset-toggle">
+                    <button class="charset-btn active" data-arrowstyle="unicode">→</button>
+                    <button class="charset-btn" data-arrowstyle="ascii">&gt;</button>
+                </div>
+            </div>
+
+            <!-- Templates -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">Templates</div>
+                <div class="template-list">
+                    <button class="tpl-btn" data-tpl="flowchart"><i class="fas fa-project-diagram" style="width:1rem;"></i> Flowchart</button>
+                    <button class="tpl-btn" data-tpl="uml"><i class="fas fa-sitemap" style="width:1rem;"></i> UML Class</button>
+                    <button class="tpl-btn" data-tpl="sequence"><i class="fas fa-exchange-alt" style="width:1rem;"></i> Sequence</button>
+                    <button class="tpl-btn" data-tpl="er"><i class="fas fa-database" style="width:1rem;"></i> ER Diagram</button>
+                    <button class="tpl-btn" data-tpl="network"><i class="fas fa-network-wired" style="width:1rem;"></i> Network</button>
+                </div>
+            </div>
+
+            <!-- Keyboard shortcuts -->
+            <div class="sidebar-section">
+                <div class="sidebar-title">Shortcuts</div>
+                <div style="font-size:0.68rem;color:var(--text-muted);line-height:1.7;">
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">S</kbd> Select</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">T</kbd> Text</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">R</kbd> Rect</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">L</kbd> Line</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">A</kbd> Arrow</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">E</kbd> Erase</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">Ctrl+Z</kbd> Undo</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">Ctrl+Y</kbd> Redo</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">Ctrl+C</kbd> Copy</div>
+                    <div><kbd style="font-family:monospace;background:var(--bg-tertiary);padding:0 3px;border-radius:3px;border:1px solid var(--border-color);">Ctrl+A</kbd> Select all</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Canvas ────────────────────────────────────── -->
+        <div class="canvas-wrap" id="canvas-wrap">
+            <canvas id="ascii-canvas" tabindex="0"></canvas>
+        </div>
+    </div>
+
+    <!-- ── Status Bar ────────────────────────────────────── -->
+    <div class="statusbar">
+        <span class="status-item" id="status-tool">Tool: Select</span>
+        <span class="status-item" id="status-pos">Col: — Row: —</span>
+        <span class="status-item" id="status-sel">—</span>
+        <span class="status-spacer"></span>
+        <span class="status-item" id="status-size">120 × 40</span>
+        <span class="status-item">ASCII Art Editor</span>
+    </div>
+</div>
+
+<!-- ── Export Modal ──────────────────────────────────────── -->
+<div class="modal-overlay" id="export-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title">Export ASCII Art</span>
+            <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+        </div>
+        <textarea class="modal-textarea" id="export-text" readonly spellcheck="false"></textarea>
+        <div class="modal-actions">
+            <button class="btn-secondary" id="modal-close2">Close</button>
+            <button class="btn-primary" id="btn-copy-export"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+            <button class="btn-primary" id="btn-download"><i class="fas fa-file-download"></i> Download .txt</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Toast ─────────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// ASCII Art Editor - Core Engine
+// ═══════════════════════════════════════════════════════════
+
+(function () {
+    'use strict';
+
+    // ── Constants ──────────────────────────────────────────
+    const CELL_W = 8;   // px per character column (Courier New 14px)
+    const CELL_H = 14;  // px per character row
+
+    // Box-drawing charsets
+    const CHARSETS = {
+        light:  { tl:'┌', tr:'┐', bl:'└', br:'┘', h:'─', v:'│', cross:'┼', tee_r:'├', tee_l:'┤', tee_d:'┬', tee_u:'┴' },
+        heavy:  { tl:'┏', tr:'┓', bl:'┗', br:'┛', h:'━', v:'┃', cross:'╋', tee_r:'┣', tee_l:'┫', tee_d:'┳', tee_u:'┻' },
+        double: { tl:'╔', tr:'╗', bl:'╚', br:'╝', h:'═', v:'║', cross:'╬', tee_r:'╠', tee_l:'╣', tee_d:'╦', tee_u:'╩' },
+        ascii:  { tl:'+', tr:'+', bl:'+', br:'+', h:'-', v:'|', cross:'+', tee_r:'+', tee_l:'+', tee_d:'+', tee_u:'+' },
+    };
+
+    // Arrow chars
+    const ARROWS = {
+        unicode: { r:'→', l:'←', u:'↑', d:'↓', lr:'↔', ud:'↕' },
+        ascii:   { r:'>', l:'<', u:'^', d:'v', lr:'-', ud:'|' },
+    };
+
+    // ── State ──────────────────────────────────────────────
+    let COLS = 120, ROWS = 40;
+    let grid = [];          // 2D array of chars
+    let undoStack = [];
+    let redoStack = [];
+    let currentTool = 'select';
+    let currentCharset = 'light';
+    let currentArrowStyle = 'unicode';
+
+    // Drawing state
+    let isDrawing = false;
+    let startCol = 0, startRow = 0;
+    let preview = null;     // { cells: [{c,r,ch}] }
+
+    // Selection state
+    let selection = null;   // {c1,r1,c2,r2}
+    let selDragging = false;
+    let selDragStart = null;
+    let selBuffer = null;
+
+    // Erase state
+    let erasing = false;
+
+    // Text cursor
+    let textCursorCol = 0, textCursorRow = 0;
+    let textActive = false;
+
+    // ── Canvas setup ───────────────────────────────────────
+    const canvas = document.getElementById('ascii-canvas');
+    const ctx = canvas.getContext('2d');
+    let isDark = false;
+
+    function initGrid(cols, rows) {
+        grid = [];
+        for (let r = 0; r < rows; r++) {
+            grid[r] = [];
+            for (let c = 0; c < cols; c++) grid[r][c] = ' ';
+        }
+        COLS = cols; ROWS = rows;
+        resizeCanvas();
+    }
+
+    function resizeCanvas() {
+        canvas.width  = COLS * CELL_W;
+        canvas.height = ROWS * CELL_H;
+        render();
+        document.getElementById('status-size').textContent = `${COLS} × ${ROWS}`;
+    }
+
+    function getColors() {
+        if (isDark) return { bg: '#0f172a', fg: '#e2e8f0', muted: '#475569', sel: 'rgba(102,126,234,0.3)', cur: '#667eea' };
+        return { bg: '#ffffff', fg: '#1a202c', muted: '#cbd5e1', sel: 'rgba(102,126,234,0.2)', cur: '#667eea' };
+    }
+
+    function render() {
+        const col = getColors();
+        ctx.fillStyle = col.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Faint grid lines
+        ctx.strokeStyle = col.muted;
+        ctx.lineWidth = 0.3;
+        ctx.globalAlpha = 0.2;
+        for (let r = 0; r <= ROWS; r++) {
+            ctx.beginPath(); ctx.moveTo(0, r * CELL_H); ctx.lineTo(COLS * CELL_W, r * CELL_H); ctx.stroke();
+        }
+        for (let c = 0; c <= COLS; c++) {
+            ctx.beginPath(); ctx.moveTo(c * CELL_W, 0); ctx.lineTo(c * CELL_W, ROWS * CELL_H); ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+
+        // Selection highlight
+        if (selection) {
+            const { c1, r1, c2, r2 } = normSel(selection);
+            ctx.fillStyle = col.sel;
+            ctx.fillRect(c1 * CELL_W, r1 * CELL_H, (c2-c1+1)*CELL_W, (r2-r1+1)*CELL_H);
+        }
+
+        // Draw grid chars
+        ctx.font = `14px 'Courier New', Courier, monospace`;
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = col.fg;
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                const ch = grid[r][c];
+                if (ch && ch !== ' ') ctx.fillText(ch, c * CELL_W, r * CELL_H);
+            }
+        }
+
+        // Draw preview overlay
+        if (preview) {
+            ctx.fillStyle = col.sel;
+            preview.cells.forEach(({ c, r }) => {
+                if (r >= 0 && r < ROWS && c >= 0 && c < COLS)
+                    ctx.fillRect(c * CELL_W, r * CELL_H, CELL_W, CELL_H);
+            });
+            ctx.fillStyle = col.cur;
+            preview.cells.forEach(({ c, r, ch }) => {
+                if (r >= 0 && r < ROWS && c >= 0 && c < COLS && ch && ch !== ' ')
+                    ctx.fillText(ch, c * CELL_W, r * CELL_H);
+            });
+        }
+
+        // Text cursor
+        if (textActive && currentTool === 'text') {
+            const now = Date.now();
+            if (Math.floor(now / 500) % 2 === 0) {
+                ctx.fillStyle = col.cur;
+                ctx.fillRect(textCursorCol * CELL_W, textCursorRow * CELL_H, 2, CELL_H);
+            }
+            scheduleRender();
+        }
+    }
+
+    let rafPending = false;
+    function scheduleRender() {
+        if (!rafPending) { rafPending = true; requestAnimationFrame(() => { rafPending = false; render(); }); }
+    }
+
+    // ── Grid helpers ───────────────────────────────────────
+    function setCell(c, r, ch) {
+        if (r >= 0 && r < ROWS && c >= 0 && c < COLS) grid[r][c] = ch;
+    }
+    function getCell(c, r) {
+        if (r >= 0 && r < ROWS && c >= 0 && c < COLS) return grid[r][c];
+        return ' ';
+    }
+    function cloneGrid() {
+        return grid.map(row => [...row]);
+    }
+    function normSel(s) {
+        return { c1: Math.min(s.c1,s.c2), r1: Math.min(s.r1,s.r2), c2: Math.max(s.c1,s.c2), r2: Math.max(s.r1,s.r2) };
+    }
+
+    // ── Undo/Redo ──────────────────────────────────────────
+    function snapshot() {
+        undoStack.push(cloneGrid());
+        if (undoStack.length > 100) undoStack.shift();
+        redoStack = [];
+    }
+    function undo() {
+        if (!undoStack.length) return;
+        redoStack.push(cloneGrid());
+        grid = undoStack.pop();
+        scheduleRender();
+    }
+    function redo() {
+        if (!redoStack.length) return;
+        undoStack.push(cloneGrid());
+        grid = redoStack.pop();
+        scheduleRender();
+    }
+
+    // ── Shape helpers ──────────────────────────────────────
+    function buildRect(c1, r1, c2, r2, cs) {
+        const cells = [];
+        const charset = CHARSETS[cs];
+        if (c1 === c2 && r1 === r2) return [{ c: c1, r: r1, ch: charset.tl }];
+        const left = Math.min(c1,c2), right = Math.max(c1,c2);
+        const top  = Math.min(r1,r2), bot   = Math.max(r1,r2);
+        // corners
+        cells.push({ c: left,  r: top, ch: charset.tl });
+        cells.push({ c: right, r: top, ch: charset.tr });
+        cells.push({ c: left,  r: bot, ch: charset.bl });
+        cells.push({ c: right, r: bot, ch: charset.br });
+        // top/bottom edges
+        for (let c = left+1; c < right; c++) {
+            cells.push({ c, r: top, ch: charset.h });
+            cells.push({ c, r: bot, ch: charset.h });
+        }
+        // left/right edges
+        for (let r = top+1; r < bot; r++) {
+            cells.push({ c: left,  r, ch: charset.v });
+            cells.push({ c: right, r, ch: charset.v });
+        }
+        return cells;
+    }
+
+    function buildLine(c1, r1, c2, r2, cs) {
+        const cells = [];
+        const charset = CHARSETS[cs];
+        const dc = c2 - c1, dr = r2 - r1;
+        if (Math.abs(dc) >= Math.abs(dr)) {
+            // horizontal dominant
+            const left = Math.min(c1,c2), right = Math.max(c1,c2);
+            for (let c = left; c <= right; c++) cells.push({ c, r: r1, ch: charset.h });
+        } else {
+            // vertical dominant
+            const top = Math.min(r1,r2), bot = Math.max(r1,r2);
+            for (let r = top; r <= bot; r++) cells.push({ c: c1, r, ch: charset.v });
+        }
+        return cells;
+    }
+
+    function buildArrow(c1, r1, c2, r2, cs, as_) {
+        const cells = [];
+        const charset = CHARSETS[cs];
+        const arrowSet = ARROWS[as_];
+        const dc = c2 - c1, dr = r2 - r1;
+
+        if (Math.abs(dc) >= Math.abs(dr)) {
+            // horizontal
+            const goRight = dc >= 0;
+            const left = Math.min(c1,c2), right = Math.max(c1,c2);
+            for (let c = left; c <= right; c++) cells.push({ c, r: r1, ch: charset.h });
+            if (goRight) cells.push({ c: right, r: r1, ch: arrowSet.r });
+            else         cells.push({ c: left,  r: r1, ch: arrowSet.l });
+        } else {
+            // vertical
+            const goDown = dr >= 0;
+            const top = Math.min(r1,r2), bot = Math.max(r1,r2);
+            for (let r = top; r <= bot; r++) cells.push({ c: c1, r, ch: charset.v });
+            if (goDown) cells.push({ c: c1, r: bot, ch: arrowSet.d });
+            else        cells.push({ c: c1, r: top, ch: arrowSet.u });
+        }
+        return cells;
+    }
+
+    function applyPreview(cells) {
+        cells.forEach(({ c, r, ch }) => setCell(c, r, ch));
+    }
+
+    // ── Mouse position helpers ─────────────────────────────
+    function eventToCell(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        return { c: Math.floor(x / CELL_W), r: Math.floor(y / CELL_H) };
+    }
+
+    // ── Mouse events ───────────────────────────────────────
+    canvas.addEventListener('mousedown', onMouseDown);
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('mouseleave', onMouseLeave);
+    canvas.addEventListener('click', onCanvasClick);
+
+    function onMouseDown(e) {
+        if (e.button !== 0) return;
+        const { c, r } = eventToCell(e);
+        if (currentTool === 'text') return;
+        if (currentTool === 'erase') { erasing = true; eraseCell(c, r); return; }
+        if (currentTool === 'select') {
+            if (selection && insideSel(c, r, normSel(selection))) {
+                selDragging = true;
+                selDragStart = { c, r };
+                selBuffer = extractSel(normSel(selection));
+                snapshot();
+                clearSel(normSel(selection));
+            } else {
+                selection = { c1: c, r1: r, c2: c, r2: r };
+                selDragging = false;
+            }
+            isDrawing = true;
+            startCol = c; startRow = r;
+            scheduleRender();
+            return;
+        }
+        isDrawing = true;
+        startCol = c; startRow = r;
+        snapshot();
+    }
+
+    function onMouseMove(e) {
+        const { c, r } = eventToCell(e);
+        updateStatusPos(c, r);
+        if (!isDrawing) return;
+
+        if (currentTool === 'erase' && erasing) { eraseCell(c, r); return; }
+
+        if (currentTool === 'select') {
+            if (selDragging) {
+                const dc = c - selDragStart.c, dr = r - selDragStart.r;
+                const s = normSel(selection);
+                clearSel(s);
+                const ns = { c1: s.c1+dc, r1: s.r1+dr, c2: s.c2+dc, r2: s.r2+dr };
+                pasteSel(ns, selBuffer);
+                selection = ns;
+                selDragStart = { c, r };
+            } else {
+                selection.c2 = c; selection.r2 = r;
+            }
+            scheduleRender(); return;
+        }
+
+        if (currentTool === 'rect')  preview = { cells: buildRect(startCol, startRow, c, r, currentCharset) };
+        if (currentTool === 'line')  preview = { cells: buildLine(startCol, startRow, c, r, currentCharset) };
+        if (currentTool === 'arrow') preview = { cells: buildArrow(startCol, startRow, c, r, currentCharset, currentArrowStyle) };
+        scheduleRender();
+    }
+
+    function onMouseUp(e) {
+        if (!isDrawing && !erasing) return;
+        const { c, r } = eventToCell(e);
+        erasing = false;
+        if (currentTool === 'select') {
+            if (!selDragging) { selection.c2 = c; selection.r2 = r; }
+            selDragging = false; selBuffer = null;
+            isDrawing = false; scheduleRender(); return;
+        }
+        if (currentTool === 'rect')  { if (preview) applyPreview(preview.cells); }
+        if (currentTool === 'line')  { if (preview) applyPreview(preview.cells); }
+        if (currentTool === 'arrow') { if (preview) applyPreview(preview.cells); }
+        preview = null;
+        isDrawing = false;
+        scheduleRender();
+    }
+
+    function onMouseLeave() {
+        if (isDrawing && currentTool !== 'select') {
+            if (preview) { applyPreview(preview.cells); preview = null; }
+            isDrawing = false;
+            scheduleRender();
+        }
+        erasing = false;
+    }
+
+    function onCanvasClick(e) {
+        if (currentTool !== 'text') return;
+        const { c, r } = eventToCell(e);
+        textCursorCol = c; textCursorRow = r;
+        textActive = true;
+        canvas.focus();
+        scheduleRender();
+    }
+
+    // ── Erase helpers ──────────────────────────────────────
+    function eraseCell(c, r) {
+        if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
+            if (!isDrawing) snapshot();
+            setCell(c, r, ' ');
+            scheduleRender();
+        }
+    }
+
+    // ── Selection helpers ──────────────────────────────────
+    function insideSel(c, r, s) {
+        return c >= s.c1 && c <= s.c2 && r >= s.r1 && r <= s.r2;
+    }
+    function extractSel(s) {
+        const buf = [];
+        for (let r = s.r1; r <= s.r2; r++) {
+            const row = [];
+            for (let c = s.c1; c <= s.c2; c++) row.push(getCell(c, r));
+            buf.push(row);
+        }
+        return buf;
+    }
+    function clearSel(s) {
+        for (let r = s.r1; r <= s.r2; r++)
+            for (let c = s.c1; c <= s.c2; c++) setCell(c, r, ' ');
+    }
+    function pasteSel(s, buf) {
+        for (let dr = 0; dr < buf.length; dr++)
+            for (let dc = 0; dc < buf[dr].length; dc++)
+                setCell(s.c1+dc, s.r1+dr, buf[dr][dc]);
+    }
+
+    // ── Keyboard ───────────────────────────────────────────
+    document.addEventListener('keydown', onKeyDown);
+
+    function onKeyDown(e) {
+        const tag = document.activeElement.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+        // Tool shortcuts
+        if (!e.ctrlKey && !e.metaKey && !e.altKey) {
+            if (e.key === 's' || e.key === 'S') { setTool('select'); e.preventDefault(); return; }
+            if (e.key === 't' || e.key === 'T') { setTool('text');   e.preventDefault(); return; }
+            if (e.key === 'r' || e.key === 'R') { setTool('rect');   e.preventDefault(); return; }
+            if (e.key === 'l' || e.key === 'L') { setTool('line');   e.preventDefault(); return; }
+            if (e.key === 'a' || e.key === 'A') { setTool('arrow');  e.preventDefault(); return; }
+            if (e.key === 'e' || e.key === 'E') { setTool('erase');  e.preventDefault(); return; }
+            if (e.key === 'Escape') { selection = null; textActive = false; preview = null; scheduleRender(); return; }
+        }
+
+        if ((e.ctrlKey || e.metaKey) && e.key === 'z') { undo(); e.preventDefault(); return; }
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || e.key === 'Y')) { redo(); e.preventDefault(); return; }
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+            copySelection(); e.preventDefault(); return;
+        }
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'a' || e.key === 'A')) {
+            selection = { c1: 0, r1: 0, c2: COLS-1, r2: ROWS-1 };
+            scheduleRender(); e.preventDefault(); return;
+        }
+
+        // Text tool typing
+        if (currentTool === 'text' && textActive) {
+            handleTextKey(e);
+        }
+    }
+
+    function handleTextKey(e) {
+        if (e.key === 'Escape') { textActive = false; scheduleRender(); return; }
+        if (e.key === 'Enter') { textCursorRow++; textCursorCol = 0; scheduleRender(); e.preventDefault(); return; }
+        if (e.key === 'Backspace') {
+            snapshot();
+            if (textCursorCol > 0) { textCursorCol--; setCell(textCursorCol, textCursorRow, ' '); }
+            else if (textCursorRow > 0) { textCursorRow--; textCursorCol = COLS - 1; }
+            scheduleRender(); e.preventDefault(); return;
+        }
+        if (e.key === 'ArrowRight') { textCursorCol = Math.min(COLS-1, textCursorCol+1); scheduleRender(); e.preventDefault(); return; }
+        if (e.key === 'ArrowLeft')  { textCursorCol = Math.max(0, textCursorCol-1); scheduleRender(); e.preventDefault(); return; }
+        if (e.key === 'ArrowDown')  { textCursorRow = Math.min(ROWS-1, textCursorRow+1); scheduleRender(); e.preventDefault(); return; }
+        if (e.key === 'ArrowUp')    { textCursorRow = Math.max(0, textCursorRow-1); scheduleRender(); e.preventDefault(); return; }
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+            snapshot();
+            setCell(textCursorCol, textCursorRow, e.key);
+            textCursorCol = Math.min(COLS-1, textCursorCol + 1);
+            scheduleRender(); e.preventDefault();
+        }
+    }
+
+    // ── Copy selection ─────────────────────────────────────
+    function copySelection() {
+        const s = selection ? normSel(selection) : { c1: 0, r1: 0, c2: COLS-1, r2: ROWS-1 };
+        const lines = [];
+        for (let r = s.r1; r <= s.r2; r++) {
+            let line = '';
+            for (let c = s.c1; c <= s.c2; c++) line += getCell(c, r);
+            lines.push(line.trimEnd());
+        }
+        navigator.clipboard.writeText(lines.join('\n')).then(() => toast('Copied!'));
+    }
+
+    // ── Export to text ─────────────────────────────────────
+    function exportText() {
+        const lines = [];
+        for (let r = 0; r < ROWS; r++) {
+            let line = '';
+            for (let c = 0; c < COLS; c++) line += grid[r][c];
+            lines.push(line.trimEnd());
+        }
+        // trim trailing blank lines
+        while (lines.length && !lines[lines.length-1].trim()) lines.pop();
+        return lines.join('\n');
+    }
+
+    // ── Status ─────────────────────────────────────────────
+    function updateStatusPos(c, r) {
+        document.getElementById('status-pos').textContent = `Col: ${c+1}  Row: ${r+1}`;
+    }
+
+    // ── Tool switching ────────────────────────────────────
+    function setTool(name) {
+        currentTool = name;
+        textActive = false; preview = null; selection = null;
+        document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === name));
+        document.getElementById('status-tool').textContent = `Tool: ${name.charAt(0).toUpperCase()+name.slice(1)}`;
+        canvas.style.cursor = name === 'text' ? 'text' : name === 'erase' ? 'cell' : 'crosshair';
+        scheduleRender();
+    }
+
+    // ── Templates ─────────────────────────────────────────
+    const TEMPLATES = {
+        flowchart: `
+┌─────────────────┐
+│     START       │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  Process Step 1 │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐       ┌──────────────────┐
+│   Decision?     ├──No──▶│  Process Step 2  │
+└────────┬────────┘       └────────┬─────────┘
+         │ Yes                     │
+         ▼                         ▼
+┌─────────────────┐       ┌──────────────────┐
+│  Process Step 3 │       │       END        │
+└────────┬────────┘       └──────────────────┘
+         │
+         ▼
+┌─────────────────┐
+│      END        │
+└─────────────────┘
+`.trim(),
+
+        uml: `
+┌─────────────────────────┐
+│        Animal           │
+├─────────────────────────┤
+│ - name: String          │
+│ - age: int              │
+├─────────────────────────┤
+│ + speak(): void         │
+│ + move(): void          │
+│ + getName(): String     │
+└────────────┬────────────┘
+             │
+     ┌───────┴───────┐
+     │               │
+┌────┴────────┐ ┌────┴────────┐
+│     Dog     │ │     Cat     │
+├─────────────┤ ├─────────────┤
+│             │ │             │
+├─────────────┤ ├─────────────┤
+│ + bark()    │ │ + purr()    │
+└─────────────┘ └─────────────┘
+`.trim(),
+
+        sequence: `
+  Client          Server          Database
+    │                │                │
+    │── Request ────▶│                │
+    │                │── Query ──────▶│
+    │                │                │
+    │                │◀── Results ────│
+    │◀── Response ───│                │
+    │                │                │
+    │── Auth Req ───▶│                │
+    │                │── Validate ───▶│
+    │                │◀── Valid ──────│
+    │◀── Token ──────│                │
+    │                │                │
+`.trim(),
+
+        er: `
+┌──────────────┐          ┌──────────────┐
+│   PATIENT    │          │   DOCTOR     │
+├──────────────┤          ├──────────────┤
+│ PK patient_id│──────────│ PK doctor_id │
+│    name      │  treats  │    name      │
+│    dob       │          │    specialty │
+│    phone     │          │    phone     │
+└──────┬───────┘          └──────────────┘
+       │
+       │ has
+       │
+┌──────┴───────┐          ┌──────────────┐
+│ APPOINTMENT  │          │   BILLING    │
+├──────────────┤          ├──────────────┤
+│ PK appt_id   │──────────│ PK bill_id   │
+│ FK patient_id│ billed   │ FK appt_id   │
+│ FK doctor_id │          │    amount    │
+│    date      │          │    status    │
+│    reason    │          │    date      │
+└──────────────┘          └──────────────┘
+`.trim(),
+
+        network: `
+                    ┌──────────────┐
+                    │   Internet   │
+                    └──────┬───────┘
+                           │
+                    ┌──────┴───────┐
+                    │   Firewall   │
+                    └──────┬───────┘
+                           │
+                    ┌──────┴───────┐
+                    │    Router    │
+                    └──┬───────┬───┘
+                       │       │
+            ┌──────────┘       └──────────┐
+     ┌──────┴───────┐          ┌──────────┴────┐
+     │   Switch A   │          │   Switch B    │
+     └──┬────────┬──┘          └──┬─────────┬──┘
+        │        │                │         │
+  ┌─────┴─┐  ┌───┴───┐      ┌────┴──┐  ┌───┴───┐
+  │  PC 1 │  │  PC 2 │      │ SRV 1 │  │  NAS  │
+  └───────┘  └───────┘      └───────┘  └───────┘
+`.trim(),
+    };
+
+    function loadTemplate(name) {
+        const tpl = TEMPLATES[name];
+        if (!tpl) return;
+        snapshot();
+        initGrid(COLS, ROWS);
+        const lines = tpl.split('\n');
+        lines.forEach((line, r) => {
+            [...line].forEach((ch, c) => {
+                if (c < COLS && r < ROWS) setCell(c, r, ch);
+            });
+        });
+        scheduleRender();
+        toast(`Template loaded: ${name}`);
+    }
+
+    // ── Toast ──────────────────────────────────────────────
+    let toastTimer;
+    function toast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+    }
+
+    // ── UI wiring ──────────────────────────────────────────
+    document.querySelectorAll('.tool-btn').forEach(btn => {
+        btn.addEventListener('click', () => setTool(btn.dataset.tool));
+    });
+
+    document.querySelectorAll('.charset-btn[data-charset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentCharset = btn.dataset.charset;
+            document.querySelectorAll('.charset-btn[data-charset]').forEach(b => b.classList.toggle('active', b === btn));
+        });
+    });
+
+    document.querySelectorAll('.charset-btn[data-arrowstyle]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentArrowStyle = btn.dataset.arrowstyle;
+            document.querySelectorAll('.charset-btn[data-arrowstyle]').forEach(b => b.classList.toggle('active', b === btn));
+        });
+    });
+
+    document.querySelectorAll('.tpl-btn').forEach(btn => {
+        btn.addEventListener('click', () => loadTemplate(btn.dataset.tpl));
+    });
+
+    document.getElementById('btn-undo').addEventListener('click', undo);
+    document.getElementById('btn-redo').addEventListener('click', redo);
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+        if (!confirm('Clear the canvas?')) return;
+        snapshot();
+        initGrid(COLS, ROWS);
+        scheduleRender();
+        toast('Canvas cleared');
+    });
+
+    document.getElementById('btn-resize').addEventListener('click', () => {
+        const c = parseInt(document.getElementById('inp-cols').value, 10);
+        const r = parseInt(document.getElementById('inp-rows').value, 10);
+        if (isNaN(c) || isNaN(r) || c < 10 || r < 3) { toast('Invalid size'); return; }
+        snapshot();
+        const old = cloneGrid();
+        initGrid(c, r);
+        // copy what fits
+        for (let row = 0; row < Math.min(r, old.length); row++)
+            for (let col = 0; col < Math.min(c, old[row]?.length || 0); col++)
+                grid[row][col] = old[row][col];
+        scheduleRender();
+        toast(`Resized to ${c}×${r}`);
+    });
+
+    document.getElementById('btn-theme').addEventListener('click', () => {
+        isDark = !isDark;
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        scheduleRender();
+    });
+
+    // Export modal
+    document.getElementById('btn-export').addEventListener('click', () => {
+        document.getElementById('export-text').value = exportText();
+        document.getElementById('export-modal').classList.add('open');
+    });
+    function closeModal() { document.getElementById('export-modal').classList.remove('open'); }
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('modal-close2').addEventListener('click', closeModal);
+    document.getElementById('export-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+    document.getElementById('btn-copy-export').addEventListener('click', () => {
+        const text = document.getElementById('export-text').value;
+        navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard!'));
+    });
+
+    document.getElementById('btn-download').addEventListener('click', () => {
+        const text = document.getElementById('export-text').value;
+        const blob = new Blob([text], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ascii-art.txt';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast('Downloaded ascii-art.txt');
+    });
+
+    // ── Init ───────────────────────────────────────────────
+    initGrid(COLS, ROWS);
+    setTool('select');
+
+    // Load a small welcome hint
+    const welcome = [
+        '  Welcome to ASCII Art Editor!',
+        '',
+        '  ← Use the sidebar tools to draw shapes.',
+        '  ← Pick a box style (Light / Heavy / Double / ASCII).',
+        '  ← Load a template to get started quickly.',
+        '  ← Press T to type, R for rectangles, L for lines,',
+        '     A for arrows, E to erase.',
+        '  ← Export your art to plain text anytime.',
+    ];
+    welcome.forEach((line, r) => {
+        [...line].forEach((ch, c) => { if (c < COLS && r < ROWS) setCell(c, r, ch); });
+    });
+    render();
+
+})();
+</script>
+</body>
+</html>
