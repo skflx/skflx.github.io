@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup B: Bento Grid | skflx.MD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ========================================================
+           MOCKUP B: BENTO GRID
+
+           Concept: Apple/Linear-inspired bento box layout.
+           Entire page is a visual grid of cards. No traditional
+           sections — everything is a "tile" in a masonry-like grid.
+           Highly visual, modern, trendy. Works beautifully dark.
+           ======================================================== */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #f5f5f7;
+            --card: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-muted: #86868b;
+            --accent: #0071e3;
+            --accent-soft: #e3f0ff;
+            --border: #d2d2d7;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --font-display: 'DM Sans', -apple-system, sans-serif;
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        [data-theme="dark"] {
+            --bg: #000000;
+            --card: #1c1c1e;
+            --text: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --text-muted: #6e6e73;
+            --accent: #2997ff;
+            --accent-soft: #0a2540;
+            --border: #38383a;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: color-mix(in srgb, var(--bg) 80%, transparent);
+            backdrop-filter: blur(20px) saturate(180%);
+            height: 48px; display: flex; align-items: center;
+            border-bottom: 0.5px solid var(--border);
+        }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: var(--font-display); font-weight: 700; font-size: 1rem; color: var(--text); text-decoration: none; }
+        .nav-links { list-style: none; display: flex; gap: 20px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .theme-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; padding: 4px; }
+
+        /* --- BENTO GRID --- */
+        .bento-container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            grid-auto-rows: minmax(160px, auto);
+        }
+
+        .bento-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 28px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden; position: relative;
+        }
+        .bento-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+
+        /* Sizing classes */
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+        .span-4 { grid-column: span 4; }
+        .row-2 { grid-row: span 2; }
+
+        /* --- HERO CARD: Full width, large --- */
+        .card-hero {
+            grid-column: span 4;
+            min-height: 280px;
+            display: grid; grid-template-columns: 1fr auto;
+            gap: 32px; align-items: center;
+            background: linear-gradient(135deg, var(--card) 60%, var(--accent-soft) 100%);
+        }
+        .card-hero .hero-content { max-width: 560px; }
+        .card-hero h1 { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
+        .card-hero h1 .accent { color: var(--accent); }
+        .card-hero .subtitle { color: var(--accent); font-size: 0.88rem; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .card-hero p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
+        .card-hero .hero-photo {
+            width: 200px; height: 240px; border-radius: var(--radius-sm);
+            object-fit: cover;
+        }
+        .hero-ctas { display: flex; gap: 10px; margin-top: 16px; }
+        .hero-ctas a {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 20px; border-radius: 980px; font-size: 0.85rem; font-weight: 500; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .cta-primary { background: var(--accent); color: #fff; }
+        .cta-primary:hover { filter: brightness(1.1); }
+        .cta-secondary { background: color-mix(in srgb, var(--text) 10%, transparent); color: var(--text); }
+        .cta-secondary:hover { background: color-mix(in srgb, var(--text) 18%, transparent); }
+
+        /* --- EDUCATION CARD --- */
+        .card-education .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 14px; }
+        .edu-item { margin-bottom: 14px; }
+        .edu-item:last-child { margin-bottom: 0; }
+        .edu-item h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+        .edu-item p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+
+        /* --- LANGUAGES CARD --- */
+        .lang-list { list-style: none; }
+        .lang-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 0.88rem; }
+        .lang-list li:last-child { border-bottom: none; }
+        .lang-level { color: var(--text-muted); font-size: 0.82rem; }
+
+        /* --- RESEARCH CARD --- */
+        .card-research { background: linear-gradient(135deg, var(--accent-soft), var(--card)); }
+        .research-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .research-tile {
+            padding: 14px; background: var(--card); border-radius: var(--radius-sm);
+            text-decoration: none; color: var(--text); transition: all 0.2s; display: block;
+        }
+        .research-tile:hover { transform: scale(1.02); }
+        .research-tile i { color: var(--accent); margin-bottom: 6px; display: block; font-size: 1.1rem; }
+        .research-tile h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+        .research-tile p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
+
+        /* --- INTERESTS: Icon grid --- */
+        .card-interests .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 14px; }
+        .interest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .interest-tile {
+            text-align: center; padding: 14px 8px;
+            background: color-mix(in srgb, var(--accent) 8%, transparent);
+            border-radius: var(--radius-sm);
+        }
+        .interest-tile i { font-size: 1.3rem; color: var(--accent); display: block; margin-bottom: 6px; }
+        .interest-tile span { font-size: 0.75rem; color: var(--text-secondary); }
+
+        /* --- TECH PROJECTS CARD --- */
+        .tech-list { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+        .tech-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px; background: color-mix(in srgb, var(--accent) 6%, transparent);
+            border-radius: var(--radius-sm);
+        }
+        .tech-item i { color: var(--accent); width: 20px; text-align: center; }
+        .tech-item .tech-info h4 { font-size: 0.88rem; font-weight: 600; }
+        .tech-item .tech-info p { font-size: 0.75rem; color: var(--text-muted); margin: 0; }
+
+        /* --- CLINICAL CARD --- */
+        .clinical-list { margin-top: 12px; }
+        .clinical-item { padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+        .clinical-item:last-child { border-bottom: none; }
+        .clinical-item .year { font-size: 0.75rem; color: var(--accent); font-weight: 600; }
+        .clinical-item h4 { font-size: 0.88rem; font-weight: 600; margin: 2px 0; }
+        .clinical-item p { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
+
+        /* --- CONNECT CARD --- */
+        .card-connect { background: linear-gradient(135deg, var(--accent), #5856d6); color: #fff; text-align: center; justify-content: center; align-items: center; }
+        .card-connect h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+        .card-connect p { color: rgba(255,255,255,0.8); font-size: 0.88rem; margin-bottom: 16px; }
+        .connect-links { display: flex; gap: 10px; justify-content: center; }
+        .connect-links a {
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.2); border-radius: 50%; color: #fff;
+            text-decoration: none; transition: background 0.2s; font-size: 1rem;
+        }
+        .connect-links a:hover { background: rgba(255,255,255,0.35); }
+
+        /* --- LOCATION CARD --- */
+        .card-location { justify-content: center; align-items: center; text-align: center; }
+        .card-location i { font-size: 1.5rem; color: var(--accent); margin-bottom: 8px; }
+        .card-location h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 2px; }
+        .card-location p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+
+        /* --- FOOTER --- */
+        .footer { text-align: center; padding: 24px; font-size: 0.75rem; color: var(--text-muted); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+            .span-3, .span-4 { grid-column: span 2; }
+            .card-hero { grid-template-columns: 1fr; }
+            .card-hero .hero-photo { display: none; }
+            .research-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .span-2, .span-3, .span-4 { grid-column: span 1; }
+            .card-hero h1 { font-size: 1.8rem; }
+            .interest-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="#" class="logo">skflx.MD</a>
+            <nav style="display:flex;align-items:center;gap:16px;">
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Research</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <button class="theme-btn" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? '' : 'dark';">
+                    <i class="fas fa-circle-half-stroke"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BENTO LAYOUT -->
+    <div class="bento-container">
+        <div class="bento-grid">
+
+            <!-- ROW 1: Hero -->
+            <div class="bento-card card-hero">
+                <div class="hero-content">
+                    <div class="subtitle"><i class="fas fa-stethoscope"></i> PGY-2 Otolaryngology Resident</div>
+                    <h1>Hi, I'm <span class="accent">Samip.</span></h1>
+                    <p>Surgeon-scientist in the Pacific Northwest. Passionate about technology, surgical education, and the intersection of medicine and innovation.</p>
+                    <div class="hero-ctas">
+                        <a href="#" class="cta-primary"><i class="fas fa-paper-plane"></i> Get in Touch</a>
+                        <a href="#" class="cta-secondary"><i class="fas fa-file-pdf"></i> Download CV</a>
+                    </div>
+                </div>
+                <img src="../images/me_large.jpg" alt="Dr. Samipya Kafle" class="hero-photo">
+            </div>
+
+            <!-- ROW 2: Education + Languages + Interests -->
+            <div class="bento-card card-education">
+                <div class="label">Education</div>
+                <div>
+                    <div class="edu-item">
+                        <h3>Yale School of Medicine</h3>
+                        <p>Otolaryngology Residency</p>
+                    </div>
+                    <div class="edu-item">
+                        <h3>University of Nevada, Reno</h3>
+                        <p>B.S. Neuroscience</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-card">
+                <div class="label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:14px;">Languages</div>
+                <ul class="lang-list">
+                    <li>Nepali <span class="lang-level">Native</span></li>
+                    <li>English <span class="lang-level">Fluent</span></li>
+                    <li>Spanish <span class="lang-level">Intermediate</span></li>
+                    <li>Swiss German <span class="lang-level">Intermediate</span></li>
+                </ul>
+            </div>
+
+            <div class="bento-card card-interests span-2">
+                <div class="label">What I Do</div>
+                <div class="interest-grid">
+                    <div class="interest-tile"><i class="fas fa-flask"></i><span>Research</span></div>
+                    <div class="interest-tile"><i class="fas fa-microchip"></i><span>Technology</span></div>
+                    <div class="interest-tile"><i class="fas fa-palette"></i><span>Art</span></div>
+                    <div class="interest-tile"><i class="fas fa-music"></i><span>Music</span></div>
+                    <div class="interest-tile"><i class="fas fa-mountain"></i><span>Outdoors</span></div>
+                    <div class="interest-tile"><i class="fas fa-dumbbell"></i><span>Fitness</span></div>
+                </div>
+            </div>
+
+            <!-- ROW 3: Research (big card) -->
+            <div class="bento-card card-research span-4">
+                <div>
+                    <div class="label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px;">Research</div>
+                    <h3 style="font-family:var(--font-display);font-size:1.15rem;font-weight:600;">Publications in Otolaryngology</h3>
+                </div>
+                <div class="research-grid">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Trauma+OR+Fracture)" target="_blank" class="research-tile">
+                        <i class="fas fa-skull"></i>
+                        <h4>Craniofacial Trauma</h4>
+                        <p>Injury patterns in sports and surgical outcomes</p>
+                    </a>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cancer+OR+Oncology)" target="_blank" class="research-tile">
+                        <i class="fas fa-ribbon"></i>
+                        <h4>Head & Neck Oncology</h4>
+                        <p>Complications, risk factors, survival outcomes</p>
+                    </a>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Education+OR+Training)" target="_blank" class="research-tile">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h4>Surgical Education</h4>
+                        <p>Live-streaming and automated feedback systems</p>
+                    </a>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cochlear+OR+Hearing)" target="_blank" class="research-tile">
+                        <i class="fas fa-ear-listen"></i>
+                        <h4>Otology & Hearing Sciences</h4>
+                        <p>Cochlear implant adaptations and speech processing</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ROW 4: Tech + Clinical + Connect -->
+            <div class="bento-card span-2">
+                <div class="label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px;">Technology</div>
+                <h3 style="font-family:var(--font-display);font-size:1.05rem;font-weight:600;">Projects</h3>
+                <div class="tech-list">
+                    <div class="tech-item">
+                        <i class="fas fa-wave-square"></i>
+                        <div class="tech-info">
+                            <h4>Speech-in-Noise Processing</h4>
+                            <p>Hearing device enhancement &middot; 2022-Present</p>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-video"></i>
+                        <div class="tech-info">
+                            <h4>Surgical Livestreaming</h4>
+                            <p>Procedure streaming platform &middot; 2022-Present</p>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-terminal"></i>
+                        <div class="tech-info">
+                            <h4>ASCII Art Editor</h4>
+                            <p>Browser-based diagram tool &middot; 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-card">
+                <div class="label" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:4px;">Clinical</div>
+                <div class="clinical-list">
+                    <div class="clinical-item">
+                        <span class="year">2022-Now</span>
+                        <h4>Surgery Livestreaming</h4>
+                        <p>Pre-clerkship curriculum design</p>
+                    </div>
+                    <div class="clinical-item">
+                        <span class="year">2020-Now</span>
+                        <h4>HAVEN Free Clinic</h4>
+                        <p>Senior Clinical Team Member</p>
+                    </div>
+                    <div class="clinical-item">
+                        <span class="year">2021-Now</span>
+                        <h4>POCUS Teaching</h4>
+                        <p>Ultrasound skills training</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-card card-connect">
+                <h3>Let's Connect</h3>
+                <p>Research, innovation, or just say hello.</p>
+                <div class="connect-links">
+                    <a href="https://linkedin.com/in/skflx" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+
+            <!-- ROW 5: Location -->
+            <div class="bento-card card-location">
+                <i class="fas fa-map-marker-alt"></i>
+                <h4>Portland, Oregon</h4>
+                <p>Pacific Northwest</p>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">&copy; 2025 skflx.MD</footer>
+</body>
+</html>
