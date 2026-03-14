@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup C: Editorial | skflx.MD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* ========================================================
+           MOCKUP C: EDITORIAL / MAGAZINE
+
+           Concept: Typography-forward, content-dense, sophisticated.
+           Inspired by editorial magazines and academic CVs.
+           Uses serif headings + sans body. Columnar layouts.
+           Dense but readable. Very professional, very elegant.
+           ======================================================== */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #faf9f6;
+            --bg-alt: #f0efe8;
+            --text: #2c2c2c;
+            --text-secondary: #555;
+            --text-muted: #8a8a8a;
+            --accent: #b8860b;
+            --accent-soft: #f5ecd7;
+            --border: #ddd;
+            --card-bg: #fff;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1a1a1a;
+            --bg-alt: #222;
+            --text: #e8e6e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #777;
+            --accent: #d4a844;
+            --accent-soft: #2a2518;
+            --border: #333;
+            --card-bg: #242424;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* --- HEADER: Editorial masthead --- */
+        .masthead {
+            text-align: center;
+            padding: 32px 24px 24px;
+            border-bottom: 2px solid var(--text);
+        }
+        .masthead-logo {
+            font-family: var(--font-serif); font-size: 2rem; font-weight: 700;
+            letter-spacing: 0.05em; color: var(--text); text-decoration: none;
+        }
+        .masthead-nav {
+            margin-top: 12px; display: flex; justify-content: center; gap: 32px;
+            list-style: none;
+        }
+        .masthead-nav a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500;
+            transition: color 0.2s;
+        }
+        .masthead-nav a:hover { color: var(--accent); }
+        .theme-btn {
+            position: fixed; top: 16px; right: 16px; z-index: 200;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 50%;
+            width: 36px; height: 36px; cursor: pointer; color: var(--text-muted);
+        }
+
+        .page { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+        /* --- HERO: Editorial style with large serif title --- */
+        .hero-editorial {
+            padding: 56px 0 40px;
+            display: grid; grid-template-columns: 180px 1fr; gap: 40px; align-items: start;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero-photo {
+            width: 180px; height: 220px; object-fit: cover;
+            filter: grayscale(30%);
+            transition: filter 0.3s;
+        }
+        .hero-photo:hover { filter: grayscale(0%); }
+        .hero-text h1 {
+            font-family: var(--font-serif); font-size: 2.8rem; font-weight: 700;
+            line-height: 1.1; margin-bottom: 12px; letter-spacing: -0.01em;
+        }
+        .hero-text .role {
+            font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--accent); font-weight: 500; margin-bottom: 14px;
+        }
+        .hero-text p { color: var(--text-secondary); font-size: 0.95rem; max-width: 480px; margin-bottom: 16px; }
+        .hero-meta {
+            display: flex; gap: 20px; font-size: 0.82rem; color: var(--text-muted);
+            border-top: 1px solid var(--border); padding-top: 14px; margin-top: 14px;
+        }
+        .hero-meta a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .hero-meta a:hover { color: var(--accent); }
+        .hero-meta i { margin-right: 4px; }
+
+        /* --- TWO-COLUMN BODY: Like a newspaper --- */
+        .two-col {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            padding: 40px 0; border-bottom: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-family: var(--font-serif); font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.15em;
+            color: var(--accent); margin-bottom: 16px;
+            padding-bottom: 8px; border-bottom: 1px solid var(--accent);
+            display: inline-block;
+        }
+
+        /* --- ABOUT COLUMN --- */
+        .about-col p { font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 10px; }
+
+        /* --- SIDEBAR COLUMN --- */
+        .sidebar-col h3 {
+            font-family: var(--font-serif); font-size: 1.05rem; font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .sidebar-col .detail { margin-bottom: 16px; }
+        .sidebar-col .detail p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
+        .lang-inline { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.8; }
+        .lang-inline strong { color: var(--text); font-weight: 500; }
+
+        /* --- RESEARCH SECTION: Dense, academic --- */
+        .research-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+        .research-entries { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .research-entry {
+            padding: 20px; border-left: 3px solid var(--accent);
+            background: var(--card-bg); transition: all 0.2s;
+            text-decoration: none; color: var(--text); display: block;
+        }
+        .research-entry:hover { background: var(--accent-soft); }
+        .research-entry h3 { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+        .research-entry p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+        .research-entry .pub-link { font-size: 0.78rem; color: var(--accent); margin-top: 8px; display: inline-block; }
+
+        /* --- PROJECTS SECTION --- */
+        .projects-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+        .project-list { list-style: none; }
+        .project-list li {
+            display: grid; grid-template-columns: 80px 1fr auto; gap: 16px;
+            padding: 16px 0; border-bottom: 1px solid var(--border); align-items: center;
+        }
+        .project-list li:last-child { border-bottom: none; }
+        .project-year { font-size: 0.82rem; color: var(--accent); font-weight: 600; }
+        .project-name { font-weight: 600; font-size: 0.92rem; }
+        .project-name span { display: block; font-weight: 400; font-size: 0.82rem; color: var(--text-muted); }
+        .project-tag {
+            font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+            padding: 4px 10px; background: var(--accent-soft); color: var(--accent);
+            border-radius: 3px; font-weight: 500;
+        }
+
+        /* --- CLINICAL SECTION --- */
+        .clinical-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+        .cv-entry { margin-bottom: 20px; padding-left: 16px; border-left: 2px solid var(--border); }
+        .cv-entry:hover { border-left-color: var(--accent); }
+        .cv-entry .cv-date { font-size: 0.78rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .cv-entry h3 { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 600; margin: 4px 0; }
+        .cv-entry p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
+
+        /* --- INTERESTS: Inline paragraph style --- */
+        .interests-section { padding: 40px 0; border-bottom: 1px solid var(--border); }
+        .interests-prose { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.8; }
+        .interests-prose .tag {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 2px 10px; background: var(--accent-soft); border-radius: 3px;
+            font-size: 0.85rem; color: var(--accent); font-weight: 500; margin: 0 2px;
+        }
+
+        /* --- CONTACT: Minimal footer-style --- */
+        .contact-section { padding: 40px 0; text-align: center; }
+        .contact-section h2 {
+            font-family: var(--font-serif); font-size: 1.6rem; font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .contact-section p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 20px; max-width: 400px; margin-left: auto; margin-right: auto; }
+        .contact-icons { display: flex; gap: 16px; justify-content: center; }
+        .contact-icons a {
+            width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border); border-radius: 50%; color: var(--text-muted);
+            text-decoration: none; transition: all 0.2s; font-size: 1rem;
+        }
+        .contact-icons a:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* --- FOOTER --- */
+        .footer {
+            text-align: center; padding: 20px; font-size: 0.75rem; color: var(--text-muted);
+            border-top: 2px solid var(--text);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero-editorial { grid-template-columns: 1fr; text-align: center; }
+            .hero-photo { margin: 0 auto; width: 140px; height: 170px; }
+            .hero-text h1 { font-size: 2rem; }
+            .hero-meta { justify-content: center; }
+            .two-col { grid-template-columns: 1fr; }
+            .research-entries { grid-template-columns: 1fr; }
+            .project-list li { grid-template-columns: 60px 1fr; }
+            .project-list li .project-tag { display: none; }
+            .masthead-nav { gap: 20px; flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-btn" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? '' : 'dark';">
+        <i class="fas fa-circle-half-stroke"></i>
+    </button>
+
+    <!-- MASTHEAD -->
+    <header class="masthead">
+        <a href="#" class="masthead-logo">skflx.MD</a>
+        <nav>
+            <ul class="masthead-nav">
+                <li><a href="#about">About</a></li>
+                <li><a href="#research">Research</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#clinical">Clinical</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page">
+
+        <!-- HERO -->
+        <section class="hero-editorial">
+            <img src="../images/me_large.jpg" alt="Dr. Samipya Kafle" class="hero-photo">
+            <div class="hero-text">
+                <div class="role">PGY-2 Otolaryngology Resident</div>
+                <h1>Samipya Kafle, MD</h1>
+                <p>Surgeon-scientist in the Pacific Northwest. Passionate about technology, surgical education, and the intersection of medicine and innovation.</p>
+                <div class="hero-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Portland, OR</span>
+                    <a href="https://linkedin.com/in/skflx" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com/skflx" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://www.instagram.com/skflx/" target="_blank"><i class="fab fa-instagram"></i> @skflx</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TWO-COLUMN: About + Sidebar -->
+        <section id="about" class="two-col">
+            <div class="about-col">
+                <div class="section-label">About</div>
+                <p>My journey began in Nepal, spanning Michigan, Oregon, Nevada, and Connecticut before returning to the Pacific Northwest. With a background in neuroscience and personal experience with hearing loss, I bring a unique perspective to both clinical practice and research in hearing technologies.</p>
+                <p>My research focuses on surgical outcomes in otolaryngology and emergent data technologies in medical education and surgical training. I'm particularly interested in cognitive frameworks that enhance surgical learning.</p>
+                <p>Beyond medicine, I'm an artist, musician, and outdoor enthusiast who values the balance between technical precision and creative expression.</p>
+            </div>
+            <div class="sidebar-col">
+                <div class="section-label">Education</div>
+                <div class="detail">
+                    <h3>Yale School of Medicine</h3>
+                    <p>Otolaryngology Residency</p>
+                </div>
+                <div class="detail">
+                    <h3>University of Nevada, Reno</h3>
+                    <p>B.S. Neuroscience</p>
+                </div>
+
+                <div class="section-label" style="margin-top: 24px;">Languages</div>
+                <div class="lang-inline">
+                    <strong>Nepali</strong> (Native) &middot;
+                    <strong>English</strong> (Fluent) &middot;
+                    <strong>Spanish</strong> (Intermediate) &middot;
+                    <strong>Swiss German</strong> (Intermediate)
+                </div>
+            </div>
+        </section>
+
+        <!-- RESEARCH -->
+        <section id="research" class="research-section">
+            <div class="section-label">Research</div>
+            <div class="research-entries">
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Trauma+OR+Fracture+OR+Injury)" target="_blank" class="research-entry">
+                    <h3>Craniofacial Trauma</h3>
+                    <p>Investigating injury patterns in sports and identifying factors associated with surgical outcomes.</p>
+                    <span class="pub-link">View on PubMed &rarr;</span>
+                </a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cancer+OR+Oncology+OR+Laryngectomy)" target="_blank" class="research-entry">
+                    <h3>Head & Neck Oncology</h3>
+                    <p>Characterizing complications, risk factors, and survival outcomes in head and neck cancer surgeries.</p>
+                    <span class="pub-link">View on PubMed &rarr;</span>
+                </a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Education+OR+Training+OR+Student)" target="_blank" class="research-entry">
+                    <h3>Surgical Education</h3>
+                    <p>Exploring innovative methods for surgical training, including live-streaming and automated feedback.</p>
+                    <span class="pub-link">View on PubMed &rarr;</span>
+                </a>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cochlear+OR+Hearing+OR+Otology)" target="_blank" class="research-entry">
+                    <h3>Otology & Hearing Sciences</h3>
+                    <p>Studying cortical adaptations in cochlear implant patients and improving speech processing.</p>
+                    <span class="pub-link">View on PubMed &rarr;</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="projects-section">
+            <div class="section-label">Technology Projects</div>
+            <ul class="project-list">
+                <li>
+                    <span class="project-year">2022</span>
+                    <div class="project-name">
+                        Speech-in-Noise Processing
+                        <span>Improving speech recognition in hearing devices for challenging environments</span>
+                    </div>
+                    <span class="project-tag">Ongoing</span>
+                </li>
+                <li>
+                    <span class="project-year">2022</span>
+                    <div class="project-name">
+                        Surgical Livestreaming Platform
+                        <span>Technical system for livestreaming procedures to medical students</span>
+                    </div>
+                    <span class="project-tag">Ongoing</span>
+                </li>
+                <li>
+                    <span class="project-year">2025</span>
+                    <div class="project-name">
+                        ASCII Art Editor
+                        <span>Browser-based ASCII/Unicode diagram editor with templates and export</span>
+                    </div>
+                    <span class="project-tag">Shipped</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- CLINICAL -->
+        <section id="clinical" class="clinical-section">
+            <div class="section-label">Clinical Experience</div>
+            <div class="cv-entry">
+                <div class="cv-date">2022 &mdash; Present</div>
+                <h3>Surgery Livestreaming Elective</h3>
+                <p>Designed and organized curriculum for pre-clerkship medical students through live-streaming procedures. Audio/video setup and sterile exoscope mounting.</p>
+            </div>
+            <div class="cv-entry">
+                <div class="cv-date">2020 &mdash; Present</div>
+                <h3>HAVEN Free Clinic</h3>
+                <p>Primary care for uninsured and underinsured patients as Senior Clinical Team Member. Mentoring junior team members.</p>
+            </div>
+            <div class="cv-entry">
+                <div class="cv-date">2021 &mdash; Present</div>
+                <h3>Point of Care Ultrasound Teaching</h3>
+                <p>Hands-on training in essential ultrasound skills through weekly small-group lessons for MS1 curriculum.</p>
+            </div>
+        </section>
+
+        <!-- INTERESTS -->
+        <section class="interests-section">
+            <div class="section-label">Beyond Medicine</div>
+            <p class="interests-prose">
+                My life outside the hospital is just as full. I create
+                <span class="tag"><i class="fas fa-palette"></i> art</span>
+                in ink and graphite, play
+                <span class="tag"><i class="fas fa-music"></i> guitar & ukulele</span>,
+                spend time
+                <span class="tag"><i class="fas fa-mountain"></i> hiking</span>
+                the Pacific Northwest, and stay fit through
+                <span class="tag"><i class="fas fa-dumbbell"></i> powerlifting</span>.
+                I value the balance between technical precision and creative expression &mdash;
+                deadlifts are my favorite.
+            </p>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="contact-section">
+            <h2>Let's Connect</h2>
+            <p>Interested in research collaborations, medical education, or just want to say hello.</p>
+            <div class="contact-icons">
+                <a href="https://linkedin.com/in/skflx" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/skflx/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/skflx" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">&copy; 2025 skflx.MD &middot; Portland, Oregon</footer>
+</body>
+</html>
