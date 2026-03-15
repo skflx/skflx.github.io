@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAG — Knowledge Atlas Graph | skflx.MD</title>
+    <meta name="description" content="Interactive OHNS knowledge graph with spaced repetition self-testing.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #0D0F14;
+            --surface: #161920;
+            --elevated: #1E2029;
+            --hover: #262833;
+            --border: #2A2D3A;
+            --border-focus: #4A9EFF;
+            --accent: #4A9EFF;
+            --accent-glow: rgba(74, 158, 255, 0.15);
+            --success: #51CF66;
+            --danger: #FF6B6B;
+            --warning: #FFD43B;
+            --txt: #E8EAF0;
+            --txt2: #9CA3B0;
+            --txt3: #5C6370;
+            --font: 'IBM Plex Sans', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+            --rad: 8px;
+            --rad-lg: 12px;
+            --tr: 200ms ease;
+            --node-anatomy: #4A9EFF;
+            --node-pathology: #FF6B6B;
+            --node-procedure: #51CF66;
+            --node-nerve: #FFD43B;
+            --node-vessel: #FF922B;
+            --node-drug: #CC5DE8;
+            --node-concept: #868E96;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--txt);
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: linear-gradient(rgba(74, 158, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(74, 158, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px
+        }
+
+        /* ── Topbar ─────────────────────────────── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 20;
+            position: relative;
+            flex-shrink: 0
+        }
+
+        .logo {
+            font-family: var(--mono);
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            margin-right: 0.5rem
+        }
+
+        .pills {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            overflow: hidden;
+            max-height: 32px
+        }
+
+        .pill {
+            font-size: 0.68rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--txt2);
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all var(--tr);
+            white-space: nowrap
+        }
+
+        .pill:hover {
+            border-color: var(--txt3);
+            color: var(--txt)
+        }
+
+        .pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff
+        }
+
+        .search-box {
+            position: relative;
+            margin-left: auto
+        }
+
+        .search-box input {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--rad);
+            color: var(--txt);
+            font-family: var(--font);
+            font-size: 0.8rem;
+            padding: 6px 10px 6px 28px;
+            width: 200px;
+            outline: none;
+            transition: border-color var(--tr)
+        }
+
+        .search-box input:focus {
+            border-color: var(--border-focus)
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            color: var(--txt3);
+            pointer-events: none
+        }
+
+        .mode-toggle {
+            display: flex;
+            border: 1px solid var(--border);
+            border-radius: var(--rad);
+            overflow: hidden
+        }
+
+        .mode-btn {
+            font-size: 0.72rem;
+            padding: 5px 12px;
+            background: transparent;
+            border: none;
+            color: var(--txt3);
+            cursor: pointer;
+            font-family: var(--font);
+            transition: all var(--tr)
+        }
+
+        .mode-btn.active {
+            background: var(--accent);
+            color: #fff
+        }
+
+        .mode-btn:hover:not(.active) {
+            color: var(--txt)
+        }
+
+        .gear-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: var(--rad);
+            color: var(--txt3);
+            cursor: pointer;
+            padding: 5px 8px;
+            transition: all var(--tr);
+            display: flex;
+            align-items: center
+        }
+
+        .gear-btn:hover {
+            color: var(--txt);
+            border-color: var(--txt3)
+        }
+
+        .nav-link {
+            color: var(--txt3);
+            text-decoration: none;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: var(--rad);
+            transition: all var(--tr)
+        }
+
+        .nav-link:hover {
+            color: var(--txt);
+            background: var(--hover)
+        }
+
+        /* ── Main area ──────────────────────────── */
+        .main-area {
+            flex: 1;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            z-index: 1
+        }
+
+        #cy {
+            flex: 1;
+            background: var(--bg)
+        }
+
+        /* ── Right panel ────────────────────────── */
+        .right-panel {
+            width: 380px;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform var(--tr);
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 15;
+            overflow: hidden
+        }
+
+        .right-panel.open {
+            transform: translateX(0)
+        }
+
+        .rp-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0
+        }
+
+        .rp-close {
+            background: none;
+            border: none;
+            color: var(--txt3);
+            cursor: pointer;
+            padding: 4px
+        }
+
+        .rp-close:hover {
+            color: var(--txt)
+        }
+
+        .rp-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem
+        }
+
+        .rp-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            font-family: var(--mono)
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-right: 4px
+        }
+
+        .badge-anatomy {
+            background: rgba(74, 158, 255, 0.18);
+            color: var(--node-anatomy)
+        }
+
+        .badge-pathology {
+            background: rgba(255, 107, 107, 0.18);
+            color: var(--node-pathology)
+        }
+
+        .badge-procedure {
+            background: rgba(81, 207, 102, 0.18);
+            color: var(--node-procedure)
+        }
+
+        .badge-nerve {
+            background: rgba(255, 212, 59, 0.18);
+            color: var(--node-nerve)
+        }
+
+        .badge-vessel {
+            background: rgba(255, 146, 43, 0.18);
+            color: var(--node-vessel)
+        }
+
+        .badge-drug {
+            background: rgba(204, 93, 232, 0.18);
+            color: var(--node-drug)
+        }
+
+        .badge-concept {
+            background: rgba(134, 142, 150, 0.18);
+            color: var(--node-concept)
+        }
+
+        .badge-sub {
+            background: var(--hover);
+            color: var(--txt2)
+        }
+
+        .rp-section {
+            margin-top: 1rem
+        }
+
+        .rp-section-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--txt3);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem
+        }
+
+        .rp-detail {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: var(--txt2)
+        }
+
+        .rp-edge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 6px 8px;
+            border-radius: var(--rad);
+            cursor: pointer;
+            transition: background var(--tr);
+            font-size: 0.8rem
+        }
+
+        .rp-edge:hover {
+            background: var(--hover)
+        }
+
+        .rp-edge-type {
+            font-family: var(--mono);
+            font-size: 0.68rem;
+            color: var(--accent);
+            min-width: 90px
+        }
+
+        .rp-edge-target {
+            color: var(--txt)
+        }
+
+        .source-tag {
+            font-size: 0.72rem;
+            background: var(--elevated);
+            color: var(--txt2);
+            padding: 3px 8px;
+            border-radius: var(--rad);
+            display: inline-block;
+            margin: 2px
+        }
+
+        /* ── Correction form ────────────────────── */
+        .corr-form {
+            margin-top: 0.75rem
+        }
+
+        .corr-form textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--rad);
+            color: var(--txt);
+            font-family: var(--font);
+            font-size: 0.78rem;
+            padding: 8px;
+            resize: vertical;
+            min-height: 60px;
+            outline: none
+        }
+
+        .corr-form textarea:focus {
+            border-color: var(--border-focus)
+        }
+
+        .corr-form input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--rad);
+            color: var(--txt);
+            font-family: var(--font);
+            font-size: 0.78rem;
+            padding: 6px 8px;
+            margin-top: 4px;
+            outline: none
+        }
+
+        .btn {
+            font-family: var(--font);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: var(--rad);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all var(--tr);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px
+        }
+
+        .btn-sm {
+            font-size: 0.7rem;
+            padding: 4px 10px
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent)
+        }
+
+        .btn-primary:hover {
+            background: #3A8EEF
+        }
+
+        .btn-danger {
+            background: rgba(255, 107, 107, 0.12);
+            color: var(--danger);
+            border-color: rgba(255, 107, 107, 0.25)
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 107, 107, 0.22)
+        }
+
+        .btn-secondary {
+            background: var(--hover);
+            color: var(--txt);
+            border-color: var(--border)
+        }
+
+        .btn-secondary:hover {
+            background: var(--elevated);
+            border-color: var(--txt3)
+        }
+
+        .btn-success {
+            background: rgba(81, 207, 102, 0.12);
+            color: var(--success);
+            border-color: rgba(81, 207, 102, 0.25)
+        }
+
+        .btn-success:hover {
+            background: rgba(81, 207, 102, 0.22)
+        }
+
+        .btn-warning {
+            background: rgba(255, 212, 59, 0.12);
+            color: var(--warning);
+            border-color: rgba(255, 212, 59, 0.25)
+        }
+
+        .btn-warning:hover {
+            background: rgba(255, 212, 59, 0.22)
+        }
+
+        /* ── Bottom strip ───────────────────────── */
+        .bottom-strip {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            height: 36px;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 1rem;
+            flex-shrink: 0;
+            z-index: 10;
+            position: relative
+        }
+
+        .leitner-info {
+            font-size: 0.72rem;
+            color: var(--txt3);
+            font-family: var(--mono)
+        }
+
+        .leitner-info strong {
+            color: var(--accent)
+        }
+
+        .node-count-info {
+            font-size: 0.72rem;
+            color: var(--txt3);
+            margin-left: auto
+        }
+
+        /* ── Self-test overlay ──────────────────── */
+        .test-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 25;
+            background: rgba(13, 15, 20, 0.92);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem
+        }
+
+        .test-overlay.active {
+            display: flex
+        }
+
+        .test-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rad-lg);
+            padding: 2rem;
+            max-width: 560px;
+            width: 100%;
+            text-align: center
+        }
+
+        .test-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            width: 100%
+        }
+
+        .test-progress-bar {
+            flex: 1;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        .test-progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.3s ease
+        }
+
+        .test-progress-text {
+            font-size: 0.7rem;
+            color: var(--txt3);
+            font-family: var(--mono);
+            white-space: nowrap
+        }
+
+        .test-hints {
+            margin: 1rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center
+        }
+
+        .test-hint {
+            font-size: 0.72rem;
+            padding: 4px 10px;
+            border-radius: 14px;
+            background: var(--elevated);
+            color: var(--txt2);
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: all var(--tr)
+        }
+
+        .test-hint:hover {
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        .test-edges {
+            margin: 0.75rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center
+        }
+
+        .test-edge-tag {
+            font-size: 0.68rem;
+            font-family: var(--mono);
+            padding: 3px 8px;
+            border-radius: var(--rad);
+            background: rgba(74, 158, 255, 0.1);
+            color: var(--accent)
+        }
+
+        .test-input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--rad);
+            color: var(--txt);
+            font-family: var(--font);
+            font-size: 1rem;
+            padding: 10px 14px;
+            outline: none;
+            margin: 1rem 0;
+            text-align: center
+        }
+
+        .test-input:focus {
+            border-color: var(--border-focus)
+        }
+
+        .test-reveal {
+            margin: 1rem 0
+        }
+
+        .test-reveal .rp-label {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem
+        }
+
+        .test-reveal .rp-detail {
+            text-align: left;
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            background: var(--elevated);
+            border-radius: var(--rad);
+            font-size: 0.82rem
+        }
+
+        .confidence-btns {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 1.25rem
+        }
+
+        .conf-btn {
+            flex: 1;
+            max-width: 120px;
+            padding: 10px 8px;
+            border-radius: var(--rad);
+            border: 1px solid var(--border);
+            background: var(--elevated);
+            color: var(--txt);
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: all var(--tr);
+            text-align: center
+        }
+
+        .conf-btn .key {
+            display: block;
+            font-size: 0.62rem;
+            color: var(--txt3);
+            margin-top: 2px;
+            font-weight: 400
+        }
+
+        .conf-btn:hover {
+            border-color: var(--txt3)
+        }
+
+        .conf-btn.again {
+            border-color: rgba(255, 107, 107, 0.3);
+            color: var(--danger)
+        }
+
+        .conf-btn.again:hover {
+            background: rgba(255, 107, 107, 0.12)
+        }
+
+        .conf-btn.hard {
+            border-color: rgba(255, 146, 43, 0.3);
+            color: var(--node-vessel)
+        }
+
+        .conf-btn.hard:hover {
+            background: rgba(255, 146, 43, 0.12)
+        }
+
+        .conf-btn.good {
+            border-color: rgba(81, 207, 102, 0.3);
+            color: var(--success)
+        }
+
+        .conf-btn.good:hover {
+            background: rgba(81, 207, 102, 0.12)
+        }
+
+        .conf-btn.easy {
+            border-color: rgba(74, 158, 255, 0.3);
+            color: var(--accent)
+        }
+
+        .conf-btn.easy:hover {
+            background: rgba(74, 158, 255, 0.12)
+        }
+
+        .test-done {
+            text-align: center
+        }
+
+        .test-done h2 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem
+        }
+
+        .test-done p {
+            color: var(--txt2);
+            font-size: 0.85rem;
+            margin-bottom: 1rem
+        }
+
+        /* ── Settings modal ─────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center
+        }
+
+        .modal-overlay.open {
+            display: flex
+        }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rad-lg);
+            width: 480px;
+            max-width: 90vw;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .modal-header h2 {
+            font-size: 1rem
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+            overflow-y: auto;
+            flex: 1
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 1rem
+        }
+
+        .corr-item {
+            padding: 0.75rem;
+            background: var(--elevated);
+            border-radius: var(--rad);
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem
+        }
+
+        .corr-item .corr-node {
+            font-family: var(--mono);
+            color: var(--accent);
+            font-size: 0.72rem
+        }
+
+        .corr-item .corr-text {
+            color: var(--txt);
+            margin: 4px 0
+        }
+
+        .corr-item .corr-meta {
+            font-size: 0.68rem;
+            color: var(--txt3)
+        }
+
+        /* ── Scrollbar ──────────────────────────── */
+        ::-webkit-scrollbar {
+            width: 5px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--txt3)
+        }
+
+        /* ── Toast ──────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 56px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: var(--elevated);
+            border: 1px solid var(--border);
+            color: var(--txt);
+            font-size: 0.78rem;
+            padding: 8px 18px;
+            border-radius: var(--rad-lg);
+            z-index: 60;
+            opacity: 0;
+            transition: all 300ms ease;
+            pointer-events: none
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1
+        }
+
+        /* ── Correction badge on node ───────────── */
+        .correction-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--warning);
+            border: 2px solid var(--surface)
+        }
+
+        @media(max-width:768px) {
+            .right-panel {
+                width: 100%
+            }
+
+            .pills {
+                display: none
+            }
+
+            .search-box input {
+                width: 140px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <a href="kag.html" class="logo">KAG</a>
+        <div class="pills" id="pills"></div>
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="search" placeholder="Search nodes…" autocomplete="off">
+        </div>
+        <div class="mode-toggle">
+            <button class="mode-btn active" data-mode="explore">Explore</button>
+            <button class="mode-btn" data-mode="test">Self-Test</button>
+        </div>
+        <button class="gear-btn" id="gear-btn" title="Settings">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                    d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+            </svg>
+        </button>
+        <a href="kag-extract.html" class="nav-link">Extractor</a>
+        <a href="index.html" class="nav-link">Home</a>
+    </div>
+
+    <!-- Main -->
+    <div class="main-area">
+        <div id="cy"></div>
+
+        <!-- Right panel -->
+        <div class="right-panel" id="right-panel">
+            <div class="rp-header">
+                <span class="rp-label" id="rp-label"></span>
+                <button class="rp-close" id="rp-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="rp-body" id="rp-body"></div>
+        </div>
+
+        <!-- Self-test overlay -->
+        <div class="test-overlay" id="test-overlay">
+            <div class="test-card" id="test-card"></div>
+        </div>
+    </div>
+
+    <!-- Bottom strip -->
+    <div class="bottom-strip">
+        <span class="leitner-info" id="leitner-info"></span>
+        <span class="node-count-info" id="node-count-info"></span>
+    </div>
+
+    <!-- Settings modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="rp-close" id="modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        (function () {
+            'use strict';
+            const TODAY = new Date().toISOString().split('T')[0];
+            const SUBSPECIALTIES = ['rhinology', 'otology', 'head-neck-onc', 'laryngology', 'peds-ent', 'skull-base', 'facial-plastics'];
+            const LEITNER_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
+            const NODE_COLORS = { anatomy: '#4A9EFF', pathology: '#FF6B6B', procedure: '#51CF66', nerve: '#FFD43B', vessel: '#FF922B', drug: '#CC5DE8', concept: '#868E96' };
+
+            /* ── Seed Graph ─────────────────────────── */
+            const SEED_GRAPH = {
+                nodes: [
+                    { id: 'external-auditory-canal', label: 'External Auditory Canal', type: 'anatomy', subspecialty: 'otology', detail: 'S-shaped canal ~2.5cm. Lateral 1/3 cartilaginous, medial 2/3 bony. Isthmus is the narrowest point at bone-cartilage junction.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'tympanic-membrane', label: 'Tympanic Membrane', type: 'anatomy', subspecialty: 'otology', detail: 'Three layers: squamous epithelium, fibrous middle, mucosal lining. Pars tensa (inferior) and pars flaccida (superior, Shrapnell membrane).', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'malleus', label: 'Malleus', type: 'anatomy', subspecialty: 'otology', detail: 'Largest ossicle. Manubrium attached to TM. Head articulates with incus in epitympanum. Lateral process creates malleolar fold.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'incus', label: 'Incus', type: 'anatomy', subspecialty: 'otology', detail: 'Articulates with malleus (body) and stapes (lenticular process). Long process is most vulnerable to necrosis in chronic otitis media.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'stapes', label: 'Stapes', type: 'anatomy', subspecialty: 'otology', detail: 'Smallest bone in body. Footplate sits in oval window. Stapedius muscle attaches to neck/head, dampening ossicular chain vibration.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'oval-window', label: 'Oval Window', type: 'anatomy', subspecialty: 'otology', detail: 'Niche between middle and inner ear, sealed by stapes footplate and annular ligament. Transmits sound to scala vestibuli.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'round-window', label: 'Round Window', type: 'anatomy', subspecialty: 'otology', detail: 'Membrane-covered opening of scala tympani. Serves as pressure release for fluid displaced by stapes footplate movement. Important CI electrode entry.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'cochlea', label: 'Cochlea', type: 'anatomy', subspecialty: 'otology', detail: '2.5 turns spiral. Contains scala vestibuli, scala media (cochlear duct), and scala tympani. Organ of Corti sits on basilar membrane in scala media. Tonotopic: base=high freq, apex=low freq.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'vestibule', label: 'Vestibule', type: 'anatomy', subspecialty: 'otology', detail: 'Central chamber of bony labyrinth. Contains utricle and saccule (otolith organs for linear acceleration). Oval window opens into vestibule.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'semicircular-canals', label: 'Semicircular Canals', type: 'anatomy', subspecialty: 'otology', detail: 'Three canals (superior, posterior, lateral) detect angular acceleration. Each has ampulla with crista ampullaris. Lateral canal 30° from horizontal.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'facial-nerve', label: 'Facial Nerve (CN VII)', type: 'nerve', subspecialty: 'otology', detail: 'Complex course: IAC → labyrinthine → geniculate ganglion → tympanic → second genu → mastoid → stylomastoid foramen. Labyrinthine segment is narrowest and most susceptible to injury.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'chorda-tympani', label: 'Chorda Tympani', type: 'nerve', subspecialty: 'otology', detail: 'Branch of CN VII. Carries taste from anterior 2/3 tongue and parasympathetic fibers to submandibular/sublingual glands. Crosses middle ear between malleus and incus.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'greater-superficial-petrosal', label: 'Greater Superficial Petrosal Nerve', type: 'nerve', subspecialty: 'otology', detail: 'Branch of CN VII at geniculate ganglion. Carries parasympathetic fibers for lacrimal gland secretion. Exits via hiatus of facial canal.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'vestibulocochlear-nerve', label: 'Vestibulocochlear Nerve (CN VIII)', type: 'nerve', subspecialty: 'otology', detail: 'Travels through IAC with CN VII. Superior and inferior vestibular divisions plus cochlear division. Vulnerable to vestibular schwannoma.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'internal-auditory-canal', label: 'Internal Auditory Canal', type: 'anatomy', subspecialty: 'otology', detail: 'Contains CN VII, CN VIII (superior/inferior vestibular, cochlear), and labyrinthine artery. Transverse and vertical crests divide IAC into four quadrants.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'tegmen-tympani', label: 'Tegmen Tympani', type: 'anatomy', subspecialty: 'otology', detail: 'Thin bone forming roof of middle ear and mastoid. Separates middle ear from middle cranial fossa. Erosion risks meningitis and CSF leak.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'mastoid', label: 'Mastoid', type: 'anatomy', subspecialty: 'otology', detail: 'Pneumatized portion of temporal bone. Contains mastoid antrum connecting to epitympanum via aditus ad antrum. Degree of pneumatization varies.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'epitympanum', label: 'Epitympanum', type: 'anatomy', subspecialty: 'otology', detail: 'Superior portion of middle ear (attic). Contains head of malleus and body of incus. Cholesteatoma commonly originates from pars flaccida retraction into epitympanum.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'facial-recess', label: 'Facial Recess', type: 'anatomy', subspecialty: 'otology', detail: 'Triangular space bounded by: fossa incudis superiorly, facial nerve medially, chorda tympani laterally. Key surgical landmark for cochlear implant electrode insertion.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'sinus-tympani', label: 'Sinus Tympani', type: 'anatomy', subspecialty: 'otology', detail: 'Deep recess posteromedial to round window niche, medial to facial nerve. Difficult to visualize directly — common site for residual cholesteatoma.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'promontory', label: 'Promontory', type: 'anatomy', subspecialty: 'otology', detail: 'Rounded elevation on medial wall of middle ear formed by basal turn of cochlea. Jacobson nerve (CN IX tympanic branch) courses over it.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'stapedius-muscle', label: 'Stapedius Muscle', type: 'anatomy', subspecialty: 'otology', detail: 'Smallest skeletal muscle. Innervated by CN VII. Contracts reflexively to loud sound (acoustic reflex), dampening ossicular chain movement.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'tensor-tympani', label: 'Tensor Tympani', type: 'anatomy', subspecialty: 'otology', detail: 'Innervated by CN V3. Inserts on manubrium of malleus. Tenses TM and dampens sound. Located in semicanal above eustachian tube.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'eustachian-tube', label: 'Eustachian Tube', type: 'anatomy', subspecialty: 'otology', detail: 'Connects middle ear to nasopharynx. Adults: 36mm, 45° angle. Children shorter, more horizontal. Equalizes middle ear pressure. Lined by respiratory epithelium.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'labyrinthine-artery', label: 'Labyrinthine Artery', type: 'vessel', subspecialty: 'otology', detail: 'Usually branch of AICA (85%). End artery — occlusion causes sudden SNHL and vestibular loss. Travels through IAC.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'sigmoid-sinus', label: 'Sigmoid Sinus', type: 'vessel', subspecialty: 'otology', detail: 'S-shaped venous sinus in posterior fossa. Lateral boundary of mastoid surgery. Thrombosis is complication of coalescent mastoiditis.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'cholesteatoma', label: 'Cholesteatoma', type: 'pathology', subspecialty: 'otology', detail: 'Keratinizing squamous epithelium in middle ear/mastoid. Acquired (pars flaccida retraction) more common than congenital. Erodes bone via enzymatic activity and pressure.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'otosclerosis', label: 'Otosclerosis', type: 'pathology', subspecialty: 'otology', detail: 'Abnormal bone remodeling at oval window causing stapes fixation. Autosomal dominant with incomplete penetrance. Presents as progressive conductive hearing loss.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'chronic-otitis-media', label: 'Chronic Otitis Media', type: 'pathology', subspecialty: 'otology', detail: 'Permanent TM perforation with chronic middle ear drainage >6 weeks. May be with or without cholesteatoma. Often causes conductive hearing loss.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'vestibular-schwannoma', label: 'Vestibular Schwannoma', type: 'pathology', subspecialty: 'skull-base', detail: 'Benign tumor of Schwann cells on CN VIII (usually superior vestibular division). Most common CPA tumor. Bilateral = NF2. Presents with asymmetric SNHL.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'tympanoplasty', label: 'Tympanoplasty', type: 'procedure', subspecialty: 'otology', detail: 'Surgical repair of TM perforation ± ossicular chain reconstruction. Grafts: temporalis fascia, tragal perichondrium, cartilage. Underlay vs overlay technique.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'mastoidectomy', label: 'Mastoidectomy', type: 'procedure', subspecialty: 'otology', detail: 'Canal wall up (CWU) vs canal wall down (CWD). Landmarks: tegmen, sigmoid, lateral SCC, facial nerve. CWD creates mastoid bowl requiring lifelong care.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'stapedectomy', label: 'Stapedectomy', type: 'procedure', subspecialty: 'otology', detail: 'Removal of stapes and placement of prosthesis for otosclerosis. Stapedotomy (small fenestra) preferred. Risk: SNHL, vertigo, facial nerve injury, perilymph fistula.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'cochlear-implant', label: 'Cochlear Implant', type: 'procedure', subspecialty: 'otology', detail: 'Electrode array inserted via round window or cochleostomy into scala tympani. Posterior tympanotomy (facial recess) approach. For severe-profound SNHL.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'ossiculoplasty', label: 'Ossiculoplasty', type: 'procedure', subspecialty: 'otology', detail: 'Reconstruction of ossicular chain. PORP (partial) replaces incus, TORP (total) replaces all. Materials: titanium, hydroxyapatite, autograft.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'lateral-semicircular-canal', label: 'Lateral Semicircular Canal', type: 'anatomy', subspecialty: 'otology', detail: 'Key landmark in mastoid surgery — lies medial to antrum. Oriented 30° above horizontal. Most commonly involved in BPPV is posterior canal, not lateral.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'geniculate-ganglion', label: 'Geniculate Ganglion', type: 'anatomy', subspecialty: 'otology', detail: 'Sensory ganglion of CN VII at first genu. Gives off greater superficial petrosal nerve. Site of herpes zoster reactivation in Ramsay Hunt syndrome.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'organ-of-corti', label: 'Organ of Corti', type: 'anatomy', subspecialty: 'otology', detail: 'Sensory epithelium in scala media. Inner hair cells (single row, ~3500) are primary transducers. Outer hair cells (3 rows, ~12000) provide cochlear amplification.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'jacobson-nerve', label: 'Jacobson Nerve (Tympanic Branch CN IX)', type: 'nerve', subspecialty: 'otology', detail: 'Branch of CN IX. Courses over promontory forming tympanic plexus. Provides sensation to middle ear mucosa and parasympathetic fibers to parotid (via lesser petrosal nerve).', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } },
+                    { id: 'stylomastoid-foramen', label: 'Stylomastoid Foramen', type: 'anatomy', subspecialty: 'otology', detail: 'Exit point of CN VII from temporal bone. Landmark for facial nerve identification in parotid surgery. Located between styloid and mastoid processes.', sources: ['Cummings 7e'], corrections: [], leitner: { box: 1, nextReview: TODAY } }
+                ], edges: [
+                    { source: 'external-auditory-canal', target: 'tympanic-membrane', type: 'contained_in', label: 'terminates at' },
+                    { source: 'tympanic-membrane', target: 'malleus', type: 'contained_in', label: 'manubrium attached' },
+                    { source: 'malleus', target: 'incus', type: 'contained_in', label: 'articulates in epitympanum' },
+                    { source: 'incus', target: 'stapes', type: 'contained_in', label: 'lenticular process to head' },
+                    { source: 'stapes', target: 'oval-window', type: 'contained_in', label: 'footplate in' },
+                    { source: 'oval-window', target: 'vestibule', type: 'contained_in', label: 'opens into' },
+                    { source: 'round-window', target: 'cochlea', type: 'contained_in', label: 'opens from scala tympani' },
+                    { source: 'cochlea', target: 'organ-of-corti', type: 'contained_in', label: 'contains' },
+                    { source: 'cochlea', target: 'vestibule', type: 'contained_in', label: 'connects to' },
+                    { source: 'vestibule', target: 'semicircular-canals', type: 'contained_in', label: 'connects to' },
+                    { source: 'semicircular-canals', target: 'lateral-semicircular-canal', type: 'contained_in' },
+                    { source: 'facial-nerve', target: 'chorda-tympani', type: 'branches_from' },
+                    { source: 'facial-nerve', target: 'greater-superficial-petrosal', type: 'branches_from' },
+                    { source: 'facial-nerve', target: 'geniculate-ganglion', type: 'contained_in', label: 'first genu' },
+                    { source: 'facial-nerve', target: 'internal-auditory-canal', type: 'contained_in' },
+                    { source: 'facial-nerve', target: 'stylomastoid-foramen', type: 'contained_in', label: 'exits at' },
+                    { source: 'facial-nerve', target: 'stapedius-muscle', type: 'innervates' },
+                    { source: 'vestibulocochlear-nerve', target: 'internal-auditory-canal', type: 'contained_in' },
+                    { source: 'vestibulocochlear-nerve', target: 'cochlea', type: 'innervates', label: 'cochlear division' },
+                    { source: 'vestibulocochlear-nerve', target: 'vestibule', type: 'innervates', label: 'vestibular division' },
+                    { source: 'labyrinthine-artery', target: 'cochlea', type: 'supplies' },
+                    { source: 'labyrinthine-artery', target: 'internal-auditory-canal', type: 'contained_in' },
+                    { source: 'sigmoid-sinus', target: 'mastoid', type: 'landmark_for', label: 'lateral boundary' },
+                    { source: 'tegmen-tympani', target: 'epitympanum', type: 'contained_in', label: 'roof of' },
+                    { source: 'epitympanum', target: 'malleus', type: 'contained_in' },
+                    { source: 'epitympanum', target: 'incus', type: 'contained_in' },
+                    { source: 'facial-recess', target: 'facial-nerve', type: 'landmark_for', label: 'medial boundary' },
+                    { source: 'facial-recess', target: 'chorda-tympani', type: 'landmark_for', label: 'lateral boundary' },
+                    { source: 'sinus-tympani', target: 'round-window', type: 'landmark_for', label: 'posteromed to RW' },
+                    { source: 'sinus-tympani', target: 'facial-nerve', type: 'landmark_for', label: 'lateral boundary' },
+                    { source: 'promontory', target: 'cochlea', type: 'arises_from', label: 'basal turn forms' },
+                    { source: 'jacobson-nerve', target: 'promontory', type: 'landmark_for', label: 'courses over' },
+                    { source: 'tensor-tympani', target: 'malleus', type: 'landmark_for', label: 'inserts on manubrium' },
+                    { source: 'eustachian-tube', target: 'epitympanum', type: 'contained_in', label: 'communicates with' },
+                    { source: 'cholesteatoma', target: 'epitympanum', type: 'arises_from', label: 'pars flaccida retraction' },
+                    { source: 'cholesteatoma', target: 'incus', type: 'complication_of', label: 'erodes long process' },
+                    { source: 'cholesteatoma', target: 'lateral-semicircular-canal', type: 'complication_of', label: 'may erode' },
+                    { source: 'cholesteatoma', target: 'facial-nerve', type: 'complication_of', label: 'may erode' },
+                    { source: 'cholesteatoma', target: 'tegmen-tympani', type: 'complication_of', label: 'may erode' },
+                    { source: 'otosclerosis', target: 'stapes', type: 'complication_of', label: 'fixes footplate' },
+                    { source: 'chronic-otitis-media', target: 'tympanic-membrane', type: 'complication_of', label: 'perforates' },
+                    { source: 'vestibular-schwannoma', target: 'vestibulocochlear-nerve', type: 'arises_from' },
+                    { source: 'vestibular-schwannoma', target: 'internal-auditory-canal', type: 'contained_in' },
+                    { source: 'tympanoplasty', target: 'tympanic-membrane', type: 'treats' },
+                    { source: 'tympanoplasty', target: 'chronic-otitis-media', type: 'treats' },
+                    { source: 'mastoidectomy', target: 'cholesteatoma', type: 'treats' },
+                    { source: 'mastoidectomy', target: 'mastoid', type: 'landmark_for' },
+                    { source: 'stapedectomy', target: 'otosclerosis', type: 'treats' },
+                    { source: 'stapedectomy', target: 'stapes', type: 'landmark_for' },
+                    { source: 'cochlear-implant', target: 'round-window', type: 'landmark_for', label: 'insertion site' },
+                    { source: 'cochlear-implant', target: 'facial-recess', type: 'landmark_for', label: 'approach via' },
+                    { source: 'ossiculoplasty', target: 'incus', type: 'treats', label: 'replaces eroded' }
+                ]
+            };
+
+            /* ── Data management ────────────────────── */
+            function loadGraph() {
+                try { const d = JSON.parse(localStorage.getItem('kag-graph')); if (d && d.nodes && d.edges) return d; } catch (e) { }
+                return JSON.parse(JSON.stringify(SEED_GRAPH));
+            }
+            function saveGraph(g) { localStorage.setItem('kag-graph', JSON.stringify(g)); }
+            let graphData = loadGraph();
+            saveGraph(graphData);
+
+            /* ── Toast ──────────────────────────────── */
+            const toastEl = document.getElementById('toast');
+            function toast(m) { toastEl.textContent = m; toastEl.className = 'toast show'; clearTimeout(toastEl._t); toastEl._t = setTimeout(() => { toastEl.className = 'toast'; }, 2200); }
+
+            /* ── Cytoscape init ─────────────────────── */
+            function buildElements(data) {
+                const degreeMap = {};
+                data.edges.forEach(e => { degreeMap[e.source] = (degreeMap[e.source] || 0) + 1; degreeMap[e.target] = (degreeMap[e.target] || 0) + 1; });
+                const maxDeg = Math.max(...Object.values(degreeMap), 1);
+                const nodes = data.nodes.map(n => {
+                    const deg = degreeMap[n.id] || 0;
+                    const size = 20 + Math.round((deg / maxDeg) * 40);
+                    return { data: { ...n, nodeSize: size, hasCorrections: n.corrections && n.corrections.length > 0 } };
+                });
+                const nodeIds = new Set(data.nodes.map(n => n.id));
+                const edges = data.edges.filter(e => nodeIds.has(e.source) && nodeIds.has(e.target)).map(e => ({ data: { ...e, id: e.source + '->' + e.target + '_' + e.type } }));
+                return [...nodes, ...edges];
+            }
+
+            const cy = cytoscape({
+                container: document.getElementById('cy'),
+                elements: buildElements(graphData),
+                style: [
+                    { selector: 'node', style: { 'label': 'data(label)', 'font-size': '10px', 'font-family': 'IBM Plex Sans, sans-serif', 'color': '#E8EAF0', 'text-valign': 'bottom', 'text-margin-y': 6, 'width': 'data(nodeSize)', 'height': 'data(nodeSize)', 'text-max-width': 100, 'text-wrap': 'ellipsis', 'border-width': 0, 'overlay-opacity': 0 } },
+                    { selector: 'node[type="anatomy"]', style: { 'background-color': '#4A9EFF' } },
+                    { selector: 'node[type="pathology"]', style: { 'background-color': '#FF6B6B' } },
+                    { selector: 'node[type="procedure"]', style: { 'background-color': '#51CF66' } },
+                    { selector: 'node[type="nerve"]', style: { 'background-color': '#FFD43B' } },
+                    { selector: 'node[type="vessel"]', style: { 'background-color': '#FF922B' } },
+                    { selector: 'node[type="drug"]', style: { 'background-color': '#CC5DE8' } },
+                    { selector: 'node[type="concept"]', style: { 'background-color': '#868E96' } },
+                    { selector: 'node[?hasCorrections]', style: { 'border-width': 3, 'border-color': '#FFD43B' } },
+                    { selector: 'edge', style: { 'line-color': '#333842', 'target-arrow-color': '#333842', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'width': 1.5, 'label': 'data(type)', 'font-size': '8px', 'font-family': 'JetBrains Mono, monospace', 'color': '#5C6370', 'text-rotation': 'autorotate', 'text-margin-y': -8, 'arrow-scale': 0.8 } },
+                    { selector: ':selected', style: { 'border-width': 3, 'border-color': '#fff' } },
+                    { selector: '.faded', style: { 'opacity': 0.12 } },
+                    { selector: '.highlighted', style: { 'border-width': 3, 'border-color': '#FFD43B', 'z-index': 10 } },
+                    { selector: '.hidden-label', style: { 'label': '' } }
+                ],
+                layout: { name: 'cose-bilkent', animate: false, nodeDimensionsIncludeLabels: true, idealEdgeLength: 120, nodeRepulsion: 8000, gravity: 0.25, numIter: 2500 },
+                wheelSensitivity: 0.3,
+                minZoom: 0.15, maxZoom: 4
+            });
+
+            /* ── Subspecialty pills ─────────────────── */
+            const pillsEl = document.getElementById('pills');
+            let activeSpecs = new Set();
+            SUBSPECIALTIES.forEach(s => {
+                const b = document.createElement('button'); b.className = 'pill'; b.textContent = s; b.dataset.spec = s;
+                b.addEventListener('click', () => {
+                    if (activeSpecs.has(s)) { activeSpecs.delete(s); b.classList.remove('active'); }
+                    else { activeSpecs.add(s); b.classList.add('active'); }
+                    applyFilters();
+                });
+                pillsEl.appendChild(b);
+            });
+
+            function applyFilters() {
+                if (activeSpecs.size === 0) { cy.nodes().removeClass('faded'); return; }
+                cy.nodes().forEach(n => {
+                    if (activeSpecs.has(n.data('subspecialty'))) n.removeClass('faded');
+                    else n.addClass('faded');
+                });
+            }
+
+            /* ── Search ──────────────────────────────── */
+            const searchInput = document.getElementById('search');
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    const q = searchInput.value.trim().toLowerCase();
+                    cy.nodes().removeClass('highlighted faded');
+                    if (!q) return;
+                    cy.nodes().forEach(n => {
+                        const match = (n.data('label') || '').toLowerCase().includes(q) || (n.data('detail') || '').toLowerCase().includes(q);
+                        if (match) n.addClass('highlighted'); else n.addClass('faded');
+                    });
+                }, 200);
+            });
+
+            /* ── Leitner info ───────────────────────── */
+            function getDueCount() {
+                const today = new Date().toISOString().split('T')[0];
+                return graphData.nodes.filter(n => n.leitner && n.leitner.nextReview <= today).length;
+            }
+            function updateBottomStrip() {
+                const due = getDueCount();
+                document.getElementById('leitner-info').innerHTML = due > 0 ? '<strong>' + due + '</strong> cards due for review' : 'No cards due';
+                document.getElementById('node-count-info').textContent = graphData.nodes.length + ' nodes · ' + graphData.edges.length + ' edges';
+            }
+            updateBottomStrip();
+
+            /* ── Right panel (Explore) ──────────────── */
+            const rightPanel = document.getElementById('right-panel');
+            const rpLabel = document.getElementById('rp-label');
+            const rpBody = document.getElementById('rp-body');
+            document.getElementById('rp-close').addEventListener('click', () => rightPanel.classList.remove('open'));
+
+            function openNodePanel(nodeId) {
+                const node = graphData.nodes.find(n => n.id === nodeId);
+                if (!node) return;
+                rpLabel.textContent = node.label;
+                const edges = graphData.edges.filter(e => e.source === nodeId || e.target === nodeId);
+                let html = '<div style="margin-bottom:0.75rem"><span class="badge badge-' + node.type + '">' + node.type + '</span><span class="badge badge-sub">' + node.subspecialty + '</span></div>';
+                html += '<div class="rp-section"><div class="rp-section-title">Clinical Detail</div><div class="rp-detail">' + escHtml(node.detail) + '</div></div>';
+                if (edges.length > 0) {
+                    html += '<div class="rp-section"><div class="rp-section-title">Connections (' + edges.length + ')</div>';
+                    edges.forEach(e => {
+                        const otherId = e.source === nodeId ? e.target : e.source;
+                        const other = graphData.nodes.find(n => n.id === otherId);
+                        const direction = e.source === nodeId ? '→' : '←';
+                        html += '<div class="rp-edge" data-node="' + otherId + '"><span class="rp-edge-type">' + direction + ' ' + e.type + '</span><span class="rp-edge-target">' + (other ? other.label : otherId) + '</span></div>';
+                    });
+                    html += '</div>';
+                }
+                if (node.sources && node.sources.length > 0) {
+                    html += '<div class="rp-section"><div class="rp-section-title">Sources</div>';
+                    node.sources.forEach(s => { html += '<span class="source-tag">' + escHtml(s) + '</span>'; });
+                    html += '</div>';
+                }
+                html += '<div class="rp-section"><div class="rp-section-title">Leitner Box</div><div style="font-size:0.8rem;color:var(--txt2)">Box ' + node.leitner.box + ' · Next review: ' + node.leitner.nextReview + '</div></div>';
+                // Correction form
+                html += '<div class="rp-section"><div class="rp-section-title">Flag Correction</div><div class="corr-form"><textarea id="corr-text" placeholder="Describe the correction…"></textarea><input id="corr-source" placeholder="Source (optional)"><button class="btn btn-warning btn-sm" style="margin-top:6px" id="corr-submit">Submit Correction</button></div></div>';
+                if (node.corrections && node.corrections.length > 0) {
+                    html += '<div class="rp-section"><div class="rp-section-title">Corrections (' + node.corrections.length + ')</div>';
+                    node.corrections.forEach((c, i) => {
+                        html += '<div class="corr-item"><div class="corr-text">' + escHtml(c.text) + '</div><div class="corr-meta">' + c.date + (c.source ? ' · ' + escHtml(c.source) : '') + (c.resolved ? ' · ✓ Resolved' : '') + '</div></div>';
+                    });
+                    html += '</div>';
+                }
+                rpBody.innerHTML = html;
+                rightPanel.classList.add('open');
+                // Edge click navigation
+                rpBody.querySelectorAll('.rp-edge').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const nid = el.dataset.node;
+                        const cyNode = cy.getElementById(nid);
+                        if (cyNode.length) { cy.animate({ center: { eles: cyNode }, zoom: 2 }, { duration: 300 }); cyNode.select(); openNodePanel(nid); }
+                    });
+                });
+                // Correction submit
+                document.getElementById('corr-submit').addEventListener('click', () => {
+                    const text = document.getElementById('corr-text').value.trim();
+                    if (!text) return;
+                    const source = document.getElementById('corr-source').value.trim();
+                    node.corrections.push({ text, source, date: TODAY, resolved: false });
+                    saveGraph(graphData);
+                    const cyNode = cy.getElementById(nodeId);
+                    if (cyNode.length) cyNode.data('hasCorrections', true);
+                    openNodePanel(nodeId);
+                    toast('Correction flagged');
+                });
+            }
+
+            function escHtml(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+            /* ── Cytoscape events ───────────────────── */
+            cy.on('tap', 'node', function (e) {
+                if (currentMode === 'explore') openNodePanel(e.target.id());
+            });
+            cy.on('dbltap', 'node', function (e) {
+                if (currentMode !== 'explore') return;
+                const n = e.target;
+                const hood = n.neighborhood().add(n);
+                cy.elements().addClass('faded');
+                hood.removeClass('faded');
+            });
+            cy.on('tap', function (e) {
+                if (e.target === cy) { cy.elements().removeClass('faded highlighted'); rightPanel.classList.remove('open'); }
+            });
+
+            /* ── Mode toggle ────────────────────────── */
+            let currentMode = 'explore';
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMode = btn.dataset.mode;
+                    if (currentMode === 'test') startSelfTest();
+                    else { document.getElementById('test-overlay').classList.remove('active'); cy.nodes().removeClass('hidden-label'); }
+                });
+            });
+
+            /* ── Self-Test Mode ─────────────────────── */
+            let testQueue = [];
+            let testIndex = 0;
+            let testRevealed = false;
+            function startSelfTest() {
+                const today = new Date().toISOString().split('T')[0];
+                testQueue = graphData.nodes.filter(n => n.leitner && n.leitner.nextReview <= today).sort((a, b) => a.leitner.box - b.leitner.box);
+                testIndex = 0; testRevealed = false;
+                if (testQueue.length === 0) {
+                    document.getElementById('test-card').innerHTML = '<div class="test-done"><h2>All caught up!</h2><p>No cards due for review. Check back later.</p><button class="btn btn-secondary" id="test-exit">Back to Explore</button></div>';
+                    document.getElementById('test-overlay').classList.add('active');
+                    document.getElementById('test-exit').addEventListener('click', () => { document.querySelector('.mode-btn[data-mode="explore"]').click(); });
+                    return;
+                }
+                showTestCard();
+                document.getElementById('test-overlay').classList.add('active');
+            }
+
+            function showTestCard() {
+                if (testIndex >= testQueue.length) {
+                    document.getElementById('test-card').innerHTML = '<div class="test-done"><h2>Session Complete ✓</h2><p>Reviewed ' + testQueue.length + ' card' + (testQueue.length === 1 ? '' : 's') + '.</p><button class="btn btn-primary" id="test-exit2">Back to Explore</button></div>';
+                    document.getElementById('test-exit2').addEventListener('click', () => { document.querySelector('.mode-btn[data-mode="explore"]').click(); });
+                    updateBottomStrip(); return;
+                }
+                testRevealed = false;
+                const node = testQueue[testIndex];
+                const edges = graphData.edges.filter(e => e.source === node.id || e.target === node.id);
+                const connNodes = edges.map(e => { const oid = e.source === node.id ? e.target : e.source; return graphData.nodes.find(n => n.id === oid); }).filter(Boolean);
+                let html = '<div class="test-progress"><div class="test-progress-bar"><div class="test-progress-fill" style="width:' + ((testIndex / testQueue.length) * 100) + '%"></div></div><div class="test-progress-text">' + (testIndex + 1) + '/' + testQueue.length + '</div></div>';
+                html += '<div style="margin-bottom:0.5rem"><span class="badge badge-' + node.type + '">' + node.type + '</span><span class="badge badge-sub">' + node.subspecialty + '</span><span class="badge" style="background:var(--hover);color:var(--txt3)">Box ' + node.leitner.box + '</span></div>';
+                // Edge cues
+                if (edges.length > 0) {
+                    html += '<div class="test-edges">';
+                    edges.forEach(e => { html += '<span class="test-edge-tag">' + e.type + '</span>'; });
+                    html += '</div>';
+                }
+                // Connected node hints
+                if (connNodes.length > 0) {
+                    html += '<div class="test-hints">';
+                    connNodes.forEach(cn => { html += '<span class="test-hint">' + escHtml(cn.label) + '</span>'; });
+                    html += '</div>';
+                }
+                html += '<div style="font-size:0.78rem;color:var(--txt3);margin:0.5rem 0">What is this structure?</div>';
+                html += '<input class="test-input" id="test-answer" placeholder="Type your answer…" autocomplete="off">';
+                html += '<div><button class="btn btn-secondary" id="test-reveal-btn">Reveal (Enter)</button></div>';
+                // Hidden reveal section
+                html += '<div id="test-reveal-area" class="test-reveal" style="display:none"></div>';
+                html += '<div id="test-confidence" class="confidence-btns" style="display:none"></div>';
+                document.getElementById('test-card').innerHTML = html;
+                const ansInput = document.getElementById('test-answer');
+                ansInput.focus();
+                ansInput.addEventListener('keydown', e => { if (e.key === 'Enter') revealAnswer(); });
+                document.getElementById('test-reveal-btn').addEventListener('click', revealAnswer);
+            }
+
+            function revealAnswer() {
+                if (testRevealed) return; testRevealed = true;
+                const node = testQueue[testIndex];
+                document.getElementById('test-reveal-area').style.display = '';
+                document.getElementById('test-reveal-area').innerHTML = '<div class="rp-label">' + escHtml(node.label) + '</div><div class="rp-detail">' + escHtml(node.detail) + '</div>';
+                document.getElementById('test-confidence').style.display = 'flex';
+                document.getElementById('test-confidence').innerHTML = '<button class="conf-btn again" data-conf="again">Again<span class="key">1</span></button><button class="conf-btn hard" data-conf="hard">Hard<span class="key">2</span></button><button class="conf-btn good" data-conf="good">Good<span class="key">3</span></button><button class="conf-btn easy" data-conf="easy">Easy<span class="key">4</span></button>';
+                document.querySelectorAll('.conf-btn').forEach(b => { b.addEventListener('click', () => scoreCard(b.dataset.conf)); });
+                document.getElementById('test-answer').blur();
+            }
+
+            function scoreCard(conf) {
+                const node = testQueue[testIndex];
+                let box = node.leitner.box;
+                if (conf === 'again') box = 1;
+                else if (conf === 'hard') {/* same box */ }
+                else if (conf === 'good') box = Math.min(box + 1, 5);
+                else if (conf === 'easy') box = Math.min(box + 2, 5);
+                node.leitner.box = box;
+                const interval = LEITNER_INTERVALS[box] || 1;
+                const next = new Date(); next.setDate(next.getDate() + (conf === 'hard' ? 1 : interval));
+                node.leitner.nextReview = next.toISOString().split('T')[0];
+                saveGraph(graphData);
+                testIndex++;
+                showTestCard();
+            }
+
+            // Keyboard shortcuts for self-test
+            document.addEventListener('keydown', e => {
+                if (currentMode !== 'test' || !document.getElementById('test-overlay').classList.contains('active')) return;
+                if (!testRevealed && e.key === 'Enter') { revealAnswer(); return; }
+                if (testRevealed) {
+                    if (e.key === '1') scoreCard('again');
+                    else if (e.key === '2') scoreCard('hard');
+                    else if (e.key === '3') scoreCard('good');
+                    else if (e.key === '4') scoreCard('easy');
+                }
+            });
+
+            /* ── Settings modal ─────────────────────── */
+            const settingsModal = document.getElementById('settings-modal');
+            document.getElementById('gear-btn').addEventListener('click', openSettings);
+            document.getElementById('modal-close').addEventListener('click', () => settingsModal.classList.remove('open'));
+            settingsModal.addEventListener('click', e => { if (e.target === settingsModal) settingsModal.classList.remove('open'); });
+
+            function openSettings() {
+                let html = '<div class="modal-actions"><button class="btn btn-secondary" id="set-import">Import Graph JSON</button><button class="btn btn-secondary" id="set-export">Export Graph JSON</button><button class="btn btn-danger" id="set-reset">Reset to Seed Data</button></div>';
+                // Corrections inbox
+                const allCorr = [];
+                graphData.nodes.forEach(n => { (n.corrections || []).forEach((c, i) => { if (!c.resolved) allCorr.push({ node: n, corr: c, idx: i }); }); });
+                html += '<div class="rp-section-title" style="margin-top:1rem">Corrections Inbox (' + allCorr.length + ')</div>';
+                if (allCorr.length === 0) html += '<div style="font-size:0.8rem;color:var(--txt3)">No unresolved corrections</div>';
+                allCorr.forEach(item => {
+                    html += '<div class="corr-item"><div class="corr-node">' + escHtml(item.node.label) + '</div><div class="corr-text">' + escHtml(item.corr.text) + '</div><div class="corr-meta">' + item.corr.date + (item.corr.source ? ' · ' + escHtml(item.corr.source) : '') + '</div><button class="btn btn-sm btn-success corr-resolve" data-node="' + item.node.id + '" data-idx="' + item.idx + '">Mark Resolved</button></div>';
+                });
+                document.getElementById('modal-body').innerHTML = html;
+                settingsModal.classList.add('open');
+                // Import
+                document.getElementById('set-import').addEventListener('click', () => {
+                    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json';
+                    inp.addEventListener('change', () => {
+                        const file = inp.files[0]; if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            try {
+                                const imported = JSON.parse(reader.result);
+                                if (!imported.nodes || !imported.edges) throw new Error('Invalid');
+                                const existIds = new Set(graphData.nodes.map(n => n.id));
+                                let addN = 0, addE = 0;
+                                imported.nodes.forEach(n => { if (!existIds.has(n.id)) { graphData.nodes.push(n); existIds.add(n.id); addN++; } });
+                                const existEdge = new Set(graphData.edges.map(e => e.source + '|' + e.target + '|' + e.type));
+                                imported.edges.forEach(e => { const k = e.source + '|' + e.target + '|' + e.type; if (!existEdge.has(k) && existIds.has(e.source) && existIds.has(e.target)) { graphData.edges.push(e); addE++; } });
+                                saveGraph(graphData); rebuildCy(); updateBottomStrip();
+                                toast('Imported +' + addN + ' nodes, +' + addE + ' edges');
+                                settingsModal.classList.remove('open');
+                            } catch (e) { toast('Import failed: ' + e.message); }
+                        }; reader.readAsText(file);
+                    }); inp.click();
+                });
+                // Export
+                document.getElementById('set-export').addEventListener('click', () => {
+                    const blob = new Blob([JSON.stringify(graphData, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob); const a = document.createElement('a');
+                    a.href = url; a.download = 'kag-graph-' + TODAY + '.json'; a.click(); URL.revokeObjectURL(url);
+                    toast('Exported graph JSON');
+                });
+                // Reset
+                document.getElementById('set-reset').addEventListener('click', () => {
+                    if (!confirm('Reset all data to seed graph? This cannot be undone.')) return;
+                    graphData = JSON.parse(JSON.stringify(SEED_GRAPH)); saveGraph(graphData); rebuildCy(); updateBottomStrip();
+                    toast('Reset to seed data'); settingsModal.classList.remove('open');
+                });
+                // Resolve corrections
+                document.querySelectorAll('.corr-resolve').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const node = graphData.nodes.find(n => n.id === btn.dataset.node);
+                        if (node && node.corrections[btn.dataset.idx]) node.corrections[btn.dataset.idx].resolved = true;
+                        saveGraph(graphData); openSettings(); toast('Correction resolved');
+                    });
+                });
+            }
+
+            function rebuildCy() {
+                cy.elements().remove();
+                cy.add(buildElements(graphData));
+                cy.layout({ name: 'cose-bilkent', animate: false, nodeDimensionsIncludeLabels: true, idealEdgeLength: 120, nodeRepulsion: 8000, gravity: 0.25, numIter: 2500 }).run();
+            }
+
+        })();
+    </script>
+</body>
+
+</html>
