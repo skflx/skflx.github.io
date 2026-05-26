@@ -1,81 +1,88 @@
-# skflx.MD - Personal Website
+# skflx.MD — Personal Website
 
-Personal portfolio website for an otolaryngology resident in the Pacific Northwest.
+Single-page personal site for an otolaryngology resident in the Pacific Northwest.
 
 ## Live Site
 
 [skflx.github.io](https://skflx.github.io)
 
-## Features
+## Overview
 
-### Dynamic Color System
-- **Color extraction from hero image**: Automatically extracts dominant colors from the profile photo
-- **Matte color palette**: Extracted colors are converted to matte versions for a professional look
-- **CSS custom properties**: Dynamic colors are applied site-wide through CSS variables
+The site is one scrollable page (`index.html`) with four click-to-expand
+sections (collapsed by default, clear at a glance):
 
-### Dark Mode
-- Toggle button in header (sun/moon icons)
-- Respects system preference (`prefers-color-scheme`)
-- User preference persisted via localStorage
+1. **A budding surgeon-scientist in the PNW** — bio, education, languages, location
+2. **My clinical tools and projects** — tools, technology projects, clinical experience
+3. **Machine & cognitive frameworks in surgical learning** — research areas (PubMed)
+4. **Outside of medicine** — art, music, outdoors, fitness
 
-### Pages
-- **Home** (`index.html`) - Landing page with hero, about, and unified "What I Do" section
-- **Projects** (`projects.html`) - Tabbed interface for Research, Technology, Art, Music, and Clinical work with CV download
-- **Contact** (`contact.html`) - Functional contact form with Formspree integration
+### Visitor-selectable visual styles
 
-### Design
-- Tailwind-inspired clean, minimal aesthetic
-- Professional color scheme with matte accents
-- Responsive design for mobile and desktop
-- Modern typography (DM Sans + Inter via Google Fonts)
-- Smooth transitions and scroll-triggered animations
+A switcher in the header lets the visitor choose between three styles, each
+with its own typography, color, and decorative treatment:
+
+- **Matte** — warm matte red / gold / brown (day) and a warm dark (night); DM Sans + Inter
+- **Terminal** — monospace, grid lines, shell-prompt section headers; dark-first
+- **Story** — warm paper + ink, Fraunces serif with handwritten Caveat accents
+
+Layered on top is a **day / night** toggle. Both the chosen style and theme are
+persisted in `localStorage` (`sk_style`, `sk_theme`) and respect
+`prefers-color-scheme` on first visit.
+
+### Modular by design
+
+Styling is token-driven: each style declares its color + type tokens for both
+themes in `css/onepager.css`, and the shared components consume only those
+tokens. Retheming or adding a style is a localized edit. Switching is driven by
+`data-style` / `data-theme` attributes on `<html>`.
 
 ## Tech Stack
 
-- **HTML5** - Semantic markup
-- **CSS3** - Custom properties, Grid, Flexbox, animations
-- **JavaScript** - Vanilla JS (no frameworks)
-- **Fonts** - Google Fonts (DM Sans, Inter)
-- **Icons** - Font Awesome 6
-- **Forms** - Formspree
+- **HTML5** — semantic markup; native `<details>` for the accordion (no JS needed to open/close)
+- **CSS3** — custom properties, Grid, Flexbox
+- **JavaScript** — vanilla, no frameworks (`js/onepager.js`: style switch, theme toggle, hash deep-linking)
+- **Fonts** — Google Fonts (DM Sans, Inter, JetBrains Mono, Fraunces, Caveat)
+- **Icons** — Font Awesome 6
 
 ## File Structure
 
 ```
-├── index.html          # Home page (combined with About)
-├── projects.html       # Projects with tabbed navigation
-├── contact.html        # Contact form
+├── index.html              # The one-pager
 ├── css/
-│   └── main.css        # Main stylesheet with design system
+│   ├── onepager.css        # Styles for the one-pager (3 styles × 2 themes)
+│   └── main.css            # Legacy stylesheet (still used by the tool pages)
 ├── js/
-│   └── main.js         # Dynamic colors, dark mode, interactions
-├── images/
-│   ├── me_large.jpg    # Hero profile image
-│   ├── art-placeholder.svg
-│   └── music-placeholder.svg
-├── documents/
-│   └── cv.pdf          # CV/Resume (placeholder)
-├── scripts/
-│   └── update_from_cv.py  # Publication list generator (deprecated)
-├── README.md           # This file
-├── MAINTENANCE.md      # Maintenance guide
-└── TODO.md             # UI/UX improvements tracker
+│   ├── onepager.js         # Style switch, theme toggle, deep-linking
+│   ├── main.js             # Legacy script (still used by the tool pages)
+│   └── cpt_search.jsx      # CPT search tool logic
+├── kag.html                # Tool: Knowledge Atlas Graph
+├── kag-extract.html        # Tool: KAG extractor
+├── cpt-search.html         # Tool: CPT code search
+├── ascii-editor.html       # Tool: ASCII/Unicode diagram editor
+├── images/                 # me_large.jpg + placeholders
+├── documents/              # cv.pdf (placeholder)
+├── scripts/                # update_from_cv.py (deprecated)
+└── archive/                # Old multi-page site + design mockups (kept for reference)
+    ├── index-legacy.html, projects.html, contact.html
+    ├── MAINTENANCE.md, TODO.md
+    └── mockups/            # Exploratory mockups + style variants
 ```
 
 ## Local Development
 
-Simply open any HTML file in a browser. No build step required.
+No build step. Serve the folder and open `index.html`:
 
-For the contact form to work, you'll need to register the Formspree endpoint or replace with your own.
+```
+python3 -m http.server 8000
+# http://localhost:8000/
+```
+
+Deep links open the matching section, e.g. `index.html#research`.
 
 ## Browser Support
 
-Modern browsers (Chrome, Firefox, Safari, Edge). Uses:
-- CSS Custom Properties
-- CSS Grid/Flexbox
-- Backdrop Filter
-- Intersection Observer API
-- Canvas API (for color extraction)
+Modern browsers (Chrome, Firefox, Safari, Edge). Uses CSS custom properties,
+Grid/Flexbox, `backdrop-filter`, and the native `<details>` element.
 
 ## License
 

@@ -1,246 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-style="matte" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Samipya Kafle, MD | Otolaryngology Resident</title>
-    <meta name="description" content="Dr. Samipya Kafle is an otolaryngology resident in the Pacific Northwest passionate about technology, surgical education, and the intersection of medicine and innovation.">
+    <meta name="description" content="Dr. Samipya Kafle is an otolaryngology resident in the Pacific Northwest, interested in machine and cognitive frameworks in surgical learning — plus art, music, the outdoors, and lifting.">
 
-    <!-- Fonts -->
+    <!-- Set style + theme before paint to avoid a flash -->
+    <script>
+        (function () {
+            try {
+                var style = localStorage.getItem('sk_style');
+                document.documentElement.setAttribute('data-style', ['matte', 'terminal', 'personality'].indexOf(style) > -1 ? style : 'matte');
+                var theme = localStorage.getItem('sk_theme');
+                if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {}
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/onepager.css">
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="header-inner">
-                <a href="index.html" class="logo">skflx.MD</a>
-
-                <nav class="nav">
-                    <ul class="nav-links">
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="projects.html">Projects</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-
-                    <button class="theme-toggle" aria-label="Toggle dark mode">
-                        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                        </svg>
-                    </button>
-
-                    <button class="mobile-menu-btn" aria-label="Toggle menu">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
-                </nav>
+    <!-- HEADER + CONTROLS -->
+    <header class="site-header">
+        <div class="bar">
+            <a href="#" class="brand">skflx<span class="dot">.MD</span></a>
+            <div class="controls">
+                <div class="style-switch" role="group" aria-label="Visual style">
+                    <button type="button" data-set-style="matte" aria-pressed="true">Matte</button>
+                    <button type="button" data-set-style="terminal" aria-pressed="false">Terminal</button>
+                    <button type="button" data-set-style="personality" aria-pressed="false">Story</button>
+                </div>
+                <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
+                    <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-content">
-                    <span class="hero-badge">
-                        <i class="fas fa-stethoscope"></i>
-                        <span id="pgy-status">PGY-2</span> Otolaryngology Resident
-                    </span>
-                    <h1 class="hero-title">
-                        Hi, I'm <span class="accent">Samip.</span>
-                    </h1>
-                    <p class="hero-description">
-                        Surgeon-scientist in training in the Pacific Northwest. Passionate about technology, surgical education, and the intersection of medicine and innovation.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="#about" class="btn btn-primary">Learn More</a>
-                        <a href="projects.html" class="btn btn-secondary">View Projects</a>
-                    </div>
-                </div>
-                <div class="hero-image-container">
-                    <img src="images/me_large.jpg" alt="Dr. Samipya Kafle" class="hero-image" loading="eager">
+    <main class="wrap">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-text">
+                <p class="role"><i class="fas fa-stethoscope"></i> PGY-2 Otolaryngology Resident &middot; Portland, OR</p>
+                <h1>Samipya <span class="accent">Kafle</span>, MD</h1>
+                <p class="tagline">Surgeon-scientist in training in the Pacific Northwest. I work at the intersection of medicine, technology, and surgical education.</p>
+                <div class="hero-links">
+                    <a href="documents/cv.pdf" class="primary"><i class="fas fa-file-pdf"></i> CV</a>
+                    <a href="https://linkedin.com/in/skflx" target="_blank" rel="noopener" class="icon-only" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/skflx/" target="_blank" rel="noopener" class="icon-only" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://github.com/skflx" target="_blank" rel="noopener" class="icon-only" aria-label="GitHub"><i class="fab fa-github"></i></a>
                 </div>
             </div>
-        </div>
-    </section>
+            <img class="hero-photo" src="images/me_large.jpg" alt="Dr. Samipya Kafle" loading="eager">
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="section">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-content">
-                    <div class="section-header">
-                        <h2>About Me</h2>
-                        <p>Background & Journey</p>
+        <!-- ACCORDION SECTIONS (collapsed by default) -->
+        <div class="sections">
+
+            <!-- 1 -->
+            <details class="section" id="about">
+                <summary>
+                    <span class="sec-title" data-note="the short version">A budding surgeon-scientist in the PNW</span>
+                    <span class="chev"><i class="fas fa-chevron-down"></i></span>
+                </summary>
+                <div class="section-body">
+                    <div class="prose">
+                        <p>My journey began in Nepal, spanning Michigan, Oregon, Nevada, and Connecticut before returning to the Pacific Northwest. With a background in neuroscience and personal experience with hearing loss, I bring a unique perspective to both clinical practice and research in hearing technologies.</p>
+                        <p>Outside the hospital I keep my hands busy — ink on paper, strings under my fingers, trails under my boots, and a barbell on the floor. I think the balance between technical precision and creative expression is the whole point.</p>
                     </div>
-                    <p>
-                        My journey began in Nepal, spanning Michigan, Oregon, Nevada, and Connecticut before returning to the Pacific Northwest. With a background in neuroscience and personal experience with hearing loss, I bring a unique perspective to both clinical practice and research in hearing technologies.
-                    </p>
-                    <p>
-                        My research focuses on surgical outcomes in otolaryngology and emergent data technologies in medical education and surgical training. I'm particularly interested in cognitive frameworks that enhance surgical learning.
-                    </p>
-                    <p>
-                        Beyond medicine, I'm an artist, musician, and outdoor enthusiast who values the balance between technical precision and creative expression.
-                    </p>
-
-                    <div class="about-stats">
-                        <div class="stat-item reveal">
-                            <i class="fas fa-user-md" style="color: var(--color-accent-matte); font-size: 1.25rem; margin-bottom: 0.5rem;"></i>
-                            <span class="stat-number" style="font-size: 1.1rem;">Yale School of Medicine</span>
-                            <span class="stat-label">Otolaryngology</span>
-                        </div>
-                        <div class="stat-item reveal">
-                            <i class="fas fa-graduation-cap" style="color: var(--color-accent-matte); font-size: 1.25rem; margin-bottom: 0.5rem;"></i>
-                            <span class="stat-number" style="font-size: 1.1rem;">University of Nevada, Reno</span>
-                            <span class="stat-label">B.S. Neuroscience</span>
-                        </div>
+                    <div class="facts">
+                        <div class="fact"><div class="k">Education</div><div class="v">Yale School of Medicine<small>Otolaryngology</small></div></div>
+                        <div class="fact"><div class="k">Undergrad</div><div class="v">Univ. of Nevada, Reno<small>B.S. Neuroscience</small></div></div>
+                        <div class="fact"><div class="k">Languages</div><div class="v" style="font-family:var(--font-body);font-weight:400;font-size:0.84rem;">Nepali (native) &middot; English (fluent) &middot; Spanish &middot; Swiss German</div></div>
+                        <div class="fact"><div class="k">Home base</div><div class="v">Portland, Oregon<small>Pacific Northwest</small></div></div>
                     </div>
                 </div>
+            </details>
 
-                <div class="about-sidebar">
-                    <div class="info-card reveal">
-                        <h4>Languages</h4>
-                        <ul class="info-list">
-                            <li><i class="fas fa-circle" style="font-size: 0.5rem;"></i> Nepali (Native)</li>
-                            <li><i class="fas fa-circle" style="font-size: 0.5rem;"></i> English (Fluent)</li>
-                            <li><i class="fas fa-circle" style="font-size: 0.5rem;"></i> Spanish (Intermediate)</li>
-                            <li><i class="fas fa-circle" style="font-size: 0.5rem;"></i> Swiss German (Intermediate)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- What I Do Section -->
-    <section class="section section-alt">
-        <div class="container">
-            <div class="section-header text-center">
-                <h2>What I Do</h2>
-                <p>Research, creativity, and personal pursuits</p>
-            </div>
-
-            <div class="grid-3">
-                <a href="projects.html#research" class="card reveal" style="text-decoration: none;">
-                    <div class="card-icon">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <h3>Research</h3>
-                    <p>Publications in otolaryngology, trauma, and surgical outcomes.</p>
-                </a>
-
-                <a href="projects.html#technology" class="card reveal" style="text-decoration: none;">
-                    <div class="card-icon">
-                        <i class="fas fa-microchip"></i>
-                    </div>
-                    <h3>Technology</h3>
-                    <p>Medical innovation and hearing device development.</p>
-                </a>
-
-                <a href="projects.html#art" class="card reveal" style="text-decoration: none;">
-                    <div class="card-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Art</h3>
-                    <p>Ink, graphite, and digital artwork.</p>
-                </a>
-
-                <a href="projects.html#music" class="card reveal" style="text-decoration: none;">
-                    <div class="card-icon">
-                        <i class="fas fa-music"></i>
-                    </div>
-                    <h3>Music</h3>
-                    <p>Guitar, ukulele, and musical projects.</p>
-                </a>
-
-                <div class="card reveal">
-                    <div class="card-icon">
-                        <i class="fas fa-mountain"></i>
-                    </div>
-                    <h3>Outdoors</h3>
-                    <p>Hiking, nature photography, and exploring the Pacific Northwest.</p>
-                </div>
-
-                <div class="card reveal">
-                    <div class="card-icon">
-                        <i class="fas fa-dumbbell"></i>
-                    </div>
-                    <h3>Fitness</h3>
-                    <p>Powerlifting and building a home gym. Deadlifts are my favorite.</p>
-                </div>
-            </div>
-
-            <div class="text-center mt-md">
-                <a href="projects.html" class="btn btn-primary">View All Projects</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="section">
-        <div class="container text-center">
-            <h2>Let's Connect</h2>
-            <p class="lead" style="max-width: 600px; margin: 0 auto var(--spacing-lg);">
-                Interested in collaborating on research, discussing medical education, or just want to say hello?
-            </p>
-            <a href="contact.html" class="btn btn-primary btn-lg">Get in Touch</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="index.html" class="logo">skflx.MD</a>
-                    <p>Otolaryngology resident passionate about technology, surgical education, and innovation in medicine.</p>
-                </div>
-
-                <div class="footer-links">
-                    <div class="footer-links-col">
-                        <h4>Navigation</h4>
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="projects.html">Projects</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-links-col">
-                        <h4>Connect</h4>
-                        <div class="social-links">
-                            <a href="https://linkedin.com/in/skflx" target="_blank" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin"></i>
+            <!-- 2 -->
+            <details class="section" id="work">
+                <summary>
+                    <span class="sec-title" data-note="what I build">My clinical tools and projects</span>
+                    <span class="chev"><i class="fas fa-chevron-down"></i></span>
+                </summary>
+                <div class="section-body">
+                    <div class="group">
+                        <div class="group-title">Tools</div>
+                        <div class="items">
+                            <a class="item" href="kag.html">
+                                <span class="item-ic"><i class="fas fa-diagram-project"></i></span>
+                                <div class="item-main"><h4>Knowledge Atlas Graph</h4><p>Interactive OHNS knowledge map with spaced-repetition self-testing</p></div>
+                                <span class="item-meta">Launch &rarr;</span>
                             </a>
-                            <a href="https://www.instagram.com/skflx/" target="_blank" aria-label="Instagram">
-                                <i class="fab fa-instagram"></i>
+                            <a class="item" href="cpt-search.html">
+                                <span class="item-ic"><i class="fas fa-magnifying-glass"></i></span>
+                                <div class="item-main"><h4>CPT Code Search</h4><p>Fast CPT lookup built for otolaryngology</p></div>
+                                <span class="item-meta">Launch &rarr;</span>
                             </a>
-                            <a href="https://github.com/skflx" target="_blank" aria-label="GitHub">
-                                <i class="fab fa-github"></i>
+                            <a class="item" href="ascii-editor.html">
+                                <span class="item-ic"><i class="fas fa-terminal"></i></span>
+                                <div class="item-main"><h4>ASCII Art Editor</h4><p>Browser-based ASCII/Unicode diagram editor</p></div>
+                                <span class="item-meta">Launch &rarr;</span>
                             </a>
                         </div>
                     </div>
+                    <div class="group">
+                        <div class="group-title">Technology projects</div>
+                        <div class="items">
+                            <div class="item">
+                                <span class="item-ic"><i class="fas fa-wave-square"></i></span>
+                                <div class="item-main"><h4>Speech-in-Noise Processing</h4><p>Improving speech recognition in hearing devices for challenging environments</p></div>
+                                <span class="item-meta">2022&ndash;now</span>
+                            </div>
+                            <div class="item">
+                                <span class="item-ic"><i class="fas fa-video"></i></span>
+                                <div class="item-main"><h4>Surgical Livestreaming Platform</h4><p>Technical system for livestreaming procedures to medical students</p></div>
+                                <span class="item-meta">2022&ndash;now</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="group-title">Clinical experience</div>
+                        <div class="items">
+                            <div class="item">
+                                <span class="item-ic"><i class="fas fa-chalkboard-user"></i></span>
+                                <div class="item-main"><h4>Surgery Livestreaming Elective</h4><p>Designed pre-clerkship curriculum; A/V setup and sterile exoscope mounting</p></div>
+                                <span class="item-meta">2022&ndash;now</span>
+                            </div>
+                            <div class="item">
+                                <span class="item-ic"><i class="fas fa-hand-holding-medical"></i></span>
+                                <div class="item-main"><h4>HAVEN Free Clinic</h4><p>Primary care for uninsured patients; Senior Clinical Team Member</p></div>
+                                <span class="item-meta">2020&ndash;now</span>
+                            </div>
+                            <div class="item">
+                                <span class="item-ic"><i class="fas fa-wave-square"></i></span>
+                                <div class="item-main"><h4>Point of Care Ultrasound Teaching</h4><p>Hands-on ultrasound skills training for the MS1 curriculum</p></div>
+                                <span class="item-meta">2021&ndash;now</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </details>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 skflx.MD. All rights reserved.</p>
-            </div>
+            <!-- 3 -->
+            <details class="section" id="research">
+                <summary>
+                    <span class="sec-title" data-note="the big question">I'm interested in machine and cognitive frameworks in surgical learning. My other research:</span>
+                    <span class="chev"><i class="fas fa-chevron-down"></i></span>
+                </summary>
+                <div class="section-body">
+                    <p class="lead">Alongside surgical learning, my published work spans outcomes across otolaryngology. Each area links to the papers on PubMed.</p>
+                    <div class="items">
+                        <a class="item" href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Trauma+OR+Fracture+OR+Injury)" target="_blank" rel="noopener">
+                            <span class="item-ic"><i class="fas fa-bone"></i></span>
+                            <div class="item-main"><h4>Craniofacial Trauma</h4><p>Injury patterns in sports and factors associated with surgical outcomes</p></div>
+                            <span class="item-meta">PubMed</span>
+                        </a>
+                        <a class="item" href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cancer+OR+Oncology+OR+Laryngectomy)" target="_blank" rel="noopener">
+                            <span class="item-ic"><i class="fas fa-ribbon"></i></span>
+                            <div class="item-main"><h4>Head &amp; Neck Oncology</h4><p>Complications, risk factors, and survival outcomes in cancer surgery</p></div>
+                            <span class="item-meta">PubMed</span>
+                        </a>
+                        <a class="item" href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Education+OR+Training+OR+Student)" target="_blank" rel="noopener">
+                            <span class="item-ic"><i class="fas fa-graduation-cap"></i></span>
+                            <div class="item-main"><h4>Surgical Education</h4><p>Live-streaming and automated feedback systems for training</p></div>
+                            <span class="item-meta">PubMed</span>
+                        </a>
+                        <a class="item" href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]+AND+(Cochlear+OR+Hearing+OR+Otology)" target="_blank" rel="noopener">
+                            <span class="item-ic"><i class="fas fa-ear-listen"></i></span>
+                            <div class="item-main"><h4>Otology &amp; Hearing Sciences</h4><p>Cortical adaptations in cochlear implant patients and speech processing</p></div>
+                            <span class="item-meta">PubMed</span>
+                        </a>
+                    </div>
+                    <a class="more-link" href="https://pubmed.ncbi.nlm.nih.gov/?term=Kafle+Samipya[au]" target="_blank" rel="noopener">View all papers on PubMed &rarr;</a>
+                </div>
+            </details>
+
+            <!-- 4 -->
+            <details class="section" id="beyond">
+                <summary>
+                    <span class="sec-title" data-note="the rest of me">Outside of medicine</span>
+                    <span class="chev"><i class="fas fa-chevron-down"></i></span>
+                </summary>
+                <div class="section-body">
+                    <div class="items grid">
+                        <a class="item" href="https://www.instagram.com/skflx/" target="_blank" rel="noopener">
+                            <span class="item-ic"><i class="fas fa-palette"></i></span>
+                            <div class="item-main"><h4>Art</h4><p>Ink &amp; graphite — anatomy, landscapes, the occasional portrait</p></div>
+                        </a>
+                        <div class="item">
+                            <span class="item-ic"><i class="fas fa-music"></i></span>
+                            <div class="item-main"><h4>Music</h4><p>Guitar &amp; ukulele; performed at the Yale 4th-Year Show (April 2023)</p></div>
+                        </div>
+                        <div class="item">
+                            <span class="item-ic"><i class="fas fa-mountain"></i></span>
+                            <div class="item-main"><h4>Outdoors</h4><p>Hiking and exploring the Pacific Northwest — trails, lakes, a camera</p></div>
+                        </div>
+                        <div class="item">
+                            <span class="item-ic"><i class="fas fa-dumbbell"></i></span>
+                            <div class="item-main"><h4>Fitness</h4><p>Powerlifting and a slowly growing home gym</p></div>
+                        </div>
+                    </div>
+                    <p style="margin-top:14px;"><span class="note">deadlifts are my favorite.</span></p>
+                </div>
+            </details>
+
         </div>
+    </main>
+
+    <footer class="footer" id="connect">
+        &copy; 2025 skflx.MD &middot; Portland, Oregon &middot;
+        <a href="https://linkedin.com/in/skflx" target="_blank" rel="noopener">LinkedIn</a> &middot;
+        <a href="https://github.com/skflx" target="_blank" rel="noopener">GitHub</a> &middot;
+        <a href="https://www.instagram.com/skflx/" target="_blank" rel="noopener">Instagram</a>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script src="js/onepager.js"></script>
 </body>
 </html>
