@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pediatric Hearing Loss · OCC Study | skflx.MD</title>
+  <meta name="description" content="Forty MCQs on pediatric hearing loss — embryology, conductive and sensorineural causes, syndromic genetics, screening, and clinical cases.">
+
+  <!-- React 18 -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- Lucide React icons -->
+  <script src="https://unpkg.com/lucide-react@0.344.0/dist/umd/lucide-react.min.js" crossorigin></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Babel (JSX in browser) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; }
+    #occ-back {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(250,246,238,0.92);
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid #E8DFD0;
+      padding: 0.45rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: system-ui, sans-serif;
+      font-size: 12px;
+      color: #6B5F4F;
+      text-decoration: none;
+    }
+    #occ-back:hover { color: #2C5454; }
+    #occ-back svg { width: 12px; height: 12px; }
+    #root { padding-top: 34px; }
+  </style>
+</head>
+<body>
+  <a id="occ-back" href="occ.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    OCC Study Modules
+  </a>
+  <div id="root"></div>
+
+  <!-- Module data -->
+  <script src="js/occ-modules/pediatrics.js"></script>
+
+  <!-- StudyViewer + mount -->
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useMemo, useRef } = React;
+    const { ChevronLeft, ChevronRight, BookOpen, Check, X, ChevronDown, Sparkles, ArrowRight, Layers, Filter, Home, Shuffle, Eye } = LucideReact;
+
+    // ─────────────────────────────────────────────────────────────────────
+    // StudyViewer — engine v0.2
+    // ─────────────────────────────────────────────────────────────────────
+
+    const PALETTE = {
+      bg: '#FAF6EE',
+      surface: '#FFFFFF',
+      border: '#E8DFD0',
+      borderSoft: '#F0E8D7',
+      text: '#2A241D',
+      textMuted: '#6B5F4F',
+      textFaint: '#9A8E7B',
+      accent: '#2C5454',
+      accentSoft: '#3D6B6B',
+      ochre: '#B08D57',
+      correct: '#5C7F4E',
+      correctBg: '#EAEFDA',
+      incorrect: '#A04B3D',
+      incorrectBg: '#F4DDD3',
+    };
+
+    function StudyViewer({ module }) {
+      const meta = module.meta || {};
+      const DOMAINS = module.DOMAINS || {};
+      const CONCEPTS = module.CONCEPTS || {};
+      const ITEMS = module.ITEMS ?? module.QUESTIONS ?? [];
+      const palette = PALETTE;
+
+      const [view, setView] = useState('home');
+      const [currentId, setCurrentId] = useState(ITEMS[0]?.id);
+      const [conceptFilter, setConceptFilter] = useState(null);
+      const [answers, setAnswers] = useState({});
+      const [firstCorrect, setFirstCorrect] = useState({});
+      const [showDetailed, setShowDetailed] = useState(false);
+      const [revealed, setRevealed] = useState(false);
+      const [domainFilter, setDomainFilter] = useState(null);
+      const cardRef = useRef(null);
+
+      useEffect(() => {
+        const link = document.createElement('link');
+        link.href = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=Crimson+Pro:ital,wght@0,300..900;1,300..900&display=swap';
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+        return () => { document.head.removeChild(link); };
+      }, []);
+
+      const filteredItems = useMemo(() => {
+        if (!conceptFilter) return ITEMS;
+        return ITEMS.filter(q => q.concepts.includes(conceptFilter));
+      }, [conceptFilter, ITEMS]);
+
+      const currentItem = useMemo(
+        () => ITEMS.find(q => q.id === currentId) || ITEMS[0],
+        [currentId, ITEMS]
+      );
+
+      const currentIdx = filteredItems.findIndex(q => q.id === currentId);
+      const totalAnswered = Object.keys(answers).length;
+      const totalCorrect = Object.values(firstCorrect).filter(Boolean).length;
+
+      const recordAnswer = (qId, value, correct) => {
+        if (answers[qId]) return;
+        setAnswers(prev => ({ ...prev, [qId]: value }));
+        setFirstCorrect(prev => ({ ...prev, [qId]: correct }));
+      };
+
+      const handleSelect = (optionId) => {
+        recordAnswer(currentId, optionId, optionId === currentItem.correct);
+      };
+
+      const handleGrade = (gotIt) => {
+        recordAnswer(currentId, gotIt ? 'got' : 'missed', gotIt);
+      };
+
+      const goToItem = (qId) => {
+        setCurrentId(qId);
+        setShowDetailed(false);
+        setRevealed(false);
+        setView('item');
+        setTimeout(() => cardRef.current?.scrollTo?.(0, 0), 50);
+      };
+
+      const handleNext = () => {
+        const idx = filteredItems.findIndex(q => q.id === currentId);
+        const next = filteredItems[(idx + 1) % filteredItems.length];
+        if (next) goToItem(next.id);
+      };
+
+      const handlePrev = () => {
+        const idx = filteredItems.findIndex(q => q.id === currentId);
+        const prev = filteredItems[(idx - 1 + filteredItems.length) % filteredItems.length];
+        if (prev) goToItem(prev.id);
+      };
+
+      const handleRandom = () => {
+        const pool = filteredItems.filter(q => q.id !== currentId);
+        if (pool.length === 0) return;
+        const rand = pool[Math.floor(Math.random() * pool.length)];
+        goToItem(rand.id);
+      };
+
+      const handleConceptClick = (conceptId) => {
+        setConceptFilter(conceptId);
+        const first = ITEMS.find(q => q.concepts.includes(conceptId));
+        if (first) goToItem(first.id);
+      };
+
+      const relatedItems = useMemo(() => {
+        if (!currentItem) return [];
+        return ITEMS
+          .filter(q => q.id !== currentItem.id)
+          .map(q => ({ q, overlap: q.concepts.filter(c => currentItem.concepts.includes(c)).length }))
+          .filter(x => x.overlap > 0)
+          .sort((a, b) => b.overlap - a.overlap)
+          .slice(0, 3)
+          .map(x => x.q);
+      }, [currentItem, ITEMS]);
+
+      return (
+        <div
+          className="min-h-screen w-full"
+          style={{
+            backgroundColor: palette.bg,
+            fontFamily: "'Crimson Pro', Georgia, serif",
+            color: palette.text,
+            backgroundImage: `radial-gradient(ellipse 80% 50% at 50% 0%, rgba(176,141,87,0.06) 0%, transparent 50%)`,
+          }}
+        >
+          <style>{`
+            .display-font { font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'opsz' 144, 'SOFT' 50; }
+            .body-font { font-family: 'Crimson Pro', Georgia, serif; }
+            @keyframes fadeUp {
+              from { opacity: 0; transform: translateY(8px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .fade-up { animation: fadeUp 0.35s ease-out forwards; }
+            @keyframes shimmer {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0.6; }
+            }
+            .pulse-correct { animation: shimmer 2s ease-in-out 1; }
+          `}</style>
+
+          <div ref={cardRef} className="max-w-2xl mx-auto px-5 pt-6 pb-32 sm:pt-10 sm:px-8">
+            {view === 'home' ? (
+              <HomeView
+                palette={palette}
+                meta={meta}
+                DOMAINS={DOMAINS}
+                CONCEPTS={CONCEPTS}
+                ITEMS={ITEMS}
+                domainFilter={domainFilter}
+                setDomainFilter={setDomainFilter}
+                totalAnswered={totalAnswered}
+                totalCorrect={totalCorrect}
+                firstCorrect={firstCorrect}
+                answers={answers}
+                onStart={() => ITEMS[0] && goToItem(ITEMS[0].id)}
+                onJump={goToItem}
+                onConceptClick={(cId) => {
+                  setConceptFilter(cId);
+                  const first = ITEMS.find(q => q.concepts.includes(cId));
+                  if (first) goToItem(first.id);
+                }}
+              />
+            ) : (
+              <ItemView
+                palette={palette}
+                DOMAINS={DOMAINS}
+                CONCEPTS={CONCEPTS}
+                ITEMS={ITEMS}
+                item={currentItem}
+                answer={answers[currentId]}
+                isCorrect={firstCorrect[currentId]}
+                onSelect={handleSelect}
+                revealed={revealed}
+                onReveal={() => setRevealed(true)}
+                onGrade={handleGrade}
+                showDetailed={showDetailed}
+                setShowDetailed={setShowDetailed}
+                onNext={handleNext}
+                onPrev={handlePrev}
+                onRandom={handleRandom}
+                onHome={() => setView('home')}
+                currentIdx={currentIdx}
+                total={filteredItems.length}
+                globalTotal={ITEMS.length}
+                conceptFilter={conceptFilter}
+                setConceptFilter={setConceptFilter}
+                relatedItems={relatedItems}
+                onConceptClick={handleConceptClick}
+                onRelatedClick={goToItem}
+                answeredSet={Object.keys(answers)}
+                firstCorrect={firstCorrect}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // HOME VIEW
+    // ─────────────────────────────────────────────────────────────────────
+
+    function HomeView({ palette, meta, DOMAINS, CONCEPTS, ITEMS, totalAnswered, totalCorrect, onStart, onJump, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter }) {
+      const conceptsByDomain = useMemo(() => {
+        const groups = {};
+        Object.entries(CONCEPTS).forEach(([id, c]) => {
+          if (!groups[c.domain]) groups[c.domain] = [];
+          groups[c.domain].push({ id, ...c });
+        });
+        return groups;
+      }, [CONCEPTS]);
+
+      const conceptCounts = useMemo(() => {
+        const counts = {};
+        Object.keys(CONCEPTS).forEach(cId => {
+          counts[cId] = {
+            total: ITEMS.filter(q => q.concepts.includes(cId)).length,
+            answered: ITEMS.filter(q => q.concepts.includes(cId) && answers[q.id]).length,
+            correct: ITEMS.filter(q => q.concepts.includes(cId) && firstCorrect[q.id]).length,
+          };
+        });
+        return counts;
+      }, [answers, firstCorrect, CONCEPTS, ITEMS]);
+
+      const progressPct = ITEMS.length ? (totalAnswered / ITEMS.length) * 100 : 0;
+      const titleLines = (meta.title || '').split('\n');
+
+      return (
+        <div className="fade-up">
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-3" style={{ color: palette.ochre }}>
+              <div className="h-px flex-1" style={{ backgroundColor: palette.border }} />
+              <span className="text-[10px] tracking-[0.3em] uppercase font-medium" style={{ fontFamily: 'system-ui, sans-serif' }}>{meta.kicker}</span>
+              <div className="h-px flex-1" style={{ backgroundColor: palette.border }} />
+            </div>
+            <h1 className="display-font text-4xl sm:text-5xl font-light leading-tight" style={{ color: palette.text, fontVariationSettings: "'opsz' 144, 'wght' 400, 'SOFT' 50" }}>
+              {titleLines.map((line, i) => (
+                <React.Fragment key={i}>
+                  {i > 0 && <br />}
+                  {i === 0
+                    ? line
+                    : <em style={{ fontVariationSettings: "'opsz' 144, 'wght' 350, 'SOFT' 100" }}>{line}</em>}
+                </React.Fragment>
+              ))}
+            </h1>
+            {meta.subtitle && (
+              <p className="mt-3 text-base leading-relaxed" style={{ color: palette.textMuted }}>
+                {meta.subtitle}
+              </p>
+            )}
+          </div>
+
+          <div
+            className="mb-8 p-5 rounded-lg"
+            style={{
+              backgroundColor: palette.surface,
+              border: `1px solid ${palette.border}`,
+              boxShadow: '0 1px 3px rgba(42,36,29,0.04)',
+            }}
+          >
+            <div className="flex items-baseline justify-between mb-3">
+              <div className="display-font text-sm tracking-wider uppercase" style={{ color: palette.textMuted, fontVariationSettings: "'wght' 500" }}>
+                Progress
+              </div>
+              <div className="display-font text-2xl" style={{ color: palette.text, fontVariationSettings: "'opsz' 144, 'wght' 400" }}>
+                <span style={{ color: palette.accent }}>{totalAnswered}</span>
+                <span style={{ color: palette.textFaint }}> / {ITEMS.length}</span>
+              </div>
+            </div>
+            <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ backgroundColor: palette.borderSoft }}>
+              <div
+                className="h-full transition-all duration-500"
+                style={{ width: `${progressPct}%`, backgroundColor: palette.accent }}
+              />
+            </div>
+            {totalAnswered > 0 && (
+              <div className="mt-3 flex items-center gap-2 text-sm" style={{ color: palette.textMuted }}>
+                <Check size={14} style={{ color: palette.correct }} />
+                <span><span className="display-font font-medium" style={{ color: palette.correct }}>{totalCorrect}</span> correct on first attempt</span>
+                <span className="ml-auto text-xs" style={{ color: palette.textFaint }}>{Math.round((totalCorrect / Math.max(totalAnswered, 1)) * 100)}%</span>
+              </div>
+            )}
+          </div>
+
+          <div className="mb-10 flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={onStart}
+              className="flex-1 py-3.5 px-5 rounded-lg flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.99]"
+              style={{ backgroundColor: palette.accent, color: palette.surface }}
+            >
+              <BookOpen size={16} />
+              <span className="display-font tracking-wide" style={{ fontVariationSettings: "'wght' 500" }}>
+                {totalAnswered > 0 ? 'Continue' : 'Begin'}
+              </span>
+            </button>
+            <button
+              onClick={() => {
+                const rand = ITEMS[Math.floor(Math.random() * ITEMS.length)];
+                if (rand) onJump(rand.id);
+              }}
+              className="py-3.5 px-5 rounded-lg flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.99]"
+              style={{ backgroundColor: palette.surface, color: palette.text, border: `1px solid ${palette.border}` }}
+            >
+              <Shuffle size={16} />
+              <span className="display-font tracking-wide" style={{ fontVariationSettings: "'wght' 500" }}>Random</span>
+            </button>
+          </div>
+
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Layers size={14} style={{ color: palette.ochre }} />
+              <span className="display-font text-xs tracking-[0.25em] uppercase" style={{ color: palette.textMuted, fontVariationSettings: "'wght' 500" }}>
+                Explore by Domain
+              </span>
+            </div>
+            <div className="space-y-3">
+              {Object.entries(DOMAINS).map(([dId, d]) => {
+                const domainConcepts = conceptsByDomain[dId] || [];
+                const expanded = domainFilter === dId;
+                const domainItemIds = new Set();
+                domainConcepts.forEach(c => {
+                  ITEMS.forEach(q => { if (q.concepts.includes(c.id)) domainItemIds.add(q.id); });
+                });
+                const domainAnswered = [...domainItemIds].filter(id => answers[id]).length;
+                return (
+                  <div
+                    key={dId}
+                    className="rounded-lg overflow-hidden transition-all"
+                    style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}` }}
+                  >
+                    <button
+                      onClick={() => setDomainFilter(expanded ? null : dId)}
+                      className="w-full p-4 flex items-center justify-between text-left hover:opacity-90 transition-opacity"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-1 h-9 rounded-full" style={{ backgroundColor: d.color }} />
+                        <div>
+                          <div className="display-font text-base tracking-wide" style={{ color: palette.text, fontVariationSettings: "'wght' 500" }}>{d.label}</div>
+                          <div className="text-xs mt-0.5" style={{ color: palette.textFaint }}>
+                            {domainConcepts.length} concepts · {domainItemIds.size} questions
+                            {domainAnswered > 0 && <span> · {domainAnswered} answered</span>}
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronDown
+                        size={18}
+                        style={{ color: palette.textFaint, transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                      />
+                    </button>
+                    {expanded && (
+                      <div className="px-4 pb-4 pt-1 fade-up">
+                        <div className="flex flex-wrap gap-1.5">
+                          {domainConcepts.map(c => {
+                            const count = conceptCounts[c.id];
+                            const isComplete = count.total > 0 && count.answered === count.total;
+                            return (
+                              <button
+                                key={c.id}
+                                onClick={() => onConceptClick(c.id)}
+                                className="px-2.5 py-1 rounded text-xs flex items-center gap-1.5 transition-all hover:opacity-80 active:scale-95"
+                                style={{ backgroundColor: d.hex, color: d.color, fontFamily: 'system-ui, sans-serif', fontWeight: 500 }}
+                              >
+                                {c.label}
+                                <span style={{ color: palette.textFaint, fontWeight: 400 }}>
+                                  {count.answered}/{count.total}
+                                </span>
+                                {isComplete && <Check size={10} style={{ color: palette.correct }} />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <div className="display-font text-xs tracking-[0.3em] uppercase" style={{ color: palette.textFaint, fontVariationSettings: "'wght' 400" }}>
+              ·  ·  ·
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ─────────────────────────────────────────────────────────────────────
+    // ITEM VIEW (mcq + recall)
+    // ─────────────────────────────────────────────────────────────────────
+
+    function ItemView({
+      palette, DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, onSelect,
+      revealed, onReveal, onGrade,
+      showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome,
+      currentIdx, total, globalTotal, conceptFilter, setConceptFilter,
+      relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect,
+    }) {
+      const answered = !!answer;
+      const isRecall = item.type === 'recall';
+      const filterConcept = conceptFilter ? CONCEPTS[conceptFilter] : null;
+      const filterDomain = filterConcept ? DOMAINS[filterConcept.domain] : null;
+
+      return (
+        <div className="fade-up">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={onHome}
+              className="flex items-center gap-1 text-sm transition-opacity hover:opacity-70"
+              style={{ color: palette.textMuted }}
+            >
+              <Home size={14} />
+              <span className="display-font tracking-wide" style={{ fontVariationSettings: "'wght' 500" }}>Menu</span>
+            </button>
+            <div className="display-font text-xs tracking-[0.2em] uppercase" style={{ color: palette.textFaint, fontVariationSettings: "'wght' 500" }}>
+              {conceptFilter
+                ? <>Filter · {filterConcept.label}</>
+                : <>Question {currentIdx + 1} of {total}</>}
+            </div>
+          </div>
+
+          {conceptFilter && (
+            <div
+              className="mb-4 px-3 py-2 rounded-md flex items-center justify-between text-sm fade-up"
+              style={{ backgroundColor: filterDomain.hex, color: filterDomain.color }}
+            >
+              <div className="flex items-center gap-2">
+                <Filter size={12} />
+                <span style={{ fontFamily: 'system-ui, sans-serif', fontWeight: 500 }}>
+                  Showing {total} of {globalTotal} · {filterConcept.label}
+                </span>
+              </div>
+              <button
+                onClick={() => setConceptFilter(null)}
+                className="hover:opacity-70 transition-opacity"
+                style={{ fontFamily: 'system-ui, sans-serif' }}
+              >
+                <X size={14} />
+              </button>
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {item.concepts.map(cId => {
+              const c = CONCEPTS[cId];
+              if (!c) return null;
+              const d = DOMAINS[c.domain];
+              return (
+                <button
+                  key={cId}
+                  onClick={() => onConceptClick(cId)}
+                  className="px-2 py-1 rounded text-[11px] tracking-wide transition-all hover:opacity-80 active:scale-95"
+                  style={{ backgroundColor: d.hex, color: d.color, fontFamily: 'system-ui, sans-serif', fontWeight: 500 }}
+                >
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div
+            className="p-6 sm:p-7 rounded-xl mb-5"
+            style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}`, boxShadow: '0 1px 3px rgba(42,36,29,0.04)' }}
+          >
+            <p
+              className="display-font text-xl sm:text-[22px] leading-snug"
+              style={{ color: palette.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}
+            >
+              {item.stem}
+            </p>
+
+            {!isRecall && (
+              <div className="space-y-2 mt-6">
+                {item.options.map((opt) => {
+                  const isSelected = answer === opt.id;
+                  const isCorrectOption = opt.id === item.correct;
+                  const showAsCorrect = answered && isCorrectOption;
+                  const showAsIncorrect = answered && isSelected && !isCorrectOption;
+
+                  let bgColor = palette.surface;
+                  let borderColor = palette.border;
+                  let textColor = palette.text;
+                  let leftColor = palette.borderSoft;
+
+                  if (showAsCorrect) {
+                    bgColor = palette.correctBg; borderColor = palette.correct; textColor = palette.text; leftColor = palette.correct;
+                  } else if (showAsIncorrect) {
+                    bgColor = palette.incorrectBg; borderColor = palette.incorrect; textColor = palette.text; leftColor = palette.incorrect;
+                  } else if (answered) {
+                    bgColor = palette.bg; textColor = palette.textMuted;
+                  }
+
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => onSelect(opt.id)}
+                      disabled={answered}
+                      className={`w-full text-left p-3.5 rounded-lg flex items-start gap-3 transition-all ${!answered ? 'hover:scale-[1.005] active:scale-[0.995] hover:shadow-sm cursor-pointer' : 'cursor-default'}`}
+                      style={{ backgroundColor: bgColor, border: `1px solid ${borderColor}`, borderLeft: `3px solid ${leftColor}`, color: textColor }}
+                    >
+                      <div
+                        className="display-font text-sm flex-shrink-0 w-5"
+                        style={{ color: showAsCorrect ? palette.correct : showAsIncorrect ? palette.incorrect : palette.ochre, fontVariationSettings: "'wght' 600" }}
+                      >
+                        {opt.id.toUpperCase()}
+                      </div>
+                      <div className="flex-1 leading-snug" style={{ fontSize: '15px' }}>
+                        {opt.text}
+                      </div>
+                      {showAsCorrect && <Check size={16} style={{ color: palette.correct, flexShrink: 0, marginTop: 2 }} />}
+                      {showAsIncorrect && <X size={16} style={{ color: palette.incorrect, flexShrink: 0, marginTop: 2 }} />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {isRecall && (
+              <div className="mt-6">
+                {!revealed && !answered ? (
+                  <button
+                    onClick={onReveal}
+                    className="w-full p-3.5 rounded-lg flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-[0.99]"
+                    style={{ backgroundColor: palette.accent, color: palette.surface }}
+                  >
+                    <Eye size={15} />
+                    <span className="display-font tracking-wide text-sm" style={{ fontVariationSettings: "'wght' 500" }}>Reveal answer</span>
+                  </button>
+                ) : (
+                  <div className="fade-up">
+                    <div className="display-font text-[11px] tracking-[0.25em] uppercase mb-2" style={{ color: palette.ochre, fontVariationSettings: "'wght' 600" }}>
+                      Answer
+                    </div>
+                    <div
+                      className="p-4 rounded-lg leading-relaxed"
+                      style={{ backgroundColor: palette.bg, border: `1px solid ${palette.borderSoft}`, borderLeft: `3px solid ${palette.ochre}`, color: palette.text, fontSize: '16px' }}
+                    >
+                      {item.answer}
+                    </div>
+                    {!answered && (
+                      <div className="flex gap-2 mt-3">
+                        <button
+                          onClick={() => onGrade(false)}
+                          className="flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:opacity-90 active:scale-[0.98]"
+                          style={{ backgroundColor: palette.incorrectBg, border: `1px solid ${palette.incorrect}`, color: palette.incorrect }}
+                        >
+                          <X size={15} />
+                          <span className="display-font tracking-wide text-sm" style={{ fontVariationSettings: "'wght' 600" }}>Missed</span>
+                        </button>
+                        <button
+                          onClick={() => onGrade(true)}
+                          className="flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:opacity-90 active:scale-[0.98]"
+                          style={{ backgroundColor: palette.correctBg, border: `1px solid ${palette.correct}`, color: palette.correct }}
+                        >
+                          <Check size={15} />
+                          <span className="display-font tracking-wide text-sm" style={{ fontVariationSettings: "'wght' 600" }}>Got it</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {answered && (
+            <div className="fade-up space-y-4 mb-6">
+              <div
+                className="p-5 rounded-xl"
+                style={{ backgroundColor: isCorrect ? palette.correctBg : palette.incorrectBg, border: `1px solid ${isCorrect ? palette.correct : palette.incorrect}` }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  {isCorrect ? (
+                    <>
+                      <Check size={16} style={{ color: palette.correct }} />
+                      <span className="display-font text-sm tracking-[0.2em] uppercase" style={{ color: palette.correct, fontVariationSettings: "'wght' 600" }}>
+                        {isRecall ? 'Got It' : 'Correct'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <X size={16} style={{ color: palette.incorrect }} />
+                      <span className="display-font text-sm tracking-[0.2em] uppercase" style={{ color: palette.incorrect, fontVariationSettings: "'wght' 600" }}>
+                        {isRecall ? 'Missed' : 'Not Quite'}
+                      </span>
+                      {!isRecall && (
+                        <span className="text-xs ml-1" style={{ color: palette.textMuted }}>
+                          · Answer: {item.correct.toUpperCase()}
+                        </span>
+                      )}
+                    </>
+                  )}
+                </div>
+                <p className="leading-relaxed" style={{ color: palette.text, fontSize: '15.5px' }}>
+                  {item.brief}
+                </p>
+              </div>
+
+              {item.detailed && (
+                <>
+                  <button
+                    onClick={() => setShowDetailed(!showDetailed)}
+                    className="w-full p-3.5 rounded-lg flex items-center justify-between transition-all hover:opacity-90 active:scale-[0.99]"
+                    style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}`, color: palette.text }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Sparkles size={14} style={{ color: palette.ochre }} />
+                      <span className="display-font tracking-wide text-sm" style={{ fontVariationSettings: "'wght' 500" }}>
+                        {showDetailed ? 'Hide detailed explanation' : 'Read detailed explanation'}
+                      </span>
+                    </div>
+                    <ChevronDown
+                      size={16}
+                      style={{ color: palette.textMuted, transform: showDetailed ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                    />
+                  </button>
+
+                  {showDetailed && (
+                    <div
+                      className="p-5 rounded-xl fade-up"
+                      style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}` }}
+                    >
+                      <p className="leading-relaxed" style={{ color: palette.text, fontSize: '16px' }}>
+                        {item.detailed}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {relatedItems.length > 0 && (
+                <div
+                  className="p-5 rounded-xl"
+                  style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}` }}
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Layers size={14} style={{ color: palette.ochre }} />
+                    <span className="display-font text-xs tracking-[0.25em] uppercase" style={{ color: palette.textMuted, fontVariationSettings: "'wght' 500" }}>
+                      Explore Related
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {relatedItems.map(q => {
+                      const isAnswered = answeredSet.includes(q.id);
+                      const wasCorrect = firstCorrect[q.id];
+                      return (
+                        <button
+                          key={q.id}
+                          onClick={() => onRelatedClick(q.id)}
+                          className="w-full text-left p-3 rounded-lg flex items-start gap-3 transition-all hover:scale-[1.005] active:scale-[0.995] hover:shadow-sm"
+                          style={{ backgroundColor: palette.bg, border: `1px solid ${palette.borderSoft}` }}
+                        >
+                          <div className="flex flex-col items-center gap-1 flex-shrink-0 mt-0.5">
+                            <div className="display-font text-[10px] tracking-wider uppercase" style={{ color: palette.ochre, fontVariationSettings: "'wght' 600" }}>
+                              {q.id.replace(/^q/i, 'Q')}
+                            </div>
+                            {isAnswered && (
+                              wasCorrect
+                                ? <Check size={11} style={{ color: palette.correct }} />
+                                : <X size={11} style={{ color: palette.incorrect }} />
+                            )}
+                          </div>
+                          <div className="flex-1 leading-snug" style={{ fontSize: '14.5px', color: palette.text }}>
+                            {q.stem}
+                          </div>
+                          <ArrowRight size={14} style={{ color: palette.textFaint, flexShrink: 0, marginTop: 4 }} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="flex items-center gap-2 mt-6">
+            <button
+              onClick={onPrev}
+              className="flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}`, color: palette.text }}
+            >
+              <ChevronLeft size={16} />
+              <span className="display-font tracking-wide text-sm" style={{ fontVariationSettings: "'wght' 500" }}>Prev</span>
+            </button>
+            <button
+              onClick={onRandom}
+              className="py-3 px-3 rounded-lg flex items-center justify-center transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ backgroundColor: palette.surface, border: `1px solid ${palette.border}`, color: palette.text }}
+              title="Random"
+            >
+              <Shuffle size={16} style={{ color: palette.textMuted }} />
+            </button>
+            <button
+              onClick={onNext}
+              className="flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ backgroundColor: palette.accent, color: palette.surface }}
+            >
+              <span className="display-font tracking-wide text-sm" style={{ fontVariationSettings: "'wght' 500" }}>
+                {answered ? 'Next' : 'Skip'}
+              </span>
+              <ChevronRight size={16} />
+            </button>
+          </div>
+
+          <div className="mt-4 flex items-center justify-center gap-1 flex-wrap max-w-md mx-auto">
+            {Array.from({ length: total }, (_, i) => {
+              const q = conceptFilter
+                ? ITEMS.filter(qq => qq.concepts.includes(conceptFilter))[i]
+                : ITEMS[i];
+              if (!q) return null;
+              const isCurrent = i === currentIdx;
+              const isAnswered = answeredSet.includes(q.id);
+              const wasCorrect = firstCorrect[q.id];
+              let dotColor = palette.borderSoft;
+              if (isAnswered) dotColor = wasCorrect ? palette.correct : palette.incorrect;
+              return (
+                <div
+                  key={q.id}
+                  className="rounded-full transition-all"
+                  style={{ width: isCurrent ? 18 : 5, height: 5, backgroundColor: isCurrent ? palette.accent : dotColor, opacity: isCurrent ? 1 : isAnswered ? 0.7 : 0.4 }}
+                />
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    // Mount
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<StudyViewer module={window.OCC_pediatrics} />);
+  </script>
+</body>
+</html>
