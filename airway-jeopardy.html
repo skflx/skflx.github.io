@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airway Rounds · Clinical Quiz | skflx.MD</title>
+  <meta name="description" content="Team-based ENT/Head & Neck airway quiz game for nursing education. Topics, difficulty filters, steal mechanic, session history.">
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    html, body { margin: 0; padding: 0; background: #0f172a; }
+    #back-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(15,23,42,0.95); backdrop-filter: blur(4px);
+      border-bottom: 1px solid rgba(100,116,139,0.25);
+      padding: 0.45rem 1.25rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: system-ui, sans-serif; font-size: 12px;
+      color: #64748b; text-decoration: none;
+    }
+    #back-nav:hover { color: #e2e8f0; }
+    #root { padding-top: 34px; min-height: 100vh; }
+    select option { background: #1e293b; color: #e2e8f0; }
+  </style>
+</head>
+<body>
+  <a id="back-nav" href="index.html">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    skflx.MD
+  </a>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useState, useReducer, useEffect, useMemo } = React;
+
+    // ─── TOPIC + DIFFICULTY CONFIG ──────────────────────────────────────────
+
+    const TOPICS = [
+      { id: 'basics',        short: 'Basics',        label: 'Trach & Laryngectomy Basics'  },
+      { id: 'emergencies',   short: 'Emergencies',   label: 'Airway Emergencies'            },
+      { id: 'valves',        short: 'Valves',        label: 'Valves, Cuffs & Suctioning'   },
+      { id: 'complications', short: 'Complications', label: 'Surgical Complications'        },
+      { id: 'daily',         short: 'Daily Care',    label: 'Daily Care & Prevention'       },
+    ];
+
+    const DIFF = {
+      easy:   { label: 'Intern',    pips: 1, pts: 100, penalty:   0, steal:  50 },
+      medium: { label: 'Resident',  pips: 2, pts: 200, penalty: -50, steal: 100 },
+      hard:   { label: 'Attending', pips: 3, pts: 400, penalty:-100, steal: 200 },
+    };
+
+    const TEAM_COLORS = ['cyan','rose','amber','emerald','violet','orange'];
+
+    // Full literal Tailwind strings — JIT requires no dynamic concatenation
+    const TC = {
+      cyan:    { bg:'bg-cyan-500',    text:'text-cyan-400',    border:'border-cyan-500',    ring:'ring-cyan-400',    dim:'bg-cyan-950/50'    },
+      rose:    { bg:'bg-rose-500',    text:'text-rose-400',    border:'border-rose-500',    ring:'ring-rose-400',    dim:'bg-rose-950/50'    },
+      amber:   { bg:'bg-amber-500',   text:'text-amber-400',   border:'border-amber-500',   ring:'ring-amber-400',   dim:'bg-amber-950/50'   },
+      emerald: { bg:'bg-emerald-500', text:'text-emerald-400', border:'border-emerald-500', ring:'ring-emerald-400', dim:'bg-emerald-950/50' },
+      violet:  { bg:'bg-violet-500',  text:'text-violet-400',  border:'border-violet-500',  ring:'ring-violet-400',  dim:'bg-violet-950/50'  },
+      orange:  { bg:'bg-orange-500',  text:'text-orange-400',  border:'border-orange-500',  ring:'ring-orange-400',  dim:'bg-orange-950/50'  },
+    };
+
+    const TOPIC_TC = {
+      basics:        'bg-blue-900/50 text-blue-300 border border-blue-700',
+      emergencies:   'bg-red-900/50 text-red-300 border border-red-700',
+      valves:        'bg-violet-900/50 text-violet-300 border border-violet-700',
+      complications: 'bg-amber-900/50 text-amber-300 border border-amber-700',
+      daily:         'bg-teal-900/50 text-teal-300 border border-teal-700',
+    };
+
+    const DIFF_TC = {
+      easy:   { badge:'bg-emerald-900/60 text-emerald-300 border border-emerald-700', pip:'bg-emerald-400' },
+      medium: { badge:'bg-yellow-900/60 text-yellow-300 border border-yellow-700',    pip:'bg-yellow-400'  },
+      hard:   { badge:'bg-red-900/60 text-red-300 border border-red-700',             pip:'bg-red-400'     },
+    };
+
+    // ─── QUESTION BANK ──────────────────────────────────────────────────────
+
+    const QUESTIONS = [
+      // ── BASICS ──
+      { id:'b1', topic:'basics', difficulty:'easy',
+        q: 'Before touching any neck airway patient, what is THE single question you must answer?',
+        a: 'Is this a partial neck breather (tracheostomy) or a total neck breather (total laryngectomy)? Everything — where you give oxygen, where you bag, whether the mouth works — flows from this distinction.',
+        pearl: 'Get the answer at the START of shift, not during the desat.' },
+
+      { id:'b2', topic:'basics', difficulty:'easy',
+        q: 'A trach patient desats — where can oxygen be delivered?',
+        a: 'Face AND stoma — both routes are viable for a trach patient. Apply to either or both; cover whichever route you are not using.',
+        pearl: 'Two routes for a trach; one route forever for a laryngectomy.' },
+
+      { id:'b3', topic:'basics', difficulty:'easy',
+        q: 'A laryngectomy patient desats — where does oxygen go, and where does it absolutely NOT go?',
+        a: 'Stoma ONLY. Face or nasal oxygen does nothing — there is no anatomical path from the mouth or nose to the lungs. They now lead only to the esophagus.',
+        pearl: 'Face O₂ on a laryngectomy patient is a placebo with a body count.' },
+
+      { id:'b4', topic:'basics', difficulty:'medium',
+        q: 'Anatomically, why does mouth-to-mouth or face-mask ventilation fail completely on a total laryngectomy patient?',
+        a: 'The larynx was surgically removed and the trachea permanently redirected to the skin as a permanent end stoma. The mouth and nose now lead only to the esophagus — there is zero connection to the lungs.',
+        pearl: 'Laryngectomy = one route, the stoma, forever.' },
+
+      { id:'b5', topic:'basics', difficulty:'medium',
+        q: "You're unsure if a crashing patient is a trach or a laryngectomy. What is the single safest immediate action?",
+        a: 'Apply oxygen to BOTH the face and the stoma simultaneously. Covering both is never wrong in an unknown airway emergency and buys time while someone confirms the surgery.',
+        pearl: 'When in doubt, oxygenate both. You cannot harm by adding the stoma.' },
+
+      { id:'b6', topic:'basics', difficulty:'hard',
+        q: 'A laryngectomy patient arrests. You have a standard face mask and a pediatric mask. Which do you use, where, and why does the alternative fail?',
+        a: 'Seal the pediatric mask (or LMA) over the stoma and bag there. A standard face mask fails because there is zero anatomical connection between the mouth/nose and the lungs — you would be ventilating the esophagus.',
+        pearl: 'Laryngectomy code = stoma is the airway. Bagging the face is bagging the esophagus.' },
+
+      { id:'b7', topic:'basics', difficulty:'hard',
+        q: 'Name the device sometimes found at the stoma wall of laryngectomy patients, what it does, and why it must not be disturbed during stoma care or suctioning.',
+        a: "A TEP (tracheoesophageal puncture) voice prosthesis — a one-way valve allowing air from the trachea into the esophagus for speech. It is the patient's only speech mechanism; dislodging it damages the prosthesis and the puncture site.",
+        pearl: "See a small valve in the stoma wall? That's their voice — leave it alone." },
+
+      { id:'b8', topic:'basics', difficulty:'hard',
+        q: 'Why does the HME become non-negotiable long-term for a laryngectomy patient specifically?',
+        a: 'With the entire upper airway permanently bypassed, the HME is the ONLY source of warming, humidification, and filtration for inhaled air — central to pulmonary hygiene and plug prevention for life.',
+        pearl: "For a laryngectomy patient the HME isn't an accessory — it's the replacement nose." },
+
+      // ── EMERGENCIES ──
+      { id:'e1', topic:'emergencies', difficulty:'easy',
+        q: 'What are the TWO failure modes behind nearly every tracheostomy emergency?',
+        a: 'Obstruction (usually a mucus plug, sometimes blood/clot) and displacement (tube out of the trachea — fully out or into a false passage in pretracheal tissue). Most floor events are obstruction.',
+        pearl: '"It\'s plugged or it\'s moved" covers almost everything.' },
+
+      { id:'e2', topic:'emergencies', difficulty:'easy',
+        q: 'You walk in on a distressed trach patient wearing a speaking valve. What is step ONE?',
+        a: 'Remove the speaking valve (or cap). A one-way valve plus any exhalation obstruction means the patient cannot exhale at all — breath stacking follows rapidly.',
+        pearl: 'Valve on + can\'t exhale = the valve itself can be the killer. Off first.' },
+
+      { id:'e3', topic:'emergencies', difficulty:'medium',
+        q: 'After removing the speaking valve, this is the NEXT intervention — NOT suctioning. Name it and explain why it comes before the catheter.',
+        a: 'Remove the inner cannula. A plugged inner cannula comes out WITH the plug, instantly clearing the most common obstruction. It also lets you assess true tube patency before passing a suction catheter.',
+        pearl: 'Inner cannula out BEFORE you chase the plug with a catheter.' },
+
+      { id:'e4', topic:'emergencies', difficulty:'medium',
+        q: 'Give the full 5-step response to a sat 70%, distressed trach patient, in correct order.',
+        a: '1. Call for help + O₂ to face AND stoma. 2. Remove speaking valve/cap. 3. Remove inner cannula. 4. Pass suction catheter. 5. Escalate (RT/ENT/Rapid Response) — calling runs in parallel, not after.',
+        pearl: 'Valve off → inner cannula out → suction → escalate.' },
+
+      { id:'e5', topic:'emergencies', difficulty:'medium',
+        q: 'When do you call for help IMMEDIATELY instead of working through troubleshooting steps yourself?',
+        a: 'Inability to ventilate after inner cannula removal and suctioning; suspected displacement or false passage; a fresh trach that has dislodged; any laryngectomy airway emergency. Call in parallel — do not serialize help behind your own troubleshooting.',
+        pearl: 'Calling early is free. Calling late is irreversible.' },
+
+      { id:'e6', topic:'emergencies', difficulty:'hard',
+        q: 'A day-2 fresh trach dislodges. Describe what you do NOT do, what you DO, and the physiological reason each choice matters.',
+        a: 'Do NOT blindly reinsert — the immature tract has no stable channel; forcing the tube back risks creating a false passage into pretracheal tissue, through which the patient cannot be ventilated. DO oxygenate via mouth and nose (trach patients have an intact upper airway) while occluding the stoma, and call ENT immediately.',
+        pearl: 'Fresh tract = no second chance at blind reinsertion. For a trach, the mouth is still your rescue route.' },
+
+      { id:'e7', topic:'emergencies', difficulty:'hard',
+        q: 'Why is a tracheostomy in its first 5–7 days categorically more dangerous than a mature trach, even if it looks identical?',
+        a: "The tract is immature — it hasn't healed into a stable, re-cannulatable channel. Accidental decannulation means blind reinsertion risks a fatal false passage. A mature tract is forgiving; a fresh tract is not.",
+        pearl: 'Fresh tract = no second chance. Mature tract = forgiving.' },
+
+      { id:'e8', topic:'emergencies', difficulty:'hard',
+        q: "What are stay/maturation sutures, and what does knowing they're present tell the bedside nurse about their own role?",
+        a: "Sutures placed by the surgeon that allow the tract to be re-tensioned and reopened if the tube dislodges. Their presence means the airway is surgically salvageable by the trained team. The RN's role is O₂ + escalation, not heroic reinsertion.",
+        pearl: "Stay sutures are the surgeon's lifeline back into the tract. Don't fight them." },
+
+      // ── VALVES ──
+      { id:'v1', topic:'valves', difficulty:'easy',
+        q: 'Before placing ANY speaking valve on a trach patient, what must be true about the cuff?',
+        a: 'The cuff must be fully deflated (down). With the cuff inflated, exhaled air has no exit path through the upper airway — breath stacking and suffocation follow.',
+        pearl: 'Valve + inflated cuff = a closed system. Cuff down, every time, no exceptions.' },
+
+      { id:'v2', topic:'valves', difficulty:'easy',
+        q: 'Name THREE signs that a patient is not tolerating a speaking valve.',
+        a: 'Respiratory distress, desaturation, rising work of breathing, air trapping, and anxiety or agitation — any three qualify.',
+        pearl: 'Distress on a valve → valve comes off NOW, questions later.' },
+
+      { id:'v3', topic:'valves', difficulty:'easy',
+        q: 'What are the clinical indications to suction a trach patient — and state one thing that is NOT an indication?',
+        a: 'Indications: audible/rattly breathing, visible secretions at the tube, desaturation, rising work of breathing, ineffective cough. NOT an indication: a fixed clock schedule or suctioning "just in case."',
+        pearl: 'Suction the patient, not the clock.' },
+
+      { id:'v4', topic:'valves', difficulty:'medium',
+        q: 'Does an inflated cuff prevent aspiration? Give a complete answer.',
+        a: 'No. It reduces GROSS aspiration and enables positive-pressure ventilation, but it does NOT prevent microaspiration of secretions that track past the cuff. "Cuff up" is not aspiration insurance.',
+        pearl: "Cuff up ≠ aspiration-proof. It's a speed bump, not a wall." },
+
+      { id:'v5', topic:'valves', difficulty:'medium',
+        q: 'Explain the step-by-step physiological sequence that makes a speaking valve lethal when the cuff is inflated.',
+        a: 'A speaking valve is one-way — air enters through it but must exit around the tube and up through the vocal cords. Cuff inflated blocks that exit → patient can inhale but not exhale → breath stacking → rising intrathoracic pressure → no ventilation.',
+        pearl: 'Cuff up closes the system. Cuff down, always.' },
+
+      { id:'v6', topic:'valves', difficulty:'hard',
+        q: "A patient suctioned every 2 hours now needs it every 30 minutes. Before accepting 'they're just more secretory,' what do you check first and why?",
+        a: 'Humidification. Inadequate humidity dries and thickens secretions, dramatically increasing suction demand and plug risk. Correcting humidity often resolves the frequency.',
+        pearl: "Rising suction demand → check the humidity before you accept 'they're just secretory.'" },
+
+      { id:'v7', topic:'valves', difficulty:'hard',
+        q: 'Describe the two main harms of aggressive deep suctioning, and state when during a catheter pass you apply suction pressure.',
+        a: 'Mucosal trauma/bleeding and hypoxia (also vagal bradycardia, bronchospasm). Apply suction pressure on WITHDRAWAL only — never on insertion.',
+        pearl: 'Suction is controlled trauma. More force and depth ≠ better — just more injury and more hypoxia.' },
+
+      { id:'v8', topic:'valves', difficulty:'hard',
+        q: 'When does sterile vs clean suctioning technique apply in the inpatient ENT setting?',
+        a: 'Sterile technique is standard in acute inpatient care (open systems) to limit lower-airway contamination. Clean technique is reserved for stable chronic/home patients. Follow unit protocol — do not improvise the technique tier.',
+        pearl: 'Inpatient open suction → sterile, by default.' },
+
+      // ── COMPLICATIONS ──
+      { id:'c1', topic:'complications', difficulty:'easy',
+        q: 'Name the FIRST subtle signs of an expanding neck hematoma — the ones that appear BEFORE stridor.',
+        a: 'Neck tightness or swelling, voice change, difficulty swallowing, and anxiety or restlessness. Stridor is a LATE sign.',
+        pearl: "By the time you hear stridor, you're already behind. Restlessness + tight neck is the call." },
+
+      { id:'c2', topic:'complications', difficulty:'easy',
+        q: 'In free flap monitoring: dusky/blue/congested appearance signals which vascular problem?',
+        a: 'Venous compromise (outflow failure) — more common than arterial failure and tends to present earlier.',
+        pearl: 'Dusky and congested = venous until proven otherwise.' },
+
+      { id:'c3', topic:'complications', difficulty:'easy',
+        q: 'A free flap looks dusky. How urgent is the call and why?',
+        a: 'Immediate — call now. Venous congestion means the surgical salvage window is hours. Delay equals flap loss. Time is tissue.',
+        pearl: 'Dusky flap → call now. Don\'t "watch it for an hour."' },
+
+      { id:'c4', topic:'complications', difficulty:'medium',
+        q: 'A neck drain turns milky/creamy. Name the complication, its anatomical source, and the dietary trigger that worsens output.',
+        a: 'Chyle leak — injury to the thoracic duct or lymphatics (classically left neck, level IV, after neck dissection). High-fat diet increases chyle flow and drain output.',
+        pearl: 'Milky drain = chyle. Report it AND the diet — fatty meals make it worse.' },
+
+      { id:'c5', topic:'complications', difficulty:'medium',
+        q: 'Distinguish arterial vs venous free flap compromise across four assessment parameters.',
+        a: 'Arterial (inflow): pale/white, cool, slow or absent capillary refill, lost Doppler signal, no pinprick bleed. Venous (outflow): dusky/blue/congested/swollen, brisk dark capillary refill, rapid dark blood on pinprick.',
+        pearl: 'Dusky = venous (more common, earlier). Pale = arterial.' },
+
+      { id:'c6', topic:'complications', difficulty:'medium',
+        q: 'A high-risk patient has a small wound bleed that stops on its own. What do you do, and why does "it stopped" not reassure you?',
+        a: "Escalate urgently — surgical or IR evaluation, ensure suction + gloves + direct-pressure supplies are at bedside. A small self-limited bleed in a radiated neck is a sentinel (herald) bleed that precedes catastrophic carotid rupture.",
+        pearl: '"It stopped" is exactly when you escalate — the next one may not.' },
+
+      { id:'c7', topic:'complications', difficulty:'hard',
+        q: 'Why can a neck hematoma compromise the airway faster than visible swelling suggests — and why does this make CT the wrong first step?',
+        a: 'Bleeding in a closed neck space causes venous AND lymphatic congestion → laryngeal and pharyngeal edema out of proportion to external swelling. It is a clinical bedside diagnosis. CT only delays definitive decompression by the surgeon.',
+        pearl: "Don't send a crashing neck to CT. Surgeon to bedside, now." },
+
+      { id:'c8', topic:'complications', difficulty:'hard',
+        q: 'Describe the three-part RN role when an expanding neck hematoma threatens the airway.',
+        a: '1. Call surgeon/ENT and rapid response immediately. 2. Bring the airway cart to bedside. 3. Prepare for bedside wound opening (clip/suture removal to evacuate clot) — this may happen before the OR. Stay with the patient.',
+        pearl: 'The fix may be opening the incision at the bedside. Have the surgeon and the cart there before you need them.' },
+
+      // ── DAILY CARE ──
+      { id:'d1', topic:'daily', difficulty:'easy',
+        q: 'Why must a trach or laryngectomy patient have active humidification, and what happens overnight without it?',
+        a: 'The stoma bypasses the upper airway that normally warms, humidifies, and filters inhaled air. Without it: mucosal drying → impaired ciliary clearance → inspissated secretions → mucus plugging. Overnight desaturations are often the first sign of a brewing plug.',
+        pearl: 'Humidification is plug prevention. Skipping it manufactures an airway emergency overnight.' },
+
+      { id:'d2', topic:'daily', difficulty:'easy',
+        q: 'What are the early warning signs of an impending mucus plug?',
+        a: 'Thick or crusty secretions, increasing suction frequency, secretions that are hard to clear, and overnight desaturations.',
+        pearl: '"We\'re suctioning thick stuff every hour" is a humidification failure announcing itself before the plug lands.' },
+
+      { id:'d3', topic:'daily', difficulty:'medium',
+        q: 'HME vs trach collar — what does each do mechanically?',
+        a: "HME (Swedish nose): passively traps the patient's exhaled heat and moisture and returns it on the next breath — passive recycling. Trach collar/mask: actively delivers externally humidified oxygen from an external source.",
+        pearl: "HME recycles the patient's moisture; the collar supplies it. Both beat dry gas." },
+
+      { id:'d4', topic:'daily', difficulty:'medium',
+        q: 'Name the 8 items that must be at every trach/laryngectomy bedside, verified at the start of every shift.',
+        a: 'Working suction + catheters; spare trach same size AND one size smaller; obturator; 10 mL syringe (cuff); spare inner cannulas; bag-valve-mask + oxygen; clear signage (trach vs laryngectomy); emergency algorithm visible.',
+        pearl: "Same size + one smaller is the rule — if same size won't pass a tightening tract, the smaller one buys the airway." },
+
+      { id:'d5', topic:'daily', difficulty:'hard',
+        q: 'Why is a delirious patient with a fresh trach a specific airway catastrophe waiting to happen — and name THREE interventions that reduce the risk.',
+        a: 'An agitated/delirious patient can self-decannulate. With a fresh immature tract, blind reinsertion risks a fatal false passage. Reduce risk: secure trach ties; treat and prevent delirium; sitter or mitts if indicated; confirm obturator + spare trach at bedside.',
+        pearl: 'Delirium + fresh trach = a self-extubation waiting to happen. Watch the hands.' },
+
+      { id:'d6', topic:'daily', difficulty:'hard',
+        q: 'Name three patient features that lower your escalation threshold even with reassuring vitals, and state the one-line principle.',
+        a: 'Prior neck radiation, bulky tumors, fresh post-op/free flap status. Principle: these patients decompensate fast and atypically — normal vitals do not outrank a worried nurse. Escalating early is never the wrong call.',
+        pearl: 'Radiation + bulky tumor + fresh postop is the "call early" triad.' },
+    ];
+
+    // ─── HELPERS ────────────────────────────────────────────────────────────
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function makeTeam(name, color, id) {
+      return { id, name, color, score: 0, streak: 0, correct: 0, wrong: 0, steals: 0 };
+    }
+
+    function loadHistory() {
+      try { return JSON.parse(localStorage.getItem('airway-rounds-history') || '[]'); }
+      catch { return []; }
+    }
+
+    function saveHistory(session) {
+      try {
+        const h = loadHistory();
+        h.unshift(session);
+        localStorage.setItem('airway-rounds-history', JSON.stringify(h.slice(0, 10)));
+      } catch {}
+    }
+
+    function buildPool(filters) {
+      return shuffle(
+        QUESTIONS.filter(q =>
+          filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty)
+        )
+      );
+    }
+
+    // ─── REDUCER ────────────────────────────────────────────────────────────
+
+    const INIT = {
+      phase: 'setup',
+      qPhase: 'idle',
+      teams: [
+        makeTeam('Team 1', 'cyan',  't0'),
+        makeTeam('Team 2', 'rose',  't1'),
+        makeTeam('Team 3', 'amber', 't2'),
+      ],
+      filters: {
+        topics: new Set(TOPICS.map(t => t.id)),
+        difficulties: new Set(['easy', 'medium', 'hard']),
+      },
+      endCondition: { type: 'count', value: 15 },
+      questionPool: [],
+      queueIdx: 0,
+      activeQ: null,
+      activeTeamId: null,
+      wrongTeamIds: [],
+      revealed: false,
+    };
+
+    function reducer(state, action) {
+      switch (action.type) {
+
+        case 'SET_TEAM_NAME':
+          return { ...state, teams: state.teams.map(t => t.id === action.id ? { ...t, name: action.name } : t) };
+
+        case 'ADD_TEAM': {
+          if (state.teams.length >= 6) return state;
+          const idx = state.teams.length;
+          return { ...state, teams: [...state.teams, makeTeam(`Team ${idx + 1}`, TEAM_COLORS[idx], `t${idx}`)] };
+        }
+
+        case 'REMOVE_TEAM':
+          if (state.teams.length <= 2) return state;
+          return { ...state, teams: state.teams.filter(t => t.id !== action.id) };
+
+        case 'TOGGLE_TOPIC': {
+          const topics = new Set(state.filters.topics);
+          topics.has(action.id) ? topics.delete(action.id) : topics.add(action.id);
+          if (topics.size === 0) return state;
+          return { ...state, filters: { ...state.filters, topics } };
+        }
+
+        case 'TOGGLE_DIFF': {
+          const difficulties = new Set(state.filters.difficulties);
+          difficulties.has(action.id) ? difficulties.delete(action.id) : difficulties.add(action.id);
+          if (difficulties.size === 0) return state;
+          return { ...state, filters: { ...state.filters, difficulties } };
+        }
+
+        case 'SET_END':
+          return { ...state, endCondition: action.endCondition };
+
+        case 'START_GAME': {
+          const pool = buildPool(state.filters);
+          if (pool.length === 0) return state;
+          const sliced = state.endCondition.type === 'count'
+            ? pool.slice(0, Math.min(state.endCondition.value, pool.length))
+            : pool;
+          return {
+            ...state,
+            phase: 'game',
+            qPhase: 'idle',
+            questionPool: sliced,
+            queueIdx: 0,
+            activeQ: sliced[0],
+            activeTeamId: null,
+            wrongTeamIds: [],
+            revealed: false,
+            teams: state.teams.map(t => ({ ...t, score: 0, streak: 0, correct: 0, wrong: 0, steals: 0 })),
+          };
+        }
+
+        case 'REVEAL':
+          return { ...state, revealed: true };
+
+        case 'BUZZ':
+          return { ...state, activeTeamId: action.teamId, qPhase: state.qPhase === 'steal' ? 'steal_buzzed' : 'buzzed' };
+
+        case 'MARK_CORRECT': {
+          const pts = DIFF[state.activeQ.difficulty].pts;
+          const newTeams = state.teams.map(t => {
+            if (t.id !== state.activeTeamId) return t;
+            const newStreak = t.streak + 1;
+            const bonus = newStreak > 0 && newStreak % 3 === 0 ? 50 : 0;
+            return { ...t, score: t.score + pts + bonus, streak: newStreak, correct: t.correct + 1 };
+          });
+          return { ...state, teams: newTeams, qPhase: 'done', revealed: true };
+        }
+
+        case 'MARK_WRONG': {
+          const penalty = DIFF[state.activeQ.difficulty].penalty;
+          const newTeams = state.teams.map(t => {
+            if (t.id !== state.activeTeamId) return t;
+            return { ...t, score: t.score + penalty, streak: 0, wrong: t.wrong + 1 };
+          });
+          const newWrongIds = [...state.wrongTeamIds, state.activeTeamId];
+          const canSteal = state.teams.some(t => !newWrongIds.includes(t.id));
+          if (!canSteal) {
+            return { ...state, teams: newTeams, wrongTeamIds: newWrongIds, qPhase: 'done', activeTeamId: null, revealed: true };
+          }
+          return { ...state, teams: newTeams, wrongTeamIds: newWrongIds, qPhase: 'steal', activeTeamId: null };
+        }
+
+        case 'MARK_STEAL_CORRECT': {
+          const stealPts = DIFF[state.activeQ.difficulty].steal;
+          const newTeams = state.teams.map(t => {
+            if (t.id !== state.activeTeamId) return t;
+            return { ...t, score: t.score + stealPts, steals: t.steals + 1 };
+          });
+          return { ...state, teams: newTeams, qPhase: 'done', revealed: true };
+        }
+
+        case 'MARK_STEAL_WRONG':
+          return { ...state, qPhase: 'done', activeTeamId: null, revealed: true };
+
+        case 'CLOSE_STEAL':
+          return { ...state, qPhase: 'done', activeTeamId: null, revealed: true };
+
+        case 'SKIP':
+          return { ...state, qPhase: 'done', revealed: true };
+
+        case 'NEXT_Q': {
+          const next = state.queueIdx + 1;
+          if (next >= state.questionPool.length) return { ...state, phase: 'results', queueIdx: next };
+          return { ...state, queueIdx: next, activeQ: state.questionPool[next], activeTeamId: null, wrongTeamIds: [], revealed: false, qPhase: 'idle' };
+        }
+
+        case 'END_NOW':
+          return { ...state, phase: 'results' };
+
+        case 'PLAY_AGAIN': {
+          const pool = buildPool(state.filters);
+          const sliced = state.endCondition.type === 'count'
+            ? pool.slice(0, Math.min(state.endCondition.value, pool.length))
+            : pool;
+          return {
+            ...state,
+            phase: 'game',
+            qPhase: 'idle',
+            questionPool: sliced,
+            queueIdx: 0,
+            activeQ: sliced[0] || null,
+            activeTeamId: null,
+            wrongTeamIds: [],
+            revealed: false,
+            teams: state.teams.map(t => ({ ...t, score: 0, streak: 0, correct: 0, wrong: 0, steals: 0 })),
+          };
+        }
+
+        case 'NEW_GAME':
+          return { ...INIT };
+
+        default:
+          return state;
+      }
+    }
+
+    // ─── SUB-COMPONENTS ─────────────────────────────────────────────────────
+
+    function Pips({ difficulty }) {
+      const cfg = DIFF[difficulty];
+      const dtc = DIFF_TC[difficulty];
+      return (
+        <div className="flex items-center gap-0.5">
+          {[0,1,2].map(i => (
+            <div key={i} className={`w-2 h-2 rounded-full ${i < cfg.pips ? dtc.pip : 'bg-slate-700'}`} />
+          ))}
+        </div>
+      );
+    }
+
+    function TeamTile({ team, active }) {
+      const color = TC[team.color];
+      const isStreaking = team.streak >= 3;
+      return (
+        <div className={`flex flex-col items-center px-3 py-1.5 rounded-lg border transition-all min-w-[64px] ${active ? `${color.border} ${color.dim} ring-2 ${color.ring}` : 'border-slate-700 bg-slate-800/50'}`}>
+          <div className={`text-[11px] font-semibold truncate max-w-[72px] ${active ? color.text : 'text-slate-400'}`}>
+            {isStreaking ? '🔥 ' : ''}{team.name}
+          </div>
+          <div className={`text-lg font-bold tabular-nums leading-tight ${active ? color.text : 'text-white'}`}>
+            {team.score}
+          </div>
+        </div>
+      );
+    }
+
+    // ─── SETUP SCREEN ───────────────────────────────────────────────────────
+
+    function SetupScreen({ state, dispatch }) {
+      const [history] = useState(loadHistory);
+      const { teams, filters, endCondition } = state;
+
+      const poolSize = useMemo(() =>
+        QUESTIONS.filter(q => filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty)).length
+      , [filters]);
+
+      const countOpts = [5,10,15,20,25,30].filter(n => n <= poolSize);
+      if (poolSize > 0 && !countOpts.includes(poolSize)) countOpts.push(poolSize);
+
+      return (
+        <div className="min-h-screen bg-slate-900 text-white">
+          <div className="max-w-xl mx-auto px-4 py-8">
+
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 bg-cyan-900/40 border border-cyan-800 rounded-full px-4 py-1 mb-4">
+                <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase">ENT · H&amp;N Nursing</span>
+              </div>
+              <h1 className="text-4xl font-bold text-white mb-1">Airway Rounds</h1>
+              <p className="text-slate-400 text-sm">Team quiz · draw &amp; buzz · steal mechanic</p>
+            </div>
+
+            {/* Teams */}
+            <section className="mb-6">
+              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Teams</h2>
+              <div className="space-y-2">
+                {teams.map((team, idx) => {
+                  const color = TC[team.color];
+                  return (
+                    <div key={team.id} className={`flex items-center gap-3 bg-slate-800 border ${color.border} rounded-xl px-3 py-2`}>
+                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${color.bg}`} />
+                      <input
+                        className="flex-1 bg-transparent text-white text-sm font-medium outline-none placeholder-slate-600"
+                        value={team.name}
+                        placeholder={`Team ${idx + 1}`}
+                        maxLength={20}
+                        onChange={e => dispatch({ type: 'SET_TEAM_NAME', id: team.id, name: e.target.value })}
+                      />
+                      {teams.length > 2 && (
+                        <button onClick={() => dispatch({ type: 'REMOVE_TEAM', id: team.id })}
+                          className="text-slate-600 hover:text-rose-400 transition-colors text-sm leading-none">✕</button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {teams.length < 6 && (
+                <button onClick={() => dispatch({ type: 'ADD_TEAM' })}
+                  className="mt-2 w-full py-2 rounded-xl border border-dashed border-slate-700 text-slate-600 hover:text-slate-300 hover:border-slate-500 text-sm transition-colors">
+                  + Add team
+                </button>
+              )}
+            </section>
+
+            {/* Topics */}
+            <section className="mb-6">
+              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Topics</h2>
+              <div className="flex flex-wrap gap-2">
+                {TOPICS.map(t => {
+                  const on = filters.topics.has(t.id);
+                  return (
+                    <button key={t.id}
+                      onClick={() => dispatch({ type: 'TOGGLE_TOPIC', id: t.id })}
+                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${on ? TOPIC_TC[t.id] : 'border-slate-700 text-slate-600 bg-transparent'}`}>
+                      {t.short}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Difficulty */}
+            <section className="mb-6">
+              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Difficulty</h2>
+              <div className="grid grid-cols-3 gap-2">
+                {Object.entries(DIFF).map(([key, cfg]) => {
+                  const on = filters.difficulties.has(key);
+                  const dtc = DIFF_TC[key];
+                  return (
+                    <button key={key}
+                      onClick={() => dispatch({ type: 'TOGGLE_DIFF', id: key })}
+                      className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-semibold transition-all ${on ? dtc.badge : 'border-slate-700 text-slate-600'}`}>
+                      <Pips difficulty={key} />
+                      <span>{cfg.label}</span>
+                      <span className="opacity-60 font-normal">{cfg.pts} pts</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* End condition */}
+            <section className="mb-7">
+              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Game Ends When…</h2>
+              <div className="flex gap-2 mb-2">
+                {['all','count','score'].map(type => {
+                  const labels = { all: `All ${poolSize} Qs`, count: 'Play N Qs', score: 'First to X pts' };
+                  const on = endCondition.type === type;
+                  return (
+                    <button key={type}
+                      onClick={() => dispatch({ type:'SET_END', endCondition:{ type, value: type==='count'?15:type==='score'?300:0 } })}
+                      className={`flex-1 py-2 rounded-xl text-xs font-semibold border transition-all ${on ? 'bg-cyan-900/50 border-cyan-600 text-cyan-300' : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300'}`}>
+                      {labels[type]}
+                    </button>
+                  );
+                })}
+              </div>
+              {endCondition.type === 'count' && (
+                <select
+                  value={endCondition.value}
+                  onChange={e => dispatch({ type:'SET_END', endCondition:{ type:'count', value:+e.target.value } })}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none">
+                  {countOpts.map(n => <option key={n} value={n}>{n} questions</option>)}
+                </select>
+              )}
+              {endCondition.type === 'score' && (
+                <select
+                  value={endCondition.value}
+                  onChange={e => dispatch({ type:'SET_END', endCondition:{ type:'score', value:+e.target.value } })}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none">
+                  {[200,300,400,500,750,1000].map(n => <option key={n} value={n}>First to {n} points</option>)}
+                </select>
+              )}
+              <p className="text-slate-600 text-xs mt-1.5 text-right">{poolSize} questions match filters</p>
+            </section>
+
+            {/* How to play */}
+            <div className="mb-6 bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 text-xs text-slate-400 space-y-1">
+              <p className="text-slate-300 font-semibold mb-1">How to play</p>
+              <p>Host reads the question aloud. A team buzzes in — host taps their button, then marks Correct or Wrong.</p>
+              <p>Wrong answer? A <span className="text-amber-400 font-semibold">steal window</span> opens for other teams at half points. No penalty on a wrong steal attempt.</p>
+              <p>3 correct in a row earns a <span className="text-yellow-400">🔥 +50 streak bonus</span>.</p>
+            </div>
+
+            {/* Recent sessions */}
+            {history.length > 0 && (
+              <section className="mb-6">
+                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Recent Sessions</h2>
+                <div className="space-y-1.5">
+                  {history.slice(0,4).map((s,i) => (
+                    <div key={i} className="flex items-center justify-between bg-slate-800/50 rounded-lg px-3 py-2 text-xs gap-3">
+                      <span className="text-slate-600 flex-shrink-0">{s.date}</span>
+                      <span className="text-white font-medium flex-shrink-0">🏆 {s.winner}</span>
+                      <span className="text-slate-500 truncate">{s.teams.map(t => `${t.name} ${t.score}`).join(' · ')}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            <button
+              onClick={() => dispatch({ type: 'START_GAME' })}
+              disabled={poolSize === 0}
+              className="w-full py-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-slate-900 font-bold text-lg transition-all">
+              {poolSize === 0 ? 'No questions match filters' : 'Start Game →'}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ─── GAME SCREEN ────────────────────────────────────────────────────────
+
+    function GameScreen({ state, dispatch }) {
+      const { teams, activeQ, qPhase, activeTeamId, wrongTeamIds, revealed, questionPool, queueIdx, endCondition } = state;
+
+      if (!activeQ) return null;
+
+      const topic = TOPICS.find(t => t.id === activeQ.topic);
+      const diff = DIFF[activeQ.difficulty];
+      const dtc  = DIFF_TC[activeQ.difficulty];
+      const ttc  = TOPIC_TC[activeQ.topic];
+
+      const buzzedTeam     = activeTeamId ? teams.find(t => t.id === activeTeamId) : null;
+      const availForSteal  = teams.filter(t => !wrongTeamIds.includes(t.id));
+      const scoreHit       = endCondition.type === 'score' && teams.some(t => t.score >= endCondition.value);
+      const isLast         = queueIdx + 1 >= questionPool.length;
+      const shouldEnd      = isLast || scoreHit;
+
+      const streakAtBonus  = buzzedTeam && buzzedTeam.streak > 0 && (buzzedTeam.streak + 1) % 3 === 0;
+
+      return (
+        <div className="min-h-screen bg-slate-900 text-white flex flex-col">
+
+          {/* Sticky scoreboard */}
+          <div className="sticky top-[34px] z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-2">
+            <div className="flex items-center gap-2 max-w-3xl mx-auto">
+              <div className="flex gap-2 flex-wrap flex-1 min-w-0">
+                {teams.map(t => <TeamTile key={t.id} team={t} active={t.id === activeTeamId} />)}
+              </div>
+              <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                <span className="text-slate-500 text-xs">Q {queueIdx + 1} / {questionPool.length}</span>
+                {endCondition.type === 'score' && (
+                  <span className="text-slate-600 text-[10px]">Target {endCondition.value}</span>
+                )}
+                <button onClick={() => dispatch({ type: 'END_NOW' })}
+                  className="text-[10px] text-slate-700 hover:text-slate-500 transition-colors mt-0.5">
+                  End game
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Question card + action panel */}
+          <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full px-4 py-5 gap-4">
+
+            {/* Card */}
+            <div className="flex-1 flex flex-col bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+
+              {/* Card header */}
+              <div className="flex items-center justify-between flex-wrap gap-2 px-5 py-3 border-b border-slate-700/80 bg-slate-800/80">
+                <div className="flex items-center gap-2">
+                  <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${ttc}`}>{topic?.short}</span>
+                  <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold ${dtc.badge}`}>
+                    <Pips difficulty={activeQ.difficulty} />
+                    <span>{diff.label}</span>
+                    <span className="opacity-60">· {diff.pts} pts</span>
+                  </div>
+                </div>
+                {qPhase === 'steal' && !activeTeamId && (
+                  <span className="text-xs font-bold text-amber-400 animate-pulse">⚡ Steal · {diff.steal} pts</span>
+                )}
+              </div>
+
+              {/* Question + answer */}
+              <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 text-center gap-5">
+                <p className="text-white text-xl md:text-2xl font-medium leading-relaxed">{activeQ.q}</p>
+
+                {!revealed ? (
+                  <button onClick={() => dispatch({ type: 'REVEAL' })}
+                    className="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-xl text-sm font-medium border border-slate-600 transition-all">
+                    Reveal Answer ↓
+                  </button>
+                ) : (
+                  <div className="w-full text-left space-y-3">
+                    <div className="bg-slate-900/60 rounded-xl px-5 py-4 border border-slate-700">
+                      <p className="text-slate-100 text-sm leading-relaxed">{activeQ.a}</p>
+                    </div>
+                    <div className="bg-cyan-950/50 rounded-xl px-5 py-3 border border-cyan-900/70 flex gap-3">
+                      <span className="text-cyan-500 text-xs font-bold uppercase tracking-widest flex-shrink-0 pt-0.5">Pearl</span>
+                      <p className="text-cyan-200 text-sm italic">{activeQ.pearl}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Action panel */}
+            <div className="space-y-2.5">
+
+              {/* Idle: any team buzzes */}
+              {qPhase === 'idle' && (
+                <>
+                  <p className="text-center text-slate-600 text-xs">Who buzzed in?</p>
+                  <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(teams.length, 3)}, 1fr)` }}>
+                    {teams.map(t => {
+                      const c = TC[t.color];
+                      return (
+                        <button key={t.id} onClick={() => dispatch({ type: 'BUZZ', teamId: t.id })}
+                          className={`py-3.5 rounded-xl font-bold text-sm ${c.bg} text-slate-900 hover:opacity-90 active:scale-95 transition-all`}>
+                          {t.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button onClick={() => dispatch({ type: 'SKIP' })}
+                    className="w-full py-2.5 rounded-xl border border-slate-700 text-slate-600 hover:text-slate-300 hover:border-slate-500 text-sm transition-all">
+                    Skip — no one answered
+                  </button>
+                </>
+              )}
+
+              {/* Buzzed: mark correct or wrong */}
+              {qPhase === 'buzzed' && buzzedTeam && (
+                <>
+                  <p className="text-center text-sm">
+                    <span className={`font-bold ${TC[buzzedTeam.color].text}`}>{buzzedTeam.name}</span>
+                    <span className="text-slate-400"> answered — correct?</span>
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button onClick={() => dispatch({ type: 'MARK_CORRECT' })}
+                      className="py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg transition-all">
+                      ✓ Correct
+                      <div className="text-xs font-normal opacity-75 mt-0.5">
+                        +{diff.pts} pts{streakAtBonus ? ' · +50 🔥' : ''}
+                      </div>
+                    </button>
+                    <button onClick={() => dispatch({ type: 'MARK_WRONG' })}
+                      className="py-4 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-bold text-lg transition-all">
+                      ✗ Wrong
+                      {diff.penalty < 0 && <div className="text-xs font-normal opacity-75 mt-0.5">{diff.penalty} pts</div>}
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Steal: pick a team */}
+              {qPhase === 'steal' && !activeTeamId && (
+                <>
+                  <p className="text-center text-amber-400 text-sm font-bold">⚡ Steal for {diff.steal} pts — who goes?</p>
+                  <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(availForSteal.length, 3)}, 1fr)` }}>
+                    {availForSteal.map(t => {
+                      const c = TC[t.color];
+                      return (
+                        <button key={t.id} onClick={() => dispatch({ type: 'BUZZ', teamId: t.id })}
+                          className={`py-3 rounded-xl font-bold text-sm border-2 ${c.border} ${c.dim} ${c.text} hover:opacity-90 active:scale-95 transition-all`}>
+                          {t.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button onClick={() => dispatch({ type: 'CLOSE_STEAL' })}
+                    className="w-full py-2.5 rounded-xl border border-slate-700 text-slate-600 hover:text-slate-300 hover:border-slate-500 text-sm transition-all">
+                    No steal
+                  </button>
+                </>
+              )}
+
+              {/* Steal buzzed: mark correct or wrong (no penalty on wrong) */}
+              {qPhase === 'steal_buzzed' && buzzedTeam && (
+                <>
+                  <p className="text-center text-sm">
+                    <span className={`font-bold ${TC[buzzedTeam.color].text}`}>{buzzedTeam.name}</span>
+                    <span className="text-slate-400"> steals — correct?</span>
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button onClick={() => dispatch({ type: 'MARK_STEAL_CORRECT' })}
+                      className="py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg transition-all">
+                      ✓ Correct
+                      <div className="text-xs font-normal opacity-75 mt-0.5">+{diff.steal} pts</div>
+                    </button>
+                    <button onClick={() => dispatch({ type: 'MARK_STEAL_WRONG' })}
+                      className="py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-lg transition-all">
+                      ✗ Wrong
+                      <div className="text-xs font-normal opacity-75 mt-0.5">no penalty</div>
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Done: advance */}
+              {qPhase === 'done' && (
+                <button
+                  onClick={() => shouldEnd ? dispatch({ type: 'END_NOW' }) : dispatch({ type: 'NEXT_Q' })}
+                  className="w-full py-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-lg transition-all">
+                  {shouldEnd ? 'See Results →' : 'Next Question →'}
+                </button>
+              )}
+
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ─── RESULTS SCREEN ─────────────────────────────────────────────────────
+
+    function ResultsScreen({ state, dispatch }) {
+      const { teams, queueIdx } = state;
+      const sorted = [...teams].sort((a, b) => b.score - a.score);
+      const isTie  = sorted.length > 1 && sorted[0].score === sorted[1].score;
+      const winner = sorted[0];
+
+      useEffect(() => {
+        saveHistory({
+          date: new Date().toLocaleDateString(),
+          winner: isTie ? 'Tie' : winner.name,
+          teams: sorted.map(t => ({ name: t.name, score: t.score })),
+        });
+      }, []);
+
+      const medals = ['🥇','🥈','🥉'];
+      const topStreaker = [...teams].sort((a,b) => b.streak - a.streak)[0];
+
+      return (
+        <div className="min-h-screen bg-slate-900 text-white">
+          <div className="max-w-lg mx-auto px-4 py-10">
+
+            <div className="text-center mb-8">
+              <div className="text-5xl mb-3">{isTie ? '🤝' : '🏆'}</div>
+              <h1 className="text-3xl font-bold text-white mb-1">
+                {isTie ? "It's a Tie!" : `${winner.name} Wins!`}
+              </h1>
+              <p className="text-slate-500 text-sm">{queueIdx} question{queueIdx !== 1 ? 's' : ''} played · {new Date().toLocaleDateString()}</p>
+            </div>
+
+            {/* Leaderboard */}
+            <div className="space-y-2 mb-6">
+              {sorted.map((team, idx) => {
+                const color   = TC[team.color];
+                const isFirst = idx === 0 && !isTie;
+                return (
+                  <div key={team.id} className={`flex items-center gap-3 rounded-2xl p-4 border transition-all ${isFirst ? `${color.border} ${color.dim}` : 'border-slate-700 bg-slate-800/40'}`}>
+                    <span className="text-2xl w-8 text-center flex-shrink-0">{medals[idx] || (idx + 1)}</span>
+                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${color.bg}`} />
+                    <span className={`flex-1 font-bold ${isFirst ? color.text : 'text-white'}`}>{team.name}</span>
+                    <div className="text-right">
+                      <div className={`text-2xl font-bold tabular-nums ${isFirst ? color.text : 'text-white'}`}>{team.score}</div>
+                      <div className="text-[10px] text-slate-500 space-x-1">
+                        <span>{team.correct}✓</span>
+                        {team.wrong > 0 && <span>{team.wrong}✗</span>}
+                        {team.steals > 0 && <span>{team.steals}⚡</span>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {topStreaker && topStreaker.streak >= 3 && (
+              <div className="mb-6 bg-amber-950/40 border border-amber-800/60 rounded-xl px-4 py-3 text-sm text-amber-300 text-center">
+                🔥 {topStreaker.name} ended on a {topStreaker.streak}-question streak!
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-3">
+              <button onClick={() => dispatch({ type: 'PLAY_AGAIN' })}
+                className="py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
+                Play Again
+              </button>
+              <button onClick={() => dispatch({ type: 'NEW_GAME' })}
+                className="py-3.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold transition-all">
+                New Game
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ─── APP ROOT ────────────────────────────────────────────────────────────
+
+    function App() {
+      const [state, dispatch] = useReducer(reducer, INIT);
+      if (state.phase === 'setup')  return <SetupScreen  state={state} dispatch={dispatch} />;
+      if (state.phase === 'game')   return <GameScreen   state={state} dispatch={dispatch} />;
+      if (state.phase === 'results') return <ResultsScreen state={state} dispatch={dispatch} />;
+      return null;
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
