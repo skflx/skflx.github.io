@@ -1,6 +1,6 @@
 /* =============================================================
    skflx.MD — one-pager behavior
-   - Style switch (matte / terminal / personality) + persistence
+   - Style switch (matte / personality) + persistence
    - Day/night theme toggle + persistence
    - Deep-link: open the matching <details> when the URL has a hash
    Accordion open/close itself is native <details> — no JS needed.
@@ -8,7 +8,7 @@
    ============================================================= */
 (function () {
     var root = document.documentElement;
-    var STYLES = ['matte', 'terminal', 'personality'];
+    var STYLES = ['matte', 'personality'];
 
     function setStyle(style) {
         if (STYLES.indexOf(style) === -1) style = 'matte';
