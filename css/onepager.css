@@ -275,6 +275,18 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
    in matte/terminal it falls back to the body/mono font (still legible). */
 [data-style="matte"] .note, [data-style="terminal"] .note { font-style: italic; }
 
+/* --- PUBLICATION LIST --- */
+.pub-list { list-style: decimal inside; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.pub-list li {
+    padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg-2); font-size: 0.84rem; line-height: 1.6; color: var(--text);
+}
+.pub-list li a { color: inherit; text-decoration: none; display: block; }
+.pub-list li:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.pub-list li a:hover { color: var(--accent); }
+.pub-list li em { font-style: italic; }
+.pub-list li strong { font-weight: 700; }
+
 /* =============================================================
    RESPONSIVE
    ============================================================= */
