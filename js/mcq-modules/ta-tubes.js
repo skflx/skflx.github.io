@@ -9,7 +9,7 @@ const meta = {
   title: 'Tubes, Tonsils\n& Neck',
   subtitle:
     'Fifty-four MCQs across myringotomy and tubes, adeno-/tonsillectomy (extra- and intracapsular), Level II neck node excision, and the operative complications and case integrations that tie them together. Answers reveal the operative rationale; concept tags link related decisions across procedures.',
-  kicker: 'OCC · Pediatric OR Primer',
+  kicker: 'MCQ · Pediatric OR Primer',
 };
 
 const DOMAINS = {
@@ -894,4 +894,4 @@ const ITEMS = [
   },
 ];
 
-window.OCC_tatubes = { meta, DOMAINS, CONCEPTS, ITEMS };
+window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };

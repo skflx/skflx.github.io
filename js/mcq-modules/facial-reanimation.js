@@ -9,7 +9,7 @@ const meta = {
   title: 'Facial\nReanimation',
   subtitle:
     'Forty-two MCQs spanning facial nerve anatomy and segments, physiology of aberrant regeneration, patient evaluation and grading scales, diagnostic workup, surgical and nonsurgical treatment, corneal protection, and three conference cases — Bell\'s palsy impostor, post-acoustic neuroma palsy, and Ramsay Hunt sequelae.',
-  kicker: 'OCC · Facial Plastics & Recon Module',
+  kicker: 'MCQ · Facial Plastics & Recon Module',
 };
 
 const DOMAINS = {
@@ -763,4 +763,4 @@ const ITEMS = [
 
 ];
 
-window.OCC_facialReanimation = { meta, DOMAINS, CONCEPTS, ITEMS };
+window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
