@@ -9,20 +9,19 @@ Single-page personal site for an otolaryngology resident in the Pacific Northwes
 ## Overview
 
 The site is one scrollable page (`index.html`) with four click-to-expand
-sections (collapsed by default, clear at a glance):
+sections (About opens by default; the rest are collapsed, clear at a glance):
 
-1. **A budding surgeon-scientist in the PNW** — bio, education, languages, location
+1. **Surgeon-scientist in training in the PNW** — bio, education, languages, location
 2. **My clinical tools and projects** — tools, technology projects, clinical experience
-3. **Machine & cognitive frameworks in surgical learning** — research areas (PubMed)
+3. **Research — hearing science & how surgeons learn** — research areas (PubMed)
 4. **Outside of medicine** — art, music, outdoors, fitness
 
 ### Visitor-selectable visual styles
 
-A switcher in the header lets the visitor choose between three styles, each
+A switcher in the header lets the visitor choose between two styles, each
 with its own typography, color, and decorative treatment:
 
 - **Matte** — warm matte red / gold / brown (day) and a warm dark (night); DM Sans + Inter
-- **Terminal** — monospace, grid lines, shell-prompt section headers; dark-first
 - **Story** — warm paper + ink, Fraunces serif with handwritten Caveat accents
 
 Layered on top is a **day / night** toggle. Both the chosen style and theme are
@@ -41,7 +40,7 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 - **HTML5** — semantic markup; native `<details>` for the accordion (no JS needed to open/close)
 - **CSS3** — custom properties, Grid, Flexbox
 - **JavaScript** — vanilla, no frameworks (`js/onepager.js`: style switch, theme toggle, hash deep-linking)
-- **Fonts** — Google Fonts (DM Sans, Inter, JetBrains Mono, Fraunces, Caveat)
+- **Fonts** — Google Fonts (DM Sans, Inter, Fraunces, Caveat)
 - **Icons** — Font Awesome 6
 
 ## File Structure
@@ -49,23 +48,21 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 ```
 ├── index.html              # The one-pager
 ├── css/
-│   ├── onepager.css        # Styles for the one-pager (3 styles × 2 themes)
+│   ├── onepager.css        # Styles for the one-pager (2 styles × 2 themes)
 │   └── main.css            # Legacy stylesheet (still used by the tool pages)
 ├── js/
 │   ├── onepager.js         # Style switch, theme toggle, deep-linking
 │   ├── main.js             # Legacy script (still used by the tool pages)
-│   └── cpt_search.jsx      # CPT search tool logic
+│   ├── cpt_search.jsx      # CPT search tool logic
+│   └── occ-modules/        # MCQ question banks
 ├── kag.html                # Tool: Knowledge Atlas Graph
 ├── kag-extract.html        # Tool: KAG extractor
 ├── cpt-search.html         # Tool: CPT code search
 ├── ascii-editor.html       # Tool: ASCII/Unicode diagram editor
-├── images/                 # me_large.jpg + placeholders
-├── documents/              # cv.pdf (placeholder)
-├── scripts/                # update_from_cv.py (deprecated)
-└── archive/                # Old multi-page site + design mockups (kept for reference)
-    ├── index-legacy.html, projects.html, contact.html
-    ├── MAINTENANCE.md, TODO.md
-    └── mockups/            # Exploratory mockups + style variants
+├── airway-jeopardy.html    # Tool: Airway Rounds team quiz
+├── occ*.html               # Tool: MCQ study guide hub + modules
+├── images/                 # Profile photo + derived hero/social crops (see images/list.txt)
+└── documents/              # cv.pdf (upload pending)
 ```
 
 ## Local Development
