@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Study | skflx.MD</title>
+  <meta name="description" content="Interactive multiple-choice study modules for otolaryngology — with concept filtering, spaced-repetition review, and progress tracking.">
+
+  <!-- Set theme before paint to avoid a flash (shares keys with the main site) -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('sk_theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Crimson+Pro:ital,wght@0,300..700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/mcq.css">
+</head>
+<body>
+  <nav class="mcq-topbar">
+    <a class="mcq-back" href="mcq.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      MCQ Study Guides
+    </a>
+    <button type="button" class="mcq-theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+    </button>
+  </nav>
+
+  <div id="root" style="padding-top:42px"></div>
+
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', cur);
+      try { localStorage.setItem('sk_theme', cur); } catch (e) {}
+    });
+  </script>
+
+  <!-- React + htm (no in-browser Babel) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/htm@3/dist/htm.umd.js" crossorigin></script>
+
+  <script src="js/mcq-manifest.js"></script>
+  <script src="js/mcq-engine.js"></script>
+
+  <script>
+    (function () {
+      var root = document.getElementById('root');
+      function notice(title, body) {
+        root.innerHTML = '<div class="mcq-notice"><h1>' + title + '</h1><p>' + body +
+          '</p><a href="mcq.html">&larr; Back to study guides</a></div>';
+      }
+      var slug = new URLSearchParams(location.search).get('m');
+      var manifest = window.MCQ_MANIFEST || [];
+      var entry = manifest.filter(function (m) { return m.slug === slug; })[0];
+      if (!entry) { notice('Module not found', 'No study module matches “' + (slug || '') + '”.'); return; }
+
+      document.title = entry.title + ' · MCQ Study | skflx.MD';
+      var s = document.createElement('script');
+      s.src = entry.data;
+      s.onload = function () {
+        var mod = window.__MCQ_MODULE;
+        try { delete window.__MCQ_MODULE; } catch (e) { window.__MCQ_MODULE = undefined; }
+        if (!mod) { notice('Module failed to load', 'The data for “' + entry.title + '” did not register correctly.'); return; }
+        window.mountMCQ(root, mod, entry);
+      };
+      s.onerror = function () { notice('Module failed to load', 'Could not fetch the data file for “' + entry.title + '”.'); };
+      document.body.appendChild(s);
+    })();
+  </script>
+</body>
+</html>

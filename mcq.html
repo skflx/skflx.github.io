@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCQ Study Guides | skflx.MD</title>
+  <meta name="description" content="Multiple-choice study modules for otolaryngology — pediatric hearing loss, the pediatric OR primer, vestibular schwannoma, and facial reanimation.">
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('sk_theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/mcq.css">
+</head>
+<body>
+  <nav class="mcq-topbar">
+    <a class="mcq-back" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      skflx.MD
+    </a>
+    <button type="button" class="mcq-theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
+      <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+    </button>
+  </nav>
+
+  <div class="mcq-root">
+    <div class="mcq-wrap" style="padding-top:4rem">
+      <div class="hub-kicker"><hr><span>MCQ · Otolaryngology</span><hr></div>
+      <h1 class="hub-title">MCQ<br><em>Study Guides</em></h1>
+      <p class="hub-subtitle">Multiple-choice sets for operative and clinical knowledge review. Each module is self-contained — work through it linearly, jump to a concept, run random mode, or review what’s due.</p>
+      <div class="hub-modules" id="modules"></div>
+      <div class="hub-dots">·  ·  ·</div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', cur);
+      try { localStorage.setItem('sk_theme', cur); } catch (e) {}
+    });
+  </script>
+  <script src="js/mcq-manifest.js"></script>
+  <script>
+    (function () {
+      var today = new Date().toISOString().split('T')[0];
+      function dueCount(slug) {
+        try {
+          var srs = JSON.parse(localStorage.getItem('mcq:srs:' + slug) || '{}');
+          var items = (srs && srs.items) || {};
+          return Object.keys(items).filter(function (id) {
+            var nr = items[id] && items[id].nextReview; return nr && nr <= today;
+          }).length;
+        } catch (e) { return 0; }
+      }
+      var wrap = document.getElementById('modules');
+      (window.MCQ_MANIFEST || []).forEach(function (m) {
+        var due = dueCount(m.slug);
+        var a = document.createElement('a');
+        a.className = 'module-card';
+        a.href = 'mcq-study.html?m=' + encodeURIComponent(m.slug);
+        a.innerHTML =
+          '<div class="module-accent" style="background:' + m.accent + '"></div>' +
+          '<div class="module-body">' +
+            '<div class="module-label">' + m.kicker + ' · ' + m.count + ' questions</div>' +
+            '<div class="module-title">' + m.title + '</div>' +
+            '<p class="module-desc">' + m.desc + '</p>' +
+            (due > 0 ? '<div class="module-due">' + due + ' due for review</div>' : '') +
+          '</div>' +
+          '<div class="module-arrow">Launch &rarr;</div>';
+        wrap.appendChild(a);
+      });
+    })();
+  </script>
+</body>
+</html>

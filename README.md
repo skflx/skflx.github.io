@@ -54,13 +54,17 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 │   ├── onepager.js         # Style switch, theme toggle, deep-linking
 │   ├── main.js             # Legacy script (still used by the tool pages)
 │   ├── cpt_search.jsx      # CPT search tool logic
-│   └── occ-modules/        # MCQ question banks
+│   ├── mcq-engine.js       # Shared MCQ study engine (React + htm, no build step)
+│   ├── mcq-manifest.js     # MCQ module registry (drives hub + viewer)
+│   └── mcq-modules/        # MCQ question banks (one file per module)
 ├── kag.html                # Tool: Knowledge Atlas Graph
 ├── kag-extract.html        # Tool: KAG extractor
 ├── cpt-search.html         # Tool: CPT code search
 ├── ascii-editor.html       # Tool: ASCII/Unicode diagram editor
 ├── airway-jeopardy.html    # Tool: Airway Rounds team quiz
-├── occ*.html               # Tool: MCQ study guide hub + modules
+├── mcq.html                # Tool: MCQ study-guide hub (manifest-driven)
+├── mcq-study.html          # Tool: MCQ viewer (?m=<slug>); occ*.html redirect here
+├── docs/authoring-mcq.md   # How to add / author an MCQ module
 ├── images/                 # Profile photo + derived hero/social crops (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
 ```
