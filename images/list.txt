@@ -2,17 +2,14 @@ Image Assets
 ============
 
 me_large.jpg
-  - Hero profile image
-  - Used on index.html (hero section)
-  - Colors are extracted from this image to create the site's dynamic color palette
-  - Replacing this image will automatically change the site's color scheme
+  - Original full-resolution profile photo (5982x3067)
+  - Not loaded by any page; source for the derived crops below
 
-art-placeholder.svg
-  - Placeholder for artwork gallery
-  - Used in projects.html (Art tab)
-  - Replace with actual artwork images
+me_card.jpg / me_card.webp
+  - Hero profile image (504x600 portrait crop of me_large.jpg)
+  - Used on index.html (hero section) via <picture>
+  - Regenerate from me_large.jpg if the photo changes
 
-music-placeholder.svg
-  - Placeholder for music section photos
-  - Used in projects.html (Music tab)
-  - Replace with actual music/performance photos
+og-card.jpg
+  - Social-sharing card (1200x630 landscape crop of me_large.jpg)
+  - Referenced by the og:image / twitter:image meta tags in index.html

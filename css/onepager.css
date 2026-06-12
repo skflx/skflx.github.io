@@ -1,10 +1,10 @@
 /* =============================================================
    skflx.MD — one-pager stylesheet
-   Modular by design. Three visitor-selectable visual STYLES
-   (matte / terminal / personality) layered over a day/night THEME.
+   Modular by design. Two visitor-selectable visual STYLES
+   (matte / personality) layered over a day/night THEME.
 
    Switching is driven by two attributes on <html>:
-       data-style = matte | terminal | personality
+       data-style = matte | personality
        data-theme = light | dark
 
    Each style declares its own design tokens (color + type) for
@@ -41,6 +41,8 @@ img { max-width: 100%; display: block; }
    SHARED LAYOUT  (tokens only — never hard-coded colors)
    ============================================================= */
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
 body {
     font-family: var(--font-body);
     color: var(--text);
@@ -98,11 +100,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
 
 /* --- HERO --- */
-.hero { display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: center; padding: 56px 0 40px; }
+.hero { display: grid; grid-template-columns: 1fr auto; gap: 36px; align-items: center; padding: 56px 0 40px; position: relative; }
+.hero::before {
+    content: ""; position: absolute; inset: -76px -20% 0;
+    background: radial-gradient(ellipse 70% 90% at 75% 0%,
+        color-mix(in srgb, var(--accent) 7%, transparent), transparent 70%);
+    pointer-events: none; z-index: -1;
+}
+.hero picture { display: contents; }
 .hero .role { color: var(--accent); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.04em; margin-bottom: 10px; }
 .hero h1 { font-family: var(--font-display); font-size: clamp(2.1rem, 5vw, 3rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 14px; }
 .hero h1 .accent { color: var(--accent); }
-.hero .tagline { color: var(--text-muted); font-size: 1.02rem; max-width: 48ch; margin-bottom: 20px; }
+.hero .tagline { color: var(--text-muted); font-size: 1.06rem; max-width: 48ch; margin-bottom: 22px; }
 .hero-links { display: flex; flex-wrap: wrap; gap: 10px; }
 .hero-links a {
     display: inline-flex; align-items: center; gap: 7px; text-decoration: none;
@@ -122,7 +131,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .section > summary {
     list-style: none; cursor: pointer; padding: 22px 24px;
     display: flex; align-items: center; gap: 16px;
+    transition: background-color 0.2s;
 }
+.section > summary:hover { background: color-mix(in srgb, var(--accent) 4%, transparent); }
 .section > summary::-webkit-details-marker { display: none; }
 .sec-title { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.05rem, 2.4vw, 1.3rem); line-height: 1.35; flex: 1; color: var(--text); }
 .chev { flex: none; color: var(--accent); transition: transform 0.25s ease; font-size: 0.9rem; }
@@ -140,6 +151,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .fact .k { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 4px; }
 .fact .v { font-family: var(--font-display); font-weight: 600; font-size: 0.92rem; }
 .fact .v small { display: block; font-family: var(--font-body); font-weight: 400; font-size: 0.8rem; color: var(--text-muted); }
+.fact .v.v-plain { font-family: var(--font-body); font-weight: 400; font-size: 0.84rem; }
 
 .group { margin-top: 20px; }
 .group:first-child { margin-top: 8px; }
@@ -157,13 +169,16 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
 .item-main h4 { font-size: 0.92rem; font-weight: 600; }
 .item-main p { font-size: 0.82rem; color: var(--text-muted); margin: 0; }
 .item-meta { font-size: 0.76rem; font-weight: 600; color: var(--accent-2); white-space: nowrap; }
+.item-award { margin-top: 3px; font-size: 0.78rem; color: var(--accent); }
 .lead { color: var(--text); font-size: 0.98rem; margin-bottom: 14px; max-width: 62ch; }
 .more-link { display: inline-block; margin-top: 14px; font-size: 0.85rem; font-weight: 500; color: var(--accent); text-decoration: none; }
 .more-link:hover { text-decoration: underline; }
 .note { font-family: var(--font-accent); color: var(--accent-2); font-size: 1rem; }
 
 /* --- FOOTER --- */
-.footer { border-top: 1px solid var(--border); padding: 24px; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+.footer { border-top: 1px solid var(--border); padding: 28px 24px 32px; text-align: center; font-size: 0.8rem; color: var(--text-muted); }
+.footer a { color: var(--text-muted); text-decoration-color: color-mix(in srgb, var(--text-muted) 40%, transparent); }
+.footer a:hover { color: var(--accent); }
 
 /* =============================================================
    STYLE 1 — MATTE   (day = matte red / gold / brown; night = warm dark)
@@ -193,28 +208,7 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
 [data-style="matte"] .section { box-shadow: var(--shadow); }
 
 /* =============================================================
-   STYLE 2 — TERMINAL   (monospace, grid lines, green; dark-first)
-   ============================================================= */
-[data-style="terminal"] {
-    --font-display: 'JetBrains Mono', ui-monospace, monospace;
-    --font-body: 'JetBrains Mono', ui-monospace, monospace;
-    --font-accent: 'JetBrains Mono', ui-monospace, monospace;
-    --radius: 8px; --radius-sm: 6px;
-    --bg: #fbfdff; --bg-2: #f3f6fa; --card: #ffffff;
-    --text: #1f2328; --text-muted: #57606a;
-    --accent: #1a7f37; --accent-2: #0969da; --accent-soft: #e6f3ea;
-    --border: #d0d7de; --shadow: none;
-    --grid: rgba(0, 0, 0, 0.03);
-}
-[data-style="terminal"][data-theme="dark"] {
-    --bg: #0d1117; --bg-2: #161b22; --card: #161b22;
-    --text: #c9d1d9; --text-muted: #8b949e;
-    --accent: #3fb950; --accent-2: #58a6ff; --accent-soft: #11271a;
-    --border: #30363d; --grid: rgba(255, 255, 255, 0.025);
-}
-
-/* =============================================================
-   STYLE 3 — PERSONALITY   (warm paper + ink; serif + handwriting)
+   STYLE 2 — PERSONALITY   (warm paper + ink; serif + handwriting)
    ============================================================= */
 [data-style="personality"] {
     --font-display: 'Fraunces', Georgia, serif;
@@ -239,24 +233,6 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
    DECORATIONS (per-style flourishes; structure stays identical)
    ============================================================= */
 
-/* Terminal: faint grid + shell-prompt section titles + mono markers */
-[data-style="terminal"] body {
-    background-image:
-        linear-gradient(var(--grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 28px 28px;
-}
-[data-style="terminal"] .section { box-shadow: none; }
-[data-style="terminal"] .sec-title::before {
-    content: "$ "; color: var(--accent); font-weight: 700;
-}
-[data-style="terminal"] .chev::before { content: "[+]"; }
-[data-style="terminal"] .section[open] .chev::before { content: "[-]"; }
-[data-style="terminal"] .chev { transform: none !important; font-size: 0.8rem; }
-[data-style="terminal"] .chev .fa-chevron-down { display: none; }
-[data-style="terminal"] .item-ic { background: none; border: 1px solid var(--border); border-radius: 4px; }
-[data-style="terminal"] .hero-photo { border-radius: 6px; border: 1px solid var(--border); }
-
 /* Personality: paper grain + handwritten micro-labels + serif emphasis */
 [data-style="personality"] body::before {
     content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -272,8 +248,8 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
 [data-style="personality"] .item-ic { border-radius: 12px; }
 
 /* The handwritten .note element only reads as handwriting in personality;
-   in matte/terminal it falls back to the body/mono font (still legible). */
-[data-style="matte"] .note, [data-style="terminal"] .note { font-style: italic; }
+   in matte it falls back to the body font (still legible). */
+[data-style="matte"] .note { font-style: italic; }
 
 /* =============================================================
    RESPONSIVE
