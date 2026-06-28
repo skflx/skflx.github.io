@@ -42,4 +42,13 @@ window.MCQ_MANIFEST = [
     desc: 'Facial nerve anatomy, aberrant regeneration and synkinesis, evaluation scales, Bell’s palsy workup, electrodiagnostics, nerve repair, transfers, free-muscle reconstruction, and conference cases.',
     data: 'js/mcq-modules/facial-reanimation.js',
   },
+  {
+    slug: 'dtc-risk-stratification',
+    title: 'Thyroid Cancer Risk Stratification',
+    kicker: 'Endocrine · 2025 ATA · Free-response',
+    count: 25,
+    accent: '#2C5454',
+    desc: 'A sequential self-test (reveal-and-grade) on the operative approach, completion thyroidectomy, histopathology, and the 2025 ATA Risk Stratification System — Recommendations 15, 16, 27, 28.',
+    data: 'js/mcq-modules/dtc-risk-stratification.js',
+  },
 ];

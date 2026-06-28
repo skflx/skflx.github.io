@@ -50,6 +50,29 @@
     return d.toISOString().split('T')[0];
   };
 
+  /* Recall (free-response) self-grade tiers → Leitner movement.
+     `box` is a number (absolute) or fn(currentBox)→box; `correct`
+     feeds the "first attempt" accuracy stat. Keyboard 1–4 maps to order. */
+  const RECALL_GRADES = [
+    { id: 'unknown', label: "Didn't know", correct: false, color: 'incorrect', box: 1 },
+    { id: 'guessed', label: 'Guessed', correct: false, color: 'ochre', box: 1 },
+    { id: 'partial', label: 'Got it partially', correct: true, color: 'accent', box: (cur) => Math.min(cur + 1, 5) },
+    { id: 'cold', label: 'Knew it cold', correct: true, color: 'correct', box: (cur) => Math.min(cur + 2, 5) },
+  ];
+
+  /* Render free-text fields, honoring `\n` as a line break (module data
+     may carry lists / mini-tables). Single-line strings pass through. */
+  const renderText = (s) => {
+    const str = s == null ? '' : String(s);
+    if (str.indexOf('\n') === -1) return str;
+    return str.split('\n').map((ln, i) =>
+      React.createElement(React.Fragment, { key: i }, i ? React.createElement('br') : null, ln));
+  };
+
+  /* Reviewer code → storage namespace. Normalized so "Kafle ", "kafle",
+     "KAFLE" collapse to one bucket; empty falls back to "guest". */
+  const normCode = (c) => String(c || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'guest';
+
   /* ---- Storage (namespaced, fail-safe) ---- */
   const load = (key, fallback) => {
     try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
@@ -62,11 +85,12 @@
   /* =========================================================
      STUDY VIEWER
      ========================================================= */
-  function StudyViewer({ module, entry }) {
+  function StudyViewer({ module, entry, code }) {
     const meta = module.meta || {};
     const DOMAINS = module.DOMAINS || {};
     const CONCEPTS = module.CONCEPTS || {};
     const slug = (entry && entry.slug) || meta.id || 'module';
+    const reviewer = normCode(code);
     const hasTaxonomy = Object.keys(DOMAINS).length > 0 && Object.keys(CONCEPTS).length > 0;
 
     // Normalize once: guarantee concepts[] and options[] on every item.
@@ -80,8 +104,8 @@
       }));
     }, [module]);
 
-    const PROGRESS_KEY = 'mcq:progress:' + slug;
-    const SRS_KEY = 'mcq:srs:' + slug;
+    const PROGRESS_KEY = 'mcq:progress:' + slug + ':' + reviewer;
+    const SRS_KEY = 'mcq:srs:' + slug + ':' + reviewer;
 
     const [view, setView] = useState('home');
     const [currentId, setCurrentId] = useState(ITEMS[0]?.id);
@@ -116,19 +140,23 @@
     const totalAnswered = Object.keys(answers).length;
     const totalCorrect = Object.values(firstCorrect).filter(Boolean).length;
 
-    const recordAnswer = (qId, value, correct) => {
+    const recordAnswer = (qId, value, correct, nextBox) => {
       if (answers[qId]) return;
       setAnswers((prev) => ({ ...prev, [qId]: value }));
       setFirstCorrect((prev) => ({ ...prev, [qId]: correct }));
       setSrs((prev) => {
         const cur = prev.items[qId] || { box: 1 };
-        const box = correct ? Math.min(cur.box + 1, 5) : 1;
+        let box;
+        if (typeof nextBox === 'function') box = nextBox(cur.box);
+        else if (typeof nextBox === 'number') box = nextBox;
+        else box = correct ? Math.min(cur.box + 1, 5) : 1;
+        box = Math.max(1, Math.min(box, 5));
         return { ...prev, items: { ...prev.items, [qId]: { box, nextReview: addDays(today(), LEITNER_INTERVALS[box]) } } };
       });
     };
 
     const handleSelect = (optionId) => recordAnswer(currentId, optionId, optionId === currentItem.correct);
-    const handleGrade = (gotIt) => recordAnswer(currentId, gotIt ? 'got' : 'missed', gotIt);
+    const handleGrade = (grade) => recordAnswer(currentId, grade.id, grade.correct, grade.box);
 
     const goToItem = (qId) => {
       setCurrentId(qId); setShowDetailed(false); setRevealed(false); setView('item');
@@ -201,10 +229,14 @@
         else opt = currentItem.options.find((o) => String(o.id).toLowerCase() === key.toLowerCase());
         if (opt) { e.preventDefault(); handleSelect(opt.id); return; }
       }
+      // Recall self-grade: 1–4 once the answer is revealed.
+      if (isRecall && revealed && !answered && /^[1-4]$/.test(key)) {
+        e.preventDefault(); handleGrade(RECALL_GRADES[parseInt(key, 10) - 1]); return;
+      }
       if (key === ' ' || key === 'Enter') {
         e.preventDefault();
         if (isRecall && !revealed && !answered) { setRevealed(true); return; }
-        if (answered || (isRecall && revealed)) handleNext();
+        if (answered) handleNext();
         return;
       }
     };
@@ -390,6 +422,8 @@
     }
     const answered = !!answer;
     const isRecall = item.type === 'recall';
+    const recallGrade = isRecall ? RECALL_GRADES.find((g) => g.id === answer) : null;
+    const passLike = recallGrade ? recallGrade.correct : isCorrect;
     const filterConcept = conceptFilter ? CONCEPTS[conceptFilter] : null;
     const filterDomain = filterConcept ? DOMAINS[filterConcept.domain] : null;
     const bannerStyle = filterDomain
@@ -430,7 +464,7 @@
           </div>` : null}
 
         <div className="mcq-card" style=${{ padding: '1.5rem', marginBottom: '1.25rem' }}>
-          <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}>${item.stem}</p>
+          <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}>${renderText(item.stem)}</p>
 
           ${!isRecall ? html`
             <div role="radiogroup" aria-label="Answer options" style=${{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1.5rem' }}>
@@ -462,11 +496,17 @@
                 </button>` : html`
                 <div className="fade-up">
                   <div className="display-font" style=${{ fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.5rem', color: C.ochre, fontWeight: 600 }}>Answer</div>
-                  <div style=${{ padding: '1rem', borderRadius: '10px', lineHeight: 1.6, backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.ochre, color: C.text, fontSize: '16px' }}>${item.answer || ''}</div>
+                  <div style=${{ padding: '1rem', borderRadius: '10px', lineHeight: 1.6, backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.ochre, color: C.text, fontSize: '16px' }}>${renderText(item.answer)}</div>
                   ${!answered ? html`
-                    <div style=${{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
-                      <button className="mcq-btn mcq-btn--flex" onClick=${() => onGrade(false)} style=${{ backgroundColor: C.incorrectBg, borderColor: C.incorrect, color: C.incorrect }}><${X} size=${15} /><span className="display-font" style=${{ fontWeight: 600, fontSize: '0.9rem' }}>Missed</span></button>
-                      <button className="mcq-btn mcq-btn--flex" onClick=${() => onGrade(true)} style=${{ backgroundColor: C.correctBg, borderColor: C.correct, color: C.correct }}><${Check} size=${15} /><span className="display-font" style=${{ fontWeight: 600, fontSize: '0.9rem' }}>Got it</span></button>
+                    <div style=${{ marginTop: '0.85rem' }}>
+                      <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, marginBottom: '0.45rem' }}>How did that go?</div>
+                      <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                        ${RECALL_GRADES.map((g, i) => html`
+                          <button key=${g.id} className="mcq-btn" onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: C[g.color] }}>
+                            <span className="display-font" style=${{ fontSize: '0.7rem', opacity: 0.6 }}>${i + 1}</span>
+                            <span className="display-font" style=${{ fontWeight: 600, fontSize: '0.85rem' }}>${g.label}</span>
+                          </button>`)}
+                      </div>
                     </div>` : null}
                 </div>`}
             </div>` : null}
@@ -474,13 +514,15 @@
 
         ${answered ? html`
           <div className="fade-up" aria-live="polite" style=${{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div style=${{ padding: '1.25rem', borderRadius: '14px', backgroundColor: isCorrect ? C.correctBg : C.incorrectBg, border: '1px solid ' + (isCorrect ? C.correct : C.incorrect) }}>
+            <div style=${{ padding: '1.25rem', borderRadius: '14px', backgroundColor: passLike ? C.correctBg : C.incorrectBg, border: '1px solid ' + (passLike ? C.correct : C.incorrect) }}>
               <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                ${isCorrect
-                  ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>${isRecall ? 'Got It' : 'Correct'}</span></${React.Fragment}>`
-                  : html`<${React.Fragment}><${X} size=${16} style=${{ color: C.incorrect }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600 }}>${isRecall ? 'Missed' : 'Not Quite'}</span>${!isRecall ? html`<span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· Answer: ${item.correct ? String(item.correct).toUpperCase() : '—'}</span>` : null}</${React.Fragment}>`}
+                ${isRecall
+                  ? html`<${React.Fragment}><${passLike ? Check : X} size=${16} style=${{ color: recallGrade ? C[recallGrade.color] : (passLike ? C.correct : C.incorrect) }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: recallGrade ? C[recallGrade.color] : (passLike ? C.correct : C.incorrect), fontWeight: 600 }}>${recallGrade ? recallGrade.label : (passLike ? 'Got It' : 'Missed')}</span></${React.Fragment}>`
+                  : isCorrect
+                  ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>Correct</span></${React.Fragment}>`
+                  : html`<${React.Fragment}><${X} size=${16} style=${{ color: C.incorrect }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600 }}>Not Quite</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· Answer: ${item.correct ? String(item.correct).toUpperCase() : '—'}</span></${React.Fragment}>`}
               </div>
-              <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '15.5px' }}>${item.brief || ''}</p>
+              <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '15.5px' }}>${renderText(item.brief)}</p>
               ${item.reference ? html`<p className="ui-font" style=${{ marginTop: '0.6rem', fontSize: '0.72rem', color: C.textFaint }}>${item.reference}</p>` : null}
             </div>
 
@@ -491,7 +533,7 @@
               </button>` : null}
             ${item.detailed && showDetailed ? html`
               <div className="mcq-card fade-up" style=${{ padding: '1.25rem' }}>
-                <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '16px' }}>${item.detailed}</p>
+                <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '16px' }}>${renderText(item.detailed)}</p>
               </div>` : null}
 
             ${relatedItems.length ? html`
@@ -539,7 +581,7 @@
   }
 
   /* ---- Mount ---- */
-  window.mountMCQ = function (rootEl, module, entry) {
-    ReactDOM.createRoot(rootEl).render(html`<${StudyViewer} module=${module} entry=${entry} />`);
+  window.mountMCQ = function (rootEl, module, entry, code) {
+    ReactDOM.createRoot(rootEl).render(html`<${StudyViewer} module=${module} entry=${entry} code=${code} />`);
   };
 })();

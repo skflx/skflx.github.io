@@ -28,10 +28,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       MCQ Study Guides
     </a>
+    <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto">
+    <button type="button" class="mcq-reviewer-chip" id="reviewer-chip" title="Switch reviewer (reloads)" hidden></button>
     <button type="button" class="mcq-theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
       <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
     </button>
+    </div>
   </nav>
 
   <div id="root" style="padding-top:42px"></div>
@@ -50,6 +53,7 @@
   <script src="https://unpkg.com/htm@3/dist/htm.umd.js" crossorigin></script>
 
   <script src="js/mcq-manifest.js"></script>
+  <script src="js/mcq-reviewer.js"></script>
   <script src="js/mcq-engine.js"></script>
 
   <script>
@@ -59,6 +63,17 @@
         root.innerHTML = '<div class="mcq-notice"><h1>' + title + '</h1><p>' + body +
           '</p><a href="mcq.html">&larr; Back to study guides</a></div>';
       }
+
+      // Switching reviewer mid-session reloads, which re-runs the prompt
+      // (pre-filled with the current code) so progress stays unambiguous.
+      var chip = document.getElementById('reviewer-chip');
+      function showChip(code) {
+        if (!chip) return;
+        chip.textContent = 'Reviewing: ' + code;
+        chip.hidden = false;
+        chip.onclick = function () { location.reload(); };
+      }
+
       var slug = new URLSearchParams(location.search).get('m');
       var manifest = window.MCQ_MANIFEST || [];
       var entry = manifest.filter(function (m) { return m.slug === slug; })[0];
@@ -71,7 +86,10 @@
         var mod = window.__MCQ_MODULE;
         try { delete window.__MCQ_MODULE; } catch (e) { window.__MCQ_MODULE = undefined; }
         if (!mod) { notice('Module failed to load', 'The data for “' + entry.title + '” did not register correctly.'); return; }
-        window.mountMCQ(root, mod, entry);
+        window.MCQReviewer.ask({ title: 'Who is reviewing?' }).then(function (code) {
+          showChip(code);
+          window.mountMCQ(root, mod, entry, code);
+        });
       };
       s.onerror = function () { notice('Module failed to load', 'Could not fetch the data file for “' + entry.title + '”.'); };
       document.body.appendChild(s);
