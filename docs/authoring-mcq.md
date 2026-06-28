@@ -56,6 +56,23 @@ questions are found by shared concept tags).
 | `answer` | recall only | The text revealed for a recall card. |
 | `brief` | recommended | Short explanation shown after answering. |
 | `detailed` | optional | Longer explanation behind a "Read more" toggle. |
+
+`stem`, `answer`, `brief`, and `detailed` honor `\n` as a line break, so you can
+lay out short lists or text "tables" inside a field (see
+`js/mcq-modules/dtc-risk-stratification.js`, a fully recall/free-response set).
+
+### Recall (free-response) cards
+
+A `type: 'recall'` card shows the `stem`, a **Reveal answer** button, then the
+`answer` text. The learner self-grades on a four-point scale instead of a binary
+got-it / missed — each tier drives spaced repetition differently:
+
+| Grade (keys 1–4) | Counts as correct? | Leitner move |
+|---|---|---|
+| Didn't know | no | reset to box 1 |
+| Guessed | no | reset to box 1 |
+| Got it partially | yes | +1 box |
+| Knew it cold | yes | +2 boxes |
 | `concepts` | optional | Array of `CONCEPTS` keys; defaults to `[]`. |
 | `section` | optional | Small label above the question (e.g. `Embryology`). |
 | `difficulty` | optional | Small badge near the counter (e.g. `hard`). |
@@ -105,8 +122,12 @@ window.__MCQ_MODULE = { meta: { title: 'Otology Set' }, DOMAINS, CONCEPTS, ITEMS
 
 - Keep the manifest `count` in sync with the number of `ITEMS`.
 - Pair each domain's `color` (solid) with a matching translucent `hex`.
-- Progress and spaced-repetition state are stored per module in `localStorage`
-  under `mcq:progress:<slug>` and `mcq:srs:<slug>`; changing a question's `id`
-  resets its history.
+- Progress and spaced-repetition state are stored per module **and per
+  reviewer** in `localStorage` under `mcq:progress:<slug>:<code>` and
+  `mcq:srs:<slug>:<code>`. The reviewer `<code>` (e.g. `kafle`, `terry`) is
+  collected by `js/mcq-reviewer.js` — a small prompt shown on each study
+  session, with a typo failsafe that flags unknown codes and suggests the
+  closest existing one. This lets coresidents share one browser while keeping
+  separate progress. Changing a question's `id` resets its history.
 - Preview locally with no build step: `python3 -m http.server` then open
   `http://localhost:8000/mcq-study.html?m=<slug>`.

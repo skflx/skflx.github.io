@@ -51,18 +51,37 @@
     });
   </script>
   <script src="js/mcq-manifest.js"></script>
+  <script src="js/mcq-reviewer.js"></script>
   <script>
     (function () {
       var today = new Date().toISOString().split('T')[0];
+      var reviewer = (window.MCQReviewer && MCQReviewer.current()) || 'guest';
+
       function dueCount(slug) {
         try {
-          var srs = JSON.parse(localStorage.getItem('mcq:srs:' + slug) || '{}');
+          var srs = JSON.parse(localStorage.getItem('mcq:srs:' + slug + ':' + reviewer) || '{}');
           var items = (srs && srs.items) || {};
           return Object.keys(items).filter(function (id) {
             var nr = items[id] && items[id].nextReview; return nr && nr <= today;
           }).length;
         } catch (e) { return 0; }
       }
+
+      // Reviewer control — who the due counts belong to, with a switch.
+      var sub = document.querySelector('.hub-subtitle');
+      if (sub && window.MCQReviewer) {
+        var bar = document.createElement('div');
+        bar.className = 'hub-reviewer';
+        var active = MCQReviewer.current();
+        bar.innerHTML = active
+          ? 'Reviewing as <strong>' + active + '</strong> · <button type="button" class="hub-reviewer-btn" id="reviewer-switch">change</button>'
+          : '<button type="button" class="hub-reviewer-btn" id="reviewer-switch">Set your reviewer code</button>';
+        sub.parentNode.insertBefore(bar, sub.nextSibling);
+        document.getElementById('reviewer-switch').addEventListener('click', function () {
+          MCQReviewer.ask({ title: 'Who is reviewing?' }).then(function () { location.reload(); });
+        });
+      }
+
       var wrap = document.getElementById('modules');
       (window.MCQ_MANIFEST || []).forEach(function (m) {
         var due = dueCount(m.slug);
