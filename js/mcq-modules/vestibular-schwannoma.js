@@ -9,7 +9,7 @@ const meta = {
   title: 'Vestibular\nSchwannoma',
   subtitle:
     'Forty-six MCQs across CPA/IAC anatomy, NF2 molecular pathophysiology and histopathology, epidemiology and natural history, diagnostic imaging and audiology, the four surgical corridors plus radiosurgery, surgical complications, and Neurofibromatosis Type 2 — closing with three conference-prep cases.',
-  kicker: 'MCQ · Neurotology Module',
+  kicker: 'Self-Assessment · Neurotology Module',
 };
 
 const DOMAINS = {

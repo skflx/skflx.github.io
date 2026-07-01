@@ -1,9 +1,10 @@
 /* =============================================================
-   MCQ study engine — StudyViewer
-   React (UMD) + htm (no in-browser Babel). Mount via window.mountMCQ.
-   Colors resolve to CSS custom properties (css/mcq.css), so the whole
+   OKSAT study engine — StudyViewer
+   (OHNS Knowledge Self-Assessment Tool; formerly the MCQ engine.)
+   React (UMD) + htm (no in-browser Babel). Mount via window.mountOKSAT.
+   Colors resolve to CSS custom properties (css/oksat.css), so the whole
    UI follows the site-wide light/dark theme. Tolerant of sparse module
-   data — see docs/authoring-mcq.md for the schema.
+   data — see docs/authoring-oksat.md for the schema.
    ============================================================= */
 (function () {
   const { useState, useEffect, useMemo, useRef } = React;
@@ -11,11 +12,11 @@
 
   /* Palette → CSS variables (theme-reactive) */
   const C = {
-    bg: 'var(--mcq-bg)', surface: 'var(--mcq-surface)', border: 'var(--mcq-border)',
-    borderSoft: 'var(--mcq-border-soft)', text: 'var(--mcq-text)', textMuted: 'var(--mcq-text-muted)',
-    textFaint: 'var(--mcq-text-faint)', accent: 'var(--mcq-accent)', accentSoft: 'var(--mcq-accent-soft)',
-    ochre: 'var(--mcq-ochre)', correct: 'var(--mcq-correct)', correctBg: 'var(--mcq-correct-bg)',
-    incorrect: 'var(--mcq-incorrect)', incorrectBg: 'var(--mcq-incorrect-bg)',
+    bg: 'var(--ok-bg)', surface: 'var(--ok-surface)', border: 'var(--ok-border)',
+    borderSoft: 'var(--ok-border-soft)', text: 'var(--ok-text)', textMuted: 'var(--ok-text-muted)',
+    textFaint: 'var(--ok-text-faint)', accent: 'var(--ok-accent)', accentSoft: 'var(--ok-accent-soft)',
+    ochre: 'var(--ok-ochre)', correct: 'var(--ok-correct)', correctBg: 'var(--ok-correct-bg)',
+    incorrect: 'var(--ok-incorrect)', incorrectBg: 'var(--ok-incorrect-bg)',
   };
 
   /* ---- Icons (lucide geometry) ---- */
@@ -104,12 +105,21 @@
       }));
     }, [module]);
 
-    const PROGRESS_KEY = 'mcq:progress:' + slug + ':' + reviewer;
-    const SRS_KEY = 'mcq:srs:' + slug + ':' + reviewer;
+    const PROGRESS_KEY = 'oksat:progress:' + slug + ':' + reviewer;
+    const SRS_KEY = 'oksat:srs:' + slug + ':' + reviewer;
 
-    const [view, setView] = useState('home');
-    const [currentId, setCurrentId] = useState(ITEMS[0]?.id);
-    const [conceptFilter, setConceptFilter] = useState(null);
+    // Deep link: ?c=<concept> opens the viewer pre-filtered to that concept.
+    const initialConcept = useMemo(() => {
+      try {
+        const c = new URLSearchParams(window.location.search).get('c');
+        return c && CONCEPTS[c] && ITEMS.some((q) => q.concepts.includes(c)) ? c : null;
+      } catch (e) { return null; }
+    }, []);
+    const [view, setView] = useState(initialConcept ? 'item' : 'home');
+    const [currentId, setCurrentId] = useState(() => initialConcept
+      ? (ITEMS.find((q) => q.concepts.includes(initialConcept)) || ITEMS[0])?.id
+      : ITEMS[0]?.id);
+    const [conceptFilter, setConceptFilter] = useState(initialConcept);
     const [reviewMode, setReviewMode] = useState(false);
     const [answers, setAnswers] = useState(() => load(PROGRESS_KEY, {}).answers || {});
     const [firstCorrect, setFirstCorrect] = useState(() => load(PROGRESS_KEY, {}).firstCorrect || {});
@@ -247,8 +257,8 @@
     }, []);
 
     return html`
-      <div className="mcq-root" ref=${cardRef}>
-        <div className="mcq-wrap">
+      <div className="ok-root" ref=${cardRef}>
+        <div className="ok-wrap">
           ${view === 'home'
             ? html`<${HomeView}
                 meta=${meta} DOMAINS=${DOMAINS} CONCEPTS=${CONCEPTS} ITEMS=${ITEMS}
@@ -306,7 +316,7 @@
         <div style=${{ marginBottom: '2rem' }}>
           <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', color: C.ochre }}>
             <div style=${{ height: '1px', flex: 1, backgroundColor: C.border }}></div>
-            <span className="ui-font" style=${{ fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 500 }}>${meta.kicker || 'MCQ'}</span>
+            <span className="ui-font" style=${{ fontSize: '10px', letterSpacing: '0.3em', textTransform: 'uppercase', fontWeight: 500 }}>${meta.kicker || 'Self-Assessment'}</span>
             <div style=${{ height: '1px', flex: 1, backgroundColor: C.border }}></div>
           </div>
           <h1 className="display-font" style=${{ fontSize: 'clamp(2.2rem,7vw,3rem)', fontWeight: 300, lineHeight: 1.12, color: C.text, fontVariationSettings: "'opsz' 144, 'wght' 400, 'SOFT' 50" }}>
@@ -315,7 +325,7 @@
           ${meta.subtitle ? html`<p style=${{ marginTop: '0.75rem', fontSize: '1rem', lineHeight: 1.6, color: C.textMuted }}>${meta.subtitle}</p>` : null}
         </div>
 
-        <div className="mcq-card" style=${{ marginBottom: '2rem', padding: '1.25rem' }}>
+        <div className="ok-card" style=${{ marginBottom: '2rem', padding: '1.25rem' }}>
           <div style=${{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
             <div className="display-font" style=${{ fontSize: '0.78rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: C.textMuted }}>Progress</div>
             <div className="display-font" style=${{ fontSize: '1.5rem' }}>
@@ -335,20 +345,20 @@
         </div>
 
         <div style=${{ marginBottom: dueCount > 0 ? '1rem' : '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <div style=${{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }} className="mcq-actions">
+          <div style=${{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }} className="ok-actions">
             <div style=${{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <button className="mcq-btn mcq-btn--primary mcq-btn--flex" onClick=${onStart}>
+              <button className="ok-btn ok-btn--primary ok-btn--flex" onClick=${onStart}>
                 <${BookOpen} size=${16} />
                 <span className="display-font" style=${{ letterSpacing: '0.02em', fontWeight: 500 }}>${totalAnswered > 0 ? 'Continue' : 'Begin'}</span>
               </button>
-              <button className="mcq-btn" onClick=${() => { const r = ITEMS[Math.floor(Math.random() * ITEMS.length)]; if (r) onJump(r.id); }}>
+              <button className="ok-btn" onClick=${() => { const r = ITEMS[Math.floor(Math.random() * ITEMS.length)]; if (r) onJump(r.id); }}>
                 <${Shuffle} size=${16} />
                 <span className="display-font" style=${{ letterSpacing: '0.02em', fontWeight: 500 }}>Random</span>
               </button>
             </div>
           </div>
           ${dueCount > 0 ? html`
-            <button className="mcq-btn mcq-btn--block" onClick=${onReview} style=${{ borderColor: C.ochre, color: C.ochre }}>
+            <button className="ok-btn ok-btn--block" onClick=${onReview} style=${{ borderColor: C.ochre, color: C.ochre }}>
               <${RotateCcw} size=${15} />
               <span className="display-font" style=${{ letterSpacing: '0.02em', fontWeight: 500 }}>Review due · ${dueCount}</span>
             </button>` : null}
@@ -369,7 +379,7 @@
                 domainConcepts.forEach((c) => ITEMS.forEach((q) => { if (q.concepts.includes(c.id)) ids.add(q.id); }));
                 const domainAnswered = [...ids].filter((id) => answers[id]).length;
                 return html`
-                  <div key=${dId} className="mcq-card" style=${{ overflow: 'hidden' }}>
+                  <div key=${dId} className="ok-card" style=${{ overflow: 'hidden' }}>
                     <button onClick=${() => setDomainFilter(expanded ? null : dId)} aria-expanded=${expanded}
                             style=${{ width: '100%', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textAlign: 'left', background: 'none', border: 'none', color: C.text }}>
                       <div style=${{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -390,7 +400,7 @@
                             const ct = conceptCounts[c.id] || { total: 0, answered: 0 };
                             const complete = ct.total > 0 && ct.answered === ct.total;
                             return html`
-                              <button key=${c.id} className="mcq-chip" onClick=${() => onConceptClick(c.id)} style=${{ backgroundColor: d.hex, color: d.color }}>
+                              <button key=${c.id} className="ok-chip" onClick=${() => onConceptClick(c.id)} style=${{ backgroundColor: d.hex, color: d.color }}>
                                 ${c.label}
                                 <span style=${{ color: C.textFaint, fontWeight: 400 }}>${ct.answered}/${ct.total}</span>
                                 ${complete ? html`<${Check} size=${10} style=${{ color: C.correct }} />` : null}
@@ -417,7 +427,7 @@
       return html`
         <div className="fade-up" style=${{ textAlign: 'center', padding: '3rem 0', color: C.textMuted }}>
           <p style=${{ marginBottom: '1.25rem' }}>Nothing to review right now — every due item is cleared.</p>
-          <button className="mcq-btn" onClick=${() => { exitReview(); onHome(); }}><${Home} size=${14} /><span className="display-font">Menu</span></button>
+          <button className="ok-btn" onClick=${() => { exitReview(); onHome(); }}><${Home} size=${14} /><span className="display-font">Menu</span></button>
         </div>`;
     }
     const answered = !!answer;
@@ -459,11 +469,11 @@
             ${item.concepts.map((cId) => {
               const c = CONCEPTS[cId]; if (!c) return null;
               const d = DOMAINS[c.domain]; if (!d) return null;
-              return html`<button key=${cId} className="mcq-chip" onClick=${() => onConceptClick(cId)} style=${{ backgroundColor: d.hex, color: d.color }}>${c.label}</button>`;
+              return html`<button key=${cId} className="ok-chip" onClick=${() => onConceptClick(cId)} style=${{ backgroundColor: d.hex, color: d.color }}>${c.label}</button>`;
             })}
           </div>` : null}
 
-        <div className="mcq-card" style=${{ padding: '1.5rem', marginBottom: '1.25rem' }}>
+        <div className="ok-card" style=${{ padding: '1.5rem', marginBottom: '1.25rem' }}>
           <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}>${renderText(item.stem)}</p>
 
           ${!isRecall ? html`
@@ -491,7 +501,7 @@
           ${isRecall ? html`
             <div style=${{ marginTop: '1.5rem' }}>
               ${!revealed && !answered ? html`
-                <button className="mcq-btn mcq-btn--primary mcq-btn--block" onClick=${onReveal}>
+                <button className="ok-btn ok-btn--primary ok-btn--block" onClick=${onReveal}>
                   <${Eye} size=${15} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Reveal answer</span>
                 </button>` : html`
                 <div className="fade-up">
@@ -502,7 +512,7 @@
                       <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, marginBottom: '0.45rem' }}>How did that go?</div>
                       <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                         ${RECALL_GRADES.map((g, i) => html`
-                          <button key=${g.id} className="mcq-btn" onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: C[g.color] }}>
+                          <button key=${g.id} className="ok-btn" onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: C[g.color] }}>
                             <span className="display-font" style=${{ fontSize: '0.7rem', opacity: 0.6 }}>${i + 1}</span>
                             <span className="display-font" style=${{ fontWeight: 600, fontSize: '0.85rem' }}>${g.label}</span>
                           </button>`)}
@@ -527,17 +537,17 @@
             </div>
 
             ${item.detailed ? html`
-              <button className="mcq-btn mcq-btn--block" onClick=${() => setShowDetailed(!showDetailed)} style=${{ justifyContent: 'space-between' }}>
+              <button className="ok-btn ok-btn--block" onClick=${() => setShowDetailed(!showDetailed)} style=${{ justifyContent: 'space-between' }}>
                 <span style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><${Sparkles} size=${14} style=${{ color: C.ochre }} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>${showDetailed ? 'Hide detailed explanation' : 'Read detailed explanation'}</span></span>
                 <${ChevronDown} size=${16} style=${{ color: C.textMuted, transform: showDetailed ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
               </button>` : null}
             ${item.detailed && showDetailed ? html`
-              <div className="mcq-card fade-up" style=${{ padding: '1.25rem' }}>
+              <div className="ok-card fade-up" style=${{ padding: '1.25rem' }}>
                 <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '16px' }}>${renderText(item.detailed)}</p>
               </div>` : null}
 
             ${relatedItems.length ? html`
-              <div className="mcq-card" style=${{ padding: '1.25rem' }}>
+              <div className="ok-card" style=${{ padding: '1.25rem' }}>
                 <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
                   <${Layers} size=${14} style=${{ color: C.ochre }} /><span className="display-font" style=${{ fontSize: '0.72rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: C.textMuted, fontWeight: 500 }}>Explore Related</span>
                 </div>
@@ -560,12 +570,12 @@
           </div>` : null}
 
         <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-          <button className="mcq-btn mcq-btn--flex" onClick=${onPrev}><${ChevronLeft} size=${16} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Prev</span></button>
-          <button className="mcq-btn" onClick=${onRandom} title="Random" aria-label="Random question"><${Shuffle} size=${16} style=${{ color: C.textMuted }} /></button>
-          <button className="mcq-btn mcq-btn--primary mcq-btn--flex" onClick=${onNext}><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>${answered ? 'Next' : 'Skip'}</span><${ChevronRight} size=${16} /></button>
+          <button className="ok-btn ok-btn--flex" onClick=${onPrev}><${ChevronLeft} size=${16} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Prev</span></button>
+          <button className="ok-btn" onClick=${onRandom} title="Random" aria-label="Random question"><${Shuffle} size=${16} style=${{ color: C.textMuted }} /></button>
+          <button className="ok-btn ok-btn--primary ok-btn--flex" onClick=${onNext}><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>${answered ? 'Next' : 'Skip'}</span><${ChevronRight} size=${16} /></button>
         </div>
 
-        <div className="mcq-dotrow" aria-hidden="true">
+        <div className="ok-dotrow" aria-hidden="true">
           ${Array.from({ length: total }, (_, i) => {
             const q = filteredItems[i];
             if (!q) return null;
@@ -574,14 +584,14 @@
             const wc = firstCorrect[q.id];
             let dot = C.borderSoft;
             if (isAns) dot = wc ? C.correct : C.incorrect;
-            return html`<div key=${q.id} className="mcq-dot" style=${{ width: isCurrent ? '18px' : '5px', backgroundColor: isCurrent ? C.accent : dot, opacity: isCurrent ? 1 : isAns ? 0.7 : 0.4 }}></div>`;
+            return html`<div key=${q.id} className="ok-dot" style=${{ width: isCurrent ? '18px' : '5px', backgroundColor: isCurrent ? C.accent : dot, opacity: isCurrent ? 1 : isAns ? 0.7 : 0.4 }}></div>`;
           })}
         </div>
       </div>`;
   }
 
   /* ---- Mount ---- */
-  window.mountMCQ = function (rootEl, module, entry, code) {
+  window.mountOKSAT = function (rootEl, module, entry, code) {
     ReactDOM.createRoot(rootEl).render(html`<${StudyViewer} module=${module} entry=${entry} code=${code} />`);
   };
 })();

@@ -1,15 +1,37 @@
 /* =============================================================
-   MCQ study modules — manifest
-   Single source of truth for the hub (mcq.html) and the dynamic
-   viewer (mcq-study.html). To add a module: drop a data file in
-   js/mcq-modules/<slug>.js (ending in window.__MCQ_MODULE = {...})
-   and append one entry here. See docs/authoring-mcq.md.
+   OKSAT study modules — manifest
+   (OHNS Knowledge Self-Assessment Tool.)
+   Single source of truth for the hub (oksat.html), the dynamic
+   viewer (oksat-study.html), and the Atlas graph. To add a module:
+   drop a data file in js/mcq-modules/<slug>.js (ending in
+   window.__MCQ_MODULE = {...}) and append one entry here — or let
+   the Question Forge (oksat-generate.html) write both for you.
+   See docs/authoring-oksat.md.
+
+   `subspecialty` keys into OKSAT_SUBSPECIALTIES below; the Atlas
+   uses it to cluster modules and color their nodes.
    ============================================================= */
-window.MCQ_MANIFEST = [
+
+/* OHNS subspecialty ring — one hue per domain, carried through
+   module cards, atlas nodes, and Forge-generated taxonomies. */
+window.OKSAT_SUBSPECIALTIES = {
+  otology:      { label: 'Otology / Neurotology',             hue: '#2F6E6A' },
+  rhinology:    { label: 'Rhinology / Allergy',               hue: '#6E4A6B' },
+  laryngology:  { label: 'Laryngology / Bronchoesophagology', hue: '#C06A4A' },
+  hn_onc:       { label: 'Head & Neck Oncology',              hue: '#9A4B2E' },
+  fprs:         { label: 'Facial Plastics & Recon',           hue: '#7A5A3A' },
+  pediatrics:   { label: 'Pediatric Otolaryngology',          hue: '#7C7A3A' },
+  sleep:        { label: 'Sleep Medicine',                    hue: '#5A567E' },
+  endocrine:    { label: 'Endocrine',                         hue: '#A8863A' },
+  fundamentals: { label: 'Fundamentals / Anatomy',            hue: '#55606A' },
+};
+
+window.OKSAT_MANIFEST = [
   {
     slug: 'pediatrics',
     title: 'Pediatric Hearing Loss',
     kicker: 'Pediatric Module',
+    subspecialty: 'pediatrics',
     count: 40,
     accent: '#2C5454',
     desc: 'Embryology, conductive and sensorineural causes, syndromic genetics, EHDI screening, and clinical cases.',
@@ -19,6 +41,7 @@ window.MCQ_MANIFEST = [
     slug: 'ta-tubes',
     title: 'Tubes, Tonsils & Neck',
     kicker: 'Pediatric OR Primer',
+    subspecialty: 'pediatrics',
     count: 54,
     accent: '#A0635E',
     desc: 'Myringotomy and tubes, adenotonsillectomy (extra- and intracapsular), Level II neck node excision, and operative complications.',
@@ -28,6 +51,7 @@ window.MCQ_MANIFEST = [
     slug: 'vestibular-schwannoma',
     title: 'Vestibular Schwannoma',
     kicker: 'Neurotology Module',
+    subspecialty: 'otology',
     count: 46,
     accent: '#5C4F7B',
     desc: 'CPA/IAC anatomy, NF2 genetics and histopathology, natural history, diagnosis and imaging, the surgical approaches plus radiosurgery, complications, and NF2 management.',
@@ -37,6 +61,7 @@ window.MCQ_MANIFEST = [
     slug: 'facial-reanimation',
     title: 'Facial Reanimation',
     kicker: 'Facial Plastics & Recon',
+    subspecialty: 'fprs',
     count: 42,
     accent: '#7B5C3A',
     desc: 'Facial nerve anatomy, aberrant regeneration and synkinesis, evaluation scales, Bell’s palsy workup, electrodiagnostics, nerve repair, transfers, free-muscle reconstruction, and conference cases.',
@@ -46,9 +71,13 @@ window.MCQ_MANIFEST = [
     slug: 'dtc-risk-stratification',
     title: 'Thyroid Cancer Risk Stratification',
     kicker: 'Endocrine · 2025 ATA · Free-response',
+    subspecialty: 'endocrine',
     count: 25,
     accent: '#2C5454',
     desc: 'A sequential self-test (reveal-and-grade) on the operative approach, completion thyroidectomy, histopathology, and the 2025 ATA Risk Stratification System — Recommendations 15, 16, 27, 28.',
     data: 'js/mcq-modules/dtc-risk-stratification.js',
   },
 ];
+
+/* Back-compat alias (older cached pages). */
+window.MCQ_MANIFEST = window.OKSAT_MANIFEST;

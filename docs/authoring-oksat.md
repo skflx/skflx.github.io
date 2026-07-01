@@ -1,8 +1,12 @@
-# Authoring an MCQ study module
+# Authoring an OKSAT study module
 
-Every study module is a single JavaScript data file plus one manifest entry.
-The shared engine (`js/mcq-engine.js`) renders it — you never touch the engine
-or write any UI. The engine is **tolerant of sparse data**: a module with only a
+OKSAT — the OHNS Knowledge Self-Assessment Tool. Every study module is a single
+JavaScript data file plus one manifest entry. The shared engine
+(`js/oksat-engine.js`) renders it — you never touch the engine or write any UI.
+The fastest authoring path is the **Question Forge** (`oksat-generate.html`):
+paste source text, review the generated items, download the module file and the
+manifest entry. This document is the underlying schema (which the Forge also
+targets). The engine is **tolerant of sparse data**: a module with only a
 title and a list of questions works. Everything else is optional and is shown
 only when present.
 
@@ -14,15 +18,18 @@ only when present.
    window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
    ```
    (`DOMAINS` and `CONCEPTS` may be omitted — see below.)
-3. **Append one entry** to `js/mcq-manifest.js`:
+3. **Append one entry** to `js/oksat-manifest.js`:
    ```js
    { slug: 'larynx-anatomy', title: 'Laryngeal Anatomy', kicker: 'Laryngology',
+     subspecialty: 'laryngology',   // keys into OKSAT_SUBSPECIALTIES (Atlas hue + clustering)
      count: 25, accent: '#4A6B7B',
      desc: 'One-line description shown on the hub card.',
      data: 'js/mcq-modules/larynx-anatomy.js' },
    ```
 
-Open `mcq-study.html?m=larynx-anatomy` to view it; it also appears on `mcq.html`.
+Open `oksat-study.html?m=larynx-anatomy` to view it; it also appears on the hub
+(`oksat.html`) and as a node cluster in the Atlas graph view. A concept deep
+link also works: `oksat-study.html?m=larynx-anatomy&c=<concept-key>`.
 
 ## Schema reference
 
@@ -31,7 +38,7 @@ Open `mcq-study.html?m=larynx-anatomy` to view it; it also appears on `mcq.html`
 |---|---|---|
 | `title` | recommended | Module heading. A `\n` splits it across two lines; the second line renders italic. |
 | `subtitle` | optional | One or two sentences under the title. |
-| `kicker` | optional | Small all-caps label above the title (e.g. `MCQ · Otology`). |
+| `kicker` | optional | Small all-caps label above the title (e.g. `Self-Assessment · Otology`). |
 | `id` | optional | Falls back to the manifest slug for storage keys. |
 
 ### `DOMAINS` (object, optional)
@@ -123,11 +130,14 @@ window.__MCQ_MODULE = { meta: { title: 'Otology Set' }, DOMAINS, CONCEPTS, ITEMS
 - Keep the manifest `count` in sync with the number of `ITEMS`.
 - Pair each domain's `color` (solid) with a matching translucent `hex`.
 - Progress and spaced-repetition state are stored per module **and per
-  reviewer** in `localStorage` under `mcq:progress:<slug>:<code>` and
-  `mcq:srs:<slug>:<code>`. The reviewer `<code>` (e.g. `kafle`, `terry`) is
-  collected by `js/mcq-reviewer.js` — a small prompt shown on each study
+  reviewer** in `localStorage` under `oksat:progress:<slug>:<code>` and
+  `oksat:srs:<slug>:<code>` (legacy `mcq:*` keys are migrated automatically).
+  Module-level completion also syncs to the shared database file
+  `data/oksat-db.json` via the hub's Settings → Completion database panel.
+  The reviewer `<code>` (e.g. `kafle`, `terry`) is
+  collected by `js/oksat-reviewer.js` — a small prompt shown on each study
   session, with a typo failsafe that flags unknown codes and suggests the
   closest existing one. This lets coresidents share one browser while keeping
   separate progress. Changing a question's `id` resets its history.
 - Preview locally with no build step: `python3 -m http.server` then open
-  `http://localhost:8000/mcq-study.html?m=<slug>`.
+  `http://localhost:8000/oksat-study.html?m=<slug>`.

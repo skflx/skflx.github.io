@@ -1,21 +1,44 @@
 /* =============================================================
-   MCQ reviewer codes — shared across mcq.html and mcq-study.html.
-   Multiple residents share one browser, so progress + spaced
-   repetition are namespaced per reviewer code (e.g. "kafle",
-   "terry"): keys become mcq:progress:<slug>:<code> and
-   mcq:srs:<slug>:<code> (the engine appends the suffix).
+   OKSAT reviewer codes — shared across oksat.html and
+   oksat-study.html. Multiple residents share one browser, so
+   progress + spaced repetition are namespaced per reviewer code
+   (e.g. "kafle", "terry"): keys become oksat:progress:<slug>:<code>
+   and oksat:srs:<slug>:<code> (the engine appends the suffix).
 
    This module owns the *identity*, not the storage:
-     • a registry of known codes (mcq:reviewers)
-     • the active code (mcq:reviewer)
+     • a registry of known codes (oksat:reviewers)
+     • the active code (oksat:reviewer)
      • a small on-brand prompt with a typo failsafe — entering an
        unknown code asks you to confirm (and suggests the closest
        existing one), so "kaffle" doesn't silently fork "kafle".
-   Theme-reactive: the modal uses the same CSS variables as mcq.css.
+     • a one-time migration of legacy mcq:* keys → oksat:* so no
+       one's progress is lost by the rename (old keys left behind).
+   Theme-reactive: the modal uses the same CSS variables as oksat.css.
    ============================================================= */
 (function () {
-  var REVIEWER_KEY = 'mcq:reviewer';
-  var REGISTRY_KEY = 'mcq:reviewers';
+  var REVIEWER_KEY = 'oksat:reviewer';
+  var REGISTRY_KEY = 'oksat:reviewers';
+
+  /* Legacy migration: copy every mcq:* key to oksat:* once (never
+     overwrite an oksat:* key that already exists). Old keys are kept
+     so an older cached page keeps working during the transition. */
+  (function migrate() {
+    try {
+      if (localStorage.getItem('oksat:migrated')) return;
+      var pending = [];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf('mcq:') === 0) pending.push(k);
+      }
+      pending.forEach(function (k) {
+        var nk = 'oksat:' + k.slice(4);
+        if (localStorage.getItem(nk) == null) {
+          localStorage.setItem(nk, localStorage.getItem(k));
+        }
+      });
+      localStorage.setItem('oksat:migrated', new Date().toISOString());
+    } catch (e) { /* storage unavailable — nothing to migrate */ }
+  })();
 
   function norm(c) {
     return String(c || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -80,8 +103,8 @@
       var card = document.createElement('div');
       card.style.cssText =
         'width:100%;max-width:24rem;border-radius:16px;padding:1.5rem;' +
-        'background:var(--mcq-surface,#fff);border:1px solid var(--mcq-border,#ddd);' +
-        'color:var(--mcq-text,#222);box-shadow:0 20px 60px rgba(0,0,0,0.25);' +
+        'background:var(--ok-surface,#fff);border:1px solid var(--ok-border,#ddd);' +
+        'color:var(--ok-text,#222);box-shadow:0 20px 60px rgba(0,0,0,0.25);' +
         "font-family:'Crimson Pro',Georgia,serif;";
       overlay.appendChild(card);
 
@@ -100,8 +123,8 @@
           'cursor:pointer;border-radius:10px;padding:0.6rem 0.9rem;font-size:0.9rem;' +
           "font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:0.01em;" +
           (primary
-            ? 'background:var(--mcq-accent,#2C5454);color:#fff;border:1px solid var(--mcq-accent,#2C5454);'
-            : 'background:transparent;color:var(--mcq-text,#222);border:1px solid var(--mcq-border,#ccc);');
+            ? 'background:var(--ok-accent,#2C5454);color:#fff;border:1px solid var(--ok-accent,#2C5454);'
+            : 'background:transparent;color:var(--ok-text,#222);border:1px solid var(--ok-border,#ccc);');
         return b;
       }
 
@@ -114,7 +137,7 @@
           "font-family:'Fraunces',Georgia,serif;font-size:1.25rem;margin-bottom:0.35rem;";
         var sub = document.createElement('p');
         sub.textContent = 'Enter your code so your progress and review schedule stay yours (e.g. kafle, terry).';
-        sub.style.cssText = 'margin:0 0 1rem;font-size:0.92rem;line-height:1.5;color:var(--mcq-text-muted,#666);';
+        sub.style.cssText = 'margin:0 0 1rem;font-size:0.92rem;line-height:1.5;color:var(--ok-text-muted,#666);';
 
         var input = document.createElement('input');
         input.type = 'text';
@@ -124,12 +147,12 @@
         input.placeholder = 'your code';
         input.style.cssText =
           'width:100%;box-sizing:border-box;padding:0.7rem 0.85rem;border-radius:10px;' +
-          'font-size:1rem;background:var(--mcq-bg,#faf8f5);color:var(--mcq-text,#222);' +
-          'border:1px solid var(--mcq-border,#ccc);outline:none;';
+          'font-size:1rem;background:var(--ok-bg,#faf8f5);color:var(--ok-text,#222);' +
+          'border:1px solid var(--ok-border,#ccc);outline:none;';
 
         var known = list();
         var hint = document.createElement('div');
-        hint.style.cssText = 'min-height:1.1rem;margin:0.5rem 0 0.25rem;font-size:0.8rem;color:var(--mcq-text-faint,#999);';
+        hint.style.cssText = 'min-height:1.1rem;margin:0.5rem 0 0.25rem;font-size:0.8rem;color:var(--ok-text-faint,#999);';
         hint.textContent = known.length ? ('Known: ' + known.join(', ')) : 'No reviewers yet — your code creates the first.';
 
         var row = document.createElement('div');
@@ -140,7 +163,7 @@
 
         function submit() {
           var c = norm(input.value);
-          if (!c) { hint.textContent = 'Please enter a code (letters/numbers).'; hint.style.color = 'var(--mcq-incorrect,#b00)'; input.focus(); return; }
+          if (!c) { hint.textContent = 'Please enter a code (letters/numbers).'; hint.style.color = 'var(--ok-incorrect,#b00)'; input.focus(); return; }
           if (known.indexOf(c) !== -1) { close(setActive(c)); return; }
           renderConfirm(c);
         }
@@ -165,7 +188,7 @@
         head.style.cssText = "font-family:'Fraunces',Georgia,serif;font-size:1.2rem;margin-bottom:0.4rem;";
 
         var msg = document.createElement('p');
-        msg.style.cssText = 'margin:0 0 1rem;font-size:0.95rem;line-height:1.5;color:var(--mcq-text-muted,#666);';
+        msg.style.cssText = 'margin:0 0 1rem;font-size:0.95rem;line-height:1.5;color:var(--ok-text-muted,#666);';
         msg.innerHTML = 'There is no reviewer <strong>“' + code + '”</strong> yet.' +
           (suggestion ? ' Did you mean <strong>“' + suggestion + '”</strong>?' : ' Create it as a new reviewer?');
 
@@ -195,7 +218,7 @@
     });
   }
 
-  window.MCQReviewer = {
+  window.OKSATReviewer = {
     norm: norm,
     list: list,
     current: current,
