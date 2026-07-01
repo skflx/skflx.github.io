@@ -8,8 +8,8 @@ const meta = {
   id: 'facial-reanimation',
   title: 'Facial\nReanimation',
   subtitle:
-    'Forty-two MCQs spanning facial nerve anatomy and segments, physiology of aberrant regeneration, patient evaluation and grading scales, diagnostic workup, surgical and nonsurgical treatment, corneal protection, and three conference cases — Bell\'s palsy impostor, post-acoustic neuroma palsy, and Ramsay Hunt sequelae.',
-  kicker: 'MCQ · Facial Plastics & Recon Module',
+    'Forty-two questions spanning facial nerve anatomy and segments, physiology of aberrant regeneration, patient evaluation and grading scales, diagnostic workup, surgical and nonsurgical treatment, corneal protection, and three conference cases — Bell\'s palsy impostor, post-acoustic neuroma palsy, and Ramsay Hunt sequelae.',
+  kicker: 'Self-Assessment · Facial Plastics & Recon Module',
 };
 
 const DOMAINS = {

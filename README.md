@@ -54,17 +54,27 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 │   ├── onepager.js         # Style switch, theme toggle, deep-linking
 │   ├── main.js             # Legacy script (still used by the tool pages)
 │   ├── cpt_search.jsx      # CPT search tool logic
-│   ├── mcq-engine.js       # Shared MCQ study engine (React + htm, no build step)
-│   ├── mcq-manifest.js     # MCQ module registry (drives hub + viewer)
-│   └── mcq-modules/        # MCQ question banks (one file per module)
+│   ├── oksat-engine.js     # OKSAT study engine (React + htm, no build step)
+│   ├── oksat-manifest.js   # OKSAT module registry + subspecialty hues
+│   ├── oksat-reviewer.js   # Per-reviewer identity (+ mcq:*→oksat:* migration)
+│   ├── oksat-prefs.js      # Font themes + day/night wiring
+│   ├── oksat-atlas.js      # Atlas graph view (Cytoscape)
+│   ├── oksat-db.js         # Completion database read/merge/export/push
+│   ├── oksat-ai.js         # Gemini key mgmt + house-style question generation
+│   └── mcq-modules/        # Question banks (one file per module)
+├── data/oksat-db.json      # Shared per-reviewer completion database (dated entries)
 ├── kag.html                # Tool: Knowledge Atlas Graph
 ├── kag-extract.html        # Tool: KAG extractor
 ├── cpt-search.html         # Tool: CPT code search
 ├── ascii-editor.html       # Tool: ASCII/Unicode diagram editor
 ├── airway-jeopardy.html    # Tool: Airway Rounds team quiz
-├── mcq.html                # Tool: MCQ study-guide hub (manifest-driven)
-├── mcq-study.html          # Tool: MCQ viewer (?m=<slug>); occ*.html redirect here
-├── docs/authoring-mcq.md   # How to add / author an MCQ module
+├── oksat.html              # Tool: OKSAT hub — modules + Atlas graph + sync settings
+├── oksat-study.html        # Tool: OKSAT viewer (?m=<slug>&c=<concept>)
+├── oksat-generate.html     # Tool: OKSAT Question Forge (Gemini)
+├── mcq.html / mcq-study.html  # Redirect stubs to the OKSAT pages
+├── docs/authoring-oksat.md # How to add / author an OKSAT module
+├── docs/design-principles.md  # OKSAT design system
+├── docs/oksat-plan.md      # OKSAT redesign plan / architecture
 ├── images/                 # Profile photo + derived hero/social crops (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
 ```

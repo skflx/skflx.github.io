@@ -29,3 +29,33 @@ Build a two-tool system hosted on GitHub pages for generating and viewing a know
 
 ## Next Steps
 The new HTML tools are ready. You can test them locally or push to master to deploy them live to GitHub Pages.
+
+---
+
+# WIP - OKSAT (OHNS Knowledge Self-Assessment Tool)
+
+## Goal
+Rename and expand the MCQ tool into OKSAT: unified hub, traversable knowledge
+atlas, per-user completion synced to a repo database file, font themes, and a
+Gemini-powered question generator. Full plan: `docs/oksat-plan.md`.
+
+## Actions Taken
+1. **Rename** — `oksat.html` / `oksat-study.html` / `js/oksat-*.js` /
+   `css/oksat.css`; old `mcq*.html` are redirect stubs; `occ*.html` point at
+   the new pages; localStorage `mcq:*` auto-migrates to `oksat:*`.
+2. **Design** — `docs/design-principles.md`; four persisted font themes
+   (Manuscript, Clinical, Atlas, Hyperlegible) behind an "Aa" topbar picker.
+3. **Atlas** — Obsidian-style Cytoscape graph on the hub: subspecialty →
+   module → domain → concept nodes, per-reviewer completion color-coding,
+   concept deep links (`?m=<slug>&c=<concept>`), dashed crossover node to KAG.
+4. **Database file** — `data/oksat-db.json` (dated per-reviewer completion,
+   no secrets) with read/merge on load and rewrite via download-to-commit or
+   a GitHub Contents API push using a runtime-only token (never stored).
+5. **Question Forge** — `oksat-generate.html`: paste text → Gemini generates a
+   full module in the embedded house style (mechanism → application → pearl);
+   validates, previews, downloads the module file + manifest entry.
+6. **Gemini key manager** — `js/oksat-ai.js`; key lives in localStorage only.
+
+## Next Steps
+Generate the first Forge module end-to-end with a real key; consider merging
+KAG node data into the Atlas (both are Cytoscape element models).

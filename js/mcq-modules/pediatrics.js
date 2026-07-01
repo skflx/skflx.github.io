@@ -9,7 +9,7 @@ const meta = {
   title: 'Pediatric\nHearing Loss',
   subtitle:
     'Forty MCQs traversing embryology, conductive and sensorineural causes, syndromic genetics, screening, and clinical cases. Answers reveal mechanism; concept tags link to related questions.',
-  kicker: 'MCQ · Pediatric Module',
+  kicker: 'Self-Assessment · Pediatric Module',
 };
 
 const DOMAINS = {

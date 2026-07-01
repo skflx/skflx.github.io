@@ -1,0 +1,390 @@
+/* =============================================================
+   OKSAT — OHNS Knowledge Self-Assessment Tool — stylesheet
+   Token-driven, themed to match the main site (css/onepager.css).
+   Colors are CSS custom properties redefined per [data-theme];
+   components consume only tokens, so retheming = editing one block.
+   Per-domain chip colors come from module data and stay inline.
+   Font themes are attribute switches on <html> (data-font) — see
+   docs/design-principles.md and js/oksat-prefs.js.
+   ============================================================= */
+
+/* ===== TOKENS ===== */
+:root {
+  --ok-radius: 12px;
+  --ok-radius-lg: 14px;
+  --ok-maxw: 42rem;
+  --ok-font-display: 'Fraunces', Georgia, serif;
+  --ok-font-body: 'Crimson Pro', Georgia, serif;
+  --ok-font-ui: system-ui, sans-serif;
+}
+
+[data-theme="light"] {
+  --ok-bg: #FAF6EE;
+  --ok-surface: #FFFFFF;
+  --ok-border: #E8DFD0;
+  --ok-border-soft: #F0E8D7;
+  --ok-text: #2A241D;
+  --ok-text-muted: #6B5F4F;
+  --ok-text-faint: #8A7C66;
+  --ok-accent: #2C5454;
+  --ok-accent-soft: #3D6B6B;
+  --ok-ochre: #9C7A45;
+  --ok-correct: #4F7042;
+  --ok-correct-bg: #EAEFDA;
+  --ok-incorrect: #9A4537;
+  --ok-incorrect-bg: #F4DDD3;
+  --ok-glow: rgba(176, 141, 87, 0.06);
+  --ok-shadow: 0 1px 3px rgba(42, 36, 29, 0.04);
+  --ok-shadow-hover: 0 4px 12px rgba(42, 36, 29, 0.08);
+}
+
+[data-theme="dark"] {
+  --ok-bg: #1B1813;
+  --ok-surface: #242019;
+  --ok-border: #3A3226;
+  --ok-border-soft: #2F2920;
+  --ok-text: #F1E7D8;
+  --ok-text-muted: #B6A48D;
+  --ok-text-faint: #8A7C68;
+  --ok-accent: #5FA3A3;
+  --ok-accent-soft: #7FB8B8;
+  --ok-ochre: #D6AC63;
+  --ok-correct: #9FBF7E;
+  --ok-correct-bg: #2A3320;
+  --ok-incorrect: #DD9683;
+  --ok-incorrect-bg: #3A241E;
+  --ok-glow: rgba(214, 172, 99, 0.05);
+  --ok-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --ok-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* ===== RESET / BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+
+html, body {
+  min-height: 100vh;
+  background: var(--ok-bg);
+  color: var(--ok-text);
+  font-family: var(--ok-font-body);
+}
+body {
+  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, var(--ok-glow) 0%, transparent 50%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+img { max-width: 100%; display: block; }
+button { font: inherit; cursor: pointer; }
+
+a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--ok-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.display-font { font-family: var(--ok-font-display); font-variation-settings: 'opsz' 144, 'SOFT' 50; }
+.body-font { font-family: var(--ok-font-body); }
+.ui-font { font-family: var(--ok-font-ui); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.fade-up { animation: fadeUp 0.35s ease-out forwards; }
+
+/* ===== TOP BAR (shared by hub + viewer) ===== */
+.ok-topbar {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  background: color-mix(in srgb, var(--ok-bg) 90%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ok-border);
+  font-family: var(--ok-font-ui); font-size: 12px;
+}
+.ok-topbar a.ok-back {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--ok-text-muted); text-decoration: none; transition: color 0.15s;
+}
+.ok-topbar a.ok-back:hover { color: var(--ok-accent); }
+.ok-topbar a.ok-back svg { width: 12px; height: 12px; }
+
+.ok-theme-toggle {
+  width: 30px; height: 30px; flex: none;
+  border: 1px solid var(--ok-border); border-radius: 50%;
+  background: var(--ok-surface); color: var(--ok-text-muted);
+  display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;
+}
+.ok-theme-toggle:hover { color: var(--ok-accent); border-color: var(--ok-accent); }
+.ok-theme-toggle svg { width: 15px; height: 15px; }
+.ok-theme-toggle .i-sun { display: none; }
+.ok-theme-toggle .i-moon { display: block; }
+[data-theme="dark"] .ok-theme-toggle .i-sun { display: block; }
+[data-theme="dark"] .ok-theme-toggle .i-moon { display: none; }
+
+/* Reviewer chip (viewer top bar) — who progress is being saved under. */
+.ok-reviewer-chip {
+  flex: none; height: 30px; padding: 0 0.7rem;
+  border: 1px solid var(--ok-border); border-radius: 999px;
+  background: var(--ok-surface); color: var(--ok-text-muted);
+  font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.02em;
+  display: inline-flex; align-items: center; transition: all 0.2s;
+}
+.ok-reviewer-chip:hover { color: var(--ok-accent); border-color: var(--ok-accent); }
+.ok-reviewer-chip[hidden] { display: none; }
+
+/* ===== LAYOUT ===== */
+.ok-root { min-height: 100vh; width: 100%; }
+.ok-wrap { max-width: var(--ok-maxw); margin: 0 auto; padding: 2.75rem 1.25rem 8rem; }
+@media (min-width: 640px) { .ok-wrap { padding: 3.25rem 2rem 8rem; } }
+
+/* ===== HUB (mcq.html) ===== */
+.hub-kicker { display: flex; align-items: center; gap: 0.75rem; color: var(--ok-ochre); margin-bottom: 0.75rem; }
+.hub-kicker hr { flex: 1; border: none; border-top: 1px solid var(--ok-border); }
+.hub-kicker span { font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+.hub-title { font-family: var(--ok-font-display); font-size: clamp(2rem, 6vw, 2.75rem); font-weight: 300; line-height: 1.15; margin-bottom: 0.75rem; }
+.hub-title em { font-style: italic; font-weight: 300; }
+.hub-subtitle { font-size: 1rem; line-height: 1.6; color: var(--ok-text-muted); margin-bottom: 1rem; }
+.hub-reviewer { font-family: var(--ok-font-ui); font-size: 12px; color: var(--ok-text-faint); margin-bottom: 2.25rem; }
+.hub-reviewer strong { color: var(--ok-ochre); font-weight: 600; }
+.hub-reviewer-btn { background: none; border: none; padding: 0; color: var(--ok-accent); font: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.hub-reviewer-btn:hover { opacity: 0.8; }
+.hub-modules { display: flex; flex-direction: column; gap: 1rem; }
+.module-card {
+  display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem;
+  background: var(--ok-surface); border: 1px solid var(--ok-border); border-radius: var(--ok-radius);
+  text-decoration: none; color: var(--ok-text); box-shadow: var(--ok-shadow);
+  transition: box-shadow 0.2s, transform 0.15s, border-color 0.15s;
+}
+.module-card:hover { box-shadow: var(--ok-shadow-hover); transform: translateY(-1px); border-color: var(--ok-ochre); }
+.module-accent { width: 4px; border-radius: 4px; flex-shrink: 0; align-self: stretch; }
+.module-body { flex: 1; }
+.module-label { font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; font-weight: 500; color: var(--ok-text-faint); margin-bottom: 0.3rem; }
+.module-title { font-family: var(--ok-font-display); font-size: 1.2rem; font-weight: 400; line-height: 1.25; margin-bottom: 0.35rem; }
+.module-desc { font-size: 0.88rem; line-height: 1.5; color: var(--ok-text-muted); }
+.module-due { margin-top: 0.4rem; font-family: var(--ok-font-ui); font-size: 11px; font-weight: 600; color: var(--ok-ochre); }
+.module-arrow { font-family: var(--ok-font-ui); font-size: 12px; color: var(--ok-text-faint); flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
+.module-card:hover .module-arrow { color: var(--ok-accent); transform: translateX(3px); }
+.hub-dots { text-align: center; margin-top: 3rem; font-family: var(--ok-font-display); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ok-text-faint); }
+
+/* ===== SHARED PRIMITIVES (viewer) ===== */
+.ok-card { background: var(--ok-surface); border: 1px solid var(--ok-border); border-radius: var(--ok-radius-lg); box-shadow: var(--ok-shadow); }
+.ok-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.85rem 1.25rem; border-radius: var(--ok-radius);
+  background: var(--ok-surface); border: 1px solid var(--ok-border); color: var(--ok-text);
+  transition: all 0.18s;
+}
+.ok-btn:hover { opacity: 0.9; }
+.ok-btn:active { transform: scale(0.985); }
+.ok-btn--primary { background: var(--ok-accent); border-color: var(--ok-accent); color: var(--ok-surface); }
+.ok-btn--block { width: 100%; }
+.ok-btn--flex { flex: 1; }
+
+.ok-chip {
+  font-family: var(--ok-font-ui); font-weight: 500; font-size: 11px; letter-spacing: 0.02em;
+  padding: 0.25rem 0.6rem; border-radius: 6px; border: none;
+  display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.15s;
+}
+.ok-chip:hover { opacity: 0.82; }
+.ok-chip:active { transform: scale(0.95); }
+
+.ok-dotrow { margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; max-width: 28rem; margin-left: auto; margin-right: auto; }
+.ok-dot { height: 5px; border-radius: 999px; transition: all 0.2s; }
+
+/* ===== NOTICE (module not found / load error) ===== */
+.ok-notice { max-width: 30rem; margin: 6rem auto; padding: 0 1.5rem; text-align: center; }
+.ok-notice h1 { font-family: var(--ok-font-display); font-weight: 400; font-size: 1.6rem; margin-bottom: 0.75rem; }
+.ok-notice p { color: var(--ok-text-muted); margin-bottom: 1.5rem; }
+.ok-notice a { color: var(--ok-accent); }
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* =============================================================
+   FONT THEMES — data-font on <html>, persisted as oksat:font.
+   Every component consumes only --ok-font-*; switching themes is
+   an attribute flip. Unknown variation axes (opsz/SOFT, set inline
+   for Fraunces) are ignored by the other families, so themes can
+   share the markup.
+   ============================================================= */
+[data-font="manuscript"] {
+  --ok-font-display: 'Fraunces', Georgia, serif;
+  --ok-font-body: 'Crimson Pro', Georgia, serif;
+  --ok-font-ui: system-ui, sans-serif;
+}
+[data-font="clinical"] {
+  --ok-font-display: 'Inter', system-ui, sans-serif;
+  --ok-font-body: 'Inter', system-ui, sans-serif;
+  --ok-font-ui: 'Inter', system-ui, sans-serif;
+}
+[data-font="atlas"] {
+  --ok-font-display: 'IBM Plex Sans', system-ui, sans-serif;
+  --ok-font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --ok-font-ui: 'JetBrains Mono', ui-monospace, monospace;
+}
+[data-font="hyperlegible"] {
+  --ok-font-display: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --ok-font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --ok-font-ui: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+/* Sans display faces need more weight than Fraunces' airy 300s. */
+[data-font="clinical"] .hub-title, [data-font="atlas"] .hub-title, [data-font="hyperlegible"] .hub-title { font-weight: 600; letter-spacing: -0.02em; }
+[data-font="clinical"] .display-font, [data-font="atlas"] .display-font, [data-font="hyperlegible"] .display-font { font-variation-settings: normal; }
+
+/* ===== TOPBAR ROUND BUTTONS (font picker, settings — same skin as the theme toggle) ===== */
+.ok-roundbtn {
+  min-width: 30px; height: 30px; flex: none; padding: 0 0.45rem;
+  border: 1px solid var(--ok-border); border-radius: 999px;
+  background: var(--ok-surface); color: var(--ok-text-muted);
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
+  font-family: var(--ok-font-ui); font-size: 12px; transition: all 0.2s;
+}
+.ok-roundbtn:hover { color: var(--ok-accent); border-color: var(--ok-accent); }
+.ok-roundbtn svg { width: 15px; height: 15px; }
+
+/* ===== POPOVER (font picker) ===== */
+.ok-popover {
+  position: absolute; top: 40px; right: 0; z-index: 60; min-width: 15rem;
+  background: var(--ok-surface); border: 1px solid var(--ok-border);
+  border-radius: var(--ok-radius); box-shadow: var(--ok-shadow-hover);
+  padding: 0.4rem; display: flex; flex-direction: column; gap: 2px;
+}
+.ok-popover-item {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  width: 100%; text-align: left; padding: 0.5rem 0.65rem; border: none; border-radius: 8px;
+  background: none; color: var(--ok-text); transition: background 0.15s;
+}
+.ok-popover-item:hover { background: var(--ok-border-soft); }
+.ok-popover-item.active { background: var(--ok-border-soft); box-shadow: inset 2px 0 0 var(--ok-accent); }
+.ok-popover-item .name { font-size: 0.95rem; }
+.ok-popover-item .hint { font-family: var(--ok-font-ui); font-size: 10px; color: var(--ok-text-faint); letter-spacing: 0.04em; }
+
+/* ===== HUB VIEW TABS (Modules / Atlas) ===== */
+.hub-tabs {
+  display: inline-flex; border: 1px solid var(--ok-border); border-radius: 999px;
+  padding: 3px; gap: 2px; background: var(--ok-surface); margin-bottom: 1.5rem;
+}
+.hub-tab {
+  border: none; background: none; color: var(--ok-text-muted);
+  font-family: var(--ok-font-ui); font-size: 12px; letter-spacing: 0.06em;
+  padding: 0.4rem 1rem; border-radius: 999px; transition: all 0.18s;
+}
+.hub-tab.active { background: var(--ok-accent); color: var(--ok-surface); }
+.hub-tab:not(.active):hover { color: var(--ok-text); }
+
+/* ===== ATLAS (graph view) ===== */
+.atlas-shell {
+  position: relative; height: min(68vh, 620px);
+  background: var(--ok-surface); border: 1px solid var(--ok-border);
+  border-radius: var(--ok-radius-lg); box-shadow: var(--ok-shadow); overflow: hidden;
+}
+.atlas-cy { position: absolute; inset: 0; }
+.atlas-toolbar {
+  position: absolute; top: 0.75rem; left: 0.75rem; right: 0.75rem; z-index: 5;
+  display: flex; align-items: center; gap: 0.5rem; pointer-events: none;
+}
+.atlas-toolbar > * { pointer-events: auto; }
+.atlas-search {
+  flex: 0 1 14rem; padding: 0.45rem 0.7rem; border-radius: 999px;
+  border: 1px solid var(--ok-border); background: color-mix(in srgb, var(--ok-bg) 88%, transparent);
+  backdrop-filter: blur(6px); color: var(--ok-text);
+  font-family: var(--ok-font-ui); font-size: 12px; outline: none;
+}
+.atlas-search:focus { border-color: var(--ok-accent); }
+.atlas-legend {
+  margin-left: auto; display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: flex-end; max-width: 55%;
+}
+.atlas-key {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.04em;
+  color: var(--ok-text-muted); padding: 0.2rem 0.55rem; border-radius: 999px;
+  border: 1px solid var(--ok-border); background: color-mix(in srgb, var(--ok-bg) 88%, transparent);
+  backdrop-filter: blur(6px);
+}
+.atlas-key .swatch { width: 9px; height: 9px; border-radius: 50%; }
+.atlas-hint {
+  position: absolute; bottom: 0.6rem; left: 0; right: 0; z-index: 5; text-align: center;
+  font-family: var(--ok-font-ui); font-size: 10.5px; letter-spacing: 0.05em;
+  color: var(--ok-text-faint); pointer-events: none;
+}
+.atlas-loading {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: var(--ok-text-faint); font-family: var(--ok-font-ui); font-size: 12px; letter-spacing: 0.1em;
+}
+
+/* ===== MODAL (settings / sync) ===== */
+.ok-modal-overlay {
+  position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 1.25rem; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(2px);
+}
+.ok-modal-overlay[hidden] { display: none; } /* [hidden] must beat display:flex */
+.ok-modal {
+  width: 100%; max-width: 30rem; max-height: 86vh; overflow-y: auto;
+  background: var(--ok-surface); border: 1px solid var(--ok-border);
+  border-radius: 16px; padding: 1.5rem; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+.ok-modal h2 { font-family: var(--ok-font-display); font-weight: 400; font-size: 1.35rem; margin-bottom: 0.25rem; }
+.ok-modal .ok-modal-sub { font-size: 0.9rem; color: var(--ok-text-muted); margin-bottom: 1.25rem; line-height: 1.5; }
+.ok-modal-section { border-top: 1px solid var(--ok-border-soft); padding-top: 1rem; margin-top: 1rem; }
+.ok-modal-section h3 {
+  font-family: var(--ok-font-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ok-ochre); margin-bottom: 0.6rem;
+}
+.ok-field { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.ok-input {
+  flex: 1; min-width: 10rem; padding: 0.55rem 0.75rem; border-radius: 10px;
+  border: 1px solid var(--ok-border); background: var(--ok-bg); color: var(--ok-text);
+  font-family: var(--ok-font-ui); font-size: 13px; outline: none;
+}
+.ok-input:focus { border-color: var(--ok-accent); }
+.ok-btn--sm { padding: 0.5rem 0.85rem; font-size: 0.85rem; border-radius: 9px; }
+.ok-note { font-family: var(--ok-font-ui); font-size: 11px; line-height: 1.55; color: var(--ok-text-faint); }
+.ok-note strong { color: var(--ok-text-muted); }
+.ok-status { font-family: var(--ok-font-ui); font-size: 11.5px; margin-top: 0.4rem; min-height: 1rem; }
+.ok-status.good { color: var(--ok-correct); }
+.ok-status.bad { color: var(--ok-incorrect); }
+
+/* ===== FORGE (oksat-generate.html) ===== */
+.forge-main { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+@media (max-width: 900px) { .forge-main { grid-template-columns: 1fr; } }
+.forge-panel { padding: 1.25rem; }
+.forge-panel h2 {
+  font-family: var(--ok-font-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ok-ochre); margin-bottom: 0.75rem;
+}
+.ok-textarea {
+  width: 100%; min-height: 16rem; resize: vertical; padding: 0.8rem 0.9rem; border-radius: 10px;
+  border: 1px solid var(--ok-border); background: var(--ok-bg); color: var(--ok-text);
+  font-family: var(--ok-font-body); font-size: 15px; line-height: 1.55; outline: none;
+}
+.ok-textarea:focus { border-color: var(--ok-accent); }
+.forge-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 0.75rem; margin-top: 0.85rem; }
+.forge-controls .full { grid-column: 1 / -1; }
+.forge-label { display: block; font-family: var(--ok-font-ui); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ok-text-faint); margin-bottom: 0.3rem; }
+.ok-select {
+  width: 100%; padding: 0.5rem 0.65rem; border-radius: 10px;
+  border: 1px solid var(--ok-border); background: var(--ok-bg); color: var(--ok-text);
+  font-family: var(--ok-font-ui); font-size: 13px; outline: none;
+}
+.forge-house summary {
+  cursor: pointer; font-family: var(--ok-font-ui); font-size: 12px; color: var(--ok-accent);
+  padding: 0.4rem 0; user-select: none;
+}
+.forge-house pre {
+  white-space: pre-wrap; font-family: var(--ok-font-ui); font-size: 11.5px; line-height: 1.6;
+  color: var(--ok-text-muted); background: var(--ok-bg); border: 1px solid var(--ok-border-soft);
+  border-radius: 10px; padding: 0.85rem; margin-top: 0.4rem; max-height: 18rem; overflow-y: auto;
+}
+.forge-item { padding: 1rem; margin-bottom: 0.75rem; }
+.forge-item .fi-kicker { font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ok-ochre); margin-bottom: 0.35rem; display: flex; gap: 0.6rem; }
+.forge-item .fi-stem { font-family: var(--ok-font-display); font-size: 1.05rem; line-height: 1.4; margin-bottom: 0.5rem; }
+.forge-item .fi-opt { font-size: 0.92rem; line-height: 1.45; padding: 0.2rem 0; color: var(--ok-text-muted); }
+.forge-item .fi-opt.correct { color: var(--ok-correct); font-weight: 600; }
+.forge-item .fi-brief { font-size: 0.9rem; line-height: 1.5; color: var(--ok-text-muted); border-top: 1px solid var(--ok-border-soft); padding-top: 0.5rem; margin-top: 0.5rem; }
+.forge-spin {
+  width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--ok-border);
+  border-top-color: var(--ok-accent); animation: okspin 0.8s linear infinite; display: inline-block;
+}
+@keyframes okspin { to { transform: rotate(360deg); } }
