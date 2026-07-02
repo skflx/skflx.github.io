@@ -74,12 +74,17 @@
      "KAFLE" collapse to one bucket; empty falls back to "guest". */
   const normCode = (c) => String(c || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'guest';
 
-  /* ---- Storage (namespaced, fail-safe) ---- */
+  /* ---- Storage (namespaced, fail-safe) ----
+     Delegates to window.OKSATStore when present (single adapter, Phase 0);
+     falls back to the original inline body so a missing/misordered store
+     script leaves behavior byte-identical to before. */
   const load = (key, fallback) => {
+    if (window.OKSATStore) return window.OKSATStore.load(key, fallback);
     try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
     catch (e) { return fallback; }
   };
   const save = (key, value) => {
+    if (window.OKSATStore) { window.OKSATStore.save(key, value); return; }
     try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
   };
 
