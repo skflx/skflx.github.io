@@ -50,12 +50,17 @@
       <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
         <div class="hub-tabs" role="tablist">
           <button class="hub-tab active" id="tab-modules" role="tab" aria-selected="true">Modules</button>
+          <button class="hub-tab" id="tab-progress" role="tab" aria-selected="false">Progress</button>
           <button class="hub-tab" id="tab-atlas" role="tab" aria-selected="false">Atlas</button>
         </div>
       </div>
 
       <section id="view-modules">
         <div class="hub-modules" id="modules"></div>
+      </section>
+
+      <section id="view-progress" hidden>
+        <div id="dash-root"></div>
       </section>
 
       <section id="view-atlas" hidden>
@@ -75,6 +80,15 @@
       <div style="margin-top:2.5rem">
         <div class="hub-kicker"><hr><span>Companion tools</span><hr></div>
         <div class="hub-modules">
+          <a class="module-card" href="oksat-adaptive.html">
+            <div class="module-accent" style="background:#2C5454"></div>
+            <div class="module-body">
+              <div class="module-label">Adaptive Practice · Gemini</div>
+              <div class="module-title">Drill gaps &amp; weak spots</div>
+              <p class="module-desc">Generates board-style questions on demand for topics with no module yet — rolling difficulty, distractor teaching, and starrable items you can export as a draft module.</p>
+            </div>
+            <div class="module-arrow">Launch &rarr;</div>
+          </a>
           <a class="module-card" href="oksat-generate.html">
             <div class="module-accent" style="background:#9C7A45"></div>
             <div class="module-body">
@@ -198,11 +212,14 @@
         OKSATReviewer.ask({ title: 'Who is reviewing?' }).then(function () { location.reload(); });
       });
 
-      /* ---- Modules list ---- */
+      /* ---- Modules list (taxonomy-grouped when the tree is present) ---- */
       var wrap = document.getElementById('modules');
-      (window.OKSAT_MANIFEST || []).forEach(function (m) {
+      var manifest = window.OKSAT_MANIFEST || [];
+      var subs = window.OKSAT_SUBSPECIALTIES || {};
+
+      function moduleCard(m) {
         var due = dueCount(m.slug);
-        var subInfo = (window.OKSAT_SUBSPECIALTIES || {})[m.subspecialty];
+        var subInfo = subs[m.subspecialty];
         var a = document.createElement('a');
         a.className = 'module-card';
         a.href = 'oksat-study.html?m=' + encodeURIComponent(m.slug);
@@ -215,24 +232,82 @@
             (due > 0 ? '<div class="module-due">' + due + ' due for review</div>' : '') +
           '</div>' +
           '<div class="module-arrow">Launch &rarr;</div>';
-        wrap.appendChild(a);
-      });
+        return a;
+      }
 
-      /* ---- Tabs + lazy Atlas ---- */
+      var tax = window.OKSAT_TAXONOMY && Array.isArray(OKSAT_TAXONOMY.topics) ? OKSAT_TAXONOMY.topics : null;
+      if (tax) {
+        // Order subspecialties by their manifest declaration; include any with gap topics.
+        var order = Object.keys(subs);
+        order.forEach(function (subKey) {
+          var subInfo = subs[subKey] || { label: subKey, hue: '#55606A' };
+          var mods = manifest.filter(function (m) { return m.subspecialty === subKey; });
+          var gaps = tax.filter(function (t) { return t.subspecialty === subKey && !t.moduleId; });
+          if (!mods.length && !gaps.length) return;
+          var head = document.createElement('div');
+          head.className = 'hub-subhead';
+          head.innerHTML = '<span class="tick" style="background:' + subInfo.hue + '"></span>' + subInfo.label;
+          wrap.appendChild(head);
+          mods.forEach(function (m) { wrap.appendChild(moduleCard(m)); });
+          if (gaps.length) {
+            var row = document.createElement('div');
+            row.className = 'hub-gap-row';
+            gaps.sort(function (a, b) { return (a.priority || 3) - (b.priority || 3); });
+            gaps.forEach(function (t) {
+              var g = document.createElement('a');
+              g.className = 'hub-gap';
+              g.href = 'oksat-adaptive.html?t=' + encodeURIComponent(t.id);
+              g.innerHTML = t.label + (t.priority === 1 ? ' <span class="p1">P1</span>' : '');
+              row.appendChild(g);
+            });
+            wrap.appendChild(row);
+          }
+        });
+      } else {
+        manifest.forEach(function (m) { wrap.appendChild(moduleCard(m)); });
+      }
+
+      /* ---- Tabs + lazy Atlas / Dashboard ---- */
       var tabM = document.getElementById('tab-modules');
+      var tabP = document.getElementById('tab-progress');
       var tabA = document.getElementById('tab-atlas');
       var viewM = document.getElementById('view-modules');
+      var viewP = document.getElementById('view-progress');
       var viewA = document.getElementById('view-atlas');
       var cy = null, atlasReviewer = reviewer, dbCache = null;
 
-      function selectTab(atlas) {
-        tabM.classList.toggle('active', !atlas); tabA.classList.toggle('active', atlas);
-        tabM.setAttribute('aria-selected', String(!atlas)); tabA.setAttribute('aria-selected', String(atlas));
-        viewM.hidden = atlas; viewA.hidden = !atlas;
-        if (atlas) bootAtlas();
+      function selectTab(name) {
+        var tabs = { modules: tabM, progress: tabP, atlas: tabA };
+        var views = { modules: viewM, progress: viewP, atlas: viewA };
+        Object.keys(tabs).forEach(function (k) {
+          var on = k === name;
+          tabs[k].classList.toggle('active', on);
+          tabs[k].setAttribute('aria-selected', String(on));
+          views[k].hidden = !on;
+        });
+        if (name === 'atlas') bootAtlas();
+        if (name === 'progress') bootDashboard();
       }
-      tabM.addEventListener('click', function () { selectTab(false); });
-      tabA.addEventListener('click', function () { selectTab(true); });
+      tabM.addEventListener('click', function () { selectTab('modules'); });
+      tabP.addEventListener('click', function () { selectTab('progress'); });
+      tabA.addEventListener('click', function () { selectTab('atlas'); });
+
+      /* Progress dashboard — lazy-load its script (and the atlas module loader
+         it reuses), then mount for the active reviewer. Re-mounts on each open
+         so it reflects the latest local progress. */
+      function bootDashboard() {
+        var el = document.getElementById('dash-root');
+        el.innerHTML = '<p class="ok-note" style="padding:1rem 0">Charting your progress…</p>';
+        var needAtlas = !(window.OKSATAtlas && OKSATAtlas.loadModules);
+        (needAtlas ? loadScript('js/oksat-atlas.js').catch(function () {}) : Promise.resolve())
+          .then(function () { return window.OKSATDashboard ? null : loadScript('js/oksat-dashboard.js'); })
+          .then(function () { return OKSATDB.fetch(); })
+          .then(function (db) {
+            if (window.OKSATDashboard) OKSATDashboard.mount(el, { reviewer: reviewer, db: db });
+            else el.innerHTML = '<p class="ok-note">Dashboard unavailable.</p>';
+          })
+          .catch(function () { el.innerHTML = '<p class="ok-note">Could not load the dashboard.</p>'; });
+      }
 
       function loadScript(src) {
         return new Promise(function (res, rej) {
@@ -385,9 +460,17 @@
           return;
         }
         var doomed = [];
+        var suffix = ':' + code;
+        // Per-module, per-reviewer keys end in ":<code>"; the adaptive/session/
+        // starred keys ARE exactly "<prefix>:<code>". Match both shapes.
+        var prefixed = ['oksat:progress:', 'oksat:srs:', 'oksat:cmastery:', 'oksat:conf:'];
+        var exact = ['oksat:adaptive:' + code, 'oksat:starred:' + code, 'oksat:session:' + code];
         for (var i = 0; i < localStorage.length; i++) {
           var k = localStorage.key(i);
-          if (k && (k.indexOf('oksat:progress:') === 0 || k.indexOf('oksat:srs:') === 0) && k.lastIndexOf(':' + code) === k.length - (':' + code).length) doomed.push(k);
+          if (!k) continue;
+          var endsWithCode = k.lastIndexOf(suffix) === k.length - suffix.length;
+          var isPrefixed = prefixed.some(function (p) { return k.indexOf(p) === 0; });
+          if ((isPrefixed && endsWithCode) || exact.indexOf(k) !== -1) doomed.push(k);
         }
         doomed.forEach(function (k) { localStorage.removeItem(k); });
         resetArmed = false;
