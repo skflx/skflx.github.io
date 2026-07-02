@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated": "2026-07-02T20:10:42.377Z",
+  "updated": "2026-07-02T20:27:08.319Z",
   "status": "DRAFT expansion — 40-node temporal-bone seed is vetted (review:true); all other nodes are subagent-authored scaffolding (review:false) pending owner stress-test against curated source text.",
   "sources": [
     "Cummings Otolaryngology 7e",
@@ -3677,7 +3677,7 @@
         "costochondral graft"
       ],
       "abbrev": null,
-      "structure": "cartilage",
+      "structure": null,
       "region": null,
       "laterality": null,
       "oksat": {
@@ -3956,7 +3956,7 @@
       ],
       "abbrev": "SMAS",
       "structure": "fascia",
-      "region": null,
+      "region": "facial-skeleton",
       "laterality": "paired",
       "oksat": {
         "modules": [],
@@ -15846,6 +15846,3821 @@
         ]
       },
       "review": false
+    },
+    {
+      "id": "auricular-cartilage",
+      "label": "Auricular Cartilage",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Single elastic-cartilage framework of the auricle whose folds and hollows form the surface subunits (helix, antihelix, tragus, concha); continuous medially with the cartilaginous external auditory canal. The lobule lacks cartilage.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "pinna cartilage",
+        "auricular framework"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "helix",
+      "label": "Helix",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Curved outer rim of the auricle, beginning at the crus of the helix within the concha and ending at the lobule. An elastic-cartilage subunit of the auricular framework.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "antihelix",
+      "label": "Antihelix",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Y-shaped ridge anterior and parallel to the helix; superiorly it divides into superior and inferior crura that bound the triangular fossa. Loss of its fold produces prominent-ear deformity.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "anthelix"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "superior-crus",
+      "label": "Superior Crus of Antihelix",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Upper of the two divergent limbs of the antihelix; with the inferior crus it bounds the triangular fossa.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "superior crus"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "inferior-crus",
+      "label": "Inferior Crus of Antihelix",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Lower, more horizontal limb of the antihelix; with the superior crus it bounds the triangular fossa.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "inferior crus"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "tragus",
+      "label": "Tragus",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Cartilaginous projection anterior to the external auditory meatus, overlapping its opening; separated from the antitragus by the intertragic notch.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "antitragus",
+      "label": "Antitragus",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Small tubercle opposite the tragus, superior to the lobule; separated from the tragus by the intertragic notch and continuous with the inferior antihelix.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "concha",
+      "label": "Concha",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Deepest hollow of the auricle, divided by the crus of the helix into cymba and cavum; the cavum concha leads medially into the external auditory canal.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "concha auriculae",
+        "cymba concha",
+        "cavum concha"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "scaphoid-fossa",
+      "label": "Scaphoid Fossa",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Narrow curved gutter between the helix and the antihelix; a hollow of the auricular cartilage framework.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "scapha"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "triangular-fossa",
+      "label": "Triangular Fossa",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Depression bounded by the superior and inferior crura of the antihelix; a hollow of the auricular cartilage framework.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "fossa triangularis"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "lobule",
+      "label": "Lobule (Earlobe)",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Inferior fibrofatty portion of the auricle; unlike the other subunits it contains NO cartilage, only fibrous tissue, fat, and skin. Continuous superiorly with the antitragus and helix.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "earlobe",
+        "lobulus auriculae"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "temporal-bone",
+      "label": "Temporal Bone",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Paired bone of the skull base composed of squamous, petrous, mastoid, and tympanic parts plus the styloid process; houses the middle and inner ear and transmits the facial and vestibulocochlear nerves.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "squamous-part",
+      "label": "Squamous Part of Temporal Bone",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Thin, flat superolateral plate of the temporal bone; bears the mandibular fossa and the zygomatic process, forming the roof and part of the wall of the external auditory canal.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "squama temporalis",
+        "temporal squama"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "petrous-part",
+      "label": "Petrous Part of Temporal Bone",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Dense pyramidal portion of the temporal bone housing the otic capsule (cochlea, vestibule, semicircular canals) and the internal auditory canal; wedged between the sphenoid and occipital bones at the skull base.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "petrous pyramid",
+        "petrous temporal bone"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mastoid-part",
+      "label": "Mastoid Part of Temporal Bone",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Posteroinferior part of the temporal bone bearing the mastoid process and air cells; continuous with the petrous part and the site of the mastoid antrum communicating with the epitympanum.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "mastoid portion"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "tympanic-part",
+      "label": "Tympanic Part of Temporal Bone",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Curved plate forming the anterior wall, floor, and lower posterior wall of the bony external auditory canal and the tympanic sulcus for the tympanic annulus; ends medially at the petrotympanic fissure.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "tympanic plate"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "otic-capsule",
+      "label": "Otic Capsule",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Dense endochondral bone of the petrous temporal bone that encloses the membranous labyrinth; contains the cochlea, vestibule, and semicircular canals. Its enchondral layer does not remodel, relevant in otosclerosis and otic-capsule-violating fractures.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "bony labyrinth capsule"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "tympanosquamous-fissure",
+      "label": "Tympanosquamous Fissure",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Suture line on the mandibular fossa between the squamous and tympanic parts of the temporal bone; lies anterolateral to the petrotympanic fissure.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "squamotympanic fissure"
+      ],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "petrotympanic-fissure",
+      "label": "Petrotympanic Fissure (Glaserian Fissure)",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Slit between the petrous and tympanic parts at the medial mandibular fossa. Transmits the chorda tympani nerve out of the middle ear and the anterior tympanic artery; also transmits the anterior malleal ligament.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Glaserian fissure",
+        "glaserian fissure"
+      ],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "petrosquamous-suture",
+      "label": "Petrosquamous Suture",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Suture between the petrous and squamous parts of the temporal bone; a persistent (Koerner's) septum along this line can complicate mastoid surgery and provide a route for infection spread.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Koerner's septum"
+      ],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "maxilla",
+      "label": "Maxilla",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Paired central midface bone forming the upper jaw, anterior maxillary sinus wall, inferior orbital rim/floor, piriform aperture and hard palate; key to Le Fort fracture patterns.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "maxilla-frontal-process",
+      "label": "Frontal Process of Maxilla",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Superomedial maxillary projection meeting the frontal and nasal bones; forms the medial orbital rim and part of the nasomaxillary buttress and lacrimal fossa.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "maxilla-zygomatic-process",
+      "label": "Zygomatic Process of Maxilla",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Lateral maxillary projection articulating with the zygoma at the zygomaticomaxillary suture; component of the lateral (zygomaticomaxillary) vertical buttress.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "maxilla-alveolar-process",
+      "label": "Alveolar Process of Maxilla",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Tooth-bearing inferior ridge of the maxilla; its dental sockets anchor the vertical midface buttresses and are disrupted in Le Fort I fractures.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "maxilla-palatine-process",
+      "label": "Palatine Process of Maxilla",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Horizontal shelf forming the anterior three-quarters of the hard palate, meeting its fellow at the intermaxillary suture and the palatine bone posteriorly.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-condyle",
+      "label": "Mandibular Condyle",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Rounded superior process of the ramus articulating with the temporal glenoid fossa at the TMJ; common site of subcondylar fracture.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-coronoid-process",
+      "label": "Coronoid Process",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Anterosuperior ramus process giving insertion to the temporalis muscle; separated from the condyle by the mandibular (sigmoid) notch.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-ramus",
+      "label": "Mandibular Ramus",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Vertical posterior segment bearing the condyle and coronoid; lateral surface receives masseter, medial surface receives medial pterygoid.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-angle",
+      "label": "Mandibular Angle",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Junction of ramus and body; a frequent fracture site, weakened by the third molar and the masseter-medial pterygoid muscular sling.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-body",
+      "label": "Mandibular Body",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Horizontal tooth-bearing segment transmitting the inferior alveolar nerve through its canal to the mental foramen.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-symphysis",
+      "label": "Mandibular Symphysis",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Midline anterior mandible (fused embryologic symphysis); parasymphyseal fractures often accompany contralateral condylar fractures.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "mandible-alveolar-ridge",
+      "label": "Mandibular Alveolar Ridge",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Tooth-bearing crest of the mandibular body; resorbs after tooth loss and is relevant to dental rehabilitation and osteotomy planning.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "zygoma",
+      "label": "Zygoma",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Malar bone forming cheek prominence and lateral orbital rim/floor; articulates with frontal, temporal, maxillary and sphenoid bones as the ZMC quadripod.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "nasal-bone",
+      "label": "Nasal Bone",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Paired bones forming the bony nasal dorsum; articulate superiorly with frontal bone, medially with each other, laterally with the maxillary frontal process.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "frontal-bone",
+      "label": "Frontal Bone",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Forms the forehead, supraorbital rims and orbital roofs and houses the frontal sinus; its inferior articulations define the frontal-bar horizontal buttress.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "glabella",
+      "label": "Glabella",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Smooth midline prominence of the frontal bone between the supraorbital ridges and above the frontonasal suture; a cephalometric soft-tissue landmark.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "supraorbital-rim",
+      "label": "Supraorbital Rim",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Superior orbital margin of the frontal bone bearing the supraorbital notch/foramen; part of the upper transverse (frontal-bar) midface buttress.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "lacrimal-bone",
+      "label": "Lacrimal Bone",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Small medial orbital wall bone forming, with the maxillary frontal process, the lacrimal fossa lodging the lacrimal sac and nasolacrimal duct.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatine-bone",
+      "label": "Palatine Bone",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "L-shaped bone with horizontal and perpendicular plates; forms the posterior hard palate, lateral nasal wall and part of the pterygopalatine fossa.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatine-bone-horizontal-plate",
+      "label": "Horizontal Plate of Palatine Bone",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Forms the posterior one-quarter of the hard palate, meeting the palatine process of the maxilla anteriorly and its fellow at the midline.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatine-bone-perpendicular-plate",
+      "label": "Perpendicular Plate of Palatine Bone",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Vertical plate forming the posterior lateral nasal wall; its sphenopalatine notch, closed by the sphenoid, becomes the sphenopalatine foramen.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "nasomaxillary-buttress",
+      "label": "Nasomaxillary (Medial) Buttress",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Medial vertical midface buttress running along the piriform aperture from the alveolus through the frontal process of the maxilla to the frontal bone.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "zygomaticomaxillary-buttress",
+      "label": "Zygomaticomaxillary (Lateral) Buttress",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Lateral vertical buttress from the maxillary alveolus through the zygomaticomaxillary junction and zygoma to the frontal bone; a key ORIF fixation strut.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "pterygomaxillary-buttress",
+      "label": "Pterygomaxillary (Posterior) Buttress",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Posterior vertical buttress connecting the maxilla to the sphenoid pterygoid plates; disrupted in Le Fort fractures via the pterygomaxillary junction.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "frontal-bar-buttress",
+      "label": "Frontal Bar (Upper Transverse) Buttress",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Thick horizontal bar of the frontal bone across the supraorbital rims and glabella; the superior transverse strut resisting midface disruption.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "infraorbital-buttress",
+      "label": "Infraorbital Rim (Transverse) Buttress",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Horizontal buttress along the inferior orbital rim linking the medial and lateral vertical struts; commonly plated in ZMC and orbital fractures.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatal-buttress",
+      "label": "Palatoalveolar (Lower Transverse) Buttress",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Horizontal palatal-alveolar strut across the hard palate tying the paired vertical buttresses together at the occlusal level.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "zygomaticotemporal-suture",
+      "label": "Zygomaticotemporal Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Articulation of the zygomatic process of the temporal bone with the temporal process of the zygoma forming the zygomatic arch.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "nasomaxillary-suture",
+      "label": "Nasomaxillary Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Suture between the lateral edge of the nasal bone and the frontal process of the maxilla, along the nasomaxillary buttress.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "frontonasal-suture",
+      "label": "Frontonasal Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Midline articulation of the nasal bones with the frontal bone; its midpoint (nasion) is a standard cephalometric landmark.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "frontomaxillary-suture",
+      "label": "Frontomaxillary Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Suture between the frontal bone and the frontal process of the maxilla, superior to the medial orbital rim.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "intermaxillary-suture",
+      "label": "Intermaxillary Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Midline suture uniting the two maxillae along the palatine processes and anterior nasal spine; site of the median palatal raphe.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "internasal-suture",
+      "label": "Internasal Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Midline suture joining the paired nasal bones forming the bony dorsum ridge.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "glenoid-fossa",
+      "label": "Glenoid (Mandibular) Fossa",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Concavity on the temporal bone squama that receives the mandibular condyle and articular disc to form the TMJ; bounded anteriorly by the articular eminence.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "septal-cartilage",
+      "label": "Septal (Quadrangular) Cartilage",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Quadrangular cartilage forming the anterior nasal septum; continuous posterosuperiorly with the ethmoid perpendicular plate and posteroinferiorly with the vomer.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "nasal-sinus",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "upper-lateral-cartilage",
+      "label": "Upper Lateral Cartilage",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Paired middle-vault cartilages fused to the dorsal septum; their caudal scroll overlaps the lower lateral cartilage and the internal nasal valve angle.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sesamoid-cartilage",
+      "label": "Sesamoid Cartilage",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Small accessory cartilages within the fibrofatty tissue lateral to the lower lateral cartilage along the alar margin.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "keystone-area",
+      "label": "Keystone Area",
+      "type": "concept",
+      "subspecialty": "rhinology",
+      "detail": "Bony-cartilaginous junction where the caudal nasal bones overlap the cephalic upper lateral cartilages and dorsal septum; critical dorsal support in rhinoplasty.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "nasal-sinus",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "perpendicular-plate-of-ethmoid",
+      "label": "Perpendicular Plate of Ethmoid",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Descending midline ethmoid plate forming the superior bony nasal septum, continuous with the septal cartilage and vomer.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "vomer",
+      "label": "Vomer",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Midline bone forming the posteroinferior bony nasal septum; articulates with the ethmoid perpendicular plate, sphenoid, maxilla and palatine crests.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "superior-turbinate",
+      "label": "Superior Turbinate",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Smallest ethmoid turbinate; the sphenoethmoidal recess and posterior ethmoid cells drain in relation to it.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "ethmoid-bulla",
+      "label": "Ethmoid Bulla",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Largest, most constant anterior ethmoid air cell bulging into the middle meatus; forms the posterior boundary of the hiatus semilunaris and ostiomeatal complex.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "basal-lamella",
+      "label": "Basal Lamella",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Coronal bony attachment of the middle turbinate to the lamina papyracea; the surgical boundary separating anterior from posterior ethmoid cells.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "agger-nasi",
+      "label": "Agger Nasi Cell",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Most anterior ethmoid air cell anterior to the middle turbinate attachment; a key landmark for the frontal recess and frontal sinus drainage.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "ethmoid-bone",
+      "label": "Ethmoid Bone",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Central bone contributing the cribriform plate, perpendicular plate, lamina papyracea and ethmoid air cells with the middle and superior turbinates.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "right-thyroid-lamina",
+      "label": "Right Thyroid Lamina",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Right quadrilateral plate of the thyroid cartilage; fuses anteriorly with the left lamina at the laryngeal prominence.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "left-thyroid-lamina",
+      "label": "Left Thyroid Lamina",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Left quadrilateral plate of the thyroid cartilage; fuses anteriorly with the right lamina at the laryngeal prominence.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "thyroid-superior-cornu",
+      "label": "Superior Cornu of Thyroid Cartilage",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Upper horn of the thyroid lamina; connected to the greater cornu of the hyoid by the lateral thyrohyoid ligament.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "superior thyroid horn"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "thyroid-inferior-cornu",
+      "label": "Inferior Cornu of Thyroid Cartilage",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Lower horn of the thyroid lamina; its medial facet articulates with the cricoid to form the cricothyroid joint.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "inferior thyroid horn"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "laryngeal-prominence",
+      "label": "Laryngeal Prominence",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Anterior midline fusion of the thyroid laminae ('Adam's apple'); anterior commissure lies on its inner surface.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Adam's apple"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "oblique-line",
+      "label": "Oblique Line of Thyroid Cartilage",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Ridge on the outer thyroid lamina giving attachment to the sternothyroid, thyrohyoid, and inferior pharyngeal constrictor muscles.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "cricoid-arch",
+      "label": "Cricoid Arch",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Narrow anterior portion of the signet-ring cricoid cartilage; gives origin to the cricothyroid and lateral cricoarytenoid muscles.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "cricoid-lamina",
+      "label": "Cricoid Lamina",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Broad posterior plate of the cricoid; bears the cricoarytenoid facets superiorly and gives origin to the posterior cricoarytenoid muscle.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "vocal-process",
+      "label": "Vocal Process of Arytenoid",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Anterior projection of the arytenoid that anchors the posterior end of the vocal ligament; a key landmark for medialization and injection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "vocal-fold-paralysis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "muscular-process",
+      "label": "Muscular Process of Arytenoid",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Lateral projection of the arytenoid; insertion of the posterior and lateral cricoarytenoid muscles that rotate the arytenoid.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "arytenoid-apex",
+      "label": "Apex of Arytenoid",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Superior tip of the arytenoid cartilage; articulates with the corniculate cartilage and lies within the aryepiglottic fold.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "petiole",
+      "label": "Petiole of Epiglottis",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Narrow inferior stalk of the epiglottis attached to the inner thyroid cartilage by the thyroepiglottic ligament.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "corniculate-cartilage",
+      "label": "Corniculate Cartilage",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Small paired elastic cartilage (of Santorini) sitting on the arytenoid apex within the aryepiglottic fold.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "cartilage of Santorini"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "cuneiform-cartilage",
+      "label": "Cuneiform Cartilage",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Small paired elastic cartilage (of Wrisberg) within the aryepiglottic fold, anterolateral to the corniculate, providing support.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "cartilage of Wrisberg"
+      ],
+      "abbrev": null,
+      "structure": "cartilage",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "vocalis-muscle",
+      "label": "Vocalis Muscle",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Medial deep fibers of the thyroarytenoid lying against the vocal ligament; fine-tunes vocal fold tension and pitch.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "benign-vocal-fold-lesions"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "thyroepiglottic-muscle",
+      "label": "Thyroepiglottic Muscle",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Superolateral thyroarytenoid fibers running to the epiglottis; widens the laryngeal inlet.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "aryepiglottic-muscle",
+      "label": "Aryepiglottic Muscle",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Oblique interarytenoid fibers continuing into the aryepiglottic fold; acts as a sphincter narrowing the laryngeal inlet during swallowing.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "buccopharyngeal-fascia",
+      "label": "Buccopharyngeal Fascia",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Posterior extension of the pretracheal (visceral) fascia covering the constrictor muscles and buccinator; forms the anterior wall of the retropharyngeal space and the medial wall of the parapharyngeal space.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "buccopharyngeal layer"
+      ],
+      "abbrev": null,
+      "structure": "fascia",
+      "region": "neck",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "visceral-space",
+      "label": "Visceral (Pretracheal) Space",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Midline compartment enclosed by the pretracheal/visceral fascia containing the thyroid gland, trachea, and esophagus; infection can descend to the anterior superior mediastinum.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "pretracheal space",
+        "anterior visceral space"
+      ],
+      "abbrev": null,
+      "structure": "space",
+      "region": "neck",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "carotid-space",
+      "label": "Carotid Space",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Space defined by the carotid sheath (the 'Lincoln's highway' of the neck) spanning skull base to mediastinum; contains the carotid artery, internal jugular vein, and vagus nerve.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Lincoln's highway"
+      ],
+      "abbrev": null,
+      "structure": "space",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "mylohyoid-muscle",
+      "label": "Mylohyoid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Suprahyoid muscle forming the muscular floor of the mouth (oral diaphragm); elevates the hyoid and floor of mouth in swallowing. Its free posterior border separates the sublingual and submandibular spaces.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "geniohyoid-muscle",
+      "label": "Geniohyoid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Suprahyoid muscle from the mental spine of the mandible to the hyoid; elevates and draws the hyoid anteriorly, widening the pharynx during swallowing.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "stylohyoid-muscle",
+      "label": "Stylohyoid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Suprahyoid muscle from the styloid process to the hyoid; elevates and retracts the hyoid. Innervated by the facial nerve.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "digastric-anterior-belly",
+      "label": "Digastric Muscle (Anterior Belly)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Suprahyoid; from the digastric fossa of the mandible to the intermediate tendon slung on the hyoid. Elevates the hyoid and depresses the mandible; innervated by the mylohyoid branch of V3.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "digastric-posterior-belly",
+      "label": "Digastric Muscle (Posterior Belly)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Suprahyoid; from the mastoid notch to the intermediate tendon on the hyoid. Elevates and retracts the hyoid; key surgical landmark overlying the retromandibular structures. Innervated by the facial nerve.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sternohyoid-muscle",
+      "label": "Sternohyoid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Infrahyoid strap muscle from the manubrium to the hyoid; depresses the hyoid after swallowing. Innervated by the ansa cervicalis (C1-C3).",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "strap muscle"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sternothyroid-muscle",
+      "label": "Sternothyroid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Infrahyoid strap muscle from the manubrium to the oblique line of the thyroid cartilage; depresses the larynx. Innervated by the ansa cervicalis.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "strap muscle"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "thyrohyoid-muscle",
+      "label": "Thyrohyoid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Infrahyoid strap from the thyroid cartilage to the hyoid; depresses the hyoid or elevates the larynx when the hyoid is fixed. Innervated by C1 fibers travelling with the hypoglossal nerve.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "strap muscle"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "omohyoid-muscle",
+      "label": "Omohyoid Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Two-bellied infrahyoid strap from the scapula to the hyoid, tethered by a fascial sling to the clavicle; depresses the hyoid and is a surgical landmark dividing neck level III/IV. Innervated by the ansa cervicalis.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "strap muscle"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "cervical-vertebra",
+      "label": "Cervical Vertebra",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "One of seven cervical vertebrae (C1-C7); characterized by transverse foramina transmitting the vertebral vessels. The vertebral bodies and anterior longitudinal ligament form the posterior floor of the prevertebral space.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "C-spine vertebra"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "cervical-spine-hyoid",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "atlas-c1",
+      "label": "Atlas (C1)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "First cervical vertebra; a ring lacking a body or spinous process. Articulates superiorly with the occipital condyles (atlanto-occipital, nodding) and inferiorly/around the dens with C2 (atlanto-axial, rotation).",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "C1"
+      ],
+      "abbrev": "C1",
+      "structure": "bone",
+      "region": "cervical-spine-hyoid",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "axis-c2",
+      "label": "Axis (C2)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Second cervical vertebra bearing the odontoid process (dens), the pivot around which the atlas and head rotate at the median atlanto-axial joint.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "C2",
+        "epistropheus"
+      ],
+      "abbrev": "C2",
+      "structure": "bone",
+      "region": "cervical-spine-hyoid",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "transverse-process",
+      "label": "Transverse Process (Cervical)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Lateral bony process of a cervical vertebra containing the transverse foramen; anterior tubercle of C6 (carotid tubercle of Chassaignac) is a compression landmark for the common carotid artery.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "cervical-spine-hyoid",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "transverse-foramen",
+      "label": "Transverse Foramen (Foramen Transversarium)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Foramen in the cervical transverse process transmitting the vertebral artery and vein (artery typically enters at C6 and ascends to C1). A defining feature of cervical vertebrae.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "foramen transversarium"
+      ],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "cervical-spine-hyoid",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "vertebral-artery",
+      "label": "Vertebral Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "First branch of the subclavian artery; ascends through the cervical transverse foramina (C6 up to C1), enters the foramen magnum, and joins to form the basilar artery. At risk in prevertebral and lateral neck dissection.",
+      "sources": [
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "cervical-spine-hyoid",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "medial-pterygoid-plate",
+      "label": "Medial Pterygoid Plate",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Thin vertical plate of the sphenoid bone; its inferior tip curves laterally as the pterygoid hamulus, around which tensor veli palatini tendon hooks.",
+      "sources": [
+        "Gray's Anatomy",
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "medial pterygoid lamina"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "pterygoid-hamulus",
+      "label": "Pterygoid Hamulus",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Hook-shaped inferior projection of the medial pterygoid plate; the tensor veli palatini tendon turns around it, and the pterygomandibular raphe attaches superiorly here.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "hamulus"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "lateral-pterygoid-plate",
+      "label": "Lateral Pterygoid Plate",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Broader plate of the sphenoid; its lateral and medial surfaces give origin to the lateral and medial pterygoid muscles respectively.",
+      "sources": [
+        "Gray's Anatomy",
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "lateral pterygoid lamina"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "buccinator",
+      "label": "Buccinator Muscle",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Muscle of the cheek arising in part from the pterygomandibular raphe; compresses the cheek against the teeth during mastication.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "superior-pharyngeal-constrictor",
+      "label": "Superior Pharyngeal Constrictor",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Uppermost constrictor arising from the pterygoid hamulus, pterygomandibular raphe, and mandibular mylohyoid line; forms the lateral and posterior wall of the oropharynx.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "middle-pharyngeal-constrictor",
+      "label": "Middle Pharyngeal Constrictor",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Arises from the greater and lesser cornua of the hyoid bone and the stylohyoid ligament; overlaps the superior constrictor externally.",
+      "sources": [
+        "Gray's Anatomy",
+        "Moore Clinically Oriented Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "inferior-pharyngeal-constrictor",
+      "label": "Inferior Pharyngeal Constrictor",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Lowest constrictor with thyropharyngeus (from the thyroid cartilage oblique line) and cricopharyngeus (from the cricoid cartilage) parts; the Killian dehiscence between them is the site of Zenker diverticulum.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "cricopharyngeus",
+      "label": "Cricopharyngeus Muscle",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Circular lower part of the inferior constrictor arising from the cricoid cartilage; functions as the upper esophageal sphincter (UES) and is the muscle divided in cricopharyngeal myotomy.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "upper esophageal sphincter"
+      ],
+      "abbrev": "UES",
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatine-process-of-maxilla",
+      "label": "Palatine Process of Maxilla",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Horizontal shelf of the maxilla forming the anterior three-quarters of the hard palate; meets its fellow at the median palatine suture.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "horizontal-plate-of-palatine",
+      "label": "Horizontal Plate of Palatine Bone",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Forms the posterior quarter of the hard palate; its posterior free border gives attachment to the palatine aponeurosis of the soft palate.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "horizontal plate of palatine"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "hard-palate",
+      "label": "Hard Palate",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Bony roof of the mouth formed by the palatine processes of the maxillae and horizontal plates of the palatine bones; separates the oral and nasal cavities.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "oral-pharynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "incisive-foramen",
+      "label": "Incisive Foramen",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Midline opening behind the central incisors transmitting the nasopalatine nerve and sphenopalatine vessels to the anterior hard palate.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "incisive canal"
+      ],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "oral-pharynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "greater-palatine-foramen",
+      "label": "Greater Palatine Foramen",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Opening at the posterolateral hard palate transmitting the greater palatine nerve and vessels that supply the mucosa of the hard palate.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "lesser-palatine-foramen",
+      "label": "Lesser Palatine Foramen",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Small opening posterior to the greater palatine foramen transmitting the lesser palatine nerves and vessels to the soft palate and tonsil.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatine-aponeurosis",
+      "label": "Palatine Aponeurosis",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Fibrous sheet, the expanded tensor veli palatini tendon, attached to the posterior border of the hard palate; forms the fibrous skeleton of the soft palate into which the other palatal muscles insert.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "aponeurosis of soft palate"
+      ],
+      "abbrev": null,
+      "structure": "membrane",
+      "region": "oral-pharynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatoglossal-arch",
+      "label": "Palatoglossal Arch (Anterior Tonsillar Pillar)",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Anterior tonsillar pillar overlying the palatoglossus muscle; forms the anterior boundary of the tonsillar fossa and the oropharyngeal isthmus.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "anterior tonsillar pillar",
+        "palatoglossus"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "palatopharyngeal-arch",
+      "label": "Palatopharyngeal Arch (Posterior Tonsillar Pillar)",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Posterior tonsillar pillar overlying the palatopharyngeus muscle; forms the posterior boundary of the tonsillar fossa.",
+      "sources": [
+        "Gray's Anatomy",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "posterior tonsillar pillar",
+        "palatopharyngeus"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sphenoid",
+      "label": "Sphenoid Bone",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Central keystone of the cranial base; articulates with all other cranial bones. Forms much of the middle cranial fossa.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "ethmoid",
+      "label": "Ethmoid Bone",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Midline bone forming part of the anterior cranial base, nasal roof and medial orbital walls.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "occipital-bone",
+      "label": "Occipital Bone",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Forms the posterior cranial fossa and encircles the foramen magnum.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "parietal-bone",
+      "label": "Parietal Bone",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Paired calvarial bones contributing to the lateral skull vault.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "greater-wing",
+      "label": "Greater Wing of Sphenoid",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Forms the anterior middle cranial fossa floor; transmits foramina rotundum, ovale and spinosum.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "lesser-wing",
+      "label": "Lesser Wing of Sphenoid",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Forms the posterior anterior-cranial-fossa margin and the anterior clinoid process; its root bounds the optic canal.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "body-of-sphenoid",
+      "label": "Body of Sphenoid",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Central cube containing the sphenoid sinus and supporting the sella turcica.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "pterygoid-process",
+      "label": "Pterygoid Process",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Descends from the sphenoid body/greater wing junction; contains medial and lateral pterygoid plates.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "clivus",
+      "label": "Clivus",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Sloping midline surface formed by the fused sphenoid body and basiocciput, posterior to the dorsum sellae.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "crista-galli",
+      "label": "Crista Galli",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Midline ethmoid ridge projecting superiorly for attachment of the falx cerebri.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "perpendicular-plate",
+      "label": "Perpendicular Plate of Ethmoid",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Forms the superior bony nasal septum.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "ethmoid-labyrinth",
+      "label": "Ethmoid Labyrinth",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Paired lateral masses containing the ethmoid air cells, bounded superiorly by the fovea ethmoidalis.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "basiocciput",
+      "label": "Basiocciput",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Basilar part of the occipital bone forming the lower clivus and fusing with the sphenoid.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "occipital-condyle",
+      "label": "Occipital Condyle",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Paired condyles flanking the foramen magnum that articulate with the atlas.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "squamous-occipital",
+      "label": "Squamous Occipital",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Expanded plate posterior to the foramen magnum forming the posterior fossa wall.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "planum-sphenoidale",
+      "label": "Planum Sphenoidale",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Flat surface of the sphenoid between the ethmoid and the tuberculum sellae.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "tuberculum-sellae",
+      "label": "Tuberculum Sellae",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Bony ridge marking the anterior boundary of the sella turcica.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "dorsum-sellae",
+      "label": "Dorsum Sellae",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Posterior wall of the sella turcica, continuous inferiorly with the clivus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "foramen-cecum",
+      "label": "Foramen Cecum",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Small midline pit between the frontal bone and crista galli; may transmit an emissary vein.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "jugular-tubercle",
+      "label": "Jugular Tubercle",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Occipital elevation superomedial to the hypoglossal canal and jugular foramen.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sphenooccipital-synchondrosis",
+      "label": "Spheno-occipital Synchondrosis",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Cartilaginous junction between the sphenoid body and basiocciput; fuses in late adolescence and drives clival growth.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sphenoethmoidal-junction",
+      "label": "Sphenoethmoidal Junction",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Articulation between the sphenoid and the posterior ethmoid.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sphenofrontal-suture",
+      "label": "Sphenofrontal Suture",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Suture between the lesser/greater wing of the sphenoid and the frontal bone.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "sphenopetrosal-fissure",
+      "label": "Sphenopetrosal Fissure",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Fissure between the greater wing of the sphenoid and the petrous temporal bone.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
+    },
+    {
+      "id": "petrooccipital-fissure",
+      "label": "Petro-occipital Fissure",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Fissure between the petrous temporal bone and the basiocciput, ending at the jugular foramen.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": false
     }
   ],
   "edges": [
@@ -19411,6 +23226,1743 @@
       "target": "vagus-nerve",
       "type": "forms",
       "label": "contents"
+    },
+    {
+      "source": "helix",
+      "target": "auricular-cartilage",
+      "type": "part_of"
+    },
+    {
+      "source": "antihelix",
+      "target": "auricular-cartilage",
+      "type": "part_of"
+    },
+    {
+      "source": "tragus",
+      "target": "auricular-cartilage",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "antitragus",
+      "target": "auricular-cartilage",
+      "type": "part_of"
+    },
+    {
+      "source": "concha",
+      "target": "auricular-cartilage",
+      "type": "part_of"
+    },
+    {
+      "source": "scaphoid-fossa",
+      "target": "auricular-cartilage",
+      "type": "part_of"
+    },
+    {
+      "source": "triangular-fossa",
+      "target": "auricular-cartilage",
+      "type": "part_of"
+    },
+    {
+      "source": "superior-crus",
+      "target": "antihelix",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "inferior-crus",
+      "target": "antihelix",
+      "type": "part_of",
+      "direction": "inferior"
+    },
+    {
+      "source": "lobule",
+      "target": "auricular-cartilage",
+      "type": "continuous_with",
+      "label": "fibrofatty, no cartilage",
+      "direction": "inferior"
+    },
+    {
+      "source": "helix",
+      "target": "scaphoid-fossa",
+      "type": "continuous_with"
+    },
+    {
+      "source": "scaphoid-fossa",
+      "target": "antihelix",
+      "type": "continuous_with"
+    },
+    {
+      "source": "superior-crus",
+      "target": "triangular-fossa",
+      "type": "continuous_with"
+    },
+    {
+      "source": "inferior-crus",
+      "target": "triangular-fossa",
+      "type": "continuous_with"
+    },
+    {
+      "source": "antihelix",
+      "target": "antitragus",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "antitragus",
+      "target": "tragus",
+      "type": "continuous_with",
+      "label": "intertragic notch"
+    },
+    {
+      "source": "helix",
+      "target": "lobule",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "lobule",
+      "target": "antitragus",
+      "type": "continuous_with",
+      "direction": "superior"
+    },
+    {
+      "source": "concha",
+      "target": "external-auditory-canal",
+      "type": "continuous_with",
+      "direction": "medial"
+    },
+    {
+      "source": "squamous-part",
+      "target": "temporal-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "petrous-part",
+      "target": "temporal-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "mastoid-part",
+      "target": "temporal-bone",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "tympanic-part",
+      "target": "temporal-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "styloid-process",
+      "target": "temporal-bone",
+      "type": "part_of",
+      "direction": "inferior"
+    },
+    {
+      "source": "mastoid",
+      "target": "mastoid-part",
+      "type": "part_of"
+    },
+    {
+      "source": "tympanic-part",
+      "target": "external-auditory-canal",
+      "type": "forms",
+      "label": "anterior wall and floor"
+    },
+    {
+      "source": "squamous-part",
+      "target": "external-auditory-canal",
+      "type": "forms",
+      "label": "roof",
+      "direction": "superior"
+    },
+    {
+      "source": "otic-capsule",
+      "target": "petrous-part",
+      "type": "part_of"
+    },
+    {
+      "source": "cochlea",
+      "target": "otic-capsule",
+      "type": "contained_in"
+    },
+    {
+      "source": "vestibule",
+      "target": "otic-capsule",
+      "type": "contained_in"
+    },
+    {
+      "source": "semicircular-canals",
+      "target": "otic-capsule",
+      "type": "contained_in"
+    },
+    {
+      "source": "internal-auditory-canal",
+      "target": "petrous-part",
+      "type": "contained_in"
+    },
+    {
+      "source": "tympanosquamous-fissure",
+      "target": "squamous-part",
+      "type": "articulates_with"
+    },
+    {
+      "source": "tympanosquamous-fissure",
+      "target": "tympanic-part",
+      "type": "articulates_with"
+    },
+    {
+      "source": "petrotympanic-fissure",
+      "target": "petrous-part",
+      "type": "articulates_with"
+    },
+    {
+      "source": "petrotympanic-fissure",
+      "target": "tympanic-part",
+      "type": "articulates_with"
+    },
+    {
+      "source": "petrotympanic-fissure",
+      "target": "chorda-tympani",
+      "type": "transmits",
+      "label": "exit from middle ear",
+      "direction": "anterior"
+    },
+    {
+      "source": "petrotympanic-fissure",
+      "target": "anterior-malleal-ligament",
+      "type": "transmits"
+    },
+    {
+      "source": "petrosquamous-suture",
+      "target": "petrous-part",
+      "type": "articulates_with"
+    },
+    {
+      "source": "petrosquamous-suture",
+      "target": "squamous-part",
+      "type": "articulates_with"
+    },
+    {
+      "source": "tensor-tympani",
+      "target": "malleus",
+      "type": "attaches_to",
+      "label": "neck of malleus",
+      "direction": "medial"
+    },
+    {
+      "source": "stapedius-muscle",
+      "target": "stapes",
+      "type": "attaches_to",
+      "label": "neck of stapes",
+      "direction": "posterior"
+    },
+    {
+      "source": "maxilla-frontal-process",
+      "target": "maxilla",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "maxilla-zygomatic-process",
+      "target": "maxilla",
+      "type": "part_of",
+      "direction": "lateral"
+    },
+    {
+      "source": "maxilla-alveolar-process",
+      "target": "maxilla",
+      "type": "part_of",
+      "direction": "inferior"
+    },
+    {
+      "source": "maxilla-palatine-process",
+      "target": "maxilla",
+      "type": "part_of",
+      "direction": "medial"
+    },
+    {
+      "source": "mandible-condyle",
+      "target": "mandible",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "mandible-coronoid-process",
+      "target": "mandible",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "mandible-ramus",
+      "target": "mandible",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "mandible-angle",
+      "target": "mandible",
+      "type": "part_of"
+    },
+    {
+      "source": "mandible-body",
+      "target": "mandible",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "mandible-symphysis",
+      "target": "mandible",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "mandible-alveolar-ridge",
+      "target": "mandible",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "glabella",
+      "target": "frontal-bone",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "supraorbital-rim",
+      "target": "frontal-bone",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "palatine-bone-horizontal-plate",
+      "target": "palatine-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "palatine-bone-perpendicular-plate",
+      "target": "palatine-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "zygoma",
+      "target": "zygomaticomaxillary-complex",
+      "type": "part_of"
+    },
+    {
+      "source": "maxilla",
+      "target": "zygomaticomaxillary-complex",
+      "type": "part_of"
+    },
+    {
+      "source": "maxilla",
+      "target": "orbital-floor",
+      "type": "forms",
+      "direction": "medial"
+    },
+    {
+      "source": "zygoma",
+      "target": "orbital-floor",
+      "type": "forms",
+      "direction": "lateral"
+    },
+    {
+      "source": "palatine-bone-horizontal-plate",
+      "target": "maxilla-palatine-process",
+      "type": "continuous_with",
+      "direction": "anterior"
+    },
+    {
+      "source": "frontozygomatic-suture",
+      "target": "frontal-bone",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "frontozygomatic-suture",
+      "target": "zygoma",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "zygomaticomaxillary-suture",
+      "target": "zygoma",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "zygomaticomaxillary-suture",
+      "target": "maxilla",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "zygomaticotemporal-suture",
+      "target": "zygoma",
+      "type": "articulates_with",
+      "direction": "anterior"
+    },
+    {
+      "source": "zygomaticotemporal-suture",
+      "target": "temporal-bone",
+      "type": "articulates_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "nasomaxillary-suture",
+      "target": "nasal-bone",
+      "type": "articulates_with",
+      "direction": "medial"
+    },
+    {
+      "source": "nasomaxillary-suture",
+      "target": "maxilla-frontal-process",
+      "type": "articulates_with",
+      "direction": "lateral"
+    },
+    {
+      "source": "frontonasal-suture",
+      "target": "frontal-bone",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "frontonasal-suture",
+      "target": "nasal-bone",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "frontomaxillary-suture",
+      "target": "frontal-bone",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "frontomaxillary-suture",
+      "target": "maxilla-frontal-process",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "intermaxillary-suture",
+      "target": "maxilla",
+      "type": "articulates_with"
+    },
+    {
+      "source": "internasal-suture",
+      "target": "nasal-bone",
+      "type": "articulates_with"
+    },
+    {
+      "source": "pterygomaxillary-fissure",
+      "target": "maxilla",
+      "type": "articulates_with",
+      "direction": "anterior"
+    },
+    {
+      "source": "pterygomaxillary-fissure",
+      "target": "sphenoid",
+      "type": "articulates_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "nasomaxillary-buttress",
+      "target": "facial-buttresses",
+      "type": "part_of"
+    },
+    {
+      "source": "nasomaxillary-buttress",
+      "target": "maxilla-frontal-process",
+      "type": "forms"
+    },
+    {
+      "source": "nasomaxillary-buttress",
+      "target": "frontal-bone",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "zygomaticomaxillary-buttress",
+      "target": "facial-buttresses",
+      "type": "part_of"
+    },
+    {
+      "source": "zygomaticomaxillary-buttress",
+      "target": "maxilla-zygomatic-process",
+      "type": "forms"
+    },
+    {
+      "source": "zygomaticomaxillary-buttress",
+      "target": "zygoma",
+      "type": "forms",
+      "direction": "superior"
+    },
+    {
+      "source": "pterygomaxillary-buttress",
+      "target": "facial-buttresses",
+      "type": "part_of"
+    },
+    {
+      "source": "pterygomaxillary-buttress",
+      "target": "pterygomaxillary-fissure",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "frontal-bar-buttress",
+      "target": "facial-buttresses",
+      "type": "part_of"
+    },
+    {
+      "source": "frontal-bar-buttress",
+      "target": "frontal-bone",
+      "type": "forms"
+    },
+    {
+      "source": "frontal-bar-buttress",
+      "target": "supraorbital-rim",
+      "type": "forms"
+    },
+    {
+      "source": "infraorbital-buttress",
+      "target": "facial-buttresses",
+      "type": "part_of"
+    },
+    {
+      "source": "infraorbital-buttress",
+      "target": "orbital-floor",
+      "type": "attaches_to",
+      "direction": "inferior"
+    },
+    {
+      "source": "palatal-buttress",
+      "target": "facial-buttresses",
+      "type": "part_of"
+    },
+    {
+      "source": "palatal-buttress",
+      "target": "maxilla-palatine-process",
+      "type": "forms"
+    },
+    {
+      "source": "palatal-buttress",
+      "target": "palatine-bone-horizontal-plate",
+      "type": "forms",
+      "direction": "posterior"
+    },
+    {
+      "source": "temporomandibular-joint",
+      "target": "mandible-condyle",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "temporomandibular-joint",
+      "target": "glenoid-fossa",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "mandible-condyle",
+      "target": "glenoid-fossa",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "glenoid-fossa",
+      "target": "temporal-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "articular-disc",
+      "target": "mandible-condyle",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "nasal-bone",
+      "target": "frontal-bone",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "nasal-bone",
+      "target": "maxilla-frontal-process",
+      "type": "articulates_with",
+      "direction": "lateral"
+    },
+    {
+      "source": "lacrimal-bone",
+      "target": "maxilla-frontal-process",
+      "type": "articulates_with",
+      "direction": "anterior"
+    },
+    {
+      "source": "lacrimal-bone",
+      "target": "nasolacrimal-duct",
+      "type": "forms",
+      "direction": "lateral"
+    },
+    {
+      "source": "inferior-turbinate",
+      "target": "maxilla",
+      "type": "attaches_to",
+      "direction": "lateral"
+    },
+    {
+      "source": "septal-cartilage",
+      "target": "perpendicular-plate-of-ethmoid",
+      "type": "continuous_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "septal-cartilage",
+      "target": "vomer",
+      "type": "continuous_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "perpendicular-plate-of-ethmoid",
+      "target": "vomer",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "septal-cartilage",
+      "target": "nasal-septum",
+      "type": "part_of"
+    },
+    {
+      "source": "perpendicular-plate-of-ethmoid",
+      "target": "nasal-septum",
+      "type": "part_of"
+    },
+    {
+      "source": "vomer",
+      "target": "nasal-septum",
+      "type": "part_of"
+    },
+    {
+      "source": "perpendicular-plate-of-ethmoid",
+      "target": "ethmoid-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "upper-lateral-cartilage",
+      "target": "septal-cartilage",
+      "type": "continuous_with",
+      "direction": "medial"
+    },
+    {
+      "source": "upper-lateral-cartilage",
+      "target": "nasal-bone",
+      "type": "continuous_with",
+      "direction": "superior"
+    },
+    {
+      "source": "keystone-area",
+      "target": "nasal-bone",
+      "type": "bounded_by",
+      "direction": "superior"
+    },
+    {
+      "source": "keystone-area",
+      "target": "upper-lateral-cartilage",
+      "type": "bounded_by",
+      "direction": "inferior"
+    },
+    {
+      "source": "keystone-area",
+      "target": "septal-cartilage",
+      "type": "bounded_by",
+      "direction": "deep"
+    },
+    {
+      "source": "upper-lateral-cartilage",
+      "target": "lower-lateral-cartilage",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "sesamoid-cartilage",
+      "target": "lower-lateral-cartilage",
+      "type": "continuous_with",
+      "direction": "lateral"
+    },
+    {
+      "source": "ethmoid-bone",
+      "target": "ethmoid-sinus",
+      "type": "forms"
+    },
+    {
+      "source": "middle-turbinate",
+      "target": "ethmoid-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "superior-turbinate",
+      "target": "ethmoid-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "uncinate-process",
+      "target": "ethmoid-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "ethmoid-bulla",
+      "target": "ethmoid-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "agger-nasi",
+      "target": "ethmoid-bone",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "basal-lamella",
+      "target": "middle-turbinate",
+      "type": "part_of"
+    },
+    {
+      "source": "basal-lamella",
+      "target": "lamina-papyracea",
+      "type": "attaches_to",
+      "direction": "lateral"
+    },
+    {
+      "source": "ostiomeatal-complex",
+      "target": "uncinate-process",
+      "type": "bounded_by",
+      "direction": "anterior"
+    },
+    {
+      "source": "ostiomeatal-complex",
+      "target": "ethmoid-bulla",
+      "type": "bounded_by",
+      "direction": "posterior"
+    },
+    {
+      "source": "ostiomeatal-complex",
+      "target": "middle-turbinate",
+      "type": "bounded_by",
+      "direction": "medial"
+    },
+    {
+      "source": "agger-nasi",
+      "target": "frontal-sinus",
+      "type": "landmark_for",
+      "direction": "anterior"
+    },
+    {
+      "source": "superior-turbinate",
+      "target": "sphenopalatine-foramen",
+      "type": "landmark_for",
+      "direction": "posterior"
+    },
+    {
+      "source": "sphenopalatine-foramen",
+      "target": "palatine-bone-perpendicular-plate",
+      "type": "bounded_by"
+    },
+    {
+      "source": "smas",
+      "target": "zygoma",
+      "type": "attaches_to",
+      "direction": "superficial"
+    },
+    {
+      "source": "right-thyroid-lamina",
+      "target": "thyroid-cartilage",
+      "type": "part_of",
+      "direction": "lateral"
+    },
+    {
+      "source": "left-thyroid-lamina",
+      "target": "thyroid-cartilage",
+      "type": "part_of",
+      "direction": "lateral"
+    },
+    {
+      "source": "thyroid-superior-cornu",
+      "target": "thyroid-cartilage",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "thyroid-inferior-cornu",
+      "target": "thyroid-cartilage",
+      "type": "part_of",
+      "direction": "inferior"
+    },
+    {
+      "source": "laryngeal-prominence",
+      "target": "thyroid-cartilage",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "oblique-line",
+      "target": "thyroid-cartilage",
+      "type": "part_of",
+      "direction": "lateral"
+    },
+    {
+      "source": "right-thyroid-lamina",
+      "target": "left-thyroid-lamina",
+      "type": "continuous_with",
+      "label": "fuse at prominence",
+      "direction": "anterior"
+    },
+    {
+      "source": "cricoid-arch",
+      "target": "cricoid-cartilage",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "cricoid-lamina",
+      "target": "cricoid-cartilage",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "vocal-process",
+      "target": "arytenoid-cartilage",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "muscular-process",
+      "target": "arytenoid-cartilage",
+      "type": "part_of",
+      "direction": "lateral"
+    },
+    {
+      "source": "arytenoid-apex",
+      "target": "arytenoid-cartilage",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "petiole",
+      "target": "epiglottis",
+      "type": "part_of",
+      "direction": "inferior"
+    },
+    {
+      "source": "corniculate-cartilage",
+      "target": "arytenoid-apex",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "cuneiform-cartilage",
+      "target": "quadrangular-membrane",
+      "type": "contained_in",
+      "label": "aryepiglottic fold"
+    },
+    {
+      "source": "cuneiform-cartilage",
+      "target": "corniculate-cartilage",
+      "type": "continuous_with",
+      "direction": "anterior"
+    },
+    {
+      "source": "cricothyroid-joint",
+      "target": "thyroid-inferior-cornu",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "cricothyroid-joint",
+      "target": "cricoid-arch",
+      "type": "articulates_with",
+      "direction": "lateral"
+    },
+    {
+      "source": "cricoarytenoid-joint",
+      "target": "cricoid-lamina",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "cricoarytenoid-joint",
+      "target": "muscular-process",
+      "type": "articulates_with",
+      "label": "arytenoid base"
+    },
+    {
+      "source": "thyroarytenoid-muscle",
+      "target": "vocal-process",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "vocalis-muscle",
+      "target": "vocal-process",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "vocalis-muscle",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "vocalis-muscle",
+      "target": "thyroarytenoid-muscle",
+      "type": "part_of",
+      "direction": "medial"
+    },
+    {
+      "source": "vocalis-muscle",
+      "target": "vocal-ligament",
+      "type": "attaches_to",
+      "label": "tenses vocal fold"
+    },
+    {
+      "source": "lateral-cricoarytenoid-muscle",
+      "target": "muscular-process",
+      "type": "attaches_to",
+      "label": "adductor"
+    },
+    {
+      "source": "lateral-cricoarytenoid-muscle",
+      "target": "cricoid-arch",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "posterior-cricoarytenoid-muscle",
+      "target": "muscular-process",
+      "type": "attaches_to",
+      "label": "sole abductor"
+    },
+    {
+      "source": "posterior-cricoarytenoid-muscle",
+      "target": "cricoid-lamina",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "cricothyroid-muscle",
+      "target": "cricoid-arch",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "cricothyroid-muscle",
+      "target": "thyroid-inferior-cornu",
+      "type": "attaches_to",
+      "direction": "inferior"
+    },
+    {
+      "source": "interarytenoid-muscle",
+      "target": "arytenoid-apex",
+      "type": "attaches_to",
+      "label": "adductor"
+    },
+    {
+      "source": "thyroepiglottic-muscle",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "thyroepiglottic-muscle",
+      "target": "epiglottis",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "aryepiglottic-muscle",
+      "target": "arytenoid-apex",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "aryepiglottic-muscle",
+      "target": "epiglottis",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "vocal-ligament",
+      "target": "vocal-process",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "conus-elasticus",
+      "target": "cricothyroid-membrane",
+      "type": "part_of",
+      "label": "cricothyroid ligament"
+    },
+    {
+      "source": "cricothyroid-membrane",
+      "target": "vocal-ligament",
+      "type": "continuous_with",
+      "direction": "superior"
+    },
+    {
+      "source": "quadrangular-membrane",
+      "target": "aryepiglottic-muscle",
+      "type": "continuous_with",
+      "label": "aryepiglottic fold",
+      "direction": "superior"
+    },
+    {
+      "source": "quadrangular-membrane",
+      "target": "vestibular-ligament",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "thyrohyoid-membrane",
+      "target": "thyroid-superior-cornu",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "thyrohyoid-membrane",
+      "target": "hyoid-bone",
+      "type": "suspends",
+      "label": "suspends larynx",
+      "direction": "superior"
+    },
+    {
+      "source": "buccopharyngeal-fascia",
+      "target": "pretracheal-visceral-fascia",
+      "type": "part_of",
+      "label": "posterior part of visceral fascia",
+      "direction": "posterior"
+    },
+    {
+      "source": "buccopharyngeal-fascia",
+      "target": "pretracheal-visceral-fascia",
+      "type": "continuous_with"
+    },
+    {
+      "source": "parapharyngeal-space",
+      "target": "buccopharyngeal-fascia",
+      "type": "bounded_by",
+      "label": "medial wall",
+      "direction": "medial"
+    },
+    {
+      "source": "parapharyngeal-space",
+      "target": "prevertebral-fascia",
+      "type": "bounded_by",
+      "label": "posterior wall",
+      "direction": "posterior"
+    },
+    {
+      "source": "parapharyngeal-space",
+      "target": "carotid-sheath",
+      "type": "bounded_by",
+      "label": "posterolateral",
+      "direction": "posterior"
+    },
+    {
+      "source": "retropharyngeal-space",
+      "target": "buccopharyngeal-fascia",
+      "type": "bounded_by",
+      "label": "anterior wall",
+      "direction": "anterior"
+    },
+    {
+      "source": "retropharyngeal-space",
+      "target": "carotid-sheath",
+      "type": "bounded_by",
+      "label": "lateral wall",
+      "direction": "lateral"
+    },
+    {
+      "source": "prevertebral-space",
+      "target": "cervical-vertebra",
+      "type": "bounded_by",
+      "label": "posterior floor",
+      "direction": "posterior"
+    },
+    {
+      "source": "submandibular-space",
+      "target": "mylohyoid-muscle",
+      "type": "bounded_by",
+      "label": "roof (divides sublingual/submaxillary)",
+      "direction": "superior"
+    },
+    {
+      "source": "visceral-space",
+      "target": "pretracheal-visceral-fascia",
+      "type": "bounded_by",
+      "label": "anterior wall",
+      "direction": "anterior"
+    },
+    {
+      "source": "visceral-space",
+      "target": "buccopharyngeal-fascia",
+      "type": "bounded_by",
+      "label": "posterior wall",
+      "direction": "posterior"
+    },
+    {
+      "source": "thyroid-gland",
+      "target": "visceral-space",
+      "type": "contained_in"
+    },
+    {
+      "source": "carotid-space",
+      "target": "carotid-sheath",
+      "type": "bounded_by",
+      "label": "enclosed by sheath"
+    },
+    {
+      "source": "carotid-space",
+      "target": "internal-jugular-vein",
+      "type": "transmits"
+    },
+    {
+      "source": "carotid-space",
+      "target": "vagus-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "internal-jugular-vein",
+      "type": "transmits"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "vagus-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "mylohyoid-muscle",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "elevates hyoid",
+      "direction": "superior"
+    },
+    {
+      "source": "geniohyoid-muscle",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "elevates hyoid",
+      "direction": "superior"
+    },
+    {
+      "source": "stylohyoid-muscle",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "elevates hyoid",
+      "direction": "superior"
+    },
+    {
+      "source": "digastric-anterior-belly",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "elevates hyoid",
+      "direction": "superior"
+    },
+    {
+      "source": "digastric-posterior-belly",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "elevates hyoid",
+      "direction": "superior"
+    },
+    {
+      "source": "sternohyoid-muscle",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "depresses hyoid",
+      "direction": "inferior"
+    },
+    {
+      "source": "thyrohyoid-muscle",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "depresses hyoid",
+      "direction": "inferior"
+    },
+    {
+      "source": "omohyoid-muscle",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "depresses hyoid",
+      "direction": "inferior"
+    },
+    {
+      "source": "sternothyroid-muscle",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "label": "depresses larynx",
+      "direction": "inferior"
+    },
+    {
+      "source": "mylohyoid-muscle",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "mylohyoid line",
+      "direction": "superior"
+    },
+    {
+      "source": "geniohyoid-muscle",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "mental spine",
+      "direction": "anterior"
+    },
+    {
+      "source": "digastric-anterior-belly",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "digastric fossa",
+      "direction": "anterior"
+    },
+    {
+      "source": "digastric-posterior-belly",
+      "target": "digastric-anterior-belly",
+      "type": "continuous_with",
+      "label": "via intermediate tendon"
+    },
+    {
+      "source": "stylohyoid-muscle",
+      "target": "styloid-process",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "thyrohyoid-muscle",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "label": "oblique line",
+      "direction": "inferior"
+    },
+    {
+      "source": "atlas-c1",
+      "target": "axis-c2",
+      "type": "articulates_with",
+      "label": "atlanto-axial joint",
+      "direction": "inferior"
+    },
+    {
+      "source": "atlas-c1",
+      "target": "cervical-vertebra",
+      "type": "part_of",
+      "label": "C1"
+    },
+    {
+      "source": "axis-c2",
+      "target": "cervical-vertebra",
+      "type": "part_of",
+      "label": "C2"
+    },
+    {
+      "source": "transverse-process",
+      "target": "cervical-vertebra",
+      "type": "part_of",
+      "direction": "lateral"
+    },
+    {
+      "source": "transverse-foramen",
+      "target": "transverse-process",
+      "type": "part_of"
+    },
+    {
+      "source": "transverse-foramen",
+      "target": "vertebral-artery",
+      "type": "transmits",
+      "label": "C6 to C1",
+      "direction": "superior"
+    },
+    {
+      "source": "vertebral-artery",
+      "target": "transverse-foramen",
+      "type": "passes_through",
+      "direction": "superior"
+    },
+    {
+      "source": "medial-pterygoid-plate",
+      "target": "sphenoid",
+      "type": "part_of",
+      "label": "process of sphenoid",
+      "direction": "medial"
+    },
+    {
+      "source": "lateral-pterygoid-plate",
+      "target": "sphenoid",
+      "type": "part_of",
+      "label": "process of sphenoid",
+      "direction": "lateral"
+    },
+    {
+      "source": "pterygoid-hamulus",
+      "target": "medial-pterygoid-plate",
+      "type": "part_of",
+      "label": "inferior tip",
+      "direction": "inferior"
+    },
+    {
+      "source": "pterygomandibular-raphe",
+      "target": "pterygoid-hamulus",
+      "type": "attaches_to",
+      "label": "superior attachment",
+      "direction": "superior"
+    },
+    {
+      "source": "buccinator",
+      "target": "pterygomandibular-raphe",
+      "type": "attaches_to",
+      "label": "posterior origin",
+      "direction": "anterior"
+    },
+    {
+      "source": "superior-pharyngeal-constrictor",
+      "target": "pterygomandibular-raphe",
+      "type": "attaches_to",
+      "label": "origin",
+      "direction": "posterior"
+    },
+    {
+      "source": "superior-pharyngeal-constrictor",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "mylohyoid line origin",
+      "direction": "anterior"
+    },
+    {
+      "source": "superior-pharyngeal-constrictor",
+      "target": "pterygoid-hamulus",
+      "type": "attaches_to",
+      "label": "origin",
+      "direction": "superior"
+    },
+    {
+      "source": "middle-pharyngeal-constrictor",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "greater & lesser cornua",
+      "direction": "inferior"
+    },
+    {
+      "source": "middle-pharyngeal-constrictor",
+      "target": "stylohyoid-ligament",
+      "type": "attaches_to",
+      "label": "origin",
+      "direction": "superior"
+    },
+    {
+      "source": "inferior-pharyngeal-constrictor",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "label": "thyropharyngeus origin",
+      "direction": "superior"
+    },
+    {
+      "source": "inferior-pharyngeal-constrictor",
+      "target": "cricoid-cartilage",
+      "type": "attaches_to",
+      "label": "cricopharyngeus origin",
+      "direction": "inferior"
+    },
+    {
+      "source": "cricopharyngeus",
+      "target": "inferior-pharyngeal-constrictor",
+      "type": "part_of",
+      "label": "lower fibers",
+      "direction": "inferior"
+    },
+    {
+      "source": "cricopharyngeus",
+      "target": "cricoid-cartilage",
+      "type": "attaches_to",
+      "label": "origin"
+    },
+    {
+      "source": "sphenomandibular-ligament",
+      "target": "sphenoid",
+      "type": "attaches_to",
+      "label": "spine of sphenoid",
+      "direction": "superior"
+    },
+    {
+      "source": "sphenomandibular-ligament",
+      "target": "mandible",
+      "type": "suspends",
+      "label": "TMJ suspensory ligament"
+    },
+    {
+      "source": "palatine-process-of-maxilla",
+      "target": "hard-palate",
+      "type": "forms",
+      "label": "anterior 3/4",
+      "direction": "anterior"
+    },
+    {
+      "source": "horizontal-plate-of-palatine",
+      "target": "hard-palate",
+      "type": "forms",
+      "label": "posterior 1/4",
+      "direction": "posterior"
+    },
+    {
+      "source": "palatine-process-of-maxilla",
+      "target": "horizontal-plate-of-palatine",
+      "type": "continuous_with",
+      "label": "transverse palatine suture",
+      "direction": "posterior"
+    },
+    {
+      "source": "incisive-foramen",
+      "target": "hard-palate",
+      "type": "part_of",
+      "label": "anterior midline",
+      "direction": "anterior"
+    },
+    {
+      "source": "greater-palatine-foramen",
+      "target": "hard-palate",
+      "type": "part_of",
+      "label": "posterolateral",
+      "direction": "posterior"
+    },
+    {
+      "source": "lesser-palatine-foramen",
+      "target": "hard-palate",
+      "type": "part_of",
+      "label": "posterolateral",
+      "direction": "posterior"
+    },
+    {
+      "source": "palatine-aponeurosis",
+      "target": "hard-palate",
+      "type": "attaches_to",
+      "label": "posterior border",
+      "direction": "anterior"
+    },
+    {
+      "source": "palatine-aponeurosis",
+      "target": "horizontal-plate-of-palatine",
+      "type": "attaches_to",
+      "label": "posterior free border",
+      "direction": "anterior"
+    },
+    {
+      "source": "palatine-aponeurosis",
+      "target": "soft-palate",
+      "type": "forms",
+      "label": "fibrous skeleton of soft palate",
+      "direction": "posterior"
+    },
+    {
+      "source": "soft-palate",
+      "target": "palatine-aponeurosis",
+      "type": "continuous_with",
+      "label": "aponeurotic core",
+      "direction": "anterior"
+    },
+    {
+      "source": "palatine-tonsil",
+      "target": "palatoglossal-arch",
+      "type": "bounded_by",
+      "label": "anterior pillar",
+      "direction": "anterior"
+    },
+    {
+      "source": "palatine-tonsil",
+      "target": "palatopharyngeal-arch",
+      "type": "bounded_by",
+      "label": "posterior pillar",
+      "direction": "posterior"
+    },
+    {
+      "source": "palatoglossal-arch",
+      "target": "soft-palate",
+      "type": "attaches_to",
+      "label": "superior attachment",
+      "direction": "superior"
+    },
+    {
+      "source": "palatoglossal-arch",
+      "target": "oral-tongue",
+      "type": "attaches_to",
+      "label": "into tongue",
+      "direction": "inferior"
+    },
+    {
+      "source": "palatopharyngeal-arch",
+      "target": "soft-palate",
+      "type": "attaches_to",
+      "label": "superior attachment",
+      "direction": "superior"
+    },
+    {
+      "source": "greater-wing",
+      "target": "sphenoid",
+      "type": "part_of"
+    },
+    {
+      "source": "lesser-wing",
+      "target": "sphenoid",
+      "type": "part_of"
+    },
+    {
+      "source": "body-of-sphenoid",
+      "target": "sphenoid",
+      "type": "part_of"
+    },
+    {
+      "source": "pterygoid-process",
+      "target": "sphenoid",
+      "type": "part_of"
+    },
+    {
+      "source": "sella-turcica",
+      "target": "body-of-sphenoid",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "clivus",
+      "target": "body-of-sphenoid",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "clivus",
+      "target": "occipital-bone",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "sphenoid-sinus",
+      "target": "body-of-sphenoid",
+      "type": "contained_in"
+    },
+    {
+      "source": "crista-galli",
+      "target": "ethmoid",
+      "type": "part_of"
+    },
+    {
+      "source": "perpendicular-plate",
+      "target": "ethmoid",
+      "type": "part_of"
+    },
+    {
+      "source": "ethmoid-labyrinth",
+      "target": "ethmoid",
+      "type": "part_of"
+    },
+    {
+      "source": "cribriform-plate",
+      "target": "ethmoid",
+      "type": "part_of"
+    },
+    {
+      "source": "fovea-ethmoidalis",
+      "target": "ethmoid-labyrinth",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "basiocciput",
+      "target": "occipital-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "occipital-condyle",
+      "target": "occipital-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "squamous-occipital",
+      "target": "occipital-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "jugular-tubercle",
+      "target": "occipital-bone",
+      "type": "part_of"
+    },
+    {
+      "source": "planum-sphenoidale",
+      "target": "body-of-sphenoid",
+      "type": "part_of"
+    },
+    {
+      "source": "tuberculum-sellae",
+      "target": "body-of-sphenoid",
+      "type": "part_of"
+    },
+    {
+      "source": "dorsum-sellae",
+      "target": "body-of-sphenoid",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "sella-turcica",
+      "target": "tuberculum-sellae",
+      "type": "bounded_by",
+      "direction": "anterior"
+    },
+    {
+      "source": "sella-turcica",
+      "target": "dorsum-sellae",
+      "type": "bounded_by",
+      "direction": "posterior"
+    },
+    {
+      "source": "dorsum-sellae",
+      "target": "clivus",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "planum-sphenoidale",
+      "target": "tuberculum-sellae",
+      "type": "continuous_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "crista-galli",
+      "target": "cribriform-plate",
+      "type": "continuous_with",
+      "direction": "superior"
+    },
+    {
+      "source": "foramen-cecum",
+      "target": "frontal-bone",
+      "type": "bounded_by",
+      "direction": "anterior"
+    },
+    {
+      "source": "foramen-cecum",
+      "target": "crista-galli",
+      "type": "bounded_by",
+      "direction": "posterior"
+    },
+    {
+      "source": "sphenooccipital-synchondrosis",
+      "target": "sphenoid",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenooccipital-synchondrosis",
+      "target": "occipital-bone",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenoethmoidal-junction",
+      "target": "sphenoid",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenoethmoidal-junction",
+      "target": "ethmoid",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenofrontal-suture",
+      "target": "sphenoid",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenofrontal-suture",
+      "target": "frontal-bone",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenopetrosal-fissure",
+      "target": "sphenoid",
+      "type": "articulates_with"
+    },
+    {
+      "source": "sphenopetrosal-fissure",
+      "target": "temporal-bone",
+      "type": "articulates_with"
+    },
+    {
+      "source": "petrooccipital-fissure",
+      "target": "temporal-bone",
+      "type": "articulates_with"
+    },
+    {
+      "source": "petrooccipital-fissure",
+      "target": "occipital-bone",
+      "type": "articulates_with"
+    },
+    {
+      "source": "foramen-ovale",
+      "target": "greater-wing",
+      "type": "contained_in"
+    },
+    {
+      "source": "foramen-rotundum",
+      "target": "greater-wing",
+      "type": "contained_in"
+    },
+    {
+      "source": "foramen-spinosum",
+      "target": "greater-wing",
+      "type": "contained_in"
+    },
+    {
+      "source": "optic-canal",
+      "target": "lesser-wing",
+      "type": "contained_in"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "greater-wing",
+      "type": "bounded_by",
+      "direction": "inferior"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "lesser-wing",
+      "type": "bounded_by",
+      "direction": "superior"
+    },
+    {
+      "source": "jugular-foramen",
+      "target": "temporal-bone",
+      "type": "bounded_by",
+      "direction": "anterior"
+    },
+    {
+      "source": "jugular-foramen",
+      "target": "occipital-bone",
+      "type": "bounded_by",
+      "direction": "posterior"
+    },
+    {
+      "source": "hypoglossal-canal",
+      "target": "occipital-bone",
+      "type": "contained_in"
+    },
+    {
+      "source": "foramen-magnum",
+      "target": "occipital-bone",
+      "type": "contained_in"
+    },
+    {
+      "source": "carotid-canal",
+      "target": "temporal-bone",
+      "type": "contained_in"
+    },
+    {
+      "source": "foramen-magnum",
+      "target": "occipital-condyle",
+      "type": "bounded_by",
+      "direction": "lateral"
     }
   ]
 }
