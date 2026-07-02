@@ -42,3 +42,6 @@ yarn-error.log*
 
 # Phase build scratch (shards merged into data/kag-graph.json, not committed raw)
 scratchpad*/
+
+# Agent working directories (in-repo scratchpads)
+scratchpad_p*/
