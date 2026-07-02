@@ -1,0 +1,1346 @@
+{
+  "version": 2,
+  "updated": "2026-07-02T19:25:43.159Z",
+  "status": "SEED — vetted temporal-bone otology core. Authored expansion nodes (later phases) carry review:false until owner review.",
+  "sources": [
+    "Cummings Otolaryngology 7e"
+  ],
+  "nodes": [
+    {
+      "id": "external-auditory-canal",
+      "label": "External Auditory Canal",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "S-shaped canal ~2.5cm. Lateral 1/3 cartilaginous, medial 2/3 bony. Isthmus is the narrowest point at bone-cartilage junction.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "tympanic-membrane",
+      "label": "Tympanic Membrane",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Three layers: squamous epithelium, fibrous middle, mucosal lining. Pars tensa (inferior) and pars flaccida (superior, Shrapnell membrane).",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "malleus",
+      "label": "Malleus",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Largest ossicle. Manubrium attached to TM. Head articulates with incus in epitympanum. Lateral process creates malleolar fold.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "incus",
+      "label": "Incus",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Articulates with malleus (body) and stapes (lenticular process). Long process is most vulnerable to necrosis in chronic otitis media.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "stapes",
+      "label": "Stapes",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Smallest bone in body. Footplate sits in oval window. Stapedius muscle attaches to neck/head, dampening ossicular chain vibration.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "oval-window",
+      "label": "Oval Window",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Niche between middle and inner ear, sealed by stapes footplate and annular ligament. Transmits sound to scala vestibuli.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "round-window",
+      "label": "Round Window",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Membrane-covered opening of scala tympani. Serves as pressure release for fluid displaced by stapes footplate movement. Important CI electrode entry.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "cochlea",
+      "label": "Cochlea",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "2.5 turns spiral. Contains scala vestibuli, scala media (cochlear duct), and scala tympani. Organ of Corti sits on basilar membrane in scala media. Tonotopic: base=high freq, apex=low freq.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "vestibule",
+      "label": "Vestibule",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Central chamber of bony labyrinth. Contains utricle and saccule (otolith organs for linear acceleration). Oval window opens into vestibule.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "semicircular-canals",
+      "label": "Semicircular Canals",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Three canals (superior, posterior, lateral) detect angular acceleration. Each has ampulla with crista ampullaris. Lateral canal 30° from horizontal.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "facial-nerve",
+      "label": "Facial Nerve (CN VII)",
+      "type": "nerve",
+      "subspecialty": "otology",
+      "detail": "Complex course: IAC → labyrinthine → geniculate ganglion → tympanic → second genu → mastoid → stylomastoid foramen. Labyrinthine segment is narrowest and most susceptible to injury.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "chorda-tympani",
+      "label": "Chorda Tympani",
+      "type": "nerve",
+      "subspecialty": "otology",
+      "detail": "Branch of CN VII. Carries taste from anterior 2/3 tongue and parasympathetic fibers to submandibular/sublingual glands. Crosses middle ear between malleus and incus.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "greater-superficial-petrosal",
+      "label": "Greater Superficial Petrosal Nerve",
+      "type": "nerve",
+      "subspecialty": "otology",
+      "detail": "Branch of CN VII at geniculate ganglion. Carries parasympathetic fibers for lacrimal gland secretion. Exits via hiatus of facial canal.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "vestibulocochlear-nerve",
+      "label": "Vestibulocochlear Nerve (CN VIII)",
+      "type": "nerve",
+      "subspecialty": "otology",
+      "detail": "Travels through IAC with CN VII. Superior and inferior vestibular divisions plus cochlear division. Vulnerable to vestibular schwannoma.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "internal-auditory-canal",
+      "label": "Internal Auditory Canal",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Contains CN VII, CN VIII (superior/inferior vestibular, cochlear), and labyrinthine artery. Transverse and vertical crests divide IAC into four quadrants.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "tegmen-tympani",
+      "label": "Tegmen Tympani",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Thin bone forming roof of middle ear and mastoid. Separates middle ear from middle cranial fossa. Erosion risks meningitis and CSF leak.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "mastoid",
+      "label": "Mastoid",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Pneumatized portion of temporal bone. Contains mastoid antrum connecting to epitympanum via aditus ad antrum. Degree of pneumatization varies.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "epitympanum",
+      "label": "Epitympanum",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Superior portion of middle ear (attic). Contains head of malleus and body of incus. Cholesteatoma commonly originates from pars flaccida retraction into epitympanum.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "facial-recess",
+      "label": "Facial Recess",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Triangular space bounded by: fossa incudis superiorly, facial nerve medially, chorda tympani laterally. Key surgical landmark for cochlear implant electrode insertion.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "sinus-tympani",
+      "label": "Sinus Tympani",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Deep recess posteromedial to round window niche, medial to facial nerve. Difficult to visualize directly — common site for residual cholesteatoma.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "promontory",
+      "label": "Promontory",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Rounded elevation on medial wall of middle ear formed by basal turn of cochlea. Jacobson nerve (CN IX tympanic branch) courses over it.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "stapedius-muscle",
+      "label": "Stapedius Muscle",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Smallest skeletal muscle. Innervated by CN VII. Contracts reflexively to loud sound (acoustic reflex), dampening ossicular chain movement.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "tensor-tympani",
+      "label": "Tensor Tympani",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Innervated by CN V3. Inserts on manubrium of malleus. Tenses TM and dampens sound. Located in semicanal above eustachian tube.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "eustachian-tube",
+      "label": "Eustachian Tube",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Connects middle ear to nasopharynx. Adults: 36mm, 45° angle. Children shorter, more horizontal. Equalizes middle ear pressure. Lined by respiratory epithelium.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "labyrinthine-artery",
+      "label": "Labyrinthine Artery",
+      "type": "vessel",
+      "subspecialty": "otology",
+      "detail": "Usually branch of AICA (85%). End artery — occlusion causes sudden SNHL and vestibular loss. Travels through IAC.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "sigmoid-sinus",
+      "label": "Sigmoid Sinus",
+      "type": "vessel",
+      "subspecialty": "otology",
+      "detail": "S-shaped venous sinus in posterior fossa. Lateral boundary of mastoid surgery. Thrombosis is complication of coalescent mastoiditis.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "cholesteatoma",
+      "label": "Cholesteatoma",
+      "type": "pathology",
+      "subspecialty": "otology",
+      "detail": "Keratinizing squamous epithelium in middle ear/mastoid. Acquired (pars flaccida retraction) more common than congenital. Erodes bone via enzymatic activity and pressure.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "otosclerosis",
+      "label": "Otosclerosis",
+      "type": "pathology",
+      "subspecialty": "otology",
+      "detail": "Abnormal bone remodeling at oval window causing stapes fixation. Autosomal dominant with incomplete penetrance. Presents as progressive conductive hearing loss.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "chronic-otitis-media",
+      "label": "Chronic Otitis Media",
+      "type": "pathology",
+      "subspecialty": "otology",
+      "detail": "Permanent TM perforation with chronic middle ear drainage >6 weeks. May be with or without cholesteatoma. Often causes conductive hearing loss.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "vestibular-schwannoma",
+      "label": "Vestibular Schwannoma",
+      "type": "pathology",
+      "subspecialty": "skull-base",
+      "detail": "Benign tumor of Schwann cells on CN VIII (usually superior vestibular division). Most common CPA tumor. Bilateral = NF2. Presents with asymmetric SNHL.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "tympanoplasty",
+      "label": "Tympanoplasty",
+      "type": "procedure",
+      "subspecialty": "otology",
+      "detail": "Surgical repair of TM perforation ± ossicular chain reconstruction. Grafts: temporalis fascia, tragal perichondrium, cartilage. Underlay vs overlay technique.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "mastoidectomy",
+      "label": "Mastoidectomy",
+      "type": "procedure",
+      "subspecialty": "otology",
+      "detail": "Canal wall up (CWU) vs canal wall down (CWD). Landmarks: tegmen, sigmoid, lateral SCC, facial nerve. CWD creates mastoid bowl requiring lifelong care.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "stapedectomy",
+      "label": "Stapedectomy",
+      "type": "procedure",
+      "subspecialty": "otology",
+      "detail": "Removal of stapes and placement of prosthesis for otosclerosis. Stapedotomy (small fenestra) preferred. Risk: SNHL, vertigo, facial nerve injury, perilymph fistula.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "cochlear-implant",
+      "label": "Cochlear Implant",
+      "type": "procedure",
+      "subspecialty": "otology",
+      "detail": "Electrode array inserted via round window or cochleostomy into scala tympani. Posterior tympanotomy (facial recess) approach. For severe-profound SNHL.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "ossiculoplasty",
+      "label": "Ossiculoplasty",
+      "type": "procedure",
+      "subspecialty": "otology",
+      "detail": "Reconstruction of ossicular chain. PORP (partial) replaces incus, TORP (total) replaces all. Materials: titanium, hydroxyapatite, autograft.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "lateral-semicircular-canal",
+      "label": "Lateral Semicircular Canal",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Key landmark in mastoid surgery — lies medial to antrum. Oriented 30° above horizontal. Most commonly involved in BPPV is posterior canal, not lateral.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "geniculate-ganglion",
+      "label": "Geniculate Ganglion",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Sensory ganglion of CN VII at first genu. Gives off greater superficial petrosal nerve. Site of herpes zoster reactivation in Ramsay Hunt syndrome.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "organ-of-corti",
+      "label": "Organ of Corti",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Sensory epithelium in scala media. Inner hair cells (single row, ~3500) are primary transducers. Outer hair cells (3 rows, ~12000) provide cochlear amplification.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "jacobson-nerve",
+      "label": "Jacobson Nerve (Tympanic Branch CN IX)",
+      "type": "nerve",
+      "subspecialty": "otology",
+      "detail": "Branch of CN IX. Courses over promontory forming tympanic plexus. Provides sensation to middle ear mucosa and parasympathetic fibers to parotid (via lesser petrosal nerve).",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    },
+    {
+      "id": "stylomastoid-foramen",
+      "label": "Stylomastoid Foramen",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Exit point of CN VII from temporal bone. Landmark for facial nerve identification in parotid surgery. Located between styloid and mastoid processes.",
+      "sources": [
+        "Cummings 7e"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": []
+      },
+      "review": true
+    }
+  ],
+  "edges": [
+    {
+      "source": "external-auditory-canal",
+      "target": "tympanic-membrane",
+      "type": "contained_in",
+      "label": "terminates at"
+    },
+    {
+      "source": "tympanic-membrane",
+      "target": "malleus",
+      "type": "contained_in",
+      "label": "manubrium attached"
+    },
+    {
+      "source": "malleus",
+      "target": "incus",
+      "type": "contained_in",
+      "label": "articulates in epitympanum"
+    },
+    {
+      "source": "incus",
+      "target": "stapes",
+      "type": "contained_in",
+      "label": "lenticular process to head"
+    },
+    {
+      "source": "stapes",
+      "target": "oval-window",
+      "type": "contained_in",
+      "label": "footplate in"
+    },
+    {
+      "source": "oval-window",
+      "target": "vestibule",
+      "type": "contained_in",
+      "label": "opens into"
+    },
+    {
+      "source": "round-window",
+      "target": "cochlea",
+      "type": "contained_in",
+      "label": "opens from scala tympani"
+    },
+    {
+      "source": "cochlea",
+      "target": "organ-of-corti",
+      "type": "contained_in",
+      "label": "contains"
+    },
+    {
+      "source": "cochlea",
+      "target": "vestibule",
+      "type": "contained_in",
+      "label": "connects to"
+    },
+    {
+      "source": "vestibule",
+      "target": "semicircular-canals",
+      "type": "contained_in",
+      "label": "connects to"
+    },
+    {
+      "source": "semicircular-canals",
+      "target": "lateral-semicircular-canal",
+      "type": "contained_in"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "chorda-tympani",
+      "type": "branches_from"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "greater-superficial-petrosal",
+      "type": "branches_from"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "geniculate-ganglion",
+      "type": "contained_in",
+      "label": "first genu"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "internal-auditory-canal",
+      "type": "contained_in"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "stylomastoid-foramen",
+      "type": "contained_in",
+      "label": "exits at"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "stapedius-muscle",
+      "type": "innervates"
+    },
+    {
+      "source": "vestibulocochlear-nerve",
+      "target": "internal-auditory-canal",
+      "type": "contained_in"
+    },
+    {
+      "source": "vestibulocochlear-nerve",
+      "target": "cochlea",
+      "type": "innervates",
+      "label": "cochlear division"
+    },
+    {
+      "source": "vestibulocochlear-nerve",
+      "target": "vestibule",
+      "type": "innervates",
+      "label": "vestibular division"
+    },
+    {
+      "source": "labyrinthine-artery",
+      "target": "cochlea",
+      "type": "supplies"
+    },
+    {
+      "source": "labyrinthine-artery",
+      "target": "internal-auditory-canal",
+      "type": "contained_in"
+    },
+    {
+      "source": "sigmoid-sinus",
+      "target": "mastoid",
+      "type": "landmark_for",
+      "label": "lateral boundary"
+    },
+    {
+      "source": "tegmen-tympani",
+      "target": "epitympanum",
+      "type": "contained_in",
+      "label": "roof of"
+    },
+    {
+      "source": "epitympanum",
+      "target": "malleus",
+      "type": "contained_in"
+    },
+    {
+      "source": "epitympanum",
+      "target": "incus",
+      "type": "contained_in"
+    },
+    {
+      "source": "facial-recess",
+      "target": "facial-nerve",
+      "type": "landmark_for",
+      "label": "medial boundary"
+    },
+    {
+      "source": "facial-recess",
+      "target": "chorda-tympani",
+      "type": "landmark_for",
+      "label": "lateral boundary"
+    },
+    {
+      "source": "sinus-tympani",
+      "target": "round-window",
+      "type": "landmark_for",
+      "label": "posteromed to RW"
+    },
+    {
+      "source": "sinus-tympani",
+      "target": "facial-nerve",
+      "type": "landmark_for",
+      "label": "lateral boundary"
+    },
+    {
+      "source": "promontory",
+      "target": "cochlea",
+      "type": "arises_from",
+      "label": "basal turn forms"
+    },
+    {
+      "source": "jacobson-nerve",
+      "target": "promontory",
+      "type": "landmark_for",
+      "label": "courses over"
+    },
+    {
+      "source": "tensor-tympani",
+      "target": "malleus",
+      "type": "landmark_for",
+      "label": "inserts on manubrium"
+    },
+    {
+      "source": "eustachian-tube",
+      "target": "epitympanum",
+      "type": "contained_in",
+      "label": "communicates with"
+    },
+    {
+      "source": "cholesteatoma",
+      "target": "epitympanum",
+      "type": "arises_from",
+      "label": "pars flaccida retraction"
+    },
+    {
+      "source": "cholesteatoma",
+      "target": "incus",
+      "type": "complication_of",
+      "label": "erodes long process"
+    },
+    {
+      "source": "cholesteatoma",
+      "target": "lateral-semicircular-canal",
+      "type": "complication_of",
+      "label": "may erode"
+    },
+    {
+      "source": "cholesteatoma",
+      "target": "facial-nerve",
+      "type": "complication_of",
+      "label": "may erode"
+    },
+    {
+      "source": "cholesteatoma",
+      "target": "tegmen-tympani",
+      "type": "complication_of",
+      "label": "may erode"
+    },
+    {
+      "source": "otosclerosis",
+      "target": "stapes",
+      "type": "complication_of",
+      "label": "fixes footplate"
+    },
+    {
+      "source": "chronic-otitis-media",
+      "target": "tympanic-membrane",
+      "type": "complication_of",
+      "label": "perforates"
+    },
+    {
+      "source": "vestibular-schwannoma",
+      "target": "vestibulocochlear-nerve",
+      "type": "arises_from"
+    },
+    {
+      "source": "vestibular-schwannoma",
+      "target": "internal-auditory-canal",
+      "type": "contained_in"
+    },
+    {
+      "source": "tympanoplasty",
+      "target": "tympanic-membrane",
+      "type": "treats"
+    },
+    {
+      "source": "tympanoplasty",
+      "target": "chronic-otitis-media",
+      "type": "treats"
+    },
+    {
+      "source": "mastoidectomy",
+      "target": "cholesteatoma",
+      "type": "treats"
+    },
+    {
+      "source": "mastoidectomy",
+      "target": "mastoid",
+      "type": "landmark_for"
+    },
+    {
+      "source": "stapedectomy",
+      "target": "otosclerosis",
+      "type": "treats"
+    },
+    {
+      "source": "stapedectomy",
+      "target": "stapes",
+      "type": "landmark_for"
+    },
+    {
+      "source": "cochlear-implant",
+      "target": "round-window",
+      "type": "landmark_for",
+      "label": "insertion site"
+    },
+    {
+      "source": "cochlear-implant",
+      "target": "facial-recess",
+      "type": "landmark_for",
+      "label": "approach via"
+    },
+    {
+      "source": "ossiculoplasty",
+      "target": "incus",
+      "type": "treats",
+      "label": "replaces eroded"
+    }
+  ]
+}

@@ -16,6 +16,7 @@
     <script src="https://unpkg.com/layout-base@1.0.2/layout-base.js"></script>
     <script src="https://unpkg.com/cose-base@1.0.3/cose-base.js"></script>
     <script src="https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js"></script>
+    <script src="js/kag-store.js"></script>
     <style>
         *,
         *::before,
@@ -1377,6 +1378,12 @@
 
             function openSettings() {
                 let html = '<div class="modal-actions"><button class="btn btn-secondary" id="set-import">Import Graph JSON</button><button class="btn btn-secondary" id="set-export">Export Graph JSON</button><button class="btn btn-danger" id="set-reset">Reset to Seed Data</button></div>';
+                // Canonical graph sync (writes data/kag-graph.json — the shared database)
+                if (window.KAGStore) {
+                    html += '<div class="rp-section-title" style="margin-top:1rem">Canonical graph sync</div>';
+                    html += '<div class="modal-actions"><button class="btn btn-secondary" id="set-dl-merged">Download merged graph</button><button class="btn btn-secondary" id="set-push">Push via token</button></div>';
+                    html += '<div style="font-size:0.75rem;color:var(--txt3);margin-top:4px">Persists this browser\'s graph to <code>data/kag-graph.json</code>: commit the download, or push with a fine-grained GitHub token (used once, never stored).</div>';
+                }
                 // Corrections inbox
                 const allCorr = [];
                 graphData.nodes.forEach(n => { (n.corrections || []).forEach((c, i) => { if (!c.resolved) allCorr.push({ node: n, corr: c, idx: i }); }); });
@@ -1387,6 +1394,20 @@
                 });
                 document.getElementById('modal-body').innerHTML = html;
                 settingsModal.classList.add('open');
+                // Canonical graph sync handlers
+                if (window.KAGStore) {
+                    const dlBtn = document.getElementById('set-dl-merged');
+                    if (dlBtn) dlBtn.addEventListener('click', () => { KAGStore.download(graphData); toast('Downloaded kag-graph.json — commit it to persist'); });
+                    const pushBtn = document.getElementById('set-push');
+                    if (pushBtn) pushBtn.addEventListener('click', () => {
+                        const token = prompt('Fine-grained GitHub token (used once, never stored):');
+                        if (!token) return;
+                        toast('Pushing to data/kag-graph.json…');
+                        KAGStore.push(graphData, token)
+                            .then(() => toast('Pushed to data/kag-graph.json'))
+                            .catch(err => toast('Push failed: ' + (err && err.message ? err.message : err)));
+                    });
+                }
                 // Import
                 document.getElementById('set-import').addEventListener('click', () => {
                     const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json';
@@ -1436,6 +1457,47 @@
                 cy.elements().remove();
                 cy.add(buildElements(graphData));
                 cy.layout({ name: 'cose-bilkent', animate: false, nodeDimensionsIncludeLabels: true, idealEdgeLength: 120, nodeRepulsion: 8000, gravity: 0.25, numIter: 2500 }).run();
+            }
+
+            /* ── Deep link: kag.html?node=<id> isolates + centers a node ── */
+            function focusNode(id) {
+                const n = cy.getElementById(id);
+                if (!n || n.empty()) { toast('Unknown node: ' + id); return; }
+                const hood = n.neighborhood().add(n);
+                cy.elements().addClass('faded');
+                hood.removeClass('faded');
+                if (currentMode === 'explore') openNodePanel(id);
+                setTimeout(function () { cy.animate({ fit: { eles: hood, padding: 80 } }, { duration: 400 }); }, 60);
+            }
+            function bootDeepLink() {
+                try {
+                    const id = new URLSearchParams(location.search).get('node');
+                    if (id) focusNode(id);
+                } catch (e) { /* no-op */ }
+            }
+
+            /* ── Externalized graph: merge data/kag-graph.json over local ──
+               Boots synchronously from localStorage/SEED above (no blank
+               screen), then folds in the canonical file. LOCAL WINS, so
+               leitner progress + corrections are preserved; the file only
+               ADDS nodes/edges this browser is missing. Only re-lays out
+               when the merge actually changed the counts (no flicker for
+               users already in sync). Fully guarded — if KAGStore or the
+               file is unavailable, behavior is exactly as before. */
+            if (window.KAGStore) {
+                KAGStore.fetch().then(function (file) {
+                    if (file && file.nodes && file.edges) {
+                        var beforeN = graphData.nodes.length, beforeE = graphData.edges.length;
+                        graphData = KAGStore.merge(file);
+                        saveGraph(graphData);
+                        if (graphData.nodes.length !== beforeN || graphData.edges.length !== beforeE) {
+                            rebuildCy(); updateBottomStrip();
+                        }
+                    }
+                    bootDeepLink();
+                });
+            } else {
+                bootDeepLink();
             }
 
         })();
