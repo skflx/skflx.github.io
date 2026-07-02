@@ -191,6 +191,21 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-dotrow { margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; max-width: 28rem; margin-left: auto; margin-right: auto; }
 .ok-dot { height: 5px; border-radius: 999px; transition: all 0.2s; }
 
+/* ===== CONFIDENCE PROMPT (mcq, post-answer; Phase 1) ===== */
+.ok-confrow { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.ok-confrow__label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ok-text-faint); margin-right: 0.15rem; }
+.ok-confrow__pill {
+  font-family: var(--ok-font-display); font-weight: 600; font-size: 0.8rem;
+  padding: 0.3rem 0.7rem; border-radius: 999px; background: none;
+  border: 1px solid currentColor; display: inline-flex; align-items: center; gap: 0.35rem;
+  cursor: pointer; transition: all 0.15s;
+}
+.ok-confrow__pill:hover { opacity: 0.75; }
+.ok-confrow__pill:active { transform: scale(0.95); }
+.ok-confrow__num { font-size: 0.65rem; opacity: 0.55; }
+.ok-confrow__skip { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ok-text-faint); background: none; border: none; cursor: pointer; padding: 0.3rem 0.4rem; }
+.ok-confrow__skip:hover { color: var(--ok-text-muted); }
+
 /* ===== NOTICE (module not found / load error) ===== */
 .ok-notice { max-width: 30rem; margin: 6rem auto; padding: 0 1.5rem; text-align: center; }
 .ok-notice h1 { font-family: var(--ok-font-display); font-weight: 400; font-size: 1.6rem; margin-bottom: 0.75rem; }

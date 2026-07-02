@@ -132,7 +132,10 @@
     const [showDetailed, setShowDetailed] = useState(false);
     const [revealed, setRevealed] = useState(false);
     const [domainFilter, setDomainFilter] = useState(null);
+    const [confPending, setConfPending] = useState(false); // confidence prompt open (mcq only)
+    const [confItem, setConfItem] = useState(null);         // item id the prompt belongs to
     const cardRef = useRef(null);
+    const sessionRef = useRef(0);                            // latest session number for calibration
 
     // Persist progress + SRS.
     useEffect(() => { save(PROGRESS_KEY, { v: 1, answers, firstCorrect, updated: new Date().toISOString() }); }, [answers, firstCorrect]);
@@ -168,15 +171,41 @@
         box = Math.max(1, Math.min(box, 5));
         return { ...prev, items: { ...prev.items, [qId]: { box, nextReview: addDays(today(), LEITNER_INTERVALS[box]) } } };
       });
+      // Derived concept-mastery layer + analytics session tick (Phase 1).
+      // Item-level SRS above is the scheduler; this is purely analytic.
+      if (window.OKSATStore) {
+        const it = ITEMS.find((q) => q.id === qId);
+        const s = OKSATStore.touchSession(reviewer);
+        if (it && it.concepts.length) OKSATStore.recordConceptResult(slug, reviewer, it.concepts, correct);
+        if (it && window.OKSATGraph && correct) { try { OKSATGraph.propagate(slug, it.concepts, reviewer); } catch (e) {} }
+        sessionRef.current = s;
+      }
     };
 
-    const handleSelect = (optionId) => recordAnswer(currentId, optionId, optionId === currentItem.correct);
+    const handleSelect = (optionId) => {
+      const wasCorrect = optionId === currentItem.correct;
+      recordAnswer(currentId, optionId, wasCorrect);
+      if (currentItem.type !== 'recall') { setConfItem(currentId); setConfPending(true); }
+    };
     const handleGrade = (grade) => recordAnswer(currentId, grade.id, grade.correct, grade.box);
 
     const goToItem = (qId) => {
       setCurrentId(qId); setShowDetailed(false); setRevealed(false); setView('item');
+      setConfPending(false); setConfItem(null);
       setTimeout(() => cardRef.current?.scrollTo?.(0, 0), 50);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Confidence calibration (Phase 1): record the tier, then dismiss. Skip
+    // (or 3s auto-skip) dismisses without writing anything.
+    const dismissConf = () => { setConfPending(false); setConfItem(null); };
+    const handleConfidence = (tier) => {
+      const qId = confItem;
+      if (qId && window.OKSATStore) {
+        const it = ITEMS.find((q) => q.id === qId);
+        OKSATStore.recordConfidence(slug, reviewer, qId, tier, !!firstCorrect[qId], it ? it.concepts : [], sessionRef.current);
+      }
+      dismissConf();
     };
     const handleNext = () => {
       if (!filteredItems.length) return;
@@ -226,6 +255,15 @@
       const answered = !!answers[currentId];
       const isRecall = currentItem.type === 'recall';
       const key = e.key;
+
+      // Confidence prompt (mcq, post-answer) intercepts 1/2/3; space/enter/→
+      // dismiss it (skip) and fall through to normal advance.
+      if (confPending) {
+        if (key === '1') { e.preventDefault(); handleConfidence('hi'); return; }
+        if (key === '2') { e.preventDefault(); handleConfidence('md'); return; }
+        if (key === '3') { e.preventDefault(); handleConfidence('lo'); return; }
+        if (key === ' ' || key === 'Enter' || key === 'ArrowRight') dismissConf();
+      }
 
       if (key === 'ArrowLeft') { e.preventDefault(); handlePrev(); return; }
       if (key === 'ArrowRight') { e.preventDefault(); handleNext(); return; }
@@ -286,8 +324,36 @@
                 reviewMode=${reviewMode} exitReview=${() => setReviewMode(false)}
                 filteredItems=${filteredItems}
                 relatedItems=${relatedItems} onConceptClick=${handleConceptClick} onRelatedClick=${goToItem}
-                answeredSet=${Object.keys(answers)} firstCorrect=${firstCorrect} />`}
+                answeredSet=${Object.keys(answers)} firstCorrect=${firstCorrect}
+                confPending=${confPending && confItem === currentId} onConfidence=${handleConfidence} onConfSkip=${dismissConf} />`}
         </div>
+      </div>`;
+  }
+
+  /* =========================================================
+     CONFIDENCE PROMPT (mcq, post-answer; skippable; 3s auto-skip)
+     Captures metacognition for calibration analytics. One extra tap;
+     never blocks the flow.
+     ========================================================= */
+  const CONF_TIERS = [
+    { id: 'hi', label: 'Confident', color: 'correct' },
+    { id: 'md', label: 'Unsure', color: 'ochre' },
+    { id: 'lo', label: 'Guessing', color: 'incorrect' },
+  ];
+  function ConfidencePrompt({ onPick, onSkip }) {
+    useEffect(() => {
+      const t = setTimeout(() => { onSkip(); }, 3000);
+      return () => clearTimeout(t);
+    }, []);
+    return html`
+      <div className="ok-confrow fade-up" role="group" aria-label="How confident were you?">
+        <span className="ui-font ok-confrow__label">How sure?</span>
+        ${CONF_TIERS.map((t, i) => html`
+          <button key=${t.id} type="button" className="ok-confrow__pill" onClick=${() => onPick(t.id)}
+                  style=${{ borderColor: C[t.color], color: C[t.color] }}>
+            <span className="ok-confrow__num">${i + 1}</span>${t.label}
+          </button>`)}
+        <button type="button" className="ok-confrow__skip ui-font" onClick=${onSkip}>skip</button>
       </div>`;
   }
 
@@ -427,7 +493,7 @@
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, onSelect, revealed, onReveal, onGrade, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect }) {
+  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, onSelect, revealed, onReveal, onGrade, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
     if (!item) {
       return html`
         <div className="fade-up" style=${{ textAlign: 'center', padding: '3rem 0', color: C.textMuted }}>
@@ -529,6 +595,7 @@
 
         ${answered ? html`
           <div className="fade-up" aria-live="polite" style=${{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+            ${confPending ? html`<${ConfidencePrompt} onPick=${onConfidence} onSkip=${onConfSkip} />` : null}
             <div style=${{ padding: '1.25rem', borderRadius: '14px', backgroundColor: passLike ? C.correctBg : C.incorrectBg, border: '1px solid ' + (passLike ? C.correct : C.incorrect) }}>
               <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 ${isRecall
@@ -537,6 +604,11 @@
                   ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>Correct</span></${React.Fragment}>`
                   : html`<${React.Fragment}><${X} size=${16} style=${{ color: C.incorrect }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600 }}>Not Quite</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· Answer: ${item.correct ? String(item.correct).toUpperCase() : '—'}</span></${React.Fragment}>`}
               </div>
+              ${!isRecall && !isCorrect && item.distractorNotes && answer && item.distractorNotes[answer] ? html`
+                <div style=${{ marginBottom: '0.75rem', padding: '0.7rem 0.85rem', borderRadius: '10px', backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.incorrect }}>
+                  <div className="ui-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600, marginBottom: '0.3rem' }}>Your distractor · ${String(answer).toUpperCase()}</div>
+                  <p style=${{ lineHeight: 1.55, color: C.text, fontSize: '14.5px' }}>${renderText(item.distractorNotes[answer])}</p>
+                </div>` : null}
               <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '15.5px' }}>${renderText(item.brief)}</p>
               ${item.reference ? html`<p className="ui-font" style=${{ marginTop: '0.6rem', fontSize: '0.72rem', color: C.textFaint }}>${item.reference}</p>` : null}
             </div>

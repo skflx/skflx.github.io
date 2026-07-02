@@ -31,7 +31,10 @@
     '   writing the distractors, then build the distractors from it.',
     '3. Never telegraph the answer in the stem (no length cues, no grammar cues, no',
     '   "always/never"). All distractors must be plausible to someone with partial',
-    '   knowledge, and each must be wrong for a stateable reason.',
+    '   knowledge, and each must be wrong for a stateable reason. For every mcq, also',
+    '   emit "distractorNotes": an object mapping each INCORRECT option id to one',
+    '   sentence naming why that distractor tempts a partial-knowledge reader and the',
+    '   precise reason it is wrong.',
     '4. Anatomy is asked as spatial relationships first ("immediately deep to…",',
     '   "crossing between X and Y"), labels second.',
     '5. Spell out every acronym at first use in each item, e.g. "superior',
@@ -65,7 +68,9 @@
     '  "ITEMS": [',
     '    { "id": "q1", "type": "mcq", "section": "…", "difficulty": "easy|medium|hard",',
     '      "stem": "…", "options": [ { "id": "a", "text": "…" } ], "correct": "a",',
-    '      "brief": "…", "detailed": "…", "reference": "…", "concepts": ["<key>"] },',
+    '      "brief": "…", "detailed": "…", "reference": "…",',
+    '      "distractorNotes": { "b": "why b tempts and why it is wrong" },',
+    '      "concepts": ["<key>"] },',
     '    { "id": "q2", "type": "recall", "stem": "…", "answer": "…",',
     '      "brief": "…", "detailed": "…", "concepts": ["<key>"] }',
     '  ]',
@@ -190,6 +195,9 @@
       if (type === 'mcq') {
         if (!Array.isArray(q.options) || q.options.length < 3) errors.push(tag + ': needs ≥3 options.');
         else if (!q.options.some(function (o) { return o.id === q.correct; })) errors.push(tag + ': "correct" matches no option id.');
+        if (!q.distractorNotes || typeof q.distractorNotes !== 'object' || !Object.keys(q.distractorNotes).length) {
+          warnings.push(tag + ': no distractorNotes (per-distractor teaching).');
+        }
       } else if (type === 'recall') {
         if (!q.answer) errors.push(tag + ': recall item missing answer.');
       } else errors.push(tag + ': unknown type "' + type + '".');
