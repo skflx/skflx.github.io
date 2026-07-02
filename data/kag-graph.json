@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated": "2026-07-02T19:25:43.159Z",
+  "updated": "2026-07-02T19:40:51.998Z",
   "status": "SEED — vetted temporal-bone otology core. Authored expansion nodes (later phases) carry review:false until owner review.",
   "sources": [
     "Cummings Otolaryngology 7e"
@@ -20,14 +20,27 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "ear canal",
+        "EAC",
+        "external acoustic meatus"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "space",
+      "region": "external-ear",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "EAC"
+          },
+          {
+            "module": "pediatrics",
+            "concept": "external-ear"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -46,14 +59,26 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "eardrum",
+        "TM"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "membrane",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "ta-tubes",
+            "concept": "tm-anatomy"
+          },
+          {
+            "module": "pediatrics",
+            "concept": "middle-ear"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -74,12 +99,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "ossicles"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -100,12 +130,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "ossicles"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -126,12 +161,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "ossicles"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -152,9 +192,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "foramen",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -178,12 +218,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "foramen",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "CI"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -202,14 +247,25 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "bony cochlea"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "inner-ear"
+          },
+          {
+            "module": "pediatrics",
+            "concept": "tonotopy"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -230,12 +286,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "vestibular"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -256,12 +317,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "vestibular"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -280,15 +346,28 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "CN VII"
+      ],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
-        "topics": []
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "nerve-segments"
+          },
+          {
+            "module": "vestibular-schwannoma",
+            "concept": "facial-nerve"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
       },
       "review": true
     },
@@ -309,11 +388,16 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "mastoid-branches"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -332,14 +416,21 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "GSPN"
+      ],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "geniculate-branches"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -358,14 +449,21 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "CN VIII"
+      ],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "vestibular-schwannoma",
+            "concept": "tumor-origin"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -384,14 +482,26 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "IAC",
+        "internal acoustic meatus"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "foramen",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "vestibular-schwannoma",
+            "concept": "IAC"
+          },
+          {
+            "module": "vestibular-schwannoma",
+            "concept": "nerve-quadrants"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -412,9 +522,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -436,11 +546,13 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "mastoid process"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -462,11 +574,13 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "attic"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "space",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -490,9 +604,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "space",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -516,9 +630,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "space",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -542,9 +656,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -568,9 +682,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "muscle",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -594,9 +708,9 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "muscle",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -618,14 +732,22 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "auditory tube",
+        "pharyngotympanic tube"
+      ],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "space",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "ta-tubes",
+            "concept": "eustachian-tube"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -647,8 +769,8 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -673,8 +795,8 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
         "concepts": [],
@@ -699,11 +821,16 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "cholesteatoma"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -725,7 +852,7 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
@@ -751,7 +878,7 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
@@ -764,7 +891,7 @@
       "id": "vestibular-schwannoma",
       "label": "Vestibular Schwannoma",
       "type": "pathology",
-      "subspecialty": "skull-base",
+      "subspecialty": "otology",
       "detail": "Benign tumor of Schwann cells on CN VIII (usually superior vestibular division). Most common CPA tumor. Bilateral = NF2. Presents with asymmetric SNHL.",
       "sources": [
         "Cummings 7e"
@@ -774,15 +901,27 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "acoustic neuroma",
+        "VS"
+      ],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "skull-base",
       "laterality": null,
       "oksat": {
-        "modules": [],
-        "concepts": [],
-        "topics": []
+        "modules": [
+          "vestibular-schwannoma"
+        ],
+        "concepts": [
+          {
+            "module": "vestibular-schwannoma",
+            "concept": "tumor-origin"
+          }
+        ],
+        "topics": [
+          "vestibular-schwannoma"
+        ]
       },
       "review": true
     },
@@ -803,7 +942,7 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
@@ -829,7 +968,7 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
@@ -855,7 +994,7 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
@@ -878,14 +1017,25 @@
         "box": 1,
         "nextReview": "2026-07-02"
       },
-      "aliases": [],
+      "aliases": [
+        "CI"
+      ],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "CI"
+          },
+          {
+            "module": "ta-tubes",
+            "concept": "cochlear-implant"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -907,7 +1057,7 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
+      "region": "temporal-bone",
       "laterality": null,
       "oksat": {
         "modules": [],
@@ -932,12 +1082,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "vestibular"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -959,11 +1114,16 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "geniculate-branches"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -985,11 +1145,20 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "pediatrics",
+            "concept": "physiology"
+          },
+          {
+            "module": "pediatrics",
+            "concept": "inner-ear"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -1011,11 +1180,16 @@
       "aliases": [],
       "abbrev": null,
       "structure": null,
-      "region": null,
-      "laterality": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "ta-tubes",
+            "concept": "cranial-nerves"
+          }
+        ],
         "topics": []
       },
       "review": true
@@ -1036,12 +1210,17 @@
       },
       "aliases": [],
       "abbrev": null,
-      "structure": null,
-      "region": null,
-      "laterality": null,
+      "structure": "foramen",
+      "region": "temporal-bone",
+      "laterality": "paired",
       "oksat": {
         "modules": [],
-        "concepts": [],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
         "topics": []
       },
       "review": true

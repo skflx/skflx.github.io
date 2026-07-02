@@ -16,6 +16,7 @@
     <script src="https://unpkg.com/layout-base@1.0.2/layout-base.js"></script>
     <script src="https://unpkg.com/cose-base@1.0.3/cose-base.js"></script>
     <script src="https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js"></script>
+    <script src="js/oksat-manifest.js"></script>
     <script src="js/kag-store.js"></script>
     <style>
         *,
@@ -981,7 +982,12 @@
         (function () {
             'use strict';
             const TODAY = new Date().toISOString().split('T')[0];
-            const SUBSPECIALTIES = ['rhinology', 'otology', 'head-neck-onc', 'laryngology', 'peds-ent', 'skull-base', 'facial-plastics'];
+            // Subspecialty vocabulary is canonicalized on OKSAT's 9 keys (from oksat-manifest.js);
+            // normSub folds any legacy KAG value (e.g. 'skull-base') to canonical so filters still match.
+            const SUB_LABELS = window.OKSAT_SUBSPECIALTIES || {};
+            const SUBSPECIALTIES = Object.keys(SUB_LABELS).length ? Object.keys(SUB_LABELS)
+                : ['otology', 'rhinology', 'laryngology', 'hn_onc', 'fprs', 'pediatrics', 'sleep', 'endocrine', 'fundamentals'];
+            const normSub = (x) => (window.KAGStore && typeof KAGStore.normSub === 'function') ? KAGStore.normSub(x) : x;
             const LEITNER_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
             const NODE_COLORS = { anatomy: '#4A9EFF', pathology: '#FF6B6B', procedure: '#51CF66', nerve: '#FFD43B', vessel: '#FF922B', drug: '#CC5DE8', concept: '#868E96' };
 
@@ -1140,7 +1146,7 @@
             const pillsEl = document.getElementById('pills');
             let activeSpecs = new Set();
             SUBSPECIALTIES.forEach(s => {
-                const b = document.createElement('button'); b.className = 'pill'; b.textContent = s; b.dataset.spec = s;
+                const b = document.createElement('button'); b.className = 'pill'; b.textContent = (SUB_LABELS[s] && SUB_LABELS[s].label) || s; b.dataset.spec = s;
                 b.addEventListener('click', () => {
                     if (activeSpecs.has(s)) { activeSpecs.delete(s); b.classList.remove('active'); }
                     else { activeSpecs.add(s); b.classList.add('active'); }
@@ -1152,7 +1158,7 @@
             function applyFilters() {
                 if (activeSpecs.size === 0) { cy.nodes().removeClass('faded'); return; }
                 cy.nodes().forEach(n => {
-                    if (activeSpecs.has(n.data('subspecialty'))) n.removeClass('faded');
+                    if (activeSpecs.has(normSub(n.data('subspecialty')))) n.removeClass('faded');
                     else n.addClass('faded');
                 });
             }
@@ -1198,6 +1204,20 @@
                 const edges = graphData.edges.filter(e => e.source === nodeId || e.target === nodeId);
                 let html = '<div style="margin-bottom:0.75rem"><span class="badge badge-' + node.type + '">' + node.type + '</span><span class="badge badge-sub">' + node.subspecialty + '</span></div>';
                 html += '<div class="rp-section"><div class="rp-section-title">Clinical Detail</div><div class="rp-detail">' + escHtml(node.detail) + '</div></div>';
+                // Study & Practice — KAG → OKSAT traversal (concept deep links, adaptive drills, modules)
+                const ok = node.oksat || {};
+                const okLinks = [];
+                (ok.concepts || []).forEach(c => { if (c && c.module && c.concept) okLinks.push({ href: 'oksat-study.html?m=' + encodeURIComponent(c.module) + '&c=' + encodeURIComponent(c.concept), label: 'Practice · ' + c.concept }); });
+                (ok.topics || []).forEach(t => { if (t) okLinks.push({ href: 'oksat-adaptive.html?t=' + encodeURIComponent(t), label: 'Drill · ' + t }); });
+                (ok.modules || []).forEach(m => { if (m) okLinks.push({ href: 'oksat-study.html?m=' + encodeURIComponent(m), label: 'Module · ' + m }); });
+                if (okLinks.length) {
+                    html += '<div class="rp-section"><div class="rp-section-title">Study &amp; Practice</div>';
+                    okLinks.forEach(l => { html += '<a class="ok-link" href="' + l.href + '" style="display:inline-block;margin:3px 4px 0 0;padding:3px 10px;border-radius:999px;background:rgba(74,158,255,0.15);color:#4A9EFF;font-size:0.72rem;text-decoration:none;border:1px solid rgba(74,158,255,0.35)">' + escHtml(l.label) + ' ↗</a>'; });
+                    html += '</div>';
+                }
+                if (node.aliases && node.aliases.length) {
+                    html += '<div class="rp-section"><div class="rp-section-title">Also known as</div><div style="font-size:0.78rem;color:var(--txt2)">' + node.aliases.map(escHtml).join(' · ') + '</div></div>';
+                }
                 if (edges.length > 0) {
                     html += '<div class="rp-section"><div class="rp-section-title">Connections (' + edges.length + ')</div>';
                     edges.forEach(e => {
