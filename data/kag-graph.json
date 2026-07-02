@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated": "2026-07-02T20:27:08.319Z",
+  "updated": "2026-07-02T20:28:23.725Z",
   "status": "DRAFT expansion — 40-node temporal-bone seed is vetted (review:true); all other nodes are subagent-authored scaffolding (review:false) pending owner stress-test against curated source text.",
   "sources": [
     "Cummings Otolaryngology 7e",
@@ -24963,6 +24963,47 @@
       "target": "occipital-condyle",
       "type": "bounded_by",
       "direction": "lateral"
+    },
+    {
+      "source": "parietal-bone",
+      "target": "frontal-bone",
+      "type": "articulates_with",
+      "label": "cranial suture"
+    },
+    {
+      "source": "parietal-bone",
+      "target": "occipital-bone",
+      "type": "articulates_with",
+      "label": "cranial suture"
+    },
+    {
+      "source": "parietal-bone",
+      "target": "temporal-bone",
+      "type": "articulates_with",
+      "label": "cranial suture"
+    },
+    {
+      "source": "parietal-bone",
+      "target": "sphenoid",
+      "type": "articulates_with",
+      "label": "cranial suture"
+    },
+    {
+      "source": "level-vi-neck",
+      "target": "level-vii-neck",
+      "type": "continuous_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "level-vi-neck",
+      "target": "thyroid-gland",
+      "type": "bounded_by"
+    },
+    {
+      "source": "level-vi-neck",
+      "target": "level-iv-neck",
+      "type": "continuous_with",
+      "direction": "superior"
     }
   ]
 }
