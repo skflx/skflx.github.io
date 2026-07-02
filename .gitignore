@@ -39,3 +39,6 @@ yarn-error.log*
 # Temporary Files
 *.tmp
 *.temp
+
+# Phase build scratch (shards merged into data/kag-graph.json, not committed raw)
+scratchpad*/
