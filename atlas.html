@@ -386,6 +386,14 @@
             background: var(--hover)
         }
 
+        .rp-edge-ext {
+            text-decoration: none
+        }
+
+        .rp-edge-ext .rp-edge-target {
+            color: #4A9EFF
+        }
+
         .rp-edge-target {
             color: var(--txt)
         }
@@ -638,6 +646,8 @@
             let STRUCT_NODES = [];          // structural nodes only
             let STRUCT_EDGES = [];          // edges with both endpoints structural
             let nodeById = {};              // id -> structural node
+            let allNodeById = {};           // id -> ANY node (for non-structural relationship targets, e.g. transmitted nerves)
+            let ALL_EDGES = [];             // every edge (so the panel can show transmits→nerve, supplies→vessel, etc.)
             let cy = null;
             let activeStructures = new Set([...DEFAULT_ON]);   // which classes are shown
             let activeRegions = new Set();                     // empty = All
@@ -831,16 +841,20 @@
                         '<div class="rp-detail">' + escHtml(node.detail) + '</div></div>';
                 }
 
-                // Grouped relationships (structural neighbors only, so each item is clickable in-atlas)
+                // Grouped relationships from ALL edges. Structural targets are clickable
+                // in-atlas; non-structural targets (e.g. a nerve a foramen transmits) link
+                // out to the KAG so relationships like "Transmits → CN V3" are never hidden.
                 const groups = {};
-                STRUCT_EDGES.forEach(e => {
+                ALL_EDGES.forEach(e => {
                     if (e.source !== nodeId && e.target !== nodeId) return;
                     const outgoing = e.source === nodeId;
                     const otherId = outgoing ? e.target : e.source;
-                    if (!nodeById[otherId]) return;
+                    const other = allNodeById[otherId];
+                    if (!other) return;
                     const heading = EDGE_HEADINGS[e.type] ? e.type : 'Related';
                     (groups[heading] = groups[heading] || []).push({
-                        otherId, outgoing, direction: e.direction || '', type: e.type
+                        otherId, outgoing, direction: e.direction || '', type: e.type,
+                        label: other.label || otherId, structural: !!nodeById[otherId]
                     });
                 });
                 const orderedKeys = HEADING_ORDER.filter(k => groups[k]);
@@ -849,12 +863,15 @@
                     const title = EDGE_HEADINGS[k] || 'Related';
                     html += '<div class="rp-section"><div class="rp-section-title">' + escHtml(title) + '</div>';
                     groups[k].forEach(item => {
-                        const other = nodeById[item.otherId];
                         const arrow = item.outgoing ? '→' : '←';
-                        html += '<div class="rp-edge" data-node="' + escHtml(item.otherId) + '">' +
-                            '<span class="rp-edge-target">' + arrow + ' ' + escHtml(other ? other.label : item.otherId) + '</span>' +
-                            (item.direction ? '<span class="rp-edge-dir">' + escHtml(item.direction) + '</span>' : '') +
-                            '</div>';
+                        const dir = item.direction ? '<span class="rp-edge-dir">' + escHtml(item.direction) + '</span>' : '';
+                        if (item.structural) {
+                            html += '<div class="rp-edge" data-node="' + escHtml(item.otherId) + '">' +
+                                '<span class="rp-edge-target">' + arrow + ' ' + escHtml(item.label) + '</span>' + dir + '</div>';
+                        } else {
+                            html += '<a class="rp-edge rp-edge-ext" href="kag.html?node=' + encodeURIComponent(item.otherId) + '">' +
+                                '<span class="rp-edge-target">' + arrow + ' ' + escHtml(item.label) + ' ↗</span>' + dir + '</a>';
+                        }
                     });
                     html += '</div>';
                 });
@@ -884,7 +901,7 @@
                 rpBody.innerHTML = html;
                 rightPanel.classList.add('open');
 
-                rpBody.querySelectorAll('.rp-edge').forEach(el => {
+                rpBody.querySelectorAll('.rp-edge[data-node]').forEach(el => {
                     el.addEventListener('click', () => focusNode(el.dataset.node, true));
                 });
             }
@@ -926,6 +943,11 @@
                 STRUCT_NODES.forEach(n => { nodeById[n.id] = n; });
                 const shownIds = new Set(STRUCT_NODES.map(n => n.id));
                 STRUCT_EDGES = (graph.edges || []).filter(e => e && shownIds.has(e.source) && shownIds.has(e.target));
+                // Full-graph indexes so the detail panel can surface relationships to
+                // non-structural nodes (nerves/vessels a foramen transmits, etc.).
+                allNodeById = {};
+                graph.nodes.forEach(n => { if (n && n.id) allNodeById[n.id] = n; });
+                ALL_EDGES = graph.edges || [];
 
                 if (STRUCT_NODES.length === 0) { showEmpty(); return; }
 

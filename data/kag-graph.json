@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated": "2026-07-02T20:01:14.367Z",
+  "updated": "2026-07-02T20:10:42.377Z",
   "status": "DRAFT expansion — 40-node temporal-bone seed is vetted (review:true); all other nodes are subagent-authored scaffolding (review:false) pending owner stress-test against curated source text.",
   "sources": [
     "Cummings Otolaryngology 7e",
@@ -14558,6 +14558,1294 @@
         ]
       },
       "review": false
+    },
+    {
+      "id": "annular-ligament",
+      "label": "Annular Ligament (Stapediovestibular)",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Ring of elastic fibrous tissue anchoring the stapes footplate within the oval window; its ossification/fixation is the hallmark of otosclerosis.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "temporal-bone",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "otosclerosis-stapes"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "anterior-malleal-ligament",
+      "label": "Anterior Malleal Ligament",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Suspensory ligament running from the malleus neck (anterior process) to the petrotympanic (Glaserian) fissure; contributes to the ossicular rotational axis.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "lateral-malleal-ligament",
+      "label": "Lateral Malleal Ligament",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Fan-shaped ligament from the malleus neck to the tympanic notch (of Rivinus), forming the roof of Prussak's space.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "superior-malleal-ligament",
+      "label": "Superior Malleal Ligament",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Suspends the malleus head from the epitympanic roof (tegmen); helps define the axis of ossicular rotation.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "posterior-incudal-ligament",
+      "label": "Posterior Incudal Ligament",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Suspends the short process of the incus in the incudal fossa; a key fulcrum, relevant when disarticulating the incudostapedial joint.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "incudomallear-joint",
+      "label": "Incudomallear Joint",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Saddle-shaped synovial joint between the malleus head and incus body; the two move as a unit about the anteroposterior ligamentous axis.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "incudostapedial-joint",
+      "label": "Incudostapedial Joint",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Ball-and-socket synovial joint between the long process (lenticular) of the incus and the stapes head; commonly disarticulated in ossiculoplasty and most eroded ossicular link in chronic OM.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "tympanic-annulus",
+      "label": "Tympanic Annulus (Annulus Fibrosus)",
+      "type": "anatomy",
+      "subspecialty": "otology",
+      "detail": "Fibrocartilaginous ring seating the pars tensa in the tympanic sulcus; deficient superiorly at the notch of Rivinus where the pars flaccida attaches.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "tympanoplasty-ossiculoplasty"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "thyrohyoid-membrane",
+      "label": "Thyrohyoid Membrane",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Fibroelastic sheet suspending the thyroid cartilage from the hyoid; pierced by the internal branch of the superior laryngeal nerve and superior laryngeal vessels.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "membrane",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "laryngotracheal-stenosis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "quadrangular-membrane",
+      "label": "Quadrangular Membrane",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Upper fibroelastic membrane of the endolarynx; its free lower edge forms the vestibular (false vocal) ligament and its upper edge the aryepiglottic fold.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "membrane",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "benign-vocal-fold-lesions"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "vestibular-ligament",
+      "label": "Vestibular Ligament (False Cord)",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Thickened inferior free margin of the quadrangular membrane forming the framework of the false vocal fold above the laryngeal ventricle.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "benign-vocal-fold-lesions"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "hyoepiglottic-ligament",
+      "label": "Hyoepiglottic Ligament",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Connects the anterior epiglottis to the hyoid body, forming the floor of the pre-epiglottic (Boyer) space; tenting it opens the vallecula during suspension laryngoscopy.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "laryngeal-scc"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "thyroepiglottic-ligament",
+      "label": "Thyroepiglottic Ligament",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Tethers the epiglottic petiole to the inner thyroid lamina just above the anterior commissure; a route of anterior tumor spread into the pre-epiglottic space.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "laryngeal-scc"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cricotracheal-ligament",
+      "label": "Cricotracheal Ligament",
+      "type": "anatomy",
+      "subspecialty": "laryngology",
+      "detail": "Connects the lower cricoid border to the first tracheal ring; divided and reapproximated in cricotracheal resection for subglottic stenosis.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "larynx",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "laryngotracheal-stenosis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "trigeminal-nerve",
+      "label": "Trigeminal Nerve (CN V)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Largest cranial nerve; divides into V1 (ophthalmic), V2 (maxillary) and V3 (mandibular), each exiting the skull base through a separate foramen.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "maxillary-nerve",
+      "label": "Maxillary Nerve (V2)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Second trigeminal division; purely sensory, exits the middle cranial fossa via foramen rotundum into the pterygopalatine fossa.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "mandibular-nerve",
+      "label": "Mandibular Nerve (V3)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Third trigeminal division carrying sensory and motor (muscles of mastication) fibers; exits through foramen ovale into the masticator space.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "middle-meningeal-artery",
+      "label": "Middle Meningeal Artery",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Branch of the maxillary artery entering the cranium through foramen spinosum; classic source of epidural hematoma.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "optic-nerve",
+      "label": "Optic Nerve (CN II)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "CN II passes with the ophthalmic artery through the optic canal in the lesser wing of sphenoid; at risk in endoscopic sphenoethmoid surgery.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "olfactory-nerve",
+      "label": "Olfactory Nerve (CN I)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "CN I fila traverse the cribriform plate; a common site of anterior skull base CSF leak and esthesioneuroblastoma origin.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "glossopharyngeal-nerve",
+      "label": "Glossopharyngeal Nerve (CN IX)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "CN IX exits the jugular foramen (pars nervosa) with CN X and XI; injury causes loss of gag and posterior-tongue taste.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "vagus-nerve",
+      "label": "Vagus Nerve (CN X)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "CN X leaves the skull through the jugular foramen and descends in the carotid sheath; supplies laryngeal and pharyngeal function.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "accessory-nerve",
+      "label": "Accessory Nerve (CN XI)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "CN XI exits the jugular foramen to innervate SCM and trapezius; landmark in level IIb/V neck dissection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "hypoglossal-nerve",
+      "label": "Hypoglossal Nerve (CN XII)",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "CN XII exits the hypoglossal canal to supply all intrinsic and most extrinsic tongue muscles.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "internal-jugular-vein",
+      "label": "Internal Jugular Vein",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Begins at the jugular foramen (pars vascularis) as the sigmoid sinus continuation; travels in the carotid sheath.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "internal-carotid-artery",
+      "label": "Internal Carotid Artery",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Enters the skull through the carotid canal of the petrous temporal bone; passes the cavernous sinus adjacent to the sphenoid sinus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "foramen-ovale",
+      "label": "Foramen Ovale",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Sphenoid greater-wing foramen transmitting V3, the accessory meningeal artery and lesser petrosal nerve; ('MALE' mnemonic: mandibular n., accessory meningeal a., lesser petrosal n., emissary veins).",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "foramen-rotundum",
+      "label": "Foramen Rotundum",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Sphenoid foramen connecting the middle cranial fossa to the pterygopalatine fossa; transmits the maxillary nerve (V2).",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "foramen-spinosum",
+      "label": "Foramen Spinosum",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Small sphenoid foramen posterolateral to foramen ovale transmitting the middle meningeal artery and meningeal branch of V3.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "jugular-foramen",
+      "label": "Jugular Foramen",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Foramen between temporal and occipital bones; pars nervosa carries CN IX, pars vascularis carries CN X, XI and the internal jugular vein. Site of glomus jugulare.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "hypoglossal-canal",
+      "label": "Hypoglossal Canal",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Canal in the occipital condyle transmitting CN XII; anterior to the condyle relative to the jugular foramen.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "foramen-magnum",
+      "label": "Foramen Magnum",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Largest skull-base foramen transmitting the medulla-spinal cord junction, vertebral arteries and the spinal roots of CN XI.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "carotid-canal",
+      "label": "Carotid Canal",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "S-shaped canal in the petrous temporal bone transmitting the internal carotid artery and its sympathetic/venous plexus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "superior-orbital-fissure",
+      "label": "Superior Orbital Fissure",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Cleft between sphenoid wings transmitting CN III, IV, VI, V1 (ophthalmic) and the superior ophthalmic vein; involved in superior orbital fissure syndrome.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "optic-canal",
+      "label": "Optic Canal",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Canal in the lesser wing of sphenoid transmitting the optic nerve (CN II) and ophthalmic artery.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pterygomaxillary-fissure",
+      "label": "Pterygomaxillary Fissure",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Cleft between the maxilla and the pterygoid process leading into the pterygopalatine fossa; transmits the terminal maxillary artery and posterior superior alveolar branches; landmark in maxillary (Le Fort) osteotomy and JNA resection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "temporomandibular-joint",
+      "label": "Temporomandibular Joint (TMJ)",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Bilateral synovial ginglymoarthrodial joint between the mandibular condyle and the glenoid fossa of the temporal bone; the only joint with a fibrocartilaginous articular disc dividing it into upper (translation) and lower (rotation) compartments.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "articular-disc",
+      "label": "TMJ Articular Disc (Meniscus)",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Biconcave fibrocartilage separating the TMJ into superior and inferior compartments; anterior displacement produces internal derangement and clicking.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "frontozygomatic-suture",
+      "label": "Frontozygomatic Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Articulation of the zygomatic frontal process with the frontal bone; a key reduction/fixation point and vertical buttress landmark in ZMC fracture repair.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "zygomaticomaxillary-suture",
+      "label": "Zygomaticomaxillary Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Junction of the zygoma and maxilla along the inferior orbital rim/zygomaticomaxillary buttress; step-off here signals ZMC fracture.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "joint",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "styloid-process",
+      "label": "Styloid Process",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Slender temporal bone projection anchoring the stylohyoid, stylomandibular and stylopharyngeus/styloglossus/stylohyoid muscles (Riolan's bouquet); elongation causes Eagle syndrome.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "hyoid-bone",
+      "label": "Hyoid Bone",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "U-shaped midline bone suspended by muscles and ligaments, anchoring the larynx and tongue base; the only bone with no direct articulation. Resected with the tract in Sistrunk procedure.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "cervical-spine-hyoid",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "stylohyoid-ligament",
+      "label": "Stylohyoid Ligament",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Fibrous band from the styloid tip to the lesser cornu of the hyoid (2nd branchial arch derivative); may ossify in Eagle syndrome.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "stylomandibular-ligament",
+      "label": "Stylomandibular Ligament",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Thickened deep cervical fascia from the styloid process to the mandibular angle; accessory TMJ ligament and the boundary separating the parotid from the submandibular space.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "sphenomandibular-ligament",
+      "label": "Sphenomandibular Ligament",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Accessory TMJ ligament from the sphenoid spine to the mandibular lingula (Meckel's cartilage remnant); primary passive support of the mandible and a landmark shielding the inferior alveolar nerve at the mandibular foramen.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pterygomandibular-raphe",
+      "label": "Pterygomandibular Raphe",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Tendinous band from the pterygoid hamulus to the posterior mylohyoid line where the buccinator meets the superior pharyngeal constrictor; landmark for inferior alveolar nerve block.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "ligament",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
     }
   ],
   "edges": [
@@ -17680,6 +18968,449 @@
       "source": "pediatric-polysomnography-criteria",
       "target": "pediatric-osa",
       "type": "staged_with"
+    },
+    {
+      "source": "annular-ligament",
+      "target": "stapes",
+      "type": "attaches_to",
+      "label": "footplate"
+    },
+    {
+      "source": "annular-ligament",
+      "target": "oval-window",
+      "type": "attaches_to"
+    },
+    {
+      "source": "annular-ligament",
+      "target": "stapes",
+      "type": "suspends"
+    },
+    {
+      "source": "stapes",
+      "target": "oval-window",
+      "type": "articulates_with",
+      "label": "via annular ligament"
+    },
+    {
+      "source": "anterior-malleal-ligament",
+      "target": "malleus",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "lateral-malleal-ligament",
+      "target": "malleus",
+      "type": "attaches_to",
+      "direction": "lateral"
+    },
+    {
+      "source": "superior-malleal-ligament",
+      "target": "malleus",
+      "type": "suspends",
+      "direction": "superior"
+    },
+    {
+      "source": "superior-malleal-ligament",
+      "target": "tegmen-tympani",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "superior-malleal-ligament",
+      "target": "epitympanum",
+      "type": "contained_in"
+    },
+    {
+      "source": "posterior-incudal-ligament",
+      "target": "incus",
+      "type": "suspends",
+      "label": "short process",
+      "direction": "posterior"
+    },
+    {
+      "source": "incudomallear-joint",
+      "target": "malleus",
+      "type": "articulates_with"
+    },
+    {
+      "source": "incudomallear-joint",
+      "target": "incus",
+      "type": "articulates_with"
+    },
+    {
+      "source": "incudostapedial-joint",
+      "target": "incus",
+      "type": "articulates_with",
+      "label": "lenticular process"
+    },
+    {
+      "source": "incudostapedial-joint",
+      "target": "stapes",
+      "type": "articulates_with"
+    },
+    {
+      "source": "tympanic-annulus",
+      "target": "tympanic-membrane",
+      "type": "attaches_to"
+    },
+    {
+      "source": "thyrohyoid-membrane",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "direction": "inferior"
+    },
+    {
+      "source": "thyrohyoid-membrane",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "thyrohyoid-membrane",
+      "target": "thyroid-cartilage",
+      "type": "suspends",
+      "direction": "inferior"
+    },
+    {
+      "source": "quadrangular-membrane",
+      "target": "epiglottis",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "quadrangular-membrane",
+      "target": "arytenoid-cartilage",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "vestibular-ligament",
+      "target": "quadrangular-membrane",
+      "type": "part_of",
+      "label": "free inferior edge",
+      "direction": "inferior"
+    },
+    {
+      "source": "vestibular-ligament",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "vestibular-ligament",
+      "target": "arytenoid-cartilage",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "hyoepiglottic-ligament",
+      "target": "epiglottis",
+      "type": "attaches_to"
+    },
+    {
+      "source": "hyoepiglottic-ligament",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "thyroepiglottic-ligament",
+      "target": "epiglottis",
+      "type": "attaches_to",
+      "label": "petiole"
+    },
+    {
+      "source": "thyroepiglottic-ligament",
+      "target": "thyroid-cartilage",
+      "type": "attaches_to",
+      "direction": "anterior"
+    },
+    {
+      "source": "cricotracheal-ligament",
+      "target": "cricoid-cartilage",
+      "type": "attaches_to",
+      "direction": "inferior"
+    },
+    {
+      "source": "vocal-ligament",
+      "target": "conus-elasticus",
+      "type": "part_of",
+      "label": "free superior edge",
+      "direction": "superior"
+    },
+    {
+      "source": "maxillary-nerve",
+      "target": "trigeminal-nerve",
+      "type": "part_of"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "trigeminal-nerve",
+      "type": "part_of"
+    },
+    {
+      "source": "foramen-ovale",
+      "target": "mandibular-nerve",
+      "type": "transmits",
+      "label": "V3"
+    },
+    {
+      "source": "foramen-rotundum",
+      "target": "maxillary-nerve",
+      "type": "transmits",
+      "label": "V2"
+    },
+    {
+      "source": "foramen-spinosum",
+      "target": "middle-meningeal-artery",
+      "type": "transmits"
+    },
+    {
+      "source": "jugular-foramen",
+      "target": "glossopharyngeal-nerve",
+      "type": "transmits",
+      "label": "CN IX"
+    },
+    {
+      "source": "jugular-foramen",
+      "target": "vagus-nerve",
+      "type": "transmits",
+      "label": "CN X"
+    },
+    {
+      "source": "jugular-foramen",
+      "target": "accessory-nerve",
+      "type": "transmits",
+      "label": "CN XI"
+    },
+    {
+      "source": "jugular-foramen",
+      "target": "internal-jugular-vein",
+      "type": "transmits"
+    },
+    {
+      "source": "hypoglossal-canal",
+      "target": "hypoglossal-nerve",
+      "type": "transmits",
+      "label": "CN XII"
+    },
+    {
+      "source": "foramen-magnum",
+      "target": "accessory-nerve",
+      "type": "transmits",
+      "label": "spinal root"
+    },
+    {
+      "source": "carotid-canal",
+      "target": "internal-carotid-artery",
+      "type": "transmits"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "trigeminal-nerve",
+      "type": "transmits",
+      "label": "V1 division"
+    },
+    {
+      "source": "optic-canal",
+      "target": "optic-nerve",
+      "type": "transmits",
+      "label": "CN II"
+    },
+    {
+      "source": "cribriform-plate",
+      "target": "olfactory-nerve",
+      "type": "transmits",
+      "label": "CN I"
+    },
+    {
+      "source": "stylomastoid-foramen",
+      "target": "facial-nerve",
+      "type": "transmits",
+      "label": "CN VII"
+    },
+    {
+      "source": "pterygomaxillary-fissure",
+      "target": "maxillary-nerve",
+      "type": "transmits",
+      "label": "terminal branches"
+    },
+    {
+      "source": "optic-canal",
+      "target": "anterior-skull-base",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "cribriform-plate",
+      "target": "olfactory-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "carotid-canal",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for",
+      "label": "petrous ICA"
+    },
+    {
+      "source": "temporomandibular-joint",
+      "target": "mandible",
+      "type": "articulates_with",
+      "label": "condyle",
+      "direction": "superior"
+    },
+    {
+      "source": "articular-disc",
+      "target": "temporomandibular-joint",
+      "type": "part_of"
+    },
+    {
+      "source": "articular-disc",
+      "target": "temporomandibular-joint",
+      "type": "contained_in"
+    },
+    {
+      "source": "frontozygomatic-suture",
+      "target": "zygomaticomaxillary-complex",
+      "type": "articulates_with",
+      "direction": "superior"
+    },
+    {
+      "source": "frontozygomatic-suture",
+      "target": "facial-buttresses",
+      "type": "landmark_for",
+      "label": "vertical buttress"
+    },
+    {
+      "source": "zygomaticomaxillary-suture",
+      "target": "zygomaticomaxillary-complex",
+      "type": "articulates_with",
+      "direction": "inferior"
+    },
+    {
+      "source": "zygomaticomaxillary-suture",
+      "target": "facial-buttresses",
+      "type": "part_of",
+      "label": "ZM buttress"
+    },
+    {
+      "source": "styloid-process",
+      "target": "stylomastoid-foramen",
+      "type": "landmark_for",
+      "direction": "anterior"
+    },
+    {
+      "source": "stylohyoid-ligament",
+      "target": "styloid-process",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "stylohyoid-ligament",
+      "target": "hyoid-bone",
+      "type": "attaches_to",
+      "label": "lesser cornu",
+      "direction": "inferior"
+    },
+    {
+      "source": "stylohyoid-ligament",
+      "target": "hyoid-bone",
+      "type": "suspends",
+      "direction": "inferior"
+    },
+    {
+      "source": "stylomandibular-ligament",
+      "target": "styloid-process",
+      "type": "attaches_to",
+      "direction": "superior"
+    },
+    {
+      "source": "stylomandibular-ligament",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "angle",
+      "direction": "inferior"
+    },
+    {
+      "source": "stylomandibular-ligament",
+      "target": "temporomandibular-joint",
+      "type": "part_of",
+      "label": "accessory ligament"
+    },
+    {
+      "source": "stylomandibular-ligament",
+      "target": "parotid-space",
+      "type": "landmark_for",
+      "label": "separates from submandibular"
+    },
+    {
+      "source": "stylomandibular-ligament",
+      "target": "submandibular-space",
+      "type": "landmark_for"
+    },
+    {
+      "source": "sphenomandibular-ligament",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "lingula",
+      "direction": "inferior"
+    },
+    {
+      "source": "sphenomandibular-ligament",
+      "target": "temporomandibular-joint",
+      "type": "part_of",
+      "label": "accessory ligament"
+    },
+    {
+      "source": "pterygomandibular-raphe",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "mylohyoid line",
+      "direction": "inferior"
+    },
+    {
+      "source": "hyoid-bone",
+      "target": "thyrohyoid-membrane",
+      "type": "landmark_for",
+      "direction": "superior"
+    },
+    {
+      "source": "alar-fascia",
+      "target": "deep-cervical-fascia",
+      "type": "part_of"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "investing-layer-deep-cervical-fascia",
+      "type": "continuous_with"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "pretracheal-visceral-fascia",
+      "type": "continuous_with"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "prevertebral-fascia",
+      "type": "continuous_with"
+    },
+    {
+      "source": "parapharyngeal-space",
+      "target": "investing-layer-deep-cervical-fascia",
+      "type": "bounded_by",
+      "direction": "lateral"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "internal-jugular-vein",
+      "type": "forms",
+      "label": "contents"
+    },
+    {
+      "source": "carotid-sheath",
+      "target": "vagus-nerve",
+      "type": "forms",
+      "label": "contents"
     }
   ]
 }
