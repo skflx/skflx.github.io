@@ -140,7 +140,10 @@
   </div>
 
   <script src="js/oksat-manifest.js"></script>
+  <script src="js/oksat-store.js"></script>
+  <script src="js/oksat-reviewer.js"></script>
   <script src="js/oksat-prefs.js"></script>
+  <script src="js/oksat-taxonomy.js"></script>
   <script src="js/oksat-ai.js"></script>
   <script>
     (function () {
@@ -329,6 +332,39 @@
       document.getElementById('cp-json').addEventListener('click', function () {
         if (current) copy(JSON.stringify(current, null, 2), this);
       });
+
+      /* ---- Import starred adaptive questions (?from=starred) ---- */
+      (function importStarred() {
+        if (new URLSearchParams(location.search).get('from') !== 'starred') return;
+        if (!window.OKSATStore) return;
+        var reviewer = (window.OKSATReviewer && OKSATReviewer.current()) || 'guest';
+        var items = (OKSATStore.getStarred(reviewer).items) || [];
+        if (!items.length) { setStatus('No starred questions to import — star some in adaptive practice first.', false); return; }
+        var subs = window.OKSAT_SUBSPECIALTIES || {};
+        var tax = (window.OKSAT_TAXONOMY && OKSAT_TAXONOMY.topics) || [];
+        function topicOf(id) { for (var i = 0; i < tax.length; i++) if (tax[i].id === id) return tax[i]; return null; }
+        var DOMAINS = {}, CONCEPTS = {};
+        var built = items.map(function (it, i) {
+          var t = topicOf(it.topicId);
+          var subKey = (t && t.subspecialty) || 'fundamentals';
+          var subInfo = subs[subKey] || { label: 'OHNS', hue: '#2C5454' };
+          if (!DOMAINS[subKey]) DOMAINS[subKey] = { label: subInfo.label, color: subInfo.hue, hex: 'rgba(44,84,84,0.10)' };
+          var cKey = it.topicId || 'general';
+          if (!CONCEPTS[cKey]) CONCEPTS[cKey] = { label: (t && t.label) || cKey, domain: subKey };
+          var q = { id: 'q' + (i + 1), type: it.type || 'mcq', stem: it.stem, brief: it.brief || '', detailed: it.detailed || '', concepts: [cKey] };
+          if (q.type === 'mcq') { q.options = it.options || []; q.correct = it.correct; if (it.distractorNotes) q.distractorNotes = it.distractorNotes; }
+          else { q.answer = it.answer || ''; }
+          return q;
+        });
+        var mod = {
+          meta: { title: 'Starred\nAdaptive Set', subtitle: 'Questions you starred during adaptive practice. AI-drafted — review and edit every item before committing.', kicker: 'Self-Assessment · Starred' },
+          DOMAINS: DOMAINS, CONCEPTS: CONCEPTS, ITEMS: built,
+        };
+        if (titleIn && !titleIn.value) { titleIn.value = 'Starred Adaptive Set'; if (slugIn) slugIn.value = 'starred-adaptive-set'; }
+        current = mod;
+        render(mod, OKSATAI.validateModule(mod));
+        setStatus('Imported ' + built.length + ' starred question(s). Review, edit the meta, then download.', true);
+      })();
     })();
   </script>
 </body>
