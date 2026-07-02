@@ -31,7 +31,10 @@
     '   writing the distractors, then build the distractors from it.',
     '3. Never telegraph the answer in the stem (no length cues, no grammar cues, no',
     '   "always/never"). All distractors must be plausible to someone with partial',
-    '   knowledge, and each must be wrong for a stateable reason.',
+    '   knowledge, and each must be wrong for a stateable reason. For every mcq, also',
+    '   emit "distractorNotes": an object mapping each INCORRECT option id to one',
+    '   sentence naming why that distractor tempts a partial-knowledge reader and the',
+    '   precise reason it is wrong.',
     '4. Anatomy is asked as spatial relationships first ("immediately deep to…",',
     '   "crossing between X and Y"), labels second.',
     '5. Spell out every acronym at first use in each item, e.g. "superior',
@@ -65,7 +68,9 @@
     '  "ITEMS": [',
     '    { "id": "q1", "type": "mcq", "section": "…", "difficulty": "easy|medium|hard",',
     '      "stem": "…", "options": [ { "id": "a", "text": "…" } ], "correct": "a",',
-    '      "brief": "…", "detailed": "…", "reference": "…", "concepts": ["<key>"] },',
+    '      "brief": "…", "detailed": "…", "reference": "…",',
+    '      "distractorNotes": { "b": "why b tempts and why it is wrong" },',
+    '      "concepts": ["<key>"] },',
     '    { "id": "q2", "type": "recall", "stem": "…", "answer": "…",',
     '      "brief": "…", "detailed": "…", "concepts": ["<key>"] }',
     '  ]',
@@ -185,20 +190,219 @@
       if (!q.id) errors.push(tag + ': missing id.');
       else if (seen[q.id]) errors.push(tag + ': duplicate id.');
       seen[q.id] = 1;
-      if (!q.stem) errors.push(tag + ': missing stem.');
       var type = q.type || 'mcq';
-      if (type === 'mcq') {
-        if (!Array.isArray(q.options) || q.options.length < 3) errors.push(tag + ': needs ≥3 options.');
-        else if (!q.options.some(function (o) { return o.id === q.correct; })) errors.push(tag + ': "correct" matches no option id.');
-      } else if (type === 'recall') {
-        if (!q.answer) errors.push(tag + ': recall item missing answer.');
-      } else errors.push(tag + ': unknown type "' + type + '".');
+      validateItem(q).errors.forEach(function (m) { errors.push(tag + ': ' + m); });
+      if (type === 'mcq' && (!q.distractorNotes || typeof q.distractorNotes !== 'object' || !Object.keys(q.distractorNotes).length)) {
+        warnings.push(tag + ': no distractorNotes (per-distractor teaching).');
+      }
       if (!q.brief) warnings.push(tag + ': no brief explanation.');
       (q.concepts || []).forEach(function (c) {
         if (!concepts[c]) warnings.push(tag + ': concept "' + c + '" not in CONCEPTS.');
       });
     });
     return { ok: !errors.length, errors: errors, warnings: warnings };
+  }
+
+  /* ---------------------------------------------------------
+     RUNTIME SINGLE-ITEM GENERATION (Phase 4)
+     The adaptive page (oksat-adaptive.html) generates one question
+     at a time. Same house style + transport as the Forge, but a
+     single-object schema, a difficulty target, an AVOID list, and
+     optional grounding excerpts from a built module.
+     --------------------------------------------------------- */
+
+  /* Per-item structural checks, shared with validateModule (bare messages). */
+  function validateItem(q) {
+    if (!q || typeof q !== 'object') return { ok: false, errors: ['not an object.'] };
+    var errors = [];
+    if (!q.stem) errors.push('missing stem.');
+    var type = q.type || 'mcq';
+    if (type === 'mcq') {
+      if (!Array.isArray(q.options) || q.options.length < 3) errors.push('needs ≥3 options.');
+      else if (!q.options.some(function (o) { return o.id === q.correct; })) errors.push('"correct" matches no option id.');
+    } else if (type === 'recall') {
+      if (!q.answer) errors.push('recall item missing answer.');
+    } else errors.push('unknown type "' + type + '".');
+    return { ok: !errors.length, errors: errors };
+  }
+
+  var SINGLE_ITEM_STYLE = [
+    '',
+    'SINGLE-ITEM MODE',
+    'You are generating ONE item, not a module. Return ONLY one JSON object — no',
+    'markdown fences, no prose — shaped exactly:',
+    '{',
+    '  "type": "mcq" | "recall",',
+    '  "stem": "…",',
+    '  "options": [ { "id": "a", "text": "…" } ],   // mcq only, 4-5 options',
+    '  "correct": "a",                               // mcq only, matches an option id',
+    '  "answer": "…",                                // recall only',
+    '  "brief": "…",',
+    '  "detailed": "…",',
+    '  "distractorNotes": { "b": "why b tempts and why it is wrong" },  // mcq: every incorrect option',
+    '  "difficulty": "easy" | "medium" | "hard"',
+    '}',
+    'No "id", no "concepts", no "meta" — the caller assigns those. Obey every',
+    'house-style PRINCIPLE above. Do NOT repeat any stem listed under AVOID.',
+  ].join('\n');
+
+  var LEVEL_PHRASE = {
+    1: 'foundational recall',
+    2: 'applied recall',
+    3: 'clinical application',
+    4: 'multi-step reasoning / adjacent-structure discrimination',
+    5: 'attending-level edge case / decision-tree trap',
+  };
+
+  /* One generation may be in flight at a time (the adaptive UI also
+     disables Next, but this guarantees it at the source). */
+  var itemInFlight = false;
+
+  function callGemini(model, key, sysText, userText, cfg) {
+    var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 45000) : null;
+    var body = { contents: [{ role: 'user', parts: [{ text: userText }] }], generationConfig: cfg };
+    if (sysText) body.systemInstruction = { parts: [{ text: sysText }] };
+    return fetch(endpoint(model, key), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      signal: ctrl ? ctrl.signal : undefined,
+    }).then(function (r) {
+      if (timer) clearTimeout(timer);
+      if (!r.ok) return r.json().catch(function () { return {}; }).then(function (j) {
+        throw new Error((j.error && j.error.message) || ('Gemini HTTP ' + r.status));
+      });
+      return r.json();
+    }, function (err) {
+      if (timer) clearTimeout(timer);
+      if (err && err.name === 'AbortError') throw new Error('Timed out — try again.');
+      throw new Error('Network error — check your connection.');
+    }).then(function (data) {
+      var parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
+      var text = parts.map(function (p) { return p.text || ''; }).join('');
+      if (!text) throw new Error('Empty response from Gemini.');
+      return text;
+    });
+  }
+
+  /* Generate ONE raw item. opts = { topic:{id,label,subspecialty,difficultyBand},
+     level:1-5, type:'mcq'|'recall'|'auto', avoidStems:[], grounding:string|null, model? }. */
+  function generateItem(opts) {
+    opts = opts || {};
+    var key = getKey();
+    if (!key) return Promise.reject(new Error('No Gemini API key attached — add one in Settings.'));
+    if (itemInFlight) return Promise.reject(new Error('A question is already being generated.'));
+    var model = opts.model || getModel();
+    var topic = opts.topic || {};
+    var level = Math.max(1, Math.min(5, opts.level || 3));
+    var sub = (window.OKSAT_SUBSPECIALTIES || {})[topic.subspecialty];
+    var typeLine = opts.type === 'mcq' ? 'multiple-choice (mcq)'
+      : opts.type === 'recall' ? 'free-response (recall)'
+      : 'your choice — mcq or recall, whichever best tests this point';
+    var avoid = (opts.avoidStems || []).filter(Boolean).slice(0, 8)
+      .map(function (s) { return '- ' + String(s).slice(0, 120); });
+
+    var user = [
+      'Generate ONE board-style OKSAT self-assessment item.',
+      'Topic: ' + (topic.label || 'general otolaryngology') + (sub ? '  (subspecialty: ' + sub.label + ')' : ''),
+      'Target difficulty: level ' + level + '/5 — ' + (LEVEL_PHRASE[level] || 'clinical application') + '.',
+      'Item type: ' + typeLine + '.',
+      avoid.length ? ('AVOID repeating any of these stems already asked this session:\n' + avoid.join('\n')) : '',
+      opts.grounding ? ('\n--- REFERENCE EXCERPTS (ground the item in these; restate, do not copy) ---\n' + opts.grounding) : '',
+    ].filter(Boolean).join('\n');
+
+    var sys = HOUSE_STYLE + '\n\n' + SINGLE_ITEM_STYLE;
+    var cfg = { responseMimeType: 'application/json', temperature: 0.7, maxOutputTokens: 4096 };
+
+    function attempt(nudge) {
+      var u = nudge ? user + '\n\nReturn ONLY the raw JSON object. No fences, no commentary.' : user;
+      return callGemini(model, key, sys, u, cfg).then(parseJSON);
+    }
+
+    itemInFlight = true;
+    // One retry with a "raw JSON only" nudge on parse/format failure.
+    return attempt(false).catch(function () { return attempt(true); })
+      .then(function (v) { itemInFlight = false; return v; },
+            function (e) { itemInFlight = false; throw e; });
+  }
+
+  /* Raw generated object → engine item shape. Returns { ok, item?, error? }.
+     Generated ids carry a 'gen:' prefix so nothing downstream mistakes them
+     for a module's stable q-ids (they must never enter oksat:srs:*). */
+  function normalizeGeneratedItem(raw, topic, seq) {
+    try {
+      if (!raw || typeof raw !== 'object') return { ok: false, error: 'Not an object.' };
+      topic = topic || {};
+      var type = raw.type === 'recall' ? 'recall' : 'mcq';
+      var item = {
+        id: 'gen:' + (topic.id || 'topic') + ':' + Date.now() + ':' + (seq || 0),
+        type: type,
+        stem: String(raw.stem || '').trim(),
+        brief: raw.brief ? String(raw.brief) : '',
+        detailed: raw.detailed ? String(raw.detailed) : '',
+        concepts: [topic.id].filter(Boolean),
+        section: topic.label || undefined,
+        topicId: topic.id,
+        generated: true,
+      };
+      if (raw.difficulty) item.difficulty = raw.difficulty;
+      if (type === 'mcq') {
+        var letters = ['a', 'b', 'c', 'd', 'e', 'f'];
+        var src = Array.isArray(raw.options) ? raw.options : [];
+        var idMap = {}, options = [];
+        src.forEach(function (o, i) {
+          if (options.length >= letters.length) return;
+          var text = String((o && (o.text != null ? o.text : o)) || '').trim();
+          if (!text) return;
+          var newId = letters[options.length];
+          var oldId = (o && o.id != null) ? String(o.id) : letters[i];
+          idMap[oldId] = newId; idMap[oldId.toLowerCase()] = newId;
+          options.push({ id: newId, text: text });
+        });
+        item.options = options;
+        var oldCorrect = raw.correct != null ? String(raw.correct) : '';
+        item.correct = idMap[oldCorrect] || idMap[oldCorrect.toLowerCase()] || '';
+        if (raw.distractorNotes && typeof raw.distractorNotes === 'object') {
+          var dn = {};
+          Object.keys(raw.distractorNotes).forEach(function (k) {
+            var nk = idMap[k] || idMap[String(k).toLowerCase()];
+            if (nk && nk !== item.correct) dn[nk] = String(raw.distractorNotes[k]);
+          });
+          if (Object.keys(dn).length) item.distractorNotes = dn;
+        }
+      } else {
+        item.answer = String(raw.answer || '').trim();
+      }
+      var v = validateItem(item);
+      if (!v.ok) return { ok: false, error: v.errors.join(' ') };
+      return { ok: true, item: item };
+    } catch (e) {
+      return { ok: false, error: (e && e.message) || 'normalization failed.' };
+    }
+  }
+
+  /* Grade a free-text answer. Resolves { verdict, feedback }; may reject
+     (caller falls back to self-grading). */
+  function gradeFreeResponse(q) {
+    q = q || {};
+    var key = getKey();
+    if (!key) return Promise.reject(new Error('No Gemini API key attached.'));
+    var prompt = [
+      'Grade a resident\'s free-text answer against the model answer.',
+      'Be strict on load-bearing facts, lenient on wording, synonyms, and order.',
+      'Return ONLY JSON: {"verdict":"correct"|"partial"|"incorrect","feedback":"1-2 sentences"}.',
+      '',
+      'QUESTION: ' + (q.stem || ''),
+      'MODEL ANSWER: ' + (q.modelAnswer || ''),
+      'RESIDENT ANSWER: ' + (q.userAnswer || ''),
+    ].join('\n');
+    return callGemini(getModel(), key, null, prompt, {
+      responseMimeType: 'application/json', temperature: 0.1, maxOutputTokens: 512,
+    }).then(parseJSON).then(function (o) {
+      var verdict = /^(correct|partial|incorrect)$/.test(o.verdict) ? o.verdict : 'partial';
+      return { verdict: verdict, feedback: String(o.feedback || '') };
+    });
   }
 
   window.OKSATAI = {
@@ -212,5 +416,9 @@
     testKey: testKey,
     generateModule: generateModule,
     validateModule: validateModule,
+    validateItem: validateItem,
+    generateItem: generateItem,
+    normalizeGeneratedItem: normalizeGeneratedItem,
+    gradeFreeResponse: gradeFreeResponse,
   };
 })();

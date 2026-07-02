@@ -22,7 +22,7 @@
   function todayISO() { return new Date().toISOString().split('T')[0]; }
 
   function emptyDB() {
-    return { version: 1, updated: new Date().toISOString(), reviewers: {} };
+    return { version: 2, updated: new Date().toISOString(), reviewers: {} };
   }
 
   /* ---- read the server file (never throws; falls back to empty) ---- */
@@ -38,9 +38,15 @@
       .catch(function () { cached = emptyDB(); return cached; });
   }
 
-  /* ---- what this browser knows about `code` ---- */
+  /* ---- what this browser knows about `code` ---- (`code` is already normalized)
+     v2 adds calibration (confidence tiers) and adaptive-topic aggregates —
+     progress only, still no secrets. */
   function localSnapshot(code) {
-    var out = { modules: {} };
+    var out = {
+      modules: {},
+      calibration: { hi: { n: 0, c: 0 }, md: { n: 0, c: 0 }, lo: { n: 0, c: 0 } },
+      adaptive: { topics: {} },
+    };
     (window.OKSAT_MANIFEST || []).forEach(function (m) {
       var rec = null;
       try { rec = JSON.parse(localStorage.getItem('oksat:progress:' + m.slug + ':' + code) || 'null'); }
@@ -56,6 +62,33 @@
         updated: (rec.updated || new Date().toISOString()).split('T')[0],
       };
     });
+    // Confidence calibration: fold every oksat:conf:*:<code> record into tier tallies.
+    try {
+      var suffix = ':' + code;
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!k || k.indexOf('oksat:conf:') !== 0) continue;
+        if (k.lastIndexOf(suffix) !== k.length - suffix.length) continue;
+        var cr = JSON.parse(localStorage.getItem(k) || 'null');
+        var entries = (cr && cr.entries) || {};
+        Object.keys(entries).forEach(function (qid) {
+          var e = entries[qid], tier = e && e.c;
+          if (tier === 'hi' || tier === 'md' || tier === 'lo') {
+            out.calibration[tier].n++;
+            if (e.ok) out.calibration[tier].c++;
+          }
+        });
+      }
+    } catch (e) {}
+    // Adaptive topic aggregates.
+    try {
+      var ad = JSON.parse(localStorage.getItem('oksat:adaptive:' + code) || 'null');
+      var topics = (ad && ad.topics) || {};
+      Object.keys(topics).forEach(function (id) {
+        var t = topics[id] || {};
+        out.adaptive.topics[id] = { attempts: t.attempts || 0, correct: t.correct || 0, updated: t.last || '' };
+      });
+    } catch (e) {}
     return out;
   }
 
@@ -92,8 +125,11 @@
     if (!next.reviewers) next.reviewers = {};
     var codes = code ? [code] : reviewerList(next);
     codes.forEach(function (c) {
-      var local = localSnapshot(c).modules;
-      if (!Object.keys(local).length && !next.reviewers[c]) return;
+      var snap = localSnapshot(c);
+      var local = snap.modules;
+      var calN = snap.calibration.hi.n + snap.calibration.md.n + snap.calibration.lo.n;
+      var hasLocal = Object.keys(local).length || calN || Object.keys(snap.adaptive.topics).length;
+      if (!hasLocal && !next.reviewers[c]) return;
       var rv = next.reviewers[c] || (next.reviewers[c] = { modules: {}, log: [] });
       if (!rv.modules) rv.modules = {};
       if (!rv.log) rv.log = [];
@@ -106,7 +142,29 @@
           if (rv.log.length > LOG_CAP) rv.log = rv.log.slice(rv.log.length - LOG_CAP);
         }
       });
+      // v2: calibration — tier-wise, whichever record has seen more wins (monotone).
+      if (calN) {
+        var sc = rv.calibration || (rv.calibration = { hi: { n: 0, c: 0 }, md: { n: 0, c: 0 }, lo: { n: 0, c: 0 } });
+        ['hi', 'md', 'lo'].forEach(function (tier) {
+          var loc = snap.calibration[tier] || { n: 0, c: 0 };
+          var srv = sc[tier] || { n: 0, c: 0 };
+          if ((loc.n || 0) > (srv.n || 0)) sc[tier] = { n: loc.n, c: loc.c };
+        });
+      }
+      // v2: adaptive — per topic, more attempts wins; tie → later date.
+      var localTopics = snap.adaptive.topics;
+      if (Object.keys(localTopics).length) {
+        var ra = rv.adaptive || (rv.adaptive = { topics: {} });
+        if (!ra.topics) ra.topics = {};
+        Object.keys(localTopics).forEach(function (id) {
+          var loc = localTopics[id], srv = ra.topics[id];
+          var win = !srv || (loc.attempts || 0) > (srv.attempts || 0) ||
+            ((loc.attempts || 0) === (srv.attempts || 0) && (loc.updated || '') > (srv.updated || ''));
+          if (win) ra.topics[id] = { attempts: loc.attempts, correct: loc.correct, updated: loc.updated };
+        });
+      }
     });
+    next.version = 2;
     next.updated = new Date().toISOString();
     return next;
   }

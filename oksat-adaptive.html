@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OKSAT Study | skflx.MD</title>
-  <meta name="description" content="OKSAT — OHNS Knowledge Self-Assessment study viewer, with concept filtering, spaced-repetition review, and per-reviewer progress tracking.">
+  <title>OKSAT Adaptive Practice | skflx.MD</title>
+  <meta name="description" content="OKSAT adaptive practice — Gemini-generated board-style questions targeting gap topics and weak concepts, with rolling difficulty and starrable items.">
 
   <!-- Set theme + font before paint to avoid a flash (shares keys with the main site) -->
   <script>
@@ -53,7 +53,9 @@
   <script src="js/oksat-prefs.js"></script>
   <script src="js/oksat-taxonomy.js"></script>
   <script src="js/oksat-concept-graph.js"></script>
-  <script src="js/oksat-engine.js"></script>
+  <script src="js/oksat-ai.js"></script>
+  <script src="js/oksat-atlas.js"></script>
+  <script src="js/oksat-adaptive.js"></script>
 
   <script>
     (function () {
@@ -61,13 +63,10 @@
       OKSATPrefs.mountFontPicker(document.getElementById('font-picker'));
 
       var root = document.getElementById('root');
-      function notice(title, body) {
-        root.innerHTML = '<div class="ok-notice"><h1>' + title + '</h1><p>' + body +
-          '</p><a href="oksat.html">&larr; Back to the self-assessment hub</a></div>';
-      }
+      var params = new URLSearchParams(location.search);
+      var topicId = params.get('t') || null;
+      var mode = params.get('mode') || null;
 
-      // Switching reviewer mid-session reloads, which re-runs the prompt
-      // (pre-filled with the current code) so progress stays unambiguous.
       var chip = document.getElementById('reviewer-chip');
       function showChip(code) {
         if (!chip) return;
@@ -76,25 +75,10 @@
         chip.onclick = function () { location.reload(); };
       }
 
-      var slug = new URLSearchParams(location.search).get('m');
-      var manifest = window.OKSAT_MANIFEST || [];
-      var entry = manifest.filter(function (m) { return m.slug === slug; })[0];
-      if (!entry) { notice('Module not found', 'No study module matches “' + (slug || '') + '”.'); return; }
-
-      document.title = entry.title + ' · OKSAT | skflx.MD';
-      var s = document.createElement('script');
-      s.src = entry.data;
-      s.onload = function () {
-        var mod = window.__MCQ_MODULE;
-        try { delete window.__MCQ_MODULE; } catch (e) { window.__MCQ_MODULE = undefined; }
-        if (!mod) { notice('Module failed to load', 'The data for “' + entry.title + '” did not register correctly.'); return; }
-        window.OKSATReviewer.ask({ title: 'Who is reviewing?' }).then(function (code) {
-          showChip(code);
-          window.mountOKSAT(root, mod, entry, code);
-        });
-      };
-      s.onerror = function () { notice('Module failed to load', 'Could not fetch the data file for “' + entry.title + '”.'); };
-      document.body.appendChild(s);
+      window.OKSATReviewer.ask({ title: 'Who is practicing?' }).then(function (code) {
+        showChip(code);
+        window.mountOKSATAdaptive(root, { topicId: topicId, mode: mode, code: code });
+      });
     })();
   </script>
 </body>

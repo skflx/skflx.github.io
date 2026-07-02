@@ -129,6 +129,40 @@
       });
     });
 
+    /* Gap topics — taxonomy entries with no module yet. Faint dashed nodes on
+       their subspecialty hub; tapping one opens adaptive practice. */
+    var tax = (window.OKSAT_TAXONOMY && window.OKSAT_TAXONOMY.topics) || [];
+    tax.forEach(function (t) {
+      if (t.moduleId) return; // built topics already render as modules
+      var sub = subs[t.subspecialty] || { label: 'OHNS', hue: '#55606A' };
+      var subId = 's:' + (t.subspecialty || 'other');
+      if (!usedSubs[subId]) {
+        usedSubs[subId] = true;
+        els.push({ data: { id: subId, kind: 'sub', label: sub.label, hue: sub.hue } });
+      }
+      var gId = 'g:' + t.id;
+      els.push({ data: { id: gId, kind: 'gap', label: t.label, hue: sub.hue, topic: t.id } });
+      els.push({ data: { id: 'e:' + subId + ':' + gId, source: subId, target: gId, kind: 'branch' } });
+    });
+
+    /* Cross-module concept clusters — dashed hops between concept nodes that
+       already exist in the graph (both members must have rendered). */
+    var graph = (window.OKSAT_CONCEPT_GRAPH && window.OKSAT_CONCEPT_GRAPH.clusters) || {};
+    var present = {};
+    els.forEach(function (e) { if (e.data && e.data.kind === 'concept') present[e.data.id] = true; });
+    Object.keys(graph).forEach(function (cid) {
+      var members = (graph[cid] && graph[cid].members) || [];
+      for (var i = 0; i < members.length; i++) {
+        for (var j = i + 1; j < members.length; j++) {
+          var a = 'c:' + members[i].module + ':' + members[i].concept;
+          var b = 'c:' + members[j].module + ':' + members[j].concept;
+          if (present[a] && present[b]) {
+            els.push({ data: { id: 'e:cl:' + cid + ':' + i + ':' + j, source: a, target: b, kind: 'cluster' } });
+          }
+        }
+      }
+    });
+
     /* The sibling graph — Knowledge Atlas Graph, one dashed hop away. */
     els.push({ data: { id: 'kag', kind: 'kag', label: 'Knowledge Atlas Graph ↗', hue: '#4A9EFF' } });
     Object.keys(usedSubs).forEach(function (subId) {
@@ -176,10 +210,17 @@
         'background-color': surface, 'border-width': 2, 'border-style': 'dashed',
         'border-color': 'data(hue)', 'label': 'data(label)',
       } },
+      { selector: 'node[kind = "gap"]', style: {
+        'width': 11, 'height': 11, 'font-size': 8.5,
+        'background-color': surface, 'border-color': 'data(hue)', 'border-width': 1.5,
+        'border-style': 'dashed', 'label': 'data(label)', 'min-zoomed-font-size': 7,
+        'color': faint, 'opacity': 0.8,
+      } },
       { selector: 'node.done', style: { 'border-color': sage, 'border-width': 3 } },
       { selector: 'edge', style: { 'curve-style': 'haystack', 'haystack-radius': 0.3, 'line-color': border, 'width': 1, 'opacity': 0.8 } },
       { selector: 'edge[kind = "trunk"]', style: { 'width': 2 } },
       { selector: 'edge[kind = "ghost"]', style: { 'line-style': 'dashed', 'opacity': 0.35 } },
+      { selector: 'edge[kind = "cluster"]', style: { 'line-style': 'dashed', 'line-color': cssVar('--ok-ochre', '#9C7A45'), 'opacity': 0.3, 'curve-style': 'bezier' } },
       { selector: '.dim', style: { 'opacity': 0.12 } },
       { selector: '.spot', style: { 'opacity': 1 } },
       { selector: 'node.hit', style: { 'border-color': cssVar('--ok-ochre', '#9C7A45'), 'border-width': 3 } },
@@ -237,6 +278,8 @@
         } else if (kind === 'concept') {
           window.location.href = 'oksat-study.html?m=' + encodeURIComponent(n.data('slug')) +
             '&c=' + encodeURIComponent(n.data('concept'));
+        } else if (kind === 'gap') {
+          window.location.href = 'oksat-adaptive.html?t=' + encodeURIComponent(n.data('topic'));
         } else if (kind === 'kag') {
           window.location.href = 'kag.html';
         } else {
@@ -273,5 +316,5 @@
     });
   }
 
-  window.OKSATAtlas = { mount: mount, modules: moduleCache };
+  window.OKSATAtlas = { mount: mount, modules: moduleCache, loadModules: loadModules };
 })();

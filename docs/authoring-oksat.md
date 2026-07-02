@@ -84,6 +84,7 @@ got-it / missed — each tier drives spaced repetition differently:
 | `section` | optional | Small label above the question (e.g. `Embryology`). |
 | `difficulty` | optional | Small badge near the counter (e.g. `hard`). |
 | `reference` | optional | Citation line under the explanation. |
+| `distractorNotes` | optional (mcq) | Object mapping each incorrect option id to one sentence on why it tempts and why it's wrong. Shown to the learner when they pick that distractor. The Question Forge emits these; hand-authored modules may add them. |
 
 ## Minimal template (sparse — no taxonomy)
 
