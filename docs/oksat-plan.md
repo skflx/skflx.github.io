@@ -144,10 +144,27 @@ docs/design-principles.md  design system
 docs/authoring-oksat.md    module authoring guide (renamed + updated)
 ```
 
-## 8. Deferred (deliberately)
+## 8. Delivered since the redesign (v2 iteration)
 
-- Data-level KAG↔OKSAT graph merge (shared node registry).
-- Adaptive difficulty controller & generation-on-demand inside the viewer (the Forge
-  covers generation for now; adaptivity needs more usage data to tune).
+The v2 build (`docs/oksat-next-iteration-plan.md`) shipped several items that were
+deferred here:
+
+- **Confidence calibration** — a per-answer Confident/Unsure/Guessing prompt on MCQs,
+  aggregated into a calibration panel on the new **Progress** dashboard tab.
+- **Adaptive generation-on-demand** — `oksat-adaptive.html` generates board-style
+  questions at runtime for gap topics and weak concepts (Gemini), with a rolling
+  difficulty controller, hybrid grounding from built modules, free-response grading,
+  and starrable items that export back through the Forge.
+- **Cross-module concept graph** — `js/oksat-concept-graph.js` clusters related
+  concepts and propagates partial mastery across modules; surfaced as dashed cluster
+  edges and gap-topic nodes in the Atlas.
+- **Unified taxonomy** — `js/oksat-taxonomy.js`, a **DRAFT** ~64-topic OHNS tree
+  (pending clinical sign-off) driving the taxonomy-grouped hub, gap-topic chips, and
+  the dashboard coverage map.
+- **Distractor autopsy** — optional `distractorNotes` per MCQ, taught on a wrong pick.
+
+### Still deferred
+
+- Full data-level KAG↔OKSAT node-registry merge (the Atlas now *links* to KAG and
+  draws cluster edges, but the graphs remain separate element models).
 - Image-based items (audiograms, CT) — needs a curated image set.
-- Confidence tagging (🟢/🌫️/👻) per answer for calibration analytics.
