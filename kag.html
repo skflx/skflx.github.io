@@ -1202,7 +1202,7 @@
                 if (!node) return;
                 rpLabel.textContent = node.label;
                 const edges = graphData.edges.filter(e => e.source === nodeId || e.target === nodeId);
-                let html = '<div style="margin-bottom:0.75rem"><span class="badge badge-' + node.type + '">' + node.type + '</span><span class="badge badge-sub">' + node.subspecialty + '</span></div>';
+                let html = '<div style="margin-bottom:0.75rem"><span class="badge badge-' + node.type + '">' + node.type + '</span><span class="badge badge-sub">' + node.subspecialty + '</span>' + (node.review === false ? '<span class="badge" style="background:rgba(214,172,99,0.22);color:#D6AC63">DRAFT</span>' : '<span class="badge" style="background:rgba(81,207,102,0.16);color:#51CF66">reviewed ✓</span>') + '</div>';
                 html += '<div class="rp-section"><div class="rp-section-title">Clinical Detail</div><div class="rp-detail">' + escHtml(node.detail) + '</div></div>';
                 // Study & Practice — KAG → OKSAT traversal (concept deep links, adaptive drills, modules)
                 const ok = node.oksat || {};
@@ -1235,6 +1235,7 @@
                 }
                 html += '<div class="rp-section"><div class="rp-section-title">Leitner Box</div><div style="font-size:0.8rem;color:var(--txt2)">Box ' + node.leitner.box + ' · Next review: ' + node.leitner.nextReview + '</div></div>';
                 // Correction form
+                if (node.review === false) { html += '<div class="rp-section"><button class="btn btn-sm btn-success" id="accept-review" style="width:100%">Accept as reviewed ✓</button></div>'; }
                 html += '<div class="rp-section"><div class="rp-section-title">Flag Correction</div><div class="corr-form"><textarea id="corr-text" placeholder="Describe the correction…"></textarea><input id="corr-source" placeholder="Source (optional)"><button class="btn btn-warning btn-sm" style="margin-top:6px" id="corr-submit">Submit Correction</button></div></div>';
                 if (node.corrections && node.corrections.length > 0) {
                     html += '<div class="rp-section"><div class="rp-section-title">Corrections (' + node.corrections.length + ')</div>';
@@ -1253,6 +1254,9 @@
                         if (cyNode.length) { cy.animate({ center: { eles: cyNode }, zoom: 2 }, { duration: 300 }); cyNode.select(); openNodePanel(nid); }
                     });
                 });
+                // Owner review: accept a DRAFT node (review:false -> true)
+                const acceptBtn = document.getElementById('accept-review');
+                if (acceptBtn) acceptBtn.addEventListener('click', () => { node.review = true; saveGraph(graphData); toast('Marked reviewed'); openNodePanel(nodeId); });
                 // Correction submit
                 document.getElementById('corr-submit').addEventListener('click', () => {
                     const text = document.getElementById('corr-text').value.trim();
@@ -1397,7 +1401,7 @@
             settingsModal.addEventListener('click', e => { if (e.target === settingsModal) settingsModal.classList.remove('open'); });
 
             function openSettings() {
-                let html = '<div class="modal-actions"><button class="btn btn-secondary" id="set-import">Import Graph JSON</button><button class="btn btn-secondary" id="set-export">Export Graph JSON</button><button class="btn btn-danger" id="set-reset">Reset to Seed Data</button></div>';
+                let html = '<div class="modal-actions"><button class="btn btn-secondary" id="set-import">Import Graph JSON</button><button class="btn btn-secondary" id="set-export">Export Graph JSON</button><button class="btn btn-danger" id="set-reset">Discard local edits</button></div>';
                 // Canonical graph sync (writes data/kag-graph.json — the shared database)
                 if (window.KAGStore) {
                     html += '<div class="rp-section-title" style="margin-top:1rem">Canonical graph sync</div>';
@@ -1459,9 +1463,14 @@
                 });
                 // Reset
                 document.getElementById('set-reset').addEventListener('click', () => {
-                    if (!confirm('Reset all data to seed graph? This cannot be undone.')) return;
-                    graphData = JSON.parse(JSON.stringify(SEED_GRAPH)); saveGraph(graphData); rebuildCy(); updateBottomStrip();
-                    toast('Reset to seed data'); settingsModal.classList.remove('open');
+                    if (!confirm('Discard this browser\'s local edits and reload the canonical atlas (data/kag-graph.json)? This cannot be undone.')) return;
+                    try { localStorage.removeItem('kag-graph'); } catch (e) { /* no-op */ }
+                    const finish = (g) => { graphData = g; saveGraph(graphData); rebuildCy(); updateBottomStrip(); toast('Reloaded canonical atlas'); settingsModal.classList.remove('open'); };
+                    if (window.KAGStore && typeof KAGStore.fetch === 'function') {
+                        KAGStore.fetch().then((file) => finish((file && file.nodes && file.edges) ? file : JSON.parse(JSON.stringify(SEED_GRAPH))));
+                    } else {
+                        finish(JSON.parse(JSON.stringify(SEED_GRAPH)));
+                    }
                 });
                 // Resolve corrections
                 document.querySelectorAll('.corr-resolve').forEach(btn => {
