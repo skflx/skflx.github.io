@@ -282,13 +282,21 @@ staged_with, arises_from, contained_in, branches_from`.)
 ## 5. Phase map (dependencies)
 
 ```
-Phase 0  Externalize KAG + kag-store + deep links        (foundation)
-Phase 1  Schema v2 fields + module↔KAG links + extractor upgrade
-Phase 2  Term-web expansion  (subagent fan-out, per subspecialty)   ── needs 1
-Phase 3  Usage analytics (hybrid; owner provisions endpoint)        ── independent, needs 0
-Phase 4  Structural anatomy atlas (subagent fan-out, per region)    ── needs 1 (+2 helps)
+Phase 0  Externalize KAG + kag-store + deep links        (foundation)   [DONE]
+Phase 1  Schema v2 fields + module↔KAG links + extractor upgrade        [DONE]
+Phase 2  Term-web expansion  (subagent fan-out, per subspecialty)       [DONE]
+Phase 4  Structural anatomy atlas (subagent fan-out, per region)        [DONE]
+Phase 4b Atlas relationship augmentation (subagent fan-out, per region) [IN PROGRESS]
+Phase 3  Usage analytics (hybrid; owner provisions endpoint)            [DEFERRED — owner call 2026-07, not needed for now]
 Phase 5  Navigation, docs, versioning, hygiene, regression          ── needs all
 ```
+
+**Plan amendment (2026-07, owner):** Phase 3 (usage analytics) is deferred —
+not necessary for now. Inserted **Phase 4b** before Phase 5: augment the
+structural atlas with additional anatomic features and, especially,
+relationships (articulations, attachments, boundaries, part-of hierarchies),
+fanned out per anatomical region. All authored content stays `review:false`
+for the owner's later curated-source stress test.
 Each phase ends with a runnable site (`python3 -m http.server 8000`) and its
 checklist passing. One commit per phase on
 `claude/oto-kag-anatomy-atlas-x19jfa`.
