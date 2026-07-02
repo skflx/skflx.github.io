@@ -59,3 +59,39 @@ Gemini-powered question generator. Full plan: `docs/oksat-plan.md`.
 ## Next Steps
 Generate the first Forge module end-to-end with a real key; consider merging
 KAG node data into the Atlas (both are Cytoscape element models).
+
+---
+
+# WIP — KAG term web + structural anatomy atlas
+
+## Goal
+Turn the KAG from a 40-node localStorage seed into the site's canonical,
+committed knowledge graph, grown into a massive OHNS term web and wired
+bidirectionally to OKSAT. Full plan: `docs/oto-kag-atlas-plan.md`.
+
+## Actions Taken
+1. **Externalized the KAG** to a committed file `data/kag-graph.json`
+   (schema v2), read through a new store `js/kag-store.js` (fetch + merge where
+   LOCAL WINS on progress, download / Contents-API push write paths). `kag.html`
+   now boots from the store; `SEED_GRAPH` remains only as an offline fallback.
+2. **Schema v2 + bidirectional OKSAT↔KAG links** — nodes carry `oksat.{modules,
+   concepts,topics}`; concept links resolve to real module CONCEPTS keys.
+   `?node=<id>` deep links tie the graphs together both ways.
+3. **Term web** — expanded to ~656 nodes / ~929 edges across all 9
+   subspecialties, fanned out one authoring agent per subspecialty, each shard
+   validated + merged via `tools/kag-validate.mjs`.
+4. **Structural anatomy atlas** — new `atlas.html`, a filtered *view* of the KAG
+   (265 structural nodes, colored by `structure`, grouped by `region`); holds no
+   data of its own, so a new structural node appears with zero atlas-code
+   changes. Spatial seed (`laterality`, edge `direction`) captured for a future
+   3D layer.
+5. **Docs** — `docs/kag-schema.md` (v2 model + enums + merge contract),
+   `docs/authoring-kag.md` (shard/validator authoring contract).
+
+All authored (non-seed) content is DRAFT / `review:false`; only the vetted
+40-node temporal-bone seed is `review:true`.
+
+## Next Steps
+Owner (resident) curated-source verification pass over the `review:false` nodes
+to graduate DRAFT content. Phase 3 usage analytics is deferred (owner call,
+2026-07 — not needed for now).

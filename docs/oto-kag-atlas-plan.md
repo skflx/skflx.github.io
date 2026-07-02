@@ -286,9 +286,9 @@ Phase 0  Externalize KAG + kag-store + deep links        (foundation)   [DONE]
 Phase 1  Schema v2 fields + module↔KAG links + extractor upgrade        [DONE]
 Phase 2  Term-web expansion  (subagent fan-out, per subspecialty)       [DONE]
 Phase 4  Structural anatomy atlas (subagent fan-out, per region)        [DONE]
-Phase 4b Atlas relationship augmentation (subagent fan-out, per region) [IN PROGRESS]
+Phase 4b Atlas relationship augmentation (subagent fan-out, per region) [DONE]
 Phase 3  Usage analytics (hybrid; owner provisions endpoint)            [DEFERRED — owner call 2026-07, not needed for now]
-Phase 5  Navigation, docs, versioning, hygiene, regression          ── needs all
+Phase 5  Navigation, docs, versioning, hygiene                          [DONE — nav in P4, docs/hygiene here; analytics parts N/A (P3 deferred)]
 ```
 
 **Plan amendment (2026-07, owner):** Phase 3 (usage analytics) is deferred —
