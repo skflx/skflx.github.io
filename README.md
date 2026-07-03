@@ -58,15 +58,20 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 │   ├── oksat-manifest.js   # OKSAT module registry + subspecialty hues
 │   ├── oksat-reviewer.js   # Per-reviewer identity (+ mcq:*→oksat:* migration)
 │   ├── oksat-prefs.js      # Font themes + day/night wiring
-│   ├── oksat-atlas.js      # Atlas graph view (Cytoscape)
+│   ├── graph-view.js       # Unified graph engine (one Cytoscape stack, three lenses)
+│   ├── graph-lens-knowledge.js   # Knowledge lens (full KAG: self-test, corrections, sync)
+│   ├── graph-lens-structural.js  # Structural lens (region nav + structure toggles)
+│   ├── graph-lens-study.js       # Study lens (OKSAT module→domain→concept hierarchy)
+│   ├── oksat-atlas.js      # Compat shim: loadModules() + mount() → study lens
 │   ├── oksat-db.js         # Completion database read/merge/export/push
 │   ├── oksat-ai.js         # Gemini key mgmt + house-style question generation
 │   ├── kag-store.js        # KAG database read/merge/save/download/push (LOCAL WINS)
 │   └── mcq-modules/        # Question banks (one file per module)
 ├── data/oksat-db.json      # Shared per-reviewer completion database (dated entries)
 ├── data/kag-graph.json     # Canonical KAG database (term web + structural atlas source)
-├── kag.html                # Tool: Knowledge Atlas Graph
-├── atlas.html              # Tool: Structural anatomy atlas (filtered view of the KAG)
+├── graph.html              # Unified graph: Knowledge · Structural · Study lenses (?lens=&node=)
+├── kag.html                # Redirect stub → graph.html?lens=knowledge (forwards ?node=)
+├── atlas.html              # Redirect stub → graph.html?lens=structural (forwards ?node=)
 ├── kag-extract.html        # Tool: KAG extractor
 ├── tools/kag-validate.mjs  # Dev-only KAG shard validator + merger (Node, not shipped)
 ├── cpt-search.html         # Tool: CPT code search

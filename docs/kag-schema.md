@@ -176,10 +176,14 @@ Nothing writes to the repo automatically.
 
 ### Deep links
 
-Both `kag.html` and `atlas.html` accept `?node=<id>`: on boot they center and
-isolate that node's neighborhood and open its detail panel. Unknown id → no-op
-(kag) or a toast (atlas). This is the target of every "Open in KAG" /
-"Practice" crossover link.
+The graph now lives on one page, **`graph.html`**, which renders the same
+`data/kag-graph.json` through three lenses — `?lens=knowledge` (the KAG),
+`?lens=structural` (the anatomy view), `?lens=study` (the OKSAT map) — over one
+shared engine (`js/graph-view.js` + `js/graph-lens-*.js`). It accepts
+`?node=<id>`: on boot it centers and isolates that node's neighborhood and opens
+its detail panel (unknown id → toast). `kag.html` and `atlas.html` are redirect
+stubs to `graph.html?lens=knowledge` / `?lens=structural` that forward `?node=`,
+so every existing "Open in KAG" / "Practice" crossover deep link keeps working.
 
 ## Related
 

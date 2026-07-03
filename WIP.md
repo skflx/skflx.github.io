@@ -95,3 +95,33 @@ All authored (non-seed) content is DRAFT / `review:false`; only the vetted
 Owner (resident) curated-source verification pass over the `review:false` nodes
 to graduate DRAFT content. Phase 3 usage analytics is deferred (owner call,
 2026-07 — not needed for now).
+
+---
+
+# WIP - Unified graph system (KAG + Structural Atlas + OKSAT graph)
+
+## Goal
+Merge the three graph surfaces into one system that manifests as three lenses,
+removing the triplicated Cytoscape code while preserving every behavior.
+
+## Actions Taken
+- **One engine** (`js/graph-view.js`, `window.GraphView`): owns the single
+  Cytoscape instance, cose-bilkent layout, neighborhood isolate, hover
+  spotlight, debounced search, `?node=` deep-link, theme re-skin, toast, and the
+  detail-panel shell. Lenses plug in via a fixed contract.
+- **One page** (`graph.html`) with a Knowledge · Structural · Study lens switcher
+  (`?lens=` / `?node=`) and consolidated chrome (`css/graph.css`).
+- **Three lenses** (`js/graph-lens-{knowledge,structural,study}.js`): full ports
+  of the former `kag.html`, `atlas.html`, and `js/oksat-atlas.js` engines.
+- **Routing**: `kag.html` / `atlas.html` are redirect stubs (forward `?node=`);
+  `js/oksat-atlas.js` is a compat shim (`loadModules()` kept for adaptive +
+  dashboard; `mount()` delegates to the study lens); the `oksat.html` Atlas tab
+  and `index.html` cards point at the unified graph. Net −2800 lines.
+
+## Technical Details
+- Vanilla JS, no build step; each lens is a guarded IIFE registered on
+  `window.GraphLenses`. Data layer (`data/kag-graph.json` via `KAGStore`) and
+  persistence keys (`localStorage['kag-graph']`, `oksat:*`) unchanged.
+
+## Next Steps
+Optional: retire the `kag.html`/`atlas.html` stubs once external links migrate.
