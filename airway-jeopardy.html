@@ -4,29 +4,294 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Airway Rounds · Clinical Quiz | skflx.MD</title>
-  <meta name="description" content="Team-based ENT/Head & Neck airway quiz game for nursing education. Topics, difficulty filters, steal mechanic, session history.">
+  <meta name="description" content="Team-based ENT/Head &amp; Neck airway quiz — Rounds, Jeopardy Board, Quick Quiz, and Browse modes for nursing education, with topic/difficulty filters, steal mechanics, and session history.">
   <script>(function(){try{var t=localStorage.getItem('sk_theme');if(!t)t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
   <link rel="stylesheet" href="css/site.css">
 
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
   <style>
-    html, body { margin: 0; padding: 0; background: #0f172a; }
-    #back-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-      background: rgba(15,23,42,0.95); backdrop-filter: blur(4px);
-      border-bottom: 1px solid rgba(100,116,139,0.25);
-      padding: 0.45rem 1.25rem;
-      display: flex; align-items: center; gap: 0.5rem;
-      font-family: system-ui, sans-serif; font-size: 12px;
-      color: #64748b; text-decoration: none;
+    html, body { margin: 0; padding: 0; }
+    #aw-app { min-height: calc(100vh - 49px); }
+
+    /* ─── Scope: the game area stays dark in both site themes ─── */
+    .aw {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      min-height: calc(100vh - 49px);
+      box-sizing: border-box;
     }
-    #back-nav:hover { color: #e2e8f0; }
-    #root { padding-top: 0; min-height: 100vh; }
-    select option { background: #1e293b; color: #e2e8f0; }
+    .aw *, .aw *::before, .aw *::after { box-sizing: border-box; }
+    .aw select option { background: #1e293b; color: #e2e8f0; }
+    .aw button { font-family: inherit; }
+
+    .aw-wrap { max-width: 640px; margin: 0 auto; padding: 1.75rem 1rem 3rem; }
+    .aw-wrap--wide { max-width: 880px; }
+
+    .aw-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(8,51,68,0.4); border: 1px solid #155e75;
+      border-radius: 999px; padding: 0.2rem 0.9rem; margin-bottom: 0.9rem;
+    }
+    .aw-eyebrow span { color: #22d3ee; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+    .aw-hero { text-align: center; margin-bottom: 1.75rem; }
+    .aw-h1 { font-size: 2.1rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem; }
+    .aw-sub { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+
+    .aw-section { margin-bottom: 1.5rem; }
+    .aw-label {
+      font-size: 0.68rem; font-weight: 700; color: #64748b;
+      letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 0.55rem;
+    }
+
+    /* Mode picker */
+    .aw-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+    .aw-mode-card {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem;
+      background: #1e293b; border: 1px solid #334155; border-radius: 1rem;
+      padding: 0.9rem 0.85rem; text-align: left; cursor: pointer; color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .aw-mode-card:hover { border-color: #475569; }
+    .aw-mode-card.active { border-color: #22d3ee; background: rgba(8,51,68,0.45); box-shadow: 0 0 0 1px #22d3ee inset; }
+    .aw-mode-icon { font-size: 1.4rem; line-height: 1; }
+    .aw-mode-title { font-size: 0.85rem; font-weight: 700; color: #fff; }
+    .aw-mode-desc { font-size: 0.72rem; color: #94a3b8; line-height: 1.3; }
+
+    /* Chips */
+    .aw-chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .aw-chip {
+      padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600;
+      border: 1px solid #334155; background: transparent; color: #64748b; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .aw-chip.active { color: var(--chip-text); background: var(--chip-bg); border-color: var(--chip-border); }
+
+    .aw-diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+    .aw-diff-card {
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+      padding: 0.7rem 0.4rem; border-radius: 0.85rem; border: 1px solid #334155;
+      background: transparent; color: #64748b; font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .aw-diff-card.active { color: var(--chip-text); background: var(--chip-bg); border-color: var(--chip-border); }
+    .aw-diff-card .aw-pts { opacity: 0.65; font-weight: 400; }
+
+    .aw-pips { display: inline-flex; align-items: center; gap: 2px; }
+    .aw-pip { width: 7px; height: 7px; border-radius: 50%; background: #334155; }
+    .aw-pip.on { background: var(--pip-color); }
+
+    .aw-count-note { color: #475569; font-size: 0.72rem; text-align: right; margin: 0.4rem 0 0; }
+
+    /* Team editor */
+    .aw-team-row {
+      display: flex; align-items: center; gap: 0.65rem; background: #1e293b;
+      border: 1px solid var(--team-border); border-radius: 0.85rem; padding: 0.5rem 0.75rem; margin-bottom: 0.45rem;
+    }
+    .aw-team-swatch { width: 11px; height: 11px; border-radius: 50%; background: var(--team-bg); flex-shrink: 0; }
+    .aw-team-input {
+      flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+      color: #fff; font-size: 0.85rem; font-weight: 500;
+    }
+    .aw-team-input::placeholder { color: #475569; }
+    .aw-team-remove {
+      background: none; border: none; color: #475569; cursor: pointer; font-size: 0.85rem;
+      line-height: 1; padding: 0.2rem;
+    }
+    .aw-team-remove:hover { color: #fb7185; }
+    .aw-add-team {
+      width: 100%; padding: 0.6rem; border-radius: 0.85rem; border: 1px dashed #334155;
+      background: transparent; color: #475569; font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+    }
+    .aw-add-team:hover { color: #cbd5e1; border-color: #64748b; }
+
+    /* Generic buttons */
+    .aw-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      border-radius: 0.85rem; border: 1px solid #334155; background: #1e293b; color: #e2e8f0;
+      font-size: 0.82rem; font-weight: 600; padding: 0.65rem 1rem; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .aw-btn:hover { border-color: #64748b; }
+    .aw-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .aw-btn-primary { background: #22d3ee; border-color: #22d3ee; color: #0f172a; }
+    .aw-btn-primary:hover { background: #67e8f9; border-color: #67e8f9; }
+    .aw-btn-primary:disabled { background: #1e293b; border-color: #334155; color: #475569; }
+    .aw-btn-ghost { background: transparent; color: #64748b; }
+    .aw-btn-ghost:hover { color: #cbd5e1; border-color: #64748b; }
+    .aw-btn-success { background: #059669; border-color: #059669; color: #fff; }
+    .aw-btn-success:hover { background: #10b981; border-color: #10b981; }
+    .aw-btn-danger { background: #be123c; border-color: #be123c; color: #fff; }
+    .aw-btn-danger:hover { background: #f43f5e; border-color: #f43f5e; }
+    .aw-btn-block { width: 100%; }
+    .aw-btn-lg { padding: 0.95rem 1rem; border-radius: 1rem; font-size: 1rem; }
+    .aw-btn-sub { display: block; font-size: 0.68rem; font-weight: 400; opacity: 0.75; margin-top: 0.15rem; }
+
+    .aw-end-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .aw-end-row .aw-btn { flex: 1; }
+    .aw-select {
+      width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 0.85rem;
+      padding: 0.55rem 0.75rem; color: #fff; font-size: 0.82rem; outline: none;
+    }
+
+    .aw-howto {
+      background: rgba(30,41,59,0.6); border: 1px solid #334155; border-radius: 0.85rem;
+      padding: 0.85rem 1rem; font-size: 0.75rem; color: #94a3b8; line-height: 1.55;
+    }
+    .aw-howto strong { color: #cbd5e1; }
+
+    .aw-history-row {
+      display: flex; align-items: center; gap: 0.6rem; background: rgba(30,41,59,0.5);
+      border-radius: 0.6rem; padding: 0.45rem 0.7rem; font-size: 0.72rem; margin-bottom: 0.35rem; flex-wrap: wrap;
+    }
+    .aw-history-mode {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      color: #22d3ee; background: rgba(8,51,68,0.5); border-radius: 999px; padding: 0.1rem 0.5rem;
+    }
+    .aw-history-date { color: #475569; flex-shrink: 0; }
+    .aw-history-winner { color: #fff; font-weight: 600; flex-shrink: 0; }
+    .aw-history-detail { color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* In-game menu link */
+    .aw-topline {
+      position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between;
+      background: rgba(15,23,42,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid #1e293b;
+      padding: 0.5rem 1rem;
+    }
+    .aw-menu-link {
+      background: none; border: none; color: #64748b; font-size: 0.72rem; cursor: pointer; padding: 0.2rem 0;
+    }
+    .aw-menu-link:hover { color: #cbd5e1; }
+    .aw-topline-right { color: #475569; font-size: 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
+    .aw-end-now { background: none; border: none; color: #475569; font-size: 0.68rem; cursor: pointer; }
+    .aw-end-now:hover { color: #94a3b8; }
+
+    /* Scoreboard */
+    .aw-scoreboard { position: sticky; top: 33px; z-index: 25; background: rgba(15,23,42,0.97); backdrop-filter: blur(6px); border-bottom: 1px solid #1e293b; padding: 0.5rem 1rem; }
+    .aw-scoreboard-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 0.6rem; }
+    .aw-team-tiles { display: flex; gap: 0.4rem; flex-wrap: wrap; flex: 1; min-width: 0; }
+    .aw-team-tile {
+      display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 0.3rem 0.55rem;
+      border-radius: 0.6rem; border: 1px solid #334155; background: rgba(30,41,59,0.5); transition: all 0.15s;
+    }
+    .aw-team-tile.active { border-color: var(--team-border); background: var(--team-dim); box-shadow: 0 0 0 1px var(--team-border) inset; }
+    .aw-team-tile-name { font-size: 0.62rem; font-weight: 700; color: #64748b; max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .aw-team-tile.active .aw-team-tile-name { color: var(--team-text); }
+    .aw-team-tile-score { font-size: 0.95rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+    .aw-team-tile.active .aw-team-tile-score { color: var(--team-text); }
+    .aw-qcounter { color: #64748b; font-size: 0.68rem; text-align: right; flex-shrink: 0; }
+
+    /* Question card */
+    .aw-game-body { max-width: 760px; margin: 0 auto; padding: 1.1rem 1rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
+    .aw-card { background: #1e293b; border: 1px solid #334155; border-radius: 1.1rem; overflow: hidden; }
+    .aw-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.65rem 1.1rem; border-bottom: 1px solid rgba(51,65,85,0.7); background: rgba(30,41,59,0.6); }
+    .aw-badges { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+    .aw-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; font-weight: 700; padding: 0.18rem 0.6rem; border-radius: 999px; border: 1px solid var(--b-border); background: var(--b-bg); color: var(--b-text); }
+    .aw-steal-flag { font-size: 0.72rem; font-weight: 700; color: #fbbf24; }
+
+    .aw-qbody { padding: 1.8rem 1.3rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+    .aw-qtext { color: #fff; font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0; }
+    .aw-reveal-btn { background: #334155; border: 1px solid #475569; color: #cbd5e1; padding: 0.55rem 1.2rem; border-radius: 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .aw-reveal-btn:hover { background: #475569; color: #fff; }
+    .aw-answer-block { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 0.7rem; }
+    .aw-answer-box { background: rgba(15,23,42,0.6); border: 1px solid #334155; border-radius: 0.85rem; padding: 0.9rem 1.1rem; color: #f1f5f9; font-size: 0.85rem; line-height: 1.55; }
+    .aw-pearl-box { background: rgba(8,51,68,0.5); border: 1px solid #155e75; border-radius: 0.85rem; padding: 0.75rem 1.1rem; display: flex; gap: 0.7rem; }
+    .aw-pearl-tag { color: #22d3ee; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0; padding-top: 0.1rem; }
+    .aw-pearl-text { color: #a5f3fc; font-size: 0.83rem; font-style: italic; margin: 0; }
+
+    .aw-panel { display: flex; flex-direction: column; gap: 0.6rem; }
+    .aw-panel-hint { text-align: center; color: #475569; font-size: 0.72rem; margin: 0; }
+    .aw-buzz-grid { display: grid; gap: 0.5rem; }
+    .aw-buzz-btn { padding: 0.9rem 0.5rem; border-radius: 0.85rem; border: none; background: var(--team-bg); color: #0f172a; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+    .aw-buzz-btn:hover { opacity: 0.9; }
+    .aw-buzz-btn:active { transform: scale(0.97); }
+    .aw-steal-btn { padding: 0.75rem 0.5rem; border-radius: 0.85rem; border: 2px solid var(--team-border); background: var(--team-dim); color: var(--team-text); font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+    .aw-steal-btn:hover { opacity: 0.9; }
+
+    .aw-verdict-name { text-align: center; font-size: 0.85rem; color: #94a3b8; margin: 0 0 0.15rem; }
+    .aw-verdict-name strong { color: var(--team-text); }
+    .aw-verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .aw-verdict-btn { padding: 0.9rem 0.5rem; border-radius: 0.85rem; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; color: #fff; }
+    .aw-verdict-correct { background: #059669; }
+    .aw-verdict-correct:hover { background: #10b981; }
+    .aw-verdict-wrong { background: #9f1239; }
+    .aw-verdict-wrong:hover { background: #e11d48; }
+
+    /* Board */
+    .aw-turn-flag { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.55rem; border-radius: 0.85rem; background: var(--team-dim); border: 1px solid var(--team-border); color: var(--team-text); font-size: 0.82rem; font-weight: 700; }
+    .aw-board-scroll { overflow-x: auto; padding-bottom: 0.4rem; -webkit-overflow-scrolling: touch; }
+    .aw-board { display: flex; gap: 0.5rem; width: max-content; min-width: 100%; }
+    .aw-board-col { display: flex; flex-direction: column; gap: 0.4rem; width: 92px; flex: 0 0 auto; }
+    .aw-board-col-header { text-align: center; font-size: 0.66rem; font-weight: 700; padding: 0.4rem 0.2rem; border-radius: 0.6rem; border: 1px solid var(--b-border); background: var(--b-bg); color: var(--b-text); }
+    .aw-board-cell {
+      height: 52px; border-radius: 0.6rem; border: 1px solid #334155; background: #1e293b; color: #67e8f9;
+      font-size: 0.95rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .aw-board-cell:hover { border-color: #22d3ee; background: rgba(8,51,68,0.5); }
+    .aw-board-cell--done { background: rgba(30,41,59,0.4); color: #334155; cursor: default; border-style: dashed; }
+    .aw-board-cell--empty { background: rgba(30,41,59,0.2); color: #334155; cursor: default; border-style: dashed; }
+    @media (min-width: 700px) { .aw-board-col { width: auto; flex: 1 1 0; } }
+
+    /* Modal */
+    .aw-modal-backdrop { position: fixed; inset: 0; background: rgba(2,6,23,0.78); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .aw-modal { width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
+
+    /* Quiz */
+    .aw-quiz-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem; font-size: 0.72rem; color: #64748b; }
+    .aw-quiz-score { color: #22d3ee; font-weight: 700; }
+    .aw-choice-list { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.4rem; }
+    .aw-choice {
+      text-align: left; padding: 0.8rem 1rem; border-radius: 0.85rem; border: 1px solid #334155;
+      background: #1e293b; color: #e2e8f0; font-size: 0.85rem; cursor: pointer; line-height: 1.4;
+    }
+    .aw-choice:hover:not(:disabled) { border-color: #64748b; }
+    .aw-choice:disabled { cursor: default; }
+    .aw-choice.correct { border-color: #059669; background: rgba(5,150,105,0.22); color: #6ee7b7; }
+    .aw-choice.wrong { border-color: #be123c; background: rgba(190,18,60,0.22); color: #fda4af; }
+    .aw-choice.dim { opacity: 0.5; }
+
+    .aw-bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.75rem; }
+    .aw-bar-label { width: 108px; flex-shrink: 0; color: #94a3b8; }
+    .aw-bar-track { flex: 1; height: 8px; border-radius: 999px; background: #1e293b; overflow: hidden; }
+    .aw-bar-fill { height: 100%; background: #22d3ee; border-radius: 999px; }
+    .aw-bar-frac { width: 44px; text-align: right; color: #64748b; flex-shrink: 0; }
+
+    /* Browse */
+    .aw-browse-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .aw-browse-controls .aw-select { width: auto; flex: 1 1 130px; }
+    .aw-search { flex: 1 1 100%; background: #1e293b; border: 1px solid #334155; border-radius: 0.85rem; padding: 0.55rem 0.85rem; color: #fff; font-size: 0.82rem; outline: none; }
+    .aw-search::placeholder { color: #475569; }
+    .aw-browse-count { color: #475569; font-size: 0.72rem; margin: -0.5rem 0 0.8rem; text-align: right; }
+    .aw-browse-row { background: #1e293b; border: 1px solid #334155; border-radius: 0.85rem; padding: 0.75rem 1rem; margin-bottom: 0.5rem; cursor: pointer; }
+    .aw-browse-row:hover { border-color: #475569; }
+    .aw-browse-q { color: #e2e8f0; font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.45; }
+    .aw-browse-expand { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .aw-empty-note { text-align: center; color: #475569; font-size: 0.82rem; padding: 2rem 1rem; }
+
+    /* Results */
+    .aw-result-hero { text-align: center; margin-bottom: 1.75rem; }
+    .aw-result-emoji { font-size: 2.6rem; margin-bottom: 0.4rem; }
+    .aw-result-title { font-size: 1.7rem; font-weight: 800; color: #fff; margin: 0 0 0.2rem; }
+    .aw-result-sub { color: #64748b; font-size: 0.82rem; margin: 0; }
+    .aw-leaderboard-row {
+      display: flex; align-items: center; gap: 0.7rem; border-radius: 1rem; border: 1px solid #334155;
+      background: rgba(30,41,59,0.4); padding: 0.85rem 1rem; margin-bottom: 0.5rem;
+    }
+    .aw-leaderboard-row.first { border-color: var(--team-border); background: var(--team-dim); }
+    .aw-medal { font-size: 1.35rem; width: 2rem; text-align: center; flex-shrink: 0; }
+    .aw-lb-name { flex: 1; font-weight: 700; color: #fff; }
+    .aw-leaderboard-row.first .aw-lb-name { color: var(--team-text); }
+    .aw-lb-score-wrap { text-align: right; }
+    .aw-lb-score { font-size: 1.4rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+    .aw-leaderboard-row.first .aw-lb-score { color: var(--team-text); }
+    .aw-lb-stats { font-size: 0.65rem; color: #64748b; }
+    .aw-streak-banner { background: rgba(120,53,15,0.35); border: 1px solid #a16207; border-radius: 0.85rem; padding: 0.7rem 1rem; text-align: center; color: #fde047; font-size: 0.82rem; margin-bottom: 1.25rem; }
+    .aw-result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+    .aw-pct-hero { font-size: 3rem; font-weight: 800; color: #22d3ee; }
+
+    @media (max-width: 420px) {
+      .aw-h1 { font-size: 1.7rem; }
+      .aw-verdict-grid { gap: 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -42,923 +307,969 @@
       </button>
     </div>
   </div>
-  <div id="root"></div>
 
-  <script type="text/babel" data-presets="react">
-    const { useState, useReducer, useEffect, useMemo } = React;
+  <div id="aw-app"></div>
 
-    // ─── TOPIC + DIFFICULTY CONFIG ──────────────────────────────────────────
+  <script src="js/airway-questions.js"></script>
+  <script src="js/airway-engine.js"></script>
+  <script>
+  (function () {
+    'use strict';
 
-    const TOPICS = [
-      { id: 'basics',        short: 'Basics',        label: 'Trach & Laryngectomy Basics'  },
-      { id: 'emergencies',   short: 'Emergencies',   label: 'Airway Emergencies'            },
-      { id: 'valves',        short: 'Valves',        label: 'Valves, Cuffs & Suctioning'   },
-      { id: 'complications', short: 'Complications', label: 'Surgical Complications'        },
-      { id: 'daily',         short: 'Daily Care',    label: 'Daily Care & Prevention'       },
+    var DATA = window.AIRWAY_DATA;
+    var ENGINE = window.AirwayEngine;
+    var QUESTIONS = DATA.questions;
+    var TOPICS = DATA.topics;
+    var DIFF = ENGINE.DIFF;
+    var DIFF_KEYS = ['easy', 'medium', 'hard'];
+
+    var root = document.getElementById('aw-app');
+
+    // ─── Color maps (inline-style driven — keeps CSS structural-only) ───
+
+    var TOPIC_COLORS = {
+      basics:        { bg: 'rgba(30,58,138,.45)',  text: '#93c5fd', border: '#1d4ed8' },
+      emergencies:   { bg: 'rgba(127,29,29,.45)',   text: '#fca5a5', border: '#b91c1c' },
+      valves:        { bg: 'rgba(76,29,149,.45)',   text: '#c4b5fd', border: '#6d28d9' },
+      complications: { bg: 'rgba(120,53,15,.45)',   text: '#fcd34d', border: '#b45309' },
+      daily:         { bg: 'rgba(19,78,74,.45)',    text: '#5eead4', border: '#0f766e' },
+    };
+
+    var DIFF_COLORS = {
+      easy:   { bg: 'rgba(6,78,59,.55)',   text: '#6ee7b7', border: '#047857', pip: '#34d399' },
+      medium: { bg: 'rgba(113,63,18,.55)', text: '#fde047', border: '#a16207', pip: '#facc15' },
+      hard:   { bg: 'rgba(127,29,29,.55)', text: '#fca5a5', border: '#b91c1c', pip: '#f87171' },
+    };
+
+    var TEAM_COLORS = {
+      cyan:    { bg: '#06b6d4', text: '#22d3ee', border: '#06b6d4', dim: 'rgba(8,51,68,.55)' },
+      rose:    { bg: '#f43f5e', text: '#fb7185', border: '#f43f5e', dim: 'rgba(76,5,25,.55)' },
+      amber:   { bg: '#f59e0b', text: '#fbbf24', border: '#f59e0b', dim: 'rgba(69,26,3,.55)' },
+      emerald: { bg: '#10b981', text: '#34d399', border: '#10b981', dim: 'rgba(2,44,34,.55)' },
+      violet:  { bg: '#8b5cf6', text: '#a78bfa', border: '#8b5cf6', dim: 'rgba(46,16,101,.55)' },
+      orange:  { bg: '#f97316', text: '#fb923c', border: '#f97316', dim: 'rgba(67,20,7,.55)' },
+    };
+
+    var MODES = [
+      { id: 'rounds', icon: '🎙️', title: 'Rounds',         desc: 'Buzz-in team quiz with a steal mechanic.' },
+      { id: 'board',  icon: '🗂️', title: 'Jeopardy Board', desc: 'Classic board — pick a topic and a value.' },
+      { id: 'quiz',   icon: '📝', title: 'Quick Quiz',      desc: 'Solo self-study, multiple choice.' },
+      { id: 'browse', icon: '📚', title: 'Browse',          desc: 'The full question bank, searchable.' },
     ];
 
-    const DIFF = {
-      easy:   { label: 'Intern',    pips: 1, pts: 100, penalty:   0, steal:  50 },
-      medium: { label: 'Resident',  pips: 2, pts: 200, penalty: -50, steal: 100 },
-      hard:   { label: 'Attending', pips: 3, pts: 400, penalty:-100, steal: 200 },
-    };
+    var MEDALS = ['🥇', '🥈', '🥉'];
 
-    const TEAM_COLORS = ['cyan','rose','amber','emerald','violet','orange'];
+    // ─── Helpers ──────────────────────────────────────────────────────
 
-    // Full literal Tailwind strings — JIT requires no dynamic concatenation
-    const TC = {
-      cyan:    { bg:'bg-cyan-500',    text:'text-cyan-400',    border:'border-cyan-500',    ring:'ring-cyan-400',    dim:'bg-cyan-950/50'    },
-      rose:    { bg:'bg-rose-500',    text:'text-rose-400',    border:'border-rose-500',    ring:'ring-rose-400',    dim:'bg-rose-950/50'    },
-      amber:   { bg:'bg-amber-500',   text:'text-amber-400',   border:'border-amber-500',   ring:'ring-amber-400',   dim:'bg-amber-950/50'   },
-      emerald: { bg:'bg-emerald-500', text:'text-emerald-400', border:'border-emerald-500', ring:'ring-emerald-400', dim:'bg-emerald-950/50' },
-      violet:  { bg:'bg-violet-500',  text:'text-violet-400',  border:'border-violet-500',  ring:'ring-violet-400',  dim:'bg-violet-950/50'  },
-      orange:  { bg:'bg-orange-500',  text:'text-orange-400',  border:'border-orange-500',  ring:'ring-orange-400',  dim:'bg-orange-950/50'  },
-    };
-
-    const TOPIC_TC = {
-      basics:        'bg-blue-900/50 text-blue-300 border border-blue-700',
-      emergencies:   'bg-red-900/50 text-red-300 border border-red-700',
-      valves:        'bg-violet-900/50 text-violet-300 border border-violet-700',
-      complications: 'bg-amber-900/50 text-amber-300 border border-amber-700',
-      daily:         'bg-teal-900/50 text-teal-300 border border-teal-700',
-    };
-
-    const DIFF_TC = {
-      easy:   { badge:'bg-emerald-900/60 text-emerald-300 border border-emerald-700', pip:'bg-emerald-400' },
-      medium: { badge:'bg-yellow-900/60 text-yellow-300 border border-yellow-700',    pip:'bg-yellow-400'  },
-      hard:   { badge:'bg-red-900/60 text-red-300 border border-red-700',             pip:'bg-red-400'     },
-    };
-
-    // ─── QUESTION BANK ──────────────────────────────────────────────────────
-
-    const QUESTIONS = [
-      // ── BASICS ──
-      { id:'b1', topic:'basics', difficulty:'easy',
-        q: 'Before touching any neck airway patient, what is THE single question you must answer?',
-        a: 'Is this a partial neck breather (tracheostomy) or a total neck breather (total laryngectomy)? Everything — where you give oxygen, where you bag, whether the mouth works — flows from this distinction.',
-        pearl: 'Get the answer at the START of shift, not during the desat.' },
-
-      { id:'b2', topic:'basics', difficulty:'easy',
-        q: 'A trach patient desats — where can oxygen be delivered?',
-        a: 'Face AND stoma — both routes are viable for a trach patient. Apply to either or both; cover whichever route you are not using.',
-        pearl: 'Two routes for a trach; one route forever for a laryngectomy.' },
-
-      { id:'b3', topic:'basics', difficulty:'easy',
-        q: 'A laryngectomy patient desats — where does oxygen go, and where does it absolutely NOT go?',
-        a: 'Stoma ONLY. Face or nasal oxygen does nothing — there is no anatomical path from the mouth or nose to the lungs. They now lead only to the esophagus.',
-        pearl: 'Face O₂ on a laryngectomy patient is a placebo with a body count.' },
-
-      { id:'b4', topic:'basics', difficulty:'medium',
-        q: 'Anatomically, why does mouth-to-mouth or face-mask ventilation fail completely on a total laryngectomy patient?',
-        a: 'The larynx was surgically removed and the trachea permanently redirected to the skin as a permanent end stoma. The mouth and nose now lead only to the esophagus — there is zero connection to the lungs.',
-        pearl: 'Laryngectomy = one route, the stoma, forever.' },
-
-      { id:'b5', topic:'basics', difficulty:'medium',
-        q: "You're unsure if a crashing patient is a trach or a laryngectomy. What is the single safest immediate action?",
-        a: 'Apply oxygen to BOTH the face and the stoma simultaneously. Covering both is never wrong in an unknown airway emergency and buys time while someone confirms the surgery.',
-        pearl: 'When in doubt, oxygenate both. You cannot harm by adding the stoma.' },
-
-      { id:'b6', topic:'basics', difficulty:'hard',
-        q: 'A laryngectomy patient arrests. You have a standard face mask and a pediatric mask. Which do you use, where, and why does the alternative fail?',
-        a: 'Seal the pediatric mask (or LMA) over the stoma and bag there. A standard face mask fails because there is zero anatomical connection between the mouth/nose and the lungs — you would be ventilating the esophagus.',
-        pearl: 'Laryngectomy code = stoma is the airway. Bagging the face is bagging the esophagus.' },
-
-      { id:'b7', topic:'basics', difficulty:'hard',
-        q: 'Name the device sometimes found at the stoma wall of laryngectomy patients, what it does, and why it must not be disturbed during stoma care or suctioning.',
-        a: "A TEP (tracheoesophageal puncture) voice prosthesis — a one-way valve allowing air from the trachea into the esophagus for speech. It is the patient's only speech mechanism; dislodging it damages the prosthesis and the puncture site.",
-        pearl: "See a small valve in the stoma wall? That's their voice — leave it alone." },
-
-      { id:'b8', topic:'basics', difficulty:'hard',
-        q: 'Why does the HME become non-negotiable long-term for a laryngectomy patient specifically?',
-        a: 'With the entire upper airway permanently bypassed, the HME is the ONLY source of warming, humidification, and filtration for inhaled air — central to pulmonary hygiene and plug prevention for life.',
-        pearl: "For a laryngectomy patient the HME isn't an accessory — it's the replacement nose." },
-
-      // ── EMERGENCIES ──
-      { id:'e1', topic:'emergencies', difficulty:'easy',
-        q: 'What are the TWO failure modes behind nearly every tracheostomy emergency?',
-        a: 'Obstruction (usually a mucus plug, sometimes blood/clot) and displacement (tube out of the trachea — fully out or into a false passage in pretracheal tissue). Most floor events are obstruction.',
-        pearl: '"It\'s plugged or it\'s moved" covers almost everything.' },
-
-      { id:'e2', topic:'emergencies', difficulty:'easy',
-        q: 'You walk in on a distressed trach patient wearing a speaking valve. What is step ONE?',
-        a: 'Remove the speaking valve (or cap). A one-way valve plus any exhalation obstruction means the patient cannot exhale at all — breath stacking follows rapidly.',
-        pearl: 'Valve on + can\'t exhale = the valve itself can be the killer. Off first.' },
-
-      { id:'e3', topic:'emergencies', difficulty:'medium',
-        q: 'After removing the speaking valve, this is the NEXT intervention — NOT suctioning. Name it and explain why it comes before the catheter.',
-        a: 'Remove the inner cannula. A plugged inner cannula comes out WITH the plug, instantly clearing the most common obstruction. It also lets you assess true tube patency before passing a suction catheter.',
-        pearl: 'Inner cannula out BEFORE you chase the plug with a catheter.' },
-
-      { id:'e4', topic:'emergencies', difficulty:'medium',
-        q: 'Give the full 5-step response to a sat 70%, distressed trach patient, in correct order.',
-        a: '1. Call for help + O₂ to face AND stoma. 2. Remove speaking valve/cap. 3. Remove inner cannula. 4. Pass suction catheter. 5. Escalate (RT/ENT/Rapid Response) — calling runs in parallel, not after.',
-        pearl: 'Valve off → inner cannula out → suction → escalate.' },
-
-      { id:'e5', topic:'emergencies', difficulty:'medium',
-        q: 'When do you call for help IMMEDIATELY instead of working through troubleshooting steps yourself?',
-        a: 'Inability to ventilate after inner cannula removal and suctioning; suspected displacement or false passage; a fresh trach that has dislodged; any laryngectomy airway emergency. Call in parallel — do not serialize help behind your own troubleshooting.',
-        pearl: 'Calling early is free. Calling late is irreversible.' },
-
-      { id:'e6', topic:'emergencies', difficulty:'hard',
-        q: 'A day-2 fresh trach dislodges. Describe what you do NOT do, what you DO, and the physiological reason each choice matters.',
-        a: 'Do NOT blindly reinsert — the immature tract has no stable channel; forcing the tube back risks creating a false passage into pretracheal tissue, through which the patient cannot be ventilated. DO oxygenate via mouth and nose (trach patients have an intact upper airway) while occluding the stoma, and call ENT immediately.',
-        pearl: 'Fresh tract = no second chance at blind reinsertion. For a trach, the mouth is still your rescue route.' },
-
-      { id:'e7', topic:'emergencies', difficulty:'hard',
-        q: 'Why is a tracheostomy in its first 5–7 days categorically more dangerous than a mature trach, even if it looks identical?',
-        a: "The tract is immature — it hasn't healed into a stable, re-cannulatable channel. Accidental decannulation means blind reinsertion risks a fatal false passage. A mature tract is forgiving; a fresh tract is not.",
-        pearl: 'Fresh tract = no second chance. Mature tract = forgiving.' },
-
-      { id:'e8', topic:'emergencies', difficulty:'hard',
-        q: "What are stay/maturation sutures, and what does knowing they're present tell the bedside nurse about their own role?",
-        a: "Sutures placed by the surgeon that allow the tract to be re-tensioned and reopened if the tube dislodges. Their presence means the airway is surgically salvageable by the trained team. The RN's role is O₂ + escalation, not heroic reinsertion.",
-        pearl: "Stay sutures are the surgeon's lifeline back into the tract. Don't fight them." },
-
-      // ── VALVES ──
-      { id:'v1', topic:'valves', difficulty:'easy',
-        q: 'Before placing ANY speaking valve on a trach patient, what must be true about the cuff?',
-        a: 'The cuff must be fully deflated (down). With the cuff inflated, exhaled air has no exit path through the upper airway — breath stacking and suffocation follow.',
-        pearl: 'Valve + inflated cuff = a closed system. Cuff down, every time, no exceptions.' },
-
-      { id:'v2', topic:'valves', difficulty:'easy',
-        q: 'Name THREE signs that a patient is not tolerating a speaking valve.',
-        a: 'Respiratory distress, desaturation, rising work of breathing, air trapping, and anxiety or agitation — any three qualify.',
-        pearl: 'Distress on a valve → valve comes off NOW, questions later.' },
-
-      { id:'v3', topic:'valves', difficulty:'easy',
-        q: 'What are the clinical indications to suction a trach patient — and state one thing that is NOT an indication?',
-        a: 'Indications: audible/rattly breathing, visible secretions at the tube, desaturation, rising work of breathing, ineffective cough. NOT an indication: a fixed clock schedule or suctioning "just in case."',
-        pearl: 'Suction the patient, not the clock.' },
-
-      { id:'v4', topic:'valves', difficulty:'medium',
-        q: 'Does an inflated cuff prevent aspiration? Give a complete answer.',
-        a: 'No. It reduces GROSS aspiration and enables positive-pressure ventilation, but it does NOT prevent microaspiration of secretions that track past the cuff. "Cuff up" is not aspiration insurance.',
-        pearl: "Cuff up ≠ aspiration-proof. It's a speed bump, not a wall." },
-
-      { id:'v5', topic:'valves', difficulty:'medium',
-        q: 'Explain the step-by-step physiological sequence that makes a speaking valve lethal when the cuff is inflated.',
-        a: 'A speaking valve is one-way — air enters through it but must exit around the tube and up through the vocal cords. Cuff inflated blocks that exit → patient can inhale but not exhale → breath stacking → rising intrathoracic pressure → no ventilation.',
-        pearl: 'Cuff up closes the system. Cuff down, always.' },
-
-      { id:'v6', topic:'valves', difficulty:'hard',
-        q: "A patient suctioned every 2 hours now needs it every 30 minutes. Before accepting 'they're just more secretory,' what do you check first and why?",
-        a: 'Humidification. Inadequate humidity dries and thickens secretions, dramatically increasing suction demand and plug risk. Correcting humidity often resolves the frequency.',
-        pearl: "Rising suction demand → check the humidity before you accept 'they're just secretory.'" },
-
-      { id:'v7', topic:'valves', difficulty:'hard',
-        q: 'Describe the two main harms of aggressive deep suctioning, and state when during a catheter pass you apply suction pressure.',
-        a: 'Mucosal trauma/bleeding and hypoxia (also vagal bradycardia, bronchospasm). Apply suction pressure on WITHDRAWAL only — never on insertion.',
-        pearl: 'Suction is controlled trauma. More force and depth ≠ better — just more injury and more hypoxia.' },
-
-      { id:'v8', topic:'valves', difficulty:'hard',
-        q: 'When does sterile vs clean suctioning technique apply in the inpatient ENT setting?',
-        a: 'Sterile technique is standard in acute inpatient care (open systems) to limit lower-airway contamination. Clean technique is reserved for stable chronic/home patients. Follow unit protocol — do not improvise the technique tier.',
-        pearl: 'Inpatient open suction → sterile, by default.' },
-
-      // ── COMPLICATIONS ──
-      { id:'c1', topic:'complications', difficulty:'easy',
-        q: 'Name the FIRST subtle signs of an expanding neck hematoma — the ones that appear BEFORE stridor.',
-        a: 'Neck tightness or swelling, voice change, difficulty swallowing, and anxiety or restlessness. Stridor is a LATE sign.',
-        pearl: "By the time you hear stridor, you're already behind. Restlessness + tight neck is the call." },
-
-      { id:'c2', topic:'complications', difficulty:'easy',
-        q: 'In free flap monitoring: dusky/blue/congested appearance signals which vascular problem?',
-        a: 'Venous compromise (outflow failure) — more common than arterial failure and tends to present earlier.',
-        pearl: 'Dusky and congested = venous until proven otherwise.' },
-
-      { id:'c3', topic:'complications', difficulty:'easy',
-        q: 'A free flap looks dusky. How urgent is the call and why?',
-        a: 'Immediate — call now. Venous congestion means the surgical salvage window is hours. Delay equals flap loss. Time is tissue.',
-        pearl: 'Dusky flap → call now. Don\'t "watch it for an hour."' },
-
-      { id:'c4', topic:'complications', difficulty:'medium',
-        q: 'A neck drain turns milky/creamy. Name the complication, its anatomical source, and the dietary trigger that worsens output.',
-        a: 'Chyle leak — injury to the thoracic duct or lymphatics (classically left neck, level IV, after neck dissection). High-fat diet increases chyle flow and drain output.',
-        pearl: 'Milky drain = chyle. Report it AND the diet — fatty meals make it worse.' },
-
-      { id:'c5', topic:'complications', difficulty:'medium',
-        q: 'Distinguish arterial vs venous free flap compromise across four assessment parameters.',
-        a: 'Arterial (inflow): pale/white, cool, slow or absent capillary refill, lost Doppler signal, no pinprick bleed. Venous (outflow): dusky/blue/congested/swollen, brisk dark capillary refill, rapid dark blood on pinprick.',
-        pearl: 'Dusky = venous (more common, earlier). Pale = arterial.' },
-
-      { id:'c6', topic:'complications', difficulty:'medium',
-        q: 'A high-risk patient has a small wound bleed that stops on its own. What do you do, and why does "it stopped" not reassure you?',
-        a: "Escalate urgently — surgical or IR evaluation, ensure suction + gloves + direct-pressure supplies are at bedside. A small self-limited bleed in a radiated neck is a sentinel (herald) bleed that precedes catastrophic carotid rupture.",
-        pearl: '"It stopped" is exactly when you escalate — the next one may not.' },
-
-      { id:'c7', topic:'complications', difficulty:'hard',
-        q: 'Why can a neck hematoma compromise the airway faster than visible swelling suggests — and why does this make CT the wrong first step?',
-        a: 'Bleeding in a closed neck space causes venous AND lymphatic congestion → laryngeal and pharyngeal edema out of proportion to external swelling. It is a clinical bedside diagnosis. CT only delays definitive decompression by the surgeon.',
-        pearl: "Don't send a crashing neck to CT. Surgeon to bedside, now." },
-
-      { id:'c8', topic:'complications', difficulty:'hard',
-        q: 'Describe the three-part RN role when an expanding neck hematoma threatens the airway.',
-        a: '1. Call surgeon/ENT and rapid response immediately. 2. Bring the airway cart to bedside. 3. Prepare for bedside wound opening (clip/suture removal to evacuate clot) — this may happen before the OR. Stay with the patient.',
-        pearl: 'The fix may be opening the incision at the bedside. Have the surgeon and the cart there before you need them.' },
-
-      // ── DAILY CARE ──
-      { id:'d1', topic:'daily', difficulty:'easy',
-        q: 'Why must a trach or laryngectomy patient have active humidification, and what happens overnight without it?',
-        a: 'The stoma bypasses the upper airway that normally warms, humidifies, and filters inhaled air. Without it: mucosal drying → impaired ciliary clearance → inspissated secretions → mucus plugging. Overnight desaturations are often the first sign of a brewing plug.',
-        pearl: 'Humidification is plug prevention. Skipping it manufactures an airway emergency overnight.' },
-
-      { id:'d2', topic:'daily', difficulty:'easy',
-        q: 'What are the early warning signs of an impending mucus plug?',
-        a: 'Thick or crusty secretions, increasing suction frequency, secretions that are hard to clear, and overnight desaturations.',
-        pearl: '"We\'re suctioning thick stuff every hour" is a humidification failure announcing itself before the plug lands.' },
-
-      { id:'d3', topic:'daily', difficulty:'medium',
-        q: 'HME vs trach collar — what does each do mechanically?',
-        a: "HME (Swedish nose): passively traps the patient's exhaled heat and moisture and returns it on the next breath — passive recycling. Trach collar/mask: actively delivers externally humidified oxygen from an external source.",
-        pearl: "HME recycles the patient's moisture; the collar supplies it. Both beat dry gas." },
-
-      { id:'d4', topic:'daily', difficulty:'medium',
-        q: 'Name the 8 items that must be at every trach/laryngectomy bedside, verified at the start of every shift.',
-        a: 'Working suction + catheters; spare trach same size AND one size smaller; obturator; 10 mL syringe (cuff); spare inner cannulas; bag-valve-mask + oxygen; clear signage (trach vs laryngectomy); emergency algorithm visible.',
-        pearl: "Same size + one smaller is the rule — if same size won't pass a tightening tract, the smaller one buys the airway." },
-
-      { id:'d5', topic:'daily', difficulty:'hard',
-        q: 'Why is a delirious patient with a fresh trach a specific airway catastrophe waiting to happen — and name THREE interventions that reduce the risk.',
-        a: 'An agitated/delirious patient can self-decannulate. With a fresh immature tract, blind reinsertion risks a fatal false passage. Reduce risk: secure trach ties; treat and prevent delirium; sitter or mitts if indicated; confirm obturator + spare trach at bedside.',
-        pearl: 'Delirium + fresh trach = a self-extubation waiting to happen. Watch the hands.' },
-
-      { id:'d6', topic:'daily', difficulty:'hard',
-        q: 'Name three patient features that lower your escalation threshold even with reassuring vitals, and state the one-line principle.',
-        a: 'Prior neck radiation, bulky tumors, fresh post-op/free flap status. Principle: these patients decompensate fast and atypically — normal vitals do not outrank a worried nurse. Escalating early is never the wrong call.',
-        pearl: 'Radiation + bulky tumor + fresh postop is the "call early" triad.' },
-    ];
-
-    // ─── HELPERS ────────────────────────────────────────────────────────────
-
-    function shuffle(arr) {
-      const a = [...arr];
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
     }
 
-    function makeTeam(name, color, id) {
-      return { id, name, color, score: 0, streak: 0, correct: 0, wrong: 0, steals: 0 };
+    function topicById(id) { return TOPICS.filter(function (t) { return t.id === id; })[0]; }
+
+    function topicBadge(topicId) {
+      var t = topicById(topicId);
+      var c = TOPIC_COLORS[topicId];
+      if (!t || !c) return '';
+      return '<span class="aw-badge" style="--b-bg:' + c.bg + ';--b-text:' + c.text + ';--b-border:' + c.border + '">' + esc(t.short) + '</span>';
     }
 
-    function loadHistory() {
-      try { return JSON.parse(localStorage.getItem('airway-rounds-history') || '[]'); }
-      catch { return []; }
+    function pipsHtml(difficulty) {
+      var cfg = DIFF[difficulty];
+      var c = DIFF_COLORS[difficulty];
+      var out = '<span class="aw-pips" style="--pip-color:' + c.pip + '">';
+      for (var i = 0; i < 3; i++) out += '<span class="aw-pip' + (i < cfg.pips ? ' on' : '') + '"></span>';
+      out += '</span>';
+      return out;
     }
 
-    function saveHistory(session) {
-      try {
-        const h = loadHistory();
-        h.unshift(session);
-        localStorage.setItem('airway-rounds-history', JSON.stringify(h.slice(0, 10)));
-      } catch {}
+    function diffBadge(difficulty) {
+      var cfg = DIFF[difficulty];
+      var c = DIFF_COLORS[difficulty];
+      return '<span class="aw-badge" style="--b-bg:' + c.bg + ';--b-text:' + c.text + ';--b-border:' + c.border + '">' +
+        pipsHtml(difficulty) + '<span>' + esc(cfg.label) + '</span></span>';
     }
 
-    function buildPool(filters) {
-      return shuffle(
-        QUESTIONS.filter(q =>
-          filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty)
-        )
-      );
+    function fmtDate() { return new Date().toLocaleDateString(); }
+
+    // ─── State ────────────────────────────────────────────────────────
+
+    function defaultTeams() {
+      return [
+        ENGINE.makeTeam('Team 1', 'cyan', 't0'),
+        ENGINE.makeTeam('Team 2', 'rose', 't1'),
+        ENGINE.makeTeam('Team 3', 'amber', 't2'),
+      ];
     }
 
-    // ─── REDUCER ────────────────────────────────────────────────────────────
-
-    const INIT = {
-      phase: 'setup',
-      qPhase: 'idle',
-      teams: [
-        makeTeam('Team 1', 'cyan',  't0'),
-        makeTeam('Team 2', 'rose',  't1'),
-        makeTeam('Team 3', 'amber', 't2'),
-      ],
+    var S = {
+      screen: 'setup',
+      mode: 'rounds',
       filters: {
-        topics: new Set(TOPICS.map(t => t.id)),
-        difficulties: new Set(['easy', 'medium', 'hard']),
+        topics: new Set(TOPICS.map(function (t) { return t.id; })),
+        difficulties: new Set(DIFF_KEYS),
       },
+      teams: defaultTeams(),
       endCondition: { type: 'count', value: 15 },
-      questionPool: [],
-      queueIdx: 0,
-      activeQ: null,
-      activeTeamId: null,
-      wrongTeamIds: [],
-      revealed: false,
+      quizCount: 10,
+      rounds: null,
+      board: null,
+      quiz: null,
+      browse: { search: '', topic: 'all', difficulty: 'all', sort: 'topic', expandedId: null },
     };
 
-    function reducer(state, action) {
-      switch (action.type) {
+    function poolFor(filters) {
+      return QUESTIONS.filter(function (q) {
+        return filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty);
+      });
+    }
 
-        case 'SET_TEAM_NAME':
-          return { ...state, teams: state.teams.map(t => t.id === action.id ? { ...t, name: action.name } : t) };
+    // ─── Render dispatch + focus-preserving update ───────────────────
 
-        case 'ADD_TEAM': {
-          if (state.teams.length >= 6) return state;
-          const idx = state.teams.length;
-          return { ...state, teams: [...state.teams, makeTeam(`Team ${idx + 1}`, TEAM_COLORS[idx], `t${idx}`)] };
-        }
+    var screens = {
+      setup: renderSetup,
+      rounds: renderRoundsGame,
+      'rounds-results': renderRoundsResults,
+      board: renderBoardGame,
+      'board-results': renderBoardResults,
+      quiz: renderQuizGame,
+      'quiz-results': renderQuizResults,
+      browse: renderBrowse,
+    };
 
-        case 'REMOVE_TEAM':
-          if (state.teams.length <= 2) return state;
-          return { ...state, teams: state.teams.filter(t => t.id !== action.id) };
+    function render() {
+      root.innerHTML = '<div class="aw">' + screens[S.screen]() + '</div>';
+    }
 
-        case 'TOGGLE_TOPIC': {
-          const topics = new Set(state.filters.topics);
-          topics.has(action.id) ? topics.delete(action.id) : topics.add(action.id);
-          if (topics.size === 0) return state;
-          return { ...state, filters: { ...state.filters, topics } };
-        }
-
-        case 'TOGGLE_DIFF': {
-          const difficulties = new Set(state.filters.difficulties);
-          difficulties.has(action.id) ? difficulties.delete(action.id) : difficulties.add(action.id);
-          if (difficulties.size === 0) return state;
-          return { ...state, filters: { ...state.filters, difficulties } };
-        }
-
-        case 'SET_END':
-          return { ...state, endCondition: action.endCondition };
-
-        case 'START_GAME': {
-          const pool = buildPool(state.filters);
-          if (pool.length === 0) return state;
-          const sliced = state.endCondition.type === 'count'
-            ? pool.slice(0, Math.min(state.endCondition.value, pool.length))
-            : pool;
-          return {
-            ...state,
-            phase: 'game',
-            qPhase: 'idle',
-            questionPool: sliced,
-            queueIdx: 0,
-            activeQ: sliced[0],
-            activeTeamId: null,
-            wrongTeamIds: [],
-            revealed: false,
-            teams: state.teams.map(t => ({ ...t, score: 0, streak: 0, correct: 0, wrong: 0, steals: 0 })),
-          };
-        }
-
-        case 'REVEAL':
-          return { ...state, revealed: true };
-
-        case 'BUZZ':
-          return { ...state, activeTeamId: action.teamId, qPhase: state.qPhase === 'steal' ? 'steal_buzzed' : 'buzzed' };
-
-        case 'MARK_CORRECT': {
-          const pts = DIFF[state.activeQ.difficulty].pts;
-          const newTeams = state.teams.map(t => {
-            if (t.id !== state.activeTeamId) return t;
-            const newStreak = t.streak + 1;
-            const bonus = newStreak > 0 && newStreak % 3 === 0 ? 50 : 0;
-            return { ...t, score: t.score + pts + bonus, streak: newStreak, correct: t.correct + 1 };
-          });
-          return { ...state, teams: newTeams, qPhase: 'done', revealed: true };
-        }
-
-        case 'MARK_WRONG': {
-          const penalty = DIFF[state.activeQ.difficulty].penalty;
-          const newTeams = state.teams.map(t => {
-            if (t.id !== state.activeTeamId) return t;
-            return { ...t, score: t.score + penalty, streak: 0, wrong: t.wrong + 1 };
-          });
-          const newWrongIds = [...state.wrongTeamIds, state.activeTeamId];
-          const canSteal = state.teams.some(t => !newWrongIds.includes(t.id));
-          if (!canSteal) {
-            return { ...state, teams: newTeams, wrongTeamIds: newWrongIds, qPhase: 'done', activeTeamId: null, revealed: true };
+    function update() {
+      var active = document.activeElement;
+      var id = active && active.id;
+      var start = active && typeof active.selectionStart === 'number' ? active.selectionStart : null;
+      var end = active && typeof active.selectionEnd === 'number' ? active.selectionEnd : null;
+      render();
+      if (id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.focus();
+          if (start !== null && el.setSelectionRange) {
+            try { el.setSelectionRange(start, end); } catch (e) { /* no-op */ }
           }
-          return { ...state, teams: newTeams, wrongTeamIds: newWrongIds, qPhase: 'steal', activeTeamId: null };
         }
-
-        case 'MARK_STEAL_CORRECT': {
-          const stealPts = DIFF[state.activeQ.difficulty].steal;
-          const newTeams = state.teams.map(t => {
-            if (t.id !== state.activeTeamId) return t;
-            return { ...t, score: t.score + stealPts, steals: t.steals + 1 };
-          });
-          return { ...state, teams: newTeams, qPhase: 'done', revealed: true };
-        }
-
-        case 'MARK_STEAL_WRONG':
-          return { ...state, qPhase: 'done', activeTeamId: null, revealed: true };
-
-        case 'CLOSE_STEAL':
-          return { ...state, qPhase: 'done', activeTeamId: null, revealed: true };
-
-        case 'SKIP':
-          return { ...state, qPhase: 'done', revealed: true };
-
-        case 'NEXT_Q': {
-          const next = state.queueIdx + 1;
-          if (next >= state.questionPool.length) return { ...state, phase: 'results', queueIdx: next };
-          return { ...state, queueIdx: next, activeQ: state.questionPool[next], activeTeamId: null, wrongTeamIds: [], revealed: false, qPhase: 'idle' };
-        }
-
-        case 'END_NOW':
-          return { ...state, phase: 'results' };
-
-        case 'PLAY_AGAIN': {
-          const pool = buildPool(state.filters);
-          const sliced = state.endCondition.type === 'count'
-            ? pool.slice(0, Math.min(state.endCondition.value, pool.length))
-            : pool;
-          return {
-            ...state,
-            phase: 'game',
-            qPhase: 'idle',
-            questionPool: sliced,
-            queueIdx: 0,
-            activeQ: sliced[0] || null,
-            activeTeamId: null,
-            wrongTeamIds: [],
-            revealed: false,
-            teams: state.teams.map(t => ({ ...t, score: 0, streak: 0, correct: 0, wrong: 0, steals: 0 })),
-          };
-        }
-
-        case 'NEW_GAME':
-          return { ...INIT };
-
-        default:
-          return state;
       }
     }
 
-    // ─── SUB-COMPONENTS ─────────────────────────────────────────────────────
+    // ─── SETUP SCREEN ─────────────────────────────────────────────────
 
-    function Pips({ difficulty }) {
-      const cfg = DIFF[difficulty];
-      const dtc = DIFF_TC[difficulty];
+    function renderModeGrid() {
+      return '<div class="aw-mode-grid">' + MODES.map(function (m) {
+        return '<button type="button" class="aw-mode-card' + (S.mode === m.id ? ' active' : '') + '" data-action="pick-mode" data-mode="' + m.id + '">' +
+          '<span class="aw-mode-icon">' + m.icon + '</span>' +
+          '<span class="aw-mode-title">' + esc(m.title) + '</span>' +
+          '<span class="aw-mode-desc">' + esc(m.desc) + '</span>' +
+          '</button>';
+      }).join('') + '</div>';
+    }
+
+    function renderFilters(poolSize) {
+      var topicChips = TOPICS.map(function (t) {
+        var on = S.filters.topics.has(t.id);
+        var c = TOPIC_COLORS[t.id];
+        var style = on ? ' style="--chip-bg:' + c.bg + ';--chip-text:' + c.text + ';--chip-border:' + c.border + '"' : '';
+        return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '"' + style + ' data-action="toggle-topic" data-id="' + t.id + '">' + esc(t.short) + '</button>';
+      }).join('');
+
+      var diffCards = DIFF_KEYS.map(function (key) {
+        var on = S.filters.difficulties.has(key);
+        var c = DIFF_COLORS[key];
+        var cfg = DIFF[key];
+        var style = on ? ' style="--chip-bg:' + c.bg + ';--chip-text:' + c.text + ';--chip-border:' + c.border + ';--pip-color:' + c.pip + '"' : ' style="--pip-color:' + c.pip + '"';
+        return '<button type="button" class="aw-diff-card' + (on ? ' active' : '') + '"' + style + ' data-action="toggle-diff" data-id="' + key + '">' +
+          pipsHtml(key) + '<span>' + esc(cfg.label) + '</span><span class="aw-pts">' + cfg.pts + ' pts</span></button>';
+      }).join('');
+
       return (
-        <div className="flex items-center gap-0.5">
-          {[0,1,2].map(i => (
-            <div key={i} className={`w-2 h-2 rounded-full ${i < cfg.pips ? dtc.pip : 'bg-slate-700'}`} />
-          ))}
-        </div>
+        '<div class="aw-section"><p class="aw-label">Topics</p><div class="aw-chip-row">' + topicChips + '</div></div>' +
+        '<div class="aw-section"><p class="aw-label">Difficulty</p><div class="aw-diff-grid">' + diffCards + '</div>' +
+        '<p class="aw-count-note">' + poolSize + ' question' + (poolSize === 1 ? '' : 's') + ' match filters</p></div>'
       );
     }
 
-    function TeamTile({ team, active }) {
-      const color = TC[team.color];
-      const isStreaking = team.streak >= 3;
-      return (
-        <div className={`flex flex-col items-center px-3 py-1.5 rounded-lg border transition-all min-w-[64px] ${active ? `${color.border} ${color.dim} ring-2 ${color.ring}` : 'border-slate-700 bg-slate-800/50'}`}>
-          <div className={`text-[11px] font-semibold truncate max-w-[72px] ${active ? color.text : 'text-slate-400'}`}>
-            {isStreaking ? '🔥 ' : ''}{team.name}
-          </div>
-          <div className={`text-lg font-bold tabular-nums leading-tight ${active ? color.text : 'text-white'}`}>
-            {team.score}
-          </div>
-        </div>
-      );
+    function renderTeamEditor(teams) {
+      var rows = teams.map(function (team, idx) {
+        var c = TEAM_COLORS[team.color];
+        return '<div class="aw-team-row" style="--team-border:' + c.border + ';--team-bg:' + c.bg + '">' +
+          '<span class="aw-team-swatch"></span>' +
+          '<input class="aw-team-input" id="team-name-' + team.id + '" data-bind="team-name" data-id="' + team.id + '" value="' + esc(team.name) + '" placeholder="Team ' + (idx + 1) + '" maxlength="20">' +
+          (teams.length > 2 ? '<button type="button" class="aw-team-remove" data-action="team-remove" data-id="' + team.id + '">✕</button>' : '') +
+          '</div>';
+      }).join('');
+      var addBtn = teams.length < 6 ? '<button type="button" class="aw-add-team" data-action="team-add">+ Add team</button>' : '';
+      return '<div class="aw-section"><p class="aw-label">Teams</p>' + rows + addBtn + '</div>';
     }
 
-    // ─── SETUP SCREEN ───────────────────────────────────────────────────────
-
-    function SetupScreen({ state, dispatch }) {
-      const [history] = useState(loadHistory);
-      const { teams, filters, endCondition } = state;
-
-      const poolSize = useMemo(() =>
-        QUESTIONS.filter(q => filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty)).length
-      , [filters]);
-
-      const countOpts = [5,10,15,20,25,30].filter(n => n <= poolSize);
-      if (poolSize > 0 && !countOpts.includes(poolSize)) countOpts.push(poolSize);
-
-      return (
-        <div className="min-h-screen bg-slate-900 text-white">
-          <div className="max-w-xl mx-auto px-4 py-8">
-
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 bg-cyan-900/40 border border-cyan-800 rounded-full px-4 py-1 mb-4">
-                <span className="text-cyan-400 text-xs font-bold tracking-widest uppercase">ENT · H&amp;N Nursing</span>
-              </div>
-              <h1 className="text-4xl font-bold text-white mb-1">Airway Rounds</h1>
-              <p className="text-slate-400 text-sm">Team quiz · draw &amp; buzz · steal mechanic</p>
-            </div>
-
-            {/* Teams */}
-            <section className="mb-6">
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Teams</h2>
-              <div className="space-y-2">
-                {teams.map((team, idx) => {
-                  const color = TC[team.color];
-                  return (
-                    <div key={team.id} className={`flex items-center gap-3 bg-slate-800 border ${color.border} rounded-xl px-3 py-2`}>
-                      <div className={`w-3 h-3 rounded-full flex-shrink-0 ${color.bg}`} />
-                      <input
-                        className="flex-1 bg-transparent text-white text-sm font-medium outline-none placeholder-slate-600"
-                        value={team.name}
-                        placeholder={`Team ${idx + 1}`}
-                        maxLength={20}
-                        onChange={e => dispatch({ type: 'SET_TEAM_NAME', id: team.id, name: e.target.value })}
-                      />
-                      {teams.length > 2 && (
-                        <button onClick={() => dispatch({ type: 'REMOVE_TEAM', id: team.id })}
-                          className="text-slate-600 hover:text-rose-400 transition-colors text-sm leading-none">✕</button>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              {teams.length < 6 && (
-                <button onClick={() => dispatch({ type: 'ADD_TEAM' })}
-                  className="mt-2 w-full py-2 rounded-xl border border-dashed border-slate-700 text-slate-600 hover:text-slate-300 hover:border-slate-500 text-sm transition-colors">
-                  + Add team
-                </button>
-              )}
-            </section>
-
-            {/* Topics */}
-            <section className="mb-6">
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Topics</h2>
-              <div className="flex flex-wrap gap-2">
-                {TOPICS.map(t => {
-                  const on = filters.topics.has(t.id);
-                  return (
-                    <button key={t.id}
-                      onClick={() => dispatch({ type: 'TOGGLE_TOPIC', id: t.id })}
-                      className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${on ? TOPIC_TC[t.id] : 'border-slate-700 text-slate-600 bg-transparent'}`}>
-                      {t.short}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Difficulty */}
-            <section className="mb-6">
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Difficulty</h2>
-              <div className="grid grid-cols-3 gap-2">
-                {Object.entries(DIFF).map(([key, cfg]) => {
-                  const on = filters.difficulties.has(key);
-                  const dtc = DIFF_TC[key];
-                  return (
-                    <button key={key}
-                      onClick={() => dispatch({ type: 'TOGGLE_DIFF', id: key })}
-                      className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-semibold transition-all ${on ? dtc.badge : 'border-slate-700 text-slate-600'}`}>
-                      <Pips difficulty={key} />
-                      <span>{cfg.label}</span>
-                      <span className="opacity-60 font-normal">{cfg.pts} pts</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* End condition */}
-            <section className="mb-7">
-              <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Game Ends When…</h2>
-              <div className="flex gap-2 mb-2">
-                {['all','count','score'].map(type => {
-                  const labels = { all: `All ${poolSize} Qs`, count: 'Play N Qs', score: 'First to X pts' };
-                  const on = endCondition.type === type;
-                  return (
-                    <button key={type}
-                      onClick={() => dispatch({ type:'SET_END', endCondition:{ type, value: type==='count'?15:type==='score'?300:0 } })}
-                      className={`flex-1 py-2 rounded-xl text-xs font-semibold border transition-all ${on ? 'bg-cyan-900/50 border-cyan-600 text-cyan-300' : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300'}`}>
-                      {labels[type]}
-                    </button>
-                  );
-                })}
-              </div>
-              {endCondition.type === 'count' && (
-                <select
-                  value={endCondition.value}
-                  onChange={e => dispatch({ type:'SET_END', endCondition:{ type:'count', value:+e.target.value } })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none">
-                  {countOpts.map(n => <option key={n} value={n}>{n} questions</option>)}
-                </select>
-              )}
-              {endCondition.type === 'score' && (
-                <select
-                  value={endCondition.value}
-                  onChange={e => dispatch({ type:'SET_END', endCondition:{ type:'score', value:+e.target.value } })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white outline-none">
-                  {[200,300,400,500,750,1000].map(n => <option key={n} value={n}>First to {n} points</option>)}
-                </select>
-              )}
-              <p className="text-slate-600 text-xs mt-1.5 text-right">{poolSize} questions match filters</p>
-            </section>
-
-            {/* How to play */}
-            <div className="mb-6 bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 text-xs text-slate-400 space-y-1">
-              <p className="text-slate-300 font-semibold mb-1">How to play</p>
-              <p>Host reads the question aloud. A team buzzes in — host taps their button, then marks Correct or Wrong.</p>
-              <p>Wrong answer? A <span className="text-amber-400 font-semibold">steal window</span> opens for other teams at half points. No penalty on a wrong steal attempt.</p>
-              <p>3 correct in a row earns a <span className="text-yellow-400">🔥 +50 streak bonus</span>.</p>
-            </div>
-
-            {/* Recent sessions */}
-            {history.length > 0 && (
-              <section className="mb-6">
-                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Recent Sessions</h2>
-                <div className="space-y-1.5">
-                  {history.slice(0,4).map((s,i) => (
-                    <div key={i} className="flex items-center justify-between bg-slate-800/50 rounded-lg px-3 py-2 text-xs gap-3">
-                      <span className="text-slate-600 flex-shrink-0">{s.date}</span>
-                      <span className="text-white font-medium flex-shrink-0">🏆 {s.winner}</span>
-                      <span className="text-slate-500 truncate">{s.teams.map(t => `${t.name} ${t.score}`).join(' · ')}</span>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            <button
-              onClick={() => dispatch({ type: 'START_GAME' })}
-              disabled={poolSize === 0}
-              className="w-full py-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 disabled:bg-slate-800 disabled:text-slate-600 text-slate-900 font-bold text-lg transition-all">
-              {poolSize === 0 ? 'No questions match filters' : 'Start Game →'}
-            </button>
-          </div>
-        </div>
-      );
+    function renderHistory() {
+      var h = ENGINE.history.load();
+      if (h.length === 0) return '';
+      var modeLabels = { rounds: 'Rounds', board: 'Board', quiz: 'Quiz' };
+      var rows = h.slice(0, 5).map(function (s) {
+        var detail = (s.teams || []).map(function (t) { return t.name + ' ' + t.score; }).join(' · ');
+        return '<div class="aw-history-row">' +
+          '<span class="aw-history-mode">' + esc(modeLabels[s.mode] || s.mode || '') + '</span>' +
+          '<span class="aw-history-date">' + esc(s.date) + '</span>' +
+          '<span class="aw-history-winner">🏆 ' + esc(s.winner) + '</span>' +
+          '<span class="aw-history-detail">' + esc(detail) + '</span>' +
+          '</div>';
+      }).join('');
+      return '<div class="aw-section"><p class="aw-label">Recent Sessions</p>' + rows + '</div>';
     }
 
-    // ─── GAME SCREEN ────────────────────────────────────────────────────────
+    function renderSetup() {
+      var poolSize = poolFor(S.filters).length;
+      var body = '';
 
-    function GameScreen({ state, dispatch }) {
-      const { teams, activeQ, qPhase, activeTeamId, wrongTeamIds, revealed, questionPool, queueIdx, endCondition } = state;
+      body += '<div class="aw-hero">' +
+        '<div class="aw-eyebrow"><span>ENT · H&amp;N Nursing</span></div>' +
+        '<h1 class="aw-h1">Airway Rounds</h1>' +
+        '<p class="aw-sub">Rounds · Jeopardy Board · Quick Quiz · Browse</p>' +
+        '</div>';
 
-      if (!activeQ) return null;
+      body += '<div class="aw-section">' + renderModeGrid() + '</div>';
+      body += renderFilters(poolSize);
 
-      const topic = TOPICS.find(t => t.id === activeQ.topic);
-      const diff = DIFF[activeQ.difficulty];
-      const dtc  = DIFF_TC[activeQ.difficulty];
-      const ttc  = TOPIC_TC[activeQ.topic];
+      if (S.mode === 'rounds') {
+        body += renderTeamEditor(S.teams);
 
-      const buzzedTeam     = activeTeamId ? teams.find(t => t.id === activeTeamId) : null;
-      const availForSteal  = teams.filter(t => !wrongTeamIds.includes(t.id));
-      const scoreHit       = endCondition.type === 'score' && teams.some(t => t.score >= endCondition.value);
-      const isLast         = queueIdx + 1 >= questionPool.length;
-      const shouldEnd      = isLast || scoreHit;
+        var countOpts = [5, 10, 15, 20, 25, 30, 40, 60].filter(function (n) { return n <= poolSize; });
+        if (poolSize > 0 && countOpts.indexOf(poolSize) === -1) countOpts.push(poolSize);
+        countOpts.sort(function (a, b) { return a - b; });
 
-      const streakAtBonus  = buzzedTeam && buzzedTeam.streak > 0 && (buzzedTeam.streak + 1) % 3 === 0;
+        body += '<div class="aw-section"><p class="aw-label">Game Ends When…</p><div class="aw-end-row">' +
+          ['all', 'count', 'score'].map(function (type) {
+            var labels = { all: 'All ' + poolSize + ' Qs', count: 'Play N Qs', score: 'First to X pts' };
+            var on = S.endCondition.type === type;
+            return '<button type="button" class="aw-btn' + (on ? ' aw-btn-primary' : '') + '" data-action="set-end-type" data-type="' + type + '">' + labels[type] + '</button>';
+          }).join('') + '</div>';
 
-      return (
-        <div className="min-h-screen bg-slate-900 text-white flex flex-col">
+        if (S.endCondition.type === 'count') {
+          body += '<select class="aw-select" data-bind="end-count">' +
+            countOpts.map(function (n) { return '<option value="' + n + '"' + (n === S.endCondition.value ? ' selected' : '') + '>' + n + ' questions</option>'; }).join('') +
+            '</select>';
+        } else if (S.endCondition.type === 'score') {
+          body += '<select class="aw-select" data-bind="end-score">' +
+            [200, 300, 400, 500, 750, 1000].map(function (n) { return '<option value="' + n + '"' + (n === S.endCondition.value ? ' selected' : '') + '>First to ' + n + ' points</option>'; }).join('') +
+            '</select>';
+        }
+        body += '</div>';
 
-          {/* Sticky scoreboard */}
-          <div className="sticky top-[34px] z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-2">
-            <div className="flex items-center gap-2 max-w-3xl mx-auto">
-              <div className="flex gap-2 flex-wrap flex-1 min-w-0">
-                {teams.map(t => <TeamTile key={t.id} team={t} active={t.id === activeTeamId} />)}
-              </div>
-              <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
-                <span className="text-slate-500 text-xs">Q {queueIdx + 1} / {questionPool.length}</span>
-                {endCondition.type === 'score' && (
-                  <span className="text-slate-600 text-[10px]">Target {endCondition.value}</span>
-                )}
-                <button onClick={() => dispatch({ type: 'END_NOW' })}
-                  className="text-[10px] text-slate-700 hover:text-slate-500 transition-colors mt-0.5">
-                  End game
-                </button>
-              </div>
-            </div>
-          </div>
+        body += '<div class="aw-section"><div class="aw-howto">' +
+          '<p style="margin:0 0 0.4rem;color:#cbd5e1;font-weight:700;">How to play</p>' +
+          '<p>Host reads the question aloud. A team buzzes in — tap their button, then mark Correct or Wrong.</p>' +
+          '<p>Wrong answer opens a <strong style="color:#fbbf24">steal window</strong> for the other teams at half points, no penalty on a miss.</p>' +
+          '<p>3 correct in a row earns a <strong style="color:#fde047">🔥 +50 streak bonus</strong>.</p>' +
+          '</div></div>';
 
-          {/* Question card + action panel */}
-          <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full px-4 py-5 gap-4">
+        var canStart = poolSize > 0;
+        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-rounds"' + (canStart ? '' : ' disabled') + '>' +
+          (canStart ? 'Start Game →' : 'No questions match filters') + '</button>';
+      }
 
-            {/* Card */}
-            <div className="flex-1 flex flex-col bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
+      if (S.mode === 'board') {
+        body += renderTeamEditor(S.teams);
+        var topicCount = S.filters.topics.size;
+        body += '<div class="aw-section"><div class="aw-howto">' +
+          '<p style="margin:0 0 0.4rem;color:#cbd5e1;font-weight:700;">How to play</p>' +
+          '<p>Each selected topic becomes a column of 5 clues (100–500 pts). Teams take turns picking a cell.</p>' +
+          '<p>Correct keeps control. Wrong opens a steal to the other teams at <strong style="color:#fbbf24">full value</strong>, no penalty on a miss.</p>' +
+          '<p>Board clears out → results.</p>' +
+          '</div></div>';
+        var canStartBoard = topicCount >= 2 && poolSize > 0;
+        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-board"' + (canStartBoard ? '' : ' disabled') + '>' +
+          (topicCount < 2 ? 'Select at least 2 topics' : (poolSize === 0 ? 'No questions match filters' : 'Build Board →')) + '</button>';
+      }
 
-              {/* Card header */}
-              <div className="flex items-center justify-between flex-wrap gap-2 px-5 py-3 border-b border-slate-700/80 bg-slate-800/80">
-                <div className="flex items-center gap-2">
-                  <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${ttc}`}>{topic?.short}</span>
-                  <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold ${dtc.badge}`}>
-                    <Pips difficulty={activeQ.difficulty} />
-                    <span>{diff.label}</span>
-                    <span className="opacity-60">· {diff.pts} pts</span>
-                  </div>
-                </div>
-                {qPhase === 'steal' && !activeTeamId && (
-                  <span className="text-xs font-bold text-amber-400 animate-pulse">⚡ Steal · {diff.steal} pts</span>
-                )}
-              </div>
+      if (S.mode === 'quiz') {
+        var quizOpts = [10, 20, 40].filter(function (n) { return n <= poolSize; });
+        if (poolSize > 0) quizOpts.push(poolSize);
+        quizOpts = quizOpts.filter(function (n, i) { return quizOpts.indexOf(n) === i; }).sort(function (a, b) { return a - b; });
+        body += '<div class="aw-section"><p class="aw-label">How Many Questions</p><div class="aw-chip-row">' +
+          quizOpts.map(function (n) {
+            var on = S.quizCount === n;
+            var label = n === poolSize ? 'All (' + n + ')' : String(n);
+            return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '" style="' + (on ? '--chip-bg:rgba(8,51,68,.5);--chip-text:#22d3ee;--chip-border:#0e7490' : '') + '" data-action="set-quiz-count" data-n="' + n + '">' + label + '</button>';
+          }).join('') + '</div></div>';
+        body += '<div class="aw-section"><div class="aw-howto"><p>Solo self-study. Answer, see the full explanation + pearl, move on. Results show your % and a review of anything missed.</p></div></div>';
+        var canStartQuiz = poolSize > 0;
+        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-quiz"' + (canStartQuiz ? '' : ' disabled') + '>' +
+          (canStartQuiz ? 'Start Quiz →' : 'No questions match filters') + '</button>';
+      }
 
-              {/* Question + answer */}
-              <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 text-center gap-5">
-                <p className="text-white text-xl md:text-2xl font-medium leading-relaxed">{activeQ.q}</p>
+      if (S.mode === 'browse') {
+        body += '<div class="aw-section"><div class="aw-howto"><p>Every question in the bank — filter, sort, and search. Tap a row to see the answer and pearl.</p></div></div>';
+        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-browse">Browse Questions →</button>';
+      }
 
-                {!revealed ? (
-                  <button onClick={() => dispatch({ type: 'REVEAL' })}
-                    className="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white rounded-xl text-sm font-medium border border-slate-600 transition-all">
-                    Reveal Answer ↓
-                  </button>
-                ) : (
-                  <div className="w-full text-left space-y-3">
-                    <div className="bg-slate-900/60 rounded-xl px-5 py-4 border border-slate-700">
-                      <p className="text-slate-100 text-sm leading-relaxed">{activeQ.a}</p>
-                    </div>
-                    <div className="bg-cyan-950/50 rounded-xl px-5 py-3 border border-cyan-900/70 flex gap-3">
-                      <span className="text-cyan-500 text-xs font-bold uppercase tracking-widest flex-shrink-0 pt-0.5">Pearl</span>
-                      <p className="text-cyan-200 text-sm italic">{activeQ.pearl}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+      body += renderHistory();
 
-            {/* Action panel */}
-            <div className="space-y-2.5">
-
-              {/* Idle: any team buzzes */}
-              {qPhase === 'idle' && (
-                <>
-                  <p className="text-center text-slate-600 text-xs">Who buzzed in?</p>
-                  <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(teams.length, 3)}, 1fr)` }}>
-                    {teams.map(t => {
-                      const c = TC[t.color];
-                      return (
-                        <button key={t.id} onClick={() => dispatch({ type: 'BUZZ', teamId: t.id })}
-                          className={`py-3.5 rounded-xl font-bold text-sm ${c.bg} text-slate-900 hover:opacity-90 active:scale-95 transition-all`}>
-                          {t.name}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <button onClick={() => dispatch({ type: 'SKIP' })}
-                    className="w-full py-2.5 rounded-xl border border-slate-700 text-slate-600 hover:text-slate-300 hover:border-slate-500 text-sm transition-all">
-                    Skip — no one answered
-                  </button>
-                </>
-              )}
-
-              {/* Buzzed: mark correct or wrong */}
-              {qPhase === 'buzzed' && buzzedTeam && (
-                <>
-                  <p className="text-center text-sm">
-                    <span className={`font-bold ${TC[buzzedTeam.color].text}`}>{buzzedTeam.name}</span>
-                    <span className="text-slate-400"> answered — correct?</span>
-                  </p>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button onClick={() => dispatch({ type: 'MARK_CORRECT' })}
-                      className="py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg transition-all">
-                      ✓ Correct
-                      <div className="text-xs font-normal opacity-75 mt-0.5">
-                        +{diff.pts} pts{streakAtBonus ? ' · +50 🔥' : ''}
-                      </div>
-                    </button>
-                    <button onClick={() => dispatch({ type: 'MARK_WRONG' })}
-                      className="py-4 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-bold text-lg transition-all">
-                      ✗ Wrong
-                      {diff.penalty < 0 && <div className="text-xs font-normal opacity-75 mt-0.5">{diff.penalty} pts</div>}
-                    </button>
-                  </div>
-                </>
-              )}
-
-              {/* Steal: pick a team */}
-              {qPhase === 'steal' && !activeTeamId && (
-                <>
-                  <p className="text-center text-amber-400 text-sm font-bold">⚡ Steal for {diff.steal} pts — who goes?</p>
-                  <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${Math.min(availForSteal.length, 3)}, 1fr)` }}>
-                    {availForSteal.map(t => {
-                      const c = TC[t.color];
-                      return (
-                        <button key={t.id} onClick={() => dispatch({ type: 'BUZZ', teamId: t.id })}
-                          className={`py-3 rounded-xl font-bold text-sm border-2 ${c.border} ${c.dim} ${c.text} hover:opacity-90 active:scale-95 transition-all`}>
-                          {t.name}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <button onClick={() => dispatch({ type: 'CLOSE_STEAL' })}
-                    className="w-full py-2.5 rounded-xl border border-slate-700 text-slate-600 hover:text-slate-300 hover:border-slate-500 text-sm transition-all">
-                    No steal
-                  </button>
-                </>
-              )}
-
-              {/* Steal buzzed: mark correct or wrong (no penalty on wrong) */}
-              {qPhase === 'steal_buzzed' && buzzedTeam && (
-                <>
-                  <p className="text-center text-sm">
-                    <span className={`font-bold ${TC[buzzedTeam.color].text}`}>{buzzedTeam.name}</span>
-                    <span className="text-slate-400"> steals — correct?</span>
-                  </p>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button onClick={() => dispatch({ type: 'MARK_STEAL_CORRECT' })}
-                      className="py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-lg transition-all">
-                      ✓ Correct
-                      <div className="text-xs font-normal opacity-75 mt-0.5">+{diff.steal} pts</div>
-                    </button>
-                    <button onClick={() => dispatch({ type: 'MARK_STEAL_WRONG' })}
-                      className="py-4 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-lg transition-all">
-                      ✗ Wrong
-                      <div className="text-xs font-normal opacity-75 mt-0.5">no penalty</div>
-                    </button>
-                  </div>
-                </>
-              )}
-
-              {/* Done: advance */}
-              {qPhase === 'done' && (
-                <button
-                  onClick={() => shouldEnd ? dispatch({ type: 'END_NOW' }) : dispatch({ type: 'NEXT_Q' })}
-                  className="w-full py-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-lg transition-all">
-                  {shouldEnd ? 'See Results →' : 'Next Question →'}
-                </button>
-              )}
-
-            </div>
-          </div>
-        </div>
-      );
+      return '<div class="aw-wrap">' + body + '</div>';
     }
 
-    // ─── RESULTS SCREEN ─────────────────────────────────────────────────────
+    // ─── SHARED IN-GAME CHROME ────────────────────────────────────────
 
-    function ResultsScreen({ state, dispatch }) {
-      const { teams, queueIdx } = state;
-      const sorted = [...teams].sort((a, b) => b.score - a.score);
-      const isTie  = sorted.length > 1 && sorted[0].score === sorted[1].score;
-      const winner = sorted[0];
-
-      useEffect(() => {
-        saveHistory({
-          date: new Date().toLocaleDateString(),
-          winner: isTie ? 'Tie' : winner.name,
-          teams: sorted.map(t => ({ name: t.name, score: t.score })),
-        });
-      }, []);
-
-      const medals = ['🥇','🥈','🥉'];
-      const topStreaker = [...teams].sort((a,b) => b.streak - a.streak)[0];
-
-      return (
-        <div className="min-h-screen bg-slate-900 text-white">
-          <div className="max-w-lg mx-auto px-4 py-10">
-
-            <div className="text-center mb-8">
-              <div className="text-5xl mb-3">{isTie ? '🤝' : '🏆'}</div>
-              <h1 className="text-3xl font-bold text-white mb-1">
-                {isTie ? "It's a Tie!" : `${winner.name} Wins!`}
-              </h1>
-              <p className="text-slate-500 text-sm">{queueIdx} question{queueIdx !== 1 ? 's' : ''} played · {new Date().toLocaleDateString()}</p>
-            </div>
-
-            {/* Leaderboard */}
-            <div className="space-y-2 mb-6">
-              {sorted.map((team, idx) => {
-                const color   = TC[team.color];
-                const isFirst = idx === 0 && !isTie;
-                return (
-                  <div key={team.id} className={`flex items-center gap-3 rounded-2xl p-4 border transition-all ${isFirst ? `${color.border} ${color.dim}` : 'border-slate-700 bg-slate-800/40'}`}>
-                    <span className="text-2xl w-8 text-center flex-shrink-0">{medals[idx] || (idx + 1)}</span>
-                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${color.bg}`} />
-                    <span className={`flex-1 font-bold ${isFirst ? color.text : 'text-white'}`}>{team.name}</span>
-                    <div className="text-right">
-                      <div className={`text-2xl font-bold tabular-nums ${isFirst ? color.text : 'text-white'}`}>{team.score}</div>
-                      <div className="text-[10px] text-slate-500 space-x-1">
-                        <span>{team.correct}✓</span>
-                        {team.wrong > 0 && <span>{team.wrong}✗</span>}
-                        {team.steals > 0 && <span>{team.steals}⚡</span>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {topStreaker && topStreaker.streak >= 3 && (
-              <div className="mb-6 bg-amber-950/40 border border-amber-800/60 rounded-xl px-4 py-3 text-sm text-amber-300 text-center">
-                🔥 {topStreaker.name} ended on a {topStreaker.streak}-question streak!
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => dispatch({ type: 'PLAY_AGAIN' })}
-                className="py-3.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all">
-                Play Again
-              </button>
-              <button onClick={() => dispatch({ type: 'NEW_GAME' })}
-                className="py-3.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold transition-all">
-                New Game
-              </button>
-            </div>
-          </div>
-        </div>
-      );
+    function topline(rightHtml) {
+      return '<div class="aw-topline"><button type="button" class="aw-menu-link" data-action="go-setup">‹ Menu</button>' +
+        '<div class="aw-topline-right">' + (rightHtml || '') + '</div></div>';
     }
 
-    // ─── APP ROOT ────────────────────────────────────────────────────────────
-
-    function App() {
-      const [state, dispatch] = useReducer(reducer, INIT);
-      if (state.phase === 'setup')  return <SetupScreen  state={state} dispatch={dispatch} />;
-      if (state.phase === 'game')   return <GameScreen   state={state} dispatch={dispatch} />;
-      if (state.phase === 'results') return <ResultsScreen state={state} dispatch={dispatch} />;
-      return null;
+    function scoreboard(teams, activeTeamId, extraRight) {
+      var tiles = teams.map(function (t) {
+        var c = TEAM_COLORS[t.color];
+        var active = t.id === activeTeamId;
+        return '<div class="aw-team-tile' + (active ? ' active' : '') + '" style="--team-border:' + c.border + ';--team-bg:' + c.bg + ';--team-text:' + c.text + ';--team-dim:' + c.dim + '">' +
+          '<span class="aw-team-tile-name">' + (t.streak >= 3 ? '🔥 ' : '') + esc(t.name) + '</span>' +
+          '<span class="aw-team-tile-score">' + t.score + '</span></div>';
+      }).join('');
+      return '<div class="aw-scoreboard"><div class="aw-scoreboard-inner"><div class="aw-team-tiles">' + tiles + '</div>' + (extraRight || '') + '</div></div>';
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    // ─── ROUNDS MODE ──────────────────────────────────────────────────
+
+    function startRounds() {
+      var pool = ENGINE.buildPool(QUESTIONS, S.filters);
+      if (pool.length === 0) return;
+      var sliced = ENGINE.rounds.slicePool(pool, S.endCondition);
+      S.rounds = {
+        teams: S.teams.map(function (t) { return ENGINE.makeTeam(t.name, t.color, t.id); }),
+        pool: sliced,
+        queueIdx: 0,
+        activeQ: sliced[0],
+        qPhase: 'idle',
+        activeTeamId: null,
+        wrongTeamIds: [],
+        revealed: false,
+      };
+      S.screen = 'rounds';
+      update();
+    }
+
+    function renderRoundsGame() {
+      var r = S.rounds;
+      if (!r || !r.activeQ) return '<div class="aw-wrap">No active question.</div>';
+      var q = r.activeQ;
+      var diff = DIFF[q.difficulty];
+      var buzzedTeam = r.activeTeamId ? r.teams.filter(function (t) { return t.id === r.activeTeamId; })[0] : null;
+      var availForSteal = ENGINE.rounds.availableStealers(r.teams, r.wrongTeamIds);
+      var isLast = r.queueIdx + 1 >= r.pool.length;
+      var scoreHit = S.endCondition.type === 'score' && r.teams.some(function (t) { return t.score >= S.endCondition.value; });
+      var shouldEnd = isLast || scoreHit;
+      var streakBonusPreview = buzzedTeam ? ENGINE.rounds.streakBonus(buzzedTeam.streak) : 0;
+
+      var html = topline('<span>Q ' + (r.queueIdx + 1) + ' / ' + r.pool.length + '</span><button type="button" class="aw-end-now" data-action="r-end-now">End game</button>');
+      html += scoreboard(r.teams, r.activeTeamId);
+
+      html += '<div class="aw-game-body"><div class="aw-card">';
+      html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) + '<span class="aw-badge" style="--b-bg:transparent;--b-text:#64748b;--b-border:#334155">' + diff.pts + ' pts</span></div>';
+      if (r.qPhase === 'steal') html += '<span class="aw-steal-flag">⚡ Steal · ' + diff.steal + ' pts</span>';
+      html += '</div>';
+
+      html += '<div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
+      if (!r.revealed) {
+        html += '<button type="button" class="aw-reveal-btn" data-action="r-reveal">Reveal Answer ↓</button>';
+      } else {
+        html += '<div class="aw-answer-block"><div class="aw-answer-box">' + esc(q.a) + '</div>' +
+          '<div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>';
+      }
+      html += '</div></div>';
+
+      html += '<div class="aw-panel">';
+      if (r.qPhase === 'idle') {
+        html += '<p class="aw-panel-hint">Who buzzed in?</p><div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(r.teams.length, 3) + ',1fr)">' +
+          r.teams.map(function (t) {
+            var c = TEAM_COLORS[t.color];
+            return '<button type="button" class="aw-buzz-btn" style="--team-bg:' + c.bg + '" data-action="r-buzz" data-id="' + t.id + '">' + esc(t.name) + '</button>';
+          }).join('') + '</div>' +
+          '<button type="button" class="aw-btn aw-btn-ghost aw-btn-block" data-action="r-skip">Skip — no one answered</button>';
+      } else if (r.qPhase === 'buzzed' && buzzedTeam) {
+        var bc = TEAM_COLORS[buzzedTeam.color];
+        html += '<p class="aw-verdict-name" style="--team-text:' + bc.text + '"><strong>' + esc(buzzedTeam.name) + '</strong> answered — correct?</p>' +
+          '<div class="aw-verdict-grid">' +
+          '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="r-correct">✓ Correct<span class="aw-btn-sub">+' + diff.pts + ' pts' + (streakBonusPreview ? ' · +50 🔥' : '') + '</span></button>' +
+          '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="r-wrong">✗ Wrong' + (diff.penalty < 0 ? '<span class="aw-btn-sub">' + diff.penalty + ' pts</span>' : '') + '</button>' +
+          '</div>';
+      } else if (r.qPhase === 'steal' && !r.activeTeamId) {
+        html += '<p class="aw-panel-hint" style="color:#fbbf24;font-weight:700;">⚡ Steal for ' + diff.steal + ' pts — who goes?</p>' +
+          '<div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(availForSteal.length, 3) + ',1fr)">' +
+          availForSteal.map(function (t) {
+            var c = TEAM_COLORS[t.color];
+            return '<button type="button" class="aw-steal-btn" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '" data-action="r-steal-buzz" data-id="' + t.id + '">' + esc(t.name) + '</button>';
+          }).join('') + '</div>' +
+          '<button type="button" class="aw-btn aw-btn-ghost aw-btn-block" data-action="r-close-steal">No steal</button>';
+      } else if (r.qPhase === 'steal_buzzed' && buzzedTeam) {
+        var sc = TEAM_COLORS[buzzedTeam.color];
+        html += '<p class="aw-verdict-name" style="--team-text:' + sc.text + '"><strong>' + esc(buzzedTeam.name) + '</strong> steals — correct?</p>' +
+          '<div class="aw-verdict-grid">' +
+          '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="r-steal-correct">✓ Correct<span class="aw-btn-sub">+' + diff.steal + ' pts</span></button>' +
+          '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="r-steal-wrong">✗ Wrong<span class="aw-btn-sub">no penalty</span></button>' +
+          '</div>';
+      } else if (r.qPhase === 'done') {
+        html += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="' + (shouldEnd ? 'r-end-now' : 'r-next') + '">' + (shouldEnd ? 'See Results →' : 'Next Question →') + '</button>';
+      }
+      html += '</div></div>';
+      return html;
+    }
+
+    function roundsAction(name, el) {
+      var r = S.rounds;
+      if (!r) return;
+      var diff = DIFF[r.activeQ.difficulty];
+
+      if (name === 'r-reveal') { r.revealed = true; }
+      else if (name === 'r-buzz') { r.activeTeamId = el.dataset.id; r.qPhase = 'buzzed'; }
+      else if (name === 'r-correct') {
+        r.teams = r.teams.map(function (t) { return t.id === r.activeTeamId ? ENGINE.rounds.markCorrect(t, r.activeQ.difficulty) : t; });
+        r.qPhase = 'done'; r.revealed = true;
+      } else if (name === 'r-wrong') {
+        r.teams = r.teams.map(function (t) { return t.id === r.activeTeamId ? ENGINE.rounds.markWrong(t, r.activeQ.difficulty) : t; });
+        r.wrongTeamIds = r.wrongTeamIds.concat([r.activeTeamId]);
+        if (ENGINE.rounds.canSteal(r.teams, r.wrongTeamIds)) { r.qPhase = 'steal'; r.activeTeamId = null; }
+        else { r.qPhase = 'done'; r.activeTeamId = null; r.revealed = true; }
+      } else if (name === 'r-steal-buzz') { r.activeTeamId = el.dataset.id; r.qPhase = 'steal_buzzed'; }
+      else if (name === 'r-steal-correct') {
+        r.teams = r.teams.map(function (t) { return t.id === r.activeTeamId ? ENGINE.rounds.markStealCorrect(t, r.activeQ.difficulty) : t; });
+        r.qPhase = 'done'; r.revealed = true;
+      } else if (name === 'r-steal-wrong' || name === 'r-close-steal') { r.qPhase = 'done'; r.activeTeamId = null; r.revealed = true; }
+      else if (name === 'r-skip') { r.qPhase = 'done'; r.revealed = true; }
+      else if (name === 'r-next') {
+        var next = r.queueIdx + 1;
+        if (next >= r.pool.length) { finishRounds(); return; }
+        r.queueIdx = next; r.activeQ = r.pool[next]; r.activeTeamId = null; r.wrongTeamIds = []; r.revealed = false; r.qPhase = 'idle';
+      } else if (name === 'r-end-now') { finishRounds(); return; }
+      update();
+    }
+
+    function finishRounds() {
+      var r = S.rounds;
+      var sorted = r.teams.slice().sort(function (a, b) { return b.score - a.score; });
+      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
+      ENGINE.history.save({
+        date: fmtDate(),
+        winner: isTie ? 'Tie' : sorted[0].name,
+        teams: sorted.map(function (t) { return { name: t.name, score: t.score }; }),
+        mode: 'rounds',
+      });
+      S.screen = 'rounds-results';
+      update();
+    }
+
+    function renderRoundsResults() {
+      var r = S.rounds;
+      var sorted = r.teams.slice().sort(function (a, b) { return b.score - a.score; });
+      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
+      var topStreaker = r.teams.slice().sort(function (a, b) { return b.streak - a.streak; })[0];
+
+      var html = '<div class="aw-wrap">';
+      html += '<div class="aw-result-hero"><div class="aw-result-emoji">' + (isTie ? '🤝' : '🏆') + '</div>' +
+        '<h1 class="aw-result-title">' + (isTie ? "It's a Tie!" : esc(sorted[0].name) + ' Wins!') + '</h1>' +
+        '<p class="aw-result-sub">' + r.queueIdx + (r.qPhase === 'done' || r.pool.length ? 1 : 0) + ' rounds · ' + fmtDate() + '</p></div>';
+
+      html += sorted.map(function (team, idx) {
+        var c = TEAM_COLORS[team.color];
+        var isFirst = idx === 0 && !isTie;
+        return '<div class="aw-leaderboard-row' + (isFirst ? ' first' : '') + '" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '">' +
+          '<span class="aw-medal">' + (MEDALS[idx] || (idx + 1)) + '</span>' +
+          '<span class="aw-lb-name">' + esc(team.name) + '</span>' +
+          '<div class="aw-lb-score-wrap"><div class="aw-lb-score">' + team.score + '</div>' +
+          '<div class="aw-lb-stats">' + team.correct + '✓' + (team.wrong > 0 ? ' ' + team.wrong + '✗' : '') + (team.steals > 0 ? ' ' + team.steals + '⚡' : '') + '</div></div></div>';
+      }).join('');
+
+      if (topStreaker && topStreaker.streak >= 3) {
+        html += '<div class="aw-streak-banner">🔥 ' + esc(topStreaker.name) + ' ended on a ' + topStreaker.streak + '-question streak!</div>';
+      }
+
+      html += '<div class="aw-result-actions">' +
+        '<button type="button" class="aw-btn aw-btn-primary aw-btn-lg" data-action="r-play-again">Play Again</button>' +
+        '<button type="button" class="aw-btn aw-btn-ghost aw-btn-lg" data-action="go-setup">Menu</button>' +
+        '</div></div>';
+      return html;
+    }
+
+    // ─── JEOPARDY BOARD MODE ──────────────────────────────────────────
+
+    function startBoard() {
+      var pool = ENGINE.buildPool(QUESTIONS, S.filters);
+      var topicIds = TOPICS.map(function (t) { return t.id; }).filter(function (id) { return S.filters.topics.has(id); });
+      if (topicIds.length < 2 || pool.length === 0) return;
+      S.board = {
+        teams: S.teams.map(function (t) { return ENGINE.makeTeam(t.name, t.color, t.id); }),
+        columns: ENGINE.board.build(topicIds, pool),
+        controlIndex: 0,
+        modal: null,
+      };
+      S.screen = 'board';
+      update();
+    }
+
+    function renderBoardGame() {
+      var b = S.board;
+      if (!b) return '<div class="aw-wrap">No board.</div>';
+      var control = b.teams[b.controlIndex];
+      var c = TEAM_COLORS[control.color];
+
+      var html = topline('<button type="button" class="aw-end-now" data-action="b-end-now">End game</button>');
+      html += scoreboard(b.teams, control.id);
+
+      html += '<div class="aw-game-body">';
+      html += '<div class="aw-turn-flag" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '">🎯 ' + esc(control.name) + "'s turn to pick</div>";
+
+      html += '<div class="aw-board-scroll"><div class="aw-board">';
+      html += b.columns.map(function (col, colIdx) {
+        var tc = TOPIC_COLORS[col.topic];
+        var topic = topicById(col.topic);
+        var cellsHtml = col.cells.map(function (cell, cellIdx) {
+          if (!cell.question) return '<div class="aw-board-cell aw-board-cell--empty">—</div>';
+          if (cell.done) return '<div class="aw-board-cell aw-board-cell--done">✓</div>';
+          return '<button type="button" class="aw-board-cell" data-action="b-cell" data-col="' + colIdx + '" data-cell="' + cellIdx + '">' + cell.value + '</button>';
+        }).join('');
+        return '<div class="aw-board-col"><div class="aw-board-col-header" style="--b-bg:' + tc.bg + ';--b-text:' + tc.text + ';--b-border:' + tc.border + '">' + esc(topic.short) + '</div>' + cellsHtml + '</div>';
+      }).join('');
+      html += '</div></div>';
+
+      if (b.modal) html += renderBoardModal(b);
+
+      html += '</div>';
+      return html;
+    }
+
+    function renderBoardModal(b) {
+      var m = b.modal;
+      var q = m.cell.question;
+      var diff = DIFF[q.difficulty];
+      var answeringTeam = b.teams.filter(function (t) { return t.id === m.answeringTeamId; })[0];
+      var atc = answeringTeam ? TEAM_COLORS[answeringTeam.color] : null;
+
+      var html = '<div class="aw-modal-backdrop"><div class="aw-modal"><div class="aw-card">';
+      html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) +
+        '<span class="aw-badge" style="--b-bg:transparent;--b-text:#22d3ee;--b-border:#0e7490">' + m.cell.value + ' pts</span></div>' +
+        (m.phase === 'steal-pick' || m.phase === 'steal-verdict' ? '<span class="aw-steal-flag">⚡ Steal · ' + m.cell.value + ' pts</span>' : '') + '</div>';
+
+      html += '<div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
+      if (!m.revealed) {
+        html += '<button type="button" class="aw-reveal-btn" data-action="b-reveal">Reveal Answer ↓</button>';
+      } else {
+        html += '<div class="aw-answer-block"><div class="aw-answer-box">' + esc(q.a) + '</div>' +
+          '<div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>';
+      }
+      html += '</div></div>';
+
+      html += '<div class="aw-panel" style="margin-top:0.9rem;">';
+      if (m.phase === 'await-verdict') {
+        if (!m.revealed) {
+          html += '<p class="aw-panel-hint">Reveal the answer, then judge ' + esc(answeringTeam.name) + '.</p>';
+        } else {
+          html += '<p class="aw-verdict-name" style="--team-text:' + atc.text + '"><strong>' + esc(answeringTeam.name) + '</strong> answered — correct?</p>' +
+            '<div class="aw-verdict-grid">' +
+            '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="b-correct">✓ Correct<span class="aw-btn-sub">+' + m.cell.value + ' pts</span></button>' +
+            '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="b-wrong">✗ Wrong<span class="aw-btn-sub">−' + m.cell.value + ' pts</span></button>' +
+            '</div>';
+        }
+      } else if (m.phase === 'steal-pick') {
+        var stealers = ENGINE.board.availableStealers(b.teams, m.pickerId, m.excludedIds);
+        html += '<p class="aw-panel-hint" style="color:#fbbf24;font-weight:700;">⚡ Steal for ' + m.cell.value + ' pts — who goes?</p>' +
+          '<div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(stealers.length, 3) + ',1fr)">' +
+          stealers.map(function (t) {
+            var stc = TEAM_COLORS[t.color];
+            return '<button type="button" class="aw-steal-btn" style="--team-border:' + stc.border + ';--team-dim:' + stc.dim + ';--team-text:' + stc.text + '" data-action="b-steal" data-id="' + t.id + '">' + esc(t.name) + '</button>';
+          }).join('') + '</div>' +
+          '<button type="button" class="aw-btn aw-btn-ghost aw-btn-block" data-action="b-no-steal">No steal</button>';
+      } else if (m.phase === 'steal-verdict') {
+        html += '<p class="aw-verdict-name" style="--team-text:' + atc.text + '"><strong>' + esc(answeringTeam.name) + '</strong> steals — correct?</p>' +
+          '<div class="aw-verdict-grid">' +
+          '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="b-steal-correct">✓ Correct<span class="aw-btn-sub">+' + m.cell.value + ' pts</span></button>' +
+          '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="b-steal-wrong">✗ Wrong<span class="aw-btn-sub">no penalty</span></button>' +
+          '</div>';
+      } else if (m.phase === 'done') {
+        var outcomeText = m.outcome.type === 'correct' ? esc(answeringTeamNameFromOutcome(b, m)) + ' scored ' + m.cell.value + ' pts and keeps control.'
+          : m.outcome.type === 'steal-correct' ? esc(m.outcome.teamName) + ' stole it for ' + m.cell.value + ' pts and takes control.'
+          : 'No steal — control rotates to ' + esc(b.teams[ENGINE.board.nextControlIndex(b.teams.length, m.pickerIndex)].name) + '.';
+        html += '<p class="aw-panel-hint">' + outcomeText + '</p>' +
+          '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="b-continue">Back to Board →</button>';
+      }
+      html += '</div></div></div>';
+      return html;
+    }
+
+    function answeringTeamNameFromOutcome(b, m) {
+      var t = b.teams.filter(function (t2) { return t2.id === m.pickerId; })[0];
+      return t ? t.name : '';
+    }
+
+    function boardAction(name, el) {
+      var b = S.board;
+      if (!b) return;
+
+      if (name === 'b-cell') {
+        var colIdx = +el.dataset.col, cellIdx = +el.dataset.cell;
+        var cell = b.columns[colIdx].cells[cellIdx];
+        if (!cell.question || cell.done) return;
+        b.modal = {
+          colIdx: colIdx, cellIdx: cellIdx, cell: cell, revealed: false, phase: 'await-verdict',
+          pickerIndex: b.controlIndex, pickerId: b.teams[b.controlIndex].id,
+          answeringTeamId: b.teams[b.controlIndex].id, excludedIds: [], outcome: null,
+        };
+      } else if (name === 'b-reveal') { b.modal.revealed = true; }
+      else if (name === 'b-correct') {
+        var m = b.modal;
+        b.teams = b.teams.map(function (t) { return t.id === m.answeringTeamId ? ENGINE.board.markCorrect(t, m.cell.value) : t; });
+        m.cell.done = true;
+        m.phase = 'done'; m.outcome = { type: 'correct' };
+      } else if (name === 'b-wrong') {
+        var m2 = b.modal;
+        b.teams = b.teams.map(function (t) { return t.id === m2.answeringTeamId ? ENGINE.board.markWrong(t, m2.cell.value) : t; });
+        m2.excludedIds = m2.excludedIds.concat([m2.answeringTeamId]);
+        var stealers = ENGINE.board.availableStealers(b.teams, m2.pickerId, m2.excludedIds);
+        if (stealers.length > 0) { m2.phase = 'steal-pick'; }
+        else { closeCellNoSteal(b, m2); }
+      } else if (name === 'b-steal') {
+        b.modal.answeringTeamId = el.dataset.id; b.modal.phase = 'steal-verdict';
+      } else if (name === 'b-steal-correct') {
+        var m3 = b.modal;
+        var stealTeam = b.teams.filter(function (t) { return t.id === m3.answeringTeamId; })[0];
+        b.teams = b.teams.map(function (t) { return t.id === m3.answeringTeamId ? ENGINE.board.markStealCorrect(t, m3.cell.value) : t; });
+        m3.cell.done = true;
+        b.controlIndex = b.teams.findIndex(function (t) { return t.id === m3.answeringTeamId; });
+        m3.phase = 'done'; m3.outcome = { type: 'steal-correct', teamName: stealTeam.name };
+      } else if (name === 'b-steal-wrong') {
+        var m4 = b.modal;
+        m4.excludedIds = m4.excludedIds.concat([m4.answeringTeamId]);
+        var remain = ENGINE.board.availableStealers(b.teams, m4.pickerId, m4.excludedIds);
+        if (remain.length > 0) { m4.phase = 'steal-pick'; }
+        else { closeCellNoSteal(b, m4); }
+      } else if (name === 'b-no-steal') { closeCellNoSteal(b, b.modal); }
+      else if (name === 'b-continue') {
+        b.modal = null;
+        if (ENGINE.board.isExhausted(b.columns)) { finishBoard(); return; }
+      } else if (name === 'b-end-now') { finishBoard(); return; }
+      update();
+    }
+
+    function closeCellNoSteal(b, m) {
+      m.cell.done = true;
+      b.controlIndex = ENGINE.board.nextControlIndex(b.teams.length, m.pickerIndex);
+      m.phase = 'done'; m.outcome = { type: 'no-steal' };
+    }
+
+    function finishBoard() {
+      var b = S.board;
+      var sorted = b.teams.slice().sort(function (a, b2) { return b2.score - a.score; });
+      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
+      ENGINE.history.save({
+        date: fmtDate(),
+        winner: isTie ? 'Tie' : sorted[0].name,
+        teams: sorted.map(function (t) { return { name: t.name, score: t.score }; }),
+        mode: 'board',
+      });
+      S.screen = 'board-results';
+      update();
+    }
+
+    function renderBoardResults() {
+      var b = S.board;
+      var sorted = b.teams.slice().sort(function (a, b2) { return b2.score - a.score; });
+      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
+
+      var html = '<div class="aw-wrap">';
+      html += '<div class="aw-result-hero"><div class="aw-result-emoji">' + (isTie ? '🤝' : '🏆') + '</div>' +
+        '<h1 class="aw-result-title">' + (isTie ? "It's a Tie!" : esc(sorted[0].name) + ' Wins!') + '</h1>' +
+        '<p class="aw-result-sub">Jeopardy Board · ' + fmtDate() + '</p></div>';
+
+      html += sorted.map(function (team, idx) {
+        var c = TEAM_COLORS[team.color];
+        var isFirst = idx === 0 && !isTie;
+        return '<div class="aw-leaderboard-row' + (isFirst ? ' first' : '') + '" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '">' +
+          '<span class="aw-medal">' + (MEDALS[idx] || (idx + 1)) + '</span>' +
+          '<span class="aw-lb-name">' + esc(team.name) + '</span>' +
+          '<div class="aw-lb-score-wrap"><div class="aw-lb-score">' + team.score + '</div>' +
+          '<div class="aw-lb-stats">' + team.correct + '✓' + (team.wrong > 0 ? ' ' + team.wrong + '✗' : '') + (team.steals > 0 ? ' ' + team.steals + '⚡' : '') + '</div></div></div>';
+      }).join('');
+
+      html += '<div class="aw-result-actions">' +
+        '<button type="button" class="aw-btn aw-btn-primary aw-btn-lg" data-action="b-play-again">Play Again</button>' +
+        '<button type="button" class="aw-btn aw-btn-ghost aw-btn-lg" data-action="go-setup">Menu</button>' +
+        '</div></div>';
+      return html;
+    }
+
+    // ─── QUICK QUIZ MODE ──────────────────────────────────────────────
+
+    function startQuiz() {
+      var pool = ENGINE.buildPool(QUESTIONS, S.filters);
+      if (pool.length === 0) return;
+      var sliced = pool.slice(0, Math.min(S.quizCount, pool.length));
+      S.quiz = {
+        pool: sliced,
+        idx: 0,
+        choices: ENGINE.quiz.buildChoices(sliced[0]),
+        answered: false,
+        selectedIdx: null,
+        records: [],
+      };
+      S.screen = 'quiz';
+      update();
+    }
+
+    function renderQuizGame() {
+      var qz = S.quiz;
+      if (!qz) return '<div class="aw-wrap">No active quiz.</div>';
+      var q = qz.pool[qz.idx];
+
+      var html = topline('<span>Q ' + (qz.idx + 1) + ' / ' + qz.pool.length + '</span>');
+      html += '<div class="aw-game-body">';
+      html += '<div class="aw-quiz-topline"><span>' + topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) + '</span><span class="aw-quiz-score">' + qz.records.filter(function (r) { return r.correct; }).length + ' / ' + qz.records.length + ' correct</span></div>';
+
+      html += '<div class="aw-card"><div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
+      html += '<div class="aw-choice-list" style="width:100%;">' + qz.choices.map(function (choice, idx) {
+        var cls = 'aw-choice';
+        if (qz.answered) {
+          if (choice.correct) cls += ' correct';
+          else if (idx === qz.selectedIdx) cls += ' wrong';
+          else cls += ' dim';
+        }
+        return '<button type="button" class="' + cls + '" data-action="q-choice" data-idx="' + idx + '"' + (qz.answered ? ' disabled' : '') + '>' + esc(choice.text) + '</button>';
+      }).join('') + '</div>';
+
+      if (qz.answered) {
+        html += '<div class="aw-answer-block" style="margin-top:0.4rem;"><div class="aw-answer-box">' + esc(q.a) + '</div>' +
+          '<div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>';
+      }
+      html += '</div></div>';
+
+      if (qz.answered) {
+        var isLast = qz.idx + 1 >= qz.pool.length;
+        html += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="q-next">' + (isLast ? 'See Results →' : 'Next Question →') + '</button>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function quizAction(name, el) {
+      var qz = S.quiz;
+      if (!qz) return;
+      var q = qz.pool[qz.idx];
+
+      if (name === 'q-choice' && !qz.answered) {
+        var idx = +el.dataset.idx;
+        qz.answered = true;
+        qz.selectedIdx = idx;
+        qz.records.push({ question: q, correct: !!qz.choices[idx].correct });
+      } else if (name === 'q-next') {
+        var next = qz.idx + 1;
+        if (next >= qz.pool.length) { finishQuiz(); return; }
+        qz.idx = next;
+        qz.choices = ENGINE.quiz.buildChoices(qz.pool[next]);
+        qz.answered = false;
+        qz.selectedIdx = null;
+      }
+      update();
+    }
+
+    function finishQuiz() {
+      var qz = S.quiz;
+      var summary = ENGINE.quiz.summarize(qz.records);
+      qz.summary = summary;
+      ENGINE.history.save({
+        date: fmtDate(),
+        winner: 'You',
+        teams: [{ name: 'You', score: summary.right }],
+        mode: 'quiz',
+      });
+      S.screen = 'quiz-results';
+      update();
+    }
+
+    function renderQuizResults() {
+      var qz = S.quiz;
+      var s = qz.summary;
+      var html = '<div class="aw-wrap">';
+      html += '<div class="aw-result-hero"><div class="aw-pct-hero">' + s.pct + '%</div>' +
+        '<p class="aw-result-sub">' + s.right + ' / ' + s.total + ' correct · ' + fmtDate() + '</p></div>';
+
+      html += '<div class="aw-section"><p class="aw-label">By Topic</p>';
+      TOPICS.forEach(function (t) {
+        var bt = s.byTopic[t.id];
+        if (!bt) return;
+        var pct = bt.total ? Math.round((bt.correct / bt.total) * 100) : 0;
+        html += '<div class="aw-bar-row"><span class="aw-bar-label">' + esc(t.short) + '</span>' +
+          '<span class="aw-bar-track"><span class="aw-bar-fill" style="width:' + pct + '%"></span></span>' +
+          '<span class="aw-bar-frac">' + bt.correct + '/' + bt.total + '</span></div>';
+      });
+      html += '</div>';
+
+      if (s.missed.length > 0) {
+        html += '<div class="aw-section"><p class="aw-label">Review Missed (' + s.missed.length + ')</p>';
+        html += s.missed.map(function (q) {
+          var open = S.browse.expandedId === q.id;
+          return '<div class="aw-browse-row" data-action="q-review-toggle" data-id="' + q.id + '">' +
+            topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) +
+            '<p class="aw-browse-q">' + esc(q.q) + '</p>' +
+            (open ? '<div class="aw-browse-expand"><div class="aw-answer-box">' + esc(q.a) + '</div><div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>' : '') +
+            '</div>';
+        }).join('');
+        html += '</div>';
+      }
+
+      html += '<div class="aw-result-actions">' +
+        '<button type="button" class="aw-btn aw-btn-primary aw-btn-lg" data-action="q-play-again">Play Again</button>' +
+        '<button type="button" class="aw-btn aw-btn-ghost aw-btn-lg" data-action="go-setup">Menu</button>' +
+        '</div></div>';
+      return html;
+    }
+
+    // ─── BROWSE MODE ──────────────────────────────────────────────────
+
+    function renderBrowse() {
+      var b = S.browse;
+      var diffOrder = { easy: 0, medium: 1, hard: 2 };
+      var topicOrder = {};
+      TOPICS.forEach(function (t, i) { topicOrder[t.id] = i; });
+
+      var list = QUESTIONS.filter(function (q) {
+        if (b.topic !== 'all' && q.topic !== b.topic) return false;
+        if (b.difficulty !== 'all' && q.difficulty !== b.difficulty) return false;
+        if (b.search) {
+          var hay = (q.q + ' ' + q.a + ' ' + q.pearl).toLowerCase();
+          if (hay.indexOf(b.search.toLowerCase()) === -1) return false;
+        }
+        return true;
+      });
+
+      list.sort(function (x, y) {
+        if (b.sort === 'difficulty') {
+          return diffOrder[x.difficulty] - diffOrder[y.difficulty] || topicOrder[x.topic] - topicOrder[y.topic];
+        }
+        return topicOrder[x.topic] - topicOrder[y.topic] || diffOrder[x.difficulty] - diffOrder[y.difficulty];
+      });
+
+      var html = topline('<span>' + QUESTIONS.length + ' total</span>');
+      html += '<div class="aw-wrap aw-wrap--wide">';
+      html += '<div class="aw-hero" style="margin-bottom:1.1rem;"><h1 class="aw-h1" style="font-size:1.6rem;">Question Bank</h1></div>';
+
+      html += '<div class="aw-browse-controls">';
+      html += '<select class="aw-select" data-bind="br-topic"><option value="all"' + (b.topic === 'all' ? ' selected' : '') + '>All topics</option>' +
+        TOPICS.map(function (t) { return '<option value="' + t.id + '"' + (b.topic === t.id ? ' selected' : '') + '>' + esc(t.short) + '</option>'; }).join('') + '</select>';
+      html += '<select class="aw-select" data-bind="br-diff"><option value="all"' + (b.difficulty === 'all' ? ' selected' : '') + '>All difficulty</option>' +
+        DIFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (b.difficulty === k ? ' selected' : '') + '>' + DIFF[k].label + '</option>'; }).join('') + '</select>';
+      html += '<select class="aw-select" data-bind="br-sort"><option value="topic"' + (b.sort === 'topic' ? ' selected' : '') + '>Sort: Topic</option>' +
+        '<option value="difficulty"' + (b.sort === 'difficulty' ? ' selected' : '') + '>Sort: Difficulty</option></select>';
+      html += '<input type="search" class="aw-search" id="browse-search" data-bind="br-search" placeholder="Search questions…" value="' + esc(b.search) + '">';
+      html += '</div>';
+
+      html += '<p class="aw-browse-count">' + list.length + ' question' + (list.length === 1 ? '' : 's') + '</p>';
+
+      if (list.length === 0) {
+        html += '<p class="aw-empty-note">No questions match these filters.</p>';
+      } else {
+        html += list.map(function (q) {
+          var open = b.expandedId === q.id;
+          return '<div class="aw-browse-row" data-action="br-toggle" data-id="' + q.id + '">' +
+            topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) +
+            '<p class="aw-browse-q">' + esc(q.q) + '</p>' +
+            (open ? '<div class="aw-browse-expand"><div class="aw-answer-box">' + esc(q.a) + '</div><div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>' : '') +
+            '</div>';
+        }).join('');
+      }
+      html += '</div>';
+      return html;
+    }
+
+    // ─── EVENT DELEGATION ─────────────────────────────────────────────
+
+    root.addEventListener('click', function (e) {
+      var el = e.target.closest('[data-action]');
+      if (!el) return;
+      var name = el.dataset.action;
+
+      if (name === 'pick-mode') { S.mode = el.dataset.mode; update(); return; }
+      if (name === 'toggle-topic') {
+        var id = el.dataset.id;
+        if (S.filters.topics.has(id)) { if (S.filters.topics.size > 1) S.filters.topics.delete(id); }
+        else S.filters.topics.add(id);
+        update(); return;
+      }
+      if (name === 'toggle-diff') {
+        var dId = el.dataset.id;
+        if (S.filters.difficulties.has(dId)) { if (S.filters.difficulties.size > 1) S.filters.difficulties.delete(dId); }
+        else S.filters.difficulties.add(dId);
+        update(); return;
+      }
+      if (name === 'team-add') {
+        if (S.teams.length < 6) { var idx = S.teams.length; S.teams.push(ENGINE.makeTeam('Team ' + (idx + 1), ENGINE.TEAM_COLORS[idx], 't' + idx)); }
+        update(); return;
+      }
+      if (name === 'team-remove') {
+        if (S.teams.length > 2) S.teams = S.teams.filter(function (t) { return t.id !== el.dataset.id; });
+        update(); return;
+      }
+      if (name === 'set-end-type') {
+        var type = el.dataset.type;
+        var value = type === 'count' ? 15 : type === 'score' ? 300 : 0;
+        S.endCondition = { type: type, value: value };
+        update(); return;
+      }
+      if (name === 'set-quiz-count') { S.quizCount = +el.dataset.n; update(); return; }
+      if (name === 'start-rounds') { startRounds(); return; }
+      if (name === 'start-board') { startBoard(); return; }
+      if (name === 'start-quiz') { startQuiz(); return; }
+      if (name === 'start-browse') { S.screen = 'browse'; update(); return; }
+      if (name === 'go-setup') { S.screen = 'setup'; update(); return; }
+
+      if (name === 'r-play-again') { startRounds(); return; }
+      if (name === 'b-play-again') { startBoard(); return; }
+      if (name === 'q-play-again') { startQuiz(); return; }
+
+      if (name === 'br-toggle') {
+        S.browse.expandedId = S.browse.expandedId === el.dataset.id ? null : el.dataset.id;
+        update(); return;
+      }
+      if (name === 'q-review-toggle') {
+        S.browse.expandedId = S.browse.expandedId === el.dataset.id ? null : el.dataset.id;
+        update(); return;
+      }
+
+      if (name.indexOf('r-') === 0) { roundsAction(name, el); return; }
+      if (name.indexOf('b-') === 0) { boardAction(name, el); return; }
+      if (name.indexOf('q-') === 0) { quizAction(name, el); return; }
+    });
+
+    root.addEventListener('input', function (e) {
+      var bind = e.target.dataset && e.target.dataset.bind;
+      if (!bind) return;
+      if (bind === 'team-name') {
+        var id = e.target.dataset.id;
+        S.teams = S.teams.map(function (t) { return t.id === id ? Object.assign({}, t, { name: e.target.value }) : t; });
+        update();
+      } else if (bind === 'br-search') {
+        S.browse.search = e.target.value;
+        update();
+      }
+    });
+
+    root.addEventListener('change', function (e) {
+      var bind = e.target.dataset && e.target.dataset.bind;
+      if (!bind) return;
+      if (bind === 'end-count') { S.endCondition = { type: 'count', value: +e.target.value }; update(); }
+      else if (bind === 'end-score') { S.endCondition = { type: 'score', value: +e.target.value }; update(); }
+      else if (bind === 'br-topic') { S.browse.topic = e.target.value; update(); }
+      else if (bind === 'br-diff') { S.browse.difficulty = e.target.value; update(); }
+      else if (bind === 'br-sort') { S.browse.sort = e.target.value; update(); }
+    });
+
+    // ─── INIT ─────────────────────────────────────────────────────────
+
+    render();
+  })();
   </script>
+
   <script src="js/site.js"></script>
 </body>
 </html>
