@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updated": "2026-07-02T20:28:23.725Z",
+  "updated": "2026-07-02T20:50:34.275Z",
   "status": "DRAFT expansion — 40-node temporal-bone seed is vetted (review:true); all other nodes are subagent-authored scaffolding (review:false) pending owner stress-test against curated source text.",
   "sources": [
     "Cummings Otolaryngology 7e",
@@ -19661,6 +19661,3493 @@
         "topics": []
       },
       "review": false
+    },
+    {
+      "id": "oculomotor-nerve",
+      "label": "Oculomotor Nerve (CN III)",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Motor to all extraocular muscles except superior oblique and lateral rectus, plus levator palpebrae and parasympathetic pupillary constriction. Traverses the cavernous sinus and superior orbital fissure; palsy gives ptosis and a 'down-and-out' eye.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "CN III",
+        "third cranial nerve"
+      ],
+      "abbrev": "CN III",
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "trochlear-nerve",
+      "label": "Trochlear Nerve (CN IV)",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Thinnest cranial nerve; only one exiting dorsally and the sole crossed nerve. Motor to superior oblique. Runs in the lateral cavernous sinus wall to the superior orbital fissure; palsy causes vertical diplopia and head tilt.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "CN IV",
+        "fourth cranial nerve"
+      ],
+      "abbrev": "CN IV",
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "ophthalmic-nerve",
+      "label": "Ophthalmic Nerve (V1)",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Purely sensory first division of CN V. Enters the orbit via the superior orbital fissure; gives frontal, lacrimal and nasociliary branches. Anterior ethmoidal branch of nasociliary is the afferent limb of the sneeze reflex and supplies the anterior skull base.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "V1",
+        "first trigeminal division"
+      ],
+      "abbrev": "V1",
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "inferior-alveolar-nerve",
+      "label": "Inferior Alveolar Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "V3 branch entering the mandibular foramen to supply lower teeth, exiting the mental foramen as the mental nerve. At risk in mandibular fractures, third-molar surgery, sagittal split osteotomy and marginal mandibulectomy; injury causes lower-lip and chin numbness.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "IAN"
+      ],
+      "abbrev": "IAN",
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "lingual-nerve",
+      "label": "Lingual Nerve",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "V3 branch carrying general sensation to the anterior two-thirds of tongue plus taste and parasympathetic fibres from chorda tympani. In the floor of mouth it loops under and crosses the submandibular duct (twice); protect it during submandibular gland excision and floor-of-mouth resection.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "auriculotemporal-nerve",
+      "label": "Auriculotemporal Nerve",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "V3 branch that encircles the middle meningeal artery, supplies the TMJ, external auditory canal and scalp, and conveys otic-ganglion parasympathetic secretomotor fibres to the parotid. Aberrant reinnervation after parotidectomy causes Frey syndrome (gustatory sweating).",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "ATN"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "infraorbital-nerve",
+      "label": "Infraorbital Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Terminal V2 branch running in the orbital floor and exiting the infraorbital foramen to supply the cheek, lower eyelid, lateral nose and upper lip. Commonly injured/entrapped in orbital-floor (blowout) and zygomaticomaxillary-complex fractures.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "ION"
+      ],
+      "abbrev": "ION",
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "greater-palatine-nerve",
+      "label": "Greater Palatine Nerve",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "V2 branch descending through the greater palatine canal to supply the hard palate and postganglionic parasympathetic fibres from the pterygopalatine ganglion. The greater palatine foramen (near the second molar) is the landmark for a maxillary nerve block.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "anterior palatine nerve"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "lesser-palatine-nerve",
+      "label": "Lesser Palatine Nerve",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "V2 branch supplying the soft palate and tonsillar region via the lesser palatine foramen; carries taste from the soft palate back to the geniculate ganglion via the greater petrosal nerve.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "oral-pharynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "abducens-nerve",
+      "label": "Abducens Nerve (CN VI)",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Motor to lateral rectus. Longest intracranial course makes it vulnerable to raised ICP; uniquely runs THROUGH the cavernous sinus adjacent to the ICA (not in the wall), so it is the first nerve affected in cavernous sinus/petrous apex (Gradenigo) pathology. Palsy gives horizontal diplopia.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "CN VI",
+        "sixth cranial nerve"
+      ],
+      "abbrev": "CN VI",
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "temporal-branch-facial-nerve",
+      "label": "Temporal (Frontal) Branch of Facial Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Terminal facial branch to frontalis, corrugator and orbicularis oculi (upper). Runs within the temporoparietal fascia along the Pitanguy line; considered a 'terminal' branch with little cross-innervation, so injury causes permanent brow ptosis. Deep to SMAS over the zygomatic arch.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Facial Plastic and Reconstructive Surgery (Papel)"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "frontal branch"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "zygomatic-branch-facial-nerve",
+      "label": "Zygomatic Branch of Facial Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Terminal facial branch to orbicularis oculi and midface; rich arborization with the buccal branch means isolated injury is often compensated. Key motor supply for eye closure alongside temporal branch.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Facial Plastic and Reconstructive Surgery (Papel)"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "buccal-branch-facial-nerve",
+      "label": "Buccal Branch of Facial Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Terminal facial branch to buccinator, orbicularis oris and midface elevators; runs near the parotid duct (parallel/just above it) - the duct is a surgical landmark to find it during parotidectomy. Extensive cross-innervation with zygomatic branch.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Facial Plastic and Reconstructive Surgery (Papel)"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "marginal-mandibular-nerve",
+      "label": "Marginal Mandibular Branch of Facial Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Terminal facial branch to the depressors of the lower lip. In up to 20% it dips below the mandibular border; it runs deep to platysma and superficial to the facial vessels. Protect it during submandibular gland excision by ligating the facial vein low and elevating the flap above the gland (Hayes-Martin manoeuvre).",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Facial Plastic and Reconstructive Surgery (Papel)"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "marginal mandibular nerve",
+        "MMN"
+      ],
+      "abbrev": "MMN",
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cervical-branch-facial-nerve",
+      "label": "Cervical Branch of Facial Nerve",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Terminal facial branch descending into the neck to innervate platysma; can be mistaken for the marginal mandibular branch but weakening it only affects the platysma/lower-lip depressor synergy. Exits the parotid tail near the angle of the mandible.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Facial Plastic and Reconstructive Surgery (Papel)"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "tragal-pointer",
+      "label": "Tragal Pointer",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Surgical landmark for the facial nerve trunk in parotidectomy: the pointed medial end of tragal cartilage. The nerve lies roughly 1 cm deep and inferior/anteromedial to the pointer - a soft landmark, so use it with the tympanomastoid suture and posterior digastric belly.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "tragal cartilage pointer"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "surface-landmarks"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "tympanomastoid-suture",
+      "label": "Tympanomastoid Suture",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "The most reliable landmark for the extratemporal facial nerve trunk: the nerve emerges from the stylomastoid foramen roughly 6-8 mm deep to the inferior end of this suture line between the tympanic and mastoid bone.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "tympanomastoid fissure"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "temporal-bone",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "surface-landmarks"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "posterior-belly-digastric",
+      "label": "Posterior Belly of Digastric Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Key operative landmark. Its superior/upper border points to the facial nerve trunk in parotid surgery; deep to it lie the internal jugular vein, ICA and cranial nerves IX-XII. Marks the superior limit of level II and separates level I from level II in neck dissection.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "posterior digastric belly"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pitanguy-line",
+      "label": "Pitanguy Line",
+      "type": "concept",
+      "subspecialty": "fprs",
+      "detail": "Surface guide to the temporal (frontal) branch of the facial nerve: a line from 0.5 cm below the tragus to 1.5 cm above the lateral eyebrow. The branch crosses the zygomatic arch deep to SMAS/temporoparietal fascia along this line and must be protected in facelift and browlift.",
+      "sources": [
+        "Facial Plastic and Reconstructive Surgery (Papel)",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Pitanguy's line"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "surface-landmarks"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "external-branch-superior-laryngeal-nerve",
+      "label": "External Branch of Superior Laryngeal Nerve",
+      "type": "nerve",
+      "subspecialty": "endocrine",
+      "detail": "Motor branch to cricothyroid; the Cernea classification describes its relation to the superior thyroid pole. To protect it during thyroidectomy, ligate superior pole vessels low and individually on the thyroid capsule. Injury lowers vocal pitch and projection.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "AAO-HNSF Core Curriculum"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "EBSLN"
+      ],
+      "abbrev": "EBSLN",
+      "structure": null,
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "vocal-fold-paralysis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "internal-branch-superior-laryngeal-nerve",
+      "label": "Internal Branch of Superior Laryngeal Nerve",
+      "type": "nerve",
+      "subspecialty": "laryngology",
+      "detail": "Sensory branch piercing the thyrohyoid membrane to supply the supraglottic larynx; afferent limb of the laryngeal adductor (cough) reflex. Its injury causes aspiration from supraglottic anaesthesia. Landmark for a superior laryngeal nerve block.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "IBSLN"
+      ],
+      "abbrev": "IBSLN",
+      "structure": null,
+      "region": "larynx",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "vocal-fold-paralysis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pterygopalatine-ganglion",
+      "label": "Pterygopalatine Ganglion",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Largest parasympathetic ganglion, suspended from V2 in the pterygopalatine fossa. Parasympathetic root is the greater petrosal (from CN VII); relays secretomotor fibres to the lacrimal gland and nasal/palatine mucosa. Target for sphenopalatine block in epistaxis and cluster headache.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "sphenopalatine ganglion",
+        "Meckel's ganglion"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "otic-ganglion",
+      "label": "Otic Ganglion",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "Parasympathetic ganglion below foramen ovale on the medial V3. Preganglionic input is the lesser petrosal nerve (from CN IX via the tympanic plexus); postganglionic secretomotor fibres hitchhike on the auriculotemporal nerve to the parotid - the basis of Frey syndrome after parotidectomy.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "submandibular-ganglion",
+      "label": "Submandibular Ganglion",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "Parasympathetic ganglion suspended from the lingual nerve in the floor of mouth. Preganglionic fibres arrive via chorda tympani (CN VII); postganglionic fibres are secretomotor to the submandibular and sublingual glands. Encountered when the lingual nerve is dissected off the submandibular gland/duct.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "non-recurrent-laryngeal-nerve",
+      "label": "Non-Recurrent Laryngeal Nerve",
+      "type": "concept",
+      "subspecialty": "laryngology",
+      "detail": "Rare variant (~0.5-1%) almost always on the RIGHT, associated with an aberrant right subclavian artery (arteria lusoria). The nerve branches directly off the cervical vagus and passes medially to the larynx without looping under the subclavian — an important cause of unexpected intraoperative RLN injury during thyroidectomy.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Bailey's Head and Neck Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "non-recurrent nerve"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification",
+          "vocal-fold-paralysis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "sln-internal-branch",
+      "label": "Internal Branch of Superior Laryngeal Nerve",
+      "type": "nerve",
+      "subspecialty": "laryngology",
+      "detail": "Sensory branch that pierces the thyrohyoid membrane with the superior laryngeal vessels to supply mucosal sensation of the supraglottic larynx down to the vocal folds. Injury impairs the laryngeal adductor (cough) reflex and predisposes to aspiration.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "internal SLN"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "vocal-fold-paralysis"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "sln-external-branch",
+      "label": "External Branch of Superior Laryngeal Nerve",
+      "type": "nerve",
+      "subspecialty": "laryngology",
+      "detail": "Motor branch to the cricothyroid muscle, controlling vocal-fold lengthening and pitch. It runs alongside the superior thyroid pedicle and is at risk during ligation of the superior thyroid artery (Cernea classification); injury causes voice fatigue and loss of high-pitch (the 'voice of professional singers').",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Bailey's Head and Neck Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "external SLN",
+        "EBSLN"
+      ],
+      "abbrev": "EBSLN",
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "vocal-fold-paralysis",
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "thyroid-isthmus",
+      "label": "Thyroid Isthmus",
+      "type": "anatomy",
+      "subspecialty": "endocrine",
+      "detail": "Midline bridge of thyroid tissue crossing the 2nd-4th tracheal rings, connecting the two lobes. Divided or retracted to expose the trachea during tracheostomy.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pyramidal-lobe",
+      "label": "Pyramidal Lobe",
+      "type": "anatomy",
+      "subspecialty": "endocrine",
+      "detail": "Superiorly projecting lobe arising from the isthmus (usually left of midline), a remnant of the distal thyroglossal duct. Present in ~50% and must be resected in total thyroidectomy to prevent residual uptake.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "zuckerkandl-tubercle",
+      "label": "Tubercle of Zuckerkandl",
+      "type": "anatomy",
+      "subspecialty": "endocrine",
+      "detail": "Posterolateral projection of the thyroid lobe; when enlarged it points like an arrow to the recurrent laryngeal nerve, which usually lies just medial/deep to it. A key intraoperative landmark for RLN identification, and the tubercle typically overlies the nerve and the superior parathyroid.",
+      "sources": [
+        "Bailey's Head and Neck Surgery",
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Zuckerkandl tubercle"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "tracheoesophageal-groove",
+      "label": "Tracheoesophageal Groove",
+      "type": "anatomy",
+      "subspecialty": "endocrine",
+      "detail": "Longitudinal groove between the trachea and esophagus housing the ascending recurrent laryngeal nerve. The left RLN lies more consistently within the groove; the right approaches more obliquely from lateral. Central compartment (level VI) node dissection tracks this groove.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Bailey's Head and Neck Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "TE groove"
+      ],
+      "abbrev": null,
+      "structure": "space",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "superior-parathyroid-gland",
+      "label": "Superior Parathyroid Gland",
+      "type": "anatomy",
+      "subspecialty": "endocrine",
+      "detail": "Derived from the 4th pharyngeal pouch; more constant in position, typically posterior to the mid-upper lobe, superior to the RLN-inferior thyroid artery crossing (dorsal to the coronal plane of the RLN). Blood supply is chiefly from the inferior thyroid artery.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Bailey's Head and Neck Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "hyperparathyroidism",
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "inferior-parathyroid-gland",
+      "label": "Inferior Parathyroid Gland",
+      "type": "anatomy",
+      "subspecialty": "endocrine",
+      "detail": "Derived from the 3rd pharyngeal pouch (descends with the thymus), so it is more variable in location and lies anterior/ventral to the RLN, often near the lower thyroid pole or in the thyrothymic tract. Blood supply is from the inferior thyroid artery — preserve the branch by ligating vessels on the thyroid capsule to avoid devascularization.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Bailey's Head and Neck Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "hyperparathyroidism",
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "superior-thyroid-vein",
+      "label": "Superior Thyroid Vein",
+      "type": "vessel",
+      "subspecialty": "endocrine",
+      "detail": "Drains the upper pole to the internal jugular vein, accompanying the superior thyroid artery.",
+      "sources": [
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "middle-thyroid-vein",
+      "label": "Middle Thyroid Vein",
+      "type": "vessel",
+      "subspecialty": "endocrine",
+      "detail": "Short vein draining the lateral lobe directly to the internal jugular vein; ligated early to allow medial rotation of the lobe and exposure of the tracheoesophageal groove.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "inferior-thyroid-vein",
+      "label": "Inferior Thyroid Vein",
+      "type": "vessel",
+      "subspecialty": "endocrine",
+      "detail": "Drains the lower pole/isthmus, descending anterior to the trachea to the brachiocephalic (innominate) veins; a source of troublesome bleeding during tracheostomy and low thyroidectomy.",
+      "sources": [
+        "Cummings Otolaryngology",
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "dtc-risk-stratification"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "trachea",
+      "label": "Trachea",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Fibrocartilaginous airway of ~18-22 C-shaped rings beginning at the cricoid. The cricothyroid membrane (below the thyroid, above the cricoid) is the surface landmark for emergency cricothyrotomy; tracheostomy is placed through the 2nd-3rd rings, below the isthmus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "airway-management-anesthesia"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "anterior-triangle-neck",
+      "label": "Anterior Cervical Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Bounded by inferior border of mandible (superior), anterior border of sternocleidomastoid (posterior) and the anterior midline of the neck. Subdivided by the digastric and omohyoid into submental, submandibular, carotid and muscular triangles.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "anterior triangle"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "posterior-triangle-neck",
+      "label": "Posterior Cervical Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Bounded by posterior border of SCM (anterior), anterior border of trapezius (posterior) and the middle third of clavicle (inferior). The inferior omohyoid belly splits it into occipital and subclavian (supraclavicular) triangles; corresponds to nodal level V.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "posterior triangle"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "submental-triangle",
+      "label": "Submental Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Suprahyoid midline triangle bounded by the two anterior bellies of digastric laterally and the hyoid inferiorly; floor is mylohyoid. Contains submental (level IA) nodes; drains anterior floor of mouth, lower lip and tongue tip.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "midline",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "submandibular-triangle",
+      "label": "Submandibular (Digastric) Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Bounded by anterior and posterior bellies of digastric and the inferior border of the mandible. Contains the submandibular gland, facial vessels, and the lingual, hypoglossal and marginal mandibular nerves — the key at-risk structures during gland excision (level IB).",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "digastric triangle"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "carotid-triangle",
+      "label": "Carotid Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Bounded by superior belly of omohyoid (anteroinferior), posterior belly of digastric (superior) and anterior border of SCM (posterior). Contains the carotid bifurcation, internal jugular vein, vagus and hypoglossal nerves and the ansa cervicalis — the classic surgical exposure of the great vessels.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "muscular-triangle",
+      "label": "Muscular (Omotracheal) Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Bounded by superior belly of omohyoid (superolateral), anterior border of SCM (inferolateral) and the midline. Contains the infrahyoid strap muscles overlying the thyroid gland, larynx and trachea — the access corridor for thyroidectomy and central-compartment (level VI) dissection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "occipital-triangle",
+      "label": "Occipital Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Superior subdivision of the posterior triangle, above the inferior belly of omohyoid. The spinal accessory nerve crosses its roof, exiting the posterior border of SCM near Erb's point — the principal danger point of level V dissection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "subclavian-triangle",
+      "label": "Subclavian (Supraclavicular/Omoclavicular) Triangle",
+      "type": "concept",
+      "subspecialty": "fundamentals",
+      "detail": "Inferior subdivision of the posterior triangle, below the omohyoid inferior belly, above the clavicle. Contains the third part of the subclavian artery, brachial plexus trunks, external jugular vein and (on the left) the thoracic duct terminus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "supraclavicular triangle",
+        "omoclavicular triangle"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "trapezius-muscle",
+      "label": "Trapezius Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Forms the posterior border of the posterior triangle; innervated by the spinal accessory nerve (CN XI) with C3-C4 proprioceptive contribution. Denervation causes shoulder syndrome — lateral scapular winging, drooped shoulder and painful abduction.",
+      "sources": [
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "anterior-scalene-muscle",
+      "label": "Anterior Scalene Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Arises from anterior tubercles of C3-C6 transverse processes, inserts on the scalene tubercle of the first rib. The phrenic nerve descends vertically on its anterior surface (deep to prevertebral fascia); the brachial plexus and subclavian artery emerge between it and the middle scalene (interscalene triangle).",
+      "sources": [
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "scalenus anterior"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "middle-scalene-muscle",
+      "label": "Middle Scalene Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Largest scalene, from posterior tubercles of cervical transverse processes to the first rib behind the subclavian groove. Its anterior border, with the anterior scalene, bounds the interscalene triangle transmitting the brachial plexus roots and subclavian artery.",
+      "sources": [
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "scalenus medius"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "longus-colli-muscle",
+      "label": "Longus Colli Muscle",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Prevertebral flexor running along the anterolateral vertebral bodies from C1 to T3, deep to the prevertebral fascia. The cervical sympathetic chain lies on its surface — dissection here (e.g. anterior spine, node clearance) risks Horner syndrome.",
+      "sources": [
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "longus cervicis"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "omohyoid-intermediate-tendon",
+      "label": "Omohyoid Intermediate Tendon",
+      "type": "anatomy",
+      "subspecialty": "fundamentals",
+      "detail": "Central tendon linking the superior and inferior bellies of omohyoid, tethered to the clavicle by a fascial sling. It crosses the internal jugular vein and carotid sheath and marks the level III/IV nodal boundary — a reliable intraoperative landmark for the IJV and the omohyoid may be divided for exposure.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "head-neck-spaces-deep-neck-infections"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "phrenic-nerve",
+      "label": "Phrenic Nerve",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "C3-C4-C5 ('keeps the diaphragm alive'); descends vertically on the anterior surface of the anterior scalene, deep to the prevertebral fascia. Injury during posterior-triangle or supraclavicular dissection causes hemidiaphragm paralysis — keep dissection superficial to prevertebral fascia.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cervical-plexus",
+      "label": "Cervical Plexus",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "Sensory (C1-C4) plexus emerging at the posterior border of mid-SCM (Erb's point); gives great auricular, lesser occipital, transverse cervical and supraclavicular nerves plus the motor ansa cervicalis. Its cutaneous branches are commonly sacrificed in neck dissection, numbing the auricle/neck skin.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "great-auricular-nerve",
+      "label": "Great Auricular Nerve",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "Largest ascending branch of the cervical plexus (C2-C3); curves around the posterior border of SCM to run superficial to it toward the parotid/auricle. A reliable landmark for the external jugular vein and for the nerve graft in facial reanimation; sacrifice numbs the lower ear lobule.",
+      "sources": [
+        "Netter Atlas of Human Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cervical-sympathetic-chain",
+      "label": "Cervical Sympathetic Chain",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "Paravertebral chain of superior, middle and inferior (stellate) ganglia lying on longus colli, deep to the prevertebral/carotid sheath — medial and posterior to the carotid. Injury produces Horner syndrome (ptosis, miosis, anhidrosis); can be mistaken for the vagus in a parapharyngeal/retrostyloid dissection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "sympathetic trunk"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "brachial-plexus",
+      "label": "Brachial Plexus",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "C5-T1 roots emerging between the anterior and middle scalenes and traversing the subclavian triangle deep to the prevertebral fascia. Encountered at the floor of a level V/Vb dissection — kept safe by not violating the prevertebral fascia.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "thoracic-duct",
+      "label": "Thoracic Duct",
+      "type": "vessel",
+      "subspecialty": "hn_onc",
+      "detail": "Terminates in the left venous angle (junction of internal jugular and subclavian veins) at the base of level IV; a smaller right lymphatic duct exists on the right. Injury during lower-neck dissection causes a chyle leak — inspect and ligate; manage with low-fat/MCT diet or re-exploration.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "ansa-cervicalis",
+      "label": "Ansa Cervicalis",
+      "type": "nerve",
+      "subspecialty": "hn_onc",
+      "detail": "Motor loop of the cervical plexus (superior root C1 via hypoglossal, inferior root C2-C3) on the anterolateral carotid sheath; supplies the infrahyoid strap muscles. Its superior root can be traced to help identify the hypoglossal nerve and is a donor for laryngeal reinnervation.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "level-iib-sublevel",
+      "label": "Nodal Sublevel IIb (Submuscular Recess)",
+      "type": "concept",
+      "subspecialty": "hn_onc",
+      "detail": "Upper jugular nodes superolateral (posterosuperior) to the spinal accessory nerve. Clearing IIb requires skeletonizing and retracting CN XI; dissect it only when indicated and avoid nerve traction to reduce shoulder morbidity.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "parotid-superficial-lobe",
+      "label": "Superficial Lobe of Parotid",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "~80% of parotid mass; lies lateral to the facial nerve plane. Superficial parotidectomy removes it while preserving the nerve — the standard operation for benign lateral-lobe tumors such as pleomorphic adenoma.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Lateral lobe"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "parotid-deep-lobe",
+      "label": "Deep Lobe of Parotid",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Portion medial to the facial nerve plane, adjacent to the retromandibular vein and parapharyngeal space. Deep-lobe tumors can present as a dumbbell parapharyngeal mass and require total parotidectomy with facial nerve dissection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Medial lobe"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "stensens-duct",
+      "label": "Stensen's Duct (Parotid Duct)",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Surface landmark: runs along a line from the mid-tragus to the mid-philtrum (middle third of that line). Pierces the buccinator to open opposite the maxillary second molar; buccal branch of VII runs parallel to it.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Parotid duct"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "retromandibular-vein",
+      "label": "Retromandibular Vein",
+      "type": "vessel",
+      "subspecialty": "hn_onc",
+      "detail": "Formed by superficial temporal + maxillary veins within the gland. Lies just deep to the facial nerve — a reliable DEEP landmark for the nerve trunk and its divisions; the temporofacial/cervicofacial split lies lateral to it.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Posterior facial vein"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "accessory-parotid",
+      "label": "Accessory Parotid",
+      "type": "anatomy",
+      "subspecialty": "hn_onc",
+      "detail": "Detached islet of parotid tissue found in ~20% of people, lying on the masseter along Stensen's duct anterior to the main gland. Can be a site of tumor and must be addressed via a facelift/parotid approach, not a direct cheek incision.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Accessory parotid gland"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pes-anserinus",
+      "label": "Pes Anserinus",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "The \"goose's foot\" — the branching point where the extratemporal facial nerve trunk splits into the temporofacial (upper) and cervicofacial (lower) divisions within the parotid, typically ~1.3 cm from the stylomastoid foramen.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Pes anserinus of facial nerve"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "temporofacial-division",
+      "label": "Temporofacial Division (VII)",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Upper division from the pes anserinus giving temporal, zygomatic and (usually) buccal branches. Innervates the periocular and upper-face musculature; the frontal/temporal branch is a danger point over the zygomatic arch.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Upper division of facial nerve"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cervicofacial-division",
+      "label": "Cervicofacial Division (VII)",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Lower division from the pes anserinus giving (buccal), marginal mandibular and cervical branches. Supplies the perioral and platysmal musculature; the marginal mandibular branch it carries is the classic danger nerve of the lower face.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Lower division of facial nerve"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "frontalis",
+      "label": "Frontalis",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Frontal belly of occipitofrontalis; elevates brow and wrinkles forehead. Sole innervation from the temporal (frontal) branch of VII, which has minimal cross-innervation — injury causes permanent brow ptosis.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Frontal belly"
+      ],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "orbicularis-oculi",
+      "label": "Orbicularis Oculi",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Sphincter of the eyelids; closes the eye and drives the blink/lacrimal pump. Innervated by temporal and zygomatic branches of VII — paralysis produces lagophthalmos and exposure keratopathy.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "orbicularis-oris",
+      "label": "Orbicularis Oris",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Sphincter of the mouth; closes and purses the lips for oral competence and speech. Innervated by buccal and marginal mandibular branches of VII.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "zygomaticus-major",
+      "label": "Zygomaticus Major",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Runs from zygomatic bone to the modiolus; principal smile elevator drawing the oral commissure up and back. Key target for smile reanimation (e.g., masseteric-to-buccal transfer). Innervated by zygomatic/buccal branches of VII.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "zygomaticus-minor",
+      "label": "Zygomaticus Minor",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "From zygomatic bone to the upper lip; elevates the lip and deepens the nasolabial fold. Innervated by zygomatic/buccal branches of VII.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "platysma",
+      "label": "Platysma",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Broad subcutaneous sheet of the neck/lower face, part of the SMAS. Depresses the mandible/lower lip and tenses neck skin. Innervated by the cervical branch of VII — its flap is elevated first in parotid and neck surgery.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "depressor-anguli-oris",
+      "label": "Depressor Anguli Oris",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "From the mandible to the modiolus; depresses the oral commissure (frown). Innervated by the marginal mandibular branch of VII — its unopposed contralateral pull causes the classic asymmetry when the marginal branch is injured.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "DAO"
+      ],
+      "abbrev": "DAO",
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "masseter",
+      "label": "Masseter",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Powerful elevator of the mandible (jaw closure) running from the zygomatic arch to the lateral ramus/angle. Innervated by the masseteric nerve from V3 — a common donor for smile reanimation nerve transfers.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "temporalis",
+      "label": "Temporalis",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Fan-shaped muscle from the temporal fossa inserting on the coronoid process; elevates and retracts the mandible. Innervated by deep temporal nerves of V3; its tendon/flap is used in temporalis transfer for dynamic reanimation.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "medial-pterygoid",
+      "label": "Medial Pterygoid",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "From the pterygoid plate/fossa to the medial angle of the mandible; elevates the jaw and mirrors the masseter internally (pterygomasseteric sling). Innervated by V3. Trismus after infiltration reflects its involvement.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "lateral-pterygoid",
+      "label": "Lateral Pterygoid",
+      "type": "anatomy",
+      "subspecialty": "fprs",
+      "detail": "Two heads from the greater wing/lateral pterygoid plate to the condylar neck and TMJ disc; protrudes the mandible and opens/deviates the jaw. Innervated by V3 — its pull displaces high condylar fractures anteromedially.",
+      "sources": [
+        "Gray's Anatomy"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "muscle",
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "marginal-mandibular-branch",
+      "label": "Marginal Mandibular Branch (VII)",
+      "type": "nerve",
+      "subspecialty": "fprs",
+      "detail": "Danger nerve of the lower face. Runs deep to platysma; may dip below the mandibular border (posteriorly it can lie ~1–2 cm below) before crossing the facial vessels. Protected by ligating the facial vein and raising the flap deep to it (Hayes-Martin maneuver). Injury causes lower-lip weakness.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Marginal mandibular nerve",
+        "MMN"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [
+          "facial-reanimation"
+        ],
+        "concepts": [
+          {
+            "module": "facial-reanimation",
+            "concept": "extratemporal"
+          }
+        ],
+        "topics": [
+          "facial-reanimation"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "frey-syndrome",
+      "label": "Frey Syndrome",
+      "type": "pathology",
+      "subspecialty": "hn_onc",
+      "detail": "Gustatory sweating/flushing over the parotid skin after parotidectomy, from aberrant reinnervation of cutaneous sweat glands by auriculotemporal secretomotor fibers. Confirmed with the Minor starch-iodine test; prevented/treated with interposition grafts (SMAS, dermis) and botulinum toxin.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Gustatory sweating",
+        "Auriculotemporal syndrome"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "salivary-gland-neoplasms"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pterygopalatine-fossa",
+      "label": "Pterygopalatine Fossa",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Fat-filled surgical crossroads between the maxillary sinus (anterior), pterygoid plates (posterior) and palatine bone (medial). Contents: V2, the pterygopalatine (sphenopalatine) ganglion and the terminal third of the internal maxillary artery. Communicates with the middle cranial fossa via foramen rotundum, the nasal cavity via the sphenopalatine foramen, the orbit via the inferior orbital fissure, the pterygoid canal (vidian) and the greater/lesser palatine canals — a common tumor spread route (JNA, ACC perineural).",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "PPF"
+      ],
+      "abbrev": null,
+      "structure": "space",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary",
+          "sinonasal-tumors"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "sphenopalatine-ganglion",
+      "label": "Sphenopalatine (Pterygopalatine) Ganglion",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Largest parasympathetic ganglion of the head, suspended from V2 in the pterygopalatine fossa. Parasympathetic secretomotor fibers arrive via the greater superficial petrosal nerve (as part of the vidian nerve) and synapse here to supply the lacrimal gland and nasal/palatine mucosal glands; sympathetic fibers pass through without synapsing.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "pterygopalatine ganglion",
+        "SPG"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "internal-maxillary-artery",
+      "label": "Internal Maxillary Artery",
+      "type": "vessel",
+      "subspecialty": "rhinology",
+      "detail": "Larger terminal branch of the external carotid; its third (pterygopalatine) part enters the fossa and divides into the sphenopalatine, descending palatine, infraorbital and posterior superior alveolar arteries. Proximal control here (or transantral ligation) is a classic maneuver for intractable posterior epistaxis and the feeding supply of a juvenile nasopharyngeal angiofibroma.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "maxillary artery",
+        "IMAX"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht",
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "vidian-nerve",
+      "label": "Vidian Nerve",
+      "type": "nerve",
+      "subspecialty": "rhinology",
+      "detail": "Nerve of the pterygoid canal, formed by the greater superficial petrosal (parasympathetic) plus the deep petrosal (sympathetic) nerves. Runs anteriorly through the vidian canal to reach the sphenopalatine ganglion. Endoscopic vidian neurectomy is used for refractory vasomotor rhinitis; the canal is a reliable landmark to the second genu of the petrous internal carotid artery.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "nerve of pterygoid canal"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "vidian-canal",
+      "label": "Vidian Canal",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Bony canal through the sphenoid base transmitting the vidian nerve and artery; runs from the anterior aspect of foramen lacerum to the pterygopalatine fossa. Endoscopically it sits at the floor of the sphenoid sinus and points to the petrous ICA — a key skull-base drilling landmark.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "pterygoid canal"
+      ],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "foramen-lacerum",
+      "label": "Foramen Lacerum",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Cartilage-filled gap at the petrous apex–sphenoid junction; the internal carotid artery crosses its superior surface (does not truly pass through it) as it transitions from the petrous to the cavernous segment. The vidian canal opens onto its anterior margin, making it an ICA landmark in expanded endonasal approaches.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "foramen",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "posterior-ethmoidal-artery",
+      "label": "Posterior Ethmoidal Artery",
+      "type": "vessel",
+      "subspecialty": "rhinology",
+      "detail": "Branch of the ophthalmic artery crossing the skull base ~2–3 mm anterior to the optic canal, roughly 12 mm posterior to the anterior ethmoidal artery. Injury during posterior ethmoidectomy risks retraction into the orbit and retrobulbar hematoma; it lies closer to the optic nerve than the AEA, so posterior dissection here demands caution.",
+      "sources": [
+        "Stammberger Functional Endoscopic Sinus Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "PEA"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "crs-polyps-afrs-biologics",
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "onodi-cell",
+      "label": "Onodi Cell",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "A posterior ethmoid cell that pneumatizes superolaterally over/above the sphenoid sinus. Pearl: when present, the optic nerve and internal carotid artery are intimately related to (and may dehisce into) the Onodi cell rather than the sphenoid — unrecognized, it is a classic cause of optic-nerve injury during posterior ethmoidectomy. Always identify it on preoperative CT.",
+      "sources": [
+        "Stammberger Functional Endoscopic Sinus Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "sphenoethmoidal cell"
+      ],
+      "abbrev": null,
+      "structure": "space",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "crs-polyps-afrs-biologics"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "keros-classification",
+      "label": "Keros Classification",
+      "type": "concept",
+      "subspecialty": "rhinology",
+      "detail": "Grades the depth of the olfactory fossa by the vertical height of the lateral lamella of the cribriform plate: Keros I 1–3 mm, II 4–7 mm, III 8–16 mm. A deeper fossa (Keros III) and a thin lateral lamella carry the highest risk of iatrogenic CSF leak/skull-base injury during ethmoidectomy; asymmetry between sides is an added danger sign.",
+      "sources": [
+        "Stammberger Functional Endoscopic Sinus Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "Keros grade"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "csf-rhinorrhea-encephalocele",
+          "crs-polyps-afrs-biologics"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "crista-ethmoidalis",
+      "label": "Crista Ethmoidalis",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Small bony crest of the perpendicular process of the palatine bone, located just anterior to the sphenopalatine foramen. It is the constant surgical landmark for identifying and ligating/cauterizing the sphenopalatine artery as it exits onto the lateral nasal wall.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "ethmoidal crest"
+      ],
+      "abbrev": null,
+      "structure": "bone",
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cavernous-sinus",
+      "label": "Cavernous Sinus",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Paired dural venous sinus lateral to the sphenoid sinus and sella. Within its lumen run the internal carotid artery and abducens nerve (CN VI — the only cranial nerve that travels free within the sinus, adjacent to the ICA); its lateral wall carries CN III, IV, V1 and V2 in a superior-to-inferior order. Cavernous sinus thrombosis is a dreaded complication of sphenoid/facial infection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "space",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications",
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "orbital-apex",
+      "label": "Orbital Apex",
+      "type": "anatomy",
+      "subspecialty": "rhinology",
+      "detail": "Convergence of the optic canal and superior orbital fissure at the posterior orbit, with the annulus of Zinn as the common origin of the rectus muscles. Orbital apex syndrome = superior orbital fissure syndrome (CN III, IV, V1, VI) plus optic-nerve (CN II) involvement; can complicate invasive fungal sinusitis or posterior ethmoid/sphenoid disease.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": "space",
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "ophthalmic-artery",
+      "label": "Ophthalmic Artery",
+      "type": "vessel",
+      "subspecialty": "rhinology",
+      "detail": "First intradural branch of the internal carotid; enters the orbit through the optic canal (inferolateral to the nerve) and gives the anterior and posterior ethmoidal arteries that supply the anterior skull base. This ICA–ECA anastomosis is why external carotid embolization for epistaxis carries a risk of retrograde central retinal artery occlusion.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht",
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "posterior-septal-artery",
+      "label": "Posterior Septal Artery",
+      "type": "vessel",
+      "subspecialty": "rhinology",
+      "detail": "Terminal septal branch of the sphenopalatine artery that crosses the anterior face of the sphenoid (between the sinus ostium and the choana) to supply the posterior nasal septum. It is the vascular pedicle of the Hadad-Bassagasteguy nasoseptal flap — the workhorse reconstruction for endoscopic skull-base defects; its pedicle must be preserved and the flap raised before sphenoidotomy in planned skull-base cases.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "posterior septal branch"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "nasal-sinus",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary",
+          "csf-rhinorrhea-encephalocele"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "retrobulbar-hematoma",
+      "label": "Retrobulbar Hematoma",
+      "type": "pathology",
+      "subspecialty": "rhinology",
+      "detail": "Orbital compartment syndrome from bleeding (classically a retracted, transected anterior/posterior ethmoidal artery) during endoscopic sinus surgery. Presents with proptosis, tense orbit, decreasing vision and a relative afferent pupillary defect; a surgical emergency requiring urgent lateral canthotomy and inferior cantholysis to prevent permanent blindness.",
+      "sources": [
+        "Stammberger Functional Endoscopic Sinus Surgery"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "retro-orbital hematoma",
+        "orbital hematoma"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": null,
+      "laterality": null,
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "orbital-intracranial-sinus-complications"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "common-carotid-artery",
+      "label": "Common Carotid Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Right arises from brachiocephalic trunk, left directly from the aortic arch. Ascends within the carotid sheath with no branches until it bifurcates near the superior border of the thyroid cartilage (C3–C4). Digital compression against the carotid (Chassaignac) tubercle of C6 is a temporizing maneuver for control.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "CCA"
+      ],
+      "abbrev": "CCA",
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "paraganglioma-vascular"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "carotid-bifurcation",
+      "label": "Carotid Bifurcation",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Division of the common carotid into internal and external carotid arteries, typically at C3–C4 (upper thyroid cartilage). Site of the carotid body (chemoreceptor, origin of carotid body paraganglioma splaying the vessels in a 'lyre sign') and carotid sinus (baroreceptor). Key landmark in neck dissection and carotid endarterectomy.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "paraganglioma-vascular"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "external-carotid-artery",
+      "label": "External Carotid Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Anteromedial branch of the bifurcation supplying the face, scalp, and neck via eight branches. Distinguished from the ICA by its cervical branches (the ICA has none in the neck). Ligation for hemorrhage should be placed distal to the superior thyroid artery to reduce collateral steal and preserve flow to distal branches.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "ECA"
+      ],
+      "abbrev": "ECA",
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "paraganglioma-vascular"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "ascending-pharyngeal-artery",
+      "label": "Ascending Pharyngeal Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Small posteromedial ECA branch (the only medial branch), often arising near the bifurcation. Supplies the pharynx, prevertebral muscles, and meninges; a frequent feeder of jugulotympanic paragangliomas and a target during preoperative embolization.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "paraganglioma-vascular"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "lingual-artery",
+      "label": "Lingual Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Second anterior ECA branch supplying the tongue and floor of mouth. Passes deep to hyoglossus; loops within the submandibular triangle where it is a landmark in transoral base-of-tongue surgery (TORS) and can be ligated for tongue hemorrhage. Hyoglossus separates the artery (deep) from the hypoglossal nerve (superficial).",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "oral-cavity-cancer"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "facial-artery",
+      "label": "Facial Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Third anterior ECA branch that grooves the posterior submandibular gland before crossing the mandibular border anterior to the masseter (palpable pulse). Ligated during level I neck dissection and submandibular gland excision; marks the facial vein and the marginal mandibular nerve, which lies superficial to it.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "external maxillary artery"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "occipital-artery",
+      "label": "Occipital Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Posterior ECA branch supplying the posterior scalp. Crosses superficial to the internal carotid and internal jugular and gives the sternocleidomastoid branch, under which the hypoglossal nerve loops — a bleeding pitfall when mobilizing CN XII in upper neck dissection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "posterior-auricular-artery",
+      "label": "Posterior Auricular Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Small posterior ECA branch supplying the auricle, postauricular scalp, and (via the stylomastoid branch) the facial nerve within the fallopian canal. Basis of postauricular/retroauricular flaps and a source of bleeding during mastoid and parotid surgery.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "external-ear",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "local-flaps-mohs-reconstruction"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "maxillary-artery",
+      "label": "Maxillary Artery (Internal Maxillary)",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Larger terminal ECA branch arising deep to the mandibular neck in the infratemporal fossa. Passes into the pterygopalatine fossa and supplies the deep face, nasal cavity, and dura. Principal artery of posterior epistaxis (via sphenopalatine) and a control point in transantral ligation and JNA surgery.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "internal maxillary artery",
+        "IMAX"
+      ],
+      "abbrev": "IMAX",
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "superficial-temporal-artery",
+      "label": "Superficial Temporal Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Smaller terminal ECA branch ascending anterior to the tragus (palpable preauricular pulse) into the temporoparietal scalp. Biopsy target in giant cell arteritis, axis of the temporoparietal fascia flap, and a landmark exiting the superior parotid.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "STA"
+      ],
+      "abbrev": "STA",
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "local-flaps-mohs-reconstruction"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cervical-ica-segment",
+      "label": "ICA — Cervical Segment",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "C1 segment from the bifurcation to the carotid canal, giving no branches. Lies in the carotid sheath; a medialized (retropharyngeal/aberrant) course is a hazard during tonsillectomy and adenoidectomy.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "paraganglioma-vascular"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "petrous-ica-segment",
+      "label": "ICA — Petrous Segment",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "C2 segment traversing the carotid canal of the temporal bone with vertical then horizontal (genu) portions. Lies medial to the eustachian tube and anteroinferior to the cochlea — at risk in petrous apex and infratemporal/skull-base approaches.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "temporal-bone-trauma"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "cavernous-ica-segment",
+      "label": "ICA — Cavernous Segment",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "C4 segment coursing through the cavernous sinus in an S-shaped siphon, adjacent to CN III, IV, V1, V2, and VI. A key landmark and danger point lateral to the sphenoid sinus in endoscopic skull-base surgery; dehiscent bony coverage is common.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "carotid siphon"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "supraclinoid-ica-segment",
+      "label": "ICA — Supraclinoid Segment",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "C6–C7 intradural segment above the anterior clinoid giving the ophthalmic artery (source of the ethmoidal arteries), then terminating into the anterior and middle cerebral arteries. Ophthalmic origin explains why posterior epistaxis from ethmoidal arteries arises from the ICA, not the ECA.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "skull-base",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "anterior-skull-base-pituitary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "inferior-alveolar-artery",
+      "label": "Inferior Alveolar Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "First-part (mandibular) branch of the maxillary artery entering the mandibular foramen with the inferior alveolar nerve to supply the lower teeth. A source of brisk bleeding in mandibular osteotomy, sagittal split, and body/angle fracture fixation.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "facial-trauma-mandible-midface"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "descending-palatine-artery",
+      "label": "Descending Palatine Artery",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Pterygopalatine branch of the maxillary artery descending the greater palatine canal to become the greater palatine artery at the hard palate. Encountered in Le Fort I down-fracture and cleft/palatal surgery; supplies the palate and contributes to the nasal septal (Kiesselbach) plexus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "greater palatine artery"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "external-jugular-vein",
+      "label": "External Jugular Vein",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Formed by the posterior division of the retromandibular vein and the posterior auricular vein; crosses the sternocleidomastoid superficially to drain into the subclavian vein. Superficial landmark encountered raising a cervical skin flap; drains the scalp and face.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "EJV"
+      ],
+      "abbrev": "EJV",
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "facial-vein",
+      "label": "Facial Vein",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Drains the anterior face; joins the anterior division of the retromandibular vein to form the common facial vein, which empties into the internal jugular. Communicates with the cavernous sinus via the ophthalmic veins (valveless), a route for retrograde facial-infection spread. Its crossing of the mandible marks the marginal mandibular nerve.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [
+        "common facial vein"
+      ],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "neck-dissection-unknown-primary"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "lingual-vein",
+      "label": "Lingual Vein",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Drains the tongue and floor of mouth; the accompanying vein (vena comitans of the hypoglossal nerve) and dorsal lingual veins empty into the internal jugular. Encountered during glossectomy and floor-of-mouth resection.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "oral-cavity-cancer"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "pterygoid-plexus",
+      "label": "Pterygoid Venous Plexus",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Valveless venous network in the infratemporal fossa around the lateral pterygoid, draining to the maxillary/retromandibular vein and communicating with the cavernous sinus. A source of troublesome venous bleeding in infratemporal fossa and maxillary surgery and a route of infection to the cavernous sinus.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "facial-skeleton",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "epistaxis-hht"
+        ]
+      },
+      "review": false
+    },
+    {
+      "id": "thyrocervical-trunk",
+      "label": "Thyrocervical Trunk",
+      "type": "vessel",
+      "subspecialty": "fundamentals",
+      "detail": "Short branch of the first part of the subclavian artery giving the inferior thyroid, transverse cervical, and suprascapular arteries. Origin landmark at the medial supraclavicular fossa in low neck dissection and central compartment surgery.",
+      "sources": [
+        "Cummings Otolaryngology"
+      ],
+      "corrections": [],
+      "leitner": {
+        "box": 1,
+        "nextReview": "2026-07-02"
+      },
+      "aliases": [],
+      "abbrev": null,
+      "structure": null,
+      "region": "neck",
+      "laterality": "paired",
+      "oksat": {
+        "modules": [],
+        "concepts": [],
+        "topics": [
+          "hyperparathyroidism"
+        ]
+      },
+      "review": false
     }
   ],
   "edges": [
@@ -25004,6 +28491,1665 @@
       "target": "level-iv-neck",
       "type": "continuous_with",
       "direction": "superior"
+    },
+    {
+      "source": "olfactory-nerve",
+      "target": "cribriform-plate",
+      "type": "passes_through",
+      "label": "fila olfactoria",
+      "direction": "superior"
+    },
+    {
+      "source": "optic-nerve",
+      "target": "optic-canal",
+      "type": "passes_through"
+    },
+    {
+      "source": "oculomotor-nerve",
+      "target": "superior-orbital-fissure",
+      "type": "passes_through"
+    },
+    {
+      "source": "trochlear-nerve",
+      "target": "superior-orbital-fissure",
+      "type": "passes_through"
+    },
+    {
+      "source": "abducens-nerve",
+      "target": "superior-orbital-fissure",
+      "type": "passes_through"
+    },
+    {
+      "source": "ophthalmic-nerve",
+      "target": "trigeminal-nerve",
+      "type": "branches_from",
+      "label": "V1"
+    },
+    {
+      "source": "maxillary-nerve",
+      "target": "trigeminal-nerve",
+      "type": "branches_from",
+      "label": "V2"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "trigeminal-nerve",
+      "type": "branches_from",
+      "label": "V3"
+    },
+    {
+      "source": "ophthalmic-nerve",
+      "target": "superior-orbital-fissure",
+      "type": "passes_through"
+    },
+    {
+      "source": "maxillary-nerve",
+      "target": "foramen-rotundum",
+      "type": "passes_through"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "foramen-ovale",
+      "type": "passes_through"
+    },
+    {
+      "source": "inferior-alveolar-nerve",
+      "target": "mandibular-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "lingual-nerve",
+      "target": "mandibular-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "auriculotemporal-nerve",
+      "target": "mandibular-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "infraorbital-nerve",
+      "target": "maxillary-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "greater-palatine-nerve",
+      "target": "maxillary-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "lesser-palatine-nerve",
+      "target": "maxillary-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "chorda-tympani",
+      "target": "lingual-nerve",
+      "type": "continuous_with",
+      "label": "taste + parasympathetic"
+    },
+    {
+      "source": "lingual-nerve",
+      "target": "submandibular-space",
+      "type": "landmark_for",
+      "label": "crosses submandibular duct"
+    },
+    {
+      "source": "auriculotemporal-nerve",
+      "target": "parotid-gland",
+      "type": "landmark_for",
+      "label": "Frey syndrome"
+    },
+    {
+      "source": "maxillary-nerve",
+      "target": "pterygopalatine-ganglion",
+      "type": "landmark_for",
+      "label": "ganglion suspended from V2"
+    },
+    {
+      "source": "temporal-branch-facial-nerve",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "zygomatic-branch-facial-nerve",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "buccal-branch-facial-nerve",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "marginal-mandibular-nerve",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "cervical-branch-facial-nerve",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "cervical-branch-facial-nerve",
+      "target": "platysma-muscle",
+      "type": "innervates"
+    },
+    {
+      "source": "marginal-mandibular-nerve",
+      "target": "submandibular-space",
+      "type": "landmark_for",
+      "label": "protect in submandibular approach",
+      "direction": "inferior"
+    },
+    {
+      "source": "tragal-pointer",
+      "target": "facial-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "tympanomastoid-suture",
+      "target": "facial-nerve",
+      "type": "landmark_for",
+      "label": "most reliable"
+    },
+    {
+      "source": "posterior-belly-digastric",
+      "target": "facial-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "pitanguy-line",
+      "target": "temporal-branch-facial-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "greater-superficial-petrosal",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "greater-superficial-petrosal",
+      "target": "geniculate-ganglion",
+      "type": "arises_from"
+    },
+    {
+      "source": "greater-superficial-petrosal",
+      "target": "pterygopalatine-ganglion",
+      "type": "continuous_with",
+      "label": "parasympathetic root"
+    },
+    {
+      "source": "chorda-tympani",
+      "target": "facial-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "glossopharyngeal-nerve",
+      "target": "jugular-foramen",
+      "type": "passes_through"
+    },
+    {
+      "source": "jacobson-nerve",
+      "target": "glossopharyngeal-nerve",
+      "type": "branches_from",
+      "label": "tympanic branch"
+    },
+    {
+      "source": "otic-ganglion",
+      "target": "glossopharyngeal-nerve",
+      "type": "continuous_with",
+      "label": "lesser petrosal"
+    },
+    {
+      "source": "otic-ganglion",
+      "target": "parotid-gland",
+      "type": "innervates",
+      "label": "secretomotor"
+    },
+    {
+      "source": "otic-ganglion",
+      "target": "auriculotemporal-nerve",
+      "type": "continuous_with",
+      "label": "postganglionic hitchhike"
+    },
+    {
+      "source": "vagus-nerve",
+      "target": "jugular-foramen",
+      "type": "passes_through"
+    },
+    {
+      "source": "superior-laryngeal-nerve",
+      "target": "vagus-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "external-branch-superior-laryngeal-nerve",
+      "target": "superior-laryngeal-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "internal-branch-superior-laryngeal-nerve",
+      "target": "superior-laryngeal-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "recurrent-laryngeal-nerve",
+      "target": "vagus-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "recurrent-laryngeal-nerve",
+      "target": "berry-ligament",
+      "type": "landmark_for",
+      "label": "at ligament of Berry"
+    },
+    {
+      "source": "accessory-nerve",
+      "target": "jugular-foramen",
+      "type": "passes_through"
+    },
+    {
+      "source": "accessory-nerve",
+      "target": "level-v-neck",
+      "type": "landmark_for",
+      "label": "most superficial in posterior triangle"
+    },
+    {
+      "source": "accessory-nerve",
+      "target": "level-ii-neck",
+      "type": "landmark_for"
+    },
+    {
+      "source": "hypoglossal-nerve",
+      "target": "hypoglossal-canal",
+      "type": "passes_through"
+    },
+    {
+      "source": "hypoglossal-nerve",
+      "target": "posterior-belly-digastric",
+      "type": "landmark_for",
+      "label": "runs deep to it",
+      "direction": "deep"
+    },
+    {
+      "source": "hypoglossal-nerve",
+      "target": "level-i-neck",
+      "type": "landmark_for"
+    },
+    {
+      "source": "submandibular-ganglion",
+      "target": "lingual-nerve",
+      "type": "continuous_with",
+      "label": "suspended from lingual nerve"
+    },
+    {
+      "source": "submandibular-ganglion",
+      "target": "submandibular-space",
+      "type": "landmark_for"
+    },
+    {
+      "source": "chorda-tympani",
+      "target": "submandibular-ganglion",
+      "type": "continuous_with",
+      "label": "preganglionic parasympathetic"
+    },
+    {
+      "source": "sln-internal-branch",
+      "target": "superior-laryngeal-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "sln-external-branch",
+      "target": "superior-laryngeal-nerve",
+      "type": "branches_from"
+    },
+    {
+      "source": "sln-external-branch",
+      "target": "cricothyroid-muscle",
+      "type": "innervates",
+      "label": "only intrinsic muscle not RLN-supplied"
+    },
+    {
+      "source": "sln-internal-branch",
+      "target": "thyrohyoid-membrane",
+      "type": "passes_through",
+      "label": "with superior laryngeal vessels",
+      "direction": "anterior"
+    },
+    {
+      "source": "non-recurrent-laryngeal-nerve",
+      "target": "recurrent-laryngeal-nerve",
+      "type": "differentiates_from",
+      "label": "right-sided, arteria lusoria"
+    },
+    {
+      "source": "zuckerkandl-tubercle",
+      "target": "recurrent-laryngeal-nerve",
+      "type": "landmark_for",
+      "label": "points to the RLN",
+      "direction": "medial"
+    },
+    {
+      "source": "tracheoesophageal-groove",
+      "target": "recurrent-laryngeal-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "recurrent-laryngeal-nerve",
+      "target": "tracheoesophageal-groove",
+      "type": "contained_in"
+    },
+    {
+      "source": "inferior-thyroid-artery",
+      "target": "superior-parathyroid-gland",
+      "type": "supplies"
+    },
+    {
+      "source": "inferior-thyroid-artery",
+      "target": "inferior-parathyroid-gland",
+      "type": "supplies"
+    },
+    {
+      "source": "superior-thyroid-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from"
+    },
+    {
+      "source": "inferior-thyroid-artery",
+      "target": "thyrocervical-trunk",
+      "type": "branches_from"
+    },
+    {
+      "source": "superior-thyroid-artery",
+      "target": "sln-external-branch",
+      "type": "landmark_for",
+      "label": "EBSLN at risk during pedicle ligation"
+    },
+    {
+      "source": "superior-thyroid-vein",
+      "target": "internal-jugular-vein",
+      "type": "drains_to"
+    },
+    {
+      "source": "middle-thyroid-vein",
+      "target": "internal-jugular-vein",
+      "type": "drains_to"
+    },
+    {
+      "source": "superior-thyroid-vein",
+      "target": "thyroid-gland",
+      "type": "drains_to"
+    },
+    {
+      "source": "middle-thyroid-vein",
+      "target": "thyroid-gland",
+      "type": "drains_to"
+    },
+    {
+      "source": "inferior-thyroid-vein",
+      "target": "thyroid-gland",
+      "type": "drains_to"
+    },
+    {
+      "source": "thyroid-isthmus",
+      "target": "thyroid-gland",
+      "type": "part_of"
+    },
+    {
+      "source": "pyramidal-lobe",
+      "target": "thyroid-gland",
+      "type": "part_of",
+      "direction": "superior"
+    },
+    {
+      "source": "zuckerkandl-tubercle",
+      "target": "thyroid-gland",
+      "type": "part_of",
+      "direction": "posterior"
+    },
+    {
+      "source": "berry-ligament",
+      "target": "cricoid-cartilage",
+      "type": "attaches_to",
+      "direction": "medial"
+    },
+    {
+      "source": "berry-ligament",
+      "target": "trachea",
+      "type": "attaches_to"
+    },
+    {
+      "source": "thyroid-gland",
+      "target": "trachea",
+      "type": "contained_in",
+      "label": "invested by pretracheal fascia"
+    },
+    {
+      "source": "superior-parathyroid-gland",
+      "target": "thyroid-gland",
+      "type": "attaches_to",
+      "direction": "posterior"
+    },
+    {
+      "source": "inferior-parathyroid-gland",
+      "target": "thyroid-gland",
+      "type": "attaches_to",
+      "direction": "inferior"
+    },
+    {
+      "source": "trachea",
+      "target": "cricoid-cartilage",
+      "type": "continuous_with",
+      "direction": "superior"
+    },
+    {
+      "source": "cricothyroid-membrane",
+      "target": "trachea",
+      "type": "landmark_for",
+      "label": "emergency cricothyrotomy site"
+    },
+    {
+      "source": "thyroid-isthmus",
+      "target": "trachea",
+      "type": "attaches_to",
+      "label": "overlies 2nd-4th rings"
+    },
+    {
+      "source": "submental-triangle",
+      "target": "anterior-triangle-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "anterior-triangle-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "carotid-triangle",
+      "target": "anterior-triangle-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "muscular-triangle",
+      "target": "anterior-triangle-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "occipital-triangle",
+      "target": "posterior-triangle-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "subclavian-triangle",
+      "target": "posterior-triangle-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "anterior-triangle-neck",
+      "target": "mandible",
+      "type": "bounded_by",
+      "label": "inferior border of mandible",
+      "direction": "superior"
+    },
+    {
+      "source": "posterior-triangle-neck",
+      "target": "trapezius-muscle",
+      "type": "bounded_by",
+      "label": "anterior border of trapezius",
+      "direction": "posterior"
+    },
+    {
+      "source": "posterior-triangle-neck",
+      "target": "omohyoid-muscle",
+      "type": "bounded_by",
+      "label": "inferior belly divides it",
+      "direction": "inferior"
+    },
+    {
+      "source": "submental-triangle",
+      "target": "digastric-anterior-belly",
+      "type": "bounded_by",
+      "label": "anterior bellies of digastric",
+      "direction": "lateral"
+    },
+    {
+      "source": "submental-triangle",
+      "target": "hyoid-bone",
+      "type": "bounded_by",
+      "direction": "inferior"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "digastric-anterior-belly",
+      "type": "bounded_by",
+      "direction": "anterior"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "digastric-posterior-belly",
+      "type": "bounded_by",
+      "direction": "posterior"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "mandible",
+      "type": "bounded_by",
+      "direction": "superior"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "lingual-nerve",
+      "type": "landmark_for",
+      "label": "at-risk in gland excision"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "hypoglossal-nerve",
+      "type": "landmark_for",
+      "label": "in floor of triangle"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "marginal-mandibular-nerve",
+      "type": "landmark_for",
+      "label": "overlies triangle"
+    },
+    {
+      "source": "carotid-triangle",
+      "target": "omohyoid-muscle",
+      "type": "bounded_by",
+      "label": "superior belly",
+      "direction": "anterior"
+    },
+    {
+      "source": "carotid-triangle",
+      "target": "digastric-posterior-belly",
+      "type": "bounded_by",
+      "direction": "superior"
+    },
+    {
+      "source": "carotid-triangle",
+      "target": "carotid-sheath",
+      "type": "landmark_for",
+      "label": "exposes great vessels"
+    },
+    {
+      "source": "carotid-triangle",
+      "target": "vagus-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "carotid-triangle",
+      "target": "hypoglossal-nerve",
+      "type": "landmark_for",
+      "label": "crosses ICA/ECA"
+    },
+    {
+      "source": "muscular-triangle",
+      "target": "omohyoid-muscle",
+      "type": "bounded_by",
+      "label": "superior belly",
+      "direction": "superolateral"
+    },
+    {
+      "source": "muscular-triangle",
+      "target": "sternohyoid-muscle",
+      "type": "landmark_for",
+      "label": "straps overlie thyroid"
+    },
+    {
+      "source": "occipital-triangle",
+      "target": "omohyoid-muscle",
+      "type": "bounded_by",
+      "label": "inferior belly",
+      "direction": "inferior"
+    },
+    {
+      "source": "subclavian-triangle",
+      "target": "omohyoid-muscle",
+      "type": "bounded_by",
+      "label": "inferior belly",
+      "direction": "superior"
+    },
+    {
+      "source": "subclavian-triangle",
+      "target": "brachial-plexus",
+      "type": "landmark_for",
+      "label": "in floor"
+    },
+    {
+      "source": "subclavian-triangle",
+      "target": "thoracic-duct",
+      "type": "landmark_for",
+      "label": "terminates on left"
+    },
+    {
+      "source": "ansa-cervicalis",
+      "target": "omohyoid-muscle",
+      "type": "innervates"
+    },
+    {
+      "source": "ansa-cervicalis",
+      "target": "sternohyoid-muscle",
+      "type": "innervates"
+    },
+    {
+      "source": "ansa-cervicalis",
+      "target": "hypoglossal-nerve",
+      "type": "landmark_for",
+      "label": "superior root identifies CN XII"
+    },
+    {
+      "source": "omohyoid-intermediate-tendon",
+      "target": "omohyoid-muscle",
+      "type": "part_of"
+    },
+    {
+      "source": "omohyoid-intermediate-tendon",
+      "target": "internal-jugular-vein",
+      "type": "landmark_for",
+      "label": "crosses IJV; level III/IV boundary"
+    },
+    {
+      "source": "digastric-posterior-belly",
+      "target": "mastoid",
+      "type": "attaches_to",
+      "label": "mastoid notch",
+      "direction": "posterior"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "digastric-posterior-belly",
+      "type": "innervates"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "platysma-muscle",
+      "type": "innervates",
+      "label": "cervical branch"
+    },
+    {
+      "source": "anterior-scalene-muscle",
+      "target": "transverse-process",
+      "type": "attaches_to",
+      "label": "anterior tubercles C3-C6"
+    },
+    {
+      "source": "middle-scalene-muscle",
+      "target": "transverse-process",
+      "type": "attaches_to",
+      "label": "posterior tubercles"
+    },
+    {
+      "source": "anterior-scalene-muscle",
+      "target": "phrenic-nerve",
+      "type": "landmark_for",
+      "label": "phrenic on its anterior surface"
+    },
+    {
+      "source": "anterior-scalene-muscle",
+      "target": "brachial-plexus",
+      "type": "landmark_for",
+      "label": "interscalene triangle",
+      "direction": "lateral"
+    },
+    {
+      "source": "middle-scalene-muscle",
+      "target": "brachial-plexus",
+      "type": "landmark_for",
+      "label": "interscalene triangle",
+      "direction": "medial"
+    },
+    {
+      "source": "longus-colli-muscle",
+      "target": "cervical-vertebra",
+      "type": "attaches_to",
+      "label": "anterolateral vertebral bodies"
+    },
+    {
+      "source": "longus-colli-muscle",
+      "target": "cervical-sympathetic-chain",
+      "type": "landmark_for",
+      "label": "chain lies on longus colli — Horner risk"
+    },
+    {
+      "source": "great-auricular-nerve",
+      "target": "cervical-plexus",
+      "type": "branches_from"
+    },
+    {
+      "source": "vagus-nerve",
+      "target": "carotid-sheath",
+      "type": "contained_in"
+    },
+    {
+      "source": "lingual-nerve",
+      "target": "submandibular-triangle",
+      "type": "contained_in"
+    },
+    {
+      "source": "phrenic-nerve",
+      "target": "anterior-scalene-muscle",
+      "type": "landmark_for",
+      "label": "descends on anterior scalene"
+    },
+    {
+      "source": "submental-triangle",
+      "target": "level-i-neck",
+      "type": "part_of",
+      "label": "sublevel IA"
+    },
+    {
+      "source": "submandibular-triangle",
+      "target": "level-i-neck",
+      "type": "part_of",
+      "label": "sublevel IB"
+    },
+    {
+      "source": "level-i-neck",
+      "target": "marginal-mandibular-nerve",
+      "type": "landmark_for",
+      "label": "protect in level I dissection"
+    },
+    {
+      "source": "digastric-posterior-belly",
+      "target": "level-ii-neck",
+      "type": "landmark_for",
+      "label": "upper limit of level II"
+    },
+    {
+      "source": "omohyoid-intermediate-tendon",
+      "target": "level-iv-neck",
+      "type": "landmark_for",
+      "label": "III/IV boundary"
+    },
+    {
+      "source": "thoracic-duct",
+      "target": "level-iv-neck",
+      "type": "landmark_for",
+      "label": "chyle leak risk",
+      "direction": "left"
+    },
+    {
+      "source": "posterior-triangle-neck",
+      "target": "level-v-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "level-v-neck",
+      "target": "trapezius-muscle",
+      "type": "bounded_by",
+      "direction": "posterior"
+    },
+    {
+      "source": "level-vi-neck",
+      "target": "recurrent-laryngeal-nerve",
+      "type": "landmark_for",
+      "label": "central compartment"
+    },
+    {
+      "source": "level-vi-neck",
+      "target": "carotid-sheath",
+      "type": "bounded_by",
+      "direction": "lateral"
+    },
+    {
+      "source": "level-iib-sublevel",
+      "target": "level-ii-neck",
+      "type": "part_of"
+    },
+    {
+      "source": "parotid-superficial-lobe",
+      "target": "parotid-gland",
+      "type": "part_of",
+      "label": "superficial lobe",
+      "direction": "superficial"
+    },
+    {
+      "source": "parotid-deep-lobe",
+      "target": "parotid-gland",
+      "type": "part_of",
+      "label": "deep lobe",
+      "direction": "deep"
+    },
+    {
+      "source": "accessory-parotid",
+      "target": "parotid-gland",
+      "type": "part_of",
+      "label": "accessory tissue",
+      "direction": "anterior"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "parotid-gland",
+      "type": "contained_in",
+      "label": "surgical plane splitting lobes"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "parotid-superficial-lobe",
+      "type": "landmark_for",
+      "label": "defines superficial lobe",
+      "direction": "deep"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "parotid-deep-lobe",
+      "type": "landmark_for",
+      "label": "defines deep lobe",
+      "direction": "superficial"
+    },
+    {
+      "source": "stensens-duct",
+      "target": "parotid-gland",
+      "type": "contained_in",
+      "label": "drains gland",
+      "direction": "anterior"
+    },
+    {
+      "source": "stensens-duct",
+      "target": "buccinator",
+      "type": "landmark_for",
+      "label": "pierces to open at 2nd molar"
+    },
+    {
+      "source": "retromandibular-vein",
+      "target": "parotid-gland",
+      "type": "contained_in",
+      "direction": "deep"
+    },
+    {
+      "source": "retromandibular-vein",
+      "target": "facial-nerve",
+      "type": "landmark_for",
+      "label": "deep landmark for trunk/divisions",
+      "direction": "deep"
+    },
+    {
+      "source": "styloid-process",
+      "target": "facial-nerve",
+      "type": "landmark_for",
+      "label": "nerve is lateral to styloid",
+      "direction": "lateral"
+    },
+    {
+      "source": "pes-anserinus",
+      "target": "facial-nerve",
+      "type": "landmark_for",
+      "label": "trunk bifurcation"
+    },
+    {
+      "source": "temporofacial-division",
+      "target": "facial-nerve",
+      "type": "branches_from",
+      "label": "upper division at pes",
+      "direction": "superior"
+    },
+    {
+      "source": "cervicofacial-division",
+      "target": "facial-nerve",
+      "type": "branches_from",
+      "label": "lower division at pes",
+      "direction": "inferior"
+    },
+    {
+      "source": "marginal-mandibular-branch",
+      "target": "cervicofacial-division",
+      "type": "branches_from",
+      "direction": "inferior"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "frontalis",
+      "type": "innervates",
+      "label": "temporal branch"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "orbicularis-oculi",
+      "type": "innervates",
+      "label": "temporal/zygomatic"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "orbicularis-oris",
+      "type": "innervates",
+      "label": "buccal/marginal"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "zygomaticus-major",
+      "type": "innervates",
+      "label": "zygomatic/buccal"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "zygomaticus-minor",
+      "type": "innervates",
+      "label": "zygomatic/buccal"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "buccinator",
+      "type": "innervates",
+      "label": "buccal branch"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "platysma",
+      "type": "innervates",
+      "label": "cervical branch"
+    },
+    {
+      "source": "facial-nerve",
+      "target": "depressor-anguli-oris",
+      "type": "innervates",
+      "label": "marginal mandibular"
+    },
+    {
+      "source": "temporofacial-division",
+      "target": "frontalis",
+      "type": "innervates"
+    },
+    {
+      "source": "temporofacial-division",
+      "target": "orbicularis-oculi",
+      "type": "innervates"
+    },
+    {
+      "source": "cervicofacial-division",
+      "target": "platysma",
+      "type": "innervates"
+    },
+    {
+      "source": "cervicofacial-division",
+      "target": "orbicularis-oris",
+      "type": "innervates"
+    },
+    {
+      "source": "marginal-mandibular-branch",
+      "target": "depressor-anguli-oris",
+      "type": "innervates"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "masseter",
+      "type": "innervates",
+      "label": "masseteric nerve"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "temporalis",
+      "type": "innervates",
+      "label": "deep temporal nerves"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "medial-pterygoid",
+      "type": "innervates"
+    },
+    {
+      "source": "mandibular-nerve",
+      "target": "lateral-pterygoid",
+      "type": "innervates"
+    },
+    {
+      "source": "masseter",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "ramus/angle"
+    },
+    {
+      "source": "masseter",
+      "target": "zygoma",
+      "type": "attaches_to",
+      "label": "zygomatic arch origin"
+    },
+    {
+      "source": "temporalis",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "coronoid process"
+    },
+    {
+      "source": "medial-pterygoid",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "medial angle"
+    },
+    {
+      "source": "lateral-pterygoid",
+      "target": "mandible",
+      "type": "attaches_to",
+      "label": "condylar neck"
+    },
+    {
+      "source": "auriculotemporal-nerve",
+      "target": "parotid-gland",
+      "type": "innervates",
+      "label": "secretomotor (parasympathetic)"
+    },
+    {
+      "source": "frey-syndrome",
+      "target": "auriculotemporal-nerve",
+      "type": "arises_from",
+      "label": "aberrant reinnervation"
+    },
+    {
+      "source": "frey-syndrome",
+      "target": "parotidectomy",
+      "type": "complication_of",
+      "label": "gustatory sweating"
+    },
+    {
+      "source": "great-auricular-nerve",
+      "target": "parotid-gland",
+      "type": "landmark_for",
+      "label": "crosses SCM below gland",
+      "direction": "inferior"
+    },
+    {
+      "source": "maxillary-nerve",
+      "target": "pterygopalatine-fossa",
+      "type": "contained_in"
+    },
+    {
+      "source": "sphenopalatine-ganglion",
+      "target": "pterygopalatine-fossa",
+      "type": "contained_in"
+    },
+    {
+      "source": "internal-maxillary-artery",
+      "target": "pterygopalatine-fossa",
+      "type": "contained_in",
+      "label": "terminal (third) part"
+    },
+    {
+      "source": "sphenopalatine-ganglion",
+      "target": "maxillary-nerve",
+      "type": "suspends",
+      "direction": "inferior"
+    },
+    {
+      "source": "pterygopalatine-fossa",
+      "target": "foramen-rotundum",
+      "type": "continuous_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "pterygopalatine-fossa",
+      "target": "sphenopalatine-foramen",
+      "type": "continuous_with",
+      "direction": "medial"
+    },
+    {
+      "source": "pterygopalatine-fossa",
+      "target": "vidian-canal",
+      "type": "continuous_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "vidian-nerve",
+      "target": "vidian-canal",
+      "type": "passes_through"
+    },
+    {
+      "source": "vidian-canal",
+      "target": "vidian-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "vidian-nerve",
+      "target": "sphenopalatine-ganglion",
+      "type": "continuous_with",
+      "label": "GSP + deep petrosal"
+    },
+    {
+      "source": "vidian-canal",
+      "target": "foramen-lacerum",
+      "type": "continuous_with",
+      "direction": "posterior"
+    },
+    {
+      "source": "vidian-nerve",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for",
+      "label": "points to petrous genu"
+    },
+    {
+      "source": "foramen-lacerum",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for"
+    },
+    {
+      "source": "sphenopalatine-artery",
+      "target": "internal-maxillary-artery",
+      "type": "branches_from",
+      "direction": "medial"
+    },
+    {
+      "source": "ophthalmic-artery",
+      "target": "internal-carotid-artery",
+      "type": "branches_from"
+    },
+    {
+      "source": "internal-maxillary-artery",
+      "target": "epistaxis",
+      "type": "landmark_for",
+      "label": "posterior epistaxis control"
+    },
+    {
+      "source": "anterior-ethmoidal-artery",
+      "target": "ophthalmic-artery",
+      "type": "branches_from"
+    },
+    {
+      "source": "posterior-ethmoidal-artery",
+      "target": "ophthalmic-artery",
+      "type": "branches_from"
+    },
+    {
+      "source": "posterior-ethmoidal-artery",
+      "target": "fovea-ethmoidalis",
+      "type": "passes_through"
+    },
+    {
+      "source": "anterior-ethmoidal-artery",
+      "target": "functional-endoscopic-sinus-surgery",
+      "type": "landmark_for"
+    },
+    {
+      "source": "posterior-ethmoidal-artery",
+      "target": "functional-endoscopic-sinus-surgery",
+      "type": "landmark_for"
+    },
+    {
+      "source": "retrobulbar-hematoma",
+      "target": "functional-endoscopic-sinus-surgery",
+      "type": "complication_of"
+    },
+    {
+      "source": "retrobulbar-hematoma",
+      "target": "anterior-ethmoidal-artery",
+      "type": "arises_from"
+    },
+    {
+      "source": "lamina-papyracea",
+      "target": "retrobulbar-hematoma",
+      "type": "landmark_for",
+      "label": "medial orbital wall breach"
+    },
+    {
+      "source": "onodi-cell",
+      "target": "optic-nerve",
+      "type": "landmark_for"
+    },
+    {
+      "source": "onodi-cell",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for"
+    },
+    {
+      "source": "onodi-cell",
+      "target": "sphenoid-sinus",
+      "type": "continuous_with",
+      "direction": "superior"
+    },
+    {
+      "source": "sphenoid-sinus",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for",
+      "label": "parasellar bulge"
+    },
+    {
+      "source": "sphenoid-sinus",
+      "target": "optic-nerve",
+      "type": "landmark_for",
+      "label": "lateral wall bulge"
+    },
+    {
+      "source": "keros-classification",
+      "target": "cribriform-plate",
+      "type": "landmark_for",
+      "label": "lateral lamella height"
+    },
+    {
+      "source": "keros-classification",
+      "target": "fovea-ethmoidalis",
+      "type": "landmark_for"
+    },
+    {
+      "source": "keros-classification",
+      "target": "csf-rhinorrhea",
+      "type": "staged_with",
+      "label": "iatrogenic CSF-leak risk"
+    },
+    {
+      "source": "crista-ethmoidalis",
+      "target": "sphenopalatine-artery",
+      "type": "landmark_for"
+    },
+    {
+      "source": "crista-ethmoidalis",
+      "target": "sphenopalatine-foramen",
+      "type": "landmark_for",
+      "direction": "anterior"
+    },
+    {
+      "source": "oculomotor-nerve",
+      "target": "cavernous-sinus",
+      "type": "contained_in",
+      "label": "lateral wall"
+    },
+    {
+      "source": "trochlear-nerve",
+      "target": "cavernous-sinus",
+      "type": "contained_in",
+      "label": "lateral wall"
+    },
+    {
+      "source": "ophthalmic-nerve",
+      "target": "cavernous-sinus",
+      "type": "contained_in",
+      "label": "lateral wall"
+    },
+    {
+      "source": "maxillary-nerve",
+      "target": "cavernous-sinus",
+      "type": "contained_in",
+      "label": "lateral wall"
+    },
+    {
+      "source": "abducens-nerve",
+      "target": "cavernous-sinus",
+      "type": "contained_in",
+      "label": "free within lumen"
+    },
+    {
+      "source": "internal-carotid-artery",
+      "target": "cavernous-sinus",
+      "type": "contained_in"
+    },
+    {
+      "source": "cavernous-sinus",
+      "target": "sphenoid-sinus",
+      "type": "bounded_by",
+      "direction": "medial"
+    },
+    {
+      "source": "cavernous-sinus",
+      "target": "superior-orbital-fissure",
+      "type": "continuous_with",
+      "direction": "anterior"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "oculomotor-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "trochlear-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "ophthalmic-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "abducens-nerve",
+      "type": "transmits"
+    },
+    {
+      "source": "optic-canal",
+      "target": "orbital-apex",
+      "type": "part_of"
+    },
+    {
+      "source": "superior-orbital-fissure",
+      "target": "orbital-apex",
+      "type": "part_of"
+    },
+    {
+      "source": "ophthalmic-artery",
+      "target": "optic-canal",
+      "type": "passes_through",
+      "label": "with optic nerve"
+    },
+    {
+      "source": "crista-galli",
+      "target": "anterior-skull-base",
+      "type": "part_of",
+      "direction": "anterior"
+    },
+    {
+      "source": "crista-galli",
+      "target": "cribriform-plate",
+      "type": "landmark_for",
+      "direction": "anterior"
+    },
+    {
+      "source": "olfactory-nerve",
+      "target": "cribriform-plate",
+      "type": "landmark_for"
+    },
+    {
+      "source": "posterior-septal-artery",
+      "target": "sphenopalatine-artery",
+      "type": "branches_from"
+    },
+    {
+      "source": "posterior-septal-artery",
+      "target": "nasoseptal-flap",
+      "type": "supplies",
+      "label": "flap pedicle"
+    },
+    {
+      "source": "posterior-septal-artery",
+      "target": "nasoseptal-flap",
+      "type": "landmark_for"
+    },
+    {
+      "source": "common-carotid-artery",
+      "target": "carotid-bifurcation",
+      "type": "continuous_with",
+      "label": "bifurcates at C3-C4",
+      "direction": "superior"
+    },
+    {
+      "source": "carotid-bifurcation",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for",
+      "label": "ICA lies posterolateral",
+      "direction": "posterior"
+    },
+    {
+      "source": "carotid-bifurcation",
+      "target": "external-carotid-artery",
+      "type": "landmark_for",
+      "label": "ECA lies anteromedial",
+      "direction": "anterior"
+    },
+    {
+      "source": "external-carotid-artery",
+      "target": "common-carotid-artery",
+      "type": "branches_from",
+      "label": "terminal branch",
+      "direction": "anterior"
+    },
+    {
+      "source": "internal-carotid-artery",
+      "target": "common-carotid-artery",
+      "type": "branches_from",
+      "label": "terminal branch",
+      "direction": "posterior"
+    },
+    {
+      "source": "ascending-pharyngeal-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "medial branch",
+      "direction": "medial"
+    },
+    {
+      "source": "lingual-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "2nd anterior branch"
+    },
+    {
+      "source": "facial-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "3rd anterior branch"
+    },
+    {
+      "source": "occipital-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "posterior branch",
+      "direction": "posterior"
+    },
+    {
+      "source": "posterior-auricular-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "posterior branch",
+      "direction": "posterior"
+    },
+    {
+      "source": "maxillary-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "terminal branch",
+      "direction": "anterior"
+    },
+    {
+      "source": "superficial-temporal-artery",
+      "target": "external-carotid-artery",
+      "type": "branches_from",
+      "label": "terminal branch",
+      "direction": "superior"
+    },
+    {
+      "source": "superior-thyroid-artery",
+      "target": "external-carotid-artery",
+      "type": "landmark_for",
+      "label": "ligate ECA distal to this branch to preserve distal flow"
+    },
+    {
+      "source": "ascending-pharyngeal-artery",
+      "target": "nasopharynx",
+      "type": "supplies"
+    },
+    {
+      "source": "lingual-artery",
+      "target": "hypoglossal-nerve",
+      "type": "landmark_for",
+      "label": "artery deep to hyoglossus, CN XII superficial",
+      "direction": "deep"
+    },
+    {
+      "source": "occipital-artery",
+      "target": "hypoglossal-nerve",
+      "type": "landmark_for",
+      "label": "SCM branch loops over CN XII"
+    },
+    {
+      "source": "posterior-auricular-artery",
+      "target": "facial-nerve",
+      "type": "supplies",
+      "label": "stylomastoid branch"
+    },
+    {
+      "source": "superficial-temporal-artery",
+      "target": "parotid-gland",
+      "type": "landmark_for",
+      "label": "exits superior parotid, preauricular pulse",
+      "direction": "superior"
+    },
+    {
+      "source": "cervical-ica-segment",
+      "target": "internal-carotid-artery",
+      "type": "part_of",
+      "label": "C1",
+      "direction": "inferior"
+    },
+    {
+      "source": "petrous-ica-segment",
+      "target": "internal-carotid-artery",
+      "type": "part_of",
+      "label": "C2"
+    },
+    {
+      "source": "cavernous-ica-segment",
+      "target": "internal-carotid-artery",
+      "type": "part_of",
+      "label": "C4"
+    },
+    {
+      "source": "supraclinoid-ica-segment",
+      "target": "internal-carotid-artery",
+      "type": "part_of",
+      "label": "C6-C7",
+      "direction": "superior"
+    },
+    {
+      "source": "petrous-ica-segment",
+      "target": "carotid-canal",
+      "type": "passes_through"
+    },
+    {
+      "source": "cavernous-ica-segment",
+      "target": "cavernous-sinus",
+      "type": "contained_in",
+      "label": "carotid siphon"
+    },
+    {
+      "source": "middle-meningeal-artery",
+      "target": "maxillary-artery",
+      "type": "branches_from",
+      "label": "1st (mandibular) part"
+    },
+    {
+      "source": "inferior-alveolar-artery",
+      "target": "maxillary-artery",
+      "type": "branches_from",
+      "label": "1st (mandibular) part"
+    },
+    {
+      "source": "sphenopalatine-artery",
+      "target": "maxillary-artery",
+      "type": "branches_from",
+      "label": "terminal (pterygopalatine) branch"
+    },
+    {
+      "source": "descending-palatine-artery",
+      "target": "maxillary-artery",
+      "type": "branches_from",
+      "label": "pterygopalatine part",
+      "direction": "inferior"
+    },
+    {
+      "source": "middle-meningeal-artery",
+      "target": "foramen-spinosum",
+      "type": "passes_through"
+    },
+    {
+      "source": "inferior-alveolar-artery",
+      "target": "inferior-alveolar-nerve",
+      "type": "landmark_for",
+      "label": "enters mandibular foramen together"
+    },
+    {
+      "source": "anterior-ethmoidal-artery",
+      "target": "supraclinoid-ica-segment",
+      "type": "branches_from",
+      "label": "via ophthalmic artery (ICA)"
+    },
+    {
+      "source": "posterior-ethmoidal-artery",
+      "target": "supraclinoid-ica-segment",
+      "type": "branches_from",
+      "label": "via ophthalmic artery (ICA)"
+    },
+    {
+      "source": "anterior-ethmoidal-artery",
+      "target": "anterior-skull-base",
+      "type": "landmark_for",
+      "label": "skull-base bleeding danger; may retract into orbit"
+    },
+    {
+      "source": "posterior-ethmoidal-artery",
+      "target": "anterior-skull-base",
+      "type": "landmark_for",
+      "label": "~2-4 mm anterior to optic nerve",
+      "direction": "posterior"
+    },
+    {
+      "source": "retromandibular-vein",
+      "target": "external-jugular-vein",
+      "type": "drains_to",
+      "label": "posterior division",
+      "direction": "inferior"
+    },
+    {
+      "source": "facial-vein",
+      "target": "internal-jugular-vein",
+      "type": "drains_to",
+      "label": "via common facial vein",
+      "direction": "inferior"
+    },
+    {
+      "source": "facial-vein",
+      "target": "cavernous-sinus",
+      "type": "continuous_with",
+      "label": "valveless ophthalmic communication",
+      "direction": "superior"
+    },
+    {
+      "source": "lingual-vein",
+      "target": "internal-jugular-vein",
+      "type": "drains_to",
+      "direction": "inferior"
+    },
+    {
+      "source": "pterygoid-plexus",
+      "target": "retromandibular-vein",
+      "type": "drains_to",
+      "label": "via maxillary vein"
+    },
+    {
+      "source": "pterygoid-plexus",
+      "target": "cavernous-sinus",
+      "type": "continuous_with",
+      "label": "emissary communication (infection route)",
+      "direction": "superior"
+    },
+    {
+      "source": "cavernous-sinus",
+      "target": "sigmoid-sinus",
+      "type": "drains_to",
+      "label": "via superior/inferior petrosal sinuses",
+      "direction": "posterior"
+    },
+    {
+      "source": "cavernous-sinus",
+      "target": "internal-carotid-artery",
+      "type": "landmark_for",
+      "label": "ICA and CN VI traverse the sinus"
+    },
+    {
+      "source": "sigmoid-sinus",
+      "target": "internal-jugular-vein",
+      "type": "drains_to",
+      "label": "via jugular foramen",
+      "direction": "inferior"
+    },
+    {
+      "source": "thyroid-gland",
+      "target": "superior-thyroid-vein",
+      "type": "drains_to",
+      "label": "superior pole",
+      "direction": "superior"
+    },
+    {
+      "source": "thyroid-gland",
+      "target": "middle-thyroid-vein",
+      "type": "drains_to",
+      "label": "lateral",
+      "direction": "lateral"
+    },
+    {
+      "source": "thyroid-gland",
+      "target": "inferior-thyroid-vein",
+      "type": "drains_to",
+      "label": "inferior pole/isthmus",
+      "direction": "inferior"
     }
   ]
 }
