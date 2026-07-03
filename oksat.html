@@ -335,7 +335,8 @@
       function mountAtlas() {
         var loading = document.getElementById('atlas-loading');
         loading.style.display = '';
-        if (cy) { cy.destroy(); cy = null; }
+        // The engine reuses one instance across re-mounts; setLens rebuilds the
+        // elements for the new reviewer/completion, so no destroy is needed.
         var completion = OKSATDB.completionFor(dbCache, atlasReviewer);
         OKSATAtlas.mount(document.getElementById('atlas-cy'), {
           reviewer: atlasReviewer,
@@ -358,7 +359,11 @@
             .then(function () { return loadScript('https://unpkg.com/cose-base@1.0.3/cose-base.js').catch(noop); })
             .then(function () { return loadScript('https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js').catch(noop); }),
           OKSATDB.fetch(),
-          loadScript('js/oksat-atlas.js'),
+          // The Atlas tab now renders through the unified graph engine + study
+          // lens; load them (guarded) alongside the OKSATAtlas mount shim.
+          (window.GraphView ? Promise.resolve() : loadScript('js/graph-view.js'))
+            .then(function () { return (window.GraphLenses && window.GraphLenses.study) ? null : loadScript('js/graph-lens-study.js'); })
+            .then(function () { return (window.OKSATAtlas && OKSATAtlas.mount) ? null : loadScript('js/oksat-atlas.js'); }),
         ]).then(function (r) {
           dbCache = r[1];
           var sel = document.getElementById('atlas-reviewer');
