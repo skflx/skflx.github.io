@@ -72,7 +72,8 @@
   }
 
   /* ---- build cytoscape elements ---- */
-  function buildElements(reviewer, completion) {
+  function buildElements(reviewer, completion, kagIndex) {
+    kagIndex = kagIndex || {};
     var subs = window.OKSAT_SUBSPECIALTIES || {};
     var els = [];
     var usedSubs = {};
@@ -123,6 +124,7 @@
             slug: entry.slug, concept: cKey,
             pct: p.total ? p.answered / p.total : 0,
             done: p.total > 0 && p.answered === p.total,
+            kagNode: (kagIndex[entry.slug + ':' + cKey] || [])[0] || null,
           },
         });
         els.push({ data: { id: 'e:' + dId + ':' + cId, source: (d ? dId : mId), target: cId, kind: 'twig' } });
@@ -167,6 +169,14 @@
     els.push({ data: { id: 'kag', kind: 'kag', label: 'Knowledge Atlas Graph ↗', hue: '#4A9EFF' } });
     Object.keys(usedSubs).forEach(function (subId) {
       els.push({ data: { id: 'e:kag:' + subId, source: 'kag', target: subId, kind: 'ghost' } });
+    });
+
+    /* Concept ↔ KAG: a dashed hop from any concept node that has a matching
+       Knowledge Atlas Graph term (OKSAT → KAG traversal; right-click opens it). */
+    els.slice().forEach(function (el) {
+      if (el.data && el.data.kind === 'concept' && el.data.kagNode) {
+        els.push({ data: { id: 'e:kagc:' + el.data.id, source: el.data.id, target: 'kag', kind: 'ghost' } });
+      }
     });
     return els;
   }
@@ -245,11 +255,13 @@
     var completion = opts.completion || {};
 
     return loadModules().then(function () {
+      var kagIndex = {};
+      function buildWith() {
       var layoutName = 'cose-bilkent';
       try { cytoscape('layout', 'cose-bilkent'); } catch (e) { layoutName = 'cose'; }
       var cy = cytoscape({
         container: container,
-        elements: buildElements(reviewer, completion),
+        elements: buildElements(reviewer, completion, kagIndex),
         style: styleFor(),
         layout: {
           name: layoutName, animate: 'end', animationDuration: 600,
@@ -287,6 +299,15 @@
         }
       });
 
+      /* Right-click / long-press a concept that has a matching Atlas term
+         opens it in the KAG (OKSAT → KAG, node-level). Normal tap still studies. */
+      cy.on('cxttap', 'node', function (e) {
+        var n = e.target;
+        if (n.data('kind') === 'concept' && n.data('kagNode')) {
+          window.location.href = 'kag.html?node=' + encodeURIComponent(n.data('kagNode'));
+        }
+      });
+
       /* Search: highlight matches; Enter zooms to them. */
       if (opts.searchInput) {
         opts.searchInput.addEventListener('input', function () {
@@ -313,6 +334,17 @@
       });
 
       return cy;
+      }
+
+      /* Load the KAG concept index first (if available) so concept nodes know
+         their Atlas counterpart; degrade to no cross-links if it's absent. */
+      if (window.KAGStore && typeof window.KAGStore.fetch === 'function') {
+        return window.KAGStore.fetch().then(function (kg) {
+          try { if (kg) kagIndex = window.KAGStore.reverseConcept(kg); } catch (e) {}
+          return buildWith();
+        });
+      }
+      return buildWith();
     });
   }
 

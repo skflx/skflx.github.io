@@ -61,10 +61,14 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 │   ├── oksat-atlas.js      # Atlas graph view (Cytoscape)
 │   ├── oksat-db.js         # Completion database read/merge/export/push
 │   ├── oksat-ai.js         # Gemini key mgmt + house-style question generation
+│   ├── kag-store.js        # KAG database read/merge/save/download/push (LOCAL WINS)
 │   └── mcq-modules/        # Question banks (one file per module)
 ├── data/oksat-db.json      # Shared per-reviewer completion database (dated entries)
+├── data/kag-graph.json     # Canonical KAG database (term web + structural atlas source)
 ├── kag.html                # Tool: Knowledge Atlas Graph
+├── atlas.html              # Tool: Structural anatomy atlas (filtered view of the KAG)
 ├── kag-extract.html        # Tool: KAG extractor
+├── tools/kag-validate.mjs  # Dev-only KAG shard validator + merger (Node, not shipped)
 ├── cpt-search.html         # Tool: CPT code search
 ├── ascii-editor.html       # Tool: ASCII/Unicode diagram editor
 ├── airway-jeopardy.html    # Tool: Airway Rounds team quiz
@@ -73,6 +77,9 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 ├── oksat-generate.html     # Tool: OKSAT Question Forge (Gemini)
 ├── mcq.html / mcq-study.html  # Redirect stubs to the OKSAT pages
 ├── docs/authoring-oksat.md # How to add / author an OKSAT module
+├── docs/authoring-kag.md   # How to author / enrich KAG nodes + edges (shards + validator)
+├── docs/kag-schema.md      # KAG v2 data model, enums, storage/merge contract
+├── docs/oto-kag-atlas-plan.md  # KAG term web + anatomy atlas master plan
 ├── docs/design-principles.md  # OKSAT design system
 ├── docs/oksat-plan.md      # OKSAT redesign plan / architecture
 ├── images/                 # Profile photo + derived hero/social crops (see images/list.txt)

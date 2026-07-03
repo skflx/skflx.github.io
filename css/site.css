@@ -1,0 +1,188 @@
+/* =============================================================
+   site.css — shared, site-wide design layer for skflx.MD
+   One palette across every tool. Mirrors the mature OKSAT
+   reference (css/oksat.css): the --ok-* tokens, warm cream light +
+   warm dark, light/dark via html[data-theme], token-only components.
+   Theme is read from localStorage 'sk_theme' (same key OKSAT uses)
+   by a pre-paint inline script on each page, with a
+   prefers-color-scheme fallback. Components are prefixed .site-*
+   and consume ONLY tokens, so a retheme is a one-block edit.
+   ============================================================= */
+
+/* ===== TOKENS ===== */
+:root {
+  --ok-radius: 12px;
+  --ok-radius-lg: 14px;
+  --ok-font-display: 'Fraunces', Georgia, serif;
+  --ok-font-body: 'Crimson Pro', Georgia, serif;
+  --ok-font-ui: system-ui, -apple-system, sans-serif;
+}
+
+html[data-theme="light"] {
+  --ok-bg: #FAF6EE;
+  --ok-surface: #FFFFFF;
+  --ok-border: #E8DFD0;
+  --ok-border-soft: #F0E8D7;
+  --ok-text: #2A241D;
+  --ok-text-muted: #6B5F4F;
+  --ok-text-faint: #8A7C66;
+  --ok-accent: #2C5454;
+  --ok-accent-soft: #3D6B6B;
+  --ok-ochre: #9C7A45;
+  --ok-correct: #4F7042;
+  --ok-correct-bg: #EAEFDA;
+  --ok-incorrect: #9A4537;
+  --ok-incorrect-bg: #F4DDD3;
+  --ok-glow: rgba(176, 141, 87, 0.06);
+  --ok-shadow: 0 1px 3px rgba(42, 36, 29, 0.04);
+  --ok-shadow-hover: 0 4px 12px rgba(42, 36, 29, 0.08);
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --ok-bg: #1B1813;
+  --ok-surface: #242019;
+  --ok-border: #3A3226;
+  --ok-border-soft: #2F2920;
+  --ok-text: #F1E7D8;
+  --ok-text-muted: #B6A48D;
+  --ok-text-faint: #8A7C68;
+  --ok-accent: #5FA3A3;
+  --ok-accent-soft: #7FB8B8;
+  --ok-ochre: #D6AC63;
+  --ok-correct: #9FBF7E;
+  --ok-correct-bg: #2A3320;
+  --ok-incorrect: #DD9683;
+  --ok-incorrect-bg: #3A241E;
+  --ok-glow: rgba(214, 172, 99, 0.05);
+  --ok-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --ok-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+/* Fallback for pages that reach paint before data-theme is set. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --ok-bg: #1B1813; --ok-surface: #242019; --ok-border: #3A3226; --ok-border-soft: #2F2920;
+    --ok-text: #F1E7D8; --ok-text-muted: #B6A48D; --ok-text-faint: #8A7C68;
+    --ok-accent: #5FA3A3; --ok-ochre: #D6AC63; --ok-correct: #9FBF7E; --ok-incorrect: #DD9683;
+    --ok-border-soft: #2F2920; --ok-shadow: 0 1px 3px rgba(0,0,0,0.3); --ok-shadow-hover: 0 6px 18px rgba(0,0,0,0.45);
+    color-scheme: dark;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --ok-bg: #FAF6EE; --ok-surface: #FFFFFF; --ok-border: #E8DFD0; --ok-border-soft: #F0E8D7;
+    --ok-text: #2A241D; --ok-text-muted: #6B5F4F; --ok-text-faint: #8A7C66;
+    --ok-accent: #2C5454; --ok-ochre: #9C7A45; --ok-correct: #4F7042; --ok-incorrect: #9A4537;
+    --ok-shadow: 0 1px 3px rgba(42,36,29,0.04); --ok-shadow-hover: 0 4px 12px rgba(42,36,29,0.08);
+    color-scheme: light;
+  }
+}
+
+/* ===== BASE TYPOGRAPHY / LINKS / FOCUS ===== */
+.site-scope, body.site-body {
+  font-family: var(--ok-font-body);
+}
+a { color: var(--ok-accent); text-decoration: none; }
+a:hover { color: var(--ok-accent-soft); }
+
+:focus-visible {
+  outline: 2px solid var(--ok-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ===== SHARED TOP BAR ===== */
+.site-topbar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.4rem 1.1rem; min-height: 48px;
+  background: color-mix(in srgb, var(--ok-bg) 90%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ok-border);
+  font-family: var(--ok-font-ui); font-size: 12px;
+  flex-shrink: 0;
+}
+.site-wordmark {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--ok-font-ui); font-weight: 700; font-size: 0.95rem;
+  letter-spacing: -0.02em; color: var(--ok-text); text-decoration: none;
+  flex-shrink: 0; transition: color 0.15s;
+}
+.site-wordmark:hover { color: var(--ok-accent); }
+.site-topbar-title {
+  font-family: var(--ok-font-ui); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ok-text-faint); white-space: nowrap;
+  padding-left: 0.75rem; margin-left: 0.15rem;
+  border-left: 1px solid var(--ok-border); flex-shrink: 0;
+}
+.site-topbar-actions {
+  display: flex; align-items: center; gap: 0.5rem; margin-left: auto; flex-shrink: 0;
+}
+.site-topbar-spacer { flex: 1; min-width: 0; }
+
+.site-theme-toggle {
+  width: 30px; height: 30px; flex: none; padding: 0;
+  border: 1px solid var(--ok-border); border-radius: 50%;
+  background: var(--ok-surface); color: var(--ok-text-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s;
+}
+.site-theme-toggle:hover { color: var(--ok-accent); border-color: var(--ok-accent); }
+.site-theme-toggle svg { width: 15px; height: 15px; }
+.site-theme-toggle .i-sun { display: none; }
+.site-theme-toggle .i-moon { display: block; }
+html[data-theme="dark"] .site-theme-toggle .i-sun { display: block; }
+html[data-theme="dark"] .site-theme-toggle .i-moon { display: none; }
+
+.site-navlink {
+  color: var(--ok-text-muted); text-decoration: none;
+  font-family: var(--ok-font-ui); font-size: 12px;
+  padding: 4px 8px; border-radius: 8px; transition: all 0.15s; white-space: nowrap;
+}
+.site-navlink:hover { color: var(--ok-text); background: var(--ok-border-soft); }
+
+/* ===== BUTTONS ===== */
+.site-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  font-family: var(--ok-font-ui); font-size: 0.8rem; font-weight: 600;
+  padding: 0.5rem 1rem; border-radius: var(--ok-radius);
+  background: var(--ok-surface); border: 1px solid var(--ok-border); color: var(--ok-text);
+  cursor: pointer; transition: all 0.18s;
+}
+.site-btn:hover { border-color: var(--ok-accent); color: var(--ok-accent); }
+.site-btn:active { transform: scale(0.985); }
+.site-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.site-btn-primary {
+  background: var(--ok-accent); border-color: var(--ok-accent); color: var(--ok-surface);
+}
+.site-btn-primary:hover { background: var(--ok-accent-soft); border-color: var(--ok-accent-soft); color: var(--ok-surface); }
+.site-btn-sm { padding: 0.35rem 0.7rem; font-size: 0.72rem; border-radius: 8px; }
+
+/* ===== PILL ===== */
+.site-pill {
+  font-family: var(--ok-font-ui); font-size: 0.68rem; font-weight: 500;
+  padding: 4px 10px; border-radius: 999px;
+  border: 1px solid var(--ok-border); background: transparent; color: var(--ok-text-muted);
+  cursor: pointer; white-space: nowrap; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.site-pill:hover { border-color: var(--ok-text-faint); color: var(--ok-text); }
+.site-pill.active {
+  background: var(--ok-accent); border-color: var(--ok-accent); color: var(--ok-surface);
+}
+
+/* ===== CARD ===== */
+.site-card {
+  background: var(--ok-surface); border: 1px solid var(--ok-border);
+  border-radius: var(--ok-radius-lg); box-shadow: var(--ok-shadow);
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .site-topbar, .site-btn, .site-pill, .site-theme-toggle, .site-navlink, .site-wordmark {
+    transition: none !important;
+  }
+}
