@@ -18,6 +18,8 @@ no design judgment required.
 | `docs/authoring-kag.md` | How to author KAG shards | The shard workflow or validator flags/guarantees change |
 | `docs/authoring-oksat.md` | How to author an OKSAT module | Module schema, manifest entry shape, or Forge output changes |
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
+| `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
+| `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
 | `docs/agent-native-plan.md` | Agent-native audit + issue roadmap (#42–#61) | An epic lands (tick it off) or the plan changes |
 | `docs/oksat-plan.md`, `docs/oksat-next-iteration-plan.md`, `docs/oto-kag-atlas-plan.md` | **Historical plan records** | Never rewritten retroactively — only their `> Status:` header may be amended; corrections to the record go in `WIP.md` |
 | `docs/docs-map.md` | This checklist | A doc is added/removed, or the pass itself changes |
@@ -63,10 +65,10 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
    and stale rules cause confidently-wrong agents. Keep it dense; link out to
    docs rather than expanding it.
 
-Steps 2 and 3 are good candidates for the planned CI data checker (issue #48)
-so drift fails a PR instead of relying on this pass being remembered. Note:
-only backtick a path in docs once the file actually exists — the path check
-flags future files.
+`tools/check-data.mjs` now enforces the data-shape half of this in CI, so
+graph/manifest drift fails a PR automatically. The doc rot scan and path check
+(steps 2–3) are still run by hand during the pass. Note: only backtick a path
+in docs once the file actually exists — the path check flags future files.
 
 ## Rot rules (why the checklist looks like this)
 

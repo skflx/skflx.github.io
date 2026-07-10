@@ -153,6 +153,22 @@ test, and verify on the real site with minimal owner input. Full audit:
    second pass (checklist-shaped, delegable to a cheaper model).
 
 ## Next Steps
-Execute the epics in the order given in `docs/agent-native-plan.md` §5
-(conventions → CI → vendoring → diagnostics → KAG split). The docs second
-pass is now a standing convention in `CLAUDE.md`.
+Execute the remaining epics in the order given in `docs/agent-native-plan.md`
+§5 (vendoring → diagnostics → KAG split). The docs second pass is now a
+standing convention in `CLAUDE.md`.
+
+### Delivered: #42 conventions pack + #46 CI verification harness
+- **#42** — `docs/decisions.md` (decision tables: page chrome, renames, the
+  localStorage key registry, module authoring, escalation) and
+  `docs/verification.md` (per-subsystem probes), both wired into `CLAUDE.md`;
+  stale graph counts removed.
+- **#46** — `tools/check-data.mjs` (deps-free data invariants; enums pulled
+  into shared `tools/kag-enums.mjs`), `tools/smoke-pages.mjs` +
+  `tools/smoke-lib.mjs` + `tools/console-allowlist.json` (headless page-boot
+  smoke), `tools/test-oksat-engine.mjs` (answer-lock / SRS / keyboard /
+  migration), and `.github/workflows/ci.yml` running all three on every PR.
+- Validated: check-data 39/39; browser suites 17/17 pages + 10/10 engine
+  checks against a vendored mirror; both harnesses proven to fail on injected
+  regressions. CDN pages need network (CI/local); a CDN-blocked sandbox boots
+  only the CDN-free pages — the motivation for the still-open vendoring epic
+  (#51).

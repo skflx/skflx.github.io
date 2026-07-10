@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A static GitHub Pages site (skflx.github.io): a personal one-pager for an otolaryngology resident plus a suite of self-contained clinical/study tools. **There is no build step, no framework build, no bundler — ever.** Every page is plain HTML + CSS + vanilla JS served as-is. `package.json` exists only for `jsdom` (ad-hoc headless smoke checks); there is no test suite or linter.
+A static GitHub Pages site (skflx.github.io): a personal one-pager for an otolaryngology resident plus a suite of self-contained clinical/study tools. **There is no build step, no framework build, no bundler — ever.** Every page is plain HTML + CSS + vanilla JS served as-is. The only npm dependencies are dev-only test tooling (`jsdom`, `playwright`); nothing shipped touches `node_modules`.
 
 ## Commands
 
@@ -12,11 +12,16 @@ A static GitHub Pages site (skflx.github.io): a personal one-pager for an otolar
 # Serve locally (required — pages fetch() JSON, so file:// breaks)
 python3 -m http.server 8000    # http://localhost:8000/
 
+# Verify a change before pushing (also run in CI on every PR)
+node tools/check-data.mjs        # committed-data invariants (deps-free, instant)
+node tools/smoke-pages.mjs       # every page boots, zero real console errors
+node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, keyboard
+
 # Validate + merge KAG shards into the canonical graph (dev-only tool)
 node tools/kag-validate.mjs [--dir <shardDir>] [--graph data/kag-graph.json] [--dry]
 ```
 
-Verification is manual/headless-browser: load the affected page, check it renders with zero real console errors. Deploy = merge to `master` (GitHub Pages serves the repo root directly).
+The browser suites need a real Chromium and, for the OKSAT/graph pages, network to their CDN scripts (React/htm/Cytoscape) — CI has both; a CDN-blocked sandbox can only boot the CDN-free pages. Verification detail: `docs/verification.md`. CI (`.github/workflows/ci.yml`) is verification only — no build step. Deploy = merge to `master` (GitHub Pages serves the repo root directly).
 
 ## Architecture
 
@@ -44,6 +49,7 @@ Uses `css/onepager.css` + `js/onepager.js` only. Two visitor-selectable styles (
 
 ## Conventions
 
+- **Routine decisions are pre-answered.** For "which CSS/JS does a new page use", renames/redirect stubs, the localStorage key registry, adding a module or subspecialty, and what must be escalated to the owner, follow `docs/decisions.md` instead of inferring from precedent. How to prove a change works, per subsystem: `docs/verification.md`.
 - **Vanilla JS, guarded IIFEs, defensive throughout:** wrap `localStorage` and DOM access in try/catch no-ops; storage reads are fail-safe; degrade gracefully rather than throw.
 - **Token-driven theming everywhere:** components consume CSS custom properties, never raw values; theme/font switching is an attribute flip on `<html>` (`data-theme`, `data-font`, `data-style`). Color always means something (one hue per subspecialty) — never decoration.
 - **CDN dependencies** (React, htm, Cytoscape) are pinned UMD `<script>` tags per page — no npm installs for shipped code.
