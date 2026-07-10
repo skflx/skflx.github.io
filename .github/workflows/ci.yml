@@ -1,0 +1,39 @@
+name: CI
+
+# Verification only — this repo has NO build step. GitHub Pages serves the
+# repo root as-is; CI never produces artifacts the site depends on.
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      # Data invariants have zero deps — run first so a data regression
+      # fails in seconds, before we install anything.
+      - name: Check committed data
+        run: node tools/check-data.mjs
+
+      - name: Install dev dependencies
+        run: npm ci
+
+      # Playwright's own Chromium + OS libs. The smoke/engine tests load
+      # the pages' CDN scripts (React/htm/Cytoscape), so CI needs network;
+      # vendoring (issue #51) will later make these hermetic.
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke-test every page
+        run: node tools/smoke-pages.mjs
+
+      - name: OKSAT engine behavior tests
+        run: node tools/test-oksat-engine.mjs
