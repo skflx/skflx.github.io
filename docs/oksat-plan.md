@@ -1,5 +1,9 @@
 # OKSAT — OHNS Knowledge Self-Assessment Tool
 
+> **Status: executed** (see `WIP.md` — "OKSAT" section). Historical planning
+> record; describes the repo as it was at planning time. Where this document
+> and the code disagree, the code and `CLAUDE.md` win.
+
 *Redesign plan and architecture. Supersedes the "MCQ study guides" naming and the
 2026-05-25 "OHNS Adaptive Quiz App" buildspec (Claude-in-Claude artifact) — that spec
 assumed the Claude.ai artifact runtime; this site is static GitHub Pages, so the useful

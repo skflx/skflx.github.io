@@ -125,3 +125,34 @@ removing the triplicated Cytoscape code while preserving every behavior.
 
 ## Next Steps
 Optional: retire the `kag.html`/`atlas.html` stubs once external links migrate.
+
+---
+
+# WIP — Agent-native hardening (docs, verification, issue roadmap)
+
+## Goal
+Make the repo workable by coding agents end-to-end: reproduce a bug, implement,
+test, and verify on the real site with minimal owner input. Full audit:
+`docs/agent-native-plan.md`.
+
+## Actions Taken
+1. **CLAUDE.md** added — the agent operating manual (hard rules, commands,
+   architecture, conventions).
+2. **Audit** of judgment chokepoints, verification gaps, reproduction paths,
+   and structural obstacles → `docs/agent-native-plan.md`, including one real
+   shipped bug: the KAG store's whole-node LOCAL-WINS merge never propagates
+   content edits or `review:true` graduations to returning browsers.
+3. **Issue roadmap filed** — GitHub #42–#61: five epics (conventions pack, CI
+   verification harness, CDN vendoring, diagnostics/replay harness, KAG
+   progress/content split), each broken into atomic sub-issues written for
+   low-context executors.
+4. **Docs refresh** — rot-prone counts removed from `CLAUDE.md` /
+   `docs/kag-schema.md`; README file tree regrouped and completed; the three
+   plan docs got `> Status:` headers marking them as executed historical
+   records; new `docs/docs-map.md` defines the mandatory documentation
+   second pass (checklist-shaped, delegable to a cheaper model).
+
+## Next Steps
+Execute the epics in the order given in `docs/agent-native-plan.md` §5
+(conventions → CI → vendoring → diagnostics → KAG split). The docs second
+pass is now a standing convention in `CLAUDE.md`.
