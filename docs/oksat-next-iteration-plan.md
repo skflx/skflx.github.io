@@ -1,5 +1,13 @@
 # OKSAT Next Iteration — Adaptive Platform Plan (v2)
 
+> **Status: largely executed** — `oksat-adaptive.html`, `js/oksat-store.js`,
+> `js/oksat-dashboard.js`, `js/oksat-taxonomy.js`, and
+> `js/oksat-concept-graph.js` shipped. Historical planning record; where this
+> document and the code disagree, the code and `CLAUDE.md` win. Its
+> engineering constraints (never export `ItemView`; keep legacy storage
+> helpers; `OKSATStore` for all new persistence) remain binding and are
+> restated in `CLAUDE.md`.
+
 *Re-grounds the "OHNS Adaptive Study Platform" plan (2026-06-03, artifact-era) onto the real OKSAT build (static GitHub Pages, no build step). Plan only — granular, with contingencies, written for less-capable executor models.*
 
 ---

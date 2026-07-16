@@ -125,3 +125,50 @@ removing the triplicated Cytoscape code while preserving every behavior.
 
 ## Next Steps
 Optional: retire the `kag.html`/`atlas.html` stubs once external links migrate.
+
+---
+
+# WIP — Agent-native hardening (docs, verification, issue roadmap)
+
+## Goal
+Make the repo workable by coding agents end-to-end: reproduce a bug, implement,
+test, and verify on the real site with minimal owner input. Full audit:
+`docs/agent-native-plan.md`.
+
+## Actions Taken
+1. **CLAUDE.md** added — the agent operating manual (hard rules, commands,
+   architecture, conventions).
+2. **Audit** of judgment chokepoints, verification gaps, reproduction paths,
+   and structural obstacles → `docs/agent-native-plan.md`, including one real
+   shipped bug: the KAG store's whole-node LOCAL-WINS merge never propagates
+   content edits or `review:true` graduations to returning browsers.
+3. **Issue roadmap filed** — GitHub #42–#61: five epics (conventions pack, CI
+   verification harness, CDN vendoring, diagnostics/replay harness, KAG
+   progress/content split), each broken into atomic sub-issues written for
+   low-context executors.
+4. **Docs refresh** — rot-prone counts removed from `CLAUDE.md` /
+   `docs/kag-schema.md`; README file tree regrouped and completed; the three
+   plan docs got `> Status:` headers marking them as executed historical
+   records; new `docs/docs-map.md` defines the mandatory documentation
+   second pass (checklist-shaped, delegable to a cheaper model).
+
+## Next Steps
+Execute the remaining epics in the order given in `docs/agent-native-plan.md`
+§5 (vendoring → diagnostics → KAG split). The docs second pass is now a
+standing convention in `CLAUDE.md`.
+
+### Delivered: #42 conventions pack + #46 CI verification harness
+- **#42** — `docs/decisions.md` (decision tables: page chrome, renames, the
+  localStorage key registry, module authoring, escalation) and
+  `docs/verification.md` (per-subsystem probes), both wired into `CLAUDE.md`;
+  stale graph counts removed.
+- **#46** — `tools/check-data.mjs` (deps-free data invariants; enums pulled
+  into shared `tools/kag-enums.mjs`), `tools/smoke-pages.mjs` +
+  `tools/smoke-lib.mjs` + `tools/console-allowlist.json` (headless page-boot
+  smoke), `tools/test-oksat-engine.mjs` (answer-lock / SRS / keyboard /
+  migration), and `.github/workflows/ci.yml` running all three on every PR.
+- Validated: check-data 39/39; browser suites 17/17 pages + 10/10 engine
+  checks against a vendored mirror; both harnesses proven to fail on injected
+  regressions. CDN pages need network (CI/local); a CDN-blocked sandbox boots
+  only the CDN-free pages — the motivation for the still-open vendoring epic
+  (#51).

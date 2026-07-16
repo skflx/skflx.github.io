@@ -23,6 +23,10 @@
    ============================================================= */
 import fs from 'fs';
 import path from 'path';
+import {
+  NODE_TYPES, SUBSPECIALTIES as SUBS, SUB_MAP, STRUCTURES, REGIONS,
+  LATERALITIES as LAT, EDGE_TYPES, KEBAB,
+} from './kag-enums.mjs';
 
 const args = process.argv.slice(2);
 const opt = (name, def) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : def; };
@@ -30,14 +34,6 @@ const DIR = opt('--dir', 'scratchpad_p2/shards');
 const GRAPH = opt('--graph', 'data/kag-graph.json');
 const DRY = args.includes('--dry');
 
-const NODE_TYPES = ['anatomy', 'pathology', 'procedure', 'nerve', 'vessel', 'drug', 'concept'];
-const SUBS = ['otology', 'rhinology', 'laryngology', 'hn_onc', 'fprs', 'pediatrics', 'sleep', 'endocrine', 'fundamentals'];
-const SUB_MAP = { 'head-neck-onc': 'hn_onc', 'peds-ent': 'pediatrics', 'facial-plastics': 'fprs', 'skull-base': 'otology' };
-const STRUCTURES = ['bone', 'cartilage', 'ligament', 'fascia', 'joint', 'foramen', 'space', 'membrane', 'muscle'];
-const REGIONS = ['temporal-bone', 'skull-base', 'facial-skeleton', 'nasal-sinus', 'larynx', 'neck', 'oral-pharynx', 'cervical-spine-hyoid', 'external-ear'];
-const LAT = ['midline', 'paired'];
-const EDGE_TYPES = ['innervates', 'supplies', 'drains_to', 'landmark_for', 'complication_of', 'differentiates_from', 'treats', 'staged_with', 'arises_from', 'contained_in', 'branches_from', 'articulates_with', 'attaches_to', 'part_of', 'bounded_by', 'continuous_with', 'passes_through', 'transmits', 'suspends', 'forms'];
-const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const TODAY = new Date().toISOString().split('T')[0];
 
 const warn = [];

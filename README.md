@@ -45,49 +45,45 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 
 ## File Structure
 
+Grouped by system; per-file detail lives in each file's header comment.
+
 ```
 ├── index.html              # The one-pager
-├── css/
-│   ├── onepager.css        # Styles for the one-pager (2 styles × 2 themes)
-│   └── main.css            # Legacy stylesheet (still used by the tool pages)
-├── js/
-│   ├── onepager.js         # Style switch, theme toggle, deep-linking
-│   ├── main.js             # Legacy script (still used by the tool pages)
-│   ├── cpt_search.jsx      # CPT search tool logic
-│   ├── oksat-engine.js     # OKSAT study engine (React + htm, no build step)
-│   ├── oksat-manifest.js   # OKSAT module registry + subspecialty hues
-│   ├── oksat-reviewer.js   # Per-reviewer identity (+ mcq:*→oksat:* migration)
-│   ├── oksat-prefs.js      # Font themes + day/night wiring
-│   ├── graph-view.js       # Unified graph engine (one Cytoscape stack, three lenses)
-│   ├── graph-lens-knowledge.js   # Knowledge lens (full KAG: self-test, corrections, sync)
-│   ├── graph-lens-structural.js  # Structural lens (region nav + structure toggles)
-│   ├── graph-lens-study.js       # Study lens (OKSAT module→domain→concept hierarchy)
-│   ├── oksat-atlas.js      # Compat shim: loadModules() + mount() → study lens
-│   ├── oksat-db.js         # Completion database read/merge/export/push
-│   ├── oksat-ai.js         # Gemini key mgmt + house-style question generation
-│   ├── kag-store.js        # KAG database read/merge/save/download/push (LOCAL WINS)
-│   └── mcq-modules/        # Question banks (one file per module)
-├── data/oksat-db.json      # Shared per-reviewer completion database (dated entries)
-├── data/kag-graph.json     # Canonical KAG database (term web + structural atlas source)
-├── graph.html              # Unified graph: Knowledge · Structural · Study lenses (?lens=&node=)
-├── kag.html                # Redirect stub → graph.html?lens=knowledge (forwards ?node=)
-├── atlas.html              # Redirect stub → graph.html?lens=structural (forwards ?node=)
-├── kag-extract.html        # Tool: KAG extractor
-├── tools/kag-validate.mjs  # Dev-only KAG shard validator + merger (Node, not shipped)
-├── cpt-search.html         # Tool: CPT code search
-├── ascii-editor.html       # Tool: ASCII/Unicode diagram editor
-├── airway-jeopardy.html    # Tool: Airway Rounds team quiz
-├── oksat.html              # Tool: OKSAT hub — modules + Atlas graph + sync settings
-├── oksat-study.html        # Tool: OKSAT viewer (?m=<slug>&c=<concept>)
-├── oksat-generate.html     # Tool: OKSAT Question Forge (Gemini)
-├── mcq.html / mcq-study.html  # Redirect stubs to the OKSAT pages
-├── docs/authoring-oksat.md # How to add / author an OKSAT module
-├── docs/authoring-kag.md   # How to author / enrich KAG nodes + edges (shards + validator)
-├── docs/kag-schema.md      # KAG v2 data model, enums, storage/merge contract
-├── docs/oto-kag-atlas-plan.md  # KAG term web + anatomy atlas master plan
-├── docs/design-principles.md  # OKSAT design system
-├── docs/oksat-plan.md      # OKSAT redesign plan / architecture
-├── images/                 # Profile photo + derived hero/social crops (see images/list.txt)
+│   ├── css/onepager.css    #   its styles (2 styles × 2 themes)
+│   └── js/onepager.js      #   style switch, theme toggle, deep-linking
+│
+├── oksat.html              # OKSAT hub — modules + Atlas link + sync settings
+├── oksat-study.html        # OKSAT viewer (?m=<slug>&c=<concept>)
+├── oksat-adaptive.html     # OKSAT adaptive session (Gemini-generated items)
+├── oksat-generate.html     # OKSAT Question Forge (Gemini module generator)
+│   ├── css/oksat.css       #   OKSAT design system (tokens; docs/design-principles.md)
+│   ├── js/oksat-*.js       #   engine, manifest, store, reviewer, prefs, db, ai,
+│   │                       #   dashboard, adaptive, taxonomy, concept-graph, atlas shim
+│   └── js/mcq-modules/     #   question banks (one data file per module)
+│
+├── graph.html              # Unified graph: Knowledge · Structural · Study (?lens=&node=)
+│   ├── css/graph.css       #   consolidated graph chrome
+│   ├── js/graph-view.js    #   the one Cytoscape engine (lens contract in header)
+│   └── js/graph-lens-*.js  #   knowledge / structural / study lenses
+├── kag-extract.html        # KAG shard extractor (Claude API)
+├── data/kag-graph.json     # Canonical KAG database (never hand-edit; use the validator)
+├── data/oksat-db.json      # Shared per-reviewer completion database
+├── tools/kag-validate.mjs  # Dev-only shard validator + merger (Node, not shipped)
+│
+├── airway-jeopardy.html    # Airway Rounds team quiz (CDN-free, self-contained)
+│   └── js/airway-*.js      #   engine + question bank
+├── cpt-search.html         # CPT code search   (legacy: css/main.css + js/main.js)
+├── ascii-editor.html       # ASCII/Unicode diagram editor (legacy chrome)
+├── css/site.css, js/site.js  # Shared chrome for newer tool pages (theme toggle)
+│
+├── mcq*.html, occ*.html    # Redirect stubs → OKSAT pages (query strings preserved)
+├── kag.html, atlas.html    # Redirect stubs → graph.html lenses (forward ?node=)
+│
+├── CLAUDE.md               # Operating manual for coding agents
+├── WIP.md                  # Running project log (one section per workstream)
+├── docs/                   # Schemas, authoring guides, design system, plans
+│                           #   (index + update rules: docs/docs-map.md)
+├── images/                 # Profile photo + derived crops (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
 ```
 

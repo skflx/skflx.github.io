@@ -2,15 +2,16 @@
 
 The Knowledge Atlas Graph is the site's canonical OHNS knowledge graph. It lives
 in one committed file, `data/kag-graph.json`, and every surface that shows graph
-data (`kag.html`, `atlas.html`, the OKSAT crossover links) reads it through
-`js/kag-store.js`. GitHub Pages is static, so **the JSON file *is* the
+data (the `graph.html` lenses and the OKSAT crossover links; `kag.html` /
+`atlas.html` are redirect stubs) reads it through `js/kag-store.js`. GitHub Pages is static, so **the JSON file *is* the
 database** — there is no server and no build step. This document is the exact
 contract every reader and every authored shard obeys. It is authoritative:
 enums below are copied verbatim from `tools/kag-validate.mjs`.
 
-Current graph: ~656 nodes / ~929 edges, 265 of them structural; the 40-node
-temporal-bone seed is vetted (`review:true`), every other authored node is
-`review:false` pending owner clinical review.
+For live node/edge counts, read the file itself — they grow with every shard
+merge, so numbers quoted in prose rot. The 40-node temporal-bone seed is
+vetted (`review:true`); every other authored node is `review:false` pending
+owner clinical review.
 
 ## File wrapper
 

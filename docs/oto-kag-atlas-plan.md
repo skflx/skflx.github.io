@@ -1,5 +1,13 @@
 # OHNS Term Web, Usage Analytics & Structural Anatomy Atlas — Master Plan
 
+> **Status: executed** except Phase 3 usage analytics (deferred by owner,
+> 2026-07); see `WIP.md` — "KAG term web + structural anatomy atlas" and
+> "Unified graph system" sections. Historical planning record: statements
+> like "there is no committed KAG data file" describe the *pre-plan* repo.
+> `kag.html`/`atlas.html` referenced below are now redirect stubs into
+> `graph.html`. Where this document and the code disagree, the code and
+> `CLAUDE.md` win.
+
 *Plan only. Granular, contingency-covered, written so a less-capable executor
 model (or a fleet of subagents) can build it phase by phase without holes.
 Grounded on the REAL repo as it exists on branch
