@@ -1,12 +1,17 @@
-# UI directions — six candidates, one validated marker set
+# UI directions — twelve candidates, one validated marker set
 
 > Snapshot date: 2026-07-25. Status: **proposal awaiting owner pick.** Nothing
 > here is implemented. Changing `OKSAT_SUBSPECIALTIES` is an owner decision
 > (`docs/decisions.md` §8) — this document exists to make that decision, not to
 > pre-empt it.
 
-Proof sheet (all six rendered on real components, light + dark):
-<https://claude.ai/code/artifact/902e76db-aa80-45cd-9fbe-78c53d1471f8>
+Two proof sheets, both rendering the same components in light + dark:
+
+- **Round 1 — six skins** (differ mostly by palette; a token-block edit):
+  <https://claude.ai/code/artifact/902e76db-aa80-45cd-9fbe-78c53d1471f8>
+- **Round 2 — six with a structural device** (differ in markup too; a component
+  pass), with an A/B compare tray:
+  <https://claude.ai/code/artifact/4db0ce83-70bb-4d58-acb5-6b5a8a794e0c>
 
 ## 1. The measured problem
 
@@ -198,3 +203,47 @@ makes this a token-block edit rather than a rewrite.
 Re-run the categorical validator on any hue change before shipping. The rule that
 matters: **never ship a marker set that fails adjacent-pair separation**, because
 the whole point of the nine hues is that they are distinguishable.
+
+---
+
+# Round two — directions with a structural device
+
+Round one's six differ almost entirely by palette: pick one and it is a
+token-block edit. That is cheap, and it is also why they read as skins rather
+than as identities.
+
+Round two borrows a **structural device** from the discipline's own visual
+world — a layout or notation rule, not a colour scheme. The nine validated
+markers above are unchanged and were re-checked against every ground below
+(all pass, light and dark).
+
+**These cost more than round one.** A device lives in markup and component CSS
+— leader lines, tab strips, grid substrates, stacked card edges — so it means
+touching `js/oksat-engine.js`'s render output or the templates around it.
+Budget a component pass, not an afternoon.
+
+| # | Direction | Device | Risk | Buys | Costs |
+|---|---|---|---|---|---|
+| 1 | **Audiogram** | The audiogram grid as layout substrate; ○ / ✕ answer notation | Med | Instant specialty identity from a diagram nobody has to learn | Grid under long stems hurts readability; needs masking |
+| 2 | **Plate XI** | Numbered figure key, keeper rules, italic caption | Med | Scholarly authority; suits the Knowledge Atlas best | Hairlines and italics are fragile on small/low-DPI screens |
+| 3 | **Lightbox** | Inverted luminosity — panels brighter than the ground | Med | Most striking; genuinely comfortable in a dark reading room | Light mode is the weaker twin by construction |
+| 4 | **Dictation** | Operative-note run-in heads, ruled margin, status stamp | High | Uncopyable; feels like the job rather than an app | Worst long-form readability; mono is dense on a phone |
+| 5 | **Card Box** | Leitner box tabs 1–5, ruled stock, visible stack depth | Low | Makes spaced repetition *visible* — which box, how much left | Stack depth is decorative on a phone |
+| 6 | **H&E** | The frosted slide label as card header; eosin/haematoxylin chrome | High | Most distinctive palette; warm without the usual cream | Eats hue space the markers need |
+
+Full token sets for each are in the round-two proof sheet; they are not
+duplicated here because none is committed yet. Once a direction is picked, its
+tokens move into this document (or straight into
+`docs/design-principles.md`, which owns the shipped system).
+
+## Two decisions to make before building
+
+1. **Distinctive ages faster.** A strong device is memorable on visit one and
+   can grate by visit two hundred — and this is a tool used daily for years.
+   Round one's Graphite is the safest answer available; Dictation and H&E are
+   the riskiest. That is a real trade, not a reason to avoid the risk.
+2. **H&E has a genuine conflict.** Eosin pink and haematoxylin violet occupy
+   nearly the same hue space as marker slots 2 (rhinology) and 4 (head & neck).
+   Choose H&E only while confining the stain to headers and rules, which is how
+   the specimen is built — otherwise the markers stop being the only meaningful
+   colour on screen, which is the whole point of §2.
