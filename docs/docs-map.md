@@ -21,6 +21,7 @@ no design judgment required.
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
 | `docs/agent-native-plan.md` | Agent-native audit + issue roadmap (#42–#61) | An epic lands (tick it off) or the plan changes |
+| `docs/feature-requests.md` | Product backlog: user-facing features ranked utility × feasibility | A feature ships (drop it), or the evidence behind the ranking shifts materially — re-snapshot rather than patching counts in place |
 | `docs/oksat-plan.md`, `docs/oksat-next-iteration-plan.md`, `docs/oto-kag-atlas-plan.md` | **Historical plan records** | Never rewritten retroactively — only their `> Status:` header may be amended; corrections to the record go in `WIP.md` |
 | `docs/docs-map.md` | This checklist | A doc is added/removed, or the pass itself changes |
 | `images/list.txt` | Image inventory | An image is added/removed |

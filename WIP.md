@@ -172,3 +172,36 @@ standing convention in `CLAUDE.md`.
   regressions. CDN pages need network (CI/local); a CDN-blocked sandbox boots
   only the CDN-free pages — the motivation for the still-open vendoring epic
   (#51).
+
+---
+
+# WIP — Product feature backlog
+
+## Goal
+Complement the engineering roadmap (#42–#61, `docs/agent-native-plan.md`) with
+a **product** backlog: what the tools should be able to do that they cannot
+today, ranked so the next build decision is already made.
+
+## Actions Taken
+- `docs/feature-requests.md` — 15 user-facing features scored
+  utility × feasibility (feasibility judged against the no-build / static /
+  client-state-only constraints, so "needs a server" scores 1), each with the
+  problem, an implementation sketch against real files, its dependencies on
+  the open engineering issues, and its escalation flags. Includes a
+  "considered and not recommended" table and a suggested execution order.
+- Registered in `docs/docs-map.md` and pointed to from `CLAUDE.md`.
+
+## Evidence behind the ranking (snapshot 2026-07-25)
+- 5 of 62 taxonomy topics have shipped modules (~92% of the mapped curriculum
+  has no static content).
+- 40 of 771 KAG nodes are `review:true` — 95% of the graph is DRAFT.
+- `data/oksat-db.json` holds zero reviewer blocks; the sync path has never
+  carried real data.
+- Only 70 of 771 nodes carry any `oksat.*` link.
+- Leitner scheduling is per module, with no cross-module daily queue.
+
+## Next Steps
+Owner triage. The three highest-scoring items (cross-module daily review
+queue, Anki/CSV export, miss log) are independent of every open engineering
+issue and can start immediately; the rest are sequenced in the doc's final
+section.
