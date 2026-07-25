@@ -205,3 +205,40 @@ Owner triage. The three highest-scoring items (cross-module daily review
 queue, Anki/CSV export, miss log) are independent of every open engineering
 issue and can start immediately; the rest are sequenced in the doc's final
 section.
+
+### Filed as GitHub #63–#77, tracked by epic #78
+One issue per feature, house style (repo primer / task / acceptance criteria),
+each naming its dependencies on the engineering roadmap and its owner-only
+escalations.
+
+---
+
+# WIP — Visual direction candidates
+
+## Goal
+Replace the palette. The owner's read ("the colors are atrocious") is
+measurably correct, so the work started with measurement rather than taste.
+
+## Actions Taken
+- **Measured the current subspecialty hues** as a categorical palette: 3 of 5
+  checks fail — 6 of 9 below the chroma floor (they render grey, not hue), and
+  `fprs #7A5A3A` vs `hn_onc #9A4B2E` at ΔE 6.4 normal vision / 2.1 protan.
+  Two subspecialties are effectively the same colour, which silently breaks the
+  repo's own "colour always means something" convention.
+- **Solved a replacement marker set** rather than picking by eye: hues spaced
+  around the wheel with per-slot lightness stepping so neighbours stay separable
+  under colour-vision deficiency. Light and dark are independent solves (the
+  dark band is L 0.48–0.67, not an inversion of light's 0.43–0.77). All checks
+  pass on every candidate surface; worst adjacent pair ΔE 12.6 light / 10.1 dark.
+- **Six chrome directions** — Clinical Register, Theatre, Graphite, Nocturne,
+  Signal, Vellum — each a complete light+dark `--ok-*` token block, all sharing
+  the one validated marker set (subspecialty hue is data, not skin).
+- `docs/ui-directions.md` carries the evidence, every token set, and the
+  implementation cost. Proof sheet rendering all six on real components:
+  <https://claude.ai/code/artifact/902e76db-aa80-45cd-9fbe-78c53d1471f8>
+
+## Next Steps
+**Owner pick — nothing is implemented.** Changing `OKSAT_SUBSPECIALTIES` is an
+owner decision (`docs/decisions.md` §8). Once a direction is chosen, note that
+the map holds one `hue` per subspecialty for both themes; a correct dark mode
+needs a second value per entry, which touches every reader of `.hue`.
