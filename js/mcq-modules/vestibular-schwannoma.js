@@ -13,14 +13,14 @@ const meta = {
 };
 
 const DOMAINS = {
-  anatomy:         { label: 'Anatomy',        color: '#8B6F47', hex: 'rgba(139,111,71,0.12)' },
-  pathophysiology: { label: 'Pathophysiology', color: '#7B6B85', hex: 'rgba(123,107,133,0.14)' },
-  epidemiology:    { label: 'Epi & Nat. Hx',  color: '#7B7B4A', hex: 'rgba(123,123,74,0.14)' },
-  diagnosis:       { label: 'Diagnosis',      color: '#2C5454', hex: 'rgba(44,84,84,0.14)' },
-  treatment:       { label: 'Treatment',      color: '#5C4F7B', hex: 'rgba(92,79,123,0.14)' },
-  complications:   { label: 'Complications',  color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
-  NF2:             { label: 'NF2',            color: '#4A5C6B', hex: 'rgba(74,92,107,0.14)' },
-  cases:           { label: 'Cases',          color: '#8B4513', hex: 'rgba(139,69,19,0.14)' },
+  anatomy:         { label: 'Anatomy',        color: '#d78c1a', hex: 'rgba(215,140,26,0.12)' },
+  pathophysiology: { label: 'Pathophysiology', color: '#854fa9', hex: 'rgba(133,79,169,0.14)' },
+  epidemiology:    { label: 'Epi & Nat. Hx',  color: '#767709', hex: 'rgba(118,119,9,0.14)' },
+  diagnosis:       { label: 'Diagnosis',      color: '#10938e', hex: 'rgba(16,147,142,0.14)' },
+  treatment:       { label: 'Treatment',      color: '#7692f1', hex: 'rgba(118,146,241,0.14)' },
+  complications:   { label: 'Complications',  color: '#a63a2d', hex: 'rgba(166,58,45,0.14)' },
+  NF2:             { label: 'NF2',            color: '#4376d8', hex: 'rgba(67,118,216,0.14)' },
+  cases:           { label: 'Cases',          color: '#903a03', hex: 'rgba(144,58,3,0.14)' },
 };
 
 const CONCEPTS = {

@@ -10,15 +10,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initActiveNav();
     updateResidencyStatus();
 
-    // Extract colors from hero image
-    const heroImage = document.querySelector('.hero-image');
-    if (heroImage) {
-        if (heroImage.complete) {
-            extractColorsFromImage(heroImage);
-        } else {
-            heroImage.addEventListener('load', () => extractColorsFromImage(heroImage));
-        }
-    }
+    /* Hero-image colour extraction is RETIRED. It set --color-* inline on
+       <html> from whatever pixels the hero happened to contain, which
+       overrode the brand accent at runtime and made the palette
+       unpredictable per page. The site now has one identity defined in
+       css/tokens.css; colour is never derived from content.
+       The extraction helpers below are left in place, unused, rather than
+       deleted, so this file's frozen-legacy status stays honest. */
 });
 
 // ===== DYNAMIC COLOR EXTRACTION =====
@@ -210,7 +208,7 @@ function applyDynamicColors(colors) {
     }
 
     // Store colors for persistence
-    localStorage.setItem('sk_dynamic_colors', JSON.stringify(colors.map(rgbToHex)));
+    /* sk_dynamic_colors is retired along with this feature — see init above. */
 }
 
 function lightenColor(color, percent) {

@@ -46,7 +46,6 @@ const PAGES = [
   { path: 'airway-jeopardy.html', ready: (p) => wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions)) },
   { path: 'kag-extract.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
-  { path: 'ascii-editor.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
   // redirect stubs: assert only the forwarded destination + query.
   // isStub → the destination's own console health is tested by its own
   // entry above, so we don't count its errors against the stub.
@@ -55,6 +54,7 @@ const PAGES = [
   { path: 'mcq.html', isStub: true, ready: stub('oksat.html', {}) },
   { path: 'mcq-study.html?m=pediatrics', isStub: true, ready: stub('oksat-study.html', { m: 'pediatrics' }) },
   { path: 'occ.html', isStub: true, ready: stubTo(/oksat\.html/) },
+  { path: 'ascii-editor.html', isStub: true, ready: stubTo(/index\.html/) },
 ];
 
 /* oksat-study.html loads the module data, then shows a blocking reviewer

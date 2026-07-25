@@ -1,43 +1,43 @@
 /* =============================================================
    skflx.MD — one-pager stylesheet
-   Modular by design. Two visitor-selectable visual STYLES
-   (matte / personality) layered over a day/night THEME.
 
-   Switching is driven by two attributes on <html>:
-       data-style = matte | personality
+   ONE identity: LIGHTBOX. The visitor-selectable style switcher
+   (matte / personality) was retired — the site now presents a
+   single brand across every page. What remains is the day/night
+   THEME, an attribute flip on <html>:
+
        data-theme = light | dark
 
-   Each style declares its own design tokens (color + type) for
-   both themes. Shared components below consume only the tokens,
-   so retheming = editing one token block. Decorative flourishes
-   per style live in the DECORATIONS section.
+   All colour and type come from css/tokens.css, which this page
+   loads first. The names below are local aliases so the existing
+   components keep reading well; they resolve to brand tokens and
+   must never hard-code a value.
    ============================================================= */
 
 /* ===== RESET ===== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 img { max-width: 100%; display: block; }
 
-/* ===== TOKEN DEFAULTS (overridden per style; matte-ish fallback) ===== */
+/* ===== LOCAL ALIASES → brand tokens (css/tokens.css) ===== */
 :root {
     --maxw: 880px;
-    --radius: 14px;
-    --radius-sm: 9px;
-    --bg: #f4ece1;
-    --bg-2: #efe5d6;
-    --card: #fffaf3;
-    --text: #2c211a;
-    --text-muted: #6f5d4d;
-    --accent: #a23b2e;
-    --accent-2: #b5882f;
-    --accent-soft: #f0e2cf;
-    --border: #e6dac8;
-    --shadow: 0 4px 18px rgba(80, 50, 20, 0.08);
-    --font-display: 'DM Sans', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-accent: 'DM Sans', system-ui, sans-serif;
+    --radius: var(--ok-radius-lg);
+    --radius-sm: var(--ok-radius-sm);
+    --bg: var(--ok-bg);
+    --bg-2: var(--ok-bg-2);
+    --card: var(--ok-surface);
+    --text: var(--ok-text);
+    --text-muted: var(--ok-text-muted);
+    --accent: var(--ok-accent);
+    --accent-2: var(--ok-ochre);
+    --accent-soft: var(--ok-surface-2);
+    --border: var(--ok-border);
+    --shadow: var(--ok-lift);
+    --font-display: var(--ok-font-display);
+    --font-body: var(--ok-font-body);
+    --font-accent: var(--ok-font-body);
 }
 
-/* =============================================================
    SHARED LAYOUT  (tokens only — never hard-coded colors)
    ============================================================= */
 html { scroll-behavior: smooth; scroll-padding-top: 76px; }
@@ -75,14 +75,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .brand .dot { color: var(--accent); }
 .controls { display: flex; align-items: center; gap: 10px; }
 
-.style-switch { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--card); gap: 2px; }
-.style-switch button {
-    border: none; background: none; cursor: pointer; color: var(--text-muted);
-    font-family: var(--font-body); font-size: 0.78rem; font-weight: 500;
-    padding: 6px 12px; border-radius: 999px; transition: all 0.2s; white-space: nowrap;
-}
-.style-switch button:hover { color: var(--text); }
-.style-switch button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 
 .theme-toggle {
     width: 34px; height: 34px; flex: none; border: 1px solid var(--border); border-radius: 50%;
@@ -182,75 +174,13 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
 .footer a:hover { color: var(--accent); }
 
 /* =============================================================
-   STYLE 1 — MATTE   (day = matte red / gold / brown; night = warm dark)
+   DECORATION — a single restrained flourish.
+   Lightbox is about emissive panels, so the hero gets one soft
+   bloom and the cards get the lift; nothing else glows.
    ============================================================= */
-[data-style="matte"] {
-    --font-display: 'DM Sans', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-accent: 'DM Sans', system-ui, sans-serif;
-    --radius: 14px; --radius-sm: 9px;
-    --bg: #f4ece1; --bg-2: #efe4d4; --card: #fffaf3;
-    --text: #2c211a; --text-muted: #6f5d4d;
-    --accent: #a23b2e;   /* matte red */
-    --accent-2: #ac7d2b; /* matte gold */
-    --accent-soft: #f0e2cf;
-    --border: #e6d8c4;
-    --shadow: 0 4px 18px rgba(90, 55, 25, 0.09);
-}
-[data-style="matte"][data-theme="dark"] {
-    --bg: #20180f; --bg-2: #292016; --card: #2b2118;
-    --text: #f1e7d8; --text-muted: #b6a48d;
-    --accent: #d76b58;   /* lifted matte red */
-    --accent-2: #d6ac63; /* matte gold */
-    --accent-soft: #3a2c1f;
-    --border: #3a2d20;
-    --shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
-}
-[data-style="matte"] .section { box-shadow: var(--shadow); }
-
-/* =============================================================
-   STYLE 2 — PERSONALITY   (warm paper + ink; serif + handwriting)
-   ============================================================= */
-[data-style="personality"] {
-    --font-display: 'Fraunces', Georgia, serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-accent: 'Caveat', cursive;
-    --radius: 14px; --radius-sm: 11px;
-    --bg: #f6f1e7; --bg-2: #f1ebdd; --card: #fffdf8;
-    --text: #2b2823; --text-muted: #6f675a;
-    --accent: #2f6b4f;   /* forest green */
-    --accent-2: #c4663b; /* terracotta */
-    --accent-soft: #e7ede4;
-    --border: #e3dccc; --shadow: 0 10px 28px rgba(60, 50, 30, 0.10);
-}
-[data-style="personality"][data-theme="dark"] {
-    --bg: #1a1714; --bg-2: #211d18; --card: #221e1a;
-    --text: #efe9dd; --text-muted: #b3a995;
-    --accent: #6bbf94; --accent-2: #e08b5f; --accent-soft: #26302a;
-    --border: #36302a; --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-}
-
-/* =============================================================
-   DECORATIONS (per-style flourishes; structure stays identical)
-   ============================================================= */
-
-/* Personality: paper grain + handwritten micro-labels + serif emphasis */
-[data-style="personality"] body::before {
-    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    opacity: 0.05; mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-[data-style="personality"] .sec-title[data-note]::before {
-    content: attr(data-note); display: block;
-    font-family: var(--font-accent); font-weight: 600; font-size: 1.15rem;
-    color: var(--accent-2); line-height: 1; margin-bottom: 4px; transform: rotate(-1.5deg);
-}
-[data-style="personality"] .hero-photo { border: 7px solid var(--card); border-radius: 6px; transform: rotate(2deg); }
-[data-style="personality"] .item-ic { border-radius: 12px; }
-
-/* The handwritten .note element only reads as handwriting in personality;
-   in matte it falls back to the body font (still legible). */
-[data-style="matte"] .note { font-style: italic; }
+.section { box-shadow: var(--ok-lift); }
+.section:hover { box-shadow: var(--ok-lift-hover); }
+.note { font-style: italic; color: var(--text-muted); }
 
 /* =============================================================
    RESPONSIVE
@@ -264,7 +194,6 @@ a.item:hover { border-color: var(--accent); transform: translateX(3px); }
     .item { grid-template-columns: auto 1fr; }
     .item-meta { grid-column: 2; }
     .site-header .bar { flex-wrap: wrap; gap: 10px; }
-    .style-switch button { padding: 6px 10px; font-size: 0.74rem; }
 }
 @media (max-width: 420px) {
     .brand { font-size: 0.95rem; }

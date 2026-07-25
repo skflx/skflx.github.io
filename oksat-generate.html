@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-font="manuscript">
+<html lang="en" data-theme="light" data-font="atlas">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Crimson+Pro:ital,wght@0,300..700;1,400&family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/oksat.css">
 </head>
 <body>
@@ -293,7 +294,7 @@
       function manifestEntry(mod) {
         var slug = slugIn.value.trim() || 'new-module';
         var subKey = subSel.value;
-        var hue = (window.OKSAT_SUBSPECIALTIES[subKey] || {}).hue || '#2C5454';
+        var hue = window.OKSATHue ? OKSATHue(subKey) : 'var(--ok-accent)';
         var title = (titleIn.value.trim() || (mod.meta && mod.meta.title) || slug).replace(/\n/g, ' ');
         var desc = ((mod.meta && mod.meta.subtitle) || '').split(/(?<=\.)\s/)[0] || 'Generated self-assessment module.';
         return [
@@ -347,8 +348,8 @@
         var built = items.map(function (it, i) {
           var t = topicOf(it.topicId);
           var subKey = (t && t.subspecialty) || 'fundamentals';
-          var subInfo = subs[subKey] || { label: 'OHNS', hue: '#2C5454' };
-          if (!DOMAINS[subKey]) DOMAINS[subKey] = { label: subInfo.label, color: subInfo.hue, hex: 'rgba(44,84,84,0.10)' };
+          var subInfo = subs[subKey] || { label: 'OHNS', hue: '#4FB3E8' };
+          if (!DOMAINS[subKey]) DOMAINS[subKey] = { label: subInfo.label, color: subInfo.hue, hex: 'rgba(79,179,232,0.10)' };
           var cKey = it.topicId || 'general';
           if (!CONCEPTS[cKey]) CONCEPTS[cKey] = { label: (t && t.label) || cKey, domain: subKey };
           var q = { id: 'q' + (i + 1), type: it.type || 'mcq', stem: it.stem, brief: it.brief || '', detailed: it.detailed || '', concepts: [cKey] };

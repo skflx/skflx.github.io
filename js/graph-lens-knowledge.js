@@ -117,8 +117,27 @@
         'color': cv('--txt3', '#5C6370'), 'text-rotation': 'autorotate', 'text-margin-y': -8, 'arrow-scale': 0.8
       } }
     ];
+    /* Node type is encoded by SHAPE as well as colour, deliberately.
+       Seven categories cannot all be mutually separable by hue — the
+       solved palette's worst pair sits in the ΔE 6–8 band, which is only
+       legitimate alongside a second channel. Shape is that channel, so
+       type stays readable for colour-vision-deficient viewers and on a
+       projector. If you ever change --node-* in css/tokens.css, leave
+       these shapes alone. */
+    var SHAPES = {
+      anatomy: 'ellipse',
+      pathology: 'diamond',
+      procedure: 'round-rectangle',
+      nerve: 'triangle',
+      vessel: 'barrel',
+      drug: 'hexagon',
+      concept: 'octagon'
+    };
     TYPES.forEach(function (t) {
-      base.push({ selector: 'node[type="' + t + '"]', style: { 'background-color': cv('--node-' + t, '#868E96') } });
+      base.push({ selector: 'node[type="' + t + '"]', style: {
+        'background-color': cv('--node-' + t, '#868E96'),
+        'shape': SHAPES[t] || 'ellipse'
+      } });
     });
     return base;
   }
@@ -136,7 +155,7 @@
     html += '<div style="margin-bottom:0.75rem"><span class="badge badge-' + esc(n.type) + '">' + esc(n.type) + '</span>'
       + '<span class="badge badge-sub">' + esc(n.subspecialty) + '</span>'
       + (n.review === false
-        ? '<span class="badge" style="background:rgba(214,172,99,0.22);color:#D6AC63">DRAFT</span>'
+        ? '<span class="badge" style="background:rgba(224,163,63,0.22);color:var(--ok-ochre)">DRAFT</span>'
         : '<span class="badge" style="background:rgba(81,207,102,0.16);color:#51CF66">reviewed ✓</span>')
       + '</div>';
     html += '<div class="rp-section"><div class="rp-section-title">Clinical Detail</div><div class="rp-detail">' + esc(n.detail) + '</div></div>';

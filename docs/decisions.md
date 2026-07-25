@@ -8,6 +8,9 @@ change works), `docs/docs-map.md` (the documentation pass).
 
 ## 1. Which chrome does a new page use?
 
+**Every page loads `css/tokens.css` first** — that is the brand (colour, type,
+geometry) and it is not optional. Then add the page's own sheet:
+
 | You are building… | CSS | JS | Precedent |
 |---|---|---|---|
 | A new tool/utility page | `css/site.css` | `js/site.js` (theme toggle, binds `.site-theme-toggle`) | `kag-extract.html`, `airway-jeopardy.html` |
@@ -16,15 +19,18 @@ change works), `docs/docs-map.md` (the documentation pass).
 | A graph surface | `css/graph.css` | `js/graph-view.js` + a lens | `graph.html` |
 
 **Never** put `css/main.css` / `js/main.js` on a new page — they are frozen
-legacy, used only by `cpt-search.html` and `ascii-editor.html` (which also
-carry `css/site.css` for the shared topbar). Do not extend them.
+legacy, used only by `cpt-search.html` (which also carries `css/site.css` for
+the shared topbar). They supply *components* only; their palette is re-pointed
+at the brand tokens. Do not extend them. `ascii-editor.html` was retired in
+2026-07 and is now a redirect stub.
 
 ## 2. Renaming or retiring a shipped page
 
 Never delete a shipped URL — someone may have linked it. Leave a **redirect
 stub** in its place that forwards the query string. Precedent: `mcq.html`,
 `mcq-study.html`, `occ*.html` → OKSAT pages; `kag.html`, `atlas.html` →
-`graph.html` lenses (forwarding `?node=`). Add the new stub to the stub lines
+`graph.html` lenses (forwarding `?node=`); `ascii-editor.html` → `index.html`
+(the tool was retired — a retired tool still leaves a stub). Add the new stub to the stub lines
 in the `README.md` file tree. A smoke test asserts stub forwarding
 (`tools/smoke-pages.mjs`), so update it too.
 
@@ -41,8 +47,8 @@ lowercase-alphanumeric, default `guest` (`norm()` in `js/oksat-store.js`,
 | Key / prefix | Owner file | Notes |
 |---|---|---|
 | `sk_theme` | `js/site.js`, `js/onepager.js` | day/night; `html[data-theme]` |
-| `sk_style` | `js/onepager.js` | one-pager style (matte/story) |
-| `sk_dynamic_colors` | `js/onepager.js` | one-pager toggle |
+| ~~`sk_style`~~ | — | **RETIRED** (2026-07, single identity). `js/onepager.js` removes it on load; do not reintroduce |
+| ~~`sk_dynamic_colors`~~ | — | **RETIRED** (2026-07). Hero-image colour extraction overrode the brand accent at runtime; the feature is off |
 | `oksat:reviewer`, `oksat:reviewers` | `js/oksat-reviewer.js` | active code + registry |
 | `oksat:migrated` | `js/oksat-reviewer.js` | one-time `mcq:*`→`oksat:*` marker |
 | `oksat:font` | `js/oksat-prefs.js` | `html[data-font]` |
@@ -79,12 +85,22 @@ merge with `tools/kag-validate.mjs` (`docs/authoring-kag.md`). Agents:
 
 ## 6. Styling / theming
 
-Components consume CSS custom properties only — **no raw color values**. A new
-color means adding a token to the owning block (`css/onepager.css` per style ×
-theme; `css/oksat.css`; `css/graph.css`; `css/site.css`). Theme/font/style
-switching is only ever an attribute flip on `<html>` (`data-theme`,
-`data-font`, `data-style`) — never a class swap on components. Color always
-means something (one hue per subspecialty); never decorative.
+Components consume CSS custom properties only — **no raw colour values**.
+Every colour on the site is declared in exactly one file, `css/tokens.css`
+(the "Lightbox" brand). A new colour means adding a token *there*, never in a
+page sheet or an inline style — a page-local `:root` loads later and silently
+wins, which is precisely how brand drift starts.
+
+Theme/font switching is only ever an attribute flip on `<html>` (`data-theme`,
+`data-font`) — never a class swap on components. Colour always means something
+(one hue per subspecialty); never decorative.
+
+**Categorical palettes are solved, not chosen.** The subspecialty markers,
+graph node types and structural classes were generated and checked against a
+colour-vision-deficiency validator; provenance and the exact invocations are in
+`docs/ui-directions.md`. Before editing any of them, re-run the validator, and
+keep a second channel (label, shape) so colour is never the only cue — graph
+node type carries a shape for exactly this reason.
 
 ## 7. Which plan doc governs what / when to log
 

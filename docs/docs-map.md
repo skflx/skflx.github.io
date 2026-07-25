@@ -17,12 +17,13 @@ no design judgment required.
 | `docs/kag-schema.md` | KAG data contract: node/edge fields, enums, storage/merge behavior | `tools/kag-validate.mjs` enums or `js/kag-store.js` load/merge/write semantics change |
 | `docs/authoring-kag.md` | How to author KAG shards | The shard workflow or validator flags/guarantees change |
 | `docs/authoring-oksat.md` | How to author an OKSAT module | Module schema, manifest entry shape, or Forge output changes |
-| `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
+| `docs/design-principles.md` | OKSAT interaction + typography principles (colour belongs to `css/tokens.css`) | An interaction principle or font theme changes |
+| `css/tokens.css` | **The brand.** Every colour on the site, both themes, plus the categorical palettes | Any visual change — and never anywhere else. Editing a categorical hue also means re-running the validator per `docs/ui-directions.md` |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
 | `docs/agent-native-plan.md` | Agent-native audit + issue roadmap (#42–#61) | An epic lands (tick it off) or the plan changes |
 | `docs/feature-requests.md` | Product backlog: user-facing features ranked utility × feasibility | A feature ships (drop it), or the evidence behind the ranking shifts materially — re-snapshot rather than patching counts in place |
-| `docs/ui-directions.md` | Candidate visual directions + the validated subspecialty marker set | A direction is picked (record it, then `docs/design-principles.md` takes over as the owner of the shipped system) |
+| `docs/ui-directions.md` | Palette provenance: why the old colours failed, how the shipped ones were solved, how to re-validate | A categorical palette changes — update the evidence, don't silently swap a hex |
 | `docs/oksat-plan.md`, `docs/oksat-next-iteration-plan.md`, `docs/oto-kag-atlas-plan.md` | **Historical plan records** | Never rewritten retroactively — only their `> Status:` header may be amended; corrections to the record go in `WIP.md` |
 | `docs/docs-map.md` | This checklist | A doc is added/removed, or the pass itself changes |
 | `images/list.txt` | Image inventory | An image is added/removed |

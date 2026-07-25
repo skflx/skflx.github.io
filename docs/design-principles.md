@@ -1,18 +1,23 @@
 # OKSAT design principles
 
 The design system behind the OHNS Knowledge Self-Assessment Tool
-(`oksat.html`, `oksat-study.html`, `oksat-generate.html`). Everything here is
-implemented as CSS custom properties in `css/oksat.css`; components consume
-only tokens, never raw values, so a retheme is a one-block edit.
+(`oksat.html`, `oksat-study.html`, `oksat-generate.html`).
+
+**Colour is not defined here.** Since 2026-07 the whole site shares one
+identity — *Lightbox* — declared once in `css/tokens.css` and loaded by every
+page before its own sheet. This document owns OKSAT's *interaction* and
+*typography* principles; `css/oksat.css` owns its components. Palette
+provenance (and the validator runs behind the categorical hues) lives in
+`docs/ui-directions.md`.
 
 ## 1. Principles
 
-1. **Warm, not clinical.** The canvas is warm cream (`#FAF6EE` light /
-   `#1B1813` dark), never hospital white. This is a *collected* study space,
-   not an EHR.
-2. **Calm feedback.** Correct/incorrect are sage (`#4F7042`) and rust
-   (`#9A4537`) — desaturated relatives of green/red that stay easy on the
-   eyes across a 100-question session and survive dark mode.
+1. **Lit, not printed.** The ground is dark and panels sit *above* it,
+   edge-lit like films on a viewing box — the inverse of a dark theme where
+   cards sink. Light mode is a designed daylight twin, not an inversion.
+2. **Calm feedback.** Correct/incorrect are a muted green and a muted rust —
+   desaturated relatives that stay easy on the eyes across a 100-question
+   session and hold up in both themes.
 3. **One hue per domain.** Each subspecialty owns a hue
    (see `OKSAT_SUBSPECIALTIES` in `js/oksat-manifest.js`), carried through
    module accent bars, concept chips, and Atlas graph nodes. Color always
@@ -30,22 +35,25 @@ only tokens, never raw values, so a retheme is a one-block edit.
    no explanations); missing data removes UI rather than breaking it.
    Storage reads are fail-safe; no build step anywhere.
 
-## 2. Color tokens
+## 2. Colour tokens
 
-| Token | Light | Dark | Role |
-|---|---|---|---|
-| `--ok-bg` | `#FAF6EE` | `#1B1813` | canvas |
-| `--ok-surface` | `#FFFFFF` | `#242019` | cards |
-| `--ok-text` | `#2A241D` | `#F1E7D8` | primary text |
-| `--ok-accent` | `#2C5454` | `#5FA3A3` | primary actions, focus |
-| `--ok-ochre` | `#9C7A45` | `#D6AC63` | kickers, review, warmth |
-| `--ok-correct` | `#4F7042` | `#9FBF7E` | sage — pass |
-| `--ok-incorrect` | `#9A4537` | `#DD9683` | rust — miss |
+Values are **not duplicated here** — they rot the moment the brand moves.
+Read them from `css/tokens.css`, which is commented and grouped. The roles
+OKSAT relies on:
 
-Subspecialty hues (module/Atlas identity): otology `#2F6E6A`, rhinology
-`#6E4A6B`, laryngology `#C06A4A`, H&N onc `#9A4B2E`, facial plastics
-`#7A5A3A`, pediatrics `#7C7A3A`, sleep `#5A567E`, endocrine `#A8863A`,
-fundamentals `#55606A`.
+| Token | Role |
+|---|---|
+| `--ok-bg` / `--ok-bg-2` | the ground the panels sit on |
+| `--ok-surface` / `--ok-surface-2` | cards — always *lighter* than the ground in dark |
+| `--ok-lift` / `--ok-lift-hover` | the edge-light + bloom that makes a panel read as lit |
+| `--ok-text` / `--ok-text-muted` / `--ok-text-faint` | type hierarchy |
+| `--ok-accent` / `--ok-on-accent` | primary actions, focus |
+| `--ok-ochre` | kickers, review state, the one warm note |
+| `--ok-correct` / `--ok-incorrect` (+ `-bg`) | answer feedback |
+| `--sub-<key>` | the nine subspecialty markers |
+
+The `--ok-lift` shadow is the load-bearing device: remove it and the
+direction collapses into an ordinary flat theme.
 
 ## 3. Typography — font themes
 

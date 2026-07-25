@@ -25,6 +25,21 @@
 (function () {
   'use strict';
 
+  /* Subspecialty markers are theme-dependent (light + dark solves), and
+     Cytoscape stores a concrete colour in element data — it cannot resolve
+     a CSS var(). So resolve here, and re-derive on the theme flip below. */
+  var NEUTRAL = { light: '#7C8794', dark: '#626D79' };   /* = --ok-text-faint */
+  function curTheme() {
+    try {
+      return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    } catch (e) { return 'dark'; }
+  }
+  function HUE(sub) {
+    var t = curTheme();
+    if (!sub) return NEUTRAL[t];
+    return (t === 'dark' && sub.hueDark) ? sub.hueDark : (sub.hue || NEUTRAL[t]);
+  }
+
   var moduleCache = {};      // slug → { meta, DOMAINS, CONCEPTS, ITEMS }
   var _reviewer = 'guest';   // injected by Phase C (oksat.html) via setContext
   var _completion = {};      // slug → { answered, total }, injected via setContext
@@ -78,7 +93,7 @@
       faint: cv('--txt3', '#5C6370'),
       border: cv('--border', '#2A2D3A'),
       sage: cv('--success', '#51CF66'),
-      ochre: cv('--node-vessel', '#9C7A45')
+      ochre: cv('--ok-ochre', '#E0A33F')
     };
   }
 
@@ -110,11 +125,12 @@
     (window.OKSAT_MANIFEST || []).forEach(function (entry) {
       var mod = moduleCache[entry.slug];
       if (!mod) return;
-      var sub = subs[entry.subspecialty] || { label: 'OHNS', hue: '#55606A' };
-      var subId = 's:' + (entry.subspecialty || 'other');
+      var sub = subs[entry.subspecialty] || null;
+      var subKeyOf = entry.subspecialty || '';
+      var subId = 's:' + (subKeyOf || 'other');
       if (!usedSubs[subId]) {
         usedSubs[subId] = true;
-        els.push({ data: { id: subId, kind: 'sub', label: sub.label, hue: sub.hue } });
+        els.push({ data: { id: subId, kind: 'sub', label: (sub && sub.label) || 'OHNS', hue: HUE(sub), subKey: subKeyOf } });
       }
 
       var comp = completion[entry.slug];
@@ -122,7 +138,7 @@
       var mId = 'm:' + entry.slug;
       els.push({
         data: {
-          id: mId, kind: 'module', label: entry.title, hue: sub.hue,
+          id: mId, kind: 'module', label: entry.title, hue: HUE(sub), subKey: subKeyOf,
           slug: entry.slug, count: entry.count, pct: pct,
           done: pct >= 0.999,
           sub: (comp ? comp.answered : 0) + ' / ' + entry.count,
@@ -137,7 +153,8 @@
       Object.keys(DOMAINS).forEach(function (dKey) {
         var d = DOMAINS[dKey];
         var dId = 'd:' + entry.slug + ':' + dKey;
-        els.push({ data: { id: dId, kind: 'domain', label: d.label, hue: d.color || sub.hue, slug: entry.slug } });
+        els.push({ data: { id: dId, kind: 'domain', label: d.label, hue: d.color || HUE(sub),
+          subKey: d.color ? '' : subKeyOf, slug: entry.slug } });
         els.push({ data: { id: 'e:' + mId + ':' + dId, source: mId, target: dId, kind: 'branch' } });
       });
       Object.keys(CONCEPTS).forEach(function (cKey) {
@@ -149,7 +166,8 @@
         els.push({
           data: {
             id: cId, kind: 'concept', label: c.label,
-            hue: (d && d.color) || sub.hue,
+            hue: (d && d.color) || HUE(sub),
+            subKey: (d && d.color) ? '' : subKeyOf,
             slug: entry.slug, concept: cKey,
             pct: p.total ? p.answered / p.total : 0,
             done: p.total > 0 && p.answered === p.total,
@@ -165,14 +183,15 @@
     var tax = (window.OKSAT_TAXONOMY && window.OKSAT_TAXONOMY.topics) || [];
     tax.forEach(function (t) {
       if (t.moduleId) return; // built topics already render as modules
-      var sub = subs[t.subspecialty] || { label: 'OHNS', hue: '#55606A' };
-      var subId = 's:' + (t.subspecialty || 'other');
+      var sub = subs[t.subspecialty] || null;
+      var subKeyOf = t.subspecialty || '';
+      var subId = 's:' + (subKeyOf || 'other');
       if (!usedSubs[subId]) {
         usedSubs[subId] = true;
-        els.push({ data: { id: subId, kind: 'sub', label: sub.label, hue: sub.hue } });
+        els.push({ data: { id: subId, kind: 'sub', label: (sub && sub.label) || 'OHNS', hue: HUE(sub), subKey: subKeyOf } });
       }
       var gId = 'g:' + t.id;
-      els.push({ data: { id: gId, kind: 'gap', label: t.label, hue: sub.hue, topic: t.id } });
+      els.push({ data: { id: gId, kind: 'gap', label: t.label, hue: HUE(sub), subKey: subKeyOf, topic: t.id } });
       els.push({ data: { id: 'e:' + subId + ':' + gId, source: subId, target: gId, kind: 'branch' } });
     });
 
@@ -195,7 +214,7 @@
     });
 
     /* The sibling graph — Knowledge Atlas Graph, one dashed hop away. */
-    els.push({ data: { id: 'kag', kind: 'kag', label: 'Knowledge Atlas Graph ↗', hue: '#4A9EFF' } });
+    els.push({ data: { id: 'kag', kind: 'kag', label: 'Knowledge Atlas Graph ↗', hue: '#4FB3E8' } });
     Object.keys(usedSubs).forEach(function (subId) {
       els.push({ data: { id: 'e:kag:' + subId, source: 'kag', target: subId, kind: 'ghost' } });
     });
@@ -341,7 +360,18 @@
 
     /* On day/night flip the engine reapplies base + our style(), so the
        explicit background-color fills must be repainted. */
-    onThemeChange: function (api) { paintCompletion(api.cy, api); }
+    onThemeChange: function (api) {
+      /* Marker hues live in element data, so a theme flip has to re-derive
+         them before the completion fills are repainted over the top. */
+      try {
+        var subs = window.OKSAT_SUBSPECIALTIES || {};
+        api.cy.nodes().forEach(function (n) {
+          var k = n.data('subKey');
+          if (k && subs[k]) n.data('hue', HUE(subs[k]));
+        });
+      } catch (e) {}
+      paintCompletion(api.cy, api);
+    }
   };
 
   /* Re-export for the Phase-C compat shim in js/oksat-atlas.js:

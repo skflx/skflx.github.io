@@ -76,8 +76,27 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - `node tools/check-data.mjs` passes on the merged graph (ids unique+kebab,
   ≥1 source each, no dangling edges, enums valid, oksat links resolve).
 
-### Legacy pages (`cpt-search.html`, `ascii-editor.html`)
+### Legacy page (`cpt-search.html`)
 - Boot with zero console errors — nothing more (frozen).
+
+### Brand consistency (any visual change)
+
+The site has one identity and one colour file. After touching styling:
+
+1. `css/tokens.css` is linked **before** the page's own sheet on every page
+   (`grep -L 'css/tokens.css' *.html` should list only redirect stubs).
+2. No colour literal has crept back into a shipped sheet, page or script:
+   ```bash
+   grep -rnE "#[0-9A-Fa-f]{6}|rgba?\(" --include=*.css --include=*.html --include=*.js . \
+     | grep -v node_modules | grep -v 'css/tokens.css'
+   ```
+   Hits are only acceptable inside redirect stubs (which are standalone by
+   design), module `DOMAINS` data, and documented JS fallbacks.
+3. Both themes on every page: flip the toggle and confirm nothing goes
+   invisible — particularly panel edges, which carry the Lightbox lift.
+4. If a categorical palette changed, re-run the validator (see
+   `docs/ui-directions.md`) and confirm the second channel still exists —
+   labels on chips and bars, shapes on graph node types.
 
 ## Adding a new page to the harness
 

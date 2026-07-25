@@ -242,3 +242,60 @@ measurably correct, so the work started with measurement rather than taste.
 owner decision (`docs/decisions.md` §8). Once a direction is chosen, note that
 the map holds one `hue` per subspecialty for both themes; a correct dark mode
 needs a second value per entry, which touches every reader of `.hue`.
+
+---
+
+# WIP — Lightbox: one visual identity site-wide
+
+## Goal
+Replace the palette everywhere and give the site a single brand, rather than
+the three looks it had grown (one-pager styles, OKSAT warm cream, graph blue).
+Direction chosen by the owner from the round-two proof sheet: **Lightbox** —
+dark ground, panels brighter than it and edge-lit like films on a viewing box;
+light mode is a designed daylight twin, not an inversion.
+
+## Actions Taken
+1. **`css/tokens.css` — the brand file.** Every colour on the site now lives in
+   one place, loaded first on every page. `css/oksat.css`, `css/site.css`,
+   `css/graph.css` and `css/main.css` had their own palettes deleted; the last
+   two are re-pointed via legacy aliases so two large frozen sheets did not
+   need rewriting.
+2. **Solved categorical palettes.** The nine subspecialty markers were
+   regenerated (the old set failed 3 of 5 checks — six hues below the chroma
+   floor, and `fprs`/`hn_onc` at ΔE 6.4 normal vision, 2.1 protan). Graph node
+   types got their own all-pairs-validated set **plus shape encoding**, since
+   seven categories cannot be separated by hue alone. `OKSAT_SUBSPECIALTIES`
+   gained a `hueDark` per entry and a `window.OKSATHue()` helper; every
+   `.hue` consumer now routes through it, and the study lens re-derives marker
+   colours on the day/night flip.
+3. **One identity on the one-pager.** The Matte/Story switcher, its CSS blocks
+   and decorations, and the `sk_style` key are retired (the key is removed from
+   storage on load). Day/night remains and still follows the OS on first visit.
+4. **Legacy pages.** `cpt-search.html` was rethemed onto the brand by
+   re-pointing `css/main.css`'s palette — its components were left untouched.
+   `js/main.js`'s hero-image colour extraction is **disabled**: it wrote
+   `--color-*` inline on `<html>` at runtime and overrode the brand accent
+   (`sk_dynamic_colors` retired with it). `ascii-editor.html` was retired at
+   the owner's request and is now a redirect stub to `index.html`.
+5. **Type.** Default stack is IBM Plex Sans + JetBrains Mono; OKSAT's default
+   font theme moved from Manuscript to Atlas. The four reader-selectable font
+   themes stay (Manuscript for long-form, Hyperlegible for accessibility).
+6. **Module domain hues** in `js/mcq-modules/*.js` were remapped onto the brand
+   family (colour values only — no content touched).
+
+## Verification
+- `node tools/check-data.mjs` — 39/39.
+- Console check across the CDN-free pages (index, airway, cpt-search,
+  kag-extract, the ascii-editor stub): zero JS errors; `airway-jeopardy.html`
+  still issues **zero external requests**, so it remains self-contained.
+- Rendered light + dark on index, oksat hub and cpt-search.
+- The browser suites could not run in this sandbox (installed Playwright wants
+  a Chromium build the image doesn't carry, and the CDNs are blocked) — CI
+  runs them on the PR.
+
+## Next Steps
+Watch CI for the OKSAT/graph pages, which could not be booted locally. Two
+follow-ups worth doing: the structural lens still has nine class hues that
+cannot all be mutually distinguishable (it leans on its legend and labels), and
+`docs/verification.md` now carries a brand-consistency probe that should be run
+on any future visual change.

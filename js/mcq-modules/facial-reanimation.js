@@ -13,13 +13,13 @@ const meta = {
 };
 
 const DOMAINS = {
-  anatomy:      { label: 'Anatomy',         color: '#7B5C3A', hex: 'rgba(123,92,58,0.13)' },
-  physiology:   { label: 'Physiology',      color: '#7B6B85', hex: 'rgba(123,107,133,0.14)' },
-  evaluation:   { label: 'Evaluation',      color: '#2C5454', hex: 'rgba(44,84,84,0.14)' },
-  workup:       { label: 'Workup',          color: '#4A5C6B', hex: 'rgba(74,92,107,0.14)' },
-  treatment:    { label: 'Treatment',       color: '#4E6B4A', hex: 'rgba(78,107,74,0.14)' },
-  complications:{ label: 'Complications',   color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
-  cases:        { label: 'Cases',           color: '#8B4513', hex: 'rgba(139,69,19,0.14)' },
+  anatomy:      { label: 'Anatomy',         color: '#ad9911', hex: 'rgba(173,153,17,0.13)' },
+  physiology:   { label: 'Physiology',      color: '#854fa9', hex: 'rgba(133,79,169,0.14)' },
+  evaluation:   { label: 'Evaluation',      color: '#10938e', hex: 'rgba(16,147,142,0.14)' },
+  workup:       { label: 'Workup',          color: '#4376d8', hex: 'rgba(67,118,216,0.14)' },
+  treatment:    { label: 'Treatment',       color: '#57bd72', hex: 'rgba(87,189,114,0.14)' },
+  complications:{ label: 'Complications',   color: '#a63a2d', hex: 'rgba(166,58,45,0.14)' },
+  cases:        { label: 'Cases',           color: '#903a03', hex: 'rgba(144,58,3,0.14)' },
 };
 
 const CONCEPTS = {

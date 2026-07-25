@@ -6,6 +6,7 @@
     <title>KAG Extractor | skflx.MD</title>
     <meta name="description" content="Claude API-powered Markdown to knowledge graph JSON extractor for OHNS study.">
     <script>(function(){try{var t=localStorage.getItem('sk_theme');if(!t)t='dark';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+    <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/site.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,20 +15,23 @@
         /* ── Reset & Base ──────────────────────────────── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --bg-primary: #0D0F14;
-            --bg-surface: #161920;
-            --bg-elevated: #1E2029;
-            --bg-hover: #262833;
-            --border: #2A2D3A;
-            --border-focus: #4A9EFF;
-            --accent: #4A9EFF;
-            --accent-glow: rgba(74,158,255,0.15);
-            --success: #51CF66;
-            --danger: #FF6B6B;
-            --warning: #FFD43B;
-            --text-primary: #E8EAF0;
-            --text-secondary: #9CA3B0;
-            --text-muted: #5C6370;
+            /* Brand comes from css/tokens.css, loaded before this page's
+               inline styles; these are local aliases only. Never put a
+               literal colour here — this block loads last and would win. */
+            --bg-primary: var(--ok-bg);
+            --bg-surface: var(--ok-surface);
+            --bg-elevated: var(--ok-surface-2);
+            --bg-hover: var(--ok-hover);
+            --border: var(--ok-border);
+            --border-focus: var(--ok-accent);
+            --accent: var(--ok-accent);
+            --accent-glow: var(--ok-glow);
+            --success: var(--ok-correct);
+            --danger: var(--ok-incorrect);
+            --warning: var(--ok-ochre);
+            --text-primary: var(--ok-text);
+            --text-secondary: var(--ok-text-muted);
+            --text-muted: var(--ok-text-faint);
             --font-body: 'IBM Plex Sans', -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --radius: 8px;

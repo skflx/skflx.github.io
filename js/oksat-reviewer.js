@@ -123,7 +123,7 @@
           'cursor:pointer;border-radius:10px;padding:0.6rem 0.9rem;font-size:0.9rem;' +
           "font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:0.01em;" +
           (primary
-            ? 'background:var(--ok-accent,#2C5454);color:#fff;border:1px solid var(--ok-accent,#2C5454);'
+            ? 'background:var(--ok-accent,#4FB3E8);color:var(--ok-on-accent,#04121A);border:1px solid var(--ok-accent,#4FB3E8);'
             : 'background:transparent;color:var(--ok-text,#222);border:1px solid var(--ok-border,#ccc);');
         return b;
       }

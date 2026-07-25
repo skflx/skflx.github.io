@@ -16,31 +16,34 @@ sections (About opens by default; the rest are collapsed, clear at a glance):
 3. **Research — hearing science & how surgeons learn** — research areas (PubMed)
 4. **Outside of medicine** — art, music, outdoors, fitness
 
-### Visitor-selectable visual styles
+### One visual identity — "Lightbox"
 
-A switcher in the header lets the visitor choose between two styles, each
-with its own typography, color, and decorative treatment:
+The whole site shares a single design language. The ground is dark and content
+panels are *brighter* than it, edge-lit like films clipped to a viewing box —
+the inverse of a typical dark theme, where cards sink. Light mode is a designed
+daylight twin, not an inversion.
 
-- **Matte** — warm matte red / gold / brown (day) and a warm dark (night); DM Sans + Inter
-- **Story** — warm paper + ink, Fraunces serif with handwritten Caveat accents
-
-Layered on top is a **day / night** toggle. Both the chosen style and theme are
-persisted in `localStorage` (`sk_style`, `sk_theme`) and respect
-`prefers-color-scheme` on first visit.
+A **day / night** toggle is the only visual control; the choice is persisted in
+`localStorage` (`sk_theme`) and respects `prefers-color-scheme` on first visit.
+(The earlier Matte / Story style switcher was retired in favour of one identity.)
 
 ### Modular by design
 
-Styling is token-driven: each style declares its color + type tokens for both
-themes in `css/onepager.css`, and the shared components consume only those
-tokens. Retheming or adding a style is a localized edit. Switching is driven by
-`data-style` / `data-theme` attributes on `<html>`.
+Styling is token-driven and colour is defined in exactly **one** file,
+`css/tokens.css`, which every page loads first. Components consume custom
+properties and never hard-code a value, so a retheme is a single-file edit.
+Day/night is an attribute flip on `<html>` (`data-theme`).
+
+Categorical colour (the nine subspecialty markers, graph node types,
+structural classes) is a *solved* palette, validated for colour-vision
+deficiency rather than chosen by eye — see `docs/ui-directions.md`.
 
 ## Tech Stack
 
 - **HTML5** — semantic markup; native `<details>` for the accordion (no JS needed to open/close)
 - **CSS3** — custom properties, Grid, Flexbox
 - **JavaScript** — vanilla, no frameworks (`js/onepager.js`: style switch, theme toggle, hash deep-linking)
-- **Fonts** — Google Fonts (DM Sans, Inter, Fraunces, Caveat)
+- **Fonts** — Google Fonts (IBM Plex Sans, JetBrains Mono; OKSAT additionally offers Fraunces / Crimson Pro / Inter / Atkinson Hyperlegible as reader-selectable themes)
 - **Icons** — Font Awesome 6
 
 ## File Structure
@@ -48,9 +51,11 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 Grouped by system; per-file detail lives in each file's header comment.
 
 ```
+├── css/tokens.css          # THE BRAND FILE — every colour, one place; loaded first everywhere
+│
 ├── index.html              # The one-pager
-│   ├── css/onepager.css    #   its styles (2 styles × 2 themes)
-│   └── js/onepager.js      #   style switch, theme toggle, deep-linking
+│   ├── css/onepager.css    #   its layout + components (colour comes from tokens.css)
+│   └── js/onepager.js      #   theme toggle, deep-linking
 │
 ├── oksat.html              # OKSAT hub — modules + Atlas link + sync settings
 ├── oksat-study.html        # OKSAT viewer (?m=<slug>&c=<concept>)
@@ -72,12 +77,12 @@ Grouped by system; per-file detail lives in each file's header comment.
 │
 ├── airway-jeopardy.html    # Airway Rounds team quiz (CDN-free, self-contained)
 │   └── js/airway-*.js      #   engine + question bank
-├── cpt-search.html         # CPT code search   (legacy: css/main.css + js/main.js)
-├── ascii-editor.html       # ASCII/Unicode diagram editor (legacy chrome)
+├── cpt-search.html         # CPT code search   (legacy components: css/main.css + js/main.js)
 ├── css/site.css, js/site.js  # Shared chrome for newer tool pages (theme toggle)
 │
 ├── mcq*.html, occ*.html    # Redirect stubs → OKSAT pages (query strings preserved)
 ├── kag.html, atlas.html    # Redirect stubs → graph.html lenses (forward ?node=)
+├── ascii-editor.html       # Redirect stub → index.html (tool retired 2026-07)
 │
 ├── CLAUDE.md               # Operating manual for coding agents
 ├── WIP.md                  # Running project log (one section per workstream)

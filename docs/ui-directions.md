@@ -1,9 +1,16 @@
 # UI directions — twelve candidates, one validated marker set
 
-> Snapshot date: 2026-07-25. Status: **proposal awaiting owner pick.** Nothing
-> here is implemented. Changing `OKSAT_SUBSPECIALTIES` is an owner decision
-> (`docs/decisions.md` §8) — this document exists to make that decision, not to
-> pre-empt it.
+> Snapshot date: 2026-07-25. Status: **DECIDED — "Lightbox" (round 2, #3) was
+> chosen by the owner and is implemented site-wide.** This document is kept as
+> the *provenance record* for the palettes: the measured case against the old
+> colours, the solved replacements, and the validator invocations to re-run
+> before anyone edits a hue. The shipped values live in `css/tokens.css`; where
+> the two disagree, the code wins.
+>
+> Also decided at the same time: the one-pager's Matte/Story switcher was
+> retired for a single identity, day/night still follows the OS on first visit,
+> `cpt-search.html` was rethemed onto the brand, and `ascii-editor.html` was
+> retired to a redirect stub.
 
 Two proof sheets, both rendering the same components in light + dark:
 

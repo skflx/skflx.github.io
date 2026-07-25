@@ -13,13 +13,13 @@ const meta = {
 };
 
 const DOMAINS = {
-  foundations: { label: 'Foundations', color: '#8B6F47', hex: 'rgba(139,111,71,0.12)' },
-  CHL: { label: 'Conductive', color: '#7B6B85', hex: 'rgba(123,107,133,0.14)' },
-  SNHL: { label: 'Sensorineural', color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
-  syndromic: { label: 'Syndromic', color: '#2C5454', hex: 'rgba(44,84,84,0.14)' },
-  workup: { label: 'Workup', color: '#7B7B4A', hex: 'rgba(123,123,74,0.14)' },
-  management: { label: 'Management', color: '#5C4F7B', hex: 'rgba(92,79,123,0.14)' },
-  cases: { label: 'Cases', color: '#8B4513', hex: 'rgba(139,69,19,0.14)' },
+  foundations: { label: 'Foundations', color: '#d78c1a', hex: 'rgba(215,140,26,0.12)' },
+  CHL: { label: 'Conductive', color: '#854fa9', hex: 'rgba(133,79,169,0.14)' },
+  SNHL: { label: 'Sensorineural', color: '#a63a2d', hex: 'rgba(166,58,45,0.14)' },
+  syndromic: { label: 'Syndromic', color: '#10938e', hex: 'rgba(16,147,142,0.14)' },
+  workup: { label: 'Workup', color: '#767709', hex: 'rgba(118,119,9,0.14)' },
+  management: { label: 'Management', color: '#7692f1', hex: 'rgba(118,146,241,0.14)' },
+  cases: { label: 'Cases', color: '#903a03', hex: 'rgba(144,58,3,0.14)' },
 };
 
 const CONCEPTS = {

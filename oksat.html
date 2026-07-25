@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-font="manuscript">
+<html lang="en" data-theme="light" data-font="atlas">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Crimson+Pro:ital,wght@0,300..700;1,400&family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/oksat.css">
 </head>
 <body>
@@ -81,7 +82,7 @@
         <div class="hub-kicker"><hr><span>Companion tools</span><hr></div>
         <div class="hub-modules">
           <a class="module-card" href="oksat-adaptive.html">
-            <div class="module-accent" style="background:#2C5454"></div>
+            <div class="module-accent" style="background:var(--ok-accent)"></div>
             <div class="module-body">
               <div class="module-label">Adaptive Practice · Gemini</div>
               <div class="module-title">Drill gaps &amp; weak spots</div>
@@ -90,7 +91,7 @@
             <div class="module-arrow">Launch &rarr;</div>
           </a>
           <a class="module-card" href="oksat-generate.html">
-            <div class="module-accent" style="background:#9C7A45"></div>
+            <div class="module-accent" style="background:var(--ok-ochre)"></div>
             <div class="module-body">
               <div class="module-label">Question Forge · Gemini</div>
               <div class="module-title">Generate a new module</div>
@@ -99,7 +100,7 @@
             <div class="module-arrow">Launch &rarr;</div>
           </a>
           <a class="module-card" href="kag.html">
-            <div class="module-accent" style="background:#4A9EFF"></div>
+            <div class="module-accent" style="background:var(--ok-accent-soft)"></div>
             <div class="module-body">
               <div class="module-label">Knowledge Atlas Graph</div>
               <div class="module-title">KAG — concept graph</div>
@@ -225,7 +226,7 @@
         a.className = 'module-card';
         a.href = 'oksat-study.html?m=' + encodeURIComponent(m.slug);
         a.innerHTML =
-          '<div class="module-accent" style="background:' + (subInfo ? subInfo.hue : m.accent) + '"></div>' +
+          '<div class="module-accent" style="background:' + (subInfo ? OKSATHue(subInfo) : m.accent) + '"></div>' +
           '<div class="module-body">' +
             '<div class="module-label">' + m.kicker + ' · ' + m.count + ' questions</div>' +
             '<div class="module-title">' + m.title + '</div>' +
@@ -247,7 +248,7 @@
           if (!mods.length && !gaps.length) return;
           var head = document.createElement('div');
           head.className = 'hub-subhead';
-          head.innerHTML = '<span class="tick" style="background:' + subInfo.hue + '"></span>' + subInfo.label;
+          head.innerHTML = '<span class="tick" style="background:' + OKSATHue(subInfo) + '"></span>' + subInfo.label;
           wrap.appendChild(head);
           mods.forEach(function (m) { wrap.appendChild(moduleCard(m)); });
           if (gaps.length) {
@@ -327,7 +328,7 @@
           var s = (window.OKSAT_SUBSPECIALTIES || {})[k]; if (!s) return;
           var chip = document.createElement('span');
           chip.className = 'atlas-key';
-          chip.innerHTML = '<span class="swatch" style="background:' + s.hue + '"></span>' + s.label;
+          chip.innerHTML = '<span class="swatch" style="background:' + OKSATHue(s) + '"></span>' + s.label;
           el.appendChild(chip);
         });
       }

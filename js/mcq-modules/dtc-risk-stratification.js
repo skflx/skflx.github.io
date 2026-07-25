@@ -14,12 +14,12 @@ const meta = {
 };
 
 const DOMAINS = {
-  staging: { label: 'AJCC / TNM Staging', color: '#2C5454', hex: 'rgba(44,84,84,0.14)' },
-  operative: { label: 'Operative Approach (Rec 15)', color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
-  completion: { label: 'Completion (Rec 16)', color: '#5C4F7B', hex: 'rgba(92,79,123,0.14)' },
-  pathology: { label: 'Histopathology (Rec 27)', color: '#7B7B4A', hex: 'rgba(123,123,74,0.14)' },
-  riskStrat: { label: 'Risk Stratification (Rec 28)', color: '#7B5C3A', hex: 'rgba(123,92,58,0.14)' },
-  controversy: { label: 'Controversy Stress-Test', color: '#8B4513', hex: 'rgba(139,69,19,0.14)' },
+  staging: { label: 'AJCC / TNM Staging', color: '#10938e', hex: 'rgba(16,147,142,0.14)' },
+  operative: { label: 'Operative Approach (Rec 15)', color: '#a63a2d', hex: 'rgba(166,58,45,0.14)' },
+  completion: { label: 'Completion (Rec 16)', color: '#7692f1', hex: 'rgba(118,146,241,0.14)' },
+  pathology: { label: 'Histopathology (Rec 27)', color: '#767709', hex: 'rgba(118,119,9,0.14)' },
+  riskStrat: { label: 'Risk Stratification (Rec 28)', color: '#ad9911', hex: 'rgba(173,153,17,0.14)' },
+  controversy: { label: 'Controversy Stress-Test', color: '#903a03', hex: 'rgba(144,58,3,0.14)' },
 };
 
 const CONCEPTS = {

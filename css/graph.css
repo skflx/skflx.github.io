@@ -8,57 +8,13 @@
    day/night toggle in js/site.js works here too.
    ============================================================= */
 
-:root {
-  --bg: #0D0F14;
-  --surface: #161920;
-  --elevated: #1E2029;
-  --hover: #262833;
-  --border: #2A2D3A;
-  --border-focus: #4A9EFF;
-  --accent: #4A9EFF;
-  --accent-glow: rgba(74, 158, 255, 0.15);
-  --success: #51CF66;
-  --danger: #FF6B6B;
-  --warning: #FFD43B;
-  --txt: #E8EAF0;
-  --txt2: #9CA3B0;
-  --txt3: #5C6370;
-  --font: 'IBM Plex Sans', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --rad: 8px;
-  --rad-lg: 12px;
-  --tr: 200ms ease;
-  /* Node type hues — shared by badges + the Knowledge lens style() */
-  --node-anatomy: #4A9EFF;
-  --node-pathology: #FF6B6B;
-  --node-procedure: #51CF66;
-  --node-nerve: #FFD43B;
-  --node-vessel: #FF922B;
-  --node-drug: #CC5DE8;
-  --node-concept: #868E96;
-  /* Structure class hues — shared by the Structural lens style() */
-  --struct-bone: #E8C170;
-  --struct-cartilage: #6BC5D2;
-  --struct-ligament: #C58BE0;
-  --struct-fascia: #8FBF7F;
-  --struct-joint: #FF9F68;
-  --struct-foramen: #7FA6FF;
-  --struct-space: #9CA3B0;
-  --struct-membrane: #E58FB0;
-  --struct-muscle: #F07070;
-}
-
-:root[data-theme="light"] {
-  --bg: #F5F1E8;
-  --surface: #FBF8F1;
-  --elevated: #F0EADD;
-  --hover: #E8DFD0;
-  --border: #E0D6C4;
-  --border-focus: #4A9EFF;
-  --txt: #2A241D;
-  --txt2: #6B5F4E;
-  --txt3: #9B8D77;
-}
+/* ===== TOKENS =====
+   Owned by css/tokens.css (the Lightbox brand file), loaded
+   before this sheet on graph.html. That file also aliases the
+   short names this stylesheet was written against (--bg,
+   --surface, --txt, --accent, --node-*, --struct-*), so the
+   lens style() functions below keep working unchanged. Do not
+   re-declare tokens here. */
 
 *,
 *::before,

@@ -28,7 +28,7 @@ The browser suites need a real Chromium and, for the OKSAT/graph pages, network 
 Three mostly-independent systems share the repo:
 
 ### 1. The one-pager (`index.html`)
-Uses `css/onepager.css` + `js/onepager.js` only. Two visitor-selectable styles (Matte, Story) × day/night theme, driven by `data-style` / `data-theme` attributes on `<html>` and persisted as `localStorage` `sk_style` / `sk_theme`. Styling is token-driven: each style declares its tokens for both themes in `css/onepager.css`; components consume only tokens, so retheming is a localized edit. Native `<details>` provides the accordion (no JS to open/close).
+Uses `css/tokens.css` + `css/onepager.css` + `js/onepager.js` only. **One identity site-wide ("Lightbox")** × day/night theme, driven by the `data-theme` attribute on `<html>` and persisted as `localStorage` `sk_theme`. The former Matte/Story style switcher and its `sk_style` key are retired. Native `<details>` provides the accordion (no JS to open/close).
 
 ### 2. OKSAT (OHNS Knowledge Self-Assessment Tool)
 - **Pages:** `oksat.html` (hub + settings), `oksat-study.html?m=<slug>&c=<concept>` (viewer), `oksat-generate.html` (Gemini "Question Forge"), `oksat-adaptive.html`. Old `mcq*.html` and `occ*.html` are redirect stubs.
@@ -36,7 +36,7 @@ Uses `css/onepager.css` + `js/onepager.js` only. Two visitor-selectable styles (
 - **Modules are data files:** one file per module in `js/mcq-modules/`, ending with exactly `window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };`, plus one manifest entry in `js/oksat-manifest.js` (which also owns `OKSAT_SUBSPECIALTIES` — the one-hue-per-subspecialty map). You never touch the engine to add content. Schema: `docs/authoring-oksat.md`.
 - **Completion database:** `data/oksat-db.json` — dated per-reviewer completion, read/merged on load; writes go via download-to-commit or a GitHub Contents API push with a runtime-only token (never stored). Reviewer identity: `js/oksat-reviewer.js` (also migrates legacy `mcq:*` localStorage to `oksat:*`).
 - **Storage:** all new persistence goes through `js/oksat-store.js` (`window.OKSATStore`); existing modules keep their duplicated load/save helpers on purpose (regression surface — don't rip them out).
-- **Design system:** `docs/design-principles.md`, implemented as CSS custom properties in `css/oksat.css`. Answers lock on first attempt (Leitner spaced repetition resurfaces misses); keyboard-first; the engine tolerates sparse modules — missing data removes UI rather than breaking it.
+- **Design system:** `docs/design-principles.md`; colour tokens live in `css/tokens.css`, OKSAT-specific components in `css/oksat.css`. Answers lock on first attempt (Leitner spaced repetition resurfaces misses); keyboard-first; the engine tolerates sparse modules — missing data removes UI rather than breaking it.
 
 ### 3. KAG (Knowledge Atlas Graph) + unified graph
 - **The JSON file is the database.** `data/kag-graph.json` (schema v2; hundreds of nodes/edges — check the file for live counts) is the site's canonical knowledge graph — GitHub Pages is static, so there is no server. Contract: `docs/kag-schema.md` (authoritative; enums copied verbatim from the validator).
@@ -45,13 +45,14 @@ Uses `css/onepager.css` + `js/onepager.js` only. Two visitor-selectable styles (
 - **Data access:** always through `js/kag-store.js` (`KAGStore`): fetch + merge where **LOCAL WINS** on progress fields, download / Contents-API push write paths. Structural fields (`structure`, `region`, `laterality`) exist only on physical anatomical structures; the structural lens is a pure filtered view holding no data of its own.
 
 ### Other tools
-`airway-jeopardy.html` (+ `js/airway-engine.js`, `js/airway-questions.js`) is deliberately **CDN-free and self-contained**. `kag-extract.html` extracts graph shards via the Claude API. `cpt-search.html` and `ascii-editor.html` are the legacy tools still on `css/main.css` / `js/main.js`. Newer tool pages share chrome via `css/site.css` + `js/site.js` (theme toggle bound to `sk_theme` / `html[data-theme]`).
+`airway-jeopardy.html` (+ `js/airway-engine.js`, `js/airway-questions.js`) is deliberately **CDN-free and self-contained** (it loads only local CSS — keep it that way). `kag-extract.html` extracts graph shards via the Claude API. `cpt-search.html` is the one remaining legacy page, still using `css/main.css` / `js/main.js` for *components* only — its palette now comes from `css/tokens.css`. `ascii-editor.html` was retired (2026-07) and is a redirect stub. Newer tool pages share chrome via `css/site.css` + `js/site.js` (theme toggle bound to `sk_theme` / `html[data-theme]`).
 
 ## Conventions
 
 - **Routine decisions are pre-answered.** For "which CSS/JS does a new page use", renames/redirect stubs, the localStorage key registry, adding a module or subspecialty, and what must be escalated to the owner, follow `docs/decisions.md` instead of inferring from precedent. How to prove a change works, per subsystem: `docs/verification.md`.
 - **Vanilla JS, guarded IIFEs, defensive throughout:** wrap `localStorage` and DOM access in try/catch no-ops; storage reads are fail-safe; degrade gracefully rather than throw.
-- **Token-driven theming everywhere:** components consume CSS custom properties, never raw values; theme/font switching is an attribute flip on `<html>` (`data-theme`, `data-font`, `data-style`). Color always means something (one hue per subspecialty) — never decoration.
+- **`css/tokens.css` is the single source of colour.** Every page loads it *first*, before its own stylesheet. No other file may declare a colour — not a hex, not an rgba, not in an inline `style`, not as a JS fallback worth caring about. A page-local `:root` block loads later and silently wins, which is how brand drift happens; if you need a new colour, add a token there. Categorical hues (subspecialty markers, graph node types, structural classes) are **solved palettes** — re-run the validator in `docs/ui-directions.md` before touching one, and never let colour be the only cue (graph node type also carries a shape).
+- **Token-driven theming everywhere:** components consume CSS custom properties, never raw values; theme/font switching is an attribute flip on `<html>` (`data-theme`, `data-font`). Color always means something (one hue per subspecialty) — never decoration.
 - **CDN dependencies** (React, htm, Cytoscape) are pinned UMD `<script>` tags per page — no npm installs for shipped code.
 - **Secrets never touch the repo:** Anthropic/Gemini API keys live in `localStorage` only; GitHub push tokens are runtime-only and never stored.
 - **localStorage namespaces:** `sk_*` (site chrome), `oksat:*` (OKSAT), `kag-graph` (KAG local state).

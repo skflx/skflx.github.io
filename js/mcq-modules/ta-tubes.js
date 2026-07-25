@@ -13,12 +13,12 @@ const meta = {
 };
 
 const DOMAINS = {
-  foundations: { label: 'Foundations', color: '#8B6F47', hex: 'rgba(139,111,71,0.12)' },
-  bmt: { label: 'Tubes & OME', color: '#7B6B85', hex: 'rgba(123,107,133,0.14)' },
-  tonsillectomy: { label: 'Tonsillectomy', color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
-  neck: { label: 'Neck Node', color: '#2C5454', hex: 'rgba(44,84,84,0.14)' },
-  complications: { label: 'Complications', color: '#7B7B4A', hex: 'rgba(123,123,74,0.14)' },
-  cases: { label: 'Integration', color: '#8B4513', hex: 'rgba(139,69,19,0.14)' },
+  foundations: { label: 'Foundations', color: '#d78c1a', hex: 'rgba(215,140,26,0.12)' },
+  bmt: { label: 'Tubes & OME', color: '#854fa9', hex: 'rgba(133,79,169,0.14)' },
+  tonsillectomy: { label: 'Tonsillectomy', color: '#a63a2d', hex: 'rgba(166,58,45,0.14)' },
+  neck: { label: 'Neck Node', color: '#10938e', hex: 'rgba(16,147,142,0.14)' },
+  complications: { label: 'Complications', color: '#767709', hex: 'rgba(118,119,9,0.14)' },
+  cases: { label: 'Integration', color: '#903a03', hex: 'rgba(144,58,3,0.14)' },
 };
 
 const CONCEPTS = {

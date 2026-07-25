@@ -9,76 +9,10 @@
    and consume ONLY tokens, so a retheme is a one-block edit.
    ============================================================= */
 
-/* ===== TOKENS ===== */
-:root {
-  --ok-radius: 12px;
-  --ok-radius-lg: 14px;
-  --ok-font-display: 'Fraunces', Georgia, serif;
-  --ok-font-body: 'Crimson Pro', Georgia, serif;
-  --ok-font-ui: system-ui, -apple-system, sans-serif;
-}
-
-html[data-theme="light"] {
-  --ok-bg: #FAF6EE;
-  --ok-surface: #FFFFFF;
-  --ok-border: #E8DFD0;
-  --ok-border-soft: #F0E8D7;
-  --ok-text: #2A241D;
-  --ok-text-muted: #6B5F4F;
-  --ok-text-faint: #8A7C66;
-  --ok-accent: #2C5454;
-  --ok-accent-soft: #3D6B6B;
-  --ok-ochre: #9C7A45;
-  --ok-correct: #4F7042;
-  --ok-correct-bg: #EAEFDA;
-  --ok-incorrect: #9A4537;
-  --ok-incorrect-bg: #F4DDD3;
-  --ok-glow: rgba(176, 141, 87, 0.06);
-  --ok-shadow: 0 1px 3px rgba(42, 36, 29, 0.04);
-  --ok-shadow-hover: 0 4px 12px rgba(42, 36, 29, 0.08);
-  color-scheme: light;
-}
-
-html[data-theme="dark"] {
-  --ok-bg: #1B1813;
-  --ok-surface: #242019;
-  --ok-border: #3A3226;
-  --ok-border-soft: #2F2920;
-  --ok-text: #F1E7D8;
-  --ok-text-muted: #B6A48D;
-  --ok-text-faint: #8A7C68;
-  --ok-accent: #5FA3A3;
-  --ok-accent-soft: #7FB8B8;
-  --ok-ochre: #D6AC63;
-  --ok-correct: #9FBF7E;
-  --ok-correct-bg: #2A3320;
-  --ok-incorrect: #DD9683;
-  --ok-incorrect-bg: #3A241E;
-  --ok-glow: rgba(214, 172, 99, 0.05);
-  --ok-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --ok-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.45);
-  color-scheme: dark;
-}
-
-/* Fallback for pages that reach paint before data-theme is set. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --ok-bg: #1B1813; --ok-surface: #242019; --ok-border: #3A3226; --ok-border-soft: #2F2920;
-    --ok-text: #F1E7D8; --ok-text-muted: #B6A48D; --ok-text-faint: #8A7C68;
-    --ok-accent: #5FA3A3; --ok-ochre: #D6AC63; --ok-correct: #9FBF7E; --ok-incorrect: #DD9683;
-    --ok-border-soft: #2F2920; --ok-shadow: 0 1px 3px rgba(0,0,0,0.3); --ok-shadow-hover: 0 6px 18px rgba(0,0,0,0.45);
-    color-scheme: dark;
-  }
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --ok-bg: #FAF6EE; --ok-surface: #FFFFFF; --ok-border: #E8DFD0; --ok-border-soft: #F0E8D7;
-    --ok-text: #2A241D; --ok-text-muted: #6B5F4F; --ok-text-faint: #8A7C66;
-    --ok-accent: #2C5454; --ok-ochre: #9C7A45; --ok-correct: #4F7042; --ok-incorrect: #9A4537;
-    --ok-shadow: 0 1px 3px rgba(42,36,29,0.04); --ok-shadow-hover: 0 4px 12px rgba(42,36,29,0.08);
-    color-scheme: light;
-  }
-}
+/* ===== TOKENS =====
+   Owned entirely by css/tokens.css (the Lightbox brand file),
+   which every page loads before this sheet. Components here
+   consume --ok-* only. Do not re-declare tokens. */
 
 /* ===== BASE TYPOGRAPHY / LINKS / FOCUS ===== */
 .site-scope, body.site-body {

@@ -18,8 +18,11 @@
   function set(key, v) { try { localStorage.setItem(key, v); } catch (e) {} }
 
   function currentFont() {
-    var f = get(FONT_KEY, 'manuscript');
-    return THEMES.some(function (t) { return t.id === f; }) ? f : 'manuscript';
+    /* 'atlas' (IBM Plex Sans + JetBrains Mono) is the Lightbox stack and the
+       site-wide default; the other three stay available to the reader —
+       Manuscript for long-form comfort, Hyperlegible for accessibility. */
+    var f = get(FONT_KEY, 'atlas');
+    return THEMES.some(function (t) { return t.id === f; }) ? f : 'atlas';
   }
   function applyFont(id) {
     document.documentElement.setAttribute('data-font', id);

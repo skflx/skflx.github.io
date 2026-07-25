@@ -205,7 +205,7 @@
     Object.keys(subs).forEach(function (key) {
       var sub = subs[key];
       var r = roll[key] || { answered: 0, first: 0 };
-      var hue = sub.hue || 'var(--ok-text-faint)';
+      var hue = window.OKSATHue ? OKSATHue(sub) : (sub.hue || 'var(--ok-text-faint)');
       var labelCell = '<div class="ui-font" style="width:8.5rem;flex-shrink:0;font-size:0.76rem;line-height:1.25;color:var(--ok-text)">' +
         esc(sub.label) + '</div>';
       var tick = '<div style="width:3px;align-self:stretch;min-height:1.1rem;background:' + esc(hue) + ';border-radius:2px;flex-shrink:0" title="' + esc(sub.label) + '"></div>';
@@ -321,7 +321,7 @@
 
     order.forEach(function (key) {
       var sub = subs[key] || { label: key, hue: 'var(--ok-text-faint)' };
-      var hue = sub.hue || 'var(--ok-text-faint)';
+      var hue = window.OKSATHue ? OKSATHue(sub) : (sub.hue || 'var(--ok-text-faint)');
       inner += '<div style="margin-top:0.75rem">' +
         '<div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.35rem">' +
         '<div style="width:3px;height:0.85rem;background:' + esc(hue) + ';border-radius:2px" title="' + esc(sub.label) + '"></div>' +

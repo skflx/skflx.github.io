@@ -61,7 +61,7 @@
      from CSS vars at build time (Cytoscape can't resolve var()). */
   function baseStyle() {
     var warning = cssVar('--warning', '#FFD43B');
-    var accent = cssVar('--accent', '#4A9EFF');
+    var accent = cssVar('--accent', '#4FB3E8');
     var txt = cssVar('--txt', '#E8EAF0');
     return [
       { selector: '.faded', style: { 'opacity': 0.12 } },

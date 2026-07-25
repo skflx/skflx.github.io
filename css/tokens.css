@@ -1,0 +1,253 @@
+/* =============================================================
+   tokens.css — the one brand file for skflx.MD.
+
+   Direction: LIGHTBOX. The ground is dark and content panels are
+   *brighter* than it, edge-lit like films clipped to a viewing
+   box — the inverse of a normal dark theme, where cards sink.
+   Light mode is the designed daylight twin, not an inversion.
+
+   THIS FILE IS THE ONLY PLACE COLOUR IS DEFINED. Every other
+   stylesheet consumes these custom properties and must never
+   hard-code a colour value (docs/decisions.md §6). Load it FIRST
+   on every page, before the page's own sheet:
+
+       <link rel="stylesheet" href="css/tokens.css">
+       <link rel="stylesheet" href="css/oksat.css">
+
+   Theme is an attribute flip on <html> (data-theme=light|dark),
+   persisted as localStorage sk_theme, pre-painted per page, with
+   prefers-color-scheme as the first-visit default.
+
+   Categorical hues (subspecialty markers, graph node types,
+   structural classes) are solved palettes, not chosen by eye —
+   provenance and the validator invocations are in
+   docs/ui-directions.md. Do not edit a hue without re-validating.
+   ============================================================= */
+
+:root {
+  /* ---- geometry ---- */
+  --ok-radius: 8px;
+  --ok-radius-lg: 12px;
+  --ok-radius-sm: 6px;
+  --ok-maxw: 42rem;
+
+  /* ---- type ----
+     Lightbox is a neutral grotesque with monospaced measurements.
+     OKSAT keeps its four reader-selectable font themes on top of
+     this (html[data-font]); these are the defaults. */
+  --ok-font-display: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --ok-font-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --ok-font-ui: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --ok-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --ok-transition: 200ms ease;
+}
+
+/* =============================================================
+   DARK — the primary expression of the direction.
+   Panels sit ABOVE the ground and are lit from their own edge.
+   ============================================================= */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ok-bg: #08090B;
+  --ok-bg-2: #0D0F13;
+  --ok-surface: #14171C;
+  --ok-surface-2: #1A1E25;
+  --ok-hover: #212630;
+
+  --ok-border: #2A313A;
+  --ok-border-soft: #1F252D;
+
+  --ok-text: #EDF2F7;
+  --ok-text-muted: #8D99A6;
+  --ok-text-faint: #626D79;
+
+  --ok-accent: #4FB3E8;
+  --ok-accent-soft: #7CC8F0;
+  --ok-on-accent: #04121A;
+  --ok-ochre: #E0A33F;
+
+  --ok-correct: #5CC49A;
+  --ok-correct-bg: #0C1F19;
+  --ok-incorrect: #E88379;
+  --ok-incorrect-bg: #231414;
+  --ok-track: #1C222A;
+
+  /* the device: emissive edge + ambient bloom */
+  --ok-glow: rgba(90, 170, 225, 0.20);
+  --ok-glow-edge: rgba(120, 190, 240, 0.10);
+  --ok-lift: 0 0 0 1px var(--ok-glow-edge), 0 0 26px -6px var(--ok-glow);
+  --ok-lift-hover: 0 0 0 1px rgba(120, 190, 240, 0.20), 0 0 34px -6px rgba(90, 170, 225, 0.32);
+  --ok-shadow: var(--ok-lift);
+  --ok-shadow-hover: var(--ok-lift-hover);
+}
+
+/* =============================================================
+   LIGHT — the daylight twin. The ground is a cool grey so panels
+   still read as lifted white rather than melting into the page.
+   ============================================================= */
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --ok-bg: #E6EBEF;
+  --ok-bg-2: #DFE6EB;
+  --ok-surface: #FCFDFE;
+  --ok-surface-2: #F3F7FA;
+  --ok-hover: #EAF0F5;
+
+  --ok-border: #C6D0D9;
+  --ok-border-soft: #DCE4EA;
+
+  --ok-text: #0E141A;
+  --ok-text-muted: #54606C;
+  --ok-text-faint: #7C8794;
+
+  --ok-accent: #0F6E9C;
+  --ok-accent-soft: #2A8CBC;
+  --ok-on-accent: #FFFFFF;
+  --ok-ochre: #8A6516;
+
+  --ok-correct: #1D7355;
+  --ok-correct-bg: #E6F1EC;
+  --ok-incorrect: #A63A2E;
+  --ok-incorrect-bg: #F9E8E5;
+  --ok-track: #D6DEE4;
+
+  --ok-glow: rgba(20, 60, 90, 0.16);
+  --ok-glow-edge: rgba(255, 255, 255, 0.92);
+  --ok-lift: 0 0 0 1px var(--ok-glow-edge), 0 6px 20px -8px var(--ok-glow);
+  --ok-lift-hover: 0 0 0 1px #FFFFFF, 0 10px 26px -8px rgba(20, 60, 90, 0.26);
+  --ok-shadow: var(--ok-lift);
+  --ok-shadow-hover: var(--ok-lift-hover);
+}
+
+/* =============================================================
+   CATEGORICAL — SUBSPECIALTY MARKERS (9)
+   Mirrors OKSAT_SUBSPECIALTIES in js/oksat-manifest.js; that map
+   is the source JS reads, this block is the source CSS reads.
+   Change one, change both.
+
+   Solved for ADJACENT-pair separation (worst ΔE 12.6 light /
+   10.1 dark vs a target of 8) because these always appear as an
+   ordered, labelled list. Never use them as the only cue.
+   ============================================================= */
+html[data-theme="light"] {
+  --sub-otology:      #1d80c4;
+  --sub-rhinology:    #e6797b;
+  --sub-laryngology:  #367926;
+  --sub-hn_onc:       #9e73cb;
+  --sub-fprs:         #966508;
+  --sub-pediatrics:   #15aaa3;
+  --sub-sleep:        #9b3a22;
+  --sub-endocrine:    #898a0d;
+  --sub-fundamentals: #8b90ed;
+}
+html[data-theme="dark"] {
+  --sub-otology:      #327db6;
+  --sub-rhinology:    #d17576;
+  --sub-laryngology:  #417734;
+  --sub-hn_onc:       #9471bb;
+  --sub-fprs:         #956408;
+  --sub-pediatrics:   #13a09a;
+  --sub-sleep:        #964430;
+  --sub-endocrine:    #838424;
+  --sub-fundamentals: #8488d6;
+}
+
+/* =============================================================
+   CATEGORICAL — GRAPH NODE TYPES (6 hues + neutral)
+   Graph nodes appear simultaneously and scattered, so these are
+   solved for ALL-pair separation, a stricter bar than the
+   markers above. Worst pair sits in the ΔE 6–8 band, which is
+   permissible ONLY alongside a second channel — hence the node
+   SHAPE encoding in js/graph-lens-knowledge.js. Never remove the
+   shapes and leave colour doing the work alone.
+   'concept' is deliberately neutral: it is the unclassified
+   catch-all, and neutral is the honest signal for that.
+   ============================================================= */
+:root {
+  --node-anatomy:   #4376d8;
+  --node-pathology: #da5b74;
+  --node-procedure: #0a7e44;
+  --node-nerve:     #ad9911;
+  --node-vessel:    #903a03;
+  --node-drug:      #863f9f;
+  --node-concept:   var(--ok-text-faint);
+}
+
+/* =============================================================
+   CATEGORICAL — STRUCTURAL CLASSES (8 hues + neutral)
+   Nine classes cannot be mutually distinguishable — that is a
+   property of colour, not of effort — so the structural lens
+   leans on its legend, node labels and region grouping, and
+   these are tuned for adjacent separation and family harmony.
+   'space' is neutral for the same reason 'concept' is.
+   ============================================================= */
+:root {
+  --struct-bone:      #d78c1a;
+  --struct-cartilage: #10938e;
+  --struct-ligament:  #854fa9;
+  --struct-fascia:    #57bd72;
+  --struct-joint:     #a63a2d;
+  --struct-foramen:   #7692f1;
+  --struct-membrane:  #cb6398;
+  --struct-muscle:    #767709;
+  --struct-space:     var(--ok-text-faint);
+}
+
+/* =============================================================
+   LEGACY ALIASES
+   graph.css and css/main.css were written against their own
+   names. Rather than rewrite two large frozen sheets, their
+   palettes are re-pointed here so every surface inherits the
+   brand from one place.
+   ============================================================= */
+:root {
+  /* graph.css */
+  --bg: var(--ok-bg);
+  --surface: var(--ok-surface);
+  --elevated: var(--ok-surface-2);
+  --hover: var(--ok-hover);
+  --border: var(--ok-border);
+  --border-focus: var(--ok-accent);
+  --accent: var(--ok-accent);
+  --accent-glow: var(--ok-glow);
+  --success: var(--ok-correct);
+  --danger: var(--ok-incorrect);
+  --warning: var(--ok-ochre);
+  --txt: var(--ok-text);
+  --txt2: var(--ok-text-muted);
+  --txt3: var(--ok-text-faint);
+  --font: var(--ok-font-body);
+  --mono: var(--ok-font-mono);
+  --rad: var(--ok-radius);
+  --rad-lg: var(--ok-radius-lg);
+  --tr: var(--ok-transition);
+
+  /* css/main.css (cpt-search) */
+  --color-primary: var(--ok-accent);
+  --color-primary-matte: var(--ok-accent-soft);
+  --color-secondary: var(--ok-text-muted);
+  --color-secondary-matte: var(--ok-text-faint);
+  --color-accent: var(--ok-accent);
+  --color-accent-matte: var(--ok-accent-soft);
+  --color-dark: var(--ok-text);
+  --color-light: var(--ok-surface-2);
+  --bg-primary: var(--ok-bg);
+  --bg-secondary: var(--ok-bg-2);
+  --bg-tertiary: var(--ok-surface-2);
+  --text-primary: var(--ok-text);
+  --text-secondary: var(--ok-text-muted);
+  --text-muted: var(--ok-text-faint);
+  --border-color: var(--ok-border);
+  --card-bg: var(--ok-surface);
+  --card-border: var(--ok-border);
+  --header-bg: var(--ok-bg-2);
+  --shadow-color: var(--ok-glow);
+  --font-sans: var(--ok-font-body);
+  --font-display: var(--ok-font-display);
+  --shadow-sm: var(--ok-lift);
+  --shadow-md: var(--ok-lift);
+  --shadow-lg: var(--ok-lift-hover);
+}
