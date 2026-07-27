@@ -294,8 +294,21 @@ light mode is a designed daylight twin, not an inversion.
   runs them on the PR.
 
 ## Next Steps
-Watch CI for the OKSAT/graph pages, which could not be booted locally. Two
-follow-ups worth doing: the structural lens still has nine class hues that
-cannot all be mutually distinguishable (it leans on its legend and labels), and
-`docs/verification.md` now carries a brand-consistency probe that should be run
-on any future visual change.
+**The direction decision was reopened (2026-07-27) before merge.** The owner
+asked to see further options, so a third proof sheet was produced: six
+directions — Bedside, Ledger, Specimen, Contrast, Meridian, and Lightbox for
+comparison — rendered across all six real surfaces with a direction switcher
+(<https://claude.ai/code/artifact/4f3fb6c7-0a65-4c53-b1c2-5e8ff8ed23ec>).
+Lightbox stays on the branch, unmerged, as a candidate.
+
+Switching costs one file: because every colour now resolves through
+`css/tokens.css`, a different pick is two token blocks, not a re-do. The
+structural work in this branch (retired style switcher, rethemed CPT page,
+disabled runtime colour extraction, retired ASCII editor, new markers + graph
+shape encoding) is direction-independent and stands either way.
+
+Still open regardless of the pick: watch CI for the OKSAT/graph pages, which
+could not be booted locally; the structural lens still has nine class hues that
+cannot all be mutually distinguishable (it leans on its legend and labels); and
+`docs/verification.md` now carries a brand-consistency probe to run on any
+future visual change.

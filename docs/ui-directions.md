@@ -1,24 +1,47 @@
-# UI directions — twelve candidates, one validated marker set
+# UI directions — candidates across three rounds, one validated marker set
 
-> Snapshot date: 2026-07-25. Status: **DECIDED — "Lightbox" (round 2, #3) was
-> chosen by the owner and is implemented site-wide.** This document is kept as
-> the *provenance record* for the palettes: the measured case against the old
-> colours, the solved replacements, and the validator invocations to re-run
-> before anyone edits a hue. The shipped values live in `css/tokens.css`; where
-> the two disagree, the code wins.
+> Snapshot date: 2026-07-27. Status: **REOPENED — awaiting owner pick.**
+> "Lightbox" was implemented site-wide on branch
+> `claude/feature-requests-matrix-5bsxyz` and is **not merged**; the owner asked
+> to see further options before proceeding. Treat the shipped tokens as a
+> candidate, not a decision.
 >
-> Also decided at the same time: the one-pager's Matte/Story switcher was
-> retired for a single identity, day/night still follows the OS on first visit,
-> `cpt-search.html` was rethemed onto the brand, and `ascii-editor.html` was
-> retired to a redirect stub.
+> Because the retheme routed every colour through `css/tokens.css`, switching
+> direction is a two-block edit in that one file — no page, component or script
+> changes. Nothing in the branch is wasted if a different direction wins.
+>
+> Decided and **not** in scope of the reopened question (these were structural,
+> not stylistic): the one-pager's Matte/Story switcher is retired for a single
+> identity; day/night still follows the OS on first visit; `cpt-search.html` is
+> rethemed onto the shared tokens; `js/main.js`'s hero-image colour extraction
+> is disabled; `ascii-editor.html` is retired to a redirect stub; the
+> subspecialty markers, the graph node palette and its shape encoding are
+> replaced.
 
-Two proof sheets, both rendering the same components in light + dark:
+Three proof sheets, all rendering the same real components in light + dark:
 
 - **Round 1 — six skins** (differ mostly by palette; a token-block edit):
   <https://claude.ai/code/artifact/902e76db-aa80-45cd-9fbe-78c53d1471f8>
 - **Round 2 — six with a structural device** (differ in markup too; a component
   pass), with an A/B compare tray:
   <https://claude.ai/code/artifact/4db0ce83-70bb-4d58-acb5-6b5a8a794e0c>
+- **Round 3 — six across every surface** (one-pager, hub, study, dashboard,
+  graph, CPT) with a direction switcher — the sheet to decide from:
+  <https://claude.ai/code/artifact/4f3fb6c7-0a65-4c53-b1c2-5e8ff8ed23ec>
+
+## Round 3 candidates (whole-site mockups)
+
+| Direction | Stance | Best for | Trade-off |
+|---|---|---|---|
+| **Bedside** | Legibility first — bigger type, more air, deep clinical teal. Differentiates on *scale*, not hue | Ward use, phones, tired eyes | Less information per screen |
+| **Ledger** | The flowsheet — dense rows, hairline rules, tabular figures, one ink blue | Dashboards, CPT, dense review | Fatiguing for long prose |
+| **Specimen** | Museum quiet — warm off-white, thin frames, square corners, botanical green | One-pager, Knowledge Atlas | Dense tools can feel underpowered |
+| **Contrast** | Accessibility as the brief — pure grounds, 2px rules, heavy weights | Every accessibility case; sunlight, projector | Blunt; never looks like a portfolio |
+| **Meridian** | Warm dark + copper, editorial rather than clinical | Feeling like a place, not a utility | Strongest personality → dates fastest |
+| **Lightbox** | Built, unmerged — panels brighter than the ground, edge-lit | Dark reading rooms; the graph | Light mode is the weaker twin |
+
+Exact token values for the round-3 candidates live in the artifact source; the
+winner's values get transcribed into `css/tokens.css` when a pick is made.
 
 ## 1. The measured problem
 
