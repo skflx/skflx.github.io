@@ -312,3 +312,39 @@ could not be booted locally; the structural lens still has nine class hues that
 cannot all be mutually distinguishable (it leans on its legend and labels); and
 `docs/verification.md` now carries a brand-consistency probe to run on any
 future visual change.
+
+---
+
+# WIP — Round 4: layout directions (scoping)
+
+## Goal
+Answer the owner's ask for options beyond a palette: five directions that
+change the **information architecture**, including a bold red/black/white
+identity and a bespoke (non-generic) bento.
+
+## Actions Taken
+- `docs/ui-round4-scope.md` — cost tiers (palette = hours, component form =
+  days, information architecture = a week+), the five candidates, the specific
+  design problems each one solves, and a five-step execution plan for any
+  Tier 3 pick.
+- Mockups with a direction switcher and day/night:
+  <https://claude.ai/code/artifact/589f060e-7bf9-49a3-8418-ff78f81a82ec>
+- Candidates: **Redline** (red/black/white, persistent spine),
+  **Ward Board** (bento where tile span encodes due count),
+  **Console** (command-bar-first, rows not cards),
+  **Codex** (permanent index + content pane),
+  **Deck** (full-bleed, the page ground *is* the subspecialty marker).
+
+## Notes worth keeping
+- A red brand cannot use red for "wrong": brand `#D81E28` vs error `#A3000E`
+  separate by only 1.61:1. Redline carries right/wrong by form (solid fill vs
+  diagonal hatch + strike), not hue.
+- The validated marker set holds on every new ground tested (pure white, pure
+  black, warm off-white, warm dark teal, near-black) — all checks pass.
+
+## Next Steps
+Owner pick. Recommendation in the scope doc: Ward Board is the Tier 3 worth
+paying for; Console is the cheapest real win because it is additive; Redline
+gets ~80% of its effect at Tier 1. Codex and Deck should wait until the content
+gap in `docs/feature-requests.md` closes — a new shell around 5 of 62 topics is
+the wrong next build.

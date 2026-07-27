@@ -28,6 +28,10 @@ Three proof sheets, all rendering the same real components in light + dark:
 - **Round 3 — six across every surface** (one-pager, hub, study, dashboard,
   graph, CPT) with a direction switcher — the sheet to decide from:
   <https://claude.ai/code/artifact/4f3fb6c7-0a65-4c53-b1c2-5e8ff8ed23ec>
+- **Round 4 — five that change the layout, not the paint** (a red spine, a
+  workload-sized bento board, a command bar, a two-pane index, a full-bleed
+  deck), with cost scoping per tier — see `docs/ui-round4-scope.md`:
+  <https://claude.ai/code/artifact/589f060e-7bf9-49a3-8418-ff78f81a82ec>
 
 ## Round 3 candidates (whole-site mockups)
 
