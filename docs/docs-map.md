@@ -23,6 +23,7 @@ no design judgment required.
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
 | `docs/agent-native-plan.md` | Agent-native audit + issue roadmap (#42–#61) | An epic lands (tick it off) or the plan changes |
 | `docs/feature-requests.md` | Product backlog: user-facing features ranked utility × feasibility | A feature ships (drop it), or the evidence behind the ranking shifts materially — re-snapshot rather than patching counts in place |
+| `docs/console-underlay-plan.md` | The ⌘K console spec + the due-count reframe (what organises the site instead) | The console ships, or the organising principle changes |
 | `docs/ui-round4-scope.md` | Layout-direction candidates + cost tiers + the execution plan for a Tier 3 change | A layout direction is picked or ruled out |
 | `docs/ui-directions.md` | Palette provenance: why the old colours failed, how the shipped ones were solved, how to re-validate | A categorical palette changes — update the evidence, don't silently swap a hex |
 | `docs/oksat-plan.md`, `docs/oksat-next-iteration-plan.md`, `docs/oto-kag-atlas-plan.md` | **Historical plan records** | Never rewritten retroactively — only their `> Status:` header may be amended; corrections to the record go in `WIP.md` |

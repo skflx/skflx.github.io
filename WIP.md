@@ -348,3 +348,42 @@ paying for; Console is the cheapest real win because it is additive; Redline
 gets ~80% of its effect at Tier 1. Codex and Deck should wait until the content
 gap in `docs/feature-requests.md` closes — a new shell around 5 of 62 topics is
 the wrong next build.
+
+---
+
+# WIP — Console underlay + dropping "due" as the organising idea
+
+## Goal
+Owner decided: a ⌘K console underlay on every page. Owner also corrected a
+product assumption — review is **periodic, not daily** — so the site should
+stop being organised around due counts.
+
+## Actions Taken
+- Working ⌘K prototype (real keyboard handling, subsequence matching, scope
+  prefixes, grouped results, recency ordering):
+  <https://claude.ai/code/artifact/b512648f-4fb5-427d-87a8-6625768dea21>
+- `docs/console-underlay-plan.md` — the console spec (index, scoping, matching,
+  ordering, mobile, state, cost), six candidate organising spines with a
+  recommendation, the build order, and six open questions for the owner.
+- `docs/feature-requests.md` amended rather than quietly rewritten: #1
+  re-scoped from "daily mixed review queue" to "session on demand", #12's
+  **streak dropped** (utility revised 2→3 because removing it improves the
+  feature), #14 re-worded, and the console added as #16 (U4 × F4 = 16).
+
+## The rule that came out of it
+Due-ness is an input to the scheduling algorithm and never a number on the
+front page — no badges, no counters, no streak. At most one quiet line inside
+the session control itself.
+
+## Verified
+Prototype driven end-to-end in headless Chromium: ⌘K and `/` open, Esc closes,
+arrow keys move selection, Enter routes, `>` scopes to commands, subsequence
+matching resolves `vs` → Vestibular Schwannoma and `tymp` → tympanostomy. Zero
+page errors. One bug found and fixed in the process: after closing, focus stayed
+in the input and swallowed the `/` shortcut.
+
+## Next Steps
+Owner answers the six open questions in `docs/console-underlay-plan.md` §5 —
+chiefly whether commands should *act* or only navigate, and whether question
+stems get indexed. Then build the console alone, over the existing pages, as
+its own revertible commit.

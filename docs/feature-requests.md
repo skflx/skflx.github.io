@@ -4,6 +4,13 @@
 > will drift; they are the evidence for the ranking, not durable facts.
 > Re-derive them from the source files before acting on an old copy of this
 > list.
+>
+> **Amended 2026-07-27 — the daily-use assumption was wrong.** The owner
+> reviews *periodically*, not daily. Due-ness is therefore an input to the
+> scheduling algorithm and **never a number shown on the front page**: no
+> badges, no counters, no streak. #1 is re-scoped from a daily queue to an
+> on-demand session and #12 loses its streak entirely (both marked below).
+> Rationale and the replacement organising ideas: `docs/console-underlay-plan.md`.
 
 This is a **product** backlog: user-facing capability the site does not have
 today. It is deliberately disjoint from the **engineering** backlog already
@@ -43,7 +50,7 @@ content (#5, #7) or raise the value of the content already present (#1–#3).
 
 | # | Feature | U | F | Score | Primary surface |
 |---|---|---|---|---|---|
-| 1 | Daily mixed review queue (cross-module due) | 5 | 4 | 20 | new "oksat-review.html" |
+| 1 | **Session on demand** (cross-module, *not* a daily queue) | 5 | 4 | 20 | new "oksat-review.html" |
 | 2 | Anki / CSV export | 4 | 5 | 20 | `js/oksat-store.js` + hub |
 | 3 | Miss log — every item failed on first attempt | 4 | 5 | 20 | `js/oksat-dashboard.js` |
 | 4 | Offline use (service worker + web app manifest) | 4 | 4 | 16 | new "sw.js", all pages |
@@ -54,14 +61,20 @@ content (#5, #7) or raise the value of the content already present (#1–#3).
 | 9 | Printable pocket sheets | 3 | 4 | 12 | `css/oksat.css` print block |
 | 10 | Validator suggests KAG↔OKSAT links | 3 | 4 | 12 | `tools/kag-validate.mjs` |
 | 11 | Item images (audiogram, CT, scope, path) | 5 | 2 | 10 | schema + engine + `images/` |
-| 12 | Hub "continue where you left off" + streak | 2 | 5 | 10 | `oksat.html` |
+| 12 | Hub "continue where you left off" (~~+ streak~~ — dropped) | 3 | 5 | 15 | `oksat.html` |
 | 13 | Global search across graph + modules | 3 | 3 | 9 | new "search.html" |
-| 14 | KAG cards join the daily queue | 3 | 3 | 9 | "oksat-review.html" + `KAGStore` |
+| 14 | KAG cards join the session | 3 | 3 | 9 | "oksat-review.html" + `KAGStore` |
 | 15 | Airway Rounds scoreboard persistence | 2 | 4 | 8 | `js/airway-engine.js` |
+| 16 | **Console underlay (⌘K on every page)** | 4 | 4 | 16 | new `js/console.js`, all pages |
 
 ---
 
-## 1 — Daily mixed review queue · U5 F4 · 20
+## 1 — Session on demand · U5 F4 · 20
+
+> **Re-scoped 2026-07-27.** Originally "daily mixed review queue". The
+> cross-module machinery is unchanged; the framing is. One control — "start a
+> session", optionally scoped to a subspecialty — with no daily obligation and
+> no due badge anywhere. Due-ness picks *what* surfaces, never *how loudly*.
 
 **Problem.** Leitner scheduling is per module. `oksat-study.html` hard-requires
 `?m=<slug>` and `dueIds` is computed inside a single module's `ITEMS` array
@@ -259,7 +272,12 @@ one most likely to stall if started from the content end.
 
 **Escalation:** image licensing and provenance — owner, always.
 
-## 12 — Hub "continue where you left off" + streak · U2 F5 · 10
+## 12 — Hub "continue where you left off" · U3 F5 · 15
+
+> **Amended 2026-07-27: the streak is dropped.** For a periodic reviewer a
+> streak is a guilt counter that reads zero almost always — it punishes the
+> actual usage pattern. Utility rises without it, because "where you left off"
+> is precisely the ordering that works at any cadence.
 
 **Problem.** The hub opens cold every time. `oksat:session:<rev>` is already
 written (30-minute-gap session counter) and nothing surfaces it.
