@@ -387,3 +387,39 @@ Owner answers the six open questions in `docs/console-underlay-plan.md` §5 —
 chiefly whether commands should *act* or only navigate, and whether question
 stems get indexed. Then build the console alone, over the existing pages, as
 its own revertible commit.
+
+---
+
+# WIP — Console decisions answered; graph diagnosed
+
+## Answers recorded (owner, 2026-07-27)
+Console sits **beside** navigation with **accessibility as a requirement**;
+question stems **will** be indexed (sequenced after caching); commands **act**,
+not just navigate, with a confirm step for anything destructive; due-counts stay
+out of sight. Full detail in `docs/console-underlay-plan.md` §5.
+
+## The graph — measured against the owner's complaint
+"Junky and fragmented" both verified against the real `data/kag-graph.json`:
+edge/node ratio 1.58 (sparse), median degree 2 with max 46 (skewed), **32% of
+nodes overlap a neighbour**, and only 40 of 771 are `review:true`. A
+force-directed layout cannot rescue that shape of data at that size.
+
+On "3 graphs": the earlier consolidation into one page with a lens switcher
+fixed the *code* (~−2,800 lines) but not the *concept* — arrival still asks
+which of three things you meant, and only one of the three is a real lens
+(structural is a filter; study redraws the manifest and is redundant with the
+hub and now the console).
+
+Evidence artifact (real data, real layout, plus a working radial ego layout):
+<https://claude.ai/code/artifact/739db5a8-34cb-475c-a6c0-d4324a766504>
+
+## Recommendation
+A + B + C: never render the whole graph; collapse three lenses to one view plus
+a structural filter chip; replace force-directed with a radial ego layout. Plus
+D: default to vetted, DRAFT behind a toggle. Do **not** rebuild the renderer —
+the engine is fine, the defaults are wrong.
+
+## Next Steps
+Owner confirms the graph plan, then build in order: console first (additive,
+revertible), then demote the graph, then optionally the palette. The DRAFT
+review queue remains the real fix for graph credibility.

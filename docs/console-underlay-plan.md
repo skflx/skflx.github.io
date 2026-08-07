@@ -72,21 +72,78 @@ same results everywhere.
 Do **not** combine the console with the hub reorganisation in one change. The
 console is revertible in a single commit; a hub rewrite is not.
 
-## 5. Open questions (owner call)
+## 5. Answered (owner, 2026-07-27)
 
-1. **Console beside navigation, or replacing it?** Recommend beside — ⌘K as the
-   only route is hostile to a first visit and on a phone.
-2. **Index question stems?** Makes "that question about Scarpa's" findable, but
-   costs loading every module on every page. Worth it only after caching
-   (backlog #4).
-3. **Should commands *act*, or only navigate?** Acting is what makes it a
-   console rather than a search box — but it needs a confirm step for anything
-   destructive.
-4. **Keep a due number anywhere?** Suggest one quiet line inside the session
-   control, nowhere else.
-5. **Graph as the home page?** Fits "explore, don't drill", but it needs
-   Cytoscape before anything renders — the slowest possible front door, and it
-   breaks with the CDN. Keep it one keystroke away instead.
-6. **Verification.** The console needs its own smoke assertions: opens on ⌘K,
-   filters, arrow-navigates, Enter routes, Esc closes and returns focus.
-   Keyboard behaviour is the feature, so it must be tested like one.
+1. **Beside navigation, not replacing it — and accessibility is a requirement.**
+   So the console is an enhancement over working pages, never the only route.
+   Concretely: a visible topbar button (not just a shortcut), a real focus trap
+   while open, focus returned to the trigger on close, `role="dialog"` +
+   `role="listbox"`/`option` with `aria-activedescendant`, results announced via
+   a polite live region, full operability without a pointer *and* without a
+   keyboard shortcut, hit targets ≥44px on touch, and `prefers-reduced-motion`
+   respected. Every page must remain fully usable with the console's script
+   removed — that is the test.
+2. **Index question stems: yes, if it improves function.** It does — "that
+   question about Scarpa's" becomes findable. Sequence it *after* caching
+   (backlog #4) so it doesn't cost a module load on every page; until then,
+   index stems lazily on first console open and keep the result in memory.
+3. **Commands act, not just navigate.** Theme, font, reviewer code, export,
+   miss log, start a session. Anything destructive (reset progress) requires an
+   explicit confirm step inside the palette.
+4. **Due stays out of sight** — one quiet line inside the session control, and
+   nowhere else. No badges, no counters, no streak.
+5. **Graph is NOT the home page** — and the graph itself has a real problem;
+   see §6.
+6. **Verification** (unchanged, still required): opens on ⌘K and on the button,
+   filters, arrow-navigates, Enter routes, Esc closes *and returns focus*, and
+   the page still works with the script absent.
+
+## 6. The graph — diagnosed, not defended
+
+Owner, 2026-07-27: *"it's very junky and on top of that super fragmented (wsup
+w the 3 graphs lol)"*. Both halves check out against the real data.
+
+Evidence (from `data/kag-graph.json`, laid out with a force algorithm of the
+same family the site uses):
+<https://claude.ai/code/artifact/739db5a8-34cb-475c-a6c0-d4324a766504>
+
+| Measure | Value | Why it matters |
+|---|---|---|
+| Nodes / edges | 771 / 1,221 | Ratio 1.58 — **sparse** |
+| Median degree | 2 (p90 = 6, max = 46) | Extremely skewed: long spindly chains plus a few hubs |
+| Nodes overlapping a neighbour | **32%** | "Junky", quantified — no label can fit |
+| `review:true` | 40 of 771 | 95% DRAFT — exploring it is unrewarding because it isn't trustworthy |
+
+**On "3 graphs":** technically there is one page and one engine — the three
+surfaces were consolidated into `graph.html` behind a lens switcher, removing
+~2,800 lines. But that fixed the **code**, not the **concept**. You still
+arrive and are asked which of three things you meant. The fragmentation is
+real and was never addressed. Worse, only one of the three is a genuine lens:
+
+- **Knowledge** — all 771 nodes. This is the hairball.
+- **Structural** — the 288 physical structures. That is a *filter*, not a mode.
+- **Study** — subspecialty → module → domain → concept, drawn from the
+  manifest, not from the KAG at all. Redundant with the hub, and now with the
+  console.
+
+### Recommendation — A + B + C together
+
+- **A. Never render the whole graph.** It stops being a destination and becomes
+  a panel answering "what connects to this?", reached from the console, a
+  concept chip, or a question.
+- **B. One view, one filter.** Keep "connections"; make structural a filter
+  chip; retire the study lens outright.
+- **C. Radial ego layout instead of force-directed.** At median degree 2 a
+  force simulation is the wrong tool. Focus at centre, neighbours on rings,
+  each second-hop node inside the wedge of whatever introduced it —
+  deterministic, instant, never overlaps, and it needs no layout extension.
+  (Implemented in the artifact's middle panel, not just described.)
+- **D, alongside:** default to `review:true`, DRAFT behind a toggle.
+
+**Not recommended:** rebuilding the renderer. Cytoscape is not the problem —
+the defaults are. And retiring the graph entirely throws away the one thing the
+site has that no question bank does.
+
+**The real fix is content, not layout.** No arrangement makes 95%-unvetted
+material feel authoritative; the DRAFT review queue (`docs/feature-requests.md`
+#5) is what turns the graph from a curiosity into a reference.
