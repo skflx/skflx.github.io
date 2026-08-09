@@ -1,0 +1,2424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>OTOLVANIA II: Harmony of Dissection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;touch-action:none}
+#wrap{
+  position:relative;
+  width:min(100vw,177.7vh);
+  aspect-ratio:16/9;
+  margin:auto;
+  top:50%;
+  transform:translateY(-50%);
+}
+#gc{display:block;width:100%;height:100%;image-rendering:pixelated;cursor:none}
+
+/* ── Touch Pad ── */
+#pad{
+  position:fixed;inset:0;pointer-events:none;
+  display:none;z-index:50;
+}
+.pbtn{
+  position:absolute;pointer-events:all;
+  background:rgba(255,255,255,0.12);
+  border:2px solid rgba(255,255,255,0.3);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Press Start 2P',monospace;color:#fff;font-size:10px;
+  user-select:none;-webkit-user-select:none;
+  transition:background 0.05s;
+}
+.pbtn:active,.pbtn.held{background:rgba(255,255,255,0.35)}
+
+/* portrait */
+@media (orientation:portrait){
+  #pad{display:block}
+  #pb-up   {width:52px;height:52px;bottom:240px;left:60px;transform:translateX(-50%)}
+  #pb-left {width:52px;height:52px;bottom:188px;left:8px}
+  #pb-right{width:52px;height:52px;bottom:188px;left:112px}
+  #pb-down {width:52px;height:52px;bottom:136px;left:60px;transform:translateX(-50%)}
+  #pb-a    {width:60px;height:60px;bottom:200px;right:20px}
+  #pb-b    {width:52px;height:52px;bottom:150px;right:90px}
+  #pb-f    {width:48px;height:48px;bottom:155px;right:18px}
+  #pb-map  {width:44px;height:44px;top:12px;right:12px}
+  #pb-pause{width:44px;height:44px;top:12px;left:12px}
+}
+/* landscape */
+@media (orientation:landscape){
+  #pad{display:block}
+  #pb-up   {width:50px;height:50px;bottom:130px;left:56px;transform:translateX(-50%)}
+  #pb-left {width:50px;height:50px;bottom:80px;left:6px}
+  #pb-right{width:50px;height:50px;bottom:80px;left:106px}
+  #pb-down {width:50px;height:50px;bottom:30px;left:56px;transform:translateX(-50%)}
+  #pb-a    {width:58px;height:58px;bottom:90px;right:18px}
+  #pb-b    {width:50px;height:50px;bottom:44px;right:86px}
+  #pb-f    {width:46px;height:46px;bottom:44px;right:18px}
+  #pb-map  {width:42px;height:42px;top:10px;right:10px}
+  #pb-pause{width:42px;height:42px;top:10px;left:10px}
+}
+
+/* ── HUD overlay styles (rendered on canvas; nothing extra needed) ── */
+</style>
+</head>
+<body>
+<div id="wrap"><canvas id="gc" width="960" height="540"></canvas></div>
+
+<!-- Touch pad -->
+<div id="pad">
+  <div class="pbtn" id="pb-up"    data-k="ArrowUp">▲</div>
+  <div class="pbtn" id="pb-left"  data-k="ArrowLeft">◀</div>
+  <div class="pbtn" id="pb-right" data-k="ArrowRight">▶</div>
+  <div class="pbtn" id="pb-down"  data-k="ArrowDown">▼</div>
+  <div class="pbtn" id="pb-a"     data-k="z">Z</div>
+  <div class="pbtn" id="pb-b"     data-k="x">X</div>
+  <div class="pbtn" id="pb-f"     data-k="f">F</div>
+  <div class="pbtn" id="pb-map"   data-k="Tab">MAP</div>
+  <div class="pbtn" id="pb-pause" data-k="Escape">|||</div>
+</div>
+
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════════
+//  OTOLVANIA II: Harmony of Dissection
+//  Phase 1+2 — PGY-1 Slice
+// ═══════════════════════════════════════════════════════════
+
+const CV = document.getElementById('gc');
+const CX = CV.getContext('2d');
+const W = 960, H = 540;
+
+// ── Input ──────────────────────────────────────────────────
+const keys = {}, pressed = {}, released = {};
+const K = {
+  left:  ()=>keys['ArrowLeft']||keys['a'],
+  right: ()=>keys['ArrowRight']||keys['d'],
+  up:    ()=>keys['ArrowUp']||keys['w'],
+  down:  ()=>keys['ArrowDown']||keys['s'],
+  jump:  ()=>keys['z']||keys[' '],
+  atk:   ()=>keys['x'],
+  sub:   ()=>keys['c'],
+  fin:   ()=>keys['f'],
+  map:   ()=>keys['Tab'],
+  pause: ()=>keys['Escape'],
+  start: ()=>keys['Enter']||keys['z'],
+  jpPress:  ()=>pressed['z']||pressed[' '],
+  atkPress: ()=>pressed['x'],
+  subPress: ()=>pressed['c'],
+  finPress: ()=>pressed['f'],
+  mapPress: ()=>pressed['Tab'],
+  pausePress:()=>pressed['Escape'],
+  startPress:()=>pressed['Enter']||pressed['z'],
+  anyPress:  ()=>Object.keys(pressed).length>0,
+};
+
+window.addEventListener('keydown', e=>{
+  if(['Tab','Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();
+  const k = e.key==='  '?' ':e.key;
+  if(!keys[k]){pressed[k]=true;}
+  keys[k]=true;
+},false);
+window.addEventListener('keyup',   e=>{const k=e.key==='  '?' ':e.key;released[k]=true;delete keys[k];},false);
+
+// Touch pad
+document.querySelectorAll('.pbtn').forEach(btn=>{
+  const k = btn.dataset.k;
+  const down = e=>{e.preventDefault();if(!keys[k])pressed[k]=true;keys[k]=true;btn.classList.add('held');};
+  const up   = e=>{e.preventDefault();released[k]=true;delete keys[k];btn.classList.remove('held');};
+  btn.addEventListener('pointerdown',down,{passive:false});
+  btn.addEventListener('pointerup',  up,  {passive:false});
+  btn.addEventListener('pointerleave',up, {passive:false});
+  btn.addEventListener('pointercancel',up,{passive:false});
+});
+
+function clearFrame(){for(const k in pressed)delete pressed[k];for(const k in released)delete released[k];}
+
+// ── Audio ──────────────────────────────────────────────────
+let AC;
+function getAC(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();return AC;}
+
+function beep(freq,dur=0.08,type='square',vol=0.18,slide=0){
+  try{
+    const ac=getAC();
+    const g=ac.createGain();const o=ac.createOscillator();
+    o.type=type;o.frequency.setValueAtTime(freq,ac.currentTime);
+    if(slide)o.frequency.linearRampToValueAtTime(slide,ac.currentTime+dur);
+    g.gain.setValueAtTime(vol,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);
+    o.connect(g);g.connect(ac.destination);
+    o.start();o.stop(ac.currentTime+dur);
+  }catch(e){}
+}
+
+const sfx={
+  jump:  ()=>beep(320,0.12,'square',0.15,180),
+  land:  ()=>beep(90,0.06,'square',0.12),
+  slash: ()=>beep(440,0.07,'sawtooth',0.14,220),
+  beam:  ()=>beep(880,0.15,'sine',0.10,1200),
+  hit:   ()=>beep(200,0.08,'sawtooth',0.18,80),
+  death: ()=>beep(180,0.4,'sawtooth',0.22,40),
+  quiz:  ()=>beep(660,0.12,'sine',0.14,880),
+  quizOk:()=>{beep(523,0.1,'sine',0.16);setTimeout(()=>beep(659,0.15,'sine',0.18),120);},
+  quizBad:()=>beep(200,0.3,'sawtooth',0.22,120),
+  lvlup: ()=>{for(let i=0;i<4;i++)setTimeout(()=>beep([330,415,523,659][i],0.12,'sine',0.2),i*90);},
+  pickup:()=>beep(800,0.08,'sine',0.14,1100),
+  save:  ()=>{beep(440,0.1,'sine',0.12);setTimeout(()=>beep(880,0.15,'sine',0.14),120);},
+  door:  ()=>beep(180,0.2,'square',0.12,240),
+  boss:  ()=>{for(let i=0;i<3;i++)setTimeout(()=>beep(110*Math.pow(1.5,i),0.2,'sawtooth',0.2),i*150);},
+  dash:  ()=>beep(600,0.06,'square',0.10,400),
+  coin:  ()=>beep(900,0.05,'sine',0.12,1200),
+};
+
+// ── Math / Util ─────────────────────────────────────────────
+const lerp=(a,b,t)=>a+(b-a)*t;
+const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+const rnd=(lo,hi)=>lo+Math.random()*(hi-lo);
+const rndI=(lo,hi)=>Math.floor(rnd(lo,hi+1));
+const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+
+function rectsOverlap(ax,ay,aw,ah,bx,by,bw,bh){
+  return ax<bx+bw && ax+aw>bx && ay<by+bh && ay+ah>by;
+}
+function rectContains(rx,ry,rw,rh,px,py){
+  return px>=rx&&px<=rx+rw&&py>=ry&&py<=ry+rh;
+}
+
+// ── Particles ───────────────────────────────────────────────
+const parts = [];
+function spawnParts(x,y,n,col,opts={}){
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2;
+    const sp=rnd(opts.spMin||0.5,opts.spMax||3);
+    parts.push({
+      x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-(opts.upBias||0),
+      life:opts.life||30,maxLife:opts.life||30,
+      col:Array.isArray(col)?pick(col):col,
+      r:opts.r||3,grav:opts.grav||0.1,
+    });
+  }
+}
+function updParts(){
+  for(let i=parts.length-1;i>=0;i--){
+    const p=parts[i];
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.grav;p.life--;
+    if(p.life<=0)parts.splice(i,1);
+  }
+}
+function drawParts(cx,cy){
+  for(const p of parts){
+    const a=p.life/p.maxLife;
+    CX.globalAlpha=a;CX.fillStyle=p.col;
+    CX.fillRect(p.x-cx-p.r/2,p.y-cy-p.r/2,p.r,p.r);
+  }
+  CX.globalAlpha=1;
+}
+
+// ── Storage / Save System ─────────────────────────────────────
+const SAVE_NS = 'otolvania2';
+function saveSlot(slot, data){
+  const key=`${SAVE_NS}:slot${slot}`;
+  try{(window.storage||localStorage).setItem(key,JSON.stringify(data));}
+  catch(e){}
+}
+function loadSlot(slot){
+  const key=`${SAVE_NS}:slot${slot}`;
+  try{
+    const raw=(window.storage||localStorage).getItem(key);
+    return raw?JSON.parse(raw):null;
+  }catch(e){return null;}
+}
+function saveExists(slot){return loadSlot(slot)!==null;}
+
+function makeSnapshot(g){
+  return {
+    room: g.roomId,
+    px: g.player.x, py: g.player.y,
+    hp: g.player.hp, maxHp: g.player.maxHp,
+    mp: g.player.mp, maxMp: g.player.maxMp,
+    xp: g.player.xp, level: g.player.level,
+    badgeTier: g.player.badgeTier,
+    canDash: g.player.canDash,
+    weapons: g.player.weapons.slice(),
+    subs: g.player.subs.slice(),
+    curWeapon: g.player.curWeapon,
+    curSub: g.player.curSub,
+    bossBeaten: g.bossBeaten.slice(),
+    visitedRooms: Array.from(g.visitedRooms),
+    leitner: Object.assign({},g.leitner),
+    morbidityList: g.morbidityList.slice(),
+    boardScore: g.boardScore,
+    ts: Date.now(),
+  };
+}
+
+function applySnapshot(g, snap){
+  g.roomId = snap.room;
+  g.player.x = snap.px; g.player.y = snap.py;
+  g.player.hp = snap.hp; g.player.maxHp = snap.maxHp;
+  g.player.mp = snap.mp; g.player.maxMp = snap.maxMp;
+  g.player.xp = snap.xp; g.player.level = snap.level;
+  g.player.badgeTier = snap.badgeTier;
+  g.player.canDash = snap.canDash;
+  g.player.weapons = snap.weapons.slice();
+  g.player.subs = snap.subs.slice();
+  g.player.curWeapon = snap.curWeapon;
+  g.player.curSub = snap.curSub;
+  g.bossBeaten = snap.bossBeaten.slice();
+  g.visitedRooms = new Set(snap.visitedRooms);
+  g.leitner = Object.assign({},snap.leitner);
+  g.morbidityList = snap.morbidityList.slice();
+  g.boardScore = snap.boardScore||0;
+}
+
+// ── Question Bank ──────────────────────────────────────────
+const QBANK = [
+  {id:'OTO-001',tier:1,topic:'Epistaxis',q:'The most common site of anterior epistaxis is located in which named vascular plexus?',
+   opts:['Kiesselbach\'s plexus','Woodruff\'s plexus','Sphenopalatine plexus','Cavernous sinus'],ans:0,
+   teach:'Kiesselbach\'s plexus (Little\'s area) on the anterior nasal septum is the classic site of anterior epistaxis.'},
+  {id:'OTO-002',tier:1,topic:'Otitis Media',q:'The most common bacterial cause of acute otitis media in children is:',
+   opts:['Haemophilus influenzae','Streptococcus pneumoniae','Moraxella catarrhalis','Staphylococcus aureus'],ans:1,
+   teach:'S. pneumoniae is the most common bacterial AOM pathogen in children post-PCV era, though H. influenzae is now increasing.'},
+  {id:'OTO-003',tier:1,topic:'Bell\'s Palsy',q:'First-line pharmacologic treatment for Bell\'s palsy started within 72 hours is:',
+   opts:['Acyclovir alone','Prednisone alone','Prednisone + valacyclovir','Observation only'],ans:1,
+   teach:'High-quality evidence (Sullivan RCT) shows oral prednisone reduces time to recovery; antivirals add marginal benefit.'},
+  {id:'OTO-004',tier:1,topic:'BPPV',q:'BPPV most commonly involves which semicircular canal?',
+   opts:['Anterior','Posterior','Horizontal','Superior'],ans:1,
+   teach:'Posterior canal BPPV accounts for ~90% of cases; otoconia settle there due to gravity in the supine position.'},
+  {id:'OTO-005',tier:1,topic:'Chorda Tympani',q:'The chorda tympani nerve carries which functional component?',
+   opts:['GSA from external ear','GVE (parasympathetic) to submandibular gland + SVA taste anterior 2/3 tongue','SVE to stapedius','GSA from tympanic membrane'],ans:1,
+   teach:'Chorda tympani = branch of CN VII; carries parasympathetic to submandibular/sublingual glands AND taste (SVA) from anterior 2/3 of tongue.'},
+  {id:'OTO-006',tier:1,topic:'Croup',q:'Croup (laryngotracheobronchitis) produces which pathognomonic radiograph finding?',
+   opts:['Thumb sign','Steeple sign','Sail sign','Epiglottis enlargement'],ans:1,
+   teach:'Steeple sign = subglottic narrowing on AP neck X-ray due to subglottic edema in viral croup.'},
+  {id:'OTO-007',tier:1,topic:'Peritonsillar Abscess',q:'First-line management of a peritonsillar abscess in a cooperative adult is:',
+   opts:['Needle aspiration or I&D','Immediate tonsillectomy','IV steroids alone','CT scan before any procedure'],ans:0,
+   teach:'Needle aspiration or incision & drainage is the immediate treatment; tonsillectomy (quinsy tonsillectomy) is reserved for recurrent cases.'},
+  {id:'OTO-008',tier:1,topic:'Weber Test',q:'In a patient with right-sided conductive hearing loss, the Weber tuning fork test will lateralize to:',
+   opts:['Left (better) ear','Right (affected) ear','Midline (no lateralization)','Cannot be performed'],ans:1,
+   teach:'Weber lateralizes to the affected ear in conductive HL because ambient noise masking is absent and bone conduction is enhanced on that side.'},
+  {id:'OTO-009',tier:1,topic:'Carhart\'s Notch',q:'Carhart\'s notch — a dip in bone-conduction thresholds — occurs at which frequency in otosclerosis?',
+   opts:['500 Hz','1000 Hz','2000 Hz','4000 Hz'],ans:2,
+   teach:'Carhart\'s notch is a mechanical artefact at 2 kHz caused by fixation of the stapes; it resolves after stapedectomy.'},
+  {id:'OTO-010',tier:1,topic:'Otitis Externa',q:'The most common organism in malignant (necrotizing) otitis externa is:',
+   opts:['Staphylococcus aureus','Aspergillus niger','Pseudomonas aeruginosa','Candida albicans'],ans:2,
+   teach:'P. aeruginosa is the causative organism in nearly all cases of malignant OE, which occurs in immunocompromised/diabetic patients.'},
+  {id:'OTO-011',tier:1,topic:'Reinke\'s Edema',q:'Reinke\'s edema (polypoid corditis) is most strongly associated with which risk factor?',
+   opts:['GERD','Hypothyroidism','Smoking','Vocal abuse'],ans:2,
+   teach:'Cigarette smoking is the dominant risk factor; bilateral gelatinous subepithelial edema causes low-pitched "gravelly" voice.'},
+  {id:'OTO-012',tier:1,topic:'Salivary Glands',q:'The most common benign parotid tumor is:',
+   opts:['Warthin\'s tumor','Pleomorphic adenoma','Mucoepidermoid carcinoma','Oncocytoma'],ans:1,
+   teach:'Pleomorphic adenoma (mixed tumor) is the most common benign and overall most common parotid neoplasm (~60-70% of all parotid tumors).'},
+  {id:'OTO-013',tier:1,topic:'SSNHL',q:'Sudden sensorineural hearing loss is empirically treated with:',
+   opts:['Oral amoxicillin','Intratympanic gentamicin','Oral or intratympanic corticosteroids','Watchful waiting'],ans:2,
+   teach:'High-dose oral steroids (prednisone 1 mg/kg/day) are first-line; intratympanic steroids are used for failed oral treatment or diabetics.'},
+  {id:'OTO-014',tier:1,topic:'Ménière\'s Disease',q:'Initial non-surgical management of Ménière\'s disease includes:',
+   opts:['Endolymphatic sac surgery','Low-sodium diet and diuretics','Labyrinthectomy','Hearing aids only'],ans:1,
+   teach:'Low-salt diet (<1500 mg/day) + diuretics (hydrochlorothiazide/triamterene) are first-line to reduce endolymphatic pressure.'},
+  {id:'OTO-015',tier:1,topic:'Cholesteatoma',q:'A cholesteatoma that arises from Shrapnell\'s membrane retraction is classified as:',
+   opts:['Congenital','Primary acquired','Secondary acquired','Iatrogenic'],ans:1,
+   teach:'Primary acquired cholesteatoma arises from pars flaccida (Shrapnell\'s membrane) retraction pocket; secondary acquired arises from pars tensa.'},
+  {id:'OTO-016',tier:1,topic:'Facial Nerve',q:'The facial nerve exits the skull through which foramen?',
+   opts:['Foramen ovale','Foramen spinosum','Stylomastoid foramen','Jugular foramen'],ans:2,
+   teach:'The facial nerve (CN VII) exits the temporal bone through the stylomastoid foramen before entering the parotid gland.'},
+  {id:'OTO-017',tier:1,topic:'Tympanometry',q:'A Type B tympanogram (flat, no peak) in a child most likely indicates:',
+   opts:['Otosclerosis','Ossicular discontinuity','Middle ear effusion (OME)','TM perforation'],ans:2,
+   teach:'Type B = no TM mobility; in children the most common cause is OME (glue ear); also seen with perforation (but with large volume).'},
+  {id:'OTO-018',tier:1,topic:'Neck Mass',q:'In a child <10 years, the most common cause of a lateral neck mass is:',
+   opts:['Lymphoma','Branchial cleft cyst','Reactive lymphadenopathy','Thyroglossal duct cyst'],ans:2,
+   teach:'Reactive lymphadenopathy (from URTI) is the most common lateral neck mass in children; branchial cleft cysts appear later.'},
+  {id:'OTO-019',tier:1,topic:'Branchial Cleft',q:'The most common branchial cleft anomaly arises from which arch?',
+   opts:['First','Second','Third','Fourth'],ans:1,
+   teach:'Second branchial cleft cysts are most common (~95%); they present as a smooth mass at the anterior border of SCM near the angle of mandible.'},
+  {id:'OTO-020',tier:1,topic:'NF2',q:'Bilateral vestibular schwannomas are pathognomonic for:',
+   opts:['Von Hippel-Lindau disease','Neurofibromatosis type 1','Neurofibromatosis type 2','Sturge-Weber syndrome'],ans:2,
+   teach:'Bilateral VS is the hallmark of NF2 (chromosome 22, merlin/schwannomin gene); NF1 affects chromosome 17.'},
+  {id:'OTO-021',tier:1,topic:'Thyroid',q:'A thyroid nodule with Bethesda IV cytology (Follicular Neoplasm/Suspicious for FN) has a malignancy risk of approximately:',
+   opts:['<5%','10-40%','50-75%','90-100%'],ans:1,
+   teach:'Bethesda IV has ~25% malignancy risk on average (range 10-40%); standard management is diagnostic hemithyroidectomy.'},
+  {id:'OTO-022',tier:1,topic:'Epistaxis',q:'The primary artery responsible for posterior epistaxis is the:',
+   opts:['Anterior ethmoidal artery','Sphenopalatine artery','Greater palatine artery','Facial artery'],ans:1,
+   teach:'The sphenopalatine artery (terminal branch of internal maxillary) is the dominant artery of the posterior nasal cavity and the main posterior epistaxis source.'},
+  {id:'OTO-023',tier:1,topic:'Vocal Cord Paralysis',q:'Left-sided recurrent laryngeal nerve palsy most commonly results from:',
+   opts:['Thyroid surgery','Aortic arch pathology / thoracic malignancy','Carotid endarterectomy','Skull base tumor'],ans:1,
+   teach:'The left RLN loops under the aortic arch, making it vulnerable to mediastinal/pulmonary pathology (Pancoast tumor, aortic aneurysm, lymphoma).'},
+  {id:'OTO-024',tier:1,topic:'Subglottic Stenosis',q:'Post-intubation subglottic stenosis most often develops at which level?',
+   opts:['Supraglottis','True vocal cords','Cricoid / subglottis','Tracheal rings 3-4'],ans:2,
+   teach:'The narrowest point of the adult airway is the subglottis at the cricoid ring; pressure necrosis from ETT cuff causes stenosis here.'},
+  {id:'OTO-025',tier:1,topic:'Zone II Trauma',q:'Penetrating neck trauma to Zone II (cricoid to angle of mandible) with hard signs should be managed by:',
+   opts:['CT angiography first','Immediate surgical exploration','Observation and serial exams','Selective angiography'],ans:1,
+   teach:'Hard signs (expanding hematoma, active hemorrhage, airway compromise, absent pulse) mandate immediate surgical exploration without delay for imaging.'},
+  {id:'BOSS-001',tier:3,topic:'Emergency Airway',q:'A post-thyroidectomy patient develops stridor and expanding cervical hematoma. Immediate action is:',
+   opts:['Call anesthesia for intubation','Open wound at bedside to relieve hematoma','CT scan to assess extent','Administer IV dexamethasone and observe'],ans:1,
+   teach:'Post-thyroidectomy hematoma with airway compromise requires IMMEDIATE bedside wound opening to decompress before airway is lost.'},
+  {id:'BOSS-002',tier:3,topic:'CICO',q:'Cannot Intubate Cannot Oxygenate (CICO) situation: after failed RSI and two LMA attempts, next step is:',
+   opts:['Repeat laryngoscopy one more time','Surgical cricothyrotomy','Retrograde intubation','Nasopharyngeal airway insertion'],ans:1,
+   teach:'CICO = surgical airway. Cricothyrotomy (scalpel-bougie-tube technique) is the definitive rescue in a failed airway.'},
+];
+
+// ── Weapons ────────────────────────────────────────────────
+const WEAPONS = [
+  {id:'curette',   name:'Curette',        dmg:18, range:52,  spd:0,   cd:18, proj:false, col:'#7ec8e3'},
+  {id:'debrider',  name:'Microdebrider',  dmg:10, range:40,  spd:0,   cd:8,  proj:false, col:'#b5e8b0'},
+  {id:'co2laser',  name:'CO₂ Laser',      dmg:8,  range:220, spd:0,   cd:12, proj:true,  col:'#ff4444'},
+];
+const SUBS = [
+  {id:'scalpel',   name:'Scalpel',     mp:0,  dmg:28, desc:'Blade strike'},
+  {id:'grommet',   name:'Grommet',     mp:4,  dmg:0,  desc:'Stun ring (3s)'},
+  {id:'bipolar',   name:'Bipolar',     mp:6,  dmg:22, desc:'Chain lightning'},
+  {id:'lavage',    name:'Saline',      mp:2,  dmg:0,  desc:'Heal 15 HP'},
+];
+
+// ── XP / Leveling ──────────────────────────────────────────
+function xpNeed(lvl){return Math.floor(22*Math.pow(lvl,1.45));}
+
+function gainXP(g,n){
+  const p=g.player;
+  const banked=g.unbankedXP||0;
+  p.xp+=n;
+  g.unbankedXP=(g.unbankedXP||0)+n;
+  while(p.xp>=xpNeed(p.level)){
+    p.xp-=xpNeed(p.level);
+    p.level++;p.maxHp+=8;p.maxMp+=1;p.hp=p.maxHp;p.mp=p.maxMp;
+    sfx.lvlup();
+    spawnParts(p.x+8,p.y,20,['#ffe066','#ffaa00','#fff'],{spMax:4,life:50,upBias:2});
+    g.msgs.push({txt:`LEVEL UP → ${p.level}`,life:180,col:'#ffe066'});
+  }
+}
+
+// ── Player Factory ─────────────────────────────────────────
+function newPlayer(){
+  return {
+    x:120, y:400, vx:0, vy:0,
+    w:18, h:28,
+    hp:80, maxHp:80,
+    mp:10, maxMp:10,
+    xp:0, level:1,
+    dir:1,          // 1=right,-1=left
+    onGround:false, wasGround:false,
+    jumping:false, jumpBuffer:0, coyote:0,
+    dashing:false, dashTimer:0, dashCd:0,
+    canDash:false,
+    atkTimer:0, atkHit:false,
+    subTimer:0,
+    hurtTimer:0, hurtFlash:0,
+    weapons:[0],    // indices into WEAPONS
+    subs:[0],       // indices into SUBS
+    curWeapon:0, curSub:0,
+    badgeTier:1,
+    stunned:0,
+    wellRead:0,     // streak buff stacks
+    wallCling:0,    // frames touching wall
+    lastGround:0,   // for coyote
+    dead:false,
+    deathTimer:0,
+  };
+}
+
+// Physics constants (exact from v1)
+const ACC=0.7, MAX=3.4, FRIC=0.75, GRAV=0.52, JV=-10.6;
+const DASH_VX=8.4, DASH_FRAMES=9, DASH_CD=32;
+const COYOTE_FRAMES=7, JUMP_BUFFER=7;
+
+// ── Leitner / Morbidity ────────────────────────────────────
+function getLeitnerBox(g,qid){return (g.leitner[qid]||0);}
+function advanceLeitner(g,qid,correct){
+  const box=getLeitnerBox(g,qid);
+  g.leitner[qid]=correct?Math.min(box+1,3):0;
+  if(!correct&&!g.morbidityList.includes(qid))g.morbidityList.push(qid);
+}
+function pickQuestion(g,tier){
+  const pool=QBANK.filter(q=>q.tier===tier);
+  const weighted=[];
+  for(const q of pool){
+    const box=getLeitnerBox(g,q.id);
+    const w=box===0?3:box===1?2:1;
+    for(let i=0;i<w;i++)weighted.push(q);
+  }
+  return pick(weighted)||pool[0];
+}
+
+
+// ── Room Definitions ──────────────────────────────────────
+// Each platform: {x,y,w,h}  (world coords)
+// Each exit: {x,y,w,h, toRoom, spawnX, spawnY, dir:'left'|'right'|'up'|'down'|'auto'}
+// Each spawn: {type, x, y, ...opts}
+// Each prop: {type:'save'|'npc'|'pickup'|'shop'|'wavelock', x,y,...}
+
+const ROOMS = {
+  ed_entrance:{
+    id:'ed_entrance', label:'Emergency Department — Entrance',
+    region:'ED', mapCol:0, mapRow:2,
+    w:1920, h:540,
+    bg:'ed',
+    platforms:[
+      {x:0,    y:510, w:1920, h:30}, // floor
+      {x:200,  y:380, w:160,  h:16},
+      {x:500,  y:300, w:200,  h:16},
+      {x:800,  y:380, w:160,  h:16},
+      {x:1100, y:280, w:200,  h:16},
+      {x:1400, y:380, w:160,  h:16},
+      {x:1650, y:300, w:200,  h:16},
+    ],
+    exits:[
+      {x:1900,y:380,w:20,h:130, toRoom:'ed_triage',    spawnX:40, spawnY:430, dir:'right'},
+      {x:0,   y:380,w:20,h:130, toRoom:'ed_triage',    spawnX:40, spawnY:430, dir:'left', hidden:true},
+    ],
+    doors:[
+      {x:120, y:450,w:36,h:60, toRoom:'clinic_waiting', spawnX:860, spawnY:430, label:'Clinic →'},
+    ],
+    spawns:[
+      {type:'walker',x:400,y:480},{type:'walker',x:900,y:480},
+      {type:'hopper',x:1200,y:480},{type:'walker',x:1600,y:480},
+    ],
+    props:[],
+  },
+
+  ed_triage:{
+    id:'ed_triage', label:'ED — Triage',
+    region:'ED', mapCol:1, mapRow:2,
+    w:960, h:540,
+    bg:'ed',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:200,y:390, w:140, h:16},
+      {x:500,y:310, w:160, h:16},
+      {x:720,y:390, w:140, h:16},
+    ],
+    exits:[
+      {x:940,y:380,w:20,h:130, toRoom:'ed_resus',    spawnX:40, spawnY:430, dir:'right'},
+      {x:0,  y:380,w:20,h:130, toRoom:'ed_entrance', spawnX:1880,spawnY:430, dir:'left'},
+    ],
+    doors:[],
+    spawns:[
+      {type:'hopper',x:300,y:480},{type:'turret',x:650,y:480},
+    ],
+    props:[
+      {type:'save', x:80, y:450, label:'Triage Desk'},
+    ],
+  },
+
+  ed_resus:{
+    id:'ed_resus', label:'ED — Resuscitation Bay',
+    region:'ED', mapCol:1, mapRow:1,
+    w:960, h:540,
+    bg:'ed',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:150,y:370, w:180, h:16},
+      {x:420,y:280, w:200, h:16},
+      {x:700,y:370, w:180, h:16},
+    ],
+    exits:[
+      {x:0,  y:380,w:20,h:130, toRoom:'ed_triage', spawnX:880, spawnY:430, dir:'left'},
+    ],
+    doors:[
+      {x:450,y:448,w:40,h:62, toRoom:'ccc_gauntlet', spawnX:80, spawnY:430, label:'Procedure ↓'},
+    ],
+    spawns:[
+      {type:'fly',x:250,y:300},{type:'fly',x:700,y:300},{type:'walker',x:500,y:480},
+    ],
+    props:[
+      {type:'npc', x:820, y:450, id:'attend1', lines:[
+        'Resident. You made it this far.',
+        'The Code Cart is beyond that door.',
+        'Finish the encounter to earn your badge.',
+      ]},
+    ],
+  },
+
+  ccc_gauntlet:{
+    id:'ccc_gauntlet', label:'Code Cart Corridor',
+    region:'ED', mapCol:1, mapRow:0,
+    w:1920, h:540,
+    bg:'ed_dark',
+    platforms:[
+      {x:0,   y:510, w:1920, h:30},
+      {x:200, y:400, w:160,  h:16},
+      {x:450, y:310, w:200,  h:16},
+      {x:750, y:400, w:160,  h:16},
+      {x:1000,y:310, w:200,  h:16},
+      {x:1280,y:400, w:160,  h:16},
+      {x:1500,y:310, w:200,  h:16},
+      {x:1700,y:400, w:160,  h:16},
+    ],
+    exits:[
+      {x:0, y:380,w:20,h:130, toRoom:'ed_resus', spawnX:880, spawnY:430, dir:'left'},
+    ],
+    doors:[
+      {x:1880,y:448,w:40,h:62, toRoom:'ccc_arena', spawnX:80, spawnY:430, label:'→ Boss', locked:true, waveLock:true},
+    ],
+    spawns:[],   // wave spawns injected at runtime
+    props:[
+      {type:'wavelock', waveLockDoor:0, waves:[
+        [{type:'walker',x:300,y:480},{type:'hopper',x:600,y:480},{type:'turret',x:900,y:480}],
+        [{type:'fly',x:400,y:300},{type:'fly',x:800,y:300},{type:'walker',x:1200,y:480},{type:'walker',x:1500,y:480}],
+        [{type:'elite',x:700,y:480},{type:'turret',x:1200,y:480},{type:'hopper',x:1500,y:480}],
+      ]},
+    ],
+  },
+
+  ccc_arena:{
+    id:'ccc_arena', label:'Code Cart Arena',
+    region:'ED', mapCol:2, mapRow:0,
+    w:1920, h:540,
+    bg:'boss',
+    platforms:[
+      {x:0,   y:510, w:1920, h:30},
+      {x:100, y:380, w:200,  h:16},
+      {x:400, y:290, w:200,  h:16},
+      {x:700, y:380, w:300,  h:16},
+      {x:1080,y:290, w:200,  h:16},
+      {x:1380,y:380, w:200,  h:16},
+      {x:1620,y:290, w:220,  h:16},
+    ],
+    exits:[
+      {x:0, y:380,w:20,h:130, toRoom:'ccc_gauntlet', spawnX:1880, spawnY:430, dir:'left'},
+    ],
+    doors:[
+      {x:1880,y:448,w:40,h:62, toRoom:'ed_entrance', spawnX:960, spawnY:430, label:'← ED', locked:true, bossLock:'code_cart'},
+    ],
+    spawns:[],
+    props:[
+      {type:'boss', bossId:'code_cart', x:960, y:400},
+    ],
+  },
+
+  clinic_waiting:{
+    id:'clinic_waiting', label:'ENT Clinic — Waiting Room',
+    region:'CLINIC', mapCol:3, mapRow:2,
+    w:960, h:540,
+    bg:'clinic',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:150,y:390, w:160, h:16},
+      {x:450,y:310, w:160, h:16},
+      {x:720,y:390, w:160, h:16},
+    ],
+    exits:[
+      {x:940,y:380,w:20,h:130, toRoom:'clinic_exam',  spawnX:40, spawnY:430, dir:'right'},
+      {x:0,  y:380,w:20,h:130, toRoom:'ward_corridor',spawnX:1880,spawnY:430, dir:'left'},
+    ],
+    doors:[
+      {x:460,y:448,w:40,h:62, toRoom:'ed_entrance', spawnX:120, spawnY:430, label:'↑ ED'},
+    ],
+    spawns:[
+      {type:'hopper',x:300,y:480},{type:'walker',x:700,y:480},
+    ],
+    props:[
+      {type:'save', x:80, y:450, label:'Reception'},
+    ],
+  },
+
+  clinic_exam:{
+    id:'clinic_exam', label:'ENT Clinic — Exam Rooms',
+    region:'CLINIC', mapCol:4, mapRow:2,
+    w:1920, h:540,
+    bg:'clinic',
+    platforms:[
+      {x:0,   y:510, w:1920, h:30},
+      {x:200, y:400, w:160,  h:16},
+      {x:500, y:300, w:200,  h:16},
+      {x:800, y:400, w:160,  h:16},
+      {x:1100,y:300, w:200,  h:16},
+      {x:1400,y:400, w:160,  h:16},
+      {x:1650,y:300, w:200,  h:16},
+    ],
+    exits:[
+      {x:0,   y:380,w:20,h:130, toRoom:'clinic_waiting',spawnX:880, spawnY:430, dir:'left'},
+      {x:1900,y:380,w:20,h:130, toRoom:'cafeteria',     spawnX:40,  spawnY:430, dir:'right'},
+    ],
+    doors:[],
+    spawns:[
+      {type:'elite',x:500,y:480},{type:'hopper',x:900,y:480},
+      {type:'fly',x:1200,y:300},{type:'walker',x:1600,y:480},
+    ],
+    props:[
+      {type:'pickup', x:1100, y:270, item:'methylene_blue', label:'Methylene Blue'},
+    ],
+  },
+
+  cafeteria:{
+    id:'cafeteria', label:'Hospital Cafeteria',
+    region:'CLINIC', mapCol:5, mapRow:2,
+    w:960, h:540,
+    bg:'clinic',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:200,y:400, w:140, h:16},
+      {x:480,y:320, w:160, h:16},
+      {x:720,y:400, w:140, h:16},
+    ],
+    exits:[
+      {x:0,  y:380,w:20,h:130, toRoom:'clinic_exam', spawnX:1880, spawnY:430, dir:'left'},
+    ],
+    doors:[],
+    spawns:[
+      {type:'walker',x:400,y:480},{type:'hopper',x:700,y:480},
+    ],
+    props:[
+      {type:'save', x:80, y:450, label:'Cafeteria Counter'},
+      {type:'shop', x:480, y:280, label:'Vending Machine'},
+    ],
+  },
+
+  ward_corridor:{
+    id:'ward_corridor', label:'Ward 4 — Corridor',
+    region:'WARD', mapCol:2, mapRow:2,
+    w:1920, h:540,
+    bg:'ward',
+    platforms:[
+      {x:0,   y:510, w:1920, h:30},
+      {x:250, y:400, w:160,  h:16},
+      {x:550, y:310, w:200,  h:16},
+      {x:850, y:400, w:160,  h:16},
+      {x:1100,y:310, w:200,  h:16},
+      {x:1400,y:400, w:160,  h:16},
+      {x:1650,y:310, w:200,  h:16},
+    ],
+    exits:[
+      {x:1900,y:380,w:20,h:130, toRoom:'clinic_waiting', spawnX:40,  spawnY:430, dir:'right'},
+      {x:0,   y:380,w:20,h:130, toRoom:'ward_hub',       spawnX:1880,spawnY:430, dir:'left'},
+    ],
+    doors:[],
+    spawns:[
+      {type:'walker',x:400,y:480},{type:'hopper',x:700,y:480},
+      {type:'turret',x:1100,y:480},{type:'fly',x:1500,y:300},
+    ],
+    props:[],
+  },
+
+  ward_hub:{
+    id:'ward_hub', label:'Ward 4 — Nursing Station',
+    region:'WARD', mapCol:1, mapRow:2,
+    w:960, h:540,
+    bg:'ward',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:150,y:390, w:160, h:16},
+      {x:450,y:310, w:160, h:16},
+      {x:720,y:390, w:160, h:16},
+    ],
+    exits:[
+      {x:940,y:380,w:20,h:130, toRoom:'ward_corridor', spawnX:40, spawnY:430, dir:'right'},
+      {x:0,  y:380,w:20,h:130, toRoom:'ward_4b',       spawnX:880,spawnY:430, dir:'left'},
+    ],
+    doors:[
+      {x:460,y:448,w:40,h:62, toRoom:'badge_gate', spawnX:80, spawnY:430, label:'Badge II →', badgeLock:2},
+    ],
+    spawns:[
+      {type:'hopper',x:300,y:480},{type:'walker',x:650,y:480},
+    ],
+    props:[],
+  },
+
+  ward_4b:{
+    id:'ward_4b', label:'Ward 4B',
+    region:'WARD', mapCol:0, mapRow:2,
+    w:960, h:540,
+    bg:'ward',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:200,y:400, w:140, h:16},
+      {x:500,y:310, w:160, h:16},
+      {x:760,y:400, w:140, h:16},
+    ],
+    exits:[
+      {x:940,y:380,w:20,h:130, toRoom:'ward_hub', spawnX:40, spawnY:430, dir:'right'},
+    ],
+    doors:[],
+    spawns:[
+      {type:'fly',x:300,y:280},{type:'walker',x:600,y:480},{type:'elite',x:800,y:480},
+    ],
+    props:[
+      {type:'npc', x:80, y:450, id:'coresident', lines:[
+        'You survived triage AND the code cart?',
+        'I\'ve been stuck on this ward for months.',
+        'The badge gate won\'t open until after the boss.',
+        'Good luck out there, PGY-1.',
+      ]},
+    ],
+  },
+
+  badge_gate:{
+    id:'badge_gate', label:'Badge Gate — Year 2',
+    region:'WARD', mapCol:2, mapRow:1,
+    w:960, h:540,
+    bg:'ward',
+    platforms:[
+      {x:0,  y:510, w:960, h:30},
+      {x:200,y:400, w:160, h:16},
+      {x:500,y:320, w:200, h:16},
+    ],
+    exits:[
+      {x:0,  y:380,w:20,h:130, toRoom:'ward_hub', spawnX:880, spawnY:430, dir:'left'},
+    ],
+    doors:[],
+    spawns:[],
+    props:[
+      {type:'badge_display', x:480, y:300, tier:2, label:'PGY-2 Territory — Badge Required'},
+    ],
+  },
+};
+
+
+// ── Enemy Factory ──────────────────────────────────────────
+function mkEnemy(type, x, y, opts={}){
+  const base={
+    x, y, vx:0, vy:0, w:20, h:28,
+    type, onGround:false,
+    hurtTimer:0, dir:1,
+    stagger:0,       // >0 = staggered (frames)
+    rage:false,      // revived with rage buff
+    dead:false,
+    qid:null,        // assigned question id
+    drops:[],
+  };
+  switch(type){
+    case 'walker': return {...base, hp:30, maxHp:30, dmg:8,  speed:0.8, xp:12, col:'#4a9eff'};
+    case 'hopper': return {...base, hp:22, maxHp:22, dmg:10, speed:1.2, xp:15, col:'#ff9b4a', w:18,h:22, jumpTimer:rndI(40,80)};
+    case 'turret': return {...base, hp:40, maxHp:40, dmg:0,  speed:0,   xp:20, col:'#ff4a4a', w:24,h:30, shotTimer:90, shotCd:90};
+    case 'fly':    return {...base, hp:18, maxHp:18, dmg:8,  speed:1.5, xp:14, col:'#c84aff', w:16,h:16, floatBase:y, floatT:Math.random()*Math.PI*2};
+    case 'elite':  return {...base, hp:60, maxHp:60, dmg:14, speed:1.0, xp:35, col:'#ffdd44', w:24,h:32, cd:0};
+    default:       return {...base, hp:20, maxHp:20, dmg:6,  speed:0.8, xp:10, col:'#888'};
+  }
+}
+
+// ── Enemy AI / Update ──────────────────────────────────────
+function updEnemy(e, p, plats){
+  if(e.dead)return;
+  if(e.stagger>0){e.stagger--;e.vx*=0.85;applyGrav(e,plats);return;}
+
+  const dx=p.x-e.x, dist=Math.abs(dx);
+  if(dx!==0)e.dir=dx>0?1:-1;
+
+  switch(e.type){
+    case 'walker':
+    case 'elite':{
+      e.vx=lerp(e.vx,e.dir*e.speed*(e.rage?1.6:1),0.15);
+      applyGrav(e,plats);
+      // edge-stop
+      if(e.onGround&&willFallOff(e,plats))e.vx=-e.vx;
+      break;
+    }
+    case 'hopper':{
+      e.jumpTimer--;
+      if(e.jumpTimer<=0&&e.onGround){
+        e.vy=-8.5;e.vx=e.dir*2*(e.rage?1.5:1);
+        e.jumpTimer=rndI(50,100);
+      }
+      applyGrav(e,plats);
+      break;
+    }
+    case 'turret':{
+      e.shotTimer--;
+      if(e.shotTimer<=0&&dist<400){
+        fireEnemyShot(e,p);
+        e.shotTimer=e.rage?50:90;
+      }
+      applyGrav(e,plats);
+      break;
+    }
+    case 'fly':{
+      e.floatT+=0.04;
+      const tx=p.x, ty=p.y-40;
+      const fdx=tx-e.x, fdy=(ty+Math.sin(e.floatT)*30)-e.y;
+      e.vx=lerp(e.vx,fdx>0?e.speed:-e.speed,0.05);
+      e.vy=lerp(e.vy,fdy*0.04,0.1);
+      e.x+=e.vx;e.y+=e.vy;
+      return;
+    }
+  }
+  e.x+=e.vx;
+  clampToRoom(e);
+}
+
+function willFallOff(e,plats){
+  const nx=e.x+e.vx*5;
+  return !plats.some(p=>nx+e.w>p.x&&nx<p.x+p.w&&Math.abs((e.y+e.h)-p.y)<8);
+}
+
+function applyGrav(e,plats){
+  e.vy+=GRAV;e.y+=e.vy;e.onGround=false;
+  for(const p of plats){
+    if(e.vx>=0&&e.x+e.w>p.x&&e.x<p.x+p.w){
+      if(e.y+e.h>p.y&&e.y+e.h<p.y+p.h+e.vy+1){
+        e.y=p.y-e.h;e.vy=0;e.onGround=true;break;
+      }
+    }
+  }
+  // also check floor
+  if(e.y+e.h>510){e.y=510-e.h;e.vy=0;e.onGround=true;}
+}
+
+function clampToRoom(e){
+  const rd=G.currentRoom;if(!rd)return;
+  if(e.x<0)e.x=0;if(e.x+e.w>rd.w)e.x=rd.w-e.w;
+}
+
+// Enemy projectiles
+const eprojs=[];
+function fireEnemyShot(e,p){
+  const dx=p.x-e.x, dy=p.y-e.y;
+  const len=Math.sqrt(dx*dx+dy*dy)||1;
+  eprojs.push({x:e.x+e.w/2,y:e.y+e.h/2,vx:dx/len*3.5,vy:dy/len*3.5,life:120,dmg:e.dmg||6,r:5});
+}
+function updEprojs(plats){
+  for(let i=eprojs.length-1;i>=0;i--){
+    const ep=eprojs[i];
+    ep.x+=ep.vx;ep.y+=ep.vy;ep.life--;
+    let hit=false;
+    for(const p of plats){if(rectContains(p.x,p.y,p.w,p.h,ep.x,ep.y)){hit=true;break;}}
+    if(ep.life<=0||hit)eprojs.splice(i,1);
+  }
+}
+
+// ── Damage Enemy ───────────────────────────────────────────
+function damageEnemy(e, d, kx){
+  if(e.dead||e.stagger>0)return;
+  e.hp-=d;e.hurtTimer=10;
+  spawnParts(e.x+e.w/2,e.y+e.h/2,5,['#ff4','#f80','#f00'],{spMax:3,life:20});
+  if(e.hp<=0){
+    e.hp=0;
+    beginStagger(e);
+  }
+}
+
+function beginStagger(e){
+  e.stagger=300; // 5 seconds @60fps
+  e.vx=0;e.vy=0;
+  if(!e.qid){
+    const q=pickQuestion(G,1);
+    e.qid=q.id;
+  }
+  sfx.quiz();
+  G.pendingQuiz={target:e,boss:false};
+}
+
+// ── Boss: Code Cart Golem ──────────────────────────────────
+function mkBoss(){
+  return {
+    id:'code_cart', name:'Code Cart Golem',
+    x:900, y:380, w:64, h:80,
+    vx:0, vy:0,
+    hp:90, maxHp:90,
+    phase:1,          // 1 or 2
+    stagger:0,        // stagger frames
+    hurtTimer:0,
+    qid:null,
+    dead:false,
+    dir:1,
+    chargeTimer:120, chargeCd:120,
+    atkTimer:0,
+    padProjs:[],      // defibrillator pads
+    enraged:false,
+    onGround:false,
+  };
+}
+
+function updBoss(b, p, plats){
+  if(b.dead)return;
+  if(b.stagger>0){
+    b.stagger--;
+    b.vx*=0.85;
+    applyGravBoss(b,plats);
+    return;
+  }
+
+  const dx=p.x-b.x;
+  b.dir=dx>0?1:-1;
+
+  if(b.phase===1){
+    // Phase 1: charge toward player
+    b.chargeTimer--;
+    if(b.chargeTimer<=0){
+      b.vx=b.dir*(b.enraged?7:5);
+      b.chargeTimer=b.enraged?70:120;
+    }
+    b.vx*=0.92;
+    applyGravBoss(b,plats);
+
+    // fire pad projectiles
+    b.atkTimer--;
+    if(b.atkTimer<=0){
+      fireBossPads(b,p);
+      b.atkTimer=b.enraged?60:100;
+    }
+
+    // phase transition
+    if(b.hp<=45&&!b.enraged){
+      beginBossStagger(b,3);// tier-3 question
+    }
+  } else {
+    // Phase 2: faster + AED shock wave
+    b.chargeTimer--;
+    if(b.chargeTimer<=0){
+      b.vx=b.dir*8;
+      b.chargeTimer=70;
+    }
+    b.vx*=0.90;
+    applyGravBoss(b,plats);
+    b.atkTimer--;
+    if(b.atkTimer<=0){
+      fireBossAED(b);
+      b.atkTimer=80;
+    }
+  }
+
+  b.x+=b.vx;
+  if(b.x<50)b.x=50;
+  if(b.x+b.w>G.currentRoom.w-50)b.x=G.currentRoom.w-50-b.w;
+
+  // update pad projectiles
+  for(let i=b.padProjs.length-1;i>=0;i--){
+    const pp=b.padProjs[i];
+    pp.x+=pp.vx;pp.y+=pp.vy;pp.life--;
+    if(pp.life<=0)b.padProjs.splice(i,1);
+  }
+}
+
+function applyGravBoss(b,plats){
+  b.vy+=GRAV*0.8;b.y+=b.vy;b.onGround=false;
+  for(const p of plats){
+    if(b.x+b.w>p.x&&b.x<p.x+p.w&&b.y+b.h>p.y&&b.y+b.h<p.y+p.h+b.vy+1){
+      b.y=p.y-b.h;b.vy=0;b.onGround=true;break;
+    }
+  }
+  if(b.y+b.h>510){b.y=510-b.h;b.vy=0;b.onGround=true;}
+}
+
+function fireBossPads(b,p){
+  const dx=p.x-b.x-b.w/2, dy=p.y-b.y-b.h/2;
+  const len=Math.sqrt(dx*dx+dy*dy)||1;
+  b.padProjs.push({x:b.x+b.w/2,y:b.y+b.h/2,vx:dx/len*4,vy:dy/len*4-2,life:180,r:8,dmg:14});
+  b.padProjs.push({x:b.x+b.w/2,y:b.y+b.h/2,vx:dx/len*4+1,vy:dy/len*4-2,life:180,r:8,dmg:14});
+}
+
+function fireBossAED(b){
+  // ground shock wave sweeping left and right
+  b.padProjs.push({x:b.x,y:b.y+b.h-8,vx:-5,vy:0,life:80,r:12,dmg:18,ground:true});
+  b.padProjs.push({x:b.x+b.w,y:b.y+b.h-8,vx:5,vy:0,life:80,r:12,dmg:18,ground:true});
+}
+
+function beginBossStagger(b, tier){
+  b.stagger=360;
+  b.vx=0;b.vy=0;
+  if(!b.qid){
+    const q=pickQuestion(G,tier);
+    b.qid=q.id;
+  }
+  sfx.boss();
+  G.pendingQuiz={target:b,boss:true,tier};
+}
+
+function damageBoss(b,d){
+  if(b.dead||b.stagger>0)return;
+  b.hp-=d;b.hurtTimer=10;
+  spawnParts(b.x+b.w/2,b.y+b.h/2,8,['#ff0','#f80','#fff'],{spMax:4,life:25});
+  if(b.hp<=0){
+    b.hp=0;
+    beginBossStagger(b,3);
+  } else if(b.hp<=45&&b.phase===1&&!b.enraged){
+    beginBossStagger(b,3);
+  }
+}
+
+// ── Wave System ────────────────────────────────────────────
+// Stored on G per room
+function initWaveSystem(room){
+  const wlProp=room.props.find(p=>p.type==='wavelock');
+  if(!wlProp)return;
+  G.waveState={
+    waves:wlProp.waves,
+    current:0,
+    enemies:[],
+    active:false,
+    complete:false,
+    doorIdx:wlProp.waveLockDoor||0,
+  };
+  spawnWave(0);
+}
+
+function spawnWave(idx){
+  const ws=G.waveState;
+  if(!ws||idx>=ws.waves.length)return;
+  ws.current=idx;ws.active=true;ws.enemies=[];
+  for(const sp of ws.waves[idx]){
+    ws.enemies.push(mkEnemy(sp.type,sp.x,sp.y));
+  }
+  G.enemies.push(...ws.enemies);
+}
+
+function updWaveSystem(){
+  const ws=G.waveState;
+  if(!ws||ws.complete)return;
+  if(!ws.active)return;
+  // Check if all enemies in current wave are dead
+  const alive=ws.enemies.filter(e=>!e.dead);
+  if(alive.length===0){
+    ws.current++;
+    if(ws.current>=ws.waves.length){
+      ws.complete=true;ws.active=false;
+      // unlock wave-locked door
+      const door=G.currentRoom.doors[ws.doorIdx];
+      if(door)door.locked=false;
+      sfx.door();
+      G.msgs.push({txt:'ALL CLEAR — door unlocked',life:180,col:'#0f0'});
+    } else {
+      spawnWave(ws.current);
+      G.msgs.push({txt:`Wave ${ws.current+1}/${ws.waves.length}`,life:120,col:'#ff0'});
+    }
+  }
+}
+
+
+// ── Quiz State Machine ─────────────────────────────────────
+// G.quiz = null | {q, target, boss, tier, state:'show'|'answered', chosen, correctAnim, timer}
+function openQuiz(pending){
+  const qObj=QBANK.find(q=>q.id===pending.target.qid)||pickQuestion(G,pending.tier||1);
+  G.quiz={
+    q:qObj, target:pending.target, boss:pending.boss||false,
+    tier:pending.tier||1,
+    state:'show', chosen:-1, correctAnim:0, timer:0,
+  };
+  G.pendingQuiz=null;
+  sfx.quiz();
+}
+
+function updQuiz(){
+  const qz=G.quiz;if(!qz)return;
+  qz.timer++;
+  if(qz.state==='show'){
+    // number keys 1-4 or arrow keys to select
+    for(let i=0;i<4;i++){
+      const k=(i+1).toString();
+      if(pressed[k]||(i===0&&pressed['ArrowLeft'])||(i===1&&pressed['ArrowRight'])||
+         (i===2&&pressed['ArrowUp'])||(i===3&&pressed['ArrowDown'])){
+        selectAnswer(i);break;
+      }
+    }
+    // F or Enter to confirm selected (touch: F button)
+    if(qz.chosen>=0&&(pressed['f']||pressed['Enter']||pressed['z'])){
+      confirmAnswer();
+    }
+  } else if(qz.state==='answered'){
+    if(qz.timer>180||(K.startPress()||pressed['f'])){
+      closeQuiz();
+    }
+  }
+}
+
+function selectAnswer(i){
+  G.quiz.chosen=i;
+}
+
+function confirmAnswer(){
+  const qz=G.quiz;
+  const correct=qz.chosen===qz.q.ans;
+  qz.state='answered';qz.timer=0;
+  advanceLeitner(G,qz.q.id,correct);
+
+  if(correct){
+    sfx.quizOk();
+    G.boardScore=Math.min(100,(G.boardScore||0)+10);
+    G.player.wellRead=Math.min(5,(G.player.wellRead||0)+1);
+    if(!qz.boss){
+      qz.target.dead=true;
+      gainXP(G,qz.target.xp);
+      G.unbankedXP=(G.unbankedXP||0)+qz.target.xp;
+      G.caseLog=G.caseLog||[];
+      G.caseLog.push({qid:qz.q.id,ts:Date.now()});
+    } else {
+      // Boss quiz pass
+      if(qz.target.hp<=0){
+        // Final kill
+        qz.target.dead=true;
+        sfx.death();
+        gainXP(G,100);
+        G.bossBeaten.push(qz.target.id);
+        G.player.canDash=true;
+        G.player.badgeTier=Math.max(G.player.badgeTier,2);
+        // unlock boss door
+        const door=G.currentRoom.doors.find(d=>d.bossLock===qz.target.id);
+        if(door)door.locked=false;
+        sfx.door();
+        G.msgs.push({txt:'BOSS DEFEATED — path unlocked',life:240,col:'#ffe066'});
+      } else {
+        // Phase transition
+        qz.target.phase=2;
+        qz.target.enraged=true;
+        qz.target.stagger=0;
+        qz.target.qid=null;
+        G.msgs.push({txt:'PHASE 2 — BOSS ENRAGED',life:180,col:'#f00'});
+      }
+    }
+  } else {
+    sfx.quizBad();
+    G.player.wellRead=0;
+    G.boardScore=Math.max(0,(G.boardScore||0)-5);
+    if(!qz.boss){
+      // enemy revives at 30% hp with rage
+      qz.target.stagger=0;
+      qz.target.hp=Math.ceil(qz.target.maxHp*0.3);
+      qz.target.rage=true;
+      qz.target.qid=null;
+      G.msgs.push({txt:`${qz.q.teach}`,life:300,col:'#f66'});
+    } else {
+      // Boss revives at 30% hp
+      qz.target.stagger=0;
+      qz.target.hp=Math.ceil(qz.target.maxHp*0.3);
+      qz.target.rage=true;
+      qz.target.qid=null;
+      G.msgs.push({txt:`${qz.q.teach}`,life:300,col:'#f66'});
+    }
+  }
+}
+
+function closeQuiz(){G.quiz=null;}
+
+// ── Player Physics Update ──────────────────────────────────
+function updPlayer(p, plats){
+  if(p.dead){p.deathTimer++;return;}
+  if(p.stunned>0){p.stunned--;applyGravPlayer(p,plats);return;}
+
+  // Horizontal
+  if(K.left())  p.vx=Math.max(p.vx-ACC,-MAX);
+  else if(K.right())p.vx=Math.min(p.vx+ACC,MAX);
+  else          p.vx*=FRIC;
+  if(Math.abs(p.vx)<0.1)p.vx=0;
+  if(p.vx!==0)p.dir=p.vx>0?1:-1;
+
+  // Dash
+  if(p.canDash){
+    p.dashCd=Math.max(0,p.dashCd-1);
+    if(K.atkPress()&&p.dashCd===0&&!G.quiz){
+      p.dashing=true;p.dashTimer=DASH_FRAMES;p.dashCd=DASH_CD;
+      p.vx=p.dir*DASH_VX;p.vy=0;
+      sfx.dash();
+      spawnParts(p.x+p.w/2,p.y+p.h/2,8,'#88f',{spMax:2,life:15});
+    }
+  }
+  if(p.dashing){
+    p.dashTimer--;
+    if(p.dashTimer<=0){p.dashing=false;}
+    else{p.vx=p.dir*DASH_VX;}
+  }
+
+  // Coyote + jump buffer
+  if(p.wasGround&&!p.onGround)p.coyote=COYOTE_FRAMES;
+  else if(p.onGround)p.coyote=COYOTE_FRAMES;
+  else p.coyote=Math.max(0,p.coyote-1);
+
+  if(K.jpPress())p.jumpBuffer=JUMP_BUFFER;
+  else p.jumpBuffer=Math.max(0,p.jumpBuffer-1);
+
+  if(p.jumpBuffer>0&&p.coyote>0&&!G.quiz){
+    p.vy=JV;p.jumping=true;p.jumpBuffer=0;p.coyote=0;
+    sfx.jump();
+  }
+  // variable jump height
+  if(p.jumping&&!K.up()&&p.vy<-4)p.vy*=0.8;
+  if(p.vy>=0)p.jumping=false;
+
+  p.wasGround=p.onGround;
+  applyGravPlayer(p,plats);
+
+  // Weapon switching
+  if(pressed['q']){
+    p.curWeapon=(p.curWeapon+1)%p.weapons.length;
+  }
+  if(pressed['e']){
+    p.curSub=(p.curSub+1)%p.subs.length;
+  }
+
+  // Hurt timer
+  if(p.hurtTimer>0){p.hurtTimer--;p.hurtFlash=p.hurtTimer%6<3?1:0;}
+  else p.hurtFlash=0;
+}
+
+function applyGravPlayer(p,plats){
+  if(!p.dashing)p.vy+=GRAV;
+  p.y+=p.vy;p.onGround=false;
+  for(const pl of plats){
+    if(p.x+p.w>pl.x&&p.x<pl.x+pl.w){
+      if(p.vy>=0&&p.y+p.h>pl.y&&p.y+p.h<=pl.y+pl.h+p.vy+1){
+        p.y=pl.y-p.h;p.vy=0;p.onGround=true;
+        if(!p.wasGround)sfx.land();
+        break;
+      }
+    }
+  }
+  if(p.y+p.h>510){p.y=510-p.h;p.vy=0;p.onGround=true;}
+  p.x+=p.vx;
+}
+
+// ── Player Attack ──────────────────────────────────────────
+const pprojs=[]; // player projectiles
+function doAttack(p){
+  if(G.quiz)return;
+  const wp=WEAPONS[p.weapons[p.curWeapon]];
+  if(p.atkTimer>0)return;
+  p.atkTimer=wp.cd;
+  sfx.slash();
+  if(wp.proj){
+    pprojs.push({x:p.x+(p.dir>0?p.w:0),y:p.y+p.h/2-4,vx:p.dir*7,vy:0,dmg:wp.dmg,life:60,r:6,col:wp.col});
+  } else {
+    // melee hitbox check
+    const hx=p.x+(p.dir>0?p.w:-wp.range);
+    const hy=p.y;
+    checkMeleeHit(hx,hy,wp.range,p.h,wp.dmg,p.dir);
+  }
+}
+
+function checkMeleeHit(hx,hy,hw,hh,dmg,dir){
+  for(const e of G.enemies){
+    if(e.dead)continue;
+    if(rectsOverlap(hx,hy,hw,hh,e.x,e.y,e.w,e.h)){
+      damageEnemy(e,dmg,dir);
+    }
+  }
+  if(G.boss&&!G.boss.dead){
+    if(rectsOverlap(hx,hy,hw,hh,G.boss.x,G.boss.y,G.boss.w,G.boss.h)){
+      damageBoss(G.boss,dmg);
+    }
+  }
+}
+
+function updPprojs(plats){
+  for(let i=pprojs.length-1;i>=0;i--){
+    const pp=pprojs[i];
+    pp.x+=pp.vx;pp.y+=pp.vy;pp.life--;
+    let hit=false;
+    for(const pl of plats){if(rectContains(pl.x,pl.y,pl.w,pl.h,pp.x,pp.y)){hit=true;break;}}
+    if(!hit){
+      for(const e of G.enemies){
+        if(!e.dead&&rectsOverlap(pp.x-pp.r,pp.y-pp.r,pp.r*2,pp.r*2,e.x,e.y,e.w,e.h)){
+          damageEnemy(e,pp.dmg,pp.vx>0?1:-1);hit=true;break;
+        }
+      }
+      if(!hit&&G.boss&&!G.boss.dead&&rectsOverlap(pp.x-pp.r,pp.y-pp.r,pp.r*2,pp.r*2,G.boss.x,G.boss.y,G.boss.w,G.boss.h)){
+        damageBoss(G.boss,pp.dmg);hit=true;
+      }
+    }
+    if(pp.life<=0||hit)pprojs.splice(i,1);
+  }
+}
+
+// ── Hurt Player ────────────────────────────────────────────
+function hurtPlayer(p, d, kx){
+  if(p.hurtTimer>0||p.dead)return;
+  p.hp-=d;p.hurtTimer=55;
+  p.vx=(kx!==undefined?(p.x<kx?-4:4):0);p.vy=-3;
+  sfx.hit();
+  spawnParts(p.x+p.w/2,p.y+p.h/2,10,'#f44',{spMax:3,life:25});
+  if(p.hp<=0){
+    p.hp=0;p.dead=true;p.deathTimer=0;
+    sfx.death();
+    dropRiskBracelet();
+  }
+}
+
+function dropRiskBracelet(){
+  if((G.unbankedXP||0)>0){
+    G.riskBracelet={x:G.player.x,y:G.player.y,xp:G.unbankedXP,roomId:G.roomId,life:-1};
+    G.unbankedXP=0;
+  }
+}
+
+// ── Sub-weapon ─────────────────────────────────────────────
+function doSub(p){
+  if(G.quiz)return;
+  const sub=SUBS[p.subs[p.curSub]];
+  if(p.subTimer>0||(sub.mp>0&&p.mp<sub.mp))return;
+  p.subTimer=40;p.mp=Math.max(0,p.mp-sub.mp);
+  switch(sub.id){
+    case 'scalpel':
+      checkMeleeHit(p.x+(p.dir>0?p.w:-56),p.y,56,p.h,sub.dmg,p.dir);
+      sfx.slash();break;
+    case 'grommet':
+      for(const e of G.enemies)if(!e.dead&&Math.abs(e.x-p.x)<200&&Math.abs(e.y-p.y)<100)e.stunned=(e.stunned||0)+180;
+      sfx.pickup();break;
+    case 'bipolar':{
+      let n=0;
+      for(const e of G.enemies)if(!e.dead&&Math.abs(e.x-p.x)<300){damageEnemy(e,22,1);n++;}
+      sfx.beam();break;
+    }
+    case 'lavage':
+      p.hp=Math.min(p.maxHp,p.hp+15);sfx.pickup();break;
+  }
+}
+
+// ── Room Loading ───────────────────────────────────────────
+function loadRoom(roomId, spawnX, spawnY){
+  const rd=ROOMS[roomId];if(!rd)return;
+
+  // save old unbankedXP location if bracelet still alive
+  G.roomId=roomId;
+  G.currentRoom=rd;
+  G.enemies=[];
+  G.boss=null;
+  G.waveState=null;
+  pprojs.length=0;
+  eprojs.length=0;
+  parts.length=0;
+
+  // spawn regular enemies
+  for(const sp of rd.spawns){
+    G.enemies.push(mkEnemy(sp.type,sp.x,sp.y,sp));
+  }
+
+  // spawn boss if room has boss prop
+  const bossP=rd.props.find(p=>p.type==='boss');
+  if(bossP&&!G.bossBeaten.includes(bossP.bossId)){
+    G.boss=mkBoss();
+    G.boss.x=bossP.x;G.boss.y=bossP.y-G.boss.h;
+    sfx.boss();
+  }
+
+  // init wave system
+  initWaveSystem(rd);
+
+  // Mark visited
+  G.visitedRooms.add(roomId);
+
+  // Camera target
+  G.camX=clamp(spawnX-W/2,0,Math.max(0,rd.w-W));
+  G.camY=0;
+
+  // Player position
+  G.player.x=spawnX;G.player.y=spawnY;
+  G.player.vx=0;G.player.vy=0;
+
+  G.quiz=null;
+  G.pendingQuiz=null;
+}
+
+// ── Camera ─────────────────────────────────────────────────
+function updCamera(){
+  const p=G.player;
+  const rd=G.currentRoom;if(!rd)return;
+  const tx=clamp(p.x-W/2+p.w/2,0,Math.max(0,rd.w-W));
+  G.camX=lerp(G.camX,tx,0.1);
+}
+
+
+// ── Background Renderers ───────────────────────────────────
+const BG_PALETTES={
+  ed:      {sky:'#0a0a1a',far:'#1a1a3a',mid:'#0d1a2e',floor:'#162030',accent:'#1e4060'},
+  ed_dark: {sky:'#05050f',far:'#0d0d20',mid:'#080f1a',floor:'#0a1218',accent:'#102030'},
+  clinic:  {sky:'#0e1a12',far:'#1a2e1a',mid:'#0f1e0f',floor:'#141e14',accent:'#1e3a1e'},
+  ward:    {sky:'#1a100a',far:'#2e1a0d',mid:'#1e100a',floor:'#1e1208',accent:'#3a2010'},
+  boss:    {sky:'#1a0505',far:'#2e0808',mid:'#1a0505',floor:'#1a0808',accent:'#5a0808'},
+};
+
+function drawBG(cx){
+  const rd=G.currentRoom;if(!rd)return;
+  const pal=BG_PALETTES[rd.bg]||BG_PALETTES.ed;
+
+  // Sky gradient
+  const grad=CX.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,pal.sky);grad.addColorStop(1,pal.far);
+  CX.fillStyle=grad;CX.fillRect(0,0,W,H);
+
+  // Parallax far layer — columns / arches
+  CX.globalAlpha=0.4;
+  CX.fillStyle=pal.mid;
+  for(let i=0;i<12;i++){
+    const bx=((i*160)-(cx*0.2))%((W+160)+160)-80;
+    CX.fillRect(bx,50,30,H);
+    // arch top
+    CX.beginPath();CX.arc(bx+15,50,30,Math.PI,0);CX.fill();
+  }
+
+  // Mid layer — panel lines
+  CX.globalAlpha=0.25;
+  CX.fillStyle=pal.accent;
+  for(let i=0;i<8;i++){
+    const bx=((i*240+40)-(cx*0.5))%((W+240)+240)-120;
+    CX.fillRect(bx,0,4,H);
+  }
+
+  // Floor platform tiles
+  CX.globalAlpha=1;
+  CX.fillStyle=pal.floor;
+
+  // Platforms
+  for(const pl of rd.platforms){
+    const px=pl.x-cx;
+    // platform surface
+    CX.fillStyle=pal.accent;
+    CX.fillRect(px,pl.y,pl.w,pl.h);
+    // highlight top
+    CX.fillStyle='rgba(255,255,255,0.07)';
+    CX.fillRect(px,pl.y,pl.w,3);
+    // shadow bottom
+    CX.fillStyle='rgba(0,0,0,0.3)';
+    CX.fillRect(px,pl.y+pl.h-3,pl.w,3);
+    // grid lines
+    CX.fillStyle='rgba(0,0,0,0.2)';
+    for(let g=0;g<pl.w;g+=32){CX.fillRect(px+g,pl.y,1,pl.h);}
+  }
+
+  // Draw doors / exits visually
+  CX.globalAlpha=0.7;
+  for(const door of (rd.doors||[])){
+    const dx=door.x-cx;
+    CX.fillStyle=door.locked?'#444':'#2a6a4a';
+    CX.fillRect(dx,door.y,door.w,door.h);
+    CX.fillStyle=door.locked?'#888':'#5f5';
+    CX.font='6px "Press Start 2P"';
+    CX.textAlign='center';
+    CX.fillText(door.label||'',dx+door.w/2,door.y-4);
+  }
+  // Draw save/npc/etc props
+  for(const prop of (rd.props||[])){
+    const px=(prop.x||0)-cx;
+    if(prop.type==='save'){
+      CX.fillStyle='#0ff';CX.globalAlpha=0.8;
+      CX.fillRect(px-12,prop.y-20,24,20);
+      CX.fillStyle='#000';CX.font='5px "Press Start 2P"';
+      CX.textAlign='center';CX.fillText('SAVE',px,prop.y-8);
+    } else if(prop.type==='npc'){
+      CX.fillStyle='#ff0';CX.globalAlpha=0.9;
+      CX.fillRect(px-8,prop.y-20,16,20);
+      CX.fillStyle='#000';CX.font='5px "Press Start 2P"';
+      CX.textAlign='center';CX.fillText('NPC',px,prop.y-8);
+    } else if(prop.type==='shop'){
+      CX.fillStyle='#f0f';CX.globalAlpha=0.8;
+      CX.fillRect(px-10,prop.y-18,20,18);
+      CX.fillStyle='#000';CX.font='5px "Press Start 2P"';
+      CX.textAlign='center';CX.fillText('$',px,prop.y-6);
+    } else if(prop.type==='badge_display'){
+      CX.fillStyle='#ff6600';CX.globalAlpha=0.6;
+      CX.fillRect(px-60,prop.y-10,120,20);
+      CX.fillStyle='#fff';CX.font='5px "Press Start 2P"';
+      CX.textAlign='center';CX.fillText(prop.label||'LOCKED',px,prop.y+4);
+    } else if(prop.type==='pickup'){
+      CX.fillStyle='#0ff';CX.globalAlpha=0.9;
+      const flash=Math.sin(G.frame*0.1)*0.4+0.6;
+      CX.globalAlpha=flash;
+      CX.fillRect(px-6,prop.y-6,12,12);
+      CX.fillStyle='#000';CX.font='5px "Press Start 2P"';
+      CX.textAlign='center';CX.fillText('!',px,prop.y+4);
+    }
+  }
+  CX.globalAlpha=1;
+}
+
+// ── Draw Entities ──────────────────────────────────────────
+function drawPlayer(p, cx){
+  if(p.dead)return;
+  if(p.hurtFlash)return;
+  const sx=p.x-cx, sy=p.y;
+
+  // shadow
+  CX.fillStyle='rgba(0,0,0,0.3)';
+  CX.fillRect(sx-2,p.y+p.h-2,p.w+4,4);
+
+  // body
+  CX.fillStyle='#7ec8e3';
+  CX.fillRect(sx,sy,p.w,p.h);
+
+  // coat
+  CX.fillStyle='#eee';
+  CX.fillRect(sx+2,sy+4,p.w-4,p.h-8);
+
+  // head
+  CX.fillStyle='#f5c5a0';
+  CX.fillRect(sx+3,sy-10,p.w-6,10);
+
+  // eyes
+  CX.fillStyle='#222';
+  const ex=p.dir>0?(sx+p.w-7):(sx+3);
+  CX.fillRect(ex,sy-6,3,3);
+
+  // weapon indicator
+  const wp=WEAPONS[p.weapons[p.curWeapon]];
+  CX.fillStyle=wp.col;
+  const arm=p.atkTimer>0?4:2;
+  CX.fillRect(sx+(p.dir>0?p.w:(-arm-2)),sy+6,arm+2,4);
+}
+
+function drawEnemy(e, cx){
+  if(e.dead)return;
+  const sx=e.x-cx,sy=e.y;
+  const stag=e.stagger>0;
+
+  if(stag){
+    // stagger kneel — flash yellow
+    const flash=Math.sin(G.frame*0.2)*0.5+0.5;
+    CX.fillStyle=`rgba(255,220,0,${flash})`;
+    CX.fillRect(sx-2,sy-2,e.w+4,e.h+4);
+  }
+
+  // hull
+  CX.fillStyle=e.rage?'#f55':e.col;
+  CX.fillRect(sx,sy,e.w,e.h);
+
+  if(e.hurtTimer>0){CX.fillStyle='rgba(255,255,255,0.6)';CX.fillRect(sx,sy,e.w,e.h);}
+
+  // hp bar
+  if(e.hp<e.maxHp){
+    CX.fillStyle='#333';CX.fillRect(sx,sy-6,e.w,4);
+    CX.fillStyle=e.hp/e.maxHp>0.5?'#0f0':'#f80';
+    CX.fillRect(sx,sy-6,e.w*(e.hp/e.maxHp),4);
+  }
+
+  // stagger FINISH prompt
+  if(stag){
+    CX.fillStyle='#ffe066';CX.font='6px "Press Start 2P"';
+    CX.textAlign='center';
+    CX.fillText('[F] FINISH',sx+e.w/2,sy-10);
+  }
+}
+
+function drawBoss(b, cx){
+  if(!b||b.dead)return;
+  const sx=b.x-cx,sy=b.y;
+  const stag=b.stagger>0;
+
+  // glow
+  CX.shadowColor=b.enraged?'#f00':'#ff0';
+  CX.shadowBlur=stag?20:8;
+
+  // hull
+  CX.fillStyle=b.phase===2?'#cc2200':(b.enraged?'#ff4400':'#884422');
+  CX.fillRect(sx,sy,b.w,b.h);
+
+  // face
+  CX.fillStyle='#333';
+  CX.fillRect(sx+8,sy+10,b.w-16,20);
+  // eyes (LED)
+  CX.fillStyle=stag?'#ff0':'#f00';
+  CX.fillRect(sx+12,sy+16,8,6);
+  CX.fillRect(sx+b.w-20,sy+16,8,6);
+
+  if(b.hurtTimer>0){CX.fillStyle='rgba(255,255,255,0.5)';CX.fillRect(sx,sy,b.w,b.h);}
+
+  CX.shadowBlur=0;
+
+  // Boss HP bar (top of screen)
+  CX.fillStyle='#111';CX.fillRect(W/4,10,W/2,14);
+  CX.fillStyle=b.enraged?'#f00':'#ff6600';
+  CX.fillRect(W/4,10,(W/2)*(b.hp/b.maxHp),14);
+  CX.strokeStyle='#fff';CX.lineWidth=1;
+  CX.strokeRect(W/4,10,W/2,14);
+  CX.fillStyle='#fff';CX.font='6px "Press Start 2P"';
+  CX.textAlign='center';CX.fillText('CODE CART GOLEM',W/2,8);
+
+  if(stag){
+    CX.fillStyle='#ffe066';CX.font='7px "Press Start 2P"';
+    CX.textAlign='center';CX.fillText('[F] FINISH',sx+b.w/2,sy-12);
+  }
+
+  // pad projectiles
+  for(const pp of b.padProjs){
+    CX.fillStyle=pp.ground?'#ff6600':'#ff0';
+    CX.beginPath();
+    CX.arc(pp.x-cx,pp.y,pp.r,0,Math.PI*2);
+    CX.fill();
+  }
+}
+
+function drawProjectiles(cx){
+  for(const pp of pprojs){
+    CX.fillStyle=pp.col||'#ff0';
+    CX.beginPath();CX.arc(pp.x-cx,pp.y,pp.r,0,Math.PI*2);CX.fill();
+  }
+  for(const ep of eprojs){
+    CX.fillStyle='#f64';
+    CX.beginPath();CX.arc(ep.x-cx,ep.y,ep.r,0,Math.PI*2);CX.fill();
+  }
+}
+
+// ── ECG HUD ────────────────────────────────────────────────
+let ecgBuf=[];
+const ECG_W=160, ECG_H=40;
+let ecgT=0;
+
+function updECG(p){
+  ecgT+=0.05*lerp(2.2,0.7,(p.hp/p.maxHp));
+  if(ecgT>1)ecgT-=1;
+  // PQRST wave
+  let v=0;
+  const t=ecgT;
+  if(t<0.05)v=(t/0.05)*0.2;                      // P
+  else if(t<0.1)v=0.2-(t-0.05)/0.05*0.2;         // P descent
+  else if(t<0.15)v=0;                             // PQ
+  else if(t<0.17)v=-(t-0.15)/0.02*0.4;           // Q
+  else if(t<0.2) v=-0.4+(t-0.17)/0.03*1.4;       // QRS up
+  else if(t<0.22)v=1.0-(t-0.2)/0.02;             // R descent
+  else if(t<0.25)v=-(t-0.22)/0.03*0.2;           // S
+  else if(t<0.3) v=-0.2+(t-0.25)/0.05*0.2;       // S up
+  else if(t<0.45)v=0;                             // ST
+  else if(t<0.55)v=(t-0.45)/0.1*0.3;             // T up
+  else if(t<0.65)v=0.3-(t-0.55)/0.1*0.3;         // T down
+  else v=0;
+
+  ecgBuf.push(v);
+  if(ecgBuf.length>ECG_W)ecgBuf.shift();
+}
+
+function drawHUD(p){
+  const mx=16, my=H-80;
+
+  // HP bar
+  CX.fillStyle='#000';CX.globalAlpha=0.6;CX.fillRect(mx,my,180,18);
+  CX.globalAlpha=1;
+  const hpFrac=p.hp/p.maxHp;
+  CX.fillStyle=hpFrac>0.6?'#0f8':'#f80';
+  if(hpFrac<0.3)CX.fillStyle='#f22';
+  CX.fillRect(mx,my,Math.floor(180*hpFrac),18);
+  CX.strokeStyle='rgba(255,255,255,0.3)';CX.lineWidth=1;
+  CX.strokeRect(mx,my,180,18);
+  CX.fillStyle='#fff';CX.font='6px "Press Start 2P"';
+  CX.textAlign='left';CX.fillText(`HP ${p.hp}/${p.maxHp}`,mx+4,my+12);
+
+  // MP bar
+  CX.fillStyle='#000';CX.globalAlpha=0.6;CX.fillRect(mx,my+22,120,12);
+  CX.globalAlpha=1;
+  CX.fillStyle='#44f';
+  CX.fillRect(mx,my+22,Math.floor(120*(p.mp/p.maxMp)),12);
+  CX.strokeStyle='rgba(255,255,255,0.3)';CX.strokeRect(mx,my+22,120,12);
+  CX.fillStyle='#aaf';CX.font='5px "Press Start 2P"';
+  CX.fillText(`MP ${p.mp}/${p.maxMp}`,mx+3,my+32);
+
+  // XP bar
+  const xpN=xpNeed(p.level);
+  CX.fillStyle='#000';CX.globalAlpha=0.6;CX.fillRect(mx,my+38,120,8);
+  CX.globalAlpha=1;
+  CX.fillStyle='#880';
+  CX.fillRect(mx,my+38,Math.floor(120*(p.xp/xpN)),8);
+  CX.strokeStyle='rgba(255,255,255,0.2)';CX.strokeRect(mx,my+38,120,8);
+  CX.fillStyle='#cc0';CX.font='5px "Press Start 2P"';
+  CX.fillText(`Lv${p.level} XP${p.xp}/${xpN}`,mx,my+54);
+
+  // Weapon
+  const wp=WEAPONS[p.weapons[p.curWeapon]];
+  CX.fillStyle='#fff';CX.font='6px "Press Start 2P"';
+  CX.fillText(wp.name,mx,my+66);
+
+  // Badge
+  CX.fillStyle='#ff0';CX.fillText(`Badge PGY-${p.badgeTier}`,mx,my+78);
+
+  // Board score
+  CX.fillStyle='#0ff';CX.fillText(`Board: ${G.boardScore||0}%`,W-120,my+12);
+
+  // Unbanked XP (risk bracelet)
+  if((G.unbankedXP||0)>0){
+    CX.fillStyle='#f0f';CX.font='5px "Press Start 2P"';
+    CX.textAlign='right';CX.fillText(`☩ ${G.unbankedXP} XP unbanked`,W-8,H-10);
+  }
+
+  // ECG
+  drawECG(p, W-ECG_W-16, my);
+
+  // Room label
+  CX.fillStyle='rgba(255,255,255,0.5)';CX.font='6px "Press Start 2P"';
+  CX.textAlign='center';CX.fillText(G.currentRoom.label,W/2,18);
+
+  // Floating messages
+  CX.textAlign='center';
+  for(let i=G.msgs.length-1;i>=0;i--){
+    const m=G.msgs[i];
+    m.life--;
+    const a=Math.min(1,m.life/30);
+    CX.globalAlpha=a;
+    CX.fillStyle=m.col||'#fff';CX.font='8px "Press Start 2P"';
+    CX.fillText(m.txt,W/2,H/2-60-i*18);
+    if(m.life<=0)G.msgs.splice(i,1);
+  }
+  CX.globalAlpha=1;
+}
+
+function drawECG(p, ex, ey){
+  CX.fillStyle='rgba(0,0,0,0.7)';CX.fillRect(ex,ey,ECG_W,ECG_H);
+  CX.strokeStyle='rgba(0,255,60,0.3)';CX.lineWidth=1;
+  // grid
+  for(let gx=0;gx<ECG_W;gx+=20){CX.beginPath();CX.moveTo(ex+gx,ey);CX.lineTo(ex+gx,ey+ECG_H);CX.stroke();}
+  for(let gy=0;gy<ECG_H;gy+=10){CX.beginPath();CX.moveTo(ex,ey+gy);CX.lineTo(ex+ECG_W,ey+gy);CX.stroke();}
+  // trace
+  if(ecgBuf.length<2)return;
+  const baseY=ey+ECG_H/2;
+  const amp=ECG_H*0.4;
+  const col=p.hp/p.maxHp<0.3?'#f00':'#00ff3c';
+  CX.strokeStyle=col;CX.lineWidth=1.5;
+  CX.shadowColor=col;CX.shadowBlur=3;
+  CX.beginPath();
+  for(let i=0;i<ecgBuf.length;i++){
+    const bx=ex+i*(ECG_W/ecgBuf.length);
+    const by=baseY-ecgBuf[i]*amp;
+    i===0?CX.moveTo(bx,by):CX.lineTo(bx,by);
+  }
+  CX.stroke();CX.shadowBlur=0;
+
+  // HR
+  const hr=Math.round(lerp(42,110,1-p.hp/p.maxHp));
+  CX.fillStyle=col;CX.font='7px "Press Start 2P"';
+  CX.textAlign='left';CX.fillText(`${hr}bpm`,ex+2,ey+ECG_H-2);
+}
+
+// ── Quiz Overlay ───────────────────────────────────────────
+function drawQuiz(){
+  const qz=G.quiz;if(!qz)return;
+  const qx=0, qy=H-160, qw=W, qh=160;
+
+  CX.fillStyle='rgba(0,0,20,0.93)';
+  CX.fillRect(qx,qy,qw,qh);
+  CX.strokeStyle='#0ff';CX.lineWidth=2;
+  CX.strokeRect(qx,qy,qw,qh);
+
+  // Topic badge
+  CX.fillStyle='#0ff';CX.font='6px "Press Start 2P"';
+  CX.textAlign='left';
+  CX.fillText(`[${qz.q.topic}] ${qz.q.id}`,qx+10,qy+14);
+
+  // Question
+  CX.fillStyle='#fff';CX.font='7px "Press Start 2P"';
+  wrapText(qz.q.q, qx+10, qy+30, qw-20, 14);
+
+  // Options
+  const optY=qy+72;
+  const optW=(qw-30)/2, optH=28;
+  const labels=['1','2','3','4'];
+  for(let i=0;i<qz.q.opts.length;i++){
+    const ox=qx+10+(i%2)*(optW+10);
+    const oy=optY+Math.floor(i/2)*(optH+4);
+    let bg='rgba(20,20,60,0.8)';
+    if(qz.state==='answered'){
+      if(i===qz.q.ans)bg='rgba(0,200,60,0.7)';
+      else if(i===qz.chosen&&i!==qz.q.ans)bg='rgba(200,20,20,0.7)';
+    } else if(i===qz.chosen)bg='rgba(60,60,200,0.8)';
+    CX.fillStyle=bg;CX.fillRect(ox,oy,optW,optH);
+    CX.strokeStyle=i===qz.chosen?'#ff0':'rgba(100,100,200,0.6)';
+    CX.lineWidth=1;CX.strokeRect(ox,oy,optW,optH);
+    CX.fillStyle='#fff';CX.font='6px "Press Start 2P"';
+    CX.textAlign='left';
+    const txt=`[${labels[i]}] ${qz.q.opts[i]}`;
+    CX.fillText(txt.slice(0,38),ox+4,oy+optH/2+3);
+  }
+
+  // Result
+  if(qz.state==='answered'){
+    const correct=qz.chosen===qz.q.ans;
+    CX.fillStyle=correct?'#0f0':'#f44';
+    CX.font='7px "Press Start 2P"';CX.textAlign='center';
+    CX.fillText(correct?'CORRECT — CASE CLOSED':'WRONG — REVIVING',qw/2,qy+140);
+  } else {
+    CX.fillStyle='rgba(255,255,255,0.5)';CX.font='5px "Press Start 2P"';
+    CX.textAlign='right';
+    CX.fillText('[1-4] SELECT   [F/Z] CONFIRM',qw-10,qy+155);
+  }
+}
+
+function wrapText(txt, x, y, maxW, lineH){
+  const words=txt.split(' ');let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(CX.measureText(test).width>maxW){
+      CX.fillText(line,x,y);line=w;y+=lineH;
+    } else line=test;
+  }
+  if(line)CX.fillText(line,x,y);
+}
+
+// ── Map Screen ─────────────────────────────────────────────
+const MAP_COL_SIZE=60, MAP_ROW_SIZE=40;
+const MAP_REGION_COLORS={ED:'#1a3a5c',CLINIC:'#1a4a2a',WARD:'#3a2a0a',default:'#2a2a2a'};
+
+function drawMap(){
+  CX.fillStyle='rgba(0,0,0,0.9)';CX.fillRect(0,0,W,H);
+  CX.strokeStyle='#0ff';CX.lineWidth=2;CX.strokeRect(10,10,W-20,H-20);
+
+  CX.fillStyle='#0ff';CX.font='10px "Press Start 2P"';
+  CX.textAlign='center';CX.fillText('MAP — TAB to close',W/2,32);
+
+  for(const [id,rd] of Object.entries(ROOMS)){
+    const visited=G.visitedRooms.has(id);
+    const ox=50+rd.mapCol*MAP_COL_SIZE;
+    const oy=60+rd.mapRow*MAP_ROW_SIZE;
+    const cw=MAP_COL_SIZE-4, ch=MAP_ROW_SIZE-4;
+
+    if(!visited){
+      CX.fillStyle='#111';CX.fillRect(ox,oy,cw,ch);
+      CX.strokeStyle='#333';CX.lineWidth=1;CX.strokeRect(ox,oy,cw,ch);
+      continue;
+    }
+
+    CX.fillStyle=MAP_REGION_COLORS[rd.region]||MAP_REGION_COLORS.default;
+    CX.fillRect(ox,oy,cw,ch);
+    CX.strokeStyle=id===G.roomId?'#ff0':'#888';
+    CX.lineWidth=id===G.roomId?2:1;
+    CX.strokeRect(ox,oy,cw,ch);
+
+    // Boss indicator
+    if(G.bossBeaten.includes(rd.props?.find(p=>p.type==='boss')?.bossId)){
+      CX.fillStyle='rgba(255,200,0,0.3)';CX.fillRect(ox,oy,cw,ch);
+    }
+
+    CX.fillStyle='#ccc';CX.font='4px "Press Start 2P"';
+    CX.textAlign='center';
+    CX.fillText(rd.label.slice(0,16),ox+cw/2,oy+ch/2+2);
+
+    // Player blink
+    if(id===G.roomId&&G.frame%30<15){
+      CX.fillStyle='#ff0';
+      CX.beginPath();CX.arc(ox+cw/2,oy+ch/2,4,0,Math.PI*2);CX.fill();
+    }
+  }
+
+  // Legend
+  CX.fillStyle='#aaa';CX.font='5px "Press Start 2P"';CX.textAlign='left';
+  for(const [region,col] of Object.entries(MAP_REGION_COLORS)){
+    if(region==='default')continue;
+    const li=['ED','CLINIC','WARD'].indexOf(region);
+    CX.fillStyle=col;CX.fillRect(W-90,H-60+li*14,10,10);
+    CX.fillStyle='#ccc';CX.fillText(region,W-76,H-52+li*14);
+  }
+}
+
+// ── Title Screen ───────────────────────────────────────────
+let titleCursor=0;
+let titleSaveInfo=[null,null,null];
+
+function drawTitle(){
+  CX.fillStyle='#000';CX.fillRect(0,0,W,H);
+
+  // Logo
+  CX.fillStyle='#0ff';CX.font='20px "Press Start 2P"';
+  CX.textAlign='center';CX.fillText('OTOLVANIA II',W/2,80);
+  CX.fillStyle='#888';CX.font='8px "Press Start 2P"';
+  CX.fillText('Harmony of Dissection',W/2,108);
+
+  // ECG decoration
+  CX.strokeStyle='#0f4';CX.lineWidth=2;CX.beginPath();
+  for(let i=0;i<W;i++){
+    const x=i;const v=i%120;let y=160;
+    if(v>40&&v<45)y=160-(v-40)*8;
+    else if(v>=45&&v<48)y=160+20-(v-45)*20;
+    else if(v>=48&&v<55)y=160+(55-v)*3;
+    CX.lineTo(x,y);
+  }
+  CX.stroke();
+
+  // Save slots
+  CX.font='8px "Press Start 2P"';
+  for(let s=0;s<3;s++){
+    const sy=220+s*70;
+    const sel=titleCursor===s;
+    CX.fillStyle=sel?'rgba(0,200,200,0.2)':'rgba(0,0,0,0.5)';
+    CX.fillRect(W/2-200,sy,400,56);
+    CX.strokeStyle=sel?'#0ff':'#444';
+    CX.lineWidth=sel?2:1;CX.strokeRect(W/2-200,sy,400,56);
+    CX.fillStyle=sel?'#0ff':'#888';
+    CX.textAlign='center';
+
+    const snap=titleSaveInfo[s];
+    if(snap){
+      CX.fillText(`SLOT ${s+1} — Lv${snap.level} ${snap.room}`,W/2,sy+20);
+      CX.fillStyle='#aaa';CX.font='6px "Press Start 2P"';
+      const d=new Date(snap.ts);
+      CX.fillText(`${d.toLocaleDateString()} Badge PGY-${snap.badgeTier}`,W/2,sy+38);
+      CX.fillText(`[Z] LOAD   [X] DELETE`,W/2,sy+52);
+    } else {
+      CX.fillText(`SLOT ${s+1} — NEW GAME`,W/2,sy+28);
+      CX.fillStyle='#666';CX.font='6px "Press Start 2P"';
+      CX.fillText(`[Z] START`,W/2,sy+46);
+    }
+    CX.font='8px "Press Start 2P"';
+  }
+
+  CX.fillStyle='#444';CX.font='5px "Press Start 2P"';
+  CX.fillText('↑↓ navigate   Z confirm',W/2,H-20);
+}
+
+// ── Pause Screen ───────────────────────────────────────────
+const PAUSE_TABS=['Stats','Morbidity','Options'];
+let pauseTab=0;
+
+function drawPause(){
+  CX.fillStyle='rgba(0,0,0,0.85)';CX.fillRect(0,0,W,H);
+  CX.strokeStyle='#0ff';CX.lineWidth=2;CX.strokeRect(20,20,W-40,H-40);
+
+  // Tabs
+  for(let t=0;t<PAUSE_TABS.length;t++){
+    const tx=40+t*160;
+    CX.fillStyle=t===pauseTab?'#0ff':'#444';
+    CX.fillRect(tx,30,150,24);
+    CX.fillStyle=t===pauseTab?'#000':'#aaa';
+    CX.font='7px "Press Start 2P"';CX.textAlign='center';
+    CX.fillText(PAUSE_TABS[t],tx+75,46);
+  }
+
+  if(pauseTab===0){
+    const p=G.player;
+    CX.fillStyle='#fff';CX.font='8px "Press Start 2P"';CX.textAlign='left';
+    const sx=50,sy=80;const lh=24;
+    CX.fillText(`Level: ${p.level}`,sx,sy);
+    CX.fillText(`HP: ${p.hp}/${p.maxHp}`,sx,sy+lh);
+    CX.fillText(`MP: ${p.mp}/${p.maxMp}`,sx,sy+lh*2);
+    CX.fillText(`XP: ${p.xp}/${xpNeed(p.level)}`,sx,sy+lh*3);
+    CX.fillText(`Badge: PGY-${p.badgeTier}`,sx,sy+lh*4);
+    CX.fillText(`Well-Read: ${p.wellRead}/5`,sx,sy+lh*5);
+    CX.fillText(`Board Score: ${G.boardScore||0}%`,sx,sy+lh*6);
+    CX.fillText(`Dash: ${p.canDash?'UNLOCKED':'locked'}`,sx,sy+lh*7);
+    CX.fillStyle='#aaa';CX.font='6px "Press Start 2P"';
+    CX.fillText('Weapons: '+p.weapons.map(i=>WEAPONS[i].name).join(', '),sx,sy+lh*8);
+    CX.fillText('Subs: '+p.subs.map(i=>SUBS[i].name).join(', '),sx,sy+lh*9);
+  } else if(pauseTab===1){
+    CX.fillStyle='#f66';CX.font='7px "Press Start 2P"';CX.textAlign='left';
+    CX.fillText('Morbidity List (missed questions):',50,80);
+    if(G.morbidityList.length===0){
+      CX.fillStyle='#0f0';CX.fillText('— none —',50,110);
+    } else {
+      for(let i=0;i<Math.min(G.morbidityList.length,12);i++){
+        const qid=G.morbidityList[i];
+        const qObj=QBANK.find(q=>q.id===qid);
+        CX.fillStyle='#faa';CX.font='5px "Press Start 2P"';
+        CX.fillText(`${qid}: ${qObj?qObj.topic:'?'} (box ${getLeitnerBox(G,qid)})`,50,106+i*18);
+      }
+    }
+  } else {
+    CX.fillStyle='#fff';CX.font='7px "Press Start 2P"';CX.textAlign='center';
+    CX.fillText('[1-3] Save to slot',W/2,120);
+    for(let s=0;s<3;s++){
+      const sy=150+s*50;
+      const snap=loadSlot(s+1);
+      CX.fillStyle='#888';
+      CX.fillRect(W/2-120,sy,240,40);
+      CX.fillStyle='#fff';CX.font='6px "Press Start 2P"';
+      CX.textAlign='center';
+      if(snap)CX.fillText(`Slot ${s+1}: Lv${snap.level} at ${snap.room}`,W/2,sy+24);
+      else CX.fillText(`Slot ${s+1}: empty`,W/2,sy+24);
+    }
+  }
+
+  CX.fillStyle='#444';CX.font='5px "Press Start 2P"';CX.textAlign='center';
+  CX.fillText('ESC / ENTER resume   ←→ tabs   [1-3] save in Options',W/2,H-30);
+}
+
+// ── Death / Respawn overlay ────────────────────────────────
+function drawDeath(){
+  const a=Math.min(1,G.player.deathTimer/60);
+  CX.fillStyle=`rgba(0,0,0,${a*0.85})`;CX.fillRect(0,0,W,H);
+  if(a<1)return;
+  CX.fillStyle='#f00';CX.font='20px "Press Start 2P"';CX.textAlign='center';
+  CX.fillText('YOU DIED',W/2,H/2-20);
+  CX.fillStyle='#888';CX.font='7px "Press Start 2P"';
+  if(G.riskBracelet)CX.fillText(`Risk Bracelet dropped: ${G.riskBracelet.xp} XP at ${G.riskBracelet.roomId}`,W/2,H/2+20);
+  CX.fillText('Z — Respawn from last save',W/2,H/2+50);
+}
+
+
+// ── Game State ─────────────────────────────────────────────
+const G = {
+  mode:'title',        // title|play|pause|map|quiz|death|gameover
+  frame:0,
+  roomId:'ed_entrance',
+  currentRoom:null,
+  player:newPlayer(),
+  enemies:[],
+  boss:null,
+  waveState:null,
+  quiz:null,
+  pendingQuiz:null,
+  msgs:[],
+  camX:0, camY:0,
+  bossBeaten:[],
+  visitedRooms:new Set(),
+  leitner:{},
+  morbidityList:[],
+  boardScore:0,
+  unbankedXP:0,
+  riskBracelet:null,
+  caseLog:[],
+  npcActive:null,    // {lines, idx, done}
+  shopOpen:false,
+};
+
+// ── NPC Interaction ────────────────────────────────────────
+function tryInteract(){
+  const p=G.player;
+  const rd=G.currentRoom;
+  // save point
+  for(const prop of rd.props){
+    if(prop.type==='save'&&Math.abs(p.x-prop.x)<60&&Math.abs(p.y-prop.y)<60){
+      doSave();return;
+    }
+    if(prop.type==='npc'&&Math.abs(p.x-prop.x)<60&&Math.abs(p.y-prop.y)<60){
+      if(!G.npcActive){
+        G.npcActive={lines:prop.lines,idx:0};
+        sfx.pickup();
+      }
+      return;
+    }
+    if(prop.type==='pickup'&&Math.abs(p.x-prop.x)<40&&Math.abs(p.y-prop.y)<50){
+      collectPickup(prop);return;
+    }
+  }
+}
+
+function advanceNPC(){
+  if(!G.npcActive)return;
+  G.npcActive.idx++;
+  sfx.pickup();
+  if(G.npcActive.idx>=G.npcActive.lines.length)G.npcActive=null;
+}
+
+function collectPickup(prop){
+  if(prop.collected)return;
+  prop.collected=true;
+  if(prop.item==='methylene_blue'){
+    G.player.subs.push(2); // bipolar index
+    G.msgs.push({txt:'Methylene Blue obtained!',life:180,col:'#0ff'});
+    sfx.pickup();
+  }
+}
+
+function doSave(){
+  saveSlot(G.activeSaveSlot||1, makeSnapshot(G));
+  G.msgs.push({txt:'GAME SAVED',life:120,col:'#0ff'});
+  sfx.save();
+}
+
+// ── Title Input ────────────────────────────────────────────
+function updTitle(){
+  if(pressed['ArrowDown']||pressed['s']){
+    titleCursor=(titleCursor+1)%3;sfx.pickup();
+  }
+  if(pressed['ArrowUp']||pressed['w']){
+    titleCursor=(titleCursor+2)%3;sfx.pickup();
+  }
+  if(K.startPress()){
+    startGame(titleCursor+1);
+  }
+  if(pressed['x']){
+    // delete slot
+    if(saveExists(titleCursor+1)){
+      saveSlot(titleCursor+1,null);
+      try{(window.storage||localStorage).removeItem(`${SAVE_NS}:slot${titleCursor+1}`);}catch(e){}
+      titleSaveInfo[titleCursor]=null;
+      sfx.hit();
+    }
+  }
+}
+
+function startGame(slot){
+  G.activeSaveSlot=slot;
+  const snap=loadSlot(slot);
+  G.player=newPlayer();
+  G.bossBeaten=[];G.visitedRooms=new Set();G.leitner={};G.morbidityList=[];
+  G.boardScore=0;G.unbankedXP=0;G.msgs=[];G.caseLog=[];
+
+  if(snap){
+    applySnapshot(G,snap);
+  }
+  loadRoom(G.roomId||'ed_entrance',G.player.x,G.player.y);
+  G.mode='play';
+  sfx.lvlup();
+}
+
+// ── Pause Input ────────────────────────────────────────────
+function updPauseInput(){
+  if(K.pausePress()||pressed['Enter']){G.mode='play';}
+  if(pressed['ArrowLeft']||pressed['a'])pauseTab=Math.max(0,pauseTab-1);
+  if(pressed['ArrowRight']||pressed['d'])pauseTab=Math.min(PAUSE_TABS.length-1,pauseTab+1);
+  // Save via number keys in options tab
+  if(pauseTab===2){
+    for(let s=1;s<=3;s++){
+      if(pressed[s.toString()]){doSave();G.activeSaveSlot=s;}
+    }
+  }
+}
+
+// ── Door / Exit Checks ─────────────────────────────────────
+function checkExits(){
+  const p=G.player;
+  const rd=G.currentRoom;
+
+  // Automatic left/right edge exits
+  for(const exit of rd.exits){
+    if(rectsOverlap(p.x,p.y,p.w,p.h,exit.x,exit.y,exit.w,exit.h)){
+      loadRoom(exit.toRoom,exit.spawnX,exit.spawnY);
+      return;
+    }
+  }
+
+  // Interact-triggered doors (F or up+interact)
+  if(pressed['f']||pressed['ArrowUp']){
+    for(const door of (rd.doors||[])){
+      if(!rectsOverlap(p.x,p.y,p.w,p.h,door.x,door.y,door.w,door.h))continue;
+      if(door.locked)continue;
+      if(door.badgeLock&&p.badgeTier<door.badgeLock){
+        G.msgs.push({txt:`PGY-${door.badgeLock} Badge Required`,life:120,col:'#f80'});
+        continue;
+      }
+      loadRoom(door.toRoom,door.spawnX,door.spawnY);
+      return;
+    }
+  }
+}
+
+// ── FINISH key (quiz trigger) ──────────────────────────────
+function checkFinish(){
+  const p=G.player;
+  if(!pressed['f']&&!K.finPress())return;
+
+  // Check NPC first
+  if(G.npcActive){advanceNPC();return;}
+
+  // Staggered enemy
+  for(const e of G.enemies){
+    if(e.dead||e.stagger<=0)continue;
+    if(Math.abs(e.x-p.x)<80&&Math.abs(e.y-p.y)<80){
+      openQuiz({target:e,boss:false,tier:1});
+      return;
+    }
+  }
+
+  // Staggered boss
+  if(G.boss&&!G.boss.dead&&G.boss.stagger>0){
+    if(Math.abs(G.boss.x-p.x)<120&&Math.abs(G.boss.y-p.y)<120){
+      openQuiz({target:G.boss,boss:true,tier:G.boss.hp<=0?3:3});
+      return;
+    }
+  }
+}
+
+// ── Player–Enemy Collision ─────────────────────────────────
+function checkContactDamage(){
+  const p=G.player;
+  if(p.hurtTimer>0||G.quiz)return;
+  for(const e of G.enemies){
+    if(e.dead||e.stagger>0)continue;
+    if(rectsOverlap(p.x,p.y,p.w,p.h,e.x,e.y,e.w,e.h)){
+      hurtPlayer(p,e.dmg,e.x+e.w/2);
+    }
+  }
+  // Boss contact
+  if(G.boss&&!G.boss.dead&&G.boss.stagger<=0){
+    if(rectsOverlap(p.x,p.y,p.w,p.h,G.boss.x,G.boss.y,G.boss.w,G.boss.h)){
+      hurtPlayer(p,20,G.boss.x+G.boss.w/2);
+    }
+  }
+  // Boss projectiles
+  for(let i=eprojs.length-1;i>=0;i--){
+    const ep=eprojs[i];
+    if(rectsOverlap(p.x,p.y,p.w,p.h,ep.x-ep.r,ep.y-ep.r,ep.r*2,ep.r*2)){
+      hurtPlayer(p,ep.dmg,ep.x);
+      eprojs.splice(i,1);
+    }
+  }
+  // Boss pad projs
+  if(G.boss){
+    for(let i=G.boss.padProjs.length-1;i>=0;i--){
+      const pp=G.boss.padProjs[i];
+      if(rectsOverlap(p.x,p.y,p.w,p.h,pp.x-pp.r,pp.y-pp.r,pp.r*2,pp.r*2)){
+        hurtPlayer(p,pp.dmg,pp.x);
+        G.boss.padProjs.splice(i,1);
+      }
+    }
+  }
+}
+
+// ── Risk Bracelet pickup ───────────────────────────────────
+function checkRiskBracelet(){
+  const rb=G.riskBracelet;
+  if(!rb||rb.roomId!==G.roomId)return;
+  const p=G.player;
+  if(Math.abs(p.x-rb.x)<30&&Math.abs(p.y-rb.y)<50){
+    gainXP(G,rb.xp);
+    G.riskBracelet=null;
+    G.msgs.push({txt:`Recovered ${rb.xp} XP`,life:120,col:'#f0f'});
+    sfx.coin();
+  }
+}
+
+// ── Main game loop update ──────────────────────────────────
+function gameUpdate(){
+  const p=G.player;
+  const rd=G.currentRoom;
+
+  // Pending quiz auto-open
+  if(G.pendingQuiz&&!G.quiz){
+    openQuiz(G.pendingQuiz);
+  }
+
+  if(G.quiz){
+    updQuiz();
+    // freeze world during quiz
+    updCamera();
+    p.atkTimer=Math.max(0,p.atkTimer-1);
+    p.subTimer=Math.max(0,p.subTimer-1);
+    return;
+  }
+
+  // Player
+  updPlayer(p, rd.platforms);
+  p.atkTimer=Math.max(0,p.atkTimer-1);
+  p.subTimer=Math.max(0,p.subTimer-1);
+
+  // Attack
+  if(K.atk())doAttack(p);
+  if(K.subPress())doSub(p);
+
+  // F key
+  checkFinish();
+
+  // Map
+  if(K.mapPress())G.mode='map';
+
+  // Exits / doors
+  if(!G.quiz)checkExits();
+
+  // Enemies
+  for(const e of G.enemies){
+    if(!e.dead)updEnemy(e,p,rd.platforms);
+  }
+  // Boss
+  if(G.boss&&!G.boss.dead)updBoss(G.boss,p,rd.platforms);
+  G.boss&&(G.boss.hurtTimer=Math.max(0,G.boss.hurtTimer-1));
+
+  // Projectiles
+  updPprojs(rd.platforms);
+  updEprojs(rd.platforms);
+
+  // Wave
+  updWaveSystem();
+
+  // Contact damage
+  checkContactDamage();
+
+  // Bracelet
+  checkRiskBracelet();
+
+  // Particles
+  updParts();
+  updECG(p);
+  updCamera();
+
+  // Death check
+  if(p.dead){
+    G.mode='death';
+  }
+}
+
+// ── Main Render ────────────────────────────────────────────
+function render(){
+  CX.clearRect(0,0,W,H);
+  const cx=Math.round(G.camX);
+
+  if(G.mode==='title'){
+    drawTitle();
+    return;
+  }
+  if(G.mode==='map'){
+    drawMap();
+    return;
+  }
+  if(G.mode==='pause'){
+    // draw play scene dimmed, then overlay
+    drawBG(cx);
+    drawProjectiles(cx);
+    drawParts(cx,0);
+    drawPlayer(G.player,cx);
+    for(const e of G.enemies)drawEnemy(e,cx);
+    if(G.boss)drawBoss(G.boss,cx);
+    drawHUD(G.player);
+    drawPause();
+    return;
+  }
+  if(G.mode==='death'){
+    drawBG(cx);drawParts(cx,0);drawHUD(G.player);drawDeath();
+    return;
+  }
+
+  // Play mode
+  drawBG(cx);
+  drawProjectiles(cx);
+  drawParts(cx,0);
+  drawPlayer(G.player,cx);
+  for(const e of G.enemies)drawEnemy(e,cx);
+  if(G.boss)drawBoss(G.boss,cx);
+
+  // Risk bracelet on floor
+  const rb=G.riskBracelet;
+  if(rb&&rb.roomId===G.roomId){
+    const flash=Math.sin(G.frame*0.15)*0.5+0.5;
+    CX.globalAlpha=flash;CX.fillStyle='#f0f';
+    CX.fillRect(rb.x-cx-6,rb.y-8,12,12);
+    CX.globalAlpha=1;CX.fillStyle='#f0f';CX.font='5px "Press Start 2P"';
+    CX.textAlign='center';CX.fillText(`${rb.xp}XP`,rb.x-cx,rb.y-10);
+  }
+
+  drawHUD(G.player);
+
+  // NPC dialogue
+  if(G.npcActive){
+    CX.fillStyle='rgba(0,0,0,0.8)';CX.fillRect(50,H-110,W-100,80);
+    CX.strokeStyle='#ff0';CX.lineWidth=1;CX.strokeRect(50,H-110,W-100,80);
+    CX.fillStyle='#ff0';CX.font='6px "Press Start 2P"';CX.textAlign='left';
+    const line=G.npcActive.lines[G.npcActive.idx]||'';
+    wrapText(line,62,H-88,W-124,14);
+    CX.fillStyle='rgba(255,255,0,0.5)';CX.font='5px "Press Start 2P"';
+    CX.textAlign='right';CX.fillText('[F] Continue',W-60,H-38);
+  }
+
+  // Quiz overlay
+  if(G.quiz)drawQuiz();
+}
+
+// ── Main Loop ──────────────────────────────────────────────
+function loop(){
+  G.frame++;
+
+  switch(G.mode){
+    case 'title':
+      updTitle();
+      break;
+    case 'play':
+      if(K.pausePress())G.mode='pause';
+      else gameUpdate();
+      break;
+    case 'pause':
+      updPauseInput();
+      break;
+    case 'map':
+      if(K.mapPress()||K.pausePress()||K.startPress())G.mode='play';
+      break;
+    case 'death':
+      if(G.player.deathTimer>90&&K.startPress()){
+        // respawn from last save
+        const snap=loadSlot(G.activeSaveSlot||1);
+        if(snap){applySnapshot(G,snap);}
+        else{G.player=newPlayer();}
+        G.player.dead=false;G.player.deathTimer=0;
+        G.player.hurtTimer=0;
+        G.riskBracelet={x:G.player.x,y:G.player.y,xp:G.unbankedXP,roomId:G.roomId};
+        G.unbankedXP=0;
+        loadRoom(G.roomId,G.player.x,G.player.y);
+        G.mode='play';
+      }
+      G.player.deathTimer++;
+      break;
+  }
+
+  render();
+  clearFrame();
+  requestAnimationFrame(loop);
+}
+
+// ── Init ───────────────────────────────────────────────────
+(function init(){
+  // Load save slot previews for title screen
+  for(let s=0;s<3;s++){titleSaveInfo[s]=loadSlot(s+1);}
+  // Start loop
+  requestAnimationFrame(loop);
+})();
+
+</script>
+</body>
+</html>
