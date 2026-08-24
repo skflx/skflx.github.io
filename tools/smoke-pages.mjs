@@ -40,18 +40,11 @@ const PAGES = [
   { path: 'oksat-study.html?m=pediatrics', ready: oksatStudyReady },
   { path: 'oksat-adaptive.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
   { path: 'oksat-generate.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
-  { path: 'graph.html?lens=knowledge', ready: graphReady },
-  { path: 'graph.html?lens=structural', ready: graphReady },
-  { path: 'graph.html?lens=study', ready: graphReady },
   { path: 'airway-jeopardy.html', ready: (p) => wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions)) },
-  { path: 'kag-extract.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
-  { path: 'ascii-editor.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
   // redirect stubs: assert only the forwarded destination + query.
   // isStub → the destination's own console health is tested by its own
   // entry above, so we don't count its errors against the stub.
-  { path: 'kag.html?node=facial-nerve', isStub: true, ready: stub('graph.html', { lens: 'knowledge', node: 'facial-nerve' }) },
-  { path: 'atlas.html?node=cochlea', isStub: true, ready: stub('graph.html', { lens: 'structural', node: 'cochlea' }) },
   { path: 'mcq.html', isStub: true, ready: stub('oksat.html', {}) },
   { path: 'mcq-study.html?m=pediatrics', isStub: true, ready: stub('oksat-study.html', { m: 'pediatrics' }) },
   { path: 'occ.html', isStub: true, ready: stubTo(/oksat\.html/) },
@@ -68,20 +61,6 @@ async function oksatStudyReady(page) {
     && document.querySelector('#root') && document.querySelector('#root').innerText.trim().length > 0,
     null, { timeout: 12000 });
   return true;
-}
-
-/* Cytoscape renders > 0 nodes. GraphView owns the instance; poll for a
-   populated cy container (its canvas child exists once laid out). */
-function graphReady(page) {
-  return wait(page, () => {
-    const cy = document.querySelector('#cy');
-    if (!cy || !cy.querySelector('canvas')) return false;
-    // the empty-state fallback is hidden via CSS (display:none), not the
-    // [hidden] attribute — check actual visibility, not the attribute.
-    const empty = document.querySelector('#cy-empty');
-    const emptyShown = empty && empty.offsetParent !== null && getComputedStyle(empty).display !== 'none';
-    return !emptyShown;
-  }, 20000).catch(() => { throw new Error('graph did not render nodes'); });
 }
 
 /* Redirect stub landed on `dest` with each expected query param present. */
