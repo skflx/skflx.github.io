@@ -45,13 +45,12 @@
     <div class="ok-wrap" style="padding-top:4rem;max-width:46rem">
       <div class="hub-kicker"><hr><span>OKSAT · Otolaryngology</span><hr></div>
       <h1 class="hub-title">OHNS Knowledge<br><em>Self-Assessment</em></h1>
-      <p class="hub-subtitle">Not just multiple choice — modules mix locked-first-attempt questions with free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly, jump to a concept, or traverse everything as a linked knowledge atlas.</p>
+      <p class="hub-subtitle">Not just multiple choice — modules mix locked-first-attempt questions with free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump directly to a concept.</p>
 
       <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
         <div class="hub-tabs" role="tablist">
           <button class="hub-tab active" id="tab-modules" role="tab" aria-selected="true">Modules</button>
           <button class="hub-tab" id="tab-progress" role="tab" aria-selected="false">Progress</button>
-          <button class="hub-tab" id="tab-atlas" role="tab" aria-selected="false">Atlas</button>
         </div>
       </div>
 
@@ -61,20 +60,6 @@
 
       <section id="view-progress" hidden>
         <div id="dash-root"></div>
-      </section>
-
-      <section id="view-atlas" hidden>
-        <div class="atlas-shell">
-          <div class="atlas-toolbar">
-            <input class="atlas-search" id="atlas-search" type="search" placeholder="Find a node…" aria-label="Search the atlas">
-            <select class="ok-select" id="atlas-reviewer" style="width:auto;flex:none;border-radius:999px;font-size:11px;padding:0.35rem 0.6rem" aria-label="Whose completion to show"></select>
-            <div class="atlas-legend" id="atlas-legend"></div>
-          </div>
-          <div class="atlas-cy" id="atlas-cy"></div>
-          <div class="atlas-loading" id="atlas-loading">Charting the atlas…</div>
-          <div class="atlas-hint">drag · scroll to zoom · hover to spotlight · tap a module to launch, a concept to drill</div>
-        </div>
-        <p class="ok-note" style="margin-top:0.75rem">Node fill deepens toward its domain hue as the selected reviewer answers that module's questions; a sage ring marks 100%. Completion merges this browser's progress with the shared database file (<code>data/oksat-db.json</code>) — sync from Settings.</p>
       </section>
 
       <div style="margin-top:2.5rem">
@@ -171,7 +156,6 @@
   <script src="js/oksat-taxonomy.js"></script>
   <script src="js/oksat-concept-graph.js"></script>
   <script src="js/oksat-db.js"></script>
-  <script src="js/kag-store.js"></script>
   <script src="js/oksat-ai.js"></script>
   <script>
     (function () {
@@ -259,30 +243,25 @@
         manifest.forEach(function (m) { wrap.appendChild(moduleCard(m)); });
       }
 
-      /* ---- Tabs + lazy Atlas / Dashboard ---- */
+      /* ---- Tabs + lazy Dashboard ---- */
       var tabM = document.getElementById('tab-modules');
       var tabP = document.getElementById('tab-progress');
-      var tabA = document.getElementById('tab-atlas');
       var viewM = document.getElementById('view-modules');
       var viewP = document.getElementById('view-progress');
-      var viewA = document.getElementById('view-atlas');
-      var cy = null, atlasReviewer = reviewer, dbCache = null;
 
       function selectTab(name) {
-        var tabs = { modules: tabM, progress: tabP, atlas: tabA };
-        var views = { modules: viewM, progress: viewP, atlas: viewA };
+        var tabs = { modules: tabM, progress: tabP };
+        var views = { modules: viewM, progress: viewP };
         Object.keys(tabs).forEach(function (k) {
           var on = k === name;
           tabs[k].classList.toggle('active', on);
           tabs[k].setAttribute('aria-selected', String(on));
           views[k].hidden = !on;
         });
-        if (name === 'atlas') bootAtlas();
         if (name === 'progress') bootDashboard();
       }
       tabM.addEventListener('click', function () { selectTab('modules'); });
       tabP.addEventListener('click', function () { selectTab('progress'); });
-      tabA.addEventListener('click', function () { selectTab('atlas'); });
 
       /* Progress dashboard — lazy-load its script (and the atlas module loader
          it reuses), then mount for the active reviewer. Re-mounts on each open
@@ -306,67 +285,6 @@
           var s = document.createElement('script');
           s.src = src; s.onload = res; s.onerror = rej;
           document.body.appendChild(s);
-        });
-      }
-
-      function legend() {
-        var el = document.getElementById('atlas-legend');
-        el.innerHTML = '';
-        var used = {};
-        (window.OKSAT_MANIFEST || []).forEach(function (m) { used[m.subspecialty] = 1; });
-        Object.keys(used).forEach(function (k) {
-          var s = (window.OKSAT_SUBSPECIALTIES || {})[k]; if (!s) return;
-          var chip = document.createElement('span');
-          chip.className = 'atlas-key';
-          chip.innerHTML = '<span class="swatch" style="background:' + s.hue + '"></span>' + s.label;
-          el.appendChild(chip);
-        });
-      }
-
-      function mountAtlas() {
-        var loading = document.getElementById('atlas-loading');
-        loading.style.display = '';
-        // The engine reuses one instance across re-mounts; setLens rebuilds the
-        // elements for the new reviewer/completion, so no destroy is needed.
-        var completion = OKSATDB.completionFor(dbCache, atlasReviewer);
-        OKSATAtlas.mount(document.getElementById('atlas-cy'), {
-          reviewer: atlasReviewer,
-          completion: completion,
-          searchInput: document.getElementById('atlas-search'),
-        }).then(function (instance) { cy = instance; loading.style.display = 'none'; });
-      }
-
-      var atlasBooted = false;
-      function bootAtlas() {
-        if (atlasBooted) return;
-        atlasBooted = true;
-        legend();
-        // cose-bilkent's plain-script build needs layoutBase + coseBase globals;
-        // if any of the plugin chain fails, the atlas falls back to built-in cose.
-        var noop = function () {};
-        Promise.all([
-          loadScript('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js')
-            .then(function () { return loadScript('https://unpkg.com/layout-base@1.0.2/layout-base.js').catch(noop); })
-            .then(function () { return loadScript('https://unpkg.com/cose-base@1.0.3/cose-base.js').catch(noop); })
-            .then(function () { return loadScript('https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js').catch(noop); }),
-          OKSATDB.fetch(),
-          // The Atlas tab now renders through the unified graph engine + study
-          // lens; load them (guarded) alongside the OKSATAtlas mount shim.
-          (window.GraphView ? Promise.resolve() : loadScript('js/graph-view.js'))
-            .then(function () { return (window.GraphLenses && window.GraphLenses.study) ? null : loadScript('js/graph-lens-study.js'); })
-            .then(function () { return (window.OKSATAtlas && OKSATAtlas.mount) ? null : loadScript('js/oksat-atlas.js'); }),
-        ]).then(function (r) {
-          dbCache = r[1];
-          var sel = document.getElementById('atlas-reviewer');
-          var codes = OKSATDB.reviewerList(dbCache);
-          if (codes.indexOf(atlasReviewer) === -1) codes.unshift(atlasReviewer);
-          sel.innerHTML = codes.map(function (c) {
-            return '<option value="' + c + '"' + (c === atlasReviewer ? ' selected' : '') + '>' + c + '</option>';
-          }).join('');
-          sel.addEventListener('change', function () { atlasReviewer = this.value; mountAtlas(); });
-          mountAtlas();
-        }).catch(function () {
-          document.getElementById('atlas-loading').textContent = 'Could not load the graph libraries (offline?).';
         });
       }
 
