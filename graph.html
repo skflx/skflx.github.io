@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph — Knowledge · Structural · Study | skflx.MD</title>
+    <meta name="description" content="One OHNS graph, three lenses: the Knowledge Atlas Graph, a structural anatomy view, and the OKSAT study map.">
+    <!-- Pre-paint theme: shared sk_theme key (OKSAT), dark default for canvas legibility. -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('sk_theme');
+                if (!t) t = 'dark';
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+        })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/graph.css">
+    <!-- Cytoscape + cose-bilkent (plain-script build needs layoutBase + coseBase globals) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/layout-base@1.0.2/layout-base.js"></script>
+    <script src="https://unpkg.com/cose-base@1.0.3/cose-base.js"></script>
+    <script src="https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js"></script>
+    <!-- Shared data + vocab (single source of truth for all three lenses) -->
+    <script src="js/kag-store.js"></script>
+    <script src="js/oksat-manifest.js"></script>
+    <script src="js/oksat-taxonomy.js"></script>
+    <script src="js/oksat-concept-graph.js"></script>
+    <!-- The one engine, then the three lens adapters that plug into it -->
+    <script src="js/graph-view.js"></script>
+    <script src="js/graph-lens-knowledge.js"></script>
+    <script src="js/graph-lens-structural.js"></script>
+    <script src="js/graph-lens-study.js"></script>
+</head>
+
+<body>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <a class="logo" href="index.html">skflx.MD</a>
+        <span class="topbar-title" id="lens-title">Graph</span>
+
+        <!-- The lens switcher: one system, three manifestations -->
+        <div class="lens-switcher" id="lens-switcher">
+            <button class="lens-btn active" data-lens="knowledge">Knowledge</button>
+            <button class="lens-btn" data-lens="structural">Structural</button>
+            <button class="lens-btn" data-lens="study">Study</button>
+        </div>
+
+        <!-- Per-lens controls (pills, toggles, mode buttons) live here -->
+        <div class="lens-controls" id="lens-controls"></div>
+
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="search" placeholder="Search…" autocomplete="off">
+        </div>
+
+        <a class="nav-link" href="kag-extract.html">Extractor</a>
+        <a class="nav-link" href="oksat.html" title="OHNS Knowledge Self-Assessment Tool">OKSAT</a>
+        <a class="nav-link" href="index.html">Home</a>
+        <button class="site-theme-toggle" type="button" aria-label="Toggle day / night">
+            <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+    </div>
+
+    <!-- Main -->
+    <div class="main-area">
+        <div id="cy"></div>
+        <div class="cy-empty" id="cy-empty"></div>
+
+        <!-- Right detail panel (shared shell; lenses fill the body) -->
+        <div class="right-panel" id="right-panel">
+            <div class="rp-header">
+                <span class="rp-label" id="rp-label"></span>
+                <button class="rp-close" id="rp-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="rp-body" id="rp-body"></div>
+        </div>
+
+        <!-- Self-test overlay (used by the Knowledge lens) -->
+        <div class="test-overlay" id="test-overlay">
+            <div class="test-card" id="test-card"></div>
+        </div>
+    </div>
+
+    <!-- Bottom strip (lens-owned status text) -->
+    <div class="bottom-strip">
+        <span class="strip-info" id="strip-left"></span>
+        <span class="strip-info right" id="strip-right"></span>
+    </div>
+
+    <!-- Settings modal (used by the Knowledge lens) -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Settings</h2>
+                <button class="rp-close" id="modal-close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg></button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        /* ── Bootstrap: wire the shared engine + lens switcher ──
+           graph.html is a thin shell. All graph behavior lives in
+           js/graph-view.js (engine) + js/graph-lens-*.js (lenses,
+           registered on window.GraphLenses). This bootstrap only maps
+           DOM → engine and drives ?lens= / ?node=. */
+        (function () {
+            'use strict';
+            var LENS_IDS = ['knowledge', 'structural', 'study'];
+
+            var $ = function (id) { return document.getElementById(id); };
+            var els = {
+                empty: $('cy-empty'),
+                controls: $('lens-controls'),
+                title: $('lens-title'),
+                searchInput: $('search'),
+                panel: $('right-panel'), panelLabel: $('rp-label'), panelBody: $('rp-body'),
+                toast: $('toast'),
+                stripLeft: $('strip-left'), stripRight: $('strip-right'),
+                testOverlay: $('test-overlay'), testCard: $('test-card'),
+                settingsModal: $('settings-modal'), settingsBody: $('modal-body'), settingsTitle: $('modal-title')
+            };
+
+            var api = window.GraphView.create($('cy'), { els: els });
+
+            // Shared panel/modal close wiring
+            $('rp-close').addEventListener('click', function () { api.panel.close(); });
+            $('modal-close').addEventListener('click', function () { els.settingsModal.classList.remove('open'); });
+            els.settingsModal.addEventListener('click', function (e) {
+                if (e.target === els.settingsModal) els.settingsModal.classList.remove('open');
+            });
+
+            // Search box → engine
+            els.searchInput.addEventListener('input', function () { api.search(this.value); });
+
+            function params() { try { return new URLSearchParams(location.search); } catch (e) { return new URLSearchParams(''); } }
+
+            function activate(lensId, nodeId) {
+                if (LENS_IDS.indexOf(lensId) === -1) lensId = 'knowledge';
+                var lenses = window.GraphLenses || {};
+                // Reflect active button
+                var btns = document.querySelectorAll('.lens-btn');
+                for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('active', btns[i].dataset.lens === lensId);
+
+                var lens = lenses[lensId];
+                if (!lens) {
+                    api.setEmpty('The "' + lensId + '" lens is not available.');
+                    return;
+                }
+                api.setLens(lens).then(function () {
+                    if (nodeId) api.focusNode(nodeId);
+                });
+            }
+
+            // Lens switcher buttons
+            document.getElementById('lens-switcher').addEventListener('click', function (e) {
+                var btn = e.target.closest('.lens-btn');
+                if (!btn) return;
+                var id = btn.dataset.lens;
+                try { history.replaceState(null, '', 'graph.html?lens=' + id); } catch (err) { /* no-op */ }
+                activate(id, null);
+            });
+
+            var p = params();
+            activate(p.get('lens') || 'knowledge', p.get('node'));
+        })();
+    </script>
+    <script src="js/site.js"></script>
+</body>
+
+</html>
