@@ -1,15 +1,15 @@
 Image Assets
 ============
 
-me_large.jpg
-  - Original full-resolution profile photo (5982x3067)
-  - Not loaded by any page; source for the derived crops below
-
 me_card.jpg / me_card.webp
-  - Hero profile image (504x600 portrait crop of me_large.jpg)
+  - Hero profile image (504x600 portrait crop)
   - Used on index.html (hero section) via <picture>
-  - Regenerate from me_large.jpg if the photo changes
 
 og-card.jpg
-  - Social-sharing card (1200x630 landscape crop of me_large.jpg)
+  - Social-sharing card (1200x630 landscape crop)
   - Referenced by the og:image / twitter:image meta tags in index.html
+
+Note: the 2.3 MB full-resolution original (me_large.jpg) was removed in the
+2026-09 cleanup — it was never loaded by any page, only a crop source. If the
+photo is ever recropped, pull the original from git history or from the
+owner's local copy rather than recommitting it here.

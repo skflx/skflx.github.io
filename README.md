@@ -1,6 +1,7 @@
 # skflx.MD — Personal Website
 
-Single-page personal site for an otolaryngology resident in the Pacific Northwest.
+Single-page personal site for an otolaryngology resident in the Pacific
+Northwest, plus a small set of self-contained clinical study tools.
 
 ## Live Site
 
@@ -15,6 +16,9 @@ sections (About opens by default; the rest are collapsed, clear at a glance):
 2. **My clinical tools and projects** — tools, technology projects, clinical experience
 3. **Research — hearing science & how surgeons learn** — research areas (PubMed)
 4. **Outside of medicine** — art, music, outdoors, fitness
+
+The residency year in the header computes itself from the program start date
+and rolls over every July 1 — there is no annual edit to forget.
 
 ### Visitor-selectable visual styles
 
@@ -35,13 +39,29 @@ themes in `css/onepager.css`, and the shared components consume only those
 tokens. Retheming or adding a style is a localized edit. Switching is driven by
 `data-style` / `data-theme` attributes on `<html>`.
 
+## The tools
+
+- **OKSAT** (`oksat.html`) — OHNS Knowledge Self-Assessment. Hand-authored
+  study modules mixing locked-first-attempt questions with free-response
+  recall cards, all feeding one Leitner spaced-repetition schedule. Progress
+  is local to the browser; nothing is uploaded.
+- **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for
+  otolaryngology.
+- **Airway Rounds** (`airway-jeopardy.html`) — team-based ENT/H&N airway quiz
+  (Rounds, Jeopardy board, quick quiz, browse). Deliberately CDN-free and
+  fully self-contained, so it works on conference-room wifi or none at all.
+
 ## Tech Stack
 
 - **HTML5** — semantic markup; native `<details>` for the accordion (no JS needed to open/close)
 - **CSS3** — custom properties, Grid, Flexbox
-- **JavaScript** — vanilla, no frameworks (`js/onepager.js`: style switch, theme toggle, hash deep-linking)
+- **JavaScript** — vanilla, no frameworks, **no build step** (`js/onepager.js`: style switch, theme toggle, residency year, hash deep-linking)
+- **React 18 + htm** — pinned UMD `<script>` tags on the OKSAT study viewer only; tagged templates, no JSX build
 - **Fonts** — Google Fonts (DM Sans, Inter, Fraunces, Caveat)
 - **Icons** — Font Awesome 6
+
+The only npm packages are dev-only test tooling (`jsdom`, `playwright`).
+Nothing shipped touches `node_modules`.
 
 ## File Structure
 
@@ -50,38 +70,31 @@ Grouped by system; per-file detail lives in each file's header comment.
 ```
 ├── index.html              # The one-pager
 │   ├── css/onepager.css    #   its styles (2 styles × 2 themes)
-│   └── js/onepager.js      #   style switch, theme toggle, deep-linking
+│   └── js/onepager.js      #   style switch, theme toggle, PGY, deep-linking
 │
-├── oksat.html              # OKSAT hub — modules + Atlas link + sync settings
-├── oksat-study.html        # OKSAT viewer (?m=<slug>&c=<concept>)
-├── oksat-adaptive.html     # OKSAT adaptive session (Gemini-generated items)
-├── oksat-generate.html     # OKSAT Question Forge (Gemini module generator)
+├── oksat.html              # OKSAT hub — module list, due-review banner, settings
+├── oksat-study.html        # OKSAT viewer (?m=<slug>[&c=<concept>])
 │   ├── css/oksat.css       #   OKSAT design system (tokens; docs/design-principles.md)
-│   ├── js/oksat-*.js       #   engine, manifest, store, reviewer, prefs, db, ai,
-│   │                       #   dashboard, adaptive, taxonomy, concept-graph, atlas shim
+│   ├── js/oksat-*.js       #   engine, manifest, store, prefs, concept graph
 │   └── js/mcq-modules/     #   question banks (one data file per module)
-│
-├── graph.html              # Unified graph: Knowledge · Structural · Study (?lens=&node=)
-│   ├── css/graph.css       #   consolidated graph chrome
-│   ├── js/graph-view.js    #   the one Cytoscape engine (lens contract in header)
-│   └── js/graph-lens-*.js  #   knowledge / structural / study lenses
-├── kag-extract.html        # KAG shard extractor (Claude API)
-├── data/kag-graph.json     # Canonical KAG database (never hand-edit; use the validator)
-├── data/oksat-db.json      # Shared per-reviewer completion database
-├── tools/kag-validate.mjs  # Dev-only shard validator + merger (Node, not shipped)
 │
 ├── airway-jeopardy.html    # Airway Rounds team quiz (CDN-free, self-contained)
 │   └── js/airway-*.js      #   engine + question bank
-├── cpt-search.html         # CPT code search   (legacy: css/main.css + js/main.js)
-├── ascii-editor.html       # ASCII/Unicode diagram editor (legacy chrome)
-├── css/site.css, js/site.js  # Shared chrome for newer tool pages (theme toggle)
+├── cpt-search.html         # CPT code search (still on legacy css/main.css tokens)
+├── css/site.css, js/site.js  # Shared chrome for tool pages (theme toggle)
 │
-├── mcq*.html, occ*.html    # Redirect stubs → OKSAT pages (query strings preserved)
-├── kag.html, atlas.html    # Redirect stubs → graph.html lenses (forward ?node=)
+├── archive/                # Kept content, served by nothing (see its README)
+│   ├── kag-graph.json      #   OHNS knowledge graph from the retired atlas viewers
+│   └── kag-graph-flat.txt  #   the same data as readable text
+│
+├── tools/                  # Dev-only verification (Node; never shipped)
+│   ├── check-data.mjs      #   committed-data invariants, zero deps
+│   ├── smoke-pages.mjs     #   every page boots with no real console errors
+│   └── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
 │
 ├── CLAUDE.md               # Operating manual for coding agents
-├── WIP.md                  # Running project log (one section per workstream)
-├── docs/                   # Schemas, authoring guides, design system, plans
+├── WIP.md                  # Current state of each system
+├── docs/                   # Schemas, authoring guides, design system, decisions
 │                           #   (index + update rules: docs/docs-map.md)
 ├── images/                 # Profile photo + derived crops (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
@@ -96,7 +109,18 @@ python3 -m http.server 8000
 # http://localhost:8000/
 ```
 
-Deep links open the matching section, e.g. `index.html#research`.
+Serving matters — `file://` breaks pages that fetch. Deep links open the
+matching section, e.g. `index.html#research`.
+
+Before pushing (CI runs the same three on every PR):
+
+```
+node tools/check-data.mjs
+node tools/smoke-pages.mjs
+node tools/test-oksat-engine.mjs
+```
+
+Deploy = merge to `master`; GitHub Pages serves the repo root directly.
 
 ## Browser Support
 

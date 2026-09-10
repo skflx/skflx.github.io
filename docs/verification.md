@@ -1,6 +1,6 @@
 # Verification — how to prove a change works
 
-Per subsystem: the exact probes that show a change is good. Most are now
+Per subsystem: the exact probes that show a change is good. Most are
 automated (`tools/*.mjs`, run in CI by `.github/workflows/ci.yml`); this doc
 is the spec they implement and the manual playbook for anything not yet
 covered. Run the automated suite locally before pushing:
@@ -11,20 +11,25 @@ node tools/smoke-pages.mjs                # every page boots, zero real console 
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
 ```
 
-The browser suites need a real Chromium (installed) and, for the OKSAT/graph
-pages, network access to their CDN scripts (React/htm/Cytoscape). CI has both.
-In a sandbox that blocks CDNs, those pages can't boot — that is the
-environment, not a regression (see `docs/agent-native-plan.md`; issue #51
-vendors the libs to remove the dependency).
+The browser suites need a real Chromium (installed) and, for `oksat.html`'s
+sibling `oksat-study.html`, network access to the React/htm CDN. CI has both.
+In a sandbox that blocks CDNs the study viewer cannot boot — that is the
+environment, not a regression. Confirm which it is by running the same page
+from `master` in a worktree; an identical failure means the sandbox. To test
+the page's own wiring without the CDN, intercept the `unpkg.com` requests and
+stub `js/oksat-engine.js` with a probe that records what `mountOKSAT` was
+called with. Every other page is CDN-independent for boot purposes and runs
+anywhere.
 
 ## "Real" console error
 
 Anything logged as `console.error` / `pageerror`, or a **same-origin**
 `requestfailed`, that is **not** matched by `tools/console-allowlist.json`.
 The allowlist holds only known-benign third-party noise (font/CDN network
-resets). A first-party error is never allowlisted. The static test server
-answers `/favicon.ico` with 204 so the site's missing favicon is not a
-spurious 404.
+resets). A first-party error is never allowlisted — a same-origin 404 is how
+this harness catches a script tag left pointing at a deleted file. The static
+test server answers `/favicon.ico` with 204 so the site's missing favicon is
+not a spurious 404.
 
 ## Playbooks by subsystem
 
@@ -33,13 +38,28 @@ spurious 404.
   sets `html[data-theme]` + `sk_theme`.
 - `index.html#research` opens that `<details>` section; all four sections
   expand/collapse (native `<details>`).
+- `#pgy-status` renders the current residency year. The HTML ships the
+  current value as a no-JS fallback, so **both** must be updated together if
+  either is ever edited by hand. Check the rollover directly rather than
+  waiting for July:
+  ```bash
+  node -e "const f=(d)=>{const n=new Date(d);const y=n.getFullYear()-(n.getMonth()<6?1:0);
+  return Math.max(1,Math.min(5,y-2024+1))};
+  ['2026-06-30','2026-07-01','2029-07-01'].forEach(d=>console.log(d,'PGY-'+f(d)))"
+  ```
 - Smoke assertion: a `details.section` element exists.
 
 ### OKSAT hub (`oksat.html`)
-- All modules in `OKSAT_MANIFEST` render as cards under `#modules`; each
-  launches `oksat-study.html?m=<slug>`.
-- Atlas card points at `graph.html?lens=study`; font picker flips `data-font`.
-- Smoke assertion: `#modules` has ≥1 child.
+- Every module in `OKSAT_MANIFEST` renders as a card under `#modules`,
+  grouped by subspecialty, each launching `oksat-study.html?m=<slug>`.
+- With seeded `oksat:progress:*` the card shows a completion meter and reads
+  **Resume**; with none it reads **Launch**.
+- With a `oksat:srs:*` item whose `nextReview` is today or earlier, the
+  `#review-banner` unhides, `#review-count` totals due across all modules,
+  and `#review-go` links to the module holding the most.
+- Settings holds only the local-data reset, which arms on first click and
+  fires on second. No API key, sync, or reviewer UI may reappear.
+- Smoke assertion: `#modules .module-card` count > 0.
 
 ### OKSAT study engine (`oksat-study.html?m=pediatrics`)
 The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
@@ -53,35 +73,36 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   `←`/`→` navigate, space/enter advance, `r` random, `h`/esc home
   (`docs/design-principles.md` §1.5). Automated: `1` selects, `→` advances,
   `h` home.
-- **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*`.
-- Note: the page shows a blocking reviewer modal before mounting — drive it
-  (`driveReviewerModal` in `tools/smoke-lib.mjs`).
+- **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*` (now by
+  `js/oksat-store.js`).
+- The page mounts straight into the module — **no prompt of any kind**. The
+  test seeds `oksat:reviewer` directly to pick a namespace.
 - Concept deep link `&c=<key>` pre-filters (manual).
-
-### Unified graph (`graph.html?lens=knowledge|structural|study`)
-- Each lens renders > 0 nodes: the `#cy` container gains a `<canvas>` and the
-  `#cy-empty` fallback is not shown (it hides via CSS `display:none`, **not**
-  the `[hidden]` attribute — check computed visibility).
-- `?node=<id>` focuses a node and opens the detail panel; the lens switcher
-  preserves `?node=`; theme flip re-skins without errors (manual).
-- Redirect stubs: `kag.html?node=X` → `graph.html?lens=knowledge&node=X`;
-  `atlas.html` → `lens=structural`. Smoke asserts the forwarded params.
 
 ### Airway Rounds (`airway-jeopardy.html`)
 - Boots with **zero external requests** (deliberately CDN-free); `AIRWAY_DATA`
   loads. Smoke assertion: `window.AIRWAY_DATA.questions` is an array.
 
-### KAG data changes
-- `node tools/kag-validate.mjs --dry` on the shard reports clean.
-- `node tools/check-data.mjs` passes on the merged graph (ids unique+kebab,
-  ≥1 source each, no dangling edges, enums valid, oksat links resolve).
+### CPT search (`cpt-search.html`)
+- Boots with zero console errors and the search field filters — nothing more
+  (frozen; still consumes `css/main.css` tokens).
 
-### Legacy pages (`cpt-search.html`, `ascii-editor.html`)
-- Boot with zero console errors — nothing more (frozen).
+### Archive (`archive/`)
+Not served, not smoke-tested, not checked by `tools/check-data.mjs`. The one
+invariant worth asserting after touching it:
+
+```bash
+node -e "const g=require('./archive/kag-graph.json');
+const ids=new Set(g.nodes.map(n=>n.id));
+console.log('nodes',g.nodes.length,'edges',g.edges.length,
+'dangling',g.edges.filter(e=>!ids.has(e.source)||!ids.has(e.target)).length)"
+```
+
+If `kag-graph.json` changes, regenerate `kag-graph-flat.txt` from it — never
+edit the flat file directly.
 
 ## Adding a new page to the harness
 
 Append an entry to `PAGES` in `tools/smoke-pages.mjs` with a `ready(page)`
 that resolves when the page's core content exists (poll via
-`page.waitForFunction`, don't sleep). If it redirects, mark `isStub: true` and
-assert the destination + forwarded params with `stub(dest, params)`.
+`page.waitForFunction`, don't sleep).

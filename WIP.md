@@ -1,174 +1,101 @@
-# WIP - OHNS Knowledge Atlas Graph (KAG)
+# WIP — current state
 
-## Goal
-Build a two-tool system hosted on GitHub pages for generating and viewing a knowledge graph of Otolaryngology concepts, with a self-contained spaced repetition testing system.
+One section per living system: what it is, where it stands, what is next.
+This is a status document, not a changelog — when something is retired, its
+section goes away rather than growing a postscript. Git history is the record
+of how things got here.
 
-## Actions Taken
-
-1. **Created Extractor (`kag-extract.html`)**
-   - Built a self-contained HTML tool with a dark theme interface.
-   - Added secure `localStorage` API key management for Anthropic.
-   - Integrated streaming Claude API calls (`claude-sonnet-4-20250514`) using a strict JSON schema prompt to extract entities and relationships.
-   - Built validation logic and preview UI (raw JSON output with node/edge counts).
-   - Added Copy, Download (as patch string), and "Merge into Atlas" functionality pointing to `kag-graph` in `localStorage`.
-
-2. **Created Atlas Viewer (`kag.html`)**
-   - Built a rich, dark-themed Cytoscape.js interface with `cose-bilkent` layout mapping the knowledge graph.
-   - Embedded ~40 seed nodes (temporal bone anatomy, pathologies like cholesteatoma, otosclerosis, and procedures) with 50+ relationships.
-   - Built **Explore Mode** with double-click neighborhood isolation, text search, and category filter pills.
-   - Built an interactive right-panel for node detail, connections, and flag-for-correction forms.
-   - Built **Self-Test Mode** with a Leitner spaced-repetition queue. Calculates due cards (`nextReview <= today`), hides answers until revealed, uses connected nodes/edges as explicit hint cues, and recalculates spacing based on confidence grading (Again, Hard, Good, Easy).
-   - Added Settings Modal to handle raw JSON Import/Export, complete state reset, and a centralized Corrections Inbox.
-
-3. **Site Integration**
-   - Updated `projects.html` to include links to both the Knowledge Atlas Graph and the KAG Extractor in the "Clinical Tools" section alongside the existing CPT Search tool.
-
-## Technical Details 
-- All styling and logic use Vanilla JS without build steps (Tailwind aesthetics implemented with native custom CSS properties). 
-- State relies exclusively on `localStorage`. 
-
-## Next Steps
-The new HTML tools are ready. You can test them locally or push to master to deploy them live to GitHub Pages.
+Last reviewed: 2026-09-10.
 
 ---
 
-# WIP - OKSAT (OHNS Knowledge Self-Assessment Tool)
+## One-pager (`index.html`)
 
-## Goal
-Rename and expand the MCQ tool into OKSAT: unified hub, traversable knowledge
-atlas, per-user completion synced to a repo database file, font themes, and a
-Gemini-powered question generator. Full plan: `docs/oksat-plan.md`.
+**State:** Live and stable. Two visitor-selectable styles (Matte, Story) ×
+day/night, all token-driven in `css/onepager.css`. Native `<details>`
+accordion, hash deep-linking.
 
-## Actions Taken
-1. **Rename** — `oksat.html` / `oksat-study.html` / `js/oksat-*.js` /
-   `css/oksat.css`; old `mcq*.html` are redirect stubs; `occ*.html` point at
-   the new pages; localStorage `mcq:*` auto-migrates to `oksat:*`.
-2. **Design** — `docs/design-principles.md`; four persisted font themes
-   (Manuscript, Clinical, Atlas, Hyperlegible) behind an "Aa" topbar picker.
-3. **Atlas** — Obsidian-style Cytoscape graph on the hub: subspecialty →
-   module → domain → concept nodes, per-reviewer completion color-coding,
-   concept deep links (`?m=<slug>&c=<concept>`), dashed crossover node to KAG.
-4. **Database file** — `data/oksat-db.json` (dated per-reviewer completion,
-   no secrets) with read/merge on load and rewrite via download-to-commit or
-   a GitHub Contents API push using a runtime-only token (never stored).
-5. **Question Forge** — `oksat-generate.html`: paste text → Gemini generates a
-   full module in the embedded house style (mechanism → application → pearl);
-   validates, previews, downloads the module file + manifest entry.
-6. **Gemini key manager** — `js/oksat-ai.js`; key lives in localStorage only.
+The residency year is computed in `js/onepager.js` from a July 1 rollover and
+capped at PGY-5, so it no longer needs a manual edit each summer. The HTML
+carries the current value as a no-JS fallback; the two must be edited
+together if either is ever touched by hand.
 
-## Next Steps
-Generate the first Forge module end-to-end with a real key; consider merging
-KAG node data into the Atlas (both are Cytoscape element models).
+**Next:** `documents/cv.pdf` is linked from the hero but the file has never
+been uploaded — that link 404s today. Either upload the CV or drop the
+button. Owner's call.
 
 ---
 
-# WIP — KAG term web + structural anatomy atlas
+## OKSAT (`oksat.html`, `oksat-study.html`)
 
-## Goal
-Turn the KAG from a 40-node localStorage seed into the site's canonical,
-committed knowledge graph, grown into a massive OHNS term web and wired
-bidirectionally to OKSAT. Full plan: `docs/oto-kag-atlas-plan.md`.
+**State:** The tool is now just the hub and the study viewer. Five
+hand-authored modules, each a data file in `js/mcq-modules/` plus one
+manifest entry; the shared engine renders all of them. Answers lock on first
+attempt and a five-box Leitner schedule resurfaces misses.
 
-## Actions Taken
-1. **Externalized the KAG** to a committed file `data/kag-graph.json`
-   (schema v2), read through a new store `js/kag-store.js` (fetch + merge where
-   LOCAL WINS on progress, download / Contents-API push write paths). `kag.html`
-   now boots from the store; `SEED_GRAPH` remains only as an offline fallback.
-2. **Schema v2 + bidirectional OKSAT↔KAG links** — nodes carry `oksat.{modules,
-   concepts,topics}`; concept links resolve to real module CONCEPTS keys.
-   `?node=<id>` deep links tie the graphs together both ways.
-3. **Term web** — expanded to ~656 nodes / ~929 edges across all 9
-   subspecialties, fanned out one authoring agent per subspecialty, each shard
-   validated + merged via `tools/kag-validate.mjs`.
-4. **Structural anatomy atlas** — new `atlas.html`, a filtered *view* of the KAG
-   (265 structural nodes, colored by `structure`, grouped by `region`); holds no
-   data of its own, so a new structural node appears with zero atlas-code
-   changes. Spatial seed (`laterality`, edge `direction`) captured for a future
-   3D layer.
-5. **Docs** — `docs/kag-schema.md` (v2 model + enums + merge contract),
-   `docs/authoring-kag.md` (shard/validator authoring contract).
+Progress is local to the browser and nothing is uploaded. Storage keys keep
+their trailing `:<code>` namespace so progress from the multi-reviewer era
+still resolves, but the code is now read silently — opening a module no
+longer interrupts with a "Who is reviewing?" prompt.
 
-All authored (non-seed) content is DRAFT / `review:false`; only the vetted
-40-node temporal-bone seed is `review:true`.
+The hub shows what the retired Progress and Atlas tabs were really being used
+for: a completion meter per module, Launch vs Resume, and a single banner
+totalling cards due across all modules with a link into the module holding
+the most.
 
-## Next Steps
-Owner (resident) curated-source verification pass over the `review:false` nodes
-to graduate DRAFT content. Phase 3 usage analytics is deferred (owner call,
-2026-07 — not needed for now).
+**Next:** Authoring is manual (`docs/authoring-oksat.md`). The module set is
+thin outside pediatrics/otology — rhinology, laryngology, and H&N oncology
+have hues reserved in `OKSAT_SUBSPECIALTIES` but no modules yet.
 
 ---
 
-# WIP - Unified graph system (KAG + Structural Atlas + OKSAT graph)
+## Airway Rounds (`airway-jeopardy.html`)
 
-## Goal
-Merge the three graph surfaces into one system that manifests as three lenses,
-removing the triplicated Cytoscape code while preserving every behavior.
+**State:** Complete and self-contained — a 200-question ENT/H&N airway bank
+with Rounds, Jeopardy board, quick quiz, and browse modes. Zero external
+requests by design, so it runs on bad conference-room wifi or none.
 
-## Actions Taken
-- **One engine** (`js/graph-view.js`, `window.GraphView`): owns the single
-  Cytoscape instance, cose-bilkent layout, neighborhood isolate, hover
-  spotlight, debounced search, `?node=` deep-link, theme re-skin, toast, and the
-  detail-panel shell. Lenses plug in via a fixed contract.
-- **One page** (`graph.html`) with a Knowledge · Structural · Study lens switcher
-  (`?lens=` / `?node=`) and consolidated chrome (`css/graph.css`).
-- **Three lenses** (`js/graph-lens-{knowledge,structural,study}.js`): full ports
-  of the former `kag.html`, `atlas.html`, and `js/oksat-atlas.js` engines.
-- **Routing**: `kag.html` / `atlas.html` are redirect stubs (forward `?node=`);
-  `js/oksat-atlas.js` is a compat shim (`loadModules()` kept for adaptive +
-  dashboard; `mount()` delegates to the study lens); the `oksat.html` Atlas tab
-  and `index.html` cards point at the unified graph. Net −2800 lines.
-
-## Technical Details
-- Vanilla JS, no build step; each lens is a guarded IIFE registered on
-  `window.GraphLenses`. Data layer (`data/kag-graph.json` via `KAGStore`) and
-  persistence keys (`localStorage['kag-graph']`, `oksat:*`) unchanged.
-
-## Next Steps
-Optional: retire the `kag.html`/`atlas.html` stubs once external links migrate.
+**Next:** Nothing planned. Keep it CDN-free; that constraint is the feature.
 
 ---
 
-# WIP — Agent-native hardening (docs, verification, issue roadmap)
+## CPT search (`cpt-search.html`)
 
-## Goal
-Make the repo workable by coding agents end-to-end: reproduce a bug, implement,
-test, and verify on the real site with minimal owner input. Full audit:
-`docs/agent-native-plan.md`.
+**State:** Frozen and working. Search logic is inline; the page still draws
+tokens from the legacy `css/main.css`, which exists only for it.
 
-## Actions Taken
-1. **CLAUDE.md** added — the agent operating manual (hard rules, commands,
-   architecture, conventions).
-2. **Audit** of judgment chokepoints, verification gaps, reproduction paths,
-   and structural obstacles → `docs/agent-native-plan.md`, including one real
-   shipped bug: the KAG store's whole-node LOCAL-WINS merge never propagates
-   content edits or `review:true` graduations to returning browsers.
-3. **Issue roadmap filed** — GitHub #42–#61: five epics (conventions pack, CI
-   verification harness, CDN vendoring, diagnostics/replay harness, KAG
-   progress/content split), each broken into atomic sub-issues written for
-   low-context executors.
-4. **Docs refresh** — rot-prone counts removed from `CLAUDE.md` /
-   `docs/kag-schema.md`; README file tree regrouped and completed; the three
-   plan docs got `> Status:` headers marking them as executed historical
-   records; new `docs/docs-map.md` defines the mandatory documentation
-   second pass (checklist-shaped, delegable to a cheaper model).
+**Next:** Nothing planned. If it is ever touched, moving it fully onto
+`css/site.css` would let `css/main.css` go.
 
-## Next Steps
-Execute the remaining epics in the order given in `docs/agent-native-plan.md`
-§5 (vendoring → diagnostics → KAG split). The docs second pass is now a
-standing convention in `CLAUDE.md`.
+---
 
-### Delivered: #42 conventions pack + #46 CI verification harness
-- **#42** — `docs/decisions.md` (decision tables: page chrome, renames, the
-  localStorage key registry, module authoring, escalation) and
-  `docs/verification.md` (per-subsystem probes), both wired into `CLAUDE.md`;
-  stale graph counts removed.
-- **#46** — `tools/check-data.mjs` (deps-free data invariants; enums pulled
-  into shared `tools/kag-enums.mjs`), `tools/smoke-pages.mjs` +
-  `tools/smoke-lib.mjs` + `tools/console-allowlist.json` (headless page-boot
-  smoke), `tools/test-oksat-engine.mjs` (answer-lock / SRS / keyboard /
-  migration), and `.github/workflows/ci.yml` running all three on every PR.
-- Validated: check-data 39/39; browser suites 17/17 pages + 10/10 engine
-  checks against a vendored mirror; both harnesses proven to fail on injected
-  regressions. CDN pages need network (CI/local); a CDN-blocked sandbox boots
-  only the CDN-free pages — the motivation for the still-open vendoring epic
-  (#51).
+## Archive (`archive/`)
+
+**State:** Holds the OHNS knowledge graph built for the retired Knowledge
+Atlas Graph and Structural Atlas viewers, as raw JSON plus a flat text
+rendering for reading. Nothing serves or checks it.
+
+Only the temporal-bone seed set is owner-vetted (`review:true`); the rest is
+authored scaffolding marked `draft` in the flat export. It is study material,
+not a reference — `archive/README.md` says so at the point of use.
+
+**Next:** Optional. Vetting nodes, or mining the detail text into OKSAT
+modules, would both put the content back to work; neither is scheduled.
+
+---
+
+## Verification
+
+**State:** Three Node suites, run in CI on every PR: `check-data.mjs`
+(committed-data invariants, zero deps), `smoke-pages.mjs` (every page boots
+with no real console errors), `test-oksat-engine.mjs` (answer lock, SRS
+writes, keyboard, legacy migration).
+
+The smoke harness earns its keep on cleanup work specifically — a same-origin
+404 is treated as a failure, which is what catches a `<script>` tag left
+pointing at a deleted file.
+
+**Next:** `oksat-study.html` needs the React/htm CDN to boot, so it cannot be
+smoke-tested in a network-restricted sandbox. Vendoring those two UMD bundles
+would make the whole suite hermetic; until then, see `docs/verification.md`
+for how to test that page's wiring with the CDN stubbed.

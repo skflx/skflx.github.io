@@ -31,7 +31,7 @@ oksat         cross-links to OKSAT modules/concepts (many now stale)
 ```
 
 Edge shape: `{ source, target, type, label }`, where `source`/`target` are node
-ids and `type` is one of ~20 relations (`part_of`, `branches_from`,
+ids and `type` is one of a fixed relation set (`part_of`, `branches_from`,
 `landmark_for`, `treats`, `complication_of`, …).
 
 ### `kag-graph-flat.txt`
