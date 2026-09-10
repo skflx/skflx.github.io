@@ -77,19 +77,6 @@ export async function launchBrowser(opts = {}) {
   return chromium.launch(launch);
 }
 
-/* oksat-study.html blocks on a "Who is reviewing?" modal before it mounts.
-   Fill it with `code` and click through (a new code adds a confirm step).
-   Resolves once the modal is gone. Shared by smoke + engine tests. */
-export async function driveReviewerModal(page, code = 'smoke') {
-  await page.waitForSelector('[role="dialog"] input', { timeout: 12000 });
-  await page.fill('[role="dialog"] input', code);
-  for (let i = 0; i < 3; i++) {
-    if (!(await page.$('[role="dialog"]'))) break;
-    await page.click('[role="dialog"] button');
-    await page.waitForTimeout(250);
-  }
-}
-
 /* Load the console-error allowlist (array of regex source strings). */
 export function loadAllowlist() {
   try {

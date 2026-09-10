@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OKSAT — OHNS Knowledge Self-Assessment | skflx.MD</title>
-  <meta name="description" content="OKSAT — the OHNS Knowledge Self-Assessment Tool. Study modules, an Obsidian-style knowledge atlas with per-user completion, spaced repetition, and a Gemini-powered question forge.">
+  <meta name="description" content="OKSAT — otolaryngology self-assessment modules with locked-first-attempt questions, free-response recall, and spaced repetition.">
 
+  <!-- Set theme + font before paint to avoid a flash (shares keys with the main site) -->
   <script>
     (function () {
       try {
@@ -22,6 +23,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Crimson+Pro:ital,wght@0,300..700;1,400&family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/oksat.css">
+
+  <style>
+    /* Review banner — the one thing worth seeing before the module list. */
+    .hub-review {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1.75rem 0 0.5rem;
+      padding: 0.85rem 1.1rem;
+      border: 1px solid var(--ok-border);
+      border-radius: 12px;
+      background: var(--ok-surface);
+    }
+    .hub-review[hidden] { display: none; }
+    .hub-review .rv-text { font-size: 0.95rem; line-height: 1.45; }
+    .hub-review .rv-count { font-weight: 600; color: var(--ok-accent); }
+    .hub-review .rv-sub {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--ok-text-faint);
+      margin-top: 0.15rem;
+    }
+    /* Per-module completion meter on each card. */
+    .module-meter {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--ok-text-faint);
+    }
+    .module-meter .bar {
+      flex: 1;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--ok-border);
+      overflow: hidden;
+    }
+    .module-meter .fill {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--ok-accent);
+    }
+  </style>
 </head>
 <body>
   <nav class="ok-topbar">
@@ -45,70 +93,18 @@
     <div class="ok-wrap" style="padding-top:4rem;max-width:46rem">
       <div class="hub-kicker"><hr><span>OKSAT · Otolaryngology</span><hr></div>
       <h1 class="hub-title">OHNS Knowledge<br><em>Self-Assessment</em></h1>
-      <p class="hub-subtitle">Not just multiple choice — modules mix locked-first-attempt questions with free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly, jump to a concept, or traverse everything as a linked knowledge atlas.</p>
+      <p class="hub-subtitle">Modules mix locked-first-attempt questions with free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept.</p>
 
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-        <div class="hub-tabs" role="tablist">
-          <button class="hub-tab active" id="tab-modules" role="tab" aria-selected="true">Modules</button>
-          <button class="hub-tab" id="tab-progress" role="tab" aria-selected="false">Progress</button>
-          <button class="hub-tab" id="tab-atlas" role="tab" aria-selected="false">Atlas</button>
+      <!-- What's due, if anything -->
+      <div class="hub-review" id="review-banner" hidden>
+        <div class="rv-text">
+          <span class="rv-count" id="review-count"></span> <span id="review-word">questions</span> due for review
+          <span class="rv-sub" id="review-where"></span>
         </div>
+        <a class="ok-btn ok-btn--sm ok-btn--primary" id="review-go" href="#">Start review &rarr;</a>
       </div>
 
-      <section id="view-modules">
-        <div class="hub-modules" id="modules"></div>
-      </section>
-
-      <section id="view-progress" hidden>
-        <div id="dash-root"></div>
-      </section>
-
-      <section id="view-atlas" hidden>
-        <div class="atlas-shell">
-          <div class="atlas-toolbar">
-            <input class="atlas-search" id="atlas-search" type="search" placeholder="Find a node…" aria-label="Search the atlas">
-            <select class="ok-select" id="atlas-reviewer" style="width:auto;flex:none;border-radius:999px;font-size:11px;padding:0.35rem 0.6rem" aria-label="Whose completion to show"></select>
-            <div class="atlas-legend" id="atlas-legend"></div>
-          </div>
-          <div class="atlas-cy" id="atlas-cy"></div>
-          <div class="atlas-loading" id="atlas-loading">Charting the atlas…</div>
-          <div class="atlas-hint">drag · scroll to zoom · hover to spotlight · tap a module to launch, a concept to drill</div>
-        </div>
-        <p class="ok-note" style="margin-top:0.75rem">Node fill deepens toward its domain hue as the selected reviewer answers that module's questions; a sage ring marks 100%. Completion merges this browser's progress with the shared database file (<code>data/oksat-db.json</code>) — sync from Settings.</p>
-      </section>
-
-      <div style="margin-top:2.5rem">
-        <div class="hub-kicker"><hr><span>Companion tools</span><hr></div>
-        <div class="hub-modules">
-          <a class="module-card" href="oksat-adaptive.html">
-            <div class="module-accent" style="background:#2C5454"></div>
-            <div class="module-body">
-              <div class="module-label">Adaptive Practice · Gemini</div>
-              <div class="module-title">Drill gaps &amp; weak spots</div>
-              <p class="module-desc">Generates board-style questions on demand for topics with no module yet — rolling difficulty, distractor teaching, and starrable items you can export as a draft module.</p>
-            </div>
-            <div class="module-arrow">Launch &rarr;</div>
-          </a>
-          <a class="module-card" href="oksat-generate.html">
-            <div class="module-accent" style="background:#9C7A45"></div>
-            <div class="module-body">
-              <div class="module-label">Question Forge · Gemini</div>
-              <div class="module-title">Generate a new module</div>
-              <p class="module-desc">Dump a chapter, guideline, or your notes — get a ready-to-commit OKSAT module written in the house style (mechanism → application → pearl).</p>
-            </div>
-            <div class="module-arrow">Launch &rarr;</div>
-          </a>
-          <a class="module-card" href="kag.html">
-            <div class="module-accent" style="background:#4A9EFF"></div>
-            <div class="module-body">
-              <div class="module-label">Knowledge Atlas Graph</div>
-              <div class="module-title">KAG — concept graph</div>
-              <p class="module-desc">The sibling graph: OHNS entities and relationships with its own spaced-repetition self-test. The Atlas view here speaks the same language.</p>
-            </div>
-            <div class="module-arrow">Launch &rarr;</div>
-          </a>
-        </div>
-      </div>
+      <div class="hub-modules" id="modules"></div>
 
       <div class="hub-dots">·  ·  ·</div>
     </div>
@@ -120,52 +116,15 @@
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem">
         <div>
           <h2 id="settings-title">Settings</h2>
-          <p class="ok-modal-sub" style="margin-bottom:0">Identity, sync, and generation. Nothing here ever writes a secret to the repo.</p>
+          <p class="ok-modal-sub" style="margin-bottom:0">Progress lives in this browser only — nothing is uploaded.</p>
         </div>
         <button type="button" class="ok-btn ok-btn--sm" id="settings-close" aria-label="Close">✕</button>
       </div>
 
       <div class="ok-modal-section">
-        <h3>Reviewer</h3>
-        <div class="ok-field">
-          <span class="ok-note" style="flex:1">Progress is saved per reviewer code.<br>Active: <strong id="set-reviewer">—</strong></span>
-          <button type="button" class="ok-btn ok-btn--sm" id="set-reviewer-btn">Change</button>
-        </div>
-      </div>
-
-      <div class="ok-modal-section">
-        <h3>Gemini API key</h3>
-        <div class="ok-field">
-          <input type="password" class="ok-input" id="gemini-key" placeholder="AIza… (Google AI Studio key)" autocomplete="off" spellcheck="false">
-          <button type="button" class="ok-btn ok-btn--sm ok-btn--primary" id="gemini-save">Save</button>
-          <button type="button" class="ok-btn ok-btn--sm" id="gemini-test">Test</button>
-          <button type="button" class="ok-btn ok-btn--sm" id="gemini-clear">Clear</button>
-        </div>
-        <div class="ok-status" id="gemini-status"></div>
-        <p class="ok-note">Used by the <strong>Question Forge</strong>. Stored only in this browser's localStorage; never synced, never committed. Get a free key at <strong>aistudio.google.com</strong>.</p>
-      </div>
-
-      <div class="ok-modal-section">
-        <h3>Completion database</h3>
-        <p class="ok-note" style="margin-bottom:0.6rem">The shared file <strong>data/oksat-db.json</strong> holds per-reviewer completion with dated entries (progress only — no keys, no secrets). <span id="db-info">Reading…</span></p>
-        <div class="ok-field">
-          <button type="button" class="ok-btn ok-btn--sm ok-btn--primary" id="db-download">Download merged file</button>
-          <button type="button" class="ok-btn ok-btn--sm" id="db-push-toggle">Push to GitHub…</button>
-        </div>
-        <div id="db-push-row" hidden>
-          <div class="ok-field">
-            <input type="password" class="ok-input" id="db-token" placeholder="fine-grained token (contents: read/write) — used once, never stored" autocomplete="off" spellcheck="false">
-            <button type="button" class="ok-btn ok-btn--sm ok-btn--primary" id="db-push">Push</button>
-          </div>
-          <p class="ok-note">The token authorizes one commit of <strong>data/oksat-db.json</strong> to <strong>master</strong> and is discarded immediately — it is never written to localStorage, the database, or the repo.</p>
-        </div>
-        <div class="ok-status" id="db-status"></div>
-      </div>
-
-      <div class="ok-modal-section">
         <h3>Local data</h3>
         <div class="ok-field">
-          <span class="ok-note" style="flex:1">Remove this browser's progress + review schedule for the <em>active</em> reviewer only.</span>
+          <span class="ok-note" style="flex:1">Clear every answer and review date stored in this browser. This cannot be undone.</span>
           <button type="button" class="ok-btn ok-btn--sm" id="reset-local" style="border-color:var(--ok-incorrect);color:var(--ok-incorrect)">Reset…</button>
         </div>
         <div class="ok-status" id="reset-status"></div>
@@ -175,52 +134,33 @@
 
   <script src="js/oksat-manifest.js"></script>
   <script src="js/oksat-store.js"></script>
-  <script src="js/oksat-reviewer.js"></script>
   <script src="js/oksat-prefs.js"></script>
-  <script src="js/oksat-taxonomy.js"></script>
-  <script src="js/oksat-concept-graph.js"></script>
-  <script src="js/oksat-db.js"></script>
-  <script src="js/kag-store.js"></script>
-  <script src="js/oksat-ai.js"></script>
   <script>
     (function () {
       OKSATPrefs.mountThemeToggle(document.getElementById('theme-toggle'));
       OKSATPrefs.mountFontPicker(document.getElementById('font-picker'));
 
       var today = new Date().toISOString().split('T')[0];
-      var reviewer = OKSATReviewer.current() || 'guest';
-
-      function dueCount(slug) {
-        try {
-          var srs = JSON.parse(localStorage.getItem('oksat:srs:' + slug + ':' + reviewer) || '{}');
-          var items = (srs && srs.items) || {};
-          return Object.keys(items).filter(function (id) {
-            var nr = items[id] && items[id].nextReview; return nr && nr <= today;
-          }).length;
-        } catch (e) { return 0; }
-      }
-
-      /* Reviewer bar — who the due counts belong to, with a switch. */
-      var sub = document.querySelector('.hub-subtitle');
-      var bar = document.createElement('div');
-      bar.className = 'hub-reviewer';
-      var active = OKSATReviewer.current();
-      bar.innerHTML = active
-        ? 'Reviewing as <strong>' + active + '</strong> · <button type="button" class="hub-reviewer-btn" id="reviewer-switch">change</button>'
-        : '<button type="button" class="hub-reviewer-btn" id="reviewer-switch">Set your reviewer code</button>';
-      sub.parentNode.insertBefore(bar, sub.nextSibling);
-      document.getElementById('reviewer-switch').addEventListener('click', function () {
-        OKSATReviewer.ask({ title: 'Who is reviewing?' }).then(function () { location.reload(); });
-      });
-
-      /* ---- Modules list (taxonomy-grouped when the tree is present) ---- */
-      var wrap = document.getElementById('modules');
+      var reviewer = OKSATStore.reviewer();
       var manifest = window.OKSAT_MANIFEST || [];
       var subs = window.OKSAT_SUBSPECIALTIES || {};
 
-      function moduleCard(m) {
-        var due = dueCount(m.slug);
+      /* ---- per-module local state (answered count + cards due today) ---- */
+      function stateFor(slug) {
+        var progress = OKSATStore.load('oksat:progress:' + slug + ':' + reviewer, {}) || {};
+        var srs = OKSATStore.load('oksat:srs:' + slug + ':' + reviewer, {}) || {};
+        var items = srs.items || {};
+        var due = Object.keys(items).filter(function (id) {
+          var nr = items[id] && items[id].nextReview;
+          return nr && nr <= today;
+        }).length;
+        return { answered: Object.keys(progress.answers || {}).length, due: due };
+      }
+
+      /* ---- module card ---- */
+      function moduleCard(m, st) {
         var subInfo = subs[m.subspecialty];
+        var pct = m.count ? Math.round((st.answered / m.count) * 100) : 0;
         var a = document.createElement('a');
         a.className = 'module-card';
         a.href = 'oksat-study.html?m=' + encodeURIComponent(m.slug);
@@ -230,259 +170,92 @@
             '<div class="module-label">' + m.kicker + ' · ' + m.count + ' questions</div>' +
             '<div class="module-title">' + m.title + '</div>' +
             '<p class="module-desc">' + m.desc + '</p>' +
-            (due > 0 ? '<div class="module-due">' + due + ' due for review</div>' : '') +
+            (st.due > 0 ? '<div class="module-due">' + st.due + ' due for review</div>' : '') +
+            (st.answered > 0
+              ? '<div class="module-meter"><span class="bar"><span class="fill" style="width:' + pct + '%"></span></span>' +
+                '<span>' + st.answered + ' / ' + m.count + '</span></div>'
+              : '') +
           '</div>' +
-          '<div class="module-arrow">Launch &rarr;</div>';
+          '<div class="module-arrow">' + (st.answered > 0 && st.answered < m.count ? 'Resume' : 'Launch') + ' &rarr;</div>';
         return a;
       }
 
-      var tax = window.OKSAT_TAXONOMY && Array.isArray(OKSAT_TAXONOMY.topics) ? OKSAT_TAXONOMY.topics : null;
-      if (tax) {
-        // Order subspecialties by their manifest declaration; include any with gap topics.
-        var order = Object.keys(subs);
-        order.forEach(function (subKey) {
-          var subInfo = subs[subKey] || { label: subKey, hue: '#55606A' };
-          var mods = manifest.filter(function (m) { return m.subspecialty === subKey; });
-          var gaps = tax.filter(function (t) { return t.subspecialty === subKey && !t.moduleId; });
-          if (!mods.length && !gaps.length) return;
-          var head = document.createElement('div');
-          head.className = 'hub-subhead';
-          head.innerHTML = '<span class="tick" style="background:' + subInfo.hue + '"></span>' + subInfo.label;
-          wrap.appendChild(head);
-          mods.forEach(function (m) { wrap.appendChild(moduleCard(m)); });
-          if (gaps.length) {
-            var row = document.createElement('div');
-            row.className = 'hub-gap-row';
-            gaps.sort(function (a, b) { return (a.priority || 3) - (b.priority || 3); });
-            gaps.forEach(function (t) {
-              var g = document.createElement('a');
-              g.className = 'hub-gap';
-              g.href = 'oksat-adaptive.html?t=' + encodeURIComponent(t.id);
-              g.innerHTML = t.label + (t.priority === 1 ? ' <span class="p1">P1</span>' : '');
-              row.appendChild(g);
-            });
-            wrap.appendChild(row);
-          }
-        });
-      } else {
-        manifest.forEach(function (m) { wrap.appendChild(moduleCard(m)); });
-      }
+      /* ---- render, grouped by subspecialty in manifest order ---- */
+      var wrap = document.getElementById('modules');
+      var totalDue = 0;
+      var dueModules = [];
 
-      /* ---- Tabs + lazy Atlas / Dashboard ---- */
-      var tabM = document.getElementById('tab-modules');
-      var tabP = document.getElementById('tab-progress');
-      var tabA = document.getElementById('tab-atlas');
-      var viewM = document.getElementById('view-modules');
-      var viewP = document.getElementById('view-progress');
-      var viewA = document.getElementById('view-atlas');
-      var cy = null, atlasReviewer = reviewer, dbCache = null;
-
-      function selectTab(name) {
-        var tabs = { modules: tabM, progress: tabP, atlas: tabA };
-        var views = { modules: viewM, progress: viewP, atlas: viewA };
-        Object.keys(tabs).forEach(function (k) {
-          var on = k === name;
-          tabs[k].classList.toggle('active', on);
-          tabs[k].setAttribute('aria-selected', String(on));
-          views[k].hidden = !on;
-        });
-        if (name === 'atlas') bootAtlas();
-        if (name === 'progress') bootDashboard();
-      }
-      tabM.addEventListener('click', function () { selectTab('modules'); });
-      tabP.addEventListener('click', function () { selectTab('progress'); });
-      tabA.addEventListener('click', function () { selectTab('atlas'); });
-
-      /* Progress dashboard — lazy-load its script (and the atlas module loader
-         it reuses), then mount for the active reviewer. Re-mounts on each open
-         so it reflects the latest local progress. */
-      function bootDashboard() {
-        var el = document.getElementById('dash-root');
-        el.innerHTML = '<p class="ok-note" style="padding:1rem 0">Charting your progress…</p>';
-        var needAtlas = !(window.OKSATAtlas && OKSATAtlas.loadModules);
-        (needAtlas ? loadScript('js/oksat-atlas.js').catch(function () {}) : Promise.resolve())
-          .then(function () { return window.OKSATDashboard ? null : loadScript('js/oksat-dashboard.js'); })
-          .then(function () { return OKSATDB.fetch(); })
-          .then(function (db) {
-            if (window.OKSATDashboard) OKSATDashboard.mount(el, { reviewer: reviewer, db: db });
-            else el.innerHTML = '<p class="ok-note">Dashboard unavailable.</p>';
-          })
-          .catch(function () { el.innerHTML = '<p class="ok-note">Could not load the dashboard.</p>'; });
-      }
-
-      function loadScript(src) {
-        return new Promise(function (res, rej) {
-          var s = document.createElement('script');
-          s.src = src; s.onload = res; s.onerror = rej;
-          document.body.appendChild(s);
-        });
-      }
-
-      function legend() {
-        var el = document.getElementById('atlas-legend');
-        el.innerHTML = '';
-        var used = {};
-        (window.OKSAT_MANIFEST || []).forEach(function (m) { used[m.subspecialty] = 1; });
-        Object.keys(used).forEach(function (k) {
-          var s = (window.OKSAT_SUBSPECIALTIES || {})[k]; if (!s) return;
-          var chip = document.createElement('span');
-          chip.className = 'atlas-key';
-          chip.innerHTML = '<span class="swatch" style="background:' + s.hue + '"></span>' + s.label;
-          el.appendChild(chip);
-        });
-      }
-
-      function mountAtlas() {
-        var loading = document.getElementById('atlas-loading');
-        loading.style.display = '';
-        // The engine reuses one instance across re-mounts; setLens rebuilds the
-        // elements for the new reviewer/completion, so no destroy is needed.
-        var completion = OKSATDB.completionFor(dbCache, atlasReviewer);
-        OKSATAtlas.mount(document.getElementById('atlas-cy'), {
-          reviewer: atlasReviewer,
-          completion: completion,
-          searchInput: document.getElementById('atlas-search'),
-        }).then(function (instance) { cy = instance; loading.style.display = 'none'; });
-      }
-
-      var atlasBooted = false;
-      function bootAtlas() {
-        if (atlasBooted) return;
-        atlasBooted = true;
-        legend();
-        // cose-bilkent's plain-script build needs layoutBase + coseBase globals;
-        // if any of the plugin chain fails, the atlas falls back to built-in cose.
-        var noop = function () {};
-        Promise.all([
-          loadScript('https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js')
-            .then(function () { return loadScript('https://unpkg.com/layout-base@1.0.2/layout-base.js').catch(noop); })
-            .then(function () { return loadScript('https://unpkg.com/cose-base@1.0.3/cose-base.js').catch(noop); })
-            .then(function () { return loadScript('https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js').catch(noop); }),
-          OKSATDB.fetch(),
-          // The Atlas tab now renders through the unified graph engine + study
-          // lens; load them (guarded) alongside the OKSATAtlas mount shim.
-          (window.GraphView ? Promise.resolve() : loadScript('js/graph-view.js'))
-            .then(function () { return (window.GraphLenses && window.GraphLenses.study) ? null : loadScript('js/graph-lens-study.js'); })
-            .then(function () { return (window.OKSATAtlas && OKSATAtlas.mount) ? null : loadScript('js/oksat-atlas.js'); }),
-        ]).then(function (r) {
-          dbCache = r[1];
-          var sel = document.getElementById('atlas-reviewer');
-          var codes = OKSATDB.reviewerList(dbCache);
-          if (codes.indexOf(atlasReviewer) === -1) codes.unshift(atlasReviewer);
-          sel.innerHTML = codes.map(function (c) {
-            return '<option value="' + c + '"' + (c === atlasReviewer ? ' selected' : '') + '>' + c + '</option>';
-          }).join('');
-          sel.addEventListener('change', function () { atlasReviewer = this.value; mountAtlas(); });
-          mountAtlas();
-        }).catch(function () {
-          document.getElementById('atlas-loading').textContent = 'Could not load the graph libraries (offline?).';
-        });
-      }
-
-      /* ---- Settings modal ---- */
-      var overlay = document.getElementById('settings-overlay');
-      document.getElementById('settings-btn').addEventListener('click', function () {
-        overlay.hidden = false;
-        document.getElementById('set-reviewer').textContent = OKSATReviewer.current() || 'not set';
-        var st = document.getElementById('gemini-status');
-        st.textContent = OKSATAI.hasKey() ? 'A key is attached to this browser.' : 'No key attached.';
-        st.className = 'ok-status';
-        OKSATDB.fetch().then(function (db) {
-          var n = Object.keys(db.reviewers || {}).length;
-          document.getElementById('db-info').textContent =
-            'Server copy updated ' + (db.updated ? db.updated.split('T')[0] : 'never') + ' · ' + n + ' reviewer' + (n === 1 ? '' : 's') + ' on file.';
+      Object.keys(subs).forEach(function (subKey) {
+        var mods = manifest.filter(function (m) { return m.subspecialty === subKey; });
+        if (!mods.length) return;
+        var subInfo = subs[subKey];
+        var head = document.createElement('div');
+        head.className = 'hub-subhead';
+        head.innerHTML = '<span class="tick" style="background:' + subInfo.hue + '"></span>' + subInfo.label;
+        wrap.appendChild(head);
+        mods.forEach(function (m) {
+          var st = stateFor(m.slug);
+          totalDue += st.due;
+          if (st.due > 0) dueModules.push({ slug: m.slug, title: m.title, due: st.due });
+          wrap.appendChild(moduleCard(m, st));
         });
       });
+
+      /* Any module whose subspecialty key is missing from the ring still renders. */
+      var placed = Object.keys(subs);
+      manifest.filter(function (m) { return placed.indexOf(m.subspecialty) === -1; })
+        .forEach(function (m) {
+          var st = stateFor(m.slug);
+          totalDue += st.due;
+          if (st.due > 0) dueModules.push({ slug: m.slug, title: m.title, due: st.due });
+          wrap.appendChild(moduleCard(m, st));
+        });
+
+      /* ---- review banner: jump straight to the module with the most due ---- */
+      if (totalDue > 0) {
+        dueModules.sort(function (a, b) { return b.due - a.due; });
+        var top = dueModules[0];
+        document.getElementById('review-count').textContent = String(totalDue);
+        document.getElementById('review-word').textContent = totalDue === 1 ? 'question' : 'questions';
+        document.getElementById('review-where').textContent = dueModules.length === 1
+          ? 'in ' + top.title
+          : 'across ' + dueModules.length + ' modules — most in ' + top.title;
+        document.getElementById('review-go').href = 'oksat-study.html?m=' + encodeURIComponent(top.slug);
+        document.getElementById('review-banner').hidden = false;
+      }
+
+      /* ---- settings modal ---- */
+      var overlay = document.getElementById('settings-overlay');
+      function openSettings() { overlay.hidden = false; }
       function closeSettings() { overlay.hidden = true; }
+      document.getElementById('settings-btn').addEventListener('click', openSettings);
       document.getElementById('settings-close').addEventListener('click', closeSettings);
       overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSettings(); });
-      window.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) closeSettings(); });
-
-      document.getElementById('set-reviewer-btn').addEventListener('click', function () {
-        OKSATReviewer.ask({ title: 'Who is reviewing?' }).then(function () { location.reload(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !overlay.hidden) closeSettings();
       });
 
-      /* Gemini key */
-      var keyInput = document.getElementById('gemini-key');
-      var keyStatus = document.getElementById('gemini-status');
-      function setKeyStatus(msg, good) { keyStatus.textContent = msg; keyStatus.className = 'ok-status ' + (good ? 'good' : 'bad'); }
-      document.getElementById('gemini-save').addEventListener('click', function () {
-        var v = keyInput.value.trim();
-        if (!v) { setKeyStatus('Paste a key first.', false); return; }
-        OKSATAI.setKey(v); keyInput.value = '';
-        setKeyStatus('Key saved to this browser.', true);
-      });
-      document.getElementById('gemini-test').addEventListener('click', function () {
-        var v = keyInput.value.trim() || OKSATAI.getKey();
-        if (!v) { setKeyStatus('No key to test.', false); return; }
-        setKeyStatus('Testing…', true);
-        OKSATAI.testKey(v).then(function () { setKeyStatus('Key works ✓', true); })
-          .catch(function (e) { setKeyStatus('Key failed: ' + e.message, false); });
-      });
-      document.getElementById('gemini-clear').addEventListener('click', function () {
-        OKSATAI.setKey(''); keyInput.value = '';
-        setKeyStatus('Key removed from this browser.', true);
-      });
-
-      /* DB sync */
-      var dbStatus = document.getElementById('db-status');
-      function setDbStatus(msg, good) { dbStatus.textContent = msg; dbStatus.className = 'ok-status ' + (good ? 'good' : 'bad'); }
-      document.getElementById('db-download').addEventListener('click', function () {
-        OKSATDB.fetch().then(function (db) {
-          OKSATDB.download(OKSATDB.buildMerged(db, null));
-          setDbStatus('Merged database downloaded — commit it as data/oksat-db.json.', true);
-        });
-      });
-      document.getElementById('db-push-toggle').addEventListener('click', function () {
-        var row = document.getElementById('db-push-row');
-        row.hidden = !row.hidden;
-      });
-      document.getElementById('db-push').addEventListener('click', function () {
-        var tokenInput = document.getElementById('db-token');
-        var token = tokenInput.value.trim();
-        if (!token) { setDbStatus('Paste a token first (it is never stored).', false); return; }
-        setDbStatus('Pushing…', true);
-        OKSATDB.fetch().then(function (db) {
-          return OKSATDB.push(OKSATDB.buildMerged(db, null), token);
-        }).then(function () {
-          tokenInput.value = '';
-          setDbStatus('Pushed ✓ — data/oksat-db.json updated on master.', true);
-        }).catch(function (e) {
-          tokenInput.value = '';
-          setDbStatus(e.message, false);
-        });
-      });
-
-      /* Local reset (active reviewer only, two-step) */
-      var resetArmed = false;
-      document.getElementById('reset-local').addEventListener('click', function () {
-        var code = OKSATReviewer.current() || 'guest';
-        var rs = document.getElementById('reset-status');
-        if (!resetArmed) {
-          resetArmed = true;
-          this.textContent = 'Confirm reset';
-          rs.textContent = 'Click again to erase local progress for “' + code + '”.';
-          rs.className = 'ok-status bad';
+      var resetBtn = document.getElementById('reset-local');
+      var resetStatus = document.getElementById('reset-status');
+      var armed = false;
+      resetBtn.addEventListener('click', function () {
+        if (!armed) {
+          armed = true;
+          resetBtn.textContent = 'Confirm reset';
+          resetStatus.textContent = 'Click again to erase all local progress.';
+          setTimeout(function () {
+            if (!armed) return;
+            armed = false;
+            resetBtn.textContent = 'Reset…';
+            resetStatus.textContent = '';
+          }, 5000);
           return;
         }
-        var doomed = [];
-        var suffix = ':' + code;
-        // Per-module, per-reviewer keys end in ":<code>"; the adaptive/session/
-        // starred keys ARE exactly "<prefix>:<code>". Match both shapes.
-        var prefixed = ['oksat:progress:', 'oksat:srs:', 'oksat:cmastery:', 'oksat:conf:'];
-        var exact = ['oksat:adaptive:' + code, 'oksat:starred:' + code, 'oksat:session:' + code];
-        for (var i = 0; i < localStorage.length; i++) {
-          var k = localStorage.key(i);
-          if (!k) continue;
-          var endsWithCode = k.lastIndexOf(suffix) === k.length - suffix.length;
-          var isPrefixed = prefixed.some(function (p) { return k.indexOf(p) === 0; });
-          if ((isPrefixed && endsWithCode) || exact.indexOf(k) !== -1) doomed.push(k);
-        }
-        doomed.forEach(function (k) { localStorage.removeItem(k); });
-        resetArmed = false;
-        this.textContent = 'Reset…';
-        rs.textContent = 'Cleared ' + doomed.length + ' record(s) for “' + code + '”.';
-        rs.className = 'ok-status good';
+        armed = false;
+        resetBtn.textContent = 'Reset…';
+        var n = OKSATStore.resetLocal(reviewer);
+        resetStatus.textContent = n + ' local record' + (n === 1 ? '' : 's') + ' cleared. Reloading…';
+        setTimeout(function () { location.reload(); }, 900);
       });
     })();
   </script>
