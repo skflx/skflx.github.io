@@ -68,7 +68,7 @@ owner (§7).
 
 ## 4. Adding an OKSAT module
 
-Full schema: `docs/authoring-oksat.md`. The load-bearing rules:
+Full schema and quality spec: `docs/authoring-oksat.md`. The load-bearing rules:
 
 1. Filename `js/mcq-modules/<slug>.js`, kebab-case; **`slug` must equal the
    filename** (checked by `tools/check-data.mjs`).
@@ -79,7 +79,8 @@ Full schema: `docs/authoring-oksat.md`. The load-bearing rules:
    `OKSAT_SUBSPECIALTIES` — never invent a hex. Adding a 10th subspecialty is
    an owner decision (§7).
 5. MCQ items need `correct` matching an option id; recall items need `answer`
-   (both checked). The engine tolerates missing `DOMAINS`/`CONCEPTS`.
+   (both checked). The engine tolerates missing `DOMAINS`/`CONCEPTS`, but the
+   quality spec requires both — every shipped module has them.
 
 Modules are authored by hand. There is no generator — the Gemini-backed
 Question Forge was retired in 2026-09.
