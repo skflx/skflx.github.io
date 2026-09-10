@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OKSAT Study | skflx.MD</title>
-  <meta name="description" content="OKSAT — OHNS Knowledge Self-Assessment study viewer, with concept filtering, spaced-repetition review, and per-reviewer progress tracking.">
+  <meta name="description" content="OKSAT — OHNS Knowledge Self-Assessment study viewer, with concept filtering and spaced-repetition review.">
 
   <!-- Set theme + font before paint to avoid a flash (shares keys with the main site) -->
   <script>
@@ -31,7 +31,6 @@
       Self-Assessment
     </a>
     <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto">
-      <button type="button" class="ok-reviewer-chip" id="reviewer-chip" title="Switch reviewer (reloads)" hidden></button>
       <span id="font-picker"></span>
       <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
@@ -49,9 +48,7 @@
 
   <script src="js/oksat-manifest.js"></script>
   <script src="js/oksat-store.js"></script>
-  <script src="js/oksat-reviewer.js"></script>
   <script src="js/oksat-prefs.js"></script>
-  <script src="js/oksat-taxonomy.js"></script>
   <script src="js/oksat-concept-graph.js"></script>
   <script src="js/oksat-engine.js"></script>
 
@@ -66,16 +63,6 @@
           '</p><a href="oksat.html">&larr; Back to the self-assessment hub</a></div>';
       }
 
-      // Switching reviewer mid-session reloads, which re-runs the prompt
-      // (pre-filled with the current code) so progress stays unambiguous.
-      var chip = document.getElementById('reviewer-chip');
-      function showChip(code) {
-        if (!chip) return;
-        chip.textContent = 'Reviewing: ' + code;
-        chip.hidden = false;
-        chip.onclick = function () { location.reload(); };
-      }
-
       var slug = new URLSearchParams(location.search).get('m');
       var manifest = window.OKSAT_MANIFEST || [];
       var entry = manifest.filter(function (m) { return m.slug === slug; })[0];
@@ -88,10 +75,7 @@
         var mod = window.__MCQ_MODULE;
         try { delete window.__MCQ_MODULE; } catch (e) { window.__MCQ_MODULE = undefined; }
         if (!mod) { notice('Module failed to load', 'The data for “' + entry.title + '” did not register correctly.'); return; }
-        window.OKSATReviewer.ask({ title: 'Who is reviewing?' }).then(function (code) {
-          showChip(code);
-          window.mountOKSAT(root, mod, entry, code);
-        });
+        window.mountOKSAT(root, mod, entry, OKSATStore.reviewer());
       };
       s.onerror = function () { notice('Module failed to load', 'Could not fetch the data file for “' + entry.title + '”.'); };
       document.body.appendChild(s);

@@ -1,7 +1,7 @@
 # OKSAT design principles
 
 The design system behind the OHNS Knowledge Self-Assessment Tool
-(`oksat.html`, `oksat-study.html`, `oksat-generate.html`). Everything here is
+(`oksat.html`, `oksat-study.html`). Everything here is
 implemented as CSS custom properties in `css/oksat.css`; components consume
 only tokens, never raw values, so a retheme is a one-block edit.
 
@@ -15,7 +15,7 @@ only tokens, never raw values, so a retheme is a one-block edit.
    eyes across a 100-question session and survive dark mode.
 3. **One hue per domain.** Each subspecialty owns a hue
    (see `OKSAT_SUBSPECIALTIES` in `js/oksat-manifest.js`), carried through
-   module accent bars, concept chips, and Atlas graph nodes. Color always
+   module accent bars, hub grouping ticks, and concept chips. Color always
    *means* something; it is never decoration.
 4. **First-attempt honesty.** An answer locks on first attempt — no
    re-answering to game the score. Spaced repetition (Leitner, 5 boxes)
@@ -42,7 +42,7 @@ only tokens, never raw values, so a retheme is a one-block edit.
 | `--ok-correct` | `#4F7042` | `#9FBF7E` | sage — pass |
 | `--ok-incorrect` | `#9A4537` | `#DD9683` | rust — miss |
 
-Subspecialty hues (module/Atlas identity): otology `#2F6E6A`, rhinology
+Subspecialty hues (module identity): otology `#2F6E6A`, rhinology
 `#6E4A6B`, laryngology `#C06A4A`, H&N onc `#9A4B2E`, facial plastics
 `#7A5A3A`, pediatrics `#7C7A3A`, sleep `#5A567E`, endocrine `#A8863A`,
 fundamentals `#55606A`.
@@ -58,7 +58,7 @@ the "Aa" topbar button:
 |---|---|---|---|---|
 | `manuscript` *(default)* | Fraunces (variable opsz/SOFT) | Crimson Pro | system-ui | the warm original |
 | `clinical` | Inter | Inter | Inter | dense, neutral, screen-first |
-| `atlas` | IBM Plex Sans | IBM Plex Sans | JetBrains Mono | matches the Knowledge Atlas Graph |
+| `atlas` | IBM Plex Sans | IBM Plex Sans | JetBrains Mono | technical, high x-height |
 | `hyperlegible` | Atkinson Hyperlegible | Atkinson Hyperlegible | Atkinson Hyperlegible | maximum legibility, low-sleep proof |
 
 Rules: body text ≥ 15px; stems use the display face at ~1.15–1.4rem;
@@ -74,18 +74,24 @@ are neutralized under sans themes.
   honors `prefers-reduced-motion`.
 - Shadows are whisper-level (`--ok-shadow`), deepening slightly on hover.
 
-## 5. Atlas graph conventions
+## 5. Hub signals
 
-- Node kinds: **subspecialty** (largest, hue ring), **module** (sized by
-  question count), **concept** (small satellites).
-- Completion encoding, per active reviewer: node fill interpolates from
-  surface → domain hue with % answered; a finished node gets a sage outline.
-- Hover spotlights the neighborhood (Obsidian-style); everything else dims.
-- Tap module → launch; tap concept → `oksat-study.html?m=<slug>&c=<concept>`.
+The hub answers one question — *what should I do next?* — with three signals
+and nothing else:
+
+- **Completion meter** per module card: answered / total, drawn only once a
+  module has been started. An untouched module shows no meter rather than an
+  empty one.
+- **Launch vs Resume** on the card's action, so a half-finished module is
+  distinguishable at a glance.
+- **One review banner** above the list: total cards due across all modules,
+  linking into the module holding the most. Absent entirely when nothing is
+  due — an empty state is noise.
+
+Progress is never framed as a score, streak, or badge; it is a record.
 
 ## 6. Voice
 
 Kickers are Small-caps-style labels ("Self-Assessment · Neurotology Module").
-Explanations teach mechanism → application → pearl (see the house style in
-`js/oksat-ai.js`). Buttons are verbs ("Begin", "Reveal answer", "Review due").
+Explanations teach mechanism → application → pearl. Buttons are verbs ("Begin", "Reveal answer", "Review due").
 No exclamation marks, no gamification chrome.

@@ -42,7 +42,7 @@
   const Eye = makeIcon(['M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z', 'M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z']);
   const RotateCcw = makeIcon(['M3 12a9 9 0 1 0 3-6.7L3 8', 'M3 3v5h5']);
 
-  /* ---- Spaced repetition (Leitner; mirrors kag.html) ---- */
+  /* ---- Spaced repetition (Leitner) ---- */
   const LEITNER_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
   const today = () => new Date().toISOString().split('T')[0];
   const addDays = (iso, n) => {

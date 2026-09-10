@@ -9,8 +9,9 @@
    smoke harness; in CI the CDN is reachable.
 
    ---- Engine contract this pins (read js/oksat-engine.js to confirm) ----
-   Storage keys (js/oksat-engine.js:113-114), reviewer normalized
-   lowercase-alnum, default 'guest':
+   Storage keys, namespace normalized lowercase-alnum and resolved by
+   OKSATStore.reviewer() from localStorage 'oksat:reviewer' (default
+   'guest' — there is no prompt):
      oksat:progress:<slug>:<reviewer> = { v:1, answers:{qId:optId},
                                           firstCorrect:{qId:bool}, updated }
      oksat:srs:<slug>:<reviewer>      = { v:1, items:{qId:{box,nextReview}}, updated }
@@ -22,7 +23,7 @@
    Usage:  node tools/test-oksat-engine.mjs [--base <url>] [--headed]
    Exits nonzero on any failed case.
    ============================================================= */
-import { startServer, launchBrowser, driveReviewerModal } from './smoke-lib.mjs';
+import { startServer, launchBrowser } from './smoke-lib.mjs';
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
@@ -42,16 +43,23 @@ function check(name, cond, detail) {
 
 const ls = (page, key) => page.evaluate((k) => { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }, key);
 
-/* Open the study page as REVIEWER with a clean context. */
+/* Open the study page in the REVIEWER namespace with a clean context.
+   The namespace is seeded directly — the page reads it from storage and
+   mounts without prompting. */
 async function openStudy(browser, base, seed) {
   const context = await browser.newContext();
-  const page = await context.newPage();
+  await context.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
   if (seed) await context.addInitScript(seed);
+  const page = await context.newPage();
   await page.goto(base + `/oksat-study.html?m=${SLUG}`, { waitUntil: 'domcontentloaded' });
-  await driveReviewerModal(page, REVIEWER);
-  await page.waitForFunction(() => document.querySelector('#root') && document.querySelector('#root').innerText.trim().length > 0, null, { timeout: 12000 });
+  await mounted(page);
   return { context, page };
 }
+
+/* Resolves once the engine has rendered into #root. */
+const mounted = (page) => page.waitForFunction(
+  () => document.querySelector('#root') && document.querySelector('#root').innerText.trim().length > 0,
+  null, { timeout: 12000 });
 
 /* Click "Begin", landing on the first item's options. */
 async function begin(page) {
@@ -88,7 +96,7 @@ async function main() {
     check('1b: locked answer unchanged after 2nd click', prog2.answers[firstAnsweredId] === 'a', `now=${prog2.answers[firstAnsweredId]}`);
     // reload → still locked to original
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await driveReviewerModal(page, REVIEWER);
+    await mounted(page);
     await page.waitForTimeout(500);
     const prog3 = await ls(page, PROGRESS);
     check('1c: lock survives reload', prog3 && prog3.answers[firstAnsweredId] === 'a', `after reload=${prog3 && prog3.answers[firstAnsweredId]}`);
@@ -136,7 +144,7 @@ async function main() {
 
   /* ---- Case 4: legacy mcq:* migration ---- */
   {
-    // seed a legacy key BEFORE any script runs; reviewer.js should copy it to oksat:*
+    // seed a legacy key BEFORE any script runs; oksat-store.js should copy it to oksat:*
     const seed = `try{localStorage.setItem('mcq:legacyprobe','hello');}catch(e){}`;
     const { context, page } = await openStudy(browser, base, seed);
     const migrated = await page.evaluate(() => { try { return localStorage.getItem('oksat:legacyprobe'); } catch (e) { return null; } });

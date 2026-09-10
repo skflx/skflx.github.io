@@ -1,19 +1,18 @@
 /* =============================================================
    OKSAT study modules — manifest
    (OHNS Knowledge Self-Assessment Tool.)
-   Single source of truth for the hub (oksat.html), the dynamic
-   viewer (oksat-study.html), and the Atlas graph. To add a module:
-   drop a data file in js/mcq-modules/<slug>.js (ending in
-   window.__MCQ_MODULE = {...}) and append one entry here — or let
-   the Question Forge (oksat-generate.html) write both for you.
-   See docs/authoring-oksat.md.
+   Single source of truth for the hub (oksat.html) and the dynamic
+   viewer (oksat-study.html). To add a module: drop a data file in
+   js/mcq-modules/<slug>.js (ending in window.__MCQ_MODULE = {...})
+   and append one entry here. `count` must equal ITEMS.length —
+   tools/check-data.mjs enforces it. See docs/authoring-oksat.md.
 
-   `subspecialty` keys into OKSAT_SUBSPECIALTIES below; the Atlas
-   uses it to cluster modules and color their nodes.
+   `subspecialty` keys into OKSAT_SUBSPECIALTIES below; the hub uses
+   it to group module cards and color their accent bar.
    ============================================================= */
 
 /* OHNS subspecialty ring — one hue per domain, carried through
-   module cards, atlas nodes, and Forge-generated taxonomies. */
+   module cards and their accent bars. */
 window.OKSAT_SUBSPECIALTIES = {
   otology:      { label: 'Otology / Neurotology',             hue: '#2F6E6A' },
   rhinology:    { label: 'Rhinology / Allergy',               hue: '#6E4A6B' },

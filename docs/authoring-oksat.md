@@ -3,11 +3,9 @@
 OKSAT — the OHNS Knowledge Self-Assessment Tool. Every study module is a single
 JavaScript data file plus one manifest entry. The shared engine
 (`js/oksat-engine.js`) renders it — you never touch the engine or write any UI.
-The fastest authoring path is the **Question Forge** (`oksat-generate.html`):
-paste source text, review the generated items, download the module file and the
-manifest entry. This document is the underlying schema (which the Forge also
-targets). The engine is **tolerant of sparse data**: a module with only a
-title and a list of questions works. Everything else is optional and is shown
+Modules are written by hand; this document is the schema. The engine is
+**tolerant of sparse data**: a module with only a title and a list of
+questions works. Everything else is optional and is shown
 only when present.
 
 ## Add a module in 3 steps
@@ -21,15 +19,15 @@ only when present.
 3. **Append one entry** to `js/oksat-manifest.js`:
    ```js
    { slug: 'larynx-anatomy', title: 'Laryngeal Anatomy', kicker: 'Laryngology',
-     subspecialty: 'laryngology',   // keys into OKSAT_SUBSPECIALTIES (Atlas hue + clustering)
+     subspecialty: 'laryngology',   // keys into OKSAT_SUBSPECIALTIES (hue + hub grouping)
      count: 25, accent: '#4A6B7B',
      desc: 'One-line description shown on the hub card.',
      data: 'js/mcq-modules/larynx-anatomy.js' },
    ```
 
-Open `oksat-study.html?m=larynx-anatomy` to view it; it also appears on the hub
-(`oksat.html`) and as a node cluster in the Atlas graph view. A concept deep
-link also works: `oksat-study.html?m=larynx-anatomy&c=<concept-key>`.
+Open `oksat-study.html?m=larynx-anatomy` to view it; it also appears on the
+hub (`oksat.html`), grouped under its subspecialty. A concept deep link also
+works: `oksat-study.html?m=larynx-anatomy&c=<concept-key>`.
 
 ## Schema reference
 
@@ -84,7 +82,7 @@ got-it / missed — each tier drives spaced repetition differently:
 | `section` | optional | Small label above the question (e.g. `Embryology`). |
 | `difficulty` | optional | Small badge near the counter (e.g. `hard`). |
 | `reference` | optional | Citation line under the explanation. |
-| `distractorNotes` | optional (mcq) | Object mapping each incorrect option id to one sentence on why it tempts and why it's wrong. Shown to the learner when they pick that distractor. The Question Forge emits these; hand-authored modules may add them. |
+| `distractorNotes` | optional (mcq) | Object mapping each incorrect option id to one sentence on why it tempts and why it's wrong. Shown to the learner when they pick that distractor. |
 
 ## Minimal template (sparse — no taxonomy)
 
@@ -130,15 +128,14 @@ window.__MCQ_MODULE = { meta: { title: 'Otology Set' }, DOMAINS, CONCEPTS, ITEMS
 
 - Keep the manifest `count` in sync with the number of `ITEMS`.
 - Pair each domain's `color` (solid) with a matching translucent `hex`.
-- Progress and spaced-repetition state are stored per module **and per
-  reviewer** in `localStorage` under `oksat:progress:<slug>:<code>` and
-  `oksat:srs:<slug>:<code>` (legacy `mcq:*` keys are migrated automatically).
-  Module-level completion also syncs to the shared database file
-  `data/oksat-db.json` via the hub's Settings → Completion database panel.
-  The reviewer `<code>` (e.g. `kafle`, `terry`) is
-  collected by `js/oksat-reviewer.js` — a small prompt shown on each study
-  session, with a typo failsafe that flags unknown codes and suggests the
-  closest existing one. This lets coresidents share one browser while keeping
-  separate progress. Changing a question's `id` resets its history.
+- Progress and spaced-repetition state live in `localStorage` under
+  `oksat:progress:<slug>:<code>` and `oksat:srs:<slug>:<code>`, where `<code>`
+  is resolved silently by `OKSATStore.reviewer()` (legacy `mcq:*` keys are
+  migrated automatically). Nothing is uploaded and there is no prompt.
+  **Changing a question's `id` resets its history** — treat ids as permanent
+  once a module has been studied.
+- The hub reads both keys to draw each card's completion meter and the
+  due-for-review banner, so a module whose `count` is wrong will show a
+  misleading meter. `tools/check-data.mjs` catches that.
 - Preview locally with no build step: `python3 -m http.server` then open
   `http://localhost:8000/oksat-study.html?m=<slug>`.
