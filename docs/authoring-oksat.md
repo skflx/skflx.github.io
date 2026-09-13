@@ -70,6 +70,15 @@ below) should share a concept key prefixed `case-` (e.g. `case-acoustic`,
 
 ### `ITEMS` (array, required)
 
+Every MCQ item opens on a **recall gate**: the stem shows first, and the
+learner chooses **Reveal answer** (answer from memory, then self-grade on the
+same four-point scale as recall items) or **Show the choices** (answer it as a
+locked-first-attempt MCQ). The engine records which path settled the item, so
+"knew it cold" and "got it with the choices" stay distinguishable. Authoring is
+unchanged — the gate is engine behavior, not a data field. Author every MCQ so
+its stem is answerable from memory (a bare "Which of the following…" with no
+context reads poorly once the choices are hidden).
+
 #### MCQ items (`type: 'mcq'` — default)
 
 | Field | Required | Notes |
@@ -168,9 +177,9 @@ See `js/mcq-modules/facial-reanimation.js` for the benchmark implementation.
 
 ### Sequential dependency (recall modules)
 
-In recall-only modules, items can be designed so each answer becomes
-load-bearing for the next — the learner builds up a framework question by
-question. This is a distinct pedagogical mode from independent MCQ items.
+In recall-only modules, items can be designed so each answer feeds the next —
+the learner builds up a framework question by question. This is a distinct
+pedagogical mode from independent MCQ items.
 **When using sequential dependency, item ordering matters — do not shuffle.**
 
 See `js/mcq-modules/dtc-risk-stratification.js` for the canonical example.

@@ -63,16 +63,23 @@ not a spurious 404.
 
 ### OKSAT study engine (`oksat-study.html?m=pediatrics`)
 The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
-- **First-attempt lock**: first selection records in
+- **Recall gate**: every MCQ opens on the stem alone — options hidden until
+  **Show the choices** (or `c`) opens them. **Reveal answer** (or space) shows
+  the answer for a memory attempt, then a four-point self-grade; the engine
+  tags each item `mode` `'recall'` or `'mcq'` in `oksat:progress:<slug>:<rev>`.
+- **First-attempt lock**: on the MCQ path, the first selection records in
   `oksat:progress:<slug>:<rev>` and disables the options; a later click does
   not change it; it survives reload. (Answers lock on first attempt — no
   re-answering to game the score.)
 - **SRS write**: `oksat:srs:<slug>:<rev>` gains an item with Leitner `box`
-  1–5 and a `nextReview` date.
-- **Keyboard**: `1`–`9`/`a`–`d` select options, `1`–`4` self-grade recall,
-  `←`/`→` navigate, space/enter advance, `r` random, `h`/esc home
-  (`docs/design-principles.md` §1.5). Automated: `1` selects, `→` advances,
-  `h` home.
+  1–5 and a `nextReview` date. A cold recall jumps two boxes; a correct MCQ,
+  one; a miss resets to box 1.
+- **Keyboard**: at the gate space/enter reveals and `c` opens the choices;
+  then `1`–`4` self-grade a revealed answer, or `1`–`9`/`a`–`d` select an
+  option once the choices are open; `←`/`→` navigate, space/enter advance,
+  `r` random, `h`/esc home (`docs/design-principles.md` §1.6). Automated:
+  `c` opens choices + `1` selects, space reveals + `4` grades cold, `→`
+  advances, `h` home.
 - **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*` (now by
   `js/oksat-store.js`).
 - The page mounts straight into the module — **no prompt of any kind**. The

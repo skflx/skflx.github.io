@@ -42,9 +42,10 @@ tokens. Retheming or adding a style is a localized edit. Switching is driven by
 ## The tools
 
 - **OKSAT** (`oksat.html`) — OHNS Knowledge Self-Assessment. Hand-authored
-  study modules mixing locked-first-attempt questions with free-response
-  recall cards, all feeding one Leitner spaced-repetition schedule. Progress
-  is local to the browser; nothing is uploaded.
+  study modules where every question opens on a recall gate — answer it from
+  memory and self-grade, or show the choices and answer it as a locked
+  first-attempt MCQ — all feeding one Leitner spaced-repetition schedule.
+  Progress is local to the browser; nothing is uploaded.
 - **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for
   otolaryngology.
 - **Airway Rounds** (`airway-jeopardy.html`) — team-based ENT/H&N airway quiz

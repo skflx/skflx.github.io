@@ -163,7 +163,7 @@ const ITEMS = [
     ],
     correct: 'b',
     brief: 'The palatine tonsil sits in a dissectable fibrous capsule; the adenoid has no capsule, so it is curetted/ablated against the nasopharyngeal roof.',
-    detailed: 'Both are secondary lymphoid tissue (germinal centers, antigen surveillance) of the second pharyngeal pouch region, part of Waldeyer ring. The crucial surgical difference: the palatine tonsil has a fibrous capsule (pharyngeal-wall fascia) that defines the extracapsular dissection plane against the superior constrictor, whereas the adenoid is uncapsulated — historically a "blind" curette procedure (now often endoscopic suction-cautery or microdebrider) sweeping the nasopharyngeal roof. Adenoid bulk peaks at 3–5 years then regresses, which is why adenoid-dominant obstruction is an early-childhood problem.',
+    detailed: 'Both are secondary lymphoid tissue (germinal centers, antigen surveillance) of the second pharyngeal pouch region, part of Waldeyer ring. The surgical difference that matters: the palatine tonsil has a fibrous capsule (pharyngeal-wall fascia) that defines the extracapsular dissection plane against the superior constrictor, whereas the adenoid is uncapsulated — historically a "blind" curette procedure (now often endoscopic suction-cautery or microdebrider) sweeping the nasopharyngeal roof. Adenoid bulk peaks at 3–5 years then regresses, which is why adenoid-dominant obstruction is an early-childhood problem.',
     concepts: ['embryology', 'adenoid-anatomy', 'tonsil-anatomy', 'capsule'],
   },
   {

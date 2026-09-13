@@ -9,7 +9,7 @@
 const meta = {
   id: 'dtc-risk-stratification',
   title: 'Differentiated\nThyroid Cancer',
-  subtitle: 'A sequential-dependency self-test on operative approach, completion thyroidectomy, histopathology, and the 2025 ATA Risk Stratification System (Rec 15, 16, 27, 28). Each answer becomes load-bearing for the next.',
+  subtitle: 'A sequential-dependency self-test on operative approach, completion thyroidectomy, histopathology, and the 2025 ATA Risk Stratification System (Rec 15, 16, 27, 28). Each answer sets up the next.',
   kicker: 'Self-Test · 2025 ATA Rec 15/16/27/28',
 };
 
@@ -275,13 +275,13 @@ Familial-syndrome flag (Part 3): cribriform-morular carcinoma — can be associa
     id: 'q16',
     type: 'recall',
     section: 'Rec 28 · Risk Strat',
-    stem: 'Capstone — Rec 28A. State (a) the inputs the 2025 ATA Risk Stratification System integrates, (b) the outcome it predicts, (c) the timeframe, and (d) strength/certainty. Then state the crucial difference between what AJCC staging predicts vs what the ATA system predicts.',
+    stem: 'Capstone — Rec 28A. State (a) the inputs the 2025 ATA Risk Stratification System integrates, (b) the outcome it predicts, (c) the timeframe, and (d) strength/certainty. Then state how what AJCC staging predicts differs from what the ATA system predicts.',
     answer: `(a) Inputs: histopathologic features of the tumor + number of cervical lymph nodes + AJCC staging + post-operative imaging + serum Tg and TgAb (if appropriate).
 (b) Predicts: risk of structural disease persistence/recurrence (locoregional and/or distant) and/or survival in DTC (PTC, FTC/IEFVPTC, OTC).
 (c) Timeframe: applied within ~3 months of surgery.
 (d) Strong recommendation, Moderate-certainty evidence.
 
-The pivotal distinction:
+The distinction:
 • AJCC/UICC TNM staging predicts disease-SPECIFIC SURVIVAL (mortality).
 • The ATA Risk Stratification System predicts STRUCTURAL PERSISTENCE/RECURRENCE.`,
     brief: 'A patient can be low STAGE (excellent survival) yet carry meaningful RECURRENCE risk — which is exactly why two parallel systems exist. Higher recurrence risk is usually dependent on co-existing factors rather than any single factor.',

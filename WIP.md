@@ -30,10 +30,16 @@ button. Owner's call.
 
 **State:** The tool is now just the hub and the study viewer. Six
 hand-authored modules, each a data file in `js/mcq-modules/` plus one
-manifest entry; the shared engine renders all of them. Answers lock on first
-attempt and a five-box Leitner schedule resurfaces misses. The engine now
-supports optional per-item images in stems and explanations (`item.image`,
-`item.explanationImage`), first used in the lip-reconstruction module.
+manifest entry; the shared engine renders all of them. Every question opens
+on a recall gate: the stem shows first, and you either **reveal the answer**
+and self-grade from memory (Knew it cold / partially / guessed / didn't know)
+or **show the choices** and answer it as an MCQ. The engine records which path
+settled each item, so "knew it cold" and "got it with the choices" stay
+distinct in the record. Answers lock on first attempt and a five-box Leitner
+schedule resurfaces misses (a cold recall jumps two boxes; a correct MCQ, one).
+The engine also supports optional per-item images in stems and explanations
+(`item.image`, `item.explanationImage`), first used in the lip-reconstruction
+module.
 
 Progress is local to the browser and nothing is uploaded. Storage keys keep
 their trailing `:<code>` namespace so progress from the multi-reviewer era
