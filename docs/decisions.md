@@ -68,7 +68,7 @@ owner (§7).
 
 ## 4. Adding an OKSAT module
 
-Full schema and quality spec: `docs/authoring-oksat.md`. The load-bearing rules:
+Full schema and quality spec: `docs/authoring-oksat.md`. The rules that matter most:
 
 1. Filename `js/mcq-modules/<slug>.js`, kebab-case; **`slug` must equal the
    filename** (checked by `tools/check-data.mjs`).

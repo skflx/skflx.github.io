@@ -15,6 +15,11 @@
      oksat:progress:<slug>:<reviewer> = { v:1, answers:{qId:optId},
                                           firstCorrect:{qId:bool}, updated }
      oksat:srs:<slug>:<reviewer>      = { v:1, items:{qId:{box,nextReview}}, updated }
+   An MCQ item opens on a recall gate (stem + "Reveal answer" / "Show the
+   choices"): the options are hidden until the learner opens them. Pressing
+   "Show the choices" (or `c`) reveals the radiogroup; picking an option locks
+   it and tags progress mode 'mcq'. The recall path ("Reveal answer", or space)
+   shows the answer and a 1–4 self-grade that tags mode 'recall'.
    An MCQ option button renders the option id uppercased in a fixed-width
    leading cell; the button is disabled once answered (first-attempt lock,
    recordAnswer() early-returns if answers[qId] exists).
@@ -61,10 +66,16 @@ const mounted = (page) => page.waitForFunction(
   () => document.querySelector('#root') && document.querySelector('#root').innerText.trim().length > 0,
   null, { timeout: 12000 });
 
-/* Click "Begin", landing on the first item's options. */
+/* Click "Begin", landing on the first item's recall gate. */
 async function begin(page) {
   await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Begin|Continue/.test(b.textContent)), null, { timeout: 8000 });
   await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find((x) => /Begin|Continue/.test(x.textContent)); b && b.click(); });
+  await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Show the choices/.test(b.textContent)), null, { timeout: 8000 });
+}
+
+/* From the recall gate, open the MCQ choices so the radiogroup renders. */
+async function openChoices(page) {
+  await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find((x) => /Show the choices/.test(x.textContent)); b && b.click(); });
   await page.waitForFunction(() => document.querySelector('[role="radiogroup"]'), null, { timeout: 8000 });
 }
 
@@ -81,6 +92,7 @@ async function main() {
   {
     const { context, page } = await openStudy(browser, base);
     await begin(page);
+    await openChoices(page);
     // pick a deliberately WRONG option: q1 correct is 'b', click option 1 ('a')
     const btns = await page.$$(optionButtons);
     await btns[0].click();
@@ -107,6 +119,7 @@ async function main() {
   {
     const { context, page } = await openStudy(browser, base);
     await begin(page);
+    await openChoices(page);
     await (await page.$$(optionButtons))[0].click();
     await page.waitForTimeout(300);
     const srs = await ls(page, SRS);
@@ -122,12 +135,15 @@ async function main() {
   {
     const { context, page } = await openStudy(browser, base);
     await begin(page);
-    // press '1' selects option 1 (id 'a') and locks it
+    // 'c' opens the choices from the recall gate, then '1' selects option 'a'
+    await page.keyboard.press('c');
+    await page.waitForFunction(() => document.querySelector('[role="radiogroup"]'), null, { timeout: 8000 });
     await page.keyboard.press('1');
     await page.waitForTimeout(300);
     const prog = await ls(page, PROGRESS);
     const id0 = prog && prog.answers && Object.keys(prog.answers)[0];
-    check('3a: key "1" selects option a', id0 && prog.answers[id0] === 'a', `answers=${JSON.stringify(prog && prog.answers)}`);
+    check('3a: key "c" opens choices, "1" selects option a', id0 && prog.answers[id0] === 'a', `answers=${JSON.stringify(prog && prog.answers)}`);
+    check('3a2: mcq answer tagged mode "mcq"', prog && prog.modes && prog.modes[id0] === 'mcq', `modes=${JSON.stringify(prog && prog.modes)}`);
     // '→' advances to a different item
     const before = await page.evaluate(() => document.body.innerText);
     await page.keyboard.press('ArrowRight');
@@ -149,6 +165,27 @@ async function main() {
     const { context, page } = await openStudy(browser, base, seed);
     const migrated = await page.evaluate(() => { try { return localStorage.getItem('oksat:legacyprobe'); } catch (e) { return null; } });
     check('4: legacy mcq:* migrated to oksat:*', migrated === 'hello', `oksat:legacyprobe=${migrated}`);
+    await context.close();
+  }
+
+  /* ---- Case 5: recall path (answer before choices) ---- */
+  {
+    const { context, page } = await openStudy(browser, base);
+    await begin(page);
+    // space reveals the answer without ever opening the choices
+    await page.keyboard.press(' ');
+    await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Knew it cold/.test(b.textContent)), null, { timeout: 8000 });
+    const noOptions = await page.evaluate(() => !document.querySelector('[role="radiogroup"]'));
+    check('5a: recall path reveals answer without choices', noOptions, 'radiogroup appeared on recall path');
+    // '4' self-grades "Knew it cold" → correct, mode 'recall', Leitner +2 (box 1→3)
+    await page.keyboard.press('4');
+    await page.waitForTimeout(300);
+    const prog = await ls(page, PROGRESS);
+    const srs = await ls(page, SRS);
+    const id0 = prog && prog.answers && Object.keys(prog.answers)[0];
+    check('5b: recall grade recorded as correct', id0 && prog.firstCorrect[id0] === true, `firstCorrect=${JSON.stringify(prog && prog.firstCorrect)}`);
+    check('5c: recall answer tagged mode "recall"', id0 && prog.modes && prog.modes[id0] === 'recall', `modes=${JSON.stringify(prog && prog.modes)}`);
+    check('5d: "knew it cold" jumps Leitner box to 3', id0 && srs.items[id0] && srs.items[id0].box === 3, `box=${id0 && srs.items[id0] && srs.items[id0].box}`);
     await context.close();
   }
 

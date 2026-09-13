@@ -17,16 +17,24 @@ only tokens, never raw values, so a retheme is a one-block edit.
    (see `OKSAT_SUBSPECIALTIES` in `js/oksat-manifest.js`), carried through
    module accent bars, hub grouping ticks, and concept chips. Color always
    *means* something; it is never decoration.
-4. **First-attempt honesty.** An answer locks on first attempt — no
-   re-answering to game the score. Spaced repetition (Leitner, 5 boxes)
-   resurfaces what was missed; the progress dots show the truthful record.
-5. **Keyboard first.** 1–9/a–d select options, 1–4 self-grade recall cards,
-   ←/→ navigate, space/enter advance, `r` random, `h`/esc home. The pointer
-   is optional.
-6. **Token-driven theming.** Light/dark (`data-theme`) and font sets
+4. **Recall before recognition.** Every question opens on a recall gate: the
+   stem alone, with **Reveal answer** (answer from memory, then self-grade) or
+   **Show the choices** (answer it as an MCQ). Seeing the options is a choice,
+   not the default — so the tool can tell "knew it cold" apart from "got it
+   with the choices."
+5. **First-attempt honesty.** An answer locks on first attempt — whether
+   recalled from memory or picked from the choices — no re-answering to game
+   the score. Spaced repetition (Leitner, 5 boxes) resurfaces what was missed;
+   the progress dots show the truthful record.
+6. **Keyboard first.** At the gate, space/enter reveals the answer for a memory
+   attempt and `c` opens the choices; then 1–4 self-grade a revealed answer, or
+   1–9/a–d select an option once the choices are open. ←/→ navigate,
+   space/enter advance once answered, `r` random, `h`/esc home. The pointer is
+   optional.
+7. **Token-driven theming.** Light/dark (`data-theme`) and font sets
    (`data-font`) are attribute switches on `<html>`; no component knows which
    theme it is in.
-7. **Degrade gracefully.** The engine tolerates sparse modules (no taxonomy,
+8. **Degrade gracefully.** The engine tolerates sparse modules (no taxonomy,
    no explanations); missing data removes UI rather than breaking it.
    Storage reads are fail-safe; no build step anywhere.
 
@@ -93,5 +101,5 @@ Progress is never framed as a score, streak, or badge; it is a record.
 ## 6. Voice
 
 Kickers are Small-caps-style labels ("Self-Assessment · Neurotology Module").
-Explanations teach mechanism → application → pearl. Buttons are verbs ("Begin", "Reveal answer", "Review due").
+Explanations teach mechanism → application → pearl. Buttons are verbs ("Begin", "Reveal answer", "Show the choices", "Review due").
 No exclamation marks, no gamification chrome.

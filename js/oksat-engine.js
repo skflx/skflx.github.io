@@ -128,17 +128,22 @@
     const [reviewMode, setReviewMode] = useState(false);
     const [answers, setAnswers] = useState(() => load(PROGRESS_KEY, {}).answers || {});
     const [firstCorrect, setFirstCorrect] = useState(() => load(PROGRESS_KEY, {}).firstCorrect || {});
+    const [modes, setModes] = useState(() => load(PROGRESS_KEY, {}).modes || {});
     const [srs, setSrs] = useState(() => load(SRS_KEY, { v: 1, items: {} }));
     const [showDetailed, setShowDetailed] = useState(false);
-    const [revealed, setRevealed] = useState(false);
+    const [revealed, setRevealed] = useState(false);   // recall path: answer shown, no choices
+    const [choicesShown, setChoicesShown] = useState(false); // MCQ path: options revealed
     const [domainFilter, setDomainFilter] = useState(null);
     const [confPending, setConfPending] = useState(false); // confidence prompt open (mcq only)
     const [confItem, setConfItem] = useState(null);         // item id the prompt belongs to
     const cardRef = useRef(null);
     const sessionRef = useRef(0);                            // latest session number for calibration
 
-    // Persist progress + SRS.
-    useEffect(() => { save(PROGRESS_KEY, { v: 1, answers, firstCorrect, updated: new Date().toISOString() }); }, [answers, firstCorrect]);
+    // Persist progress + SRS. `modes` records how each item was settled —
+    // 'recall' (answered from memory, choices never shown) or 'mcq' (picked
+    // from the options) — so "knew it cold" and "got it with the choices"
+    // stay distinguishable. Absent on progress written before this existed.
+    useEffect(() => { save(PROGRESS_KEY, { v: 1, answers, firstCorrect, modes, updated: new Date().toISOString() }); }, [answers, firstCorrect, modes]);
     useEffect(() => { save(SRS_KEY, { ...srs, updated: new Date().toISOString() }); }, [srs]);
 
     const dueIds = useMemo(() => {
@@ -158,10 +163,11 @@
     const totalAnswered = Object.keys(answers).length;
     const totalCorrect = Object.values(firstCorrect).filter(Boolean).length;
 
-    const recordAnswer = (qId, value, correct, nextBox) => {
+    const recordAnswer = (qId, value, correct, nextBox, mode) => {
       if (answers[qId]) return;
       setAnswers((prev) => ({ ...prev, [qId]: value }));
       setFirstCorrect((prev) => ({ ...prev, [qId]: correct }));
+      if (mode) setModes((prev) => ({ ...prev, [qId]: mode }));
       setSrs((prev) => {
         const cur = prev.items[qId] || { box: 1 };
         let box;
@@ -182,15 +188,19 @@
       }
     };
 
+    // MCQ path: the learner opened the choices and picked one.
     const handleSelect = (optionId) => {
       const wasCorrect = optionId === currentItem.correct;
-      recordAnswer(currentId, optionId, wasCorrect);
+      recordAnswer(currentId, optionId, wasCorrect, undefined, 'mcq');
       if (currentItem.type !== 'recall') { setConfItem(currentId); setConfPending(true); }
     };
-    const handleGrade = (grade) => recordAnswer(currentId, grade.id, grade.correct, grade.box);
+    // Recall path: answered from memory, then self-graded (both recall-type
+    // items and MCQ items settled without ever opening the choices).
+    const handleGrade = (grade) => recordAnswer(currentId, grade.id, grade.correct, grade.box, 'recall');
+    const showChoices = () => setChoicesShown(true);
 
     const goToItem = (qId) => {
-      setCurrentId(qId); setShowDetailed(false); setRevealed(false); setView('item');
+      setCurrentId(qId); setShowDetailed(false); setRevealed(false); setChoicesShown(false); setView('item');
       setConfPending(false); setConfItem(null);
       setTimeout(() => cardRef.current?.scrollTo?.(0, 0), 50);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -275,20 +285,27 @@
       if (key === 'r') { e.preventDefault(); handleRandom(); return; }
       if (key === 'd' && answered && currentItem.detailed) { e.preventDefault(); setShowDetailed((v) => !v); return; }
 
-      // Option selection: numbers or the literal option ids (mcq, unanswered).
-      if (!isRecall && !answered && currentItem.options.length) {
+      // Recall gate (mcq, unanswered, nothing opened yet): `c` opens the
+      // choices; space/enter (below) reveals the answer for a memory attempt.
+      if (!isRecall && !answered && !revealed && !choicesShown && (key === 'c' || key === 'C')) {
+        e.preventDefault(); showChoices(); return;
+      }
+      // Option selection: numbers or the literal option ids — only once the
+      // choices are open (mcq path).
+      if (!isRecall && choicesShown && !answered && currentItem.options.length) {
         let opt = null;
         if (/^[1-9]$/.test(key)) opt = currentItem.options[parseInt(key, 10) - 1];
         else opt = currentItem.options.find((o) => String(o.id).toLowerCase() === key.toLowerCase());
         if (opt) { e.preventDefault(); handleSelect(opt.id); return; }
       }
-      // Recall self-grade: 1–4 once the answer is revealed.
-      if (isRecall && revealed && !answered && /^[1-4]$/.test(key)) {
+      // Recall self-grade: 1–4 once the answer is revealed (recall-type items
+      // and the mcq recall path both land here).
+      if (revealed && !choicesShown && !answered && /^[1-4]$/.test(key)) {
         e.preventDefault(); handleGrade(RECALL_GRADES[parseInt(key, 10) - 1]); return;
       }
       if (key === ' ' || key === 'Enter') {
         e.preventDefault();
-        if (isRecall && !revealed && !answered) { setRevealed(true); return; }
+        if (!revealed && !choicesShown && !answered) { setRevealed(true); return; } // reveal for recall
         if (answered) handleNext();
         return;
       }
@@ -315,8 +332,9 @@
                 onConceptClick=${handleConceptClick} />`
             : html`<${ItemView}
                 DOMAINS=${DOMAINS} CONCEPTS=${CONCEPTS} ITEMS=${ITEMS}
-                item=${currentItem} answer=${answers[currentId]} isCorrect=${firstCorrect[currentId]}
+                item=${currentItem} answer=${answers[currentId]} isCorrect=${firstCorrect[currentId]} mode=${modes[currentId]}
                 onSelect=${handleSelect} revealed=${revealed} onReveal=${() => setRevealed(true)} onGrade=${handleGrade}
+                choicesShown=${choicesShown} onShowChoices=${showChoices}
                 showDetailed=${showDetailed} setShowDetailed=${setShowDetailed}
                 onNext=${handleNext} onPrev=${handlePrev} onRandom=${handleRandom} onHome=${() => setView('home')}
                 currentIdx=${currentIdx} total=${filteredItems.length} globalTotal=${ITEMS.length}
@@ -493,7 +511,7 @@
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, onSelect, revealed, onReveal, onGrade, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
+  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
     if (!item) {
       return html`
         <div className="fade-up" style=${{ textAlign: 'center', padding: '3rem 0', color: C.textMuted }}>
@@ -503,8 +521,23 @@
     }
     const answered = !!answer;
     const isRecall = item.type === 'recall';
-    const recallGrade = isRecall ? RECALL_GRADES.find((g) => g.id === answer) : null;
+    // How the answer was settled. `mode` is absent on items answered before
+    // recall-first shipped, so fall back to the item type: a locked recall-type
+    // item was self-graded, a locked mcq item was a picked option.
+    const answeredViaRecall = answered && (mode ? mode === 'recall' : isRecall);
+    const recallGrade = answeredViaRecall ? RECALL_GRADES.find((g) => g.id === answer) : null;
     const passLike = recallGrade ? recallGrade.correct : isCorrect;
+    // The recall path reveals the plain answer: a recall item's `answer` field,
+    // or the correct option's text for an mcq item.
+    const correctOption = item.options.find((o) => o.id === item.correct);
+    const revealAnswerText = isRecall ? item.answer : (correctOption ? correctOption.text : '');
+    // Show the options block when the learner opened the choices, or when a
+    // past mcq answer needs its locked state drawn.
+    const showOptions = !isRecall && (choicesShown || (answered && !answeredViaRecall));
+    // Show the plain-answer + self-grade block on the recall path.
+    const showRecallBlock = revealed || (answered && answeredViaRecall);
+    // The recall gate (mcq only): stem is up, nothing opened yet.
+    const atGate = !isRecall && !answered && !revealed && !choicesShown;
     const filterConcept = conceptFilter ? CONCEPTS[conceptFilter] : null;
     const filterDomain = filterConcept ? DOMAINS[filterConcept.domain] : null;
     const bannerStyle = filterDomain
@@ -548,7 +581,42 @@
           <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}>${renderText(item.stem)}</p>
           ${item.image ? html`<div style=${{ marginTop: '1rem' }}><img src=${item.image} alt=${item.imageAlt || ''} style=${{ maxWidth: '100%', borderRadius: '10px', border: '1px solid ' + C.borderSoft }} /></div>` : null}
 
-          ${!isRecall ? html`
+          ${atGate ? html`
+            <div className="fade-up" style=${{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+              <p className="ui-font" style=${{ fontSize: '0.82rem', lineHeight: 1.5, color: C.textMuted }}>Work out your answer from memory first, then reveal it — or open the choices if you'd rather pick.</p>
+              <button className="ok-btn ok-btn--primary ok-btn--block" onClick=${onReveal}>
+                <${Eye} size=${15} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Reveal answer</span>
+              </button>
+              <button className="ok-btn ok-btn--block" onClick=${onShowChoices}>
+                <${Layers} size=${15} style=${{ color: C.ochre }} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Show the choices</span>
+              </button>
+            </div>` : null}
+
+          ${isRecall && !revealed && !answered ? html`
+            <div style=${{ marginTop: '1.5rem' }}>
+              <button className="ok-btn ok-btn--primary ok-btn--block" onClick=${onReveal}>
+                <${Eye} size=${15} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Reveal answer</span>
+              </button>
+            </div>` : null}
+
+          ${showRecallBlock ? html`
+            <div className="fade-up" style=${{ marginTop: '1.5rem' }}>
+              <div className="display-font" style=${{ fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.5rem', color: C.ochre, fontWeight: 600 }}>Answer</div>
+              <div style=${{ padding: '1rem', borderRadius: '10px', lineHeight: 1.6, backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.ochre, color: C.text, fontSize: '16px' }}>${renderText(revealAnswerText)}</div>
+              ${!answered ? html`
+                <div style=${{ marginTop: '0.85rem' }}>
+                  <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, marginBottom: '0.45rem' }}>Did you know it?</div>
+                  <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                    ${RECALL_GRADES.map((g, i) => html`
+                      <button key=${g.id} className="ok-btn" onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: C[g.color] }}>
+                        <span className="display-font" style=${{ fontSize: '0.7rem', opacity: 0.6 }}>${i + 1}</span>
+                        <span className="display-font" style=${{ fontWeight: 600, fontSize: '0.85rem' }}>${g.label}</span>
+                      </button>`)}
+                  </div>
+                </div>` : null}
+            </div>` : null}
+
+          ${showOptions ? html`
             <div role="radiogroup" aria-label="Answer options" style=${{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1.5rem' }}>
               ${item.options.length ? item.options.map((opt) => {
                 const isSelected = answer === opt.id;
@@ -569,29 +637,6 @@
                   </button>`;
               }) : html`<p style=${{ color: C.textFaint, fontStyle: 'italic', fontSize: '0.9rem' }}>No options provided for this question.</p>`}
             </div>` : null}
-
-          ${isRecall ? html`
-            <div style=${{ marginTop: '1.5rem' }}>
-              ${!revealed && !answered ? html`
-                <button className="ok-btn ok-btn--primary ok-btn--block" onClick=${onReveal}>
-                  <${Eye} size=${15} /><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>Reveal answer</span>
-                </button>` : html`
-                <div className="fade-up">
-                  <div className="display-font" style=${{ fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.5rem', color: C.ochre, fontWeight: 600 }}>Answer</div>
-                  <div style=${{ padding: '1rem', borderRadius: '10px', lineHeight: 1.6, backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.ochre, color: C.text, fontSize: '16px' }}>${renderText(item.answer)}</div>
-                  ${!answered ? html`
-                    <div style=${{ marginTop: '0.85rem' }}>
-                      <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, marginBottom: '0.45rem' }}>How did that go?</div>
-                      <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-                        ${RECALL_GRADES.map((g, i) => html`
-                          <button key=${g.id} className="ok-btn" onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: C[g.color] }}>
-                            <span className="display-font" style=${{ fontSize: '0.7rem', opacity: 0.6 }}>${i + 1}</span>
-                            <span className="display-font" style=${{ fontWeight: 600, fontSize: '0.85rem' }}>${g.label}</span>
-                          </button>`)}
-                      </div>
-                    </div>` : null}
-                </div>`}
-            </div>` : null}
         </div>
 
         ${answered ? html`
@@ -599,13 +644,13 @@
             ${confPending ? html`<${ConfidencePrompt} onPick=${onConfidence} onSkip=${onConfSkip} />` : null}
             <div style=${{ padding: '1.25rem', borderRadius: '14px', backgroundColor: passLike ? C.correctBg : C.incorrectBg, border: '1px solid ' + (passLike ? C.correct : C.incorrect) }}>
               <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                ${isRecall
-                  ? html`<${React.Fragment}><${passLike ? Check : X} size=${16} style=${{ color: recallGrade ? C[recallGrade.color] : (passLike ? C.correct : C.incorrect) }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: recallGrade ? C[recallGrade.color] : (passLike ? C.correct : C.incorrect), fontWeight: 600 }}>${recallGrade ? recallGrade.label : (passLike ? 'Got It' : 'Missed')}</span></${React.Fragment}>`
+                ${recallGrade
+                  ? html`<${React.Fragment}><${passLike ? Check : X} size=${16} style=${{ color: C[recallGrade.color] }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C[recallGrade.color], fontWeight: 600 }}>${recallGrade.label}</span></${React.Fragment}>`
                   : isCorrect
-                  ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>Correct</span></${React.Fragment}>`
+                  ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>Correct</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· with the choices</span></${React.Fragment}>`
                   : html`<${React.Fragment}><${X} size=${16} style=${{ color: C.incorrect }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600 }}>Not Quite</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· Answer: ${item.correct ? String(item.correct).toUpperCase() : '—'}</span></${React.Fragment}>`}
               </div>
-              ${!isRecall && !isCorrect && item.distractorNotes && answer && item.distractorNotes[answer] ? html`
+              ${!answeredViaRecall && !isCorrect && item.distractorNotes && answer && item.distractorNotes[answer] ? html`
                 <div style=${{ marginBottom: '0.75rem', padding: '0.7rem 0.85rem', borderRadius: '10px', backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.incorrect }}>
                   <div className="ui-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600, marginBottom: '0.3rem' }}>Your distractor · ${String(answer).toUpperCase()}</div>
                   <p style=${{ lineHeight: 1.55, color: C.text, fontSize: '14.5px' }}>${renderText(item.distractorNotes[answer])}</p>

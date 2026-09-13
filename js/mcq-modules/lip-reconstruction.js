@@ -88,7 +88,7 @@ const ITEMS = [
     ],
     correct: 'c',
     brief: 'The labial arteries run in a submucosal plane — between the orbicularis oris and the mucosal surface of the lip, not between muscle and skin.',
-    detailed: 'The superior labial artery is submucosal in ~81% of cadaveric specimens (within the muscle in ~19%), while the inferior labial artery is submucosal in ~87%. Near the midline, the superior labial artery sits within 10 mm of the free lip margin. This anatomy is directly load-bearing for Abbe and Estlander flap pedicle preservation: the labial artery runs 1–2 mm posterior to the vermilion-cutaneous junction, so the surgeon must begin the full-thickness flap incision carefully to avoid transecting it. The submucosal position also explains why mucosal advancement flaps are undermined deep to the minor salivary glands — staying in the submucosal plane avoids the artery.',
+    detailed: 'The superior labial artery is submucosal in ~81% of cadaveric specimens (within the muscle in ~19%), while the inferior labial artery is submucosal in ~87%. Near the midline, the superior labial artery sits within 10 mm of the free lip margin. This is the anatomy the Abbe and Estlander flaps live or die by: the labial artery runs 1–2 mm posterior to the vermilion-cutaneous junction, so the full-thickness incision has to be started carefully to avoid transecting the pedicle. The submucosal position also explains why mucosal advancement flaps are undermined deep to the minor salivary glands — staying in the submucosal plane avoids the artery.',
     concepts: ['labial-artery', 'abbe-flap'],
 },
 
@@ -610,8 +610,8 @@ const ITEMS = [
         { id: 'd', text: 'The Karapandzic flap reconstructs the commissure; the Gillies flap does not' },
     ],
     correct: 'c',
-    brief: 'The Karapandzic flap uses curvilinear, partial-thickness incisions that meticulously preserve the neurovascular pedicle — labial arteries, buccal and marginal mandibular motor nerves, and mental sensory nerves — maintaining dynamic oral sphincter function and sensation.',
-    detailed: 'The Gillies fan flap uses full-thickness cuts that transect motor and sensory nerves, producing a denervated, adynamic reconstructed lip segment. Karapandzic\'s refinement was to dissect around (not through) the neurovascular bundle near the commissure — the bundle containing the labial artery branches plus the buccal and marginal mandibular branches of the facial nerve. This requires meticulous skeletonization of each neurovascular structure during the partial-thickness incisions, adding surgical complexity but preserving the functional integrity that makes the Karapandzic flap uniquely capable of maintaining oral competence. The Karapandzic is a bilateral rotation-advancement flap, with curvilinear incisions running from the defect edges into the melolabial and nasolabial creases.',
+    brief: 'The Karapandzic flap uses curvilinear, partial-thickness incisions that spare the neurovascular pedicle — labial arteries, buccal and marginal mandibular motor nerves, and mental sensory nerves — so the reconstructed lip keeps dynamic sphincter function and sensation.',
+    detailed: 'The Gillies fan flap uses full-thickness cuts that transect motor and sensory nerves, leaving a denervated, adynamic lip segment. Karapandzic\'s refinement was to dissect around the neurovascular bundle near the commissure rather than through it — the bundle carrying the labial artery branches plus the buccal and marginal mandibular branches of the facial nerve. That means skeletonizing each structure as the partial-thickness incisions are made; it is slower and more demanding than the Gillies, but it is what lets the reconstructed lip stay competent. The Karapandzic is a bilateral rotation-advancement flap, with curvilinear incisions running from the defect edges into the melolabial and nasolabial creases.',
     concepts: ['karapandzic-flap', 'gillies-fan', 'sphincter-repair'],
 },
 
@@ -748,7 +748,7 @@ const ITEMS = [
     ],
     correct: 'b',
     brief: 'Free tissue transfer is reserved for defects where local/regional tissue is inadequate (prior radiation, extensive resection). The classic choice is the radial forearm free flap (RFFF), often combined with a palmaris longus tendon sling for static oral sphincter support.',
-    detailed: 'The RFFF provides thin, pliable fasciocutaneous tissue that closely matches lip thickness. The palmaris longus tendon — harvested in continuity with the radial forearm flap — serves as a static suspension sling anchored to the bilateral oral modioli or zygomatic arches, preventing gravity-induced lip ptosis and severe oral incontinence (drooling). This tendon sling provides static oral competence at rest, though voluntary pucker and dynamic function are not restored. An alternative donor is the anterolateral thigh (ALT) flap, which offers more tissue bulk and can incorporate tensor fascia lata for sling support, but its thickness can be problematic for lip reconstruction.',
+    detailed: 'The RFFF provides thin, pliable fasciocutaneous tissue that closely matches lip thickness. The palmaris longus tendon — harvested in continuity with the radial forearm flap — is anchored to the bilateral oral modioli or zygomatic arches as a static suspension sling, holding the lip against gravity to prevent ptosis and the drooling of oral incontinence. It buys competence at rest only; voluntary pucker and dynamic function are not restored. An alternative donor is the anterolateral thigh (ALT) flap, which offers more tissue bulk and can incorporate tensor fascia lata for sling support, but its thickness can be problematic for lip reconstruction.',
     concepts: ['free-flap-lip', 'reconstructive-algorithm'],
 },
 
