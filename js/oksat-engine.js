@@ -546,6 +546,7 @@
 
         <div className="ok-card" style=${{ padding: '1.5rem', marginBottom: '1.25rem' }}>
           <p className="display-font" style=${{ fontSize: 'clamp(1.15rem,3.2vw,1.4rem)', lineHeight: 1.35, color: C.text, fontVariationSettings: "'opsz' 100, 'wght' 400" }}>${renderText(item.stem)}</p>
+          ${item.image ? html`<div style=${{ marginTop: '1rem' }}><img src=${item.image} alt=${item.imageAlt || ''} style=${{ maxWidth: '100%', borderRadius: '10px', border: '1px solid ' + C.borderSoft }} /></div>` : null}
 
           ${!isRecall ? html`
             <div role="radiogroup" aria-label="Answer options" style=${{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1.5rem' }}>
@@ -621,6 +622,7 @@
             ${item.detailed && showDetailed ? html`
               <div className="ok-card fade-up" style=${{ padding: '1.25rem' }}>
                 <p style=${{ lineHeight: 1.6, color: C.text, fontSize: '16px' }}>${renderText(item.detailed)}</p>
+                ${item.explanationImage ? html`<div style=${{ marginTop: '0.75rem' }}><img src=${item.explanationImage} alt=${item.explanationImageAlt || ''} style=${{ maxWidth: '100%', borderRadius: '10px', border: '1px solid ' + C.borderSoft }} /></div>` : null}
               </div>` : null}
 
             ${relatedItems.length ? html`

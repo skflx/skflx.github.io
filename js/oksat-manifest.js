@@ -76,6 +76,16 @@ window.OKSAT_MANIFEST = [
     desc: 'A sequential self-test (reveal-and-grade) on the operative approach, completion thyroidectomy, histopathology, and the 2025 ATA Risk Stratification System — Recommendations 15, 16, 27, 28.',
     data: 'js/mcq-modules/dtc-risk-stratification.js',
   },
+  {
+    slug: 'lip-reconstruction',
+    title: 'Lip Reconstruction',
+    kicker: 'Facial Plastics & Recon',
+    subspecialty: 'fprs',
+    count: 52,
+    accent: '#7A5A3A',
+    desc: 'Lip anatomy, oncologic considerations, vermilion and small-defect repairs, cross-lip flaps (Abbe, Estlander), Karapandzic and Gillies rotation flaps, subtotal reconstruction, and clinical cases.',
+    data: 'js/mcq-modules/lip-reconstruction.js',
+  },
 ];
 
 /* Back-compat alias (older cached pages). */

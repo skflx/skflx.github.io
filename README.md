@@ -96,6 +96,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── WIP.md                  # Current state of each system
 ├── docs/                   # Schemas, authoring guides, design system, decisions
 │                           #   (index + update rules: docs/docs-map.md)
+├── img/oksat/              # Per-module images used in question stems & explanations
 ├── images/                 # Profile photo + derived crops (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
 ```
