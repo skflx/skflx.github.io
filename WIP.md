@@ -5,7 +5,7 @@ This is a status document, not a changelog — when something is retired, its
 section goes away rather than growing a postscript. Git history is the record
 of how things got here.
 
-Last reviewed: 2026-09-10.
+Last reviewed: 2026-09-13.
 
 ---
 
@@ -28,10 +28,12 @@ button. Owner's call.
 
 ## OKSAT (`oksat.html`, `oksat-study.html`)
 
-**State:** The tool is now just the hub and the study viewer. Five
+**State:** The tool is now just the hub and the study viewer. Six
 hand-authored modules, each a data file in `js/mcq-modules/` plus one
 manifest entry; the shared engine renders all of them. Answers lock on first
-attempt and a five-box Leitner schedule resurfaces misses.
+attempt and a five-box Leitner schedule resurfaces misses. The engine now
+supports optional per-item images in stems and explanations (`item.image`,
+`item.explanationImage`), first used in the lip-reconstruction module.
 
 Progress is local to the browser and nothing is uploaded. Storage keys keep
 their trailing `:<code>` namespace so progress from the multi-reviewer era
@@ -45,7 +47,8 @@ the most.
 
 **Next:** Authoring is manual (`docs/authoring-oksat.md`). The module set is
 thin outside pediatrics/otology — rhinology, laryngology, and H&N oncology
-have hues reserved in `OKSAT_SUBSPECIALTIES` but no modules yet.
+have hues reserved in `OKSAT_SUBSPECIALTIES` but no modules yet. Facial
+plastics now has two modules (facial reanimation, lip reconstruction).
 
 ---
 

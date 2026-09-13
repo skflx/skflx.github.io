@@ -83,6 +83,10 @@ below) should share a concept key prefixed `case-` (e.g. `case-acoustic`,
 | `detailed` | **yes** | Longer explanation behind a "Read more" toggle — teaches mechanism → application → pearl. |
 | `concepts` | **yes** | Array of `CONCEPTS` keys. 1–3 tags per item; every item must have at least one. |
 | `section` | recommended (>30 items) | Small label above the question (e.g. `Embryology`). Adds visible grouping in the UI. |
+| `image` | optional | Path to an image shown below the stem (e.g. `'img/oksat/lip-recon/subunits.jpg'`). |
+| `imageAlt` | with `image` | Alt text for the stem image. |
+| `explanationImage` | optional | Path to an image shown inside the detailed explanation. |
+| `explanationImageAlt` | with `explanationImage` | Alt text for the explanation image. |
 
 #### Recall items (`type: 'recall'`)
 
@@ -113,6 +117,23 @@ A `type: 'recall'` card shows the `stem`, a **Reveal answer** button, then the
 for short lists, bullet-point layouts, or text "tables" within a field (see
 `js/mcq-modules/dtc-risk-stratification.js` for multi-line recall answers).
 Template literals (backtick strings) work well for multi-line `answer` fields.
+
+### Images
+
+Items can include images in the stem and/or the detailed explanation. Store
+images under `img/oksat/<module-slug>/` (e.g. `img/oksat/lip-recon/`).
+
+- `image` — shown below the stem, before the options. Use for diagrams the
+  learner needs to answer the question (anatomy figures, surgical markings).
+- `explanationImage` — shown inside the detailed explanation toggle. Use for
+  clinical photo series, step-by-step illustrations, or diagrams that teach
+  rather than test.
+
+Both are optional strings (relative paths from the repo root). When absent,
+nothing renders — the engine handles this gracefully. Always provide an
+`imageAlt` / `explanationImageAlt` alongside.
+
+See `js/mcq-modules/lip-reconstruction.js` for the reference implementation.
 
 ---
 
