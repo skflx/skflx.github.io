@@ -28,7 +28,7 @@ button. Owner's call.
 
 ## OKSAT (`oksat.html`, `oksat-study.html`)
 
-**State:** The tool is now just the hub and the study viewer. Six
+**State:** The tool is now just the hub and the study viewer. Seven
 hand-authored modules, each a data file in `js/mcq-modules/` plus one
 manifest entry; the shared engine renders all of them. Every question opens
 on a recall gate: the stem shows first, and you either **reveal the answer**
@@ -52,9 +52,11 @@ totalling cards due across all modules with a link into the module holding
 the most.
 
 **Next:** Authoring is manual (`docs/authoring-oksat.md`). The module set is
-thin outside pediatrics/otology — rhinology, laryngology, and H&N oncology
-have hues reserved in `OKSAT_SUBSPECIALTIES` but no modules yet. Facial
-plastics now has two modules (facial reanimation, lip reconstruction).
+thin outside pediatrics/otology — laryngology and H&N oncology have hues
+reserved in `OKSAT_SUBSPECIALTIES` but no modules yet. Facial plastics has
+two modules (facial reanimation, lip reconstruction); rhinology now has its
+first (allergy and allergy testing, a free-response module in the
+dtc-risk-stratification style).
 
 ---
 

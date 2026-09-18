@@ -86,6 +86,16 @@ window.OKSAT_MANIFEST = [
     desc: 'Lip anatomy, oncologic considerations, vermilion and small-defect repairs, cross-lip flaps (Abbe, Estlander), Karapandzic and Gillies rotation flaps, subtotal reconstruction, and clinical cases.',
     data: 'js/mcq-modules/lip-reconstruction.js',
   },
+  {
+    slug: 'allergy-testing',
+    title: 'Allergy and Allergy Testing',
+    kicker: 'Rhinology / Allergy',
+    subspecialty: 'rhinology',
+    count: 83,
+    accent: '#6E4A6B',
+    desc: 'The mediator cascade, skin and in vitro testing, pharmacotherapy and immunotherapy, biologics, and the OHNS crossovers — AFRS, AERD, angioedema, and food syndromes.',
+    data: 'js/mcq-modules/allergy-testing.js',
+  },
 ];
 
 /* Back-compat alias (older cached pages). */
