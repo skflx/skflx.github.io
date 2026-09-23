@@ -36,7 +36,11 @@ their pinned SHA-384; every root `*.html` has a CSP whose `script-src` has no
 `'unsafe-inline'`/`'unsafe-eval'`/remote origin, no inline executable
 `<script>`, no `on*=` handlers or `javascript:` URLs, `rel="noopener"` on
 every `target="_blank"`, and — for the self-contained pages — no remote
-`<link>`/`<script>`/`<img>` at all. Smoke additionally loads
+`<link>`/`<script>`/`<img>` at all. §4 checks every root page's `css/` and
+`js/` references carry `?v=` equal to the first 8 hex of that file's
+SHA-256 (fix with `node tools/stamp-assets.mjs`; spec in its header). To
+prove the check bites, append a comment to `css/site.css` and rerun: the
+three pages that load it must FAIL. Smoke additionally loads
 `oksat-study.html?m=<img onerror…>` and asserts the payload renders as text.
 
 ### One-pager (`index.html`)
@@ -47,7 +51,11 @@ every `target="_blank"`, and — for the self-contained pages — no remote
   `#research`, `#beyond`) are plain anchors, and the one in view gets
   `aria-current` (scroll-spy in `js/onepager.js`).
 - No horizontal scroll at 390px wide; the cochlea figure (Fig. 1) is static
-  SVG and renders without JS.
+  SVG and renders without JS, and without CSS it is still a line drawing
+  capped at its viewBox size (the generator emits fallback `fill`/`stroke`/
+  `width`/`height` attributes; any stylesheet rule outranks them).
+- Check phones and the phone's "desktop site" mode, which lays the page out
+  at 980px (the ≥960px two-column grid), in both themes.
 - `#pgy-status` renders the current residency year. The HTML ships the
   current value as a no-JS fallback, so **both** must be updated together if
   either is ever edited by hand. Check the rollover directly rather than

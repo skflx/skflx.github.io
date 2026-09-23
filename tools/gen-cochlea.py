@@ -11,7 +11,7 @@ x = fraction of length from the apex).
 
 Edit the constants below, then run from the repo root:
     python3 tools/gen-cochlea.py
-It rewrites the <svg class="cochlea"> contents and viewBox; the <title>
+It rewrites the <svg class="cochlea"> contents, viewBox and size; the <title>
 and <figcaption> are prose and stay hand-edited. Stdlib only.
 """
 import math
@@ -71,27 +71,33 @@ for F, lab in [(8000, '8k'), (4000, '4k'), (2000, '2k'), (1000, '1k'), (500, '50
     r = rad(th)
     xo, yo = pt(th); xi, yi = pt(th, -7); xl, yl = pt(th, -17)
     ticks.append((lab, xo, yo, xi, yi, xl, yl, x))
-out = [f'<path class="cochlea-duct" d="{duct}" pathLength="1"/>',
-       f'<path class="cochlea-membrane" d="{inner}"/>',
-       f'<path class="cochlea-lead" d="{lead}"/>',
-       f'<path class="cochlea-array" d="{array}"/>']
+# The fill/stroke/font-size attributes are a no-CSS fallback only (every
+# rule in css/onepager.css outranks them): without them an unstyled SVG
+# paints each path as a solid black blob the width of the page.
+out = [f'<path class="cochlea-duct" d="{duct}" pathLength="1" fill="none" stroke="currentColor"/>',
+       f'<path class="cochlea-membrane" d="{inner}" fill="none"/>',
+       f'<path class="cochlea-lead" d="{lead}" fill="none" stroke="currentColor"/>',
+       f'<path class="cochlea-array" d="{array}" fill="none"/>']
 for lab, xo, yo, xi, yi, xl, yl, x in ticks:
-    out.append(f'<g class="cochlea-tick"><line x1="{xo:.1f}" y1="{yo:.1f}" x2="{xi:.1f}" y2="{yi:.1f}"/><text x="{xl:.1f}" y="{yl:.1f}">{lab}</text></g>')
+    out.append(f'<g class="cochlea-tick" fill="currentColor" font-size="10.5"><line x1="{xo:.1f}" y1="{yo:.1f}" x2="{xi:.1f}" y2="{yi:.1f}"/><text x="{xl:.1f}" y="{yl:.1f}">{lab}</text></g>')
 # stagger the reveal base -> apex, the way an array goes in
 order = sorted(range(len(contacts)), key=lambda i: -contacts[i][0])
 for rank, i in enumerate(order):
     ch, x, y = contacts[i]
-    out.append(f'<circle class="cochlea-contact" cx="{x:.1f}" cy="{y:.1f}" r="{1.9 if ch > NSINGLE else 2.3}" style="--i:{rank}"/>')
+    out.append(f'<circle class="cochlea-contact" cx="{x:.1f}" cy="{y:.1f}" r="{1.9 if ch > NSINGLE else 2.3}" fill="currentColor" style="--i:{rank}"/>')
 xs = [p[0] for p in pts] + [bx + dx * 34] + [t[5] for t in ticks]
 ys = [p[1] for p in pts] + [by + dy * 34] + [t[6] for t in ticks]
 pad = 14
-vb = f'{min(xs) - pad:.0f} {min(ys) - pad:.0f} {max(xs) - min(xs) + 2 * pad:.0f} {max(ys) - min(ys) + 2 * pad:.0f}'
+vbw, vbh = max(xs) - min(xs) + 2 * pad, max(ys) - min(ys) + 2 * pad
+vb = f'{min(xs) - pad:.0f} {min(ys) - pad:.0f} {vbw:.0f} {vbh:.0f}'
+# width/height: no-CSS fallback size (css/onepager.css scales it to the column)
+size = f'width="{vbw:.0f}" height="{vbh:.0f}"'
 import re
 HTML = 'index.html'
 t = open(HTML, encoding='utf-8').read()
 frag = '\n'.join('                ' + l for l in out)
-t, n = re.subn(r'(<svg class="cochlea" viewBox=")[^"]*(" role="img" aria-labelledby="cochlea-title">\n\s*<title[^\n]*</title>\n)(.*?)(\n\s*</svg>)',
-              lambda m: m.group(1) + vb + m.group(2) + frag + m.group(4), t, flags=re.S)
+t, n = re.subn(r'(<svg class="cochlea" )viewBox="[^"]*"(?: width="[^"]*" height="[^"]*")?( role="img" aria-labelledby="cochlea-title">\n\s*<title[^\n]*</title>\n)(.*?)(\n\s*</svg>)',
+              lambda m: m.group(1) + f'viewBox="{vb}" {size}' + m.group(2) + frag + m.group(4), t, flags=re.S)
 if n != 1:
     raise SystemExit('could not find the cochlea <svg> in index.html')
 open(HTML, 'w', encoding='utf-8').write(t)

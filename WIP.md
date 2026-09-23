@@ -28,7 +28,10 @@ portrait on a plate, then five open numbered sections with sticky heads on
 desktop; Fig. 1 (a generated cochlea drawn to the owner's 30.2 mm duct, with
 their FLEX28 array and Greenwood tonotopic ticks; `tools/gen-cochlea.py`)
 sits in About. The social card (`images/og-card.jpg`) was
-re-rendered to match. The residency year computes itself
+re-rendered to match. Asset URLs are hash-stamped since the first deploy
+reached phones as new HTML under the cached pre-redesign stylesheet; Fig. 1
+also carries no-CSS fallback attributes so an unstyled page shows a line
+drawing, not a black blob. The residency year computes itself
 from a July 1 rollover (capped at PGY-5); the HTML carries the current value
 as a no-JS fallback, and the two must change together.
 
@@ -147,7 +150,9 @@ modules, would both put the content back to work; neither is scheduled.
 
 **State:** Four Node suites, run in CI on every PR: `check-data.mjs`
 (committed data + security invariants: CSP on every page, no inline or
-third-party script, vendored-file hashes), `test-wiki-sync.mjs` (the vault
+third-party script, vendored-file hashes; and that every `css/`/`js/`
+reference carries a current `?v=` stamp from `stamp-assets.mjs`),
+`test-wiki-sync.mjs` (the vault
 boundary), `smoke-pages.mjs` (every page boots with no real console errors,
 plus the `?m=` XSS regression), `test-oksat-engine.mjs` (answer lock, SRS
 writes, keyboard, legacy migration). With React/htm vendored the browser
