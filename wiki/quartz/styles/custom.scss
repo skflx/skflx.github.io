@@ -1,0 +1,99 @@
+// =============================================================
+// sk.oto — Quartz 5 custom styles (scaffold; copy to
+// quartz/styles/custom.scss in the Quartz repo).
+// Carries the main site's type and restraint into the wiki. Colors
+// come from quartz.config.yaml (theme.colors); this file only adds
+// the self-hosted faces and a few typographic decisions.
+// Font files: copy skflx.github.io/fonts/*.woff2 to
+// quartz/static/fonts/ (README §Bootstrap).
+// =============================================================
+@use "./variables.scss" as *;
+
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 800;
+  font-stretch: 62% 125%;
+  src: url("/static/fonts/archivo-latin-var.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("/static/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("/static/fonts/ibm-plex-mono-latin-500.woff2") format("woff2");
+}
+
+// Note titles are whole declarative sentences: set them like a lede,
+// not a poster.
+article h1.article-title,
+.page-header h1 {
+  font-weight: 680;
+  font-stretch: 104%;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+h2, h3 {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+// Mono for metadata: dates, reading time, breadcrumbs.
+.content-meta, .breadcrumb-container {
+  font-family: var(--codeFont);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+.page-title a {
+  font-family: "Archivo", system-ui, sans-serif;
+  font-weight: 760;
+  font-stretch: 118%;
+  letter-spacing: -0.03em;
+}
+
+// Active Recall: the collapsed question callouts are the point of a
+// note, so give them a ruled, quiet frame instead of a colored box.
+.callout[data-callout="question"] {
+  --color: var(--tertiary);
+  --border: var(--lightgray);
+  --bg: transparent;
+  border-width: 1px 1px 1px 3px;
+  border-radius: 3px;
+}
+
+// Unvetted warning inserted by wiki/sync/sync-vault.mjs.
+.callout[data-callout="warning"] {
+  --color: var(--secondary);
+  --bg: transparent;
+  border-radius: 3px;
+}
+
+// dgmo diagram sources render as code until a renderer exists
+// (README §Open questions); keep them narrow and legible.
+pre:has(> code[data-language="dgmo"]) {
+  font-size: 0.85em;
+  border-left: 3px solid var(--tertiary);
+}
+
+// Breadcrumbs are wayfinding, not headlines.
+.breadcrumb-container .breadcrumb-element,
+.breadcrumb-container .breadcrumb-element a,
+.breadcrumb-container .breadcrumb-element p {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+// Tag chips never break mid-word on narrow screens.
+a.tag-link, .tags a {
+  white-space: nowrap;
+}

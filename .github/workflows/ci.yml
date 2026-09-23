@@ -27,6 +27,11 @@ jobs:
       - name: Check committed data
         run: node tools/check-data.mjs
 
+      # The wiki sync is the privacy boundary for the Obsidian vault;
+      # zero deps, synthetic fixtures only.
+      - name: Wiki sync behavior tests
+        run: node tools/test-wiki-sync.mjs
+
       - name: Install dev dependencies
         run: npm ci
 
