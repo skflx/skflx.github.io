@@ -18,9 +18,13 @@ no design judgment required.
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
+| `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
+| `wiki/README.md` | Wiki kit: pipeline, what leaves the vault (phase 1), reader-correction round trip, bootstrap, open owner decisions | `wiki/` files, `policy.json`, the feedback tool, or the Quartz config change |
+| `js/vendor/README.md` | Provenance, versions, and licenses of vendored scripts | A vendored file is added, upgraded, or removed (update the hashes in `tools/check-data.mjs` too) |
 | `docs/docs-map.md` | This checklist | A doc is added/removed, or the pass itself changes |
 | `archive/README.md` | What the archived data is and how to read it | Anything is added to or changed under `archive/` |
 | `images/list.txt` | Image inventory | An image is added/removed |
+| `fonts/LICENSE-*.txt` | Licenses of the self-hosted faces | A face is added or removed |
 
 There are no plan docs. The five that existed were records of work on systems
 retired in 2026-09 and went with them; `WIP.md` now carries current state.
@@ -47,7 +51,7 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
 3. **Path check.** Every backticked path in `README.md` and `CLAUDE.md` must
    exist:
    ```bash
-   grep -oE '`[a-zA-Z0-9_./-]+\.(html|js|mjs|css|json|md)`' README.md CLAUDE.md \
+   grep -ohE '`[a-zA-Z0-9_./-]+\.(html|js|mjs|css|json|md)`' README.md CLAUDE.md \
      | tr -d '`' | sort -u | while read -r p; do [ -e "$p" ] || echo "MISSING: $p"; done
    ```
    Zero `MISSING` lines allowed. (Glob-style entries like `js/oksat-*.js`

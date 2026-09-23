@@ -1,7 +1,4 @@
 {
-  "dependencies": {
-    "jsdom": "^27.2.0"
-  },
   "devDependencies": {
     "playwright": "^1.61.1"
   }

@@ -1,16 +1,12 @@
 /* =============================================================
    skflx.MD — one-pager behavior
-   - Style switch (matte / personality) + persistence
-   - Day/night theme toggle + persistence
    - Residency year: advances itself every July 1
-   - Deep-link: open the matching <details> when the URL has a hash
-   Accordion open/close itself is native <details> — no JS needed.
-   Storage keys are shared with the rest of the site: sk_style, sk_theme.
+   - Section nav: marks the section currently in view
+   Theme toggle lives in js/site.js; the initial theme is applied
+   pre-paint by js/theme-boot.js. Hash deep-links (#about, #work…)
+   are plain anchors and need no script.
    ============================================================= */
 (function () {
-    var root = document.documentElement;
-    var STYLES = ['matte', 'personality'];
-
     /* Residency: started July 1, 2024; OHNS is a five-year program, so the
        label stops climbing at PGY-5 rather than inventing a PGY-6. The HTML
        carries the current year as a static fallback for no-JS readers —
@@ -31,52 +27,33 @@
         if (el) el.textContent = 'PGY-' + currentPGY();
     }
 
-    function setStyle(style) {
-        if (STYLES.indexOf(style) === -1) style = 'matte';
-        root.setAttribute('data-style', style);
-        try { localStorage.setItem('sk_style', style); } catch (e) {}
-        syncStyleButtons(style);
-    }
-
-    function setTheme(theme) {
-        theme = theme === 'dark' ? 'dark' : 'light';
-        root.setAttribute('data-theme', theme);
-        try { localStorage.setItem('sk_theme', theme); } catch (e) {}
-    }
-
-    function syncStyleButtons(style) {
-        document.querySelectorAll('[data-set-style]').forEach(function (btn) {
-            btn.setAttribute('aria-pressed', btn.getAttribute('data-set-style') === style ? 'true' : 'false');
+    /* Scroll-spy: the nav link for the section nearest the top of the
+       viewport gets aria-current. Purely cosmetic — skipped if the
+       browser lacks IntersectionObserver. */
+    function watchSections() {
+        if (!('IntersectionObserver' in window)) return;
+        var links = {};
+        document.querySelectorAll('.op-nav a[href^="#"]').forEach(function (a) {
+            links[a.getAttribute('href').slice(1)] = a;
         });
-    }
-
-    function openFromHash() {
-        var id = (location.hash || '').replace('#', '');
-        if (!id) return;
-        var el = document.getElementById(id);
-        if (el && el.tagName.toLowerCase() === 'details') {
-            el.open = true;
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        var visible = {};
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting; });
+            var current = null;
+            Object.keys(links).forEach(function (id) { if (!current && visible[id]) current = id; });
+            Object.keys(links).forEach(function (id) {
+                if (id === current) links[id].setAttribute('aria-current', 'true');
+                else links[id].removeAttribute('aria-current');
+            });
+        }, { rootMargin: '-80px 0px -55% 0px' });
+        Object.keys(links).forEach(function (id) {
+            var sec = document.getElementById(id);
+            if (sec) io.observe(sec);
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        syncStyleButtons(root.getAttribute('data-style') || 'matte');
         updateResidencyYear();
-
-        document.querySelectorAll('[data-set-style]').forEach(function (btn) {
-            btn.addEventListener('click', function () { setStyle(btn.getAttribute('data-set-style')); });
-        });
-
-        var themeBtn = document.getElementById('theme-toggle');
-        if (themeBtn) {
-            themeBtn.addEventListener('click', function () {
-                setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-            });
-        }
-
-        openFromHash();
+        try { watchSections(); } catch (e) { /* cosmetic only */ }
     });
-
-    window.addEventListener('hashchange', openFromHash);
 })();

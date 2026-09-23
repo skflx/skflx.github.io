@@ -7,6 +7,10 @@ on:
   push:
     branches: [master]
 
+# Least privilege: CI only reads the repo.
+permissions:
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -23,12 +27,17 @@ jobs:
       - name: Check committed data
         run: node tools/check-data.mjs
 
+      # The wiki sync is the privacy boundary for the Obsidian vault;
+      # zero deps, synthetic fixtures only.
+      - name: Wiki sync behavior tests
+        run: node tools/test-wiki-sync.mjs
+
       - name: Install dev dependencies
         run: npm ci
 
-      # Playwright's own Chromium + OS libs. The smoke/engine tests load
-      # the pages' CDN scripts (React/htm/Cytoscape), so CI needs network;
-      # vendoring (issue #51) will later make these hermetic.
+      # Playwright's own Chromium + OS libs. Page scripts are all
+      # same-origin (React/htm are vendored in js/vendor/), so the suites
+      # are hermetic apart from optional Google Fonts on OKSAT pages.
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 

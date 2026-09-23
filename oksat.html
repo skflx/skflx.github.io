@@ -1,75 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-font="manuscript">
+<html lang="en" data-theme="light" data-font="instrument">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>OKSAT — OHNS Knowledge Self-Assessment | skflx.MD</title>
   <meta name="description" content="OKSAT — otolaryngology self-assessment modules with locked-first-attempt questions, free-response recall, and spaced repetition.">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
-  <!-- Set theme + font before paint to avoid a flash (shares keys with the main site) -->
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem('sk_theme');
-        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', t);
-        var f = localStorage.getItem('oksat:font');
-        if (f) document.documentElement.setAttribute('data-font', f);
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Theme + typeface before paint (shares sk_theme with the main site) -->
+  <script src="js/theme-boot.js"></script>
 
+  <!-- Optional typefaces for the "Aa" picker; only fetched when chosen -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Crimson+Pro:ital,wght@0,300..700;1,400&family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/oksat.css">
 
-  <style>
-    /* Review banner — the one thing worth seeing before the module list. */
-    .hub-review {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin: 1.75rem 0 0.5rem;
-      padding: 0.85rem 1.1rem;
-      border: 1px solid var(--ok-border);
-      border-radius: 12px;
-      background: var(--ok-surface);
-    }
-    .hub-review[hidden] { display: none; }
-    .hub-review .rv-text { font-size: 0.95rem; line-height: 1.45; }
-    .hub-review .rv-count { font-weight: 600; color: var(--ok-accent); }
-    .hub-review .rv-sub {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--ok-text-faint);
-      margin-top: 0.15rem;
-    }
-    /* Per-module completion meter on each card. */
-    .module-meter {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 0.6rem;
-      font-size: 0.75rem;
-      color: var(--ok-text-faint);
-    }
-    .module-meter .bar {
-      flex: 1;
-      height: 3px;
-      border-radius: 999px;
-      background: var(--ok-border);
-      overflow: hidden;
-    }
-    .module-meter .fill {
-      display: block;
-      height: 100%;
-      border-radius: 999px;
-      background: var(--ok-accent);
-    }
-  </style>
 </head>
 <body>
   <nav class="ok-topbar">
@@ -77,21 +25,20 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       skflx.MD
     </a>
-    <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto">
+    <div class="ok-topbar-actions">
       <span id="font-picker"></span>
       <button type="button" class="ok-roundbtn" id="settings-btn" aria-label="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
       </button>
-      <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
-        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+      <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
       </button>
     </div>
   </nav>
 
   <div class="ok-root">
-    <div class="ok-wrap" style="padding-top:4rem;max-width:46rem">
-      <div class="hub-kicker"><hr><span>OKSAT · Otolaryngology</span><hr></div>
+    <div class="ok-wrap" style="padding-top:6rem;max-width:46rem">
+      <div class="hub-kicker"><span>OKSAT · Otolaryngology</span><hr></div>
       <h1 class="hub-title">OHNS Knowledge<br><em>Self-Assessment</em></h1>
       <p class="hub-subtitle">Modules mix locked-first-attempt questions with free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept.</p>
 
@@ -106,7 +53,7 @@
 
       <div class="hub-modules" id="modules"></div>
 
-      <div class="hub-dots">·  ·  ·</div>
+      <p class="hub-dots">Progress lives in this browser only. Nothing is uploaded.</p>
     </div>
   </div>
 
@@ -135,129 +82,6 @@
   <script src="js/oksat-manifest.js"></script>
   <script src="js/oksat-store.js"></script>
   <script src="js/oksat-prefs.js"></script>
-  <script>
-    (function () {
-      OKSATPrefs.mountThemeToggle(document.getElementById('theme-toggle'));
-      OKSATPrefs.mountFontPicker(document.getElementById('font-picker'));
-
-      var today = new Date().toISOString().split('T')[0];
-      var reviewer = OKSATStore.reviewer();
-      var manifest = window.OKSAT_MANIFEST || [];
-      var subs = window.OKSAT_SUBSPECIALTIES || {};
-
-      /* ---- per-module local state (answered count + cards due today) ---- */
-      function stateFor(slug) {
-        var progress = OKSATStore.load('oksat:progress:' + slug + ':' + reviewer, {}) || {};
-        var srs = OKSATStore.load('oksat:srs:' + slug + ':' + reviewer, {}) || {};
-        var items = srs.items || {};
-        var due = Object.keys(items).filter(function (id) {
-          var nr = items[id] && items[id].nextReview;
-          return nr && nr <= today;
-        }).length;
-        return { answered: Object.keys(progress.answers || {}).length, due: due };
-      }
-
-      /* ---- module card ---- */
-      function moduleCard(m, st) {
-        var subInfo = subs[m.subspecialty];
-        var pct = m.count ? Math.round((st.answered / m.count) * 100) : 0;
-        var a = document.createElement('a');
-        a.className = 'module-card';
-        a.href = 'oksat-study.html?m=' + encodeURIComponent(m.slug);
-        a.innerHTML =
-          '<div class="module-accent" style="background:' + (subInfo ? subInfo.hue : m.accent) + '"></div>' +
-          '<div class="module-body">' +
-            '<div class="module-label">' + m.kicker + ' · ' + m.count + ' questions</div>' +
-            '<div class="module-title">' + m.title + '</div>' +
-            '<p class="module-desc">' + m.desc + '</p>' +
-            (st.due > 0 ? '<div class="module-due">' + st.due + ' due for review</div>' : '') +
-            (st.answered > 0
-              ? '<div class="module-meter"><span class="bar"><span class="fill" style="width:' + pct + '%"></span></span>' +
-                '<span>' + st.answered + ' / ' + m.count + '</span></div>'
-              : '') +
-          '</div>' +
-          '<div class="module-arrow">' + (st.answered > 0 && st.answered < m.count ? 'Resume' : 'Launch') + ' &rarr;</div>';
-        return a;
-      }
-
-      /* ---- render, grouped by subspecialty in manifest order ---- */
-      var wrap = document.getElementById('modules');
-      var totalDue = 0;
-      var dueModules = [];
-
-      Object.keys(subs).forEach(function (subKey) {
-        var mods = manifest.filter(function (m) { return m.subspecialty === subKey; });
-        if (!mods.length) return;
-        var subInfo = subs[subKey];
-        var head = document.createElement('div');
-        head.className = 'hub-subhead';
-        head.innerHTML = '<span class="tick" style="background:' + subInfo.hue + '"></span>' + subInfo.label;
-        wrap.appendChild(head);
-        mods.forEach(function (m) {
-          var st = stateFor(m.slug);
-          totalDue += st.due;
-          if (st.due > 0) dueModules.push({ slug: m.slug, title: m.title, due: st.due });
-          wrap.appendChild(moduleCard(m, st));
-        });
-      });
-
-      /* Any module whose subspecialty key is missing from the ring still renders. */
-      var placed = Object.keys(subs);
-      manifest.filter(function (m) { return placed.indexOf(m.subspecialty) === -1; })
-        .forEach(function (m) {
-          var st = stateFor(m.slug);
-          totalDue += st.due;
-          if (st.due > 0) dueModules.push({ slug: m.slug, title: m.title, due: st.due });
-          wrap.appendChild(moduleCard(m, st));
-        });
-
-      /* ---- review banner: jump straight to the module with the most due ---- */
-      if (totalDue > 0) {
-        dueModules.sort(function (a, b) { return b.due - a.due; });
-        var top = dueModules[0];
-        document.getElementById('review-count').textContent = String(totalDue);
-        document.getElementById('review-word').textContent = totalDue === 1 ? 'question' : 'questions';
-        document.getElementById('review-where').textContent = dueModules.length === 1
-          ? 'in ' + top.title
-          : 'across ' + dueModules.length + ' modules — most in ' + top.title;
-        document.getElementById('review-go').href = 'oksat-study.html?m=' + encodeURIComponent(top.slug);
-        document.getElementById('review-banner').hidden = false;
-      }
-
-      /* ---- settings modal ---- */
-      var overlay = document.getElementById('settings-overlay');
-      function openSettings() { overlay.hidden = false; }
-      function closeSettings() { overlay.hidden = true; }
-      document.getElementById('settings-btn').addEventListener('click', openSettings);
-      document.getElementById('settings-close').addEventListener('click', closeSettings);
-      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeSettings(); });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && !overlay.hidden) closeSettings();
-      });
-
-      var resetBtn = document.getElementById('reset-local');
-      var resetStatus = document.getElementById('reset-status');
-      var armed = false;
-      resetBtn.addEventListener('click', function () {
-        if (!armed) {
-          armed = true;
-          resetBtn.textContent = 'Confirm reset';
-          resetStatus.textContent = 'Click again to erase all local progress.';
-          setTimeout(function () {
-            if (!armed) return;
-            armed = false;
-            resetBtn.textContent = 'Reset…';
-            resetStatus.textContent = '';
-          }, 5000);
-          return;
-        }
-        armed = false;
-        resetBtn.textContent = 'Reset…';
-        var n = OKSATStore.resetLocal(reviewer);
-        resetStatus.textContent = n + ' local record' + (n === 1 ? '' : 's') + ' cleared. Reloading…';
-        setTimeout(function () { location.reload(); }, 900);
-      });
-    })();
-  </script>
+  <script src="js/oksat-hub.js"></script>
 </body>
 </html>

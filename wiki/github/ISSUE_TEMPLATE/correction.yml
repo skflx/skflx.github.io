@@ -1,0 +1,42 @@
+# Goes to skflx/ent-wiki as .github/ISSUE_TEMPLATE/correction.yml.
+# Every published note links here with ?template=correction.yml&note=<vault path>
+# (wiki/sync/policy.json → feedback). wiki/feedback/pull-feedback.mjs reads
+# these issues back into the vault by the `wiki-feedback` label and the
+# headings below — rename a label here and it must change there too.
+name: Suggest a correction
+description: Point out an error in a wiki note. Issues on this repository are public.
+title: "Correction: "
+labels: ["wiki-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reading closely. This issue is **public**, so leave out anything that could identify a patient.
+  - type: input
+    id: note
+    attributes:
+      label: Note
+      description: Filled in from the page you came from. Leave it as is.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong
+      description: Quote the sentence and say what is incorrect, outdated, or unclear.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Correction and source
+      description: What it should say, and where that comes from (guideline, textbook chapter, paper).
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy
+      options:
+        - label: This report contains no patient-identifying information.
+          required: true

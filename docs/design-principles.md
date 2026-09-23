@@ -7,12 +7,13 @@ only tokens, never raw values, so a retheme is a one-block edit.
 
 ## 1. Principles
 
-1. **Warm, not clinical.** The canvas is warm cream (`#FAF6EE` light /
-   `#1B1813` dark), never hospital white. This is a *collected* study space,
-   not an EHR.
-2. **Calm feedback.** Correct/incorrect are sage (`#4F7042`) and rust
-   (`#9A4537`) — desaturated relatives of green/red that stay easy on the
-   eyes across a 100-question session and survive dark mode.
+1. **An instrument, not a brochure.** Paper and ink (`#F1F1EC` / `#0D0E10`),
+   hairline rules instead of shadowed cards, and a monospace for anything that
+   is data (labels, counts, keys). Same system as the rest of the site
+   (`css/site.css`); OKSAT expresses it as `--ok-*` tokens.
+2. **Calm feedback.** Correct/incorrect are a deep green and a crimson, each
+   paired with a faint tint, readable across a 100-question session in both
+   themes. Neither is reused for decoration.
 3. **One hue per domain.** Each subspecialty owns a hue
    (see `OKSAT_SUBSPECIALTIES` in `js/oksat-manifest.js`), carried through
    module accent bars, hub grouping ticks, and concept chips. Color always
@@ -42,45 +43,47 @@ only tokens, never raw values, so a retheme is a one-block edit.
 
 | Token | Light | Dark | Role |
 |---|---|---|---|
-| `--ok-bg` | `#FAF6EE` | `#1B1813` | canvas |
-| `--ok-surface` | `#FFFFFF` | `#242019` | cards |
-| `--ok-text` | `#2A241D` | `#F1E7D8` | primary text |
-| `--ok-accent` | `#2C5454` | `#5FA3A3` | primary actions, focus |
-| `--ok-ochre` | `#9C7A45` | `#D6AC63` | kickers, review, warmth |
-| `--ok-correct` | `#4F7042` | `#9FBF7E` | sage — pass |
-| `--ok-incorrect` | `#9A4537` | `#DD9683` | rust — miss |
+| `--ok-bg` | `#F1F1EC` | `#0D0E10` | canvas (paper / ink) |
+| `--ok-surface` | `#FAFAF7` | `#16181B` | cards, modal |
+| `--ok-text` | `#121418` | `#ECEBE6` | primary text; primary buttons |
+| `--ok-accent` | `#2445B0` | `#8EA7FF` | actions, focus, progress (audiogram blue) |
+| `--ok-ochre` | `#B8371A` | `#FF6B42` | kickers, review-due (audiogram red; historical token name) |
+| `--ok-correct` | `#1F7A52` | `#5FD3A0` | pass |
+| `--ok-incorrect` | `#B0243A` | `#FF7A8A` | miss |
 
-Subspecialty hues (module identity): otology `#2F6E6A`, rhinology
-`#6E4A6B`, laryngology `#C06A4A`, H&N onc `#9A4B2E`, facial plastics
-`#7A5A3A`, pediatrics `#7C7A3A`, sleep `#5A567E`, endocrine `#A8863A`,
-fundamentals `#55606A`.
+Subspecialty hues (module identity) are unchanged and live only in
+`OKSAT_SUBSPECIALTIES` (`js/oksat-manifest.js`); changing them is an owner
+decision.
 
 ## 3. Typography — font themes
 
 Three roles: `--ok-font-display` (titles, stems, numbers), `--ok-font-body`
 (prose, explanations), `--ok-font-ui` (chips, kickers, controls). Four themes,
-switched via `data-font` and persisted per browser (`oksat:font`), picked from
-the "Aa" topbar button:
+switched via `data-font`, picked from the "Aa" topbar button and persisted
+only on an explicit pick (`oksat:typeface`):
 
 | `data-font` | Display | Body | UI | When |
 |---|---|---|---|---|
-| `manuscript` *(default)* | Fraunces (variable opsz/SOFT) | Crimson Pro | system-ui | the warm original |
+| `instrument` *(default)* | Archivo (variable width) | Archivo | IBM Plex Mono | the site's own faces; self-hosted, no network |
 | `clinical` | Inter | Inter | Inter | dense, neutral, screen-first |
 | `atlas` | IBM Plex Sans | IBM Plex Sans | JetBrains Mono | technical, high x-height |
 | `hyperlegible` | Atkinson Hyperlegible | Atkinson Hyperlegible | Atkinson Hyperlegible | maximum legibility, low-sleep proof |
 
-Rules: body text ≥ 15px; stems use the display face at ~1.15–1.4rem;
-UI/meta text is small (10–12px) but always all-caps + letterspaced so it
-reads as *chrome*, not content. Fraunces-specific `font-variation-settings`
-are neutralized under sans themes.
+The three alternates load from Google Fonts only when chosen. Rules: body
+text ≥ 15px; stems use the display face at ~1.15–1.4rem; UI/meta text is
+small (10–12px) and set in the UI face so it reads as *chrome*, not content.
+Archivo ships without an italic here, so `em` in titles is set upright
+(no faux italic). The engine still passes Fraunces-era variation axes
+inline; `css/oksat.css` neutralizes them.
 
 ## 4. Space, shape, motion
 
-- Radii: 10px controls, 12px cards, 14px feature cards, 999px pills.
+- Radii: 4px everywhere except pills (999px). Square is the house style.
 - One content column, `--ok-maxw: 42rem`, generous bottom padding (8rem).
+- Hub modules are ruled rows under a subspecialty rule, not floating cards.
 - Motion: 150–350ms ease; `fade-up` (8px rise) on view changes; everything
   honors `prefers-reduced-motion`.
-- Shadows are whisper-level (`--ok-shadow`), deepening slightly on hover.
+- No drop shadows; hover is a color or border change.
 
 ## 5. Hub signals
 

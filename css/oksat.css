@@ -1,6 +1,7 @@
 /* =============================================================
    OKSAT — OHNS Knowledge Self-Assessment Tool — stylesheet
-   Token-driven, themed to match the main site (css/onepager.css).
+   Token-driven, same palette as the rest of the site (css/site.css),
+   expressed as --ok-* tokens because the engine consumes those names.
    Colors are CSS custom properties redefined per [data-theme];
    components consume only tokens, so retheming = editing one block.
    Per-domain chip colors come from module data and stay inline.
@@ -8,54 +9,71 @@
    docs/design-principles.md and js/oksat-prefs.js.
    ============================================================= */
 
-/* ===== TOKENS ===== */
-:root {
-  --ok-radius: 12px;
-  --ok-radius-lg: 14px;
-  --ok-maxw: 42rem;
-  --ok-font-display: 'Fraunces', Georgia, serif;
-  --ok-font-body: 'Crimson Pro', Georgia, serif;
-  --ok-font-ui: system-ui, sans-serif;
+/* ===== TYPEFACES (self-hosted, SIL OFL — fonts/LICENSE-*) ===== */
+@font-face {
+  font-family: 'Archivo'; font-style: normal; font-display: swap;
+  font-weight: 300 800; font-stretch: 62% 125%;
+  src: url('../fonts/archivo-latin-var.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono'; font-style: normal; font-display: swap; font-weight: 400;
+  src: url('../fonts/ibm-plex-mono-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono'; font-style: normal; font-display: swap; font-weight: 500;
+  src: url('../fonts/ibm-plex-mono-latin-500.woff2') format('woff2');
 }
 
+/* ===== TOKENS ===== */
+:root {
+  --ok-radius: 4px;
+  --ok-radius-lg: 4px;
+  --ok-maxw: 42rem;
+  --ok-font-display: 'Archivo', system-ui, sans-serif;
+  --ok-font-body: 'Archivo', system-ui, sans-serif;
+  --ok-font-ui: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* Paper + ink. Accent (blue) = act here; "ochre" is the historical token
+   name for the second signal — vermilion — used for kickers and review. */
 [data-theme="light"] {
-  --ok-bg: #FAF6EE;
-  --ok-surface: #FFFFFF;
-  --ok-border: #E8DFD0;
-  --ok-border-soft: #F0E8D7;
-  --ok-text: #2A241D;
-  --ok-text-muted: #6B5F4F;
-  --ok-text-faint: #8A7C66;
-  --ok-accent: #2C5454;
-  --ok-accent-soft: #3D6B6B;
-  --ok-ochre: #9C7A45;
-  --ok-correct: #4F7042;
-  --ok-correct-bg: #EAEFDA;
-  --ok-incorrect: #9A4537;
-  --ok-incorrect-bg: #F4DDD3;
-  --ok-glow: rgba(176, 141, 87, 0.06);
-  --ok-shadow: 0 1px 3px rgba(42, 36, 29, 0.04);
-  --ok-shadow-hover: 0 4px 12px rgba(42, 36, 29, 0.08);
+  --ok-bg: #F1F1EC;
+  --ok-surface: #FAFAF7;
+  --ok-border: #D6D7D0;
+  --ok-border-soft: #E4E5DF;
+  --ok-text: #121418;
+  --ok-text-muted: #4A4F57;
+  --ok-text-faint: #646973;
+  --ok-accent: #2445B0;
+  --ok-accent-soft: #3656C4;
+  --ok-ochre: #B8371A;
+  --ok-correct: #1F7A52;
+  --ok-correct-bg: #DCEDE3;
+  --ok-incorrect: #B0243A;
+  --ok-incorrect-bg: #F5DDE0;
+  --ok-glow: transparent;
+  --ok-shadow: none;
+  --ok-shadow-hover: 0 0 0 1px var(--ok-text);
 }
 
 [data-theme="dark"] {
-  --ok-bg: #1B1813;
-  --ok-surface: #242019;
-  --ok-border: #3A3226;
-  --ok-border-soft: #2F2920;
-  --ok-text: #F1E7D8;
-  --ok-text-muted: #B6A48D;
-  --ok-text-faint: #8A7C68;
-  --ok-accent: #5FA3A3;
-  --ok-accent-soft: #7FB8B8;
-  --ok-ochre: #D6AC63;
-  --ok-correct: #9FBF7E;
-  --ok-correct-bg: #2A3320;
-  --ok-incorrect: #DD9683;
-  --ok-incorrect-bg: #3A241E;
-  --ok-glow: rgba(214, 172, 99, 0.05);
-  --ok-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --ok-shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --ok-bg: #0D0E10;
+  --ok-surface: #16181B;
+  --ok-border: #2C2F35;
+  --ok-border-soft: #22252A;
+  --ok-text: #ECEBE6;
+  --ok-text-muted: #A6AAB2;
+  --ok-text-faint: #7E838C;
+  --ok-accent: #8EA7FF;
+  --ok-accent-soft: #A9BCFF;
+  --ok-ochre: #FF6B42;
+  --ok-correct: #5FD3A0;
+  --ok-correct-bg: #13291F;
+  --ok-incorrect: #FF7A8A;
+  --ok-incorrect-bg: #33161B;
+  --ok-glow: transparent;
+  --ok-shadow: none;
+  --ok-shadow-hover: 0 0 0 1px var(--ok-text);
 }
 
 /* ===== RESET / BASE ===== */
@@ -70,8 +88,6 @@ html, body {
   font-family: var(--ok-font-body);
 }
 body {
-  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, var(--ok-glow) 0%, transparent 50%);
-  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -81,10 +97,10 @@ button { font: inherit; cursor: pointer; }
 a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:focus-visible {
   outline: 2px solid var(--ok-accent);
   outline-offset: 3px;
-  border-radius: 6px;
 }
+::selection { background: var(--ok-accent); color: var(--ok-bg); }
 
-.display-font { font-family: var(--ok-font-display); font-variation-settings: 'opsz' 144, 'SOFT' 50; }
+.display-font { font-family: var(--ok-font-display); }
 .body-font { font-family: var(--ok-font-body); }
 .ui-font { font-family: var(--ok-font-ui); }
 
@@ -96,10 +112,12 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
   position: fixed; inset: 0 0 auto 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
   padding: 0.45rem 1.1rem;
-  background: color-mix(in srgb, var(--ok-bg) 90%, transparent);
-  backdrop-filter: blur(8px);
+  min-height: 52px;
+  background: color-mix(in srgb, var(--ok-bg) 88%, transparent);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  backdrop-filter: saturate(140%) blur(10px);
   border-bottom: 1px solid var(--ok-border);
-  font-family: var(--ok-font-ui); font-size: 12px;
+  font-family: var(--ok-font-ui); font-size: 12px; letter-spacing: 0.04em;
 }
 .ok-topbar a.ok-back {
   display: inline-flex; align-items: center; gap: 0.4rem;
@@ -109,17 +127,14 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-topbar a.ok-back svg { width: 12px; height: 12px; }
 
 .ok-theme-toggle {
-  width: 30px; height: 30px; flex: none;
-  border: 1px solid var(--ok-border); border-radius: 50%;
-  background: var(--ok-surface); color: var(--ok-text-muted);
-  display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s;
+  width: 34px; height: 34px; flex: none; padding: 0;
+  border: 1px solid transparent; border-radius: 50%;
+  background: none; color: var(--ok-text);
+  display: inline-grid; place-items: center;
 }
-.ok-theme-toggle:hover { color: var(--ok-accent); border-color: var(--ok-accent); }
-.ok-theme-toggle svg { width: 15px; height: 15px; }
-.ok-theme-toggle .i-sun { display: none; }
-.ok-theme-toggle .i-moon { display: block; }
-[data-theme="dark"] .ok-theme-toggle .i-sun { display: block; }
-[data-theme="dark"] .ok-theme-toggle .i-moon { display: none; }
+.ok-theme-toggle:hover { border-color: var(--ok-border); }
+.ok-theme-toggle svg { width: 16px; height: 16px; transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1); }
+[data-theme="dark"] .ok-theme-toggle svg { transform: rotate(180deg); }
 
 
 /* ===== LAYOUT ===== */
@@ -130,27 +145,26 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 /* ===== HUB (oksat.html) ===== */
 .hub-kicker { display: flex; align-items: center; gap: 0.75rem; color: var(--ok-ochre); margin-bottom: 0.75rem; }
 .hub-kicker hr { flex: 1; border: none; border-top: 1px solid var(--ok-border); }
-.hub-kicker span { font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
-.hub-title { font-family: var(--ok-font-display); font-size: clamp(2rem, 6vw, 2.75rem); font-weight: 300; line-height: 1.15; margin-bottom: 0.75rem; }
-.hub-title em { font-style: italic; font-weight: 300; }
+.hub-kicker span { font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+.hub-title { font-family: var(--ok-font-display); font-size: clamp(2.4rem, 8vw, 3.6rem); font-weight: 740; font-stretch: 118%; letter-spacing: -0.035em; line-height: 0.95; margin-bottom: 1rem; }
+.hub-title em { font-style: normal; font-weight: 300; font-stretch: 100%; }
 .hub-subtitle { font-size: 1rem; line-height: 1.6; color: var(--ok-text-muted); margin-bottom: 1rem; }
-.hub-modules { display: flex; flex-direction: column; gap: 1rem; }
+.hub-modules { display: flex; flex-direction: column; }
 .module-card {
-  display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem 1.5rem;
-  background: var(--ok-surface); border: 1px solid var(--ok-border); border-radius: var(--ok-radius);
-  text-decoration: none; color: var(--ok-text); box-shadow: var(--ok-shadow);
-  transition: box-shadow 0.2s, transform 0.15s, border-color 0.15s;
+  display: flex; align-items: center; gap: 1rem; padding: 1.15rem 0;
+  border-top: 1px solid var(--ok-border);
+  text-decoration: none; color: var(--ok-text);
 }
-.module-card:hover { box-shadow: var(--ok-shadow-hover); transform: translateY(-1px); border-color: var(--ok-ochre); }
+.module-card:hover .module-title { color: var(--ok-accent); }
 .module-accent { width: 4px; border-radius: 4px; flex-shrink: 0; align-self: stretch; }
 .module-body { flex: 1; }
-.module-label { font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; font-weight: 500; color: var(--ok-text-faint); margin-bottom: 0.3rem; }
-.module-title { font-family: var(--ok-font-display); font-size: 1.2rem; font-weight: 400; line-height: 1.25; margin-bottom: 0.35rem; }
+.module-label { font-family: var(--ok-font-ui); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--ok-text-faint); margin-bottom: 0.3rem; }
+.module-title { font-family: var(--ok-font-display); font-size: 1.2rem; font-weight: 640; letter-spacing: -0.01em; transition: color 0.15s; line-height: 1.25; margin-bottom: 0.35rem; }
 .module-desc { font-size: 0.88rem; line-height: 1.5; color: var(--ok-text-muted); }
 .module-due { margin-top: 0.4rem; font-family: var(--ok-font-ui); font-size: 11px; font-weight: 600; color: var(--ok-ochre); }
 .module-arrow { font-family: var(--ok-font-ui); font-size: 12px; color: var(--ok-text-faint); flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
 .module-card:hover .module-arrow { color: var(--ok-accent); transform: translateX(3px); }
-.hub-dots { text-align: center; margin-top: 3rem; font-family: var(--ok-font-display); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ok-text-faint); }
+.hub-dots { margin-top: 0; border-top: 1px solid var(--ok-border); padding-top: 1rem; font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.06em; color: var(--ok-text-faint); }
 
 /* ===== SHARED PRIMITIVES (viewer) ===== */
 .ok-card { background: var(--ok-surface); border: 1px solid var(--ok-border); border-radius: var(--ok-radius-lg); box-shadow: var(--ok-shadow); }
@@ -160,9 +174,10 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
   background: var(--ok-surface); border: 1px solid var(--ok-border); color: var(--ok-text);
   transition: all 0.18s;
 }
-.ok-btn:hover { opacity: 0.9; }
+.ok-btn:hover { border-color: var(--ok-text); }
 .ok-btn:active { transform: scale(0.985); }
-.ok-btn--primary { background: var(--ok-accent); border-color: var(--ok-accent); color: var(--ok-surface); }
+.ok-btn--primary { background: var(--ok-text); border-color: var(--ok-text); color: var(--ok-bg); }
+.ok-btn--primary:hover { background: var(--ok-accent); border-color: var(--ok-accent); color: var(--ok-bg); }
 .ok-btn--block { width: 100%; }
 .ok-btn--flex { flex: 1; }
 
@@ -211,11 +226,13 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 @keyframes okShimmer { 100% { transform: translateX(100%); } }
 
 .hub-subhead {
-  font-family: var(--ok-font-display); font-size: 0.72rem; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--ok-text-muted); font-weight: 500;
-  display: flex; align-items: center; gap: 0.5rem; margin: 1.5rem 0 0.75rem;
+  font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ok-text); font-weight: 500;
+  display: flex; align-items: center; gap: 0.55rem; margin: 2.25rem 0 0; padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--ok-text);
 }
-.hub-subhead .tick { width: 3px; height: 0.9rem; border-radius: 999px; }
+.hub-subhead + .module-card { border-top: 0; }
+.hub-subhead .tick { width: 8px; height: 8px; border-radius: 50%; }
 
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
@@ -223,16 +240,16 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 }
 
 /* =============================================================
-   FONT THEMES — data-font on <html>, persisted as oksat:font.
-   Every component consumes only --ok-font-*; switching themes is
-   an attribute flip. Unknown variation axes (opsz/SOFT, set inline
-   for Fraunces) are ignored by the other families, so themes can
-   share the markup.
+   FONT THEMES — data-font on <html>, persisted as oksat:typeface
+   (js/oksat-prefs.js). Every component consumes only --ok-font-*;
+   switching is an attribute flip. `instrument` (the site's own
+   Archivo + IBM Plex Mono, self-hosted) is the default; the others
+   come from Google Fonts and are only fetched when chosen.
    ============================================================= */
-[data-font="manuscript"] {
-  --ok-font-display: 'Fraunces', Georgia, serif;
-  --ok-font-body: 'Crimson Pro', Georgia, serif;
-  --ok-font-ui: system-ui, sans-serif;
+[data-font="instrument"] {
+  --ok-font-display: 'Archivo', system-ui, sans-serif;
+  --ok-font-body: 'Archivo', system-ui, sans-serif;
+  --ok-font-ui: 'IBM Plex Mono', ui-monospace, monospace;
 }
 [data-font="clinical"] {
   --ok-font-display: 'Inter', system-ui, sans-serif;
@@ -249,19 +266,19 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
   --ok-font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
   --ok-font-ui: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
-/* Sans display faces need more weight than Fraunces' airy 300s. */
-[data-font="clinical"] .hub-title, [data-font="atlas"] .hub-title, [data-font="hyperlegible"] .hub-title { font-weight: 600; letter-spacing: -0.02em; }
-[data-font="clinical"] .display-font, [data-font="atlas"] .display-font, [data-font="hyperlegible"] .display-font { font-variation-settings: normal; }
+/* The engine sets Fraunces-era variation axes inline; neutralize them. */
+.display-font { font-variation-settings: normal !important; }
+[data-font="clinical"] .hub-title, [data-font="atlas"] .hub-title, [data-font="hyperlegible"] .hub-title { font-stretch: 100%; }
 
 /* ===== TOPBAR ROUND BUTTONS (font picker, settings — same skin as the theme toggle) ===== */
 .ok-roundbtn {
-  min-width: 30px; height: 30px; flex: none; padding: 0 0.45rem;
-  border: 1px solid var(--ok-border); border-radius: 999px;
-  background: var(--ok-surface); color: var(--ok-text-muted);
+  min-width: 34px; height: 34px; flex: none; padding: 0 0.5rem;
+  border: 1px solid transparent; border-radius: 999px;
+  background: none; color: var(--ok-text);
   display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
   font-family: var(--ok-font-ui); font-size: 12px; transition: all 0.2s;
 }
-.ok-roundbtn:hover { color: var(--ok-accent); border-color: var(--ok-accent); }
+.ok-roundbtn:hover { border-color: var(--ok-border); }
 .ok-roundbtn svg { width: 15px; height: 15px; }
 
 /* ===== POPOVER (font picker) ===== */
@@ -290,14 +307,14 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-modal {
   width: 100%; max-width: 30rem; max-height: 86vh; overflow-y: auto;
   background: var(--ok-surface); border: 1px solid var(--ok-border);
-  border-radius: 16px; padding: 1.5rem; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  border-radius: var(--ok-radius); padding: 1.5rem; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
 }
-.ok-modal h2 { font-family: var(--ok-font-display); font-weight: 400; font-size: 1.35rem; margin-bottom: 0.25rem; }
+.ok-modal h2 { font-family: var(--ok-font-display); font-weight: 680; font-size: 1.35rem; margin-bottom: 0.25rem; }
 .ok-modal .ok-modal-sub { font-size: 0.9rem; color: var(--ok-text-muted); margin-bottom: 1.25rem; line-height: 1.5; }
 .ok-modal-section { border-top: 1px solid var(--ok-border-soft); padding-top: 1rem; margin-top: 1rem; }
 .ok-modal-section h3 {
-  font-family: var(--ok-font-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--ok-ochre); margin-bottom: 0.6rem;
+  font-family: var(--ok-font-ui); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ok-text-faint); margin-bottom: 0.6rem;
 }
 .ok-field { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; }
 .ok-btn--sm { padding: 0.5rem 0.85rem; font-size: 0.85rem; border-radius: 9px; }
@@ -306,3 +323,27 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-status { font-family: var(--ok-font-ui); font-size: 11.5px; margin-top: 0.4rem; min-height: 1rem; }
 .ok-status.good { color: var(--ok-correct); }
 .ok-status.bad { color: var(--ok-incorrect); }
+
+.ok-topbar-actions { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
+
+/* ===== HUB SIGNALS (oksat.html) ===== */
+/* Review banner — the one thing worth seeing before the module list. */
+.hub-review {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  margin: 1.75rem 0 0.5rem; padding: 0.9rem 1rem;
+  border: 1px solid var(--ok-ochre); border-left-width: 3px; border-radius: var(--ok-radius);
+  background: var(--ok-surface);
+}
+.hub-review[hidden] { display: none; }
+.hub-review .rv-text { font-size: 0.95rem; line-height: 1.45; }
+.hub-review .rv-count { font-family: var(--ok-font-ui); font-weight: 500; color: var(--ok-ochre); }
+.hub-review .rv-sub { display: block; font-size: 0.8rem; color: var(--ok-text-faint); margin-top: 0.15rem; }
+/* Per-module completion meter on each card. */
+.module-meter {
+  display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem;
+  font-family: var(--ok-font-ui); font-size: 11px; color: var(--ok-text-faint); font-variant-numeric: tabular-nums;
+}
+.module-meter .bar { flex: 1; max-width: 12rem; height: 2px; background: var(--ok-border); overflow: hidden; }
+.module-meter .fill { display: block; height: 100%; background: var(--ok-accent); }
+/* Archivo ships no italic cut here; don't let the browser fake one. */
+.ok-root h1 em, #root h1 em { font-style: normal; }

@@ -1,0 +1,51 @@
+{
+  "$comment": "What may leave the sk.oto vault. Read by wiki/sync/sync-vault.mjs. Allowlist, not denylist: a folder that is not named here is never published, so new vault folders (data_sources/, _drafts/, .agents/ ...) stay private by default.",
+
+  "includeFolders": ["Otology", "Sinus", "Laryngology", "Head_and_Neck", "FPRS", "Pediatrics"],
+  "includeRootFiles": [],
+  "$comment_phase": "Phase 1 (2026-09): only the six subspecialty maps of content go out (gate.tierMatches), and the root MOC.md stays home. To open the full set: set tierMatches to \"\" and includeRootFiles to [\"MOC.md\"].",
+
+  "skipNamesStartingWith": ["_", "."],
+
+  "gate": {
+    "$comment": "A note is published only if its frontmatter passes. 'statusIn' empty = any status.",
+    "statusIn": ["complete"],
+    "requireVetted": false,
+    "honorDraftTrue": true,
+    "tierMatches": "^Master Map of Content"
+  },
+
+  "stripSections": ["Personal Notes"],
+  "dropTitleH1": true,
+  "dropFrontmatterKeys": ["personal_status"],
+
+  "unvetted": {
+    "$comment": "When vetted is empty, add this tag and put this callout under the H1, so an unverified note never reads as a reference.",
+    "tag": "unvetted",
+    "callout": "> [!warning] Unvetted\n> Study scaffolding, not yet verified against source texts. Not a clinical reference."
+  },
+
+  "feedback": {
+    "$comment": "Appended to every published note: a link to the correction issue form in the wiki repo (wiki/github/ISSUE_TEMPLATE/correction.yml). 'field' is the form input the vault path prefills; pull-feedback.mjs reads it back.",
+    "issueUrl": "https://github.com/skflx/ent-wiki/issues/new?template=correction.yml",
+    "field": "note",
+    "titlePrefix": "Correction: ",
+    "text": "*Spot an error? [Suggest a correction]({url}) — opens a public GitHub issue.*"
+  },
+
+  "holdIfBodyMatches": {
+    "$comment": "Fail closed: a note matching any of these is held back and listed in the report for a human to look at. Tuned for PHI and credentials, not clinical vocabulary.",
+    "patterns": [
+      "\\bMRN\\b",
+      "\\bDOB\\b",
+      "\\bdate of birth\\b",
+      "\\b\\d{3}-\\d{2}-\\d{4}\\b",
+      "\\(?\\b\\d{3}\\)?[-.\\s]\\d{3}[-.\\s]\\d{4}\\b",
+      "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+      "AIza[0-9A-Za-z_-]{35}",
+      "sk-ant-[A-Za-z0-9_-]{10,}",
+      "gh[pousr]_[A-Za-z0-9]{30,}",
+      "-----BEGIN [A-Z ]*PRIVATE KEY-----"
+    ]
+  }
+}

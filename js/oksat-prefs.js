@@ -1,14 +1,18 @@
 /* =============================================================
    OKSAT preferences — font theme + day/night wiring.
    Font themes are pure CSS attribute switches ([data-font] in
-   css/oksat.css); this module persists the choice (oksat:font),
-   applies it on load, and renders the "Aa" picker in the topbar.
-   The day/night toggle shares the site-wide sk_theme key.
+   css/oksat.css); this module persists an explicit choice
+   (oksat:typeface), applies it, and renders the "Aa" picker in the
+   topbar. js/theme-boot.js applies the stored choice pre-paint.
+   Only an explicit pick is written, so a future change of default
+   reaches everyone who never chose. The day/night toggle shares the
+   site-wide sk_theme key.
    ============================================================= */
 (function () {
-  var FONT_KEY = 'oksat:font';
+  var FONT_KEY = 'oksat:typeface';
+  var DEFAULT = 'instrument';
   var THEMES = [
-    { id: 'manuscript',  name: 'Manuscript',  hint: 'Fraunces · Crimson Pro' },
+    { id: 'instrument',  name: 'Instrument',  hint: 'Archivo · Plex Mono' },
     { id: 'clinical',    name: 'Clinical',    hint: 'Inter' },
     { id: 'atlas',       name: 'Atlas',       hint: 'IBM Plex · JetBrains' },
     { id: 'hyperlegible', name: 'Hyperlegible', hint: 'Atkinson' },
@@ -18,14 +22,12 @@
   function set(key, v) { try { localStorage.setItem(key, v); } catch (e) {} }
 
   function currentFont() {
-    var f = get(FONT_KEY, 'manuscript');
-    return THEMES.some(function (t) { return t.id === f; }) ? f : 'manuscript';
+    var f = get(FONT_KEY, DEFAULT);
+    return THEMES.some(function (t) { return t.id === f; }) ? f : DEFAULT;
   }
-  function applyFont(id) {
-    document.documentElement.setAttribute('data-font', id);
-    set(FONT_KEY, id);
-  }
-  applyFont(currentFont());
+  function showFont(id) { document.documentElement.setAttribute('data-font', id); }
+  function applyFont(id) { showFont(id); set(FONT_KEY, id); }
+  showFont(currentFont());
 
   /* ---- "Aa" popover picker. `host` must be position:relative-able. ---- */
   function mountFontPicker(host) {
@@ -68,9 +70,10 @@
     btn.addEventListener('click', function () {
       var cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', cur);
+      btn.setAttribute('aria-pressed', cur === 'dark' ? 'true' : 'false');
       try { localStorage.setItem('sk_theme', cur); } catch (e) {}
-      document.dispatchEvent(new CustomEvent('oksat:theme', { detail: cur }));
     });
+    btn.setAttribute('aria-pressed', document.documentElement.getAttribute('data-theme') === 'dark' ? 'true' : 'false');
   }
 
   window.OKSATPrefs = {

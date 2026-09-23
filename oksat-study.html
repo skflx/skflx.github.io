@@ -1,27 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-font="manuscript">
+<html lang="en" data-theme="light" data-font="instrument">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>OKSAT Study | skflx.MD</title>
   <meta name="description" content="OKSAT — OHNS Knowledge Self-Assessment study viewer, with concept filtering and spaced-repetition review.">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
-  <!-- Set theme + font before paint to avoid a flash (shares keys with the main site) -->
-  <script>
-    (function () {
-      try {
-        var t = localStorage.getItem('sk_theme');
-        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', t);
-        var f = localStorage.getItem('oksat:font');
-        if (f) document.documentElement.setAttribute('data-font', f);
-      } catch (e) {}
-    })();
-  </script>
+  <!-- Theme + typeface before paint (shares sk_theme with the main site) -->
+  <script src="js/theme-boot.js"></script>
 
+  <!-- Optional typefaces for the "Aa" picker; only fetched when chosen -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Crimson+Pro:ital,wght@0,300..700;1,400&family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/oksat.css">
 </head>
 <body>
@@ -30,21 +24,20 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       Self-Assessment
     </a>
-    <div style="display:flex;align-items:center;gap:0.5rem;margin-left:auto">
+    <div class="ok-topbar-actions">
       <span id="font-picker"></span>
-      <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Toggle day / night">
-        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+      <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
       </button>
     </div>
   </nav>
 
-  <div id="root" style="padding-top:42px"></div>
+  <div id="root" style="padding-top:52px"></div>
 
-  <!-- React + htm (no in-browser Babel) -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/htm@3/dist/htm.umd.js" crossorigin></script>
+  <!-- React + htm, pinned and self-hosted (js/vendor/README.md); no in-browser Babel -->
+  <script src="js/vendor/react-18.3.1.production.min.js"></script>
+  <script src="js/vendor/react-dom-18.3.1.production.min.js"></script>
+  <script src="js/vendor/htm-3.1.1.umd.js"></script>
 
   <script src="js/oksat-manifest.js"></script>
   <script src="js/oksat-store.js"></script>
@@ -52,34 +45,6 @@
   <script src="js/oksat-concept-graph.js"></script>
   <script src="js/oksat-engine.js"></script>
 
-  <script>
-    (function () {
-      OKSATPrefs.mountThemeToggle(document.getElementById('theme-toggle'));
-      OKSATPrefs.mountFontPicker(document.getElementById('font-picker'));
-
-      var root = document.getElementById('root');
-      function notice(title, body) {
-        root.innerHTML = '<div class="ok-notice"><h1>' + title + '</h1><p>' + body +
-          '</p><a href="oksat.html">&larr; Back to the self-assessment hub</a></div>';
-      }
-
-      var slug = new URLSearchParams(location.search).get('m');
-      var manifest = window.OKSAT_MANIFEST || [];
-      var entry = manifest.filter(function (m) { return m.slug === slug; })[0];
-      if (!entry) { notice('Module not found', 'No study module matches “' + (slug || '') + '”.'); return; }
-
-      document.title = entry.title + ' · OKSAT | skflx.MD';
-      var s = document.createElement('script');
-      s.src = entry.data;
-      s.onload = function () {
-        var mod = window.__MCQ_MODULE;
-        try { delete window.__MCQ_MODULE; } catch (e) { window.__MCQ_MODULE = undefined; }
-        if (!mod) { notice('Module failed to load', 'The data for “' + entry.title + '” did not register correctly.'); return; }
-        window.mountOKSAT(root, mod, entry, OKSATStore.reviewer());
-      };
-      s.onerror = function () { notice('Module failed to load', 'Could not fetch the data file for “' + entry.title + '”.'); };
-      document.body.appendChild(s);
-    })();
-  </script>
+  <script src="js/oksat-viewer.js"></script>
 </body>
 </html>

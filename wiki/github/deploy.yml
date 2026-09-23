@@ -1,0 +1,81 @@
+# =============================================================
+# Deploy workflow for the separate wiki repo (scaffold — inert here).
+# Copy to .github/workflows/deploy.yml in skflx/ent-wiki. Adapted from
+# Quartz 5's docs/hosting.md (GitHub Pages). Changes are marked "sk:".
+# In that repo: Settings → Pages → Source = "GitHub Actions".
+# =============================================================
+name: Deploy sk.oto wiki to GitHub Pages
+
+on:
+  push:
+    branches:
+      - v5 # sk: Quartz 5's default branch name; change if you rename it
+  workflow_dispatch: {} # sk: allow a manual redeploy
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # git history → accurate "last modified" dates
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Cache Quartz plugins
+        uses: actions/cache@v5
+        with:
+          path: .quartz/plugins
+          key: ${{ runner.os }}-plugins-${{ hashFiles('quartz.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-plugins-
+      - name: Install Dependencies
+        run: npm ci
+      - name: Install Quartz plugins
+        run: npx quartz plugin install
+      # sk: second look before anything is public. content/ was produced
+      # by sync-vault.mjs on the owner's machine; this fails the deploy if
+      # a Personal Notes heading or a source dump somehow got committed.
+      - name: Refuse private material
+        run: |
+          if grep -rIl --include='*.md' -e '^## Personal Notes' content/; then
+            echo "::error::Personal Notes section found in content/ — re-run sync-vault.mjs"; exit 1; fi
+          if [ -e content/data_sources ] || [ -e content/_drafts ] || [ -e content/.agents ]; then
+            echo "::error::private vault folder found in content/"; exit 1; fi
+      # sk: ```dgmo fences → inline SVG (light + dark, site palette).
+      # Needs `npm i -D @diagrammo/dgmo` in this repo; see wiki/README.md.
+      - name: Render DGMO diagrams
+        run: node scripts/render-dgmo.mjs content
+      - name: Build Quartz
+        run: npx quartz build
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

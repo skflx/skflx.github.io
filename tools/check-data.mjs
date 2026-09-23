@@ -23,6 +23,7 @@
    Every check here passes on master. If a check fails
    on untouched master, the CHECK is wrong — investigate before editing data.
    ============================================================= */
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -125,9 +126,83 @@ function checkAirway() {
     `${bad.length} malformed (e.g. ${bad.slice(0, 3).join(' ; ')})`);
 }
 
+/* ===========================================================
+   3. Security invariants (docs/security.md)
+   Static checks over every shipped page, so a regression fails CI
+   instead of waiting for someone to notice. Regex, not a parser:
+   the pages are hand-written and these patterns are simple.
+   =========================================================== */
+
+/* SHA-384 of each vendored file (js/vendor/README.md). A mismatch
+   means the file was edited or swapped — re-derive it from npm. */
+const VENDOR_SHA384 = {
+  'js/vendor/react-18.3.1.production.min.js': 'DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z',
+  'js/vendor/react-dom-18.3.1.production.min.js': 'gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1',
+  'js/vendor/htm-3.1.1.umd.js': 'toVdrLSMaw7Y55MowcKqkmFL/Ek6Sky62NOk0b5sDDZBu2wcoPyyQUt9unDVjXhL',
+};
+
+/* Pages that must make no third-party request at all. */
+const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html']);
+
+function checkSecurity() {
+  console.log('\nsecurity: vendored scripts + page policies');
+
+  for (const [file, want] of Object.entries(VENDOR_SHA384)) {
+    let got = null;
+    try { got = crypto.createHash('sha384').update(fs.readFileSync(rel(file))).digest('base64'); } catch (e) { /* missing */ }
+    ok(got === want, `${file} matches pinned SHA-384`, `${file} ${got ? 'hash changed' : 'missing'}`);
+  }
+
+  const pages = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
+  for (const page of pages) {
+    const html = fs.readFileSync(rel(page), 'utf8');
+    const problems = [];
+
+    const csp = (html.match(/<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]+)"/i) || [])[1];
+    if (!csp) problems.push('no CSP meta');
+    else {
+      const dir = (name) => (csp.split(';').map((d) => d.trim()).find((d) => d.startsWith(name + ' ')) || '');
+      const scriptSrc = dir('script-src') || dir('default-src');
+      if (!scriptSrc) problems.push('CSP has no script-src/default-src');
+      if (/'unsafe-inline'|'unsafe-eval'|\*|https?:|data:/.test(scriptSrc)) problems.push(`script-src too broad: "${scriptSrc}"`);
+      if (!/object-src 'none'/.test(csp)) problems.push("CSP lacks object-src 'none'");
+      if (!/base-uri 'none'|base-uri 'self'/.test(csp)) problems.push('CSP lacks base-uri');
+      if (SELF_CONTAINED.has(page) && /https?:/.test(csp)) problems.push('self-contained page allows a remote origin in CSP');
+    }
+
+    /* Inline executable script: a <script> without src whose type is not a data block. */
+    for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+      const attrs = m[1];
+      if (/\bsrc\s*=/.test(attrs)) {
+        const src = (attrs.match(/\bsrc\s*=\s*"([^"]+)"/) || [])[1] || '';
+        if (/^(https?:)?\/\//i.test(src)) problems.push(`third-party script ${src}`);
+        else if (!fs.existsSync(rel(src.split('?')[0]))) problems.push(`script src missing on disk: ${src}`);
+      } else if (!/type\s*=\s*"application\/(ld\+)?json"/i.test(attrs) && m[2].trim()) {
+        problems.push('inline <script> (move it to a file; CSP forbids it)');
+      }
+    }
+    if (/\son[a-z]+\s*=\s*["']/i.test(html.replace(/<script\b[\s\S]*?<\/script>/gi, ''))) problems.push('inline on*= event handler');
+    if (/href\s*=\s*["']\s*javascript:/i.test(html)) problems.push('javascript: URL');
+
+    for (const m of html.matchAll(/<a\b[^>]*target="_blank"[^>]*>/gi)) {
+      if (!/rel="[^"]*noopener/.test(m[0])) problems.push(`target=_blank without rel=noopener: ${m[0].slice(0, 80)}`);
+    }
+
+    if (SELF_CONTAINED.has(page)) {
+      const loaded = [...html.matchAll(/<(?:link|script|img|iframe|source)\b[^>]*>/gi)]
+        .map((m) => m[0]).filter((tag) => !/rel="canonical"/i.test(tag))
+        .map((tag) => (tag.match(/(?:href|src|srcset)\s*=\s*"(https?:\/\/[^"]+)"/i) || [])[1]).filter(Boolean);
+      if (loaded.length) problems.push(`loads remote resources: ${loaded.join(', ')}`);
+    }
+
+    ok(problems.length === 0, `${page}: CSP present, no inline/third-party script`, `${page}: ${problems.join(' ; ')}`);
+  }
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkOksat();
 checkAirway();
+checkSecurity();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

@@ -4,7 +4,7 @@
    console errors, plus a per-page readiness assertion.
 
    Real browser (headless Chromium via Playwright) because the study
-   viewer renders through React + htm from a CDN — jsdom can't stand in.
+   viewer renders through React + htm (vendored) — a DOM shim can't stand in.
    Each page gets a fresh context (clean localStorage) so tests are
    order-independent.
 
@@ -36,9 +36,15 @@ const OFFLINE = args.includes('--offline');
 const wait = (page, fn, timeout = 12000) => page.waitForFunction(fn, null, { timeout }).then(() => true);
 
 const PAGES = [
-  { path: 'index.html', ready: (p) => wait(p, () => !!document.querySelector('details.section')) },
+  { path: 'index.html', ready: (p) => wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent)) },
   { path: 'oksat.html', ready: (p) => wait(p, () => document.querySelectorAll('#modules .module-card').length > 0) },
   { path: 'oksat-study.html?m=pediatrics', ready: oksatStudyReady },
+  /* Regression: ?m= once reached innerHTML (reflected DOM XSS). It must
+     render as text in the not-found notice, never as markup. */
+  { path: 'oksat-study.html?m=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
+    ready: (p) => wait(p, () => !!document.querySelector('.ok-notice')
+      && !document.getElementById('pwn') && !window.__pwned
+      && /<img/.test(document.querySelector('.ok-notice').textContent)) },
   { path: 'airway-jeopardy.html', ready: (p) => wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions)) },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
 ];
