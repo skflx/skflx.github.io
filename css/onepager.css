@@ -97,6 +97,7 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
 }
 .cochlea-membrane { fill: none; stroke: var(--rule-strong); stroke-width: 0.9; stroke-dasharray: 1.5 3.5; }
 .cochlea-lead { fill: none; stroke: var(--signal); stroke-width: 2.2; stroke-linecap: round; }
+.cochlea-array { fill: none; stroke: var(--signal); stroke-width: 1; stroke-linecap: round; opacity: 0; animation: fade 0.6s ease-out 1.4s forwards; }
 .cochlea-contact { fill: var(--signal); opacity: 0; animation: contact 0.35s ease-out both; animation-delay: calc(1.5s + var(--i, 0) * 45ms); }
 .cochlea-tick line { stroke: var(--signal-2); stroke-width: 1; }
 .cochlea-tick text {
@@ -107,8 +108,9 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @media (prefers-reduced-motion: reduce) {
   .cochlea-duct { stroke-dasharray: none; stroke-dashoffset: 0; animation: none; }
-  .cochlea-contact { opacity: 1; animation: none; }
+  .cochlea-contact, .cochlea-array { opacity: 1; animation: none; }
 }
+@keyframes fade { to { opacity: 1; } }
 @keyframes contact { from { opacity: 0; transform: scale(0.2); transform-box: fill-box; transform-origin: center; } to { opacity: 1; transform: none; } }
 
 /* =============================================================

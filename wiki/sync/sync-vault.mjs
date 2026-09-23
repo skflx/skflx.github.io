@@ -16,6 +16,11 @@
    - unvetted notes get a tag and a warning callout
    - the H1 that repeats the frontmatter title is dropped (Quartz
      renders the title itself)
+   - optional phase gate on `tier` (policy gate.tierMatches), e.g.
+     maps of content only while the rest is being vetted
+   - every published note ends with a "Suggest a correction" link to a
+     prefilled GitHub issue (policy.feedback) — the public half of the
+     reader-feedback loop; wiki/feedback/pull-feedback.mjs is the other
    - it only ever deletes files it wrote itself (tracked in
      <out>/.vault-sync.json); it refuses a non-empty folder it did not
      create
@@ -163,6 +168,15 @@ export function dropTitleH1(body, title) {
     return body.slice(m[0].length);
 }
 
+/* The per-note link into the issue form. `note` is the vault-relative
+   path, which is what pull-feedback.mjs maps the issue back onto.
+   Parentheses are encoded so the URL cannot end the Markdown link. */
+export function feedbackLink(fb, rel, title) {
+    const q = (s) => encodeURIComponent(s).replace(/[()]/g, (c) => (c === '(' ? '%28' : '%29'));
+    const url = `${fb.issueUrl}${fb.issueUrl.includes('?') ? '&' : '?'}${fb.field}=${q(rel)}&title=${q(`${fb.titlePrefix || ''}${title || rel}`)}`;
+    return `${fb.text.replace('{url}', url)}`;
+}
+
 /* ---------- vault walk ---------- */
 function walk(dir, skipPrefixes, acc = []) {
     for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -213,6 +227,7 @@ export function transform(vault, policy, candidates) {
             if (gate.honorDraftTrue && String(meta.draft).toLowerCase() === 'true') { report.gated.push({ rel, why: 'draft: true' }); continue; }
             if (gate.statusIn.length && !gate.statusIn.includes(status)) { report.gated.push({ rel, why: `status: ${status || '(none)'}` }); continue; }
             if (gate.requireVetted && !String(meta.vetted || '').trim()) { report.gated.push({ rel, why: 'not vetted' }); continue; }
+            if (gate.tierMatches && !new RegExp(gate.tierMatches, 'i').test(String(meta.tier || ''))) { report.gated.push({ rel, why: `tier: ${meta.tier || '(none)'}` }); continue; }
         }
 
         const stripped = stripSections(body, policy.stripSections);
@@ -241,6 +256,9 @@ export function transform(vault, policy, candidates) {
             fmText = addTag(fmText, policy.unvetted.tag);
             body = insertAfterH1(body, policy.unvetted.callout);
             report.unvetted++;
+        }
+        if (policy.feedback && policy.feedback.issueUrl) {
+            body = body.replace(/\s*$/, '') + '\n\n' + feedbackLink(policy.feedback, n.rel, n.meta.title) + '\n';
         }
         report.personalSectionsCut += n.cut;
         report.linksUnlinked += link.unlinked;

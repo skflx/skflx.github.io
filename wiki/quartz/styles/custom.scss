@@ -96,6 +96,11 @@ figure.dgmo {
   }
   .dgmo-dark { display: none; }
 }
+// Wide layouts (render-dgmo.mjs marks them) keep a readable text size on
+// phones and scroll sideways rather than shrinking to ~5px type.
+@media (max-width: 800px) {
+  figure.dgmo.dgmo-wide svg { min-width: 44rem; }
+}
 :root[saved-theme="dark"] figure.dgmo {
   .dgmo-light { display: none; }
   .dgmo-dark { display: block; }

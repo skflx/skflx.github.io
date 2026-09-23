@@ -25,8 +25,9 @@ Icon fonts, emoji, pastel badges and the Matte/Story style switch are gone.
 
 **State:** Rebuilt as an index: big name beside a background-removed
 portrait on a plate, then five open numbered sections with sticky heads on
-desktop; Fig. 1 (a generated cochlea with a 22-contact array and Greenwood
-tonotopic ticks) sits in About. The social card (`images/og-card.jpg`) was
+desktop; Fig. 1 (a generated cochlea drawn to the owner's 30.2 mm duct, with
+their FLEX28 array and Greenwood tonotopic ticks; `tools/gen-cochlea.py`)
+sits in About. The social card (`images/og-card.jpg`) was
 re-rendered to match. The residency year computes itself
 from a July 1 rollover (capped at PGY-5); the HTML carries the current value
 as a no-JS fallback, and the two must change together.
@@ -100,22 +101,30 @@ deleted.
 
 ## Wiki scaffold (`wiki/`)
 
-**State:** Scaffold only, nothing built or served. Quartz 5 config (from the
-upstream `obsidian` template, retuned to the site), custom styles, landing
-page, an inert deploy workflow, and `wiki/sync/sync-vault.mjs` — the
-fail-closed sync from the `sk.oto` vault (six subspecialty folders + MOC;
-Personal Notes, drafts, source texts and governance files never leave).
-Tested on a synthetic vault in CI; a real Quartz v5.0.0 build of the config
-succeeded on 2026-09-23.
+**State:** Not live; nothing is built or served from this repo. Quartz 5
+config (from the upstream `obsidian` template, retuned to the site), custom
+styles, landing page, an inert deploy workflow, and
+`wiki/sync/sync-vault.mjs` — the fail-closed sync from the `sk.oto` vault
+(six subspecialty folders; Personal Notes, drafts, source texts and
+governance files never leave). Phase 1 of `policy.json` publishes only the
+six subspecialty maps of content; their sync output is committed in
+`wiki/content/` and renders in Quartz v5.0.0 (checked 2026-09-23).
+
+Reader corrections: every published note ends with a link to a prefilled
+public GitHub issue (`wiki/github/ISSUE_TEMPLATE/correction.yml`);
+`wiki/feedback/pull-feedback.mjs` pulls those issues into the vault's
+`_inbox/wiki-feedback/` as untrusted, fenced reports, and prints the
+`Closes #n` lines once they are resolved. Fixes are made in the vault, so
+Drive and the wiki both get them.
 
 DGMO diagrams render at build time: `wiki/dgmo/render-dgmo.mjs` uses the
 same `@diagrammo/dgmo` library as the vault's Obsidian plugin to emit light
 and dark SVGs on a palette built from the site tokens (verified in a real
 Quartz build, 2026-09-23).
 
-**Next:** Owner decisions in `wiki/README.md` — who can read it (public,
-vetted-only, or gated; brainstorm pending), the separate repo, whether to
-automate the sync, and a reader feedback channel.
+**Next:** Create `skflx/ent-wiki` and go live (`wiki/README.md` §Bootstrap);
+publish notes beyond the maps as they are vetted (widen `gate.tierMatches`);
+decide whether to automate the sync (needs a secret).
 
 ---
 

@@ -122,6 +122,25 @@ fences and prose are untouched, the source is escaped, and the chart title
 is re-centered. A real Quartz/DGMO build is not part of CI (no build step
 here); `wiki/README.md` records the last manual build check.
 
+The suite also pins the phase-1 policy: only `tier: Master Map of Content`
+notes publish, the root `MOC.md` does not, and every note ends with a
+prefilled correction link whose URL survives parentheses.
+
+It runs `wiki/feedback/pull-feedback.mjs` against a saved, deliberately
+hostile issue list (no network) and checks that:
+
+- a dry run writes nothing, and PRs and unlabelled issues are skipped;
+- reader text containing its own fences, headings and "instructions" stays
+  inside its fence;
+- a `note` path-traversal or frontmatter-injection attempt is dropped;
+- PHI trips the flag;
+- an owner's resolution is never overwritten;
+- `--closes` emits only resolved issues;
+- the inbox never publishes.
+
+Fig. 1 has no test; regenerate it with `python3 tools/gen-cochlea.py` and
+look at it in both themes.
+
 ### Archive (`archive/`)
 Not served, not smoke-tested, not checked by `tools/check-data.mjs`. The one
 invariant worth asserting after touching it:

@@ -70,3 +70,19 @@ synthetic vault by `tools/test-wiki-sync.mjs`. Changing
 `wiki/sync/policy.json` changes what can be published: owner decision.
 See `wiki/README.md` for the open questions (public vs. gated, unvetted
 content).
+
+Reader feedback flows the other way. Corrections arrive as public GitHub
+issues, and `wiki/feedback/pull-feedback.mjs` copies them into the vault's
+`_inbox/wiki-feedback/`, which is never published. Their text was written
+by strangers, so the tool handles it as untrusted data:
+
+- Reader text is written only inside a code fence it cannot close, under a
+  callout saying it is untrusted. An agent triaging the inbox therefore
+  reads it as a report, not as instructions.
+- The `note` field is kept only if it names a real vault file. Path
+  traversal and frontmatter injection are dropped.
+- Frontmatter values are single-line and JSON-quoted.
+- Reports that trip the PHI patterns are flagged, so the owner can scrub
+  the public issue.
+
+The tool reads the public API and needs no token.

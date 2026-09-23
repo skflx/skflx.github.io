@@ -128,6 +128,9 @@ system, not an append-only diary) and run the documentation pass in
   (including a new CDN, font service, or analytics).
 - Loosening a page's Content-Security-Policy (`docs/security.md`).
 - Changing `wiki/sync/policy.json` or anything else that decides what
-  leaves the Obsidian vault; making the wiki public.
+  leaves the Obsidian vault (including widening the phase-1 `tierMatches`
+  gate); making the wiki public.
+- Changing Fig. 1's device or measurements (`tools/gen-cochlea.py`) — they
+  are the owner's own implant.
 - Merging to `master` (that is deploy).
 - Anything that would put a secret in the repo.

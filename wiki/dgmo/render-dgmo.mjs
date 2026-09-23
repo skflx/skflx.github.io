@@ -65,6 +65,15 @@ export function recenterTitle(svg) {
     return svg.replace(/(<text\b[^>]*class="chart-title"[^>]*\bx=")[-\d.]+(")/, `$1${cx}$2`);
 }
 
+/* A diagram laid out this wide (pyramids come out at 1200) shrinks to
+   unreadable text on a phone; custom.scss gives .dgmo-wide a minimum
+   width there and lets the figure scroll instead. */
+const WIDE = 900;
+export function viewBoxWidth(svg) {
+    const vb = /viewBox="[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+[\d.]+"/.exec(svg);
+    return vb ? parseFloat(vb[1]) : 0;
+}
+
 /* Replace every ```dgmo … ``` (or ~~~dgmo) fence. `renderFn(src, theme)`
    resolves to { svg } or throws. Pure apart from renderFn, so it is
    testable without the library. */
@@ -82,7 +91,7 @@ export async function transformMarkdown(md, renderFn) {
             if (!light?.svg || !dark?.svg) throw new Error('empty render');
             const title = (src.split('\n')[0] || '').replace(/^\s*\S+\s*/, '').trim();
             parts.push([
-                `<figure class="dgmo"${title ? ` aria-label="${esc(title)}"` : ''}>`,
+                `<figure class="dgmo${viewBoxWidth(light.svg) >= WIDE ? ' dgmo-wide' : ''}"${title ? ` aria-label="${esc(title)}"` : ''}>`,
                 `<div class="dgmo-light">${oneLine(recenterTitle(light.svg))}</div>`,
                 `<div class="dgmo-dark">${oneLine(recenterTitle(dark.svg))}</div>`,
                 `<details class="dgmo-source"><summary>Diagram source</summary><pre><code>${esc(src).replace(/\r?\n/g, '&#10;')}</code></pre></details>`,
