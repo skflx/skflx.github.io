@@ -6,7 +6,7 @@
 
    Loaded as a plain <script> BEFORE the engine. Progress and SRS
    keys (oksat:progress:*, oksat:srs:*) are owned by the engine;
-   oksat:font / sk_theme by oksat-prefs.js. All reads and writes
+   oksat:typeface / sk_theme by oksat-prefs.js. All reads and writes
    here are guarded and never throw.
 
    ---- Identity ----

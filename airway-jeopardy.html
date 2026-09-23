@@ -3,43 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Zero third-party requests by design; the CSP makes that an enforced invariant. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
   <title>Airway Rounds · Clinical Quiz | skflx.MD</title>
   <meta name="description" content="Team-based ENT/Head &amp; Neck airway quiz — Rounds, Jeopardy Board, Quick Quiz, and Browse modes for nursing education, with topic/difficulty filters, steal mechanics, and session history.">
-  <script>(function(){try{var t=localStorage.getItem('sk_theme');if(!t)t='light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();</script>
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <script src="js/theme-boot.js"></script>
   <link rel="stylesheet" href="css/site.css">
 
   <style>
     html, body { margin: 0; padding: 0; }
-    #aw-app { min-height: calc(100vh - 49px); }
+    #aw-app { min-height: calc(100vh - 53px); }
 
     /* ─── Scope: the game area stays dark in both site themes ─── */
+    /* Stage palette = the site's night tokens (css/site.css), fixed dark in
+       both themes because this runs on projectors. */
     .aw {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      min-height: calc(100vh - 49px);
+      --aw-bg: #0D0E10; --aw-surface: #16181B; --aw-border: #2C2F35; --aw-border-strong: #3A3E45;
+      --aw-faint: #7E838C; --aw-muted: #A6AAB2; --aw-text: #ECEBE6; --aw-strong: #FFFFFF;
+      --aw-accent: #FF6B42; --aw-accent-line: #9E3F24; --aw-accent-soft: rgba(255, 107, 66, 0.12);
+      background: var(--aw-bg);
+      color: var(--aw-text);
+      font-family: var(--font-sans);
+      min-height: calc(100vh - 53px);
       box-sizing: border-box;
     }
     .aw *, .aw *::before, .aw *::after { box-sizing: border-box; }
-    .aw select option { background: #1e293b; color: #e2e8f0; }
+    .aw select option { background: var(--aw-surface); color: var(--aw-text); }
     .aw button { font-family: inherit; }
 
     .aw-wrap { max-width: 640px; margin: 0 auto; padding: 1.75rem 1rem 3rem; }
     .aw-wrap--wide { max-width: 880px; }
 
-    .aw-eyebrow {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: rgba(8,51,68,0.4); border: 1px solid #155e75;
-      border-radius: 999px; padding: 0.2rem 0.9rem; margin-bottom: 0.9rem;
-    }
-    .aw-eyebrow span { color: #22d3ee; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+    .aw-eyebrow { display: block; margin-bottom: 0.75rem; }
+    .aw-eyebrow span { font-family: var(--font-mono); color: var(--aw-accent); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
     .aw-hero { text-align: center; margin-bottom: 1.75rem; }
-    .aw-h1 { font-size: 2.1rem; font-weight: 800; color: #fff; margin: 0 0 0.25rem; }
-    .aw-sub { color: #94a3b8; font-size: 0.85rem; margin: 0; }
+    .aw-h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 740; font-stretch: 118%; letter-spacing: -0.035em; line-height: 1; color: var(--aw-strong); margin: 0 0 0.25rem; }
+    .aw-sub { color: var(--aw-muted); font-size: 0.85rem; margin: 0; }
 
     .aw-section { margin-bottom: 1.5rem; }
     .aw-label {
-      font-size: 0.68rem; font-weight: 700; color: #64748b;
+      font-size: 0.68rem; font-weight: 700; color: var(--aw-faint);
       letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 0.55rem;
     }
 
@@ -47,21 +52,21 @@
     .aw-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .aw-mode-card {
       display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem;
-      background: #1e293b; border: 1px solid #334155; border-radius: 1rem;
+      background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 6px;
       padding: 0.9rem 0.85rem; text-align: left; cursor: pointer; color: inherit;
       transition: border-color 0.15s, background 0.15s;
     }
-    .aw-mode-card:hover { border-color: #475569; }
-    .aw-mode-card.active { border-color: #22d3ee; background: rgba(8,51,68,0.45); box-shadow: 0 0 0 1px #22d3ee inset; }
-    .aw-mode-icon { font-size: 1.4rem; line-height: 1; }
-    .aw-mode-title { font-size: 0.85rem; font-weight: 700; color: #fff; }
-    .aw-mode-desc { font-size: 0.72rem; color: #94a3b8; line-height: 1.3; }
+    .aw-mode-card:hover { border-color: var(--aw-border-strong); }
+    .aw-mode-card.active { border-color: var(--aw-accent); background: var(--aw-accent-soft); box-shadow: 0 0 0 1px var(--aw-accent) inset; }
+    .aw-mode-icon { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1; color: var(--aw-accent); letter-spacing: 0.06em; }
+    .aw-mode-title { font-size: 0.85rem; font-weight: 700; color: var(--aw-strong); }
+    .aw-mode-desc { font-size: 0.72rem; color: var(--aw-muted); line-height: 1.3; }
 
     /* Chips */
     .aw-chip-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .aw-chip {
       padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600;
-      border: 1px solid #334155; background: transparent; color: #64748b; cursor: pointer;
+      border: 1px solid var(--aw-border); background: transparent; color: var(--aw-faint); cursor: pointer;
       transition: all 0.15s;
     }
     .aw-chip.active { color: var(--chip-text); background: var(--chip-bg); border-color: var(--chip-border); }
@@ -69,224 +74,224 @@
     .aw-diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
     .aw-diff-card {
       display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
-      padding: 0.7rem 0.4rem; border-radius: 0.85rem; border: 1px solid #334155;
-      background: transparent; color: #64748b; font-size: 0.72rem; font-weight: 600; cursor: pointer;
+      padding: 0.7rem 0.4rem; border-radius: 6px; border: 1px solid var(--aw-border);
+      background: transparent; color: var(--aw-faint); font-size: 0.72rem; font-weight: 600; cursor: pointer;
       transition: all 0.15s;
     }
     .aw-diff-card.active { color: var(--chip-text); background: var(--chip-bg); border-color: var(--chip-border); }
     .aw-diff-card .aw-pts { opacity: 0.65; font-weight: 400; }
 
     .aw-pips { display: inline-flex; align-items: center; gap: 2px; }
-    .aw-pip { width: 7px; height: 7px; border-radius: 50%; background: #334155; }
+    .aw-pip { width: 7px; height: 7px; border-radius: 50%; background: var(--aw-border); }
     .aw-pip.on { background: var(--pip-color); }
 
-    .aw-count-note { color: #475569; font-size: 0.72rem; text-align: right; margin: 0.4rem 0 0; }
+    .aw-count-note { color: var(--aw-border-strong); font-size: 0.72rem; text-align: right; margin: 0.4rem 0 0; }
 
     /* Team editor */
     .aw-team-row {
-      display: flex; align-items: center; gap: 0.65rem; background: #1e293b;
-      border: 1px solid var(--team-border); border-radius: 0.85rem; padding: 0.5rem 0.75rem; margin-bottom: 0.45rem;
+      display: flex; align-items: center; gap: 0.65rem; background: var(--aw-surface);
+      border: 1px solid var(--team-border); border-radius: 6px; padding: 0.5rem 0.75rem; margin-bottom: 0.45rem;
     }
     .aw-team-swatch { width: 11px; height: 11px; border-radius: 50%; background: var(--team-bg); flex-shrink: 0; }
     .aw-team-input {
       flex: 1; min-width: 0; background: transparent; border: none; outline: none;
-      color: #fff; font-size: 0.85rem; font-weight: 500;
+      color: var(--aw-strong); font-size: 0.85rem; font-weight: 500;
     }
-    .aw-team-input::placeholder { color: #475569; }
+    .aw-team-input::placeholder { color: var(--aw-border-strong); }
     .aw-team-remove {
-      background: none; border: none; color: #475569; cursor: pointer; font-size: 0.85rem;
+      background: none; border: none; color: var(--aw-border-strong); cursor: pointer; font-size: 0.85rem;
       line-height: 1; padding: 0.2rem;
     }
-    .aw-team-remove:hover { color: #fb7185; }
+    .aw-team-remove:hover { color: #FF7A8A; }
     .aw-add-team {
-      width: 100%; padding: 0.6rem; border-radius: 0.85rem; border: 1px dashed #334155;
-      background: transparent; color: #475569; font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+      width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px dashed var(--aw-border);
+      background: transparent; color: var(--aw-border-strong); font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
     }
-    .aw-add-team:hover { color: #cbd5e1; border-color: #64748b; }
+    .aw-add-team:hover { color: var(--aw-muted); border-color: var(--aw-faint); }
 
     /* Generic buttons */
     .aw-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
-      border-radius: 0.85rem; border: 1px solid #334155; background: #1e293b; color: #e2e8f0;
+      border-radius: 6px; border: 1px solid var(--aw-border); background: var(--aw-surface); color: var(--aw-text);
       font-size: 0.82rem; font-weight: 600; padding: 0.65rem 1rem; cursor: pointer;
       transition: all 0.15s;
     }
-    .aw-btn:hover { border-color: #64748b; }
+    .aw-btn:hover { border-color: var(--aw-faint); }
     .aw-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .aw-btn-primary { background: #22d3ee; border-color: #22d3ee; color: #0f172a; }
-    .aw-btn-primary:hover { background: #67e8f9; border-color: #67e8f9; }
-    .aw-btn-primary:disabled { background: #1e293b; border-color: #334155; color: #475569; }
-    .aw-btn-ghost { background: transparent; color: #64748b; }
-    .aw-btn-ghost:hover { color: #cbd5e1; border-color: #64748b; }
-    .aw-btn-success { background: #059669; border-color: #059669; color: #fff; }
-    .aw-btn-success:hover { background: #10b981; border-color: #10b981; }
-    .aw-btn-danger { background: #be123c; border-color: #be123c; color: #fff; }
-    .aw-btn-danger:hover { background: #f43f5e; border-color: #f43f5e; }
+    .aw-btn-primary { background: var(--aw-accent); border-color: var(--aw-accent); color: var(--aw-bg); }
+    .aw-btn-primary:hover { background: var(--aw-accent); border-color: var(--aw-accent); }
+    .aw-btn-primary:disabled { background: var(--aw-surface); border-color: var(--aw-border); color: var(--aw-border-strong); }
+    .aw-btn-ghost { background: transparent; color: var(--aw-faint); }
+    .aw-btn-ghost:hover { color: var(--aw-muted); border-color: var(--aw-faint); }
+    .aw-btn-success { background: #1F7A52; border-color: #1F7A52; color: var(--aw-strong); }
+    .aw-btn-success:hover { background: #3FB483; border-color: #3FB483; }
+    .aw-btn-danger { background: #B0243A; border-color: #B0243A; color: var(--aw-strong); }
+    .aw-btn-danger:hover { background: #E0485E; border-color: #E0485E; }
     .aw-btn-block { width: 100%; }
-    .aw-btn-lg { padding: 0.95rem 1rem; border-radius: 1rem; font-size: 1rem; }
+    .aw-btn-lg { padding: 0.95rem 1rem; border-radius: 6px; font-size: 1rem; }
     .aw-btn-sub { display: block; font-size: 0.68rem; font-weight: 400; opacity: 0.75; margin-top: 0.15rem; }
 
     .aw-end-row { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
     .aw-end-row .aw-btn { flex: 1; }
     .aw-select {
-      width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 0.85rem;
-      padding: 0.55rem 0.75rem; color: #fff; font-size: 0.82rem; outline: none;
+      width: 100%; background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 6px;
+      padding: 0.55rem 0.75rem; color: var(--aw-strong); font-size: 0.82rem; outline: none;
     }
 
     .aw-howto {
-      background: rgba(30,41,59,0.6); border: 1px solid #334155; border-radius: 0.85rem;
-      padding: 0.85rem 1rem; font-size: 0.75rem; color: #94a3b8; line-height: 1.55;
+      background: rgba(28,31,35,0.6); border: 1px solid var(--aw-border); border-radius: 6px;
+      padding: 0.85rem 1rem; font-size: 0.75rem; color: var(--aw-muted); line-height: 1.55;
     }
-    .aw-howto strong { color: #cbd5e1; }
+    .aw-howto strong { color: var(--aw-muted); }
 
     .aw-history-row {
-      display: flex; align-items: center; gap: 0.6rem; background: rgba(30,41,59,0.5);
-      border-radius: 0.6rem; padding: 0.45rem 0.7rem; font-size: 0.72rem; margin-bottom: 0.35rem; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 0.6rem; background: rgba(28,31,35,0.5);
+      border-radius: 4px; padding: 0.45rem 0.7rem; font-size: 0.72rem; margin-bottom: 0.35rem; flex-wrap: wrap;
     }
     .aw-history-mode {
       font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
-      color: #22d3ee; background: rgba(8,51,68,0.5); border-radius: 999px; padding: 0.1rem 0.5rem;
+      color: var(--aw-accent); background: var(--aw-accent-soft); border-radius: 999px; padding: 0.1rem 0.5rem;
     }
-    .aw-history-date { color: #475569; flex-shrink: 0; }
-    .aw-history-winner { color: #fff; font-weight: 600; flex-shrink: 0; }
-    .aw-history-detail { color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .aw-history-date { color: var(--aw-border-strong); flex-shrink: 0; }
+    .aw-history-winner { color: var(--aw-strong); font-weight: 600; flex-shrink: 0; }
+    .aw-history-detail { color: var(--aw-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* In-game menu link */
     .aw-topline {
       position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between;
-      background: rgba(15,23,42,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid #1e293b;
+      background: rgba(13,14,16,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--aw-surface);
       padding: 0.5rem 1rem;
     }
     .aw-menu-link {
-      background: none; border: none; color: #64748b; font-size: 0.72rem; cursor: pointer; padding: 0.2rem 0;
+      background: none; border: none; color: var(--aw-faint); font-size: 0.72rem; cursor: pointer; padding: 0.2rem 0;
     }
-    .aw-menu-link:hover { color: #cbd5e1; }
-    .aw-topline-right { color: #475569; font-size: 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
-    .aw-end-now { background: none; border: none; color: #475569; font-size: 0.68rem; cursor: pointer; }
-    .aw-end-now:hover { color: #94a3b8; }
+    .aw-menu-link:hover { color: var(--aw-muted); }
+    .aw-topline-right { color: var(--aw-border-strong); font-size: 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
+    .aw-end-now { background: none; border: none; color: var(--aw-border-strong); font-size: 0.68rem; cursor: pointer; }
+    .aw-end-now:hover { color: var(--aw-muted); }
 
     /* Scoreboard */
-    .aw-scoreboard { position: sticky; top: 33px; z-index: 25; background: rgba(15,23,42,0.97); backdrop-filter: blur(6px); border-bottom: 1px solid #1e293b; padding: 0.5rem 1rem; }
+    .aw-scoreboard { position: sticky; top: 33px; z-index: 25; background: rgba(13,14,16,0.97); backdrop-filter: blur(6px); border-bottom: 1px solid var(--aw-surface); padding: 0.5rem 1rem; }
     .aw-scoreboard-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 0.6rem; }
     .aw-team-tiles { display: flex; gap: 0.4rem; flex-wrap: wrap; flex: 1; min-width: 0; }
     .aw-team-tile {
       display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 0.3rem 0.55rem;
-      border-radius: 0.6rem; border: 1px solid #334155; background: rgba(30,41,59,0.5); transition: all 0.15s;
+      border-radius: 4px; border: 1px solid var(--aw-border); background: rgba(28,31,35,0.5); transition: all 0.15s;
     }
     .aw-team-tile.active { border-color: var(--team-border); background: var(--team-dim); box-shadow: 0 0 0 1px var(--team-border) inset; }
-    .aw-team-tile-name { font-size: 0.62rem; font-weight: 700; color: #64748b; max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .aw-team-tile-name { font-size: 0.62rem; font-weight: 700; color: var(--aw-faint); max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .aw-team-tile.active .aw-team-tile-name { color: var(--team-text); }
-    .aw-team-tile-score { font-size: 0.95rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+    .aw-team-tile-score { font-size: 0.95rem; font-weight: 800; color: var(--aw-strong); font-variant-numeric: tabular-nums; }
     .aw-team-tile.active .aw-team-tile-score { color: var(--team-text); }
-    .aw-qcounter { color: #64748b; font-size: 0.68rem; text-align: right; flex-shrink: 0; }
+    .aw-qcounter { color: var(--aw-faint); font-size: 0.68rem; text-align: right; flex-shrink: 0; }
 
     /* Question card */
     .aw-game-body { max-width: 760px; margin: 0 auto; padding: 1.1rem 1rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
-    .aw-card { background: #1e293b; border: 1px solid #334155; border-radius: 1.1rem; overflow: hidden; }
-    .aw-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.65rem 1.1rem; border-bottom: 1px solid rgba(51,65,85,0.7); background: rgba(30,41,59,0.6); }
+    .aw-card { background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 1.1rem; overflow: hidden; }
+    .aw-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.65rem 1.1rem; border-bottom: 1px solid rgba(58,62,69,0.7); background: rgba(28,31,35,0.6); }
     .aw-badges { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
     .aw-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; font-weight: 700; padding: 0.18rem 0.6rem; border-radius: 999px; border: 1px solid var(--b-border); background: var(--b-bg); color: var(--b-text); }
     .aw-steal-flag { font-size: 0.72rem; font-weight: 700; color: #fbbf24; }
 
     .aw-qbody { padding: 1.8rem 1.3rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
-    .aw-qtext { color: #fff; font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0; }
-    .aw-reveal-btn { background: #334155; border: 1px solid #475569; color: #cbd5e1; padding: 0.55rem 1.2rem; border-radius: 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
-    .aw-reveal-btn:hover { background: #475569; color: #fff; }
+    .aw-qtext { color: var(--aw-strong); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0; }
+    .aw-reveal-btn { background: var(--aw-border); border: 1px solid var(--aw-border-strong); color: var(--aw-muted); padding: 0.55rem 1.2rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .aw-reveal-btn:hover { background: var(--aw-border-strong); color: var(--aw-strong); }
     .aw-answer-block { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 0.7rem; }
-    .aw-answer-box { background: rgba(15,23,42,0.6); border: 1px solid #334155; border-radius: 0.85rem; padding: 0.9rem 1.1rem; color: #f1f5f9; font-size: 0.85rem; line-height: 1.55; }
-    .aw-pearl-box { background: rgba(8,51,68,0.5); border: 1px solid #155e75; border-radius: 0.85rem; padding: 0.75rem 1.1rem; display: flex; gap: 0.7rem; }
-    .aw-pearl-tag { color: #22d3ee; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0; padding-top: 0.1rem; }
-    .aw-pearl-text { color: #a5f3fc; font-size: 0.83rem; font-style: italic; margin: 0; }
+    .aw-answer-box { background: rgba(13,14,16,0.6); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.9rem 1.1rem; color: var(--aw-text); font-size: 0.85rem; line-height: 1.55; }
+    .aw-pearl-box { background: var(--aw-accent-soft); border: 1px solid var(--aw-accent-line); border-radius: 6px; padding: 0.75rem 1.1rem; display: flex; gap: 0.7rem; }
+    .aw-pearl-tag { color: var(--aw-accent); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0; padding-top: 0.1rem; }
+    .aw-pearl-text { color: var(--aw-accent); font-size: 0.83rem; font-style: italic; margin: 0; }
 
     .aw-panel { display: flex; flex-direction: column; gap: 0.6rem; }
-    .aw-panel-hint { text-align: center; color: #475569; font-size: 0.72rem; margin: 0; }
+    .aw-panel-hint { text-align: center; color: var(--aw-border-strong); font-size: 0.72rem; margin: 0; }
     .aw-buzz-grid { display: grid; gap: 0.5rem; }
-    .aw-buzz-btn { padding: 0.9rem 0.5rem; border-radius: 0.85rem; border: none; background: var(--team-bg); color: #0f172a; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+    .aw-buzz-btn { padding: 0.9rem 0.5rem; border-radius: 6px; border: none; background: var(--team-bg); color: var(--aw-bg); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
     .aw-buzz-btn:hover { opacity: 0.9; }
     .aw-buzz-btn:active { transform: scale(0.97); }
-    .aw-steal-btn { padding: 0.75rem 0.5rem; border-radius: 0.85rem; border: 2px solid var(--team-border); background: var(--team-dim); color: var(--team-text); font-weight: 700; font-size: 0.82rem; cursor: pointer; }
+    .aw-steal-btn { padding: 0.75rem 0.5rem; border-radius: 6px; border: 2px solid var(--team-border); background: var(--team-dim); color: var(--team-text); font-weight: 700; font-size: 0.82rem; cursor: pointer; }
     .aw-steal-btn:hover { opacity: 0.9; }
 
-    .aw-verdict-name { text-align: center; font-size: 0.85rem; color: #94a3b8; margin: 0 0 0.15rem; }
+    .aw-verdict-name { text-align: center; font-size: 0.85rem; color: var(--aw-muted); margin: 0 0 0.15rem; }
     .aw-verdict-name strong { color: var(--team-text); }
     .aw-verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
-    .aw-verdict-btn { padding: 0.9rem 0.5rem; border-radius: 0.85rem; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; color: #fff; }
-    .aw-verdict-correct { background: #059669; }
-    .aw-verdict-correct:hover { background: #10b981; }
-    .aw-verdict-wrong { background: #9f1239; }
-    .aw-verdict-wrong:hover { background: #e11d48; }
+    .aw-verdict-btn { padding: 0.9rem 0.5rem; border-radius: 6px; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--aw-strong); }
+    .aw-verdict-correct { background: #1F7A52; }
+    .aw-verdict-correct:hover { background: #3FB483; }
+    .aw-verdict-wrong { background: #8A1C2E; }
+    .aw-verdict-wrong:hover { background: #D23249; }
 
     /* Board */
-    .aw-turn-flag { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.55rem; border-radius: 0.85rem; background: var(--team-dim); border: 1px solid var(--team-border); color: var(--team-text); font-size: 0.82rem; font-weight: 700; }
+    .aw-turn-flag { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.55rem; border-radius: 6px; background: var(--team-dim); border: 1px solid var(--team-border); color: var(--team-text); font-size: 0.82rem; font-weight: 700; }
     .aw-board-scroll { overflow-x: auto; padding-bottom: 0.4rem; -webkit-overflow-scrolling: touch; }
     .aw-board { display: flex; gap: 0.5rem; width: max-content; min-width: 100%; }
     .aw-board-col { display: flex; flex-direction: column; gap: 0.4rem; width: 92px; flex: 0 0 auto; }
-    .aw-board-col-header { text-align: center; font-size: 0.66rem; font-weight: 700; padding: 0.4rem 0.2rem; border-radius: 0.6rem; border: 1px solid var(--b-border); background: var(--b-bg); color: var(--b-text); }
+    .aw-board-col-header { text-align: center; font-size: 0.66rem; font-weight: 700; padding: 0.4rem 0.2rem; border-radius: 4px; border: 1px solid var(--b-border); background: var(--b-bg); color: var(--b-text); }
     .aw-board-cell {
-      height: 52px; border-radius: 0.6rem; border: 1px solid #334155; background: #1e293b; color: #67e8f9;
+      height: 52px; border-radius: 4px; border: 1px solid var(--aw-border); background: var(--aw-surface); color: var(--aw-accent);
       font-size: 0.95rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
-    .aw-board-cell:hover { border-color: #22d3ee; background: rgba(8,51,68,0.5); }
-    .aw-board-cell--done { background: rgba(30,41,59,0.4); color: #334155; cursor: default; border-style: dashed; }
-    .aw-board-cell--empty { background: rgba(30,41,59,0.2); color: #334155; cursor: default; border-style: dashed; }
+    .aw-board-cell:hover { border-color: var(--aw-accent); background: var(--aw-accent-soft); }
+    .aw-board-cell--done { background: rgba(28,31,35,0.4); color: var(--aw-border); cursor: default; border-style: dashed; }
+    .aw-board-cell--empty { background: rgba(28,31,35,0.2); color: var(--aw-border); cursor: default; border-style: dashed; }
     @media (min-width: 700px) { .aw-board-col { width: auto; flex: 1 1 0; } }
 
     /* Modal */
-    .aw-modal-backdrop { position: fixed; inset: 0; background: rgba(2,6,23,0.78); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .aw-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.78); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem; }
     .aw-modal { width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
 
     /* Quiz */
-    .aw-quiz-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem; font-size: 0.72rem; color: #64748b; }
-    .aw-quiz-score { color: #22d3ee; font-weight: 700; }
+    .aw-quiz-topline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem; font-size: 0.72rem; color: var(--aw-faint); }
+    .aw-quiz-score { color: var(--aw-accent); font-weight: 700; }
     .aw-choice-list { display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.4rem; }
     .aw-choice {
-      text-align: left; padding: 0.8rem 1rem; border-radius: 0.85rem; border: 1px solid #334155;
-      background: #1e293b; color: #e2e8f0; font-size: 0.85rem; cursor: pointer; line-height: 1.4;
+      text-align: left; padding: 0.8rem 1rem; border-radius: 6px; border: 1px solid var(--aw-border);
+      background: var(--aw-surface); color: var(--aw-text); font-size: 0.85rem; cursor: pointer; line-height: 1.4;
     }
-    .aw-choice:hover:not(:disabled) { border-color: #64748b; }
+    .aw-choice:hover:not(:disabled) { border-color: var(--aw-faint); }
     .aw-choice:disabled { cursor: default; }
-    .aw-choice.correct { border-color: #059669; background: rgba(5,150,105,0.22); color: #6ee7b7; }
-    .aw-choice.wrong { border-color: #be123c; background: rgba(190,18,60,0.22); color: #fda4af; }
+    .aw-choice.correct { border-color: #1F7A52; background: rgba(95,211,160,0.14); color: #5FD3A0; }
+    .aw-choice.wrong { border-color: #B0243A; background: rgba(255,122,138,0.14); color: #FF9DA9; }
     .aw-choice.dim { opacity: 0.5; }
 
     .aw-bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.75rem; }
-    .aw-bar-label { width: 108px; flex-shrink: 0; color: #94a3b8; }
-    .aw-bar-track { flex: 1; height: 8px; border-radius: 999px; background: #1e293b; overflow: hidden; }
-    .aw-bar-fill { height: 100%; background: #22d3ee; border-radius: 999px; }
-    .aw-bar-frac { width: 44px; text-align: right; color: #64748b; flex-shrink: 0; }
+    .aw-bar-label { width: 108px; flex-shrink: 0; color: var(--aw-muted); }
+    .aw-bar-track { flex: 1; height: 8px; border-radius: 999px; background: var(--aw-surface); overflow: hidden; }
+    .aw-bar-fill { height: 100%; background: var(--aw-accent); border-radius: 999px; }
+    .aw-bar-frac { width: 44px; text-align: right; color: var(--aw-faint); flex-shrink: 0; }
 
     /* Browse */
     .aw-browse-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
     .aw-browse-controls .aw-select { width: auto; flex: 1 1 130px; }
-    .aw-search { flex: 1 1 100%; background: #1e293b; border: 1px solid #334155; border-radius: 0.85rem; padding: 0.55rem 0.85rem; color: #fff; font-size: 0.82rem; outline: none; }
-    .aw-search::placeholder { color: #475569; }
-    .aw-browse-count { color: #475569; font-size: 0.72rem; margin: -0.5rem 0 0.8rem; text-align: right; }
-    .aw-browse-row { background: #1e293b; border: 1px solid #334155; border-radius: 0.85rem; padding: 0.75rem 1rem; margin-bottom: 0.5rem; cursor: pointer; }
-    .aw-browse-row:hover { border-color: #475569; }
-    .aw-browse-q { color: #e2e8f0; font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.45; }
+    .aw-search { flex: 1 1 100%; background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.55rem 0.85rem; color: var(--aw-strong); font-size: 0.82rem; outline: none; }
+    .aw-search::placeholder { color: var(--aw-border-strong); }
+    .aw-browse-count { color: var(--aw-border-strong); font-size: 0.72rem; margin: -0.5rem 0 0.8rem; text-align: right; }
+    .aw-browse-row { background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.5rem; cursor: pointer; }
+    .aw-browse-row:hover { border-color: var(--aw-border-strong); }
+    .aw-browse-q { color: var(--aw-text); font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.45; }
     .aw-browse-expand { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .aw-empty-note { text-align: center; color: #475569; font-size: 0.82rem; padding: 2rem 1rem; }
+    .aw-empty-note { text-align: center; color: var(--aw-border-strong); font-size: 0.82rem; padding: 2rem 1rem; }
 
     /* Results */
     .aw-result-hero { text-align: center; margin-bottom: 1.75rem; }
-    .aw-result-emoji { font-size: 2.6rem; margin-bottom: 0.4rem; }
-    .aw-result-title { font-size: 1.7rem; font-weight: 800; color: #fff; margin: 0 0 0.2rem; }
-    .aw-result-sub { color: #64748b; font-size: 0.82rem; margin: 0; }
+    .aw-result-emoji { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--aw-accent); margin-bottom: 0.5rem; }
+    .aw-result-title { font-size: 1.7rem; font-weight: 800; color: var(--aw-strong); margin: 0 0 0.2rem; }
+    .aw-result-sub { color: var(--aw-faint); font-size: 0.82rem; margin: 0; }
     .aw-leaderboard-row {
-      display: flex; align-items: center; gap: 0.7rem; border-radius: 1rem; border: 1px solid #334155;
-      background: rgba(30,41,59,0.4); padding: 0.85rem 1rem; margin-bottom: 0.5rem;
+      display: flex; align-items: center; gap: 0.7rem; border-radius: 6px; border: 1px solid var(--aw-border);
+      background: rgba(28,31,35,0.4); padding: 0.85rem 1rem; margin-bottom: 0.5rem;
     }
     .aw-leaderboard-row.first { border-color: var(--team-border); background: var(--team-dim); }
     .aw-medal { font-size: 1.35rem; width: 2rem; text-align: center; flex-shrink: 0; }
-    .aw-lb-name { flex: 1; font-weight: 700; color: #fff; }
+    .aw-lb-name { flex: 1; font-weight: 700; color: var(--aw-strong); }
     .aw-leaderboard-row.first .aw-lb-name { color: var(--team-text); }
     .aw-lb-score-wrap { text-align: right; }
-    .aw-lb-score { font-size: 1.4rem; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; }
+    .aw-lb-score { font-size: 1.4rem; font-weight: 800; color: var(--aw-strong); font-variant-numeric: tabular-nums; }
     .aw-leaderboard-row.first .aw-lb-score { color: var(--team-text); }
-    .aw-lb-stats { font-size: 0.65rem; color: #64748b; }
-    .aw-streak-banner { background: rgba(120,53,15,0.35); border: 1px solid #a16207; border-radius: 0.85rem; padding: 0.7rem 1rem; text-align: center; color: #fde047; font-size: 0.82rem; margin-bottom: 1.25rem; }
+    .aw-lb-stats { font-size: 0.65rem; color: var(--aw-faint); }
+    .aw-streak-banner { background: rgba(120,53,15,0.35); border: 1px solid #a16207; border-radius: 6px; padding: 0.7rem 1rem; text-align: center; color: #fde047; font-size: 0.82rem; margin-bottom: 1.25rem; }
     .aw-result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
-    .aw-pct-hero { font-size: 3rem; font-weight: 800; color: #22d3ee; }
+    .aw-pct-hero { font-size: 3rem; font-weight: 800; color: var(--aw-accent); }
 
     @media (max-width: 420px) {
       .aw-h1 { font-size: 1.7rem; }
@@ -295,980 +300,22 @@
   </style>
 </head>
 <body>
-  <div class="site-topbar">
-    <a class="site-wordmark" href="index.html">skflx.MD</a>
+  <header class="site-topbar">
+    <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
     <span class="site-topbar-title">Airway Rounds</span>
-    <span class="site-topbar-spacer"></span>
     <div class="site-topbar-actions">
-      <a class="site-navlink" href="index.html">Home</a>
-      <button class="site-theme-toggle" type="button" aria-label="Toggle day / night">
-        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <a class="site-navlink" href="index.html#tools">Tools</a>
+      <button class="site-theme-toggle" type="button" aria-label="Night mode" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
       </button>
     </div>
-  </div>
+  </header>
 
   <div id="aw-app"></div>
 
   <script src="js/airway-questions.js"></script>
   <script src="js/airway-engine.js"></script>
-  <script>
-  (function () {
-    'use strict';
-
-    var DATA = window.AIRWAY_DATA;
-    var ENGINE = window.AirwayEngine;
-    var QUESTIONS = DATA.questions;
-    var TOPICS = DATA.topics;
-    var DIFF = ENGINE.DIFF;
-    var DIFF_KEYS = ['easy', 'medium', 'hard'];
-
-    var root = document.getElementById('aw-app');
-
-    // ─── Color maps (inline-style driven — keeps CSS structural-only) ───
-
-    var TOPIC_COLORS = {
-      basics:        { bg: 'rgba(30,58,138,.45)',  text: '#93c5fd', border: '#1d4ed8' },
-      emergencies:   { bg: 'rgba(127,29,29,.45)',   text: '#fca5a5', border: '#b91c1c' },
-      valves:        { bg: 'rgba(76,29,149,.45)',   text: '#c4b5fd', border: '#6d28d9' },
-      complications: { bg: 'rgba(120,53,15,.45)',   text: '#fcd34d', border: '#b45309' },
-      daily:         { bg: 'rgba(19,78,74,.45)',    text: '#5eead4', border: '#0f766e' },
-    };
-
-    var DIFF_COLORS = {
-      easy:   { bg: 'rgba(6,78,59,.55)',   text: '#6ee7b7', border: '#047857', pip: '#34d399' },
-      medium: { bg: 'rgba(113,63,18,.55)', text: '#fde047', border: '#a16207', pip: '#facc15' },
-      hard:   { bg: 'rgba(127,29,29,.55)', text: '#fca5a5', border: '#b91c1c', pip: '#f87171' },
-    };
-
-    var TEAM_COLORS = {
-      cyan:    { bg: '#06b6d4', text: '#22d3ee', border: '#06b6d4', dim: 'rgba(8,51,68,.55)' },
-      rose:    { bg: '#f43f5e', text: '#fb7185', border: '#f43f5e', dim: 'rgba(76,5,25,.55)' },
-      amber:   { bg: '#f59e0b', text: '#fbbf24', border: '#f59e0b', dim: 'rgba(69,26,3,.55)' },
-      emerald: { bg: '#10b981', text: '#34d399', border: '#10b981', dim: 'rgba(2,44,34,.55)' },
-      violet:  { bg: '#8b5cf6', text: '#a78bfa', border: '#8b5cf6', dim: 'rgba(46,16,101,.55)' },
-      orange:  { bg: '#f97316', text: '#fb923c', border: '#f97316', dim: 'rgba(67,20,7,.55)' },
-    };
-
-    var MODES = [
-      { id: 'rounds', icon: '🎙️', title: 'Rounds',         desc: 'Buzz-in team quiz with a steal mechanic.' },
-      { id: 'board',  icon: '🗂️', title: 'Jeopardy Board', desc: 'Classic board — pick a topic and a value.' },
-      { id: 'quiz',   icon: '📝', title: 'Quick Quiz',      desc: 'Solo self-study, multiple choice.' },
-      { id: 'browse', icon: '📚', title: 'Browse',          desc: 'The full question bank, searchable.' },
-    ];
-
-    var MEDALS = ['🥇', '🥈', '🥉'];
-
-    // ─── Helpers ──────────────────────────────────────────────────────
-
-    function esc(s) {
-      return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
-    }
-
-    function topicById(id) { return TOPICS.filter(function (t) { return t.id === id; })[0]; }
-
-    function topicBadge(topicId) {
-      var t = topicById(topicId);
-      var c = TOPIC_COLORS[topicId];
-      if (!t || !c) return '';
-      return '<span class="aw-badge" style="--b-bg:' + c.bg + ';--b-text:' + c.text + ';--b-border:' + c.border + '">' + esc(t.short) + '</span>';
-    }
-
-    function pipsHtml(difficulty) {
-      var cfg = DIFF[difficulty];
-      var c = DIFF_COLORS[difficulty];
-      var out = '<span class="aw-pips" style="--pip-color:' + c.pip + '">';
-      for (var i = 0; i < 3; i++) out += '<span class="aw-pip' + (i < cfg.pips ? ' on' : '') + '"></span>';
-      out += '</span>';
-      return out;
-    }
-
-    function diffBadge(difficulty) {
-      var cfg = DIFF[difficulty];
-      var c = DIFF_COLORS[difficulty];
-      return '<span class="aw-badge" style="--b-bg:' + c.bg + ';--b-text:' + c.text + ';--b-border:' + c.border + '">' +
-        pipsHtml(difficulty) + '<span>' + esc(cfg.label) + '</span></span>';
-    }
-
-    function fmtDate() { return new Date().toLocaleDateString(); }
-
-    // ─── State ────────────────────────────────────────────────────────
-
-    function defaultTeams() {
-      return [
-        ENGINE.makeTeam('Team 1', 'cyan', 't0'),
-        ENGINE.makeTeam('Team 2', 'rose', 't1'),
-        ENGINE.makeTeam('Team 3', 'amber', 't2'),
-      ];
-    }
-
-    var S = {
-      screen: 'setup',
-      mode: 'rounds',
-      filters: {
-        topics: new Set(TOPICS.map(function (t) { return t.id; })),
-        difficulties: new Set(DIFF_KEYS),
-      },
-      teams: defaultTeams(),
-      endCondition: { type: 'count', value: 15 },
-      quizCount: 10,
-      rounds: null,
-      board: null,
-      quiz: null,
-      browse: { search: '', topic: 'all', difficulty: 'all', sort: 'topic', expandedId: null },
-    };
-
-    function poolFor(filters) {
-      return QUESTIONS.filter(function (q) {
-        return filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty);
-      });
-    }
-
-    // ─── Render dispatch + focus-preserving update ───────────────────
-
-    var screens = {
-      setup: renderSetup,
-      rounds: renderRoundsGame,
-      'rounds-results': renderRoundsResults,
-      board: renderBoardGame,
-      'board-results': renderBoardResults,
-      quiz: renderQuizGame,
-      'quiz-results': renderQuizResults,
-      browse: renderBrowse,
-    };
-
-    function render() {
-      root.innerHTML = '<div class="aw">' + screens[S.screen]() + '</div>';
-    }
-
-    function update() {
-      var active = document.activeElement;
-      var id = active && active.id;
-      var start = active && typeof active.selectionStart === 'number' ? active.selectionStart : null;
-      var end = active && typeof active.selectionEnd === 'number' ? active.selectionEnd : null;
-      render();
-      if (id) {
-        var el = document.getElementById(id);
-        if (el) {
-          el.focus();
-          if (start !== null && el.setSelectionRange) {
-            try { el.setSelectionRange(start, end); } catch (e) { /* no-op */ }
-          }
-        }
-      }
-    }
-
-    // ─── SETUP SCREEN ─────────────────────────────────────────────────
-
-    function renderModeGrid() {
-      return '<div class="aw-mode-grid">' + MODES.map(function (m) {
-        return '<button type="button" class="aw-mode-card' + (S.mode === m.id ? ' active' : '') + '" data-action="pick-mode" data-mode="' + m.id + '">' +
-          '<span class="aw-mode-icon">' + m.icon + '</span>' +
-          '<span class="aw-mode-title">' + esc(m.title) + '</span>' +
-          '<span class="aw-mode-desc">' + esc(m.desc) + '</span>' +
-          '</button>';
-      }).join('') + '</div>';
-    }
-
-    function renderFilters(poolSize) {
-      var topicChips = TOPICS.map(function (t) {
-        var on = S.filters.topics.has(t.id);
-        var c = TOPIC_COLORS[t.id];
-        var style = on ? ' style="--chip-bg:' + c.bg + ';--chip-text:' + c.text + ';--chip-border:' + c.border + '"' : '';
-        return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '"' + style + ' data-action="toggle-topic" data-id="' + t.id + '">' + esc(t.short) + '</button>';
-      }).join('');
-
-      var diffCards = DIFF_KEYS.map(function (key) {
-        var on = S.filters.difficulties.has(key);
-        var c = DIFF_COLORS[key];
-        var cfg = DIFF[key];
-        var style = on ? ' style="--chip-bg:' + c.bg + ';--chip-text:' + c.text + ';--chip-border:' + c.border + ';--pip-color:' + c.pip + '"' : ' style="--pip-color:' + c.pip + '"';
-        return '<button type="button" class="aw-diff-card' + (on ? ' active' : '') + '"' + style + ' data-action="toggle-diff" data-id="' + key + '">' +
-          pipsHtml(key) + '<span>' + esc(cfg.label) + '</span><span class="aw-pts">' + cfg.pts + ' pts</span></button>';
-      }).join('');
-
-      return (
-        '<div class="aw-section"><p class="aw-label">Topics</p><div class="aw-chip-row">' + topicChips + '</div></div>' +
-        '<div class="aw-section"><p class="aw-label">Difficulty</p><div class="aw-diff-grid">' + diffCards + '</div>' +
-        '<p class="aw-count-note">' + poolSize + ' question' + (poolSize === 1 ? '' : 's') + ' match filters</p></div>'
-      );
-    }
-
-    function renderTeamEditor(teams) {
-      var rows = teams.map(function (team, idx) {
-        var c = TEAM_COLORS[team.color];
-        return '<div class="aw-team-row" style="--team-border:' + c.border + ';--team-bg:' + c.bg + '">' +
-          '<span class="aw-team-swatch"></span>' +
-          '<input class="aw-team-input" id="team-name-' + team.id + '" data-bind="team-name" data-id="' + team.id + '" value="' + esc(team.name) + '" placeholder="Team ' + (idx + 1) + '" maxlength="20">' +
-          (teams.length > 2 ? '<button type="button" class="aw-team-remove" data-action="team-remove" data-id="' + team.id + '">✕</button>' : '') +
-          '</div>';
-      }).join('');
-      var addBtn = teams.length < 6 ? '<button type="button" class="aw-add-team" data-action="team-add">+ Add team</button>' : '';
-      return '<div class="aw-section"><p class="aw-label">Teams</p>' + rows + addBtn + '</div>';
-    }
-
-    function renderHistory() {
-      var h = ENGINE.history.load();
-      if (h.length === 0) return '';
-      var modeLabels = { rounds: 'Rounds', board: 'Board', quiz: 'Quiz' };
-      var rows = h.slice(0, 5).map(function (s) {
-        var detail = (s.teams || []).map(function (t) { return t.name + ' ' + t.score; }).join(' · ');
-        return '<div class="aw-history-row">' +
-          '<span class="aw-history-mode">' + esc(modeLabels[s.mode] || s.mode || '') + '</span>' +
-          '<span class="aw-history-date">' + esc(s.date) + '</span>' +
-          '<span class="aw-history-winner">🏆 ' + esc(s.winner) + '</span>' +
-          '<span class="aw-history-detail">' + esc(detail) + '</span>' +
-          '</div>';
-      }).join('');
-      return '<div class="aw-section"><p class="aw-label">Recent Sessions</p>' + rows + '</div>';
-    }
-
-    function renderSetup() {
-      var poolSize = poolFor(S.filters).length;
-      var body = '';
-
-      body += '<div class="aw-hero">' +
-        '<div class="aw-eyebrow"><span>ENT · H&amp;N Nursing</span></div>' +
-        '<h1 class="aw-h1">Airway Rounds</h1>' +
-        '<p class="aw-sub">Rounds · Jeopardy Board · Quick Quiz · Browse</p>' +
-        '</div>';
-
-      body += '<div class="aw-section">' + renderModeGrid() + '</div>';
-      body += renderFilters(poolSize);
-
-      if (S.mode === 'rounds') {
-        body += renderTeamEditor(S.teams);
-
-        var countOpts = [5, 10, 15, 20, 25, 30, 40, 60].filter(function (n) { return n <= poolSize; });
-        if (poolSize > 0 && countOpts.indexOf(poolSize) === -1) countOpts.push(poolSize);
-        countOpts.sort(function (a, b) { return a - b; });
-
-        body += '<div class="aw-section"><p class="aw-label">Game Ends When…</p><div class="aw-end-row">' +
-          ['all', 'count', 'score'].map(function (type) {
-            var labels = { all: 'All ' + poolSize + ' Qs', count: 'Play N Qs', score: 'First to X pts' };
-            var on = S.endCondition.type === type;
-            return '<button type="button" class="aw-btn' + (on ? ' aw-btn-primary' : '') + '" data-action="set-end-type" data-type="' + type + '">' + labels[type] + '</button>';
-          }).join('') + '</div>';
-
-        if (S.endCondition.type === 'count') {
-          body += '<select class="aw-select" data-bind="end-count">' +
-            countOpts.map(function (n) { return '<option value="' + n + '"' + (n === S.endCondition.value ? ' selected' : '') + '>' + n + ' questions</option>'; }).join('') +
-            '</select>';
-        } else if (S.endCondition.type === 'score') {
-          body += '<select class="aw-select" data-bind="end-score">' +
-            [200, 300, 400, 500, 750, 1000].map(function (n) { return '<option value="' + n + '"' + (n === S.endCondition.value ? ' selected' : '') + '>First to ' + n + ' points</option>'; }).join('') +
-            '</select>';
-        }
-        body += '</div>';
-
-        body += '<div class="aw-section"><div class="aw-howto">' +
-          '<p style="margin:0 0 0.4rem;color:#cbd5e1;font-weight:700;">How to play</p>' +
-          '<p>Host reads the question aloud. A team buzzes in — tap their button, then mark Correct or Wrong.</p>' +
-          '<p>Wrong answer opens a <strong style="color:#fbbf24">steal window</strong> for the other teams at half points, no penalty on a miss.</p>' +
-          '<p>3 correct in a row earns a <strong style="color:#fde047">🔥 +50 streak bonus</strong>.</p>' +
-          '</div></div>';
-
-        var canStart = poolSize > 0;
-        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-rounds"' + (canStart ? '' : ' disabled') + '>' +
-          (canStart ? 'Start Game →' : 'No questions match filters') + '</button>';
-      }
-
-      if (S.mode === 'board') {
-        body += renderTeamEditor(S.teams);
-        var topicCount = S.filters.topics.size;
-        body += '<div class="aw-section"><div class="aw-howto">' +
-          '<p style="margin:0 0 0.4rem;color:#cbd5e1;font-weight:700;">How to play</p>' +
-          '<p>Each selected topic becomes a column of 5 clues (100–500 pts). Teams take turns picking a cell.</p>' +
-          '<p>Correct keeps control. Wrong opens a steal to the other teams at <strong style="color:#fbbf24">full value</strong>, no penalty on a miss.</p>' +
-          '<p>Board clears out → results.</p>' +
-          '</div></div>';
-        var canStartBoard = topicCount >= 2 && poolSize > 0;
-        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-board"' + (canStartBoard ? '' : ' disabled') + '>' +
-          (topicCount < 2 ? 'Select at least 2 topics' : (poolSize === 0 ? 'No questions match filters' : 'Build Board →')) + '</button>';
-      }
-
-      if (S.mode === 'quiz') {
-        var quizOpts = [10, 20, 40].filter(function (n) { return n <= poolSize; });
-        if (poolSize > 0) quizOpts.push(poolSize);
-        quizOpts = quizOpts.filter(function (n, i) { return quizOpts.indexOf(n) === i; }).sort(function (a, b) { return a - b; });
-        body += '<div class="aw-section"><p class="aw-label">How Many Questions</p><div class="aw-chip-row">' +
-          quizOpts.map(function (n) {
-            var on = S.quizCount === n;
-            var label = n === poolSize ? 'All (' + n + ')' : String(n);
-            return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '" style="' + (on ? '--chip-bg:rgba(8,51,68,.5);--chip-text:#22d3ee;--chip-border:#0e7490' : '') + '" data-action="set-quiz-count" data-n="' + n + '">' + label + '</button>';
-          }).join('') + '</div></div>';
-        body += '<div class="aw-section"><div class="aw-howto"><p>Solo self-study. Answer, see the full explanation + pearl, move on. Results show your % and a review of anything missed.</p></div></div>';
-        var canStartQuiz = poolSize > 0;
-        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-quiz"' + (canStartQuiz ? '' : ' disabled') + '>' +
-          (canStartQuiz ? 'Start Quiz →' : 'No questions match filters') + '</button>';
-      }
-
-      if (S.mode === 'browse') {
-        body += '<div class="aw-section"><div class="aw-howto"><p>Every question in the bank — filter, sort, and search. Tap a row to see the answer and pearl.</p></div></div>';
-        body += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="start-browse">Browse Questions →</button>';
-      }
-
-      body += renderHistory();
-
-      return '<div class="aw-wrap">' + body + '</div>';
-    }
-
-    // ─── SHARED IN-GAME CHROME ────────────────────────────────────────
-
-    function topline(rightHtml) {
-      return '<div class="aw-topline"><button type="button" class="aw-menu-link" data-action="go-setup">‹ Menu</button>' +
-        '<div class="aw-topline-right">' + (rightHtml || '') + '</div></div>';
-    }
-
-    function scoreboard(teams, activeTeamId, extraRight) {
-      var tiles = teams.map(function (t) {
-        var c = TEAM_COLORS[t.color];
-        var active = t.id === activeTeamId;
-        return '<div class="aw-team-tile' + (active ? ' active' : '') + '" style="--team-border:' + c.border + ';--team-bg:' + c.bg + ';--team-text:' + c.text + ';--team-dim:' + c.dim + '">' +
-          '<span class="aw-team-tile-name">' + (t.streak >= 3 ? '🔥 ' : '') + esc(t.name) + '</span>' +
-          '<span class="aw-team-tile-score">' + t.score + '</span></div>';
-      }).join('');
-      return '<div class="aw-scoreboard"><div class="aw-scoreboard-inner"><div class="aw-team-tiles">' + tiles + '</div>' + (extraRight || '') + '</div></div>';
-    }
-
-    // ─── ROUNDS MODE ──────────────────────────────────────────────────
-
-    function startRounds() {
-      var pool = ENGINE.buildPool(QUESTIONS, S.filters);
-      if (pool.length === 0) return;
-      var sliced = ENGINE.rounds.slicePool(pool, S.endCondition);
-      S.rounds = {
-        teams: S.teams.map(function (t) { return ENGINE.makeTeam(t.name, t.color, t.id); }),
-        pool: sliced,
-        queueIdx: 0,
-        activeQ: sliced[0],
-        qPhase: 'idle',
-        activeTeamId: null,
-        wrongTeamIds: [],
-        revealed: false,
-      };
-      S.screen = 'rounds';
-      update();
-    }
-
-    function renderRoundsGame() {
-      var r = S.rounds;
-      if (!r || !r.activeQ) return '<div class="aw-wrap">No active question.</div>';
-      var q = r.activeQ;
-      var diff = DIFF[q.difficulty];
-      var buzzedTeam = r.activeTeamId ? r.teams.filter(function (t) { return t.id === r.activeTeamId; })[0] : null;
-      var availForSteal = ENGINE.rounds.availableStealers(r.teams, r.wrongTeamIds);
-      var isLast = r.queueIdx + 1 >= r.pool.length;
-      var scoreHit = S.endCondition.type === 'score' && r.teams.some(function (t) { return t.score >= S.endCondition.value; });
-      var shouldEnd = isLast || scoreHit;
-      var streakBonusPreview = buzzedTeam ? ENGINE.rounds.streakBonus(buzzedTeam.streak) : 0;
-
-      var html = topline('<span>Q ' + (r.queueIdx + 1) + ' / ' + r.pool.length + '</span><button type="button" class="aw-end-now" data-action="r-end-now">End game</button>');
-      html += scoreboard(r.teams, r.activeTeamId);
-
-      html += '<div class="aw-game-body"><div class="aw-card">';
-      html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) + '<span class="aw-badge" style="--b-bg:transparent;--b-text:#64748b;--b-border:#334155">' + diff.pts + ' pts</span></div>';
-      if (r.qPhase === 'steal') html += '<span class="aw-steal-flag">⚡ Steal · ' + diff.steal + ' pts</span>';
-      html += '</div>';
-
-      html += '<div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
-      if (!r.revealed) {
-        html += '<button type="button" class="aw-reveal-btn" data-action="r-reveal">Reveal Answer ↓</button>';
-      } else {
-        html += '<div class="aw-answer-block"><div class="aw-answer-box">' + esc(q.a) + '</div>' +
-          '<div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>';
-      }
-      html += '</div></div>';
-
-      html += '<div class="aw-panel">';
-      if (r.qPhase === 'idle') {
-        html += '<p class="aw-panel-hint">Who buzzed in?</p><div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(r.teams.length, 3) + ',1fr)">' +
-          r.teams.map(function (t) {
-            var c = TEAM_COLORS[t.color];
-            return '<button type="button" class="aw-buzz-btn" style="--team-bg:' + c.bg + '" data-action="r-buzz" data-id="' + t.id + '">' + esc(t.name) + '</button>';
-          }).join('') + '</div>' +
-          '<button type="button" class="aw-btn aw-btn-ghost aw-btn-block" data-action="r-skip">Skip — no one answered</button>';
-      } else if (r.qPhase === 'buzzed' && buzzedTeam) {
-        var bc = TEAM_COLORS[buzzedTeam.color];
-        html += '<p class="aw-verdict-name" style="--team-text:' + bc.text + '"><strong>' + esc(buzzedTeam.name) + '</strong> answered — correct?</p>' +
-          '<div class="aw-verdict-grid">' +
-          '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="r-correct">✓ Correct<span class="aw-btn-sub">+' + diff.pts + ' pts' + (streakBonusPreview ? ' · +50 🔥' : '') + '</span></button>' +
-          '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="r-wrong">✗ Wrong' + (diff.penalty < 0 ? '<span class="aw-btn-sub">' + diff.penalty + ' pts</span>' : '') + '</button>' +
-          '</div>';
-      } else if (r.qPhase === 'steal' && !r.activeTeamId) {
-        html += '<p class="aw-panel-hint" style="color:#fbbf24;font-weight:700;">⚡ Steal for ' + diff.steal + ' pts — who goes?</p>' +
-          '<div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(availForSteal.length, 3) + ',1fr)">' +
-          availForSteal.map(function (t) {
-            var c = TEAM_COLORS[t.color];
-            return '<button type="button" class="aw-steal-btn" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '" data-action="r-steal-buzz" data-id="' + t.id + '">' + esc(t.name) + '</button>';
-          }).join('') + '</div>' +
-          '<button type="button" class="aw-btn aw-btn-ghost aw-btn-block" data-action="r-close-steal">No steal</button>';
-      } else if (r.qPhase === 'steal_buzzed' && buzzedTeam) {
-        var sc = TEAM_COLORS[buzzedTeam.color];
-        html += '<p class="aw-verdict-name" style="--team-text:' + sc.text + '"><strong>' + esc(buzzedTeam.name) + '</strong> steals — correct?</p>' +
-          '<div class="aw-verdict-grid">' +
-          '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="r-steal-correct">✓ Correct<span class="aw-btn-sub">+' + diff.steal + ' pts</span></button>' +
-          '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="r-steal-wrong">✗ Wrong<span class="aw-btn-sub">no penalty</span></button>' +
-          '</div>';
-      } else if (r.qPhase === 'done') {
-        html += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="' + (shouldEnd ? 'r-end-now' : 'r-next') + '">' + (shouldEnd ? 'See Results →' : 'Next Question →') + '</button>';
-      }
-      html += '</div></div>';
-      return html;
-    }
-
-    function roundsAction(name, el) {
-      var r = S.rounds;
-      if (!r) return;
-      var diff = DIFF[r.activeQ.difficulty];
-
-      if (name === 'r-reveal') { r.revealed = true; }
-      else if (name === 'r-buzz') { r.activeTeamId = el.dataset.id; r.qPhase = 'buzzed'; }
-      else if (name === 'r-correct') {
-        r.teams = r.teams.map(function (t) { return t.id === r.activeTeamId ? ENGINE.rounds.markCorrect(t, r.activeQ.difficulty) : t; });
-        r.qPhase = 'done'; r.revealed = true;
-      } else if (name === 'r-wrong') {
-        r.teams = r.teams.map(function (t) { return t.id === r.activeTeamId ? ENGINE.rounds.markWrong(t, r.activeQ.difficulty) : t; });
-        r.wrongTeamIds = r.wrongTeamIds.concat([r.activeTeamId]);
-        if (ENGINE.rounds.canSteal(r.teams, r.wrongTeamIds)) { r.qPhase = 'steal'; r.activeTeamId = null; }
-        else { r.qPhase = 'done'; r.activeTeamId = null; r.revealed = true; }
-      } else if (name === 'r-steal-buzz') { r.activeTeamId = el.dataset.id; r.qPhase = 'steal_buzzed'; }
-      else if (name === 'r-steal-correct') {
-        r.teams = r.teams.map(function (t) { return t.id === r.activeTeamId ? ENGINE.rounds.markStealCorrect(t, r.activeQ.difficulty) : t; });
-        r.qPhase = 'done'; r.revealed = true;
-      } else if (name === 'r-steal-wrong' || name === 'r-close-steal') { r.qPhase = 'done'; r.activeTeamId = null; r.revealed = true; }
-      else if (name === 'r-skip') { r.qPhase = 'done'; r.revealed = true; }
-      else if (name === 'r-next') {
-        var next = r.queueIdx + 1;
-        if (next >= r.pool.length) { finishRounds(); return; }
-        r.queueIdx = next; r.activeQ = r.pool[next]; r.activeTeamId = null; r.wrongTeamIds = []; r.revealed = false; r.qPhase = 'idle';
-      } else if (name === 'r-end-now') { finishRounds(); return; }
-      update();
-    }
-
-    function finishRounds() {
-      var r = S.rounds;
-      var sorted = r.teams.slice().sort(function (a, b) { return b.score - a.score; });
-      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
-      ENGINE.history.save({
-        date: fmtDate(),
-        winner: isTie ? 'Tie' : sorted[0].name,
-        teams: sorted.map(function (t) { return { name: t.name, score: t.score }; }),
-        mode: 'rounds',
-      });
-      S.screen = 'rounds-results';
-      update();
-    }
-
-    function renderRoundsResults() {
-      var r = S.rounds;
-      var sorted = r.teams.slice().sort(function (a, b) { return b.score - a.score; });
-      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
-      var topStreaker = r.teams.slice().sort(function (a, b) { return b.streak - a.streak; })[0];
-
-      var html = '<div class="aw-wrap">';
-      html += '<div class="aw-result-hero"><div class="aw-result-emoji">' + (isTie ? '🤝' : '🏆') + '</div>' +
-        '<h1 class="aw-result-title">' + (isTie ? "It's a Tie!" : esc(sorted[0].name) + ' Wins!') + '</h1>' +
-        '<p class="aw-result-sub">' + r.queueIdx + (r.qPhase === 'done' || r.pool.length ? 1 : 0) + ' rounds · ' + fmtDate() + '</p></div>';
-
-      html += sorted.map(function (team, idx) {
-        var c = TEAM_COLORS[team.color];
-        var isFirst = idx === 0 && !isTie;
-        return '<div class="aw-leaderboard-row' + (isFirst ? ' first' : '') + '" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '">' +
-          '<span class="aw-medal">' + (MEDALS[idx] || (idx + 1)) + '</span>' +
-          '<span class="aw-lb-name">' + esc(team.name) + '</span>' +
-          '<div class="aw-lb-score-wrap"><div class="aw-lb-score">' + team.score + '</div>' +
-          '<div class="aw-lb-stats">' + team.correct + '✓' + (team.wrong > 0 ? ' ' + team.wrong + '✗' : '') + (team.steals > 0 ? ' ' + team.steals + '⚡' : '') + '</div></div></div>';
-      }).join('');
-
-      if (topStreaker && topStreaker.streak >= 3) {
-        html += '<div class="aw-streak-banner">🔥 ' + esc(topStreaker.name) + ' ended on a ' + topStreaker.streak + '-question streak!</div>';
-      }
-
-      html += '<div class="aw-result-actions">' +
-        '<button type="button" class="aw-btn aw-btn-primary aw-btn-lg" data-action="r-play-again">Play Again</button>' +
-        '<button type="button" class="aw-btn aw-btn-ghost aw-btn-lg" data-action="go-setup">Menu</button>' +
-        '</div></div>';
-      return html;
-    }
-
-    // ─── JEOPARDY BOARD MODE ──────────────────────────────────────────
-
-    function startBoard() {
-      var pool = ENGINE.buildPool(QUESTIONS, S.filters);
-      var topicIds = TOPICS.map(function (t) { return t.id; }).filter(function (id) { return S.filters.topics.has(id); });
-      if (topicIds.length < 2 || pool.length === 0) return;
-      S.board = {
-        teams: S.teams.map(function (t) { return ENGINE.makeTeam(t.name, t.color, t.id); }),
-        columns: ENGINE.board.build(topicIds, pool),
-        controlIndex: 0,
-        modal: null,
-      };
-      S.screen = 'board';
-      update();
-    }
-
-    function renderBoardGame() {
-      var b = S.board;
-      if (!b) return '<div class="aw-wrap">No board.</div>';
-      var control = b.teams[b.controlIndex];
-      var c = TEAM_COLORS[control.color];
-
-      var html = topline('<button type="button" class="aw-end-now" data-action="b-end-now">End game</button>');
-      html += scoreboard(b.teams, control.id);
-
-      html += '<div class="aw-game-body">';
-      html += '<div class="aw-turn-flag" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '">🎯 ' + esc(control.name) + "'s turn to pick</div>";
-
-      html += '<div class="aw-board-scroll"><div class="aw-board">';
-      html += b.columns.map(function (col, colIdx) {
-        var tc = TOPIC_COLORS[col.topic];
-        var topic = topicById(col.topic);
-        var cellsHtml = col.cells.map(function (cell, cellIdx) {
-          if (!cell.question) return '<div class="aw-board-cell aw-board-cell--empty">—</div>';
-          if (cell.done) return '<div class="aw-board-cell aw-board-cell--done">✓</div>';
-          return '<button type="button" class="aw-board-cell" data-action="b-cell" data-col="' + colIdx + '" data-cell="' + cellIdx + '">' + cell.value + '</button>';
-        }).join('');
-        return '<div class="aw-board-col"><div class="aw-board-col-header" style="--b-bg:' + tc.bg + ';--b-text:' + tc.text + ';--b-border:' + tc.border + '">' + esc(topic.short) + '</div>' + cellsHtml + '</div>';
-      }).join('');
-      html += '</div></div>';
-
-      if (b.modal) html += renderBoardModal(b);
-
-      html += '</div>';
-      return html;
-    }
-
-    function renderBoardModal(b) {
-      var m = b.modal;
-      var q = m.cell.question;
-      var diff = DIFF[q.difficulty];
-      var answeringTeam = b.teams.filter(function (t) { return t.id === m.answeringTeamId; })[0];
-      var atc = answeringTeam ? TEAM_COLORS[answeringTeam.color] : null;
-
-      var html = '<div class="aw-modal-backdrop"><div class="aw-modal"><div class="aw-card">';
-      html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) +
-        '<span class="aw-badge" style="--b-bg:transparent;--b-text:#22d3ee;--b-border:#0e7490">' + m.cell.value + ' pts</span></div>' +
-        (m.phase === 'steal-pick' || m.phase === 'steal-verdict' ? '<span class="aw-steal-flag">⚡ Steal · ' + m.cell.value + ' pts</span>' : '') + '</div>';
-
-      html += '<div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
-      if (!m.revealed) {
-        html += '<button type="button" class="aw-reveal-btn" data-action="b-reveal">Reveal Answer ↓</button>';
-      } else {
-        html += '<div class="aw-answer-block"><div class="aw-answer-box">' + esc(q.a) + '</div>' +
-          '<div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>';
-      }
-      html += '</div></div>';
-
-      html += '<div class="aw-panel" style="margin-top:0.9rem;">';
-      if (m.phase === 'await-verdict') {
-        if (!m.revealed) {
-          html += '<p class="aw-panel-hint">Reveal the answer, then judge ' + esc(answeringTeam.name) + '.</p>';
-        } else {
-          html += '<p class="aw-verdict-name" style="--team-text:' + atc.text + '"><strong>' + esc(answeringTeam.name) + '</strong> answered — correct?</p>' +
-            '<div class="aw-verdict-grid">' +
-            '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="b-correct">✓ Correct<span class="aw-btn-sub">+' + m.cell.value + ' pts</span></button>' +
-            '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="b-wrong">✗ Wrong<span class="aw-btn-sub">−' + m.cell.value + ' pts</span></button>' +
-            '</div>';
-        }
-      } else if (m.phase === 'steal-pick') {
-        var stealers = ENGINE.board.availableStealers(b.teams, m.pickerId, m.excludedIds);
-        html += '<p class="aw-panel-hint" style="color:#fbbf24;font-weight:700;">⚡ Steal for ' + m.cell.value + ' pts — who goes?</p>' +
-          '<div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(stealers.length, 3) + ',1fr)">' +
-          stealers.map(function (t) {
-            var stc = TEAM_COLORS[t.color];
-            return '<button type="button" class="aw-steal-btn" style="--team-border:' + stc.border + ';--team-dim:' + stc.dim + ';--team-text:' + stc.text + '" data-action="b-steal" data-id="' + t.id + '">' + esc(t.name) + '</button>';
-          }).join('') + '</div>' +
-          '<button type="button" class="aw-btn aw-btn-ghost aw-btn-block" data-action="b-no-steal">No steal</button>';
-      } else if (m.phase === 'steal-verdict') {
-        html += '<p class="aw-verdict-name" style="--team-text:' + atc.text + '"><strong>' + esc(answeringTeam.name) + '</strong> steals — correct?</p>' +
-          '<div class="aw-verdict-grid">' +
-          '<button type="button" class="aw-verdict-btn aw-verdict-correct" data-action="b-steal-correct">✓ Correct<span class="aw-btn-sub">+' + m.cell.value + ' pts</span></button>' +
-          '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="b-steal-wrong">✗ Wrong<span class="aw-btn-sub">no penalty</span></button>' +
-          '</div>';
-      } else if (m.phase === 'done') {
-        var outcomeText = m.outcome.type === 'correct' ? esc(answeringTeamNameFromOutcome(b, m)) + ' scored ' + m.cell.value + ' pts and keeps control.'
-          : m.outcome.type === 'steal-correct' ? esc(m.outcome.teamName) + ' stole it for ' + m.cell.value + ' pts and takes control.'
-          : 'No steal — control rotates to ' + esc(b.teams[ENGINE.board.nextControlIndex(b.teams.length, m.pickerIndex)].name) + '.';
-        html += '<p class="aw-panel-hint">' + outcomeText + '</p>' +
-          '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="b-continue">Back to Board →</button>';
-      }
-      html += '</div></div></div>';
-      return html;
-    }
-
-    function answeringTeamNameFromOutcome(b, m) {
-      var t = b.teams.filter(function (t2) { return t2.id === m.pickerId; })[0];
-      return t ? t.name : '';
-    }
-
-    function boardAction(name, el) {
-      var b = S.board;
-      if (!b) return;
-
-      if (name === 'b-cell') {
-        var colIdx = +el.dataset.col, cellIdx = +el.dataset.cell;
-        var cell = b.columns[colIdx].cells[cellIdx];
-        if (!cell.question || cell.done) return;
-        b.modal = {
-          colIdx: colIdx, cellIdx: cellIdx, cell: cell, revealed: false, phase: 'await-verdict',
-          pickerIndex: b.controlIndex, pickerId: b.teams[b.controlIndex].id,
-          answeringTeamId: b.teams[b.controlIndex].id, excludedIds: [], outcome: null,
-        };
-      } else if (name === 'b-reveal') { b.modal.revealed = true; }
-      else if (name === 'b-correct') {
-        var m = b.modal;
-        b.teams = b.teams.map(function (t) { return t.id === m.answeringTeamId ? ENGINE.board.markCorrect(t, m.cell.value) : t; });
-        m.cell.done = true;
-        m.phase = 'done'; m.outcome = { type: 'correct' };
-      } else if (name === 'b-wrong') {
-        var m2 = b.modal;
-        b.teams = b.teams.map(function (t) { return t.id === m2.answeringTeamId ? ENGINE.board.markWrong(t, m2.cell.value) : t; });
-        m2.excludedIds = m2.excludedIds.concat([m2.answeringTeamId]);
-        var stealers = ENGINE.board.availableStealers(b.teams, m2.pickerId, m2.excludedIds);
-        if (stealers.length > 0) { m2.phase = 'steal-pick'; }
-        else { closeCellNoSteal(b, m2); }
-      } else if (name === 'b-steal') {
-        b.modal.answeringTeamId = el.dataset.id; b.modal.phase = 'steal-verdict';
-      } else if (name === 'b-steal-correct') {
-        var m3 = b.modal;
-        var stealTeam = b.teams.filter(function (t) { return t.id === m3.answeringTeamId; })[0];
-        b.teams = b.teams.map(function (t) { return t.id === m3.answeringTeamId ? ENGINE.board.markStealCorrect(t, m3.cell.value) : t; });
-        m3.cell.done = true;
-        b.controlIndex = b.teams.findIndex(function (t) { return t.id === m3.answeringTeamId; });
-        m3.phase = 'done'; m3.outcome = { type: 'steal-correct', teamName: stealTeam.name };
-      } else if (name === 'b-steal-wrong') {
-        var m4 = b.modal;
-        m4.excludedIds = m4.excludedIds.concat([m4.answeringTeamId]);
-        var remain = ENGINE.board.availableStealers(b.teams, m4.pickerId, m4.excludedIds);
-        if (remain.length > 0) { m4.phase = 'steal-pick'; }
-        else { closeCellNoSteal(b, m4); }
-      } else if (name === 'b-no-steal') { closeCellNoSteal(b, b.modal); }
-      else if (name === 'b-continue') {
-        b.modal = null;
-        if (ENGINE.board.isExhausted(b.columns)) { finishBoard(); return; }
-      } else if (name === 'b-end-now') { finishBoard(); return; }
-      update();
-    }
-
-    function closeCellNoSteal(b, m) {
-      m.cell.done = true;
-      b.controlIndex = ENGINE.board.nextControlIndex(b.teams.length, m.pickerIndex);
-      m.phase = 'done'; m.outcome = { type: 'no-steal' };
-    }
-
-    function finishBoard() {
-      var b = S.board;
-      var sorted = b.teams.slice().sort(function (a, b2) { return b2.score - a.score; });
-      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
-      ENGINE.history.save({
-        date: fmtDate(),
-        winner: isTie ? 'Tie' : sorted[0].name,
-        teams: sorted.map(function (t) { return { name: t.name, score: t.score }; }),
-        mode: 'board',
-      });
-      S.screen = 'board-results';
-      update();
-    }
-
-    function renderBoardResults() {
-      var b = S.board;
-      var sorted = b.teams.slice().sort(function (a, b2) { return b2.score - a.score; });
-      var isTie = sorted.length > 1 && sorted[0].score === sorted[1].score;
-
-      var html = '<div class="aw-wrap">';
-      html += '<div class="aw-result-hero"><div class="aw-result-emoji">' + (isTie ? '🤝' : '🏆') + '</div>' +
-        '<h1 class="aw-result-title">' + (isTie ? "It's a Tie!" : esc(sorted[0].name) + ' Wins!') + '</h1>' +
-        '<p class="aw-result-sub">Jeopardy Board · ' + fmtDate() + '</p></div>';
-
-      html += sorted.map(function (team, idx) {
-        var c = TEAM_COLORS[team.color];
-        var isFirst = idx === 0 && !isTie;
-        return '<div class="aw-leaderboard-row' + (isFirst ? ' first' : '') + '" style="--team-border:' + c.border + ';--team-dim:' + c.dim + ';--team-text:' + c.text + '">' +
-          '<span class="aw-medal">' + (MEDALS[idx] || (idx + 1)) + '</span>' +
-          '<span class="aw-lb-name">' + esc(team.name) + '</span>' +
-          '<div class="aw-lb-score-wrap"><div class="aw-lb-score">' + team.score + '</div>' +
-          '<div class="aw-lb-stats">' + team.correct + '✓' + (team.wrong > 0 ? ' ' + team.wrong + '✗' : '') + (team.steals > 0 ? ' ' + team.steals + '⚡' : '') + '</div></div></div>';
-      }).join('');
-
-      html += '<div class="aw-result-actions">' +
-        '<button type="button" class="aw-btn aw-btn-primary aw-btn-lg" data-action="b-play-again">Play Again</button>' +
-        '<button type="button" class="aw-btn aw-btn-ghost aw-btn-lg" data-action="go-setup">Menu</button>' +
-        '</div></div>';
-      return html;
-    }
-
-    // ─── QUICK QUIZ MODE ──────────────────────────────────────────────
-
-    function startQuiz() {
-      var pool = ENGINE.buildPool(QUESTIONS, S.filters);
-      if (pool.length === 0) return;
-      var sliced = pool.slice(0, Math.min(S.quizCount, pool.length));
-      S.quiz = {
-        pool: sliced,
-        idx: 0,
-        choices: ENGINE.quiz.buildChoices(sliced[0]),
-        answered: false,
-        selectedIdx: null,
-        records: [],
-      };
-      S.screen = 'quiz';
-      update();
-    }
-
-    function renderQuizGame() {
-      var qz = S.quiz;
-      if (!qz) return '<div class="aw-wrap">No active quiz.</div>';
-      var q = qz.pool[qz.idx];
-
-      var html = topline('<span>Q ' + (qz.idx + 1) + ' / ' + qz.pool.length + '</span>');
-      html += '<div class="aw-game-body">';
-      html += '<div class="aw-quiz-topline"><span>' + topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) + '</span><span class="aw-quiz-score">' + qz.records.filter(function (r) { return r.correct; }).length + ' / ' + qz.records.length + ' correct</span></div>';
-
-      html += '<div class="aw-card"><div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
-      html += '<div class="aw-choice-list" style="width:100%;">' + qz.choices.map(function (choice, idx) {
-        var cls = 'aw-choice';
-        if (qz.answered) {
-          if (choice.correct) cls += ' correct';
-          else if (idx === qz.selectedIdx) cls += ' wrong';
-          else cls += ' dim';
-        }
-        return '<button type="button" class="' + cls + '" data-action="q-choice" data-idx="' + idx + '"' + (qz.answered ? ' disabled' : '') + '>' + esc(choice.text) + '</button>';
-      }).join('') + '</div>';
-
-      if (qz.answered) {
-        html += '<div class="aw-answer-block" style="margin-top:0.4rem;"><div class="aw-answer-box">' + esc(q.a) + '</div>' +
-          '<div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>';
-      }
-      html += '</div></div>';
-
-      if (qz.answered) {
-        var isLast = qz.idx + 1 >= qz.pool.length;
-        html += '<button type="button" class="aw-btn aw-btn-primary aw-btn-block aw-btn-lg" data-action="q-next">' + (isLast ? 'See Results →' : 'Next Question →') + '</button>';
-      }
-      html += '</div>';
-      return html;
-    }
-
-    function quizAction(name, el) {
-      var qz = S.quiz;
-      if (!qz) return;
-      var q = qz.pool[qz.idx];
-
-      if (name === 'q-choice' && !qz.answered) {
-        var idx = +el.dataset.idx;
-        qz.answered = true;
-        qz.selectedIdx = idx;
-        qz.records.push({ question: q, correct: !!qz.choices[idx].correct });
-      } else if (name === 'q-next') {
-        var next = qz.idx + 1;
-        if (next >= qz.pool.length) { finishQuiz(); return; }
-        qz.idx = next;
-        qz.choices = ENGINE.quiz.buildChoices(qz.pool[next]);
-        qz.answered = false;
-        qz.selectedIdx = null;
-      }
-      update();
-    }
-
-    function finishQuiz() {
-      var qz = S.quiz;
-      var summary = ENGINE.quiz.summarize(qz.records);
-      qz.summary = summary;
-      ENGINE.history.save({
-        date: fmtDate(),
-        winner: 'You',
-        teams: [{ name: 'You', score: summary.right }],
-        mode: 'quiz',
-      });
-      S.screen = 'quiz-results';
-      update();
-    }
-
-    function renderQuizResults() {
-      var qz = S.quiz;
-      var s = qz.summary;
-      var html = '<div class="aw-wrap">';
-      html += '<div class="aw-result-hero"><div class="aw-pct-hero">' + s.pct + '%</div>' +
-        '<p class="aw-result-sub">' + s.right + ' / ' + s.total + ' correct · ' + fmtDate() + '</p></div>';
-
-      html += '<div class="aw-section"><p class="aw-label">By Topic</p>';
-      TOPICS.forEach(function (t) {
-        var bt = s.byTopic[t.id];
-        if (!bt) return;
-        var pct = bt.total ? Math.round((bt.correct / bt.total) * 100) : 0;
-        html += '<div class="aw-bar-row"><span class="aw-bar-label">' + esc(t.short) + '</span>' +
-          '<span class="aw-bar-track"><span class="aw-bar-fill" style="width:' + pct + '%"></span></span>' +
-          '<span class="aw-bar-frac">' + bt.correct + '/' + bt.total + '</span></div>';
-      });
-      html += '</div>';
-
-      if (s.missed.length > 0) {
-        html += '<div class="aw-section"><p class="aw-label">Review Missed (' + s.missed.length + ')</p>';
-        html += s.missed.map(function (q) {
-          var open = S.browse.expandedId === q.id;
-          return '<div class="aw-browse-row" data-action="q-review-toggle" data-id="' + q.id + '">' +
-            topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) +
-            '<p class="aw-browse-q">' + esc(q.q) + '</p>' +
-            (open ? '<div class="aw-browse-expand"><div class="aw-answer-box">' + esc(q.a) + '</div><div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>' : '') +
-            '</div>';
-        }).join('');
-        html += '</div>';
-      }
-
-      html += '<div class="aw-result-actions">' +
-        '<button type="button" class="aw-btn aw-btn-primary aw-btn-lg" data-action="q-play-again">Play Again</button>' +
-        '<button type="button" class="aw-btn aw-btn-ghost aw-btn-lg" data-action="go-setup">Menu</button>' +
-        '</div></div>';
-      return html;
-    }
-
-    // ─── BROWSE MODE ──────────────────────────────────────────────────
-
-    function renderBrowse() {
-      var b = S.browse;
-      var diffOrder = { easy: 0, medium: 1, hard: 2 };
-      var topicOrder = {};
-      TOPICS.forEach(function (t, i) { topicOrder[t.id] = i; });
-
-      var list = QUESTIONS.filter(function (q) {
-        if (b.topic !== 'all' && q.topic !== b.topic) return false;
-        if (b.difficulty !== 'all' && q.difficulty !== b.difficulty) return false;
-        if (b.search) {
-          var hay = (q.q + ' ' + q.a + ' ' + q.pearl).toLowerCase();
-          if (hay.indexOf(b.search.toLowerCase()) === -1) return false;
-        }
-        return true;
-      });
-
-      list.sort(function (x, y) {
-        if (b.sort === 'difficulty') {
-          return diffOrder[x.difficulty] - diffOrder[y.difficulty] || topicOrder[x.topic] - topicOrder[y.topic];
-        }
-        return topicOrder[x.topic] - topicOrder[y.topic] || diffOrder[x.difficulty] - diffOrder[y.difficulty];
-      });
-
-      var html = topline('<span>' + QUESTIONS.length + ' total</span>');
-      html += '<div class="aw-wrap aw-wrap--wide">';
-      html += '<div class="aw-hero" style="margin-bottom:1.1rem;"><h1 class="aw-h1" style="font-size:1.6rem;">Question Bank</h1></div>';
-
-      html += '<div class="aw-browse-controls">';
-      html += '<select class="aw-select" data-bind="br-topic"><option value="all"' + (b.topic === 'all' ? ' selected' : '') + '>All topics</option>' +
-        TOPICS.map(function (t) { return '<option value="' + t.id + '"' + (b.topic === t.id ? ' selected' : '') + '>' + esc(t.short) + '</option>'; }).join('') + '</select>';
-      html += '<select class="aw-select" data-bind="br-diff"><option value="all"' + (b.difficulty === 'all' ? ' selected' : '') + '>All difficulty</option>' +
-        DIFF_KEYS.map(function (k) { return '<option value="' + k + '"' + (b.difficulty === k ? ' selected' : '') + '>' + DIFF[k].label + '</option>'; }).join('') + '</select>';
-      html += '<select class="aw-select" data-bind="br-sort"><option value="topic"' + (b.sort === 'topic' ? ' selected' : '') + '>Sort: Topic</option>' +
-        '<option value="difficulty"' + (b.sort === 'difficulty' ? ' selected' : '') + '>Sort: Difficulty</option></select>';
-      html += '<input type="search" class="aw-search" id="browse-search" data-bind="br-search" placeholder="Search questions…" value="' + esc(b.search) + '">';
-      html += '</div>';
-
-      html += '<p class="aw-browse-count">' + list.length + ' question' + (list.length === 1 ? '' : 's') + '</p>';
-
-      if (list.length === 0) {
-        html += '<p class="aw-empty-note">No questions match these filters.</p>';
-      } else {
-        html += list.map(function (q) {
-          var open = b.expandedId === q.id;
-          return '<div class="aw-browse-row" data-action="br-toggle" data-id="' + q.id + '">' +
-            topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) +
-            '<p class="aw-browse-q">' + esc(q.q) + '</p>' +
-            (open ? '<div class="aw-browse-expand"><div class="aw-answer-box">' + esc(q.a) + '</div><div class="aw-pearl-box"><span class="aw-pearl-tag">Pearl</span><p class="aw-pearl-text">' + esc(q.pearl) + '</p></div></div>' : '') +
-            '</div>';
-        }).join('');
-      }
-      html += '</div>';
-      return html;
-    }
-
-    // ─── EVENT DELEGATION ─────────────────────────────────────────────
-
-    root.addEventListener('click', function (e) {
-      var el = e.target.closest('[data-action]');
-      if (!el) return;
-      var name = el.dataset.action;
-
-      if (name === 'pick-mode') { S.mode = el.dataset.mode; update(); return; }
-      if (name === 'toggle-topic') {
-        var id = el.dataset.id;
-        if (S.filters.topics.has(id)) { if (S.filters.topics.size > 1) S.filters.topics.delete(id); }
-        else S.filters.topics.add(id);
-        update(); return;
-      }
-      if (name === 'toggle-diff') {
-        var dId = el.dataset.id;
-        if (S.filters.difficulties.has(dId)) { if (S.filters.difficulties.size > 1) S.filters.difficulties.delete(dId); }
-        else S.filters.difficulties.add(dId);
-        update(); return;
-      }
-      if (name === 'team-add') {
-        if (S.teams.length < 6) { var idx = S.teams.length; S.teams.push(ENGINE.makeTeam('Team ' + (idx + 1), ENGINE.TEAM_COLORS[idx], 't' + idx)); }
-        update(); return;
-      }
-      if (name === 'team-remove') {
-        if (S.teams.length > 2) S.teams = S.teams.filter(function (t) { return t.id !== el.dataset.id; });
-        update(); return;
-      }
-      if (name === 'set-end-type') {
-        var type = el.dataset.type;
-        var value = type === 'count' ? 15 : type === 'score' ? 300 : 0;
-        S.endCondition = { type: type, value: value };
-        update(); return;
-      }
-      if (name === 'set-quiz-count') { S.quizCount = +el.dataset.n; update(); return; }
-      if (name === 'start-rounds') { startRounds(); return; }
-      if (name === 'start-board') { startBoard(); return; }
-      if (name === 'start-quiz') { startQuiz(); return; }
-      if (name === 'start-browse') { S.screen = 'browse'; update(); return; }
-      if (name === 'go-setup') { S.screen = 'setup'; update(); return; }
-
-      if (name === 'r-play-again') { startRounds(); return; }
-      if (name === 'b-play-again') { startBoard(); return; }
-      if (name === 'q-play-again') { startQuiz(); return; }
-
-      if (name === 'br-toggle') {
-        S.browse.expandedId = S.browse.expandedId === el.dataset.id ? null : el.dataset.id;
-        update(); return;
-      }
-      if (name === 'q-review-toggle') {
-        S.browse.expandedId = S.browse.expandedId === el.dataset.id ? null : el.dataset.id;
-        update(); return;
-      }
-
-      if (name.indexOf('r-') === 0) { roundsAction(name, el); return; }
-      if (name.indexOf('b-') === 0) { boardAction(name, el); return; }
-      if (name.indexOf('q-') === 0) { quizAction(name, el); return; }
-    });
-
-    root.addEventListener('input', function (e) {
-      var bind = e.target.dataset && e.target.dataset.bind;
-      if (!bind) return;
-      if (bind === 'team-name') {
-        var id = e.target.dataset.id;
-        S.teams = S.teams.map(function (t) { return t.id === id ? Object.assign({}, t, { name: e.target.value }) : t; });
-        update();
-      } else if (bind === 'br-search') {
-        S.browse.search = e.target.value;
-        update();
-      }
-    });
-
-    root.addEventListener('change', function (e) {
-      var bind = e.target.dataset && e.target.dataset.bind;
-      if (!bind) return;
-      if (bind === 'end-count') { S.endCondition = { type: 'count', value: +e.target.value }; update(); }
-      else if (bind === 'end-score') { S.endCondition = { type: 'score', value: +e.target.value }; update(); }
-      else if (bind === 'br-topic') { S.browse.topic = e.target.value; update(); }
-      else if (bind === 'br-diff') { S.browse.difficulty = e.target.value; update(); }
-      else if (bind === 'br-sort') { S.browse.sort = e.target.value; update(); }
-    });
-
-    // ─── INIT ─────────────────────────────────────────────────────────
-
-    render();
-  })();
-  </script>
+  <script src="js/airway-app.js"></script>
 
   <script src="js/site.js"></script>
 </body>
