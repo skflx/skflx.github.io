@@ -6,20 +6,16 @@ is the spec they implement and the manual playbook for anything not yet
 covered. Run the automated suite locally before pushing:
 
 ```bash
-node tools/check-data.mjs                 # data invariants (deps-free, instant)
+node tools/check-data.mjs                 # data + security invariants (deps-free, instant)
+node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
 ```
 
-The browser suites need a real Chromium (installed) and, for `oksat.html`'s
-sibling `oksat-study.html`, network access to the React/htm CDN. CI has both.
-In a sandbox that blocks CDNs the study viewer cannot boot — that is the
-environment, not a regression. Confirm which it is by running the same page
-from `master` in a worktree; an identical failure means the sandbox. To test
-the page's own wiring without the CDN, intercept the `unpkg.com` requests and
-stub `js/oksat-engine.js` with a probe that records what `mountOKSAT` was
-called with. Every other page is CDN-independent for boot purposes and runs
-anywhere.
+The browser suites need a real Chromium and nothing else: every page script
+is same-origin (React/htm are vendored in `js/vendor/`), so they run in a
+network-restricted sandbox too. The only remote requests left are optional
+Google Fonts on the OKSAT pages, which the console allowlist tolerates.
 
 ## "Real" console error
 
@@ -28,16 +24,30 @@ Anything logged as `console.error` / `pageerror`, or a **same-origin**
 The allowlist holds only known-benign third-party noise (font/CDN network
 resets). A first-party error is never allowlisted — a same-origin 404 is how
 this harness catches a script tag left pointing at a deleted file. The static
-test server answers `/favicon.ico` with 204 so the site's missing favicon is
-not a spurious 404.
+test server answers `/favicon.ico` with 204 (pages link `images/favicon.svg`;
+browsers still probe the root path). A CSP violation logs a console error,
+so the smoke suite also proves each page runs under its own policy.
 
 ## Playbooks by subsystem
 
+### Security invariants (all pages)
+`tools/check-data.mjs` §3 (spec: `docs/security.md`): vendored files match
+their pinned SHA-384; every root `*.html` has a CSP whose `script-src` has no
+`'unsafe-inline'`/`'unsafe-eval'`/remote origin, no inline executable
+`<script>`, no `on*=` handlers or `javascript:` URLs, `rel="noopener"` on
+every `target="_blank"`, and — for the self-contained pages — no remote
+`<link>`/`<script>`/`<img>` at all. Smoke additionally loads
+`oksat-study.html?m=<img onerror…>` and asserts the payload renders as text.
+
 ### One-pager (`index.html`)
-- Style switcher sets `html[data-style]` and persists `sk_style`; day/night
-  sets `html[data-theme]` + `sk_theme`.
-- `index.html#research` opens that `<details>` section; all four sections
-  expand/collapse (native `<details>`).
+- Day/night toggle (`.site-theme-toggle`, `js/site.js`) flips
+  `html[data-theme]` and persists `sk_theme`; `js/theme-boot.js` applies it
+  before paint.
+- All sections are open; the topbar links (`#about`, `#tools`, `#work`,
+  `#research`, `#beyond`) are plain anchors, and the one in view gets
+  `aria-current` (scroll-spy in `js/onepager.js`).
+- No horizontal scroll at 390px wide; the cochlea figure (Fig. 1) is static
+  SVG and renders without JS.
 - `#pgy-status` renders the current residency year. The HTML ships the
   current value as a no-JS fallback, so **both** must be updated together if
   either is ever edited by hand. Check the rollover directly rather than
@@ -47,7 +57,7 @@ not a spurious 404.
   return Math.max(1,Math.min(5,y-2024+1))};
   ['2026-06-30','2026-07-01','2029-07-01'].forEach(d=>console.log(d,'PGY-'+f(d)))"
   ```
-- Smoke assertion: a `details.section` element exists.
+- Smoke assertion: `.hero-name` exists and `#pgy-status` reads `PGY-<n>`.
 
 ### OKSAT hub (`oksat.html`)
 - Every module in `OKSAT_MANIFEST` renders as a card under `#modules`,
@@ -87,12 +97,27 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - Concept deep link `&c=<key>` pre-filters (manual).
 
 ### Airway Rounds (`airway-jeopardy.html`)
-- Boots with **zero external requests** (deliberately CDN-free); `AIRWAY_DATA`
-  loads. Smoke assertion: `window.AIRWAY_DATA.questions` is an array.
+- Boots with **zero external requests** (deliberately CDN-free — its CSP
+  names no remote origin, so a regression is also a console error);
+  `AIRWAY_DATA` loads. Smoke assertion: `window.AIRWAY_DATA.questions` is an
+  array.
 
 ### CPT search (`cpt-search.html`)
-- Boots with zero console errors and the search field filters — nothing more
-  (frozen; still consumes `css/main.css` tokens).
+- Boots with zero console errors; typing filters; clicking a result copies
+  its code and flips the button to **Copied**; a query like
+  `<img src=x onerror=…>` renders as text (results go through `esc()`).
+
+### Wiki sync (`wiki/sync/sync-vault.mjs`)
+`tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and
+asserts: dry run writes nothing; only allowlisted folders + `MOC.md` leave;
+`data_sources/`, `_drafts/`, `_*`, dotfiles, governance docs, non-Markdown
+files and symlinks never do; `## Personal Notes` is cut (fence-aware) and
+`personal_status` dropped; stub/draft notes are gated; the PHI tripwire
+holds a note (exit 2); links to unpublished notes are unlinked; unvetted
+notes are tagged and bannered; it deletes only files it wrote and refuses
+foreign folders and outputs inside the vault. A real Quartz build is not
+part of CI (no build step here); `wiki/README.md` records the last manual
+build check.
 
 ### Archive (`archive/`)
 Not served, not smoke-tested, not checked by `tools/check-data.mjs`. The one

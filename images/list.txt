@@ -2,8 +2,11 @@ Image Assets
 ============
 
 me_card.jpg / me_card.webp
-  - Hero profile image (504x600 portrait crop)
-  - Used on index.html (hero section) via <picture>
+  - Profile portrait (504x600 crop)
+  - Used on index.html (About section) via <picture>
+
+favicon.svg
+  - Site icon (ink square, audiogram-red ring); linked by every page
 
 og-card.jpg
   - Social-sharing card (1200x630 landscape crop)

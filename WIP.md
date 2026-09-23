@@ -5,24 +5,33 @@ This is a status document, not a changelog — when something is retired, its
 section goes away rather than growing a postscript. Git history is the record
 of how things got here.
 
-Last reviewed: 2026-09-13.
+Last reviewed: 2026-09-23.
+
+---
+
+## Design system (`css/site.css`, `css/oksat.css`)
+
+**State:** Redesigned 2026-09-23 away from the warm-cream/serif look. One
+system everywhere: paper/ink, hairline rules, Archivo + IBM Plex Mono
+(self-hosted), and two audiogram signal colors with fixed meanings. OKSAT
+mirrors it as `--ok-*` tokens; Airway's dark stage uses the night palette.
+Icon fonts, emoji, pastel badges and the Matte/Story style switch are gone.
+
+**Next:** Nothing scheduled. The og-card image (`images/og-card.jpg`) predates
+the redesign and could be reshot to match.
 
 ---
 
 ## One-pager (`index.html`)
 
-**State:** Live and stable. Two visitor-selectable styles (Matte, Story) ×
-day/night, all token-driven in `css/onepager.css`. Native `<details>`
-accordion, hash deep-linking.
+**State:** Rebuilt as an index: big name, Fig. 1 (a generated cochlea with a
+22-contact array and Greenwood tonotopic ticks), then five open numbered
+sections with sticky heads on desktop. The residency year computes itself
+from a July 1 rollover (capped at PGY-5); the HTML carries the current value
+as a no-JS fallback, and the two must change together.
 
-The residency year is computed in `js/onepager.js` from a July 1 rollover and
-capped at PGY-5, so it no longer needs a manual edit each summer. The HTML
-carries the current value as a no-JS fallback; the two must be edited
-together if either is ever touched by hand.
-
-**Next:** `documents/cv.pdf` is linked from the hero but the file has never
-been uploaded — that link 404s today. Either upload the CV or drop the
-button. Owner's call.
+**Next:** `documents/cv.pdf` is linked from the hero but has never been
+uploaded — that link 404s today. Upload the CV or drop the link. Owner's call.
 
 ---
 
@@ -40,6 +49,10 @@ schedule resurfaces misses (a cold recall jumps two boxes; a correct MCQ, one).
 The engine also supports optional per-item images in stems and explanations
 (`item.image`, `item.explanationImage`), first used in the lip-reconstruction
 module.
+
+The viewer now loads React/htm from `js/vendor/` (pinned) rather than a CDN,
+and the default typeface is the site's own (`instrument`); the choice moved to
+`oksat:typeface` and is stored only when picked.
 
 Progress is local to the browser and nothing is uploaded. Storage keys keep
 their trailing `:<code>` namespace so progress from the multi-reviewer era
@@ -64,7 +77,9 @@ dtc-risk-stratification style).
 
 **State:** Complete and self-contained — a 200-question ENT/H&N airway bank
 with Rounds, Jeopardy board, quick quiz, and browse modes. Zero external
-requests by design, so it runs on bad conference-room wifi or none.
+requests by design (now enforced by its CSP), so it runs on bad
+conference-room wifi or none. Retoned onto the site palette; UI logic moved
+from an inline script to `js/airway-app.js`.
 
 **Next:** Nothing planned. Keep it CDN-free; that constraint is the feature.
 
@@ -72,11 +87,28 @@ requests by design, so it runs on bad conference-room wifi or none.
 
 ## CPT search (`cpt-search.html`)
 
-**State:** Frozen and working. Search logic is inline; the page still draws
-tokens from the legacy `css/main.css`, which exists only for it.
+**State:** Working, on the shared system (`css/site.css`), logic in
+`js/cpt-search.js`. Search history stays in `localStorage`
+(`cpt-history`, `cpt-analytics`). The legacy stylesheet it depended on is
+deleted.
 
-**Next:** Nothing planned. If it is ever touched, moving it fully onto
-`css/site.css` would let `css/main.css` go.
+**Next:** Nothing planned. The code table is hand-maintained inline data.
+
+---
+
+## Wiki scaffold (`wiki/`)
+
+**State:** Scaffold only, nothing built or served. Quartz 5 config (from the
+upstream `obsidian` template, retuned to the site), custom styles, landing
+page, an inert deploy workflow, and `wiki/sync/sync-vault.mjs` — the
+fail-closed sync from the `sk.oto` vault (six subspecialty folders + MOC;
+Personal Notes, drafts, source texts and governance files never leave).
+Tested on a synthetic vault in CI; a real Quartz v5.0.0 build of the config
+succeeded on 2026-09-23.
+
+**Next:** Owner decisions in `wiki/README.md` — public vs. vetted-only vs.
+password-gated, the separate repo, and whether to automate the sync. DGMO
+diagrams render as code until converted (e.g. to Mermaid).
 
 ---
 
@@ -97,16 +129,16 @@ modules, would both put the content back to work; neither is scheduled.
 
 ## Verification
 
-**State:** Three Node suites, run in CI on every PR: `check-data.mjs`
-(committed-data invariants, zero deps), `smoke-pages.mjs` (every page boots
-with no real console errors), `test-oksat-engine.mjs` (answer lock, SRS
-writes, keyboard, legacy migration).
+**State:** Four Node suites, run in CI on every PR: `check-data.mjs`
+(committed data + security invariants: CSP on every page, no inline or
+third-party script, vendored-file hashes), `test-wiki-sync.mjs` (the vault
+boundary), `smoke-pages.mjs` (every page boots with no real console errors,
+plus the `?m=` XSS regression), `test-oksat-engine.mjs` (answer lock, SRS
+writes, keyboard, legacy migration). With React/htm vendored the browser
+suites are hermetic and run in a network-restricted sandbox.
 
-The smoke harness earns its keep on cleanup work specifically — a same-origin
-404 is treated as a failure, which is what catches a `<script>` tag left
-pointing at a deleted file.
+Security audit 2026-09-23: `docs/security.md` (one high-severity reflected
+XSS fixed; CSP added site-wide; CDN scripts vendored).
 
-**Next:** `oksat-study.html` needs the React/htm CDN to boot, so it cannot be
-smoke-tested in a network-restricted sandbox. Vendoring those two UMD bundles
-would make the whole suite hermetic; until then, see `docs/verification.md`
-for how to test that page's wiring with the CDN stubbed.
+**Next:** GitHub Pages cannot send headers, so `frame-ancestors`/HSTS are out
+of reach without a proxy host. Owner's call whether that matters.
