@@ -115,9 +115,12 @@ files and symlinks never do; `## Personal Notes` is cut (fence-aware) and
 `personal_status` dropped; stub/draft notes are gated; the PHI tripwire
 holds a note (exit 2); links to unpublished notes are unlinked; unvetted
 notes are tagged and bannered; it deletes only files it wrote and refuses
-foreign folders and outputs inside the vault. A real Quartz build is not
-part of CI (no build step here); `wiki/README.md` records the last manual
-build check.
+foreign folders and outputs inside the vault. The same suite checks
+`wiki/dgmo/render-dgmo.mjs`'s fence transform with a stub renderer: good
+fences become one-line light+dark figures, failed ones stay code, other
+fences and prose are untouched, the source is escaped, and the chart title
+is re-centered. A real Quartz/DGMO build is not part of CI (no build step
+here); `wiki/README.md` records the last manual build check.
 
 ### Archive (`archive/`)
 Not served, not smoke-tested, not checked by `tools/check-data.mjs`. The one

@@ -1,18 +1,19 @@
 Image Assets
 ============
 
-me_card.jpg / me_card.webp
-  - Profile portrait (504x600 crop)
-  - Used on index.html (About section) via <picture>
+portrait-cutout.webp
+  - Hero portrait, background removed (transparent WebP, 720 wide, EXIF-free)
+  - Cut out from the owner's 2026-09 studio headshot with rembg's
+    birefnet-portrait model; the original stays with the owner, not here
+  - Used on index.html (hero) and in og-card.jpg
 
 favicon.svg
   - Site icon (ink square, audiogram-red ring); linked by every page
 
 og-card.jpg
-  - Social-sharing card (1200x630 landscape crop)
-  - Referenced by the og:image / twitter:image meta tags in index.html
+  - Social-sharing card (1200x630), rendered from the site's own type and
+    the cutout portrait (headless Chromium screenshot of an HTML card)
+  - Referenced by the og:image / twitter:image meta tags and JSON-LD in index.html
 
-Note: the 2.3 MB full-resolution original (me_large.jpg) was removed in the
-2026-09 cleanup — it was never loaded by any page, only a crop source. If the
-photo is ever recropped, pull the original from git history or from the
-owner's local copy rather than recommitting it here.
+The earlier garden portrait (me_card.jpg/.webp) was retired in the 2026-09
+redesign; it is in git history if ever wanted.

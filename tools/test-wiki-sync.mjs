@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /* =============================================================
    test-wiki-sync.mjs — behavior tests for wiki/sync/sync-vault.mjs,
-   the privacy boundary between the sk.oto vault and the web.
+   the privacy boundary between the sk.oto vault and the web, and for
+   the DGMO fence transform in wiki/dgmo/render-dgmo.mjs.
 
    Builds a synthetic vault in a temp dir (no real notes are ever
    committed), runs the sync, and asserts what did and did not
@@ -115,6 +116,25 @@ ok(r.status === 1, 'refuses an output folder inside the vault');
 ok(stripSections('## Personal Notes\n~~~\n## x\n~~~\n## Next\nkeep', ['Personal Notes']).body === '## Next\nkeep', 'stripSections handles ~~~ fences');
 ok(unlinkMissing('[[Missing#Heading]]', new Set()).body === 'Missing › Heading', 'heading links fall back to readable text');
 ok(splitFrontmatter('no frontmatter').fm === null, 'files without frontmatter parse');
+
+/* wiki/dgmo/render-dgmo.mjs — fence transform, with a stub renderer so
+   this suite stays dependency-free (the real library runs in the wiki
+   repo's deploy). */
+console.log('\nwiki/dgmo/render-dgmo.mjs');
+const { transformMarkdown, recenterTitle } = await import(path.join(ROOT, 'wiki/dgmo/render-dgmo.mjs'));
+const stub = async (src, theme) => {
+    if (/BROKEN/.test(src)) throw new Error('parse error');
+    return { svg: `<svg viewBox="0 0 400 100">\n\n<text>${theme}</text></svg>` };
+};
+const doc = 'Intro\n\n```dgmo\nflowchart A <b>\n(x) -> [y]\n```\n\nMiddle\n\n~~~dgmo\nflowchart BROKEN\n~~~\n\n```js\nkeep()\n```\n';
+const t = await transformMarkdown(doc, stub);
+ok(t.rendered === 1 && t.failed.length === 1, 'renders good fences, reports failed ones');
+ok(/<div class="dgmo-light"><svg[^]*light[^]*<div class="dgmo-dark"><svg[^]*dark/.test(t.md), 'emits a light and a dark SVG');
+ok(!/<svg[^>]*>\s*\n\s*\n/.test(t.md) && t.md.split('\n').some((l) => l.startsWith('<figure class="dgmo"') && l.endsWith('</figure>')), 'figure is one line (a blank line would break the HTML block)');
+ok(/~~~dgmo\nflowchart BROKEN\n~~~/.test(t.md), 'a fence that fails to render stays as code');
+ok(/```js\nkeep\(\)\n```/.test(t.md) && /^Intro/.test(t.md) && /Middle/.test(t.md), 'other fences and prose untouched');
+ok(/<code>flowchart A &lt;b&gt;/.test(t.md) && !/<b>/.test(t.md), 'diagram source is escaped');
+ok(/class="chart-title" x="240\.0"/.test(recenterTitle('<svg viewBox="0 0 480 390"><text class="chart-title" x="600" y="30">T</text></svg>')), 'chart title re-centered on the viewBox');
 
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);

@@ -60,6 +60,7 @@ html[data-theme="light"], :root:not([data-theme]) {
   --rule: #D6D7D0;
   --rule-strong: #B4B6AE;
   --wash: #E7E8E1;
+  --plate: #E1E2DA;
   --signal: #B8371A;
   --signal-2: #2445B0;
   --on-signal: #FAFAF7;
@@ -77,6 +78,7 @@ html[data-theme="dark"] {
   --rule: #26292E;
   --rule-strong: #3A3E45;
   --wash: #1C1F23;
+  --plate: #2A2D33;
   --signal: #FF6B42;
   --signal-2: #8EA7FF;
   --on-signal: #0D0E10;
@@ -88,7 +90,7 @@ html[data-theme="dark"] {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     --bg: #0D0E10; --surface: #16181B; --ink: #ECEBE6; --ink-muted: #A6AAB2;
-    --ink-faint: #7E838C; --rule: #26292E; --rule-strong: #3A3E45; --wash: #1C1F23;
+    --ink-faint: #7E838C; --rule: #26292E; --rule-strong: #3A3E45; --wash: #1C1F23; --plate: #2A2D33;
     --signal: #FF6B42; --signal-2: #8EA7FF; --on-signal: #0D0E10;
     --ok: #5FD3A0; --bad: #FF7A8A;
     color-scheme: dark;

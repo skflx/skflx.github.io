@@ -58,6 +58,10 @@ jobs:
             echo "::error::Personal Notes section found in content/ — re-run sync-vault.mjs"; exit 1; fi
           if [ -e content/data_sources ] || [ -e content/_drafts ] || [ -e content/.agents ]; then
             echo "::error::private vault folder found in content/"; exit 1; fi
+      # sk: ```dgmo fences → inline SVG (light + dark, site palette).
+      # Needs `npm i -D @diagrammo/dgmo` in this repo; see wiki/README.md.
+      - name: Render DGMO diagrams
+        run: node scripts/render-dgmo.mjs content
       - name: Build Quartz
         run: npx quartz build
       - name: Upload artifact

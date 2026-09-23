@@ -10,7 +10,8 @@ Northwest, plus a small set of self-contained clinical study tools.
 ## Overview
 
 The site is one scrollable page (`index.html`), set like an index rather than
-a brochure: a large name, a figure, then five numbered sections, all open —
+a brochure: a large name beside a cutout portrait, then five numbered
+sections, all open —
 About, Tools, Clinical projects, Research, Off hours. On desktop the section
 heads stay pinned in a left column while the content scrolls; on phones it is
 one column.
@@ -28,10 +29,14 @@ One system across every page, declared as tokens in `css/site.css`:
   emphasis, left-ear blue for science. Nothing is colored for decoration.
 - **Archivo** (variable width: expanded for the name and section heads) and
   **IBM Plex Mono** for anything that is data. Both are self-hosted.
-- **Fig. 1** — a cochlea drawn as a logarithmic spiral, with a 22-contact
-  implant electrode in the basal turn and tonotopic ticks placed by the
-  Greenwood place–frequency function. Static SVG, animated once on load,
-  still under `prefers-reduced-motion`.
+- **Portrait on a plate** — a background-removed headshot standing on a
+  tinted plate, head breaking its top edge (the plate keeps the dark suit
+  legible in night mode).
+- **Fig. 1** (About) — a cochlea drawn as a logarithmic spiral, with a
+  22-contact implant electrode in the basal turn and tonotopic ticks placed
+  by the Greenwood place–frequency function, next to "both sides of the
+  electrode". Static SVG, animated once on load, still under
+  `prefers-reduced-motion`.
 
 A **day / night** toggle flips `html[data-theme]`, persisted as `sk_theme`
 and defaulting to `prefers-color-scheme`.
@@ -91,7 +96,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── fonts/                  # Self-hosted Archivo + IBM Plex Mono (+ licenses)
 │
 ├── wiki/                   # Scaffold: Quartz 5 wiki for the sk.oto vault (not served; see wiki/README.md)
-│   └── sync/               #   vault → wiki sync, the privacy boundary
+│   ├── sync/               #   vault → wiki sync, the privacy boundary
+│   └── dgmo/               #   DGMO diagrams → inline SVG at wiki build time
 │
 ├── archive/                # Kept content, served by nothing (see its README)
 │   ├── kag-graph.json      #   OHNS knowledge graph from the retired atlas viewers
@@ -108,7 +114,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── docs/                   # Design system, decisions, security, verification
 │                           #   (index + update rules: docs/docs-map.md)
 ├── img/oksat/              # Per-module images used in question stems & explanations
-├── images/                 # Profile photo, social card, favicon (see images/list.txt)
+├── images/                 # Cutout portrait, social card, favicon (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
 ```
 

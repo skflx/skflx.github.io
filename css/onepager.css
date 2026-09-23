@@ -64,11 +64,11 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
   font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.02em;
 }
 .hero-links a { color: var(--ink); text-decoration-color: var(--rule-strong); }
-.hero-links li:first-child a { text-decoration-color: var(--signal); text-decoration-thickness: 2px; }
 
 .hero-figure { margin: clamp(2rem, 6vw, 3rem) 0 0; max-width: 26rem; justify-self: center; width: 100%; }
-.hero-figure figcaption { margin-top: 0.75rem; text-transform: none; letter-spacing: 0.01em; font-weight: 400; font-size: 0.72rem; line-height: 1.5; }
+.hero-figure figcaption, .about-figure figcaption { margin-top: 0.75rem; text-transform: none; letter-spacing: 0.01em; font-weight: 400; font-size: 0.72rem; line-height: 1.5; }
 .fig-no { color: var(--ink); font-weight: 500; margin-right: 0.35em; }
+.about-figure { margin: 0; max-width: 22rem; }
 
 @media (min-width: 960px) {
   .hero {
@@ -152,6 +152,18 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
   /* the block rule already sits above the first entry */
   .rows > li:first-child .row, .log > li:first-child { border-top: 0; padding-top: 0.4rem; }
 }
+
+/* ----- Cutout portrait: stands on a plate, head breaks its top edge.
+   The plate keeps the dark suit from dissolving into the night theme. */
+.cutout { margin: 0; align-self: start; }
+.cutout-frame { position: relative; isolation: isolate; }
+.cutout-frame::before {
+  content: ''; position: absolute; z-index: -1; inset: 34% 0 0 0;
+  background: var(--plate); border-bottom: 1px solid var(--ink);
+}
+.cutout img { display: block; width: 100%; height: auto; }
+.hero-figure.cutout { max-width: 22rem; }
+@media (min-width: 960px) { .hero-figure.cutout { max-width: none; } }
 
 /* ----- 01 About ----- */
 .about { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }

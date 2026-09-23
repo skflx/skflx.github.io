@@ -78,8 +78,37 @@ h2, h3 {
   border-radius: 3px;
 }
 
-// dgmo diagram sources render as code until a renderer exists
-// (README §Open questions); keep them narrow and legible.
+// DGMO diagrams, pre-rendered to SVG by wiki/dgmo/render-dgmo.mjs:
+// one SVG per theme, the source one click away.
+figure.dgmo {
+  margin: 1.5rem 0;
+  border-top: 1px solid var(--lightgray);
+  border-bottom: 1px solid var(--lightgray);
+  padding: 1rem 0 0.5rem;
+  overflow-x: auto;
+
+  svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    background: transparent !important; // sit on the page, not a slide
+  }
+  .dgmo-dark { display: none; }
+}
+:root[saved-theme="dark"] figure.dgmo {
+  .dgmo-light { display: none; }
+  .dgmo-dark { display: block; }
+}
+details.dgmo-source {
+  margin-top: 0.5rem;
+  font-family: var(--codeFont);
+  font-size: 0.75rem;
+  summary { cursor: pointer; color: var(--gray); }
+  pre { font-size: 0.8rem; }
+}
+
+// A fence that failed to render stays a code block; mark it as source.
 pre:has(> code[data-language="dgmo"]) {
   font-size: 0.85em;
   border-left: 3px solid var(--tertiary);

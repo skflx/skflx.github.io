@@ -17,21 +17,23 @@ system everywhere: paper/ink, hairline rules, Archivo + IBM Plex Mono
 mirrors it as `--ok-*` tokens; Airway's dark stage uses the night palette.
 Icon fonts, emoji, pastel badges and the Matte/Story style switch are gone.
 
-**Next:** Nothing scheduled. The og-card image (`images/og-card.jpg`) predates
-the redesign and could be reshot to match.
+**Next:** Nothing scheduled.
 
 ---
 
 ## One-pager (`index.html`)
 
-**State:** Rebuilt as an index: big name, Fig. 1 (a generated cochlea with a
-22-contact array and Greenwood tonotopic ticks), then five open numbered
-sections with sticky heads on desktop. The residency year computes itself
+**State:** Rebuilt as an index: big name beside a background-removed
+portrait on a plate, then five open numbered sections with sticky heads on
+desktop; Fig. 1 (a generated cochlea with a 22-contact array and Greenwood
+tonotopic ticks) sits in About. The social card (`images/og-card.jpg`) was
+re-rendered to match. The residency year computes itself
 from a July 1 rollover (capped at PGY-5); the HTML carries the current value
 as a no-JS fallback, and the two must change together.
 
-**Next:** `documents/cv.pdf` is linked from the hero but has never been
-uploaded — that link 404s today. Upload the CV or drop the link. Owner's call.
+**Next (TODO, owner):** add the CV. The hero link was removed until
+`documents/cv.pdf` exists; when it lands, add a `Curriculum vitae` item to
+`.hero-links` in `index.html`.
 
 ---
 
@@ -106,9 +108,14 @@ Personal Notes, drafts, source texts and governance files never leave).
 Tested on a synthetic vault in CI; a real Quartz v5.0.0 build of the config
 succeeded on 2026-09-23.
 
-**Next:** Owner decisions in `wiki/README.md` — public vs. vetted-only vs.
-password-gated, the separate repo, and whether to automate the sync. DGMO
-diagrams render as code until converted (e.g. to Mermaid).
+DGMO diagrams render at build time: `wiki/dgmo/render-dgmo.mjs` uses the
+same `@diagrammo/dgmo` library as the vault's Obsidian plugin to emit light
+and dark SVGs on a palette built from the site tokens (verified in a real
+Quartz build, 2026-09-23).
+
+**Next:** Owner decisions in `wiki/README.md` — who can read it (public,
+vetted-only, or gated; brainstorm pending), the separate repo, whether to
+automate the sync, and a reader feedback channel.
 
 ---
 

@@ -28,13 +28,36 @@ copied into that repo when it is created.
 |---|---|---|
 | `sync/sync-vault.mjs` | stays here, run locally | vault → `content/`, fail-closed (below) |
 | `sync/policy.json` | stays here | what may be published — edit this, not the script |
+| `dgmo/render-dgmo.mjs` | `scripts/render-dgmo.mjs` | ```` ```dgmo ```` fences → inline SVG, run by the deploy before `quartz build` |
 | `quartz.config.yaml` | repo root | Quartz 5 `obsidian` template, retuned (`# sk:` marks every change) |
 | `quartz/styles/custom.scss` | `quartz/styles/custom.scss` | self-hosted faces + the main site's typographic restraint |
 | `content/index.md` | `content/index.md` | landing page |
 | `github/deploy.yml` | `.github/workflows/deploy.yml` | build + Pages deploy, with a last-chance privacy check |
 
 `tools/test-wiki-sync.mjs` (repo root) tests the sync against a synthetic
-vault in CI. No real note is committed anywhere in this repo.
+vault, and the DGMO fence transform with a stub renderer, in CI. No real
+note is committed anywhere in this repo.
+
+## Diagrams (DGMO)
+
+The vault's flowcharts are [DGMO](https://github.com/diagrammo/dgmo) fences,
+drawn in Obsidian by the [obsidian-dgmo](https://github.com/diagrammo/obsidian-dgmo)
+plugin. Quartz cannot read them, so `render-dgmo.mjs` pre-renders each fence
+with the same `@diagrammo/dgmo` library the plugin uses:
+
+- static SVG, **twice** (light and dark), on a DGMO palette built from the
+  site tokens (`SKFLX_PALETTE`); `custom.scss` shows the one matching Quartz's
+  `saved-theme`. No client script, no CDN.
+- the source stays under the diagram in a collapsed *Diagram source*.
+- a fence that fails to parse stays a code block and is listed; it never
+  fails the build.
+- works around a DGMO 0.86 bug (chart title centered on an assumed 1200px
+  canvas, so it was cut off) by re-centering the title on the viewBox.
+
+DGMO warns that the vault's `r: <Tag>` suffix on flowchart nodes is
+deprecated (`W_FLOWCHART_NODE_SUFFIX`); those diagrams still render.
+Labels use DGMO's own font stack (Inter/system), not Archivo, so box sizes
+stay what the layout engine measured.
 
 ## What leaves the vault, and what never does
 
@@ -66,36 +89,47 @@ title; and deletes only files it wrote itself (tracked in
 2. Copy in: `quartz.config.yaml`, `quartz/styles/custom.scss`,
    `content/index.md`, `github/deploy.yml` → `.github/workflows/deploy.yml`;
    and `skflx.github.io/fonts/*.woff2` → `quartz/static/fonts/`.
-3. `npx quartz plugin install --from-config`
+3. `npx quartz plugin install --from-config`, then
+   `npm i -D @diagrammo/dgmo` and copy `dgmo/render-dgmo.mjs` → `scripts/`.
 4. Sync (dry run first, read the report):
    ```bash
    node ~/skflx.github.io/wiki/sync/sync-vault.mjs --vault ~/sk.oto --out content --report /tmp/sync.json
    node ~/skflx.github.io/wiki/sync/sync-vault.mjs --vault ~/sk.oto --out content --write
    ```
-5. `npx quartz build --serve` → http://localhost:8080 and look.
+5. `node scripts/render-dgmo.mjs content && npx quartz build --serve` →
+   http://localhost:8080 and look. (Re-running the sync restores the plain
+   fences; the deploy renders them itself.)
 6. Commit, push to `v5`; Settings → Pages → Source: *GitHub Actions*.
 7. Then, in this repo: add the wiki to the Tools index on `index.html`.
 
 Verified 2026-09-23: this config builds cleanly on Quartz v5.0.0 against a
 synthetic vault in the vault's exact note format (callouts, `dgmo` fences,
 KaTeX, aliased and table-escaped wikilinks); output contained no personal
-text and no Google Fonts request.
+text and no Google Fonts request; DGMO flowcharts rendered in both themes
+with `@diagrammo/dgmo` 0.86.0.
 
 ## Decisions for the owner before anything is public
 
-- **Public, private, or password-gated?** A GitHub Pages site is public, and
-  so is a public repo's `content/`. Most notes are `vetted: ""` and
-  AI-assisted; they would publish under your name with only the
-  "Unvetted" banner between them and a reader. Options: publish only
-  `requireVetted: true` notes (flip it in `policy.json`), keep the repo
-  private (Pages on a private repo needs a paid plan), or use Quartz's
-  `encrypted-pages` plugin (client-side, enabled in the config) for a
-  password.
+- **Who can read it — open, brainstorm pending.** A GitHub Pages site is
+  public. Most notes are `vetted: ""` and AI-assisted; they would publish
+  under your name with only the "Unvetted" banner between them and a reader.
+  Options on the table:
+  - *Vetted only* — flip `requireVetted: true` in `policy.json`. Safest,
+    but the site grows only as fast as vetting does.
+  - *Password* — Quartz's `encrypted-pages` encrypts each page at build
+    time; the password is a CI secret, not in the repo. **But** a password
+    only protects anything if the Markdown in `content/` is not itself in a
+    public repo. It works if the wiki repo is private (Pages from a private
+    repo needs a paid plan), or if a private repo holds `content/` and a
+    public one only receives the built, encrypted site. Otherwise the
+    plaintext is one click away on GitHub.
+  - *Reader feedback* — a "report an error" link per note that opens a
+    prefilled GitHub issue (or a form) naming the note, triaged
+    periodically into vault edits. Needs no server; issues on a public
+    repo are public.
 - **Sync trigger.** Manual (above) is the scaffold. Automating it from the
   vault's own git repo would need a cross-repo token — a secret, which this
   project does not hold without your say-so.
-- **DGMO diagrams** render as code blocks; there is no DGMO renderer for
-  Quartz. Converting to Mermaid (which Quartz renders) is possible later.
 - **`sources:` citations** publish as note properties. They cite chapters,
   not text, so they carry no copyrighted material; the source texts
   themselves never leave (`data_sources/` is not allowlisted).
