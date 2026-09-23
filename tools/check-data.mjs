@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { stampHtml, rootPages } from './stamp-assets.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => path.join(ROOT, p);
@@ -199,10 +200,26 @@ function checkSecurity() {
   }
 }
 
+/* ===========================================================
+   4. Asset stamps (tools/stamp-assets.mjs)
+   Every same-origin CSS/JS reference carries ?v=<hash of the file>,
+   so a deploy can never pair new HTML with a cached old stylesheet.
+   Editing a CSS/JS file without re-stamping fails here.
+   =========================================================== */
+function checkStamps() {
+  console.log('\nasset stamps: ?v= matches each css/ and js/ file');
+  for (const page of rootPages()) {
+    const { stale } = stampHtml(fs.readFileSync(rel(page), 'utf8'));
+    ok(stale.length === 0, `${page}: asset stamps current`,
+      `${page}: stale stamp (run node tools/stamp-assets.mjs): ${stale.join(' ; ')}`);
+  }
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkOksat();
 checkAirway();
 checkSecurity();
+checkStamps();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

@@ -15,7 +15,8 @@ change works), `docs/docs-map.md` (the documentation pass).
 | An OKSAT page | `css/oksat.css` | `js/theme-boot.js` + the `js/oksat-*.js` stack; React/htm from `js/vendor/` | `oksat.html`, `oksat-study.html` |
 
 Every new page also gets: the CSP `<meta>` from its closest precedent,
-`<link rel="icon" href="images/favicon.svg">`, an entry in `PAGES`
+`<link rel="icon" href="images/favicon.svg">`, stamped asset references
+(`node tools/stamp-assets.mjs`), an entry in `PAGES`
 (`tools/smoke-pages.mjs`), and **no inline script** — `tools/check-data.mjs`
 fails otherwise (`docs/security.md`).
 

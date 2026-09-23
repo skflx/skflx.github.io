@@ -110,7 +110,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── kag-graph-flat.txt  #   the same data as readable text
 │
 ├── tools/                  # Dev-only verification (Node; never shipped)
-│   ├── check-data.mjs      #   data + security invariants, zero deps
+│   ├── check-data.mjs      #   data + security invariants + asset stamps, zero deps
+│   ├── stamp-assets.mjs    #   ?v=<hash> cache-busting on every css/ and js/ reference
 │   ├── test-wiki-sync.mjs  #   vault sync + feedback loop on a synthetic vault
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
@@ -136,6 +137,14 @@ python3 -m http.server 8000
 
 Serving matters — `file://` breaks pages that fetch. Deep links jump to
 the matching section, e.g. `index.html#research`.
+
+After editing any file in `css/` or `js/`, refresh its cache-busting stamp
+(`?v=<hash>` on every reference, so a deploy never pairs new HTML with a
+cached old stylesheet):
+
+```
+node tools/stamp-assets.mjs
+```
 
 Before pushing (CI runs the same four on every PR):
 

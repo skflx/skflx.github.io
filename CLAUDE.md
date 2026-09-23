@@ -12,8 +12,11 @@ A static GitHub Pages site (skflx.github.io): a personal one-pager for an otolar
 # Serve locally (required — file:// breaks pages that fetch)
 python3 -m http.server 8000    # http://localhost:8000/
 
+# After editing any css/ or js/ file: refresh the ?v= cache-busting stamps
+node tools/stamp-assets.mjs      # rewrites stale stamps in every root *.html
+
 # Verify a change before pushing (also run in CI on every PR)
-node tools/check-data.mjs        # data + security invariants (deps-free, instant)
+node tools/check-data.mjs        # data + security invariants + asset stamps (deps-free, instant)
 node tools/test-wiki-sync.mjs    # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs       # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, keyboard
@@ -57,6 +60,7 @@ Kept content, **served by nothing** — no page fetches it, no test checks it. C
 - **Vanilla JS, guarded IIFEs, defensive throughout:** wrap `localStorage` and DOM access in try/catch no-ops; storage reads are fail-safe; degrade gracefully rather than throw.
 - **Token-driven theming everywhere:** components consume CSS custom properties, never raw values; theme/font switching is an attribute flip on `<html>` (`data-theme`, `data-font`). Color always means something (the two audiogram signals; one hue per subspecialty) — never decoration.
 - **Security rules** (`docs/security.md`, enforced by `tools/check-data.mjs`): every page has a CSP `<meta>` with `script-src 'self'`; **no inline `<script>`, no `on*=` handlers** — page logic goes in `js/<page>.js`; no third-party scripts (vendor into `js/vendor/` and pin the hash); anything reaching `innerHTML` is escaped, anything from the URL goes through `textContent`. No new external dependency (CDN, font service, analytics) without the owner.
+- **Asset stamps:** every `<link>`/`<script>` into `css/` or `js/` carries `?v=<first 8 hex of the file's SHA-256>` (`tools/stamp-assets.mjs`; `tools/check-data.mjs` fails on a stale one). GitHub Pages and its CDN cache each URL on its own clock, so without it a phone can pair new HTML with an old stylesheet, which is how the 2026-09 redesign first rendered. Never hand-edit a stamp; rerun the tool.
 - **No secrets, and no key fields.** The Gemini and Anthropic key managers were deleted with the tools that used them; nothing in the repo now reads a credential. Do not reintroduce one.
 - **localStorage namespaces:** `sk_*` (site chrome), `oksat:*` (OKSAT), plus CPT's legacy `cpt-history`/`cpt-analytics`. Full registry in `docs/decisions.md` §3.
 - **Indentation** (`.editorconfig`): 4 spaces for HTML/JS, 2 for CSS/Markdown.
