@@ -42,3 +42,6 @@ yarn-error.log*
 
 # Agent scratch directories (never committed)
 scratchpad*/
+
+# SSB pipeline drop zone: generated images and audits awaiting review (docs/ssb-imagegen.md)
+tools/ssb-pipeline/incoming/

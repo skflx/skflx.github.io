@@ -28,6 +28,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { stampHtml, rootPages } from './stamp-assets.mjs';
+import { validate as validateSsb, contentFiles as ssbFiles } from './ssb-content.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => path.join(ROOT, p);
@@ -215,11 +216,28 @@ function checkStamps() {
   }
 }
 
+/* ===========================================================
+   5. SSB knowledge graph (ssb/content/*.json)
+   Schema, id format, vocabularies, every reference resolving, and
+   the review gate (verified content stands on verified sources).
+   Rules: docs/authoring-ssb.md; checker: tools/ssb-content.mjs.
+   =========================================================== */
+function checkSsb() {
+  console.log('\nssb: knowledge graph schema + references');
+  const files = ssbFiles();
+  if (!files.length) { pass('ssb: no content yet'); return; }
+  const { errors, index } = validateSsb(files);
+  ok(errors.length === 0, `ssb: ${files.length} file(s), graph consistent`,
+    `ssb: ${errors.length} problem(s) (node tools/ssb-content.mjs):\n        ` + errors.slice(0, 20).join('\n        '));
+  ok(index.size > 0, 'ssb: graph has entities', 'ssb: content files present but empty');
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkOksat();
 checkAirway();
 checkSecurity();
 checkStamps();
+checkSsb();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);
