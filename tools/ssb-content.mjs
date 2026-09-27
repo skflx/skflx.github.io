@@ -58,7 +58,7 @@ const ENUM = {
   category: ['inflammatory', 'infectious', 'fungal', 'benign-neoplasm', 'malignant-neoplasm', 'fibro-osseous', 'congenital',
     'cystic', 'vascular', 'traumatic', 'iatrogenic', 'idiopathic'],
   conditionGeo: ['overlay', 'none'],
-  srcType: ['consensus', 'classification', 'cadaver', 'CT-series', 'cohort', 'animal', 'review', 'meta-analysis', 'textbook', 'atlas'],
+  srcType: ['consensus', 'classification', 'cadaver', 'CT-series', 'trial', 'cohort', 'animal', 'review', 'meta-analysis', 'textbook', 'atlas'],
   review: ['draft', 'verified'],
   tier: [1, 2, 3],
 };
