@@ -20,13 +20,14 @@ node tools/check-data.mjs        # data + security invariants + asset stamps (de
 node tools/test-wiki-sync.mjs    # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs       # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, keyboard
+node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 ```
 
 The browser suites need only a real Chromium — all page scripts are same-origin (React/htm vendored), so they run in a network-restricted sandbox. Verification detail: `docs/verification.md`. CI (`.github/workflows/ci.yml`) is verification only — no build step. Deploy = merge to `master` (GitHub Pages serves the repo root directly).
 
 ## Architecture
 
-Three independent systems share the repo, plus a scaffold. They share no runtime and no state — only the design tokens and the theme key.
+Three independent systems share the repo, plus two scaffolds (the wiki, and SSB in design). They share no runtime and no state — only the design tokens and the theme key.
 
 ### Design system
 `css/site.css` is the one palette + type + chrome (paper/ink, hairline rules, Archivo + IBM Plex Mono self-hosted in `fonts/`, two audiogram signal colors: `--signal` red = act/emphasis, `--signal-2` blue = science). `css/oksat.css` mirrors it as `--ok-*` tokens. Theme is `html[data-theme]`, applied pre-paint by `js/theme-boot.js` (every page, in `<head>`) and toggled by `js/site.js`, persisted as `sk_theme`. Rules and the list of removed tropes: `docs/decisions.md` §5.
@@ -46,6 +47,9 @@ Deliberately **self-contained** (`js/airway-app.js` + `js/airway-engine.js` + `j
 
 ### Other pages
 `cpt-search.html` — `css/site.css` + a page `<style>`, logic in `js/cpt-search.js`. The legacy main stylesheet it used was deleted in the 2026-09 redesign; do not recreate a second token set.
+
+### SSB — Sinus & Skull Base 3D (design stage; no page yet)
+A planned traversable 3D atlas of the sinuses and ventral skull base, driven by a typed knowledge graph: every fact is a node (structure, variant, hazard, procedure step…) with typed edges and sources, and geometry is keyed by the same ids. Architecture, conventions, phase plan and open owner decisions: `docs/ssb.md` — read it before any SSB work. Content schema and editorial rules: `docs/authoring-ssb.md`, enforced by `tools/ssb-content.mjs`. Content is `ssb/content/*.json`; everything is `review: "draft"` and **only the owner sets `verified`** (medical correctness, `docs/decisions.md` §7). Ids are never renamed; coordinates never go in content. Image generation runs outside the repo from `docs/ssb-imagegen.md` — generated pixels never carry an anatomical claim.
 
 ### Wiki scaffold (`wiki/`)
 Quartz 5 config, styles, landing page, and deploy workflow for publishing the owner's `sk.oto` Obsidian vault from a **separate repo** (`skflx/ent-wiki` → `skflx.github.io/ent-wiki/`), so this repo stays build-free. Nothing in `wiki/` is built or served here (`.nojekyll` keeps GitHub Pages from rendering its Markdown). `wiki/sync/sync-vault.mjs` is the only path from the vault to anything public and fails closed (folder allowlist, Personal Notes stripped, PHI tripwire, phase gate on `tier` — currently the six maps of content only); `wiki/dgmo/render-dgmo.mjs` turns the vault's ```` ```dgmo ```` diagrams into inline SVG at wiki build time; `wiki/feedback/pull-feedback.mjs` brings reader-correction issues back into the vault's `_inbox/` as untrusted data; `tools/test-wiki-sync.mjs` pins all three. The only real vault content allowed in this repo is sync-vault output in `wiki/content/` (regenerate it with the script, never hand-edit it); test fixtures stay synthetic. Read `wiki/README.md` first.

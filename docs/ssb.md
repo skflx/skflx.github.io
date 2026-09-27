@@ -381,7 +381,7 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 | Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | phase 3, report |
 | Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | phase 1, CI |
 | Behavior | `tools/test-ssb.mjs`: deep link → state; pick at a golden view returns the expected id; tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 1–7, CI |
-| Citations | an agent matches every `src.*` against PubMed/DOI and sets `verified` only on a match | continuous |
+| Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match; it also corrects the study-design `type`. **`verified` means the work exists as cited — not that it supports the claim**; claim support is the reviewer's and owner's job. (Phase 0 matched via search listings because the agent sandbox's proxy blocked direct PubMed/Crossref/DOI lookups.) | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 
 ## 10. Storage
