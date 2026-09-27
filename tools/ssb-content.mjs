@@ -22,7 +22,7 @@ export const CONTENT_DIR = path.join(ROOT, 'ssb', 'content');
 const COLLECTIONS = {
   structures: 's', landmarks: 'lm', variants: 'v', classifications: 'c',
   measurements: 'm', hazards: 'h', principles: 'pr', procedures: 'p',
-  stations: 't', pathways: 'pw', sources: 'src',
+  stations: 't', pathways: 'pw', conditions: 'dz', sources: 'src',
 };
 const COMMON = ['id', 'tier', 'review'];
 const REQUIRED = {
@@ -36,6 +36,7 @@ const REQUIRED = {
   procedures: [...COMMON, 'name', 'indications', 'steps', 'src'],
   stations: ['id', 'tier', 'name', 'side', 'scope', 'where', 'shows', 'purpose'],
   pathways: [...COMMON, 'name', 'kind', 'from', 'via', 'to', 'src'],
+  conditions: [...COMMON, 'name', 'category', 'involves', 'what', 'why', 'imaging', 'src'],
   sources: ['id', 'cite', 'type', 'verified'],
 };
 const ENUM = {
@@ -54,11 +55,14 @@ const ENUM = {
   side: ['R', 'L', 'either', 'midline'],
   scope: [0, 30, 45, 70, null],
   pathwayKind: ['mucociliary', 'drainage'],
-  srcType: ['consensus', 'classification', 'cadaver', 'CT-series', 'cohort', 'animal', 'review', 'meta-analysis', 'textbook'],
+  category: ['inflammatory', 'infectious', 'fungal', 'benign-neoplasm', 'malignant-neoplasm', 'fibro-osseous', 'congenital',
+    'cystic', 'vascular', 'traumatic', 'iatrogenic', 'idiopathic'],
+  conditionGeo: ['overlay', 'none'],
+  srcType: ['consensus', 'classification', 'cadaver', 'CT-series', 'cohort', 'animal', 'review', 'meta-analysis', 'textbook', 'atlas'],
   review: ['draft', 'verified'],
   tier: [1, 2, 3],
 };
-const ID = /^(s|lm|v|c|m|h|pr|p|t|pw|src)\.[a-z0-9]+(-[a-z0-9]+)*$/;
+const ID = /^(s|lm|v|c|m|h|pr|p|t|pw|dz|src)\.[a-z0-9]+(-[a-z0-9]+)*$/;
 const INLINE_REF = /\[\[([a-z]+\.[a-z0-9-]+)(?:\|[^\]]*)?\]\]/g;
 
 /* Returns { errors, warnings, index } — index maps id → { type, entity }. */
@@ -134,6 +138,13 @@ export function validate(files, { allowDangling = false } = {}) {
       }
       if (key === 'stations') refs(w + ' shows', e.shows);
       if (key === 'pathways') { refCheck(w + ' from', e.from); refs(w + ' via', e.via); refCheck(w + ' to', e.to); }
+      if (key === 'conditions') {
+        refs(w + ' involves', e.involves, ['structures']);
+        refs(w + ' class', e.class, ['classifications']);
+        refs(w + ' complications', e.complications, ['conditions', 'hazards']);
+        refs(w + ' managedBy', e.managedBy, ['procedures']);
+        refs(w + ' mimics', e.mimics, ['conditions']);
+      }
     }
   }
 
@@ -174,6 +185,12 @@ function checkEnums(key, e, where, err) {
   }
   if (key === 'stations') { one('side', ENUM.side); one('scope', ENUM.scope); }
   if (key === 'pathways') one('kind', ENUM.pathwayKind);
+  if (key === 'conditions') {
+    one('category', ENUM.category); one('geo', ENUM.conditionGeo);
+    const im = e.imaging;
+    if (im !== undefined && (!im || typeof im !== 'object' || !(im.ct || im.mri))) err(`${where}: imaging needs ct and/or mri`);
+    for (const p of e.pearls || []) one('pearls.tier', ENUM.tier, p && p.tier);
+  }
   if (key === 'sources') { one('type', ENUM.srcType); if (typeof e.verified !== 'boolean') err(`${where}: verified must be boolean`); }
 }
 

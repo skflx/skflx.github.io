@@ -61,8 +61,36 @@ data, ever.
 | 2 | Variants and their classifications (IFAC, Keros, Gera, uncinate attachment, sphenoid pneumatization, Onodi/Haller), extended FESS (Draf IIa/IIb, sphenoidotomy, SPA/AEA ligation, medial maxillectomy, DCR, orbital decompression), complication recognition and rescue |
 | 3 | Expanded endonasal approaches on the sagittal and coronal planes (transcribriform → transclival, transpterygoid, petrous apex, cavernous sinus, CVJ), ICA segments, OCRs, cavernous and suprasellar neurovascular anatomy, reconstruction and flap design, quantitative anatomy |
 
+**Pathology** is a layer over that anatomy, not a separate atlas: each
+condition (`dz.*` — inflammatory and fungal disease and their orbital and
+intracranial complications, CSF leak and encephalocele, benign and malignant
+sinonasal and skull base tumors) names the structures it involves, its
+imaging discriminators and mimics, its staging systems, and what it changes
+at the table. In the scene a condition is an overlay on the specimen (a
+lesion volume, an opacified cell, an effaced fat plane); in CT mode, its
+findings; in self-test, *pattern → diagnosis* and *diagnosis → what it
+changes about the operation*.
+
 Region ownership and the full inventory live in the graph
 (`ssb/content/*.json`), not here.
+
+### Reference atlases
+
+External labeled imaging the graph is checked against, recorded under
+`ssb/reference/` with provenance:
+
+- **UW Interactive CT Sinus Anatomy** (LoGerfo, Richardson, Dalley, Anzai;
+  `ssb/reference/uw-sinusanatomy2/`) — labeled axial/coronal/sagittal stacks
+  of a normal sinus CT, with every slice published as an unlabeled/labeled
+  pair, plus normal-variant and inflammatory-disease pages. Its label
+  vocabulary is crosswalked to graph ids (`crosswalk.json`), which fed
+  synonyms and gap entities into the graph. The owner reports the authors'
+  permission (2026-09); until its scope is confirmed in writing, no UW image
+  is copied into this repo. The unlabeled/labeled pairs are a ready-made
+  CT recall deck (see the unlabeled slice, name the structures, reveal); using
+  them in SSB needs that scope to cover republishing, because the site is
+  HTTP-only and an HTTPS page cannot load its images (mixed content), so
+  they would have to be served from this origin.
 
 ## 3. Modes
 
@@ -461,3 +489,6 @@ leaves the page useful. Model tier = who does the work best per token.
 5. **Publish while `draft`?** Recommended: publish with visible unverified
    markers (the wiki's precedent), prioritizing owner review of tier 1.
 6. Name and URL (`SSB`, `ssb.html`) — working title.
+7. **UW atlas permission scope** — reference and linking only, or
+   republishing its images here (which the CT recall deck needs)? Written
+   confirmation either way.

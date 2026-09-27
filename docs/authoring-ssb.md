@@ -23,7 +23,7 @@ one object whose keys are collections (all optional, all arrays):
 ```
 { "structures": [], "landmarks": [], "variants": [], "classifications": [],
   "measurements": [], "hazards": [], "principles": [], "procedures": [],
-  "stations": [], "pathways": [], "sources": [] }
+  "stations": [], "pathways": [], "conditions": [], "sources": [] }
 ```
 
 Ids are global across files; a file may reference any id in any other.
@@ -46,6 +46,7 @@ renaming a display name).
 | `p.` | procedure | `p.draf-iia` |
 | `t.` | station (a camera view) | `t.frontal-recess-70` |
 | `pw.` | pathway | `pw.frontal-drainage` |
+| `dz.` | condition (disease or lesion) | `dz.inverted-papilloma` |
 | `src.` | source | `src.wormald-2016-ifac` |
 
 **Laterality lives in geometry, not in ids.** Graph entities are
@@ -87,11 +88,15 @@ Required fields in **bold**.
 
 **Pathway `pw.`** — a flow the scene animates. **`id` `name` `kind` (`mucociliary` / `drainage`) `from` `via` (ids, in order) `to` `tier` `src` `review`**, `note`.
 
-**Source `src.`** — **`id` `cite` (Vancouver style) `type` `verified`**, `doi`, `pmid`, `url`. `type`: `consensus` / `classification` / `cadaver` / `CT-series` / `cohort` / `animal` / `review` / `meta-analysis` / `textbook` — the study design, because it bounds what the source can support (a cadaver series is not a CT prevalence; a primate experiment is not a human threshold). `verified` is `true` only after the citation was matched against PubMed, the DOI resolver or the publisher; never fill a DOI or PMID from memory.
+**Condition `dz.`** — a disease or lesion, drawn as a layer over the anatomy it involves. **`id` `name` `category` `involves` (s-ids) `tier` `what` `why` (what it changes at the table) `imaging` (`{ct?, mri?}` — the findings that identify it, at least one) `src` `review`**, `syn`, `eponym`, `endo` (endoscopic appearance), `class` (c-ids — its staging or grading systems), `complications` (dz- or h-ids), `managedBy` (p-ids), `mimics` (dz-ids — its imaging differential), `redFlags` (findings that make it urgent or change the operation), `pearls` (`[{tier, text}]`), `geo` (`overlay` — a lesion volume placed on the specimen — or `none`).
+
+**Source `src.`** — **`id` `cite` (Vancouver style) `type` `verified`**, `doi`, `pmid`, `url`. `type`: `consensus` / `classification` / `cadaver` / `CT-series` / `cohort` / `animal` / `review` / `meta-analysis` / `textbook` / `atlas` (a labeled image atlas: supports identification, not prevalence) — the study design, because it bounds what the source can support (a cadaver series is not a CT prevalence; a primate experiment is not a human threshold). `verified` is `true` only after the citation was matched against PubMed, the DOI resolver or the publisher; never fill a DOI or PMID from memory.
 
 ## 6. Vocabularies
 
 **`kind`:** `bone` `bone-part` `cell` `sinus` `space` `opening` `mucosa` `cartilage` `artery` `vein` `venous-sinus` `nerve` `ganglion` `dura` `brain` `muscle` `tendon` `fat` `gland` `duct` `ligament` `region`.
+
+**`category`** (conditions): `inflammatory` `infectious` `fungal` `benign-neoplasm` `malignant-neoplasm` `fibro-osseous` `congenital` `cystic` `vascular` `traumatic` `iatrogenic` `idiopathic`.
 
 **`region`:** `nasal-cavity` `septum` `lateral-wall` `maxillary` `lacrimal` `nasopharynx` `ppf` `itf` `ethmoid` `frontal` `olfactory` `orbit` `acf` `sphenoid` `sellar` `parasellar` `suprasellar` `clival` `petrous` `cvj`.
 
