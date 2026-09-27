@@ -87,7 +87,7 @@ Required fields in **bold**.
 
 **Pathway `pw.`** — a flow the scene animates. **`id` `name` `kind` (`mucociliary` / `drainage`) `from` `via` (ids, in order) `to` `tier` `src` `review`**, `note`.
 
-**Source `src.`** — **`id` `cite` (Vancouver style) `type` `verified`**, `doi`, `pmid`, `url`. `type`: `consensus` / `classification` / `cadaver` / `CT-series` / `cohort` / `review` / `meta-analysis` / `textbook`. `verified` is `true` only after the citation was matched against PubMed, the DOI resolver or the publisher; never fill a DOI or PMID from memory.
+**Source `src.`** — **`id` `cite` (Vancouver style) `type` `verified`**, `doi`, `pmid`, `url`. `type`: `consensus` / `classification` / `cadaver` / `CT-series` / `cohort` / `animal` / `review` / `meta-analysis` / `textbook` — the study design, because it bounds what the source can support (a cadaver series is not a CT prevalence; a primate experiment is not a human threshold). `verified` is `true` only after the citation was matched against PubMed, the DOI resolver or the publisher; never fill a DOI or PMID from memory.
 
 ## 6. Vocabularies
 

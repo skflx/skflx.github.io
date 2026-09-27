@@ -54,7 +54,7 @@ const ENUM = {
   side: ['R', 'L', 'either', 'midline'],
   scope: [0, 30, 45, 70, null],
   pathwayKind: ['mucociliary', 'drainage'],
-  srcType: ['consensus', 'classification', 'cadaver', 'CT-series', 'cohort', 'review', 'meta-analysis', 'textbook'],
+  srcType: ['consensus', 'classification', 'cadaver', 'CT-series', 'cohort', 'animal', 'review', 'meta-analysis', 'textbook'],
   review: ['draft', 'verified'],
   tier: [1, 2, 3],
 };
