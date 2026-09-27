@@ -567,7 +567,8 @@
       "syn": [
         "ICA prominence",
         "carotid protuberance",
-        "carotid sulcus bulge"
+        "carotid sulcus bulge",
+        "carotid canal prominence"
       ],
       "what": "Bony bulge of the ICA into the lateral and posterior walls of the sphenoid sinus: a vertical paraclival part below the sella and a parasellar part lateral to it, turning under the optic prominence at the paraclinoid segment.",
       "why": "It shows you where the ICA is — and the bone over it can be under 1 mm or absent ([[v.ica-dehiscence]]). Nothing is pushed, twisted or coagulated with monopolar on it.",
@@ -630,7 +631,8 @@
       "tier": 1,
       "syn": [
         "optic canal prominence",
-        "optic protuberance"
+        "optic protuberance",
+        "optic eminence"
       ],
       "what": "Bony ridge of the optic canal in the superolateral wall of the sphenoid sinus (and sometimes of the last posterior ethmoid cell), running from the orbital apex back toward the tuberculum.",
       "why": "It marks the optic nerve, which may be covered by very thin or dehiscent bone ([[v.optic-canal-dehiscence]]). It is the superior lateral limit of any sphenoid work and the target of optic nerve decompression.",
@@ -3377,13 +3379,61 @@
       "review": "draft"
     },
     {
+      "id": "s.petrous-carotid-canal",
+      "name": "Petrous carotid canal",
+      "kind": "opening",
+      "region": "petrous",
+      "tier": 3,
+      "geo": "sweep",
+      "syn": [
+        "carotid canal (petrous)"
+      ],
+      "what": "Bony canal within the petrous temporal bone carrying the petrous ICA from its entrance at the skull base, forward and medially, to the foramen lacerum, where the artery turns up into its paraclival course.",
+      "why": "It is the surgeon's guide to the horizontal petrous ICA before it is skeletonized: the vidian canal runs anteromedial and roughly parallel to it toward the same point at the foramen lacerum, so following the vidian nerve back leads onto the canal's anteromedial wall in the infrapetrous and transpterygoid corridors.",
+      "rel": [
+        {
+          "r": "contains",
+          "to": "s.internal-carotid-artery",
+          "note": "petrous segment"
+        },
+        {
+          "r": "borders",
+          "to": "s.foramen-lacerum",
+          "note": "the canal opens anteromedially into it, where the ICA turns into the paraclival segment"
+        },
+        {
+          "r": "borders",
+          "to": "s.vidian-canal",
+          "note": "the vidian canal runs straight back through the sphenoid floor and meets the carotid canal at the foramen lacerum (anterior genu); the ICA lies superolateral to the vidian canal's posterior end, so drilling follows the canal's inferomedial side"
+        },
+        {
+          "r": "landmark-for",
+          "to": "p.medial-petrous-apex-approach"
+        },
+        {
+          "r": "landmark-for",
+          "to": "p.transpterygoid-approach"
+        }
+      ],
+      "ct": "Axial bone window: follow the canal from its opening on the inferior petrous surface through the vertical segment and genu, then anteromedially along the horizontal segment to the foramen lacerum. Coronal: the vidian canal in the sphenoid floor leads back to the same point.",
+      "reliability": "constant",
+      "src": [
+        "src.kassam-2008-vidian",
+        "src.labib-2014-ica",
+        "src.zanation-2009-petrous",
+        "src.uw-ct-sinus-atlas"
+      ],
+      "review": "draft"
+    },
+    {
       "id": "s.petroclival-synchondrosis",
       "name": "Petroclival synchondrosis",
       "kind": "bone-part",
       "region": "petrous",
       "tier": 3,
       "syn": [
-        "petroclival fissure"
+        "petroclival fissure",
+        "petro-occipital fissure"
       ],
       "what": "Cartilaginous joint between the petrous apex and the clivus, running from the foramen lacerum back to the jugular foramen.",
       "why": "It is the typical origin of chondrosarcoma (paramedian), in contrast to chordoma (midline); the inferior petrosal sinus runs along it.",
@@ -4240,6 +4290,9 @@
       "name": "Laterally pneumatized sphenoid (lateral recess)",
       "of": "s.sphenoid-lateral-recess",
       "tier": 2,
+      "syn": [
+        "pneumatized pterygoid plates"
+      ],
       "def": "Sphenoid air extending lateral to the line between the vidian canal and foramen rotundum, into the greater wing and/or pterygoid base.",
       "why": "Puts V2 and the vidian nerve in relief in the sinus wall and thins the middle fossa floor (spontaneous CSF leak site). Reaching it needs a contralateral angled view or a transpterygoid approach.",
       "geo": "diorama",
@@ -4255,6 +4308,10 @@
       "tier": 2,
       "class": "c.sphenoid-pneumatization",
       "code": "conchal",
+      "syn": [
+        "hypoplastic sphenoid sinus",
+        "sphenoid sinus hypoplasia"
+      ],
       "def": "Rudimentary sphenoid sinus separated from the sella by a thick block of cancellous bone; no pneumatization under the sella.",
       "why": "No prominences to guide you: the sella is reached by drilling through solid bone under navigation, staying midline between the (unseen) ICAs. Normal in young children.",
       "geo": "diorama",

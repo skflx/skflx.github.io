@@ -906,6 +906,13 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/17232856/"
     },
     {
+      "id": "src.uw-ct-sinus-atlas",
+      "cite": "LoGerfo SE, Richardson ML, Dalley RW, Anzai Y. Interactive CT Sinus Anatomy [Internet]. Seattle: University of Washington Department of Radiology; c2009 [cited 2026 Sep 27]. Available from: http://uwmsk.org/sinusanatomy2/",
+      "type": "atlas",
+      "verified": true,
+      "url": "http://uwmsk.org/sinusanatomy2/"
+    },
+    {
       "id": "src.valentine-2011-vascular",
       "cite": "Valentine R, Wormald PJ. Controlling the surgical field during a large endoscopic vascular injury. Laryngoscope. 2011;121(3):562-566.",
       "type": "cohort",

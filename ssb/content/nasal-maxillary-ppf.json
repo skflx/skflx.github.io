@@ -318,7 +318,8 @@
       "geo": "specimen",
       "partOf": "s.ethmoid-bone",
       "syn": [
-        "lamina perpendicularis"
+        "lamina perpendicularis",
+        "ethmoid plate"
       ],
       "what": "Thin midline plate hanging from the [[s.cribriform-plate]], forming the posterosuperior bony septum.",
       "why": "It is continuous with the skull base: twisting or rocking it (instead of cutting it) can fracture the cribriform plate and cause a CSF leak. Resect it with through-cutting instruments.",
@@ -1126,6 +1127,9 @@
       "region": "lacrimal",
       "tier": 2,
       "geo": "specimen",
+      "syn": [
+        "anterior process of the maxilla"
+      ],
       "what": "Thick upward process of the maxilla forming the anterior lacrimal crest and the anterior half of the lacrimal fossa, in front of the maxillary line.",
       "why": "The bone removed with a drill or Kerrison in endoscopic DCR to expose the upper lacrimal sac; also removed in an extended prelacrimal or Draf III approach.",
       "rel": [
@@ -1349,6 +1353,37 @@
       "src": [
         "src.grays-42",
         "src.cavallo-2005-ppf"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.retroantral-fat-pad",
+      "name": "Retroantral fat pad",
+      "kind": "fat",
+      "region": "itf",
+      "tier": 2,
+      "geo": "specimen",
+      "syn": [
+        "retromaxillary fat pad"
+      ],
+      "partOf": "s.pterygopalatine-fossa",
+      "what": "Fat behind and lateral to the posterior wall of the maxillary sinus in the anterior infratemporal fossa, continuous laterally with the buccal fat pad and medially with the fat of the [[s.pterygopalatine-fossa]].",
+      "why": "It is the plane a transmaxillary or medial maxillectomy dissection opens into once the posterior maxillary wall is removed; on CT, an intact, well-defined fat stripe here argues against extension of disease through the wall, while effacement or replacement of the fat by soft-tissue density is a sign that tumour or aggressive sinonasal disease has spread from the antrum into the PPF.",
+      "rel": [
+        {
+          "r": "posterior-to",
+          "to": "s.maxillary-posterior-wall"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.pterygopalatine-fossa"
+        }
+      ],
+      "ct": "Axial: a clean low-density fat plane behind the posterior maxillary wall on both sides — compare sides. Stranding, effacement or soft-tissue replacement means disease has crossed the posterior wall: an early sign of acute invasive fungal sinusitis (it can precede visible bone erosion) and of malignant or JNA spread into the infratemporal fossa.",
+      "src": [
+        "src.cavallo-2005-ppf",
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -1601,6 +1636,9 @@
       "region": "maxillary",
       "tier": 1,
       "geo": "point",
+      "syn": [
+        "inferior orbital foramen"
+      ],
       "what": "Opening on the anterior maxillary wall below the inferior orbital rim where the infraorbital nerve emerges onto the face.",
       "why": "The superior limit of any anterior maxillary wall window; canine fossa punctures are placed well below and lateral to the canine root, away from it.",
       "rel": [
@@ -3016,6 +3054,37 @@
       "review": "draft"
     },
     {
+      "id": "s.foramen-spinosum",
+      "name": "Foramen spinosum",
+      "kind": "opening",
+      "region": "itf",
+      "tier": 3,
+      "geo": "point",
+      "what": "Small round foramen in the greater sphenoid wing, posterolateral to the foramen ovale, transmitting the middle meningeal artery (and vein) into the middle fossa.",
+      "why": "It is the constant landmark for the middle meningeal artery and marks the posterolateral limit of dissection along the greater wing in lateral infratemporal-fossa extensions of the transpterygoid corridor.",
+      "rel": [
+        {
+          "r": "transmits",
+          "to": "s.middle-meningeal-artery"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.foramen-ovale"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.foramen-ovale"
+        }
+      ],
+      "ct": "Axial skull base bone window: small round foramen just posterolateral to the foramen ovale in the greater wing.",
+      "reliability": "constant",
+      "src": [
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
+      ],
+      "review": "draft"
+    },
+    {
       "id": "s.middle-meningeal-artery",
       "name": "Middle meningeal artery",
       "kind": "artery",
@@ -3608,6 +3677,9 @@
       "tier": 2,
       "geo": "diorama",
       "eponym": "Haller",
+      "syn": [
+        "Haller cell"
+      ],
       "def": "Ethmoid cell pneumatising along the medial orbital floor (maxillary sinus roof) lateral to the infundibulum, below the lamina papyracea on coronal CT.",
       "why": "A large cell narrows the infundibulum and maxillary ostium from above and laterally; it must be opened (from the antrostomy or infundibulum) and its roof is the orbit.",
       "prev": [
