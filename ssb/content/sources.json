@@ -1,12 +1,33 @@
 {
   "sources": [
     {
+      "id": "src.ajcc-8",
+      "cite": "Amin MB, Edge SB, Greene FL, et al., eds. AJCC Cancer Staging Manual. 8th ed. New York: Springer; 2017.",
+      "type": "classification",
+      "verified": true
+    },
+    {
+      "id": "src.alaggio-2022-lymphoid",
+      "cite": "Alaggio R, Amador C, Anagnostopoulos I, et al. The 5th edition of the World Health Organization Classification of Haematolymphoid Tumours: Lymphoid Neoplasms. Leukemia. 2022;36(7):1720-1748.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1038/s41375-022-01620-2",
+      "pmid": "35732829"
+    },
+    {
       "id": "src.aldana-2012-naxl",
       "cite": "Aldana PR, Naseri I, La Corte E. The naso-axial line: a new method of accurately predicting the inferior limit of the endoscopic endonasal approach to the craniovertebral junction. Neurosurgery. 2012;71(2 Suppl Operative):ons308-ons314.",
       "type": "CT-series",
       "verified": true,
       "pmid": "22791031",
       "url": "https://pubmed.ncbi.nlm.nih.gov/22791031/"
+    },
+    {
+      "id": "src.amit-2019-snuc",
+      "cite": "Amit M, Abdelmeguid AS, Watcherporn T, et al. Induction chemotherapy response as a guide for treatment optimization in sinonasal undifferentiated carcinoma. J Clin Oncol. 2019;37(6):504-512.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "30615549"
     },
     {
       "id": "src.anderson-2009-emlp",
@@ -16,6 +37,47 @@
       "doi": "10.1002/lary.20565",
       "pmid": "19554631",
       "url": "https://pubmed.ncbi.nlm.nih.gov/19554631/"
+    },
+    {
+      "id": "src.andrews-1989",
+      "cite": "Andrews JC, Fisch U, Valavanis A, Aeppli U, Makek MS. The surgical management of extensive nasopharyngeal angiofibromas with the infratemporal fossa approach. Laryngoscope. 1989;99(4):429-437.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "2538688"
+    },
+    {
+      "id": "src.asa-2022-pitnet",
+      "cite": "Asa SL, Mete O, Perry A, Osamura RY. Overview of the 2022 WHO Classification of Pituitary Tumors. Endocr Pathol. 2022;33(1):6-26.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1007/s12022-022-09703-7",
+      "pmid": "35291028"
+    },
+    {
+      "id": "src.ashraf-2001-incidental-lund",
+      "cite": "Ashraf N, Bhattacharyya N. Determination of the \"incidental\" Lund score for the staging of chronic rhinosinusitis. Otolaryngol Head Neck Surg. 2001;125(5):483-486.",
+      "type": "CT-series",
+      "verified": true,
+      "doi": "10.1067/mhn.2001.119324",
+      "pmid": "11700446",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11700446/"
+    },
+    {
+      "id": "src.babbel-1992-patterns",
+      "cite": "Babbel RW, Harnsberger HR, Sonkens J, Hunt S. Recurring patterns of inflammatory sinonasal disease demonstrated on screening sinus CT. AJNR Am J Neuroradiol. 1992;13(3):903-912.",
+      "type": "CT-series",
+      "verified": true,
+      "pmid": "1590190",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1590190/"
+    },
+    {
+      "id": "src.bachert-2019-dupilumab",
+      "cite": "Bachert C, Han JK, Desrosiers M, et al. Efficacy and safety of dupilumab in patients with severe chronic rhinosinusitis with nasal polyps (LIBERTY NP SINUS-24 and LIBERTY NP SINUS-52): results from two multicentre, randomised, double-blind, placebo-controlled, parallel-group phase 3 trials. Lancet. 2019;394(10209):1638-1650.",
+      "type": "trial",
+      "verified": true,
+      "doi": "10.1016/S0140-6736(19)31881-1",
+      "pmid": "31543428",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31543428/"
     },
     {
       "id": "src.barges-coll-2010",
@@ -31,6 +93,15 @@
       "type": "classification",
       "verified": true,
       "doi": "10.2500/105065894781874278"
+    },
+    {
+      "id": "src.bent-kuhn-1994-afrs",
+      "cite": "Bent JP 3rd, Kuhn FA. Diagnosis of allergic fungal sinusitis. Otolaryngol Head Neck Surg. 1994;111(5):580-588.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1177/019459989411100508",
+      "pmid": "7970796",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7970796/"
     },
     {
       "id": "src.bergland-1968",
@@ -81,12 +152,47 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/8837792/"
     },
     {
+      "id": "src.brastianos-2014",
+      "cite": "Brastianos PK, Taylor-Weiner A, Manley PE, et al. Exome sequencing identifies BRAF mutations in papillary craniopharyngiomas. Nat Genet. 2014;46(2):161-165.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "24413733"
+    },
+    {
+      "id": "src.busquets-2006",
+      "cite": "Busquets JM, Hwang PH. Endoscopic resection of sinonasal inverted papilloma: a meta-analysis. Otolaryngol Head Neck Surg. 2006;134(3):476-482.",
+      "type": "meta-analysis",
+      "verified": true,
+      "pmid": "16500448"
+    },
+    {
+      "id": "src.byun-2000-rcc",
+      "cite": "Byun WM, Kim OL, Kim D. MR imaging findings of Rathke's cleft cysts: significance of intracystic nodules. AJNR Am J Neuroradiol. 2000;21(3):485-488.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "10730639"
+    },
+    {
+      "id": "src.cannady-2007",
+      "cite": "Cannady SB, Batra PS, Sautter NB, Roh HJ, Citardi MJ. New staging system for sinonasal inverted papilloma in the endoscopic era. Laryngoscope. 2007;117(7):1283-1287.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "17632914"
+    },
+    {
       "id": "src.casiano-2001",
       "cite": "Casiano RR. A stepwise surgical technique using the medial orbital floor as the key landmark in performing endoscopic sinus surgery. Laryngoscope. 2001;111(6):964-974.",
       "type": "cadaver",
       "verified": true,
       "pmid": "11404605",
       "url": "https://pubmed.ncbi.nlm.nih.gov/11404605/"
+    },
+    {
+      "id": "src.caturegli-2005",
+      "cite": "Caturegli P, Newschaffer C, Olivi A, Pomper MG, Burger PC, Rose NR. Autoimmune hypophysitis. Endocr Rev. 2005;26(5):599-614.",
+      "type": "review",
+      "verified": true,
+      "pmid": "15634713"
     },
     {
       "id": "src.cavallo-2005-ppf",
@@ -105,6 +211,20 @@
       "url": "https://onlinelibrary.wiley.com/doi/10.1288/00005537-197009000-00007"
     },
     {
+      "id": "src.chen-2019-npc",
+      "cite": "Chen YP, Chan ATC, Le QT, Blanchard P, Sun Y, Ma J. Nasopharyngeal carcinoma. Lancet. 2019;394(10192):64-80.",
+      "type": "review",
+      "verified": true,
+      "pmid": "31178151"
+    },
+    {
+      "id": "src.chiu-2005-osteoma",
+      "cite": "Chiu AG, Schipor I, Cohen NA, Kennedy DW, Palmer JN. Surgical decisions in the management of frontal sinus osteomas. Am J Rhinol. 2005;19(2):191-197.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "15921220"
+    },
+    {
       "id": "src.choby-2018-ifac",
       "cite": "Choby G, Thamboo A, Won TB, Kim J, Shih LC, Hwang PH. Computed tomography analysis of frontal cell prevalence according to the International Frontal Sinus Anatomy Classification. Int Forum Allergy Rhinol. 2018;8(7):825-830.",
       "type": "CT-series",
@@ -119,6 +239,24 @@
       "verified": true,
       "pmid": "9007854",
       "url": "https://pubmed.ncbi.nlm.nih.gov/9007854/"
+    },
+    {
+      "id": "src.craig-2021-ods",
+      "cite": "Craig JR, Poetker DM, Aksoy U, et al. Diagnosing odontogenic sinusitis: an international multidisciplinary consensus statement. Int Forum Allergy Rhinol. 2021;11(8):1235-1248.",
+      "type": "consensus",
+      "verified": true,
+      "doi": "10.1002/alr.22777",
+      "pmid": "33583151",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33583151/"
+    },
+    {
+      "id": "src.crash-2004",
+      "cite": "Roberts I, Yates D, Sandercock P, et al. Effect of intravenous corticosteroids on death within 14 days in 10008 adults with clinically significant head injury (MRC CRASH trial): randomised placebo-controlled trial. Lancet. 2004;364(9442):1321-1328.",
+      "type": "trial",
+      "verified": true,
+      "doi": "10.1016/S0140-6736(04)17188-2",
+      "pmid": "15474134",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15474134/"
     },
     {
       "id": "src.cummings-7",
@@ -140,6 +278,42 @@
       "verified": true,
       "pmid": "8730186",
       "url": "https://pubmed.ncbi.nlm.nih.gov/8730186/"
+    },
+    {
+      "id": "src.delgaudio-2003-ifs-ct",
+      "cite": "DelGaudio JM, Swain RE Jr, Kingdom TT, Muller S, Hudgins PA. Computed tomographic findings in patients with invasive fungal sinusitis. Arch Otolaryngol Head Neck Surg. 2003;129(2):236-240.",
+      "type": "CT-series",
+      "verified": true,
+      "doi": "10.1001/archotol.129.2.236",
+      "pmid": "12578456",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12578456/"
+    },
+    {
+      "id": "src.delgaudio-2017-ccad",
+      "cite": "DelGaudio JM, Loftus PA, Hamizan AW, Harvey RJ, Wise SK. Central compartment atopic disease. Am J Rhinol Allergy. 2017;31(4):228-234.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.2500/ajra.2017.31.4443",
+      "pmid": "28716173",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28716173/"
+    },
+    {
+      "id": "src.deshazo-1997-fungal",
+      "cite": "deShazo RD, Chapin K, Swain RE. Fungal sinusitis. N Engl J Med. 1997;337(4):254-259.",
+      "type": "review",
+      "verified": true,
+      "doi": "10.1056/NEJM199707243370407",
+      "pmid": "9227932",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9227932/"
+    },
+    {
+      "id": "src.deshazo-1997-mycetoma",
+      "cite": "deShazo RD, O'Brien M, Chapin K, et al. Criteria for the diagnosis of sinus mycetoma. J Allergy Clin Immunol. 1997;99(4):475-485.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1016/s0091-6749(97)70073-3",
+      "pmid": "9111491",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9111491/"
     },
     {
       "id": "src.dessi-1994",
@@ -165,6 +339,20 @@
       "url": "https://www.sciencedirect.com/science/article/abs/pii/S1043181010800879"
     },
     {
+      "id": "src.dulguerov-1992",
+      "cite": "Dulguerov P, Calcaterra T. Esthesioneuroblastoma: the UCLA experience 1970-1990. Laryngoscope. 1992;102(8):843-849.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "1495347"
+    },
+    {
+      "id": "src.dulguerov-2001",
+      "cite": "Dulguerov P, Allal AS, Calcaterra TC. Esthesioneuroblastoma: a meta-analysis and review. Lancet Oncol. 2001;2(11):683-690.",
+      "type": "meta-analysis",
+      "verified": true,
+      "pmid": "11902539"
+    },
+    {
       "id": "src.dusick-2007-doppler",
       "cite": "Dusick JR, Esposito F, Malkasian D, Kelly DF. Avoidance of carotid artery injuries in transsphenoidal surgery with the Doppler probe and micro-hook blades. Neurosurgery. 2007;60(4 Suppl 2):ONS322-ONS329.",
       "type": "cohort",
@@ -172,6 +360,15 @@
       "doi": "10.1227/01.NEU.0000255408.84269.A8",
       "pmid": "17415170",
       "url": "https://pubmed.ncbi.nlm.nih.gov/17415170/"
+    },
+    {
+      "id": "src.ebright-2001-cst",
+      "cite": "Ebright JR, Pace MT, Niazi AF. Septic thrombosis of the cavernous sinuses. Arch Intern Med. 2001;161(22):2671-2676.",
+      "type": "review",
+      "verified": true,
+      "doi": "10.1001/archinte.161.22.2671",
+      "pmid": "11732931",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11732931/"
     },
     {
       "id": "src.elster-1993",
@@ -196,6 +393,15 @@
       "type": "classification",
       "verified": true,
       "doi": "10.1227/01.NEU.0000255354.64077.66"
+    },
+    {
+      "id": "src.faughnan-2020-hht",
+      "cite": "Faughnan ME, Mager JJ, Hetts SW, et al. Second International Guidelines for the Diagnosis and Management of Hereditary Hemorrhagic Telangiectasia. Ann Intern Med. 2020;173(12):989-1001.",
+      "type": "consensus",
+      "verified": true,
+      "doi": "10.7326/M20-1443",
+      "pmid": "32894695",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32894695/"
     },
     {
       "id": "src.ference-2015-ion",
@@ -238,6 +444,15 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/16826072/"
     },
     {
+      "id": "src.friedman-2013-iih",
+      "cite": "Friedman DI, Liu GT, Digre KB. Revised diagnostic criteria for the pseudotumor cerebri syndrome in adults and children. Neurology. 2013;81(13):1159-1165.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1212/WNL.0b013e3182a55f17",
+      "pmid": "23966248",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23966248/"
+    },
+    {
       "id": "src.fujii-1979",
       "cite": "Fujii K, Chambers SM, Rhoton AL Jr. Neurovascular relationships of the sphenoid sinus. A microsurgical study. J Neurosurg. 1979;50(1):31-39.",
       "type": "cadaver",
@@ -270,6 +485,24 @@
       "doi": "10.4193/Rhin17.067",
       "pmid": "29069120",
       "url": "https://pubmed.ncbi.nlm.nih.gov/29069120/"
+    },
+    {
+      "id": "src.germiller-2006-intracranial",
+      "cite": "Germiller JA, Monin DL, Sparano AM, Tom LW. Intracranial complications of sinusitis in children and adolescents and their outcomes. Arch Otolaryngol Head Neck Surg. 2006;132(9):969-976.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1001/archotol.132.9.969",
+      "pmid": "16982973",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16982973/"
+    },
+    {
+      "id": "src.gillespie-1998-aifs",
+      "cite": "Gillespie MB, O'Malley BW Jr, Francis HW. An approach to fulminant invasive fungal rhinosinusitis in the immunocompromised host. Arch Otolaryngol Head Neck Surg. 1998;124(5):520-526.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1001/archotol.124.5.520",
+      "pmid": "9604977",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9604977/"
     },
     {
       "id": "src.golding-wood-1961",
@@ -318,6 +551,38 @@
       "url": "https://doi.org/10.1177/028418516105600601"
     },
     {
+      "id": "src.hanna-2009-endoscopic",
+      "cite": "Hanna E, DeMonte F, Ibrahim S, Roberts D, Levine N, Kupferman M. Endoscopic resection of sinonasal cancers with and without craniotomy: oncologic results. Arch Otolaryngol Head Neck Surg. 2009;135(12):1219-1224.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "20026819"
+    },
+    {
+      "id": "src.har-el-2001-mucocele",
+      "cite": "Har-El G. Endoscopic management of 108 sinus mucoceles. Laryngoscope. 2001;111(12):2131-2134.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1097/00005537-200112000-00009",
+      "pmid": "11802010",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11802010/"
+    },
+    {
+      "id": "src.hardy-1976",
+      "cite": "Hardy J, Vezina JL. Transsphenoidal neurosurgery of intracranial neoplasm. Adv Neurol. 1976;15:261-273.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "945663"
+    },
+    {
+      "id": "src.harris-1994-spa",
+      "cite": "Harris GJ. Subperiosteal abscess of the orbit. Age as a factor in the bacteriology and response to treatment. Ophthalmology. 1994;101(3):585-595.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1016/s0161-6420(94)31297-8",
+      "pmid": "8127580",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8127580/"
+    },
+    {
       "id": "src.harvey-2012-reconstruction",
       "cite": "Harvey RJ, Parmar P, Sacks R, Zanation AM. Endoscopic skull base reconstruction of large dural defects: a systematic review of published evidence. Laryngoscope. 2012;122(2):452-459.",
       "type": "meta-analysis",
@@ -331,6 +596,15 @@
       "verified": true,
       "pmid": "6769079",
       "url": "https://pubmed.ncbi.nlm.nih.gov/6769079/"
+    },
+    {
+      "id": "src.hedlund-2006-frontonasal",
+      "cite": "Hedlund G. Congenital frontonasal masses: developmental anatomy, malformations, and MR imaging. Pediatr Radiol. 2006;36(7):647-662.",
+      "type": "review",
+      "verified": true,
+      "doi": "10.1007/s00247-005-0100-3",
+      "pmid": "16532348",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16532348/"
     },
     {
       "id": "src.hegazy-2000",
@@ -357,12 +631,55 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/17875850/"
     },
     {
+      "id": "src.howard-2001-jna",
+      "cite": "Howard DJ, Lloyd G, Lund V. Recurrence and its avoidance in juvenile angiofibroma. Laryngoscope. 2001;111(9):1509-1511.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "11568597"
+    },
+    {
+      "id": "src.hyams-1988",
+      "cite": "Hyams VJ, Batsakis JG, Michaels L. Tumors of the Upper Respiratory Tract and Ear. Atlas of Tumor Pathology, 2nd series, fascicle 25. Washington, DC: Armed Forces Institute of Pathology; 1988.",
+      "type": "atlas",
+      "verified": true
+    },
+    {
       "id": "src.iaconetta-2007-abducens",
       "cite": "Iaconetta G, Fusco M, Cavallo LM, Cappabianca P, Samii M, Tschabitscher M. The abducens nerve: microanatomic and endoscopic study. Neurosurgery. 2007;61(3 Suppl):7-14.",
       "type": "cadaver",
       "verified": true,
       "pmid": "17876228",
       "url": "https://pubmed.ncbi.nlm.nih.gov/17876228/"
+    },
+    {
+      "id": "src.icar-rs-2021",
+      "cite": "Orlandi RR, Kingdom TT, Smith TL, et al. International consensus statement on allergy and rhinology: rhinosinusitis 2021. Int Forum Allergy Rhinol. 2021;11(3):213-739.",
+      "type": "consensus",
+      "verified": true,
+      "doi": "10.1002/alr.22741",
+      "pmid": "33236525",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33236525/"
+    },
+    {
+      "id": "src.icar-skull-base-2019",
+      "cite": "Wang EW, Zanation AM, Gardner PA, et al. ICAR: endoscopic skull-base surgery. Int Forum Allergy Rhinol. 2019;9(S3):S145-S365.",
+      "type": "consensus",
+      "verified": true,
+      "pmid": "31329374"
+    },
+    {
+      "id": "src.jankowski-2007-itac",
+      "cite": "Jankowski R, Georgel T, Vignaud JM, et al. Endoscopic surgery reveals that woodworkers' adenocarcinomas originate in the olfactory cleft. Rhinology. 2007;45(4):308-314.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "18085026"
+    },
+    {
+      "id": "src.kadish-1976",
+      "cite": "Kadish S, Goodman M, Wang CC. Olfactory neuroblastoma. A clinical analysis of 17 cases. Cancer. 1976;37(3):1571-1576.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "1260676"
     },
     {
       "id": "src.kainz-1989",
@@ -513,6 +830,20 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/8232800/"
     },
     {
+      "id": "src.komotar-2012-meningioma",
+      "cite": "Komotar RJ, Starke RM, Raper DM, Anand VK, Schwartz TH. Endoscopic endonasal versus open transcranial resection of anterior midline skull base meningiomas. World Neurosurg. 2012;77(5-6):713-724.",
+      "type": "meta-analysis",
+      "verified": true,
+      "pmid": "22120296"
+    },
+    {
+      "id": "src.krouse-2000",
+      "cite": "Krouse JH. Development of a staging system for inverted papilloma. Laryngoscope. 2000;110(6):965-968.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "10852514"
+    },
+    {
       "id": "src.kumar-2003-spa",
       "cite": "Kumar S, Shetty A, Rockey J, Nilssen E. Contemporary surgical treatment of epistaxis. What is the evidence for sphenopalatine artery ligation? Clin Otolaryngol Allied Sci. 2003;28(4):360-363.",
       "type": "review",
@@ -562,6 +893,20 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/11081167/"
     },
     {
+      "id": "src.lee-2007-ip-hyperostosis",
+      "cite": "Lee DK, Chung SK, Dhong HJ, et al. Focal hyperostosis on CT of sinonasal inverted papilloma as a predictor of tumor origin. AJNR Am J Neuroradiol. 2007;28(4):618-621.",
+      "type": "CT-series",
+      "verified": true,
+      "pmid": "17416809"
+    },
+    {
+      "id": "src.lee-2012-fd",
+      "cite": "Lee JS, FitzGibbon EJ, Chen YR, et al. Clinical guidelines for the management of craniofacial fibrous dysplasia. Orphanet J Rare Dis. 2012;7 Suppl 1:S2.",
+      "type": "consensus",
+      "verified": true,
+      "pmid": "22640797"
+    },
+    {
       "id": "src.leng-2008-gasket",
       "cite": "Leng LZ, Brown S, Anand VK, Schwartz TH. \"Gasket-seal\" watertight closure in minimal-access endoscopic cranial base surgery. Neurosurgery. 2008;62(5 Suppl 2):ONSE342-ONSE343.",
       "type": "cohort",
@@ -578,6 +923,29 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/10406604/"
     },
     {
+      "id": "src.lloyd-1999-jna",
+      "cite": "Lloyd G, Howard D, Phelps P, Cheesman A. Juvenile angiofibroma: the lessons of 20 years of modern imaging. J Laryngol Otol. 1999;113(2):127-134.",
+      "type": "CT-series",
+      "verified": true,
+      "pmid": "10396561"
+    },
+    {
+      "id": "src.lloyd-2008-csf-imaging",
+      "cite": "Lloyd KM, DelGaudio JM, Hudgins PA. Imaging of skull base cerebrospinal fluid leaks in adults. Radiology. 2008;248(3):725-736.",
+      "type": "review",
+      "verified": true,
+      "doi": "10.1148/radiol.2483070362",
+      "pmid": "18710972",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18710972/"
+    },
+    {
+      "id": "src.lund-2010-eptns",
+      "cite": "Lund VJ, Stammberger H, Nicolai P, et al. European position paper on endoscopic management of tumours of the nose, paranasal sinuses and skull base. Rhinol Suppl. 2010;(22):1-143.",
+      "type": "consensus",
+      "verified": true,
+      "pmid": "20502772"
+    },
+    {
       "id": "src.lund-2014-terminology",
       "cite": "Lund VJ, Stammberger H, Fokkens WJ, et al. European position paper on the anatomical terminology of the internal nose and paranasal sinuses. Rhinol Suppl. 2014;(24):1-34.",
       "type": "consensus",
@@ -586,11 +954,46 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/24720000/"
     },
     {
+      "id": "src.lund-kennedy-1997",
+      "cite": "Lund VJ, Kennedy DW. Staging for rhinosinusitis. Otolaryngol Head Neck Surg. 1997;117(3 Pt 2):S35-S40.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1016/S0194-59989770005-6",
+      "pmid": "9334786",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9334786/"
+    },
+    {
+      "id": "src.lund-mackay-1993",
+      "cite": "Lund VJ, Mackay IS. Staging in rhinosinusitus. Rhinology. 1993;31(4):183-184.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "8140385",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8140385/"
+    },
+    {
       "id": "src.luxenberger-1998",
       "cite": "Luxenberger W, Stammberger H, Jebeles JA, Walch C. Endoscopic optic nerve decompression: the Graz experience. Laryngoscope. 1998;108(6):873-882.",
       "type": "cohort",
       "verified": true,
       "doi": "10.1097/00005537-199806000-00016"
+    },
+    {
+      "id": "src.manning-1997-afrs-imaging",
+      "cite": "Manning SC, Merkel M, Kriesel K, Vuitch F, Marple B. Computed tomography and magnetic resonance diagnosis of allergic fungal sinusitis. Laryngoscope. 1997;107(2):170-176.",
+      "type": "CT-series",
+      "verified": true,
+      "doi": "10.1097/00005537-199702000-00007",
+      "pmid": "9023239",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9023239/"
+    },
+    {
+      "id": "src.markowitz-1991-noe",
+      "cite": "Markowitz BL, Manson PN, Sargent L, et al. Management of the medial canthal tendon in nasoethmoid orbital fractures: the importance of the central fragment in classification and treatment. Plast Reconstr Surg. 1991;87(5):843-853.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1097/00006534-199105000-00005",
+      "pmid": "2017492",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2017492/"
     },
     {
       "id": "src.matthews-1997-recirculation",
@@ -628,6 +1031,13 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/22170080/"
     },
     {
+      "id": "src.melmed-2011-prolactin",
+      "cite": "Melmed S, Casanueva FF, Hoffman AR, et al. Diagnosis and treatment of hyperprolactinemia: an Endocrine Society clinical practice guideline. J Clin Endocrinol Metab. 2011;96(2):273-288.",
+      "type": "consensus",
+      "verified": true,
+      "pmid": "21296991"
+    },
+    {
       "id": "src.messerklinger-1978",
       "cite": "Messerklinger W. Endoscopy of the Nose. Baltimore: Urban & Schwarzenberg; 1978.",
       "type": "textbook",
@@ -643,12 +1053,28 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/25658782/"
     },
     {
+      "id": "src.middlebrooks-2015-aifs",
+      "cite": "Middlebrooks EH, Frost CJ, De Jesus RO, et al. Acute invasive fungal rhinosinusitis: a comprehensive update of CT findings and design of an effective diagnostic imaging model. AJNR Am J Neuroradiol. 2015;36(8):1529-1535.",
+      "type": "CT-series",
+      "verified": true,
+      "doi": "10.3174/ajnr.A4298",
+      "pmid": "25882281",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25882281/"
+    },
+    {
       "id": "src.mladina-1987",
       "cite": "Mladina R. The role of maxillar morphology in the development of pathological septal deformities. Rhinology. 1987;25(3):199-205.",
       "type": "classification",
       "verified": true,
       "pmid": "3672004",
       "url": "https://pubmed.ncbi.nlm.nih.gov/3672004/"
+    },
+    {
+      "id": "src.molitch-2017",
+      "cite": "Molitch ME. Diagnosis and treatment of pituitary adenomas: a review. JAMA. 2017;317(5):516-524.",
+      "type": "review",
+      "verified": true,
+      "pmid": "28170483"
     },
     {
       "id": "src.moon-2001-aea",
@@ -668,12 +1094,35 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/20489508/"
     },
     {
+      "id": "src.morita-1993",
+      "cite": "Morita A, Ebersold MJ, Olsen KD, et al. Esthesioneuroblastoma: prognosis and management. Neurosurgery. 1993;32(5):706-714.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "8492845"
+    },
+    {
       "id": "src.nemergut-2005-di",
       "cite": "Nemergut EC, Zuo Z, Jane JA Jr, Laws ER Jr. Predictors of diabetes insipidus after transsphenoidal surgery: a review of 881 patients. J Neurosurg. 2005;103(3):448-454.",
       "type": "cohort",
       "verified": true,
       "pmid": "16235676",
       "url": "https://pubmed.ncbi.nlm.nih.gov/16235676/"
+    },
+    {
+      "id": "src.nicolai-2008-malignant",
+      "cite": "Nicolai P, Battaglia P, Bignami M, et al. Endoscopic surgery for malignant tumors of the sinonasal tract and adjacent skull base: a 10-year experience. Am J Rhinol. 2008;22(3):308-316.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "18588765"
+    },
+    {
+      "id": "src.oakley-2016-csf-diagnosis",
+      "cite": "Oakley GM, Alt JA, Schlosser RJ, Harvey RJ, Orlandi RR. Diagnosis of cerebrospinal fluid rhinorrhea: an evidence-based review with recommendations. Int Forum Allergy Rhinol. 2016;6(1):8-16.",
+      "type": "review",
+      "verified": true,
+      "doi": "10.1002/alr.21637",
+      "pmid": "26370330",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26370330/"
     },
     {
       "id": "src.obrien-2016-close",
@@ -685,6 +1134,13 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/27643765/"
     },
     {
+      "id": "src.ojiri-2000-ip-mri",
+      "cite": "Ojiri H, Ujita M, Tada S, Fukuda K. Potentially distinctive features of sinonasal inverted papilloma on MR imaging. AJR Am J Roentgenol. 2000;175(2):465-468.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "10915695"
+    },
+    {
       "id": "src.osawa-2009-vidian",
       "cite": "Osawa S, Rhoton AL Jr, Seker A, et al. Microsurgical and endoscopic anatomy of the vidian canal. Neurosurgery. 2009;64(5 Suppl 2):385-411.",
       "type": "cadaver",
@@ -693,10 +1149,49 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/19404118/"
     },
     {
+      "id": "src.osborn-2018",
+      "cite": "Osborn AG, Hedlund GL, Salzman KL. Osborn's Brain: Imaging, Pathology, and Anatomy. 2nd ed. Philadelphia: Elsevier; 2018.",
+      "type": "textbook",
+      "verified": true,
+      "url": "https://shop.elsevier.com/books/osborns-brain/osborn/978-0-323-47776-5"
+    },
+    {
       "id": "src.pinheiro-neto-2007-nsf",
       "cite": "Pinheiro-Neto CD, Prevedello DM, Carrau RL, et al. Improving the design of the pedicled nasoseptal flap for skull base reconstruction: a radioanatomic study. Laryngoscope. 2007;117(9):1560-1569.",
       "type": "CT-series",
       "verified": true
+    },
+    {
+      "id": "src.psaltis-2014-mlk",
+      "cite": "Psaltis AJ, Li G, Vaezeafshar R, Cho KS, Hwang PH. Modification of the Lund-Kennedy endoscopic scoring system improves its reliability and correlation with patient-reported outcome measures. Laryngoscope. 2014;124(10):2216-2223.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1002/lary.24654",
+      "pmid": "24615873",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24615873/"
+    },
+    {
+      "id": "src.radkowski-1996",
+      "cite": "Radkowski D, McGill T, Healy GB, Ohlms L, Jones DT. Angiofibroma. Changes in staging and treatment. Arch Otolaryngol Head Neck Surg. 1996;122(2):122-129.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "8630204"
+    },
+    {
+      "id": "src.rajasekaran-2011-apoplexy",
+      "cite": "Rajasekaran S, Vanderpump M, Baldeweg S, et al. UK guidelines for the management of pituitary apoplexy. Clin Endocrinol (Oxf). 2011;74(1):9-20.",
+      "type": "consensus",
+      "verified": true,
+      "pmid": "21044119"
+    },
+    {
+      "id": "src.ratilal-2015-cochrane",
+      "cite": "Ratilal BO, Costa J, Pappamikail L, Sampaio C. Antibiotic prophylaxis for preventing meningitis in patients with basilar skull fractures. Cochrane Database Syst Rev. 2015;(4):CD004884.",
+      "type": "meta-analysis",
+      "verified": true,
+      "doi": "10.1002/14651858.CD004884.pub4",
+      "pmid": "25918919",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25918919/"
     },
     {
       "id": "src.raymond-1997",
@@ -802,12 +1297,75 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/15921222/"
     },
     {
+      "id": "src.robson-2022-gpa",
+      "cite": "Robson JC, Grayson PC, Ponte C, et al. 2022 American College of Rheumatology/European Alliance of Associations for Rheumatology classification criteria for granulomatosis with polyangiitis. Ann Rheum Dis. 2022;81(3):315-320.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1136/annrheumdis-2021-221795",
+      "pmid": "35110333",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35110333/"
+    },
+    {
+      "id": "src.rodriguez-2008-frontal-fracture",
+      "cite": "Rodriguez ED, Stanwix MG, Nam AJ, et al. Twenty-six-year experience treating frontal sinus fractures: a novel algorithm based on anatomical fracture pattern and failure of conventional techniques. Plast Reconstr Surg. 2008;122(6):1850-1866.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1097/PRS.0b013e31818d58ba",
+      "pmid": "19050539",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19050539/"
+    },
+    {
       "id": "src.rontal-1979",
       "cite": "Rontal E, Rontal M, Guilford FT. Surgical anatomy of the orbit. Ann Otol Rhinol Laryngol. 1979;88(3 Pt 1):382-386.",
       "type": "cadaver",
       "verified": true,
       "pmid": "464532",
       "url": "https://pubmed.ncbi.nlm.nih.gov/464532/"
+    },
+    {
+      "id": "src.rosenfeld-2015-sinusitis",
+      "cite": "Rosenfeld RM, Piccirillo JF, Chandrasekhar SS, et al. Clinical practice guideline (update): adult sinusitis. Otolaryngol Head Neck Surg. 2015;152(2 Suppl):S1-S39.",
+      "type": "consensus",
+      "verified": true,
+      "doi": "10.1177/0194599815572097",
+      "pmid": "25832968",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25832968/"
+    },
+    {
+      "id": "src.safder-2010-black-turbinate",
+      "cite": "Safder S, Carpenter JS, Roberts TD, Bailey N. The \"Black Turbinate\" sign: an early MR imaging finding of nasal mucormycosis. AJNR Am J Neuroradiol. 2010;31(4):771-774.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.3174/ajnr.A1808",
+      "pmid": "19942703",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19942703/"
+    },
+    {
+      "id": "src.schlosser-2004-csf",
+      "cite": "Schlosser RJ, Bolger WE. Nasal cerebrospinal fluid leaks: critical review and surgical considerations. Laryngoscope. 2004;114(2):255-265.",
+      "type": "review",
+      "verified": true,
+      "doi": "10.1097/00005537-200402000-00015",
+      "pmid": "14755200",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14755200/"
+    },
+    {
+      "id": "src.schlosser-2006-spontaneous",
+      "cite": "Schlosser RJ, Woodworth BA, Wilensky EM, Grady MS, Bolger WE. Spontaneous cerebrospinal fluid leaks: a variant of benign intracranial hypertension. Ann Otol Rhinol Laryngol. 2006;115(7):495-500.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1177/000348940611500703",
+      "pmid": "16900803",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16900803/"
+    },
+    {
+      "id": "src.shovlin-2000-curacao",
+      "cite": "Shovlin CL, Guttmacher AE, Buscarini E, et al. Diagnostic criteria for hereditary hemorrhagic telangiectasia (Rendu-Osler-Weber syndrome). Am J Med Genet. 2000;91(1):66-67.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1002/(sici)1096-8628(20000306)91:1<66::aid-ajmg12>3.0.co;2-p",
+      "pmid": "10751092",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10751092/"
     },
     {
       "id": "src.simmen-2006-aea",
@@ -843,6 +1401,13 @@
       "doi": "10.2214/ajr.159.2.1632360"
     },
     {
+      "id": "src.simpson-1957",
+      "cite": "Simpson D. The recurrence of intracranial meningiomas after surgical treatment. J Neurol Neurosurg Psychiatry. 1957;20(1):22-39.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "13406590"
+    },
+    {
       "id": "src.snyderman-1999-spa",
       "cite": "Snyderman CH, Goldman SA, Carrau RL, Ferguson BJ, Grandis JR. Endoscopic sphenopalatine artery ligation is an effective method of treatment for posterior epistaxis. Am J Rhinol. 1999;13(2):137-140.",
       "type": "cohort",
@@ -852,12 +1417,40 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/10219443/"
     },
     {
+      "id": "src.snyderman-2008-oncologic",
+      "cite": "Snyderman CH, Carrau RL, Kassam AB, et al. Endoscopic skull base surgery: principles of endonasal oncological surgery. J Surg Oncol. 2008;97(8):658-664.",
+      "type": "review",
+      "verified": true,
+      "pmid": "18493946"
+    },
+    {
+      "id": "src.snyderman-2010-jna",
+      "cite": "Snyderman CH, Pant H, Carrau RL, Gardner P. A new endoscopic staging system for angiofibromas. Arch Otolaryngol Head Neck Surg. 2010;136(6):588-594.",
+      "type": "classification",
+      "verified": true,
+      "pmid": "20566910"
+    },
+    {
+      "id": "src.som-curtin-2011",
+      "cite": "Som PM, Curtin HD, eds. Head and Neck Imaging. 5th ed. St Louis: Mosby Elsevier; 2011.",
+      "type": "textbook",
+      "verified": true,
+      "url": "https://shop.elsevier.com/books/head-and-neck-imaging-2-volume-set/som/978-0-323-05355-6"
+    },
+    {
       "id": "src.soparkar-1994-silent-sinus",
       "cite": "Soparkar CN, Patrinely JR, Cuaycong MJ, et al. The silent sinus syndrome. A cause of spontaneous enophthalmos. Ophthalmology. 1994;101(4):772-778.",
       "type": "cohort",
       "verified": true,
       "pmid": "8152774",
       "url": "https://pubmed.ncbi.nlm.nih.gov/8152774/"
+    },
+    {
+      "id": "src.stacchiotti-2015-chordoma",
+      "cite": "Stacchiotti S, Sommer J; Chordoma Global Consensus Group. Building a global consensus approach to chordoma: a position paper from the medical and patient community. Lancet Oncol. 2015;16(2):e71-e83.",
+      "type": "consensus",
+      "verified": true,
+      "pmid": "25638683"
     },
     {
       "id": "src.stammberger-1991",
@@ -874,12 +1467,30 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/2747392/"
     },
     {
+      "id": "src.tomazic-2009-sternberg",
+      "cite": "Tomazic PV, Stammberger H. Spontaneous CSF-leaks and meningoencephaloceles in sphenoid sinus by persisting Sternberg's canal. Rhinology. 2009;47(4):369-374.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.4193/Rhin08.236",
+      "pmid": "19936360",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19936360/"
+    },
+    {
       "id": "src.tran-2007-emlp",
       "cite": "Tran KN, Beule AG, Singal D, Wormald PJ. Frontal ostium restenosis after the endoscopic modified Lothrop procedure. Laryngoscope. 2007;117(8):1457-1462.",
       "type": "cohort",
       "verified": true,
       "pmid": "17585278",
       "url": "https://pubmed.ncbi.nlm.nih.gov/17585278/"
+    },
+    {
+      "id": "src.trimarchi-2001-cimdl",
+      "cite": "Trimarchi M, Gregorini G, Facchetti F, et al. Cocaine-induced midline destructive lesions: clinical, radiographic, histopathologic, and serologic features and their differentiation from Wegener granulomatosis. Medicine (Baltimore). 2001;80(6):391-404.",
+      "type": "cohort",
+      "verified": true,
+      "doi": "10.1097/00005792-200111000-00005",
+      "pmid": "11704715",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11704715/"
     },
     {
       "id": "src.truong-2019-medial-wall",
@@ -937,12 +1548,41 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/9432081/"
     },
     {
+      "id": "src.wenig-1995-reah",
+      "cite": "Wenig BM, Heffner DK. Respiratory epithelial adenomatoid hamartomas of the sinonasal tract and nasopharynx: a clinicopathologic study of 31 cases. Ann Otol Rhinol Laryngol. 1995;104(8):639-645.",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "7639474"
+    },
+    {
       "id": "src.wexler-2006-swell-body",
       "cite": "Wexler D, Braverman I, Amar M. Histology of the nasal septal swell body (septal turbinate). Otolaryngol Head Neck Surg. 2006;134(4):596-600.",
       "type": "cadaver",
       "verified": true,
       "pmid": "16564379",
       "url": "https://pubmed.ncbi.nlm.nih.gov/16564379/"
+    },
+    {
+      "id": "src.who-bone-2020",
+      "cite": "WHO Classification of Tumours Editorial Board. Soft tissue and bone tumours. 5th ed. Lyon (France): International Agency for Research on Cancer; 2020. (WHO classification of tumours series; vol. 3).",
+      "type": "classification",
+      "verified": true,
+      "url": "https://publications.iarc.who.int/Book-And-Report-Series/Who-Classification-Of-Tumours/Soft-Tissue-And-Bone-Tumours-2020"
+    },
+    {
+      "id": "src.who-cns-2021",
+      "cite": "Louis DN, Perry A, Wesseling P, et al. The 2021 WHO Classification of Tumors of the Central Nervous System: a summary. Neuro Oncol. 2021;23(8):1231-1251.",
+      "type": "classification",
+      "verified": true,
+      "doi": "10.1093/neuonc/noab106",
+      "pmid": "34185076"
+    },
+    {
+      "id": "src.who-hn-2022",
+      "cite": "WHO Classification of Tumours Editorial Board. Head and neck tumours. 5th ed. Lyon (France): International Agency for Research on Cancer; 2022. (WHO classification of tumours series; vol. 9).",
+      "type": "classification",
+      "verified": true,
+      "url": "https://publications.iarc.who.int/629"
     },
     {
       "id": "src.wormald-1998-swing-door",

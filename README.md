@@ -94,7 +94,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/cpt-search.js    #   code table + search
 │
 ├── ssb/                    # SSB 3D atlas — design stage, no page yet (docs/ssb.md)
-│   └── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
+│   ├── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
+│   └── reference/          #   external atlases crosswalked to the graph (text only)
 │
 ├── css/site.css            # The design system: tokens, faces, shared chrome
 ├── js/site.js              # Day/night toggle

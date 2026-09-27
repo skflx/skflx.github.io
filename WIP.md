@@ -104,22 +104,38 @@ deleted.
 
 ## SSB — Sinus & Skull Base 3D (design)
 
-**State:** Design stage; architecture, schema and validator in place; draft
-knowledge graph authored by region (nasal/maxillary/PPF; ethmoid/frontal/
-orbit/ACF; sphenoid/sellar/clival), each adversarially reviewed by a second
-model and every source checked to exist as cited (checked via search listings —
-the agent sandbox blocked direct PubMed/DOI lookups; "verified" means
-exists-as-cited, not supports-the-claim); all content still draft. As of
-2026-09-27 the graph has about 790 entities and 128 sources. Known content
-gaps: petrolingual/parasellar ligaments, carotid cave, jugular foramen and CN
-IX–XI, Hardy/SIPAP classifications, pituitary transposition; orbital hematoma
-hazard in the nasal region, IMAX ligation, JNA staging, ION canal grading;
-Lynch approach, canthotomy/cantholysis as a procedure, frontal AP-depth
-measurement, olfactory neuroblastoma staging.
+**State:** Design stage — architecture, schema and validator in place; no
+page yet. Draft knowledge graph in `ssb/content/`: anatomy by region
+(nasal/maxillary/PPF; ethmoid/frontal/orbit/ACF; sphenoid/sellar/clival)
+plus a pathology layer (inflammatory/infectious/structural; neoplastic).
+Every file was authored by one model and adversarially reviewed by
+another; every source was checked to exist as cited (pathology sources
+against PubMed records; the first anatomy batch via search listings, being
+re-checked against PubMed). "Verified" on a source means exists-as-cited,
+not supports-the-claim; all content is still `review: draft`. The UW
+Interactive CT Sinus Anatomy site (owner-reported permission) was crawled
+into `ssb/reference/uw-sinusanatomy2/` — label vocabulary crosswalked to
+graph ids, which fed synonyms and gap entities. As of 2026-09-27: about
+980 entities (78 conditions) and 210 sources.
 
 **Next:** Owner review (tier 1 first) — flip `review` to verified; owner
-decisions in `docs/ssb.md` §13 (approve vendoring three.js, pick the reference
-dataset); then phase 1 walking skeleton.
+decisions in `docs/ssb.md` §13 (vendor three.js, reference dataset, UW
+permission scope); then phase 1 walking skeleton. Known content gaps:
+- Anatomy: petrolingual/parasellar ligaments, carotid cave, jugular
+  foramen and CN IX–XI; orbital septum, superior ophthalmic vein, frontal
+  lobe beyond gyrus rectus, hard palate, parapharyngeal space.
+- Procedures (so conditions can link `managedBy`): canthotomy/cantholysis,
+  orbitotomy, choanal atresia repair, frontal obliteration/cranialization,
+  septodermoplasty and Young's, IMAX ligation, Lynch approach.
+- Conditions: EGPA, PCD, immunodeficiency, granulomatous infections,
+  septal hematoma/abscess, developmental cysts, organizing hematoma,
+  facial fractures; HPV-related multiphenotypic and SMARCA4-deficient
+  carcinomas, non-intestinal adenocarcinoma, biphenotypic sarcoma,
+  petroclival/cavernous/spheno-orbital meningiomas, trigeminal schwannoma,
+  germinoma, LCH, optic pathway glioma.
+- Classifications/numbers: SPOA drainage size threshold, AFRS staging,
+  Cannady (IP), WHO CNS meningioma grade, AJCC N categories, ION canal
+  grading, JNA staging variants, olfactory neuroblastoma staging review.
 
 ---
 
