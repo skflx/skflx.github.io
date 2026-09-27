@@ -109,9 +109,8 @@ page yet. Draft knowledge graph in `ssb/content/`: anatomy by region
 (nasal/maxillary/PPF; ethmoid/frontal/orbit/ACF; sphenoid/sellar/clival)
 plus a pathology layer (inflammatory/infectious/structural; neoplastic).
 Every file was authored by one model and adversarially reviewed by
-another; every source was checked to exist as cited (pathology sources
-against PubMed records; the first anatomy batch via search listings, being
-re-checked against PubMed). "Verified" on a source means exists-as-cited,
+another; every journal source was matched to its PubMed record (NCBI
+E-utilities; the few PubMed does not index were confirmed by hand). "Verified" on a source means exists-as-cited,
 not supports-the-claim; all content is still `review: draft`. The UW
 Interactive CT Sinus Anatomy site (owner-reported permission) was crawled
 into `ssb/reference/uw-sinusanatomy2/` — label vocabulary crosswalked to

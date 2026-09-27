@@ -12,7 +12,8 @@
       "type": "classification",
       "verified": true,
       "doi": "10.1038/s41375-022-01620-2",
-      "pmid": "35732829"
+      "pmid": "35732829",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35732829/"
     },
     {
       "id": "src.aldana-2012-naxl",
@@ -20,14 +21,17 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "22791031",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/22791031/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22791031/",
+      "doi": "10.1227/NEU.0b013e318266e488"
     },
     {
       "id": "src.amit-2019-snuc",
       "cite": "Amit M, Abdelmeguid AS, Watcherporn T, et al. Induction chemotherapy response as a guide for treatment optimization in sinonasal undifferentiated carcinoma. J Clin Oncol. 2019;37(6):504-512.",
       "type": "cohort",
       "verified": true,
-      "pmid": "30615549"
+      "pmid": "30615549",
+      "doi": "10.1200/JCO.18.00353",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30615549/"
     },
     {
       "id": "src.anderson-2009-emlp",
@@ -43,7 +47,9 @@
       "cite": "Andrews JC, Fisch U, Valavanis A, Aeppli U, Makek MS. The surgical management of extensive nasopharyngeal angiofibromas with the infratemporal fossa approach. Laryngoscope. 1989;99(4):429-437.",
       "type": "classification",
       "verified": true,
-      "pmid": "2538688"
+      "pmid": "2538688",
+      "doi": "10.1288/00005537-198904000-00013",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2538688/"
     },
     {
       "id": "src.asa-2022-pitnet",
@@ -51,7 +57,8 @@
       "type": "classification",
       "verified": true,
       "doi": "10.1007/s12022-022-09703-7",
-      "pmid": "35291028"
+      "pmid": "35291028",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35291028/"
     },
     {
       "id": "src.ashraf-2001-incidental-lund",
@@ -85,7 +92,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "20559102",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/20559102/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20559102/",
+      "doi": "10.1227/01.NEU.0000370892.11284.EA"
     },
     {
       "id": "src.bent-1994",
@@ -109,7 +117,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "5638016",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/5638016/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/5638016/",
+      "doi": "10.3171/jns.1968.28.2.0093"
     },
     {
       "id": "src.bolger-1990-msh",
@@ -117,7 +126,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "2126098",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/2126098/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2126098/",
+      "doi": "10.1177/019459989010300516"
     },
     {
       "id": "src.bolger-1991",
@@ -125,7 +135,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "1984551",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/1984551/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1984551/",
+      "doi": "10.1288/00005537-199101000-00010"
     },
     {
       "id": "src.bolger-1992-lacrimal",
@@ -133,7 +144,8 @@
       "type": "cohort",
       "verified": true,
       "doi": "10.1001/archotol.1992.01880110047011",
-      "url": "https://doi.org/10.1001/archotol.1992.01880110047011"
+      "url": "https://doi.org/10.1001/archotol.1992.01880110047011",
+      "pmid": "1418897"
     },
     {
       "id": "src.bolger-1999-crista",
@@ -141,7 +153,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "10219434",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10219434/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10219434/",
+      "doi": "10.2500/105065899782106814"
     },
     {
       "id": "src.bouthillier-1996",
@@ -149,35 +162,43 @@
       "type": "classification",
       "verified": true,
       "pmid": "8837792",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/8837792/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8837792/",
+      "doi": "10.1097/00006123-199603000-00001"
     },
     {
       "id": "src.brastianos-2014",
       "cite": "Brastianos PK, Taylor-Weiner A, Manley PE, et al. Exome sequencing identifies BRAF mutations in papillary craniopharyngiomas. Nat Genet. 2014;46(2):161-165.",
       "type": "cohort",
       "verified": true,
-      "pmid": "24413733"
+      "pmid": "24413733",
+      "doi": "10.1038/ng.2868",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24413733/"
     },
     {
       "id": "src.busquets-2006",
       "cite": "Busquets JM, Hwang PH. Endoscopic resection of sinonasal inverted papilloma: a meta-analysis. Otolaryngol Head Neck Surg. 2006;134(3):476-482.",
       "type": "meta-analysis",
       "verified": true,
-      "pmid": "16500448"
+      "pmid": "16500448",
+      "doi": "10.1016/j.otohns.2005.11.038",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16500448/"
     },
     {
       "id": "src.byun-2000-rcc",
       "cite": "Byun WM, Kim OL, Kim D. MR imaging findings of Rathke's cleft cysts: significance of intracystic nodules. AJNR Am J Neuroradiol. 2000;21(3):485-488.",
       "type": "cohort",
       "verified": true,
-      "pmid": "10730639"
+      "pmid": "10730639",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10730639/"
     },
     {
       "id": "src.cannady-2007",
       "cite": "Cannady SB, Batra PS, Sautter NB, Roh HJ, Citardi MJ. New staging system for sinonasal inverted papilloma in the endoscopic era. Laryngoscope. 2007;117(7):1283-1287.",
       "type": "classification",
       "verified": true,
-      "pmid": "17632914"
+      "pmid": "17632914",
+      "doi": "10.1097/MLG.0b013e31803330f1",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17632914/"
     },
     {
       "id": "src.casiano-2001",
@@ -185,14 +206,17 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "11404605",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11404605/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11404605/",
+      "doi": "10.1097/00005537-200106000-00007"
     },
     {
       "id": "src.caturegli-2005",
       "cite": "Caturegli P, Newschaffer C, Olivi A, Pomper MG, Burger PC, Rose NR. Autoimmune hypophysitis. Endocr Rev. 2005;26(5):599-614.",
       "type": "review",
       "verified": true,
-      "pmid": "15634713"
+      "pmid": "15634713",
+      "doi": "10.1210/er.2004-0011",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15634713/"
     },
     {
       "id": "src.cavallo-2005-ppf",
@@ -208,21 +232,25 @@
       "type": "classification",
       "verified": true,
       "doi": "10.1288/00005537-197009000-00007",
-      "url": "https://onlinelibrary.wiley.com/doi/10.1288/00005537-197009000-00007"
+      "url": "https://onlinelibrary.wiley.com/doi/10.1288/00005537-197009000-00007",
+      "pmid": "5470225"
     },
     {
       "id": "src.chen-2019-npc",
       "cite": "Chen YP, Chan ATC, Le QT, Blanchard P, Sun Y, Ma J. Nasopharyngeal carcinoma. Lancet. 2019;394(10192):64-80.",
       "type": "review",
       "verified": true,
-      "pmid": "31178151"
+      "pmid": "31178151",
+      "doi": "10.1016/S0140-6736(19)30956-0",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31178151/"
     },
     {
       "id": "src.chiu-2005-osteoma",
       "cite": "Chiu AG, Schipor I, Cohen NA, Kennedy DW, Palmer JN. Surgical decisions in the management of frontal sinus osteomas. Am J Rhinol. 2005;19(2):191-197.",
       "type": "cohort",
       "verified": true,
-      "pmid": "15921220"
+      "pmid": "15921220",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15921220/"
     },
     {
       "id": "src.choby-2018-ifac",
@@ -230,7 +258,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "29457874",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/29457874/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29457874/",
+      "doi": "10.1002/alr.22105"
     },
     {
       "id": "src.ciric-1997",
@@ -238,7 +267,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "9007854",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9007854/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9007854/",
+      "doi": "10.1097/00006123-199702000-00001"
     },
     {
       "id": "src.craig-2021-ods",
@@ -269,7 +299,9 @@
       "cite": "de Almeida JR, Zanation AM, Snyderman CH, et al. Defining the nasopalatine line: the limit for endonasal surgery of the spine. Laryngoscope. 2009;119(2):239-244.",
       "type": "CT-series",
       "verified": true,
-      "doi": "10.1002/lary.20108"
+      "doi": "10.1002/lary.20108",
+      "pmid": "19172603",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19172603/"
     },
     {
       "id": "src.delano-1996",
@@ -321,7 +353,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "8169516",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/8169516/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8169516/",
+      "doi": "10.1017/s0022215100126477"
     },
     {
       "id": "src.dichiro-1962",
@@ -343,14 +376,18 @@
       "cite": "Dulguerov P, Calcaterra T. Esthesioneuroblastoma: the UCLA experience 1970-1990. Laryngoscope. 1992;102(8):843-849.",
       "type": "classification",
       "verified": true,
-      "pmid": "1495347"
+      "pmid": "1495347",
+      "doi": "10.1288/00005537-199208000-00001",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1495347/"
     },
     {
       "id": "src.dulguerov-2001",
       "cite": "Dulguerov P, Allal AS, Calcaterra TC. Esthesioneuroblastoma: a meta-analysis and review. Lancet Oncol. 2001;2(11):683-690.",
       "type": "meta-analysis",
       "verified": true,
-      "pmid": "11902539"
+      "pmid": "11902539",
+      "doi": "10.1016/S1470-2045(01)00558-7",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11902539/"
     },
     {
       "id": "src.dusick-2007-doppler",
@@ -376,7 +413,8 @@
       "type": "review",
       "verified": true,
       "pmid": "8451394",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/8451394/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8451394/",
+      "doi": "10.1148/radiology.187.1.8451394"
     },
     {
       "id": "src.epos-2020",
@@ -392,7 +430,9 @@
       "cite": "Esposito F, Dusick JR, Fatemi N, Kelly DF. Graded repair of cranial base defects and cerebrospinal fluid leaks in transsphenoidal surgery. Neurosurgery. 2007;60(4 Suppl 2):295-303.",
       "type": "classification",
       "verified": true,
-      "doi": "10.1227/01.NEU.0000255354.64077.66"
+      "doi": "10.1227/01.NEU.0000255354.64077.66",
+      "pmid": "17415166",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17415166/"
     },
     {
       "id": "src.faughnan-2020-hht",
@@ -409,7 +449,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "25992806",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/25992806/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25992806/",
+      "doi": "10.1002/lary.25089"
     },
     {
       "id": "src.fernandez-miranda-2009-septa",
@@ -417,14 +458,17 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "19655331",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/19655331/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19655331/",
+      "doi": "10.1002/lary.20623"
     },
     {
       "id": "src.fernandez-miranda-2014-clinoidectomy",
       "cite": "Fernandez-Miranda JC, Gardner PA, Rastelli MM Jr, et al. Endoscopic endonasal transcavernous posterior clinoidectomy with interdural pituitary transposition. J Neurosurg. 2014;121(1):91-99.",
       "type": "cohort",
       "verified": true,
-      "url": "https://thejns.org/view/journals/j-neurosurg/121/1/article-p91.xml"
+      "url": "https://thejns.org/view/journals/j-neurosurg/121/1/article-p91.xml",
+      "pmid": "24816325",
+      "doi": "10.3171/2014.3.JNS131865"
     },
     {
       "id": "src.fernandez-miranda-2018-cavernous",
@@ -441,7 +485,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "16826072",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/16826072/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16826072/",
+      "doi": "10.1097/01.mlg.0000221967.67003.1d"
     },
     {
       "id": "src.friedman-2013-iih",
@@ -458,7 +503,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "758376",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/758376/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/758376/",
+      "doi": "10.3171/jns.1979.50.1.0031"
     },
     {
       "id": "src.garcia-2000-spa",
@@ -466,7 +512,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "10919887",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10919887/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10919887/",
+      "doi": "10.1016/s0161-6420(00)00242-6"
     },
     {
       "id": "src.gardner-2013-ica",
@@ -510,7 +557,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "13706533",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/13706533/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13706533/",
+      "doi": "10.1017/s0022215100057716"
     },
     {
       "id": "src.goodale-1958",
@@ -518,7 +566,8 @@
       "type": "cohort",
       "verified": true,
       "doi": "10.1001/archotol.1958.00730020281001",
-      "url": "https://doi.org/10.1001/archotol.1958.00730020281001"
+      "url": "https://doi.org/10.1001/archotol.1958.00730020281001",
+      "pmid": "13570786"
     },
     {
       "id": "src.grays-42",
@@ -531,8 +580,9 @@
       "cite": "Gross WE, Gross CW, Becker D, Moore D, Phillips D. Modified transnasal endoscopic Lothrop procedure as an alternative to frontal sinus obliteration. Otolaryngol Head Neck Surg. 1995;113(4):427-434.",
       "type": "cohort",
       "verified": true,
-      "doi": "10.1016/S0194-59989570080-3",
-      "url": "https://journals.sagepub.com/doi/abs/10.1016/S0194-59989570080-3"
+      "doi": "10.1016/s0194-5998(95)70080-3",
+      "url": "https://journals.sagepub.com/doi/abs/10.1016/S0194-59989570080-3",
+      "pmid": "7567016"
     },
     {
       "id": "src.hadad-2006-nsf",
@@ -540,7 +590,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "17003708",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17003708/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17003708/",
+      "doi": "10.1097/01.mlg.0000234933.37779.e4"
     },
     {
       "id": "src.hammer-radberg-1961",
@@ -548,14 +599,17 @@
       "type": "cadaver",
       "verified": true,
       "doi": "10.1177/028418516105600601",
-      "url": "https://doi.org/10.1177/028418516105600601"
+      "url": "https://doi.org/10.1177/028418516105600601",
+      "pmid": "13904157"
     },
     {
       "id": "src.hanna-2009-endoscopic",
       "cite": "Hanna E, DeMonte F, Ibrahim S, Roberts D, Levine N, Kupferman M. Endoscopic resection of sinonasal cancers with and without craniotomy: oncologic results. Arch Otolaryngol Head Neck Surg. 2009;135(12):1219-1224.",
       "type": "cohort",
       "verified": true,
-      "pmid": "20026819"
+      "pmid": "20026819",
+      "doi": "10.1001/archoto.2009.173",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20026819/"
     },
     {
       "id": "src.har-el-2001-mucocele",
@@ -571,7 +625,8 @@
       "cite": "Hardy J, Vezina JL. Transsphenoidal neurosurgery of intracranial neoplasm. Adv Neurol. 1976;15:261-273.",
       "type": "classification",
       "verified": true,
-      "pmid": "945663"
+      "pmid": "945663",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/945663/"
     },
     {
       "id": "src.harris-1994-spa",
@@ -587,7 +642,9 @@
       "cite": "Harvey RJ, Parmar P, Sacks R, Zanation AM. Endoscopic skull base reconstruction of large dural defects: a systematic review of published evidence. Laryngoscope. 2012;122(2):452-459.",
       "type": "meta-analysis",
       "verified": true,
-      "doi": "10.1002/lary.22475"
+      "doi": "10.1002/lary.22475",
+      "pmid": "22253060",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22253060/"
     },
     {
       "id": "src.hayreh-1980",
@@ -595,7 +652,8 @@
       "type": "animal",
       "verified": true,
       "pmid": "6769079",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/6769079/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6769079/",
+      "doi": "10.1016/s0161-6420(80)35283-4"
     },
     {
       "id": "src.hedlund-2006-frontonasal",
@@ -612,7 +670,8 @@
       "type": "meta-analysis",
       "verified": true,
       "pmid": "10892690",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10892690/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10892690/",
+      "doi": "10.1097/00005537-200007000-00019"
     },
     {
       "id": "src.hol-2000-turbinate",
@@ -628,14 +687,17 @@
       "type": "cohort",
       "verified": true,
       "pmid": "17875850",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17875850/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17875850/",
+      "doi": "10.1001/archotol.133.9.858"
     },
     {
       "id": "src.howard-2001-jna",
       "cite": "Howard DJ, Lloyd G, Lund V. Recurrence and its avoidance in juvenile angiofibroma. Laryngoscope. 2001;111(9):1509-1511.",
       "type": "cohort",
       "verified": true,
-      "pmid": "11568597"
+      "pmid": "11568597",
+      "doi": "10.1097/00005537-200109000-00003",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11568597/"
     },
     {
       "id": "src.hyams-1988",
@@ -649,7 +711,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "17876228",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17876228/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17876228/",
+      "doi": "10.1227/01.neu.0000289706.42061.19"
     },
     {
       "id": "src.icar-rs-2021",
@@ -665,21 +728,26 @@
       "cite": "Wang EW, Zanation AM, Gardner PA, et al. ICAR: endoscopic skull-base surgery. Int Forum Allergy Rhinol. 2019;9(S3):S145-S365.",
       "type": "consensus",
       "verified": true,
-      "pmid": "31329374"
+      "pmid": "31329374",
+      "doi": "10.1002/alr.22326",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31329374/"
     },
     {
       "id": "src.jankowski-2007-itac",
       "cite": "Jankowski R, Georgel T, Vignaud JM, et al. Endoscopic surgery reveals that woodworkers' adenocarcinomas originate in the olfactory cleft. Rhinology. 2007;45(4):308-314.",
       "type": "cohort",
       "verified": true,
-      "pmid": "18085026"
+      "pmid": "18085026",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18085026/"
     },
     {
       "id": "src.kadish-1976",
       "cite": "Kadish S, Goodman M, Wang CC. Olfactory neuroblastoma. A clinical analysis of 17 cases. Cancer. 1976;37(3):1571-1576.",
       "type": "classification",
       "verified": true,
-      "pmid": "1260676"
+      "pmid": "1260676",
+      "doi": "10.1002/1097-0142(197603)37:3<1571::aid-cncr2820370347>3.0.co;2-l",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1260676/"
     },
     {
       "id": "src.kainz-1989",
@@ -703,7 +771,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "15987596",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/15987596/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15987596/",
+      "doi": "10.1227/01.neu.0000163687.64774.e4"
     },
     {
       "id": "src.kassam-2005-sagittal-1",
@@ -727,7 +796,8 @@
       "type": "classification",
       "verified": true,
       "pmid": "18377251",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18377251/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18377251/",
+      "doi": "10.3171/JNS/2008/108/4/0715"
     },
     {
       "id": "src.kassam-2008-nsf",
@@ -735,7 +805,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "18728603",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18728603/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18728603/",
+      "doi": "10.1227/01.neu.0000297074.13423.f5"
     },
     {
       "id": "src.kassam-2008-pituitary-transposition",
@@ -743,7 +814,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "18424968",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18424968/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18424968/",
+      "doi": "10.1227/01.neu.0000317374.30443.23"
     },
     {
       "id": "src.kassam-2008-vidian",
@@ -751,7 +823,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "18173330",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18173330/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18173330/",
+      "doi": "10.3171/JNS/2008/108/01/0177"
     },
     {
       "id": "src.kassam-2009-meckel",
@@ -759,7 +832,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "19240575",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/19240575/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19240575/",
+      "doi": "10.1227/01.NEU.0000335162.36862.54"
     },
     {
       "id": "src.kassam-2011-800",
@@ -767,7 +841,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "21166570",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/21166570/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21166570/",
+      "doi": "10.3171/2010.10.JNS09406"
     },
     {
       "id": "src.kassam-gardner-2012",
@@ -781,8 +856,9 @@
       "cite": "Kennedy DW, Zinreich SJ, Rosenbaum AE, Johns ME. Functional endoscopic sinus surgery. Theory and diagnostic evaluation. Arch Otolaryngol. 1985;111(9):576-582.",
       "type": "review",
       "verified": true,
-      "pmid": "3364966",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/3364966/"
+      "pmid": "4026673",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3364966/",
+      "doi": "10.1001/archotol.1985.00800110054002"
     },
     {
       "id": "src.kennedy-1990-decompression",
@@ -790,7 +866,8 @@
       "type": "cohort",
       "verified": true,
       "doi": "10.1001/archotol.1990.01870030039006",
-      "url": "https://doi.org/10.1001/archotol.1990.01870030039006"
+      "url": "https://doi.org/10.1001/archotol.1990.01870030039006",
+      "pmid": "2306344"
     },
     {
       "id": "src.kennedy-1990-ica",
@@ -819,7 +896,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "11568612",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11568612/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11568612/",
+      "doi": "10.1097/00005537-200109000-00020"
     },
     {
       "id": "src.knosp-1993",
@@ -827,21 +905,26 @@
       "type": "classification",
       "verified": true,
       "pmid": "8232800",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/8232800/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8232800/",
+      "doi": "10.1227/00006123-199310000-00008"
     },
     {
       "id": "src.komotar-2012-meningioma",
       "cite": "Komotar RJ, Starke RM, Raper DM, Anand VK, Schwartz TH. Endoscopic endonasal versus open transcranial resection of anterior midline skull base meningiomas. World Neurosurg. 2012;77(5-6):713-724.",
       "type": "meta-analysis",
       "verified": true,
-      "pmid": "22120296"
+      "pmid": "22120296",
+      "doi": "10.1016/j.wneu.2011.08.025",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22120296/"
     },
     {
       "id": "src.krouse-2000",
       "cite": "Krouse JH. Development of a staging system for inverted papilloma. Laryngoscope. 2000;110(6):965-968.",
       "type": "classification",
       "verified": true,
-      "pmid": "10852514"
+      "pmid": "10852514",
+      "doi": "10.1097/00005537-200006000-00015",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10852514/"
     },
     {
       "id": "src.kumar-2003-spa",
@@ -876,7 +959,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "11802009",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11802009/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11802009/",
+      "doi": "10.1097/00005537-200112000-00008"
     },
     {
       "id": "src.lang-1989",
@@ -890,21 +974,25 @@
       "type": "review",
       "verified": true,
       "pmid": "11081167",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11081167/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11081167/",
+      "doi": "10.1023/a:1009951917649"
     },
     {
       "id": "src.lee-2007-ip-hyperostosis",
       "cite": "Lee DK, Chung SK, Dhong HJ, et al. Focal hyperostosis on CT of sinonasal inverted papilloma as a predictor of tumor origin. AJNR Am J Neuroradiol. 2007;28(4):618-621.",
       "type": "CT-series",
       "verified": true,
-      "pmid": "17416809"
+      "pmid": "17416809",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17416809/"
     },
     {
       "id": "src.lee-2012-fd",
       "cite": "Lee JS, FitzGibbon EJ, Chen YR, et al. Clinical guidelines for the management of craniofacial fibrous dysplasia. Orphanet J Rare Dis. 2012;7 Suppl 1:S2.",
       "type": "consensus",
       "verified": true,
-      "pmid": "22640797"
+      "pmid": "22640797",
+      "doi": "10.1186/1750-1172-7-S1-S2",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22640797/"
     },
     {
       "id": "src.leng-2008-gasket",
@@ -912,7 +1000,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "18596534",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/18596534/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18596534/",
+      "doi": "10.1227/01.neu.0000326017.84315.1f"
     },
     {
       "id": "src.levin-1999-ionts",
@@ -920,14 +1009,17 @@
       "type": "cohort",
       "verified": true,
       "pmid": "10406604",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10406604/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10406604/",
+      "doi": "10.1016/s0161-6420(99)00707-1"
     },
     {
       "id": "src.lloyd-1999-jna",
       "cite": "Lloyd G, Howard D, Phelps P, Cheesman A. Juvenile angiofibroma: the lessons of 20 years of modern imaging. J Laryngol Otol. 1999;113(2):127-134.",
       "type": "CT-series",
       "verified": true,
-      "pmid": "10396561"
+      "pmid": "10396561",
+      "doi": "10.1017/s0022215100143373",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10396561/"
     },
     {
       "id": "src.lloyd-2008-csf-imaging",
@@ -943,7 +1035,8 @@
       "cite": "Lund VJ, Stammberger H, Nicolai P, et al. European position paper on endoscopic management of tumours of the nose, paranasal sinuses and skull base. Rhinol Suppl. 2010;(22):1-143.",
       "type": "consensus",
       "verified": true,
-      "pmid": "20502772"
+      "pmid": "20502772",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20502772/"
     },
     {
       "id": "src.lund-2014-terminology",
@@ -975,7 +1068,9 @@
       "cite": "Luxenberger W, Stammberger H, Jebeles JA, Walch C. Endoscopic optic nerve decompression: the Graz experience. Laryngoscope. 1998;108(6):873-882.",
       "type": "cohort",
       "verified": true,
-      "doi": "10.1097/00005537-199806000-00016"
+      "doi": "10.1097/00005537-199806000-00016",
+      "pmid": "9628503",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9628503/"
     },
     {
       "id": "src.manning-1997-afrs-imaging",
@@ -997,7 +1092,7 @@
     },
     {
       "id": "src.matthews-1997-recirculation",
-      "cite": "Goldman NC, Matthews BL, Burke AJ. Recirculation of mucus via accessory ostia causing chronic maxillary sinus disease. Otolaryngol Head Neck Surg. 1997;117(4):422-423.",
+      "cite": "Matthews BL, Burke AJ. Recirculation of mucus via accessory ostia causing chronic maxillary sinus disease. Otolaryngol Head Neck Surg. 1997;117(4):422-423.",
       "type": "cohort",
       "verified": true,
       "doi": "10.1016/S0194-5998(97)70139-6",
@@ -1019,7 +1114,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "8072353",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/8072353/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8072353/",
+      "doi": "10.1288/00005537-199409000-00006"
     },
     {
       "id": "src.meckel-2013-pta",
@@ -1035,7 +1131,9 @@
       "cite": "Melmed S, Casanueva FF, Hoffman AR, et al. Diagnosis and treatment of hyperprolactinemia: an Endocrine Society clinical practice guideline. J Clin Endocrinol Metab. 2011;96(2):273-288.",
       "type": "consensus",
       "verified": true,
-      "pmid": "21296991"
+      "pmid": "21296991",
+      "doi": "10.1210/jc.2010-1692",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21296991/"
     },
     {
       "id": "src.messerklinger-1978",
@@ -1074,7 +1172,9 @@
       "cite": "Molitch ME. Diagnosis and treatment of pituitary adenomas: a review. JAMA. 2017;317(5):516-524.",
       "type": "review",
       "verified": true,
-      "pmid": "28170483"
+      "pmid": "28170483",
+      "doi": "10.1001/jama.2016.19699",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28170483/"
     },
     {
       "id": "src.moon-2001-aea",
@@ -1082,14 +1182,15 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "11359174",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11359174/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11359174/",
+      "doi": "10.1097/00005537-200105000-00027"
     },
     {
       "id": "src.morera-2010-far-medial",
       "cite": "Morera VA, Fernandez-Miranda JC, Prevedello DM, et al. \"Far-medial\" expanded endonasal approach to the inferior third of the clivus: the transcondylar and transjugular tubercle approaches. Neurosurgery. 2010;66(6 Suppl Operative):211-220.",
       "type": "cadaver",
       "verified": true,
-      "doi": "10.1227/01.neu.0000369926.01891.5d",
+      "doi": "10.1227/01.NEU.0000369926.01891.5D",
       "pmid": "20489508",
       "url": "https://pubmed.ncbi.nlm.nih.gov/20489508/"
     },
@@ -1098,7 +1199,9 @@
       "cite": "Morita A, Ebersold MJ, Olsen KD, et al. Esthesioneuroblastoma: prognosis and management. Neurosurgery. 1993;32(5):706-714.",
       "type": "classification",
       "verified": true,
-      "pmid": "8492845"
+      "pmid": "8492845",
+      "doi": "10.1227/00006123-199305000-00002",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8492845/"
     },
     {
       "id": "src.nemergut-2005-di",
@@ -1106,14 +1209,17 @@
       "type": "cohort",
       "verified": true,
       "pmid": "16235676",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/16235676/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16235676/",
+      "doi": "10.3171/jns.2005.103.3.0448"
     },
     {
       "id": "src.nicolai-2008-malignant",
       "cite": "Nicolai P, Battaglia P, Bignami M, et al. Endoscopic surgery for malignant tumors of the sinonasal tract and adjacent skull base: a 10-year experience. Am J Rhinol. 2008;22(3):308-316.",
       "type": "cohort",
       "verified": true,
-      "pmid": "18588765"
+      "pmid": "18588765",
+      "doi": "10.2500/ajr.2008.22.3170",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18588765/"
     },
     {
       "id": "src.oakley-2016-csf-diagnosis",
@@ -1138,7 +1244,9 @@
       "cite": "Ojiri H, Ujita M, Tada S, Fukuda K. Potentially distinctive features of sinonasal inverted papilloma on MR imaging. AJR Am J Roentgenol. 2000;175(2):465-468.",
       "type": "cohort",
       "verified": true,
-      "pmid": "10915695"
+      "pmid": "10915695",
+      "doi": "10.2214/ajr.175.2.1750465",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10915695/"
     },
     {
       "id": "src.osawa-2009-vidian",
@@ -1146,7 +1254,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "19404118",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/19404118/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19404118/",
+      "doi": "10.1227/01.NEU.0000338945.54863.D9"
     },
     {
       "id": "src.osborn-2018",
@@ -1159,7 +1268,10 @@
       "id": "src.pinheiro-neto-2007-nsf",
       "cite": "Pinheiro-Neto CD, Prevedello DM, Carrau RL, et al. Improving the design of the pedicled nasoseptal flap for skull base reconstruction: a radioanatomic study. Laryngoscope. 2007;117(9):1560-1569.",
       "type": "CT-series",
-      "verified": true
+      "verified": true,
+      "pmid": "17597630",
+      "doi": "10.1097/MLG.0b013e31806db514",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17597630/"
     },
     {
       "id": "src.psaltis-2014-mlk",
@@ -1175,14 +1287,18 @@
       "cite": "Radkowski D, McGill T, Healy GB, Ohlms L, Jones DT. Angiofibroma. Changes in staging and treatment. Arch Otolaryngol Head Neck Surg. 1996;122(2):122-129.",
       "type": "classification",
       "verified": true,
-      "pmid": "8630204"
+      "pmid": "8630204",
+      "doi": "10.1001/archotol.1996.01890140012004",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8630204/"
     },
     {
       "id": "src.rajasekaran-2011-apoplexy",
       "cite": "Rajasekaran S, Vanderpump M, Baldeweg S, et al. UK guidelines for the management of pituitary apoplexy. Clin Endocrinol (Oxf). 2011;74(1):9-20.",
       "type": "consensus",
       "verified": true,
-      "pmid": "21044119"
+      "pmid": "21044119",
+      "doi": "10.1111/j.1365-2265.2010.03913.x",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21044119/"
     },
     {
       "id": "src.ratilal-2015-cochrane",
@@ -1198,7 +1314,8 @@
       "cite": "Raymond J, Hardy J, Czepko R, Roy D. Arterial injuries in transsphenoidal surgery for pituitary adenoma; the role of angiography and endovascular treatment. AJNR Am J Neuroradiol. 1997;18(4):655-665.",
       "type": "cohort",
       "verified": true,
-      "url": "https://www.ajnr.org/content/18/4/655"
+      "url": "https://www.ajnr.org/content/18/4/655",
+      "pmid": "9127026"
     },
     {
       "id": "src.renn-rhoton-1975",
@@ -1206,7 +1323,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "1151464",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/1151464/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1151464/",
+      "doi": "10.3171/jns.1975.43.3.0288"
     },
     {
       "id": "src.rhoton-2000-cerebellar-arteries",
@@ -1214,7 +1332,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "10983304",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10983304/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10983304/",
+      "doi": "10.1097/00006123-200009001-00010"
     },
     {
       "id": "src.rhoton-2000-foramen-magnum",
@@ -1222,7 +1341,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "10983308",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10983308/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10983308/",
+      "doi": "10.1097/00006123-200009001-00017"
     },
     {
       "id": "src.rhoton-2002-acf",
@@ -1278,7 +1398,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "21520113",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/21520113/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21520113/",
+      "doi": "10.1002/lary.21419"
     },
     {
       "id": "src.robinson-2005-anterior-maxilla",
@@ -1286,7 +1407,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "16222195",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/16222195/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16222195/",
+      "doi": "10.1097/01.mlg.0000176544.72657.a6"
     },
     {
       "id": "src.robinson-2005-cfp-complications",
@@ -1320,7 +1442,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "464532",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/464532/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/464532/",
+      "doi": "10.1177/000348947908800315"
     },
     {
       "id": "src.rosenfeld-2015-sinusitis",
@@ -1391,21 +1514,26 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "28235979",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/28235979/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28235979/",
+      "doi": "10.4193/Rhin16.318"
     },
     {
       "id": "src.simmons-1992-stalk",
       "cite": "Simmons GE, Suchnicki JE, Rak KM, Damiano TR. MR imaging of the pituitary stalk: size, shape, and enhancement pattern. AJR Am J Roentgenol. 1992;159(2):375-377.",
       "type": "cohort",
       "verified": true,
-      "doi": "10.2214/ajr.159.2.1632360"
+      "doi": "10.2214/ajr.159.2.1632360",
+      "pmid": "1632360",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1632360/"
     },
     {
       "id": "src.simpson-1957",
       "cite": "Simpson D. The recurrence of intracranial meningiomas after surgical treatment. J Neurol Neurosurg Psychiatry. 1957;20(1):22-39.",
       "type": "classification",
       "verified": true,
-      "pmid": "13406590"
+      "pmid": "13406590",
+      "doi": "10.1136/jnnp.20.1.22",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13406590/"
     },
     {
       "id": "src.snyderman-1999-spa",
@@ -1421,14 +1549,18 @@
       "cite": "Snyderman CH, Carrau RL, Kassam AB, et al. Endoscopic skull base surgery: principles of endonasal oncological surgery. J Surg Oncol. 2008;97(8):658-664.",
       "type": "review",
       "verified": true,
-      "pmid": "18493946"
+      "pmid": "18493946",
+      "doi": "10.1002/jso.21020",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18493946/"
     },
     {
       "id": "src.snyderman-2010-jna",
       "cite": "Snyderman CH, Pant H, Carrau RL, Gardner P. A new endoscopic staging system for angiofibromas. Arch Otolaryngol Head Neck Surg. 2010;136(6):588-594.",
       "type": "classification",
       "verified": true,
-      "pmid": "20566910"
+      "pmid": "20566910",
+      "doi": "10.1001/archoto.2010.83",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20566910/"
     },
     {
       "id": "src.som-curtin-2011",
@@ -1443,14 +1575,17 @@
       "type": "cohort",
       "verified": true,
       "pmid": "8152774",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/8152774/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8152774/",
+      "doi": "10.1016/s0161-6420(94)31267-x"
     },
     {
       "id": "src.stacchiotti-2015-chordoma",
       "cite": "Stacchiotti S, Sommer J; Chordoma Global Consensus Group. Building a global consensus approach to chordoma: a position paper from the medical and patient community. Lancet Oncol. 2015;16(2):e71-e83.",
       "type": "consensus",
       "verified": true,
-      "pmid": "25638683"
+      "pmid": "25638683",
+      "doi": "10.1016/S1470-2045(14)71190-8",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25638683/"
     },
     {
       "id": "src.stammberger-1991",
@@ -1464,7 +1599,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "2747392",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/2747392/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2747392/",
+      "doi": "10.1288/00005537-198907000-00004"
     },
     {
       "id": "src.tomazic-2009-sternberg",
@@ -1481,7 +1617,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "17585278",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/17585278/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17585278/",
+      "doi": "10.1097/MLG.0b013e31806865be"
     },
     {
       "id": "src.trimarchi-2001-cimdl",
@@ -1498,7 +1635,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "30192192",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30192192/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30192192/",
+      "doi": "10.3171/2018.3.JNS18596"
     },
     {
       "id": "src.tunkel-2020-epistaxis",
@@ -1506,7 +1644,8 @@
       "type": "consensus",
       "verified": true,
       "pmid": "31910111",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/31910111/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31910111/",
+      "doi": "10.1177/0194599819890327"
     },
     {
       "id": "src.underwood-1910",
@@ -1529,7 +1668,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "21344434",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/21344434/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21344434/",
+      "doi": "10.1002/lary.21361"
     },
     {
       "id": "src.wang-2010-sphenoid-extensions",
@@ -1537,7 +1677,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "20305499",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/20305499/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20305499/",
+      "doi": "10.1227/01.NEU.0000367619.24800.B1"
     },
     {
       "id": "src.wareing-1998-spf",
@@ -1545,14 +1686,17 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "9432081",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9432081/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9432081/",
+      "doi": "10.1097/00005537-199801000-00024"
     },
     {
       "id": "src.wenig-1995-reah",
       "cite": "Wenig BM, Heffner DK. Respiratory epithelial adenomatoid hamartomas of the sinonasal tract and nasopharynx: a clinicopathologic study of 31 cases. Ann Otol Rhinol Laryngol. 1995;104(8):639-645.",
       "type": "cohort",
       "verified": true,
-      "pmid": "7639474"
+      "pmid": "7639474",
+      "doi": "10.1177/000348949510400809",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7639474/"
     },
     {
       "id": "src.wexler-2006-swell-body",
@@ -1560,7 +1704,8 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "16564379",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/16564379/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16564379/",
+      "doi": "10.1016/j.otohns.2005.10.058"
     },
     {
       "id": "src.who-bone-2020",
@@ -1575,7 +1720,8 @@
       "type": "classification",
       "verified": true,
       "doi": "10.1093/neuonc/noab106",
-      "pmid": "34185076"
+      "pmid": "34185076",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34185076/"
     },
     {
       "id": "src.who-hn-2022",
@@ -1590,7 +1736,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "9764294",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/9764294/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9764294/",
+      "doi": "10.1017/s0022215100141052"
     },
     {
       "id": "src.wormald-2000-lacrimal-sac",
@@ -1598,7 +1745,8 @@
       "type": "CT-series",
       "verified": true,
       "pmid": "10964312",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/10964312/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10964312/",
+      "doi": "10.1067/mhn.2000.105416"
     },
     {
       "id": "src.wormald-2002-dcr",
@@ -1606,7 +1754,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "11802041",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/11802041/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11802041/",
+      "doi": "10.1097/00005537-200201000-00013"
     },
     {
       "id": "src.wormald-2003-emlp",
@@ -1614,7 +1763,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "12567082",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/12567082/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12567082/",
+      "doi": "10.1097/00005537-200302000-00015"
     },
     {
       "id": "src.wormald-2016-ifac",
@@ -1637,20 +1787,25 @@
       "type": "cohort",
       "verified": true,
       "pmid": "19807986",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/19807986/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19807986/",
+      "doi": "10.2500/ajra.2009.23.3378"
     },
     {
       "id": "src.zanation-2009-petrous",
       "cite": "Zanation AM, Snyderman CH, Carrau RL, Gardner PA, Prevedello DM, Kassam AB. Endoscopic endonasal surgery for petrous apex lesions. Laryngoscope. 2009;119(1):19-25.",
       "type": "cohort",
       "verified": true,
-      "doi": "10.1002/lary.20027"
+      "doi": "10.1002/lary.20027",
+      "pmid": "19117306",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19117306/"
     },
     {
       "id": "src.zhou-2013-prelacrimal",
       "cite": "Zhou B, Han DM, Cui SJ, Huang Q, Wang CS. Intranasal endoscopic prelacrimal recess approach to maxillary sinus. Chin Med J (Engl). 2013;126(7):1276-1280.",
       "type": "cohort",
-      "verified": true
+      "verified": true,
+      "pmid": "23557558",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23557558/"
     },
     {
       "id": "src.zwagerman-2019-lumbar-drain",
@@ -1658,7 +1813,8 @@
       "type": "cohort",
       "verified": true,
       "pmid": "30485224",
-      "url": "https://pubmed.ncbi.nlm.nih.gov/30485224/"
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30485224/",
+      "doi": "10.3171/2018.4.JNS172447"
     }
   ]
 }
