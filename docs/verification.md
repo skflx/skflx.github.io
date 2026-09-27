@@ -163,6 +163,21 @@ console.log('nodes',g.nodes.length,'edges',g.edges.length,
 If `kag-graph.json` changes, regenerate `kag-graph-flat.txt` from it — never
 edit the flat file directly.
 
+### SSB knowledge graph (`ssb/content/`)
+
+`node tools/ssb-content.mjs` (also run by `tools/check-data.mjs`). Checks:
+required fields per entity type and the controlled vocabularies
+(`docs/authoring-ssb.md` §5–§6); id format and global uniqueness; every
+reference resolves — structured refs *and* inline `[[id]]` in text — with
+the right target type; no HTML in text; and the review gate (an entity marked
+`verified` must cite sources that are all `verified: true`). Drafting one
+region file alone: `node tools/ssb-content.mjs --allow-dangling <file>`
+turns unresolved refs into warnings.
+
+What it cannot check: medical correctness and whether a source supports the
+claim that cites it. That stays with the owner, who alone flips `review` to
+`verified`.
+
 ## Adding a new page to the harness
 
 Append an entry to `PAGES` in `tools/smoke-pages.mjs` with a `ready(page)`

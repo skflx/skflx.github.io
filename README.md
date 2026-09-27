@@ -93,6 +93,9 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 │
+├── ssb/                    # SSB 3D atlas — design stage, no page yet (docs/ssb.md)
+│   └── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
+│
 ├── css/site.css            # The design system: tokens, faces, shared chrome
 ├── js/site.js              # Day/night toggle
 ├── js/theme-boot.js        # Pre-paint theme (every page, in <head>)
@@ -115,7 +118,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── test-wiki-sync.mjs  #   vault sync + feedback loop on a synthetic vault
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
-│   └── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
+│   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
+│   └── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
 │
 ├── CLAUDE.md               # Operating manual for coding agents
 ├── WIP.md                  # Current state of each system

@@ -5,7 +5,7 @@ This is a status document, not a changelog — when something is retired, its
 section goes away rather than growing a postscript. Git history is the record
 of how things got here.
 
-Last reviewed: 2026-09-23.
+Last reviewed: 2026-09-27.
 
 ---
 
@@ -99,6 +99,27 @@ from an inline script to `js/airway-app.js`.
 deleted.
 
 **Next:** Nothing planned. The code table is hand-maintained inline data.
+
+---
+
+## SSB — Sinus & Skull Base 3D (design)
+
+**State:** Design stage; architecture, schema and validator in place; draft
+knowledge graph authored by region (nasal/maxillary/PPF; ethmoid/frontal/
+orbit/ACF; sphenoid/sellar/clival), each adversarially reviewed by a second
+model and every source checked to exist as cited (checked via search listings —
+the agent sandbox blocked direct PubMed/DOI lookups; "verified" means
+exists-as-cited, not supports-the-claim); all content still draft. As of
+2026-09-27 the graph has about 790 entities and 128 sources. Known content
+gaps: petrolingual/parasellar ligaments, carotid cave, jugular foramen and CN
+IX–XI, Hardy/SIPAP classifications, pituitary transposition; orbital hematoma
+hazard in the nasal region, IMAX ligation, JNA staging, ION canal grading;
+Lynch approach, canthotomy/cantholysis as a procedure, frontal AP-depth
+measurement, olfactory neuroblastoma staging.
+
+**Next:** Owner review (tier 1 first) — flip `review` to verified; owner
+decisions in `docs/ssb.md` §13 (approve vendoring three.js, pick the reference
+dataset); then phase 1 walking skeleton.
 
 ---
 
