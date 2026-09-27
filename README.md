@@ -120,7 +120,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
-│   └── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
+│   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
+│   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
 │
 ├── CLAUDE.md               # Operating manual for coding agents
 ├── WIP.md                  # Current state of each system

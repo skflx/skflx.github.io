@@ -133,3 +133,45 @@ reliable vocabulary since the same handful of structures recur across runs
 of consecutive slices, but a handful of single-slice-only labels elsewhere
 in the stacks may not be captured. The eight static Normal/Abnormal pages'
 captions were read in full (not sampled), so their vocabulary is complete.
+
+## Per-slice extraction (every labeled frame)
+
+`slices.json` supersedes the sampled vocabulary above for positional work:
+every one of the 421 labeled atlas frames, each label's text and the pixel
+position of every arrow tip. `relations.json` turns those into spatial
+relations and tests the graph's spatial claims against them. Regenerate
+with `tools/ssb-pipeline/uw/` (see `tools/ssb-pipeline/README.md`); the
+images themselves are fetched into a gitignored folder and never committed.
+
+**Method.** The site publishes each slice twice, unlabeled and labeled.
+Annotations are pure white while this CT tops out near 220, so a threshold on
+the labeled frame (minus any bright bone in the unlabeled twin) isolates text
+and arrows exactly. Text is read by local OCR (RapidOCR); OCR variants that
+fuzzy matching missed were decoded by eye from label crops and are listed as
+aliases in `relate.py`. Each arrow is skeletonized; its tail is the end that
+starts at a label and its tip is the other end. Label and tip positions were
+spot-checked visually.
+
+**Relations.** Only comparisons within one slice are used, because pixel
+spacing and the offsets between planes are unknown: medial/lateral (distance
+from a midline taken from labeled midline structures) in axial and coronal,
+superior/inferior in coronal and sagittal, anterior/posterior in axial and
+sagittal (sagittal faces left). Medial/lateral is compared only between points
+at about the same height (coronal) or depth (axial), with a larger margin when
+the two points lie on opposite sides. A relation needs agreement on at least
+80% of votes from at least three slices.
+
+**Limits — read before trusting a verdict.** An arrow tip is one point
+chosen by the labeler inside an extended structure. Where the labeling
+convention picks a point that is not representative, even a strong consensus
+is wrong about the structure: UW marks the inferior meatus at its lateral part,
+beside the turbinate's attachment, so points say "meatus superior to
+turbinate" on 23 of 27 votes although the meatus lies beneath and lateral to
+the turbinate. A contradiction is therefore a prompt for review, never an
+automatic edit. The specimen is one adult (n = 1) and the atlas labels
+normal anatomy only.
+
+**Results, 2026-09-27.** 2,019 labels (22 unreadable), 97 distinct terms,
+794 consensus relations. Of the graph's spatial claims, 39 were testable: 37
+agree and 2 contradict — the meatus artifact above, from both directions.
+The rest name structures UW does not label on a shared slice.

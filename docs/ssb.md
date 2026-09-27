@@ -84,7 +84,11 @@ External labeled imaging the graph is checked against, recorded under
   of a normal sinus CT, with every slice published as an unlabeled/labeled
   pair, plus normal-variant and inflammatory-disease pages. Its label
   vocabulary is crosswalked to graph ids (`crosswalk.json`), which fed
-  synonyms and gap entities into the graph. The owner reports the authors'
+  synonyms and gap entities into the graph. Every labeled frame was also
+  extracted to label positions (`slices.json`), from which within-slice
+  spatial relations test the graph's `rel` claims (`relations.json`,
+  `tools/ssb-pipeline/uw/relate.py`) — a relational check available before
+  our own specimen exists, with the limits its README states. The owner reports the authors'
   permission (2026-09); until its scope is confirmed in writing, no UW image
   is copied into this repo. The unlabeled/labeled pairs are a ready-made
   CT recall deck (see the unlabeled slice, name the structures, reveal); using
