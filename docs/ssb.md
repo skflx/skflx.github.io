@@ -142,6 +142,10 @@ Three classes, chosen per structure by its `geo` field.
 One adult CT, thin-slice, with vascular contrast so the ICA segments
 segment cleanly, from an open dataset whose license allows redistributing
 derived meshes and volumes. Candidates and licenses: §13 (owner decision).
+No open dataset or model segments ethmoid cells, the uncinate or frontal
+recess cells (phase-0 research, 2026-09); automatic tools stop at whole
+maxillary/frontal sinus, nasal cavity, orbit, optic nerve and ICA. The
+surgical layer is manual segmentation whichever CT is chosen.
 Whatever is chosen, `ssb/LICENSE-data.md` records dataset, case id,
 license and attribution for every derived file. Faces are removed: the
 volume is cropped to the region and soft tissue outside a dilated bone
@@ -183,9 +187,14 @@ work, `@gltf-transform/cli` as a dev dependency for glTF packaging:
 
 **Models carry geometry only** — no materials, no embedded textures.
 Materials are assigned at runtime from CSS tokens by `kind` (theming works;
-no `blob:` image URLs, so `img-src 'self'` holds). Compression is plain
-gzip decoded by the browser's native `DecompressionStream` — no WebAssembly
-decoder, so no `'wasm-unsafe-eval'` (Draco/meshopt would need it; §8).
+GLTFLoader turns embedded textures into `blob:` URLs, which `img-src 'self'`
+blocks — so there are none). Compression is plain gzip decoded by the
+browser's native `DecompressionStream`; GitHub Pages compresses only text
+types and serves binaries as `application/octet-stream`, so the loader
+checks the gzip magic bytes rather than trusting headers. If the budgets
+below fail, the next step is Draco with its **JS** decoder (no WebAssembly,
+no `eval` — works under the current CSP); meshopt needs real WebAssembly and
+therefore `'wasm-unsafe-eval'`, a CSP loosening (§8, §13).
 
 Git carries the binaries (GitHub Pages cannot serve LFS). Re-export only at
 release points; the budget below bounds history growth.
@@ -350,10 +359,13 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 `default-src`). The design is shaped so this holds:
 
 - ES modules from same-origin files satisfy `script-src 'self'`; there is no
-  import map (it would be an inline script). Vendored addons that import the
-  bare specifier `'three'` are rewritten to a relative path at vendoring
-  time; `js/vendor/README.md` records the patch and `tools/check-data.mjs`
-  pins the patched bytes.
+  import map (it would be an inline script). three.js now ships only
+  unminified module builds — `three.module.js`, which imports
+  `./three.core.js`; both are vendored side by side (Pages gzips them in
+  transit). Every addon imports the bare specifier `'three'`; that one line
+  is rewritten to a relative path at vendoring time,
+  `js/vendor/README.md` records the patch, and `tools/check-data.mjs` pins
+  the patched bytes.
 - No WebAssembly (no Draco/meshopt), no `blob:` images (no embedded
   textures), no workers from blobs.
 - Vendoring three.js is a new third-party dependency — **owner approval
@@ -367,7 +379,7 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 | Geometry ↔ graph | every pack node, sweep and landmark resolves to a graph id; every `geo: specimen` structure has geometry or is listed pending | phase 3, CI |
 | **Spatial claims ↔ geometry** | each spatial `rel` (`medial-to` …) checked against landmark/centroid coordinates; a failure means the prose or the mesh is wrong | phase 3, CI |
 | Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | phase 3, report |
-| Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium launched with a software-GL flag | phase 1, CI |
+| Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | phase 1, CI |
 | Behavior | `tools/test-ssb.mjs`: deep link → state; pick at a golden view returns the expected id; tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 1–7, CI |
 | Citations | an agent matches every `src.*` against PubMed/DOI and sets `verified` only on a match | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
@@ -423,11 +435,28 @@ leaves the page useful. Model tier = who does the work best per token.
 ## 13. Owner decisions
 
 1. **Approve vendoring three.js** (same-origin, pinned; phase 1 blocker).
-2. **Reference dataset and its license** — candidates from the phase-0
-   research are listed below; share-alike licenses make the derived models
-   share-alike.
-3. **Keep the CSP strict** (recommended; gzip instead of wasm decoders).
-   Revisit only if the payload budgets fail.
+2. **Reference dataset and its license.** Research (2026-09, verify each
+   before committing):
+   - *SPL Head & Neck Atlas* (Open Anatomy Project) — "3D Slicer License",
+     permissive, existing skull and vessel labels, and its viewer (Open
+     Anatomy Browser: slices + 3D + structure tree) is the closest prior art
+     to this design. Check slice thickness and label depth first.
+   - *CT-SCOPE* (Data in Brief 2025) — osseous paranasal anatomy with
+     ethmoid-region annotation across scanners; **license variant
+     unconfirmed** (the journal allows CC BY or CC BY-NC-ND; ND would rule
+     it out).
+   - *NasalSeg* (Scientific Data 2024) — CC BY 4.0, 130 CTs, coarse labels
+     (nasal cavity, nasopharynx, maxillary sinus); slice thickness
+     unconfirmed.
+   - Ruled out: TCIA head collections (limited-access license since 2022,
+     because head CT reconstructs faces), HaN-Seg (CC BY-NC-ND, 2–3 mm
+     slices), CQ500 (NC, no relevant labels). BodyParts3D / Z-Anatomy
+     (CC BY-SA) are usable for coarse context only and would make derived
+     models share-alike.
+   - TotalSegmentator's head tasks (Apache-2.0) can pre-label the coarse
+     structures on whichever CT is chosen.
+3. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
+   needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
 4. **Who segments** — owner, or a paid annotator under owner review.
 5. **Publish while `draft`?** Recommended: publish with visible unverified
    markers (the wiki's precedent), prioritizing owner review of tier 1.
