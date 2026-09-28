@@ -142,6 +142,12 @@ Both are optional strings (relative paths from the repo root). When absent,
 nothing renders — the engine handles this gracefully. Always provide an
 `imageAlt` / `explanationImageAlt` alongside.
 
+A labeled figure (a classification panel, a staging table) belongs in
+`explanationImage`, not `image` — in the stem it shows the answer before the
+recall gate. Third-party figures keep their license terms: `otoplasty` reuses
+StatPearls figures (CC BY-NC-ND 4.0), so they are copied unmodified (no crops
+or annotations) and credited in the file header and `meta.sources`.
+
 See `js/mcq-modules/lip-reconstruction.js` for the reference implementation.
 
 ---
