@@ -253,6 +253,198 @@
       "url": "https://pubmed.ncbi.nlm.nih.gov/15921220/"
     },
     {
+      "id": "src.chiu-2019-ch01",
+      "cite": "Lupa M, Antunes M, Becker SS, Becker DG. Septoplasty. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 1.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch02",
+      "cite": "Orlandi R, Vaezeafshar R, Hwang PH. Middle and Inferior Turbinates. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 2.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch03",
+      "cite": "Man L, Fakhri S, Luong AU, Citardi MJ. Sphenopalatine/Internal Maxillary Artery Ligation. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 3.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch04",
+      "cite": "Naidoo Y, Wormald P. Endoscopic and Open Anterior/Posterior Ethmoid Artery Ligation. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 4.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch05",
+      "cite": "Stamm AC, Pignatari SSN, Balsalobre L. Endoscopic Repair of Choanal Atresia. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 5.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch06",
+      "cite": "Chiu AG, Palmer JN. Maxillary Antrostomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 6.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch08",
+      "cite": "Chiu AG, Reed J. Sphenoidotomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 8.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch09",
+      "cite": "Chiu AG, Palmer JN. Frontal Sinusotomy—Draf I and IIa. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 9.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch10",
+      "cite": "Barham HP, Ramakrishnan VR. Frontal Sinusotomy—Draf IIb. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 10.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch11",
+      "cite": "Sansoni ER, Sacks R, Harvey RJ. Frontal Sinusotomy—Draf III. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 11.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch12",
+      "cite": "Parasher A, Adelson RT, Wei C, Cohen N, Adappa ND. Postoperative Débridement. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 12.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch13",
+      "cite": "Pearlman AN, Conley DB. Balloon Dilatation of the Maxillary, Frontal, and Sphenoid Sinuses. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 13.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch14",
+      "cite": "Leung R, Chandra R. Revision Functional Endoscopic Sinus Surgery: Completion Sphenoethmoidectomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 14.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch15",
+      "cite": "Woodworth BA, Grayson J. Modified Medial Maxillectomy for Recalcitrant Maxillary Sinusitis. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 15.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch16",
+      "cite": "Lee JM, Yip J. Extended Sphenoid Sinus Antrostomy and Radical Sphenoidectomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 16.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch17",
+      "cite": "Sacks R, Naidoo Y. Endoscopic Dacryocystorhinostomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 17.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch18",
+      "cite": "Lobo BC, Sindwani R. Endoscopic Orbital Decompression. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 18.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch19",
+      "cite": "Barham HP, Ramakrishnan VR, Kingdom TT. Optic Nerve Decompression. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 19.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch20",
+      "cite": "Miyake MM, Bleier BS. Endoscopic Approach and Removal of Orbital Tumors. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 20.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch21",
+      "cite": "Ference EH, Welch KC. Endoscopic Medial Maxillectomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 21.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch22",
+      "cite": "Lee JT, Chiu AG. Endoscopic Denker Approach for Anterior Maxilla Tumors. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 22.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch23",
+      "cite": "Sacks R, Sivasubramaniam R. Endoscopic Vidian Neurectomy. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 23.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch24",
+      "cite": "Kuan EC, Chandra R, O'Malley BW Jr, Adappa ND. Pterygopalatine/Pterygomaxillary Space Approaches, Maxillary Artery Ligation, and Approach to Juvenile Nasopharyngeal Angiofibroma. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 24.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch25",
+      "cite": "Ference EH, Ramakrishnan VR, Suh JD. Endoscopic Craniofacial Resection. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 25.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch26",
+      "cite": "Mantravadi AV, Welch KC. Repair of Cerebrospinal Fluid Leak and Encephalocele of the Cribriform Plate. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 26.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch27",
+      "cite": "Bleier BS, Schlosser R. Sphenoid Sinus Cerebrospinal Fluid Leak and Encephalocele Repair. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 27.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch28",
+      "cite": "Joe SA. Endoscopic Resection of Pituitary Tumors. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 28.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch29",
+      "cite": "Wang EW, Vandergrift WA III, Parasher A, Mattos J, Schlosser R. Endoscopic Transplanum and Sellar Approach. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 29.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch30",
+      "cite": "Nayak JV, Thamboo A, Choby G, Harsh GR, Hwang PH. Endoscopic Management of Clival Chordomas and Chondrosarcomas. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 30.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch31",
+      "cite": "Sansoni ER, Harvey RJ. Large Skull Base Defect Reconstruction With and Without Pedicled Flaps. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 31.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch32",
+      "cite": "Iloreta AMC, Adappa ND, Govindaraj S. Frontal Sinus Trephination. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 32.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
+      "id": "src.chiu-2019-ch33",
+      "cite": "Ference EH, Welch KC. Osteoplastic Flaps With and Without Obliteration. In: Chiu AG, Palmer JN, Adappa ND, editors. Atlas of Endoscopic Sinus and Skull Base Surgery. 2nd ed. Philadelphia: Elsevier; 2019. Chapter 33.",
+      "type": "textbook",
+      "verified": true
+    },
+    {
       "id": "src.choby-2018-ifac",
       "cite": "Choby G, Thamboo A, Won TB, Kim J, Shih LC, Hwang PH. Computed tomography analysis of frontal cell prevalence according to the International Frontal Sinus Anatomy Classification. Int Forum Allergy Rhinol. 2018;8(7):825-830.",
       "type": "CT-series",
