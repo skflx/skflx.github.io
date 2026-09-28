@@ -2002,7 +2002,7 @@
     {
       "id": "src.zwagerman-2019-lumbar-drain",
       "cite": "Zwagerman NT, Wang EW, Shin SS, et al. Does lumbar drainage reduce postoperative cerebrospinal fluid leak after endoscopic endonasal skull base surgery? A prospective, randomized controlled trial. J Neurosurg. 2019;131(4):1172-1178.",
-      "type": "cohort",
+      "type": "trial",
       "verified": true,
       "pmid": "30485224",
       "url": "https://pubmed.ncbi.nlm.nih.gov/30485224/",

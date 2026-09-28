@@ -141,7 +141,8 @@
       "src": [
         "src.kim-2001-sphenoid-ostium",
         "src.wormald-textbook",
-        "src.lund-2014-terminology"
+        "src.lund-2014-terminology",
+        "src.chiu-2019-ch16"
       ],
       "partOf": "s.sphenoid-face",
       "rel": [
@@ -183,6 +184,10 @@
         {
           "tier": 2,
           "text": "A small posterior ethmoid cell opening in the superior meatus can mimic it; the true ostium is medial to the superior turbinate, a meatal opening is lateral to it."
+        },
+        {
+          "tier": 2,
+          "text": "It often lies at about the height of the maxillary sinus roof: after an antrostomy, the orbital floor seen through it gives a working height for sphenoid entry, and staying at or below that plane keeps you under the skull base."
         }
       ],
       "review": "draft"
@@ -847,7 +852,9 @@
       "src": [
         "src.rhoton-2002-orbit",
         "src.delano-1996",
-        "src.fujii-1979"
+        "src.fujii-1979",
+        "src.chiu-2019-ch19",
+        "src.uw-ct-sinus-atlas"
       ],
       "partOf": "s.sphenoid-bone",
       "rel": [
@@ -878,6 +885,11 @@
         {
           "r": "superior-to",
           "to": "s.carotid-prominence"
+        },
+        {
+          "r": "superior-to",
+          "to": "s.vidian-canal",
+          "note": "coronal CT through the sphenoid: optic canal at the top of the lateral wall, foramen rotundum (V2) below it, vidian canal at the floor"
         }
       ],
       "ct": "Axial: runs anterolaterally from the chiasmatic sulcus to the orbital apex, lateral to the sphenoid or an Onodi cell. Coronal: round canal superomedial to the anterior clinoid, above the lOCR.",
@@ -891,6 +903,10 @@
         {
           "tier": 3,
           "text": "Inside the canal the nerve sheath is fused to the periosteum, so the nerve cannot move away from swelling or bone fragments; that is why intracanalicular injury is poorly tolerated and why decompression extends forward to the annulus of Zinn."
+        },
+        {
+          "tier": 3,
+          "text": "Through the canal the dura is in two layers: an outer layer that continues into the orbit as the periorbita, and an inner layer that becomes the nerve's own sheath, tethered to the arachnoid. They part at the orbital opening, where the annulus of Zinn surrounds the nerve."
         }
       ],
       "review": "draft"
@@ -2564,7 +2580,8 @@
       "geo": "sweep",
       "src": [
         "src.rhoton-2002-supratentorial-arteries",
-        "src.rhoton-2002-orbit"
+        "src.rhoton-2002-orbit",
+        "src.chiu-2019-ch19"
       ],
       "rel": [
         {
@@ -2594,6 +2611,10 @@
         {
           "tier": 3,
           "text": "Origin is occasionally extradural from the clinoid segment ([[v.ophthalmic-artery-extradural-origin]]), placing it within the lOCR drilling field."
+        },
+        {
+          "tier": 3,
+          "text": "In the canal it lies inferolateral to the nerve in most patients and inferomedial in a minority (about 85% and 15% in one textbook account); the inferomedial artery sits where an endonasal decompression works, one more reason to incise the sheath superomedially."
         }
       ],
       "review": "draft"
@@ -2968,7 +2989,8 @@
       "geo": "specimen",
       "src": [
         "src.kassam-2005-sagittal-2",
-        "src.rhoton-2000-foramen-magnum"
+        "src.rhoton-2000-foramen-magnum",
+        "src.chiu-2019-ch30"
       ],
       "rel": [
         {
@@ -3010,6 +3032,10 @@
         {
           "tier": 3,
           "text": "The basilar plexus lies between the clival bone and dura; CN VI pierces the dura at the midclivus a short distance lateral to midline, so clival dura is opened in the midline and extended with care."
+        },
+        {
+          "tier": 3,
+          "text": "Clival marrow changes with age: hematopoietic marrow gives low-to-intermediate T1 signal in children and young adults, and the signal brightens as fat replaces it. A dark clivus can be normal in a young patient, so judge a \"lesion\" against the age-expected signal."
         }
       ],
       "review": "draft"
@@ -3346,7 +3372,8 @@
       "geo": "specimen",
       "src": [
         "src.zanation-2009-petrous",
-        "src.labib-2014-ica"
+        "src.labib-2014-ica",
+        "src.uw-ct-sinus-atlas"
       ],
       "rel": [
         {
@@ -3366,6 +3393,11 @@
         {
           "r": "borders",
           "to": "s.dorellos-canal"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.sphenoid-sinus",
+          "note": "posterolateral, behind the paraclival ICA; reached through the sinus in the [[p.medial-petrous-apex-approach]]"
         }
       ],
       "ct": "Axial bone window: the triangle medial to the cochlea and IAC; compare sides for asymmetric pneumatization or marrow before calling a lesion. MRI (T1 bright, T2 bright, no enhancement) identifies cholesterol granuloma.",
@@ -3440,7 +3472,8 @@
       "geo": "specimen",
       "src": [
         "src.labib-2014-ica",
-        "src.rhoton-2002-cavernous"
+        "src.rhoton-2002-cavernous",
+        "src.uw-ct-sinus-atlas"
       ],
       "rel": [
         {
@@ -3454,6 +3487,11 @@
         {
           "r": "borders",
           "to": "s.inferior-petrosal-sinus"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.sphenoid-sinus",
+          "note": "posterolateral, beyond the paraclival ICA — where chondrosarcoma arises"
         }
       ],
       "reliability": "constant",
@@ -4294,10 +4332,11 @@
         "pneumatized pterygoid plates"
       ],
       "def": "Sphenoid air extending lateral to the line between the vidian canal and foramen rotundum, into the greater wing and/or pterygoid base.",
-      "why": "Puts V2 and the vidian nerve in relief in the sinus wall and thins the middle fossa floor (spontaneous CSF leak site). Reaching it needs a contralateral angled view or a transpterygoid approach.",
+      "why": "Puts V2 and the vidian nerve in relief in the sinus wall and thins the middle fossa floor (spontaneous CSF leak site). Reaching it needs a contralateral angled view or a transpterygoid approach. One textbook account puts lateral pneumatization into the pterygoid base at about 35% of people, bilateral in about 17% (method not stated).",
       "geo": "diorama",
       "src": [
-        "src.wang-2010-sphenoid-extensions"
+        "src.wang-2010-sphenoid-extensions",
+        "src.chiu-2019-ch27"
       ],
       "review": "draft"
     },
@@ -4685,11 +4724,13 @@
           "why": "Wide window; thin bone over the paraclival ICAs."
         }
       ],
-      "caveats": "The original three types predate CT; \"postsellar\" subdivides the old sellar type. Lateral extensions (lateral recess, anterior clinoid, pterygoid) are scored separately. Young children are normally conchal or presellar.",
+      "caveats": "The original three types predate CT; \"postsellar\" subdivides the old sellar type. Lateral extensions (lateral recess, anterior clinoid, pterygoid) are scored separately. Young children are normally conchal or presellar. Sources differ in terms: textbook chapters using a three-type scheme call the dominant type \"sellar\" or \"postsellar\" interchangeably (air under the whole sella) and quote roughly 5–10% conchal, 25–30% presellar and about 65% sellar/postsellar — a conchal figure higher than the older anatomical series ([[v.conchal-sphenoid]]). Check which scheme a figure uses before comparing it.",
       "src": [
         "src.hammer-radberg-1961",
         "src.wang-2010-sphenoid-extensions",
-        "src.renn-rhoton-1975"
+        "src.renn-rhoton-1975",
+        "src.chiu-2019-ch27",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -5131,6 +5172,25 @@
       "review": "draft"
     },
     {
+      "id": "m.sphenoid-drill-out-patency",
+      "name": "Patency after sphenoid drill-out",
+      "tier": 3,
+      "what": "Proportion of sphenoid drill-out openings found patent at follow-up in chronic sphenoid sinusitis.",
+      "unit": "% patients",
+      "value": {
+        "mean": 100
+      },
+      "method": "endoscopic",
+      "conf": "low",
+      "n": 9,
+      "population": "chronic sphenoid sinusitis after failed sphenoidotomy; mean follow-up 17.1 months",
+      "note": "One small series, as summarized in a textbook chapter. A separate 9-patient series of mini nasoseptal flaps over bare inferior sphenoid bone (mostly fungal sinusitis) also reported 100% patency at a mean 8.4 months. For comparison, a standard sphenoidotomy for isolated sphenoid disease is reported patent in over 90% at up to 4 years; diffuse chronic sphenoiditis is where it fails.",
+      "src": [
+        "src.chiu-2019-ch16"
+      ],
+      "review": "draft"
+    },
+    {
       "id": "m.sella-ap-diameter",
       "name": "Sella turcica anteroposterior diameter",
       "tier": 2,
@@ -5273,10 +5333,11 @@
       "conf": "low",
       "from": "lm.ica-paraclinoid-medial",
       "to": "lm.ica-paraclinoid-medial",
-      "note": "Measured between the R and L instances of the landmark. The narrowest point is most often at the supraclinoid/paraclinoid level, less often in the cavernous sinus or the sphenoid; ectatic ICAs in acromegaly narrow it further. This width is the lateral limit of the transtuberculum opening.",
+      "note": "Measured between the R and L instances of the landmark. The narrowest point is most often at the supraclinoid/paraclinoid level, less often in the cavernous sinus or the sphenoid; ectatic ICAs in acromegaly narrow it further. This width is the lateral limit of the transtuberculum opening. A narrow sella tends to go with medially placed carotids, so a small sella is a cue to measure this distance before opening.",
       "src": [
         "src.renn-rhoton-1975",
-        "src.rhoton-2002-sellar"
+        "src.rhoton-2002-sellar",
+        "src.chiu-2019-ch28"
       ],
       "review": "draft"
     },
@@ -5346,9 +5407,11 @@
       "method": "endoscopic",
       "conf": "med",
       "population": "randomized trial; high risk = large dural defects in the anterior or posterior cranial fossa or third-ventricle entry",
-      "note": "About 21% leaked without a drain in the control arm. The benefit applies to high-risk defects, not routine pituitary surgery.",
+      "note": "About 21% leaked without a drain in the control arm. The benefit applies to high-risk defects, not routine pituitary surgery. Textbook chapters argue against routine drainage (it adds morbidity) and reserve it for raised intracranial pressure, a persistent high-flow intraoperative leak or a small early postoperative leak; this is consistent with the trial, which tested high-risk defects only. Reported drain use after sphenoid leak repair ranges from 0% to 73% of patients across series.",
       "src": [
-        "src.zwagerman-2019-lumbar-drain"
+        "src.zwagerman-2019-lumbar-drain",
+        "src.chiu-2019-ch27",
+        "src.chiu-2019-ch31"
       ],
       "review": "draft"
     }
@@ -5586,14 +5649,15 @@
         "p.transplanum-transtuberculum"
       ],
       "site": "Anterior (superior) intercavernous sinus in the upper sellar dura below the tuberculum.",
-      "mechanism": "Dural incision through the sinus, or a large sinus covering the whole anterior wall.",
+      "mechanism": "Dural incision through the sinus, or a large sinus covering the whole anterior wall — more likely with a small secreting microadenoma in a normal-sized gland, since a macroadenoma tends to compress the venous channels.",
       "consequence": "Brisk venous bleeding that obscures the dural opening.",
       "prevent": "Open the sellar dura below the sinus; for transtuberculum exposure, coagulate the sinus with bipolar across its width before dividing it.",
       "recognize": "Venous welling from the upper dural edge as it is incised.",
       "rescue": "Bipolar coagulation of the cut dural edges, hemostatic matrix and gentle pressure.",
       "src": [
         "src.rhoton-2002-sellar",
-        "src.kassam-2005-sagittal-1"
+        "src.kassam-2005-sagittal-1",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -5648,16 +5712,17 @@
         "p.transclival-approach",
         "p.transsellar-approach"
       ],
-      "site": "Reconstructed sellar, planum and clival defects.",
-      "mechanism": "Graft or flap failure: flap too small, laid on mucosa, displaced when packing is removed, or lifted by raised CSF pressure; posterior fossa and large anterior fossa defects; obesity.",
+      "site": "Reconstructed sellar, planum and clival defects; failures cluster at the most dependent edge of the repair (highest CSF pressure) and at its uppermost edge (flap migration or contraction).",
+      "mechanism": "Graft or flap failure: flap too small, laid on mucosa, displaced when packing is removed, or lifted by raised CSF pressure. Risk rises with posterior fossa and large anterior fossa defects, ventricular entry, postoperative radiotherapy and obesity (raised intracranial pressure).",
       "consequence": "CSF rhinorrhea, meningitis, tension pneumocephalus.",
-      "prevent": "Multilayer repair matched to the defect; vascularized flap on bare bone for high-flow leaks; bolster; lumbar drain for high-risk defects ([[m.csf-leak-lumbar-drain]]); avoid straining, nose blowing and early positive-pressure mask ventilation.",
-      "recognize": "Clear, salty, positional rhinorrhea; beta-2 transferrin-positive fluid; CT for pneumocephalus; endoscopy for flap position.",
+      "prevent": "Multilayer repair matched to the defect; vascularized flap on bare bone for high-flow leaks; bolster; lumbar drain for high-risk defects, not routinely ([[m.csf-leak-lumbar-drain]]); avoid straining, nose blowing and early positive-pressure mask ventilation.",
+      "recognize": "Clear, salty, positional rhinorrhea; beta-2 transferrin-positive fluid; CT for pneumocephalus; endoscopy for flap position. On postoperative MRI a non-enhancing flap suggests ischemia and may justify re-exploration, but an enhancing flap does not rule out a later leak.",
       "rescue": "Early return to theatre to reposition or augment the repair (preferred for high-flow leaks); lumbar drainage as an adjunct for small leaks; treat meningitis.",
       "src": [
         "src.harvey-2012-reconstruction",
         "src.zwagerman-2019-lumbar-drain",
-        "src.kassam-2011-800"
+        "src.kassam-2011-800",
+        "src.chiu-2019-ch31"
       ],
       "review": "draft"
     },
@@ -5722,11 +5787,12 @@
       "mechanism": "Resection or devascularization of normal gland; traction during pituitary transposition.",
       "consequence": "Adrenal insufficiency (potentially fatal), hypothyroidism, hypogonadism, GH deficiency.",
       "prevent": "Locate the normal gland on MRI; extracapsular (pseudocapsule) dissection preserving it; gentle transposition.",
-      "recognize": "Postoperative cortisol protocol; hypotension, hyponatremia or fatigue suggest adrenal insufficiency.",
+      "recognize": "Postoperative cortisol protocol (a day-1 cortisol when no perioperative steroids were given); hypotension, hyponatremia or fatigue suggest adrenal insufficiency.",
       "rescue": "Stress-dose steroids per protocol and hormone replacement with endocrinology.",
       "src": [
         "src.ciric-1997",
-        "src.kassam-2011-800"
+        "src.kassam-2011-800",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -5951,7 +6017,7 @@
       "consequence": "No vascularized septal flap available when a high-flow leak occurs.",
       "prevent": "Decide on reconstruction first: raise the flap, or make rescue-flap incisions that protect the pedicle, before widening the sphenoid inferiorly; keep at least one pedicle intact.",
       "recognize": "Brisk arterial bleeding from the inferior sphenoid face; a pale, non-bleeding flap edge at inset.",
-      "rescue": "Use the contralateral nasoseptal flap, a lateral nasal wall (inferior turbinate) flap, or an extracranial pericranial flap.",
+      "rescue": "Use the contralateral nasoseptal flap, a lateral nasal wall (inferior turbinate) flap, or a regional flap: pericranial ([[p.pericranial-flap]]) or temporoparietal fascia ([[p.temporoparietal-fascia-flap]]).",
       "src": [
         "src.hadad-2006-nsf",
         "src.kassam-2008-nsf"
@@ -6005,16 +6071,19 @@
       "at": "s.sphenoid-ostium",
       "during": [
         "p.sphenoidotomy",
-        "p.transethmoidal-sphenoidotomy"
+        "p.transethmoidal-sphenoidotomy",
+        "p.sphenoid-drill-out"
       ],
       "site": "Margins of the sphenoidotomy.",
-      "mechanism": "Small opening; circumferential mucosal stripping with exposed bone; a separate transethmoidal opening not joined to the natural ostium (two-hole recirculation).",
+      "mechanism": "Small opening; circumferential mucosal stripping with exposed bone; underlying osteitis; a separate transethmoidal opening not joined to the natural ostium (two-hole recirculation).",
       "consequence": "Recurrent sphenoiditis or mucocele.",
       "prevent": "Enlarge the natural ostium inferomedially; preserve mucosa at the margins; join transnasal and transethmoidal openings into one.",
       "recognize": "Recurrent posterior discharge or headache; stenosis at endoscopy; opacified sinus on CT.",
-      "rescue": "Revision wide sphenoidotomy, with a mucosal flap to line the opening if needed.",
+      "rescue": "Revision wide sphenoidotomy or a sphenoid drill-out ([[p.sphenoid-drill-out]]), covering bare bone with a mucosal flap if needed; radical sphenoidectomy ([[p.radical-sphenoidectomy]]) as the last step.",
       "src": [
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch08",
+        "src.chiu-2019-ch16"
       ],
       "review": "draft"
     }
@@ -6150,13 +6219,27 @@
       "id": "pr.reconstruction-matches-leak",
       "name": "Match the repair to the leak",
       "tier": 3,
-      "rule": "Grade every leak and match the repair: no or small leak — free graft or fat; high-flow leak (cistern or ventricle opened) — multilayer repair with a vascularized flap on bare bone, and a lumbar drain for high-risk defects.",
-      "why": "Vascularized repair halves the leak rate for large defects, and lumbar drainage further reduces it in high-risk defects ([[m.csf-leak-vascularized]], [[m.csf-leak-lumbar-drain]]).",
-      "caveat": "Raised intracranial pressure (obesity, idiopathic intracranial hypertension) defeats good repairs; treat it too.",
+      "rule": "Grade every leak and match the repair: no leak or a small low-flow leak (defect under about 1 cm, little arachnoid opened, no planned radiotherapy) — free graft or fat; high-flow leak (cistern or ventricle opened) or a large defect — multilayer repair with a vascularized flap on bare bone. A lumbar drain is for high-risk defects, not a routine.",
+      "why": "Vascularized repair halves the leak rate for large defects, and in a randomized trial perioperative lumbar drainage cut it further in high-risk defects ([[m.csf-leak-vascularized]], [[m.csf-leak-lumbar-drain]]). Outside that group routine drainage has no proven benefit and adds its own morbidity, so drains are otherwise kept for raised intracranial pressure or a small early postoperative leak.",
+      "caveat": "Raised intracranial pressure (obesity, idiopathic intracranial hypertension) defeats good repairs; treat it too. Free grafts are an adjunct to a flap in large defects, not a substitute for one.",
       "src": [
         "src.esposito-2007-leak-grade",
         "src.harvey-2012-reconstruction",
-        "src.zwagerman-2019-lumbar-drain"
+        "src.zwagerman-2019-lumbar-drain",
+        "src.chiu-2019-ch27",
+        "src.chiu-2019-ch31"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "pr.one-flap-two-regions",
+      "name": "One flap, two neighboring zones",
+      "tier": 3,
+      "rule": "A single nasoseptal flap can resurface two adjacent skull base zones — frontal, cribriform, planum–sellar, clival — but not three; a defect spanning three needs a second flap or a regional flap.",
+      "why": "The flap's area is fixed by the septum; stretched over a third zone it is too short to lie flat on bone at every edge. Knowing this before resection decides which pedicles must be protected ([[pr.plan-reconstruction-first]]).",
+      "caveat": "An expert rule of thumb, not measured coverage: septal size, prior septal surgery and an extended design (onto the nasal floor) change the reach.",
+      "src": [
+        "src.chiu-2019-ch31"
       ],
       "review": "draft"
     },
@@ -6230,9 +6313,22 @@
         {
           "check": "Ostium position relative to the superior turbinate and choana",
           "why": "Plans the transnasal entry ([[m.choana-to-sphenoid-ostium]])."
+        },
+        {
+          "check": "Height of the sphenopalatine foramen on axial and sagittal CT (with navigation)",
+          "why": "The posterior septal artery leaves the foramen and crosses the sphenoid face at roughly that height, so it predicts how far down the sphenoidotomy can go before the artery, and any future nasoseptal flap pedicle, is at risk ([[s.posterior-septal-artery]])."
         }
       ],
       "steps": [
+        {
+          "do": "Optional vasoconstriction of the sphenopalatine territory: a transoral greater palatine canal injection ([[lm.greater-palatine-foramen]], opposite the second molar; needle bent at 45° about 1.5–2 cm from its tip; 1–2 mL of 1% lidocaine with 1:100,000 epinephrine), or a transnasal injection into the lateral wall about 1 cm above the posterior attachment of the middle turbinate.",
+          "see": [
+            "s.greater-palatine-canal",
+            "s.sphenopalatine-foramen",
+            "s.middle-turbinate"
+          ],
+          "think": "The bend in the needle is the depth stop — the canal ends in the pterygopalatine fossa just below the orbit. Aspirate before injecting."
+        },
         {
           "do": "Decongest; gently lateralize the middle turbinate and advance the 0° scope medial to it along the septum to the sphenoethmoidal recess.",
           "see": [
@@ -6245,7 +6341,7 @@
           "think": "The choana is my floor marker; the ostium should be 1–1.5 cm above it, medial to the superior turbinate."
         },
         {
-          "do": "Identify the natural ostium medial to the superior turbinate; if it is not visible, resect the inferior third of the superior turbinate with through-cutting instruments.",
+          "do": "Identify the natural ostium medial to the superior turbinate; if it is not visible, resect the inferior third of the superior turbinate with through-cutting instruments (some surgeons take up to its lower half, never more).",
           "see": [
             "s.sphenoid-ostium",
             "s.superior-turbinate"
@@ -6261,14 +6357,15 @@
           "think": "The probe goes posteriorly and slightly upward, parallel to the skull base, never laterally."
         },
         {
-          "do": "Enlarge the ostium inferiorly and medially with a Kerrison or mushroom punch; stop above the posterior septal artery unless no flap will be needed.",
+          "do": "Enlarge the ostium inferiorly and medially with a Kerrison or mushroom punch; stop above the posterior septal artery unless no flap will be needed. If more inferior room is needed but the flap must be kept, first elevate the face mucosa in the subperiosteal plane (a relaxing cut along the vomer helps) and displace it, with the posterior septal artery, downward before removing bone.",
           "see": [
             "s.sphenoid-face",
             "s.posterior-septal-artery"
           ],
           "risk": [
             "h.nsf-pedicle-injury",
-            "h.ica-injury-sphenoidotomy"
+            "h.ica-injury-sphenoidotomy",
+            "h.posterior-septal-artery-bleed"
           ],
           "think": "Will this patient need a nasoseptal flap? If possibly, the inferior face stays or rescue incisions go in now."
         },
@@ -6308,12 +6405,18 @@
         "Entering a posterior ethmoid or Onodi cell and calling it the sphenoid",
         "Two separate openings (natural and transethmoidal) causing mucus recirculation",
         "Enlarging superolaterally toward the optic nerve and ICA",
-        "Twisting septa off the carotid prominence"
+        "Twisting septa off the carotid prominence",
+        "Punching thick, osteitic sphenoid face bone (fungal ball, long-standing sphenoiditis) instead of drilling it",
+        "Stripping mucosa from the skull base or medial orbital wall: prolonged edema and new bone formation (neo-osteogenesis) follow",
+        "Running a microdebrider inside the sinus rather than at its opening"
       ],
       "src": [
         "src.wormald-textbook",
         "src.stammberger-1991",
-        "src.kim-2001-sphenoid-ostium"
+        "src.kim-2001-sphenoid-ostium",
+        "src.chiu-2019-ch08",
+        "src.chiu-2019-ch16",
+        "src.chiu-2019-ch27"
       ],
       "review": "draft"
     },
@@ -6347,7 +6450,7 @@
           "think": "The last ethmoid cell is superolateral to the sphenoid; the sphenoid is inferomedial to it."
         },
         {
-          "do": "Locate the sphenoid face at the posteroinferior medial corner of the posterior ethmoid, beside the superior turbinate attachment; confirm with navigation or by identifying the natural ostium medial to the superior turbinate.",
+          "do": "Locate the sphenoid face at the posteroinferior medial corner of the posterior ethmoid, beside the superior turbinate attachment; confirm with navigation or by identifying the natural ostium medial to the superior turbinate. To spare the superior turbinate, use the \"Bolger box\" — bounded medially by the superior turbinate, inferiorly by its basal lamella, superiorly by the skull base and laterally by the orbital wall — and enter the sphenoid only through the inferomedial half of the box.",
           "see": [
             "s.sphenoid-face",
             "s.sphenoid-ostium",
@@ -6392,7 +6495,210 @@
       "src": [
         "src.wormald-textbook",
         "src.delano-1996",
-        "src.bolger-1991"
+        "src.bolger-1991",
+        "src.chiu-2019-ch08"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.sphenoid-drill-out",
+      "name": "Extended sphenoidotomy (sphenoid drill-out)",
+      "tier": 2,
+      "indications": [
+        "Chronic sphenoid sinusitis that recurs after a standard sphenoidotomy (stenosis, osteitis, persistent disease)",
+        "The middle step of the escalation for chronic sphenoiditis: standard sphenoidotomy, then drill-out, then radical sphenoidectomy ([[p.radical-sphenoidectomy]])",
+        "Targets the usual causes of sphenoidotomy failure: circumferentially denuded bone, too small an opening, and osteitic bone"
+      ],
+      "corridor": "Binostril: both sphenoid faces, the posterior bony septum and the intersinus septum removed to make one common sphenoid opening.",
+      "preop": [
+        {
+          "check": "Revision anatomy: skull base height and slope, remnant superior turbinate, septal insertions on the carotid prominences, ICA and optic canal dehiscence",
+          "why": "Previous surgery removes the usual landmarks; the CT and navigation replace them ([[v.intersinus-septum-on-ica]], [[v.ica-dehiscence]])."
+        },
+        {
+          "check": "Osteitis (thick, sclerotic sinus walls) and fungal disease",
+          "why": "Osteitic bone has to be drilled rather than punched, and bare bone needs mucosal cover to stay open."
+        },
+        {
+          "check": "Septal mucosa and posterior septal artery on each side",
+          "why": "A small pedicled septal flap may be needed to cover bare bone at the lower rim."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Decongest with pledgets medial to the superior turbinates and in the sphenoethmoidal recesses; find each natural ostium or, after previous surgery or when inflammation hides it, the sphenoid floor and roof with navigation.",
+          "see": [
+            "s.sphenoethmoidal-recess",
+            "s.superior-turbinate",
+            "s.sphenoid-ostium"
+          ],
+          "station": "t.ser-0",
+          "think": "If the superior turbinate is gone I have lost my height marker, and the skull base slopes down toward the back of the sinus — enter low and medial."
+        },
+        {
+          "do": "Widen each sphenoidotomy with rotating punches and Kerrison rongeurs up to the skull base, laterally to the medial orbital wall and down to the sphenoid floor; drill thick bone; keep the microdebrider out of the sinus.",
+          "see": [
+            "s.sphenoid-face",
+            "s.planum-sphenoidale",
+            "s.sphenoid-floor",
+            "s.lamina-papyracea"
+          ],
+          "removes": [
+            "s.sphenoid-face"
+          ],
+          "risk": [
+            "h.ica-injury-sphenoidotomy",
+            "h.optic-nerve-injury-sphenoid",
+            "h.posterior-septal-artery-bleed"
+          ],
+          "station": "t.sphenoid-face-0",
+          "think": "Where are the optic and carotid prominences on this side? Nothing is pulled off the lateral wall."
+        },
+        {
+          "do": "Remove the posterior bony septum and rostrum and take the intersinus septum down flush to join both sinuses into one opening.",
+          "see": [
+            "s.sphenoid-rostrum",
+            "s.intersinus-septum",
+            "s.nasal-septum"
+          ],
+          "removes": [
+            "s.sphenoid-rostrum",
+            "s.intersinus-septum"
+          ],
+          "risk": [
+            "h.septum-avulsion-ica",
+            "h.posterior-septal-artery-bleed"
+          ],
+          "think": "Does the intersinus septum insert on a carotid prominence? Drill it and leave a stump."
+        },
+        {
+          "do": "Cover bare bone at the lower rim with a short (mini) nasoseptal flap — as little as 5–10 mm of posterior septal mucosa on the posterior septal artery.",
+          "see": [
+            "s.posterior-septal-artery",
+            "s.sphenoid-floor"
+          ],
+          "risk": [
+            "h.nsf-pedicle-injury"
+          ],
+          "think": "Denuded bone at the rim is what scars the opening shut; mucosa over it keeps it open."
+        },
+        {
+          "do": "At about one week, suction old blood and debris from the sphenoid without disturbing the inferior flap.",
+          "see": [
+            "s.sphenoid-sinus"
+          ],
+          "think": "Around the flap, never under it."
+        }
+      ],
+      "endpoints": [
+        "One wide common sphenoid opening from skull base to floor and from orbital wall to orbital wall",
+        "No circumferential bare bone left at the rim"
+      ],
+      "pitfalls": [
+        "Drilling too high when the superior turbinate has been removed",
+        "Microdebrider engaged inside the sinus rather than at its opening",
+        "Denuded or osteitic bone left uncovered at the inferior rim",
+        "Twisting septa off a carotid prominence"
+      ],
+      "src": [
+        "src.chiu-2019-ch16"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.radical-sphenoidectomy",
+      "name": "Radical sphenoidectomy (sphenoid marsupialization)",
+      "tier": 3,
+      "indications": [
+        "Chronic sphenoid sinusitis that has failed standard sphenoidotomy and drill-out ([[p.sphenoid-drill-out]]) — the last step of the escalation",
+        "A sinus whose mucociliary clearance cannot be relied on: marsupializing it into the nasopharynx makes drainage dependent and blunts the effect of scarring"
+      ],
+      "corridor": "Transnasal, unilateral or bilateral (binostril with a posterior septectomy): the sphenoid floor drilled down flush with the posterior sinus wall so the sinus becomes a recess of the nasopharynx.",
+      "preop": [
+        {
+          "check": "Floor thickness, vidian canals and pneumatization on CT",
+          "why": "The floor is drilled down to the level of the posterior wall; the vidian canals mark its lateral edges ([[s.vidian-canal]])."
+        },
+        {
+          "check": "Lateral wall: ICA and optic canal dehiscence, septal insertions",
+          "why": "The same lateral-wall hazards as any sphenoidotomy."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Coagulate and divide the posterior septal artery on the sphenoid face.",
+          "see": [
+            "s.posterior-septal-artery",
+            "s.sphenoid-face"
+          ],
+          "risk": [
+            "h.posterior-septal-artery-bleed",
+            "h.nsf-pedicle-injury"
+          ],
+          "think": "This gives up the nasoseptal flap on this side — could this patient ever need it?"
+        },
+        {
+          "do": "Raise an inferiorly based mucoperiosteal flap from the sphenoid face and rostrum with two vertical incisions running from the edges of the sphenoid opening down to where the sinus ends in the nasopharyngeal roof.",
+          "see": [
+            "s.sphenoid-face",
+            "s.sphenoid-rostrum",
+            "s.nasopharynx"
+          ],
+          "think": "This flap will line the new floor; handle it gently."
+        },
+        {
+          "do": "For a bilateral procedure, remove the posterior 1–2 cm of the nasal septum and the intersinus septum to make one wide common opening.",
+          "see": [
+            "s.nasal-septum",
+            "s.vomer",
+            "s.intersinus-septum"
+          ],
+          "removes": [
+            "s.sphenoid-rostrum",
+            "s.intersinus-septum"
+          ],
+          "risk": [
+            "h.septum-avulsion-ica"
+          ]
+        },
+        {
+          "do": "Strip the remaining diseased sphenoid mucosa and drill the sphenoid floor down until it is flush with the posterior sinus wall.",
+          "see": [
+            "s.sphenoid-floor",
+            "s.clival-recess",
+            "s.vidian-canal"
+          ],
+          "risk": [
+            "h.ica-injury-sphenoidotomy",
+            "h.vidian-sacrifice-dry-eye"
+          ],
+          "think": "No ledge left for mucus to pool behind; the vidian canals are my lateral edges."
+        },
+        {
+          "do": "Lay the flap into the marsupialized cavity over the drilled floor and hold it with packing or tissue glue; remove packs at 3–5 days.",
+          "see": [
+            "s.sphenoid-floor",
+            "s.nasopharynx"
+          ]
+        },
+        {
+          "do": "At about one week, suction old blood and debris from the cavity without lifting the inferior flap.",
+          "see": [
+            "s.sphenoid-sinus"
+          ]
+        }
+      ],
+      "endpoints": [
+        "Sphenoid floor level with the posterior sinus wall, opening widely and dependently into the nasopharynx",
+        "Drilled floor covered by the inferiorly based flap"
+      ],
+      "pitfalls": [
+        "A residual floor ledge that keeps mucus pooling behind it",
+        "Displacing the inferior flap at pack removal or at the first debridement",
+        "Drilling the floor lateral to the vidian canal"
+      ],
+      "src": [
+        "src.chiu-2019-ch16"
       ],
       "review": "draft"
     },
@@ -6432,7 +6738,7 @@
       ],
       "steps": [
         {
-          "do": "Decongest; lateralize both middle turbinates; make rescue-flap incisions or raise a full nasoseptal flap on the chosen side.",
+          "do": "Head up, with modest controlled hypotension (no more than about 20% below baseline). Decongest; lateralize both middle turbinates (partial turbinate resection only if the cavity is narrow); make rescue-flap incisions or raise a full nasoseptal flap on the chosen side. On the other side, cut a small posterior septal mucosal window beside the sphenoid ostium, its lower incision parallel to the ostium, so instruments cross from that nostril while that side's pedicle survives.",
           "see": [
             "s.middle-turbinate",
             "s.nasal-septum",
@@ -6445,7 +6751,7 @@
           "think": "Leak risk high (suprasellar tumor, empty sella)? Full flap now; otherwise rescue incisions that protect the pedicle."
         },
         {
-          "do": "Identify both ostia; detach the posterior bony septum and remove the rostrum; open both sphenoids widely.",
+          "do": "Identify both ostia and enlarge them at first only 1–2 mm upward and outward, pushing the face mucosa and septal artery down with a Freer before bone comes off; detach the posterior bony septum (not forward of the middle turbinate heads) and remove the rostrum; open both sphenoids widely.",
           "see": [
             "s.sphenoid-ostium",
             "s.sphenoid-rostrum",
@@ -6459,7 +6765,7 @@
             "h.nsf-pedicle-injury",
             "h.ica-injury-sphenoidotomy"
           ],
-          "think": "Width target: lOCR to lOCR, planum to floor. The rostrum defines my midline."
+          "think": "Width target: lOCR to lOCR, planum to floor. The rostrum defines my midline. Low enough when a straight suction passes into the sinus just below the sellar floor — no inferior ledge of rostrum left."
         },
         {
           "do": "Take down the intersinus and accessory septa flush with the posterior wall using through-cutting instruments or a drill.",
@@ -6505,7 +6811,7 @@
           "think": "Lateral limit: bluish cavernous sinus and the Doppler signal. Upper limit: the intercavernous sinus under the tuberculum."
         },
         {
-          "do": "Doppler the dura on both sides, then incise it medially below the intercavernous sinus and extend in a cruciate or rectangular pattern.",
+          "do": "Doppler the dura on both sides; outline the incision with bipolar, then incise the dura medially below the intercavernous sinus and extend it in a cruciate or rectangular pattern.",
           "see": [
             "s.sellar-dura",
             "s.internal-carotid-artery"
@@ -6554,6 +6860,15 @@
             "h.postop-csf-leak"
           ],
           "think": "Grade 0–1: inlay or onlay. Grade 2: fat plus buttress. Grade 3 or cistern opened: vascularized flap ([[p.skull-base-reconstruction]])."
+        },
+        {
+          "do": "Postoperative endocrine watch: sodium and urine output for diabetes insipidus and SIADH; cortisol on day 1 when no perioperative steroids were given. Withhold saline irrigation for 2–3 weeks, since it can mask CSF rhinorrhea.",
+          "risk": [
+            "h.diabetes-insipidus",
+            "h.hypopituitarism",
+            "h.postop-csf-leak"
+          ],
+          "think": "Clear drip on bending forward or a salty taste is CSF until proven otherwise."
         }
       ],
       "endpoints": [
@@ -6565,14 +6880,18 @@
         "Opening off-midline by following the septum",
         "Removing the superior part first so the diaphragma collapses early",
         "Lateral curettage against an ICA that indents the gland ([[v.ica-indenting-pituitary]])",
-        "No reconstruction plan when the diaphragma tears"
+        "No reconstruction plan when the diaphragma tears",
+        "Posterior septectomy carried forward of the middle turbinate heads: prolonged septal crusting",
+        "An inferior ledge of rostrum or sphenoid floor left behind, blocking instruments to the sella and planum"
       ],
       "src": [
         "src.kassam-2005-sagittal-1",
         "src.rhoton-2002-sellar",
         "src.esposito-2007-leak-grade",
         "src.dusick-2007-doppler",
-        "src.kassam-gardner-2012"
+        "src.kassam-gardner-2012",
+        "src.chiu-2019-ch28",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -6648,7 +6967,7 @@
           "think": "My lateral bony limit at the tuberculum is the mOCR on each side."
         },
         {
-          "do": "Thin the tuberculum, upper sellar face and posterior planum with a diamond bur under irrigation to an eggshell and lift it away; open the medial optic canals if the tumor enters them.",
+          "do": "Thin the tuberculum, upper sellar face and posterior planum with a diamond bur under irrigation to an eggshell and lift it away; open the medial optic canals if the tumor enters them. Over a meningioma, drill out the thickened, hypervascular bone at its base: this removes much of its blood supply.",
           "see": [
             "s.tuberculum-sellae",
             "s.planum-sphenoidale",
@@ -6664,7 +6983,7 @@
             "h.paraclinoid-ica-injury",
             "h.optic-nerve-thermal-injury"
           ],
-          "think": "Heat off the optic nerves; stay between the mOCRs; the intercavernous sinus is right under this bone."
+          "think": "Heat off the optic nerves; stay between the mOCRs; the intercavernous sinus is right under this bone. Every osteotomy — midline from posterior to anterior, out to both optic canals, joined across the planum — is finished before the dura is opened, so bleeding from drilling never floods the intradural stage."
         },
         {
           "do": "Coagulate the superior intercavernous sinus across its width and divide it; open the planum and sellar dura above and below it and join the openings.",
@@ -6742,14 +7061,17 @@
         "Drilling lateral to the mOCR onto the paraclinoid ICA",
         "Coagulating superior hypophyseal arteries as tumor feeders",
         "Pursuing tumor lateral to the optic nerve or ICA endonasally",
-        "Flap laid partly on mucosa"
+        "Flap laid partly on mucosa",
+        "Opening dura before the bony exposure is complete",
+        "An inferior ledge of rostrum left, blocking instruments to the planum"
       ],
       "src": [
         "src.kassam-2005-sagittal-1",
         "src.kassam-2008-craniopharyngioma",
         "src.labib-2013-mocr",
         "src.kassam-2008-nsf",
-        "src.zwagerman-2019-lumbar-drain"
+        "src.zwagerman-2019-lumbar-drain",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -6788,11 +7110,12 @@
       ],
       "steps": [
         {
-          "do": "Harvest an extended nasoseptal flap; wide bilateral sphenoidotomy with posterior septectomy; flatten the rostrum and sphenoid floor down to the vidian canals.",
+          "do": "Position the head slightly flexed, which opens the line of sight to the sphenoid and clivus and lets blood pool away from the field. Harvest an extended nasoseptal flap on the side opposite the tumor's most lateral extension and park it in a widely opened maxillary sinus, clear of the clival corridor; wide bilateral sphenoidotomy with posterior septectomy; flatten the rostrum and sphenoid floor down to the vidian canals.",
           "see": [
             "s.sphenoid-floor",
             "s.vidian-canal",
-            "s.sphenoid-rostrum"
+            "s.sphenoid-rostrum",
+            "s.maxillary-sinus"
           ],
           "removes": [
             "s.sphenoid-rostrum",
@@ -6925,7 +7248,8 @@
         "src.barges-coll-2010",
         "src.morera-2010-far-medial",
         "src.kassam-2008-pituitary-transposition",
-        "src.zwagerman-2019-lumbar-drain"
+        "src.zwagerman-2019-lumbar-drain",
+        "src.chiu-2019-ch30"
       ],
       "review": "draft"
     },
@@ -6968,7 +7292,7 @@
           "think": "Which side carries the flap? That pedicle stays."
         },
         {
-          "do": "Remove the posterior maxillary wall, open the PPF periosteum and displace its fat and vessels laterally to expose V2 at the foramen rotundum, the vidian nerve and the pterygoid base.",
+          "do": "Remove the posterior maxillary wall and bipolar all exposed PPF fat before handling it (it is threaded with small vessels that otherwise ooze throughout); open the PPF periosteum and displace its fat and vessels laterally to expose V2 at the foramen rotundum, the vidian nerve and the pterygoid base.",
           "see": [
             "s.pterygopalatine-fossa",
             "s.internal-maxillary-artery",
@@ -6990,7 +7314,7 @@
             "h.vidian-sacrifice-dry-eye"
           ],
           "station": "t.quadrangular-space-0",
-          "think": "For a lateral recess leak this is enough — stop here and repair."
+          "think": "For a lateral recess leak this is enough — stop here and repair, leaving the medial soft-tissue bridge that carries the vidian nerve and the V2 (infraorbital) branches intact."
         },
         {
           "do": "Posterior extension: follow the vidian canal back, drilling its inferior and medial circumference, to the anterior genu; skeletonize the horizontal petrous and lower paraclival ICA.",
@@ -7047,7 +7371,8 @@
         "src.kassam-2008-vidian",
         "src.kassam-2009-meckel",
         "src.labib-2014-ica",
-        "src.kassam-2005-sagittal-2"
+        "src.kassam-2005-sagittal-2",
+        "src.chiu-2019-ch27"
       ],
       "review": "draft"
     },
@@ -7294,32 +7619,46 @@
           "why": "The optic strut drilling field includes the clinoid ICA and occasionally the ophthalmic origin ([[v.ophthalmic-artery-extradural-origin]])."
         },
         {
-          "check": "Documented visual acuity, fields and pupil",
-          "why": "Indication and outcome."
+          "check": "Full ophthalmologic baseline: acuity, color vision, fields, pupils, proptosis, intraocular pressure and fundus; visual evoked potentials in an unconscious patient; ultrasound if a hematoma is suspected",
+          "why": "Indication and outcome, and a treatable orbital cause is not missed."
+        },
+        {
+          "check": "Contraindications: complete disruption of the nerve or chiasm, complete optic atrophy, carotid–cavernous fistula, or unfitness for general anesthesia",
+          "why": "Opening the canal cannot help a transected or atrophic nerve, and visual loss from a fistula needs the fistula treated."
+        },
+        {
+          "check": "Medical treatment of the cause",
+          "why": "Steroids for traumatic optic neuropathy are contested ([[dz.traumatic-optic-neuropathy]]: no benefit shown in the International Optic Nerve Trauma Study, and high-dose steroids raised mortality after head injury in CRASH); thyroid eye disease may respond to radiotherapy, and idiopathic intracranial hypertension to diuretics."
         }
       ],
       "steps": [
         {
-          "do": "Complete posterior ethmoidectomy and wide sphenoidotomy; identify the posterior lamina papyracea, optic prominence and lateral opticocarotid recess.",
+          "do": "Complete posterior ethmoidectomy and wide sphenoidotomy (resecting or swinging the middle turbinate if the corridor is narrow); identify the posterior lamina papyracea, optic prominence and lateral opticocarotid recess.",
           "see": [
             "s.lamina-papyracea",
             "s.optic-prominence",
             "s.lateral-opticocarotid-recess",
-            "s.carotid-prominence"
+            "s.carotid-prominence",
+            "s.middle-turbinate",
+            "s.posterior-septal-artery"
           ],
           "risk": [
-            "h.optic-nerve-injury-sphenoid"
+            "h.optic-nerve-injury-sphenoid",
+            "h.posterior-septal-artery-bleed"
           ],
           "station": "t.optic-canal-0",
-          "think": "Is the canal in the sphenoid or in an Onodi cell?"
+          "think": "Is the canal in the sphenoid or in an Onodi cell? The posterior septal branch of the sphenopalatine artery crosses the lower edge of the sphenoidotomy — coagulate it if it bleeds."
         },
         {
-          "do": "Thin the posterior lamina papyracea at the orbital apex and the medial optic canal wall with a diamond bur under constant irrigation.",
+          "do": "In the posterior ethmoid about 1 cm in front of the sphenoid face, fracture the lamina papyracea and flake it back toward the optic strut, leaving periorbita intact; where the bone becomes too thick for hand instruments (orbital apex, medial canal wall), thin it with a diamond bur under constant irrigation, or an ultrasonic bone aspirator.",
           "see": [
+            "s.lamina-papyracea",
+            "s.periorbita",
             "s.optic-canal"
           ],
           "risk": [
-            "h.optic-nerve-thermal-injury"
+            "h.optic-nerve-thermal-injury",
+            "h.medial-rectus-injury"
           ],
           "think": "Irrigate continuously; thin to an eggshell only."
         },
@@ -7344,31 +7683,44 @@
             "s.optic-nerve"
           ],
           "risk": [
-            "h.ophthalmic-artery-injury"
+            "h.ophthalmic-artery-injury",
+            "h.medial-rectus-injury"
           ],
-          "think": "Does the evidence justify opening the sheath in this patient?"
+          "think": "Does the evidence justify opening the sheath in this patient? Carried through the annulus, the cut can injure the rectus origins (diplopia). If CSF escapes, seal it with fibrin glue or a small free mucosal graft and minimal absorbable packing — nothing that presses on the nerve."
         },
         {
           "do": "Hemostasis without packing on the nerve.",
           "see": [
             "s.optic-canal"
           ]
+        },
+        {
+          "do": "Postoperatively: no nasal packing; a carefully tapered high-dose steroid course, adjusted to serial eye examinations.",
+          "see": [
+            "s.optic-nerve"
+          ],
+          "think": "Vision worse than before surgery: urgent examination and CT for a hematoma or retained fragment."
         }
       ],
       "endpoints": [
-        "Medial canal wall removed from the annulus to the tuberculum",
+        "Medial canal wall removed from the annulus to the tuberculum — about 180° of the canal circumference",
+        "Nerve sheath inspected for hematoma",
         "No packing against the nerve"
       ],
       "pitfalls": [
         "Decompressing the wall of an Onodi cell believed to be sphenoid",
         "Heat injury from drilling",
-        "Inferior sheath incision onto the ophthalmic artery"
+        "Inferior sheath incision onto the ophthalmic artery",
+        "Sheath incision carried across the annulus onto the rectus origins (diplopia)",
+        "Packing a sheath CSF leak against the nerve"
       ],
       "src": [
         "src.luxenberger-1998",
         "src.levin-1999-ionts",
         "src.delano-1996",
-        "src.labib-2014-ica"
+        "src.labib-2014-ica",
+        "src.chiu-2019-ch19",
+        "src.crash-2004"
       ],
       "review": "draft"
     },
@@ -7501,8 +7853,20 @@
           "why": "Plan an alternative flap if the nasoseptal flap is unavailable."
         },
         {
-          "check": "Risk factors: obesity, raised intracranial pressure, radiation, posterior fossa defect",
-          "why": "Adds layers and a lumbar drain."
+          "check": "Risk factors for failure: obesity or raised intracranial pressure, postoperative radiotherapy, ventricular entry, large anterior or posterior fossa defects",
+          "why": "Adds layers and, for high-risk defects, a lumbar drain."
+        },
+        {
+          "check": "Defect map: suprachiasmatic (anterior fossa) or infrachiasmatic (sella, clivus) in the sagittal plane; extension lateral to the pterygoid plates in the coronal plane",
+          "why": "Lateral extension usually means sacrificing the ipsilateral internal maxillary artery, and with it every flap that depends on it on that side."
+        },
+        {
+          "check": "Flap reach and area against the defect",
+          "why": "A well-designed nasoseptal flap (up to about 25 cm²) reaches from the posterior table of the frontal sinus to the sella and from one lamina papyracea to the other, or covers a full clivectomy — but spans only two neighboring zones ([[pr.one-flap-two-regions]]). Local alternatives are small: inferior turbinate flap about 2.4 cm²; middle turbinate flap about 5.6 cm², reaching the sella only if the turbinate is at least about 4 cm long (a concha bullosa makes harvest harder); hard palate flap about 15 cm², with a risk of oroantral fistula. Regional flaps: pericranial ([[p.pericranial-flap]], about 29–35 cm²), temporoparietal fascia ([[p.temporoparietal-fascia-flap]], about 238 cm²) and facial buccinator (about 19 cm², with a risk of epiphora)."
+        },
+        {
+          "check": "Age under about 14 years",
+          "why": "The face is small relative to the skull, so a nasoseptal flap may be too short to reach the defect; plan an alternative."
         }
       ],
       "steps": [
@@ -7525,18 +7889,19 @@
           "think": "Fat supports the repair, but too much in the sella compresses the chiasm."
         },
         {
-          "do": "Inlay: place collagen matrix or fascia intradurally beyond the dural edges.",
+          "do": "Inlay: place collagen matrix or fascia intradurally, oversized well beyond the dural edges to allow for overlap and shrinkage; where the falx blocks an anterior defect, split the front of the graft into two \"trouser legs\" that straddle it.",
           "see": [
-            "s.sellar-dura"
+            "s.sellar-dura",
+            "s.falx-cerebri"
           ]
         },
         {
-          "do": "Gasket seal where the bony edges allow: fascia lata over the defect with a rigid buttress countersunk into the bony opening.",
+          "do": "Gasket seal where the bony edges allow: fascia lata over the defect with a rigid buttress (bone, cartilage or an absorbable plate) countersunk into the bony opening.",
           "see": [
             "s.planum-sphenoidale",
             "s.tuberculum-sellae"
           ],
-          "think": "Only possible when the bony rim will hold the buttress."
+          "think": "Only possible when the bony rim will hold the buttress. Autologous bone and cartilage tend to resorb, so their job is early support."
         },
         {
           "do": "Onlay: rotate the nasoseptal flap on its posterior septal pedicle to cover the defect with generous overlap onto bone, without twisting or stretching the pedicle.",
@@ -7551,7 +7916,7 @@
           "think": "Pedicle along the sphenoid floor; edges flat, no folds, periosteal side down."
         },
         {
-          "do": "Secure with sealant, absorbable packing and a nasal balloon or tamponade; lumbar drain for high-risk defects.",
+          "do": "Secure with absorbable packing held by a nasal balloon (sealant is optional over a well-placed multilayer flap repair); lumbar drain for high-risk defects, not routinely.",
           "see": [
             "s.sphenoid-sinus"
           ],
@@ -7559,10 +7924,10 @@
             "h.postop-csf-leak",
             "h.tension-pneumocephalus"
           ],
-          "think": "Balloon firm enough to hold the flap but not to compress the pedicle or chiasm."
+          "think": "The balloon holds the packing, not the flap: inflate only enough to steady the packing — over-inflation can push the graft intracranially, compress the pedicle or press on the chiasm."
         },
         {
-          "do": "Postoperative precautions: head up, no nose blowing or straining, no early positive-pressure mask ventilation, stool softeners.",
+          "do": "Postoperative precautions: head up, no nose blowing or straining, no early positive-pressure mask ventilation, stool softeners. The balloon usually stays 2–5 days (packing 4–7 days after a sphenoid leak repair); no saline irrigation for the first 2–3 weeks, since it can mask CSF rhinorrhea. Antibiotic cover while packing is in place is common but regimens vary; its aim is the sinonasal infection that follows this surgery, not meningitis prevention.",
           "risk": [
             "h.tension-pneumocephalus",
             "h.postop-csf-leak"
@@ -7578,7 +7943,8 @@
         "Flap laid on residual mucosa (failure, mucocele)",
         "Flap too small or pedicle twisted",
         "Over-packing the sella under the chiasm",
-        "Balloon over-inflation compressing the pedicle"
+        "Balloon inflated to \"hold\" the flap: it can displace the graft intracranially, compress the pedicle or press on the chiasm",
+        "Free grafts alone for a large or high-flow defect"
       ],
       "src": [
         "src.hadad-2006-nsf",
@@ -7587,7 +7953,153 @@
         "src.esposito-2007-leak-grade",
         "src.harvey-2012-reconstruction",
         "src.zanation-2009-high-flow",
-        "src.zwagerman-2019-lumbar-drain"
+        "src.zwagerman-2019-lumbar-drain",
+        "src.chiu-2019-ch27",
+        "src.chiu-2019-ch29",
+        "src.chiu-2019-ch31"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.pericranial-flap",
+      "name": "Pericranial flap for endonasal skull base reconstruction",
+      "tier": 3,
+      "indications": [
+        "Large anterior skull base defect when the nasoseptal flap is unavailable (prior septal surgery, tumor involvement, lost pedicle) or too small",
+        "Rescue after loss of both nasoseptal pedicles ([[h.nsf-pedicle-injury]])"
+      ],
+      "corridor": "From the forehead, pedicled on the supraorbital and supratrochlear vessels, through a bony window at the nasion and a Draf III frontal opening into the nasal cavity.",
+      "preop": [
+        {
+          "check": "Supraorbital and supratrochlear vessels intact (no previous coronal or forehead surgery that divided them)",
+          "why": "They are the flap's only supply."
+        },
+        {
+          "check": "Frontal sinus anatomy for a Draf III",
+          "why": "The flap reaches the nose through a modified endoscopic Lothrop opening ([[p.draf-iii]])."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Make a bicoronal scalp incision and raise the scalp in the subgaleal plane, leaving the pericranium on the skull.",
+          "think": "The pericranium is the flap: do not thin or perforate it."
+        },
+        {
+          "do": "Incise the pericranium far back and elevate it forward to the supraorbital rims, preserving the supraorbital and supratrochlear vessels as its pedicle.",
+          "see": [
+            "s.supraorbital-nerve",
+            "s.supratrochlear-nerve"
+          ],
+          "risk": [
+            "h.supraorbital-nerve-injury"
+          ],
+          "think": "The pedicle is at the rims; that is where elevation needs the most care."
+        },
+        {
+          "do": "Endoscopically, perform a modified Lothrop (Draf III) to open a wide transport corridor from the frontal sinus into the nose.",
+          "see": [
+            "s.frontal-sinus",
+            "s.frontal-intersinus-septum"
+          ],
+          "risk": [
+            "h.draf-iii-cribriform-injury"
+          ]
+        },
+        {
+          "do": "Open a small bony window through the nasion into the frontal sinus and pass the flap through it and the Draf III opening onto the defect.",
+          "see": [
+            "s.frontal-sinus-anterior-table",
+            "s.frontal-sinus"
+          ],
+          "think": "Is the window wide enough that the pedicle is not strangled?"
+        },
+        {
+          "do": "Inset the flap over the whole defect on denuded bone without kinking the pedicle at the nasion.",
+          "see": [
+            "s.cribriform-plate",
+            "s.planum-sphenoidale"
+          ]
+        }
+      ],
+      "endpoints": [
+        "Flap covering the defect with bone contact all round",
+        "Pedicle unkinked through the nasion window"
+      ],
+      "pitfalls": [
+        "Dividing the supraorbital or supratrochlear vessels during elevation",
+        "A nasion window or frontal opening too narrow for the flap bulk",
+        "Transposing without a Draf III corridor"
+      ],
+      "src": [
+        "src.chiu-2019-ch31"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.temporoparietal-fascia-flap",
+      "name": "Temporoparietal fascia flap with transpterygoid transfer",
+      "tier": 3,
+      "indications": [
+        "Large clival, sellar or parasellar defects when endonasal flaps are unavailable or too small"
+      ],
+      "corridor": "From the temple, pedicled on the superficial temporal vessels, through a tunnel from the temporal fossa deep to the zygomatic arch into the infratemporal and pterygopalatine fossae, then through a transpterygoid opening into the nasal cavity.",
+      "preop": [
+        {
+          "check": "Superficial temporal artery signal; no previous temporal or coronal surgery on that side",
+          "why": "It is the flap's only supply."
+        },
+        {
+          "check": "Side of the transfer route",
+          "why": "The route sacrifices the sphenopalatine and posterior nasal arteries on that side, and with them that side's nasoseptal flap."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Endoscopically, ligate the sphenopalatine and posterior nasal arteries, remove the posterior maxillary wall and open the pterygopalatine and infratemporal fossae; enlarge the route by removing the anterior part of the pterygoid process.",
+          "see": [
+            "s.sphenopalatine-artery",
+            "s.pterygopalatine-fossa",
+            "s.infratemporal-fossa",
+            "s.pterygoid-process"
+          ],
+          "risk": [
+            "h.imax-bleeding-ppf",
+            "h.pterygoid-plexus-bleeding",
+            "h.nsf-pedicle-injury"
+          ],
+          "station": "t.ppf-itf-overview"
+        },
+        {
+          "do": "Through a hemicoronal incision, harvest the temporoparietal fascia on the superficial temporal vessels.",
+          "think": "Keep the anterior dissection limited: the frontal branch of the facial nerve runs with this fascia there."
+        },
+        {
+          "do": "Develop a tunnel from the temporal fossa deep to the zygomatic arch into the infratemporal and pterygopalatine fossae, dilate it (a tube or sheath can bridge it) and draw the flap through into the nose.",
+          "see": [
+            "s.infratemporal-fossa",
+            "s.pterygopalatine-fossa"
+          ],
+          "think": "A tight tunnel strangles the pedicle; make it generous."
+        },
+        {
+          "do": "Inset the fascia over the defect on denuded bone without twisting the pedicle.",
+          "see": [
+            "s.clivus",
+            "s.sella-turcica"
+          ]
+        }
+      ],
+      "endpoints": [
+        "Perfused fascia covering the defect on bare bone",
+        "Pedicle untwisted through the tunnel"
+      ],
+      "pitfalls": [
+        "Injury to the frontal branch of the facial nerve during harvest (brow paralysis)",
+        "Tunnel too narrow, compressing the pedicle",
+        "Uncontrolled internal maxillary bleeding while opening the infratemporal route"
+      ],
+      "src": [
+        "src.chiu-2019-ch31"
       ],
       "review": "draft"
     },

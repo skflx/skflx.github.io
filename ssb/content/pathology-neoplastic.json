@@ -1515,6 +1515,10 @@
         {
           "tier": 3,
           "text": "The 2022 WHO classification flags higher-risk types — e.g. sparsely granulated somatotroph, Crooke cell, immature PIT1-lineage tumors and lactotroph tumors in men — that merit closer follow-up."
+        },
+        {
+          "tier": 3,
+          "text": "Small secreting tumors in a normal-sized gland bleed more from the intercavernous and cavernous venous channels than macroadenomas, which compress them ([[h.intercavernous-sinus-bleeding]]). Cushing disease can leave the nasal mucosa thin and fragile, and secreting tumors can make it more vascular: raise the flap gently."
         }
       ],
       "geo": "overlay",
@@ -1529,7 +1533,8 @@
         "src.rhoton-2002-sellar",
         "src.truong-2019-medial-wall",
         "src.fernandez-miranda-2018-cavernous",
-        "src.icar-skull-base-2019"
+        "src.icar-skull-base-2019",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -1996,6 +2001,10 @@
         {
           "tier": 3,
           "text": "Preserve every superior hypophyseal branch to the chiasm; coagulating \"small feeders\" on the capsule can blind the patient ([[h.chiasm-devascularization]])."
+        },
+        {
+          "tier": 3,
+          "text": "Drill away the thickened, hypervascular bone of the tuberculum and planum before opening the dura: it carries much of the tumor's blood supply, and all bony work is finished before intradural dissection begins."
         }
       ],
       "geo": "overlay",
@@ -2005,7 +2014,8 @@
         "src.komotar-2012-meningioma",
         "src.icar-skull-base-2019",
         "src.kassam-2005-sagittal-1",
-        "src.osborn-2018"
+        "src.osborn-2018",
+        "src.chiu-2019-ch29"
       ],
       "review": "draft"
     },
@@ -2056,7 +2066,8 @@
         "h.brainstem-perforator-injury",
         "h.postop-csf-leak",
         "h.cvj-instability",
-        "h.hypoglossal-injury"
+        "h.hypoglossal-injury",
+        "h.tension-pneumocephalus"
       ],
       "managedBy": [
         "p.transclival-approach",
@@ -2087,7 +2098,7 @@
         },
         {
           "tier": 3,
-          "text": "Chordoma versus chondrosarcoma: midline clivus versus petroclival fissure; ICA pushed laterally versus usually medially; destroyed-bone fragments versus rings-and-arcs matrix; lower versus higher ADC; brachyury and keratin positive versus negative (both are S100 positive)."
+          "text": "Chordoma versus chondrosarcoma: midline clivus versus petroclival fissure; ICA pushed laterally versus usually medially; destroyed-bone fragments versus rings-and-arcs matrix; lower versus higher ADC; brachyury, keratin and EMA positive versus negative (both are S100 positive)."
         },
         {
           "tier": 3,
@@ -2096,6 +2107,18 @@
         {
           "tier": 3,
           "text": "Intradural resection opens the prepontine cistern: close with a large pedicled nasoseptal flap as a high-flow repair ([[pr.reconstruction-matches-leak]]); change instruments and irrigate after tumor removal to limit seeding of the corridor and flap harvest site."
+        },
+        {
+          "tier": 2,
+          "text": "About a third of chordomas arise at the skull base, most of the rest in the sacrum and spine. Despite a low-grade histology, local aggressiveness keeps 5-year survival for clival chordoma around 60–70%."
+        },
+        {
+          "tier": 3,
+          "text": "Endoscopic series report postoperative CSF leak in 0–33% after clival chordoma resection; the high-flow prepontine cistern makes these the hardest leaks to seal ([[h.postop-csf-leak]])."
+        },
+        {
+          "tier": 3,
+          "text": "Gross-total resection stays the aim, but \"safe\" sets the limit: when a massive tumor hugs the brainstem or sits in retrocarotid or retrotubal pockets that cannot be reached safely, planned residual after maximal decompression, followed by radiotherapy, can still give durable control because chordoma grows slowly (one reported case stable at 2.5 years). This is case-level evidence and does not replace the consensus goal."
         }
       ],
       "geo": "overlay",
@@ -2104,7 +2127,8 @@
         "src.who-bone-2020",
         "src.icar-skull-base-2019",
         "src.kassam-2005-sagittal-2",
-        "src.osborn-2018"
+        "src.osborn-2018",
+        "src.chiu-2019-ch30"
       ],
       "review": "draft"
     },
@@ -2115,7 +2139,9 @@
         "chondrosarcoma",
         "petroclival chondrosarcoma",
         "conventional chondrosarcoma",
-        "mesenchymal chondrosarcoma"
+        "mesenchymal chondrosarcoma",
+        "clear cell chondrosarcoma",
+        "dedifferentiated chondrosarcoma"
       ],
       "category": "malignant-neoplasm",
       "involves": [
@@ -2174,6 +2200,14 @@
         {
           "tier": 3,
           "text": "IDH1/IDH2 mutations are common in conventional chondrosarcoma and support the diagnosis on a small biopsy; brachyury is negative."
+        },
+        {
+          "tier": 2,
+          "text": "Subtypes: conventional (graded 1–3, the most common), mesenchymal, clear cell and dedifferentiated. The prognosis is far better than chordoma's — 5-year survival up to about 90% is reported."
+        },
+        {
+          "tier": 3,
+          "text": "Most arise along the petroclival (petro-occipital) fissure, but some start at the spheno-occipital synchondrosis near the midline, where location alone no longer separates them from chordoma; rely on matrix, ADC and immunostains."
         }
       ],
       "geo": "overlay",
@@ -2183,7 +2217,8 @@
         "src.zanation-2009-petrous",
         "src.kassam-2005-coronal",
         "src.kassam-2008-vidian",
-        "src.osborn-2018"
+        "src.osborn-2018",
+        "src.chiu-2019-ch30"
       ],
       "review": "draft"
     },
