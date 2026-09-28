@@ -43,7 +43,7 @@ as a no-JS fallback, and the two must change together.
 
 ## OKSAT (`oksat.html`, `oksat-study.html`)
 
-**State:** The tool is now just the hub and the study viewer. Seven
+**State:** The tool is now just the hub and the study viewer. Eight
 hand-authored modules, each a data file in `js/mcq-modules/` plus one
 manifest entry; the shared engine renders all of them. Every question opens
 on a recall gate: the stem shows first, and you either **reveal the answer**
@@ -54,7 +54,13 @@ distinct in the record. Answers lock on first attempt and a five-box Leitner
 schedule resurfaces misses (a cold recall jumps two boxes; a correct MCQ, one).
 The engine also supports optional per-item images in stems and explanations
 (`item.image`, `item.explanationImage`), first used in the lip-reconstruction
-module.
+module. The otoplasty module (2026-09) is adapted from the StatPearls
+*Otoplasty* article and reuses its figures unmodified under CC BY-NC-ND 4.0,
+with attribution in the module header and `meta.sources`; unlabeled clinical
+photos go in stems, labeled figures (Marx grades, the staging table) only in
+explanations so they can't give the answer away. Its explanations flag where
+the sk.oto vault and StatPearls disagree (hillock 4–6 mapping, prominence
+thresholds) — unvetted for correctness pending owner review.
 
 The viewer now loads React/htm from `js/vendor/` (pinned) rather than a CDN,
 and the default typeface is the site's own (`instrument`); the choice moved to
@@ -73,7 +79,7 @@ the most.
 **Next:** Authoring is manual (`docs/authoring-oksat.md`). The module set is
 thin outside pediatrics/otology — laryngology and H&N oncology have hues
 reserved in `OKSAT_SUBSPECIALTIES` but no modules yet. Facial plastics has
-two modules (facial reanimation, lip reconstruction); rhinology now has its
+three modules (facial reanimation, lip reconstruction, otoplasty); rhinology now has its
 first (allergy and allergy testing, a free-response module in the
 dtc-risk-stratification style).
 

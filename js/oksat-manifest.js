@@ -87,6 +87,16 @@ window.OKSAT_MANIFEST = [
     data: 'js/mcq-modules/lip-reconstruction.js',
   },
   {
+    slug: 'otoplasty',
+    title: 'Otoplasty & Auricular Deformity',
+    kicker: 'Facial Plastics & Recon',
+    subspecialty: 'fprs',
+    count: 55,
+    accent: '#7A5A3A',
+    desc: 'Auricular anatomy and norms, Mustardé and Furnas otoplasty, Stahl ear, cryptotia, cauliflower ear, neonatal molding, microtia frameworks, complications, and clinical cases — with StatPearls clinical photographs.',
+    data: 'js/mcq-modules/otoplasty.js',
+  },
+  {
     slug: 'allergy-testing',
     title: 'Allergy and Allergy Testing',
     kicker: 'Rhinology / Allergy',
