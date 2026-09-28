@@ -540,11 +540,27 @@
         {
           "r": "lateral-to",
           "to": "s.middle-turbinate"
+        },
+        {
+          "r": "medial-to",
+          "to": "s.orbit",
+          "note": "across the lamina papyracea"
+        },
+        {
+          "r": "anterior-to",
+          "to": "s.posterior-ethmoid-cells",
+          "note": "separated by the basal lamella"
+        },
+        {
+          "r": "inferior-to",
+          "to": "s.frontal-sinus",
+          "note": "and behind it; the frontal recess, at the front of the anterior ethmoid, connects the two"
         }
       ],
       "src": [
         "src.lund-2014-terminology",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -590,6 +606,11 @@
           "r": "borders",
           "to": "s.orbital-apex",
           "note": "posterolaterally"
+        },
+        {
+          "r": "superior-to",
+          "to": "s.sphenoid-ostium",
+          "note": "and lateral: the ostium opens medial to the superior turbinate ([[pr.sphenoid-ostium-medial-to-st]]), so a transethmoid sphenoidotomy is made low and medial"
         }
       ],
       "pearls": [
@@ -605,7 +626,8 @@
       "src": [
         "src.lund-2014-terminology",
         "src.stammberger-1991",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -688,6 +710,10 @@
         },
         {
           "tier": 2,
+          "text": "Skull-base bone usually looks thicker and more ivory-white than the ethmoid septations — a useful cue that becomes unreliable in osteitic or revision cavities."
+        },
+        {
+          "tier": 2,
           "text": "Roof height can differ between sides ([[v.asymmetric-ethmoid-roof]]); read each side separately on coronal CT."
         },
         {
@@ -698,7 +724,8 @@
       "src": [
         "src.lund-2014-terminology",
         "src.kainz-1989",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch14"
       ],
       "review": "draft"
     },
@@ -860,9 +887,16 @@
           "to": "s.crista-galli"
         }
       ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "The anterior attachment of the MT is the endoscopic guide to it: the olfactory fossa lies above and medial to the MT's vertical attachment. In many patients the most anterior part of the MT inserts on the frontal sinus floor in front of the cribriform plate, which is why that segment can be taken in a Draf IIb/III as long as the dissection stays anterior to the first olfactory fibre ([[lm.first-olfactory-fiber]])."
+        }
+      ],
       "src": [
         "src.keros-1962",
-        "src.lang-1989"
+        "src.lang-1989",
+        "src.chiu-2019-ch10"
       ],
       "review": "draft"
     },
@@ -1399,13 +1433,18 @@
           "text": "Seeing the PEA means the optic canal is close ([[m.pea-to-optic-canal]]) — switch to gentle, visualized instruments."
         },
         {
+          "tier": 2,
+          "text": "Cutting it by accident is usually a minor bleed, but it can be large when an anterior skull-base tumor has recruited it or after sphenopalatine ligation has shifted flow to the ethmoidal system — seal it before dividing in those patients."
+        },
+        {
           "tier": 3,
           "text": "It supplies the planum dura and posterior olfactory mucosa; in transcribriform and transplanum resections it is coagulated at the lamina to devascularize the tumor base."
         }
       ],
       "src": [
         "src.rhoton-2002-orbit",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch04"
       ],
       "review": "draft"
     },
@@ -1568,14 +1607,21 @@
           "text": "Count the cells, then decide the extent: the grade of surgery ([[c.efss]], [[c.draf]]) should match the pathology and anatomy, not habit."
         },
         {
+          "tier": 2,
+          "text": "It pneumatizes up into the vertical (squamous) frontal bone and back into the horizontal orbital plate, between the frontal lobe above and the orbit below; that supraorbital extension is the part an endoscope reaches worst."
+        },
+        {
           "tier": 3,
-          "text": "The anteroposterior depth at the ostium (nasal beak to posterior table) decides whether a Draf IIb or III is feasible; measure it on the sagittal CT for each side."
+          "text": "The anteroposterior depth at the ostium decides whether a Draf IIb or III is feasible; measure it on the sagittal CT for each side. Authors measure it differently — nasal beak to posterior table at the ostium, or from the forward projection of the olfactory fossa to the anterior table — but the question is the same: will a drill fit in front of the skull base? About 10 mm is often quoted as the minimum, and a posterior table less than 5 mm from the skin in front of the nasal beak rules out a Draf III."
         }
       ],
       "src": [
         "src.lund-2014-terminology",
         "src.wormald-textbook",
-        "src.lang-1989"
+        "src.lang-1989",
+        "src.chiu-2019-ch10",
+        "src.chiu-2019-ch11",
+        "src.chiu-2019-ch32"
       ],
       "review": "draft"
     },
@@ -1604,9 +1650,16 @@
           "to": "s.frontal-sinus-posterior-table"
         }
       ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Thick diploic bone — about 4–12 mm in a textbook range — under skin, subcutaneous fat, frontalis and pericranium. In acute infection it is the wrong way in (osteomyelitis, intracranial spread): trephines enter through the floor."
+        }
+      ],
       "src": [
         "src.lang-1989",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch32"
       ],
       "review": "draft"
     },
@@ -1949,6 +2002,11 @@
         {
           "r": "landmark-for",
           "to": "p.draf-i"
+        },
+        {
+          "r": "inferior-to",
+          "to": "s.frontal-sinus",
+          "note": "below the frontal sinus floor; its roof is uncapped to reach the frontal recess behind or medial to it"
         }
       ],
       "pearls": [
@@ -1968,7 +2026,8 @@
       "src": [
         "src.wormald-2016-ifac",
         "src.bolger-1991",
-        "src.lund-2014-terminology"
+        "src.lund-2014-terminology",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -2064,12 +2123,22 @@
         {
           "tier": 2,
           "text": "Its upper border, the frontoethmoidal suture, carries the ethmoidal foramina: from the orbit side it marks the height of the skull base."
+        },
+        {
+          "tier": 2,
+          "text": "In thyroid eye disease raised orbital pressure often bows it medially into the ethmoid, so it lies closer than usual during the ethmoidectomy of a decompression."
+        },
+        {
+          "tier": 2,
+          "text": "Its curve continues smoothly into the orbital floor: following that contour up from the floor predicts where the lamina runs when osteitic partitions hide it in revision surgery."
         }
       ],
       "src": [
         "src.lund-2014-terminology",
         "src.stammberger-1991",
-        "src.rhoton-2002-orbit"
+        "src.rhoton-2002-orbit",
+        "src.chiu-2019-ch14",
+        "src.chiu-2019-ch18"
       ],
       "review": "draft"
     },
@@ -2148,8 +2217,15 @@
           "to": "s.medial-rectus"
         }
       ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Medially, the extraconal fat lies between the periorbita and the medial rectus, crossed above the muscle by the ethmoidal neurovascular bundles; inside the muscle cone the intraconal fat surrounds the optic nerve and vessels, and the inferior intraconal space carries the oculomotor branches to the inferior rectus and inferior oblique. Extraconal fat may be coagulated and removed; intraconal fat is left alone."
+        }
+      ],
       "src": [
-        "src.rhoton-2002-orbit"
+        "src.rhoton-2002-orbit",
+        "src.chiu-2019-ch20"
       ],
       "review": "draft"
     },
@@ -2182,11 +2258,16 @@
         {
           "tier": 2,
           "text": "Posteriorly the muscle lies almost on the lamina: a small breach in the posterior ethmoid is closer to muscle than the same breach anteriorly."
+        },
+        {
+          "tier": 3,
+          "text": "The medial intraconal space beside it is divided by the inferomedial muscular trunk of the ophthalmic artery into zone A (anteroinferior — most accessible; the oculomotor branch enters the muscle's inner surface posteriorly), zone B (anterosuperior, beside the ethmoidal vessels, sometimes reached above the muscle) and zone C (behind the arterial trunk — smallest and hardest, next to the optic nerve and ophthalmic artery)."
         }
       ],
       "src": [
         "src.rhoton-2002-orbit",
-        "src.may-1994"
+        "src.may-1994",
+        "src.chiu-2019-ch20"
       ],
       "review": "draft"
     },
@@ -2847,9 +2928,10 @@
       "name": "First olfactory fibre",
       "of": "s.olfactory-fila",
       "tier": 3,
-      "locate": "The most anterior olfactory filum entering the cribriform plate, just posterior to the frontal sinus floor on each side of the septum; posterior limit of a Draf III.",
+      "locate": "The most anterior olfactory filum entering the cribriform plate, just posterior to the frontal sinus floor on each side of the septum; posterior limit of a Draf III. A small emissary vein just in front of it, running laterally, is easily mistaken for it and must not be taken as the limit.",
       "src": [
-        "src.wormald-2003-emlp"
+        "src.wormald-2003-emlp",
+        "src.chiu-2019-ch11"
       ],
       "review": "draft"
     },
@@ -2913,9 +2995,10 @@
       "name": "Frontal trephination point",
       "of": "s.frontal-sinus-floor",
       "tier": 2,
-      "locate": "Anterior table or floor of the frontal sinus just above/under the medial brow, medial to the supraorbital notch and lateral to the midline, chosen on CT where the sinus is deepest.",
+      "locate": "Medial floor of the frontal sinus under the medial brow, medial to the supraorbital notch and lateral to the midline, chosen on CT where the sinus is deepest; not so far inferomedial that the scar reaches the frontal recess.",
       "src": [
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch32"
       ],
       "review": "draft"
     }
@@ -3164,13 +3247,14 @@
           "src": "src.simmen-2006-aea",
           "conf": "low",
           "population": "latex-injected adult cadaver sides",
-          "note": "Cadaveric, not a CT prevalence: the artery hung below the roof in all 10 sides with a large supraorbital ethmoid cell and in 1 of 18 without one; 6 sides with a small cell had it close to or within the roof. CT series spread widely (slice thickness, threshold for 'below the roof') and need their own source before a CT range is quoted."
+          "note": "Cadaveric, not a CT prevalence: the artery hung below the roof in all 10 sides with a large supraorbital ethmoid cell and in 1 of 18 without one; 6 sides with a small cell had it close to or within the roof. CT series spread widely (slice thickness, threshold for 'below the roof') and need their own source before a CT range is quoted. A textbook chapter from the same school (Naidoo & Wormald) quotes 36% of cases in a mesentery and 16% both mesenteric and dehiscent — the most exposed combination — without denominator or method; it probably draws on the group's cadaver work but was not checked against it, so the primary cadaver figure stands."
         }
       ],
       "src": [
         "src.simmen-2006-aea",
         "src.moon-2001-aea",
-        "src.floreani-2006-aea"
+        "src.floreani-2006-aea",
+        "src.chiu-2019-ch04"
       ],
       "review": "draft"
     },
@@ -3537,10 +3621,11 @@
           "why": "Salvage for recalcitrant frontal disease, frontal tumors, large mucoceles, and access to the frontal sinus for skull base surgery."
         }
       ],
-      "caveats": "Draf I in the original description includes clearing cells from the frontal recess; EFSS grades 1–3 subdivide that work. Terms modified endoscopic Lothrop procedure (EMLP) and frontal drill-out are synonyms for type III.",
+      "caveats": "Draf I in the original description includes clearing cells from the frontal recess; EFSS grades 1–3 subdivide that work. Terms modified endoscopic Lothrop procedure (EMLP) and frontal drill-out are synonyms for type III. Type I is defined inconsistently: some atlases limit it to removing the upper uncinate while leaving the agger nasi cell, whereas Draf's description and the IFAC/EFSS literature include clearing the obstructing recess cells below the ostium — state the definition when comparing results.",
       "src": [
         "src.draf-1991",
-        "src.wormald-2016-ifac"
+        "src.wormald-2016-ifac",
+        "src.chiu-2019-ch09"
       ],
       "review": "draft"
     },
@@ -3884,10 +3969,11 @@
       },
       "method": "endoscopic",
       "conf": "low",
-      "note": "Larger with added lateral wall or fat decompression; smaller when the inferomedial strut is preserved.",
+      "note": "Larger with added lateral wall or fat decompression; smaller when the inferomedial strut is preserved. A textbook chapter reports an average globe recession of about 3.5 mm (range 2–12 mm) after endoscopic decompression and roughly 2 mm more with an added lateral wall decompression (expert-reported, series not specified).",
       "src": [
         "src.kennedy-1990-decompression",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch18"
       ],
       "review": "draft"
     },
@@ -3951,14 +4037,16 @@
       "site": "Posterior margin of the frontal recess, suprabullar recess roof, especially when the artery hangs in a mesentery or a supraorbital ethmoid cell is present.",
       "mechanism": "A debrider, curette or through-biter catches a canal that hangs below the roof or is dehiscent; the lateral stump retracts into the orbit and keeps bleeding behind the periorbita.",
       "consequence": "Brisk nasal bleeding; orbital hematoma with rising orbital pressure and risk of vision loss; rarely intracranial bleeding if the medial stump retracts through the lamella.",
-      "prevent": "Locate the canal on coronal and sagittal CT; identify the artery at the posterior frontal recess before clearing cells there; no powered instruments on a ridge crossing the roof; keep frontal dissection anterior to it.",
+      "prevent": "Locate the canal on coronal and sagittal CT; identify the artery at the posterior frontal recess before clearing cells there; no powered instruments on a ridge crossing the roof; keep frontal dissection anterior to it. Open cells between their septations rather than cutting across them — the artery can run inside one. In extended frontal or skull-base work a mesenteric artery can be bipolared deliberately early instead of risking a tear later.",
       "recognize": "Pulsatile bleeding at the roof behind the frontal recess; then eyelid swelling, proptosis, tense globe, subconjunctival hemorrhage, pupil change.",
-      "rescue": "Bipolar the visible stump (not monopolar); if the stump has retracted and the orbit tightens, manage as orbital hematoma ([[h.orbital-hematoma]]) — canthotomy/cantholysis and medial orbital decompression, with external ligation if bleeding continues.",
+      "rescue": "Bipolar the visible stump — never monopolar, whose current can crack the thin roof (CSF leak) and spread into the orbit; if the stump has retracted and the orbit tightens, manage as orbital hematoma ([[h.orbital-hematoma]]) — canthotomy/cantholysis and medial orbital decompression, with external ligation if bleeding continues.",
       "src": [
         "src.simmen-2006-aea",
         "src.moon-2001-aea",
         "src.floreani-2006-aea",
-        "src.stankiewicz-1989"
+        "src.stankiewicz-1989",
+        "src.chiu-2019-ch04",
+        "src.chiu-2019-ch10"
       ],
       "review": "draft"
     },
@@ -3971,7 +4059,8 @@
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
         "p.aea-ligation",
-        "p.orbital-decompression"
+        "p.orbital-decompression",
+        "p.orbital-tumor-resection"
       ],
       "site": "Retrobulbar or extraconal space behind a breached lamina or a retracted AEA/PEA.",
       "mechanism": "Arterial bleeding (retracted ethmoidal artery) raises pressure within minutes; venous bleeding from orbital fat after a lamina breach develops over hours. Pressure in the closed orbit compresses the optic nerve and its blood supply.",
@@ -3998,13 +4087,14 @@
       ],
       "site": "Posterior ethmoid roof just anterior to the sphenoid face.",
       "mechanism": "Removing the last posterior ethmoid partitions at the skull base with a debrider or forceps.",
-      "consequence": "Bleeding (usually modest), orbital hematoma if the stump retracts, and a view obscured right next to the optic canal.",
+      "consequence": "Bleeding (usually modest, heavier when the artery is enlarged by an anterior skull-base tumor or after SPA ligation), orbital hematoma if the stump retracts, and a view obscured right next to the optic canal.",
       "prevent": "Expect it a few millimetres anterior to the sphenoid face; keep instruments below and in front of it; coagulate with bipolar before dividing it in extended approaches.",
       "recognize": "Bleeding from a transverse ridge on the posterior roof; orbital signs if it retracts.",
       "rescue": "Bipolar under vision or warm irrigation and pressure; do not blindly cauterize near the optic canal; manage orbital signs as orbital hematoma.",
       "src": [
         "src.rhoton-2002-orbit",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch04"
       ],
       "review": "draft"
     },
@@ -4016,7 +4106,8 @@
       "during": [
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
-        "p.draf-iia"
+        "p.draf-iia",
+        "p.completion-sphenoethmoidectomy"
       ],
       "site": "Anywhere along the lamina; commonly at the bulla, the basal lamella's lateral attachment, or a pre-existing dehiscence.",
       "mechanism": "Lateral pressure through a thin or dehiscent lamina, often while removing the bulla or during uncinectomy/antrostomy; then fat is mistaken for polyp.",
@@ -4039,7 +4130,8 @@
       "during": [
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
-        "p.orbital-decompression"
+        "p.orbital-decompression",
+        "p.orbital-tumor-resection"
       ],
       "site": "Mid and posterior lamina, where the muscle lies nearly on the bone.",
       "mechanism": "A microdebrider through a lamina breach suctions fat and then muscle; less often a forceps grasping periorbita.",
@@ -4083,7 +4175,8 @@
       "tier": 2,
       "during": [
         "p.anterior-ethmoidectomy",
-        "p.posterior-ethmoidectomy"
+        "p.posterior-ethmoidectomy",
+        "p.completion-sphenoethmoidectomy"
       ],
       "site": "Ethmoid roof, often posteriorly where it slopes lower than expected, or at a skull-base cell mistaken for an ethmoid partition.",
       "mechanism": "Instruments angled horizontally or upward in the posterior ethmoid, or a debrider running along the roof, pass through the fovea into the frontal lobe.",
@@ -4223,11 +4316,12 @@
       "consequence": "Recurrent frontal obstruction; revision surgery.",
       "prevent": "Make the opening as large as the anatomy allows; cover bare bone with mucosal flaps or free grafts; control inflammatory disease medically; close follow-up and debridement.",
       "recognize": "Progressive narrowing on endoscopy, most of it in the first year ([[m.draf-iii-ostium-narrowing]]).",
-      "rescue": "In-office debridement and steroid therapy early; revision drill-out with mucosal grafting if it closes.",
+      "rescue": "In-office debridement and steroid therapy early; a thick fibrotic web on the front of the beak at about 12 weeks can be injected with triamcinolone (0.3–0.5 mL of 40 mg/mL through a long 25G needle); revision drill-out with mucosal grafting if it closes.",
       "src": [
         "src.tran-2007-emlp",
         "src.anderson-2009-emlp",
-        "src.wormald-2003-emlp"
+        "src.wormald-2003-emlp",
+        "src.chiu-2019-ch11"
       ],
       "review": "draft"
     },
@@ -4266,13 +4360,14 @@
       ],
       "site": "Supraorbital notch and medial brow.",
       "mechanism": "Brow incision or periosteal elevation cuts or stretches the nerves.",
-      "consequence": "Numbness or dysesthesia of the forehead and scalp.",
+      "consequence": "Numbness or dysesthesia of the forehead and scalp back to the vertex.",
       "prevent": "Palpate the notch; keep the trephination incision medial to it and deepen bluntly; elevate subperiosteally with the nerves in the flap.",
       "recognize": "Postoperative forehead numbness.",
       "rescue": "Usually partial recovery over months; counselling.",
       "src": [
         "src.rhoton-2002-orbit",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch32"
       ],
       "review": "draft"
     },
@@ -4305,15 +4400,16 @@
         "p.osteoplastic-flap"
       ],
       "site": "Obliterated frontal sinus.",
-      "mechanism": "Residual mucosa left in the sinus or recess (especially in bony crevices) keeps secreting behind the obliteration material.",
+      "mechanism": "Residual mucosa left in the sinus or recess (especially in bony crevices) keeps secreting behind the obliteration material. Posterior table erosion can mean mucosa already sits on dura, where it cannot be removed completely.",
       "consequence": "Mucocele years later, possibly with orbital or intracranial extension, hard to image against fat graft.",
       "prevent": "Remove every trace of mucosa and burr the inner cortex; plug the recess; consider endoscopic Draf III instead of obliteration when feasible.",
-      "recognize": "Recurrent swelling, pain, globe displacement; MRI shows a mucocele within or beside the graft.",
+      "recognize": "Recurrent swelling, pain, globe displacement; MRI is the best follow-up study, but it can miss small mucoceles and cannot reliably tell viable fat from oil cysts of fat necrosis or granulation tissue.",
       "rescue": "Endoscopic marsupialization (often via Draf III) or revision open surgery.",
       "src": [
         "src.goodale-1958",
         "src.gross-1995-mlp",
-        "src.wormald-2003-emlp"
+        "src.wormald-2003-emlp",
+        "src.chiu-2019-ch33"
       ],
       "review": "draft"
     },
@@ -4329,11 +4425,12 @@
       "mechanism": "Unbalanced prolapse of orbital contents inferomedially after strut and floor removal changes muscle vectors.",
       "consequence": "New or worsened strabismus requiring prisms or strabismus surgery.",
       "prevent": "Preserve the inferomedial strut when proptosis reduction needs allow; balanced (medial plus lateral) decompression; periorbital incisions planned to control prolapse.",
-      "recognize": "Postoperative diplopia, especially in primary and down-gaze.",
-      "rescue": "Observation for resolution, prisms, then strabismus surgery once stable.",
+      "recognize": "Postoperative diplopia, especially in primary and down-gaze. New diplopia is reported in up to a third of patients and is often temporary.",
+      "rescue": "Observation for resolution, prisms, then strabismus surgery once stable — usually not before 8–10 months after decompression.",
       "src": [
         "src.kennedy-1990-decompression",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch18"
       ],
       "review": "draft"
     },
@@ -4521,9 +4618,10 @@
       "tier": 2,
       "rule": "Make a wide maxillary antrostomy, identify the medial orbital floor, and enter the posterior ethmoid and sphenoid at or just above that height, medial to the lamina; the skull base is always above it.",
       "why": "The orbital floor is constant and visible even when the ethmoid is distorted by polyps or prior surgery, so it fixes a safe vertical level for going posteriorly; Casiano's distances to the skull base and sphenoid come from cadaver measurements (11 heads, 18 sides), not a clinical outcome series.",
-      "caveat": "The skull base lies closer to the orbital floor in some patients (low roof); confirm the vertical distance on sagittal CT before relying on it.",
+      "caveat": "The skull base lies closer to the orbital floor in some patients (low roof); confirm the vertical distance on sagittal CT before relying on it. A tall, well-pneumatized maxillary sinus with a short posterior ethmoid (maxillary-to-posterior-ethmoid height ratio above about 2:1) is the pattern that leads toward the skull base instead of the sphenoid.",
       "src": [
-        "src.casiano-2001"
+        "src.casiano-2001",
+        "src.chiu-2019-ch14"
       ],
       "review": "draft"
     },
@@ -4904,6 +5002,222 @@
       "review": "draft"
     },
     {
+      "id": "p.completion-sphenoethmoidectomy",
+      "name": "Revision FESS: completion sphenoethmoidectomy",
+      "tier": 2,
+      "indications": [
+        "Persistent chronic rhinosinusitis after limited surgery (antrostomy and partial ethmoidectomy), aiming to make this the last operation — usually with frontal recess dissection",
+        "Retained osteitic partitions along the lamina papyracea and skull base keeping the overlying mucosa inflamed"
+      ],
+      "corridor": "Through the scarred middle meatus along the lamina papyracea to the sphenoid, then forward along the skull base.",
+      "preop": [
+        {
+          "check": "Residual partitions, osteitis and neo-osteogenesis along the lamina and skull base",
+          "why": "They are the usual nidus of persistent disease and the targets of the revision."
+        },
+        {
+          "check": "Maxillary sinus height against posterior ethmoid height on coronal CT",
+          "why": "A tall, well-pneumatized maxillary sinus with a short posterior ethmoid (height ratio above about 2:1) draws the surgeon toward the skull base instead of the sphenoid — a CSF leak pattern."
+        },
+        {
+          "check": "Repeat the [[pr.close-ct-review]] for the altered anatomy",
+          "why": "Landmarks removed at the first operation (uncinate, bulla, part of the MT) can no longer be relied on."
+        },
+        {
+          "check": "Inflammatory load",
+          "why": "A preoperative oral steroid course may reduce both difficulty and blood loss in polyp disease."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Debulk polyps with the microdebrider, but take bone with hand instruments, which give better feel in thick osteitic bone.",
+          "see": [
+            "s.middle-meatus",
+            "s.ethmoid-labyrinth"
+          ],
+          "risk": [
+            "h.lamina-papyracea-breach",
+            "h.ethmoid-roof-penetration"
+          ],
+          "think": "Soft tissue with the debrider, bone by feel."
+        },
+        {
+          "do": "Revise the maxillary antrostomy: remove the uncinate remnant with a backbiter, and take the posterior fontanelle and posterior maxillary partitions back to the posterior maxillary wall with through-cutting forceps.",
+          "see": [
+            "s.uncinate-process",
+            "s.maxillary-natural-ostium",
+            "s.posterior-fontanelle",
+            "s.maxillary-posterior-wall",
+            "s.orbital-floor"
+          ],
+          "risk": [
+            "h.lamina-papyracea-breach"
+          ],
+          "think": "A posterior pocket left behind acts as an air scoop and a persistent osteitic nidus. The medial orbital floor is my height reference ([[pr.casiano-medial-orbital-floor]]).",
+          "station": "t.medial-orbital-floor-30"
+        },
+        {
+          "do": "Find the sphenoid through the posterior ethmoid at or just above the orbital-floor height, medially. Clues in distorted anatomy: the last posterior ethmoid cell is pyramid-shaped where the superior turbinate's basal lamella meets the skull base, and the posterior maxillary wall curves back toward the sphenoid face.",
+          "see": [
+            "s.posterior-ethmoid-cells",
+            "s.superior-turbinate",
+            "s.sphenoid-face",
+            "s.maxillary-posterior-wall"
+          ],
+          "risk": [
+            "h.ethmoid-roof-penetration",
+            "h.optic-nerve-injury-onodi"
+          ],
+          "think": "Am I heading for the sphenoid or up into the skull base? With a short posterior ethmoid, stay low and medial.",
+          "station": "t.posterior-ethmoid-roof-0"
+        },
+        {
+          "do": "Enlarge the sphenoidotomy widely; before taking bone inferiorly with a Kerrison, retract the mucosa with a Freer to protect the septal branch of the sphenopalatine artery. A maximal opening lets retained allergic mucin be cleared and the sphenoid irrigated.",
+          "see": [
+            "s.sphenoid-sinus",
+            "s.sphenoid-ostium",
+            "s.posterior-septal-artery"
+          ],
+          "risk": [
+            "h.posterior-septal-artery-bleed"
+          ],
+          "think": "Is the opening big enough for the patient to irrigate it?"
+        },
+        {
+          "do": "Clear the skull base from posterior to anterior, taking each partition down and away while erring laterally against the skeletonized lamina papyracea; the curve of the orbital floor continues into the medial orbital wall and predicts its contour.",
+          "see": [
+            "s.fovea-ethmoidalis",
+            "s.lamina-papyracea",
+            "s.posterior-ethmoidal-artery",
+            "s.anterior-ethmoidal-artery"
+          ],
+          "risk": [
+            "h.ethmoid-roof-penetration",
+            "h.lateral-lamella-perforation",
+            "h.aea-transection"
+          ],
+          "think": "The roof slopes down toward the midline. Can I feel behind this partition and see in front of it ([[pr.see-behind-before-cut]])? Skull base is usually thicker and ivory-white — but osteitis blurs that difference.",
+          "station": "t.ethmoid-roof-30"
+        },
+        {
+          "do": "Last, remove the superior uncinate remnant on the anteromedial orbital wall and complete the frontal recess dissection as planned ([[p.draf-i]] or beyond).",
+          "see": [
+            "s.uncinate-process",
+            "s.agger-nasi-cell",
+            "s.frontal-recess"
+          ],
+          "risk": [
+            "h.retained-frontal-cells",
+            "h.frontal-recess-stenosis"
+          ],
+          "think": "Easy to overlook after working posteriorly — a retained upper uncinate keeps the frontal recess obstructed."
+        },
+        {
+          "do": "Finish without packing where possible, and tell the patient not to blow the nose.",
+          "think": "Most revision cases need no packing or hemostatic agent (87% of 165 patients in one series); spacers reduce synechiae without a clear bleeding benefit. Nose-blowing after an unrecognized lamina breach causes orbital or subcutaneous emphysema."
+        }
+      ],
+      "endpoints": [
+        "Smooth skull base and lamina papyracea from the sphenoid to the frontal recess, with no retained partitions",
+        "Wide maxillary antrostomy including the posterior fontanelle",
+        "Wide sphenoidotomy",
+        "Upper uncinate remnant removed and the frontal recess open"
+      ],
+      "pitfalls": [
+        "Powered instruments on osteitic bone at the skull base",
+        "Mistaking the skull base for a septation in a short posterior ethmoid",
+        "Leaving the upper uncinate remnant or a posterior maxillary pocket"
+      ],
+      "src": [
+        "src.chiu-2019-ch14"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.postoperative-debridement",
+      "name": "Postoperative endoscopic debridement after sinus surgery",
+      "tier": 1,
+      "indications": [
+        "Routine follow-up after FESS: clearing crust, clot, retained bone fragments and early synechiae while the cavity heals",
+        "More frequent visits after operations that crust more — Draf III drill-out, medial maxillectomy, extended skull-base surgery"
+      ],
+      "corridor": "In clinic, under topical anesthesia and decongestion, with 0° and angled endoscopes through the operated cavity.",
+      "preop": [
+        {
+          "check": "What was done, and what must not be disturbed",
+          "why": "After a CSF leak repair or skull-base tumor resection, debride minimally near the reconstruction; after orbital surgery, leave the orbitotomy alone for the first weeks."
+        },
+        {
+          "check": "Will the patient tolerate it?",
+          "why": "Many children cannot tolerate office debridement and need it under anesthesia."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Schedule: first visit about 5–7 days after surgery, the second at 1–2 weeks and a third around 4–5 weeks when the cavity is nearly healed. Anesthetize and decongest topically (e.g. 4% cocaine); analgesia before the first visit helps.",
+          "think": "Is this cavity healing as expected, or does it need more frequent visits?"
+        },
+        {
+          "do": "Work in a fixed order: nasal cavity and nasopharynx, then the sphenoid face as the posterior limit, then along the lamina papyracea and skull base, then the maxillary sinus, and the frontal recess last. Keep instruments along the lateral wall, away from the sensitive septal mucosa.",
+          "see": [
+            "s.nasopharynx",
+            "s.sphenoid-face",
+            "s.lamina-papyracea",
+            "s.fovea-ethmoidalis",
+            "s.maxillary-sinus",
+            "s.frontal-recess"
+          ],
+          "risk": [
+            "h.frontal-recess-stenosis"
+          ],
+          "think": "Am I lifting crust off healing mucosa, or tearing the mucosa itself?"
+        },
+        {
+          "do": "Leave crust at or near the sphenopalatine foramen, and over a resected MT stump, alone for at least the first 10 days.",
+          "see": [
+            "s.sphenopalatine-foramen",
+            "s.middle-turbinate"
+          ],
+          "risk": [
+            "h.posterior-septal-artery-bleed"
+          ],
+          "think": "An adherent crust pulled here can start an arterial bleed in the clinic."
+        },
+        {
+          "do": "Frontal recess: find and clear it with a 30°/45° view (a Silastic stent left at surgery makes the natural recess easy to find); divide early synechiae and adhesions of the MT.",
+          "see": [
+            "s.frontal-recess",
+            "s.middle-turbinate"
+          ],
+          "risk": [
+            "h.frontal-recess-stenosis"
+          ],
+          "think": "Is the pathway open, and is the MT staying medial?",
+          "station": "t.frontal-recess-45"
+        },
+        {
+          "do": "Between visits: high-volume isotonic saline irrigation from 24–48 hours after surgery; steroid (e.g. budesonide) irrigation for polyp disease where prescribed; anti-staphylococcal antibiotic cover while splints, spacers or packing remain.",
+          "think": "Retained packing or splints carry a toxic shock risk — cover them and take them out on time."
+        }
+      ],
+      "endpoints": [
+        "Cavity free of obstructing crust and clot",
+        "Synechiae divided and the MT medial",
+        "Openings patent as healing completes"
+      ],
+      "pitfalls": [
+        "Vigorous debridement over a skull-base repair",
+        "Pulling crust off the sphenopalatine region in the first 10 days",
+        "Instruments dragged along the septum",
+        "Treating an arterial bleed with silver nitrate: it needs electrocautery, and repacking or a return to theatre if uncontrolled",
+        "Not being ready for a vasovagal reaction: stop, lay the patient flat with the legs raised, cold pack and fluids"
+      ],
+      "src": [
+        "src.chiu-2019-ch12"
+      ],
+      "review": "draft"
+    },
+    {
       "id": "p.draf-i",
       "name": "Draf I frontal sinusotomy (frontal recess clearance)",
       "tier": 2,
@@ -4924,9 +5238,21 @@
         {
           "check": "AEA position and supraorbital ethmoid cell",
           "why": "The posterior limit of the dissection."
+        },
+        {
+          "check": "AP diameter of the frontal recess on sagittal CT",
+          "why": "The best single predictor of how hard the dissection will be: a narrow recess tolerates little instrumentation and is easily stripped of mucosa; some surgeons dilate it with a balloon before using instruments."
         }
       ],
       "steps": [
+        {
+          "do": "Set up: in a full FESS leave the frontal recess for last, after the antrostomy, sphenoethmoidectomy and identification of the skull base. Head up about 30°, inject at least 2 mL of lidocaine with adrenaline at the MT axilla, and keep 1:1000 adrenaline pledgets for the field.",
+          "see": [
+            "lm.middle-turbinate-axilla",
+            "s.middle-turbinate"
+          ],
+          "think": "Is the skull base already identified behind, and is the field dry enough to work above the axilla?"
+        },
         {
           "do": "Remove the upper uncinate up to its attachment, recognising a terminal recess if present.",
           "see": [
@@ -5010,13 +5336,16 @@
       "pitfalls": [
         "Leaving the upper uncinate or agger nasi roof",
         "Opening a supraorbital ethmoid cell and calling it the frontal sinus",
-        "Circumferential mucosal stripping"
+        "Circumferential mucosal stripping",
+        "Drifting medially toward the cribriform plate with an angled scope — rotating the light post away from the midline (about 10 o'clock for a right-sided dissection) re-centres the recess"
       ],
       "src": [
         "src.draf-1991",
         "src.wormald-2016-ifac",
         "src.wormald-textbook",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.chiu-2019-ch09",
+        "src.chiu-2019-ch10"
       ],
       "review": "draft"
     },
@@ -5117,20 +5446,31 @@
       "name": "Draf IIb frontal sinusotomy",
       "tier": 3,
       "indications": [
-        "Frontal disease not controlled by Draf IIa",
+        "Frontal disease not controlled by Draf IIa, including failed frontal surgery with neo-osteogenesis or a lateralized MT remnant",
         "Frontal septal cell or medial disease",
         "Benign tumors (e.g. inverted papilloma, osteoma) near the ostium",
-        "Unilateral access when a Draf III is not required"
+        "Unilateral access when a Draf III is not required",
+        "Frontal mucocele, or a previously obliterated sinus that must be reopened",
+        "Access to the posterior table for CSF leak or encephalocele repair, and selected fractures",
+        "Lateralized MT remnant obstructing the recess: the frontal sinus rescue variant — a medially based mucosal flap raised from the MT stump, a Draf IIb, then the flap laid back over the bare bone"
       ],
       "corridor": "Frontal sinus floor from the lamina papyracea to the nasal septum, including the MT's anterior skull-base attachment.",
       "preop": [
         {
           "check": "AP depth nasal beak to posterior table",
-          "why": "A shallow AP depth limits the safe width of the opening."
+          "why": "A shallow AP depth limits the safe width of the opening. About 10 mm is often quoted as the minimum; the practical test is whether the drill fits without its shaft touching the cribriform plate or the posterior table."
         },
         {
           "check": "Position of the first olfactory fibre relative to the MT attachment",
           "why": "The resection of the MT's anterior attachment must stay in front of it."
+        },
+        {
+          "check": "Relative contraindications",
+          "why": "A very narrow AP diameter, severe bilateral neo-osteogenesis, disease far lateral in a well-pneumatized sinus (out of endoscopic reach — plan an above-and-below or external route), or comorbidity precluding general anesthesia."
+        },
+        {
+          "check": "MRI when tumor, CSF leak, encephalocele or a previous obliteration is in question",
+          "why": "Separates tumor from inspissated secretions and sizes a skull-base defect; after fat obliteration it helps but is often hard to read."
         }
       ],
       "steps": [
@@ -5144,7 +5484,7 @@
           "think": "Is the lateral part of the opening as wide as it will get before I work medially?"
         },
         {
-          "do": "Resect the anterior-superior MT attachment below the frontal floor, then drill the floor and beak medially to the septum.",
+          "do": "Resect the anterior-superior MT attachment below the frontal floor (the lowest part of the MT can be kept for function), then drill the floor and beak medially to the septum.",
           "see": [
             "s.middle-turbinate",
             "s.frontal-beak",
@@ -5159,7 +5499,7 @@
           "think": "Where is the first olfactory fibre? Everything I remove medially must be anterior to it."
         },
         {
-          "do": "Remove any frontal septal cell and smooth the opening; cover exposed bone with mucosa where possible.",
+          "do": "Remove any frontal septal cell and smooth the opening: clear pus and bone dust, coagulate the midline soft tissue in front of the cribriform plate, trim ragged MT and septal edges, and cover exposed bone with mucosa where possible.",
           "see": [
             "v.frontal-septal-cell",
             "s.frontal-intersinus-septum"
@@ -5168,6 +5508,18 @@
             "h.neo-ostium-restenosis"
           ],
           "think": "Is there a mucosal edge on at least part of the circumference?"
+        },
+        {
+          "do": "Stabilize and dress: medialize any MT remnant with a transseptal absorbable suture; if a stent is used, prefer a thin pliable Silastic sheet to a rigid tube and remove it at about 2 weeks.",
+          "see": [
+            "s.middle-turbinate",
+            "s.frontal-ostium"
+          ],
+          "risk": [
+            "h.neo-ostium-restenosis",
+            "h.frontal-recess-stenosis"
+          ],
+          "think": "Stents are colonized by biofilm (shown by 3 weeks, probably sooner) — the benefit must outweigh that."
         }
       ],
       "endpoints": [
@@ -5176,12 +5528,14 @@
       ],
       "pitfalls": [
         "Taking the MT attachment too far posteriorly",
-        "Leaving a medial shelf that scars shut"
+        "Leaving a medial shelf that scars shut",
+        "Trusting navigation without re-checking its registration on fixed landmarks during the case"
       ],
       "src": [
         "src.draf-1991",
         "src.wormald-2016-ifac",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch10"
       ],
       "review": "draft"
     },
@@ -5200,7 +5554,7 @@
       "preop": [
         {
           "check": "AP depth at the ostium (nasal beak to posterior table) on sagittal CT",
-          "why": "A very narrow AP depth makes the procedure hazardous or impossible."
+          "why": "A very narrow AP depth makes the procedure hazardous or impossible; a posterior table less than 5 mm from the skin in front of the nasal beak (mostly after trauma or with craniofacial anomalies) is an absolute contraindication."
         },
         {
           "check": "Frontal sinus size and intersinus septum position; frontal aplasia",
@@ -5209,11 +5563,32 @@
         {
           "check": "Posterior table dehiscence, prior CSF leak sites",
           "why": "Areas to avoid drilling."
+        },
+        {
+          "check": "Disease activity",
+          "why": "Operate when topical therapy is likely to control the airway disease; very active disease still needing systemic steroids is a relative contraindication."
+        },
+        {
+          "check": "Anesthesia plan",
+          "why": "Total intravenous anesthesia with a low heart rate (about 55–65 bpm) and a mean arterial pressure near 60 mmHg keeps the drilling field dry (the chapter's targets; expert opinion)."
         }
       ],
       "steps": [
         {
-          "do": "Create a window in the anterior-superior septum just below the frontal sinus floor.",
+          "do": "Raise the mucosal flaps first: on each side one continuous flap over the nasal beak, frontal floor, frontal process of the maxilla and the planned septal window, before any drilling.",
+          "see": [
+            "s.frontal-beak",
+            "s.frontal-process-maxilla",
+            "s.nasal-septum"
+          ],
+          "risk": [
+            "h.neo-ostium-restenosis"
+          ],
+          "think": "These flaps are what will cover the bone at the end — protect them from the drill.",
+          "station": "t.draf-iii-0"
+        },
+        {
+          "do": "Create a window in the anterior-superior septum just below the frontal sinus floor; mark its anteroinferior corner by pushing needle-tip cautery through the septum from one side, so the flaps on both sides stay symmetric.",
           "see": [
             "s.nasal-septum",
             "s.frontal-beak"
@@ -5238,17 +5613,28 @@
           "station": "t.draf-iii-0"
         },
         {
-          "do": "Open one or both frontal sinuses (Draf IIa or outside-in from the frontal process of the maxilla), then drill the beak and floors forward and laterally toward each lamina.",
+          "do": "Outside-in: on each side drill the bone lateral to the nasal beak down to the periosteum of the frontal process of the maxilla, fixing the lateral limits before the beak is opened; the periosteum shows as whiter tissue that bleeds more than bone.",
+          "see": [
+            "s.frontal-process-maxilla",
+            "s.frontal-beak"
+          ],
+          "think": "Periosteum reached on both sides? Then the lateral limits are set and the beak can come down broadly.",
+          "station": "t.draf-iii-0"
+        },
+        {
+          "do": "Take down the beak and frontal floors between those limits on a broad inverted-U front, aiming more superiorly and anteriorly than at the recess, and open the frontal sinus mucosa as late as possible; then follow the medial orbital wall where it turns into the orbital roof to square off each side. (With a normal recess, a Draf IIa on one side can be the starting point instead — inside-out.)",
           "see": [
             "s.frontal-beak",
             "s.frontal-sinus-floor",
-            "s.frontal-sinus-posterior-table"
+            "s.frontal-sinus-posterior-table",
+            "s.lamina-papyracea",
+            "s.orbital-roof"
           ],
           "risk": [
             "h.posterior-table-breach",
             "h.lamina-papyracea-breach"
           ],
-          "think": "Identify the posterior table before drilling; drill forward (beak) not backward. Stop laterally at the lamina and orbital roof."
+          "think": "Identify the posterior table before drilling; drill forward (beak), not backward. Outside-in never depends on frontal recess anatomy, so it suits a scarred or neo-osteogenic recess better than the inside-out (Lothrop) order that starts in the recess."
         },
         {
           "do": "Remove the intersinus septum and any frontal septal cells to make one common cavity; smooth all edges.",
@@ -5264,14 +5650,27 @@
           "station": "t.draf-iii-0"
         },
         {
-          "do": "Cover exposed bone with free mucosal grafts or local flaps; place stents or packing as preferred.",
+          "do": "Trim MT heads that project forward back behind the posterior edge of the septal window; cover exposed bone — above all the frontal process of the maxilla, which dries and crusts most — with the flaps and free mucosal grafts (e.g. from the posterior inferior turbinate), held by a 0.5 mm Silastic sheet cut to a template of the cavity.",
+          "see": [
+            "s.frontal-ostium",
+            "s.frontal-process-maxilla",
+            "s.middle-turbinate",
+            "s.inferior-turbinate"
+          ],
+          "risk": [
+            "h.neo-ostium-restenosis"
+          ],
+          "think": "The neo-ostium will narrow substantially in the first year ([[m.draf-iii-ostium-narrowing]]); make it as large as the anatomy allows."
+        },
+        {
+          "do": "Postoperative: high-volume saline irrigation from day 1; remove the Silastic at 3 weeks or later, clearing granulation, crust and unfavourable synechiae; review at about 3 and 12 weeks.",
           "see": [
             "s.frontal-ostium"
           ],
           "risk": [
             "h.neo-ostium-restenosis"
           ],
-          "think": "The neo-ostium will narrow substantially in the first year ([[m.draf-iii-ostium-narrowing]]); make it as large as the anatomy allows."
+          "think": "A thick fibrotic web on the front of the beak at 12 weeks is treated early ([[h.neo-ostium-restenosis]]) before it matures."
         }
       ],
       "endpoints": [
@@ -5283,14 +5682,20 @@
       "pitfalls": [
         "Drilling behind the first olfactory fibre",
         "Undersized AP opening",
-        "Leaving intersinus or septal cell remnants that scar"
+        "Leaving intersinus or septal cell remnants that scar",
+        "Boring a narrow hole toward the sinus instead of taking the beak on a broad front",
+        "Opening the inflamed frontal mucosa early — it bleeds and blinds the rest of the drilling",
+        "MT heads left in the plane of the septal window — synechiae into the olfactory cleft",
+        "Harvesting the inferior turbinate graft too deep — its artery can bleed after surgery",
+        "Expecting a Draf III alone to reach a lesion over the lateral orbital roof — it needs an added orbital transposition or an external approach"
       ],
       "src": [
         "src.draf-1991",
         "src.gross-1995-mlp",
         "src.wormald-2003-emlp",
         "src.tran-2007-emlp",
-        "src.anderson-2009-emlp"
+        "src.anderson-2009-emlp",
+        "src.chiu-2019-ch11"
       ],
       "review": "draft"
     },
@@ -5300,10 +5705,12 @@
       "tier": 2,
       "indications": [
         "Complicated acute frontal sinusitis (orbital or intracranial spread, Pott's puffy tumor) needing drainage",
-        "Adjunct to endoscopic surgery (above-and-below) for far lateral cells or disease",
-        "Localizing the frontal ostium from above with irrigation (e.g. fluorescein-tinted saline)"
+        "A second working port (above-and-below) for disease out of endoscopic reach: far lateral cells, laterally based mucoceles or polyps, neo-osteogenic recess obstruction, benign tumors such as osteoma or inverted papilloma",
+        "Localizing the frontal ostium from above with irrigation (e.g. fluorescein-tinted saline)",
+        "Rapid decompression of both sinuses through an intersinus septectomy",
+        "Combined repair of a posterior table CSF leak or encephalocele; rarely a posterior table fracture"
       ],
-      "corridor": "Anterior table or floor of the frontal sinus through a medial brow incision.",
+      "corridor": "Medial floor of the frontal sinus (or, in a non-infected sinus, the anterior table) through a brow or upper-lid incision.",
       "preop": [
         {
           "check": "Sinus depth and extent on CT (or navigation); aplasia or hypoplasia",
@@ -5316,7 +5723,7 @@
       ],
       "steps": [
         {
-          "do": "Mark the trephination point on CT/navigation where the sinus is deepest; make a small incision in or below the medial brow.",
+          "do": "Mark the trephination point on CT/navigation at the medial floor where the sinus is deepest. Incision: infrabrow (most used — just under the brow, medial to the supraorbital bundle), intrabrow, suprabrow or upper-lid crease; keep it 1–2 cm and stop at the medial end of the brow.",
           "see": [
             "lm.frontal-trephination-point",
             "lm.supraorbital-notch",
@@ -5325,10 +5732,10 @@
           "risk": [
             "h.supraorbital-nerve-injury"
           ],
-          "think": "Is the sinus definitely behind this point? Am I medial to the supraorbital notch?"
+          "think": "Is the sinus definitely behind this point? Am I medial to the supraorbital notch? Each incision trades scar visibility, brow alopecia, forehead numbness and infection. In the upper-lid route, stay preseptal above the levator and identify and retract the supraorbital and supratrochlear bundles before opening the periosteum."
         },
         {
-          "do": "Elevate periosteum subperiosteally and drill or trephine into the sinus.",
+          "do": "Elevate periosteum and enter through the medial floor — not so low and medial that scar reaches the frontal recess. Saucerize a window of about 6–8 mm with a 4 mm cutting bur until a blue hue shows mucosa through the last thin bone, then enter with a curette or the navigation probe; enlarge to 5–15 mm with a small Kerrison if instruments must pass.",
           "see": [
             "s.frontal-sinus-anterior-table",
             "s.frontal-sinus-floor",
@@ -5341,7 +5748,7 @@
           "think": "Angle away from the posterior table; stop as soon as I am in air or pus."
         },
         {
-          "do": "Culture, irrigate and, if combined with endoscopy, flush dyed saline to identify the drainage pathway from below; leave a drain or cannula if needed.",
+          "do": "Culture, irrigate and, if combined with endoscopy, flush dyed saline to identify the drainage pathway from below; leave a drain or cannula if needed. An 8F catheter or silicone tube sutured in place for irrigation usually comes out after 3–5 days.",
           "see": [
             "s.frontal-sinus",
             "s.frontal-recess"
@@ -5355,10 +5762,14 @@
       ],
       "pitfalls": [
         "Trephinating a hypoplastic sinus without imaging",
-        "Lateral placement injuring the supraorbital nerve"
+        "Lateral placement injuring the supraorbital nerve",
+        "Entering an acutely infected sinus through the anterior table — its diploic bone risks osteomyelitis and intracranial spread",
+        "A trephine placed too low and medial — scar can close the frontal recess",
+        "Trephination alone as definitive treatment for chronic inflammatory frontal disease: failure rates up to 57% are reported"
       ],
       "src": [
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch32"
       ],
       "review": "draft"
     },
@@ -5368,24 +5779,24 @@
       "tier": 3,
       "indications": [
         "Frontal disease inaccessible endoscopically (far lateral, supraorbital)",
-        "Selected frontal fractures",
-        "Large lateral osteomas or tumors",
-        "Failed endoscopic surgery including Draf III"
+        "Selected frontal fractures, particularly those involving the frontal recess, and posterior table defects with CSF leak",
+        "Large lateral osteomas, other fibro-osseous lesions (fibrous dysplasia, ossifying fibroma) or tumors",
+        "Chronic frontal sinusitis or recurrent recess stenosis despite endoscopic surgery, including Draf III"
       ],
       "corridor": "Anterior table raised as a bone flap hinged on pericranium, via coronal or brow incision.",
       "preop": [
         {
           "check": "Template of the sinus outline from CT or navigation",
-          "why": "An inaccurate outline enters the cranial cavity or orbit."
+          "why": "An inaccurate outline enters the cranial cavity or orbit. Navigation outlines the sinus more accurately than a cut-out 6-foot Caldwell film or transillumination."
         },
         {
           "check": "Mucosal disease, posterior table integrity, outflow tract",
-          "why": "Decides between obliteration and a non-obliterative flap with endoscopic drainage."
+          "why": "Decides between obliteration and a non-obliterative flap with endoscopic drainage. If the recess is undisturbed and less than about half of the mucosa is lost, the rest can be kept with endoscopic drainage; more extensive loss favors obliteration. Posterior table erosion may mean mucosa already lies on dura — obliteration then risks a hidden mucocele."
         }
       ],
       "steps": [
         {
-          "do": "Coronal (or brow) incision; elevate a pericranial flap preserving supraorbital and supratrochlear nerves.",
+          "do": "Protect the corneas (temporary tarsorrhaphy or shields). Coronal incision behind the hairline to the preauricular creases, cut parallel to the hair follicles; raise the flap subgaleally or subperiosteally, keeping the pericranium vascularized (raised with the scalp so it does not dry) for the hinge or reconstruction. Laterally, dissect deep to the temporoparietal fascia, on the superficial layer of the deep temporal fascia.",
           "see": [
             "s.supraorbital-nerve",
             "s.supratrochlear-nerve",
@@ -5394,10 +5805,10 @@
           "risk": [
             "h.supraorbital-nerve-injury"
           ],
-          "think": "Keep the pericranium for the hinge or for later reconstruction."
+          "think": "The frontal branch of the facial nerve runs on the deep surface of the temporoparietal fascia — the plane beneath that fascia protects it. Supraorbital and supratrochlear bundles leaving through a notch come up with the flap; through a foramen, drill the lower rim of the canal to free them."
         },
         {
-          "do": "Outline the sinus with the template and cut the anterior table with a bevel toward the sinus; fracture the flap down on its periosteal hinge at the orbital rims.",
+          "do": "Outline the sinus with the navigation-derived template and cut the anterior table with a bevel toward the sinus — or drill a line of small holes 0.5–1 cm apart and join them, which removes less bone and lets the flap lock back; fracture the intersinus septum, then hinge the flap down on its pericranium at the orbital rims (or lift it free and keep it in saline).",
           "see": [
             "s.frontal-sinus-anterior-table",
             "s.frontal-sinus"
@@ -5418,10 +5829,24 @@
           "risk": [
             "h.mucocele-after-obliteration"
           ],
-          "think": "Every fragment of mucosa left behind is a future mucocele."
+          "think": "Every fragment of mucosa left behind is a future mucocele. Fat is the usual filler; avoid hydroxyapatite cement, which infects and needs revision more often."
         },
         {
-          "do": "Replace and fix the flap; close in layers.",
+          "do": "If the posterior table must go (cranialization): remove it with all mucosa, plug the recess, and lay a pericranial flap on the supraorbital and supratrochlear vessels across the floor, sutured to dura, to separate brain from nose.",
+          "see": [
+            "s.frontal-sinus-posterior-table",
+            "s.anterior-cranial-fossa-dura",
+            "s.frontal-recess",
+            "s.supratrochlear-nerve"
+          ],
+          "risk": [
+            "h.mucocele-after-obliteration",
+            "h.csf-repair-failure"
+          ],
+          "think": "Is the pericranial flap still well perfused when I lay it in?"
+        },
+        {
+          "do": "Replace the flap and fix it with titanium plates or wires (a perforation-cut flap may lock without hardware); close in layers.",
           "see": [
             "s.frontal-sinus-anterior-table"
           ],
@@ -5437,11 +5862,14 @@
       "pitfalls": [
         "Template error",
         "Residual mucosa under the obliteration",
-        "Contour deformity from bone resorption"
+        "Contour deformity: bossing from a proud or ill-fitting flap or new bone in the saw gap; late depression from over-drilling, poor fixation or resorption",
+        "Infection after obliteration for chronic disease (cellulitis, abscess, fistula)",
+        "Superficial dissection near the tragus — the frontal branch of the facial nerve and the superficial temporal vessels"
       ],
       "src": [
         "src.goodale-1958",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch33"
       ],
       "review": "draft"
     },
@@ -5454,7 +5882,7 @@
         "Devascularization of anterior skull-base tumors",
         "Control of an AEA bleeding during FESS"
       ],
-      "corridor": "Endoscopic: ethmoid roof at the posterior frontal recess after anterior ethmoidectomy. External: medial orbit through a Lynch/medial canthal or transcaruncular approach along the frontoethmoidal suture.",
+      "corridor": "Endoscopic: ethmoid roof at the posterior frontal recess, after a sphenoethmoidectomy has defined the skull base. External: medial orbit through a Lynch/medial canthal or transcaruncular approach along the frontoethmoidal suture.",
       "preop": [
         {
           "check": "AEA canal position: in the roof or in a mesentery; supraorbital ethmoid cell",
@@ -5463,12 +5891,18 @@
         {
           "check": "Keros depth",
           "why": "Opening the canal medially approaches the lateral lamella."
+        },
+        {
+          "check": "Why the artery is being tied: epistaxis, tumor devascularization or bleeding during FESS",
+          "why": "For epistaxis an external route with endoscopic assistance is often the safer choice: reaching an artery that runs in the roof endoscopically exposes the skull base just to avoid a small scar. Endoscopic control suits an artery in a mesentery or an ethmoid that is already open."
         }
       ],
       "steps": [
         {
-          "do": "Endoscopic: complete an anterior ethmoidectomy and identify the AEA crossing the roof behind the frontal recess.",
+          "do": "Endoscopic: complete a sphenoethmoidectomy and find the skull base at the sphenoid roof, then follow it forward, opening each cell between its septations (in and out) rather than cutting across them, until the AEA is seen crossing the roof behind the frontal recess.",
           "see": [
+            "s.sphenoid-sinus",
+            "s.fovea-ethmoidalis",
             "s.anterior-ethmoidal-artery",
             "lm.aea-ethmoid-roof",
             "s.bullar-lamella"
@@ -5477,23 +5911,26 @@
             "h.aea-transection",
             "h.lateral-lamella-perforation"
           ],
-          "think": "Is the artery accessible below the roof, or would I have to drill the canal next to the lateral lamella?",
+          "think": "Is the artery accessible below the roof, or would I have to drill the canal next to the lateral lamella? An artery can lie inside a septation — never cut straight across one.",
           "station": "t.ethmoid-roof-30"
         },
         {
-          "do": "Endoscopic: remove the thin canal bone laterally near the lamina; clip and/or bipolar the artery close to the orbit.",
+          "do": "Endoscopic: work on the middle of the canal where it crosses the roof — away from the lateral lamella medially and from the anterior ethmoidal foramen laterally. Confirm its course on navigation, thin the canal bone with a diamond bur across a broad front, free the artery from its bony sleeve (a bone-encased artery will not take a clip, even in a mesentery), then clip and/or bipolar it before dividing.",
           "see": [
             "s.anterior-ethmoidal-canal",
+            "lm.aea-ethmoid-roof",
+            "s.lateral-lamella",
             "s.lamina-papyracea"
           ],
           "risk": [
             "h.orbital-hematoma",
-            "h.lateral-lamella-perforation"
+            "h.lateral-lamella-perforation",
+            "h.medial-rectus-injury"
           ],
-          "think": "Never cut before it is sealed: a divided stump retracts into the orbit."
+          "think": "Never cut before it is sealed: a divided stump retracts into the orbit. Opening the lamina around the foramen exposes weak periorbita, fat and the medial rectus to the debrider; a narrow drill track near the orbit is how the artery itself gets cut."
         },
         {
-          "do": "External: incise medial to the canthus (above the medial canthal tendon), elevate periorbita subperiosteally behind the posterior lacrimal crest along the frontoethmoidal suture.",
+          "do": "External: a curved incision midway between the medial canthus and the nasal dorsum, above the medial canthal tendon, broken by a small notch at the level of the canthus to prevent webbing; elevate subperiosteally past the lacrimal sac region and behind the posterior lacrimal crest along the frontoethmoidal suture.",
           "see": [
             "s.medial-canthal-tendon",
             "s.trochlea",
@@ -5517,6 +5954,16 @@
             "h.orbital-hematoma"
           ],
           "think": "The PEA is about 12 mm further and the optic canal only about 6 mm behind it — do not chase further posteriorly than needed."
+        },
+        {
+          "do": "External: close the deep layers in exact apposition, then skin. After either route, check visual acuity and eye movements hourly for the first 6 hours; mild periorbital bruising is expected.",
+          "see": [
+            "s.orbit"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ],
+          "think": "Pain, proptosis, falling vision or restricted movement is an orbital hematoma until proven otherwise."
         }
       ],
       "endpoints": [
@@ -5526,13 +5973,17 @@
       "pitfalls": [
         "Monopolar cautery near the orbit",
         "Dividing before sealing",
-        "Chasing a canal embedded in the roof endoscopically next to the lateral lamella"
+        "Chasing a canal embedded in the roof endoscopically next to the lateral lamella",
+        "Removing the lamina papyracea around the anterior ethmoidal foramen endoscopically",
+        "Relying on a clip for an artery still encased in bone",
+        "Bipolar heat deep in the external approach: the trochlea and superior oblique above, and the optic nerve a few millimetres behind the PEA"
       ],
       "src": [
         "src.floreani-2006-aea",
         "src.simmen-2006-aea",
         "src.rontal-1979",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch04"
       ],
       "review": "draft"
     },
@@ -5542,7 +5993,8 @@
       "tier": 3,
       "indications": [
         "Thyroid eye disease with compressive optic neuropathy, exposure keratopathy or disfiguring proptosis (usually after the active phase)",
-        "Emergency relief of orbital hematoma not controlled by canthotomy/cantholysis"
+        "Emergency relief of orbital hematoma not controlled by canthotomy/cantholysis",
+        "Access: drainage of orbital abscess or hematoma, biopsy of indeterminate medial lesions, benign medial tumors ([[p.orbital-tumor-resection]]) and palliative debulking; the first stage of [[p.optic-nerve-decompression]]"
       ],
       "corridor": "Medial orbital wall from the frontal recess to the orbital apex and the medial orbital floor medial to the infraorbital nerve, through a complete sphenoethmoidectomy.",
       "preop": [
@@ -5557,11 +6009,15 @@
         {
           "check": "Baseline vision, motility and exophthalmometry",
           "why": "Documents compressive neuropathy and pre-existing strabismus; informs whether to preserve the inferomedial strut."
+        },
+        {
+          "check": "Laterality and anesthesia plan",
+          "why": "Bilateral decompression is usually done at one sitting, and an only-seeing eye is commonly decompressed under general anesthesia; warn the anesthetist against forceful bag-mask ventilation after extubation, which can blow air into the orbit and soft tissues."
         }
       ],
       "steps": [
         {
-          "do": "Complete uncinectomy, a wide maxillary antrostomy to the orbital floor, full sphenoethmoidectomy and frontal recess clearance.",
+          "do": "Complete uncinectomy, a wide maxillary antrostomy to the orbital floor, full sphenoethmoidectomy and frontal recess clearance. Resecting the MT improves exposure of the medial wall, allows more prolapse and eases postoperative cleaning (practice varies).",
           "see": [
             "s.orbital-floor",
             "s.lamina-papyracea",
@@ -5571,7 +6027,7 @@
           "risk": [
             "h.decompression-frontal-obstruction"
           ],
-          "think": "Is the whole lamina exposed from the frontal recess to the sphenoid face, and is the frontal recess clear?",
+          "think": "Is the whole lamina exposed from the frontal recess to the sphenoid face, and is the frontal recess clear? In thyroid eye disease the lamina is often bowed medially by orbital pressure — expect it closer than usual.",
           "station": "t.medial-orbital-wall-0"
         },
         {
@@ -5587,10 +6043,10 @@
             "h.ethmoid-roof-penetration",
             "h.optic-nerve-injury-onodi"
           ],
-          "think": "The ethmoidal arteries mark the skull base; preserve them unless they block the decompression."
+          "think": "The ethmoidal arteries mark the skull base; preserve them unless they block the decompression. Posterior limit: the sphenoethmoid angle, where the sphenoid face meets the skull base — unless the optic canal is to be opened."
         },
         {
-          "do": "Remove the medial orbital floor medial to the infraorbital nerve, deciding whether to preserve the inferomedial strut.",
+          "do": "Remove the medial orbital floor medial to the infraorbital nerve — elevate the periorbita off it with a ball probe to make a pocket for the curette, then down-fracture — deciding whether to preserve the inferomedial strut.",
           "see": [
             "s.orbital-floor",
             "s.infraorbital-nerve",
@@ -5617,6 +6073,17 @@
           "think": "Blade only through periorbita — never a debrider; inferior incisions first so fat does not hide the next ones."
         },
         {
+          "do": "For severe proptosis, add a lateral wall decompression through a lateral canthotomy (usually by the orbital surgeon): a balanced medial-plus-lateral decompression.",
+          "see": [
+            "s.orbit",
+            "s.periorbita"
+          ],
+          "risk": [
+            "h.decompression-diplopia"
+          ],
+          "think": "More reduction with less new diplopia than pushing the medial and floor decompression further."
+        },
+        {
           "do": "For compressive optic neuropathy, extend to the orbital apex and optic canal ([[p.optic-nerve-decompression]]).",
           "see": [
             "s.orbital-apex",
@@ -5626,6 +6093,16 @@
             "h.optic-nerve-injury-onodi"
           ],
           "think": "Is the apex adequately relieved? Avoid heat and pressure on the canal."
+        },
+        {
+          "do": "Finish without nasal packing, so the prolapsed orbital contents are neither pushed back nor compressed.",
+          "see": [
+            "s.orbital-fat"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ],
+          "think": "Hemostasis by bipolar and patience, not by packing against the orbit."
         }
       ],
       "endpoints": [
@@ -5636,11 +6113,150 @@
       "pitfalls": [
         "Removing the upper anterior lamina and blocking the frontal recess",
         "Using a debrider on periorbita",
-        "Unplanned strut removal causing diplopia"
+        "Unplanned strut removal causing diplopia",
+        "Monopolar cautery near the opened periorbita — bipolar only"
       ],
       "src": [
         "src.kennedy-1990-decompression",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch18"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.orbital-tumor-resection",
+      "name": "Endoscopic transnasal resection of medial orbital tumors",
+      "tier": 3,
+      "indications": [
+        "Benign extraconal or intraconal tumors lying medial or inferior to the optic nerve",
+        "Lesions lateral to the nerve only when they lie below the plane of resectability — a line from the opposite naris along the long axis of the optic nerve; below it they can be reached without retracting the nerve",
+        "Biopsy of indeterminate medial orbital lesions"
+      ],
+      "corridor": "Transethmoidal through the lamina papyracea (and the orbital apex bone), into the extraconal fat and then around the medial rectus into the medial intraconal space, with a posterior septal window for two-surgeon, binostril work.",
+      "preop": [
+        {
+          "check": "Relation of the tumor to the optic nerve on 3D CT/MRI reconstruction",
+          "why": "Shows whether it lies medial/inferior to the nerve or below the plane of resectability, and its size and shape."
+        },
+        {
+          "check": "Formal visual fields; a joint plan with ophthalmology (and neurosurgery if the dura or apex may be breached)",
+          "why": "Baseline for the most feared complication and for the choice of approach."
+        },
+        {
+          "check": "Is a vascular lesion or an ophthalmic artery aneurysm suspected?",
+          "why": "Angiography only then, not routinely."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Complete a maxillary antrostomy, sphenoethmoidectomy and sphenoidotomy to expose the whole medial orbital wall back to the apex.",
+          "see": [
+            "s.lamina-papyracea",
+            "s.orbital-floor",
+            "s.sphenoid-sinus",
+            "s.optic-prominence"
+          ],
+          "risk": [
+            "h.lamina-papyracea-breach",
+            "h.optic-nerve-injury-onodi"
+          ],
+          "think": "Where is the optic nerve on this side, and is there an Onodi cell?",
+          "station": "t.medial-orbital-wall-0"
+        },
+        {
+          "do": "Remove the lamina with fine elevators; thin the thicker palatine and sphenoid bone at the orbital apex and optic canal with an angled diamond bur under irrigation.",
+          "see": [
+            "s.lamina-papyracea",
+            "s.orbital-apex",
+            "s.optic-canal"
+          ],
+          "risk": [
+            "h.optic-nerve-thermal-injury"
+          ],
+          "think": "Heat and pressure near the canal are the danger, not the thin lamina."
+        },
+        {
+          "do": "Open the periorbita with a reverse hockey-stick incision using a sickle knife, keeping the anterior periorbita intact.",
+          "see": [
+            "s.periorbita",
+            "s.orbital-fat"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ],
+          "think": "Intact anterior periorbita helps healing and limits prolapse."
+        },
+        {
+          "do": "Dissect the extraconal fat, where an extraconal tumor is found and removed. Use bipolar only in the extraconal space; warm-water irrigation and saline-soaked patties give hemostasis and retract fat.",
+          "see": [
+            "s.orbital-fat",
+            "s.medial-rectus",
+            "s.anterior-ethmoidal-artery",
+            "s.posterior-ethmoidal-artery"
+          ],
+          "risk": [
+            "h.orbital-hematoma",
+            "h.medial-rectus-injury"
+          ],
+          "think": "The ethmoidal neurovascular bundles cross above the medial rectus here."
+        },
+        {
+          "do": "Through a posterior septal window a second surgeon retracts the medial rectus superomedially with a ball probe, exposing the medial intraconal space.",
+          "see": [
+            "s.medial-rectus",
+            "s.inferior-rectus",
+            "s.optic-nerve",
+            "s.ophthalmic-artery"
+          ],
+          "risk": [
+            "h.medial-rectus-injury",
+            "h.ophthalmic-artery-injury"
+          ],
+          "think": "Which zone is the tumor in — A (anteroinferior, easiest), B (anterosuperior, beside the ethmoidal vessels) or C (behind the ophthalmic artery's inferomedial muscular trunk, next to the optic nerve, hardest)?"
+        },
+        {
+          "do": "Free the tumor from its medial, superior and inferior attachments before dividing the lateral ones, and deliver it anteriorly in a plane parallel to the optic nerve. Do not manipulate the nerve, and do not cauterize or resect intraconal fat.",
+          "see": [
+            "s.optic-nerve",
+            "s.orbital-fat"
+          ],
+          "risk": [
+            "h.ophthalmic-artery-injury"
+          ],
+          "think": "Am I pulling on anything that is tethered to the nerve?"
+        },
+        {
+          "do": "After extensive dissection of a mid or anterior orbital lesion, reconstruct the medial wall (e.g. with a nasoseptal flap) to prevent enophthalmos and diplopia from lost orbital volume; small defects near the annulus of Zinn and optic canal may be left.",
+          "see": [
+            "s.periorbita",
+            "s.lamina-papyracea"
+          ],
+          "think": "How much orbital support has this dissection removed?"
+        },
+        {
+          "do": "Postoperative: keep any packing off the orbitotomy; serial eye examinations with a low threshold to re-explore; no high-volume irrigation for 2 weeks; a first debridement at days 5–8 only to open the inferior airway, leaving the orbitotomy alone until weeks 3–4.",
+          "see": [
+            "s.orbit"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ],
+          "think": "Bleeding or swelling in a closed orbit compresses the nerve — reassess vision, not just comfort."
+        }
+      ],
+      "endpoints": [
+        "Tumor removed without optic nerve manipulation",
+        "Vision and motility at baseline",
+        "Medial wall reconstructed when the dissection was extensive"
+      ],
+      "pitfalls": [
+        "Monopolar cautery anywhere in the orbit; bipolar in the intraconal space",
+        "Cauterizing or resecting intraconal fat",
+        "Choosing the endoscopic route for a lesion lateral to the nerve and above the plane of resectability",
+        "Packing pressed onto the orbitotomy (raised orbital pressure if bleeding or edema follow)"
+      ],
+      "src": [
+        "src.chiu-2019-ch20"
       ],
       "review": "draft"
     },
@@ -5733,7 +6349,7 @@
         },
         {
           "check": "Reconstruction plan: nasoseptal flap availability or pericranial flap",
-          "why": "Tumor involving the septum rules out the NSF."
+          "why": "Tumor involving the septum rules out the NSF. Pedicled flaps are preferred when radiotherapy will follow; when the septum, posterior ethmoid or pterygopalatine fossa is involved, free fascia and mucosal grafts are taken well away from the tumor."
         },
         {
           "check": "Relation of A2, frontopolar and orbitofrontal arteries to the tumor",
@@ -5742,8 +6358,9 @@
       ],
       "steps": [
         {
-          "do": "Harvest or preserve reconstruction flaps; bilateral maxillary antrostomies, sphenoethmoidectomies, Draf III and posterior septectomy.",
+          "do": "Infiltrate the pterygopalatine fossa through the greater palatine foramen to reduce bleeding; harvest or preserve reconstruction flaps; bilateral maxillary antrostomies, sphenoethmoidectomies, Draf III and posterior septectomy.",
           "see": [
+            "lm.greater-palatine-foramen",
             "s.frontal-sinus",
             "s.sphenoid-sinus",
             "s.lamina-papyracea",
@@ -5774,7 +6391,7 @@
             "s.crista-galli",
             "s.anterior-cranial-fossa-dura"
           ],
-          "think": "Limits: frontal posterior table anteriorly, planum posteriorly, laminae laterally."
+          "think": "Limits: frontal posterior table anteriorly, planum posteriorly, laminae laterally. A tumor confined to one side without septal involvement can be resected unilaterally, preserving smell on the other side."
         },
         {
           "do": "Open the dura around the tumor, divide the falx, debulk centrally and dissect the capsule extracapsularly.",
@@ -5802,6 +6419,18 @@
             "h.tension-pneumocephalus"
           ],
           "think": "Does the flap cover every edge of bare bone around the defect? ([[p.skull-base-reconstruction]])"
+        },
+        {
+          "do": "Postoperative: a rolled thin Silastic stent in each frontal sinus for 14–21 days; nasal trumpets sutured at the septocolumellar junction for 48–72 hours to divert airflow from the repair; expect crusting for about 3 months (mean about 101 days in one series, longer after larger approaches).",
+          "see": [
+            "s.frontal-sinus",
+            "s.anterior-cranial-fossa-dura"
+          ],
+          "risk": [
+            "h.tension-pneumocephalus",
+            "h.neo-ostium-restenosis"
+          ],
+          "think": "Anything that raises nasal pressure — mask ventilation, nose-blowing — can push air through the repair."
         }
       ],
       "endpoints": [
@@ -5816,7 +6445,8 @@
       "src": [
         "src.kassam-2005-sagittal-1",
         "src.rhoton-2002-acf",
-        "src.hadad-2006-nsf"
+        "src.hadad-2006-nsf",
+        "src.chiu-2019-ch25"
       ],
       "review": "draft"
     },
@@ -5837,17 +6467,21 @@
           "why": "Avoids operating on rhinitis."
         },
         {
-          "check": "Thin-section CT (with MRI or cisternography when needed) to localize the defect and any second defect",
+          "check": "Thin-section CT — coronal shows cribriform and fovea defects best — (with MRI or cisternography when needed) to localize the defect and any second defect",
           "why": "Missed second defects cause failure."
         },
         {
           "check": "Signs of raised intracranial pressure (obesity, empty sella, papilledema)",
           "why": "Untreated intracranial hypertension undermines the repair."
+        },
+        {
+          "check": "Anesthesia plan for emergence",
+          "why": "A deep, smooth extubation without coughing, and no positive-pressure mask ventilation afterwards, protect the repair from pressure spikes and air entry (pneumocephalus)."
         }
       ],
       "steps": [
         {
-          "do": "Expose the defect (intrathecal fluorescein, where used, helps localize it).",
+          "do": "Expose the defect. Intrathecal fluorescein, where used, is off-label and must be dilute — commonly 0.1 mL of 10% fluorescein diluted in 10 mL of the patient's CSF or preservative-free saline, injected slowly; a blue-light filter shows small or low-flow leaks.",
           "see": [
             "s.cribriform-plate",
             "s.lateral-lamella",
@@ -5878,10 +6512,10 @@
             "h.csf-repair-failure",
             "h.tension-pneumocephalus"
           ],
-          "think": "Defect size and flow decide the layers: small low-flow defects close with a free graft; large or high-flow defects need multilayer plus vascularized cover."
+          "think": "Defect size and flow decide the layers: small low-flow defects close with a free graft; large or high-flow defects need multilayer plus vascularized cover. In one cribriform algorithm, a defect over about 5 mm (or any encephalocele) gets a free mucosal or pedicled septal graft rather than sealant and packing alone, and a rigid underlay of bone or cartilage (e.g. a composite graft from a split resected MT) is kept for encephaloceles; a cribriform leak without encephalocele closes without rigid material. A free mucosal graft goes mucosa-side toward the nose."
         },
         {
-          "do": "Postoperative care: head elevation, avoid straining and nose blowing; lumbar drain only selectively; treat raised intracranial pressure.",
+          "do": "Postoperative care: head elevation, no straining or nose blowing; non-absorbable packing, if used, stays at least 5 days, then saline sprays 4–6 times a day; lumbar drain only selectively (when used, about 10–15 mL/h for 2–5 days, then clamped and observed before removal); treat raised intracranial pressure.",
           "see": [
             "s.anterior-cranial-fossa-dura"
           ],
@@ -5898,11 +6532,13 @@
       "pitfalls": [
         "Missed second defect",
         "Graft on mucosa rather than bone",
-        "Ignoring intracranial hypertension"
+        "Ignoring intracranial hypertension",
+        "Free mucosal graft laid with its mucosal surface against the bone — a mucocele can form"
       ],
       "src": [
         "src.hegazy-2000",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch26"
       ],
       "review": "draft"
     },
@@ -5956,7 +6592,7 @@
             "h.csf-repair-failure",
             "h.tension-pneumocephalus"
           ],
-          "think": "Is the repair sized for the defect, not for the sac? ([[p.csf-leak-repair]])"
+          "think": "Is the repair sized for the defect, not for the sac? ([[p.csf-leak-repair]]) When brain has herniated, a rigid underlay (bone or cartilage) is often added to resist the raised intracranial pressure."
         }
       ],
       "endpoints": [
@@ -5969,7 +6605,8 @@
       ],
       "src": [
         "src.hegazy-2000",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch26"
       ],
       "review": "draft"
     }

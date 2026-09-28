@@ -1789,7 +1789,7 @@
       "what": "Herniation of meninges (meningocele) or meninges and brain (meningoencephalocele) through a skull-base defect into the nose or sinuses. It is congenital — frontoethmoidal types present as an external midline mass, basal types (transethmoidal, sphenoethmoidal, transsphenoidal) as an intranasal one — or acquired: spontaneous in adults with raised intracranial pressure, or after trauma or surgery.",
       "why": "The herniated tissue is non-functional and is reduced with bipolar cautery down to the skull base, never avulsed (vessels retract intracranially — [[h.encephalocele-bleeding]]), then the defect is closed in layers; large transsphenoidal encephaloceles carrying pituitary, hypothalamus or chiasm are not reduced and need a combined team. The unforgivable error is to biopsy or \"polypectomize\" it in clinic.",
       "imaging": {
-        "ct": "Thin-section CT: a skull-base defect with smooth, corticated, remodeled margins (not the destruction of a tumor) — cribriform plate, lateral lamella, fovea, planum, lateral sphenoid recess, or the foramen caecum and nasofrontal region in congenital types — with a soft-tissue mass in continuity below it. An isolated opacified cell beneath thin skull base is suspicious. Congenital forms: enlarged foramen caecum, bifid or absent crista galli, widened nasoethmoidal region, hypertelorism.",
+        "ct": "Thin-section CT (the coronal plane shows cribriform and fovea defects best): a skull-base defect with smooth, corticated, remodeled margins (not the destruction of a tumor) — cribriform plate, lateral lamella, fovea, planum, lateral sphenoid recess, or the foramen caecum and nasofrontal region in congenital types — with a soft-tissue mass in continuity below it. An isolated opacified cell beneath thin skull base is suspicious. Congenital forms: enlarged foramen caecum, bifid or absent crista galli, widened nasoethmoidal region, hypertelorism.",
         "mri": "Diagnostic: the mass is continuous with the brain through the defect, its contents follow brain signal (often with T2-bright gliosis) or CSF (meningocele), and it has no solid enhancement; a CSF cleft or stalk and draped vessels may be seen. This separates it from polyps, mucocele, nasal glioma (no CSF connection), olfactory neuroblastoma and other tumors. In adults look for intracranial hypertension signs (empty sella, optic sheath distension, transverse sinus stenosis)."
       },
       "endo": "0° and 30°, suspected side: a smooth, grey-pink, sometimes pulsatile polyp-like mass medial to the middle turbinate in the olfactory cleft, or high in the ethmoid or sphenoid, that may enlarge with Valsalva or jugular compression (Furstenberg sign).",
@@ -1839,7 +1839,8 @@
         "src.schlosser-2004-csf",
         "src.lloyd-2008-csf-imaging",
         "src.wormald-textbook",
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch26"
       ],
       "review": "draft"
     },
