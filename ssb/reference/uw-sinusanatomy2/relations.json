@@ -9163,19 +9163,6 @@
    "evidence": [
     {
      "terms": [
-      "anterior ethmoid air cells",
-      "lamina papyracea"
-     ],
-     "uw": "medial-to",
-     "votes": [
-      3,
-      0
-     ],
-     "slices": 3,
-     "agree": true
-    },
-    {
-     "terms": [
       "anterior ethmoid sinus",
       "lamina papyracea"
      ],
@@ -9185,6 +9172,19 @@
       0
      ],
      "slices": 5,
+     "agree": true
+    },
+    {
+     "terms": [
+      "anterior ethmoid air cells",
+      "lamina papyracea"
+     ],
+     "uw": "medial-to",
+     "votes": [
+      3,
+      0
+     ],
+     "slices": 3,
      "agree": true
     }
    ]
@@ -9197,6 +9197,88 @@
    "file": "ethmoid-frontal-orbit.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "medial-to",
+   "to": "s.orbit",
+   "note": "across the lamina papyracea",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "anterior ethmoid",
+      "orbit"
+     ],
+     "uw": "medial-to",
+     "votes": [
+      12,
+      0
+     ],
+     "slices": 12,
+     "agree": true
+    }
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "anterior-to",
+   "to": "s.posterior-ethmoid-cells",
+   "note": "separated by the basal lamella",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "anterior ethmoid",
+      "posterior ethmoid"
+     ],
+     "uw": "anterior-to",
+     "votes": [
+      18,
+      0
+     ],
+     "slices": 18,
+     "agree": true
+    },
+    {
+     "terms": [
+      "anterior ethmoid sinus",
+      "posterior ethmoid air cells"
+     ],
+     "uw": "anterior-to",
+     "votes": [
+      9,
+      0
+     ],
+     "slices": 7,
+     "agree": true
+    }
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "note": "and behind it; the frontal recess, at the front of the anterior ethmoid, connects the two",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "anterior ethmoid sinus",
+      "frontal sinus"
+     ],
+     "uw": "inferior-to",
+     "votes": [
+      0,
+      7
+     ],
+     "slices": 7,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.posterior-ethmoid-cells",
@@ -9274,6 +9356,29 @@
    "file": "ethmoid-frontal-orbit.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "r": "superior-to",
+   "to": "s.sphenoid-ostium",
+   "note": "and lateral: the ostium opens medial to the superior turbinate ([[pr.sphenoid-ostium-medial-to-st]]), so a transethmoid sphenoidotomy is made low and medial",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "posterior ethmoid air cells",
+      "sphenoid sinus ostium"
+     ],
+     "uw": "superior-to",
+     "votes": [
+      6,
+      0
+     ],
+     "slices": 4,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.superior-meatus",
@@ -9930,6 +10035,29 @@
    "evidence": []
   },
   {
+   "id": "s.agger-nasi-cell",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "note": "below the frontal sinus floor; its roof is uncapped to reach the frontal recess behind or medial to it",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "agger nasi cell",
+      "frontal sinus"
+     ],
+     "uw": "inferior-to",
+     "votes": [
+      0,
+      7
+     ],
+     "slices": 7,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.orbit",
    "r": "lateral-to",
    "to": "s.ethmoid-labyrinth",
@@ -10381,6 +10509,15 @@
    "evidence": []
   },
   {
+   "id": "s.inferior-meatus",
+   "r": "lateral-to",
+   "to": "s.inferior-turbinate",
+   "note": "the meatus is the space under the turbinate and against the lateral wall; labeled CT atlases mark its lateral part, beside the turbinate attachment",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "untested",
+   "evidence": []
+  },
+  {
    "id": "s.nasal-septum",
    "r": "medial-to",
    "to": "s.middle-turbinate",
@@ -10580,6 +10717,29 @@
    ]
   },
   {
+   "id": "s.inferior-turbinate",
+   "r": "medial-to",
+   "to": "s.maxillary-sinus",
+   "note": "attached to the medial maxillary wall below the natural ostium",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "inferior turbinate",
+      "maxillary sinus"
+     ],
+     "uw": "medial-to",
+     "votes": [
+      21,
+      0
+     ],
+     "slices": 21,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.middle-turbinate",
    "r": "superior-to",
    "to": "s.inferior-turbinate",
@@ -10628,6 +10788,29 @@
    "file": "nasal-maxillary-ppf.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.middle-turbinate",
+   "r": "anterior-to",
+   "to": "s.sphenopalatine-foramen",
+   "note": "the SPF lies just behind the MT's posterior attachment",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "middle turbinate",
+      "sphenopalatine foramen"
+     ],
+     "uw": "anterior-to",
+     "votes": [
+      5,
+      0
+     ],
+     "slices": 5,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.superior-turbinate",
@@ -10830,6 +11013,29 @@
    "evidence": []
   },
   {
+   "id": "s.ethmoid-infundibulum",
+   "r": "lateral-to",
+   "to": "s.middle-meatus",
+   "note": "a cleft off the lateral middle meatus, hidden behind the uncinate",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "infundibulum",
+      "middle meatus"
+     ],
+     "uw": "lateral-to",
+     "votes": [
+      0,
+      6
+     ],
+     "slices": 6,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.hiatus-semilunaris",
    "r": "posterior-to",
    "to": "s.uncinate-process",
@@ -10970,6 +11176,29 @@
    "evidence": []
   },
   {
+   "id": "s.frontal-process-maxilla",
+   "r": "anterior-to",
+   "to": "s.nasolacrimal-duct",
+   "note": "the bone taken in front of the sac and duct in DCR and prelacrimal approaches",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "anterior process maxilla",
+      "nasolacrimal duct"
+     ],
+     "uw": "anterior-to",
+     "votes": [
+      29,
+      0
+     ],
+     "slices": 29,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.lacrimal-bone",
    "r": "posterior-to",
    "to": "s.frontal-process-maxilla",
@@ -11038,6 +11267,29 @@
       0
      ],
      "slices": 32,
+     "agree": true
+    }
+   ]
+  },
+  {
+   "id": "s.maxillary-sinus",
+   "r": "lateral-to",
+   "to": "s.nasolacrimal-duct",
+   "note": "the duct runs in the anteromedial wall of the sinus",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "maxillary sinus",
+      "nasolacrimal duct"
+     ],
+     "uw": "lateral-to",
+     "votes": [
+      0,
+      12
+     ],
+     "slices": 12,
      "agree": true
     }
    ]
@@ -11217,6 +11469,29 @@
    "file": "nasal-maxillary-ppf.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.infraorbital-foramen",
+   "r": "lateral-to",
+   "to": "s.nasolacrimal-duct",
+   "note": "an anterior maxillary window lies between the duct medially and the nerve above and laterally",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "inferior orbital foramen",
+      "nasolacrimal duct"
+     ],
+     "uw": "lateral-to",
+     "votes": [
+      0,
+      5
+     ],
+     "slices": 5,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.lacrimal-sac",
@@ -11445,6 +11720,29 @@
    ]
   },
   {
+   "id": "s.greater-palatine-canal",
+   "r": "posterior-to",
+   "to": "s.maxillary-sinus",
+   "note": "descends behind the posteromedial corner of the sinus, between maxilla and palatine bone",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "greater palatine foramen",
+      "maxillary sinus"
+     ],
+     "uw": "posterior-to",
+     "votes": [
+      0,
+      33
+     ],
+     "slices": 33,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.pterygopalatine-fossa",
    "r": "posterior-to",
    "to": "s.maxillary-sinus",
@@ -11502,6 +11800,29 @@
    "file": "nasal-maxillary-ppf.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "anterior-to",
+   "to": "s.sphenoid-sinus",
+   "note": "anterolateral; the lateral recess lies behind it across the pterygoid base (transpterygoid route)",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "pterygopalatine fossa",
+      "sphenoid sinus"
+     ],
+     "uw": "anterior-to",
+     "votes": [
+      22,
+      0
+     ],
+     "slices": 22,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.pterygopalatine-ganglion",
@@ -11588,6 +11909,52 @@
    "file": "nasal-maxillary-ppf.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "r": "inferior-to",
+   "to": "s.optic-canal",
+   "note": "on the lateral sphenoid wall the optic prominence is above, V2 below and lateral",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "foramen rotundum",
+      "optic canal"
+     ],
+     "uw": "inferior-to",
+     "votes": [
+      0,
+      9
+     ],
+     "slices": 9,
+     "agree": true
+    }
+   ]
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "r": "posterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "note": "opens into the upper posterior wall of the fossa",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "foramen rotundum",
+      "pterygopalatine fossa"
+     ],
+     "uw": "posterior-to",
+     "votes": [
+      0,
+      5
+     ],
+     "slices": 5,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.vidian-nerve",
@@ -11681,6 +12048,29 @@
    "evidence": []
   },
   {
+   "id": "s.pterygomaxillary-fissure",
+   "r": "lateral-to",
+   "to": "s.sphenopalatine-foramen",
+   "note": "the lateral (ITF) and medial (nasal) doors of the PPF",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "pterygomaxillary fissure",
+      "sphenopalatine foramen"
+     ],
+     "uw": "lateral-to",
+     "votes": [
+      0,
+      5
+     ],
+     "slices": 5,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.inferior-orbital-fissure",
    "r": "superior-to",
    "to": "s.pterygopalatine-fossa",
@@ -11699,6 +12089,29 @@
       0
      ],
      "slices": 9,
+     "agree": true
+    }
+   ]
+  },
+  {
+   "id": "s.inferior-orbital-fissure",
+   "r": "inferior-to",
+   "to": "s.superior-orbital-fissure",
+   "note": "the two fissures diverge from the orbital apex",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "inferior orbital fissure",
+      "superior orbital fissure"
+     ],
+     "uw": "inferior-to",
+     "votes": [
+      0,
+      8
+     ],
+     "slices": 8,
      "agree": true
     }
    ]
@@ -11819,6 +12232,29 @@
    "file": "nasal-maxillary-ppf.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.foramen-ovale",
+   "r": "posterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "note": "posterolateral, at the posterior root of the lateral pterygoid plate",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "foramen ovale",
+      "pterygopalatine fossa"
+     ],
+     "uw": "posterior-to",
+     "votes": [
+      0,
+      7
+     ],
+     "slices": 7,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.foramen-spinosum",
@@ -12487,6 +12923,29 @@
    "file": "sphenoid-sellar-clival.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "superior-to",
+   "to": "s.vidian-canal",
+   "note": "coronal CT through the sphenoid: optic canal at the top of the lateral wall, foramen rotundum (V2) below it, vidian canal at the floor",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "optic canal",
+      "vidian canal"
+     ],
+     "uw": "superior-to",
+     "votes": [
+      8,
+      0
+     ],
+     "slices": 8,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.optic-strut",
@@ -13782,6 +14241,29 @@
    "evidence": []
   },
   {
+   "id": "s.petrous-apex",
+   "r": "posterior-to",
+   "to": "s.sphenoid-sinus",
+   "note": "posterolateral, behind the paraclival ICA; reached through the sinus in the [[p.medial-petrous-apex-approach]]",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "petrous apex",
+      "sphenoid sinus"
+     ],
+     "uw": "posterior-to",
+     "votes": [
+      0,
+      6
+     ],
+     "slices": 6,
+     "agree": true
+    }
+   ]
+  },
+  {
    "id": "s.petroclival-synchondrosis",
    "r": "lateral-to",
    "to": "s.clivus",
@@ -13798,6 +14280,29 @@
    "file": "sphenoid-sellar-clival.json",
    "status": "untested",
    "evidence": []
+  },
+  {
+   "id": "s.petroclival-synchondrosis",
+   "r": "posterior-to",
+   "to": "s.sphenoid-sinus",
+   "note": "posterolateral, beyond the paraclival ICA \u2014 where chondrosarcoma arises",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "evidence": [
+    {
+     "terms": [
+      "petrooccipital fissure",
+      "sphenoid sinus"
+     ],
+     "uw": "posterior-to",
+     "votes": [
+      0,
+      13
+     ],
+     "slices": 11,
+     "agree": true
+    }
+   ]
   },
   {
    "id": "s.inferior-petrosal-sinus",

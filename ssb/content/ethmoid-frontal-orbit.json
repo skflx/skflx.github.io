@@ -1224,6 +1224,10 @@
           "text": "Rule of thumb along the orbital wall: about 24 mm from the anterior lacrimal crest to the AEA, about 12 mm to the PEA, about 6 mm to the optic canal ([[m.alc-to-aea]], [[m.aea-to-pea]], [[m.pea-to-optic-canal]])."
         },
         {
+          "tier": 2,
+          "text": "Of the two ethmoidal arteries it is the larger and the one that matters in epistaxis: it supplies the anterior third of the septum and lateral wall, while the PEA feeds only a small area around the superior turbinate and the adjacent septum. Bleeding that persists high and anterior after [[p.spa-ligation]] points to it ([[p.aea-ligation]])."
+        },
+        {
           "tier": 3,
           "text": "After crossing the lateral lamella it gives the [[s.anterior-falcine-artery]] and turns down through the cribroethmoidal foramen into the nose; dividing it at the orbit or skull base devascularizes olfactory-groove meningiomas."
         }
@@ -1232,7 +1236,8 @@
         "src.simmen-2006-aea",
         "src.moon-2001-aea",
         "src.rhoton-2002-orbit",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch03"
       ],
       "review": "draft"
     },
@@ -1423,6 +1428,11 @@
           "to": "s.posterior-ethmoid-cells"
         },
         {
+          "r": "supplies",
+          "to": "s.superior-turbinate",
+          "note": "with the adjacent posterosuperior septum — a small territory next to the AEA's"
+        },
+        {
           "r": "landmark-for",
           "to": "p.posterior-ethmoidectomy"
         }
@@ -1444,7 +1454,8 @@
       "src": [
         "src.rhoton-2002-orbit",
         "src.wormald-textbook",
-        "src.chiu-2019-ch04"
+        "src.chiu-2019-ch04",
+        "src.chiu-2019-ch03"
       ],
       "review": "draft"
     },
@@ -2252,6 +2263,11 @@
         {
           "r": "medial-to",
           "to": "s.optic-nerve"
+        },
+        {
+          "r": "attaches-to",
+          "to": "s.annulus-of-zinn",
+          "note": "origin"
         }
       ],
       "pearls": [
@@ -2477,6 +2493,11 @@
         {
           "r": "inferior-to",
           "to": "s.medial-rectus"
+        },
+        {
+          "r": "attaches-to",
+          "to": "s.annulus-of-zinn",
+          "note": "origin"
         }
       ],
       "src": [
@@ -2506,6 +2527,71 @@
       ],
       "src": [
         "src.rhoton-2002-orbit"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.annulus-of-zinn",
+      "name": "Common tendinous ring",
+      "kind": "tendon",
+      "region": "orbit",
+      "tier": 2,
+      "syn": [
+        "annulus of Zinn",
+        "anulus tendineus communis",
+        "annulus tendineus communis",
+        "common annular tendon",
+        "tendon of Zinn"
+      ],
+      "eponym": "Zinn",
+      "what": "A fibrous ring at the orbital apex from which the four rectus muscles arise. It encircles the orbital opening of the [[s.optic-canal]] and the middle part of the [[s.superior-orbital-fissure]], and blends with the [[s.periorbita]] and the dural sheath of the optic nerve.",
+      "why": "It is the tightest collar around the optic nerve as the nerve enters the orbit, so an [[p.optic-nerve-decompression]] is carried forward to it. The medial and superior recti arise closest to the nerve: a sheath incision extended through the ring can detach their origins and cause diplopia ([[h.medial-rectus-injury]]), and the ophthalmic artery runs below and lateral to the nerve inside it.",
+      "geo": "diorama",
+      "endo": "Either side, 0°/30°, after the lamina papyracea and medial optic canal wall are removed: a thicker, whiter band where the periorbita meets the optic nerve sheath at the orbital end of the canal.",
+      "reliability": "constant",
+      "rel": [
+        {
+          "r": "attaches-to",
+          "to": "s.optic-canal",
+          "note": "to the bone around the canal's orbital opening"
+        },
+        {
+          "r": "borders",
+          "to": "s.superior-orbital-fissure",
+          "note": "spans its middle part (the oculomotor foramen)"
+        },
+        {
+          "r": "transmits",
+          "to": "s.optic-nerve"
+        },
+        {
+          "r": "transmits",
+          "to": "s.ophthalmic-artery"
+        },
+        {
+          "r": "transmits",
+          "to": "s.oculomotor-nerve",
+          "note": "both divisions, through the fissure part of the ring"
+        },
+        {
+          "r": "transmits",
+          "to": "s.abducens-nerve"
+        },
+        {
+          "r": "landmark-for",
+          "to": "p.optic-nerve-decompression",
+          "note": "anterior limit of the decompression"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Inside the ring run the optic nerve and ophthalmic artery (through the canal) and CN III, the nasociliary nerve and CN VI (through the fissure); the lacrimal, frontal and trochlear nerves and the superior ophthalmic vein pass above it, outside the muscle cone."
+        }
+      ],
+      "src": [
+        "src.rhoton-2002-orbit",
+        "src.chiu-2019-ch19"
       ],
       "review": "draft"
     },
@@ -3076,7 +3162,7 @@
       "class": "c.ifac",
       "code": "SBC",
       "def": "IFAC: a cell above the ethmoid bulla that does not enter the frontal sinus. CT: sagittal view shows a cell between the bulla roof and the skull base, below the level of the frontal ostium.",
-      "why": "It forms the posterior wall of the lower frontal recess and pushes the pathway anteriorly; the AEA often runs in or at its roof.",
+      "why": "It forms the posterior wall of the lower frontal recess and pushes the pathway anteriorly; the AEA often runs in or at its roof. In frontal balloon dilation ([[p.balloon-sinus-dilation]]) a well-pneumatized suprabullar cell is the classic false target: a wire in it lights the forehead as a diffuse glow, not the sharp spot that moves with a wire in the frontal sinus.",
       "geo": "diorama",
       "prev": [
         {
@@ -3091,7 +3177,8 @@
         }
       ],
       "src": [
-        "src.wormald-2016-ifac"
+        "src.wormald-2016-ifac",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -3550,7 +3637,8 @@
         {
           "code": "0",
           "label": "Balloon dilation",
-          "criterion": "Balloon dilation of the frontal drainage pathway without tissue removal."
+          "criterion": "Balloon dilation of the frontal drainage pathway without tissue removal.",
+          "why": "Done with [[p.balloon-sinus-dilation]]: nothing is removed, so the outflow is widened by displacing the cells around it rather than clearing them."
         },
         {
           "code": "1",
@@ -3585,7 +3673,8 @@
       ],
       "caveats": "Grade wording here is paraphrased from Wormald et al. 2016; check the source table. Unlike Draf I, EFSS separates clearing cells from enlarging the ostium.",
       "src": [
-        "src.wormald-2016-ifac"
+        "src.wormald-2016-ifac",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -4131,18 +4220,20 @@
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
         "p.orbital-decompression",
-        "p.orbital-tumor-resection"
+        "p.orbital-tumor-resection",
+        "p.optic-nerve-decompression"
       ],
       "site": "Mid and posterior lamina, where the muscle lies nearly on the bone.",
-      "mechanism": "A microdebrider through a lamina breach suctions fat and then muscle; less often a forceps grasping periorbita.",
+      "mechanism": "A microdebrider through a lamina breach suctions fat and then muscle; less often a forceps grasping periorbita. In optic nerve decompression, a sheath incision carried forward through the [[s.annulus-of-zinn|annulus of Zinn]], where the rectus muscles arise.",
       "consequence": "Transection, contusion or entrapment with severe, often permanent diplopia; muscle fragments in the specimen.",
-      "prevent": "No powered instruments near a breached lamina; recognize fat early; in decompression, incise periorbita in strips with a sickle blade rather than with a debrider.",
+      "prevent": "No powered instruments near a breached lamina; recognize fat early; in decompression, incise periorbita in strips with a sickle blade rather than with a debrider. Keep an optic sheath incision superomedial and short of the rectus origins.",
       "recognize": "Muscle in the debrider trap or specimen; postoperative diplopia with limited adduction (or restriction on forced duction).",
       "rescue": "Urgent ophthalmology/strabismus assessment and MRI; early exploration and repair when transected; later strabismus surgery.",
       "src": [
         "src.may-1994",
         "src.stankiewicz-1989",
-        "src.rhoton-2002-orbit"
+        "src.rhoton-2002-orbit",
+        "src.chiu-2019-ch19"
       ],
       "review": "draft"
     },
@@ -4221,17 +4312,19 @@
         "p.anterior-ethmoidectomy",
         "p.draf-i",
         "p.draf-iia",
-        "p.orbital-decompression"
+        "p.orbital-decompression",
+        "p.balloon-sinus-dilation"
       ],
       "site": "Frontal recess and ostium.",
-      "mechanism": "Circumferential mucosal stripping, exposed or osteitic bone, retained cell walls, lateralized MT, or fat prolapse narrowing the outflow.",
+      "mechanism": "Circumferential mucosal stripping (including trimming around an outflow just widened by a balloon), exposed or osteitic bone, retained cell walls, lateralized MT, or fat prolapse narrowing the outflow.",
       "consequence": "Iatrogenic frontal sinusitis or mucocele years later; with retained cells ([[h.retained-frontal-cells]]), a leading cause of revision frontal surgery.",
       "prevent": "Uncap cells instead of stripping ([[pr.uncap-the-egg]]); preserve and stabilize the MT; leave no bone bare around the full circumference; consider mucosal flaps or stents in narrow recesses; careful postoperative debridement.",
       "recognize": "Recurrent frontal pain and opacification; endoscopic synechiae or MT adhesion; CT shows neo-osteogenesis at the recess.",
       "rescue": "Early: lyse adhesions and medialize the MT in clinic; late: revision frontal sinusotomy, escalating to Draf IIb/III.",
       "src": [
         "src.wormald-textbook",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -4334,18 +4427,20 @@
         "p.draf-iii",
         "p.draf-iib",
         "p.frontal-trephination",
-        "p.osteoplastic-flap"
+        "p.osteoplastic-flap",
+        "p.balloon-sinus-dilation"
       ],
       "site": "Posterior table, especially inferiorly where it becomes skull base, or anywhere in a small or shallow sinus.",
-      "mechanism": "Drilling posteriorly in a narrow AP sinus, a trephine placed too high or too far from the midline over a small sinus, or an osteotome angled posteriorly when cutting an osteoplastic flap.",
+      "mechanism": "Drilling posteriorly in a narrow AP sinus, a trephine placed too high or too far from the midline over a small sinus, or an osteotome angled posteriorly when cutting an osteoplastic flap. A balloon inflated in a frontal outflow narrowed by anterior osteitis or an osteoma can transmit its force to the posterior table.",
       "consequence": "CSF leak, frontal lobe injury, meningitis, pneumocephalus.",
-      "prevent": "Measure AP depth on sagittal CT; identify the posterior table first and drill anteriorly; trephinate where CT shows the sinus is deepest; bevel flap cuts toward the sinus using a CT- or navigation-based template.",
+      "prevent": "Measure AP depth on sagittal CT; identify the posterior table first and drill anteriorly; trephinate where CT shows the sinus is deepest; bevel flap cuts toward the sinus using a CT- or navigation-based template. Before balloon dilation, check the CT for osteitis or an osteoma narrowing the outflow, and open such an outflow conventionally instead.",
       "recognize": "Clear fluid, visible dura or brain; postoperative rhinorrhea or neurological change.",
       "rescue": "Repair with graft (underlay/overlay) endoscopically or through the open approach; neurosurgical input for brain or dural injury.",
       "src": [
         "src.wormald-2003-emlp",
         "src.goodale-1958",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -6226,7 +6321,7 @@
           "think": "Am I pulling on anything that is tethered to the nerve?"
         },
         {
-          "do": "After extensive dissection of a mid or anterior orbital lesion, reconstruct the medial wall (e.g. with a nasoseptal flap) to prevent enophthalmos and diplopia from lost orbital volume; small defects near the annulus of Zinn and optic canal may be left.",
+          "do": "After extensive dissection of a mid or anterior orbital lesion, reconstruct the medial wall (e.g. with a nasoseptal flap) to prevent enophthalmos and diplopia from lost orbital volume; small defects near the [[s.annulus-of-zinn|annulus of Zinn]] and optic canal may be left.",
           "see": [
             "s.periorbita",
             "s.lamina-papyracea"
@@ -6481,7 +6576,7 @@
       ],
       "steps": [
         {
-          "do": "Expose the defect. Intrathecal fluorescein, where used, is off-label and must be dilute — commonly 0.1 mL of 10% fluorescein diluted in 10 mL of the patient's CSF or preservative-free saline, injected slowly; a blue-light filter shows small or low-flow leaks.",
+          "do": "Expose the defect. Intrathecal fluorescein, where used, is off-label and must be dilute — commonly 0.1 mL of 10% fluorescein diluted in 10 mL of the patient's CSF or preservative-free saline, injected slowly over about 10 minutes; blue-light excitation viewed through a blue-blocking filter shows small or low-flow leaks.",
           "see": [
             "s.cribriform-plate",
             "s.lateral-lamella",
@@ -6538,7 +6633,8 @@
       "src": [
         "src.hegazy-2000",
         "src.wormald-textbook",
-        "src.chiu-2019-ch26"
+        "src.chiu-2019-ch26",
+        "src.chiu-2019-ch27"
       ],
       "review": "draft"
     },

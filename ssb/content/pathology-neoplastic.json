@@ -27,7 +27,7 @@
       "why": "The operation is planned around the attachment (pedicle), not the bulk: debulk the exophytic part, find the attachment, strip the mucosa there subperiosteally and drill the bone beneath it, choosing the approach (wide antrostomy, prelacrimal, endoscopic medial maxillectomy, Draf IIb/III, osteoplastic flap) that gives instruments a straight line to that site. Everything goes to pathology, because a focus of carcinoma turns it into a cancer operation.",
       "imaging": {
         "ct": "Unilateral lobulated soft-tissue mass centered on the middle meatus, typically extending into the maxillary sinus through a widened ostium, with remodeling and thinning of adjacent walls rather than destruction. Focal hyperostosis at one point (a bony plaque, spur or cone) predicts the attachment site with good but imperfect reliability (49 of 55 hyperostotic foci, 89%, matched the surgical origin in one retrospective CT series of 76 patients); diffuse sclerosis of a whole sinus wall is nonspecific and also occurs with chronic sinusitis. Entrapped bone fragments can look like calcification. The rest of the opacified sinus is often retained secretion, which CT cannot separate from tumor. Aggressive bone destruction, orbital or intracranial invasion, or necrosis suggests associated carcinoma.",
-        "mri": "The convoluted cerebriform pattern — alternating hyper- and hypointense striations like gyri on T2 and contrast-enhanced T1 — is seen in most inverted papillomas and is uncommon in other sinonasal tumors. MRI separates enhancing tumor from non-enhancing obstructed secretions (T2 bright with only peripheral mucosal enhancement), and that boundary sets the true extent, the Krouse stage and the approach. Focal loss of the cerebriform pattern, necrosis or infiltration beyond bone raises suspicion of carcinoma in that area."
+        "mri": "The convoluted cerebriform pattern — alternating hyper- and hypointense striations like gyri on T2 and contrast-enhanced T1 — is seen in most inverted papillomas and is uncommon in other sinonasal tumors. MRI separates enhancing tumor from non-enhancing obstructed secretions (T2 bright with only peripheral mucosal enhancement), and that boundary sets the true extent, the Krouse stage and the approach. Focal loss of the cerebriform pattern, necrosis or infiltration beyond bone raises suspicion of carcinoma in that area. Order both for planning: in one atlas chapter's summary CT hyperostosis is the more sensitive and the MRI pattern the more specific guide to the attachment, and together they localize it better than either alone."
       },
       "endo": "Either side, 0°, middle meatus: a unilateral, firm, pale-pink to red, papillary or mulberry-surfaced polypoid mass, more opaque and warty than an inflammatory polyp and bleeding more readily; it often coexists with ordinary polyps, so a biopsy of the most anterior polyp can miss it.",
       "class": [
@@ -106,7 +106,8 @@
         "src.lee-2007-ip-hyperostosis",
         "src.ojiri-2000-ip-mri",
         "src.busquets-2006",
-        "src.som-curtin-2011"
+        "src.som-curtin-2011",
+        "src.chiu-2019-ch21"
       ],
       "review": "draft"
     },
@@ -317,11 +318,15 @@
         },
         {
           "tier": 2,
-          "text": "Embolization is timed within a few days before surgery, before collateral supply re-forms."
+          "text": "Embolization is timed close to surgery, before collateral supply re-forms and embolized vessels recanalize — within 24 hours in one atlas chapter, within a few days in other practice; the longer the gap, the more the tumor bleeds. Beyond the distal internal maxillary branches and the ascending pharyngeal artery, larger tumors recruit the accessory meningeal and facial arteries and ICA-derived vidian and mandibular branches."
         },
         {
           "tier": 2,
           "text": "Follow its routes: from the sphenopalatine foramen into the nose and nasopharynx, through the PPF and pterygomaxillary fissure into the infratemporal fossa, up through the orbital fissures, and back into the basisphenoid and vidian canal toward the foramen lacerum."
+        },
+        {
+          "tier": 2,
+          "text": "Recurrence usually grows submucosally — in the basisphenoid, vidian canal or PPF, under intact mucosa — so follow-up is by contrast-enhanced MRI (or CT), not endoscopy alone."
         },
         {
           "tier": 3,
@@ -329,7 +334,11 @@
         },
         {
           "tier": 3,
-          "text": "Disconnect before you mobilize: control the internal maxillary branches in the PPF and infratemporal fossa first, then deliver the tumor; the vidian artery is divided with bipolar close to, but not into, the canal."
+          "text": "Disconnect before you mobilize: control the internal maxillary branches in the PPF and infratemporal fossa first, then deliver the tumor; the vidian artery is divided with bipolar close to, but not into, the canal. Embolization does not replace this step: embolized vessels recanalize, and an unligated internal maxillary artery can still bleed heavily."
+        },
+        {
+          "tier": 3,
+          "text": "Large tumors are worked two-surgeon, four-handed through both nostrils with a partial posterior septectomy ([[p.ppf-exposure]]). A mass filling the nasopharynx may have to be debulked or divided anteriorly before its attachment comes into view, so en bloc removal, though preferred, is not always possible; in young patients the nasopharyngeal part can be taken transorally."
         }
       ],
       "geo": "overlay",
@@ -340,7 +349,8 @@
         "src.lloyd-1999-jna",
         "src.howard-2001-jna",
         "src.lund-2010-eptns",
-        "src.who-hn-2022"
+        "src.who-hn-2022",
+        "src.chiu-2019-ch24"
       ],
       "review": "draft"
     },
@@ -409,7 +419,7 @@
       "what": "A benign, encapsulated nerve sheath tumor arising from branches of V1 or V2 or from autonomic fibers in the nasal cavity, ethmoid, maxillary sinus or pterygopalatine fossa.",
       "why": "It can usually be enucleated endoscopically, and identifying the nerve of origin (V2, vidian or palatine nerves in the PPF) predicts the deficit resection will cause — numbness or dry eye. MRI separates it from vascular tumors that need embolization and from perineural spread of carcinoma along the same foramina.",
       "imaging": {
-        "ct": "Well-circumscribed oval or lobulated mass with smooth expansion and remodeling of bone and widening of foramina along its nerve (foramen rotundum, vidian canal, infraorbital canal), without destruction.",
+        "ct": "Well-circumscribed oval or lobulated mass with smooth expansion and remodeling of bone and widening of foramina along its nerve (foramen rotundum, vidian canal, infraorbital canal), without destruction. In the PPF this separates it from [[dz.jna]]: a schwannoma widens the foramen of its own nerve, whereas JNA bows the posterior maxillary wall forward and erodes the pterygoid base.",
         "mri": "T1 isointense, heterogeneous T2 (cellular Antoni A areas darker, myxoid Antoni B areas brighter), cystic change and heterogeneous enhancement; a fusiform or dumbbell extension along the parent nerve through its foramen favors schwannoma. No flow voids, unlike JNA."
       },
       "endo": "Either side, 0°: a smooth, firm, yellow-tan submucosal mass with intact mucosa; not friable.",
@@ -435,7 +445,8 @@
       "geo": "overlay",
       "src": [
         "src.who-hn-2022",
-        "src.som-curtin-2011"
+        "src.som-curtin-2011",
+        "src.chiu-2019-ch24"
       ],
       "review": "draft"
     },
@@ -994,8 +1005,8 @@
         "s.orbit"
       ],
       "tier": 2,
-      "what": "A malignant neuroectodermal tumor of the olfactory epithelium, arising high in the nasal cavity at the cribriform plate, superior septum and superior turbinate; it presents with unilateral obstruction, epistaxis and smell loss and can grow through the cribriform plate into the anterior cranial fossa.",
-      "why": "Standard treatment is en bloc resection of the olfactory apparatus with clear margins — usually an endoscopic transcribriform (or craniofacial) resection of the cribriform plate, overlying dura, olfactory bulb and tract on the involved side or sides — followed by radiotherapy, with stage ([[c.kadish]], [[c.dulguerov]]) and [[c.hyams]] grade guiding adjuvant treatment. Dural and brain margins are checked by frozen section, and the defect is reconstructed as a large anterior skull base defect.",
+      "what": "A malignant neuroectodermal tumor of the olfactory epithelium, arising high in the nasal cavity at the cribriform plate, superior septum and superior turbinate; it presents with unilateral obstruction, epistaxis and smell loss and can grow through the cribriform plate into the anterior cranial fossa. It accounts for roughly 3–6% of sinonasal malignancies.",
+      "why": "Standard treatment is complete resection with negative margins of the olfactory apparatus on the involved side or sides — cribriform plate, overlying dura, olfactory bulb and tract — usually by an endoscopic transcribriform (or craniofacial) resection, followed by radiotherapy, with stage ([[c.kadish]], [[c.dulguerov]]) and [[c.hyams]] grade guiding adjuvant treatment. The intranasal bulk may be debulked piecemeal to reach the attachment: clear margins, not en bloc delivery, are what predict survival, so dural and brain margins are checked by frozen section. The defect is reconstructed as a large anterior skull base defect.",
       "imaging": {
         "ct": "Enhancing soft-tissue mass in the olfactory cleft and superior nasal cavity with erosion or remodeling of the cribriform plate, fovea and lamina papyracea; speckled calcification in some. Coronal images show the \"dumbbell\" with its waist at the cribriform plate when it extends intracranially.",
         "mri": "Intermediate T1 and T2 with avid, fairly homogeneous enhancement; defines dural, olfactory bulb and tract, brain and orbital involvement. Cysts at the margin between the intracranial tumor and the frontal lobe are highly suggestive of olfactory neuroblastoma. Image the neck, including retropharyngeal and level II nodes."
@@ -1046,6 +1057,10 @@
           "text": "In selected early tumors confined to one side without septal involvement, a unilateral transcribriform resection has been used to preserve smell from the other side; bilateral or midline disease needs a bilateral resection."
         },
         {
+          "tier": 3,
+          "text": "Non-randomized comparisons show similar survival, metastasis and complication rates after endoscopic and open craniofacial resection, with a shorter stay after endoscopic surgery; case selection favors the endoscopic arm, and margin status matters more than the route."
+        },
+        {
           "tier": 2,
           "text": "Recurrence (local, intracranial, nodal) can appear more than a decade after treatment, so surveillance with MRI and endoscopy continues long term."
         },
@@ -1068,7 +1083,8 @@
         "src.hyams-1988",
         "src.icar-skull-base-2019",
         "src.lund-2010-eptns",
-        "src.som-curtin-2011"
+        "src.som-curtin-2011",
+        "src.chiu-2019-ch25"
       ],
       "review": "draft"
     },
@@ -2713,9 +2729,11 @@
           "why": "High grade."
         }
       ],
-      "caveats": "Interobserver variation is considerable and many centers report low (I–II) versus high (III–IV). A high-grade tumor needs review against SNUC, neuroendocrine carcinoma and SMARCB1-deficient carcinoma.",
+      "caveats": "Interobserver variation is considerable and many centers report low (I–II) versus high (III–IV). A high-grade tumor needs review against SNUC, neuroendocrine carcinoma and SMARCB1-deficient carcinoma. Grade carries prognosis: in a Mayo Clinic series of 49 patients treated 1951–1990 it was the strongest prognostic factor, with 5-year survival about 80% for low-grade (32 patients) versus 40% for high-grade (15) tumors — a small, retrospective, pre-endoscopic series.",
       "src": [
-        "src.hyams-1988"
+        "src.hyams-1988",
+        "src.morita-1993",
+        "src.chiu-2019-ch25"
       ],
       "review": "draft"
     },

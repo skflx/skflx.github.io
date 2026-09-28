@@ -902,7 +902,7 @@
         },
         {
           "tier": 3,
-          "text": "Inside the canal the nerve sheath is fused to the periosteum, so the nerve cannot move away from swelling or bone fragments; that is why intracanalicular injury is poorly tolerated and why decompression extends forward to the annulus of Zinn."
+          "text": "Inside the canal the nerve sheath is fused to the periosteum, so the nerve cannot move away from swelling or bone fragments; that is why intracanalicular injury is poorly tolerated and why decompression extends forward to the [[s.annulus-of-zinn|annulus of Zinn]]."
         },
         {
           "tier": 3,
@@ -4148,11 +4148,12 @@
       "of": "s.internal-carotid-artery",
       "tier": 2,
       "def": "No bone between the ICA (usually parasellar or paraclival) and the sphenoid mucosa. CT: no bony margin over the carotid canal on thin-section bone windows — bone thinner than the slice resolution can mimic it.",
-      "why": "A dehiscent ICA can be opened by suction, a microdebrider or mucosal stripping. Leave mucosa over the prominence, keep powered instruments away, and warn the team preoperatively.",
+      "why": "A dehiscent ICA can be opened by suction, a microdebrider or mucosal stripping. Leave mucosa over the prominence, keep powered instruments away, and warn the team preoperatively. Balloon dilation of the sphenoid ([[p.balloon-sinus-dilation]]) passes its guidewire blind, with no reliable transillumination check, so a dehiscence on CT calls for confirming the wire with fluoroscopy or navigation — or for a conventional sphenoidotomy under direct vision.",
       "geo": "diorama",
       "src": [
         "src.fujii-1979",
-        "src.kennedy-1990-ica"
+        "src.kennedy-1990-ica",
+        "src.chiu-2019-ch13"
       ],
       "prev": [
         {
@@ -4180,11 +4181,12 @@
       "of": "s.optic-canal",
       "tier": 2,
       "def": "No bone between the optic nerve sheath and the mucosa of the sphenoid or an Onodi cell along the canal.",
-      "why": "The nerve is then protected only by mucosa and sheath: no suction, cautery or pressure on the optic prominence, and particular care when an Onodi cell carries the canal.",
+      "why": "The nerve is then protected only by mucosa and sheath: no suction, cautery or pressure on the optic prominence, and particular care when an Onodi cell carries the canal. Balloon dilation of the sphenoid ([[p.balloon-sinus-dilation]]) passes its guidewire blind toward the optic prominence, so a dehiscence on CT calls for confirming the wire with fluoroscopy or navigation — or for a conventional sphenoidotomy under direct vision.",
       "geo": "diorama",
       "src": [
         "src.fujii-1979",
-        "src.delano-1996"
+        "src.delano-1996",
+        "src.chiu-2019-ch13"
       ],
       "prev": [
         {
@@ -4332,11 +4334,12 @@
         "pneumatized pterygoid plates"
       ],
       "def": "Sphenoid air extending lateral to the line between the vidian canal and foramen rotundum, into the greater wing and/or pterygoid base.",
-      "why": "Puts V2 and the vidian nerve in relief in the sinus wall and thins the middle fossa floor (spontaneous CSF leak site). Reaching it needs a contralateral angled view or a transpterygoid approach. One textbook account puts lateral pneumatization into the pterygoid base at about 35% of people, bilateral in about 17% (method not stated).",
+      "why": "Puts V2 and the vidian nerve in relief in the sinus wall and thins the middle fossa floor (spontaneous CSF leak site). Reaching it needs a contralateral angled view or a transpterygoid approach. One textbook account puts lateral pneumatization into the pterygoid base at about 35% of people, bilateral in about 17% (method not stated). Another atlas chapter gives a lateral recess in 25–48% of patients and an extensive one in about 8% (method not stated); accounts differ in how far lateral the air must reach to count. The roof of an extensive recess can lie directly under the temporal lobe, a common site of middle fossa meningoencephaloceles.",
       "geo": "diorama",
       "src": [
         "src.wang-2010-sphenoid-extensions",
-        "src.chiu-2019-ch27"
+        "src.chiu-2019-ch27",
+        "src.chiu-2019-ch24"
       ],
       "review": "draft"
     },
@@ -4610,11 +4613,14 @@
       "name": "Vidian canal protruding into the sphenoid floor",
       "of": "s.sphenoid-floor",
       "tier": 3,
-      "def": "The vidian canal is raised into the sinus floor on a bony ridge or septum, typically with lateral or pterygoid pneumatization.",
+      "class": "c.vidian-canal-type",
+      "code": "1",
+      "def": "The vidian canal is raised into the sinus floor on a bony ridge or septum, typically with lateral or pterygoid pneumatization. It is type 1 of [[c.vidian-canal-type]]; a type 2 canal (on the floor, partly protruding) shows as a lower ridge and carries the same risk to a lesser degree.",
       "why": "Easy to follow back to the anterior genu of the ICA, but also easy to injure while flattening the floor (dry eye).",
       "geo": "diorama",
       "src": [
-        "src.kassam-2008-vidian"
+        "src.kassam-2008-vidian",
+        "src.chiu-2019-ch23"
       ],
       "review": "draft"
     },
@@ -5426,10 +5432,11 @@
         "p.sphenoidotomy",
         "p.transethmoidal-sphenoidotomy",
         "p.transsellar-approach",
-        "p.posterior-ethmoidectomy"
+        "p.posterior-ethmoidectomy",
+        "p.balloon-sinus-dilation"
       ],
       "site": "Parasellar and paraclival carotid prominences in the lateral and posterior sphenoid walls, especially where bone is thin or dehiscent.",
-      "mechanism": "Microdebrider, suction, punch or curette on a thin or dehiscent ICA; extending the sphenoidotomy superolaterally; mistaking the carotid prominence for a septum or cell wall; working in the wrong cavity (Onodi cell, contralateral sinus); monopolar current on the wall.",
+      "mechanism": "Microdebrider, suction, punch or curette on a thin or dehiscent ICA; extending the sphenoidotomy superolaterally; mistaking the carotid prominence for a septum or cell wall; working in the wrong cavity (Onodi cell, contralateral sinus); monopolar current on the wall; a balloon guidewire passed blind into the sphenoid.",
       "consequence": "Torrential arterial bleeding, hemorrhagic shock, stroke or death; later pseudoaneurysm or carotid–cavernous fistula.",
       "prevent": "Read the axial and coronal CT for dehiscence, septal insertions and ICA course; enlarge the sphenoidotomy inferiorly and medially; no powered instruments or monopolar on the lateral wall; leave mucosa on the prominences; confirm the cavity with navigation.",
       "recognize": "Sudden high-pressure pulsatile bleeding, often a jet that whites out the endoscope, with rapid hemodynamic change.",
@@ -5437,7 +5444,8 @@
       "src": [
         "src.gardner-2013-ica",
         "src.valentine-2011-vascular",
-        "src.fujii-1979"
+        "src.fujii-1979",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -5471,10 +5479,11 @@
       "during": [
         "p.sphenoidotomy",
         "p.transethmoidal-sphenoidotomy",
-        "p.posterior-ethmoidectomy"
+        "p.posterior-ethmoidectomy",
+        "p.balloon-sinus-dilation"
       ],
       "site": "Superolateral sphenoid wall (optic prominence, lOCR) or the lateral wall of a sphenoethmoidal (Onodi) cell.",
-      "mechanism": "Instrument, microdebrider or suction on a dehiscent canal; heat from drilling without irrigation; monopolar cautery; opening the lateral wall of an Onodi cell mistaken for the sphenoid; compressive packing or orbital apex hematoma.",
+      "mechanism": "Instrument, microdebrider or suction on a dehiscent canal; heat from drilling without irrigation; monopolar cautery; opening the lateral wall of an Onodi cell mistaken for the sphenoid; compressive packing or orbital apex hematoma; a balloon guidewire passed blind into the sphenoid or an Onodi cell.",
       "consequence": "Partial or complete visual loss, often permanent.",
       "prevent": "Identify Onodi cells and canal dehiscence on CT; enter the sphenoid inferomedially; no suction or powered instruments on the optic prominence; bipolar only; diamond burs with irrigation.",
       "recognize": "Intraoperatively exposed sheath or nerve fibers. Postoperatively reduced acuity, color desaturation and a relative afferent pupillary defect — check pupils and vision in recovery.",
@@ -5482,7 +5491,8 @@
       "src": [
         "src.delano-1996",
         "src.fujii-1979",
-        "src.levin-1999-ionts"
+        "src.levin-1999-ionts",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -5741,14 +5751,15 @@
       ],
       "site": "Intracranial air entering through a skull base defect.",
       "mechanism": "Air drawn in through an incompetent repair (ball-valve), worsened by lumbar drain overdrainage, positive-pressure mask ventilation or nose blowing.",
-      "consequence": "Mass effect with falling consciousness.",
-      "prevent": "Watertight repair; avoid lumbar drain overdrainage; no early CPAP or bag-mask ventilation.",
+      "consequence": "Mass effect with falling consciousness. Clinically significant pneumocephalus follows roughly 0–12% of anterior skull base resections (a textbook range); tension physiology is the rarer, emergency end of it.",
+      "prevent": "Watertight repair; avoid lumbar drain overdrainage; no early CPAP or bag-mask ventilation. Some teams suture nasal trumpets in place for 48–72 hours to divert airflow away from the repair.",
       "recognize": "Headache, confusion, falling GCS; CT with frontal lobes compressed and separated by air (Mount Fuji sign).",
-      "rescue": "Clamp the lumbar drain, 100% oxygen, head up; urgent repair of the defect; needle or burr hole decompression if life-threatening.",
+      "rescue": "Clamp the lumbar drain, 100% oxygen, head up; urgent repair of the defect; needle or burr hole decompression if life-threatening. Antibiotics are usually added; when the repair keeps failing, a temporary tracheostomy diverts airflow from the nose.",
       "src": [
         "src.kassam-2011-800",
         "src.hegazy-2000",
-        "src.kassam-2005-sagittal-1"
+        "src.kassam-2005-sagittal-1",
+        "src.chiu-2019-ch25"
       ],
       "review": "draft"
     },
@@ -5823,9 +5834,10 @@
       "at": "s.optic-nerve",
       "during": [
         "p.optic-nerve-decompression",
-        "p.transplanum-transtuberculum"
+        "p.transplanum-transtuberculum",
+        "p.orbital-tumor-resection"
       ],
-      "site": "Optic canal walls, lOCR and medial optic canal at the tuberculum.",
+      "site": "Optic canal walls, lOCR and medial optic canal at the tuberculum. Also the thick palatine and sphenoid bone at the orbital apex, drilled to reach apical orbital tumors.",
       "mechanism": "Heat from drilling without continuous irrigation; bur skip; bone fragments pushed into the canal; instruments inserted into the canal.",
       "consequence": "Visual loss.",
       "prevent": "Diamond bur with copious irrigation; thin to an eggshell and lift fragments away from the nerve; never insert instruments between bone and nerve.",
@@ -5833,7 +5845,8 @@
       "rescue": "Urgent ophthalmology; CT for a retained fragment; steroids are debated.",
       "src": [
         "src.luxenberger-1998",
-        "src.levin-1999-ionts"
+        "src.levin-1999-ionts",
+        "src.chiu-2019-ch20"
       ],
       "review": "draft"
     },
@@ -5844,17 +5857,19 @@
       "at": "s.ophthalmic-artery",
       "during": [
         "p.optic-nerve-decompression",
-        "p.transplanum-transtuberculum"
+        "p.transplanum-transtuberculum",
+        "p.orbital-tumor-resection"
       ],
-      "site": "Inferior aspect of the optic nerve within the canal; extradural origin near the optic strut.",
-      "mechanism": "Sheath incision in the inferior quadrants; drilling the inferior canal or optic strut near an extradural origin.",
+      "site": "Inferior aspect of the optic nerve within the canal; extradural origin near the optic strut. In the orbit, its inferomedial muscular trunk crossing the medial intraconal space.",
+      "mechanism": "Sheath incision in the inferior quadrants; drilling the inferior canal or optic strut near an extradural origin. Dissection in the medial intraconal space during orbital tumor resection, especially behind the artery's inferomedial muscular trunk (zone C, [[s.medial-rectus]]).",
       "consequence": "Orbital hemorrhage; retinal ischemia and blindness.",
       "prevent": "If the sheath is opened, incise it superomedially; identify the artery's origin on CTA.",
       "recognize": "Bleeding from inside the canal or sheath; tense orbit.",
       "rescue": "Gentle pressure and careful bipolar; assess for orbital compartment syndrome and perform lateral canthotomy and cantholysis if present.",
       "src": [
         "src.rhoton-2002-supratentorial-arteries",
-        "src.luxenberger-1998"
+        "src.luxenberger-1998",
+        "src.chiu-2019-ch20"
       ],
       "review": "draft"
     },
@@ -5988,13 +6003,14 @@
         "p.medial-petrous-apex-approach"
       ],
       "site": "Vidian nerve in its canal at the pterygoid base.",
-      "mechanism": "Transection of the vidian nerve to follow its canal to the petrous ICA.",
+      "mechanism": "Transection of the vidian nerve to follow its canal to the petrous ICA. The deficit is the same as after a deliberate vidian neurectomy ([[h.dry-eye-vidian]]).",
       "consequence": "Reduced ipsilateral reflex tearing and dry eye.",
-      "prevent": "Preserve the nerve when the petrous ICA need not be exposed; when sacrifice is planned, counsel the patient.",
-      "recognize": "Dry, gritty eye; reduced Schirmer test.",
+      "prevent": "Preserve the nerve when the petrous ICA need not be exposed; when sacrifice is planned, counsel the patient. Give artificial tears for the first month.",
+      "recognize": "Dry, gritty eye; reduced Schirmer test, which often stays low long term although symptoms usually settle within about a month.",
       "rescue": "Lubricants, punctal plugs, ophthalmology follow-up.",
       "src": [
-        "src.kassam-2008-vidian"
+        "src.kassam-2008-vidian",
+        "src.chiu-2019-ch23"
       ],
       "review": "draft"
     },
@@ -7289,7 +7305,7 @@
           "risk": [
             "h.nsf-pedicle-injury"
           ],
-          "think": "Which side carries the flap? That pedicle stays."
+          "think": "Which side carries the flap? That pedicle stays. Beyond the SPA (e.g. toward the lateral recess) the artery can sometimes be swept down out of the way, but it usually has to be divided and ligated — traction alone can avulse it."
         },
         {
           "do": "Remove the posterior maxillary wall and bipolar all exposed PPF fat before handling it (it is threaded with small vessels that otherwise ooze throughout); open the PPF periosteum and displace its fat and vessels laterally to expose V2 at the foramen rotundum, the vidian nerve and the pterygoid base.",
@@ -7372,7 +7388,8 @@
         "src.kassam-2009-meckel",
         "src.labib-2014-ica",
         "src.kassam-2005-sagittal-2",
-        "src.chiu-2019-ch27"
+        "src.chiu-2019-ch27",
+        "src.chiu-2019-ch24"
       ],
       "review": "draft"
     },
@@ -7663,11 +7680,12 @@
           "think": "Irrigate continuously; thin to an eggshell only."
         },
         {
-          "do": "Lift the thinned bone away from the nerve from the annulus back to the tuberculum, opening the medial half of the canal circumference; drill the lateral opticocarotid recess (optic strut) for inferior decompression when needed.",
+          "do": "Lift the thinned bone away from the nerve from the [[s.annulus-of-zinn|annulus]] back to the tuberculum, opening the medial half of the canal circumference; drill the lateral opticocarotid recess (optic strut) for inferior decompression when needed.",
           "see": [
             "s.optic-nerve",
             "s.optic-strut",
-            "s.medial-opticocarotid-recess"
+            "s.medial-opticocarotid-recess",
+            "s.annulus-of-zinn"
           ],
           "risk": [
             "h.optic-nerve-thermal-injury",
@@ -7680,7 +7698,8 @@
           "do": "Optional sheath incision (debated): superomedially, including the annulus, away from the ophthalmic artery below.",
           "see": [
             "s.ophthalmic-artery",
-            "s.optic-nerve"
+            "s.optic-nerve",
+            "s.annulus-of-zinn"
           ],
           "risk": [
             "h.ophthalmic-artery-injury",
@@ -7849,8 +7868,8 @@
           "why": "A high-flow leak (cistern or ventricle) needs a vascularized repair ([[pr.reconstruction-matches-leak]])."
         },
         {
-          "check": "Flap availability: prior septal surgery, perforation, pedicle side",
-          "why": "Plan an alternative flap if the nasoseptal flap is unavailable."
+          "check": "Flap availability: prior septal surgery, perforation, pedicle side, tumor along the flap or its pedicle, planned radiotherapy",
+          "why": "Plan an alternative if the nasoseptal flap is unavailable: tumor in the septum or along the pedicle's course (posterior ethmoid, sphenoid face, PPF) rules it out — use a pericranial flap, or free fascia and mucosal grafts harvested well away from the tumor. Planned radiotherapy favors a pedicled, vascularized flap."
         },
         {
           "check": "Risk factors for failure: obesity or raised intracranial pressure, postoperative radiotherapy, ventricular entry, large anterior or posterior fossa defects",
@@ -7944,7 +7963,8 @@
         "Flap too small or pedicle twisted",
         "Over-packing the sella under the chiasm",
         "Balloon inflated to \"hold\" the flap: it can displace the graft intracranially, compress the pedicle or press on the chiasm",
-        "Free grafts alone for a large or high-flow defect"
+        "Free grafts alone for a large or high-flow defect",
+        "Free mucosal graft laid with its mucosa against the defect: it fails to take and the trapped mucosa can form a mucocele"
       ],
       "src": [
         "src.hadad-2006-nsf",
@@ -7956,7 +7976,9 @@
         "src.zwagerman-2019-lumbar-drain",
         "src.chiu-2019-ch27",
         "src.chiu-2019-ch29",
-        "src.chiu-2019-ch31"
+        "src.chiu-2019-ch31",
+        "src.chiu-2019-ch25",
+        "src.chiu-2019-ch26"
       ],
       "review": "draft"
     },

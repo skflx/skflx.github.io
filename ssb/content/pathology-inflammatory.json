@@ -52,7 +52,8 @@
         "p.anterior-ethmoidectomy",
         "p.sphenoidotomy",
         "p.frontal-trephination",
-        "p.subperiosteal-abscess-drainage"
+        "p.subperiosteal-abscess-drainage",
+        "p.balloon-sinus-dilation"
       ],
       "mimics": [
         "dz.acute-invasive-fungal-sinusitis",
@@ -66,7 +67,7 @@
         },
         {
           "tier": 2,
-          "text": "Recurrent ARS (four or more episodes a year with full recovery between) is easily confused with headache disorders and rhinitis; document at least one episode endoscopically or on CT before offering surgery."
+          "text": "Recurrent ARS (four or more episodes a year with full recovery between) is easily confused with headache disorders and rhinitis; document at least one episode endoscopically or on CT before offering surgery. When it is offered for focal disease without polyps, balloon dilation of the involved outflows ([[p.balloon-sinus-dilation]]) is an alternative to conventional FESS."
         },
         {
           "tier": 2,
@@ -79,7 +80,8 @@
         "src.rosenfeld-2015-sinusitis",
         "src.icar-rs-2021",
         "src.chandler-1970",
-        "src.germiller-2006-intracranial"
+        "src.germiller-2006-intracranial",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -132,7 +134,8 @@
         "p.posterior-ethmoidectomy",
         "p.draf-i",
         "p.draf-iia",
-        "p.sphenoidotomy"
+        "p.sphenoidotomy",
+        "p.balloon-sinus-dilation"
       ],
       "mimics": [
         "dz.odontogenic-sinusitis",
@@ -154,6 +157,10 @@
         {
           "tier": 2,
           "text": "Neo-osteogenesis (osteitic thickening of sinus walls) marks recalcitrant disease and predicts persisting inflammation after surgery."
+        },
+        {
+          "tier": 2,
+          "text": "Balloon dilation ([[p.balloon-sinus-dilation]]) suits focal disease limited to the maxillary, frontal or sphenoid outflow, including in the office under local anesthesia; it cannot treat the ethmoid cells, and polyps are a poor indication."
         }
       ],
       "geo": "overlay",
@@ -162,7 +169,8 @@
         "src.icar-rs-2021",
         "src.rosenfeld-2015-sinusitis",
         "src.babbel-1992-patterns",
-        "src.kennedy-1985"
+        "src.kennedy-1985",
+        "src.chiu-2019-ch13"
       ],
       "review": "draft"
     },
@@ -642,6 +650,10 @@
         {
           "tier": 2,
           "text": "Endodontic material extruded into the antrum is also hyperdense but metal-bright, homogeneous and next to a treated root — look at the tooth."
+        },
+        {
+          "tier": 2,
+          "text": "In the sphenoid, osteitis from a fungal ball or long-standing inflammation thickens the anterior face: expect to drill rather than punch when enlarging the sphenoidotomy ([[p.sphenoidotomy]])."
         }
       ],
       "geo": "overlay",
@@ -649,7 +661,8 @@
         "src.deshazo-1997-mycetoma",
         "src.deshazo-1997-fungal",
         "src.cummings-7",
-        "src.wormald-textbook"
+        "src.wormald-textbook",
+        "src.chiu-2019-ch08"
       ],
       "review": "draft"
     },
@@ -1636,7 +1649,7 @@
       },
       "endo": "0°, 30° and 45° at the olfactory cleft, ethmoid roof or sphenoid on the suspected side: clear fluid that wells or pulsates with Valsalva, a smooth glistening meningocele or encephalocele, or a bony defect; with intrathecal fluorescein (off-label, low dose), the leak shows yellow-green under blue light.",
       "redFlags": [
-        "Unilateral clear watery rhinorrhea, worse leaning forward or straining, salty taste → test the fluid for β2-transferrin or β-trace protein before imaging.",
+        "Unilateral clear watery rhinorrhea, worse leaning forward or straining, salty taste → test the fluid for β2-transferrin or β-trace protein before imaging; a sample the patient collects at home can still be tested about a week later if kept at room temperature.",
         "History of meningitis → repair once recovered, even if the leak has stopped.",
         "Headache, pulsatile tinnitus, visual obscurations or papilledema after repair → rebound intracranial hypertension, threatening vision and the repair.",
         "Obesity, empty sella and multiple defects on CT → treat the pressure together with the repair.",
@@ -1669,6 +1682,10 @@
           "text": "Rhinorrhea often stops and restarts; a leak that has stopped has not healed."
         },
         {
+          "tier": 2,
+          "text": "An atlas chapter reports that patients with spontaneous sphenoid leaks and encephaloceles present with rhinorrhea in about 85%, chronic headache in 77% and previous meningitis in 15% (expert-reported figures), often with obesity, hypertension, sleep apnea and intracranial hypertension — ask about headache and meningitis in every patient."
+        },
+        {
           "tier": 3,
           "text": "Lateral recess defects lie lateral to the foramen rotundum in a highly pneumatized sphenoid and are usually attributed to arachnoid pits eroded by raised pressure; a persistent lateral craniopharyngeal (Sternberg) canal, where it exists, opens medial to the foramen rotundum (Tomazic & Stammberger 2009). Position relative to V2 sets the corridor: lateral defects usually need a transpterygoid approach, medial ones can often be reached through a wide sphenoidotomy."
         }
@@ -1681,7 +1698,8 @@
         "src.oakley-2016-csf-diagnosis",
         "src.friedman-2013-iih",
         "src.tomazic-2009-sternberg",
-        "src.hegazy-2000"
+        "src.hegazy-2000",
+        "src.chiu-2019-ch27"
       ],
       "review": "draft"
     },
@@ -1911,7 +1929,7 @@
       ],
       "tier": 1,
       "what": "Congenital failure of the posterior nasal cavity to open into the nasopharynx ([[v.choanal-atresia]]): bilateral atresia presents at birth with cyclic cyanosis relieved by crying, because neonates breathe through the nose; unilateral atresia presents later with one-sided obstruction and discharge. It is often associated with CHARGE syndrome, especially when bilateral.",
-      "why": "Bilateral atresia needs an oral airway (McGovern nipple) and early repair; transnasal endoscopic repair removes the atretic plate, the posterior vomer and bone of the medial pterygoid plate to widen the choana, and covering raw bone with mucosal flaps reduces restenosis (stenting is debated). The skull base lies just above the plate, so work low along the nasal floor and inferomedially.",
+      "why": "Bilateral atresia needs an oral airway (McGovern nipple) and early repair; transnasal endoscopic repair ([[p.choanal-atresia-repair]]) removes the atretic plate, the posterior vomer and bone of the medial pterygoid plate to widen the choana, and covering raw bone with mucosal flaps reduces restenosis (stenting is debated). The skull base lies just above the plate, so work low along the nasal floor and inferomedially. A coexisting septal deviation is common and narrows the corridor further.",
       "imaging": {
         "ct": "Non-contrast CT after suction and decongestion, axial images parallel to the hard palate: narrowed posterior nasal cavity with medial bowing of the lateral wall and medial pterygoid plate, a thickened vomer, and a bony or membranous atretic plate with secretions pooled in front of it. Most are mixed bony-membranous; purely membranous atresia is uncommon. Check the other side and the height of the skull base, and look for CHARGE features in the temporal bones (semicircular canal hypoplasia)."
       },
@@ -1921,9 +1939,13 @@
         "Bilateral atresia → screen for CHARGE (coloboma, heart defect, growth and genital anomalies, ear anomalies) before surgery.",
         "Low skull base or narrow nasopharynx on CT → avoid superior dissection."
       ],
+      "managedBy": [
+        "p.choanal-atresia-repair"
+      ],
       "geo": "overlay",
       "src": [
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch05"
       ],
       "review": "draft"
     },

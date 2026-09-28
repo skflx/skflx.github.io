@@ -5,7 +5,7 @@ This is a status document, not a changelog — when something is retired, its
 section goes away rather than growing a postscript. Git history is the record
 of how things got here.
 
-Last reviewed: 2026-09-27.
+Last reviewed: 2026-09-28.
 
 ---
 
@@ -110,12 +110,19 @@ page yet. Draft knowledge graph in `ssb/content/`: anatomy by region
 plus a pathology layer (inflammatory/infectious/structural; neoplastic).
 Every file was authored by one model and adversarially reviewed by
 another; every journal source was matched to its PubMed record (NCBI
-E-utilities; the few PubMed does not index were confirmed by hand). "Verified" on a source means exists-as-cited,
-not supports-the-claim; all content is still `review: draft`. The UW
-Interactive CT Sinus Anatomy site (owner-reported permission) was crawled
-into `ssb/reference/uw-sinusanatomy2/` — label vocabulary crosswalked to
-graph ids, which fed synonyms and gap entities. As of 2026-09-27: about
-980 entities (78 conditions) and 210 sources.
+E-utilities; the few PubMed does not index were confirmed by hand).
+"Verified" on a source means exists-as-cited, not supports-the-claim; all
+content is still `review: draft`. The Chiu/Palmer/Adappa atlas (2nd ed.,
+the owner's copy; chapter 7 is not in the Drive folder) was read chapter by
+chapter against the graph and integrated in our own words, one source per
+chapter; conflicts were decided on evidence (e.g. lumbar drains stay for
+high-risk defects on trial evidence). The UW Interactive CT Sinus Anatomy
+site (owner-reported permission) is crawled into `ssb/reference/uw-sinusanatomy2/`:
+every labeled frame's labels and arrow tips (`slices.json`), from which
+`tools/ssb-pipeline/uw/relate.py` tests the graph's spatial claims. As of
+2026-09-28: about 1,030 entities (50 procedures, 78 conditions), 242
+sources; 60 spatial claims testable against UW, 58 agree, the other 2 a
+documented arrow-placement artifact.
 
 **Next:** Owner review (tier 1 first) — flip `review` to verified; owner
 decisions in `docs/ssb.md` §13 (vendor three.js, reference dataset, UW
@@ -124,8 +131,11 @@ permission scope); then phase 1 walking skeleton. Known content gaps:
   foramen and CN IX–XI; orbital septum, superior ophthalmic vein, frontal
   lobe beyond gyrus rectus, hard palate, parapharyngeal space.
 - Procedures (so conditions can link `managedBy`): canthotomy/cantholysis,
-  orbitotomy, choanal atresia repair, frontal obliteration/cranialization,
-  septodermoplasty and Young's, IMAX ligation, Lynch approach.
+  orbitotomy, frontal sinus cranialization, septodermoplasty and Young's,
+  transantral IMAX ligation, Lynch approach.
+- Owner review flagged by the integration: whether the two dry-eye hazards
+  (vidian neurectomy vs vidian sacrifice in transpterygoid work) should
+  merge; optic nerve sheath incision wording in optic nerve decompression.
 - Conditions: EGPA, PCD, immunodeficiency, granulomatous infections,
   septal hematoma/abscess, developmental cysts, organizing hematoma,
   facial fractures; HPV-related multiphenotypic and SMARCA4-deficient
