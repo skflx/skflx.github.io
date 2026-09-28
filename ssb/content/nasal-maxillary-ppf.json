@@ -219,7 +219,8 @@
       "reliability": "constant",
       "src": [
         "src.lund-2014-terminology",
-        "src.grays-42"
+        "src.grays-42",
+        "src.chiu-2019-ch01"
       ],
       "pearls": [
         {
@@ -229,6 +230,10 @@
         {
           "tier": 3,
           "text": "For skull base surgery the posterior septectomy (1–2 cm) is what gives binostril four-hand access; decide on a nasoseptal flap before you take it."
+        },
+        {
+          "tier": 2,
+          "text": "At the bony–cartilaginous junction the perichondrium does not run on into the periosteum; dense crossing fibres bind the two layers. Divide them sharply to pass from the subperichondrial onto the subperiosteal plane, or the flap tears here."
         }
       ],
       "review": "draft"
@@ -299,12 +304,13 @@
       "reliability": "constant",
       "src": [
         "src.mau-2007-l-strut",
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch01"
       ],
       "pearls": [
         {
           "tier": 2,
-          "text": "Leave at least 10 mm dorsally and caudally ([[m.l-strut-width]]); more if the cartilage is thin or already weakened by trauma or prior surgery."
+          "text": "Leave at least 10 mm dorsally and caudally ([[m.l-strut-width]]) — several authors set 15 mm as the minimum — and more if the cartilage is thin or already weakened by trauma or prior surgery."
         }
       ],
       "review": "draft"
@@ -565,6 +571,11 @@
           "r": "attaches-to",
           "to": "s.lacrimal-bone",
           "note": "lacrimal process"
+        },
+        {
+          "r": "medial-to",
+          "to": "s.maxillary-sinus",
+          "note": "attached to the medial maxillary wall below the natural ostium"
         }
       ],
       "ct": "Coronal: the lowest and largest turbinate; bone scroll with thick mucosa. Separate soft-tissue from bone hypertrophy before reduction.",
@@ -572,7 +583,9 @@
       "reliability": "constant",
       "src": [
         "src.lund-2014-terminology",
-        "src.grays-42"
+        "src.grays-42",
+        "src.chiu-2019-ch02",
+        "src.uw-ct-sinus-atlas"
       ],
       "pearls": [
         {
@@ -582,6 +595,10 @@
         {
           "tier": 2,
           "text": "Posterior end bleeding after reduction comes from the inferior turbinate branch of the posterior lateral nasal artery ([[s.posterior-lateral-nasal-artery]])."
+        },
+        {
+          "tier": 2,
+          "text": "Its submucosa is erectile: capacitance venous sinusoids fill and empty with sympathetic tone and with the temperature and humidity of inspired air, changing both its bulk and its surface area. That is why it shrinks with decongestant — the basis of the decongestion test before reduction."
         }
       ],
       "review": "draft"
@@ -635,6 +652,11 @@
           "r": "landmark-for",
           "to": "p.spa-ligation",
           "note": "posterior attachment points to the SPF"
+        },
+        {
+          "r": "anterior-to",
+          "to": "s.sphenopalatine-foramen",
+          "note": "the SPF lies just behind the MT's posterior attachment"
         }
       ],
       "ct": "Coronal: anterior vertical lamella rising to the skull base at the lateral lamella; check pneumatisation ([[v.concha-bullosa]]) and curvature ([[v.paradoxical-middle-turbinate]]).",
@@ -642,7 +664,10 @@
       "reliability": "constant",
       "src": [
         "src.lund-2014-terminology",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.chiu-2019-ch02",
+        "src.chiu-2019-ch06",
+        "src.uw-ct-sinus-atlas"
       ],
       "pearls": [
         {
@@ -656,6 +681,10 @@
         {
           "tier": 3,
           "text": "Posterior attachment and horizontal basal lamella are cut in a transpterygoid or posterior ethmoid-to-SPF approach; the SPA lies just behind it."
+        },
+        {
+          "tier": 2,
+          "text": "Partial MT resection is debated: it widens ethmoid access and may reduce lateral scarring and polyp recurrence (lower recurrence at 3 years in one report), but it removes the main landmark for revision. Preserve it during antrostomy when you can; if some must go, take no more than needed, typically the anteroinferior part — the lower half is the usual safe limit, while higher resection risks the cribriform plate — and cauterise the posterior stump, which carries SPA branches."
         }
       ],
       "review": "draft"
@@ -949,6 +978,11 @@
         {
           "r": "anterior-to",
           "to": "s.ethmoid-bulla"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.middle-meatus",
+          "note": "a cleft off the lateral middle meatus, hidden behind the uncinate"
         }
       ],
       "ct": "Coronal: air (or opacified) cleft lateral to the uncinate, over the maxillary ostium.",
@@ -956,7 +990,8 @@
       "reliability": "constant",
       "src": [
         "src.lund-2014-terminology",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -1145,13 +1180,19 @@
           "r": "borders",
           "to": "s.lacrimal-sac",
           "note": "anterior wall of the lacrimal fossa"
+        },
+        {
+          "r": "anterior-to",
+          "to": "s.nasolacrimal-duct",
+          "note": "the bone taken in front of the sac and duct in DCR and prelacrimal approaches"
         }
       ],
       "ct": "Axial: thick bone anteromedial to the lacrimal sac; its thickness predicts the drilling needed for DCR.",
       "reliability": "constant",
       "src": [
         "src.grays-42",
-        "src.wormald-2002-dcr"
+        "src.wormald-2002-dcr",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -1216,6 +1257,11 @@
           "r": "drains-to",
           "to": "s.ethmoid-infundibulum",
           "note": "via the natural ostium"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.nasolacrimal-duct",
+          "note": "the duct runs in the anteromedial wall of the sinus"
         }
       ],
       "ct": "Coronal and axial: large air space in the maxilla; check the ostium, infundibulum, infraorbital canal, septa, Haller cells and dental roots.",
@@ -1223,7 +1269,8 @@
       "reliability": "constant",
       "src": [
         "src.lund-2014-terminology",
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "pearls": [
         {
@@ -1278,7 +1325,14 @@
       "src": [
         "src.stammberger-1991",
         "src.kennedy-1985",
-        "src.lund-2014-terminology"
+        "src.lund-2014-terminology",
+        "src.chiu-2019-ch06"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Before the uncinate is removed, expect the ostium at about the junction of the lower third and upper two-thirds of the maxillary line — roughly level with the lower third of the MT."
+        }
       ],
       "review": "draft"
     },
@@ -1653,11 +1707,17 @@
         {
           "r": "wall-of",
           "to": "s.maxillary-anterior-wall"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.nasolacrimal-duct",
+          "note": "an anterior maxillary window lies between the duct medially and the nerve above and laterally"
         }
       ],
       "reliability": "constant",
       "src": [
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -1889,7 +1949,14 @@
       "endo": "30°/45°, right or left, inferior meatus: slit or pore high on the lateral wall; pressing on the medial canthus may express fluid.",
       "reliability": "constant",
       "src": [
-        "src.grays-42"
+        "src.grays-42",
+        "src.chiu-2019-ch21"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "From the front of the nose the valve lies roughly 30–35 mm behind the limen nasi along the inferior meatus (textbook estimate), about 10–15 mm behind the IT head ([[m.hasner-behind-it-head]]); medial maxillectomy and inferior meatal cuts start behind it."
+        }
       ],
       "review": "draft"
     },
@@ -1988,7 +2055,14 @@
       "reliability": "constant",
       "src": [
         "src.bolger-1999-crista",
-        "src.simmen-2006-spa"
+        "src.simmen-2006-spa",
+        "src.chiu-2019-ch03"
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "In cadaver dissections the crista lies within about 1 mm of the SPF in roughly 95% of specimens (textbook-reported figure), so taking it down almost always exposes the foramen."
+        }
       ],
       "review": "draft"
     },
@@ -2099,7 +2173,7 @@
         "SPA"
       ],
       "what": "Terminal branch of the IMAX; enters the nose through the [[s.sphenopalatine-foramen]] and divides into the [[s.posterior-lateral-nasal-artery]] and the [[s.posterior-septal-artery]], often before it exits the foramen.",
-      "why": "The main supply of the nasal cavity and the source of most posterior epistaxis; ligation must catch every branch, including the posterior septal artery running across the sphenoid face.",
+      "why": "The main supply of the nasal cavity (up to about 90% of its mucosa by textbook estimate) and the source of most posterior epistaxis; ligation must catch every branch, including the posterior septal artery running across the sphenoid face.",
       "rel": [
         {
           "r": "branch-of",
@@ -2123,7 +2197,8 @@
       "src": [
         "src.simmen-2006-spa",
         "src.snyderman-1999-spa",
-        "src.grays-42"
+        "src.grays-42",
+        "src.chiu-2019-ch03"
       ],
       "review": "draft"
     },
@@ -2292,11 +2367,17 @@
         {
           "r": "transmits",
           "to": "s.greater-palatine-nerve"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.maxillary-sinus",
+          "note": "descends behind the posteromedial corner of the sinus, between maxilla and palatine bone"
         }
       ],
       "reliability": "constant",
       "src": [
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -2378,13 +2459,19 @@
         {
           "r": "contains",
           "to": "s.maxillary-nerve"
+        },
+        {
+          "r": "anterior-to",
+          "to": "s.sphenoid-sinus",
+          "note": "anterolateral; the lateral recess lies behind it across the pterygoid base (transpterygoid route)"
         }
       ],
       "ct": "Axial: fat-filled cleft behind the maxillary sinus; loss of its fat (or widening) signals tumour. Its foramina (rotundum, vidian, palatovaginal, SPF, greater palatine) are the escape routes to check.",
       "reliability": "constant",
       "src": [
         "src.cavallo-2005-ppf",
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "pearls": [
         {
@@ -2497,13 +2584,24 @@
         {
           "r": "lateral-to",
           "to": "s.vidian-canal"
+        },
+        {
+          "r": "inferior-to",
+          "to": "s.optic-canal",
+          "note": "on the lateral sphenoid wall the optic prominence is above, V2 below and lateral"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.pterygopalatine-fossa",
+          "note": "opens into the upper posterior wall of the fossa"
         }
       ],
       "ct": "Coronal: round canal superolateral to the vidian canal on the anterior sphenoid.",
       "reliability": "constant",
       "src": [
         "src.grays-42",
-        "src.osawa-2009-vidian"
+        "src.osawa-2009-vidian",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -2740,11 +2838,17 @@
         {
           "r": "medial-to",
           "to": "s.infratemporal-fossa"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.sphenopalatine-foramen",
+          "note": "the lateral (ITF) and medial (nasal) doors of the PPF"
         }
       ],
       "reliability": "constant",
       "src": [
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -2765,11 +2869,17 @@
         {
           "r": "borders",
           "to": "s.orbit"
+        },
+        {
+          "r": "inferior-to",
+          "to": "s.superior-orbital-fissure",
+          "note": "the two fissures diverge from the orbital apex"
         }
       ],
       "reliability": "constant",
       "src": [
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -3044,12 +3154,18 @@
         {
           "r": "posterior-to",
           "to": "s.foramen-rotundum"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.pterygopalatine-fossa",
+          "note": "posterolateral, at the posterior root of the lateral pterygoid plate"
         }
       ],
       "ct": "Axial skull base: oval foramen posterolateral to the pterygoid base; foramen spinosum just behind and lateral.",
       "reliability": "constant",
       "src": [
-        "src.grays-42"
+        "src.grays-42",
+        "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
     },
@@ -3626,7 +3742,7 @@
       "class": "c.middle-turbinate-pneumatization",
       "code": "bulbous / extensive",
       "def": "Aerated middle turbinate on coronal CT; in strict use, pneumatisation of the bulbous (inferior) segment, alone or with the vertical lamella. Usually drains into the frontal recess or the retrobullar recess.",
-      "why": "A large one narrows the middle meatus, pushes the uncinate laterally and hides the OMC; lateral lamellectomy restores access. It can contain mucocele, polyps or be the site of the contact point in headache.",
+      "why": "A large one narrows the middle meatus, pushes the uncinate laterally and hides the OMC; lateral lamellectomy restores access. It can contain mucocele, polyps or be the site of the contact point in headache. Resect the lateral lamella: the medial lamella runs up to the skull-base attachment and is left. Treat the cell like an ethmoid cell — open it and preserve its mucosa; crushing it shrinks it only for a while and can trap its secretions.",
       "prev": [
         {
           "value": "53.6",
@@ -3641,7 +3757,8 @@
       ],
       "src": [
         "src.bolger-1991",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.chiu-2019-ch02"
       ],
       "review": "draft"
     },
@@ -3681,7 +3798,7 @@
         "Haller cell"
       ],
       "def": "Ethmoid cell pneumatising along the medial orbital floor (maxillary sinus roof) lateral to the infundibulum, below the lamina papyracea on coronal CT.",
-      "why": "A large cell narrows the infundibulum and maxillary ostium from above and laterally; it must be opened (from the antrostomy or infundibulum) and its roof is the orbit.",
+      "why": "A large cell narrows the infundibulum and maxillary ostium from above and laterally; it must be opened (from the antrostomy or infundibulum) and its roof is the orbit. Reaching it usually needs angled scopes and angled (90°, giraffe) forceps.",
       "prev": [
         {
           "value": "45.1",
@@ -3696,7 +3813,8 @@
       ],
       "src": [
         "src.bolger-1991",
-        "src.lund-2014-terminology"
+        "src.lund-2014-terminology",
+        "src.chiu-2019-ch06"
       ],
       "review": "draft"
     },
@@ -3858,10 +3976,11 @@
       "geo": "diorama",
       "class": "c.mladina-septal",
       "def": "Departure of the septum from the midline, cartilaginous, bony or both; describe by site (valve area vs posterior) and shape ([[c.mladina-septal]]).",
-      "why": "Obstructs the airway (mainly at the valve) and the surgical corridor (posteriorly); a deviation that blocks the middle meatus should be corrected before or during FESS.",
+      "why": "Obstructs the airway (mainly at the valve) and the surgical corridor (posteriorly); a deviation that blocks the middle meatus should be corrected before or during FESS. Some deviation is present in most people (textbook estimates of about 77–90% of the general population), so treat the deviation that explains the symptoms or blocks the route, not one that is merely visible.",
       "src": [
         "src.mladina-1987",
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch01"
       ],
       "review": "draft"
     },
@@ -3923,11 +4042,20 @@
           "note": "Osteological series (35% opened only into the superior meatus, 56% spanned both meati, 9% had two openings). Soft-tissue dissections of branch patterns are more relevant clinically, and small accessory foramina for branches are not counted here.",
           "n": 238,
           "population": "dry-skull lateral nasal walls"
+        },
+        {
+          "value": "42",
+          "unit": "% specimens",
+          "method": "cadaver",
+          "src": "src.chiu-2019-ch03",
+          "conf": "low",
+          "note": "Textbook-reported, primary study not named: the SPA had branched before leaving the foramen, its branches passing through separate bony openings. This looser definition (any separate branch foramen) likely explains the gap from the 9% of true double foramina in dry skulls."
         }
       ],
       "src": [
         "src.wareing-1998-spf",
-        "src.simmen-2006-spa"
+        "src.simmen-2006-spa",
+        "src.chiu-2019-ch03"
       ],
       "review": "draft"
     },
@@ -3979,7 +4107,7 @@
       "tier": 2,
       "geo": "diorama",
       "def": "Congenital obstruction of the choana, most often mixed bony-membranous; CT shows a narrowed posterior nasal cavity, a thickened vomer and medial bowing of the lateral nasal wall.",
-      "why": "Bilateral atresia is a neonatal airway emergency; unilateral presents later with one-sided discharge. Repair endoscopically by removing the atretic plate and the posterior vomer.",
+      "why": "Bilateral atresia is a neonatal airway emergency; unilateral presents later with one-sided discharge. Repair endoscopically by removing the atretic plate and the posterior vomer ([[p.choanal-atresia-repair]]).",
       "src": [
         "src.cummings-7"
       ],
@@ -4215,6 +4343,38 @@
         "src.bolger-1990-msh"
       ],
       "review": "draft"
+    },
+    {
+      "id": "c.vidian-canal-type",
+      "name": "Vidian canal position relative to the sphenoid floor",
+      "of": "s.vidian-canal",
+      "tier": 3,
+      "basis": "Coronal CT: where the vidian canal lies relative to the floor of the sphenoid sinus.",
+      "classes": [
+        {
+          "code": "1",
+          "label": "Protruding",
+          "criterion": "Canal lies above the floor, projecting into the sinus.",
+          "why": "Easiest to find from inside the sphenoid, and easiest to injure while flattening the floor."
+        },
+        {
+          "code": "2",
+          "label": "On the floor",
+          "criterion": "Canal lies on the floor, partly protruding into the sinus.",
+          "why": "Usually still visible as a ridge in the floor."
+        },
+        {
+          "code": "3",
+          "label": "Embedded",
+          "criterion": "Canal lies within the bone of the floor or sphenoid body, below the sinus.",
+          "why": "Not seen from the sinus; reach it from the PPF or by drilling the floor."
+        }
+      ],
+      "caveats": "Criteria as summarised in a surgical atlas chapter; check the primary CT study's exact definitions before using the boundary between types 1 and 2 for research.",
+      "src": [
+        "src.chiu-2019-ch23"
+      ],
+      "review": "draft"
     }
   ],
   "measurements": [
@@ -4428,10 +4588,11 @@
       "method": "cadaver",
       "conf": "med",
       "what": "Minimum width of dorsal and caudal septal cartilage left in septoplasty to preserve nasal support.",
-      "note": "The 10 mm rule is a convention; engineering analysis suggests a wider strut (or reinforcement) where cartilage is thin, and the dorsal strut near the keystone is most important.",
+      "note": "The 10 mm rule is a convention; engineering analysis suggests a wider strut (or reinforcement) where cartilage is thin, and the dorsal strut near the keystone is most important. A current surgical atlas chapter sets 15 mm as the minimum; the 10–15 mm range reflects differing conventions, not conflicting measurements.",
       "src": [
         "src.mau-2007-l-strut",
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch01"
       ],
       "review": "draft"
     },
@@ -4549,7 +4710,8 @@
         "p.maxillary-antrostomy",
         "p.uncinectomy",
         "p.medial-maxillectomy",
-        "p.prelacrimal-approach"
+        "p.prelacrimal-approach",
+        "p.endoscopic-denker"
       ],
       "tier": 1,
       "site": "Anterior margin of the antrostomy, in the bony nasolacrimal canal just in front of the natural ostium.",
@@ -4557,10 +4719,11 @@
       "consequence": "Epiphora and dacryocystitis; many injuries are subclinical because the duct drains into the antrostomy.",
       "prevent": "Enlarge posteriorly and inferiorly, not anteriorly; stop when bone becomes hard; in maxillectomy or prelacrimal work, divide the duct sharply and obliquely instead of avulsing it.",
       "recognize": "Hard bone giving way at the anterior antrostomy margin; a white tubular structure; post-op epiphora.",
-      "rescue": "A cleanly transected duct that opens into the antrostomy often drains; persistent epiphora is treated by endoscopic DCR. In planned transection, marsupialise the cut duct.",
+      "rescue": "A cleanly transected duct that opens into the antrostomy often drains; persistent epiphora is treated by endoscopic DCR. In planned transection, marsupialise the cut duct; some add a DCR at the same sitting to prevent stenosis — the steps of a formal DCR (remove the remaining lacrimal bone, cannulate and slit the duct vertically, evert its mucosa), usually without stents.",
       "src": [
         "src.bolger-1992-lacrimal",
-        "src.stammberger-1991"
+        "src.stammberger-1991",
+        "src.chiu-2019-ch21"
       ],
       "review": "draft"
     },
@@ -4615,7 +4778,8 @@
         "p.maxillary-antrostomy",
         "p.medial-maxillectomy",
         "p.prelacrimal-approach",
-        "p.ppf-exposure"
+        "p.ppf-exposure",
+        "p.endoscopic-denker"
       ],
       "tier": 2,
       "site": "Antral roof, especially over a suspended or dehiscent infraorbital canal or a large Haller cell; V2 in the PPF.",
@@ -4636,7 +4800,8 @@
       "at": "s.anterior-superior-alveolar-nerve",
       "during": [
         "p.canine-fossa-trephination",
-        "p.prelacrimal-approach"
+        "p.prelacrimal-approach",
+        "p.endoscopic-denker"
       ],
       "tier": 2,
       "site": "Anterior maxillary wall, medial part of the canine fossa and around the piriform aperture.",
@@ -4903,18 +5068,20 @@
       "during": [
         "p.ppf-exposure",
         "p.medial-maxillectomy",
-        "p.transpterygoid-approach"
+        "p.transpterygoid-approach",
+        "p.endoscopic-denker"
       ],
       "tier": 3,
       "site": "Anterior (vascular) layer of the PPF behind the posterior maxillary wall.",
       "mechanism": "Opening the periosteum and dissecting fat bluntly tears the tortuous IMAX or its branches before they are identified.",
-      "consequence": "Heavy arterial bleeding that obscures the fossa and can force abandonment.",
-      "prevent": "Open periosteum sharply, identify the IMAX loop and branches, clip or bipolar them before retracting; consider preoperative embolisation for vascular tumours.",
+      "consequence": "Heavy arterial bleeding that obscures the fossa and can force abandonment. Branches missed during the dissection can go into spasm and bleed profusely after surgery.",
+      "prevent": "Open periosteum sharply, identify the IMAX loop and branches, clip or bipolar them before retracting, coagulating every exposed branch even if it is not bleeding; finish the bony window before opening the periosteum; consider preoperative embolisation for vascular tumours.",
       "recognize": "Pulsatile bleeding from the PPF fat.",
       "rescue": "Pressure with a patty, then identify and clip the proximal IMAX; embolisation if uncontrolled.",
       "src": [
         "src.cavallo-2005-ppf",
-        "src.kassam-2005-coronal"
+        "src.kassam-2005-coronal",
+        "src.chiu-2019-ch24"
       ],
       "review": "draft"
     },
@@ -4951,12 +5118,13 @@
       "site": "Vidian nerve in its canal or the PPF.",
       "mechanism": "Division of greater superficial petrosal (parasympathetic) fibres to the lacrimal gland.",
       "consequence": "Reduced reflex tearing; usually tolerated but can be symptomatic, especially with prior dry eye.",
-      "prevent": "Consent for it; prefer posterior nasal neurectomy for rhinorrhoea; assess tear function pre-op.",
-      "recognize": "Dry, gritty eye post-op; reduced Schirmer test.",
+      "prevent": "Consent for it; prefer posterior nasal neurectomy for rhinorrhoea; assess tear function pre-op. Give artificial tears for the first month.",
+      "recognize": "Dry, gritty eye post-op; reduced Schirmer test, which often stays low long term although symptoms usually settle within about a month.",
       "rescue": "Lubricants and ophthalmology follow-up.",
       "src": [
         "src.golding-wood-1961",
-        "src.osawa-2009-vidian"
+        "src.osawa-2009-vidian",
+        "src.chiu-2019-ch23"
       ],
       "review": "draft"
     },
@@ -4995,10 +5163,11 @@
       "consequence": "Recurrent epiphora and dacryocystitis.",
       "prevent": "Remove bone up to the sac fundus (8–10 mm above the axilla); open the sac fully and lay sac flaps onto nasal mucosal flaps (mucosa-to-mucosa); check that the common canaliculus opening lies in the ostium.",
       "recognize": "Epiphora returns; failed irrigation; closed or granulating ostium on endoscopy.",
-      "rescue": "Revision DCR with wider bone removal; address canalicular obstruction separately.",
+      "rescue": "Revision DCR with wider bone removal: most failures come from inadequate exposure of the sac and common canaliculus. Incise new mucosa straight onto bone at the palpated edge of the old osteotomy; a free mucosal graft from the agger nasi can cover bare bone, topical mitomycin C helped in several revision series, and tubes stay longer (4–6 weeks). Address canalicular obstruction separately.",
       "src": [
         "src.wormald-2002-dcr",
-        "src.wormald-2000-lacrimal-sac"
+        "src.wormald-2000-lacrimal-sac",
+        "src.chiu-2019-ch17"
       ],
       "review": "draft"
     },
@@ -5013,11 +5182,12 @@
       "site": "Behind the posterior lacrimal crest, where the lacrimal bone meets the lamina papyracea.",
       "mechanism": "Removing bone or sac too far posteriorly; confusing orbital fat with the sac.",
       "consequence": "Orbital fat prolapse, haematoma, medial rectus injury.",
-      "prevent": "Stay on the sac; confirm it with light-pipe transillumination or a probe tenting its wall before incising.",
+      "prevent": "Stay on the sac; confirm it with light-pipe transillumination or a probe tenting its wall before incising. Take lacrimal bone only up to the uncinate attachment and leave the uncinate: the bone behind it is thin over the orbit.",
       "recognize": "Fat in the field; periorbital bruising.",
       "rescue": "Leave fat alone, avoid packing, monitor vision; manage as orbital haematoma if pressure rises.",
       "src": [
-        "src.wormald-2002-dcr"
+        "src.wormald-2002-dcr",
+        "src.chiu-2019-ch17"
       ],
       "review": "draft"
     },
@@ -5186,11 +5356,12 @@
       "id": "pr.l-strut-preserve",
       "name": "Preserve the L-strut and the keystone",
       "tier": 2,
-      "rule": "In septoplasty keep at least 10 mm (more if weak) of dorsal and caudal cartilage and never disarticulate the septum from the nasal bones or twist the perpendicular plate.",
+      "rule": "In septoplasty keep at least 10 mm (many advise 15 mm; more if weak) of dorsal and caudal cartilage and never disarticulate the septum from the nasal bones or twist the perpendicular plate.",
       "why": "The L-strut holds up the dorsum and tip; twisting the bony septum can fracture the cribriform plate.",
       "src": [
         "src.mau-2007-l-strut",
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch01"
       ],
       "review": "draft"
     },
@@ -5222,11 +5393,12 @@
       "id": "pr.preserve-turbinate-mucosa",
       "name": "Reduce the turbinate, not its mucosa",
       "tier": 1,
-      "rule": "Treat inferior turbinate hypertrophy by out-fracture and submucosal reduction (bone and/or submucosal tissue), preserving the mucosal surface.",
-      "why": "The mucosa conditions air and gives the sensation of airflow; destroying it risks crusting and empty nose syndrome.",
+      "rule": "Treat inferior turbinate hypertrophy by out-fracture and submucosal reduction (bone and/or submucosal tissue), preserving the mucosal surface. Escalate only as needed — out-fracture, then submucosal soft-tissue reduction, then submucosal bone resection — and keep full-thickness resection or aggressive ablation for failures.",
+      "why": "The mucosa conditions air and gives the sensation of airflow; destroying it risks crusting and empty nose syndrome. Long-term comparative data favour submucosal resection combined with out-fracture, and partial turbinectomy damages the ciliated epithelium more than submucosal radiofrequency reduction.",
       "src": [
         "src.hol-2000-turbinate",
-        "src.houser-2007-ens"
+        "src.houser-2007-ens",
+        "src.chiu-2019-ch02"
       ],
       "review": "draft"
     },
@@ -5250,6 +5422,36 @@
       "src": [
         "src.robinson-2005-anterior-maxilla",
         "src.robinson-2005-cfp-complications"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "pr.dry-field-before-first-cut",
+      "name": "Make the field dry before the first cut",
+      "tier": 1,
+      "rule": "Place decongestant pledgets accurately — high enough to shrink the septal and turbinate swell bodies and open the middle meatus, not just on the floor — infiltrate lidocaine with adrenaline where you will incise, and give both time to work (at least 5 minutes for topical decongestion, up to about 15 minutes for infiltration) before the first incision.",
+      "why": "Endoscopic surgery depends on a clear view, and bleeding is what takes it away. Heart rate and blood pressure often peak in the first quarter-hour after induction; operating before vasoconstriction has taken effect means more mucosal trauma and bleeding, especially at the anterior septum, the MT head and the lateral wall, and badly placed pledgets leave the middle meatus and frontal recess hidden. Total intravenous anaesthesia reduced blood loss compared with inhalational anaesthesia in a systematic review.",
+      "caveat": "Local vasoconstriction does not control a named artery: for heavy bleeding from the SPA territory use a transpalatal greater palatine injection with a depth-limited needle ([[m.greater-palatine-canal-length]]) or control the artery ([[p.spa-ligation]]).",
+      "src": [
+        "src.chiu-2019-ch06",
+        "src.chiu-2019-ch01",
+        "src.chiu-2019-ch05",
+        "src.chiu-2019-ch17",
+        "src.chiu-2019-ch21",
+        "src.chiu-2019-ch03"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "pr.maxillary-access-ladder",
+      "name": "Climb the maxillary access ladder one rung at a time",
+      "tier": 2,
+      "rule": "Choose the least extensive endonasal route that reaches the lesion's attachment: middle meatal antrostomy, mega-antrostomy, modified (turbinate- and duct-sparing) medial maxillectomy, total medial maxillectomy with or without the nasolacrimal duct, transseptal (cross-court) routes, and finally the endoscopic Denker approach ([[p.endoscopic-denker]]) — before an open approach.",
+      "why": "Each rung buys more anterolateral reach at the price of more morbidity (duct, turbinate, infraorbital and alveolar nerves, alar support). Cadaver studies put numbers on the steps (small single series, angles of instrument reach as reported in atlas chapters): total over modified medial maxillectomy about 12°; medial maxillectomy over antrostomy about 18.5°, and a 1 cm Denker maxillotomy about 33.5° more; a cross-court window about 15° over an ipsilateral approach, raising access lateral to the infraorbital nerve from 63% to 98% of specimens and to the anterior wall from 25% to 95%; septal dislocation about 20° over total medial maxillectomy.",
+      "caveat": "The ladder is a guide, not a rule: surgeon preference, tumour extent and margins, sinus geometry and whether a DCR is acceptable all shift the choice. A cross-court window needs an unscarred septum and angled instruments; septal dislocation (cartilage freed from the crest and the bony septum and swung across) allows straight instruments and four hands through one nostril but is limited by a concave anterior maxilla or a prominent opposite piriform rim; a limited septal window made for access can later serve as the transseptal route. The prelacrimal approach ([[p.prelacrimal-approach]]) reaches the anterior and lateral antrum while keeping the IT and duct when the recess is wide enough. Canine fossa trephination adds no reach for a tumour on the anterior wall.",
+      "src": [
+        "src.chiu-2019-ch22",
+        "src.chiu-2019-ch21"
       ],
       "review": "draft"
     }
@@ -5342,13 +5544,19 @@
         "Symptomatic nasal obstruction from septal deviation",
         "Access for sinus or skull base surgery",
         "Contact-point headache with a matching deviation (selected)",
-        "Septal spur causing epistaxis or crusting"
+        "Septal spur causing epistaxis or crusting",
+        "Deviation narrowing the middle meatus in recurrent or chronic rhinosinusitis (with sinus surgery)",
+        "Nasal obstruction in selected patients with obstructive sleep apnoea"
       ],
-      "corridor": "Transnasal, 0° endoscope, hemitransfixion or Killian incision on the side of the most anterior deviation, or a targeted incision in front of an isolated posterior spur.",
+      "corridor": "Transnasal, 0° endoscope, hemitransfixion or Killian incision on the side of the most anterior deviation, or, for an isolated spur, a targeted incision in front of it or a horizontal incision along the spur's apex with flaps raised above and below it and simply redraped once the spur is removed (directed septoplasty).",
       "preop": [
         {
           "check": "Locate the deviation (valve vs posterior, cartilage vs bone) and classify it ([[c.mladina-septal]]).",
           "why": "Valve deviations explain obstruction; posterior deviations mainly limit access, so a limited endoscopic resection may be enough."
+        },
+        {
+          "check": "Base the diagnosis on examination; CT is not needed to diagnose a septal deviation.",
+          "why": "CT can understate the deviation seen clinically; when one exists, use it for posterior deflections and a concha bullosa that anterior rhinoscopy misses."
         },
         {
           "check": "Check skull base integrity and the perpendicular plate on CT when available.",
@@ -5361,7 +5569,7 @@
       ],
       "steps": [
         {
-          "do": "Infiltrate and make the incision; raise the mucoperichondrial flap in the subperichondrial plane.",
+          "do": "After topical decongestion, infiltrate lidocaine with adrenaline under the mucoperichondrium and give it time to work (about 15 minutes for full effect, [[pr.dry-field-before-first-cut]]); make the incision and raise the mucoperichondrial flap in the subperichondrial plane.",
           "see": [
             "s.septal-cartilage",
             "s.nasal-septum"
@@ -5402,7 +5610,21 @@
             "h.saddle-nose",
             "h.csf-leak-septoplasty"
           ],
-          "think": "How much dorsal and caudal strut is left? At least 10 mm, more if thin. Never twist bone near the skull base."
+          "think": "How much dorsal and caudal strut is left? At least 10 mm (15 mm by some authors, [[m.l-strut-width]]), more if thin. The posterior bony septum carries no support and need not be kept — but cut it, never twist bone near the skull base."
+        },
+        {
+          "do": "Caudal deviation: score the concave face of the caudal cartilage vertically to weaken its memory and free it from the maxillary crest; then either trim the strip lying in the crest groove, swing the septum to the midline and suture it to the nasal spine (swinging door), or, without trimming, set its base on the far side of the crest from the obstruction (doorstop).",
+          "see": [
+            "s.septal-cartilage",
+            "s.maxillary-crest",
+            "lm.anterior-nasal-spine",
+            "s.septal-l-strut"
+          ],
+          "risk": [
+            "h.saddle-nose"
+          ],
+          "think": "Scoring and freeing weaken the caudal strut, so fix it securely. A deformity beyond this needs an ethmoid-bone batten (\"sandwich\") graft, which can be placed endonasally, or an open extracorporeal septoplasty (septum removed, rebuilt as an L-strut and replaced).",
+          "station": "t.septum-anterior"
         },
         {
           "do": "Replace straightened cartilage between the flaps where support or a perforation risk exists; repair tears; quilt the flaps and/or place splints.",
@@ -5414,9 +5636,15 @@
             "h.septal-perforation"
           ],
           "think": "Are there opposing tears? Close one side and interpose cartilage."
+        },
+        {
+          "do": "Postoperative: remove splints after 2–7 days. Some surgeons give an anti-staphylococcal antibiotic while packing or splints are in place to prevent toxic shock syndrome; practice varies.",
+          "see": [
+            "s.nasal-septum"
+          ]
         }
       ],
-      "endpoints": "Septum in the midline from valve to choana with a clear corridor for the scope; intact L-strut of at least 10 mm; flaps apposed without opposing tears.",
+      "endpoints": "Septum in the midline from valve to choana with a clear corridor for the scope; intact L-strut of at least 10–15 mm ([[m.l-strut-width]]); flaps apposed without opposing tears.",
       "pitfalls": [
         "Under-correcting the caudal septum and valve area",
         "Twisting the perpendicular plate",
@@ -5425,7 +5653,8 @@
       ],
       "src": [
         "src.cummings-7",
-        "src.mau-2007-l-strut"
+        "src.mau-2007-l-strut",
+        "src.chiu-2019-ch01"
       ],
       "review": "draft"
     },
@@ -5434,25 +5663,26 @@
       "name": "Inferior turbinate reduction",
       "tier": 1,
       "indications": [
-        "Nasal obstruction from inferior turbinate hypertrophy not responding to medical therapy",
+        "Nasal obstruction from inferior turbinate hypertrophy (allergic or non-allergic chronic rhinitis) not responding to medical therapy",
         "Compensatory hypertrophy opposite a septal deviation",
         "Access for inferior meatal or skull base work"
       ],
       "corridor": "Transnasal, 0° endoscope.",
       "preop": [
         {
-          "check": "Decongestion test and CT: mucosal (decongests) vs bony hypertrophy.",
-          "why": "Mucosal hypertrophy responds to submucosal energy techniques; bony hypertrophy needs out-fracture or submucosal bone resection."
+          "check": "Decongestion test: mucosal (shrinks) vs bony hypertrophy. Imaging is not needed for the inferior turbinate itself.",
+          "why": "Mucosal hypertrophy responds to submucosal energy techniques; bony hypertrophy needs out-fracture or submucosal bone resection. A sinus CT, when one exists, also shows the bone."
         }
       ],
       "steps": [
         {
-          "do": "Out-fracture: medialise the IT with a Freer, then lateralise it firmly along its whole length.",
+          "do": "Out-fracture: medialise the IT with a Freer, then press it inferolaterally along its whole length — its bony attachment is angled, so pushing straight laterally moves it poorly.",
           "see": [
             "s.inferior-turbinate",
-            "s.inferior-meatus"
+            "s.inferior-meatus",
+            "s.hasner-valve"
           ],
-          "think": "Does it stay lateral? If it springs back, bony hypertrophy needs submucosal bone reduction.",
+          "think": "Does it stay lateral? If it springs back, bony hypertrophy needs submucosal bone reduction. Be gentle toward the inferior meatus: the nasolacrimal duct opens under the anterior IT.",
           "station": "t.first-pass-floor"
         },
         {
@@ -5463,7 +5693,7 @@
           "risk": [
             "h.empty-nose"
           ],
-          "think": "Remove volume, not surface; the anterior head at the valve gives the most benefit."
+          "think": "Remove volume, not surface; the anterior head at the valve — roughly its first 2 cm — gives most of the airway benefit."
         },
         {
           "do": "Check the posterior end and coagulate any bleeding at the tail under vision.",
@@ -5481,11 +5711,14 @@
       "pitfalls": [
         "Resecting mucosa (crusting, empty nose)",
         "Missing the head at the valve",
-        "Leaving posterior bleeding"
+        "Leaving posterior bleeding",
+        "Aggressive thermal reduction (mucosal slough and prolonged crusting)",
+        "Full-thickness resection of the anterior end: bare bone, slow healing and heavy crusting"
       ],
       "src": [
         "src.hol-2000-turbinate",
-        "src.houser-2007-ens"
+        "src.houser-2007-ens",
+        "src.chiu-2019-ch02"
       ],
       "review": "draft"
     },
@@ -5654,7 +5887,7 @@
           "think": "One opening, not two: separate openings recirculate mucus."
         },
         {
-          "do": "Inspect the antrum with 30°/45°/70° scopes; remove disease (fungal debris, polyps) with curved suction and instruments while preserving mucosa.",
+          "do": "Inspect the antrum with 30°/45°/70° scopes; remove disease (fungal debris, polyps, and every trace of allergic mucin — 70° scope and saline irrigation) with curved suction and instruments while preserving mucosa.",
           "see": [
             "s.maxillary-sinus",
             "s.alveolar-recess",
@@ -5665,7 +5898,7 @@
           "risk": [
             "h.infraorbital-nerve-injury"
           ],
-          "think": "Where is the infraorbital nerve? Keep debriders off the roof. Disease in the anterior or alveolar recess may need a canine fossa or prelacrimal route.",
+          "think": "Where is the infraorbital nerve? Keep debriders off the roof. Disease in the anterior or alveolar recess may need a canine fossa or prelacrimal route. Allergic mucin left behind keeps the mucosa oedematous.",
           "station": "t.maxillary-antrum-70"
         },
         {
@@ -5680,7 +5913,7 @@
           "think": "An unstable MT will scar across the antrostomy."
         }
       ],
-      "endpoints": "Single antrostomy including the natural ostium, sized to the disease (typically 1–2 cm for CRS, larger for fungus or topical therapy access); NLD, orbit and posterior lateral nasal artery intact; MT stable.",
+      "endpoints": "Single antrostomy including the natural ostium, sized to the disease — minimal enlargement of the natural ostium for recurrent acute sinusitis with non-polypoid mucosa, typically 1–2 cm for CRS, and wide (full uncinate and fontanelle removal back to the palatine bone) for polyposis, hyperplastic mucosa, fungus, revision or topical-therapy access; NLD, orbit and posterior lateral nasal artery intact; MT stable.",
       "pitfalls": [
         "Antrostomy separate from the natural ostium",
         "Anterior extension into the NLD",
@@ -5690,7 +5923,8 @@
       "src": [
         "src.stammberger-1991",
         "src.kennedy-1985",
-        "src.epos-2020"
+        "src.epos-2020",
+        "src.chiu-2019-ch06"
       ],
       "review": "draft"
     },
@@ -5700,7 +5934,7 @@
       "tier": 2,
       "indications": [
         "Inverted papilloma or benign tumour attached to the maxillary walls",
-        "Recalcitrant maxillary sinusitis after failed antrostomy (mega-antrostomy)",
+        "Recalcitrant maxillary sinusitis after failed antrostomy (mega-antrostomy), e.g. cystic fibrosis, extensive allergic mucin, prolapsed orbital fat after medial orbital decompression, or a scarred sinus after mucosal stripping (Caldwell-Luc)",
         "Access to the anterior, lateral and inferior antrum, PPF and ITF",
         "Selected malignancy with clear margins"
       ],
@@ -5717,6 +5951,14 @@
         {
           "check": "Posterior wall, PPF and orbital floor integrity.",
           "why": "Erosion changes the plan and the risk to IMAX and the orbit."
+        },
+        {
+          "check": "Plan vascular control: a transpalatal greater palatine injection (needle bent to limit depth, [[m.greater-palatine-canal-length]]) or a transnasal injection over the crista ethmoidalis just below the MT's posterior attachment (needle bent about 1 cm).",
+          "why": "Vasoconstriction in the PPF and SPA territory reduces bleeding during wall removal ([[pr.dry-field-before-first-cut]])."
+        },
+        {
+          "check": "Septal deviation blocking the middle meatus.",
+          "why": "A limited septal window may be enough, and it can later serve as a transseptal route to the anterolateral antrum ([[pr.maxillary-access-ladder]])."
         }
       ],
       "steps": [
@@ -5733,7 +5975,16 @@
           "station": "t.maxillary-antrum-70"
         },
         {
-          "do": "Cut the IT: in the modified technique incise the IT horizontally preserving its head, or detach it; carry cuts down the medial wall to the nasal floor.",
+          "do": "Raise a medially based nasal floor mucosal flap before any bone cuts: anterior cut just below the IT attachment and slightly behind the valve of Hasner, posterior cut at the level of the posterior maxillary wall, joined by a cut placed as close to the IT attachment as possible for length; park it on the floor or drape it over the septum.",
+          "see": [
+            "s.nasal-floor",
+            "s.inferior-meatus",
+            "s.hasner-valve"
+          ],
+          "think": "This flap goes back over the bare bony ridge at the end: less crusting and contracture."
+        },
+        {
+          "do": "Cut the IT: clamp it with a haemostat for at least 30 seconds at the junction of its anterior third and posterior two-thirds, cut along the crushed line from just behind the nasolacrimal duct back to the posterior maxillary wall and medial pterygoid plate, and remove the posterior two-thirds, keeping the head (modified technique) — or detach the whole IT for more room. Carry cuts down the medial wall to the nasal floor.",
           "see": [
             "s.inferior-turbinate",
             "s.inferior-meatus",
@@ -5743,7 +5994,19 @@
           "risk": [
             "h.turbinate-tail-bleed"
           ],
-          "think": "How far forward must you go? If only the posterior wall and floor are involved, preserve the IT head and NLD."
+          "think": "How far forward must you go? If only the posterior wall and floor are involved, preserve the IT head and NLD. Most of the antrum lies below the IT's upper attachment, so removing its posterior two-thirds opens the sinus floor; keeping the head preserves normal nasal airflow."
+        },
+        {
+          "do": "Mark the anterior osteotomy by puncturing the medial wall with a J-curette just behind and below the valve of Hasner; run the inferior cut back through the posterior fontanelle with through-cutting forceps, then forward with a backbiter toward the anterior wall.",
+          "see": [
+            "s.maxillary-medial-wall",
+            "s.hasner-valve",
+            "s.posterior-fontanelle"
+          ],
+          "risk": [
+            "h.nasolacrimal-duct-injury"
+          ],
+          "think": "Staying behind Hasner's valve keeps the duct in the modified operation; divide it only if the anterior wall must be reached (next step)."
         },
         {
           "do": "Identify the nasolacrimal duct in its canal; drill it out and divide it sharply and obliquely if the anterior wall must be reached, or preserve it.",
@@ -5785,7 +6048,7 @@
           "think": "Drilling the attachment reduces recurrence; watch the infraorbital canal on the roof."
         },
         {
-          "do": "Smooth the floor transition to the nasal floor; check haemostasis and the orbit.",
+          "do": "Drill any residual inferior ridge of the medial wall flush with the nasal floor (diamond bur) — in a contracted or hypoplastic sinus only down to its floor — lay the floor flap back over the bare bone, and check haemostasis and the orbit.",
           "see": [
             "s.nasal-floor",
             "s.maxillary-sinus-floor"
@@ -5794,18 +6057,33 @@
             "h.middle-turbinate-lateralization"
           ],
           "think": "A flat transition lets the cavity self-clean and be examined in clinic."
+        },
+        {
+          "do": "Postoperative: hold the floor flap down with a small spacer or dissolvable packing against the IT remnant until the first visit, and leave the posterior IT stump alone for about 2 weeks.",
+          "see": [
+            "s.inferior-turbinate",
+            "s.nasal-floor"
+          ],
+          "risk": [
+            "h.turbinate-tail-bleed"
+          ],
+          "think": "Debriding the stump while its clot dissolves invites a bleed."
         }
       ],
       "endpoints": "Attachment site cleared and drilled; one common cavity of nose and antrum with a smooth floor; NLD preserved or cleanly divided; orbit, ION and IMAX intact.",
       "pitfalls": [
-        "Leaving anterior-wall attachment unreachable without prelacrimal or canine fossa extension",
+        "Leaving anterior-wall attachment unreachable without prelacrimal, canine fossa or Denker ([[p.endoscopic-denker]]) extension",
         "Crushing the NLD",
-        "Crusting from removal of the whole IT"
+        "Crusting from removal of the whole IT",
+        "Stripping antral mucosa when operating for inflammatory disease (inflammation, poor clearance, contracture)",
+        "With prolapsed orbital fat, making the upper cuts first: make the inferior and anterior cuts first to see where fat fills the infundibulum, then fold the wall away from the fat"
       ],
       "src": [
         "src.wormald-textbook",
         "src.cummings-7",
-        "src.zhou-2013-prelacrimal"
+        "src.zhou-2013-prelacrimal",
+        "src.chiu-2019-ch15",
+        "src.chiu-2019-ch21"
       ],
       "review": "draft"
     },
@@ -5893,7 +6171,7 @@
       "name": "Canine fossa trephination and Caldwell-Luc",
       "tier": 2,
       "indications": [
-        "Anterior or lateral antral disease unreachable through a middle meatal antrostomy (trephine as an adjunct port)",
+        "Anterior or lateral antral disease unreachable through a middle meatal antrostomy (trephine as an adjunct port), e.g. severe maxillary polyposis",
         "Caldwell-Luc (sublabial antrostomy) now rarely: foreign bodies, some cysts or tumours, when endoscopic routes fail"
       ],
       "corridor": "Sublabial/transfacial: trocar puncture of the canine fossa (trephine) or a sublabial incision with an anterior wall window (Caldwell-Luc).",
@@ -5952,12 +6230,14 @@
       "pitfalls": [
         "Medial or high puncture (dental numbness, ION injury)",
         "Stripping all antral mucosa",
-        "Inferior meatal drainage instead of the natural ostium"
+        "Inferior meatal drainage instead of the natural ostium",
+        "Trephining for a tumour attached to the anterior wall: no added reach, and the port can pass through the tumour — use a prelacrimal or Denker route ([[pr.maxillary-access-ladder]])"
       ],
       "src": [
         "src.robinson-2005-anterior-maxilla",
         "src.robinson-2005-cfp-complications",
-        "src.cummings-7"
+        "src.cummings-7",
+        "src.chiu-2019-ch22"
       ],
       "review": "draft"
     },
@@ -5973,12 +6253,12 @@
       "corridor": "Transnasal, 0° (and 30°) endoscope, lateral wall at the MT axilla.",
       "preop": [
         {
-          "check": "Level of obstruction by syringing/probing (canalicular vs sac/duct).",
-          "why": "DCR fixes a post-sac obstruction; canalicular obstruction needs a different operation."
+          "check": "Level of obstruction by syringing/probing (canalicular vs sac/duct); dacryocystography and lacrimal scintigraphy when the level is unclear or a functional block is suspected.",
+          "why": "DCR fixes a post-sac obstruction; canalicular obstruction needs a different operation. Imaging can also reveal a tight common canaliculus that will keep the eye watering after a DCR."
         },
         {
           "check": "Septal deviation, MT and agger nasi on CT or endoscopy.",
-          "why": "May need septoplasty or MT/agger work for access."
+          "why": "May need septoplasty or MT/agger work for access. If a septoplasty is needed, incise on the side opposite the DCR: the endoscope will not tear that flap, less blood runs onto the lens, and septum-to-lateral-wall synechiae are less likely."
         },
         {
           "check": "Suspicion of tumour (bloody tears, mass).",
@@ -5987,7 +6267,7 @@
       ],
       "steps": [
         {
-          "do": "Raise a posteriorly based mucosal flap on the lateral wall above and in front of the MT axilla, over the maxillary line and frontal process.",
+          "do": "After decongestion, infiltrate the MT axilla and the mucosa over the frontal process with lidocaine and adrenaline; raise a posteriorly based mucosal flap on the lateral wall above and in front of the MT axilla, over the maxillary line and frontal process.",
           "see": [
             "s.middle-turbinate",
             "s.maxillary-line",
@@ -5997,7 +6277,7 @@
           "station": "t.lacrimal-sac-0"
         },
         {
-          "do": "Remove the frontal process of the maxilla (drill/Kerrison) and flake off the lacrimal bone to expose the whole sac up to its fundus.",
+          "do": "Remove the frontal process of the maxilla with a punch (Hajek–Koffler or Kerrison) for as long as it will bite, then a DCR bur; flake off the lacrimal bone up to, but not including, the uncinate attachment, exposing the whole sac up to its fundus.",
           "see": [
             "s.frontal-process-maxilla",
             "s.lacrimal-bone",
@@ -6008,7 +6288,7 @@
           "risk": [
             "h.dcr-orbital-entry"
           ],
-          "think": "Is the fundus exposed? Most of the sac lies above the axilla. Posterior to the lacrimal bone is orbit."
+          "think": "Is the fundus exposed? Most of the sac lies above the axilla. Open the punch after each bite so any caught sac slips free instead of tearing, and keep the bur at the bone–sac interface, never between sac and bone. Leave the uncinate: the bone behind it is thin and the orbit lies there."
         },
         {
           "do": "Pass a lacrimal probe through the canaliculus to tent the medial sac wall; incise the sac vertically and open it with relaxing cuts into anterior and posterior flaps.",
@@ -6023,7 +6303,7 @@
           "think": "Probe tenting confirms sac, not orbit; never force the probe."
         },
         {
-          "do": "Marsupialise: lay the sac flaps onto the trimmed nasal mucosal flaps (mucosa to mucosa); check the common canaliculus opening lies within the ostium; stent if indicated.",
+          "do": "Marsupialise: lay the sac flaps onto the trimmed nasal mucosal flaps and, where exposed, onto agger nasi mucosa (mucosa to mucosa); check the common canaliculus opening lies within the ostium; pass silicone tubes through the puncta when the common canaliculus is narrow.",
           "see": [
             "s.lacrimal-sac",
             "s.lacrimal-canaliculi"
@@ -6031,7 +6311,17 @@
           "risk": [
             "h.dcr-ostium-failure"
           ],
-          "think": "No bare bone, flat sac: that is what keeps it open."
+          "think": "No bare bone, flat sac: apposed mucosa heals by primary intention and keeps the ostium open. Tubes dilate a narrow common canaliculus, help seat the flaps (gelatin sponge slid down them) and draw tears by capillarity."
+        },
+        {
+          "do": "Postoperative: remove the tubes at about 4 weeks and confirm patency with the fluorescein dye disappearance test and a Valsalva bubble test at the ostium.",
+          "see": [
+            "s.lacrimal-sac",
+            "s.lacrimal-canaliculi"
+          ],
+          "risk": [
+            "h.dcr-ostium-failure"
+          ]
         }
       ],
       "endpoints": "Sac fully opened and flat on the lateral wall from fundus to duct, common canaliculus draining into the ostium, mucosal edges apposed; fluorescein or saline passes freely.",
@@ -6043,7 +6333,8 @@
       ],
       "src": [
         "src.wormald-2002-dcr",
-        "src.wormald-2000-lacrimal-sac"
+        "src.wormald-2000-lacrimal-sac",
+        "src.chiu-2019-ch17"
       ],
       "review": "draft"
     },
@@ -6052,7 +6343,8 @@
       "name": "Endoscopic sphenopalatine artery ligation",
       "tier": 2,
       "indications": [
-        "Posterior epistaxis failing packing or cautery",
+        "Posterior epistaxis (bleeding that adequate anterior packing does not control) failing or recurring after posterior packing or cautery",
+        "Early alternative to posterior packing and admission within a structured epistaxis pathway (shorter stay, lower cost and less morbidity than packing-first care)",
         "Recurrent posterior epistaxis",
         "Adjunct to control bleeding before posterior nasal or skull base surgery"
       ],
@@ -6064,7 +6356,7 @@
         },
         {
           "check": "Coagulopathy, anticoagulants, hypertension, HHT.",
-          "why": "Correct what can be corrected; HHT needs a different strategy."
+          "why": "Correct what can be corrected. Bleeding driven by anticoagulants or antiplatelets is better managed with limited cautery and resorbable packing than with ligation, and in HHT ligation rarely gives lasting control ([[dz.hht]])."
         },
         {
           "check": "Septal deviation limiting access.",
@@ -6073,7 +6365,7 @@
       ],
       "steps": [
         {
-          "do": "Optional small maxillary antrostomy to identify the posterior wall of the maxillary sinus as a landmark.",
+          "do": "Get room and a workable field: medialise the MT gently with a Freer, pledget the middle meatus and remove a large uncinate if it blocks the view; if bleeding still obscures, slow it with a transpalatal greater palatine injection of lidocaine with adrenaline ([[m.greater-palatine-canal-length]]), warm (about 50 °C) irrigation, decongestant pledgets or bipolar. Optionally make a small maxillary antrostomy to identify the posterior wall of the maxillary sinus as a landmark.",
           "see": [
             "s.maxillary-natural-ostium",
             "s.maxillary-sinus"
@@ -6112,7 +6404,7 @@
             "h.spa-ligation-failure",
             "h.posterior-septal-artery-bleed"
           ],
-          "think": "Missing the posterior septal branch is the classic cause of failure; the nerves travel with the vessels."
+          "think": "Missing the posterior septal branch is the classic cause of failure. The posterior nasal nerves (including the nasopalatine) leave the foramen with the vessels; dividing them causes no recognised deficit, but they can often be teased off before clipping."
         },
         {
           "do": "Replace the flap; inspect for other bleeding sites.",
@@ -6136,7 +6428,8 @@
         "src.snyderman-1999-spa",
         "src.bolger-1999-crista",
         "src.simmen-2006-spa",
-        "src.tunkel-2020-epistaxis"
+        "src.tunkel-2020-epistaxis",
+        "src.chiu-2019-ch03"
       ],
       "review": "draft"
     },
@@ -6211,8 +6504,8 @@
       "corridor": "Transnasal: transmaxillary/trans-SPF to the anterior opening of the vidian canal in the posterior PPF, or transsphenoidal to a vidian ridge in the sphenoid floor.",
       "preop": [
         {
-          "check": "Vidian canal course and relation to the sphenoid floor on coronal CT.",
-          "why": "A protruding canal ([[v.vidian-canal-protrusion]]) can be reached from inside the sphenoid."
+          "check": "Vidian canal course and relation to the sphenoid floor on coronal CT ([[c.vidian-canal-type]]).",
+          "why": "A canal above or on the floor (types 1–2, [[v.vidian-canal-protrusion]]) can be reached from inside the sphenoid; an embedded type 3 canal is reached through the PPF."
         },
         {
           "check": "Tear function and dry eye history.",
@@ -6236,7 +6529,7 @@
           "station": "t.spf-crista"
         },
         {
-          "do": "Retract the PPF contents laterally and find the vidian canal opening at the pterygoid base, inferomedial to foramen rotundum; distinguish it from the smaller, more medial palatovaginal canal.",
+          "do": "Retract the PPF contents laterally and find the vidian canal opening at the pterygoid base, inferomedial to foramen rotundum; distinguish it from the smaller, more medial palatovaginal canal and its pharyngeal nerve.",
           "see": [
             "s.vidian-canal",
             "s.vidian-nerve",
@@ -6247,10 +6540,10 @@
           "risk": [
             "h.v2-injury"
           ],
-          "think": "The palatovaginal canal is medial and smaller; the vidian nerve enters the PPG."
+          "think": "The palatovaginal canal is medial and smaller; the vidian nerve enters the PPG. The vidian and pharyngeal nerves together tether the fossa contents: dividing both lets them move laterally."
         },
         {
-          "do": "Divide the nerve at the canal opening and coagulate the vidian artery; do not drill posteriorly along the canal.",
+          "do": "Divide the vidian nerve (and the pharyngeal nerve) at the canal openings with a sickle knife and coagulate the vidian artery; inspect the whole bony rim of the canal to confirm a complete cut, then plug the canal with bone wax. Do not drill posteriorly along the canal.",
           "see": [
             "s.vidian-nerve",
             "s.vidian-artery"
@@ -6259,18 +6552,20 @@
             "h.dry-eye-vidian",
             "h.ica-injury-vidian"
           ],
-          "think": "Posteriorly the canal leads to the ICA genu: neurectomy needs no deep drilling."
+          "think": "Posteriorly the canal leads to the ICA genu: neurectomy needs no deep drilling. Relapse at 12–24 months is put down to nerve regrowth; a complete cut and a wax plug reduce it."
         }
       ],
-      "endpoints": "Vidian nerve divided at the anterior canal with haemostasis and no posterior drilling.",
+      "endpoints": "Vidian nerve divided at the anterior canal with the whole rim checked and the canal plugged, haemostasis, and no posterior drilling.",
       "pitfalls": [
         "Confusing the palatovaginal canal with the vidian canal",
         "Posterior drilling toward the ICA",
-        "Unwarned dry eye"
+        "Unwarned dry eye",
+        "Incomplete section or an unplugged canal (relapse from reinnervation at 12–24 months)"
       ],
       "src": [
         "src.golding-wood-1961",
-        "src.osawa-2009-vidian"
+        "src.osawa-2009-vidian",
+        "src.chiu-2019-ch23"
       ],
       "review": "draft"
     },
@@ -6411,7 +6706,7 @@
         "IMAX ligation for refractory epistaxis",
         "Vidian neurectomy"
       ],
-      "corridor": "Transnasal: wide middle meatal antrostomy (or medial maxillectomy) plus removal of the posterior maxillary wall; medially through the SPF and palatine perpendicular plate.",
+      "corridor": "Transnasal: wide middle meatal antrostomy (or medial maxillectomy) plus removal of the posterior maxillary wall; medially through the SPF and palatine perpendicular plate. For large juvenile angiofibromas two surgeons work binostril (four hands) through a partial posterior septectomy for countertraction; the nasopharyngeal part, often the hardest margin, may be taken transorally with a curved adenoid bipolar, especially in young patients.",
       "preop": [
         {
           "check": "Tumour extent on MRI/CT: foramina involved (rotundum, vidian, IOF, pterygomaxillary fissure), ITF extension.",
@@ -6419,7 +6714,7 @@
         },
         {
           "check": "Vascularity; consider angiography and embolisation.",
-          "why": "JNA and vascular tumours bleed from IMAX and ICA branches."
+          "why": "JNA and vascular tumours bleed from IMAX and ICA branches. Embolisation reduces but does not replace intraoperative control of the IMAX: embolised vessels recanalise."
         },
         {
           "check": "Which side for the nasoseptal flap if reconstruction is needed.",
@@ -6450,7 +6745,7 @@
           "risk": [
             "h.posterior-antrostomy-bleed"
           ],
-          "think": "Proximal control before opening the fossa.",
+          "think": "Proximal control before opening the fossa. For access behind the SPA (e.g. to the lateral recess) it can occasionally be retracted downward, but it usually has to be divided and ligated: traction avulses it.",
           "station": "t.spf-crista"
         },
         {
@@ -6465,10 +6760,10 @@
             "h.imax-bleeding-ppf",
             "h.palatal-numbness"
           ],
-          "think": "Periosteum intact keeps fat and vessels contained until you are ready."
+          "think": "Periosteum intact keeps fat and vessels contained until you are ready. For IMAX ligation alone a posterior wall window is enough; for tumour, finish all bone removal before opening the periosteum — the fossa contents are under tension and herniate into the nose, and a torn IMAX in herniating fat is hard to control."
         },
         {
-          "do": "Incise the periosteum; identify and control the IMAX loop and its branches in the anterior vascular layer.",
+          "do": "Incise the periosteum widely; find the IMAX by its pulsation in the fat (it runs lateral to medial), tease it out with a blunt probe, place two clips laterally and one medially and divide between them; control its branches in the anterior vascular layer.",
           "see": [
             "s.pterygopalatine-fossa",
             "s.internal-maxillary-artery",
@@ -6478,7 +6773,7 @@
           "risk": [
             "h.imax-bleeding-ppf"
           ],
-          "think": "Vascular before neural: clip or bipolar branches before retraction.",
+          "think": "Vascular before neural: clip or bipolar branches before retraction. Coagulate every branch you expose — unrecognised branches can go into spasm and bleed heavily after surgery.",
           "station": "t.ppf-transmaxillary"
         },
         {
@@ -6527,7 +6822,292 @@
       "src": [
         "src.cavallo-2005-ppf",
         "src.kassam-2005-coronal",
-        "src.osawa-2009-vidian"
+        "src.osawa-2009-vidian",
+        "src.chiu-2019-ch24"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.choanal-atresia-repair",
+      "name": "Endoscopic choanal atresia repair (cross-over flap technique)",
+      "tier": 2,
+      "indications": [
+        "Bilateral choanal atresia in the neonate, once an oral airway is secured ([[dz.choanal-atresia]])",
+        "Unilateral choanal atresia with obstruction or discharge"
+      ],
+      "corridor": "Transnasal along the floor with a 0° endoscope alone (small-diameter in neonates) and fine, sometimes otologic-size, instruments; the new choana is made by removing the atretic plate and the posterior septum (vomer) and is lined with crossed mucosal flaps from the posterior septum and nasal floor of both sides.",
+      "preop": [
+        {
+          "check": "CT: plate composition, skull base height and the width of the posterior nasal cavity on both sides ([[v.choanal-atresia]]).",
+          "why": "Sets how low and how far medially to work; a low skull base above the plate forbids superior dissection."
+        },
+        {
+          "check": "Septal deviation.",
+          "why": "It commonly coexists and narrows the corridor further; plan for it."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Decongest topically (allow at least 5 minutes) and out-fracture the IT with a Freer to widen the posterior corridor.",
+          "see": [
+            "s.inferior-turbinate",
+            "s.nasal-floor",
+            "s.choana"
+          ],
+          "think": "Room first: the whole operation is done along the floor with a 0° scope.",
+          "station": "t.first-pass-floor"
+        },
+        {
+          "do": "Infiltrate saline under the posterior septal and nasal floor mucosa to lift it for the flaps.",
+          "see": [
+            "s.nasal-septum",
+            "s.nasal-floor"
+          ],
+          "think": "Hydrodissection makes thin mucosa easier to cut to shape and elevate."
+        },
+        {
+          "do": "Incise the posterior septal mucosa about 1 cm in front of the atretic plate and carry the cut onto the nasal floor toward the IT tail — an L-shape on one side and its mirror J-shape on the other — and raise the flaps.",
+          "see": [
+            "s.nasal-septum",
+            "s.vomer",
+            "s.nasal-floor",
+            "s.inferior-turbinate"
+          ],
+          "think": "Each flap must be long enough to cross to the other side of the new choana."
+        },
+        {
+          "do": "Remove the posterior septum (vomer) and the atretic plate, taking the upper limit no higher than the lower edge of the MT; widen laterally as needed.",
+          "see": [
+            "s.vomer",
+            "s.choana",
+            "s.middle-turbinate",
+            "s.medial-pterygoid-plate",
+            "s.nasopharynx"
+          ],
+          "think": "Stay low and medial: the skull base lies just above the plate."
+        },
+        {
+          "do": "Cross the flaps so that together they cover the whole raw neochoana, floor and roof; hold them with fibrin glue or a soft anchored pack for 1–2 days.",
+          "see": [
+            "s.choana",
+            "s.nasopharynx"
+          ],
+          "think": "No bare bone: covered bone is what prevents restenosis."
+        },
+        {
+          "do": "Postoperative: saline irrigation at least three times daily for the first month (very small volumes in neonates), a short tapering course of topical steroid drops, no suction catheters in the first weeks, and endoscopy at about 10 days and then periodically through the first year.",
+          "see": [
+            "s.choana"
+          ],
+          "think": "A blind suction catheter can displace the flaps."
+        }
+      ],
+      "endpoints": "A widened choana on the affected side(s) with the atretic plate and posterior vomer removed below the level of the MT's lower edge, and all raw bone covered by mucosal flaps.",
+      "pitfalls": [
+        "Dissecting above the lower edge of the MT (skull base)",
+        "Leaving raw bone uncovered (restenosis)",
+        "Ignoring a coexisting septal deviation that narrows the corridor",
+        "Late obstruction, years later, from hypertrophy of the posterior IT at the septal defect; partial turbinectomy helps selected patients"
+      ],
+      "src": [
+        "src.chiu-2019-ch05",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.balloon-sinus-dilation",
+      "name": "Balloon sinus dilation (balloon-only and hybrid)",
+      "tier": 2,
+      "indications": [
+        "Recurrent acute or chronic rhinosinusitis without polyps limited to the maxillary, frontal or sphenoid outflow (focal, ostium-limited disease)",
+        "Selected patients in the office under local anaesthesia, avoiding a general anaesthetic",
+        "Hybrid use during conventional FESS, most often for the frontal outflow"
+      ],
+      "corridor": "Transnasal under endoscopic view: a guide catheter angled for each sinus, a (usually illuminated) guidewire through the outflow, and a balloon inflated over the wire. A balloon-only procedure removes no bone and cannot treat the ethmoid, whose many septated cells have no single dilatable ostium; a hybrid adds conventional instruments at any point of the dissection.",
+      "preop": [
+        {
+          "check": "Polyps or ethmoid disease on CT and endoscopy.",
+          "why": "Dilating an ostium does not clear polyps or ethmoid cells; these patients need conventional or hybrid surgery."
+        },
+        {
+          "check": "Septal deviation, large IT, concha bullosa, tortuous or complex frontal outflow.",
+          "why": "Each can stop the catheter or balloon from reaching the ostium."
+        },
+        {
+          "check": "Sphenoid: ICA and optic canal dehiscence ([[v.ica-dehiscence]], [[v.optic-canal-dehiscence]]).",
+          "why": "Sphenoid wire passage is essentially blind, so a dehiscent carotid or optic nerve is directly at risk."
+        },
+        {
+          "check": "Frontal: outflow narrowed by osteitis or an osteoma.",
+          "why": "Inflating in a rigid, narrow tract can transmit force to the posterior table (fracture, CSF leak)."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Maxillary: place the angled catheter behind the uncinate pointing inferolaterally toward the natural ostium, pass the wire into the antrum and confirm it by transillumination of the cheek, then inflate a balloon whose diameter sets the size of the opening.",
+          "see": [
+            "s.uncinate-process",
+            "s.ethmoid-infundibulum",
+            "s.maxillary-natural-ostium",
+            "s.maxillary-sinus"
+          ],
+          "think": "The wire should advance with smooth, light pressure; resistance means a submucosal tract — withdraw and redirect.",
+          "station": "t.third-pass-middle-meatus"
+        },
+        {
+          "do": "Frontal: use a catheter angled about 70°; spin the slightly bent wire tip to find the recess without moving the catheter; confirm the position by transillumination and, for a long recess, dilate serially from above downward.",
+          "see": [
+            "s.frontal-recess",
+            "s.frontal-sinus",
+            "v.suprabullar-cell",
+            "s.agger-nasi-cell"
+          ],
+          "risk": [
+            "h.posterior-table-breach"
+          ],
+          "think": "A sharp spot of light on the forehead that moves with the wire means frontal sinus; a diffuse glow means an ethmoid or suprabullar cell, the classic false passage. Taking the uncinate first can ease wire entry, but dilating before any dissection keeps the field dry.",
+          "station": "t.frontal-recess-70"
+        },
+        {
+          "do": "Sphenoid: pass the wire into the sphenoid ostium medial to the superior turbinate and dilate; confirm with fluoroscopy or navigation when unsure.",
+          "see": [
+            "s.sphenoethmoidal-recess",
+            "s.sphenoid-ostium",
+            "s.superior-turbinate"
+          ],
+          "risk": [
+            "h.ica-injury-sphenoidotomy",
+            "h.optic-nerve-injury-sphenoid"
+          ],
+          "think": "There is no reliable transillumination check here: the wire passes blind toward the carotid and optic prominences.",
+          "station": "t.ser-0"
+        },
+        {
+          "do": "Hybrid: after dilation remove bony overhangs and mucosal tags bluntly or with a powered instrument, and complete any ethmoid surgery conventionally.",
+          "see": [
+            "s.frontal-recess",
+            "s.ethmoid-bulla"
+          ],
+          "risk": [
+            "h.frontal-recess-stenosis"
+          ],
+          "think": "Avoid circumferential mucosal injury at a dilated outflow: it heals as a stenosis."
+        }
+      ],
+      "endpoints": "Each targeted outflow dilated with the wire proven to be in the intended sinus, no circumferential mucosal injury, and any ethmoid or polyp disease handled by conventional (hybrid) surgery. Oozing for 24–48 hours is expected; packing is rarely needed.",
+      "pitfalls": [
+        "Dilating a suprabullar or ethmoid cell instead of the frontal sinus",
+        "Forcing the wire against resistance (submucosal tract)",
+        "Choosing balloon-only for polyps or ethmoid disease",
+        "Blind sphenoid wire passage with a dehiscent ICA or optic nerve",
+        "Dilating an osteitic or osteoma-narrowed frontal outflow (posterior table fracture)",
+        "Circumferential mucosal trauma when trimming after dilation (stenosis)"
+      ],
+      "src": [
+        "src.chiu-2019-ch13"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.endoscopic-denker",
+      "name": "Endoscopic Denker approach (anterior medial maxillectomy)",
+      "tier": 3,
+      "indications": [
+        "Benign or malignant tumours attached to the prelacrimal, anterior, inferior or lateral walls of the maxillary sinus",
+        "PPF and ITF lesions needing straight, wide access",
+        "Odontogenic lesions and refractory chronic rhinosinusitis of the anterolateral antrum — the traditional Caldwell-Luc indications"
+      ],
+      "corridor": "Transnasal, 0° endoscope: an endoscopic medial maxillectomy extended forward through the piriform aperture and the medial part of the anterior maxillary wall below the infraorbital nerve (the endonasal form of Denker's open operation, also called total endoscopic anterior medial maxillectomy). With the medial wall and a segment of the anterior wall gone, straight instruments reach every antral wall, the PPF and the ITF without a sublabial or transseptal incision, avoiding the oral contamination and oroantral fistula risk of a gingivobuccal incision. A lesser variant, the endoscopic anterior maxillotomy, drills only a window in the anterior wall below the infraorbital foramen through a subperiosteal pocket at the piriform rim.",
+      "preop": [
+        {
+          "check": "Tumour attachment and the shape of the anterior maxilla on CT and MRI.",
+          "why": "Confirms that lesser routes cannot reach it ([[pr.maxillary-access-ladder]]) and plans the bone cuts around the attachment."
+        },
+        {
+          "check": "Infraorbital foramen and canal position.",
+          "why": "The anterior window must stay below the nerve."
+        },
+        {
+          "check": "Counsel for nasolacrimal duct division, cheek swelling and numbness.",
+          "why": "The duct is divided, and the infraorbital and anterior superior alveolar nerves lie close to the cuts."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Incise with a needle-tip cautery under a 0° scope along the junction of nasal floor and lateral wall, and along the lateral wall forward and down to just in front of the IT head over the piriform rim.",
+          "see": [
+            "s.nasal-floor",
+            "s.lateral-nasal-wall",
+            "s.inferior-turbinate"
+          ],
+          "think": "These incisions serve both the medial maxillectomy and the subperiosteal pocket on the face of the maxilla."
+        },
+        {
+          "do": "Elevate subperiosteally over the piriform aperture onto the anterior maxilla until the infraorbital nerve is seen at its foramen.",
+          "see": [
+            "s.maxillary-anterior-wall",
+            "s.canine-fossa",
+            "s.infraorbital-foramen",
+            "s.infraorbital-nerve"
+          ],
+          "risk": [
+            "h.infraorbital-nerve-injury",
+            "h.anterior-superior-alveolar-nerve-injury"
+          ],
+          "think": "Seeing the nerve is what makes the anterior cut safe."
+        },
+        {
+          "do": "Complete an endoscopic medial maxillectomy ([[p.medial-maxillectomy]]), keeping the nasolacrimal duct until the end and then dividing it obliquely.",
+          "see": [
+            "s.maxillary-medial-wall",
+            "s.inferior-turbinate",
+            "s.nasolacrimal-duct"
+          ],
+          "risk": [
+            "h.nasolacrimal-duct-injury"
+          ],
+          "think": "A sharp oblique cut leaves a duct that can still drain."
+        },
+        {
+          "do": "Cut the maxillotomy: a superior cut toward the level of the sinus roof but below the infraorbital foramen, an inferior cut at the junction of nasal floor and medial wall, and a posterior cut along the posterior wall, joined to the medial maxillectomy; remove the segment en bloc with the tumour's bony attachment.",
+          "see": [
+            "s.maxillary-anterior-wall",
+            "s.maxillary-posterior-wall",
+            "s.zygomatic-recess",
+            "s.alveolar-recess"
+          ],
+          "risk": [
+            "h.infraorbital-nerve-injury",
+            "h.anterior-superior-alveolar-nerve-injury"
+          ],
+          "think": "Keep the window below the nerve and take no more piriform rim than needed: losing the rim can let the ala collapse.",
+          "station": "t.maxillary-antrum-70"
+        },
+        {
+          "do": "Clear and drill the attachment site; extend into the PPF or ITF with straight instruments as needed.",
+          "see": [
+            "s.maxillary-sinus",
+            "s.pterygopalatine-fossa",
+            "s.infratemporal-fossa"
+          ],
+          "risk": [
+            "h.imax-bleeding-ppf"
+          ],
+          "think": "The straight corridor is the point of the approach: use it for four-handed work.",
+          "station": "t.ppf-itf-overview"
+        }
+      ],
+      "endpoints": "Every antral wall and, if needed, the PPF and ITF reachable with straight instruments; tumour removed with its bony attachment; infraorbital and anterior superior alveolar nerves preserved; nasolacrimal duct cleanly divided.",
+      "pitfalls": [
+        "Cutting above the infraorbital foramen",
+        "Taking too much piriform rim (alar collapse)",
+        "Cheek swelling and pain, and upper lip or tooth numbness, from the anterior dissection",
+        "Choosing it when a lesser rung of the access ladder would reach the lesion"
+      ],
+      "src": [
+        "src.chiu-2019-ch22",
+        "src.chiu-2019-ch21"
       ],
       "review": "draft"
     }
