@@ -93,7 +93,8 @@
 
     var TRACHEA = {
         lumenA: 0.90, lumenB: 0.80, wall: 0.12, cz: 0.10,
-        ringH: 0.40, ringGap: 0.20, gapBelowCricoid: 0.30, rings: 5,
+        proud: 0.06,                           // rings stand this far outside the wall
+        ringH: 0.40, ringGap: 0.20, gapBelowCricoid: 0.30, rings: 4,
         arc: 290, gapCenter: 90                // cartilage arc; gap centered posteriorly
     };
 
@@ -276,9 +277,13 @@
 
     /* ---------- trachea ---------- */
 
+    /* Ring section straddles the wall's outer face (f: 0 inner -> 1 outer). */
     function tracheaRadii(th, f) {
-        var w = f * TRACHEA.wall;
+        var w = TRACHEA.wall - TRACHEA.proud + f * 2 * TRACHEA.proud;
         return [TRACHEA.lumenA + w, TRACHEA.lumenB + w];
+    }
+    function tracheaWallRadii() {   // mid-plane of the continuous wall
+        return [TRACHEA.lumenA + TRACHEA.wall / 2, TRACHEA.lumenB + TRACHEA.wall / 2];
     }
     function ringTop(k) { return -TRACHEA.gapBelowCricoid - k * (TRACHEA.ringH + TRACHEA.ringGap); }
     var TRACHEA_BOTTOM = ringTop(TRACHEA.rings - 1) - TRACHEA.ringH;
@@ -344,16 +349,25 @@
             });
         })(ringTop(k));
     }
-    /* trachealis: the flat membranous wall closing each C */
+    /* the continuous wall the rings ride on (annular ligaments), and the
+       flat trachealis closing it across the posterior gap */
     parts.push({
-        kind: 'surface', ink: 'faint', u: [-1, 1, 6], v: [0, 1, 10],
+        kind: 'surface', ink: 'faint', u: [TRACHEA_ARC[0], TRACHEA_ARC[1], 48], v: [0, 1, 6],
+        thick: TRACHEA.wall,
+        fn: function (th, v) {
+            var r = tracheaWallRadii();
+            return [r[0] * Math.cos(th), lerp(0, TRACHEA_BOTTOM, v), r[1] * Math.sin(th) + TRACHEA.cz];
+        }
+    });
+    parts.push({
+        kind: 'surface', ink: 'faint', u: [-1, 1, 6], v: [0, 1, 6], thick: TRACHEA.wall,
         fn: function (u, v) {
             var end = tracheaEnd();
             return [u * end[0], lerp(0, TRACHEA_BOTTOM, v), end[1]];
         }
     });
-    function tracheaEnd() {   // where a C's ends meet the flat wall: [x, z]
-        var th = TRACHEA_ARC[0], r = tracheaRadii(th, 0.5);
+    function tracheaEnd() {   // where the wall's ends meet the flat part: [x, z]
+        var th = TRACHEA_ARC[0], r = tracheaWallRadii();
         return [Math.abs(r[0] * Math.cos(th)), r[1] * Math.sin(th) + TRACHEA.cz];
     }
 
@@ -365,21 +379,21 @@
         folds: [0.2, COMMISSURE[1] - 0.12, -0.4],
         membrane: membrane(0.4, 0.5),
         cricoid: cricPoint(20 * RAD, 1, 0.3),
-        trachea: [TRACHEA.lumenA + TRACHEA.wall, ringTop(2) - TRACHEA.ringH / 2, TRACHEA.cz]
+        trachea: [TRACHEA.lumenA + TRACHEA.wall + TRACHEA.proud, ringTop(2) - TRACHEA.ringH / 2, TRACHEA.cz]
     };
 
     window.ASCII3D.define('larynx', {
         alt: 'The laryngeal skeleton and upper trachea, turning. The hyoid and epiglottis sit above the thyroid cartilage, whose two laminae meet at the front. Inside it the vocal folds run from the arytenoids to the front of the thyroid, seen dotted through the cartilage. Below the vocal folds, between the thyroid cartilage and the cricoid, the highlighted cricothyroid membrane is the site of an emergency surgical airway. The cricoid is the one complete ring, a signet with a low arch in front and a tall plate behind; the tracheal rings below it are C-shaped, open at the back.',
         cols: 72, rows: 44,
-        camera: { frame: 'turntable', yaw: 35, pitch: 12, fit: 0.95 },
+        camera: { frame: 'turntable', yaw: 35, pitch: 12, fit: 1.07, offset: [0, 1.5] },
         motion: { spin: 20 },
-        crease: 55,
+        crease: 55, idDepth: 0.015,
         parts: parts,
         labels: [
             { at: mark.epiglottis, text: 'epiglottis', ink: 'muted' },
             { at: mark.hyoid, text: 'hyoid', ink: 'muted' },
             { at: mark.thyroid, text: 'thyroid' },
-            { at: mark.folds, text: 'vocal folds', ink: 'muted' },
+            { at: mark.folds, text: 'vocal folds', ink: 'muted', dx: -8 },
             { at: mark.membrane, text: 'cricothyroid\nmembrane', ink: 'signal' },
             { at: mark.cricoid, text: 'cricoid' },
             { at: mark.trachea, text: 'trachea' }
