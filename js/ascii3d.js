@@ -355,6 +355,14 @@
             [out.mesh].concat(out.extra || []).forEach(function (m) { if (m) m.part = i; });
             if (out.line) lines.push(out.line);
             if (out.points) points.push(out.points);
+            /* a malformed coordinate (NaN) would poison framing and hang
+               label placement: fail loudly instead */
+            [out.mesh && out.mesh.P, out.line && out.line.pts, out.points && out.points.pts].concat((out.extra || []).map(function (m) { return m.P; }))
+                .forEach(function (ps) {
+                    (ps || []).forEach(function (p) {
+                        if (!(isFinite(p[0]) && isFinite(p[1]) && isFinite(p[2]))) throw new Error('ascii3d: part ' + i + ' (' + part.kind + ') has a non-finite point');
+                    });
+                });
         });
         /* Bounding sphere (AABB center) frames the auto camera. */
         var lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
