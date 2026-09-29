@@ -50,9 +50,10 @@ Check each of these, and fix before moving on:
 - The claim is legible at the default angle, without the caption.
 - Labels sit on blank paper. Adjust `dx`/`dy`, `camera.offset` or `fit`.
 - The emphasis ink map (`s`/`b`) covers exactly the intended part.
-- Thin parts still read. If they are 1 cell wide, thicken them or raise
-  `cols`/`rows`.
-- Nothing important leaves the grid through a full spin or rock.
+- Thin parts still read. If they are 1 cell wide, thicken them (`thick`
+  gives a sheet a body) or raise `cols`/`rows`.
+- Nothing important leaves the grid through a full spin or rock. A tall,
+  narrow spinner fills the grid better with `camera.frame: 'turntable'`.
 
 ## 3. Place, bake, stamp
 

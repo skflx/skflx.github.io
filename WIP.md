@@ -24,9 +24,11 @@ Icon fonts, emoji, pastel badges and the Matte/Story style switch are gone.
 ## Figures: ASCII 3D (`js/ascii3d.js`, `js/diagrams/`)
 
 **State:** Added 2026-09-29. A small software renderer draws every figure
-except Fig. 1 into a monospace grid: triangles z-buffered at cell centers,
-Blinn-Phong shading mapped to a glyph ramp, contour glyphs on silhouettes,
-sub-cell line glyphs, and labels whose leaders stretch clear of the drawing.
+except Fig. 1 into a monospace grid: triangles z-buffered on a sub-cell
+sample grid, Blinn-Phong shading mapped to a glyph ramp, contour glyphs that
+follow the boundary through each cell (silhouettes, depth jumps, part edges,
+optional creases), sub-cell line glyphs, and labels whose leaders stretch
+clear of the drawing.
 Figures turn (spin or rock), take drag and arrow keys, re-shade when the
 theme flips (shadow is ink on paper, light is glyph density on a dark
 ground), pick their resolution from the column width, and stop when
