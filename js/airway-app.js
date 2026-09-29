@@ -131,6 +131,10 @@
 
   function render() {
     root.innerHTML = '<div class="aw">' + screens[S.screen]() + '</div>';
+    // The setup hero's larynx figure (js/diagrams/larynx.js); the engine
+    // keeps its angle across re-renders. Decorative to the game: a failure
+    // here must never stop the quiz.
+    if (window.ASCII3D) { try { window.ASCII3D.mountAll(root); } catch (e) { /* no-op */ } }
   }
 
   function update() {
@@ -223,6 +227,7 @@
       '<div class="aw-eyebrow"><span>ENT · H&amp;N Nursing</span></div>' +
       '<h1 class="aw-h1">Airway Rounds</h1>' +
       '<p class="aw-sub">Rounds · Jeopardy Board · Quick Quiz · Browse</p>' +
+      '<figure class="a3d" data-a3d="larynx"></figure>' +
       '</div>';
 
     body += '<div class="aw-section">' + renderModeGrid() + '</div>';

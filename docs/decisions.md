@@ -121,7 +121,9 @@ system, not an append-only diary) and run the documentation pass in
 
 ## 7. Escalate to the owner — do NOT decide these yourself
 
-- Any claim about medical correctness in module or archive content.
+- Any claim about medical correctness in module, figure, or archive content
+  (figures with invented shapes or data say "schematic" in the caption).
+- Replacing Fig. 1 with an ASCII 3D figure.
 - Adding a subspecialty (10th hue) or changing `OKSAT_SUBSPECIALTIES`.
 - Changing Leitner scheduling semantics (`LEITNER_INTERVALS`, box math).
 - Deleting or rewriting anything under `archive/` — it is kept content.
@@ -135,3 +137,20 @@ system, not an append-only diary) and run the documentation pass in
   are the owner's own implant.
 - Merging to `master` (that is deploy).
 - Anything that would put a secret in the repo.
+
+## 8. Adding a figure
+
+Use the figure system (`docs/diagrams.md`; playbook
+`.claude/skills/ascii-diagram/SKILL.md`). Do not add an image, an SVG
+library or a canvas. Precedent: every figure since 2026-09-29, one scene
+file each in `js/diagrams/`.
+
+| Question | Answer |
+|---|---|
+| Does this spot need a figure? | Only if it shows something the prose cannot show well: spatial relations, a schedule, a response surface. Never decoration. |
+| Which inks? | `ink` for the subject. `signal` for at most one thing (act / emphasis). `science` for measurement. `ok`/`bad` for outcomes. Nothing else is colored. |
+| Spin or rock? | Objects spin. Plots and diagrams with a reading direction rock. |
+| Invented data or proportions? | Allowed, but "schematic" goes in the caption and the scene header, and it is flagged to the owner (§7). |
+| A figure no page shows any more? | Delete the scene file (`check-data.mjs` fails on orphans). |
+| A figure on a page rendered by JavaScript? | Emit the empty `<figure data-a3d>` and call `ASCII3D.mountAll(root)` after each render (Airway). There is no baked frame. |
+

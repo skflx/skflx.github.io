@@ -22,6 +22,9 @@ vault. `tools/check-data.mjs` enforces the page rules below in CI.
 4. **`innerHTML` only with escaped data.** Anything that reaches markup goes
    through an `esc()`; anything from the URL (`location.search`/`hash`)
    goes through `textContent` or is matched against a known list first.
+   The figure engine (`js/ascii3d.js`) builds its grid with `textContent`
+   and never uses `innerHTML`. Its baked frames are escaped by
+   `tools/ascii3d.mjs`.
 5. **`target="_blank"` carries `rel="noopener"`** (plus `noreferrer` on the
    one-pager).
 6. **Self-contained pages make no remote request at all** —

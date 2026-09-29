@@ -5,7 +5,7 @@ This is a status document, not a changelog — when something is retired, its
 section goes away rather than growing a postscript. Git history is the record
 of how things got here.
 
-Last reviewed: 2026-09-23.
+Last reviewed: 2026-09-29.
 
 ---
 
@@ -21,13 +21,48 @@ Icon fonts, emoji, pastel badges and the Matte/Story style switch are gone.
 
 ---
 
+## Figures: ASCII 3D (`js/ascii3d.js`, `js/diagrams/`)
+
+**State:** Added 2026-09-29. A small software renderer draws every figure
+except Fig. 1 into a monospace grid: triangles z-buffered at cell centers,
+Blinn-Phong shading mapped to a glyph ramp, contour glyphs on silhouettes,
+sub-cell line glyphs, and labels whose leaders stretch clear of the drawing.
+Figures turn (spin or rock), take drag and arrow keys, re-shade when the
+theme flips (shadow is ink on paper, light is glyph density on a dark
+ground), pick their resolution from the column width, and stop when
+off-screen or under reduced motion. The same core runs in Node:
+`tools/ascii3d.mjs` previews a scene as text with an ink map, and bakes the
+first frame into parsed pages as the no-JS fallback. `check-data.mjs`
+guards bakes, orphans, script order, and the Leitner schedule. Three
+figures ship:
+
+- **Fig. 2** (one-pager, Research): binaural pitch fusion as a ribbed
+  surface, twelve electrode curves, fused span in blue. **Schematic, not
+  data — owner to vet the depiction and caption** (§7).
+- **Leitner staircase** (OKSAT hub): the five boxes as blocks rising with
+  their interval, and the +1 / +2 / miss moves. Its intervals are checked
+  against the engine.
+- **Larynx** (Airway setup screen): hyoid, epiglottis, thyroid, the cricoid
+  as the one complete ring, C-shaped tracheal rings, and the cricothyroid
+  membrane in signal. Schematic proportions; owner to vet.
+
+New figures follow `.claude/skills/ascii-diagram/SKILL.md` (reference:
+`docs/diagrams.md`).
+
+**Next:** Figures inside OKSAT question items (needs a small hook in
+`js/oksat-engine.js`); candidates the prose already asks for — facial nerve
+course, IAC nerve quadrants, semicircular canal planes.
+
+---
+
 ## One-pager (`index.html`)
 
 **State:** Rebuilt as an index: big name beside a background-removed
 portrait on a plate, then five open numbered sections with sticky heads on
 desktop; Fig. 1 (a generated cochlea drawn to the owner's 30.2 mm duct, with
 their FLEX28 array and Greenwood tonotopic ticks; `tools/gen-cochlea.py`)
-sits in About. The social card (`images/og-card.jpg`) was
+sits in About; Fig. 2 (ASCII 3D, binaural pitch fusion, schematic) sits
+in Research. The social card (`images/og-card.jpg`) was
 re-rendered to match. Asset URLs are hash-stamped since the first deploy
 reached phones as new HTML under the cached pre-redesign stylesheet; Fig. 1
 also carries no-CSS fallback attributes so an unstyled page shows a line

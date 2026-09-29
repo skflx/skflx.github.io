@@ -20,13 +20,17 @@ node tools/check-data.mjs        # data + security invariants + asset stamps (de
 node tools/test-wiki-sync.mjs    # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs       # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, keyboard
+
+# ASCII 3D figures: preview as text, then refresh the baked no-JS frames
+node tools/ascii3d.mjs render <id> --inks   # the exact frame + its ink map
+node tools/ascii3d.mjs bake                 # then re-run stamp-assets
 ```
 
 The browser suites need only a real Chromium — all page scripts are same-origin (React/htm vendored), so they run in a network-restricted sandbox. Verification detail: `docs/verification.md`. CI (`.github/workflows/ci.yml`) is verification only — no build step. Deploy = merge to `master` (GitHub Pages serves the repo root directly).
 
 ## Architecture
 
-Three independent systems share the repo, plus a scaffold. They share no runtime and no state — only the design tokens and the theme key.
+Three independent systems share the repo, plus a scaffold and one shared component (the figures). They share no state — only the design tokens, the theme key, and the figure engine.
 
 ### Design system
 `css/site.css` is the one palette + type + chrome (paper/ink, hairline rules, Archivo + IBM Plex Mono self-hosted in `fonts/`, two audiogram signal colors: `--signal` red = act/emphasis, `--signal-2` blue = science). `css/oksat.css` mirrors it as `--ok-*` tokens. Theme is `html[data-theme]`, applied pre-paint by `js/theme-boot.js` (every page, in `<head>`) and toggled by `js/site.js`, persisted as `sk_theme`. Rules and the list of removed tropes: `docs/decisions.md` §5.
@@ -43,6 +47,9 @@ Three independent systems share the repo, plus a scaffold. They share no runtime
 
 ### 3. Airway Rounds (`airway-jeopardy.html`)
 Deliberately **self-contained** (`js/airway-app.js` + `js/airway-engine.js` + `js/airway-questions.js`, same-origin CSS/fonts) so it runs on bad conference-room wifi or none; its CSP names no remote origin. Keep it that way: adding any external request to this page defeats its purpose. The game stage stays dark in both themes (projectors), on `--aw-*` tokens.
+
+### Figures: ASCII 3D (`js/ascii3d.js`, `js/diagrams/`, `css/ascii3d.css`)
+Every figure except Fig. 1 is real geometry rendered into a monospace grid: one scene per file in `js/diagrams/<id>.js` (`ASCII3D.define`), drawn by the shared engine, which turns it, takes drag/keys, and re-shades on a theme flip. The engine core is DOM-free, so `tools/ascii3d.mjs` renders the same frames in Node: terminal previews (an agent can iterate on a figure as text) and the baked no-JS frame between `<!-- a3d:<id> -->` markers in each parsed page. `tools/check-data.mjs` fails on a stale bake, an orphan scene, a page missing the engine/scene/CSS, or a Leitner figure that disagrees with `LEITNER_INTERVALS`. Inks are roles (`ink`, `signal`, `science`, …) mapped to tokens; printable ASCII only. New figure requests follow `.claude/skills/ascii-diagram/SKILL.md` (`/ascii-diagram`); reference: `docs/diagrams.md`.
 
 ### Other pages
 `cpt-search.html` — `css/site.css` + a page `<style>`, logic in `js/cpt-search.js`. The legacy main stylesheet it used was deleted in the 2026-09 redesign; do not recreate a second token set.
@@ -66,4 +73,5 @@ Kept content, **served by nothing** — no page fetches it, no test checks it. C
 - **Indentation** (`.editorconfig`): 4 spaces for HTML/JS, 2 for CSS/Markdown.
 - **`WIP.md` describes the current state of each system** — not an append-only diary. When something is retired, delete its section rather than narrating the removal.
 - **Documentation second pass (required):** after any significant change, once the code itself is done and verified, run a docs pass as a separate final step: update `README.md`, `WIP.md`, this file, and the owning `docs/*` file. The doc→subsystem map and the mechanical checklist live in `docs/docs-map.md` — the pass is deliberately checklist-shaped so it can be delegated to a smaller/cheaper model or agent. Never write facts that rot (item counts, file sizes, line numbers) into docs; point at the source file instead.
+- **Figures are scenes, not markup.** Change a figure in `js/diagrams/<id>.js`, then `bake` + `stamp-assets`; never hand-edit a baked block. Invented shapes/data are labelled schematic, and their clinical claims are the owner's to vet.
 - **Prefer deleting to keeping.** Dead code here is not free: it gets loaded, indexed, read by the next agent, and mistaken for something in use. If nothing references it, remove it rather than leaving it "just in case" — git history is the safety net.
