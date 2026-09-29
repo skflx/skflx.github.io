@@ -40,6 +40,14 @@ One system across every page, declared as tokens in `css/site.css`:
   `tools/gen-cochlea.py`, animated once on load, still under
   `prefers-reduced-motion`.
 
+- **ASCII 3D figures** — every other figure is geometry rendered live into
+  a character grid by the site's own renderer (`js/ascii3d.js`): Fig. 2
+  (Research, binaural pitch fusion as a ribbed surface), the Leitner
+  staircase on the OKSAT hub, and a turning larynx on Airway Rounds. They
+  turn, drag, re-shade for night mode, stand still under reduced motion,
+  and ship a pre-rendered frame for readers without JavaScript. How to
+  make one: `docs/diagrams.md`.
+
 A **day / night** toggle flips `html[data-theme]`, persisted as `sk_theme`
 and defaulting to `prefers-color-scheme`.
 
@@ -62,7 +70,7 @@ itself is not live yet (`wiki/README.md`).
 
 ## Tech Stack
 
-- **HTML5** — semantic markup, static SVG figure, no framework
+- **HTML5** — semantic markup, a static SVG figure plus ASCII 3D figures (own renderer, no library), no framework
 - **CSS3** — custom properties (one token set), Grid, Flexbox, variable fonts
 - **JavaScript** — vanilla, no frameworks, **no build step**
 - **React 18 + htm** — vendored UMD builds in `js/vendor/`, on the OKSAT study viewer only; tagged templates, no JSX build
@@ -93,6 +101,10 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 │
+├── js/ascii3d.js           # ASCII 3D figure engine (shared by every figure)
+│   ├── js/diagrams/        #   one scene per figure
+│   └── css/ascii3d.css     #   grid sizing + ink -> token mapping
+│
 ├── css/site.css            # The design system: tokens, faces, shared chrome
 ├── js/site.js              # Day/night toggle
 ├── js/theme-boot.js        # Pre-paint theme (every page, in <head>)
@@ -114,6 +126,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── stamp-assets.mjs    #   ?v=<hash> cache-busting on every css/ and js/ reference
 │   ├── test-wiki-sync.mjs  #   vault sync + feedback loop on a synthetic vault
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
+│   ├── ascii3d.mjs         #   ASCII figures: terminal preview, bake no-JS frames, scaffold
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   └── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
 │
@@ -144,6 +157,14 @@ cached old stylesheet):
 
 ```
 node tools/stamp-assets.mjs
+```
+
+After editing a figure (`js/diagrams/*.js` or the engine), re-bake the
+frames pages ship without JavaScript, then stamp:
+
+```
+node tools/ascii3d.mjs render <id>   # preview in the terminal
+node tools/ascii3d.mjs bake
 ```
 
 Before pushing (CI runs the same four on every PR):

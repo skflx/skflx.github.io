@@ -18,6 +18,8 @@ no design judgment required.
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
+| `docs/diagrams.md` | The ASCII 3D figure system: request template, workflow, scene schema, inks, rules | The engine gains or changes a feature, a part kind, an ink, or the bake/check contract |
+| `.claude/skills/ascii-diagram/SKILL.md` | The agent playbook for a figure request (`/ascii-diagram`) | The workflow or its verification steps change |
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
 | `wiki/README.md` | Wiki kit: pipeline, what leaves the vault (phase 1), reader-correction round trip, bootstrap, open owner decisions | `wiki/` files, `policy.json`, the feedback tool, or the Quartz config change |
 | `js/vendor/README.md` | Provenance, versions, and licenses of vendored scripts | A vendored file is added, upgraded, or removed (update the hashes in `tools/check-data.mjs` too) |

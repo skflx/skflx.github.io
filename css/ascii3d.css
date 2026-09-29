@@ -1,0 +1,59 @@
+/* =============================================================
+   ascii3d.css — ASCII 3D figures (js/ascii3d.js, js/diagrams/*).
+   Loaded by any page that shows one. Token-driven: each ink is a
+   role mapped to the page's own tokens — css/site.css names first,
+   OKSAT's --ok-* as the fallback — so one stylesheet serves both
+   token sets. A dark stage (Airway) remaps --a3d-* in its scope.
+
+   The grid scales to its column: font-size = container width over
+   (cols x 0.6em advance), capped so a wide column does not blow it
+   up. line-height 1.1 is the cell aspect the engine projects with
+   (CELL_ASPECT in js/ascii3d.js) — change both together.
+   ============================================================= */
+.a3d {
+  --a3d-font: var(--font-mono, var(--ok-font-ui, ui-monospace, monospace));
+  --a3d-ink: var(--ink, var(--ok-text, currentColor));
+  --a3d-muted: var(--ink-muted, var(--ok-text-muted, currentColor));
+  --a3d-faint: var(--ink-faint, var(--ok-text-faint, currentColor));
+  --a3d-signal: var(--signal, var(--ok-ochre, currentColor));
+  --a3d-science: var(--signal-2, var(--ok-accent, currentColor));
+  --a3d-ok: var(--ok, var(--ok-correct, currentColor));
+  --a3d-bad: var(--bad, var(--ok-incorrect, currentColor));
+  --a3d-max: 13px;
+  margin: 0;
+}
+
+.a3d-stage {
+  container-type: inline-size;
+  position: relative;
+}
+.a3d-stage--live { cursor: grab; touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
+.a3d-stage--live:active { cursor: grabbing; }
+.a3d-stage:focus-visible { outline: 1px solid var(--a3d-signal); outline-offset: 6px; }
+
+.a3d-grid {
+  margin: 0; padding: 0; overflow: hidden;
+  font-family: var(--a3d-font); font-weight: 400;
+  font-size: min(calc(100cqw / var(--a3d-cols, 64) / 0.6), var(--a3d-max));
+  line-height: 1.1; letter-spacing: 0;
+  font-variant-ligatures: none; font-kerning: none; font-feature-settings: "liga" 0, "calt" 0;
+  white-space: pre; color: var(--a3d-ink); background: none;
+  -webkit-user-select: none; user-select: none;
+}
+.a3d-hud {
+  display: flex; justify-content: space-between; gap: 1rem;
+  min-height: 1.5em; padding-top: 0.35rem;
+  font: 400 0.68rem/1.5 var(--a3d-font); letter-spacing: 0.04em; color: var(--a3d-faint);
+}
+.a3d-muted { color: var(--a3d-muted); }
+.a3d-faint { color: var(--a3d-faint); }
+.a3d-signal { color: var(--a3d-signal); }
+.a3d-science { color: var(--a3d-science); }
+.a3d-ok { color: var(--a3d-ok); }
+.a3d-bad { color: var(--a3d-bad); }
+
+/* Browsers without container queries: a fixed, readable size. */
+@supports not (width: 1cqw) {
+  .a3d-grid { font-size: 9px; }
+  .a3d-stage { overflow-x: auto; }
+}
