@@ -217,10 +217,10 @@ def per_slice(ax, plane, p, base=None, every=3):
 
 
 def air_projection_identity(ax):
-    """Specimen-identity test independent of any registration: a coronal-view projection
-    of intracranial/sinus air (frontal sinus outline is individual, as in forensic ID).
-    Axial-derived vs sagittal-derived (same scan: control) and vs the coronal stack.
-    Scale and offset are searched; mirror both ways for the coronal."""
+    """Specimen-identity test independent of the 3D fit: the frontal sinus outline (individual,
+    as in forensic identification) as a coronal-view projection of air above the orbital roofs.
+    The axial-derived projection is the reference; the sagittal-derived one (same scan) and the
+    coronal stack's go through the same free search (scale, offset, mirror) against it."""
     from skimage.feature import match_template
 
     def air(V, air_thr, soft_thr):
@@ -229,37 +229,38 @@ def air_projection_identity(ax):
             body = ndi.binary_fill_holes(ndi.binary_closing(g > soft_thr, iterations=3))
             out[i] = ndi.binary_erosion(body, iterations=4) & (g < air_thr)
         return out
-    A = air(load('axial'), 75, 95)                 # (n, y, x)
-    Pa = A[:, 30:230, :].sum(1).astype(float)      # (n, x): anterior 200 rows = frontal..sphenoid face
-    sag = read_results().get('registration', {}).get('sagittal')
-    S = air(load('sagittal'), 30, 60)              # sagittal air ~4, soft ~80
-    Cc = air(load('coronal'), 15, 30)              # coronal air ~0, soft ~41
-    p = [sag['params'][n] for n in NAMES]
-    dz = p[10]
-    # sagittal: project over u where axial y in [30, 230]: y = oy + s*u (rotation ~1 deg ignored)
-    u0 = int(round((30 - p[1]) / p[6])); u1 = int(round((230 - p[1]) / p[6]))
-    Ps = S[:, 4:398, max(0, u0):u1].sum(2).T.astype(float) * p[6]   # (v, j), air thickness in axial px
-    Ps = ndi.zoom(Ps, (p[6] / dz, p[7]), order=1)                  # -> (axial slice, axial x)
-    x0 = int(round(p[0]))
-    H = min(Pa.shape[0], Ps.shape[0]); W = min(Pa.shape[1] - x0, Ps.shape[1])
-    ctrl = ncc(Pa[:H, x0:x0 + W], Ps[:H, :W], np.ones((H, W), bool))
-    Pc = Cc[:60, 10:428].sum(0).astype(float)                       # (v, u) over the anterior 60 coronal slices
-    best = (-1, None)
-    for mirror in (False, True):
-        Q = Pc[:, ::-1] if mirror else Pc
-        for sv in np.arange(0.30, 0.46, 0.01):                      # coronal rows -> axial slices
-            for su in np.arange(0.55, 0.80, 0.01):                  # coronal cols -> axial x
-                Z = ndi.zoom(Q, (sv, su), order=1)
-                if Z.shape[0] > Pa.shape[0] or Z.shape[1] > Pa.shape[1]:
-                    continue
-                r = match_template(Pa, Z)
-                c = float(r.max())
-                if c > best[0]:
-                    best = (c, dict(mirror=mirror, rows_per_slice=round(1 / sv, 3), col_scale=round(su, 3)))
-    return {'control_axial_vs_sagittal_ncc': round(ctrl, 4), 'axial_vs_coronal_best_ncc': round(best[0], 4),
-            'coronal_best_fit': best[1],
-            'note': 'coronal-view projection of air inside the head; the sagittal control uses the fitted '
-                    'registration, the coronal gets a free scale/offset/mirror search'}
+    sag = read_results()['registration']['sagittal']['params']
+    dz, s, step = sag['dz'], sag['s'], sag['wx']
+    nmax = 66                                       # axial slices above the orbital roofs
+    Pa = air(load('axial'), 75, 95)[:nmax, 30:160, :].sum(1).astype(float)   # (n, x)
+    u0 = int((30 - sag['oy']) / s); u1 = int((160 - sag['oy']) / s); v1 = int((nmax * dz - sag['oz']) / s)
+    Ps = air(load('sagittal'), 30, 60)[:, 4:v1, u0:u1].sum(2).T.astype(float) * s
+    Ps = ndi.zoom(Ps, (s / dz, step), order=1)      # -> (axial slice, axial x)
+    x0 = int(round(sag['ox']))
+    Psf = np.zeros_like(Pa)
+    h = min(Pa.shape[0], Ps.shape[0]); w = min(Pa.shape[1] - x0, Ps.shape[1]); Psf[:h, x0:x0 + w] = Ps[:h, :w]
+    Pc = air(load('coronal'), 15, 30)[:30, 10:180].sum(0).astype(float)      # coronal img001-030, above the orbits
+    big = np.pad(Pa, ((20, 20), (20, 20)))
+
+    def search(T0):
+        best = (-1.0, None)
+        for mirror in (False, True):
+            T = T0[:, ::-1] if mirror else T0
+            for sv in np.arange(0.30, 0.50, 0.01):
+                for su in np.arange(0.55, 0.85, 0.01):
+                    Z = ndi.zoom(T, (sv, su), order=1)
+                    if Z.shape[0] > big.shape[0] or Z.shape[1] > big.shape[1]:
+                        continue
+                    c = float(match_template(big, Z).max())
+                    if c > best[0]:
+                        best = (c, {'mirror': mirror, 'row_scale': round(float(sv), 2), 'col_scale': round(float(su), 2)})
+        return best
+    ctrl = search(ndi.zoom(Psf, (2.4, 1 / 0.68), order=1))   # control resampled to a coronal-like grid first
+    cor = search(Pc)
+    return {'control_sagittal_ncc': round(ctrl[0], 4), 'control_fit': ctrl[1],
+            'coronal_ncc': round(cor[0], 4), 'coronal_fit': cor[1],
+            'search_bounds': {'row_scale': [0.30, 0.49], 'col_scale': [0.55, 0.84]},
+            'note': 'frontal-sinus air projection; a coronal best fit on a search bound means no real match'}
 
 
 def landmark_residuals(ax, plane, p, base=None, ks=None, patch=15, search=6):
@@ -379,6 +380,38 @@ def axial_from_sagittal(ax, p, ns, png=None):
     return out
 
 
+def axial_even_spacing(ax, p):
+    """Every UW axial slice against the sagittal stack resampled at Z = n*dz + delta: the best
+    delta per slice (in slice units) exposes a dropped, duplicated or unevenly spaced axial
+    capture; with a uniform stack every delta is ~0."""
+    Bs = boneness(load('sagittal'))
+    O, e1, e2, w, dz = frame('sagittal', p)
+    Minv = np.linalg.inv(np.c_[e1, e2, w])
+    N, H, W = ax.shape
+    yy, xx = np.mgrid[0:H:2, 0:W:2].astype(np.float32)
+    inside = np.hypot(xx - ax.fov[0], yy - ax.fov[1]) < ax.fov[2] - 6
+    deltas, nccs = [], []
+    for n in range(N):
+        E2 = ndi.gaussian_gradient_magnitude(ax.B[n][::2, ::2], 1.0)
+
+        def f(d):
+            P = np.stack([xx, yy, np.full_like(xx, (n + d) * dz)]) - O[:, None, None]
+            u, v, j = np.tensordot(Minv, P, axes=1)
+            val = ndi.map_coordinates(Bs, [j, v, u], order=1, cval=0.0)
+            ok = inside & (j >= 0) & (j <= Bs.shape[0] - 1) & (v >= 4) & (v <= 397) & (u >= 0) & (u <= Bs.shape[2] - 1)
+            return ncc(ndi.gaussian_gradient_magnitude(val, 1.0), E2, ok)
+        grid = np.arange(-1.5, 1.51, 0.25)
+        d0 = grid[int(np.argmax([f(d) for d in grid]))]
+        r = optimize.minimize_scalar(lambda d: -f(d), bounds=(d0 - 0.25, d0 + 0.25), method='bounded', options={'xatol': 0.01})
+        deltas.append(round(float(r.x), 3)); nccs.append(round(-float(r.fun), 4))
+    d = np.array(deltas)
+    return {'delta_slices_median_abs': round(float(np.median(np.abs(d))), 3), 'delta_slices_max_abs': round(float(np.abs(d).max()), 3),
+            'linear_trend_slices_per_100': round(float(np.polyfit(np.arange(N), d, 1)[0] * 100), 4),
+            'ncc_median': round(float(np.median(nccs)), 4), 'ncc_min': round(float(min(nccs)), 4),
+            'worst_slices': sorted(range(1, N + 1), key=lambda i: -abs(d[i - 1]))[:5],
+            'note': 'per axial slice, best Z shift (in axial slices) of the sagittal-stack resample against the UW axial image'}
+
+
 def free_offset_summary(offs):
     o = np.array(offs)
     return {'n_slices': len(offs),
@@ -420,6 +453,8 @@ def main():
     ns = [60, 85, 105, 125, 150]
     info['axial_rebuilt_from_sagittal_ncc'] = dict(zip([n + 1 for n in ns], axial_from_sagittal(
         ax, p, ns, os.path.join(a.png_dir, 'recon-axial.png'))))
+    info['axial_even_spacing'] = axial_even_spacing(ax, p)
+    log('axial even spacing', info['axial_even_spacing'])
     overlay_png(ax, 'sagittal', p, [20, 50, 68, 90, 118], os.path.join(a.png_dir, 'recon-sagittal.png'))
     reg['sagittal'] = info
     write_results('registration', {**prev, **reg})

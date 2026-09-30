@@ -174,6 +174,14 @@ Three classes, chosen per structure by its `geo` field.
 
 ### 5.1 Reference specimen
 
+**Chosen (2026-09-30): the UW atlas's axial/sagittal head** — one adult,
+0.3437 mm in-plane, 0.625 mm axial slices, bone window (8-bit display
+values, not HU), registered and scaled in `tools/ssb-pipeline/uw/`
+(`registration.json`; the gate's findings are in
+`ssb/reference/uw-sinusanatomy2/README.md`). UW's coronal stack is a
+different head and is not used for geometry. The general requirements
+below still describe what a replacement specimen would need.
+
 One adult CT, thin-slice, with vascular contrast so the ICA segments
 segment cleanly, from an open dataset whose license allows redistributing
 derived meshes and volumes. Candidates and licenses: §13 (owner decision).
@@ -221,7 +229,8 @@ work, `@gltf-transform/cli` as a dev dependency for glTF packaging:
    → `ssb/ct/sdf-<id>.u8.gz`.
 
 **Models carry geometry only** — no materials, no embedded textures.
-Materials are assigned at runtime from CSS tokens by `kind` (theming works;
+Materials are assigned at runtime from CSS tokens by `kind` (procedural
+surfaces, `js/ssb/materials.js`, §7.4; theming works;
 GLTFLoader turns embedded textures into `blob:` URLs, which `img-src 'self'`
 blocks — so there are none). Compression is plain gzip decoded by the
 browser's native `DecompressionStream`; GitHub Pages compresses only text
@@ -295,9 +304,10 @@ A diorama is an ES module `js/ssb/dioramas/<name>.js`, registered in
 Every part is an object named `<graph id>.<side>` whose `userData.id` is the
 graph id, so picking selects the entity through the ordinary store path; a
 hazard site carries the graph's hazard ids in `userData.hazards` and is
-hatched (and named in the HUD). Materials are assigned by the lab from
-`--ssb-*` tokens by each part's `userData.look` (tint + space / ghost /
-translucent flags), never by the diorama. Geometry primitives
+hatched (and named in the HUD). A part's `userData.look` names its tissue
+`kind` (the graph's kind vocabulary; `kit.tag` rejects an unknown one) plus
+space / ghost / translucent flags, and the lab draws it with the procedural
+material of that kind (§7.4) — a diorama never names a colour. Geometry primitives
 (`dioramas/kit.js`): superellipsoid air cells (Wormald's building blocks,
 literally), profile extrusions (prisms) for plates and the skull base, tubes
 for vessels and pathways — each kind has one implicit `inside()` test and
@@ -344,7 +354,8 @@ js/ssb/stamps.js             GENERATED: data-asset path → hash (for fetch URLs
 js/ssb/graph.js              load + index content; text renderer; search
 js/ssb/state.js              one store (mode, tier, layers, selection, camera, step);
                              URL-hash codec; ssb:* storage (guarded)
-js/ssb/scene.js              renderer, cameras, lights, on-demand loop, token materials
+js/ssb/scene.js              renderer, cameras, lights, on-demand loop, quality choice
+js/ssb/materials.js          procedural tissue materials: one shader hook per kind (three passed in)
 js/ssb/geo-specimen.js       pack loading (gzip → GLTFLoader.parse), unit registry, dissection states
 js/ssb/geo-sweep.js          tubes and flow particles
 js/ssb/volume.js             CT/label/distance arrays: slicing, lookup, proximity
@@ -360,12 +371,14 @@ tools/ssb-pipeline/          offline geometry/CT pipeline
 ```
 
 Dependency direction is one-way and acyclic: `main → mode-* → {scene,
-geo-*, volume, ui-*} → {graph, state} → stamps`, and `main → dioramas →
-frame`. Only `scene` and `geo-*` import three.js; the dioramas receive it as
-an argument, and `mode-lab.js` uses the stage's `THREE`, so one module
-instance serves the page. Built so far: `main`, `frame`, `stamps`, `graph`,
-`state`, `scene`, `mode-lab`, `dioramas/*`, `ui-panel`, `ui-tree`,
-`ui-search`, `ui-lab`.
+geo-*, volume, ui-*} → {graph, state} → stamps`, `scene → materials`, and
+`main → dioramas → {frame, materials}`. Only `scene` and `geo-*` import
+three.js; the dioramas and `materials` receive it as an argument (they load
+without WebGL: the URL whitelist and the tests read their tables), and
+`mode-lab.js` uses the stage's `THREE`, so one module instance serves the
+page. Built so far: `main`, `frame`, `stamps`, `graph`, `state`, `scene`,
+`materials`, `mode-lab`, `dioramas/*`, `ui-panel`, `ui-tree`, `ui-search`,
+`ui-lab`.
 
 ### 7.2 Cache-busting an ES-module graph
 
@@ -389,7 +402,8 @@ prevent. So (phase 1) `tools/stamp-assets.mjs` gains:
 
 One store; everything else subscribes. The URL hash is the shareable state:
 `#s=s.lateral-lamella&tier=2`, `#p=p.draf-iia&step=4`,
-`#lab=ethmoid-roof&c.keros=III`, `#ct=cor&at=12.5,31,48`. Parsing is
+`#lab=ethmoid-roof&c.keros=III`, `#ct=cor&at=12.5,31,48`, and the rendering
+quality override `q=full|lite` (§7.4). Parsing is
 whitelist-only: ids must exist in the graph index, numbers are parsed and
 clamped, unknown keys are ignored, and nothing from the URL reaches markup
 except through `textContent` (`docs/security.md` rule 4). The lab hash is
@@ -402,14 +416,53 @@ drags update it once they settle, since browsers rate-limit history writes.
 
 ### 7.4 Rendering
 
-- Materials from tokens: `css/ssb.css` declares one token per tissue kind and
-  per cell category; `scene.js` reads computed values at boot and on
-  `html[data-theme]` change. Anatomical color convention (artery red, vein
-  blue, nerve yellow, bone ivory, dura grey) *is* the meaning, so it
-  satisfies the site's color rule; air cells take categorical hues by
-  identity (allowed — categorical colors that encode identity).
-- **Hazards are never color alone:** hatched shader overlay + text in the
-  HUD. `--signal` marks UI emphasis only.
+- **Materials: one procedural surface per tissue kind** (`materials.js`).
+  A part's `look` names its `kind`; the library draws it as a
+  `MeshStandardMaterial` extended through `onBeforeCompile` (three's lighting
+  and shadows stay) with an albedo / roughness / relief hook. Bone is ivory
+  with fine pitting and varying gloss; `bone-cut` is the flat solid cap
+  colour for future section planes; mucosa is pink with a fine, domain-warped
+  submucosal vessel network and a wet sheen (the endoscope's main surface,
+  tuned under a single spotlight); cartilage, dura (fibrous grain), fat
+  (lobules cut by thin septa), muscle, artery, vein, nerve (lengthwise
+  striation), gland and brain follow. Air cells, air spaces and the flow
+  pathway stay plain tinted surfaces. There are no textures and no UVs:
+  every pattern is a function of the **world position in millimetres**
+  (1 scene unit = 1 mm), so its scale is identical on every model and does
+  not move when a model is rebuilt. Structured 2D patterns (vessels, fibres)
+  are projected triplanar; isotropic ones (pores, mottling, lobules) are
+  solid 3D noise, which needs no projection. Relief is a derivative bump in
+  mm (independent of zoom), and detail finer than a pixel fades out from the
+  pixel's footprint, so a far view is smooth rather than shimmering. Nerve and
+  muscle grain follows a per-vertex `ssbAxis` tangent when the geometry has
+  one (`kit.tubeGeometry` writes it).
+  - Colors come from `css/ssb.css`: one `--ssb-*` token per tissue kind (plus
+    an accent for the vessels and fat septa) and per cell category, read at
+    boot and again on every `html[data-theme]` change; a missing token draws
+    mid-grey, so there is no second copy of the palette in JS. The anatomical
+    convention (artery red, vein blue, nerve yellow, bone ivory, dura
+    grey-white) *is* the meaning, so it satisfies the site's color rule; air
+    cells take categorical hues by identity (allowed — categorical colors
+    that encode identity).
+  - One compiled program per (kind, hazard, quality): the cache key is set
+    explicitly (three would otherwise key on the hook's source, identical for
+    every kind), so any number of parts share the compile; a selection adds
+    materials, not programs. Ghosted walls and air spaces are see-through and
+    stay plain.
+  - **Quality** `full` or `lite` (fewer octaves, no domain warp, at most two
+    projection planes, a plain-noise stand-in for lobules). Chosen at boot
+    from device hints — a software rasterizer or old mobile GPU (renderer
+    string), Save-Data, a small-memory or dual-core device, a phone-sized
+    touch screen mean `lite` — and overridden by the hash key `q`
+    (whitelist-only: exactly `full` or `lite`, anything else is ignored). A
+    change of `q` recompiles the programs in place.
+  - Nothing is animated: no time uniform and no frame requests, so
+    `prefers-reduced-motion` needs no special case.
+  - The generated-texture briefs in §11 stay a later refinement; this library
+    is what draws until then.
+- **Hazards are never color alone:** hatched shader overlay (over whatever
+  the tissue looks like; its relief and gloss are flattened under the
+  stripes) + text in the HUD. `--signal` marks UI emphasis only.
 - Explore stage follows the site theme; the endoscope and CT stages are
   dark in both themes (like Airway's stage).
 - Labels: DOM overlay with SVG leader lines, few at a time (selection,
@@ -465,7 +518,7 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 | **Spatial claims ↔ geometry** | each spatial `rel` (`medial-to` …) checked against landmark/centroid coordinates; a failure means the prose or the mesh is wrong | phase 3, CI |
 | Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | phase 3, report |
 | Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | phase 1, CI |
-| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Now (phase 2): each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet. Later: tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 2–7, CI |
+| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Now (phase 2): each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet; the material library (graph kinds ↔ material kinds, tokens for both themes, every kind compiles and draws hatched or not at `q=full` and `q=lite`, hostile `q` ignored, programs shared, hatch visible, no animation). Later: tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 2–7, CI |
 | Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match; it also corrects the study-design `type`. **`verified` means the work exists as cited — not that it supports the claim**; claim support is the reviewer's and owner's job. Match against the PubMed record itself (NCBI E-utilities), never a search snippet: in phase 0 a search-listing check added a nonexistent co-author and a wrong PMID, both caught by the E-utilities re-check. Sources PubMed does not index (monographs, unindexed journal years) are confirmed by hand. | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 
@@ -496,8 +549,8 @@ generator is better than code:
 
 The repo holds no API keys (`CLAUDE.md`), so these run in the Gemini app by
 the owner from ready-to-paste briefs with acceptance checks:
-`docs/ssb-imagegen.md`. Procedural shaders come first; textures are a phase-8
-refinement, not a dependency.
+`docs/ssb-imagegen.md`. Procedural shaders come first (`js/ssb/materials.js`, §7.4); textures
+are a phase-8 refinement, not a dependency.
 
 ## 12. Build plan
 

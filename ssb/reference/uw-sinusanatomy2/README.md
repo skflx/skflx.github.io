@@ -168,10 +168,29 @@ is wrong about the structure: UW marks the inferior meatus at its lateral part,
 beside the turbinate's attachment, so points say "meatus superior to
 turbinate" on 23 of 27 votes although the meatus lies beneath and lateral to
 the turbinate. A contradiction is therefore a prompt for review, never an
-automatic edit. The specimen is one adult (n = 1) and the atlas labels
-normal anatomy only.
+automatic edit. The atlas shows **two** adult heads (see "Two specimens" below) and labels normal anatomy only.
 
 **Results, 2026-09-27.** 2,019 labels (22 unreadable), 97 distinct terms,
 794 consensus relations. Of the graph's spatial claims, 39 were testable: 37
 agree and 2 contradict — the meatus artifact above, from both directions.
 The rest name structures UW does not label on a shared slice.
+
+## Two specimens (reconstruction gate, 2026-09-30)
+
+Registration (`tools/ssb-pipeline/uw/register.py`, results in
+`registration.json`) shows the **axial and sagittal stacks are one CT**: the
+sagittal images are a rigid reformat of the axial volume (normalized
+cross-correlation 0.997; bony edges within 0.2 px at the 90th percentile).
+The **coronal stack is a different head** (best correlation 0.39, and
+visibly different ethmoid partitions, maxillary septa and sphenoid
+septation). Consequences:
+
+- The reference specimen for SSB geometry is the axial/sagittal head only;
+  coronal views are resliced from its volume.
+- Scale: 0.3437 mm/px in-plane, 0.625 mm axial slices — consistent with a
+  180 mm reconstruction circle and 1.000 mm sagittal steps, and with the
+  globe's axial length (24.6 mm).
+- Coronal labels stay valid as within-slice relational evidence (from a
+  second head) but are not mapped into the 3D frame.
+- Left–right is assumed radiological (patient right on image left); no label
+  names a side.
