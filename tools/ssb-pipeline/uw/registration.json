@@ -1,0 +1,159 @@
+{
+ "stacks": {
+  "axial": {
+   "slices": 175,
+   "size_wh": [
+    507,
+    476
+   ],
+   "window": {
+    "soft_tissue_level": 111,
+    "bone_p99.5": 226.0,
+    "max": 255
+   },
+   "scout": {
+    "scout": "axial/apSkull.jpg",
+    "band_axis": "rows",
+    "step_px": 2.3828,
+    "band_width_px": [
+     2,
+     3
+    ],
+    "max_abs_residual_px": 0.303,
+    "span_px": [
+     2.0,
+     419.0
+    ],
+    "note": "bands tile the whole scout image evenly (a hover map), so they encode an even-spacing assumption and slice order, not measured positions"
+   },
+   "adjacent_slice_shift_px": {
+    "median": 0.25,
+    "p95": 0.75,
+    "max": 1.25,
+    "cumulative_drift_rc": [
+     8.5,
+     0.25
+    ],
+    "note": "phase correlation of consecutive slices; anatomy changes add noise, a pan would add a jump"
+   },
+   "fov_circle": {
+    "cx": [
+     245.34,
+     0.022
+    ],
+    "cy": [
+     226.56,
+     0.041
+    ],
+    "r": [
+     261.9,
+     0.026
+    ],
+    "fit_residual_px": 0.312,
+    "note": "[mean, sd] over slices; the FOV circle is burned into every capture"
+   }
+  },
+  "coronal": {
+   "slices": 109,
+   "size_wh": [
+    613,
+    434
+   ],
+   "window": {
+    "soft_tissue_level": 41,
+    "bone_p99.5": 169.0,
+    "max": 255
+   },
+   "scout": {
+    "scout": "coronal/lat_skull.jpg",
+    "band_axis": "columns",
+    "step_px": 3.8525,
+    "band_width_px": [
+     3,
+     4
+    ],
+    "max_abs_residual_px": 0.426,
+    "span_px": [
+     6.0,
+     426.0
+    ],
+    "note": "bands tile the whole scout image evenly (a hover map), so they encode an even-spacing assumption and slice order, not measured positions"
+   },
+   "adjacent_slice_shift_px": {
+    "median": 0.559,
+    "p95": 2.596,
+    "max": 8.004,
+    "cumulative_drift_rc": [
+     -48.75,
+     7.75
+    ],
+    "note": "phase correlation of consecutive slices; anatomy changes add noise, a pan would add a jump"
+   },
+   "content_rows": {
+    "top": [
+     10,
+     10,
+     10
+    ],
+    "bottom": [
+     427,
+     391,
+     427
+    ],
+    "slices_used": 105,
+    "note": "[median, min, max] first/last non-black row; constant = fixed vertical framing"
+   }
+  },
+  "sagittal": {
+   "slices": 137,
+   "size_wh": [
+    626,
+    401
+   ],
+   "window": {
+    "soft_tissue_level": 80,
+    "bone_p99.5": 208.0,
+    "max": 255
+   },
+   "scout": {
+    "scout": "sagittal/apSkull.jpg",
+    "band_axis": "columns",
+    "step_px": 3.9414,
+    "band_width_px": [
+     3,
+     4
+    ],
+    "max_abs_residual_px": 0.469,
+    "span_px": [
+     2.0,
+     542.0
+    ],
+    "note": "bands tile the whole scout image evenly (a hover map), so they encode an even-spacing assumption and slice order, not measured positions"
+   },
+   "adjacent_slice_shift_px": {
+    "median": 1.118,
+    "p95": 8.531,
+    "max": 38.322,
+    "cumulative_drift_rc": [
+     -58.0,
+     -72.75
+    ],
+    "note": "phase correlation of consecutive slices; anatomy changes add noise, a pan would add a jump"
+   },
+   "content_rows": {
+    "top": [
+     4,
+     4,
+     4
+    ],
+    "bottom": [
+     397,
+     397,
+     397
+    ],
+    "slices_used": 137,
+    "note": "[median, min, max] first/last non-black row; constant = fixed vertical framing"
+   }
+  }
+ }
+}
