@@ -227,12 +227,12 @@ html[data-theme="dark"] {
    docked controls, so the dock never covers the model. */
 .ssb-stage[data-dock="open"] { --ssb-canvas-left: var(--ssb-dock-w); }
 .ssb-stage[data-dock="collapsed"] { --ssb-canvas-left: var(--ssb-dock-rail); }
-.ssb-stage canvas {
+.ssb-stage > canvas {
   position: absolute; top: 0; right: 0; bottom: 0; left: var(--ssb-canvas-left);
   display: block; width: calc(100% - var(--ssb-canvas-left)); height: 100%; touch-action: none;
 }
-.ssb-stage canvas:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
-.ssb-stage[data-state="unavailable"] canvas { display: none; }
+.ssb-stage > canvas:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+.ssb-stage[data-state="unavailable"] > canvas { display: none; }
 
 /* Axis letters are DOM text projected from the scene (scene.js). */
 .ssb-labels { position: absolute; top: 0; right: 0; bottom: 0; left: var(--ssb-canvas-left); overflow: hidden; pointer-events: none; }

@@ -66,9 +66,8 @@ export function mountCt({ store, graph, dom, loadFn = loadVolume }) {
     let status = 'idle';         /* idle | loading | ready | absent | error */
     let problem = '';
     let win = { name: '', center: 128, width: 255 };
-    let initialWindow = null;
     let overlay = true;
-    let hover = null;            /* { plane, info } while the pointer rests on a view */
+    let hover = null;            /* what is under the pointer while it rests on a view */
     let selected = new Set();    /* label indices of the selected graph entity */
     const renders = { axial: 0, coronal: 0, sagittal: 0 };
     const subs = new Set();
@@ -223,10 +222,6 @@ export function mountCt({ store, graph, dom, loadFn = loadVolume }) {
     const huText = (hu) => (hu === null ? '' : `≈ ${hu < 0 ? MINUS : ''}${Math.abs(hu)} HU`);
 
     /* ---------------- geometry of a view ---------------- */
-
-    function layoutOf(plane) {
-        return views[plane].layout;
-    }
 
     /* client point -> RAS mm on `plane` (its normal coordinate is the slice's). */
     function rasFromClient(plane, clientX, clientY) {
@@ -567,7 +562,6 @@ export function mountCt({ store, graph, dom, loadFn = loadVolume }) {
         const names = Object.keys(vol.windows);
         const first = vol.windows.bone ? 'bone' : names[0];
         win = first ? { name: first, center: Math.round(vol.windows[first].center), width: Math.round(vol.windows[first].width) } : { name: '', center: 128, width: 255 };
-        initialWindow = { ...win };
         overlay = vol.hasLabels;
         readPalette();
         readSelection();
@@ -652,15 +646,13 @@ export function mountCt({ store, graph, dom, loadFn = loadVolume }) {
     });
 
     return {
-        hook, legend, setPlane, scroll, nudge, setWindow, setPreset, cycleWindow, setOverlay, selectUnderCrosshair, layoutOf,
+        hook, legend, setPlane, scroll, nudge, setWindow, setPreset, cycleWindow, setOverlay,
         get status() { return status; },
         get window() { return { ...win }; },
-        get initialWindow() { return initialWindow ? { ...initialWindow } : null; },
         get overlay() { return overlay; },
         get hasLabels() { return !!vol && vol.hasLabels; },
         get windows() { return vol ? Object.keys(vol.windows) : []; },
         get valueMax() { return VALUE_MAX; },
-        retry: start,
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
     };
 }

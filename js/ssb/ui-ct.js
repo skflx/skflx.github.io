@@ -76,13 +76,11 @@ export function buildCtDom(root) {
 
 export function mountCtControls({ dom, ct, store, graph, stageSwitch }) {
     const { info } = dom;
-    const secs = {};
     let builtFor = false;
 
     const section = (key, title) => {
         const sec = el('div', `ssb-ct-sec ssb-ct-sec-${key}`);
         sec.append(el('h2', 'site-kicker ssb-ct-kicker', title));
-        secs[key] = sec;
         info.append(sec);
         return sec;
     };

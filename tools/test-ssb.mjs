@@ -432,6 +432,22 @@ function drawnCross(page, plane) {
   }, plane);
 }
 
+/* Mean luma of the 3 x 3 device pixels where `ras` must be drawn on `plane` (first principles, below). */
+function lumaAt(page, plane, ras) {
+  return page.evaluate(([p, at]) => {
+    const canvas = document.querySelector(`.ssb-ct-view[data-plane="${p}"] canvas`);
+    const box = window.__ssb.ct.crosshair(p).box;
+    const max = [23.25, 20.25, 29];
+    const axes = { axial: [0, 1, 64, 56], coronal: [0, 2, 64, 63], sagittal: [1, 2, 56, 63] }[p];
+    const x = Math.round(box.x + ((max[axes[0]] - at[axes[0]]) / 0.75 + 0.5) * (box.w / axes[2]));
+    const y = Math.round(box.y + ((max[axes[1]] - at[axes[1]]) / 0.75 + 0.5) * (box.h / axes[3]));
+    const d = canvas.getContext('2d').getImageData(x - 1, y - 1, 3, 3).data;
+    let sum = 0;
+    for (let i = 0; i < d.length; i += 4) sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+    return { luma: sum / 9, x, mid: box.x + box.w / 2 };
+  }, [plane, ras]);
+}
+
 /* The device-pixel position an RAS point must be drawn at, from first principles:
    radiological display puts the maximum of x (and of y, z) at the image's left/top
    edge, pixels are 0.75 mm (the fixture's smallest spacing), centres at integers. */
@@ -483,19 +499,11 @@ async function ctTests(browser, base) {
       const s = await canvasStats(page, plane);
       check(`CT: the ${plane} view is not blank (air, soft tissue and bone all drawn)`, s.dark > 0.05 && s.mid > 0.05 && s.bright > 0.01 && s.std > 25, JSON.stringify(s));
     }
-    /* radiological convention: the big right sinus is on the left half of the axial image, the small left one on the right */
-    const halves = await ct(page, () => {
-      const c = document.querySelector('.ssb-ct-view[data-plane="axial"] canvas');
-      const b = window.__ssb.ct.crosshair('axial').box;
-      const darkIn = (x0, x1) => {
-        const d = c.getContext('2d').getImageData(x0, b.y, x1 - x0, b.h).data;
-        let n = 0; for (let i = 0; i < d.length; i += 4) if (d[i] + d[i + 1] + d[i + 2] < 45) n++;
-        return n;
-      };
-      const mid = b.x + b.w / 2;
-      return { left: darkIn(b.x + b.w * 0.1, mid - 4), right: darkIn(mid + 4, b.x + b.w * 0.9) };
-    });
-    check('CT: radiological display — the larger right maxillary sinus is on the image LEFT (more air in the left half)', halves.left > halves.right * 1.5, JSON.stringify(halves));
+    /* radiological convention: the big right sinus (x up to +16) is drawn on the image LEFT; the small left one (x down to -14) on the right */
+    const rSide = await lumaAt(page, 'axial', [15, 5, RSIN[2]]);
+    const lSide = await lumaAt(page, 'axial', [-15, 5, RSIN[2]]);
+    check('CT: radiological display — x = +15 mm (inside the right sinus) is air on the image LEFT; x = -15 mm (beside the smaller left sinus) is tissue on the image RIGHT',
+      rSide.luma < 30 && lSide.luma > 45 && rSide.x < rSide.mid && lSide.x > lSide.mid, JSON.stringify({ rSide, lSide }));
     const letters = await ct(page, () => Object.fromEntries([...document.querySelectorAll('.ssb-ct-view')].map((v) => {
       const at = (edge) => { const e = v.querySelector(`.ssb-ct-o[data-edge="${edge}"]`); const r = e.getBoundingClientRect(); return { t: e.textContent, x: r.left, y: r.top }; };
       return [v.dataset.plane, { left: at('left'), right: at('right'), top: at('top'), bottom: at('bottom') }];
@@ -636,11 +644,16 @@ async function ctTests(browser, base) {
     const bone = await canvasStats(page, 'axial');
     const presets = await page.$$eval('#ssb-ct button[data-preset]', (bs) => bs.map((b) => b.dataset.preset));
     check('CT: the window presets are the ones in ct.json (bone, soft), bone first', presets.join() === 'bone,soft' && (await page.evaluate(() => window.__ssb.ct.window.name)) === 'bone', presets.join());
+    const tissue = [-3, -10, RSIN[2]];
+    const boneTissue = await lumaAt(page, 'axial', tissue);
     await page.click('#ssb-ct button[data-preset="soft"]');
     await settle(page);
     const soft = await canvasStats(page, 'axial');
+    const softTissue = await lumaAt(page, 'axial', tissue);
     const w = await page.evaluate(() => window.__ssb.ct.window);
-    check('CT: the soft window (centre 60, width 40) changes what is drawn and is recorded', w.name === 'soft' && w.center === 60 && w.width === 40 && Math.abs(soft.mean - bone.mean) > 8 && soft.bright > bone.bright + 0.1, JSON.stringify({ w, bone, soft }));
+    check('CT: the soft window (centre 60, width 40) is recorded and lifts soft tissue (value 60) from dark grey to mid grey while air stays black',
+      w.name === 'soft' && w.center === 60 && w.width === 40 && boneTissue.luma < 85 && softTissue.luma > boneTissue.luma + 40 && soft.dark > 0.3 && Math.abs(soft.mean - bone.mean) > 8,
+      JSON.stringify({ w, boneTissue, softTissue, bone, soft }));
     await page.$eval('#ssb-ct-width', (input) => { input.value = '120'; input.dispatchEvent(new Event('input', { bubbles: true })); });
     const cw = await page.evaluate(() => ({ w: window.__ssb.ct.window, out: document.querySelector('#ssb-ct output[for="ssb-ct-width"]').textContent }));
     check('CT: the width slider sets a custom window (no preset pressed) and its readout', cw.w.width === 120 && cw.w.name === '' && cw.out === '120'
