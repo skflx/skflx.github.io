@@ -44,7 +44,7 @@
    artery and its drop are seen through the cut face rather than hidden in
    the cells.
    ============================================================= */
-import { band, superellipse, rasRoot, geometry, tubeGeometry, ribbonGeometry, mesh, tag } from './kit.js?v=647e9332';
+import { band, superellipse, rasRoot, geometry, tubeGeometry, ribbonGeometry, mesh, tag } from './kit.js?v=318ffa60';
 
 export const TITLE = 'Ethmoid roof';
 
@@ -174,7 +174,7 @@ export function build(THREE, params) {
     const d = derive(params);
     const root = rasRoot(THREE);
     const slab = (poly) => ({ kind: 'prism', axis: 'y', from: -SLAB, to: SLAB, poly });
-    const bone = { tint: 'bone', cut: true };
+    const bone = { kind: 'bone', cut: true };
     const add = (obj) => { root.add(obj); return obj; };
 
     /* Midline: crista galli above, perpendicular plate below. */
@@ -218,13 +218,13 @@ function buildSide(THREE, add, d, side, slab, bone) {
     /* Dura lining the anterior cranial fossa over roof, lamella, plate, crista. */
     const surface = [[xRoofEnd, s.depth], [s.xTop, s.depth], [XC, 0], [CG_HALF, 0], [cgAt(Math.min(s.depth + 4, CG_APEX - 2)), Math.min(s.depth + 4, CG_APEX - 2)]];
     /* (band's side -1 is the intracranial side for this lateral-to-medial walk) */
-    add(mesh(THREE, geometry(THREE, slab(X(band(surface, T_DURA, -1)))), 's.anterior-cranial-fossa-dura', side, { tint: 'dura' }));
+    add(mesh(THREE, geometry(THREE, slab(X(band(surface, T_DURA, -1)))), 's.anterior-cranial-fossa-dura', side, { kind: 'dura' }));
 
     /* Olfactory fossa: the trough over the plate, inside the dura-lined lamella, up to the roof level. */
     const zf = T_DURA + 0.05;
     const inner = (z) => XC + z * cot - T_DURA / s.sin - 0.05;
     const fossa = [[cgAt(zf) + T_DURA, zf], [inner(zf), zf], [inner(s.depth), s.depth], [cgAt(s.depth) + T_DURA, s.depth]];
-    add(mesh(THREE, geometry(THREE, slab(X(fossa))), 's.olfactory-fossa', side, { tint: 'space', space: true }));
+    add(mesh(THREE, geometry(THREE, slab(X(fossa))), 's.olfactory-fossa', side, { kind: 'space', space: true }));
 
     /* Middle turbinate's vertical attachment at the plate/lamella junction. */
     const mt = [[XC, -T_CRIB], [XC + 0.3, -9], [XC + 1.2, -16], [XC + 3, -21]];
@@ -238,7 +238,7 @@ function buildSide(THREE, add, d, side, slab, bone) {
 
     /* Orbit, below the roof (below the supraorbital cell when present). */
     const orbitTop = (d.soec ? soecBottom : s.roofUnder) - 0.6;
-    add(mesh(THREE, geometry(THREE, slab(X(superellipse(s.xLP + 17.5, orbitTop - 16.5, 17, 16.5, 2.6, 56)))), 's.orbit', side, { tint: 'orbit' }));
+    add(mesh(THREE, geometry(THREE, slab(X(superellipse(s.xLP + 17.5, orbitTop - 16.5, 17, 16.5, 2.6, 56)))), 's.orbit', side, { kind: 'fat' }));
 
     /* A representative anterior ethmoid cell column under the roof, between
        the MT/lamella and the lamina. The AEA's canal runs in a septum between
@@ -264,7 +264,7 @@ function buildSide(THREE, add, d, side, slab, bone) {
         cells.add(new THREE.Mesh(geometry(THREE, { kind: 'super', c: [k * (x0 + x1) / 2, CELL_Y[0] / 2 + CELL_Y[1] / 2, (top + bottom) / 2],
             r: [(x1 - x0) / 2, (CELL_Y[1] - CELL_Y[0]) / 2, (top - bottom) / 2], n: 5 })));
     }
-    add(tag(cells, 's.anterior-ethmoid-cells', side, { tint: 'cell-ethmoid' }));
+    add(tag(cells, 's.anterior-ethmoid-cells', side, { kind: 'air-cell', tint: 'cell-ethmoid' }));
 
     /* Supraorbital ethmoid cell over the orbit. */
     if (d.soec) {
@@ -273,7 +273,7 @@ function buildSide(THREE, add, d, side, slab, bone) {
         add(mesh(THREE, geometry(THREE, { kind: 'super', c: [k * (x0 + x1) / 2, 0, (s.roofUnder - 0.35 + soecBottom) / 2],
             r: [(x1 - x0) / 2, SLAB - 0.8, (SOEC_H - 0.35) / 2], n: 5 }), 'v.supraorbital-ethmoid-cell', side,
         /* translucent: the cell pneumatizes around the AEA, which stays visible */
-        { tint: 'cell-soec', translucent: true }));
+        { kind: 'air-cell', tint: 'cell-soec', translucent: true }));
     }
 
     /* AEA: from the orbit through the anterior ethmoidal foramen at the lamina,
@@ -301,12 +301,12 @@ function buildSide(THREE, add, d, side, slab, bone) {
         [k * (CG_HALF + 0.9), AEA_Y[1] + 0.8, -3],
     ];
     const hanging = d.drop > 0;
-    add(mesh(THREE, tubeGeometry(THREE, artery, AEA_R), 's.anterior-ethmoidal-artery', side, { tint: 'artery' },
+    add(mesh(THREE, tubeGeometry(THREE, artery, AEA_R), 's.anterior-ethmoidal-artery', side, { kind: 'artery' },
         hanging ? { hazards: ['h.aea-transection'] } : {}));
-    add(mesh(THREE, tubeGeometry(THREE, cross.slice(0, -1), CANAL_R), 's.anterior-ethmoidal-canal', side, { tint: 'bone', ghost: true }));
+    add(mesh(THREE, tubeGeometry(THREE, cross.slice(0, -1), CANAL_R), 's.anterior-ethmoidal-canal', side, { kind: 'bone', ghost: true }));
     if (hanging) {
         const mid = cross.slice(0, -1);
         add(mesh(THREE, ribbonGeometry(THREE, mid, mid.map(() => s.roofUnder + 0.1), mid.map((p) => p[2] + CANAL_R * 0.6)),
-            'v.aea-in-mesentery', side, { tint: 'mucosa', doubleSide: true }));
+            'v.aea-in-mesentery', side, { kind: 'mucosa', doubleSide: true }));
     }
 }

@@ -6,7 +6,7 @@
    (docs/ssb.md 7.1).
 
    The URL hash is the shareable state (`#s=s.uncinate-process&tier=2`,
-   `#lab=ethmoid-roof&keros=12`) and is untrusted input (docs/security.md
+   `#lab=ethmoid-roof&keros=12&q=lite`) and is untrusted input (docs/security.md
    rule 4): parsing is whitelist-only, ids must exist in the graph index, a
    diorama name must be in the injected registry and its keys in that
    diorama's PARAMS, numbers are parsed, clamped and snapped to the step,
@@ -21,6 +21,13 @@ export const TIER_MAX = 3;
 export const TIER_DEFAULT = 1;
 export const PREFS_KEY = 'ssb:prefs';
 const HASH_MAX = 2048;
+
+/* Rendering quality (`q=` in the hash): an exact, case-sensitive whitelist.
+   Anything else is ignored, so the device's own choice stands (materials.js). */
+export const QUALITIES = Object.freeze(['full', 'lite']);
+export function clampQuality(value) {
+    return typeof value === 'string' && QUALITIES.includes(value) ? value : null;
+}
 
 /* Any input -> an integer tier in [1, 3], or null when it is not a number. */
 export function clampTier(value) {
@@ -79,7 +86,7 @@ function sameLab(a, b) {
     return keys.length === Object.keys(b.params).length && keys.every((k) => a.params[k] === b.params[k]);
 }
 
-/* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>' -> { selection?, tier?, lab? }.
+/* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&q=<full|lite>' -> { selection?, tier?, lab?, quality? }.
    Only whitelisted keys, only valid values; anything else is dropped.
    `has(id)` is the graph's index lookup; `labs` maps a diorama name to its
    { params: PARAMS, presets: PRESETS }. A classification id naming a preset
@@ -110,13 +117,16 @@ export function parseHash(hash, has, labs = {}) {
         }
         out.lab = normalizeLab({ name, params: values }, labs);
     }
+    const quality = clampQuality(params.get('q'));
+    if (quality) out.quality = quality;
     return out;
 }
 
 const num = (v) => String(Number(Number(v).toFixed(3)));
 
 /* State -> the canonical hash ('' when there is nothing to share). A lab
-   writes its name and every parameter that differs from its default. */
+   writes its name and every parameter that differs from its default; a
+   quality override is written last. */
 export function formatHash(state, labs = {}) {
     const parts = [];
     if (state.selection) parts.push('s=' + encodeURIComponent(state.selection));
@@ -128,6 +138,7 @@ export function formatHash(state, labs = {}) {
             if (v !== undefined && v !== p.default) parts.push(p.key + '=' + num(v));
         }
     }
+    if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
 }
 
@@ -152,11 +163,12 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab }. Invariant: the selected entity's tier is
-   never above `tier` (selecting a deeper entity raises the depth; lowering
-   the depth below the selection closes it). `lab` is the variant-lab stage:
-   null on the specimen stage, else { name, params } with every parameter
-   present and clamped (normalizeLab).
+/* state = { tier, selection, lab, quality }. Invariant: the selected entity's
+   tier is never above `tier` (selecting a deeper entity raises the depth;
+   lowering the depth below the selection closes it). `lab` is the variant-lab
+   stage: null on the specimen stage, else { name, params } with every
+   parameter present and clamped (normalizeLab). `quality` is the rendering
+   override from the hash ('full' | 'lite'), null for the device's choice.
    Subscribers get (state, previous, meta); meta.source names the origin
    ('url', 'tree', 'search', 'panel', 'tier', 'scene', 'lab', 'slider') so
    the URL sync can tell a hash-driven change from a click, and a slider
@@ -168,13 +180,14 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         selection,
         tier: Math.max(fromUrl.tier || prefs.tier || TIER_DEFAULT, selection ? tierOf(selection) : TIER_MIN),
         lab: fromUrl.lab || null,
+        quality: fromUrl.quality || null,
     });
     const subs = new Set();
 
     function set(patch, meta = {}) {
         const prev = state;
         const next = { ...prev, ...patch };
-        if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab)) return false;
+        if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && next.quality === prev.quality) return false;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         state = Object.freeze(next);
         for (const fn of [...subs]) {
@@ -211,7 +224,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const p = parseHash(next, has, labs);
             const selection = p.selection || null;
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
-            return set({ selection, tier, lab: p.lab || null }, { source: 'url' });
+            return set({ selection, tier, lab: p.lab || null, quality: p.quality || null }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),

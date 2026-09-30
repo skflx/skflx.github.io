@@ -37,7 +37,7 @@
      skull-base slope (the graph says only that it slopes down posteriorly,
      s.fovea-ethmoidalis) and wall thicknesses: schematic; graph silent.
    ============================================================= */
-import { inside, bounds, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=647e9332';
+import { inside, bounds, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=318ffa60';
 
 export const TITLE = 'Frontal recess';
 export const SIDE = 'R';
@@ -468,11 +468,11 @@ export function build(THREE, params) {
     const m = model(params);
     const root = rasRoot(THREE);
     const R = SIDE;
-    const bone = { tint: 'bone', cut: true };
+    const bone = { kind: 'bone', cut: true };
     const add = (obj) => { root.add(obj); return obj; };
 
     /* Frontal sinus: the lumen (space) above a floor pierced by the ostium. */
-    add(mesh(THREE, geometry(THREE, SINUS), 's.frontal-sinus', R, { tint: 'space', space: true }));
+    add(mesh(THREE, geometry(THREE, SINUS), 's.frontal-sinus', R, { kind: 'space', space: true }));
     const floorPoly = superellipse(10, 2, 9.2, 7.2, 4, 64);
     const ostiumPoly = superellipse(OSTIUM.c[0], OSTIUM.c[1], OSTIUM.r[0], OSTIUM.r[1], 2, 40);
     add(mesh(THREE, geometry(THREE, { kind: 'prism', axis: 'z', from: FLOOR[0], to: FLOOR[1],
@@ -480,11 +480,11 @@ export function build(THREE, params) {
     const ring = new THREE.Mesh(new THREE.TorusGeometry(1, 0.22, 10, 48));
     ring.scale.set(OSTIUM.r[0], OSTIUM.r[1], 1);
     ring.position.set(OSTIUM.c[0], OSTIUM.c[1], (FLOOR[0] + FLOOR[1]) / 2);
-    add(tag(ring, 's.frontal-ostium', R, { tint: 'bone-cut' }));
+    add(tag(ring, 's.frontal-ostium', R, { kind: 'bone-cut' }));
     /* Medial walls are ghosted: the camera looks in from the nasal side. */
-    add(mesh(THREE, geometry(THREE, { kind: 'box', min: [0, -3.5, FLOOR[0]], max: [1, 9.5, 21] }), 's.frontal-intersinus-septum', 'M', { tint: 'bone', ghost: true }));
+    add(mesh(THREE, geometry(THREE, { kind: 'box', min: [0, -3.5, FLOOR[0]], max: [1, 9.5, 21] }), 's.frontal-intersinus-septum', 'M', { kind: 'bone', ghost: true }));
     add(mesh(THREE, geometry(THREE, { kind: 'prism', axis: 'x', from: 1, to: 19,
-        poly: [[-3.5, FLOOR[0]], [-3.5, 17], [-5, 17], [-5, FLOOR[0]]] }), 's.frontal-sinus-posterior-table', R, { tint: 'bone', ghost: true }));
+        poly: [[-3.5, FLOOR[0]], [-3.5, 17], [-5, 17], [-5, FLOOR[0]]] }), 's.frontal-sinus-posterior-table', R, { kind: 'bone', ghost: true }));
     add(mesh(THREE, geometry(THREE, { kind: 'prism', axis: 'x', from: 1, to: X_BEAK, poly: BEAK_POLY }), 's.frontal-beak', R, bone));
 
     /* Skull base behind the ostium, sloping down posteriorly. */
@@ -494,39 +494,39 @@ export function build(THREE, params) {
     /* Walls: MT medially, lamina laterally (ghosted: the camera looks through them). */
     add(mesh(THREE, geometry(THREE, { kind: 'prism', axis: 'x', from: X_MT - 1, to: X_MT,
         poly: [[Y_BACK, Z_BOTTOM], [Y_FRONT - 1, Z_BOTTOM], [Y_FRONT - 1, -6], [2.5, -3], [-3.5, FLOOR[0]], [Y_BACK, roofZ(Y_BACK)]] }),
-    's.middle-turbinate', R, { tint: 'bone', ghost: true }));
+    's.middle-turbinate', R, { kind: 'bone', ghost: true }));
     add(mesh(THREE, geometry(THREE, { kind: 'box', min: [X_LP, Y_BACK, Z_BOTTOM], max: [X_LP + 0.8, Y_FRONT, FLOOR[0]] }),
-        's.lamina-papyracea', R, { tint: 'bone', ghost: true }));
+        's.lamina-papyracea', R, { kind: 'bone', ghost: true }));
 
     /* Bulla, uncinate, infundibulum. */
-    add(mesh(THREE, geometry(THREE, BULLA), 's.ethmoid-bulla', R, { tint: 'cell-ethmoid' }));
+    add(mesh(THREE, geometry(THREE, BULLA), 's.ethmoid-bulla', R, { kind: 'air-cell', tint: 'cell-ethmoid' }));
     const unc = new THREE.Group();
     for (const s of m.uncinateSolids) unc.add(new THREE.Mesh(geometry(THREE, s)));
-    add(tag(unc, 's.uncinate-process', R, { tint: 'bone', cut: true }, { attachment: m.uncinate }));
+    add(tag(unc, 's.uncinate-process', R, { kind: 'bone', cut: true }, { attachment: m.uncinate }));
     add(mesh(THREE, geometry(THREE, { kind: 'box', min: [X_UNC[1] + 0.1, Y_UNC[0] + 0.1, Z_BOTTOM + 0.5],
         max: [X_LP - 0.1, Y_FRONT - 0.2, m.uncinate === 1 ? Z_CAP[0] - 0.1 : -9] }),
-    's.ethmoid-infundibulum', R, { tint: 'space', space: true }));
+    's.ethmoid-infundibulum', R, { kind: 'space', space: true }));
 
     /* The AEA along the skull base: the posterior limit of the recess
        (pr.aea-frontal-recess-limit), in its canal in the roof. */
     const za = roofZ(Y_AEA) - 0.9;
     add(mesh(THREE, tubeGeometry(THREE, [[X_LP + 4, Y_AEA - 2.5, za - 1.2], [X_LP, Y_AEA - 1.5, za], [8, Y_AEA - 0.3, za + 0.4], [X_MT - 0.5, Y_AEA + 1, za + 0.8]], 0.55),
-        's.anterior-ethmoidal-artery', R, { tint: 'artery' }));
+        's.anterior-ethmoidal-artery', R, { kind: 'artery' }));
 
     /* IFAC cells, each hued by identity. */
     for (const c of m.cells) {
-        add(mesh(THREE, geometry(THREE, c.solid), c.id, R, { tint: 'cell-' + c.key }, { code: c.code }));
+        add(mesh(THREE, geometry(THREE, c.solid), c.id, R, { kind: 'air-cell', tint: 'cell-' + c.key }, { code: c.code }));
     }
 
     /* The computed pathway. */
     const path = solvePathway(params);
     if (path.points.length > 1) {
-        const tube = mesh(THREE, tubeGeometry(THREE, path.points, 0.5, 10), path.id, R, { tint: 'flow' });
+        const tube = mesh(THREE, tubeGeometry(THREE, path.points, 0.5, 10), path.id, R, { kind: 'flow' });
         add(tube);
         const curve = new THREE.CatmullRomCurve3(path.points.map((p) => new THREE.Vector3(...p)), false, 'centripetal');
         const count = Math.max(4, Math.round(path.length / 2.5));
         const dots = new THREE.InstancedMesh(new THREE.SphereGeometry(0.42, 10, 8), undefined, count);
-        tag(dots, path.id, R, { tint: 'flow-particle' }, { particles: true });
+        tag(dots, path.id, R, { kind: 'flow-particle' }, { particles: true });
         const tmp = new THREE.Matrix4();
         const place = (t) => {
             for (let n = 0; n < count; n++) {

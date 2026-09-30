@@ -112,7 +112,11 @@ supraorbital cell) and `frontal-recess` (IFAC cells, uncinate attachment,
 computed drainage pathway) dioramas, with presets from the graph's
 classifications, picking into the panels, hatched hazard sites and a
 `#lab=` URL state (`docs/ssb.md` §6; behaviour pinned by
-`tools/test-ssb.mjs`). Draft knowledge graph in `ssb/content/`: anatomy by region
+`tools/test-ssb.mjs`). Surfaces are procedural per tissue kind
+(`js/ssb/materials.js`, `docs/ssb.md` §7.4): world-space mm noise from
+`--ssb-*` tokens, no textures, quality `full`/`lite` by device hints or the
+`#q=` hash key; the dioramas use them now, the specimen and endoscope will
+reuse them. Draft knowledge graph in `ssb/content/`: anatomy by region
 (nasal/maxillary/PPF; ethmoid/frontal/orbit/ACF; sphenoid/sellar/clival)
 plus a pathology layer (inflammatory/infectious/structural; neoplastic).
 Every file was authored by one model and adversarially reviewed by

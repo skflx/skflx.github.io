@@ -30,15 +30,37 @@
    - on desktop the docked controls never cover the canvas and collapse to
      a rail; phones get the controls in the bottom sheet;
    - reduced motion stops the particles;
+   - the tissue-material library (js/ssb/materials.js, docs/ssb.md 7.4): every
+     graph `kind` (and the docs' vocabulary) has a material kind, every colour
+     token exists for both themes, no shader animates; every kind compiles and
+     draws without a WebGL error, hatched and not, at q=full and q=lite; the
+     hash `q` key picks the quality (also at runtime) and a hostile value is
+     ignored; programs are shared per kind (a selection adds materials, not
+     programs); hazard hatching is visible on the real lab under both
+     qualities; picking works under full; reduced motion adds no animation
+     under full;
    - zero real console errors throughout.
 
    Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>]
            --shots writes desktop + phone screenshots of each diorama.
    Exits nonzero on any failed check.
    ============================================================= */
+import fs from 'fs';
 import path from 'path';
-import { startServer, launchBrowser, collectErrors } from './smoke-lib.mjs';
+import zlib from 'zlib';
+import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 import { validate, contentFiles } from './ssb-content.mjs';
+
+/* The browser modules under js/ have no package "type", so Node would reparse
+   them and warn. Import them as data: URLs instead. The three below need
+   neither three.js nor a DOM; their tables are pinned in section 6. */
+const dataUrl = (source) => 'data:text/javascript;base64,' + Buffer.from(source).toString('base64');
+const sourceOf = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
+const { KINDS, TISSUE_KINDS, GRAPH_KINDS, TOKENS, kindForGraph, detectQuality } = await import(dataUrl(sourceOf('js/ssb/materials.js')));
+const { parseHash, formatHash, clampQuality } = await import(dataUrl(sourceOf('js/ssb/state.js')));
+const kit = await import(dataUrl(sourceOf('js/ssb/dioramas/kit.js')
+  .replace(/from '\.\.\/frame\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/frame.js'))}'`)
+  .replace(/from '\.\.\/materials\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/materials.js'))}'`)));
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
@@ -53,6 +75,41 @@ const r2 = (v) => Math.round(v * 100) / 100;
 
 const { index: GRAPH } = validate(contentFiles());
 const entity = (id) => (GRAPH.get(id) || {}).entity;
+
+/* A Playwright screenshot (8-bit RGB/RGBA PNG) -> { width, height, at(x, y) -> [r, g, b] }. */
+function decodePng(buf) {
+  let pos = 8;
+  let width = 0;
+  let height = 0;
+  let bpp = 4;
+  const idat = [];
+  while (pos < buf.length) {
+    const len = buf.readUInt32BE(pos);
+    const type = buf.toString('ascii', pos + 4, pos + 8);
+    const data = buf.subarray(pos + 8, pos + 8 + len);
+    if (type === 'IHDR') { width = data.readUInt32BE(0); height = data.readUInt32BE(4); bpp = data[9] === 6 ? 4 : 3; }
+    else if (type === 'IDAT') idat.push(data);
+    pos += 12 + len;
+  }
+  const raw = zlib.inflateSync(Buffer.concat(idat));
+  const stride = width * bpp;
+  const out = Buffer.alloc(height * stride);
+  for (let y = 0; y < height; y++) {
+    const f = raw[y * (stride + 1)];
+    for (let x = 0; x < stride; x++) {
+      const v = raw[y * (stride + 1) + 1 + x];
+      const a = x >= bpp ? out[y * stride + x - bpp] : 0;
+      const b = y > 0 ? out[(y - 1) * stride + x] : 0;
+      const c = x >= bpp && y > 0 ? out[(y - 1) * stride + x - bpp] : 0;
+      let add = 0;
+      if (f === 1) add = a; else if (f === 2) add = b; else if (f === 3) add = (a + b) >> 1;
+      else if (f === 4) { const pa = Math.abs(b - c); const pb = Math.abs(a - c); const pc = Math.abs(a + b - 2 * c); add = pa <= pb && pa <= pc ? a : pb <= pc ? b : c; }
+      out[y * stride + x] = (v + add) & 255;
+    }
+  }
+  return { width, height, at: (x, y) => [out[y * stride + x * bpp], out[y * stride + x * bpp + 1], out[y * stride + x * bpp + 2]] };
+}
+const luma = ([r, g, b]) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
 /* ---------------- page helpers ---------------- */
 
@@ -379,6 +436,190 @@ async function main() {
     await act(page, () => page.click('button[data-cls="c.keros"][data-code="III"]'));
     check('phone: a preset in the sheet rebuilds the diorama', (await page.evaluate(() => window.__ssb.lab.params.keros)) === 12);
     await context.close();
+  }
+
+  /* ===== 6. tissue materials (js/ssb/materials.js, docs/ssb.md 7.4) ===== */
+  {
+    /* -- tables, in plain Node (materials.js needs neither three.js nor a DOM) -- */
+    const authoring = fs.readFileSync(path.join(ROOT, 'docs/authoring-ssb.md'), 'utf8');
+    const kindLine = authoring.split('\n').find((l) => l.startsWith('**`kind`:**')) || '';
+    const vocab = [...kindLine.matchAll(/`([a-z-]+)`/g)].map((m) => m[1]).filter((k) => k !== 'kind');
+    check('materials: the graph kind vocabulary in docs/authoring-ssb.md is the one materials.js maps',
+      vocab.length > 10 && vocab.every((k) => GRAPH_KINDS.includes(k)) && GRAPH_KINDS.every((k) => vocab.includes(k)), vocab.join(' '));
+    const kindsUsed = [...new Set([...GRAPH.values()].map((n) => n.entity).filter((e) => e && String(e.id).startsWith('s.')).map((e) => e.kind))];
+    const unmapped = kindsUsed.filter((k) => GRAPH_KINDS.includes(k) === false || (kindForGraph(k) === null && k !== 'region'));
+    check('materials: every graph kind in use has a material kind (a region is not a surface)', unmapped.length === 0, unmapped.join(', '));
+    check('materials: every mapped kind is a known material kind', GRAPH_KINDS.every((k) => kindForGraph(k) === null || KINDS.includes(kindForGraph(k))));
+    check('materials: one factory per tissue kind the brief names',
+      ['bone', 'bone-cut', 'mucosa', 'cartilage', 'dura', 'fat', 'muscle', 'artery', 'vein', 'nerve', 'gland'].every((k) => TISSUE_KINDS.includes(k))
+      && KINDS.includes('air-cell'));
+
+    const css = fs.readFileSync(path.join(ROOT, 'css/ssb.css'), 'utf8');
+    const block = (re) => (css.match(re) || [''])[0];
+    const light = block(/:root\s*\{[^}]*\}/);
+    const dark = block(/html\[data-theme="dark"\]\s*\{[^}]*\}/);
+    const missing = TOKENS.filter((t) => !light.includes(`--ssb-${t}:`) || !dark.includes(`--ssb-${t}:`));
+    check('materials: every colour token the library reads is declared for both themes in css/ssb.css', missing.length === 0, missing.join(', '));
+
+    const src = fs.readFileSync(path.join(ROOT, 'js/ssb/materials.js'), 'utf8');
+    check('materials: nothing animates (no clock, no time uniform, no frame requests)', !/uTime|performance\.now|requestAnimationFrame|THREE\.Clock|setInterval/.test(src));
+    check('materials: no raw colour literals (colours are tokens)', !/#[0-9a-fA-F]{6}\b/.test(src.replace(/\/\*[\s\S]*?\*\//g, '')) );
+
+    check('quality hints: software GL and phones are lite, a desktop GPU is full',
+      detectQuality({ renderer: 'ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero)), SwiftShader driver)' }) === 'lite'
+      && detectQuality({ renderer: 'ANGLE (NVIDIA, NVIDIA GeForce RTX 3060 Direct3D11)', coarse: false, shortSide: 1080 }) === 'full'
+      && detectQuality({ coarse: true, shortSide: 390 }) === 'lite' && detectQuality({ coarse: true, shortSide: 1024 }) === 'full'
+      && detectQuality({ navigator: { deviceMemory: 2 } }) === 'lite' && detectQuality({ navigator: { connection: { saveData: true } } }) === 'lite'
+      && detectQuality({}) === 'full');
+
+    const hostileQ = ['ultra', 'FULL', 'Lite', ' lite', 'lite ', 'lite\u0000', '', '<img src=x onerror=window.__pwned=1>', '../../x', 'full,lite', '__proto__'];
+    const parsed = hostileQ.map((q) => parseHash('#q=' + encodeURIComponent(q), () => false).quality);
+    check('hash codec: q accepts exactly full|lite and drops everything else',
+      parseHash('#q=lite', () => false).quality === 'lite' && parseHash('#tier=2&q=full', () => false).quality === 'full'
+      && parsed.every((v) => v === undefined) && clampQuality('lite') === 'lite' && clampQuality({ toString: () => 'lite' }) === null
+      && clampQuality(undefined) === null, JSON.stringify(parsed));
+    check('hash codec: q is written last and only when set',
+      formatHash({ selection: null, tier: 1, lab: null, quality: 'lite' }) === '#q=lite'
+      && formatHash({ selection: null, tier: 1, lab: null, quality: null }) === ''
+      && formatHash({ selection: null, tier: 1, lab: null, quality: 'bogus' }) === '');
+
+    let threw = false;
+    try { kit.tag({ userData: {} }, 's.x', 'R', { kind: 'flesh' }); } catch (e) { threw = true; }
+    let ok = true;
+    try { kit.tag({ userData: {} }, 's.x', 'R', { kind: 'bone' }); } catch (e) { ok = false; }
+    check('kit.tag rejects an unknown material kind and accepts a real one', threw && ok);
+
+    /* -- in the browser, both qualities -- */
+    const STAGE_BG_TOL = 6;
+    const canvasShot = async (page) => {
+      const r = await page.evaluate(() => { const c = document.getElementById('ssb-canvas').getBoundingClientRect(); return { x: c.left, y: c.top, width: c.width, height: c.height }; });
+      return { png: decodePng(await page.screenshot({ clip: r })), rect: r };
+    };
+    const shots = {};
+    for (const q of ['full', 'lite']) {
+      const { context, page, errors } = await open(browser, base, `#q=${q}`, { waitLab: false });
+      await page.waitForFunction(() => window.__ssb.materials, null, { timeout: 30000 });
+      const state = await page.evaluate(() => ({ q: window.__ssb.materials.quality, req: window.__ssb.materials.requested, hash: location.hash }));
+      check(`q=${q}: the hash key picks the quality and the canonical hash keeps it`, state.q === q && state.req === q && state.hash === `#q=${q}`, JSON.stringify(state));
+
+      const probes = await page.evaluate(() => {
+        const m = window.__ssb.materials;
+        const out = [];
+        for (const k of m.kinds) for (const h of [false, true]) out.push(m.probe(k, h));
+        return { out, programs: m.programs, materials: m.materials, keys: m.programKeys() };
+      });
+      const bad = probes.out.filter((p) => p.glError !== 0 || p.rgb.every((v) => v === 0));
+      check(`q=${q}: every kind (${KINDS.length}), plain and hazard-hatched, compiles and draws without a WebGL error`,
+        probes.out.length === KINDS.length * 2 && bad.length === 0, bad.map((p) => `${p.kind}${p.hazard ? '+hatch' : ''} err ${p.glError} rgb ${p.rgb}`).join('; '));
+      const weak = TISSUE_KINDS.concat(KINDS.filter((k) => !TISSUE_KINDS.includes(k))).filter((k) => {
+        const plain = probes.out.find((p) => p.kind === k && !p.hazard);
+        const hatched = probes.out.find((p) => p.kind === k && p.hazard);
+        return !(hatched.contrast - plain.contrast >= 0.15 || (hatched.dark >= 0.2 && plain.dark < 0.1));
+      });
+      check(`q=${q}: hazard hatching shows over every kind (stripes in the probe)`, weak.length === 0, weak.join(', '));
+      const lite = probes.keys.filter((k) => k.includes('SSB_LITE')).length;
+      check(`q=${q}: the patterned programs are ${q === 'lite' ? '' : 'not '}the lite variants`, q === 'lite' ? lite > 0 : lite === 0, `${lite} lite programs`);
+      check(`q=${q}: programs are shared per kind (${probes.materials} materials, ${probes.programs} programs)`,
+        probes.programs <= 2 * TISSUE_KINDS.length + 5 && probes.programs < probes.materials + 2, `${probes.programs} programs`);
+      check(`q=${q}: no shader compile or GL errors were logged`, errors.length === 0, errors.slice(0, 2).map((e) => e.text.slice(0, 300)).join(' | '));
+      await context.close();
+    }
+
+    for (const q of ['full', 'lite']) {
+      const { context, page } = await open(browser, base, `#lab=ethmoid-roof&keros=12&q=${q}`);
+      await page.waitForTimeout(600);
+      const f0 = await page.evaluate(() => window.__ssb.frames);
+      check(`q=${q}: the lab renders frames and reports the quality`, f0 > 0 && (await page.evaluate(() => window.__ssb.materials.quality)) === q);
+      const { png } = await canvasShot(page);
+      const bg = png.at(2, 2);
+      let ink = 0;
+      for (let y = 0; y < png.height; y += 2) for (let x = 0; x < png.width; x += 2) {
+        const c = png.at(x, y);
+        if (Math.abs(c[0] - bg[0]) + Math.abs(c[1] - bg[1]) + Math.abs(c[2] - bg[2]) > STAGE_BG_TOL) ink++;
+      }
+      const frac = ink / ((png.width / 2) * (png.height / 2));
+      check(`q=${q}: the lab canvas is not blank (${(frac * 100).toFixed(0)}% drawn)`, frac > 0.1, String(frac));
+      shots[q] = png;
+
+      /* the real lab: the hatched lateral lamella shows stripes over its tissue */
+      const at = await page.evaluate(() => window.__ssb.lab.screenOf('s.lateral-lamella.R'));
+      let stripes = null;
+      if (at) {
+        const r = await page.evaluate(() => { const c = document.getElementById('ssb-canvas').getBoundingClientRect(); return { left: c.left, top: c.top }; });
+        const cx = Math.round(at.x - r.left);
+        const cy = Math.round(at.y - r.top);
+        let dark = 0;
+        let bright = 0;
+        let n = 0;
+        for (let y = cy - 6; y <= cy + 6; y++) for (let x = cx - 6; x <= cx + 6; x++) {
+          if (x < 0 || y < 0 || x >= png.width || y >= png.height) continue;
+          const l = luma(png.at(x, y));
+          n++;
+          if (l < 80) dark++; else if (l > 110) bright++;
+        }
+        stripes = { dark: dark / n, bright: bright / n };
+      }
+      check(`q=${q}: the hatched lateral lamella still shows dark stripes over its tissue`, stripes && stripes.dark > 0.2 && stripes.bright > 0.15, JSON.stringify(stripes));
+
+      /* picking, then a selection: new materials, no new programs */
+      const before = await page.evaluate(() => ({ p: window.__ssb.materials.programs, m: window.__ssb.materials.materials }));
+      const pickAt = await page.evaluate(() => window.__ssb.lab.screenOf('s.anterior-cranial-fossa-dura.R'));
+      if (pickAt) await page.mouse.click(pickAt.x, pickAt.y);
+      await page.waitForFunction(() => window.__ssb.selection === 's.anterior-cranial-fossa-dura', null, { timeout: 8000 }).catch(() => {});
+      const after = await page.evaluate(() => ({ p: window.__ssb.materials.programs, m: window.__ssb.materials.materials, sel: window.__ssb.selection }));
+      check(`q=${q}: clicking the dura picks it (picking is unchanged by the materials)`, after.sel === 's.anterior-cranial-fossa-dura', JSON.stringify(after));
+      check(`q=${q}: selecting a part adds materials, not shader programs`, after.m > before.m && after.p === before.p, JSON.stringify({ before, after }));
+      await context.close();
+    }
+    if (shots.full && shots.lite) {
+      let differ = 0;
+      const w = Math.min(shots.full.width, shots.lite.width);
+      const h = Math.min(shots.full.height, shots.lite.height);
+      for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) {
+        const a = shots.full.at(x, y);
+        const b = shots.lite.at(x, y);
+        if (Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2]) > 12) differ++;
+      }
+      check(`full and lite draw different detail (${differ} px differ)`, differ > 100, String(differ));
+    }
+
+    /* switching at runtime: the hash key recompiles in place, and rendering goes on */
+    {
+      const { context, page } = await open(browser, base, '#lab=frontal-recess&q=lite');
+      await page.evaluate(() => { location.hash = '#lab=frontal-recess&q=full'; });
+      await page.waitForFunction(() => window.__ssb.materials.quality === 'full', null, { timeout: 8000 }).catch(() => {});
+      const f0 = await page.evaluate(() => window.__ssb.frames);
+      await page.waitForFunction((n) => window.__ssb.frames > n, f0, { timeout: 15000 }).catch(() => {});
+      const now = await page.evaluate(() => ({ q: window.__ssb.materials.quality, req: window.__ssb.materials.requested, f: window.__ssb.frames, hash: location.hash }));
+      check('the hash q key switches quality at runtime and rendering continues', now.q === 'full' && now.req === 'full' && now.f > f0 && /q=full/.test(now.hash), JSON.stringify(now));
+      await page.evaluate(() => { location.hash = '#lab=frontal-recess'; });
+      await page.waitForFunction(() => window.__ssb.materials.requested === null, null, { timeout: 8000 }).catch(() => {});
+      const back = await page.evaluate(() => ({ q: window.__ssb.materials.quality, req: window.__ssb.materials.requested, det: window.__ssb.materials.detected, hash: location.hash }));
+      check('dropping q from the hash returns to the device choice', back.req === null && back.q === back.det && !/q=/.test(back.hash), JSON.stringify(back));
+      await context.close();
+    }
+
+    /* hostile q values in the live page: ignored, never markup */
+    for (const bad of ['<img src=x id=pwnq onerror=window.__pwned=1>', 'ultra', 'FULL', 'lite%00']) {
+      const raw = bad.startsWith('<') ? encodeURIComponent(bad) : bad;
+      const { context, page } = await open(browser, base, `#lab=ethmoid-roof&q=${raw}`);
+      const got = await page.evaluate(() => ({ req: window.__ssb.materials.requested, q: window.__ssb.materials.quality, det: window.__ssb.materials.detected,
+        hash: location.hash, pwn: !!document.getElementById('pwnq') || !!window.__pwned }));
+      check(`a hostile q (${bad.slice(0, 12)}…) is ignored: the device's quality stands, the hash is rewritten without it`,
+        got.req === null && got.q === got.det && got.hash === '#lab=ethmoid-roof' && !got.pwn, JSON.stringify(got));
+      await context.close();
+    }
+
+    /* reduced motion under the heavy shaders: still no animation, no continuous rendering */
+    {
+      const { context, page } = await open(browser, base, '#lab=ethmoid-roof&q=full', { reducedMotion: 'reduce' });
+      await page.waitForTimeout(800);
+      const a = await page.evaluate(() => window.__ssb.frames);
+      await page.waitForTimeout(1200);
+      const b = await page.evaluate(() => window.__ssb.frames);
+      check('reduced motion, q=full: the materials add no animation (no continuous rendering)', b - a <= 1, `${b - a} frames`);
+      await context.close();
+    }
   }
 
   /* ===== screenshots ===== */

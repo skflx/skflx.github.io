@@ -212,10 +212,26 @@ a pixel where a click picks a given part). It pins:
 - a hostile `#lab=` is clamped, snapped or dropped, rewritten canonically,
   and never becomes markup; an unknown diorama leaves the specimen stage;
 - reduced motion stops the particle animation and continuous rendering;
-- zero real console errors.
+- the tissue-material library (`js/ssb/materials.js`, `docs/ssb.md` §7.4):
+  its kind table matches the vocabulary in `docs/authoring-ssb.md` and every
+  graph kind in use; every colour token it reads exists for both themes in
+  `css/ssb.css`; nothing animates. Through `window.__ssb.materials` (read-only:
+  quality, program and material counts, `probe(kind, hatched)` draws a
+  sphere into a small target and returns the GL error and pixels), every
+  kind, plain and hatched, compiles and draws without a WebGL error at
+  `#q=full` and at `#q=lite`; programs are shared per kind (a selection adds
+  materials, not programs); the `q` hash key picks the quality, switches it
+  at runtime and rewrites the hash canonically, and a hostile `q` is ignored;
+  the real lab renders non-blank under both, the hatched lateral lamella
+  still shows dark stripes, picking still works, and reduced motion adds no
+  animation. Software WebGL picks `lite` on its own, so the default runs
+  exercise it and `q=full` is always explicit.
 
 `node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
-screenshots of each diorama for a visual check.
+screenshots of each diorama for a visual check. Judging how a material
+*looks* (pattern scale, sheen under the endoscope's spotlight) stays a human
+check: render it in a scratch page that imports `materials.js` with a
+spotlight and both themes, and compare `full` with `lite`.
 
 ## Adding a new page to the harness
 

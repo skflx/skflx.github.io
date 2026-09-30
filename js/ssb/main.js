@@ -9,11 +9,12 @@
    a message in the place the missing piece would have been.
 
    window.__ssb is a read-only window for tests:
-   { frames, selection, caps, hash, lab } (lab: mode-lab.js's hook).
+   { frames, selection, caps, hash, lab, materials } (lab: mode-lab.js's
+   hook; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
 import { loadGraph } from './graph.js?v=b298c916';
-import { createStore } from './state.js?v=f8c63408';
-import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=cae6c45e';
+import { createStore, parseHash } from './state.js?v=a1cdba76';
+import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=418899ff';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=366f2db2';
 import { mountTree } from './ui-tree.js?v=a65a733c';
@@ -54,6 +55,7 @@ Object.defineProperty(window, '__ssb', {
         get caps() { return caps; },
         get hash() { return store ? store.hash() : null; },
         get lab() { return lab ? lab.hook : null; },
+        get materials() { return stage ? stage.materialsHook : null; },
     }),
 });
 
@@ -81,6 +83,7 @@ async function bootGraph() {
     wireTier();
     wireNav();
     wireUrl();
+    wireQuality();
     return graph;
 }
 
@@ -142,6 +145,18 @@ function wireUrl() {
     window.addEventListener('popstate', adopt);
 }
 
+/* The #q= override follows the store (a hand edit or Back/Forward re-applies
+   it); null means the device's own choice (docs/ssb.md 7.4). The stage may
+   not exist yet: bootStage reads the same key straight from the hash. */
+function wireQuality() {
+    let seen = store.get().quality;
+    store.subscribe((state) => {
+        if (state.quality === seen) return;
+        seen = state.quality;
+        if (stage) stage.setQuality(state.quality);
+    });
+}
+
 /* ---------------- 3D stage ---------------- */
 
 async function bootStage() {
@@ -160,9 +175,10 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=58735015');
+        const { createScene } = await import('./scene.js?v=1f7092c1');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
+            quality: parseHash(location.hash, () => false).quality || null,
             onLost: () => unavailable('The graphics context was lost. Reload the page to bring the 3D view back.'),
         });
         if (!caps.decompression) note.textContent += ' · no model-pack support in this browser';

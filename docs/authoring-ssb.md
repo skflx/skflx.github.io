@@ -94,7 +94,7 @@ Required fields in **bold**.
 
 ## 6. Vocabularies
 
-**`kind`:** `bone` `bone-part` `cell` `sinus` `space` `opening` `mucosa` `cartilage` `artery` `vein` `venous-sinus` `nerve` `ganglion` `dura` `brain` `muscle` `tendon` `fat` `gland` `duct` `ligament` `region`.
+**`kind`:** `bone` `bone-part` `cell` `sinus` `space` `opening` `mucosa` `cartilage` `artery` `vein` `venous-sinus` `nerve` `ganglion` `dura` `brain` `muscle` `tendon` `fat` `gland` `duct` `ligament` `region`. The scene draws each kind with a procedural material (`js/ssb/materials.js`, `docs/ssb.md` §7.4); a new kind needs a line in its `GRAPH_KIND` table, and `tools/test-ssb.mjs` fails until the two agree.
 
 **`category`** (conditions): `inflammatory` `infectious` `fungal` `benign-neoplasm` `malignant-neoplasm` `fibro-osseous` `congenital` `cystic` `vascular` `traumatic` `iatrogenic` `idiopathic`.
 

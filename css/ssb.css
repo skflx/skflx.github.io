@@ -26,15 +26,26 @@
   --ssb-axis-s: #2F5AA8;
 
   /* Tissue kinds: the anatomical convention is the meaning (bone ivory, cut
-     bone darker, artery red, dura grey, orbital fat yellow, mucosa pink);
-     `space` tints see-through air spaces. */
+     bone darker, artery red, vein blue, nerve yellow, dura grey-white, fat
+     yellow, mucosa pink); js/ssb/materials.js draws one procedural surface
+     per kind from these base colours. `space` tints see-through air spaces.
+     The two "accent" tokens are the second colour of a pattern: the
+     submucosal vessels and the septa between fat lobules. */
   --ssb-bone: #DCCFAE;
   --ssb-bone-cut: #B8A47A;
   --ssb-space: #7FA6C9;
-  --ssb-orbit: #E3CF8F;
-  --ssb-dura: #8F969E;
+  --ssb-cartilage: #C6D2D6;
+  --ssb-dura: #B7BAB8;
+  --ssb-fat: #E8C95E;
+  --ssb-fat-septum: #F4EBC8;
+  --ssb-muscle: #A94A3F;
   --ssb-artery: #C0392B;
+  --ssb-vein: #3B62AE;
+  --ssb-nerve: #E7D36A;
+  --ssb-gland: #C99785;
+  --ssb-brain: #C7ADA5;
   --ssb-mucosa: #D98A82;
+  --ssb-mucosa-vessel: #A8383F;
   /* Air cells: categorical hues by identity. The IFAC cells are grouped by
      class — anterior greens, posterior violets/ochre, medial blue — and the
      unclassified ethmoid cells are slate. */
@@ -66,10 +77,18 @@ html[data-theme="dark"] {
   --ssb-bone: #CFC3A2;
   --ssb-bone-cut: #A08C62;
   --ssb-space: #8FB6DA;
-  --ssb-orbit: #C9B676;
-  --ssb-dura: #9AA1A9;
+  --ssb-cartilage: #B4C2C8;
+  --ssb-dura: #A9ADAB;
+  --ssb-fat: #D9B84F;
+  --ssb-fat-septum: #E6DBB2;
+  --ssb-muscle: #B85448;
   --ssb-artery: #E0473A;
+  --ssb-vein: #5A82D2;
+  --ssb-nerve: #DCC85C;
+  --ssb-gland: #CDA090;
+  --ssb-brain: #BBA199;
   --ssb-mucosa: #E0958C;
+  --ssb-mucosa-vessel: #B5424A;
   --ssb-cell-ethmoid: #9AA7B2;
   --ssb-cell-anc: #3DB58D;
   --ssb-cell-sac: #7FC45F;

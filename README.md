@@ -95,7 +95,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │
 ├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode + variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens
-│   ├── js/ssb/             #   ES modules (graph, state, scene, lab, UI); stamps.js is generated
+│   ├── js/ssb/             #   ES modules (graph, state, scene, materials, lab, UI); stamps.js is generated
 │   ├── js/ssb/dioramas/    #   parametric dioramas for the variant lab
 │   └── js/vendor/three-0.186.1/  # three.js, pinned and self-hosted
 ├── ssb/                    # SSB data (knowledge graph, references)
@@ -125,7 +125,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
-│   ├── test-ssb.mjs        #   SSB variant lab: dioramas, computed pathway rules, picking, hash
+│   ├── test-ssb.mjs        #   SSB variant lab: dioramas, pathway rules, picking, hash, tissue materials
 │   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
 │   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
 │

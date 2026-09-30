@@ -1,6 +1,6 @@
 /* =============================================================
    scene.js — the 3D stage: renderer, camera, controls, lights, token
-   materials, picking, on-demand loop.
+   tissue materials, picking, on-demand loop.
 
    Two stages share one renderer: the *specimen* stage (phase 1's
    placeholder — an RAS axis gizmo and a neutral 10 mm grid, since the
@@ -11,10 +11,12 @@
    - Coordinates: authored data is RAS millimetres; rasToScene() (frame.js,
      re-exported here) is the one conversion, at the one boundary
      (docs/ssb.md 4). 1 scene unit = 1 mm.
-   - Materials come from CSS tokens (--ssb-* in css/ssb.css), by the `look`
-     a part carries (tint + flags). Computed values are read at boot and
-     again whenever html[data-theme] changes. A hazard site is hatched in
-     the shader, never marked by colour alone (docs/ssb.md 7.4).
+   - Materials come from the procedural tissue library (materials.js), by
+     the `look` a part carries (kind + flags), coloured from CSS tokens
+     (--ssb-* in css/ssb.css) read at boot and again whenever html[data-theme]
+     changes. A hazard site is hatched in the shader, never marked by colour
+     alone (docs/ssb.md 7.4). Quality is 'full' or 'lite': the #q= hash
+     override, else chosen from device hints at boot.
    - Rendering is on demand: a frame is drawn only when something changed
      (orbit, resize, theme, content), except while an animation is running
      (setAnimating), e.g. the lab's flow particles.
@@ -25,6 +27,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { OrbitControls } from '../vendor/three-0.186.1/examples/jsm/controls/OrbitControls.js';
 import { rasToScene } from './frame.js?v=f554e767';
+import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=84f05f95';
 
 export { rasToScene };
 
@@ -38,21 +41,6 @@ const GRID_HALF = 80;     /* mm */
 const GRID_STEP = 10;     /* mm */
 const GRID_MAJOR = 50;    /* mm */
 
-/* Fallbacks when a token is missing (they mirror css/ssb.css, light theme). */
-const TINT_FALLBACK = {
-    bone: '#dccfae', 'bone-cut': '#b8a47a', space: '#7fa6c9', orbit: '#e3cf8f', dura: '#8f969e',
-    artery: '#c0392b', mucosa: '#d98a82', flow: '#159ec4', 'flow-particle': '#e8fbff',
-    'cell-ethmoid': '#8e9ba6', 'cell-anc': '#2f9e7a', 'cell-sac': '#6db24f', 'cell-safc': '#b1b53a',
-    'cell-sbc': '#8267d0', 'cell-sbfc': '#b0509f', 'cell-soec': '#c98a2e', 'cell-fsc': '#3f6fc9',
-};
-
-/* A computed --ssb-* token as a colour string three.js can parse, else the fallback. */
-export function token(name, fallback) {
-    let value = '';
-    try { value = getComputedStyle(document.documentElement).getPropertyValue(name).trim(); } catch (e) { /* no-op */ }
-    return /^#[0-9a-f]{3,8}$/i.test(value) || /^rgba?\(/i.test(value) ? value : fallback;
-}
-
 /* Grid lines in the scene's XZ plane (the RAS axial plane, z = 0). */
 function gridGeometry(major) {
     const pts = [];
@@ -65,14 +53,15 @@ function gridGeometry(major) {
     return g;
 }
 
-/* opts: { canvas, host, labels, onLost }
+/* opts: { canvas, host, labels, onLost, quality }
      canvas  the WebGL canvas; CSS sizes it (the whole stage, or the stage
              beside the lab's docked controls) and the renderer follows it
      host    the stage element
      labels  overlay element that receives the axis letters (DOM text, not sprites)
      onLost  called when the graphics context is lost
+     quality 'full' | 'lite' (the #q= override), or null to choose from device hints
    Throws if WebGL 2 is unavailable (main.js catches and degrades to graph mode). */
-export function createScene({ canvas, host, labels, onLost }) {
+export function createScene({ canvas, host, labels, onLost, quality = null }) {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(pixelRatio);
@@ -134,56 +123,30 @@ export function createScene({ canvas, host, labels, onLost }) {
     const content = new THREE.Group();
     scene.add(content);
 
-    /* ---- token materials, cached by look ---- */
+    /* ---- tissue materials (materials.js), cached by look ---- */
 
-    const hatchColor = { value: new THREE.Color() };
-    const hatchScale = { value: 9 * pixelRatio };
-    const selectColor = new THREE.Color();
-    const materials = new Map();
+    const gl = renderer.getContext();
+    let gpu = '';
+    try {
+        const info = gl.getExtension('WEBGL_debug_renderer_info');
+        if (info) gpu = String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL) || '');
+    } catch (e) { /* masked: no hint */ }
+    const detected = detectQuality({
+        renderer: gpu,
+        coarse: typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches,
+        shortSide: Math.min(window.screen ? window.screen.width : 0, window.screen ? window.screen.height : 0),
+    });
+    let requested = quality === 'lite' || quality === 'full' ? quality : null;
+    const library = createMaterials(THREE, { pixelRatio, quality: requested || detected });
 
-    function paint(entry) {
-        const { mat, tint, selected } = entry;
-        mat.color.set(token('--ssb-' + tint, TINT_FALLBACK[tint] || '#999999'));
-        if (tint === 'flow' || tint === 'flow-particle') {
-            mat.emissive.copy(mat.color);
-            mat.emissiveIntensity = tint === 'flow' ? 0.35 : 0.8;
-        } else {
-            mat.emissive.copy(selected ? selectColor : new THREE.Color(0x000000));
-            mat.emissiveIntensity = selected ? 0.55 : 1;
-        }
-    }
+    /* look: { kind, tint?, space?, ghost?, translucent?, doubleSide?, cut? }; a slab with
+       cut: true gets [cut faces, sides]. opts: { hazard, selected }. */
+    const materialsFor = library.materialsFor;
 
-    /* look: { tint, space?, ghost?, translucent?, doubleSide? }; hazard: hatched;
-       selected: emissive highlight. One material per combination. */
-    function material(look, { hazard = false, selected = false } = {}) {
-        const tint = look.tint || 'bone';
-        const key = [tint, look.space ? 's' : '', look.ghost ? 'g' : '', look.translucent ? 't' : '', look.doubleSide ? 'd' : '',
-            hazard ? 'h' : '', selected ? 'x' : ''].join('|');
-        if (materials.has(key)) return materials.get(key).mat;
-        const mat = new THREE.MeshStandardMaterial({ roughness: 0.78, metalness: 0 });
-        if (look.space || look.ghost || look.translucent) {
-            mat.transparent = true;
-            mat.depthWrite = false;
-            mat.opacity = look.space ? 0.16 : look.ghost ? 0.1 : 0.55;
-            mat.side = THREE.DoubleSide;
-        }
-        if (look.doubleSide) mat.side = THREE.DoubleSide;
-        if (hazard) {
-            mat.onBeforeCompile = (shader) => {
-                shader.uniforms.uHatch = hatchColor;
-                shader.uniforms.uHatchScale = hatchScale;
-                shader.fragmentShader = 'uniform vec3 uHatch;\nuniform float uHatchScale;\n' + shader.fragmentShader.replace(
-                    '#include <color_fragment>',
-                    '#include <color_fragment>\n\tfloat ssbHatch = step(0.55, fract((gl_FragCoord.x + gl_FragCoord.y) / uHatchScale));\n'
-                    + '\tdiffuseColor.rgb = mix(diffuseColor.rgb, uHatch, ssbHatch * 0.9);',
-                );
-            };
-            mat.customProgramCacheKey = () => 'ssb-hatch';
-        }
-        const entry = { mat, tint, selected };
-        paint(entry);
-        materials.set(key, entry);
-        return mat;
+    /* The #q= override (null: back to the device's choice). */
+    function setQuality(q) {
+        requested = q === 'lite' || q === 'full' ? q : null;
+        if (library.setQuality(requested || detected)) requestRender();
     }
 
     /* A ghosted wall reads by its outline: hard edges as lines. */
@@ -194,12 +157,6 @@ export function createScene({ canvas, host, labels, onLost }) {
         return lines;
     }
 
-    /* Materials for a part mesh: [cut faces, sides] for a slab with cut: true. */
-    function materialsFor(look, opts) {
-        if (look.cut) return [material({ ...look, tint: 'bone-cut' }, opts), material(look, opts)];
-        return material(look, opts);
-    }
-
     /* ---- tokens -> colours (boot + every theme change) ---- */
 
     const themeSubs = new Set();
@@ -208,10 +165,8 @@ export function createScene({ canvas, host, labels, onLost }) {
         gridMinor.material.color.set(token('--ssb-grid', '#d6d7d0'));
         gridMajor.material.color.set(token('--ssb-grid-major', '#b4b6ae'));
         for (const a of axes) a.material.color.set(token(`--ssb-axis-${a.axis.key}`, '#888888'));
-        hatchColor.value.set(token('--ssb-hazard', '#231815'));
         edgeMaterial.color.set(token('--ssb-bone-cut', '#b8a47a'));
-        selectColor.set(token('--ssb-select', '#ffb000'));
-        for (const entry of materials.values()) paint(entry);
+        library.refresh();
         for (const fn of [...themeSubs]) { try { fn(); } catch (e) { console.error(e); } }
         requestRender();
     }
@@ -365,9 +320,66 @@ export function createScene({ canvas, host, labels, onLost }) {
     function onFrame(fn) { frameSubs.add(fn); return () => frameSubs.delete(fn); }
     function onTheme(fn) { themeSubs.add(fn); return () => themeSubs.delete(fn); }
 
+    /* ---- the test window for materials (window.__ssb.materials) ---- */
+
+    const probeScene = new THREE.Scene();
+    probeScene.add(new THREE.HemisphereLight(0xffffff, 0x808080, 1.4));
+    const probeLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    probeLight.position.set(0.3, 0.4, 1);
+    probeScene.add(probeLight);
+    const probeCamera = new THREE.PerspectiveCamera(30, 1, 1, 100);
+    probeCamera.position.set(0, 0, 20);
+
+    /* Draw a sphere in the kind's material into a 24 px target: the GL error
+       state, the colour at its centre (a shader that compiled but draws
+       nothing, or NaN, reads black), and over its middle the relative
+       luminance range and the share of near-black pixels (a hatched kind has
+       stripes, a plain one hardly any). */
+    function probeKind(kind, hazard = false) {
+        const target = new THREE.WebGLRenderTarget(24, 24);
+        const ball = new THREE.Mesh(new THREE.SphereGeometry(5, 24, 16), library.material({ kind }, { hazard }));
+        probeScene.add(ball);
+        while (gl.getError() !== gl.NO_ERROR) { /* drain */ }
+        const before = renderer.getRenderTarget();
+        renderer.setRenderTarget(target);
+        renderer.render(probeScene, probeCamera);
+        const px = new Uint8Array(24 * 24 * 4);
+        renderer.readRenderTargetPixels(target, 0, 0, 24, 24, px);
+        renderer.setRenderTarget(before);
+        const glError = gl.getError();
+        let lo = 255;
+        let hi = 0;
+        let dark = 0;
+        for (let y = 6; y < 18; y++) {
+            for (let x = 6; x < 18; x++) {
+                const i = (y * 24 + x) * 4;
+                const l = 0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2];
+                lo = Math.min(lo, l);
+                hi = Math.max(hi, l);
+                if (l < 25) dark += 1;
+            }
+        }
+        const c = (12 * 24 + 12) * 4;
+        probeScene.remove(ball);
+        ball.geometry.dispose();
+        target.dispose();
+        return { kind, hazard, glError, rgb: [px[c], px[c + 1], px[c + 2]], contrast: hi > 0 ? (hi - lo) / hi : 0, dark: dark / 144 };
+    }
+
+    const materialsHook = Object.freeze({
+        kinds: KINDS,
+        get quality() { return library.quality; },
+        get requested() { return requested; },
+        get detected() { return detected; },
+        get materials() { return library.count; },
+        get programs() { return renderer.info.programs.length; },
+        programKeys: () => renderer.info.programs.map((p) => p.cacheKey),
+        probe: probeKind,
+    });
+
     refreshTheme();
     return {
         THREE, canvas, camera, frames: () => frames, requestRender, refreshTheme,
-        materialsFor, outline, setContent, frame, resetView, pick, toClient, setAnimating, onFrame, onTheme,
+        materialsFor, setQuality, materialsHook, outline, setContent, frame, resetView, pick, toClient, setAnimating, onFrame, onTheme,
     };
 }

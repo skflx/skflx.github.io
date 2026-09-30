@@ -22,6 +22,7 @@
    PARAMS for the URL whitelist.
    ============================================================= */
 import { rasToScene } from '../frame.js?v=f554e767';
+import { isKind } from '../materials.js?v=84f05f95';
 
 /* ---------------- implicit tests ---------------- */
 
@@ -211,11 +212,20 @@ function superGeometry(THREE, s, { segU = 40, segV = 24 } = {}) {
     return g;
 }
 
-/* A tube along RAS points (centripetal Catmull-Rom, docs/ssb.md 5.5). */
+/* A tube along RAS points (centripetal Catmull-Rom, docs/ssb.md 5.5). Each
+   vertex also carries `ssbAxis`, the unit tangent there, so the fibrous
+   materials (nerve, muscle) can run their grain lengthwise. */
 export function tubeGeometry(THREE, points, radius, radial = 12) {
     const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(p[0], p[1], p[2])), false, 'centripetal');
     const segs = Math.max(8, Math.round(curve.getLength() * 3));
-    return new THREE.TubeGeometry(curve, segs, radius, radial, false);
+    const g = new THREE.TubeGeometry(curve, segs, radius, radial, false);
+    const axis = [];
+    for (let i = 0; i <= segs; i++) {
+        const t = curve.getTangentAt(i / segs);
+        for (let j = 0; j <= radial; j++) axis.push(t.x, t.y, t.z);
+    }
+    g.setAttribute('ssbAxis', new THREE.Float32BufferAttribute(axis, 3));
+    return g;
 }
 
 /* A vertical ribbon hanging below a polyline: top z per point, bottom z per point. */
@@ -236,10 +246,15 @@ export function ribbonGeometry(THREE, points, topZ, bottomZ) {
 /* ---------------- parts ---------------- */
 
 /* Name an object as a graph part: `<id>.<side>`, userData.id = the graph id
-   (so a pick selects the entity). `look` tells the lab which token material
-   to use: { tint, cut?, space?, ghost?, doubleSide? }; `hazards` lists the
-   graph's hazard ids for a hazard site (hatched by the lab). */
+   (so a pick selects the entity). `look` tells the lab how to draw it:
+   { kind, tint?, cut?, space?, ghost?, translucent?, doubleSide? } — `kind`
+   is a tissue kind of materials.js (the graph's kind vocabulary: bone,
+   mucosa, dura, artery, …); `tint` overrides the colour token only where a
+   kind is categorical (air cells hue by identity); a diorama never names a
+   colour. `hazards` lists the graph's hazard ids for a hazard site (hatched
+   by the lab). An unknown kind is an authoring error and throws. */
 export function tag(obj, id, side, look, extra = {}) {
+    if (!look || !isKind(look.kind)) throw new Error(`diorama part ${id}.${side}: unknown material kind "${look && look.kind}"`);
     obj.name = `${id}.${side}`;
     obj.userData.id = id;
     obj.userData.side = side;
