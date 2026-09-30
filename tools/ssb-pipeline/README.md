@@ -23,6 +23,28 @@ All four write sections of `uw/registration.json` (numbers only, no pixels); eac
 script's docstring states its method. The coronal stack is a different specimen
 from the axial and sagittal stacks (`registration.specimen_identity`).
 
+Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
+
+    .venv/bin/python tools/ssb-pipeline/uw/specimen.py   # -> ssb/ct/{ct.json,ct.u8.gz,labels.u16.gz},
+                                                         #    ssb/geometry/{labels,landmarks,landmarks.meta}.json
+    .venv/bin/python tools/ssb-pipeline/uw/meshes.py     # ssb/ct + labels -> ssb/models/<pack>.glb.gz, packs.json
+    node tools/stamp-assets.mjs && node tools/check-data.mjs
+
+`specimen.py` resamples the axial volume into the RAS frame and masks the face. It then
+grows the named air spaces from UW's arrow tips (marker watershed on air). It adds the
+cuts the tips cannot give: the choanae (PNS plane), the frontal ostium (narrowest
+cross-section), the sphenoid intersinus septum, and a basal-lamella **proxy** plane for
+anterior versus posterior ethmoid. Finally it places landmarks. `meshes.py` reads the
+committed volume back, so the meshes cannot drift from CT mode.
+
+Both scripts are deterministic: gzip is written with mtime 0. `ssb/geometry/labels.json`
+is append-only. Existing indices are reused and new names are appended, so never delete
+the file once it is committed. Both scripts write their report to `registration.json`
+(`specimen`, `meshes`). With `--png-dir DIR` they also write check images (label overlays,
+mesh renders). A native-resolution copy of the volume stays offline in
+`incoming/uw-sinusanatomy2/_recon/specimen-native.npz`. Provenance for everything under
+`ssb/ct`, `ssb/geometry` and `ssb/models` is in `ssb/LICENSE-data.md`.
+
 `relate.py` needs only the committed `slices.json`, so the graph's spatial
 claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps

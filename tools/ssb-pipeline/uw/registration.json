@@ -9326,5 +9326,441 @@
     ]
    }
   }
+ },
+ "specimen": {
+  "grid": {
+   "box_mm": {
+    "r": [
+     -52.0,
+     52.0
+    ],
+    "a": [
+     -90.0,
+     22.0
+    ],
+    "s": [
+     -16.0,
+     80.0
+    ]
+   },
+   "step_mm": 0.5,
+   "dims_xyz": [
+    209,
+    225,
+    193
+   ]
+  },
+  "thresholds_display": {
+   "bone": 150,
+   "air": 78
+  },
+  "seeds_used": {
+   "s.maxillary-sinus.R": 34,
+   "s.maxillary-sinus.L": 79,
+   "s.frontal-sinus.R": 43,
+   "s.frontal-sinus.L": 18,
+   "s.sphenoid-sinus.L": 33,
+   "s.sphenoid-sinus.R": 36,
+   "s.frontal-recess.R": 17,
+   "s.agger-nasi-cell.R": 3,
+   "s.agger-nasi-cell.L": 4,
+   "s.ethmoid-bulla.R": 4,
+   "s.anterior-ethmoid-cells.L": 28,
+   "s.anterior-ethmoid-cells.R": 1,
+   "s.posterior-ethmoid-cells.L": 30,
+   "s.posterior-ethmoid-cells.R": 8,
+   "ethmoid.R": 3,
+   "ethmoid.L": 4,
+   "s.nasopharynx.M": 16,
+   "s.nasal-cavity.L": 44,
+   "s.nasal-cavity.R": 38
+  },
+  "seeds_dropped": {
+   "frontal sinus": 1,
+   "frontal recess (above the frontal sinus floor)": 8,
+   "frontal recess": 4,
+   "anterior ethmoid": 2,
+   "posterior ethmoid air cells": 3,
+   "inferior turbinate": 20,
+   "middle turbinate": 2,
+   "hiatus semilunaris": 2
+  },
+  "pns_a_mm": -49.5,
+  "choanal_arch_s_mm": 12.5,
+  "sphenoid_split": "septum: 2 pieces after 1 mm erosion, sides ['L', 'R']",
+  "frontal_ostia": {
+   "R": {
+    "s_mm": 48.0,
+    "area_mm2": 53.666666666666664,
+    "centre_ras": [
+     5.864485981308412,
+     -20.348130841121495,
+     48.0
+    ]
+   },
+   "L": {
+    "s_mm": 50.5,
+    "area_mm2": 32.666666666666664,
+    "centre_ras": [
+     -8.83984375,
+     -17.81640625,
+     50.5
+    ]
+   }
+  },
+  "ethmoid_split_proxy": {
+   "R": {
+    "n_anterior_tips": 1,
+    "n_posterior_tips": 10,
+    "a_mm": -35.685
+   },
+   "L": {
+    "n_anterior_tips": 30,
+    "n_posterior_tips": 31,
+    "a_mm": -34.31
+   }
+  },
+  "basal_lamella_tips_a_mm": [
+   -38.8,
+   -38.8,
+   -38.9,
+   -36.2,
+   -38.7,
+   -38.8,
+   -38.8,
+   -36.9
+  ],
+  "volumes_cm3": {
+   "s.agger-nasi-cell.L": 0.04,
+   "s.agger-nasi-cell.R": 0.19,
+   "s.anterior-ethmoid-cells.L": 0.87,
+   "s.anterior-ethmoid-cells.R": 0.24,
+   "s.ethmoid-bulla.R": 0.29,
+   "s.frontal-recess.L": 0.39,
+   "s.frontal-recess.R": 0.65,
+   "s.frontal-sinus.L": 0.53,
+   "s.frontal-sinus.R": 1.2,
+   "s.maxillary-sinus.L": 15.26,
+   "s.maxillary-sinus.R": 13.7,
+   "s.nasal-cavity.L": 2.76,
+   "s.nasal-cavity.R": 6.05,
+   "s.nasopharynx.M": 6.57,
+   "s.posterior-ethmoid-cells.L": 1.6,
+   "s.posterior-ethmoid-cells.R": 1.75,
+   "s.sphenoid-sinus.L": 2.31,
+   "s.sphenoid-sinus.R": 8.47
+  },
+  "ethmoid_complex_total_cm3": {
+   "R": 3.12,
+   "L": 2.9
+  },
+  "volume_refs": {
+   "s.maxillary-sinus": {
+    "range": [
+     8,
+     25
+    ],
+    "cite": "Sahlstrand-Johnson 2011 doi:10.1186/1471-2342-11-8: 15.7 +/- 5.3; Pirner 2009 doi:10.1007/s00405-008-0777-7: 17.4 / 17.9"
+   },
+   "s.frontal-sinus": {
+    "range": [
+     0.5,
+     11
+    ],
+    "cite": "Pirner 2009: 4.2 / 4.0; Sanchez Fernandez 2000 doi:10.1080/000164800750001080: 3.7 (SD 3.6)"
+   },
+   "s.sphenoid-sinus": {
+    "range": [
+     1,
+     11
+    ],
+    "cite": "Pirner 2009: 5.3 / 5.5; Sanchez Fernandez 2000: 3.5 (SD 2.6)"
+   },
+   "ethmoid": {
+    "range": [
+     2.5,
+     9
+    ],
+    "cite": "Sanchez Fernandez 2000: 5.5 (SD 2.0); Park 2010 doi:10.1016/j.ijporl.2010.08.018: 4.5 +/- 0.9 (anterior + posterior ethmoid, incl. agger, bulla, recess cells)"
+   }
+  },
+  "sanity": {
+   "s.frontal-sinus.L": {
+    "cm3": 0.53,
+    "ref_range": [
+     0.5,
+     11
+    ],
+    "outlier": false
+   },
+   "s.frontal-sinus.R": {
+    "cm3": 1.2,
+    "ref_range": [
+     0.5,
+     11
+    ],
+    "outlier": false
+   },
+   "s.maxillary-sinus.L": {
+    "cm3": 15.26,
+    "ref_range": [
+     8,
+     25
+    ],
+    "outlier": false
+   },
+   "s.maxillary-sinus.R": {
+    "cm3": 13.7,
+    "ref_range": [
+     8,
+     25
+    ],
+    "outlier": false
+   },
+   "s.sphenoid-sinus.L": {
+    "cm3": 2.31,
+    "ref_range": [
+     1,
+     11
+    ],
+    "outlier": false
+   },
+   "s.sphenoid-sinus.R": {
+    "cm3": 8.47,
+    "ref_range": [
+     1,
+     11
+    ],
+    "outlier": false
+   },
+   "ethmoid complex.R": {
+    "cm3": 3.12,
+    "ref_range": [
+     2.5,
+     9
+    ],
+    "outlier": false
+   },
+   "ethmoid complex.L": {
+    "cm3": 2.9,
+    "ref_range": [
+     2.5,
+     9
+    ],
+    "outlier": false
+   }
+  },
+  "tip_hits": {
+   "maxillary sinus": {
+    "id": "s.maxillary-sinus",
+    "n": 113,
+    "hit_pct": 90.3,
+    "hit_pct_within_1.5mm": 100.0
+   },
+   "frontal sinus": {
+    "id": "s.frontal-sinus",
+    "n": 62,
+    "hit_pct": 9.7,
+    "hit_pct_within_1.5mm": 80.6
+   },
+   "sphenoid sinus": {
+    "id": "s.sphenoid-sinus",
+    "n": 69,
+    "hit_pct": 98.6,
+    "hit_pct_within_1.5mm": 100.0
+   },
+   "frontal recess": {
+    "id": "s.frontal-recess",
+    "n": 27,
+    "hit_pct": 55.6,
+    "hit_pct_within_1.5mm": 70.4
+   },
+   "frontal sinus drainage pathway": {
+    "id": "s.frontal-recess",
+    "n": 2,
+    "hit_pct": 50.0,
+    "hit_pct_within_1.5mm": 100.0
+   },
+   "agger nasi cell": {
+    "id": "s.agger-nasi-cell",
+    "n": 7,
+    "hit_pct": 0.0,
+    "hit_pct_within_1.5mm": 85.7
+   },
+   "ethmoid bulla": {
+    "id": "s.ethmoid-bulla",
+    "n": 4,
+    "hit_pct": 25.0,
+    "hit_pct_within_1.5mm": 100.0
+   },
+   "anterior ethmoid": {
+    "id": "s.anterior-ethmoid-cells",
+    "n": 24,
+    "hit_pct": 29.2,
+    "hit_pct_within_1.5mm": 91.7
+   },
+   "anterior ethmoid sinus": {
+    "id": "s.anterior-ethmoid-cells",
+    "n": 7,
+    "hit_pct": 42.9,
+    "hit_pct_within_1.5mm": 100.0
+   },
+   "posterior ethmoid": {
+    "id": "s.posterior-ethmoid-cells",
+    "n": 22,
+    "hit_pct": 81.8,
+    "hit_pct_within_1.5mm": 100.0
+   },
+   "posterior ethmoid air cells": {
+    "id": "s.posterior-ethmoid-cells",
+    "n": 19,
+    "hit_pct": 57.9,
+    "hit_pct_within_1.5mm": 84.2
+   },
+   "nasopharynx": {
+    "id": "s.nasopharynx",
+    "n": 16,
+    "hit_pct": 100.0,
+    "hit_pct_within_1.5mm": 100.0
+   }
+  },
+  "unassigned_air_cm3": 2.76,
+  "landmarks": {
+   "lm.anterior-nasal-spine.M": {
+    "method": "image search: anterior-most bone within 7 px of the midsagittal plane at the nasal floor (labels3d.find_ans)"
+   },
+   "lm.greater-palatine-foramen.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 19,
+    "spread_mm": 2.78
+   },
+   "lm.foramen-rotundum-anterior.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 2,
+    "spread_mm": 0.32
+   },
+   "lm.foramen-rotundum-anterior.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 3,
+    "spread_mm": 0.62
+   },
+   "lm.vidian-canal-anterior.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 3,
+    "spread_mm": 0.62
+   },
+   "s.foramen-ovale.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 7,
+    "spread_mm": 1.25
+   },
+   "lm.sphenopalatine-foramen.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 5,
+    "spread_mm": 1.24
+   },
+   "lm.infraorbital-foramen.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 13,
+    "spread_mm": 3.65
+   },
+   "lm.sphenoid-ostium.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 7,
+    "spread_mm": 3.21
+   },
+   "lm.sphenoid-ostium.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 2,
+    "spread_mm": 0.31
+   },
+   "s.foramen-lacerum.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 3,
+    "spread_mm": 0.62
+   },
+   "s.anterior-clinoid-process.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 5,
+    "spread_mm": 0.63
+   },
+   "s.superior-orbital-fissure.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 4,
+    "spread_mm": 1.0
+   },
+   "s.superior-orbital-fissure.L": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 4,
+    "spread_mm": 1.0
+   },
+   "s.petrous-apex.R": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 6,
+    "spread_mm": 0.96
+   },
+   "s.sella-turcica.M": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 17,
+    "spread_mm": 2.88
+   },
+   "s.dorsum-sellae.M": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 10,
+    "spread_mm": 1.56
+   },
+   "s.crista-galli.M": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 9,
+    "spread_mm": 1.28
+   },
+   "s.clivus.M": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 3,
+    "spread_mm": 0.62
+   },
+   "s.vomer.M": {
+    "method": "median of UW arrow tips (axial + sagittal)",
+    "n_tips": 6,
+    "spread_mm": 0.94
+   },
+   "lm.crista-galli-apex.M": {
+    "method": "highest bone (display >= 125) within 3 mm of the MSP and 6 mm (AP) of the crista galli tips"
+   },
+   "lm.dorsum-sellae-tip.M": {
+    "method": "highest bone (display >= 125) within 3 mm of the MSP and 5 mm (AP) of the dorsum tips"
+   },
+   "lm.sella-floor-center.M": {
+    "method": "half-level crossing between the fossa contents and the sphenoid air below the sella tips, on the midline at the tips' AP position"
+   },
+   "lm.frontal-ostium.R": {
+    "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
+    "area_mm2": 53.666666666666664
+   },
+   "lm.frontal-ostium.L": {
+    "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
+    "area_mm2": 32.666666666666664
+   }
+  }
+ },
+ "meshes": {
+  "core": {
+   "file": "core.glb.gz",
+   "bytes": 1377029,
+   "bytes_uncompressed": 1871300,
+   "triangles": 155998
+  },
+  "ethmoid-frontal": {
+   "file": "ethmoid-frontal.glb.gz",
+   "bytes": 299933,
+   "bytes_uncompressed": 410840,
+   "triangles": 33442
+  },
+  "sphenoid-sellar": {
+   "file": "sphenoid-sellar.glb.gz",
+   "bytes": 123931,
+   "bytes_uncompressed": 170076,
+   "triangles": 13998
+  }
  }
 }

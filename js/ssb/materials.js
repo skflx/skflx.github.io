@@ -527,6 +527,27 @@ const SPEC = {
 };
 const PLAIN_ROUGHNESS = 0.78;
 
+/* The --ssb-* token (without the prefix) a material kind is coloured by, or
+   null for an unknown kind. The CT label overlay colours its outlines the
+   same way (mode-ct.js), so a structure is one colour in 3D and on CT. */
+export function kindToken(kind) {
+    return Object.prototype.hasOwnProperty.call(SPEC, kind) ? SPEC[kind].token : null;
+}
+
+/* The categorical air-cell hues by identity: each IFAC frontal recess cell
+   has its own --ssb-cell-* token (the ethmoid cells without one are slate,
+   cell-ethmoid). The frontal-recess diorama and the CT label overlay both
+   read this table. */
+export const CELL_TINT = Object.freeze({
+    's.agger-nasi-cell': 'cell-anc',
+    'v.supra-agger-cell': 'cell-sac',
+    'v.supra-agger-frontal-cell': 'cell-safc',
+    'v.suprabullar-cell': 'cell-sbc',
+    'v.suprabullar-frontal-cell': 'cell-sbfc',
+    'v.supraorbital-ethmoid-cell': 'cell-soec',
+    'v.frontal-septal-cell': 'cell-fsc',
+});
+
 /* Every --ssb-* colour token this library reads besides the categorical
    `tint`s (tools/test-ssb.mjs checks each is declared for both themes). */
 export const TOKENS = Object.freeze([...new Set([

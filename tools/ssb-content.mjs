@@ -43,7 +43,7 @@ const ENUM = {
   kind: ['bone', 'bone-part', 'cell', 'sinus', 'space', 'opening', 'mucosa', 'cartilage', 'artery', 'vein',
     'venous-sinus', 'nerve', 'ganglion', 'dura', 'brain', 'muscle', 'tendon', 'fat', 'gland', 'duct', 'ligament', 'region'],
   region: ['nasal-cavity', 'septum', 'lateral-wall', 'maxillary', 'lacrimal', 'nasopharynx', 'ppf', 'itf', 'ethmoid',
-    'frontal', 'olfactory', 'orbit', 'acf', 'sphenoid', 'sellar', 'parasellar', 'suprasellar', 'clival', 'petrous', 'cvj'],
+    'frontal', 'olfactory', 'orbit', 'acf', 'sphenoid', 'sellar', 'parasellar', 'suprasellar', 'clival', 'petrous', 'cvj', 'multiple'],
   geo: ['specimen', 'sweep', 'diorama', 'point', 'none'],
   rel: ['medial-to', 'lateral-to', 'anterior-to', 'posterior-to', 'superior-to', 'inferior-to', 'borders', 'wall-of',
     'attaches-to', 'contains', 'passes-through', 'transmits', 'drains-to', 'opens-into', 'branch-of', 'supplies',
@@ -192,6 +192,31 @@ function checkEnums(key, e, where, err) {
     for (const p of e.pearls || []) one('pearls.tier', ENUM.tier, p && p.tier);
   }
   if (key === 'sources') { one('type', ENUM.srcType); if (typeof e.verified !== 'boolean') err(`${where}: verified must be boolean`); }
+}
+
+/* Geometry must name graph entities: every "<id>.<side>" in the specimen's
+   model packs, label table and landmarks resolves to an id in the graph
+   (docs/ssb.md §9, geometry ↔ graph). Returns error strings. */
+const GEO_REF = /^((?:s|lm|v|c|m|h|pr|p|t|pw|dz)\.[a-z0-9]+(?:-[a-z0-9]+)*)\.(R|L|M)$/;
+export function validateGeometry(index, root = ROOT) {
+  const errors = [];
+  const files = ['ssb/models/packs.json', 'ssb/geometry/labels.json', 'ssb/geometry/landmarks.json'];
+  for (const rel of files) {
+    const abs = path.join(root, rel);
+    if (!fs.existsSync(abs)) continue;
+    let data;
+    try { data = JSON.parse(fs.readFileSync(abs, 'utf8')); } catch (e) { errors.push(`${rel}: not valid JSON — ${e.message}`); continue; }
+    const seen = new Set();
+    const walk = (v) => {
+      if (typeof v === 'string') { const m = GEO_REF.exec(v); if (m) seen.add(m[1]); }
+      else if (Array.isArray(v)) v.forEach(walk);
+      else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) { const m = GEO_REF.exec(k); if (m) seen.add(m[1]); walk(x); }
+    };
+    walk(data);
+    if (!seen.size) errors.push(`${rel}: names no graph ids`);
+    for (const id of seen) if (!index.has(id)) errors.push(`${rel}: ${id} is not in the graph`);
+  }
+  return errors;
 }
 
 export function contentFiles() {

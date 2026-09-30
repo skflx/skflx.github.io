@@ -5,21 +5,26 @@
    where WebGL 2 exists, and scene.js (which pulls in three.js) is loaded
    with a dynamic import so a failure there degrades to graph mode instead
    of taking the page down. The variant lab (mode-lab.js, ui-lab.js) mounts
-   once both exist. Nothing here throws to a blank page: a problem becomes
-   a message in the place the missing piece would have been.
+   once both exist. The CT stage (mode-ct.js, ui-ct.js) needs only the graph:
+   it is drawn on 2D canvases from typed arrays, so it works with no WebGL
+   at all (the documented fallback, docs/ssb.md 7.5). Nothing here throws to
+   a blank page: a problem becomes a message in the place the missing piece
+   would have been.
 
    window.__ssb is a read-only window for tests:
-   { frames, selection, caps, hash, lab, materials } (lab: mode-lab.js's
-   hook; materials: scene.js's hook on the tissue-material library).
+   { frames, selection, caps, hash, lab, ct, materials } (lab, ct: the
+   stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=b298c916';
-import { createStore, parseHash } from './state.js?v=a1cdba76';
-import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=418899ff';
+import { loadGraph } from './graph.js?v=7d4cef6f';
+import { createStore, parseHash } from './state.js?v=293241be';
+import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=5d0f3292';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
-import { mountLabControls } from './ui-lab.js?v=366f2db2';
-import { mountTree } from './ui-tree.js?v=a65a733c';
-import { mountSearch } from './ui-search.js?v=ac0317ba';
-import { mountPanel } from './ui-panel.js?v=84e7f24e';
+import { mountLabControls } from './ui-lab.js?v=e3714361';
+import { mountCt } from './mode-ct.js?v=3c976a67';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=77995a86';
+import { mountTree } from './ui-tree.js?v=d023a52d';
+import { mountSearch } from './ui-search.js?v=582c7673';
+import { mountPanel } from './ui-panel.js?v=4702e7d2';
 
 const $ = (id) => document.getElementById(id);
 
@@ -48,6 +53,7 @@ const caps = detect();
 let store = null;
 let stage = null;
 let lab = null;
+let ct = null;
 Object.defineProperty(window, '__ssb', {
     value: Object.freeze({
         get frames() { return stage ? stage.frames() : 0; },
@@ -55,6 +61,7 @@ Object.defineProperty(window, '__ssb', {
         get caps() { return caps; },
         get hash() { return store ? store.hash() : null; },
         get lab() { return lab ? lab.hook : null; },
+        get ct() { return ct ? ct.hook : null; },
         get materials() { return stage ? stage.materialsHook : null; },
     }),
 });
@@ -84,6 +91,8 @@ async function bootGraph() {
     wireNav();
     wireUrl();
     wireQuality();
+    wireStages();
+    bootCt(graph);
     return graph;
 }
 
@@ -132,12 +141,13 @@ function wireUrl() {
         try { history[mode + 'State'](null, '', location.pathname + location.search + hash); } catch (e) { /* sandboxed: keep going */ }
     };
     write('replace');   /* drop anything junk from the address bar */
-    /* A lab slider changes state many times a second; browsers rate-limit
-       history writes, so those settle for a moment before replacing. */
+    /* A lab slider or a CT crosshair drag changes state many times a second;
+       browsers rate-limit history writes, so those settle for a moment before
+       replacing. */
     let settle = 0;
     store.subscribe((state, prev, meta) => {
         clearTimeout(settle);
-        if (meta.source === 'slider' && state.selection === prev.selection) { settle = setTimeout(() => write('replace'), 250); return; }
+        if ((meta.source === 'slider' || meta.source === 'cursor') && state.selection === prev.selection) { settle = setTimeout(() => write('replace'), 250); return; }
         write(meta.source !== 'url' && state.selection !== prev.selection ? 'push' : 'replace');
     });
     const adopt = () => store.applyHash(location.hash);
@@ -155,6 +165,45 @@ function wireQuality() {
         seen = state.quality;
         if (stage) stage.setQuality(state.quality);
     });
+}
+
+/* The stage switch: the three stages are exclusive (specimen, lab, CT).
+   Which one is showing follows the store (`data-stage` on the app, the
+   pressed pill); the lab's own button is handled in ui-lab.js and the CT
+   button in ui-ct.js. Leaving for the specimen works without a 3D view too,
+   where it shows the "needs WebGL" message. */
+function wireStages() {
+    const app = $('ssb-app');
+    const stageSwitch = $('ssb-stage-mode');
+    const mark = () => {
+        const { lab: inLab, ct: inCt } = store.get();
+        const stage = inLab ? 'lab' : inCt ? 'ct' : 'specimen';
+        app.dataset.stage = stage;
+        for (const b of stageSwitch.querySelectorAll('button[data-stage]')) {
+            const on = b.dataset.stage === stage;
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            b.classList.toggle('active', on);
+        }
+    };
+    store.subscribe(mark);
+    mark();
+    const specimen = stageSwitch.querySelector('button[data-stage="specimen"]');
+    specimen.disabled = false;
+    specimen.addEventListener('click', () => store.leaveStage());
+}
+
+/* ---------------- CT (needs only the graph) ---------------- */
+
+function bootCt(graph) {
+    try {
+        const dom = buildCtDom($('ssb-ct'));
+        ct = mountCt({ store, graph, dom });
+        mountCtControls({ dom, ct, store, graph, stageSwitch: $('ssb-stage-mode') });
+    } catch (e) {
+        console.error(e);
+        const button = $('ssb-stage-mode').querySelector('button[data-stage="ct"]');
+        if (button) button.title = 'The CT stage could not start.';
+    }
 }
 
 /* ---------------- 3D stage ---------------- */
@@ -175,7 +224,7 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=1f7092c1');
+        const { createScene } = await import('./scene.js?v=bb954f63');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
             quality: parseHash(location.hash, () => false).quality || null,
@@ -195,7 +244,8 @@ async function bootStage() {
 function bootLab(graph, stageHandle) {
     const stageSwitch = $('ssb-stage-mode');
     if (!graph || !stageHandle) {
-        for (const b of stageSwitch.querySelectorAll('button')) b.title = 'The lab needs the 3D view, which is unavailable here.';
+        const button = stageSwitch.querySelector('button[data-stage="lab"]');
+        if (button) button.title = 'The lab needs the 3D view, which is unavailable here.';
         return;
     }
     lab = mountLab({
@@ -203,7 +253,7 @@ function bootLab(graph, stageHandle) {
         hud: $('ssb-hud'), label: $('ssb-part-label'), truth: $('ssb-truth'), note: $('ssb-stage-note'),
     });
     mountLabControls({
-        app: $('ssb-app'), root: $('ssb-lab'), dock: $('ssb-lab-dock'), dockBody: $('ssb-dock-body'), dockToggle: $('ssb-dock-toggle'),
+        root: $('ssb-lab'), dock: $('ssb-lab-dock'), dockBody: $('ssb-dock-body'), dockToggle: $('ssb-dock-toggle'),
         sheetHost: $('ssb-lab-sheet'), panel: $('ssb-panel'), handle: $('ssb-sheet-handle'), tabs: $('ssb-sheet-tabs'),
         title: $('ssb-sheet-title'), hud: $('ssb-hud'), stageHost: $('ssb-stage'),
         stageSwitch, graph, store, dioramas: DIORAMAS, views: lab,

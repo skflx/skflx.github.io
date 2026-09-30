@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "dims": [
+    209,
+    225,
+    193
+  ],
+  "spacing": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "affine": [
+    [
+      0.5,
+      0,
+      0,
+      -52.0
+    ],
+    [
+      0,
+      0.5,
+      0,
+      -90.0
+    ],
+    [
+      0,
+      0,
+      0.5,
+      -16.0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "affineNote": "voxel (i,j,k,1) -> RAS mm (docs/ssb.md §4); row-major",
+  "dtype": "uint8",
+  "values": {
+    "kind": "display",
+    "note": "bone-window display level from the source images, not HU. toHU assumes a linear window through air = 45 -> -1000 HU and brain = 111 -> +35 HU (about 15.7 HU per level, W ~4000 / L ~300); uncertain by roughly +/-50 HU in soft tissue and more near saturation. 0 = no data (outside the reconstruction circle, and the masked face).",
+    "toHU": [
+      [
+        0,
+        -1000
+      ],
+      [
+        45,
+        -1000
+      ],
+      [
+        226,
+        1838
+      ],
+      [
+        255,
+        2293
+      ]
+    ]
+  },
+  "windows": {
+    "bone": {
+      "center": 128,
+      "width": 255
+    },
+    "sinus": {
+      "center": 96,
+      "width": 128
+    },
+    "soft": {
+      "center": 111,
+      "width": 26
+    }
+  },
+  "labels": {
+    "file": "labels.u16.gz",
+    "dtype": "uint16",
+    "table": "../geometry/labels.json"
+  },
+  "specimen": "uw-axial-sagittal",
+  "license": "ssb/LICENSE-data.md"
+}

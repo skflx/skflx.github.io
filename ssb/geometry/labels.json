@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "labels": {
+    "1": "s.agger-nasi-cell.L",
+    "2": "s.agger-nasi-cell.R",
+    "3": "s.anterior-ethmoid-cells.L",
+    "4": "s.anterior-ethmoid-cells.R",
+    "5": "s.ethmoid-bulla.R",
+    "6": "s.frontal-recess.L",
+    "7": "s.frontal-recess.R",
+    "8": "s.frontal-sinus.L",
+    "9": "s.frontal-sinus.R",
+    "10": "s.maxillary-sinus.L",
+    "11": "s.maxillary-sinus.R",
+    "12": "s.nasal-cavity.L",
+    "13": "s.nasal-cavity.R",
+    "14": "s.nasopharynx.M",
+    "15": "s.posterior-ethmoid-cells.L",
+    "16": "s.posterior-ethmoid-cells.R",
+    "17": "s.sphenoid-sinus.L",
+    "18": "s.sphenoid-sinus.R"
+  }
+}

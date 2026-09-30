@@ -8,7 +8,7 @@
    <details>; selecting an entity opens its ancestors and marks it
    aria-current.
    ============================================================= */
-import { OTHER_GROUPS, REGION_LABEL, REGION_ORDER, KIND_LABEL, KIND_ORDER } from './graph.js?v=b298c916';
+import { OTHER_GROUPS, REGION_LABEL, REGION_ORDER, KIND_LABEL, KIND_ORDER } from './graph.js?v=7d4cef6f';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

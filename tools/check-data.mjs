@@ -28,7 +28,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
-import { validate as validateSsb, contentFiles as ssbFiles } from './ssb-content.mjs';
+import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => path.join(ROOT, p);
@@ -244,6 +244,9 @@ function checkSsb() {
   ok(errors.length === 0, `ssb: ${files.length} file(s), graph consistent`,
     `ssb: ${errors.length} problem(s) (node tools/ssb-content.mjs):\n        ` + errors.slice(0, 20).join('\n        '));
   ok(index.size > 0, 'ssb: graph has entities', 'ssb: content files present but empty');
+  const geo = validateSsbGeometry(index);
+  ok(geo.length === 0, 'ssb: specimen geometry names only graph ids',
+    `ssb: ${geo.length} geometry reference problem(s):\n        ` + geo.slice(0, 20).join('\n        '));
 }
 
 /* ---- run ---- */

@@ -65,6 +65,17 @@
   /* Parts of the selected entity glow with this. */
   --ssb-select: #FFB000;
 
+  /* CT stage: dark in both themes (like the endoscope and Airway's stage).
+     The orientation letters use the gizmo's axis hues, lightened for a dark
+     ground; the crosshair is the selection colour (it marks what is selected). */
+  --ssb-ct-bg: #0b0d0e;
+  --ssb-ct-ink: #D6DADA;
+  --ssb-ct-ink-muted: #8C9496;
+  --ssb-ct-cross: var(--ssb-select);
+  --ssb-ct-axis-r: #E0705A;
+  --ssb-ct-axis-a: #5FBF95;
+  --ssb-ct-axis-s: #86A2EE;
+
   --ssb-nav-w: clamp(14rem, 20vw, 20rem);
   --ssb-panel-w: clamp(18rem, 28vw, 27rem);
   --ssb-dock-w: 17rem;
@@ -101,6 +112,7 @@ html[data-theme="dark"] {
   --ssb-flow-particle: #F2FDFF;
   --ssb-hazard: #120C0A;
   --ssb-select: #FFC233;
+  --ssb-ct-bg: #060708;
 }
 
 /* ===== PAGE FRAME: topbar, notice, app fill the viewport ===== */
@@ -342,6 +354,122 @@ html[data-theme="dark"] {
 /* Sheet tabs + the lab controls' phone host (inert on desktop). */
 .ssb-sheet-tabs { flex: none; display: flex; gap: 0.35rem; padding: 0 var(--gutter) 0.55rem; }
 .ssb-lab-sheet { display: none; }
+
+/* ===== CT STAGE: three linked slice views + an info cell (docs/ssb.md 3, 5.6) ===== */
+.ssb-ct {
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; flex-direction: column; background: var(--ssb-ct-bg);
+}
+.ssb[data-stage="ct"] .ssb-stage-note { display: none; }
+.ssb-ct-grid {
+  flex: 1; min-height: 0; display: grid; gap: 1px; background: var(--rule-strong);
+  grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto;
+}
+.ssb-ct:not([data-status="ready"]) .ssb-ct-grid { visibility: hidden; }
+
+.ssb-ct-view {
+  position: relative; margin: 0; min-width: 0; min-height: 0;
+  background: var(--ssb-ct-bg); color: var(--ssb-ct-ink);
+}
+.ssb-ct-canvas {
+  position: absolute; inset: 0; display: block; width: 100%; height: 100%;
+  touch-action: none; cursor: crosshair;
+}
+.ssb-ct-canvas:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
+.ssb-ct-view[data-active="true"]::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; border: 1px solid var(--signal);
+}
+
+/* Orientation letters at the four edges, in the gizmo's axis hues. */
+.ssb-ct-o {
+  position: absolute; pointer-events: none;
+  font: 600 0.8rem/1 var(--font-mono); color: var(--ssb-ct-ink-muted);
+}
+.ssb-ct-o[data-edge="left"] { left: 0.5rem; top: 50%; transform: translateY(-50%); }
+.ssb-ct-o[data-edge="right"] { right: 0.5rem; top: 50%; transform: translateY(-50%); }
+.ssb-ct-o[data-edge="top"] { top: 0.4rem; left: 50%; transform: translateX(-50%); }
+.ssb-ct-o[data-edge="bottom"] { bottom: 0.4rem; left: 50%; transform: translateX(-50%); }
+.ssb-ct-o[data-letter="R"], .ssb-ct-o[data-letter="L"] { color: var(--ssb-ct-axis-r); }
+.ssb-ct-o[data-letter="A"], .ssb-ct-o[data-letter="P"] { color: var(--ssb-ct-axis-a); }
+.ssb-ct-o[data-letter="S"], .ssb-ct-o[data-letter="I"] { color: var(--ssb-ct-axis-s); }
+
+.ssb-ct-cap {
+  position: absolute; left: 0.5rem; top: 0.4rem; pointer-events: none;
+  display: flex; gap: 0.6rem; font: 500 0.7rem/1 var(--font-mono); letter-spacing: 0.04em;
+}
+.ssb-ct-name { text-transform: uppercase; letter-spacing: 0.08em; color: var(--ssb-ct-ink-muted); }
+.ssb-ct-pos { color: var(--ssb-ct-ink); }
+
+.ssb-ct-tip {
+  position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; white-space: nowrap;
+  padding: 0.2rem 0.45rem; font: 500 0.72rem/1.25 var(--font-sans);
+  color: var(--ssb-ct-ink); background: color-mix(in srgb, var(--ssb-ct-bg) 88%, transparent);
+  border: 1px solid var(--ssb-ct-ink-muted); border-radius: var(--radius);
+}
+
+/* The truth badge: a strip under the views (kept on one line; the title has the note). */
+.ssb-ct .ssb-ct-truth {
+  position: static; flex: none; max-width: none; margin: 0; padding: 0.3rem var(--gutter);
+  color: var(--signal-2); background: var(--surface); border: 0; border-top: 1px solid var(--rule-strong); border-radius: 0;
+  pointer-events: auto;
+}
+
+.ssb-ct-msg {
+  position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
+  text-align: center; color: var(--ssb-ct-ink-muted); background: var(--ssb-ct-bg);
+}
+
+/* The info cell follows the page theme. */
+.ssb-ct-info {
+  min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  padding: 0.35rem var(--gutter) 0.75rem; background: var(--surface); color: var(--ink);
+}
+.ssb-ct-sec { padding: 0.55rem 0 0.25rem; }
+.ssb-ct-kicker { margin: 0 0 0.4rem; }
+.ssb-ct-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.ssb-ct-sliders { margin-top: 0.4rem; }
+.ssb-ct-sliders > summary { cursor: pointer; font-size: 0.8rem; color: var(--ink-muted); }
+.ssb-ct-sliders[open] > summary { margin-bottom: 0.2rem; }
+.ssb-ct-slider { display: grid; grid-template-columns: 3rem minmax(0, 1fr) 2.2rem; align-items: center; gap: 0.5rem; }
+.ssb-ct-slider-label { font-size: 0.8rem; color: var(--ink-muted); }
+.ssb-ct-slider-value { font: 500 0.75rem/1 var(--font-mono); text-align: right; }
+.ssb-ct-slider .ssb-range { margin: 0.2rem 0; }
+.ssb-ct-check { display: flex; align-items: center; gap: 0.5rem; font-size: 0.84rem; cursor: pointer; }
+.ssb-ct-check input { flex: none; width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--ink); }
+.ssb-ct-check.is-off { opacity: 0.45; cursor: default; }
+.ssb-ct-readout { margin: 0; font: 400 0.75rem/1.5 var(--font-mono); color: var(--ink-muted); }
+.ssb-ct-readout-what { color: var(--ink); font-weight: 500; }
+.ssb-ct-keys { margin: 0; max-width: 28rem; font-size: 0.75rem; line-height: 1.45; color: var(--ink-muted); }
+.ssb-ct-legend { margin-top: 0.35rem; font-size: 0.8rem; }
+.ssb-ct-legend > summary { cursor: pointer; color: var(--ink-muted); }
+.ssb-ct-legend-list { list-style: none; margin: 0.3rem 0 0; padding: 0; max-height: 8rem; overflow-y: auto; }
+.ssb-ct-legend-list li { display: flex; align-items: center; gap: 0.45rem; padding: 0.1rem 0; }
+.ssb-ct-swatch { flex: none; width: 0.7rem; height: 0.7rem; border: 1px solid var(--rule-strong); border-radius: 1px; }
+.ssb-ct-legend-item {
+  margin: 0; padding: 0; background: none; border: 0; cursor: pointer; text-align: left;
+  font: inherit; color: inherit; text-decoration: underline; text-decoration-color: var(--ink-faint); text-underline-offset: 0.2em;
+}
+span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
+
+/* Phones: one plane at a time (the switcher picks it), the info cell below. */
+@media (max-width: 959px) {
+  .ssb-ct-view:not([data-active="true"]) { display: none; }
+  .ssb-ct-info { max-height: 15rem; }
+  .ssb-ct-sec { padding: 0.3rem 0 0.15rem; }
+  .ssb-ct-kicker, .ssb-ct-sec-keys { display: none; }
+  .ssb-ct-sec-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1.25rem; }
+  .ssb-ct-sec-labels .ssb-ct-legend { margin-top: 0; }
+  .ssb-ct-sec-labels .ssb-ct-legend[open] { flex: 1 1 100%; }
+}
+
+@media (min-width: 960px) {
+  .ssb-ct-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+  .ssb-ct-view[data-plane="axial"] { grid-area: 1 / 1; }
+  .ssb-ct-view[data-plane="coronal"] { grid-area: 1 / 2; }
+  .ssb-ct-view[data-plane="sagittal"] { grid-area: 2 / 1; }
+  .ssb-ct-info { grid-area: 2 / 2; }
+  .ssb-ct-sec-planes { display: none; }
+}
 
 /* ===== PANEL: bottom sheet on phones, right column on desktop ===== */
 .ssb-panel {

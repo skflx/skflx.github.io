@@ -5,3 +5,5 @@ scipy==1.17.1
 scikit-image==0.26.0
 rapidocr-onnxruntime==1.4.4
 onnxruntime==1.30.0
+fast-simplification==0.2.0
+matplotlib==3.11.2

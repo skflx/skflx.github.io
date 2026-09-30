@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/ssb.css?v=30c8c975">
+    <link rel="stylesheet" href="css/ssb.css?v=2a8acee3">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -59,6 +59,7 @@
                     <span class="site-kicker">Stage</span>
                     <button class="site-pill active" type="button" data-stage="specimen" aria-pressed="true" disabled title="The reference specimen (a placeholder until it is built)">Specimen</button>
                     <button class="site-pill" type="button" data-stage="lab" aria-pressed="false" disabled title="Variant lab: parametric dioramas">Lab</button>
+                    <button class="site-pill" type="button" data-stage="ct" aria-pressed="false" disabled title="Triplanar CT of the reference specimen">CT</button>
                 </div>
             </div>
             <div class="ssb-stage" id="ssb-stage">
@@ -72,6 +73,7 @@
                 </div>
                 <div class="ssb-hud" id="ssb-hud" hidden></div>
                 <p class="ssb-stage-msg" id="ssb-stage-msg" hidden></p>
+                <section class="ssb-ct" id="ssb-ct" aria-label="CT: axial, coronal and sagittal slices" hidden></section>
                 <span class="ssb-truth" id="ssb-truth" hidden></span>
                 <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Placeholder scene &middot; 10 mm grid</span>
             </div>
@@ -93,7 +95,7 @@
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=cd8dc051"></script>
+    <script type="module" src="js/ssb/main.js?v=1eb0f472"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>

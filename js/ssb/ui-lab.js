@@ -12,7 +12,9 @@
    edge — the canvas starts beside it, so the model is never covered — that
    collapses to a rail; on phones the bottom sheet, which gains Controls /
    Details tabs in lab mode (a click on a part switches it to Details).
-   View buttons cut the camera to the diorama's standard views.
+   View buttons cut the camera to the diorama's standard views. Which stage
+   is showing (the pressed pill, `data-stage` on the app) and the way back to
+   the specimen are main.js's; this owns the Lab pill.
    ============================================================= */
 
 function el(tag, cls, text) {
@@ -26,7 +28,7 @@ const fmt = (v) => String(Number(Number(v).toFixed(2)));
 
 const VIEW_LABEL = { sagittal: ['Sagittal', 'Sagittal'], coronal: ['Coronal', 'Coronal'], axial: ['Axial', 'Axial'], oblique: ['¾', 'Three-quarter'] };
 
-export function mountLabControls({ app, root, dock, dockBody, dockToggle, sheetHost, panel, handle, tabs, title, hud, stageHost, stageSwitch,
+export function mountLabControls({ root, dock, dockBody, dockToggle, sheetHost, panel, handle, tabs, title, hud, stageHost, stageSwitch,
     graph, store, dioramas, views }) {
     const names = Object.keys(dioramas);
     const remembered = {};          /* per diorama: last parameters, for switching back */
@@ -205,12 +207,6 @@ export function mountLabControls({ app, root, dock, dockBody, dockToggle, sheetH
 
     function sync() {
         const cur = lab();
-        app.dataset.stage = cur ? 'lab' : 'specimen';
-        for (const b of stageSwitch.querySelectorAll('button[data-stage]')) {
-            const on = (b.dataset.stage === 'lab') === !!cur;
-            b.setAttribute('aria-pressed', on ? 'true' : 'false');
-            b.classList.toggle('active', on);
-        }
         root.hidden = !cur;
         if (!cur) { place(); return; }
         remembered[cur.name] = cur.params;
@@ -337,10 +333,8 @@ export function mountLabControls({ app, root, dock, dockBody, dockToggle, sheetH
     });
 
     stageSwitch.addEventListener('click', (e) => {
-        const b = e.target.closest('button[data-stage]');
-        if (!b || b.disabled) return;
-        if (b.dataset.stage === 'specimen') { store.setLab(null); return; }
-        if (lab()) return;
+        const b = e.target.closest('button[data-stage="lab"]');
+        if (!b || b.disabled || lab()) return;
         const name = lastLab || names[0];
         store.setLab({ name, params: remembered[name] || {} });
         if (!wide.matches) {
@@ -367,7 +361,7 @@ export function mountLabControls({ app, root, dock, dockBody, dockToggle, sheetH
     views.onView(markView);
     if (typeof wide.addEventListener === 'function') wide.addEventListener('change', onWide);
 
-    for (const b of stageSwitch.querySelectorAll('button[data-stage]')) b.disabled = false;
+    stageSwitch.querySelector('button[data-stage="lab"]').disabled = false;
     setView(lab() && !wide.matches && !store.get().selection ? 'controls' : 'details');
     sync();
 }

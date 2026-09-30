@@ -37,7 +37,8 @@
      skull-base slope (the graph says only that it slopes down posteriorly,
      s.fovea-ethmoidalis) and wall thicknesses: schematic; graph silent.
    ============================================================= */
-import { inside, bounds, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=318ffa60';
+import { inside, bounds, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=772eb244';
+import { CELL_TINT } from '../materials.js?v=bec7c740';
 
 export const TITLE = 'Frontal recess';
 export const SIDE = 'R';
@@ -515,7 +516,7 @@ export function build(THREE, params) {
 
     /* IFAC cells, each hued by identity. */
     for (const c of m.cells) {
-        add(mesh(THREE, geometry(THREE, c.solid), c.id, R, { kind: 'air-cell', tint: 'cell-' + c.key }, { code: c.code }));
+        add(mesh(THREE, geometry(THREE, c.solid), c.id, R, { kind: 'air-cell', tint: CELL_TINT[c.id] }, { code: c.code }));
     }
 
     /* The computed pathway. */

@@ -98,7 +98,7 @@ Required fields in **bold**.
 
 **`category`** (conditions): `inflammatory` `infectious` `fungal` `benign-neoplasm` `malignant-neoplasm` `fibro-osseous` `congenital` `cystic` `vascular` `traumatic` `iatrogenic` `idiopathic`.
 
-**`region`:** `nasal-cavity` `septum` `lateral-wall` `maxillary` `lacrimal` `nasopharynx` `ppf` `itf` `ethmoid` `frontal` `olfactory` `orbit` `acf` `sphenoid` `sellar` `parasellar` `suprasellar` `clival` `petrous` `cvj`.
+**`region`:** `nasal-cavity` `septum` `lateral-wall` `maxillary` `lacrimal` `nasopharynx` `ppf` `itf` `ethmoid` `frontal` `olfactory` `orbit` `acf` `sphenoid` `sellar` `parasellar` `suprasellar` `clival` `petrous` `cvj` `multiple` (a container spanning regions, e.g. the specimen's bony envelope).
 
 **`geo`** (how the thing gets geometry, `docs/ssb.md` §5): `specimen` (segmented from the reference CT) · `sweep` (tube along an authored centerline — vessels, nerves, ducts) · `diorama` (parametric teaching model) · `point` (landmark only) · `none` (conceptual).
 

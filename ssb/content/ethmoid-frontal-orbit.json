@@ -2830,6 +2830,20 @@
         "src.rhoton-2002-acf"
       ],
       "review": "draft"
+    },
+    {
+      "id": "s.skull-base-region",
+      "name": "Bony framework (specimen envelope)",
+      "kind": "region",
+      "region": "multiple",
+      "tier": 1,
+      "what": "The bone of the sinonasal region and ventral skull base in the reference specimen, drawn as one surface for orientation.",
+      "why": "It is context, not one bone: individual bones, lamellae and resection units are their own entries and carry the anatomy that matters at the table.",
+      "geo": "specimen",
+      "src": [
+        "src.uw-ct-sinus-atlas"
+      ],
+      "review": "draft"
     }
   ],
   "landmarks": [
