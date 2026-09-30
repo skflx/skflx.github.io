@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Self-contained: every fetch (ssb/**, js/**) is same-origin (docs/ssb.md section 8). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>SSB Sinus &amp; Skull Base 3D | skflx.MD</title>
+    <meta name="description" content="A traversable 3D atlas of the paranasal sinuses and ventral skull base for otolaryngology residents. Draft content; not a clinical reference.">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <script src="js/theme-boot.js?v=61b69b81"></script>
+    <link rel="stylesheet" href="css/site.css?v=3efb923c">
+    <link rel="stylesheet" href="css/ssb.css?v=3260c6c4">
+</head>
+<body class="ssb-body">
+    <header class="site-topbar">
+        <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
+        <span class="site-topbar-title">SSB &middot; 3D atlas</span>
+        <div class="site-topbar-actions">
+            <a class="site-navlink" href="index.html#tools">Tools</a>
+            <button class="site-theme-toggle" type="button" aria-label="Night mode" aria-pressed="false">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <p class="ssb-notice" role="note"><strong>Draft content.</strong> Not a clinical reference; nothing here has been verified yet.</p>
+    <noscript><p class="ssb-problem">SSB needs JavaScript: the structure list, the panels and the 3D view are all drawn by script.</p></noscript>
+
+    <main class="ssb" id="ssb-app" data-nav="closed">
+        <h1 class="visually-hidden">SSB: Sinus and Skull Base 3D</h1>
+        <nav class="ssb-nav" id="ssb-nav" aria-label="Structures and search">
+            <div class="ssb-nav-head">
+                <div class="ssb-nav-title">
+                    <span class="site-kicker">Structures</span>
+                    <button class="site-btn site-btn-sm ssb-nav-close" id="ssb-nav-close" type="button">Close</button>
+                </div>
+                <label class="visually-hidden" for="ssb-search">Search structures, conditions and procedures</label>
+                <input class="ssb-search" id="ssb-search" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search"
+                    placeholder="Search: uncinate, Keros, AEA&hellip;">
+            </div>
+            <div class="ssb-nav-scroll">
+                <div id="ssb-results" hidden></div>
+                <div id="ssb-tree"><p class="ssb-empty">Loading&hellip;</p></div>
+            </div>
+        </nav>
+
+        <div class="ssb-center">
+            <div class="ssb-toolbar">
+                <button class="site-btn site-btn-sm ssb-nav-toggle" id="ssb-nav-toggle" type="button" aria-controls="ssb-nav" aria-expanded="false">Structures</button>
+                <div class="ssb-tier" id="ssb-tier" role="group" aria-label="Depth">
+                    <span class="site-kicker">Depth</span>
+                    <button class="site-pill" type="button" data-tier="1" aria-pressed="true" title="Depth 1: junior"><span>1</span><span class="ssb-tier-name">Junior</span></button>
+                    <button class="site-pill" type="button" data-tier="2" aria-pressed="false" title="Depth 2: senior"><span>2</span><span class="ssb-tier-name">Senior</span></button>
+                    <button class="site-pill" type="button" data-tier="3" aria-pressed="false" title="Depth 3: fellow"><span>3</span><span class="ssb-tier-name">Fellow</span></button>
+                </div>
+            </div>
+            <div class="ssb-stage" id="ssb-stage">
+                <canvas id="ssb-canvas" tabindex="0" aria-label="3D stage. A placeholder axis gizmo and grid; drag to orbit, scroll to zoom, arrow keys to pan."></canvas>
+                <div class="ssb-labels" id="ssb-labels" aria-hidden="true"></div>
+                <p class="ssb-stage-msg" id="ssb-stage-msg" hidden></p>
+                <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Placeholder scene &middot; 10 mm grid</span>
+            </div>
+        </div>
+
+        <aside class="ssb-panel" id="ssb-panel" data-sheet="closed" aria-label="Details">
+            <button class="ssb-sheet-handle" id="ssb-sheet-handle" type="button" aria-expanded="false" aria-controls="ssb-panel-body">
+                <span class="ssb-grabber" aria-hidden="true"></span>
+                <span class="ssb-sheet-title" id="ssb-sheet-title">Details</span>
+            </button>
+            <div class="ssb-panel-body" id="ssb-panel-body"><p class="ssb-empty">Loading&hellip;</p></div>
+        </aside>
+
+        <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
+    </main>
+
+    <script type="module" src="js/ssb/main.js?v=272feb8a"></script>
+    <script src="js/site.js?v=dd67d957"></script>
+</body>
+</html>

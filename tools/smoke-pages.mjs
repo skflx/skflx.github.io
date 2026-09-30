@@ -45,6 +45,18 @@ const PAGES = [
     ready: (p) => wait(p, () => !!document.querySelector('.ok-notice')
       && !document.getElementById('pwn') && !window.__pwned
       && /<img/.test(document.querySelector('.ok-notice').textContent)) },
+  /* SSB: the tree is built from the graph and the WebGL stage has drawn a
+     frame (window.__ssb is the read-only test window, js/ssb/main.js). */
+  { path: 'ssb.html', ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree button[data-id]').length > 0
+      && !!window.__ssb && window.__ssb.frames > 0) },
+  /* Regression, same class as the OKSAT one above: the hash is untrusted. A
+     payload in #s= must not become an element, must not run, and must not
+     select anything (ids are matched against the graph index). */
+  { path: 'ssb.html#s=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
+    ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree button[data-id]').length > 0
+      && !!window.__ssb && window.__ssb.selection === null
+      && !document.getElementById('pwn') && !window.__pwned
+      && !document.querySelector('#ssb-panel-body [data-entity]')) },
   { path: 'airway-jeopardy.html', ready: (p) => wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions)) },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
 ];

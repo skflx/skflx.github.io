@@ -18,15 +18,28 @@ vault. `tools/check-data.mjs` enforces the page rules below in CI.
    logic lives in `js/*.js`; the pre-paint theme is `js/theme-boot.js`.
    JSON-LD data blocks are fine.
 3. **Same-origin scripts only.** Third-party code is vendored byte-for-byte
-   into `js/vendor/` with its SHA-384 pinned (`js/vendor/README.md`).
+   into `js/vendor/` with its SHA-384 pinned (`js/vendor/README.md`). That
+   includes three.js (0.186.1, for `ssb.html`), whose ES-module build is
+   vendored with one patched import line per addon and no import map (an
+   import map would be an inline script). `type="module"` scripts from
+   same-origin files satisfy `script-src 'self'`; `tools/stamp-assets.mjs`
+   rejects bare or non-same-origin import specifiers in `js/ssb/`. Vendored
+   three.js contains no `eval`/`new Function`, workers or WebAssembly; SSB
+   model packs must stay free of embedded textures (a `blob:` image is
+   blocked by `img-src 'self'`).
 4. **`innerHTML` only with escaped data.** Anything that reaches markup goes
    through an `esc()`; anything from the URL (`location.search`/`hash`)
    goes through `textContent` or is matched against a known list first.
 5. **`target="_blank"` carries `rel="noopener"`** (plus `noreferrer` on the
    one-pager).
 6. **Self-contained pages make no remote request at all** —
-   `index.html`, `cpt-search.html`, `airway-jeopardy.html`. Their CSPs
-   name no remote origin. OKSAT pages may fetch optional Google Fonts
+   `index.html`, `cpt-search.html`, `airway-jeopardy.html`, `ssb.html`.
+   Their CSPs name no remote origin. (`ssb.html` reads its content with
+   same-origin `fetch`, covered by `default-src 'self'`; its citation links
+   to DOI/PubMed are plain navigations built in `js/ssb/ui-panel.js` from
+   validated ids, `rel="noopener"`, and request nothing until clicked. The
+   URL hash is untrusted: `js/ssb/state.js` matches it against the graph
+   index and it never reaches markup.) OKSAT pages may fetch optional Google Fonts
    (only when a non-default typeface is picked).
 
 Changing any of these (a new CDN, loosening a CSP) is an owner decision —

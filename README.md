@@ -93,7 +93,11 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 │
-├── ssb/                    # SSB 3D atlas — design stage, no page yet (docs/ssb.md)
+├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (phase 1: graph mode; docs/ssb.md)
+│   ├── css/ssb.css         #   its layout and --ssb-* tokens
+│   ├── js/ssb/             #   ES modules (graph, state, scene, UI); stamps.js is generated
+│   └── js/vendor/three-0.186.1/  # three.js, pinned and self-hosted
+├── ssb/                    # SSB data (knowledge graph, references)
 │   ├── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
 │   └── reference/          #   external atlases crosswalked to the graph (text only)
 │

@@ -24,6 +24,8 @@ bower_components/
 # Build Outputs
 dist/
 build/
+# ...except the vendored three.js module build (js/vendor/README.md): it is shipped, not generated
+!js/vendor/three-*/build/
 
 # Logs
 *.log
@@ -45,3 +47,6 @@ scratchpad*/
 
 # SSB pipeline drop zone: generated images and audits awaiting review (docs/ssb-imagegen.md)
 tools/ssb-pipeline/incoming/
+
+# Python bytecode (offline pipelines)
+__pycache__/

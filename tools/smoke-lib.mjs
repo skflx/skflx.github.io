@@ -6,6 +6,8 @@
    robust Chromium launcher that works both in this sandbox (pinned
    /opt/pw-browsers build) and in CI (npx playwright install chromium),
    and a console-error collector keyed off tools/console-allowlist.json.
+   The launcher enables software WebGL (SwiftShader) so ssb.html's 3D stage
+   renders in headless Chromium without a GPU; other pages ignore it.
 
    Playwright is a devDependency; nothing shipped imports this.
    ============================================================= */
@@ -73,7 +75,8 @@ export function chromiumExecutable() {
 export async function launchBrowser(opts = {}) {
   const { chromium } = await import('playwright');
   const executablePath = chromiumExecutable();
-  const launch = { headless: !opts.headed };
+  /* WebGL without a GPU (docs/ssb.md 9): ANGLE on SwiftShader. */
+  const launch = { headless: !opts.headed, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] };
   if (executablePath) launch.executablePath = executablePath;
   return chromium.launch(launch);
 }

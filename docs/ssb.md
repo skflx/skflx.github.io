@@ -1,10 +1,11 @@
 # SSB — Sinus & Skull Base 3D: architecture and conventions
 
-**Status: design (2026-09).** No page ships yet. What exists: this
-architecture, the content schema (`docs/authoring-ssb.md`), its validator
-(`tools/ssb-content.mjs`, run by `tools/check-data.mjs`), the draft
-knowledge graph (`ssb/content/`), and the image-generation briefs
-(`docs/ssb-imagegen.md`). Build order and owner decisions: §12–§13.
+**Status: phase 1 (2026-09).** `ssb.html` runs graph mode — tree, search,
+depth filter, info panels, deep links — over the draft knowledge graph
+(`ssb/content/`, schema `docs/authoring-ssb.md`, validator
+`tools/ssb-content.mjs`), with a placeholder 3D stage on vendored three.js.
+The reference specimen is being reconstructed from the UW atlas (§13).
+Build order and owner decisions: §12–§13.
 
 ## 0. What it is
 
