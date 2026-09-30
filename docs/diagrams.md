@@ -88,14 +88,21 @@ ASCII3D.define('id', {
     camera: { yaw: 30, pitch: 20,    // degrees; pitch > 0 looks down
               fit: 0.85,             // how much of the grid the geometry fills
               persp: 3.2,            // camera distance in scene radii; larger = flatter
-              frame: 'view',         // 'view' (tight, centered) | 'sphere' (safe for a spin)
+              frame: 'view',         // 'view' (tight, centered) | 'sphere' | 'turntable' (both spin-safe)
               offset: [0, 0],        // nudge the image, in cells
               target: [x, y, z] },   // orbit center (default: the geometry's center)
     motion: { spin: 18 },            // deg/s turntable, or { rock: 14, period: 12 } sway
     light: { dir: [-0.5, 0.6, -0.62], ambient: 0.14, diffuse: 0.78, spec: 0.35, shininess: 18 },
     fog: 0.4,                        // depth cue: far cells thin out
-    outline: true,                   // contour glyphs on silhouettes and depth jumps
+    outline: true,                   // contour glyphs on silhouettes, depth jumps, part edges
     edgeDepth: 0.18,                 // depth jump (in scene radii) that counts as an edge
+    ss: [2, 4],                      // samples per cell, across x down (1 = one per cell); a cell's
+                                     // edge glyph follows the boundary through its samples
+    cover: [0.5, 0.3],               // share of a cell's samples that draws it / draws a thin feature
+    idEdges: true,                   // contour where two parts meet at different depths
+    idDepth: 0.045,                  // that depth gap in scene radii (default edgeDepth * 0.25)
+    crease: 40,                      // degrees: a normal break this sharp within a part draws a
+                                     // contour (off by default; for faceted or folded surfaces)
     ramp: '.:;=+*#@',                // shading glyphs, least ink -> most ink
     readout: true,                   // live HUD: "drag to turn" + angle (false hides it)
     interactive: true,               // drag / keys (false: display only)
@@ -105,8 +112,14 @@ ASCII3D.define('id', {
 ```
 
 Framing defaults to `'sphere'` when the scene spins and to `'view'`
-otherwise. Light is in view space, pointing toward the light, so the key
-light stays put as the object turns.
+otherwise. `'turntable'` is the opt-in spin-safe fit for tall or wide
+objects: it bounds the geometry by a vertical cylinder about the orbit
+target (its widest reach and its height) rather than a sphere, and fits
+that at the scene's pitch and perspective. For a tall, narrow figure it
+is much tighter than `'sphere'` yet still clears the grid at every yaw;
+dragging to a steeper pitch than the scene's own can clip it. Light is
+in view space, pointing toward the light, so the key light stays put as
+the object turns.
 
 ### Parts
 
@@ -117,8 +130,8 @@ Sampling counts only set smoothness.
 
 | `kind` | Parameters | Use it for |
 |---|---|---|
-| `surface` | `fn(u, v) → [x,y,z]`, `u`/`v: [a, b, n]`, `wrapU`/`wrapV`, `inkAt(u, v)` | Anything parametric: laminae, membranes, leaves, bands |
-| `heightfield` | `fn(x, z) → y`, `x`/`z: [a, b, n]`, `inkAt(x, z)` | Surfaces over a plane: response surfaces, terrain |
+| `surface` | `fn(u, v) → [x,y,z]`, `u`/`v: [a, b, n]`, `wrapU`/`wrapV`, `inkAt(u, v)`, `thick` | Anything parametric: laminae, membranes, leaves, bands |
+| `heightfield` | `fn(x, z) → y`, `x`/`z: [a, b, n]`, `inkAt(x, z)`, `thick` | Surfaces over a plane: response surfaces, terrain |
 | `tube` | `path(t) → [x,y,z]`, `t: [a, b, n]`, `radius` (number or `fn(t)`), `sides`, `inkAt(t)` | Ducts, nerves, vessels, electrode arrays. Frames are parallel-transported, so tubes never twist |
 | `torus` | `R`, `r` or `section: [w, h]`, `center`, `arc: [deg0, deg1]` (a C-shaped ring), `n`, `sides` | Rings, loops, canals |
 | `sphere` | `center`, `radius` or `radii: [a, b, c]`, `n` | Balls, ellipsoids |
@@ -126,6 +139,12 @@ Sampling counts only set smoothness.
 | `box` | `center`, `size: [w, h, d]`, `open: ['top', …]`, `n` | Blocks, trays, bars of a 3D chart |
 | `line` | `points: [[x,y,z], …]` or `path(t)` + `t`, `closed`, `glyph`, `dash: [on, off]`, `hidden: 'hide' \| 'dots'` | Axes, arcs, leaders in space, curves drawn over a surface |
 | `points` | `points`, `glyph` (default `o`) | Contacts, markers, arrowheads (`v`, `>`) |
+
+`thick` (surface and heightfield) gives a sheet a body: the grid is pushed
+out and in along its normals by half of `thick` each (in the part's own
+units, before `scale`) and closed with a rim along every edge that is not
+wrapped, so a thin plate seen edge-on or from behind still has an edge and
+a back. `inkAt` colors both faces and the rim alike.
 
 Lines choose glyphs from where they cross each cell: shallow runs give
 `_` or `-`, diagonals `/` or `\` (one per row), steep runs `|`. The
@@ -190,9 +209,35 @@ mark shadow; light text means a dark stage, so denser glyphs mark light.
 Per frame: an orbit camera (yaw about the world's vertical, then pitch)
 feeds a perspective projection into cells whose aspect is `CELL_ASPECT`
 (`js/ascii3d.js`, matched by `line-height` in `css/ascii3d.css`). Triangles
-are z-buffered at cell centers, with interpolated normals and two-sided
-Blinn-Phong lighting. Luminance picks a ramp glyph, and fog thins distant
-cells. A contour pass turns silhouette and depth-jump cells into `- | / \`.
+are z-buffered on a finer grid of samples, `ss` per cell, keeping each
+sample's depth, part, ink and normal. Two-sided Blinn-Phong shading runs
+only for the samples a cell keeps.
+
+Samples then resolve to cells. A cell's front is the nearest thing its
+samples cover (a sliver thinner than the thin `cover` share is looked
+past, so a far surface behind it still shows). Samples within `edgeDepth`
+of that front on the same part, or within `idDepth` on another, are
+inside; the rest (empty, much deeper, or another part at a different
+depth) are outside. The inside samples give the cell's luminance, depth,
+and majority ink and part. Luminance picks a ramp glyph, and fog thins
+distant cells. A cell short of the full `cover` share draws only as a
+thin feature, when no full cell stands beside it that is not much
+farther; otherwise it is the fringe of a bigger shape and would only
+thicken its outline.
+
+**Contours follow the edge.** When the boundary passes through a cell, its
+glyph comes from the inside/outside mask, measured in physical units (a
+cell is `CELL_ASPECT` tall): the boundary's angle and where it runs in the
+cell. Near-horizontal gives `_` when the edge runs low in the cell and `-`
+otherwise, about 45 degrees gives `/` or `\`, near-vertical gives `|`. A
+boundary that falls exactly on a cell border leaves no partial mask, so
+the four-neighbour test still marks it: a surface cell beside empty
+space, in front of a depth jump, or in front of another part by more than
+`idDepth`. `crease` adds a contour between neighbors of one part whose
+normals part by more than that angle. The shading ramp never uses
+`- | / \ _`, so they always read as contours. `ss: [1, 1]` with
+`idEdges: false` is the plain one-sample-per-cell look.
+
 Lines and points are depth-tested with a small bias, so a curve drawn on a
 surface still shows. Labels come last. The DOM gets one `<span>` per ink
 run, built with `textContent`.
