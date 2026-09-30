@@ -44,5 +44,9 @@ jobs:
       - name: Smoke-test every page
         run: node tools/smoke-pages.mjs
 
+      # SSB variant lab: dioramas, computed pathway rules, picking, hash.
+      - name: SSB behavior tests
+        run: node tools/test-ssb.mjs
+
       - name: OKSAT engine behavior tests
         run: node tools/test-oksat-engine.mjs

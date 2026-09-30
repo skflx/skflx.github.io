@@ -93,9 +93,10 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 │
-├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (phase 1: graph mode; docs/ssb.md)
+├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode + variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens
-│   ├── js/ssb/             #   ES modules (graph, state, scene, UI); stamps.js is generated
+│   ├── js/ssb/             #   ES modules (graph, state, scene, lab, UI); stamps.js is generated
+│   ├── js/ssb/dioramas/    #   parametric dioramas for the variant lab
 │   └── js/vendor/three-0.186.1/  # three.js, pinned and self-hosted
 ├── ssb/                    # SSB data (knowledge graph, references)
 │   ├── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
@@ -124,6 +125,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
+│   ├── test-ssb.mjs        #   SSB variant lab: dioramas, computed pathway rules, picking, hash
 │   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
 │   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
 │
@@ -156,13 +158,14 @@ cached old stylesheet):
 node tools/stamp-assets.mjs
 ```
 
-Before pushing (CI runs the same four on every PR):
+Before pushing (CI runs the same five on every PR):
 
 ```
 node tools/check-data.mjs
 node tools/test-wiki-sync.mjs
 node tools/smoke-pages.mjs
 node tools/test-oksat-engine.mjs
+node tools/test-ssb.mjs
 ```
 
 Deploy = merge to `master`; GitHub Pages serves the repo root directly.

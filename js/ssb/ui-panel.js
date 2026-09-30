@@ -359,6 +359,7 @@ export function mountPanel({ panel, body, handle, title, live, graph, store }) {
     });
 
     store.subscribe((state, prev) => {
+        if (state.selection === prev.selection && state.tier === prev.tier) return;   /* e.g. a lab slider */
         render();
         if (state.selection !== prev.selection && state.selection) {
             panel.dataset.sheet = 'open';

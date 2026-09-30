@@ -10,6 +10,7 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
+node tools/test-ssb.mjs                   # SSB variant lab: dioramas, pathway rules, picking, hash
 ```
 
 The browser suites need a real Chromium and nothing else: every page script
@@ -177,6 +178,44 @@ turns unresolved refs into warnings.
 What it cannot check: medical correctness and whether a source supports the
 claim that cites it. That stays with the owner, who alone flips `review` to
 `verified`.
+
+### SSB page and variant lab (`ssb.html`)
+
+Smoke boots `ssb.html` (graph mode + a WebGL frame; headless Chromium runs
+software WebGL, flags in `tools/smoke-lib.mjs`), the hostile `#s=` payload,
+and `#lab=frontal-recess` (a diorama builds). `tools/test-ssb.mjs` drives the
+lab and reads the scene back through the read-only `window.__ssb.lab` hook
+(part names, graph ids, hazards, RAS bounding boxes, the computed pathway,
+a pixel where a click picks a given part). It pins:
+
+- each diorama loads on its lesson's view (ethmoid roof coronal, frontal
+  recess sagittal); every part is named `<graph id>.<side>` and its id and
+  hazard ids resolve in the graph; the *schematic — idealized* badge shows;
+- presets satisfy the graph's own criterion text (`c.keros`, `c.gera`) and
+  preset codes are classes in the graph (`c.ifac`,
+  `c.uncinate-superior-attachment`); buttons carry the class labels;
+- ethmoid roof: Keros I→III raises each lateral lamella by exactly the
+  preset difference, and the lamella meets the fovea; asymmetry shortens
+  the left lamella; the AEA canal drops exactly as its parameter; a
+  supraorbital cell drops it by `m.aea-mesentery-drop`'s mean;
+- frontal recess, under uncinate attachments 1, 5 and 6: each anterior cell
+  alone moves the computed pathway posteriorly and each suprabullar cell
+  anteriorly (≥ 0.5 mm, mean over the recess and ostium), the frontal septal
+  cell laterally at the ostium, the pathway runs anterior and medial to the
+  supraorbital cell, and it drains medial to the uncinate into the middle
+  meatus (1) or lateral into the infundibulum (5, 6); the same toggles
+  through the UI checkboxes move it posterior vs anterior;
+- clicking a part selects its entity (panel and URL follow); view buttons
+  cut the camera without rebuilding; the desktop dock never covers the
+  canvas and collapses to a rail; phones get the controls in the sheet with
+  no horizontal scroll;
+- a hostile `#lab=` is clamped, snapped or dropped, rewritten canonically,
+  and never becomes markup; an unknown diorama leaves the specimen stage;
+- reduced motion stops the particle animation and continuous rendering;
+- zero real console errors.
+
+`node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
+screenshots of each diorama for a visual check.
 
 ## Adding a new page to the harness
 

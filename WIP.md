@@ -102,10 +102,17 @@ deleted.
 
 ---
 
-## SSB — Sinus & Skull Base 3D (design)
+## SSB — Sinus & Skull Base 3D
 
-**State:** Design stage — architecture, schema and validator in place; no
-page yet. Draft knowledge graph in `ssb/content/`: anatomy by region
+**State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
+links) and a 3D stage with two stages: the specimen placeholder (the
+reference specimen is being reconstructed from the UW atlas) and the
+variant lab — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
+supraorbital cell) and `frontal-recess` (IFAC cells, uncinate attachment,
+computed drainage pathway) dioramas, with presets from the graph's
+classifications, picking into the panels, hatched hazard sites and a
+`#lab=` URL state (`docs/ssb.md` §6; behaviour pinned by
+`tools/test-ssb.mjs`). Draft knowledge graph in `ssb/content/`: anatomy by region
 (nasal/maxillary/PPF; ethmoid/frontal/orbit/ACF; sphenoid/sellar/clival)
 plus a pathology layer (inflammatory/infectious/structural; neoplastic).
 Every file was authored by one model and adversarially reviewed by
@@ -124,9 +131,11 @@ every labeled frame's labels and arrow tips (`slices.json`), from which
 sources; 60 spatial claims testable against UW, 58 agree, the other 2 a
 documented arrow-placement artifact.
 
-**Next:** Owner review (tier 1 first) — flip `review` to verified; owner
-decisions in `docs/ssb.md` §13 (vendor three.js, reference dataset, UW
-permission scope); then phase 1 walking skeleton. Known content gaps:
+**Next:** Owner review of the two dioramas' schematic proportions (each
+module's header lists what the graph does not give) and of the graph (tier
+1 first) — flip `review` to verified; the `sphenoid` diorama (rest of
+phase 2); the reference specimen (phase 3, `docs/ssb.md` §13). Known
+content gaps:
 - Anatomy: petrolingual/parasellar ligaments, carotid cave, jugular
   foramen and CN IX–XI; orbital septum, superior ophthalmic vein, frontal
   lobe beyond gyrus rectus, hard palate, parapharyngeal space.

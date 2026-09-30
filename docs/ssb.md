@@ -1,11 +1,13 @@
 # SSB — Sinus & Skull Base 3D: architecture and conventions
 
-**Status: phase 1 (2026-09).** `ssb.html` runs graph mode — tree, search,
-depth filter, info panels, deep links — over the draft knowledge graph
-(`ssb/content/`, schema `docs/authoring-ssb.md`, validator
-`tools/ssb-content.mjs`), with a placeholder 3D stage on vendored three.js.
-The reference specimen is being reconstructed from the UW atlas (§13).
-Build order and owner decisions: §12–§13.
+**Status: phase 1 done, phase 2 in progress (2026-09).** `ssb.html` runs
+graph mode — tree, search, depth filter, info panels, deep links — over the
+draft knowledge graph (`ssb/content/`, schema `docs/authoring-ssb.md`,
+validator `tools/ssb-content.mjs`), and a 3D stage on vendored three.js with
+two stages: the specimen placeholder, and the variant lab with the
+`ethmoid-roof` and `frontal-recess` dioramas (§6). The reference specimen is
+being reconstructed from the UW atlas (§13). Build order and owner
+decisions: §12–§13.
 
 ## 0. What it is
 
@@ -268,14 +270,42 @@ shaft pass" (label ≠ tissue along sampled points) and "how close is the ICA"
 
 ## 6. Dioramas
 
-A diorama is an ES module `js/ssb/dioramas/<name>.js` exporting
-`build(params) → THREE.Group` and `PRESETS` keyed by classification code.
-Parts are named with graph ids, so picking, panels, hazards and self-test
-work exactly as on the specimen. Geometry primitives: superellipsoid air
-cells (Wormald's building blocks, literally), lofted/bent sheets for lamellae,
-profile extrusions for the skull base. A diorama may be placed in context by
-a similarity transform onto specimen landmarks, but defaults to standalone
-with a *schematic* badge.
+A diorama is an ES module `js/ssb/dioramas/<name>.js`, registered in
+`dioramas/index.js`, exporting:
+
+- `PARAMS` — `[{key, label, unit, min, max, step, default, from?, type?,
+  options?, requires?}]`; `from` is the graph id the range comes from,
+  `type` is `toggle` or `choice` (else a range), `requires` ties a size to
+  its on/off toggle. The lab's sliders and the URL whitelist are generated
+  from it.
+- `PRESETS` — `{ '<classification id>': { '<class code>': {params…} } }`,
+  derived from the classification's own criteria in the graph (the module
+  says where the graph is silent). Buttons are labelled with the graph's
+  class labels.
+- `VIEWS` (`sagittal`, `coronal`, `axial`, `oblique`, radiological
+  conventions) and `VIEW_DEFAULT` — the view the lesson reads in.
+- `classify(params)` and `readout(params, userData, names)` — the HUD lines
+  (classification of the current parameters, the AEA's course, the
+  pathway's outlet).
+- `build(THREE, params) → THREE.Group` — geometry in RAS millimetres,
+  converted once to the scene by the root group's rotation (`rasToScene`,
+  `js/ssb/frame.js`). three.js is passed in, never imported, so the modules
+  load with graph mode for the URL whitelist.
+
+Every part is an object named `<graph id>.<side>` whose `userData.id` is the
+graph id, so picking selects the entity through the ordinary store path; a
+hazard site carries the graph's hazard ids in `userData.hazards` and is
+hatched (and named in the HUD). Materials are assigned by the lab from
+`--ssb-*` tokens by each part's `userData.look` (tint + space / ghost /
+translucent flags), never by the diorama. Geometry primitives
+(`dioramas/kit.js`): superellipsoid air cells (Wormald's building blocks,
+literally), profile extrusions (prisms) for plates and the skull base, tubes
+for vessels and pathways — each kind has one implicit `inside()` test and
+one mesh builder, so anything computed over a diorama sees exactly what is
+drawn. A diorama may be placed in context by a similarity transform onto
+specimen landmarks, but defaults to standalone with a *schematic —
+idealized* badge. Fixed proportions the graph does not give are stated as
+schematic in each module's header.
 
 | Diorama | Parameters | Presets from |
 |---|---|---|
@@ -288,7 +318,18 @@ In `frontal-recess`, the drainage pathway is **computed** as the channel left
 between the cells present, so the learner sees why anterior cells (agger
 nasi, supra agger) push the pathway posteriorly, posterior cells (suprabullar,
 suprabullar frontal) push it anteriorly, and a frontal septal cell pushes it
-laterally — the geometry derives the rule rather than illustrating it.
+laterally — the geometry derives the rule rather than illustrating it. The
+recess and sinus are voxelized at 0.5 mm from the rendered solids, the cells
+present subtracted, and the path from the sinus through the ostium to the
+middle meatus or infundibulum is a 26-neighbour Dijkstra path whose step cost
+grows as clearance shrinks (so it runs down the middle of the channel),
+smoothed inside free space, drawn as a tube with slow particles (none under
+reduced motion). The uncinate's superior attachment (Landsberg–Friedman 1, 5,
+6) is geometry too: its lateral bend closes a terminal recess (drainage
+medial to it), a plate to the skull base or a medial bend to the MT leaves
+only the infundibulum. `tools/test-ssb.mjs` checks every rule under all
+three attachments. The supraorbital ethmoid cell is posterolateral to the
+pathway rather than pushing it (the graph states a relation, not a push).
 
 ## 7. Runtime architecture
 
@@ -298,6 +339,7 @@ laterally — the geometry derives the rule rather than illustrating it.
 ssb.html                     shell: CSP, chrome, canvas, panels (no inline script)
 css/ssb.css                  --ssb-* tokens (tissue kinds, cell categories, stage) + layout
 js/ssb/main.js               entry (type="module"): feature detection, boot, error surface
+js/ssb/frame.js              rasToScene / sceneToRas — the one coordinate conversion
 js/ssb/stamps.js             GENERATED: data-asset path → hash (for fetch URLs)
 js/ssb/graph.js              load + index content; text renderer; search
 js/ssb/state.js              one store (mode, tier, layers, selection, camera, step);
@@ -306,7 +348,7 @@ js/ssb/scene.js              renderer, cameras, lights, on-demand loop, token ma
 js/ssb/geo-specimen.js       pack loading (gzip → GLTFLoader.parse), unit registry, dissection states
 js/ssb/geo-sweep.js          tubes and flow particles
 js/ssb/volume.js             CT/label/distance arrays: slicing, lookup, proximity
-js/ssb/dioramas/*.js         parametric models
+js/ssb/dioramas/*.js         parametric models (index.js registry, kit.js primitives)
 js/ssb/mode-*.js             explore, endoscope, ct, procedure, lab, quiz
 js/ssb/ui-*.js               panel, labels, tree/search, HUD
 js/vendor/three-<version>/   three.js module build + the addons used (§8)
@@ -318,8 +360,12 @@ tools/ssb-pipeline/          offline geometry/CT pipeline
 ```
 
 Dependency direction is one-way and acyclic: `main → mode-* → {scene,
-geo-*, volume, ui-*} → {graph, state} → stamps`. Only `scene`, `geo-*` and
-dioramas import three.js.
+geo-*, volume, ui-*} → {graph, state} → stamps`, and `main → dioramas →
+frame`. Only `scene` and `geo-*` import three.js; the dioramas receive it as
+an argument, and `mode-lab.js` uses the stage's `THREE`, so one module
+instance serves the page. Built so far: `main`, `frame`, `stamps`, `graph`,
+`state`, `scene`, `mode-lab`, `dioramas/*`, `ui-panel`, `ui-tree`,
+`ui-search`, `ui-lab`.
 
 ### 7.2 Cache-busting an ES-module graph
 
@@ -346,7 +392,13 @@ One store; everything else subscribes. The URL hash is the shareable state:
 `#lab=ethmoid-roof&c.keros=III`, `#ct=cor&at=12.5,31,48`. Parsing is
 whitelist-only: ids must exist in the graph index, numbers are parsed and
 clamped, unknown keys are ignored, and nothing from the URL reaches markup
-except through `textContent` (`docs/security.md` rule 4).
+except through `textContent` (`docs/security.md` rule 4). The lab hash is
+`#lab=<diorama>&<key>=<value>…`: the diorama must be in the registry, keys
+must be in its `PARAMS` (values clamped and snapped to the step; a `choice`
+snaps to an option), and a classification id naming a preset
+(`c.keros=III`) is applied before explicit parameters. The canonical form
+written back lists only parameters that differ from their defaults; slider
+drags update it once they settle, since browsers rate-limit history writes.
 
 ### 7.4 Rendering
 
@@ -413,7 +465,7 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 | **Spatial claims ↔ geometry** | each spatial `rel` (`medial-to` …) checked against landmark/centroid coordinates; a failure means the prose or the mesh is wrong | phase 3, CI |
 | Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | phase 3, report |
 | Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | phase 1, CI |
-| Behavior | `tools/test-ssb.mjs`: deep link → state; pick at a golden view returns the expected id; tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 1–7, CI |
+| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Now (phase 2): each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet. Later: tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 2–7, CI |
 | Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match; it also corrects the study-design `type`. **`verified` means the work exists as cited — not that it supports the claim**; claim support is the reviewer's and owner's job. Match against the PubMed record itself (NCBI E-utilities), never a search snippet: in phase 0 a search-listing check added a nonexistent co-author and a wrong PMID, both caught by the E-utilities re-check. Sources PubMed does not index (monographs, unindexed journal years) are confirmed by hand. | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 
@@ -456,7 +508,7 @@ leaves the page useful. Model tier = who does the work best per token.
 |---|---|---|
 | 0 | Architecture, schema, validator, draft graph, image briefs *(this change)* | Opus authors per region; Sonnet research and citation checks; Opus adversarial review |
 | 1 | Walking skeleton: vendored three.js, `ssb.html`, module stamping, graph mode (tree, search, panels, procedures as text), smoke entry | Sonnet |
-| 2 | Dioramas `ethmoid-roof`, `frontal-recess`, `sphenoid`; variant lab; picking → panels | Opus (parametric anatomy), Sonnet (wiring) |
+| 2 | Dioramas `ethmoid-roof`, `frontal-recess` *(done)*, `sphenoid`; variant lab; picking → panels *(done)* | Opus (parametric anatomy), Sonnet (wiring) |
 | 3 | Reference specimen: dataset chosen, segmented, pipeline, packs, geometry ↔ graph checks | Owner (dataset, segmentation); Sonnet (pipeline) |
 | 4 | Endoscope mode: fulcrum optics, collision, proximity HUD, stations | Opus (optics/constraints), Sonnet (UI) |
 | 5 | CT mode: triplanar + oblique, label overlay, crosshair sync | Sonnet |

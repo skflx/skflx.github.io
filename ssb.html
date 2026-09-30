@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/ssb.css?v=3260c6c4">
+    <link rel="stylesheet" href="css/ssb.css?v=164b8cfd">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -55,11 +55,24 @@
                     <button class="site-pill" type="button" data-tier="2" aria-pressed="false" title="Depth 2: senior"><span>2</span><span class="ssb-tier-name">Senior</span></button>
                     <button class="site-pill" type="button" data-tier="3" aria-pressed="false" title="Depth 3: fellow"><span>3</span><span class="ssb-tier-name">Fellow</span></button>
                 </div>
+                <div class="ssb-stage-mode" id="ssb-stage-mode" role="group" aria-label="Stage">
+                    <span class="site-kicker">Stage</span>
+                    <button class="site-pill active" type="button" data-stage="specimen" aria-pressed="true" disabled title="The reference specimen (a placeholder until it is built)">Specimen</button>
+                    <button class="site-pill" type="button" data-stage="lab" aria-pressed="false" disabled title="Variant lab: parametric dioramas">Lab</button>
+                </div>
             </div>
             <div class="ssb-stage" id="ssb-stage">
-                <canvas id="ssb-canvas" tabindex="0" aria-label="3D stage. A placeholder axis gizmo and grid; drag to orbit, scroll to zoom, arrow keys to pan."></canvas>
-                <div class="ssb-labels" id="ssb-labels" aria-hidden="true"></div>
+                <canvas id="ssb-canvas" tabindex="0" aria-label="3D stage: the specimen placeholder or a variant-lab diorama. Drag to orbit, scroll to zoom, arrow keys to pan; click a part to open it."></canvas>
+                <div class="ssb-labels" id="ssb-labels" aria-hidden="true"><span class="ssb-part-label" id="ssb-part-label" hidden></span></div>
+                <div class="ssb-lab-dock" id="ssb-lab-dock" data-collapsed="false" hidden>
+                    <button class="ssb-dock-toggle" id="ssb-dock-toggle" type="button" aria-expanded="true" aria-controls="ssb-dock-body">Hide controls</button>
+                    <div class="ssb-dock-body" id="ssb-dock-body">
+                        <section class="ssb-lab" id="ssb-lab" aria-label="Variant lab controls" hidden></section>
+                    </div>
+                </div>
+                <div class="ssb-hud" id="ssb-hud" hidden></div>
                 <p class="ssb-stage-msg" id="ssb-stage-msg" hidden></p>
+                <span class="ssb-truth" id="ssb-truth" hidden></span>
                 <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Placeholder scene &middot; 10 mm grid</span>
             </div>
         </div>
@@ -69,13 +82,18 @@
                 <span class="ssb-grabber" aria-hidden="true"></span>
                 <span class="ssb-sheet-title" id="ssb-sheet-title">Details</span>
             </button>
+            <div class="ssb-sheet-tabs" id="ssb-sheet-tabs" role="group" aria-label="Sheet shows" hidden>
+                <button class="site-pill" type="button" data-view="controls" aria-pressed="false">Lab controls</button>
+                <button class="site-pill active" type="button" data-view="details" aria-pressed="true">Details</button>
+            </div>
+            <div class="ssb-lab-sheet" id="ssb-lab-sheet"></div>
             <div class="ssb-panel-body" id="ssb-panel-body"><p class="ssb-empty">Loading&hellip;</p></div>
         </aside>
 
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=272feb8a"></script>
+    <script type="module" src="js/ssb/main.js?v=1e56a441"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>

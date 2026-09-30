@@ -57,6 +57,9 @@ const PAGES = [
       && !!window.__ssb && window.__ssb.selection === null
       && !document.getElementById('pwn') && !window.__pwned
       && !document.querySelector('#ssb-panel-body [data-entity]')) },
+  /* SSB variant lab: a diorama builds (behaviour is tools/test-ssb.mjs). */
+  { path: 'ssb.html#lab=frontal-recess', ready: (p) => wait(p, () => !!window.__ssb && !!window.__ssb.lab
+      && window.__ssb.lab.builds > 0 && window.__ssb.frames > 0, 20000) },
   { path: 'airway-jeopardy.html', ready: (p) => wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions)) },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
 ];
