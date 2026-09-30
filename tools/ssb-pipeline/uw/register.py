@@ -156,7 +156,7 @@ def coronal_candidates(ax):
         oy = i0 - cr
         r0, r1 = ROWS['coronal']
         dz = 1.8                                           # refined by the fit
-        for tilt in (0.0, 16.0):
+        for tilt in (16.0,):   # tilt 0 starts converged to the same basin in development
             out.append(dict(flip=flip, base=base, proj_ncc=ncc0,
                             p0=[ox, oy, -r0 * s, tilt, 0, 0, s, 0, step, 0, dz]))
     return out
@@ -192,24 +192,74 @@ def fit_stack(ax, plane, p0, base=None, blur_first=False, log=print):
 
 
 # ---------------------------------------------------------------- diagnostics
-def per_slice(ax, plane, p, base=None):
+def per_slice(ax, plane, p, base=None, every=3):
     """Full-resolution NCC of every slice at the global solution, plus a free per-slice
-    offset (along w, and in-plane du, dv) to expose uneven spacing or framing drift."""
+    offset (along w, and in-plane du, dv) on every `every`-th slice to expose uneven
+    spacing or framing drift."""
     S = Stack(ax, plane, ds=1, sigma=1.5, base=base)
+    S2 = Stack(ax, plane, ds=2, sigma=1.5, base=base)
     O, e1, e2, w, dz = frame(plane, p, base)
     nccs, offs = [], []
     for k in range(load(plane).shape[0]):
         c0 = S.slice_ncc(p, k)
         nccs.append(round(c0, 4))
+        if k % every or c0 < 0.2:
+            continue
 
         def f(q):
             pq = np.array(p, float).copy()
             pq[0:3] = O + q[0] * w + q[1] * e1 + q[2] * e2
-            return S.slice_ncc(pq, k)
-        if c0 > 0.2:
-            q, c1 = powell(f, [0.0, 0.0, 0.0], 300)
-            offs.append([k, round(float(q[0]), 3), round(float(q[1]), 2), round(float(q[2]), 2), round(c1, 4)])
+            return S2.slice_ncc(pq, k)
+        c00 = f([0.0, 0.0, 0.0])
+        q, c1 = powell(f, [0.0, 0.0, 0.0], 250)
+        offs.append([k, round(float(q[0]), 3), round(float(q[1]), 2), round(float(q[2]), 2), round(c1 - c00, 4)])
     return nccs, offs
+
+
+def air_projection_identity(ax):
+    """Specimen-identity test independent of any registration: a coronal-view projection
+    of intracranial/sinus air (frontal sinus outline is individual, as in forensic ID).
+    Axial-derived vs sagittal-derived (same scan: control) and vs the coronal stack.
+    Scale and offset are searched; mirror both ways for the coronal."""
+    from skimage.feature import match_template
+
+    def air(V, air_thr, soft_thr):
+        out = np.zeros(V.shape, bool)
+        for i, g in enumerate(V):
+            body = ndi.binary_fill_holes(ndi.binary_closing(g > soft_thr, iterations=3))
+            out[i] = ndi.binary_erosion(body, iterations=4) & (g < air_thr)
+        return out
+    A = air(load('axial'), 75, 95)                 # (n, y, x)
+    Pa = A[:, 30:230, :].sum(1).astype(float)      # (n, x): anterior 200 rows = frontal..sphenoid face
+    sag = read_results().get('registration', {}).get('sagittal')
+    S = air(load('sagittal'), 30, 60)              # sagittal air ~4, soft ~80
+    Cc = air(load('coronal'), 15, 30)              # coronal air ~0, soft ~41
+    p = [sag['params'][n] for n in NAMES]
+    dz = p[10]
+    # sagittal: project over u where axial y in [30, 230]: y = oy + s*u (rotation ~1 deg ignored)
+    u0 = int(round((30 - p[1]) / p[6])); u1 = int(round((230 - p[1]) / p[6]))
+    Ps = S[:, 4:398, max(0, u0):u1].sum(2).T.astype(float) * p[6]   # (v, j), air thickness in axial px
+    Ps = ndi.zoom(Ps, (p[6] / dz, p[7]), order=1)                  # -> (axial slice, axial x)
+    x0 = int(round(p[0]))
+    H = min(Pa.shape[0], Ps.shape[0]); W = min(Pa.shape[1] - x0, Ps.shape[1])
+    ctrl = ncc(Pa[:H, x0:x0 + W], Ps[:H, :W], np.ones((H, W), bool))
+    Pc = Cc[:60, 10:428].sum(0).astype(float)                       # (v, u) over the anterior 60 coronal slices
+    best = (-1, None)
+    for mirror in (False, True):
+        Q = Pc[:, ::-1] if mirror else Pc
+        for sv in np.arange(0.30, 0.46, 0.01):                      # coronal rows -> axial slices
+            for su in np.arange(0.55, 0.80, 0.01):                  # coronal cols -> axial x
+                Z = ndi.zoom(Q, (sv, su), order=1)
+                if Z.shape[0] > Pa.shape[0] or Z.shape[1] > Pa.shape[1]:
+                    continue
+                r = match_template(Pa, Z)
+                c = float(r.max())
+                if c > best[0]:
+                    best = (c, dict(mirror=mirror, rows_per_slice=round(1 / sv, 3), col_scale=round(su, 3)))
+    return {'control_axial_vs_sagittal_ncc': round(ctrl, 4), 'axial_vs_coronal_best_ncc': round(best[0], 4),
+            'coronal_best_fit': best[1],
+            'note': 'coronal-view projection of air inside the head; the sagittal control uses the fitted '
+                    'registration, the coronal gets a free scale/offset/mirror search'}
 
 
 def landmark_residuals(ax, plane, p, base=None, ks=None, patch=15, search=6):
@@ -299,11 +349,52 @@ def summarize(plane, p, base, sc, ax, log):
     return info
 
 
+def axial_from_sagittal(ax, p, ns, png=None):
+    """Reverse check: rebuild UW axial slices from the sagittal stack alone (inverting the fitted
+    sagittal model) and compare with the UW axial images. x resolution is one sagittal step."""
+    from PIL import Image, ImageDraw
+    Bs = boneness(load('sagittal'))
+    O, e1, e2, w, dz = frame('sagittal', p)
+    Minv = np.linalg.inv(np.c_[e1, e2, w])
+    N, H, W = ax.shape
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    out, rows = [], []
+    for n in ns:
+        P = np.stack([xx, yy, np.full_like(xx, n * dz)]) - O[:, None, None]
+        u, v, j = np.tensordot(Minv, P, axes=1)
+        val = ndi.map_coordinates(Bs, [j, v, u], order=1, cval=0.0)
+        ok = (j >= 0) & (j <= Bs.shape[0] - 1) & (v >= 4) & (v <= 397) & (u >= 0) & (u <= Bs.shape[2] - 1)
+        ok &= np.hypot(xx - ax.fov[0], yy - ax.fov[1]) < ax.fov[2] - 3
+        E1 = ndi.gaussian_gradient_magnitude(val, 1.5); E2 = ndi.gaussian_gradient_magnitude(ax.B[n], 1.5)
+        out.append(round(ncc(E1, E2, ndi.binary_erosion(ok, iterations=3)), 4))
+        if png:
+            a = (np.clip(val, 0, 1) * 255).astype(np.uint8); b = (np.clip(ax.B[n], 0, 1) * 255).astype(np.uint8)
+            sep = np.full((H, 4, 3), 90, np.uint8)
+            row = np.hstack([np.dstack([a] * 3), sep, np.dstack([b] * 3), sep, np.dstack([b, a, b])])
+            im = Image.fromarray(row); ImageDraw.Draw(im).text((6, 6), f'axial img{n + 1:03d}: rebuilt from UW sagittal stack | UW | overlay', fill=(255, 255, 0))
+            rows.append(np.asarray(im))
+    if png:
+        img = np.vstack(rows)
+        Image.fromarray(img).resize((img.shape[1] // 2, img.shape[0] // 2), Image.LANCZOS).save(png)
+    return out
+
+
+def free_offset_summary(offs):
+    o = np.array(offs)
+    return {'n_slices': len(offs),
+            'along_step_median_abs_steps': round(float(np.median(np.abs(o[:, 1]))), 4),
+            'along_step_max_abs_steps': round(float(np.abs(o[:, 1]).max()), 4),
+            'du_dv_median_abs_px': [round(float(np.median(np.abs(o[:, 2]))), 3), round(float(np.median(np.abs(o[:, 3]))), 3)],
+            'du_dv_max_abs_px': [round(float(np.abs(o[:, 2]).max()), 3), round(float(np.abs(o[:, 3]).max()), 3)],
+            'ncc_gain_median': round(float(np.median(o[:, 4])), 4), 'ncc_gain_max': round(float(o[:, 4].max()), 4),
+            'note': 'each tested slice gets its own extra shift (slice steps along w; UW pixels du, dv) with '
+                    'the global model fixed; near-zero shifts and gains = even spacing and no framing drift'}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--refit', action='store_true')
     ap.add_argument('--png-dir', default=CACHE)
-    ap.add_argument('--skip-coronal-search', action='store_true')
     a = ap.parse_args()
     log = lambda *m: print(*m, flush=True)
     ax = Axial()
@@ -322,17 +413,13 @@ def main():
     info['ncc_per_slice'] = nccs
     info['ncc_summary'] = {'median': round(float(np.median(nccs)), 4), 'min': round(float(np.min(nccs)), 4),
                            'p10': round(float(np.percentile(nccs, 10)), 4),
-                           'slices_below_0.9': [i + 1 for i, c in enumerate(nccs) if c < 0.9]}
-    o = np.array(offs)
-    info['per_slice_free_offset'] = {
-        'n': len(offs), 'along_step_frac_of_step_median_abs': round(float(np.median(np.abs(o[:, 1]))), 4),
-        'along_step_max_abs': round(float(np.abs(o[:, 1]).max()), 4),
-        'du_px_median_abs': round(float(np.median(np.abs(o[:, 2]))), 3), 'dv_px_median_abs': round(float(np.median(np.abs(o[:, 3]))), 3),
-        'du_dv_px_max_abs': [round(float(np.abs(o[:, 2]).max()), 3), round(float(np.abs(o[:, 3]).max()), 3)],
-        'ncc_gain_median': round(float(np.median(o[:, 4] - np.array([nccs[int(r[0])] for r in o]))), 4),
-        'note': 'per slice: best extra shift (in slice steps along w, and UW pixels du, dv) with the global model fixed'}
+                           'slices_below_0.95': [i + 1 for i, c in enumerate(nccs) if c < 0.95]}
+    info['per_slice_free_offset'] = free_offset_summary(offs)
     info['landmarks'] = landmark_residuals(ax, 'sagittal', p)
-    log('sagittal landmarks', info['landmarks'])
+    log('sagittal', info['ncc_summary'], info['per_slice_free_offset'], info['landmarks'])
+    ns = [60, 85, 105, 125, 150]
+    info['axial_rebuilt_from_sagittal_ncc'] = dict(zip([n + 1 for n in ns], axial_from_sagittal(
+        ax, p, ns, os.path.join(a.png_dir, 'recon-axial.png'))))
     overlay_png(ax, 'sagittal', p, [20, 50, 68, 90, 118], os.path.join(a.png_dir, 'recon-sagittal.png'))
     reg['sagittal'] = info
     write_results('registration', {**prev, **reg})
@@ -355,14 +442,18 @@ def main():
     p, sc, base = best
     info = summarize('coronal', p, base, sc, ax, log)
     info['starts'] = tried
-    nccs, offs = per_slice(ax, 'coronal', p, base)
+    nccs, offs = per_slice(ax, 'coronal', p, base, every=6)
     info['ncc_per_slice'] = nccs
     info['ncc_summary'] = {'median': round(float(np.median(nccs)), 4), 'min': round(float(np.min(nccs)), 4),
                            'max': round(float(np.max(nccs)), 4)}
+    info['per_slice_free_offset'] = free_offset_summary(offs)
     info['landmarks'] = landmark_residuals(ax, 'coronal', p, base)
-    log('coronal landmarks', info['landmarks'])
+    log('coronal', info['ncc_summary'], info['landmarks'])
     overlay_png(ax, 'coronal', p, [20, 35, 50, 70, 95], os.path.join(a.png_dir, 'recon-coronal.png'), base)
     reg['coronal'] = info
+    write_results('registration', {**prev, **reg})
+    reg['specimen_identity'] = air_projection_identity(ax)
+    log('identity', reg['specimen_identity'])
     write_results('registration', {**prev, **reg})
 
 
