@@ -212,7 +212,7 @@ html[data-theme="dark"] {
 .ssb-center { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 
 .ssb-toolbar {
-  flex: none; display: flex; align-items: center; gap: 0.75rem;
+  flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.75rem;
   padding: 0.5rem var(--gutter); border-bottom: 1px solid var(--rule);
 }
 .ssb-tier { display: flex; align-items: center; gap: 0.4rem; }
@@ -395,7 +395,7 @@ html[data-theme="dark"] {
 
 .ssb-ct-cap {
   position: absolute; left: 0.5rem; top: 0.4rem; pointer-events: none;
-  display: flex; gap: 0.6rem; font: 500 0.7rem/1 var(--font-mono); letter-spacing: 0.04em;
+  display: flex; flex-direction: column; gap: 0.3rem; font: 500 0.7rem/1 var(--font-mono); letter-spacing: 0.04em;
 }
 .ssb-ct-name { text-transform: uppercase; letter-spacing: 0.08em; color: var(--ssb-ct-ink-muted); }
 .ssb-ct-pos { color: var(--ssb-ct-ink); }

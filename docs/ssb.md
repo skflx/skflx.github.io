@@ -5,9 +5,10 @@ graph mode — tree, search, depth filter, info panels, deep links — over the
 draft knowledge graph (`ssb/content/`, schema `docs/authoring-ssb.md`,
 validator `tools/ssb-content.mjs`), and a 3D stage on vendored three.js with
 two stages: the specimen placeholder, and the variant lab with the
-`ethmoid-roof` and `frontal-recess` dioramas (§6). The reference specimen is
-being reconstructed from the UW atlas (§13). Build order and owner
-decisions: §12–§13.
+`ethmoid-roof` and `frontal-recess` dioramas (§6). CT mode (triplanar slices,
+label outlines, crosshair sync; §3, §5.6) is a third stage that needs no
+WebGL. The reference specimen is being reconstructed from the UW atlas
+(§13). Build order and owner decisions: §12–§13.
 
 ## 0. What it is
 
@@ -123,12 +124,25 @@ never reloads.
   skull base, orbit, AEA) from precomputed distance fields. This mode is
   where the fulcrum constraint teaches why the frontal recess needs a 45–70°
   scope and why posterior septectomy opens binostril work.
-- **CT.** Axial/coronal/sagittal plus an oblique slice down the scope axis,
-  crosshair synced to the 3D cursor or scope tip (navigation-style).
-  Label overlay outlines segmented structures; hover names the voxel's
-  structure. Bone and soft-tissue windows. Built for the Wormald
+- **CT.** Axial, coronal and sagittal slices of the specimen volume, each
+  on its own canvas, radiological convention (patient right on the image's
+  left) with orientation letters; one crosshair in RAS mm shared by the
+  three (navigation-style). Click or drag a view to move it, wheel or arrow
+  keys to scroll the active plane a voxel, Shift+arrows to move it in the
+  plane, `1`/`2`/`3` to pick a plane; bone, sinus and soft-tissue window
+  presets from `ct.json` plus width/level (slider, or right-drag). The label
+  overlay outlines every segmented structure in the colour its graph kind has
+  in 3D (the `--ssb-*` tokens of §7.4: a sinus is one blue, each IFAC cell its
+  own hue), fills the selected entity, and has a colour key that selects.
+  Hovering names the voxel's structure (label table → graph id → graph
+  name) with the approximate HU (`toHU`); clicking a labelled voxel selects
+  that entity in the ordinary panel. The volume loads on first entry; with
+  no `ssb/ct/ct.json` the stage says so. Built for the Wormald
   building-block exercise: scroll the three planes, identify each frontal
-  recess cell, and toggle its 3D block to check.
+  recess cell, and toggle its 3D block to check. *Not built yet:* the oblique
+  slice down the scope axis (`volume.js` already extracts any plane; the
+  endoscope mode will drive it), the crosshair following the 3D cursor or scope
+  tip, and the 3D block toggle (it needs the 3D specimen).
 - **Procedure.** A procedure from the graph played as steps. Each step sets
   the station (camera pose), applies the cumulative dissection state (units
   the step `removes` disappear), highlights what comes into view, hatches
@@ -277,6 +291,22 @@ same arrays answer "what structure is here" (label lookup), "may the scope
 shaft pass" (label ≠ tissue along sampled points) and "how close is the ICA"
 (distance-field lookup).
 
+`js/ssb/volume.js` loads and serves them. `ssb/ct/ct.json` carries `dims`,
+`spacing`, the voxel → RAS `affine` (row-major, any axis order or sign; the
+inverse is computed), `dtype: uint8`, `windows` (presets in the file's own
+value units), `values.toHU` (a piecewise-linear display → HU table) and the
+label file and table; `ct.u8.gz` and `labels.u16.gz` are gzip of raw voxels,
+x fastest, then y, then z (labels little-endian); the table,
+`ssb/geometry/labels.json`, maps an index to `<graph id>.<side>`. The loader
+decodes only when the bytes start with the gzip magic `1f 8b`, so a server
+that sends `Content-Encoding` (the browser has already decoded) and one that
+does not both work; sizes are checked against `dims`; a missing label volume
+drops only the overlay; a header that fails validation, or a label file or
+table name that would leave `ssb/ct` and `ssb/geometry`, is refused. Slices
+are resampled per pixel (trilinear CT, nearest label) along straight rows in
+voxel space: the three standard planes, and `obliqueSlice` for an origin plus
+two in-plane unit vectors.
+
 ## 6. Dioramas
 
 A diorama is an ES module `js/ssb/dioramas/<name>.js`, registered in
@@ -358,27 +388,30 @@ js/ssb/scene.js              renderer, cameras, lights, on-demand loop, quality 
 js/ssb/materials.js          procedural tissue materials: one shader hook per kind (three passed in)
 js/ssb/geo-specimen.js       pack loading (gzip → GLTFLoader.parse), unit registry, dissection states
 js/ssb/geo-sweep.js          tubes and flow particles
-js/ssb/volume.js             CT/label/distance arrays: slicing, lookup, proximity
+js/ssb/volume.js             CT/label/distance arrays: loading, affine, slicing, lookup (proximity later)
 js/ssb/dioramas/*.js         parametric models (index.js registry, kit.js primitives)
 js/ssb/mode-*.js             explore, endoscope, ct, procedure, lab, quiz
-js/ssb/ui-*.js               panel, labels, tree/search, HUD
+js/ssb/ui-*.js               panel, labels, tree/search, HUD, lab and CT controls
 js/vendor/three-<version>/   three.js module build + the addons used (§8)
 ssb/content/*.json           the knowledge graph
 ssb/geometry/*.json          labels, landmarks, sweeps, station poses
 ssb/models/, ssb/ct/         pipeline outputs
 tools/ssb-content.mjs        graph validator (CI)
 tools/ssb-pipeline/          offline geometry/CT pipeline
+tools/ssb-fixture-ct.mjs     a synthetic volume in the same format, for tests (never written into ssb/)
 ```
 
 Dependency direction is one-way and acyclic: `main → mode-* → {scene,
-geo-*, volume, ui-*} → {graph, state} → stamps`, `scene → materials`, and
-`main → dioramas → {frame, materials}`. Only `scene` and `geo-*` import
+geo-*, volume, ui-*} → {graph, state} → stamps`, `scene → materials`,
+`mode-ct → {volume, materials}` and `main → dioramas → {frame, materials}`. Only `scene` and `geo-*` import
 three.js; the dioramas and `materials` receive it as an argument (they load
 without WebGL: the URL whitelist and the tests read their tables), and
 `mode-lab.js` uses the stage's `THREE`, so one module instance serves the
 page. Built so far: `main`, `frame`, `stamps`, `graph`, `state`, `scene`,
 `materials`, `mode-lab`, `dioramas/*`, `ui-panel`, `ui-tree`, `ui-search`,
-`ui-lab`.
+`ui-lab`, `volume`, `mode-ct`, `ui-ct`. `mode-ct` and `ui-ct` are mounted
+from the graph alone (no `scene`), which is why CT works where WebGL does
+not.
 
 ### 7.2 Cache-busting an ES-module graph
 
@@ -413,6 +446,16 @@ snaps to an option), and a classification id naming a preset
 (`c.keros=III`) is applied before explicit parameters. The canonical form
 written back lists only parameters that differ from their defaults; slider
 drags update it once they settle, since browsers rate-limit history writes.
+
+The CT hash is `#ct=<ax|cor|sag>&at=<r>,<a>,<s>`: the plane is exactly one
+of those three names (or `axial`, `coronal`, `sagittal`), anything else
+ignores the whole stage; `at` is the crosshair in RAS mm and must be three
+finite numbers, else it is dropped (the viewer then sits at the volume's
+centre). The store clamps it to a sanity range until the volume is loaded
+and to the volume's own bounds after (`setCtBounds`), and the canonical hash
+is rewritten; a crosshair drag settles before the URL is replaced, like a
+lab slider. The stage is one of specimen, lab or CT: a hash with both `lab`
+and `ct` keeps the lab, and entering one leaves the other.
 
 ### 7.4 Rendering
 
@@ -464,7 +507,8 @@ drags update it once they settle, since browsers rate-limit history writes.
   the tissue looks like; its relief and gloss are flattened under the
   stripes) + text in the HUD. `--signal` marks UI emphasis only.
 - Explore stage follows the site theme; the endoscope and CT stages are
-  dark in both themes (like Airway's stage).
+  dark in both themes (like Airway's stage; CT's views use the `--ssb-ct-*`
+  tokens, its info cell and truth strip follow the theme).
 - Labels: DOM overlay with SVG leader lines, few at a time (selection,
   step, tour), decluttered by tier and priority; never "label everything".
 - Picking: raycast on click, all intersections kept for click-to-go-deeper;
@@ -518,7 +562,8 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 | **Spatial claims ↔ geometry** | each spatial `rel` (`medial-to` …) checked against landmark/centroid coordinates; a failure means the prose or the mesh is wrong | phase 3, CI |
 | Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | phase 3, report |
 | Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | phase 1, CI |
-| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Now (phase 2): each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet; the material library (graph kinds ↔ material kinds, tokens for both themes, every kind compiles and draws hatched or not at `q=full` and `q=lite`, hostile `q` ignored, programs shared, hatch visible, no animation). Later: tier filter; endoscope shaft blocked by tissue; CT label lookup; storage failure is a no-op | phases 2–7, CI |
+| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Now (phase 2): each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet; the material library (graph kinds ↔ material kinds, tokens for both themes, every kind compiles and draws hatched or not at `q=full` and `q=lite`, hostile `q` ignored, programs shared, hatch visible, no animation). Later: tier filter; endoscope shaft blocked by tissue; storage failure is a no-op | phases 2–7, CI |
+| CT mode | `tools/test-ssb.mjs`, through the read-only `window.__ssb.ct` hook, on the synthetic volume of `tools/ssb-fixture-ct.mjs` (the page's `ssb/ct/*` requests are routed to it, so the suite never depends on the real volume): `volume.js` in plain Node (affine round trip, exact trilinear, slices agree with `sample`/`labelAt`, radiological orientation, oblique planes, gzip by magic bytes, loader errors, name whitelist) and the `#ct=` codec; in the page, the three views render non-blank, the crosshair is drawn at the same RAS point in all three and a click moves it within a voxel, label lookup returns the fixture's ids, hover gives name and ≈HU, a click selects the entity, keys/wheel/window/outlines/colour key, outline colours are the materials' tokens and follow the theme, hostile `#ct=` is clamped or ignored, a missing volume shows a message, CT runs with WebGL blocked, phones show one plane | phase 5, CI |
 | Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match; it also corrects the study-design `type`. **`verified` means the work exists as cited — not that it supports the claim**; claim support is the reviewer's and owner's job. Match against the PubMed record itself (NCBI E-utilities), never a search snippet: in phase 0 a search-listing check added a nonexistent co-author and a wrong PMID, both caught by the E-utilities re-check. Sources PubMed does not index (monographs, unindexed journal years) are confirmed by hand. | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 
@@ -564,7 +609,7 @@ leaves the page useful. Model tier = who does the work best per token.
 | 2 | Dioramas `ethmoid-roof`, `frontal-recess` *(done)*, `sphenoid`; variant lab; picking → panels *(done)* | Opus (parametric anatomy), Sonnet (wiring) |
 | 3 | Reference specimen: dataset chosen, segmented, pipeline, packs, geometry ↔ graph checks | Owner (dataset, segmentation); Sonnet (pipeline) |
 | 4 | Endoscope mode: fulcrum optics, collision, proximity HUD, stations | Opus (optics/constraints), Sonnet (UI) |
-| 5 | CT mode: triplanar + oblique, label overlay, crosshair sync | Sonnet |
+| 5 | CT mode: triplanar, label overlay, crosshair sync *(done on the pipeline's volume; the oblique slice down the scope axis and 3D-cursor sync wait for endoscope mode)* | Sonnet |
 | 6 | Procedure mode: `removes` states, hazards in scene, station poses | Opus (content), Sonnet (wiring) |
 | 7 | Self-test from the graph, Leitner storage | Sonnet |
 | 8 | Textures (owner via `docs/ssb-imagegen.md`), offline caching, performance | Haiku/Sonnet |

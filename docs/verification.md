@@ -10,7 +10,7 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
-node tools/test-ssb.mjs                   # SSB variant lab: dioramas, pathway rules, picking, hash
+node tools/test-ssb.mjs                   # SSB: variant lab (dioramas, pathway rules, picking, hash) + CT mode
 ```
 
 The browser suites need a real Chromium and nothing else: every page script
@@ -227,8 +227,40 @@ a pixel where a click picks a given part). It pins:
   animation. Software WebGL picks `lite` on its own, so the default runs
   exercise it and `q=full` is always explicit.
 
+**CT mode** (`js/ssb/volume.js`, `mode-ct.js`, `ui-ct.js`; `docs/ssb.md` §3,
+§5.6) is tested on a synthetic volume, never on the real one:
+`tools/ssb-fixture-ct.mjs` builds a small anisotropic, axis-flipped phantom
+in exactly the `ssb/ct/` format (a large right and a smaller left maxillary
+sinus, an agger nasi cell, a midline cavity, a label id that is not in the
+graph, a label index the table does not name), and `test-ssb.mjs` answers the
+page's `ssb/ct/*` and `ssb/geometry/labels.json` requests from it with
+Playwright routing (nothing is written into `ssb/`, and the suite passes
+whether or not the real volume is in the tree; "no volume" is a routed 404).
+`node tools/ssb-fixture-ct.mjs [dir]` writes the same files to a directory
+for a manual look. `node tools/test-ssb.mjs --only ct` runs just this
+section. It pins, in plain Node: the affine round trip (also rotated and
+sheared), exact trilinear sampling on a linear field, slices equal to
+`sample()`/`labelAt()` pixel for pixel, the radiological orientation, oblique
+planes, gzip by magic bytes (raw bytes pass through, damage is refused), the
+loader's errors and name whitelist, and the `#ct=` codec (plane whitelist,
+crosshair clamping, stage exclusivity). In the page, through the read-only
+`window.__ssb.ct` hook and real pixels: each view renders non-blank; the
+drawn crosshair sits where first principles put it in all three views, and a
+click in one moves it in the others within a voxel; the larger right sinus
+is on the image left; label lookup returns the fixture's ids, hover shows the
+graph name and ≈ HU, a click selects the entity in the panel; keys, wheel,
+window presets/sliders/right-drag, the outline toggle and the colour key work;
+outline colours equal the materials' tokens and follow the theme; hostile
+`#ct=` values are clamped or ignored and never become markup; a missing
+volume shows a message naming `ssb/ct/ct.json` and the rest of the page
+still works; with `getContext('webgl*')` blocked the stage still loads,
+draws and selects (CT is the no-WebGL fallback); a server that sends
+`Content-Encoding: gzip` loads the same; phones show one plane at a time.
+Judging how the images *look* (window presets on the real head, outline
+contrast) stays a human check: `--shots` writes `ct-*.png`.
+
 `node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
-screenshots of each diorama for a visual check. Judging how a material
+screenshots of each diorama and of CT mode for a visual check. Judging how a material
 *looks* (pattern scale, sheen under the endoscope's spotlight) stays a human
 check: render it in a scratch page that imports `materials.js` with a
 spotlight and both themes, and compare `full` with `lite`.
