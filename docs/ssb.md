@@ -466,33 +466,23 @@ leaves the page useful. Model tier = who does the work best per token.
 
 ## 13. Owner decisions
 
-1. **Approve vendoring three.js** (same-origin, pinned; phase 1 blocker).
-2. **Reference dataset and its license.** Research (2026-09, verify each
-   before committing):
-   - *SPL Head & Neck Atlas* (Open Anatomy Project) — "3D Slicer License",
-     permissive, existing skull and vessel labels, and its viewer (Open
-     Anatomy Browser: slices + 3D + structure tree) is the closest prior art
-     to this design. Check slice thickness and label depth first.
-   - *CT-SCOPE* (Data in Brief 2025) — osseous paranasal anatomy with
-     ethmoid-region annotation across scanners; **license variant
-     unconfirmed** (the journal allows CC BY or CC BY-NC-ND; ND would rule
-     it out).
-   - *NasalSeg* (Scientific Data 2024) — CC BY 4.0, 130 CTs, coarse labels
-     (nasal cavity, nasopharynx, maxillary sinus); slice thickness
-     unconfirmed.
-   - Ruled out: TCIA head collections (limited-access license since 2022,
-     because head CT reconstructs faces), HaN-Seg (CC BY-NC-ND, 2–3 mm
-     slices), CQ500 (NC, no relevant labels). BodyParts3D / Z-Anatomy
-     (CC BY-SA) are usable for coarse context only and would make derived
-     models share-alike.
-   - TotalSegmentator's head tasks (Apache-2.0) can pre-label the coarse
-     structures on whichever CT is chosen.
-3. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
+Decided (owner, 2026-09-30):
+
+- **Vendor three.js** — approved (same-origin, pinned; `js/vendor/README.md`).
+- **Reference specimen: reconstruct from the UW atlas.** Its axial stack is
+  treated as a CT volume, registered against UW's own coronal and sagittal
+  reformats, scaled from the globe, and segmented with the labeled arrow tips
+  as named seeds — gated on a feasibility check. Bone window only: vessels
+  and nerves are sweeps placed at labeled points; thin lamellae get schematic
+  touch-up.
+- **UW permission covers publishing 3D geometry and volumes derived from
+  its images** (owner-confirmed; record the authors' written permission with
+  the reference when available).
+
+Still open:
+
+1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
    needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
-4. **Who segments** — owner, or a paid annotator under owner review.
-5. **Publish while `draft`?** Recommended: publish with visible unverified
+2. **Publish while `draft`?** Recommended: publish with visible unverified
    markers (the wiki's precedent), prioritizing owner review of tier 1.
-6. Name and URL (`SSB`, `ssb.html`) — working title.
-7. **UW atlas permission scope** — reference and linking only, or
-   republishing its images here (which the CT recall deck needs)? Written
-   confirmation either way.
+3. Name and URL (`SSB`, `ssb.html`) — working title.
