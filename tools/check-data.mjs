@@ -29,6 +29,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
 import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
+import { loadEngine, bakeAll } from './ascii3d.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => path.join(ROOT, p);
@@ -249,6 +250,66 @@ function checkSsb() {
     `ssb: ${geo.length} geometry reference problem(s):\n        ` + geo.slice(0, 20).join('\n        '));
 }
 
+/* ===========================================================
+   5. ASCII 3D figures (js/ascii3d.js, js/diagrams/*, docs/diagrams.md)
+   Scenes render, pages load what they show (engine first), no
+   scene file is orphaned, baked no-JS frames are current, and the
+   Leitner figure states the engine's real schedule.
+   =========================================================== */
+function checkFigures() {
+  console.log('\nASCII figures: js/diagrams/* <-> pages');
+  let eng;
+  try { eng = loadEngine(); } catch (e) { fail('engine + scenes load: ' + e.message); return; }
+  const { A3D, fileOf } = eng;
+
+  for (const id of A3D.ids()) {
+    try {
+      const fr = A3D.frame(id, {});
+      ok(fr.chars.some((c) => c !== ' '), `${id}: renders`, `${id}: renders a blank frame`);
+    } catch (e) { fail(`${id}: frame threw — ${e.message}`); }
+  }
+
+  /* data-a3d ids a page shows: in its HTML, or in the page's own
+     scripts (Airway renders its markup from js/airway-app.js). */
+  const used = new Set();
+  const idsIn = (src) => [...src.matchAll(/data-a3d="([a-z0-9-]+)"/g)].map((m) => m[1]);
+  for (const page of rootPages()) {
+    const html = fs.readFileSync(rel(page), 'utf8');
+    const scripts = [...html.matchAll(/<script\b[^>]*\bsrc="([^"?]+)/g)].map((m) => m[1]);
+    const ids = new Set(idsIn(html));
+    for (const src of scripts) {
+      if (src.startsWith('js/') && !src.startsWith('js/diagrams/') && src !== 'js/ascii3d.js' && fs.existsSync(rel(src))) {
+        idsIn(fs.readFileSync(rel(src), 'utf8')).forEach((id) => ids.add(id));
+      }
+    }
+    for (const id of ids) {
+      used.add(id);
+      const file = fileOf[id];
+      const eIdx = scripts.indexOf('js/ascii3d.js'), sIdx = file ? scripts.indexOf(file) : -1;
+      ok(!!file && eIdx >= 0 && sIdx > eIdx, `${page}: figure '${id}' loads js/ascii3d.js then ${file}`,
+        `${page}: figure '${id}' needs ${file ? 'js/ascii3d.js then ' + file : 'a scene (no js/diagrams file defines it)'}`);
+      ok(/css\/ascii3d\.css/.test(html), `${page}: figure '${id}' has css/ascii3d.css`, `${page}: figure '${id}' without css/ascii3d.css`);
+    }
+  }
+  const orphans = A3D.ids().filter((id) => !used.has(id));
+  ok(orphans.length === 0, 'no orphan scene files', `scenes no page shows (delete them): ${orphans.join(', ')}`);
+
+  for (const r of bakeAll({ write: false })) {
+    if (r.unknown) fail(`${r.page}: baked block a3d:${r.id} has no scene`);
+    else ok(r.fresh, `${r.page}: baked frame '${r.id}' current`, `${r.page}: baked frame '${r.id}' stale (run node tools/ascii3d.mjs bake)`);
+  }
+
+  const leitner = A3D.get('leitner');
+  if (leitner) {
+    const m = fs.readFileSync(rel('js/oksat-engine.js'), 'utf8').match(/LEITNER_INTERVALS\s*=\s*\{([^}]*)\}/);
+    const engine = m ? m[1].split(',').map((kv) => Number(kv.split(':')[1])) : [];
+    const shown = leitner.intervals || [];
+    ok(engine.length > 0 && JSON.stringify(engine) === JSON.stringify(shown),
+      `leitner figure intervals [${shown}] === LEITNER_INTERVALS`,
+      `leitner figure intervals [${shown}] !== LEITNER_INTERVALS [${engine}] (js/diagrams/leitner.js)`);
+  }
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkOksat();
@@ -256,5 +317,6 @@ checkAirway();
 checkSecurity();
 checkStamps();
 checkSsb();
+checkFigures();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

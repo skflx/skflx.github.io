@@ -11,6 +11,7 @@
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
   <script src="js/theme-boot.js?v=61b69b81"></script>
   <link rel="stylesheet" href="css/site.css?v=3efb923c">
+  <link rel="stylesheet" href="css/ascii3d.css?v=50a20a22">
 
   <style>
     html, body { margin: 0; padding: 0; }
@@ -41,6 +42,16 @@
     .aw-hero { text-align: center; margin-bottom: 1.75rem; }
     .aw-h1 { font-size: clamp(2rem, 7vw, 2.8rem); font-weight: 740; font-stretch: 118%; letter-spacing: -0.035em; line-height: 1; color: var(--aw-strong); margin: 0 0 0.25rem; }
     .aw-sub { color: var(--aw-muted); font-size: 0.85rem; margin: 0; }
+    /* Larynx figure (js/diagrams/larynx.js) on the stage's own tokens */
+    .aw .a3d {
+      --a3d-ink: var(--aw-text); --a3d-muted: var(--aw-muted); --a3d-faint: var(--aw-faint);
+      --a3d-signal: var(--aw-accent); --a3d-max: 9.5px;
+      max-width: 26rem; margin: 1.25rem auto 0;
+    }
+    .aw .a3d figcaption {
+      margin: 0.5rem auto 0; max-width: 24rem;
+      font-size: 0.75rem; line-height: 1.45; color: var(--aw-muted); text-wrap: pretty;
+    }
 
     .aw-section { margin-bottom: 1.5rem; }
     .aw-label {
@@ -313,9 +324,11 @@
 
   <div id="aw-app"></div>
 
+  <script src="js/ascii3d.js?v=5f5f9af0"></script>
+  <script src="js/diagrams/larynx.js?v=43a3fa22"></script>
   <script src="js/airway-questions.js?v=ef3f3106"></script>
   <script src="js/airway-engine.js?v=4f9e2b6e"></script>
-  <script src="js/airway-app.js?v=9ed08e9c"></script>
+  <script src="js/airway-app.js?v=fcbf6c1f"></script>
 
   <script src="js/site.js?v=dd67d957"></script>
 </body>

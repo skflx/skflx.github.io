@@ -33,11 +33,17 @@ const OFFLINE = args.includes('--offline');
 
 /* Each page: path + an async readiness check(page) that resolves truthy
    when the page has rendered its core content. Checks poll internally. */
-const wait = (page, fn, timeout = 12000) => page.waitForFunction(fn, null, { timeout }).then(() => true);
+const wait = (page, fn, arg = null, timeout = 12000) => page.waitForFunction(fn, arg, { timeout }).then(() => true);
 
 const PAGES = [
-  { path: 'index.html', ready: (p) => wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent)) },
-  { path: 'oksat.html', ready: (p) => wait(p, () => document.querySelectorAll('#modules .module-card').length > 0) },
+  { path: 'index.html', ready: async (p) => {
+    await wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent));
+    return figureReady(p, 'fusion', { themeFlip: true });
+  } },
+  { path: 'oksat.html', ready: async (p) => {
+    await wait(p, () => document.querySelectorAll('#modules .module-card').length > 0);
+    return figureReady(p, 'leitner');
+  } },
   { path: 'oksat-study.html?m=pediatrics', ready: oksatStudyReady },
   /* Regression: ?m= once reached innerHTML (reflected DOM XSS). It must
      render as text in the not-found notice, never as markup. */
@@ -64,9 +70,31 @@ const PAGES = [
   /* SSB variant lab: a diorama builds (behaviour is tools/test-ssb.mjs). */
   { path: 'ssb.html#lab=frontal-recess', ready: (p) => wait(p, () => !!window.__ssb && !!window.__ssb.lab
       && window.__ssb.lab.builds > 0 && window.__ssb.frames > 0, 20000) },
-  { path: 'airway-jeopardy.html', ready: (p) => wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions)) },
+  { path: 'airway-jeopardy.html', ready: async (p) => {
+    await wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions));
+    await figureReady(p, 'larynx');
+    /* the app re-renders the whole screen on every change: the figure must come back */
+    await p.click('[data-action="pick-mode"]:not(.active)');
+    return figureReady(p, 'larynx');
+  } },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
 ];
+
+/* An ASCII 3D figure (js/ascii3d.js) mounted and drew. With themeFlip,
+   flipping html[data-theme] must re-shade it (paper -> dark ground). */
+async function figureReady(page, id, { themeFlip = false } = {}) {
+  const sel = `[data-a3d="${id}"].is-live .a3d-grid`;
+  await wait(page, (s) => { const g = document.querySelector(s); return !!g && g.textContent.trim().length > 40; }, sel);
+  if (!themeFlip) return true;
+  const fig = `[data-a3d="${id}"]`;
+  const before = await page.$eval(fig, (f) => f.getAttribute('data-a3d-shade'));
+  await page.evaluate(() => {
+    const r = document.documentElement;
+    r.setAttribute('data-theme', r.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  await page.waitForFunction(([s, b]) => { const a = document.querySelector(s).getAttribute('data-a3d-shade'); return !!a && a !== b; }, [fig, before], { timeout: 5000 });
+  return true;
+}
 
 /* oksat-study.html loads the module data, then mounts immediately —
    there is no reviewer prompt any more. Assert the module actually

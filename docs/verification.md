@@ -150,6 +150,26 @@ hostile issue list (no network) and checks that:
 Fig. 1 has no test; regenerate it with `python3 tools/gen-cochlea.py` and
 look at it in both themes.
 
+### ASCII 3D figures (`js/ascii3d.js`, `js/diagrams/`)
+`tools/check-data.mjs` §5 checks the following. Every scene renders a
+non-blank frame. Every figure a page shows (`data-a3d` in its HTML or in
+its own scripts) loads `css/ascii3d.css`, then `js/ascii3d.js` before its
+scene file. No scene is orphaned. Every baked block equals a fresh render
+(`node tools/ascii3d.mjs bake --check`). The Leitner figure's `intervals`
+equal `LEITNER_INTERVALS` in `js/oksat-engine.js`. To prove the last check
+bites, change one interval in the engine: the check must FAIL.
+
+`tools/smoke-pages.mjs` (`figureReady`) checks that each figure mounts live
+with a drawn grid. On the one-pager, flipping `html[data-theme]` must flip
+the figure's `data-a3d-shade` (paper ↔ dark ground). On Airway, picking
+another mode (a full re-render) must bring the figure back live. To prove
+that bites, remove the `mountAll` call from `js/airway-app.js`: the Airway
+smoke must FAIL.
+
+Manual: `node tools/ascii3d.mjs render <id> --turn 4` for every side, then
+the page at 390px and 1280px in both themes. Load it once with JavaScript
+off to see the baked frame.
+
 ### Archive (`archive/`)
 Not served, not smoke-tested, not checked by `tools/check-data.mjs`. The one
 invariant worth asserting after touching it:

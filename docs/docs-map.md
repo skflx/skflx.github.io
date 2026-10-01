@@ -18,6 +18,8 @@ no design judgment required.
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
+| `docs/diagrams.md` | The ASCII 3D figure system: request template, workflow, scene schema, inks, rules | The engine gains or changes a feature, a part kind, an ink, or the bake/check contract |
+| `.claude/skills/ascii-diagram/SKILL.md` | The agent playbook for a figure request (`/ascii-diagram`) | The workflow or its verification steps change |
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
 | `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |
 | `docs/authoring-ssb.md` | SSB content schema and editorial rules | The schema or `tools/ssb-content.mjs` changes |
