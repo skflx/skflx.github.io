@@ -15,16 +15,16 @@
    { frames, selection, caps, hash, lab, ct, materials } (lab, ct: the
    stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=7d4cef6f';
+import { loadGraph } from './graph.js?v=6e35cf90';
 import { createStore, parseHash } from './state.js?v=293241be';
 import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=5d0f3292';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=3d1564e1';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=9dfc8a11';
-import { mountTree } from './ui-tree.js?v=d023a52d';
-import { mountSearch } from './ui-search.js?v=582c7673';
-import { mountPanel } from './ui-panel.js?v=4702e7d2';
+import { mountCt } from './mode-ct.js?v=190b5b5b';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=4a245c7a';
+import { mountTree } from './ui-tree.js?v=4ffabfa8';
+import { mountSearch } from './ui-search.js?v=cadb9f6f';
+import { mountPanel } from './ui-panel.js?v=42551188';
 
 const $ = (id) => document.getElementById(id);
 

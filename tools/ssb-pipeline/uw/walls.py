@@ -117,9 +117,11 @@ def compartments(g, ct, lab, table, res):
             markers[lab == v] = cid(n)
     report = {}
     # orbits from UW tips (side from the tip's r)
+    # UW labels one orbit only; its tips mirrored through the midsagittal plane (x = 0 by
+    # construction of the frame) seed the other side - a seed only, the watershed finds the walls
     P = tips(res, 'orbit')
     used = {'R': 0, 'L': 0}
-    for p in P:
+    for p in P + [[-p[0], p[1], p[2]] for p in P]:
         q = snap_soft(g, p, soft, dist)
         if q is None or dist[tuple(q)] < 2.0:
             continue
@@ -128,10 +130,12 @@ def compartments(g, ct, lab, table, res):
         markers[k - 1:k + 2, j - 1:j + 2, i - 1:i + 2] = np.where(soft[k - 1:k + 2, j - 1:j + 2, i - 1:i + 2], cid('orbit.' + side),
                                                                  markers[k - 1:k + 2, j - 1:j + 2, i - 1:i + 2])
         used[side] += 1
-    report['orbit_tips_used'] = used
+    report['orbit_seeds_used'] = used
+    report['orbit_tips_by_side'] = {'R': sum(p[0] > 0 for p in P), 'L': sum(p[0] <= 0 for p in P)}
     # retromaxillary soft tissue (pterygopalatine fossa + pterygomaxillary fissure + retroantral fat)
     used = {'R': 0, 'L': 0}
-    for p in tips(res, 'pterygopalatine fossa', 'pterygomaxillary fissure', 'retroantral fat pad'):
+    Q = tips(res, 'pterygopalatine fossa', 'pterygomaxillary fissure', 'retroantral fat pad')
+    for p in Q + [[-p[0], p[1], p[2]] for p in Q]:
         q = snap_soft(g, p, soft, dist, 3.0)
         if q is None:
             continue
@@ -139,7 +143,8 @@ def compartments(g, ct, lab, table, res):
         if markers[tuple(q)] == 0:
             markers[tuple(q)] = cid('retromaxillary.' + side)
             used[side] += 1
-    report['retromaxillary_tips_used'] = used
+    report['retromaxillary_seeds_used'] = used
+    report['retromaxillary_tips_by_side'] = {'R': sum(p[0] > 0 for p in Q), 'L': sum(p[0] <= 0 for p in Q)}
     # intracranial: far from bone, above the orbital roofs (frontal lobes) or behind the greater
     # wings above the skull base (temporal lobes); exterior: masked face and lateral soft tissue
     orb_top = max(p[2] for p in P) if P else 45.0
@@ -150,7 +155,14 @@ def compartments(g, ct, lab, table, res):
     markers[ext] = cid('exterior')
     lat = soft & (dist >= 3.0) & (np.abs(g.R) > 46) & (g.A > -60) & (g.S < 40)
     markers[lat & (markers == 0)] = cid('exterior')
-    phar = soft & (dist >= 3.0) & (np.abs(g.R) < 12) & (g.A < -80) & (g.S < 2)
+    # deep soft tissue of the face far from any air space: behind the maxilla laterally
+    # (infratemporal / masticator space) and behind the nasopharynx (prevertebral)
+    dair = ndi.distance_transform_edt(~air_lab, sampling=g.step)
+    deep = soft & (dist >= 4.0) & (dair >= 6.0) & (g.S < 25)
+    for sd, sg in (('R', 1), ('L', -1)):
+        itf = deep & (g.A < -40) & (g.A > -75) & (sg * g.R > 12) & (sg * g.R < 48)
+        markers[itf & (markers == 0)] = cid('retromaxillary.' + sd)
+    phar = soft & (dist >= 3.0) & (dair >= 4.0) & (np.abs(g.R) < 12) & (g.A < -70) & (g.S < 10)
     markers[phar & (markers == 0)] = cid('pharynx')
     oral = soft & (dist >= 2.0) & (np.abs(g.R) < 20) & (g.A > -45) & (g.A < -10) & (g.S < -8)
     markers[oral & (markers == 0)] = cid('oral')
@@ -213,12 +225,21 @@ def nearest_two(g, ws, comp, cand, names_needed):
     return d1, c1, d2, c2, dists
 
 
-def direction(dA, dB, mask):
-    """Unit vector field (r, a, s components) pointing from A towards B, evaluated where mask."""
-    f = ndi.gaussian_filter((dA - dB).astype(np.float32), 1.0)
+def local_fields(dA, dB, m, pad=4):
+    """Inside the padded bounding box of m: unit direction from A towards B (gradient of d_A - d_B,
+    lightly smoothed) and the cosine between grad d_A and grad d_B (-1 = A and B on opposite sides)."""
+    kk, jj, ii = np.nonzero(m)
+    lo = np.maximum([kk.min() - pad, jj.min() - pad, ii.min() - pad], 0)
+    hi = np.minimum([kk.max() + pad + 1, jj.max() + pad + 1, ii.max() + pad + 1], m.shape)
+    sl = tuple(slice(a, b) for a, b in zip(lo, hi))
+    a, b = dA[sl].astype(np.float32), dB[sl].astype(np.float32)
+    f = ndi.gaussian_filter(a - b, 1.0)
     gk, gj, gi = np.gradient(f)
     n = np.sqrt(gk ** 2 + gj ** 2 + gi ** 2) + 1e-6
-    return gi[mask] / n[mask], gj[mask] / n[mask], gk[mask] / n[mask]
+    ak, aj, ai = np.gradient(ndi.gaussian_filter(a, 0.7)); bk, bj, bi = np.gradient(ndi.gaussian_filter(b, 0.7))
+    cos = (ak * bk + aj * bj + ai * bi) / (np.sqrt(ak ** 2 + aj ** 2 + ai ** 2) * np.sqrt(bk ** 2 + bj ** 2 + bi ** 2) + 1e-6)
+    q = (kk - lo[0], jj - lo[1], ii - lo[2])
+    return gi[q] / n[q], gj[q] / n[q], gk[q] / n[q], cos[q]
 
 
 def walls(g, ct, lab, table, ws, comp, bone, res):
@@ -239,8 +260,8 @@ def walls(g, ct, lab, table, ws, comp, bone, res):
     out = np.zeros(g.shape, np.int32)
     names = {}
     report = {}
-    inv = {v: n for n, v in comp.items()}
     lm = json.load(open(os.path.join(REPO, 'ssb/geometry/landmarks.json')))
+    se = lm.get('lm.sella-floor-center.M')
     for name, A, B, T in specs:
         av = [comp[n] for n in A if n in comp]; bv = [comp[n] for n in B if n in comp]
         if not av or not bv:
@@ -252,13 +273,18 @@ def walls(g, ct, lab, table, ws, comp, bone, res):
             continue
         dA = np.min([dists[n] for n in A if n in dists], axis=0)
         dB = np.min([dists[n] for n in B if n in dists], axis=0)
-        nr, na, ns = direction(dA, dB, m)
+        nr, na, ns, cos = local_fields(dA, dB, m)
         kk, jj, ii = np.nonzero(m)
-        rr = g.r[ii]
+        # between: A and B lie on opposite sides of the voxel (or the voxel touches one of them)
+        betw = (dA[m] <= g.step) | (dB[m] <= g.step) | (cos < -0.1)
+        kk, jj, ii, nr, na, ns = kk[betw], jj[betw], ii[betw], nr[betw], na[betw], ns[betw]
+        rr, aa, sv = g.r[ii], g.a[jj], g.s[kk]
         parts = {}
         if name.startswith('ethmoid-roof'):
             sd = name[-1]
-            lat = np.abs(nr) > np.abs(ns)          # A->B horizontal: the vertical lateral lamella
+            # A->B horizontal and pointing to the midline (ethmoid cells lateral, olfactory fossa medial): the
+            # vertical lateral lamella; everything else on this interface is the fovea (roof)
+            lat = (np.abs(nr) > np.abs(ns)) & (nr * np.sign(rr) < 0)
             parts['s.lateral-lamella.' + sd] = lat
             parts['s.fovea-ethmoidalis.' + sd] = ~lat
         elif name == 'sphenoid-front':
@@ -270,11 +296,13 @@ def walls(g, ct, lab, table, ws, comp, bone, res):
             for sd, sg in (('R', 1), ('L', -1)):
                 parts['s.sphenoid-floor.' + sd] = np.sign(rr) == sg
         elif name == 'sphenoid-ic':
-            a_tub = tuberculum_a(g, lm)
-            lateral = np.abs(nr) > np.maximum(np.abs(ns), np.abs(na))
-            up = ~lateral & (ns > 0)
-            parts['s.planum-sphenoidale.M'] = up & (g.a[jj] > a_tub)
-            parts['s.sella-turcica.M'] = ~lateral & (g.a[jj] <= a_tub) & (np.abs(rr) < 12)
+            a_tub = tuberculum_a(g, ct, lm)
+            lateral = (np.abs(nr) > np.maximum(np.abs(ns), np.abs(na))) | (np.abs(rr) >= 12)
+            parts['s.planum-sphenoidale.M'] = ~lateral & (ns > 0) & (aa > a_tub)
+            s_fl = se[2] if se else 30.0
+            post = ~lateral & (aa <= a_tub)
+            parts['s.sella-turcica.M'] = post & (sv >= s_fl - 3.0)
+            parts['s.clivus.M'] = post & (sv < s_fl - 3.0)
             for sd, sg in (('R', 1), ('L', -1)):
                 parts['s.sphenoid-lateral-wall.' + sd] = lateral & (np.sign(rr) == sg)
             report['tuberculum_a_mm'] = a_tub
@@ -282,51 +310,76 @@ def walls(g, ct, lab, table, ws, comp, bone, res):
             parts[name] = np.ones(len(kk), bool)
         for pn, sel in parts.items():
             key = pn.split('#')[0]
+            if not sel.any():
+                continue
             if key not in names:
                 names[key] = len(names) + 1
-            out[kk[sel], jj[sel], ii[sel]] = np.where(out[kk[sel], jj[sel], ii[sel]] == 0, names[key],
-                                                      out[kk[sel], jj[sel], ii[sel]])
-        report[name] = {'voxels': int(m.sum()), 'T_mm': T, 'bone_fraction': round(float(bone[m].mean()), 2)}
+            cur = out[kk[sel], jj[sel], ii[sel]]
+            out[kk[sel], jj[sel], ii[sel]] = np.where(cur == 0, names[key], cur)
+        report[name] = {'voxels': int(betw.sum()), 'dropped_not_between': int((~betw).sum()), 'T_mm': T,
+                        'bone_fraction': round(float(bone[kk, jj, ii].mean()), 2)}
     return out, names, report
 
 
-def tuberculum_a(g, lm):
-    """Tuberculum sellae (a, mm): on the midsagittal band, the anterior edge of the pituitary fossa -
-    the most anterior point, above the sella floor, where the intracranial floor drops below the planum."""
-    se = lm.get('lm.sella-floor-center.M') or lm.get('s.sella-turcica.M')
-    return float(se[1]) + 6.0 if se else -62.0
+def tuberculum_a(g, ct, lm):
+    """Tuberculum sellae, AP position (mm): on the midsagittal band (|r| <= 2 mm), scanning forward
+    from the sella floor, the first level where the highest bone of the fossa's anterior wall comes
+    within 2 mm of the planum height - i.e. where the sellar wall has climbed to the planum."""
+    se = lm.get('lm.sella-floor-center.M')
+    if not se:
+        return -62.0
+    band = np.abs(g.r) <= 2.0
+    js = np.nonzero((g.a >= se[1]) & (g.a <= se[1] + 20))[0]
+    top = []
+    for j in js:
+        col = (ct[:, j, band] >= BT).any(axis=1) & (g.s >= se[2] - 2) & (g.s <= se[2] + 20)
+        k = np.nonzero(col)[0]
+        top.append(g.s[k.max()] if len(k) else np.nan)
+    top = np.array(top)
+    planum = np.nanmedian(top[-8:])
+    ok = np.nonzero(top >= planum - 2.0)[0]
+    return float(g.a[js[ok[0]]]) if len(ok) else float(se[1]) + 6.0
 
 
 # ---------------------------------------------------------------- nasal septum and turbinates
-def septum_turbinates(g, ct, lab, table, res, ws, comp):
+def septum_turbinates(g, ct, lab, table, res, walls_lab):
+    from skimage.morphology import convex_hull_image
     byname = {v: int(k) for k, v in table.items()}
     nR = lab == byname['s.nasal-cavity.R']; nL = lab == byname['s.nasal-cavity.L']
-    tissue = (lab == 0) & (ct >= AIR)
+    tissue = (lab == 0) & (ct >= AIR) & (walls_lab == 0)
     dR = ndi.distance_transform_edt(~nR, sampling=g.step); dL = ndi.distance_transform_edt(~nL, sampling=g.step)
     other = (lab > 0) & ~nR & ~nL
     dO = ndi.distance_transform_edt(~other, sampling=g.step)
-    sept = tissue & (dR + dL <= 12.0) & (dO > np.maximum(dR, dL)) & (np.abs(g.R) < 8)
-    # keep the largest connected piece (the septum is one plate)
+    # septum: tissue between the two airways (their distance gradients point opposite ways), nearer
+    # to both airways than to any sinus, within 10 mm in total (bone, cartilage and mucosa)
+    zone = tissue & (dR + dL <= 10.0) & (dO > np.maximum(dR, dL)) & (np.abs(g.R) < 10)
+    kk, jj, ii = np.nonzero(zone)
+    gR = np.gradient(ndi.gaussian_filter(dR.astype(np.float32), 0.7)); gL = np.gradient(ndi.gaussian_filter(dL.astype(np.float32), 0.7))
+    cos = sum(gR[c][kk, jj, ii] * gL[c][kk, jj, ii] for c in range(3)) / (
+        np.sqrt(sum(gR[c][kk, jj, ii] ** 2 for c in range(3))) * np.sqrt(sum(gL[c][kk, jj, ii] ** 2 for c in range(3))) + 1e-6)
+    del gR, gL
+    sept = np.zeros(g.shape, bool)
+    sept[kk[cos < -0.5], jj[cos < -0.5], ii[cos < -0.5]] = True
     cl, n = ndi.label(sept)
     if n:
         sizes = np.bincount(cl.ravel()); sizes[0] = 0
         sept = cl == np.argmax(sizes)
     out = {'s.nasal-septum.M': sept}
     rep = {'septum_voxels': int(sept.sum())}
-    # turbinates: tissue enclosed by one side's airway in each coronal slice
-    disk = np.zeros((17, 17), bool)
-    yy, xx = np.mgrid[-8:9, -8:9]; disk[(yy ** 2 + xx ** 2) <= 64] = True       # 4 mm radius
+    # turbinates: tissue inside the per-coronal-slice convex hull of one side's airway (what projects
+    # into the airway), split by marker watershed on tissue thickness: UW inferior / middle turbinate
+    # tips against "lateral wall" markers (tissue touching a sinus or a named wall) and the septum
+    near_other = ndi.distance_transform_edt(~(other | (walls_lab > 0) | sept), sampling=g.step) <= 1.0
     for sd, air in (('R', nR), ('L', nL)):
-        enc = np.zeros(g.shape, bool)
+        hull = np.zeros(g.shape, bool)
         for j in range(g.shape[1]):
             sl = air[:, j, :]
-            if sl.sum() < 20:
-                continue
-            enc[:, j, :] = ndi.binary_closing(sl, disk, iterations=1, border_value=0)
-        cand = enc & tissue & ~sept
-        # markers from UW tips inside the candidate tissue (snap to the thickest tissue within 3 mm)
+            if sl.sum() >= 20:
+                hull[:, j, :] = convex_hull_image(sl)
+        cand = hull & tissue & ~sept
         thick = ndi.distance_transform_edt(cand, sampling=g.step)
         mk = np.zeros(g.shape, np.int32)
+        mk[cand & near_other] = 3
         used = {}
         for code, term in ((1, 'inferior turbinate'), (2, 'middle turbinate')):
             used[term] = 0
@@ -337,8 +390,6 @@ def septum_turbinates(g, ct, lab, table, res, ws, comp):
                 if q is None:
                     continue
                 mk[tuple(q)] = code; used[term] += 1
-        if not mk.any():
-            continue
         tw = watershed(-thick, mk, mask=cand, connectivity=1)
         for code, nm in ((1, 's.inferior-turbinate.' + sd), (2, 's.middle-turbinate.' + sd)):
             m = tw == code
@@ -347,11 +398,47 @@ def septum_turbinates(g, ct, lab, table, res, ws, comp):
                 sizes = np.bincount(cl.ravel()); sizes[0] = 0
                 m = cl == np.argmax(sizes)
             out[nm] = m
-        rep['turbinate_tips_used.' + sd] = used
+            rep[nm] = {'voxels': int(m.sum()), 'cm3': round(float(m.sum()) * g.step ** 3 / 1000, 2),
+                       'a_range_mm': [float(g.a[np.nonzero(m.any(axis=(0, 2)))[0]].min()),
+                                      float(g.a[np.nonzero(m.any(axis=(0, 2)))[0]].max())] if m.any() else None}
+        rep['tips_used.' + sd] = used
     return out, rep
 
 
 # ---------------------------------------------------------------- main
+PROXY = {
+    's.basal-lamella': 'PROXY: bone within 3 mm of both the anterior and the posterior ethmoid labels, whose '
+                       'boundary is stage B\'s coronal proxy plane (specimen.py), not the traced lamella; the '
+                       'real basal lamella is not continuous at this resolution and UW\'s 8 tips sit at the roof',
+    's.lateral-lamella': 'ethmoid-cells | intracranial bone split from the fovea by orientation (A->B mostly '
+                         'horizontal and towards the midline); the junction is a threshold, not a suture',
+    's.fovea-ethmoidalis': 'ethmoid-cells | intracranial bone whose A->B direction is mostly vertical',
+    's.planum-sphenoidale': 'sphenoid | intracranial, upward-facing, |r| < 12 mm, anterior to the tuberculum '
+                            '(found on the midsagittal bone profile)',
+    's.sella-turcica': 'sphenoid | intracranial behind the tuberculum, from 3 mm below the sella floor up: the '
+                       'sellar floor and anterior wall as seen from the sinus, not the whole saddle',
+    's.clivus': 'sphenoid | intracranial behind the tuberculum more than 3 mm below the sella floor: the clival '
+                'recess wall only, not the clivus',
+    's.sphenoid-lateral-wall': 'sphenoid | intracranial facing sideways, plus the roof of a lateral recess '
+                               '(|r| >= 12 mm) under the middle cranial fossa',
+    's.sphenoid-face': 'sphenoid | nasal cavity or posterior ethmoid, A->B mostly anteroposterior; side = r sign',
+    's.sphenoid-floor': 'sphenoid | nasopharynx or prevertebral soft tissue, and downward-facing sphenoid | nasal; '
+                        'side = r sign',
+    's.maxillary-anterior-wall': 'maxillary | exterior (the face): the facial and anterolateral wall',
+    's.maxillary-posterior-wall': 'maxillary | retromaxillary soft tissue (PPF, retroantral fat, infratemporal fossa)',
+    's.maxillary-sinus-floor': 'maxillary | oral soft tissue, up to 16 mm of alveolar bone',
+    's.nasal-floor': 'nasal cavity | oral soft tissue (hard palate), up to 16 mm',
+    's.nasal-septum': 'bone, cartilage and mucosa between the right and left airways (not split into '
+                      'perpendicular plate / vomer / cartilage: their junctions are not visible)',
+    's.inferior-turbinate': 'tissue (bone + mucosa) inside the coronal convex hull of the airway, grown from UW '
+                            'tips against lateral-wall and septum markers',
+    's.middle-turbinate': 'as the inferior turbinate; its vertical attachment to the skull base is too thin to '
+                          'follow and is not included',
+    's.orbit': 'orbital soft tissue (globe, fat, muscles, nerve) by watershed from UW orbit tips (one side\'s tips, '
+               'mirrored for the other); the anterior limit is where it meets the masked face, so the lids are in',
+}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--png-dir', default=CACHE)
@@ -364,10 +451,98 @@ def main():
     lab = np.where(np.isin(lab0, [int(k) for k in base]), lab0, 0).astype(np.uint16)
     ws, comp, bone, soft, dist, rep_c = compartments(g, ct, lab, base, res)
     wl, wnames, rep_w = walls(g, ct, lab, base, ws, comp, bone, res)
-    st, rep_t = septum_turbinates(g, ct, lab, base, res, ws, comp)
-    np.savez_compressed(os.path.join(CACHE, 'walls-grid.npz'), ws=ws, comp=json.dumps(comp), walls=wl,
-                        wall_names=json.dumps(wnames), **{'st_' + k: v for k, v in st.items()})
-    print(json.dumps(rep_c, indent=1)); print(json.dumps(rep_w, indent=1)); print(json.dumps(rep_t, indent=1))
+    st, rep_t = septum_turbinates(g, ct, lab, base, res, wl)
+    # compose: walls first, then septum and turbinates, then the orbits; only on voxels no air label holds
+    new = {}
+    for n, v in wnames.items():
+        new[n] = wl == v
+    for n, m in st.items():
+        new[n] = m
+    for sd in ('R', 'L'):
+        if 'orbit.' + sd in comp:
+            new['s.orbit.' + sd] = ws == comp['orbit.' + sd]
+    by_name = {v: int(k) for k, v in table.items()}
+    out = lab.copy()
+    counts = {}
+    for n in [n for n in new if not n.startswith('s.orbit.')] + [n for n in new if n.startswith('s.orbit.')]:
+        m = new[n] & (out == 0)
+        if m.sum() < 30:
+            continue
+        if n not in by_name:
+            by_name[n] = max(by_name.values()) + 1
+        out[m] = by_name[n]
+        counts[n] = int(m.sum())
+    assert np.array_equal(out[lab > 0], lab[lab > 0]), 'an air label was overwritten'
+    table = {str(i): k for k, i in sorted(by_name.items(), key=lambda kv: kv[1])}
+    with gzip.GzipFile(os.path.join(REPO, 'ssb/ct/labels.u16.gz'), 'wb', compresslevel=9, mtime=0) as f:
+        f.write(np.ascontiguousarray(out).astype('<u2').tobytes())
+    json.dump({'version': 1, 'labels': table}, open(os.path.join(REPO, 'ssb/geometry/labels.json'), 'w'), indent=2)
+    np.savez_compressed(os.path.join(CACHE, 'walls-grid.npz'), ws=ws, comp=json.dumps(comp), labels=out,
+                        table=json.dumps(table))
+    report = {
+        'method': __doc__.split('Method.')[1].strip(),
+        'thresholds_display': {'bone_thin': BT, 'air': AIR},
+        'compartments': rep_c, 'walls': rep_w, 'septum_turbinates': rep_t,
+        'voxels_written': counts,
+        'cm3': {n: round(c * g.step ** 3 / 1000, 2) for n, c in counts.items()},
+        'notes': PROXY,
+        'not_derived': {
+            's.superior-turbinate': 'no UW tips; not separable from the middle turbinate here',
+            's.uncinate-process': 'UW has 6 sagittal tips but the process is a sub-millimetre hook fused to the '
+                                  'lateral wall at this resolution; left in the lateral wall',
+            's.bullar-lamella': 'no tips; bulla seeded on the right only (stage B)',
+            's.perpendicular-plate / s.vomer': 'inside s.nasal-septum.M, junctions not visible',
+        },
+    }
+    write_results('walls', report)
+    overlays(g, ct, out, table, args.png_dir)
+    print(json.dumps({'compartments': rep_c['compartments_cm3'], 'cm3': report['cm3']}, indent=1))
+
+
+def overlays(g, ct, labels, table, png_dir):
+    from PIL import Image, ImageDraw
+    import colorsys
+    names = sorted(v for v in table.values() if v.rsplit('.', 1)[0] not in AIR_IDS)
+    col = {}
+    for i, n in enumerate(names):
+        col[n] = np.array(colorsys.hsv_to_rgb((i * 0.618) % 1, 0.85, 1.0)) * 255
+    idx_col = {int(k): col[v] for k, v in table.items() if v in col}
+
+    def blend(gray, lab):
+        rgb = np.dstack([gray] * 3).astype(np.float32)
+        for v, c in idx_col.items():
+            m = lab == v
+            if m.any():
+                a = 0.25 if table[str(v)].startswith('s.orbit.') else 0.65
+                rgb[m] = (1 - a) * rgb[m] + a * c
+        return rgb.clip(0, 255).astype(np.uint8)
+    rows = []
+    for av in (-15, -25, -35, -45, -55, -65):
+        j = int(np.argmin(np.abs(g.a - av)))
+        rows.append(('coronal a=%g (R on image left)' % av, blend(ct[::-1, j, ::-1], labels[::-1, j, ::-1])))
+    for sv in (10, 25, 38, 55):
+        k = int(np.argmin(np.abs(g.s - sv)))
+        rows.append(('axial s=%g (R on image left)' % sv, blend(ct[k][::-1, ::-1], labels[k][::-1, ::-1])))
+    for rv in (8, -8, 20, -20):
+        i = int(np.argmin(np.abs(g.r - rv)))
+        rows.append(('sagittal r=%g (anterior left)' % rv, blend(ct[::-1, ::-1, i], labels[::-1, ::-1, i])))
+    for name, group in (('coronal', rows[:6]), ('axial', rows[6:10]), ('sagittal', rows[10:])):
+        ims = [Image.fromarray(v).resize((v.shape[1] * 2, v.shape[0] * 2), Image.NEAREST) for _, v in group]
+        per = 3 if len(ims) > 4 else len(ims)
+        W = max(sum(im.width for im in ims[r:r + per]) + 6 * (per - 1) for r in range(0, len(ims), per))
+        H = sum(max(im.height for im in ims[r:r + per]) + 16 for r in range(0, len(ims), per))
+        canvas = Image.new('RGB', (W, H), (20, 20, 20)); y = 0
+        for r0 in range(0, len(ims), per):
+            x = 0
+            for (title, _), im in zip(group[r0:r0 + per], ims[r0:r0 + per]):
+                canvas.paste(im, (x, y + 16)); ImageDraw.Draw(canvas).text((x + 3, y + 2), title, fill=(255, 255, 0))
+                x += im.width + 6
+            y += max(im.height for im in ims[r0:r0 + per]) + 16
+        canvas.save(os.path.join(png_dir, f'reconC-walls-{name}.png'))
+    leg = Image.new('RGB', (330, 14 * len(names) + 8), (20, 20, 20)); d = ImageDraw.Draw(leg)
+    for i, n in enumerate(names):
+        d.rectangle([6, 5 + 14 * i, 16, 15 + 14 * i], fill=tuple(int(c) for c in col[n])); d.text((22, 5 + 14 * i), n, fill=(230, 230, 230))
+    leg.save(os.path.join(png_dir, 'reconC-walls-legend.png'))
 
 
 AIR_IDS = ('s.agger-nasi-cell', 's.anterior-ethmoid-cells', 's.ethmoid-bulla', 's.frontal-recess', 's.frontal-sinus',

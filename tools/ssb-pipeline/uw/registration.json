@@ -9761,6 +9761,873 @@
    "bytes": 123931,
    "bytes_uncompressed": 170076,
    "triangles": 13998
+  },
+  "walls": {
+   "file": "walls.glb.gz",
+   "bytes": 984603,
+   "bytes_uncompressed": 1345304,
+   "triangles": 108642
+  }
+ },
+ "walls": {
+  "method": "1. Compartments. Every voxel that is not bone (display < BT) is assigned to one compartment by marker\n   watershed on the negated distance to bone (6-connected), so compartments meet where bone is, or at the\n   narrowest neck where the bone is too thin to see (lamina papyracea, cribriform plate, fissures).\n   Markers: every named air space of stage B (its air floods its own mucosa); orbit (UW \"orbit\" tips);\n   intracranial (soft tissue >= 6 mm from bone above the orbital roofs, and the middle cranial fossae\n   behind the greater wings); exterior (the masked face, display 0, and soft tissue lateral to the skull);\n   retromaxillary (UW \"pterygopalatine fossa\", \"pterygomaxillary fissure\", \"retroantral fat pad\" tips);\n   pharynx/prevertebral and oral (soft tissue far from bone behind the nasopharynx / below the palate).\n2. Walls. A wall is the bone shared by two compartments: bone (display >= BT) or, where the bone is too\n   thin to show, the interface voxels between the two compartments. Each candidate voxel takes its two\n   nearest distinct compartments; it belongs to wall (A, B) when those are A and B and d_A + d_B <= T\n   (T per wall: thin plates ~4 mm, tables and floors more). Walls that split one interface by orientation\n   (fovea vs lateral lamella, sphenoid face vs floor vs lateral wall vs planum) use the direction from A to\n   B (gradient of d_A - d_B).\n3. Septum and turbinates from the nasal airway itself (air-label distances, not compartments):\n   septum = tissue whose two nearest air spaces are the right and left nasal cavity, within 12 mm total;\n   turbinates = tissue enclosed by one side's nasal airway (inside the 2D closing of that airway in each\n   coronal slice), split by marker watershed on tissue thickness from UW's inferior / middle turbinate tips.",
+  "thresholds_display": {
+   "bone_thin": 120,
+   "air": 78
+  },
+  "compartments": {
+   "orbit_seeds_used": {
+    "R": 32,
+    "L": 32
+   },
+   "orbit_tips_by_side": {
+    "R": 32,
+    "L": 0
+   },
+   "retromaxillary_seeds_used": {
+    "R": 55,
+    "L": 54
+   },
+   "retromaxillary_tips_by_side": {
+    "R": 85,
+    "L": 10
+   },
+   "compartments_cm3": {
+    "orbit.R": 21.38,
+    "orbit.L": 20.97,
+    "retromaxillary.L": 45.63,
+    "retromaxillary.R": 47.89,
+    "intracranial": 293.38,
+    "exterior": 439.92,
+    "pharynx": 8.55,
+    "oral": 8.06
+   }
+  },
+  "walls": {
+   "s.lamina-papyracea.R": {
+    "voxels": 5452,
+    "dropped_not_between": 92,
+    "T_mm": 4.0,
+    "bone_fraction": 0.89
+   },
+   "s.orbital-floor.R": {
+    "voxels": 8213,
+    "dropped_not_between": 139,
+    "T_mm": 5.0,
+    "bone_fraction": 0.95
+   },
+   "s.maxillary-medial-wall.R": {
+    "voxels": 13748,
+    "dropped_not_between": 643,
+    "T_mm": 6.0,
+    "bone_fraction": 0.95
+   },
+   "s.maxillary-anterior-wall.R": {
+    "voxels": 25557,
+    "dropped_not_between": 386,
+    "T_mm": 8.0,
+    "bone_fraction": 1.0
+   },
+   "s.maxillary-posterior-wall.R": {
+    "voxels": 11689,
+    "dropped_not_between": 2286,
+    "T_mm": 6.0,
+    "bone_fraction": 1.0
+   },
+   "s.maxillary-sinus-floor.R": {
+    "voxels": 10732,
+    "dropped_not_between": 134,
+    "T_mm": 16.0,
+    "bone_fraction": 1.0
+   },
+   "s.nasal-floor.R": {
+    "voxels": 12180,
+    "dropped_not_between": 355,
+    "T_mm": 16.0,
+    "bone_fraction": 1.0
+   },
+   "s.basal-lamella.R": {
+    "voxels": 354,
+    "dropped_not_between": 25,
+    "T_mm": 3.0,
+    "bone_fraction": 0.31
+   },
+   "ethmoid-roof.R": {
+    "voxels": 3180,
+    "dropped_not_between": 224,
+    "T_mm": 5.0,
+    "bone_fraction": 0.94
+   },
+   "s.cribriform-plate.R": {
+    "voxels": 781,
+    "dropped_not_between": 105,
+    "T_mm": 5.0,
+    "bone_fraction": 0.94
+   },
+   "s.frontal-sinus-anterior-table.R": {
+    "voxels": 11549,
+    "dropped_not_between": 108,
+    "T_mm": 14.0,
+    "bone_fraction": 1.0
+   },
+   "s.frontal-sinus-posterior-table.R": {
+    "voxels": 10766,
+    "dropped_not_between": 411,
+    "T_mm": 10.0,
+    "bone_fraction": 1.0
+   },
+   "s.frontal-sinus-floor.R": {
+    "voxels": 995,
+    "dropped_not_between": 18,
+    "T_mm": 8.0,
+    "bone_fraction": 1.0
+   },
+   "s.lamina-papyracea.L": {
+    "voxels": 6038,
+    "dropped_not_between": 87,
+    "T_mm": 4.0,
+    "bone_fraction": 0.9
+   },
+   "s.orbital-floor.L": {
+    "voxels": 7913,
+    "dropped_not_between": 172,
+    "T_mm": 5.0,
+    "bone_fraction": 0.98
+   },
+   "s.maxillary-medial-wall.L": {
+    "voxels": 11948,
+    "dropped_not_between": 541,
+    "T_mm": 6.0,
+    "bone_fraction": 0.93
+   },
+   "s.maxillary-anterior-wall.L": {
+    "voxels": 30440,
+    "dropped_not_between": 345,
+    "T_mm": 8.0,
+    "bone_fraction": 1.0
+   },
+   "s.maxillary-posterior-wall.L": {
+    "voxels": 13057,
+    "dropped_not_between": 1537,
+    "T_mm": 6.0,
+    "bone_fraction": 1.0
+   },
+   "s.maxillary-sinus-floor.L": {
+    "voxels": 11844,
+    "dropped_not_between": 353,
+    "T_mm": 16.0,
+    "bone_fraction": 1.0
+   },
+   "s.nasal-floor.L": {
+    "voxels": 4361,
+    "dropped_not_between": 405,
+    "T_mm": 16.0,
+    "bone_fraction": 1.0
+   },
+   "s.basal-lamella.L": {
+    "voxels": 778,
+    "dropped_not_between": 58,
+    "T_mm": 3.0,
+    "bone_fraction": 0.46
+   },
+   "ethmoid-roof.L": {
+    "voxels": 5017,
+    "dropped_not_between": 608,
+    "T_mm": 5.0,
+    "bone_fraction": 0.95
+   },
+   "s.cribriform-plate.L": {
+    "voxels": 671,
+    "dropped_not_between": 23,
+    "T_mm": 5.0,
+    "bone_fraction": 0.99
+   },
+   "s.frontal-sinus-anterior-table.L": {
+    "voxels": 6816,
+    "dropped_not_between": 34,
+    "T_mm": 14.0,
+    "bone_fraction": 1.0
+   },
+   "s.frontal-sinus-posterior-table.L": {
+    "voxels": 5958,
+    "dropped_not_between": 299,
+    "T_mm": 10.0,
+    "bone_fraction": 1.0
+   },
+   "s.frontal-sinus-floor.L": {
+    "voxels": 545,
+    "dropped_not_between": 3,
+    "T_mm": 8.0,
+    "bone_fraction": 1.0
+   },
+   "s.intersinus-septum.M": {
+    "voxels": 2016,
+    "dropped_not_between": 75,
+    "T_mm": 4.0,
+    "bone_fraction": 0.78
+   },
+   "s.frontal-intersinus-septum.M": {
+    "voxels": 709,
+    "dropped_not_between": 474,
+    "T_mm": 6.0,
+    "bone_fraction": 0.88
+   },
+   "sphenoid-front": {
+    "voxels": 6275,
+    "dropped_not_between": 161,
+    "T_mm": 5.0,
+    "bone_fraction": 0.83
+   },
+   "sphenoid-below": {
+    "voxels": 11118,
+    "dropped_not_between": 480,
+    "T_mm": 8.0,
+    "bone_fraction": 1.0
+   },
+   "tuberculum_a_mm": -61.5,
+   "sphenoid-ic": {
+    "voxels": 17818,
+    "dropped_not_between": 473,
+    "T_mm": 5.0,
+    "bone_fraction": 0.93
+   }
+  },
+  "septum_turbinates": {
+   "septum_voxels": 41855,
+   "s.inferior-turbinate.R": {
+    "voxels": 18801,
+    "cm3": 2.35,
+    "a_range_mm": [
+     -49.5,
+     -10.0
+    ]
+   },
+   "s.middle-turbinate.R": {
+    "voxels": 11808,
+    "cm3": 1.48,
+    "a_range_mm": [
+     -54.0,
+     -11.5
+    ]
+   },
+   "tips_used.R": {
+    "inferior turbinate": 9,
+    "middle turbinate": 19
+   },
+   "s.inferior-turbinate.L": {
+    "voxels": 38385,
+    "cm3": 4.8,
+    "a_range_mm": [
+     -49.5,
+     -8.5
+    ]
+   },
+   "s.middle-turbinate.L": {
+    "voxels": 18936,
+    "cm3": 2.37,
+    "a_range_mm": [
+     -52.0,
+     -9.5
+    ]
+   },
+   "tips_used.L": {
+    "inferior turbinate": 34,
+    "middle turbinate": 13
+   }
+  },
+  "voxels_written": {
+   "s.lamina-papyracea.R": 5452,
+   "s.orbital-floor.R": 8213,
+   "s.maxillary-medial-wall.R": 13748,
+   "s.maxillary-anterior-wall.R": 25557,
+   "s.maxillary-posterior-wall.R": 11689,
+   "s.maxillary-sinus-floor.R": 10732,
+   "s.nasal-floor.R": 12180,
+   "s.basal-lamella.R": 354,
+   "s.lateral-lamella.R": 814,
+   "s.fovea-ethmoidalis.R": 2366,
+   "s.cribriform-plate.R": 781,
+   "s.frontal-sinus-anterior-table.R": 11549,
+   "s.frontal-sinus-posterior-table.R": 10766,
+   "s.frontal-sinus-floor.R": 995,
+   "s.lamina-papyracea.L": 6038,
+   "s.orbital-floor.L": 7913,
+   "s.maxillary-medial-wall.L": 11948,
+   "s.maxillary-anterior-wall.L": 30440,
+   "s.maxillary-posterior-wall.L": 13057,
+   "s.maxillary-sinus-floor.L": 11844,
+   "s.nasal-floor.L": 4361,
+   "s.basal-lamella.L": 778,
+   "s.lateral-lamella.L": 1008,
+   "s.fovea-ethmoidalis.L": 4009,
+   "s.cribriform-plate.L": 671,
+   "s.frontal-sinus-anterior-table.L": 6816,
+   "s.frontal-sinus-posterior-table.L": 5958,
+   "s.frontal-sinus-floor.L": 545,
+   "s.intersinus-septum.M": 2016,
+   "s.frontal-intersinus-septum.M": 709,
+   "s.sphenoid-face.R": 1821,
+   "s.sphenoid-floor.R": 5438,
+   "s.sphenoid-face.L": 3226,
+   "s.sphenoid-floor.L": 6424,
+   "s.planum-sphenoidale.M": 2726,
+   "s.sella-turcica.M": 3840,
+   "s.clivus.M": 2079,
+   "s.sphenoid-lateral-wall.R": 3046,
+   "s.sphenoid-lateral-wall.L": 6093,
+   "s.nasal-septum.M": 41855,
+   "s.inferior-turbinate.R": 18801,
+   "s.middle-turbinate.R": 11808,
+   "s.inferior-turbinate.L": 38385,
+   "s.middle-turbinate.L": 18936,
+   "s.orbit.R": 170517,
+   "s.orbit.L": 167351
+  },
+  "cm3": {
+   "s.lamina-papyracea.R": 0.68,
+   "s.orbital-floor.R": 1.03,
+   "s.maxillary-medial-wall.R": 1.72,
+   "s.maxillary-anterior-wall.R": 3.19,
+   "s.maxillary-posterior-wall.R": 1.46,
+   "s.maxillary-sinus-floor.R": 1.34,
+   "s.nasal-floor.R": 1.52,
+   "s.basal-lamella.R": 0.04,
+   "s.lateral-lamella.R": 0.1,
+   "s.fovea-ethmoidalis.R": 0.3,
+   "s.cribriform-plate.R": 0.1,
+   "s.frontal-sinus-anterior-table.R": 1.44,
+   "s.frontal-sinus-posterior-table.R": 1.35,
+   "s.frontal-sinus-floor.R": 0.12,
+   "s.lamina-papyracea.L": 0.75,
+   "s.orbital-floor.L": 0.99,
+   "s.maxillary-medial-wall.L": 1.49,
+   "s.maxillary-anterior-wall.L": 3.81,
+   "s.maxillary-posterior-wall.L": 1.63,
+   "s.maxillary-sinus-floor.L": 1.48,
+   "s.nasal-floor.L": 0.55,
+   "s.basal-lamella.L": 0.1,
+   "s.lateral-lamella.L": 0.13,
+   "s.fovea-ethmoidalis.L": 0.5,
+   "s.cribriform-plate.L": 0.08,
+   "s.frontal-sinus-anterior-table.L": 0.85,
+   "s.frontal-sinus-posterior-table.L": 0.74,
+   "s.frontal-sinus-floor.L": 0.07,
+   "s.intersinus-septum.M": 0.25,
+   "s.frontal-intersinus-septum.M": 0.09,
+   "s.sphenoid-face.R": 0.23,
+   "s.sphenoid-floor.R": 0.68,
+   "s.sphenoid-face.L": 0.4,
+   "s.sphenoid-floor.L": 0.8,
+   "s.planum-sphenoidale.M": 0.34,
+   "s.sella-turcica.M": 0.48,
+   "s.clivus.M": 0.26,
+   "s.sphenoid-lateral-wall.R": 0.38,
+   "s.sphenoid-lateral-wall.L": 0.76,
+   "s.nasal-septum.M": 5.23,
+   "s.inferior-turbinate.R": 2.35,
+   "s.middle-turbinate.R": 1.48,
+   "s.inferior-turbinate.L": 4.8,
+   "s.middle-turbinate.L": 2.37,
+   "s.orbit.R": 21.31,
+   "s.orbit.L": 20.92
+  },
+  "notes": {
+   "s.basal-lamella": "PROXY: bone within 3 mm of both the anterior and the posterior ethmoid labels, whose boundary is stage B's coronal proxy plane (specimen.py), not the traced lamella; the real basal lamella is not continuous at this resolution and UW's 8 tips sit at the roof",
+   "s.lateral-lamella": "ethmoid-cells | intracranial bone split from the fovea by orientation (A->B mostly horizontal and towards the midline); the junction is a threshold, not a suture",
+   "s.fovea-ethmoidalis": "ethmoid-cells | intracranial bone whose A->B direction is mostly vertical",
+   "s.planum-sphenoidale": "sphenoid | intracranial, upward-facing, |r| < 12 mm, anterior to the tuberculum (found on the midsagittal bone profile)",
+   "s.sella-turcica": "sphenoid | intracranial behind the tuberculum, from 3 mm below the sella floor up: the sellar floor and anterior wall as seen from the sinus, not the whole saddle",
+   "s.clivus": "sphenoid | intracranial behind the tuberculum more than 3 mm below the sella floor: the clival recess wall only, not the clivus",
+   "s.sphenoid-lateral-wall": "sphenoid | intracranial facing sideways, plus the roof of a lateral recess (|r| >= 12 mm) under the middle cranial fossa",
+   "s.sphenoid-face": "sphenoid | nasal cavity or posterior ethmoid, A->B mostly anteroposterior; side = r sign",
+   "s.sphenoid-floor": "sphenoid | nasopharynx or prevertebral soft tissue, and downward-facing sphenoid | nasal; side = r sign",
+   "s.maxillary-anterior-wall": "maxillary | exterior (the face): the facial and anterolateral wall",
+   "s.maxillary-posterior-wall": "maxillary | retromaxillary soft tissue (PPF, retroantral fat, infratemporal fossa)",
+   "s.maxillary-sinus-floor": "maxillary | oral soft tissue, up to 16 mm of alveolar bone",
+   "s.nasal-floor": "nasal cavity | oral soft tissue (hard palate), up to 16 mm",
+   "s.nasal-septum": "bone, cartilage and mucosa between the right and left airways (not split into perpendicular plate / vomer / cartilage: their junctions are not visible)",
+   "s.inferior-turbinate": "tissue (bone + mucosa) inside the coronal convex hull of the airway, grown from UW tips against lateral-wall and septum markers",
+   "s.middle-turbinate": "as the inferior turbinate; its vertical attachment to the skull base is too thin to follow and is not included",
+   "s.orbit": "orbital soft tissue (globe, fat, muscles, nerve) by watershed from UW orbit tips (one side's tips, mirrored for the other); the anterior limit is where it meets the masked face, so the lids are in"
+  },
+  "not_derived": {
+   "s.superior-turbinate": "no UW tips; not separable from the middle turbinate here",
+   "s.uncinate-process": "UW has 6 sagittal tips but the process is a sub-millimetre hook fused to the lateral wall at this resolution; left in the lateral wall",
+   "s.bullar-lamella": "no tips; bulla seeded on the right only (stage B)",
+   "s.perpendicular-plate / s.vomer": "inside s.nasal-septum.M, junctions not visible"
+  }
+ },
+ "sweeps": {
+  "s.anterior-ethmoidal-artery.R": {
+   "confidence": "low",
+   "length_mm": 9.7,
+   "status_fraction": {
+    "labelled": 0.09,
+    "inferred": 0.91
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "the one UW \"anterior ethmoidal artery canal\" tip, snapped to the lamina papyracea, is the labelled point; the course across the ethmoid roof to the lateral lamella is inferred: 1 mm under the labelled roof at the same coronal level (a canal in a mesentery below the roof would not be found by this rule)"
+   ],
+   "points": {
+    "lm.anterior-ethmoidal-foramen": [
+     10.0,
+     -24.0,
+     40.0
+    ],
+    "lm.aea-lateral-lamella-entry": [
+     2.5,
+     -25.5,
+     46.0
+    ]
+   }
+  },
+  "s.anterior-ethmoidal-artery.L": {
+   "confidence": "low",
+   "length_mm": 8.6,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "mirrored from the other side's UW tip; the course across the ethmoid roof to the lateral lamella is inferred: 1 mm under the labelled roof at the same coronal level (a canal in a mesentery below the roof would not be found by this rule)"
+   ],
+   "points": {
+    "lm.anterior-ethmoidal-foramen": [
+     -11.0,
+     -24.0,
+     40.0
+    ],
+    "lm.aea-lateral-lamella-entry": [
+     -5.5,
+     -25.5,
+     46.5
+    ]
+   }
+  },
+  "s.infraorbital-nerve.R": {
+   "confidence": "low",
+   "length_mm": 25.6,
+   "status_fraction": {
+    "detected": 0.31,
+    "inferred": 0.69
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain) from the foramen back; the groove behind it and the course to the inferior orbital fissure are inferred along the top of the labelled orbital floor"
+   ],
+   "canal": {
+    "length_mm": 8.6,
+    "method": "ring chain",
+    "seed": "the other side's UW tips, mirrored"
+   },
+   "points": {
+    "canal_posterior": [
+     28.5,
+     -23.5,
+     20.2
+    ],
+    "lm.infraorbital-foramen": [
+     27.4,
+     -18.0,
+     14.9
+    ]
+   }
+  },
+  "s.infraorbital-nerve.L": {
+   "confidence": "low",
+   "length_mm": 26.4,
+   "status_fraction": {
+    "detected": 0.36,
+    "inferred": 0.64
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain) from the foramen back; the groove behind it and the course to the inferior orbital fissure are inferred along the top of the labelled orbital floor"
+   ],
+   "canal": {
+    "length_mm": 10.4,
+    "method": "ring chain",
+    "seed": "UW inferior orbital foramen tips"
+   },
+   "points": {
+    "canal_posterior": [
+     -29.0,
+     -22.5,
+     20.5
+    ],
+    "lm.infraorbital-foramen": [
+     -27.4,
+     -16.0,
+     14.8
+    ]
+   }
+  },
+  "s.internal-carotid-artery.R": {
+   "confidence": "medium",
+   "length_mm": 51.1,
+   "status_fraction": {
+    "detected": 0.69,
+    "inferred": 0.31
+   },
+   "radius_source": "petrous: detected canal lumen (clamped 1.6-2.8 mm); cavernous: default 2.3 mm",
+   "notes": [
+    "petrous canal seeded from UW petrous carotid canal tips",
+    "cavernous course inferred: shortest soft-tissue path from the end of the bony canal to the space beneath the anterior clinoid that keeps ~2.5 mm from bone (it hugs the carotid sulcus of the sphenoid body); no contrast, so the vessel itself is not seen there"
+   ],
+   "canal": {
+    "length_mm": 37.0,
+    "lumen_radius_mm_median": 2.05,
+    "enclosure_median": 0.88
+   },
+   "points": {
+    "canal_end": [
+     13.2,
+     -72.5,
+     25.3
+    ],
+    "clinoid_space": [
+     16.5,
+     -60.5,
+     33.5
+    ]
+   }
+  },
+  "s.internal-carotid-artery.L": {
+   "confidence": "medium",
+   "length_mm": 50.1,
+   "status_fraction": {
+    "detected": 0.73,
+    "inferred": 0.27
+   },
+   "radius_source": "petrous: detected canal lumen (clamped 1.6-2.8 mm); cavernous: default 2.3 mm",
+   "notes": [
+    "petrous canal seeded from the mirrored right-side tips",
+    "this side's anterior clinoid ring was not found; the other side's, mirrored, set the search box",
+    "cavernous course inferred: shortest soft-tissue path from the end of the bony canal to the space beneath the anterior clinoid that keeps ~2.5 mm from bone (it hugs the carotid sulcus of the sphenoid body); no contrast, so the vessel itself is not seen there"
+   ],
+   "canal": {
+    "length_mm": 37.7,
+    "lumen_radius_mm_median": 2.01,
+    "enclosure_median": 0.83
+   },
+   "points": {
+    "canal_end": [
+     -13.5,
+     -71.0,
+     26.9
+    ],
+    "clinoid_space": [
+     -17.0,
+     -60.5,
+     34.0
+    ]
+   }
+  },
+  "s.maxillary-nerve.R": {
+   "confidence": "low",
+   "length_mm": 11.9,
+   "status_fraction": {
+    "detected": 0.38,
+    "inferred": 0.62
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain); 3 mm behind (towards the trigeminal ganglion) and 4 mm in front (into the pterygopalatine fossa) continue the canal axis and are inferred"
+   ],
+   "canal": {
+    "length_mm": 5.0,
+    "seed": "UW foramen rotundum tips"
+   },
+   "points": {}
+  },
+  "s.maxillary-nerve.L": {
+   "confidence": "low",
+   "length_mm": 9.4,
+   "status_fraction": {
+    "detected": 0.2,
+    "inferred": 0.8
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain); 3 mm behind (towards the trigeminal ganglion) and 4 mm in front (into the pterygopalatine fossa) continue the canal axis and are inferred"
+   ],
+   "canal": {
+    "length_mm": 2.5,
+    "seed": "the other side's canal, mirrored, as the search seed"
+   },
+   "points": {}
+  },
+  "s.nasolacrimal-duct.R": {
+   "confidence": "high",
+   "length_mm": 13.4,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "bony nasolacrimal canal detected (ring chain, axial slices); the sac above and the meatal opening below are where bone stops enclosing the lumen"
+   ],
+   "canal": {
+    "length_mm": 15.0,
+    "lumen_radius_mm_median": 1.0,
+    "seed": "UW nasolacrimal duct tips",
+    "tip_track_distance_mm_median": 1.79
+   },
+   "points": {
+    "lm.nasolacrimal-duct-top": [
+     11.3,
+     -19.0,
+     27.0
+    ],
+    "lm.hasner-valve": [
+     12.3,
+     -23.0,
+     14.5
+    ]
+   }
+  },
+  "s.nasolacrimal-duct.L": {
+   "confidence": "high",
+   "length_mm": 12.1,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "bony nasolacrimal canal detected (ring chain, axial slices); the sac above and the meatal opening below are where bone stops enclosing the lumen"
+   ],
+   "canal": {
+    "length_mm": 12.9,
+    "lumen_radius_mm_median": 1.5,
+    "seed": "the other side's UW tips, mirrored",
+    "tip_track_distance_mm_median": 1.81
+   },
+   "points": {
+    "lm.nasolacrimal-duct-top": [
+     -12.0,
+     -19.5,
+     26.5
+    ],
+    "lm.hasner-valve": [
+     -12.5,
+     -22.0,
+     15.0
+    ]
+   }
+  },
+  "s.optic-nerve.R": {
+   "confidence": "high",
+   "length_mm": 32.9,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "intraorbital nerve followed in orbital fat to a = -29.6 mm (globe)"
+   ],
+   "canal": {
+    "length_mm": 7.3,
+    "lumen_radius_mm_median": 2.01,
+    "enclosure_median": 0.71,
+    "neck_ras": [
+     12.3,
+     -54.9,
+     39.5
+    ]
+   },
+   "points": {
+    "lm.optic-canal-cranial-opening": [
+     11.0,
+     -56.4,
+     40.6
+    ],
+    "lm.optic-canal-orbital-opening": [
+     15.3,
+     -52.1,
+     37.9
+    ]
+   }
+  },
+  "s.optic-nerve.L": {
+   "confidence": "high",
+   "length_mm": 34.6,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "intraorbital nerve followed in orbital fat to a = -28.8 mm (globe)"
+   ],
+   "canal": {
+    "length_mm": 8.5,
+    "lumen_radius_mm_median": 2.01,
+    "enclosure_median": 0.71,
+    "neck_ras": [
+     -12.8,
+     -54.6,
+     39.1
+    ]
+   },
+   "points": {
+    "lm.optic-canal-cranial-opening": [
+     -11.3,
+     -57.0,
+     40.9
+    ],
+    "lm.optic-canal-orbital-opening": [
+     -15.8,
+     -51.3,
+     37.6
+    ]
+   }
+  },
+  "s.posterior-ethmoidal-artery.R": {
+   "confidence": "low",
+   "length_mm": 10.4,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "inferred: foramen placed 6 mm in front of the detected optic canal orbital opening (m.pea-to-optic-canal, population mean) at the top of the labelled lamina papyracea; course 1 mm under the labelled roof to its medial edge"
+   ],
+   "points": {
+    "lm.posterior-ethmoidal-foramen": [
+     10.0,
+     -46.1,
+     40.0
+    ]
+   }
+  },
+  "s.posterior-ethmoidal-artery.L": {
+   "confidence": "low",
+   "length_mm": 5.1,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "inferred: foramen placed 6 mm in front of the detected optic canal orbital opening (m.pea-to-optic-canal, population mean) at the top of the labelled lamina papyracea; course 1 mm under the labelled roof to its medial edge"
+   ],
+   "points": {
+    "lm.posterior-ethmoidal-foramen": [
+     -12.5,
+     -45.3,
+     39.5
+    ]
+   }
+  },
+  "s.sphenopalatine-artery.R": {
+   "confidence": "low",
+   "length_mm": 6.3,
+   "status_fraction": {
+    "detected": 0.14,
+    "inferred": 0.86
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "the foramen is detected (where the retromaxillary and nasal compartments meet through the lateral nasal wall); the vessel is not visible without contrast: its course from the centre of the pterygopalatine fossa through the foramen to 4 mm onto the nasal side is inferred"
+   ],
+   "points": {
+    "lm.sphenopalatine-foramen": [
+     11.1,
+     -50.3,
+     20.0
+    ]
+   }
+  },
+  "s.sphenopalatine-artery.L": {
+   "confidence": "low",
+   "length_mm": 6.3,
+   "status_fraction": {
+    "detected": 0.14,
+    "inferred": 0.86
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "the foramen is detected (where the retromaxillary and nasal compartments meet through the lateral nasal wall); the vessel is not visible without contrast: its course from the centre of the pterygopalatine fossa through the foramen to 4 mm onto the nasal side is inferred"
+   ],
+   "points": {
+    "lm.sphenopalatine-foramen": [
+     -12.0,
+     -50.7,
+     19.6
+    ]
+   }
+  },
+  "s.vidian-nerve.R": {
+   "confidence": "low",
+   "length_mm": 20.0,
+   "status_fraction": {
+    "labelled": 0.05,
+    "inferred": 0.95
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "UW vidian canal tips (median) are the one labelled point; course drawn straight (AP) at that point's depth below the sphenoid floor (1.1 mm) and side, from the level of the petrous canal's end (a = -72.5) to the level of the foramen rotundum's anterior opening (a = -51.5); the canal itself is not resolved by the detectors"
+   ],
+   "points": {
+    "lm.vidian-canal-posterior-end": [
+     13.2,
+     -72.5,
+     16.9
+    ]
+   }
+  },
+  "s.vidian-nerve.L": {
+   "confidence": "low",
+   "length_mm": 19.5,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "mirrored from the other side's UW tips; course drawn straight (AP) at that point's depth below the sphenoid floor (1.1 mm) and side, from the level of the petrous canal's end (a = -71.0) to the level of the foramen rotundum's anterior opening (a = -51.5); the canal itself is not resolved by the detectors"
+   ],
+   "points": {
+    "lm.vidian-canal-posterior-end": [
+     -13.2,
+     -71.0,
+     16.9
+    ]
+   }
+  }
+ },
+ "sdf": {
+  "fields": {
+   "s.anterior-cranial-fossa": {
+    "source": "labels (walls.py)",
+    "voxels": 12375,
+    "bytes": 157542
+   },
+   "s.orbit": {
+    "source": "labels (walls.py)",
+    "voxels": 367024,
+    "bytes": 302170
+   },
+   "s.internal-carotid-artery": {
+    "source": "sweeps.json",
+    "inferred_fraction_of_centreline": 0.28,
+    "bytes": 166317
+   },
+   "s.optic-nerve": {
+    "source": "sweeps.json",
+    "inferred_fraction_of_centreline": 0.0,
+    "bytes": 155562
+   },
+   "s.anterior-ethmoidal-artery": {
+    "source": "sweeps.json",
+    "inferred_fraction_of_centreline": 0.95,
+    "bytes": 63319
+   }
+  },
+  "budget_bytes": {
+   "ct": 3462035,
+   "labels": 198128,
+   "sdf": 844910,
+   "total": 4505073,
+   "limit": 6000000
   }
  }
 }

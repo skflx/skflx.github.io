@@ -33,7 +33,9 @@ It is not a DICOM export. The volume values are therefore 8-bit display levels, 
 (`ssb/ct/ct.json` gives an approximate inverse). The scale is inferred from the acquisition
 geometry and cross-checked against anatomy, with the method and uncertainty in
 `registration.json`. Segmentation is semi-automatic, grown from UW's arrow tips; it is
-`draft` like the rest of SSB, and the reconstruction method sets its limits.
+`draft` like the rest of SSB, and the reconstruction method sets its limits. The scan has no
+contrast. Vessels and nerves show only where bone encloses them, or where orbital fat outlines
+them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` marks those points.
 
 ### Derived files
 
@@ -42,6 +44,10 @@ geometry and cross-checked against anatomy, with the method and uncertainty in
 | `ssb/ct/ct.u8.gz`, `ssb/ct/ct.json` | the axial display volume resampled to 0.5 mm in the RAS frame (`docs/ssb.md` §4), cropped to the sinonasal / ventral skull base region, external face masked | `tools/ssb-pipeline/uw/specimen.py` |
 | `ssb/ct/labels.u16.gz`, `ssb/geometry/labels.json` | named air spaces on the same grid | `specimen.py` |
 | `ssb/geometry/landmarks.json`, `landmarks.meta.json` | landmark coordinates, RAS mm, with method per point | `specimen.py` |
-| `ssb/models/*.glb.gz`, `ssb/models/packs.json` | surfaces of the named air spaces and the bony envelope | `tools/ssb-pipeline/uw/meshes.py` |
+| `ssb/models/*.glb.gz`, `ssb/models/packs.json` | surfaces of the named air spaces and the bony envelope; the `walls` pack: bone resection units, septum, turbinates and orbital contents | `tools/ssb-pipeline/uw/meshes.py` |
+| `ssb/ct/labels.u16.gz` (indices from 19 on), `ssb/geometry/labels.json` | walls, septum, turbinates and orbits, added on voxels no air space holds | `tools/ssb-pipeline/uw/walls.py` |
+| `ssb/geometry/sweeps.json`, `sweeps.meta.json` | centrelines and radii of the ICA, optic, maxillary, vidian and infraorbital nerves, nasolacrimal duct, sphenopalatine and ethmoidal arteries; per point whether it was detected in the CT, labelled by UW or inferred | `tools/ssb-pipeline/uw/sweeps.py` |
+| `ssb/ct/sdf-*.u8.gz`, the `sdf` key of `ssb/ct/ct.json` | distance fields (mm) to the ICA, optic nerve, AEA, anterior skull base and orbit | `tools/ssb-pipeline/uw/sdf.py` |
+| `ssb/reference/specimen-relations.json` | the graph's spatial claims tested against this specimen (numbers only) | `tools/ssb-pipeline/uw/relate3d.py` |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.

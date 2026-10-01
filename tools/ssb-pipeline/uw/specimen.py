@@ -453,7 +453,10 @@ def write_outputs(ct, labels, table, A):
         'specimen': 'uw-axial-sagittal',
         'license': 'ssb/LICENSE-data.md',
     }
-    json.dump(header, open(os.path.join(REPO, 'ssb/ct/ct.json'), 'w'), indent=2, ensure_ascii=False)
+    hp = os.path.join(REPO, 'ssb/ct/ct.json')
+    if os.path.exists(hp) and 'sdf' in json.load(open(hp)):     # stage C (sdf.py) owns this key: keep it
+        header['sdf'] = json.load(open(hp))['sdf']
+    json.dump(header, open(hp, 'w'), indent=2, ensure_ascii=False)
     json.dump({'version': 1, 'labels': table}, open(os.path.join(REPO, 'ssb/geometry/labels.json'), 'w'), indent=2)
 
 

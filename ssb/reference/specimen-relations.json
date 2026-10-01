@@ -1,0 +1,6573 @@
+{
+ "method": "per side (R, L; a midline structure pairs with either side) on regions, not centroids:\n\n  The two point sets are binned on the two axes the claim does not test (2 mm cells). In every cell that\n  holds both, the medians along the tested axis are compared (for medial / lateral: the median distance\n  from the midsagittal plane, |r|, so \"medial-to\" means \"closer to the midline at the same height and\n  depth\"). A cell votes only when the medians differ by more than 0.5 mm. The claim agrees on a side when\n  >= 70 % of the votes agree, contradicts when <= 30 % do, and is mixed in between. With fewer than 3\n  voting cells (the structures do not overlap in projection), the whole sets are compared instead: agree\n  if A's 25th-75th percentile range along the axis lies wholly on the claimed side of B's, contradict if\n  wholly on the other, otherwise untestable. A side whose sweep is mostly inferred (sweeps.meta.json) is\n  marked \"weak\": its agreement partly restates the rule that placed it.",
+ "params": {
+  "cell_mm": 2.0,
+  "margin_mm": 0.5,
+  "agree_fraction": 0.7,
+  "min_cells": 3
+ },
+ "specimen": "uw-axial-sagittal",
+ "counts": {
+  "no-geometry": 436,
+  "agree": 88,
+  "mixed": 4,
+  "untestable": 2
+ },
+ "tests": [
+  {
+   "id": "s.ethmoid-bulla",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 27,
+     "cells_agree": 27,
+     "median_delta_mm": 4.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.ethmoid-bulla",
+   "r": "medial-to",
+   "to": "s.lamina-papyracea",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 29,
+     "cells_agree": 29,
+     "median_delta_mm": 1.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.ethmoid-bulla",
+   "r": "anterior-to",
+   "to": "s.basal-lamella",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.ethmoid-bulla",
+   "r": "posterior-to",
+   "to": "s.frontal-recess",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 12,
+     "cells_agree": 11,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 0.92
+    }
+   }
+  },
+  {
+   "id": "s.basal-lamella",
+   "r": "posterior-to",
+   "to": "s.ethmoid-bulla",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.basal-lamella",
+   "r": "anterior-to",
+   "to": "s.posterior-ethmoid-cells",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 50,
+     "cells_agree": 50,
+     "median_delta_mm": 7.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "anterior-to",
+   "to": "s.basal-lamella",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 20,
+     "cells_agree": 20,
+     "median_delta_mm": 3.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 43,
+     "cells_agree": 43,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "inferior-to",
+   "to": "s.fovea-ethmoidalis",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 3.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 10.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "medial-to",
+   "to": "s.lamina-papyracea",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 5.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 64,
+     "cells_agree": 64,
+     "median_delta_mm": 3.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 16,
+     "cells_agree": 16,
+     "median_delta_mm": 0.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 39,
+     "cells_agree": 39,
+     "median_delta_mm": 2.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "medial-to",
+   "to": "s.orbit",
+   "note": "across the lamina papyracea",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 18.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 71,
+     "cells_agree": 71,
+     "median_delta_mm": 17.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "anterior-to",
+   "to": "s.posterior-ethmoid-cells",
+   "note": "separated by the basal lamella",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 11.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 47,
+     "cells_agree": 47,
+     "median_delta_mm": 13.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "note": "and behind it; the frontal recess, at the front of the anterior ethmoid, connects the two",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 19.0,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 5,
+     "cells_agree": 5,
+     "median_delta_mm": 22.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "r": "posterior-to",
+   "to": "s.basal-lamella",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 50,
+     "cells_agree": 50,
+     "median_delta_mm": 7.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "r": "anterior-to",
+   "to": "s.sphenoid-sinus",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 55,
+     "cells_agree": 55,
+     "median_delta_mm": 18.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "r": "medial-to",
+   "to": "s.orbit",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 68,
+     "cells_agree": 68,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 65,
+     "cells_agree": 65,
+     "median_delta_mm": 16.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "r": "inferior-to",
+   "to": "s.fovea-ethmoidalis",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 41,
+     "cells_agree": 41,
+     "median_delta_mm": 9.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 38,
+     "cells_agree": 38,
+     "median_delta_mm": 14.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.fovea-ethmoidalis",
+   "r": "superior-to",
+   "to": "s.anterior-ethmoid-cells",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 3.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 10.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.fovea-ethmoidalis",
+   "r": "superior-to",
+   "to": "s.posterior-ethmoid-cells",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 41,
+     "cells_agree": 41,
+     "median_delta_mm": 9.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 38,
+     "cells_agree": 38,
+     "median_delta_mm": 14.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.fovea-ethmoidalis",
+   "r": "lateral-to",
+   "to": "s.lateral-lamella",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "mixed",
+   "sides": {
+    "R": {
+     "status": "mixed",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 22,
+     "cells_agree": 11,
+     "median_delta_mm": 2.5,
+     "fraction_agree": 0.5
+    },
+    "L": {
+     "status": "mixed",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 34,
+     "cells_agree": 12,
+     "median_delta_mm": 1.0,
+     "fraction_agree": 0.35
+    }
+   }
+  },
+  {
+   "id": "s.fovea-ethmoidalis",
+   "r": "lateral-to",
+   "to": "s.cribriform-plate",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 10,
+     "cells_agree": 10,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 18,
+     "cells_agree": 18,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.lateral-lamella",
+   "r": "medial-to",
+   "to": "s.fovea-ethmoidalis",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "mixed",
+   "sides": {
+    "R": {
+     "status": "mixed",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 22,
+     "cells_agree": 11,
+     "median_delta_mm": 2.5,
+     "fraction_agree": 0.5
+    },
+    "L": {
+     "status": "mixed",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 34,
+     "cells_agree": 12,
+     "median_delta_mm": 1.0,
+     "fraction_agree": 0.35
+    }
+   }
+  },
+  {
+   "id": "s.cribriform-plate",
+   "r": "lateral-to",
+   "to": "s.crista-galli",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "mixed",
+   "sides": {
+    "R": {
+     "status": "contradict",
+     "kinds": [
+      "label",
+      "landmark"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": -0.9,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "landmark"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 0.6,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.cribriform-plate",
+   "r": "medial-to",
+   "to": "s.fovea-ethmoidalis",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 10,
+     "cells_agree": 10,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 18,
+     "cells_agree": 18,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.crista-galli",
+   "r": "medial-to",
+   "to": "s.cribriform-plate",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "mixed",
+   "sides": {
+    "R": {
+     "status": "contradict",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": -0.9,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 0.6,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.crista-galli",
+   "r": "superior-to",
+   "to": "s.nasal-septum",
+   "note": "continuous below with the perpendicular plate",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 26.9,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoidal-artery",
+   "r": "posterior-to",
+   "to": "s.frontal-recess",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 4,
+     "cells_agree": 3,
+     "median_delta_mm": 1.8,
+     "fraction_agree": 0.75,
+     "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.R"
+    },
+    "L": {
+     "status": "mixed",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 5,
+     "cells_agree": 2,
+     "median_delta_mm": 3.2,
+     "fraction_agree": 0.4,
+     "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.L"
+    }
+   }
+  },
+  {
+   "id": "s.anterior-ethmoidal-artery",
+   "r": "anterior-to",
+   "to": "s.posterior-ethmoidal-artery",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 20.8,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.R, s.posterior-ethmoidal-artery.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 21.2,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.L, s.posterior-ethmoidal-artery.L"
+    }
+   }
+  },
+  {
+   "id": "s.posterior-ethmoidal-artery",
+   "r": "posterior-to",
+   "to": "s.anterior-ethmoidal-artery",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 20.8,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.posterior-ethmoidal-artery.R, s.anterior-ethmoidal-artery.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 21.2,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.posterior-ethmoidal-artery.L, s.anterior-ethmoidal-artery.L"
+    }
+   }
+  },
+  {
+   "id": "s.frontal-sinus",
+   "r": "superior-to",
+   "to": "s.frontal-recess",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 22,
+     "cells_agree": 22,
+     "median_delta_mm": 13.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 13,
+     "cells_agree": 13,
+     "median_delta_mm": 12.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-sinus",
+   "r": "superior-to",
+   "to": "s.orbit",
+   "note": "medial part of the orbital roof",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 19,
+     "cells_agree": 19,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 13,
+     "cells_agree": 13,
+     "median_delta_mm": 18.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-sinus-anterior-table",
+   "r": "anterior-to",
+   "to": "s.frontal-sinus-posterior-table",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 143,
+     "cells_agree": 143,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 80,
+     "cells_agree": 80,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-sinus-posterior-table",
+   "r": "posterior-to",
+   "to": "s.frontal-sinus-anterior-table",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 143,
+     "cells_agree": 143,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 80,
+     "cells_agree": 80,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-sinus-floor",
+   "r": "superior-to",
+   "to": "s.orbit",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 22,
+     "cells_agree": 22,
+     "median_delta_mm": 13.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 16,
+     "cells_agree": 16,
+     "median_delta_mm": 15.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-recess",
+   "r": "posterior-to",
+   "to": "s.agger-nasi-cell",
+   "note": "usual; the pathway can be medial, posteromedial or rarely lateral to it",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 12,
+     "cells_agree": 12,
+     "median_delta_mm": 2.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 3,
+     "cells_agree": 3,
+     "median_delta_mm": 3.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-recess",
+   "r": "anterior-to",
+   "to": "s.ethmoid-bulla",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 12,
+     "cells_agree": 11,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 0.92
+    }
+   }
+  },
+  {
+   "id": "s.frontal-recess",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "note": "the MT vertical lamella forms its medial wall",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 15,
+     "cells_agree": 15,
+     "median_delta_mm": 0.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 3,
+     "cells_agree": 3,
+     "median_delta_mm": 1.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-recess",
+   "r": "medial-to",
+   "to": "s.lamina-papyracea",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 61,
+     "cells_agree": 61,
+     "median_delta_mm": 5.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 41,
+     "cells_agree": 41,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.frontal-recess",
+   "r": "anterior-to",
+   "to": "s.anterior-ethmoidal-artery",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 4,
+     "cells_agree": 3,
+     "median_delta_mm": 1.8,
+     "fraction_agree": 0.75,
+     "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.R"
+    },
+    "L": {
+     "status": "mixed",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 5,
+     "cells_agree": 2,
+     "median_delta_mm": 3.2,
+     "fraction_agree": 0.4,
+     "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.L"
+    }
+   }
+  },
+  {
+   "id": "s.agger-nasi-cell",
+   "r": "anterior-to",
+   "to": "s.frontal-recess",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 12,
+     "cells_agree": 12,
+     "median_delta_mm": 2.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 3,
+     "cells_agree": 3,
+     "median_delta_mm": 3.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.agger-nasi-cell",
+   "r": "anterior-to",
+   "to": "s.middle-turbinate",
+   "note": "anterior to or directly above its anterior insertion",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 6,
+     "cells_agree": 6,
+     "median_delta_mm": 15.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 4,
+     "cells_agree": 4,
+     "median_delta_mm": 15.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.agger-nasi-cell",
+   "r": "medial-to",
+   "to": "s.orbit",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 19.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 21.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.agger-nasi-cell",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "note": "below the frontal sinus floor; its roof is uncapped to reach the frontal recess behind or medial to it",
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 15,
+     "cells_agree": 15,
+     "median_delta_mm": 21.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 2,
+     "cells_agree": 2,
+     "median_delta_mm": 21.5,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.orbit",
+   "r": "superior-to",
+   "to": "s.maxillary-sinus",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 195,
+     "cells_agree": 195,
+     "median_delta_mm": 27.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 196,
+     "cells_agree": 196,
+     "median_delta_mm": 28.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.orbital-floor",
+   "r": "superior-to",
+   "to": "s.maxillary-sinus",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 162,
+     "cells_agree": 162,
+     "median_delta_mm": 12.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 161,
+     "cells_agree": 161,
+     "median_delta_mm": 12.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.orbital-floor",
+   "r": "inferior-to",
+   "to": "s.orbit",
+   "note": null,
+   "file": "ethmoid-frontal-orbit.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 166,
+     "cells_agree": 166,
+     "median_delta_mm": 15.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 164,
+     "cells_agree": 164,
+     "median_delta_mm": 16.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.nasal-cavity",
+   "r": "lateral-to",
+   "to": "s.nasal-septum",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 370,
+     "cells_agree": 356,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 0.96
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 364,
+     "cells_agree": 342,
+     "median_delta_mm": 3.0,
+     "fraction_agree": 0.94
+    }
+   }
+  },
+  {
+   "id": "s.nasal-cavity",
+   "r": "medial-to",
+   "to": "s.maxillary-sinus",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 246,
+     "cells_agree": 246,
+     "median_delta_mm": 18.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 247,
+     "cells_agree": 247,
+     "median_delta_mm": 20.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.nasal-cavity",
+   "r": "anterior-to",
+   "to": "s.nasopharynx",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 65,
+     "cells_agree": 65,
+     "median_delta_mm": 28.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 54,
+     "cells_agree": 54,
+     "median_delta_mm": 31.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.nasal-floor",
+   "r": "inferior-to",
+   "to": "s.inferior-turbinate",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 75,
+     "cells_agree": 75,
+     "median_delta_mm": 10.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 64,
+     "cells_agree": 64,
+     "median_delta_mm": 12.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.nasal-septum",
+   "r": "medial-to",
+   "to": "s.middle-turbinate",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 134,
+     "cells_agree": 134,
+     "median_delta_mm": 5.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 169,
+     "cells_agree": 169,
+     "median_delta_mm": 5.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.nasal-septum",
+   "r": "medial-to",
+   "to": "s.inferior-turbinate",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 144,
+     "cells_agree": 144,
+     "median_delta_mm": 7.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 186,
+     "cells_agree": 186,
+     "median_delta_mm": 6.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.inferior-turbinate",
+   "r": "inferior-to",
+   "to": "s.middle-turbinate",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 68,
+     "cells_agree": 68,
+     "median_delta_mm": 17.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 101,
+     "cells_agree": 101,
+     "median_delta_mm": 15.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.inferior-turbinate",
+   "r": "lateral-to",
+   "to": "s.nasal-septum",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 144,
+     "cells_agree": 144,
+     "median_delta_mm": 7.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 186,
+     "cells_agree": 186,
+     "median_delta_mm": 6.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.inferior-turbinate",
+   "r": "medial-to",
+   "to": "s.maxillary-sinus",
+   "note": "attached to the medial maxillary wall below the natural ostium",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 114,
+     "cells_agree": 114,
+     "median_delta_mm": 15.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 163,
+     "cells_agree": 163,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.middle-turbinate",
+   "r": "superior-to",
+   "to": "s.inferior-turbinate",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 68,
+     "cells_agree": 68,
+     "median_delta_mm": 17.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 101,
+     "cells_agree": 101,
+     "median_delta_mm": 15.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.middle-turbinate",
+   "r": "lateral-to",
+   "to": "s.nasal-septum",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 134,
+     "cells_agree": 134,
+     "median_delta_mm": 5.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 169,
+     "cells_agree": 169,
+     "median_delta_mm": 5.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-sinus",
+   "r": "lateral-to",
+   "to": "s.nasal-cavity",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 246,
+     "cells_agree": 246,
+     "median_delta_mm": 18.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 247,
+     "cells_agree": 247,
+     "median_delta_mm": 20.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-sinus",
+   "r": "inferior-to",
+   "to": "s.orbit",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 195,
+     "cells_agree": 195,
+     "median_delta_mm": 27.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 196,
+     "cells_agree": 196,
+     "median_delta_mm": 28.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-sinus",
+   "r": "lateral-to",
+   "to": "s.nasolacrimal-duct",
+   "note": "the duct runs in the anteromedial wall of the sinus",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 7,
+     "cells_agree": 7,
+     "median_delta_mm": 11.3,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 6,
+     "cells_agree": 6,
+     "median_delta_mm": 11.8,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-anterior-wall",
+   "r": "anterior-to",
+   "to": "s.maxillary-sinus",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 179,
+     "cells_agree": 174,
+     "median_delta_mm": 10.0,
+     "fraction_agree": 0.97
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 203,
+     "cells_agree": 198,
+     "median_delta_mm": 9.0,
+     "fraction_agree": 0.98
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-medial-wall",
+   "r": "medial-to",
+   "to": "s.maxillary-sinus",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 225,
+     "cells_agree": 225,
+     "median_delta_mm": 10.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 230,
+     "cells_agree": 229,
+     "median_delta_mm": 10.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-sinus-floor",
+   "r": "inferior-to",
+   "to": "s.nasal-floor",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 18,
+     "cells_agree": 13,
+     "median_delta_mm": 4.0,
+     "fraction_agree": 0.72
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 12,
+     "cells_agree": 11,
+     "median_delta_mm": 3.5,
+     "fraction_agree": 0.92
+    }
+   }
+  },
+  {
+   "id": "s.infraorbital-nerve",
+   "r": "superior-to",
+   "to": "s.maxillary-sinus",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 13,
+     "cells_agree": 13,
+     "median_delta_mm": 11.4,
+     "fraction_agree": 1.0,
+     "weak": "mostly inferred sweep: s.infraorbital-nerve.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 13,
+     "cells_agree": 13,
+     "median_delta_mm": 12.4,
+     "fraction_agree": 1.0,
+     "weak": "mostly inferred sweep: s.infraorbital-nerve.L"
+    }
+   }
+  },
+  {
+   "id": "s.infraorbital-nerve",
+   "r": "inferior-to",
+   "to": "s.orbit",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 13,
+     "cells_agree": 13,
+     "median_delta_mm": 16.1,
+     "fraction_agree": 1.0,
+     "weak": "mostly inferred sweep: s.infraorbital-nerve.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 13,
+     "cells_agree": 13,
+     "median_delta_mm": 16.1,
+     "fraction_agree": 1.0,
+     "weak": "mostly inferred sweep: s.infraorbital-nerve.L"
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-nerve",
+   "r": "superior-to",
+   "to": "s.vidian-nerve",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 7.0,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.maxillary-nerve.R, s.vidian-nerve.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 9.3,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.maxillary-nerve.L, s.vidian-nerve.L"
+    }
+   }
+  },
+  {
+   "id": "s.maxillary-nerve",
+   "r": "lateral-to",
+   "to": "s.vidian-nerve",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 5.5,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.maxillary-nerve.R, s.vidian-nerve.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 8.1,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.maxillary-nerve.L, s.vidian-nerve.L"
+    }
+   }
+  },
+  {
+   "id": "s.vidian-nerve",
+   "r": "inferior-to",
+   "to": "s.maxillary-nerve",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 7.0,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.vidian-nerve.R, s.maxillary-nerve.R"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 9.3,
+     "basis": "whole sets (no overlap in projection)",
+     "weak": "mostly inferred sweep: s.vidian-nerve.L, s.maxillary-nerve.L"
+    }
+   }
+  },
+  {
+   "id": "s.nasopharynx",
+   "r": "inferior-to",
+   "to": "s.sphenoid-sinus",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 141,
+     "cells_agree": 141,
+     "median_delta_mm": 26.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 30,
+     "cells_agree": 30,
+     "median_delta_mm": 23.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "posterior-to",
+   "to": "s.posterior-ethmoid-cells",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 55,
+     "cells_agree": 55,
+     "median_delta_mm": 18.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "inferior-to",
+   "to": "s.sella-turcica",
+   "note": "sellar and postsellar types; in a presellar sinus the sella is posterosuperior",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 89,
+     "cells_agree": 89,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 7,
+     "cells_agree": 7,
+     "median_delta_mm": 12.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "inferior-to",
+   "to": "s.planum-sphenoidale",
+   "note": "the planum is its roof",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 61,
+     "cells_agree": 61,
+     "median_delta_mm": 13.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 15,
+     "cells_agree": 15,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "superior-to",
+   "to": "s.nasopharynx",
+   "note": "its floor is part of the nasopharyngeal roof",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 141,
+     "cells_agree": 141,
+     "median_delta_mm": 26.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 30,
+     "cells_agree": 30,
+     "median_delta_mm": 23.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "medial-to",
+   "to": "s.internal-carotid-artery",
+   "note": "parasellar and paraclival segments bulge into its lateral and posterior walls",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 14,
+     "cells_agree": 14,
+     "median_delta_mm": 14.3,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "untestable",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 4.6,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-face",
+   "r": "posterior-to",
+   "to": "s.posterior-ethmoid-cells",
+   "note": "its lateral part, via the transethmoidal route",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 52,
+     "cells_agree": 51,
+     "median_delta_mm": 7.0,
+     "fraction_agree": 0.98
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 52,
+     "cells_agree": 52,
+     "median_delta_mm": 9.5,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sphenoid-floor",
+   "r": "superior-to",
+   "to": "s.nasopharynx",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 75,
+     "cells_agree": 75,
+     "median_delta_mm": 16.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 65,
+     "cells_agree": 65,
+     "median_delta_mm": 16.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.anterior-clinoid-process",
+   "r": "lateral-to",
+   "to": "s.optic-nerve",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "untestable",
+   "sides": {
+    "R": {
+     "status": "untestable",
+     "kinds": [
+      "landmark",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": -0.7,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.planum-sphenoidale",
+   "r": "superior-to",
+   "to": "s.sphenoid-sinus",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 61,
+     "cells_agree": 61,
+     "median_delta_mm": 13.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 15,
+     "cells_agree": 15,
+     "median_delta_mm": 17.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.planum-sphenoidale",
+   "r": "posterior-to",
+   "to": "s.cribriform-plate",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 18.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 6,
+     "cells_agree": 6,
+     "median_delta_mm": 15.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sella-turcica",
+   "r": "superior-to",
+   "to": "s.sphenoid-sinus",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 89,
+     "cells_agree": 89,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 7,
+     "cells_agree": 7,
+     "median_delta_mm": 12.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.sella-turcica",
+   "r": "anterior-to",
+   "to": "s.dorsum-sellae",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "landmark"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 4.7,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.dorsum-sellae",
+   "r": "superior-to",
+   "to": "s.clivus",
+   "note": "continuous with it below",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 11.3,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.internal-carotid-artery",
+   "r": "lateral-to",
+   "to": "s.clivus",
+   "note": "paraclival segment",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 14.8,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 10,
+     "cells_agree": 10,
+     "median_delta_mm": 15.1,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.internal-carotid-artery",
+   "r": "inferior-to",
+   "to": "s.optic-nerve",
+   "note": "clinoid and ophthalmic segments lie inferolateral to the nerve",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 19.1,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 19.4,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.optic-nerve",
+   "r": "medial-to",
+   "to": "s.anterior-clinoid-process",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "untestable",
+   "sides": {
+    "R": {
+     "status": "untestable",
+     "kinds": [
+      "sweep",
+      "landmark"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": -0.7,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.optic-nerve",
+   "r": "superior-to",
+   "to": "s.internal-carotid-artery",
+   "note": "supraclinoid ICA lies inferolateral to the intracranial nerve",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 19.1,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "sweep"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 19.4,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.optic-nerve",
+   "r": "lateral-to",
+   "to": "s.sphenoid-sinus",
+   "note": "intracanalicular segment in the superolateral sinus wall",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 6,
+     "cells_agree": 6,
+     "median_delta_mm": 14.3,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "untestable",
+     "kinds": [
+      "sweep",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 4.9,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.clivus",
+   "r": "posterior-to",
+   "to": "s.sphenoid-sinus",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 55,
+     "cells_agree": 55,
+     "median_delta_mm": 14.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 10,
+     "cells_agree": 10,
+     "median_delta_mm": 18.0,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.clivus",
+   "r": "posterior-to",
+   "to": "s.nasopharynx",
+   "note": "lower clivus",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 15.5,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.clivus",
+   "r": "medial-to",
+   "to": "s.internal-carotid-artery",
+   "note": "paraclival segments on each side",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 14.8,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "sweep"
+     ],
+     "cells_voting": 10,
+     "cells_agree": 10,
+     "median_delta_mm": 15.1,
+     "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.clivus",
+   "r": "medial-to",
+   "to": "s.petrous-apex",
+   "note": "across the petroclival synchondrosis",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "landmark"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 21.1,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.foramen-lacerum",
+   "r": "lateral-to",
+   "to": "s.clivus",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 21.8,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.petrous-apex",
+   "r": "lateral-to",
+   "to": "s.clivus",
+   "note": null,
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 21.1,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.petrous-apex",
+   "r": "posterior-to",
+   "to": "s.sphenoid-sinus",
+   "note": "posterolateral, behind the paraclival ICA; reached through the sinus in the [[p.medial-petrous-apex-approach]]",
+   "file": "sphenoid-sellar-clival.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 26.3,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  }
+ ],
+ "no_geometry": [
+  {
+   "id": "s.ethmoid-labyrinth",
+   "r": "medial-to",
+   "to": "s.orbit",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.ethmoid-labyrinth",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.ethmoid-labyrinth",
+   "r": "inferior-to",
+   "to": "s.fovea-ethmoidalis",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.ethmoid-labyrinth",
+   "r": "superior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.ethmoid-labyrinth",
+   "r": "anterior-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.ethmoid-bulla",
+   "r": "posterior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.ethmoid-bulla",
+   "r": "inferior-to",
+   "to": "s.suprabullar-recess",
+   "missing": [
+    "s.suprabullar-recess"
+   ]
+  },
+  {
+   "id": "s.bullar-lamella",
+   "r": "anterior-to",
+   "to": "s.basal-lamella",
+   "missing": [
+    "s.bullar-lamella"
+   ]
+  },
+  {
+   "id": "s.bullar-lamella",
+   "r": "posterior-to",
+   "to": "s.frontal-recess",
+   "missing": [
+    "s.bullar-lamella"
+   ]
+  },
+  {
+   "id": "s.suprabullar-recess",
+   "r": "superior-to",
+   "to": "s.ethmoid-bulla",
+   "missing": [
+    "s.suprabullar-recess"
+   ]
+  },
+  {
+   "id": "s.suprabullar-recess",
+   "r": "inferior-to",
+   "to": "s.fovea-ethmoidalis",
+   "missing": [
+    "s.suprabullar-recess"
+   ]
+  },
+  {
+   "id": "s.suprabullar-recess",
+   "r": "posterior-to",
+   "to": "s.frontal-recess",
+   "missing": [
+    "s.suprabullar-recess"
+   ]
+  },
+  {
+   "id": "s.retrobullar-recess",
+   "r": "posterior-to",
+   "to": "s.ethmoid-bulla",
+   "missing": [
+    "s.retrobullar-recess"
+   ]
+  },
+  {
+   "id": "s.retrobullar-recess",
+   "r": "anterior-to",
+   "to": "s.basal-lamella",
+   "missing": [
+    "s.retrobullar-recess"
+   ]
+  },
+  {
+   "id": "s.basal-lamella-vertical",
+   "r": "anterior-to",
+   "to": "s.basal-lamella-horizontal",
+   "missing": [
+    "s.basal-lamella-vertical",
+    "s.basal-lamella-horizontal"
+   ]
+  },
+  {
+   "id": "s.basal-lamella-vertical",
+   "r": "posterior-to",
+   "to": "s.retrobullar-recess",
+   "missing": [
+    "s.basal-lamella-vertical",
+    "s.retrobullar-recess"
+   ]
+  },
+  {
+   "id": "s.basal-lamella-horizontal",
+   "r": "posterior-to",
+   "to": "s.basal-lamella-vertical",
+   "missing": [
+    "s.basal-lamella-horizontal",
+    "s.basal-lamella-vertical"
+   ]
+  },
+  {
+   "id": "s.basal-lamella-horizontal",
+   "r": "superior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.basal-lamella-horizontal"
+   ]
+  },
+  {
+   "id": "s.basal-lamella-horizontal",
+   "r": "anterior-to",
+   "to": "s.sphenopalatine-foramen",
+   "missing": [
+    "s.basal-lamella-horizontal",
+    "s.sphenopalatine-foramen"
+   ]
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "r": "superior-to",
+   "to": "s.sphenoid-ostium",
+   "missing": [
+    "s.sphenoid-ostium"
+   ]
+  },
+  {
+   "id": "s.superior-meatus",
+   "r": "inferior-to",
+   "to": "s.superior-turbinate",
+   "missing": [
+    "s.superior-meatus",
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.superior-meatus",
+   "r": "superior-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.superior-meatus"
+   ]
+  },
+  {
+   "id": "s.fovea-ethmoidalis",
+   "r": "inferior-to",
+   "to": "s.anterior-cranial-fossa-dura",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.lateral-lamella",
+   "r": "lateral-to",
+   "to": "s.olfactory-bulb",
+   "missing": [
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.lateral-lamella",
+   "r": "lateral-to",
+   "to": "s.olfactory-cleft",
+   "missing": [
+    "s.olfactory-cleft"
+   ]
+  },
+  {
+   "id": "s.cribriform-plate",
+   "r": "inferior-to",
+   "to": "s.olfactory-bulb",
+   "missing": [
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.cribriform-plate",
+   "r": "superior-to",
+   "to": "s.olfactory-cleft",
+   "missing": [
+    "s.olfactory-cleft"
+   ]
+  },
+  {
+   "id": "s.olfactory-fossa",
+   "r": "medial-to",
+   "to": "s.fovea-ethmoidalis",
+   "missing": [
+    "s.olfactory-fossa"
+   ]
+  },
+  {
+   "id": "s.olfactory-fossa",
+   "r": "superior-to",
+   "to": "s.cribriform-plate",
+   "missing": [
+    "s.olfactory-fossa"
+   ]
+  },
+  {
+   "id": "s.olfactory-fossa",
+   "r": "lateral-to",
+   "to": "s.crista-galli",
+   "missing": [
+    "s.olfactory-fossa"
+   ]
+  },
+  {
+   "id": "s.olfactory-cleft",
+   "r": "medial-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.olfactory-cleft"
+   ]
+  },
+  {
+   "id": "s.olfactory-cleft",
+   "r": "lateral-to",
+   "to": "s.nasal-septum",
+   "missing": [
+    "s.olfactory-cleft"
+   ]
+  },
+  {
+   "id": "s.olfactory-cleft",
+   "r": "inferior-to",
+   "to": "s.cribriform-plate",
+   "missing": [
+    "s.olfactory-cleft"
+   ]
+  },
+  {
+   "id": "s.olfactory-bulb",
+   "r": "superior-to",
+   "to": "s.cribriform-plate",
+   "missing": [
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.olfactory-bulb",
+   "r": "lateral-to",
+   "to": "s.crista-galli",
+   "missing": [
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.olfactory-bulb",
+   "r": "medial-to",
+   "to": "s.lateral-lamella",
+   "missing": [
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.olfactory-bulb",
+   "r": "anterior-to",
+   "to": "s.olfactory-tract",
+   "missing": [
+    "s.olfactory-bulb",
+    "s.olfactory-tract"
+   ]
+  },
+  {
+   "id": "s.olfactory-tract",
+   "r": "posterior-to",
+   "to": "s.olfactory-bulb",
+   "missing": [
+    "s.olfactory-tract",
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.olfactory-tract",
+   "r": "lateral-to",
+   "to": "s.gyrus-rectus",
+   "missing": [
+    "s.olfactory-tract",
+    "s.gyrus-rectus"
+   ]
+  },
+  {
+   "id": "s.crista-galli",
+   "r": "medial-to",
+   "to": "s.olfactory-bulb",
+   "missing": [
+    "s.olfactory-bulb"
+   ]
+  },
+  {
+   "id": "s.crista-galli",
+   "r": "posterior-to",
+   "to": "s.foramen-caecum",
+   "missing": [
+    "s.foramen-caecum"
+   ]
+  },
+  {
+   "id": "s.foramen-caecum",
+   "r": "anterior-to",
+   "to": "s.crista-galli",
+   "missing": [
+    "s.foramen-caecum"
+   ]
+  },
+  {
+   "id": "s.foramen-caecum",
+   "r": "anterior-to",
+   "to": "s.superior-sagittal-sinus",
+   "missing": [
+    "s.foramen-caecum",
+    "s.superior-sagittal-sinus"
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoidal-artery",
+   "r": "inferior-to",
+   "to": "s.superior-oblique",
+   "missing": [
+    "s.superior-oblique"
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoidal-artery",
+   "r": "superior-to",
+   "to": "s.medial-rectus",
+   "missing": [
+    "s.medial-rectus"
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoidal-foramen",
+   "r": "anterior-to",
+   "to": "s.posterior-ethmoidal-foramen",
+   "missing": [
+    "s.anterior-ethmoidal-foramen",
+    "s.posterior-ethmoidal-foramen"
+   ]
+  },
+  {
+   "id": "s.posterior-ethmoidal-foramen",
+   "r": "posterior-to",
+   "to": "s.anterior-ethmoidal-foramen",
+   "missing": [
+    "s.posterior-ethmoidal-foramen",
+    "s.anterior-ethmoidal-foramen"
+   ]
+  },
+  {
+   "id": "s.posterior-ethmoidal-foramen",
+   "r": "anterior-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.posterior-ethmoidal-foramen",
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoidal-canal",
+   "r": "posterior-to",
+   "to": "s.frontal-recess",
+   "missing": [
+    "s.anterior-ethmoidal-canal"
+   ]
+  },
+  {
+   "id": "s.anterior-ethmoidal-sulcus",
+   "r": "medial-to",
+   "to": "s.fovea-ethmoidalis",
+   "missing": [
+    "s.anterior-ethmoidal-sulcus"
+   ]
+  },
+  {
+   "id": "s.posterior-ethmoidal-artery",
+   "r": "anterior-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.middle-ethmoidal-artery",
+   "r": "posterior-to",
+   "to": "s.anterior-ethmoidal-artery",
+   "missing": [
+    "s.middle-ethmoidal-artery"
+   ]
+  },
+  {
+   "id": "s.middle-ethmoidal-artery",
+   "r": "anterior-to",
+   "to": "s.posterior-ethmoidal-artery",
+   "missing": [
+    "s.middle-ethmoidal-artery"
+   ]
+  },
+  {
+   "id": "s.frontal-sinus",
+   "r": "anterior-to",
+   "to": "s.anterior-cranial-fossa-dura",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.frontal-sinus-posterior-table",
+   "r": "anterior-to",
+   "to": "s.anterior-cranial-fossa-dura",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.frontal-beak",
+   "r": "anterior-to",
+   "to": "s.frontal-ostium",
+   "missing": [
+    "s.frontal-beak",
+    "s.frontal-ostium"
+   ]
+  },
+  {
+   "id": "s.frontal-beak",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "missing": [
+    "s.frontal-beak"
+   ]
+  },
+  {
+   "id": "s.frontal-ostium",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "missing": [
+    "s.frontal-ostium"
+   ]
+  },
+  {
+   "id": "s.frontal-ostium",
+   "r": "superior-to",
+   "to": "s.frontal-recess",
+   "missing": [
+    "s.frontal-ostium"
+   ]
+  },
+  {
+   "id": "s.frontal-ostium",
+   "r": "posterior-to",
+   "to": "s.frontal-beak",
+   "missing": [
+    "s.frontal-ostium",
+    "s.frontal-beak"
+   ]
+  },
+  {
+   "id": "s.frontal-recess",
+   "r": "inferior-to",
+   "to": "s.frontal-ostium",
+   "missing": [
+    "s.frontal-ostium"
+   ]
+  },
+  {
+   "id": "s.terminal-recess",
+   "r": "lateral-to",
+   "to": "s.frontal-recess",
+   "missing": [
+    "s.terminal-recess"
+   ]
+  },
+  {
+   "id": "s.agger-nasi",
+   "r": "anterior-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.agger-nasi"
+   ]
+  },
+  {
+   "id": "s.orbit",
+   "r": "lateral-to",
+   "to": "s.ethmoid-labyrinth",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.orbit",
+   "r": "inferior-to",
+   "to": "s.anterior-cranial-fossa-dura",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.lamina-papyracea",
+   "r": "lateral-to",
+   "to": "s.ethmoid-labyrinth",
+   "missing": [
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.lamina-papyracea",
+   "r": "medial-to",
+   "to": "s.periorbita",
+   "missing": [
+    "s.periorbita"
+   ]
+  },
+  {
+   "id": "s.lamina-papyracea",
+   "r": "inferior-to",
+   "to": "s.frontoethmoidal-suture",
+   "missing": [
+    "s.frontoethmoidal-suture"
+   ]
+  },
+  {
+   "id": "s.frontoethmoidal-suture",
+   "r": "superior-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.frontoethmoidal-suture"
+   ]
+  },
+  {
+   "id": "s.periorbita",
+   "r": "lateral-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.periorbita"
+   ]
+  },
+  {
+   "id": "s.periorbita",
+   "r": "medial-to",
+   "to": "s.orbital-fat",
+   "missing": [
+    "s.periorbita",
+    "s.orbital-fat"
+   ]
+  },
+  {
+   "id": "s.orbital-fat",
+   "r": "lateral-to",
+   "to": "s.periorbita",
+   "missing": [
+    "s.orbital-fat",
+    "s.periorbita"
+   ]
+  },
+  {
+   "id": "s.medial-rectus",
+   "r": "lateral-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.medial-rectus"
+   ]
+  },
+  {
+   "id": "s.medial-rectus",
+   "r": "inferior-to",
+   "to": "s.superior-oblique",
+   "missing": [
+    "s.medial-rectus",
+    "s.superior-oblique"
+   ]
+  },
+  {
+   "id": "s.medial-rectus",
+   "r": "medial-to",
+   "to": "s.optic-nerve",
+   "missing": [
+    "s.medial-rectus"
+   ]
+  },
+  {
+   "id": "s.superior-oblique",
+   "r": "superior-to",
+   "to": "s.medial-rectus",
+   "missing": [
+    "s.superior-oblique",
+    "s.medial-rectus"
+   ]
+  },
+  {
+   "id": "s.superior-oblique",
+   "r": "posterior-to",
+   "to": "s.trochlea",
+   "missing": [
+    "s.superior-oblique",
+    "s.trochlea"
+   ]
+  },
+  {
+   "id": "s.trochlea",
+   "r": "anterior-to",
+   "to": "s.superior-oblique",
+   "missing": [
+    "s.trochlea",
+    "s.superior-oblique"
+   ]
+  },
+  {
+   "id": "s.trochlea",
+   "r": "inferior-to",
+   "to": "s.frontal-sinus",
+   "missing": [
+    "s.trochlea"
+   ]
+  },
+  {
+   "id": "s.orbital-roof",
+   "r": "inferior-to",
+   "to": "s.anterior-cranial-fossa-dura",
+   "missing": [
+    "s.orbital-roof",
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.inferior-rectus",
+   "r": "superior-to",
+   "to": "s.orbital-floor",
+   "missing": [
+    "s.inferior-rectus"
+   ]
+  },
+  {
+   "id": "s.inferior-rectus",
+   "r": "inferior-to",
+   "to": "s.medial-rectus",
+   "missing": [
+    "s.inferior-rectus",
+    "s.medial-rectus"
+   ]
+  },
+  {
+   "id": "s.supraorbital-nerve",
+   "r": "lateral-to",
+   "to": "s.supratrochlear-nerve",
+   "missing": [
+    "s.supraorbital-nerve",
+    "s.supratrochlear-nerve"
+   ]
+  },
+  {
+   "id": "s.supratrochlear-nerve",
+   "r": "medial-to",
+   "to": "s.supraorbital-nerve",
+   "missing": [
+    "s.supratrochlear-nerve",
+    "s.supraorbital-nerve"
+   ]
+  },
+  {
+   "id": "s.supratrochlear-nerve",
+   "r": "superior-to",
+   "to": "s.trochlea",
+   "missing": [
+    "s.supratrochlear-nerve",
+    "s.trochlea"
+   ]
+  },
+  {
+   "id": "s.anterior-cranial-fossa",
+   "r": "superior-to",
+   "to": "s.ethmoid-labyrinth",
+   "missing": [
+    "s.anterior-cranial-fossa",
+    "s.ethmoid-labyrinth"
+   ]
+  },
+  {
+   "id": "s.anterior-cranial-fossa",
+   "r": "superior-to",
+   "to": "s.orbit",
+   "missing": [
+    "s.anterior-cranial-fossa"
+   ]
+  },
+  {
+   "id": "s.anterior-cranial-fossa",
+   "r": "anterior-to",
+   "to": "s.planum-sphenoidale",
+   "missing": [
+    "s.anterior-cranial-fossa"
+   ]
+  },
+  {
+   "id": "s.anterior-cranial-fossa-dura",
+   "r": "superior-to",
+   "to": "s.cribriform-plate",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.anterior-cranial-fossa-dura",
+   "r": "superior-to",
+   "to": "s.fovea-ethmoidalis",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.anterior-cranial-fossa-dura",
+   "r": "posterior-to",
+   "to": "s.frontal-sinus-posterior-table",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.gyrus-rectus",
+   "r": "medial-to",
+   "to": "s.olfactory-tract",
+   "missing": [
+    "s.gyrus-rectus",
+    "s.olfactory-tract"
+   ]
+  },
+  {
+   "id": "s.gyrus-rectus",
+   "r": "superior-to",
+   "to": "s.cribriform-plate",
+   "missing": [
+    "s.gyrus-rectus"
+   ]
+  },
+  {
+   "id": "s.falx-cerebri",
+   "r": "superior-to",
+   "to": "s.crista-galli",
+   "missing": [
+    "s.falx-cerebri"
+   ]
+  },
+  {
+   "id": "s.superior-sagittal-sinus",
+   "r": "superior-to",
+   "to": "s.falx-cerebri",
+   "missing": [
+    "s.superior-sagittal-sinus",
+    "s.falx-cerebri"
+   ]
+  },
+  {
+   "id": "s.superior-sagittal-sinus",
+   "r": "posterior-to",
+   "to": "s.foramen-caecum",
+   "missing": [
+    "s.superior-sagittal-sinus",
+    "s.foramen-caecum"
+   ]
+  },
+  {
+   "id": "s.orbitofrontal-artery",
+   "r": "superior-to",
+   "to": "s.cribriform-plate",
+   "missing": [
+    "s.orbitofrontal-artery"
+   ]
+  },
+  {
+   "id": "s.nasal-cavity",
+   "r": "inferior-to",
+   "to": "s.anterior-cranial-fossa-dura",
+   "missing": [
+    "s.anterior-cranial-fossa-dura"
+   ]
+  },
+  {
+   "id": "s.nasal-vestibule",
+   "r": "anterior-to",
+   "to": "s.internal-nasal-valve",
+   "missing": [
+    "s.nasal-vestibule",
+    "s.internal-nasal-valve"
+   ]
+  },
+  {
+   "id": "s.internal-nasal-valve",
+   "r": "anterior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.internal-nasal-valve"
+   ]
+  },
+  {
+   "id": "s.nasal-floor",
+   "r": "medial-to",
+   "to": "s.greater-palatine-canal",
+   "missing": [
+    "s.greater-palatine-canal"
+   ]
+  },
+  {
+   "id": "s.inferior-meatus",
+   "r": "inferior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.inferior-meatus"
+   ]
+  },
+  {
+   "id": "s.inferior-meatus",
+   "r": "medial-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.inferior-meatus"
+   ]
+  },
+  {
+   "id": "s.inferior-meatus",
+   "r": "lateral-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.inferior-meatus"
+   ]
+  },
+  {
+   "id": "s.septal-cartilage",
+   "r": "anterior-to",
+   "to": "s.perpendicular-plate",
+   "missing": [
+    "s.septal-cartilage",
+    "s.perpendicular-plate"
+   ]
+  },
+  {
+   "id": "s.septal-cartilage",
+   "r": "anterior-to",
+   "to": "s.vomer",
+   "missing": [
+    "s.septal-cartilage"
+   ]
+  },
+  {
+   "id": "s.septal-cartilage",
+   "r": "superior-to",
+   "to": "s.maxillary-crest",
+   "missing": [
+    "s.septal-cartilage",
+    "s.maxillary-crest"
+   ]
+  },
+  {
+   "id": "s.septal-l-strut",
+   "r": "anterior-to",
+   "to": "s.perpendicular-plate",
+   "missing": [
+    "s.septal-l-strut",
+    "s.perpendicular-plate"
+   ]
+  },
+  {
+   "id": "s.perpendicular-plate",
+   "r": "posterior-to",
+   "to": "s.septal-cartilage",
+   "missing": [
+    "s.perpendicular-plate",
+    "s.septal-cartilage"
+   ]
+  },
+  {
+   "id": "s.perpendicular-plate",
+   "r": "superior-to",
+   "to": "s.vomer",
+   "missing": [
+    "s.perpendicular-plate"
+   ]
+  },
+  {
+   "id": "s.vomer",
+   "r": "inferior-to",
+   "to": "s.perpendicular-plate",
+   "missing": [
+    "s.perpendicular-plate"
+   ]
+  },
+  {
+   "id": "s.vomer",
+   "r": "posterior-to",
+   "to": "s.septal-cartilage",
+   "missing": [
+    "s.septal-cartilage"
+   ]
+  },
+  {
+   "id": "s.maxillary-crest",
+   "r": "inferior-to",
+   "to": "s.septal-cartilage",
+   "missing": [
+    "s.maxillary-crest",
+    "s.septal-cartilage"
+   ]
+  },
+  {
+   "id": "s.maxillary-crest",
+   "r": "superior-to",
+   "to": "s.nasal-floor",
+   "missing": [
+    "s.maxillary-crest"
+   ]
+  },
+  {
+   "id": "s.septal-swell-body",
+   "r": "superior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.septal-swell-body"
+   ]
+  },
+  {
+   "id": "s.septal-swell-body",
+   "r": "medial-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.septal-swell-body"
+   ]
+  },
+  {
+   "id": "s.kiesselbach-area",
+   "r": "inferior-to",
+   "to": "s.septal-swell-body",
+   "missing": [
+    "s.kiesselbach-area",
+    "s.septal-swell-body"
+   ]
+  },
+  {
+   "id": "s.kiesselbach-area",
+   "r": "anterior-to",
+   "to": "s.vomer",
+   "missing": [
+    "s.kiesselbach-area"
+   ]
+  },
+  {
+   "id": "s.inferior-turbinate",
+   "r": "superior-to",
+   "to": "s.inferior-meatus",
+   "missing": [
+    "s.inferior-meatus"
+   ]
+  },
+  {
+   "id": "s.middle-turbinate",
+   "r": "inferior-to",
+   "to": "s.superior-turbinate",
+   "missing": [
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.middle-turbinate",
+   "r": "medial-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.middle-turbinate",
+   "r": "anterior-to",
+   "to": "s.sphenopalatine-foramen",
+   "missing": [
+    "s.sphenopalatine-foramen"
+   ]
+  },
+  {
+   "id": "s.superior-turbinate",
+   "r": "superior-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.superior-turbinate",
+   "r": "posterior-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.superior-turbinate",
+   "r": "lateral-to",
+   "to": "s.sphenoethmoidal-recess",
+   "missing": [
+    "s.superior-turbinate",
+    "s.sphenoethmoidal-recess"
+   ]
+  },
+  {
+   "id": "s.supreme-turbinate",
+   "r": "superior-to",
+   "to": "s.superior-turbinate",
+   "missing": [
+    "s.supreme-turbinate",
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.lateral-nasal-wall",
+   "r": "lateral-to",
+   "to": "s.nasal-cavity",
+   "missing": [
+    "s.lateral-nasal-wall"
+   ]
+  },
+  {
+   "id": "s.lateral-nasal-wall",
+   "r": "medial-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.lateral-nasal-wall"
+   ]
+  },
+  {
+   "id": "s.middle-meatus",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.middle-meatus"
+   ]
+  },
+  {
+   "id": "s.middle-meatus",
+   "r": "superior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.middle-meatus"
+   ]
+  },
+  {
+   "id": "s.uncinate-process",
+   "r": "medial-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.uncinate-process",
+   "r": "medial-to",
+   "to": "s.ethmoid-infundibulum",
+   "missing": [
+    "s.uncinate-process",
+    "s.ethmoid-infundibulum"
+   ]
+  },
+  {
+   "id": "s.uncinate-process",
+   "r": "anterior-to",
+   "to": "s.ethmoid-bulla",
+   "missing": [
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.uncinate-process",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.uncinate-process",
+   "r": "posterior-to",
+   "to": "s.maxillary-line",
+   "missing": [
+    "s.uncinate-process",
+    "s.maxillary-line"
+   ]
+  },
+  {
+   "id": "s.ethmoid-infundibulum",
+   "r": "lateral-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.ethmoid-infundibulum",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.ethmoid-infundibulum",
+   "r": "medial-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.ethmoid-infundibulum"
+   ]
+  },
+  {
+   "id": "s.ethmoid-infundibulum",
+   "r": "anterior-to",
+   "to": "s.ethmoid-bulla",
+   "missing": [
+    "s.ethmoid-infundibulum"
+   ]
+  },
+  {
+   "id": "s.ethmoid-infundibulum",
+   "r": "lateral-to",
+   "to": "s.middle-meatus",
+   "missing": [
+    "s.ethmoid-infundibulum",
+    "s.middle-meatus"
+   ]
+  },
+  {
+   "id": "s.hiatus-semilunaris",
+   "r": "posterior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.hiatus-semilunaris",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.hiatus-semilunaris",
+   "r": "anterior-to",
+   "to": "s.ethmoid-bulla",
+   "missing": [
+    "s.hiatus-semilunaris"
+   ]
+  },
+  {
+   "id": "s.recessus-terminalis",
+   "r": "superior-to",
+   "to": "s.ethmoid-infundibulum",
+   "missing": [
+    "s.recessus-terminalis",
+    "s.ethmoid-infundibulum"
+   ]
+  },
+  {
+   "id": "s.recessus-terminalis",
+   "r": "medial-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.recessus-terminalis"
+   ]
+  },
+  {
+   "id": "s.maxillary-line",
+   "r": "anterior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.maxillary-line",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.maxillary-line",
+   "r": "posterior-to",
+   "to": "s.frontal-process-maxilla",
+   "missing": [
+    "s.maxillary-line",
+    "s.frontal-process-maxilla"
+   ]
+  },
+  {
+   "id": "s.anterior-fontanelle",
+   "r": "inferior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.anterior-fontanelle",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.anterior-fontanelle",
+   "r": "superior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.anterior-fontanelle"
+   ]
+  },
+  {
+   "id": "s.anterior-fontanelle",
+   "r": "anterior-to",
+   "to": "s.posterior-fontanelle",
+   "missing": [
+    "s.anterior-fontanelle",
+    "s.posterior-fontanelle"
+   ]
+  },
+  {
+   "id": "s.posterior-fontanelle",
+   "r": "posterior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.posterior-fontanelle",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.posterior-fontanelle",
+   "r": "superior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.posterior-fontanelle"
+   ]
+  },
+  {
+   "id": "s.posterior-fontanelle",
+   "r": "posterior-to",
+   "to": "s.maxillary-natural-ostium",
+   "missing": [
+    "s.posterior-fontanelle",
+    "s.maxillary-natural-ostium"
+   ]
+  },
+  {
+   "id": "s.frontal-process-maxilla",
+   "r": "anterior-to",
+   "to": "s.lacrimal-bone",
+   "missing": [
+    "s.frontal-process-maxilla",
+    "s.lacrimal-bone"
+   ]
+  },
+  {
+   "id": "s.frontal-process-maxilla",
+   "r": "anterior-to",
+   "to": "s.maxillary-line",
+   "missing": [
+    "s.frontal-process-maxilla",
+    "s.maxillary-line"
+   ]
+  },
+  {
+   "id": "s.frontal-process-maxilla",
+   "r": "anterior-to",
+   "to": "s.nasolacrimal-duct",
+   "missing": [
+    "s.frontal-process-maxilla"
+   ]
+  },
+  {
+   "id": "s.lacrimal-bone",
+   "r": "posterior-to",
+   "to": "s.frontal-process-maxilla",
+   "missing": [
+    "s.lacrimal-bone",
+    "s.frontal-process-maxilla"
+   ]
+  },
+  {
+   "id": "s.lacrimal-bone",
+   "r": "anterior-to",
+   "to": "s.lamina-papyracea",
+   "missing": [
+    "s.lacrimal-bone"
+   ]
+  },
+  {
+   "id": "s.maxillary-sinus",
+   "r": "anterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.maxillary-natural-ostium",
+   "r": "lateral-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.maxillary-natural-ostium",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.maxillary-natural-ostium",
+   "r": "posterior-to",
+   "to": "s.nasolacrimal-duct",
+   "missing": [
+    "s.maxillary-natural-ostium"
+   ]
+  },
+  {
+   "id": "s.maxillary-natural-ostium",
+   "r": "inferior-to",
+   "to": "s.orbital-floor",
+   "missing": [
+    "s.maxillary-natural-ostium"
+   ]
+  },
+  {
+   "id": "s.maxillary-posterior-wall",
+   "r": "anterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.maxillary-posterior-wall",
+   "r": "anterior-to",
+   "to": "s.infratemporal-fossa",
+   "missing": [
+    "s.infratemporal-fossa"
+   ]
+  },
+  {
+   "id": "s.retroantral-fat-pad",
+   "r": "posterior-to",
+   "to": "s.maxillary-posterior-wall",
+   "missing": [
+    "s.retroantral-fat-pad"
+   ]
+  },
+  {
+   "id": "s.retroantral-fat-pad",
+   "r": "lateral-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.retroantral-fat-pad",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.alveolar-recess",
+   "r": "inferior-to",
+   "to": "s.maxillary-natural-ostium",
+   "missing": [
+    "s.alveolar-recess",
+    "s.maxillary-natural-ostium"
+   ]
+  },
+  {
+   "id": "s.zygomatic-recess",
+   "r": "lateral-to",
+   "to": "s.maxillary-natural-ostium",
+   "missing": [
+    "s.zygomatic-recess",
+    "s.maxillary-natural-ostium"
+   ]
+  },
+  {
+   "id": "s.prelacrimal-recess",
+   "r": "anterior-to",
+   "to": "s.nasolacrimal-duct",
+   "missing": [
+    "s.prelacrimal-recess"
+   ]
+  },
+  {
+   "id": "s.canine-fossa",
+   "r": "inferior-to",
+   "to": "s.infraorbital-foramen",
+   "missing": [
+    "s.canine-fossa",
+    "s.infraorbital-foramen"
+   ]
+  },
+  {
+   "id": "s.infraorbital-canal",
+   "r": "superior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.infraorbital-canal"
+   ]
+  },
+  {
+   "id": "s.infraorbital-foramen",
+   "r": "superior-to",
+   "to": "s.canine-fossa",
+   "missing": [
+    "s.infraorbital-foramen",
+    "s.canine-fossa"
+   ]
+  },
+  {
+   "id": "s.infraorbital-foramen",
+   "r": "lateral-to",
+   "to": "s.nasolacrimal-duct",
+   "missing": [
+    "s.infraorbital-foramen"
+   ]
+  },
+  {
+   "id": "s.lacrimal-sac",
+   "r": "superior-to",
+   "to": "s.nasolacrimal-duct",
+   "missing": [
+    "s.lacrimal-sac"
+   ]
+  },
+  {
+   "id": "s.lacrimal-sac",
+   "r": "anterior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.lacrimal-sac",
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.lacrimal-sac",
+   "r": "lateral-to",
+   "to": "s.middle-turbinate",
+   "missing": [
+    "s.lacrimal-sac"
+   ]
+  },
+  {
+   "id": "s.lacrimal-canaliculi",
+   "r": "lateral-to",
+   "to": "s.lacrimal-sac",
+   "missing": [
+    "s.lacrimal-canaliculi",
+    "s.lacrimal-sac"
+   ]
+  },
+  {
+   "id": "s.nasolacrimal-duct",
+   "r": "inferior-to",
+   "to": "s.lacrimal-sac",
+   "missing": [
+    "s.lacrimal-sac"
+   ]
+  },
+  {
+   "id": "s.nasolacrimal-duct",
+   "r": "anterior-to",
+   "to": "s.maxillary-natural-ostium",
+   "missing": [
+    "s.maxillary-natural-ostium"
+   ]
+  },
+  {
+   "id": "s.nasolacrimal-duct",
+   "r": "anterior-to",
+   "to": "s.uncinate-process",
+   "missing": [
+    "s.uncinate-process"
+   ]
+  },
+  {
+   "id": "s.hasner-valve",
+   "r": "inferior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.hasner-valve"
+   ]
+  },
+  {
+   "id": "s.palatine-bone",
+   "r": "posterior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.palatine-bone"
+   ]
+  },
+  {
+   "id": "s.palatine-bone",
+   "r": "medial-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.palatine-bone",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.palatine-perpendicular-plate",
+   "r": "medial-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.palatine-perpendicular-plate",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.palatine-perpendicular-plate",
+   "r": "posterior-to",
+   "to": "s.maxillary-medial-wall",
+   "missing": [
+    "s.palatine-perpendicular-plate"
+   ]
+  },
+  {
+   "id": "s.crista-ethmoidalis",
+   "r": "anterior-to",
+   "to": "s.sphenopalatine-foramen",
+   "missing": [
+    "s.crista-ethmoidalis",
+    "s.sphenopalatine-foramen"
+   ]
+  },
+  {
+   "id": "s.sphenopalatine-foramen",
+   "r": "posterior-to",
+   "to": "s.crista-ethmoidalis",
+   "missing": [
+    "s.sphenopalatine-foramen",
+    "s.crista-ethmoidalis"
+   ]
+  },
+  {
+   "id": "s.sphenopalatine-foramen",
+   "r": "medial-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.sphenopalatine-foramen",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.internal-maxillary-artery",
+   "r": "anterior-to",
+   "to": "s.pterygopalatine-ganglion",
+   "missing": [
+    "s.internal-maxillary-artery",
+    "s.pterygopalatine-ganglion"
+   ]
+  },
+  {
+   "id": "s.internal-maxillary-artery",
+   "r": "anterior-to",
+   "to": "s.maxillary-nerve",
+   "missing": [
+    "s.internal-maxillary-artery"
+   ]
+  },
+  {
+   "id": "s.sphenopalatine-artery",
+   "r": "posterior-to",
+   "to": "s.crista-ethmoidalis",
+   "missing": [
+    "s.crista-ethmoidalis"
+   ]
+  },
+  {
+   "id": "s.posterior-septal-artery",
+   "r": "inferior-to",
+   "to": "s.sphenoid-ostium",
+   "missing": [
+    "s.posterior-septal-artery",
+    "s.sphenoid-ostium"
+   ]
+  },
+  {
+   "id": "s.posterior-septal-artery",
+   "r": "superior-to",
+   "to": "s.choana",
+   "missing": [
+    "s.posterior-septal-artery",
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.descending-palatine-artery",
+   "r": "inferior-to",
+   "to": "s.sphenopalatine-artery",
+   "missing": [
+    "s.descending-palatine-artery"
+   ]
+  },
+  {
+   "id": "s.greater-palatine-canal",
+   "r": "inferior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.greater-palatine-canal",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.greater-palatine-canal",
+   "r": "posterior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.greater-palatine-canal"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "posterior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "anterior-to",
+   "to": "s.pterygoid-process",
+   "missing": [
+    "s.pterygopalatine-fossa",
+    "s.pterygoid-process"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "lateral-to",
+   "to": "s.palatine-perpendicular-plate",
+   "missing": [
+    "s.pterygopalatine-fossa",
+    "s.palatine-perpendicular-plate"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "medial-to",
+   "to": "s.infratemporal-fossa",
+   "missing": [
+    "s.pterygopalatine-fossa",
+    "s.infratemporal-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "inferior-to",
+   "to": "s.orbit",
+   "missing": [
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-fossa",
+   "r": "anterior-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-ganglion",
+   "r": "inferior-to",
+   "to": "s.maxillary-nerve",
+   "missing": [
+    "s.pterygopalatine-ganglion"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-ganglion",
+   "r": "posterior-to",
+   "to": "s.internal-maxillary-artery",
+   "missing": [
+    "s.pterygopalatine-ganglion",
+    "s.internal-maxillary-artery"
+   ]
+  },
+  {
+   "id": "s.pterygopalatine-ganglion",
+   "r": "medial-to",
+   "to": "s.maxillary-nerve",
+   "missing": [
+    "s.pterygopalatine-ganglion"
+   ]
+  },
+  {
+   "id": "s.maxillary-nerve",
+   "r": "superior-to",
+   "to": "s.pterygopalatine-ganglion",
+   "missing": [
+    "s.pterygopalatine-ganglion"
+   ]
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "r": "superior-to",
+   "to": "s.vidian-canal",
+   "missing": [
+    "s.foramen-rotundum",
+    "s.vidian-canal"
+   ]
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "r": "lateral-to",
+   "to": "s.vidian-canal",
+   "missing": [
+    "s.foramen-rotundum",
+    "s.vidian-canal"
+   ]
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "r": "inferior-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.foramen-rotundum",
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "r": "posterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.foramen-rotundum",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.vidian-canal",
+   "r": "inferior-to",
+   "to": "s.foramen-rotundum",
+   "missing": [
+    "s.vidian-canal",
+    "s.foramen-rotundum"
+   ]
+  },
+  {
+   "id": "s.vidian-canal",
+   "r": "medial-to",
+   "to": "s.foramen-rotundum",
+   "missing": [
+    "s.vidian-canal",
+    "s.foramen-rotundum"
+   ]
+  },
+  {
+   "id": "s.vidian-canal",
+   "r": "lateral-to",
+   "to": "s.palatovaginal-canal",
+   "missing": [
+    "s.vidian-canal",
+    "s.palatovaginal-canal"
+   ]
+  },
+  {
+   "id": "s.palatovaginal-canal",
+   "r": "medial-to",
+   "to": "s.vidian-canal",
+   "missing": [
+    "s.palatovaginal-canal",
+    "s.vidian-canal"
+   ]
+  },
+  {
+   "id": "s.pterygomaxillary-fissure",
+   "r": "lateral-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.pterygomaxillary-fissure",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygomaxillary-fissure",
+   "r": "medial-to",
+   "to": "s.infratemporal-fossa",
+   "missing": [
+    "s.pterygomaxillary-fissure",
+    "s.infratemporal-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygomaxillary-fissure",
+   "r": "lateral-to",
+   "to": "s.sphenopalatine-foramen",
+   "missing": [
+    "s.pterygomaxillary-fissure",
+    "s.sphenopalatine-foramen"
+   ]
+  },
+  {
+   "id": "s.inferior-orbital-fissure",
+   "r": "superior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.inferior-orbital-fissure",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.inferior-orbital-fissure",
+   "r": "inferior-to",
+   "to": "s.superior-orbital-fissure",
+   "missing": [
+    "s.inferior-orbital-fissure"
+   ]
+  },
+  {
+   "id": "s.pterygoid-process",
+   "r": "posterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.pterygoid-process",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.pterygoid-process",
+   "r": "inferior-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.pterygoid-process"
+   ]
+  },
+  {
+   "id": "s.medial-pterygoid-plate",
+   "r": "medial-to",
+   "to": "s.lateral-pterygoid-plate",
+   "missing": [
+    "s.medial-pterygoid-plate",
+    "s.lateral-pterygoid-plate"
+   ]
+  },
+  {
+   "id": "s.lateral-pterygoid-plate",
+   "r": "lateral-to",
+   "to": "s.medial-pterygoid-plate",
+   "missing": [
+    "s.lateral-pterygoid-plate",
+    "s.medial-pterygoid-plate"
+   ]
+  },
+  {
+   "id": "s.lateral-pterygoid-plate",
+   "r": "medial-to",
+   "to": "s.infratemporal-fossa",
+   "missing": [
+    "s.lateral-pterygoid-plate",
+    "s.infratemporal-fossa"
+   ]
+  },
+  {
+   "id": "s.infratemporal-fossa",
+   "r": "lateral-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.infratemporal-fossa",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.infratemporal-fossa",
+   "r": "lateral-to",
+   "to": "s.lateral-pterygoid-plate",
+   "missing": [
+    "s.infratemporal-fossa",
+    "s.lateral-pterygoid-plate"
+   ]
+  },
+  {
+   "id": "s.infratemporal-fossa",
+   "r": "posterior-to",
+   "to": "s.maxillary-sinus",
+   "missing": [
+    "s.infratemporal-fossa"
+   ]
+  },
+  {
+   "id": "s.lateral-pterygoid-muscle",
+   "r": "superior-to",
+   "to": "s.medial-pterygoid-muscle",
+   "missing": [
+    "s.lateral-pterygoid-muscle",
+    "s.medial-pterygoid-muscle"
+   ]
+  },
+  {
+   "id": "s.medial-pterygoid-muscle",
+   "r": "inferior-to",
+   "to": "s.lateral-pterygoid-muscle",
+   "missing": [
+    "s.medial-pterygoid-muscle",
+    "s.lateral-pterygoid-muscle"
+   ]
+  },
+  {
+   "id": "s.mandibular-nerve",
+   "r": "posterior-to",
+   "to": "s.lateral-pterygoid-plate",
+   "missing": [
+    "s.mandibular-nerve",
+    "s.lateral-pterygoid-plate"
+   ]
+  },
+  {
+   "id": "s.foramen-ovale",
+   "r": "lateral-to",
+   "to": "s.foramen-rotundum",
+   "missing": [
+    "s.foramen-rotundum"
+   ]
+  },
+  {
+   "id": "s.foramen-ovale",
+   "r": "posterior-to",
+   "to": "s.foramen-rotundum",
+   "missing": [
+    "s.foramen-rotundum"
+   ]
+  },
+  {
+   "id": "s.foramen-ovale",
+   "r": "posterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.foramen-spinosum",
+   "r": "posterior-to",
+   "to": "s.foramen-ovale",
+   "missing": [
+    "s.foramen-spinosum"
+   ]
+  },
+  {
+   "id": "s.foramen-spinosum",
+   "r": "lateral-to",
+   "to": "s.foramen-ovale",
+   "missing": [
+    "s.foramen-spinosum"
+   ]
+  },
+  {
+   "id": "s.middle-meningeal-artery",
+   "r": "posterior-to",
+   "to": "s.foramen-ovale",
+   "missing": [
+    "s.middle-meningeal-artery"
+   ]
+  },
+  {
+   "id": "s.nasopharynx",
+   "r": "posterior-to",
+   "to": "s.choana",
+   "missing": [
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.choana",
+   "r": "anterior-to",
+   "to": "s.nasopharynx",
+   "missing": [
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.choana",
+   "r": "inferior-to",
+   "to": "s.sphenoid-ostium",
+   "missing": [
+    "s.choana",
+    "s.sphenoid-ostium"
+   ]
+  },
+  {
+   "id": "s.eustachian-tube",
+   "r": "posterior-to",
+   "to": "s.inferior-turbinate",
+   "missing": [
+    "s.eustachian-tube"
+   ]
+  },
+  {
+   "id": "s.eustachian-tube",
+   "r": "lateral-to",
+   "to": "s.nasopharynx",
+   "missing": [
+    "s.eustachian-tube"
+   ]
+  },
+  {
+   "id": "s.torus-tubarius",
+   "r": "anterior-to",
+   "to": "s.fossa-of-rosenmuller",
+   "missing": [
+    "s.torus-tubarius",
+    "s.fossa-of-rosenmuller"
+   ]
+  },
+  {
+   "id": "s.fossa-of-rosenmuller",
+   "r": "posterior-to",
+   "to": "s.torus-tubarius",
+   "missing": [
+    "s.fossa-of-rosenmuller",
+    "s.torus-tubarius"
+   ]
+  },
+  {
+   "id": "s.fossa-of-rosenmuller",
+   "r": "lateral-to",
+   "to": "s.adenoid",
+   "missing": [
+    "s.fossa-of-rosenmuller",
+    "s.adenoid"
+   ]
+  },
+  {
+   "id": "s.adenoid",
+   "r": "posterior-to",
+   "to": "s.choana",
+   "missing": [
+    "s.adenoid",
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.adenoid",
+   "r": "medial-to",
+   "to": "s.fossa-of-rosenmuller",
+   "missing": [
+    "s.adenoid",
+    "s.fossa-of-rosenmuller"
+   ]
+  },
+  {
+   "id": "s.tensor-veli-palatini",
+   "r": "lateral-to",
+   "to": "s.levator-veli-palatini",
+   "missing": [
+    "s.tensor-veli-palatini",
+    "s.levator-veli-palatini"
+   ]
+  },
+  {
+   "id": "s.levator-veli-palatini",
+   "r": "medial-to",
+   "to": "s.tensor-veli-palatini",
+   "missing": [
+    "s.levator-veli-palatini",
+    "s.tensor-veli-palatini"
+   ]
+  },
+  {
+   "id": "s.levator-veli-palatini",
+   "r": "inferior-to",
+   "to": "s.torus-tubarius",
+   "missing": [
+    "s.levator-veli-palatini",
+    "s.torus-tubarius"
+   ]
+  },
+  {
+   "id": "s.sphenoid-bone",
+   "r": "posterior-to",
+   "to": "s.ethmoid-bone",
+   "missing": [
+    "s.sphenoid-bone",
+    "s.ethmoid-bone"
+   ]
+  },
+  {
+   "id": "s.sphenoid-bone",
+   "r": "anterior-to",
+   "to": "s.pons",
+   "missing": [
+    "s.sphenoid-bone",
+    "s.pons"
+   ]
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "posterior-to",
+   "to": "s.sphenoethmoidal-recess",
+   "missing": [
+    "s.sphenoethmoidal-recess"
+   ]
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "medial-to",
+   "to": "s.cavernous-sinus",
+   "missing": [
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "r": "medial-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.sphenoid-ostium",
+   "r": "medial-to",
+   "to": "s.superior-turbinate",
+   "missing": [
+    "s.sphenoid-ostium",
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.sphenoid-ostium",
+   "r": "lateral-to",
+   "to": "s.nasal-septum",
+   "missing": [
+    "s.sphenoid-ostium"
+   ]
+  },
+  {
+   "id": "s.sphenoid-ostium",
+   "r": "superior-to",
+   "to": "s.choana",
+   "missing": [
+    "s.sphenoid-ostium",
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.sphenoid-ostium",
+   "r": "superior-to",
+   "to": "s.posterior-septal-artery",
+   "missing": [
+    "s.sphenoid-ostium",
+    "s.posterior-septal-artery"
+   ]
+  },
+  {
+   "id": "s.sphenoethmoidal-recess",
+   "r": "lateral-to",
+   "to": "s.nasal-septum",
+   "missing": [
+    "s.sphenoethmoidal-recess"
+   ]
+  },
+  {
+   "id": "s.sphenoethmoidal-recess",
+   "r": "medial-to",
+   "to": "s.superior-turbinate",
+   "missing": [
+    "s.sphenoethmoidal-recess",
+    "s.superior-turbinate"
+   ]
+  },
+  {
+   "id": "s.sphenoethmoidal-recess",
+   "r": "anterior-to",
+   "to": "s.sphenoid-face",
+   "missing": [
+    "s.sphenoethmoidal-recess"
+   ]
+  },
+  {
+   "id": "s.sphenoethmoidal-recess",
+   "r": "superior-to",
+   "to": "s.choana",
+   "missing": [
+    "s.sphenoethmoidal-recess",
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.sphenoid-face",
+   "r": "posterior-to",
+   "to": "s.sphenoethmoidal-recess",
+   "missing": [
+    "s.sphenoethmoidal-recess"
+   ]
+  },
+  {
+   "id": "s.sphenoid-face",
+   "r": "posterior-to",
+   "to": "s.posterior-septal-artery",
+   "missing": [
+    "s.posterior-septal-artery"
+   ]
+  },
+  {
+   "id": "s.sphenoid-rostrum",
+   "r": "inferior-to",
+   "to": "s.sphenoid-ostium",
+   "missing": [
+    "s.sphenoid-rostrum",
+    "s.sphenoid-ostium"
+   ]
+  },
+  {
+   "id": "s.intersinus-septum",
+   "r": "medial-to",
+   "to": "s.carotid-prominence",
+   "missing": [
+    "s.carotid-prominence"
+   ]
+  },
+  {
+   "id": "s.sphenoid-lateral-wall",
+   "r": "medial-to",
+   "to": "s.cavernous-sinus",
+   "missing": [
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.sphenoid-lateral-recess",
+   "r": "lateral-to",
+   "to": "s.vidian-canal",
+   "missing": [
+    "s.sphenoid-lateral-recess",
+    "s.vidian-canal"
+   ]
+  },
+  {
+   "id": "s.sphenoid-lateral-recess",
+   "r": "posterior-to",
+   "to": "s.pterygopalatine-fossa",
+   "missing": [
+    "s.sphenoid-lateral-recess",
+    "s.pterygopalatine-fossa"
+   ]
+  },
+  {
+   "id": "s.clival-recess",
+   "r": "inferior-to",
+   "to": "s.sella-turcica",
+   "missing": [
+    "s.clival-recess"
+   ]
+  },
+  {
+   "id": "s.clival-recess",
+   "r": "medial-to",
+   "to": "s.carotid-prominence",
+   "missing": [
+    "s.clival-recess",
+    "s.carotid-prominence"
+   ]
+  },
+  {
+   "id": "s.clival-recess",
+   "r": "anterior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.clival-recess"
+   ]
+  },
+  {
+   "id": "s.carotid-prominence",
+   "r": "lateral-to",
+   "to": "s.sella-turcica",
+   "missing": [
+    "s.carotid-prominence"
+   ]
+  },
+  {
+   "id": "s.carotid-prominence",
+   "r": "lateral-to",
+   "to": "s.clival-recess",
+   "missing": [
+    "s.carotid-prominence",
+    "s.clival-recess"
+   ]
+  },
+  {
+   "id": "s.carotid-prominence",
+   "r": "inferior-to",
+   "to": "s.optic-prominence",
+   "missing": [
+    "s.carotid-prominence",
+    "s.optic-prominence"
+   ]
+  },
+  {
+   "id": "s.optic-prominence",
+   "r": "superior-to",
+   "to": "s.carotid-prominence",
+   "missing": [
+    "s.optic-prominence",
+    "s.carotid-prominence"
+   ]
+  },
+  {
+   "id": "s.optic-prominence",
+   "r": "lateral-to",
+   "to": "s.planum-sphenoidale",
+   "missing": [
+    "s.optic-prominence"
+   ]
+  },
+  {
+   "id": "s.lateral-opticocarotid-recess",
+   "r": "inferior-to",
+   "to": "s.optic-prominence",
+   "missing": [
+    "s.lateral-opticocarotid-recess",
+    "s.optic-prominence"
+   ]
+  },
+  {
+   "id": "s.lateral-opticocarotid-recess",
+   "r": "superior-to",
+   "to": "s.carotid-prominence",
+   "missing": [
+    "s.lateral-opticocarotid-recess",
+    "s.carotid-prominence"
+   ]
+  },
+  {
+   "id": "s.lateral-opticocarotid-recess",
+   "r": "lateral-to",
+   "to": "s.medial-opticocarotid-recess",
+   "missing": [
+    "s.lateral-opticocarotid-recess",
+    "s.medial-opticocarotid-recess"
+   ]
+  },
+  {
+   "id": "s.medial-opticocarotid-recess",
+   "r": "medial-to",
+   "to": "s.lateral-opticocarotid-recess",
+   "missing": [
+    "s.medial-opticocarotid-recess",
+    "s.lateral-opticocarotid-recess"
+   ]
+  },
+  {
+   "id": "s.medial-opticocarotid-recess",
+   "r": "lateral-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.medial-opticocarotid-recess",
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.greater-wing-of-sphenoid",
+   "r": "lateral-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.greater-wing-of-sphenoid"
+   ]
+  },
+  {
+   "id": "s.greater-wing-of-sphenoid",
+   "r": "inferior-to",
+   "to": "s.lesser-wing-of-sphenoid",
+   "missing": [
+    "s.greater-wing-of-sphenoid",
+    "s.lesser-wing-of-sphenoid"
+   ]
+  },
+  {
+   "id": "s.lesser-wing-of-sphenoid",
+   "r": "superior-to",
+   "to": "s.greater-wing-of-sphenoid",
+   "missing": [
+    "s.lesser-wing-of-sphenoid",
+    "s.greater-wing-of-sphenoid"
+   ]
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "lateral-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "lateral-to",
+   "to": "s.planum-sphenoidale",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "medial-to",
+   "to": "s.anterior-clinoid-process",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "superior-to",
+   "to": "s.optic-strut",
+   "missing": [
+    "s.optic-canal",
+    "s.optic-strut"
+   ]
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "superior-to",
+   "to": "s.carotid-prominence",
+   "missing": [
+    "s.optic-canal",
+    "s.carotid-prominence"
+   ]
+  },
+  {
+   "id": "s.optic-canal",
+   "r": "superior-to",
+   "to": "s.vidian-canal",
+   "missing": [
+    "s.optic-canal",
+    "s.vidian-canal"
+   ]
+  },
+  {
+   "id": "s.optic-strut",
+   "r": "inferior-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-strut",
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.optic-strut",
+   "r": "medial-to",
+   "to": "s.superior-orbital-fissure",
+   "missing": [
+    "s.optic-strut"
+   ]
+  },
+  {
+   "id": "s.optic-strut",
+   "r": "anterior-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.optic-strut"
+   ]
+  },
+  {
+   "id": "s.anterior-clinoid-process",
+   "r": "lateral-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.anterior-clinoid-process",
+   "r": "anterior-to",
+   "to": "s.posterior-clinoid-process",
+   "missing": [
+    "s.posterior-clinoid-process"
+   ]
+  },
+  {
+   "id": "s.anterior-clinoid-process",
+   "r": "superior-to",
+   "to": "s.oculomotor-nerve",
+   "missing": [
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.middle-clinoid-process",
+   "r": "lateral-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.middle-clinoid-process",
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.middle-clinoid-process",
+   "r": "medial-to",
+   "to": "s.anterior-clinoid-process",
+   "missing": [
+    "s.middle-clinoid-process"
+   ]
+  },
+  {
+   "id": "s.superior-orbital-fissure",
+   "r": "lateral-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.superior-orbital-fissure",
+   "r": "inferior-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.planum-sphenoidale",
+   "r": "anterior-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.planum-sphenoidale",
+   "r": "medial-to",
+   "to": "s.optic-canal",
+   "missing": [
+    "s.optic-canal"
+   ]
+  },
+  {
+   "id": "s.planum-sphenoidale",
+   "r": "inferior-to",
+   "to": "s.gyrus-rectus",
+   "missing": [
+    "s.gyrus-rectus"
+   ]
+  },
+  {
+   "id": "s.planum-sphenoidale",
+   "r": "inferior-to",
+   "to": "s.olfactory-tract",
+   "missing": [
+    "s.olfactory-tract"
+   ]
+  },
+  {
+   "id": "s.limbus-sphenoidale",
+   "r": "posterior-to",
+   "to": "s.planum-sphenoidale",
+   "missing": [
+    "s.limbus-sphenoidale"
+   ]
+  },
+  {
+   "id": "s.limbus-sphenoidale",
+   "r": "anterior-to",
+   "to": "s.chiasmatic-sulcus",
+   "missing": [
+    "s.limbus-sphenoidale",
+    "s.chiasmatic-sulcus"
+   ]
+  },
+  {
+   "id": "s.chiasmatic-sulcus",
+   "r": "posterior-to",
+   "to": "s.limbus-sphenoidale",
+   "missing": [
+    "s.chiasmatic-sulcus",
+    "s.limbus-sphenoidale"
+   ]
+  },
+  {
+   "id": "s.chiasmatic-sulcus",
+   "r": "anterior-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.chiasmatic-sulcus",
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.tuberculum-sellae",
+   "r": "posterior-to",
+   "to": "s.chiasmatic-sulcus",
+   "missing": [
+    "s.tuberculum-sellae",
+    "s.chiasmatic-sulcus"
+   ]
+  },
+  {
+   "id": "s.tuberculum-sellae",
+   "r": "anterior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.tuberculum-sellae",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.tuberculum-sellae",
+   "r": "superior-to",
+   "to": "s.anterior-intercavernous-sinus",
+   "missing": [
+    "s.tuberculum-sellae",
+    "s.anterior-intercavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.tuberculum-sellae",
+   "r": "medial-to",
+   "to": "s.medial-opticocarotid-recess",
+   "missing": [
+    "s.tuberculum-sellae",
+    "s.medial-opticocarotid-recess"
+   ]
+  },
+  {
+   "id": "s.sella-turcica",
+   "r": "medial-to",
+   "to": "s.cavernous-sinus",
+   "missing": [
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.sella-turcica",
+   "r": "posterior-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.sella-turcica",
+   "r": "inferior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.dorsum-sellae",
+   "r": "posterior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.dorsum-sellae",
+   "r": "anterior-to",
+   "to": "s.basilar-artery",
+   "missing": [
+    "s.basilar-artery"
+   ]
+  },
+  {
+   "id": "s.dorsum-sellae",
+   "r": "anterior-to",
+   "to": "s.interpeduncular-cistern",
+   "missing": [
+    "s.interpeduncular-cistern"
+   ]
+  },
+  {
+   "id": "s.posterior-clinoid-process",
+   "r": "posterior-to",
+   "to": "s.anterior-clinoid-process",
+   "missing": [
+    "s.posterior-clinoid-process"
+   ]
+  },
+  {
+   "id": "s.posterior-clinoid-process",
+   "r": "medial-to",
+   "to": "s.oculomotor-nerve",
+   "missing": [
+    "s.posterior-clinoid-process",
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.anterior-intercavernous-sinus",
+   "r": "inferior-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.anterior-intercavernous-sinus",
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.anterior-intercavernous-sinus",
+   "r": "anterior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.anterior-intercavernous-sinus",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.posterior-intercavernous-sinus",
+   "r": "posterior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.posterior-intercavernous-sinus",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.posterior-intercavernous-sinus",
+   "r": "anterior-to",
+   "to": "s.dorsum-sellae",
+   "missing": [
+    "s.posterior-intercavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.diaphragma-sellae",
+   "r": "superior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.diaphragma-sellae",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.diaphragma-sellae",
+   "r": "inferior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.diaphragma-sellae",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.diaphragma-sellae",
+   "r": "inferior-to",
+   "to": "s.suprasellar-cistern",
+   "missing": [
+    "s.diaphragma-sellae",
+    "s.suprasellar-cistern"
+   ]
+  },
+  {
+   "id": "s.pituitary-gland",
+   "r": "posterior-to",
+   "to": "s.tuberculum-sellae",
+   "missing": [
+    "s.pituitary-gland",
+    "s.tuberculum-sellae"
+   ]
+  },
+  {
+   "id": "s.pituitary-gland",
+   "r": "anterior-to",
+   "to": "s.dorsum-sellae",
+   "missing": [
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.pituitary-gland",
+   "r": "inferior-to",
+   "to": "s.diaphragma-sellae",
+   "missing": [
+    "s.pituitary-gland",
+    "s.diaphragma-sellae"
+   ]
+  },
+  {
+   "id": "s.pituitary-gland",
+   "r": "medial-to",
+   "to": "s.cavernous-sinus",
+   "missing": [
+    "s.pituitary-gland",
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.pituitary-gland",
+   "r": "superior-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.adenohypophysis",
+   "r": "anterior-to",
+   "to": "s.neurohypophysis",
+   "missing": [
+    "s.adenohypophysis",
+    "s.neurohypophysis"
+   ]
+  },
+  {
+   "id": "s.neurohypophysis",
+   "r": "posterior-to",
+   "to": "s.adenohypophysis",
+   "missing": [
+    "s.neurohypophysis",
+    "s.adenohypophysis"
+   ]
+  },
+  {
+   "id": "s.pituitary-stalk",
+   "r": "posterior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.pituitary-stalk",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.pituitary-stalk",
+   "r": "superior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.pituitary-stalk",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.cavernous-sinus",
+   "r": "lateral-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.cavernous-sinus",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.cavernous-sinus",
+   "r": "lateral-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.cavernous-sinus",
+   "r": "superior-to",
+   "to": "s.maxillary-nerve",
+   "missing": [
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.cavernous-sinus",
+   "r": "posterior-to",
+   "to": "s.superior-orbital-fissure",
+   "missing": [
+    "s.cavernous-sinus"
+   ]
+  },
+  {
+   "id": "s.cavernous-sinus-medial-wall",
+   "r": "lateral-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.cavernous-sinus-medial-wall",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.cavernous-sinus-medial-wall",
+   "r": "medial-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.cavernous-sinus-medial-wall"
+   ]
+  },
+  {
+   "id": "s.internal-carotid-artery",
+   "r": "lateral-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.internal-carotid-artery",
+   "r": "posterior-to",
+   "to": "s.eustachian-tube",
+   "missing": [
+    "s.eustachian-tube"
+   ]
+  },
+  {
+   "id": "s.proximal-dural-ring",
+   "r": "inferior-to",
+   "to": "s.distal-dural-ring",
+   "missing": [
+    "s.proximal-dural-ring",
+    "s.distal-dural-ring"
+   ]
+  },
+  {
+   "id": "s.distal-dural-ring",
+   "r": "superior-to",
+   "to": "s.proximal-dural-ring",
+   "missing": [
+    "s.distal-dural-ring",
+    "s.proximal-dural-ring"
+   ]
+  },
+  {
+   "id": "s.oculomotor-nerve",
+   "r": "inferior-to",
+   "to": "s.posterior-cerebral-artery",
+   "missing": [
+    "s.oculomotor-nerve",
+    "s.posterior-cerebral-artery"
+   ]
+  },
+  {
+   "id": "s.oculomotor-nerve",
+   "r": "superior-to",
+   "to": "s.superior-cerebellar-artery",
+   "missing": [
+    "s.oculomotor-nerve",
+    "s.superior-cerebellar-artery"
+   ]
+  },
+  {
+   "id": "s.oculomotor-nerve",
+   "r": "lateral-to",
+   "to": "s.posterior-clinoid-process",
+   "missing": [
+    "s.oculomotor-nerve",
+    "s.posterior-clinoid-process"
+   ]
+  },
+  {
+   "id": "s.oculomotor-nerve",
+   "r": "superior-to",
+   "to": "s.trochlear-nerve",
+   "missing": [
+    "s.oculomotor-nerve",
+    "s.trochlear-nerve"
+   ]
+  },
+  {
+   "id": "s.oculomotor-nerve",
+   "r": "superior-to",
+   "to": "s.ophthalmic-nerve",
+   "missing": [
+    "s.oculomotor-nerve",
+    "s.ophthalmic-nerve"
+   ]
+  },
+  {
+   "id": "s.oculomotor-nerve",
+   "r": "lateral-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.trochlear-nerve",
+   "r": "inferior-to",
+   "to": "s.oculomotor-nerve",
+   "missing": [
+    "s.trochlear-nerve",
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.trochlear-nerve",
+   "r": "superior-to",
+   "to": "s.ophthalmic-nerve",
+   "missing": [
+    "s.trochlear-nerve",
+    "s.ophthalmic-nerve"
+   ]
+  },
+  {
+   "id": "s.ophthalmic-nerve",
+   "r": "inferior-to",
+   "to": "s.trochlear-nerve",
+   "missing": [
+    "s.ophthalmic-nerve",
+    "s.trochlear-nerve"
+   ]
+  },
+  {
+   "id": "s.ophthalmic-nerve",
+   "r": "superior-to",
+   "to": "s.maxillary-nerve",
+   "missing": [
+    "s.ophthalmic-nerve"
+   ]
+  },
+  {
+   "id": "s.ophthalmic-nerve",
+   "r": "lateral-to",
+   "to": "s.abducens-nerve",
+   "missing": [
+    "s.ophthalmic-nerve",
+    "s.abducens-nerve"
+   ]
+  },
+  {
+   "id": "s.abducens-nerve",
+   "r": "lateral-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.abducens-nerve"
+   ]
+  },
+  {
+   "id": "s.abducens-nerve",
+   "r": "medial-to",
+   "to": "s.ophthalmic-nerve",
+   "missing": [
+    "s.abducens-nerve",
+    "s.ophthalmic-nerve"
+   ]
+  },
+  {
+   "id": "s.dorellos-canal",
+   "r": "inferior-to",
+   "to": "s.petrosphenoidal-ligament",
+   "missing": [
+    "s.dorellos-canal",
+    "s.petrosphenoidal-ligament"
+   ]
+  },
+  {
+   "id": "s.dorellos-canal",
+   "r": "posterior-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.dorellos-canal"
+   ]
+  },
+  {
+   "id": "s.petrosphenoidal-ligament",
+   "r": "superior-to",
+   "to": "s.dorellos-canal",
+   "missing": [
+    "s.petrosphenoidal-ligament",
+    "s.dorellos-canal"
+   ]
+  },
+  {
+   "id": "s.meckels-cave",
+   "r": "lateral-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.meckels-cave"
+   ]
+  },
+  {
+   "id": "s.trigeminal-ganglion",
+   "r": "lateral-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.trigeminal-ganglion"
+   ]
+  },
+  {
+   "id": "s.quadrangular-space",
+   "r": "lateral-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.quadrangular-space"
+   ]
+  },
+  {
+   "id": "s.quadrangular-space",
+   "r": "medial-to",
+   "to": "s.maxillary-nerve",
+   "missing": [
+    "s.quadrangular-space"
+   ]
+  },
+  {
+   "id": "s.quadrangular-space",
+   "r": "inferior-to",
+   "to": "s.abducens-nerve",
+   "missing": [
+    "s.quadrangular-space",
+    "s.abducens-nerve"
+   ]
+  },
+  {
+   "id": "s.optic-nerve",
+   "r": "anterior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.optic-nerve",
+   "r": "superior-to",
+   "to": "s.ophthalmic-artery",
+   "missing": [
+    "s.ophthalmic-artery"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "superior-to",
+   "to": "s.diaphragma-sellae",
+   "missing": [
+    "s.optic-chiasm",
+    "s.diaphragma-sellae"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "superior-to",
+   "to": "s.pituitary-gland",
+   "missing": [
+    "s.optic-chiasm",
+    "s.pituitary-gland"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "anterior-to",
+   "to": "s.pituitary-stalk",
+   "missing": [
+    "s.optic-chiasm",
+    "s.pituitary-stalk"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "inferior-to",
+   "to": "s.anterior-communicating-artery",
+   "missing": [
+    "s.optic-chiasm",
+    "s.anterior-communicating-artery"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "inferior-to",
+   "to": "s.lamina-terminalis",
+   "missing": [
+    "s.optic-chiasm",
+    "s.lamina-terminalis"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "posterior-to",
+   "to": "s.planum-sphenoidale",
+   "missing": [
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.optic-chiasm",
+   "r": "anterior-to",
+   "to": "s.optic-tract",
+   "missing": [
+    "s.optic-chiasm",
+    "s.optic-tract"
+   ]
+  },
+  {
+   "id": "s.optic-tract",
+   "r": "posterior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.optic-tract",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.optic-tract",
+   "r": "lateral-to",
+   "to": "s.pituitary-stalk",
+   "missing": [
+    "s.optic-tract",
+    "s.pituitary-stalk"
+   ]
+  },
+  {
+   "id": "s.falciform-ligament",
+   "r": "superior-to",
+   "to": "s.optic-nerve",
+   "missing": [
+    "s.falciform-ligament"
+   ]
+  },
+  {
+   "id": "s.ophthalmic-artery",
+   "r": "inferior-to",
+   "to": "s.optic-nerve",
+   "missing": [
+    "s.ophthalmic-artery"
+   ]
+  },
+  {
+   "id": "s.suprasellar-cistern",
+   "r": "superior-to",
+   "to": "s.diaphragma-sellae",
+   "missing": [
+    "s.suprasellar-cistern",
+    "s.diaphragma-sellae"
+   ]
+  },
+  {
+   "id": "s.suprasellar-cistern",
+   "r": "anterior-to",
+   "to": "s.liliequist-membrane",
+   "missing": [
+    "s.suprasellar-cistern",
+    "s.liliequist-membrane"
+   ]
+  },
+  {
+   "id": "s.liliequist-membrane",
+   "r": "posterior-to",
+   "to": "s.pituitary-stalk",
+   "missing": [
+    "s.liliequist-membrane",
+    "s.pituitary-stalk"
+   ]
+  },
+  {
+   "id": "s.liliequist-membrane",
+   "r": "anterior-to",
+   "to": "s.interpeduncular-cistern",
+   "missing": [
+    "s.liliequist-membrane",
+    "s.interpeduncular-cistern"
+   ]
+  },
+  {
+   "id": "s.interpeduncular-cistern",
+   "r": "posterior-to",
+   "to": "s.dorsum-sellae",
+   "missing": [
+    "s.interpeduncular-cistern"
+   ]
+  },
+  {
+   "id": "s.interpeduncular-cistern",
+   "r": "posterior-to",
+   "to": "s.liliequist-membrane",
+   "missing": [
+    "s.interpeduncular-cistern",
+    "s.liliequist-membrane"
+   ]
+  },
+  {
+   "id": "s.hypothalamus",
+   "r": "superior-to",
+   "to": "s.pituitary-stalk",
+   "missing": [
+    "s.hypothalamus",
+    "s.pituitary-stalk"
+   ]
+  },
+  {
+   "id": "s.hypothalamus",
+   "r": "posterior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.hypothalamus",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.mammillary-bodies",
+   "r": "posterior-to",
+   "to": "s.pituitary-stalk",
+   "missing": [
+    "s.mammillary-bodies",
+    "s.pituitary-stalk"
+   ]
+  },
+  {
+   "id": "s.lamina-terminalis",
+   "r": "superior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.lamina-terminalis",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.lamina-terminalis",
+   "r": "posterior-to",
+   "to": "s.anterior-communicating-artery",
+   "missing": [
+    "s.lamina-terminalis",
+    "s.anterior-communicating-artery"
+   ]
+  },
+  {
+   "id": "s.anterior-cerebral-artery",
+   "r": "superior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.anterior-cerebral-artery",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.anterior-communicating-artery",
+   "r": "superior-to",
+   "to": "s.optic-chiasm",
+   "missing": [
+    "s.anterior-communicating-artery",
+    "s.optic-chiasm"
+   ]
+  },
+  {
+   "id": "s.anterior-communicating-artery",
+   "r": "anterior-to",
+   "to": "s.lamina-terminalis",
+   "missing": [
+    "s.anterior-communicating-artery",
+    "s.lamina-terminalis"
+   ]
+  },
+  {
+   "id": "s.posterior-communicating-artery",
+   "r": "superior-to",
+   "to": "s.oculomotor-nerve",
+   "missing": [
+    "s.posterior-communicating-artery",
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.clivus",
+   "r": "anterior-to",
+   "to": "s.pons",
+   "missing": [
+    "s.pons"
+   ]
+  },
+  {
+   "id": "s.clivus",
+   "r": "anterior-to",
+   "to": "s.basilar-artery",
+   "missing": [
+    "s.basilar-artery"
+   ]
+  },
+  {
+   "id": "s.basilar-plexus",
+   "r": "posterior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.basilar-plexus"
+   ]
+  },
+  {
+   "id": "s.basilar-artery",
+   "r": "posterior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.basilar-artery"
+   ]
+  },
+  {
+   "id": "s.basilar-artery",
+   "r": "anterior-to",
+   "to": "s.pons",
+   "missing": [
+    "s.basilar-artery",
+    "s.pons"
+   ]
+  },
+  {
+   "id": "s.basilar-artery",
+   "r": "posterior-to",
+   "to": "s.dorsum-sellae",
+   "missing": [
+    "s.basilar-artery"
+   ]
+  },
+  {
+   "id": "s.posterior-cerebral-artery",
+   "r": "superior-to",
+   "to": "s.oculomotor-nerve",
+   "missing": [
+    "s.posterior-cerebral-artery",
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.posterior-cerebral-artery",
+   "r": "superior-to",
+   "to": "s.superior-cerebellar-artery",
+   "missing": [
+    "s.posterior-cerebral-artery",
+    "s.superior-cerebellar-artery"
+   ]
+  },
+  {
+   "id": "s.superior-cerebellar-artery",
+   "r": "inferior-to",
+   "to": "s.oculomotor-nerve",
+   "missing": [
+    "s.superior-cerebellar-artery",
+    "s.oculomotor-nerve"
+   ]
+  },
+  {
+   "id": "s.superior-cerebellar-artery",
+   "r": "inferior-to",
+   "to": "s.posterior-cerebral-artery",
+   "missing": [
+    "s.superior-cerebellar-artery",
+    "s.posterior-cerebral-artery"
+   ]
+  },
+  {
+   "id": "s.anterior-inferior-cerebellar-artery",
+   "r": "inferior-to",
+   "to": "s.superior-cerebellar-artery",
+   "missing": [
+    "s.anterior-inferior-cerebellar-artery",
+    "s.superior-cerebellar-artery"
+   ]
+  },
+  {
+   "id": "s.vertebral-artery",
+   "r": "lateral-to",
+   "to": "s.odontoid-process",
+   "missing": [
+    "s.vertebral-artery",
+    "s.odontoid-process"
+   ]
+  },
+  {
+   "id": "s.pons",
+   "r": "posterior-to",
+   "to": "s.basilar-artery",
+   "missing": [
+    "s.pons",
+    "s.basilar-artery"
+   ]
+  },
+  {
+   "id": "s.pons",
+   "r": "posterior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.pons"
+   ]
+  },
+  {
+   "id": "s.prepontine-cistern",
+   "r": "posterior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.prepontine-cistern"
+   ]
+  },
+  {
+   "id": "s.prepontine-cistern",
+   "r": "anterior-to",
+   "to": "s.pons",
+   "missing": [
+    "s.prepontine-cistern",
+    "s.pons"
+   ]
+  },
+  {
+   "id": "s.foramen-lacerum",
+   "r": "posterior-to",
+   "to": "s.vidian-canal",
+   "missing": [
+    "s.vidian-canal"
+   ]
+  },
+  {
+   "id": "s.petroclival-synchondrosis",
+   "r": "lateral-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.petroclival-synchondrosis"
+   ]
+  },
+  {
+   "id": "s.petroclival-synchondrosis",
+   "r": "medial-to",
+   "to": "s.petrous-apex",
+   "missing": [
+    "s.petroclival-synchondrosis"
+   ]
+  },
+  {
+   "id": "s.petroclival-synchondrosis",
+   "r": "posterior-to",
+   "to": "s.sphenoid-sinus",
+   "missing": [
+    "s.petroclival-synchondrosis"
+   ]
+  },
+  {
+   "id": "s.inferior-petrosal-sinus",
+   "r": "lateral-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.inferior-petrosal-sinus"
+   ]
+  },
+  {
+   "id": "s.greater-superficial-petrosal-nerve",
+   "r": "superior-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.greater-superficial-petrosal-nerve"
+   ]
+  },
+  {
+   "id": "s.greater-superficial-petrosal-nerve",
+   "r": "posterior-to",
+   "to": "s.vidian-nerve",
+   "missing": [
+    "s.greater-superficial-petrosal-nerve"
+   ]
+  },
+  {
+   "id": "s.foramen-magnum",
+   "r": "inferior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.foramen-magnum"
+   ]
+  },
+  {
+   "id": "s.foramen-magnum",
+   "r": "medial-to",
+   "to": "s.occipital-condyle",
+   "missing": [
+    "s.foramen-magnum",
+    "s.occipital-condyle"
+   ]
+  },
+  {
+   "id": "s.occipital-condyle",
+   "r": "lateral-to",
+   "to": "s.foramen-magnum",
+   "missing": [
+    "s.occipital-condyle",
+    "s.foramen-magnum"
+   ]
+  },
+  {
+   "id": "s.occipital-condyle",
+   "r": "inferior-to",
+   "to": "s.hypoglossal-canal",
+   "missing": [
+    "s.occipital-condyle",
+    "s.hypoglossal-canal"
+   ]
+  },
+  {
+   "id": "s.hypoglossal-canal",
+   "r": "superior-to",
+   "to": "s.occipital-condyle",
+   "missing": [
+    "s.hypoglossal-canal",
+    "s.occipital-condyle"
+   ]
+  },
+  {
+   "id": "s.odontoid-process",
+   "r": "posterior-to",
+   "to": "s.anterior-arch-of-atlas",
+   "missing": [
+    "s.odontoid-process",
+    "s.anterior-arch-of-atlas"
+   ]
+  },
+  {
+   "id": "s.odontoid-process",
+   "r": "anterior-to",
+   "to": "s.transverse-atlantal-ligament",
+   "missing": [
+    "s.odontoid-process",
+    "s.transverse-atlantal-ligament"
+   ]
+  },
+  {
+   "id": "s.odontoid-process",
+   "r": "inferior-to",
+   "to": "s.foramen-magnum",
+   "missing": [
+    "s.odontoid-process",
+    "s.foramen-magnum"
+   ]
+  },
+  {
+   "id": "s.anterior-arch-of-atlas",
+   "r": "anterior-to",
+   "to": "s.odontoid-process",
+   "missing": [
+    "s.anterior-arch-of-atlas",
+    "s.odontoid-process"
+   ]
+  },
+  {
+   "id": "s.anterior-arch-of-atlas",
+   "r": "posterior-to",
+   "to": "s.longus-colli",
+   "missing": [
+    "s.anterior-arch-of-atlas",
+    "s.longus-colli"
+   ]
+  },
+  {
+   "id": "s.anterior-arch-of-atlas",
+   "r": "inferior-to",
+   "to": "s.clivus",
+   "missing": [
+    "s.anterior-arch-of-atlas"
+   ]
+  },
+  {
+   "id": "s.transverse-atlantal-ligament",
+   "r": "posterior-to",
+   "to": "s.odontoid-process",
+   "missing": [
+    "s.transverse-atlantal-ligament",
+    "s.odontoid-process"
+   ]
+  },
+  {
+   "id": "s.transverse-atlantal-ligament",
+   "r": "anterior-to",
+   "to": "s.tectorial-membrane",
+   "missing": [
+    "s.transverse-atlantal-ligament",
+    "s.tectorial-membrane"
+   ]
+  },
+  {
+   "id": "s.tectorial-membrane",
+   "r": "posterior-to",
+   "to": "s.transverse-atlantal-ligament",
+   "missing": [
+    "s.tectorial-membrane",
+    "s.transverse-atlantal-ligament"
+   ]
+  },
+  {
+   "id": "s.anterior-atlanto-occipital-membrane",
+   "r": "posterior-to",
+   "to": "s.longus-capitis",
+   "missing": [
+    "s.anterior-atlanto-occipital-membrane",
+    "s.longus-capitis"
+   ]
+  },
+  {
+   "id": "s.longus-capitis",
+   "r": "posterior-to",
+   "to": "s.nasopharynx",
+   "missing": [
+    "s.longus-capitis"
+   ]
+  },
+  {
+   "id": "s.longus-capitis",
+   "r": "anterior-to",
+   "to": "s.anterior-arch-of-atlas",
+   "missing": [
+    "s.longus-capitis",
+    "s.anterior-arch-of-atlas"
+   ]
+  },
+  {
+   "id": "s.longus-colli",
+   "r": "medial-to",
+   "to": "s.longus-capitis",
+   "missing": [
+    "s.longus-colli",
+    "s.longus-capitis"
+   ]
+  },
+  {
+   "id": "s.pharyngobasilar-fascia",
+   "r": "anterior-to",
+   "to": "s.longus-capitis",
+   "missing": [
+    "s.pharyngobasilar-fascia",
+    "s.longus-capitis"
+   ]
+  }
+ ]
+}

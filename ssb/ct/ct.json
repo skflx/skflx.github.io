@@ -80,5 +80,97 @@
     "table": "../geometry/labels.json"
   },
   "specimen": "uw-axial-sagittal",
-  "license": "ssb/LICENSE-data.md"
+  "license": "ssb/LICENSE-data.md",
+  "sdf": {
+    "dims": [
+      105,
+      113,
+      97
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "affine": [
+      [
+        1.0,
+        0,
+        0,
+        -52.0
+      ],
+      [
+        0,
+        1.0,
+        0,
+        -90.0
+      ],
+      [
+        0,
+        0,
+        1.0,
+        -16.0
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "affineNote": "voxel (i,j,k,1) -> RAS mm, row-major; a 1 mm grid over the CT box (every second CT voxel centre)",
+    "dtype": "uint8",
+    "scale": 0.1,
+    "clampMm": 25.0,
+    "note": "mm to the nearest surface of the structure = value * scale; 0 inside; 250 = 25 mm or farther. Built by tools/ssb-pipeline/uw/sdf.py from walls.py labels and sweeps.json; what is inferred is in ssb/geometry/sweeps.meta.json",
+    "fields": {
+      "s.anterior-cranial-fossa": {
+        "file": "sdf-s.anterior-cranial-fossa.u8.gz",
+        "hud": "skull base",
+        "what": "nearest skull-base bone of the anterior cranial fossa floor (ethmoid roof, lateral lamella, cribriform plate, planum)",
+        "units": [
+          "s.fovea-ethmoidalis",
+          "s.lateral-lamella",
+          "s.cribriform-plate",
+          "s.planum-sphenoidale"
+        ],
+        "source": "labels (walls.py)",
+        "voxels": 12375
+      },
+      "s.orbit": {
+        "file": "sdf-s.orbit.u8.gz",
+        "hud": "orbit",
+        "what": "nearest orbital wall (lamina papyracea, orbital floor, frontal sinus floor) or orbital contents",
+        "units": [
+          "s.orbit",
+          "s.lamina-papyracea",
+          "s.orbital-floor",
+          "s.frontal-sinus-floor"
+        ],
+        "source": "labels (walls.py)",
+        "voxels": 367024
+      },
+      "s.internal-carotid-artery": {
+        "file": "sdf-s.internal-carotid-artery.u8.gz",
+        "hud": "ICA",
+        "what": "surface of the ICA tube",
+        "source": "sweeps.json",
+        "inferred_fraction_of_centreline": 0.28
+      },
+      "s.optic-nerve": {
+        "file": "sdf-s.optic-nerve.u8.gz",
+        "hud": "optic nerve",
+        "what": "surface of the optic nerve tube",
+        "source": "sweeps.json",
+        "inferred_fraction_of_centreline": 0.0
+      },
+      "s.anterior-ethmoidal-artery": {
+        "file": "sdf-s.anterior-ethmoidal-artery.u8.gz",
+        "hud": "AEA",
+        "what": "surface of the AEA tube",
+        "source": "sweeps.json",
+        "inferred_fraction_of_centreline": 0.95
+      }
+    }
+  }
 }

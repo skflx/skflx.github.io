@@ -45,6 +45,33 @@ mesh renders). A native-resolution copy of the volume stays offline in
 `incoming/uw-sinusanatomy2/_recon/specimen-native.npz`. Provenance for everything under
 `ssb/ct`, `ssb/geometry` and `ssb/models` is in `ssb/LICENSE-data.md`.
 
+Reconstruction, stage C (resection units, neurovascular sweeps, proximity fields; run after stage B):
+
+    .venv/bin/python tools/ssb-pipeline/uw/walls.py      # compartments + walls -> ssb/ct/labels.u16.gz, labels.json
+    .venv/bin/python tools/ssb-pipeline/uw/meshes.py     # now also ssb/models/walls.glb.gz
+    .venv/bin/python tools/ssb-pipeline/uw/sweeps.py     # -> ssb/geometry/sweeps.json, sweeps.meta.json
+    .venv/bin/python tools/ssb-pipeline/uw/sdf.py        # -> ssb/ct/sdf-<id>.u8.gz, "sdf" key of ct.json
+    .venv/bin/python tools/ssb-pipeline/uw/relate3d.py   # graph spatial claims vs the 3D specimen
+    node tools/stamp-assets.mjs && node tools/check-data.mjs
+
+`specimen.py` rewrites `labels.u16.gz` with the air spaces only, so rerun `walls.py` (and the rest of
+stage C) after it; `ct.json`'s `sdf` key survives a `specimen.py` rerun. `walls.py` first assigns every
+non-bone voxel to a compartment: the named air spaces flood their own mucosa, and seeds mark the orbit, the
+intracranial space, the face, the retromaxillary soft tissue, the pharynx and the mouth. A marker watershed
+on distance-to-bone then splits them where bone is, or at the narrowest neck where bone is too thin to see.
+A wall is the bone (or the bare interface) whose two nearest compartments are the named pair, within a
+thickness limit and on opposite sides. The septum and turbinates come from the airway itself. Which units are
+proxies or orientation splits is listed in `registration.json` (`walls.notes`); the basal lamella stays a
+proxy, because stage B's anterior/posterior ethmoid split is a plane. `sweeps.py` marks each centreline point
+`detected` (a canal lumen with bone all round, or the optic nerve in orbital fat on a soft window), `labelled`
+(a UW tip) or `inferred` (a stated rule between found points). Its docstring and `sweeps.meta.json` say which
+is which, per sweep. The bone-window CT has no contrast: the cavernous ICA, the ethmoidal arteries and the
+sphenopalatine artery beyond its foramen are inferred. `sdf.py` builds the HUD's five fields on a 1 mm grid
+(0.1 mm per level, clamped at 25 mm). `relate3d.py` needs only `ssb/`. It compares regions, not centroids:
+same-height cells for medial/lateral, and the same for the other two axes. It writes
+`ssb/reference/specimen-relations.json`. Check images (`--png-dir`): `reconC-walls-*.png`,
+`reconC-mesh-walls.png`, `reconC-sweeps-*.png`.
+
 `relate.py` needs only the committed `slices.json`, so the graph's spatial
 claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps

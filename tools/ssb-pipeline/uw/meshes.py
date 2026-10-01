@@ -31,7 +31,21 @@ PACKS = {
     'ethmoid-frontal': ['s.frontal-sinus', 's.frontal-recess', 's.agger-nasi-cell', 's.ethmoid-bulla',
                         's.anterior-ethmoid-cells', 's.posterior-ethmoid-cells'],
     'sphenoid-sellar': ['s.sphenoid-sinus'],
+    # stage C (walls.py): bone resection units, septum, turbinates, and the orbital contents they face
+    'walls': ['s.lamina-papyracea', 's.orbital-floor', 's.maxillary-medial-wall', 's.maxillary-anterior-wall',
+              's.maxillary-posterior-wall', 's.maxillary-sinus-floor', 's.nasal-floor', 's.basal-lamella',
+              's.lateral-lamella', 's.fovea-ethmoidalis', 's.cribriform-plate', 's.frontal-sinus-anterior-table',
+              's.frontal-sinus-posterior-table', 's.frontal-sinus-floor', 's.intersinus-septum',
+              's.frontal-intersinus-septum', 's.sphenoid-face', 's.sphenoid-floor', 's.planum-sphenoidale',
+              's.sella-turcica', 's.clivus', 's.sphenoid-lateral-wall', 's.nasal-septum', 's.inferior-turbinate',
+              's.middle-turbinate', 's.orbit'],
 }
+AIR_PACKED = {c for p in ('core', 'ethmoid-frontal', 'sphenoid-sellar') for c in PACKS[p]} - {'s.skull-base-region'}
+# thin plates (walls.py writes them one or two voxels thick): a lower iso-level keeps them closed
+THIN = set(PACKS['walls']) - {'s.nasal-septum', 's.inferior-turbinate', 's.middle-turbinate', 's.orbit'}
+WALL_BUDGET = {'s.nasal-septum': 6000, 's.inferior-turbinate': 4000, 's.middle-turbinate': 3500, 's.orbit': 3000,
+               's.maxillary-anterior-wall': 3000, 's.frontal-sinus-anterior-table': 2500,
+               's.frontal-sinus-posterior-table': 2500}
 # triangle budget per node (docs/ssb.md section 5.4: <= 400k on screen in total)
 BUDGET = {'s.skull-base-region': 110000, 's.nasal-cavity': 12000, 's.maxillary-sinus': 8000, 's.nasopharynx': 6000,
           's.sphenoid-sinus': 7000, 's.anterior-ethmoid-cells': 5000, 's.posterior-ethmoid-cells': 5000,
@@ -47,9 +61,9 @@ def read_volume():
     return hdr, ct, lab, table
 
 
-def surface(mask, aff, sigma=0.75, step=1):
+def surface(mask, aff, sigma=0.75, step=1, level=0.5):
     f = ndi.gaussian_filter(mask.astype(np.float32), sigma)
-    v, faces, _, _ = marching_cubes(np.pad(f, 2), 0.5, step_size=step, allow_degenerate=False)
+    v, faces, _, _ = marching_cubes(np.pad(f, 2), level, step_size=step, allow_degenerate=False)
     v -= 2
     kji = v
     ijk = kji[:, ::-1]                                   # (i, j, k)
@@ -78,8 +92,8 @@ def normals(v, f):
     return vn / np.maximum(np.linalg.norm(vn, axis=1, keepdims=True), 1e-12)
 
 
-def build(mask, aff, budget, step=1, sigma=0.75):
-    v, f = surface(mask, aff, sigma, step)
+def build(mask, aff, budget, step=1, sigma=0.75, level=0.5):
+    v, f = surface(mask, aff, sigma, step, level)
     v = taubin(v, f)
     if len(f) > budget:
         v, f = fast_simplification.simplify(v.astype(np.float32), f.astype(np.int32), 1 - budget / len(f))
@@ -154,11 +168,15 @@ def main():
         m = lab == int(idx)
         if m.sum() < 50:
             continue
-        built[name] = build(m, aff, BUDGET.get(cid, 3000))
+        if cid in THIN:
+            built[name] = build(m, aff, WALL_BUDGET.get(cid, 2000), sigma=0.6, level=0.3)
+        else:
+            built[name] = build(m, aff, BUDGET.get(cid, WALL_BUDGET.get(cid, 3000)))
         print(name, 'tris', len(built[name][1]), flush=True)
     # bony envelope: bone within 12 mm of the named air spaces (the sinus skeleton, not the
     # calvaria the crop box also cuts), specks removed, 1 mm marching cubes
-    near = ndi.distance_transform_edt(lab == 0, sampling=hdr['spacing'][0]) <= 12.0
+    air_ids = [int(k) for k, v in table.items() if v.rsplit('.', 1)[0] in AIR_PACKED]
+    near = ndi.distance_transform_edt(~np.isin(lab, air_ids), sampling=hdr['spacing'][0]) <= 12.0
     bone = (ct >= BONE_LEVEL) & near
     cl, n = ndi.label(bone)
     sizes = np.bincount(cl.ravel()); keep = sizes >= 400; keep[0] = False
@@ -189,6 +207,10 @@ def main():
                                                    'no existing graph id covers the whole '
                                                    'envelope (the graph splits bone into bones and bone parts). Rename '
                                                    'or add to the graph before the viewer relies on it.'},
+        'notes': {'walls': 'stage C resection units (tools/ssb-pipeline/uw/walls.py): each is the bone two named '
+                           'compartments share; several are proxies or orientation splits - the method per unit is in '
+                           'tools/ssb-pipeline/uw/registration.json "walls.notes". s.orbit is the orbital soft tissue '
+                           '(globe, fat, muscles) the walls face, not bone.'},
         'packs': packs,
         'totals': {'bytes': int(sum(p['bytes'] for p in packs.values())),
                    'triangles': int(sum(p['triangles'] for p in packs.values()))},
@@ -207,15 +229,18 @@ def render(built, png_dir):
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d.art3d import Poly3DCollection
     rng = np.random.default_rng(3)
-    names = sorted(k for k in built if k != BONE_ID)
-    cols = {k: rng.uniform(0.25, 0.95, 3) for k in names}
+    walls = set(PACKS['walls'])
+    names = sorted(k for k in built if k != BONE_ID and k.rsplit('.', 1)[0] not in walls)
+    wnames = sorted(k for k in built if k.rsplit('.', 1)[0] in walls and not k.startswith('s.orbit.'))
+    cols = {k: rng.uniform(0.25, 0.95, 3) for k in names + wnames}
     light = np.array([0.4, 0.5, 0.75]); light /= np.linalg.norm(light)
-    for tag, with_bone in (('air', False), ('bone', True)):
+    for tag, with_bone in (('air', False), ('bone', True), ('walls', None)):
         fig = plt.figure(figsize=(18, 6.4), dpi=110)
         for n, (elev, azim, title) in enumerate(((0, -90, 'anterior (RAS: from +A)'), (0, 180, 'left lateral'),
                                                  (90, -90, 'superior'))):
             ax = fig.add_subplot(1, 3, n + 1, projection='3d')
-            items = [(BONE_ID, np.array([0.85, 0.82, 0.72]))] if with_bone else [(k, cols[k]) for k in names]
+            items = ([(BONE_ID, np.array([0.85, 0.82, 0.72]))] if with_bone else
+                     [(k, cols[k]) for k in (wnames if with_bone is None else names)])
             for k, c in items:
                 v, f, nrm = built[k]
                 fn = np.cross(v[f[:, 1]] - v[f[:, 0]], v[f[:, 2]] - v[f[:, 0]])
@@ -227,9 +252,10 @@ def render(built, png_dir):
             ax.set_box_aspect((104, 112, 96)); ax.view_init(elev=elev, azim=azim)
             ax.set_xlabel('R'); ax.set_ylabel('A'); ax.set_zlabel('S'); ax.set_title(title)
         if not with_bone:
-            handles = [plt.Line2D([0], [0], marker='s', ls='', color=cols[k], label=k) for k in names]
+            handles = [plt.Line2D([0], [0], marker='s', ls='', color=cols[k], label=k)
+                       for k in (wnames if with_bone is None else names)]
             fig.legend(handles=handles, loc='lower center', ncol=6, fontsize=7)
-        fig.savefig(os.path.join(png_dir, f'reconB-mesh-{tag}.png'), bbox_inches='tight')
+        fig.savefig(os.path.join(png_dir, f'recon{"C" if tag == "walls" else "B"}-mesh-{tag}.png'), bbox_inches='tight')
         plt.close(fig)
 
 

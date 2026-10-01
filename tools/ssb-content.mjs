@@ -195,12 +195,12 @@ function checkEnums(key, e, where, err) {
 }
 
 /* Geometry must name graph entities: every "<id>.<side>" in the specimen's
-   model packs, label table and landmarks resolves to an id in the graph
+   model packs, label table, landmarks and sweeps resolves to an id in the graph
    (docs/ssb.md §9, geometry ↔ graph). Returns error strings. */
 const GEO_REF = /^((?:s|lm|v|c|m|h|pr|p|t|pw|dz)\.[a-z0-9]+(?:-[a-z0-9]+)*)\.(R|L|M)$/;
 export function validateGeometry(index, root = ROOT) {
   const errors = [];
-  const files = ['ssb/models/packs.json', 'ssb/geometry/labels.json', 'ssb/geometry/landmarks.json'];
+  const files = ['ssb/models/packs.json', 'ssb/geometry/labels.json', 'ssb/geometry/landmarks.json', 'ssb/geometry/sweeps.json'];
   for (const rel of files) {
     const abs = path.join(root, rel);
     if (!fs.existsSync(abs)) continue;
