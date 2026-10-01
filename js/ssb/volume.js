@@ -140,7 +140,94 @@ export function parseHeader(meta) {
         dims: dims.slice(), spacing: spacing.slice(), affine, inverse, toHU, windows, labels,
         values: meta.values && typeof meta.values === 'object' ? { kind: String(meta.values.kind || ''), note: String(meta.values.note || '') } : { kind: '', note: '' },
         specimen: typeof meta.specimen === 'string' ? meta.specimen : '',
+        sdf: parseFields(meta.sdf),
     };
+}
+
+/* ---------------- distance fields ---------------- */
+
+/* ct.json's `sdf` key -> { dims, affine, inverse, scale, clampMm, fields:
+   Map(graph id -> { id, file, hud, what }) }, or null when it is absent or
+   malformed (the proximity readout then says "no data"; nothing throws).
+   Field files are names under ssb/ct only. */
+export function parseFields(sdf) {
+    if (!sdf || typeof sdf !== 'object') return null;
+    const dims = sdf.dims;
+    if (!Array.isArray(dims) || dims.length !== 3 || !dims.every((n) => Number.isInteger(n) && n >= 1 && n <= DIM_MAX)) return null;
+    if (dims[0] * dims[1] * dims[2] > VOXELS_MAX) return null;
+    const affine = matrix(sdf.affine);
+    const inverse = affine && invert3(affine.map((row) => row.slice(0, 3)));
+    if (!inverse || (sdf.dtype !== undefined && sdf.dtype !== 'uint8')) return null;
+    if (!finite(sdf.scale) || sdf.scale <= 0) return null;
+    const fields = new Map();
+    if (sdf.fields && typeof sdf.fields === 'object') {
+        for (const [id, f] of Object.entries(sdf.fields)) {
+            if (!/^[a-z]+\.[a-z0-9-]+$/.test(id) || !f || typeof f.file !== 'string' || !/^[A-Za-z0-9._-]+\.u8\.gz$/.test(f.file)) continue;
+            fields.set(id, { id, file: `ssb/ct/${f.file}`, hud: typeof f.hud === 'string' ? f.hud.slice(0, 40) : id, what: typeof f.what === 'string' ? f.what : '' });
+        }
+    }
+    return { dims: dims.slice(), affine, inverse, scale: sdf.scale, clampMm: finite(sdf.clampMm) && sdf.clampMm > 0 ? sdf.clampMm : 255 * sdf.scale, fields };
+}
+
+/* One distance field over its own grid: sample(r, a, s) -> mm to the
+   structure's surface (trilinear over the stored values x scale; 0 inside),
+   NaN outside the grid. `clamped` says a value is at the field's cap (the
+   structure is that far or farther). */
+export function createField(grid, data) {
+    const [nx, ny, nz] = grid.dims;
+    if (!(data instanceof Uint8Array) || data.length !== nx * ny * nz) throw new VolumeError('invalid', 'A distance field does not match its grid.');
+    const A = grid.affine;
+    const B = grid.inverse;
+    function sample(r, a, s) {
+        const x = r - A[0][3];
+        const y = a - A[1][3];
+        const z = s - A[2][3];
+        const i = B[0][0] * x + B[0][1] * y + B[0][2] * z;
+        const j = B[1][0] * x + B[1][1] * y + B[1][2] * z;
+        const k = B[2][0] * x + B[2][1] * y + B[2][2] * z;
+        if (!(i >= -0.5 && i < nx - 0.5 && j >= -0.5 && j < ny - 0.5 && k >= -0.5 && k < nz - 0.5)) return NaN;
+        const ci = Math.min(nx - 1, Math.max(0, i));
+        const cj = Math.min(ny - 1, Math.max(0, j));
+        const ck = Math.min(nz - 1, Math.max(0, k));
+        const i0 = Math.floor(ci);
+        const j0 = Math.floor(cj);
+        const k0 = Math.floor(ck);
+        const i1 = Math.min(nx - 1, i0 + 1);
+        const j1 = Math.min(ny - 1, j0 + 1);
+        const k1 = Math.min(nz - 1, k0 + 1);
+        const fx = ci - i0;
+        const fy = cj - j0;
+        const fz = ck - k0;
+        const at = (ii, jj, kk) => data[kk * nx * ny + jj * nx + ii];
+        const c00 = at(i0, j0, k0) * (1 - fx) + at(i1, j0, k0) * fx;
+        const c10 = at(i0, j1, k0) * (1 - fx) + at(i1, j1, k0) * fx;
+        const c01 = at(i0, j0, k1) * (1 - fx) + at(i1, j0, k1) * fx;
+        const c11 = at(i0, j1, k1) * (1 - fx) + at(i1, j1, k1) * fx;
+        return ((c00 * (1 - fy) + c10 * fy) * (1 - fz) + (c01 * (1 - fy) + c11 * fy) * fz) * grid.scale;
+    }
+    return { sample, clampMm: grid.clampMm, clamped: (mm) => mm >= grid.clampMm - grid.scale / 2 };
+}
+
+/* Fetch every field the header lists. Resolves Map(id -> { ...meta, field })
+   where `field` is null and `error` says why for a field that could not be
+   read; never rejects. */
+export async function loadFields(header, { fetchFn = (url) => fetch(url) } = {}) {
+    const out = new Map();
+    const grid = header && header.sdf;
+    if (!grid) return out;
+    const count = grid.dims[0] * grid.dims[1] * grid.dims[2];
+    await Promise.all([...grid.fields.values()].map(async (f) => {
+        try {
+            const r = await fetchFn(stamped(f.file));
+            if (!r.ok) throw new VolumeError('network', `${f.file}: HTTP ${r.status}`);
+            const buf = await decode(await r.arrayBuffer(), count);
+            if (buf.byteLength !== count) throw new VolumeError('invalid', `${f.file} has ${buf.byteLength} bytes; the grid implies ${count}.`);
+            out.set(f.id, { ...f, field: createField(grid, new Uint8Array(buf)), error: '' });
+        } catch (e) {
+            out.set(f.id, { ...f, field: null, error: e && e.message ? String(e.message) : 'unreadable' });
+        }
+    }));
+    return out;
 }
 
 /* The RAS box of a parsed header's voxel centres: { min, max } in mm. The

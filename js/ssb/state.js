@@ -88,14 +88,14 @@ function sameLab(a, b) {
     return keys.length === Object.keys(b.params).length && keys.every((k) => a.params[k] === b.params[k]);
 }
 
-/* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&ct=<plane>&at=<r,a,s>&q=<full|lite>'
-   -> { selection?, tier?, lab?, ct?, cursor?, quality? } (a lab wins over a ct;
+/* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&ct=<plane>&at=<r,a,s>&e=<station|side>&pose=<d,yaw,pitch,roll,lens>&q=<full|lite>'
+   -> { selection?, tier?, lab?, ct?, endo?, cursor?, quality? } (a lab wins over a ct, a ct over the endoscope;
    `at` without a plane is the specimen's 3D cursor, `cursor`).
    Only whitelisted keys, only valid values; anything else is dropped.
    `has(id)` is the graph's index lookup; `labs` maps a diorama name to its
    { params: PARAMS, presets: PRESETS }. A classification id naming a preset
    (`c.keros=III`) is applied first, then explicit parameters over it. */
-export function parseHash(hash, has, labs = {}) {
+export function parseHash(hash, has, labs = {}, isStation = null) {
     const out = {};
     if (typeof hash !== 'string' || hash.length > HASH_MAX) return out;
     let params;
@@ -123,8 +123,10 @@ export function parseHash(hash, has, labs = {}) {
     }
     const plane = out.lab ? null : clampCtPlane(params.get('ct'));
     const at = parseCtAt(params.get('at'));
+    const endo = out.lab || plane ? null : parseEndo(params.get('e'), params.get('pose'), has, isStation);
     if (plane) out.ct = { plane, at };
-    else if (at && !out.lab && params.get('ct') === null) out.cursor = at;     /* a bad `ct` still ignores the whole stage */
+    else if (endo) out.endo = endo;
+    else if (at && !out.lab && params.get('ct') === null && params.get('e') === null) out.cursor = at;     /* a bad `ct` (or `e`) still ignores the whole stage */
     const quality = clampQuality(params.get('q'));
     if (quality) out.quality = quality;
     return out;
@@ -151,6 +153,9 @@ export function formatHash(state, labs = {}) {
     if (state.ct && !state.lab && clampCtPlane(state.ct.plane)) {
         parts.push('ct=' + CT_CODE[state.ct.plane]);
         if (state.ct.at) parts.push('at=' + atText(state.ct.at));
+    } else if (state.endo && !state.lab) {
+        parts.push('e=' + (state.endo.station || state.endo.side));
+        if (state.endo.pose) parts.push('pose=' + poseText(state.endo.pose));
     } else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
@@ -219,6 +224,85 @@ function sameCt(a, b) {
     return sameAt(a.at, b.at);
 }
 
+/* ---------------- endoscope ---------------- */
+
+/* The endoscope stage (docs/ssb.md 3): which nostril, an optional station
+   (`<t-id>.<R|L|M>`: its pose and the dissection it assumes, from
+   ssb/geometry/stations.json) and an optional pose. The pose is
+   { d (insertion, mm), yaw (deg, + lateral), pitch (deg, + up), roll (deg,
+   clockwise on the monitor from 12 o'clock; the light post sits opposite),
+   lens (0 | 30 | 45 | 70) }. A null pose means "the station's own pose", or
+   with no station "the starting pose". Values are clamped and rounded
+   (0.1 mm, 0.1 deg) so the hash and the state agree exactly. */
+export const ENDO_SIDES = Object.freeze(['R', 'L']);
+export const LENSES = Object.freeze([0, 30, 45, 70]);
+export const POSE_LIMITS = Object.freeze({ d: [0, 130], yaw: [-60, 60], pitch: [-60, 80] });
+const STATION_KEY = /^(t\.[a-z0-9-]+)\.(R|L|M)$/;
+
+const tenth = (v) => Math.round(v * 10) / 10 + 0;      /* + 0: no -0 */
+export function wrapRoll(v) {
+    let r = ((v % 360) + 360) % 360;
+    if (r > 180) r -= 360;
+    return tenth(r === -180 ? 180 : r);
+}
+export function snapLens(v) {
+    let best = LENSES[0];
+    for (const l of LENSES) if (Math.abs(l - v) < Math.abs(best - v)) best = l;
+    return best;
+}
+
+/* Any { d, yaw, pitch, roll, lens } -> the same clamped, wrapped, snapped and
+   rounded, or null when a value is not a finite number. */
+export function clampPose(p) {
+    if (!p || typeof p !== 'object') return null;
+    const keys = ['d', 'yaw', 'pitch', 'roll', 'lens'];
+    if (!keys.every((k) => typeof p[k] === 'number' && Number.isFinite(p[k]))) return null;
+    const c = (v, [lo, hi]) => tenth(Math.min(hi, Math.max(lo, v)));
+    return { d: c(p.d, POSE_LIMITS.d), yaw: c(p.yaw, POSE_LIMITS.yaw), pitch: c(p.pitch, POSE_LIMITS.pitch), roll: wrapRoll(p.roll), lens: snapLens(p.lens) };
+}
+
+/* 'd,yaw,pitch,roll,lens' -> a clamped pose, or null. */
+export function parsePose(raw) {
+    if (typeof raw !== 'string' || raw.length > 96) return null;
+    const parts = raw.split(',');
+    if (parts.length !== 5 || parts.some((x) => x.trim() === '')) return null;
+    const n = parts.map(Number);
+    return clampPose({ d: n[0], yaw: n[1], pitch: n[2], roll: n[3], lens: n[4] });
+}
+export const poseText = (p) => [p.d, p.yaw, p.pitch, p.roll, p.lens].map((v) => String(v)).join(',');
+
+/* `e` (a side, or a station key whose id the graph knows as a scope station)
+   + `pose` -> { side, station, pose }, or null. A midline (.M) station is
+   scoped from the right nostril. */
+export function parseEndo(e, poseRaw, has, isStation = null) {
+    if (typeof e !== 'string') return null;
+    const pose = parsePose(poseRaw);
+    if (ENDO_SIDES.includes(e)) return { side: e, station: null, pose };
+    const m = STATION_KEY.exec(e);
+    if (!m || !has(m[1]) || (isStation && !isStation(m[1]))) return null;
+    return { side: m[2] === 'L' ? 'L' : 'R', station: e, pose };
+}
+
+export function normalizeEndo(endo, has = () => true, isStation = null) {
+    if (!endo || !ENDO_SIDES.includes(endo.side)) return null;
+    let station = null;
+    if (endo.station !== null && endo.station !== undefined) {
+        const m = STATION_KEY.exec(String(endo.station));
+        if (!m || !has(m[1]) || (isStation && !isStation(m[1]))) return null;
+        station = endo.station;
+    }
+    const pose = endo.pose ? clampPose(endo.pose) : null;
+    if (endo.pose && !pose) return null;
+    return { side: endo.side, station, pose };
+}
+
+function sameEndo(a, b) {
+    if (a === b) return true;
+    if (!a || !b || a.side !== b.side || a.station !== b.station) return false;
+    if (!a.pose || !b.pose) return a.pose === b.pose;
+    return ['d', 'yaw', 'pitch', 'roll', 'lens'].every((k) => a.pose[k] === b.pose[k]);
+}
+
 /* ---------------- guarded storage ---------------- */
 
 function store() {
@@ -240,13 +324,14 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, cursor, quality }. Invariant: the
+/* state = { tier, selection, lab, ct, endo, cursor, quality }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is one of three: the specimen (lab and ct both null), the variant lab
    (`lab`: { name, params } with every parameter present and clamped,
-   normalizeLab), or CT (`ct`: { plane, at }, normalizeCt); entering one
-   leaves the other.
+   normalizeLab), CT (`ct`: { plane, at }, normalizeCt) or the endoscope
+   (`endo`: { side, station, pose }, normalizeEndo); entering one leaves the
+   others.
    `cursor` is the one 3D cursor in RAS mm, shared by CT and the specimen: the
    CT crosshair is `ct.at`, which the store keeps equal to `cursor` while the
    CT stage shows, and `cursor` is what survives in the specimen stage (where
@@ -259,8 +344,8 @@ export function savePrefs(prefs) {
    ('url', 'tree', 'search', 'panel', 'tier', 'scene', 'lab', 'slider', 'ct',
    'cursor', 'ct-bounds') so the URL sync can tell a hash-driven change from
    a click, and a slider or crosshair drag from a deliberate step. */
-export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs = {} }) {
-    const fromUrl = parseHash(hash, has, labs);
+export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs = {}, isStation = null }) {
+    const fromUrl = parseHash(hash, has, labs, isStation);
     const selection = fromUrl.selection || null;
     let ctBounds = null;
     const ct0 = fromUrl.ct ? normalizeCt(fromUrl.ct, ctBounds) : null;
@@ -269,6 +354,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         tier: Math.max(fromUrl.tier || prefs.tier || TIER_DEFAULT, selection ? tierOf(selection) : TIER_MIN),
         lab: fromUrl.lab || null,
         ct: ct0,
+        endo: fromUrl.endo || null,
         cursor: ct0 ? ct0.at : clampAt(fromUrl.cursor, ctBounds),
         quality: fromUrl.quality || null,
     });
@@ -278,8 +364,9 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const prev = state;
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
-            && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality) return false;
+            && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality && sameEndo(next.endo, prev.endo)) return false;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
+        if (sameEndo(next.endo, prev.endo)) next.endo = prev.endo;
         if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
         if (sameAt(next.cursor, prev.cursor)) next.cursor = prev.cursor;
         state = Object.freeze(next);
@@ -311,7 +398,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         setLab(lab, meta = { source: 'lab' }) {
             if (lab === null) return set({ lab: null }, meta);
             const next = normalizeLab(lab, labs);
-            return next ? set({ lab: next, ct: null }, meta) : false;
+            return next ? set({ lab: next, ct: null, endo: null }, meta) : false;
         },
         /* Enter or change the CT stage ({ plane, at }), or leave it (null):
            the plane is whitelisted and the crosshair clamped to the bounds;
@@ -322,7 +409,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const next = normalizeCt(ct, ctBounds);
             if (!next) return false;
             const at = next.at || state.cursor;
-            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null }, meta);
+            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null, endo: null }, meta);
         },
         /* Move the 3D cursor (RAS mm, clamped), or clear it (null). In the CT
            stage this is the crosshair; elsewhere it is remembered for the
@@ -339,16 +426,26 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const cursor = clampAt(state.cursor, ctBounds);
             return set(state.ct ? { cursor, ct: { plane: state.ct.plane, at: cursor } } : { cursor }, { source: 'ct-bounds' });
         },
+        /* Enter or change the endoscope ({ side, station, pose }), or leave it
+           (null); `tip` (RAS mm), when given, becomes the 3D cursor, so CT
+           opens at the scope tip. Entering leaves the lab and CT. */
+        setEndo(endo, meta = { source: 'scope' }, tip = null) {
+            if (endo === null) return set({ endo: null }, meta);
+            const next = normalizeEndo(endo, has, isStation);
+            if (!next) return false;
+            const cursor = tip ? clampAt(tip, ctBounds) : state.cursor;
+            return set({ endo: next, lab: null, ct: null, cursor: cursor || state.cursor }, meta);
+        },
         /* Back to the specimen stage. */
-        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null }, meta); },
+        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, endo: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
         applyHash(next) {
-            const p = parseHash(next, has, labs);
+            const p = parseHash(next, has, labs, isStation);
             const selection = p.selection || null;
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
             const ct = p.ct ? normalizeCt(p.ct, ctBounds) : null;
             const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
-            return set({ selection, tier, lab: p.lab || null, ct, cursor, quality: p.quality || null }, { source: 'url' });
+            return set({ selection, tier, lab: p.lab || null, ct, endo: p.endo || null, cursor: cursor || (p.endo ? state.cursor : null), quality: p.quality || null }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),
