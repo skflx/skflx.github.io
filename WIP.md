@@ -177,7 +177,7 @@ are mostly inferred), distance fields for the proximity HUD (`ct.json`
 an id the graph lacks. The **Specimen stage** (`mode-specimen.js`) shows the
 packs in 3D: named views, bone X-ray/solid/hidden, region layers, landmarks,
 click-through picking, a 3D cursor shared with the CT crosshair, and a
-section plane with solid caps; sweeps are not drawn yet. **CT mode** (`mode-ct.js`,
+section plane with solid caps; a vessels-and-nerves layer draws the sweeps as tubes (off by default; most points are inferred, see `sweeps.meta.json`). **CT mode** (`mode-ct.js`,
 `docs/ssb.md` §3) shows it as axial/coronal/sagittal canvases with a shared
 crosshair, window presets, label outlines and hover names, without WebGL.
 The variant lab — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
