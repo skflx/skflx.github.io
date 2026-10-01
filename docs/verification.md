@@ -259,8 +259,35 @@ draws and selects (CT is the no-WebGL fallback); a server that sends
 Judging how the images *look* (window presets on the real head, outline
 contrast) stays a human check: `--shots` writes `ct-*.png`.
 
+**Specimen stage** (`js/ssb/geo-specimen.js`, `mode-specimen.js`,
+`ui-specimen.js`; `docs/ssb.md` §3 Explore) runs on the real committed packs
+(`node tools/test-ssb.mjs --only specimen`). It pins: every pack is a
+quantized glTF whose nodes are exactly what `ssb/models/packs.json` lists,
+each named `<graph id>.<side>` with the id in the graph; every mesh lies in
+the CT volume's bounds, so the 3D cursor and CT share one frame; the loader
+places each mesh where an independent read of the raw data puts it in RAS;
+laterality three ways — data (`.R` centroids and landmarks at +R), scene
+(`rasToScene`, the nasal spine at the origin) and screen (anterior view: the
+patient's right on the viewer's left; lateral and superior views likewise),
+plus each sided landmark nearer its own side's mesh; budgets (triangles,
+draw calls) and the on-demand loop; bone X-ray / solid / hidden and region
+layers; tier-filtered, non-overlapping landmark labels; picking keeps every
+hit through the bone and a second click steps to the next; a click sets the
+shared cursor (`state.cursor`, `#at=`) within 1 mm of an independent ray
+cast and CT lands there; selection frames without turning the camera (a cut
+under reduced motion), and an entity with no surface leaves the camera alone
+and says so; the section plane clips on the cursor, follows the slider and
+the URL, and caps solid bone. Judging how the specimen *looks* stays a human
+check (`--shots` writes `spec-*.png`).
+
+The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never
+runs in CI: its proof is the overlay PNGs each stage writes and
+`ssb/reference/specimen-relations.json` (the graph's spatial claims tested
+against the 3D geometry); `tools/check-data.mjs` pins only that every name
+in the specimen data — packs, label table, landmarks, sweeps — is a graph id.
+
 `node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
-screenshots of each diorama and of CT mode for a visual check. Judging how a material
+screenshots of each diorama, CT mode and the specimen for a visual check. Judging how a material
 *looks* (pattern scale, sheen under the endoscope's spotlight) stays a human
 check: render it in a scratch page that imports `materials.js` with a
 spotlight and both themes, and compare `full` with `lite`.

@@ -105,8 +105,8 @@ deleted.
 ## SSB — Sinus & Skull Base 3D
 
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
-links) and three stages: the specimen (a placeholder scene until the
-Specimen stage lands), CT, and the variant lab. The **reference specimen**
+links) and three stages: the specimen, CT, and the variant lab. The
+**reference specimen**
 is reconstructed from the UW atlas (`tools/ssb-pipeline/uw/`, provenance
 `ssb/LICENSE-data.md`): its axial and sagittal stacks are one CT (the
 coronal is another head, `ssb/reference/uw-sinusanatomy2/README.md`),
@@ -114,8 +114,23 @@ resampled to RAS mm with the face masked (`ssb/ct/`), the air spaces split
 into named compartments seeded by UW's own label arrows (label volume +
 `ssb/geometry/labels.json`; the anterior/posterior ethmoid split is a
 proxy for the basal lamella), landmarks (`ssb/geometry/landmarks.json`),
-and meshes packed by region (`ssb/models/`); `tools/check-data.mjs` fails
-if any of it names an id the graph lacks. **CT mode** (`mode-ct.js`,
+and meshes packed by region (`ssb/models/`). Stage C added the bony walls
+as named label units and a `walls` pack (lamina papyracea, orbital floor,
+maxillary walls, fovea / lateral lamella / cribriform plate, frontal tables,
+sphenoid face, floor and lateral walls, planum, septum, inferior and middle
+turbinates; superior turbinate, uncinate and bullar lamella not separable),
+vessel and nerve centrelines (`ssb/geometry/sweeps.json`, every point marked
+detected, labelled or inferred in `sweeps.meta.json`: optic nerve,
+nasolacrimal duct and petrous ICA are seen in their canals; the cavernous
+ICA — no contrast — vidian nerve and ethmoidal and sphenopalatine arteries
+are mostly inferred), distance fields for the proximity HUD (`ct.json`
+`sdf`), and a 3D test of the graph's spatial claims
+(`ssb/reference/specimen-relations.json`: as of 2026-10-01, 94 testable,
+88 agree, none contradict). `tools/check-data.mjs` fails if any of it names
+an id the graph lacks. The **Specimen stage** (`mode-specimen.js`) shows the
+packs in 3D: named views, bone X-ray/solid/hidden, region layers, landmarks,
+click-through picking, a 3D cursor shared with the CT crosshair, and a
+section plane with solid caps; sweeps are not drawn yet. **CT mode** (`mode-ct.js`,
 `docs/ssb.md` §3) shows it as axial/coronal/sagittal canvases with a shared
 crosshair, window presets, label outlines and hover names, without WebGL.
 The variant lab — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
@@ -146,16 +161,17 @@ every labeled frame's labels and arrow tips (`slices.json`), from which
 sources; 60 spatial claims testable against UW, 58 agree, the other 2 a
 documented arrow-placement artifact.
 
-**Next:** The Specimen stage (the packs in 3D: layers, picking, landmarks,
-CT↔3D cursor, section plane); reconstruction stage C (bony walls as
-resection units, vessel/nerve sweeps along their canals, distance fields
-for the proximity HUD, the graph's spatial claims tested in 3D); the
-endoscope stage (`docs/ssb.md` §3: fulcrum optics, collision, HUD, station
+**Next:** The endoscope stage (`docs/ssb.md` §3: fulcrum optics, collision, HUD, station
 poses); the `sphenoid` diorama (rest of phase 2); procedure mode and
 self-test (phases 6–7). Owner review of the two dioramas' schematic
 proportions (each module's header lists what the graph does not give) and
 of the graph (tier 1 first) — flip `review` to verified; record the UW
-authors' written permission beside `ssb/LICENSE-data.md`. Known content
+authors' written permission beside `ssb/LICENSE-data.md`. Hand
+segmentation (3D Slicer) would replace the reconstruction's proxies: the
+true basal lamella, the vidian and ethmoidal canals, and the cavernous ICA
+(or a contrast CT). This specimen's AEA–PEA spacing (21 mm against a
+population mean of 12) rests on an inferred PEA — worth an owner look.
+Known content
 gaps:
 - Anatomy: petrolingual/parasellar ligaments, carotid cave, jugular
   foramen and CN IX–XI; orbital septum, superior ophthalmic vein, frontal
