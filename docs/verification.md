@@ -10,6 +10,7 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
+node tools/test-ssb.mjs                   # SSB: variant lab (dioramas, pathway rules, picking, hash) + CT mode
 ```
 
 The browser suites need a real Chromium and nothing else: every page script
@@ -182,6 +183,134 @@ console.log('nodes',g.nodes.length,'edges',g.edges.length,
 
 If `kag-graph.json` changes, regenerate `kag-graph-flat.txt` from it — never
 edit the flat file directly.
+
+### SSB knowledge graph (`ssb/content/`)
+
+`node tools/ssb-content.mjs` (also run by `tools/check-data.mjs`). Checks:
+required fields per entity type and the controlled vocabularies
+(`docs/authoring-ssb.md` §5–§6); id format and global uniqueness; every
+reference resolves — structured refs *and* inline `[[id]]` in text — with
+the right target type; no HTML in text; and the review gate (an entity marked
+`verified` must cite sources that are all `verified: true`). Drafting one
+region file alone: `node tools/ssb-content.mjs --allow-dangling <file>`
+turns unresolved refs into warnings.
+
+What it cannot check: medical correctness and whether a source supports the
+claim that cites it. That stays with the owner, who alone flips `review` to
+`verified`.
+
+### SSB page and variant lab (`ssb.html`)
+
+Smoke boots `ssb.html` (graph mode + a WebGL frame; headless Chromium runs
+software WebGL, flags in `tools/smoke-lib.mjs`), the hostile `#s=` payload,
+and `#lab=frontal-recess` (a diorama builds). `tools/test-ssb.mjs` drives the
+lab and reads the scene back through the read-only `window.__ssb.lab` hook
+(part names, graph ids, hazards, RAS bounding boxes, the computed pathway,
+a pixel where a click picks a given part). It pins:
+
+- each diorama loads on its lesson's view (ethmoid roof coronal, frontal
+  recess sagittal); every part is named `<graph id>.<side>` and its id and
+  hazard ids resolve in the graph; the *schematic — idealized* badge shows;
+- presets satisfy the graph's own criterion text (`c.keros`, `c.gera`) and
+  preset codes are classes in the graph (`c.ifac`,
+  `c.uncinate-superior-attachment`); buttons carry the class labels;
+- ethmoid roof: Keros I→III raises each lateral lamella by exactly the
+  preset difference, and the lamella meets the fovea; asymmetry shortens
+  the left lamella; the AEA canal drops exactly as its parameter; a
+  supraorbital cell drops it by `m.aea-mesentery-drop`'s mean;
+- frontal recess, under uncinate attachments 1, 5 and 6: each anterior cell
+  alone moves the computed pathway posteriorly and each suprabullar cell
+  anteriorly (≥ 0.5 mm, mean over the recess and ostium), the frontal septal
+  cell laterally at the ostium, the pathway runs anterior and medial to the
+  supraorbital cell, and it drains medial to the uncinate into the middle
+  meatus (1) or lateral into the infundibulum (5, 6); the same toggles
+  through the UI checkboxes move it posterior vs anterior;
+- clicking a part selects its entity (panel and URL follow); view buttons
+  cut the camera without rebuilding; the desktop dock never covers the
+  canvas and collapses to a rail; phones get the controls in the sheet with
+  no horizontal scroll;
+- a hostile `#lab=` is clamped, snapped or dropped, rewritten canonically,
+  and never becomes markup; an unknown diorama leaves the specimen stage;
+- reduced motion stops the particle animation and continuous rendering;
+- the tissue-material library (`js/ssb/materials.js`, `docs/ssb.md` §7.4):
+  its kind table matches the vocabulary in `docs/authoring-ssb.md` and every
+  graph kind in use; every colour token it reads exists for both themes in
+  `css/ssb.css`; nothing animates. Through `window.__ssb.materials` (read-only:
+  quality, program and material counts, `probe(kind, hatched)` draws a
+  sphere into a small target and returns the GL error and pixels), every
+  kind, plain and hatched, compiles and draws without a WebGL error at
+  `#q=full` and at `#q=lite`; programs are shared per kind (a selection adds
+  materials, not programs); the `q` hash key picks the quality, switches it
+  at runtime and rewrites the hash canonically, and a hostile `q` is ignored;
+  the real lab renders non-blank under both, the hatched lateral lamella
+  still shows dark stripes, picking still works, and reduced motion adds no
+  animation. Software WebGL picks `lite` on its own, so the default runs
+  exercise it and `q=full` is always explicit.
+
+**CT mode** (`js/ssb/volume.js`, `mode-ct.js`, `ui-ct.js`; `docs/ssb.md` §3,
+§5.6) is tested on a synthetic volume, never on the real one:
+`tools/ssb-fixture-ct.mjs` builds a small anisotropic, axis-flipped phantom
+in exactly the `ssb/ct/` format (a large right and a smaller left maxillary
+sinus, an agger nasi cell, a midline cavity, a label id that is not in the
+graph, a label index the table does not name), and `test-ssb.mjs` answers the
+page's `ssb/ct/*` and `ssb/geometry/labels.json` requests from it with
+Playwright routing (nothing is written into `ssb/`, and the suite passes
+whether or not the real volume is in the tree; "no volume" is a routed 404).
+`node tools/ssb-fixture-ct.mjs [dir]` writes the same files to a directory
+for a manual look. `node tools/test-ssb.mjs --only ct` runs just this
+section. It pins, in plain Node: the affine round trip (also rotated and
+sheared), exact trilinear sampling on a linear field, slices equal to
+`sample()`/`labelAt()` pixel for pixel, the radiological orientation, oblique
+planes, gzip by magic bytes (raw bytes pass through, damage is refused), the
+loader's errors and name whitelist, and the `#ct=` codec (plane whitelist,
+crosshair clamping, stage exclusivity). In the page, through the read-only
+`window.__ssb.ct` hook and real pixels: each view renders non-blank; the
+drawn crosshair sits where first principles put it in all three views, and a
+click in one moves it in the others within a voxel; the larger right sinus
+is on the image left; label lookup returns the fixture's ids, hover shows the
+graph name and ≈ HU, a click selects the entity in the panel; keys, wheel,
+window presets/sliders/right-drag, the outline toggle and the colour key work;
+outline colours equal the materials' tokens and follow the theme; hostile
+`#ct=` values are clamped or ignored and never become markup; a missing
+volume shows a message naming `ssb/ct/ct.json` and the rest of the page
+still works; with `getContext('webgl*')` blocked the stage still loads,
+draws and selects (CT is the no-WebGL fallback); a server that sends
+`Content-Encoding: gzip` loads the same; phones show one plane at a time.
+Judging how the images *look* (window presets on the real head, outline
+contrast) stays a human check: `--shots` writes `ct-*.png`.
+
+**Specimen stage** (`js/ssb/geo-specimen.js`, `mode-specimen.js`,
+`ui-specimen.js`; `docs/ssb.md` §3 Explore) runs on the real committed packs
+(`node tools/test-ssb.mjs --only specimen`). It pins: every pack is a
+quantized glTF whose nodes are exactly what `ssb/models/packs.json` lists,
+each named `<graph id>.<side>` with the id in the graph; every mesh lies in
+the CT volume's bounds, so the 3D cursor and CT share one frame; the loader
+places each mesh where an independent read of the raw data puts it in RAS;
+laterality three ways — data (`.R` centroids and landmarks at +R), scene
+(`rasToScene`, the nasal spine at the origin) and screen (anterior view: the
+patient's right on the viewer's left; lateral and superior views likewise),
+plus each sided landmark nearer its own side's mesh; budgets (triangles,
+draw calls) and the on-demand loop; bone X-ray / solid / hidden and region
+layers; tier-filtered, non-overlapping landmark labels; picking keeps every
+hit through the bone and a second click steps to the next; a click sets the
+shared cursor (`state.cursor`, `#at=`) within 1 mm of an independent ray
+cast and CT lands there; selection frames without turning the camera (a cut
+under reduced motion), and an entity with no surface leaves the camera alone
+and says so; the section plane clips on the cursor, follows the slider and
+the URL, and caps solid bone. Judging how the specimen *looks* stays a human
+check (`--shots` writes `spec-*.png`).
+
+The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never
+runs in CI: its proof is the overlay PNGs each stage writes and
+`ssb/reference/specimen-relations.json` (the graph's spatial claims tested
+against the 3D geometry); `tools/check-data.mjs` pins only that every name
+in the specimen data — packs, label table, landmarks, sweeps — is a graph id.
+
+`node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
+screenshots of each diorama, CT mode and the specimen for a visual check. Judging how a material
+*looks* (pattern scale, sheen under the endoscope's spotlight) stays a human
+check: render it in a scratch page that imports `materials.js` with a
+spotlight and both themes, and compare `full` with `lite`.
 
 ## Adding a new page to the harness
 

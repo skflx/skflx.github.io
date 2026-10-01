@@ -1,0 +1,3030 @@
+{
+  "conditions": [
+    {
+      "id": "dz.acute-rhinosinusitis",
+      "name": "Acute rhinosinusitis",
+      "syn": [
+        "ARS",
+        "acute sinusitis",
+        "acute bacterial rhinosinusitis",
+        "ABRS",
+        "acute viral rhinosinusitis",
+        "post-viral rhinosinusitis",
+        "recurrent acute rhinosinusitis"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.frontal-sinus",
+        "s.sphenoid-sinus",
+        "s.ostiomeatal-complex",
+        "s.middle-meatus"
+      ],
+      "tier": 1,
+      "what": "Sudden-onset inflammation of the nose and sinuses lasting less than 12 weeks with complete recovery: two or more symptoms, one of them blockage or discharge, ± facial pain/pressure ± reduced smell. Most episodes are viral; bacterial infection is suspected when symptoms persist 10 days or more without improvement or worsen after initial improvement (\"double sickening\").",
+      "why": "Uncomplicated ARS is a clinical diagnosis treated medically; imaging and surgery are for its complications, and the job at the table is to drain the complication and the sinus that feeds it. Acutely inflamed mucosa bleeds and hides landmarks, so the operation is limited to the involved sinuses rather than a full FESS.",
+      "imaging": {
+        "ct": "Not indicated for uncomplicated disease: mucosal thickening, air–fluid levels, bubbly secretions and an occluded ostiomeatal complex are common in colds and do not separate viral from bacterial infection. Contrast-enhanced CT of the sinuses and orbits (plus the brain when there is headache or neurological change) is for suspected complications — look for postseptal fat stranding, a rim-enhancing subperiosteal or orbital collection, erosion of the lamina papyracea or of the frontal anterior or posterior table, a forehead subperiosteal collection, and extra-axial or intracerebral collections.",
+        "mri": "Contrast MRI with diffusion-weighted imaging when intracranial or cavernous sinus spread is suspected: it shows small subdural empyemas (restricted diffusion) and epidural abscesses (variable diffusion), cerebritis, dural enhancement and venous sinus thrombosis that CT misses."
+      },
+      "endo": "0°, affected side: hyperemic, edematous middle meatus with pus draining from beneath the middle turbinate (anterior group) or into the sphenoethmoidal recess (posterior group). An endoscopically guided middle meatal swab is the preferred culture.",
+      "redFlags": [
+        "Periorbital edema or erythema, displaced globe, diplopia, painful or restricted eye movement, reduced acuity or color vision → contrast CT and ophthalmology ([[c.chandler]]).",
+        "Severe frontal or unilateral headache, forehead swelling, meningism, focal deficit, seizures or reduced consciousness → contrast CT and MRI of the brain.",
+        "Bilateral orbital signs or cranial nerve III, IV or VI palsy with sepsis → [[dz.cavernous-sinus-thrombosis]].",
+        "Immunocompromise, neutropenia or uncontrolled diabetes with facial pain, numbness, or pale or dark mucosa → urgent endoscopy and biopsy for [[dz.acute-invasive-fungal-sinusitis]]."
+      ],
+      "complications": [
+        "dz.preseptal-cellulitis",
+        "dz.orbital-cellulitis",
+        "dz.subperiosteal-orbital-abscess",
+        "dz.orbital-abscess",
+        "dz.cavernous-sinus-thrombosis",
+        "dz.pott-puffy-tumor",
+        "dz.epidural-abscess",
+        "dz.subdural-empyema",
+        "dz.brain-abscess-sinogenic",
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.frontal-trephination",
+        "p.subperiosteal-abscess-drainage",
+        "p.balloon-sinus-dilation"
+      ],
+      "mimics": [
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.odontogenic-sinusitis",
+        "dz.crs-without-polyps"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "EPOS 2020 suggests bacterial ARS when at least three are present: discolored discharge and severe local pain (both with unilateral predominance), fever above 38 °C, raised ESR/CRP, and double sickening."
+        },
+        {
+          "tier": 2,
+          "text": "Recurrent ARS (four or more episodes a year with full recovery between) is easily confused with headache disorders and rhinitis; document at least one episode endoscopically or on CT before offering surgery. When it is offered for focal disease without polyps, balloon dilation of the involved outflows ([[p.balloon-sinus-dilation]]) is an alternative to conventional FESS."
+        },
+        {
+          "tier": 2,
+          "text": "Orbital complications come mostly from ethmoiditis in young children; intracranial complications cluster in adolescents with frontal sinusitis (valveless diploic veins), so a teenager with frontal sinusitis and severe headache is imaged early."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.epos-2020",
+        "src.rosenfeld-2015-sinusitis",
+        "src.icar-rs-2021",
+        "src.chandler-1970",
+        "src.germiller-2006-intracranial",
+        "src.chiu-2019-ch13"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.crs-without-polyps",
+      "name": "Chronic rhinosinusitis without nasal polyps",
+      "syn": [
+        "CRSsNP",
+        "chronic sinusitis",
+        "chronic rhinosinusitis"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.ostiomeatal-complex",
+        "s.ethmoid-infundibulum",
+        "s.maxillary-sinus",
+        "s.maxillary-natural-ostium",
+        "s.anterior-ethmoid-cells",
+        "s.frontal-recess",
+        "s.middle-meatus",
+        "s.sphenoethmoidal-recess"
+      ],
+      "class": [
+        "c.epos-2020-crs",
+        "c.lund-mackay",
+        "c.lund-kennedy",
+        "c.sinonasal-inflammatory-patterns"
+      ],
+      "tier": 1,
+      "what": "Sinonasal inflammation for 12 weeks or more with at least two symptoms — one of them blockage or discharge, the others facial pain/pressure or reduced smell — confirmed by endoscopy or CT, without visible polyps. It is often, but not always, non-type 2 (neutrophilic) inflammation.",
+      "why": "Surgery follows failed appropriate medical therapy and is directed by the CT: open the blocked drainage pathways (infundibular, ostiomeatal or sphenoethmoidal pattern) and preserve mucosa rather than strip it. Persisting disease after surgery sends you looking for a missed cell, a recirculation, a scarred frontal recess, or a secondary cause (dental, immune, ciliary).",
+      "imaging": {
+        "ct": "Thin-section non-contrast CT after maximal medical therapy is the staging and planning study. Mucosal thickening or opacification follows a drainage-unit distribution ([[c.sinonasal-inflammatory-patterns]]): infundibular (maxillary alone), ostiomeatal (maxillary, anterior ethmoid ± frontal), or sphenoethmoidal recess (posterior ethmoid and sphenoid). Chronicity shows as thickened, sclerotic sinus walls (osteitis). Score it with [[c.lund-mackay]] and read the anatomy with [[pr.close-ct-review]]. Features that are NOT typical CRS and should redirect the diagnosis: unilateral disease, expansion or erosion of bone, hyperdense contents or calcification, and focal hyperostosis (fungal ball, AFRS, mucocele, odontogenic disease, inverted papilloma or malignancy).",
+        "mri": "Not routine. Inflamed mucosa is T2 hyperintense with surface enhancement; MRI is used when CT shows unilateral opacification, to separate an enhancing mass from retained secretions."
+      },
+      "endo": "0° and 30°, each side: edematous or hyperemic middle meatal mucosa, mucopurulent discharge from the middle meatus or sphenoethmoidal recess, no polyps; scored with [[c.lund-kennedy]].",
+      "redFlags": [
+        "Unilateral symptoms or unilateral opacification → endoscopy and MRI or biopsy before assuming CRS.",
+        "Bone expansion, erosion, hyperdense contents or focal hyperostosis on CT → not simple CRS (fungal, cystic or neoplastic disease).",
+        "Epistaxis, facial numbness, diplopia, cheek swelling or loosening teeth → exclude malignancy.",
+        "Unilateral maxillary disease in a patient with dental disease or dental work → [[dz.odontogenic-sinusitis]]; the tooth must be treated."
+      ],
+      "complications": [
+        "dz.mucocele"
+      ],
+      "managedBy": [
+        "p.uncinectomy",
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.draf-i",
+        "p.draf-iia",
+        "p.sphenoidotomy",
+        "p.balloon-sinus-dilation"
+      ],
+      "mimics": [
+        "dz.odontogenic-sinusitis",
+        "dz.fungal-ball",
+        "dz.acute-rhinosinusitis",
+        "dz.inverted-papilloma",
+        "dz.silent-sinus-syndrome",
+        "dz.sarcoidosis-sinonasal"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Scan after treatment, not during an exacerbation, or the CT overstages the disease."
+        },
+        {
+          "tier": 1,
+          "text": "Include the natural ostium in the antrostomy ([[pr.natural-ostium-clearance]]); an opening that misses it recirculates mucus ([[h.missed-natural-ostium]])."
+        },
+        {
+          "tier": 2,
+          "text": "Neo-osteogenesis (osteitic thickening of sinus walls) marks recalcitrant disease and predicts persisting inflammation after surgery."
+        },
+        {
+          "tier": 2,
+          "text": "Balloon dilation ([[p.balloon-sinus-dilation]]) suits focal disease limited to the maxillary, frontal or sphenoid outflow, including in the office under local anesthesia; it cannot treat the ethmoid cells, and polyps are a poor indication."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.epos-2020",
+        "src.icar-rs-2021",
+        "src.rosenfeld-2015-sinusitis",
+        "src.babbel-1992-patterns",
+        "src.kennedy-1985",
+        "src.chiu-2019-ch13"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.crs-with-polyps",
+      "name": "Chronic rhinosinusitis with nasal polyps",
+      "syn": [
+        "CRSwNP",
+        "nasal polyposis",
+        "eosinophilic chronic rhinosinusitis",
+        "eCRS",
+        "sinonasal polyposis"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.middle-meatus",
+        "s.ethmoid-labyrinth",
+        "s.anterior-ethmoid-cells",
+        "s.posterior-ethmoid-cells",
+        "s.frontal-recess",
+        "s.maxillary-sinus",
+        "s.sphenoethmoidal-recess",
+        "s.olfactory-cleft",
+        "s.middle-turbinate"
+      ],
+      "class": [
+        "c.epos-2020-crs",
+        "c.nasal-polyp-score",
+        "c.lund-kennedy",
+        "c.lund-mackay"
+      ],
+      "tier": 1,
+      "what": "CRS with bilateral edematous polyps arising mainly from the ethmoid and middle meatus, usually driven by type 2 (eosinophilic) inflammation. Loss of smell is prominent, and asthma and aspirin-exacerbated respiratory disease often coexist.",
+      "why": "Polyps hide and distort the landmarks and bleed, so dissection starts from constant ones — maxillary antrostomy to the orbital floor, the medial orbital wall, the sphenoid roof — and follows the skull base from posterior to anterior ([[pr.skull-base-posterior-to-anterior]]). For type 2 disease a complete ethmoidectomy with wide frontal and sphenoid openings creates one cavity that topical steroid irrigation can reach; recurrence is expected and is managed with irrigations, biologics or revision.",
+      "imaging": {
+        "ct": "Bilateral, roughly symmetric pan-opacification centered on the ethmoids, with polypoid soft tissue widening the middle meatus and filling the nasal cavity; ethmoid septa and the lamina may be thinned and bowed by expansion, but permeative bone destruction is not expected. Heterogeneous hyperdense (serpiginous) contents suggest eosinophilic or allergic fungal mucin ([[dz.afrs]]). Disease centered on the middle and superior turbinates and upper septum with relatively clear lateral sinuses suggests [[dz.ccad]]. Read the lamina papyracea and ethmoid roof carefully — polyps and osteitis thin them while hiding them endoscopically. Unilateral polyposis is not CRSwNP until histology says so.",
+        "mri": "Polyps are T2 hyperintense with surface enhancement and non-enhancing edematous cores; inspissated eosinophilic mucin is T2 hypointense. MRI is reserved for unilateral disease, suspected complications, or an olfactory cleft mass."
+      },
+      "endo": "0°, each nostril: pale, grey, translucent, edematous polyps emerging from the middle meatus, graded with [[c.nasal-polyp-score]]; in advanced disease they reach the nasal floor. Thick, tenacious, brown-green mucin between polyps suggests AFRS or eosinophilic mucin.",
+      "redFlags": [
+        "Unilateral polyp or unilateral polyposis → tissue diagnosis before planning surgery ([[dz.inverted-papilloma]], malignancy, encephalocele).",
+        "Polypoid mass in the olfactory cleft medial to the middle turbinate, or one that pulsates or enlarges with Valsalva → MRI before any biopsy ([[dz.meningoencephalocele]], [[dz.olfactory-neuroblastoma]]).",
+        "Proptosis, diplopia or visual change → expansile mucocele or AFRS eroding the orbit; expedite surgery.",
+        "Bleeding, firm or necrotic polyp, or bone destruction → biopsy for malignancy.",
+        "Nasal polyps in a child → sweat chloride test for [[dz.cystic-fibrosis-sinusitis]]."
+      ],
+      "complications": [
+        "dz.mucocele"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.draf-iia",
+        "p.draf-iii"
+      ],
+      "mimics": [
+        "dz.afrs",
+        "dz.aerd",
+        "dz.ccad",
+        "dz.antrochoanal-polyp",
+        "dz.cystic-fibrosis-sinusitis",
+        "dz.inverted-papilloma",
+        "dz.meningoencephalocele",
+        "dz.olfactory-neuroblastoma",
+        "dz.oncocytic-papilloma",
+        "dz.reah",
+        "dz.itac"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Polyps displace the middle turbinate and uncinate: identify the maxillary ostium and the medial orbital wall first, and never grasp and twist polypoid tissue near the skull base."
+        },
+        {
+          "tier": 2,
+          "text": "EPOS 2020 considers biologics for bilateral polyps after surgery (or when unfit for it) with three of five criteria: type 2 evidence (tissue eosinophils ≥10/hpf, blood eosinophils ≥250/µL or total IgE ≥100 IU/mL); ≥2 courses of systemic steroids a year or >3 months of low-dose steroids; SNOT-22 ≥40; anosmia on smell testing; asthma needing regular inhaled steroids."
+        },
+        {
+          "tier": 2,
+          "text": "Polyps, asthma and respiratory reactions to NSAIDs are [[dz.aerd]] — the most severe and fastest-recurring phenotype."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.epos-2020",
+        "src.icar-rs-2021",
+        "src.bachert-2019-dupilumab",
+        "src.stammberger-1991",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.aerd",
+      "name": "Aspirin-exacerbated respiratory disease",
+      "syn": [
+        "AERD",
+        "Samter triad",
+        "aspirin triad",
+        "NSAID-exacerbated respiratory disease",
+        "N-ERD"
+      ],
+      "eponym": "Samter triad",
+      "category": "inflammatory",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.middle-meatus",
+        "s.frontal-recess",
+        "s.frontal-sinus",
+        "s.maxillary-sinus",
+        "s.sphenoid-sinus",
+        "s.olfactory-cleft"
+      ],
+      "class": [
+        "c.epos-2020-crs",
+        "c.nasal-polyp-score"
+      ],
+      "tier": 2,
+      "what": "CRS with nasal polyps plus asthma plus respiratory reactions (congestion, bronchospasm) to aspirin and other COX-1 inhibitors, from dysregulated arachidonic acid metabolism with overproduction of cysteinyl leukotrienes. It is the most severe, fastest-recurring form of type 2 polyp disease, usually with anosmia.",
+      "why": "Plan complete surgery — full sphenoethmoidectomy with wide maxillary, frontal (Draf IIa, or Draf III in selected patients) and sphenoid openings — because limited surgery recurs quickly; aspirin desensitization with daily aspirin started a few weeks after surgery, or a biologic, slows recurrence. Perioperatively avoid NSAIDs (including ketorolac) and optimize asthma with the anesthetist.",
+      "imaging": {
+        "ct": "Dense, bilateral pansinus opacification with extensive polyps (high [[c.lund-mackay]] scores), often with hyperdense inspissated eosinophilic mucin and osteitic walls — like [[dz.crs-with-polyps]] but typically more extensive and quick to reopacify after surgery."
+      },
+      "endo": "0°, both sides: large polyps (often grade 3–4 on [[c.nasal-polyp-score]]) with thick eosinophilic mucin; the olfactory cleft is commonly filled.",
+      "redFlags": [
+        "NSAID exposure (including perioperative ketorolac) → severe bronchospasm.",
+        "Uncontrolled asthma → optimize before anesthesia.",
+        "Rapid regrowth after surgery → aspirin therapy after desensitization or a biologic, rather than repeated limited revisions."
+      ],
+      "complications": [
+        "dz.mucocele"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.draf-iia",
+        "p.draf-iii"
+      ],
+      "mimics": [
+        "dz.crs-with-polyps",
+        "dz.afrs"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Ask every polyp patient about asthma and reactions to aspirin or ibuprofen; the history alone often makes the diagnosis, and a supervised aspirin challenge confirms it."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.epos-2020",
+        "src.icar-rs-2021",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.ccad",
+      "name": "Central compartment atopic disease",
+      "syn": [
+        "CCAD",
+        "central compartment allergic disease"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.middle-turbinate",
+        "s.superior-turbinate",
+        "s.nasal-septum",
+        "s.olfactory-cleft"
+      ],
+      "class": [
+        "c.epos-2020-crs"
+      ],
+      "tier": 2,
+      "what": "A type 2, inhalant-allergy-associated CRS phenotype in which polypoid edema starts in the central compartment of the nose — the medial middle turbinate, superior turbinate and posterosuperior septum. The lateral sinuses are spared early and involved later, \"inside out\".",
+      "why": "The pattern points to allergy as the driver, so allergy testing and treatment (avoidance, topical steroids, immunotherapy) matter as much as surgery. When surgery is needed, the diseased central compartment is the target and the lateral sinuses are opened only as far as they are involved.",
+      "imaging": {
+        "ct": "Soft-tissue thickening centered on the middle and superior turbinates and the posterosuperior septum, with the maxillary and lateral ethmoid cells relatively clear or showing only mucosal thickening that starts medially; in advanced disease the ethmoids opacify but the central predominance remains."
+      },
+      "endo": "0°, both sides: polypoid degeneration of the middle turbinate head and medial surface, the superior turbinate and the adjacent septum; the middle meatus may be relatively clear.",
+      "redFlags": [
+        "Unilateral central or olfactory cleft polypoid disease → exclude [[dz.inverted-papilloma]], [[dz.meningoencephalocele]] and [[dz.olfactory-neuroblastoma]] (MRI before biopsy)."
+      ],
+      "mimics": [
+        "dz.crs-with-polyps",
+        "dz.olfactory-neuroblastoma",
+        "dz.meningoencephalocele",
+        "dz.inverted-papilloma"
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Olfactory cleft involvement explains early, disproportionate smell loss."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.delgaudio-2017-ccad",
+        "src.epos-2020"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.cystic-fibrosis-sinusitis",
+      "name": "Cystic fibrosis–related chronic rhinosinusitis",
+      "syn": [
+        "CF sinusitis",
+        "CF-CRS",
+        "CFTR-related sinus disease"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-medial-wall",
+        "s.uncinate-process",
+        "s.ethmoid-labyrinth",
+        "s.frontal-sinus",
+        "s.sphenoid-sinus",
+        "s.middle-meatus"
+      ],
+      "class": [
+        "c.epos-2020-crs"
+      ],
+      "tier": 2,
+      "what": "Pansinus disease in cystic fibrosis: dehydrated, viscous mucus with failed clearance (CFTR dysfunction), chronic Pseudomonas and Staphylococcus infection and often polyps, in sinuses that are small because pneumatization is impaired. The sinuses act as a bacterial reservoir for the lungs, including after lung transplant.",
+      "why": "Mucociliary clearance will not recover, so surgery makes wide, gravity- and irrigation-friendly openings (large antrostomies, often a modified medial maxillectomy) in often hypoplastic frontal and sphenoid sinuses. Pulmonary function, vitamin K–related coagulopathy and the transplant team shape timing; CFTR modulators improve sinus disease in many patients and have changed surgical indications.",
+      "imaging": {
+        "ct": "Pan-opacification with the characteristic medial bulging of the lateral nasal wall into the nasal cavity from expanded maxillary sinuses (\"pseudomucocele\"), a demineralized or absent uncinate process, and hypoplastic or aplastic frontal and sphenoid sinuses; secretions may be hyperdense. These features in a child should prompt CF testing.",
+        "mri": "Inspissated secretions may be T1 hyperintense and T2 hypointense; MRI adds little beyond CT except in suspected complications."
+      },
+      "endo": "0°, both sides: medialized lateral nasal wall narrowing the middle meatus, thick tenacious mucopus and polyps.",
+      "redFlags": [
+        "Nasal polyps in a child → sweat chloride test.",
+        "Before or after lung transplant → sinus source control is planned with the transplant team (Pseudomonas reservoir).",
+        "Medial bulging with thinning of the orbit or skull base → true mucocele formation."
+      ],
+      "complications": [
+        "dz.mucocele"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.medial-maxillectomy",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.sphenoidotomy"
+      ],
+      "mimics": [
+        "dz.crs-with-polyps",
+        "dz.afrs",
+        "dz.mucocele"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.epos-2020",
+        "src.icar-rs-2021",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.odontogenic-sinusitis",
+      "name": "Odontogenic sinusitis",
+      "syn": [
+        "ODS",
+        "dental sinusitis",
+        "maxillary sinusitis of dental origin"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-sinus-floor",
+        "s.alveolar-recess",
+        "s.maxillary-natural-ostium",
+        "s.ostiomeatal-complex",
+        "s.anterior-ethmoid-cells",
+        "s.frontal-recess"
+      ],
+      "class": [
+        "c.epos-2020-crs"
+      ],
+      "tier": 2,
+      "what": "Bacterial maxillary sinusitis from a dental source — apical periodontitis or abscess of a maxillary premolar or molar, an oroantral fistula, or dental work (extraction, implant, sinus lift, extruded root-canal material). It is usually unilateral with foul-smelling discharge and often spreads to the anterior ethmoid and frontal sinus.",
+      "why": "Both the tooth and the sinus usually need treatment: dental treatment alone cures some patients, while ESS is often needed and may come first when symptoms are severe or a complication is present. At the table clear the ostiomeatal complex and the whole antrum — pus, displaced implants, root fragments, root-canal paste — and coordinate closure of any oroantral fistula with the dental surgeon.",
+      "imaging": {
+        "ct": "Unilateral maxillary opacification, often with anterior ethmoid and frontal extension through the ostiomeatal complex. Read every maxillary premolar and molar on bone windows in coronal and sagittal planes: periapical lucency, a dehiscent sinus floor over a root apex, periodontal bone loss, an oroantral fistula, displaced dental implants, root fragments, or hyperdense endodontic material in the antrum (which mimics fungal ball calcification). Radiology reports often miss the dental source; CBCT helps when the CT is equivocal, and periapical radiographs are insensitive."
+      },
+      "endo": "0° and 30°, affected side: purulent, often foul discharge from the middle meatus; an oroantral fistula may be seen intraorally.",
+      "redFlags": [
+        "Unilateral maxillary opacification in an adult → check the teeth on CT before planning ESS.",
+        "Orbital or intracranial complications can arise from dental sources (often anaerobes) → manage as for [[dz.acute-rhinosinusitis]] complications.",
+        "Hyperdense material with bone destruction or fat infiltration → not odontogenic sinusitis; biopsy."
+      ],
+      "complications": [
+        "dz.orbital-cellulitis",
+        "dz.subperiosteal-orbital-abscess"
+      ],
+      "managedBy": [
+        "p.uncinectomy",
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.canine-fossa-trephination",
+        "p.prelacrimal-approach"
+      ],
+      "mimics": [
+        "dz.fungal-ball",
+        "dz.crs-without-polyps",
+        "dz.acute-rhinosinusitis"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Unilateral maxillary sinusitis with a foul smell is dental until proven otherwise."
+        },
+        {
+          "tier": 2,
+          "text": "The culprit tooth may be painless and look sound; the diagnosis rests on sinusitis plus a dental source on imaging or examination, confirmed with the dentist."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.craig-2021-ods",
+        "src.epos-2020",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.afrs",
+      "name": "Allergic fungal rhinosinusitis",
+      "syn": [
+        "AFRS",
+        "allergic fungal sinusitis",
+        "AFS",
+        "eosinophilic fungal rhinosinusitis"
+      ],
+      "category": "fungal",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.anterior-ethmoid-cells",
+        "s.posterior-ethmoid-cells",
+        "s.frontal-recess",
+        "s.frontal-sinus",
+        "s.maxillary-sinus",
+        "s.sphenoid-sinus",
+        "s.middle-meatus",
+        "s.lamina-papyracea",
+        "s.fovea-ethmoidalis",
+        "s.frontal-sinus-posterior-table",
+        "s.orbit"
+      ],
+      "class": [
+        "c.bent-kuhn-afrs",
+        "c.fungal-rhinosinusitis",
+        "c.epos-2020-crs"
+      ],
+      "tier": 2,
+      "what": "A non-invasive, type 2 (IgE-mediated) hypersensitivity to fungi colonizing the sinuses, producing polyps and thick eosinophilic \"peanut-butter\" mucin that fills and expands the sinuses. Patients are typically young, atopic and immunocompetent, and disease is often unilateral or asymmetric.",
+      "why": "The expanding mucin thins or erodes the lamina papyracea and skull base but pushes the periorbita and dura away rather than invading them, so the mucin is suctioned and irrigated off them gently and navigation, not bone contour, defines the limits. Every involved cell is opened widely (frontal Draf IIa–III as needed) and all mucin removed, because residual mucin drives recurrence; postoperative systemic and topical steroids and irrigations are part of the operation.",
+      "imaging": {
+        "ct": "Expansile, often unilateral or asymmetric multisinus opacification with heterogeneous central hyperdensity — serpiginous or \"double-density\" high-attenuation mucin (concentrated protein, heavy metals and calcium salts) surrounded by a low-attenuation rim of edematous mucosa. Sinus walls are expanded, remodeled and thinned, with smooth pressure erosion of the lamina papyracea, fovea ethmoidalis, posterior frontal table or sphenoid walls in a substantial minority — unlike the permeative destruction of invasive fungal disease or malignancy. Polyps fill the nasal cavity. Report orbital extension (proptosis, globe displacement), extradural extension and bone over the optic nerve and ICA.",
+        "mri": "The mucin is T1 variable (often iso- to hyperintense) and markedly T2 hypointense to signal void, so on T2 alone a packed sinus can mimic an aerated one; the peripheral mucosa is T2 bright and enhances, with no central enhancement. MRI confirms that dura and periorbita remain intact and separates mucin from tumor."
+      },
+      "endo": "0° and 30°, affected side: polyps with thick, tenacious, tan to brown-green or black mucin in the middle meatus or spilling from opened cells (\"peanut butter\" or \"axle grease\").",
+      "redFlags": [
+        "Proptosis, diplopia, telecanthus or visual change → expedite surgery; removing the mucin decompresses the orbit.",
+        "Sudden visual loss from sphenoid or posterior ethmoid mucin compressing the optic nerve → emergency decompression.",
+        "Hyphae within tissue on histology, or an immunocompromised host → not AFRS; manage as invasive fungal disease.",
+        "Eroded bone over the ICA or optic canal → suction and irrigate, do not curette."
+      ],
+      "complications": [
+        "h.lamina-papyracea-breach",
+        "h.ethmoid-roof-penetration"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.draf-iia",
+        "p.draf-iii"
+      ],
+      "mimics": [
+        "dz.fungal-ball",
+        "dz.crs-with-polyps",
+        "dz.aerd",
+        "dz.mucocele",
+        "dz.chronic-invasive-fungal-sinusitis",
+        "dz.cystic-fibrosis-sinusitis"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Send the mucin — not only tissue — for fungal stain; culture is often negative. Dematiaceous fungi (Bipolaris, Curvularia, Alternaria) and Aspergillus are typical."
+        },
+        {
+          "tier": 2,
+          "text": "Unilateral expansile disease with hyperdense contents in a young atopic patient is AFRS until proven otherwise, but tissue must still exclude invasion and tumor."
+        },
+        {
+          "tier": 3,
+          "text": "Recurrence is common; long-term postoperative steroids, irrigations and, in selected patients, immunotherapy or biologics are used to prevent it."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.bent-kuhn-1994-afrs",
+        "src.manning-1997-afrs-imaging",
+        "src.deshazo-1997-fungal",
+        "src.epos-2020",
+        "src.icar-rs-2021"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.fungal-ball",
+      "name": "Fungal ball",
+      "syn": [
+        "mycetoma",
+        "sinus mycetoma",
+        "aspergilloma",
+        "fungus ball"
+      ],
+      "category": "fungal",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-natural-ostium",
+        "s.maxillary-medial-wall",
+        "s.ostiomeatal-complex",
+        "s.sphenoid-sinus"
+      ],
+      "class": [
+        "c.fungal-rhinosinusitis"
+      ],
+      "tier": 1,
+      "what": "A dense, non-invasive conglomerate of fungal hyphae (usually Aspergillus) packed inside one sinus — most often the maxillary, then the sphenoid — in an immunocompetent, often older patient. It may be silent or cause unilateral discharge, cacosmia or pain.",
+      "why": "Endoscopic removal through a wide ostium (maxillary antrostomy or sphenoidotomy) with thorough irrigation cures it without antifungals, but every fragment must be cleared — angled scopes, curved suction and irrigation, and canine fossa or prelacrimal access reach the anterior and inferior antrum. In a patient about to be immunosuppressed it can turn invasive, so remove it first.",
+      "imaging": {
+        "ct": "Single-sinus, usually complete opacification with central heterogeneous hyperdense material and punctate or linear calcifications (common but not universal) lying centrally within the sinus contents — unlike the peripheral, eggshell-like mural calcification of chronic bacterial sinusitis; the sinus wall is thickened and sclerotic from osteitis, and the medial wall may be focally thinned or eroded by pressure. As a rule there is no expansion and no infiltration of surrounding fat. Bilateral or multisinus involvement is unusual and should raise other diagnoses.",
+        "mri": "Markedly T2 hypointense to signal-void center (dense hyphae, paramagnetic metals) with a T2 hyperintense, enhancing peripheral mucosa and no central enhancement; on T2 alone the ball can be mistaken for air."
+      },
+      "endo": "30°–70° through the antrostomy (or 0° into the sphenoid), affected side: cheesy, crumbly or clay-like brown, green, grey or black material; the mucosa beneath is inflamed but intact.",
+      "redFlags": [
+        "Planned or current immunosuppression (chemotherapy, transplant, high-dose steroids) or uncontrolled diabetes → remove promptly; risk of invasive conversion.",
+        "Sphenoid fungal ball with a dehiscent ICA or optic canal on CT → irrigate and suction only; no blind curettage of the lateral wall.",
+        "Hyperdense contents with bone destruction or fat infiltration outside the sinus → not a fungal ball; biopsy for invasive fungal disease or tumor."
+      ],
+      "complications": [
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.chronic-invasive-fungal-sinusitis"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.sphenoidotomy",
+        "p.canine-fossa-trephination",
+        "p.prelacrimal-approach"
+      ],
+      "mimics": [
+        "dz.afrs",
+        "dz.odontogenic-sinusitis",
+        "dz.crs-without-polyps",
+        "dz.chronic-invasive-fungal-sinusitis",
+        "dz.inverted-papilloma"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Calcified or hyperdense contents in one opacified maxillary sinus with a sclerotic wall: think fungal ball first."
+        },
+        {
+          "tier": 2,
+          "text": "deShazo criteria: sinus opacification ± flocculent calcification; cheesy or clay-like material; a dense tangle of hyphae separate from but adjacent to the mucosa; nonspecific mucosal inflammation; no invasion of mucosa, vessels or bone; no allergic mucin."
+        },
+        {
+          "tier": 2,
+          "text": "Endodontic material extruded into the antrum is also hyperdense but metal-bright, homogeneous and next to a treated root — look at the tooth."
+        },
+        {
+          "tier": 2,
+          "text": "In the sphenoid, osteitis from a fungal ball or long-standing inflammation thickens the anterior face: expect to drill rather than punch when enlarging the sphenoidotomy ([[p.sphenoidotomy]])."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.deshazo-1997-mycetoma",
+        "src.deshazo-1997-fungal",
+        "src.cummings-7",
+        "src.wormald-textbook",
+        "src.chiu-2019-ch08"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.acute-invasive-fungal-sinusitis",
+      "name": "Acute invasive fungal rhinosinusitis",
+      "syn": [
+        "AIFRS",
+        "acute fulminant invasive fungal sinusitis",
+        "mucormycosis",
+        "rhino-orbital-cerebral mucormycosis",
+        "ROCM",
+        "invasive aspergillosis of the sinuses",
+        "zygomycosis"
+      ],
+      "category": "fungal",
+      "involves": [
+        "s.middle-turbinate",
+        "s.nasal-septum",
+        "s.inferior-turbinate",
+        "s.lateral-nasal-wall",
+        "s.nasal-floor",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.sphenoid-sinus",
+        "s.pterygopalatine-fossa",
+        "s.infratemporal-fossa",
+        "s.orbit",
+        "s.orbital-apex",
+        "s.cavernous-sinus",
+        "s.internal-carotid-artery",
+        "s.anterior-cranial-fossa"
+      ],
+      "class": [
+        "c.fungal-rhinosinusitis"
+      ],
+      "tier": 1,
+      "what": "Angioinvasive fungal infection (Mucorales — mucormycosis — or Aspergillus) of the sinonasal mucosa in an immunocompromised host: neutropenia (hematologic malignancy, transplant), poorly controlled or ketoacidotic diabetes, or high-dose steroids. Hyphae invade vessels and nerves, infarct tissue and spread into the orbit, face and brain over days (under 4 weeks by definition), with high mortality.",
+      "why": "It is a surgical emergency: early endoscopic biopsy of suspicious mucosa (middle turbinate first, then septum and palate) with frozen section, then urgent debridement back to bleeding, sensate tissue while systemic antifungals start (amphotericin B for Mucorales) and the immune defect is reversed. The disease margin, not the anatomy, sets the resection — maxillectomy, orbital exenteration and repeated second looks are decided case by case in a patient who may be thrombocytopenic and septic.",
+      "imaging": {
+        "ct": "Early CT may look almost normal or show only severe unilateral mucosal thickening of the nasal cavity (turbinates, septum) — the most consistent finding in DelGaudio 2003. The discriminating signs are outside the sinus: infiltration of fat planes — periantral (premaxillary and retromaxillary) fat, pterygopalatine fossa, orbital fat — which can precede any visible bone erosion because hyphae spread along vessels through intact bone; periantral fat stranding was the most sensitive single CT sign in Middlebrooks 2015. Others: subtle or permeative bone erosion, non-enhancing (devitalized) mucosa on contrast CT, nasal and facial soft-tissue edema, and in late disease orbital, cavernous sinus and intracranial extension. Opacification may be mild — in an immunocompromised patient, \"mild sinus disease with fat stranding\" is the pattern to fear.",
+        "mri": "More sensitive than CT for early and extrasinus disease. Loss of contrast enhancement of the mucosa — the \"black turbinate\" sign — marks devitalized tissue that must be debrided (patchy non-enhancement also occurs in normal turbinates, probably with the nasal cycle, so interpret it with endoscopy). Also look for T2 signal change and enhancement in orbital fat, muscles and the orbital apex, pterygopalatine fossa and masticator space infiltration, cavernous sinus expansion or filling defects, ICA narrowing, occlusion or pseudoaneurysm, dural enhancement, cerebritis and infarcts on DWI. Obtain contrast MRI of the sinuses, orbits and brain unless it would delay surgery."
+      },
+      "endo": "0°, both sides: pale, insensate, dusky or black (necrotic) mucosa that bleeds little when cut, most often first on the middle turbinate, then the septum, inferior turbinate and palate; test sensation with a probe. Early disease may look only pale and edematous.",
+      "redFlags": [
+        "Immunocompromised patient with fever, facial pain, swelling or numbness → urgent endoscopy and biopsy of the middle turbinate, septum and any abnormal mucosa.",
+        "Pale or black insensate mucosa, palatal eschar, V2 numbness, periorbital swelling, ophthalmoplegia, proptosis or visual loss → emergency debridement plus antifungals.",
+        "Orbital apex syndrome or cavernous sinus signs → intracranial spread; ICA involvement risks stroke, so image the vessels.",
+        "A normal CT does not exclude it: decide on endoscopy and frozen section, not on imaging.",
+        "Surgery fails unless the immune defect is reversed (neutrophil recovery, correction of ketoacidosis, steroid reduction)."
+      ],
+      "complications": [
+        "dz.cavernous-sinus-thrombosis",
+        "dz.orbital-abscess",
+        "dz.brain-abscess-sinogenic",
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.medial-maxillectomy",
+        "p.ppf-exposure"
+      ],
+      "mimics": [
+        "dz.acute-rhinosinusitis",
+        "dz.chronic-invasive-fungal-sinusitis",
+        "dz.gpa",
+        "dz.nk-t-cell-lymphoma",
+        "dz.cocaine-midline-destructive-lesion",
+        "dz.orbital-cellulitis",
+        "dz.cavernous-sinus-thrombosis",
+        "dz.sinonasal-scc",
+        "dz.snuc"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "In an immunocompromised patient, sinusitis with any orbital, facial or palatal sign is invasive fungal disease until a biopsy says otherwise."
+        },
+        {
+          "tier": 2,
+          "text": "Frozen section: Mucorales hyphae are broad, ribbon-like, pauciseptate and branch at right angles; Aspergillus hyphae are narrow, septate and branch at acute (about 45°) angles. The distinction matters because voriconazole does not cover Mucorales."
+        },
+        {
+          "tier": 2,
+          "text": "Plan second-look endoscopies: disease recurs at the margins until the immune defect recovers."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.deshazo-1997-fungal",
+        "src.gillespie-1998-aifs",
+        "src.delgaudio-2003-ifs-ct",
+        "src.middlebrooks-2015-aifs",
+        "src.safder-2010-black-turbinate",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.chronic-invasive-fungal-sinusitis",
+      "name": "Chronic invasive fungal rhinosinusitis",
+      "syn": [
+        "CIFRS",
+        "chronic invasive fungal sinusitis",
+        "granulomatous invasive fungal sinusitis",
+        "indolent invasive fungal sinusitis"
+      ],
+      "category": "fungal",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.posterior-ethmoid-cells",
+        "s.sphenoid-sinus",
+        "s.maxillary-sinus",
+        "s.orbit",
+        "s.orbital-apex",
+        "s.optic-canal",
+        "s.superior-orbital-fissure",
+        "s.cavernous-sinus",
+        "s.pterygopalatine-fossa",
+        "s.anterior-cranial-fossa"
+      ],
+      "class": [
+        "c.fungal-rhinosinusitis"
+      ],
+      "tier": 3,
+      "what": "Slowly progressive fungal invasion of sinus mucosa and bone over more than 12 weeks, in mildly immunocompromised (diabetes, low-dose steroids) or immunocompetent patients; the granulomatous form (usually Aspergillus flavus, reported mainly from Sudan, India and Pakistan) forms non-caseating granulomas. It classically presents as an orbital apex syndrome or a mass eroding the skull base.",
+      "why": "It behaves like a tumor, so biopsy separates it from malignancy, and treatment is debridement plus prolonged systemic antifungals (e.g. voriconazole for Aspergillus). Complete resection at the orbital apex or cavernous sinus is rarely possible without unacceptable morbidity: debulk and decompress, let medical therapy do the rest, and follow with serial imaging.",
+      "imaging": {
+        "ct": "Hyperdense soft tissue in one or more sinuses (ethmoid, sphenoid, maxillary) with bone destruction and extension beyond the sinus — orbital apex, pterygopalatine and infratemporal fossae, cavernous sinus, anterior cranial fossa — easily mistaken for malignancy; sclerosis may coexist with erosion, reflecting chronicity.",
+        "mri": "Markedly T2 hypointense soft tissue (fungal elements) with variable enhancement; contrast MRI best shows extension into the orbital apex, cavernous sinus and meninges (dural thickening and enhancement) and ICA narrowing or thrombosis."
+      },
+      "endo": "0° and 30°, affected side: granular or polypoid mucosa, firm masses, crusting or debris — not the fulminant black mucosa of acute invasive disease.",
+      "redFlags": [
+        "Orbital apex syndrome (visual loss with ophthalmoplegia) and a sinus lesion → urgent biopsy; do not give empirical steroids before tissue.",
+        "Destructive, T2-hypointense sinus mass → send fungal stains and cultures with every biopsy.",
+        "Cavernous sinus or ICA involvement → mycotic aneurysm and stroke risk."
+      ],
+      "complications": [
+        "dz.cavernous-sinus-thrombosis",
+        "dz.brain-abscess-sinogenic"
+      ],
+      "managedBy": [
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.medial-maxillectomy"
+      ],
+      "mimics": [
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.fungal-ball",
+        "dz.afrs",
+        "dz.gpa",
+        "dz.sinonasal-scc",
+        "dz.nk-t-cell-lymphoma"
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Separated from AFRS by invasion of tissue (not just hyphae in mucin) and from acute invasive disease by its time course and the absence of fulminant angioinvasion."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.deshazo-1997-fungal",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.antrochoanal-polyp",
+      "name": "Antrochoanal polyp",
+      "syn": [
+        "ACP",
+        "Killian polyp",
+        "choanal polyp",
+        "sphenochoanal polyp",
+        "ethmochoanal polyp"
+      ],
+      "eponym": "Killian polyp",
+      "category": "inflammatory",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-natural-ostium",
+        "s.posterior-fontanelle",
+        "s.middle-meatus",
+        "s.choana",
+        "s.nasopharynx"
+      ],
+      "tier": 1,
+      "what": "A solitary benign polyp that arises from a cyst on a maxillary sinus wall, prolapses through the natural ostium or an accessory ostium in the posterior fontanelle ([[v.accessory-maxillary-ostium]]), and grows backward into the choana and nasopharynx. It is usually unilateral and seen in children and young adults with one-sided obstruction.",
+      "why": "Recurrence comes from leaving the antral cyst and its attachment, so remove the whole polyp including its maxillary base through a wide antrostomy with angled scopes and instruments, adding a canine fossa or prelacrimal port when the base is anterior or inferior. Snaring only the choanal part is the classic error.",
+      "imaging": {
+        "ct": "Unilateral opacified maxillary sinus — neither expanded nor eroded — in continuity with a low-density, smoothly marginated tubular mass that passes through a widened maxillary ostium or posterior fontanelle into the middle meatus, posterior nasal cavity and choana, sometimes hanging into the nasopharynx or oropharynx. No calcification, no bone destruction, no hyperostosis.",
+        "mri": "T2 hyperintense and T1 hypointense with thin peripheral enhancement only and no solid enhancing core, which separates it from inverted papilloma and juvenile angiofibroma."
+      },
+      "endo": "0°, affected side: smooth, pale, translucent, pedunculated polyp emerging from the posterior middle meatus and filling the choana; with a 30°–45° scope through the antrostomy, follow the stalk to its antral base.",
+      "redFlags": [
+        "Unilateral nasal polyp in an adult → histology ([[dz.inverted-papilloma]], malignancy).",
+        "Adolescent male with a choanal mass and epistaxis → [[dz.jna]] until proven otherwise; image, do not biopsy in clinic.",
+        "Mass in the olfactory cleft rather than the middle meatus → MRI for [[dz.meningoencephalocele]]."
+      ],
+      "managedBy": [
+        "p.uncinectomy",
+        "p.maxillary-antrostomy",
+        "p.canine-fossa-trephination",
+        "p.prelacrimal-approach"
+      ],
+      "mimics": [
+        "dz.jna",
+        "dz.inverted-papilloma",
+        "dz.crs-with-polyps",
+        "dz.mucus-retention-cyst"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Sphenochoanal and ethmochoanal polyps are rarer relatives; trace the stalk to its origin before cutting."
+        },
+        {
+          "tier": 2,
+          "text": "In children, avoid canine fossa puncture where unerupted teeth lie in the anterior maxilla; angled instruments through the antrostomy usually suffice."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.cummings-7",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.mucocele",
+      "name": "Paranasal sinus mucocele",
+      "syn": [
+        "mucocele",
+        "mucopyocele",
+        "pyocele",
+        "frontoethmoidal mucocele",
+        "sphenoid mucocele",
+        "postoperative maxillary cyst"
+      ],
+      "category": "cystic",
+      "involves": [
+        "s.frontal-sinus",
+        "s.frontal-recess",
+        "s.frontal-sinus-floor",
+        "s.frontal-sinus-posterior-table",
+        "s.anterior-ethmoid-cells",
+        "s.lamina-papyracea",
+        "s.orbital-roof",
+        "s.orbit",
+        "s.anterior-cranial-fossa-dura",
+        "s.maxillary-sinus",
+        "s.sphenoid-sinus",
+        "s.optic-canal"
+      ],
+      "tier": 1,
+      "what": "An epithelium-lined, mucus-filled sinus or cell whose outflow is blocked — by previous surgery, trauma, CRS, polyps, osteoma or tumor — so that it slowly expands, thinning and remodeling its bony walls. Most are frontal or frontoethmoidal, then ethmoid, maxillary and sphenoid; an infected one is a mucopyocele.",
+      "why": "Endoscopic marsupialization — a wide, permanent opening into the nose that leaves the lining in place — is standard, and stripping the lining off exposed dura or periorbita is unnecessary and dangerous. The route follows position: frontal recess surgery (Draf IIa, IIb or III) for most frontal mucoceles, above-and-below or osteoplastic access for far-lateral ones, and a wide sphenoidotomy for sphenoid mucoceles against the optic nerve.",
+      "imaging": {
+        "ct": "A homogeneous, expanded, completely opacified sinus or cell of mucoid attenuation (low to mildly high, rising with protein content and inspissation), with smooth, thinned, bowed and remodeled walls and focal dehiscence — lamina papyracea, orbital roof, posterior frontal table, planum or optic canal — but no permeative destruction. No central enhancement: only a thin enhancing rim (thicker in a mucopyocele). Frontoethmoidal lesions displace the globe down and out; sphenoid ones thin the optic canal and cavernous sinus walls. Look for the cause: prior surgery (missing uncinate or middle turbinate, neo-osteogenesis, scarred frontal recess), fracture lines, or an osteoma.",
+        "mri": "Signal follows protein content: watery mucoceles are T1 hypointense and T2 hyperintense; as mucus concentrates, T1 becomes bright and T2 falls, and inspissated contents can be T2 dark enough to mimic air. There is no internal enhancement — only a thin peripheral rim — which separates it from a tumor (solid enhancement) and from a meningoencephalocele (brain or CSF continuous with the intracranial space). MRI shows the intracranial and intraorbital extent and dural contact."
+      },
+      "endo": "0° (ethmoid, sphenoid) or 70° (frontal recess), affected side: a smooth bulge in the frontal recess, ethmoid or sphenoethmoidal recess; once opened, thick grey-brown or yellow mucus (pus if infected) drains.",
+      "redFlags": [
+        "Visual loss or diplopia from a sphenoid or posterior ethmoid mucocele → emergency decompression; the optic nerve is at risk.",
+        "Fever, pain, rapidly increasing swelling or orbital cellulitis → mucopyocele; drain urgently.",
+        "Posterior table or skull-base dehiscence with dura against the lining → marsupialize, do not strip.",
+        "Enhancing solid tissue or destructive margins → not a simple mucocele (tumor, inverted papilloma, malignancy)."
+      ],
+      "complications": [
+        "dz.orbital-cellulitis",
+        "dz.subperiosteal-orbital-abscess",
+        "dz.epidural-abscess",
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.draf-iia",
+        "p.draf-iib",
+        "p.draf-iii",
+        "p.anterior-ethmoidectomy",
+        "p.sphenoidotomy",
+        "p.maxillary-antrostomy",
+        "p.frontal-trephination",
+        "p.osteoplastic-flap",
+        "p.optic-nerve-decompression"
+      ],
+      "mimics": [
+        "dz.mucus-retention-cyst",
+        "dz.afrs",
+        "dz.meningoencephalocele",
+        "dz.inverted-papilloma",
+        "dz.petrous-apex-cholesterol-granuloma",
+        "dz.cystic-fibrosis-sinusitis",
+        "dz.pott-puffy-tumor",
+        "dz.subperiosteal-orbital-abscess",
+        "dz.ossifying-fibroma",
+        "dz.petrous-apex-effusion"
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Most frontal mucoceles appear years — sometimes decades — after surgery or trauma; that is why frontal fractures and obliterated sinuses need long-term follow-up."
+        },
+        {
+          "tier": 2,
+          "text": "Frontal obliteration itself produces late mucoceles, often hidden against the fat graft on imaging ([[h.mucocele-after-obliteration]]); endoscopic marsupialization has largely replaced it."
+        },
+        {
+          "tier": 3,
+          "text": "A maxillary mucocele years after a Caldwell-Luc operation (postoperative maxillary cyst) may lie anterior or lateral to a scar septum; reach it through a prelacrimal or canine fossa route when an antrostomy cannot."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.har-el-2001-mucocele",
+        "src.wormald-textbook",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.mucus-retention-cyst",
+      "name": "Mucous retention cyst",
+      "syn": [
+        "retention cyst",
+        "maxillary sinus cyst",
+        "pseudocyst",
+        "serous retention cyst",
+        "MRC"
+      ],
+      "category": "cystic",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-sinus-floor",
+        "s.alveolar-recess"
+      ],
+      "tier": 1,
+      "what": "A common, usually incidental dome-shaped lesion on the floor or wall of the maxillary sinus — either a true retention cyst from a blocked seromucinous gland or a submucosal serous pseudocyst. It does not block the ostium or expand the sinus.",
+      "why": "Almost always left alone: it is not an indication for sinus surgery and rarely explains facial pain. It is removed only if it blocks the ostium, causes its own symptoms, or cannot be told apart from something else — then through a middle meatal antrostomy with angled instruments.",
+      "imaging": {
+        "ct": "Smooth, dome-shaped, homogeneous lesion of fluid or mucoid attenuation with a convex upper margin, usually on the floor of the maxillary sinus; the rest of the sinus is aerated, the walls are normal and there is no expansion — unlike a mucocele. A root apex or periapical lucency under the dome, or a corticated rim arising from the floor, suggests an odontogenic cyst instead.",
+        "mri": "T1 hypointense (bright if proteinaceous), T2 hyperintense, with at most a thin peripheral rim and no internal enhancement."
+      },
+      "redFlags": [
+        "Sinus expansion or wall thinning → reclassify as [[dz.mucocele]].",
+        "Tooth apex, periapical lucency or a corticated lesion from the sinus floor → odontogenic cyst or tumor; image the teeth.",
+        "Solid enhancement → not a cyst."
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy"
+      ],
+      "mimics": [
+        "dz.mucocele",
+        "dz.antrochoanal-polyp"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.cummings-7",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.silent-sinus-syndrome",
+      "name": "Silent sinus syndrome",
+      "syn": [
+        "SSS",
+        "chronic maxillary atelectasis",
+        "imploding antrum syndrome"
+      ],
+      "category": "idiopathic",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-natural-ostium",
+        "s.uncinate-process",
+        "s.middle-meatus",
+        "s.orbital-floor",
+        "s.orbit"
+      ],
+      "tier": 2,
+      "what": "Spontaneous, painless enophthalmos and hypoglobus from a collapsing maxillary sinus: its ostium is occluded, gas is resorbed, negative pressure builds and the walls — above all the orbital floor — bow inward. It is the symptomatic end of [[v.maxillary-sinus-atelectasis]].",
+      "why": "The uncinate is lateralized and plastered against the orbit and the orbital floor is thin and low, so uncinectomy is the moment of highest orbital risk ([[h.orbital-entry-uncinectomy]]): take the uncinate from its free edge with a backbiter or ball probe, never with a sickle knife pushed through it. Restoring ventilation with uncinectomy and antrostomy halts progression; orbital floor reconstruction for residual enophthalmos is usually staged once the sinus is stable.",
+      "imaging": {
+        "ct": "Small, partially or completely opacified maxillary sinus with inward retraction (concavity) of its walls — especially a depressed, downward-bowed orbital floor that enlarges the orbit. The uncinate process is lateralized against the inferomedial orbital wall, closing the infundibulum; the middle meatus is widened and retroantral fat increased. Bone is thinned, not eroded. Separate it from congenital hypoplasia, where the sinus is small but its walls are not drawn in and the uncinate is often hypoplastic ([[c.maxillary-sinus-hypoplasia]])."
+      },
+      "endo": "0° and 30°, affected side: wide middle meatus, uncinate lying flat against the lateral wall, retracted medial maxillary wall.",
+      "redFlags": [
+        "Uncinate touching the lamina papyracea on coronal CT → orbital entry risk at uncinectomy.",
+        "Diplopia or marked hypoglobus → ophthalmology; plan staged orbital floor repair.",
+        "Similar collapse after trauma or orbital surgery → review for an old orbital floor fracture."
+      ],
+      "complications": [
+        "h.orbital-entry-uncinectomy"
+      ],
+      "managedBy": [
+        "p.uncinectomy",
+        "p.maxillary-antrostomy"
+      ],
+      "mimics": [
+        "dz.orbital-floor-fracture",
+        "dz.crs-without-polyps"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Often found on CT before any change in the face is noticed — the \"silent\" refers to the absence of sinus symptoms."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.soparkar-1994-silent-sinus",
+        "src.bolger-1990-msh",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.preseptal-cellulitis",
+      "name": "Preseptal (periorbital) cellulitis",
+      "syn": [
+        "periorbital cellulitis",
+        "Chandler I",
+        "inflammatory edema of the lids"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.lamina-papyracea",
+        "s.frontal-sinus"
+      ],
+      "class": [
+        "c.chandler"
+      ],
+      "tier": 1,
+      "what": "Eyelid edema and erythema anterior to the orbital septum, from venous congestion in sinusitis (Chandler I) or from a skin or lacrimal source. Vision, eye movement and globe position are normal.",
+      "why": "Treated medically without surgery, but it can progress, so the examination looks for postseptal signs — proptosis, painful or restricted motility, reduced acuity or color vision, a relative afferent pupillary defect. If they appear, or the lids are too swollen to examine the eye, contrast CT follows.",
+      "imaging": {
+        "ct": "Contrast CT, when obtained: swelling and stranding of the lids and periorbital soft tissues confined anterior to the orbital septum, with normal postseptal fat, extraocular muscles and medial orbital wall; ipsilateral ethmoid opacification if sinogenic."
+      },
+      "redFlags": [
+        "Proptosis, ophthalmoplegia, pain on eye movement, chemosis, reduced acuity, color desaturation or RAPD → postseptal disease: contrast CT and ophthalmology.",
+        "Lids too swollen to examine the globe → treat as postseptal until imaged.",
+        "Not improving on IV antibiotics → contrast CT."
+      ],
+      "complications": [
+        "dz.orbital-cellulitis"
+      ],
+      "mimics": [
+        "dz.orbital-cellulitis"
+      ],
+      "geo": "none",
+      "src": [
+        "src.chandler-1970",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.orbital-cellulitis",
+      "name": "Orbital (postseptal) cellulitis",
+      "syn": [
+        "postseptal cellulitis",
+        "Chandler II"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.orbit",
+        "s.orbital-fat",
+        "s.periorbita",
+        "s.medial-rectus",
+        "s.lamina-papyracea",
+        "s.ethmoid-labyrinth"
+      ],
+      "class": [
+        "c.chandler"
+      ],
+      "tier": 1,
+      "what": "Diffuse infection and edema of the orbital fat and muscles behind the septum without a discrete abscess (Chandler II), usually spreading from ethmoid sinusitis through the thin lamina papyracea, its dehiscences and valveless veins. It causes proptosis, chemosis and painful or limited eye movement.",
+      "why": "Treatment is IV antibiotics and sinus care with serial visual checks; the imaging question is whether there is a drainable collection. Without one, surgery is indicated only for failing vision or failure to improve.",
+      "imaging": {
+        "ct": "Contrast CT of orbits and sinuses in axial and coronal planes: stranding and increased density of extraconal and/or intraconal fat, thickened enhancing medial rectus, proptosis, and ipsilateral ethmoid opacification, with no rim-enhancing collection. A thickened, slightly displaced medial periorbita without a defined collection (phlegmon) is the gray zone between cellulitis and early abscess — repeat the CT if the patient does not improve.",
+        "mri": "Useful in children to spare radiation and whenever cavernous sinus or intracranial spread is suspected; restricted diffusion suggests an abscess."
+      },
+      "redFlags": [
+        "Falling acuity or color vision, new RAPD or worsening motility → urgent repeat imaging and drainage of any collection; a tense orbit may need canthotomy and cantholysis.",
+        "Bilateral signs, cranial nerve III, IV, V1 or VI deficits or sepsis → [[dz.cavernous-sinus-thrombosis]].",
+        "Immunocompromised patient → exclude [[dz.acute-invasive-fungal-sinusitis]].",
+        "Frontal sinusitis or severe headache → image the brain for intracranial spread."
+      ],
+      "complications": [
+        "dz.subperiosteal-orbital-abscess",
+        "dz.orbital-abscess",
+        "dz.cavernous-sinus-thrombosis"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.anterior-ethmoidectomy"
+      ],
+      "mimics": [
+        "dz.preseptal-cellulitis",
+        "dz.subperiosteal-orbital-abscess",
+        "dz.orbital-abscess",
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.cavernous-sinus-thrombosis"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.chandler-1970",
+        "src.cummings-7",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.subperiosteal-orbital-abscess",
+      "name": "Subperiosteal orbital abscess",
+      "syn": [
+        "SPOA",
+        "subperiosteal abscess of the orbit",
+        "Chandler III"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.lamina-papyracea",
+        "s.periorbita",
+        "s.orbit",
+        "s.medial-rectus",
+        "s.anterior-ethmoid-cells",
+        "s.ethmoid-labyrinth",
+        "s.orbital-roof",
+        "s.frontal-sinus"
+      ],
+      "class": [
+        "c.chandler"
+      ],
+      "tier": 1,
+      "what": "Pus collected between bone (usually the lamina papyracea) and the periorbita, pushing the globe laterally and down. In children most are medial, from ethmoiditis; frontal sinusitis produces superior collections under the orbital roof.",
+      "why": "Position on contrast CT decides the route: medial abscesses drain endoscopically by removing the lamina over them while keeping the periorbita intact ([[p.subperiosteal-abscess-drainage]]), whereas superior, lateral or loculated ones need an external or combined approach. Small medial abscesses in young children with normal vision may be observed on IV antibiotics (Garcia–Harris criteria), draining at once if vision worsens or there is no improvement.",
+      "imaging": {
+        "ct": "Contrast CT: a lentiform (biconvex), rim-enhancing, low-density collection hugging the lamina papyracea — or the orbital roof in frontal disease — that displaces a thickened, enhancing medial rectus and the orbital fat laterally, with proptosis and inferolateral globe displacement and an opacified ethmoid on the same side. Gas in the collection suggests anaerobes and favors drainage. Report its size in three planes and whether it reaches superiorly beyond an endoscopic view or posteriorly toward the apex. The lamina is often thin or dehiscent. An early phlegmon has no well-formed rim; repeat the CT if the patient does not improve.",
+        "mri": "Rim-enhancing collection with restricted diffusion; preferred in children when feasible and whenever intracranial spread is suspected."
+      },
+      "endo": "0° and 30°, affected side: congested, bleeding ethmoid; after the lamina over the abscess is removed, pus wells through the bone window while the periorbita stays intact.",
+      "redFlags": [
+        "Any visual deficit (acuity, color vision, RAPD) → urgent drainage.",
+        "Superior or lateral position, a large collection, gas in the collection, frontal sinusitis, age 9 or older, chronic sinusitis, a dental source or a recurrent collection → drain rather than observe.",
+        "Worsening at any time, or no improvement after 24–48 hours of IV antibiotics → repeat CT and drain.",
+        "Superior collection with frontal sinusitis → image the brain for epidural or subdural spread."
+      ],
+      "complications": [
+        "dz.orbital-abscess",
+        "dz.cavernous-sinus-thrombosis",
+        "dz.epidural-abscess",
+        "h.incomplete-abscess-drainage"
+      ],
+      "managedBy": [
+        "p.subperiosteal-abscess-drainage",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.maxillary-antrostomy",
+        "p.frontal-trephination"
+      ],
+      "mimics": [
+        "dz.orbital-cellulitis",
+        "dz.orbital-abscess",
+        "dz.mucocele"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Garcia–Harris criteria for a trial of medical therapy: age under 9 years, medial and not large, no gas, no frontal sinusitis, no optic nerve or retinal compromise, not recurrent after drainage, no chronic sinusitis (e.g. nasal polyps), and no dental source."
+        },
+        {
+          "tier": 2,
+          "text": "Never incise the periorbita during drainage: it opens the orbit to the infection."
+        },
+        {
+          "tier": 3,
+          "text": "Older children and adults grow mixed and anaerobic flora and respond less to antibiotics alone, which is why age matters in the criteria."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.chandler-1970",
+        "src.garcia-2000-spa",
+        "src.harris-1994-spa",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.orbital-abscess",
+      "name": "Orbital abscess",
+      "syn": [
+        "intraorbital abscess",
+        "Chandler IV"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.orbit",
+        "s.orbital-fat",
+        "s.periorbita",
+        "s.medial-rectus",
+        "s.orbital-apex",
+        "s.optic-nerve"
+      ],
+      "class": [
+        "c.chandler"
+      ],
+      "tier": 1,
+      "what": "Pus within the orbital tissues inside the periorbita (extraconal or intraconal), from progression of orbital cellulitis or rupture of a subperiosteal abscess (Chandler IV). Proptosis is marked, movement is severely limited, and the risk of permanent visual loss is high.",
+      "why": "It needs urgent drainage together with the sinus source; unlike a subperiosteal abscess the periorbita must be opened to reach it, usually through an external orbitotomy with oculoplastic surgery, occasionally endoscopically for a medial extraconal collection. Vision is the clock.",
+      "imaging": {
+        "ct": "Contrast CT: a rim-enhancing low-density collection within the orbital fat — inside the periorbita, not lentiform against bone — often medial extraconal or intraconal, with severe proptosis, enlarged muscles, diffuse fat stranding, loss of the fat plane around the optic nerve, and sometimes gas.",
+        "mri": "Restricted diffusion within the collection; MRI shows intraconal extent, optic nerve sheath involvement, superior ophthalmic vein thrombosis and cavernous sinus extension better than CT."
+      },
+      "redFlags": [
+        "Visual loss, RAPD or a tense orbit with raised intraocular pressure → emergency decompression (canthotomy and cantholysis as a bridge) and drainage.",
+        "Dilated or thrombosed superior ophthalmic vein, or bilateral signs → [[dz.cavernous-sinus-thrombosis]]."
+      ],
+      "complications": [
+        "dz.cavernous-sinus-thrombosis",
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.maxillary-antrostomy"
+      ],
+      "mimics": [
+        "dz.subperiosteal-orbital-abscess",
+        "dz.orbital-cellulitis",
+        "dz.cavernous-sinus-thrombosis"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.chandler-1970",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.cavernous-sinus-thrombosis",
+      "name": "Septic cavernous sinus thrombosis",
+      "syn": [
+        "cavernous sinus thrombosis",
+        "CST",
+        "Chandler V",
+        "cavernous sinus thrombophlebitis"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.cavernous-sinus",
+        "s.internal-carotid-artery",
+        "s.abducens-nerve",
+        "s.oculomotor-nerve",
+        "s.trochlear-nerve",
+        "s.ophthalmic-nerve",
+        "s.maxillary-nerve",
+        "s.anterior-intercavernous-sinus",
+        "s.posterior-intercavernous-sinus",
+        "s.sphenoid-sinus",
+        "s.sphenoid-lateral-wall",
+        "s.orbit",
+        "s.pterygoid-venous-plexus"
+      ],
+      "class": [
+        "c.chandler"
+      ],
+      "tier": 2,
+      "what": "Infected thrombus in the cavernous sinus, spreading along the valveless ophthalmic veins from orbital or facial infection or ethmoid and frontal sinusitis, or directly through the lateral wall from sphenoid sinusitis. Fever, headache, proptosis, chemosis and cranial nerve palsies (often VI first, then III, IV, V1–V2) appear and cross to the other eye through the intercavernous sinuses.",
+      "why": "Treatment is high-dose IV antibiotics, anticoagulation considered case by case (evidence is limited), and drainage of the source — sphenoidotomy and ethmoidectomy, plus any orbital abscess. The lateral sphenoid wall and the cavernous ICA sit against infected, thrombosed sinus, so open the sphenoid wide and inferomedially and do not instrument the lateral wall.",
+      "imaging": {
+        "ct": "Contrast CT: enlarged cavernous sinus with convex lateral walls and irregular non-enhancing filling defects or asymmetric enhancement; a dilated, non-enhancing (thrombosed) superior ophthalmic vein; proptosis; sphenoid or ethmoid opacification; sometimes narrowing of the cavernous ICA.",
+        "mri": "Contrast MRI with MR venography is the most sensitive study: enlarged cavernous sinus with heterogeneous or absent enhancement, abnormal thrombus signal, dural enhancement along the lateral wall, dilated and thrombosed superior ophthalmic veins, and narrowing or wall enhancement of the cavernous ICA (arteritis, infarct risk). DWI shows associated infarcts and empyema."
+      },
+      "redFlags": [
+        "Bilateral orbital signs, or ophthalmoplegia out of proportion to proptosis → CST until proven otherwise.",
+        "Abducens palsy with sphenoid sinusitis → image the cavernous sinus.",
+        "Narrowed cavernous ICA → stroke risk; involve neurointervention.",
+        "Falling consciousness or meningism → meningitis or empyema."
+      ],
+      "complications": [
+        "dz.meningitis-sinogenic",
+        "dz.subdural-empyema",
+        "dz.brain-abscess-sinogenic"
+      ],
+      "managedBy": [
+        "p.sphenoidotomy",
+        "p.posterior-ethmoidectomy",
+        "p.anterior-ethmoidectomy"
+      ],
+      "mimics": [
+        "dz.orbital-cellulitis",
+        "dz.orbital-abscess",
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.pituitary-apoplexy"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Isolated sphenoid sinusitis is easily missed — it gives deep headache and few nasal symptoms — yet it drains directly toward the cavernous sinus."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.chandler-1970",
+        "src.ebright-2001-cst",
+        "src.rhoton-2002-cavernous",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.pott-puffy-tumor",
+      "name": "Pott's puffy tumor",
+      "syn": [
+        "Pott puffy tumor",
+        "frontal osteomyelitis with subperiosteal abscess"
+      ],
+      "eponym": "Percivall Pott",
+      "category": "infectious",
+      "involves": [
+        "s.frontal-sinus",
+        "s.frontal-sinus-anterior-table",
+        "s.frontal-bone",
+        "s.frontal-sinus-posterior-table",
+        "s.frontal-recess",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "tier": 2,
+      "what": "A subperiosteal abscess of the forehead from osteomyelitis of the frontal sinus anterior table, usually in adolescents with frontal sinusitis or after frontal trauma. It presents as a doughy forehead swelling with headache and fever.",
+      "why": "It is a marker of intracranial spread — epidural or subdural collections and brain abscess often coexist — so the brain is imaged before surgery and combined neurosurgical drainage planned when needed. Treatment drains the forehead abscess, debrides sequestered bone and restores frontal drainage (endoscopic frontal sinusotomy ± trephination), with prolonged IV antibiotics.",
+      "imaging": {
+        "ct": "Contrast CT: frontal sinus opacification with a rim-enhancing subgaleal or subperiosteal collection over the anterior table, which is eroded or permeative (\"moth-eaten\") with sequestra; always inspect the posterior table and the intracranial side for epidural or subdural collections and cerebritis.",
+        "mri": "Contrast MRI with DWI is more sensitive for concurrent epidural or subdural empyema, cerebritis, abscess and superior sagittal sinus thrombosis; marrow edema and enhancement of the frontal bone confirm osteomyelitis."
+      },
+      "redFlags": [
+        "Any forehead swelling with frontal sinusitis in an adolescent → contrast CT plus MRI of the brain.",
+        "Seizures, focal deficit or reduced consciousness → intracranial collection; neurosurgery now.",
+        "Superior sagittal sinus thrombosis on imaging → venous infarction risk."
+      ],
+      "complications": [
+        "dz.epidural-abscess",
+        "dz.subdural-empyema",
+        "dz.brain-abscess-sinogenic",
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.frontal-trephination",
+        "p.draf-iia",
+        "p.draf-iii"
+      ],
+      "mimics": [
+        "dz.mucocele"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.germiller-2006-intracranial",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.epidural-abscess",
+      "name": "Epidural abscess (sinogenic)",
+      "syn": [
+        "extradural abscess",
+        "epidural empyema"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.frontal-sinus",
+        "s.frontal-sinus-posterior-table",
+        "s.frontal-bone",
+        "s.anterior-cranial-fossa",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "tier": 2,
+      "what": "Pus between the inner table of the skull and the dura, most often behind the frontal sinus posterior table from frontal sinusitis (by osteomyelitis or valveless diploic veins). Because the dura is adherent, it enlarges slowly and may cause only headache and fever.",
+      "why": "Small collections may settle with antibiotics and sinus drainage alone, while larger ones need neurosurgical drainage, often with endoscopic frontal sinusotomy under the same anesthetic. The posterior table may be eroded — do not probe blindly through it from below.",
+      "imaging": {
+        "ct": "Contrast CT: a lentiform (biconvex) extra-axial low-density collection with an enhancing dural margin, next to an opacified frontal sinus with posterior table erosion; it is limited by sutures but can cross the midline — the opposite of a subdural empyema.",
+        "mri": "More sensitive than CT: lentiform extra-axial collection with the displaced, enhancing (T2-hypointense) dura between it and the brain; diffusion restriction is variable and less consistent than in subdural empyema, so absent restriction does not exclude pus."
+      },
+      "redFlags": [
+        "Frontal sinusitis with persistent headache, forehead swelling or any neurological change → contrast MRI.",
+        "Coexisting subdural empyema, cerebritis or venous sinus thrombosis → neurosurgical emergency."
+      ],
+      "complications": [
+        "dz.subdural-empyema",
+        "dz.meningitis-sinogenic",
+        "dz.brain-abscess-sinogenic"
+      ],
+      "managedBy": [
+        "p.draf-iia",
+        "p.draf-iii",
+        "p.frontal-trephination"
+      ],
+      "mimics": [
+        "dz.subdural-empyema"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.germiller-2006-intracranial",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.subdural-empyema",
+      "name": "Subdural empyema (sinogenic)",
+      "syn": [
+        "subdural abscess",
+        "interhemispheric empyema"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.frontal-sinus",
+        "s.frontal-sinus-posterior-table",
+        "s.anterior-cranial-fossa",
+        "s.anterior-cranial-fossa-dura",
+        "s.falx-cerebri",
+        "s.superior-sagittal-sinus"
+      ],
+      "tier": 2,
+      "what": "Pus in the subdural space — spreading freely over the convexity and along the falx — from frontal or ethmoid sinusitis via thrombophlebitis of emissary veins. It progresses quickly to seizures, hemiparesis and falling consciousness and is a neurosurgical emergency.",
+      "why": "Neurosurgical evacuation (craniotomy or burr holes) is urgent, and the sinus source is drained in the same session or soon after. A thin empyema can look trivial on CT, so MRI decides.",
+      "imaging": {
+        "ct": "Contrast CT: a crescentic extra-axial low-density collection with rim enhancement over the frontal convexity or along the falx (interhemispheric), crossing sutures but stopped by the falx, with mass effect out of proportion to its thickness; often subtle or missed on CT.",
+        "mri": "Contrast MRI with DWI: crescentic collection with marked restricted diffusion and enclosing enhancement; look for cerebritis, cortical vein or superior sagittal sinus thrombosis, venous infarcts and ventriculitis."
+      },
+      "redFlags": [
+        "Seizures, focal deficit or reduced consciousness with sinusitis → immediate contrast MRI and neurosurgery.",
+        "Thin parafalcine (interhemispheric) collection → easily missed on CT; ask for MRI."
+      ],
+      "complications": [
+        "dz.brain-abscess-sinogenic",
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.draf-iia",
+        "p.draf-iii",
+        "p.anterior-ethmoidectomy",
+        "p.frontal-trephination"
+      ],
+      "mimics": [
+        "dz.epidural-abscess"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.germiller-2006-intracranial",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.brain-abscess-sinogenic",
+      "name": "Brain abscess (sinogenic)",
+      "syn": [
+        "frontal lobe abscess",
+        "intracerebral abscess",
+        "cerebritis"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.gyrus-rectus",
+        "s.anterior-cranial-fossa",
+        "s.anterior-cranial-fossa-dura",
+        "s.frontal-sinus",
+        "s.frontal-sinus-posterior-table",
+        "s.ethmoid-labyrinth"
+      ],
+      "tier": 2,
+      "what": "An encapsulated collection in the brain — typically the frontal lobe from frontal or ethmoid sinusitis, rarely the temporal lobe from sphenoid disease — that evolves from cerebritis to a walled abscess over days to weeks. Symptoms can be vague: headache, personality change, seizures.",
+      "why": "Neurosurgery aspirates or excises it (early cerebritis may be treated medically), and the sinus source is cleared endoscopically, combined or staged. Cultures from both sites guide weeks of antibiotics.",
+      "imaging": {
+        "ct": "Contrast CT: a ring-enhancing lesion with a smooth, thin capsule (often thinner on the ventricular side) and surrounding vasogenic edema in the frontal lobe next to an opacified frontal or ethmoid sinus, sometimes with a posterior table or skull-base defect; early cerebritis is an ill-defined low-density area with patchy enhancement.",
+        "mri": "Restricted diffusion in the cavity (bright on DWI, dark on ADC) separates abscess from necrotic tumor; the capsule is T2 hypointense. Look for daughter abscesses, ventriculitis and a dural path from the sinus."
+      },
+      "redFlags": [
+        "Personality change, seizures or focal deficit with frontal sinusitis → contrast MRI.",
+        "Abscess near the ventricle → risk of intraventricular rupture; neurosurgical urgency."
+      ],
+      "complications": [
+        "dz.meningitis-sinogenic"
+      ],
+      "managedBy": [
+        "p.draf-iia",
+        "p.draf-iii",
+        "p.anterior-ethmoidectomy",
+        "p.sphenoidotomy"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.germiller-2006-intracranial",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.meningitis-sinogenic",
+      "name": "Meningitis from sinusitis or a CSF fistula",
+      "syn": [
+        "sinogenic meningitis",
+        "recurrent bacterial meningitis",
+        "post-traumatic meningitis"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.anterior-cranial-fossa-dura",
+        "s.cribriform-plate",
+        "s.ethmoid-labyrinth",
+        "s.sphenoid-sinus",
+        "s.frontal-sinus"
+      ],
+      "tier": 2,
+      "what": "Infection of the leptomeninges spreading from sinusitis (most often sphenoid or ethmoid) or through a skull-base defect with a CSF leak. Recurrent bacterial meningitis, often pneumococcal, should prompt a search for an occult CSF fistula.",
+      "why": "Meningitis is treated medically; the rhinologist's job is to close the pathway — drain an infected sinus acutely and, after recovery, localize and repair any skull-base defect even if the rhinorrhea has stopped. A leak can seal temporarily and still cause further meningitis.",
+      "imaging": {
+        "ct": "Often normal; CT looks for complications (hydrocephalus, empyema) and the source — sphenoid or ethmoid opacification, a skull-base defect, pneumocephalus, an encephalocele. Thin-section skull-base CT after recovery localizes a fistula.",
+        "mri": "Leptomeningeal (sulcal and basal cistern) enhancement with FLAIR hyperintensity in the sulci; look for ventriculitis, subdural collections, cerebritis and venous thrombosis. Heavily T2-weighted skull-base images show a CSF tract or encephalocele."
+      },
+      "redFlags": [
+        "Recurrent meningitis → occult CSF fistula until proven otherwise; thin-section skull-base CT.",
+        "Meningitis with sphenoid sinusitis → look for cavernous sinus thrombosis and ICA involvement.",
+        "Clear rhinorrhea after head trauma or skull-base surgery → β2-transferrin and repair."
+      ],
+      "complications": [
+        "dz.subdural-empyema",
+        "dz.brain-abscess-sinogenic",
+        "dz.cavernous-sinus-thrombosis"
+      ],
+      "managedBy": [
+        "p.csf-leak-repair",
+        "p.encephalocele-repair",
+        "p.sphenoidotomy",
+        "p.anterior-ethmoidectomy"
+      ],
+      "geo": "none",
+      "src": [
+        "src.germiller-2006-intracranial",
+        "src.schlosser-2004-csf",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.csf-leak-spontaneous",
+      "name": "Spontaneous CSF rhinorrhea",
+      "syn": [
+        "spontaneous CSF leak",
+        "idiopathic CSF rhinorrhea",
+        "spontaneous cerebrospinal fluid fistula",
+        "lateral sphenoid recess leak",
+        "Sternberg canal leak"
+      ],
+      "category": "idiopathic",
+      "involves": [
+        "s.cribriform-plate",
+        "s.lateral-lamella",
+        "s.olfactory-fossa",
+        "s.fovea-ethmoidalis",
+        "s.sphenoid-sinus",
+        "s.sphenoid-lateral-recess",
+        "s.frontal-sinus-posterior-table",
+        "s.anterior-cranial-fossa-dura",
+        "s.sella-turcica",
+        "s.meckels-cave"
+      ],
+      "class": [
+        "c.friedman-iih"
+      ],
+      "tier": 2,
+      "what": "A CSF leak through a skull-base defect without trauma, surgery or tumor, typically in obese middle-aged women with — often unrecognized — idiopathic intracranial hypertension. Chronically raised pressure thins the skull base and pushes dura and brain through its weakest points: the cribriform plate and lateral lamella, the lateral recess of a well-pneumatized sphenoid, the ethmoid roof and the posterior frontal table.",
+      "why": "These are the leaks most likely to recur or to reappear elsewhere after repair, so the operation is part of treating the pressure: localize every defect, reduce any encephalocele, repair in layers on denuded bone, and screen for and treat intracranial hypertension (weight loss, acetazolamide, shunt or venous sinus stenting) with neuro-ophthalmology. Defects are often multiple, and a lateral sphenoid recess defect usually needs a transpterygoid route ([[p.transpterygoid-approach]]).",
+      "imaging": {
+        "ct": "Thin-section (about 1 mm or less) CT of the skull base in three planes is the first study: a focal bony defect in the cribriform plate, lateral lamella, ethmoid roof, lateral recess of the sphenoid or posterior frontal table, often with soft tissue or fluid in the adjacent cell or sinus — an isolated opacified cell or an air–fluid level beside thin bone points to the site. Look for markers of intracranial hypertension: partially or completely empty sella, multiple skull-base defects, arachnoid pits and scalloped thinning of the skull base, enlarged foramen ovale or Meckel's cave, and extensive sphenoid pneumatization lateral to the foramen rotundum ([[v.lateral-recess-pneumatization]]). Note a deep, thin olfactory fossa ([[c.keros]]).",
+        "mri": "Heavily T2-weighted (3D T2, CISS/FIESTA) MRI shows CSF continuity through the defect and separates meningocele (CSF only) or meningoencephalocele (brain, often with gliosis) from mucosal disease or retained secretions. It also shows intracranial hypertension signs: empty sella, flattened posterior globes, distended optic nerve sheaths ± tortuous optic nerves, enlarged Meckel's caves, and transverse sinus stenosis on MR venography. CT or MR cisternography with intrathecal contrast is kept for active leaks that the other studies fail to localize; radionuclide cisternography confirms a leak but localizes poorly."
+      },
+      "endo": "0°, 30° and 45° at the olfactory cleft, ethmoid roof or sphenoid on the suspected side: clear fluid that wells or pulsates with Valsalva, a smooth glistening meningocele or encephalocele, or a bony defect; with intrathecal fluorescein (off-label, low dose), the leak shows yellow-green under blue light.",
+      "redFlags": [
+        "Unilateral clear watery rhinorrhea, worse leaning forward or straining, salty taste → test the fluid for β2-transferrin or β-trace protein before imaging; a sample the patient collects at home can still be tested about a week later if kept at room temperature.",
+        "History of meningitis → repair once recovered, even if the leak has stopped.",
+        "Headache, pulsatile tinnitus, visual obscurations or papilledema after repair → rebound intracranial hypertension, threatening vision and the repair.",
+        "Obesity, empty sella and multiple defects on CT → treat the pressure together with the repair.",
+        "Mass in the olfactory cleft on endoscopy → MRI before any biopsy."
+      ],
+      "complications": [
+        "dz.meningitis-sinogenic",
+        "dz.meningoencephalocele",
+        "h.csf-repair-failure"
+      ],
+      "managedBy": [
+        "p.csf-leak-repair",
+        "p.encephalocele-repair",
+        "p.transpterygoid-approach",
+        "p.skull-base-reconstruction",
+        "p.nasoseptal-flap",
+        "p.draf-iii"
+      ],
+      "mimics": [
+        "dz.meningoencephalocele",
+        "dz.csf-leak-traumatic"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "A spontaneous leak vents the pressure: papilledema and lumbar opening pressure may be normal until the leak is closed, so imaging signs of intracranial hypertension carry the diagnosis before repair."
+        },
+        {
+          "tier": 2,
+          "text": "Rhinorrhea often stops and restarts; a leak that has stopped has not healed."
+        },
+        {
+          "tier": 2,
+          "text": "An atlas chapter reports that patients with spontaneous sphenoid leaks and encephaloceles present with rhinorrhea in about 85%, chronic headache in 77% and previous meningitis in 15% (expert-reported figures), often with obesity, hypertension, sleep apnea and intracranial hypertension — ask about headache and meningitis in every patient."
+        },
+        {
+          "tier": 3,
+          "text": "Lateral recess defects lie lateral to the foramen rotundum in a highly pneumatized sphenoid and are usually attributed to arachnoid pits eroded by raised pressure; a persistent lateral craniopharyngeal (Sternberg) canal, where it exists, opens medial to the foramen rotundum (Tomazic & Stammberger 2009). Position relative to V2 sets the corridor: lateral defects usually need a transpterygoid approach, medial ones can often be reached through a wide sphenoidotomy."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.schlosser-2004-csf",
+        "src.schlosser-2006-spontaneous",
+        "src.lloyd-2008-csf-imaging",
+        "src.oakley-2016-csf-diagnosis",
+        "src.friedman-2013-iih",
+        "src.tomazic-2009-sternberg",
+        "src.hegazy-2000",
+        "src.chiu-2019-ch27"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.csf-leak-traumatic",
+      "name": "Traumatic CSF rhinorrhea (accidental and iatrogenic)",
+      "syn": [
+        "post-traumatic CSF leak",
+        "CSF fistula",
+        "iatrogenic CSF leak",
+        "basilar skull fracture with CSF rhinorrhea"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.cribriform-plate",
+        "s.lateral-lamella",
+        "s.fovea-ethmoidalis",
+        "s.frontal-sinus-posterior-table",
+        "s.frontal-recess",
+        "s.planum-sphenoidale",
+        "s.sphenoid-sinus",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "tier": 2,
+      "what": "CSF leak from a skull-base fracture after head or facial trauma — usually appearing early, sometimes delayed — or from surgical injury. During FESS the usual site is the lateral lamella of the cribriform plate or the posterior ethmoid roof; after endonasal skull base surgery it is the reconstruction.",
+      "why": "Many accidental traumatic leaks stop within days with conservative care (head elevation, avoiding straining, ± lumbar drain), so repair is kept for persistent, delayed, recurrent or high-volume leaks, meningitis, or when an associated injury (frontal posterior table fracture, encephalocele) needs surgery anyway. A leak recognized during sinus surgery is repaired at once, in layers, on denuded bone.",
+      "imaging": {
+        "ct": "Thin-section skull-base CT: fractures of the posterior frontal table, cribriform plate, ethmoid roof, planum or sphenoid (often with a sphenoid hemosinus or air–fluid level), pneumocephalus and displaced fragments; after FESS, a gap in the lateral lamella or ethmoid roof with adjacent opacification. Fractures are often multiple, and an opacified sinus next to a fracture is the likeliest site but not proof.",
+        "mri": "Heavily T2-weighted MRI shows CSF tracking through the defect, herniated brain (post-traumatic encephalocele) and contusion; CT cisternography helps when multiple fractures make the site unclear and the leak is active."
+      },
+      "endo": "30° and 45° on the suspected side: clear (or fluorescein-stained) fluid from a defect in the olfactory cleft, ethmoid roof, frontal recess or sphenoid; an iatrogenic defect is a clean gap with pulsating CSF, exposed dura or brain.",
+      "redFlags": [
+        "Clear rhinorrhea (or a halo around bloody discharge) after head or facial trauma → β2-transferrin; persistent leak → repair.",
+        "Meningitis, or pneumocephalus that is increasing → repair.",
+        "Sudden clear flush or soft, pale tissue during FESS → stop, identify and repair immediately ([[h.lateral-lamella-perforation]]).",
+        "Brain tissue in the defect → treat as an encephalocele: bipolar reduction, no traction ([[h.encephalocele-bleeding]])."
+      ],
+      "complications": [
+        "dz.meningitis-sinogenic",
+        "dz.meningoencephalocele",
+        "h.tension-pneumocephalus",
+        "h.csf-repair-failure"
+      ],
+      "managedBy": [
+        "p.csf-leak-repair",
+        "p.skull-base-reconstruction",
+        "p.nasoseptal-flap",
+        "p.draf-iii",
+        "p.osteoplastic-flap"
+      ],
+      "mimics": [
+        "dz.csf-leak-spontaneous"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "The ethmoid roof is thinnest at the lateral lamella, which is why iatrogenic leaks cluster there — especially with a deep olfactory fossa ([[c.keros]])."
+        },
+        {
+          "tier": 2,
+          "text": "Routine prophylactic antibiotics for basilar skull fracture with a leak are not supported by trial evidence; closing a persistent leak is what prevents meningitis."
+        },
+        {
+          "tier": 3,
+          "text": "A comminuted posterior frontal table with dural tear may be better served by cranialization than by endonasal repair ([[dz.frontal-sinus-fracture]])."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.schlosser-2004-csf",
+        "src.lloyd-2008-csf-imaging",
+        "src.oakley-2016-csf-diagnosis",
+        "src.ratilal-2015-cochrane",
+        "src.hegazy-2000"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.meningoencephalocele",
+      "name": "Meningoencephalocele of the anterior and central skull base",
+      "syn": [
+        "encephalocele",
+        "meningocele",
+        "basal encephalocele",
+        "frontoethmoidal encephalocele",
+        "transethmoidal encephalocele",
+        "sphenoidal encephalocele",
+        "lateral recess meningoencephalocele"
+      ],
+      "category": "congenital",
+      "involves": [
+        "s.cribriform-plate",
+        "s.lateral-lamella",
+        "s.fovea-ethmoidalis",
+        "s.olfactory-cleft",
+        "s.foramen-caecum",
+        "s.planum-sphenoidale",
+        "s.sphenoid-sinus",
+        "s.sphenoid-lateral-recess",
+        "s.frontal-sinus-posterior-table",
+        "s.anterior-cranial-fossa-dura",
+        "s.gyrus-rectus"
+      ],
+      "tier": 2,
+      "what": "Herniation of meninges (meningocele) or meninges and brain (meningoencephalocele) through a skull-base defect into the nose or sinuses. It is congenital — frontoethmoidal types present as an external midline mass, basal types (transethmoidal, sphenoethmoidal, transsphenoidal) as an intranasal one — or acquired: spontaneous in adults with raised intracranial pressure, or after trauma or surgery.",
+      "why": "The herniated tissue is non-functional and is reduced with bipolar cautery down to the skull base, never avulsed (vessels retract intracranially — [[h.encephalocele-bleeding]]), then the defect is closed in layers; large transsphenoidal encephaloceles carrying pituitary, hypothalamus or chiasm are not reduced and need a combined team. The unforgivable error is to biopsy or \"polypectomize\" it in clinic.",
+      "imaging": {
+        "ct": "Thin-section CT (the coronal plane shows cribriform and fovea defects best): a skull-base defect with smooth, corticated, remodeled margins (not the destruction of a tumor) — cribriform plate, lateral lamella, fovea, planum, lateral sphenoid recess, or the foramen caecum and nasofrontal region in congenital types — with a soft-tissue mass in continuity below it. An isolated opacified cell beneath thin skull base is suspicious. Congenital forms: enlarged foramen caecum, bifid or absent crista galli, widened nasoethmoidal region, hypertelorism.",
+        "mri": "Diagnostic: the mass is continuous with the brain through the defect, its contents follow brain signal (often with T2-bright gliosis) or CSF (meningocele), and it has no solid enhancement; a CSF cleft or stalk and draped vessels may be seen. This separates it from polyps, mucocele, nasal glioma (no CSF connection), olfactory neuroblastoma and other tumors. In adults look for intracranial hypertension signs (empty sella, optic sheath distension, transverse sinus stenosis)."
+      },
+      "endo": "0° and 30°, suspected side: a smooth, grey-pink, sometimes pulsatile polyp-like mass medial to the middle turbinate in the olfactory cleft, or high in the ethmoid or sphenoid, that may enlarge with Valsalva or jugular compression (Furstenberg sign).",
+      "redFlags": [
+        "Unilateral \"polyp\" medial to the middle turbinate, in the olfactory cleft, or in any child → MRI before biopsy.",
+        "Recurrent meningitis or clear rhinorrhea with an intranasal mass → encephalocele.",
+        "Transsphenoidal encephalocele containing hypothalamus, pituitary or chiasm → do not reduce; repair around it with endocrine and neurosurgical input.",
+        "Adult with a spontaneous encephalocele → assess and treat intracranial pressure."
+      ],
+      "complications": [
+        "dz.meningitis-sinogenic",
+        "dz.csf-leak-spontaneous",
+        "h.encephalocele-bleeding",
+        "h.csf-repair-failure"
+      ],
+      "managedBy": [
+        "p.encephalocele-repair",
+        "p.csf-leak-repair",
+        "p.transpterygoid-approach",
+        "p.skull-base-reconstruction",
+        "p.nasoseptal-flap"
+      ],
+      "mimics": [
+        "dz.nasal-glioma",
+        "dz.nasal-dermoid",
+        "dz.crs-with-polyps",
+        "dz.ccad",
+        "dz.mucocele",
+        "dz.csf-leak-spontaneous",
+        "dz.olfactory-neuroblastoma",
+        "dz.inverted-papilloma",
+        "dz.olfactory-groove-meningioma"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Congenital frontoethmoidal (sincipital) encephaloceles are nasofrontal, nasoethmoidal or naso-orbital; basal ones are transethmoidal, sphenoethmoidal, transsphenoidal or spheno-orbital."
+        },
+        {
+          "tier": 3,
+          "text": "Lateral sphenoid recess encephaloceles arise in a sphenoid pneumatized lateral to the foramen rotundum ([[v.lateral-recess-pneumatization]]) and are reached through the pterygoid base."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.hedlund-2006-frontonasal",
+        "src.schlosser-2004-csf",
+        "src.lloyd-2008-csf-imaging",
+        "src.wormald-textbook",
+        "src.cummings-7",
+        "src.chiu-2019-ch26"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.idiopathic-intracranial-hypertension",
+      "name": "Idiopathic intracranial hypertension",
+      "syn": [
+        "IIH",
+        "pseudotumor cerebri",
+        "benign intracranial hypertension"
+      ],
+      "category": "idiopathic",
+      "involves": [
+        "s.sella-turcica",
+        "s.pituitary-gland",
+        "s.optic-nerve",
+        "s.meckels-cave",
+        "s.cribriform-plate",
+        "s.lateral-lamella",
+        "s.sphenoid-lateral-recess",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "class": [
+        "c.friedman-iih"
+      ],
+      "tier": 2,
+      "what": "Raised intracranial pressure without a mass, hydrocephalus or other cause, mostly in obese women of childbearing age, with headache, pulsatile tinnitus and papilledema that threatens vision. It is the main underlying cause of spontaneous CSF leaks and adult encephaloceles, where the leak can mask the pressure.",
+      "why": "For the rhinologist it decides whether a skull-base repair holds: untreated IIH drives recurrence and new leaks, so infer or measure the pressure (imaging markers, neuro-ophthalmology, postoperative opening pressure) and treat it (weight loss, acetazolamide, shunt or venous sinus stenting). After the leak is closed, pressure can rebound and threaten vision.",
+      "imaging": {
+        "ct": "Often normal; indirect signs are a partially empty sella, skull-base thinning with arachnoid pits, multiple skull-base defects, enlarged foramen ovale or Meckel's cave, and extensive sphenoid pneumatization.",
+        "mri": "Signs listed in the Friedman criteria: empty sella, flattening of the posterior globe, distended perioptic subarachnoid space ± tortuous optic nerve, and transverse venous sinus stenosis on MR venography; also enlarged Meckel's caves, arachnoid pits and meningoceles. MRI and MR venography also exclude a mass and venous sinus thrombosis."
+      },
+      "redFlags": [
+        "Papilledema with visual field loss → urgent neuro-ophthalmology.",
+        "New headache, pulsatile tinnitus or visual obscurations after CSF leak repair → rebound pressure; examine the fundi.",
+        "Venous sinus thrombosis must be excluded with MR venography before the label IIH is used."
+      ],
+      "complications": [
+        "dz.csf-leak-spontaneous",
+        "dz.meningoencephalocele",
+        "h.csf-repair-failure"
+      ],
+      "geo": "none",
+      "src": [
+        "src.friedman-2013-iih",
+        "src.schlosser-2006-spontaneous",
+        "src.lloyd-2008-csf-imaging"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.choanal-atresia",
+      "name": "Choanal atresia",
+      "syn": [
+        "congenital choanal atresia",
+        "choanal stenosis"
+      ],
+      "category": "congenital",
+      "involves": [
+        "s.choana",
+        "s.vomer",
+        "s.medial-pterygoid-plate",
+        "s.palatine-bone",
+        "s.nasal-cavity",
+        "s.lateral-nasal-wall",
+        "s.nasopharynx",
+        "s.sphenoid-bone"
+      ],
+      "tier": 1,
+      "what": "Congenital failure of the posterior nasal cavity to open into the nasopharynx ([[v.choanal-atresia]]): bilateral atresia presents at birth with cyclic cyanosis relieved by crying, because neonates breathe through the nose; unilateral atresia presents later with one-sided obstruction and discharge. It is often associated with CHARGE syndrome, especially when bilateral.",
+      "why": "Bilateral atresia needs an oral airway (McGovern nipple) and early repair; transnasal endoscopic repair ([[p.choanal-atresia-repair]]) removes the atretic plate, the posterior vomer and bone of the medial pterygoid plate to widen the choana, and covering raw bone with mucosal flaps reduces restenosis (stenting is debated). The skull base lies just above the plate, so work low along the nasal floor and inferomedially. A coexisting septal deviation is common and narrows the corridor further.",
+      "imaging": {
+        "ct": "Non-contrast CT after suction and decongestion, axial images parallel to the hard palate: narrowed posterior nasal cavity with medial bowing of the lateral wall and medial pterygoid plate, a thickened vomer, and a bony or membranous atretic plate with secretions pooled in front of it. Most are mixed bony-membranous; purely membranous atresia is uncommon. Check the other side and the height of the skull base, and look for CHARGE features in the temporal bones (semicircular canal hypoplasia)."
+      },
+      "endo": "0° (small-diameter scope in neonates), affected side: the nasal cavity ends blindly at the choana with pooled secretions; a catheter will not pass.",
+      "redFlags": [
+        "Neonate with cyclic cyanosis relieved by crying, or a catheter that will not pass → bilateral atresia; secure an oral airway now.",
+        "Bilateral atresia → screen for CHARGE (coloboma, heart defect, growth and genital anomalies, ear anomalies) before surgery.",
+        "Low skull base or narrow nasopharynx on CT → avoid superior dissection."
+      ],
+      "managedBy": [
+        "p.choanal-atresia-repair"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.cummings-7",
+        "src.chiu-2019-ch05"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nasal-dermoid",
+      "name": "Nasal dermoid sinus cyst",
+      "syn": [
+        "nasal dermoid",
+        "dermoid sinus",
+        "nasal dermal sinus",
+        "midline nasal pit"
+      ],
+      "category": "congenital",
+      "involves": [
+        "s.nasal-septum",
+        "s.septal-cartilage",
+        "s.perpendicular-plate",
+        "s.foramen-caecum",
+        "s.crista-galli",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "tier": 2,
+      "what": "A congenital epithelium-lined tract with skin adnexa running from the nasal dorsum — a midline pit, often with a protruding hair, or a cyst — between the nasal bones and septum toward the foramen caecum, reaching the dura in a minority. It arises when the dural diverticulum through the prenasal space fails to regress and drags skin with it.",
+      "why": "Cure requires excision of the whole tract including any intracranial part; MRI and CT decide whether it is extracranial (external rhinoplasty, midline or endoscopic-assisted approach) or needs a combined anterior cranial approach. Incomplete excision leads to recurrence and infection — abscess, osteomyelitis, meningitis.",
+      "imaging": {
+        "ct": "Midline tract or cyst over the nasal dorsum or within the septum; an enlarged foramen caecum with a bifid or eroded crista galli suggests intracranial extension. In infants the foramen caecum is not yet ossified, so its apparent width alone is unreliable — MRI decides.",
+        "mri": "The cyst is T2 hyperintense, variable on T1 (bright if it contains fat), restricts diffusion like an epidermoid, and does not enhance (a rim enhances if infected); follow the tract toward the foramen caecum — tissue at or above it means intracranial extension."
+      },
+      "redFlags": [
+        "Midline nasal pit with a hair or discharge → MRI before any surgery or biopsy.",
+        "Recurrent infection, meningitis or forehead abscess → intracranial connection.",
+        "Midline mass that transilluminates or swells with crying (Furstenberg positive) → encephalocele, not dermoid."
+      ],
+      "complications": [
+        "dz.meningitis-sinogenic",
+        "dz.brain-abscess-sinogenic"
+      ],
+      "mimics": [
+        "dz.nasal-glioma",
+        "dz.meningoencephalocele"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.hedlund-2006-frontonasal",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nasal-glioma",
+      "name": "Nasal glial heterotopia",
+      "syn": [
+        "nasal glioma",
+        "glial heterotopia",
+        "heterotopic brain tissue of the nose"
+      ],
+      "category": "congenital",
+      "involves": [
+        "s.nasal-cavity",
+        "s.lateral-nasal-wall",
+        "s.middle-turbinate",
+        "s.nasal-septum",
+        "s.cribriform-plate",
+        "s.foramen-caecum"
+      ],
+      "tier": 2,
+      "what": "A congenital mass of heterotopic glial tissue (not a neoplasm) that has lost its intracranial connection, lying outside the nose over the dorsum, inside the nose on the lateral wall, middle turbinate or septum, or both. It is firm, non-pulsatile, does not transilluminate or swell with crying, and a fibrous stalk to the skull base persists in a minority.",
+      "why": "Excise it completely — endoscopically for intranasal lesions — once MRI has shown there is no CSF or brain continuity. Follow any stalk to the cribriform plate and inspect, and if needed repair, the skull base; telling it apart from an encephalocele is the whole preoperative task.",
+      "imaging": {
+        "ct": "Soft-tissue mass without a skull-base defect (or with only a small defect along a fibrous stalk) and a normal foramen caecum; a large lesion may remodel the nasal bones or septum.",
+        "mri": "Iso- to hypointense to grey matter on T1 and hyperintense on T2 (gliosis), with little or no enhancement and no CSF-filled connection to the intracranial subarachnoid space — the key difference from an encephalocele."
+      },
+      "endo": "0°, affected side: firm, smooth, pale or reddish polypoid mass high in the nasal cavity on the lateral wall, middle turbinate or septum, unchanged by Valsalva.",
+      "redFlags": [
+        "Any congenital intranasal mass → MRI before biopsy.",
+        "Stalk to the cribriform plate, or clear rhinorrhea after excision → repair the skull base."
+      ],
+      "mimics": [
+        "dz.meningoencephalocele",
+        "dz.nasal-dermoid",
+        "dz.olfactory-neuroblastoma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.hedlund-2006-frontonasal",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.hht",
+      "name": "Hereditary hemorrhagic telangiectasia",
+      "syn": [
+        "HHT",
+        "Osler–Weber–Rendu syndrome",
+        "Rendu–Osler–Weber disease"
+      ],
+      "eponym": "Osler–Weber–Rendu",
+      "category": "vascular",
+      "involves": [
+        "s.nasal-septum",
+        "s.kiesselbach-area",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.nasal-floor",
+        "s.lateral-nasal-wall"
+      ],
+      "class": [
+        "c.curacao-hht"
+      ],
+      "tier": 2,
+      "what": "Autosomal dominant vascular dysplasia (mainly ENG and ACVRL1, also SMAD4) causing fragile mucocutaneous telangiectases and visceral arteriovenous malformations in lung, liver and brain. Recurrent spontaneous epistaxis is the commonest and usually the first manifestation and can make patients transfusion-dependent.",
+      "why": "Bleeding comes from many diffuse, mostly anterior mucosal telangiectases rather than one vessel, so arterial ligation gives little lasting benefit; treatment is humidification, tranexamic acid, systemic antiangiogenic therapy (e.g. bevacizumab), laser or other ablation of lesions, and for severe disease septodermoplasty or nasal closure (Young procedure). In any nasal operation use atraumatic technique and non-adherent, absorbable packing — removing ordinary packing tears telangiectases — and avoid creating a septal perforation.",
+      "imaging": {
+        "ct": "Nasal imaging is usually normal. The imaging that matters is screening for visceral AVMs: thin-section chest CT for pulmonary AVMs after a positive transthoracic contrast echocardiogram, and liver imaging when indicated.",
+        "mri": "Brain MRI screens adults with suspected or definite HHT for cerebral vascular malformations."
+      },
+      "endo": "0°, both sides: multiple bright red punctate or spider-like telangiectases on the anterior septum, anterior inferior turbinate and nasal floor that bleed on contact; treated noses show crusting and septal perforation.",
+      "redFlags": [
+        "Pulmonary AVMs → paradoxical embolism (stroke, brain abscess): filter IV lines for air and give antibiotic prophylaxis for procedures as the guidelines advise.",
+        "Transfusion-dependent anemia → systemic therapy with hematology.",
+        "Aggressive cautery or adherent packing → septal perforation and worse bleeding."
+      ],
+      "complications": [
+        "h.septal-perforation"
+      ],
+      "mimics": [
+        "dz.lobular-capillary-hemangioma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.shovlin-2000-curacao",
+        "src.faughnan-2020-hht",
+        "src.tunkel-2020-epistaxis"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.gpa",
+      "name": "Granulomatosis with polyangiitis",
+      "syn": [
+        "GPA",
+        "Wegener's granulomatosis",
+        "ANCA-associated vasculitis of the nose"
+      ],
+      "eponym": "Wegener (retired eponym)",
+      "category": "inflammatory",
+      "involves": [
+        "s.nasal-septum",
+        "s.septal-cartilage",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.maxillary-sinus",
+        "s.maxillary-medial-wall",
+        "s.ethmoid-labyrinth",
+        "s.nasolacrimal-duct",
+        "s.orbit",
+        "s.nasopharynx",
+        "s.eustachian-tube"
+      ],
+      "class": [
+        "c.acr-eular-gpa",
+        "c.epos-2020-crs"
+      ],
+      "tier": 2,
+      "what": "An ANCA-associated (usually PR3/cANCA) necrotizing granulomatous small-vessel vasculitis that most often begins in the nose and sinuses — crusting, bloody discharge, obstruction, septal perforation, saddle nose. It can involve the ear, orbit, lacrimal system, subglottis, lungs and kidneys.",
+      "why": "Biopsy active mucosa of the septum or turbinate (not crusts or necrotic debris) and treat with immunosuppression; surgery is limited to diagnosis, complications (orbital disease, lacrimal obstruction, mucocele) and irrigation-based hygiene, because operating on active disease worsens scarring and perforation. Septal and dorsal reconstruction waits for sustained remission.",
+      "imaging": {
+        "ct": "Early: nonspecific mucosal thickening with nodular soft tissue in the nasal cavity and on the septum. Later and characteristic: destruction of the septum, turbinates and medial maxillary walls combined with thick, sclerotic sinus walls and new bone (osteitis, sometimes a double bony contour lining the sinus) and progressive loss of sinus volume. Orbital inflammatory masses, often medial and contiguous with the ethmoid, may be present.",
+        "mri": "Granulomatous tissue is characteristically T2 hypointense with variable enhancement; MRI shows orbital, pachymeningeal (dural thickening and enhancement) and skull-base involvement and separates inflammation from retained secretions."
+      },
+      "endo": "0°, both sides: friable, granular mucosa with bloody crusts, septal perforation involving cartilage and bone, and destroyed turbinates.",
+      "redFlags": [
+        "Crusting nose with hematuria, cough or hemoptysis, or otitis media → systemic GPA: urgent ANCA, urinalysis and chest imaging.",
+        "Orbital mass, optic neuropathy or subglottic stenosis → urgent rheumatology.",
+        "Negative ANCA does not exclude limited disease → biopsy.",
+        "Cocaine use with PR3-ANCA → suspect [[dz.cocaine-midline-destructive-lesion]] before GPA; confirm with toxicology and histology, because cocaine users can also have true GPA."
+      ],
+      "complications": [
+        "h.septal-perforation",
+        "h.saddle-nose",
+        "dz.mucocele"
+      ],
+      "managedBy": [
+        "p.endoscopic-dcr"
+      ],
+      "mimics": [
+        "dz.cocaine-midline-destructive-lesion",
+        "dz.nk-t-cell-lymphoma",
+        "dz.sarcoidosis-sinonasal",
+        "dz.chronic-invasive-fungal-sinusitis",
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.sinonasal-scc"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.robson-2022-gpa",
+        "src.epos-2020",
+        "src.trimarchi-2001-cimdl",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.sarcoidosis-sinonasal",
+      "name": "Sinonasal sarcoidosis",
+      "syn": [
+        "sarcoidosis of the nose and sinuses",
+        "SNS"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.nasal-septum",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth"
+      ],
+      "tier": 2,
+      "what": "Non-caseating granulomatous inflammation of the nasal mucosa as part of systemic sarcoidosis (rarely isolated), with crusting, obstruction, smell loss and epistaxis. Small yellow submucosal nodules on the septum and turbinates are typical, and nasal disease is associated with lupus pernio of the facial skin.",
+      "why": "Diagnosis is by biopsy (non-caseating granulomas, with stains and cultures to exclude fungal and mycobacterial infection and GPA) plus systemic workup; treatment is medical (topical, intralesional or systemic steroids and steroid-sparing agents). Surgery is kept for obstructed sinuses and complications because it can worsen crusting and scarring.",
+      "imaging": {
+        "ct": "Nonspecific mucosal thickening and nodular soft tissue on the septum and turbinates; advanced disease shows septal perforation and punctate lytic or sclerotic lesions of the nasal bones. It mimics CRS and GPA.",
+        "mri": "Nodular enhancing mucosal thickening; MRI shows neurosarcoidosis — pachymeningeal thickening, pituitary stalk and hypothalamic involvement, optic nerve enhancement."
+      },
+      "endo": "0°, both sides: crusted, erythematous, granular mucosa with small yellowish submucosal nodules on the septum and inferior turbinates.",
+      "redFlags": [
+        "Diabetes insipidus, visual loss or cranial neuropathy → neurosarcoidosis; MRI of brain and pituitary.",
+        "Granulomas on biopsy → exclude infection and GPA before starting steroids."
+      ],
+      "complications": [
+        "h.septal-perforation",
+        "h.saddle-nose"
+      ],
+      "mimics": [
+        "dz.gpa",
+        "dz.crs-without-polyps",
+        "dz.cocaine-midline-destructive-lesion",
+        "dz.nk-t-cell-lymphoma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.cocaine-midline-destructive-lesion",
+      "name": "Cocaine-induced midline destructive lesion",
+      "syn": [
+        "CIMDL",
+        "cocaine nose",
+        "cocaine-induced pseudovasculitis",
+        "levamisole-associated nasal necrosis"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.nasal-septum",
+        "s.septal-cartilage",
+        "s.perpendicular-plate",
+        "s.vomer",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.uncinate-process",
+        "s.lateral-nasal-wall",
+        "s.maxillary-medial-wall",
+        "s.nasal-floor"
+      ],
+      "tier": 2,
+      "what": "Progressive destruction of the septum, turbinates, lateral nasal walls and sometimes the hard palate from chronic intranasal cocaine use — ischemic vasoconstriction, direct toxicity, adulterants such as levamisole, and in some patients an autoimmune response. The result is one large crusted cavity, often painful.",
+      "why": "It mimics GPA clinically and on histology, and many patients are ANCA-positive — often PR3 (cANCA) and characteristically anti-human neutrophil elastase, so biopsy and serology are read against the drug history; immunosuppression does not stop it, abstinence does. Reconstruction (perforation repair, palatal obturator, dorsal support) is considered only after prolonged, confirmed abstinence.",
+      "imaging": {
+        "ct": "Extensive midline destruction — cartilaginous and bony septum, turbinates, medial maxillary walls, sometimes the hard palate (oronasal fistula) and rarely the lamina papyracea or skull base — producing a common sinonasal cavity lined by thickened mucosa, with relatively little soft-tissue mass, unlike lymphoma or carcinoma.",
+        "mri": "Mucosal thickening lining a cavity, with no solid enhancing mass."
+      },
+      "endo": "0°, both sides: large septal perforation, absent turbinates, crusted necrotic mucosa and in advanced cases an oronasal communication.",
+      "redFlags": [
+        "Palatal perforation → cocaine, NK/T-cell lymphoma, GPA or syphilis; biopsy the edge.",
+        "A soft-tissue mass rather than a cavity → exclude lymphoma or carcinoma.",
+        "PR3-ANCA with drug use → do not treat as GPA without toxicology and specialist review."
+      ],
+      "complications": [
+        "h.septal-perforation",
+        "h.saddle-nose"
+      ],
+      "mimics": [
+        "dz.gpa",
+        "dz.nk-t-cell-lymphoma",
+        "dz.sarcoidosis-sinonasal",
+        "dz.acute-invasive-fungal-sinusitis"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.trimarchi-2001-cimdl",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.frontal-sinus-fracture",
+      "name": "Frontal sinus fracture",
+      "syn": [
+        "anterior table fracture",
+        "posterior table fracture",
+        "frontal sinus outflow tract injury",
+        "frontal bone fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.frontal-sinus",
+        "s.frontal-sinus-anterior-table",
+        "s.frontal-sinus-posterior-table",
+        "s.frontal-sinus-floor",
+        "s.frontal-recess",
+        "s.frontal-ostium",
+        "s.anterior-cranial-fossa-dura",
+        "s.orbital-roof",
+        "s.supraorbital-nerve"
+      ],
+      "class": [
+        "c.frontal-sinus-fracture"
+      ],
+      "tier": 2,
+      "what": "A high-energy fracture of the frontal sinus walls — anterior table, posterior table, floor and outflow tract — often with NOE, orbital and intracranial injuries. Management turns on three questions: contour (anterior table), dura and CSF (posterior table), and drainage (outflow tract).",
+      "why": "Displaced anterior table fractures are reduced for contour; posterior table fractures with a persistent CSF leak or marked displacement or comminution are explored (repair or cranialization); and outflow tract injury, the risk factor for late mucocele, is increasingly observed and then opened endoscopically (Draf IIa–III) if drainage fails, rather than routinely obliterated. Because mucoceles can appear years later, CT follow-up is long.",
+      "imaging": {
+        "ct": "Thin-section CT with sagittal and coronal reformats: anterior table displacement and contour; posterior table displacement and comminution (greater displacement predicts dural tear and persistent leak); pneumocephalus, frontal lobe contusion and air–fluid levels; and the outflow tract — fractures of the sinus floor, medial orbital roof and anterior ethmoid at the frontal recess, or fragments lodged in it. Check for NOE and orbital roof involvement.",
+        "mri": "Not needed acutely beyond the brain injury workup; later, MRI separates a mucocele from scar or obliteration material."
+      },
+      "endo": "70°, affected side (delayed): a narrowed or scarred frontal recess, or displaced bone blocking drainage.",
+      "redFlags": [
+        "Clear rhinorrhea or pneumocephalus → posterior table and dural injury ([[dz.csf-leak-traumatic]]).",
+        "Fracture through the sinus floor or medial orbital roof → outflow tract at risk; plan CT follow-up or early endoscopic drainage.",
+        "Associated NOE fracture, orbital roof fracture or visual loss → multidisciplinary repair; examine for [[dz.traumatic-optic-neuropathy]].",
+        "Forehead swelling, headache or proptosis years later → [[dz.mucocele]]."
+      ],
+      "complications": [
+        "dz.mucocele",
+        "dz.csf-leak-traumatic",
+        "dz.meningitis-sinogenic",
+        "dz.brain-abscess-sinogenic",
+        "h.mucocele-after-obliteration"
+      ],
+      "managedBy": [
+        "p.draf-iia",
+        "p.draf-iii",
+        "p.osteoplastic-flap",
+        "p.csf-leak-repair",
+        "p.frontal-trephination"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Obliteration commits the patient to lifelong mucocele risk and makes follow-up imaging hard; endoscopic salvage (Draf III) remains available if drainage fails later."
+        },
+        {
+          "tier": 3,
+          "text": "Cranialization — removing the posterior table and all mucosa, plugging the recess and letting the frontal lobe fill the space — is for severely comminuted posterior table fractures with dural injury."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.rodriguez-2008-frontal-fracture",
+        "src.cummings-7",
+        "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.noe-fracture",
+      "name": "Naso-orbito-ethmoid fracture",
+      "syn": [
+        "NOE fracture",
+        "nasoethmoid fracture",
+        "naso-orbital-ethmoid fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.frontal-process-maxilla",
+        "s.medial-canthal-tendon",
+        "s.lacrimal-bone",
+        "s.lacrimal-fossa",
+        "s.lacrimal-sac",
+        "s.nasolacrimal-duct",
+        "s.lamina-papyracea",
+        "s.ethmoid-labyrinth",
+        "s.nasal-septum",
+        "s.frontal-recess",
+        "s.frontal-sinus-floor",
+        "s.cribriform-plate"
+      ],
+      "class": [
+        "c.noe-markowitz"
+      ],
+      "tier": 2,
+      "what": "Fracture of the central upper midface where the nasal bones, frontal process of the maxilla, lacrimal bone and ethmoid meet, displacing the \"central fragment\" that carries the medial canthal tendon. It causes telecanthus and a flattened nasal root, and is often combined with CSF leak and lacrimal and frontal outflow injury.",
+      "why": "Grading the central fragment and tendon ([[c.noe-markowitz]]) decides fixation — plate a large fragment, and add transnasal canthopexy when the tendon is avulsed or the fragment is comminuted — and early repair matters because secondary correction of telecanthus is poor. Associated injuries are treated in the same plan: cribriform leaks, the frontal outflow tract, and the lacrimal system (late DCR).",
+      "imaging": {
+        "ct": "Thin-section axial and coronal CT: fracture and displacement of the medial orbital rim and frontal process of the maxilla (the central fragment), nasal bones telescoped into the ethmoid, widened intercanthal distance, comminuted lamina papyracea and lacrimal fossa, and disruption of the nasolacrimal canal. Check the cribriform plate and anterior skull base (pneumocephalus, CSF leak), the frontal sinus floor and outflow tract, and the other orbital walls."
+      },
+      "redFlags": [
+        "Telecanthus or a rounded, displaced medial canthus → central fragment or tendon displacement; repair early.",
+        "Clear rhinorrhea → cribriform or ethmoid roof fracture ([[dz.csf-leak-traumatic]]).",
+        "Epiphora later → nasolacrimal obstruction ([[p.endoscopic-dcr]]).",
+        "Visual loss → traumatic optic neuropathy or retrobulbar hematoma."
+      ],
+      "complications": [
+        "dz.csf-leak-traumatic",
+        "dz.mucocele",
+        "dz.meningitis-sinogenic",
+        "dz.traumatic-optic-neuropathy",
+        "h.medial-canthal-disruption"
+      ],
+      "managedBy": [
+        "p.endoscopic-dcr",
+        "p.csf-leak-repair"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.markowitz-1991-noe",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.orbital-floor-fracture",
+      "name": "Orbital floor (blowout) fracture",
+      "syn": [
+        "blowout fracture",
+        "orbital blow-out fracture",
+        "trapdoor fracture",
+        "white-eyed blowout fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.orbital-floor",
+        "s.inferior-rectus",
+        "s.orbital-fat",
+        "s.infraorbital-canal",
+        "s.infraorbital-nerve",
+        "s.maxillary-sinus",
+        "s.inferomedial-orbital-strut",
+        "s.lamina-papyracea"
+      ],
+      "tier": 2,
+      "what": "Fracture of the thin orbital floor, usually medial to the infraorbital canal and sometimes with the medial wall, from blunt orbital trauma. Orbital fat or the inferior rectus may herniate into the maxillary sinus, causing diplopia, enophthalmos and infraorbital numbness.",
+      "why": "Muscle entrapment — typically a trapdoor fracture in a child — is repaired within hours to save the muscle; otherwise large defects, early enophthalmos or persisting diplopia are repaired electively through transconjunctival or endoscopic transantral routes. The endoscope through an antrostomy shows the posterior ledge on which an implant must rest, and loss of the inferomedial strut makes the implant harder to support.",
+      "imaging": {
+        "ct": "Thin-section coronal and sagittal CT: size and posterior extent of the floor defect (to the posterior ledge), herniated fat and inferior rectus in the antrum, a rounded or sagging inferior rectus belly (loss of support), antral hemosinus, orbital emphysema, and medial wall and inferomedial strut involvement. In a child's trapdoor fracture the floor can look almost normal, with only a small sliver of trapped soft tissue — the examination decides."
+      },
+      "redFlags": [
+        "Child with restricted up-gaze, pain on eye movement, nausea, vomiting or bradycardia (oculocardiac reflex) and a quiet white eye → trapdoor entrapment; repair urgently.",
+        "Visual loss or a tense, proptotic orbit → retrobulbar hematoma; lateral canthotomy and cantholysis.",
+        "Globe injury must be excluded by ophthalmology before repair."
+      ],
+      "complications": [
+        "h.infraorbital-nerve-injury"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy"
+      ],
+      "mimics": [
+        "dz.silent-sinus-syndrome"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.traumatic-optic-neuropathy",
+      "name": "Traumatic optic neuropathy",
+      "syn": [
+        "TON",
+        "indirect optic nerve injury",
+        "optic canal fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.optic-canal",
+        "s.optic-nerve",
+        "s.orbital-apex",
+        "s.optic-prominence",
+        "s.sphenoid-lateral-wall",
+        "s.anterior-clinoid-process"
+      ],
+      "tier": 3,
+      "what": "Visual loss after head or facial trauma from injury to the optic nerve — usually indirect, from force transmitted to the intracanalicular segment where the nerve is tethered, less often direct, from bone fragments or penetration. It is diagnosed by reduced acuity or field with a relative afferent pupillary defect.",
+      "why": "Neither high-dose steroids nor canal decompression has proven benefit over observation (International Optic Nerve Trauma Study), and megadose steroids increased mortality after significant head injury (CRASH), so decompression ([[p.optic-nerve-decompression]]) is reserved for selected cases such as a fragment impinging on the nerve or delayed deterioration. If decompressing, confirm on CT whether the canal runs in an Onodi cell ([[c.delano-optic-nerve]]).",
+      "imaging": {
+        "ct": "Thin-section CT through the optic canals in axial and coronal planes: canal fracture, bone fragments impinging on the nerve, fractures of the anterior clinoid and lateral sphenoid wall, sphenoid hemosinus; in indirect injury the CT is often normal. Also look for retrobulbar hematoma and orbital apex fractures.",
+        "mri": "May show optic nerve sheath hematoma or nerve signal change; rarely changes acute management."
+      },
+      "redFlags": [
+        "Visual loss with a tense, proptotic orbit → retrobulbar hematoma: lateral canthotomy and cantholysis first, not canal decompression.",
+        "RAPD in an unconscious trauma patient → document early; it may be the only sign.",
+        "Canal fracture with a fragment in the nerve and worsening vision → consider decompression."
+      ],
+      "managedBy": [
+        "p.optic-nerve-decompression"
+      ],
+      "geo": "none",
+      "src": [
+        "src.levin-1999-ionts",
+        "src.crash-2004",
+        "src.luxenberger-1998",
+        "src.delano-1996"
+      ],
+      "review": "draft"
+    }
+  ],
+  "classifications": [
+    {
+      "id": "c.sinonasal-inflammatory-patterns",
+      "name": "Inflammatory sinonasal disease patterns on CT (Babbel–Harnsberger)",
+      "of": "s.ostiomeatal-complex",
+      "tier": 1,
+      "basis": "Distribution of inflammatory mucosal disease on screening coronal CT, grouped by the drainage pathway that is blocked (Babbel et al. 1992, building on the ostiomeatal unit concept of Zinreich and Kennedy).",
+      "classes": [
+        {
+          "code": "infundibular",
+          "label": "Infundibular pattern",
+          "criterion": "Disease limited to the maxillary sinus, with obstruction of the ethmoidal infundibulum or maxillary ostium.",
+          "why": "Uncinectomy and a maxillary antrostomy that includes the natural ostium."
+        },
+        {
+          "code": "OMU",
+          "label": "Ostiomeatal unit pattern",
+          "criterion": "Obstruction in the middle meatus with ipsilateral maxillary, anterior ethmoid and frontal disease; the frontal sinus may be spared when it drains medial to the uncinate (lamina papyracea insertion).",
+          "why": "Uncinectomy, antrostomy and anterior ethmoidectomy, with frontal recess surgery when the frontal sinus is involved."
+        },
+        {
+          "code": "SER",
+          "label": "Sphenoethmoidal recess pattern",
+          "criterion": "Posterior ethmoid and sphenoid disease from obstruction of the sphenoethmoidal recess.",
+          "why": "Sphenoidotomy ± posterior ethmoidectomy; the anterior sinuses may be left alone."
+        },
+        {
+          "code": "polyposis",
+          "label": "Sinonasal polyposis pattern",
+          "criterion": "Diffuse polypoid disease of the nasal cavity and sinuses: bilateral pan-opacification, widened infundibula, convex (bulging) ethmoid walls, thinned septa.",
+          "why": "Diffuse disease: complete surgery plus long-term medical or biologic therapy, not targeted drainage."
+        },
+        {
+          "code": "sporadic",
+          "label": "Sporadic (unclassifiable) pattern",
+          "criterion": "Isolated disease not explained by an obstructed pathway — retention cysts, mucoceles, isolated mucosal thickening, postoperative change.",
+          "why": "Usually not an indication for drainage surgery by itself; consider a local cause."
+        }
+      ],
+      "caveats": "Descriptive rather than a stage: patterns overlap in one patient, and frontal recess cell anatomy (IFAC) is not captured. Its value is the first question when reading any CT — which drainage pathway is blocked, and does the disease fit it? Disease that fits no pathway (unilateral, expansile, hyperdense) needs another explanation.",
+      "src": [
+        "src.babbel-1992-patterns",
+        "src.kennedy-1985",
+        "src.stammberger-1991"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.lund-mackay",
+      "name": "Lund–Mackay CT score",
+      "of": "dz.crs-without-polyps",
+      "tier": 1,
+      "basis": "CT opacification of each sinus group and the ostiomeatal complex, scored per side (Lund & Mackay 1993); used for chronic rhinosinusitis with or without polyps.",
+      "classes": [
+        {
+          "code": "0",
+          "label": "Clear",
+          "criterion": "No opacification of the sinus; for the ostiomeatal complex, not occluded."
+        },
+        {
+          "code": "1",
+          "label": "Partial opacification",
+          "criterion": "Partial opacification of the maxillary, anterior ethmoid, posterior ethmoid, sphenoid or frontal sinus (the ostiomeatal complex has no score of 1)."
+        },
+        {
+          "code": "2",
+          "label": "Complete opacification",
+          "criterion": "Complete opacification of the sinus, or an occluded ostiomeatal complex."
+        },
+        {
+          "code": "total",
+          "label": "Total score",
+          "criterion": "Five sinus groups (0–2 each) plus the ostiomeatal complex (0 or 2): 0–12 per side, 0–24 in total.",
+          "why": "An objective CT benchmark for staging, trials and consensus criteria; it correlates weakly with symptoms."
+        }
+      ],
+      "caveats": "People without CRS commonly score a few points — the mean was about 4 of 24 in one CT series of adults scanned for non-sinus reasons — so a low score neither proves nor excludes CRS. It ignores osteitis, hyperdense contents and frontal recess anatomy, and scans taken during an acute episode overstate it.",
+      "src": [
+        "src.lund-mackay-1993",
+        "src.ashraf-2001-incidental-lund",
+        "src.epos-2020"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.lund-kennedy",
+      "name": "Lund–Kennedy endoscopic score",
+      "of": "dz.crs-with-polyps",
+      "tier": 1,
+      "basis": "Endoscopic appearance of each side scored 0–2 for five features (Lund & Kennedy); the modified score (Psaltis et al. 2014) keeps polyps, discharge and edema only.",
+      "classes": [
+        {
+          "code": "polyps",
+          "label": "Polyps",
+          "criterion": "0 absent; 1 confined to the middle meatus; 2 beyond the middle meatus."
+        },
+        {
+          "code": "discharge",
+          "label": "Discharge",
+          "criterion": "0 none; 1 clear and thin; 2 thick and purulent."
+        },
+        {
+          "code": "edema",
+          "label": "Edema",
+          "criterion": "0 absent; 1 mild; 2 severe."
+        },
+        {
+          "code": "scarring",
+          "label": "Scarring (postoperative)",
+          "criterion": "0 absent; 1 mild; 2 severe."
+        },
+        {
+          "code": "crusting",
+          "label": "Crusting (postoperative)",
+          "criterion": "0 absent; 1 mild; 2 severe."
+        },
+        {
+          "code": "total",
+          "label": "Total",
+          "criterion": "Original: 0–10 per side, 0–20 in total. Modified Lund–Kennedy (polyps, discharge, edema): 0–6 per side, 0–12 in total.",
+          "why": "The modified score is more reliable and tracks patient-reported outcomes better; use it to follow the postoperative cavity."
+        }
+      ],
+      "caveats": "Scarring and crusting reflect surgery and healing more than disease activity. The polyp item is coarse; biologic trials use the 0–4 per side polyp score ([[c.nasal-polyp-score]]).",
+      "src": [
+        "src.lund-kennedy-1997",
+        "src.psaltis-2014-mlk"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.nasal-polyp-score",
+      "name": "Nasal polyp score (0–4 per side)",
+      "of": "dz.crs-with-polyps",
+      "tier": 2,
+      "basis": "Endoscopic polyp extent graded 0–4 on each side and summed (0–8); the primary endoscopic endpoint of phase 3 biologic trials in CRSwNP.",
+      "classes": [
+        {
+          "code": "0",
+          "label": "None",
+          "criterion": "No polyps."
+        },
+        {
+          "code": "1",
+          "label": "Middle meatus",
+          "criterion": "Small polyps in the middle meatus not reaching below the inferior border of the middle turbinate."
+        },
+        {
+          "code": "2",
+          "label": "Below the middle turbinate",
+          "criterion": "Polyps reaching below the lower border of the middle turbinate."
+        },
+        {
+          "code": "3",
+          "label": "Large",
+          "criterion": "Large polyps reaching the lower border of the inferior turbinate, or polyps medial to the middle turbinate."
+        },
+        {
+          "code": "4",
+          "label": "Obstructing",
+          "criterion": "Large polyps causing complete obstruction of the inferior nasal cavity."
+        }
+      ],
+      "caveats": "Several polyp grading systems exist (Meltzer, Lildholdt, the Lund–Kennedy polyp item) and they are not interchangeable; check which one a trial or an eligibility rule uses.",
+      "src": [
+        "src.bachert-2019-dupilumab",
+        "src.epos-2020"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.epos-2020-crs",
+      "name": "EPOS 2020 classification of chronic rhinosinusitis",
+      "of": "dz.crs-without-polyps",
+      "tier": 2,
+      "basis": "Primary versus secondary CRS; then anatomic distribution (localized, usually unilateral, versus diffuse, bilateral); then endotype dominance (type 2 or non-type 2) for primary disease, or cause for secondary disease (EPOS 2020).",
+      "classes": [
+        {
+          "code": "P-L-T2",
+          "label": "Primary, localized, type 2",
+          "criterion": "Unilateral type 2 disease: allergic fungal rhinosinusitis.",
+          "why": "[[dz.afrs]]"
+        },
+        {
+          "code": "P-L-nT2",
+          "label": "Primary, localized, non-type 2",
+          "criterion": "Isolated sinusitis of one sinus without another cause."
+        },
+        {
+          "code": "P-D-T2",
+          "label": "Primary, diffuse, type 2",
+          "criterion": "Bilateral type 2 disease: eosinophilic CRS (usually with polyps; tissue eosinophils ≥10/hpf), bilateral AFRS, central compartment atopic disease.",
+          "why": "Complete surgery, corticosteroids and, when criteria are met, biologics ([[dz.crs-with-polyps]], [[dz.aerd]], [[dz.ccad]])."
+        },
+        {
+          "code": "P-D-nT2",
+          "label": "Primary, diffuse, non-type 2",
+          "criterion": "Bilateral non-eosinophilic CRS (tissue eosinophils below the threshold).",
+          "why": "Often without polyps; targeted surgery and anti-inflammatory therapy ([[dz.crs-without-polyps]])."
+        },
+        {
+          "code": "S-L",
+          "label": "Secondary, localized",
+          "criterion": "Local pathology: odontogenic disease, fungal ball, tumor.",
+          "why": "Treat the cause ([[dz.odontogenic-sinusitis]], [[dz.fungal-ball]])."
+        },
+        {
+          "code": "S-D",
+          "label": "Secondary, diffuse",
+          "criterion": "Mechanical (primary ciliary dyskinesia, cystic fibrosis), inflammatory (GPA, EGPA) or immunological (immunodeficiency).",
+          "why": "Systemic workup and disease-specific treatment ([[dz.cystic-fibrosis-sinusitis]], [[dz.gpa]])."
+        }
+      ],
+      "caveats": "Endotype is inferred in practice from surrogates — tissue or blood eosinophils, total IgE, asthma — and eosinophil thresholds vary between populations. The CRSwNP/CRSsNP phenotype split remains in use alongside this scheme.",
+      "src": [
+        "src.epos-2020"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.bent-kuhn-afrs",
+      "name": "Bent–Kuhn criteria for allergic fungal rhinosinusitis",
+      "of": "dz.afrs",
+      "tier": 2,
+      "basis": "Five major criteria, all required for the diagnosis, with minor criteria that support it (Bent & Kuhn 1994).",
+      "classes": [
+        {
+          "code": "M1",
+          "label": "Type I hypersensitivity",
+          "criterion": "IgE-mediated hypersensitivity to fungi by history, skin test or specific IgE."
+        },
+        {
+          "code": "M2",
+          "label": "Nasal polyposis",
+          "criterion": "Polyps on endoscopy or imaging."
+        },
+        {
+          "code": "M3",
+          "label": "Characteristic CT",
+          "criterion": "Heterogeneous hyperdense contents in expanded, opacified sinuses, often with bone remodeling or erosion."
+        },
+        {
+          "code": "M4",
+          "label": "Eosinophilic mucin without invasion",
+          "criterion": "Eosinophil-rich mucin and no fungal invasion of sinus tissue on histology (Charcot–Leyden crystals are a minor criterion)."
+        },
+        {
+          "code": "M5",
+          "label": "Positive fungal stain",
+          "criterion": "Fungal hyphae in the mucin on stain; culture may be negative."
+        },
+        {
+          "code": "minor",
+          "label": "Minor criteria",
+          "criterion": "Asthma, unilateral predominance, radiographic bone erosion, positive fungal culture, Charcot–Leyden crystals, peripheral eosinophilia."
+        }
+      ],
+      "caveats": "Eosinophilic mucin CRS without demonstrable fungi looks the same, and how essential fungal allergy is remains debated. Culture is neither sensitive nor specific — stain the mucin. Bone erosion is common but only a minor criterion.",
+      "src": [
+        "src.bent-kuhn-1994-afrs",
+        "src.icar-rs-2021"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.fungal-rhinosinusitis",
+      "name": "Classification of fungal rhinosinusitis",
+      "of": "dz.acute-invasive-fungal-sinusitis",
+      "tier": 1,
+      "basis": "Tissue invasion on histology (invasive versus non-invasive), then host immunity, time course and host response (deShazo et al. 1997).",
+      "classes": [
+        {
+          "code": "AIFRS",
+          "label": "Acute (fulminant) invasive",
+          "criterion": "Hyphae invading mucosa, submucosa, vessels or bone; course under 4 weeks; immunocompromised host.",
+          "why": "Surgical emergency: debridement, antifungals and reversal of immunosuppression ([[dz.acute-invasive-fungal-sinusitis]])."
+        },
+        {
+          "code": "CIFRS",
+          "label": "Chronic invasive",
+          "criterion": "Tissue invasion with a course over 12 weeks and sparse inflammation; often diabetic or mildly immunocompromised host.",
+          "why": "Debridement and a prolonged antifungal course ([[dz.chronic-invasive-fungal-sinusitis]])."
+        },
+        {
+          "code": "GIFRS",
+          "label": "Granulomatous invasive",
+          "criterion": "Tissue invasion with non-caseating granulomas, usually Aspergillus flavus in immunocompetent hosts; chronic course.",
+          "why": "Debridement and antifungals; often presents as a cheek or orbital mass."
+        },
+        {
+          "code": "FB",
+          "label": "Fungal ball (non-invasive)",
+          "criterion": "Dense hyphae in one sinus; no invasion, no allergic mucin.",
+          "why": "Endoscopic removal alone ([[dz.fungal-ball]])."
+        },
+        {
+          "code": "AFRS",
+          "label": "Allergic fungal rhinosinusitis (non-invasive)",
+          "criterion": "Eosinophilic mucin with hyphae, type I hypersensitivity and polyps; no invasion.",
+          "why": "Surgery plus steroids ([[dz.afrs]])."
+        },
+        {
+          "code": "SFC",
+          "label": "Saprophytic fungal colonization",
+          "criterion": "Fungi growing on crusts in an operated cavity, without invasion.",
+          "why": "Endoscopic removal of crusts."
+        }
+      ],
+      "caveats": "The dividing line is invasion of tissue on histology, so every debridement of suspected fungal disease sends tissue, not only secretions. The 4- and 12-week limits are conventions, and forms can convert — a fungal ball in a newly immunosuppressed patient can become invasive.",
+      "src": [
+        "src.deshazo-1997-fungal",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.frontal-sinus-fracture",
+      "name": "Frontal sinus fracture pattern",
+      "of": "dz.frontal-sinus-fracture",
+      "tier": 2,
+      "basis": "Which walls are fractured and how displaced, plus frontal sinus outflow tract and dural involvement — the elements that management algorithms use (e.g. Rodriguez et al. 2008); there is no single universally adopted numbered system.",
+      "classes": [
+        {
+          "code": "AT-ND",
+          "label": "Anterior table, non-displaced",
+          "criterion": "Anterior table fracture without contour deformity; posterior table and outflow tract intact.",
+          "why": "Observe."
+        },
+        {
+          "code": "AT-D",
+          "label": "Anterior table, displaced",
+          "criterion": "Displaced or comminuted anterior table with contour deformity; posterior table intact.",
+          "why": "Reduce and fix for contour (open or endoscope-assisted), or camouflage later."
+        },
+        {
+          "code": "OT",
+          "label": "Outflow tract involved",
+          "criterion": "Fracture through the sinus floor, medial orbital roof or anterior ethmoid at the frontal recess, or fragments obstructing it.",
+          "why": "Mucocele and chronic sinusitis risk: CT follow-up and endoscopic frontal sinusotomy (Draf IIa–III) if drainage fails; obliteration is now a secondary option."
+        },
+        {
+          "code": "PT-ND",
+          "label": "Posterior table, non-displaced",
+          "criterion": "Posterior table fracture without significant displacement and without a persistent CSF leak.",
+          "why": "Observe; conservative care of any transient leak."
+        },
+        {
+          "code": "PT-D",
+          "label": "Posterior table, displaced or comminuted",
+          "criterion": "Displaced or comminuted posterior table, often with dural tear, persistent CSF leak, pneumocephalus or brain injury.",
+          "why": "Neurosurgical repair; cranialization for severe comminution."
+        }
+      ],
+      "caveats": "Patterns combine (e.g. AT-D with OT). Thresholds for \"significant\" displacement differ between algorithms; a persistent CSF leak and the state of the outflow tract drive decisions more than millimetres do.",
+      "src": [
+        "src.rodriguez-2008-frontal-fracture",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.noe-markowitz",
+      "name": "Markowitz–Manson classification of naso-orbito-ethmoid fractures",
+      "of": "dz.noe-fracture",
+      "tier": 2,
+      "eponym": "Markowitz–Manson",
+      "basis": "State of the central bone fragment that carries the medial canthal tendon (Markowitz et al. 1991).",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Type I",
+          "criterion": "A single large central fragment with the medial canthal tendon attached (unilateral or bilateral, complete or incomplete).",
+          "why": "Plate the fragment; the tendon follows it."
+        },
+        {
+          "code": "II",
+          "label": "Type II",
+          "criterion": "Comminuted central fragment, but the tendon remains attached to a fragment large enough to fix.",
+          "why": "Fix the tendon-bearing fragment, often with transnasal wiring."
+        },
+        {
+          "code": "III",
+          "label": "Type III",
+          "criterion": "Severe comminution with the tendon avulsed or attached to fragments too small to fix.",
+          "why": "Transnasal canthopexy plus bone grafting of the medial orbital wall and nasal dorsum."
+        }
+      ],
+      "caveats": "Final typing is often made at surgery, by exposing the fragment and testing the tendon; CT suggests the type but can underestimate comminution.",
+      "src": [
+        "src.markowitz-1991-noe",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.curacao-hht",
+      "name": "Curaçao criteria for hereditary hemorrhagic telangiectasia",
+      "of": "dz.hht",
+      "tier": 2,
+      "basis": "Four clinical criteria; the number met gives definite, possible or unlikely HHT (Shovlin et al. 2000). Genetic testing can confirm.",
+      "classes": [
+        {
+          "code": "E",
+          "label": "Epistaxis",
+          "criterion": "Spontaneous, recurrent nosebleeds."
+        },
+        {
+          "code": "T",
+          "label": "Telangiectases",
+          "criterion": "Multiple, at characteristic sites: lips, oral cavity, fingers, nose."
+        },
+        {
+          "code": "V",
+          "label": "Visceral lesions",
+          "criterion": "Gastrointestinal telangiectasia, or pulmonary, hepatic, cerebral or spinal arteriovenous malformations."
+        },
+        {
+          "code": "F",
+          "label": "Family history",
+          "criterion": "A first-degree relative with HHT by these criteria."
+        },
+        {
+          "code": "definite",
+          "label": "Definite HHT",
+          "criterion": "Three or four criteria."
+        },
+        {
+          "code": "possible",
+          "label": "Possible or suspected HHT",
+          "criterion": "Two criteria."
+        },
+        {
+          "code": "unlikely",
+          "label": "Unlikely HHT",
+          "criterion": "Fewer than two criteria."
+        }
+      ],
+      "caveats": "Children and young adults may not yet meet the criteria because lesions accumulate with age; in families with a known mutation, genetic testing settles the diagnosis.",
+      "src": [
+        "src.shovlin-2000-curacao",
+        "src.faughnan-2020-hht"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.acr-eular-gpa",
+      "name": "2022 ACR/EULAR classification criteria for granulomatosis with polyangiitis",
+      "of": "dz.gpa",
+      "tier": 3,
+      "basis": "Weighted clinical, laboratory, imaging and biopsy items, summed only after a small- or medium-vessel vasculitis has been diagnosed and mimics excluded; a total of 5 or more classifies as GPA (Robson et al. 2022).",
+      "classes": [
+        {
+          "code": "nasal",
+          "label": "Nasal involvement (+3)",
+          "criterion": "Bloody discharge, ulcers, crusting, congestion or blockage, or septal defect or perforation."
+        },
+        {
+          "code": "cartilage",
+          "label": "Cartilaginous involvement (+2)",
+          "criterion": "Ear or nose cartilage inflammation, hoarse voice or stridor, endobronchial involvement, or saddle nose deformity."
+        },
+        {
+          "code": "hearing",
+          "label": "Hearing loss (+1)",
+          "criterion": "Conductive or sensorineural hearing loss."
+        },
+        {
+          "code": "PR3",
+          "label": "cANCA or anti-PR3 positive (+5)",
+          "criterion": "Positive test for cytoplasmic ANCA or anti-proteinase 3 antibodies."
+        },
+        {
+          "code": "lung",
+          "label": "Lung nodules, mass or cavitation (+2)",
+          "criterion": "On chest imaging."
+        },
+        {
+          "code": "granuloma",
+          "label": "Granuloma on biopsy (+2)",
+          "criterion": "Granuloma, extravascular granulomatous inflammation or giant cells on biopsy."
+        },
+        {
+          "code": "sinus-imaging",
+          "label": "Sinonasal inflammation on imaging (+1)",
+          "criterion": "Inflammation, consolidation or effusion of the nasal or paranasal sinuses, or mastoiditis, on imaging."
+        },
+        {
+          "code": "GN",
+          "label": "Pauci-immune glomerulonephritis (+1)",
+          "criterion": "On biopsy."
+        },
+        {
+          "code": "MPO",
+          "label": "pANCA or anti-MPO positive (−1)",
+          "criterion": "Positive test for perinuclear ANCA or anti-myeloperoxidase antibodies."
+        },
+        {
+          "code": "eos",
+          "label": "Blood eosinophils ≥1 × 10⁹/L (−4)",
+          "criterion": "Peripheral eosinophil count at or above 1 × 10⁹/L."
+        },
+        {
+          "code": "GPA",
+          "label": "Classified as GPA",
+          "criterion": "Total score ≥5."
+        }
+      ],
+      "caveats": "These are classification criteria for studies, not diagnostic criteria: apply them only after a vasculitis is diagnosed and mimics — cocaine-induced lesions, lymphoma, infection — are excluded. Nasal items weigh heavily, so a crusting nose with PR3-ANCA reaches the threshold by itself, which is exactly the cocaine trap.",
+      "src": [
+        "src.robson-2022-gpa"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.friedman-iih",
+      "name": "Revised diagnostic criteria for pseudotumor cerebri (Friedman)",
+      "of": "dz.idiopathic-intracranial-hypertension",
+      "tier": 2,
+      "basis": "Papilledema-based diagnosis with a normal neurological examination, imaging and CSF composition and a raised opening pressure, plus defined routes to diagnosis without papilledema (Friedman et al. 2013).",
+      "classes": [
+        {
+          "code": "A",
+          "label": "Papilledema",
+          "criterion": "Papilledema present."
+        },
+        {
+          "code": "B",
+          "label": "Normal neurological examination",
+          "criterion": "Normal apart from cranial nerve abnormalities."
+        },
+        {
+          "code": "C",
+          "label": "Neuroimaging",
+          "criterion": "Normal brain parenchyma without hydrocephalus, mass, structural lesion or abnormal meningeal enhancement on MRI with and without gadolinium; MR venography as well in atypical patients (anyone other than obese women), to exclude venous sinus thrombosis."
+        },
+        {
+          "code": "D",
+          "label": "CSF composition",
+          "criterion": "Normal CSF composition."
+        },
+        {
+          "code": "E",
+          "label": "Opening pressure",
+          "criterion": "Lumbar puncture opening pressure ≥250 mm CSF in adults, ≥280 mm CSF in children (≥250 mm if the child is neither sedated nor obese)."
+        },
+        {
+          "code": "definite",
+          "label": "Definite",
+          "criterion": "A–E all met."
+        },
+        {
+          "code": "probable",
+          "label": "Probable",
+          "criterion": "A–D met with a lower opening pressure."
+        },
+        {
+          "code": "no-papilledema",
+          "label": "Without papilledema",
+          "criterion": "B–E plus a unilateral or bilateral abducens palsy makes the diagnosis; without an abducens palsy, B–E plus at least three of four imaging signs — empty sella, flattened posterior globe, distended perioptic subarachnoid space ± tortuous optic nerve, transverse venous sinus stenosis — only suggests it."
+        }
+      ],
+      "caveats": "In spontaneous CSF leaks the leak vents the pressure, so papilledema and opening pressure may be normal until the leak is closed; before repair, the imaging signs carry the most weight.",
+      "src": [
+        "src.friedman-2013-iih",
+        "src.schlosser-2006-spontaneous"
+      ],
+      "review": "draft"
+    }
+  ]
+}

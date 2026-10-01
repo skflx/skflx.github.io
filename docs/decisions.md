@@ -13,6 +13,7 @@ change works), `docs/docs-map.md` (the documentation pass).
 | A new tool/utility page | `css/site.css` (tokens, faces, topbar, buttons, footer) + a page `<style>` on its tokens | `js/theme-boot.js` in `<head>`, `js/site.js` at the end, page logic in `js/<page>.js` | `cpt-search.html` |
 | A page that must work fully offline | as above — `css/site.css` and the fonts are same-origin; **zero remote requests**, CSP with no remote origin | as above | `airway-jeopardy.html` |
 | An OKSAT page | `css/oksat.css` | `js/theme-boot.js` + the `js/oksat-*.js` stack; React/htm from `js/vendor/` | `oksat.html`, `oksat-study.html` |
+| A page with an ES-module graph (3D) | `css/site.css` + `css/<page>.css` (its `--<page>-*` tokens; the WebGL scene reads them) | `js/theme-boot.js` in `<head>`, `js/site.js` at the end, and **one** `<script type="module" src="js/<page>/main.js">`; imports are relative, three.js only from `js/vendor/three-<version>/`; `tools/stamp-assets.mjs` stamps the whole graph | `ssb.html` |
 
 Every new page also gets: the CSP `<meta>` from its closest precedent,
 `<link rel="icon" href="images/favicon.svg">`, stamped asset references
@@ -43,9 +44,10 @@ cannot be corrected.
 
 ## 3. localStorage keys
 
-Namespaces: `sk_*` (site chrome), `oksat:*` (OKSAT). All new OKSAT
-persistence goes through `window.OKSATStore` (`js/oksat-store.js`) — do not
-add raw `localStorage` calls to OKSAT pages. Every read and write is
+Namespaces: `sk_*` (site chrome), `oksat:*` (OKSAT), `ssb:*` (SSB). All new
+OKSAT persistence goes through `window.OKSATStore` (`js/oksat-store.js`) — do
+not add raw `localStorage` calls to OKSAT pages; SSB's goes through the
+guarded adapter in `js/ssb/state.js`. Every read and write is
 guarded; a storage failure degrades to a no-op, never an exception.
 
 OKSAT keys carry a trailing `:<code>` namespace. There is one user and no
@@ -65,6 +67,7 @@ resolving** — do not "simplify" it away without migrating the data first.
 | `oksat:progress:<slug>:<rev>` | `js/oksat-engine.js` | answers + firstCorrect |
 | `oksat:srs:<slug>:<rev>` | `js/oksat-engine.js` | Leitner boxes |
 | `oksat:cmastery:<slug>:<rev>`, `oksat:conf:<slug>:<rev>`, `oksat:session:<rev>` | `js/oksat-store.js` | mastery / calibration / analytics |
+| `ssb:prefs` | `js/ssb/state.js` | SSB depth (tier 1/2/3) as `{v:1, tier}`; written only on an explicit depth pick, never from a shared link |
 | `cpt-history`, `cpt-analytics` | `js/cpt-search.js` | recent searches + counts; predates the namespaces, kept so history survives |
 
 Retired, no longer read: `sk_style` (one-pager style switch, removed in the

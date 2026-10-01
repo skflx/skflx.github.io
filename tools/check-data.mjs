@@ -27,7 +27,8 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { stampHtml, rootPages } from './stamp-assets.mjs';
+import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
+import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
 import { loadEngine, bakeAll } from './ascii3d.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -141,10 +142,19 @@ const VENDOR_SHA384 = {
   'js/vendor/react-18.3.1.production.min.js': 'DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z',
   'js/vendor/react-dom-18.3.1.production.min.js': 'gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1',
   'js/vendor/htm-3.1.1.umd.js': 'toVdrLSMaw7Y55MowcKqkmFL/Ek6Sky62NOk0b5sDDZBu2wcoPyyQUt9unDVjXhL',
+  /* three.js 0.186.1 (SSB). The two build files are byte-identical to the npm
+     tarball; each addon differs from it only in its bare 'three' import,
+     rewritten to a relative path (js/vendor/README.md). */
+  'js/vendor/three-0.186.1/build/three.module.js': 'm8JoFX52V6NGv2usipnlLJKnJfL7IE8dbniPDDCSGSQv3Hm4n6PjfV6syVwfuoRc',
+  'js/vendor/three-0.186.1/build/three.core.js': 'mdKeCwPEcbDvzaxwhm+MVuLoMou+E7jQqrs4tmu/n8HBYPGI1kZt0MkJxlMR4zFM',
+  'js/vendor/three-0.186.1/examples/jsm/controls/OrbitControls.js': 'qPsQxHJQusTrZkJM/pV9+9Ar5wamA5KT4tS5DssTyclVxwLoIXzCoJLxdFE3rrbT',
+  'js/vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js': 'TY1cL389i0uKzt8Zef+4ZTyT95lXTtcBQeMs0ax19sXELjIjHWgGNQSO9EaOrkfv',
+  'js/vendor/three-0.186.1/examples/jsm/utils/BufferGeometryUtils.js': '80MKp/CJ09MRFS7LKwTZfs+4FOsnlOG8NSuvB3RLMWod2+6UFOfwSkLo937gpx8S',
+  'js/vendor/three-0.186.1/examples/jsm/utils/SkeletonUtils.js': '9wnnny/bCGM+AmRCOO5igFReelvUyFf3GxRjMbg7DRZE/ErDbTH7hvDc+eS0yFWG',
 };
 
 /* Pages that must make no third-party request at all. */
-const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html']);
+const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'ssb.html']);
 
 function checkSecurity() {
   console.log('\nsecurity: vendored scripts + page policies');
@@ -214,6 +224,30 @@ function checkStamps() {
     ok(stale.length === 0, `${page}: asset stamps current`,
       `${page}: stale stamp (run node tools/stamp-assets.mjs): ${stale.join(' ; ')}`);
   }
+  /* SSB's ES-module graph and its data-hash map (docs/ssb.md 7.2). */
+  const ssb = stampSsb();
+  ok(ssb.errors.length === 0, 'js/ssb: imports resolve, no cycle', `js/ssb: ${ssb.errors.join(' ; ')}`);
+  ok(ssb.stale.length === 0, 'js/ssb: module specifiers and stamps.js current',
+    `js/ssb: stale (run node tools/stamp-assets.mjs):\n        ` + ssb.stale.join('\n        '));
+}
+
+/* ===========================================================
+   5. SSB knowledge graph (ssb/content/*.json)
+   Schema, id format, vocabularies, every reference resolving, and
+   the review gate (verified content stands on verified sources).
+   Rules: docs/authoring-ssb.md; checker: tools/ssb-content.mjs.
+   =========================================================== */
+function checkSsb() {
+  console.log('\nssb: knowledge graph schema + references');
+  const files = ssbFiles();
+  if (!files.length) { pass('ssb: no content yet'); return; }
+  const { errors, index } = validateSsb(files);
+  ok(errors.length === 0, `ssb: ${files.length} file(s), graph consistent`,
+    `ssb: ${errors.length} problem(s) (node tools/ssb-content.mjs):\n        ` + errors.slice(0, 20).join('\n        '));
+  ok(index.size > 0, 'ssb: graph has entities', 'ssb: content files present but empty');
+  const geo = validateSsbGeometry(index);
+  ok(geo.length === 0, 'ssb: specimen geometry names only graph ids',
+    `ssb: ${geo.length} geometry reference problem(s):\n        ` + geo.slice(0, 20).join('\n        '));
 }
 
 /* ===========================================================
@@ -282,6 +316,7 @@ checkOksat();
 checkAirway();
 checkSecurity();
 checkStamps();
+checkSsb();
 checkFigures();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

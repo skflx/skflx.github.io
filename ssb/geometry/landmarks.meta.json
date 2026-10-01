@@ -1,0 +1,121 @@
+{
+ "frame": "RAS mm, origin ANS projected on the midsagittal plane, axial parallel to Frankfort (tools/ssb-pipeline/uw/registration.json \"frame\")",
+ "specimen": "uw-axial-sagittal",
+ "landmarks": {
+  "lm.anterior-nasal-spine.M": {
+   "method": "image search: anterior-most bone within 7 px of the midsagittal plane at the nasal floor (labels3d.find_ans)"
+  },
+  "lm.crista-galli-apex.M": {
+   "method": "highest bone (display >= 125) within 3 mm of the MSP and 6 mm (AP) of the crista galli tips"
+  },
+  "lm.dorsum-sellae-tip.M": {
+   "method": "highest bone (display >= 125) within 3 mm of the MSP and 5 mm (AP) of the dorsum tips"
+  },
+  "lm.foramen-rotundum-anterior.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "lm.foramen-rotundum-anterior.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 2,
+   "spread_mm": 0.32
+  },
+  "lm.frontal-ostium.L": {
+   "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
+   "area_mm2": 32.666666666666664
+  },
+  "lm.frontal-ostium.R": {
+   "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
+   "area_mm2": 53.666666666666664
+  },
+  "lm.greater-palatine-foramen.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 19,
+   "spread_mm": 2.78
+  },
+  "lm.infraorbital-foramen.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 13,
+   "spread_mm": 3.65
+  },
+  "lm.sella-floor-center.M": {
+   "method": "half-level crossing between the fossa contents and the sphenoid air below the sella tips, on the midline at the tips' AP position"
+  },
+  "lm.sphenoid-ostium.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 2,
+   "spread_mm": 0.31
+  },
+  "lm.sphenoid-ostium.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 7,
+   "spread_mm": 3.21
+  },
+  "lm.sphenopalatine-foramen.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 5,
+   "spread_mm": 1.24
+  },
+  "lm.vidian-canal-anterior.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "s.anterior-clinoid-process.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 5,
+   "spread_mm": 0.63
+  },
+  "s.clivus.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "s.crista-galli.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 9,
+   "spread_mm": 1.28
+  },
+  "s.dorsum-sellae.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 10,
+   "spread_mm": 1.56
+  },
+  "s.foramen-lacerum.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "s.foramen-ovale.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 7,
+   "spread_mm": 1.25
+  },
+  "s.petrous-apex.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 6,
+   "spread_mm": 0.96
+  },
+  "s.sella-turcica.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 17,
+   "spread_mm": 2.88
+  },
+  "s.superior-orbital-fissure.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 4,
+   "spread_mm": 1.0
+  },
+  "s.superior-orbital-fissure.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 4,
+   "spread_mm": 1.0
+  },
+  "s.vomer.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 6,
+   "spread_mm": 0.94
+  }
+ }
+}

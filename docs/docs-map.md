@@ -21,6 +21,10 @@ no design judgment required.
 | `docs/diagrams.md` | The ASCII 3D figure system: request template, workflow, scene schema, inks, rules | The engine gains or changes a feature, a part kind, an ink, or the bake/check contract |
 | `.claude/skills/ascii-diagram/SKILL.md` | The agent playbook for a figure request (`/ascii-diagram`) | The workflow or its verification steps change |
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
+| `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |
+| `docs/authoring-ssb.md` | SSB content schema and editorial rules | The schema or `tools/ssb-content.mjs` changes |
+| `docs/ssb-imagegen.md` | Image-generation and cross-model briefs | A brief or its acceptance check changes |
+| `ssb/reference/*/README.md` | Provenance, permission and method of each external atlas crawl | A reference is re-crawled or its permission scope changes |
 | `wiki/README.md` | Wiki kit: pipeline, what leaves the vault (phase 1), reader-correction round trip, bootstrap, open owner decisions | `wiki/` files, `policy.json`, the feedback tool, or the Quartz config change |
 | `js/vendor/README.md` | Provenance, versions, and licenses of vendored scripts | A vendored file is added, upgraded, or removed (update the hashes in `tools/check-data.mjs` too) |
 | `docs/docs-map.md` | This checklist | A doc is added/removed, or the pass itself changes |

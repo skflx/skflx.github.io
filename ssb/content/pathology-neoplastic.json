@@ -1,0 +1,2982 @@
+{
+  "conditions": [
+    {
+      "id": "dz.inverted-papilloma",
+      "name": "Sinonasal inverted papilloma",
+      "syn": [
+        "inverted papilloma",
+        "IP",
+        "inverting papilloma",
+        "Schneiderian papilloma, inverted type",
+        "sinonasal papilloma, inverted type",
+        "Ringertz tumor"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.lateral-nasal-wall",
+        "s.middle-meatus",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.frontal-recess",
+        "s.frontal-sinus",
+        "s.sphenoid-sinus",
+        "s.nasal-cavity"
+      ],
+      "tier": 1,
+      "what": "A benign but locally aggressive tumor of the sinonasal (Schneiderian) mucosa whose epithelium grows inward into the stroma; it is usually unilateral and arises from the lateral nasal wall or maxillary sinus. It recurs if its attachment is left behind and can harbor or give rise to squamous cell carcinoma.",
+      "why": "The operation is planned around the attachment (pedicle), not the bulk: debulk the exophytic part, find the attachment, strip the mucosa there subperiosteally and drill the bone beneath it, choosing the approach (wide antrostomy, prelacrimal, endoscopic medial maxillectomy, Draf IIb/III, osteoplastic flap) that gives instruments a straight line to that site. Everything goes to pathology, because a focus of carcinoma turns it into a cancer operation.",
+      "imaging": {
+        "ct": "Unilateral lobulated soft-tissue mass centered on the middle meatus, typically extending into the maxillary sinus through a widened ostium, with remodeling and thinning of adjacent walls rather than destruction. Focal hyperostosis at one point (a bony plaque, spur or cone) predicts the attachment site with good but imperfect reliability (49 of 55 hyperostotic foci, 89%, matched the surgical origin in one retrospective CT series of 76 patients); diffuse sclerosis of a whole sinus wall is nonspecific and also occurs with chronic sinusitis. Entrapped bone fragments can look like calcification. The rest of the opacified sinus is often retained secretion, which CT cannot separate from tumor. Aggressive bone destruction, orbital or intracranial invasion, or necrosis suggests associated carcinoma.",
+        "mri": "The convoluted cerebriform pattern — alternating hyper- and hypointense striations like gyri on T2 and contrast-enhanced T1 — is seen in most inverted papillomas and is uncommon in other sinonasal tumors. MRI separates enhancing tumor from non-enhancing obstructed secretions (T2 bright with only peripheral mucosal enhancement), and that boundary sets the true extent, the Krouse stage and the approach. Focal loss of the cerebriform pattern, necrosis or infiltration beyond bone raises suspicion of carcinoma in that area. Order both for planning: in one atlas chapter's summary CT hyperostosis is the more sensitive and the MRI pattern the more specific guide to the attachment, and together they localize it better than either alone."
+      },
+      "endo": "Either side, 0°, middle meatus: a unilateral, firm, pale-pink to red, papillary or mulberry-surfaced polypoid mass, more opaque and warty than an inflammatory polyp and bleeding more readily; it often coexists with ordinary polyps, so a biopsy of the most anterior polyp can miss it.",
+      "class": [
+        "c.krouse"
+      ],
+      "complications": [
+        "dz.sinonasal-scc",
+        "dz.mucocele",
+        "h.nasolacrimal-duct-injury",
+        "h.frontal-recess-stenosis"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.medial-maxillectomy",
+        "p.prelacrimal-approach",
+        "p.canine-fossa-trephination",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.draf-iib",
+        "p.draf-iii",
+        "p.osteoplastic-flap",
+        "p.sphenoidotomy"
+      ],
+      "mimics": [
+        "dz.crs-with-polyps",
+        "dz.antrochoanal-polyp",
+        "dz.oncocytic-papilloma",
+        "dz.exophytic-papilloma",
+        "dz.reah",
+        "dz.sinonasal-scc",
+        "dz.itac",
+        "dz.mucosal-melanoma",
+        "dz.olfactory-neuroblastoma",
+        "dz.fungal-ball",
+        "dz.mucocele",
+        "dz.crs-without-polyps",
+        "dz.meningoencephalocele"
+      ],
+      "redFlags": [
+        "Any unilateral nasal polyp or unilateral sinus opacification: image and take tissue before calling it chronic rhinosinusitis — papilloma, carcinoma and melanoma all present this way.",
+        "Bone destruction rather than remodeling, orbital or intracranial invasion, necrosis, pain, V2 numbness, epiphora or rapid growth: assume carcinoma until proven otherwise and stage it as a malignancy.",
+        "Recurrence at the same site: the attachment was not controlled — revise with subperiosteal removal and drilling through an approach that reaches it.",
+        "Frontal attachment far lateral (beyond a sagittal plane through the lamina papyracea), on the anterior table or in a supraorbital cell: an endoscopic Draf III may not reach it — plan an osteoplastic flap or combined access."
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Before biopsying any unilateral nasal mass in clinic, look at the CT (and MRI if the skull base is thin or eroded): an encephalocele or a juvenile angiofibroma must be excluded first."
+        },
+        {
+          "tier": 2,
+          "text": "Attachment-oriented surgery: debulk with a microdebrider to find the pedicle, then take the attachment with its periosteum and drill the underlying (often hyperostotic) bone, which can hide tumor in its crevices."
+        },
+        {
+          "tier": 2,
+          "text": "Maxillary attachments: medial or posterior wall → wide antrostomy with angled scopes; anterior, lateral (zygomatic recess) or inferior (alveolar recess) wall → [[p.prelacrimal-approach]] or [[p.medial-maxillectomy]], with a canine fossa port if needed."
+        },
+        {
+          "tier": 2,
+          "text": "Frontal attachments: posteromedial on the floor or recess → Draf IIb or III; far lateral, anterior table or supraorbital cell → combined with an osteoplastic flap or trephine."
+        },
+        {
+          "tier": 3,
+          "text": "A meta-analysis of series from the endoscopic era (1992–2004) found recurrence in 12% of 714 patients resected endoscopically versus 20% of 346 resected by non-endoscopic approaches (retrospective series; case selection likely favors the endoscopic arm). The difference is usually attributed to attachment control rather than to the endoscope itself."
+        },
+        {
+          "tier": 3,
+          "text": "Carcinoma (usually squamous) is found synchronously or develops later in a minority of patients — quoted across surgical series at roughly 5–15% of patients, synchronous more often than metachronous; definitions, follow-up and tertiary-referral case mix differ between series. Recurrences can be late, usually at the original attachment, so endoscopic surveillance continues for years."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.lund-2010-eptns",
+        "src.krouse-2000",
+        "src.lee-2007-ip-hyperostosis",
+        "src.ojiri-2000-ip-mri",
+        "src.busquets-2006",
+        "src.som-curtin-2011",
+        "src.chiu-2019-ch21"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.oncocytic-papilloma",
+      "name": "Sinonasal oncocytic papilloma",
+      "syn": [
+        "oncocytic papilloma",
+        "cylindrical cell papilloma",
+        "Schneiderian papilloma, oncocytic type"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.lateral-nasal-wall",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.middle-meatus"
+      ],
+      "tier": 2,
+      "what": "The least common Schneiderian papilloma, made of multilayered oncocytic columnar cells with intraepithelial microcysts; like inverted papilloma it arises from the lateral nasal wall and sinuses.",
+      "why": "It is managed like an inverted papilloma — attachment-directed complete resection with drilling of the underlying bone — because it recurs when incompletely removed and can be associated with carcinoma. Imaging cannot separate it from inverted papilloma, so the plan is set by extent and attachment, and the subtype comes from histology.",
+      "imaging": {
+        "ct": "Unilateral lobulated mass of the lateral nasal wall or maxillary sinus with bony remodeling and possible focal hyperostosis at the attachment — indistinguishable from inverted papilloma.",
+        "mri": "May show a cerebriform pattern like inverted papilloma; MRI maps tumor versus retained secretions but does not identify the subtype."
+      },
+      "endo": "Either side, 0°, middle meatus: a unilateral red-brown to tan papillary mass, often more friable and beefy-red than inverted papilloma.",
+      "complications": [
+        "dz.sinonasal-scc"
+      ],
+      "managedBy": [
+        "p.maxillary-antrostomy",
+        "p.medial-maxillectomy",
+        "p.prelacrimal-approach",
+        "p.anterior-ethmoidectomy"
+      ],
+      "mimics": [
+        "dz.inverted-papilloma",
+        "dz.crs-with-polyps",
+        "dz.sinonasal-scc",
+        "dz.itac"
+      ],
+      "redFlags": [
+        "Bone destruction, necrosis or extension beyond the sinus walls: associated carcinoma until proven otherwise."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "It is not HPV-related (exophytic papilloma is, with HPV 6/11) and it carries KRAS mutations, whereas most inverted papillomas carry EGFR mutations. The Krouse system was built for inverted papilloma but is applied to it in practice."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.lund-2010-eptns"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.exophytic-papilloma",
+      "name": "Sinonasal exophytic papilloma",
+      "syn": [
+        "exophytic papilloma",
+        "fungiform papilloma",
+        "septal papilloma",
+        "Schneiderian papilloma, exophytic type"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.nasal-septum",
+        "s.nasal-cavity"
+      ],
+      "tier": 2,
+      "what": "A warty, outward-growing papilloma of the nasal septum, associated with low-risk HPV types (6 and 11).",
+      "why": "Excise it with the underlying mucosa and a small margin (subperichondrial on the septum); recurrence reflects incomplete excision and malignant change is exceptional, so no wide resection is needed. A \"papilloma\" on the lateral wall or in a sinus should be treated as inverted or oncocytic type until histology says otherwise.",
+      "imaging": {
+        "ct": "Usually not needed; a small soft-tissue nodule on the anterior septum without bone change."
+      },
+      "endo": "Either side, 0°, anterior septum: a sessile or pedunculated gray-pink warty lesion with a papillary surface, sitting on the septum rather than the lateral wall.",
+      "mimics": [
+        "dz.inverted-papilloma",
+        "dz.lobular-capillary-hemangioma",
+        "dz.sinonasal-scc"
+      ],
+      "redFlags": [
+        "A papillary lesion on the lateral wall or in a sinus: not exophytic type until proven — manage as inverted or oncocytic papilloma."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.reah",
+      "name": "Respiratory epithelial adenomatoid hamartoma (REAH)",
+      "syn": [
+        "REAH",
+        "respiratory epithelial adenomatoid hamartoma",
+        "adenomatoid hamartoma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.olfactory-cleft",
+        "s.nasal-septum",
+        "s.middle-turbinate",
+        "s.superior-turbinate"
+      ],
+      "tier": 3,
+      "what": "A benign glandular hamartoma, typically centered in the olfactory cleft (posterior superior septum and medial surface of the middle turbinate), often bilateral and often found alongside nasal polyps.",
+      "why": "Recognizing it prevents over-treatment: it is removed conservatively at its mucosal base, preserving the cribriform plate, the middle turbinate and as much olfactory mucosa as possible. Tell the pathologist the specimen came from the olfactory cleft, because it must be separated from low-grade adenocarcinoma and inverted papilloma.",
+      "imaging": {
+        "ct": "Widening of the olfactory cleft by soft tissue, often bilateral and symmetric, with the middle turbinates bowed laterally but an intact cribriform plate and no destruction; frequently accompanied by polypoid disease elsewhere.",
+        "mri": "Nonspecific T2 hyperintense, mildly enhancing soft tissue confined below the cribriform plate, with no dural enhancement or intracranial component (which would point to olfactory neuroblastoma or meningioma)."
+      },
+      "endo": "Either side, 0° then 30°, between the middle turbinate and the septum: a rubbery, pale, polypoid mass filling the olfactory cleft, often on both sides.",
+      "mimics": [
+        "dz.olfactory-neuroblastoma",
+        "dz.inverted-papilloma",
+        "dz.crs-with-polyps",
+        "dz.itac"
+      ],
+      "redFlags": [
+        "A unilateral olfactory cleft mass with cribriform erosion or an intracranial component is not REAH until MRI and biopsy exclude olfactory neuroblastoma, adenocarcinoma and meningioma.",
+        "An olfactory-cleft biopsy reported as adenocarcinoma: ask for expert review against REAH before planning a craniofacial resection."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "The CT clue is a widened olfactory cleft in a patient with polyps; it is often an incidental finding in polypectomy specimens."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.wenig-1995-reah"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.jna",
+      "name": "Juvenile nasopharyngeal angiofibroma",
+      "syn": [
+        "JNA",
+        "juvenile angiofibroma",
+        "nasopharyngeal angiofibroma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.sphenopalatine-foramen",
+        "s.nasal-cavity",
+        "s.nasopharynx",
+        "s.pterygopalatine-fossa",
+        "s.pterygoid-process",
+        "s.vidian-canal",
+        "s.sphenoid-bone",
+        "s.sphenoid-sinus",
+        "s.maxillary-posterior-wall",
+        "s.pterygomaxillary-fissure",
+        "s.infratemporal-fossa",
+        "s.inferior-orbital-fissure",
+        "s.superior-orbital-fissure",
+        "s.cavernous-sinus"
+      ],
+      "tier": 1,
+      "what": "A benign but locally destructive, highly vascular tumor arising at the posterolateral nasal wall near the sphenopalatine foramen, occurring almost exclusively in adolescent males. It presents with unilateral nasal obstruction and recurrent epistaxis.",
+      "why": "It is diagnosed by imaging, not biopsy; surgery follows preoperative embolization and removes the tumor along its routes of spread, finishing by drilling the basisphenoid and the vidian (pterygoid) canal, where residual tumor hides and drives recurrence. Residual vascularity after embolization (supply from the ICA) and intracranial extent predict blood loss and whether an endonasal-only or staged approach is realistic.",
+      "imaging": {
+        "ct": "Avidly enhancing mass centered on the sphenopalatine foramen with widening of the pterygopalatine fossa and anterior bowing of the posterior maxillary wall (Holman–Miller sign). Erosion of the medial pterygoid plate and pterygoid base, widening of the vidian canal and invasion of the cancellous basisphenoid (the main predictor of residual disease and recurrence). It spreads medially into the nose and nasopharynx, laterally through the pterygomaxillary fissure into the infratemporal fossa, superiorly through the inferior and superior orbital fissures, and posteriorly toward the foramen lacerum and middle cranial fossa. Bone is remodeled and eroded, not permeated.",
+        "mri": "Intermediate T1, heterogeneous T2 with serpiginous flow voids (\"salt and pepper\") and intense enhancement; MRI defines intracranial, cavernous sinus and orbital apex extension and separates tumor from obstructed secretions. Angiography at embolization maps supply: internal maxillary (sphenopalatine, descending palatine) and ascending pharyngeal arteries, and in larger tumors ICA branches (vidian artery, inferolateral trunk) that cannot be embolized safely."
+      },
+      "endo": "Either side, 0°: a smooth, lobulated, red-purple submucosal mass in the posterior nasal cavity lateral to the choana, near the sphenopalatine foramen, often filling the nasopharynx; the covering mucosa is intact and the mass bleeds briskly on contact.",
+      "class": [
+        "c.jna-radkowski",
+        "c.jna-andrews-fisch",
+        "c.jna-upmc"
+      ],
+      "complications": [
+        "h.imax-bleeding-ppf",
+        "h.ica-injury-vidian",
+        "h.petrous-ica-injury-transpterygoid",
+        "h.v2-injury",
+        "h.vidian-sacrifice-dry-eye"
+      ],
+      "managedBy": [
+        "p.ppf-exposure",
+        "p.transpterygoid-approach",
+        "p.medial-maxillectomy",
+        "p.sphenoidotomy"
+      ],
+      "mimics": [
+        "dz.antrochoanal-polyp",
+        "dz.lobular-capillary-hemangioma",
+        "dz.rhabdomyosarcoma",
+        "dz.nasopharyngeal-carcinoma",
+        "dz.glomangiopericytoma",
+        "dz.sinonasal-schwannoma"
+      ],
+      "redFlags": [
+        "Adolescent male with unilateral obstruction and epistaxis: CT and MRI before any biopsy — a clinic biopsy can cause torrential bleeding.",
+        "Residual enhancement after embolization or ICA supply on angiography: higher blood loss — consider staging the resection or a combined approach.",
+        "Intracranial, cavernous sinus or orbital apex extension: plan with neurosurgery; small residual in these sites is often observed with serial MRI or irradiated rather than chased.",
+        "A presumed JNA in a female or an older adult: reconsider the diagnosis before treating it as one."
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Think of JNA in any adolescent boy with unilateral nasal obstruction and recurrent epistaxis; the diagnosis rests on the CT and MRI pattern, not on tissue."
+        },
+        {
+          "tier": 2,
+          "text": "Embolization is timed close to surgery, before collateral supply re-forms and embolized vessels recanalize — within 24 hours in one atlas chapter, within a few days in other practice; the longer the gap, the more the tumor bleeds. Beyond the distal internal maxillary branches and the ascending pharyngeal artery, larger tumors recruit the accessory meningeal and facial arteries and ICA-derived vidian and mandibular branches."
+        },
+        {
+          "tier": 2,
+          "text": "Follow its routes: from the sphenopalatine foramen into the nose and nasopharynx, through the PPF and pterygomaxillary fissure into the infratemporal fossa, up through the orbital fissures, and back into the basisphenoid and vidian canal toward the foramen lacerum."
+        },
+        {
+          "tier": 2,
+          "text": "Recurrence usually grows submucosally — in the basisphenoid, vidian canal or PPF, under intact mucosa — so follow-up is by contrast-enhanced MRI (or CT), not endoscopy alone."
+        },
+        {
+          "tier": 3,
+          "text": "After removal, drill the basisphenoid and the pterygoid (vidian) canal: tumor left in cancellous bone there is the usual source of recurrence. Follow the vidian canal posteriorly to the anterior genu of the petrous ICA, drilling only its inferomedial circumference, because the ICA lies superolateral to the back of the canal ([[pr.vidian-canal-to-genu]])."
+        },
+        {
+          "tier": 3,
+          "text": "Disconnect before you mobilize: control the internal maxillary branches in the PPF and infratemporal fossa first, then deliver the tumor; the vidian artery is divided with bipolar close to, but not into, the canal. Embolization does not replace this step: embolized vessels recanalize, and an unligated internal maxillary artery can still bleed heavily."
+        },
+        {
+          "tier": 3,
+          "text": "Large tumors are worked two-surgeon, four-handed through both nostrils with a partial posterior septectomy ([[p.ppf-exposure]]). A mass filling the nasopharynx may have to be debulked or divided anteriorly before its attachment comes into view, so en bloc removal, though preferred, is not always possible; in young patients the nasopharyngeal part can be taken transorally."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.radkowski-1996",
+        "src.andrews-1989",
+        "src.snyderman-2010-jna",
+        "src.lloyd-1999-jna",
+        "src.howard-2001-jna",
+        "src.lund-2010-eptns",
+        "src.who-hn-2022",
+        "src.chiu-2019-ch24"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.lobular-capillary-hemangioma",
+      "name": "Lobular capillary hemangioma",
+      "syn": [
+        "pyogenic granuloma",
+        "granuloma gravidarum",
+        "pregnancy tumor",
+        "LCH"
+      ],
+      "category": "vascular",
+      "involves": [
+        "s.nasal-septum",
+        "s.kiesselbach-area",
+        "s.inferior-turbinate",
+        "s.nasal-vestibule"
+      ],
+      "tier": 2,
+      "what": "A benign, fast-growing, easily bleeding capillary proliferation, most often on the anterior septum (Kiesselbach area) or the head of the inferior turbinate; associated with pregnancy, trauma, nasal packing and digital trauma.",
+      "why": "Excise it with its base and cauterize the feeding vessel under endoscopic control, which is usually curative; in pregnancy it may shrink after delivery, so bleeding can be controlled and small lesions observed. Histology is always sent to exclude melanoma, glomangiopericytoma and other vascular tumors.",
+      "imaging": {
+        "ct": "Usually unnecessary; if imaged, a small, avidly enhancing polypoid mass of the anterior nasal cavity without bone destruction.",
+        "mri": "T2 hyperintense with avid enhancement; flow voids only when large."
+      },
+      "endo": "Either side, 0°, anterior nasal cavity: a red to purple, friable, lobulated, pedunculated or sessile mass on the anterior septum or inferior turbinate head, often ulcerated with a fibrinous cap and bleeding on touch.",
+      "mimics": [
+        "dz.jna",
+        "dz.glomangiopericytoma",
+        "dz.mucosal-melanoma",
+        "dz.hht",
+        "dz.exophytic-papilloma"
+      ],
+      "redFlags": [
+        "A vascular mass in the posterior nasal cavity of an adolescent male is a JNA until imaging says otherwise — do not biopsy in clinic.",
+        "A pigmented or recurrent \"pyogenic granuloma\" in an older adult: biopsy for mucosal melanoma."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.sinonasal-schwannoma",
+      "name": "Sinonasal and pterygopalatine schwannoma",
+      "syn": [
+        "schwannoma",
+        "neurilemmoma",
+        "V2 schwannoma",
+        "vidian schwannoma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.maxillary-sinus",
+        "s.pterygopalatine-fossa",
+        "s.maxillary-nerve",
+        "s.vidian-nerve",
+        "s.foramen-rotundum",
+        "s.infraorbital-nerve"
+      ],
+      "tier": 3,
+      "what": "A benign, encapsulated nerve sheath tumor arising from branches of V1 or V2 or from autonomic fibers in the nasal cavity, ethmoid, maxillary sinus or pterygopalatine fossa.",
+      "why": "It can usually be enucleated endoscopically, and identifying the nerve of origin (V2, vidian or palatine nerves in the PPF) predicts the deficit resection will cause — numbness or dry eye. MRI separates it from vascular tumors that need embolization and from perineural spread of carcinoma along the same foramina.",
+      "imaging": {
+        "ct": "Well-circumscribed oval or lobulated mass with smooth expansion and remodeling of bone and widening of foramina along its nerve (foramen rotundum, vidian canal, infraorbital canal), without destruction. In the PPF this separates it from [[dz.jna]]: a schwannoma widens the foramen of its own nerve, whereas JNA bows the posterior maxillary wall forward and erodes the pterygoid base.",
+        "mri": "T1 isointense, heterogeneous T2 (cellular Antoni A areas darker, myxoid Antoni B areas brighter), cystic change and heterogeneous enhancement; a fusiform or dumbbell extension along the parent nerve through its foramen favors schwannoma. No flow voids, unlike JNA."
+      },
+      "endo": "Either side, 0°: a smooth, firm, yellow-tan submucosal mass with intact mucosa; not friable.",
+      "complications": [
+        "h.v2-injury",
+        "h.vidian-sacrifice-dry-eye",
+        "h.imax-bleeding-ppf"
+      ],
+      "managedBy": [
+        "p.ppf-exposure",
+        "p.transpterygoid-approach",
+        "p.medial-maxillectomy",
+        "p.anterior-ethmoidectomy"
+      ],
+      "mimics": [
+        "dz.jna",
+        "dz.glomangiopericytoma",
+        "dz.adenoid-cystic-carcinoma"
+      ],
+      "redFlags": [
+        "Foraminal widening with pain, numbness and loss of the fat around the nerve in a patient with a prior sinonasal, palatal or skin cancer is perineural spread, not a schwannoma — biopsy and stage."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.som-curtin-2011",
+        "src.chiu-2019-ch24"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.glomangiopericytoma",
+      "name": "Sinonasal glomangiopericytoma",
+      "syn": [
+        "glomangiopericytoma",
+        "sinonasal-type hemangiopericytoma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.lateral-nasal-wall",
+        "s.ethmoid-labyrinth"
+      ],
+      "tier": 3,
+      "what": "An uncommon, indolent perivascular myoid tumor of the nasal cavity in older adults (borderline/low-grade in the WHO classification), presenting with obstruction and epistaxis; it shows nuclear beta-catenin from CTNNB1 mutation.",
+      "why": "Complete endoscopic excision with a mucosal margin is usually curative, but recurrence can be late, so follow-up is long. Its vascularity warrants preparation for bleeding.",
+      "imaging": {
+        "ct": "Polypoid, enhancing nasal-cavity mass with bony remodeling rather than destruction.",
+        "mri": "Avidly enhancing, sometimes with flow voids; nonspecific."
+      },
+      "endo": "Either side, 0°: a soft, red to gray-pink polypoid mass that bleeds on contact.",
+      "mimics": [
+        "dz.lobular-capillary-hemangioma",
+        "dz.jna",
+        "dz.sinonasal-schwannoma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.osteoma",
+      "name": "Paranasal sinus osteoma",
+      "syn": [
+        "osteoma",
+        "frontal sinus osteoma",
+        "ethmoid osteoma",
+        "ivory osteoma"
+      ],
+      "category": "fibro-osseous",
+      "involves": [
+        "s.frontal-sinus",
+        "s.frontal-recess",
+        "s.frontal-ostium",
+        "s.ethmoid-labyrinth",
+        "s.lamina-papyracea",
+        "s.frontal-sinus-posterior-table",
+        "s.orbit"
+      ],
+      "tier": 1,
+      "what": "A slow-growing benign tumor of mature bone, most common in the frontal sinus and frontal recess and next in the ethmoid; usually an incidental CT finding.",
+      "why": "Most are observed with interval CT; surgery is for symptoms, obstructed drainage (mucocele), orbital or intracranial extension, or documented growth. Whether it can come out endoscopically depends on where it attaches and how far it extends laterally relative to a sagittal plane through the lamina papyracea; anterior-table, far-lateral or supraorbital tumors may need an osteoplastic flap or combined approach.",
+      "imaging": {
+        "ct": "Sharply marginated, homogeneous, very dense (ivory) bone, or dense cortex around a less dense cancellous core, projecting into the sinus lumen from a broad or narrow base. Fibrous dysplasia instead expands the bone itself with ground-glass matrix, and ossifying fibroma has a rim around a heterogeneous center. Record the attachment, its relation to the frontal ostium, the lamina papyracea plane and the posterior table or skull base, and any mucocele behind it.",
+        "mri": "Signal void on all sequences; MRI is needed only for complications (mucocele, pneumocephalus, abscess)."
+      },
+      "endo": "Either side, 30°–70° into the frontal recess: a hard, smooth, white-yellow mass under thin mucosa.",
+      "complications": [
+        "dz.mucocele",
+        "dz.meningitis-sinogenic",
+        "dz.brain-abscess-sinogenic",
+        "h.tension-pneumocephalus"
+      ],
+      "managedBy": [
+        "p.draf-iia",
+        "p.draf-iib",
+        "p.draf-iii",
+        "p.osteoplastic-flap",
+        "p.anterior-ethmoidectomy"
+      ],
+      "mimics": [
+        "dz.fibrous-dysplasia",
+        "dz.ossifying-fibroma"
+      ],
+      "redFlags": [
+        "Multiple craniofacial osteomas (with dental anomalies or soft-tissue tumors): screen for Gardner syndrome (familial adenomatous polyposis) — colonoscopy.",
+        "Erosion of the posterior table or orbital roof with pneumocephalus, CSF leak or orbital symptoms: remove it.",
+        "A mucocele behind an obstructing osteoma: remove the osteoma, not only the mucocele."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Endoscopic drill-out: core the center with the drill to thin it into a shell, then fracture the shell away from the lamina papyracea and skull base; a Draf III gives the angle for medial attachments."
+        },
+        {
+          "tier": 2,
+          "text": "Chiu and colleagues graded frontal osteomas by attachment, size relative to the frontal recess and lateral extension past a plane through the lamina papyracea; anterosuperior attachment and lateral extension predict the need for external access."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.chiu-2005-osteoma",
+        "src.who-hn-2022",
+        "src.lund-2010-eptns",
+        "src.som-curtin-2011"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.fibrous-dysplasia",
+      "name": "Craniofacial fibrous dysplasia",
+      "syn": [
+        "fibrous dysplasia",
+        "FD",
+        "monostotic fibrous dysplasia",
+        "polyostotic fibrous dysplasia",
+        "McCune-Albright syndrome"
+      ],
+      "category": "fibro-osseous",
+      "involves": [
+        "s.sphenoid-bone",
+        "s.ethmoid-bone",
+        "s.frontal-bone",
+        "s.maxillary-sinus",
+        "s.optic-canal",
+        "s.anterior-clinoid-process",
+        "s.pterygoid-process",
+        "s.clivus",
+        "s.orbit"
+      ],
+      "tier": 2,
+      "what": "A developmental disorder in which normal bone is replaced by fibrous tissue and immature woven bone, caused by postzygotic activating GNAS mutations; it affects one bone or several, with café-au-lait macules and endocrine disease in McCune–Albright syndrome.",
+      "why": "It is treated for function — deformity, sinus obstruction, pain, nerve compression — not for its presence, and activity usually slows after skeletal maturity; endoscopic surgery reopens drainage or contours rather than chasing complete excision. Prophylactic optic canal decompression with normal vision is not recommended (it risks the vision it aims to protect); decompression is for documented progressive visual loss.",
+      "imaging": {
+        "ct": "Expansion of the involved bone with ground-glass matrix, mixed with cystic and sclerotic areas, preserved outer cortical contour and an indistinct transition to normal bone; it replaces bone rather than growing into the sinus lumen. Foramina (optic, vidian, rotundum) and sinus ostia are narrowed or encased. CT is the diagnostic study.",
+        "mri": "Variable and misleading: intermediate-to-low T1, heterogeneous T2 and moderate to avid enhancement that can mimic a tumor or meningioma — always read it with the CT."
+      },
+      "endo": "Either side: normal mucosa over expanded, gritty bone narrowing the nasal cavity or sinus ostia; it bleeds more than normal bone when drilled.",
+      "complications": [
+        "dz.mucocele"
+      ],
+      "managedBy": [
+        "p.optic-nerve-decompression",
+        "p.draf-iib",
+        "p.draf-iii",
+        "p.sphenoidotomy",
+        "p.maxillary-antrostomy"
+      ],
+      "mimics": [
+        "dz.ossifying-fibroma",
+        "dz.osteoma",
+        "dz.olfactory-groove-meningioma",
+        "dz.planum-tuberculum-meningioma"
+      ],
+      "redFlags": [
+        "Rapid visual loss, pain or sudden expansion: hemorrhage or a secondary aneurysmal bone cyst in the lesion (or rarely sarcomatous change) — urgent MRI and decompression.",
+        "Progressive visual acuity or field loss with a narrowed optic canal: decompression is indicated; encasement alone is not.",
+        "Avoid radiotherapy: it is associated with malignant transformation."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Screen for endocrine disease (growth hormone excess, phosphate wasting) and other bone lesions; untreated GH excess worsens craniofacial disease."
+        },
+        {
+          "tier": 3,
+          "text": "In the sphenoid it can obliterate the sinus and bury the carotid and optic canals in dysplastic bone: rely on navigation and Doppler, not surface landmarks."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.lee-2012-fd",
+        "src.who-hn-2022",
+        "src.som-curtin-2011"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.ossifying-fibroma",
+      "name": "Ossifying fibroma",
+      "syn": [
+        "cemento-ossifying fibroma",
+        "juvenile psammomatoid ossifying fibroma",
+        "juvenile trabecular ossifying fibroma",
+        "JPOF",
+        "JTOF"
+      ],
+      "category": "fibro-osseous",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.maxillary-sinus",
+        "s.frontal-sinus",
+        "s.lamina-papyracea",
+        "s.orbit"
+      ],
+      "tier": 2,
+      "what": "A benign, well-demarcated fibro-osseous neoplasm that grows expansively; the juvenile psammomatoid type typically involves the sinonasal tract and orbit of children and young adults, the trabecular type mainly the jaws.",
+      "why": "Unlike fibrous dysplasia it is a true neoplasm with a defined border, so it is removed completely — en bloc, or by thorough curettage and drilling of its rim — because partial removal is followed by regrowth, especially in the aggressive juvenile types.",
+      "imaging": {
+        "ct": "Well-circumscribed expansile mass with a thick sclerotic bony rim (shell) around a heterogeneous, less dense or ground-glass center; it displaces rather than infiltrates the orbit and skull base and has a sharp interface with normal bone — the key difference from the blending margin of fibrous dysplasia.",
+        "mri": "Heterogeneous: hypointense rim, variably enhancing center; cysts and fluid levels in juvenile types."
+      },
+      "endo": "Either side: a hard, smooth, expansile mass under normal mucosa; once the shell is opened, a gritty center that separates from surrounding bone.",
+      "managedBy": [
+        "p.anterior-ethmoidectomy",
+        "p.medial-maxillectomy",
+        "p.draf-iii",
+        "p.osteoplastic-flap"
+      ],
+      "mimics": [
+        "dz.fibrous-dysplasia",
+        "dz.osteoma",
+        "dz.mucocele"
+      ],
+      "redFlags": [
+        "Rapid growth, proptosis or visual symptoms in a child: juvenile ossifying fibroma behaves aggressively — expedite complete resection."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.som-curtin-2011"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.sinonasal-scc",
+      "name": "Sinonasal squamous cell carcinoma",
+      "syn": [
+        "SNSCC",
+        "sinonasal SCC",
+        "maxillary sinus carcinoma",
+        "keratinizing squamous cell carcinoma",
+        "non-keratinizing squamous cell carcinoma",
+        "HPV-associated sinonasal carcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.nasal-cavity",
+        "s.lateral-nasal-wall",
+        "s.ethmoid-labyrinth",
+        "s.nasal-septum",
+        "s.maxillary-sinus-floor",
+        "s.orbital-floor",
+        "s.lamina-papyracea",
+        "s.periorbita",
+        "s.orbit",
+        "s.infraorbital-nerve",
+        "s.pterygopalatine-fossa",
+        "s.infratemporal-fossa",
+        "s.cribriform-plate"
+      ],
+      "tier": 1,
+      "what": "The most common sinonasal malignancy, arising most often in the maxillary sinus and nasal cavity and presenting late with unilateral obstruction, bleeding, cheek numbness, loose teeth, epiphora or proptosis. Some arise from an inverted papilloma, and a subset of non-keratinizing tumors is HPV-associated.",
+      "why": "The operation is defined by its margins — periorbita versus orbital fat and muscle, skull base and dura, pterygoid plates, PPF and infratemporal fossa, palate — which decide between endoscopic resection, endoscopically assisted craniofacial resection, open maxillectomy with or without orbital exenteration, or primary chemoradiation. Resect to clear margins with frozen sections, usually followed by radiotherapy; debulking without a margin plan does not help the patient.",
+      "imaging": {
+        "ct": "Aggressive, destructive soft-tissue mass with permeative destruction (not smooth remodeling) of sinus walls, orbital floor or lamina papyracea, palate, pterygoid plates or cribriform plate; heterogeneous enhancement with necrosis. Obliterated retroantral and PPF fat, a widened foramen rotundum or infraorbital canal suggest perineural spread.",
+        "mri": "Intermediate T2 cellular tumor against bright T2 retained secretions: MRI separates tumor from the obstructed sinus and is the basis of T staging. Margin questions: periorbita (a preserved dark line versus nodular enhancement and fat infiltration), orbital apex, dura (thin smooth enhancement may be reactive; thick, nodular or pial enhancement and brain edema mean invasion), PPF and infratemporal fossa, and perineural spread along V2 and V3 to foramen rotundum, foramen ovale, Meckel's cave and the cavernous sinus. Neck imaging and PET-CT for nodes and distant disease."
+      },
+      "endo": "Either side, 0°: a friable, irregular, often ulcerated or necrotic mass that bleeds easily; its edge can look like a polyp or papilloma.",
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "complications": [
+        "h.postop-csf-leak",
+        "h.nasolacrimal-duct-injury",
+        "h.v2-injury"
+      ],
+      "managedBy": [
+        "p.medial-maxillectomy",
+        "p.anterior-ethmoidectomy",
+        "p.transcribriform-approach",
+        "p.ppf-exposure",
+        "p.transpterygoid-approach",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.inverted-papilloma",
+        "dz.oncocytic-papilloma",
+        "dz.exophytic-papilloma",
+        "dz.itac",
+        "dz.adenoid-cystic-carcinoma",
+        "dz.mucosal-melanoma",
+        "dz.snuc",
+        "dz.smarcb1-deficient-carcinoma",
+        "dz.nut-carcinoma",
+        "dz.nk-t-cell-lymphoma",
+        "dz.gpa",
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.chronic-invasive-fungal-sinusitis"
+      ],
+      "redFlags": [
+        "Unilateral nasal symptoms with cheek numbness (V2), loose teeth, epiphora, diplopia or proptosis: image and biopsy — these are late signs of malignancy, not sinusitis.",
+        "Orbital apex, cavernous sinus, extensive brain, nasopharynx or clivus involvement (T4b): resection for cure is rarely possible — definitive chemoradiation is the default.",
+        "Invasion through the periorbita into orbital fat, extraocular muscle or globe: exenteration may be needed for a margin; periorbita involvement alone can usually be resected with the eye preserved.",
+        "Tumor on the septum or rostrum, or a planned margin through the septum: the ipsilateral nasoseptal flap may be oncologically unsafe — plan a contralateral, pericranial or free-graft reconstruction.",
+        "Biopsy reported as \"poorly differentiated\" or \"undifferentiated\": ask for the full immunohistochemical panel (p16/HPV, NUT, SMARCB1, neuroendocrine markers, S100/SOX10, CD56, EBER) before treatment — the category changes the plan."
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Öhngren's line (medial canthus to the angle of the mandible) divides maxillary tumors: those above and behind it reach the orbit, skull base and PPF early and do worse."
+        },
+        {
+          "tier": 2,
+          "text": "Endoscopic resection is tumor-driven: disassemble the tumor to find its origin, then resect subsite by subsite with frozen-section margins; piecemeal removal is acceptable only when the final margins are clear."
+        },
+        {
+          "tier": 3,
+          "text": "Retrospective series of selected tumors report outcomes after endoscopic resection comparable to open approaches; the selection explains much of that, and the approach never justifies giving up a margin."
+        },
+        {
+          "tier": 2,
+          "text": "Elective treatment of the neck is debated; it is more often offered for advanced maxillary SCC than for small nasal cavity tumors."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.ajcc-8",
+        "src.lund-2010-eptns",
+        "src.snyderman-2008-oncologic",
+        "src.nicolai-2008-malignant",
+        "src.hanna-2009-endoscopic",
+        "src.cummings-7",
+        "src.som-curtin-2011"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.itac",
+      "name": "Sinonasal intestinal-type adenocarcinoma (ITAC)",
+      "syn": [
+        "ITAC",
+        "intestinal-type adenocarcinoma",
+        "woodworkers' adenocarcinoma",
+        "ethmoid adenocarcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.olfactory-cleft",
+        "s.ethmoid-labyrinth",
+        "s.middle-turbinate",
+        "s.superior-turbinate",
+        "s.nasal-septum",
+        "s.cribriform-plate",
+        "s.olfactory-fossa",
+        "s.anterior-cranial-fossa-dura",
+        "s.lamina-papyracea"
+      ],
+      "tier": 2,
+      "what": "An adenocarcinoma resembling colonic adenocarcinoma, strongly associated with occupational hardwood and leather dust, arising in the ethmoid region; endoscopic studies place its origin in the olfactory cleft.",
+      "why": "Because it starts in the olfactory cleft, resection is planned as an en bloc removal of the cleft — middle and superior turbinates, septal mucosa, cribriform plate and overlying dura as needed — through a unilateral or bilateral transcribriform approach with frozen margins, usually followed by radiotherapy. Nodal metastasis is uncommon, so the neck is not routinely treated.",
+      "imaging": {
+        "ct": "Soft-tissue mass centered in the olfactory cleft and superior ethmoid, eroding the cribriform plate, lamina papyracea and septum, with possible extension into the anterior cranial fossa.",
+        "mri": "Intermediate T2 with heterogeneous enhancement (mucinous types T2 bright); maps dural enhancement over the cribriform plate and fovea, olfactory bulb and tract involvement, the periorbita, and tumor versus retained secretions."
+      },
+      "endo": "Either side, 0° then 30°, olfactory cleft: a friable, papillary or polypoid, pale-to-red mass between the middle turbinate and the septum that can pass for a polyp; check the opposite cleft.",
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "complications": [
+        "h.postop-csf-leak",
+        "h.olfactory-loss"
+      ],
+      "managedBy": [
+        "p.transcribriform-approach",
+        "p.anterior-ethmoidectomy",
+        "p.posterior-ethmoidectomy",
+        "p.draf-iii",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.inverted-papilloma",
+        "dz.oncocytic-papilloma",
+        "dz.olfactory-neuroblastoma",
+        "dz.reah",
+        "dz.sinonasal-scc",
+        "dz.crs-with-polyps",
+        "dz.olfactory-groove-meningioma"
+      ],
+      "redFlags": [
+        "Occupational hardwood or leather dust exposure with a unilateral olfactory-cleft \"polyp\": biopsy it.",
+        "Metastatic colorectal adenocarcinoma looks the same under the microscope and shares CDX2/CK20 staining: correlate clinically."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "When the tumor is confined to one olfactory cleft and the septum is uninvolved, a unilateral transcribriform resection can preserve the contralateral cleft; bilateral disease needs bilateral resection."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.jankowski-2007-itac",
+        "src.nicolai-2008-malignant",
+        "src.lund-2010-eptns",
+        "src.ajcc-8"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.adenoid-cystic-carcinoma",
+      "name": "Sinonasal adenoid cystic carcinoma",
+      "syn": [
+        "adenoid cystic carcinoma",
+        "ACC",
+        "cylindroma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.nasal-cavity",
+        "s.pterygopalatine-fossa",
+        "s.maxillary-nerve",
+        "s.foramen-rotundum",
+        "s.vidian-nerve",
+        "s.vidian-canal",
+        "s.greater-palatine-canal",
+        "s.infraorbital-nerve",
+        "s.meckels-cave",
+        "s.cavernous-sinus",
+        "s.mandibular-nerve",
+        "s.foramen-ovale"
+      ],
+      "tier": 2,
+      "what": "A minor salivary gland carcinoma, in the sinonasal tract most often in the maxillary sinus or nasal cavity, that grows slowly but spreads along nerves and metastasizes late, especially to the lungs; MYB rearrangements (MYB–NFIB) are characteristic.",
+      "why": "Perineural spread along V2 and its branches (infraorbital, palatine, vidian, foramen rotundum) toward Meckel's cave and the cavernous sinus sets the true margin: follow the nerve with frozen sections as far as is safely resectable and plan radiotherapy fields to the skull base. Microscopically positive margins are common and long survival with disease is typical, so the extent of resection is weighed against its morbidity.",
+      "imaging": {
+        "ct": "Soft-tissue mass with bone destruction or remodeling; widened or eroded foramina (rotundum, vidian, greater palatine, infraorbital canal) and loss of fat in the PPF.",
+        "mri": "Variable T2 (tubular and cribriform patterns brighter, solid pattern darker). The key study for perineural spread: thickened enhancing V2, V3 or vidian nerve, obliterated PPF fat, enlarged foramen rotundum or ovale, enhancement in Meckel's cave or the lateral cavernous sinus, and denervation atrophy of the masticator muscles (V3). Skip lesions occur, so image the whole nerve to the brainstem."
+      },
+      "endo": "Either side: often a firm, smooth submucosal mass under intact mucosa that looks benign.",
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "complications": [
+        "h.v2-injury",
+        "h.vidian-sacrifice-dry-eye",
+        "h.trigeminal-injury-meckel"
+      ],
+      "managedBy": [
+        "p.medial-maxillectomy",
+        "p.ppf-exposure",
+        "p.transpterygoid-approach",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.sinonasal-schwannoma",
+        "dz.sinonasal-scc"
+      ],
+      "redFlags": [
+        "V2 or V3 numbness, pain or formication with a sinonasal or palatal mass: perineural spread until proven otherwise — contrast MRI with fat suppression along the whole nerve.",
+        "Cavernous sinus or Meckel's cave involvement: usually treated with radiotherapy rather than chased surgically."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Image the chest at staging and in follow-up: pulmonary metastases can appear many years later and grow slowly."
+        },
+        {
+          "tier": 3,
+          "text": "Following the nerve: in the PPF identify V2 and the vidian nerve and trace them back toward foramen rotundum and the vidian canal with frozen sections, remembering that the canal leads to the petrous ICA ([[pr.vidian-canal-to-genu]])."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.ajcc-8",
+        "src.lund-2010-eptns",
+        "src.som-curtin-2011"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.mucosal-melanoma",
+      "name": "Sinonasal mucosal melanoma",
+      "syn": [
+        "mucosal melanoma",
+        "sinonasal melanoma",
+        "malignant melanoma of the nasal cavity"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-septum",
+        "s.lateral-nasal-wall",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.nasal-cavity",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth"
+      ],
+      "tier": 2,
+      "what": "A melanoma arising from melanocytes of the sinonasal mucosa, usually in older adults and most often on the septum or lateral nasal wall; it presents with unilateral obstruction and epistaxis, and many are amelanotic.",
+      "why": "Every mucosal melanoma starts at T3 in AJCC staging because local recurrence and distant metastasis dominate the outcome regardless of size. Resection aims for clear margins (endoscopic when feasible) with adjuvant radiotherapy for local control, while PET-CT staging and immune-checkpoint therapy shape the plan — morbid, heroic resections rarely change survival. Prognosis is poor: most deaths come from distant metastasis, often after local control has been achieved.",
+      "imaging": {
+        "ct": "Polypoid, enhancing nasal cavity mass with remodeling or destruction; can look deceptively like a polyp.",
+        "mri": "Melanin shortens T1 and T2, so melanotic tumors can be T1 hyperintense and T2 hypointense (a pattern shared with hemorrhage and inspissated secretions); amelanotic tumors are nonspecific. Look for separate mucosal satellite lesions."
+      },
+      "endo": "Either side, 0°: a fleshy, friable, polypoid mass on the septum or lateral wall — black, brown, gray or pink when amelanotic — sometimes with separate pigmented mucosal patches.",
+      "class": [
+        "c.ajcc-mucosal-melanoma-t"
+      ],
+      "managedBy": [
+        "p.medial-maxillectomy",
+        "p.anterior-ethmoidectomy",
+        "p.transcribriform-approach",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.lobular-capillary-hemangioma",
+        "dz.inverted-papilloma",
+        "dz.sinonasal-scc",
+        "dz.olfactory-neuroblastoma",
+        "dz.snuc",
+        "dz.rhabdomyosarcoma"
+      ],
+      "redFlags": [
+        "A pigmented or bleeding polypoid mass in an older adult: biopsy, then stage with PET-CT and brain MRI before any definitive surgery.",
+        "Distant metastases at staging: surgery becomes palliative (bleeding, obstruction) and systemic therapy leads."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Compared with cutaneous melanoma, KIT mutations are more frequent and BRAF mutations less frequent — relevant to systemic therapy choice. Immunostains: S100, SOX10, HMB-45, Melan-A."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.ajcc-8",
+        "src.lund-2010-eptns"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.olfactory-neuroblastoma",
+      "name": "Olfactory neuroblastoma",
+      "syn": [
+        "esthesioneuroblastoma",
+        "ENB",
+        "ONB"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.olfactory-cleft",
+        "s.olfactory-mucosa",
+        "s.cribriform-plate",
+        "s.olfactory-fossa",
+        "s.olfactory-bulb",
+        "s.olfactory-tract",
+        "s.anterior-cranial-fossa-dura",
+        "s.gyrus-rectus",
+        "s.crista-galli",
+        "s.nasal-septum",
+        "s.superior-turbinate",
+        "s.middle-turbinate",
+        "s.ethmoid-labyrinth",
+        "s.lamina-papyracea",
+        "s.orbit"
+      ],
+      "tier": 2,
+      "what": "A malignant neuroectodermal tumor of the olfactory epithelium, arising high in the nasal cavity at the cribriform plate, superior septum and superior turbinate; it presents with unilateral obstruction, epistaxis and smell loss and can grow through the cribriform plate into the anterior cranial fossa. It accounts for roughly 3–6% of sinonasal malignancies.",
+      "why": "Standard treatment is complete resection with negative margins of the olfactory apparatus on the involved side or sides — cribriform plate, overlying dura, olfactory bulb and tract — usually by an endoscopic transcribriform (or craniofacial) resection, followed by radiotherapy, with stage ([[c.kadish]], [[c.dulguerov]]) and [[c.hyams]] grade guiding adjuvant treatment. The intranasal bulk may be debulked piecemeal to reach the attachment: clear margins, not en bloc delivery, are what predict survival, so dural and brain margins are checked by frozen section. The defect is reconstructed as a large anterior skull base defect.",
+      "imaging": {
+        "ct": "Enhancing soft-tissue mass in the olfactory cleft and superior nasal cavity with erosion or remodeling of the cribriform plate, fovea and lamina papyracea; speckled calcification in some. Coronal images show the \"dumbbell\" with its waist at the cribriform plate when it extends intracranially.",
+        "mri": "Intermediate T1 and T2 with avid, fairly homogeneous enhancement; defines dural, olfactory bulb and tract, brain and orbital involvement. Cysts at the margin between the intracranial tumor and the frontal lobe are highly suggestive of olfactory neuroblastoma. Image the neck, including retropharyngeal and level II nodes."
+      },
+      "endo": "Either side, 0° then 30°, high in the olfactory cleft: a red-gray, polypoid, moderately vascular mass between the middle turbinate and the septum that can pass for a polyp until biopsied.",
+      "class": [
+        "c.kadish",
+        "c.dulguerov",
+        "c.hyams"
+      ],
+      "complications": [
+        "h.postop-csf-leak",
+        "h.olfactory-loss",
+        "h.a2-branch-injury",
+        "h.tension-pneumocephalus"
+      ],
+      "managedBy": [
+        "p.transcribriform-approach",
+        "p.aea-ligation",
+        "p.draf-iii",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.snuc",
+        "dz.smarcb1-deficient-carcinoma",
+        "dz.sinonasal-neuroendocrine-carcinoma",
+        "dz.itac",
+        "dz.mucosal-melanoma",
+        "dz.rhabdomyosarcoma",
+        "dz.olfactory-groove-meningioma",
+        "dz.reah",
+        "dz.inverted-papilloma",
+        "dz.meningoencephalocele",
+        "dz.nasal-glioma",
+        "dz.crs-with-polyps",
+        "dz.ccad"
+      ],
+      "redFlags": [
+        "Unilateral olfactory-cleft mass: CT and MRI before biopsy (exclude an encephalocele), then biopsy — olfactory neuroblastoma, adenocarcinoma, melanoma, SNUC and meningioma share this site.",
+        "Dural or brain invasion, or orbital involvement beyond the periorbita: plan resection of dura and involved brain and discuss orbital preservation before the day of surgery.",
+        "A high-grade tumor (Hyams III–IV) or a biopsy that could be SNUC, neuroendocrine carcinoma or SMARCB1-deficient carcinoma: complete the immunohistochemistry before surgery — the treatment sequence may change.",
+        "A new neck node years after treatment: regional recurrence is typically late — restage and salvage."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "In selected early tumors confined to one side without septal involvement, a unilateral transcribriform resection has been used to preserve smell from the other side; bilateral or midline disease needs a bilateral resection."
+        },
+        {
+          "tier": 3,
+          "text": "Non-randomized comparisons show similar survival, metastasis and complication rates after endoscopic and open craniofacial resection, with a shorter stay after endoscopic surgery; case selection favors the endoscopic arm, and margin status matters more than the route."
+        },
+        {
+          "tier": 2,
+          "text": "Recurrence (local, intracranial, nodal) can appear more than a decade after treatment, so surveillance with MRI and endoscopy continues long term."
+        },
+        {
+          "tier": 3,
+          "text": "Pathology: lobules of small round blue cells in neurofibrillary matrix with Homer Wright rosettes, synaptophysin and chromogranin positive, S100-positive sustentacular cells at the periphery, keratin usually negative — the panel that separates it from SNUC, neuroendocrine carcinoma, melanoma and rhabdomyosarcoma."
+        },
+        {
+          "tier": 3,
+          "text": "Elective neck irradiation is increasingly used for advanced or high-grade tumors; the evidence is retrospective."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.kadish-1976",
+        "src.morita-1993",
+        "src.dulguerov-1992",
+        "src.dulguerov-2001",
+        "src.hyams-1988",
+        "src.icar-skull-base-2019",
+        "src.lund-2010-eptns",
+        "src.som-curtin-2011",
+        "src.chiu-2019-ch25"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.snuc",
+      "name": "Sinonasal undifferentiated carcinoma (SNUC)",
+      "syn": [
+        "SNUC",
+        "sinonasal undifferentiated carcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.maxillary-sinus",
+        "s.sphenoid-sinus",
+        "s.cribriform-plate",
+        "s.anterior-cranial-fossa-dura",
+        "s.orbit",
+        "s.cavernous-sinus"
+      ],
+      "tier": 3,
+      "what": "A highly aggressive high-grade carcinoma without squamous or glandular differentiation, presenting with extensive disease (orbit, skull base, brain) that progresses over weeks to months; IDH2 (R172) mutations are frequent.",
+      "why": "It is a diagnosis of exclusion — NUT carcinoma, SMARCB1- or SMARCA4-deficient carcinoma, neuroendocrine carcinoma, high-grade olfactory neuroblastoma, melanoma and lymphoma must be excluded by immunohistochemistry before treatment. Many centers start with induction chemotherapy and let the response select definitive chemoradiation (responders) or surgery followed by chemoradiation, rather than starting with resection.",
+      "imaging": {
+        "ct": "Large destructive mass centered in the ethmoid and nasal cavity with aggressive bone destruction and early orbital and anterior cranial fossa invasion; necrosis.",
+        "mri": "Heterogeneous intermediate T2 with necrosis; maps dural, brain, orbital and cavernous sinus extent. Stage nodes and distant disease with PET-CT."
+      },
+      "endo": "Either side: a large, fungating, necrotic, friable mass.",
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "managedBy": [
+        "p.transcribriform-approach",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.smarcb1-deficient-carcinoma",
+        "dz.nut-carcinoma",
+        "dz.sinonasal-neuroendocrine-carcinoma",
+        "dz.olfactory-neuroblastoma",
+        "dz.sinonasal-scc",
+        "dz.nk-t-cell-lymphoma",
+        "dz.mucosal-melanoma",
+        "dz.rhabdomyosarcoma",
+        "dz.acute-invasive-fungal-sinusitis"
+      ],
+      "redFlags": [
+        "Progression over weeks with proptosis, diplopia or cranial neuropathy: expedite biopsy with a full immunohistochemical panel and staging — do not wait for a scheduled resection."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Response to induction chemotherapy is itself prognostic and has been used to choose chemoradiation versus surgery; non-responders do poorly with either (single-center retrospective data)."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.amit-2019-snuc",
+        "src.icar-skull-base-2019"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.smarcb1-deficient-carcinoma",
+      "name": "SMARCB1 (INI1)-deficient sinonasal carcinoma",
+      "syn": [
+        "SMARCB1-deficient carcinoma",
+        "INI1-deficient sinonasal carcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.nasal-cavity",
+        "s.maxillary-sinus",
+        "s.cribriform-plate",
+        "s.anterior-cranial-fossa-dura",
+        "s.orbit"
+      ],
+      "tier": 3,
+      "what": "A high-grade sinonasal carcinoma defined by loss of SMARCB1 (INI1) protein, with basaloid or rhabdoid/plasmacytoid cells; recognized as its own entity in the 2022 WHO classification, it was previously often called SNUC or basaloid carcinoma.",
+      "why": "It behaves aggressively with frequent local recurrence and distant spread, so treatment is multimodal (resection where margins are achievable, radiotherapy, chemotherapy) and staging is completed before surgery. Recognizing it requires asking for INI1 immunostaining on every poorly differentiated sinonasal carcinoma.",
+      "imaging": {
+        "ct": "Destructive ethmoid and nasal-cavity mass with orbital and skull base invasion; no feature separates it from SNUC.",
+        "mri": "Heterogeneous enhancing mass; nonspecific."
+      },
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "managedBy": [
+        "p.transcribriform-approach",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.snuc",
+        "dz.nut-carcinoma",
+        "dz.sinonasal-scc",
+        "dz.olfactory-neuroblastoma",
+        "dz.sinonasal-neuroendocrine-carcinoma"
+      ],
+      "redFlags": [
+        "Any \"undifferentiated\" or \"basaloid\" sinonasal carcinoma: request SMARCB1 (INI1) and SMARCA4 immunostains."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.sinonasal-neuroendocrine-carcinoma",
+      "name": "Sinonasal neuroendocrine carcinoma",
+      "syn": [
+        "SNEC",
+        "small cell neuroendocrine carcinoma",
+        "large cell neuroendocrine carcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.ethmoid-labyrinth",
+        "s.nasal-cavity",
+        "s.maxillary-sinus",
+        "s.sphenoid-sinus"
+      ],
+      "tier": 3,
+      "what": "A high-grade carcinoma with neuroendocrine differentiation (small cell or large cell type), keratin positive with neuroendocrine markers, behaving like its pulmonary counterpart.",
+      "why": "It spreads early, so systemic staging comes first and chemotherapy with radiotherapy is central, with surgery in a selected role. It must be separated from olfactory neuroblastoma (keratin usually negative, S100-positive sustentacular cells) and from metastatic small cell lung carcinoma, because the treatments differ.",
+      "imaging": {
+        "ct": "Destructive, enhancing sinonasal mass; nonspecific.",
+        "mri": "Nonspecific; stages intracranial, orbital and nodal extent."
+      },
+      "mimics": [
+        "dz.olfactory-neuroblastoma",
+        "dz.snuc",
+        "dz.smarcb1-deficient-carcinoma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nut-carcinoma",
+      "name": "NUT carcinoma",
+      "syn": [
+        "NUT midline carcinoma",
+        "NUTM1-rearranged carcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.maxillary-sinus",
+        "s.nasal-septum"
+      ],
+      "tier": 3,
+      "what": "A very aggressive, poorly differentiated carcinoma defined by NUTM1 rearrangement (most often BRD4–NUTM1) that arises in midline structures including the sinonasal tract, often in young patients.",
+      "why": "Diagnosis needs NUT immunostaining, which should be requested for any undifferentiated carcinoma, particularly in a young patient. It responds poorly to standard therapy, so early multidisciplinary planning and trial enrollment matter more than the choice of approach.",
+      "imaging": {
+        "ct": "Rapidly growing, destructive midline sinonasal mass; nonspecific."
+      },
+      "mimics": [
+        "dz.snuc",
+        "dz.smarcb1-deficient-carcinoma",
+        "dz.sinonasal-scc"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nk-t-cell-lymphoma",
+      "name": "Extranodal NK/T-cell lymphoma (nasal)",
+      "syn": [
+        "extranodal NK/T-cell lymphoma, nasal type",
+        "ENKTL",
+        "NK/T-cell lymphoma",
+        "lethal midline granuloma",
+        "polymorphic reticulosis"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.nasal-septum",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.maxillary-sinus",
+        "s.nasopharynx"
+      ],
+      "tier": 2,
+      "what": "An EBV-driven lymphoma of NK or cytotoxic T cells that destroys midline nasal structures with ulceration and necrosis; it is more common in East Asia and Latin America.",
+      "why": "Surgery's only role is diagnosis: take multiple generous biopsies from the viable edge (the necrotic center is non-diagnostic), send fresh tissue for flow cytometry and ask for EBER in situ hybridization. Treatment is radiotherapy with asparaginase-based chemotherapy; resection and serial debridement do not help.",
+      "imaging": {
+        "ct": "Mucosal thickening or mass of the nasal cavity with destruction of the septum and turbinates and septal perforation; bone erosion is often less than the soft-tissue destruction suggests. Spread to the palate, orbits, nasopharynx and facial soft tissue.",
+        "mri": "Infiltrative intermediate-T2 soft tissue with heterogeneous enhancement and non-enhancing necrotic areas."
+      },
+      "endo": "Either side, 0°: crusting, ulceration and gray or black necrotic mucosa with septal perforation and turbinate destruction — easily mistaken for granulomatous disease or invasive fungal sinusitis.",
+      "mimics": [
+        "dz.gpa",
+        "dz.cocaine-midline-destructive-lesion",
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.chronic-invasive-fungal-sinusitis",
+        "dz.sarcoidosis-sinonasal",
+        "dz.sinonasal-scc",
+        "dz.snuc",
+        "dz.nasopharyngeal-carcinoma"
+      ],
+      "redFlags": [
+        "Repeated biopsies reported as \"necrosis\" or \"inflammation\" from a destructive midline lesion: rebiopsy deeper and larger at the viable edge and request EBER.",
+        "Fever, cytopenias and liver dysfunction with a destructive nasal lesion: consider hemophagocytic syndrome — urgent hematology."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.alaggio-2022-lymphoid",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nasopharyngeal-carcinoma",
+      "name": "Nasopharyngeal carcinoma",
+      "syn": [
+        "NPC",
+        "non-keratinizing nasopharyngeal carcinoma",
+        "keratinizing nasopharyngeal carcinoma",
+        "lymphoepithelioma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasopharynx",
+        "s.fossa-of-rosenmuller",
+        "s.torus-tubarius",
+        "s.eustachian-tube",
+        "s.choana",
+        "s.longus-capitis",
+        "s.pharyngobasilar-fascia",
+        "s.clivus",
+        "s.foramen-lacerum",
+        "s.petrous-apex",
+        "s.foramen-ovale",
+        "s.mandibular-nerve",
+        "s.pterygoid-process",
+        "s.pterygopalatine-fossa",
+        "s.sphenoid-sinus",
+        "s.cavernous-sinus",
+        "s.hypoglossal-canal",
+        "s.internal-carotid-artery"
+      ],
+      "tier": 1,
+      "what": "A carcinoma of the nasopharyngeal epithelium, most often starting in the fossa of Rosenmüller; the common non-keratinizing type is EBV-associated and endemic in southern China and Southeast Asia. It presents with a neck mass, a unilateral middle-ear effusion, nasal obstruction or bleeding, or cranial neuropathy.",
+      "why": "Primary treatment is radiotherapy, with chemotherapy for locoregionally advanced disease, so the surgeon's jobs are diagnosis — a targeted endoscopic biopsy that stays out of the deep lateral wall, where the parapharyngeal ICA lies — and salvage. Endoscopic nasopharyngectomy suits selected local recurrences, with the ICA relation deciding resectability and a vascularized flap covering exposed ICA and bone.",
+      "imaging": {
+        "ct": "Asymmetric soft tissue effacing the fossa of Rosenmüller; erosion or sclerosis of the skull base (clivus, foramen lacerum, pterygoid base, petrous apex); a widened foramen ovale; retropharyngeal and level II/V nodes, often necrotic.",
+        "mri": "The staging study ([[c.ajcc-nasopharynx-t]]): intermediate T2 tumor enhancing less than mucosa; parapharyngeal and prevertebral (longus) extension, clival marrow replacement (loss of T1 fat), perineural spread via foramen ovale (V3) and via the PPF, foramen rotundum (V2) and vidian canal (vidian nerve) to Meckel's cave and the cavernous sinus, and intracranial extent. Adenoid hypertrophy is symmetric with preserved striations and an intact deep mucosal line; carcinoma breaches it."
+      },
+      "endo": "Either side, 0° or 30° through the ipsilateral nostril: asymmetric fullness, nodularity, ulceration or friable mucosa in the fossa of Rosenmüller behind the torus, sometimes submucosal under a normal surface; always compare with the other side.",
+      "class": [
+        "c.ajcc-nasopharynx-t"
+      ],
+      "complications": [
+        "h.parapharyngeal-ica-injury",
+        "h.ica-pseudoaneurysm-delayed"
+      ],
+      "managedBy": [
+        "p.diagnostic-nasal-endoscopy",
+        "p.transpterygoid-approach",
+        "p.nasoseptal-flap"
+      ],
+      "mimics": [
+        "dz.jna",
+        "dz.nk-t-cell-lymphoma",
+        "dz.rhabdomyosarcoma",
+        "dz.chordoma",
+        "dz.skull-base-metastasis"
+      ],
+      "redFlags": [
+        "An adult with a unilateral middle-ear effusion: examine the nasopharynx endoscopically, and biopsy or image anything asymmetric.",
+        "Cranial neuropathy (VI, V2, V3, XII) with a nasopharyngeal mass: skull base and perineural invasion — MRI staging before anything else.",
+        "Post-radiation nasopharyngeal necrosis with exposed ICA or bleeding: risk of carotid blowout — CTA and endovascular planning before debridement."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Plasma EBV DNA is used for screening in endemic regions and for monitoring response and recurrence."
+        },
+        {
+          "tier": 3,
+          "text": "Salvage nasopharyngectomy: open the lateral nasopharynx through a transpterygoid corridor, locate the parapharyngeal ICA using the vidian canal and the Eustachian tube, and cover exposed ICA and bone with vascularized tissue to reduce necrosis."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.chen-2019-npc",
+        "src.ajcc-8",
+        "src.who-hn-2022",
+        "src.icar-skull-base-2019",
+        "src.som-curtin-2011"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.rhabdomyosarcoma",
+      "name": "Sinonasal and parameningeal rhabdomyosarcoma",
+      "syn": [
+        "rhabdomyosarcoma",
+        "RMS",
+        "embryonal rhabdomyosarcoma",
+        "alveolar rhabdomyosarcoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasopharynx",
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.maxillary-sinus",
+        "s.pterygopalatine-fossa",
+        "s.infratemporal-fossa",
+        "s.orbit"
+      ],
+      "tier": 2,
+      "what": "A malignant tumor of skeletal-muscle lineage; in the nose, sinuses and nasopharynx it affects children (embryonal type) and adolescents and young adults (alveolar type, often FOXO1-fusion positive), and these parameningeal sites carry a less favorable prognosis.",
+      "why": "Treatment is chemotherapy and radiotherapy on pediatric oncology protocols, so the surgeon provides adequate tissue (fresh tissue for molecular testing) and avoids mutilating resections. Separating it from JNA before touching it matters: this tumor can be biopsied, a JNA should not be.",
+      "imaging": {
+        "ct": "Destructive soft-tissue mass with bone erosion, lacking the smooth, sphenopalatine-foramen-centered PPF widening of JNA.",
+        "mri": "Intermediate T1, intermediate-to-high T2 and heterogeneous enhancement without prominent flow voids; look for intracranial (parameningeal) and leptomeningeal extension."
+      },
+      "mimics": [
+        "dz.jna",
+        "dz.nasopharyngeal-carcinoma",
+        "dz.olfactory-neuroblastoma",
+        "dz.mucosal-melanoma",
+        "dz.snuc"
+      ],
+      "redFlags": [
+        "A destructive nasal or nasopharyngeal mass in a child or young adult, especially with a cranial nerve palsy: MRI of the skull base and brain and an expedited biopsy."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-hn-2022",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.pituitary-neuroendocrine-tumor",
+      "name": "Pituitary neuroendocrine tumor (pituitary adenoma)",
+      "syn": [
+        "PitNET",
+        "pituitary adenoma",
+        "macroadenoma",
+        "microadenoma",
+        "prolactinoma",
+        "nonfunctioning pituitary adenoma",
+        "somatotroph tumor",
+        "acromegaly",
+        "corticotroph tumor",
+        "Cushing disease"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.sella-turcica",
+        "s.pituitary-gland",
+        "s.adenohypophysis",
+        "s.sellar-dura",
+        "s.diaphragma-sellae",
+        "s.pituitary-stalk",
+        "s.suprasellar-cistern",
+        "s.optic-chiasm",
+        "s.cavernous-sinus",
+        "s.cavernous-sinus-medial-wall",
+        "s.internal-carotid-artery",
+        "s.anterior-intercavernous-sinus",
+        "s.sphenoid-sinus",
+        "s.clivus"
+      ],
+      "tier": 1,
+      "what": "A tumor of anterior pituitary cells — now called PitNET and classified by cell lineage (PIT1, TPIT, SF1) in the 2022 WHO classification — presenting with hormone excess, hypopituitarism, or mass effect such as bitemporal hemianopia. Microadenomas are under 10 mm, macroadenomas 10 mm or more.",
+      "why": "Prolactinomas are treated first with dopamine agonists, not surgery; for the rest, the endoscopic transsellar approach removes tumor inferiorly, then laterally, then superiorly so the diaphragma descends last, and preserves the compressed normal gland. Cavernous sinus invasion, the shape of the suprasellar part and the expected CSF leak decide whether a sellar opening suffices, whether transtuberculum or medial cavernous wall work is needed, and whether the nasoseptal flap pedicle must be protected from the start.",
+      "imaging": {
+        "ct": "Enlarged, remodeled sella with a thinned, ballooned floor in macroadenomas; calcification is rare (it favors craniopharyngioma or meningioma). CT and CTA map sphenoid pneumatization, septa inserting on the carotid prominences, the intercarotid distance and any aneurysm; invasive tumors can erode the floor and clivus.",
+        "mri": "Microadenoma: a focus enhancing later and less than normal gland on dynamic contrast images, T1 hypointense, with stalk deviation or floor asymmetry as soft signs; corticotroph microadenomas may be invisible (inferior petrosal sinus sampling). Macroadenoma: solid or cystic mass, isointense to gray matter, enhancing less than normal gland, rising through the diaphragma with a waist (\"snowman\" or figure-of-eight); the normal gland is compressed to a thin enhancing rim, most often superior or posterior. Cavernous invasion is graded with [[c.knosp]]; the ICA is encased usually without narrowing (narrowing favors meningioma). Hemorrhage or fluid levels suggest apoplexy."
+      },
+      "endo": "Midline, 0°, sellar opening: the floor may be thin, blue and bulging; through the dura the tumor is soft, gray-purple and suctions easily, while normal gland is firmer, orange-yellow and finely vascular.",
+      "class": [
+        "c.knosp",
+        "c.hardy"
+      ],
+      "complications": [
+        "dz.pituitary-apoplexy",
+        "h.diabetes-insipidus",
+        "h.hypopituitarism",
+        "h.intraop-csf-leak-sellar",
+        "h.postop-csf-leak",
+        "h.cavernous-ica-injury-sellar",
+        "h.intercavernous-sinus-bleeding",
+        "h.cavernous-sinus-venous-bleeding",
+        "h.cavernous-cranial-nerve-injury"
+      ],
+      "managedBy": [
+        "p.sphenoidotomy",
+        "p.transsellar-approach",
+        "p.transplanum-transtuberculum",
+        "p.transcavernous-approach",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.craniopharyngioma",
+        "dz.rathke-cleft-cyst",
+        "dz.planum-tuberculum-meningioma",
+        "dz.hypophysitis",
+        "dz.skull-base-ica-aneurysm",
+        "dz.chordoma",
+        "dz.skull-base-metastasis"
+      ],
+      "redFlags": [
+        "Sudden severe headache, visual loss or ophthalmoplegia: [[dz.pituitary-apoplexy]] — hydrocortisone immediately, urgent MRI and neurosurgery.",
+        "Measure prolactin before any operation; with a large tumor ask for a diluted sample, because the hook effect can make a giant prolactinoma look nonfunctioning. Mild hyperprolactinemia with a large nonfunctioning tumor is usually stalk effect.",
+        "Check cortisol and thyroid function before surgery; unrecognized adrenal insufficiency is dangerous under anesthesia — give steroid cover.",
+        "A flow void, pulsation artifact or curvilinear rim calcification in the \"tumor\": exclude an aneurysm with CTA or MRA before opening the dura.",
+        "Knosp 3B–4, a narrow intercarotid distance or a poorly pneumatized sphenoid: plan navigation, Doppler and a rehearsed ICA-injury response."
+      ],
+      "pearls": [
+        {
+          "tier": 1,
+          "text": "Bitemporal hemianopia from a sellar mass means the chiasm is compressed from below; visual recovery depends on duration of compression and optic atrophy."
+        },
+        {
+          "tier": 2,
+          "text": "Remove tumor inferiorly, then laterally, then superiorly ([[pr.adenoma-inferior-lateral-superior]]); if the diaphragma drops early it hides lateral tumor."
+        },
+        {
+          "tier": 2,
+          "text": "Grade the leak at the end ([[c.csf-leak-grade]]) and match the repair to it ([[pr.reconstruction-matches-leak]]); protect a nasoseptal flap pedicle when a high-flow leak is likely (large suprasellar tumors, transtuberculum extension)."
+        },
+        {
+          "tier": 3,
+          "text": "For functioning tumors invading the medial cavernous wall, resecting the wall after releasing its ligaments raises remission rates; for nonfunctioning tumors, residual lateral cavernous tumor is usually observed or irradiated rather than chased."
+        },
+        {
+          "tier": 3,
+          "text": "The 2022 WHO classification flags higher-risk types — e.g. sparsely granulated somatotroph, Crooke cell, immature PIT1-lineage tumors and lactotroph tumors in men — that merit closer follow-up."
+        },
+        {
+          "tier": 3,
+          "text": "Small secreting tumors in a normal-sized gland bleed more from the intercavernous and cavernous venous channels than macroadenomas, which compress them ([[h.intercavernous-sinus-bleeding]]). Cushing disease can leave the nasal mucosa thin and fragile, and secreting tumors can make it more vascular: raise the flap gently."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.asa-2022-pitnet",
+        "src.knosp-1993",
+        "src.micko-2015",
+        "src.hardy-1976",
+        "src.melmed-2011-prolactin",
+        "src.molitch-2017",
+        "src.elster-1993",
+        "src.rhoton-2002-sellar",
+        "src.truong-2019-medial-wall",
+        "src.fernandez-miranda-2018-cavernous",
+        "src.icar-skull-base-2019",
+        "src.chiu-2019-ch29"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.pituitary-apoplexy",
+      "name": "Pituitary apoplexy",
+      "syn": [
+        "apoplexy",
+        "hemorrhagic pituitary adenoma",
+        "pituitary infarction"
+      ],
+      "category": "vascular",
+      "involves": [
+        "s.sella-turcica",
+        "s.pituitary-gland",
+        "s.optic-chiasm",
+        "s.cavernous-sinus",
+        "s.oculomotor-nerve",
+        "s.abducens-nerve",
+        "s.sphenoid-sinus"
+      ],
+      "tier": 2,
+      "what": "Sudden hemorrhage or infarction within a pituitary tumor (occasionally a normal gland), causing thunderclap headache, visual loss, ophthalmoplegia and acute adrenal insufficiency.",
+      "why": "It is an endocrine emergency first: give hydrocortisone before anything else. Urgent endoscopic transsellar decompression is favored for reduced consciousness or severe or worsening visual loss, while isolated ocular palsies often recover with conservative care — a joint decision of neurosurgery, endocrinology and ophthalmology.",
+      "imaging": {
+        "ct": "A hyperdense sellar mass on the non-contrast head CT done for thunderclap headache, though CT misses many cases.",
+        "mri": "Sellar mass with blood products: T1 hyperintensity (subacute), fluid–fluid levels, peripheral rim enhancement of an infarcted tumor, restricted diffusion in infarcted tissue, and thickening of the adjacent sphenoid sinus mucosa."
+      },
+      "complications": [
+        "h.hypopituitarism",
+        "h.diabetes-insipidus"
+      ],
+      "managedBy": [
+        "p.transsellar-approach"
+      ],
+      "mimics": [
+        "dz.skull-base-ica-aneurysm",
+        "dz.rathke-cleft-cyst",
+        "dz.cavernous-sinus-thrombosis"
+      ],
+      "redFlags": [
+        "Thunderclap headache with visual loss or ophthalmoplegia: steroids now, MRI, neurosurgical review.",
+        "Hypotension, hyponatremia or drowsiness: acute adrenal insufficiency — hydrocortisone before imaging."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.rajasekaran-2011-apoplexy",
+        "src.molitch-2017"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.hypophysitis",
+      "name": "Hypophysitis",
+      "syn": [
+        "lymphocytic hypophysitis",
+        "autoimmune hypophysitis",
+        "IgG4-related hypophysitis",
+        "checkpoint-inhibitor hypophysitis"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.pituitary-gland",
+        "s.pituitary-stalk",
+        "s.neurohypophysis",
+        "s.sella-turcica"
+      ],
+      "tier": 3,
+      "what": "Inflammation of the pituitary — autoimmune (classically late pregnancy or postpartum), IgG4-related, drug-induced (immune checkpoint inhibitors) or secondary — causing headache, hypopituitarism (often ACTH deficiency first) and diabetes insipidus.",
+      "why": "It is treated medically (hormone replacement, with glucocorticoids when indicated), so recognizing it avoids an unnecessary resection. Surgery is limited to biopsy when the diagnosis is uncertain or decompression for threatened vision.",
+      "imaging": {
+        "ct": "Sella usually not enlarged or remodeled, unlike a macroadenoma of similar size.",
+        "mri": "Symmetric, homogeneous enlargement of the gland with a thickened, midline stalk, intense homogeneous enhancement, loss of the posterior pituitary bright spot (diabetes insipidus), and sometimes a dural tail."
+      },
+      "mimics": [
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.rathke-cleft-cyst",
+        "dz.craniopharyngioma",
+        "dz.skull-base-metastasis"
+      ],
+      "redFlags": [
+        "Diabetes insipidus at presentation with a sellar mass is unusual for an adenoma: think of hypophysitis, craniopharyngioma, metastasis, germinoma or histiocytosis."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.caturegli-2005"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.skull-base-ica-aneurysm",
+      "name": "Parasellar and petrous ICA aneurysm",
+      "syn": [
+        "cavernous carotid aneurysm",
+        "paraclinoid aneurysm",
+        "superior hypophyseal artery aneurysm",
+        "petrous carotid aneurysm",
+        "giant ICA aneurysm"
+      ],
+      "category": "vascular",
+      "involves": [
+        "s.internal-carotid-artery",
+        "s.cavernous-sinus",
+        "s.sella-turcica",
+        "s.anterior-clinoid-process",
+        "s.optic-nerve",
+        "s.petrous-apex",
+        "s.sphenoid-sinus"
+      ],
+      "tier": 2,
+      "what": "A saccular or fusiform aneurysm of the petrous, cavernous or paraclinoid ICA that can bulge into the sella, sphenoid sinus or petrous apex and mimic a tumor; it can cause cranial neuropathy, visual loss, epistaxis into the sphenoid or subarachnoid hemorrhage.",
+      "why": "Opening or biopsying it endonasally is catastrophic, so every sellar, parasellar, sphenoid or petrous apex mass is checked for vascular signal before surgery, with CTA, MRA or angiography when in doubt. Treatment is endovascular or microsurgical, not endonasal resection.",
+      "imaging": {
+        "ct": "Round, well-defined, smoothly remodeling parasellar, sellar or petrous apex mass, often with curvilinear rim calcification; CTA shows continuity with the ICA lumen, and partially thrombosed aneurysms show laminated thrombus.",
+        "mri": "Flow void in the patent lumen with pulsation artifact along the phase-encoding direction; thrombosed parts show concentric layers of different signal; continuity with the ICA on MRA."
+      },
+      "complications": [
+        "h.cavernous-ica-injury-sellar",
+        "h.paraclinoid-ica-injury",
+        "h.ica-pseudoaneurysm-delayed"
+      ],
+      "mimics": [
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.craniopharyngioma",
+        "dz.planum-tuberculum-meningioma",
+        "dz.petrous-apex-cholesterol-granuloma",
+        "dz.chondrosarcoma",
+        "dz.pituitary-apoplexy"
+      ],
+      "redFlags": [
+        "Flow void, pulsation artifact or rim calcification in a sellar or petrous apex lesion: vascular imaging before any endonasal opening.",
+        "Epistaxis from the sphenoid after skull base trauma or surgery: suspect a pseudoaneurysm — angiography rather than packing and observation."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.craniopharyngioma",
+      "name": "Craniopharyngioma",
+      "syn": [
+        "adamantinomatous craniopharyngioma",
+        "papillary craniopharyngioma",
+        "Rathke pouch tumor"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.suprasellar-cistern",
+        "s.pituitary-stalk",
+        "s.sella-turcica",
+        "s.pituitary-gland",
+        "s.diaphragma-sellae",
+        "s.optic-chiasm",
+        "s.optic-tract",
+        "s.hypothalamus",
+        "s.lamina-terminalis",
+        "s.mammillary-bodies",
+        "s.interpeduncular-cistern",
+        "s.superior-hypophyseal-artery",
+        "s.anterior-cerebral-artery",
+        "s.anterior-communicating-artery",
+        "s.posterior-communicating-artery",
+        "s.tuberculum-sellae",
+        "s.planum-sphenoidale",
+        "s.dorsum-sellae"
+      ],
+      "tier": 2,
+      "what": "A benign (WHO grade 1) epithelial tumor from Rathke pouch remnants along the pituitary stalk, mostly suprasellar; the adamantinomatous type (CTNNB1-mutant, children and adults) is cystic and calcified, the papillary type (BRAF V600E, adults) is more solid. It causes visual loss, hypopituitarism, diabetes insipidus, hydrocephalus and hypothalamic dysfunction.",
+      "why": "The endonasal transtuberculum–transplanum corridor reaches most midline tumors below and behind the chiasm, with the corridor and stop points chosen by the tumor's relation to the stalk ([[c.craniopharyngioma-infundibulum]]) and the degree of hypothalamic involvement, which decides between radical resection and planned subtotal resection with radiotherapy. The dissection often opens the third ventricle or basal cisterns, so a high-flow leak is expected and the nasoseptal flap is raised or protected at the start.",
+      "imaging": {
+        "ct": "Calcification (coarse, rim or nodular) in a cystic–solid suprasellar mass is the most useful single discriminator: typical of adamantinomatous tumors and rare in adenoma and Rathke cleft cyst. The sella is normal or enlarged and eroded when there is an intrasellar part.",
+        "mri": "Adamantinomatous: multilobulated cysts, often T1 hyperintense from protein and cholesterol, with enhancing solid nodules and rim; calcifications dark on T2 and SWI. Papillary: mostly solid or solid–cystic, enhancing, often centered in the floor of the third ventricle (infundibulo-tuberal), with little calcification. Report the stalk position (in front of, through, behind the tumor), chiasm position, extension into the third ventricle or interpeduncular cistern, hypothalamic involvement (lost interface, edema) and the relation to the A1/ACoA complex and perforators."
+      },
+      "endo": "Midline, 0° then 30°–45° above the diaphragma: cysts of brown-green \"machinery-oil\" fluid, gritty calcified nodules and a gliotic, adherent capsule, with the stalk and superior hypophyseal branches running across it.",
+      "class": [
+        "c.craniopharyngioma-infundibulum"
+      ],
+      "complications": [
+        "h.diabetes-insipidus",
+        "h.hypopituitarism",
+        "h.hypothalamic-injury",
+        "h.chiasm-devascularization",
+        "h.acoa-perforator-injury",
+        "h.postop-csf-leak"
+      ],
+      "managedBy": [
+        "p.transplanum-transtuberculum",
+        "p.transsellar-approach",
+        "p.transclival-approach",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.rathke-cleft-cyst",
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.planum-tuberculum-meningioma",
+        "dz.skull-base-ica-aneurysm",
+        "dz.skull-base-epidermoid",
+        "dz.hypophysitis"
+      ],
+      "redFlags": [
+        "Hydrocephalus or reduced consciousness: CSF diversion or cyst decompression comes first.",
+        "Hypothalamic involvement on MRI (no interface, edema, bilateral involvement): planned subtotal resection with adjuvant radiotherapy is often chosen to avoid hypothalamic obesity and cognitive injury.",
+        "Purely intraventricular tumor or major lateral extension beyond the ICA and optic nerves: endonasal reach is limited — consider a transcranial route.",
+        "Stalk sacrifice means diabetes insipidus and panhypopituitarism: steroid cover and close sodium monitoring from day 0."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "A cystic, calcified suprasellar mass in a child is a craniopharyngioma until proven otherwise."
+        },
+        {
+          "tier": 3,
+          "text": "Papillary craniopharyngiomas carry BRAF V600E in nearly all cases, and BRAF/MEK inhibition can shrink them — a tissue diagnosis before a morbid radical resection can change the plan."
+        },
+        {
+          "tier": 3,
+          "text": "Dissect the capsule sharply off the chiasm and stalk, preserving the superior hypophyseal branches to the chiasm; stop where the capsule fuses with the hypothalamus."
+        },
+        {
+          "tier": 3,
+          "text": "Retroinfundibular tumors reaching the interpeduncular cistern need a transdorsum route with pituitary transposition (upper third of the [[p.transclival-approach|transclival approach]])."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.kassam-2008-craniopharyngioma",
+        "src.who-cns-2021",
+        "src.brastianos-2014",
+        "src.kassam-2008-pituitary-transposition",
+        "src.icar-skull-base-2019",
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.rathke-cleft-cyst",
+      "name": "Rathke cleft cyst",
+      "syn": [
+        "RCC",
+        "Rathke's cleft cyst",
+        "pars intermedia cyst"
+      ],
+      "category": "cystic",
+      "involves": [
+        "s.pituitary-gland",
+        "s.adenohypophysis",
+        "s.neurohypophysis",
+        "s.sella-turcica",
+        "s.pituitary-stalk",
+        "s.suprasellar-cistern",
+        "s.optic-chiasm"
+      ],
+      "tier": 2,
+      "what": "A benign cyst lined by a single layer of epithelium, derived from Rathke pouch remnants between the anterior and posterior pituitary lobes; usually incidental, sometimes causing headache, visual loss or hypopituitarism.",
+      "why": "Asymptomatic cysts are observed; symptomatic ones are drained and fenestrated through a transsellar approach and left open to the sphenoid, with limited wall removal, because aggressive wall excision adds diabetes insipidus and hypopituitarism without clearly preventing recurrence. The main surgical trap is a cystic craniopharyngioma or adenoma mistaken for a cyst.",
+      "imaging": {
+        "ct": "Non-calcified low-density or isodense sellar or suprasellar cyst, usually with a normal-sized sella; calcification argues against it.",
+        "mri": "Smooth midline cyst between the anterior and posterior lobes, not enhancing, with protein-dependent signal (T1 bright or dark, T2 variable). A small intracystic nodule that is T1 hyperintense and T2 hypointense is characteristic. Only a thin rim of enhancement from the displaced gland, never a thick enhancing wall or a solid nodule."
+      },
+      "endo": "Midline, 0°, through the sellar dura and often a thin layer of anterior gland: clear, mucoid or thick yellow-white contents that suction out, with a thin translucent wall.",
+      "complications": [
+        "h.diabetes-insipidus",
+        "h.hypopituitarism",
+        "h.intraop-csf-leak-sellar"
+      ],
+      "managedBy": [
+        "p.transsellar-approach",
+        "p.transplanum-transtuberculum"
+      ],
+      "mimics": [
+        "dz.craniopharyngioma",
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.pituitary-apoplexy",
+        "dz.hypophysitis"
+      ],
+      "redFlags": [
+        "Thick nodular enhancement, calcification or a solid component: not a simple Rathke cleft cyst — plan for craniopharyngioma or adenoma.",
+        "Symptomatic recurrence after drainage: re-drain with a wide fenestration into the sphenoid so it cannot reseal."
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.byun-2000-rcc",
+        "src.icar-skull-base-2019",
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.olfactory-groove-meningioma",
+      "name": "Olfactory groove meningioma",
+      "syn": [
+        "olfactory groove meningioma",
+        "OGM",
+        "anterior skull base meningioma",
+        "subfrontal meningioma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.olfactory-fossa",
+        "s.cribriform-plate",
+        "s.crista-galli",
+        "s.anterior-cranial-fossa-dura",
+        "s.falx-cerebri",
+        "s.olfactory-bulb",
+        "s.olfactory-tract",
+        "s.gyrus-rectus",
+        "s.anterior-ethmoidal-artery",
+        "s.posterior-ethmoidal-artery",
+        "s.anterior-falcine-artery",
+        "s.anterior-cerebral-artery",
+        "s.frontopolar-artery",
+        "s.orbitofrontal-artery",
+        "s.planum-sphenoidale",
+        "s.optic-nerve"
+      ],
+      "tier": 2,
+      "what": "A meningioma arising from the dura over the cribriform plate and crista galli that grows slowly and silently, often to a large size, before presenting with smell loss, personality or cognitive change, or visual loss.",
+      "why": "The endonasal transcribriform approach devascularizes the tumor first (ethmoidal arteries, dural base), removes the dural attachment and hyperostotic bone ([[c.simpson]] I–II) and avoids brain retraction; it suits midline tumors that extend little lateral to the lamina papyracea (not beyond about the mid-orbital roof) in patients already anosmic, and commits to a large multilayer reconstruction. Large tumors extending far laterally over the orbital roofs, encasing the A2 or frontopolar arteries, or in patients with preserved smell favor a transcranial approach.",
+      "imaging": {
+        "ct": "Hyperostosis, blistering or erosion of the cribriform plate and planum; calcification in some; tumor may grow down through the cribriform plate into the ethmoid.",
+        "mri": "Extra-axial, broad-based, homogeneously enhancing mass on the olfactory groove with a dural tail and a CSF–vascular cleft separating it from the frontal lobes; loss of that cleft and frontal edema suggest pial involvement and a harder dissection. The A2s and frontopolar arteries are displaced up and back — encasement matters for the approach. Coronal images show lateral extent over the orbital roofs; sagittal images show extension to the planum, tuberculum and optic apparatus."
+      },
+      "endo": "Midline, 0°, after bilateral ethmoidectomy and removal of the cribriform plate: hypervascular dura and tumor, often with hyperostotic bone and sometimes an intranasal part; after coagulation of the base and internal debulking, the capsule is rolled off the gyri recti and A2s in the arachnoid plane.",
+      "class": [
+        "c.simpson"
+      ],
+      "complications": [
+        "h.postop-csf-leak",
+        "h.csf-repair-failure",
+        "h.a2-branch-injury",
+        "h.olfactory-loss",
+        "h.tension-pneumocephalus",
+        "h.aea-transection"
+      ],
+      "managedBy": [
+        "p.transcribriform-approach",
+        "p.aea-ligation",
+        "p.draf-iii",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.olfactory-neuroblastoma",
+        "dz.itac",
+        "dz.planum-tuberculum-meningioma",
+        "dz.fibrous-dysplasia",
+        "dz.meningoencephalocele",
+        "dz.skull-base-metastasis"
+      ],
+      "redFlags": [
+        "Tumor extending far laterally over the orbital roofs (beyond roughly the mid-orbit), encasing the A2 or frontopolar arteries, or with major frontal edema: consider transcranial or combined resection.",
+        "A unilateral tumor with smell still present: a transcranial approach may preserve it, whereas endonasal resection sacrifices it — discuss this explicitly.",
+        "A \"meningioma\" with an intranasal component and nasal symptoms: biopsy to exclude olfactory neuroblastoma before planning."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Foster Kennedy syndrome — ipsilateral optic atrophy, contralateral papilledema and anosmia — is the textbook presentation of a large olfactory groove meningioma."
+        },
+        {
+          "tier": 2,
+          "text": "Pooled retrospective series comparing the routes for anterior midline meningiomas reported higher CSF leak rates and lower gross-total resection with the endonasal route, with selection bias in both arms; reconstruction strategy and tumor selection drive those numbers."
+        },
+        {
+          "tier": 3,
+          "text": "Devascularize early: coagulate the anterior and posterior ethmoidal arteries at the skull base and the dural base before debulking — the classic advantage of the endonasal route."
+        },
+        {
+          "tier": 3,
+          "text": "The posterior limit of dural resection is the planum; the optic nerves and chiasm lie just behind, so identify the medial opticocarotid recess before extending back."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.komotar-2012-meningioma",
+        "src.simpson-1957",
+        "src.who-cns-2021",
+        "src.icar-skull-base-2019",
+        "src.kassam-2005-sagittal-1",
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.planum-tuberculum-meningioma",
+      "name": "Planum sphenoidale and tuberculum sellae meningioma",
+      "syn": [
+        "tuberculum sellae meningioma",
+        "planum sphenoidale meningioma",
+        "suprasellar meningioma",
+        "TSM"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.tuberculum-sellae",
+        "s.planum-sphenoidale",
+        "s.limbus-sphenoidale",
+        "s.chiasmatic-sulcus",
+        "s.diaphragma-sellae",
+        "s.optic-canal",
+        "s.optic-nerve",
+        "s.optic-chiasm",
+        "s.falciform-ligament",
+        "s.internal-carotid-artery",
+        "s.ophthalmic-artery",
+        "s.superior-hypophyseal-artery",
+        "s.anterior-cerebral-artery",
+        "s.anterior-communicating-artery",
+        "s.pituitary-stalk",
+        "s.anterior-clinoid-process",
+        "s.medial-opticocarotid-recess",
+        "s.suprasellar-cistern"
+      ],
+      "tier": 3,
+      "what": "A meningioma arising from the dura of the tuberculum sellae, chiasmatic sulcus and planum, presenting early with asymmetric visual loss because it lifts and compresses the optic nerves and chiasm and often grows into the optic canals.",
+      "why": "The goal is vision: the endonasal transtuberculum–transplanum approach reaches the dural base first and opens the medial optic canals, where tumor tends to lie inferomedial to the nerve, without retracting the nerves, and it suits tumors without major extension lateral to the supraclinoid ICA or anterior clinoid and without vessel encasement. It demands a planned high-flow reconstruction; lateral extension, ICA or ACA encasement, or unfavorable sphenoid anatomy favor a transcranial approach.",
+      "imaging": {
+        "ct": "Hyperostosis or blistering of the planum and tuberculum, sometimes calcification; the sella is not enlarged.",
+        "mri": "Homogeneously enhancing extra-axial mass centered above the tuberculum with a dural tail along the planum and diaphragma; the pituitary gland sits separate and normal-sized below it, the diaphragma is pushed down and the stalk back — the opposite of a macroadenoma, which enlarges the sella and pushes the diaphragma up. Assess optic canal extension on thin coronal post-contrast images, lateral extent past the ICA and clinoid, ICA and A1/ACoA encasement (vessel narrowing favors meningioma) and the arachnoid cleft."
+      },
+      "endo": "Midline, 0°, after removing tuberculum and planum bone: coagulate the dural base, debulk internally, then dissect the capsule off the optic nerves, chiasm, superior hypophyseal branches, A1/ACoA and stalk; open the medial optic canals to follow tumor into them.",
+      "class": [
+        "c.simpson"
+      ],
+      "complications": [
+        "h.chiasm-devascularization",
+        "h.optic-nerve-thermal-injury",
+        "h.ophthalmic-artery-injury",
+        "h.acoa-perforator-injury",
+        "h.paraclinoid-ica-injury",
+        "h.intercavernous-sinus-bleeding",
+        "h.postop-csf-leak"
+      ],
+      "managedBy": [
+        "p.transplanum-transtuberculum",
+        "p.optic-nerve-decompression",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.craniopharyngioma",
+        "dz.olfactory-groove-meningioma",
+        "dz.skull-base-ica-aneurysm",
+        "dz.fibrous-dysplasia"
+      ],
+      "redFlags": [
+        "Progressive visual loss: expedite surgery — duration of compression and optic atrophy predict recovery.",
+        "Tumor lateral to the supraclinoid ICA or optic nerve (including tumor superolateral to the nerve in its canal), or encasing the ICA or ACA: transcranial or combined approach.",
+        "Tumor inside an optic canal: open the canal and remove it — residual there causes late visual decline."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "A normal-sized sella with a separate, normally enhancing gland beneath a suprasellar mass argues against pituitary adenoma."
+        },
+        {
+          "tier": 3,
+          "text": "Intracanalicular tumor usually lies inferomedial to the optic nerve — exactly where the endonasal view looks — so open the medial canal early and follow it."
+        },
+        {
+          "tier": 3,
+          "text": "Preserve every superior hypophyseal branch to the chiasm; coagulating \"small feeders\" on the capsule can blind the patient ([[h.chiasm-devascularization]])."
+        },
+        {
+          "tier": 3,
+          "text": "Drill away the thickened, hypervascular bone of the tuberculum and planum before opening the dura: it carries much of the tumor's blood supply, and all bony work is finished before intradural dissection begins."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-cns-2021",
+        "src.simpson-1957",
+        "src.komotar-2012-meningioma",
+        "src.icar-skull-base-2019",
+        "src.kassam-2005-sagittal-1",
+        "src.osborn-2018",
+        "src.chiu-2019-ch29"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.chordoma",
+      "name": "Skull base chordoma",
+      "syn": [
+        "chordoma",
+        "clival chordoma",
+        "conventional chordoma",
+        "chondroid chordoma",
+        "poorly differentiated chordoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.clivus",
+        "s.clival-recess",
+        "s.dorsum-sellae",
+        "s.sphenoid-sinus",
+        "s.basilar-plexus",
+        "s.prepontine-cistern",
+        "s.basilar-artery",
+        "s.pons",
+        "s.abducens-nerve",
+        "s.dorellos-canal",
+        "s.internal-carotid-artery",
+        "s.cavernous-sinus",
+        "s.petrous-apex",
+        "s.nasopharynx",
+        "s.longus-capitis",
+        "s.occipital-condyle",
+        "s.hypoglossal-canal",
+        "s.foramen-magnum",
+        "s.odontoid-process"
+      ],
+      "tier": 2,
+      "what": "A malignant, slow-growing bone tumor from notochordal remnants, arising in the midline clivus; it causes diplopia (abducens palsy), headache and lower cranial neuropathies, and tends to recur locally.",
+      "why": "The first operation counts most: maximal safe, ideally gross-total, resection — drilling involved clival bone back to normal-appearing bone — followed by high-dose radiotherapy (usually protons or other particles), because residual tumor and recurrence, including seeding along the surgical corridor, determine survival. The endonasal transclival corridor fits midline tumor medial to the paraclival ICAs; lateral extension needs transpterygoid or petrous modules or a combined approach.",
+      "imaging": {
+        "ct": "Midline, lytic, destructive clival lesion with irregular intratumoral bone fragments (remnants of destroyed bone, not chondroid matrix) and a soft-tissue mass, centered on the clivus rather than the petroclival fissure.",
+        "mri": "Lobulated, very T2 hyperintense mass with hypointense septations (a \"honeycomb\"), intermediate T1 with foci of hemorrhage or mucus, and moderate heterogeneous enhancement; it indents the pons (the \"thumb sign\"), displaces the basilar artery backward and pushes the paraclival and cavernous ICAs laterally. ADC tends to be lower than in chondrosarcoma and lowest in poorly differentiated chordoma. Map dural breach and intradural extent, cavernous sinus, Dorello's canal, hypoglossal canals and condyles (craniocervical stability) and the nasopharyngeal component."
+      },
+      "endo": "Midline, 0°, after a wide posterior sphenoidotomy and clival drilling: gray, gelatinous, lobulated tumor within soft or eroded clival bone, often behind intact dura; intradural tumor pushes the basilar artery and abducens nerves.",
+      "complications": [
+        "h.abducens-injury",
+        "h.paraclival-ica-injury-transclival",
+        "h.basilar-plexus-bleeding",
+        "h.brainstem-perforator-injury",
+        "h.postop-csf-leak",
+        "h.cvj-instability",
+        "h.hypoglossal-injury",
+        "h.tension-pneumocephalus"
+      ],
+      "managedBy": [
+        "p.transclival-approach",
+        "p.transpterygoid-approach",
+        "p.medial-petrous-apex-approach",
+        "p.transodontoid-approach",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.chondrosarcoma",
+        "dz.ecchordosis-physaliphora",
+        "dz.skull-base-metastasis",
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.nasopharyngeal-carcinoma",
+        "dz.skull-base-epidermoid"
+      ],
+      "redFlags": [
+        "A small, stable, non-enhancing retroclival lesion on a bony stalk: consider [[dz.ecchordosis-physaliphora]] before planning surgery.",
+        "If tissue is needed before definitive surgery, take it through the planned endonasal corridor so the tract is removed at resection — seeding along biopsy and surgical tracts occurs.",
+        "Extensive condylar or C1 involvement: assess craniocervical stability and plan occipitocervical fusion with the resection.",
+        "Abducens palsy with a clival mass: chordoma until proven otherwise."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Histology: lobules of vacuolated physaliphorous cells in a myxoid matrix. Brachyury immunostaining confirms chordoma and separates it from chondrosarcoma; poorly differentiated chordomas, often in children, lose SMARCB1 (INI1)."
+        },
+        {
+          "tier": 3,
+          "text": "Chordoma versus chondrosarcoma: midline clivus versus petroclival fissure; ICA pushed laterally versus usually medially; destroyed-bone fragments versus rings-and-arcs matrix; lower versus higher ADC; brachyury, keratin and EMA positive versus negative (both are S100 positive)."
+        },
+        {
+          "tier": 3,
+          "text": "The clival thirds ([[c.clivus-thirds]]) map the module: upper (pituitary transposition), middle (between the paraclival ICAs), lower (down to the foramen magnum, with the nasopalatine line as the inferior reach)."
+        },
+        {
+          "tier": 3,
+          "text": "Intradural resection opens the prepontine cistern: close with a large pedicled nasoseptal flap as a high-flow repair ([[pr.reconstruction-matches-leak]]); change instruments and irrigate after tumor removal to limit seeding of the corridor and flap harvest site."
+        },
+        {
+          "tier": 2,
+          "text": "About a third of chordomas arise at the skull base, most of the rest in the sacrum and spine. Despite a low-grade histology, local aggressiveness keeps 5-year survival for clival chordoma around 60–70%."
+        },
+        {
+          "tier": 3,
+          "text": "Endoscopic series report postoperative CSF leak in 0–33% after clival chordoma resection; the high-flow prepontine cistern makes these the hardest leaks to seal ([[h.postop-csf-leak]])."
+        },
+        {
+          "tier": 3,
+          "text": "Gross-total resection stays the aim, but \"safe\" sets the limit: when a massive tumor hugs the brainstem or sits in retrocarotid or retrotubal pockets that cannot be reached safely, planned residual after maximal decompression, followed by radiotherapy, can still give durable control because chordoma grows slowly (one reported case stable at 2.5 years). This is case-level evidence and does not replace the consensus goal."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.stacchiotti-2015-chordoma",
+        "src.who-bone-2020",
+        "src.icar-skull-base-2019",
+        "src.kassam-2005-sagittal-2",
+        "src.osborn-2018",
+        "src.chiu-2019-ch30"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.chondrosarcoma",
+      "name": "Skull base chondrosarcoma",
+      "syn": [
+        "chondrosarcoma",
+        "petroclival chondrosarcoma",
+        "conventional chondrosarcoma",
+        "mesenchymal chondrosarcoma",
+        "clear cell chondrosarcoma",
+        "dedifferentiated chondrosarcoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.petroclival-synchondrosis",
+        "s.foramen-lacerum",
+        "s.petrous-apex",
+        "s.clivus",
+        "s.internal-carotid-artery",
+        "s.inferior-petrosal-sinus",
+        "s.vidian-canal",
+        "s.cavernous-sinus",
+        "s.meckels-cave",
+        "s.abducens-nerve",
+        "s.dorellos-canal",
+        "s.prepontine-cistern"
+      ],
+      "tier": 2,
+      "what": "A malignant cartilage-forming tumor that at the skull base typically arises off the midline from the petroclival synchondrosis near the foramen lacerum; most are low grade and slow-growing, presenting with abducens palsy or other cranial neuropathies.",
+      "why": "Because it lies posterolateral to, and displaces, the paraclival and lacerum ICA, the endonasal route must work around the carotid (transpterygoid, infrapetrous or medial petrous apex modules) or be combined with a lateral transcranial approach; maximal safe resection, with radiotherapy for residual or higher-grade tumor, controls it far better than chordoma. Separating it from chordoma therefore changes prognosis, radiation planning and how aggressively residual tumor is chased.",
+      "imaging": {
+        "ct": "Paramedian lytic lesion centered on the petroclival fissure and foramen lacerum, often with chondroid matrix calcification (\"rings and arcs\") and scalloped bone destruction.",
+        "mri": "Lobulated, very T2 hyperintense (hyaline cartilage) mass with heterogeneous ring-and-arc or septal enhancement; ADC generally higher than chordoma. Location is the key discriminator: off-midline at the petroclival fissure, typically displacing the ICA anteromedially and extending into the cavernous sinus, Meckel's cave or cerebellopontine angle. Mesenchymal and dedifferentiated types enhance more solidly and behave aggressively."
+      },
+      "endo": "Ipsilateral, 0° then 30°–45°, after a transpterygoid exposure with the vidian canal traced to the anterior genu: gray-blue, gelatinous to gritty cartilage lateral and posterior to the paraclival ICA, often softer than the CT suggests.",
+      "complications": [
+        "h.petrous-ica-injury-transpterygoid",
+        "h.paraclival-ica-injury-transclival",
+        "h.ica-injury-vidian",
+        "h.abducens-injury",
+        "h.vidian-sacrifice-dry-eye",
+        "h.trigeminal-injury-meckel",
+        "h.postop-csf-leak"
+      ],
+      "managedBy": [
+        "p.transpterygoid-approach",
+        "p.medial-petrous-apex-approach",
+        "p.transclival-approach",
+        "p.nasoseptal-flap",
+        "p.skull-base-reconstruction"
+      ],
+      "mimics": [
+        "dz.chordoma",
+        "dz.petrous-apex-cholesterol-granuloma",
+        "dz.skull-base-metastasis",
+        "dz.skull-base-ica-aneurysm"
+      ],
+      "redFlags": [
+        "An off-midline petroclival lesion: map the ICA course on CTA before choosing the corridor — the carotid lies between the endonasal surgeon and the tumor.",
+        "Solid, avid enhancement or rapid growth: consider mesenchymal or dedifferentiated chondrosarcoma — systemic staging and oncology input."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Follow the vidian canal back to the anterior genu ([[pr.vidian-canal-to-genu]]) to control the ICA before working lateral to it."
+        },
+        {
+          "tier": 3,
+          "text": "IDH1/IDH2 mutations are common in conventional chondrosarcoma and support the diagnosis on a small biopsy; brachyury is negative."
+        },
+        {
+          "tier": 2,
+          "text": "Subtypes: conventional (graded 1–3, the most common), mesenchymal, clear cell and dedifferentiated. The prognosis is far better than chordoma's — 5-year survival up to about 90% is reported."
+        },
+        {
+          "tier": 3,
+          "text": "Most arise along the petroclival (petro-occipital) fissure, but some start at the spheno-occipital synchondrosis near the midline, where location alone no longer separates them from chordoma; rely on matrix, ADC and immunostains."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.who-bone-2020",
+        "src.icar-skull-base-2019",
+        "src.zanation-2009-petrous",
+        "src.kassam-2005-coronal",
+        "src.kassam-2008-vidian",
+        "src.osborn-2018",
+        "src.chiu-2019-ch30"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.ecchordosis-physaliphora",
+      "name": "Ecchordosis physaliphora",
+      "syn": [
+        "ecchordosis",
+        "EP"
+      ],
+      "category": "congenital",
+      "involves": [
+        "s.clivus",
+        "s.prepontine-cistern"
+      ],
+      "tier": 3,
+      "what": "A small benign notochordal remnant on the back of the clivus, usually projecting into the prepontine cistern and found incidentally.",
+      "why": "It is left alone: recognizing it prevents an unnecessary transclival operation. Rarely it causes a CSF leak or bleeding, and a lesion that grows or enhances is treated as a possible chordoma.",
+      "imaging": {
+        "ct": "A small defect or bony stalk on the dorsal clivus without destruction.",
+        "mri": "Small T2 hyperintense, T1 hypointense, non-enhancing lesion in the prepontine cistern attached to the clivus by a thin stalk; stable on follow-up."
+      },
+      "mimics": [
+        "dz.chordoma",
+        "dz.skull-base-epidermoid"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.skull-base-metastasis",
+      "name": "Skull base metastasis",
+      "syn": [
+        "clival metastasis",
+        "sphenoid metastasis",
+        "skull base plasmacytoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.clivus",
+        "s.sphenoid-bone",
+        "s.petrous-apex",
+        "s.sella-turcica",
+        "s.pituitary-stalk",
+        "s.cavernous-sinus",
+        "s.orbital-apex",
+        "s.occipital-condyle"
+      ],
+      "tier": 2,
+      "what": "Blood-borne metastasis to the skull base — commonly from breast, prostate, lung, kidney or thyroid — or a hematologic deposit such as plasmacytoma; clival, sphenoid and petrous apex deposits present with cranial neuropathies and headache.",
+      "why": "A new destructive skull base lesion in an adult with, or at risk of, cancer is biopsied and staged before any resection. Treatment is usually radiotherapy and systemic therapy, with endonasal surgery reserved for tissue, optic nerve decompression or pain.",
+      "imaging": {
+        "ct": "Lytic (or sclerotic, e.g. prostate) destructive lesion, often with other skeletal lesions.",
+        "mri": "Replacement of normal T1-bright clival marrow and enhancing soft tissue; metastases to the stalk or posterior pituitary present with diabetes insipidus."
+      },
+      "managedBy": [
+        "p.transclival-approach",
+        "p.sphenoidotomy",
+        "p.optic-nerve-decompression"
+      ],
+      "mimics": [
+        "dz.chordoma",
+        "dz.chondrosarcoma",
+        "dz.nasopharyngeal-carcinoma",
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.hypophysitis",
+        "dz.olfactory-groove-meningioma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.osborn-2018",
+        "src.cummings-7"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.petrous-apex-cholesterol-granuloma",
+      "name": "Petrous apex cholesterol granuloma",
+      "syn": [
+        "cholesterol granuloma",
+        "cholesterol cyst",
+        "petrous apex cyst"
+      ],
+      "category": "cystic",
+      "involves": [
+        "s.petrous-apex",
+        "s.internal-carotid-artery",
+        "s.petroclival-synchondrosis",
+        "s.clivus",
+        "s.sphenoid-sinus",
+        "s.abducens-nerve",
+        "s.dorellos-canal",
+        "s.meckels-cave"
+      ],
+      "tier": 3,
+      "what": "An expansile cyst of a pneumatized petrous apex filled with altered blood, cholesterol crystals and a foreign-body giant-cell reaction; often incidental, when symptomatic it causes headache, abducens or trigeminal symptoms, or hearing loss.",
+      "why": "Asymptomatic lesions are observed; symptomatic ones are drained, not excised. The endonasal route, medial to the paraclival ICA through the sphenoid, works when the cyst abuts the posterior sphenoid or clival recess; the opening is kept patent (stent, mucosal or nasoseptal flap lining) because closure means recurrence, and cysts without a medial window are drained through a lateral (infracochlear or infralabyrinthine) route.",
+      "imaging": {
+        "ct": "Smooth, expansile, well-marginated petrous apex lesion with cortical thinning and trabecular loss and no matrix; the opposite apex is usually well pneumatized.",
+        "mri": "T1 hyperintense and T2 hyperintense, not suppressing with fat saturation, non-enhancing, often with a dark T2 hemosiderin rim and no restricted diffusion. This combination separates it from asymmetric fatty marrow (suppresses with fat saturation, not expansile), trapped fluid (T1 dark, not expansile), mucocele (usually T1 dark, T2 bright), cholesteatoma or epidermoid (restricted diffusion) and chondrosarcoma (enhances)."
+      },
+      "endo": "Ipsilateral, through a wide sphenoidotomy, 0° then 30°–45°: once the thin bone medial to the paraclival ICA is opened, brown \"motor-oil\" fluid with glistening cholesterol crystals drains.",
+      "complications": [
+        "h.paraclival-ica-injury-transclival",
+        "h.petrous-ica-injury-transpterygoid",
+        "h.abducens-injury"
+      ],
+      "managedBy": [
+        "p.medial-petrous-apex-approach",
+        "p.transpterygoid-approach",
+        "p.sphenoidotomy",
+        "p.nasoseptal-flap"
+      ],
+      "mimics": [
+        "dz.petrous-apex-effusion",
+        "dz.mucocele",
+        "dz.skull-base-epidermoid",
+        "dz.chondrosarcoma",
+        "dz.skull-base-ica-aneurysm"
+      ],
+      "redFlags": [
+        "Before draining, confirm on CTA or MRA that the lesion is not a petrous ICA aneurysm and map the ICA — the medial route passes right beside it.",
+        "New abducens palsy or trigeminal symptoms: the lesion is symptomatic — drainage is indicated."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "If the cyst does not bulge into the sphenoid, reaching it endonasally means lateralizing the ICA or an infrapetrous corridor; a lateral transtemporal drainage may be the better route."
+        }
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.zanation-2009-petrous",
+        "src.icar-skull-base-2019",
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.skull-base-epidermoid",
+      "name": "Skull base epidermoid cyst (congenital cholesteatoma)",
+      "syn": [
+        "epidermoid cyst",
+        "epidermoid",
+        "congenital cholesteatoma",
+        "petrous apex cholesteatoma"
+      ],
+      "category": "congenital",
+      "involves": [
+        "s.petrous-apex",
+        "s.prepontine-cistern",
+        "s.suprasellar-cistern",
+        "s.meckels-cave"
+      ],
+      "tier": 3,
+      "what": "A slow-growing inclusion cyst lined by keratinizing squamous epithelium and filled with keratin, found in the petrous apex (congenital cholesteatoma) or intradurally in the cerebellopontine, prepontine and suprasellar cisterns.",
+      "why": "Intradural epidermoids insinuate around vessels and nerves, so the capsule is removed only where it peels away safely, and spilled contents can cause chemical meningitis. A petrous apex cholesteatoma, unlike a cholesterol granuloma, needs removal or exteriorization of its matrix rather than simple drainage.",
+      "imaging": {
+        "ct": "Petrous apex: smooth, expansile, low-density lesion. Intradural: CSF-density lesion.",
+        "mri": "Near-CSF signal on T1 and T2 but incompletely suppressed on FLAIR and bright on diffusion-weighted imaging (restricted diffusion) — the discriminator from arachnoid cyst, cholesterol granuloma and cystic tumors; no enhancement; it wraps around vessels rather than displacing them."
+      },
+      "mimics": [
+        "dz.petrous-apex-cholesterol-granuloma",
+        "dz.craniopharyngioma",
+        "dz.ecchordosis-physaliphora",
+        "dz.chordoma"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.petrous-apex-effusion",
+      "name": "Petrous apex effusion (trapped fluid)",
+      "syn": [
+        "trapped fluid",
+        "petrous apex opacification",
+        "petrous apex effusion"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.petrous-apex"
+      ],
+      "tier": 3,
+      "what": "Non-expansile fluid or mucosal thickening in pneumatized petrous apex air cells, often after middle ear or mastoid inflammation; an incidental finding to leave alone.",
+      "why": "It needs no treatment, and recognizing it prevents a skull base operation for a pseudo-lesion. It matters only if it expands, erodes bone or becomes symptomatic.",
+      "imaging": {
+        "ct": "Opacified petrous apex air cells with intact trabeculae and cortex and no expansion.",
+        "mri": "T2 hyperintense and T1 hypointense (or intermediate if proteinaceous), without expansion or enhancement beyond thin mucosa. Asymmetric fatty marrow — the other leave-alone lesion — is T1 bright but suppresses with fat saturation."
+      },
+      "mimics": [
+        "dz.petrous-apex-cholesterol-granuloma",
+        "dz.mucocele"
+      ],
+      "geo": "overlay",
+      "src": [
+        "src.osborn-2018"
+      ],
+      "review": "draft"
+    }
+  ],
+  "classifications": [
+    {
+      "id": "c.krouse",
+      "name": "Krouse staging of inverted papilloma",
+      "of": "dz.inverted-papilloma",
+      "tier": 2,
+      "basis": "Anatomic extent on endoscopy and CT/MRI, plus the presence of associated malignancy (Krouse 2000).",
+      "classes": [
+        {
+          "code": "T1",
+          "label": "Nasal cavity only",
+          "criterion": "Confined to the nasal cavity, without extension into the sinuses; no malignancy.",
+          "why": "Endoscopic excision at the attachment."
+        },
+        {
+          "code": "T2",
+          "label": "OMC, ethmoid, medial maxillary wall",
+          "criterion": "Involves the ostiomeatal complex, ethmoid sinuses and/or the medial wall of the maxillary sinus, with or without nasal cavity involvement; no malignancy.",
+          "why": "Endoscopic ethmoidectomy with a wide antrostomy reaches these attachments."
+        },
+        {
+          "code": "T3",
+          "label": "Other maxillary walls, frontal or sphenoid",
+          "criterion": "Involves the lateral, inferior, superior, anterior or posterior maxillary walls, the sphenoid sinus and/or the frontal sinus, with or without the medial maxillary wall, ethmoid or nasal cavity; no malignancy.",
+          "why": "Needs an approach that reaches the attachment: prelacrimal, endoscopic medial maxillectomy, Draf IIb/III, osteoplastic flap or combined access."
+        },
+        {
+          "code": "T4",
+          "label": "Extrasinus extension or malignancy",
+          "criterion": "Any extension outside the nose and sinuses (orbit, intracranial compartment, pterygomaxillary space) or any associated malignancy.",
+          "why": "Plan as an extended or oncologic resection with multidisciplinary staging."
+        }
+      ],
+      "caveats": "Stage reflects extent, not the attachment site, and T3 lumps very different maxillary and frontal attachments together. Reproductions differ on the superior maxillary wall: the original abstract groups it with T2 (\"medial and superior portions\"), whereas most reproduced tables put it in T3 — say which you use. Later systems were proposed to predict recurrence better, e.g. Cannady 2007: group A (nasal cavity, ethmoid, medial maxillary wall), B (lateral maxillary sinus, frontal or sphenoid sinus) and C (extrasinus extension), with recurrence in 3%, 20% and 35% of patients respectively in pooled endoscopic series (n = 445, mean follow-up about 40 months). Stage on MRI, which separates tumor from obstructed secretions.",
+      "src": [
+        "src.krouse-2000",
+        "src.cannady-2007"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.jna-radkowski",
+      "name": "Radkowski staging of juvenile angiofibroma",
+      "of": "dz.jna",
+      "tier": 2,
+      "basis": "Radiologic extent on CT/MRI; a modification of the Sessions system that adds skull base erosion and grades PPF and infratemporal extension (Radkowski et al. 1996).",
+      "classes": [
+        {
+          "code": "IA",
+          "label": "Nose / nasopharyngeal vault",
+          "criterion": "Limited to the nasal cavity and/or nasopharyngeal vault."
+        },
+        {
+          "code": "IB",
+          "label": "Sinus extension",
+          "criterion": "Extension into one or more paranasal sinuses."
+        },
+        {
+          "code": "IIA",
+          "label": "Minimal PPF",
+          "criterion": "Minimal extension into the pterygopalatine (pterygomaxillary) fossa."
+        },
+        {
+          "code": "IIB",
+          "label": "Full PPF",
+          "criterion": "Full occupation of the pterygopalatine fossa, with or without erosion of the orbital bones."
+        },
+        {
+          "code": "IIC",
+          "label": "Infratemporal fossa",
+          "criterion": "Extension into the infratemporal fossa, cheek or temporal fossa, or posterior to the pterygoid plates.",
+          "why": "The lateral limit of a purely endonasal resection in many hands; transmaxillary or combined access."
+        },
+        {
+          "code": "IIIA",
+          "label": "Skull base, minimal intracranial",
+          "criterion": "Erosion of the skull base (middle cranial fossa or pterygoid base) with minimal intracranial extension."
+        },
+        {
+          "code": "IIIB",
+          "label": "Extensive intracranial",
+          "criterion": "Extensive intracranial extension, with or without cavernous sinus involvement.",
+          "why": "Plan with neurosurgery; residual in the cavernous sinus is often observed or irradiated."
+        }
+      ],
+      "caveats": "An extent-only system: it does not capture blood supply, which in endoscopic series predicts blood loss and residual disease better (see [[c.jna-upmc]]). Basisphenoid (cancellous sphenoid) invasion, the main predictor of recurrence in imaging series, is folded into skull base erosion (IIIA) rather than staged on its own.",
+      "src": [
+        "src.radkowski-1996"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.jna-andrews-fisch",
+      "name": "Andrews–Fisch staging of juvenile angiofibroma",
+      "of": "dz.jna",
+      "tier": 3,
+      "basis": "Radiologic extent, modified by Andrews et al. (1989) from Fisch, separating extradural from intradural intracranial extension.",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Nose and nasopharynx",
+          "criterion": "Limited to the nasopharynx and nasal cavity; bone destruction negligible or limited to the sphenopalatine foramen."
+        },
+        {
+          "code": "II",
+          "label": "PPF or sinuses",
+          "criterion": "Invades the pterygopalatine fossa or the maxillary, ethmoid or sphenoid sinus, with bone destruction."
+        },
+        {
+          "code": "IIIa",
+          "label": "ITF or orbit, extracranial",
+          "criterion": "Invades the infratemporal fossa or orbital region without intracranial involvement."
+        },
+        {
+          "code": "IIIb",
+          "label": "ITF or orbit, extradural intracranial",
+          "criterion": "Infratemporal fossa or orbit with extradural (parasellar) intracranial involvement."
+        },
+        {
+          "code": "IVa",
+          "label": "Intradural",
+          "criterion": "Intracranial intradural tumor without infiltration of the cavernous sinus, pituitary fossa or optic chiasm."
+        },
+        {
+          "code": "IVb",
+          "label": "Intradural with cavernous, sella or chiasm",
+          "criterion": "Intradural tumor with infiltration of the cavernous sinus, pituitary fossa or optic chiasm."
+        }
+      ],
+      "caveats": "Devised for open (infratemporal fossa) surgery; like Radkowski it ignores vascularity.",
+      "src": [
+        "src.andrews-1989"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.jna-upmc",
+      "name": "UPMC endoscopic staging of juvenile angiofibroma",
+      "of": "dz.jna",
+      "tier": 3,
+      "basis": "Route of extension as it matters to an endonasal approach, plus residual vascularity on angiography after embolization, which reflects internal carotid supply (Snyderman et al. 2010).",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Nose, medial PPF",
+          "criterion": "Nasal cavity and medial pterygopalatine fossa."
+        },
+        {
+          "code": "II",
+          "label": "Sinuses, lateral PPF",
+          "criterion": "Paranasal sinuses and lateral pterygopalatine fossa; no residual vascularity."
+        },
+        {
+          "code": "III",
+          "label": "Skull base, orbit or ITF; no residual vascularity",
+          "criterion": "Skull base erosion, orbit or infratemporal fossa involvement; no residual vascularity after embolization."
+        },
+        {
+          "code": "IV",
+          "label": "Skull base, orbit or ITF; residual vascularity",
+          "criterion": "Skull base erosion, orbit or infratemporal fossa involvement with residual vascularity.",
+          "why": "Expect heavier bleeding from ICA branches; consider staging the resection."
+        },
+        {
+          "code": "V",
+          "label": "Intracranial with residual vascularity",
+          "criterion": "Intracranial extension with residual vascularity; suffix M for medial extension (toward the cavernous sinus and sella) or L for lateral extension (middle cranial fossa).",
+          "why": "Highest blood loss and residual rate; plan staged or combined surgery with neurosurgery."
+        }
+      ],
+      "caveats": "Requires post-embolization angiography to grade. In the original series stage correlated with blood loss, need for staged surgery and residual disease.",
+      "src": [
+        "src.snyderman-2010-jna"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.kadish",
+      "name": "Kadish staging of olfactory neuroblastoma (with Morita modification)",
+      "of": "dz.olfactory-neuroblastoma",
+      "tier": 2,
+      "basis": "Anatomic extent (Kadish et al. 1976), with stage D added for regional or distant metastasis by Morita et al. 1993 (modified Kadish).",
+      "classes": [
+        {
+          "code": "A",
+          "label": "Nasal cavity",
+          "criterion": "Confined to the nasal cavity."
+        },
+        {
+          "code": "B",
+          "label": "Nasal cavity and sinuses",
+          "criterion": "Involves the nasal cavity and one or more paranasal sinuses."
+        },
+        {
+          "code": "C",
+          "label": "Beyond the sinuses",
+          "criterion": "Extends beyond the nasal cavity and sinuses — orbit, skull base, intracranial cavity (in the original system also cervical or distant metastasis).",
+          "why": "The commonest stage at presentation in most series; the stage does not separate cribriform erosion from brain invasion."
+        },
+        {
+          "code": "D",
+          "label": "Metastatic (Morita)",
+          "criterion": "Cervical lymph node or distant metastasis."
+        }
+      ],
+      "caveats": "Kadish C is heterogeneous. The TNM system of Dulguerov ([[c.dulguerov]]) separates cribriform involvement (T2) and extradural intracranial or orbital extension (T3) from brain involvement (T4) and has correlated better with outcome in several series; [[c.hyams]] grade adds independent prognostic information.",
+      "src": [
+        "src.kadish-1976",
+        "src.morita-1993"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.dulguerov",
+      "name": "Dulguerov TNM staging of olfactory neuroblastoma",
+      "of": "dz.olfactory-neuroblastoma",
+      "tier": 3,
+      "basis": "TNM system based on CT/MRI extent at the cribriform plate, orbit, dura and brain (Dulguerov and Calcaterra 1992).",
+      "classes": [
+        {
+          "code": "T1",
+          "label": "Nose and sinuses, sparing superior ethmoid",
+          "criterion": "Nasal cavity and/or paranasal sinuses excluding the sphenoid, sparing the most superior ethmoid cells."
+        },
+        {
+          "code": "T2",
+          "label": "Reaches the cribriform plate",
+          "criterion": "Nasal cavity and/or paranasal sinuses including the sphenoid, with extension to or erosion of the cribriform plate."
+        },
+        {
+          "code": "T3",
+          "label": "Orbit or extradural ACF",
+          "criterion": "Extends into the orbit or protrudes into the anterior cranial fossa without dural invasion."
+        },
+        {
+          "code": "T4",
+          "label": "Brain",
+          "criterion": "Involves the brain.",
+          "why": "Resection includes involved dura and brain with frozen-section margins."
+        },
+        {
+          "code": "N1",
+          "label": "Nodal metastasis",
+          "criterion": "Any cervical lymph node metastasis (N0: none)."
+        },
+        {
+          "code": "M1",
+          "label": "Distant metastasis",
+          "criterion": "Distant metastasis present (M0: none)."
+        }
+      ],
+      "src": [
+        "src.dulguerov-1992"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.hyams",
+      "name": "Hyams histologic grade of olfactory neuroblastoma",
+      "of": "dz.olfactory-neuroblastoma",
+      "tier": 3,
+      "basis": "Histology: architecture, nuclear pleomorphism, neurofibrillary matrix, rosettes, mitoses, necrosis and calcification (Hyams et al. 1988).",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Grade I",
+          "criterion": "Lobular architecture, pleomorphism absent to slight, prominent neurofibrillary matrix, Homer Wright pseudorosettes may be present, no mitoses or necrosis; calcification variable.",
+          "why": "Low grade."
+        },
+        {
+          "code": "II",
+          "label": "Grade II",
+          "criterion": "Lobular, pleomorphism present, neurofibrillary matrix present, Homer Wright pseudorosettes may be present, mitoses present, no necrosis; calcification variable.",
+          "why": "Low grade."
+        },
+        {
+          "code": "III",
+          "label": "Grade III",
+          "criterion": "Lobularity may be lost, prominent pleomorphism, matrix scant or absent, Flexner–Wintersteiner rosettes may be present, prominent mitoses, necrosis present, no calcification.",
+          "why": "High grade: more regional and distant failure; adjuvant chemotherapy is often considered."
+        },
+        {
+          "code": "IV",
+          "label": "Grade IV",
+          "criterion": "Lobularity may be lost, marked pleomorphism, no matrix, rosettes uncommon, marked mitotic activity, prominent necrosis, no calcification.",
+          "why": "High grade."
+        }
+      ],
+      "caveats": "Interobserver variation is considerable and many centers report low (I–II) versus high (III–IV). A high-grade tumor needs review against SNUC, neuroendocrine carcinoma and SMARCB1-deficient carcinoma. Grade carries prognosis: in a Mayo Clinic series of 49 patients treated 1951–1990 it was the strongest prognostic factor, with 5-year survival about 80% for low-grade (32 patients) versus 40% for high-grade (15) tumors — a small, retrospective, pre-endoscopic series.",
+      "src": [
+        "src.hyams-1988",
+        "src.morita-1993",
+        "src.chiu-2019-ch25"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.hardy",
+      "name": "Hardy (Hardy–Wilson) classification of pituitary adenomas",
+      "of": "dz.pituitary-neuroendocrine-tumor",
+      "tier": 3,
+      "basis": "Radiologic sellar floor change (grades 0–IV; Hardy and Vezina 1976) and extrasellar extension (stages A–E). The stages are given here as used in Wilson's 1979 modification (the Hardy–Wilson classification), which added stage 0 (no suprasellar extension) and divided parasellar extension into intradural (D) and extradural, cavernous sinus (E).",
+      "classes": [
+        {
+          "code": "0",
+          "label": "Grade 0",
+          "criterion": "Sella of normal size and contour, floor intact."
+        },
+        {
+          "code": "I",
+          "label": "Grade I",
+          "criterion": "Normal-sized sella with focal bulging or asymmetry of the floor (tumor under 10 mm)."
+        },
+        {
+          "code": "II",
+          "label": "Grade II",
+          "criterion": "Enlarged sella with an intact floor (tumor 10 mm or more)."
+        },
+        {
+          "code": "III",
+          "label": "Grade III",
+          "criterion": "Localized erosion or perforation of the sellar floor."
+        },
+        {
+          "code": "IV",
+          "label": "Grade IV",
+          "criterion": "Diffuse destruction of the sellar floor."
+        },
+        {
+          "code": "A",
+          "label": "Stage A",
+          "criterion": "Suprasellar extension into the suprasellar cistern."
+        },
+        {
+          "code": "B",
+          "label": "Stage B",
+          "criterion": "Suprasellar extension obliterating the recesses of the third ventricle."
+        },
+        {
+          "code": "C",
+          "label": "Stage C",
+          "criterion": "Suprasellar extension grossly displacing the third ventricle."
+        },
+        {
+          "code": "D",
+          "label": "Stage D",
+          "criterion": "Intracranial intradural parasellar extension (anterior, middle or posterior fossa)."
+        },
+        {
+          "code": "E",
+          "label": "Stage E",
+          "criterion": "Extracranial extradural extension into or beneath the cavernous sinus."
+        }
+      ],
+      "caveats": "A plain-film and CT era system: it describes bony remodeling well but cavernous sinus invasion poorly — use [[c.knosp]] for that.",
+      "src": [
+        "src.hardy-1976"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.ajcc-sinonasal-t",
+      "name": "AJCC T categories for maxillary sinus and nasal cavity/ethmoid carcinoma (8th ed.)",
+      "of": "dz.sinonasal-scc",
+      "tier": 2,
+      "basis": "AJCC Cancer Staging Manual, 8th edition, primary tumor (T) categories for carcinomas of the maxillary sinus and of the nasal cavity and ethmoid sinus (not mucosal melanoma, lymphoma or sarcoma). Codes here are prefixed Max- or NE- for the two sites. The 8th edition is still the current AJCC staging for these sites (the 2025 version 9 head and neck revision covered the nasopharynx).",
+      "classes": [
+        {
+          "code": "Max-T1",
+          "label": "Maxillary T1",
+          "criterion": "Limited to the maxillary sinus mucosa with no erosion or destruction of bone."
+        },
+        {
+          "code": "Max-T2",
+          "label": "Maxillary T2",
+          "criterion": "Bone erosion or destruction, including extension into the hard palate and/or middle nasal meatus, but not the posterior maxillary wall or pterygoid plates."
+        },
+        {
+          "code": "Max-T3",
+          "label": "Maxillary T3",
+          "criterion": "Invades the bone of the posterior maxillary wall, subcutaneous tissues, floor or medial wall of the orbit, pterygoid fossa, or ethmoid sinuses."
+        },
+        {
+          "code": "Max-T4a",
+          "label": "Maxillary T4a (moderately advanced)",
+          "criterion": "Invades anterior orbital contents, skin of the cheek, pterygoid plates, infratemporal fossa, cribriform plate, or sphenoid or frontal sinuses.",
+          "why": "Resectable for cure: plan orbital, pterygoid and skull base margins."
+        },
+        {
+          "code": "Max-T4b",
+          "label": "Maxillary T4b (very advanced)",
+          "criterion": "Invades the orbital apex, dura, brain, middle cranial fossa, cranial nerves other than V2, nasopharynx or clivus.",
+          "why": "Usually not resectable for cure; resection only in selected cases (e.g. limited dural involvement)."
+        },
+        {
+          "code": "NE-T1",
+          "label": "Nasal cavity/ethmoid T1",
+          "criterion": "Restricted to one subsite, with or without bony invasion."
+        },
+        {
+          "code": "NE-T2",
+          "label": "Nasal cavity/ethmoid T2",
+          "criterion": "Invades two subsites in a single region or extends to an adjacent region within the nasoethmoidal complex, with or without bony invasion."
+        },
+        {
+          "code": "NE-T3",
+          "label": "Nasal cavity/ethmoid T3",
+          "criterion": "Extends to the medial wall or floor of the orbit, maxillary sinus, palate or cribriform plate."
+        },
+        {
+          "code": "NE-T4a",
+          "label": "Nasal cavity/ethmoid T4a (moderately advanced)",
+          "criterion": "Invades anterior orbital contents, skin of the nose or cheek, minimal extension into the anterior cranial fossa, pterygoid plates, or sphenoid or frontal sinuses.",
+          "why": "Endoscopic or craniofacial resection with dural margin when needed."
+        },
+        {
+          "code": "NE-T4b",
+          "label": "Nasal cavity/ethmoid T4b (very advanced)",
+          "criterion": "Invades the orbital apex, dura, brain, middle cranial fossa, cranial nerves other than V2, nasopharynx or clivus.",
+          "why": "Usually not resectable for cure; resection only in selected cases."
+        }
+      ],
+      "caveats": "Nasal cavity subsites are septum, floor, lateral wall and vestibule; ethmoid subsites are right and left. Staging needs MRI to separate tumor from secretions. N and M follow the general head and neck rules.",
+      "src": [
+        "src.ajcc-8"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.ajcc-nasopharynx-t",
+      "name": "AJCC T categories for nasopharyngeal carcinoma (8th ed.; kept in version 9)",
+      "of": "dz.nasopharyngeal-carcinoma",
+      "tier": 2,
+      "basis": "AJCC Cancer Staging Manual, 8th edition, primary tumor (T) categories for nasopharyngeal carcinoma, staged on MRI. AJCC/UICC version 9 (Pan et al. 2024), used for cases diagnosed from 2025, is now the current edition for this site; it keeps the same T0–T4 categories with the wording clarifications given in caveats.",
+      "classes": [
+        {
+          "code": "T0",
+          "label": "T0",
+          "criterion": "No tumor identified, but EBV-positive cervical node(s)."
+        },
+        {
+          "code": "T1",
+          "label": "T1",
+          "criterion": "Confined to the nasopharynx, or extends to the oropharynx and/or nasal cavity without parapharyngeal involvement."
+        },
+        {
+          "code": "T2",
+          "label": "T2",
+          "criterion": "Extends to the parapharyngeal space and/or adjacent soft tissue (medial pterygoid, lateral pterygoid, prevertebral muscles)."
+        },
+        {
+          "code": "T3",
+          "label": "T3",
+          "criterion": "Involves bony structures of the skull base, cervical vertebra, pterygoid structures and/or paranasal sinuses (version 9: unequivocal bone infiltration)."
+        },
+        {
+          "code": "T4",
+          "label": "T4",
+          "criterion": "Intracranial extension, involvement of cranial nerves (version 9: unequivocal on imaging or examination), hypopharynx, orbit (version 9: including the inferior orbital fissure) or parotid gland, and/or extensive soft-tissue infiltration beyond the lateral surface of the lateral pterygoid muscle."
+        }
+      ],
+      "caveats": "The 8th edition replaced the older \"masticator space\" and \"infratemporal fossa\" terms with named muscles; version 9 words the T4 soft-tissue limit as the anterolateral surface of the lateral pterygoid. Version 9 also adds advanced radiologic extranodal extension to N3, splits M1 into M1a (three or fewer metastatic lesions) and M1b, and redraws the stage groups (stage IV is now metastatic disease only). T stage guides radiotherapy fields and chemotherapy, not primary surgery.",
+      "src": [
+        "src.ajcc-8"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.ajcc-mucosal-melanoma-t",
+      "name": "AJCC T categories for head and neck mucosal melanoma (8th ed.)",
+      "of": "dz.mucosal-melanoma",
+      "tier": 3,
+      "basis": "AJCC Cancer Staging Manual, 8th edition, primary tumor categories for mucosal melanoma of the head and neck; still the current AJCC edition for this site.",
+      "classes": [
+        {
+          "code": "T3",
+          "label": "T3",
+          "criterion": "Limited to the mucosa and immediately underlying soft tissue, regardless of thickness or size."
+        },
+        {
+          "code": "T4a",
+          "label": "T4a (moderately advanced)",
+          "criterion": "Involves deep soft tissue, cartilage, bone or overlying skin."
+        },
+        {
+          "code": "T4b",
+          "label": "T4b (very advanced)",
+          "criterion": "Involves brain, dura, skull base, lower cranial nerves (IX–XII), masticator space, carotid artery, prevertebral space or mediastinal structures."
+        }
+      ],
+      "caveats": "There is no T1 or T2: the staging itself encodes the aggressive behavior of all mucosal melanomas.",
+      "src": [
+        "src.ajcc-8"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.simpson",
+      "name": "Simpson grade of meningioma resection",
+      "of": "dz.olfactory-groove-meningioma",
+      "tier": 3,
+      "basis": "Extent of removal of a meningioma including its dural attachment and involved bone (Simpson 1957); applies to all intracranial meningiomas, including [[dz.planum-tuberculum-meningioma]].",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Grade I",
+          "criterion": "Macroscopically complete removal including excision of the dural attachment and any abnormal bone (and the venous sinus if involved).",
+          "why": "Endonasally achieved for anterior skull base meningiomas by excising the dural base with the hyperostotic cribriform or planum bone."
+        },
+        {
+          "code": "II",
+          "label": "Grade II",
+          "criterion": "Macroscopically complete removal with coagulation of the dural attachment."
+        },
+        {
+          "code": "III",
+          "label": "Grade III",
+          "criterion": "Macroscopically complete removal without resection or coagulation of the dural attachment or its extradural extensions (e.g. hyperostotic bone)."
+        },
+        {
+          "code": "IV",
+          "label": "Grade IV",
+          "criterion": "Partial removal, leaving tumor in situ."
+        },
+        {
+          "code": "V",
+          "label": "Grade V",
+          "criterion": "Simple decompression, with or without biopsy."
+        }
+      ],
+      "caveats": "Derived from a pre-microsurgical, pre-MRI series; in modern series the recurrence gradient between grades I–III is smaller, and WHO grade and molecular features (e.g. CDKN2A/B deletion, TERT promoter mutation) also drive recurrence.",
+      "src": [
+        "src.simpson-1957",
+        "src.who-cns-2021"
+      ],
+      "review": "draft"
+    }
+  ]
+}

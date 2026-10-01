@@ -1,0 +1,9 @@
+# Offline SSB pipeline (never run in CI, never shipped). python3 -m venv .venv && .venv/bin/pip install -r tools/ssb-pipeline/requirements.txt
+numpy==2.4.6
+pillow==12.3.0
+scipy==1.17.1
+scikit-image==0.26.0
+rapidocr-onnxruntime==1.4.4
+onnxruntime==1.30.0
+fast-simplification==0.2.0
+matplotlib==3.11.2

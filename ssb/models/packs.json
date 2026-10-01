@@ -1,0 +1,312 @@
+{
+ "version": 1,
+ "specimen": "uw-axial-sagittal",
+ "frame": "RAS millimetres (docs/ssb.md section 4); apply rasToScene at the root, as the dioramas do",
+ "encoding": "glTF 2.0 binary, gzip; KHR_mesh_quantization: int16 POSITION dequantized by each node's translation/scale, int8 normalized NORMAL; no materials, no textures",
+ "nodeNames": "<graph id>.<side>; node extras {id, side, name} (three.js strips dots from object names, so read userData.id / userData.side)",
+ "proposedIds": {
+  "s.skull-base-region": "bony envelope of the sinonasal / ventral skull base region: bone (display >= 150, ~ +650 HU) within 12 mm of the named air spaces; no existing graph id covers the whole envelope (the graph splits bone into bones and bone parts). Rename or add to the graph before the viewer relies on it."
+ },
+ "notes": {
+  "walls": "stage C resection units (tools/ssb-pipeline/uw/walls.py): each is the bone two named compartments share; several are proxies or orientation splits - the method per unit is in tools/ssb-pipeline/uw/registration.json \"walls.notes\". s.orbit is the orbital soft tissue (globe, fat, muscles) the walls face, not bone."
+ },
+ "packs": {
+  "core": {
+   "file": "core.glb.gz",
+   "bytes": 1377029,
+   "bytes_uncompressed": 1871300,
+   "triangles": 155998,
+   "nodes": {
+    "s.maxillary-sinus.L": {
+     "triangles": 7998,
+     "vertices": 4003
+    },
+    "s.maxillary-sinus.R": {
+     "triangles": 8000,
+     "vertices": 4000
+    },
+    "s.nasal-cavity.L": {
+     "triangles": 12000,
+     "vertices": 5902
+    },
+    "s.nasal-cavity.R": {
+     "triangles": 12000,
+     "vertices": 5980
+    },
+    "s.nasopharynx.M": {
+     "triangles": 6000,
+     "vertices": 3002
+    },
+    "s.skull-base-region.M": {
+     "triangles": 110000,
+     "vertices": 54592
+    }
+   }
+  },
+  "ethmoid-frontal": {
+   "file": "ethmoid-frontal.glb.gz",
+   "bytes": 299933,
+   "bytes_uncompressed": 410840,
+   "triangles": 33442,
+   "nodes": {
+    "s.agger-nasi-cell.L": {
+     "triangles": 652,
+     "vertices": 328
+    },
+    "s.agger-nasi-cell.R": {
+     "triangles": 1200,
+     "vertices": 602
+    },
+    "s.anterior-ethmoid-cells.L": {
+     "triangles": 5000,
+     "vertices": 2466
+    },
+    "s.anterior-ethmoid-cells.R": {
+     "triangles": 4096,
+     "vertices": 2054
+    },
+    "s.ethmoid-bulla.R": {
+     "triangles": 1500,
+     "vertices": 752
+    },
+    "s.frontal-recess.L": {
+     "triangles": 2500,
+     "vertices": 1256
+    },
+    "s.frontal-recess.R": {
+     "triangles": 2500,
+     "vertices": 1254
+    },
+    "s.frontal-sinus.L": {
+     "triangles": 3000,
+     "vertices": 1502
+    },
+    "s.frontal-sinus.R": {
+     "triangles": 2998,
+     "vertices": 1501
+    },
+    "s.posterior-ethmoid-cells.L": {
+     "triangles": 4998,
+     "vertices": 2469
+    },
+    "s.posterior-ethmoid-cells.R": {
+     "triangles": 4998,
+     "vertices": 2493
+    }
+   }
+  },
+  "sphenoid-sellar": {
+   "file": "sphenoid-sellar.glb.gz",
+   "bytes": 123931,
+   "bytes_uncompressed": 170076,
+   "triangles": 13998,
+   "nodes": {
+    "s.sphenoid-sinus.L": {
+     "triangles": 7000,
+     "vertices": 3502
+    },
+    "s.sphenoid-sinus.R": {
+     "triangles": 6998,
+     "vertices": 3501
+    }
+   }
+  },
+  "walls": {
+   "file": "walls.glb.gz",
+   "bytes": 984603,
+   "bytes_uncompressed": 1345304,
+   "triangles": 108642,
+   "nodes": {
+    "s.basal-lamella.L": {
+     "triangles": 2000,
+     "vertices": 1004
+    },
+    "s.basal-lamella.R": {
+     "triangles": 2000,
+     "vertices": 1002
+    },
+    "s.clivus.M": {
+     "triangles": 2000,
+     "vertices": 1014
+    },
+    "s.cribriform-plate.L": {
+     "triangles": 2000,
+     "vertices": 1004
+    },
+    "s.cribriform-plate.R": {
+     "triangles": 2000,
+     "vertices": 998
+    },
+    "s.fovea-ethmoidalis.L": {
+     "triangles": 2000,
+     "vertices": 992
+    },
+    "s.fovea-ethmoidalis.R": {
+     "triangles": 1998,
+     "vertices": 1003
+    },
+    "s.frontal-intersinus-septum.M": {
+     "triangles": 2000,
+     "vertices": 1002
+    },
+    "s.frontal-sinus-anterior-table.L": {
+     "triangles": 2500,
+     "vertices": 1252
+    },
+    "s.frontal-sinus-anterior-table.R": {
+     "triangles": 2500,
+     "vertices": 1252
+    },
+    "s.frontal-sinus-floor.L": {
+     "triangles": 1668,
+     "vertices": 836
+    },
+    "s.frontal-sinus-floor.R": {
+     "triangles": 1998,
+     "vertices": 1001
+    },
+    "s.frontal-sinus-posterior-table.L": {
+     "triangles": 2500,
+     "vertices": 1252
+    },
+    "s.frontal-sinus-posterior-table.R": {
+     "triangles": 2500,
+     "vertices": 1246
+    },
+    "s.inferior-turbinate.L": {
+     "triangles": 3998,
+     "vertices": 2001
+    },
+    "s.inferior-turbinate.R": {
+     "triangles": 3998,
+     "vertices": 2001
+    },
+    "s.intersinus-septum.M": {
+     "triangles": 2000,
+     "vertices": 984
+    },
+    "s.lamina-papyracea.L": {
+     "triangles": 1998,
+     "vertices": 1003
+    },
+    "s.lamina-papyracea.R": {
+     "triangles": 2000,
+     "vertices": 996
+    },
+    "s.lateral-lamella.L": {
+     "triangles": 2000,
+     "vertices": 1008
+    },
+    "s.lateral-lamella.R": {
+     "triangles": 2000,
+     "vertices": 1002
+    },
+    "s.maxillary-anterior-wall.L": {
+     "triangles": 3000,
+     "vertices": 1508
+    },
+    "s.maxillary-anterior-wall.R": {
+     "triangles": 3000,
+     "vertices": 1502
+    },
+    "s.maxillary-medial-wall.L": {
+     "triangles": 2000,
+     "vertices": 1002
+    },
+    "s.maxillary-medial-wall.R": {
+     "triangles": 1998,
+     "vertices": 1001
+    },
+    "s.maxillary-posterior-wall.L": {
+     "triangles": 1998,
+     "vertices": 1003
+    },
+    "s.maxillary-posterior-wall.R": {
+     "triangles": 1998,
+     "vertices": 993
+    },
+    "s.maxillary-sinus-floor.L": {
+     "triangles": 2000,
+     "vertices": 1000
+    },
+    "s.maxillary-sinus-floor.R": {
+     "triangles": 1998,
+     "vertices": 997
+    },
+    "s.middle-turbinate.L": {
+     "triangles": 3500,
+     "vertices": 1738
+    },
+    "s.middle-turbinate.R": {
+     "triangles": 3500,
+     "vertices": 1744
+    },
+    "s.nasal-floor.L": {
+     "triangles": 2000,
+     "vertices": 1016
+    },
+    "s.nasal-floor.R": {
+     "triangles": 2000,
+     "vertices": 1003
+    },
+    "s.nasal-septum.M": {
+     "triangles": 5998,
+     "vertices": 2997
+    },
+    "s.orbit.L": {
+     "triangles": 3000,
+     "vertices": 1502
+    },
+    "s.orbit.R": {
+     "triangles": 2998,
+     "vertices": 1501
+    },
+    "s.orbital-floor.L": {
+     "triangles": 2000,
+     "vertices": 1003
+    },
+    "s.orbital-floor.R": {
+     "triangles": 2000,
+     "vertices": 998
+    },
+    "s.planum-sphenoidale.M": {
+     "triangles": 2000,
+     "vertices": 1002
+    },
+    "s.sella-turcica.M": {
+     "triangles": 1998,
+     "vertices": 1007
+    },
+    "s.sphenoid-face.L": {
+     "triangles": 2000,
+     "vertices": 992
+    },
+    "s.sphenoid-face.R": {
+     "triangles": 1998,
+     "vertices": 993
+    },
+    "s.sphenoid-floor.L": {
+     "triangles": 2000,
+     "vertices": 990
+    },
+    "s.sphenoid-floor.R": {
+     "triangles": 2000,
+     "vertices": 989
+    },
+    "s.sphenoid-lateral-wall.L": {
+     "triangles": 2000,
+     "vertices": 1006
+    },
+    "s.sphenoid-lateral-wall.R": {
+     "triangles": 2000,
+     "vertices": 999
+    }
+   }
+  }
+ },
+ "totals": {
+  "bytes": 2785496,
+  "triangles": 312080
+ },
+ "license": "ssb/LICENSE-data.md"
+}
