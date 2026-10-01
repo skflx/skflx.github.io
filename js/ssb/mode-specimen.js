@@ -36,7 +36,7 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadCtBounds } from './geo-specimen.js?v=5d21d3dc';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=0b9a991b';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=d27e5b3d';
 import { PLANES } from './volume.js?v=3c9cfa21';
@@ -102,7 +102,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false };
     const section = { axis: null, flip: false };
 
     const active = () => { const s = store.get(); return !s.lab && !s.ct; };
@@ -116,6 +116,14 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const markerGeometry = new THREE.SphereGeometry(MARKER_MM, 14, 10);
     const markerFront = new THREE.MeshBasicMaterial();
     const markerBehind = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.3, depthFunc: THREE.GreaterDepth, depthWrite: false });
+
+    const sweepRoot = new THREE.Group();      /* vessels and nerves as tubes, RAS mm */
+    sweepRoot.name = 'sweeps';
+    const sweepList = new Map();              /* key -> { object, sw } */
+    const sweepFront = new THREE.MeshBasicMaterial();
+    const sweepArtery = new THREE.MeshBasicMaterial();
+    const sweepMaterials = [sweepFront, sweepArtery];
+    let sweeps = new Map();
 
     const cursorMarker = new THREE.Group();   /* a crosshair that shows through everything */
     cursorMarker.name = 'cursor';
@@ -148,6 +156,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         const landmark = token('--ssb-landmark', '#2445B0');
         markerFront.color.set(landmark);
         markerBehind.color.set(landmark);
+        sweepFront.color.set(token('--ssb-sweep-nerve', '#444444'));
+        sweepArtery.color.set(token('--ssb-sweep-artery', '#C0392B'));
         const cross = token('--ssb-ct-cross', '#FFB000');
         cursorLineMaterial.color.set(cross);
         cursorDotMaterial.color.set(cross);
@@ -168,6 +178,23 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             behind.visible = false;       /* the see-through trace of a hidden marker is for the selection only */
             markerRoot.add(group);
             markers.set(key, { object: group, behind, lm });
+        }
+    }
+
+    function buildSweeps() {
+        for (const [key, sw] of sweeps) {
+            if (sweepList.has(key)) continue;
+            const curve = new THREE.CatmullRomCurve3(sw.pts.map((p) => new THREE.Vector3(...p)));
+            const segs = Math.min(200, sw.pts.length * 4);
+            const radius = Math.max(0.2, sw.radius.reduce((a, b) => a + b, 0) / sw.radius.length);
+            const geometry = new THREE.TubeGeometry(curve, segs, radius, 8, false);
+            const artery = /artery/.test(sw.id);
+            const mesh = new THREE.Mesh(geometry, artery ? sweepArtery : sweepFront);
+            mesh.name = key;
+            mesh.userData = { id: sw.id, side: sw.side, key, sweep: true };
+            mesh.visible = false;
+            sweepRoot.add(mesh);
+            sweepList.set(key, { object: mesh, sw });
         }
     }
 
@@ -234,6 +261,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             m.object.visible = layers.landmarks || mine;
             m.behind.visible = mine;
         }
+        for (const [, m] of sweepList) m.object.visible = layers.sweeps || (!!sel && m.sw.id === sel);
         stage.requestRender();
     }
 
@@ -437,6 +465,14 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
+    function setSweeps(on) {
+        if (!!on === layers.sweeps) return false;
+        layers.sweeps = !!on;
+        paint();
+        emit();
+        return true;
+    }
+
     /* The regions of the air spaces and tissue on screen, with what they hold. */
     function regions() {
         const out = new Map();
@@ -466,7 +502,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     function install() {
         if (installed || !specimen) return;
-        specimen.root.add(markerRoot, cursorMarker);
+        specimen.root.add(markerRoot, sweepRoot, cursorMarker);
+        buildSweeps();
         installed = true;
         stage.setSpecimen(specimen.root);
         stage.setHome(home);
@@ -512,6 +549,11 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         loadLandmarks({ graph }).then((l) => {
             landmarks = l;
             if (installed) { buildMarkers(); paint(); }
+            emit();
+        });
+        loadSweeps({ graph }).then((w) => {
+            sweeps = w;
+            if (installed) { buildSweeps(); paint(); }
             emit();
         });
         const paintTwice = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -709,8 +751,9 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     colours();
     /* Everything this stage made on the GPU side, given back (the page going away, or a caller that is done). */
     function dispose() {
+        for (const m of sweepList.values()) m.object.geometry.dispose();
         if (cap.plane) { cap.back.material.dispose(); cap.front.material.dispose(); cap.plane.geometry.dispose(); }
-        for (const o of [markerGeometry, markerFront, markerBehind, cursorLineMaterial, cursorDotMaterial]) o.dispose();
+        for (const o of [markerGeometry, markerFront, markerBehind, ...sweepMaterials, cursorLineMaterial, cursorDotMaterial]) o.dispose();
         if (specimen) specimen.dispose();
     }
     window.addEventListener('pagehide', dispose);
@@ -749,6 +792,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get bone() { return layers.bone; },
         get hiddenRegions() { return [...layers.hidden]; },
         get landmarksOn() { return layers.landmarks; },
+        get sweepsOn() { return layers.sweeps; },
+        get sweeps() { return [...sweepList].filter(([, m]) => m.object.visible).map(([key]) => key); },
         get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
         get cap() { return { shown: !!cap.plane && cap.plane.visible, plane: cap.plane ? cap.plane.position.toArray() : null }; },
         get view() { return view; },
@@ -845,7 +890,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setView, setBone, setRegion, setLandmarks, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setView, setBone, setRegion, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -855,6 +900,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
         get ready() { return installed; },
         get hasLandmarks() { return landmarks.size > 0; },
+        get sweepsOn() { return layers.sweeps; },
+        get hasSweeps() { return sweeps.size > 0; },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
         dispose,
     };

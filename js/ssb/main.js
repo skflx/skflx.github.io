@@ -272,7 +272,7 @@ function bootLab(graph, stageHandle) {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=071ad46d'), import('./ui-specimen.js?v=89890d31')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=a29cb4f1'), import('./ui-specimen.js?v=d7a7ecdf')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },

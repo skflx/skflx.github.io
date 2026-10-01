@@ -1209,6 +1209,18 @@ async function specimenTests(browser, base) {
     await context.close();
   }
 
+  /* ===== sweeps layer: tubes from sweeps.json, off until asked ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/sweeps.json'), 'utf8'));
+    check('sweeps: the layer starts off with no tube drawn', (await spec(page, () => window.__ssb.specimen.sweepsOn)) === false && (await spec(page, () => window.__ssb.specimen.sweeps.length)) === 0);
+    await page.locator('#ssb-spec-sweeps').check();
+    await page.waitForTimeout(100);
+    const shown = await spec(page, () => window.__ssb.specimen.sweeps);
+    check('sweeps: turning the layer on draws every sweep in sweeps.json', shown.length === Object.keys(doc).length, `${shown.length} of ${Object.keys(doc).length}`);
+    await context.close();
+  }
+
   /* ===== frame and laterality, through the camera ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '');

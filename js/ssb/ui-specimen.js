@@ -160,7 +160,12 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     lmBox.type = 'checkbox';
     lmBox.id = 'ssb-spec-landmarks';
     lmLabel.append(lmBox, el('span', null, 'Show markers and labels'));
-    lmSec.append(lmLabel);
+    const swLabel = el('label', 'ssb-ct-check');
+    const swBox = el('input');
+    swBox.type = 'checkbox';
+    swBox.id = 'ssb-spec-sweeps';
+    swLabel.append(swBox, el('span', null, 'Show vessels and nerves (partly inferred)'));
+    lmSec.append(lmLabel, swLabel);
 
     /* ---- section ---- */
     const secSec = section('Section');
@@ -220,6 +225,9 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         lmBox.checked = specimen.landmarksOn;
         lmBox.disabled = !specimen.hasLandmarks;
         lmLabel.classList.toggle('is-off', !specimen.hasLandmarks);
+        swBox.checked = specimen.sweepsOn;
+        swBox.disabled = !specimen.hasSweeps;
+        swLabel.classList.toggle('is-off', !specimen.hasSweeps);
 
         const sec = specimen.section;
         mark(secRow, 'section', sec.axis || 'off');
@@ -253,6 +261,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     root.addEventListener('change', (e) => {
         const t = e.target;
         if (t === lmBox) specimen.setLandmarks(lmBox.checked);
+        else if (t === swBox) specimen.setSweeps(swBox.checked);
         else if (t === flipBox) specimen.flipSection();
         else if (t.matches('input[data-region]')) specimen.setRegion(t.dataset.region, t.checked);
     });
