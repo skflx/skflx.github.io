@@ -5,26 +5,29 @@
    where WebGL 2 exists, and scene.js (which pulls in three.js) is loaded
    with a dynamic import so a failure there degrades to graph mode instead
    of taking the page down. The variant lab (mode-lab.js, ui-lab.js) mounts
-   once both exist. The CT stage (mode-ct.js, ui-ct.js) needs only the graph:
+   once both exist, and so does the Specimen stage (mode-specimen.js,
+   ui-specimen.js), also by dynamic import because geo-specimen.js pulls in
+   three.js and its glTF loader. The CT stage (mode-ct.js, ui-ct.js) needs only the graph:
    it is drawn on 2D canvases from typed arrays, so it works with no WebGL
    at all (the documented fallback, docs/ssb.md 7.5). Nothing here throws to
    a blank page: a problem becomes a message in the place the missing piece
    would have been.
 
    window.__ssb is a read-only window for tests:
-   { frames, selection, caps, hash, lab, ct, materials } (lab, ct: the
-   stages' hooks; materials: scene.js's hook on the tissue-material library).
+   { frames, selection, caps, hash, lab, ct, specimen, materials } (lab, ct,
+   specimen: the stages' hooks; materials: scene.js's hook on the
+   tissue-material library).
    ============================================================= */
 import { loadGraph } from './graph.js?v=6e35cf90';
-import { createStore, parseHash } from './state.js?v=293241be';
-import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=5d0f3292';
+import { createStore, parseHash } from './state.js?v=91f08185';
+import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=c2c1fadc';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=190b5b5b';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=4a245c7a';
+import { mountCt } from './mode-ct.js?v=68739c5c';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=2b978daa';
 import { mountTree } from './ui-tree.js?v=4ffabfa8';
 import { mountSearch } from './ui-search.js?v=cadb9f6f';
-import { mountPanel } from './ui-panel.js?v=42551188';
+import { mountPanel } from './ui-panel.js?v=33010c8b';
 
 const $ = (id) => document.getElementById(id);
 
@@ -54,6 +57,8 @@ let store = null;
 let stage = null;
 let lab = null;
 let ct = null;
+let specimen = null;
+let panelApi = null;
 Object.defineProperty(window, '__ssb', {
     value: Object.freeze({
         get frames() { return stage ? stage.frames() : 0; },
@@ -62,6 +67,7 @@ Object.defineProperty(window, '__ssb', {
         get hash() { return store ? store.hash() : null; },
         get lab() { return lab ? lab.hook : null; },
         get ct() { return ct ? ct.hook : null; },
+        get specimen() { return specimen ? specimen.hook : null; },
         get materials() { return stage ? stage.materialsHook : null; },
     }),
 });
@@ -83,9 +89,10 @@ async function bootGraph() {
     store = createStore({ has: graph.has, tierOf: graph.tierOf, hash: location.hash, labs: LAB_SPECS });
     mountTree({ root: $('ssb-tree'), graph, store });
     mountSearch({ input: $('ssb-search'), results: $('ssb-results'), tree: $('ssb-tree'), graph, store });
-    mountPanel({
+    panelApi = mountPanel({
         panel: $('ssb-panel'), body: panelBody, handle: $('ssb-sheet-handle'), title: $('ssb-sheet-title'),
         live: $('ssb-live'), graph, store,
+        annotate: (id) => (specimen ? specimen.annotate(id) : null),     /* "no geometry for this entry" */
     });
     wireTier();
     wireNav();
@@ -224,7 +231,7 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=bb954f63');
+        const { createScene } = await import('./scene.js?v=0a08939b');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
             quality: parseHash(location.hash, () => false).quality || null,
@@ -260,9 +267,34 @@ function bootLab(graph, stageHandle) {
     });
 }
 
+/* ---------------- the Specimen stage (needs both) ---------------- */
+
+async function bootSpecimen(graph, stageHandle) {
+    if (!graph || !stageHandle) return;
+    try {
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=071ad46d'), import('./ui-specimen.js?v=89890d31')]);
+        specimen = mountSpecimen({
+            stage: stageHandle, store, graph,
+            dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
+            orient: buildOrient($('ssb-orient')), panel: panelApi,
+        });
+        mountSpecimenControls({
+            dock: $('ssb-spec-dock'), body: $('ssb-spec-body'), toggle: $('ssb-spec-toggle'), stageHost: $('ssb-stage'), specimen, store,
+        });
+    } catch (e) {
+        console.error(e);
+        specimen = null;
+        const msg = $('ssb-stage-msg');
+        msg.hidden = false;
+        msg.textContent = 'The reference specimen could not start. The structure list, search, panels, the lab and CT still work.';
+    }
+}
+
 /* Graph mode never waits on the stage, and neither depends on the other;
-   the lab waits for both. */
+   the lab and the specimen wait for both. */
 const graphReady = bootGraph().catch((e) => { console.error(e); problem($('ssb-panel-body'), 'Something went wrong starting the page.'); return null; });
 const stageReady = bootStage().catch((e) => { console.error(e); return null; });
-Promise.all([graphReady, stageReady]).then(([graph, stageHandle]) => bootLab(graph, stageHandle))
-    .catch((e) => { console.error(e); });
+Promise.all([graphReady, stageReady]).then(([graph, stageHandle]) => {
+    bootLab(graph, stageHandle);
+    return bootSpecimen(graph, stageHandle);
+}).catch((e) => { console.error(e); });

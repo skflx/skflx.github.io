@@ -2,11 +2,12 @@
    scene.js — the 3D stage: renderer, camera, controls, lights, token
    tissue materials, picking, on-demand loop.
 
-   Two stages share one renderer: the *specimen* stage (phase 1's
-   placeholder — an RAS axis gizmo and a neutral 10 mm grid, since the
-   reference specimen does not exist yet) and a *content* slot the variant
-   lab fills with a diorama (setContent). No pixel of the placeholder makes
-   an anatomical claim.
+   Two stages share one renderer, through two slots: the *specimen* slot
+   (setSpecimen / showSpecimen: the reference specimen, which mode-specimen.js
+   owns and disposes) and the *content* slot the variant lab fills with a
+   diorama (setContent, which disposes what it replaces). While neither holds
+   anything the stage shows a placeholder — an RAS axis gizmo and a neutral
+   10 mm grid — that makes no anatomical claim.
 
    - Coordinates: authored data is RAS millimetres; rasToScene() (frame.js,
      re-exported here) is the one conversion, at the one boundary
@@ -19,7 +20,9 @@
      override, else chosen from device hints at boot.
    - Rendering is on demand: a frame is drawn only when something changed
      (orbit, resize, theme, content), except while an animation is running
-     (setAnimating), e.g. the lab's flow particles.
+     (setAnimating), e.g. the lab's flow particles, or a camera flight.
+   - The camera's up is always +Y (OrbitControls fixes its orbit axis when it
+     is built), so a view from above is aimed from slightly behind the target.
    - Only this module (and the dioramas, which receive THREE as an
      argument) touch three.js. The import paths are versioned and
      deliberately unstamped (js/vendor/README.md).
@@ -27,7 +30,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { OrbitControls } from '../vendor/three-0.186.1/examples/jsm/controls/OrbitControls.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=bec7c740';
+import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=d27e5b3d';
 
 export { rasToScene };
 
@@ -62,7 +65,7 @@ function gridGeometry(major) {
      quality 'full' | 'lite' (the #q= override), or null to choose from device hints
    Throws if WebGL 2 is unavailable (main.js catches and degrades to graph mode). */
 export function createScene({ canvas, host, labels, onLost, quality = null }) {
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, stencil: true });     /* the stencil buffer draws a section's solid caps */
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     renderer.setPixelRatio(pixelRatio);
 
@@ -88,12 +91,12 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     camera.add(head);
     scene.add(hemi);
 
-    /* ---- the specimen stage: placeholder content ---- */
+    /* ---- the placeholder: shown while the specimen and content slots are empty ---- */
 
-    const specimen = new THREE.Group();
+    const placeholder = new THREE.Group();
     const gridMinor = new THREE.LineSegments(gridGeometry(false), new THREE.LineBasicMaterial());
     const gridMajor = new THREE.LineSegments(gridGeometry(true), new THREE.LineBasicMaterial());
-    specimen.add(gridMinor, gridMajor);
+    placeholder.add(gridMinor, gridMajor);
 
     const up = new THREE.Vector3(0, 1, 0);
     const axes = AXES.map((axis) => {
@@ -106,7 +109,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         tip.position.copy(dir).multiplyScalar(AXIS_LENGTH - headLength / 2);
         shaft.quaternion.setFromUnitVectors(up, dir);
         tip.quaternion.copy(shaft.quaternion);
-        specimen.add(shaft, tip);
+        placeholder.add(shaft, tip);
 
         const el = document.createElement('span');
         el.className = 'ssb-axis-label';
@@ -115,13 +118,20 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         labels.append(el);
         return { axis, material, el, tip: dir.clone().multiplyScalar(AXIS_LENGTH + 9) };
     });
-    scene.add(specimen);
-    const specimenView = { position: camera.position.clone(), target: controls.target.clone() };
+    scene.add(placeholder);
+    const placeholderView = { position: camera.position.clone(), target: controls.target.clone() };
 
-    /* ---- the content slot ---- */
+    /* ---- the content slot (the lab) and the specimen slot ---- */
 
     const content = new THREE.Group();
     scene.add(content);
+    const specimenSlot = new THREE.Group();
+    specimenSlot.visible = false;
+    scene.add(specimenSlot);
+
+    function syncPlaceholder() {
+        placeholder.visible = content.children.length === 0 && !(specimenSlot.visible && specimenSlot.children.length > 0);
+    }
 
     /* ---- tissue materials (materials.js), cached by look ---- */
 
@@ -199,18 +209,19 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
             const x = (probe.x * 0.5 + 0.5) * width;
             const y = (-probe.y * 0.5 + 0.5) * height;
             a.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -50%)`;
-            a.el.style.visibility = specimen.visible && probe.z < 1 ? 'visible' : 'hidden';
+            a.el.style.visibility = placeholder.visible && probe.z < 1 ? 'visible' : 'hidden';
         }
     }
 
     function render(now) {
         queued = false;
         resize();
+        advanceFlight(now || performance.now());
         for (const fn of [...frameSubs]) { try { fn(now || performance.now()); } catch (e) { console.error(e); } }
         renderer.render(scene, camera);
         placeLabels();
         frames += 1;
-        if (animating) requestRender();
+        if (animating || flight) requestRender();
     }
 
     function requestRender() {
@@ -243,8 +254,32 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     function setContent(obj) {
         for (const child of [...content.children]) { content.remove(child); disposeTree(child); }
         if (obj) content.add(obj);
-        specimen.visible = !obj;
+        syncPlaceholder();
         requestRender();
+    }
+
+    /* Install the specimen (null removes it) and show or hide it; it is the
+       caller's to dispose. */
+    function setSpecimen(obj) {
+        for (const child of [...specimenSlot.children]) specimenSlot.remove(child);
+        if (obj) specimenSlot.add(obj);
+        syncPlaceholder();
+        requestRender();
+    }
+    function showSpecimen(on) {
+        specimenSlot.visible = !!on;
+        syncPlaceholder();
+        requestRender();
+    }
+
+    /* The pose (scene units) that shows a sphere from scene direction `dir`
+       (a unit vector from the target toward the camera), far enough that the
+       sphere fits the canvas. */
+    function poseFor(center, radius, dir) {
+        const vfov = (camera.fov * Math.PI) / 180;
+        const hfov = 2 * Math.atan(Math.tan(vfov / 2) * (width / height));
+        const distance = (radius / Math.sin(Math.min(vfov, hfov) / 2)) * 1.02;
+        return { target: center.clone(), position: center.clone().addScaledVector(dir, distance), distance };
     }
 
     /* Aim the camera at `obj` from RAS direction `view.dir` (up `view.up`),
@@ -263,20 +298,90 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         }
         const dir = new THREE.Vector3(...rasToScene(view.dir)).normalize();
         camera.up.set(...rasToScene(view.up || [0, 0, 1]));
-        const vfov = (camera.fov * Math.PI) / 180;
-        const hfov = 2 * Math.atan(Math.tan(vfov / 2) * (width / height));
-        const dist = (sphere.radius / Math.sin(Math.min(vfov, hfov) / 2)) * 1.02;
-        controls.target.copy(sphere.center);
-        camera.position.copy(sphere.center).addScaledVector(dir, dist);
+        const pose = poseFor(sphere.center, sphere.radius, dir);
+        flight = null;
+        controls.target.copy(pose.target);
+        camera.position.copy(pose.position);
         controls.minDistance = sphere.radius * 0.4;
         controls.update();
         requestRender();
     }
 
-    function resetView() {
+    /* ---- camera flights (the specimen stage; the lab only ever cuts) ---- */
+
+    let flight = null;
+    let home = null;
+    controls.addEventListener('start', () => { flight = null; });   /* a drag or wheel takes the camera back */
+
+    /* Aim at a sphere given in RAS mm ({ center, radius }) from RAS direction
+       `dir` (default: the way the camera already looks), with the camera's up
+       kept at +Y. `ms` > 0 flies there (orbit around the target, eased); 0 cuts.
+       `minDistance` bounds how close the reader may then zoom. */
+    function look({ center, radius }, { dir = null, ms = 0, minDistance = 4 } = {}) {
+        resize();
+        const c = new THREE.Vector3(...rasToScene(center));
+        const d = dir ? new THREE.Vector3(...rasToScene(dir)).normalize() : camera.position.clone().sub(controls.target).normalize();
+        const pose = poseFor(c, radius, d);
         camera.up.set(0, 1, 0);
-        camera.position.copy(specimenView.position);
-        controls.target.copy(specimenView.target);
+        controls.minDistance = minDistance;
+        if (!(ms > 0)) {
+            flight = null;
+            controls.target.copy(pose.target);
+            camera.position.copy(pose.position);
+            controls.update();
+            requestRender();
+            return;
+        }
+        const from = camera.position.clone().sub(controls.target);
+        const fromDir = from.clone().normalize();
+        const toDir = d.clone();
+        flight = {
+            ms, t: null, fromTarget: controls.target.clone(), toTarget: pose.target, fromDistance: from.length(), toDistance: pose.distance,
+            fromDir, turn: new THREE.Quaternion().setFromUnitVectors(fromDir, toDir),
+        };
+        requestRender();
+    }
+
+    const still = new THREE.Quaternion();
+    const step = new THREE.Quaternion();
+    const offset = new THREE.Vector3();
+    function advanceFlight(now) {
+        if (!flight) return;
+        if (flight.t === null) flight.t = now;
+        const k = Math.min(1, Math.max(0, (now - flight.t) / flight.ms));
+        const e = k < 0.5 ? 2 * k * k : 1 - ((-2 * k + 2) ** 2) / 2;
+        step.copy(still).slerp(flight.turn, e);
+        offset.copy(flight.fromDir).applyQuaternion(step).multiplyScalar(flight.fromDistance + (flight.toDistance - flight.fromDistance) * e);
+        controls.target.lerpVectors(flight.fromTarget, flight.toTarget, e);
+        camera.position.copy(controls.target).add(offset);
+        controls.update();
+        if (k >= 1) flight = null;
+    }
+
+    /* Where the camera is (scene units), for tests and for restoring a view. */
+    function pose() {
+        return { position: camera.position.toArray(), target: controls.target.toArray(), distance: camera.position.distanceTo(controls.target) };
+    }
+    function setPose(p) {
+        flight = null;
+        camera.up.set(0, 1, 0);
+        camera.position.set(...p.position);
+        controls.target.set(...p.target);
+        controls.update();
+        requestRender();
+    }
+
+    /* What "reset" means while a stage other than the placeholder owns the
+       camera: the lab resets on leaving (mode-lab.js), and the specimen, which
+       may be the stage it leaves for, installs its own view here. */
+    function setHome(fn) { home = typeof fn === 'function' ? fn : null; }
+
+    function resetView() {
+        if (home) { home(); return; }
+        flight = null;
+        camera.up.set(0, 1, 0);
+        camera.position.copy(placeholderView.position);
+        controls.target.copy(placeholderView.target);
         controls.minDistance = 30;
         controls.update();
         requestRender();
@@ -285,25 +390,40 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     const raycaster = new THREE.Raycaster();
     const ndc = new THREE.Vector2();
     const tagged = (o) => { for (let p = o; p; p = p.parent) if (p.userData && p.userData.id) return p; return null; };
+    const shown = (o, root) => { for (let p = o; p && p !== root.parent; p = p.parent) if (!p.visible) return false; return true; };
 
-    /* Everything under a client point, as tagged parts, nearest first; solid
-       parts before see-through ones (spaces, ghosted walls), so a cell inside
-       a sinus is picked through the sinus. */
-    function pick(clientX, clientY) {
+    /* Every tagged part under a client point that `root` (default: the lab's
+       content) holds, nearest first, one entry per part:
+       { part, object (the mesh hit), point (scene), distance, clear }.
+       Hidden objects are skipped; `clear` marks see-through ones. */
+    function pickHits(clientX, clientY, root = content) {
         const r = canvas.getBoundingClientRect();
         ndc.set(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
         raycaster.setFromCamera(ndc, camera);
         const seen = new Set();
-        const parts = [];
-        for (const hit of raycaster.intersectObject(content, true)) {
+        const hits = [];
+        for (const hit of raycaster.intersectObject(root, true)) {
             if (hit.object.isLine || hit.object.isPoints) continue;
             const part = tagged(hit.object);
-            if (!part || seen.has(part) || !hit.object.visible) continue;
+            if (!part || seen.has(part) || !shown(hit.object, root)) continue;
             seen.add(part);
             const look = part.userData.look || {};
-            parts.push({ part, distance: hit.distance, clear: !!(look.space || look.ghost || look.translucent) });
+            hits.push({ part, object: hit.object, point: hit.point.clone(), distance: hit.distance, clear: !!(look.space || look.ghost || look.translucent || look.xray) });
         }
-        return parts.sort((a, b) => a.clear - b.clear || a.distance - b.distance).map((p) => p.part);
+        return hits;
+    }
+
+    /* The lab's order: solid parts before see-through ones (spaces, ghosted
+       walls), so a cell inside a sinus is picked through the sinus. */
+    function pick(clientX, clientY) {
+        return pickHits(clientX, clientY).sort((a, b) => a.clear - b.clear || a.distance - b.distance).map((h) => h.part);
+    }
+
+    /* One section: the planes (THREE.Plane, scene units) every surface is cut
+       by; an empty list removes the cut. */
+    function setClip(planes) {
+        renderer.clippingPlanes = Array.isArray(planes) ? planes : [];
+        requestRender();
     }
 
     /* A scene point -> client coordinates (and whether it is in front). */
@@ -377,9 +497,17 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         probe: probeKind,
     });
 
+    /* Renderer bookkeeping for tests: what is alive on the GPU side. */
+    const info = () => ({
+        geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures,
+        programs: renderer.info.programs.length, calls: renderer.info.render.calls, triangles: renderer.info.render.triangles,
+        clipping: renderer.clippingPlanes.length, flying: !!flight, animating,
+    });
+
     refreshTheme();
     return {
-        THREE, canvas, camera, frames: () => frames, requestRender, refreshTheme,
-        materialsFor, setQuality, materialsHook, outline, setContent, frame, resetView, pick, toClient, setAnimating, onFrame, onTheme,
+        THREE, canvas, camera, frames: () => frames, requestRender, refreshTheme, info,
+        materialsFor, setQuality, materialsHook, outline, setContent, setSpecimen, showSpecimen, frame, look, pose, setPose, setHome,
+        resetView, pick, pickHits, setClip, toClient, setAnimating, onFrame, onTheme,
     };
 }

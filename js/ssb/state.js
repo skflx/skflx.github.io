@@ -89,7 +89,8 @@ function sameLab(a, b) {
 }
 
 /* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&ct=<plane>&at=<r,a,s>&q=<full|lite>'
-   -> { selection?, tier?, lab?, ct?, quality? } (a lab wins over a ct).
+   -> { selection?, tier?, lab?, ct?, cursor?, quality? } (a lab wins over a ct;
+   `at` without a plane is the specimen's 3D cursor, `cursor`).
    Only whitelisted keys, only valid values; anything else is dropped.
    `has(id)` is the graph's index lookup; `labs` maps a diorama name to its
    { params: PARAMS, presets: PRESETS }. A classification id naming a preset
@@ -121,17 +122,21 @@ export function parseHash(hash, has, labs = {}) {
         out.lab = normalizeLab({ name, params: values }, labs);
     }
     const plane = out.lab ? null : clampCtPlane(params.get('ct'));
-    if (plane) out.ct = { plane, at: parseCtAt(params.get('at')) };
+    const at = parseCtAt(params.get('at'));
+    if (plane) out.ct = { plane, at };
+    else if (at && !out.lab && params.get('ct') === null) out.cursor = at;     /* a bad `ct` still ignores the whole stage */
     const quality = clampQuality(params.get('q'));
     if (quality) out.quality = quality;
     return out;
 }
 
 const num = (v) => String(Number(Number(v).toFixed(3)));
+const atText = (at) => at.map((v) => String(Number(Number(v).toFixed(2)))).join(',');
 
 /* State -> the canonical hash ('' when there is nothing to share). A lab
    writes its name and every parameter that differs from its default; the CT
-   stage its plane and crosshair; a quality override is written last. */
+   stage its plane and crosshair; the specimen its 3D cursor alone (`at=`);
+   a quality override is written last. */
 export function formatHash(state, labs = {}) {
     const parts = [];
     if (state.selection) parts.push('s=' + encodeURIComponent(state.selection));
@@ -145,8 +150,8 @@ export function formatHash(state, labs = {}) {
     }
     if (state.ct && !state.lab && clampCtPlane(state.ct.plane)) {
         parts.push('ct=' + CT_CODE[state.ct.plane]);
-        if (state.ct.at) parts.push('at=' + state.ct.at.map((v) => String(Number(Number(v).toFixed(2)))).join(','));
-    }
+        if (state.ct.at) parts.push('at=' + atText(state.ct.at));
+    } else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
 }
@@ -188,25 +193,30 @@ function ctLimits(bounds) {
     return ok ? bounds : { min: [-CT_SANE, -CT_SANE, -CT_SANE], max: [CT_SANE, CT_SANE, CT_SANE] };
 }
 
+/* A point -> the same clamped to the bounds (rounded to 0.001 mm; the hash
+   carries two decimals), or null when it is not three finite numbers. */
+export function clampAt(at, bounds = null) {
+    if (!Array.isArray(at) || at.length !== 3 || !at.every(Number.isFinite)) return null;
+    const { min, max } = ctLimits(bounds);
+    return at.map((v, n) => Math.round(Math.min(max[n], Math.max(min[n], v)) * 1000) / 1000);
+}
+
 /* { plane, at } -> the same with the plane whitelisted and `at` clamped to the
-   bounds (rounded to 0.001 mm; the hash carries two decimals), or null
-   when the plane is not one of the three. */
+   bounds, or null when the plane is not one of the three. */
 export function normalizeCt(ct, bounds = null) {
     const plane = ct && clampCtPlane(ct.plane);
-    if (!plane) return null;
-    const { min, max } = ctLimits(bounds);
-    let at = null;
-    if (Array.isArray(ct.at) && ct.at.length === 3 && ct.at.every(Number.isFinite)) {
-        at = ct.at.map((v, n) => Math.round(Math.min(max[n], Math.max(min[n], v)) * 1000) / 1000);
-    }
-    return { plane, at };
+    return plane ? { plane, at: clampAt(ct.at, bounds) } : null;
+}
+
+function sameAt(a, b) {
+    if (a === b) return true;
+    return !!a && !!b && a.every((v, n) => v === b[n]);
 }
 
 function sameCt(a, b) {
     if (a === b) return true;
     if (!a || !b || a.plane !== b.plane) return false;
-    if (!a.at || !b.at) return a.at === b.at;
-    return a.at.every((v, n) => v === b.at[n]);
+    return sameAt(a.at, b.at);
 }
 
 /* ---------------- guarded storage ---------------- */
@@ -230,16 +240,21 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, quality }. Invariant: the selected
-   entity's tier is never above `tier` (selecting a deeper entity raises the
-   depth; lowering the depth below the selection closes it). The stage is one
-   of three: the specimen (lab and ct both null), the variant lab (`lab`:
-   { name, params } with every parameter present and clamped, normalizeLab),
-   or CT (`ct`: { plane, at }, normalizeCt); entering one leaves the other.
+/* state = { tier, selection, lab, ct, cursor, quality }. Invariant: the
+   selected entity's tier is never above `tier` (selecting a deeper entity
+   raises the depth; lowering the depth below the selection closes it). The
+   stage is one of three: the specimen (lab and ct both null), the variant lab
+   (`lab`: { name, params } with every parameter present and clamped,
+   normalizeLab), or CT (`ct`: { plane, at }, normalizeCt); entering one
+   leaves the other.
+   `cursor` is the one 3D cursor in RAS mm, shared by CT and the specimen: the
+   CT crosshair is `ct.at`, which the store keeps equal to `cursor` while the
+   CT stage shows, and `cursor` is what survives in the specimen stage (where
+   `ct` is null) so a click on a 3D surface can land the CT crosshair there.
    `quality` is the rendering override from the hash ('full' | 'lite'), null
-   for the device's choice. The CT crosshair is clamped to the volume's
-   bounds, which only the loaded volume knows: setCtBounds() hands them in
-   and re-clamps, and until then the limit is a sanity range.
+   for the device's choice. The cursor is clamped to the volume's bounds,
+   which only the loaded volume knows: setCtBounds() hands them in and
+   re-clamps, and until then the limit is a sanity range.
    Subscribers get (state, previous, meta); meta.source names the origin
    ('url', 'tree', 'search', 'panel', 'tier', 'scene', 'lab', 'slider', 'ct',
    'cursor', 'ct-bounds') so the URL sync can tell a hash-driven change from
@@ -248,11 +263,13 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
     const fromUrl = parseHash(hash, has, labs);
     const selection = fromUrl.selection || null;
     let ctBounds = null;
+    const ct0 = fromUrl.ct ? normalizeCt(fromUrl.ct, ctBounds) : null;
     let state = Object.freeze({
         selection,
         tier: Math.max(fromUrl.tier || prefs.tier || TIER_DEFAULT, selection ? tierOf(selection) : TIER_MIN),
         lab: fromUrl.lab || null,
-        ct: fromUrl.ct ? normalizeCt(fromUrl.ct, ctBounds) : null,
+        ct: ct0,
+        cursor: ct0 ? ct0.at : clampAt(fromUrl.cursor, ctBounds),
         quality: fromUrl.quality || null,
     });
     const subs = new Set();
@@ -261,9 +278,10 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const prev = state;
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
-            && next.quality === prev.quality) return false;
+            && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality) return false;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
+        if (sameAt(next.cursor, prev.cursor)) next.cursor = prev.cursor;
         state = Object.freeze(next);
         for (const fn of [...subs]) {
             try { fn(state, prev, meta); } catch (e) { console.error(e); }
@@ -296,18 +314,30 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             return next ? set({ lab: next, ct: null }, meta) : false;
         },
         /* Enter or change the CT stage ({ plane, at }), or leave it (null):
-           the plane is whitelisted and the crosshair clamped to the bounds.
-           Entering CT leaves the lab. */
+           the plane is whitelisted and the crosshair clamped to the bounds;
+           entering without one (`at: null`) keeps the 3D cursor. Entering CT
+           leaves the lab. */
         setCt(ct, meta = { source: 'ct' }) {
             if (ct === null) return set({ ct: null }, meta);
             const next = normalizeCt(ct, ctBounds);
-            return next ? set({ ct: next, lab: null }, meta) : false;
+            if (!next) return false;
+            const at = next.at || state.cursor;
+            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null }, meta);
         },
-        /* The loaded volume's RAS box ({ min, max }): later crosshairs clamp
-           to it, and the current one is re-clamped now. */
+        /* Move the 3D cursor (RAS mm, clamped), or clear it (null). In the CT
+           stage this is the crosshair; elsewhere it is remembered for the
+           next visit. Never changes the stage. */
+        setCursor(at, meta = { source: 'cursor' }) {
+            const p = at === null ? null : clampAt(at, ctBounds);
+            if (at !== null && !p) return false;
+            return set(state.ct ? { cursor: p, ct: { plane: state.ct.plane, at: p } } : { cursor: p }, meta);
+        },
+        /* The loaded volume's RAS box ({ min, max }): later cursors clamp to
+           it, and the current one is re-clamped now. */
         setCtBounds(bounds) {
             ctBounds = bounds && ctLimits(bounds) === bounds ? bounds : null;
-            return state.ct ? set({ ct: normalizeCt(state.ct, ctBounds) }, { source: 'ct-bounds' }) : false;
+            const cursor = clampAt(state.cursor, ctBounds);
+            return set(state.ct ? { cursor, ct: { plane: state.ct.plane, at: cursor } } : { cursor }, { source: 'ct-bounds' });
         },
         /* Back to the specimen stage. */
         leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null }, meta); },
@@ -316,7 +346,9 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const p = parseHash(next, has, labs);
             const selection = p.selection || null;
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
-            return set({ selection, tier, lab: p.lab || null, ct: p.ct ? normalizeCt(p.ct, ctBounds) : null, quality: p.quality || null }, { source: 'url' });
+            const ct = p.ct ? normalizeCt(p.ct, ctBounds) : null;
+            const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
+            return set({ selection, tier, lab: p.lab || null, ct, cursor, quality: p.quality || null }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),

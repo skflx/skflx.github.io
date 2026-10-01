@@ -37,8 +37,8 @@
      skull-base slope (the graph says only that it slopes down posteriorly,
      s.fovea-ethmoidalis) and wall thicknesses: schematic; graph silent.
    ============================================================= */
-import { inside, bounds, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=772eb244';
-import { CELL_TINT } from '../materials.js?v=bec7c740';
+import { inside, bounds, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=9634f04e';
+import { CELL_TINT } from '../materials.js?v=d27e5b3d';
 
 export const TITLE = 'Frontal recess';
 export const SIDE = 'R';

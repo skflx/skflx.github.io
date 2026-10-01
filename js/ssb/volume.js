@@ -143,6 +143,28 @@ export function parseHeader(meta) {
     };
 }
 
+/* The RAS box of a parsed header's voxel centres: { min, max } in mm. The
+   specimen stage reads it from the header alone, to clamp its 3D cursor
+   before the volume itself has been downloaded. */
+export function headerBounds(header) {
+    const [nx, ny, nz] = header.dims;
+    const A = header.affine;
+    const min = [Infinity, Infinity, Infinity];
+    const max = [-Infinity, -Infinity, -Infinity];
+    for (const i of [0, nx - 1]) {
+        for (const j of [0, ny - 1]) {
+            for (const k of [0, nz - 1]) {
+                for (let n = 0; n < 3; n++) {
+                    const v = A[n][0] * i + A[n][1] * j + A[n][2] * k + A[n][3];
+                    min[n] = Math.min(min[n], v);
+                    max[n] = Math.max(max[n], v);
+                }
+            }
+        }
+    }
+    return { min, max };
+}
+
 /* { "labels": { "1": "s.maxillary-sinus.R" } } -> Map(index -> name). */
 export function parseTable(doc) {
     const out = new Map();
@@ -211,17 +233,8 @@ export function createVolume({ header, ct, labels = null, table = null }) {
     ];
 
     /* RAS box of the voxel centres (where a cursor may sit). */
-    const min = [Infinity, Infinity, Infinity];
-    const max = [-Infinity, -Infinity, -Infinity];
-    for (const i of [0, nx - 1]) {
-        for (const j of [0, ny - 1]) {
-            for (const k of [0, nz - 1]) {
-                const p = toRAS(i, j, k);
-                for (let n = 0; n < 3; n++) { min[n] = Math.min(min[n], p[n]); max[n] = Math.max(max[n], p[n]); }
-            }
-        }
-    }
-    const bounds = { min, max };
+    const bounds = headerBounds(header);
+    const { min, max } = bounds;
     const center = [0, 1, 2].map((n) => (min[n] + max[n]) / 2);
     /* voxel size along each RAS axis (the step of a scroll) */
     const axisStep = [0, 1, 2].map((n) => 1 / Math.hypot(B[0][n], B[1][n], B[2][n]));

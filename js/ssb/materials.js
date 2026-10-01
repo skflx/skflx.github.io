@@ -36,6 +36,11 @@
    - A hazard site is hatched in the shader over whatever the tissue looks
      like (relief and gloss are flattened under the stripes), never by
      colour alone (the HUD names it).
+   - `xray: true` draws a wall as a fresnel ghost (docs/ssb.md 3, "X-ray"):
+     one shell whose opacity rises toward the silhouette, blended plainly
+     with no depth write. One tint over one tint composites the same in any
+     order, so nothing is sorted and a thick bone envelope still lets the
+     air spaces inside it read through.
 
    three.js is passed in (createMaterials(THREE, …)), never imported, so
    this module loads without WebGL: diorama modules import kind names from
@@ -554,6 +559,36 @@ export const TOKENS = Object.freeze([...new Set([
     ...Object.values(SPEC).flatMap((spec) => [spec.token, spec.extra].filter(Boolean)), 'hazard', 'select',
 ])]);
 
+/* The X-ray ghost: alpha = base + rim * (1 - |n.v|)^power, one flat tint.
+   Clipping chunks are included so a section plane cuts it like any wall. */
+const XRAY_VERT = /* glsl */`
+#include <common>
+#include <clipping_planes_pars_vertex>
+varying vec3 vXN;
+varying vec3 vXV;
+void main() {
+    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+    vXN = normalize( normalMatrix * normal );
+    vXV = - mvPosition.xyz;
+    gl_Position = projectionMatrix * mvPosition;
+    #include <clipping_planes_vertex>
+}`;
+const XRAY_FRAG = /* glsl */`
+uniform vec3 uXColor;
+uniform float uXBase;
+uniform float uXRim;
+uniform float uXPower;
+varying vec3 vXN;
+varying vec3 vXV;
+#include <clipping_planes_pars_fragment>
+void main() {
+    #include <clipping_planes_fragment>
+    float facing = abs( dot( normalize( vXN ), normalize( vXV ) ) );
+    float rim = pow( 1.0 - facing, uXPower );
+    gl_FragColor = vec4( uXColor, clamp( uXBase + uXRim * rim, 0.0, 1.0 ) );
+    #include <colorspace_fragment>
+}`;
+
 const HATCH_DECL = 'uniform vec3 uHatch;\nuniform float uHatchScale;\n';
 /* Over the finished albedo; stripes are flat and dull (see ROUGH/BUMP below). */
 const HATCH_CODE = '\tfloat ssbHatch = step(0.55, fract((gl_FragCoord.x + gl_FragCoord.y) / uHatchScale));\n'
@@ -615,30 +650,42 @@ export function createMaterials(THREE, opts = {}) {
     }
 
     function paint(entry) {
-        const { mat, kind, name, selected } = entry;
+        const { mat, kind, name, selected, partner } = entry;
+        if (entry.xray) {
+            /* a selected ghost is tinted with the selection colour and drawn firmer */
+            const u = mat.uniforms;
+            u.uXColor.value.set(selected || partner ? swatch('select') : swatch(name));
+            u.uXBase.value = selected ? 0.22 : partner ? 0.12 : 0.045;
+            u.uXRim.value = selected ? 0.8 : 0.7;
+            return;
+        }
         mat.color.set(swatch(name));
         if (kind === 'flow' || kind === 'flow-particle') {
             mat.emissive.copy(mat.color);
             mat.emissiveIntensity = kind === 'flow' ? 0.35 : 0.8;
         } else {
-            mat.emissive.copy(selected ? selectColor : new THREE.Color(0x000000));
-            mat.emissiveIntensity = selected ? 0.55 : 1;
+            mat.emissive.copy(selected || partner ? selectColor : new THREE.Color(0x000000));
+            mat.emissiveIntensity = selected ? 0.55 : partner ? 0.22 : 1;
         }
     }
 
-    /* look: { kind, tint?, space?, ghost?, translucent?, doubleSide? }: kind
-       picks the tissue; tint (else the kind's own) names the --ssb-* token,
+    /* look: { kind, tint?, space?, ghost?, translucent?, doubleSide?, onTop?, opacity?, xray? }: kind
+       picks the tissue; onTop turns the depth test off; opacity overrides a
+       see-through look's; xray draws the wall as
+       a fresnel ghost (xrayMaterial); tint (else the kind's own) names the --ssb-* token,
        so air cells keep their categorical hues. hazard: hatched; selected:
-       emissive highlight. One material per combination; programs are shared
+       emissive highlight; partner: the other side of a selected pair, a
+       dimmer highlight. One material per combination; programs are shared
        per (kind, hazard). Ghosted walls and air spaces are see-through and
        stay plain: no pattern is spent on them. An unknown kind draws as a
        plain air space (kit.tag rejects one at authoring time). */
-    function material(look, { hazard = false, selected = false } = {}) {
+    function material(look, { hazard = false, selected = false, partner = false } = {}) {
         const kind = SPEC[look.kind] ? look.kind : 'space';
+        if (look.xray) return xrayMaterial(kind, look, { selected, partner });
         const patterned = !!SPEC[kind].glsl && !look.ghost && !look.space;
         const name = look.tint || SPEC[kind].token;
         const key = [patterned ? kind : 'plain:' + kind, name, look.space ? 's' : '', look.ghost ? 'g' : '', look.translucent ? 't' : '',
-            look.doubleSide ? 'd' : '', hazard ? 'h' : '', selected ? 'x' : ''].join('|');
+            look.doubleSide ? 'd' : '', look.onTop ? 'o' : '', look.opacity !== undefined ? 'a' + look.opacity : '', hazard ? 'h' : '', selected ? 'x' : '', partner ? 'p' : ''].join('|');
         if (cache.has(key)) return cache.get(key).mat;
         const mat = new THREE.MeshStandardMaterial({ roughness: patterned ? SPEC[kind].rough : PLAIN_ROUGHNESS, metalness: 0 });
         if (look.space || look.ghost || look.translucent) {
@@ -648,6 +695,8 @@ export function createMaterials(THREE, opts = {}) {
             mat.side = THREE.DoubleSide;
         }
         if (look.doubleSide) mat.side = THREE.DoubleSide;
+        if (look.onTop) mat.depthTest = false;      /* drawn over what hides it (a selection must be seen) */
+        if (look.opacity !== undefined && mat.transparent) mat.opacity = look.opacity;
         if (patterned) {
             if (SPEC[kind].extra && !secondary[kind]) secondary[kind] = { value: new THREE.Color(swatch(SPEC[kind].extra)) };
             if (SPEC[kind].axis) mat.defaultAttributeValues = { ssbAxis: [0, 0, 0] };   /* geometry without a fibre axis */
@@ -655,7 +704,28 @@ export function createMaterials(THREE, opts = {}) {
             if (quality === 'lite') mat.defines.SSB_LITE = 1;
         }
         patch(mat, kind, patterned, hazard);
-        const entry = { mat, kind, name, selected, patterned };
+        const entry = { mat, kind, name, selected, partner, patterned };
+        paint(entry);
+        cache.set(key, entry);
+        return mat;
+    }
+
+    /* The fresnel ghost of a wall (look.xray). Its tint is the kind's token,
+       except bone, which is ghosted in the darker cut-bone colour (ivory would
+       vanish on the light stage). One program serves every ghost. */
+    function xrayMaterial(kind, look, { selected, partner }) {
+        const name = look.tint || (kind === 'bone' ? 'bone-cut' : SPEC[kind].token);
+        const key = ['xray', name, selected ? 'x' : '', partner ? 'p' : ''].join('|');
+        if (cache.has(key)) return cache.get(key).mat;
+        const mat = new THREE.ShaderMaterial({
+            vertexShader: XRAY_VERT,
+            fragmentShader: XRAY_FRAG,
+            uniforms: { uXColor: { value: new THREE.Color() }, uXBase: { value: 0 }, uXRim: { value: 0 }, uXPower: { value: 2.2 } },
+            transparent: true, depthWrite: false, side: THREE.DoubleSide, clipping: true,
+            forceSinglePass: true,      /* one tint composites the same in any order: no back-then-front passes */
+        });
+        mat.customProgramCacheKey = () => 'ssb:xray';
+        const entry = { mat, kind, name, selected, partner, xray: true };
         paint(entry);
         cache.set(key, entry);
         return mat;

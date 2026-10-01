@@ -409,9 +409,11 @@ without WebGL: the URL whitelist and the tests read their tables), and
 `mode-lab.js` uses the stage's `THREE`, so one module instance serves the
 page. Built so far: `main`, `frame`, `stamps`, `graph`, `state`, `scene`,
 `materials`, `mode-lab`, `dioramas/*`, `ui-panel`, `ui-tree`, `ui-search`,
-`ui-lab`, `volume`, `mode-ct`, `ui-ct`. `mode-ct` and `ui-ct` are mounted
-from the graph alone (no `scene`), which is why CT works where WebGL does
-not.
+`ui-lab`, `volume`, `mode-ct`, `ui-ct`, `geo-specimen`, `mode-specimen`,
+`ui-specimen`. `mode-ct` and `ui-ct` are mounted from the graph alone (no
+`scene`), which is why CT works where WebGL does not; `mode-specimen` is
+loaded by dynamic import (`geo-specimen` pulls in three.js and its glTF
+loader), so a failure there leaves graph mode and CT alone.
 
 ### 7.2 Cache-busting an ES-module graph
 

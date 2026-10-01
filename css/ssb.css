@@ -64,6 +64,8 @@
   --ssb-hazard: #231815;
   /* Parts of the selected entity glow with this. */
   --ssb-select: #FFB000;
+  /* Landmark markers on the specimen: reference points, the science signal. */
+  --ssb-landmark: var(--signal-2);
 
   /* CT stage: dark in both themes (like the endoscope and Airway's stage).
      The orientation letters use the gizmo's axis hues, lightened for a dark
@@ -221,21 +223,27 @@ html[data-theme="dark"] {
 
 .ssb-stage {
   --ssb-canvas-left: 0px;
+  --ssb-canvas-bottom: 0px;
   position: relative; flex: 1; min-height: 9rem; overflow: hidden; background: var(--ssb-stage-bg);
 }
 /* The canvas (and the labels projected onto it) start right of the lab's
    docked controls, so the dock never covers the model. */
 .ssb-stage[data-dock="open"] { --ssb-canvas-left: var(--ssb-dock-w); }
 .ssb-stage[data-dock="collapsed"] { --ssb-canvas-left: var(--ssb-dock-rail); }
+/* The same for the Specimen stage's layers dock (desktop only; on phones it overlays). */
+@media (min-width: 960px) {
+  .ssb-stage[data-spec-dock="open"] { --ssb-canvas-left: var(--ssb-dock-w); }
+  .ssb-stage[data-spec-dock="collapsed"] { --ssb-canvas-left: var(--ssb-dock-rail); }
+}
 .ssb-stage > canvas {
-  position: absolute; top: 0; right: 0; bottom: 0; left: var(--ssb-canvas-left);
-  display: block; width: calc(100% - var(--ssb-canvas-left)); height: 100%; touch-action: none;
+  position: absolute; top: 0; right: 0; left: var(--ssb-canvas-left);
+  display: block; width: calc(100% - var(--ssb-canvas-left)); height: calc(100% - var(--ssb-canvas-bottom)); touch-action: none;
 }
 .ssb-stage > canvas:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
 .ssb-stage[data-state="unavailable"] > canvas { display: none; }
 
 /* Axis letters are DOM text projected from the scene (scene.js). */
-.ssb-labels { position: absolute; top: 0; right: 0; bottom: 0; left: var(--ssb-canvas-left); overflow: hidden; pointer-events: none; }
+.ssb-labels { position: absolute; top: 0; right: 0; bottom: var(--ssb-canvas-bottom); left: var(--ssb-canvas-left); overflow: hidden; pointer-events: none; }
 .ssb-axis-label { position: absolute; left: 0; top: 0; font: 500 0.85rem/1 var(--font-mono); }
 .ssb-axis-label[data-axis="r"] { color: var(--ssb-axis-r); }
 .ssb-axis-label[data-axis="a"] { color: var(--ssb-axis-a); }
@@ -250,6 +258,9 @@ html[data-theme="dark"] {
   position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
   text-align: center; color: var(--ink-muted);
 }
+@media (min-width: 960px) {
+  .ssb[data-stage="specimen"] .ssb-stage-note { left: calc(var(--ssb-canvas-left) + var(--gutter)); max-width: calc(100% - var(--ssb-canvas-left) - 2 * var(--gutter)); }
+}
 
 /* ===== STAGE SWITCH (toolbar) ===== */
 .ssb-stage-mode { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; }
@@ -257,7 +268,7 @@ html[data-theme="dark"] {
 .ssb-stage-mode .site-pill:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ===== VARIANT LAB: dock (desktop), controls, HUD, badge ===== */
-.ssb-lab-dock {
+.ssb-lab-dock, .ssb-spec-dock {
   position: absolute; z-index: 3; top: 0; bottom: 0; left: 0; width: var(--ssb-dock-w);
   display: flex; flex-direction: column;
   background: var(--surface); border-right: 1px solid var(--rule-strong);
@@ -273,13 +284,13 @@ html[data-theme="dark"] {
 .ssb-dock-toggle:hover { color: var(--ink); background: var(--wash); }
 .ssb-dock-toggle:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
 /* Collapsed: a rail with a vertical label; the model gets the whole width. */
-.ssb-lab-dock[data-collapsed="true"] { width: var(--ssb-dock-rail); }
-.ssb-lab-dock[data-collapsed="true"] .ssb-dock-body { display: none; }
-.ssb-lab-dock[data-collapsed="true"] .ssb-dock-toggle {
+.ssb-lab-dock[data-collapsed="true"], .ssb-spec-dock[data-collapsed="true"] { width: var(--ssb-dock-rail); }
+.ssb-lab-dock[data-collapsed="true"] .ssb-dock-body, .ssb-spec-dock[data-collapsed="true"] .ssb-dock-body { display: none; }
+.ssb-lab-dock[data-collapsed="true"] .ssb-dock-toggle, .ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle {
   flex: 1; justify-content: flex-start; padding: 0.75rem 0; border-bottom: 0;
   writing-mode: vertical-rl;
 }
-.ssb-lab-dock[data-collapsed="true"] .ssb-dock-toggle::after { content: '\203A'; margin-top: 0.4rem; }
+.ssb-lab-dock[data-collapsed="true"] .ssb-dock-toggle::after, .ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle::after { content: '\203A'; margin-top: 0.4rem; }
 .ssb-lab { padding: 0 1rem 1rem; }
 .ssb-lab-sec { padding: 0.8rem 0 0.4rem; border-top: 1px solid var(--rule); }
 .ssb-lab-sec:first-child { border-top: 0; }
@@ -342,6 +353,50 @@ html[data-theme="dark"] {
   background: repeating-linear-gradient(135deg, var(--ssb-hazard) 0 2px, var(--ssb-bone) 2px 5px);
 }
 .ssb[data-stage="lab"] .ssb-stage-note { display: none; }
+
+/* ===== SPECIMEN STAGE: layers dock, orientation widget, labels, notes ===== */
+.ssb-spec { padding: 0 1rem 1rem; }
+.ssb-spec .ssb-lab-sec:first-child { border-top: 0; }
+.ssb-spec-checks { display: flex; flex-direction: column; gap: 0.35rem; }
+.ssb-spec-slider { padding-bottom: 0.2rem; }
+.ssb-spec .ssb-ct-check + .ssb-ct-check, .ssb-spec .ssb-ct-check + .ssb-param-src { margin-top: 0.3rem; }
+.ssb-spec-label { z-index: 1; }
+.ssb-geo-note {
+  margin: 0 0 0.75rem; padding: 0.4rem 0.6rem;
+  background: var(--wash); border-left: 2px solid var(--signal-2);
+  font-size: 0.8125rem; color: var(--ink-muted);
+}
+
+/* R/L, A/P, S/I as the camera sees them (ui-specimen.js buildOrient). */
+.ssb-orient {
+  position: absolute; z-index: 2; top: 0.6rem; left: calc(var(--ssb-canvas-left) + 0.75rem);
+  width: 84px; height: 84px; pointer-events: none;
+}
+.ssb-orient svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.ssb-orient line { stroke-width: 2; stroke-linecap: round; }
+.ssb-orient text { font: 600 11px/1 var(--font-mono); }
+.ssb-orient .ssb-orient-minus { opacity: 0.6; }
+.ssb-orient-r line { stroke: var(--ssb-axis-r); } .ssb-orient-r text { fill: var(--ssb-axis-r); }
+.ssb-orient-a line { stroke: var(--ssb-axis-a); } .ssb-orient-a text { fill: var(--ssb-axis-a); }
+.ssb-orient-s line { stroke: var(--ssb-axis-s); } .ssb-orient-s text { fill: var(--ssb-axis-s); }
+.ssb[data-stage="lab"] .ssb-orient, .ssb[data-stage="ct"] .ssb-orient { display: none; }
+
+/* Phones: the layers dock sits under the model, closed until asked for; open, it takes the
+   lower part of the stage and the canvas gives way (so the model stays in sight). */
+@media (max-width: 959px) {
+  .ssb-stage[data-spec-dock="open"] { --ssb-canvas-bottom: 48%; }
+  .ssb-spec-dock {
+    top: auto; left: 0; right: 0; width: auto; height: 48%;
+    border-right: 0; border-top: 1px solid var(--rule-strong);
+  }
+  .ssb-spec-dock[data-collapsed="true"] { width: auto; height: auto; right: auto; border-right: 1px solid var(--rule-strong); }
+  .ssb-spec-dock .ssb-dock-toggle { justify-content: flex-start; }
+  .ssb-spec-dock .ssb-dock-toggle::after { content: '\203A'; transform: rotate(90deg); margin-left: 0.4rem; line-height: 1; }
+  .ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle { writing-mode: horizontal-tb; padding: 0.4rem 0.75rem; flex: none; }
+  .ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle::after { transform: none; margin-top: 0; }
+  /* the provenance badge moves up out of the dock's way */
+  .ssb[data-stage="specimen"] .ssb-stage-note { top: 0.5rem; bottom: auto; left: auto; right: 0.6rem; max-width: calc(100% - 7.5rem); text-align: right; }
+}
 
 /* The selected part's name, projected onto the stage. */
 .ssb-part-label {

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* =============================================================
    test-ssb.mjs — SSB behavior tests (docs/ssb.md 9): the variant lab
-   (phase 2) and CT mode (phase 5).
+   (phase 2), CT mode (phase 5) and the Specimen stage.
 
    Drives ssb.html in headless Chromium (software WebGL, smoke-lib.mjs) and
    reads the scene back through the read-only test window window.__ssb.lab
@@ -52,11 +52,25 @@
      outline colours are the materials' tokens (and follow the theme), hostile
      #ct= values are clamped or ignored, a missing volume shows a message, CT
      works with WebGL blocked, and phones show one plane at a time;
+   - the Specimen stage (docs/ssb.md 3, 5.3, 7), on the real packs, landmarks
+     and CT header: the packs in plain Node (glTF, every node a graph id, inside
+     the CT volume ± 5 mm, patient right is +x, the landmarks lie on their own
+     side's meshes, an independent ray cast for the pick), the `#at=` cursor
+     codec and the store's one shared cursor; in the page, the loader places
+     every mesh exactly where the raw data says, the camera views agree with
+     the landmarks (the viewer's left is the patient's right in an anterior
+     view), layers (bone solid / X-ray / hidden, regions, landmarks and their
+     tier-filtered labels), click-through picking, the cursor reaching CT and
+     coming back, selection from the tree (highlight, partner, framing, no
+     geometry), the section plane (pixels above the plane are gone), the lab
+     and CT coming and going without leaks, bad and new packs (a truncated
+     gzip is a message in place; a pack that appears loads; bad nodes are
+     skipped with a console.warn), no WebGL, q=lite and phones;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct]
-           --shots writes desktop + phone screenshots of each diorama and of
-           CT mode (ct-*.png).
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen]
+           --shots writes desktop + phone screenshots of each diorama, of
+           CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
    ============================================================= */
 import fs from 'fs';
@@ -73,6 +87,7 @@ const dataUrl = (source) => 'data:text/javascript;base64,' + Buffer.from(source)
 const sourceOf = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const { KINDS, TISSUE_KINDS, GRAPH_KINDS, TOKENS, kindForGraph, detectQuality } = await import(dataUrl(sourceOf('js/ssb/materials.js')));
 const { parseHash, formatHash, clampQuality, createStore, normalizeCt } = await import(dataUrl(sourceOf('js/ssb/state.js')));
+const { rasToScene, sceneToRas } = await import(dataUrl(sourceOf('js/ssb/frame.js')));
 const kit = await import(dataUrl(sourceOf('js/ssb/dioramas/kit.js')
   .replace(/from '\.\.\/frame\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/frame.js'))}'`)
   .replace(/from '\.\.\/materials\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/materials.js'))}'`)));
@@ -82,7 +97,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct: just the CT section (development) */
+const ONLY = opt('--only', null);   /* --only ct | specimen: just that section (development) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -844,6 +859,878 @@ async function ctTests(browser, base) {
   }
 }
 
+/* ---------------- Specimen: the packs in plain Node ---------------- */
+
+/* Every pack packs.json lists, parsed without three.js: node key -> { id, side,
+   pack, pts (RAS mm, dequantized through the node's own transform), box, tris }.
+   An independent reading of the data: the page's loader is checked against it. */
+function readPacks() {
+  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8'));
+  const nodes = new Map();
+  const files = {};
+  for (const [name, def] of Object.entries(doc.packs)) {
+    const b = zlib.gunzipSync(fs.readFileSync(path.join(ROOT, 'ssb/models', def.file)));
+    const dv = new DataView(b.buffer, b.byteOffset, b.byteLength);
+    const json = JSON.parse(b.subarray(20, 20 + dv.getUint32(12, true)).toString());
+    const bin = 20 + dv.getUint32(12, true) + 8;
+    files[name] = { magic: dv.getUint32(0, true), version: dv.getUint32(4, true), length: dv.getUint32(8, true), size: b.length, json };
+    for (const n of json.nodes) {
+      const prim = json.meshes[n.mesh].primitives[0];
+      const pa = json.accessors[prim.attributes.POSITION];
+      const bv = json.bufferViews[pa.bufferView];
+      const off = bin + (bv.byteOffset || 0);
+      const stride = bv.byteStride || 6;
+      const pts = new Float64Array(pa.count * 3);
+      const lo = [Infinity, Infinity, Infinity];
+      const hi = [-Infinity, -Infinity, -Infinity];
+      for (let i = 0; i < pa.count; i++) {
+        for (let k = 0; k < 3; k++) {
+          const v = dv.getInt16(off + i * stride + k * 2, true) * n.scale[k] + n.translation[k];
+          pts[i * 3 + k] = v;
+          if (v < lo[k]) lo[k] = v;
+          if (v > hi[k]) hi[k] = v;
+        }
+      }
+      const ia = json.accessors[prim.indices];
+      const iv = json.bufferViews[ia.bufferView];
+      const idx = new Uint16Array(ia.count);
+      for (let i = 0; i < ia.count; i++) idx[i] = dv.getUint16(bin + (iv.byteOffset || 0) + i * 2, true);
+      nodes.set(`${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, pack: name, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
+    }
+  }
+  return { doc, nodes, files };
+}
+
+const ctBox = (() => {
+  const h = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/ct/ct.json'), 'utf8'));
+  const lo = [Infinity, Infinity, Infinity];
+  const hi = [-Infinity, -Infinity, -Infinity];
+  for (const i of [0, h.dims[0] - 1]) for (const j of [0, h.dims[1] - 1]) for (const k of [0, h.dims[2] - 1]) {
+    for (let n = 0; n < 3; n++) { const v = h.affine[n][0] * i + h.affine[n][1] * j + h.affine[n][2] * k + h.affine[n][3]; lo[n] = Math.min(lo[n], v); hi[n] = Math.max(hi[n], v); }
+  }
+  return { min: lo, max: hi };
+})();
+
+/* Nearest vertex of a parsed node to a RAS point, mm. */
+function nearestVertex(node, p) {
+  let best = Infinity;
+  for (let i = 0; i < node.pts.length; i += 3) {
+    const d = (node.pts[i] - p[0]) ** 2 + (node.pts[i + 1] - p[1]) ** 2 + (node.pts[i + 2] - p[2]) ** 2;
+    if (d < best) best = d;
+  }
+  return Math.sqrt(best);
+}
+
+/* The nearest intersection of a ray (RAS mm) with any triangle of the parsed packs (Moller-Trumbore): { t, key, point } or null. */
+function rayNearest(nodes, o, d) {
+  let best = null;
+  for (const [key, n] of nodes) {
+    const p = n.pts;
+    for (let t = 0; t < n.idx.length; t += 3) {
+      const a = n.idx[t] * 3;
+      const b = n.idx[t + 1] * 3;
+      const c = n.idx[t + 2] * 3;
+      const e1 = [p[b] - p[a], p[b + 1] - p[a + 1], p[b + 2] - p[a + 2]];
+      const e2 = [p[c] - p[a], p[c + 1] - p[a + 1], p[c + 2] - p[a + 2]];
+      const h = [d[1] * e2[2] - d[2] * e2[1], d[2] * e2[0] - d[0] * e2[2], d[0] * e2[1] - d[1] * e2[0]];
+      const det = e1[0] * h[0] + e1[1] * h[1] + e1[2] * h[2];
+      if (Math.abs(det) < 1e-12) continue;
+      const s = [o[0] - p[a], o[1] - p[a + 1], o[2] - p[a + 2]];
+      const u = (s[0] * h[0] + s[1] * h[1] + s[2] * h[2]) / det;
+      if (u < 0 || u > 1) continue;
+      const q = [s[1] * e1[2] - s[2] * e1[1], s[2] * e1[0] - s[0] * e1[2], s[0] * e1[1] - s[1] * e1[0]];
+      const v = (d[0] * q[0] + d[1] * q[1] + d[2] * q[2]) / det;
+      if (v < 0 || u + v > 1) continue;
+      const tt = (e2[0] * q[0] + e2[1] * q[1] + e2[2] * q[2]) / det;
+      if (tt > 1e-6 && (!best || tt < best.t)) best = { t: tt, key, point: [o[0] + d[0] * tt, o[1] + d[1] * tt, o[2] + d[2] * tt] };
+    }
+  }
+  return best;
+}
+
+/* Where the plane x = X cuts the envelope's bone, from the raw triangles: grid points of the plane whose inside/outside (even-odd along +y over the
+   cut outline) is the same at 0.8 mm around them — [{ y, z, inside }]. The stencil cap must paint exactly the inside ones. */
+function sectionProbes(node, X) {
+  const p = node.pts;
+  const segs = [];
+  for (let t = 0; t < node.idx.length; t += 3) {
+    const v = [node.idx[t], node.idx[t + 1], node.idx[t + 2]].map((i) => [p[i * 3], p[i * 3 + 1], p[i * 3 + 2]]);
+    const side = v.map((q) => q[0] >= X);
+    if (side[0] === side[1] && side[1] === side[2]) continue;
+    const cut = [];
+    for (let e = 0; e < 3; e++) {
+      const a = v[e];
+      const b = v[(e + 1) % 3];
+      if ((a[0] >= X) !== (b[0] >= X)) { const f = (X - a[0]) / (b[0] - a[0]); cut.push([a[1] + f * (b[1] - a[1]), a[2] + f * (b[2] - a[2])]); }
+    }
+    if (cut.length === 2) segs.push(cut);
+  }
+  const inside = (y, z) => {
+    let c = 0;
+    for (const [[y1, z1], [y2, z2]] of segs) {
+      if ((z1 > z) === (z2 > z)) continue;
+      if (y1 + ((z - z1) / (z2 - z1)) * (y2 - y1) > y) c += 1;
+    }
+    return c % 2 === 1;
+  };
+  const out = [];
+  const M = 0.8;
+  for (let y = -88; y <= -3; y += 2) for (let z = -14; z <= 78; z += 2) {
+    const here = inside(y, z);
+    if ([[M, 0], [-M, 0], [0, M], [0, -M], [M, M], [-M, -M], [M, -M], [-M, M]].every(([dy, dz]) => inside(y + dy, z + dz) === here)) out.push({ y, z, inside: here });
+  }
+  return out;
+}
+
+/* A glTF binary (no quantization, no materials) of boxes: [{ id, side, center, half }], positions in RAS mm. */
+function makeGlb(boxes) {
+  const accessors = [];
+  const views = [];
+  const chunks = [];
+  let offset = 0;
+  const add = (buf, count, componentType, type, extra = {}) => {
+    const pad = (4 - (buf.length % 4)) % 4;
+    views.push({ buffer: 0, byteOffset: offset, byteLength: buf.length });
+    accessors.push({ bufferView: views.length - 1, componentType, count, type, ...extra });
+    chunks.push(buf, Buffer.alloc(pad));
+    offset += buf.length + pad;
+    return accessors.length - 1;
+  };
+  const nodes = [];
+  const meshes = [];
+  boxes.forEach((b, i) => {
+    const pos = [];
+    for (const dx of [-1, 1]) for (const dy of [-1, 1]) for (const dz of [-1, 1]) pos.push(b.center[0] + dx * b.half, b.center[1] + dy * b.half, b.center[2] + dz * b.half);
+    const idx = [0, 1, 3, 0, 3, 2, 4, 6, 7, 4, 7, 5, 0, 4, 5, 0, 5, 1, 2, 3, 7, 2, 7, 6, 0, 2, 6, 0, 6, 4, 1, 5, 7, 1, 7, 3];
+    const nor = [];
+    for (let v = 0; v < 8; v++) nor.push(0, 0, 1);
+    const lo = [0, 1, 2].map((k) => b.center[k] - b.half);
+    const hi = [0, 1, 2].map((k) => b.center[k] + b.half);
+    const p = add(Buffer.from(new Float32Array(pos).buffer), 8, 5126, 'VEC3', { min: lo, max: hi });
+    const n = add(Buffer.from(new Float32Array(nor).buffer), 8, 5126, 'VEC3');
+    const x = add(Buffer.from(new Uint16Array(idx).buffer), idx.length, 5123, 'SCALAR');
+    meshes.push({ primitives: [{ attributes: { POSITION: p, NORMAL: n }, indices: x, mode: 4 }] });
+    nodes.push({ name: `${b.id}.${b.side}`, mesh: i, extras: { id: b.id, side: b.side, name: `${b.id}.${b.side}` } });
+  });
+  const bin = Buffer.concat(chunks);
+  const json = Buffer.from(JSON.stringify({ asset: { version: '2.0' }, scene: 0, scenes: [{ nodes: nodes.map((_, i) => i) }], nodes, meshes, accessors, bufferViews: views, buffers: [{ byteLength: bin.length }] }));
+  const jpad = Buffer.alloc((4 - (json.length % 4)) % 4, 0x20);
+  const jc = Buffer.concat([json, jpad]);
+  const head = Buffer.alloc(12);
+  head.writeUInt32LE(0x46546c67, 0); head.writeUInt32LE(2, 4); head.writeUInt32LE(12 + 8 + jc.length + 8 + bin.length, 8);
+  const jh = Buffer.alloc(8); jh.writeUInt32LE(jc.length, 0); jh.writeUInt32LE(0x4e4f534a, 4);
+  const bh = Buffer.alloc(8); bh.writeUInt32LE(bin.length, 0); bh.writeUInt32LE(0x004e4942, 4);
+  return Buffer.concat([head, jh, jc, bh, bin]);
+}
+
+async function specimenUnitTests() {
+  const { doc, nodes, files } = readPacks();
+  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, k]));
+  check('specimen packs: every pack is a glTF 2.0 binary whose length field is true, with KHR_mesh_quantization required',
+    Object.values(files).every((f) => f.magic === 0x46546c67 && f.version === 2 && f.length === f.size && (f.json.extensionsRequired || []).includes('KHR_mesh_quantization')),
+    JSON.stringify(Object.entries(files).map(([k, f]) => [k, f.magic, f.version, f.length, f.size])));
+  check('specimen packs: the nodes in each file are exactly the nodes packs.json lists for it',
+    listed.length === nodes.size && listed.every(([name, key]) => nodes.has(key) && nodes.get(key).pack === name), `${listed.length} listed, ${nodes.size} read`);
+  const unknown = [...nodes.values()].filter((n) => !GRAPH.has(n.id));
+  check('specimen packs: every node id is a graph entity', unknown.length === 0, unknown.map((n) => n.id).join(', '));
+  const named = [...nodes].filter(([key, n]) => key !== `${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
+  check('specimen packs: nodes are named <graph id>.<R|L|M>', named.length === 0, named.map(([k]) => k).join(', '));
+  const outside = [...nodes].filter(([, n]) => n.box.min.some((v, i) => v < ctBox.min[i] - 5) || n.box.max.some((v, i) => v > ctBox.max[i] + 5));
+  check('specimen packs: every mesh lies inside the CT volume (± 5 mm), so the 3D cursor and the CT share one frame',
+    outside.length === 0, outside.map(([k, n]) => `${k} ${n.box.min.map(r2)}..${n.box.max.map(r2)}`).join('; ') + ` vs ${ctBox.min}..${ctBox.max}`);
+  /* laterality of the data itself: the centroid of every sided mesh is on its own side of the midsagittal plane */
+  const wrong = [];
+  const cx = (n) => { let s = 0; for (let i = 0; i < n.pts.length; i += 3) s += n.pts[i]; return s / (n.pts.length / 3); };
+  for (const [key, n] of nodes) {
+    const x = cx(n);
+    if ((n.side === 'R' && x <= 0) || (n.side === 'L' && x >= 0) || (n.side === 'M' && Math.abs(x) > 10)) wrong.push(`${key} ${r2(x)}`);
+  }
+  check('specimen packs: patient right is +x (every .R mesh centroid x > 0, .L < 0, midline pieces within 10 mm of x = 0)', wrong.length === 0, wrong.join('; '));
+  check('specimen packs: the maxillary sinuses (spec): .R centroid x > 0 and .L < 0',
+    nodes.has('s.maxillary-sinus.R') && nodes.has('s.maxillary-sinus.L') && cx(nodes.get('s.maxillary-sinus.R')) > 10 && cx(nodes.get('s.maxillary-sinus.L')) < -10);
+
+  /* the landmarks: independent markups, authored in RAS, against the meshes */
+  const lm = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/landmarks.json'), 'utf8'));
+  const sided = Object.entries(lm).filter(([k]) => /\.(R|L)$/.test(k));
+  const badSide = sided.filter(([k, p]) => (k.endsWith('.R') && p[0] <= 0) || (k.endsWith('.L') && p[0] >= 0));
+  check('landmarks: every .R landmark has x > 0 and every .L landmark x < 0', badSide.length === 0, badSide.map(([k]) => k).join(', '));
+  const ans = lm['lm.anterior-nasal-spine.M'];
+  const origin = rasToScene(ans);
+  check('frame: rasToScene([r, a, s]) = [r, s, -a] and sceneToRas inverts it', JSON.stringify(rasToScene([1, 2, 3])) === '[1,3,-2]' && JSON.stringify(sceneToRas([1, 3, -2])) === '[1,2,3]');
+  check('frame: lm.anterior-nasal-spine.M maps to the scene origin (± 2 mm)', Math.hypot(...origin) < 2, JSON.stringify(origin));
+  const PAIRS = { 'lm.sphenoid-ostium': 's.sphenoid-sinus', 'lm.frontal-ostium': 's.frontal-recess', 'lm.sphenopalatine-foramen': 's.nasal-cavity',
+    'lm.infraorbital-foramen': 's.maxillary-sinus', 'lm.greater-palatine-foramen': 's.maxillary-sinus', 'lm.vidian-canal-anterior': 's.sphenoid-sinus',
+    'lm.foramen-rotundum-anterior': 's.sphenoid-sinus' };
+  const rows = [];
+  for (const [k, p] of sided) {
+    const m = /^(.+)\.(R|L)$/.exec(k);
+    if (!PAIRS[m[1]]) continue;
+    const own = nodes.get(`${PAIRS[m[1]]}.${m[2]}`);
+    const other = nodes.get(`${PAIRS[m[1]]}.${m[2] === 'R' ? 'L' : 'R'}`);
+    if (!own || !other) continue;
+    rows.push({ k, own: nearestVertex(own, p), other: nearestVertex(other, p) });
+  }
+  check('landmarks vs meshes (data): each paired landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s',
+    rows.length >= 8 && rows.every((r) => r.own <= 4 && r.own < r.other), JSON.stringify(rows.map((r) => [r.k, r2(r.own), r2(r.other)])));
+
+  /* the cursor in the store: the shared CT crosshair, `at` without a plane in the hash */
+  const has = (id) => GRAPH.has(id);
+  const hp = (h) => parseHash(h, has);
+  check('state: #at=1,2,3 alone is the specimen\'s 3D cursor (the CT crosshair, remembered)', JSON.stringify(hp('#at=1,2,3').cursor) === '[1,2,3]' && !hp('#at=1,2,3').ct);
+  check('state: with a plane, `at` stays the CT crosshair and no separate cursor is parsed', hp('#ct=ax&at=1,2,3').ct.at.join() === '1,2,3' && hp('#ct=ax&at=1,2,3').cursor === undefined);
+  check('state: a hostile `at` is dropped whole, and a lab or a bad `ct` (which ignores the whole stage) wins over it',
+    ['1,2', 'a,b,c', '1,2,3,4', 'NaN,1,2', '1e999,0,0', '<img>,1,2', ''].every((at) => hp(`#at=${at}`).cursor === undefined)
+      && parseHash('#lab=k&at=1,2,3', has, { k: { params: [], presets: {} } }).cursor === undefined
+      && hp('#ct=AX&at=1,2,3').cursor === undefined);
+  const labs = { k: { params: [], presets: {} } };
+  const st = createStore({ has, tierOf: () => 1, hash: '#at=1,2,3', prefs: {}, labs });
+  check('state: a cursor in the URL is in the store and is written back as #at=', JSON.stringify(st.get().cursor) === '[1,2,3]' && st.hash() === '#at=1,2,3', st.hash());
+  st.setCt({ plane: 'cor', at: null });
+  check('state: entering CT with no crosshair keeps the 3D cursor (#ct=cor&at=…)', st.get().ct.at.join() === '1,2,3' && st.hash() === '#ct=cor&at=1,2,3', st.hash());
+  st.setCursor([5, 6, 7]);
+  check('state: in the CT stage the cursor is the crosshair (ct.at follows it)', st.get().ct.at.join() === '5,6,7' && st.hash() === '#ct=cor&at=5,6,7', st.hash());
+  st.leaveStage();
+  check('state: leaving CT keeps the cursor for the specimen (#at=)', st.get().ct === null && st.get().cursor.join() === '5,6,7' && st.hash() === '#at=5,6,7', st.hash());
+  const seen = [];
+  st.subscribe((s2, p, meta) => seen.push(meta.source));
+  st.setCtBounds({ min: [-24, -21, -18], max: [23.25, 20.25, 29] });
+  check('state: bounds that already contain the cursor change nothing (no notification)', seen.length === 0 && st.get().cursor.join() === '5,6,7', seen.join());
+  st.setCtBounds({ min: [-1, -1, -1], max: [1, 1, 1] });
+  check('state: the volume\'s bounds re-clamp the cursor (one ct-bounds notification)', st.get().cursor.join() === '1,1,1' && seen.join() === 'ct-bounds', seen.join());
+  st.setCtBounds({ min: [-24, -21, -18], max: [23.25, 20.25, 29] });
+  st.setCursor([1e9, -1e9, 5]);
+  check('state: setCursor clamps to the bounds, rejects a non-point, and clears with null',
+    st.get().cursor.join() === '23.25,-21,5' && st.setCursor([1, 2]) === false && st.setCursor(null) && st.get().cursor === null && st.hash() === '', st.hash());
+  st.setCursor([1, 2, 3]);
+  st.setLab({ name: 'k', params: {} });
+  check('state: the lab leaves the cursor in the store but out of the URL', st.get().cursor.join() === '1,2,3' && st.hash() === '#lab=k', st.hash());
+  st.applyHash('#at=9,8,7');
+  check('state: applyHash adopts a cursor from a pasted link', st.get().cursor.join() === '9,8,7' && st.get().lab === null && st.hash() === '#at=9,8,7', st.hash());
+}
+
+/* ---------------- Specimen: the page ---------------- */
+
+const RAW = { 'content-type': 'application/octet-stream' };
+
+/* routes: { '<file name under ssb/models/ or ssb/geometry/>': (route) => … }. */
+async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true } = {}) {
+  const context = await browser.newContext({ viewport, reducedMotion, deviceScaleFactor: viewport.width < 600 ? 2 : 1 });
+  if (!webgl) {
+    await context.addInitScript(() => {
+      const real = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return typeof type === 'string' && /webgl/i.test(type) ? null : real.call(this, type, ...rest); };
+    });
+  }
+  if (routes) {
+    await context.route(/\/ssb\/(models|geometry)\/[^/?#]+(?:[?#].*)?$/, (route) => {
+      const name = new URL(route.request().url()).pathname.split('/').pop();
+      return routes[name] ? routes[name](route) : route.continue();
+    });
+  }
+  const page = await context.newPage();
+  const errors = collectErrors(page);
+  if (track) allErrors.push(errors);
+  const warnings = [];
+  page.on('console', (m) => { if (m.type() === 'warning') warnings.push(m.text()); });
+  await page.goto(`${base}/ssb.html${hash}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await page.waitForFunction(() => document.querySelectorAll('#ssb-tree button[data-id]').length > 0, null, { timeout: 20000 });
+  if (wait === 'settled') {
+    await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
+    await page.waitForFunction(() => !window.__ssb.specimen.installed || window.__ssb.specimen.renders > 0, null, { timeout: 20000 });
+  }
+  return { context, page, errors, warnings };
+}
+
+const spec = (page, fn, arg) => page.evaluate(fn, arg);
+const specNodes = (page) => page.evaluate(() => window.__ssb.specimen.nodes());
+const nextFrames = (page, n = 2) => page.evaluate((k) => new Promise((res) => { let i = 0; const f = () => (++i >= k ? res() : requestAnimationFrame(f)); requestAnimationFrame(f); }), n);
+const clickView = async (page, view) => { await page.click(`#ssb-spec button[data-view="${view}"]`); await page.waitForFunction(() => !window.__ssb.specimen.camera().flying, null, { timeout: 5000 }); await nextFrames(page, 3); };
+const project = (page, ras) => page.evaluate((r) => window.__ssb.specimen.project(r), ras);
+const sceneMsg = (page) => page.evaluate(() => { const m = document.getElementById('ssb-stage-msg'); return { hidden: m.hidden, text: m.textContent }; });
+
+/* The canvas as an image, with the corner widgets (orientation, dock) left to the caller to ignore. */
+async function canvasImage(page) {
+  const r = await page.evaluate(() => { const b = document.getElementById('ssb-canvas').getBoundingClientRect(); return { x: b.left, y: b.top, width: b.width, height: b.height }; });
+  const img = decodePng(await page.screenshot({ clip: r }));
+  return { img, rect: r };
+}
+const isBg = (px, bg) => Math.abs(px[0] - bg[0]) + Math.abs(px[1] - bg[1]) + Math.abs(px[2] - bg[2]) <= 12;
+
+async function specimenTests(browser, base) {
+  const { nodes: truth } = readPacks();
+
+  /* ===== boot, registry, materials ===== */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '');
+    const info = await spec(page, () => ({
+      status: window.__ssb.specimen.status, packs: window.__ssb.specimen.packs, problems: window.__ssb.specimen.problems,
+      pressed: document.querySelector('#ssb-stage-mode [data-stage="specimen"]').getAttribute('aria-pressed'),
+      stage: document.getElementById('ssb-app').dataset.stage, note: document.getElementById('ssb-stage-note').textContent,
+      noteShown: getComputedStyle(document.getElementById('ssb-stage-note')).display !== 'none',
+      msgHidden: document.getElementById('ssb-stage-msg').hidden, frames: window.__ssb.frames, view: window.__ssb.specimen.view,
+      axisLabels: [...document.querySelectorAll('.ssb-axis-label')].map((e) => getComputedStyle(e).visibility),
+    }));
+    check('specimen: boots to status ready with no problems, the Specimen pill pressed, and no stage message', info.status === 'ready' && info.problems.length === 0 && info.pressed === 'true' && info.stage === 'specimen' && info.msgHidden, JSON.stringify(info));
+    check('specimen: the stage note is provenance (reference specimen, UW CT atlas, draft), not the placeholder', info.noteShown && /Reference specimen · UW CT atlas · draft/.test(info.note) && !/Placeholder/i.test(info.note), info.note);
+    check('specimen: the placeholder grid\'s axis letters are gone while the specimen shows', info.axisLabels.every((v) => v === 'hidden'), info.axisLabels.join());
+
+    const listed = Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs);
+    check('specimen: every pack packs.json lists is loaded, node for node as listed (core first)',
+      listed.every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
+    const nodes = await specNodes(page);
+    const keys = nodes.map((n) => n.key).sort();
+    check('specimen: the registry is exactly what the data holds (node keys match an independent read of the packs)', keys.join() === [...truth.keys()].sort().join(), `${keys.length} vs ${truth.size}`);
+    check('specimen: every registry id is in the knowledge graph', nodes.every((n) => GRAPH.has(n.id)), nodes.filter((n) => !GRAPH.has(n.id)).map((n) => n.id).join());
+    const off = [];
+    for (const n of nodes) {
+      const t = truth.get(n.key);
+      const d = Math.max(...[0, 1, 2].flatMap((i) => [Math.abs(n.box.min[i] - t.box.min[i]), Math.abs(n.box.max[i] - t.box.max[i])]));
+      if (!(d < 0.05)) off.push(`${n.key} ${r2(d)}`);
+    }
+    check('specimen: the loader places every mesh exactly where the raw data says it is in RAS (quantization, node transform and the one rasToScene root; max error < 0.05 mm)', off.length === 0, off.join('; '));
+    const outside = nodes.filter((n) => n.box.min.some((v, i) => v < ctBox.min[i] - 5) || n.box.max.some((v, i) => v > ctBox.max[i] + 5));
+    check('specimen: every mesh in the scene lies inside the CT volume\'s bounds (± 5 mm)', outside.length === 0, outside.map((n) => n.key).join());
+
+    /* looks by graph kind */
+    const env = nodes.find((n) => n.id === 's.skull-base-region');
+    const cellsKinds = nodes.filter((n) => entity(n.id) && entity(n.id).kind === 'cell');
+    const sinus = nodes.filter((n) => entity(n.id) && entity(n.id).kind === 'sinus');
+    check('specimen: the bony envelope is bone (a graph region drawn as bone), X-ray by default: a transparent fresnel shell with no depth write',
+      env && env.group === 'bone' && env.look.kind === 'bone' && env.material === 'ShaderMaterial' && env.transparent && env.depthWrite === false, JSON.stringify(env && { g: env.group, m: env.material }));
+    check('specimen: sinuses are see-through air spaces; cells are plain tinted blocks, the IFAC cells by their categorical hue',
+      sinus.length > 0 && sinus.every((n) => n.look.kind === 'space' && n.look.space) && cellsKinds.length > 0 && cellsKinds.every((n) => n.look.kind === 'air-cell' && typeof n.look.tint === 'string')
+        && nodes.filter((n) => n.id === 's.agger-nasi-cell').every((n) => n.look.tint === 'cell-anc'), JSON.stringify([...new Set(cellsKinds.map((n) => n.look.tint))]));
+    const regions = nodes.filter((n) => entity(n.id) && entity(n.id).kind === 'region' && n.id !== 's.skull-base-region');
+    check('specimen: the nasal cavity and nasopharynx (graph regions) are air spaces', regions.length > 0 && regions.filter((n) => /nasal-cavity|nasopharynx/.test(n.id)).every((n) => n.look.space), regions.map((n) => n.key).join());
+    check('specimen: budgets — all triangles ≤ 400k, draw calls ≤ 150, no WebGL error state', (await spec(page, () => window.__ssb.specimen.triangles)) <= 400000 && (await spec(page, () => window.__ssb.specimen.info().calls)) <= 150);
+    const f0 = await page.evaluate(() => window.__ssb.frames);
+    await page.waitForTimeout(700);
+    check('specimen: no frames are drawn while nothing changes (on-demand loop)', (await page.evaluate(() => window.__ssb.frames)) === f0);
+    await context.close();
+  }
+
+  /* ===== frame and laterality, through the camera ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const lmk = Object.fromEntries((await spec(page, () => window.__ssb.specimen.landmarks)).map((l) => [l.key, l.ras]));
+    const cam = await spec(page, () => window.__ssb.specimen.camera());
+    check('specimen: the default view is the anterior-oblique from the patient\'s right-front, a little above (toward +R, +A, +S)',
+      cam.toCamera[0] > 0.3 && cam.toCamera[1] > 0.3 && cam.toCamera[2] > 0.1 && cam.toCamera[2] < 0.7 && (await spec(page, () => window.__ssb.specimen.view)) === 'oblique', JSON.stringify(cam.toCamera));
+
+    await clickView(page, 'anterior');
+    const a = {};
+    for (const k of ['lm.frontal-ostium.R', 'lm.frontal-ostium.L', 'lm.sphenoid-ostium.R', 'lm.sphenoid-ostium.L', 'lm.crista-galli-apex.M', 'lm.anterior-nasal-spine.M', 'lm.sella-floor-center.M']) a[k] = await project(page, lmk[k]);
+    check('frame: in the anterior view the camera looks at the face from +A (toCamera ≈ +A)', (await spec(page, () => window.__ssb.specimen.camera().toCamera[1])) > 0.99);
+    check('frame: in the anterior view the patient\'s RIGHT is on the viewer\'s LEFT (lm.*.R project left of lm.*.L, for the frontal and sphenoid ostia)',
+      a['lm.frontal-ostium.R'].x < a['lm.frontal-ostium.L'].x && a['lm.sphenoid-ostium.R'].x < a['lm.sphenoid-ostium.L'].x, JSON.stringify([a['lm.frontal-ostium.R'].x, a['lm.frontal-ostium.L'].x]));
+    check('frame: superior is up (the crista galli projects above the sellar floor)', a['lm.crista-galli-apex.M'].y < a['lm.sella-floor-center.M'].y, JSON.stringify([a['lm.crista-galli-apex.M'].y, a['lm.sella-floor-center.M'].y]));
+    check('frame: the orientation widget agrees (R left of L, S above I)', await page.evaluate(() => {
+      const c = (cls) => { const r = document.querySelector(cls).getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+      return c('.ssb-orient-r .ssb-orient-plus').x < c('.ssb-orient-r .ssb-orient-minus').x && c('.ssb-orient-s .ssb-orient-plus').y < c('.ssb-orient-s .ssb-orient-minus').y;
+    }));
+
+    /* a click on the .R sinus in the anterior view (bone hidden) picks the .R node, on the viewer's left */
+    await page.click('#ssb-spec button[data-bone="hidden"]');
+    await nextFrames(page, 2);
+    const sR = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
+    const sL = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.L'));
+    check('frame: the .R maxillary sinus is picked on the viewer\'s left and the .L on the right, in the anterior view', sR && sL && sR.x < sL.x, JSON.stringify([sR, sL]));
+    await page.click('#ssb-spec button[data-bone="xray"]');
+
+    await clickView(page, 'right');
+    const r = {};
+    for (const k of ['lm.anterior-nasal-spine.M', 'lm.dorsum-sellae-tip.M', 'lm.crista-galli-apex.M', 'lm.sella-floor-center.M']) r[k] = await project(page, lmk[k]);
+    const camR = await spec(page, () => window.__ssb.specimen.camera().toCamera);
+    check('frame: in the right lateral view the camera is on the patient\'s right (toCamera ≈ +R) and anterior is to the viewer\'s right (nasal spine right of the dorsum sellae)',
+      camR[0] > 0.99 && r['lm.anterior-nasal-spine.M'].x > r['lm.dorsum-sellae-tip.M'].x && r['lm.crista-galli-apex.M'].y < r['lm.sella-floor-center.M'].y, JSON.stringify([camR, r]));
+    await clickView(page, 'left');
+    const l0 = await project(page, lmk['lm.anterior-nasal-spine.M']);
+    const l1 = await project(page, lmk['lm.dorsum-sellae-tip.M']);
+    check('frame: in the left lateral view anterior is to the viewer\'s left', l0.x < l1.x, JSON.stringify([l0.x, l1.x]));
+    await clickView(page, 'superior');
+    const s0 = await project(page, lmk['lm.anterior-nasal-spine.M']);
+    const s1 = await project(page, lmk['lm.dorsum-sellae-tip.M']);
+    const sR2 = await project(page, lmk['lm.frontal-ostium.R']);
+    const sL2 = await project(page, lmk['lm.frontal-ostium.L']);
+    check('frame: from above, anterior is up the screen and the patient\'s right is on the viewer\'s right',
+      s0.y < s1.y && sR2.x > sL2.x && (await spec(page, () => window.__ssb.specimen.camera().toCamera[2])) > 0.99, JSON.stringify([s0, s1, sR2, sL2]));
+
+    /* the landmarks against the meshes in the scene: independent markups, the page's own transform */
+    const PAIRS = { 'lm.sphenoid-ostium': 's.sphenoid-sinus', 'lm.frontal-ostium': 's.frontal-recess', 'lm.sphenopalatine-foramen': 's.nasal-cavity',
+      'lm.infraorbital-foramen': 's.maxillary-sinus', 'lm.greater-palatine-foramen': 's.maxillary-sinus', 'lm.vidian-canal-anterior': 's.sphenoid-sinus',
+      'lm.foramen-rotundum-anterior': 's.sphenoid-sinus' };
+    const rows = [];
+    for (const [k, ras] of Object.entries(lmk)) {
+      const m = /^(.+)\.(R|L)$/.exec(k);
+      if (!m || !PAIRS[m[1]]) continue;
+      const other = m[2] === 'R' ? 'L' : 'R';
+      const own = await spec(page, ([key, p]) => window.__ssb.specimen.nearest(key, p), [`${PAIRS[m[1]]}.${m[2]}`, ras]);
+      const far = await spec(page, ([key, p]) => window.__ssb.specimen.nearest(key, p), [`${PAIRS[m[1]]}.${other}`, ras]);
+      if (own && far) rows.push({ k, own: own.distance, other: far.distance });
+    }
+    check('frame: in the scene every sided landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s (the loader, the root transform and the landmark file agree)',
+      rows.length >= 8 && rows.every((x) => x.own <= 4 && x.own < x.other), JSON.stringify(rows.map((x) => [x.k, r2(x.own), r2(x.other)])));
+    const centroids = {};
+    for (const key of ['s.maxillary-sinus.R', 's.maxillary-sinus.L']) centroids[key] = await spec(page, (k) => window.__ssb.specimen.centroid(k), key);
+    check('frame: in the scene the .R maxillary sinus centroid is at x > 0 and the .L at x < 0 (scene +x is patient right)', centroids['s.maxillary-sinus.R'][0] > 10 && centroids['s.maxillary-sinus.L'][0] < -10, JSON.stringify(centroids));
+    await context.close();
+  }
+
+  /* ===== layers ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const env = async () => (await specNodes(page)).find((n) => n.id === 's.skull-base-region');
+    check('layers: the bone envelope is X-ray by default', (await env()).material === 'ShaderMaterial' && (await page.getAttribute('#ssb-spec button[data-bone="xray"]', 'aria-pressed')) === 'true');
+    await page.click('#ssb-spec button[data-bone="solid"]');
+    await nextFrames(page, 2);
+    let e = await env();
+    check('layers: Solid draws the envelope as procedural bone (opaque, lit)', e.visible && e.material === 'MeshStandardMaterial' && !e.transparent, JSON.stringify(e));
+    await page.click('#ssb-spec button[data-bone="hidden"]');
+    await nextFrames(page, 2);
+    e = await env();
+    const airVisible = (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.visible);
+    check('layers: Hidden removes the envelope and leaves the air spaces', !e.visible && airVisible);
+    await page.click('#ssb-spec button[data-bone="xray"]');
+
+    const regionBoxes = await page.$$eval('#ssb-spec input[data-region]', (bs) => bs.map((b) => b.dataset.region));
+    const nodes0 = await specNodes(page);
+    const wantRegions = [...new Set(nodes0.filter((n) => n.group !== 'bone').map((n) => n.region || 'other'))].sort();
+    check('layers: one toggle per region that holds air spaces or soft tissue, built from the loaded packs', regionBoxes.slice().sort().join() === wantRegions.join(), regionBoxes.join() + ' vs ' + wantRegions.join());
+    await page.click('#ssb-spec input[data-region="maxillary"]');
+    await nextFrames(page, 2);
+    const after = await specNodes(page);
+    check('layers: unchecking a region hides exactly its nodes', after.filter((n) => n.region === 'maxillary' && n.group !== 'bone').every((n) => !n.visible)
+      && after.filter((n) => n.region !== 'maxillary' || n.group === 'bone').every((n) => n.visible), JSON.stringify(after.filter((n) => !n.visible).map((n) => n.key)));
+    await page.click('#ssb-spec input[data-region="maxillary"]');
+
+    /* landmarks: every marker is orientation geometry (never tier-filtered); labels are few and follow the tier */
+    const lmAll = await spec(page, () => window.__ssb.specimen.landmarks.length);
+    check('layers: no landmark markers until the layer is on', (await spec(page, () => window.__ssb.specimen.markers.length)) === 0);
+    await page.click('#ssb-spec-landmarks');
+    await clickView(page, 'anterior');
+    const t1 = await spec(page, () => ({ markers: window.__ssb.specimen.markers.length, labels: window.__ssb.specimen.labels }));
+    check('layers: the landmarks layer shows every marker, whatever the depth', t1.markers === lmAll && lmAll >= 20, `${t1.markers} of ${lmAll}`);
+    check('layers: at depth 1 the labels are few (≤ 8) and only for entities of tier ≤ 1', t1.labels.length > 0 && t1.labels.length <= 8 && t1.labels.every((l) => (entity(l.id).tier || 1) <= 1), JSON.stringify(t1.labels));
+    await page.click('#ssb-tier button[data-tier="3"]');
+    await nextFrames(page, 2);
+    const t3 = await spec(page, () => ({ markers: window.__ssb.specimen.markers.length, labels: window.__ssb.specimen.labels }));
+    check('layers: raising the depth adds labels (still ≤ 8) and never changes the markers',
+      t3.markers === lmAll && t3.labels.length <= 8 && t3.labels.length >= t1.labels.length && t3.labels.every((l) => (entity(l.id).tier || 1) <= 3), JSON.stringify([t1.labels.length, t3.labels.length]));
+    const lap = await page.evaluate(() => {
+      const els = [...document.querySelectorAll('.ssb-spec-label:not([hidden])')].map((e) => e.getBoundingClientRect());
+      for (let i = 0; i < els.length; i++) for (let j = i + 1; j < els.length; j++) { const a = els[i], b = els[j]; if (a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) return true; }
+      return false;
+    });
+    check('layers: labels never sit on one another', !lap);
+    await page.click('#ssb-tier button[data-tier="1"]');
+    await context.close();
+  }
+
+  /* ===== picking, deeper-click, the cursor, CT sync ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    await clickView(page, 'anterior');
+    const lmk = Object.fromEntries((await spec(page, () => window.__ssb.specimen.landmarks)).map((l) => [l.key, l.ras]));
+    const fs0 = (await spec(page, () => window.__ssb.specimen.nodes())).find((n) => n.key === 's.frontal-sinus.R');
+    const aim = [0, 1, 2].map((n) => (fs0.box.min[n] + fs0.box.max[n]) / 2);
+    const p = await project(page, aim);
+    const hits = await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y), [p.x, p.y]);
+    const groupOf = Object.fromEntries((await specNodes(page)).map((n) => [n.key, n.group]));
+    const iSinus = hits.findIndex((h) => h.key === 's.frontal-sinus.R');
+    check('picking: a ray through the bone into a sinus keeps every hit — at least 2 distinct, nearest first, bone before the sinus',
+      new Set(hits.map((h) => h.key)).size >= 2 && iSinus > 0 && groupOf[hits[0].key] === 'bone' && hits.slice(1).every((h, i) => h.distance >= hits[i].distance), JSON.stringify(hits.map((h) => [h.key, r2(h.distance)])));
+    const picked = [];
+    for (let i = 0; i < hits.length + 1; i++) {
+      await page.mouse.click(p.x, p.y);
+      picked.push(await page.evaluate(() => ({ sel: window.__ssb.selection, primary: window.__ssb.specimen.primary, hash: location.hash, panel: (document.querySelector('#ssb-panel-body [data-entity]') || {}).dataset?.entity })));
+    }
+    check('picking: clicking the same spot again steps to the next hit and wraps; the store, the panel and the URL follow each',
+      picked[0].sel === hits[0].id && picked[1].sel === hits[1].id && picked[hits.length].sel === hits[0].id
+        && picked.every((q) => q.panel === q.sel && q.hash.includes('s=' + q.sel)), JSON.stringify(picked.map((q) => q.sel)));
+    check('picking: the clicked side is the full highlight (primary), the clicked node', picked[1].primary === hits[1].key, picked[1].primary);
+
+    /* the click's surface point is the 3D cursor: against an independent ray cast through the raw data */
+    let best = -Infinity;
+    let vtx = null;
+    for (const n of truth.values()) for (let i = 0; i < n.pts.length; i += 3) if (n.pts[i + 1] > best) { best = n.pts[i + 1]; vtx = [n.pts[i], n.pts[i + 1], n.pts[i + 2]]; }
+    const camNow = await spec(page, () => window.__ssb.specimen.camera());
+    const dir = vtx.map((v, i) => v - camNow.position[i]);
+    const len = Math.hypot(...dir);
+    const ray = rayNearest(truth, camNow.position, dir.map((v) => v / len));
+    const pv = await project(page, vtx);
+    const before = await spec(page, () => window.__ssb.specimen.cursor);
+    await page.mouse.click(pv.x, pv.y);
+    await page.waitForFunction(() => /(^|&)at=/.test(location.hash.slice(1)), null, { timeout: 3000 }).catch(() => {});     /* a cursor move reaches the URL once it settles */
+    const got = await page.evaluate(() => ({ cursor: window.__ssb.specimen.cursor, marker: window.__ssb.specimen.cursorMarker, hash: location.hash, sel: window.__ssb.selection }));
+    const dist = Math.hypot(...got.cursor.map((v, i) => v - ray.point[i]));
+    check('cursor: a click at the most anterior vertex of the data sets the shared cursor within 1 mm of where an independent ray cast through the raw triangles meets the first surface',
+      dist < 1 && JSON.stringify(got.cursor) !== JSON.stringify(before) && got.sel === truth.get(ray.key).id, `${r2(dist)} mm; ${ray.key}; cursor ${got.cursor}`);
+    check('cursor: the 3D crosshair marker is at the cursor and the URL carries it as #at= (no stage change)',
+      got.marker && arrEq(got.marker, got.cursor, 1e-6) && /(^|&)at=/.test(got.hash.slice(1)) && !/ct=/.test(got.hash), got.hash);
+
+    /* the CT stage opens there, on the real volume */
+    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready' && Object.values(window.__ssb.ct.renders).some((n) => n > 0), null, { timeout: 30000 });
+    const ctAt = await page.evaluate(() => ({ cursor: window.__ssb.ct.cursor, hash: location.hash, stage: document.getElementById('ssb-app').dataset.stage, bounds: window.__ssb.ct.bounds }));
+    check('cursor: switching to CT lands the crosshair on the clicked surface point (within one 0.5 mm voxel)', ctAt.stage === 'ct' && Math.hypot(...ctAt.cursor.map((v, i) => v - got.cursor[i])) <= 0.5, JSON.stringify(ctAt));
+    check('cursor: the CT bounds the specimen clamped to (read from ct.json alone) are the volume\'s own', arrEq(ctAt.bounds.min, ctBox.min, 1e-6) && arrEq(ctAt.bounds.max, ctBox.max, 1e-6));
+    const specBounds = await spec(page, () => window.__ssb.specimen.ctBounds);
+    check('cursor: the specimen read the same bounds before the volume was downloaded', specBounds && arrEq(specBounds.min, ctBox.min, 1e-6));
+    /* and back: the crosshair is the cursor; a new crosshair shows in 3D */
+    const move = [12, -30, 22];
+    await page.evaluate((m) => { location.hash = `#ct=cor&at=${m.join(',')}`; }, move);
+    await page.waitForFunction((m) => window.__ssb.ct.cursor && Math.abs(window.__ssb.ct.cursor[0] - m[0]) < 1e-6, move);
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    await nextFrames(page, 3);
+    const back = await page.evaluate(() => ({ marker: window.__ssb.specimen.cursorMarker, cursor: window.__ssb.specimen.cursor, hash: location.hash, active: window.__ssb.specimen.active }));
+    check('cursor: the CT crosshair shows in the specimen as the 3D crosshair marker, and the URL is #at= again', back.active && back.marker && arrEq(back.marker, move, 1e-6) && back.hash.includes('at=12,-30,22') && !back.hash.includes('ct='), JSON.stringify(back));
+    const proj = await project(page, move);
+    check('cursor: the marker is drawn on screen (it shows through the bone)', proj.front && proj.x > 0 && proj.y > 0);
+    await context.close();
+  }
+
+  /* ===== selection from the tree and search: highlight, partner, framing, no-geometry ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '#s=s.maxillary-sinus', { reducedMotion: 'reduce' });
+    const nodes = await specNodes(page);
+    const mine = nodes.filter((n) => n.id === 's.maxillary-sinus');
+    const primary = mine.filter((n) => n.highlight === 'primary');
+    const partner = mine.filter((n) => n.highlight === 'partner');
+    check('selection: a deep link highlights the maxillary sinus — the side nearest the camera at full strength (patient right, from the right-front), the other side dimmed',
+      mine.length === 2 && primary.length === 1 && partner.length === 1 && primary[0].side === 'R' && primary[0].emissive > partner[0].emissive && partner[0].emissive > 0, JSON.stringify(mine.map((n) => [n.key, n.highlight, n.emissive])));
+    check('selection: everything else is untouched', nodes.filter((n) => n.id !== 's.maxillary-sinus').every((n) => n.highlight === null));
+    check('selection: the selection\'s name is labelled on the stage and the panel shows the entity', (await spec(page, () => window.__ssb.specimen.labels)).some((l) => l.id === 's.maxillary-sinus')
+      && (await page.$('#ssb-panel-body [data-entity="s.maxillary-sinus"]')) !== null);
+
+    /* tree selection frames it (a cut under reduced motion) and keeps the way the camera looks */
+    await page.click('#ssb-spec button[data-view="oblique"]');
+    const c0 = await spec(page, () => window.__ssb.specimen.camera());
+    await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id="s.sphenoid-sinus"]').click(); });
+    await nextFrames(page, 3);
+    const c1 = await spec(page, () => window.__ssb.specimen.camera());
+    const sphen = (await specNodes(page)).filter((n) => n.id === 's.sphenoid-sinus');
+    const centre = [0, 1, 2].map((n) => (Math.min(...sphen.map((s) => s.box.min[n])) + Math.max(...sphen.map((s) => s.box.max[n]))) / 2);
+    check('selection: choosing a structure in the tree frames it (the camera targets its centre) without turning the camera, as a cut under reduced motion',
+      !c1.flying && Math.hypot(...c1.target.map((v, i) => v - centre[i])) < 0.5 && c1.toCamera.every((v, i) => Math.abs(v - c0.toCamera[i]) < 1e-3) && c1.distance < c0.distance, JSON.stringify([c0.target, c1.target, centre]));
+    await page.click('#ssb-spec button[data-bone="hidden"]');
+    await nextFrames(page, 2);
+    check('selection: a click on the specimen does not move the camera (the reader chose the view)', await (async () => {
+      const aim = await spec(page, () => window.__ssb.specimen.screenOf('s.sphenoid-sinus.R') || window.__ssb.specimen.screenOf('s.sphenoid-sinus.L'));
+      const before = await spec(page, () => window.__ssb.specimen.camera());
+      await page.mouse.click(aim.x, aim.y);
+      const afterCam = await spec(page, () => window.__ssb.specimen.camera());
+      return !!aim && arrEq(before.position, afterCam.position, 1e-6);
+    })());
+    await page.click('#ssb-spec button[data-bone="xray"]');
+
+    /* an entry with no geometry leaves the camera alone and says so */
+    const ids = new Set((await specNodes(page)).map((n) => n.id));
+    const lmIds = new Set((await spec(page, () => window.__ssb.specimen.landmarks)).map((l) => l.id));
+    const bare = [...GRAPH.values()].map((v) => v.entity).find((e) => e.id.startsWith('s.') && !ids.has(e.id) && !lmIds.has(e.id));
+    const camA = await spec(page, () => window.__ssb.specimen.camera());
+    await page.evaluate((id) => { location.hash = `#s=${id}`; }, bare.id);
+    await nextFrames(page, 3);
+    const camB = await spec(page, () => window.__ssb.specimen.camera());
+    const note = await page.evaluate(() => { const n = document.querySelector('#ssb-panel-body .ssb-geo-note'); return n ? n.textContent : null; });
+    check(`selection: ${bare.id} has no geometry — the camera stays put and the panel says the specimen has none`,
+      arrEq(camA.position, camB.position, 1e-9) && arrEq(camA.target, camB.target, 1e-9) && /no geometry/.test(note || ''), String(note));
+    check('selection: …and nothing on the stage is highlighted', (await specNodes(page)).every((n) => n.highlight === null));
+    /* a landmark-only entry: a marker, no surface, and the camera still stays */
+    const lmOnly = [...lmIds].find((id) => !ids.has(id) && id.startsWith('s.'));
+    if (lmOnly) {
+      await page.evaluate((id) => { location.hash = `#s=${id}`; }, lmOnly);
+      await nextFrames(page, 3);
+      const camC = await spec(page, () => window.__ssb.specimen.camera());
+      const info = await page.evaluate(() => ({ markers: window.__ssb.specimen.markers, note: (document.querySelector('#ssb-panel-body .ssb-geo-note') || {}).textContent, labels: window.__ssb.specimen.labels }));
+      check(`selection: ${lmOnly} is a landmark with no surface — its marker is shown (and labelled when in view), the camera stays, the panel says it is a point marker`,
+        info.markers.some((k) => k.startsWith(lmOnly + '.')) && arrEq(camB.position, camC.position, 1e-9) && /point marker/.test(info.note || ''), JSON.stringify(info));
+    }
+    await context.close();
+  }
+
+  /* ===== section plane ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    await clickView(page, 'right');
+    const bgOf = (img) => img.at(img.width - 4, 4);
+    const lit = (img, rect, y0, y1) => {
+      let n = 0;
+      const bg = bgOf(img);
+      for (let y = Math.max(0, Math.ceil(y0)); y < Math.min(img.height, Math.floor(y1)); y++) for (let x = 0; x < img.width; x++) {
+        if (x < 120 && y < 120) continue;                               /* the orientation widget */
+        if (y > img.height - 44) continue;                              /* the provenance note */
+        if (!isBg(img.at(x, y), bg)) n += 1;
+      }
+      return n;
+    };
+    const off = await canvasImage(page);
+    await page.click('#ssb-spec button[data-section="axial"]');
+    const sec = await spec(page, () => window.__ssb.specimen.section);
+    const cursor0 = await spec(page, () => window.__ssb.specimen.cursor);
+    check('section: choosing Axial puts the plane on the shared cursor (it starts mid-volume), one clip plane is active', sec.axis === 'axial' && cursor0 && Math.abs(sec.at - cursor0[2]) < 1e-9 && (await spec(page, () => window.__ssb.specimen.info().clipping)) === 1, JSON.stringify([sec, cursor0]));
+    await page.fill('#ssb-spec-section', '25');
+    await page.dispatchEvent('#ssb-spec-section', 'input');
+    await nextFrames(page, 3);
+    const cur = await spec(page, () => window.__ssb.specimen.cursor);
+    await page.waitForFunction((h) => location.hash.includes(h), `at=${cursor0[0]},${cursor0[1]},25`, { timeout: 3000 }).catch(() => {});     /* the URL follows a slider once it settles */
+    check('section: the slider moves the cursor along the axis (the CT crosshair), in mm, and the URL follows', Math.abs(cur[2] - 25) < 1e-6 && cur[0] === cursor0[0] && (await page.evaluate(() => location.hash)).includes(`at=${cursor0[0]},${cursor0[1]},25`), JSON.stringify(cur));
+    const line = (await project(page, [0, -40, 25])).y - off.rect.y;     /* the cut plane seen edge-on is a band a few px thick under perspective: keep clear of it */
+    const on = await canvasImage(page);
+    const aboveOff = lit(off.img, off.rect, 0, line - 12);
+    const aboveOn = lit(on.img, on.rect, 0, line - 12);
+    const belowOn = lit(on.img, on.rect, line + 12, on.img.height);
+    check('section: the axial cut removes everything above the plane (nothing is drawn above it; there was plenty before) and keeps what is below',
+      aboveOff > 500 && aboveOn === 0 && belowOn > 500, JSON.stringify({ aboveOff, aboveOn, belowOn, line }));
+    await page.click('#ssb-spec-flip');
+    await nextFrames(page, 3);
+    const flipped = await canvasImage(page);
+    const flipAbove = lit(flipped.img, flipped.rect, 0, line - 12);
+    const flipBelow = lit(flipped.img, flipped.rect, line + 12, flipped.img.height);
+    check('section: "keep the other side" keeps what is above the plane and removes what is below', flipAbove > 500 && flipBelow === 0, JSON.stringify({ flipAbove, flipBelow, line }));
+    await page.click('#ssb-spec button[data-section="coronal"]');
+    await page.click('#ssb-spec button[data-section="sagittal"]');
+    check('section: only one plane at a time (the section follows its axis)', (await spec(page, () => window.__ssb.specimen.section.axis)) === 'sagittal' && (await spec(page, () => window.__ssb.specimen.info().clipping)) === 1);
+    /* the CT stage and the lab never see the cut */
+    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await nextFrames(page, 2);
+    check('section: leaving the specimen removes the clip (the lab and CT are never cut)', (await spec(page, () => window.__ssb.specimen.info().clipping)) === 0);
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    await nextFrames(page, 2);
+    check('section: …and returning restores it at the cursor', (await spec(page, () => window.__ssb.specimen.info().clipping)) === 1 && (await spec(page, () => window.__ssb.specimen.section.axis)) === 'sagittal');
+    await page.click('#ssb-spec button[data-section="off"]');
+    check('section: Off removes the cut', (await spec(page, () => window.__ssb.specimen.info().clipping)) === 0);
+    await context.close();
+  }
+
+  /* ===== section caps: solid bone is capped exactly where the plane cuts bone ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const probes = sectionProbes(truth.get('s.skull-base-region.M'), 0);
+    const inside = probes.filter((q) => q.inside);
+    check('caps: the midsagittal plane cuts bone at enough points of the raw data to test (≥ 40 well inside)', inside.length >= 40, `${inside.length} of ${probes.length}`);
+    await clickView(page, 'right');
+    const capColor = await page.evaluate(() => {
+      const probe = document.createElement('span');
+      probe.style.color = getComputedStyle(document.documentElement).getPropertyValue('--ssb-bone-cut').trim();
+      document.body.append(probe);
+      const c = getComputedStyle(probe).color.match(/\d+/g).map(Number);
+      probe.remove();
+      return c;
+    });
+    const near = (c) => Math.abs(c[0] - capColor[0]) + Math.abs(c[1] - capColor[1]) + Math.abs(c[2] - capColor[2]) <= 60;
+    const share = async () => {
+      await nextFrames(page, 3);
+      const { img, rect } = await canvasImage(page);
+      const px = await page.evaluate((ps) => ps.map((q) => window.__ssb.specimen.project([0, q.y, q.z])), inside);
+      let n = 0;
+      px.forEach((q) => { const x = Math.round(q.x - rect.x); const y = Math.round(q.y - rect.y); if (x >= 0 && y >= 0 && x < img.width && y < img.height && near(img.at(x, y))) n += 1; });
+      return n / inside.length;
+    };
+    await page.click('#ssb-spec button[data-bone="solid"]');
+    await page.click('#ssb-spec button[data-section="sagittal"]');
+    await page.fill('#ssb-spec-section', '0');
+    await page.dispatchEvent('#ssb-spec-section', 'input');
+    const solid = await share();
+    const capShown = await spec(page, () => window.__ssb.specimen.cap.shown);
+    check('caps: with solid bone the cut face is drawn in the cut-bone colour at ≥ 90% of the points where the raw data says the plane is inside bone', capShown && solid >= 0.9, `${r2(solid)}; cap ${capShown}`);
+    await page.click('#ssb-spec button[data-bone="xray"]');
+    const xray = await share();
+    check('caps: an X-ray ghost is not capped (the same points are mostly not cut-bone coloured, and no cap is drawn)', !(await spec(page, () => window.__ssb.specimen.cap.shown)) && xray < 0.6, `${r2(xray)}`);
+    await page.click('#ssb-spec button[data-bone="solid"]');
+    await page.click('#ssb-spec button[data-section="off"]');
+    check('caps: with no section there is no cap', !(await spec(page, () => window.__ssb.specimen.cap.shown)));
+    await page.click('#ssb-spec button[data-section="axial"]');
+    await page.fill('#ssb-spec-section', '30');
+    await page.dispatchEvent('#ssb-spec-section', 'input');
+    await page.click('#ssb-spec button[data-bone="hidden"]');
+    check('caps: with the bone hidden there is nothing to cap', !(await spec(page, () => window.__ssb.specimen.cap.shown)));
+    /* what the cut took away cannot be picked */
+    await page.click('#ssb-spec button[data-bone="xray"]');
+    await clickView(page, 'superior');
+    const aim = await project(page, [0, -45, 60]);        /* above the plane at S 30: cut away */
+    const hits = await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y), [aim.x, aim.y]);
+    check('section: surfaces on the cut-away side are not picked (there are hits below, and every hit lies on the kept side of the plane)', hits.length >= 1 && hits.every((h) => h.point[2] <= 30.1), JSON.stringify(hits.map((h) => [h.key, r2(h.point[2])])));
+    await context.close();
+  }
+
+  /* ===== stages: lab and CT come and go, nothing leaks, the camera comes back ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    await clickView(page, 'right');
+    const camA = await spec(page, () => window.__ssb.specimen.camera());
+    const geo0 = await spec(page, () => window.__ssb.specimen.info().geometries);
+    for (let i = 0; i < 3; i++) {
+      await page.click('#ssb-stage-mode [data-stage="lab"]');
+      await page.waitForFunction(() => window.__ssb.lab && window.__ssb.lab.builds > 0 && !window.__ssb.specimen.active);
+      await nextFrames(page, 3);
+      await page.click('#ssb-stage-mode [data-stage="specimen"]');
+      await page.waitForFunction(() => window.__ssb.specimen.active);
+      await nextFrames(page, 4);
+    }
+    const camB = await spec(page, () => window.__ssb.specimen.camera());
+    const geo1 = await spec(page, () => window.__ssb.specimen.info().geometries);
+    check('stages: after three trips through the lab the specimen is back with the camera where the reader left it', arrEq(camA.position, camB.position, 1e-3) && arrEq(camA.target, camB.target, 1e-3), JSON.stringify([camA.position, camB.position]));
+    check('stages: no geometry leaks across stage switches (GPU geometry count is back to what it was)', geo1 <= geo0, `${geo0} -> ${geo1}`);
+    check('stages: the lab did not dispose the specimen (every node is still there and drawn)', (await specNodes(page)).length === truth.size && (await spec(page, () => window.__ssb.specimen.info().triangles)) > 100000);
+    /* and a pick still works after the round trip */
+    const aim = await spec(page, () => window.__ssb.specimen.screenOf('s.skull-base-region.M'));
+    check('stages: picking still works after the round trip', aim && (await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y).length, [aim.x, aim.y])) >= 1);
+    await context.close();
+  }
+
+  /* ===== bad packs: a message in place, never a blank stage ===== */
+  {
+    const real = (name) => fs.readFileSync(path.join(ROOT, 'ssb/models', name));
+    const truncated = (name) => (route) => route.fulfill({ status: 200, headers: RAW, body: real(name).subarray(0, Math.floor(real(name).length / 2)) });
+
+    /* core truncated */
+    {
+      const { context, page, warnings } = await openSpecimen(browser, base, '', { routes: { 'core.glb.gz': truncated('core.glb.gz') } });
+      const info = await page.evaluate(() => ({
+        status: window.__ssb.specimen.status, installed: window.__ssb.specimen.installed, msg: document.getElementById('ssb-stage-msg').textContent,
+        shown: !document.getElementById('ssb-stage-msg').hidden, axis: [...document.querySelectorAll('.ssb-axis-label')].map((e) => getComputedStyle(e).visibility),
+        treeItems: document.querySelectorAll('#ssb-tree button[data-id]').length, packs: Object.fromEntries(Object.entries(window.__ssb.specimen.packs).map(([k, v]) => [k, v.state])),
+      }));
+      check('bad pack: a truncated core.glb.gz is a message in place (status error, "could not be loaded"), nothing installed', info.status === 'error' && !info.installed && info.shown && /could not be loaded/i.test(info.msg) && /damaged|gzip|cut/i.test(info.msg), JSON.stringify(info));
+      check('bad pack: the stage is not blank — the placeholder grid and axes stay, and the structure list is there — and nothing is added to a missing core', info.axis.every((v) => v === 'visible') && info.treeItems > 20 && info.packs.core === 'failed' && info.packs['sphenoid-sellar'] === 'pending', JSON.stringify(info));
+      check('bad pack: the problem is a console.warn, not an error', warnings.some((w) => /core/.test(w)), warnings.join(' | '));
+      const sel = await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); return document.querySelector('#ssb-panel-body [data-entity]') !== null; });
+      check('bad pack: graph mode works (selecting in the tree opens the panel)', sel);
+      await context.close();
+    }
+    /* a region pack truncated: the rest still shows */
+    {
+      const { context, page } = await openSpecimen(browser, base, '', { routes: { 'ethmoid-frontal.glb.gz': truncated('ethmoid-frontal.glb.gz') } });
+      const info = await page.evaluate(() => ({
+        status: window.__ssb.specimen.status, installed: window.__ssb.specimen.installed, note: document.getElementById('ssb-stage-note').textContent, title: document.getElementById('ssb-stage-note').title,
+        packs: Object.fromEntries(Object.entries(window.__ssb.specimen.packs).map(([k, v]) => [k, v.state + ':' + v.nodes.length])),
+        status2: document.querySelector('#ssb-spec .ssb-param-src:last-of-type') ? document.querySelector('#ssb-spec .ssb-param-src:last-of-type').textContent : '', frames: window.__ssb.specimen.renders,
+      }));
+      check('bad pack: a truncated region pack is partial — the other packs show, the note says how many could not load, the reason is on it',
+        info.status === 'partial' && info.installed && /\d+ of \d+ packs could not be loaded/.test(info.note) && /ethmoid-frontal/.test(info.title) && info.packs['ethmoid-frontal'].startsWith('failed') && info.packs.core.startsWith('loaded:'), JSON.stringify(info));
+      await context.close();
+    }
+    /* not gzip at all, right name */
+    {
+      const { context, page } = await openSpecimen(browser, base, '', { routes: { 'core.glb.gz': (route) => route.fulfill({ status: 200, headers: RAW, body: Buffer.from('this is not a model') }) } });
+      const info = await page.evaluate(() => ({ status: window.__ssb.specimen.status, msg: document.getElementById('ssb-stage-msg').textContent }));
+      check('bad pack: a core file that is not a glTF binary is a message too', info.status === 'error' && /not a glTF binary/.test(info.msg), JSON.stringify(info));
+      await context.close();
+    }
+    /* no pack list */
+    {
+      const { context, page, errors } = await openSpecimen(browser, base, '', { track: false, routes: { 'packs.json': (route) => route.fulfill({ status: 404, body: 'not found' }) } });
+      const info = await page.evaluate(() => ({ status: window.__ssb.specimen.status, msg: document.getElementById('ssb-stage-msg').textContent, shown: !document.getElementById('ssb-stage-msg').hidden }));
+      check('bad pack: no packs.json is the "not in this build yet" message', info.status === 'absent' && info.shown && /not in this build yet/.test(info.msg), JSON.stringify(info));
+      check('bad pack: the only console noise is the expected 404 for the missing file', errors.every((e) => /404/.test(e.text)), JSON.stringify(errors));
+      await context.close();
+    }
+    /* a pack that appears, with nodes that must be skipped */
+    {
+      const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8'));
+      const have = new Set([...truth.keys()].map((k) => truth.get(k).id));
+      const fresh = [...GRAPH.values()].map((v) => v.entity).filter((e) => e.id.startsWith('s.') && !have.has(e.id) && (e.kind === 'bone' || e.kind === 'bone-part'))[0];
+      const dup = [...truth.keys()][0];
+      const dupNode = truth.get(dup);
+      const glb = zlib.gzipSync(makeGlb([
+        { id: fresh.id, side: 'R', center: [20, -40, 20], half: 3 },
+        { id: 's.not-in-the-graph', side: 'M', center: [0, -40, 20], half: 3 },
+        { id: dupNode.id, side: dupNode.side, center: [0, -40, 20], half: 3 },
+        { id: fresh.id, side: 'L', center: [5000, 0, 0], half: 3 },
+        { id: fresh.id, side: 'X', center: [0, 0, 0], half: 3 },
+      ]));
+      doc.packs.appeared = { file: 'appeared.glb.gz', bytes: glb.length, triangles: 60, nodes: { [`${fresh.id}.R`]: {} } };
+      const { context, page, warnings } = await openSpecimen(browser, base, '', { routes: {
+        'packs.json': (route) => route.fulfill({ status: 200, headers: { 'content-type': 'application/json' }, body: JSON.stringify(doc) }),
+        'appeared.glb.gz': (route) => route.fulfill({ status: 200, headers: RAW, body: glb }),
+      } });
+      const info = await page.evaluate(() => ({ status: window.__ssb.specimen.status, packs: window.__ssb.specimen.packs, keys: window.__ssb.specimen.nodes().map((n) => n.key), problems: window.__ssb.specimen.problems }));
+      const added = (await specNodes(page)).find((n) => n.key === `${fresh.id}.R`);
+      check('new pack: a pack that appears in packs.json is loaded with no code change (its valid node is in the registry, as bone)', info.packs.appeared && info.packs.appeared.state === 'loaded' && added && added.group === 'bone' && info.keys.length === truth.size + 1, JSON.stringify(info.packs.appeared));
+      check('new pack: nodes that are not in the graph, repeat a key, lie off the head or have no valid side are skipped, each with a console.warn (and the real packs are untouched)',
+        info.packs.appeared.nodes.length === 1 && info.problems.length >= 4 && warnings.filter((w) => /SSB specimen/.test(w)).length >= 4 && info.keys.filter((k) => truth.has(k)).length === truth.size && info.status === 'partial', JSON.stringify([info.problems, warnings.length]));
+      await context.close();
+    }
+  }
+
+  /* ===== WebGL missing, quality, theme, phones ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '', { webgl: false, wait: 'none' });
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    const info = await page.evaluate(() => ({ spec: window.__ssb.specimen, msg: document.getElementById('ssb-stage-msg').textContent, shown: !document.getElementById('ssb-stage-msg').hidden }));
+    check('no WebGL: there is no specimen stage, the stage says the 3D view needs WebGL 2, and graph mode works', info.spec === null && info.shown && /WebGL 2/.test(info.msg));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#q=lite');
+    await page.click('#ssb-spec button[data-bone="solid"]');
+    await nextFrames(page, 3);
+    const info = await page.evaluate(() => ({ q: window.__ssb.materials.quality, frames: window.__ssb.frames, bone: window.__ssb.specimen.bone }));
+    await page.mouse.move(600, 400);
+    const t0 = Date.now();
+    await page.click('#ssb-spec button[data-view="anterior"]');
+    await page.waitForFunction(() => !window.__ssb.specimen.camera().flying);
+    check('quality: under #q=lite the solid bone compiles and draws, and a view change stays interactive (< 4 s under SwiftShader)', info.q === 'lite' && info.bone === 'solid' && Date.now() - t0 < 4000, JSON.stringify({ ...info, ms: Date.now() - t0 }));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '', { viewport: { width: 390, height: 844 } });
+    const info = await page.evaluate(() => {
+      const d = document.getElementById('ssb-spec-dock').getBoundingClientRect();
+      const c = document.getElementById('ssb-canvas').getBoundingClientRect();
+      const st = document.getElementById('ssb-stage').getBoundingClientRect();
+      return { collapsed: document.getElementById('ssb-spec-dock').dataset.collapsed, dockW: d.width, canvasW: c.width, canvasH: c.height, stageW: st.width, scroll: document.documentElement.scrollWidth <= window.innerWidth, status: window.__ssb.specimen.status };
+    });
+    check('phone: the specimen loads, the layers dock is closed (a small tab at the foot of the stage), the canvas is the whole stage, no horizontal scroll',
+      info.status === 'ready' && info.collapsed === 'true' && info.dockW < 200 && info.canvasW >= info.stageW - 1 && info.scroll, JSON.stringify(info));
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'spec-phone.png') });
+    await page.click('#ssb-spec-toggle');
+    await nextFrames(page, 3);
+    const open = await page.evaluate(() => {
+      const d = document.getElementById('ssb-spec-dock').getBoundingClientRect();
+      const c = document.getElementById('ssb-canvas').getBoundingClientRect();
+      return { collapsed: document.getElementById('ssb-spec-dock').dataset.collapsed, canvasBottom: c.bottom, canvasH: c.height, dockTop: d.top, dockH: d.height, stageH: document.getElementById('ssb-stage').getBoundingClientRect().height, bodyScroll: document.getElementById('ssb-spec-body').scrollHeight > document.getElementById('ssb-spec-body').clientHeight };
+    });
+    check('phone: opening the layers gives the lower part of the stage to them, and the canvas gives way (the model stays in sight above them, not under them)',
+      open.collapsed === 'false' && open.canvasBottom <= open.dockTop + 1 && open.canvasH >= 150 && open.dockH <= open.stageH * 0.55, JSON.stringify(open));
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, 'spec-phone-layers.png') });
+    await page.click('#ssb-spec-toggle');
+    await nextFrames(page, 3);
+    check('phone: closing them gives the canvas the whole stage back', (await page.evaluate(() => document.getElementById('ssb-canvas').getBoundingClientRect().height)) >= info.canvasH - 1);
+
+    await context.close();
+  }
+
+  /* ===== screenshots ===== */
+  if (SHOTS) {
+    fs.mkdirSync(SHOTS, { recursive: true });
+    const { context, page } = await openSpecimen(browser, base, '', { track: false });
+    const shot = async (name) => { await nextFrames(page, 3); await page.waitForTimeout(250); await page.screenshot({ path: path.join(SHOTS, `spec-${name}.png`) }); };
+    await shot('default');
+    await clickView(page, 'anterior'); await shot('anterior');
+    await clickView(page, 'right'); await shot('lateral-right');
+    await clickView(page, 'superior'); await shot('superior');
+    await clickView(page, 'oblique');
+    await page.click('#ssb-spec button[data-bone="solid"]'); await shot('solid');
+    await clickView(page, 'right');
+    await page.click('#ssb-spec button[data-section="sagittal"]');
+    await page.fill('#ssb-spec-section', '2'); await page.dispatchEvent('#ssb-spec-section', 'input');
+    await shot('section');
+    await clickView(page, 'oblique'); await shot('section-oblique');
+    await page.click('#ssb-spec button[data-section="off"]');
+    await page.click('#ssb-spec button[data-bone="xray"]');
+    await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id="s.frontal-sinus"]').click(); });
+    await page.waitForFunction(() => !window.__ssb.specimen.camera().flying);
+    await shot('selection');
+    await page.click('#ssb-spec-landmarks');
+    await clickView(page, 'anterior');
+    await shot('landmarks');
+    await page.click('.site-theme-toggle');
+    await shot('dark');
+    await context.close();
+  }
+}
+
 /* ---------------- the suite ---------------- */
 
 async function main() {
@@ -855,6 +1742,11 @@ async function main() {
   if (ONLY === 'ct') {
     await ctUnitTests();
     await ctTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'specimen') {
+    await specimenUnitTests();
+    await specimenTests(browser, base);
     return finish(browser, server);
   }
 
@@ -1313,6 +2205,10 @@ async function main() {
   /* ===== 7. CT mode (js/ssb/volume.js, mode-ct.js, ui-ct.js; docs/ssb.md 3, 5.6) ===== */
   await ctUnitTests();
   await ctTests(browser, base);
+
+  /* ===== 8. the Specimen stage (js/ssb/geo-specimen.js, mode-specimen.js, ui-specimen.js; docs/ssb.md 3, 5.3, 7) ===== */
+  await specimenUnitTests();
+  await specimenTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

@@ -6,6 +6,12 @@
    escapes first (docs/ssb.md 7.6). A [[id]] link inside the panel selects
    that entity. The pearls shown follow the depth (tier) setting.
 
+   `annotate(id)` (optional) may return one more node for the entry's head: the
+   specimen stage uses it to say the reference specimen has no geometry for
+   the entry. mountPanel returns { refresh }, which redoes that one line when
+   the answer to annotate changes with no change of selection (it touches
+   nothing else, least of all the sheet).
+
    On phones the panel is a bottom sheet (ssb.css): the handle button
    toggles data-sheet; on desktop that attribute is inert.
    ============================================================= */
@@ -21,7 +27,7 @@ function el(tag, cls, text) {
 const asList = (v) => (Array.isArray(v) ? v : typeof v === 'string' && v ? [v] : []);
 const words = (s) => String(s).replace(/-/g, ' ');
 
-export function mountPanel({ panel, body, handle, title, live, graph, store }) {
+export function mountPanel({ panel, body, handle, title, live, graph, store, annotate = null }) {
     /* ---- small builders ---- */
 
     const rich = (tag, cls, text) => {
@@ -319,6 +325,22 @@ export function mountPanel({ panel, body, handle, title, live, graph, store }) {
 
     let shownId = null;
 
+    function noteFor(id) {
+        try { return annotate ? annotate(id) : null; } catch (err) { console.error(err); return null; }
+    }
+
+    /* The annotation of the entry on show, again (the specimen's packs arrived,
+       or the stage changed). */
+    function refreshNote() {
+        const id = store.get().selection;
+        const art = body.querySelector('article.ssb-entity');
+        if (!art || !id || art.dataset.entity !== id) return;
+        const old = art.querySelector('.ssb-geo-note');
+        if (old) old.remove();
+        const note = noteFor(id);
+        if (note) art.querySelector('.ssb-entity-head').after(note);
+    }
+
     function render() {
         const st = store.get();
         const id = st.selection;
@@ -339,6 +361,8 @@ export function mountPanel({ panel, body, handle, title, live, graph, store }) {
         const art = el('article', 'ssb-entity');
         art.dataset.entity = id;
         art.append(head(e, type));
+        const note = noteFor(id);
+        if (note) art.append(note);
         for (const sec of [...(BODY[type] ? BODY[type](e, st) : []), type === 'sources' ? null : sourcesSec(e)]) {
             if (sec) art.append(sec);
         }
@@ -373,4 +397,5 @@ export function mountPanel({ panel, body, handle, title, live, graph, store }) {
         panel.dataset.sheet = 'open';
         handle.setAttribute('aria-expanded', 'true');
     }
+    return { refresh: refreshNote };
 }

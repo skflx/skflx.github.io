@@ -49,6 +49,10 @@ const PAGES = [
      frame (window.__ssb is the read-only test window, js/ssb/main.js). */
   { path: 'ssb.html', ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree button[data-id]').length > 0
       && !!window.__ssb && window.__ssb.frames > 0) },
+  /* The Specimen stage (the default one): every pack listed in packs.json is
+     loaded and drawn under SwiftShader; behaviour is tools/test-ssb.mjs. */
+  { path: 'ssb.html', ready: (p) => wait(p, () => !!window.__ssb && !!window.__ssb.specimen && window.__ssb.specimen.status === 'ready'
+      && window.__ssb.specimen.renders > 0 && window.__ssb.specimen.nodes().length > 0, 40000) },
   /* Regression, same class as the OKSAT one above: the hash is untrusted. A
      payload in #s= must not become an element, must not run, and must not
      select anything (ids are matched against the graph index). */
