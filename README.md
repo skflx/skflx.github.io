@@ -93,14 +93,18 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 │
-├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode + variant lab; docs/ssb.md)
+├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, variant lab, CT; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens
-│   ├── js/ssb/             #   ES modules (graph, state, scene, materials, lab, UI); stamps.js is generated
+│   ├── js/ssb/             #   ES modules (graph, state, scene, materials, volume, lab, CT, UI); stamps.js is generated
 │   ├── js/ssb/dioramas/    #   parametric dioramas for the variant lab
 │   └── js/vendor/three-0.186.1/  # three.js, pinned and self-hosted
-├── ssb/                    # SSB data (knowledge graph, references)
+├── ssb/                    # SSB data (knowledge graph, references, reference specimen)
 │   ├── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
-│   └── reference/          #   external atlases crosswalked to the graph (text only)
+│   ├── reference/          #   external atlases crosswalked to the graph (text only)
+│   ├── ct/                 #   specimen CT volume + label volume (pipeline output)
+│   ├── geometry/           #   label table, landmarks (pipeline output, keyed by graph ids)
+│   ├── models/             #   specimen meshes, gzipped glTF packs (pipeline output)
+│   └── LICENSE-data.md     #   provenance and permission of the specimen data
 │
 ├── css/site.css            # The design system: tokens, faces, shared chrome
 ├── js/site.js              # Day/night toggle
@@ -125,7 +129,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
-│   ├── test-ssb.mjs        #   SSB variant lab: dioramas, pathway rules, picking, hash, tissue materials
+│   ├── test-ssb.mjs        #   SSB: variant lab, pathway rules, picking, hash, tissue materials, CT mode
+│   ├── ssb-fixture-ct.mjs  #   synthetic CT volume the SSB tests route in (never written to ssb/)
 │   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
 │   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
 │

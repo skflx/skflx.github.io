@@ -604,10 +604,10 @@ leaves the page useful. Model tier = who does the work best per token.
 
 | Phase | Deliverable | Who |
 |---|---|---|
-| 0 | Architecture, schema, validator, draft graph, image briefs *(this change)* | Opus authors per region; Sonnet research and citation checks; Opus adversarial review |
-| 1 | Walking skeleton: vendored three.js, `ssb.html`, module stamping, graph mode (tree, search, panels, procedures as text), smoke entry | Sonnet |
+| 0 | Architecture, schema, validator, draft graph, image briefs *(done)* | Opus authors per region; Sonnet research and citation checks; Opus adversarial review |
+| 1 | Walking skeleton: vendored three.js, `ssb.html`, module stamping, graph mode (tree, search, panels, procedures as text), smoke entry *(done)* | Sonnet |
 | 2 | Dioramas `ethmoid-roof`, `frontal-recess` *(done)*, `sphenoid`; variant lab; picking → panels *(done)* | Opus (parametric anatomy), Sonnet (wiring) |
-| 3 | Reference specimen: dataset chosen, segmented, pipeline, packs, geometry ↔ graph checks | Owner (dataset, segmentation); Sonnet (pipeline) |
+| 3 | Reference specimen: dataset chosen, segmented, pipeline, packs, geometry ↔ graph checks *(stage B done: CT, named air spaces, landmarks, packs; stage C — walls, sweeps, distance fields — next; the Specimen stage that shows the packs is in progress)* | Owner (dataset, decisions); Opus (reconstruction, anatomy-critical), Sonnet (viewer) |
 | 4 | Endoscope mode: fulcrum optics, collision, proximity HUD, stations | Opus (optics/constraints), Sonnet (UI) |
 | 5 | CT mode: triplanar, label overlay, crosshair sync *(done on the pipeline's volume; the oblique slice down the scope axis and 3D-cursor sync wait for endoscope mode)* | Sonnet |
 | 6 | Procedure mode: `removes` states, hazards in scene, station poses | Opus (content), Sonnet (wiring) |

@@ -105,9 +105,20 @@ deleted.
 ## SSB — Sinus & Skull Base 3D
 
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
-links) and a 3D stage with two stages: the specimen placeholder (the
-reference specimen is being reconstructed from the UW atlas) and the
-variant lab — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
+links) and three stages: the specimen (a placeholder scene until the
+Specimen stage lands), CT, and the variant lab. The **reference specimen**
+is reconstructed from the UW atlas (`tools/ssb-pipeline/uw/`, provenance
+`ssb/LICENSE-data.md`): its axial and sagittal stacks are one CT (the
+coronal is another head, `ssb/reference/uw-sinusanatomy2/README.md`),
+resampled to RAS mm with the face masked (`ssb/ct/`), the air spaces split
+into named compartments seeded by UW's own label arrows (label volume +
+`ssb/geometry/labels.json`; the anterior/posterior ethmoid split is a
+proxy for the basal lamella), landmarks (`ssb/geometry/landmarks.json`),
+and meshes packed by region (`ssb/models/`); `tools/check-data.mjs` fails
+if any of it names an id the graph lacks. **CT mode** (`mode-ct.js`,
+`docs/ssb.md` §3) shows it as axial/coronal/sagittal canvases with a shared
+crosshair, window presets, label outlines and hover names, without WebGL.
+The variant lab — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
 supraorbital cell) and `frontal-recess` (IFAC cells, uncinate attachment,
 computed drainage pathway) dioramas, with presets from the graph's
 classifications, picking into the panels, hatched hazard sites and a
@@ -135,11 +146,17 @@ every labeled frame's labels and arrow tips (`slices.json`), from which
 sources; 60 spatial claims testable against UW, 58 agree, the other 2 a
 documented arrow-placement artifact.
 
-**Next:** Owner review of the two dioramas' schematic proportions (each
-module's header lists what the graph does not give) and of the graph (tier
-1 first) — flip `review` to verified; the `sphenoid` diorama (rest of
-phase 2); the reference specimen (phase 3, `docs/ssb.md` §13). Known
-content gaps:
+**Next:** The Specimen stage (the packs in 3D: layers, picking, landmarks,
+CT↔3D cursor, section plane); reconstruction stage C (bony walls as
+resection units, vessel/nerve sweeps along their canals, distance fields
+for the proximity HUD, the graph's spatial claims tested in 3D); the
+endoscope stage (`docs/ssb.md` §3: fulcrum optics, collision, HUD, station
+poses); the `sphenoid` diorama (rest of phase 2); procedure mode and
+self-test (phases 6–7). Owner review of the two dioramas' schematic
+proportions (each module's header lists what the graph does not give) and
+of the graph (tier 1 first) — flip `review` to verified; record the UW
+authors' written permission beside `ssb/LICENSE-data.md`. Known content
+gaps:
 - Anatomy: petrolingual/parasellar ligaments, carotid cave, jugular
   foramen and CN IX–XI; orbital septum, superior ophthalmic vein, frontal
   lobe beyond gyrus rectus, hard palate, parapharyngeal space.
