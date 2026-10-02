@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=3763933b';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=4a3ac221';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=d27e5b3d';
-import { PLANES } from './volume.js?v=32f42275';
-import { CT_PLANES } from './state.js?v=d1632bce';
-import { REGION_LABEL } from './graph.js?v=c5a342e4';
+import { PLANES } from './volume.js?v=3cbe3dc2';
+import { CT_PLANES } from './state.js?v=cd9bf710';
+import { REGION_LABEL } from './graph.js?v=6a1cdded';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -104,6 +104,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let framed = false;             /* the default view has been applied */
     const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
+    let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
+    let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
 
     const active = () => { const s = store.get(); return !s.lab && !s.ct; };
@@ -252,7 +254,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
                 if (layers.bone === 'xray') look = { ...look, xray: true };
             } else if (layers.mucosa && u.group === 'air') {
                 /* the lining: opaque from within, a translucent shell from outside (as X-ray ghosts the bone) */
-                look = inside ? { kind: 'mucosa', doubleSide: true } : { kind: 'mucosa', translucent: true, doubleSide: true, opacity: 0.4 };
+                look = inside || insideForced ? { kind: 'mucosa', doubleSide: true } : { kind: 'mucosa', translucent: true, doubleSide: true, opacity: 0.4 };
             }
             if (u.group !== 'bone' && isSel) {
                 look = { ...look, space: false, translucent: true, onTop: true, ...(partner ? { opacity: 0.3 } : {}) };
@@ -463,9 +465,12 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
-    function setMucosa(on) {
-        if (!!on === layers.mucosa) return false;
+    /* opts.inside: true makes the lining opaque whatever the camera's position (the scope), false releases it. */
+    function setMucosa(on, opts = {}) {
+        const force = opts.inside === undefined ? insideForced : !!opts.inside;
+        if (!!on === layers.mucosa && force === insideForced) return false;
         layers.mucosa = !!on;
+        insideForced = force;
         paint();
         emit();
         return true;
@@ -474,8 +479,11 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     /* Is the camera inside the box of the air spaces? Re-paints when it crosses. */
     function checkInside() {
         if (!specimen || !layers.mucosa) return;
-        const keys = [...specimen.nodes].filter(([, m]) => m.userData.group === 'air').map(([k]) => k);
-        const b = keys.length ? specimen.boundsOf(keys) : null;
+        if (!airBox) {
+            const keys = [...specimen.nodes].filter(([, m]) => m.userData.group === 'air').map(([k]) => k);
+            airBox = keys.length ? specimen.boundsOf(keys) : null;
+        }
+        const b = airBox;
         const c = sceneToRas(stage.camera.position.toArray());
         const now = !!b && [0, 1, 2].every((n) => c[n] >= b.min[n] && c[n] <= b.max[n]);
         if (now !== inside) { inside = now; paint(); }
@@ -539,6 +547,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     }
 
     function onPack(pack) {
+        airBox = null;
         if (pack.state === 'loaded' && !installed) install();
         if (installed) {
             buildMarkers();
@@ -762,7 +771,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             if (meta.source !== 'scene') focusKey = null;
             choosePrimary();
             paint();
-            if (now && meta.source !== 'scene') frameSelection();
+            if (now && meta.source !== 'scene' && !state.scope) frameSelection();      /* the scope owns the camera */
             emit();
         }
         if (state.cursor !== prev.cursor) {

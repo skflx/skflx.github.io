@@ -157,7 +157,7 @@ export function formatHash(state, labs = {}) {
     if (state.ct && !state.lab && clampCtPlane(state.ct.plane)) {
         parts.push('ct=' + CT_CODE[state.ct.plane]);
         if (state.ct.at) parts.push('at=' + atText(state.ct.at));
-    } else if (!state.lab && state.scope) parts.push('scope=' + formatScope(state.scope));
+    } else if (!state.lab && state.scope) parts.push('scope=' + formatScope(state.scope));      /* the link is the pose alone: the shared cursor (`at`) is deliberately not written, so a reload opens CT at the volume centre */
     else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';

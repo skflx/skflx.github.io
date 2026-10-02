@@ -23,7 +23,7 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=3763933b';
+import { loadLandmarks } from './geo-specimen.js?v=4a3ac221';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { LENSES, POSE_DEFAULT, RANGES, clampPose, frameOf, lightPostAngle, tipOf, verticalFov } from './scope.js?v=06f6a501';
 
@@ -112,7 +112,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         }
         spot.visible = true;
         specimen.setBone('hidden');
-        specimen.setMucosa(true);
+        specimen.setMucosa(true, { inside: true });
         if (!stopFrames) stopFrames = stage.onFrame(onFrame);
         apply();
         emit();
@@ -131,7 +131,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             camera.near = saved.near;
             camera.updateProjectionMatrix();
             specimen.setBone(saved.bone);
-            specimen.setMucosa(saved.mucosa);
+            specimen.setMucosa(saved.mucosa, { inside: false });
             stage.setPose(saved.pose);        /* also releases the held pose */
             saved = null;
         }

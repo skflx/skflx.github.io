@@ -3,7 +3,7 @@
    cache-busted the same way the module graph is (docs/ssb.md 7.2). */
 export const STAMPS = {
     "ssb/content/ethmoid-frontal-orbit.json": "0c059490",
-    "ssb/content/nasal-maxillary-ppf.json": "aa154cea",
+    "ssb/content/nasal-maxillary-ppf.json": "f3364796",
     "ssb/content/pathology-inflammatory.json": "eee42381",
     "ssb/content/pathology-neoplastic.json": "781d9627",
     "ssb/content/sources.json": "a55de1cf",

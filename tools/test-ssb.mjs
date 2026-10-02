@@ -1971,6 +1971,9 @@ async function scopeTests(browser, base) {
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
     const info = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash }));
     check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 30, yaw: 10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,30,10,0,0,30', JSON.stringify(info));
+    await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); });
+    await nextFrames(page, 3);
+    check('scope: selecting a structure while in the scope starts no camera flight (the scope owns the camera)', (await spec(page, () => window.__ssb.specimen.camera().flying)) === false);
     await page.click('#ssb-stage-mode [data-stage="ct"]');
     await nextFrames(page, 2);
     const ct = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, active: window.__ssb.scope.active, engaged: window.__ssb.scope.engaged, hash: location.hash, controls: window.__ssb.scope.controlsEnabled(), bone: window.__ssb.specimen.bone }));
@@ -1979,6 +1982,14 @@ async function scopeTests(browser, base) {
     await nextFrames(page, 3);
     const back = await spec(page, () => window.__ssb.specimen.camera());
     check('scope: coming back to the specimen after CT shows the orbit view, not the scope\'s tip (the camera is outside the head, a normal distance from its target)', back.distance > 60 && back.position.some((v) => Math.abs(v) > 40), JSON.stringify(back));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,0,0,0,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 3);
+    const air = (await specNodes(page)).filter((n) => n.group === 'air');
+    check('scope: at depth 0 (the tip in front of the cavity, outside the air spaces\' box) the lining is still opaque, not 0.4-opacity shells', air.length > 0 && air.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(air.filter((n) => n.transparent).map((n) => n.key)));
     await context.close();
   }
   for (const hash of ['#scope=R,40,0,0,0,31', '#scope=X,40,0,0,0,0', '#scope=' + encodeURIComponent('<img src=x id=pwnscope onerror=window.__pwned=1>'), '#scope=R,1,2,3']) {

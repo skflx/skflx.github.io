@@ -5478,10 +5478,9 @@
       "method": "cadaver",
       "conf": "low",
       "what": "Approximate maximum surface area of the posterior pedicle inferior turbinate flap, as tabulated in the atlas chapter.",
-      "note": "A long, narrow flap with limited anterior reach; a textbook table value derived from the literature, without a stated n.",
+      "note": "Second-hand: a textbook table value (about 2.4 cm², a long, narrow flap with limited anterior reach) with no n. The primary report (Fortes 2007) is a four-patient series whose abstract gives no area, so the figure's origin is not verified here; check it against the chapter's own reference list before relying on it.",
       "src": [
-        "src.chiu-2019-ch31",
-        "src.fortes-2007-itf"
+        "src.chiu-2019-ch31"
       ],
       "review": "draft"
     }

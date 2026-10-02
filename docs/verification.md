@@ -283,7 +283,7 @@ contrast) stays a human check: `--shots` writes `ct-*.png`.
 `docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
 the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the
 scope's own side, unit vectors, lens 0 = shaft, lens 30 at roll 0 looks up as
-`sin(pitch + 30°)`, the upright horizon, tip = fulcrum at depth 0, the light
+`sin(pitch + 30°)`, an image up that is orthonormal to the view and continuous through the zenith (no flip as a 70° view passes the vertical), tip = fulcrum at depth 0, the light
 post opposite the lens offset) and the `#scope=` codec and store (round trip,
 hostile values clamped or ignored, stage exclusivity); in the page, the camera
 is exactly the pose's tip and view, keys / drag / wheel / sliders change the

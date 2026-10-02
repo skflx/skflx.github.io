@@ -196,7 +196,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 - **Endoscope stage** (`scope.js`, `mode-endoscope.js`, `ui-endoscope.js`,
   `#scope=`) — a first-person rigid scope as a camera pose over the
   Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a
-  0 / 30 / 45 / 70° lens with an upright horizon and a light-post
+  0 / 30 / 45 / 70° lens with a camera head that stays upright (no image flip through the zenith) and a light-post
   indicator, a spotlight at the tip, the lining drawn as mucosa from
   inside. No collision or HUD yet.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
