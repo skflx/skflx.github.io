@@ -66,6 +66,9 @@
   --ssb-select: #FFB000;
   /* Landmark markers on the specimen: reference points, the science signal. */
   --ssb-landmark: var(--signal-2);
+  /* Vessels (signal: act, they bleed) and nerves/ducts (ink) as tubes on the specimen. */
+  --ssb-sweep-artery: var(--signal);
+  --ssb-sweep-nerve: var(--ink);
 
   /* CT stage: dark in both themes (like the endoscope and Airway's stage).
      The orientation letters use the gizmo's axis hues, lightened for a dark
