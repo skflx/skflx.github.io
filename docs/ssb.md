@@ -1,11 +1,12 @@
 # SSB — Sinus & Skull Base 3D: architecture and conventions
 
-**Status (2026-10-02): phases 0, 1, 3 and 5 done, 2 half done; endoscope
-and soft tissue next.** `ssb.html` runs graph mode over the draft knowledge
-graph (`ssb/content/`, schema `docs/authoring-ssb.md`, validator
-`tools/ssb-content.mjs`) and three stages: the reference specimen
-reconstructed from the UW atlas (§5.1), CT (§3, §5.6; no WebGL needed), and
-the variant lab (§6). **What is done and what is next, task by task, with
+**Status (2026-10-02): phases 0, 1, 3 and 5 done, 2 half done, the endoscope
+rig built; its collision and soft tissue next.** `ssb.html` runs graph mode
+over the draft knowledge graph (`ssb/content/`, schema
+`docs/authoring-ssb.md`, validator `tools/ssb-content.mjs`) and four stages:
+the reference specimen reconstructed from the UW atlas (§5.1), the
+endoscope on it (§3), CT (§3, §5.6; no WebGL needed), and the variant lab
+(§6). **What is done and what is next, task by task, with
 who does it: `docs/ssb-roadmap.md`.** This file is the design; the roadmap
 is the board.
 
@@ -125,7 +126,12 @@ never reloads.
   scope and why posterior septectomy opens binostril work.
   The specimen's face mask removed the nose, so the fulcrum is a
   provisional schematic `lm.naris` until the nose exists (§5.7); the scope
-  sees the air spaces' surfaces drawn as mucosa.
+  sees the air spaces' surfaces drawn as mucosa. Built (`js/ssb/scope.js`:
+  the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
+  `ui-endoscope.js`): a scope pose is a camera over the Specimen stage
+  (`state.scope`, exclusive with the lab and CT), with a spotlight at the tip
+  and a 70° circular field of view; collision, the HUD and station flights
+  are the next work packages (`docs/ssb-roadmap.md`).
 - **CT.** Axial, coronal and sagittal slices of the specimen volume, each
   on its own canvas, radiological convention (patient right on the image's
   left) with orientation letters; one crosshair in RAS mm shared by the
@@ -328,7 +334,11 @@ Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the
 committed `ssb/ct/` volume, not the raw crawl, so it can be rerun in any
 session; it writes a `soft` pack, `ssb/geometry/charts.json`, and merges
 its landmarks and sweeps into the shared geometry files (never dropping
-other steps' keys; method per point in the `*.meta.json` files). Waypoint
+other steps' keys; method per point in the `*.meta.json` files). The
+sagittal chart is single-valued only where the surface does not fold back
+(a spur, a deviation): `charts.json` lists the cells that do under
+`unreliable`, and anything placed there is approximate. Where the septum is thicker than the wall unit's cap, or a turbinate abuts it, the patch is completed from the airway lining's medial-most sheet; those cells are `filled` (lower confidence), and one posterosuperior gap stays no-data. The `soft` pack
+is listed in `packs.json` like the others. Waypoint
 specs live in `tools/ssb-pipeline/uw/sweeps-soft.json` — anatomy as data,
 authored with sources, never hand-placed coordinates in content.
 
@@ -337,6 +347,98 @@ from the graph, presets from the procedure's own design ladder, parts
 named `<graph id>.<side>`, a *schematic on specimen* badge, and rules
 pinned in `tools/test-ssb.mjs` (the NSF pedicle contains the posterior
 septal artery; the superior cut stays below the olfactory strip).
+
+#### Flap overlay contract (ST3)
+
+*First pass by a Sonnet-class model at the owner's request, with sources in
+`ssb/content/` (ST0). Every default below that is not a cited graph value is
+marked schematic; the owner or a checkpoint should vet them.*
+
+**Inputs.** For side X: the septal chart `ssb/geometry/charts.json`
+`s.septal-mucosa.X` (chart (a, s) mm = RAS (A, S); `grid`, `polygon`,
+`unreliable`, `filled`); the landmarks `lm.sphenoid-ostium.X`,
+`lm.choanal-arch.M`, `lm.middle-turbinate-head.X`; the mesh of the same
+surface (for areas). From the chart: `top(a)` and `bottom(a)` (upper and
+lower occupied S at a), `post(s)` (smallest occupied A at height s) and the
+anterior edge `a_ant`. In the reference specimen the septal surface stops
+about 4 mm in front of the rostrum and at the masked vestibule, and has one
+no-data gap posterosuperiorly (A -45…-35, S 28–33): the overlay clips to
+what exists and says so.
+
+**Parameters** (sliders, presets as buttons, like a diorama):
+
+| Key | Range | Default | From |
+|---|---|---|---|
+| `design` | `short` · `full` · `extended` · `rescue` | `full` | `p.nasoseptal-flap` preop ladder |
+| `top_margin` (mm below the top of the septum) | 5–20; below 10 flagged "olfactory risk" | 15 (schematic) | `m.nsf-superior-incision` (10–20, conf low; one chapter accepts 5) |
+| `ostium_clearance` (mm below the ostium landmark, where the superior cut starts; negative = above it) | -4–6 | 2 (schematic: the graph has no ostium size) | `s.posterior-septal-artery-*-branch` (dominant branch always below the ostium plane). The atlas chapter on large defects starts the superior cut at the *superior* aspect of the ostium; `p.nasoseptal-flap` says the inferior margin: the range spans both |
+| `anterior_margin` (full, extended: mm behind the chart's anterior edge) | 0–10 | 0 (the specimen's chart ends at the masked vestibule) | `p.nasoseptal-flap` step 4 ("up to the mucocutaneous junction") |
+| `window` (rescue: side of the contralateral window beside the ostium, mm) | 3–8 | 5 (schematic: no size in the graph) | `p.nasoseptal-flap` rescue step |
+
+**Geometry** (chart mm; `s_o` = the ostium landmark's S, `s_c` = the choanal
+arch's S, `clr` = `ostium_clearance`):
+
+1. *Pedicle* — the segment of the posterior edge from `s_c` up to
+   `s_o - clr`. Its height `s_o - clr - s_c` must lie in 8–16 mm; the graph's
+   `m.choana-to-sphenoid-ostium` is 10–15 mm before the clearance (in the
+   specimen 12.2 mm right, 16.6 mm left: the specimen's ostia are 4 mm apart
+   in height).
+2. *Superior incision* — from the pedicle's upper end forward at
+   `s_sup(a) = min(s_o - clr, top(a) - top_margin)`: level at the ostium
+   margin, then following the septum's top down when the margin binds
+   (never closer to the top than `top_margin`; the atlas leaves 1–2 cm of superior septum when the defect is sellar or planum only, and needs no margin when the approach is transethmoid).
+3. *Posterior-inferior cut* — down the posterior edge from `s_c` along the
+   choanal arch and vomer to `bottom(post)`.
+4. *Inferior incision* — forward along `bottom(a)` (the septum–floor
+   junction; the lining turns onto the floor there).
+5. *Anterior cut* — a vertical line at `a_cut`: `short` = the A of
+   `lm.middle-turbinate-head.X` (the graph's "head of the MT"); `full` and
+   `extended` = `a_ant - anterior_margin` (a_ant as a negative number plus
+   the margin); `rescue` has none.
+6. *Outline* = the polygon pedicle → superior → anterior → inferior →
+   posterior-inferior, clipped to the chart's polygon.
+7. *Extended* draws the full outline plus a tab on the inferior border and a
+   readout "+ floor and inferior meatus, ≈ 20 mm longer, ≈ 774 mm²"
+   (`m.nsf-extended-gain`, 27 cadaver sides): the septal chart cannot hold
+   the floor, so the addition is a literature number, labelled as such, not
+   a drawn area.
+8. *Rescue* draws only the superior incision to `a_cut = lm.middle-turbinate-head`
+   (no flap is raised: area 0, the pedicle marked) and the `window` beside the
+   ostium, on the chart of the contralateral side.
+
+**Readouts.** Surface area in cm² of the specimen mesh triangles whose
+centroid's chart point lies in the outline (not the planar chart area);
+pedicle height; length along the outline's long axis; per design, the
+literature beside it (full: 17.12 cm² mean, `m.nsf-area`). The specimen's
+default full flap is only about half of its septal lining (the upper
+`top_margin` is left, and the masked vestibule and floor turn are missing),
+so the readout sits far below the literature figure; the abstract does not
+say whether that figure includes floor mucosa, so the gap is shown, not
+explained away. The share of outline length on `unreliable` or `filled` cells,
+shown as a "approximate" badge when above 0; badge **schematic on specimen**.
+
+**Tests `tools/test-ssb.mjs` must pin** (ST5):
+
+- the pedicle contains the posterior septal artery: the first point of both
+  `s.posterior-septal-artery-*-branch` sweeps of that side lies inside the
+  pedicle's chart box (s between `s_c` and `s_o - clr`, a within 4 mm of
+  `post(s)`), for the default parameters, on both sides;
+- the superior cut keeps at least `top_margin` from `top(a)` at every
+  sample, for every parameter in range (property test over a grid), and is
+  never above `s_o - clr`;
+- the area readout equals an independent point-in-polygon sum over the mesh
+  within 2 %;
+- `short` ⊂ `full` (area strictly smaller), both inside the chart polygon;
+  `rescue` has zero area and the same pedicle as `short`;
+- sides: the right and left overlays differ only through their own chart and
+  landmarks (swapping the data swaps the outlines);
+- determinism: the same parameters give the same polygon (hash it);
+- hostile `#flap=` values clamp or are ignored (as `#lab=` does).
+
+**Not in this contract** (later, on other surfaces): inferior and middle
+turbinate flaps and the lateral nasal wall flaps (they need lateral-wall
+charts), regional flaps (extranasal, outside the specimen), the contralateral
+reverse flap that resurfaces the donor septum.
 
 ## 6. Dioramas
 
@@ -401,6 +503,96 @@ medial to it), a plate to the skull base or a medial bend to the MT leaves
 only the infundibulum. `tools/test-ssb.mjs` checks every rule under all
 three attachments. The supraorbital ethmoid cell is posterolateral to the
 pathway rather than pushing it (the graph states a relation, not a push).
+
+### 6.1 The `sphenoid` diorama (D1 spec)
+
+*First pass by a Sonnet-class model at the owner's request; every fixed
+proportion is schematic and says so in the module header, and the rules are
+the graph's own definitions. To be vetted.*
+
+**Scene.** One standalone, bilateral model in a local RAS frame: origin on
+the sphenoid face at the midline and the ostium height, y negative
+posteriorly. Solids: the sinus as a superellipsoid pair (air) inside the
+sphenoid body; rostrum and anterior face with two ostia; roof (planum,
+tuberculum, sella as a bulge with its anterior and posterior wall planes);
+floor; clivus behind; the ICAs as tubes (parasellar and paraclival
+segments) in canals; optic nerves in canals; vidian canals; foramen
+rotundum (V2); the intersinus septum; the lateral recess; the anterior
+clinoid with its optic strut; an optional sphenoethmoidal (Onodi) cell.
+`kit.js` primitives only; the same `inside()` tests drive rendering and the
+rules. Fixed schematic sizes (stated in the header, not from the graph): sella
+AP length, ICA and optic canal diameters, wall thicknesses, sinus height.
+
+**`PARAMS`** (a `choice` or `toggle` where the graph defines classes, a
+range where it gives numbers):
+
+| Key | Type / range | Graph source |
+|---|---|---|
+| `pneum` | choice `conchal` · `presellar` · `sellar` · `postsellar` | `c.sphenoid-pneumatization` (preset codes) |
+| `lateral_recess` + `lr_extent` | toggle; extent lateral to the vidian canal–foramen rotundum line, 0–15 mm (schematic) | `v.lateral-recess-pneumatization` |
+| `clinoid_pneum` | toggle (air in the anterior clinoid via the optic strut) | `v.pneumatized-anterior-clinoid` |
+| `septum_on_ica` + `septum_shift` | toggle; shift of the main septum from the midline, -8…8 mm (schematic) | `v.intersinus-septum-on-ica`, `s.intersinus-septum` |
+| `ica_protrusion` | toggle | `v.ica-protrusion` |
+| `ica_dehiscence` | toggle (no bone over the exposed ICA) | `v.ica-dehiscence` |
+| `intercarotid` | 4–18 mm, medial wall to medial wall | `m.intercarotid-distance-narrowest` |
+| `optic_type` | choice 1 · 2 · 3 · 4 | `c.delano-optic-nerve` |
+| `optic_dehiscence` | toggle | `v.optic-canal-dehiscence` |
+| `onodi` | toggle (the sphenoethmoidal cell over the optic nerve; implied by `optic_type` 4) | `v.sphenoethmoidal-cell` |
+| `vidian_type` | choice 1 · 2 · 3 | `c.vidian-canal-type` |
+
+**`PRESETS`:** `c.sphenoid-pneumatization` (4 codes → `pneum`),
+`c.delano-optic-nerve` (1–4 → `optic_type`, `onodi` for 4),
+`c.vidian-canal-type` (1–3 → `vidian_type`). The graph is silent on joint
+configurations (e.g. which pneumatization goes with a lateral recess), so
+presets set one parameter and leave the rest at the default (`sellar`, all
+toggles off, `intercarotid` 12, `optic_type` 1, `vidian_type` 2).
+
+**`VIEWS`:** `sagittal` (default: reads the pneumatization), `axial` (septum,
+ICAs, optic canals), `coronal` (lateral recess, vidian canal, V2, carotid
+prominences), `oblique`.
+
+**`classify` / `readout` HUD lines:** pneumatization class; DeLano type;
+vidian type; "septum meets the ICA prominence: yes/no"; "intercarotid
+window: N mm"; "ICA dehiscent / protruding"; hazards named by their ids.
+
+**Hazard sites** (hatched, `userData.hazards`): the exposed ICA wall
+(`h.ica-injury-sphenoidotomy`, `h.septum-avulsion-ica` when the septum
+inserts on it); the optic canal where exposed (`h.optic-nerve-injury-sphenoid`,
+`h.optic-nerve-injury-onodi` with an Onodi cell); the vidian canal ridge
+(`h.ica-injury-vidian`).
+
+**Rules `tools/test-ssb.mjs` must pin** (computed from the solids on a voxel
+grid at 0.5 mm, as the frontal-recess rules are; none written in):
+
+1. *Pneumatization order.* Posterior air extent is strictly
+   conchal < presellar < sellar < postsellar; air lies under the sella
+   (between its anterior and posterior wall planes, below its floor) exactly
+   for `sellar` and `postsellar`; air lies behind the posterior sellar wall
+   plane exactly for `postsellar`; `conchal` leaves more than a few mm of
+   bone between sinus air and the sella.
+2. *Carotid prominence.* The fraction of an ICA segment's circumference
+   facing sinus air is 0 for `conchal`, and at least 0.5 exactly when the
+   segment is protruding (`v.ica-protrusion`'s own definition); `ica_protrusion`
+   with `conchal` is impossible and degrades to no protrusion (documented).
+3. *Septum on the ICA.* The minimum distance between the intersinus septum's
+   posterior end and the ICA canal wall is 0 exactly when `septum_on_ica` is
+   on and the sinus is at least `sellar`; otherwise it is positive.
+4. *DeLano.* Optic canal circumference facing air: type 1 → 0; type 2 → above
+   0 and below 0.5 (indenting); type 3 → at least 0.5 (traversing); type 4 →
+   an Onodi cell lies lateral to the nerve and shares air with the canal
+   wall; the nerve is never inside the sinus lumen as a free tube.
+5. *Intercarotid window.* The minimum distance between the two ICAs' medial
+   walls equals `intercarotid` within 0.5 mm over the whole range; `septum_shift`
+   does not change it.
+6. *Vidian.* Type 1: a ridge of positive height over the sinus floor;
+   type 2: the canal on the floor with a lower ridge (height below type 1's);
+   type 3: no ridge.
+7. *Lateral recess.* With `lateral_recess` on, sinus air extends lateral to
+   the vidian canal–foramen rotundum line by `lr_extent` (±1 mm); off, it
+   does not.
+8. *Names and ids.* Every part is `<graph id>.<side>` and its id resolves in
+   the graph; every hazard id resolves; the URL codec round-trips and clamps
+   hostile values; both themes compile.
 
 ## 7. Runtime architecture
 

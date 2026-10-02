@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=0b9a991b';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=4a3ac221';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=d27e5b3d';
-import { PLANES } from './volume.js?v=3c9cfa21';
-import { CT_PLANES } from './state.js?v=91f08185';
-import { REGION_LABEL } from './graph.js?v=6e35cf90';
+import { PLANES } from './volume.js?v=3cbe3dc2';
+import { CT_PLANES } from './state.js?v=cd9bf710';
+import { REGION_LABEL } from './graph.js?v=6a1cdded';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -102,7 +102,10 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false };
+    let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
+    let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
+    let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
 
     const active = () => { const s = store.get(); return !s.lab && !s.ct; };
@@ -249,9 +252,14 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             let look = u.look;
             if (u.group === 'bone') {
                 if (layers.bone === 'xray') look = { ...look, xray: true };
-            } else if (isSel) {
+            } else if (layers.mucosa && u.group === 'air') {
+                /* the lining: opaque from within, a translucent shell from outside (as X-ray ghosts the bone) */
+                look = inside || insideForced ? { kind: 'mucosa', doubleSide: true } : { kind: 'mucosa', translucent: true, doubleSide: true, opacity: 0.4 };
+            }
+            if (u.group !== 'bone' && isSel) {
                 look = { ...look, space: false, translucent: true, onTop: true, ...(partner ? { opacity: 0.3 } : {}) };
             }
+            u.drawn = look.kind;
             mesh.material = stage.materialsFor(look, { selected: primary, partner });
             mesh.renderOrder = isSel ? 5 : 0;
             mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : !layers.hidden.has(regionOf(mesh)));
@@ -457,6 +465,30 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
+    /* opts.inside: true makes the lining opaque whatever the camera's position (the scope), false releases it. */
+    function setMucosa(on, opts = {}) {
+        const force = opts.inside === undefined ? insideForced : !!opts.inside;
+        if (!!on === layers.mucosa && force === insideForced) return false;
+        layers.mucosa = !!on;
+        insideForced = force;
+        paint();
+        emit();
+        return true;
+    }
+
+    /* Is the camera inside the box of the air spaces? Re-paints when it crosses. */
+    function checkInside() {
+        if (!specimen || !layers.mucosa) return;
+        if (!airBox) {
+            const keys = [...specimen.nodes].filter(([, m]) => m.userData.group === 'air').map(([k]) => k);
+            airBox = keys.length ? specimen.boundsOf(keys) : null;
+        }
+        const b = airBox;
+        const c = sceneToRas(stage.camera.position.toArray());
+        const now = !!b && [0, 1, 2].every((n) => c[n] >= b.min[n] && c[n] <= b.max[n]);
+        if (now !== inside) { inside = now; paint(); }
+    }
+
     function setLandmarks(on) {
         if (!!on === layers.landmarks) return false;
         layers.landmarks = !!on;
@@ -515,6 +547,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     }
 
     function onPack(pack) {
+        airBox = null;
         if (pack.state === 'loaded' && !installed) install();
         if (installed) {
             buildMarkers();
@@ -725,6 +758,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         renders += 1;
         stage.camera.updateMatrixWorld();
         if (orient) orient.update(stage.camera.quaternion);
+        checkInside();
         placeLabels();
     }
 
@@ -737,7 +771,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             if (meta.source !== 'scene') focusKey = null;
             choosePrimary();
             paint();
-            if (now && meta.source !== 'scene') frameSelection();
+            if (now && meta.source !== 'scene' && !state.scope) frameSelection();      /* the scope owns the camera */
             emit();
         }
         if (state.cursor !== prev.cursor) {
@@ -793,6 +827,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get hiddenRegions() { return [...layers.hidden]; },
         get landmarksOn() { return layers.landmarks; },
         get sweepsOn() { return layers.sweeps; },
+        get mucosaOn() { return layers.mucosa; },
+        get mucosaInside() { return inside; },
         get sweeps() { return [...sweepList].filter(([, m]) => m.object.visible).map(([key]) => key); },
         get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
         get cap() { return { shown: !!cap.plane && cap.plane.visible, plane: cap.plane ? cap.plane.position.toArray() : null }; },
@@ -812,7 +848,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         /* every node: key, id, side, pack, layer group, region, visible, RAS box, triangles */
         nodes: () => (specimen ? [...specimen.nodes].map(([key, m]) => ({
             key, id: m.userData.id, side: m.userData.side, pack: m.userData.pack, group: m.userData.group, region: m.userData.region,
-            visible: m.visible, look: m.userData.look, triangles: m.userData.triangles, box: rasBox(key),
+            visible: m.visible, look: m.userData.look, drawn: m.userData.drawn || m.userData.look.kind, triangles: m.userData.triangles, box: rasBox(key),
             material: m.material.type, transparent: !!m.material.transparent, depthWrite: m.material.depthWrite,
             highlight: store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
             emissive: m.material.emissiveIntensity,
@@ -890,7 +926,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setView, setBone, setRegion, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setView, setBone, setRegion, setMucosa, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -901,6 +937,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get ready() { return installed; },
         get hasLandmarks() { return landmarks.size > 0; },
         get sweepsOn() { return layers.sweeps; },
+        get mucosaOn() { return layers.mucosa; },
         get hasSweeps() { return sweeps.size > 0; },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
         dispose,

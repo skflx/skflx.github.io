@@ -4,9 +4,6 @@
  "frame": "RAS millimetres (docs/ssb.md section 4); apply rasToScene at the root, as the dioramas do",
  "encoding": "glTF 2.0 binary, gzip; KHR_mesh_quantization: int16 POSITION dequantized by each node's translation/scale, int8 normalized NORMAL; no materials, no textures",
  "nodeNames": "<graph id>.<side>; node extras {id, side, name} (three.js strips dots from object names, so read userData.id / userData.side)",
- "proposedIds": {
-  "s.skull-base-region": "bony envelope of the sinonasal / ventral skull base region: bone (display >= 150, ~ +650 HU) within 12 mm of the named air spaces; no existing graph id covers the whole envelope (the graph splits bone into bones and bone parts). Rename or add to the graph before the viewer relies on it."
- },
  "notes": {
   "walls": "stage C resection units (tools/ssb-pipeline/uw/walls.py): each is the bone two named compartments share; several are proxies or orientation splits - the method per unit is in tools/ssb-pipeline/uw/registration.json \"walls.notes\". s.orbit is the orbital soft tissue (globe, fat, muscles) the walls face, not bone."
  },
@@ -302,11 +299,27 @@
      "vertices": 999
     }
    }
+  },
+  "soft": {
+   "file": "soft.glb.gz",
+   "bytes": 88654,
+   "bytes_uncompressed": 126140,
+   "triangles": 9999,
+   "nodes": {
+    "s.septal-mucosa.L": {
+     "triangles": 5000,
+     "vertices": 2683
+    },
+    "s.septal-mucosa.R": {
+     "triangles": 4999,
+     "vertices": 2659
+    }
+   }
   }
  },
  "totals": {
-  "bytes": 2785496,
-  "triangles": 312080
+  "bytes": 2874150,
+  "triangles": 322079
  },
  "license": "ssb/LICENSE-data.md"
 }

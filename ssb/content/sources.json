@@ -2007,6 +2007,192 @@
       "pmid": "30485224",
       "url": "https://pubmed.ncbi.nlm.nih.gov/30485224/",
       "doi": "10.3171/2018.4.JNS172447"
+    },
+    {
+      "id": "src.radiopaedia-nasal-septum",
+      "cite": "Radiopaedia.org. Nasal septum [Internet article]. https://radiopaedia.org/articles/nasal-septum (accessed 2026-10-02).",
+      "type": "atlas",
+      "verified": true,
+      "url": "https://radiopaedia.org/articles/nasal-septum"
+    },
+    {
+      "id": "src.radiopaedia-nasal-cavity",
+      "cite": "Radiopaedia.org. Nasal cavity [Internet article]. https://radiopaedia.org/articles/nasal-cavity (accessed 2026-10-02).",
+      "type": "atlas",
+      "verified": true,
+      "url": "https://radiopaedia.org/articles/nasal-cavity"
+    },
+    {
+      "id": "src.radiopaedia-nasal-cartilages",
+      "cite": "Radiopaedia.org. Nasal cartilages [Internet article]. https://radiopaedia.org/articles/nasal-cartilages (accessed 2026-10-02).",
+      "type": "atlas",
+      "verified": true,
+      "url": "https://radiopaedia.org/articles/nasal-cartilages"
+    },
+    {
+      "id": "src.radiopaedia-nasal-bone",
+      "cite": "Radiopaedia.org. Nasal bone [Internet article]. https://radiopaedia.org/articles/nasal-bone (accessed 2026-10-02).",
+      "type": "atlas",
+      "verified": true,
+      "url": "https://radiopaedia.org/articles/nasal-bone"
+    },
+    {
+      "id": "src.radiopaedia-paranasal-sinuses",
+      "cite": "Radiopaedia.org. Paranasal sinuses [Internet article]. https://radiopaedia.org/articles/paranasal-sinuses (accessed 2026-10-02).",
+      "type": "atlas",
+      "verified": true,
+      "url": "https://radiopaedia.org/articles/paranasal-sinuses"
+    },
+    {
+      "id": "src.macarthur-2016-nasal-arteries",
+      "cite": "MacArthur FJD, McGarry GW. The arterial supply of the nasal cavity. Eur Arch Otorhinolaryngol. 2016;274(2):809-815. doi:10.1007/s00405-016-4281-1",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "27568352",
+      "doi": "10.1007/s00405-016-4281-1"
+    },
+    {
+      "id": "src.gras-cabrerizo-2014-spa",
+      "cite": "Gras-Cabrerizo JR, Ademá-Alcover JM, Gras-Albert JR, et al. Anatomical and surgical study of the sphenopalatine artery branches. Eur Arch Otorhinolaryngol. 2014;271(7):1947-1951. doi:10.1007/s00405-013-2825-1",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "24253386",
+      "doi": "10.1007/s00405-013-2825-1"
+    },
+    {
+      "id": "src.gras-cabrerizo-2016-aea-septal",
+      "cite": "Gras-Cabrerizo JR, García-Garrigós E, Ademá-Alcover JM, et al. A unilateral septal flap based on the anterior ethmoidal artery (Castelnuovo's flap): CT cadaver study. Surg Radiol Anat. 2016;38(6):723-728. doi:10.1007/s00276-015-1610-9",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "26740000",
+      "doi": "10.1007/s00276-015-1610-9"
+    },
+    {
+      "id": "src.pinheiro-neto-2011-nsf-dimensions",
+      "cite": "Pinheiro-Neto CD, Ramos HF, Peris-Celda M, et al. Study of the nasoseptal flap for endoscopic anterior cranial base reconstruction. Laryngoscope. 2011;121(12):2514-2520. doi:10.1002/lary.22353",
+      "type": "CT-series",
+      "verified": true,
+      "pmid": "22109750",
+      "doi": "10.1002/lary.22353"
+    },
+    {
+      "id": "src.peris-celda-2013-extended-nsf",
+      "cite": "Peris-Celda M, Pinheiro-Neto CD, Funaki T, et al. The extended nasoseptal flap for skull base reconstruction of the clival region: an anatomical and radiological study. J Neurol Surg B Skull Base. 2013;74(6):369-385. doi:10.1055/s-0033-1347368",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "24436940",
+      "doi": "10.1055/s-0033-1347368"
+    },
+    {
+      "id": "src.zhang-2014-psa",
+      "cite": "Zhang X, Wang EW, Wei H, et al. Anatomy of the posterior septal artery with surgical implications on the vascularized pedicled nasoseptal flap. Head Neck. 2015;37(10):1470-1476. doi:10.1002/hed.23775",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "24846837",
+      "doi": "10.1002/hed.23775"
+    },
+    {
+      "id": "src.bleier-2011-bas-flap",
+      "cite": "Bleier BS, Curry WT, Wang EW, Schlosser RJ. The bipedicled anterior septal flap: a radioanatomic and cadaveric study. Laryngoscope. 2011;121(7):1367-1371. doi:10.1002/lary.21824",
+      "type": "CT-series",
+      "verified": true,
+      "pmid": "21671235",
+      "doi": "10.1002/lary.21824"
+    },
+    {
+      "id": "src.fortes-2007-itf",
+      "cite": "Fortes FSG, Carrau RL, Snyderman CH, et al. The posterior pedicle inferior turbinate flap: a new vascularized flap for skull base reconstruction. Laryngoscope. 2007;117(8):1329-1332. doi:10.1097/mlg.0b013e318062111f",
+      "type": "cohort",
+      "verified": true,
+      "pmid": "17597634",
+      "doi": "10.1097/mlg.0b013e318062111f"
+    },
+    {
+      "id": "src.prevedello-2009-mtf",
+      "cite": "Prevedello DM, Barges-Coll J, Fernandez-Miranda JC, et al. Middle turbinate flap for skull base reconstruction: cadaveric feasibility study. Laryngoscope. 2009;119(11):2094-2098. doi:10.1002/lary.20226",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "19718761",
+      "doi": "10.1002/lary.20226"
+    },
+    {
+      "id": "src.hadad-2011-hb2",
+      "cite": "Hadad G, Rivera-Serrano CM, Bassagaisteguy LH, et al. Anterior pedicle lateral nasal wall flap: a novel technique for the reconstruction of anterior skull base defects. Laryngoscope. 2011;121(8):1606-1610. doi:10.1002/lary.21889",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "21792948",
+      "doi": "10.1002/lary.21889"
+    },
+    {
+      "id": "src.rivera-serrano-2011-lnwf",
+      "cite": "Rivera-Serrano CM, Bassagaisteguy LH, Hadad G, et al. Posterior pedicle lateral nasal wall flap: new reconstructive technique for large defects of the skull base. Am J Rhinol Allergy. 2011;25(6):e212-e216. doi:10.2500/ajra.2011.25.3693",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "22185727",
+      "doi": "10.2500/ajra.2011.25.3693"
+    },
+    {
+      "id": "src.bloom-2012-valve-ct",
+      "cite": "Bloom JD, Sridharan S, Hagiwara M, Babb JS, White WM, Constantinides M. Reformatted computed tomography to assess the internal nasal valve and association with physical examination. Arch Facial Plast Surg. 2012;14(5):331-335. doi:10.1001/archfacial.2012.50",
+      "type": "CT-series",
+      "verified": true,
+      "pmid": "22986939",
+      "doi": "10.1001/archfacial.2012.50"
+    },
+    {
+      "id": "src.toriumi-1996-nose-vessels",
+      "cite": "Toriumi DM, Mueller RA, Grosch T, Bhattacharyya TK, Larrabee WF. Vascular anatomy of the nose and the external rhinoplasty approach. Arch Otolaryngol Head Neck Surg. 1996;122(1):24-34. doi:10.1001/archotol.1996.01890130020003",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "8554743",
+      "doi": "10.1001/archotol.1996.01890130020003"
+    },
+    {
+      "id": "src.jung-2000-nasal-tip-arteries",
+      "cite": "Jung DH, Kim HJ, Koh KS, et al. Arterial supply of the nasal tip in Asians. Laryngoscope. 2000;110(2 Pt 1):308-311. doi:10.1097/00005537-200002010-00024",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "10680935",
+      "doi": "10.1097/00005537-200002010-00024"
+    },
+    {
+      "id": "src.moscatiello-2011-dorsal-nasal-flap",
+      "cite": "Moscatiello F, Carrera A, Tirone L, Piombino P, Herrero J, Califano L. Distally based dorsal nasal flap in nasal ala reconstruction: anatomic study and clinical experience. Dermatol Surg. 2011;37(6):825-834. doi:10.1111/j.1524-4725.2011.01942.x",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "21463384",
+      "doi": "10.1111/j.1524-4725.2011.01942.x"
+    },
+    {
+      "id": "src.momoh-2013-superior-labial",
+      "cite": "Momoh AO, Kelley BP, Diaz-Garcia RJ, et al. An alternative mucosal flap for nasal lining: the superior labial artery mucosal flap: an anatomic study. J Craniofac Surg. 2013;24(2):626-628. doi:10.1097/SCS.0b013e318280206c",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "23524761",
+      "doi": "10.1097/SCS.0b013e318280206c"
+    },
+    {
+      "id": "src.sertel-2016-pericranial-nose",
+      "cite": "Sertel S, Pasche P. Pericranial flap for inner lining in nasal reconstruction. Ann Plast Surg. 2016;77(4):425-432. doi:10.1097/SAP.0000000000000624",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "26418782",
+      "doi": "10.1097/SAP.0000000000000624"
+    },
+    {
+      "id": "src.jacobs-2007-anterior-jaw",
+      "cite": "Jacobs R, Lambrichts I, Liang X, et al. Neurovascularization of the anterior jaw bones revisited using high-resolution magnetic resonance imaging. Oral Surg Oral Med Oral Pathol Oral Radiol Endod. 2007;103(5):683-693. doi:10.1016/j.tripleo.2006.11.014",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "17320428",
+      "doi": "10.1016/j.tripleo.2006.11.014"
+    },
+    {
+      "id": "src.wang-2007-supratrochlear",
+      "cite": "Wang HY, Li QF, Gu B, et al. [Anatomic study of supratrochlear artery and its application in nasal reconstruction]. Zhonghua Zheng Xing Wai Ke Za Zhi. 2007;23(6):487-490. Chinese.",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "18269022"
     }
   ]
 }

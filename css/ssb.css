@@ -81,6 +81,12 @@
   --ssb-ct-axis-a: #5FBF95;
   --ssb-ct-axis-s: #86A2EE;
 
+  /* Endoscope stage: the dark surround of the field-of-view circle and its light-post marker
+     (dark in both themes, like CT and Airway Rounds' stage; the post is the selection colour). */
+  --ssb-scope-mask: var(--ssb-ct-bg);
+  --ssb-scope-ink: var(--ssb-ct-ink);
+  --ssb-scope-post: var(--ssb-select);
+
   --ssb-nav-w: clamp(14rem, 20vw, 20rem);
   --ssb-panel-w: clamp(18rem, 28vw, 27rem);
   --ssb-dock-w: 17rem;
@@ -217,11 +223,11 @@ html[data-theme="dark"] {
 .ssb-center { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
 
 .ssb-toolbar {
-  flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.75rem;
+  flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem;
   padding: 0.5rem var(--gutter); border-bottom: 1px solid var(--rule);
 }
 .ssb-tier { display: flex; align-items: center; gap: 0.4rem; }
-.ssb-tier .site-pill { min-height: 32px; gap: 0.4rem; padding: 0.3rem 0.7rem; }
+.ssb-tier .site-pill { min-height: 32px; gap: 0.4rem; padding: 0.3rem 0.6rem; }
 .ssb-tier-name { display: none; }
 
 .ssb-stage {
@@ -266,8 +272,8 @@ html[data-theme="dark"] {
 }
 
 /* ===== STAGE SWITCH (toolbar) ===== */
-.ssb-stage-mode { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; }
-.ssb-stage-mode .site-pill { min-height: 32px; }
+.ssb-stage-mode { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
+.ssb-stage-mode .site-pill { min-height: 32px; padding-inline: 0.5rem; }     /* four stages must still fit one row beside the depth selector at 1280 */
 .ssb-stage-mode .site-pill:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ===== VARIANT LAB: dock (desktop), controls, HUD, badge ===== */
@@ -611,6 +617,13 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   .ssb-truth { top: 0.5rem; left: 0.6rem; right: auto; font-size: 0.62rem; }
 }
 
+/* The depth names (Junior, Senior, Fellow) only where the toolbar keeps a wide margin: with four stage
+   pills the row is full at 1280 px, and a wrapped toolbar shrinks the stage (which the lab tests,
+   among other things, are sensitive to). */
+@media (min-width: 1440px) {
+  .ssb-tier-name { display: inline; }
+}
+
 /* ===== DESKTOP: three columns ===== */
 @media (min-width: 960px) {
   .ssb {
@@ -619,8 +632,31 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   }
   .ssb-nav { display: flex; position: static; border-right: 1px solid var(--rule); background: var(--bg); }
   .ssb-nav-title .ssb-nav-close, .ssb-nav-toggle, .ssb-sheet-handle { display: none; }
-  .ssb-tier-name { display: inline; }
 
   .ssb-panel { max-height: none; border-top: 0; border-left: 1px solid var(--rule); }
   .ssb-panel-body { padding: 1rem 1.25rem 2rem; }
+}
+
+/* ===== ENDOSCOPE STAGE: the field-of-view overlay (docs/ssb.md 3) ===== */
+/* The scope's image sits where the canvas does: beside the dock's strip (desktop), above it (phones). */
+.ssb[data-stage="scope"] #ssb-spec { display: none; }
+.ssb-scope-controls { padding: 0 1rem 1rem; }
+.ssb-scope-controls[hidden], .ssb-scope[hidden] { display: none; }
+.ssb-scope {
+  position: absolute; z-index: 2; top: 0; right: 0; left: var(--ssb-canvas-left); bottom: var(--ssb-canvas-bottom);
+  pointer-events: none; container-type: size;
+}
+/* the clear circle is the 70 degree field of view: its diameter is the shorter side of the stage */
+.ssb-scope-mask {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent calc(50cqmin - 1px), var(--ssb-scope-mask) 50cqmin);
+}
+.ssb-scope-post {
+  position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--ssb-scope-post);
+  left: calc(50% + var(--post-x, 0) * (50cqmin - 10px)); top: calc(50% - var(--post-y, 1) * (50cqmin - 10px));
+  transform: translate(-50%, -50%); transition: left 0.12s ease-out, top 0.12s ease-out;
+}
+.ssb-scope-readout {
+  position: absolute; left: 0; right: 0; top: 0.5rem; margin: 0; text-align: center;
+  font: 500 0.72rem/1.2 var(--font-mono); letter-spacing: 0.04em; color: var(--ssb-scope-ink);
 }

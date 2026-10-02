@@ -3905,6 +3905,22 @@
       ],
       "reliability": "constant",
       "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "s.superficial-temporal-artery",
+      "name": "Superficial temporal artery",
+      "kind": "artery",
+      "region": "multiple",
+      "tier": 3,
+      "geo": "none",
+      "what": "Terminal external carotid branch in front of the ear and up over the temple; its frontal and parietal branches run in the temporoparietal fascia.",
+      "why": "The pedicle of the temporoparietal fascia flap: the fascia is tunnelled through the pterygopalatine fossa to the skull base ([[p.temporoparietal-fascia-flap]]).",
+      "rel": [],
+      "reliability": "constant",
+      "src": [
+        "src.chiu-2019-ch31"
+      ]
     }
   ],
   "landmarks": [

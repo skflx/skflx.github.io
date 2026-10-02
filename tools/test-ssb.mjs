@@ -66,9 +66,18 @@
      and CT coming and going without leaks, bad and new packs (a truncated
      gzip is a message in place; a pack that appears loads; bad nodes are
      skipped with a console.warn), no WebGL, q=lite and phones;
+   - the Endoscope stage (docs/ssb.md 3, js/ssb/scope.js): the scope's math in
+     plain Node (lens 0 looks down the shaft, a 30 degree lens at roll 0 looks up,
+     unit vectors, an upright horizon, the tip at depth 0 is the fulcrum, yaw
+     swings toward the scope's own side) and the `#scope=` codec (round trip,
+     hostile values clamped or ignored, the store's stage exclusivity); in the
+     page, the stage renders non-blank inside a circular field of view, the
+     camera is exactly the pose's tip and view, keys, drag and wheel change the
+     pose, the light-post indicator moves with roll, the lights are the scope's,
+     reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -86,7 +95,9 @@ import { buildFixture, fixtureFiles } from './ssb-fixture-ct.mjs';
 const dataUrl = (source) => 'data:text/javascript;base64,' + Buffer.from(source).toString('base64');
 const sourceOf = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const { KINDS, TISSUE_KINDS, GRAPH_KINDS, TOKENS, kindForGraph, detectQuality } = await import(dataUrl(sourceOf('js/ssb/materials.js')));
-const { parseHash, formatHash, clampQuality, createStore, normalizeCt } = await import(dataUrl(sourceOf('js/ssb/state.js')));
+const SCOPE_URL = dataUrl(sourceOf('js/ssb/scope.js'));
+const { parseHash, formatHash, clampQuality, createStore, normalizeCt } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`)));
+const SC = await import(SCOPE_URL);
 const { rasToScene, sceneToRas } = await import(dataUrl(sourceOf('js/ssb/frame.js')));
 const kit = await import(dataUrl(sourceOf('js/ssb/dioramas/kit.js')
   .replace(/from '\.\.\/frame\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/frame.js'))}'`)
@@ -97,7 +108,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen: just that section (development) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope: just that section (development) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -1315,6 +1326,32 @@ async function specimenTests(browser, base) {
       && after.filter((n) => n.region !== 'maxillary' || n.group === 'bone').every((n) => n.visible), JSON.stringify(after.filter((n) => !n.visible).map((n) => n.key)));
     await page.click('#ssb-spec input[data-region="maxillary"]');
 
+    /* mucosa: the air spaces drawn as their lining; a layer, not a different mesh */
+    const airKeys = nodes0.filter((n) => n.group === 'air').map((n) => n.key);
+    check('mucosa: the layer starts off and no air space is drawn as mucosa', (await spec(page, () => window.__ssb.specimen.mucosaOn)) === false
+      && (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn !== 'mucosa'));
+    await page.click('#ssb-spec-mucosa');
+    await nextFrames(page, 2);
+    const muc = await specNodes(page);
+    check('mucosa: toggling the layer draws every air-space node as mucosa (outside: a translucent shell); bone is untouched',
+      airKeys.length > 0 && muc.filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa' && n.transparent) && muc.filter((n) => n.group === 'bone').every((n) => n.drawn === 'bone'),
+      JSON.stringify(muc.filter((n) => n.group === 'air' && n.drawn !== 'mucosa').map((n) => n.key)));
+    await page.click('#ssb-spec button[data-bone="hidden"]');     /* the envelope's ghost is hit first otherwise */
+    await nextFrames(page, 2);
+    const mAim = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
+    const mHits = mAim ? await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y), [mAim.x, mAim.y]) : [];
+    check('mucosa: picking through the layer still selects the air space\'s graph id', !!mAim && mHits.length > 0 && mHits[0].key === 's.maxillary-sinus.R' && GRAPH.has(mHits[0].id), JSON.stringify(mHits.map((h) => h.key)));
+    await page.click('#ssb-spec button[data-bone="xray"]');
+    const r0 = await spec(page, () => window.__ssb.specimen.renders);
+    await page.click('.site-theme-toggle');
+    await nextFrames(page, 3);
+    check('mucosa: both themes compile — the layer still draws after the theme flips',
+      (await spec(page, () => window.__ssb.specimen.renders)) > r0 && (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa'));
+    await page.click('.site-theme-toggle');
+    await page.click('#ssb-spec-mucosa');
+    await nextFrames(page, 2);
+    check('mucosa: toggling off restores every air space\'s own look', (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === n.look.kind));
+
     /* landmarks: every marker is orientation geometry (never tier-filtered); labels are few and follow the tier */
     const lmAll = await spec(page, () => window.__ssb.specimen.landmarks.length);
     check('layers: no landmark markers until the layer is on', (await spec(page, () => window.__ssb.specimen.markers.length)) === 0);
@@ -1743,6 +1780,263 @@ async function specimenTests(browser, base) {
   }
 }
 
+/* ---------------- Endoscope: the math and the codec (Node only) ---------------- */
+
+function scopeUnitTests() {
+  const S = [0, 0, 1];
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const len = (a) => Math.hypot(...a);
+  const poses = [];
+  let seed = 11;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+  for (let i = 0; i < 400; i++) {
+    poses.push({ side: rnd() < 0.5 ? 'R' : 'L', depth: rnd() * 120, yaw: (rnd() - 0.5) * 90, pitch: (rnd() - 0.5) * 90, roll: rnd() * 359, lens: SC.LENSES[Math.floor(rnd() * 4)] });
+  }
+  const F = [4.43, -0.32, 10];
+  const frames = poses.map((p) => ({ p, f: SC.frameOf(p) }));
+  check('scope: yaw 0 / pitch 0 points straight posterior (-A), for either nostril',
+    ['R', 'L'].every((side) => { const d = SC.shaftDir({ ...SC.POSE_DEFAULT, side }); return near(d[0], 0, 1e-9) && near(d[1], -1, 1e-9) && near(d[2], 0, 1e-9); }));
+  check('scope: yaw + swings the tip laterally on the scope\'s own side (+R for the right nostril, -R for the left); pitch + goes up',
+    SC.shaftDir({ ...SC.POSE_DEFAULT, side: 'R', yaw: 20 })[0] > 0.3 && SC.shaftDir({ ...SC.POSE_DEFAULT, side: 'L', yaw: 20 })[0] < -0.3 && SC.shaftDir({ ...SC.POSE_DEFAULT, pitch: 20 })[2] > 0.3);
+  check('scope: the shaft direction is a unit vector for random poses', frames.every(({ f }) => near(len(f.d), 1, 1e-9)));
+  check('scope: lens 0 looks down the shaft (v = d)', frames.filter(({ p }) => p.lens === 0).every(({ f }) => len(f.v.map((x, i) => x - f.d[i])) < 1e-9));
+  check('scope: a 30 degree lens at roll 0 looks up: v . S = sin(pitch + 30), so above the horizontal whenever the shaft is not pitched below -30 degrees, whatever the nostril and yaw',
+    poses.every((p) => { const f = SC.frameOf({ ...p, lens: 30, roll: 0 }); return near(dot(f.v, S), Math.sin((p.pitch + 30) * Math.PI / 180), 1e-9) && (p.pitch <= -30 || dot(f.v, S) > 0); }));
+  check('scope: the view direction is a unit vector, at the lens angle from the shaft', frames.every(({ p, f }) => near(len(f.v), 1, 1e-9) && near(dot(f.v, f.d), Math.cos(p.lens * Math.PI / 180), 1e-9)));
+  check('scope: the camera\'s up and right are unit and perpendicular to the view and to each other, for random poses',
+    frames.every(({ f }) => near(dot(f.up, f.v), 0, 1e-9) && near(len(f.up), 1, 1e-9) && near(dot(f.right, f.v), 0, 1e-9) && near(dot(f.right, f.up), 0, 1e-9) && near(len(f.right), 1, 1e-9)));
+  check('scope: with a 0 degree lens the camera\'s up is S projected off the shaft, whatever the roll (the camera head is held level)',
+    frames.filter(({ p }) => p.lens === 0).every(({ f }) => { const k = dot(S, f.d); const u = S.map((x, i) => x - k * f.d[i]); const n = len(u); return u.every((x, i) => near(x / n, f.up[i], 1e-9)); }));
+  check('scope: at roll 0 the horizon stays upright until the view passes the vertical: up . S = cos(pitch + lens), whatever the nostril and yaw',
+    poses.every((p) => { const f = SC.frameOf({ ...p, roll: 0 }); return near(dot(f.up, S), Math.cos((p.pitch + p.lens) * Math.PI / 180), 1e-9); }));
+  const steps = (list) => list.map((q) => SC.frameOf(q)).every((f, i, all) => i === 0 || dot(f.up, all[i - 1].up) > 0.99);
+  const pitchSweep = Array.from({ length: 91 }, (_, i) => ({ ...SC.POSE_DEFAULT, lens: 70, pitch: i - 45 }));
+  const rollSweep = Array.from({ length: 360 }, (_, i) => ({ ...SC.POSE_DEFAULT, lens: 70, pitch: 20, roll: i }));
+  check('scope: no gimbal flip — the image turns smoothly as a 70 degree view passes the vertical (pitch -45..45) and as it rolls about it (pitch 20, the frontal recess), and the light post stays at the bottom at roll 0',
+    steps(pitchSweep) && steps(rollSweep) && pitchSweep.every((q) => near(SC.lightPostAngle(q), 270, 1e-6)));
+  check('scope: the tip at depth 0 is the fulcrum, and at depth t it is F + t d', poses.every((p) => { const t0 = SC.tipOf(F, { ...p, depth: 0 }); const t = SC.tipOf(F, p); const d = SC.shaftDir(p); return len(t0.map((x, i) => x - F[i])) < 1e-12 && len(t.map((x, i) => x - F[i] - p.depth * d[i])) < 1e-9; }));
+  const a0 = SC.lightPostAngle({ ...SC.POSE_DEFAULT, lens: 30, roll: 0 });
+  const a90 = SC.lightPostAngle({ ...SC.POSE_DEFAULT, lens: 30, roll: 90 });
+  check('scope: the light post is opposite the lens\'s offset in the image (roll 0: at the bottom) and turns with roll', near(a0, 270, 1e-6) && Math.abs(a90 - a0) > 45, `${a0} ${a90}`);
+  check('scope: the field of view is a 70 degree circle inside the shorter side (vertical fov 70 when landscape, wider when portrait)',
+    near(SC.verticalFov(800, 600), 70, 1e-6) && SC.verticalFov(400, 800) > 100);
+
+  /* the codec */
+  const rt = SC.formatScope(SC.parseScope('L,12.5,-3,4,200,70'));
+  check('scope: #scope= round-trips (format(parse(x)) = x)', rt === 'L,12.5,-3,4,200,70' && SC.formatScope(SC.parseScope(rt)) === rt, rt);
+  const hostile = SC.parseScope('R,99999,-999,999,99999,45');
+  check('scope: hostile numbers are clamped to the ranges', hostile && hostile.depth === 120 && hostile.yaw === -45 && hostile.pitch === 45 && hostile.roll === 359, JSON.stringify(hostile));
+  const bad = ['X,1,2,3,4,30', 'R,1,2,3,4,31', 'R,1,2,3,4', 'R,1,2,3,4,30,5', 'R,a,2,3,4,30', 'R,,2,3,4,30', 'R,1,2,3,4,', '<img src=x onerror=1>', 'R,1,2,3,4,30'.repeat(20)];
+  check('scope: a bad side, a lens off the whitelist, the wrong field count, NaN, empty fields, markup or an overlong value is ignored entirely',
+    bad.slice(0, -1).every((v) => SC.parseScope(v) === null) && SC.parseScope(bad[bad.length - 1]) === null, bad.filter((v) => SC.parseScope(v) !== null).join(' | '));
+  const has = (id) => GRAPH.has(id);
+  check('state: #scope= is the endoscope stage; a lab wins over it and a ct plane wins over it; hostile values are dropped',
+    parseHash('#scope=R,40,10,-5,90,45', has).scope.lens === 45 && !parseHash('#lab=ethmoid-roof&scope=R,40,0,0,0,0', has, { 'ethmoid-roof': { params: [], presets: {} } }).scope
+      && !parseHash('#ct=ax&scope=R,40,0,0,0,0', has).scope && parseHash('#scope=R,40,0,0,0,31', has).scope === undefined);
+  const st = createStore({ has, tierOf: () => 1, hash: '#scope=L,30,10,0,0,30', prefs: {}, labs: {} });
+  check('state: the store takes the pose from the URL and writes the same canonical hash back', st.get().scope.side === 'L' && st.get().scope.lens === 30 && st.hash() === '#scope=L,30,10,0,0,30', st.hash());
+  st.setScope({ side: 'R', depth: 5000, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+  check('state: setScope clamps (depth 5000 -> 120) and entering the scope leaves CT and the lab', st.get().scope.depth === 120 && st.get().ct === null && st.get().lab === null);
+  st.setCt({ plane: 'axial', at: null });
+  check('state: entering CT leaves the scope (the stages are exclusive) and the hash is the CT\'s', st.get().scope === null && st.get().ct && !/scope=/.test(st.hash()), st.hash());
+  st.setScope(SC.POSE_DEFAULT);
+  check('state: entering the scope leaves CT; leaveStage() clears it', st.get().ct === null && st.get().scope && (st.leaveStage(), st.get().scope === null && st.hash() === ''), st.hash());
+  st.applyHash('#scope=R,40,0,0,0,0');
+  check('state: applyHash adopts a pasted scope link and drops it when the hash has none', st.get().scope && (st.applyHash(''), st.get().scope === null));
+}
+
+/* ---------------- Endoscope: the page ---------------- */
+
+async function scopeTests(browser, base) {
+  /* ===== the stage from the pill ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const pill = await page.evaluate(() => { const b = document.querySelector('#ssb-stage-mode [data-stage="scope"]'); return { disabled: b.disabled, pressed: b.getAttribute('aria-pressed') }; });
+    check('scope: the Scope pill is enabled once the specimen and the fulcrum are loaded, and not pressed', !pill.disabled && pill.pressed === 'false', JSON.stringify(pill));
+    await page.click('#ssb-stage-mode [data-stage="scope"]');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 10000 });
+    await nextFrames(page, 4);
+    const on = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash, pose: window.__ssb.scope.pose, pressed: document.querySelector('#ssb-stage-mode [data-stage="scope"]').getAttribute('aria-pressed'),
+      overlay: !document.getElementById('ssb-scope').hidden, controls: !document.getElementById('ssb-scope-controls').hidden, layers: getComputedStyle(document.getElementById('ssb-spec')).display }));
+    check('scope: pressing it enters the stage: pose in the URL (#scope=R,40,0,0,0,0), the overlay and the controls show, the layer controls give way',
+      on.stage === 'scope' && on.hash === '#scope=R,40,0,0,0,0' && on.pressed === 'true' && on.overlay && on.controls && on.layers === 'none', JSON.stringify(on));
+
+    /* the camera is the pose */
+    const cam = await spec(page, () => ({ cam: window.__ssb.scope.camera(), tip: window.__ssb.scope.tip, frame: window.__ssb.scope.frame, fulcrum: window.__ssb.scope.fulcrum }));
+    const lmNaris = (await spec(page, () => window.__ssb.specimen.landmarks)).find((l) => l.key === 'lm.naris.R');
+    check('scope: the fulcrum is lm.naris.R from landmarks.json', lmNaris && cam.fulcrum.every((v, i) => near(v, lmNaris.ras[i], 1e-6)), JSON.stringify([cam.fulcrum, lmNaris]));
+    check('scope: the camera sits at the tip F + depth d (depth 40, straight posterior) and looks along the pose\'s view, with the pose\'s upright up',
+      cam.cam.position.every((v, i) => near(v, cam.tip[i], 0.01)) && near(cam.tip[1], cam.fulcrum[1] - 40, 0.01) && cam.cam.view.every((v, i) => near(v, cam.frame.v[i], 1e-4)) && cam.cam.up.every((v, i) => near(v, cam.frame.up[i], 1e-4)),
+      JSON.stringify(cam.cam));
+    const lights = await spec(page, () => ({ l: window.__ssb.scope.lights(), controls: window.__ssb.scope.controlsEnabled(), bone: window.__ssb.specimen.bone, mucosa: window.__ssb.specimen.mucosaOn }));
+    check('scope: lit by a spotlight at the tip with inverse-square falloff (decay 2); the orbit headlight is off and the orbit controls are disabled',
+      lights.l.spot && lights.l.spot.on && lights.l.spot.decay === 2 && lights.l.head === 0 && lights.controls === false, JSON.stringify(lights));
+    check('scope: the lining is seen from inside — bone hidden, mucosa on', lights.bone === 'hidden' && lights.mucosa === true, JSON.stringify(lights));
+    const mat = (await specNodes(page)).filter((n) => n.group === 'air');
+    check('scope: every air-space node is drawn as mucosa, opaque (the camera is inside the airway)', mat.length > 0 && mat.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(mat.filter((n) => n.drawn !== 'mucosa' || n.transparent).map((n) => n.key)));
+
+    /* non-blank, inside a circular field of view */
+    const { img } = await canvasImage(page);
+    const W = img.width, H = img.height;
+    const R = Math.min(W, H) / 2;
+    const px = (x, y) => img.at(Math.round(x), Math.round(y));
+    const corner = px(3, 3);
+    const colours = new Set();
+    let lit = 0;
+    for (let i = 0; i < 400; i++) {
+      const a = (i / 400) * Math.PI * 2 * 7;
+      const r = (0.15 + 0.7 * ((i * 37) % 100) / 100) * R;
+      const c = px(W / 2 + Math.cos(a) * r, H / 2 + Math.sin(a) * r);
+      colours.add(c.map((v) => v >> 4).join());
+      if (c[0] + c[1] + c[2] > 60) lit++;
+    }
+    check('scope: the image is not blank — many distinct colours and mostly lit pixels inside the circle', colours.size >= 25 && lit > 200, `${colours.size} colours, ${lit}/400 lit`);
+    check('scope: outside the circle the stage is the dark mask (the corner is near-black, in either theme)', corner.every((v) => v < 40), JSON.stringify(corner));
+
+    const f0 = await page.evaluate(() => window.__ssb.frames);
+    await page.waitForTimeout(600);
+    check('scope: the on-demand loop holds — no frames are drawn while the pose does not change', (await page.evaluate(() => window.__ssb.frames)) === f0, `${(await page.evaluate(() => window.__ssb.frames)) - f0} frames`);
+
+    /* keys */
+    await page.focus('#ssb-canvas');
+    const pose0 = await spec(page, () => window.__ssb.scope.pose);
+    await page.keyboard.press('ArrowLeft');
+    const p1 = await spec(page, () => window.__ssb.scope.pose);
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('Shift+ArrowUp');
+    const p2 = await spec(page, () => window.__ssb.scope.pose);
+    await page.keyboard.press('+');
+    await page.keyboard.press('e');
+    await page.keyboard.press('l');
+    const p3 = await spec(page, () => window.__ssb.scope.pose);
+    check('scope: keys change the pose through the store — ArrowLeft yaws toward +R for the right scope (+2), ArrowUp pitches up (+2, Shift x5), + deepens (+1), E rolls (+5), L steps the lens (0 -> 30)',
+      p1.yaw === pose0.yaw + 2 && p2.pitch === pose0.pitch + 2 + 10 && p3.depth === pose0.depth + 1 && p3.roll === pose0.roll + 5 && p3.lens === 30, JSON.stringify([pose0, p1, p2, p3]));
+    check('scope: the URL follows the pose', (await page.evaluate(() => location.hash)).startsWith('#scope=R,41,2,12,5,30') || await page.waitForFunction(() => location.hash.startsWith('#scope=R,41,2,12,5,30'), null, { timeout: 2000 }).then(() => true).catch(() => false));
+    const cam2 = await spec(page, () => ({ cam: window.__ssb.scope.camera(), tip: window.__ssb.scope.tip, frame: window.__ssb.scope.frame }));
+    check('scope: the camera follows the pose after the keys (tip and view)', cam2.cam.position.every((v, i) => near(v, cam2.tip[i], 0.01)) && cam2.cam.view.every((v, i) => near(v, cam2.frame.v[i], 1e-4)));
+
+    /* the light-post indicator turns with roll, on a circle */
+    const postAt = () => page.evaluate(() => { const c = document.getElementById('ssb-scope').getBoundingClientRect(); const b = document.querySelector('.ssb-scope-post').getBoundingClientRect(); return { x: b.left + b.width / 2 - (c.left + c.width / 2), y: b.top + b.height / 2 - (c.top + c.height / 2), r: Math.min(c.width, c.height) / 2 }; });
+    await page.evaluate(() => { const r = document.getElementById('ssb-scope-roll'); r.value = '0'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+    await nextFrames(page, 3);
+    await page.waitForTimeout(250);
+    const i0 = await postAt();
+    await page.evaluate(() => { const r = document.getElementById('ssb-scope-roll'); r.value = '90'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+    await nextFrames(page, 3);
+    await page.waitForTimeout(250);
+    const i90 = await postAt();
+    check('scope: the light-post indicator sits on the field-of-view rim and moves with roll (the slider drives the same store)',
+      near(Math.hypot(i0.x, i0.y), i0.r - 10, 3) && near(Math.hypot(i90.x, i90.y), i0.r - 10, 3) && Math.hypot(i0.x - i90.x, i0.y - i90.y) > 20 && (await spec(page, () => window.__ssb.scope.pose.roll)) === 90, JSON.stringify([i0, i90]));
+
+    /* drag and wheel */
+    const box = await page.evaluate(() => { const b = document.getElementById('ssb-canvas').getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; });
+    const before = await spec(page, () => window.__ssb.scope.pose);
+    await page.mouse.move(box.x, box.y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + 100, box.y - 40, { steps: 5 });
+    await page.mouse.up();
+    const after = await spec(page, () => window.__ssb.scope.pose);
+    check('scope: dragging looks where the pointer goes — 100 px right turns the right scope\'s yaw by -15 degrees, 40 px up raises the pitch by 6', near(after.yaw - before.yaw, -15, 1.01) && near(after.pitch - before.pitch, 6, 1.01), JSON.stringify([before, after]));
+    await page.mouse.wheel(0, -100);
+    await nextFrames(page, 2);
+    const wheel = await spec(page, () => window.__ssb.scope.pose.depth);
+    check('scope: the wheel inserts (scroll up +1 mm)', wheel === after.depth + 1, `${after.depth} -> ${wheel}`);
+    await page.click('#ssb-scope-controls button[data-side="L"]');
+    check('scope: the side button switches nostril — the fulcrum is lm.naris.L', (await spec(page, () => window.__ssb.scope.pose.side)) === 'L' && near((await spec(page, () => window.__ssb.scope.fulcrum[0])), (await spec(page, () => window.__ssb.specimen.landmarks)).find((l) => l.key === 'lm.naris.L').ras[0], 1e-6));
+    await page.click('#ssb-scope-controls button[data-side="R"]');
+
+    /* both themes: the stage keeps rendering after the theme flips */
+    const r0 = await spec(page, () => window.__ssb.scope.renders);
+    await page.click('.site-theme-toggle');
+    await nextFrames(page, 3);
+    check('scope: both themes — the scope keeps rendering after the theme flips (the mask is dark in both)', (await spec(page, () => window.__ssb.scope.renders)) > r0 && (await spec(page, () => window.__ssb.scope.engaged)));
+    await page.click('.site-theme-toggle');
+
+    /* leaving puts the specimen back */
+    const camBefore = await spec(page, () => window.__ssb.specimen.camera());
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    await nextFrames(page, 3);
+    const off = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash, engaged: window.__ssb.scope.engaged, active: window.__ssb.scope.active, bone: window.__ssb.specimen.bone, mucosa: window.__ssb.specimen.mucosaOn,
+      controls: window.__ssb.scope.controlsEnabled(), lights: window.__ssb.scope.lights(), overlay: document.getElementById('ssb-scope').hidden, cam: window.__ssb.specimen.camera() }));
+    check('scope: leaving restores the specimen — stage and URL, bone X-ray, mucosa off, orbit controls and headlight back, the spotlight off, the overlay gone',
+      off.stage === 'specimen' && off.hash === '' && !off.engaged && !off.active && off.bone === 'xray' && off.mucosa === false && off.controls === true && off.lights.head > 0 && off.lights.spot && !off.lights.spot.on && off.overlay, JSON.stringify(off));
+    check('scope: leaving restores the orbit view (the camera is where it was before the scope: same distance to target, toCamera within 1e-3)',
+      near(off.cam.distance, camBefore.distance, 0.5) && off.cam.toCamera.every((v, i) => near(v, camBefore.toCamera[i], 1e-3)), JSON.stringify([off.cam, camBefore]));
+    await context.close();
+  }
+
+  /* ===== a pasted link, hostile links, the other stages ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=L,30,10,0,0,30');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    const info = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash }));
+    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 30, yaw: 10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,30,10,0,0,30', JSON.stringify(info));
+    await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); });
+    await nextFrames(page, 3);
+    check('scope: selecting a structure while in the scope starts no camera flight (the scope owns the camera)', (await spec(page, () => window.__ssb.specimen.camera().flying)) === false);
+    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await nextFrames(page, 2);
+    const ct = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, active: window.__ssb.scope.active, engaged: window.__ssb.scope.engaged, hash: location.hash, controls: window.__ssb.scope.controlsEnabled(), bone: window.__ssb.specimen.bone }));
+    check('scope: entering CT from the scope leaves it cleanly (stage, hash, orbit controls and the specimen\'s layers restored)', ct.stage === 'ct' && !ct.active && !ct.engaged && !/scope=/.test(ct.hash) && ct.controls && ct.bone === 'xray', JSON.stringify(ct));
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    await nextFrames(page, 3);
+    const back = await spec(page, () => window.__ssb.specimen.camera());
+    check('scope: coming back to the specimen after CT shows the orbit view, not the scope\'s tip (the camera is outside the head, a normal distance from its target)', back.distance > 60 && back.position.some((v) => Math.abs(v) > 40), JSON.stringify(back));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,0,0,0,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 3);
+    const air = (await specNodes(page)).filter((n) => n.group === 'air');
+    check('scope: at depth 0 (the tip in front of the cavity, outside the air spaces\' box) the lining is still opaque, not 0.4-opacity shells', air.length > 0 && air.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(air.filter((n) => n.transparent).map((n) => n.key)));
+    await context.close();
+  }
+  for (const hash of ['#scope=R,40,0,0,0,31', '#scope=X,40,0,0,0,0', '#scope=' + encodeURIComponent('<img src=x id=pwnscope onerror=window.__pwned=1>'), '#scope=R,1,2,3']) {
+    const { context, page } = await openSpecimen(browser, base, hash);
+    const info = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, pwn: !!document.getElementById('pwnscope') || !!window.__pwned, active: window.__ssb.scope.active }));
+    check(`scope: hostile ${hash.slice(0, 40)} is ignored (specimen stage, nothing injected)`, info.stage === 'specimen' && !info.pwn && !info.active, JSON.stringify(info));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,60,50000,-50000,99999,45');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    const pose = await spec(page, () => window.__ssb.scope.pose);
+    check('scope: out-of-range numbers in a link clamp (yaw 45, pitch -45, roll 359), not break', pose.yaw === 45 && pose.pitch === -45 && pose.roll === 359 && pose.depth === 60, JSON.stringify(pose));
+    await context.close();
+  }
+
+  /* ===== reduced motion, phones, no WebGL ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,30', { reducedMotion: 'reduce' });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    const d = await page.evaluate(() => getComputedStyle(document.querySelector('.ssb-scope-post')).transitionDuration);
+    check('scope: prefers-reduced-motion leaves no transition on the light-post indicator (a pose change is a cut: site.css clamps it to 0.01 ms)', d.split(',').every((t) => parseFloat(t) <= 0.001), d);
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,30', { viewport: { width: 390, height: 844 } });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 3);
+    const m = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, c: document.getElementById('ssb-canvas').getBoundingClientRect().width, o: document.getElementById('ssb-scope').getBoundingClientRect().width }));
+    const { img } = await canvasImage(page);
+    check('scope: on a phone the image fills the stage, nothing scrolls sideways, and the circle is the shorter side', m.sw <= m.cw && m.c > 300 && near(m.o, m.c, 1), JSON.stringify(m));
+    check('scope: on a phone the image is not blank (many distinct colours inside the circle)', (() => {
+      const set = new Set();
+      const R = Math.min(img.width, img.height) / 2;
+      for (let i = 0; i < 400; i++) { const a = (i / 400) * Math.PI * 14; const r = (0.15 + 0.7 * ((i * 37) % 100) / 100) * R; set.add(img.at(Math.round(img.width / 2 + Math.cos(a) * r), Math.round(img.height / 2 + Math.sin(a) * r)).map((v) => v >> 4).join()); }
+      return set.size >= 15;
+    })());
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,0', { webgl: false, wait: 'graph' });
+    const info = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, pill: document.querySelector('#ssb-stage-mode [data-stage="scope"]').disabled, scope: window.__ssb.scope }));
+    check('scope: with WebGL blocked the Scope pill stays disabled and nothing throws (the URL still selects the stage, which says what is missing)', info.pill === true && info.scope === null, JSON.stringify(info));
+    await context.close();
+  }
+}
+
 /* ---------------- the suite ---------------- */
 
 async function main() {
@@ -1759,6 +2053,11 @@ async function main() {
   if (ONLY === 'specimen') {
     await specimenUnitTests();
     await specimenTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'scope') {
+    scopeUnitTests();
+    await scopeTests(browser, base);
     return finish(browser, server);
   }
 
@@ -1884,6 +2183,7 @@ async function main() {
 
     /* picking */
     await setHash(page, '#lab=ethmoid-roof&keros=12');
+    await nextFrames(page, 4);      /* the dock just resized the canvas: the camera's projection updates on the next render, and screenOf reads it */
     const at = await page.evaluate(() => window.__ssb.lab.screenOf('s.lateral-lamella.R'));
     check('a pixel exists where the right lateral lamella is picked first', !!at);
     if (at) {
@@ -2221,6 +2521,10 @@ async function main() {
   /* ===== 8. the Specimen stage (js/ssb/geo-specimen.js, mode-specimen.js, ui-specimen.js; docs/ssb.md 3, 5.3, 7) ===== */
   await specimenUnitTests();
   await specimenTests(browser, base);
+
+  /* ===== 9. the Endoscope stage (js/ssb/scope.js, mode-endoscope.js, ui-endoscope.js; docs/ssb.md 3) ===== */
+  scopeUnitTests();
+  await scopeTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

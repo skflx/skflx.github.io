@@ -152,7 +152,7 @@ deleted.
 ## SSB — Sinus & Skull Base 3D
 
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
-links) and three stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
+links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
@@ -175,13 +175,30 @@ links) and three stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   test of the graph's spatial claims (`ssb/reference/specimen-relations.json`;
   as of 2026-10-01, 94 testable, 88 agree, none contradict).
   `tools/check-data.mjs` fails if any of it names an id the graph lacks.
-  **No soft tissue yet** — the data is bone-window, so it will be derived,
-  swept or parametric (`docs/ssb.md` §5.7); the face mask removed the nose.
+  Soft tissue is bone-window-limited, so it is derived, swept or parametric
+  (`docs/ssb.md` §5.7): stage D (`softtissue.py`) so far gives the septal
+  mucosa surfaces and charts (the `soft` pack), the choanal arch, the
+  middle turbinate heads and the provisional nostrils `lm.naris.R/.L`,
+  and `sweeps_soft.py` turns the waypoints in `uw/sweeps-soft.json` into
+  the septal-branch, nasopalatine and AEA-septal sweeps (all inferred,
+  schematic courses; first-pass waypoints to be vetted). The graph now
+  holds the soft-tissue and nose entries (septal mucosa, the septal and
+  nasal-tip arteries, the turbinate and lateral-wall flaps, the external
+  valve, ala, columella, nasal bone, piriform aperture), sourced from
+  PubMed-matched papers and Radiopaedia articles. The face mask removed
+  the nose; the unmasked source stacks do contain it (ST6-0).
 - **Specimen stage** (`mode-specimen.js`) — the packs in 3D: named views,
   bone X-ray/solid/hidden, region layers, landmarks, click-through
   picking, a 3D cursor shared with the CT crosshair, a section plane with
-  solid caps, and a vessels-and-nerves layer drawing the sweeps as tubes
-  (off by default; most points are inferred).
+  solid caps, a vessels-and-nerves layer drawing the sweeps as tubes
+  (off by default; most points are inferred), and a Mucosa layer drawing
+  the air spaces as their lining.
+- **Endoscope stage** (`scope.js`, `mode-endoscope.js`, `ui-endoscope.js`,
+  `#scope=`) — a first-person rigid scope as a camera pose over the
+  Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a
+  0 / 30 / 45 / 70° lens with a camera head that stays upright (no image flip through the zenith) and a light-post
+  indicator, a spotlight at the tip, the lining drawn as mucosa from
+  inside. No collision or HUD yet.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -194,7 +211,7 @@ links) and three stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 - **Materials** — procedural per tissue kind (`js/ssb/materials.js`,
   `docs/ssb.md` §7.4): world-space mm noise from `--ssb-*` tokens, no
   textures, quality `full`/`lite` by device hints or the `#q=` hash key;
-  the dioramas use them now, the specimen and endoscope will reuse them.
+  the dioramas, the specimen and the endoscope all use them.
 - **Knowledge graph** (`ssb/content/`) — anatomy by region
   (nasal/maxillary/PPF; ethmoid/frontal/orbit/ACF; sphenoid/sellar/clival)
   plus a pathology layer (inflammatory/infectious/structural; neoplastic).
@@ -216,7 +233,8 @@ links) and three stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
-backlog). In short: the endoscope stage and a soft-tissue layer
+backlog). In short: the endoscope's collision, HUD and stations and a
+soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `sphenoid` diorama; procedure mode and

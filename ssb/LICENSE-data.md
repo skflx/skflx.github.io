@@ -48,6 +48,7 @@ them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` ma
 | `ssb/ct/labels.u16.gz` (indices from 19 on), `ssb/geometry/labels.json` | walls, septum, turbinates and orbits, added on voxels no air space holds | `tools/ssb-pipeline/uw/walls.py` |
 | `ssb/geometry/sweeps.json`, `sweeps.meta.json` | centrelines and radii of the ICA, optic, maxillary, vidian and infraorbital nerves, nasolacrimal duct, sphenopalatine and ethmoidal arteries; per point whether it was detected in the CT, labelled by UW or inferred | `tools/ssb-pipeline/uw/sweeps.py` |
 | `ssb/ct/sdf-*.u8.gz`, the `sdf` key of `ssb/ct/ct.json` | distance fields (mm) to the ICA, optic nerve, AEA, anterior skull base and orbit | `tools/ssb-pipeline/uw/sdf.py` |
+| `ssb/models/soft.glb.gz`, `ssb/geometry/charts.json`, `lm.choanal-arch.M` and `lm.naris.R/.L` in `ssb/geometry/landmarks.json` | the septal mucosa surfaces (the nasal cavities' lining facing the septum unit) and their sagittal charts; two landmarks derived from the labels and the volume (the nostrils are schematic offsets, method in `landmarks.meta.json`) | `tools/ssb-pipeline/uw/softtissue.py` |
 | `ssb/reference/specimen-relations.json` | the graph's spatial claims tested against this specimen (numbers only) | `tools/ssb-pipeline/uw/relate3d.py` |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.

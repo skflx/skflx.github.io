@@ -101,9 +101,9 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 │
-├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, CT, variant lab; docs/ssb.md)
+├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens
-│   ├── js/ssb/             #   ES modules (graph, state, scene, materials, specimen, volume, CT, lab, UI); stamps.js is generated
+│   ├── js/ssb/             #   ES modules (graph, state, scene, materials, specimen, endoscope, volume, CT, lab, UI); stamps.js is generated
 │   ├── js/ssb/dioramas/    #   parametric dioramas for the variant lab
 │   └── js/vendor/three-0.186.1/  # three.js, pinned and self-hosted
 ├── ssb/                    # SSB data (knowledge graph, references, reference specimen)
@@ -141,7 +141,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── ascii3d.mjs         #   ASCII figures: terminal preview, bake no-JS frames, scaffold
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
-│   ├── test-ssb.mjs        #   SSB: variant lab, pathway rules, picking, hash, tissue materials, CT, specimen
+│   ├── test-ssb.mjs        #   SSB: variant lab, pathway rules, picking, hash, tissue materials, CT, specimen, endoscope
 │   ├── ssb-fixture-ct.mjs  #   synthetic CT volume the SSB tests route in (never written to ssb/)
 │   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
 │   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)

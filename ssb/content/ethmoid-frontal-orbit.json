@@ -2833,17 +2833,86 @@
     },
     {
       "id": "s.skull-base-region",
-      "name": "Bony framework (specimen envelope)",
+      "name": "Sinonasal bony envelope (reconstruction)",
       "kind": "region",
       "region": "multiple",
       "tier": 1,
-      "what": "The bone of the sinonasal region and ventral skull base in the reference specimen, drawn as one surface for orientation.",
-      "why": "It is context, not one bone: individual bones, lamellae and resection units are their own entries and carry the anatomy that matters at the table.",
+      "what": "The bone within 12 mm of the named air spaces in the reference specimen, drawn as one surface for orientation; it is a reconstruction unit, not an anatomical structure.",
+      "why": "Gives the specimen its skeleton while the walls pack carries the named bones.",
       "geo": "specimen",
       "src": [
         "src.uw-ct-sinus-atlas"
       ],
       "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "s.anterior-ethmoidal-septal-branch",
+      "name": "Septal branch of the anterior ethmoidal artery",
+      "kind": "artery",
+      "region": "septum",
+      "tier": 3,
+      "geo": "sweep",
+      "what": "The branch of the [[s.anterior-ethmoidal-artery]] that enters the upper anterior septum and descends in its lining. In a CT cadaver series its entry lay about 7 mm behind the septal projection of the middle turbinate's anterior attachment ([[m.aea-septal-branch-axilla]]).",
+      "why": "It joins the anterior arterial supply at the Kiesselbach area and is the pedicle of a small unilateral septal flap for anterior septal perforations (Castelnuovo's flap).",
+      "rel": [
+        {
+          "r": "branch-of",
+          "to": "s.anterior-ethmoidal-artery"
+        },
+        {
+          "r": "supplies",
+          "to": "s.nasal-septum"
+        }
+      ],
+      "reliability": "usual",
+      "src": [
+        "src.gras-cabrerizo-2016-aea-septal",
+        "src.macarthur-2016-nasal-arteries"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.supraorbital-artery",
+      "name": "Supraorbital artery",
+      "kind": "artery",
+      "region": "frontal",
+      "tier": 3,
+      "geo": "none",
+      "what": "Ophthalmic-system artery leaving the orbit with the [[s.supraorbital-nerve]] and running up the forehead; the main axial supply of the pericranial flap.",
+      "why": "It carries the pericranial flap for endonasal skull base reconstruction: in a nasal reconstruction series it vascularized about 71 mm of pericranium against about 35 mm for the supratrochlear artery ([[m.soa-axial-length]]), and superficial dissection should stop 15 mm above the orbital rim.",
+      "rel": [
+        {
+          "r": "accompanies",
+          "to": "s.supraorbital-nerve"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.sertel-2016-pericranial-nose"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.supratrochlear-artery",
+      "name": "Supratrochlear artery",
+      "kind": "artery",
+      "region": "frontal",
+      "tier": 3,
+      "geo": "none",
+      "what": "Ophthalmic-system artery leaving the orbit with the [[s.supratrochlear-nerve]]. It gives a cutaneous branch about 12 mm above the orbital rim and 13 mm from the midline, communicating with the contralateral branch and the supraorbital arteries.",
+      "why": "The shorter axial supply of the pericranial flap; the constant cutaneous branch is the basis of the paramedian forehead flap for the nose.",
+      "rel": [
+        {
+          "r": "accompanies",
+          "to": "s.supratrochlear-nerve"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.sertel-2016-pericranial-nose",
+        "src.wang-2007-supratrochlear"
+      ]
     }
   ],
   "landmarks": [

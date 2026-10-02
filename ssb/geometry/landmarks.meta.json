@@ -116,6 +116,39 @@
    "method": "median of UW arrow tips (axial + sagittal)",
    "n_tips": 6,
    "spread_mm": 0.94
+  },
+  "lm.choanal-arch.M": {
+   "method": "highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
+   "n_boundary_voxels": 287,
+   "septum_mean_r": 0.31
+  },
+  "lm.naris.R": {
+   "method": "inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity's anterior edge; replaced when the nose exists (ST6)",
+   "n_front_voxels": 73,
+   "anterior_air_edge_a_mm": -9.5,
+   "row_bone_max_a_mm": -10.0
+  },
+  "lm.naris.L": {
+   "method": "inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity's anterior edge; replaced when the nose exists (ST6)",
+   "n_front_voxels": 48,
+   "anterior_air_edge_a_mm": -9.5,
+   "row_bone_max_a_mm": -10.0
+  },
+  "lm.middle-turbinate-head.R": {
+   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
+   "n_front_voxels": 7,
+   "a_range_mm": [
+    -54.0,
+    -11.5
+   ]
+  },
+  "lm.middle-turbinate-head.L": {
+   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
+   "n_front_voxels": 13,
+   "a_range_mm": [
+    -52.0,
+    -9.5
+   ]
   }
  }
 }

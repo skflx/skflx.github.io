@@ -360,9 +360,15 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
 
     /* Where the camera is (scene units), for tests and for restoring a view. */
     function pose() {
+        if (held) return held;
         return { position: camera.position.toArray(), target: controls.target.toArray(), distance: camera.position.distanceTo(controls.target) };
     }
+    /* While the endoscope owns the camera, pose() reports the orbit view it replaced (a stage that is left
+       meanwhile saves that, not the tip). null releases it. */
+    let held = null;
+    function holdPose(p) { held = p; }
     function setPose(p) {
+        held = null;
         flight = null;
         camera.up.set(0, 1, 0);
         camera.position.set(...p.position);
@@ -506,7 +512,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
 
     refreshTheme();
     return {
-        THREE, canvas, camera, frames: () => frames, requestRender, refreshTheme, info,
+        THREE, canvas, camera, scene, controls, lights: { hemi, head }, frames: () => frames, holdPose, requestRender, refreshTheme, info,
         materialsFor, setQuality, materialsHook, outline, setContent, setSpecimen, showSpecimen, frame, look, pose, setPose, setHome,
         resetView, pick, pickHits, setClip, toClient, setAnimating, onFrame, onTheme,
     };

@@ -10629,5 +10629,71 @@
    "total": 4505073,
    "limit": 6000000
   }
+ },
+ "softtissue": {
+  "surfaces": {
+   "s.septal-mucosa.R": {
+    "triangles": 4999,
+    "area_cm2": 14.34,
+    "chart_bbox_mm": {
+     "a": [
+      -51.0,
+      -1.0
+     ],
+     "s": [
+      -3.0,
+      40.0
+     ]
+    },
+    "max_abs_r_mm": 7.25,
+    "roundtrip_max_3d_mm": 0.44,
+    "roundtrip_max_3d_mm_all_cells": 1.081,
+    "roundtrip_max_chart_mm": 0.419,
+    "roundtrip_samples": 400,
+    "cells": 1398,
+    "unreliable_cells": 36,
+    "filled_cells": 50
+   },
+   "s.septal-mucosa.L": {
+    "triangles": 5000,
+    "area_cm2": 15.36,
+    "chart_bbox_mm": {
+     "a": [
+      -52.0,
+      -1.0
+     ],
+     "s": [
+      -3.0,
+      41.0
+     ]
+    },
+    "max_abs_r_mm": 5.6,
+    "roundtrip_max_3d_mm": 0.266,
+    "roundtrip_max_3d_mm_all_cells": 1.077,
+    "roundtrip_max_chart_mm": 0.153,
+    "roundtrip_samples": 400,
+    "cells": 1373,
+    "unreliable_cells": 126,
+    "filled_cells": 59
+   }
+  },
+  "choanal_arch": [
+   4.0,
+   -51.5,
+   12.0
+  ],
+  "naris": {
+   "lm.naris.R": [
+    4.43,
+    -0.32,
+    10.0
+   ],
+   "lm.naris.L": [
+    -0.99,
+    -0.16,
+    10.0
+   ]
+  },
+  "pack_bytes": 88654
  }
 }

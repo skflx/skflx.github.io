@@ -3510,9 +3510,463 @@
         "src.grays-42"
       ],
       "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "s.septal-mucosa",
+      "name": "Septal mucosa",
+      "kind": "mucosa",
+      "region": "septum",
+      "tier": 2,
+      "geo": "specimen",
+      "partOf": "s.nasal-septum",
+      "syn": [
+        "septal mucoperichondrium",
+        "septal mucoperiosteum"
+      ],
+      "what": "The lining of each side of the septum: mucoperichondrium over the [[s.septal-cartilage]] and mucoperiosteum over the [[s.perpendicular-plate]] and [[s.vomer]]. It is the tissue the nasoseptal flap is raised from.",
+      "why": "The flap's blood supply travels in this lining: the [[s.posterior-septal-artery]] and its branches run in it, so it is raised in a subperichondrial and subperiosteal plane, and the donor side then lacks lining until it remucosalizes. A tear in the lining on both sides at the same place leaves the avascular cartilage bare ([[h.septal-perforation]]).",
+      "rel": [
+        {
+          "r": "wall-of",
+          "to": "s.nasal-cavity",
+          "note": "the medial wall"
+        }
+      ],
+      "ct": "Not separable from the cartilage and bone beneath it on CT; the lining is the air/tissue boundary.",
+      "reliability": "constant",
+      "src": [
+        "src.hadad-2006-nsf",
+        "src.pinheiro-neto-2011-nsf-dimensions",
+        "src.radiopaedia-nasal-septum"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.nasal-floor-mucosa",
+      "name": "Nasal floor and inferior meatus mucosa",
+      "kind": "mucosa",
+      "region": "nasal-cavity",
+      "tier": 3,
+      "geo": "none",
+      "partOf": "s.nasal-floor",
+      "what": "The mucoperiosteum of the nasal floor, continuing laterally into the [[s.inferior-meatus]]. The extended nasoseptal flap takes it together with the septal mucosa.",
+      "why": "It adds length and area for large defects: in a cadaver and CT series the extended flap was about 20 mm longer and added about 774 mm² ([[m.nsf-extended-gain]]). The reference specimen has no surface for it yet.",
+      "rel": [
+        {
+          "r": "inferior-to",
+          "to": "s.septal-mucosa"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.peris-celda-2013-extended-nsf",
+        "src.hadad-2006-nsf"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.posterior-septal-artery-superior-branch",
+      "name": "Posterior septal artery, superior branch",
+      "kind": "artery",
+      "region": "septum",
+      "tier": 3,
+      "geo": "sweep",
+      "what": "The upper of the two septal branches into which the [[s.posterior-septal-artery]] divides on the sphenoid face or at the back of the septum.",
+      "why": "Both branches lie inside the nasoseptal flap pedicle. In one latex-injected series the dominant branch always lay below the axial plane of the sphenoid ostium, so the upper rim of the pedicle is set by the ostium.",
+      "rel": [
+        {
+          "r": "branch-of",
+          "to": "s.posterior-septal-artery"
+        },
+        {
+          "r": "supplies",
+          "to": "s.nasal-septum"
+        }
+      ],
+      "endo": "Not separately visible; Doppler over the pedicle confirms flow, not which branch.",
+      "reliability": "variable",
+      "src": [
+        "src.zhang-2014-psa",
+        "src.macarthur-2016-nasal-arteries"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.posterior-septal-artery-inferior-branch",
+      "name": "Posterior septal artery, inferior branch",
+      "kind": "artery",
+      "region": "septum",
+      "tier": 3,
+      "geo": "sweep",
+      "what": "The lower of the two septal branches of the [[s.posterior-septal-artery]]. It was the dominant branch in about three of five sides in one series, and may run downward before turning anteroinferiorly along the septum.",
+      "why": "Two high-risk places for the flap design were identified in that series: the inferior aspect of the sphenoid ostium and the junction of the posterior septum with the choanal arch. This branch passes close to both.",
+      "rel": [
+        {
+          "r": "branch-of",
+          "to": "s.posterior-septal-artery"
+        },
+        {
+          "r": "supplies",
+          "to": "s.nasal-septum"
+        },
+        {
+          "r": "superior-to",
+          "to": "s.choana"
+        }
+      ],
+      "reliability": "variable",
+      "src": [
+        "src.zhang-2014-psa",
+        "src.macarthur-2016-nasal-arteries"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.nasopalatine-artery",
+      "name": "Nasopalatine artery",
+      "kind": "artery",
+      "region": "septum",
+      "tier": 3,
+      "geo": "sweep",
+      "what": "The artery of the anteroinferior septum that runs to the [[s.incisive-canal]]. In the Kiesselbach area it meets the [[s.greater-palatine-artery]], the septal branch of the superior labial artery and the anterior ethmoidal artery.",
+      "why": "With the septal branch of the superior labial artery it supplies the bipedicled anterior septal flap, an option for frontal table coverage when the posterior pedicle is not available ([[m.bas-flap-length]]).",
+      "rel": [
+        {
+          "r": "supplies",
+          "to": "s.nasal-septum"
+        },
+        {
+          "r": "accompanies",
+          "to": "s.nasopalatine-nerve"
+        },
+        {
+          "r": "passes-through",
+          "to": "s.incisive-canal"
+        }
+      ],
+      "reliability": "usual",
+      "src": [
+        "src.bleier-2011-bas-flap",
+        "src.radiopaedia-nasal-cavity",
+        "src.macarthur-2016-nasal-arteries"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.incisive-canal",
+      "name": "Incisive canal",
+      "kind": "opening",
+      "region": "septum",
+      "tier": 2,
+      "geo": "none",
+      "syn": [
+        "nasopalatine canal"
+      ],
+      "what": "Canal through the anterior hard palate, behind the central incisors, joining the floor of the nose beside the septum to the mouth. It carries the [[s.nasopalatine-nerve]] and the nasopalatine artery.",
+      "why": "The anterior limit of the bipedicled anterior septal flap's long axis ([[m.bas-flap-length]]). Its neurovascular bundle can be large enough to cause clinically significant trauma if the canal is entered.",
+      "ct": "A canal through the anterior maxilla on sagittal CT. It is not resolved in the reference specimen (a 0.5 mm bone-window display volume), so its position there is not drawn.",
+      "reliability": "constant",
+      "src": [
+        "src.jacobs-2007-anterior-jaw",
+        "src.bleier-2011-bas-flap"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.superior-labial-artery",
+      "name": "Superior labial artery",
+      "kind": "artery",
+      "region": "nasal-cavity",
+      "tier": 3,
+      "geo": "none",
+      "what": "Branch of the facial artery running in the upper lip. Its septal branch ascends into the anterior septum; its nasal-septal branches also supply the nasal tip.",
+      "why": "The external end of the anterior septal arterial arcade, and the source of the anterior pedicle of the bipedicled anterior septal flap.",
+      "rel": [
+        {
+          "r": "branch-of",
+          "to": "s.facial-artery"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.momoh-2013-superior-labial",
+        "src.moscatiello-2011-dorsal-nasal-flap",
+        "src.radiopaedia-nasal-septum"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.superior-labial-septal-branch",
+      "name": "Septal branch of the superior labial artery",
+      "kind": "artery",
+      "region": "septum",
+      "tier": 3,
+      "geo": "sweep",
+      "what": "The branch of the [[s.superior-labial-artery]] that enters the anterior septum near the columella and ascends in its lining.",
+      "why": "One of the arteries joining at the Kiesselbach area, and one of the two pedicles of the bipedicled anterior septal flap.",
+      "rel": [
+        {
+          "r": "branch-of",
+          "to": "s.superior-labial-artery"
+        },
+        {
+          "r": "supplies",
+          "to": "s.nasal-septum"
+        },
+        {
+          "r": "supplies",
+          "to": "s.kiesselbach-area"
+        }
+      ],
+      "reliability": "usual",
+      "src": [
+        "src.bleier-2011-bas-flap",
+        "src.macarthur-2016-nasal-arteries",
+        "src.radiopaedia-nasal-septum"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.facial-artery",
+      "name": "Facial artery",
+      "kind": "artery",
+      "region": "multiple",
+      "tier": 3,
+      "geo": "none",
+      "what": "External carotid branch crossing the face. It gives off the [[s.superior-labial-artery]] and the lateral nasal branches of the external nose.",
+      "why": "The external-carotid source for the anteroinferior septum and the external nose, in contrast to the ophthalmic (internal carotid) source of the anterior ethmoidal and dorsal nasal arteries: the two systems anastomose in the nose.",
+      "rel": [
+        {
+          "r": "supplies",
+          "to": "s.nasal-septum"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.moscatiello-2011-dorsal-nasal-flap",
+        "src.momoh-2013-superior-labial",
+        "src.radiopaedia-nasal-septum"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.external-nose",
+      "name": "External nose",
+      "kind": "region",
+      "region": "multiple",
+      "tier": 2,
+      "geo": "none",
+      "what": "The skin, musculoaponeurotic layer, five named cartilages (two lateral, two alar, one septal) and nasal bones that form the nose outside the piriform aperture.",
+      "why": "It is the fulcrum for every instrument: the nostril sets how far and in which directions a scope can swing. In the reference specimen it was masked away, so the endoscope pivots on a provisional point.",
+      "rel": [
+        {
+          "r": "anterior-to",
+          "to": "s.nasal-vestibule"
+        }
+      ],
+      "reliability": "constant",
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Most of the arteries of the nose run superficial to the musculoaponeurotic layer. The lateral and dorsal nasal arteries and the columellar branches form an alar arcade, so an external approach dissected below that layer preserves the main supply of the tip."
+        }
+      ],
+      "src": [
+        "src.radiopaedia-nasal-cartilages",
+        "src.toriumi-1996-nose-vessels"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.lateral-nasal-artery",
+      "name": "Lateral nasal artery",
+      "kind": "artery",
+      "region": "multiple",
+      "tier": 3,
+      "geo": "none",
+      "what": "Branch of the facial system to the side of the external nose and the alar region. It is not the posterior lateral nasal artery of the sphenopalatine system ([[s.posterior-lateral-nasal-artery]]).",
+      "why": "The main supply of the nasal tip in most sides of an Asian cadaver series; it forms an alar arcade with the dorsal nasal and columellar arteries.",
+      "rel": [
+        {
+          "r": "branch-of",
+          "to": "s.facial-artery"
+        },
+        {
+          "r": "supplies",
+          "to": "s.external-nose"
+        }
+      ],
+      "reliability": "usual",
+      "src": [
+        "src.jung-2000-nasal-tip-arteries",
+        "src.toriumi-1996-nose-vessels",
+        "src.moscatiello-2011-dorsal-nasal-flap"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.dorsal-nasal-artery",
+      "name": "Dorsal nasal artery",
+      "kind": "artery",
+      "region": "multiple",
+      "tier": 3,
+      "geo": "none",
+      "what": "Ophthalmic-system artery of the nasal dorsum; it joins the lateral nasal branches of the facial system in the superficial layer over the nasal dorsum.",
+      "why": "The internal carotid contribution to the external nose, and the main tip supply in a minority of sides.",
+      "rel": [
+        {
+          "r": "supplies",
+          "to": "s.external-nose"
+        }
+      ],
+      "reliability": "variable",
+      "src": [
+        "src.moscatiello-2011-dorsal-nasal-flap",
+        "src.jung-2000-nasal-tip-arteries",
+        "src.toriumi-1996-nose-vessels"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.columellar-artery",
+      "name": "Columellar arteries",
+      "kind": "artery",
+      "region": "multiple",
+      "tier": 3,
+      "geo": "none",
+      "what": "Small arteries rising through the columella to the nasal tip. They are narrow and vary in size and number.",
+      "why": "They are crossed by a transcolumellar incision, but are a variable and usually minor contribution to the tip, so the tip does not depend on them.",
+      "rel": [
+        {
+          "r": "supplies",
+          "to": "s.external-nose"
+        }
+      ],
+      "reliability": "variable",
+      "src": [
+        "src.jung-2000-nasal-tip-arteries",
+        "src.toriumi-1996-nose-vessels"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.external-nasal-valve",
+      "name": "External nasal valve",
+      "kind": "opening",
+      "region": "nasal-cavity",
+      "tier": 2,
+      "geo": "none",
+      "what": "The nostril aperture, bounded by the alar rim, the columella and the nasal sill. Its shape is held by the alar cartilages.",
+      "why": "Collapse here narrows the airway at the entrance, and the aperture is where the scope enters and the fulcrum sits: an alar rim pushed laterally changes how far the shaft can swing.",
+      "rel": [
+        {
+          "r": "anterior-to",
+          "to": "s.internal-nasal-valve"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.grays-42",
+        "src.radiopaedia-nasal-cartilages"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.nasal-ala",
+      "name": "Nasal ala",
+      "kind": "region",
+      "region": "nasal-cavity",
+      "tier": 2,
+      "geo": "none",
+      "partOf": "s.external-nose",
+      "what": "The mobile wing of the external nose forming the lateral wall of the nostril and its rim.",
+      "why": "The scope sheath retracts it laterally on entry ([[s.nasal-vestibule]]).",
+      "rel": [
+        {
+          "r": "wall-of",
+          "to": "s.nasal-vestibule",
+          "note": "lateral wall"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.grays-42",
+        "src.radiopaedia-nasal-cartilages"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.columella",
+      "name": "Columella",
+      "kind": "region",
+      "region": "septum",
+      "tier": 2,
+      "geo": "none",
+      "partOf": "s.external-nose",
+      "what": "The soft-tissue strut between the two nostrils; the visible part of the septum, formed by the medial crura of the alar cartilages.",
+      "why": "The medial wall of the nostril. Transfixion and hemitransfixion incisions are made at its caudal septal border.",
+      "rel": [
+        {
+          "r": "wall-of",
+          "to": "s.nasal-vestibule",
+          "note": "medial wall"
+        }
+      ],
+      "reliability": "constant",
+      "src": [
+        "src.radiopaedia-nasal-septum",
+        "src.radiopaedia-nasal-cartilages"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.nasal-bone",
+      "name": "Nasal bone",
+      "kind": "bone",
+      "region": "nasal-cavity",
+      "tier": 2,
+      "geo": "none",
+      "partOf": "s.external-nose",
+      "what": "Small paired bone forming the nasal ridge between the frontal processes of the maxillae. Its free lower edge continues as the lateral (upper lateral) cartilage.",
+      "why": "The bony roof of the external nose and the upper border of the piriform aperture; the procerus and nasalis muscles attach to its outer surface.",
+      "reliability": "constant",
+      "src": [
+        "src.radiopaedia-nasal-bone"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "s.piriform-aperture",
+      "name": "Piriform aperture",
+      "kind": "opening",
+      "region": "nasal-cavity",
+      "tier": 2,
+      "geo": "none",
+      "syn": [
+        "anterior nasal aperture"
+      ],
+      "what": "The pear-shaped bony opening of the front of the skull into the nose, bounded by the nasal bones above and the maxillae to the sides and below; the anterior nasal spine projects from its floor.",
+      "why": "The bony limit of every transnasal movement: the scope's fulcrum lies in front of it, and the rim of the aperture lies behind the nostril.",
+      "reliability": "constant",
+      "src": [
+        "src.grays-42",
+        "src.radiopaedia-nasal-bone"
+      ]
     }
   ],
   "landmarks": [
+    {
+      "id": "lm.naris",
+      "name": "Naris (nostril)",
+      "of": "s.nasal-vestibule",
+      "tier": 1,
+      "locate": "The nostril opening; the endoscope's fulcrum.",
+      "src": [
+        "src.grays-42"
+      ],
+      "review": "draft"
+    },
     {
       "id": "lm.nasal-sill",
       "name": "Nasal sill",
@@ -3743,6 +4197,18 @@
         "src.osawa-2009-vidian"
       ],
       "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "lm.middle-turbinate-head",
+      "name": "Middle turbinate head",
+      "of": "s.middle-turbinate",
+      "tier": 2,
+      "locate": "The anterior end of the middle turbinate. The septal projection of the turbinate's anterior attachment to the lateral wall (the axilla) is the anterior reference for the anterior ethmoidal artery's septal branch and a cut line for the short nasoseptal flap. The specimen landmark approximates the axilla with the turbinate's anterior end.",
+      "src": [
+        "src.gras-cabrerizo-2016-aea-septal",
+        "src.cummings-7"
+      ]
     }
   ],
   "variants": [
@@ -4125,6 +4591,149 @@
         "src.cummings-7"
       ],
       "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "v.psa-bifurcation-site",
+      "name": "Level at which the posterior septal artery divides",
+      "of": "s.posterior-septal-artery",
+      "tier": 3,
+      "geo": "none",
+      "why": "A branch point on the sphenoid face puts two vessels, not one, in the strip between the sphenoid ostium and the choanal arch.",
+      "prev": [
+        {
+          "value": "65.4",
+          "unit": "% sides",
+          "method": "cadaver",
+          "src": "src.zhang-2014-psa",
+          "conf": "med",
+          "n": 26,
+          "population": "latex-injected head sides",
+          "note": "close to the sphenopalatine foramen; the other 34.6% divided at the posterior border of the nasal septum"
+        },
+        {
+          "value": "71",
+          "unit": "% sides",
+          "method": "cadaver",
+          "src": "src.macarthur-2016-nasal-arteries",
+          "conf": "low",
+          "n": 7,
+          "population": "fresh frozen heads, dissected sides",
+          "note": "5 of 7 sides divided on the rostrum lateral to the sphenoid ostium and 2 medial to it; very small series, a different landmark from the one above"
+        }
+      ],
+      "src": [
+        "src.zhang-2014-psa",
+        "src.macarthur-2016-nasal-arteries"
+      ],
+      "def": "Whether the artery divides into its two septal branches close to the sphenopalatine foramen or later, at the posterior border of the septum."
+    },
+    {
+      "review": "draft",
+      "id": "v.psa-two-branch-pedicle",
+      "name": "Two septal artery branches in the flap pedicle",
+      "of": "s.posterior-septal-artery",
+      "tier": 3,
+      "geo": "none",
+      "why": "The commoner finding: the pedicle should be treated as two vessels, and the distance from the artery to the sphenoid ostium (about 9 mm, [[m.psa-to-sphenoid-ostium]]) as the margin to protect.",
+      "prev": [
+        {
+          "value": "71.4",
+          "unit": "% specimens",
+          "method": "cadaver",
+          "src": "src.pinheiro-neto-2011-nsf-dimensions",
+          "conf": "low",
+          "note": "dissection after endoscopic craniofacial resection; the denominator is not given in the abstract"
+        }
+      ],
+      "src": [
+        "src.pinheiro-neto-2011-nsf-dimensions"
+      ],
+      "def": "Two branches of the septal artery found in the pedicle of a raised nasoseptal flap."
+    },
+    {
+      "review": "draft",
+      "id": "v.psa-dominant-inferior-branch",
+      "name": "Inferior branch dominant",
+      "of": "s.posterior-septal-artery",
+      "tier": 3,
+      "geo": "none",
+      "why": "The dominant branch always lay below the axial plane of the sphenoid ostium in the same series, so an inferior sphenoidotomy margin is where it is most exposed.",
+      "prev": [
+        {
+          "value": "61.5",
+          "unit": "% sides",
+          "method": "cadaver",
+          "src": "src.zhang-2014-psa",
+          "conf": "med",
+          "n": 26,
+          "population": "latex-injected head sides"
+        }
+      ],
+      "src": [
+        "src.zhang-2014-psa"
+      ],
+      "def": "The inferior septal branch is the larger of the two."
+    },
+    {
+      "review": "draft",
+      "id": "v.spa-multiple-trunks",
+      "name": "Two or three sphenopalatine arterial trunks",
+      "of": "s.sphenopalatine-artery",
+      "tier": 2,
+      "geo": "none",
+      "why": "A clip or cautery on one trunk leaves flow in the others, which is why sphenopalatine ligation fails when a trunk is missed; look for an accessory foramen too.",
+      "prev": [
+        {
+          "value": "33 (two) and 6 (three)",
+          "unit": "% sides",
+          "method": "cadaver",
+          "src": "src.gras-cabrerizo-2014-spa",
+          "conf": "med",
+          "n": 90,
+          "population": "adult cadaveric nasal fossae",
+          "note": "single trunk in 61%"
+        },
+        {
+          "value": "24 (two)",
+          "unit": "% patients",
+          "method": "endoscopic",
+          "src": "src.gras-cabrerizo-2014-spa",
+          "conf": "low",
+          "n": 17,
+          "population": "patients treated for posterior epistaxis",
+          "note": "single trunk in 76%; small series"
+        }
+      ],
+      "src": [
+        "src.gras-cabrerizo-2014-spa"
+      ],
+      "def": "More than one arterial trunk leaves the sphenopalatine foramen."
+    },
+    {
+      "review": "draft",
+      "id": "v.nasal-tip-lateral-nasal-dominance",
+      "name": "Source of the nasal tip's main supply",
+      "of": "s.lateral-nasal-artery",
+      "tier": 3,
+      "geo": "none",
+      "why": "Whichever it is, the alar arcade connects them; the variant matters when the tip skin is raised or a pedicled flap is planned.",
+      "prev": [
+        {
+          "value": "78",
+          "unit": "% sides",
+          "method": "cadaver",
+          "src": "src.jung-2000-nasal-tip-arteries",
+          "conf": "low",
+          "n": 102,
+          "population": "Korean cadavers (51 heads)",
+          "note": "the lateral nasal artery in 78% of sides and the dorsal nasal in 22%; a single Asian population, not generalizable"
+        }
+      ],
+      "src": [
+        "src.jung-2000-nasal-tip-arteries"
+      ],
+      "def": "Which artery is the main source of the nasal tip: the lateral nasal (facial) or the dorsal nasal (ophthalmic)."
     }
   ],
   "classifications": [
@@ -4689,6 +5298,189 @@
       "note": "Endoscopic cadaver dissection in a small series; the spread is wide, so distance alone does not find the foramen: use the MT tail and the crista ethmoidalis. The SPF lies just anterior to the sphenoid face, a little short of the sphenoid ostium distance.",
       "src": [
         "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "m.psa-to-sphenoid-ostium",
+      "name": "Septal artery to sphenoid ostium",
+      "tier": 3,
+      "unit": "mm",
+      "value": {
+        "mean": 9.3
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "Distance between the posterior septal artery on the sphenoid face and the sphenoid ostium.",
+      "to": "lm.posterior-septal-artery-crossing",
+      "note": "A single mean from one dissection-and-CT study; the abstract gives no spread or n for the dissections. Compare with the chart distance in the specimen.",
+      "src": [
+        "src.pinheiro-neto-2011-nsf-dimensions"
+      ],
+      "from": "lm.sphenoid-ostium"
+    },
+    {
+      "review": "draft",
+      "id": "m.nsf-area",
+      "name": "Nasoseptal flap area against defect area",
+      "tier": 3,
+      "unit": "cm²",
+      "value": {
+        "mean": 17.12
+      },
+      "method": "CT",
+      "conf": "low",
+      "what": "Area of the harvested nasoseptal flap measured in an anatomical and radiological study; the anterior skull base defects in the same series averaged 8.64 cm².",
+      "n": 30,
+      "population": "30 CT scans compared; flap and defect measured on cadaver dissection and CT",
+      "note": "The flap was larger than the defect in all cases, but the anterior edge was the margin most likely to fall short (difference in width 5 mm or less in a third). The abstract does not say which design (short, full) this is. The atlas chapter on large defect reconstruction (Table 31.2) quotes about 25.1 cm² as the maximum nasoseptal flap area in a radioanatomic study (Pinheiro-Neto 2007), and says Asian nasal cavities may not offer the same septal mucosal area as those of white patients.",
+      "src": [
+        "src.pinheiro-neto-2011-nsf-dimensions",
+        "src.chiu-2019-ch31",
+        "src.pinheiro-neto-2007-nsf"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "m.nsf-extended-gain",
+      "name": "Extended nasoseptal flap: added length and area",
+      "tier": 3,
+      "unit": "mm / mm²",
+      "value": {
+        "mean": 20
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "What adding the nasal floor and inferior meatus mucosa gives over a standard flap: about 20 mm more length and 774 mm² more area.",
+      "n": 27,
+      "population": "27 formalin-fixed sides, 13 CT scans",
+      "note": "Value shown is the added length in mm; the added area is about 774 mm². The extended flap covered a clival defect from tuberculum to foramen magnum in 66.6% and from below the sella in 91.6%; a defect lateral to the hypoglossal canals is unlikely to be covered.",
+      "src": [
+        "src.peris-celda-2013-extended-nsf"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "m.bas-flap-length",
+      "name": "Bipedicled anterior septal flap: length and area",
+      "tier": 3,
+      "unit": "mm",
+      "value": {
+        "mean": 39.64,
+        "sd": 4.26
+      },
+      "method": "CT",
+      "conf": "low",
+      "what": "Length from the incisive canal to the sphenoid face at the level of the choanal arch, as the long axis of the bipedicled anterior septal flap. Mean area 916.46 ± 262.66 mm².",
+      "n": 9,
+      "population": "9 midline sagittal CT images; confirmed in 4 cadavers",
+      "note": "The same series puts the flap's coverage at about 100% of the frontal beak and 51% of the posterior frontal table. Pedicles: the septal branch of the superior labial artery and the nasopalatine artery.",
+      "src": [
+        "src.bleier-2011-bas-flap"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "m.mtf-area",
+      "name": "Middle turbinate flap area",
+      "tier": 3,
+      "unit": "cm²",
+      "value": {
+        "mean": 5.6
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "Mean surface area of the middle turbinate flap; flaps shorter than 4.0 cm did not reach the sella.",
+      "n": 12,
+      "population": "12 flaps in 6 injected cadaveric heads",
+      "note": "Covered planum and fovea defects in all 12 flaps; 2 of 12 could not cover a sellar defect. Technically demanding. The atlas quotes the same mean (5.6 cm²) and stresses that dimensions vary with turbinate size.",
+      "src": [
+        "src.prevedello-2009-mtf",
+        "src.chiu-2019-ch31"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "m.aea-septal-branch-axilla",
+      "name": "Anterior ethmoidal artery septal entry behind the middle turbinate axilla",
+      "tier": 3,
+      "unit": "mm",
+      "value": {
+        "mean": 7.35,
+        "sd": 0.95,
+        "range": [
+          5.5,
+          8.7
+        ]
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "On a sagittal plane, the distance from the septal projection of the middle turbinate's anterior attachment back to the vertical line through the entry of the anterior ethmoidal artery into the septum.",
+      "n": 10,
+      "population": "10 nasal cavities of 5 adult cadaveric heads (CT)",
+      "note": "Basis for a unilateral septal flap on the septal branch of the anterior ethmoidal artery. Measured from the axilla, which the specimen landmark approximates with the turbinate head.",
+      "src": [
+        "src.gras-cabrerizo-2016-aea-septal"
+      ],
+      "from": "lm.middle-turbinate-head"
+    },
+    {
+      "review": "draft",
+      "id": "m.internal-nasal-valve-angle",
+      "name": "Internal nasal valve angle",
+      "tier": 2,
+      "unit": "degrees",
+      "value": {
+        "range": [
+          10,
+          15
+        ]
+      },
+      "method": "CT",
+      "conf": "low",
+      "what": "The angle between the septum and the lateral wall at the internal valve. 10 to 15 degrees is the paper's hypothesised true value; standard coronal CT sections read it wider than a section reformatted through the valve.",
+      "n": 24,
+      "population": "24 rhinoplasty patients with CT for nasal obstruction",
+      "note": "The paper tests a reformatting plane against the hypothesised true value; it does not establish a normal range, and no correlation with the modified Cottle maneuver was found.",
+      "src": [
+        "src.bloom-2012-valve-ct"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "m.soa-axial-length",
+      "name": "Supraorbital artery: axial vascularization of the pericranial flap",
+      "tier": 3,
+      "unit": "mm",
+      "value": {
+        "mean": 70.7,
+        "sd": 13.9
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "Length of pericranium reliably vascularized along the supraorbital artery; the supratrochlear artery gave 35 ± 10.4 mm.",
+      "n": 4,
+      "population": "4 injected cadavers (and 4 patients)",
+      "note": "Superficial dissection should end 15 mm above the orbital rim to keep the flap alive; the deep and superficial branches divide a median 8 mm above the rim. A nasal reconstruction series, small n.",
+      "src": [
+        "src.sertel-2016-pericranial-nose"
+      ]
+    },
+    {
+      "id": "m.itf-area",
+      "name": "Inferior turbinate flap: maximum area",
+      "tier": 3,
+      "unit": "cm²",
+      "value": {
+        "mean": 2.4
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "Approximate maximum surface area of the posterior pedicle inferior turbinate flap, as tabulated in the atlas chapter.",
+      "note": "Second-hand: a textbook table value (about 2.4 cm², a long, narrow flap with limited anterior reach) with no n. The primary report (Fortes 2007) is a four-patient series whose abstract gives no area, so the figure's origin is not verified here; check it against the chapter's own reference list before relying on it.",
+      "src": [
+        "src.chiu-2019-ch31"
       ],
       "review": "draft"
     }
@@ -7152,6 +7944,188 @@
         "src.chiu-2019-ch21"
       ],
       "review": "draft"
+    },
+    {
+      "review": "draft",
+      "id": "p.inferior-turbinate-flap",
+      "name": "Posterior pedicle inferior turbinate flap",
+      "tier": 3,
+      "indications": [
+        "A limited skull base defect when the nasoseptal flap is unavailable (after a posterior septectomy or wide sphenoidotomies, or with pedicle loss): a long, narrow flap whose anterior reach is limited"
+      ],
+      "corridor": "Transnasal, 0° endoscope; the inferior turbinate mucoperiosteum pedicled on the inferior turbinate branch of the sphenopalatine artery (a terminal branch of the [[s.posterior-lateral-nasal-artery]]). Stored in a large maxillary antrostomy.",
+      "preop": [
+        {
+          "check": "Pedicle: inferior turbinate surgery or tumour, or sphenopalatine artery ligation.",
+          "why": "Any of these excludes the flap; the alternatives are the contralateral nasoseptal flap or a regional flap."
+        },
+        {
+          "check": "Expected flap area against the defect.",
+          "why": "The maximum area in the literature the atlas quotes is small, about 2.4 cm², so it suits small or posterior defects."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Create a large maxillary antrostomy for storing the flap.",
+          "see": [
+            "s.maxillary-sinus"
+          ],
+          "think": "Raise the flap early, before the resection."
+        },
+        {
+          "do": "Incise the superior border of the flap down to bone, from the junction of the vertical palatine bone and the posteromedial maxilla horizontally forward to the head of the inferior turbinate at the piriform aperture.",
+          "see": [
+            "s.inferior-turbinate",
+            "s.palatine-bone"
+          ],
+          "think": "The cut goes to bone or the flap will not lift cleanly."
+        },
+        {
+          "do": "Dissect the mucosa off the turbinate bone in a subperiosteal plane, inferiorly and then up to the lateral side of the turbinate bone, preserving the pedicled blood supply.",
+          "see": [
+            "s.inferior-turbinate",
+            "s.posterior-lateral-nasal-artery"
+          ],
+          "think": "Stay subperiosteal: the vessels are in the periosteum."
+        },
+        {
+          "do": "Continue superiorly to the apex of the inferior meatus; incise and free the mucosa there, away from the lacrimal duct. Further forward the freeing incision can lie more laterally to widen the flap.",
+          "see": [
+            "s.inferior-meatus",
+            "s.nasolacrimal-duct"
+          ],
+          "think": "This makes a narrowing in the flap; the cut protects the duct."
+        },
+        {
+          "do": "Place the flap and complete the multilayered reconstruction as for the posterior nasoseptal flap.",
+          "see": [
+            "s.inferior-turbinate"
+          ],
+          "think": "Mucosa faces the nasal cavity; raw surface to cleaned bone."
+        }
+      ],
+      "endpoints": "Flap covers the defect with its pedicle intact and no functional mucosa buried beneath it.",
+      "pitfalls": [
+        "Using the flap for a defect larger than its small area",
+        "Entering the lacrimal duct at the apex of the inferior meatus",
+        "Raising it after prior inferior turbinate surgery or sphenopalatine ligation"
+      ],
+      "src": [
+        "src.chiu-2019-ch31",
+        "src.fortes-2007-itf"
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "p.middle-turbinate-flap",
+      "name": "Middle turbinate flap",
+      "tier": 3,
+      "indications": [
+        "Small defects of the fovea ethmoidalis, planum sphenoidale or sella when the nasoseptal flap is not available: technically challenging, with very variable dimensions that depend on the turbinate"
+      ],
+      "corridor": "Transnasal, 0° endoscope; the middle turbinate mucosa raised from both its medial and lateral surfaces on the middle turbinate branch of the sphenopalatine artery.",
+      "steps": [
+        {
+          "do": "Make a vertical incision at the head of the middle turbinate.",
+          "see": [
+            "s.middle-turbinate"
+          ],
+          "think": "Check the turbinate's length first (> 4 cm for the sella)."
+        },
+        {
+          "do": "Make a horizontal incision at the superior medial aspect of the turbinate, below its attachment to the lateral lamella of the cribriform plate.",
+          "see": [
+            "s.middle-turbinate",
+            "s.lateral-lamella"
+          ],
+          "think": "Too high risks a CSF leak: stay below the cribriform plate."
+        },
+        {
+          "do": "Elevate the medial and lateral mucosa from the bone in a subperiosteal plane with sharp instruments, then remove the turbinate bone piecemeal with through-cutting forceps.",
+          "see": [
+            "s.middle-turbinate"
+          ],
+          "think": "The bone is removed from inside the mucosal envelope."
+        },
+        {
+          "do": "Incise the mucosa in the axilla to detach the lateral mucosa from the nasal wall, below the cribriform plate again, and continue inferiorly and posteriorly to free the lateral mucosa completely.",
+          "see": [
+            "s.middle-turbinate",
+            "s.lateral-nasal-wall"
+          ],
+          "think": "The flap is then unfolded like a book."
+        },
+        {
+          "do": "Dissect the pedicle back toward the sphenopalatine foramen for extra length.",
+          "see": [
+            "s.sphenopalatine-foramen"
+          ],
+          "think": "Length decides reach."
+        },
+        {
+          "do": "Place the flap and complete the multilayered reconstruction as for the posterior nasoseptal flap.",
+          "see": [
+            "s.middle-turbinate"
+          ],
+          "think": "Mucosa toward the nasal cavity."
+        }
+      ],
+      "endpoints": "Flap covers the defect with its pedicle intact.",
+      "pitfalls": [
+        "A turbinate shorter than about 4 cm for a sellar defect",
+        "Cutting the superior incision too high (CSF leak)",
+        "Concha bullosa or hypoplasia not recognised on imaging"
+      ],
+      "src": [
+        "src.chiu-2019-ch31",
+        "src.prevedello-2009-mtf"
+      ],
+      "preop": [
+        {
+          "check": "Imaging of the middle turbinate: length, concha bullosa, hypoplasia.",
+          "why": "The turbinate must be longer than about 4 cm for the flap to reach the sella; a concha bullosa or hypoplastic turbinate makes the dissection harder."
+        },
+        {
+          "check": "Pedicle: prior sphenoid surgery, sphenopalatine ligation, internal maxillary artery sacrifice.",
+          "why": "The atlas lists these as excluding or endangering the middle turbinate pedicle."
+        }
+      ]
+    },
+    {
+      "review": "draft",
+      "id": "p.lateral-nasal-wall-flap",
+      "name": "Lateral nasal wall flap (anterior or posterior pedicle)",
+      "tier": 3,
+      "indications": [
+        "Anterior pedicle (Hadad-Bassagaisteguy 2): reconstruction of anterior skull base defects in selected patients, after endonasal resection of an esthesioneuroblastoma or of a meningoencephalocele",
+        "Posterior pedicle (Carrau-Hadad): large median defects of the planum, sella, clivus and nasopharynx"
+      ],
+      "corridor": "Transnasal, 0° endoscope; the mucoperiosteum of the inferolateral nasal wall, based anteriorly or posteriorly.",
+      "steps": [
+        {
+          "do": "Raise the inferolateral nasal wall mucoperiosteum, with the anterior pedicle for anterior defects or the posterior pedicle for median ones.",
+          "see": [
+            "s.lateral-nasal-wall",
+            "s.inferior-turbinate"
+          ],
+          "think": "Choose the pedicle by where the defect is and which arteries are intact."
+        },
+        {
+          "do": "Transpose to the defect, raw surface to bone.",
+          "see": [
+            "s.lateral-nasal-wall"
+          ],
+          "think": "These are cadaver-derived techniques with a handful of clinical cases each."
+        }
+      ],
+      "endpoints": "Flap covers the defect with its pedicle intact.",
+      "pitfalls": [
+        "Choosing a flap whose pedicle was divided by an earlier approach"
+      ],
+      "src": [
+        "src.hadad-2011-hb2",
+        "src.rivera-serrano-2011-lnwf"
+      ]
     }
   ],
   "stations": [

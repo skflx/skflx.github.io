@@ -16,8 +16,8 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=3c9cfa21';
-import { CT_PLANES } from './state.js?v=91f08185';
+import { PLANES } from './volume.js?v=3cbe3dc2';
+import { CT_PLANES } from './state.js?v=cd9bf710';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -165,6 +165,12 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     swBox.type = 'checkbox';
     swBox.id = 'ssb-spec-sweeps';
     swLabel.append(swBox, el('span', null, 'Show vessels and nerves (partly inferred)'));
+    const mucLabel = el('label', 'ssb-ct-check');
+    const mucBox = el('input');
+    mucBox.type = 'checkbox';
+    mucBox.id = 'ssb-spec-mucosa';
+    mucLabel.append(mucBox, el('span', null, 'Mucosa (air spaces drawn as their lining)'));
+    airSec.append(mucLabel);
     lmSec.append(lmLabel, swLabel);
 
     /* ---- section ---- */
@@ -222,6 +228,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
             const r = regions.find((x) => x.region === box.dataset.region);
             if (r) box.checked = r.on;
         }
+        mucBox.checked = specimen.mucosaOn;
         lmBox.checked = specimen.landmarksOn;
         lmBox.disabled = !specimen.hasLandmarks;
         lmLabel.classList.toggle('is-off', !specimen.hasLandmarks);
@@ -261,6 +268,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     root.addEventListener('change', (e) => {
         const t = e.target;
         if (t === lmBox) specimen.setLandmarks(lmBox.checked);
+        else if (t === mucBox) specimen.setMucosa(mucBox.checked);
         else if (t === swBox) specimen.setSweeps(swBox.checked);
         else if (t === flipBox) specimen.flipSection();
         else if (t.matches('input[data-region]')) specimen.setRegion(t.dataset.region, t.checked);
