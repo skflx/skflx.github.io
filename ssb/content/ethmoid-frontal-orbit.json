@@ -2833,12 +2833,12 @@
     },
     {
       "id": "s.skull-base-region",
-      "name": "Bony framework (specimen envelope)",
+      "name": "Sinonasal bony envelope (reconstruction)",
       "kind": "region",
       "region": "multiple",
       "tier": 1,
-      "what": "The bone of the sinonasal region and ventral skull base in the reference specimen, drawn as one surface for orientation.",
-      "why": "It is context, not one bone: individual bones, lamellae and resection units are their own entries and carry the anatomy that matters at the table.",
+      "what": "The bone within 12 mm of the named air spaces in the reference specimen, drawn as one surface for orientation; it is a reconstruction unit, not an anatomical structure.",
+      "why": "Gives the specimen its skeleton while the walls pack carries the named bones.",
       "geo": "specimen",
       "src": [
         "src.uw-ct-sinus-atlas"

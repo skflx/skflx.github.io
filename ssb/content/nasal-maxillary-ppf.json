@@ -3514,6 +3514,17 @@
   ],
   "landmarks": [
     {
+      "id": "lm.naris",
+      "name": "Naris (nostril)",
+      "of": "s.nasal-vestibule",
+      "tier": 1,
+      "locate": "The nostril opening; the endoscope's fulcrum.",
+      "src": [
+        "src.grays-42"
+      ],
+      "review": "draft"
+    },
+    {
       "id": "lm.nasal-sill",
       "name": "Nasal sill",
       "of": "s.nasal-vestibule",
