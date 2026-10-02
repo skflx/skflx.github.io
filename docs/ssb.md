@@ -1,14 +1,13 @@
 # SSB — Sinus & Skull Base 3D: architecture and conventions
 
-**Status: phase 1 done, phase 2 in progress (2026-09).** `ssb.html` runs
-graph mode — tree, search, depth filter, info panels, deep links — over the
-draft knowledge graph (`ssb/content/`, schema `docs/authoring-ssb.md`,
-validator `tools/ssb-content.mjs`), and a 3D stage on vendored three.js with
-two stages: the specimen placeholder, and the variant lab with the
-`ethmoid-roof` and `frontal-recess` dioramas (§6). CT mode (triplanar slices,
-label outlines, crosshair sync; §3, §5.6) is a third stage that needs no
-WebGL. The reference specimen is being reconstructed from the UW atlas
-(§13). Build order and owner decisions: §12–§13.
+**Status (2026-10-02): phases 0, 1, 3 and 5 done, 2 half done; endoscope
+and soft tissue next.** `ssb.html` runs graph mode over the draft knowledge
+graph (`ssb/content/`, schema `docs/authoring-ssb.md`, validator
+`tools/ssb-content.mjs`) and three stages: the reference specimen
+reconstructed from the UW atlas (§5.1), CT (§3, §5.6; no WebGL needed), and
+the variant lab (§6). **What is done and what is next, task by task, with
+who does it: `docs/ssb-roadmap.md`.** This file is the design; the roadmap
+is the board.
 
 ## 0. What it is
 
@@ -124,6 +123,9 @@ never reloads.
   skull base, orbit, AEA) from precomputed distance fields. This mode is
   where the fulcrum constraint teaches why the frontal recess needs a 45–70°
   scope and why posterior septectomy opens binostril work.
+  The specimen's face mask removed the nose, so the fulcrum is a
+  provisional schematic `lm.naris` until the nose exists (§5.7); the scope
+  sees the air spaces' surfaces drawn as mucosa.
 - **CT.** Axial, coronal and sagittal slices of the specimen volume, each
   on its own canvas, radiological convention (patient right on the image's
   left) with orientation letters; one crosshair in RAS mm shared by the
@@ -139,10 +141,10 @@ never reloads.
   that entity in the ordinary panel. The volume loads on first entry; with
   no `ssb/ct/ct.json` the stage says so. Built for the Wormald
   building-block exercise: scroll the three planes, identify each frontal
-  recess cell, and toggle its 3D block to check. *Not built yet:* the oblique
-  slice down the scope axis (`volume.js` already extracts any plane; the
-  endoscope mode will drive it), the crosshair following the 3D cursor or scope
-  tip, and the 3D block toggle (it needs the 3D specimen).
+  recess cell, and toggle its 3D block to check. The crosshair is the
+  Specimen stage's 3D cursor (`state.cursor`). *Not built yet:* the oblique
+  slice down the scope axis and the crosshair following the scope tip
+  (roadmap E4), and the 3D block toggle.
 - **Procedure.** A procedure from the graph played as steps. Each step sets
   the station (camera pose), applies the cumulative dissection state (units
   the step `removes` disappear), highlights what comes into view, hatches
@@ -306,6 +308,35 @@ table name that would leave `ssb/ct` and `ssb/geometry`, is refused. Slices
 are resampled per pixel (trilinear CT, nearest label) along straight rows in
 voxel space: the three standard planes, and `obliqueSlice` for an origin plus
 two in-plane unit vectors.
+
+### 5.7 Soft tissue
+
+The reference specimen is a bone-window CT in 8-bit display values: air
+and bone separate cleanly, but mucosa, fluid, fat, muscle and cartilage
+lie a few display levels apart. None of them can be segmented from it, so
+soft tissue is built three other ways, and each part says which:
+
+| Layer | Built as | Truth kind |
+|---|---|---|
+| Mucosa (sinus and nasal lining) | the air spaces' own surfaces — the air/tissue boundary *is* the mucosal surface — drawn with the `mucosa` material; no thickness is modelled | specimen |
+| Septal mucosa (and nasal floor, for the extended flap) | the faces of the `s.nasal-septum.M` (and `s.nasal-floor.*`) wall units that face each nasal cavity, meshed per side, each with a **chart**: the surface's sagittal projection (a, s) in mm and a lookup grid back onto it, so anything drawn on the septum is specified in 2D | specimen |
+| Small arteries (posterior septal and its branches, PLNA branches, septal AEA/PEA branches, nasopalatine, superior labial) | sweeps (§5.5) generated from **waypoints** — landmarks or chart points — at a stated depth below the surface; every point `inferred`, every waypoint cited | specimen-placed, inferred |
+| Flap territories (nasoseptal: short, full, extended; rescue incisions; later IT/MT/lateral wall flaps) | **overlays**: outlines computed at runtime on a chart from landmarks plus the graph's measurements and the procedure's steps, with parameters and presets like a diorama's | schematic on specimen |
+| External nose (naris, vestibule, valves, ala, columella; cartilage) | not in the specimen: the face mask (§5.1) removed it. Owner decision O1/O2 (§13) | — |
+
+Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the
+committed `ssb/ct/` volume, not the raw crawl, so it can be rerun in any
+session; it writes a `soft` pack, `ssb/geometry/charts.json`, and merges
+its landmarks and sweeps into the shared geometry files (never dropping
+other steps' keys; method per point in the `*.meta.json` files). Waypoint
+specs live in `tools/ssb-pipeline/uw/sweeps-soft.json` — anatomy as data,
+authored with sources, never hand-placed coordinates in content.
+
+Overlays share the diorama contract's spirit (§6): parameters with ranges
+from the graph, presets from the procedure's own design ladder, parts
+named `<graph id>.<side>`, a *schematic on specimen* badge, and rules
+pinned in `tools/test-ssb.mjs` (the NSF pedicle contains the posterior
+septal artery; the superior cut stays below the olfactory strip).
 
 ## 6. Dioramas
 
@@ -602,19 +633,22 @@ are a phase-8 refinement, not a dependency.
 ## 12. Build plan
 
 Each phase ends green on `tools/check-data.mjs` and the smoke suite, and
-leaves the page useful. Model tier = who does the work best per token.
+leaves the page useful. Model tier = who does the work best per token
+(`docs/delegation.md`). This table is the plan's shape; **status, work
+packages, checkpoints and order live in `docs/ssb-roadmap.md`.**
 
 | Phase | Deliverable | Who |
 |---|---|---|
-| 0 | Architecture, schema, validator, draft graph, image briefs *(done)* | Opus authors per region; Sonnet research and citation checks; Opus adversarial review |
-| 1 | Walking skeleton: vendored three.js, `ssb.html`, module stamping, graph mode (tree, search, panels, procedures as text), smoke entry *(done)* | Sonnet |
-| 2 | Dioramas `ethmoid-roof`, `frontal-recess` *(done)*, `sphenoid`; variant lab; picking → panels *(done)* | Opus (parametric anatomy), Sonnet (wiring) |
-| 3 | Reference specimen: dataset chosen, segmented, pipeline, packs, geometry ↔ graph checks *(stage B done: CT, named air spaces, landmarks, packs; stage C — walls, sweeps, distance fields — next; the Specimen stage that shows the packs is in progress)* | Owner (dataset, decisions); Opus (reconstruction, anatomy-critical), Sonnet (viewer) |
-| 4 | Endoscope mode: fulcrum optics, collision, proximity HUD, stations | Opus (optics/constraints), Sonnet (UI) |
-| 5 | CT mode: triplanar, label overlay, crosshair sync *(done on the pipeline's volume; the oblique slice down the scope axis and 3D-cursor sync wait for endoscope mode)* | Sonnet |
+| 0 | Architecture, schema, validator, draft graph, image briefs | Opus authors per region; Sonnet research and citation checks; Opus adversarial review |
+| 1 | Walking skeleton: vendored three.js, `ssb.html`, module stamping, graph mode, smoke entry | Sonnet |
+| 2 | Dioramas `ethmoid-roof`, `frontal-recess`, `sphenoid`, `lateral-wall`; variant lab; picking → panels | Opus (parameters, proportions, rules as a spec), Sonnet (build to the spec) |
+| 3 | Reference specimen: pipeline, packs, Specimen stage, geometry ↔ graph checks | Owner (dataset, decisions); Opus (reconstruction, anatomy-critical), Sonnet (viewer) |
+| 3b | Soft tissue (§5.7): mucosa, septal surfaces and charts, waypoint vessels, flap overlays, external nose | Opus (content, waypoints, flap spec), Sonnet (pipeline stage D, viewer, tests) |
+| 4 | Endoscope mode: fulcrum optics, collision, proximity HUD, stations | Opus (math spec, station poses), Sonnet (rig, UI, tests) |
+| 5 | CT mode: triplanar, label overlay, crosshair sync, oblique slice down the scope | Sonnet |
 | 6 | Procedure mode: `removes` states, hazards in scene, station poses | Opus (content), Sonnet (wiring) |
 | 7 | Self-test from the graph, Leitner storage | Sonnet |
-| 8 | Textures (owner via `docs/ssb-imagegen.md`), offline caching, performance | Haiku/Sonnet |
+| 8 | Offline caching, performance; image textures only where procedural materials fall short (§11) | Sonnet |
 | ∞ | Content verification: citations checked, owner review | Sonnet, owner |
 
 ## 13. Owner decisions
@@ -632,7 +666,21 @@ Decided (owner, 2026-09-30):
   its images** (owner-confirmed; record the authors' written permission with
   the reference when available).
 
-Still open:
+Still open (the roadmap's §2 lists what each blocks):
+
+- **O1 — Source of the external nose.** (a) Unmask a nose-only box of the
+  specimen (real n = 1 naris, vestibule and alar skin; touches the "faces
+  are removed" rule of §5.1), (b) a parametric nose diorama registered to
+  the piriform aperture and ANS (schematic), or (c) both — specimen skin
+  surface, cartilage as an overlay. Recommended: (c), if the nose is in the
+  source's field of view (roadmap ST6-0 checks).
+- **O2 — Nose scope.** Entry anatomy only (vestibule, valves, ala,
+  columella: the scope's fulcrum and walls) or also the rhinoplasty
+  framework (ULC/LLC and crura, ligaments, SMAS). Recommended: entry anatomy
+  now; the framework later as its own diorama.
+- **O3 — Content authoring split.** Sonnet drafts the content backlog and
+  checks citations, Opus reviews adversarially; Opus keeps authoring
+  anything that places geometry. Recommended: yes.
 
 1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
    needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
