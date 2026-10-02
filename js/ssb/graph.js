@@ -9,7 +9,7 @@
    Imports stamps.js only (docs/ssb.md 7.1). Everything here is pure data
    and strings; the DOM is never touched.
    ============================================================= */
-import { STAMPS } from './stamps.js?v=bd82aad3';
+import { STAMPS } from './stamps.js?v=e9906922';
 
 /* Collection key -> id prefix (docs/authoring-ssb.md section 3). */
 export const COLLECTIONS = {

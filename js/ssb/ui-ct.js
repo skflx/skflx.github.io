@@ -12,7 +12,7 @@
    The CT button works without WebGL: CT is CPU-drawn and is the documented
    fallback (docs/ssb.md 7.5).
    ============================================================= */
-import { PLANES } from './volume.js?v=612be087';
+import { PLANES } from './volume.js?v=4a0115ab';
 import { CT_PLANES } from './state.js?v=91f08185';
 
 function el(tag, cls, text) {

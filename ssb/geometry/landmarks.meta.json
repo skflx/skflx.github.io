@@ -121,6 +121,18 @@
    "method": "highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
    "n_boundary_voxels": 287,
    "septum_mean_r": 0.26
+  },
+  "lm.naris.R": {
+   "method": "inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity's anterior edge; replaced when the nose exists (ST6)",
+   "n_front_voxels": 73,
+   "anterior_air_edge_a_mm": -9.5,
+   "row_bone_max_a_mm": -10.0
+  },
+  "lm.naris.L": {
+   "method": "inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity's anterior edge; replaced when the nose exists (ST6)",
+   "n_front_voxels": 48,
+   "anterior_air_edge_a_mm": -9.5,
+   "row_bone_max_a_mm": -10.0
   }
  }
 }

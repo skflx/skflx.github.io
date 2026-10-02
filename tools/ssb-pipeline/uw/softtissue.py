@@ -15,8 +15,9 @@ it is derived (docs/ssb.md 5.7). Writes:
   ssb/geometry/charts.json      per surface: the RAS -> chart rule, the bounding polygon in chart mm,
                                 and a 1 mm (a, s) -> r lookup grid (null where the surface is absent),
                                 with the surface normal per cell (unit, pointing into the tissue).
-  ssb/geometry/landmarks.json   merged (never drops a key): lm.choanal-arch.M, and
-                                landmarks.meta.json the method per point.
+  ssb/geometry/landmarks.json   merged (never drops a key): lm.choanal-arch.M, and the provisional
+                                endoscope fulcrum lm.naris.R / .L (E1, see naris()); landmarks.meta.json
+                                the method per point.
 
 Method. The septal mucosa of side X is the lining of nasal-cavity.X where it faces the septum wall unit
 (s.nasal-septum.M, walls.py): marching cubes on the air space, Taubin smoothing, and the triangles whose
@@ -203,6 +204,37 @@ def choanal_arch(lab, table, aff, sept_pts):
     return [round(float(x), 2) for x in p], {'n_boundary_voxels': int(len(ras)), 'septum_mean_r': round(mid, 2)}
 
 
+NARIS_ABOVE_ANS_MM = 10.0     # schematic (E1): axial level of the fulcrum above lm.anterior-nasal-spine.M
+NARIS_SLAB_MM = 2.0           # +- around that level
+NARIS_FRONT_MM = 1.0          # "the most anterior air voxels": within this of the anterior-most one
+NARIS_FORWARD_MM = 10.0       # schematic (E1): the fulcrum lies this far in front of the masked cavity's anterior edge
+
+
+def naris(lab, ct, table, aff, ans):
+    """lm.naris.<side> (E1, provisional): the endoscope's fulcrum until the nose exists (ST6). Per side, the
+    air voxels of nasal-cavity.<side> within +-2 mm of the axial level 10 mm above the ANS; of those, the
+    ones within 1 mm of the anterior-most; their centroid moved 10 mm anterior (+A). Both 10 mm figures are
+    schematic. Asserts the point is anterior to every bone voxel (display >= BONE_LEVEL) of its axial row."""
+    by = {v: int(k) for k, v in table.items()}
+    A = np.array(aff)
+    level = ans[2] + NARIS_ABOVE_ANS_MM
+    ks = [k for k in range(ct.shape[0]) if abs(A[2, 2] * k + A[2, 3] - level) <= NARIS_SLAB_MM]
+    out, info = {}, {}
+    for side in 'RL':
+        kk, jj, ii = np.nonzero((lab == by[f's.nasal-cavity.{side}'])[ks])
+        a = A[1, 1] * jj + A[1, 3]; r = A[0, 0] * ii + A[0, 3]
+        front = a >= a.max() - NARIS_FRONT_MM
+        p = [float(r[front].mean()), float(a[front].mean()) + NARIS_FORWARD_MM, float(level)]
+        k = int(round((p[2] - A[2, 3]) / A[2, 2]))
+        jb = np.nonzero(ct[k] >= M.BONE_LEVEL)[0]
+        bone_a = float((A[1, 1] * jb + A[1, 3]).max())
+        assert p[1] > bone_a, f'lm.naris.{side}: A {p[1]:.1f} is not anterior to the bone of its axial row (A {bone_a:.1f})'
+        out[f'lm.naris.{side}'] = [round(x, 2) for x in p]
+        info[f'lm.naris.{side}'] = {'n_front_voxels': int(front.sum()), 'anterior_air_edge_a_mm': round(float(a.max()), 2),
+                                    'row_bone_max_a_mm': round(bone_a, 2)}
+    return out, info
+
+
 def main():
     hdr, ct, lab, table = M.read_volume()
     aff, spacing = hdr['affine'], hdr['spacing'][0]
@@ -269,9 +301,17 @@ def main():
                   'specimen.py cuts that boundary at the PNS plane (softtissue.py)', **meta}
     json.dump(mm, open(mp, 'w'), indent=1)
     print('lm.choanal-arch.M', arch, meta)
+    nar, ninfo = naris(lab, ct, table, aff, lm['lm.anterior-nasal-spine.M'])
+    lm.update(nar)
+    json.dump(dict(sorted(lm.items())), open(lp, 'w'), indent=1)
+    for k, v in nar.items():
+        mm['landmarks'][k] = {'method': 'inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity\'s anterior edge; '
+                                        'replaced when the nose exists (ST6)', **ninfo[k]}
+    json.dump(mm, open(mp, 'w'), indent=1)
+    print(nar, ninfo)
     import sweeps_soft
     sweeps_soft.run()                  # surface-snapped vessel sweeps from sweeps-soft.json (no-op while it is empty)
-    write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'pack_bytes': gz})
+    write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'naris': nar, 'pack_bytes': gz})
 
 
 if __name__ == '__main__':
