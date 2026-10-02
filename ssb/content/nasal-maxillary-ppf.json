@@ -5334,9 +5334,11 @@
       "what": "Area of the harvested nasoseptal flap measured in an anatomical and radiological study; the anterior skull base defects in the same series averaged 8.64 cm².",
       "n": 30,
       "population": "30 CT scans compared; flap and defect measured on cadaver dissection and CT",
-      "note": "The flap was larger than the defect in all cases, but the anterior edge was the margin most likely to fall short (difference in width 5 mm or less in a third). The abstract does not say which design (short, full) this is.",
+      "note": "The flap was larger than the defect in all cases, but the anterior edge was the margin most likely to fall short (difference in width 5 mm or less in a third). The abstract does not say which design (short, full) this is. The atlas chapter on large defect reconstruction (Table 31.2) quotes about 25.1 cm² as the maximum nasoseptal flap area in a radioanatomic study (Pinheiro-Neto 2007), and says Asian nasal cavities may not offer the same septal mucosal area as those of white patients.",
       "src": [
-        "src.pinheiro-neto-2011-nsf-dimensions"
+        "src.pinheiro-neto-2011-nsf-dimensions",
+        "src.chiu-2019-ch31",
+        "src.pinheiro-neto-2007-nsf"
       ]
     },
     {
@@ -5392,9 +5394,10 @@
       "what": "Mean surface area of the middle turbinate flap; flaps shorter than 4.0 cm did not reach the sella.",
       "n": 12,
       "population": "12 flaps in 6 injected cadaveric heads",
-      "note": "Covered planum and fovea defects in all 12 flaps; 2 of 12 could not cover a sellar defect. Technically demanding.",
+      "note": "Covered planum and fovea defects in all 12 flaps; 2 of 12 could not cover a sellar defect. Technically demanding. The atlas quotes the same mean (5.6 cm²) and stresses that dimensions vary with turbinate size.",
       "src": [
-        "src.prevedello-2009-mtf"
+        "src.prevedello-2009-mtf",
+        "src.chiu-2019-ch31"
       ]
     },
     {
@@ -5463,6 +5466,24 @@
       "src": [
         "src.sertel-2016-pericranial-nose"
       ]
+    },
+    {
+      "id": "m.itf-area",
+      "name": "Inferior turbinate flap: maximum area",
+      "tier": 3,
+      "unit": "cm²",
+      "value": {
+        "mean": 2.4
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "Approximate maximum surface area of the posterior pedicle inferior turbinate flap, as tabulated in the atlas chapter.",
+      "note": "A long, narrow flap with limited anterior reach; a textbook table value derived from the literature, without a stated n.",
+      "src": [
+        "src.chiu-2019-ch31",
+        "src.fortes-2007-itf"
+      ],
+      "review": "draft"
     }
   ],
   "hazards": [
@@ -7931,39 +7952,67 @@
       "name": "Posterior pedicle inferior turbinate flap",
       "tier": 3,
       "indications": [
-        "A limited skull base defect (a CSF fistula, an exposed internal carotid artery or an aneurysm clip) when the nasoseptal flap is unavailable, for instance after a posterior septectomy or wide sphenoidotomies"
+        "A limited skull base defect when the nasoseptal flap is unavailable (after a posterior septectomy or wide sphenoidotomies, or with pedicle loss): a long, narrow flap whose anterior reach is limited"
       ],
-      "corridor": "Transnasal, 0° endoscope; the inferior turbinate mucoperiosteum pedicled on the inferior turbinate artery, a terminal branch of the [[s.posterior-lateral-nasal-artery]].",
+      "corridor": "Transnasal, 0° endoscope; the inferior turbinate mucoperiosteum pedicled on the inferior turbinate branch of the sphenopalatine artery (a terminal branch of the [[s.posterior-lateral-nasal-artery]]). Stored in a large maxillary antrostomy.",
       "preop": [
         {
-          "check": "Prior posterior septectomy or sphenoidotomy, and whether the sphenopalatine artery has been ligated.",
-          "why": "The flap depends on the sphenopalatine artery and its posterior lateral nasal branch; the reason to use it is that the septal pedicle is gone, so its own pedicle must be intact."
+          "check": "Pedicle: inferior turbinate surgery or tumour, or sphenopalatine artery ligation.",
+          "why": "Any of these excludes the flap; the alternatives are the contralateral nasoseptal flap or a regional flap."
+        },
+        {
+          "check": "Expected flap area against the defect.",
+          "why": "The maximum area in the literature the atlas quotes is small, about 2.4 cm², so it suits small or posterior defects."
         }
       ],
       "steps": [
         {
-          "do": "Identify the posterior end of the inferior turbinate and the artery entering it from the region of the [[s.sphenopalatine-foramen]].",
+          "do": "Create a large maxillary antrostomy for storing the flap.",
           "see": [
-            "s.inferior-turbinate",
-            "s.posterior-lateral-nasal-artery",
-            "s.sphenopalatine-foramen"
+            "s.maxillary-sinus"
           ],
-          "think": "The pedicle is at the back of the turbinate: keep dissection there minimal."
+          "think": "Raise the flap early, before the resection."
         },
         {
-          "do": "Raise the mucoperiosteum of the inferior turbinate as a pedicled flap and transpose it to the defect, raw surface to bone.",
+          "do": "Incise the superior border of the flap down to bone, from the junction of the vertical palatine bone and the posteromedial maxilla horizontally forward to the head of the inferior turbinate at the piriform aperture.",
+          "see": [
+            "s.inferior-turbinate",
+            "s.palatine-bone"
+          ],
+          "think": "The cut goes to bone or the flap will not lift cleanly."
+        },
+        {
+          "do": "Dissect the mucosa off the turbinate bone in a subperiosteal plane, inferiorly and then up to the lateral side of the turbinate bone, preserving the pedicled blood supply.",
+          "see": [
+            "s.inferior-turbinate",
+            "s.posterior-lateral-nasal-artery"
+          ],
+          "think": "Stay subperiosteal: the vessels are in the periosteum."
+        },
+        {
+          "do": "Continue superiorly to the apex of the inferior meatus; incise and free the mucosa there, away from the lacrimal duct. Further forward the freeing incision can lie more laterally to widen the flap.",
+          "see": [
+            "s.inferior-meatus",
+            "s.nasolacrimal-duct"
+          ],
+          "think": "This makes a narrowing in the flap; the cut protects the duct."
+        },
+        {
+          "do": "Place the flap and complete the multilayered reconstruction as for the posterior nasoseptal flap.",
           "see": [
             "s.inferior-turbinate"
           ],
-          "think": "Size is limited: the flap suits small defects."
+          "think": "Mucosa faces the nasal cavity; raw surface to cleaned bone."
         }
       ],
-      "endpoints": "Flap covers the entire defect on an intact pedicle.",
+      "endpoints": "Flap covers the defect with its pedicle intact and no functional mucosa buried beneath it.",
       "pitfalls": [
-        "A short flap for a defect it cannot cover",
-        "Damaging the posterior lateral nasal artery before the flap is raised"
+        "Using the flap for a defect larger than its small area",
+        "Entering the lacrimal duct at the apex of the inferior meatus",
+        "Raising it after prior inferior turbinate surgery or sphenopalatine ligation"
       ],
       "src": [
+        "src.chiu-2019-ch31",
         "src.fortes-2007-itf"
       ]
     },
@@ -7973,32 +8022,74 @@
       "name": "Middle turbinate flap",
       "tier": 3,
       "indications": [
-        "Small defects of the fovea ethmoidalis, planum sphenoidale or sella when vascularized tissue is wanted and the nasoseptal flap is not available"
+        "Small defects of the fovea ethmoidalis, planum sphenoidale or sella when the nasoseptal flap is not available: technically challenging, with very variable dimensions that depend on the turbinate"
       ],
-      "corridor": "Transnasal, 0° endoscope; turbinate mucoperiosteum harvested from both its medial and lateral aspects on the arteries supplying the middle turbinate.",
+      "corridor": "Transnasal, 0° endoscope; the middle turbinate mucosa raised from both its medial and lateral surfaces on the middle turbinate branch of the sphenopalatine artery.",
       "steps": [
         {
-          "do": "Identify the arteries supplying the middle turbinate and raise its mucoperiosteum from the medial and lateral sides as a pedicled flap.",
-          "see": [
-            "s.middle-turbinate",
-            "s.posterior-lateral-nasal-artery"
-          ],
-          "think": "Technically demanding; length decides what it reaches (shorter than about 4 cm did not reach the sella in the cadaver series)."
-        },
-        {
-          "do": "Transpose to the defect, raw surface to bone.",
+          "do": "Make a vertical incision at the head of the middle turbinate.",
           "see": [
             "s.middle-turbinate"
           ],
-          "think": "Mean area about 5.6 cm² ([[m.mtf-area]])."
+          "think": "Check the turbinate's length first (> 4 cm for the sella)."
+        },
+        {
+          "do": "Make a horizontal incision at the superior medial aspect of the turbinate, below its attachment to the lateral lamella of the cribriform plate.",
+          "see": [
+            "s.middle-turbinate",
+            "s.lateral-lamella"
+          ],
+          "think": "Too high risks a CSF leak: stay below the cribriform plate."
+        },
+        {
+          "do": "Elevate the medial and lateral mucosa from the bone in a subperiosteal plane with sharp instruments, then remove the turbinate bone piecemeal with through-cutting forceps.",
+          "see": [
+            "s.middle-turbinate"
+          ],
+          "think": "The bone is removed from inside the mucosal envelope."
+        },
+        {
+          "do": "Incise the mucosa in the axilla to detach the lateral mucosa from the nasal wall, below the cribriform plate again, and continue inferiorly and posteriorly to free the lateral mucosa completely.",
+          "see": [
+            "s.middle-turbinate",
+            "s.lateral-nasal-wall"
+          ],
+          "think": "The flap is then unfolded like a book."
+        },
+        {
+          "do": "Dissect the pedicle back toward the sphenopalatine foramen for extra length.",
+          "see": [
+            "s.sphenopalatine-foramen"
+          ],
+          "think": "Length decides reach."
+        },
+        {
+          "do": "Place the flap and complete the multilayered reconstruction as for the posterior nasoseptal flap.",
+          "see": [
+            "s.middle-turbinate"
+          ],
+          "think": "Mucosa toward the nasal cavity."
         }
       ],
       "endpoints": "Flap covers the defect with its pedicle intact.",
       "pitfalls": [
-        "A flap under about 4 cm for a sellar defect"
+        "A turbinate shorter than about 4 cm for a sellar defect",
+        "Cutting the superior incision too high (CSF leak)",
+        "Concha bullosa or hypoplasia not recognised on imaging"
       ],
       "src": [
+        "src.chiu-2019-ch31",
         "src.prevedello-2009-mtf"
+      ],
+      "preop": [
+        {
+          "check": "Imaging of the middle turbinate: length, concha bullosa, hypoplasia.",
+          "why": "The turbinate must be longer than about 4 cm for the flap to reach the sella; a concha bullosa or hypoplastic turbinate makes the dissection harder."
+        },
+        {
+          "check": "Pedicle: prior sphenoid surgery, sphenopalatine ligation, internal maxillary artery sacrifice.",
+          "why": "The atlas lists these as excluding or endangering the middle turbinate pedicle."
+        }
       ]
     },
     {

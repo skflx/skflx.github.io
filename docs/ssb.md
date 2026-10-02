@@ -371,7 +371,7 @@ what exists and says so.
 |---|---|---|---|
 | `design` | `short` · `full` · `extended` · `rescue` | `full` | `p.nasoseptal-flap` preop ladder |
 | `top_margin` (mm below the top of the septum) | 5–20; below 10 flagged "olfactory risk" | 15 (schematic) | `m.nsf-superior-incision` (10–20, conf low; one chapter accepts 5) |
-| `ostium_clearance` (mm below the ostium landmark, where the superior cut starts) | 0–6 | 2 (schematic: the graph has no ostium size) | `s.posterior-septal-artery-*-branch` (dominant branch always below the ostium plane) |
+| `ostium_clearance` (mm below the ostium landmark, where the superior cut starts; negative = above it) | -4–6 | 2 (schematic: the graph has no ostium size) | `s.posterior-septal-artery-*-branch` (dominant branch always below the ostium plane). The atlas chapter on large defects starts the superior cut at the *superior* aspect of the ostium; `p.nasoseptal-flap` says the inferior margin: the range spans both |
 | `anterior_margin` (full, extended: mm behind the chart's anterior edge) | 0–10 | 0 (the specimen's chart ends at the masked vestibule) | `p.nasoseptal-flap` step 4 ("up to the mucocutaneous junction") |
 | `window` (rescue: side of the contralateral window beside the ostium, mm) | 3–8 | 5 (schematic: no size in the graph) | `p.nasoseptal-flap` rescue step |
 
@@ -386,7 +386,7 @@ arch's S, `clr` = `ostium_clearance`):
 2. *Superior incision* — from the pedicle's upper end forward at
    `s_sup(a) = min(s_o - clr, top(a) - top_margin)`: level at the ostium
    margin, then following the septum's top down when the margin binds
-   (never closer to the top than `top_margin`).
+   (never closer to the top than `top_margin`; the atlas leaves 1–2 cm of superior septum when the defect is sellar or planum only, and needs no margin when the approach is transethmoid).
 3. *Posterior-inferior cut* — down the posterior edge from `s_c` along the
    choanal arch and vomer to `bottom(post)`.
 4. *Inferior incision* — forward along `bottom(a)` (the septum–floor
