@@ -858,21 +858,21 @@ Decided (owner, 2026-09-30):
   its images** (owner-confirmed; record the authors' written permission with
   the reference when available).
 
-Still open (the roadmap's §2 lists what each blocks):
+O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists what each unblocks:
 
 - **O1 — Source of the external nose.** (a) Unmask a nose-only box of the
   specimen (real n = 1 naris, vestibule and alar skin; touches the "faces
   are removed" rule of §5.1), (b) a parametric nose diorama registered to
   the piriform aperture and ANS (schematic), or (c) both — specimen skin
   surface, cartilage as an overlay. Recommended: (c), if the nose is in the
-  source's field of view (roadmap ST6-0 checks).
+  source's field of view (roadmap ST6-0 checks). **Decided: (c).**
 - **O2 — Nose scope.** Entry anatomy only (vestibule, valves, ala,
   columella: the scope's fulcrum and walls) or also the rhinoplasty
   framework (ULC/LLC and crura, ligaments, SMAS). Recommended: entry anatomy
-  now; the framework later as its own diorama.
+  now; the framework later as its own diorama. **Decided:** entry anatomy now; the full nasal framework is the intended end state (roadmap ST7).
 - **O3 — Content authoring split.** Sonnet drafts the content backlog and
   checks citations, Opus reviews adversarially; Opus keeps authoring
-  anything that places geometry. Recommended: yes.
+  anything that places geometry. Recommended: yes. **Decided: yes.**
 
 1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
    needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.

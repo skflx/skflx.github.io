@@ -24,17 +24,17 @@ history keeps the specs).
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
 
-**Waiting on the owner:** decisions O1–O3 (§2), then CP-1's report. **CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1) are done as a first pass by the same Sonnet-class model** (branch `claude/wave-1-sonnet`): Opus is to verify them, then wave 2 starts (ST5, E3, E4, D2, E5).
+**Decided (2026-10-02):** O1–O3 answered (§2). **Waiting on the owner:** CP-1's report. **CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1) are done as a first pass by the same Sonnet-class model** (branch `claude/wave-1-sonnet`): Opus is to verify them, then wave 2 starts (ST5, E3, E4, D2, E5).
 
 ## 2. Owner — decisions and actions
 
-Decisions (detail and recommendations: `docs/ssb.md` §13):
+Decisions (detail and recommendations: `docs/ssb.md` §13). **O1–O3 were decided by the owner on 2026-10-02, each as recommended**, with the O2 addition below:
 
 | ID | Question | Recommended | Blocks |
 |---|---|---|---|
-| O1 | Where the **external nose** comes from: the specimen's own nose (unmask a nose-only box), a parametric nose diorama, or both | Both: specimen skin surface for the naris and ala (real n = 1), cartilage as a schematic overlay — if ST6-0 shows the nose is in the field of view | ST6 |
-| O2 | How much **nose**: entry anatomy only (vestibule, valves, ala, columella — the scope's fulcrum and walls), or the rhinoplasty framework too (ULC/LLC crura, ligaments, SMAS) | Entry anatomy now; framework later, as its own diorama | ST0 scope, ST6 |
-| O3 | **Content authoring split**: Sonnet drafts backlog content and checks citations, Opus reviews adversarially (cheaper) — instead of Opus authoring | Yes for the §6 backlog; Opus keeps authoring anything that places geometry (vessels, flaps, stations) | C1 |
+| O1 | Where the **external nose** comes from: the specimen's own nose (unmask a nose-only box), a parametric nose diorama, or both | Both: specimen skin surface for the naris and ala (real n = 1), cartilage as a schematic overlay — if ST6-0 shows the nose is in the field of view | ST6 — **decided** |
+| O2 | How much **nose**: entry anatomy only (vestibule, valves, ala, columella — the scope's fulcrum and walls), or the rhinoplasty framework too (ULC/LLC crura, ligaments, SMAS) | Entry anatomy now; framework later, as its own diorama. **Decided:** entry anatomy now; the full nasal framework is the intended end state, logged as task ST7 | ST0 scope, ST6 — **decided** |
+| O3 | **Content authoring split**: Sonnet drafts backlog content and checks citations, Opus reviews adversarially (cheaper) — instead of Opus authoring | Yes for the §6 backlog; Opus keeps authoring anything that places geometry (vessels, flaps, stations). **Decided: yes** | C1 — **decided** |
 | — | Still open from before: strict CSP; publish while `draft`; name | as in §13 | — |
 
 Actions (no model can do these):
@@ -450,8 +450,11 @@ with tier filtering; the NSF overlay per ST3 (design presets as buttons,
 sliders for the parameters, area readout, incisions drawn on the surface,
 "schematic on specimen" badge). Tests per ST3.
 
-### ST6 — External nose        [blocked: O1, O2] · Opus spec → Sonnet build
+### ST6 — External nose        [unblocked: O1, O2 decided 2026-10-02; scope = entry anatomy, specimen skin + schematic cartilage overlay] · Opus spec → Sonnet build
 Spec after ST6-0 and the owner's decision.
+
+### ST7 — Full nasal framework        [later] · Opus spec → Sonnet build · depends: ST6
+Owner decision (O2, 2026-10-02): the atlas ultimately covers the entire nasal framework (ULC/LLC crura, ligaments, SMAS, dorsum, tip support), as its own diorama after ST6's entry anatomy. Not scheduled; spec after ST6.
 
 ### D1 — Sphenoid diorama spec        [review] · **Opus** (first pass by Sonnet 5.5)
 Result: the spec is `docs/ssb.md` §6.1: parameters from `c.sphenoid-pneumatization`, `c.delano-optic-nerve`, `c.vidian-canal-type` and `m.intercarotid-distance-narrowest`, the variants the graph defines, eight rules computed from the solids that the tests must pin, hazard sites by graph id. All sizes the graph does not give (sella length, ICA and canal diameters, wall thickness) are left to the module header as schematic. **Vet:** the rule set (esp. rule 2's 0.5 circumference threshold, taken from `v.ica-protrusion`'s definition, and rule 4's DeLano type 4 geometry) and that presets set one parameter at a time.
