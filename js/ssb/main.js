@@ -13,18 +13,21 @@
    a blank page: a problem becomes a message in the place the missing piece
    would have been.
 
+   The Endoscope stage (mode-endoscope.js, ui-endoscope.js) is a pose over the
+   specimen (scope.js is its math, state.scope its state) and mounts with it.
+
    window.__ssb is a read-only window for tests:
-   { frames, selection, caps, hash, lab, ct, specimen, materials } (lab, ct,
-   specimen: the stages' hooks; materials: scene.js's hook on the
+   { frames, selection, caps, hash, lab, ct, specimen, scope, materials } (lab, ct,
+   specimen, scope: the stages' hooks; materials: scene.js's hook on the
    tissue-material library).
    ============================================================= */
 import { loadGraph } from './graph.js?v=cfe8bc5e';
-import { createStore, parseHash } from './state.js?v=91f08185';
+import { createStore, parseHash } from './state.js?v=23001c1b';
 import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=c2c1fadc';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=8f8064ca';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=302d2d68';
+import { mountCt } from './mode-ct.js?v=875e3bb7';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=a82c81a2';
 import { mountTree } from './ui-tree.js?v=99b09f7f';
 import { mountSearch } from './ui-search.js?v=20af240e';
 import { mountPanel } from './ui-panel.js?v=f065622e';
@@ -58,6 +61,7 @@ let stage = null;
 let lab = null;
 let ct = null;
 let specimen = null;
+let endo = null;
 let panelApi = null;
 Object.defineProperty(window, '__ssb', {
     value: Object.freeze({
@@ -68,6 +72,7 @@ Object.defineProperty(window, '__ssb', {
         get lab() { return lab ? lab.hook : null; },
         get ct() { return ct ? ct.hook : null; },
         get specimen() { return specimen ? specimen.hook : null; },
+        get scope() { return endo ? endo.hook : null; },
         get materials() { return stage ? stage.materialsHook : null; },
     }),
 });
@@ -154,7 +159,7 @@ function wireUrl() {
     let settle = 0;
     store.subscribe((state, prev, meta) => {
         clearTimeout(settle);
-        if ((meta.source === 'slider' || meta.source === 'cursor') && state.selection === prev.selection) { settle = setTimeout(() => write('replace'), 250); return; }
+        if ((meta.source === 'slider' || meta.source === 'cursor' || meta.source === 'scope') && state.selection === prev.selection) { settle = setTimeout(() => write('replace'), 250); return; }
         write(meta.source !== 'url' && state.selection !== prev.selection ? 'push' : 'replace');
     });
     const adopt = () => store.applyHash(location.hash);
@@ -174,7 +179,7 @@ function wireQuality() {
     });
 }
 
-/* The stage switch: the three stages are exclusive (specimen, lab, CT).
+/* The stage switch: the four stages are exclusive (specimen, lab, CT, scope).
    Which one is showing follows the store (`data-stage` on the app, the
    pressed pill); the lab's own button is handled in ui-lab.js and the CT
    button in ui-ct.js. Leaving for the specimen works without a 3D view too,
@@ -183,8 +188,8 @@ function wireStages() {
     const app = $('ssb-app');
     const stageSwitch = $('ssb-stage-mode');
     const mark = () => {
-        const { lab: inLab, ct: inCt } = store.get();
-        const stage = inLab ? 'lab' : inCt ? 'ct' : 'specimen';
+        const { lab: inLab, ct: inCt, scope: inScope } = store.get();
+        const stage = inLab ? 'lab' : inCt ? 'ct' : inScope ? 'scope' : 'specimen';
         app.dataset.stage = stage;
         for (const b of stageSwitch.querySelectorAll('button[data-stage]')) {
             const on = b.dataset.stage === stage;
@@ -231,7 +236,7 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=0a08939b');
+        const { createScene } = await import('./scene.js?v=02ca29d5');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
             quality: parseHash(location.hash, () => false).quality || null,
@@ -272,7 +277,7 @@ function bootLab(graph, stageHandle) {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=14ff20a9'), import('./ui-specimen.js?v=2e78421b')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=020647a8'), import('./ui-specimen.js?v=2eacda3d')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -281,12 +286,28 @@ async function bootSpecimen(graph, stageHandle) {
         mountSpecimenControls({
             dock: $('ssb-spec-dock'), body: $('ssb-spec-body'), toggle: $('ssb-spec-toggle'), stageHost: $('ssb-stage'), specimen, store,
         });
+        await bootEndoscope(graph, stageHandle);
     } catch (e) {
         console.error(e);
         specimen = null;
         const msg = $('ssb-stage-msg');
         msg.hidden = false;
         msg.textContent = 'The reference specimen could not start. The structure list, search, panels, the lab and CT still work.';
+    }
+}
+
+/* The endoscope rides on the specimen (its dock, its meshes), so it mounts right after it; a failure
+   here leaves the specimen, the lab and CT working and the Scope pill disabled. */
+async function bootEndoscope(graph, stageHandle) {
+    try {
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=f7e1e14a'), import('./ui-endoscope.js?v=78c236fc')]);
+        endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
+        mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
+    } catch (e) {
+        console.error(e);
+        endo = null;
+        const button = $('ssb-stage-mode').querySelector('button[data-stage="scope"]');
+        if (button) button.title = 'The endoscope could not start.';
     }
 }
 

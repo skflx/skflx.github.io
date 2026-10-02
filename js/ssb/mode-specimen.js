@@ -40,7 +40,7 @@ import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-s
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=d27e5b3d';
 import { PLANES } from './volume.js?v=4a0115ab';
-import { CT_PLANES } from './state.js?v=91f08185';
+import { CT_PLANES } from './state.js?v=23001c1b';
 import { REGION_LABEL } from './graph.js?v=cfe8bc5e';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
