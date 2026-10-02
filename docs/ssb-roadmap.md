@@ -24,7 +24,7 @@ history keeps the specs).
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
 
-**Waiting on the owner:** decisions O1–O3 (§2), then CP-1's report. **CP-1 is done** (first pass, same model as the code; branch `claude/wave-1-sonnet`): re-check it, then the Opus wave-1 WPs (ST0 first) and wave 2.
+**Waiting on the owner:** decisions O1–O3 (§2), then CP-1's report. **CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1) are done as a first pass by the same Sonnet-class model** (branch `claude/wave-1-sonnet`): Opus is to verify them, then wave 2 starts (ST5, E3, E4, D2, E5).
 
 ## 2. Owner — decisions and actions
 
@@ -142,6 +142,8 @@ whole external nose (axial: tip 0.3 mm inside the frame over slices
 visible). Recommendation unchanged: both (specimen skin for naris and ala,
 cartilage as a schematic overlay); the frame margin at the tip is thin, so
 expect a slightly flattened tip.
+
+**O1 evidence, second pass (soft tissue of the nose).** Sources: Radiopaedia's nasal-cavity, septum, cartilage and bone articles (qualitative anatomy only: five named cartilages, the columella as the visible septum, the dual arterial supply) and PubMed. **Radiopaedia scans were not examined:** the site is readable only as text through the fetch tool here (scripted downloads return HTTP 406, PubMed Central full texts return a reCAPTCHA), and I did not work around either, so the "look at other scans for averages" step is not done; the owner can supply specific cases or open the PMC full texts. What the unmasked UW sagittal stack gives for this specimen (n = 1, landmarks picked by profile curvature, about ±2 mm and ±8°): nasion to pronasale ≈ 54 mm, nasion to subnasale ≈ 57 mm, the tip 13 mm in front of the subnasale, nasolabial angle ≈ 89°, nasofrontal angle ≈ 138°; in the axial stack the tip is 18 mm in front of the ANS row. **Cannot be compared with population norms yet:** the normative values in the papers found (a Brazilian series of 100 Caucasians, a Korean series of 21) are not in their abstracts, and the Korean abstract's nasolabial angles look transposed. One quantitative anchor is verified: the internal valve is 10–15° (a hypothesised true value, n = 24). For the endoscope, pronasale 18 mm in front of the ANS puts the nostril aperture a little behind and below the tip, so `lm.naris` at A ≈ 0 is plausible but probably 5–10 mm too far back; the specimen could place it properly and this was not done.
 
 **Wave 2**
 
@@ -396,7 +398,8 @@ poses (interpolate pose parameters, not the camera), deep link
 `#scope=t.<id>`. Accept: every station's pose is collision-free and its
 first `shows` structure's centroid is inside the view frustum.
 
-### ST0 — Soft-tissue content        [ready] · **Opus** · depends: — (O2 sets the nose scope)
+### ST0 — Soft-tissue content        [review] · **Opus** (first pass by Sonnet 5.5, owner's request: Opus to verify) · depends: — (O2 sets the nose scope)
+Result (2026-10-02): added to the region files, all `draft`: `s.septal-mucosa`, `s.nasal-floor-mucosa`; the posterior septal artery's superior and inferior branches, `s.nasopalatine-artery`, `s.incisive-canal`, `s.superior-labial-artery` and its septal branch, `s.anterior-ethmoidal-septal-branch`, `s.facial-artery`, `s.lateral-nasal-artery` (facial; distinct from the PLNA), `s.dorsal-nasal-artery`, `s.columellar-artery`, `s.supraorbital-artery`, `s.supratrochlear-artery`, `s.superficial-temporal-artery`; the nose entry anatomy `s.external-nose`, `s.external-nasal-valve`, `s.nasal-ala`, `s.columella`, `s.nasal-bone`, `s.piriform-aperture`; `lm.middle-turbinate-head`; variants (PSA bifurcation level, two-branch pedicle, dominant inferior branch, SPA multiple trunks, tip supply); measurements (septal artery to ostium, NSF area, extended-flap gain, bipedicled anterior septal flap, MT flap area, AEA septal entry, internal valve angle, SOA axial length); procedures `p.inferior-turbinate-flap`, `p.middle-turbinate-flap`, `p.lateral-nasal-wall-flap`. **Sources:** 21 new, every journal paper matched in PubMed (PMID and DOI stored); five Radiopaedia articles (type `atlas`, fetched 2026-10-02). **Not done, and why:** the angular artery (no source in hand), the PEA septal branch (no course source), cartilages (O2 undecided), NSF length/width by design (the abstracts give area and the extended gain only; short/full dimensions come from the overlay on the specimen), the incisive canal's position (not resolved in the 0.5 mm display volume: derived from a literature distance instead). Steps of the three added flaps are limited to what their abstracts say; a surgical technique source is needed for harvest detail. **Check hardest:** every `why` that goes beyond its abstract, `v.*` prevalences' denominators, the extranasal arteries' relations.
 Author, with sources, into the region files (`docs/authoring-ssb.md`):
 - `s.septal-mucosa` (kind `mucosa`, geo `specimen`) and, if needed,
   `s.nasal-floor-mucosa` for the extended flap.
@@ -419,7 +422,8 @@ Author, with sources, into the region files (`docs/authoring-ssb.md`):
 Then ST0c (Sonnet): PubMed E-utilities check of every new source
 (`docs/ssb.md` §9 Citations).
 
-### ST3 — Flap construction spec        [ready] · **Opus** · depends: ST0
+### ST3 — Flap construction spec        [review] · **Opus** (first pass by Sonnet 5.5) · depends: ST0
+Result: the contract is in `docs/ssb.md` §5.7 (parameters and ranges from the graph, geometry on ST2's chart, readouts, the tests ST5 must pin). Checked numerically on the specimen: with the defaults the pedicle is 10.2 mm (right) and 14.6 mm (left) high; the first points of both PSA branch sweeps lie in it; the superior cut keeps the margin everywhere; the default full flap is 7.5 cm² right and 8.5 cm² left against the specimen's septal lining of 14.3 / 15.4 cm². **Flag:** the literature mean is 17.12 cm² (`m.nsf-area`): the specimen overlay is under half of it. Likely contributors: the upper margin left unelevated, the masked vestibule and floor turn missing from the chart, and a smaller specimen septum; whether the 17.12 cm² includes floor mucosa is not stated in the abstract. The defaults for `top_margin` (15), `ostium_clearance` (2) and `window` (5) are schematic.
 Write `docs/ssb.md` §5.7's flap overlay contract concretely: the NSF outline
 in ST2's chart for each design in `p.nasoseptal-flap` (short, full,
 extended) — superior incision `m.nsf-superior-incision` below the septal
@@ -429,12 +433,14 @@ ranges from the graph, plus the rescue-flap incisions; the tests it must
 pass (pedicle contains the PSA sweep; the superior cut never enters the
 olfactory strip; area readout equals the polygon's surface area).
 
-### ST4b — Vessel waypoints        [ready] · **Opus** · depends: ST0 (ST4a format)
+### ST4b — Vessel waypoints        [review] · **Opus** (first pass by Sonnet 5.5) · depends: ST0 (ST4a format)
+Result: `uw/sweeps-soft.json` holds 10 entries (R and L): PSA inferior and superior branches, nasopalatine artery, superior labial septal branch, AEA septal branch; each cites its sources and has a `derivation` text saying what is cited and what is schematic. **Honest limits:** only the PSA branch starts, the AEA entry (7.35 mm behind the middle turbinate head) and the nasopalatine end (39.6 mm in front of the choanal arch) come from numbers; every course between them is a straight chart segment, the superior branch's direction has no cited waypoint, and the superior labial branch is truncated where the face mask removed its entry. The septal chart ends about 4 mm in front of the rostrum, so the PSA start sits at the chart's posterior edge, not on the rostrum. All 10 flagged `variable` where the sources show variation; the nasopalatine left sweep is 77 % over flagged cells.
 Write `tools/ssb-pipeline/uw/sweeps-soft.json` entries for every sweep
 ST0 adds that runs on a mucosal surface, from sources, each waypoint
 citing its source in the entry; flag the ones whose course is variable.
 
-### ST4c — Regenerate vessels        [todo] · Sonnet · depends: ST2, ST4a, ST4b
+### ST4c — Regenerate vessels        [done] · Sonnet · depends: ST2, ST4a, ST4b
+Result: `softtissue.py` regenerated everything; every new sweep id resolves in the graph (`check-data` passes); `relate3d.py` agreement is unchanged (88 agree, 4 mixed, 2 untestable before and after); 4 new claims are untestable for want of geometry.
 Run `softtissue.py`; check every new sweep id resolves in the graph;
 `relate3d.py` agreement does not drop (report the before/after counts).
 
@@ -447,7 +453,8 @@ sliders for the parameters, area readout, incisions drawn on the surface,
 ### ST6 — External nose        [blocked: O1, O2] · Opus spec → Sonnet build
 Spec after ST6-0 and the owner's decision.
 
-### D1 — Sphenoid diorama spec        [ready] · **Opus**
+### D1 — Sphenoid diorama spec        [review] · **Opus** (first pass by Sonnet 5.5)
+Result: the spec is `docs/ssb.md` §6.1: parameters from `c.sphenoid-pneumatization`, `c.delano-optic-nerve`, `c.vidian-canal-type` and `m.intercarotid-distance-narrowest`, the variants the graph defines, eight rules computed from the solids that the tests must pin, hazard sites by graph id. All sizes the graph does not give (sella length, ICA and canal diameters, wall thickness) are left to the module header as schematic. **Vet:** the rule set (esp. rule 2's 0.5 circumference threshold, taken from `v.ica-protrusion`'s definition, and rule 4's DeLano type 4 geometry) and that presets set one parameter at a time.
 Parameters, presets from `c.sphenoid-pneumatization`, schematic proportions
 (stated in the header), and the rules `test-ssb.mjs` must pin (as the
 frontal-recess IFAC rules are), per `docs/ssb.md` §6's `sphenoid` row.

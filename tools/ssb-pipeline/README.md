@@ -80,7 +80,7 @@ Reconstruction, stage D (soft tissue; needs only the committed `ssb/`, not the c
     node tools/stamp-assets.mjs && node tools/check-data.mjs
 
 `softtissue.py` meshes each nasal cavity's lining where it faces the septum wall unit, with a sagittal chart ((a, s) mm to R, a 1 mm grid, the cells where the surface folds are
-flagged `unreliable`). Its `soft` pack waits under `pendingPacks` in `packs.json` until the graph has `s.septal-mucosa`.
+flagged `unreliable`). Its `soft` pack is listed in `packs.json` (`s.septal-mucosa` is a graph id).
 `lm.naris.R/.L` is the endoscope's provisional fulcrum (schematic offsets, replaced when the nose exists).
 `specimen.py` rewrites `landmarks.json`, so rerun stage D after it. Then `sweeps_soft.py` runs from `softtissue.py`: it turns the waypoints in `uw/sweeps-soft.json`
 (format in its docstring; empty until the soft-tissue vessels are specified) into sweeps on those charts and merges them into `sweeps.json`.

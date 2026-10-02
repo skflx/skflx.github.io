@@ -177,11 +177,16 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `tools/check-data.mjs` fails if any of it names an id the graph lacks.
   Soft tissue is bone-window-limited, so it is derived, swept or parametric
   (`docs/ssb.md` §5.7): stage D (`softtissue.py`) so far gives the septal
-  mucosa surfaces and charts (a `soft` pack parked under `pendingPacks`
-  until the graph has its id), the choanal arch and the provisional
-  nostrils `lm.naris.R/.L`, and `sweeps_soft.py` is ready for waypoint
-  specs (none yet). The face mask removed the nose; the unmasked source
-  stacks do contain it (ST6-0).
+  mucosa surfaces and charts (the `soft` pack), the choanal arch, the
+  middle turbinate heads and the provisional nostrils `lm.naris.R/.L`,
+  and `sweeps_soft.py` turns the waypoints in `uw/sweeps-soft.json` into
+  the septal-branch, nasopalatine and AEA-septal sweeps (all inferred,
+  schematic courses; first-pass waypoints to be vetted). The graph now
+  holds the soft-tissue and nose entries (septal mucosa, the septal and
+  nasal-tip arteries, the turbinate and lateral-wall flaps, the external
+  valve, ala, columella, nasal bone, piriform aperture), sourced from
+  PubMed-matched papers and Radiopaedia articles. The face mask removed
+  the nose; the unmasked source stacks do contain it (ST6-0).
 - **Specimen stage** (`mode-specimen.js`) — the packs in 3D: named views,
   bone X-ray/solid/hidden, region layers, landmarks, click-through
   picking, a 3D cursor shared with the CT crosshair, a section plane with

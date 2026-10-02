@@ -8,7 +8,7 @@
  },
  "specimen": "uw-axial-sagittal",
  "counts": {
-  "no-geometry": 436,
+  "no-geometry": 440,
   "agree": 88,
   "mixed": 4,
   "untestable": 2
@@ -4944,6 +4944,41 @@
    "missing": [
     "s.levator-veli-palatini",
     "s.torus-tubarius"
+   ]
+  },
+  {
+   "id": "s.nasal-floor-mucosa",
+   "r": "inferior-to",
+   "to": "s.septal-mucosa",
+   "missing": [
+    "s.nasal-floor-mucosa",
+    "s.septal-mucosa"
+   ]
+  },
+  {
+   "id": "s.posterior-septal-artery-inferior-branch",
+   "r": "superior-to",
+   "to": "s.choana",
+   "missing": [
+    "s.choana"
+   ]
+  },
+  {
+   "id": "s.external-nose",
+   "r": "anterior-to",
+   "to": "s.nasal-vestibule",
+   "missing": [
+    "s.external-nose",
+    "s.nasal-vestibule"
+   ]
+  },
+  {
+   "id": "s.external-nasal-valve",
+   "r": "anterior-to",
+   "to": "s.internal-nasal-valve",
+   "missing": [
+    "s.external-nasal-valve",
+    "s.internal-nasal-valve"
    ]
   },
   {
