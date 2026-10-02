@@ -23,7 +23,7 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=93e7ba73';
+import { loadLandmarks } from './geo-specimen.js?v=e5e9e745';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { LENSES, POSE_DEFAULT, RANGES, clampPose, frameOf, lightPostAngle, tipOf, verticalFov } from './scope.js?v=4f99f9f0';
 
@@ -62,7 +62,9 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
 
     /* ---------------- the camera ---------------- */
 
-    function apply() {
+    /* `redraw` is false from inside a frame: the render that called us is the redraw (asking for another
+       would keep the on-demand loop running forever). */
+    function apply(redraw = true) {
         const p = pose();
         const f = p && fulcra.get(p.side);
         if (!p || !f) return;
@@ -82,12 +84,12 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             camera.updateProjectionMatrix();
         }
         camera.updateMatrixWorld(true);
-        stage.requestRender();
+        if (redraw) stage.requestRender();
     }
 
     function onFrame() {
         renders += 1;
-        apply();
+        apply(false);
     }
 
     /* ---------------- taking over and giving back ---------------- */

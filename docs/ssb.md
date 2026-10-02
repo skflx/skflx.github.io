@@ -337,7 +337,7 @@ its landmarks and sweeps into the shared geometry files (never dropping
 other steps' keys; method per point in the `*.meta.json` files). The
 sagittal chart is single-valued only where the surface does not fold back
 (a spur, a deviation): `charts.json` lists the cells that do under
-`unreliable`, and anything placed there is approximate. The `soft` pack
+`unreliable`, and anything placed there is approximate. Where the septum is thicker than the wall unit's cap, or a turbinate abuts it, the patch is completed from the airway lining's medial-most sheet; those cells are `filled` (lower confidence), and one posterosuperior gap stays no-data. The `soft` pack
 stays in `packs.json`'s `pendingPacks` until the graph has
 `s.septal-mucosa`. Waypoint
 specs live in `tools/ssb-pipeline/uw/sweeps-soft.json` — anatomy as data,

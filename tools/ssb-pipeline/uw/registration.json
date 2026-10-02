@@ -10633,8 +10633,8 @@
  "softtissue": {
   "surfaces": {
    "s.septal-mucosa.R": {
-    "triangles": 5000,
-    "area_cm2": 14.0,
+    "triangles": 4999,
+    "area_cm2": 14.34,
     "chart_bbox_mm": {
      "a": [
       -51.0,
@@ -10645,16 +10645,18 @@
       40.0
      ]
     },
-    "max_abs_r_mm": 6.64,
-    "roundtrip_max_3d_mm": 0.918,
-    "roundtrip_max_chart_mm": 0.915,
+    "max_abs_r_mm": 7.25,
+    "roundtrip_max_3d_mm": 0.44,
+    "roundtrip_max_3d_mm_all_cells": 1.081,
+    "roundtrip_max_chart_mm": 0.419,
     "roundtrip_samples": 400,
-    "cells": 1366,
-    "unreliable_cells": 31
+    "cells": 1398,
+    "unreliable_cells": 36,
+    "filled_cells": 50
    },
    "s.septal-mucosa.L": {
-    "triangles": 4999,
-    "area_cm2": 14.91,
+    "triangles": 5000,
+    "area_cm2": 15.36,
     "chart_bbox_mm": {
      "a": [
       -52.0,
@@ -10665,12 +10667,14 @@
       41.0
      ]
     },
-    "max_abs_r_mm": 5.1,
-    "roundtrip_max_3d_mm": 0.974,
-    "roundtrip_max_chart_mm": 0.974,
+    "max_abs_r_mm": 5.6,
+    "roundtrip_max_3d_mm": 0.266,
+    "roundtrip_max_3d_mm_all_cells": 1.077,
+    "roundtrip_max_chart_mm": 0.153,
     "roundtrip_samples": 400,
-    "cells": 1337,
-    "unreliable_cells": 122
+    "cells": 1373,
+    "unreliable_cells": 126,
+    "filled_cells": 59
    }
   },
   "choanal_arch": [
@@ -10690,6 +10694,6 @@
     10.0
    ]
   },
-  "pack_bytes": 88360
+  "pack_bytes": 88654
  }
 }

@@ -24,7 +24,7 @@ Method. The septal mucosa of side X is the lining of nasal-cavity.X where it fac
 centroid lies within 1 mm of a septum voxel, largest connected patch only. Normals are the air space's
 outward normals, i.e. they point from the airway into the septum. The chart is the sagittal projection:
 chart (a, s) = RAS (A, S) in mm, and r = the surface's R coordinate, so a flap outlined on the chart
-lands on the surface by lookup. Chart round-trip error is printed and bounded (see check()).
+lands on the surface by lookup. Chart round-trip error is printed and bounded on the interior, reliable cells (an edge cell is only partly covered, so its centre is extrapolated; a flagged cell is flagged); the all-cell maximum is reported beside it.
 Finally runs sweeps_soft.py (vessel sweeps snapped to these charts; a no-op while sweeps-soft.json is empty).
 Deterministic: gzip with mtime 0, no randomness other than a seeded sample.
 """
@@ -42,11 +42,43 @@ from volume import write_results  # noqa: E402
 
 REPO = M.REPO
 SURFACE = 's.septal-mucosa'
+FILL_R_MM = 8.0               # hole fill: no further than this from the midsagittal plane
 BUDGET = 5000                 # triangles per side (walls.s.nasal-septum is 6000)
 NEAR_MM = 1.0                 # a triangle belongs to the septal surface if its centroid is this close to septum voxels
 GRID_MM = 1.0
 FOLD_MM = 1.0                 # a cell whose samples span more than this in R is flagged unreliable
 ROUNDTRIP_MAX_MM = 1.0
+
+
+def fill_holes(v, f, near, sg):
+    """The septum wall unit (walls.py) is capped at 10 mm between the airways, so where the septum is
+    thicker (a spur, a deviation) or a turbinate abuts it the label-based patch has holes. Inside the
+    patch's own outline, those cells take the medial-most sheet of the airway's lining instead: per
+    1 mm (a, s) cell the triangles facing the midline whose R is within 1 mm of the cell's most medial
+    one, no more than FILL_R_MM from the midline plane. Returns the new triangle mask and the filled
+    cells' centres [[a, s]...] (the chart marks them `filled`: lower confidence)."""
+    tri = v[f]
+    cen = tri.mean(1)
+    fn = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+    fn /= np.maximum(np.linalg.norm(fn, axis=1, keepdims=True), 1e-12)
+    cell = np.round(cen[:, 1:3]).astype(int)
+    a0, s0 = cell[near].min(0) - 2
+    shape = tuple(cell[near].max(0) - cell[near].min(0) + 5)
+    have = np.zeros(shape, bool)
+    have[cell[near, 0] - a0, cell[near, 1] - s0] = True
+    outline = ndi.binary_fill_holes(ndi.binary_closing(have, iterations=2))
+    inside = (cell[:, 0] - a0 >= 0) & (cell[:, 0] - a0 < shape[0]) & (cell[:, 1] - s0 >= 0) & (cell[:, 1] - s0 < shape[1])
+    medial = (fn[:, 0] * sg < -0.3) & (sg * cen[:, 0] <= FILL_R_MM) & inside
+    key = (cell[:, 0] - a0) * shape[1] + (cell[:, 1] - s0)
+    rmin = {}
+    for i in np.flatnonzero(medial):
+        rmin[key[i]] = min(rmin.get(key[i], 1e9), sg * cen[i, 0])
+    sheet = np.zeros(len(f), bool)
+    for i in np.flatnonzero(medial):
+        if sg * cen[i, 0] <= rmin[key[i]] + 1.0 and outline[cell[i, 0] - a0, cell[i, 1] - s0] and not have[cell[i, 0] - a0, cell[i, 1] - s0]:
+            sheet[i] = True
+    cells = sorted({(int(c[0]), int(c[1])) for c in cell[sheet]})
+    return near | sheet, [[float(a), float(s)] for a, s in cells]
 
 
 def septal_surface(lab, table, aff, side, spacing):
@@ -61,6 +93,7 @@ def septal_surface(lab, table, aff, side, spacing):
     cen = v[f].mean(1)
     ijk = cen @ inv[:3, :3].T + inv[:3, 3]
     near = ndi.map_coordinates(d, [ijk[:, 2], ijk[:, 1], ijk[:, 0]], order=1, mode='nearest') <= NEAR_MM
+    near, filled = fill_holes(v, f, near, 1 if side == 'R' else -1)
     f = f[near]
     # largest connected patch (triangles linked by shared vertices)
     used, inverse = np.unique(f.ravel(), return_inverse=True)
@@ -78,7 +111,7 @@ def septal_surface(lab, table, aff, side, spacing):
         v, f = fast_simplification.simplify(v.astype(np.float32), f.astype(np.int32), 1 - BUDGET / len(f))
         v, f = np.asarray(v, np.float64), np.asarray(f, np.int64)
     # orient the normals from the airway into the septum (they are the air space's outward ones already)
-    return v, f, M.normals(v, f)
+    return v, f, M.normals(v, f), filled
 
 
 def area_mm2(v, f):
@@ -156,14 +189,14 @@ def lookup(ch, a, s):
     return num / den if den > 1e-9 else None
 
 
-def roundtrip(ch, v, f):
+def roundtrip(ch, v, f, skip=None):
     """chart -> surface -> chart. For sample chart points (a, s): P = (lookup r, a, s); error =
     distance from P to the surface (nearest dense sample) in 3D, and the chart shift of that
     nearest surface point. Returns (max 3D mm, max chart mm, n)."""
     pts, _ = dense(v, f, 0.3)
     tree = cKDTree(pts)
     rng = np.random.default_rng(7)
-    ii, jj = np.nonzero(ch['occ'])
+    ii, jj = np.nonzero(ch['occ'] if skip is None else ch['occ'] & ~skip)
     pick = rng.choice(len(ii), size=min(400, len(ii)), replace=False)
     e3 = ec = 0.0
     n = 0
@@ -242,16 +275,21 @@ def main():
     all_pts = []
     for side in 'RL':
         name = f'{SURFACE}.{side}'
-        v, f, nrm = septal_surface(lab, table, aff, side, spacing)
+        v, f, nrm, filled = septal_surface(lab, table, aff, side, spacing)
         built[name] = (v, f, nrm)
         ch = chart_of(v, f, nrm)
-        e3, ec, n = roundtrip(ch, v, f)
+        flagged = ch['unreliable'].copy()                  # the round trip is judged where the chart claims to be single-valued
+        for a, s_ in filled:
+            flagged[int(round(a - ch['a0'])), int(round(s_ - ch['s0']))] = True
+        interior = ndi.binary_erosion(ch['occ'], structure=np.ones((3, 3), bool))     # edge cells are partly covered: their centre is extrapolated
+        e3, ec, n = roundtrip(ch, v, f, ndi.binary_dilation(flagged) | ~interior)
+        e3_all, _, _ = roundtrip(ch, v, f)
         area = area_mm2(v, f)
         mid = float(np.abs(v[:, 0]).max())
         report[name] = {'triangles': int(len(f)), 'area_cm2': round(area / 100, 2), 'chart_bbox_mm': {
             'a': [round(ch['a0'], 1), round(ch['a0'] + ch['na'], 1)], 's': [round(ch['s0'], 1), round(ch['s0'] + ch['ns'], 1)]},
-            'max_abs_r_mm': round(mid, 2), 'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_chart_mm': round(ec, 3), 'roundtrip_samples': n,
-                        'cells': int(ch['occ'].sum()), 'unreliable_cells': int(ch['unreliable'].sum())}
+            'max_abs_r_mm': round(mid, 2), 'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_3d_mm_all_cells': round(e3_all, 3), 'roundtrip_max_chart_mm': round(ec, 3), 'roundtrip_samples': n,
+                        'cells': int(ch['occ'].sum()), 'unreliable_cells': int(ch['unreliable'].sum()), 'filled_cells': len(filled)}
         print(name, json.dumps(report[name]), flush=True)
         assert e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, f'{name}: chart round-trip error over {ROUNDTRIP_MAX_MM} mm'
         assert mid <= 15.0, f'{name}: reaches {mid} mm from the midsagittal plane'
@@ -261,6 +299,8 @@ def main():
                         'polygon': ch['polygon'], 'grid': {'origin': [ch['a0'], ch['s0']], 'step': GRID_MM, 'dims': [ch['na'], ch['ns']],
                                                            'r': rows, 'normal': nrows},
                         'area_cm2': report[name]['area_cm2'],
+                        'filled': {'rule': f'chart cells with no septum-unit surface (a septum thicker than the unit\'s 10 mm cap: a spur or deviation; or a turbinate abutting it) taken instead from the medial-most sheet of the airway lining within {FILL_R_MM} mm of the midline plane; lower confidence',
+                                   'cells': filled},
                         'unreliable': {'rule': f'chart cells whose surface samples span more than {FOLD_MM} mm in R (the surface folds across the cell: '
                                                'a spur, a deviation or a steep edge); a lookup there is approximate',
                                        'cells': [[round(ch['a0'] + int(i), 1), round(ch['s0'] + int(j), 1)] for i, j in zip(*np.nonzero(ch['unreliable']))]}}

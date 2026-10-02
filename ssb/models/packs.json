@@ -313,8 +313,8 @@
  "pendingPacks": {
   "soft": {
    "file": "soft.glb.gz",
-   "bytes": 88360,
-   "bytes_uncompressed": 125872,
+   "bytes": 88654,
+   "bytes_uncompressed": 126140,
    "triangles": 9999,
    "id": "s.septal-mucosa",
    "sides": [
@@ -322,12 +322,12 @@
     "R"
    ],
    "trianglesBySide": {
-    "L": 4999,
-    "R": 5000
+    "L": 5000,
+    "R": 4999
    },
    "verticesBySide": {
-    "L": 2675,
-    "R": 2645
+    "L": 2683,
+    "R": 2659
    }
   },
   "_note": "written by softtissue.py; the graph has no s.septal-mucosa yet (ST0 adds it). Move the \"soft\" entry into \"packs\" when it does."

@@ -48,7 +48,7 @@ class Chart:
         self.na, self.ns = g['dims']
         self.r = g['r']
         self.n = g['normal']
-        self.bad = {(int(round(a - self.a0)), int(round(s - self.s0))) for a, s in entry.get('unreliable', {}).get('cells', [])}
+        self.bad = {(int(round(a - self.a0)), int(round(s - self.s0))) for key in ('unreliable', 'filled') for a, s in entry.get(key, {}).get('cells', [])}
 
     def _cells(self, a, s):
         x, y = (a - self.a0) / self.step, (s - self.s0) / self.step
@@ -153,7 +153,7 @@ def run(spec_path=SPEC, write=True):
         P, rad, fold = generate(key, e, Chart(charts[e['surface']]), landmarks)
         out[key] = (P, rad)
         if fold:
-            print(f'WARNING {key}: {fold:.0%} of the path lies on chart cells flagged unreliable (the surface folds there)', flush=True)
+            print(f'WARNING {key}: {fold:.0%} of the path lies on chart cells flagged unreliable or filled (the surface folds there, or is the hole-fill)', flush=True)
         sweeps[key] = {'pts': [[round(float(x), 1) for x in p] for p in P], 'radius': [round(float(x), 2) for x in rad]}
         meta['sweeps'][key] = {
             'confidence': 'low', 'length_mm': round(length(P), 1), 'status_fraction': {'inferred': 1.0}, 'status': ['inferred'] * len(P),

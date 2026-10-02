@@ -1884,6 +1884,10 @@ async function scopeTests(browser, base) {
     check('scope: the image is not blank — many distinct colours and mostly lit pixels inside the circle', colours.size >= 25 && lit > 200, `${colours.size} colours, ${lit}/400 lit`);
     check('scope: outside the circle the stage is the dark mask (the corner is near-black, in either theme)', corner.every((v) => v < 40), JSON.stringify(corner));
 
+    const f0 = await page.evaluate(() => window.__ssb.frames);
+    await page.waitForTimeout(600);
+    check('scope: the on-demand loop holds — no frames are drawn while the pose does not change', (await page.evaluate(() => window.__ssb.frames)) === f0, `${(await page.evaluate(() => window.__ssb.frames)) - f0} frames`);
+
     /* keys */
     await page.focus('#ssb-canvas');
     const pose0 = await spec(page, () => window.__ssb.scope.pose);
