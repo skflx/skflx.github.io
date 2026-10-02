@@ -15,8 +15,13 @@
      w = d x u0, o = cos(roll) u0 + sin(roll) w, v = cos(lens) d + sin(lens) o.
      Roll 0 with a 30 degree lens therefore looks up.
    - The camera head stays upright while the telescope rotates (the real
-     technique): the image's up is S projected perpendicular to v. The light
-     post sits at the image edge opposite o's projection onto the image.
+     technique): the camera's up is u0, carried into the oblique view by the
+     lens's own deflection (the rotation about d x o that takes d to v), so
+     up = cos(roll)(cos(lens) o - sin(lens) d) - sin(roll)(d x o). Unlike S
+     projected perpendicular to v, this has no singularity: the image does
+     not spin when a 45 or 70 degree view passes the vertical (looking up
+     into the frontal recess). The light post sits at the image edge
+     opposite o's projection onto the image.
 
    `#scope=side,depth,yaw,pitch,roll,lens` is untrusted input: parseScope
    whitelists the side and the lens, clamps the numbers to RANGES and returns
@@ -125,7 +130,8 @@ export function frameOf(p) {
     const lens = p.lens * RAD;
     const o = add(scale(u0, Math.cos(roll)), scale(w, Math.sin(roll)));
     const v = norm(add(scale(d, Math.cos(lens)), scale(o, Math.sin(lens))));
-    const up = Math.abs(dot(v, S_AXIS)) > 0.9999 ? perp(A_AXIS, v) : perp(S_AXIS, v);
+    const n = cross(d, o);
+    const up = norm(sub(scale(sub(scale(o, Math.cos(lens)), scale(d, Math.sin(lens))), Math.cos(roll)), scale(n, Math.sin(roll))));
     const right = norm(cross(v, up));
     const px = -dot(o, right);
     const py = -dot(o, up);

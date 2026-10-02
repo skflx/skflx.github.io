@@ -8,7 +8,7 @@
    never reaches markup. State flows one way: the store's pose -> sync();
    the controls only ever call endo.setPose / endo.enter.
    ============================================================= */
-import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=4f99f9f0';
+import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=06f6a501';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

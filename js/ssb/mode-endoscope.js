@@ -25,7 +25,7 @@
    ============================================================= */
 import { loadLandmarks } from './geo-specimen.js?v=3763933b';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { LENSES, POSE_DEFAULT, RANGES, clampPose, frameOf, lightPostAngle, tipOf, verticalFov } from './scope.js?v=4f99f9f0';
+import { LENSES, POSE_DEFAULT, RANGES, clampPose, frameOf, lightPostAngle, tipOf, verticalFov } from './scope.js?v=06f6a501';
 
 const DRAG_DEG_PER_PX = 0.15;
 const WHEEL_MM = 1;

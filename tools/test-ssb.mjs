@@ -1803,8 +1803,17 @@ function scopeUnitTests() {
   check('scope: a 30 degree lens at roll 0 looks up: v . S = sin(pitch + 30), so above the horizontal whenever the shaft is not pitched below -30 degrees, whatever the nostril and yaw',
     poses.every((p) => { const f = SC.frameOf({ ...p, lens: 30, roll: 0 }); return near(dot(f.v, S), Math.sin((p.pitch + 30) * Math.PI / 180), 1e-9) && (p.pitch <= -30 || dot(f.v, S) > 0); }));
   check('scope: the view direction is a unit vector, at the lens angle from the shaft', frames.every(({ p, f }) => near(len(f.v), 1, 1e-9) && near(dot(f.v, f.d), Math.cos(p.lens * Math.PI / 180), 1e-9)));
-  check('scope: the camera\'s up is perpendicular to the view, and keeps S positive (the horizon stays upright) for |pitch| < 60',
-    frames.every(({ f }) => near(dot(f.up, f.v), 0, 1e-9) && near(len(f.up), 1, 1e-9) && dot(f.up, S) > 0) && frames.every(({ f }) => near(dot(f.right, f.v), 0, 1e-9) && near(dot(f.right, f.up), 0, 1e-9)));
+  check('scope: the camera\'s up and right are unit and perpendicular to the view and to each other, for random poses',
+    frames.every(({ f }) => near(dot(f.up, f.v), 0, 1e-9) && near(len(f.up), 1, 1e-9) && near(dot(f.right, f.v), 0, 1e-9) && near(dot(f.right, f.up), 0, 1e-9) && near(len(f.right), 1, 1e-9)));
+  check('scope: with a 0 degree lens the camera\'s up is S projected off the shaft, whatever the roll (the camera head is held level)',
+    frames.filter(({ p }) => p.lens === 0).every(({ f }) => { const k = dot(S, f.d); const u = S.map((x, i) => x - k * f.d[i]); const n = len(u); return u.every((x, i) => near(x / n, f.up[i], 1e-9)); }));
+  check('scope: at roll 0 the horizon stays upright until the view passes the vertical: up . S = cos(pitch + lens), whatever the nostril and yaw',
+    poses.every((p) => { const f = SC.frameOf({ ...p, roll: 0 }); return near(dot(f.up, S), Math.cos((p.pitch + p.lens) * Math.PI / 180), 1e-9); }));
+  const steps = (list) => list.map((q) => SC.frameOf(q)).every((f, i, all) => i === 0 || dot(f.up, all[i - 1].up) > 0.99);
+  const pitchSweep = Array.from({ length: 91 }, (_, i) => ({ ...SC.POSE_DEFAULT, lens: 70, pitch: i - 45 }));
+  const rollSweep = Array.from({ length: 360 }, (_, i) => ({ ...SC.POSE_DEFAULT, lens: 70, pitch: 20, roll: i }));
+  check('scope: no gimbal flip — the image turns smoothly as a 70 degree view passes the vertical (pitch -45..45) and as it rolls about it (pitch 20, the frontal recess), and the light post stays at the bottom at roll 0',
+    steps(pitchSweep) && steps(rollSweep) && pitchSweep.every((q) => near(SC.lightPostAngle(q), 270, 1e-6)));
   check('scope: the tip at depth 0 is the fulcrum, and at depth t it is F + t d', poses.every((p) => { const t0 = SC.tipOf(F, { ...p, depth: 0 }); const t = SC.tipOf(F, p); const d = SC.shaftDir(p); return len(t0.map((x, i) => x - F[i])) < 1e-12 && len(t.map((x, i) => x - F[i] - p.depth * d[i])) < 1e-9; }));
   const a0 = SC.lightPostAngle({ ...SC.POSE_DEFAULT, lens: 30, roll: 0 });
   const a90 = SC.lightPostAngle({ ...SC.POSE_DEFAULT, lens: 30, roll: 90 });
