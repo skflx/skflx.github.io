@@ -617,6 +617,13 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   .ssb-truth { top: 0.5rem; left: 0.6rem; right: auto; font-size: 0.62rem; }
 }
 
+/* The depth names (Junior, Senior, Fellow) only where the toolbar keeps a wide margin: with four stage
+   pills the row is full at 1280 px, and a wrapped toolbar shrinks the stage (which the lab tests,
+   among other things, are sensitive to). */
+@media (min-width: 1440px) {
+  .ssb-tier-name { display: inline; }
+}
+
 /* ===== DESKTOP: three columns ===== */
 @media (min-width: 960px) {
   .ssb {
@@ -625,7 +632,6 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   }
   .ssb-nav { display: flex; position: static; border-right: 1px solid var(--rule); background: var(--bg); }
   .ssb-nav-title .ssb-nav-close, .ssb-nav-toggle, .ssb-sheet-handle { display: none; }
-  .ssb-tier-name { display: inline; }
 
   .ssb-panel { max-height: none; border-top: 0; border-left: 1px solid var(--rule); }
   .ssb-panel-body { padding: 1rem 1.25rem 2rem; }
