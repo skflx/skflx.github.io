@@ -6,7 +6,7 @@
    tree. Enter opens the best match; Down moves into the list; Escape clears.
    Everything reaches the DOM through textContent.
    ============================================================= */
-import { TYPE_LABEL, REGION_LABEL } from './graph.js?v=3a13ab70';
+import { TYPE_LABEL, REGION_LABEL } from './graph.js?v=e05b056d';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

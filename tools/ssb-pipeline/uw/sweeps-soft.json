@@ -1,0 +1,5 @@
+{
+ "version": 1,
+ "note": "Vessel waypoints for sweeps_soft.py (format: its docstring). Anatomy is data: ST4b (Opus) adds entries here, each waypoint with its source. Empty until then; `sweeps_soft.py --selftest` exercises the machinery on a synthetic entry without writing.",
+ "sweeps": {}
+}

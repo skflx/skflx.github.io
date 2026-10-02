@@ -8,7 +8,7 @@ export const STAMPS = {
     "ssb/content/pathology-neoplastic.json": "781d9627",
     "ssb/content/sources.json": "80a8ba0b",
     "ssb/content/sphenoid-sellar-clival.json": "14bd5e74",
-    "ssb/geometry/charts.json": "a2f6f625",
+    "ssb/geometry/charts.json": "6708232c",
     "ssb/geometry/labels.json": "d094c3d6",
     "ssb/geometry/landmarks.json": "0b6a7e6a",
     "ssb/geometry/landmarks.meta.json": "fb9cd278",

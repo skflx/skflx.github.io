@@ -10648,7 +10648,9 @@
     "max_abs_r_mm": 6.64,
     "roundtrip_max_3d_mm": 0.918,
     "roundtrip_max_chart_mm": 0.915,
-    "roundtrip_samples": 400
+    "roundtrip_samples": 400,
+    "cells": 1366,
+    "unreliable_cells": 31
    },
    "s.septal-mucosa.L": {
     "triangles": 4999,
@@ -10666,7 +10668,9 @@
     "max_abs_r_mm": 5.1,
     "roundtrip_max_3d_mm": 0.974,
     "roundtrip_max_chart_mm": 0.974,
-    "roundtrip_samples": 400
+    "roundtrip_samples": 400,
+    "cells": 1337,
+    "unreliable_cells": 122
    }
   },
   "choanal_arch": [

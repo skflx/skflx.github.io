@@ -24,6 +24,7 @@ centroid lies within 1 mm of a septum voxel, largest connected patch only. Norma
 outward normals, i.e. they point from the airway into the septum. The chart is the sagittal projection:
 chart (a, s) = RAS (A, S) in mm, and r = the surface's R coordinate, so a flap outlined on the chart
 lands on the surface by lookup. Chart round-trip error is printed and bounded (see check()).
+Finally runs sweeps_soft.py (vessel sweeps snapped to these charts; a no-op while sweeps-soft.json is empty).
 Deterministic: gzip with mtime 0, no randomness other than a seeded sample.
 """
 import gzip, json, os, sys
@@ -43,6 +44,7 @@ SURFACE = 's.septal-mucosa'
 BUDGET = 5000                 # triangles per side (walls.s.nasal-septum is 6000)
 NEAR_MM = 1.0                 # a triangle belongs to the septal surface if its centroid is this close to septum voxels
 GRID_MM = 1.0
+FOLD_MM = 1.0                 # a cell whose samples span more than this in R is flagged unreliable
 ROUNDTRIP_MAX_MM = 1.0
 
 
@@ -108,7 +110,26 @@ def chart_of(v, f, nrm):
     cnt = np.zeros((na, ns)); rsum = np.zeros((na, ns)); nsum = np.zeros((na, ns, 3))
     np.add.at(cnt, (ia, js), 1); np.add.at(rsum, (ia, js), pts[:, 0]); np.add.at(nsum, (ia, js), fn[tri])
     occ = cnt > 0
+    rmax = np.full((na, ns), -np.inf); rmin = np.full((na, ns), np.inf)
+    np.maximum.at(rmax, (ia, js), pts[:, 0]); np.minimum.at(rmin, (ia, js), pts[:, 0])
+    unreliable = occ & ((rmax - rmin) > FOLD_MM)       # the surface folds across the cell: a sagittal chart is not single-valued there
     r = np.where(occ, rsum / np.maximum(cnt, 1), np.nan)
+    # r at the cell CENTRE, not the cell mean: a plane fitted to the cell's samples (the surface slopes
+    # across a 1 mm cell, and a bilinear lookup reads the grid as values at the centres)
+    order = np.lexsort((js, ia))
+    key = ia[order] * ns + js[order]
+    cuts = np.flatnonzero(np.diff(key)) + 1
+    for grp in np.split(order, cuts):
+        i, j = ia[grp[0]], js[grp[0]]
+        if len(grp) < 4:
+            continue
+        da, ds = pts[grp, 1] - (a0 + i * GRID_MM), pts[grp, 2] - (s0 + j * GRID_MM)
+        A = np.c_[np.ones(len(grp)), da, ds]
+        if np.linalg.matrix_rank(A) < 3:
+            continue
+        coef = np.linalg.lstsq(A, pts[grp, 0], rcond=None)[0]
+        if abs(coef[0] - r[i, j]) < 1.5:
+            r[i, j] = coef[0]
     nn = nsum / np.maximum(np.linalg.norm(nsum, axis=2, keepdims=True), 1e-12)
     # polygon: outer contour of the filled occupancy mask, in chart mm
     filled = ndi.binary_fill_holes(ndi.binary_closing(occ, iterations=2))
@@ -116,7 +137,7 @@ def chart_of(v, f, nrm):
     c = max(cs, key=len) - 1
     c = approximate_polygon(c, 0.5)
     poly = [[round(float(a0 + p[0] * GRID_MM), 2), round(float(s0 + p[1] * GRID_MM), 2)] for p in c[:-1]]
-    return {'a0': float(a0), 's0': float(s0), 'na': na, 'ns': ns, 'r': r, 'n': nn, 'occ': occ, 'polygon': poly,
+    return {'a0': float(a0), 's0': float(s0), 'na': na, 'ns': ns, 'r': r, 'n': nn, 'occ': occ, 'polygon': poly, 'unreliable': unreliable,
             'area_chart_cm2': float(filled.sum() * GRID_MM ** 2 / 100)}
 
 
@@ -197,7 +218,8 @@ def main():
         mid = float(np.abs(v[:, 0]).max())
         report[name] = {'triangles': int(len(f)), 'area_cm2': round(area / 100, 2), 'chart_bbox_mm': {
             'a': [round(ch['a0'], 1), round(ch['a0'] + ch['na'], 1)], 's': [round(ch['s0'], 1), round(ch['s0'] + ch['ns'], 1)]},
-            'max_abs_r_mm': round(mid, 2), 'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_chart_mm': round(ec, 3), 'roundtrip_samples': n}
+            'max_abs_r_mm': round(mid, 2), 'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_chart_mm': round(ec, 3), 'roundtrip_samples': n,
+                        'cells': int(ch['occ'].sum()), 'unreliable_cells': int(ch['unreliable'].sum())}
         print(name, json.dumps(report[name]), flush=True)
         assert e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, f'{name}: chart round-trip error over {ROUNDTRIP_MAX_MM} mm'
         assert mid <= 15.0, f'{name}: reaches {mid} mm from the midsagittal plane'
@@ -206,7 +228,10 @@ def main():
         charts[name] = {'rule': 'chart (a, s) mm = RAS (A, S); r = RAS R of the surface at that (a, s); sagittal projection',
                         'polygon': ch['polygon'], 'grid': {'origin': [ch['a0'], ch['s0']], 'step': GRID_MM, 'dims': [ch['na'], ch['ns']],
                                                            'r': rows, 'normal': nrows},
-                        'area_cm2': report[name]['area_cm2']}
+                        'area_cm2': report[name]['area_cm2'],
+                        'unreliable': {'rule': f'chart cells whose surface samples span more than {FOLD_MM} mm in R (the surface folds across the cell: '
+                                               'a spur, a deviation or a steep edge); a lookup there is approximate',
+                                       'cells': [[round(ch['a0'] + int(i), 1), round(ch['s0'] + int(j), 1)] for i, j in zip(*np.nonzero(ch['unreliable']))]}}
         all_pts.append(v)
 
     # pack
@@ -244,6 +269,8 @@ def main():
                   'specimen.py cuts that boundary at the PNS plane (softtissue.py)', **meta}
     json.dump(mm, open(mp, 'w'), indent=1)
     print('lm.choanal-arch.M', arch, meta)
+    import sweeps_soft
+    sweeps_soft.run()                  # surface-snapped vessel sweeps from sweeps-soft.json (no-op while it is empty)
     write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'pack_bytes': gz})
 
 

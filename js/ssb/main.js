@@ -18,16 +18,16 @@
    specimen: the stages' hooks; materials: scene.js's hook on the
    tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=3a13ab70';
+import { loadGraph } from './graph.js?v=e05b056d';
 import { createStore, parseHash } from './state.js?v=91f08185';
 import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=c2c1fadc';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=aefd9bcb';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=6a2be2ba';
-import { mountTree } from './ui-tree.js?v=fe51c594';
-import { mountSearch } from './ui-search.js?v=9cf3c374';
-import { mountPanel } from './ui-panel.js?v=b0b0735c';
+import { mountCt } from './mode-ct.js?v=8d7e7a09';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=a28fd69d';
+import { mountTree } from './ui-tree.js?v=98e944c4';
+import { mountSearch } from './ui-search.js?v=12e975fb';
+import { mountPanel } from './ui-panel.js?v=0be3c631';
 
 const $ = (id) => document.getElementById(id);
 
@@ -272,7 +272,7 @@ function bootLab(graph, stageHandle) {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=563baefb'), import('./ui-specimen.js?v=5903e84d')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=233964a6'), import('./ui-specimen.js?v=4a5ec70b')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
