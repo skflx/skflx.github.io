@@ -22,6 +22,8 @@ no design judgment required.
 | `.claude/skills/ascii-diagram/SKILL.md` | The agent playbook for a figure request (`/ascii-diagram`) | The workflow or its verification steps change |
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
 | `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |
+| `docs/ssb-roadmap.md` | SSB task board: status, owner decisions/actions, waves, work packages, checkpoints, content backlog | A WP changes status (same PR), a wave closes (shrink done WPs), a decision lands |
+| `docs/delegation.md` | Who does what (owner / Opus / Sonnet), WP format, executor and checkpoint protocols, launch prompts | The split or the protocol changes |
 | `docs/authoring-ssb.md` | SSB content schema and editorial rules | The schema or `tools/ssb-content.mjs` changes |
 | `docs/ssb-imagegen.md` | Image-generation and cross-model briefs | A brief or its acceptance check changes |
 | `ssb/reference/*/README.md` | Provenance, permission and method of each external atlas crawl | A reference is re-crawled or its permission scope changes |
@@ -32,8 +34,9 @@ no design judgment required.
 | `images/list.txt` | Image inventory | An image is added/removed |
 | `fonts/LICENSE-*.txt` | Licenses of the self-hosted faces | A face is added or removed |
 
-There are no plan docs. The five that existed were records of work on systems
-retired in 2026-09 and went with them; `WIP.md` now carries current state.
+One plan doc: `docs/ssb-roadmap.md`, a task board kept current, not a
+diary. `WIP.md` carries current state; the roadmap carries what is next
+and who does it.
 
 ## The second-pass checklist
 
