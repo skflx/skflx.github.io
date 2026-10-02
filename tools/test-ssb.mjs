@@ -1315,6 +1315,32 @@ async function specimenTests(browser, base) {
       && after.filter((n) => n.region !== 'maxillary' || n.group === 'bone').every((n) => n.visible), JSON.stringify(after.filter((n) => !n.visible).map((n) => n.key)));
     await page.click('#ssb-spec input[data-region="maxillary"]');
 
+    /* mucosa: the air spaces drawn as their lining; a layer, not a different mesh */
+    const airKeys = nodes0.filter((n) => n.group === 'air').map((n) => n.key);
+    check('mucosa: the layer starts off and no air space is drawn as mucosa', (await spec(page, () => window.__ssb.specimen.mucosaOn)) === false
+      && (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn !== 'mucosa'));
+    await page.click('#ssb-spec-mucosa');
+    await nextFrames(page, 2);
+    const muc = await specNodes(page);
+    check('mucosa: toggling the layer draws every air-space node as mucosa (outside: a translucent shell); bone is untouched',
+      airKeys.length > 0 && muc.filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa' && n.transparent) && muc.filter((n) => n.group === 'bone').every((n) => n.drawn === 'bone'),
+      JSON.stringify(muc.filter((n) => n.group === 'air' && n.drawn !== 'mucosa').map((n) => n.key)));
+    await page.click('#ssb-spec button[data-bone="hidden"]');     /* the envelope's ghost is hit first otherwise */
+    await nextFrames(page, 2);
+    const mAim = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
+    const mHits = mAim ? await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y), [mAim.x, mAim.y]) : [];
+    check('mucosa: picking through the layer still selects the air space\'s graph id', !!mAim && mHits.length > 0 && mHits[0].key === 's.maxillary-sinus.R' && GRAPH.has(mHits[0].id), JSON.stringify(mHits.map((h) => h.key)));
+    await page.click('#ssb-spec button[data-bone="xray"]');
+    const r0 = await spec(page, () => window.__ssb.specimen.renders);
+    await page.click('.site-theme-toggle');
+    await nextFrames(page, 3);
+    check('mucosa: both themes compile — the layer still draws after the theme flips',
+      (await spec(page, () => window.__ssb.specimen.renders)) > r0 && (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa'));
+    await page.click('.site-theme-toggle');
+    await page.click('#ssb-spec-mucosa');
+    await nextFrames(page, 2);
+    check('mucosa: toggling off restores every air space\'s own look', (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === n.look.kind));
+
     /* landmarks: every marker is orientation geometry (never tier-filtered); labels are few and follow the tier */
     const lmAll = await spec(page, () => window.__ssb.specimen.landmarks.length);
     check('layers: no landmark markers until the layer is on', (await spec(page, () => window.__ssb.specimen.markers.length)) === 0);
