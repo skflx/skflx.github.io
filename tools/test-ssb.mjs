@@ -2183,6 +2183,7 @@ async function main() {
 
     /* picking */
     await setHash(page, '#lab=ethmoid-roof&keros=12');
+    await nextFrames(page, 4);      /* the dock just resized the canvas: the camera's projection updates on the next render, and screenOf reads it */
     const at = await page.evaluate(() => window.__ssb.lab.screenOf('s.lateral-lamella.R'));
     check('a pixel exists where the right lateral lamella is picked first', !!at);
     if (at) {
