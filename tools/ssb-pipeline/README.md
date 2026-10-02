@@ -72,6 +72,19 @@ same-height cells for medial/lateral, and the same for the other two axes. It wr
 `ssb/reference/specimen-relations.json`. Check images (`--png-dir`): `reconC-walls-*.png`,
 `reconC-mesh-walls.png`, `reconC-sweeps-*.png`.
 
+Reconstruction, stage D (soft tissue; needs only the committed `ssb/`, not the crawl; run after stage C):
+
+    .venv/bin/python tools/ssb-pipeline/uw/softtissue.py      # -> ssb/models/soft.glb.gz, ssb/geometry/charts.json,
+                                                              #    lm.choanal-arch.M and lm.naris.R/.L in landmarks.json
+    .venv/bin/python tools/ssb-pipeline/uw/sweeps_soft.py --selftest   # the waypoint-sweep machinery, nothing written
+    node tools/stamp-assets.mjs && node tools/check-data.mjs
+
+`softtissue.py` meshes each nasal cavity's lining where it faces the septum wall unit, with a sagittal chart ((a, s) mm to R, a 1 mm grid, the cells where the surface folds are
+flagged `unreliable`). Its `soft` pack waits under `pendingPacks` in `packs.json` until the graph has `s.septal-mucosa`.
+`lm.naris.R/.L` is the endoscope's provisional fulcrum (schematic offsets, replaced when the nose exists).
+`specimen.py` rewrites `landmarks.json`, so rerun stage D after it. Then `sweeps_soft.py` runs from `softtissue.py`: it turns the waypoints in `uw/sweeps-soft.json`
+(format in its docstring; empty until the soft-tissue vessels are specified) into sweeps on those charts and merges them into `sweeps.json`.
+
 `relate.py` needs only the committed `slices.json`, so the graph's spatial
 claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps

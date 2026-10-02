@@ -1,11 +1,12 @@
 # SSB — Sinus & Skull Base 3D: architecture and conventions
 
-**Status (2026-10-02): phases 0, 1, 3 and 5 done, 2 half done; endoscope
-and soft tissue next.** `ssb.html` runs graph mode over the draft knowledge
-graph (`ssb/content/`, schema `docs/authoring-ssb.md`, validator
-`tools/ssb-content.mjs`) and three stages: the reference specimen
-reconstructed from the UW atlas (§5.1), CT (§3, §5.6; no WebGL needed), and
-the variant lab (§6). **What is done and what is next, task by task, with
+**Status (2026-10-02): phases 0, 1, 3 and 5 done, 2 half done, the endoscope
+rig built; its collision and soft tissue next.** `ssb.html` runs graph mode
+over the draft knowledge graph (`ssb/content/`, schema
+`docs/authoring-ssb.md`, validator `tools/ssb-content.mjs`) and four stages:
+the reference specimen reconstructed from the UW atlas (§5.1), the
+endoscope on it (§3), CT (§3, §5.6; no WebGL needed), and the variant lab
+(§6). **What is done and what is next, task by task, with
 who does it: `docs/ssb-roadmap.md`.** This file is the design; the roadmap
 is the board.
 
@@ -125,7 +126,12 @@ never reloads.
   scope and why posterior septectomy opens binostril work.
   The specimen's face mask removed the nose, so the fulcrum is a
   provisional schematic `lm.naris` until the nose exists (§5.7); the scope
-  sees the air spaces' surfaces drawn as mucosa.
+  sees the air spaces' surfaces drawn as mucosa. Built (`js/ssb/scope.js`:
+  the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
+  `ui-endoscope.js`): a scope pose is a camera over the Specimen stage
+  (`state.scope`, exclusive with the lab and CT), with a spotlight at the tip
+  and a 70° circular field of view; collision, the HUD and station flights
+  are the next work packages (`docs/ssb-roadmap.md`).
 - **CT.** Axial, coronal and sagittal slices of the specimen volume, each
   on its own canvas, radiological convention (patient right on the image's
   left) with orientation letters; one crosshair in RAS mm shared by the
@@ -328,7 +334,12 @@ Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the
 committed `ssb/ct/` volume, not the raw crawl, so it can be rerun in any
 session; it writes a `soft` pack, `ssb/geometry/charts.json`, and merges
 its landmarks and sweeps into the shared geometry files (never dropping
-other steps' keys; method per point in the `*.meta.json` files). Waypoint
+other steps' keys; method per point in the `*.meta.json` files). The
+sagittal chart is single-valued only where the surface does not fold back
+(a spur, a deviation): `charts.json` lists the cells that do under
+`unreliable`, and anything placed there is approximate. The `soft` pack
+stays in `packs.json`'s `pendingPacks` until the graph has
+`s.septal-mucosa`. Waypoint
 specs live in `tools/ssb-pipeline/uw/sweeps-soft.json` — anatomy as data,
 authored with sources, never hand-placed coordinates in content.
 

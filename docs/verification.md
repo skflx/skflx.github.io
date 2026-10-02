@@ -279,6 +279,20 @@ draws and selects (CT is the no-WebGL fallback); a server that sends
 Judging how the images *look* (window presets on the real head, outline
 contrast) stays a human check: `--shots` writes `ct-*.png`.
 
+**Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
+`docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
+the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the
+scope's own side, unit vectors, lens 0 = shaft, lens 30 at roll 0 looks up as
+`sin(pitch + 30°)`, the upright horizon, tip = fulcrum at depth 0, the light
+post opposite the lens offset) and the `#scope=` codec and store (round trip,
+hostile values clamped or ignored, stage exclusivity); in the page, the camera
+is exactly the pose's tip and view, keys / drag / wheel / sliders change the
+pose with the right signs, the indicator moves with roll, the lights and
+layers are the scope's and come back on leaving (orbit view included), a
+pasted link opens the stage, a phone fits, WebGL blocked disables the pill.
+How the image *looks* (spot intensity, cone, the lining from inside) is a
+human check: take a screenshot of `#scope=R,45,6,4,0,0`.
+
 **Specimen stage** (`js/ssb/geo-specimen.js`, `mode-specimen.js`,
 `ui-specimen.js`; `docs/ssb.md` §3 Explore) runs on the real committed packs
 (`node tools/test-ssb.mjs --only specimen`). It pins: every pack is a

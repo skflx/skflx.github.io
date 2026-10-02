@@ -16,15 +16,15 @@ history keeps the specs).
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **2 of 4 dioramas** | `sphenoid` (D1–D2), `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes) | soft tissue (track ST); `s.skull-base-region` id (H1); hand segmentation (owner, optional) |
-| 4 Endoscope | **not started** — wave 1 | E1–E6 |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer) | soft tissue (track ST: ST1, ST2, ST4a in review; ST0, ST3, ST4b Opus); hand segmentation (owner, optional) |
+| 4 Endoscope | **rig built** (E1, E2 in review) | collision + HUD (E3), station poses (E5, Opus), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
 
-**Waiting on the owner:** decisions O1–O3 (§2), then CP-1's report.
+**Waiting on the owner:** decisions O1–O3 (§2), then CP-1's report. **Wave 1 Sonnet WPs are all in `review`** (branch `claude/wave-1-sonnet`): CP-1 (Opus) is next.
 
 ## 2. Owner — decisions and actions
 
@@ -114,7 +114,8 @@ standard checks (`node tools/check-data.mjs`, `node tools/test-ssb.mjs`,
 Pipeline WPs need the Python env: `python3 -m venv .venv &&
 .venv/bin/pip install -r tools/ssb-pipeline/requirements.txt`.
 
-### H1 — Graph entities the geometry already needs        [ready] · Sonnet · depends: —
+### H1 — Graph entities the geometry already needs        [review] · Sonnet · depends: —
+Result: `lm.naris` added (tier 1, `of: s.nasal-vestibule`). `s.skull-base-region` already existed with `region: multiple` (`skull-base` is not in the validator's vocabulary), so only its name and text were brought to the spec. `meshes.py` still writes its `proposedIds` note: rerunning it needs the raw crawl, and the id is in the graph now, so the note is stale and goes at the next pack rebuild.
 Goal: every id the packs and the endoscope use exists in the graph.
 Read: `docs/authoring-ssb.md` §3–§5; `ssb/models/packs.json` `proposedIds`.
 Touch: `ssb/content/nasal-maxillary-ppf.json`, `ssb/content/ethmoid-frontal-orbit.json`.
@@ -138,7 +139,8 @@ Accept: `node tools/ssb-content.mjs` and `node tools/check-data.mjs` pass.
 Escalate: the validator rejects the kind/region vocabulary in a way that
 needs a schema change.
 
-### ST1 — Mucosa layer on the specimen        [ready] · Sonnet · depends: —
+### ST1 — Mucosa layer on the specimen        [review] · Sonnet · depends: —
+Result: "Mucosa" toggle in the Specimen layers (`setMucosa`, hook `mucosaOn` / `drawn` per node): opaque and double-sided once the camera is inside the air spaces' box, a 40 % translucent shell outside; no shader change. `test-ssb.mjs --only specimen` pins toggle on/off, bone untouched, picking through it, both themes.
 Goal: the air spaces can be drawn as their lining — the surface the
 endoscope will see.
 Read: `docs/ssb.md` §5.7, §7.4; `js/ssb/materials.js`;
@@ -157,7 +159,8 @@ through it still selects the air space's graph id; both themes compile.
 Escalate: the material library has no way to express inside/outside
 without a new shader.
 
-### ST2 — Septal mucosa surfaces (stage D, from the committed volume)        [ready] · Sonnet · depends: —
+### ST2 — Septal mucosa surfaces (stage D, from the committed volume)        [review] · Sonnet · depends: —
+Result: `softtissue.py` writes `ssb/models/soft.glb.gz` (5000 triangles a side), `ssb/geometry/charts.json` and `lm.choanal-arch.M` (R 4.0, A -51.5, S 12.0; stage B's `choanal_arch_s_mm` is 12.5). Areas 14.0 / 14.9 cm², both within 7 mm of the midsagittal plane, chart round-trip max 0.97 mm. **Deviations for CP-1:** (1) the pack is listed under `pendingPacks` in `packs.json`, not `packs`, because `check-data` fails any packs.json name that is not a graph id and `s.septal-mucosa` is ST0's; move it when ST0 lands. (2) A sagittal chart is not single-valued where the surface folds (the left side has a spur or deviation: 122 of 1337 cells span more than 1 mm in R, the right 31 of 1366): those cells are listed under `unreliable` in `charts.json` and ST3/ST4b should treat them as approximate. (3) The choanal arch sits at the 4 mm edge of its search window; the PNS plane is the specimen's own cut.
 Goal: a surface per side for the septal mucosa, with a 2D chart, so flaps
 and septal vessels can be placed on it.
 Read: `docs/ssb.md` §5.3, §5.7; `tools/ssb-pipeline/uw/walls.py` (how the
@@ -194,7 +197,8 @@ sample of points (print the max error).
 Escalate: the septum wall unit does not separate cleanly from the turbinate
 or floor walls (report where, with slice numbers).
 
-### ST4a — Surface-snapped sweeps (pipeline machinery)        [ready] · Sonnet · depends: —
+### ST4a — Surface-snapped sweeps (pipeline machinery)        [review] · Sonnet · depends: —
+Result: `sweeps_soft.py` + an empty `sweeps-soft.json`; `softtissue.py` calls it. `--selftest` builds a straight chart line per side on reliable cells and checks every point is within 0.5 mm of `depth` below the mesh (max 0.09 mm) and that a rerun is identical. The test entry is built in memory, not committed, because a sweep key must be a graph id. Paths over `unreliable` cells warn and are flagged in the meta.
 Goal: vessels that run on a mucosal surface can be specified as waypoints
 and generated, so Opus writes anatomy as data and never hand-places points.
 Read: `docs/ssb.md` §5.5, §5.7; `tools/ssb-pipeline/uw/sweeps.py`; `ssb/geometry/sweeps.meta.json`.
@@ -216,7 +220,8 @@ within 0.5 mm of `depth` below the surface; rerunning is byte-identical;
 `check-data.mjs` passes after the test entry is removed again.
 Escalate: ST2's chart is not ready — build against a stub and say so.
 
-### ST6-0 — Is the nose in the source images?        [ready] · Sonnet · depends: —
+### ST6-0 — Is the nose in the source images?        [review] · Sonnet · depends: —
+Result (evidence for O1; method and numbers in the PR body): yes. In the unmasked axial stack the nasal tip is inside the frame, with its anterior skin 1 px (0.34 mm) from the top edge over axial slices 123–129 (0-based, superior = 0, 0.625 mm apart): a hair from clipping, and no head mask touches row 0. In the sagittal stack the whole nose lies forward of column 30 over slices 53–72 and the tip (slice 62) is 15 px from the left edge; the skin–air edge is one connected contour from glabella to chin, and the vestibule air is visible there (rows 280–298). The mask removed it; a nose-only unmask is feasible.
 Goal: evidence for owner decision O1.
 Read: `tools/ssb-pipeline/README.md`; `tools/ssb-pipeline/uw/specimen.py`
 docstring (face mask); `ssb/reference/uw-sinusanatomy2/README.md`.
@@ -231,7 +236,8 @@ Accept: the report answers each question with slice numbers.
 Escalate: the UW site is unreachable from the session (report the error;
 the owner may need to run it locally).
 
-### E1 — Provisional endoscope fulcrum        [todo] · Sonnet · depends: H1, ST2 (same script)
+### E1 — Provisional endoscope fulcrum        [review] · Sonnet · depends: H1, ST2 (same script)
+Result: `lm.naris.R` (4.43, -0.32, 10.0) and `.L` (-0.99, -0.16, 10.0), anterior to the bone of their axial row (A -10.0). **For CP-1:** the masked cavity's anterior edge is at A -9.5 on both sides, so the 10 mm forward step puts both points at A ≈ 0; the left front centroid is only 1 mm from the midline (R -0.99) against 4.4 for the right, a narrow left vestibule or a deviation, so the two nostrils are not symmetric.
 Goal: a `lm.naris.R` / `.L` point the scope can pivot on until the nose
 exists.
 Read: `docs/ssb.md` §3 (Endoscope), §5.7.
@@ -247,7 +253,8 @@ figures are schematic and go to CP-1 for a look.
 Accept: both points emitted, anterior to every bone voxel on their axial
 row, `check-data.mjs` passes.
 
-### E2 — Scope rig        [todo] · Sonnet · depends: E1 (ST1 helps)
+### E2 — Scope rig        [review] · Sonnet · depends: E1 (ST1 helps)
+Result: `scope.js` (math, `#scope=` codec), `mode-endoscope.js`, `ui-endoscope.js`, a fourth stage pill. The scope is a camera pose over the Specimen stage (the store's `scope`, exclusive with `lab` and `ct`): bone hidden, mucosa on, spotlight (decay 2) at the tip, 70° circular field of view, drag / wheel / keys / sliders. **Deviations for CP-1:** it touched `js/ssb/scene.js` (exports `scene`, `controls`, `lights` and a `holdPose` so a stage left from the scope saves the orbit view, not the tip), outside the WP's Touch list; and the toolbar's pill padding and gaps in `css/ssb.css` shrank so four stages still fit one row at 1280 px. The lens-30 "looks up" rule holds for pitch above -30° (`v·S = sin(pitch + 30°)`). Spot intensity (350 cd), cone and fill are by eye: judge them at CP-1.
 Goal: first-person rigid-endoscope view on the specimen.
 Read: `docs/ssb.md` §3 (Endoscope), §4, §7.1–§7.4; `js/ssb/mode-specimen.js`
 (stage pattern), `js/ssb/state.js` (hash codecs).
