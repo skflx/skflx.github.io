@@ -8,15 +8,14 @@ it is derived (docs/ssb.md 5.7). Writes:
 
   ssb/models/soft.glb.gz        the septal mucosa, one open surface per side (s.septal-mucosa.R / .L).
                                 Same encoding and budget rules as the walls pack. Listed in packs.json
-                                under "pendingPacks" (and "proposedIds"), not "packs": the viewer loads
-                                only "packs", and the graph has no s.septal-mucosa yet (ST0 adds it;
-                                check-data fails a packs.json name that is not a graph id). When it does,
-                                move the entry into "packs" with its nodes keyed "<id>.<side>".
+                                under "packs" (s.septal-mucosa is a graph id since ST0; check-data fails a
+                                packs.json name that is not one).
   ssb/geometry/charts.json      per surface: the RAS -> chart rule, the bounding polygon in chart mm,
                                 and a 1 mm (a, s) -> r lookup grid (null where the surface is absent),
                                 with the surface normal per cell (unit, pointing into the tissue).
   ssb/geometry/landmarks.json   merged (never drops a key): lm.choanal-arch.M, and the provisional
-                                endoscope fulcrum lm.naris.R / .L (E1, see naris()); landmarks.meta.json
+                                endoscope fulcrum lm.naris.R / .L (E1, see naris()), and lm.middle-turbinate-head.R / .L
+                                (turbinate_heads()); landmarks.meta.json
                                 the method per point.
 
 Method. The septal mucosa of side X is the lining of nasal-cavity.X where it faces the septum wall unit
@@ -268,6 +267,25 @@ def naris(lab, ct, table, aff, ans):
     return out, info
 
 
+def turbinate_heads(lab, table, aff):
+    """lm.middle-turbinate-head.<side>: the anterior end of the middle turbinate wall unit (walls.py): the
+    centroid of its voxels within 1 mm (A) of the anterior-most one. A proxy for the axilla, the turbinate's
+    attachment to the lateral wall, which a bone-window CT does not resolve. Used by the septal flap overlay
+    (short-flap anterior cut) and by the AEA septal-branch waypoints."""
+    by = {v: int(k) for k, v in table.items()}
+    A = np.array(aff)
+    out, info = {}, {}
+    for side in 'RL':
+        kk, jj, ii = np.nonzero(lab == by[f's.middle-turbinate.{side}'])
+        a = A[1, 1] * jj + A[1, 3]
+        front = a >= a.max() - 1.0
+        r = A[0, 0] * ii + A[0, 3]
+        sv = A[2, 2] * kk + A[2, 3]
+        out[f'lm.middle-turbinate-head.{side}'] = [round(float(r[front].mean()), 2), round(float(a[front].mean()), 2), round(float(sv[front].mean()), 2)]
+        info[f'lm.middle-turbinate-head.{side}'] = {'n_front_voxels': int(front.sum()), 'a_range_mm': [round(float(a.min()), 1), round(float(a.max()), 1)]}
+    return out, info
+
+
 def main():
     hdr, ct, lab, table = M.read_volume()
     aff, spacing = hdr['affine'], hdr['spacing'][0]
@@ -309,19 +327,14 @@ def main():
     # pack
     items = [(k, *built[k]) for k in sorted(built)]
     raw, gz = M.write_glb(os.path.join(REPO, 'ssb/models/soft.glb.gz'), items)
-    # node names are written as id + sides here, not "<id>.<side>": check-data fails a packs.json key that is not
-    # a graph id yet; the move into "packs" (nodes keyed by name) happens when the graph has the id
     entry = {'file': 'soft.glb.gz', 'bytes': gz, 'bytes_uncompressed': raw, 'triangles': int(sum(len(f) for _, _, f, _ in items)),
-             'id': SURFACE, 'sides': sorted(k.rsplit('.', 1)[1] for k in built),
-             'trianglesBySide': {k.rsplit('.', 1)[1]: int(len(f)) for k, _, f, _ in items},
-             'verticesBySide': {k.rsplit('.', 1)[1]: int(len(v)) for k, v, _, _ in items}}
+             'nodes': {k: {'triangles': int(len(f)), 'vertices': int(len(v))} for k, v, f, _ in items}}
     pj = os.path.join(REPO, 'ssb/models/packs.json')
     man = json.load(open(pj))
-    man.setdefault('pendingPacks', {})['soft'] = entry
-    man['pendingPacks']['_note'] = ('written by softtissue.py; the graph has no s.septal-mucosa yet (ST0 adds it). '
-                                    'Move the "soft" entry into "packs" when it does.')
-    man.setdefault('proposedIds', {})[SURFACE] = ('lining of the nasal cavity where it faces the septum wall unit; one open surface per '
-                                                   'side from the specimen air space (softtissue.py); add to the graph before the viewer loads the pack')
+    man['packs']['soft'] = entry
+    for stale in ('pendingPacks', 'proposedIds'):       # transitional keys: every pack node is a graph id now
+        man.pop(stale, None)
+    man['totals'] = {'bytes': int(sum(p['bytes'] for p in man['packs'].values())), 'triangles': int(sum(p['triangles'] for p in man['packs'].values()))}
     json.dump(man, open(pj, 'w'), indent=1)
 
     cj = os.path.join(REPO, 'ssb/geometry/charts.json')
@@ -349,6 +362,13 @@ def main():
                                         'replaced when the nose exists (ST6)', **ninfo[k]}
     json.dump(mm, open(mp, 'w'), indent=1)
     print(nar, ninfo)
+    heads, hinfo = turbinate_heads(lab, table, aff)
+    lm.update(heads)
+    json.dump(dict(sorted(lm.items())), open(lp, 'w'), indent=1)
+    for k, v in heads.items():
+        mm['landmarks'][k] = {'method': 'centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)', **hinfo[k]}
+    json.dump(mm, open(mp, 'w'), indent=1)
+    print(heads, hinfo)
     import sweeps_soft
     sweeps_soft.run()                  # surface-snapped vessel sweeps from sweeps-soft.json (no-op while it is empty)
     write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'naris': nar, 'pack_bytes': gz})

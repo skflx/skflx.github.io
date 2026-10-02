@@ -202,11 +202,6 @@ def main():
                     'translation/scale, int8 normalized NORMAL; no materials, no textures',
         'nodeNames': '<graph id>.<side>; node extras {id, side, name} (three.js strips dots from object names, '
                      'so read userData.id / userData.side)',
-        'proposedIds': {BONE_ID.rsplit('.', 1)[0]: 'bony envelope of the sinonasal / ventral skull base region: bone '
-                                                   '(display >= 150, ~ +650 HU) within 12 mm of the named air spaces; '
-                                                   'no existing graph id covers the whole '
-                                                   'envelope (the graph splits bone into bones and bone parts). Rename '
-                                                   'or add to the graph before the viewer relies on it.'},
         'notes': {'walls': 'stage C resection units (tools/ssb-pipeline/uw/walls.py): each is the bone two named '
                            'compartments share; several are proxies or orientation splits - the method per unit is in '
                            'tools/ssb-pipeline/uw/registration.json "walls.notes". s.orbit is the orbital soft tissue '

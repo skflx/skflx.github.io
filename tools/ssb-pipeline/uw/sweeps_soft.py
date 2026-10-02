@@ -15,6 +15,7 @@ into a centreline. Nothing is hand-placed in 3D. Per entry, keyed "<id>.<side>" 
   src        graph source ids, as in the content files
   variable   optional note, set when the vessel's course varies between people
   notes      optional text
+  derivation optional text: how the waypoints were derived (what is cited, what is schematic)
 
 Generate: waypoints -> chart polyline (straight in chart mm between waypoints) -> r and the normal by
 bilinear lookup in the chart's 1 mm grid -> point = (r, a, s) + depth * normal -> resampled every 1 mm of
@@ -159,7 +160,7 @@ def run(spec_path=SPEC, write=True):
             'confidence': 'low', 'length_mm': round(length(P), 1), 'status_fraction': {'inferred': 1.0}, 'status': ['inferred'] * len(P),
             'radius_source': 'sweeps-soft.json (stated, not measured)', 'source': 'sweeps_soft.py',
             'chart_unreliable_fraction': round(fold, 2), 'notes': e.get('notes', ''), **({'variable': e['variable']} if e.get('variable') else {}),
-            'spec': {k: e[k] for k in ('surface', 'waypoints', 'depth', 'radius', 'src') if k in e}}
+            'spec': {k: e[k] for k in ('surface', 'waypoints', 'depth', 'radius', 'src', 'derivation') if k in e}}
     json.dump(sweeps, open(sp, 'w'), indent=1)
     json.dump(meta, open(mp, 'w'), indent=1)
     for k, (P, _) in out.items():

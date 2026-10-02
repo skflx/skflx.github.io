@@ -133,6 +133,22 @@
    "n_front_voxels": 48,
    "anterior_air_edge_a_mm": -9.5,
    "row_bone_max_a_mm": -10.0
+  },
+  "lm.middle-turbinate-head.R": {
+   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
+   "n_front_voxels": 7,
+   "a_range_mm": [
+    -54.0,
+    -11.5
+   ]
+  },
+  "lm.middle-turbinate-head.L": {
+   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
+   "n_front_voxels": 13,
+   "a_range_mm": [
+    -52.0,
+    -9.5
+   ]
   }
  }
 }

@@ -847,6 +847,660 @@
      16.9
     ]
    }
+  },
+  "s.anterior-ethmoidal-septal-branch.L": {
+   "confidence": "low",
+   "length_mm": 15.5,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.15,
+   "notes": "",
+   "variable": "Entry depends on the turbinate's axilla, which the specimen approximates with the turbinate head.",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "lm": "lm.middle-turbinate-head.L",
+      "offset": [
+       0,
+       -7.35,
+       5.5
+      ]
+     },
+     {
+      "chart": [
+       -20,
+       28
+      ]
+     },
+     {
+      "chart": [
+       -21,
+       20
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.3,
+    "src": [
+     "src.gras-cabrerizo-2016-aea-septal"
+    ],
+    "derivation": "Entry: 7.35 mm behind the septal projection of the middle turbinate head (Gras-Cabrerizo 2016, mean of 10 cavities), near the top of the septum. Descent is a schematic line; the paper gives the entry, not the course."
+   }
+  },
+  "s.anterior-ethmoidal-septal-branch.R": {
+   "confidence": "low",
+   "length_mm": 15.7,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.29,
+   "notes": "",
+   "variable": "Entry depends on the turbinate's axilla, which the specimen approximates with the turbinate head.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "lm": "lm.middle-turbinate-head.R",
+      "offset": [
+       0,
+       -7.35,
+       5.5
+      ]
+     },
+     {
+      "chart": [
+       -20,
+       28
+      ]
+     },
+     {
+      "chart": [
+       -21,
+       20
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.3,
+    "src": [
+     "src.gras-cabrerizo-2016-aea-septal"
+    ],
+    "derivation": "Entry: 7.35 mm behind the septal projection of the middle turbinate head (Gras-Cabrerizo 2016, mean of 10 cavities), near the top of the septum. Descent is a schematic line; the paper gives the entry, not the course."
+   }
+  },
+  "s.nasopalatine-artery.L": {
+   "confidence": "low",
+   "length_mm": 16.9,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.77,
+   "notes": "",
+   "variable": "The incisive-canal end is derived from a mean (39.6 \u00b1 4.3 mm) measured on sagittal CT in 9 heads.",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -26,
+       5
+      ]
+     },
+     {
+      "chart": [
+       -18,
+       7
+      ]
+     },
+     {
+      "chart": [
+       -12,
+       9
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.bleier-2011-bas-flap",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "End at the incisive canal, placed 39.6 mm in front of the choanal arch level (Bleier 2011: the flap length from the incisive canal to the sphenoid face at the choanal arch), i.e. A -11.9, near the septal chart's floor edge (the chart's lower edge rises toward the nose, so the end sits a few mm above the floor line). The canal itself is not resolved in the specimen. The start continues the inferior branch."
+   }
+  },
+  "s.nasopalatine-artery.R": {
+   "confidence": "low",
+   "length_mm": 14.5,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.2,
+   "notes": "",
+   "variable": "The incisive-canal end is derived from a mean (39.6 \u00b1 4.3 mm) measured on sagittal CT in 9 heads.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -26,
+       5
+      ]
+     },
+     {
+      "chart": [
+       -18,
+       7
+      ]
+     },
+     {
+      "chart": [
+       -12,
+       9
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.bleier-2011-bas-flap",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "End at the incisive canal, placed 39.6 mm in front of the choanal arch level (Bleier 2011: the flap length from the incisive canal to the sphenoid face at the choanal arch), i.e. A -11.9, near the septal chart's floor edge (the chart's lower edge rises toward the nose, so the end sits a few mm above the floor line). The canal itself is not resolved in the specimen. The start continues the inferior branch."
+   }
+  },
+  "s.posterior-septal-artery-inferior-branch.L": {
+   "confidence": "low",
+   "length_mm": 28.0,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.35,
+   "notes": "",
+   "variable": "Which branch is dominant, and where the artery divides, vary between sides and people (Zhang 2014: dominant inferior in 61.5%, division near the sphenopalatine foramen in 65.4%).",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -42,
+       20
+      ]
+     },
+     {
+      "chart": [
+       -44,
+       15
+      ]
+     },
+     {
+      "chart": [
+       -38,
+       9
+      ]
+     },
+     {
+      "chart": [
+       -26,
+       4
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.5,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries",
+     "src.pinheiro-neto-2011-nsf-dimensions"
+    ],
+    "derivation": "Start: the middle of the strip between the choanal arch (S 12.0) and the sphenoid ostium on the chart's posterior edge (the specimen's septal surface ends about 4 mm in front of the rostrum). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed. On the left the septal surface starts 3 mm further forward at this height (A -43), so the start is moved there."
+   }
+  },
+  "s.posterior-septal-artery-inferior-branch.R": {
+   "confidence": "low",
+   "length_mm": 25.6,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.0,
+   "notes": "",
+   "variable": "Which branch is dominant, and where the artery divides, vary between sides and people (Zhang 2014: dominant inferior in 61.5%, division near the sphenopalatine foramen in 65.4%).",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -44,
+       18
+      ]
+     },
+     {
+      "chart": [
+       -44,
+       13
+      ]
+     },
+     {
+      "chart": [
+       -38,
+       8
+      ]
+     },
+     {
+      "chart": [
+       -26,
+       4
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.5,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries",
+     "src.pinheiro-neto-2011-nsf-dimensions"
+    ],
+    "derivation": "Start: the middle of the strip between the choanal arch (S 12.0) and the sphenoid ostium on the chart's posterior edge (the specimen's septal surface ends about 4 mm in front of the rostrum). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed. On the right a gap in the septal surface at A -46, S 14-15 forces the start 2 mm forward (A -44)."
+   }
+  },
+  "s.posterior-septal-artery-superior-branch.L": {
+   "confidence": "low",
+   "length_mm": 17.2,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.13,
+   "notes": "",
+   "variable": "Course of the superior branch is not described in the sources read for this pass; it is drawn short, toward the upper septum.",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -42,
+       20
+      ]
+     },
+     {
+      "chart": [
+       -40,
+       23
+      ]
+     },
+     {
+      "chart": [
+       -34,
+       23
+      ]
+     },
+     {
+      "chart": [
+       -28,
+       27
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "Start as the inferior branch. The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it. On the left the septal surface starts 3 mm further forward at this height (A -43), so the start is moved there."
+   }
+  },
+  "s.posterior-septal-artery-superior-branch.R": {
+   "confidence": "low",
+   "length_mm": 18.8,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.0,
+   "notes": "",
+   "variable": "Course of the superior branch is not described in the sources read for this pass; it is drawn short, toward the upper septum.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -44,
+       18
+      ]
+     },
+     {
+      "chart": [
+       -40,
+       21
+      ]
+     },
+     {
+      "chart": [
+       -34,
+       23
+      ]
+     },
+     {
+      "chart": [
+       -28,
+       27
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "Start as the inferior branch. The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it. On the right a gap in the septal surface at A -46, S 14-15 forces the start 2 mm forward (A -44)."
+   }
+  },
+  "s.superior-labial-septal-branch.L": {
+   "confidence": "low",
+   "length_mm": 11.2,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.0,
+   "notes": "",
+   "variable": "Entry level at the columella varies; the specimen's face mask removed the entry.",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -9,
+       14
+      ]
+     },
+     {
+      "chart": [
+       -8,
+       19
+      ]
+     },
+     {
+      "chart": [
+       -9,
+       25
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.3,
+    "src": [
+     "src.bleier-2011-bas-flap",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point."
+   }
+  },
+  "s.superior-labial-septal-branch.R": {
+   "confidence": "low",
+   "length_mm": 11.2,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.0,
+   "notes": "",
+   "variable": "Entry level at the columella varies; the specimen's face mask removed the entry.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -9,
+       14
+      ]
+     },
+     {
+      "chart": [
+       -8,
+       19
+      ]
+     },
+     {
+      "chart": [
+       -9,
+       25
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.3,
+    "src": [
+     "src.bleier-2011-bas-flap",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point."
+   }
   }
  }
 }
