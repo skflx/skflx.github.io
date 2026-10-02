@@ -116,6 +116,11 @@
    "method": "median of UW arrow tips (axial + sagittal)",
    "n_tips": 6,
    "spread_mm": 0.94
+  },
+  "lm.choanal-arch.M": {
+   "method": "highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
+   "n_boundary_voxels": 287,
+   "septum_mean_r": 0.26
   }
  }
 }
