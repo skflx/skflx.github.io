@@ -118,7 +118,9 @@ never reloads.
   stays upright (camera head held level while the telescope rotates — the
   real technique); a light-post indicator sits opposite the view direction.
   Illumination is a spotlight at the tip with inverse-square falloff, so
-  depth reads as it does in the OR. The shaft cannot pass through tissue
+  depth reads as it does in the OR; its intensity follows an automatic
+  exposure (K·D², D the median distance to the lining over five rays), as a
+  camera control unit does, so the image stays legible at any range. The shaft cannot pass through tissue
   (sampled against the label volume, §5.6). A proximity HUD gives the
   distance in mm from the tip to each critical structure (ICA, optic nerve,
   skull base, orbit, AEA) from precomputed distance fields. This mode is

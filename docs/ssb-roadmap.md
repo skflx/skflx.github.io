@@ -17,7 +17,7 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **2 of 4 dioramas** | `sphenoid` (D1 amended, D2 next), `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces) | open airway lining (ST1b), floor chart (ST2b), corrections (ST0d, ST4d), flap overlay (ST3r → ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig built** (E1, E2 done; fulcrum and exposure need fixing) | fulcrum (E1b), exposure (E2b), collision + HUD (E3), station poses (E5, Opus), flights (E6) |
+| 4 Endoscope | **rig built** (E1, E2, E2b done or in review; the fulcrum still needs fixing) | fulcrum (E1b), exposure (E2b), collision + HUD (E3), station poses (E5, Opus), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -595,7 +595,7 @@ lateral on their row; each within 3 mm of the verification's estimate
 scope` pass.
 Escalate: the UW site is unreachable; no level has an enclosed lumen.
 
-### E2b — Scope exposure        [ready] · Sonnet · depends: —
+### E2b — Scope exposure        [review] · Sonnet · depends: —
 Goal: the scope image is legible at every distance (verification: white
 disc at the sphenoid pose).
 Read: this file §4 verification "New findings on screen"; `docs/ssb.md` §3
@@ -615,6 +615,18 @@ under 10 % of the pixels inside the circle have luminance ≥ 250 and their
 median luminance is 40–200; the on-demand loop still idles when the pose
 does not change; the existing scope tests pass.
 Escalate: raycasting the packs costs more than a frame at 60 fps.
+*Result (Sonnet, 2026-10-03):* exposure = K·D² (K from `EXPOSURE_D0 = 20`,
+clamp 10–2000) plus the scope's hemisphere fill raised 0.1 → 0.55: the three
+Accept poses read 1.4 %, 0 %, 0 % clipped, median luminance 168, 48, 66
+(`test-ssb --only scope`, 61/61). The "K so the straight 40 mm pose looks as
+now" clause could not hold with the Accept: that pose clips 15 % at the old
+exposure, so K and the fill were tuned to the Accept instead. White areas
+are single nodes with the tip against them, not interface membranes: the
+whole field at `R,52,-3,15,0,0` is `s.sphenoid-sinus.R` (0.77 mm ahead), and
+at `R,40,0,15,0,30` it is `s.nasal-cavity.R` (0.3 mm). Both follow from the
+provisional fulcrum (E1b). Raycast cost: 11–17 ms per pose change in
+headless software-GL Chromium (not per frame); borderline against the
+Escalate line, for the checkpoint.
 
 ### E3 — Collision and proximity HUD        [todo] · Sonnet · depends: E1b, E2b (same files)
 *O4 decided 2026-10-03: 4 mm.* *Spec revised again at verification (2026-10-03); it supersedes the CP-1
