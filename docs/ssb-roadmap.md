@@ -17,7 +17,7 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **2 of 4 dioramas** | `sphenoid` (D1 amended, D2 next), `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces) | open airway lining (ST1b), floor chart (ST2b), corrections (ST0d, ST4d), flap overlay (ST3r → ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig built** (E1, E1b, E2 done; E2b in review) | collision + HUD (E3), station poses (E5, Opus), flights (E6) |
+| 4 Endoscope | **rig built** (E1, E1b, E2 done; E2b in review) | collision + HUD (E3, in review), station poses (E5, Opus), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -632,7 +632,7 @@ background through the lining (no geometry there: ST1b's problem). Raycast cost:
 10–17 ms per pose change in headless software-GL Chromium (not per frame);
 borderline against the Escalate line, for the checkpoint.
 
-### E3 — Collision and proximity HUD        [todo] · Sonnet · depends: E1b, E2b (same files)
+### E3 — Collision and proximity HUD        [review] · Sonnet · depends: E1b, E2b (same files)
 *O4 decided 2026-10-03: 4 mm.* *Spec revised again at verification (2026-10-03); it supersedes the CP-1
 revision below wherever they differ, and the CP-1 text is kept for the
 record.* (1) The fulcrum is E1b's. (2) `SHAFT_RADIUS_MM = 2.0` (a 4 mm
@@ -674,6 +674,24 @@ specimen: from `lm.naris.R` a pose with yaw -3 ± 3°, pitch 15 ± 3° and depth
 52 mm is collision-free and its tip is within 2 mm of `lm.sphenoid-ostium.R`
 (CP-1 found yaw -3, pitch 15, depth 52.2 at 0.7 mm), and a pose straight
 posterior at depth 40 is blocked by the same rule where CT is bone.
+
+*Result (Sonnet, 2026-10-03):* `scope.js` `shaftClearance` / `sdfSampler` /
+`hudRows` (pure), wired in `mode-endoscope.js` and `ui-endoscope.js`: bone-only
+collision with clamping (also for a pasted link), mucosal contact and the
+proximity HUD in the controls, the 4 / 2.7 mm shaft pills. The fixture got an
+analytic sphere SDF. `test-ssb` 435/435. **One Accept item is not met, for the
+checkpoint:** with E1b's fulcrum, a 4 mm shaft's closest free tip to
+`lm.sphenoid-ostium.L` is **3.31 mm** (yaw -2, pitch 24, depth 63), not within
+2.5 mm; the verification's 2.4 mm used the superseded fulcrum. A 2.7 mm shaft
+reaches 1.55 mm (yaw 0, pitch 24, depth 64). The right side passes (2.03 mm: yaw
+-3, pitch 19, depth 58.5). The test pins the left gap as a measured fact, named
+OPEN; it does not stand in for the Accept. Options: accept 2.7 mm for the left
+ostium, relax the tolerance to 3.5 mm, or move the left landmark (anatomy:
+Opus). Frontal item met: lens 70 reaches both ostia (R yaw -2, pitch 33,
+depth 36, roll 0; L yaw -10, pitch 44, depth 41, roll 15), no lens-0 pose does.
+The HUD sits in the controls panel; a stage-overlay HUD needs CSS (outside this
+WP's Touch). The existing pasted-link test now uses `L,30,-10,0,0,30` because
+`L,30,10,0,0,30` is inside bone and clamps to depth 16.
 
 ### E4 — CT along the scope        [todo] · Sonnet · depends: E3 (same files)
 Goal: the CT follows the tip.
