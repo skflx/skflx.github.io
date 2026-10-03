@@ -125,7 +125,9 @@ never reloads.
   where the fulcrum constraint teaches why the frontal recess needs a 45–70°
   scope and why posterior septectomy opens binostril work.
   The specimen's face mask removed the nose, so the fulcrum is a
-  provisional schematic `lm.naris` until the nose exists (§5.7); the scope
+  provisional schematic `lm.naris` until the nose exists (§5.7) — misplaced
+  (internal-valve level; the left one inside the septum), to be re-derived
+  from the unmasked stack (roadmap E1b); the scope
   sees the air spaces' surfaces drawn as mucosa. Built (`js/ssb/scope.js`:
   the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
   `ui-endoscope.js`): a scope pose is a camera over the Specimen stage
@@ -354,6 +356,13 @@ septal artery; the superior cut stays below the olfactory strip).
 `ssb/content/` (ST0). Every default below that is not a cited graph value is
 marked schematic; the owner or a checkpoint should vet them.*
 
+> **Verified 2026-10-03 (Opus): under revision (ST3r).** The inferior
+> incision below contradicts the atlas (the standard flap takes a strip of
+> nasal floor), `top_margin` should depend on the design, the pedicle test
+> is circular, and `top(a)` must be interpolated across the no-data gap.
+> Findings: `docs/ssb-roadmap.md` §4, "Opus verification of wave 1". Build
+> nothing on this contract before ST3r.
+
 **Inputs.** For side X: the septal chart `ssb/geometry/charts.json`
 `s.septal-mucosa.X` (chart (a, s) mm = RAS (A, S); `grid`, `polygon`,
 `unreliable`, `filled`); the landmarks `lm.sphenoid-ostium.X`,
@@ -509,6 +518,14 @@ pathway rather than pushing it (the graph states a relation, not a push).
 *First pass by a Sonnet-class model at the owner's request; every fixed
 proportion is schematic and says so in the module header, and the rules are
 the graph's own definitions. To be vetted.*
+
+> **Amended 2026-10-03 (Opus), binding for D2:** rule 4's type 4 is
+> inverted below — the Onodi cell lies medial and/or superior to the
+> nerve, which runs in its lateral wall; "circumference facing air", the
+> conchal bone thickness (≥ 8 mm, schematic), rule 2's status as a
+> convention and a table of impossible combinations are defined in
+> `docs/ssb-roadmap.md` §4, "Opus verification of wave 1". The text below
+> is the first pass, kept as written.
 
 **Scene.** One standalone, bilateral model in a local RAS frame: origin on
 the sphenoid face at the midline and the ostium height, y negative
