@@ -178,14 +178,17 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   Soft tissue is bone-window-limited, so it is derived, swept or parametric
   (`docs/ssb.md` §5.7): stage D (`softtissue.py`) so far gives the septal
   mucosa surfaces and charts (the `soft` pack), the choanal arch, the
-  middle turbinate heads and the provisional nostrils `lm.naris.R/.L`,
+  middle turbinate heads and the provisional nostrils `lm.naris.R/.L`
+  (misplaced — internal-valve level, the left one inside the septum; E1b),
   and `sweeps_soft.py` turns the waypoints in `uw/sweeps-soft.json` into
   the septal-branch, nasopalatine and AEA-septal sweeps (all inferred,
-  schematic courses; first-pass waypoints to be vetted). The graph now
+  schematic courses; first-pass waypoints verified 2026-10-03 with
+  corrections pending, ST4d). The graph now
   holds the soft-tissue and nose entries (septal mucosa, the septal and
   nasal-tip arteries, the turbinate and lateral-wall flaps, the external
   valve, ala, columella, nasal bone, piriform aperture), sourced from
-  PubMed-matched papers and Radiopaedia articles. The face mask removed
+  PubMed-matched papers and Radiopaedia articles (verified against the
+  atlas and abstracts 2026-10-03; three errors pending in ST0d). The face mask removed
   the nose; the unmasked source stacks do contain it (ST6-0).
 - **Specimen stage** (`mode-specimen.js`) — the packs in 3D: named views,
   bone X-ray/solid/hidden, region layers, landmarks, click-through
@@ -198,7 +201,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a
   0 / 30 / 45 / 70° lens with a camera head that stays upright (no image flip through the zenith) and a light-post
   indicator, a spotlight at the tip, the lining drawn as mucosa from
-  inside. No collision or HUD yet.
+  inside. No collision or HUD yet; near surfaces saturate the image (E2b)
+  and ostia and choanae are drawn as closed membranes (ST1b).
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -233,13 +237,14 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
-backlog). In short: the endoscope's collision, HUD and stations and a
-soft-tissue layer
+backlog). Wave 1 was verified by Opus on 2026-10-03 (roadmap §4); wave 2
+starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's fulcrum, exposure,
+collision, HUD and stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `sphenoid` diorama; procedure mode and
-self-test after. Waiting on the owner: decisions O1–O3 (`docs/ssb.md`
-§13) and review of the dioramas and tier-1 content.
+self-test after. Waiting on the owner: decisions O4–O5
+(`docs/ssb-roadmap.md` §2) and review of the dioramas and tier-1 content.
 
 ---
 
