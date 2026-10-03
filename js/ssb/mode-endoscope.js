@@ -36,9 +36,9 @@ const SPOT = { intensity: 350, angle: 0.72, penumbra: 0.55, decay: 2 };
    distance. K is EXPOSURE_D0 as a range: the intensity SPOT.intensity would give at that D. Tuned against the Accept
    in tools/test-ssb.mjs (under 10 % of the field clipped, median luminance 40-200 at three poses) together with FILL;
    the clamp keeps a blind pose (no hit) and a mucosal contact legible. */
-const EXPOSURE_D0 = 20;
+const EXPOSURE_D0 = 16;
 const EXPOSURE = { K: SPOT.intensity / (EXPOSURE_D0 * EXPOSURE_D0), floorMm: 3, farMm: 150, offAxisDeg: 15, min: 10, max: 2000 };
-const FILL = 0.55;                /* hemisphere fill left on in the scope: the lining beyond the light is dim, not black */
+const FILL = 0.5;                /* hemisphere fill left on in the scope: the lining beyond the light is dim, not black */
 const KEY_STEP = { depth: 1, yaw: 2, pitch: 2, roll: 5 };
 
 /* opts: { stage, store, graph, specimen }
