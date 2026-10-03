@@ -3665,7 +3665,7 @@
       ],
       "what": "Canal through the anterior hard palate, behind the central incisors, joining the floor of the nose beside the septum to the mouth. It carries the [[s.nasopalatine-nerve]] and the nasopalatine artery.",
       "why": "The anterior limit of the bipedicled anterior septal flap's long axis ([[m.bas-flap-length]]). Its neurovascular bundle can be large enough to cause clinically significant trauma if the canal is entered.",
-      "ct": "A canal through the anterior maxilla on sagittal CT. It is not resolved in the reference specimen (a 0.5 mm bone-window display volume), so its position there is not drawn.",
+      "ct": "The canal is visible in the reference specimen on the midsagittal plane, running from the nasal floor anteroinferiorly through the anterior maxilla ([[lm.incisive-canal]]).",
       "reliability": "constant",
       "src": [
         "src.jacobs-2007-anterior-jaw",
@@ -4209,6 +4209,18 @@
         "src.gras-cabrerizo-2016-aea-septal",
         "src.cummings-7"
       ]
+    },
+    {
+      "id": "lm.incisive-canal",
+      "name": "Incisive canal, nasal opening",
+      "of": "s.incisive-canal",
+      "tier": 2,
+      "locate": "The nasal opening of the incisive canal, on the floor beside the septum's base.",
+      "src": [
+        "src.jacobs-2007-anterior-jaw",
+        "src.bleier-2011-bas-flap"
+      ],
+      "review": "draft"
     }
   ],
   "variants": [
@@ -5468,6 +5480,26 @@
       ]
     },
     {
+      "id": "m.itf-dimensions",
+      "name": "Inferior turbinate pedicle flap: length",
+      "tier": 3,
+      "unit": "mm",
+      "value": {
+        "mean": 54.0,
+        "sd": 4.9
+      },
+      "method": "cadaver",
+      "conf": "low",
+      "what": "Length of the posterior pedicle inferior turbinate flap raised in nine cadaver heads.",
+      "n": 9,
+      "population": "cadaver heads",
+      "note": "Width of the distal third 22.1 ± 3.7 mm. Reach 112 ± 21 % of the posterior cranial fossa length and 67 ± 10 % of the anterior cranial fossa length (the abstract gives ± 9.9).",
+      "src": [
+        "src.harvey-2009-itf"
+      ],
+      "review": "draft"
+    },
+    {
       "id": "m.itf-area",
       "name": "Inferior turbinate flap: maximum area",
       "tier": 3,
@@ -5478,9 +5510,10 @@
       "method": "cadaver",
       "conf": "low",
       "what": "Approximate maximum surface area of the posterior pedicle inferior turbinate flap, as tabulated in the atlas chapter.",
-      "note": "Second-hand: a textbook table value (about 2.4 cm², a long, narrow flap with limited anterior reach) with no n. The primary report (Fortes 2007) is a four-patient series whose abstract gives no area, so the figure's origin is not verified here; check it against the chapter's own reference list before relying on it.",
+      "note": "Table 31.2 of the atlas chapter cites Harvey 2009 (its ref. 47) for 2.4 cm², which Harvey's own dimensions ([[m.itf-dimensions]]) contradict. The printed table confirms \"2.4\" with ref. 47, so the inconsistency is the atlas's. Unresolved until the primary source of the figure is found. The primary report on this flap (Fortes 2007) is a four-patient series whose abstract gives no area.",
       "src": [
-        "src.chiu-2019-ch31"
+        "src.chiu-2019-ch31",
+        "src.harvey-2009-itf"
       ],
       "review": "draft"
     }
@@ -7961,7 +7994,7 @@
         },
         {
           "check": "Expected flap area against the defect.",
-          "why": "The maximum area in the literature the atlas quotes is small, about 2.4 cm², so it suits small or posterior defects."
+          "why": "Harvey's cadaver flaps were 54.0 ± 4.9 mm long and 22.1 ± 3.7 mm wide in the distal third ([[m.itf-dimensions]]); the atlas table quotes about 2.4 cm² ([[m.itf-area]]), a figure those dimensions do not support. Reach is limited anteriorly."
         }
       ],
       "steps": [
@@ -8012,7 +8045,8 @@
       ],
       "src": [
         "src.chiu-2019-ch31",
-        "src.fortes-2007-itf"
+        "src.fortes-2007-itf",
+        "src.harvey-2009-itf"
       ]
     },
     {
@@ -8021,7 +8055,8 @@
       "name": "Middle turbinate flap",
       "tier": 3,
       "indications": [
-        "Small defects of the fovea ethmoidalis, planum sphenoidale or sella when the nasoseptal flap is not available: technically challenging, with very variable dimensions that depend on the turbinate"
+        "Small defects of the fovea ethmoidalis, planum sphenoidale or sella when the nasoseptal flap is not available: technically challenging, with very variable dimensions that depend on the turbinate",
+        "Midline defects from the transplanum to the transsellar region (atlas Table 31.2)"
       ],
       "corridor": "Transnasal, 0° endoscope; the middle turbinate mucosa raised from both its medial and lateral surfaces on the middle turbinate branch of the sphenopalatine artery.",
       "steps": [
@@ -8086,8 +8121,8 @@
           "why": "The turbinate must be longer than about 4 cm for the flap to reach the sella; a concha bullosa or hypoplastic turbinate makes the dissection harder."
         },
         {
-          "check": "Pedicle: prior sphenoid surgery, sphenopalatine ligation, internal maxillary artery sacrifice.",
-          "why": "The atlas lists these as excluding or endangering the middle turbinate pedicle."
+          "check": "Pedicle: the internal maxillary artery (prior infratemporal fossa surgery or tumour).",
+          "why": "The atlas lists the middle turbinate flap among the flaps excluded when the internal maxillary artery is unavailable; prior sphenoid surgery and posterior septectomy endanger the septal branch, i.e. the nasoseptal flap."
         }
       ]
     },
