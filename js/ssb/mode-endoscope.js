@@ -28,8 +28,8 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=e987da95';
-import { loadVolume, stamped, decode } from './volume.js?v=fb9aaa68';
+import { loadLandmarks } from './geo-specimen.js?v=b9e276c1';
+import { sharedVolume, stamped, decode } from './volume.js?v=70ec3826';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, frameOf, hudRows, lightPostAngle, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=4ee7f38a';
 
@@ -86,9 +86,8 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     /* ---------------- the volume: collision and the HUD ---------------- */
 
     /* ct.json's `sdf` block -> [{ id, name, at }], skipping anything malformed (the HUD is optional). */
-    async function loadFields() {
-        const res = await fetch(stamped('ssb/ct/ct.json'));
-        const sdf = res.ok ? (await res.json()).sdf : null;
+    async function loadFields(meta) {
+        const sdf = meta ? meta.sdf : null;
         if (!sdf || !Array.isArray(sdf.dims) || sdf.dims.length !== 3 || !sdf.dims.every((n) => Number.isInteger(n) && n > 1 && n <= 512)
             || !Array.isArray(sdf.affine) || !(sdf.scale > 0) || !(sdf.clampMm > 0) || !sdf.fields || typeof sdf.fields !== 'object') return [];
         const count = sdf.dims[0] * sdf.dims[1] * sdf.dims[2];
@@ -106,12 +105,20 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         return out;
     }
 
-    Promise.all([loadVolume(), loadFields().catch(() => [])]).then(([vol, fields]) => {
-        ctAt = (p) => vol.sample(p[0], p[1], p[2]);
-        sdfFields = fields;
-        exposed = null;
-        sync();
-    }).catch((e) => console.error(e));
+    /* The volume and the fields load on the first engage, not at mount: a visitor who never opens the scope
+       downloads none of it. Until they arrive the scope moves unblocked. */
+    let volumeAsked = false;
+    function loadCollision() {
+        if (volumeAsked) return;
+        volumeAsked = true;
+        sharedVolume().then(async (vol) => {
+            const fields = await loadFields(vol.meta).catch(() => []);
+            ctAt = (p) => vol.sample(p[0], p[1], p[2]);
+            sdfFields = fields;
+            exposed = null;
+            sync();
+        }).catch((e) => { volumeAsked = false; console.error(e); });
+    }
 
     /* Check the pose against the CT: clamp a blocked depth (true = the pose was changed, and sync runs again
        through the store) and refresh the HUD. */
@@ -251,6 +258,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     function sync() {
         if (pose() && available() && enforce()) return;
         const want = !!pose() && available();
+        if (want) loadCollision();
         if (want && !engaged) engage();
         else if (!want && engaged) disengage();
         else if (engaged) { apply(); emit(); }

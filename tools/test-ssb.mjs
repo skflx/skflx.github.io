@@ -1997,6 +1997,22 @@ function scopeCollisionTests() {
 /* ---------------- Endoscope: the page ---------------- */
 
 async function scopeTests(browser, base) {
+  /* ===== the CT volume loads only when asked, and once per page (CP-2a) ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const asked = [];
+    page.on('request', (r) => { if (/\/ssb\/ct\/ct\.u8\.gz/.test(r.url())) asked.push(r.url()); });
+    await nextFrames(page, 4);
+    await page.waitForTimeout(500);
+    check('scope: a specimen page that never opens the scope or CT does not fetch the CT volume', asked.length === 0, `${asked.length} requests`);
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
+    await page.evaluate(() => { location.hash = '#ct=ax'; });
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready', null, { timeout: 30000 });
+    check('scope: opening the scope and then CT fetches the CT volume once (one shared copy)', asked.length === 1, `${asked.length} requests`);
+    await context.close();
+  }
+
   /* ===== the stage from the pill ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '');

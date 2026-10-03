@@ -446,5 +446,15 @@ export async function loadVolume({ fetchFn = (url) => fetch(url) } = {}) {
             for (let n = 0; n < count; n++) labels[n] = view.getUint16(n * 2, true);
         }
     }
-    return createVolume({ header, ct: new Uint8Array(ctBuf), labels, table: parseTable(tableDoc) });
+    const vol = createVolume({ header, ct: new Uint8Array(ctBuf), labels, table: parseTable(tableDoc) });
+    vol.meta = meta;                     /* the raw header, for optional blocks (the endoscope's `sdf`) */
+    return vol;
+}
+
+/* One volume per page: CT mode and the endoscope share it, and nothing is fetched until one of them asks
+   (about 4 MB transferred, 27 MB decoded). A failed load is forgotten, so the next ask retries. */
+let shared = null;
+export function sharedVolume() {
+    if (!shared) shared = loadVolume().catch((e) => { shared = null; throw e; });
+    return shared;
 }
