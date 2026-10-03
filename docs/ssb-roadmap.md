@@ -15,9 +15,9 @@ history keeps the specs).
 |---|---|---|
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
-| 2 Variant lab | **3 of 4 dioramas** (sphenoid in review) | `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces) | open airway lining (ST1b), floor chart (ST2b), corrections (ST0d, ST4d), flap overlay (ST3r → ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig built** (E1, E1b, E2 done; E2b in review) | collision + HUD (E3, in review), station poses (E5, Opus), flights (E6) |
+| 2 Variant lab | **3 of 4 dioramas** (sphenoid done, D2a follow-up) | `lateral-wall` (later) |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | **standard specimen (N1, O6)**, then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
+| 4 Endoscope | **rig, exposure, collision + HUD done** (E1, E1b, E2, E2b, E3) | CT along the scope (E4), station poses (E5, Opus, after N1 and ST1b), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -25,6 +25,8 @@ history keeps the specs).
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
 
 **Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2; O4 and O5 decided the same day, and ST3r (the flap contract) and the D1 amendments are written into `docs/ssb.md`. **Next:** wave 2's Sonnet lanes (`docs/ssb-sonnet-handoff.md`).
+
+**CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
 
 ## 2. Owner — decisions and actions
 
@@ -37,6 +39,7 @@ Decisions (detail and recommendations: `docs/ssb.md` §13). **O1–O3 were decid
 | O3 | **Content authoring split**: Sonnet drafts backlog content and checks citations, Opus reviews adversarially (cheaper) — instead of Opus authoring | Yes for the §6 backlog; Opus keeps authoring anything that places geometry (vessels, flaps, stations). **Decided: yes** | C1 — **decided** |
 | O4 | **Scope diameter** modelled by the endoscope's collision ring | 4 mm (the standard adult telescope), 2.7 mm selectable | E3 — **decided 2026-10-03: as recommended** |
 | O5 | NSF superior incision | (recommended: margin per design) | ST3r — **decided 2026-10-03: the superior incision starts at the level of the floor (inferior margin) of the sphenoid ostium, for every design** (Geltzeiler's technique; ch. 31 starts at the ostium's superior aspect, the graph's step at its inferior margin — the owner chose the latter). The margin below the septal top keeps one default (15) and applies where the incision rises forward (designs B, C) |
+| O6 | Symmetric "normal" specimen for the first release, variants later | (owner's own instruction) | N1 — **decided 2026-10-03 by the owner: as symmetric and standard as possible; septal deviation, ostium heights etc. later as variants.** Opus chose the method: right half mirrored (the left carries the anomalies), septum centred keeping its measured thickness (`docs/ssb.md` §5.1) |
 | — | Still open from before: strict CSP; publish while `draft`; name | as in §13 | — |
 
 Actions (no model can do these):
@@ -356,15 +359,71 @@ parallel sessions.
 
 | Lane | Order | Who |
 |---|---|---|
-| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | **E1b** nostril fulcrum → **ST2b** floor chart, ostium margin, incisive canal (also after ST0d) → **ST1b** open airway lining → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
-| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | **E2b** exposure → **E3** collision + HUD (needs E1b) → **E4** CT along the scope | Sonnet |
-| Content and dioramas | **ST0d** content corrections (folds in ST0c) · **D2** sphenoid build (D1 + amendments) | Sonnet |
-| Specs | ~~ST3r~~ (done 2026-10-03) · **ST6** nose spec (now; reuses E1b's method) · then **E5** station poses (after E3, ST1b, E2b) | Opus |
+| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → **N1** standard specimen (O6) → **ST2c** floor mucosa → **ST1b** open airway lining → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
+| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → **E3** (one required change, CP-2a) → **E4** CT along the scope | Sonnet |
+| Content and dioramas | ~~ST0d~~ · ~~D2~~ → **D2a** presellar in rule 9 → **C1** content backlog (O3; first item in CP-2a) | Sonnet |
+| Specs | ~~ST3r~~ (done 2026-10-03) · **ST6** nose spec (now; reuses E1b's method) · then **E5** station poses (after E3, N1, ST1b) | Opus |
 
 **ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
 after ST4d: its contract (ST3r) is written.
 
 O4, O5 and the two owner checks were answered on 2026-10-03 (§2, §4).
+
+**CP-2a — wave 2's first PRs (Opus, 2026-10-03).** Diffs read, every
+suite run on each branch (E3 branch, which contains E2b: `test-ssb`
+435/435; D2: `--only lab` 97/97; all `check-data` 75/75). Merged before
+this pass by the owner: ST0d (#97: the texts match the WP; one content
+question below) and E1b (#98: 0.9 and 0.5 mm from the verification's
+estimates, E1's values kept as `superseded`).
+
+- **E2b (#99) — pass.** Tuning K and the fill to the Accept, not to the
+  old 40 mm look, is accepted (the old look clipped). The raycast runs at
+  most once per moved frame, but during a drag that is every frame, at
+  10–17 ms on the CPU: E4 (same file) exposes on settle (debounce
+  ~100 ms after the last pose change) instead.
+- **E3 (#102) — pass, one required change before merge.** The endoscope
+  mounts at page boot and immediately fetches and decodes the CT, the
+  labels and five distance fields (~4.4 MB transferred, ~27 MB decoded:
+  209×225×193 voxels as u8 plus u16) for every visitor, scope or not, and
+  CT mode then loads its own second copy. Required: load on first engage,
+  and share one volume between CT mode and the scope (a memoized loader in
+  `volume.js`). **The left sphenoid ostium item (3.31 mm, not ≤ 2.5)** is
+  not relaxed and 2.7 mm is not substituted: the standard specimen (N1)
+  makes the left side the right's mirror, where the right's pose reaches
+  2.03 mm; N1 deletes the OPEN pin and pins both sides. Accepted as is:
+  rotation that would hit bone pulls the scope back silently (the HUD says
+  "Bone limits the depth"); the HUD in the controls panel (a stage overlay
+  needs CSS: E4 or later); the pasted-link test's new pose.
+- **ST2b (#101) — merge as a partial.** The incisive-canal tie-break
+  (midline-most of four candidates) is confirmed: the canal is a single
+  midline trunk below its paired nasal openings, so a `.M` point belongs on
+  the trunk; its S is the box top (a lower bound) and within the Accept.
+  `registration.json` losing its `naris` block is outside Touch but the
+  right consequence of `softtissue.py` no longer writing `lm.naris`.
+  Escalation 1 (floor chart) is decided as option (a), on the standard
+  specimen: the 1–3 mm of soft tissue between floor bone and air *is* the
+  floor mucosa, so the surface is the airway's, not the bone's — WP ST2c.
+  The small left floor unit is a left-side labelling gap that N1 removes
+  from the served specimen. Escalation 2 (left ostium margin): N1 mirrors
+  the right's 23.5 mm.
+- **D2 (#100) — pass; merge after bringing master in (stamp-only
+  conflicts).** Gap 1 decided: presellar air ends in front of the sella's
+  anterior wall, so a carotid share of 0 there is the anatomy; presellar
+  joins rule 9's table for protrusion and dehiscence (`docs/ssb.md` §6.1
+  amended; WP D2a). Gap 2: judging a carotid segment only where the class
+  reaches it is the rule now (paraclival from postsellar). Gap 3: "no
+  effect = takes its default, HUD names it" is the rule now. The DeLano 4
+  preset also turns the Onodi cell on: accepted, type 4 is defined by the
+  cell.
+- **Content question (C1, first item).** ST0d's middle turbinate flap
+  check now names only the internal maxillary artery, as the WP said; but
+  the flap's pedicle is the middle turbinate branch of the sphenopalatine
+  artery, so prior sphenopalatine ligation plausibly endangers it too.
+  Not in Table 31.3; needs a source before it goes back in.
+
+Merge order: #99 → #102 (after its change) → #101 → #100. Each later
+one then has stamp-only conflicts: take either side and rerun
+`node tools/stamp-assets.mjs` (`docs/delegation.md` §6).
 
 **CP-2 (Opus)** — anatomy on screen: each vessel's course against its
 sources, PSA inside the flap pedicle, flap ladder against the procedure's
@@ -596,7 +655,7 @@ lateral on their row; each within 3 mm of the verification's estimate
 scope` pass.
 Escalate: the UW site is unreachable; no level has an enclosed lumen.
 
-### E2b — Scope exposure        [review] · Sonnet · depends: —
+### E2b — Scope exposure        [done: CP-2a] · Sonnet · depends: —
 Goal: the scope image is legible at every distance (verification: white
 disc at the sphenoid pose).
 Read: this file §4 verification "New findings on screen"; `docs/ssb.md` §3
@@ -632,7 +691,7 @@ background through the lining (no geometry there: ST1b's problem). Raycast cost:
 10–17 ms per pose change in headless software-GL Chromium (not per frame);
 borderline against the Escalate line, for the checkpoint.
 
-### E3 — Collision and proximity HUD        [review] · Sonnet · depends: E1b, E2b (same files)
+### E3 — Collision and proximity HUD        [done: CP-2a; lazy shared volume added by Opus] · Sonnet · depends: E1b, E2b (same files)
 *O4 decided 2026-10-03: 4 mm.* *Spec revised again at verification (2026-10-03); it supersedes the CP-1
 revision below wherever they differ, and the CP-1 text is kept for the
 record.* (1) The fulcrum is E1b's. (2) `SHAFT_RADIUS_MM = 2.0` (a 4 mm
@@ -693,16 +752,23 @@ The HUD sits in the controls panel; a stage-overlay HUD needs CSS (outside this
 WP's Touch). The existing pasted-link test now uses `L,30,-10,0,0,30` because
 `L,30,10,0,0,30` is inside bone and clamps to depth 16.
 
-### E4 — CT along the scope        [todo] · Sonnet · depends: E3 (same files)
-Goal: the CT follows the tip.
-Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/mode-ct.js` (only to accept the cursor), `tools/test-ssb.mjs`.
-Spec: on pose change (throttled to animation frames), `state.cursor = T`;
-an inset canvas shows `obliqueSlice` through T spanned by v and camera up,
-with the shaft drawn on it.
+### E4 — CT along the scope        [ready] · Sonnet · depends: E3 (same files)
+Goal: the CT follows the tip; exposure stops costing a raycast per dragged frame.
+Read: `docs/ssb.md` §3 (Endoscope, CT), §5.6; §4 "CP-2a" (E2b, E3) of this file; `js/ssb/volume.js` (`sharedVolume`, `obliqueSlice`); `js/ssb/mode-endoscope.js`; `js/ssb/ui-endoscope.js`.
+Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/mode-ct.js` (only to accept the cursor), `css/ssb.css`, `tools/test-ssb.mjs`.
+Don't: load the volume at page boot (it loads on the first engage through `sharedVolume`, CP-2a); change `scope.js`'s collision rules.
+Spec: (1) on pose change (throttled to animation frames), `state.cursor = T`;
+an inset canvas in the scope controls shows `obliqueSlice` through T spanned by v and camera up,
+with the shaft drawn on it; hidden until the volume has loaded, and with no volume.
+(2) Exposure on settle: `expose()` runs once the pose has not changed for 100 ms (and on engage),
+not on every moving frame; a settled pose reads exactly as it does now.
+(3) The HUD's near-row colour moves from the inline style to a class in `css/ssb.css` on `--signal`.
 Accept: after a pose change the CT crosshair equals T within a voxel; the
-inset's centre pixel samples the same value as `volume.sample(T)`.
+inset's centre pixel samples the same value as `volume.sample(T)`; during a 30-frame
+drag `expose()` runs at most twice; E2b's exposure checks still pass; the CP-2a
+lazy-load test still passes (no `ct.u8.gz` request until the scope or CT opens).
 
-### E5 — Station poses        [todo] · **Opus** · depends: E3, E2b, ST1b
+### E5 — Station poses        [todo] · **Opus** · depends: E3, N1, ST1b
 Write `ssb/geometry/stations.json` (`{"t.<id>.<side>": pose}`) for every
 `t.*` the specimen covers, by driving the rig until the view shows what the
 station's `shows` lists; check each is collision-free. List stations the
@@ -754,7 +820,7 @@ Steps:
 Accept: `node tools/ssb-content.mjs` and `node tools/check-data.mjs` pass.
 Escalate: a claim does not match its abstract (report, do not rewrite).
 
-### ST2b — Nasal floor chart and incisive canal        [blocked: floor chart (step 1) and left ostium margin (step 3) escalated; steps 2 and right margin done, PR open] · Sonnet · depends: E1b, ST0d
+### ST2b — Nasal floor chart and incisive canal        [done (partial): canal + right margin; floor → ST2c, left → N1] · Sonnet · depends: E1b, ST0d
 Goal: floor mucosa surfaces with charts (the NSF's floor strip and the
 extended flap need them), and the incisive canal as a landmark.
 Read: this file §4 verification (ST0 3, ST3 1); `docs/ssb.md` §5.7; ST2
@@ -794,7 +860,7 @@ Escalate: the floor wall unit does not separate from the inferior
 turbinate or maxillary walls (report where).
 *Result (Sonnet, 2026-10-03), partial.* Done: `lm.incisive-canal.M` (0.1, -18.95, -1.0), 2.3 mm from (0, -18, -3), channel run 12.5 mm (four bone-bounded candidates; the midline-most centroid is taken, R 0.05 — the others sit at |R| 1.6–3.1; the box top at S -1 clips it, so S is a lower bound); right `inferior_margin_s_mm` 23.5 (below the landmark's 24.16). `softtissue.py` no longer rewrites `lm.naris` (its E1 step would have clobbered E1b). **Escalated, not done:** (1) *Floor chart.* The `s.nasal-floor.<side>` unit does not abut the cavity air: it is the palate's bone, display 170–195, with 1–3 mm of unlabelled soft tissue (display ~50–110) between it and the air (distance floor→air: right median 3.2 mm, 8 voxels touch; left median 6.3 mm, 0 touch). The right unit has 12180 voxels, the left only 4361, so a left floor mucosa cannot be derived from it: meshing the cavity's down-facing lining (normal S < -0.5) within 3 mm of the unit gives 3.9 cm² right but 0.5 cm² left (R -15…-2, A -48…-40). It does touch `s.maxillary-medial-wall.R` (149 voxels) and `s.maxillary-sinus-floor` (275 R, 83 L), not the inferior turbinate. A method that defines the floor from the air's down-facing lining instead of the unit is an anatomy call (and the left unit's coverage may be a labelling gap in `walls.py`). (2) *Left ostium margin.* No cavity | sinus interface on the left; the fallback opening (display < 150 voxels of `s.sphenoid-face.L` within 6 mm of the landmark, touching both airways) is one 530-voxel component spanning S 23.5–34.5 (11 mm, R -13.5…-3.5, A -54.5…-49.5), over the 8 mm limit, so no left margin is written.
 
-### ST1b — Open airway lining        [todo] · Sonnet · depends: ST2b (same pack files)
+### ST1b — Open airway lining        [todo] · Sonnet · depends: N1, ST2c (same pack files)
 Goal: the scope sees through the ostia and the choanae (verification: each
 air compartment is a closed shell, so every opening is a double membrane).
 Read: this file §4 verification "New findings on screen"; `docs/ssb.md`
@@ -818,6 +884,115 @@ hits a `s.sphenoid-sinus.R` node; a ray from `#scope=R,40,0,3,0,0`'s tip
 along v passes the PNS plane (A -50) before its first hit; picking from
 inside returns graph ids; budgets hold.
 Escalate: the union surface breaks the triangle or byte budget.
+
+### N1 — Standard specimen: right half mirrored, septum centred        [ready] · Sonnet · depends: ST2b, E3 (merged)
+Goal: the page serves a symmetric, standard specimen (O6, `docs/ssb.md`
+§5.1); the as-scanned head stays the pipeline's input.
+Read: `docs/ssb.md` §4, §5.1 (the standard-specimen paragraph), §5.3,
+§5.6, §5.7; §4 "CP-2a" of this file; the docstrings of
+`tools/ssb-pipeline/uw/walls.py`, `meshes.py`, `sdf.py`, `softtissue.py`,
+`sweeps_soft.py`, `sweeps.py`; `ssb/geometry/charts.json`'s `note`.
+Touch: new `tools/ssb-pipeline/uw/normalize.py`; `ssb/ct/*`;
+`ssb/models/*`; `ssb/geometry/*` (`labels.json` append-only);
+`js/ssb/ui-specimen.js` and `js/ssb/ui-ct.js` (one note each);
+`tools/test-ssb.mjs`; docs pass.
+Don't: change graph content; hand-edit an output; change a test threshold;
+commit anything from `incoming/`; rerun `sweeps.py` (its seeds are the
+asymmetric UW arrow tips — mirror its output instead, step 6).
+Steps:
+0. Input: the as-scanned `ssb/ct/{ct.json,ct.u8.gz,labels.u16.gz}` and
+   `ssb/geometry/{labels.json,landmarks.json,landmarks.meta.json,charts.json,sweeps.json,sweeps.meta.json}`
+   read with `git show <commit>:<path>` at the master commit just before
+   N1 (a constant `AS_SCANNED_COMMIT` in `normalize.py`, also written to
+   `ct.json`), cached under `tools/ssb-pipeline/incoming/_recon/as-scanned/`.
+1. Midline check. The frame's midsagittal plane is R = 0 (voxel column
+   104 of 209). Fit a plane to the as-scanned `s.nasal-septum.M` voxels
+   with S ≥ 20 (the perpendicular plate) plus every `.M` landmark; print
+   its R offset at the origin and its tilt.
+2. Centre the septum (right half only; the left is replaced in step 3).
+   From the as-scanned septal charts, per cell (a, s) in both: offset
+   c = (rR + rL) / 2, thickness T = rR − rL. Cells in one chart only,
+   `filled`, `unreliable`, or in the posterosuperior hole take c from the
+   nearest valid cell, then a 3×3 median over the union outline; outside
+   the outline c tapers linearly to 0 over 3 mm. Per column (a, s), the new
+   right surface is at r = T/2 (= rR − c): if c > 0, voxels with
+   T/2 < x ≤ rR become right-cavity air (display = the median of the
+   as-scanned `s.nasal-cavity.R` air, printed; label `s.nasal-cavity.R`);
+   if c < 0, voxels with rR ≤ x < T/2 take the display and label of the
+   voxel at x + c (septal tissue extended). Nothing lateral to the old
+   right surface changes.
+3. Mirror. Every voxel with x < 0 takes the display of the voxel at −x and
+   its label mapped side for side (`.R` → the same id's `.L` index, `.M`
+   and unnamed unchanged; append a `.L` index to `labels.json` if one is
+   missing, print it). First, in the right half, relabel any `.L` voxel to
+   the same id's `.R` (print the count per id).
+4. Midline plates. Where, after step 3, air of a paired air space (any
+   `.R` air label) is face-adjacent across R = 0 to air of its own `.L`,
+   set the voxels with |x| ≤ 0.5 (three columns, 1.5 mm) over that patch,
+   dilated 1 mm in A and S, to bone: display = the median of the
+   as-scanned `s.sphenoid-face` voxels (printed); label
+   `s.intersinus-septum.M` in the sphenoid, `s.frontal-intersinus-septum.M`
+   in the frontal sinus (append indices), the nasal septum's label in the
+   nasal cavity (the olfactory-cleft contact, 52 mm² as scanned). Print
+   each plate's area. Afterwards no `.R` air voxel touches a `.L` air voxel.
+5. `ct.json` gains `standard`: `{ method, asScannedCommit, sourceSide: "R",
+   septumOffsetMm: { median, max }, plates: { <id>: mm² }, note }`.
+6. Rerun every stage that reads `ssb/ct`, in their documented order
+   (`walls.py`, `meshes.py`, `sdf.py`, `softtissue.py`, `sweeps_soft.py`).
+   Then make the side pairs exact: every paired landmark `.L` := `.R` with
+   R negated, `.M` R := 0 (the meta keeps the as-scanned point under
+   `asScanned`, method "mirrored from .R (N1)"; the sphenoid ostium's
+   `inferior_margin_s_mm` carries over); `sweeps.json` `.L` := mirrored
+   `.R` (meta likewise); `s.septal-mucosa.L`'s chart := `.R`'s with r
+   negated.
+7. One `textContent` note in the specimen controls and in the CT stage,
+   shown when `ct.json` has `standard`: "Standardized specimen: one head's
+   right half, mirrored, with the septum centred — symmetric by
+   construction, not a real head."
+8. Tests (`test-ssb.mjs`): re-pin the real-specimen numbers that move, each
+   with its old and new value in the PR; delete E3's OPEN left-ostium pin
+   and instead, per side, run E3's 1° search: a collision-free 4 mm pose
+   within 2.5 mm of `lm.sphenoid-ostium.<side>`, the left pose the right
+   one with yaw negated (± 1°). New: the CT and the label volume are
+   mirror-symmetric (labels side-mapped) outside |x| ≤ 0.5 — 0 mismatches;
+   every `.L` landmark mirrors its `.R` within 0.01 mm; the right septal
+   surface lies at T/2 within 0.5 mm on interior chart cells.
+Accept: `check-data.mjs`, `test-ssb.mjs` (full), `smoke-pages.mjs`; the
+script prints the midline fit, the septum offset (median, max), each
+relabel count, each plate area, pack bytes and triangles against the
+§5.4 budgets and against the as-scanned packs.
+Escalate: the midline fit is more than 1.5 mm or 3° off R = 0; a stage
+needs a parameter change to run; a budget breaks; in the as-scanned
+volume a right-labelled structure other than an air space reaches more
+than 2 mm left of R = 0 (print which).
+
+### ST2c — Nasal floor mucosa from the airway lining        [todo] · Sonnet · depends: N1
+Goal: ST2b step 1, decided at CP-2a as option (a) on the standard
+specimen: the 1–3 mm of soft tissue between the floor bone and the air is
+the floor mucosa, so its surface is the airway's.
+Read: ST2, ST2b (above) and §4 "CP-2a"; `docs/ssb.md` §5.7;
+`softtissue.py`.
+Touch: `tools/ssb-pipeline/uw/softtissue.py`; `ssb/models/soft.glb.gz`,
+`packs.json`; `ssb/geometry/charts.json`; docs pass.
+Don't: change the septal surfaces or their charts beyond the junction
+record.
+Steps:
+1. `s.nasal-floor-mucosa.R`: the faces of the right cavity's airway lining
+   (the surface ST2's hole fill already uses) whose normal, airway into
+   tissue, has an S component ≤ −cos 45°, lying within 6 mm above a
+   `s.nasal-floor.R` voxel; medially bounded by the septal chart's
+   `bottom(a)`, posteriorly by A −50 (the PNS plane), laterally where the
+   normal's S component rises above −cos 45° (the floor turning into the
+   inferior meatus). Keep the largest connected component. `.L` := the
+   mirror (the specimen is symmetric after N1).
+2. Chart: axial projection (a, r) on a 1 mm grid → s, plus the junction
+   polyline with the septal chart's `bottom(a)`.
+3. Print area, chart box, round-trip errors, and the junction's distance
+   to `bottom(a)`.
+Accept: chart round-trip ≤ 1 mm on interior cells; the junction within
+1 mm of the septal chart's `bottom(a)` over their shared A; `check-data`
+and `test-ssb --only specimen` pass.
+Escalate: area under 2 cm², or a second component over 0.5 cm².
 
 ### ST0 — Soft-tissue content        [done: verified 2026-10-03, corrections in ST0d] · **Opus** (first pass by Sonnet 5.5) · depends: — (O2 sets the nose scope)
 *Verification (Opus, 2026-10-03):* checked against ch. 31 and every new PubMed abstract (§4). Three errors — `m.itf-area`'s source, the middle turbinate flap's pedicle check, `s.incisive-canal` "not resolved" — go to ST0d; the rest reads as cited. All still `draft`: medical correctness is the owner's.
@@ -868,7 +1043,7 @@ Result: `softtissue.py` regenerated everything; every new sweep id resolves in t
 Run `softtissue.py`; check every new sweep id resolves in the graph;
 `relate3d.py` agreement does not drop (report the before/after counts).
 
-### ST4d — Waypoint corrections        [todo] · Sonnet · depends: ST2b, ST0d
+### ST4d — Waypoint corrections        [todo] · Sonnet · depends: N1, ST2c
 Goal: apply the verification's ST4b findings and regenerate.
 Read: this file §4 verification "ST4b waypoints"; ST4a and ST4b above.
 Touch: `tools/ssb-pipeline/uw/sweeps-soft.json`; regenerated
@@ -920,7 +1095,7 @@ Parameters, presets from `c.sphenoid-pneumatization`, schematic proportions
 (stated in the header), and the rules `test-ssb.mjs` must pin (as the
 frontal-recess IFAC rules are), per `docs/ssb.md` §6's `sphenoid` row.
 
-### D2 — Sphenoid diorama build        [review: PR open — `js/ssb/dioramas/sphenoid.js`, rules 0–9 pinned in `--only lab` (see PR for two spec gaps)] · Sonnet · depends: D1
+### D2 — Sphenoid diorama build        [done: CP-2a; follow-up D2a] · Sonnet · depends: D1
 Build `js/ssb/dioramas/sphenoid.js` to `docs/ssb.md` §6.1 as it now stands (the 2026-10-03 amendments are folded in, rules 0–9) using `kit.js` primitives;
 register it; tests from §6.1.
 Read: `docs/ssb.md` §6 and §6.1; `js/ssb/dioramas/frontal-recess.js` and `kit.js` (the pattern); `tools/test-ssb.mjs` lab section.
@@ -928,6 +1103,16 @@ Touch: new `js/ssb/dioramas/sphenoid.js`, `js/ssb/dioramas/index.js`, `tools/tes
 Don't: change `kit.js` beyond adding a primitive the scene needs (say so in the PR); invent proportions the graph gives.
 Accept: rules 0–9 pinned in `test-ssb.mjs` (`--only lab`), computed from the solids on a 0.5 mm grid.
 Escalate: a rule cannot hold with the stated schematic sizes (report the numbers).
+
+### D2a — Presellar in rule 9        [ready] · Sonnet · depends: D2 merged
+Goal: rule 9 as amended at CP-2a (`docs/ssb.md` §6.1).
+Read: `docs/ssb.md` §6.1 rules 2 and 9; `js/ssb/dioramas/sphenoid.js` `degrade()`.
+Touch: `js/ssb/dioramas/sphenoid.js`, `tools/test-ssb.mjs`.
+Steps: in `degrade()`, with `pneum` = presellar, `ica_protrusion` and
+`ica_dehiscence` take their defaults and are named in the HUD; tests: each
+of the two pairs draws the same model as presellar with the toggle off, and
+the HUD names it.
+Accept: `node tools/test-ssb.mjs --only lab`.
 
 ### P1/P2, T1, C1 — wave 3        [todo]
 P1 (Opus): `removes` units per step for the first procedures, mapped to

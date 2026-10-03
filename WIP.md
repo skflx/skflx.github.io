@@ -154,6 +154,9 @@ deleted.
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
 links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
+- **Specimen served as scanned, for now:** the owner chose a symmetric
+  standard specimen for the first release (O6, `docs/ssb.md` §5.1); WP N1
+  builds it, until then the left side keeps the as-scanned anomalies.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
   sagittal stacks are one CT (the coronal is another head,

@@ -114,3 +114,27 @@ write the next wave's WPs, keep the status board current.
 
 Several `ready` WPs with no shared **Touch** files can run in parallel
 sessions.
+
+## 6. Running lanes in parallel, cheaply
+
+What costs tokens is context, re-sent every turn: a long session pays
+for its whole history on each call, and an orchestrator that spawns
+subagents pays twice (each subagent re-reads the repo cold, then its report
+lands in the orchestrator's context). So:
+
+- **Lanes are separate Sonnet sessions launched by the owner**, not Opus
+  subagents. Opus never sits in the loop while a WP is being built.
+- **One fresh session per WP** (or `/clear` between WPs in a lane): the
+  WP's Read list is the context; a lane's history is not needed, the
+  roadmap carries it.
+- **Opus runs once per batch**, in a fresh session, as a checkpoint:
+  diffs, test output and the WP's Accept, not the codebase (§4). Several
+  PRs per checkpoint is cheaper than one checkpoint per PR.
+- **Escalating is cheap, guessing is expensive.** A WP that stops at its
+  Escalate line costs a paragraph at the checkpoint; one that guesses an
+  anatomy call costs a corrective WP.
+- **Merge soon after a checkpoint**, so lanes branch from a current
+  `master` and conflicts stay stamp-only (recipe:
+  `docs/ssb-sonnet-handoff.md` "Merging lanes"). Merges, stamp conflicts
+  and docs passes are mechanical: a Sonnet (or smaller) session at low
+  effort is enough.
