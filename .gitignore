@@ -50,3 +50,6 @@ tools/ssb-pipeline/incoming/
 
 # Python bytecode (offline pipelines)
 __pycache__/
+
+# Python virtualenvs (offline pipelines)
+.venv/

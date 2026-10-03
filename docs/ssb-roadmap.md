@@ -24,7 +24,7 @@ history keeps the specs).
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
 
-**Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2. **Waiting on the owner:** O4, O5 (§2).
+**Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2; O4 and O5 decided the same day, and ST3r (the flap contract) and the D1 amendments are written into `docs/ssb.md`. **Next:** wave 2's Sonnet lanes (`docs/ssb-sonnet-handoff.md`).
 
 ## 2. Owner — decisions and actions
 
@@ -35,8 +35,8 @@ Decisions (detail and recommendations: `docs/ssb.md` §13). **O1–O3 were decid
 | O1 | Where the **external nose** comes from: the specimen's own nose (unmask a nose-only box), a parametric nose diorama, or both | Both: specimen skin surface for the naris and ala (real n = 1), cartilage as a schematic overlay — if ST6-0 shows the nose is in the field of view | ST6 — **decided** |
 | O2 | How much **nose**: entry anatomy only (vestibule, valves, ala, columella — the scope's fulcrum and walls), or the rhinoplasty framework too (ULC/LLC crura, ligaments, SMAS) | Entry anatomy now; framework later, as its own diorama. **Decided:** entry anatomy now; the full nasal framework is the intended end state, logged as task ST7 | ST0 scope, ST6 — **decided** |
 | O3 | **Content authoring split**: Sonnet drafts backlog content and checks citations, Opus reviews adversarially (cheaper) — instead of Opus authoring | Yes for the §6 backlog; Opus keeps authoring anything that places geometry (vessels, flaps, stations). **Decided: yes** | C1 — **decided** |
-| O4 | **Scope diameter** modelled by the endoscope's collision ring | 4 mm (the standard adult telescope), 2.7 mm selectable — a 3 mm ring was CP-1's pick and fails from the old fulcrum anyway | E3 (builds the default; one constant) |
-| O5 | NSF superior incision margin per design | short 15 mm, full/extended 10 mm (schematic): the atlas keeps 1–2 cm only for sella/planum defects; transethmoid work sacrifices olfaction anyway | ST3r |
+| O4 | **Scope diameter** modelled by the endoscope's collision ring | 4 mm (the standard adult telescope), 2.7 mm selectable | E3 — **decided 2026-10-03: as recommended** |
+| O5 | NSF superior incision | (recommended: margin per design) | ST3r — **decided 2026-10-03: the superior incision starts at the level of the floor (inferior margin) of the sphenoid ostium, for every design** (Geltzeiler's technique; ch. 31 starts at the ostium's superior aspect, the graph's step at its inferior margin — the owner chose the latter). The margin below the septal top keeps one default (15) and applies where the incision rises forward (designs B, C) |
 | — | Still open from before: strict CSP; publish while `draft`; name | as in §13 | — |
 
 Actions (no model can do these):
@@ -46,9 +46,9 @@ Actions (no model can do these):
 - Record the UW authors' written permission beside `ssb/LICENSE-data.md`.
 - Look at the specimen's AEA–PEA spacing (21 mm vs population 12; inferred
   PEA).
-- Read Table 31.2 of the Chiu atlas ch. 31 in print: the inferior turbinate
-  flap's "2.4 cm²" cites Harvey 2009, whose abstract gives 54 × 22 mm.
-- Judge the specimen's choanal airway height (~14 mm; bony roof ~16 mm).
+- ~~Read Table 31.2 in print~~ — done 2026-10-03 (owner's photos; see §4).
+- ~~Judge the choanal airway height~~ — done 2026-10-03: ~14 mm is plausible
+  (the range is broad, larger in men than women).
 - Optional upgrade: hand segmentation in 3D Slicer (basal lamella, vidian
   and ethmoidal canals, cavernous ICA) or a contrast CT.
 
@@ -262,7 +262,7 @@ abstract; titles, authors, PMIDs and DOIs match)
 
 *ST3 flap contract*
 
-1. **The inferior incision contradicts the atlas.** Ch. 31: from the
+1. **The inferior incision contradicts the atlas** *(overstated — corrected by Fig. 31.3, see "Owner answers" below)*. Ch. 31: from the
    choanal arch "turn toward the floor of the nose and move laterally
    until the desired width is achieved", then cut forward along the floor.
    The standard flap takes a strip of floor; the extended (Peris-Celda)
@@ -298,8 +298,8 @@ canal the specimen shows; re-anchor it on the canal. The AEA entry's
 distance, from the axilla, which the specimen approximates with the
 turbinate head). Corrections: WP **ST4d**.
 
-*D1 sphenoid spec* — **binding amendments for D2** (they change
-`docs/ssb.md` §6.1, which keeps the first-pass text with a pointer here):
+*D1 sphenoid spec* — **amendments, binding for D2** (folded into
+`docs/ssb.md` §6.1 the same day, rules 0–9):
 
 1. **Rule 4, type 4, is inverted.** DeLano type 4 (the graph's own
    criterion) has the nerve *lateral* to the posterior ethmoid
@@ -324,26 +324,47 @@ turbinate head). Corrections: WP **ST4d**.
 real-specimen Accept as a search rather than CP-1's pose, and the frontal
 line-of-sight check.
 
+*Owner answers and the printed chapter (2026-10-03).* O4: 4 mm, as
+recommended. O5: the superior incision starts at the floor of the sphenoid
+ostium for every design (§2). Choanal airway ~14 mm: plausible. The
+owner's photos of ch. 31 settle three points read from a garbled text
+layer:
+
+- **Table 31.2 does print "2.4" with reference 47** (Harvey 2009) for the
+  inferior turbinate flap. The discrepancy with Harvey's own 54 × 22 mm is
+  therefore the atlas's, not the extraction's: ST0d keeps Harvey's
+  dimensions as the primary value and the table figure as a flagged,
+  cited secondary. The same table gives the middle turbinate flap's range
+  as transplanum to **transsellar** (not transodontoid) and the
+  contralateral transposition septal flap as ethmoidal-artery based.
+- **Table 31.3 confirms the middle turbinate flap finding**: the internal
+  maxillary artery row excludes the posterior septal, inferior turbinate,
+  nasal floor and middle turbinate flaps; sphenoid surgery and posterior
+  septectomy appear only under the septal branch.
+- **Fig. 31.3 corrects ST3 finding 1 above, which overstated it.** The
+  basic (A) and anterior-extension (B) flaps are septal in the figure; the
+  floor is the lateral extension (C). The first pass's junction cut for
+  short and full was therefore consistent with the figure; what it lacked
+  was drawing C's floor on a chart instead of a readout. The text's "move
+  laterally until the desired width" is how C is cut. Fig. 31.3 also shows
+  A's superior border level at the ostium and B's rising toward the top of
+  the septum anteriorly — ST3r encodes both.
+
 **Wave 2** (re-planned 2026-10-03 after the verification above). Three
 lanes; inside a lane the WPs share files and run in order, the lanes run in
 parallel sessions.
 
 | Lane | Order | Who |
 |---|---|---|
-| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) | **E1b** nostril fulcrum → **ST2b** floor chart + incisive canal (also after ST0d) → **ST1b** open airway lining → **ST4d** waypoint corrections (reruns ST4c) | Sonnet |
+| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | **E1b** nostril fulcrum → **ST2b** floor chart, ostium margin, incisive canal (also after ST0d) → **ST1b** open airway lining → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
 | Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | **E2b** exposure → **E3** collision + HUD (needs E1b) → **E4** CT along the scope | Sonnet |
 | Content and dioramas | **ST0d** content corrections (folds in ST0c) · **D2** sphenoid build (D1 + amendments) | Sonnet |
-| Specs | **ST3r** flap contract revision (after ST2b) · **ST6** nose spec (now; reuses E1b's method) · then **E5** station poses (after E3, ST1b, E2b) | Opus |
+| Specs | ~~ST3r~~ (done 2026-10-03) · **ST6** nose spec (now; reuses E1b's method) · then **E5** station poses (after E3, ST1b, E2b) | Opus |
 
-**ST5** (flap overlay and soft-tissue panel) waits for ST3r and ST4d: it
-moves to the end of wave 2 or the start of wave 3, whichever comes first.
+**ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
+after ST4d: its contract (ST3r) is written.
 
-**Waiting on the owner** (recommendations in the verification above):
-**O4** scope diameter — 4 mm default, 2.7 mm selectable (E3 builds the
-default either way; the constant is one line); **O5** NSF `top_margin` per
-design — short 15, full/extended 10 (ST3r); read Table 31.2 of ch. 31 in
-print for the inferior turbinate flap's area (ST0d keeps it flagged until
-then); whether a ~14 mm choanal airway is plausible for this specimen.
+O4, O5 and the two owner checks were answered on 2026-10-03 (§2, §4).
 
 **CP-2 (Opus)** — anatomy on screen: each vessel's course against its
 sources, PSA inside the flap pedicle, flap ladder against the procedure's
@@ -596,7 +617,7 @@ does not change; the existing scope tests pass.
 Escalate: raycasting the packs costs more than a frame at 60 fps.
 
 ### E3 — Collision and proximity HUD        [todo] · Sonnet · depends: E1b, E2b (same files)
-*Spec revised again at verification (2026-10-03); it supersedes the CP-1
+*O4 decided 2026-10-03: 4 mm.* *Spec revised again at verification (2026-10-03); it supersedes the CP-1
 revision below wherever they differ, and the CP-1 text is kept for the
 record.* (1) The fulcrum is E1b's. (2) `SHAFT_RADIUS_MM = 2.0` (a 4 mm
 telescope, O4), with 1.35 (2.7 mm) selectable in the scope controls, not in
@@ -676,13 +697,16 @@ Steps:
    of the anterior). In `m.itf-area` replace the note: Table 31.2 cites
    Harvey 2009 (its ref. 47) for 2.4 cm², which Harvey's own dimensions
    contradict; unresolved until the printed table is read. Point the
-   inferior turbinate flap's preop "expected area" at both.
+   inferior turbinate flap's preop "expected area" at both. (The printed
+   Table 31.2 confirms "2.4" with ref. 47: the inconsistency is the atlas's;
+   say so, citing both.)
 2. `p.middle-turbinate-flap`, second preop check → "Pedicle: the internal
    maxillary artery (prior infratemporal fossa surgery or tumour)." Why:
    "The atlas lists the middle turbinate flap among the flaps excluded when
    the internal maxillary artery is unavailable; prior sphenoid surgery and
    posterior septectomy endanger the septal branch, i.e. the nasoseptal
-   flap."
+   flap." Add to its indications the atlas's midline range, transplanum to
+   transsellar (Table 31.2).
 3. `s.incisive-canal`: `ct` → the canal is visible in the reference
    specimen on the midsagittal plane, running from the nasal floor
    anteroinferiorly through the anterior maxilla (point at
@@ -717,9 +741,21 @@ Steps:
    connected channel of display 78–150 bounded by bone (≥ 150) within 2 mm
    on both sides in R or A that runs at least 5 mm in S; its topmost point.
    The verification saw it from (A -18, S -3) to (A -13, S -12) at R 0.
-3. Print areas, chart boxes, round-trip errors and the canal's run.
+3. The sphenoid ostium's inferior margin per side (the NSF's superior
+   incision starts there, O5), into `landmarks.meta.json`
+   `lm.sphenoid-ostium.<side>` as `inferior_margin_s_mm` with its method:
+   the lowest S of the `s.nasal-cavity.<side>` | `s.sphenoid-sinus.<side>`
+   label interface (right: ≈ 23.5). Where there is no interface (the left
+   ostium is closed by mucosa in this scan), the lowest S of the connected
+   set of display < 150 voxels that crosses the `s.sphenoid-face.<side>`
+   wall within 6 mm of the landmark, between cavity air and sinus air;
+   escalate if that set is taller than 8 mm or absent.
+4. Print areas, chart boxes, round-trip errors, the canal's run and both
+   inferior margins.
 Accept: floor chart round-trip ≤ 1 mm on interior cells; the canal point
-within 3 mm of (0, -18, -3) and a run ≥ 5 mm; `check-data.mjs` passes.
+within 3 mm of (0, -18, -3) and a run ≥ 5 mm; right inferior margin within
+1 mm of 23.5 and each margin below its landmark's S; `check-data.mjs`
+passes.
 Escalate: the floor wall unit does not separate from the inferior
 turbinate or maxillary walls (report where).
 
@@ -774,7 +810,7 @@ Then ST0c (Sonnet): PubMed E-utilities check of every new source
 (`docs/ssb.md` §9 Citations). *Folded into ST0d (2026-10-03): the verification checked 17 of the new journal sources; ST0d checks the rest.*
 
 ### ST3 — Flap construction spec        [done: first pass; revision ST3r] · **Opus** (first pass by Sonnet 5.5) · depends: ST0
-*Verification (Opus, 2026-10-03):* the floor cut contradicts the atlas, the area gap is mostly construction, `top_margin` should depend on the design, the pedicle test is circular, and `top(a)` needs interpolating across the no-data gap (§4). ST3r revises the contract; the first-pass text in `docs/ssb.md` §5.7 stays until then, with a pointer.
+*Verification (Opus, 2026-10-03):* the floor cut contradicts the atlas, the area gap is mostly construction, `top_margin` should depend on the design, the pedicle test is circular, and `top(a)` needs interpolating across the no-data gap (§4). ST3r revised the contract the same day (`docs/ssb.md` §5.7; the first pass is in git history).
 Result: the contract is in `docs/ssb.md` §5.7 (parameters and ranges from the graph, geometry on ST2's chart, readouts, the tests ST5 must pin). Checked numerically on the specimen: with the defaults the pedicle is 10.2 mm (right) and 14.6 mm (left) high; the first points of both PSA branch sweeps lie in it; the superior cut keeps the margin everywhere; the default full flap is 7.5 cm² right and 8.5 cm² left against the specimen's septal lining of 14.3 / 15.4 cm². **Flag:** the literature mean is 17.12 cm² and the atlas quotes a maximum of about 25.1 cm² (`m.nsf-area`): the specimen overlay is well under half of either. Also from the atlas (ch. 31): its superior incision starts at the superior aspect of the ostium, the graph's step says the inferior margin, so `ostium_clearance` now spans both. Likely contributors: the upper margin left unelevated, the masked vestibule and floor turn missing from the chart, and a smaller specimen septum; whether the 17.12 cm² includes floor mucosa is not stated in the abstract. The defaults for `top_margin` (15), `ostium_clearance` (2) and `window` (5) are schematic.
 Write `docs/ssb.md` §5.7's flap overlay contract concretely: the NSF outline
 in ST2's chart for each design in `p.nasoseptal-flap` (short, full,
@@ -816,7 +852,8 @@ Steps:
 Accept: printed start/end points match steps 1–3 within 0.5 mm;
 `check-data.mjs` passes; agreement does not drop.
 
-### ST3r — Flap contract revision        [todo] · **Opus** · depends: ST2b, O5
+### ST3r — Flap contract revision        [done 2026-10-03] · **Opus** · depends: O5
+Result: `docs/ssb.md` §5.7 rewritten (its "Changes from the first pass" lists them): the superior incision starts at the ostium's inferior margin for every design (O5), level for A and rising for B/C (Fig. 31.3), C drawn on the floor chart, `top(a)` interpolated across the gap, the pedicle test a cross-check of two sources. Specimen numbers wait for ST2b (the left inferior margin, the floor chart).
 Revise `docs/ssb.md` §5.7's contract for the verification's ST3 findings:
 an inferior incision on the floor chart at `floor_width` lateral to the
 junction (atlas ch. 31), with short/full/extended differing in the anterior
@@ -826,7 +863,10 @@ against the 9.3 mm point, not ST4b's construction; recompute the
 specimen's areas with the floor strip and say what the masked vestibule
 still removes. ST5 builds on this, not on the first pass.
 
-### ST5 — Soft-tissue panel and NSF overlay        [todo] · Sonnet · depends: ST1b, ST3r, ST4d
+### ST5 — Soft-tissue panel and NSF overlay        [todo] · Sonnet · depends: ST1b, ST2b, ST4d (contract: ST3r, done)
+Read: `docs/ssb.md` §5.7 (the revised contract — not the first pass in git history), §6 (diorama parameter/URL pattern), §7.3–§7.4; `js/ssb/mode-specimen.js`, `js/ssb/ui-specimen.js`, `js/ssb/state.js`.
+Touch: new `js/ssb/flap.js` (pure geometry on chart data: no DOM, no three.js import, so Node tests it), `js/ssb/mode-specimen.js`, `js/ssb/ui-specimen.js`, `js/ssb/state.js` (`#flap=`), `css/ssb.css`, `tools/test-ssb.mjs`.
+Accept: every test in §5.7's list, the outline computation in Node and the drawing in the page; areas printed for each design and side in the PR.
 Specimen stage: a soft-tissue group (Mucosa, Septal mucosa, Vessels, Flap)
 with tier filtering; the NSF overlay per ST3 (design presets as buttons,
 sliders for the parameters, area readout, incisions drawn on the surface,
@@ -839,15 +879,20 @@ Spec after ST6-0 and the owner's decision. The verification already resampled th
 Owner decision (O2, 2026-10-02): the atlas ultimately covers the entire nasal framework (ULC/LLC crura, ligaments, SMAS, dorsum, tip support), as its own diorama after ST6's entry anatomy. Not scheduled; spec after ST6.
 
 ### D1 — Sphenoid diorama spec        [done: amended 2026-10-03] · **Opus** (first pass by Sonnet 5.5)
-*Verification (Opus, 2026-10-03):* six amendments, binding for D2 (§4, "D1 sphenoid spec"): rule 4's type 4 was inverted (the Onodi cell is medial/superior to the nerve); "facing air" defined; conchal's bone ≥ 8 mm; rule 2's threshold labelled a convention; one table of impossible combinations; one parameter per preset kept.
+*Verification (Opus, 2026-10-03):* six amendments, now folded into `docs/ssb.md` §6.1 (§4, "D1 sphenoid spec"): rule 4's type 4 was inverted (the Onodi cell is medial/superior to the nerve); "facing air" defined; conchal's bone ≥ 8 mm; rule 2's threshold labelled a convention; one table of impossible combinations; one parameter per preset kept.
 Result: the spec is `docs/ssb.md` §6.1: parameters from `c.sphenoid-pneumatization`, `c.delano-optic-nerve`, `c.vidian-canal-type` and `m.intercarotid-distance-narrowest`, the variants the graph defines, eight rules computed from the solids that the tests must pin, hazard sites by graph id. All sizes the graph does not give (sella length, ICA and canal diameters, wall thickness) are left to the module header as schematic. **Vet:** the rule set (esp. rule 2's 0.5 circumference threshold, taken from `v.ica-protrusion`'s definition, and rule 4's DeLano type 4 geometry) and that presets set one parameter at a time.
 Parameters, presets from `c.sphenoid-pneumatization`, schematic proportions
 (stated in the header), and the rules `test-ssb.mjs` must pin (as the
 frontal-recess IFAC rules are), per `docs/ssb.md` §6's `sphenoid` row.
 
 ### D2 — Sphenoid diorama build        [ready] · Sonnet · depends: D1
-Build `js/ssb/dioramas/sphenoid.js` to D1 **with its 2026-10-03 amendments** (§4) using `kit.js` primitives;
-register it; tests from D1 as amended.
+Build `js/ssb/dioramas/sphenoid.js` to `docs/ssb.md` §6.1 as it now stands (the 2026-10-03 amendments are folded in, rules 0–9) using `kit.js` primitives;
+register it; tests from §6.1.
+Read: `docs/ssb.md` §6 and §6.1; `js/ssb/dioramas/frontal-recess.js` and `kit.js` (the pattern); `tools/test-ssb.mjs` lab section.
+Touch: new `js/ssb/dioramas/sphenoid.js`, `js/ssb/dioramas/index.js`, `tools/test-ssb.mjs`.
+Don't: change `kit.js` beyond adding a primitive the scene needs (say so in the PR); invent proportions the graph gives.
+Accept: rules 0–9 pinned in `test-ssb.mjs` (`--only lab`), computed from the solids on a 0.5 mm grid.
+Escalate: a rule cannot hold with the stated schematic sizes (report the numbers).
 
 ### P1/P2, T1, C1 — wave 3        [todo]
 P1 (Opus): `removes` units per step for the first procedures, mapped to

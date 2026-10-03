@@ -238,7 +238,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
 backlog). Wave 1 was verified by Opus on 2026-10-03 (roadmap §4); wave 2
-starts with its corrections. In short: the endoscope's fulcrum, exposure,
+starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's fulcrum, exposure,
 collision, HUD and stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
