@@ -290,6 +290,14 @@ is exactly the pose's tip and view, keys / drag / wheel / sliders change the
 pose with the right signs, the indicator moves with roll, the lights and
 layers are the scope's and come back on leaving (orbit view included), a
 pasted link opens the stage, a phone fits, WebGL blocked disables the pill.
+Collision and the HUD are pinned too: on the synthetic fixture (a bony septum,
+a sphere's analytic distance) a pose through a wall clamps to the last free
+0.5 mm sample, a pose in air is untouched, the ring makes a thicker shaft
+clamp earlier, and a read distance field matches the analytic distance within
+a voxel; on the real specimen the searches (a 1° yaw/pitch grid) are re-run
+and the poses they find are pinned — right sphenoid ostium, both frontal
+ostia from a 70° lens, and no 0° pose reaching a frontal ostium. A change to
+the pipeline's CT, landmarks or distance fields moves those pins on purpose.
 How the image *looks* (spot intensity, cone, the lining from inside) is a
 human check: take a screenshot of `#scope=R,45,6,4,0,0`.
 
