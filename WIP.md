@@ -179,7 +179,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   (`docs/ssb.md` §5.7): stage D (`softtissue.py`) so far gives the septal
   mucosa surfaces and charts (the `soft` pack), the choanal arch, the
   middle turbinate heads; the nostrils `lm.naris.R/.L` come from
-  `nose.py` (the vestibule lumen of the unmasked stack),
+  `nose.py` (the vestibule lumen of the unmasked stack), the incisive canal `lm.incisive-canal.M` and the right sphenoid ostium's
+  inferior margin (ST2b, partial: floor chart and left margin escalated),
   and `sweeps_soft.py` turns the waypoints in `uw/sweeps-soft.json` into
   the septal-branch, nasopalatine and AEA-septal sweeps (all inferred,
   schematic courses; first-pass waypoints verified 2026-10-03 with

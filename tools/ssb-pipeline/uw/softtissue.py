@@ -13,9 +13,10 @@ it is derived (docs/ssb.md 5.7). Writes:
   ssb/geometry/charts.json      per surface: the RAS -> chart rule, the bounding polygon in chart mm,
                                 and a 1 mm (a, s) -> r lookup grid (null where the surface is absent),
                                 with the surface normal per cell (unit, pointing into the tissue).
-  ssb/geometry/landmarks.json   merged (never drops a key): lm.choanal-arch.M, and the provisional
-                                endoscope fulcrum lm.naris.R / .L (E1, see naris()), and lm.middle-turbinate-head.R / .L
-                                (turbinate_heads()); landmarks.meta.json
+  ssb/geometry/landmarks.json   merged (never drops a key): lm.choanal-arch.M, lm.incisive-canal.M
+                                (incisive_canal()), lm.middle-turbinate-head.R / .L (turbinate_heads()), and the
+                                sphenoid ostium's inferior_margin_s_mm in the meta (ostium_margin()); lm.naris is
+                                nose.py's (E1b), not written here; landmarks.meta.json
                                 the method per point.
 
 Method. The septal mucosa of side X is the lining of nasal-cavity.X where it faces the septum wall unit
@@ -236,35 +237,89 @@ def choanal_arch(lab, table, aff, sept_pts):
     return [round(float(x), 2) for x in p], {'n_boundary_voxels': int(len(ras)), 'septum_mean_r': round(mid, 2)}
 
 
-NARIS_ABOVE_ANS_MM = 10.0     # schematic (E1): axial level of the fulcrum above lm.anterior-nasal-spine.M
-NARIS_SLAB_MM = 2.0           # +- around that level
-NARIS_FRONT_MM = 1.0          # "the most anterior air voxels": within this of the anterior-most one
-NARIS_FORWARD_MM = 10.0       # schematic (E1): the fulcrum lies this far in front of the masked cavity's anterior edge
+BONE_LEVEL = 150              # display value of dense bone (meshes.BONE_LEVEL)
+CANAL_BOX = {'r': (-4.0, 4.0), 'a': (-24.0, -8.0), 's': (-14.0, -1.0)}
+CANAL_BONE_WITHIN_MM = 2.0
+CANAL_MIN_RUN_MM = 5.0
+OSTIUM_NEAR_MM = 6.0
+OSTIUM_MAX_HEIGHT_MM = 8.0
 
 
-def naris(lab, ct, table, aff, ans):
-    """lm.naris.<side> (E1, provisional): the endoscope's fulcrum until the nose exists (ST6). Per side, the
-    air voxels of nasal-cavity.<side> within +-2 mm of the axial level 10 mm above the ANS; of those, the
-    ones within 1 mm of the anterior-most; their centroid moved 10 mm anterior (+A). Both 10 mm figures are
-    schematic. Asserts the point is anterior to every bone voxel (display >= BONE_LEVEL) of its axial row."""
-    by = {v: int(k) for k, v in table.items()}
+def _ras_grids(shape, aff):
+    kk, jj, ii = np.indices(shape)
     A = np.array(aff)
-    level = ans[2] + NARIS_ABOVE_ANS_MM
-    ks = [k for k in range(ct.shape[0]) if abs(A[2, 2] * k + A[2, 3] - level) <= NARIS_SLAB_MM]
-    out, info = {}, {}
-    for side in 'RL':
-        kk, jj, ii = np.nonzero((lab == by[f's.nasal-cavity.{side}'])[ks])
-        a = A[1, 1] * jj + A[1, 3]; r = A[0, 0] * ii + A[0, 3]
-        front = a >= a.max() - NARIS_FRONT_MM
-        p = [float(r[front].mean()), float(a[front].mean()) + NARIS_FORWARD_MM, float(level)]
-        k = int(round((p[2] - A[2, 3]) / A[2, 2]))
-        jb = np.nonzero(ct[k] >= M.BONE_LEVEL)[0]
-        bone_a = float((A[1, 1] * jb + A[1, 3]).max())
-        assert p[1] > bone_a, f'lm.naris.{side}: A {p[1]:.1f} is not anterior to the bone of its axial row (A {bone_a:.1f})'
-        out[f'lm.naris.{side}'] = [round(x, 2) for x in p]
-        info[f'lm.naris.{side}'] = {'n_front_voxels': int(front.sum()), 'anterior_air_edge_a_mm': round(float(a.max()), 2),
-                                    'row_bone_max_a_mm': round(bone_a, 2)}
-    return out, info
+    return A[0, 3] + A[0, 0] * ii, A[1, 3] + A[1, 1] * jj, A[2, 3] + A[2, 2] * kk
+
+
+def incisive_canal(ct, aff, spacing):
+    """lm.incisive-canal.M (ST2b): inside CANAL_BOX, the voxels of display 78-150 (a channel, not air, not bone)
+    with bone (>= 150) within 2 mm on both sides along R, or on both sides along A; 26-connected components
+    that run at least 5 mm in S are candidates. The canal is a midline structure, so the candidate whose
+    centroid is nearest the midsagittal plane (R = 0) is taken; the landmark is its topmost point (mean of the
+    voxels of its top S layer). NB the box's top edge (S -1) clips the candidate, so S is a lower bound."""
+    R, A, S = _ras_grids(ct.shape, aff)
+    bone = ct >= BONE_LEVEL
+    reach = int(round(CANAL_BONE_WITHIN_MM / spacing))
+
+    def both(axis):
+        lo = np.zeros_like(bone); hi = np.zeros_like(bone)
+        for k in range(1, reach + 1):
+            lo |= np.roll(bone, k, axis); hi |= np.roll(bone, -k, axis)
+        return lo & hi
+
+    box = ((R >= CANAL_BOX['r'][0]) & (R <= CANAL_BOX['r'][1]) & (A >= CANAL_BOX['a'][0]) & (A <= CANAL_BOX['a'][1])
+           & (S >= CANAL_BOX['s'][0]) & (S <= CANAL_BOX['s'][1]))
+    m = (ct >= 78) & (ct < BONE_LEVEL) & (both(2) | both(1)) & box
+    lab, n = ndi.label(m, structure=np.ones((3, 3, 3)))
+    cands = []
+    for c in range(1, n + 1):
+        q = lab == c
+        run = float(S[q].max() - S[q].min() + spacing)
+        if run >= CANAL_MIN_RUN_MM:
+            cands.append((abs(float(R[q].mean())), c, run))
+    assert cands, 'no bone-bounded channel runs 5 mm in S inside the incisive-canal box'
+    cands.sort()
+    q = lab == cands[0][1]
+    top = q & (S >= S[q].max() - 1e-6)
+    p = [round(float(g[top].mean()), 2) for g in (R, A, S)]
+    return p, {'run_s_mm': round(cands[0][2], 1), 'n_voxels': int(q.sum()), 'n_candidates': len(cands),
+               'candidate_centroid_abs_r_mm': [round(c[0], 2) for c in sorted(cands)],
+               'a_range_mm': [round(float(A[q].min()), 1), round(float(A[q].max()), 1)],
+               's_range_mm': [round(float(S[q].min()), 1), round(float(S[q].max()), 1)]}
+
+
+def ostium_margin(lab, ct, table, aff, lm, side):
+    """The sphenoid ostium's inferior margin (S, mm), O5: the lowest S of the s.nasal-cavity.<side> |
+    s.sphenoid-sinus.<side> label interface within 6 mm of lm.sphenoid-ostium.<side>. Where there is no
+    interface (the ostium is closed by mucosa in the scan), the set of display < 150 voxels of
+    s.sphenoid-face.<side> within 6 mm of the landmark that touches both airways; refuses if it is taller than
+    8 mm. Returns (S, info) or (None, info) when the fallback refuses."""
+    by = {v: int(k) for k, v in table.items()}
+    R, A, S = _ras_grids(ct.shape, aff)
+    p = np.array(lm[f'lm.sphenoid-ostium.{side}'])
+    near = np.linalg.norm(np.stack([R - p[0], A - p[1], S - p[2]]), axis=0) <= OSTIUM_NEAR_MM
+    cav = lab == by[f's.nasal-cavity.{side}']; sin = lab == by[f's.sphenoid-sinus.{side}']
+    iface = ((ndi.binary_dilation(cav) & sin) | (ndi.binary_dilation(sin) & cav)) & near
+    if iface.any():
+        return float(S[iface].min()), {'source': 'cavity | sinus label interface', 'n_voxels': int(iface.sum()),
+                                       's_range_mm': [float(S[iface].min()), float(S[iface].max())]}
+    opening = (lab == by[f's.sphenoid-face.{side}']) & (ct < BONE_LEVEL) & near
+    comp, n = ndi.label(opening, structure=np.ones((3, 3, 3)))
+    keep = np.zeros_like(opening)
+    for c in range(1, n + 1):
+        q = comp == c
+        grown = ndi.binary_dilation(q, iterations=2)
+        if (grown & cav).any() and (grown & sin).any():
+            keep |= q
+    if not keep.any():
+        return None, {'source': 'closed-wall fallback', 'refused': 'no opening touches both airways'}
+    lo, hi = float(S[keep].min()), float(S[keep].max())
+    info = {'source': 'closed-wall fallback (display < 150 opening of s.sphenoid-face)', 'n_voxels': int(keep.sum()),
+            's_range_mm': [lo, hi], 'height_mm': hi - lo + 0.5}
+    if hi - lo + 0.5 > OSTIUM_MAX_HEIGHT_MM:
+        info['refused'] = f'opening is {hi - lo + 0.5:.1f} mm tall (> {OSTIUM_MAX_HEIGHT_MM} mm)'
+        return None, info
+    return lo, info
 
 
 def turbinate_heads(lab, table, aff):
@@ -354,14 +409,24 @@ def main():
                   'specimen.py cuts that boundary at the PNS plane (softtissue.py)', **meta}
     json.dump(mm, open(mp, 'w'), indent=1)
     print('lm.choanal-arch.M', arch, meta)
-    nar, ninfo = naris(lab, ct, table, aff, lm['lm.anterior-nasal-spine.M'])
-    lm.update(nar)
+    canal, cinfo = incisive_canal(ct, aff, spacing)
+    lm['lm.incisive-canal.M'] = canal
+    mm['landmarks']['lm.incisive-canal.M'] = {
+        'method': 'topmost point of the midline-most bone-bounded display 78-150 channel (>= 5 mm in S) in |R| <= 4, A -24..-8, S -14..-1; '
+                  'the box top clips it, so S is a lower bound (softtissue.py, ST2b)', **cinfo}
     json.dump(dict(sorted(lm.items())), open(lp, 'w'), indent=1)
-    for k, v in nar.items():
-        mm['landmarks'][k] = {'method': 'inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity\'s anterior edge; '
-                                        'replaced when the nose exists (ST6)', **ninfo[k]}
+    margins = {}
+    for side in 'RL':
+        key = f'lm.sphenoid-ostium.{side}'
+        sm, minfo = ostium_margin(lab, ct, table, aff, lm, side)
+        print(key, 'inferior margin S', sm, minfo)
+        if sm is not None:
+            mm['landmarks'][key]['inferior_margin_s_mm'] = sm
+            mm['landmarks'][key]['inferior_margin_method'] = ('lowest S of the cavity | sinus label interface within 6 mm of the landmark'
+                                                              if minfo['source'].startswith('cavity') else minfo['source'])
+            margins[side] = sm
     json.dump(mm, open(mp, 'w'), indent=1)
-    print(nar, ninfo)
+    print('lm.incisive-canal.M', canal, cinfo)
     heads, hinfo = turbinate_heads(lab, table, aff)
     lm.update(heads)
     json.dump(dict(sorted(lm.items())), open(lp, 'w'), indent=1)
@@ -371,7 +436,7 @@ def main():
     print(heads, hinfo)
     import sweeps_soft
     sweeps_soft.run()                  # surface-snapped vessel sweeps from sweeps-soft.json (no-op while it is empty)
-    write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'naris': nar, 'pack_bytes': gz})
+    write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'incisive_canal': canal, 'ostium_inferior_margin_s_mm': margins, 'pack_bytes': gz})
 
 
 if __name__ == '__main__':

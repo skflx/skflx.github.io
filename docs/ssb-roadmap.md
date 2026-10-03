@@ -754,7 +754,7 @@ Steps:
 Accept: `node tools/ssb-content.mjs` and `node tools/check-data.mjs` pass.
 Escalate: a claim does not match its abstract (report, do not rewrite).
 
-### ST2b — Nasal floor chart and incisive canal        [todo] · Sonnet · depends: E1b, ST0d
+### ST2b — Nasal floor chart and incisive canal        [blocked: floor chart (step 1) and left ostium margin (step 3) escalated; steps 2 and right margin done, PR open] · Sonnet · depends: E1b, ST0d
 Goal: floor mucosa surfaces with charts (the NSF's floor strip and the
 extended flap need them), and the incisive canal as a landmark.
 Read: this file §4 verification (ST0 3, ST3 1); `docs/ssb.md` §5.7; ST2
@@ -792,6 +792,7 @@ within 3 mm of (0, -18, -3) and a run ≥ 5 mm; right inferior margin within
 passes.
 Escalate: the floor wall unit does not separate from the inferior
 turbinate or maxillary walls (report where).
+*Result (Sonnet, 2026-10-03), partial.* Done: `lm.incisive-canal.M` (0.1, -18.95, -1.0), 2.3 mm from (0, -18, -3), channel run 12.5 mm (four bone-bounded candidates; the midline-most centroid is taken, R 0.05 — the others sit at |R| 1.6–3.1; the box top at S -1 clips it, so S is a lower bound); right `inferior_margin_s_mm` 23.5 (below the landmark's 24.16). `softtissue.py` no longer rewrites `lm.naris` (its E1 step would have clobbered E1b). **Escalated, not done:** (1) *Floor chart.* The `s.nasal-floor.<side>` unit does not abut the cavity air: it is the palate's bone, display 170–195, with 1–3 mm of unlabelled soft tissue (display ~50–110) between it and the air (distance floor→air: right median 3.2 mm, 8 voxels touch; left median 6.3 mm, 0 touch). The right unit has 12180 voxels, the left only 4361, so a left floor mucosa cannot be derived from it: meshing the cavity's down-facing lining (normal S < -0.5) within 3 mm of the unit gives 3.9 cm² right but 0.5 cm² left (R -15…-2, A -48…-40). It does touch `s.maxillary-medial-wall.R` (149 voxels) and `s.maxillary-sinus-floor` (275 R, 83 L), not the inferior turbinate. A method that defines the floor from the air's down-facing lining instead of the unit is an anatomy call (and the left unit's coverage may be a labelling gap in `walls.py`). (2) *Left ostium margin.* No cavity | sinus interface on the left; the fallback opening (display < 150 voxels of `s.sphenoid-face.L` within 6 mm of the landmark, touching both airways) is one 530-voxel component spanning S 23.5–34.5 (11 mm, R -13.5…-3.5, A -54.5…-49.5), over the 8 mm limit, so no left margin is written.
 
 ### ST1b — Open airway lining        [todo] · Sonnet · depends: ST2b (same pack files)
 Goal: the scope sees through the ostia and the choanae (verification: each

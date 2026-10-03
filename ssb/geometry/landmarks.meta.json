@@ -50,7 +50,9 @@
   "lm.sphenoid-ostium.R": {
    "method": "median of UW arrow tips (axial + sagittal)",
    "n_tips": 7,
-   "spread_mm": 3.21
+   "spread_mm": 3.21,
+   "inferior_margin_s_mm": 23.5,
+   "inferior_margin_method": "lowest S of the cavity | sinus label interface within 6 mm of the landmark"
   },
   "lm.sphenopalatine-foramen.R": {
    "method": "median of UW arrow tips (axial + sagittal)",
@@ -182,6 +184,26 @@
    "a_range_mm": [
     -52.0,
     -9.5
+   ]
+  },
+  "lm.incisive-canal.M": {
+   "method": "topmost point of the midline-most bone-bounded display 78-150 channel (>= 5 mm in S) in |R| <= 4, A -24..-8, S -14..-1; the box top clips it, so S is a lower bound (softtissue.py, ST2b)",
+   "run_s_mm": 12.5,
+   "n_voxels": 463,
+   "n_candidates": 4,
+   "candidate_centroid_abs_r_mm": [
+    0.05,
+    1.64,
+    2.36,
+    3.14
+   ],
+   "a_range_mm": [
+    -23.5,
+    -11.5
+   ],
+   "s_range_mm": [
+    -13.0,
+    -1.0
    ]
   }
  }
