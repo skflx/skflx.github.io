@@ -2139,12 +2139,81 @@ async function scopeTests(browser, base) {
     await context.close();
   }
 
+  /* ===== collision and the proximity HUD on the page (E3) ===== */
+  {
+    /* a pasted link through bone is clamped, in the pose and the URL; the pinned poses are not */
+    const open = async (hash, opts) => {
+      const o = await openSpecimen(browser, base, hash, opts);
+      await o.page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
+      await nextFrames(o.page, 3);
+      return o;
+    };
+    const slide = (page, key, value) => page.evaluate(([k, v]) => { const r = document.getElementById(`ssb-scope-${k}`); r.value = String(v); r.dispatchEvent(new Event('input', { bubbles: true })); }, [key, value]);
+    let o = await open('#scope=L,30,10,0,0,30');
+    const clamped = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash, hud: window.__ssb.scope.hud }));
+    check('scope: a pasted pose through bone is clamped to the last free depth, in the pose and in the URL (L,30,10,0,0,30 -> depth 16)',
+      clamped.pose.depth === 16 && clamped.pose.yaw === 10 && clamped.hash === '#scope=L,16,10,0,0,30' && clamped.hud.limited === true, JSON.stringify(clamped));
+    await o.context.close();
+
+    o = await open('#scope=R,58.5,-3,19,0,0');
+    const sph = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, tip: window.__ssb.scope.tip, hud: window.__ssb.scope.hud, lm: window.__ssb.specimen.landmarks.find((l) => l.key === 'lm.sphenoid-ostium.R').ras }));
+    check('scope: the pinned right sphenoid pose (R,58.5,-3,19) is not clamped and its tip is within 2.5 mm of lm.sphenoid-ostium.R',
+      sph.pose.depth === 58.5 && Math.hypot(...sph.tip.map((v, i) => v - sph.lm[i])) <= 2.5 && !sph.hud.limited, JSON.stringify(sph));
+    check('scope: the HUD lists every distance field, nearest first, in mm; mucosal contact is reported (15 mm of shaft at the sphenoid pose)',
+      sph.hud.rows.length === 5 && sph.hud.rows.every((r, i, a) => i === 0 || a[i - 1].mm <= r.mm) && sph.hud.rows.every((r) => r.name && !/^s\./.test(r.name)) && sph.hud.contactMm === 15, JSON.stringify(sph.hud));
+    const dom = await o.page.evaluate(() => ({ rows: [...document.querySelectorAll('.ssb-scope-hud-row')].map((e) => e.textContent), near: document.querySelectorAll('.ssb-scope-hud-row[data-near]').length,
+      contact: (document.querySelector('.ssb-scope-hud-contact') || {}).textContent, hidden: document.querySelector('.ssb-scope-hud').closest('.ssb-lab-sec').hidden }));
+    check('scope: the proximity section shows a row per structure with its graph name, and the mucosal contact line; none within 3 mm here, so none is flagged',
+      !dom.hidden && dom.rows.length === 5 && dom.rows[0].startsWith('Orbit:') && dom.near === 0 && /^Mucosal contact: 15 mm/.test(dom.contact), JSON.stringify(dom));
+    /* the shaft: 2.7 mm goes deeper than 4 mm before bone */
+    await slide(o.page, 'yaw', 0);
+    await slide(o.page, 'pitch', 0);
+    await slide(o.page, 'depth', 100);
+    await nextFrames(o.page, 2);
+    const d4 = await o.page.evaluate(() => window.__ssb.scope.pose.depth);
+    await o.page.click('#ssb-scope-controls button[data-shaft="2.7"]');
+    await slide(o.page, 'depth', 100);
+    await nextFrames(o.page, 2);
+    const d27 = await o.page.evaluate(() => ({ depth: window.__ssb.scope.pose.depth, shaft: window.__ssb.scope.shaft, hash: location.hash, pressed: document.querySelector('#ssb-scope-controls button[data-shaft="2.7"]').getAttribute('aria-pressed') }));
+    check('scope: the 4 mm shaft stops at depth 85 and the 2.7 mm shaft, selectable in the controls and not in the URL, goes on to 86',
+      d4 === 85 && d27.depth === 86 && d27.shaft.key === '2.7' && d27.pressed === 'true' && !/2\.7/.test(d27.hash), JSON.stringify([d4, d27]));
+    await o.context.close();
+
+    o = await open('#scope=R,74,3,24,0,0');
+    const nearHud = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, row: (() => { const e = document.querySelector('.ssb-scope-hud-row[data-near]'); return e && { text: e.textContent, id: e.dataset.id, color: e.style.color }; })(),
+      others: document.querySelectorAll('.ssb-scope-hud-row[data-near]').length }));
+    check('scope: within 3 mm of a structure its row is drawn in the signal colour (R,74,3,24: the anterior cranial fossa, 2.2 mm) and only that row',
+      nearHud.pose.depth === 74 && nearHud.row && nearHud.row.id === 's.anterior-cranial-fossa' && /2\.2 mm/.test(nearHud.row.text) && /signal/.test(nearHud.row.color) && nearHud.others === 1, JSON.stringify(nearHud));
+    await o.context.close();
+
+    for (const [hash, label] of [['#scope=R,36,-2,33,0,70', 'right'], ['#scope=L,41,-10,44,15,70', 'left']]) {
+      o = await open(hash);
+      const f = await o.page.evaluate(() => window.__ssb.scope.pose);
+      check(`scope: the pinned ${label} frontal pose (${hash.slice(7)}) opens unclamped`, f.depth === Number(hash.slice(7).split(',')[1]), JSON.stringify(f));
+      await o.context.close();
+    }
+
+    /* no distance fields: no HUD, no error, collision still works */
+    const noSdf = (route) => route.fetch().then(async (res) => { const j = await res.json(); delete j.sdf; return route.fulfill({ response: res, json: j }); });
+    const ctx2 = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    await ctx2.route(/\/ssb\/ct\/ct\.json(?:[?#].*)?$/, noSdf);
+    const errors2 = [];
+    const page2 = await ctx2.newPage();
+    page2.on('pageerror', (e) => errors2.push(String(e)));
+    await page2.goto(`${base}/ssb.html#scope=L,30,10,0,0,30`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page2.waitForFunction(() => window.__ssb && window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
+    await nextFrames(page2, 3);
+    const none = await page2.evaluate(() => ({ depth: window.__ssb.scope.pose.depth, rows: window.__ssb.scope.hud.rows.length, hidden: document.querySelector('.ssb-scope-hud').closest('.ssb-lab-sec').hidden }));
+    check('scope: with no distance fields in ct.json the Proximity section is hidden, nothing throws, and collision still clamps (depth 16)', none.rows === 0 && none.hidden && none.depth === 16 && errors2.length === 0, JSON.stringify([none, errors2]));
+    await ctx2.close();
+  }
+
   /* ===== a pasted link, hostile links, the other stages ===== */
   {
-    const { context, page } = await openSpecimen(browser, base, '#scope=L,30,10,0,0,30');
+    const { context, page } = await openSpecimen(browser, base, '#scope=L,30,-10,0,0,30');
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
     const info = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash }));
-    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 30, yaw: 10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,30,10,0,0,30', JSON.stringify(info));
+    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 30, yaw: -10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,30,-10,0,0,30', JSON.stringify(info));
     await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); });
     await nextFrames(page, 3);
     check('scope: selecting a structure while in the scope starts no camera flight (the scope owns the camera)', (await spec(page, () => window.__ssb.specimen.camera().flying)) === false);

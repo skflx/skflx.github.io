@@ -68,6 +68,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let clampMm = 25;
     let shaft = '4';                     /* '4' | '2.7' (mm): the collision ring's radius, SHAFT_RADII */
     let hud = { rows: [], contactMm: 0, limited: false };
+    let limitedNext = false;
     let lastPose = null;                 /* the pose to come back to when the Scope pill is pressed again */
 
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
@@ -120,12 +121,13 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         if (!p || !f || !ctAt) { hud = { rows: [], contactMm: 0, limited: false }; return false; }
         const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft]);
         if (c.depth < p.depth - 1e-9) {
-            hud = { ...hud, limited: true };
+            limitedNext = true;                /* the pass the clamp triggers reports it */
             setPose({ depth: c.depth });
             return true;
         }
         const names = new Map(sdfFields.map((x) => [x.id, x.name]));
-        hud = { rows: hudRows(sdfFields, tipOf(f, p)).map((r) => ({ ...r, name: names.get(r.id) })), contactMm: c.contactMm, limited: false };
+        hud = { rows: hudRows(sdfFields, tipOf(f, p)).map((r) => ({ ...r, name: names.get(r.id) })), contactMm: c.contactMm, limited: limitedNext };
+        limitedNext = false;
         return false;
     }
 
