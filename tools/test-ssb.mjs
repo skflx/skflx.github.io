@@ -99,8 +99,12 @@ const SCOPE_URL = dataUrl(sourceOf('js/ssb/scope.js'));
 const { parseHash, formatHash, clampQuality, createStore, normalizeCt } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`)));
 const SC = await import(SCOPE_URL);
 const { rasToScene, sceneToRas } = await import(dataUrl(sourceOf('js/ssb/frame.js')));
-const kit = await import(dataUrl(sourceOf('js/ssb/dioramas/kit.js')
+const KIT_URL = dataUrl(sourceOf('js/ssb/dioramas/kit.js')
   .replace(/from '\.\.\/frame\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/frame.js'))}'`)
+  .replace(/from '\.\.\/materials\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/materials.js'))}'`));
+const kit = await import(KIT_URL);
+const SPH = await import(dataUrl(sourceOf('js/ssb/dioramas/sphenoid.js')
+  .replace(/from '\.\/kit\.js[^']*'/, `from '${KIT_URL}'`)
   .replace(/from '\.\.\/materials\.js[^']*'/, `from '${dataUrl(sourceOf('js/ssb/materials.js'))}'`)));
 
 const args = process.argv.slice(2);
@@ -108,7 +112,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope: just that section (development) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -2037,6 +2041,283 @@ async function scopeTests(browser, base) {
   }
 }
 
+
+/* ---------------- the sphenoid diorama (docs/ssb.md 6.1, rules 0-9) ---------------- */
+
+/* Every number below is read off the solids on a 0.5 mm grid (or, for two
+   distances between cylinders, analytically); nothing is written in. */
+function sphenoidRuleTests() {
+  const D = Object.fromEntries(SPH.PARAMS.map((p) => [p.key, p.default]));
+  const P = (o) => ({ ...D, ...o });
+  const G = 0.5;
+  const shapeOf = (m, id, side, seg) => m.solids.filter((s) => s.id === id && (!side || s.side === side) && (!seg || s.seg === seg));
+  const sgnOf = (side) => (side === 'R' ? 1 : -1);
+
+  /* defaults: the spec's defaults and the graph's classes */
+  check('sphenoid: defaults are sellar, every toggle off, intercarotid 12, DeLano 1, vidian 2',
+    D.pneum === 3 && D.lateral_recess === 0 && D.clinoid_pneum === 0 && D.septum_on_ica === 0 && D.ica_protrusion === 0 && D.ica_dehiscence === 0
+    && D.optic_dehiscence === 0 && D.onodi === 0 && D.intercarotid === 12 && D.optic_type === 1 && D.vidian_type === 2, JSON.stringify(D));
+  for (const [cls, key] of [['c.sphenoid-pneumatization', 'pneum'], ['c.delano-optic-nerve', 'optic_type'], ['c.vidian-canal-type', 'vidian_type']]) {
+    const codes = entity(cls).classes.map((c) => String(c.code));
+    const opts = SPH.PARAMS.find((p) => p.key === key).options.map((o) => o.code);
+    check(`sphenoid: ${key} offers exactly the codes of ${cls}`, JSON.stringify(opts) === JSON.stringify(codes), JSON.stringify([opts, codes]));
+    check(`sphenoid: ${cls} presets cover every class`, JSON.stringify(Object.keys(SPH.PRESETS[cls])) === JSON.stringify(codes));
+  }
+  const ic = SPH.PARAMS.find((p) => p.key === 'intercarotid');
+  const graphRange = entity('m.intercarotid-distance-narrowest').value.range;
+  check('sphenoid: the intercarotid slider is the graph\'s own range', ic.min === graphRange[0] && ic.max === graphRange[1], JSON.stringify([ic.min, ic.max, graphRange]));
+
+  /* rule 1: pneumatization order */
+  const reach = {};
+  for (const pn of [1, 2, 3, 4]) {
+    const m = SPH.model(P({ pneum: pn }));
+    let minY = 0;
+    let under = false;
+    let behind = false;
+    for (let x = -18; x <= 18; x += G) for (let y = -48; y <= 2; y += G) for (let z = -16; z <= 20; z += G) {
+      if (!m.air(x, y, z) || m.which(x, y, z) !== 'sinus') continue;
+      if (y < minY) minY = y;
+      if (Math.abs(x) <= 5 && y > -30 && y < -18 && z < 5.5) under = true;
+      if (y < -30) behind = true;
+    }
+    reach[pn] = { minY, under, behind };
+  }
+  check('sphenoid rule 1: posterior air extent is strictly conchal < presellar < sellar < postsellar',
+    reach[1].minY > reach[2].minY && reach[2].minY > reach[3].minY && reach[3].minY > reach[4].minY, JSON.stringify(reach));
+  check('sphenoid rule 1: air lies under the sella exactly for sellar and postsellar', !reach[1].under && !reach[2].under && reach[3].under && reach[4].under);
+  check('sphenoid rule 1: air lies behind the posterior sellar wall plane exactly for postsellar', !reach[1].behind && !reach[2].behind && !reach[3].behind && reach[4].behind);
+  check('sphenoid rule 1: presellar air reaches but does not pass the anterior sellar wall plane (y -18)', reach[2].minY <= -16 && reach[2].minY > -18, String(reach[2].minY));
+  {
+    const m = SPH.model(P({ pneum: 1 }));
+    const b = shapeOf(m, 's.sella-turcica')[0].shape;
+    let gap = Infinity;
+    for (let x = -18; x <= 18; x += 1) for (let y = -14; y <= 2; y += G) for (let z = -16; z <= 12; z += G) {
+      if (!m.air(x, y, z)) continue;
+      const dx = Math.max(b.min[0] - x, 0, x - b.max[0]);
+      const dy = Math.max(b.min[1] - y, 0, y - b.max[1]);
+      const dz = Math.max(b.min[2] - z, 0, z - b.max[2]);
+      gap = Math.min(gap, Math.hypot(dx, dy, dz));
+    }
+    check('sphenoid rule 1: conchal leaves at least 8 mm of bone between sinus air and the sella', gap >= 8, String(gap));
+  }
+
+  /* rule 0 + 2: carotid prominence. A segment is judged where the sinus reaches it:
+     the parasellar segment from sellar, the paraclival segment from postsellar;
+     in presellar and conchal the ICA lies behind all air (share 0 whatever the toggle). */
+  const icaShare = (o, side, seg) => {
+    const m = SPH.model(P(o));
+    const c = SPH.canals(m).find((x) => x.id === 'ica' && x.side === side && x.seg === seg);
+    return SPH.facing(m, c, ['sinus']);
+  };
+  check('sphenoid rule 2: the ICA faces no air in conchal (any toggle) and none in presellar either',
+    [1, 2].every((pn) => [0, 1].every((pr) => ['parasellar', 'paraclival'].every((seg) => icaShare({ pneum: pn, ica_protrusion: pr }, 'R', seg) === 0))));
+  for (const [pn, seg] of [[3, 'parasellar'], [4, 'parasellar'], [4, 'paraclival']]) {
+    for (const side of ['R', 'L']) {
+      const off = icaShare({ pneum: pn }, side, seg);
+      const on = icaShare({ pneum: pn, ica_protrusion: 1 }, side, seg);
+      check(`sphenoid rule 2: ${side} ${seg} ICA in ${pn === 3 ? 'sellar' : 'postsellar'}: share ${r2(off)} without, ${r2(on)} with protrusion (at least 0.5 exactly when protruding)`,
+        off > 0 && off < 0.5 && on >= 0.5, `${off} ${on}`);
+    }
+  }
+  {
+    /* a dehiscence leaves no wall on the arc facing the sinus */
+    const m = SPH.model(P({ ica_dehiscence: 1 }));
+    const walls = shapeOf(m, 's.carotid-prominence', 'R', 'parasellar')[0].shape;
+    const a = walls.a;
+    const medial = kit.inside(walls, a[0] - 2.6, a[1], (walls.a[2] + walls.b[2]) / 2);
+    const lateral = kit.inside(walls, a[0] + 2.6, a[1], (walls.a[2] + walls.b[2]) / 2);
+    check('sphenoid: a dehiscent ICA has no bone on the sinus side and keeps it on the other', !medial && lateral, JSON.stringify({ medial, lateral }));
+    const share = icaShare({ ica_dehiscence: 1 }, 'R', 'parasellar');
+    check('sphenoid rule 0: a dehiscence sets the wall to 0 on its arc (the share rises above the intact wall\'s)', share > icaShare({}, 'R', 'parasellar'), String(share));
+  }
+
+  /* rule 3: septum on the ICA (distance from the septum solid to the carotid canal wall) */
+  const sepDist = (o) => {
+    const m = SPH.model(P(o));
+    const sep = shapeOf(m, 's.intersinus-septum')[0].shape;
+    const b = kit.bounds(sep);
+    const walls = shapeOf(m, 's.carotid-prominence', null, 'parasellar');
+    let best = Infinity;
+    for (let x = b.min[0]; x <= b.max[0]; x += 0.25) for (let y = b.min[1]; y <= b.max[1]; y += 0.25) for (let z = 0; z <= 3; z += 1) {
+      if (!kit.inside(sep, x, y, z)) continue;
+      for (const w of walls) {
+        const f = kit.cylFrame(w.shape, x, y, Math.min(Math.max(z, w.shape.a[2]), w.shape.b[2]));
+        best = Math.min(best, f.rho - w.shape.r);
+      }
+    }
+    return best;
+  };
+  for (const pn of [3, 4]) {
+    for (const shift of [0, 5, -5]) {
+      check(`sphenoid rule 3: ${pn === 3 ? 'sellar' : 'postsellar'}, shift ${shift}: the septum meets the carotid canal wall (distance 0) with the toggle on`,
+        sepDist({ pneum: pn, septum_on_ica: 1, septum_shift: shift }) <= 0.01, String(sepDist({ pneum: pn, septum_on_ica: 1, septum_shift: shift })));
+      check(`sphenoid rule 3: ${pn === 3 ? 'sellar' : 'postsellar'}, shift ${shift}: with the toggle off the distance is positive`, sepDist({ pneum: pn, septum_shift: shift }) > 0.5);
+    }
+  }
+  check('sphenoid rule 3: presellar (below sellar) the septum cannot reach the ICA even with the toggle on', sepDist({ pneum: 2, septum_on_ica: 1 }) > 0.5);
+
+  /* rule 4: DeLano (0 + 4) */
+  const optic = (o) => {
+    const m = SPH.model(P(o));
+    const c = SPH.canals(m).find((x) => x.id === 'optic' && x.side === 'R');
+    return { sinus: SPH.facing(m, c, ['sinus']), cell: SPH.facing(m, c, ['cell']), m };
+  };
+  for (const pn of [3, 4]) {
+    const o1 = optic({ pneum: pn, optic_type: 1 });
+    const o2 = optic({ pneum: pn, optic_type: 2 });
+    const o3 = optic({ pneum: pn, optic_type: 3 });
+    const o4 = optic({ pneum: pn, optic_type: 4 });
+    check(`sphenoid rule 4 (${pn === 3 ? 'sellar' : 'postsellar'}): type 1 faces no air; type 2 above 0 and below 0.5; type 3 at least 0.5`,
+      o1.sinus === 0 && o1.cell === 0 && o2.sinus > 0 && o2.sinus < 0.5 && o3.sinus >= 0.5, JSON.stringify([o1.sinus, o2.sinus, o3.sinus]));
+    check(`sphenoid rule 4 (${pn === 3 ? 'sellar' : 'postsellar'}): type 4 faces the Onodi cell over at least 0.25 and the sinus not at all`, o4.cell >= 0.25 && o4.sinus === 0, JSON.stringify([o4.cell, o4.sinus]));
+  }
+  {
+    const m = optic({ optic_type: 4 }).m;
+    const cell = shapeOf(m, 'v.sphenoethmoidal-cell', 'R')[0].shape;
+    const nerve = shapeOf(m, 's.optic-nerve', 'R')[0].shape;
+    const mid = [0, 1, 2].map((i) => (nerve.a[i] + nerve.b[i]) / 2);
+    check('sphenoid rule 4: the Onodi cell lies medial and/or superior to the nerve (not lateral)', cell.c[0] < mid[0] && cell.c[2] > mid[2], JSON.stringify([cell.c, mid]));
+    let inLumen = 0;
+    for (let x = 0; x <= 12; x += G) for (let y = -22; y <= -6; y += G) for (let z = 0; z <= 22; z += G) {
+      const w = m.which(x, y, z);
+      if (w === 'cell' && z < 9.4) inLumen++;
+    }
+    check('sphenoid rule 4: the cell is a separate space — none of its air lies at sinus level, and the nerve never runs free in the sinus lumen (no sinus air at the nerve)',
+      inLumen === 0 && optic({ optic_type: 4 }).sinus === 0, String(inLumen));
+    check('sphenoid rule 4: optic type 4 implies the Onodi cell', shapeOf(SPH.model(P({ optic_type: 4, onodi: 0 })), 'v.sphenoethmoidal-cell', 'R').length === 1);
+  }
+
+  /* rule 5: intercarotid window — nearest medial walls of the two ICA arteries */
+  for (const val of [4, 7.5, 12, 18]) {
+    for (const shift of [0, 6, -8]) {
+      const m = SPH.model(P({ intercarotid: val, septum_shift: shift }));
+      let gap = Infinity;
+      for (const seg of ['parasellar', 'paraclival']) {
+        const R = shapeOf(m, 's.internal-carotid-artery', 'R', seg)[0].shape;
+        const L = shapeOf(m, 's.internal-carotid-artery', 'L', seg)[0].shape;
+        gap = Math.min(gap, (R.a[0] - R.r) - (L.a[0] + L.r));
+      }
+      check(`sphenoid rule 5: intercarotid ${val}, septum shift ${shift}: the measured window is ${r2(gap)} mm`, near(gap, val, 0.5), String(gap));
+    }
+  }
+
+  /* rule 6: vidian ridge over the floor */
+  const ridge = (vt) => {
+    const m = SPH.model(P({ vidian_type: vt }));
+    const canal = shapeOf(m, 's.vidian-canal', 'R')[0].shape;
+    let h = -Infinity;
+    for (let x = 5; x <= 14; x += 0.25) for (let y = -28; y <= -8; y += 0.25) {
+      let top = null;
+      for (let z = -20; z <= 0; z += 0.1) if (kit.inside(canal, x, y, z)) top = z;
+      if (top !== null && m.air(x, y, top + 0.6)) h = Math.max(h, top + 12);   /* ZB = -12 */
+    }
+    return h;
+  };
+  const r1v = ridge(1);
+  const r2v = ridge(2);
+  const r3v = ridge(3);
+  check('sphenoid rule 6: vidian type 1 has a ridge of positive height; type 2 a lower one; type 3 none', r1v > 0 && r2v > 0 && r2v < r1v && r3v === -Infinity, JSON.stringify([r1v, r2v, r3v]));
+
+  /* rule 7: lateral recess */
+  const lateral = (o) => {
+    const m = SPH.model(P(o));
+    let mx = -Infinity;
+    for (let x = 0; x <= 40; x += G) for (let y = -16; y <= 0; y += G) for (let z = -14; z <= 10; z += G) if (m.air(x, y, z)) mx = Math.max(mx, SPH.lineSide(x, z));
+    return mx;
+  };
+  check('sphenoid rule 7: with the recess off, no air lies lateral to the vidian-rotundum line', lateral({}) <= 0, String(lateral({})));
+  for (const ext of [3, 6, 15]) {
+    const got = lateral({ lateral_recess: 1, lr_extent: ext });
+    check(`sphenoid rule 7: lr_extent ${ext} puts the air ${r2(got)} mm lateral to the line (±1 mm)`, near(got, ext, 1), String(got));
+  }
+
+  /* rule 9: impossible combinations degrade, by one table */
+  const same = (a, b) => JSON.stringify(SPH.model(a).solids) === JSON.stringify(SPH.model(b).solids);
+  const noEffect = { ica_protrusion: 1, ica_dehiscence: 1, optic_dehiscence: 1, lateral_recess: 1, clinoid_pneum: 1, septum_on_ica: 1, optic_type: 3, vidian_type: 1 };
+  for (const [k, v] of Object.entries(noEffect)) {
+    check(`sphenoid rule 9: conchal ignores ${k}=${v} (geometry equals the default configuration's)`, same(P({ pneum: 1, [k]: v }), P({ pneum: 1 })) || (k === 'optic_type' || k === 'vidian_type') && same(P({ pneum: 1, [k]: v }), P({ pneum: 1, [k]: D[k] })));
+    check(`sphenoid rule 9: the HUD says what conchal degraded (${k})`, SPH.model(P({ pneum: 1, [k]: v })).notes.includes(k));
+  }
+  check('sphenoid rule 9: conchal degrades optic type 2 to type 1', same(P({ pneum: 1, optic_type: 2 }), P({ pneum: 1, optic_type: 1 })));
+  check('sphenoid rule 9: optic type 3 below sellar draws type 2', same(P({ pneum: 2, optic_type: 3 }), P({ pneum: 2, optic_type: 2 })) && SPH.model(P({ pneum: 2, optic_type: 3 })).notes.includes('optic_type'));
+  check('sphenoid rule 9: optic type 3 at sellar is not degraded', SPH.model(P({ pneum: 3, optic_type: 3 })).notes.length === 0);
+  check('sphenoid rule 9: every degrade happens at most once and never invents a parameter', Object.keys(SPH.degrade(P({ pneum: 1, ...noEffect })).p).sort().join() === Object.keys(D).sort().join());
+
+  /* rule 8 (codec part): the URL whitelist round-trips and clamps */
+  const labs = { sphenoid: { params: SPH.PARAMS, presets: SPH.PRESETS } };
+  const has = () => true;
+  const hostile = parseHash('#lab=sphenoid&pneum=999&intercarotid=-1e9&optic_type=' + encodeURIComponent('<img src=x onerror=1>') + '&lr_extent=1e400&septum_shift=40&vidian_type=2.6&bogus=1', has, labs).lab;
+  check('sphenoid rule 8: a hostile #lab= is clamped (pneum 4, intercarotid 4, shift 8, vidian 3) or dropped to the default (optic 1, lr_extent 6)',
+    hostile.params.pneum === 4 && hostile.params.intercarotid === 4 && hostile.params.septum_shift === 8 && hostile.params.vidian_type === 3
+    && hostile.params.optic_type === 1 && hostile.params.lr_extent === 6, JSON.stringify(hostile.params));
+  const text = formatHash({ lab: hostile }, labs);
+  const again = parseHash(text, has, labs).lab;
+  check('sphenoid rule 8: the URL codec round-trips', JSON.stringify(again.params) === JSON.stringify(hostile.params) && formatHash({ lab: again }, labs) === text && !/[<>]/.test(text), text);
+  const sorted = (p) => JSON.stringify(Object.entries(p).sort());
+  void sorted;
+}
+
+async function sphenoidPageTests(browser, base) {
+  const { context, page } = await open(browser, base, '#lab=sphenoid');
+  const ps = await parts(page);
+  check('sphenoid: opens on the sagittal view', (await page.evaluate(() => window.__ssb.lab.view)) === 'sagittal');
+  /* hazard sites are hatched and named in the HUD */
+  await setHash(page, '#lab=sphenoid&pneum=3&ica_protrusion=1');
+  const icaR = await part(page, 's.internal-carotid-artery.R');
+  check('sphenoid: a carotid in the sinus wall is a hazard site naming the graph\'s ICA hazard',
+    icaR.hazards.includes('h.ica-injury-sphenoidotomy') && entity('h.ica-injury-sphenoidotomy').at === 's.internal-carotid-artery', JSON.stringify(icaR.hazards));
+  check('sphenoid: the HUD names the hazard in text', await page.evaluate(() => /ICA injury at the sphenoid lateral wall/.test(document.getElementById('ssb-hud').textContent)));
+  await setHash(page, '#lab=sphenoid&pneum=3&septum_on_ica=1');
+  check('sphenoid: a septum inserting on the ICA carries h.septum-avulsion-ica', (await part(page, 's.intersinus-septum.M')).hazards.includes('h.septum-avulsion-ica'));
+  await setHash(page, '#lab=sphenoid&optic_type=4&onodi=1');
+  const nerve = await part(page, 's.optic-nerve.R');
+  check('sphenoid: with an Onodi cell the optic nerve carries h.optic-nerve-injury-onodi and the cell is drawn',
+    nerve.hazards.includes('h.optic-nerve-injury-onodi') && !!(await part(page, 'v.sphenoethmoidal-cell.R')));
+  await setHash(page, '#lab=sphenoid&vidian_type=1');
+  check('sphenoid: a protruding vidian canal carries h.ica-injury-vidian', (await part(page, 's.vidian-canal.R')).hazards.includes('h.ica-injury-vidian'));
+  await setHash(page, '#lab=sphenoid&lateral_recess=1&lr_extent=8&clinoid_pneum=1');
+  const names = (await parts(page)).map((p) => p.name);
+  check('sphenoid: the lateral recess and the pneumatized clinoid are parts when on',
+    names.includes('s.sphenoid-lateral-recess.R') && names.includes('v.pneumatized-anterior-clinoid.L'), names.join(' '));
+
+  /* presets, buttons labelled with the graph's class labels */
+  const labels = await page.$$eval('button[data-cls="c.sphenoid-pneumatization"]', (bs) => bs.map((b) => [b.dataset.code, b.textContent]));
+  check('sphenoid: pneumatization preset buttons carry the graph class labels', labels.length === 4
+    && labels.every(([code, text]) => text.includes(entity('c.sphenoid-pneumatization').classes.find((c) => c.code === code).label)), JSON.stringify(labels));
+  await act(page, () => page.click('button[data-cls="c.sphenoid-pneumatization"][data-code="postsellar"]'));
+  check('sphenoid: the postsellar preset sets pneum 4', (await page.evaluate(() => window.__ssb.lab.params.pneum)) === 4);
+  await act(page, () => page.click('button[data-cls="c.delano-optic-nerve"][data-code="4"]'));
+  const pr4 = await page.evaluate(() => window.__ssb.lab.params);
+  check('sphenoid: the DeLano 4 preset sets optic_type 4 and the Onodi cell', pr4.optic_type === 4 && pr4.onodi === 1, JSON.stringify(pr4));
+  check('sphenoid: the HUD names the DeLano type, the vidian type and the intercarotid window',
+    await page.evaluate(() => /DeLano/i.test(document.getElementById('ssb-hud').textContent) && /Intercarotid window: 12 mm/.test(document.getElementById('ssb-hud').textContent)));
+
+  /* rule 9 in the page: conchal ignores the carotid toggles (the same parts, the same boxes) */
+  await setHash(page, '#lab=sphenoid&pneum=1');
+  const plain = JSON.stringify((await parts(page)).map((p) => [p.name, p.box]));
+  await setHash(page, '#lab=sphenoid&pneum=1&ica_protrusion=1&septum_on_ica=1&lateral_recess=1&clinoid_pneum=1');
+  const toggled = JSON.stringify((await parts(page)).map((p) => [p.name, p.box]));
+  check('sphenoid rule 9: in the page, conchal with the toggles on draws the same model', plain === toggled);
+  check('sphenoid rule 9: the HUD says what was degraded', await page.evaluate(() => /left at its default/.test(document.getElementById('ssb-hud').textContent)));
+
+  /* both themes compile */
+  const before = await builds(page);
+  await page.click('.site-theme-toggle');
+  await page.waitForTimeout(400);
+  check('sphenoid: both themes — the lab keeps its parts after the theme flips', (await parts(page)).length === ps.length || (await parts(page)).length > 0 && (await builds(page)) >= before);
+  await page.click('.site-theme-toggle');
+  await context.close();
+
+  /* clicking a part selects its entity */
+  const sel = await open(browser, base, '#lab=sphenoid');
+  const at = await sel.page.evaluate(() => window.__ssb.lab.screenOf('s.sella-turcica.M'));
+  if (at) await sel.page.mouse.click(at.x, at.y);
+  await sel.page.waitForTimeout(300);
+  const picked = await sel.page.evaluate(() => window.__ssb.selection);
+  check('sphenoid: clicking a part selects a graph entity', !!picked && !!entity(picked), String(picked));
+  await sel.context.close();
+}
+
 /* ---------------- the suite ---------------- */
 
 async function main() {
@@ -2048,6 +2329,11 @@ async function main() {
   if (ONLY === 'ct') {
     await ctUnitTests();
     await ctTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'lab') {
+    sphenoidRuleTests();
+    await sphenoidPageTests(browser, base);
     return finish(browser, server);
   }
   if (ONLY === 'specimen') {
@@ -2065,6 +2351,8 @@ async function main() {
   const REQUIRED = {
     'ethmoid-roof': ['s.cribriform-plate.R', 's.lateral-lamella.R', 's.lateral-lamella.L', 's.fovea-ethmoidalis.R', 's.crista-galli.M',
       's.lamina-papyracea.R', 's.anterior-ethmoid-cells.R', 's.middle-turbinate.R', 's.orbit.R', 's.olfactory-fossa.R', 's.anterior-ethmoidal-artery.R'],
+    sphenoid: ['s.sphenoid-sinus.R', 's.sphenoid-sinus.L', 's.sphenoid-face.M', 's.sella-turcica.M', 's.intersinus-septum.M', 's.internal-carotid-artery.R',
+      's.internal-carotid-artery.L', 's.carotid-prominence.R', 's.optic-nerve.R', 's.optic-canal.R', 's.vidian-canal.R', 's.foramen-rotundum.R', 's.planum-sphenoidale.M'],
     'frontal-recess': ['s.frontal-sinus.R', 's.frontal-ostium.R', 's.uncinate-process.R', 's.ethmoid-bulla.R', 's.middle-turbinate.R',
       's.lamina-papyracea.R', 's.fovea-ethmoidalis.R', 's.agger-nasi-cell.R'],
   };
@@ -2280,6 +2568,10 @@ async function main() {
     check('an unknown diorama name is ignored (specimen stage, empty hash)', g.lab === null && g.hash === '' && !g.pwn, JSON.stringify(g));
     await bad.context.close();
   }
+
+  /* ===== 4b. the sphenoid diorama: rules 0-9 of docs/ssb.md 6.1 ===== */
+  sphenoidRuleTests();
+  await sphenoidPageTests(browser, base);
 
   /* ===== 5. stage switch, reduced motion, phones ===== */
   {

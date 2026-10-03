@@ -23,7 +23,7 @@
    ============================================================= */
 import { loadGraph } from './graph.js?v=6a1cdded';
 import { createStore, parseHash } from './state.js?v=cd9bf710';
-import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=c2c1fadc';
+import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=6d449287';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
 import { mountCt } from './mode-ct.js?v=e9413c89';

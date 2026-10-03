@@ -16,7 +16,12 @@
             radii r, optionally tilted by `tilt` radians about the x axis
             (Wormald's building blocks, literally: n = 2 is an ellipsoid,
             larger n a rounded box); optional `zMin` truncates it below an
-            absolute RAS height (untilted solids only)
+            absolute RAS height and `zMax` above one (untilted solids only)
+     cyl    a straight capped cylinder { a: [x,y,z], b: [x,y,z], r } (canals,
+            nerves, vessels that a rule has to test: tubeGeometry has no
+            implicit test); optional `arc: { d: [x,y,z], half }` leaves only
+            the wall on the side away from direction d, i.e. a gap of half
+            angle `half` radians facing d (a dehiscence), mesh and test alike
    three.js is passed in (build(THREE, params)), never imported, so every
    diorama module stays loadable without WebGL — graph mode reads their
    PARAMS for the URL whitelist.
@@ -53,8 +58,10 @@ export function inside(s, x, y, z) {
         if (!pointInPoly(u, v, s.poly)) return false;
         return !(s.holes || []).some((h) => pointInPoly(u, v, h));
     }
+    if (s.kind === 'cyl') return cylInside(s, x, y, z);
     if (s.kind === 'super') {
         if (s.zMin !== undefined && z < s.zMin) return false;
+        if (s.zMax !== undefined && z > s.zMax) return false;
         let dx = x - s.c[0];
         let dy = y - s.c[1];
         let dz = z - s.c[2];
@@ -74,6 +81,31 @@ export function inside(s, x, y, z) {
     return false;
 }
 
+/* Distance along and across the axis of a cylinder, for a point. */
+export function cylFrame(s, x, y, z) {
+    const ab = [s.b[0] - s.a[0], s.b[1] - s.a[1], s.b[2] - s.a[2]];
+    const len = Math.hypot(...ab);
+    const u = ab.map((v) => v / len);
+    const ap = [x - s.a[0], y - s.a[1], z - s.a[2]];
+    const t = ap[0] * u[0] + ap[1] * u[1] + ap[2] * u[2];
+    const perp = [ap[0] - t * u[0], ap[1] - t * u[1], ap[2] - t * u[2]];
+    return { t, len, u, perp, rho: Math.hypot(...perp) };
+}
+
+function cylInside(s, x, y, z) {
+    const f = cylFrame(s, x, y, z);
+    if (f.t < 0 || f.t > f.len || f.rho > s.r) return false;
+    if (s.arc && f.rho > 1e-9) {
+        const d = s.arc.d;
+        const dl = Math.hypot(...d);
+        const dp = d.map((v, i) => v / dl - f.u[i] * ((d[0] * f.u[0] + d[1] * f.u[1] + d[2] * f.u[2]) / dl));
+        const dpl = Math.hypot(...dp) || 1;
+        const cos = (f.perp[0] * dp[0] + f.perp[1] * dp[1] + f.perp[2] * dp[2]) / (f.rho * dpl);
+        if (Math.acos(Math.max(-1, Math.min(1, cos))) < s.arc.half) return false;
+    }
+    return true;
+}
+
 /* Axis-aligned RAS bounds of a solid (for fast rejection). */
 export function bounds(s) {
     if (s.kind === 'box') return { min: s.min.slice(), max: s.max.slice() };
@@ -85,10 +117,15 @@ export function bounds(s) {
         const order = s.axis === 'x' ? [2, 0, 1] : s.axis === 'y' ? [0, 2, 1] : [0, 1, 2];
         return { min: order.map((i) => lo[i]), max: order.map((i) => hi[i]) };
     }
+    if (s.kind === 'cyl') {
+        const e = [0, 1, 2].map((i) => s.r * Math.sqrt(Math.max(0, 1 - ((s.b[i] - s.a[i]) / Math.hypot(...[0, 1, 2].map((j) => s.b[j] - s.a[j]))) ** 2)));
+        return { min: [0, 1, 2].map((i) => Math.min(s.a[i], s.b[i]) - e[i]), max: [0, 1, 2].map((i) => Math.max(s.a[i], s.b[i]) + e[i]) };
+    }
     const reach = s.tilt ? Math.hypot(s.r[1], s.r[2]) : null;
     const r = [s.r[0], reach || s.r[1], reach || s.r[2]];
     const b = { min: s.c.map((c, i) => c - r[i]), max: s.c.map((c, i) => c + r[i]) };
     if (s.zMin !== undefined) b.min[2] = Math.max(b.min[2], s.zMin);
+    if (s.zMax !== undefined) b.max[2] = Math.min(b.max[2], s.zMax);
     return b;
 }
 
@@ -148,6 +185,7 @@ export function geometry(THREE, s, opts = {}) {
         return g;
     }
     if (s.kind === 'prism') return prismGeometry(THREE, s);
+    if (s.kind === 'cyl') return cylGeometry(THREE, s);
     return superGeometry(THREE, s, opts);
 }
 
@@ -168,6 +206,42 @@ function prismGeometry(THREE, s) {
     return g;
 }
 
+/* A cylinder from a to b; with `arc`, an open C-shaped wall (double-sided in
+   the lab) whose gap faces d. The reference direction of the arc is the
+   projection of d on the plane across the axis, so the mesh and cylInside
+   agree. */
+function cylGeometry(THREE, s) {
+    const a = new THREE.Vector3(...s.a);
+    const b = new THREE.Vector3(...s.b);
+    const len = a.distanceTo(b);
+    const axis = b.clone().sub(a).normalize();
+    const seg = 40;
+    let g;
+    let rot = 0;
+    if (s.arc) {
+        const half = s.arc.half;
+        /* CylinderGeometry puts a vertex at (r sin t, r cos t); with the gap centred on t = 0 the wall runs from `half` round to 2 pi - `half` */
+        g = new THREE.CylinderGeometry(s.r, s.r, len, seg, 1, true, half, Math.PI * 2 - 2 * half);
+        const d = new THREE.Vector3(...s.arc.d).normalize();
+        const dp = d.clone().sub(axis.clone().multiplyScalar(d.dot(axis))).normalize();
+        /* where the cylinder's own +z falls, after aligning +y with the axis */
+        const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis);
+        const z0 = new THREE.Vector3(0, 0, 1).applyQuaternion(q);
+        const x0 = new THREE.Vector3(1, 0, 0).applyQuaternion(q);
+        /* rotate so the gap is centred on dp */
+        const th = Math.atan2(dp.dot(x0), dp.dot(z0));
+        rot = th;
+        g.rotateY(rot);
+        g.applyQuaternion(q);
+    } else {
+        g = new THREE.CylinderGeometry(s.r, s.r, len, seg, 1, false);
+        g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), axis));
+    }
+    const mid = a.clone().add(b).multiplyScalar(0.5);
+    g.translate(mid.x, mid.y, mid.z);
+    return g;
+}
+
 /* Superellipsoid surface with analytic normals (no seam artefacts). */
 function superGeometry(THREE, s, { segU = 40, segV = 24 } = {}) {
     const e = 2 / s.n;
@@ -181,8 +255,13 @@ function superGeometry(THREE, s, { segU = 40, segV = 24 } = {}) {
         const t = Math.max(-1, Math.min(1, (s.zMin - s.c[2]) / c));
         v0 = Math.asin(spow(t, 1 / e));
     }
+    let v1 = Math.PI / 2;
+    if (s.zMax !== undefined && s.zMax < s.c[2] + c) {
+        const t = Math.max(-1, Math.min(1, (s.zMax - s.c[2]) / c));
+        v1 = Math.asin(spow(t, 1 / e));
+    }
     for (let j = 0; j <= segV; j++) {
-        const v = v0 + (j / segV) * (Math.PI / 2 - v0);
+        const v = v0 + (j / segV) * (v1 - v0);
         for (let i = 0; i <= segU; i++) {
             const u = -Math.PI + (i / segU) * Math.PI * 2;
             const x = a * spow(Math.cos(v), e) * spow(Math.cos(u), e);

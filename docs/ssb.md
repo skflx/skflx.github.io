@@ -494,7 +494,7 @@ hatched (and named in the HUD). A part's `userData.look` names its tissue
 space / ghost / translucent flags, and the lab draws it with the procedural
 material of that kind (§7.4) — a diorama never names a colour. Geometry primitives
 (`dioramas/kit.js`): superellipsoid air cells (Wormald's building blocks,
-literally), profile extrusions (prisms) for plates and the skull base, tubes
+literally), profile extrusions (prisms) for plates and the skull base, cylinders (`cyl`, with an implicit test) for canals and nerves, tubes
 for vessels and pathways — each kind has one implicit `inside()` test and
 one mesh builder, so anything computed over a diorama sees exactly what is
 drawn. A diorama may be placed in context by a similarity transform onto
@@ -527,6 +527,15 @@ three attachments. The supraorbital ethmoid cell is posterolateral to the
 pathway rather than pushing it (the graph states a relation, not a push).
 
 ### 6.1 The `sphenoid` diorama (D1 spec)
+
+*Built (D2) as `js/ssb/dioramas/sphenoid.js`, `kit.js` gaining a `cyl`
+solid (canals and nerves need an implicit test; an optional `arc` leaves a
+dehiscence gap, mesh and test alike) and a `zMax` for `super`. Two readings of
+the spec: rule 2's "segment" is judged where the sinus reaches it (parasellar
+from sellar, paraclival from postsellar; in presellar the ICA lies behind
+all air, share 0 whatever the toggle, which rule 9's table does not list),
+and rule 3's distance is to the parasellar canal wall. The tests are
+`tools/test-ssb.mjs --only lab`.*
 
 *First pass by a Sonnet-class model; amended by Opus at verification
 (2026-10-03): rule 4's type 4 corrected (it was inverted), "facing air"
