@@ -213,6 +213,28 @@ No open dataset or model segments ethmoid cells, the uncinate or frontal
 recess cells (phase-0 research, 2026-09); automatic tools stop at whole
 maxillary/frontal sinus, nasal cavity, orbit, optic nerve and ICA. The
 surgical layer is manual segmentation whichever CT is chosen.
+
+**Served as a standard specimen (owner, 2026-10-03, O6).** The first
+release teaches normal anatomy, so what the page serves is the UW head
+*standardized*: its right half mirrored onto the left, the nasal septum
+centred, and a thin midline plate wherever a paired sinus's air would
+otherwise cross the midline. It is not a real head (no head is
+symmetric), and the page says so wherever the volume is shown. Why the
+right half: in the as-scanned head the left side has the anomalies — the
+left sphenoid ostium is closed by mucosa, the left nasal cavity holds
+under half the right's air by label volume (2.8 vs 6.1 cm³, with a left inferior
+turbinate twice the right's volume: compensatory hypertrophy against a
+septum bowed slightly right), the left floor wall unit is a third of the
+right's, and the left ethmoid bulla is unlabelled. The septum is centred,
+not rebuilt: each column keeps its measured thickness (median 4 mm
+mucosa to mucosa, the swell body ~10 mm), only its midline offset (at
+most ~2 mm here) is removed, so the septal swell body and the thin
+olfactory septum stay as scanned. The as-scanned volume stays the
+pipeline's input (reproducible from the UW crawl, or from git at the
+commit WP N1 names) and becomes a variant later — a septal deviation, a
+closed ostium, asymmetric sinuses — rather than the default. Method and
+acceptance: roadmap WP N1.
+
 Whatever is chosen, `ssb/LICENSE-data.md` records dataset, case id,
 license and attribution for every derived file. Faces are removed: the
 volume is cropped to the region and soft tissue outside a dilated bone
@@ -632,9 +654,16 @@ grid at 0.5 mm, as the frontal-recess rules are; none written in):
    HUD says what was degraded): with `pneum` = `conchal`, `ica_protrusion`,
    `ica_dehiscence`, `optic_type` 2–3, `optic_dehiscence`, `vidian_type` 1,
    `lateral_recess`, `clinoid_pneum` and `septum_on_ica` have no effect;
-   `optic_type` 3 needs at least `sellar` (below it, type 2 is drawn). A
+   with `presellar`, `ica_protrusion` and `ica_dehiscence` have no effect
+   (the air ends in front of the sella's anterior wall, so it never reaches
+   the parasellar carotid: a share of 0 is the anatomy, not a bug — added
+   at the D2 checkpoint, 2026-10-03);
+   `optic_type` 3 needs at least `sellar` (below it, type 2 is drawn). "No
+   effect" means the parameter takes its default and the HUD names it. A
    test sets each such pair and checks the geometry equals the degraded
-   configuration's.
+   configuration's. Rule 2 judges a carotid segment only where the class
+   reaches it: the parasellar segment from `sellar`, the paraclival from
+   `postsellar`.
 
 ## 7. Runtime architecture
 
@@ -915,6 +944,11 @@ O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists
 - **O3 — Content authoring split.** Sonnet drafts the content backlog and
   checks citations, Opus reviews adversarially; Opus keeps authoring
   anything that places geometry. Recommended: yes. **Decided: yes.**
+- **O6 — Normal before variant (owner, 2026-10-03).** The first release
+  is a working *normal* atlas and endoscope: as symmetric and standard as
+  the data allow, even though no real head is; septal deviation, ostium
+  heights and other asymmetries come later as variants. Implemented as the
+  standard specimen of §5.1 (right half mirrored, septum centred; WP N1).
 
 1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
    needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.

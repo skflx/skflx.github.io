@@ -44,9 +44,15 @@ except for the two cross-lane waits marked ⏸.
 
 | Lane | WPs, in order |
 |---|---|
-| **A — content and dioramas** | **ST0d** content corrections → **D2** sphenoid diorama build |
-| **B — pipeline, then the overlay** | **E1b** nostril fulcrum → ⏸ *wait for ST0d merged* (it adds the `lm.incisive-canal` id that `check-data` requires) → **ST2b** floor chart, ostium margin, incisive canal → **ST1b** open airway lining → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
-| **C — scope runtime** | **E2b** exposure → ⏸ *wait for E1b merged* → **E3** collision + HUD → **E4** CT along the scope |
+| **A — content and dioramas** | ~~ST0d~~ → ~~D2~~ → **D2a** presellar in rule 9 (after #100 merges) |
+| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ⏸ *wait for #101 and #102 merged* → **N1** standard specimen → **ST2c** floor mucosa → **ST1b** open airway lining → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
+| **C — scope runtime** | ~~E2b~~ → **E3**: apply CP-2a's required change on #102 (lazy, shared volume) → **E4** CT along the scope (also: exposure on settle, CP-2a) |
+
+*Re-planned at CP-2a (2026-10-03, `docs/ssb-roadmap.md` §4):* the owner
+asked for a normal, symmetric first release (O6). N1 builds it; every
+left-side escalation of this wave (left ostium reach, left ostium margin,
+left floor unit) is resolved by it, so do not work around a left-side gap
+in the as-scanned data — report it.
 
 Not yours: **E5** station poses and the **ST6** nose spec (Opus).
 
@@ -59,10 +65,20 @@ do not merge. Where the lane waits on another lane's WP, check whether it
 is merged; if not, stop and report.
 ```
 
+## Merging lanes
+
+The stamps (`?v=` in `ssb.html`, `js/ssb/main.js` and the module imports,
+`js/ssb/stamps.js`) conflict whenever two lanes touch `js/`. Resolve a
+stamp-only conflict by taking either side, then `node
+tools/stamp-assets.mjs` and `node tools/check-data.mjs`; never hand-pick
+hashes. Branch each WP from current `master`; stack on another lane's
+branch only when the WP truly needs its files, and say so in the PR.
+
 ## Traps the verification found (read before starting)
 
-- **`lm.naris` is wrong until E1b lands** (the left point is inside the
-  septum). Anything that tests scope reachability waits for E1b.
+- **The as-scanned left side is anomalous** (closed sphenoid ostium, small
+  floor unit, missing bulla label). Until N1 lands, a left-side failure is
+  expected; N1 replaces the left with the right's mirror.
 - **E3's Accept is a search, not CP-1's pose.** CP-1's pose (yaw -3, pitch
   15) is blocked by its own rule. Find the pose by searching yaw and pitch
   on a 1° grid, then pin what you find. The shaft is 4 mm (radius 2.0, O4).
