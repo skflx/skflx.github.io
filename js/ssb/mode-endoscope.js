@@ -31,7 +31,14 @@ const DRAG_DEG_PER_PX = 0.15;
 const WHEEL_MM = 1;
 const NEAR_MM = 0.4;
 const SPOT = { intensity: 350, angle: 0.72, penumbra: 0.55, decay: 2 };
-const FILL = 0.1;                 /* hemisphere fill left on in the scope: the lining beyond the light is dim, not black */
+/* Automatic exposure, as a camera control unit does: the spotlight's intensity is K * D^2, D the median distance to
+   the lining along the view and four rays 15 degrees off it, so a surface at the median range is lit the same at any
+   distance. K is EXPOSURE_D0 as a range: the intensity SPOT.intensity would give at that D. Tuned against the Accept
+   in tools/test-ssb.mjs (under 10 % of the field clipped, median luminance 40-200 at three poses) together with FILL;
+   the clamp keeps a blind pose (no hit) and a mucosal contact legible. */
+const EXPOSURE_D0 = 16;
+const EXPOSURE = { K: SPOT.intensity / (EXPOSURE_D0 * EXPOSURE_D0), floorMm: 3, farMm: 150, offAxisDeg: 15, min: 10, max: 2000 };
+const FILL = 0.5;                /* hemisphere fill left on in the scope: the lining beyond the light is dim, not black */
 const KEY_STEP = { depth: 1, yaw: 2, pitch: 2, roll: 5 };
 
 /* opts: { stage, store, graph, specimen }
@@ -46,6 +53,10 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let spot = null;
     let stopFrames = null;
     let renders = 0;
+    let exposed = null;                  /* the pose key the spotlight was last exposed for */
+    let lastD = null;
+    let lastMs = 0;
+    const raycaster = new THREE.Raycaster();
     let lastPose = null;                 /* the pose to come back to when the Scope pill is pressed again */
 
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
@@ -84,7 +95,36 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             camera.updateProjectionMatrix();
         }
         camera.updateMatrixWorld(true);
+        expose(p);
         if (redraw) stage.requestRender();
+    }
+
+    /* The distance from the tip to the lining ahead: the median hit over five rays against the visible air-space
+       surfaces drawn as mucosa (the air spaces and the septal mucosa), floored at 3 mm; no hit at all reads as the far limit. Only when the
+       pose changes: a frame that did not move the scope costs nothing. */
+    function expose(p) {
+        if (!spot) return;
+        const t0 = performance.now();
+        const key = `${p.side},${p.depth},${p.yaw},${p.pitch},${p.roll},${p.lens}`;
+        if (key === exposed) return;
+        exposed = key;
+        const targets = [];
+        stage.scene.updateMatrixWorld(true);
+        stage.scene.traverse((o) => { if (o.isMesh && o.visible && o.userData && o.userData.drawn === 'mucosa') targets.push(o); });
+        const q = camera.quaternion;
+        const a = EXPOSURE.offAxisDeg * Math.PI / 180;
+        const dirs = [[0, 0], [Math.sin(a), 0], [-Math.sin(a), 0], [0, Math.sin(a)], [0, -Math.sin(a)]]
+            .map(([x, y]) => new THREE.Vector3(x, y, -Math.sqrt(1 - x * x - y * y)).applyQuaternion(q));
+        raycaster.near = 0;
+        raycaster.far = EXPOSURE.farMm;
+        const hits = dirs.map((d) => {
+            raycaster.set(camera.position, d);
+            const h = raycaster.intersectObjects(targets, false);
+            return h.length ? h[0].distance : EXPOSURE.farMm;
+        }).sort((x, y) => x - y);
+        lastD = Math.max(EXPOSURE.floorMm, hits[2]);
+        lastMs = performance.now() - t0;
+        spot.intensity = Math.min(EXPOSURE.max, Math.max(EXPOSURE.min, EXPOSURE.K * lastD * lastD));
     }
 
     function onFrame() {
@@ -111,6 +151,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             camera.add(spot, spot.target);
         }
         spot.visible = true;
+        exposed = null;
         specimen.setBone('hidden');
         specimen.setMucosa(true, { inside: true });
         if (!stopFrames) stopFrames = stage.onFrame(onFrame);
@@ -152,7 +193,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         if (state.scope) lastPose = state.scope;
         if (state.scope !== prev.scope) sync();
     });
-    specimen.onChange(sync);          /* the specimen loading, or a layer change, may make the scope available */
+    specimen.onChange(() => { exposed = null; sync(); });          /* the specimen loading, or a layer change, may make the scope available */
 
     /* ---------------- pose changes ---------------- */
 
@@ -251,6 +292,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             const dir = (x, y, z) => toRas(new THREE.Vector3(x, y, z).applyQuaternion(q));
             return { position: toRas(camera.position), view: dir(0, 0, -1), up: dir(0, 1, 0), fov: camera.fov, near: camera.near };
         },
+        get exposure() { return { distance: lastD, intensity: spot ? spot.intensity : null, ms: lastMs }; },
         lights: () => ({ spot: spot ? { on: spot.visible, intensity: spot.intensity, decay: spot.decay, angle: spot.angle } : null,
             hemi: stage.lights.hemi.intensity, head: stage.lights.head.intensity }),
         controlsEnabled: () => stage.controls.enabled,
