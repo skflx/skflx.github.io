@@ -201,9 +201,10 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `#scope=`) — a first-person rigid scope as a camera pose over the
   Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a
   0 / 30 / 45 / 70° lens with a camera head that stays upright (no image flip through the zenith) and a light-post
-  indicator, a spotlight at the tip, the lining drawn as mucosa from
-  inside. No collision or HUD yet; near surfaces saturate the image (E2b)
-  and ostia and choanae are drawn as closed membranes (ST1b).
+  indicator, a spotlight at the tip with automatic exposure (K·D² from raycasts
+  to the lining), the lining drawn as mucosa from inside. Bone
+  stops the shaft (4 or 2.7 mm), mucosal contact is reported and a proximity
+  HUD reads the distance fields at the tip; ostia and choanae are drawn as closed membranes (ST1b).
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -239,8 +240,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
 backlog). Wave 1 was verified by Opus on 2026-10-03 (roadmap §4); wave 2
-starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's fulcrum, exposure,
-collision, HUD and stations and a soft-tissue layer
+starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's
+stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `sphenoid` diorama; procedure mode and
