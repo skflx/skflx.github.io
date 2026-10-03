@@ -178,8 +178,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   Soft tissue is bone-window-limited, so it is derived, swept or parametric
   (`docs/ssb.md` §5.7): stage D (`softtissue.py`) so far gives the septal
   mucosa surfaces and charts (the `soft` pack), the choanal arch, the
-  middle turbinate heads and the provisional nostrils `lm.naris.R/.L`
-  (misplaced — internal-valve level, the left one inside the septum; E1b),
+  middle turbinate heads; the nostrils `lm.naris.R/.L` come from
+  `nose.py` (the vestibule lumen of the unmasked stack),
   and `sweeps_soft.py` turns the waypoints in `uw/sweeps-soft.json` into
   the septal-branch, nasopalatine and AEA-septal sweeps (all inferred,
   schematic courses; first-pass waypoints verified 2026-10-03 with
