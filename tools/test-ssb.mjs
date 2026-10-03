@@ -87,7 +87,7 @@ import path from 'path';
 import zlib from 'zlib';
 import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 import { validate, contentFiles } from './ssb-content.mjs';
-import { buildFixture, fixtureFiles } from './ssb-fixture-ct.mjs';
+import { buildFixture, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE } from './ssb-fixture-ct.mjs';
 
 /* The browser modules under js/ have no package "type", so Node would reparse
    them and warn. Import them as data: URLs instead. The three below need
@@ -1843,6 +1843,155 @@ function scopeUnitTests() {
   check('state: entering the scope leaves CT; leaveStage() clears it', st.get().ct === null && st.get().scope && (st.leaveStage(), st.get().scope === null && st.hash() === ''), st.hash());
   st.applyHash('#scope=R,40,0,0,0,0');
   check('state: applyHash adopts a pasted scope link and drops it when the hash has none', st.get().scope && (st.applyHash(''), st.get().scope === null));
+
+  scopeCollisionTests();
+}
+
+
+/* ---------------- Endoscope: collision and the proximity HUD (E3, Node only) ---------------- */
+
+function scopeCollisionTests() {
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const len = (a) => Math.hypot(...a);
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const R4 = SC.SHAFT_RADII['4'];
+  const R27 = SC.SHAFT_RADII['2.7'];
+
+  /* ---- the fixture: a bony septum and a sinus, analytic distances ---- */
+  const fxVol = createVolume({ header: parseHeader(FX.meta), ct: FX.ct });
+  const fxAt = (p) => fxVol.sample(p[0], p[1], p[2]);
+  const wallF = [6, 10, 0];
+  const through = { side: 'R', depth: 20, yaw: -45, pitch: 0, roll: 0, lens: 0 };      /* medially, into the midline septum (bone at |x| < 0.6) */
+  const hit = SC.shaftClearance(wallF, through, fxAt, R4);
+  const free = SC.shaftClearance(wallF, { ...through, depth: hit.depth }, fxAt, R4);
+  const past = SC.shaftClearance(wallF, { ...through, depth: hit.depth + 0.5 }, fxAt, R4);
+  const toWall = 6 / Math.SQRT1_2;
+  check('scope collision (fixture): a pose through a solid wall clamps before it — to the last free 0.5 mm sample, not past the wall on the axis',
+    hit.blocked && hit.depth > 0 && hit.depth < toWall && !free.blocked && past.blocked && past.depth === hit.depth && hit.depth % 0.5 === 0, JSON.stringify([hit, free, past, toWall]));
+  const sinus = { side: 'R', depth: 3, yaw: 0, pitch: 0, roll: 0, lens: 0 };
+  const inAir = SC.shaftClearance([10, 3, -4], sinus, fxAt, R4);
+  check('scope collision (fixture): a pose in air is untouched (depth unchanged, not blocked)', !inAir.blocked && inAir.depth === 3, JSON.stringify(inAir));
+  const d0 = SC.shaftClearance(wallF, through, fxAt, 0).depth;
+  const d27 = SC.shaftClearance(wallF, through, fxAt, R27).depth;
+  check('scope collision (fixture): the ring matters — a thicker shaft clamps earlier (axis only > 2.7 mm > 4 mm)', d0 > d27 && d27 > hit.depth, `${d0} ${d27} ${hit.depth}`);
+  const nan = SC.shaftClearance(wallF, through, () => NaN, R4);
+  check('scope collision: NaN (outside the volume) and 0 (no data) never block', !nan.blocked && nan.depth === 20 && !SC.shaftClearance(wallF, through, () => 0, R4).blocked, JSON.stringify(nan));
+  check('scope collision: blocked at the first sample leaves 1.5 mm free (the shaft cannot start inside bone)',
+    (() => { const c = SC.shaftClearance(wallF, through, () => 255, R4); return c.blocked && c.depth === 1.5; })());
+
+  /* ---- the HUD: distance fields ---- */
+  const sdfBytes = FX.sdf;
+  const field = SC.sdfSampler(FX.meta.sdf, sdfBytes);
+  const { center, radius } = SDF_FX_SPHERE;
+  let worst = 0;
+  let seed = 5;
+  const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+  for (let i = 0; i < 300; i++) {
+    const p = [-20 + rnd() * 40, -18 + rnd() * 36, -15 + rnd() * 40];
+    const truth = Math.min(25, Math.max(0, len(sub(p, center)) - radius));
+    worst = Math.max(worst, Math.abs(field(p) - truth));
+  }
+  check('scope HUD: a distance field read at the tip matches the analytic distance to the sphere within one voxel (1 mm), worst error', worst <= 1, `worst ${worst.toFixed(3)} mm`);
+  check('scope HUD: the field is 0 inside the structure and the clamp (25 mm) outside the grid', field(center) === 0 && field([500, 0, 0]) === 25 && field([center[0] + radius + 40, center[1], center[2]]) === 25);
+  const rows = SC.hudRows([{ id: 'far', at: () => 25 }, { id: 'near', at: () => 1.5 }, { id: 'mid', at: () => 9 }], [0, 0, 0]);
+  check('scope HUD: rows come nearest first; no fields, no rows (the HUD hides)', rows.map((r) => r.id).join() === 'near,mid,far' && SC.hudRows([], [0, 0, 0]).length === 0);
+
+  /* ---- the real specimen: the volume, the fulcrum, the searches ---- */
+  const meta = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/ct/ct.json'), 'utf8'));
+  const vol = createVolume({ header: parseHeader(meta), ct: new Uint8Array(zlib.gunzipSync(fs.readFileSync(path.join(ROOT, 'ssb/ct/ct.u8.gz')))) });
+  const ctAt = (p) => vol.sample(p[0], p[1], p[2]);
+  const lms = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/landmarks.json'), 'utf8'));
+  const F = { R: lms['lm.naris.R'], L: lms['lm.naris.L'] };
+  const pose = (side, depth, yaw, pitch, roll = 0, lens = 0) => ({ side, depth, yaw, pitch, roll, lens });
+  const clear = (p, r = R4) => SC.shaftClearance(F[p.side], p, ctAt, r);
+
+  const deep = clear(pose('R', 100, 0, 0));
+  check('scope collision (specimen): straight posterior to depth 100 is stopped by bone at the last free depth (85 mm for the 4 mm shaft, 86 for 2.7) — a regression pin',
+    deep.blocked && deep.depth === 85 && !clear(pose('R', 85, 0, 0)).blocked && clear(pose('R', 85.5, 0, 0)).depth === 85 && clear(pose('R', 100, 0, 0), R27).depth === 86, JSON.stringify(deep));
+  const straight = clear(pose('R', 40, 0, 0));
+  check('scope collision (specimen): mucosa does not block, and its length is reported (R 40, straight: free, 25 mm of shaft in mucosa — a regression pin)', !straight.blocked && straight.contactMm === 25, JSON.stringify(straight));
+
+  /* Search yaw and pitch on a 1 degree grid for a free pose whose tip is within `tol` of the target; the closest wins. */
+  const reach = (side, target, r) => {
+    let best = null;
+    let near = 0;
+    for (let yaw = -45; yaw <= 45; yaw++) {
+      for (let pitch = -45; pitch <= 45; pitch++) {
+        const base = pose(side, 120, yaw, pitch);
+        const cl = SC.shaftClearance(F[side], base, ctAt, r);
+        const d = SC.shaftDir(base);
+        const t = Math.round(Math.max(0, Math.min(cl.depth, dot(sub(target, F[side]), d))) * 2) / 2;
+        const p = { ...base, depth: t };
+        if (SC.shaftClearance(F[side], p, ctAt, r).blocked) continue;
+        const dist = len(sub(target, SC.tipOf(F[side], p)));
+        if (dist <= 2.5) near += 1;
+        if (!best || dist < best.dist) best = { yaw, pitch, depth: t, dist };
+      }
+    }
+    return { ...best, near };
+  };
+  const sphR = reach('R', lms['lm.sphenoid-ostium.R'], R4);
+  check('scope collision (specimen): right sphenoid ostium — a 1 degree search finds a free pose with the tip within 2.5 mm; pinned: yaw -3, pitch 19, depth 58.5 (2.03 mm)',
+    sphR.dist <= 2.5 && sphR.yaw === -3 && sphR.pitch === 19 && sphR.depth === 58.5, JSON.stringify(sphR));
+  const sphL = reach('L', lms['lm.sphenoid-ostium.L'], R4);
+  const sphL27 = reach('L', lms['lm.sphenoid-ostium.L'], R27);
+  /* E3's Accept says 2.5 mm per side; with E1b's fulcrum the 4 mm shaft gets no closer than 3.31 mm on the left (the verification's 2.4 mm used the
+     superseded fulcrum). This pins the measured gap and that the 2.7 mm shaft closes it; it is NOT the Accept — an Opus decision (see the roadmap). */
+  check('scope collision (specimen): OPEN — left sphenoid ostium, 4 mm shaft: the closest free tip is 3.31 mm away (yaw -2, pitch 24, depth 63), so the 2.5 mm Accept is not met; the 2.7 mm shaft reaches 1.55 mm (yaw 0, pitch 24, depth 64)',
+    sphL.dist > 2.5 && near(sphL.dist, 3.31, 0.02) && sphL.yaw === -2 && sphL.pitch === 24 && sphL.depth === 63 && sphL27.dist <= 2.5 && near(sphL27.dist, 1.55, 0.02) && sphL27.yaw === 0 && sphL27.pitch === 24 && sphL27.depth === 64, JSON.stringify([sphL, sphL27]));
+  const beside = [[0, 0, 5], [-5, 0, 0]].map((off) => {
+    const T = lms['lm.sphenoid-ostium.R'];
+    const P = [T[0] + off[0], T[1] + off[1], T[2] + off[2]];
+    const dv = sub(P, F.R);
+    let best = null;
+    for (let yaw = -45; yaw <= 45; yaw++) for (let pitch = -45; pitch <= 45; pitch++) {
+      const a = Math.acos(Math.min(1, dot(SC.shaftDir(pose('R', 1, yaw, pitch)), dv) / len(dv)));
+      if (!best || a < best.a) best = { yaw, pitch, a };
+    }
+    const req = pose('R', Math.round(len(dv) * 2) / 2, best.yaw, best.pitch);
+    const c = clear(req);
+    return { req, c, ok: c.blocked && c.depth < req.depth && !clear({ ...req, depth: c.depth }).blocked && clear({ ...req, depth: c.depth + 0.5 }).blocked };
+  });
+  check('scope collision (specimen): a pose aimed 5 mm beside the sphenoid ostium (above it, lateral to it) clamps at the last free depth, which is free, with the next half millimetre blocked',
+    beside.every((b) => b.ok), JSON.stringify(beside));
+
+  /* Frontal: a 70 degree lens reaches the ostium, a straight scope does not. */
+  const losFree = (a, b) => { const n = Math.ceil(len(sub(b, a)) / 0.5); for (let i = 0; i <= n; i++) { const t = i / n; if (ctAt([0, 1, 2].map((k) => a[k] + (b[k] - a[k]) * t)) >= SC.BONE_LEVEL) return false; } return true; };
+  const sees = (p) => {
+    const T = lms[`lm.frontal-ostium.${p.side}`];
+    const tip = SC.tipOf(F[p.side], p);
+    const dist = len(sub(T, tip));
+    const v = SC.frameOf(p).v;
+    const ang = Math.acos(Math.max(-1, Math.min(1, dot(v, sub(T, tip).map((x) => x / dist))))) * 180 / Math.PI;
+    return { free: !clear(p).blocked, ang, dist, los: losFree(tip, T) };
+  };
+  const frontal = { R: pose('R', 36, -2, 33, 0, 70), L: pose('L', 41, -10, 44, 15, 70) };
+  for (const side of ['R', 'L']) {
+    const r = sees(frontal[side]);
+    check(`scope collision (specimen): the ${side === 'R' ? 'right' : 'left'} frontal ostium from a 70 degree lens — a free pose (${JSON.stringify(frontal[side]).replace(/"/g, '')}) looks within 15 degrees of it, a bone-free line of sight of at most 25 mm`,
+      r.free && r.ang <= 15 && r.dist <= 25 && r.los, JSON.stringify(r));
+  }
+  let straightReach = 0;
+  for (const side of ['R', 'L']) {
+    for (let yaw = -45; yaw <= 45; yaw++) {
+      for (let pitch = -45; pitch <= 45; pitch++) {
+        const base = pose(side, 120, yaw, pitch, 0, 0);
+        const cl = SC.shaftClearance(F[side], base, ctAt, R4).depth;
+        for (let depth = Math.max(0, cl - 40); depth <= cl; depth += 1) {
+          const r = sees({ ...base, depth });
+          if (r.dist <= 25 && r.ang <= 15 && r.los && r.free) straightReach += 1;
+        }
+      }
+    }
+  }
+  check('scope collision (specimen): no lens-0 pose, either side, reaches a frontal ostium (free, within 15 degrees, bone-free line of sight, 25 mm or less)', straightReach === 0, `${straightReach} poses`);
+
+  /* the HUD at a pose: pinned so a change to the fields shows */
+  const nearPose = pose('R', 74, 3, 24);
+  const hudOf = (p) => SC.hudRows(Object.entries(meta.sdf.fields).map(([id, f]) => ({ id, at: SC.sdfSampler(meta.sdf, new Uint8Array(zlib.gunzipSync(fs.readFileSync(path.join(ROOT, 'ssb/ct', f.file))))) })), SC.tipOf(F[p.side], p));
+  const near3 = hudOf(nearPose);
+  check('scope HUD (specimen): R 74, 3, 24 is free and 2.15 mm from the skull base (nearest first, the others farther) — the pose used by the page test to check the 3 mm signal rule',
+    !clear(nearPose).blocked && near3[0].id === 's.anterior-cranial-fossa' && near(near3[0].mm, 2.15, 0.05) && near3[1].mm > 3, JSON.stringify(near3.slice(0, 2)));
 }
 
 /* ---------------- Endoscope: the page ---------------- */

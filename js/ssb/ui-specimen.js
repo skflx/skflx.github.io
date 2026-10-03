@@ -17,7 +17,7 @@
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
 import { PLANES } from './volume.js?v=fb9aaa68';
-import { CT_PLANES } from './state.js?v=cd9bf710';
+import { CT_PLANES } from './state.js?v=82ca4b88';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
