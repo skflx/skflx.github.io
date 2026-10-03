@@ -681,7 +681,7 @@ poses (interpolate pose parameters, not the camera), deep link
 `#scope=t.<id>`. Accept: every station's pose is collision-free and its
 first `shows` structure's centroid is inside the view frustum.
 
-### ST0d — Content corrections        [ready] · Sonnet · depends: — (folds in ST0c)
+### ST0d — Content corrections        [review: PR open — ST0 findings applied, 4 sources re-checked] · Sonnet · depends: — (folds in ST0c)
 Goal: apply the verification's ST0 findings; check the sources it did not
 read.
 Read: this file §4 verification, "ST0 content"; `docs/authoring-ssb.md`
