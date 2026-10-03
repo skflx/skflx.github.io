@@ -1965,6 +1965,31 @@ async function scopeTests(browser, base) {
     await context.close();
   }
 
+  /* ===== exposure: legible at every distance (E2b) ===== */
+  for (const hash of ['#scope=R,52,-3,15,0,0', '#scope=R,42,-3,15,0,0', '#scope=R,40,0,15,0,30', '#scope=R,40,0,0,0,0']) {
+    const { context, page } = await openSpecimen(browser, base, hash);
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 4);
+    const ex = await spec(page, () => window.__ssb.scope.exposure);
+    const { img } = await canvasImage(page);
+    const R = Math.min(img.width, img.height) / 2;
+    const lums = [];
+    for (let y = 0; y < img.height; y += 2) {
+      for (let x = 0; x < img.width; x += 2) {
+        if (Math.hypot(x - img.width / 2, y - img.height / 2) > R * 0.97) continue;
+        const c = img.at(x, y);
+        lums.push(0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]);
+      }
+    }
+    lums.sort((a, b) => a - b);
+    const sat = lums.filter((l) => l >= 250).length / lums.length;
+    const median = lums[Math.floor(lums.length / 2)];
+    console.log(`  [E2b] ${hash} D=${ex.distance && ex.distance.toFixed(1)} intensity=${ex.intensity && ex.intensity.toFixed(0)} raycast=${ex.ms.toFixed(1)}ms saturated=${(sat * 100).toFixed(1)}% median=${median.toFixed(0)}`);
+    check(`scope: exposure at ${hash} — under 10 % of the field saturated (luminance >= 250), median luminance 40-200`,
+      ex.distance !== null && sat < 0.1 && median >= 40 && median <= 200, `D ${ex.distance}, saturated ${(sat * 100).toFixed(1)} %, median ${median.toFixed(0)}`);
+    await context.close();
+  }
+
   /* ===== a pasted link, hostile links, the other stages ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '#scope=L,30,10,0,0,30');

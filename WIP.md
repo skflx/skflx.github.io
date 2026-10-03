@@ -200,9 +200,9 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `#scope=`) — a first-person rigid scope as a camera pose over the
   Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a
   0 / 30 / 45 / 70° lens with a camera head that stays upright (no image flip through the zenith) and a light-post
-  indicator, a spotlight at the tip, the lining drawn as mucosa from
-  inside. No collision or HUD yet; near surfaces saturate the image (E2b)
-  and ostia and choanae are drawn as closed membranes (ST1b).
+  indicator, a spotlight at the tip with automatic exposure (K·D² from raycasts
+  to the lining), the lining drawn as mucosa from inside. No collision or
+  HUD yet; ostia and choanae are drawn as closed membranes (ST1b).
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
