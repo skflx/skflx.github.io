@@ -15,7 +15,7 @@ history keeps the specs).
 |---|---|---|
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
-| 2 Variant lab | **2 of 4 dioramas** | `sphenoid` (D1 amended, D2 next), `lateral-wall` (later) |
+| 2 Variant lab | **3 of 4 dioramas** (sphenoid in review) | `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces) | open airway lining (ST1b), floor chart (ST2b), corrections (ST0d, ST4d), flap overlay (ST3r → ST5); hand segmentation (owner, optional) |
 | 4 Endoscope | **rig built** (E1, E1b, E2 done; E2b in review) | collision + HUD (E3, in review), station poses (E5, Opus), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
@@ -920,7 +920,7 @@ Parameters, presets from `c.sphenoid-pneumatization`, schematic proportions
 (stated in the header), and the rules `test-ssb.mjs` must pin (as the
 frontal-recess IFAC rules are), per `docs/ssb.md` §6's `sphenoid` row.
 
-### D2 — Sphenoid diorama build        [ready] · Sonnet · depends: D1
+### D2 — Sphenoid diorama build        [review: PR open — `js/ssb/dioramas/sphenoid.js`, rules 0–9 pinned in `--only lab` (see PR for two spec gaps)] · Sonnet · depends: D1
 Build `js/ssb/dioramas/sphenoid.js` to `docs/ssb.md` §6.1 as it now stands (the 2026-10-03 amendments are folded in, rules 0–9) using `kit.js` primitives;
 register it; tests from §6.1.
 Read: `docs/ssb.md` §6 and §6.1; `js/ssb/dioramas/frontal-recess.js` and `kit.js` (the pattern); `tools/test-ssb.mjs` lab section.

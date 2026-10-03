@@ -209,8 +209,11 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
 - **Variant lab** — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
-  supraorbital cell) and `frontal-recess` (IFAC cells, uncinate attachment,
-  computed drainage pathway) dioramas, with presets from the graph's
+  supraorbital cell), `frontal-recess` (IFAC cells, uncinate attachment,
+  computed drainage pathway) and `sphenoid` (pneumatization, carotid and
+  optic-nerve exposure, DeLano/Onodi, septum, vidian canal, lateral recess;
+  every exposure is read off the solids, rules in `docs/ssb.md` §6.1)
+  dioramas, with presets from the graph's
   classifications, picking into the panels, hatched hazard sites and a
   `#lab=` URL state (`docs/ssb.md` §6; behaviour pinned by
   `tools/test-ssb.mjs`).
@@ -244,7 +247,7 @@ starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). I
 stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
-nose) in parallel with the `sphenoid` diorama; procedure mode and
+nose) in parallel with the `lateral-wall` diorama; procedure mode and
 self-test after. Waiting on the owner: decisions O4–O5
 (`docs/ssb-roadmap.md` §2) and review of the dioramas and tier-1 content.
 
