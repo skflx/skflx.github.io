@@ -182,7 +182,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   (`docs/ssb.md` §5.7): stage D (`softtissue.py`) so far gives the septal
   mucosa surfaces and charts (the `soft` pack), the choanal arch, the
   middle turbinate heads; the nostrils `lm.naris.R/.L` come from
-  `nose.py` (the vestibule lumen of the unmasked stack),
+  `nose.py` (the vestibule lumen of the unmasked stack), the incisive canal `lm.incisive-canal.M` and the right sphenoid ostium's
+  inferior margin (ST2b, partial: floor chart and left margin escalated),
   and `sweeps_soft.py` turns the waypoints in `uw/sweeps-soft.json` into
   the septal-branch, nasopalatine and AEA-septal sweeps (all inferred,
   schematic courses; first-pass waypoints verified 2026-10-03 with
@@ -203,15 +204,19 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `#scope=`) — a first-person rigid scope as a camera pose over the
   Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a
   0 / 30 / 45 / 70° lens with a camera head that stays upright (no image flip through the zenith) and a light-post
-  indicator, a spotlight at the tip, the lining drawn as mucosa from
-  inside. No collision or HUD yet; near surfaces saturate the image (E2b)
-  and ostia and choanae are drawn as closed membranes (ST1b).
+  indicator, a spotlight at the tip with automatic exposure (K·D² from raycasts
+  to the lining), the lining drawn as mucosa from inside. Bone
+  stops the shaft (4 or 2.7 mm), mucosal contact is reported and a proximity
+  HUD reads the distance fields at the tip; ostia and choanae are drawn as closed membranes (ST1b).
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
 - **Variant lab** — the `ethmoid-roof` (Keros, Gera, asymmetry, AEA course,
-  supraorbital cell) and `frontal-recess` (IFAC cells, uncinate attachment,
-  computed drainage pathway) dioramas, with presets from the graph's
+  supraorbital cell), `frontal-recess` (IFAC cells, uncinate attachment,
+  computed drainage pathway) and `sphenoid` (pneumatization, carotid and
+  optic-nerve exposure, DeLano/Onodi, septum, vidian canal, lateral recess;
+  every exposure is read off the solids, rules in `docs/ssb.md` §6.1)
+  dioramas, with presets from the graph's
   classifications, picking into the panels, hatched hazard sites and a
   `#lab=` URL state (`docs/ssb.md` §6; behaviour pinned by
   `tools/test-ssb.mjs`).
@@ -241,11 +246,11 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
 backlog). Wave 1 was verified by Opus on 2026-10-03 (roadmap §4); wave 2
-starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's fulcrum, exposure,
-collision, HUD and stations and a soft-tissue layer
+starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's
+stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
-nose) in parallel with the `sphenoid` diorama; procedure mode and
+nose) in parallel with the `lateral-wall` diorama; procedure mode and
 self-test after. Waiting on the owner: decisions O4–O5
 (`docs/ssb-roadmap.md` §2) and review of the dioramas and tier-1 content.
 

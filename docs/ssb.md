@@ -118,10 +118,18 @@ never reloads.
   stays upright (camera head held level while the telescope rotates — the
   real technique); a light-post indicator sits opposite the view direction.
   Illumination is a spotlight at the tip with inverse-square falloff, so
-  depth reads as it does in the OR. The shaft cannot pass through tissue
-  (sampled against the label volume, §5.6). A proximity HUD gives the
-  distance in mm from the tip to each critical structure (ICA, optic nerve,
-  skull base, orbit, AEA) from precomputed distance fields. This mode is
+  depth reads as it does in the OR; its intensity follows an automatic
+  exposure (K·D², D the median distance to the lining over five rays), as a
+  camera control unit does, so the image stays legible at any range. The shaft cannot pass through bone: it is
+  sampled every 0.5 mm, on its axis and on a ring of four points at the
+  shaft radius (4 mm scope, or 2.7 mm, chosen in the controls, never in the
+  URL), against the CT display volume (§5.6), and a pose that would block is
+  clamped to the last free depth. Only bone blocks (display ≥ 150); the
+  shaft length lying in mucosa is reported as mucosal contact, because this
+  specimen is not decongested and a rigid scope displaces mucosa. A proximity
+  HUD gives the distance in mm from the tip to each critical structure (ICA,
+  optic nerve, skull base, orbit, AEA) from precomputed distance fields, the
+  ones within 3 mm in the signal colour. This mode is
   where the fulcrum constraint teaches why the frontal recess needs a 45–70°
   scope and why posterior septectomy opens binostril work.
   The specimen's face mask removed the nose, so the fulcrum `lm.naris`
@@ -516,7 +524,7 @@ hatched (and named in the HUD). A part's `userData.look` names its tissue
 space / ghost / translucent flags, and the lab draws it with the procedural
 material of that kind (§7.4) — a diorama never names a colour. Geometry primitives
 (`dioramas/kit.js`): superellipsoid air cells (Wormald's building blocks,
-literally), profile extrusions (prisms) for plates and the skull base, tubes
+literally), profile extrusions (prisms) for plates and the skull base, cylinders (`cyl`, with an implicit test) for canals and nerves, tubes
 for vessels and pathways — each kind has one implicit `inside()` test and
 one mesh builder, so anything computed over a diorama sees exactly what is
 drawn. A diorama may be placed in context by a similarity transform onto
@@ -549,6 +557,15 @@ three attachments. The supraorbital ethmoid cell is posterolateral to the
 pathway rather than pushing it (the graph states a relation, not a push).
 
 ### 6.1 The `sphenoid` diorama (D1 spec)
+
+*Built (D2) as `js/ssb/dioramas/sphenoid.js`, `kit.js` gaining a `cyl`
+solid (canals and nerves need an implicit test; an optional `arc` leaves a
+dehiscence gap, mesh and test alike) and a `zMax` for `super`. Two readings of
+the spec: rule 2's "segment" is judged where the sinus reaches it (parasellar
+from sellar, paraclival from postsellar; in presellar the ICA lies behind
+all air, share 0 whatever the toggle, which rule 9's table does not list),
+and rule 3's distance is to the parasellar canal wall. The tests are
+`tools/test-ssb.mjs --only lab`.*
 
 *First pass by a Sonnet-class model; amended by Opus at verification
 (2026-10-03): rule 4's type 4 corrected (it was inverted), "facing air"

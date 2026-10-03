@@ -50,6 +50,10 @@ export const SITES = [
     { index: 5, name: 's.fixture-unknown.R', center: [-10, -10, 12], radii: [2, 2, 2] },
     { index: 6, name: null, center: [6, -12, 14], radii: [1.5, 1.5, 1.5] },
 ];
+/* One distance field for the endoscope's proximity HUD (E3): the distance to the surface of a sphere, so a test
+   can compare it with the analytic value. 1 mm grid, value * scale = mm, 0 inside, clampMm and beyond = 250. */
+export const SDF_SPHERE = { id: 's.orbit', center: [12, 8, 6], radius: 3 };
+export const SDF_GRID = { dims: [51, 45, 51], origin: [-25, -22, -20], scale: 0.1, clampMm: 25 };
 const HEAD = { center: [0, 0, 5], radii: [22, 19, 22] };
 const SHELL = 2;   /* mm of bone */
 
@@ -91,6 +95,13 @@ export function buildFixture() {
         }
     }
 
+    const [sx, sy, sz] = SDF_GRID.dims;
+    const sdf = new Uint8Array(sx * sy * sz);
+    let at = 0;
+    for (let k = 0; k < sz; k++) for (let j = 0; j < sy; j++) for (let i = 0; i < sx; i++, at++) {
+        const d = Math.hypot(i + SDF_GRID.origin[0] - SDF_SPHERE.center[0], j + SDF_GRID.origin[1] - SDF_SPHERE.center[1], k + SDF_GRID.origin[2] - SDF_SPHERE.center[2]) - SDF_SPHERE.radius;
+        sdf[at] = Math.min(250, Math.max(0, Math.round(d / SDF_GRID.scale)));
+    }
     const meta = {
         version: 1,
         dims: DIMS,
@@ -105,6 +116,12 @@ export function buildFixture() {
         },
         windows: { bone: { center: 128, width: 255 }, soft: { center: 60, width: 40 } },
         labels: { file: 'labels.u16.gz', dtype: 'uint16', table: '../geometry/labels.json' },
+        sdf: {
+            dims: SDF_GRID.dims, spacing: [1, 1, 1],
+            affine: [[1, 0, 0, SDF_GRID.origin[0]], [0, 1, 0, SDF_GRID.origin[1]], [0, 0, 1, SDF_GRID.origin[2]], [0, 0, 0, 1]],
+            dtype: 'uint8', scale: SDF_GRID.scale, clampMm: SDF_GRID.clampMm,
+            fields: { [SDF_SPHERE.id]: { file: `sdf-${SDF_SPHERE.id}.u8.gz`, hud: 'sphere' } },
+        },
         specimen: 'synthetic-fixture',
         license: 'none (synthetic phantom for tests)',
     };
@@ -116,6 +133,8 @@ export function buildFixture() {
         ctGz: zlib.gzipSync(Buffer.from(ct.buffer, ct.byteOffset, ct.byteLength), { level: 9 }),
         labelsGz: zlib.gzipSync(raw16, { level: 9 }),
         sites: SITES,
+        sdfGz: zlib.gzipSync(Buffer.from(sdf.buffer, sdf.byteOffset, sdf.byteLength), { level: 9 }),
+        sdf,
     };
 }
 
@@ -125,6 +144,7 @@ export function fixtureFiles(fx = buildFixture()) {
         'ssb/ct/ct.json': Buffer.from(JSON.stringify(fx.meta, null, 2)),
         'ssb/ct/ct.u8.gz': fx.ctGz,
         'ssb/ct/labels.u16.gz': fx.labelsGz,
+        [`ssb/ct/sdf-${SDF_SPHERE.id}.u8.gz`]: fx.sdfGz,
         'ssb/geometry/labels.json': Buffer.from(JSON.stringify(fx.table, null, 2)),
     };
 }

@@ -8,7 +8,7 @@
    never reaches markup. State flows one way: the store's pose -> sync();
    the controls only ever call endo.setPose / endo.enter.
    ============================================================= */
-import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=06f6a501';
+import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=4ee7f38a';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -76,7 +76,9 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     for (const s of SIDES) sideRow.append(pill(s === 'R' ? 'Right' : 'Left', { side: s }, s === 'R' ? 'Right nostril' : 'Left nostril'));
     const lensRow = row('Lens angle');
     for (const l of LENSES) lensRow.append(pill(`${l}°`, { lens: String(l) }, `${l} degree lens`));
-    poseSec.append(sideRow, lensRow);
+    const shaftRow = row('Scope diameter');
+    shaftRow.append(pill('4 mm', { shaft: '4' }, '4 mm telescope'), pill('2.7 mm', { shaft: '2.7' }, '2.7 mm telescope'));
+    poseSec.append(sideRow, lensRow, shaftRow);
 
     /* ---- sliders ---- */
     const SLIDERS = [
@@ -108,10 +110,35 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     }
 
     const tipOut = el('p', 'ssb-param-src ssb-scope-tip');
-    const fulcrumNote = el('p', 'ssb-param-src', 'The nostril is a schematic placeholder: 10 mm in front of the masked cavity, until the nose is modelled.');
+    const fulcrumNote = el('p', 'ssb-param-src', 'The pivot is the vestibule centroid (lm.naris) measured on the unmasked CT; the face stays masked until the nose is modelled. Bone stops the shaft; mucosa does not.');
     const keys = el('p', 'ssb-param-src', 'Canvas focused: drag or arrow keys look around, wheel or + / − insert and withdraw, Q / E roll, L changes the lens, Shift for larger steps.');
     const status = el('p', 'ssb-param-src ssb-scope-status');
+    const hudSec = section('Proximity');
+    const hudList = el('div', 'ssb-scope-hud');
+    hudList.setAttribute('role', 'status');
+    hudList.setAttribute('aria-live', 'off');
+    hudSec.append(hudList);
     poseSec.append(tipOut, fulcrumNote, keys, status);
+
+    /* ---- the proximity HUD: nearest structure first, within 3 mm in the signal colour ---- */
+    const NEAR_MM = 3;
+    function renderHud() {
+        const h = endo.hud;
+        hudSec.hidden = !h.rows.length;
+        hudList.replaceChildren();
+        if (!h.rows.length) return;
+        for (const r of h.rows) {
+            const line = el('p', 'ssb-param-src ssb-scope-hud-row');
+            const far = r.mm >= h.clampMm - 0.05;
+            line.textContent = `${r.name}: ${far ? '>' : ''}${fmt(far ? h.clampMm : r.mm)} mm`;
+            line.dataset.id = r.id;
+            if (r.mm <= NEAR_MM) { line.dataset.near = 'true'; line.style.setProperty('color', 'var(--signal)'); }
+            hudList.append(line);
+        }
+        const contact = el('p', 'ssb-param-src ssb-scope-hud-contact', `Mucosal contact: ${fmt(h.contactMm)} mm of shaft`);
+        hudList.append(contact);
+        if (h.limited) hudList.append(el('p', 'ssb-param-src ssb-scope-hud-limit', 'Bone limits the depth.'));
+    }
 
     /* ---- follow the pose ---- */
     function sync() {
@@ -121,6 +148,8 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
         if (!p) return;
         mark(sideRow, 'side', p.side);
         mark(lensRow, 'lens', p.lens);
+        mark(shaftRow, 'shaft', endo.shaft);
+        renderHud();
         for (const [key, s] of sliders) {
             if (Number(s.range.value) !== p[key]) s.range.value = String(p[key]);
             s.out.textContent = `${fmt(p[key])} ${s.unit}`;
@@ -139,7 +168,8 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     root.addEventListener('click', (e) => {
         const b = e.target.closest('button');
         if (!b || !endo.pose) return;
-        if (b.dataset.side) endo.setPose({ side: b.dataset.side });
+        if (b.dataset.shaft) endo.setShaft(b.dataset.shaft);
+        else if (b.dataset.side) endo.setPose({ side: b.dataset.side });
         else if (b.dataset.lens) endo.setPose({ lens: Number(b.dataset.lens) });
     });
 

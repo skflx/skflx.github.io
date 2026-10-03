@@ -15,9 +15,9 @@ history keeps the specs).
 |---|---|---|
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
-| 2 Variant lab | **2 of 4 dioramas** | `sphenoid` (D1 amended, D2 next), `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces) | **standard specimen (N1, O6)**, then floor chart (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig built** (E1, E2 done; fulcrum fixed, E1b in review; exposure needs fixing) | exposure (E2b), collision + HUD (E3), station poses (E5, Opus), flights (E6) |
+| 2 Variant lab | **3 of 4 dioramas** (sphenoid done, D2a follow-up) | `lateral-wall` (later) |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | **standard specimen (N1, O6)**, then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
+| 4 Endoscope | **rig, exposure, collision + HUD done** (E1, E1b, E2, E2b, E3) | CT along the scope (E4), station poses (E5, Opus, after N1 and ST1b), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -26,7 +26,7 @@ history keeps the specs).
 
 **Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2; O4 and O5 decided the same day, and ST3r (the flap contract) and the D1 amendments are written into `docs/ssb.md`. **Next:** wave 2's Sonnet lanes (`docs/ssb-sonnet-handoff.md`).
 
-**CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes but must load the CT lazily before merge; ST2b's partial is merged as is. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
+**CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
 
 ## 2. Owner — decisions and actions
 
@@ -655,7 +655,7 @@ lateral on their row; each within 3 mm of the verification's estimate
 scope` pass.
 Escalate: the UW site is unreachable; no level has an enclosed lumen.
 
-### E2b — Scope exposure        [ready] · Sonnet · depends: —
+### E2b — Scope exposure        [done: CP-2a] · Sonnet · depends: —
 Goal: the scope image is legible at every distance (verification: white
 disc at the sphenoid pose).
 Read: this file §4 verification "New findings on screen"; `docs/ssb.md` §3
@@ -675,8 +675,23 @@ under 10 % of the pixels inside the circle have luminance ≥ 250 and their
 median luminance is 40–200; the on-demand loop still idles when the pose
 does not change; the existing scope tests pass.
 Escalate: raycasting the packs costs more than a frame at 60 fps.
+*Result (Sonnet, 2026-10-03; retuned after E1b merged):* exposure = K·D² (K
+from `EXPOSURE_D0 = 16`, clamp 10–2000) plus the scope's hemisphere fill
+raised 0.1 → 0.5: the three Accept poses read 0 %, 3.7 %, 0 % clipped, median
+luminance 46, 67, 46 (`test-ssb --only scope`, 61/61). The "K so the straight
+40 mm pose looks as now" clause could not hold with the Accept (that pose
+clipped 15 % at the old exposure with the provisional fulcrum), so K and the
+fill were tuned to the Accept instead; they were retuned once E1b moved the
+fulcrum (the first values left the "not blank" check one colour short).
+White areas at the first tuning were single nodes with the tip against them,
+not interface membranes (`s.sphenoid-sinus.R` 0.77 mm ahead at `R,52,-3,15,0,0`,
+`s.nasal-cavity.R` 0.3 mm at `R,40,0,15,0,30`); with E1b's fulcrum neither pose
+is that close. At `R,40,0,0,0,0` the left edge of the field shows the page
+background through the lining (no geometry there: ST1b's problem). Raycast cost:
+10–17 ms per pose change in headless software-GL Chromium (not per frame);
+borderline against the Escalate line, for the checkpoint.
 
-### E3 — Collision and proximity HUD        [todo] · Sonnet · depends: E1b, E2b (same files)
+### E3 — Collision and proximity HUD        [done: CP-2a; lazy shared volume added by Opus] · Sonnet · depends: E1b, E2b (same files)
 *O4 decided 2026-10-03: 4 mm.* *Spec revised again at verification (2026-10-03); it supersedes the CP-1
 revision below wherever they differ, and the CP-1 text is kept for the
 record.* (1) The fulcrum is E1b's. (2) `SHAFT_RADIUS_MM = 2.0` (a 4 mm
@@ -719,14 +734,39 @@ specimen: from `lm.naris.R` a pose with yaw -3 ± 3°, pitch 15 ± 3° and depth
 (CP-1 found yaw -3, pitch 15, depth 52.2 at 0.7 mm), and a pose straight
 posterior at depth 40 is blocked by the same rule where CT is bone.
 
-### E4 — CT along the scope        [todo] · Sonnet · depends: E3 (same files)
-Goal: the CT follows the tip.
-Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/mode-ct.js` (only to accept the cursor), `tools/test-ssb.mjs`.
-Spec: on pose change (throttled to animation frames), `state.cursor = T`;
-an inset canvas shows `obliqueSlice` through T spanned by v and camera up,
-with the shaft drawn on it.
+*Result (Sonnet, 2026-10-03):* `scope.js` `shaftClearance` / `sdfSampler` /
+`hudRows` (pure), wired in `mode-endoscope.js` and `ui-endoscope.js`: bone-only
+collision with clamping (also for a pasted link), mucosal contact and the
+proximity HUD in the controls, the 4 / 2.7 mm shaft pills. The fixture got an
+analytic sphere SDF. `test-ssb` 435/435. **One Accept item is not met, for the
+checkpoint:** with E1b's fulcrum, a 4 mm shaft's closest free tip to
+`lm.sphenoid-ostium.L` is **3.31 mm** (yaw -2, pitch 24, depth 63), not within
+2.5 mm; the verification's 2.4 mm used the superseded fulcrum. A 2.7 mm shaft
+reaches 1.55 mm (yaw 0, pitch 24, depth 64). The right side passes (2.03 mm: yaw
+-3, pitch 19, depth 58.5). The test pins the left gap as a measured fact, named
+OPEN; it does not stand in for the Accept. Options: accept 2.7 mm for the left
+ostium, relax the tolerance to 3.5 mm, or move the left landmark (anatomy:
+Opus). Frontal item met: lens 70 reaches both ostia (R yaw -2, pitch 33,
+depth 36, roll 0; L yaw -10, pitch 44, depth 41, roll 15), no lens-0 pose does.
+The HUD sits in the controls panel; a stage-overlay HUD needs CSS (outside this
+WP's Touch). The existing pasted-link test now uses `L,30,-10,0,0,30` because
+`L,30,10,0,0,30` is inside bone and clamps to depth 16.
+
+### E4 — CT along the scope        [ready] · Sonnet · depends: E3 (same files)
+Goal: the CT follows the tip; exposure stops costing a raycast per dragged frame.
+Read: `docs/ssb.md` §3 (Endoscope, CT), §5.6; §4 "CP-2a" (E2b, E3) of this file; `js/ssb/volume.js` (`sharedVolume`, `obliqueSlice`); `js/ssb/mode-endoscope.js`; `js/ssb/ui-endoscope.js`.
+Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/mode-ct.js` (only to accept the cursor), `css/ssb.css`, `tools/test-ssb.mjs`.
+Don't: load the volume at page boot (it loads on the first engage through `sharedVolume`, CP-2a); change `scope.js`'s collision rules.
+Spec: (1) on pose change (throttled to animation frames), `state.cursor = T`;
+an inset canvas in the scope controls shows `obliqueSlice` through T spanned by v and camera up,
+with the shaft drawn on it; hidden until the volume has loaded, and with no volume.
+(2) Exposure on settle: `expose()` runs once the pose has not changed for 100 ms (and on engage),
+not on every moving frame; a settled pose reads exactly as it does now.
+(3) The HUD's near-row colour moves from the inline style to a class in `css/ssb.css` on `--signal`.
 Accept: after a pose change the CT crosshair equals T within a voxel; the
-inset's centre pixel samples the same value as `volume.sample(T)`.
+inset's centre pixel samples the same value as `volume.sample(T)`; during a 30-frame
+drag `expose()` runs at most twice; E2b's exposure checks still pass; the CP-2a
+lazy-load test still passes (no `ct.u8.gz` request until the scope or CT opens).
 
 ### E5 — Station poses        [todo] · **Opus** · depends: E3, N1, ST1b
 Write `ssb/geometry/stations.json` (`{"t.<id>.<side>": pose}`) for every
@@ -780,7 +820,7 @@ Steps:
 Accept: `node tools/ssb-content.mjs` and `node tools/check-data.mjs` pass.
 Escalate: a claim does not match its abstract (report, do not rewrite).
 
-### ST2b — Nasal floor chart and incisive canal        [todo] · Sonnet · depends: E1b, ST0d
+### ST2b — Nasal floor chart and incisive canal        [done (partial): canal + right margin; floor → ST2c, left → N1] · Sonnet · depends: E1b, ST0d
 Goal: floor mucosa surfaces with charts (the NSF's floor strip and the
 extended flap need them), and the incisive canal as a landmark.
 Read: this file §4 verification (ST0 3, ST3 1); `docs/ssb.md` §5.7; ST2
@@ -818,6 +858,7 @@ within 3 mm of (0, -18, -3) and a run ≥ 5 mm; right inferior margin within
 passes.
 Escalate: the floor wall unit does not separate from the inferior
 turbinate or maxillary walls (report where).
+*Result (Sonnet, 2026-10-03), partial.* Done: `lm.incisive-canal.M` (0.1, -18.95, -1.0), 2.3 mm from (0, -18, -3), channel run 12.5 mm (four bone-bounded candidates; the midline-most centroid is taken, R 0.05 — the others sit at |R| 1.6–3.1; the box top at S -1 clips it, so S is a lower bound); right `inferior_margin_s_mm` 23.5 (below the landmark's 24.16). `softtissue.py` no longer rewrites `lm.naris` (its E1 step would have clobbered E1b). **Escalated, not done:** (1) *Floor chart.* The `s.nasal-floor.<side>` unit does not abut the cavity air: it is the palate's bone, display 170–195, with 1–3 mm of unlabelled soft tissue (display ~50–110) between it and the air (distance floor→air: right median 3.2 mm, 8 voxels touch; left median 6.3 mm, 0 touch). The right unit has 12180 voxels, the left only 4361, so a left floor mucosa cannot be derived from it: meshing the cavity's down-facing lining (normal S < -0.5) within 3 mm of the unit gives 3.9 cm² right but 0.5 cm² left (R -15…-2, A -48…-40). It does touch `s.maxillary-medial-wall.R` (149 voxels) and `s.maxillary-sinus-floor` (275 R, 83 L), not the inferior turbinate. A method that defines the floor from the air's down-facing lining instead of the unit is an anatomy call (and the left unit's coverage may be a labelling gap in `walls.py`). (2) *Left ostium margin.* No cavity | sinus interface on the left; the fallback opening (display < 150 voxels of `s.sphenoid-face.L` within 6 mm of the landmark, touching both airways) is one 530-voxel component spanning S 23.5–34.5 (11 mm, R -13.5…-3.5, A -54.5…-49.5), over the 8 mm limit, so no left margin is written.
 
 ### ST1b — Open airway lining        [todo] · Sonnet · depends: N1, ST2c (same pack files)
 Goal: the scope sees through the ostia and the choanae (verification: each
@@ -844,7 +885,7 @@ along v passes the PNS plane (A -50) before its first hit; picking from
 inside returns graph ids; budgets hold.
 Escalate: the union surface breaks the triangle or byte budget.
 
-### N1 — Standard specimen: right half mirrored, septum centred        [ready after #101 merges] · Sonnet · depends: ST2b partial (#101), E3 (#102) merged
+### N1 — Standard specimen: right half mirrored, septum centred        [ready] · Sonnet · depends: ST2b, E3 (merged)
 Goal: the page serves a symmetric, standard specimen (O6, `docs/ssb.md`
 §5.1); the as-scanned head stays the pipeline's input.
 Read: `docs/ssb.md` §4, §5.1 (the standard-specimen paragraph), §5.3,
@@ -1054,7 +1095,7 @@ Parameters, presets from `c.sphenoid-pneumatization`, schematic proportions
 (stated in the header), and the rules `test-ssb.mjs` must pin (as the
 frontal-recess IFAC rules are), per `docs/ssb.md` §6's `sphenoid` row.
 
-### D2 — Sphenoid diorama build        [ready] · Sonnet · depends: D1
+### D2 — Sphenoid diorama build        [done: CP-2a; follow-up D2a] · Sonnet · depends: D1
 Build `js/ssb/dioramas/sphenoid.js` to `docs/ssb.md` §6.1 as it now stands (the 2026-10-03 amendments are folded in, rules 0–9) using `kit.js` primitives;
 register it; tests from §6.1.
 Read: `docs/ssb.md` §6 and §6.1; `js/ssb/dioramas/frontal-recess.js` and `kit.js` (the pattern); `tools/test-ssb.mjs` lab section.
@@ -1063,7 +1104,7 @@ Don't: change `kit.js` beyond adding a primitive the scene needs (say so in the 
 Accept: rules 0–9 pinned in `test-ssb.mjs` (`--only lab`), computed from the solids on a 0.5 mm grid.
 Escalate: a rule cannot hold with the stated schematic sizes (report the numbers).
 
-### D2a — Presellar in rule 9        [todo] · Sonnet · depends: D2 merged
+### D2a — Presellar in rule 9        [ready] · Sonnet · depends: D2 merged
 Goal: rule 9 as amended at CP-2a (`docs/ssb.md` §6.1).
 Read: `docs/ssb.md` §6.1 rules 2 and 9; `js/ssb/dioramas/sphenoid.js` `degrade()`.
 Touch: `js/ssb/dioramas/sphenoid.js`, `tools/test-ssb.mjs`.

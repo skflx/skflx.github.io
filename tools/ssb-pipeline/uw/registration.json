@@ -10682,17 +10682,13 @@
    -51.5,
    12.0
   ],
-  "naris": {
-   "lm.naris.R": [
-    4.43,
-    -0.32,
-    10.0
-   ],
-   "lm.naris.L": [
-    -0.99,
-    -0.16,
-    10.0
-   ]
+  "incisive_canal": [
+   0.1,
+   -18.95,
+   -1.0
+  ],
+  "ostium_inferior_margin_s_mm": {
+   "R": 23.5
   },
   "pack_bytes": 88654
  }
