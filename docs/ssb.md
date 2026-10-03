@@ -126,10 +126,10 @@ never reloads.
   skull base, orbit, AEA) from precomputed distance fields. This mode is
   where the fulcrum constraint teaches why the frontal recess needs a 45–70°
   scope and why posterior septectomy opens binostril work.
-  The specimen's face mask removed the nose, so the fulcrum is a
-  provisional schematic `lm.naris` until the nose exists (§5.7) — misplaced
-  (internal-valve level; the left one inside the septum), to be re-derived
-  from the unmasked stack (roadmap E1b); the scope
+  The specimen's face mask removed the nose, so the fulcrum `lm.naris`
+  is measured from the unmasked axial stack, in memory
+  (`tools/ssb-pipeline/uw/nose.py`: the vestibule lumen at the alar-rim
+  band; method in the landmark meta); the scope
   sees the air spaces' surfaces drawn as mucosa. Built (`js/ssb/scope.js`:
   the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
   `ui-endoscope.js`): a scope pose is a camera over the Specimen stage

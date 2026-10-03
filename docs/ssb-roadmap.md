@@ -17,7 +17,7 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **2 of 4 dioramas** | `sphenoid` (D1 amended, D2 next), `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces) | open airway lining (ST1b), floor chart (ST2b), corrections (ST0d, ST4d), flap overlay (ST3r → ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig built** (E1, E2, E2b done or in review; the fulcrum still needs fixing) | fulcrum (E1b), exposure (E2b), collision + HUD (E3), station poses (E5, Opus), flights (E6) |
+| 4 Endoscope | **rig built** (E1, E1b, E2 done; E2b in review) | collision + HUD (E3), station poses (E5, Opus), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -565,7 +565,8 @@ indicator moves with roll; reduced motion respected.
 Escalate: the specimen's air meshes do not render from inside without pack
 changes.
 
-### E1b — Nostril fulcrum from the unmasked stack        [ready] · Sonnet · depends: —
+### E1b — Nostril fulcrum from the unmasked stack        [review] · Sonnet · depends: —
+Result: `nose.py` puts `lm.naris.R` at (6.55, 4.45, 4.7) and `.L` at (-7.83, 4.22, 3.76), both in air with tissue medial and lateral, 0.9 and 0.5 mm from the verification's estimates; E1's values are kept under `superseded` in the meta.
 Goal: `lm.naris.R` / `.L` at the real nostril, replacing E1's schematic
 points (verification (a): the left one is inside the septum).
 Read: this file §4 "Opus verification of wave 1" (a); `docs/ssb.md` §3
@@ -692,7 +693,7 @@ poses (interpolate pose parameters, not the camera), deep link
 `#scope=t.<id>`. Accept: every station's pose is collision-free and its
 first `shows` structure's centroid is inside the view frustum.
 
-### ST0d — Content corrections        [ready] · Sonnet · depends: — (folds in ST0c)
+### ST0d — Content corrections        [review: PR open — ST0 findings applied, 4 sources re-checked] · Sonnet · depends: — (folds in ST0c)
 Goal: apply the verification's ST0 findings; check the sources it did not
 read.
 Read: this file §4 verification, "ST0 content"; `docs/authoring-ssb.md`

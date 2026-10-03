@@ -2108,6 +2108,15 @@
       "doi": "10.1097/mlg.0b013e318062111f"
     },
     {
+      "id": "src.harvey-2009-itf",
+      "cite": "Harvey RJ, Sheahan PO, Schlosser RJ. Inferior turbinate pedicle flap for endoscopic skull base defect repair. Am J Rhinol Allergy. 2009;23(5):522-526. doi:10.2500/ajra.2009.23.3354",
+      "type": "cadaver",
+      "verified": true,
+      "pmid": "19807987",
+      "doi": "10.2500/ajra.2009.23.3354",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19807987/"
+    },
+    {
       "id": "src.prevedello-2009-mtf",
       "cite": "Prevedello DM, Barges-Coll J, Fernandez-Miranda JC, et al. Middle turbinate flap for skull base reconstruction: cadaveric feasibility study. Laryngoscope. 2009;119(11):2094-2098. doi:10.1002/lary.20226",
       "type": "cadaver",
