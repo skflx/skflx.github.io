@@ -97,6 +97,16 @@ window.OKSAT_MANIFEST = [
     data: 'js/mcq-modules/otoplasty.js',
   },
   {
+    slug: 'facial-analysis',
+    title: 'Facial Analysis',
+    kicker: 'Facial Plastics & Recon',
+    subspecialty: 'fprs',
+    count: 63,
+    accent: '#7A5A3A',
+    desc: 'Photography and skin typing, soft-tissue landmarks and planes, thirds and fifths, profile angles, nasal anatomy and tip support, nasal analysis from every view, and four integrating cases — with textbook figures.',
+    data: 'js/mcq-modules/facial-analysis.js',
+  },
+  {
     slug: 'allergy-testing',
     title: 'Allergy and Allergy Testing',
     kicker: 'Rhinology / Allergy',

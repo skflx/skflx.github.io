@@ -84,8 +84,8 @@ as a no-JS fallback, and the two must change together.
 
 ## OKSAT (`oksat.html`, `oksat-study.html`)
 
-**State:** The tool is now just the hub and the study viewer. Eight
-hand-authored modules, each a data file in `js/mcq-modules/` plus one
+**State:** The tool is now just the hub and the study viewer.
+Hand-authored modules, each a data file in `js/mcq-modules/` plus one
 manifest entry; the shared engine renders all of them. Every question opens
 on a recall gate: the stem shows first, and you either **reveal the answer**
 and self-grade from memory (Knew it cold / partially / guessed / didn't know)
@@ -102,6 +102,15 @@ photos go in stems, labeled figures (Marx grades, the staging table) only in
 explanations so they can't give the answer away. Its explanations flag where
 the sk.oto vault and StatPearls disagree (hillock 4–6 mapping, prominence
 thresholds) — unvetted for correctness pending owner review.
+
+The facial-analysis module is built to the `.claude/skills/oksat-module`
+recipe: Cummings Review ch. 3 for the numbers, the resident-review deck for the
+outline and figures, vault notes cross-checked (Baker's PDF could not be
+text-extracted, so Baker is cited only through the vault). It mixes free-response
+recall items with MCQs, ends in four synthesis cases, and its explanations flag
+where deck, textbook, and vault disagree. Its figures are third-party textbook
+illustrations copied unmodified: **rights for public hosting are the owner's
+call.** Nothing in it is clinically verified.
 
 The viewer now loads React/htm from `js/vendor/` (pinned) rather than a CDN,
 and the default typeface is the site's own (`instrument`); the choice moved to
@@ -120,7 +129,7 @@ the most.
 **Next:** Authoring is manual (`docs/authoring-oksat.md`). The module set is
 thin outside pediatrics/otology — laryngology and H&N oncology have hues
 reserved in `OKSAT_SUBSPECIALTIES` but no modules yet. Facial plastics has
-three modules (facial reanimation, lip reconstruction, otoplasty); rhinology now has its
+four modules (facial reanimation, lip reconstruction, otoplasty, facial analysis); rhinology now has its
 first (allergy and allergy testing, a free-response module in the
 dtc-risk-stratification style).
 
