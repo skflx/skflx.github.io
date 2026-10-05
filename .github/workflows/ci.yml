@@ -16,6 +16,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The change detector below diffs against the PR's base branch.
+          fetch-depth: 0
+
+      # Run the slow suites only when something they exercise changed.
+      # check-data (every invariant) and the page smoke test always run, so
+      # a cross-cutting regression still fails. A push to master runs
+      # everything. Editing this workflow runs everything too.
+      - name: Detect what changed
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            changed=$(git diff --name-only "origin/${{ github.base_ref }}...HEAD")
+          else
+            changed="ALL"
+          fi
+          echo "Changed files:"; echo "$changed"
+          shared='css/site\.css|js/site\.js|js/theme-boot\.js|tools/smoke-lib\.mjs|package(-lock)?\.json|\.github/workflows/ci\.yml'
+          match() { [ "$changed" = "ALL" ] || echo "$changed" | grep -Eq "^($1|$shared)"; echo $?; }
+          flag() { if [ "$(match "$2")" = "0" ]; then echo "$1=true" >> "$GITHUB_OUTPUT"; else echo "$1=false" >> "$GITHUB_OUTPUT"; fi; }
+          flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-)'
+          flag oksat 'js/oksat-|js/mcq-modules/pediatrics|js/vendor/(react|htm)|css/oksat\.css|oksat(-study)?\.html|tools/test-oksat-engine'
+          flag wiki  'wiki/|tools/test-wiki-sync'
+          cat "$GITHUB_OUTPUT"
 
       - uses: actions/setup-node@v4
         with:
@@ -30,6 +54,7 @@ jobs:
       # The wiki sync is the privacy boundary for the Obsidian vault;
       # zero deps, synthetic fixtures only.
       - name: Wiki sync behavior tests
+        if: steps.changes.outputs.wiki == 'true'
         run: node tools/test-wiki-sync.mjs
 
       - name: Install dev dependencies
@@ -46,7 +71,9 @@ jobs:
 
       # SSB variant lab: dioramas, computed pathway rules, picking, hash.
       - name: SSB behavior tests
+        if: steps.changes.outputs.ssb == 'true'
         run: node tools/test-ssb.mjs
 
       - name: OKSAT engine behavior tests
+        if: steps.changes.outputs.oksat == 'true'
         run: node tools/test-oksat-engine.mjs
