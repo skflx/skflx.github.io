@@ -3,18 +3,39 @@
  "specimen": "uw-axial-sagittal",
  "landmarks": {
   "lm.anterior-nasal-spine.M": {
-   "method": "image search: anterior-most bone within 7 px of the midsagittal plane at the nasal floor (labels3d.find_ans)"
+   "method": "R := 0 (N1); image search: anterior-most bone within 7 px of the midsagittal plane at the nasal floor (labels3d.find_ans)",
+   "sourceMethod": "image search: anterior-most bone within 7 px of the midsagittal plane at the nasal floor (labels3d.find_ans)",
+   "asScanned": [
+    1.04,
+    0.0,
+    0.0
+   ]
   },
   "lm.crista-galli-apex.M": {
-   "method": "highest bone (display >= 125) within 3 mm of the MSP and 6 mm (AP) of the crista galli tips"
+   "method": "R := 0 (N1); highest bone (display >= 125) within 3 mm of the MSP and 6 mm (AP) of the crista galli tips",
+   "sourceMethod": "highest bone (display >= 125) within 3 mm of the MSP and 6 mm (AP) of the crista galli tips",
+   "asScanned": [
+    -1.5,
+    -32.0,
+    48.0
+   ]
   },
   "lm.dorsum-sellae-tip.M": {
-   "method": "highest bone (display >= 125) within 3 mm of the MSP and 5 mm (AP) of the dorsum tips"
+   "method": "R := 0 (N1); highest bone (display >= 125) within 3 mm of the MSP and 5 mm (AP) of the dorsum tips",
+   "sourceMethod": "highest bone (display >= 125) within 3 mm of the MSP and 5 mm (AP) of the dorsum tips",
+   "asScanned": [
+    -0.5,
+    -73.5,
+    40.0
+   ]
   },
   "lm.foramen-rotundum-anterior.L": {
-   "method": "median of UW arrow tips (axial + sagittal)",
-   "n_tips": 3,
-   "spread_mm": 0.62
+   "method": "mirrored from .R (N1)",
+   "asScanned": [
+    -22.39,
+    -59.1,
+    25.56
+   ]
   },
   "lm.foramen-rotundum-anterior.R": {
    "method": "median of UW arrow tips (axial + sagittal)",
@@ -22,8 +43,12 @@
    "spread_mm": 0.32
   },
   "lm.frontal-ostium.L": {
-   "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
-   "area_mm2": 32.666666666666664
+   "method": "mirrored from .R (N1)",
+   "asScanned": [
+    -8.84,
+    -17.82,
+    50.5
+   ]
   },
   "lm.frontal-ostium.R": {
    "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
@@ -40,12 +65,23 @@
    "spread_mm": 3.65
   },
   "lm.sella-floor-center.M": {
-   "method": "half-level crossing between the fossa contents and the sphenoid air below the sella tips, on the midline at the tips' AP position"
+   "method": "R := 0 (N1); half-level crossing between the fossa contents and the sphenoid air below the sella tips, on the midline at the tips' AP position",
+   "sourceMethod": "half-level crossing between the fossa contents and the sphenoid air below the sella tips, on the midline at the tips' AP position",
+   "asScanned": [
+    0.0,
+    -68.94,
+    33.05
+   ]
   },
   "lm.sphenoid-ostium.L": {
-   "method": "median of UW arrow tips (axial + sagittal)",
-   "n_tips": 2,
-   "spread_mm": 0.31
+   "method": "mirrored from .R (N1)",
+   "asScanned": [
+    -8.77,
+    -54.58,
+    28.6
+   ],
+   "inferior_margin_s_mm": 23.5,
+   "inferior_margin_method": "lowest S of the cavity | sinus label interface within 6 mm of the landmark"
   },
   "lm.sphenoid-ostium.R": {
    "method": "median of UW arrow tips (axial + sagittal)",
@@ -70,19 +106,37 @@
    "spread_mm": 0.63
   },
   "s.clivus.M": {
-   "method": "median of UW arrow tips (axial + sagittal)",
+   "method": "R := 0 (N1); median of UW arrow tips (axial + sagittal)",
    "n_tips": 3,
-   "spread_mm": 0.62
+   "spread_mm": 0.62,
+   "sourceMethod": "median of UW arrow tips (axial + sagittal)",
+   "asScanned": [
+    -1.41,
+    -91.1,
+    5.26
+   ]
   },
   "s.crista-galli.M": {
-   "method": "median of UW arrow tips (axial + sagittal)",
+   "method": "R := 0 (N1); median of UW arrow tips (axial + sagittal)",
    "n_tips": 9,
-   "spread_mm": 1.28
+   "spread_mm": 1.28,
+   "sourceMethod": "median of UW arrow tips (axial + sagittal)",
+   "asScanned": [
+    -1.42,
+    -35.42,
+    43.39
+   ]
   },
   "s.dorsum-sellae.M": {
-   "method": "median of UW arrow tips (axial + sagittal)",
+   "method": "R := 0 (N1); median of UW arrow tips (axial + sagittal)",
    "n_tips": 10,
-   "spread_mm": 1.56
+   "spread_mm": 1.56,
+   "sourceMethod": "median of UW arrow tips (axial + sagittal)",
+   "asScanned": [
+    -0.91,
+    -76.16,
+    37.27
+   ]
   },
   "s.foramen-lacerum.L": {
    "method": "median of UW arrow tips (axial + sagittal)",
@@ -100,14 +154,23 @@
    "spread_mm": 0.96
   },
   "s.sella-turcica.M": {
-   "method": "median of UW arrow tips (axial + sagittal)",
+   "method": "R := 0 (N1); median of UW arrow tips (axial + sagittal)",
    "n_tips": 17,
-   "spread_mm": 2.88
+   "spread_mm": 2.88,
+   "sourceMethod": "median of UW arrow tips (axial + sagittal)",
+   "asScanned": [
+    2.53,
+    -68.94,
+    37.99
+   ]
   },
   "s.superior-orbital-fissure.L": {
-   "method": "median of UW arrow tips (axial + sagittal)",
-   "n_tips": 4,
-   "spread_mm": 1.0
+   "method": "mirrored from .R (N1)",
+   "asScanned": [
+    -18.07,
+    -60.37,
+    37.44
+   ]
   },
   "s.superior-orbital-fissure.R": {
    "method": "median of UW arrow tips (axial + sagittal)",
@@ -115,14 +178,26 @@
    "spread_mm": 1.0
   },
   "s.vomer.M": {
-   "method": "median of UW arrow tips (axial + sagittal)",
+   "method": "R := 0 (N1); median of UW arrow tips (axial + sagittal)",
    "n_tips": 6,
-   "spread_mm": 0.94
+   "spread_mm": 0.94,
+   "sourceMethod": "median of UW arrow tips (axial + sagittal)",
+   "asScanned": [
+    -3.62,
+    -52.05,
+    8.99
+   ]
   },
   "lm.choanal-arch.M": {
-   "method": "highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
-   "n_boundary_voxels": 287,
-   "septum_mean_r": 0.31
+   "method": "R := 0 (N1); highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
+   "n_boundary_voxels": 338,
+   "septum_mean_r": -0.01,
+   "sourceMethod": "highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
+   "asScanned": [
+    4.0,
+    -51.5,
+    12.0
+   ]
   },
   "lm.naris.R": {
    "method": "vestibule lumen of the unmasked axial stack: air (0 < display < 78) on this side of the midline with tissue (>= 78) within 12 mm medially and laterally on the same row, A -2..16, S 0..10; centroid of the lumen voxels in the 3 mm S band of largest lumen area (tools/ssb-pipeline/uw/nose.py, E1b)",
@@ -148,27 +223,12 @@
    }
   },
   "lm.naris.L": {
-   "method": "vestibule lumen of the unmasked axial stack: air (0 < display < 78) on this side of the midline with tissue (>= 78) within 12 mm medially and laterally on the same row, A -2..16, S 0..10; centroid of the lumen voxels in the 3 mm S band of largest lumen area (tools/ssb-pipeline/uw/nose.py, E1b)",
-   "band_s_mm": [
-    2.5,
-    5.0
-   ],
-   "lumen_area_mm2": 123.0,
-   "n_voxels": 2953,
-   "superseded": {
-    "value": [
-     -0.99,
-     -0.16,
-     10.0
-    ],
-    "meta": {
-     "method": "inferred \u2014 schematic: 10 mm above ANS, 10 mm anterior to the masked nasal cavity's anterior edge; replaced when the nose exists (ST6)",
-     "n_front_voxels": 48,
-     "anterior_air_edge_a_mm": -9.5,
-     "row_bone_max_a_mm": -10.0
-    },
-    "reason": "E1: internal-valve level; left point inside the caudal septum - verification 2026-10-03"
-   }
+   "method": "mirrored from .R (N1)",
+   "asScanned": [
+    -7.83,
+    4.22,
+    3.76
+   ]
   },
   "lm.middle-turbinate-head.R": {
    "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
@@ -179,30 +239,35 @@
    ]
   },
   "lm.middle-turbinate-head.L": {
-   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
-   "n_front_voxels": 13,
-   "a_range_mm": [
-    -52.0,
-    -9.5
+   "method": "mirrored from .R (N1)",
+   "asScanned": [
+    -3.19,
+    -10.23,
+    28.88
    ]
   },
   "lm.incisive-canal.M": {
-   "method": "topmost point of the midline-most bone-bounded display 78-150 channel (>= 5 mm in S) in |R| <= 4, A -24..-8, S -14..-1; the box top clips it, so S is a lower bound (softtissue.py, ST2b)",
-   "run_s_mm": 12.5,
-   "n_voxels": 463,
-   "n_candidates": 4,
+   "method": "R := 0 (N1); topmost point of the midline-most bone-bounded display 78-150 channel (>= 5 mm in S) in |R| <= 4, A -24..-8, S -14..-1; the box top clips it, so S is a lower bound (softtissue.py, ST2b)",
+   "run_s_mm": 11.5,
+   "n_voxels": 494,
+   "n_candidates": 3,
    "candidate_centroid_abs_r_mm": [
-    0.05,
-    1.64,
+    0.0,
     2.36,
-    3.14
+    2.36
    ],
    "a_range_mm": [
-    -23.5,
-    -11.5
+    -20.0,
+    -12.0
    ],
    "s_range_mm": [
-    -13.0,
+    -12.0,
+    -1.0
+   ],
+   "sourceMethod": "topmost point of the midline-most bone-bounded display 78-150 channel (>= 5 mm in S) in |R| <= 4, A -24..-8, S -14..-1; the box top clips it, so S is a lower bound (softtissue.py, ST2b)",
+   "asScanned": [
+    0.1,
+    -18.95,
     -1.0
    ]
   }

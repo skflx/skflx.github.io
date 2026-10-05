@@ -241,7 +241,13 @@ olfactory septum stay as scanned. The as-scanned volume stays the
 pipeline's input (reproducible from the UW crawl, or from git at the
 commit WP N1 names) and becomes a variant later — a septal deviation, a
 closed ostium, asymmetric sinuses — rather than the default. Method and
-acceptance: roadmap WP N1.
+acceptance: roadmap WP N1; the script is `tools/ssb-pipeline/uw/normalize.py`.
+Decisions made when it ran (owner, 2026-10-05, simplicity first): the mirror
+plane is R = 0, not the septum's fitted plane (the fit's tilt is printed, and
+the gate is the fitted plane's R at the septum, not its extrapolation to the
+origin); the frontal sinus's tables, which cross R = 0 in the as-scanned
+head, are simply replaced by the mirror; a landmark that exists on one side
+only stays as scanned.
 
 Whatever is chosen, `ssb/LICENSE-data.md` records dataset, case id,
 license and attribution for every derived file. Faces are removed: the
@@ -293,6 +299,12 @@ checks the gzip magic bytes rather than trusting headers. If the budgets
 below fail, the next step is Draco with its **JS** decoder (no WebAssembly,
 no `eval` — works under the current CSP); meshopt needs real WebAssembly and
 therefore `'wasm-unsafe-eval'`, a CSP loosening (§8, §13).
+
+The served specimen is the standardized one (§5.1): `normalize.py` writes the
+mirrored CT and labels from the as-scanned inputs, then reruns `walls.py`,
+`meshes.py`, `sdf.py` and `softtissue.py` on them and makes the side pairs
+exact (`normalize.py all`). The side-relative scope `yaw` means a mirrored pose
+keeps its yaw (`js/ssb/scope.js`).
 
 Git carries the binaries (GitHub Pages cannot serve LFS). Re-export only at
 release points; the budget below bounds history growth.

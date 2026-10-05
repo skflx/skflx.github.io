@@ -301,7 +301,9 @@ a sphere's analytic distance) a pose through a wall clamps to the last free
 clamp earlier, and a read distance field matches the analytic distance within
 a voxel; on the real specimen the searches (a 1° yaw/pitch grid) are re-run
 and the poses they find are pinned — right sphenoid ostium, both frontal
-ostia from a 70° lens, and no 0° pose reaching a frontal ostium. A change to
+ostia from a 70° lens, and no 0° pose reaching a frontal ostium (the left
+poses are the right ones mirrored: the standard specimen is symmetric, and
+`yaw` is side-relative, so a mirrored pose has the same yaw). A change to
 the pipeline's CT, landmarks or distance fields moves those pins on purpose.
 How the image *looks* (spot intensity, cone, the lining from inside) is a
 human check: take a screenshot of `#scope=R,45,6,4,0,0`.
@@ -324,7 +326,12 @@ shared cursor (`state.cursor`, `#at=`) within 1 mm of an independent ray
 cast and CT lands there; selection frames without turning the camera (a cut
 under reduced motion), and an entity with no surface leaves the camera alone
 and says so; the section plane clips on the cursor, follows the slider and
-the URL, and caps solid bone. Judging how the specimen *looks* stays a human
+the URL, and caps solid bone. The standard specimen is pinned too
+(`standardSpecimenTests`): the CT and the label volume are mirror-symmetric
+about R = 0 outside the midline plates, no `.R` air touches `.L` air, paired
+landmarks and sweeps mirror within 0.01 mm, `.M` landmarks sit at R = 0, and
+the right septal surface lies at half the as-scanned thickness (read with
+`git show` at the commit `ct.json` names; CI checks out full history). Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 
 The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never

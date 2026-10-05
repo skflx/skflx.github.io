@@ -135,7 +135,7 @@
           "s.planum-sphenoidale"
         ],
         "source": "labels (walls.py)",
-        "voxels": 12375
+        "voxels": 9734
       },
       "s.orbit": {
         "file": "sdf-s.orbit.u8.gz",
@@ -148,14 +148,14 @@
           "s.frontal-sinus-floor"
         ],
         "source": "labels (walls.py)",
-        "voxels": 367024
+        "voxels": 370360
       },
       "s.internal-carotid-artery": {
         "file": "sdf-s.internal-carotid-artery.u8.gz",
         "hud": "ICA",
         "what": "surface of the ICA tube",
         "source": "sweeps.json",
-        "inferred_fraction_of_centreline": 0.28
+        "inferred_fraction_of_centreline": 0.29
       },
       "s.optic-nerve": {
         "file": "sdf-s.optic-nerve.u8.gz",
@@ -169,8 +169,24 @@
         "hud": "AEA",
         "what": "surface of the AEA tube",
         "source": "sweeps.json",
-        "inferred_fraction_of_centreline": 0.95
+        "inferred_fraction_of_centreline": 0.91
       }
     }
+  },
+  "standard": {
+    "method": "right half mirrored onto the left (R = 0); septum centred keeping its measured thickness; a thin midline plate wherever a paired air space would cross the midline (tools/ssb-pipeline/uw/normalize.py)",
+    "asScannedCommit": "37fa476240afb7568d652814e82801e7f1cb7c97",
+    "sourceSide": "R",
+    "septumOffsetMm": {
+      "median": 0.57,
+      "max": 2.51
+    },
+    "plates": {
+      "s.sphenoid-sinus": 610.8,
+      "s.frontal-sinus": 85.2,
+      "s.frontal-recess": 77.2,
+      "s.nasal-cavity": 69.5
+    },
+    "note": "Standardized specimen: one head's right half, mirrored, with the septum centred - symmetric by construction, not a real head."
   }
 }

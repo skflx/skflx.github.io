@@ -16,7 +16,7 @@ history keeps the specs).
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done, D2a follow-up) | `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | **standard specimen (N1, O6)**, then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | ~~standard specimen (N1, O6)~~ (review), then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
 | 4 Endoscope | **rig, exposure, collision + HUD done** (E1, E1b, E2, E2b, E3) | CT along the scope (E4), station poses (E5, Opus, after N1 and ST1b), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
@@ -885,7 +885,8 @@ along v passes the PNS plane (A -50) before its first hit; picking from
 inside returns graph ids; budgets hold.
 Escalate: the union surface breaks the triangle or byte budget.
 
-### N1 — Standard specimen: right half mirrored, septum centred        [ready] · Sonnet · depends: ST2b, E3 (merged)
+### N1 — Standard specimen: right half mirrored, septum centred        [review: PR open] · Sonnet · depends: ST2b, E3 (merged)
+Result (2026-10-05): `tools/ssb-pipeline/uw/normalize.py` built the standard specimen; the numbers are in the PR body. First run escalated (midline fit, frontal tables); the owner answered the same day: gate on the fit at the septum, mirror at R = 0, frontal tables exempt, one-sided landmarks stay as scanned. Step 8's "yaw negated" was corrected: yaw is side-relative (`scope.js`), so the mirrored left pose has the same yaw. One-sided landmarks (`lm.greater-palatine-foramen.L`, `lm.infraorbital-foramen.L`, `s.foramen-lacerum.L`, `s.foramen-ovale.L`, `lm.sphenopalatine-foramen.R`, `lm.vidian-canal-anterior.R`, `s.anterior-clinoid-process.R`, `s.petrous-apex.R`) stay as scanned; `lm.infraorbital-foramen.L` then lies 4.01 mm from the mirrored left maxillary mesh, so the two landmark-vs-mesh checks now cover paired landmarks only (owner, 2026-10-05; threshold unchanged, row guard 8 -> 6 because only six paired rows remain).
 Goal: the page serves a symmetric, standard specimen (O6, `docs/ssb.md`
 §5.1); the as-scanned head stays the pipeline's input.
 Read: `docs/ssb.md` §4, §5.1 (the standard-specimen paragraph), §5.3,

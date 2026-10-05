@@ -22,7 +22,7 @@
    Imports stamps.js only; no DOM is touched, so the tests run this module
    in plain Node.
    ============================================================= */
-import { STAMPS } from './stamps.js?v=d7c9ba49';
+import { STAMPS } from './stamps.js?v=e6c725b8';
 
 export const CT_META = 'ssb/ct/ct.json';
 export const CT_DATA = 'ssb/ct/ct.u8.gz';
