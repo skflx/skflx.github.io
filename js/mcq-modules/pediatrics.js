@@ -28,19 +28,14 @@ const CONCEPTS = {
   'middle-ear': { label: 'Middle Ear', domain: 'foundations' },
   'inner-ear': { label: 'Inner Ear', domain: 'foundations' },
   ossicles: { label: 'Ossicles', domain: 'foundations' },
-  EAC: { label: 'EAC', domain: 'foundations' },
   'first-arch': { label: 'First Arch', domain: 'foundations' },
   physiology: { label: 'Physiology', domain: 'foundations' },
   tonotopy: { label: 'Tonotopy', domain: 'foundations' },
-  NIHL: { label: 'Noise-Induced HL', domain: 'foundations' },
   mechanism: { label: 'Mechanism', domain: 'foundations' },
   potassium: { label: 'K⁺ Recycling', domain: 'foundations' },
-  collagen: { label: 'Collagen', domain: 'foundations' },
-  vestibular: { label: 'Vestibular', domain: 'foundations' },
   epidemiology: { label: 'Epidemiology', domain: 'foundations' },
   CHL: { label: 'Conductive HL', domain: 'CHL' },
   atresia: { label: 'Aural Atresia', domain: 'CHL' },
-  jahrsdoerfer: { label: 'Jahrsdoerfer', domain: 'CHL' },
   BCD: { label: 'BCDs / BAHA', domain: 'CHL' },
   cholesteatoma: { label: 'Cholesteatoma', domain: 'CHL' },
   congenital: { label: 'Congenital Anomalies', domain: 'CHL' },
@@ -70,7 +65,6 @@ const CONCEPTS = {
   diagnosis: { label: 'Diagnosis', domain: 'workup' },
   workup: { label: 'Workup', domain: 'workup' },
   EHDI: { label: 'EHDI', domain: 'workup' },
-  screening: { label: 'Screening', domain: 'workup' },
   surgical: { label: 'Surgical', domain: 'management' },
   treatment: { label: 'Treatment', domain: 'management' },
   CI: { label: 'Cochlear Implant', domain: 'management' },
@@ -82,6 +76,7 @@ const CONCEPTS = {
 const ITEMS = [
   {
     id: 'q1',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'During which embryonic weeks do the six Hillocks of His form?',
     options: [
@@ -97,6 +92,7 @@ const ITEMS = [
   },
   {
     id: 'q2',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Which adult auricular structure derives from the third Hillock of His?',
     options: [
@@ -112,6 +108,7 @@ const ITEMS = [
   },
   {
     id: 'q3',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Failure of meatal plug resorption by the 21st fetal week most directly results in:',
     options: [
@@ -123,10 +120,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'The meatal plug, formed at week 9, must resorb by week 21 to canalize the EAC.',
     detailed: 'The first pharyngeal groove invaginates to form the primary meatus, which fills with proliferating ectodermal cells (meatal plug) at 9 weeks. The plug expands into the disc-shaped meatal plate, contacts the malleus, and thins to form the outer epithelial layer of the TM. If the core fails to canalize by 21 weeks, congenital aural atresia or stenosis results — often unilateral, right-sided, and male-predominant. Microtia is a hillock-formation failure; TM perforation is acquired.',
-    concepts: ['embryology', 'external-ear', 'EAC', 'atresia'],
+    concepts: ['embryology', 'external-ear', 'atresia'],
   },
   {
     id: 'q4',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'The head of the malleus and body of the incus derive from:',
     options: [
@@ -138,10 +136,11 @@ const ITEMS = [
     correct: 'b',
     brief: "Meckel's (1st arch) cartilage forms the head of malleus and body and short process of incus.",
     detailed: "First arch (Meckel's): head of malleus, body and short process of incus. Second arch (Reichert's): manubrium of malleus, long process and body of incus, stapes superstructure, tympanic surface of stapes footplate. The vestibular surface of the stapes footplate derives from the otic capsule. The incudostapedial joint forms at 8.5 weeks; cartilaginous ossicular skeleton replaces mesenchymal precursors at 15 weeks.",
-    concepts: ['embryology', 'middle-ear', 'ossicles', 'first-arch'],
+    concepts: ['middle-ear', 'ossicles', 'first-arch'],
   },
   {
     id: 'q5',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'When does the otic capsule complete ossification?',
     options: [
@@ -157,6 +156,7 @@ const ITEMS = [
   },
   {
     id: 'q6',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'The middle ear transformer ratio of approximately 22:1 produces what gain?',
     options: [
@@ -172,6 +172,7 @@ const ITEMS = [
   },
   {
     id: 'q7',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Why does noise-induced hearing loss preferentially produce a notch at 4 kHz?',
     options: [
@@ -183,10 +184,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'EAC resonance at ~3500 Hz boosts sound energy in the 3–4 kHz range by ~15 dB.',
     detailed: 'The EAC functions as a quarter-wavelength resonator with peak amplification near 3500 Hz, delivering ~15 dB of passive gain. Combined with the basal cochlea\'s vulnerability (stiffer basilar membrane, high-frequency tonotopy, higher metabolic demand for OHCs), this concentrates noise damage at ~4 kHz — the classic audiometric notch. Lateral 1/3 of the EAC is cartilaginous; medial 2/3 is bony.',
-    concepts: ['physiology', 'external-ear', 'NIHL', 'tonotopy'],
+    concepts: ['physiology', 'external-ear', 'tonotopy'],
   },
   {
     id: 'q8',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Outer hair cell function is best evaluated by:',
     options: [
@@ -198,10 +200,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'OAEs assess outer hair cell function via electromotile feedback to the basilar membrane.',
     detailed: 'OHCs amplify basilar membrane motion via electromotility (prestin protein) and produce otoacoustic emissions as a byproduct. Loss of OAEs indicates OHC dysfunction. In auditory neuropathy spectrum disorder (ANSD), OAEs are preserved (OHCs intact) but ABR is absent (synaptic or neural failure) — the classic decoupling. ABR evaluates the entire pathway; tympanometry assesses middle ear; acoustic reflexes test the stapedial reflex arc.',
-    concepts: ['physiology', 'inner-ear', 'audiology', 'ANSD'],
+    concepts: ['inner-ear', 'audiology', 'ANSD'],
   },
   {
     id: 'q9',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'The base of the cochlea is most responsive to which frequencies?',
     options: [
@@ -213,10 +216,11 @@ const ITEMS = [
     correct: 'c',
     brief: 'Tonotopy: basal cochlea (narrow, stiff basilar membrane) is high-frequency tuned; apex is low-frequency tuned.',
     detailed: 'The basilar membrane has a mechanical gradient — narrow and stiff at the base, wide and compliant at the apex. Sound produces a traveling wave that peaks at the location matching its frequency. This tonotopy is preserved by cochlear implant electrode arrays, with basal electrodes carrying high-frequency information. Hybrid/EAS strategies preserve apical acoustic hearing while electrically stimulating the base.',
-    concepts: ['physiology', 'inner-ear', 'tonotopy', 'CI'],
+    concepts: ['physiology', 'inner-ear', 'tonotopy'],
   },
   {
     id: 'q10',
+    section: 'Conductive',
     type: 'mcq',
     stem: 'What proportion of pediatric hearing loss is conductive?',
     options: [
@@ -232,6 +236,7 @@ const ITEMS = [
   },
   {
     id: 'q11',
+    section: 'Conductive',
     type: 'mcq',
     stem: 'In the Jahrsdoerfer scale for atresiaplasty candidacy, presence of the stapes is worth how many points?',
     options: [
@@ -243,10 +248,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Stapes presence = 2 points (the only 2-point item); all other 8 parameters = 1 point each. Total = 10.',
     detailed: 'The Jahrsdoerfer scale weights stapes presence at 2 points because no functional ossicular reconstruction is possible without it. Remaining 1-point parameters: oval window open, middle ear space, facial nerve normal, malleus-incus complex present, mastoid pneumatization, incus-stapes connection, round window normal, external ear appearance. Scoring: 10 Excellent, 9 Very Good, 8 Good, 7 Fair, 6 Marginal, ≤5 Poor. Most surgeons require ≥7 for atresiaplasty candidacy.',
-    concepts: ['CHL', 'atresia', 'jahrsdoerfer', 'surgical'],
+    concepts: ['CHL', 'atresia', 'surgical'],
   },
   {
     id: 'q12',
+    section: 'Conductive',
     type: 'mcq',
     stem: "According to Shannon et al.'s meta-analysis of aural atresia outcomes, which intervention shows greater hearing improvement?",
     options: [
@@ -258,10 +264,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'BCDs showed 34.4 ± 1.6 dB gain vs. 22.4 ± 1.5 dB for atresiaplasty (p<0.0001), with fewer complications.',
     detailed: 'The Shannon meta-analysis tilts modern practice toward BCDs as first-line, especially in marginal Jahrsdoerfer scores. Atresiaplasty remains reasonable in Jahrsdoerfer ≥8 at experienced centers, offering more natural cosmesis and no external hardware. BCDs are primary for non-operable cases. Early soft-band BCD is now standard for both unilateral and bilateral atresia in infancy — even unilateral HL carries documented academic and behavioral risks.',
-    concepts: ['CHL', 'atresia', 'surgical', 'BCD'],
+    concepts: ['atresia', 'surgical', 'BCD'],
   },
   {
     id: 'q13',
+    section: 'Conductive',
     type: 'mcq',
     stem: 'Congenital aural atresia is most commonly associated with:',
     options: [
@@ -273,10 +280,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Congenital aural atresia is typically unilateral, right-sided, and more common in males.',
     detailed: 'Most cases are idiopathic and multifactorial. Syndromic associations include Treacher Collins (TCOF1), Goldenhar (hemifacial microsomia), and Crouzon syndrome. Atresia may be isolated or accompanied by microtia and ossicular abnormalities. Workup includes audiometry, careful exam for syndromic features, and CT temporal bone — typically deferred to age 4–5+ when surgical planning becomes relevant.',
-    concepts: ['CHL', 'atresia', 'epidemiology', 'congenital'],
+    concepts: ['atresia', 'epidemiology', 'congenital'],
   },
   {
     id: 'q14',
+    section: 'Conductive',
     type: 'mcq',
     stem: 'A congenital cholesteatoma classically presents as:',
     options: [
@@ -292,6 +300,7 @@ const ITEMS = [
   },
   {
     id: 'q15',
+    section: 'Conductive',
     type: 'mcq',
     stem: 'The most common congenital ossicular anomaly is:',
     options: [
@@ -303,10 +312,11 @@ const ITEMS = [
     correct: 'c',
     brief: 'Congenital stapes footplate fixation is the most common congenital ossicular anomaly.',
     detailed: 'Congenital ossicular anomalies have an overall incidence of 0.5–1.2%, with ~25% syndromic. Stapes footplate fixation can mimic juvenile otosclerosis (low-frequency CHL, possible Carhart notch at 2 kHz) but is stable from birth rather than progressive. Always obtain CT before pediatric stapes surgery to exclude IP-III (Phelps/DFN3) — a potential perilymph gusher setup that contraindicates stapedotomy.',
-    concepts: ['CHL', 'ossicles', 'congenital', 'DFN3'],
+    concepts: ['ossicles', 'congenital', 'DFN3'],
   },
   {
     id: 'q16',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'The most common non-genetic cause of pediatric SNHL is:',
     options: [
@@ -322,6 +332,7 @@ const ITEMS = [
   },
   {
     id: 'q17',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'The diagnostic window for distinguishing congenital from postnatally-acquired CMV is:',
     options: [
@@ -337,6 +348,7 @@ const ITEMS = [
   },
   {
     id: 'q18',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'First-line treatment for symptomatic congenital CMV with CNS involvement is:',
     options: [
@@ -352,6 +364,7 @@ const ITEMS = [
   },
   {
     id: 'q19',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'Which MRI finding constellation is most suggestive of congenital CMV?',
     options: [
@@ -367,6 +380,7 @@ const ITEMS = [
   },
   {
     id: 'q20',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'Which mitochondrial variant confers dose-independent susceptibility to aminoglycoside ototoxicity?',
     options: [
@@ -378,10 +392,11 @@ const ITEMS = [
     correct: 'c',
     brief: 'A1555G in the mitochondrial 12S rRNA (MT-RNR1) causes dose-independent aminoglycoside ototoxicity.',
     detailed: 'Carriers can develop profound deafness from a single dose of aminoglycoside. The mutation is maternally inherited and affects ~1 in 500 individuals. Family history of HL after antibiotic exposure should prompt mitochondrial testing before any aminoglycoside use. MT-TS1 confers similar susceptibility. MT-TL1 and MT-TK underlie the multisystem MELAS and MERRF syndromes respectively, in which HL is part of a broader phenotype.',
-    concepts: ['acquired-SNHL', 'ototoxicity', 'mitochondrial', 'mechanism'],
+    concepts: ['ototoxicity', 'mitochondrial', 'mechanism'],
   },
   {
     id: 'q21',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'GJB2 / Connexin 26 mutations cause hearing loss by:',
     options: [
@@ -393,10 +408,11 @@ const ITEMS = [
     correct: 'c',
     brief: 'Connexin 26 forms gap junctions in supporting cells that recycle K⁺ from hair cells back to endolymph.',
     detailed: 'Hair cell depolarization requires K⁺ influx from endolymph. The spent K⁺ exits through the basolateral membrane and must return to endolymph via gap junctions of supporting cells, fibrocytes, and stria vascularis. GJB2 mutations disrupt this recycling, causing severe-to-profound SNHL despite normal inner ear anatomy. GJB2 accounts for 15–50% of AR non-syndromic deafness: 35delG most common in European descent, 167delT in Ashkenazi, 235delC in East Asians. Excellent CI candidates.',
-    concepts: ['genetic-SNHL', 'GJB2', 'mechanism', 'potassium'],
+    concepts: ['genetic-SNHL', 'GJB2', 'potassium'],
   },
   {
     id: 'q22',
+    section: 'Sensorineural',
     type: 'mcq',
     stem: 'DFN3 (Phelps syndrome / X-linked stapes gusher) results from mutation in:',
     options: [
@@ -408,10 +424,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'DFN3 is caused by POU3F4 mutation, producing incomplete partition type III on imaging.',
     detailed: 'POU3F4 is a transcription factor; its disruption produces failure of bony separation between the IAC and cochlear base (incomplete partition type III). CT shows bulbous IAC with widened cochlear aperture. Clinical: mixed hearing loss, congenital stapes fixation, and catastrophic perilymph gusher with stapes surgery from abnormal CSF–perilymph communication. Always obtain CT before pediatric stapes surgery — IP-III contraindicates stapedotomy.',
-    concepts: ['genetic-SNHL', 'syndromic-XL', 'DFN3', 'imaging', 'surgical'],
+    concepts: ['genetic-SNHL', 'syndromic-XL', 'DFN3'],
   },
   {
     id: 'q23',
+    section: 'Workup',
     type: 'mcq',
     stem: "The EHDI '1:3:6 rule' refers to:",
     options: [
@@ -423,10 +440,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Screen by 1 month, audiologic evaluation of failures by 3 months, intervention by 6 months.',
     detailed: "Pre-EHDI, the average age of congenital HL diagnosis was ~2 years — well past the critical period for language. Yoshinaga-Itano's foundational work established that intervention before 6 months produces language outcomes statistically indistinguishable from normal-hearing peers. The aspirational target is now 1:2:3. Largest dropout is at the diagnostic step (loss to follow-up after failed screen). Ongoing surveillance from 2 months addresses delayed-onset/progressive HL, dominated by cCMV.",
-    concepts: ['EHDI', 'screening', 'epidemiology'],
+    concepts: ['EHDI', 'epidemiology'],
   },
   {
     id: 'q24',
+    section: 'Workup',
     type: 'mcq',
     stem: 'For a 9-month-old infant, the most appropriate behavioral audiologic test is:',
     options: [
@@ -442,6 +460,7 @@ const ITEMS = [
   },
   {
     id: 'q25',
+    section: 'Workup',
     type: 'mcq',
     stem: 'In a child with bilateral severe-to-profound congenital SNHL, what targeted test screens for a treatable, potentially lethal syndrome?',
     options: [
@@ -453,10 +472,11 @@ const ITEMS = [
     correct: 'c',
     brief: 'EKG screens for Jervell and Lange-Nielsen syndrome (prolonged QT) in bilateral severe-to-profound SNHL.',
     detailed: 'JLN combines bilateral severe-to-profound SNHL with prolonged QT — untreated mortality ~50% by age 15 from ventricular arrhythmia. KCNQ1 and KCNE1 encode potassium channel subunits required for both cardiac repolarization (IKs) and endolymph K⁺ secretion by the stria vascularis. Treatment: beta-blockade ± ICD. Avoid QT-prolonging drugs (macrolides, ondansetron). Universal lab batteries are no longer recommended — phenotype-driven targeted testing has higher yield.',
-    concepts: ['workup', 'JLN', 'syndromic-AR', 'potassium'],
+    concepts: ['workup', 'JLN', 'potassium'],
   },
   {
     id: 'q26',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'A child with preauricular pits, branchial cleft cysts, mixed hearing loss, and renal anomalies most likely has:',
     options: [
@@ -472,6 +492,7 @@ const ITEMS = [
   },
   {
     id: 'q27',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'Treacher Collins syndrome results from mutation in:',
     options: [
@@ -483,10 +504,11 @@ const ITEMS = [
     correct: 'a',
     brief: 'TCOF1 on 5q32-33.1 encodes treacle protein, involved in neural crest cell ribosome biogenesis.',
     detailed: 'Treacher Collins (mandibulofacial dysostosis) is AD with 50% de novo mutations. Features: hypoplastic facial bones, downward-slanting palpebral fissures, lower eyelid coloboma with lash absence, micrognathia (airway concern in infancy), choanal atresia in some, ear atresia/ossicular anomalies, malformed oval window. Atresiaplasty is technically challenging due to distorted anatomy and aberrant facial nerve course; BCDs are often preferred.',
-    concepts: ['syndromic-AD', 'treacher-collins', 'first-arch', 'atresia'],
+    concepts: ['syndromic-AD', 'treacher-collins', 'first-arch'],
   },
   {
     id: 'q28',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'Waardenburg syndrome Type 1 is distinguished from Type 2 by the presence of:',
     options: [
@@ -502,6 +524,7 @@ const ITEMS = [
   },
   {
     id: 'q29',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'The three major diagnostic criteria for CHARGE syndrome (Verloes) are:',
     options: [
@@ -517,6 +540,7 @@ const ITEMS = [
   },
   {
     id: 'q30',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'The most common autosomal recessive syndromic hearing loss is:',
     options: [
@@ -532,6 +556,7 @@ const ITEMS = [
   },
   {
     id: 'q31',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'Which Usher syndrome subtype features delayed motor milestones from vestibular areflexia?',
     options: [
@@ -543,10 +568,11 @@ const ITEMS = [
     correct: 'a',
     brief: 'Usher Type 1 = profound congenital HL + vestibular areflexia + prepubertal retinitis pigmentosa.',
     detailed: 'Type 1: profound HL + vestibular areflexia (delayed sitting, walking) + prepubertal RP, often MYO7A. Type 2: moderate-severe HL + normal vestibular + pubertal RP, USH2A. Type 3: progressive HL + variable vestibular + post-pubertal RP. Type 1 is most relevant for pediatric ENT: identify at newborn screen, watch for motor delay, refer to ophthalmology for ERG (more sensitive than fundoscopy in young children), and consider early bilateral CI before vision loss progresses.',
-    concepts: ['syndromic-AR', 'usher', 'vestibular', 'CI'],
+    concepts: ['syndromic-AR', 'usher', 'CI'],
   },
   {
     id: 'q32',
+    section: 'Workup',
     type: 'mcq',
     stem: 'The most common inner ear malformation seen on imaging in pediatric SNHL is:',
     options: [
@@ -558,10 +584,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'EVA is the most common radiologic abnormality in pediatric SNHL, often associated with Pendred syndrome.',
     detailed: 'EVA is defined as vestibular aqueduct midpoint diameter >1.5 mm (Valvassori) or >2 mm at operculum (Cincinnati criterion). Often associated with IP-II (Mondini). SLC26A4 mutations underlie Pendred when bilateral. EVA can produce CHL (third-window effect), SNHL, or mixed loss — often progressive with head trauma. Surgical caveat: higher CSF gusher risk at cochleostomy during CI.',
-    concepts: ['imaging', 'EVA', 'syndromic-AR', 'pendred'],
+    concepts: ['EVA', 'syndromic-AR', 'pendred'],
   },
   {
     id: 'q33',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'Alport syndrome results from mutations in genes encoding:',
     options: [
@@ -573,10 +600,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Mutations in COL4A3, COL4A4, COL4A5 (type IV collagen) cause Alport syndrome.',
     detailed: 'Type IV collagen forms the glomerular basement membrane, cochlear basement membrane, and lens capsule. Clinical diagnosis requires 4 of: family history of hematuria, high-frequency SNHL, ocular changes (anterior lenticonus), GBM changes on biopsy. Most common inheritance is X-linked. High-frequency SNHL often precedes renal failure — urinalysis is reasonable screening in progressive high-frequency loss. Renal transplant may be needed in late adolescence.',
-    concepts: ['syndromic-XL', 'alport', 'collagen'],
+    concepts: ['syndromic-XL', 'alport'],
   },
   {
     id: 'q34',
+    section: 'Syndromic',
     type: 'mcq',
     stem: 'Jervell and Lange-Nielsen syndrome results from mutation in which gene class?',
     options: [
@@ -588,10 +616,11 @@ const ITEMS = [
     correct: 'c',
     brief: 'KCNQ1 and KCNE1 encode potassium channel subunits required for both cardiac repolarization and endolymph K⁺ secretion.',
     detailed: 'The same IKs channel is required for cardiac repolarization and for K⁺ secretion by the stria vascularis — explaining the dual phenotype of bilateral severe-to-profound SNHL + prolonged QT. JLN is AR; the heterozygous state produces Romano-Ward syndrome (long QT without HL). Treatment: beta-blockade ± ICD. Avoid QT-prolonging drugs. CI is safe with cardiology clearance and anesthetic precautions.',
-    concepts: ['syndromic-AR', 'JLN', 'potassium', 'mechanism'],
+    concepts: ['JLN', 'potassium', 'mechanism'],
   },
   {
     id: 'q35',
+    section: 'Workup',
     type: 'mcq',
     stem: 'For most pediatric SNHL imaging workup, the preferred first-line study is:',
     options: [
@@ -607,6 +636,7 @@ const ITEMS = [
   },
   {
     id: 'q36',
+    section: 'Management',
     type: 'mcq',
     stem: 'Following bacterial meningitis with profound SNHL, why is urgent cochlear implantation often recommended?',
     options: [
@@ -618,10 +648,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Post-meningitis labyrinthitis ossificans can begin within weeks, potentially preventing electrode insertion.',
     detailed: 'Streptococcus pneumoniae meningitis is the most common cause. Bony obliteration of the scala tympani can begin within weeks, scarring the cochlear lumen and making conventional electrode insertion impossible. Serial MRI surveillance is critical — loss of fluid signal in the cochlea on T2 suggests fibrosis preceding ossification. Urgent CI may be required even before optimal pre-op preparation.',
-    concepts: ['surgical', 'CI', 'meningitis', 'acquired-SNHL'],
+    concepts: ['surgical', 'CI', 'meningitis'],
   },
   {
     id: 'q37',
+    section: 'Cases',
     type: 'mcq',
     stem: 'A 3-month-old with right Grade III microtia/aural atresia and right CHL (~50–60 dB), normal left hearing. What is the most appropriate initial amplification?',
     options: [
@@ -633,10 +664,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Early soft-band BCD on the right side is standard — unilateral HL carries documented academic and developmental risks.',
     detailed: 'Even with a normal contralateral ear, unilateral hearing loss carries ~10× higher rates of grade retention, behavioral difficulties, and IEP utilization. Children lose binaural summation, squelch, head shadow benefit, and spatial release from masking. Soft-band BAHA delivers bone-conducted sound bypassing the atresia. Osseointegrated implants are deferred to age 5+ when temporal bone thickness permits stable integration (≥3 mm). CT and atresiaplasty vs. BCD decision-making typically wait until age 4–5+.',
-    concepts: ['cases', 'atresia', 'BCD', 'CHL'],
+    concepts: ['cases', 'BCD', 'CHL'],
   },
   {
     id: 'q38',
+    section: 'Cases',
     type: 'mcq',
     stem: 'A 3-day-old with failed newborn screen, blueberry muffin rash, and MRI showing periventricular calcifications. The diagnostic and treatment priority is:',
     options: [
@@ -648,10 +680,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'CMV PCR within the 21-day window confirms congenital infection; valganciclovir 6 months for symptomatic disease with CNS/SNHL involvement.',
     detailed: 'Beyond 21 days, postnatal acquisition cannot be excluded by PCR. Urine, saliva, or dried blood spot PCR are all acceptable. Symptomatic cCMV with CNS findings and/or SNHL is the standard treatment indication. Monitor weekly CBC for neutropenia. Long-term audiologic surveillance is essential — delayed-onset and progressive HL can occur years later (~7% of asymptomatic cCMV infants develop delayed HL).',
-    concepts: ['cases', 'cCMV', 'treatment', 'diagnosis'],
+    concepts: ['cases', 'treatment', 'diagnosis'],
   },
   {
     id: 'q39',
+    section: 'Cases',
     type: 'mcq',
     stem: 'A 3-week-old with bilateral severe-to-profound SNHL, GJB2-positive, no other risk factors. Long-term expectations include:',
     options: [
@@ -663,10 +696,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'GJB2 phenotype is the textbook CI candidate: stable severe-to-profound prelingual SNHL with normal anatomy and excellent outcomes.',
     detailed: 'GJB2 (DFNB1, Connexin 26) accounts for 15–50% of AR non-syndromic SNHL. Hearing is typically stable from birth, normal inner ear anatomy, normal cochlear nerve, no syndromic features. FDA approved CI at ≥9 months for severe-to-profound bilateral SNHL. Bilateral simultaneous CI is now standard when bilateral profound SNHL is confirmed — binaural benefits include localization, speech in noise, reduced listening effort. Sequential second-side CI should be considered within ~3–4 years for best outcomes.',
-    concepts: ['cases', 'GJB2', 'CI', 'genetic-SNHL'],
+    concepts: ['cases', 'GJB2', 'genetic-SNHL'],
   },
   {
     id: 'q40',
+    section: 'Management',
     type: 'mcq',
     stem: 'Gene therapy for which deafness gene has shown the most clinical success to date?',
     options: [

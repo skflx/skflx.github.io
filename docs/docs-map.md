@@ -20,6 +20,7 @@ no design judgment required.
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
 | `docs/diagrams.md` | The ASCII 3D figure system: request template, workflow, scene schema, inks, rules | The engine gains or changes a feature, a part kind, an ink, or the bake/check contract |
 | `.claude/skills/ascii-diagram/SKILL.md` | The agent playbook for a figure request (`/ascii-diagram`) | The workflow or its verification steps change |
+| `.claude/skills/oksat-module/SKILL.md` | The agent playbook for a new OKSAT module: sources, figures, ladder, cases, verification (`/oksat-module`) | The module spec, the engine's input rules, or `tools/lint-oksat.mjs` change |
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
 | `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |
 | `docs/ssb-roadmap.md` | SSB task board: status, owner decisions/actions, waves, work packages, checkpoints, content backlog | A WP changes status (same PR), a wave closes (shrink done WPs), a decision lands |

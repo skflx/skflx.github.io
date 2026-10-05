@@ -10,8 +10,13 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
+node tools/lint-oksat.mjs <slug>          # a new OKSAT module against the quality spec (not run in CI; older modules predate it)
 node tools/test-ssb.mjs                   # SSB: variant lab (dioramas, pathway rules, picking, hash) + CT mode
 ```
+
+In CI (`.github/workflows/ci.yml`) `check-data` and the page smoke test always run; the SSB,
+OKSAT-engine and wiki-sync suites run only when a file they exercise changed (a push to
+`master` runs everything). Locally, run whichever suite your change touches.
 
 The browser suites need a real Chromium and nothing else: every page script
 is same-origin (React/htm are vendored in `js/vendor/`), so they run in a

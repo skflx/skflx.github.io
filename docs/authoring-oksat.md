@@ -142,6 +142,11 @@ Both are optional strings (relative paths from the repo root). When absent,
 nothing renders — the engine handles this gracefully. Always provide an
 `imageAlt` / `explanationImageAlt` alongside.
 
+The engine renders plain text only: `**bold**`, `#` headings, and backticks show
+literally. Use `\n` for line breaks and `• ` for bullets. `tools/lint-oksat.mjs`
+flags markdown. The agent recipe for a whole module (sources, figures, ladder,
+cases) is `.claude/skills/oksat-module/SKILL.md`.
+
 A labeled figure (a classification panel, a staging table) belongs in
 `explanationImage`, not `image` — in the stem it shows the answer before the
 recall gate. Third-party figures keep their license terms: `otoplasty` reuses

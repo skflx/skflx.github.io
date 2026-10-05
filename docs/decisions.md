@@ -94,6 +94,10 @@ Full schema and quality spec: `docs/authoring-oksat.md`. The rules that matter m
    (both checked). The engine tolerates missing `DOMAINS`/`CONCEPTS`, but the
    quality spec requires both — every shipped module has them.
 
+6. A new module comes back clean from `node tools/lint-oksat.mjs <slug>` (domains
+   5–8, concepts 20–50, 1–3 tags per item, no orphan concepts, alt text on every
+   image, plain text only). The recipe is `.claude/skills/oksat-module/SKILL.md`.
+
 Modules are authored by hand. There is no generator — the Gemini-backed
 Question Forge was retired in 2026-09.
 
