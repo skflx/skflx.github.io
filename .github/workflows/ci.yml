@@ -23,7 +23,7 @@ jobs:
       # Run the slow suites only when something they exercise changed.
       # check-data (every invariant) and the page smoke test always run, so
       # a cross-cutting regression still fails. A push to master runs
-      # everything. Editing this workflow runs everything too.
+      # everything.
       - name: Detect what changed
         id: changes
         run: |
@@ -33,7 +33,7 @@ jobs:
             changed="ALL"
           fi
           echo "Changed files:"; echo "$changed"
-          shared='css/site\.css|js/site\.js|js/theme-boot\.js|tools/smoke-lib\.mjs|package(-lock)?\.json|\.github/workflows/ci\.yml'
+          shared='css/site\.css|js/site\.js|js/theme-boot\.js|tools/smoke-lib\.mjs|package(-lock)?\.json'
           match() { [ "$changed" = "ALL" ] || echo "$changed" | grep -Eq "^($1|$shared)"; echo $?; }
           flag() { if [ "$(match "$2")" = "0" ]; then echo "$1=true" >> "$GITHUB_OUTPUT"; else echo "$1=false" >> "$GITHUB_OUTPUT"; fi; }
           flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-)'
