@@ -9746,27 +9746,27 @@
  "meshes": {
   "core": {
    "file": "core.glb.gz",
-   "bytes": 1377029,
-   "bytes_uncompressed": 1871300,
+   "bytes": 1377172,
+   "bytes_uncompressed": 1873052,
    "triangles": 155998
   },
   "ethmoid-frontal": {
    "file": "ethmoid-frontal.glb.gz",
-   "bytes": 299933,
-   "bytes_uncompressed": 410840,
-   "triangles": 33442
+   "bytes": 310243,
+   "bytes_uncompressed": 426376,
+   "triangles": 34600
   },
   "sphenoid-sellar": {
    "file": "sphenoid-sellar.glb.gz",
-   "bytes": 123931,
-   "bytes_uncompressed": 170076,
-   "triangles": 13998
+   "bytes": 122344,
+   "bytes_uncompressed": 170096,
+   "triangles": 14000
   },
   "walls": {
    "file": "walls.glb.gz",
-   "bytes": 984603,
-   "bytes_uncompressed": 1345304,
-   "triangles": 108642
+   "bytes": 978681,
+   "bytes_uncompressed": 1339832,
+   "triangles": 108216
   }
  },
  "walls": {
@@ -9786,7 +9786,7 @@
    },
    "retromaxillary_seeds_used": {
     "R": 55,
-    "L": 54
+    "L": 55
    },
    "retromaxillary_tips_by_side": {
     "R": 85,
@@ -9794,31 +9794,31 @@
    },
    "compartments_cm3": {
     "orbit.R": 21.38,
-    "orbit.L": 20.97,
-    "retromaxillary.L": 45.63,
+    "orbit.L": 21.38,
+    "retromaxillary.L": 47.89,
     "retromaxillary.R": 47.89,
-    "intracranial": 293.38,
-    "exterior": 439.92,
-    "pharynx": 8.55,
-    "oral": 8.06
+    "intracranial": 291.56,
+    "exterior": 445.79,
+    "pharynx": 6.39,
+    "oral": 8.6
    }
   },
   "walls": {
    "s.lamina-papyracea.R": {
-    "voxels": 5452,
+    "voxels": 5454,
     "dropped_not_between": 92,
     "T_mm": 4.0,
     "bone_fraction": 0.89
    },
    "s.orbital-floor.R": {
-    "voxels": 8213,
+    "voxels": 8214,
     "dropped_not_between": 139,
     "T_mm": 5.0,
     "bone_fraction": 0.95
    },
    "s.maxillary-medial-wall.R": {
-    "voxels": 13748,
-    "dropped_not_between": 643,
+    "voxels": 13686,
+    "dropped_not_between": 641,
     "T_mm": 6.0,
     "bone_fraction": 0.95
    },
@@ -9841,38 +9841,38 @@
     "bone_fraction": 1.0
    },
    "s.nasal-floor.R": {
-    "voxels": 12180,
-    "dropped_not_between": 355,
+    "voxels": 12445,
+    "dropped_not_between": 383,
     "T_mm": 16.0,
     "bone_fraction": 1.0
    },
    "s.basal-lamella.R": {
-    "voxels": 354,
+    "voxels": 350,
     "dropped_not_between": 25,
     "T_mm": 3.0,
     "bone_fraction": 0.31
    },
    "ethmoid-roof.R": {
-    "voxels": 3180,
-    "dropped_not_between": 224,
+    "voxels": 3208,
+    "dropped_not_between": 103,
     "T_mm": 5.0,
     "bone_fraction": 0.94
    },
    "s.cribriform-plate.R": {
-    "voxels": 781,
-    "dropped_not_between": 105,
+    "voxels": 378,
+    "dropped_not_between": 4,
     "T_mm": 5.0,
-    "bone_fraction": 0.94
+    "bone_fraction": 0.86
    },
    "s.frontal-sinus-anterior-table.R": {
-    "voxels": 11549,
-    "dropped_not_between": 108,
+    "voxels": 9054,
+    "dropped_not_between": 124,
     "T_mm": 14.0,
     "bone_fraction": 1.0
    },
    "s.frontal-sinus-posterior-table.R": {
-    "voxels": 10766,
-    "dropped_not_between": 411,
+    "voxels": 8941,
+    "dropped_not_between": 134,
     "T_mm": 10.0,
     "bone_fraction": 1.0
    },
@@ -9883,128 +9883,128 @@
     "bone_fraction": 1.0
    },
    "s.lamina-papyracea.L": {
-    "voxels": 6038,
-    "dropped_not_between": 87,
+    "voxels": 5454,
+    "dropped_not_between": 92,
     "T_mm": 4.0,
-    "bone_fraction": 0.9
+    "bone_fraction": 0.89
    },
    "s.orbital-floor.L": {
-    "voxels": 7913,
-    "dropped_not_between": 172,
+    "voxels": 8217,
+    "dropped_not_between": 139,
     "T_mm": 5.0,
-    "bone_fraction": 0.98
+    "bone_fraction": 0.95
    },
    "s.maxillary-medial-wall.L": {
-    "voxels": 11948,
-    "dropped_not_between": 541,
+    "voxels": 13717,
+    "dropped_not_between": 647,
     "T_mm": 6.0,
-    "bone_fraction": 0.93
+    "bone_fraction": 0.95
    },
    "s.maxillary-anterior-wall.L": {
-    "voxels": 30440,
-    "dropped_not_between": 345,
+    "voxels": 25557,
+    "dropped_not_between": 386,
     "T_mm": 8.0,
     "bone_fraction": 1.0
    },
    "s.maxillary-posterior-wall.L": {
-    "voxels": 13057,
-    "dropped_not_between": 1537,
+    "voxels": 11689,
+    "dropped_not_between": 2286,
     "T_mm": 6.0,
     "bone_fraction": 1.0
    },
    "s.maxillary-sinus-floor.L": {
-    "voxels": 11844,
-    "dropped_not_between": 353,
+    "voxels": 10732,
+    "dropped_not_between": 134,
     "T_mm": 16.0,
     "bone_fraction": 1.0
    },
    "s.nasal-floor.L": {
-    "voxels": 4361,
-    "dropped_not_between": 405,
+    "voxels": 12817,
+    "dropped_not_between": 361,
     "T_mm": 16.0,
     "bone_fraction": 1.0
    },
    "s.basal-lamella.L": {
-    "voxels": 778,
-    "dropped_not_between": 58,
+    "voxels": 354,
+    "dropped_not_between": 23,
     "T_mm": 3.0,
-    "bone_fraction": 0.46
+    "bone_fraction": 0.31
    },
    "ethmoid-roof.L": {
-    "voxels": 5017,
-    "dropped_not_between": 608,
+    "voxels": 3384,
+    "dropped_not_between": 142,
     "T_mm": 5.0,
-    "bone_fraction": 0.95
+    "bone_fraction": 0.94
    },
    "s.cribriform-plate.L": {
-    "voxels": 671,
-    "dropped_not_between": 23,
+    "voxels": 478,
+    "dropped_not_between": 4,
     "T_mm": 5.0,
-    "bone_fraction": 0.99
+    "bone_fraction": 0.89
    },
    "s.frontal-sinus-anterior-table.L": {
-    "voxels": 6816,
-    "dropped_not_between": 34,
+    "voxels": 9266,
+    "dropped_not_between": 128,
     "T_mm": 14.0,
     "bone_fraction": 1.0
    },
    "s.frontal-sinus-posterior-table.L": {
-    "voxels": 5958,
-    "dropped_not_between": 299,
+    "voxels": 9085,
+    "dropped_not_between": 138,
     "T_mm": 10.0,
     "bone_fraction": 1.0
    },
    "s.frontal-sinus-floor.L": {
-    "voxels": 545,
-    "dropped_not_between": 3,
+    "voxels": 995,
+    "dropped_not_between": 18,
     "T_mm": 8.0,
     "bone_fraction": 1.0
    },
    "s.intersinus-septum.M": {
-    "voxels": 2016,
-    "dropped_not_between": 75,
+    "voxels": 6449,
+    "dropped_not_between": 416,
     "T_mm": 4.0,
-    "bone_fraction": 0.78
+    "bone_fraction": 1.0
    },
    "s.frontal-intersinus-septum.M": {
-    "voxels": 709,
-    "dropped_not_between": 474,
+    "voxels": 1174,
+    "dropped_not_between": 303,
     "T_mm": 6.0,
-    "bone_fraction": 0.88
+    "bone_fraction": 1.0
    },
    "sphenoid-front": {
-    "voxels": 6275,
-    "dropped_not_between": 161,
+    "voxels": 4807,
+    "dropped_not_between": 188,
     "T_mm": 5.0,
-    "bone_fraction": 0.83
+    "bone_fraction": 0.64
    },
    "sphenoid-below": {
-    "voxels": 11118,
-    "dropped_not_between": 480,
+    "voxels": 6528,
+    "dropped_not_between": 223,
     "T_mm": 8.0,
     "bone_fraction": 1.0
    },
    "tuberculum_a_mm": -61.5,
    "sphenoid-ic": {
-    "voxels": 17818,
-    "dropped_not_between": 473,
+    "voxels": 17460,
+    "dropped_not_between": 809,
     "T_mm": 5.0,
-    "bone_fraction": 0.93
+    "bone_fraction": 0.94
    }
   },
   "septum_turbinates": {
-   "septum_voxels": 41855,
+   "septum_voxels": 42871,
    "s.inferior-turbinate.R": {
-    "voxels": 18801,
-    "cm3": 2.35,
+    "voxels": 18669,
+    "cm3": 2.33,
     "a_range_mm": [
      -49.5,
      -10.0
     ]
    },
    "s.middle-turbinate.R": {
-    "voxels": 11808,
-    "cm3": 1.48,
+    "voxels": 11716,
+    "cm3": 1.46,
     "a_range_mm": [
      -54.0,
      -11.5
@@ -10015,19 +10015,19 @@
     "middle turbinate": 19
    },
    "s.inferior-turbinate.L": {
-    "voxels": 38385,
-    "cm3": 4.8,
+    "voxels": 18899,
+    "cm3": 2.36,
     "a_range_mm": [
      -49.5,
-     -8.5
+     -10.0
     ]
    },
    "s.middle-turbinate.L": {
-    "voxels": 18936,
-    "cm3": 2.37,
+    "voxels": 11602,
+    "cm3": 1.45,
     "a_range_mm": [
-     -52.0,
-     -9.5
+     -54.0,
+     -11.5
     ]
    },
    "tips_used.L": {
@@ -10036,100 +10036,100 @@
    }
   },
   "voxels_written": {
-   "s.lamina-papyracea.R": 5452,
-   "s.orbital-floor.R": 8213,
-   "s.maxillary-medial-wall.R": 13748,
+   "s.lamina-papyracea.R": 5454,
+   "s.orbital-floor.R": 8214,
+   "s.maxillary-medial-wall.R": 13686,
    "s.maxillary-anterior-wall.R": 25557,
    "s.maxillary-posterior-wall.R": 11689,
    "s.maxillary-sinus-floor.R": 10732,
-   "s.nasal-floor.R": 12180,
-   "s.basal-lamella.R": 354,
-   "s.lateral-lamella.R": 814,
-   "s.fovea-ethmoidalis.R": 2366,
-   "s.cribriform-plate.R": 781,
-   "s.frontal-sinus-anterior-table.R": 11549,
-   "s.frontal-sinus-posterior-table.R": 10766,
+   "s.nasal-floor.R": 12445,
+   "s.basal-lamella.R": 350,
+   "s.lateral-lamella.R": 829,
+   "s.fovea-ethmoidalis.R": 2379,
+   "s.cribriform-plate.R": 378,
+   "s.frontal-sinus-anterior-table.R": 9054,
+   "s.frontal-sinus-posterior-table.R": 8941,
    "s.frontal-sinus-floor.R": 995,
-   "s.lamina-papyracea.L": 6038,
-   "s.orbital-floor.L": 7913,
-   "s.maxillary-medial-wall.L": 11948,
-   "s.maxillary-anterior-wall.L": 30440,
-   "s.maxillary-posterior-wall.L": 13057,
-   "s.maxillary-sinus-floor.L": 11844,
-   "s.nasal-floor.L": 4361,
-   "s.basal-lamella.L": 778,
-   "s.lateral-lamella.L": 1008,
-   "s.fovea-ethmoidalis.L": 4009,
-   "s.cribriform-plate.L": 671,
-   "s.frontal-sinus-anterior-table.L": 6816,
-   "s.frontal-sinus-posterior-table.L": 5958,
-   "s.frontal-sinus-floor.L": 545,
-   "s.intersinus-septum.M": 2016,
-   "s.frontal-intersinus-septum.M": 709,
-   "s.sphenoid-face.R": 1821,
-   "s.sphenoid-floor.R": 5438,
-   "s.sphenoid-face.L": 3226,
-   "s.sphenoid-floor.L": 6424,
-   "s.planum-sphenoidale.M": 2726,
-   "s.sella-turcica.M": 3840,
-   "s.clivus.M": 2079,
-   "s.sphenoid-lateral-wall.R": 3046,
-   "s.sphenoid-lateral-wall.L": 6093,
-   "s.nasal-septum.M": 41855,
-   "s.inferior-turbinate.R": 18801,
-   "s.middle-turbinate.R": 11808,
-   "s.inferior-turbinate.L": 38385,
-   "s.middle-turbinate.L": 18936,
+   "s.lamina-papyracea.L": 5454,
+   "s.orbital-floor.L": 8217,
+   "s.maxillary-medial-wall.L": 13717,
+   "s.maxillary-anterior-wall.L": 25557,
+   "s.maxillary-posterior-wall.L": 11689,
+   "s.maxillary-sinus-floor.L": 10732,
+   "s.nasal-floor.L": 12817,
+   "s.basal-lamella.L": 354,
+   "s.lateral-lamella.L": 832,
+   "s.fovea-ethmoidalis.L": 2552,
+   "s.cribriform-plate.L": 478,
+   "s.frontal-sinus-anterior-table.L": 9266,
+   "s.frontal-sinus-posterior-table.L": 9085,
+   "s.frontal-sinus-floor.L": 995,
+   "s.intersinus-septum.M": 6449,
+   "s.frontal-intersinus-septum.M": 1174,
+   "s.sphenoid-face.R": 1804,
+   "s.sphenoid-floor.R": 3740,
+   "s.sphenoid-face.L": 1809,
+   "s.sphenoid-floor.L": 3726,
+   "s.planum-sphenoidale.M": 2291,
+   "s.sella-turcica.M": 3945,
+   "s.clivus.M": 4300,
+   "s.sphenoid-lateral-wall.R": 3462,
+   "s.sphenoid-lateral-wall.L": 3462,
+   "s.nasal-septum.M": 42871,
+   "s.inferior-turbinate.R": 18669,
+   "s.middle-turbinate.R": 11716,
+   "s.inferior-turbinate.L": 18899,
+   "s.middle-turbinate.L": 11602,
    "s.orbit.R": 170517,
-   "s.orbit.L": 167351
+   "s.orbit.L": 170517
   },
   "cm3": {
    "s.lamina-papyracea.R": 0.68,
    "s.orbital-floor.R": 1.03,
-   "s.maxillary-medial-wall.R": 1.72,
+   "s.maxillary-medial-wall.R": 1.71,
    "s.maxillary-anterior-wall.R": 3.19,
    "s.maxillary-posterior-wall.R": 1.46,
    "s.maxillary-sinus-floor.R": 1.34,
-   "s.nasal-floor.R": 1.52,
+   "s.nasal-floor.R": 1.56,
    "s.basal-lamella.R": 0.04,
    "s.lateral-lamella.R": 0.1,
    "s.fovea-ethmoidalis.R": 0.3,
-   "s.cribriform-plate.R": 0.1,
-   "s.frontal-sinus-anterior-table.R": 1.44,
-   "s.frontal-sinus-posterior-table.R": 1.35,
+   "s.cribriform-plate.R": 0.05,
+   "s.frontal-sinus-anterior-table.R": 1.13,
+   "s.frontal-sinus-posterior-table.R": 1.12,
    "s.frontal-sinus-floor.R": 0.12,
-   "s.lamina-papyracea.L": 0.75,
-   "s.orbital-floor.L": 0.99,
-   "s.maxillary-medial-wall.L": 1.49,
-   "s.maxillary-anterior-wall.L": 3.81,
-   "s.maxillary-posterior-wall.L": 1.63,
-   "s.maxillary-sinus-floor.L": 1.48,
-   "s.nasal-floor.L": 0.55,
-   "s.basal-lamella.L": 0.1,
-   "s.lateral-lamella.L": 0.13,
-   "s.fovea-ethmoidalis.L": 0.5,
-   "s.cribriform-plate.L": 0.08,
-   "s.frontal-sinus-anterior-table.L": 0.85,
-   "s.frontal-sinus-posterior-table.L": 0.74,
-   "s.frontal-sinus-floor.L": 0.07,
-   "s.intersinus-septum.M": 0.25,
-   "s.frontal-intersinus-septum.M": 0.09,
+   "s.lamina-papyracea.L": 0.68,
+   "s.orbital-floor.L": 1.03,
+   "s.maxillary-medial-wall.L": 1.71,
+   "s.maxillary-anterior-wall.L": 3.19,
+   "s.maxillary-posterior-wall.L": 1.46,
+   "s.maxillary-sinus-floor.L": 1.34,
+   "s.nasal-floor.L": 1.6,
+   "s.basal-lamella.L": 0.04,
+   "s.lateral-lamella.L": 0.1,
+   "s.fovea-ethmoidalis.L": 0.32,
+   "s.cribriform-plate.L": 0.06,
+   "s.frontal-sinus-anterior-table.L": 1.16,
+   "s.frontal-sinus-posterior-table.L": 1.14,
+   "s.frontal-sinus-floor.L": 0.12,
+   "s.intersinus-septum.M": 0.81,
+   "s.frontal-intersinus-septum.M": 0.15,
    "s.sphenoid-face.R": 0.23,
-   "s.sphenoid-floor.R": 0.68,
-   "s.sphenoid-face.L": 0.4,
-   "s.sphenoid-floor.L": 0.8,
-   "s.planum-sphenoidale.M": 0.34,
-   "s.sella-turcica.M": 0.48,
-   "s.clivus.M": 0.26,
-   "s.sphenoid-lateral-wall.R": 0.38,
-   "s.sphenoid-lateral-wall.L": 0.76,
-   "s.nasal-septum.M": 5.23,
-   "s.inferior-turbinate.R": 2.35,
-   "s.middle-turbinate.R": 1.48,
-   "s.inferior-turbinate.L": 4.8,
-   "s.middle-turbinate.L": 2.37,
+   "s.sphenoid-floor.R": 0.47,
+   "s.sphenoid-face.L": 0.23,
+   "s.sphenoid-floor.L": 0.47,
+   "s.planum-sphenoidale.M": 0.29,
+   "s.sella-turcica.M": 0.49,
+   "s.clivus.M": 0.54,
+   "s.sphenoid-lateral-wall.R": 0.43,
+   "s.sphenoid-lateral-wall.L": 0.43,
+   "s.nasal-septum.M": 5.36,
+   "s.inferior-turbinate.R": 2.33,
+   "s.middle-turbinate.R": 1.46,
+   "s.inferior-turbinate.L": 2.36,
+   "s.middle-turbinate.L": 1.45,
    "s.orbit.R": 21.31,
-   "s.orbit.L": 20.92
+   "s.orbit.L": 21.31
   },
   "notes": {
    "s.basal-lamella": "PROXY: bone within 3 mm of both the anterior and the posterior ethmoid labels, whose boundary is stage B's coronal proxy plane (specimen.py), not the traced lamella; the real basal lamella is not continuous at this resolution and UW's 8 tips sit at the roof",
@@ -10598,98 +10598,98 @@
   "fields": {
    "s.anterior-cranial-fossa": {
     "source": "labels (walls.py)",
-    "voxels": 12375,
-    "bytes": 157542
+    "voxels": 9734,
+    "bytes": 135509
    },
    "s.orbit": {
     "source": "labels (walls.py)",
-    "voxels": 367024,
-    "bytes": 302170
+    "voxels": 370360,
+    "bytes": 290194
    },
    "s.internal-carotid-artery": {
     "source": "sweeps.json",
-    "inferred_fraction_of_centreline": 0.28,
-    "bytes": 166317
+    "inferred_fraction_of_centreline": 0.29,
+    "bytes": 146497
    },
    "s.optic-nerve": {
     "source": "sweeps.json",
     "inferred_fraction_of_centreline": 0.0,
-    "bytes": 155562
+    "bytes": 133263
    },
    "s.anterior-ethmoidal-artery": {
     "source": "sweeps.json",
-    "inferred_fraction_of_centreline": 0.95,
-    "bytes": 63319
+    "inferred_fraction_of_centreline": 0.91,
+    "bytes": 60973
    }
   },
   "budget_bytes": {
-   "ct": 3462035,
-   "labels": 198128,
-   "sdf": 844910,
-   "total": 4505073,
+   "ct": 3394951,
+   "labels": 190798,
+   "sdf": 766436,
+   "total": 4352185,
    "limit": 6000000
   }
  },
  "softtissue": {
   "surfaces": {
    "s.septal-mucosa.R": {
-    "triangles": 4999,
-    "area_cm2": 14.34,
+    "triangles": 5000,
+    "area_cm2": 15.19,
     "chart_bbox_mm": {
      "a": [
       -51.0,
       -1.0
      ],
      "s": [
-      -3.0,
+      -4.0,
       40.0
      ]
     },
-    "max_abs_r_mm": 7.25,
-    "roundtrip_max_3d_mm": 0.44,
-    "roundtrip_max_3d_mm_all_cells": 1.081,
-    "roundtrip_max_chart_mm": 0.419,
+    "max_abs_r_mm": 6.27,
+    "roundtrip_max_3d_mm": 0.73,
+    "roundtrip_max_3d_mm_all_cells": 0.732,
+    "roundtrip_max_chart_mm": 0.692,
     "roundtrip_samples": 400,
-    "cells": 1398,
-    "unreliable_cells": 36,
-    "filled_cells": 50
+    "cells": 1429,
+    "unreliable_cells": 45,
+    "filled_cells": 41
    },
    "s.septal-mucosa.L": {
     "triangles": 5000,
-    "area_cm2": 15.36,
+    "area_cm2": 15.16,
     "chart_bbox_mm": {
      "a": [
-      -52.0,
+      -51.0,
       -1.0
      ],
      "s": [
-      -3.0,
-      41.0
+      -4.0,
+      40.0
      ]
     },
-    "max_abs_r_mm": 5.6,
-    "roundtrip_max_3d_mm": 0.266,
-    "roundtrip_max_3d_mm_all_cells": 1.077,
-    "roundtrip_max_chart_mm": 0.153,
+    "max_abs_r_mm": 6.27,
+    "roundtrip_max_3d_mm": 0.674,
+    "roundtrip_max_3d_mm_all_cells": 0.994,
+    "roundtrip_max_chart_mm": 0.626,
     "roundtrip_samples": 400,
-    "cells": 1373,
-    "unreliable_cells": 126,
-    "filled_cells": 59
+    "cells": 1425,
+    "unreliable_cells": 42,
+    "filled_cells": 39
    }
   },
   "choanal_arch": [
-   4.0,
-   -51.5,
+   -3.5,
+   -51.0,
    12.0
   ],
   "incisive_canal": [
-   0.1,
-   -18.95,
+   0.0,
+   -19.08,
    -1.0
   ],
   "ostium_inferior_margin_s_mm": {
    "R": 23.5
   },
-  "pack_bytes": 88654
+  "pack_bytes": 87858
  }
 }

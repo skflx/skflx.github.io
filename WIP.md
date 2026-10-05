@@ -165,9 +165,13 @@ deleted.
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
 links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
-- **Specimen served as scanned, for now:** the owner chose a symmetric
-  standard specimen for the first release (O6, `docs/ssb.md` §5.1); WP N1
-  builds it, until then the left side keeps the as-scanned anomalies.
+- **Standard specimen (O6, N1 in review):** the page serves the UW head
+  standardized — right half mirrored onto the left at R = 0, septum centred,
+  thin midline plates where a paired air space would cross
+  (`tools/ssb-pipeline/uw/normalize.py`, `docs/ssb.md` §5.1; `ct.json`
+  `standard`, and a note in the Specimen and CT controls). Landmarks that
+  exist on one side only stay as scanned (listed in the roadmap, N1). The
+  as-scanned head is the pipeline's input and becomes a variant later.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
   sagittal stacks are one CT (the coronal is another head,
