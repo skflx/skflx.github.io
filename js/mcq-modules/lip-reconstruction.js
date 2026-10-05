@@ -796,7 +796,7 @@ const ITEMS = [
     correct: 'b',
     brief: 'A 40% defect falls in the middle tier (1/3–2/3). With the commissure intact, the Abbe flap is the appropriate choice — the commissure-sparing branch of the algorithm.',
     detailed: 'Walking the algorithm: (1) Defect size = 40% → too large for primary closure (<1/3), appropriate for cross-lip or rotation flaps (1/3–2/3). (2) Commissure involved? → No → Abbe flap, not Estlander. (3) Could the Karapandzic work? → Yes, but for a 40% defect the Abbe provides adequate tissue transfer with less microstomia risk. The Abbe flap will be pedicled on the contralateral superior labial artery, with width = half the defect (~20% of total lip width), rotated 180°, and maintained for ~21 days before pedicle division. Bernard-Burow-Webster flaps are reserved for >2/3 defects.',
-    concepts: ['case-lower-lip-scc', 'abbe-flap', 'commissure-decision', 'reconstructive-algorithm'],
+    concepts: ['case-lower-lip-scc', 'commissure-decision', 'reconstructive-algorithm'],
 },
 
 {
@@ -871,7 +871,7 @@ const ITEMS = [
     correct: 'b',
     brief: 'The advanced cheek tissue lacks orbicularis oris muscle. Without a dynamic sphincter, the reconstructed lip cannot generate the active contraction needed to seal the oral aperture during eating and drinking.',
     detailed: 'This is the fundamental limitation of Bernard-Burow-Webster and similar cheek advancement techniques: they provide tissue bulk and mucosal lining but not the specialized circumferential sphincter of the orbicularis oris. Contrast this with the Karapandzic flap (which preserves the muscle with its innervation) and the Abbe flap (which transfers muscle that can reinnervate). For this patient, a static sling (palmaris longus or fascia lata graft sutured between the modioli) could partially compensate by providing passive support. Dynamic function could potentially be augmented by transferring an innervated muscle slip (depressor anguli oris or masseter transfer). These are the same principles used in free flap lip reconstruction with a palmaris longus sling.',
-    concepts: ['case-near-total', 'bernard-burow', 'sphincter-repair', 'free-flap-lip'],
+    concepts: ['case-near-total', 'bernard-burow', 'free-flap-lip'],
 },
 
 {

@@ -58,6 +58,13 @@ item's `detailed` under **Discrepancy:** / **Caveat:**, and list it in the hand-
 questions so the keyed answer is robust to the disagreement (ask for the *sex-specific
 pattern* rather than an upper bound that varies by source).
 
+Anything the sources do not state, and anything you are unsure of, is verified on the web
+before it is keyed, and recorded in `meta.sources` (title and PubMed id or journal, never a
+bare URL). `facial-analysis` did this for the Weir excision, the E-line, tip blood supply, the
+depressor septi nasi, the external nasal nerve, and radix effect on perceived length. Report
+what the search could and could not confirm; a claim found only in the deck stays labelled
+"deck only".
+
 Test every geometric or causal claim before you encode it. `facial-analysis` caught a
 vault statement that a recessed chin *increases* the nasomental angle: constructing the
 angle shows it decreases. Flag it; do not copy it.
@@ -73,9 +80,15 @@ classification panel, a surgical series). Never decoration.
    `plumb-line.png` was histology depth of invasion.
 2. **Labeled vs unlabeled decides the slot.** A figure that prints the answer goes in
    `explanationImage` (inside "Read more"). Only an unlabeled figure may be a stem `image`.
-3. **Reject** figures with patient faces, clinic watermarks, or resolution too low to
-   read (a 200 px diagram is not a teaching figure).
-4. **Copy unmodified** (convert TIFF → PNG only) to `img/oksat/<slug>/`, kebab-case names.
+3. **Reject** figures with patient faces, clinic or stock-photo watermarks (look for faint
+   overlays on rendered heads), labels that contradict the source text, or resolution too
+   low to read (a 200 px diagram is not a teaching figure).
+4. **Copy to `img/oksat/<slug>/`, kebab-case names, content unmodified** (no crops, no annotation). Then compress so the module stays light, and look at the result:
+   - cap width at 1200 px (the viewer shows about 600 px; 1200 covers retina);
+   - line art and text figures: 256-colour PNG (`Image.quantize`, no dither). Errors stay near zero;
+   - photographs, shaded illustrations, gradients: JPEG quality 90 with `subsampling=0` (keeps thin labels crisp). A palette PNG posterizes them (grayscale anatomy bands badly);
+   - grayscale figures: `convert('L')` PNG, lossless;
+   - view original beside compressed at full size before accepting. `facial-analysis` went from about 6 MB to 2 MB this way with every label still sharp.
 5. **Alt text describes what is visibly there**, including printed labels and values,
    and never asserts more than you saw. Every image needs `imageAlt` /
    `explanationImageAlt`.
@@ -116,7 +129,7 @@ earlier rungs. Reuse earlier facts in later stems, and in the cases.
   angle's norm), not from absurdities. A distractor may be a common source error
   (name it in the explanation).
 - **Balance the answer letters.** Hand-written modules skew to b/c (`lip-reconstruction`
-  b = 41 of 52). Shuffle options programmatically with a fixed cycle; skip items whose
+  b = 41 of 52). **For a new module only**, shuffle options programmatically with a fixed cycle; skip items whose
   options are an ordered series (Type I–VI, ratios) or contain "none/all of the above".
   `tools/lint-oksat.mjs` warns above 40 % for one letter.
 
@@ -190,6 +203,19 @@ an explanation image, and read the screenshots.
 
 Do not rely on a walk that never left the landing page. The first walk of
 `facial-analysis` did, and reported "no broken images" for nothing.
+
+## Auditing an existing module
+
+`node tools/lint-oksat.mjs` lists problems. Progress is stored by **item id and option id**
+(`answers:{qId:optId}`), so on a module someone has already studied:
+
+- safe: trim tags to 3 (drop the broadest tag first, keep `case-*` and safety tags), merge
+  singleton concepts to get under 50, add `section` labels (derive from the first tag's domain),
+  add `meta.sources` from the file header, reorder items in the array (ids unchanged);
+- **never**: renumber ids, reorder or relabel options, change `correct`. This is why
+  answer-letter skew in studied modules is reported but not fixed.
+- verify with a script that every item's id, options, `correct`, stem, brief and detailed are
+  byte-identical to `git show HEAD:<file>` after the edit.
 
 ## 7. Documentation pass (required, last)
 

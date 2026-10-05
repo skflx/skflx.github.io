@@ -11,6 +11,7 @@ const meta = {
   title: 'Differentiated\nThyroid Cancer',
   subtitle: 'A sequential-dependency self-test on operative approach, completion thyroidectomy, histopathology, and the 2025 ATA Risk Stratification System (Rec 15, 16, 27, 28). Each answer sets up the next.',
   kicker: 'Self-Test · 2025 ATA Rec 15/16/27/28',
+  sources: ['2025 ATA Differentiated Thyroid Cancer guidelines — Recommendations 15, 16, 27, 28 with Tables 5–7'],
 };
 
 const DOMAINS = {
@@ -367,7 +368,7 @@ Refinements since 2015:
 • Stays LOW: classic PTC, no vascular invasion, negative margins, no/limited nodal disease (≤5 micromets <2 mm), no aggressive subtype → completion NOT required; lobectomy adequate; surveillance only.
 • Pushes INTERMEDIATE: vascular invasion present, OR microscopic ETE + multifocality, OR pN1a with several involved nodes / focus >5 mm → completion MAY be considered (to facilitate RAI and/or enhance Tg follow-up) — after confirming RLN function (defer contralateral if ipsilateral nerve injured).`,
     brief: 'One-line distillation: stage (age 58, 3.2 cm) sets survival expectations; the final pathology features set recurrence risk and decide whether lobectomy was definitive or whether completion + RAI earns its keep.',
-    concepts: ['case', 'lobectomy', 'total-thyroidectomy', 'nodal-risk'],
+    concepts: ['case', 'total-thyroidectomy', 'nodal-risk'],
   },
   {
     id: 'c1',

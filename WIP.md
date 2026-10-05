@@ -109,8 +109,10 @@ outline and figures, vault notes cross-checked (Baker's PDF could not be
 text-extracted, so Baker is cited only through the vault). It mixes free-response
 recall items with MCQs, ends in four synthesis cases, and its explanations flag
 where deck, textbook, and vault disagree. Its figures are third-party textbook
-illustrations copied unmodified: **rights for public hosting are the owner's
-call.** Nothing in it is clinically verified.
+illustrations copied unmodified (compressed only), kept on the public site at the
+owner's decision with a takedown note in the module's sources. Details not in
+Cummings Review were web-verified and are recorded in `meta.sources`; claims found
+only in the deck are labelled as such. Nothing in it is clinically verified.
 
 The viewer now loads React/htm from `js/vendor/` (pinned) rather than a CDN,
 and the default typeface is the site's own (`instrument`); the choice moved to

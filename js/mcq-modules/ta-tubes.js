@@ -10,6 +10,7 @@ const meta = {
   subtitle:
     'Fifty-four MCQs across myringotomy and tubes, adeno-/tonsillectomy (extra- and intracapsular), Level II neck node excision, and the operative complications and case integrations that tie them together. Answers reveal the operative rationale; concept tags link related decisions across procedures.',
   kicker: 'Self-Assessment · Pediatric OR Primer',
+  sources: ['Pediatric Otolaryngology OR Day Study Guide (Q&A adapted to MCQ)'],
 };
 
 const DOMAINS = {
@@ -78,6 +79,7 @@ const ITEMS = [
   // ─────────────── FOUNDATIONS ───────────────
   {
     id: 'q1',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'The middle ear cleft (tympanic cavity, antrum, mastoid air cells) is derived embryologically from:',
     options: [
@@ -93,6 +95,7 @@ const ITEMS = [
   },
   {
     id: 'q2',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Compared with the adult, the tympanic membrane of an 18-month-old is:',
     options: [
@@ -108,6 +111,7 @@ const ITEMS = [
   },
   {
     id: 'q3',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'The eustachian tube is opened actively during swallowing and yawning primarily by which muscle, and how does it change with age?',
     options: [
@@ -123,6 +127,7 @@ const ITEMS = [
   },
   {
     id: 'q4',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'A toddler with mucoid OME has a conductive loss. What air-bone gap and mechanism best fit?',
     options: [
@@ -138,6 +143,7 @@ const ITEMS = [
   },
   {
     id: 'q5',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'During tonsillectomy, the major arterial bleeder is encountered at the inferior pole. Its origin is:',
     options: [
@@ -153,6 +159,7 @@ const ITEMS = [
   },
   {
     id: 'q6',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Which statement about the palatine tonsil versus the adenoid (pharyngeal tonsil) is correct?',
     options: [
@@ -164,10 +171,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'The palatine tonsil sits in a dissectable fibrous capsule; the adenoid has no capsule, so it is curetted/ablated against the nasopharyngeal roof.',
     detailed: 'Both are secondary lymphoid tissue (germinal centers, antigen surveillance) of the second pharyngeal pouch region, part of Waldeyer ring. The surgical difference that matters: the palatine tonsil has a fibrous capsule (pharyngeal-wall fascia) that defines the extracapsular dissection plane against the superior constrictor, whereas the adenoid is uncapsulated — historically a "blind" curette procedure (now often endoscopic suction-cautery or microdebrider) sweeping the nasopharyngeal roof. Adenoid bulk peaks at 3–5 years then regresses, which is why adenoid-dominant obstruction is an early-childhood problem.',
-    concepts: ['embryology', 'adenoid-anatomy', 'tonsil-anatomy', 'capsule'],
+    concepts: ['embryology', 'adenoid-anatomy', 'capsule'],
   },
   {
     id: 'q7',
+    section: 'Foundations',
     type: 'mcq',
     stem: 'Waldeyer ring comprises the palatine tonsils, adenoid, lingual tonsil, and tubal tonsils. What is the expected immune consequence of tonsillectomy in a child?',
     options: [
@@ -184,6 +192,7 @@ const ITEMS = [
   // ─────────────── TUBES & OME ───────────────
   {
     id: 'q8',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'Per AAO-HNS guidance, which child most clearly meets criteria for tympanostomy tubes?',
     options: [
@@ -199,6 +208,7 @@ const ITEMS = [
   },
   {
     id: 'q9',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'Which is an ABSOLUTE contraindication to proceeding with tube placement today?',
     options: [
@@ -214,6 +224,7 @@ const ITEMS = [
   },
   {
     id: 'q10',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'A young child has UNILATERAL conductive loss attributed to OME. Before crediting OME alone, the key pearl is to:',
     options: [
@@ -229,6 +240,7 @@ const ITEMS = [
   },
   {
     id: 'q11',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'Which tympanic-membrane quadrant is the safest site for myringotomy and tube placement, and which must be avoided?',
     options: [
@@ -244,6 +256,7 @@ const ITEMS = [
   },
   {
     id: 'q12',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'For a first-time, otherwise healthy toddler with mucoid OME, the appropriate tube and rationale is:',
     options: [
@@ -259,6 +272,7 @@ const ITEMS = [
   },
   {
     id: 'q13',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'In the ventilation–clearance–defense model of OME, tympanostomy tubes directly address which component?',
     options: [
@@ -274,6 +288,7 @@ const ITEMS = [
   },
   {
     id: 'q14',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'The most common intraoperative complication of pediatric tube placement is:',
     options: [
@@ -289,6 +304,7 @@ const ITEMS = [
   },
   {
     id: 'q15',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'On post-tube tympanometry, a patent functioning tube most characteristically produces:',
     options: [
@@ -304,6 +320,7 @@ const ITEMS = [
   },
   {
     id: 'q16',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'A toddler has stiff, thickened, immobile tympanograms (myringosclerosis). How should this shape counseling?',
     options: [
@@ -319,6 +336,7 @@ const ITEMS = [
   },
   {
     id: 'q17',
+    section: 'Tubes & OME',
     type: 'mcq',
     stem: 'In a child with stiff, immobile drums and disproportionate low-frequency conductive loss, which often-overlooked entity should prompt consideration of HRCT before tubes?',
     options: [
@@ -334,6 +352,7 @@ const ITEMS = [
   },
   {
     id: 'q18',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Post-tube otorrhea: the most accurate counseling for families is:',
     options: [
@@ -349,6 +368,7 @@ const ITEMS = [
   },
   {
     id: 'q19',
+    section: 'Complications',
     type: 'mcq',
     stem: 'A child returns with recurrent conductive loss and ear fullness after tube placement; the tube is in position. The most likely problem is:',
     options: [
@@ -364,6 +384,7 @@ const ITEMS = [
   },
   {
     id: 'q20',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Regarding grommet extrusion and chronic OME (COME):',
     options: [
@@ -380,6 +401,7 @@ const ITEMS = [
   // ─────────────── TONSILLECTOMY ───────────────
   {
     id: 'q21',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'Using AHI thresholds, which child has moderate-to-severe OSA for which adenotonsillectomy is first-line?',
     options: [
@@ -395,6 +417,7 @@ const ITEMS = [
   },
   {
     id: 'q22',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'A colleague suggests watchful waiting for a 2-year-old with severe OSA (AHI ~11). The strongest argument to operate now is:',
     options: [
@@ -410,6 +433,7 @@ const ITEMS = [
   },
   {
     id: 'q23',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'Pre-operative workup for a young child with severe OSA most appropriately includes:',
     options: [
@@ -425,6 +449,7 @@ const ITEMS = [
   },
   {
     id: 'q24',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'On the Brodsky scale, tonsils that occupy roughly 50% of the oropharyngeal width between the pillars are graded:',
     options: [
@@ -440,6 +465,7 @@ const ITEMS = [
   },
   {
     id: 'q25',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'In extracapsular (total) tonsillectomy, the correct dissection plane is between:',
     options: [
@@ -455,6 +481,7 @@ const ITEMS = [
   },
   {
     id: 'q26',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'The single most important proactive hemostasis maneuver during extracapsular tonsillectomy is to:',
     options: [
@@ -470,6 +497,7 @@ const ITEMS = [
   },
   {
     id: 'q27',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'Which pair correctly matches an errant dissection direction with the structure it endangers?',
     options: [
@@ -481,10 +509,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Lateral/deep dissection threatens the ICA beyond the constrictor; over-superior dissection injures the levator/palatal muscles and risks velopharyngeal insufficiency.',
     detailed: 'The two cardinal spatial errors: straying lateral and deep past the superior constrictor approaches the internal carotid (rare but catastrophic — stay on the capsule), and extending too far superiorly toward the soft-palate insertion injures the palatal musculature, risking velopharyngeal insufficiency. Respect the inferior pole vascularly and never assume hemostasis. These are anatomy-driven decision points; rushing converts a controlled dissection into a hemorrhage- or VPI-prone one.',
-    concepts: ['tonsil-dissection', 'carotid', 'VPI', 'dissection-plane'],
+    concepts: ['carotid', 'VPI', 'dissection-plane'],
   },
   {
     id: 'q28',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'The most common resident error during adenotonsillectomy — producing "failed" surgery with persistent obstruction — is:',
     options: [
@@ -500,6 +529,7 @@ const ITEMS = [
   },
   {
     id: 'q29',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'For a toddler with severe OSA and large, congested glands, appropriate intraoperative modifications include:',
     options: [
@@ -515,6 +545,7 @@ const ITEMS = [
   },
   {
     id: 'q30',
+    section: 'Integration',
     type: 'mcq',
     stem: 'Recurrent throat infection now justifies tonsillectomy when episodes meet which (Paradise) threshold?',
     options: [
@@ -530,6 +561,7 @@ const ITEMS = [
   },
   {
     id: 'q31',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'Which factors most justify planned overnight observation after adenotonsillectomy?',
     options: [
@@ -545,6 +577,7 @@ const ITEMS = [
   },
   {
     id: 'q32',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'For a 2-year-old with severe OSA, why is extracapsular (total) tonsillectomy preferred over intracapsular?',
     options: [
@@ -556,11 +589,12 @@ const ITEMS = [
     correct: 'b',
     brief: 'Total tonsillectomy gives complete obstruction relief with negligible regrowth; intracapsular\'s lower-bleeding advantage is outweighed when OSA is severe.',
     detailed: 'Technique selection trades bleeding risk against completeness. Extracapsular removes all lymphoid tissue and capsule for maximal, durable airway relief (minimal regrowth) at a higher hemorrhage rate (~1% primary, ~2–4% secondary). Intracapsular leaves a capsular rim, halving hemorrhage risk and reducing pain, but ~5–15% regrow and may need revision. For severe OSA the definitive airway benefit wins, with age-appropriate monitoring covering the bleeding risk. Intracapsular shines for mild OSA or high bleeding risk — not severe obstruction.',
-    concepts: ['extracapsular', 'intracapsular', 'OSA', 'regrowth'],
+    concepts: ['extracapsular', 'intracapsular', 'regrowth'],
   },
   // ─────────────── INTRACAPSULAR ───────────────
   {
     id: 'q33',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'The principle that makes intracapsular (partial) tonsillectomy lower-bleeding than extracapsular is:',
     options: [
@@ -576,6 +610,7 @@ const ITEMS = [
   },
   {
     id: 'q34',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'After intracapsular tonsillectomy, what is the expected residual burden and regrowth risk?',
     options: [
@@ -591,6 +626,7 @@ const ITEMS = [
   },
   {
     id: 'q35',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'Which statement about intracapsular tonsillectomy technique (coblation, microdebrider, or partial blunt dissection) is correct?',
     options: [
@@ -606,6 +642,7 @@ const ITEMS = [
   },
   {
     id: 'q36',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'During intracapsular dissection, you recognize you have reached the correct depth when:',
     options: [
@@ -621,6 +658,7 @@ const ITEMS = [
   },
   {
     id: 'q37',
+    section: 'Tonsillectomy',
     type: 'mcq',
     stem: 'When counseling a family choosing between intracapsular and extracapsular tonsillectomy, the honest trade-off is:',
     options: [
@@ -637,6 +675,7 @@ const ITEMS = [
   // ─────────────── NECK NODE ───────────────
   {
     id: 'q38',
+    section: 'Neck Node',
     type: 'mcq',
     stem: 'Cervical Level II is subdivided into IIa and IIb by which structure, and which nerve is the principal one at risk?',
     options: [
@@ -648,10 +687,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'The spinal accessory nerve separates IIa (anterior) from IIb (posterior); CN XI is the key structure to identify and protect, with IIb dissection riskier.',
     detailed: 'Level II (upper jugular) runs from skull base to the hyoid, bounded laterally by the SCM and medially toward the carotid/hyoglossus, with the posterior belly of digastric superiorly. The spinal accessory nerve (CN XI) divides IIa (anteromedial to the nerve) from IIb (posterolateral, behind the nerve) — IIb sits in the nerve\'s descending path and is higher-risk. Other structures in/near the field: internal jugular vein (lateral, drains the chain, with the facial vein entering superiorly), vagus within the carotid sheath, common/internal carotid medially, and hypoglossal (CN XII) crossing anterior to the ICA. Identify CN XI early before nodal dissection.',
-    concepts: ['nodal-anatomy', 'spinal-accessory', 'carotid', 'cranial-nerves'],
+    concepts: ['nodal-anatomy', 'spinal-accessory', 'carotid'],
   },
   {
     id: 'q39',
+    section: 'Neck Node',
     type: 'mcq',
     stem: 'A young child has chronic, calcified cervical nodes. Which infectious cause is most characteristic?',
     options: [
@@ -667,6 +707,7 @@ const ITEMS = [
   },
   {
     id: 'q40',
+    section: 'Neck Node',
     type: 'mcq',
     stem: 'For a 16-year-old with a recurrent 1–1.5 cm calcified Level II node, which feature is reassuring, and what is the role of fine-needle aspiration (FNA)?',
     options: [
@@ -682,6 +723,7 @@ const ITEMS = [
   },
   {
     id: 'q41',
+    section: 'Neck Node',
     type: 'mcq',
     stem: 'Injury to the spinal accessory nerve during Level IIb dissection produces:',
     options: [
@@ -693,10 +735,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'CN XI denervates trapezius; injury causes shoulder drop, weak abduction past 90°, and lateral scapular winging, not tongue or voice changes.',
     detailed: 'The spinal accessory nerve supplies the trapezius (and SCM); injury gives shoulder droop, pain, weakness abducting the arm above 90°, and lateral winging of the scapula. Protect it by exposing the posterior SCM border and identifying the nerve (emerging near the junction of the upper and middle third) before nodal dissection, then using blunt instruments to separate the node, ligating small feeders individually rather than avulsing the node. If a node is densely adherent to CN XI, partial excision is safer than risking permanent palsy — and should be documented. Tongue deviation = CN XII, hoarseness = CN X/vagus, the Horner triad = sympathetic chain.',
-    concepts: ['spinal-accessory', 'node-dissection', 'cranial-nerves', 'dissection-plane'],
+    concepts: ['spinal-accessory', 'cranial-nerves', 'dissection-plane'],
   },
   {
     id: 'q42',
+    section: 'Neck Node',
     type: 'mcq',
     stem: 'If brisk bleeding is encountered from the internal jugular vein during node excision, the correct principle is:',
     options: [
@@ -712,6 +755,7 @@ const ITEMS = [
   },
   {
     id: 'q43',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Why is Horner syndrome an unlikely complication of a Level II node excision?',
     options: [
@@ -727,6 +771,7 @@ const ITEMS = [
   },
   {
     id: 'q44',
+    section: 'Neck Node',
     type: 'mcq',
     stem: 'Routine post-operative surveillance after a Level II node excision centers on:',
     options: [
@@ -743,6 +788,7 @@ const ITEMS = [
   // ─────────────── COMPLICATIONS ───────────────
   {
     id: 'q45',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Post-tonsillectomy hemorrhage: which statement about timing and the "rule of 5s" is correct?',
     options: [
@@ -758,6 +804,7 @@ const ITEMS = [
   },
   {
     id: 'q46',
+    section: 'Complications',
     type: 'mcq',
     stem: 'A child presents with brisk post-tonsillectomy bleeding. Initial management and the threshold for returning to the OR are:',
     options: [
@@ -773,6 +820,7 @@ const ITEMS = [
   },
   {
     id: 'q47',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Velopharyngeal insufficiency after adenotonsillectomy: which is most accurate?',
     options: [
@@ -788,6 +836,7 @@ const ITEMS = [
   },
   {
     id: 'q48',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Post-tonsillectomy dysphagia in a toddler is best managed by:',
     options: [
@@ -803,6 +852,7 @@ const ITEMS = [
   },
   {
     id: 'q49',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Across a pediatric OR list, which profile carries the HIGHEST post-operative hemorrhage risk?',
     options: [
@@ -819,6 +869,7 @@ const ITEMS = [
   // ─────────────── INTEGRATION / CASES ───────────────
   {
     id: 'q50',
+    section: 'Integration',
     type: 'mcq',
     stem: 'A 19-month-old with OME (SAT ~55 dB) and speech delay is scheduled for tubes. Regarding speech-language pathology (SLP):',
     options: [
@@ -834,6 +885,7 @@ const ITEMS = [
   },
   {
     id: 'q51',
+    section: 'Integration',
     type: 'mcq',
     stem: 'A 2-year-old with severe OSA (AHI ~11) is having adenotonsillectomy. Which anesthetic/airway plan is most appropriate?',
     options: [
@@ -845,10 +897,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Severe-OSA toddlers need spontaneous-ventilation induction, opioid-sparing technique (OSA heightens opioid sensitivity), dexamethasone for edema, and awake extubation.',
     detailed: 'Children with severe OSA are sensitive to opioids and prone to post-op airway collapse, so avoid heavy premedication, favor a gentle inhalational induction that preserves spontaneous ventilation, anticipate a potentially difficult airway, and minimize opioids (use acetaminophen/regional adjuncts). Give intraoperative dexamethasone to blunt airway edema, and extubate only when fully awake with the gag intact — not deep — keeping reintubation equipment and nebulized epinephrine at the bedside. Continuous pulse oximetry/capnography and semi-upright positioning cover the high-risk first 24 hours, the rationale for overnight admission.',
-    concepts: ['cases', 'anesthesia', 'airway-edema', 'OSA'],
+    concepts: ['cases', 'anesthesia', 'airway-edema'],
   },
   {
     id: 'q52',
+    section: 'Integration',
     type: 'mcq',
     stem: 'A 5-year-old with a seizure disorder is undergoing adenotonsillectomy. Which anesthetic plan best fits?',
     options: [
@@ -864,6 +917,7 @@ const ITEMS = [
   },
   {
     id: 'q53',
+    section: 'Integration',
     type: 'mcq',
     stem: 'The same 5-year-old has bilateral cochlear implants. Which perioperative consideration is correct?',
     options: [
@@ -879,6 +933,7 @@ const ITEMS = [
   },
   {
     id: 'q54',
+    section: 'Integration',
     type: 'mcq',
     stem: 'A 6-year-old with allergic rhinitis is scheduled for adenotonsillectomy for SDB. The most useful pre-operative optimization is:',
     options: [

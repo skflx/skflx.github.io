@@ -10,6 +10,7 @@ const meta = {
   subtitle:
     'Forty-six MCQs across CPA/IAC anatomy, NF2 molecular pathophysiology and histopathology, epidemiology and natural history, diagnostic imaging and audiology, the four surgical corridors plus radiosurgery, surgical complications, and Neurofibromatosis Type 2 — closing with three conference-prep cases.',
   kicker: 'Self-Assessment · Neurotology Module',
+  sources: ['AAO-HNSF Otolaryngology Core Curriculum — Vestibular Schwannoma (Raymond, Manzoor, Peng; Walsh, Chair); content paraphrased for study'],
 };
 
 const DOMAINS = {
@@ -84,6 +85,7 @@ const ITEMS = [
   // ════════════════ ANATOMY ════════════════
   {
     id: 'q1',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'Vestibular schwannomas most often arise from which structure?',
     options: [
@@ -99,6 +101,7 @@ const ITEMS = [
   },
   {
     id: 'q2',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'Which structure forms the SUPERIOR boundary of the cerebellopontine angle?',
     options: [
@@ -114,6 +117,7 @@ const ITEMS = [
   },
   {
     id: 'q3',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'At the fundus of the IAC, the falciform (transverse) crest and Bill’s bar are oriented, respectively:',
     options: [
@@ -129,6 +133,7 @@ const ITEMS = [
   },
   {
     id: 'q4',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'At the IAC fundus, which nerve occupies the anterior-SUPERIOR quadrant?',
     options: [
@@ -144,6 +149,7 @@ const ITEMS = [
   },
   {
     id: 'q5',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'Moving medially from fundus to porus, the cranial nerves within the IAC:',
     options: [
@@ -159,6 +165,7 @@ const ITEMS = [
   },
   {
     id: 'q6',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'By the standard CPA size convention, a tumor 2.2 cm in greatest diameter is classified as:',
     options: [
@@ -174,6 +181,7 @@ const ITEMS = [
   },
   {
     id: 'q7',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Which facial nerve trajectory relative to a vestibular schwannoma is MOST common?',
     options: [
@@ -191,6 +199,7 @@ const ITEMS = [
   // ════════════════ PATHOPHYSIOLOGY ════════════════
   {
     id: 'q8',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'The Obersteiner–Redlich zone marks the transition between:',
     options: [
@@ -206,6 +215,7 @@ const ITEMS = [
   },
   {
     id: 'q9',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'The NF2 tumor-suppressor gene (chromosome 22q12.2) encodes which protein?',
     options: [
@@ -221,6 +231,7 @@ const ITEMS = [
   },
   {
     id: 'q10',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'Approximately what proportion of vestibular schwannomas are sporadic unilateral tumors?',
     options: [
@@ -236,6 +247,7 @@ const ITEMS = [
   },
   {
     id: 'q11',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'In NF2, what fraction of patients carry a de novo mutation, and what is notable about many of them?',
     options: [
@@ -251,6 +263,7 @@ const ITEMS = [
   },
   {
     id: 'q12',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'Verocay bodies, seen in vestibular schwannoma, consist of:',
     options: [
@@ -266,6 +279,7 @@ const ITEMS = [
   },
   {
     id: 'q13',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'Which immunohistochemical profile supports a diagnosis of schwannoma?',
     options: [
@@ -281,6 +295,7 @@ const ITEMS = [
   },
   {
     id: 'q14',
+    section: 'Pathophysiology',
     type: 'mcq',
     stem: 'Which non-merlin molecular feature provides the rationale for anti-angiogenic therapy in NF2-related VS?',
     options: [
@@ -298,6 +313,7 @@ const ITEMS = [
   // ════════════════ EPIDEMIOLOGY & NATURAL HISTORY ════════════════
   {
     id: 'q15',
+    section: 'Epi & Nat. Hx',
     type: 'mcq',
     stem: 'The rising incidence of vestibular schwannoma over recent decades is best explained by:',
     options: [
@@ -313,6 +329,7 @@ const ITEMS = [
   },
   {
     id: 'q16',
+    section: 'Epi & Nat. Hx',
     type: 'mcq',
     stem: 'The approximate lifetime prevalence of vestibular schwannoma is:',
     options: [
@@ -328,6 +345,7 @@ const ITEMS = [
   },
   {
     id: 'q17',
+    section: 'Epi & Nat. Hx',
     type: 'mcq',
     stem: 'Prospective 40-year Danish national-registry data on VS demonstrated which trend at diagnosis?',
     options: [
@@ -343,6 +361,7 @@ const ITEMS = [
   },
   {
     id: 'q18',
+    section: 'Epi & Nat. Hx',
     type: 'mcq',
     stem: 'Which factor is the most consistent predictor of future vestibular schwannoma growth?',
     options: [
@@ -358,6 +377,7 @@ const ITEMS = [
   },
   {
     id: 'q19',
+    section: 'Epi & Nat. Hx',
     type: 'mcq',
     stem: 'Among patients with serviceable hearing at diagnosis who are observed, roughly what fraction retain serviceable hearing at 10 years?',
     options: [
@@ -373,6 +393,7 @@ const ITEMS = [
   },
   {
     id: 'q20',
+    section: 'Epi & Nat. Hx',
     type: 'mcq',
     stem: 'At diagnosis, what is the approximate prevalence of reduced vestibular response on the tumor side?',
     options: [
@@ -390,6 +411,7 @@ const ITEMS = [
   // ════════════════ DIAGNOSIS ════════════════
   {
     id: 'q21',
+    section: 'Diagnosis',
     type: 'mcq',
     stem: 'The most common presenting symptom complex of vestibular schwannoma is:',
     options: [
@@ -405,6 +427,7 @@ const ITEMS = [
   },
   {
     id: 'q22',
+    section: 'Diagnosis',
     type: 'mcq',
     stem: 'On MRI, which feature most strongly favors meningioma over vestibular schwannoma?',
     options: [
@@ -420,6 +443,7 @@ const ITEMS = [
   },
   {
     id: 'q23',
+    section: 'Diagnosis',
     type: 'mcq',
     stem: 'In the Koos classification, which grade denotes a tumor filling the CPA with brainstem CONTACT but no compression?',
     options: [
@@ -435,6 +459,7 @@ const ITEMS = [
   },
   {
     id: 'q24',
+    section: 'Diagnosis',
     type: 'mcq',
     stem: 'In the audiovestibular work-up of VS, auditory brainstem response (ABR) testing is best characterized as:',
     options: [
@@ -450,6 +475,7 @@ const ITEMS = [
   },
   {
     id: 'q25',
+    section: 'Diagnosis',
     type: 'mcq',
     stem: 'The Hitselberger sign — hypesthesia of the posterior external auditory canal — reflects involvement of:',
     options: [
@@ -465,6 +491,7 @@ const ITEMS = [
   },
   {
     id: 'q26',
+    section: 'Diagnosis',
     type: 'mcq',
     stem: 'The second most common lesion of the IAC/CPA after vestibular schwannoma is:',
     options: [
@@ -482,6 +509,7 @@ const ITEMS = [
   // ════════════════ TREATMENT ════════════════
   {
     id: 'q27',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'A typical “wait-and-scan” surveillance schedule for an observed small VS is:',
     options: [
@@ -497,6 +525,7 @@ const ITEMS = [
   },
   {
     id: 'q28',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'With gross total microsurgical resection of VS, long-term local tumor control is approximately:',
     options: [
@@ -512,6 +541,7 @@ const ITEMS = [
   },
   {
     id: 'q29',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'A defining feature of the translabyrinthine approach is that it:',
     options: [
@@ -527,6 +557,7 @@ const ITEMS = [
   },
   {
     id: 'q30',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'Compared with translabyrinthine surgery, the retrosigmoid approach is characterized by:',
     options: [
@@ -542,6 +573,7 @@ const ITEMS = [
   },
   {
     id: 'q31',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'Ideal patient selection for the middle fossa approach includes:',
     options: [
@@ -557,6 +589,7 @@ const ITEMS = [
   },
   {
     id: 'q32',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'With a 13 Gy marginal dose in the modern stereotactic radiosurgery era, the facial-nerve palsy rate is approximately:',
     options: [
@@ -572,6 +605,7 @@ const ITEMS = [
   },
   {
     id: 'q33',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'Which systemic agent has shown the most promising tumor/hearing response specifically in NF2-related VS?',
     options: [
@@ -587,6 +621,7 @@ const ITEMS = [
   },
   {
     id: 'q34',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'For a patient with non-serviceable hearing on the tumor side after VS treatment, an appropriate auditory rehabilitation option is:',
     options: [
@@ -604,6 +639,7 @@ const ITEMS = [
   // ════════════════ COMPLICATIONS ════════════════
   {
     id: 'q35',
+    section: 'Complications',
     type: 'mcq',
     stem: 'The most common procedural complication after vestibular schwannoma resection is:',
     options: [
@@ -619,6 +655,7 @@ const ITEMS = [
   },
   {
     id: 'q36',
+    section: 'Complications',
     type: 'mcq',
     stem: 'After VS surgery, how does a CSF leak alter meningitis risk, and what are the baseline meningitis rates?',
     options: [
@@ -634,6 +671,7 @@ const ITEMS = [
   },
   {
     id: 'q37',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Delayed facial weakness after VS resection (onset days postoperatively) is best managed by:',
     options: [
@@ -649,6 +687,7 @@ const ITEMS = [
   },
   {
     id: 'q38',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Persistent long-term postoperative headache is most associated with which approach?',
     options: [
@@ -664,6 +703,7 @@ const ITEMS = [
   },
   {
     id: 'q39',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Infarction in the distal AICA territory after VS surgery classically produces:',
     options: [
@@ -679,6 +719,7 @@ const ITEMS = [
   },
   {
     id: 'q40',
+    section: 'Complications',
     type: 'mcq',
     stem: 'The risk of true recurrence after gross total resection of VS is approximately:',
     options: [
@@ -696,6 +737,7 @@ const ITEMS = [
   // ════════════════ NEUROFIBROMATOSIS TYPE 2 ════════════════
   {
     id: 'q41',
+    section: 'NF2',
     type: 'mcq',
     stem: 'Which finding alone satisfies the Manchester criteria for a clinical diagnosis of NF2?',
     options: [
@@ -711,6 +753,7 @@ const ITEMS = [
   },
   {
     id: 'q42',
+    section: 'NF2',
     type: 'mcq',
     stem: 'Initial diagnostic imaging for a patient newly diagnosed with NF2 should include:',
     options: [
@@ -726,6 +769,7 @@ const ITEMS = [
   },
   {
     id: 'q43',
+    section: 'NF2',
     type: 'mcq',
     stem: 'For auditory rehabilitation in NF2 after bilateral tumor treatment, the choice between a cochlear implant and an auditory brainstem implant depends primarily on:',
     options: [
@@ -743,6 +787,7 @@ const ITEMS = [
   // ════════════════ CONFERENCE-PREP CASES ════════════════
   {
     id: 'q44',
+    section: 'Cases',
     type: 'mcq',
     stem: 'A 16-year-old girl has mild right-sided hearing loss; MRI reveals a 2 cm right VS and a 0.5 cm left VS. The most likely unifying diagnosis is:',
     options: [
@@ -754,10 +799,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Bilateral VS in an adolescent is NF2 until proven otherwise — sporadic disease is unilateral and presents decades later.',
     detailed: 'Bilateral VS satisfies the Manchester criteria for NF2 outright, and young age fits the teenage-onset pattern; a negative family history would not exclude it given the ~50% de novo rate (with frequent mosaicism). Confirm with whole-brain and whole-spine MRI plus genetic testing, and counsel on the central dilemma — protecting hearing and facial function bilaterally, with cochlear or auditory brainstem implantation planned according to cochlear-nerve status. NF1 (neurofibromin, chromosome 17) does not cause bilateral VS.',
-    concepts: ['cases', 'NF2', 'manchester-criteria', 'bilateral-VS'],
+    concepts: ['cases', 'manchester-criteria', 'bilateral-VS'],
   },
   {
     id: 'q45',
+    section: 'Cases',
     type: 'mcq',
     stem: 'A 62-year-old woman has sudden left SNHL (3 days), preceding mild asymmetry, months of imbalance, a normal otologic exam, and a positive left head impulse test. The most appropriate next diagnostic step is:',
     options: [
@@ -769,10 +815,11 @@ const ITEMS = [
     correct: 'b',
     brief: 'Sudden SNHL with a positive head impulse test points to a peripheral (retrocochlear-capable) lesion; contrast MRI is the test that confirms or excludes VS.',
     detailed: 'Asymmetric/sudden SNHL plus chronic imbalance and a positive (catch-up saccade) head impulse test — indicating ipsilateral vestibular hypofunction — raises VS, which can present as sudden SNHL and may even respond to steroids. The work-up step is contrast MRI of the IACs. Immediate hearing management mirrors idiopathic sudden SNHL (corticosteroids), and persistent dizziness is addressed with vestibular rehabilitation once central compensation is supported. If a medium tumor were found, options would span observation, microsurgery, and radiosurgery.',
-    concepts: ['cases', 'MRI', 'vestibulopathy', 'presentation'],
+    concepts: ['cases', 'vestibulopathy', 'presentation'],
   },
   {
     id: 'q46',
+    section: 'Cases',
     type: 'mcq',
     stem: 'One week after a right translabyrinthine craniotomy, a 58-year-old returns with fever, headache, nuchal rigidity, and clear right-sided rhinorrhea. The unifying clinical concern is:',
     options: [
@@ -784,7 +831,7 @@ const ITEMS = [
     correct: 'b',
     brief: 'Clear rhinorrhea after a lateral skull-base approach is CSF until proven otherwise, and a CSF fistula is the conduit that raises bacterial-meningitis risk roughly sevenfold.',
     detailed: 'Clear rhinorrhea signals a CSF leak — CSF tracking through peri-labyrinthine/attic air cells and the eustachian tube — confirmable by beta-2 transferrin. Fever, headache, and nuchal rigidity indicate meningitis; CSF leak raises bacterial-meningitis risk to ~14% versus a ~1–2% baseline. Confirm with CSF studies/culture and treat with culture-directed antibiotics. Persistent rhinorrhea failing conservative measures (lumbar drain, pressure-lowering) warrants re-operation with targeted air-cell closure and eustachian-tube obliteration.',
-    concepts: ['cases', 'CSF-leak', 'meningitis', 'translabyrinthine'],
+    concepts: ['cases', 'meningitis', 'translabyrinthine'],
   },
 
 ];

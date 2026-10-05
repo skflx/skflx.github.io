@@ -101,7 +101,7 @@ window.OKSAT_MANIFEST = [
     title: 'Facial Analysis',
     kicker: 'Facial Plastics & Recon',
     subspecialty: 'fprs',
-    count: 63,
+    count: 64,
     accent: '#7A5A3A',
     desc: 'Photography and skin typing, soft-tissue landmarks and planes, thirds and fifths, profile angles, nasal anatomy and tip support, nasal analysis from every view, and four integrating cases — with textbook figures.',
     data: 'js/mcq-modules/facial-analysis.js',

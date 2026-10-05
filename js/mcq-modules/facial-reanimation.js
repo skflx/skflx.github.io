@@ -10,6 +10,7 @@ const meta = {
   subtitle:
     'Forty-two questions spanning facial nerve anatomy and segments, physiology of aberrant regeneration, patient evaluation and grading scales, diagnostic workup, surgical and nonsurgical treatment, corneal protection, and three conference cases — Bell\'s palsy impostor, post-acoustic neuroma palsy, and Ramsay Hunt sequelae.',
   kicker: 'Self-Assessment · Facial Plastics & Recon Module',
+  sources: ['AAO-HNSF Otolaryngology Core Curriculum — Facial Reanimation (Lu, Baddour, Coviello); content paraphrased for study'],
 };
 
 const DOMAINS = {
@@ -73,6 +74,7 @@ const ITEMS = [
 
   {
     id: 'q1',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'The facial nerve (CN VII) derives from which pharyngeal arch, and which of the following structures shares that same arch of origin?',
     options: [
@@ -89,6 +91,7 @@ const ITEMS = [
 
   {
     id: 'q2',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'Which intratemporal segment of the facial nerve is the narrowest and shortest (3–5 mm), and why does this anatomy confer the highest risk of injury in temporal bone trauma?',
     options: [
@@ -105,6 +108,7 @@ const ITEMS = [
 
   {
     id: 'q3',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'The greater superficial petrosal nerve (GSPN), arising at the geniculate ganglion, synpases in the pterygopalatine ganglion to supply parasympathetic secretomotor fibers to which target organs?',
     options: [
@@ -121,6 +125,7 @@ const ITEMS = [
 
   {
     id: 'q4',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'Dehiscence of the bony fallopian canal is present in approximately 30% of normal individuals. In which facial nerve segment and anatomical location does this most commonly occur, and what is its surgical implication?',
     options: [
@@ -137,6 +142,7 @@ const ITEMS = [
 
   {
     id: 'q5',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'A patient with facial palsy reports that loud sounds are painful on the affected side (hyperacusis). This symptom localizes the lesion to the facial nerve at or proximal to which branch point?',
     options: [
@@ -153,6 +159,7 @@ const ITEMS = [
 
   {
     id: 'q6',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'During a parotidectomy, the surgeon locates the facial nerve trunk using the "tragal pointer" landmark. Where does the nerve lie relative to the tip of the tragal cartilage?',
     options: [
@@ -169,6 +176,7 @@ const ITEMS = [
 
   {
     id: 'q7',
+    section: 'Anatomy',
     type: 'mcq',
     stem: "Pitanguy's line is a surface reference drawn from 0.5 cm below the tragus to 1.5 cm superior to the lateral eyebrow. It approximates the course of which facial nerve branch, and at what anatomical landmark does this branch cross?",
     options: [
@@ -185,6 +193,7 @@ const ITEMS = [
 
   {
     id: 'q8',
+    section: 'Anatomy',
     type: 'mcq',
     stem: 'The Hayes-Martin maneuver — ligation of the facial artery and vein with superior elevation of the deep cervical fascia — is used in submandibular triangle dissection to protect which nerve?',
     options: [
@@ -203,6 +212,7 @@ const ITEMS = [
 
   {
     id: 'q9',
+    section: 'Physiology',
     type: 'mcq',
     stem: 'Nonflaccid facial palsy (NFFP) results from aberrant nerve regeneration after an acute facial palsy. When does this process begin, and for how long does it evolve?',
     options: [
@@ -219,6 +229,7 @@ const ITEMS = [
 
   {
     id: 'q10',
+    section: 'Physiology',
     type: 'mcq',
     stem: 'Which of the following best describes the mechanism of synkinesis after facial nerve injury?',
     options: [
@@ -237,6 +248,7 @@ const ITEMS = [
 
   {
     id: 'q11',
+    section: 'Evaluation',
     type: 'mcq',
     stem: 'Synchronous bilateral facial paralysis is defined as bilateral onset within three weeks of each other. What etiology should be presumed, and which single infectious cause is the most important to identify?',
     options: [
@@ -253,6 +265,7 @@ const ITEMS = [
 
   {
     id: 'q12',
+    section: 'Evaluation',
     type: 'mcq',
     stem: 'On examination, a patient with a 6-month history of prior Bell\'s palsy shows a narrowed palpebral fissure, deepened nasolabial fold on the affected side, and involuntary eye closure when smiling. How does this presentation differ from flaccid facial palsy?',
     options: [
@@ -269,6 +282,7 @@ const ITEMS = [
 
   {
     id: 'q13',
+    section: 'Evaluation',
     type: 'mcq',
     stem: 'A patient presents with no visible facial movement at rest or with maximal effort, no facial symmetry, and no forehead movement. What is his House-Brackmann (HB) grade, and what distinguishes it from Grade V?',
     options: [
@@ -285,6 +299,7 @@ const ITEMS = [
 
   {
     id: 'q14',
+    section: 'Evaluation',
     type: 'mcq',
     stem: 'The Sunnybrook Facial Grading System assesses three domains and produces a composite score. Which formula correctly represents the Sunnybrook composite score?',
     options: [
@@ -303,6 +318,7 @@ const ITEMS = [
 
   {
     id: 'q15',
+    section: 'Workup',
     type: 'mcq',
     stem: "Bell's palsy is a clinical diagnosis of exclusion. Which of the following, if present, is INCONSISTENT with the diagnosis of Bell's palsy and requires further work-up?",
     options: [
@@ -319,6 +335,7 @@ const ITEMS = [
 
   {
     id: 'q16',
+    section: 'Workup',
     type: 'mcq',
     stem: "A 34-year-old presents with 36 hours of progressive unilateral facial weakness involving all branches, ear discomfort, mild taste change, and no other symptoms. Per AAO-HNSF guidelines, what is the most appropriate management?",
     options: [
@@ -335,6 +352,7 @@ const ITEMS = [
 
   {
     id: 'q17',
+    section: 'Workup',
     type: 'mcq',
     stem: 'MRI with and without gadolinium is NOT a routine first-line test for Bell\'s palsy, but five indications warrant obtaining it. Which of the following would NOT independently indicate MRI in a patient with facial palsy?',
     options: [
@@ -351,6 +369,7 @@ const ITEMS = [
 
   {
     id: 'q18',
+    section: 'Workup',
     type: 'mcq',
     stem: 'Electroneurography (ENoG) measures compound muscle action potential (CMAP) amplitude compared to the unaffected side after supramaximal stimulation. What is the optimal timing window for ENoG following acute facial palsy, and why?',
     options: [
@@ -367,6 +386,7 @@ const ITEMS = [
 
   {
     id: 'q19',
+    section: 'Workup',
     type: 'mcq',
     stem: 'What is the critical clinical advantage of needle EMG (nEMG) over ENoG in facial nerve assessment, and when is nEMG most valuable?',
     options: [
@@ -385,6 +405,7 @@ const ITEMS = [
 
   {
     id: 'q20',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'A patient undergoes resection of a parotid malignancy with intraoperative transection of the facial nerve trunk. What is the optimal repair strategy if the surgeon acts within 72 hours, and what is the realistic expected outcome?',
     options: [
@@ -401,6 +422,7 @@ const ITEMS = [
 
   {
     id: 'q21',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'The masseteric nerve (NTM) and hypoglossal nerve (CN XII) are the two main ipsilateral donor nerves for facial reanimation when the proximal facial nerve is unavailable. What is the key advantage of each?',
     options: [
@@ -417,6 +439,7 @@ const ITEMS = [
 
   {
     id: 'q22',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'Cross-facial nerve grafting (CFNG) uses expendable contralateral zygomatic/buccal branches connected by a sural nerve interposition graft. What is its main limitation, and what is its unique advantage over ipsilateral nerve transfers?',
     options: [
@@ -433,6 +456,7 @@ const ITEMS = [
 
   {
     id: 'q23',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'For chronic flaccid facial palsy without viable native musculature, a single-stage procedure that provides IMMEDIATE improvement in resting facial symmetry is preferred for an elderly patient with multiple medical comorbidities. Which option best fits this profile?',
     options: [
@@ -449,6 +473,7 @@ const ITEMS = [
 
   {
     id: 'q24',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'Upper eyelid platinum weights are preferred over gold for static eyelid loading in lagophthalmos. Which physical property of platinum drives this preference?',
     options: [
@@ -465,6 +490,7 @@ const ITEMS = [
 
   {
     id: 'q25',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'A patient presents 8 months after Bell\'s palsy with facial tightness, synkinesis, and hypertonicity. What is the first-line treatment for this nonflaccid (postparalytic) facial palsy?',
     options: [
@@ -481,6 +507,7 @@ const ITEMS = [
 
   {
     id: 'q26',
+    section: 'Treatment',
     type: 'mcq',
     stem: 'In chemodenervation for nonflaccid facial palsy, the CONTRALATERAL (healthy) side is also targeted to improve dynamic symmetry. Which contralateral muscle is most specifically targeted to reduce the over-pulling of the healthy lower lip?',
     options: [
@@ -499,6 +526,7 @@ const ITEMS = [
 
   {
     id: 'q27',
+    section: 'Complications',
     type: 'mcq',
     stem: 'Which combination of risk factors places a patient with facial paralysis at the HIGHEST risk for corneal ulceration and vision loss from exposure keratopathy?',
     options: [
@@ -516,7 +544,94 @@ const ITEMS = [
   // ════════════════ CASE 1 · SCCa / Perineural ════════════════
 
   {
+    id: 'q38',
+    section: 'Anatomy',
+    type: 'mcq',
+    stem: "Zuker's point localizes the zygomatic/buccal branch of the facial nerve innervating the zygomaticus major for distal nerve transfers and CFNG harvest. Where is Zuker's point located?",
+    options: [
+      { id: 'a', text: '0.5 cm below the tragus, on a line to the lateral eyebrow' },
+      { id: 'b', text: 'At the junction of the anterior border of the masseter and the lower eyelid' },
+      { id: 'c', text: 'At the midpoint of a line from the root of the helix to the lateral oral commissure' },
+      { id: 'd', text: '1 cm anterior to the tragus at the level of the zygomatic arch' },
+    ],
+    correct: 'c',
+    brief: "Zuker's point is the midpoint of a line from the root of the helix to the lateral oral commissure — where the zygomatic/buccal branch innervating the zygomaticus major is reliably identified.",
+    detailed: "Zuker's point is the anatomic target for identifying the zygomatic/buccal branch to the zygomaticus major — the primary smile elevator and the key target in smile reanimation surgery. Its reliable location (midpoint of helix root–commissure line) reduces dissection time and donor morbidity during CFNG harvest and distal nerve transfers. The companion landmark Pitanguy's line (0.5 cm below the tragus to 1.5 cm above the lateral brow) approximates the temporal branch over the zygomatic arch. Neither landmark is the same as option A (which describes Pitanguy's line). The zygomatic arch crossing of the temporal branch occurs 4 cm behind the lateral canthus (10–19 mm anterior to the EAC).",
+    concepts: ['surface-landmarks', 'CFNG', 'nerve-transfer'],
+  },
+
+  {
+    id: 'q39',
+    section: 'Complications',
+    type: 'mcq',
+    stem: 'For ALL patients with facial paralysis regardless of etiology, stage, or severity, which three interventions constitute the minimum recommended immediate management?',
+    options: [
+      { id: 'a', text: 'Oral steroids, artificial tears, and audiometry' },
+      { id: 'b', text: 'Artificial tears / lubricating ointment, eyelid taping or moisture chamber, and ophthalmology referral' },
+      { id: 'c', text: 'Platinum eyelid weight implantation, artificial tears, and physical therapy' },
+      { id: 'd', text: 'Botulinum toxin, artificial tears, and corneal topography' },
+    ],
+    correct: 'b',
+    brief: 'The universal minimum: (1) artificial tears and lubricating ointment; (2) eyelid taping or moisture chamber at night; (3) ophthalmology referral for baseline corneal assessment — regardless of cause or severity.',
+    detailed: 'These three measures protect against exposure keratopathy — the most devastating and preventable complication of facial paralysis — and should be initiated at the moment of diagnosis for every patient. (1) Frequent artificial tears (daytime) and lubricating ointment (nocturnal) keep the corneal surface lubricated; (2) Eyelid taping or moisture chamber prevents nocturnal desiccation when Bell\'s reflex and voluntary closure are absent; (3) Ophthalmology referral ensures baseline corneal surface assessment and establishes specialist co-management. These apply to a Bell\'s palsy Grade II presentation with mild weakness and equally to a Grade VI total paralysis post-acoustic neuroma resection. Surgical escalation (platinum eyelid weight, ectropion repair, tarsorrhaphy) is added when these conservative measures are insufficient. Oral steroids are appropriate for Bell\'s palsy specifically but not universally for all facial paralysis. Audiometry, PT, and botulinum toxin are important in specific contexts but are not universal immediate corneal-protection measures.',
+    concepts: ['corneal', 'eyelid'],
+  },
+
+  {
+    id: 'q40',
+    section: 'Treatment',
+    type: 'mcq',
+    stem: 'The zygomatic and buccal branches of the facial nerve have extensive overlapping innervation of mid-face muscles. How is this redundancy exploited in facial reanimation surgery?',
+    options: [
+      { id: 'a', text: 'The overlap means injury to either branch in isolation is usually clinically undetectable, allowing one to be sacrificed as a donor for CFNG without causing visible deficit' },
+      { id: 'b', text: 'The overlap is a barrier to reanimation because stimulating one branch activates all mid-face muscles simultaneously' },
+      { id: 'c', text: 'The overlap is exploited by stimulating both branches together to produce supramaximal commissure excursion' },
+      { id: 'd', text: 'The overlap disappears after Wallerian degeneration, limiting CFNG to use within the first 72 hours' },
+    ],
+    correct: 'a',
+    brief: 'Redundant innervation of mid-face muscles by both zygomatic and buccal branches means sacrificing one branch on the contralateral donor side causes no detectable clinical deficit — the anatomical basis for CFNG harvest without donor morbidity.',
+    detailed: 'The zygomatic and buccal branches converge on the same mid-face muscles (zygomaticus major, orbicularis oris, levator labii) with considerable redundancy. Clinical consequence: injury to a single zygomatic or buccal branch is often functionally unnoticeable because the partner branch maintains motor input. Surgical exploitation: (1) during CFNG, expendable contralateral zygomatic or buccal branches are coapted to the sural nerve graft — the contralateral face shows no meaningful weakness because the remaining branch provides functional coverage; (2) in distal nerve transfers on the affected side, a redundant branch can be used as a donor for nerve-to-nerve coaptation without creating a new motor deficit. This redundancy is what makes CFNG feasible as a technique — otherwise sacrificing any facial nerve branch would produce visible paresis on the "good" side.',
+    concepts: ['CFNG', 'nerve-transfer'],
+  },
+
+  {
+    id: 'q41',
+    section: 'Anatomy',
+    type: 'mcq',
+    stem: "In Bell's palsy, corticosteroids reduce edema and compression within the confined fallopian canal. Which intratemporal segment's unique anatomy is the mechanistic basis for this therapeutic rationale?",
+    options: [
+      { id: 'a', text: 'Meatal segment — it lacks epineurium and perineurium, making it more susceptible to pressure' },
+      { id: 'b', text: 'Labyrinthine segment — it traverses the narrowest bony canal with no room for expansion, acting as a compartment syndrome' },
+      { id: 'c', text: 'Tympanic segment — dehiscence in 30% allows nerve prolapse into the middle ear during edema' },
+      { id: 'd', text: 'Mastoid segment — its vertical course is most susceptible to stretch injury during swelling' },
+    ],
+    correct: 'b',
+    brief: 'The labyrinthine segment traverses the narrowest bony canal with no tolerance for swelling. Viral neuritis (HSV-1 reactivation) causes edema that compresses the nerve in its own closed canal — a compartment-syndrome equivalent reversed by steroids.',
+    detailed: 'The labyrinthine segment (3–5 mm) is the narrowest intratemporal segment and occupies the most constricted portion of the fallopian canal. When HSV-1 reactivation triggers viral neuritis and inflammatory edema, the nerve swells within a fixed bony channel with zero room for expansion — analogous to a compartment syndrome. This results in axonal compression and conduction block. Corticosteroids reduce this inflammatory edema within the confined canal, relieving axonal compression and improving recovery rates. This is also why temporal bone fractures through the labyrinthine segment produce the highest rate of immediate facial nerve injury (from direct compression) — the same anatomical feature that creates vulnerability to both inflammatory and traumatic insults. The tympanic segment\'s dehiscence rate (30%) is a different phenomenon and relates to iatrogenic, not inflammatory, risk. The meatal segment\'s lack of connective tissue sheaths contributes to vulnerability to inflammatory infiltration but is not the narrowest canal.',
+    concepts: ['nerve-segments', 'bells-palsy'],
+  },
+
+  {
+    id: 'q42',
+    section: 'Workup',
+    type: 'mcq',
+    stem: 'A 40-year-old patient presents with a flaccid right facial palsy with no history of prior palsy, no otologic symptoms, and no other cranial neuropathies. He is 35 days from symptom onset and has had no improvement. Which electrodiagnostic approach is most appropriate at this stage?',
+    options: [
+      { id: 'a', text: 'ENoG only — the 35-day mark is still optimal for CMAP amplitude measurement' },
+      { id: 'b', text: 'Neither ENoG nor nEMG — electrodiagnostics are not indicated at any stage in incomplete palsy' },
+      { id: 'c', text: 'Needle EMG (nEMG) — at 35 days, nEMG can characterize injury type and detect early reinnervation; ENoG is past its optimal window' },
+      { id: 'd', text: 'Both ENoG and nEMG simultaneously — the combined study at 35 days gives the most complete picture' },
+    ],
+    correct: 'c',
+    brief: 'At 35 days, ENoG is past its 21-day optimal window. nEMG is now the appropriate test — it can characterize the injury (neurapraxia vs axonotmesis), detect fibrillation potentials, and identify early reinnervation MUAPs before clinical movement returns.',
+    detailed: 'ENoG is optimal from 72 hours to 21 days. Beyond 21 days, early reinnervation potentials confound the CMAP amplitude, making ENoG unreliable. At 35 days (5 weeks), nEMG (optimal 2–3 weeks to 3 months) is the appropriate test. nEMG provides: (1) injury characterization — neurapraxia (no fibrillations, intact axon, good prognosis), axonotmesis (fibrillation potentials, regeneration possible), or neurotmesis (fibrillations, no voluntary MUAPs, surgical repair needed); (2) early reinnervation detection — nascent polyphasic MUAPs appear before any visible movement returns; a single polyphasic MUAP is an excellent prognostic sign. At 35 days without improvement, nEMG helps decide whether to continue watchful waiting (early reinnervation potentials present) or escalate to imaging and surgical planning (no signs of recovery). Note: this patient\'s presentation is actually incomplete (no history given of HB grade) — if it were truly a complete HB VI palsy, ENoG within the first 21 days would have been appropriate to assess degeneration severity for surgical decompression consideration.',
+    concepts: ['electrodiagnostics', 'bells-palsy'],
+  },
+
+
+  {
     id: 'q28',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 1: A 53-year-old male reports a 4–5 month history of "Bell\'s palsy" without any clinical improvement. PMH: cutaneous SCCa of the nasal skin resected by Mohs surgery 2 years ago. Exam shows complete flaccid facial paralysis without synkinesis. Which features make this presentation INCONSISTENT with typical Bell\'s palsy?',
     options: [
@@ -533,6 +648,7 @@ const ITEMS = [
 
   {
     id: 'q29',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 1 (continued): Full MRI, laboratory work-up, and CT all return negative. The patient continues to have complete flaccid facial paralysis at 6 months with no recovery. What should be considered next?',
     options: [
@@ -549,6 +665,7 @@ const ITEMS = [
 
   {
     id: 'q30',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 1 (continued): On examination, this patient has a widened palpebral fissure, complete inability to close his eye, and no voluntary facial movement. Which corneal risk factor is most critically raised by his history of nasal SCCa and potential perineural spread?',
     options: [
@@ -567,6 +684,7 @@ const ITEMS = [
 
   {
     id: 'q31',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 2: A 45-year-old male is 6 months post right acoustic neuroma resection with complete postoperative facial paralysis. Intraoperative notes confirm the facial nerve was left anatomically intact with reduced (but present) stimulation at end of case. When is the traditional threshold for intervening with a nerve transfer, and what is the rationale for waiting?',
     options: [
@@ -583,6 +701,7 @@ const ITEMS = [
 
   {
     id: 'q32',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 2 (continued): At 14 months, there is still no facial movement and no reinnervation on needle EMG. The distal facial nerve branches are intact, and native facial musculature is viable on EMG. What is the most appropriate first-line surgical option to restore smile excursion?',
     options: [
@@ -599,6 +718,7 @@ const ITEMS = [
 
   {
     id: 'q33',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 2 (continued): How would the surgical plan change if the patient presented with 24 months of complete flaccid paralysis and no EMG evidence of residual motor unit activity?',
     options: [
@@ -615,6 +735,7 @@ const ITEMS = [
 
   {
     id: 'q34',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 2 (variant): The operative note instead states that the facial nerve was TRANSECTED during surgery and not repaired. It is now post-operative day 1. What is the most critical reason to return to the OR within 72 hours, and what is the expected outcome if repair is achieved?',
     options: [
@@ -633,6 +754,7 @@ const ITEMS = [
 
   {
     id: 'q35',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 3: A 53-year-old woman presents 1 year after left Ramsay Hunt syndrome (treated with steroids + antivirals within 72 hours). She has left facial tightness, inability to smile, and on exam: narrowed left palpebral fissure, deepened NLF, complete eye closure, minimal commissure excursion, and significant left orbicularis contraction when attempting to smile. What is the diagnosis?',
     options: [
@@ -649,6 +771,7 @@ const ITEMS = [
 
   {
     id: 'q36',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 3 (continued): How does the treatment algorithm for this patient\'s NFFP differ from what would be used for a patient with flaccid facial palsy? What treatment is specifically CONTRAINDICATED in NFFP?',
     options: [
@@ -665,6 +788,7 @@ const ITEMS = [
 
   {
     id: 'q37',
+    section: 'Cases',
     type: 'mcq',
     stem: 'Case 3 (continued): Would the management algorithm change substantially if this patient presented 2 years after Ramsay Hunt rather than 1 year?',
     options: [
@@ -680,87 +804,6 @@ const ITEMS = [
   },
 
   // ════════════════ RAPID-FIRE ════════════════
-
-  {
-    id: 'q38',
-    type: 'mcq',
-    stem: "Zuker's point localizes the zygomatic/buccal branch of the facial nerve innervating the zygomaticus major for distal nerve transfers and CFNG harvest. Where is Zuker's point located?",
-    options: [
-      { id: 'a', text: '0.5 cm below the tragus, on a line to the lateral eyebrow' },
-      { id: 'b', text: 'At the junction of the anterior border of the masseter and the lower eyelid' },
-      { id: 'c', text: 'At the midpoint of a line from the root of the helix to the lateral oral commissure' },
-      { id: 'd', text: '1 cm anterior to the tragus at the level of the zygomatic arch' },
-    ],
-    correct: 'c',
-    brief: "Zuker's point is the midpoint of a line from the root of the helix to the lateral oral commissure — where the zygomatic/buccal branch innervating the zygomaticus major is reliably identified.",
-    detailed: "Zuker's point is the anatomic target for identifying the zygomatic/buccal branch to the zygomaticus major — the primary smile elevator and the key target in smile reanimation surgery. Its reliable location (midpoint of helix root–commissure line) reduces dissection time and donor morbidity during CFNG harvest and distal nerve transfers. The companion landmark Pitanguy's line (0.5 cm below the tragus to 1.5 cm above the lateral brow) approximates the temporal branch over the zygomatic arch. Neither landmark is the same as option A (which describes Pitanguy's line). The zygomatic arch crossing of the temporal branch occurs 4 cm behind the lateral canthus (10–19 mm anterior to the EAC).",
-    concepts: ['surface-landmarks', 'CFNG', 'nerve-transfer'],
-  },
-
-  {
-    id: 'q39',
-    type: 'mcq',
-    stem: 'For ALL patients with facial paralysis regardless of etiology, stage, or severity, which three interventions constitute the minimum recommended immediate management?',
-    options: [
-      { id: 'a', text: 'Oral steroids, artificial tears, and audiometry' },
-      { id: 'b', text: 'Artificial tears / lubricating ointment, eyelid taping or moisture chamber, and ophthalmology referral' },
-      { id: 'c', text: 'Platinum eyelid weight implantation, artificial tears, and physical therapy' },
-      { id: 'd', text: 'Botulinum toxin, artificial tears, and corneal topography' },
-    ],
-    correct: 'b',
-    brief: 'The universal minimum: (1) artificial tears and lubricating ointment; (2) eyelid taping or moisture chamber at night; (3) ophthalmology referral for baseline corneal assessment — regardless of cause or severity.',
-    detailed: 'These three measures protect against exposure keratopathy — the most devastating and preventable complication of facial paralysis — and should be initiated at the moment of diagnosis for every patient. (1) Frequent artificial tears (daytime) and lubricating ointment (nocturnal) keep the corneal surface lubricated; (2) Eyelid taping or moisture chamber prevents nocturnal desiccation when Bell\'s reflex and voluntary closure are absent; (3) Ophthalmology referral ensures baseline corneal surface assessment and establishes specialist co-management. These apply to a Bell\'s palsy Grade II presentation with mild weakness and equally to a Grade VI total paralysis post-acoustic neuroma resection. Surgical escalation (platinum eyelid weight, ectropion repair, tarsorrhaphy) is added when these conservative measures are insufficient. Oral steroids are appropriate for Bell\'s palsy specifically but not universally for all facial paralysis. Audiometry, PT, and botulinum toxin are important in specific contexts but are not universal immediate corneal-protection measures.',
-    concepts: ['corneal', 'eyelid'],
-  },
-
-  {
-    id: 'q40',
-    type: 'mcq',
-    stem: 'The zygomatic and buccal branches of the facial nerve have extensive overlapping innervation of mid-face muscles. How is this redundancy exploited in facial reanimation surgery?',
-    options: [
-      { id: 'a', text: 'The overlap means injury to either branch in isolation is usually clinically undetectable, allowing one to be sacrificed as a donor for CFNG without causing visible deficit' },
-      { id: 'b', text: 'The overlap is a barrier to reanimation because stimulating one branch activates all mid-face muscles simultaneously' },
-      { id: 'c', text: 'The overlap is exploited by stimulating both branches together to produce supramaximal commissure excursion' },
-      { id: 'd', text: 'The overlap disappears after Wallerian degeneration, limiting CFNG to use within the first 72 hours' },
-    ],
-    correct: 'a',
-    brief: 'Redundant innervation of mid-face muscles by both zygomatic and buccal branches means sacrificing one branch on the contralateral donor side causes no detectable clinical deficit — the anatomical basis for CFNG harvest without donor morbidity.',
-    detailed: 'The zygomatic and buccal branches converge on the same mid-face muscles (zygomaticus major, orbicularis oris, levator labii) with considerable redundancy. Clinical consequence: injury to a single zygomatic or buccal branch is often functionally unnoticeable because the partner branch maintains motor input. Surgical exploitation: (1) during CFNG, expendable contralateral zygomatic or buccal branches are coapted to the sural nerve graft — the contralateral face shows no meaningful weakness because the remaining branch provides functional coverage; (2) in distal nerve transfers on the affected side, a redundant branch can be used as a donor for nerve-to-nerve coaptation without creating a new motor deficit. This redundancy is what makes CFNG feasible as a technique — otherwise sacrificing any facial nerve branch would produce visible paresis on the "good" side.',
-    concepts: ['CFNG', 'nerve-transfer'],
-  },
-
-  {
-    id: 'q41',
-    type: 'mcq',
-    stem: "In Bell's palsy, corticosteroids reduce edema and compression within the confined fallopian canal. Which intratemporal segment's unique anatomy is the mechanistic basis for this therapeutic rationale?",
-    options: [
-      { id: 'a', text: 'Meatal segment — it lacks epineurium and perineurium, making it more susceptible to pressure' },
-      { id: 'b', text: 'Labyrinthine segment — it traverses the narrowest bony canal with no room for expansion, acting as a compartment syndrome' },
-      { id: 'c', text: 'Tympanic segment — dehiscence in 30% allows nerve prolapse into the middle ear during edema' },
-      { id: 'd', text: 'Mastoid segment — its vertical course is most susceptible to stretch injury during swelling' },
-    ],
-    correct: 'b',
-    brief: 'The labyrinthine segment traverses the narrowest bony canal with no tolerance for swelling. Viral neuritis (HSV-1 reactivation) causes edema that compresses the nerve in its own closed canal — a compartment-syndrome equivalent reversed by steroids.',
-    detailed: 'The labyrinthine segment (3–5 mm) is the narrowest intratemporal segment and occupies the most constricted portion of the fallopian canal. When HSV-1 reactivation triggers viral neuritis and inflammatory edema, the nerve swells within a fixed bony channel with zero room for expansion — analogous to a compartment syndrome. This results in axonal compression and conduction block. Corticosteroids reduce this inflammatory edema within the confined canal, relieving axonal compression and improving recovery rates. This is also why temporal bone fractures through the labyrinthine segment produce the highest rate of immediate facial nerve injury (from direct compression) — the same anatomical feature that creates vulnerability to both inflammatory and traumatic insults. The tympanic segment\'s dehiscence rate (30%) is a different phenomenon and relates to iatrogenic, not inflammatory, risk. The meatal segment\'s lack of connective tissue sheaths contributes to vulnerability to inflammatory infiltration but is not the narrowest canal.',
-    concepts: ['nerve-segments', 'bells-palsy'],
-  },
-
-  {
-    id: 'q42',
-    type: 'mcq',
-    stem: 'A 40-year-old patient presents with a flaccid right facial palsy with no history of prior palsy, no otologic symptoms, and no other cranial neuropathies. He is 35 days from symptom onset and has had no improvement. Which electrodiagnostic approach is most appropriate at this stage?',
-    options: [
-      { id: 'a', text: 'ENoG only — the 35-day mark is still optimal for CMAP amplitude measurement' },
-      { id: 'b', text: 'Neither ENoG nor nEMG — electrodiagnostics are not indicated at any stage in incomplete palsy' },
-      { id: 'c', text: 'Needle EMG (nEMG) — at 35 days, nEMG can characterize injury type and detect early reinnervation; ENoG is past its optimal window' },
-      { id: 'd', text: 'Both ENoG and nEMG simultaneously — the combined study at 35 days gives the most complete picture' },
-    ],
-    correct: 'c',
-    brief: 'At 35 days, ENoG is past its 21-day optimal window. nEMG is now the appropriate test — it can characterize the injury (neurapraxia vs axonotmesis), detect fibrillation potentials, and identify early reinnervation MUAPs before clinical movement returns.',
-    detailed: 'ENoG is optimal from 72 hours to 21 days. Beyond 21 days, early reinnervation potentials confound the CMAP amplitude, making ENoG unreliable. At 35 days (5 weeks), nEMG (optimal 2–3 weeks to 3 months) is the appropriate test. nEMG provides: (1) injury characterization — neurapraxia (no fibrillations, intact axon, good prognosis), axonotmesis (fibrillation potentials, regeneration possible), or neurotmesis (fibrillations, no voluntary MUAPs, surgical repair needed); (2) early reinnervation detection — nascent polyphasic MUAPs appear before any visible movement returns; a single polyphasic MUAP is an excellent prognostic sign. At 35 days without improvement, nEMG helps decide whether to continue watchful waiting (early reinnervation potentials present) or escalate to imaging and surgical planning (no signs of recovery). Note: this patient\'s presentation is actually incomplete (no history given of HB grade) — if it were truly a complete HB VI palsy, ENoG within the first 21 days would have been appropriate to assess degeneration severity for surgical decompression consideration.',
-    concepts: ['electrodiagnostics', 'bells-palsy'],
-  },
-
 ];
 
 window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };

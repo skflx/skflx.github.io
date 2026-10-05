@@ -35,6 +35,7 @@ const meta = {
         'Resident review deck “Facial Analysis”, 9/28/26 — figures and the Powell–Humphreys, Goode/Crumley/Simon, tip-defining-point and alar–columellar slides',
         'sk.oto vault — facial fifths/thirds, Goode’s ratio, Anderson tripod, Gonzalez-Ulloa subunit notes (unvetted; cite Cummings Review and Baker, Local Flaps 3e)',
         'Baker SR. Local Flaps in Facial Reconstruction, 3e, Ch. 18 (nasal subunits and skin thickness figure) — via vault only',
+        'Web-verified details (not in Cummings Review): Weir alar wedge excision (Weir 1892; Modified Weir Wedge with Nasal Sill Step, Facial Plast Surg Aesthet Med 2024); nasal tip blood supply (Nasal tip blood supply: an anatomic study validating the safety of the transcolumellar incision in rhinoplasty, PubMed 7708862); Ricketts E-line; depressor septi nasi anatomy; external nasal nerve; radix and perceived nasal length',
         'Figures are third-party textbook illustrations reproduced for education. If you hold rights to one and want it removed, message the site owner (linkedin.com/in/skflx) and it will come down.',
     ],
 };
@@ -143,7 +144,7 @@ const ITEMS = [
         correct: 'b',
         brief: 'One frontal, two lateral, two three-quarter oblique, and one base (worm’s-eye) view make the six.',
         detailed: `Each view answers a different question: the frontal view gives symmetry, fifths, and thirds; the laterals give the profile angles, projection, and rotation; the obliques give the brow–dorsum–tip line and tip contour; the base view gives triangle shape, tip bulbosity, and alar base width.\n\nCaveat: the six-view set is the deck’s standard. Cummings Review organizes the same analysis by frontal, lateral, and base views and notes the three-quarter view for the brow–tip line; individual practices add or drop views.\n\nPearl: if you cannot name the view that answers a question, you do not yet know where to look for it.`,
-        explanationImage: IMG + 'fa-photo-series.png',
+        explanationImage: IMG + 'fa-photo-series.jpg',
         explanationImageAlt: 'A grid of standardized photographs of one patient in rows: frontal and base views across the top, oblique views in the middle, and lateral views at the bottom',
         concepts: ['photo-series'],
     },
@@ -152,7 +153,7 @@ const ITEMS = [
         stem: 'Walk the Cummings Review facial-analysis checklist: what do you assess on the photograph itself, then the frontal, lateral, and base views?',
         answer: `Photograph / skin: photo quality (lighting, focus, exposure, Frankfort); skin assessment.\nFrontal: overall symmetry; brow–tip aesthetic line (also in ¾ view); facial fifths; facial thirds.\nLateral: nasofrontal angle; nasion position; straightness of dorsum; nasal length; projection; rotation; columella–alar relationship; nasolabial angle; chin position.\nBase: base shape; tip bulbosity; base width; columella–lobule ratio.`,
         brief: 'Quality and skin first, then frontal symmetry and proportions, lateral angles and tip position, and base shape.',
-        detailed: `The order is the build-up of this module: the photograph and skin (section 1), frontal proportions (section 3), lateral landmarks and angles (sections 2 and 4), and nasal specifics (sections 5 and 6).\n\nPearl: a structured checklist is what keeps you from fixing the feature the patient points at while missing the one that drives the problem. Case 1 below is exactly that trap.`,
+        detailed: `The order is the build-up of this module: the photograph and skin (section 1), frontal proportions (section 3), lateral landmarks and angles (sections 2 and 4), and nasal specifics (sections 5 and 6).\n\nPearl: a structured checklist is what keeps you from fixing the feature the patient points at while missing the one that drives the problem. Case 1 below is exactly that trap.\n\nHouse rule: look at the chin first. Chin position changes how large the nose looks and distorts every pogonion-based angle, so it is read before the nose is judged.`,
         concepts: ['analysis-checklist', 'photo-series'],
     },
     {
@@ -207,7 +208,7 @@ const ITEMS = [
         correct: 'c',
         brief: 'Skin is thinnest over the rhinion and thickest at the tip and radix; thin rhinion skin shows every contour and drapes into a saddle if the hump is over-resected.',
         detailed: `Mechanism: the tip carries sebaceous, thick skin; the rhinion is where skin is thinnest and the osseocartilaginous junction sits just beneath it. Thick skin hides irregularities but blunts definition; thin skin reveals them.\n\nApplication: Cummings Review states that hump reduction must account for the thin rhinion skin and not remove the hump completely, or a saddle appearance results once the skin and soft tissue are redraped. Thick tip skin limits how much refinement a given cartilage change will show, which is why tip grafts add definition.\n\nPearl: assess skin thickness at the first visit; it caps what the cartilage work can deliver.`,
-        explanationImage: IMG + 'fa-nasal-skin-thickness.png',
+        explanationImage: IMG + 'fa-nasal-skin-thickness.jpg',
         explanationImageAlt: 'Frontal and lateral views of the nose with subunit outlines; the middle vault is shaded blue while the radix, tip, and alar regions are shaded red and orange, mapping skin thickness across subunits',
         concepts: ['skin-thickness', 'rhinion'],
     },
@@ -251,8 +252,8 @@ const ITEMS = [
         ],
         correct: 'a',
         brief: 'The radix should sit at the level of the supratarsal crease.',
-        detailed: `The radix is the root of the nose. Its vertical position sets where the nasal dorsum starts relative to the eyes, so it shapes the nasofrontal angle and the perceived length of the nose. The deck sets the target at the supratarsal crease.\n\nApplication: a radix well below that level reads as a deep, low root; one well above reads as a high root. Both change the nasofrontal angle and so the apparent size of the nose, which is why radix height is checked before any dorsal reduction.\n\nPearl: radix height (vertical position) and nasofrontal angle (anteroposterior depth) are related but are different measurements.`,
-        explanationImage: IMG + 'fa-radix-level.png',
+        detailed: `The radix is the root of the nose. Its vertical position sets where the nasal dorsum starts relative to the eyes, so it shapes the nasofrontal angle and the perceived length of the nose. The deck sets the target at the supratarsal crease.\n\nApplication: a deep (low) radix, with an acute nasofrontal angle, makes the nose look shorter; a high radix, where the forehead runs into the dorsum in a straight line, makes it look longer. Small changes in radix position therefore change perceived nasal length and projection, which is why radix height is checked before any dorsal reduction.\n\nPearl: radix height (vertical position) and nasofrontal angle (anteroposterior depth) are related but are different measurements.`,
+        explanationImage: IMG + 'fa-radix-level.jpg',
         explanationImageAlt: 'Two lateral profile illustrations of a woman: on the left a red horizontal line crosses at the level of the eye and nasal root; on the right red horizontal reference lines are labeled R, T, S, and M with a blue bracket between T and A at the nasal tip',
         concepts: ['radix', 'nasofrontal'],
     },
@@ -281,7 +282,7 @@ const ITEMS = [
         ],
         correct: 'b',
         brief: 'The zero meridian of Gonzalez-Ulloa runs perpendicular to Frankfort through the nasion; the chin should lie near it.',
-        detailed: `Mechanism: because it is built on Frankfort, the zero meridian gives a true vertical that is independent of head tilt. The pogonion is compared against it to decide whether the chin is retrusive or protrusive.\n\nCummings Review: the mentolabial sulcus lies about 4 mm posterior to the zero meridian. The deck gives a pogonion tolerance of about 2 mm (slide 25), and 5 mm on slide 6; in men it sits slightly anterior and in women slightly posterior. Treat the tolerance as roughly 2–5 mm and a sex-adjusted target rather than an exact number.\n\nPearl: this is the line that turns "she has a big nose" into "she has a small chin" (Case 1).`,
+        detailed: `Mechanism: because it is built on Frankfort, the zero meridian gives a true vertical that is independent of head tilt. The pogonion is compared against it to decide whether the chin is retrusive or protrusive.\n\nCummings Review: the mentolabial sulcus lies about 4 mm posterior to the zero meridian. The pogonion should lie within about 0 ± 2 mm of the line (deck slide 25 and the published description of the zero meridian), on it or just posterior; the deck puts it slightly more anterior in men and slightly more posterior in women. Deck slide 6 gives a looser 5 mm; use 2 mm.\n\nPearl: this is the line that turns "she has a big nose" into "she has a small chin" (Case 1).`,
         explanationImage: IMG + 'fa-zero-meridian.png',
         explanationImageAlt: 'Grayscale lateral face with a horizontal Frankfort Horizontal Line through the ear and a vertical line dropped from the labeled nasion, perpendicular to it, passing in front of the chin',
         concepts: ['zero-meridian', 'frankfort-plane'],
@@ -334,11 +335,25 @@ const ITEMS = [
         ],
         correct: 'd',
         brief: 'Alar base width should equal the intercanthal distance; vertical lines from the medial canthi fall near the alar–facial grooves.',
-        detailed: `This is the central fifth applied to the nose. A vertical line dropped from each medial canthus should meet the alar–facial groove. When the alar base extends lateral to that line the base is wide, and an alar base reduction (Weir excision) is the usual surgical answer in the vault notes.\n\nCaveat: the deck footnotes this rule on its fifths slide, and the vault expresses it as the same alignment; Cummings Review lists "base width" as a base-view item but does not print the equality. Treat it as the standard teaching rather than a measured norm.\n\nPearl: check alar base width on the base view as well, since flare can be exaggerated in a frontal photo.`,
+        detailed: `This is the central fifth applied to the nose. A vertical line dropped from each medial canthus should meet the alar–facial groove. When the alar base extends lateral to that line the base is wide, and alar base reduction (the Weir excision, next question) is the usual surgical answer.\n\nCaveat: the deck footnotes this rule on its fifths slide, and the vault expresses it as the same alignment; Cummings Review lists "base width" as a base-view item but does not print the equality. Treat it as the standard teaching rather than a measured norm.\n\nPearl: check alar base width on the base view as well, since flare can be exaggerated in a frontal photo.`,
         concepts: ['alar-base-width', 'facial-fifths'],
     },
     {
         id: 'q17', type: 'mcq', section: 'Proportions & Units',
+        stem: 'On the frontal and base views the interalar distance exceeds the intercanthal distance and the alae flare. Which procedure narrows the base, and where is the external incision hidden?',
+        options: [
+            { id: 'a', text: 'Transdomal suturing; incision in the columella' },
+            { id: 'b', text: 'Weir excision: a wedge of skin and soft tissue from the alar base and nostril sill, with the external incision in the alar–facial groove' },
+            { id: 'c', text: 'Cephalic trim of the lower lateral cartilages; marginal incision' },
+            { id: 'd', text: 'Columellar strut; transcolumellar incision' },
+        ],
+        correct: 'b',
+        brief: 'Alar base reduction (Weir excision) is considered when the interalar distance exceeds the intercanthal distance; the external wedge incision is hidden in the alar–facial groove.',
+        detailed: `Mechanism: Weir described the alar wedge excision in 1892. The modern Weir excision customizes the wedge to the curve of the nostril and uses the sutures to shape the contour; the original external wedge hides the incision in the alar–facial groove. Typically a few millimetres (about 3–4 mm in some descriptions) of skin and soft tissue come from the alar base and nostril sill, which reduces flare and narrows the base. Modifications such as a nasal sill step address alar width and alar excess in one maneuver.\n\nApplication: the indication is a base wider than the central fifth, that is, interalar distance greater than intercanthal distance. Confirm on the base view before cutting.\n\nCaveat: over-resection is not benign. Anatomic work on the tip’s blood supply found that a transcolumellar incision does not compromise the tip, but extensive tip defatting or extended alar base resections can, because the lateral nasal artery runs in the subdermal plexus just above the alar groove.\n\nPearl: the Weir excision narrows the base; transdomal sutures, dome division, and subcutaneous excision narrow the tip. They solve different base-view findings.`,
+        concepts: ['alar-base-width', 'nasal-vasculature'],
+    },
+    {
+        id: 'q18', type: 'mcq', section: 'Proportions & Units',
         stem: 'After a naso-orbito-ethmoid fracture the central fifth of the face looks widened and the intercanthal distance measures more than 40 mm. What is the finding, and what does it imply?',
         options: [
             { id: 'a', text: 'Telecanthus; disruption of the medial canthal tendon attachment' },
@@ -352,7 +367,7 @@ const ITEMS = [
         concepts: ['telecanthus', 'facial-fifths'],
     },
     {
-        id: 'q18', type: 'recall', section: 'Proportions & Units',
+        id: 'q19', type: 'recall', section: 'Proportions & Units',
         stem: 'List the aesthetic units of the face in the Cummings Review list.',
         answer: `Forehead, eyes, nose, lips, chin, ears, neck.`,
         brief: 'Seven units: forehead, eyes, nose, lips, chin, ears, neck.',
@@ -362,7 +377,7 @@ const ITEMS = [
         concepts: ['aesthetic-units'],
     },
     {
-        id: 'q19', type: 'mcq', section: 'Proportions & Units',
+        id: 'q20', type: 'mcq', section: 'Proportions & Units',
         stem: 'A surgical defect involves more than half of a convex nasal subunit such as the tip. According to the subunit principle, what is the preferred approach?',
         options: [
             { id: 'a', text: 'Close the defect only within its own margins' },
@@ -376,17 +391,17 @@ const ITEMS = [
         concepts: ['subunit-principle', 'aesthetic-units'],
     },
     {
-        id: 'q20', type: 'recall', section: 'Proportions & Units',
+        id: 'q21', type: 'recall', section: 'Proportions & Units',
         stem: 'Describe the ideal brow: where it starts medially, where it peaks, and where it ends.',
         answer: `Starts medially above the nasal ala (a vertical from the ala).\nPeaks at the lateral limbus (highest point).\nEnds at an oblique line from the nasal ala through the lateral canthus.`,
         brief: 'The brow begins above the ala, peaks at the lateral limbus, and ends on the ala–lateral canthus line.',
         detailed: `These three landmarks give an easy reference grid: a vertical through the ala marks the medial end, a line from the ala through the lateral limbus marks the peak, and a line from the ala through the lateral canthus marks the tail.\n\nApplication: the same grid distinguishes brow ptosis or a lateral droop from a normal brow, which matters in forehead and upper-lid planning.\n\nPearl: the nasal ala is the anchor for all three lines.`,
-        explanationImage: IMG + 'fa-brow-position.png',
+        explanationImage: IMG + 'fa-brow-position.jpg',
         explanationImageAlt: 'Frontal photograph of a woman’s eye and brow with four green lines numbered 1 to 4: a vertical line from the nasal ala, two oblique lines from the ala toward the brow and lateral canthus, and a horizontal line across the brow',
         concepts: ['brow'],
     },
     {
-        id: 'q21', type: 'mcq', section: 'Proportions & Units',
+        id: 'q22', type: 'mcq', section: 'Proportions & Units',
         stem: 'Which description of the typical female brow, compared with the male brow, is correct?',
         options: [
             { id: 'a', text: 'Thicker, straighter, sitting at the supraorbital rim' },
@@ -400,7 +415,7 @@ const ITEMS = [
         concepts: ['brow'],
     },
     {
-        id: 'q22', type: 'recall', section: 'Proportions & Units',
+        id: 'q23', type: 'recall', section: 'Proportions & Units',
         stem: 'Give the Cummings Review eyelid reference values: palpebral fissure height, MRD1, MRD2, canthal tilt, and tarsal crease height.',
         answer: `Palpebral fissure height: 10–12 mm.\nMRD1 (light reflex to upper lid margin): 4–5 mm.\nMRD2 (light reflex to lower lid margin): 5–6 mm.\nLateral canthus about 2 mm higher than the medial canthus.\nTarsal crease: 7–15 mm above the lash line, higher in females.\nUpper lid covers a little iris; inferior limbus within 1–2 mm of the lower lid.`,
         brief: 'MRD1 4–5 mm, MRD2 5–6 mm, fissure height 10–12 mm, lateral canthus ~2 mm above the medial canthus.',
@@ -408,8 +423,8 @@ const ITEMS = [
         concepts: ['eyelid-metrics'],
     },
     {
-        id: 'q23', type: 'mcq', section: 'Proportions & Units',
-        stem: 'Relative to a line from the nasal tip to the chin, where do the lips ideally sit, and what is the upper-to-lower lip height ratio?',
+        id: 'q24', type: 'mcq', section: 'Proportions & Units',
+        stem: 'Relative to the esthetic line from the nasal tip to the soft-tissue pogonion (Ricketts’ E-line), where do the lips ideally sit, and what is the upper-to-lower lip height ratio?',
         options: [
             { id: 'a', text: 'Upper lip 4 mm posterior, lower lip 2 mm posterior; ratio 1:2' },
             { id: 'b', text: 'Upper lip 2 mm posterior, lower lip 4 mm posterior; ratio 1:2' },
@@ -417,25 +432,25 @@ const ITEMS = [
             { id: 'd', text: 'Upper lip 4 mm anterior, lower lip 2 mm anterior; ratio 2:1' },
         ],
         correct: 'a',
-        brief: 'The upper lip sits ~4 mm and the lower lip ~2 mm behind the tip–chin line, with upper:lower lip height 1:2.',
-        detailed: `The lower lip sits closer to the line than the upper, which gives the normal slight forward position of the lower lip, and the 1:2 height ratio is the same proportion as the lower third.\n\nCaveat: Cummings Review prints the line as "menton to nasal tip," but the standard esthetic line (Ricketts’ E-line) runs from the nasal tip to the soft-tissue pogonion. The 4 mm and 2 mm values are for that tip–chin line.\n\nPearl: lip position and chin position move together; check chin before lip when a profile looks off.`,
+        brief: 'The upper lip sits ~4 mm and the lower lip ~2 mm behind the E-line (nasal tip to pogonion), with upper:lower lip height 1:2.',
+        detailed: `The lower lip sits closer to the line than the upper, which gives the normal slight forward position of the lower lip, and the 1:2 height ratio is the same proportion as the lower third.\n\nCaveat: Cummings Review prints the line as "menton to nasal tip." Ricketts’ E-line is defined from the nasal tip (pronasale) to the soft-tissue pogonion, and this module uses the pogonion. The 4 mm and 2 mm values are Ricketts’ norms for a Caucasian profile and vary with ethnicity.\n\nPearl: lip position and chin position move together; check chin before lip when a profile looks off.`,
         concepts: ['perioral', 'facial-thirds'],
     },
 
     // ════════════════ PROFILE ANGLES ════════════════
 
     {
-        id: 'q24', type: 'recall', section: 'Profile Angles',
+        id: 'q25', type: 'recall', section: 'Profile Angles',
         stem: 'Name the profile angles with the lines that form them and their norms: nasofrontal, nasofacial, nasolabial, nasomental, mentocervical.',
         answer: `Nasofrontal: glabella–nasion line × nasal dorsum line; 115–135°.\nNasofacial: facial plane (glabella–pogonion) × dorsum line; 30–40°, ideally 36°.\nNasolabial: columella × subnasale–labrale superius line; men 90–95°, women 95–110° (greater rotation acceptable in shorter women).\nNasomental: dorsum line × tip–pogonion line; 120–132°.\nMentocervical (cervicomental): facial plane × menton–cervical point line; 80–95°.`,
         brief: 'Nasofrontal 115–135, nasofacial 30–40 (36), nasolabial 90–95 men and 95–110 women, nasomental 120–132, mentocervical 80–95.',
-        detailed: `Each angle answers one question: nasofrontal = radix depth, nasofacial = overall dorsal projection, nasolabial = tip rotation, nasomental = nose-to-chin relation, mentocervical = neck definition.\n\nDiscrepancies to carry: the nasolabial range for women is 95–110° in Cummings Review and the deck, 95–105° in the deck figure (next question), and 100–105° in the vault. The deck’s profile figure prints the neck angle as "nasocervical" while the table calls it mentocervical; both mean the same chin–neck angle.\n\nPearl: memorize the male/female split for nasolabial; it is the one with a sex-specific number.`,
-        explanationImage: IMG + 'fa-profile-angles.png',
-        explanationImageAlt: 'Rendered profile of a head with colored lines marking nasofrontal, nasofacial, nasomental, and nasocervical angles and a table of values: nasofrontal 115–130, nasofacial 30–40, nasomental 120–132, nasocervical 80–95 degrees',
+        detailed: `Each angle answers one question: nasofrontal = radix depth, nasofacial = overall dorsal projection, nasolabial = tip rotation, nasomental = nose-to-chin relation, mentocervical = neck definition.\n\nDiscrepancies to carry: the nasolabial range for women is 95–110° in Cummings Review and the deck table (the keyed value), 95–105° in the deck’s profile figure, and 100–105° in the vault. The deck’s profile slide labels the neck angle "nasocervical" while its table calls it mentocervical; both mean the same chin–neck angle.\n\nPearl: memorize the male/female split for nasolabial; it is the one with a sex-specific number.`,
+        explanationImage: IMG + 'fa-aesthetic-triangle.jpg',
+        explanationImageAlt: 'Faint sketch of a head in profile with a vertical reference line and blue lines forming the four profile angles, labeled NFr at the forehead, NFa and NM near the nasal tip, and MeC at the chin–neck junction',
         concepts: ['nasofrontal', 'nasofacial', 'mentocervical'],
     },
     {
-        id: 'q25', type: 'mcq', section: 'Profile Angles',
+        id: 'q26', type: 'mcq', section: 'Profile Angles',
         stem: 'A patient has a nasofrontal angle of about 100° (normal 115–135°). What does that describe?',
         options: [
             { id: 'a', text: 'A shallow, flat radix with a very obtuse forehead–nose transition' },
@@ -449,23 +464,23 @@ const ITEMS = [
         concepts: ['nasofrontal', 'radix'],
     },
     {
-        id: 'q26', type: 'mcq', section: 'Profile Angles',
+        id: 'q27', type: 'mcq', section: 'Profile Angles',
         stem: 'Which pair gives the ideal nasolabial angle for men and for women?',
         options: [
             { id: 'a', text: 'Men 100–110°; women 90–95°' },
-            { id: 'b', text: 'Men 90–95°; women 95–110° (95–105° in the deck figure)' },
+            { id: 'b', text: 'Men 90–95°; women 95–110°' },
             { id: 'c', text: 'Men 115–135°; women 120–132°' },
             { id: 'd', text: 'Both 90–95°' },
         ],
         correct: 'b',
-        brief: 'Men 90–95°, women 95–110° (the deck figure shows 95–105°): women are more rotated.',
-        detailed: `The nasolabial angle is formed by the columella and the upper lip (subnasale to labrale superius) and is the standard measure of tip rotation. Values below the norm mean an under-rotated, drooping tip; above it, an overrotated, upturned tip.\n\nCummings Review adds that greater rotation is acceptable in shorter women, so a number slightly outside the range may be acceptable if the profile is balanced.\n\nPearl: if a question gives only "95–105" or "95–110" for women, pick the answer that gets the sex difference right; the exact upper bound varies by source.`,
+        brief: 'Men 90–95°, women 95–110° (deck table; the Powell–Humphreys values): women are more rotated.',
+        detailed: `The nasolabial angle is formed by the columella and the upper lip (subnasale to labrale superius) and is the standard measure of tip rotation. Values below the norm mean an under-rotated, drooping tip; above it, an overrotated, upturned tip.\n\nCummings Review adds that greater rotation is acceptable in shorter women, so a number slightly outside the range may be acceptable if the profile is balanced.\n\nCaveat: these are the deck-table values (Powell and Humphreys). The profile figure on the next slide prints 95–105° for women, and published series report narrower ranges; the keyed answer follows the deck table.\n\nPearl: the sex difference (women more obtuse) is the part that is stable across sources.`,
         explanationImage: IMG + 'fa-angles-by-sex.png',
         explanationImageAlt: 'Two line-drawn nasal profiles side by side: the left in purple marking a nasofrontal angle of 115–120 degrees and a nasolabial angle of 90–95 degrees, the right in green marking 120–130 degrees and 95–105 degrees',
         concepts: ['nasolabial', 'tip-rotation'],
     },
     {
-        id: 'q27', type: 'mcq', section: 'Profile Angles',
+        id: 'q28', type: 'mcq', section: 'Profile Angles',
         stem: 'The nasofacial angle is 46° on a Frankfort-oriented lateral photograph (ideal 36°; range 30–40°). What does it indicate?',
         options: [
             { id: 'a', text: 'An underprojected nose' },
@@ -475,11 +490,11 @@ const ITEMS = [
         ],
         correct: 'b',
         brief: 'An angle above 40° means the dorsum leans away from the facial plane, so the nose looks overprojected.',
-        detailed: `The nasofacial angle is the dorsal line against the facial plane. Larger means the nose projects more from the face; smaller means it sits closer, an underprojected nose.\n\nThe facial plane ends at the pogonion, so a recessed chin tilts the plane and raises the angle even when the nose is normal. If the number looks high, confirm that the chin is not the cause before planning reduction.\n\nPearl: pair every nasofacial measurement with a chin check (zero meridian).`,
+        detailed: `The nasofacial angle is the dorsal line against the facial plane. Larger means the nose projects more from the face; smaller means it sits closer, an underprojected nose.\n\nThe facial plane ends at the pogonion, so a recessed chin tilts the plane and raises the angle even when the nose is normal. If the number looks high, confirm that the chin is not the cause before planning reduction.\n\nPearl: pair every nasofacial measurement with a chin check (zero meridian). A retrognathic chin produces a larger nasofacial angle and emphasizes the apparent size of the nose.`,
         concepts: ['nasofacial', 'chin-nose-balance'],
     },
     {
-        id: 'q28', type: 'mcq', section: 'Profile Angles',
+        id: 'q29', type: 'mcq', section: 'Profile Angles',
         stem: 'Which statement about the nasomental angle (normal 120–132°) is correct?',
         options: [
             { id: 'a', text: 'A recessed chin makes it more obtuse than 132°' },
@@ -489,27 +504,27 @@ const ITEMS = [
         ],
         correct: 'd',
         brief: 'The nasomental angle is dorsum line × tip–pogonion line; a prominent nose or a retrusive chin narrows it.',
-        detailed: `Geometry: the angle sits at the tip between the dorsum (running up and back) and the tip-to-pogonion line (running down and back). Pushing the pogonion posteriorly tilts the lower line further back, which closes the angle; pushing the tip forward does the same.\n\nDiscrepancy: the vault note states that retrogenia increases the nasomental angle. By the construction above it decreases it; treat the vault statement as an error to verify against Baker or Cummings before relying on it.\n\nPearl: a low nasomental angle makes you suspect chin or nose; a zero-meridian measurement tells you which.`,
+        detailed: `Geometry: the angle sits at the tip between the dorsum (running up and back) and the tip-to-pogonion line (running down and back). Pushing the pogonion posteriorly tilts the lower line further back, which closes the angle; pushing the tip forward does the same.\n\nDiscrepancy: the vault note states that retrogenia increases the nasomental angle. By construction it decreases it: for a dorsum at 36° the angle is about 144° minus the backward tilt of the tip-to-pogonion line, so 12–24° of chin recession gives 120–132°. The sources I searched define the angle the same way (sellion–tip line and tip–pogonion line) but do not state the direction, so this rests on the geometry; check it against Baker.\n\nPearl: a low nasomental angle makes you suspect chin or nose; a zero-meridian measurement tells you which.`,
         concepts: ['nasomental', 'chin-nose-balance'],
     },
-    {
-        id: 'q29', type: 'mcq', section: 'Profile Angles',
-        stem: 'The aesthetic triangle of Powell and Humphreys relates the major components of the face to describe harmony. According to the deck, which angle is the most important in this construct?',
+        {
+        id: 'q30', type: 'mcq', section: 'Profile Angles',
+        stem: 'The aesthetic triangle of Powell and Humphreys ties forehead, nose, chin, and neck into one profile. Which four angles make it up?',
         options: [
-            { id: 'a', text: 'Nasomental angle' },
-            { id: 'b', text: 'Nasofrontal angle' },
-            { id: 'c', text: 'Nasolabial angle' },
-            { id: 'd', text: 'Mentocervical angle' },
+            { id: 'a', text: 'Nasofrontal, nasofacial, nasomental, and mentocervical' },
+            { id: 'b', text: 'Nasofrontal, nasolabial, nasomental, and mentocervical' },
+            { id: 'c', text: 'Nasofacial, nasolabial, nasomental, and Frankfort' },
+            { id: 'd', text: 'Nasofrontal, nasofacial, nasolabial, and cervicomental' },
         ],
         correct: 'a',
-        brief: 'The deck names the nasomental angle as the most important in the aesthetic triangle.',
-        detailed: `The construct uses the nasofrontal, nasofacial, nasomental, and mentocervical angles to tie forehead, nose, chin, and neck into one profile. The nasomental angle is the one that relates the nose to the chin, which is why it carries the weight: the same nose looks different with a different chin.\n\nCaveat: this ranking is the deck’s statement; Cummings Review lists the angles without ranking them.\n\nPearl: if the nasomental angle is the odd one out, the answer to "is the nose the problem?" is usually in the chin.`,
-        explanationImage: IMG + 'fa-aesthetic-triangle.png',
+        brief: 'The triangle uses the nasofrontal, nasofacial, nasomental, and mentocervical angles; the nasolabial angle is not one of the four.',
+        detailed: `Each angle links the nose to a neighbor: nasofrontal (forehead), nasofacial (overall dorsal projection against the facial plane), nasomental (nose to chin), mentocervical (chin to neck). The nasolabial angle (tip rotation) is reported alongside them, with Powell and Humphreys’ sex-specific values, but it is not one of the four triangle angles. Option d is a trap: cervicomental is another name for the mentocervical angle, and the nasolabial angle is still not part of the triangle.\n\nCaveat: the deck states that the nasomental angle is the most important of the four. I could not find that ranking in Cummings Review or in the literature I searched, so it is not keyed here; treat it as the deck’s emphasis.\n\nPearl: if the nasomental angle is the odd one out, the answer to "is the nose the problem?" is usually in the chin.`,
+        explanationImage: IMG + 'fa-aesthetic-triangle.jpg',
         explanationImageAlt: 'Faint sketch of a head in profile with a vertical reference line and blue lines forming angles labeled NFr at the forehead, NFa and NM near the nasal tip, and MeC at the chin–neck junction',
         concepts: ['aesthetic-triangle', 'nasomental', 'mentocervical'],
     },
     {
-        id: 'q30', type: 'mcq', section: 'Profile Angles',
+        id: 'q31', type: 'mcq', section: 'Profile Angles',
         stem: 'Per the deck figure, how do the ideal nasofrontal and nasolabial angles compare between women and men?',
         options: [
             { id: 'a', text: 'Both are the same in men and women' },
@@ -518,7 +533,7 @@ const ITEMS = [
             { id: 'd', text: 'Both are smaller in women' },
         ],
         correct: 'c',
-        brief: 'In the deck figure, women are more obtuse on both angles: nasofrontal 120–130° vs 115–120° and nasolabial 95–105° vs 90–95°.',
+        brief: 'In the deck figure, women are more obtuse on both angles (nasofrontal 120–130° vs 115–120°; nasolabial larger, 95–110° vs 90–95° in the deck table).',
         detailed: `The female profile has a shallower radix and a more rotated tip than the male profile; the male profile has a deeper radix and a more perpendicular columella.\n\nApplication: do not apply a single norm to both sexes. Overrotating a male tip to a female nasolabial angle is a recognizable surgical signature.\n\nCaveat: the sex-specific nasofrontal ranges come from this figure only; the textbook gives 115–135° for everyone, which encompasses both.`,
         explanationImage: IMG + 'fa-angles-by-sex.png',
         explanationImageAlt: 'Two line-drawn nasal profiles side by side: the left in purple marking nasofrontal 115–120 and nasolabial 90–95 degrees, the right in green marking 120–130 and 95–105 degrees',
@@ -528,7 +543,7 @@ const ITEMS = [
     // ════════════════ NASAL ANATOMY & SUPPORT ════════════════
 
     {
-        id: 'q31', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q32', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'How many nasal subunits are there, and which ones are paired?',
         options: [
             { id: 'a', text: '7 subunits; dorsum, tip, columella, and alae are paired' },
@@ -544,7 +559,7 @@ const ITEMS = [
         concepts: ['nasal-subunits', 'subunit-principle'],
     },
     {
-        id: 'q32', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q33', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'The junction where the caudal edge of the upper lateral cartilage meets the cephalic edge of the lower lateral cartilage is called what?',
         options: [
             { id: 'a', text: 'The scroll region' },
@@ -560,7 +575,7 @@ const ITEMS = [
         concepts: ['keystone-scroll', 'tip-support'],
     },
     {
-        id: 'q33', type: 'recall', section: 'Nasal Anatomy & Support',
+        id: 'q34', type: 'recall', section: 'Nasal Anatomy & Support',
         stem: 'List the three major tip support mechanisms and the minor supports.',
         answer: `Major:\n1. Size, shape, and resiliency of the medial and lateral crura of the lower lateral cartilages\n2. Attachment of the medial crural footplates to the caudal septum\n3. Attachment of the cephalic LLC margins to the caudal ULC (scroll)\n\nMinor: interdomal ligaments, dorsal cartilaginous septum, membranous septum, skin and subcutaneous tissue, sesamoid cartilages, nasal spine.`,
         brief: 'Three majors: crural strength, footplate–septum attachment, and the scroll; minors include interdomal ligaments, dorsal septum, membranous septum, skin, sesamoids, and the nasal spine.',
@@ -570,7 +585,7 @@ const ITEMS = [
         concepts: ['tip-support'],
     },
     {
-        id: 'q34', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q35', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'In the tripod model of the nasal tip, which structures form the central leg and the other two legs, and what follows from manipulating one leg?',
         options: [
             { id: 'a', text: 'Central leg = dorsal septum; lateral legs = the nasal bones; the legs act independently' },
@@ -580,11 +595,11 @@ const ITEMS = [
         ],
         correct: 'c',
         brief: 'The conjoined medial crura are the central leg and each lateral crus is a leg; the three are coupled, so changing one changes the others.',
-        detailed: `Mechanism: the tip rests on three struts that meet at the domes. Shortening or lengthening a leg moves the apex, so it changes projection and rotation together.\n\nApplication: this is why a cephalic trim, which shortens the lateral legs, increases rotation, and why Cummings Review leaves a 6–8 mm residual strip of lateral crus so support is not lost.\n\nCaveat: the vault note assigns specific projection effects to each manipulation; those are not printed in Cummings Review, so verify directional claims about projection before using them.\n\nPearl: never evaluate a single maneuver in isolation; ask what it does to the other two legs.`,
+        detailed: `Mechanism: the tip rests on three struts that meet at the domes. Shortening or lengthening a leg moves the apex, so it changes projection and rotation together.\n\nApplication: this is why a cephalic trim, which shortens the lateral legs, increases rotation, and why Cummings Review leaves a 6–8 mm residual strip of lateral crus so support is not lost.\n\nCaveat: Cummings Review states only that manipulating one leg affects the other two, so no directional rule is keyed here. The vault note assigns specific projection effects to each manipulation. I checked them against published descriptions of the tripod (moving the columella anteriorly increases projection and rotation, and shortening the lateral crura adds rotation), and they agree, but they are not Cummings Review’s wording.\n\nPearl: never evaluate a single maneuver in isolation; ask what it does to the other two legs.`,
         concepts: ['tripod', 'tip-support'],
     },
     {
-        id: 'q35', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q36', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'Which method of increasing nasal tip projection gives the most tip support?',
         options: [
             { id: 'a', text: 'Transdomal suturing' },
@@ -598,7 +613,7 @@ const ITEMS = [
         concepts: ['tip-support', 'tip-projection'],
     },
     {
-        id: 'q36', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q37', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'Which statement about the blood supply of the nose is correct?',
         options: [
             { id: 'a', text: 'It comes only from the external carotid system' },
@@ -607,14 +622,14 @@ const ITEMS = [
             { id: 'd', text: 'It comes from the lingual artery' },
         ],
         correct: 'b',
-        brief: 'The nose has dual supply: external carotid (facial branches) and internal carotid (ophthalmic branches).',
-        detailed: `Mechanism: the facial artery gives the superior labial artery (with its columellar branches), the lateral nasal artery, and the angular artery, while the ophthalmic artery contributes the dorsal nasal artery and, via the anterior ethmoidal artery, the external nasal branch.\n\nApplication: a transcolumellar incision in open rhinoplasty divides the columellar branches, and tip perfusion is maintained through the lateral nasal arteries. This redundancy is why the nasal tip tolerates open approaches, but it also means smoking, prior surgery, or a scarred columella reduce the margin.\n\nPearl: the nose is a watershed between the two carotid systems.`,
-        explanationImage: IMG + 'fa-nasal-vasculature.png',
+        brief: 'The nose has dual supply: external carotid (facial branches) and internal carotid (ophthalmic branches); the tip depends mainly on the lateral nasal arteries.',
+        detailed: `Mechanism: the facial artery gives the superior labial artery (with its columellar branches), the lateral nasal artery, and the angular artery, while the ophthalmic artery contributes the dorsal nasal artery and, via the anterior ethmoidal artery, the external nasal branch.\n\nApplication: in cadaver injection studies the lateral nasal artery was present in nearly all specimens (97%), running in the subdermal plexus 2–3 mm above the alar groove, while the columellar branch of the superior labial artery was seen bilaterally in only 9% and was absent in 23%. When the columellar branches were transected, flow crossed over from the lateral nasal arcades to the cut ends. A transcolumellar incision is therefore generally safe for the tip.\n\nCaveat: the same anatomic work cautions that extensive tip defatting or extended alar base resections are the situations that can compromise tip perfusion (see the Weir excision question).\n\nPearl: the nose is a watershed between the two carotid systems.`,
+        explanationImage: IMG + 'fa-nasal-vasculature.jpg',
         explanationImageAlt: 'Lateral view of the nose and eye with arteries traced in red and labeled lateral nasal artery, angular artery, facial artery, arcades, columellar branches, and superior labial artery',
         concepts: ['nasal-vasculature'],
     },
     {
-        id: 'q37', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q38', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'Which nerve supplies skin sensation over the nasal tip and dorsum, emerging between the nasal bone and the upper lateral cartilage?',
         options: [
             { id: 'a', text: 'Infraorbital nerve (V2)' },
@@ -624,13 +639,13 @@ const ITEMS = [
         ],
         correct: 'd',
         brief: 'The external nasal branch of the anterior ethmoidal nerve (V1) supplies the tip and dorsum.',
-        detailed: `The external nasal branch exits between the nasal bone and the upper lateral cartilage (the keystone area) and supplies the dorsum and tip. The supratrochlear and infratrochlear nerves (V1) supply the root and upper sidewall, and the infraorbital nerve (V2) supplies the lateral nose and ala.\n\nApplication: numbness of the tip and dorsum after rhinoplasty follows the distribution of this branch.\n\nPearl: the nose straddles V1 and V2.`,
-        explanationImage: IMG + 'fa-nasal-innervation.png',
+        detailed: `The external nasal branch exits between the nasal bone and the upper lateral cartilage (the keystone area) and supplies the skin of the dorsum, the tip, and the medial alae. The supratrochlear and infratrochlear nerves (V1) supply the root and upper sidewall, and the infraorbital nerve (V2) supplies the lateral nose and ala.\n\nApplication: numbness of the tip and dorsum after rhinoplasty follows the distribution of this branch.\n\nPearl: the nose straddles V1 and V2.`,
+        explanationImage: IMG + 'fa-nasal-innervation.jpg',
         explanationImageAlt: 'Illustration of the face with yellow nerve branches labeled infratrochlear nerve, supratrochlear nerve, external branch of anterior ethmoidal nerve, and infraorbital nerve',
         concepts: ['nasal-innervation', 'keystone-scroll'],
     },
     {
-        id: 'q38', type: 'mcq', section: 'Nasal Anatomy & Support',
+        id: 'q39', type: 'mcq', section: 'Nasal Anatomy & Support',
         stem: 'A patient’s nasal tip droops with smiling. Which muscle is the usual culprit?',
         options: [
             { id: 'a', text: 'Depressor septi nasi' },
@@ -640,8 +655,8 @@ const ITEMS = [
         ],
         correct: 'a',
         brief: 'The depressor septi nasi pulls the tip and columella down on animation, producing tip ptosis with smiling.',
-        detailed: `Cummings Review lists "tip tension with smile" in the nasal assessment. The depressor septi nasi inserts at the medial crura/footplates and the caudal septum.\n\nThe other muscles are less relevant to tip position: the procerus elevates the glabellar skin, the transverse nasalis compresses the nostril, and the levator labii superioris alaeque nasi elevates the ala and upper lip.\n\nApplication: if the tip drops on smile, evaluate dynamically; static photographs alone will miss it.\n\nPearl: dynamic tip position belongs on the analysis checklist.`,
-        explanationImage: IMG + 'fa-nasal-muscles.png',
+        detailed: `Cummings Review lists "tip tension with smile" in the nasal assessment. The depressor septi nasi arises from the maxilla (incisive fossa), inserts into the nasal septum and the base of the alar part of nasalis, and is the only nasal muscle that pulls the nose downward. Its action, with the orbicularis oris, produces dynamic tip descent on smiling.\n\nThe other muscles are less relevant to tip position: the procerus elevates the glabellar skin, the transverse nasalis compresses the nostril, and the levator labii superioris alaeque nasi elevates the ala and upper lip.\n\nApplication: if the tip drops on smile, evaluate dynamically; static photographs alone will miss it. Releasing the muscle at its origin or insertion is the basis of surgical treatment of a plunging tip.\n\nPearl: dynamic tip position belongs on the analysis checklist.`,
+        explanationImage: IMG + 'fa-nasal-muscles.jpg',
         explanationImageAlt: 'Anatomic illustration of the nasal muscles labeling orbicularis oculi, medial canthal tendon, levator labii superioris alaeque nasi, dilator naris anterior, alar nasalis, procerus, anomalous nasi, transverse nasalis, compressor narium minor, depressor septi nasi, and orbicularis oris',
         concepts: ['nasal-muscles', 'tip-rotation'],
     },
@@ -649,7 +664,7 @@ const ITEMS = [
     // ════════════════ NASAL ANALYSIS ════════════════
 
     {
-        id: 'q39', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q40', type: 'mcq', section: 'Nasal Analysis',
         stem: 'In this frontal view, the two smooth, symmetric curves running from the brows down the nasal dorsum to the tip are called:',
         image: IMG + 'fa-brow-tip-lines.png',
         imageAlt: 'Frontal grayscale illustration of a face with two curved lines running from the medial brows down both sides of the nose to the tip',
@@ -665,7 +680,7 @@ const ITEMS = [
         concepts: ['brow-tip-line'],
     },
     {
-        id: 'q40', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q41', type: 'mcq', section: 'Nasal Analysis',
         stem: 'On the base view the nose should resemble a triangle. What is the ideal ratio of infratip lobule to nostril length?',
         options: [
             { id: 'a', text: '1:1' },
@@ -681,7 +696,7 @@ const ITEMS = [
         concepts: ['base-view'],
     },
     {
-        id: 'q41', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q42', type: 'mcq', section: 'Nasal Analysis',
         stem: 'What are the tip-defining points, and what does excessive distance between them cause?',
         options: [
             { id: 'a', text: 'The alar base points; a wide nasal base' },
@@ -691,13 +706,13 @@ const ITEMS = [
         ],
         correct: 'd',
         brief: 'Tip-defining points are the light reflections over the domes; too much distance between them gives a boxy tip.',
-        detailed: `The tip-defining points are the most anterior projections of the tip cartilages (the domes). Externally they appear where the light reflex sits on the tip.\n\nThe deck gives the ideal spacing as 6–8 mm in women and 8–10 mm in men; Cummings Review gives only the qualitative rule, that excess distance causes a boxy or trapezoidal tip, so treat the millimetre values as the deck’s.\n\nApplication: wide tip-defining points are narrowed with transdomal sutures, dome division, or subcutaneous excision (Case 3).\n\nPearl: the points are a base-view and frontal-view finding; check the light reflex on the photograph.`,
-        explanationImage: IMG + 'fa-tip-defining-points.png',
+        detailed: `The tip-defining points are the most anterior projections of the tip cartilages (the domes). Externally they appear where the light reflex sits on the tip.\n\nThe deck gives the ideal spacing as 6–8 mm in women and 8–10 mm in men; Cummings Review gives only the qualitative rule, that excess distance causes a boxy or trapezoidal tip, so treat the millimetre values as the deck’s; I could not corroborate them elsewhere.\n\nApplication: wide tip-defining points are narrowed with transdomal sutures, dome division, or subcutaneous excision (Case 3).\n\nPearl: the points are a base-view and frontal-view finding; check the light reflex on the photograph.`,
+        explanationImage: IMG + 'fa-tip-defining-points.jpg',
         explanationImageAlt: 'Left, a line drawing of the nasal tip in profile labeling right dome, left dome, supratip breakpoint, and columellar breakpoint; right, a frontal photograph of a woman’s nose with a diamond drawn through the tip-defining points',
         concepts: ['tip-defining-points'],
     },
     {
-        id: 'q42', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q43', type: 'mcq', section: 'Nasal Analysis',
         stem: 'Which lateral-view finding is the supratip break, and what is its absence called?',
         options: [
             { id: 'a', text: 'A depression just above the tip where dorsum transitions to tip; its absence is a polly-beak deformity' },
@@ -711,7 +726,7 @@ const ITEMS = [
         concepts: ['supratip-break'],
     },
     {
-        id: 'q43', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q44', type: 'mcq', section: 'Nasal Analysis',
         stem: 'On the frontal view, the ideal tip has a "gull-in-flight" appearance. What is it?',
         options: [
             { id: 'a', text: 'The alar rims hang well below the columella' },
@@ -725,7 +740,7 @@ const ITEMS = [
         concepts: ['gull-in-flight', 'alar-columellar'],
     },
     {
-        id: 'q44', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q45', type: 'mcq', section: 'Nasal Analysis',
         stem: 'What is the normal columellar show on the lateral view, and what ratio should the ala bear to the lobule?',
         options: [
             { id: 'a', text: '2–4 mm; 1:1' },
@@ -741,7 +756,7 @@ const ITEMS = [
         concepts: ['columellar-show', 'alar-columellar'],
     },
     {
-        id: 'q45', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q46', type: 'mcq', section: 'Nasal Analysis',
         stem: 'In the six-type alar–columellar classification shown in the deck, which type is an isolated retracted columella (insufficient show with a normally positioned ala)?',
         options: [
             { id: 'a', text: 'Type I' },
@@ -757,7 +772,7 @@ const ITEMS = [
         concepts: ['alar-columellar', 'columellar-show'],
     },
     {
-        id: 'q46', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q47', type: 'mcq', section: 'Nasal Analysis',
         stem: 'Which method relates nasal tip projection to nasal length with a ratio of 0.55–0.60 : 1?',
         options: [
             { id: 'a', text: 'Simon method' },
@@ -768,12 +783,12 @@ const ITEMS = [
         correct: 'b',
         brief: 'Goode: projection (alar groove to tip) divided by nasal length (nasion to tip) = 0.55–0.60.',
         detailed: `Three methods: Goode 0.55–0.60 : 1 (projection to nasal length); Crumley 3-4-5 triangle (projection, nasal height, nasal length); Simon 1:1 (tip projection to upper lip length).\n\nConnection worth seeing: the Crumley 3:5 relationship equals 0.60, the upper bound of Goode’s range, so the two methods agree.\n\nPearl: Goode measures projection perpendicular from the alar–facial groove; Simon compares against a different structure, the upper lip.`,
-        explanationImage: IMG + 'fa-goode-crumley.png',
+        explanationImage: IMG + 'fa-goode-crumley.jpg',
         explanationImageAlt: 'Two lateral photographs with overlays: left, Goode’s method with a vertical axis from nasion to the alar groove and a horizontal line from the ala to the tip; right, a 3-4-5 triangle on the nose; the captions say nasal projection should be 60% of nasal length',
         concepts: ['tip-projection'],
     },
     {
-        id: 'q47', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q48', type: 'mcq', section: 'Nasal Analysis',
         stem: 'A patient’s nasion-to-tip length is 40 mm and tip projection (alar groove to tip) is 26 mm. What is the Goode ratio and what does it indicate?',
         options: [
             { id: 'a', text: '0.65; overprojected' },
@@ -787,7 +802,7 @@ const ITEMS = [
         concepts: ['tip-projection'],
     },
     {
-        id: 'q48', type: 'mcq', section: 'Nasal Analysis',
+        id: 'q49', type: 'mcq', section: 'Nasal Analysis',
         stem: 'A woman has an under-rotated, drooping tip with a nasolabial angle of 88°. Which maneuver increases tip rotation?',
         options: [
             { id: 'a', text: 'Full transfixion incision' },
@@ -803,7 +818,7 @@ const ITEMS = [
         concepts: ['tip-rotation', 'tip-projection', 'nasolabial'],
     },
     {
-        id: 'q49', type: 'recall', section: 'Nasal Analysis',
+        id: 'q50', type: 'recall', section: 'Nasal Analysis',
         stem: 'List the Cummings Review methods to increase tip projection, and the methods to decrease it.',
         answer: `Increase: transdomal suturing (mild, no added support); lateral crural steal (greater, no added support); tip grafting (shield-shaped onlay, adds definition); columellar strut (most support); septocolumellar suture high on the caudal septum.\n\nDecrease: full transfixion incision; shortening the medial crura; dome division; medial crural steal; shaving an excessive dorsal or caudal septum; septocolumellar suture low on the caudal septum.`,
         brief: 'Projection up: transdomal, lateral crural steal, tip graft, columellar strut, high septocolumellar suture. Projection down: transfixion, medial crural shortening, dome division, medial crural steal, septal shaving, low septocolumellar suture.',
@@ -811,12 +826,12 @@ const ITEMS = [
         concepts: ['tip-projection', 'tip-support'],
     },
     {
-        id: 'q50', type: 'recall', section: 'Nasal Analysis',
+        id: 'q51', type: 'recall', section: 'Nasal Analysis',
         stem: 'Per the deck, how do forehead and chin size change the perceived size of the nose, and what chin position does the Gonzalez-Ulloa line predict?',
         answer: `Prominent forehead → nose looks small; small forehead → nose looks large.\nSmall (underprojected) chin → nose looks large; large chin → nose looks small.\nChin should lie near the Gonzalez-Ulloa line, a drop line from the nasion perpendicular to Frankfort (within about 2 mm; more anterior in men, more posterior in women).`,
         brief: 'The nose is judged against its neighbors: weak chin or forehead makes it look larger, strong ones make it look smaller.',
-        detailed: `Mechanism: perception is relational. A recessed chin enlarges the apparent nose without changing it, and the nasomental and nasofacial angles reflect that.\n\nApplication: always measure the chin before planning nasal reduction (Case 1). The deck’s forehead statements are less standardized than the chin statements; Cummings Review does not print them, so treat the forehead rule as a clinical heuristic.\n\nPearl: patients complain about the nose but often need a chin.`,
-        explanationImage: IMG + 'fa-chin-gonzalez-ulloa.png',
+        detailed: `Mechanism: perception is relational. A recessed chin enlarges the apparent nose without changing it, and the nasomental and nasofacial angles reflect that.\n\nApplication: always measure the chin before planning nasal reduction (Case 1). The chin statement is well supported. For the forehead, published rhinoplasty analyses agree that a deep nasofrontal angle or low radix makes the nose look shorter and a high radix makes it look longer; the deck’s wording is looser and Cummings Review does not print it, so treat it as a heuristic.\n\nPearl: patients complain about the nose but often need a chin.`,
+        explanationImage: IMG + 'fa-chin-gonzalez-ulloa.jpg',
         explanationImageAlt: 'Photograph of a woman in profile with a cyan horizontal Frankfort Horizontal Plane and a vertical Gonzalez-Ulloa Line dropped from the nasion, with the labels Men and Women near the bottom marking the expected chin position',
         concepts: ['chin-nose-balance', 'zero-meridian'],
     },
@@ -824,7 +839,7 @@ const ITEMS = [
     // ════════════════ SYNTHESIS CASES ════════════════
 
     {
-        id: 'q51', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q52', type: 'mcq', section: 'Synthesis Cases',
         stem: 'CASE 1. A 28-year-old woman asks for rhinoplasty because "my nose is too big." Frankfort-oriented photographs give: nasofrontal 128°, nasolabial 102°, nasofacial 41°, nasomental 114°. The pogonion lies 9 mm behind the zero meridian. Which measurements are outside the normal range?',
         options: [
             { id: 'a', text: 'Nasofrontal and nasolabial' },
@@ -838,7 +853,7 @@ const ITEMS = [
         concepts: ['case-profile', 'nasofacial', 'nasomental'],
     },
     {
-        id: 'q52', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q53', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) Which is the best interpretation and plan?',
         options: [
             { id: 'a', text: 'The nose is overprojected; reduce the dorsum and tip projection' },
@@ -847,12 +862,12 @@ const ITEMS = [
             { id: 'd', text: 'Retrogenia creates the impression of a large nose and distorts the pogonion-based angles; evaluate chin augmentation (with or without limited nasal refinement) and re-measure' },
         ],
         correct: 'd',
-        brief: 'A recessed chin makes the nose look large and inflates the pogonion-dependent angles; address the chin before reducing a normal nose.',
-        detailed: `The nasolabial and nasofrontal angles are normal, so tip rotation and radix depth are not the problem. The nasofacial angle is borderline and the nasomental angle is acute, which together with a pogonion 9 mm behind the zero meridian is the signature of retrogenia: a small chin makes the nose look large (deck).\n\nApplication: reducing a normally projected nose in this patient would unbalance the profile further. Chin augmentation or genioplasty is evaluated first, and nasal changes are reassessed afterward.\n\nPearl: the question to ask is not "how do I make the nose smaller?" but "is the nose actually the outlier?"`,
+        brief: 'Look at the chin first: a recessed chin makes the nose look large and inflates the pogonion-dependent angles, so address it before reducing a normal nose.',
+        detailed: `The nasolabial and nasofrontal angles are normal, so tip rotation and radix depth are not the problem. The nasofacial angle is borderline and the nasomental angle is acute, which together with a pogonion 9 mm behind the zero meridian is the signature of retrogenia: a small chin makes the nose look large (deck).\n\nApplication: reducing a normally projected nose in this patient would unbalance the profile further. The chin is always assessed first: chin augmentation or genioplasty is evaluated before any nasal change, and the nose is reassessed afterward. A retrusive chin is known to give the illusion of an overprojected nose; the one series reporting that over half of rhinoplasty candidates needed a genioplasty is small, single-center, and should not be used as a rate.\n\nPearl: the question to ask is not "how do I make the nose smaller?" but "is the nose actually the outlier?"`,
         concepts: ['case-profile', 'chin-nose-balance', 'zero-meridian'],
     },
     {
-        id: 'q53', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q54', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) She also asks you to remove a "bump" at the junction of the bony and cartilaginous dorsum. Her skin is thin over the middle third. What is the key planning point?',
         options: [
             { id: 'a', text: 'Reduce conservatively; thin rhinion skin shows contour and a complete reduction can drape into a saddle appearance' },
@@ -866,7 +881,7 @@ const ITEMS = [
         concepts: ['case-profile', 'skin-thickness', 'rhinion'],
     },
     {
-        id: 'q54', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q55', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) She asks which photograph shows the smoothness and straightness of her dorsum best. Which view do you use?',
         options: [
             { id: 'a', text: 'Frontal view only' },
@@ -880,7 +895,7 @@ const ITEMS = [
         concepts: ['case-profile', 'brow-tip-line', 'photo-series'],
     },
     {
-        id: 'q55', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q56', type: 'mcq', section: 'Synthesis Cases',
         stem: 'CASE 2. A 52-year-old man complains that his tip "hangs down" and drops further when he smiles. Frankfort-oriented measurements: nasolabial angle 82°, nasion-to-tip length 40 mm, tip projection 21 mm, columellar show 1 mm. How do you classify the tip?',
         options: [
             { id: 'a', text: 'Over-rotated and overprojected' },
@@ -894,7 +909,7 @@ const ITEMS = [
         concepts: ['case-tip', 'nasolabial', 'tip-projection'],
     },
     {
-        id: 'q56', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q57', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) The tip drops when he smiles. Which structure do you evaluate and what finding on animation confirms it?',
         options: [
             { id: 'a', text: 'Depressor septi nasi; the tip and columella move caudally with smiling' },
@@ -904,11 +919,11 @@ const ITEMS = [
         ],
         correct: 'a',
         brief: 'Tip descent with smiling points to an active depressor septi nasi; tip tension with smile is part of the nasal assessment.',
-        detailed: `The depressor septi nasi inserts on the medial crura and caudal septum and pulls the columella and tip down on animation. Cummings Review lists "tip tension with smile" among the nasal surgery considerations.\n\nApplication: static photographs cannot show this; watch him smile and talk, and plan release or accommodation if the finding is present.\n\nPearl: dynamic tip descent is why a tip that looks fine at rest can fail the patient’s own mirror.`,
+        detailed: `The depressor septi nasi inserts on the medial crura and caudal septum and pulls the columella and tip down on animation. Cummings Review lists "tip tension with smile" among the nasal surgery considerations.\n\nApplication: static photographs cannot show this; watch him smile and talk, and plan release of the muscle if the finding is present.\n\nPearl: dynamic tip descent is why a tip that looks fine at rest can fail the patient’s own mirror.`,
         concepts: ['case-tip', 'nasal-muscles', 'tip-rotation'],
     },
     {
-        id: 'q57', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q58', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) Which combination best addresses under-projection, loss of support, and under-rotation?',
         options: [
             { id: 'a', text: 'Full transfixion incision and medial crural shortening' },
@@ -922,7 +937,7 @@ const ITEMS = [
         concepts: ['case-tip', 'tip-support', 'tip-rotation'],
     },
     {
-        id: 'q58', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q59', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) Why does the surgeon leave a 6–8 mm strip of lateral crus when performing the cephalic trim?',
         options: [
             { id: 'a', text: 'To prevent bleeding from the lateral nasal artery' },
@@ -936,7 +951,7 @@ const ITEMS = [
         concepts: ['case-tip', 'tripod', 'tip-support'],
     },
     {
-        id: 'q59', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q60', type: 'mcq', section: 'Synthesis Cases',
         stem: 'CASE 3. A 24-year-old man has a broad nose with thick, oily skin. Frontal view: intercanthal distance 32 mm, alar base 41 mm. Base view: trapezoidal shape with a boxy tip. How do you read the frontal finding?',
         options: [
             { id: 'a', text: 'The alar base is narrower than the intercanthal distance' },
@@ -946,11 +961,11 @@ const ITEMS = [
         ],
         correct: 'b',
         brief: 'Alar base width should approximate the intercanthal distance; 41 mm against 32 mm is a wide base.',
-        detailed: `The central fifth is the intercanthal distance and the alar base should match it. Vertical lines from the medial canthi should fall near the alar–facial grooves; here the alae extend well lateral to them.\n\nApplication: the vault notes list alar base reduction (Weir excision) for a base wider than the medial canthal lines.\n\nPearl: confirm on the base view; a trapezoid base with flared alae points to the same problem.`,
+        detailed: `The central fifth is the intercanthal distance and the alar base should match it. Vertical lines from the medial canthi should fall near the alar–facial grooves; here the alae extend well lateral to them.\n\nApplication: alar base reduction (Weir excision, see the Proportions & Units section) is considered when the interalar distance exceeds the intercanthal distance.\n\nPearl: confirm on the base view; a trapezoid base with flared alae points to the same problem.`,
         concepts: ['case-wide-base', 'alar-base-width', 'facial-fifths'],
     },
     {
-        id: 'q60', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q61', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) The tip looks boxy with widely spaced light reflexes. Which is the best description and a recognized correction?',
         options: [
             { id: 'a', text: 'Under-rotation; increase with a cephalic trim' },
@@ -964,7 +979,7 @@ const ITEMS = [
         concepts: ['case-wide-base', 'tip-defining-points', 'base-view'],
     },
     {
-        id: 'q61', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q62', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) How does his thick tip skin change your counseling and planning?',
         options: [
             { id: 'a', text: 'Thick tip skin masks irregularities but limits the refinement a given cartilage change will show; plan on more structural definition and a slower resolution' },
@@ -978,7 +993,7 @@ const ITEMS = [
         concepts: ['case-wide-base', 'skin-thickness', 'tip-support'],
     },
     {
-        id: 'q62', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q63', type: 'mcq', section: 'Synthesis Cases',
         stem: 'CASE 4. After Mohs surgery for a basal cell carcinoma, a 62-year-old has a defect involving about 60% of the nasal tip subunit. What does the subunit principle suggest?',
         options: [
             { id: 'a', text: 'Repair only within the defect margins, leaving the rest of the tip' },
@@ -992,7 +1007,7 @@ const ITEMS = [
         concepts: ['case-subunit', 'subunit-principle', 'nasal-subunits'],
     },
     {
-        id: 'q63', type: 'mcq', section: 'Synthesis Cases',
+        id: 'q64', type: 'mcq', section: 'Synthesis Cases',
         stem: '(Same patient.) Which feature of the nasal subunit anatomy explains why scars along subunit borders are inconspicuous?',
         options: [
             { id: 'a', text: 'Subunit borders have no blood supply, so scars do not form' },
