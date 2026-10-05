@@ -19,7 +19,8 @@
    skflx.obs/Files (Cummings Otolaryngology / Cummings Review figures
    3.1–3.3, Baker Local Flaps Ch. 18, and other facial-plastics texts as
    in the deck). They are third-party material used for personal study;
-   confirm reuse rights before hosting publicly. Two Drive files were
+   hosted publicly at the owner's decision, with a takedown
+   note in meta.sources (message the owner via linkedin.com/in/skflx). Two Drive files were
    deliberately NOT used: nose-scale.png is the NOSE questionnaire, and
    plumb-line.png is a histology depth-of-invasion figure. */
 
@@ -34,6 +35,7 @@ const meta = {
         'Resident review deck “Facial Analysis”, 9/28/26 — figures and the Powell–Humphreys, Goode/Crumley/Simon, tip-defining-point and alar–columellar slides',
         'sk.oto vault — facial fifths/thirds, Goode’s ratio, Anderson tripod, Gonzalez-Ulloa subunit notes (unvetted; cite Cummings Review and Baker, Local Flaps 3e)',
         'Baker SR. Local Flaps in Facial Reconstruction, 3e, Ch. 18 (nasal subunits and skin thickness figure) — via vault only',
+        'Figures are third-party textbook illustrations reproduced for education. If you hold rights to one and want it removed, message the site owner (linkedin.com/in/skflx) and it will come down.',
     ],
 };
 
