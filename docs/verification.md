@@ -305,6 +305,7 @@ ostia from a 70° lens, and no 0° pose reaching a frontal ostium. A change to
 the pipeline's CT, landmarks or distance fields moves those pins on purpose.
 How the image *looks* (spot intensity, cone, the lining from inside) is a
 human check: take a screenshot of `#scope=R,45,6,4,0,0`.
+CT along the scope is pinned in the page: after a pose change the shared cursor equals the tip within a voxel, the inset's centre pixel is the volume sampled at the tip, a back-to-back drag measures the exposure at most twice and the settled pose once more, and with the CT request blocked the inset stays hidden.
 
 **Specimen stage** (`js/ssb/geo-specimen.js`, `mode-specimen.js`,
 `ui-specimen.js`; `docs/ssb.md` §3 Explore) runs on the real committed packs

@@ -120,6 +120,44 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     hudSec.append(hudList);
     poseSec.append(tipOut, fulcrumNote, keys, status);
 
+    /* ---- CT along the scope (E4): the oblique slice through the tip, spanned by the view and the camera's up ---- */
+    const ctSec = section('CT along the scope');
+    ctSec.hidden = true;
+    const inset = el('canvas', 'ssb-scope-inset');
+    inset.id = 'ssb-scope-inset';
+    inset.setAttribute('role', 'img');
+    inset.setAttribute('aria-label', 'Oblique CT slice through the scope tip: the viewing direction runs left to right, the camera up runs upward, and the shaft is drawn in the signal colour.');
+    ctSec.append(inset, el('p', 'ssb-param-src', 'The tip is at the centre; the scope looks to the right. Slice through the tip along the view and the camera\'s up; the 3D cursor and the CT stage follow the tip.'));
+    const g2d = (() => { try { return inset.getContext('2d'); } catch (e) { return null; } })();
+    function paintInset() {
+        const d = endo.inset;
+        ctSec.hidden = !d || !g2d;
+        if (!d || !g2d) return;
+        if (inset.width !== d.width) { inset.width = d.width; inset.height = d.height; }
+        const img = g2d.createImageData(d.width, d.height);
+        for (let i = 0; i < d.ct.length; i++) {
+            const v = d.ct[i];
+            const g = v === v ? Math.max(0, Math.min(255, Math.round(v))) : 24;      /* NaN: outside the volume */
+            img.data[4 * i] = img.data[4 * i + 1] = img.data[4 * i + 2] = g;
+            img.data[4 * i + 3] = 255;
+        }
+        g2d.putImageData(img, 0, 0);
+        const css = getComputedStyle(root);
+        g2d.strokeStyle = css.getPropertyValue('--signal').trim() || '#d33';
+        g2d.lineWidth = 2;
+        /* the shaft stops 4 px short of the tip and a ring marks it, so the centre pixel stays the CT's */
+        const [x0, y0, x1, y1] = d.shaft;
+        const len = Math.hypot(x1 - x0, y1 - y0) || 1;
+        g2d.beginPath();
+        g2d.moveTo(x0, y0);
+        g2d.lineTo(x1 - (x1 - x0) / len * 4, y1 - (y1 - y0) / len * 4);
+        g2d.stroke();
+        g2d.beginPath();
+        g2d.arc(x1, y1, 4, 0, 2 * Math.PI);
+        g2d.stroke();
+    }
+    endo.onInset(paintInset);
+
     /* ---- the proximity HUD: nearest structure first, within 3 mm in the signal colour ---- */
     const NEAR_MM = 3;
     function renderHud() {
@@ -132,7 +170,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
             const far = r.mm >= h.clampMm - 0.05;
             line.textContent = `${r.name}: ${far ? '>' : ''}${fmt(far ? h.clampMm : r.mm)} mm`;
             line.dataset.id = r.id;
-            if (r.mm <= NEAR_MM) { line.dataset.near = 'true'; line.style.setProperty('color', 'var(--signal)'); }
+            if (r.mm <= NEAR_MM) { line.dataset.near = 'true'; line.classList.add('ssb-scope-hud-near'); }
             hudList.append(line);
         }
         const contact = el('p', 'ssb-param-src ssb-scope-hud-contact', `Mucosal contact: ${fmt(h.contactMm)} mm of shaft`);

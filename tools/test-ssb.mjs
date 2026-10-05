@@ -1128,7 +1128,7 @@ async function specimenUnitTests() {
 const RAW = { 'content-type': 'application/octet-stream' };
 
 /* routes: { '<file name under ssb/models/ or ssb/geometry/>': (route) => … }. */
-async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true } = {}) {
+async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true, abort = null } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion, deviceScaleFactor: viewport.width < 600 ? 2 : 1 });
   if (!webgl) {
     await context.addInitScript(() => {
@@ -1136,6 +1136,7 @@ async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280
       HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return typeof type === 'string' && /webgl/i.test(type) ? null : real.call(this, type, ...rest); };
     });
   }
+  if (abort) await context.route(abort, (route) => route.abort());
   if (routes) {
     await context.route(/\/ssb\/(models|geometry)\/[^/?#]+(?:[?#].*)?$/, (route) => {
       const name = new URL(route.request().url()).pathname.split('/').pop();
@@ -2127,8 +2128,8 @@ async function scopeTests(browser, base) {
     await nextFrames(page, 3);
     const off = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash, engaged: window.__ssb.scope.engaged, active: window.__ssb.scope.active, bone: window.__ssb.specimen.bone, mucosa: window.__ssb.specimen.mucosaOn,
       controls: window.__ssb.scope.controlsEnabled(), lights: window.__ssb.scope.lights(), overlay: document.getElementById('ssb-scope').hidden, cam: window.__ssb.specimen.camera() }));
-    check('scope: leaving restores the specimen — stage and URL, bone X-ray, mucosa off, orbit controls and headlight back, the spotlight off, the overlay gone',
-      off.stage === 'specimen' && off.hash === '' && !off.engaged && !off.active && off.bone === 'xray' && off.mucosa === false && off.controls === true && off.lights.head > 0 && off.lights.spot && !off.lights.spot.on && off.overlay, JSON.stringify(off));
+    check('scope: leaving restores the specimen — stage and URL (the tip survives as the 3D cursor, `#at=`, E4), bone X-ray, mucosa off, orbit controls and headlight back, the spotlight off, the overlay gone',
+      off.stage === 'specimen' && /^(#at=[-\d.,]+)?$/.test(off.hash) && !off.engaged && !off.active && off.bone === 'xray' && off.mucosa === false && off.controls === true && off.lights.head > 0 && off.lights.spot && !off.lights.spot.on && off.overlay, JSON.stringify(off));
     check('scope: leaving restores the orbit view (the camera is where it was before the scope: same distance to target, toCamera within 1e-3)',
       near(off.cam.distance, camBefore.distance, 0.5) && off.cam.toCamera.every((v, i) => near(v, camBefore.toCamera[i], 1e-3)), JSON.stringify([off.cam, camBefore]));
     await context.close();
@@ -2156,6 +2157,61 @@ async function scopeTests(browser, base) {
     console.log(`  [E2b] ${hash} D=${ex.distance && ex.distance.toFixed(1)} intensity=${ex.intensity && ex.intensity.toFixed(0)} raycast=${ex.ms.toFixed(1)}ms saturated=${(sat * 100).toFixed(1)}% median=${median.toFixed(0)}`);
     check(`scope: exposure at ${hash} — under 10 % of the field saturated (luminance >= 250), median luminance 40-200`,
       ex.distance !== null && sat < 0.1 && median >= 40 && median <= 200, `D ${ex.distance}, saturated ${(sat * 100).toFixed(1)} %, median ${median.toFixed(0)}`);
+    await context.close();
+  }
+
+  /* ===== CT along the scope, and exposure on settle (E4) ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,52,-3,15,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision && window.__ssb.scope.inset, null, { timeout: 30000 });
+    await nextFrames(page, 4);
+    await page.waitForTimeout(300);
+    const ins = await page.evaluate(() => {
+      const s = window.__ssb.scope; const T = s.tip; const c = document.getElementById('ssb-scope-inset');
+      const px = c.getContext('2d').getImageData(c.width >> 1, c.height >> 1, 1, 1).data;
+      return { tip: T, cursor: s.cursor, inset: s.inset, sample: s.sampleAt(T), px: [...px], shown: !c.closest('.ssb-lab-sec').hidden, w: c.width, h: c.height };
+    });
+    const voxel = 1;     /* the display volume's voxel is 1 mm (ct.json) */
+    check('scope CT: after a pose change the shared cursor equals the tip within a voxel', ins.cursor && Math.hypot(...ins.cursor.map((v, i) => v - ins.tip[i])) <= voxel, JSON.stringify([ins.cursor, ins.tip]));
+    check('scope CT: the inset is shown once the volume has loaded, and its centre pixel is the volume sampled at the tip',
+      ins.shown && ins.w === ins.inset.width && near(ins.inset.center, ins.sample, 1e-4) && Math.abs(ins.px[0] - Math.max(0, Math.min(255, Math.round(ins.sample)))) <= 1, JSON.stringify(ins));
+    const shaft = ins.inset.shaft;
+    check('scope CT: the shaft is drawn ending at the centre pixel', near(shaft[2], (ins.w - 1) / 2, 1e-6) && near(shaft[3], (ins.h - 1) / 2, 1e-6), JSON.stringify(shaft));
+    /* the cursor follows a later pose change, and CT opens on it */
+    await page.evaluate(() => { const r = document.getElementById('ssb-scope-yaw'); r.value = '-1'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+    await nextFrames(page, 4);
+    const c2 = await page.evaluate(() => ({ tip: window.__ssb.scope.tip, cursor: window.__ssb.scope.cursor }));
+    check('scope CT: the cursor follows the next pose change', c2.cursor && Math.hypot(...c2.cursor.map((v, i) => v - c2.tip[i])) <= voxel && Math.hypot(...c2.cursor.map((v, i) => v - ins.cursor[i])) > 0.1, JSON.stringify([c2, ins.cursor]));
+    /* a 30-frame drag measures the exposure at most twice; a settled pose is exposed */
+    const box = await page.evaluate(() => { const b = document.getElementById('ssb-canvas').getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; });
+    await page.waitForTimeout(300);
+    const runs0 = await page.evaluate(() => window.__ssb.scope.exposeRuns);
+    await page.mouse.move(box.x, box.y);
+    await page.mouse.down();
+    const frames0 = await page.evaluate(() => window.__ssb.scope.renders);
+    for (let i = 1; i <= 30; i++) await page.mouse.move(box.x + i * 10, box.y - i * 6);      /* back to back: the pose never rests for 100 ms */
+    const dragFrames = (await page.evaluate(() => window.__ssb.scope.renders)) - frames0;
+    await page.mouse.up();
+    const runsDrag = (await page.evaluate(() => window.__ssb.scope.exposeRuns)) - runs0;
+    await page.waitForTimeout(400);
+    const runsSettled = (await page.evaluate(() => window.__ssb.scope.exposeRuns)) - runs0;
+    check('scope: during a 30-frame drag the exposure runs at most twice, and the settled pose is exposed once more', runsDrag <= 2 && runsSettled >= 1 && runsSettled <= 3, `${runsDrag} during (${dragFrames} frames), ${runsSettled} after`);
+    check('scope: the HUD near colour is a class, not an inline style (E4)', !(await page.evaluate(() => [...document.querySelectorAll('.ssb-scope-hud-row')].some((e) => e.style.color))) && (await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--signal'))).length > 0);
+    const tipEnd = await page.evaluate(() => window.__ssb.scope.tip);
+    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready', null, { timeout: 30000 });
+    const cc = await page.evaluate(() => window.__ssb.ct.cursor);
+    check('scope CT: leaving the scope for CT keeps the cursor where the tip was', cc && Math.hypot(...cc.map((v, i) => v - tipEnd[i])) <= voxel, JSON.stringify([cc, tipEnd]));
+    await context.close();
+  }
+  {
+    /* no volume, no inset: a scope whose CT never loads still moves and shows no inset */
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,30,0,0,0,0', { abort: /\/ssb\/ct\/ct\.u8\.gz/, track: false });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 4);
+    await page.waitForTimeout(500);
+    const none = await page.evaluate(() => ({ inset: window.__ssb.scope.inset, hidden: document.getElementById('ssb-scope-inset').closest('.ssb-lab-sec').hidden }));
+    check('scope CT: with no volume the inset is hidden and there is no error', none.inset === null && none.hidden === true, JSON.stringify(none));
     await context.close();
   }
 
@@ -2200,10 +2256,10 @@ async function scopeTests(browser, base) {
     await o.context.close();
 
     o = await open('#scope=R,74,3,24,0,0');
-    const nearHud = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, row: (() => { const e = document.querySelector('.ssb-scope-hud-row[data-near]'); return e && { text: e.textContent, id: e.dataset.id, color: e.style.color }; })(),
+    const nearHud = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, row: (() => { const e = document.querySelector('.ssb-scope-hud-row[data-near]'); return e && { text: e.textContent, id: e.dataset.id, color: getComputedStyle(e).color, cls: e.className, other: getComputedStyle(document.querySelector('.ssb-scope-hud-row:not([data-near])')).color, sig: (() => { const t = document.createElement('i'); t.style.color = 'var(--signal)'; document.body.append(t); const c = getComputedStyle(t).color; t.remove(); return c; })() }; })(),
       others: document.querySelectorAll('.ssb-scope-hud-row[data-near]').length }));
     check('scope: within 3 mm of a structure its row is drawn in the signal colour (R,74,3,24: the anterior cranial fossa, 2.2 mm) and only that row',
-      nearHud.pose.depth === 74 && nearHud.row && nearHud.row.id === 's.anterior-cranial-fossa' && /2\.2 mm/.test(nearHud.row.text) && /signal/.test(nearHud.row.color) && nearHud.others === 1, JSON.stringify(nearHud));
+      nearHud.pose.depth === 74 && nearHud.row && nearHud.row.id === 's.anterior-cranial-fossa' && /2\.2 mm/.test(nearHud.row.text) && /ssb-scope-hud-near/.test(nearHud.row.cls) && nearHud.row.color === nearHud.row.sig && nearHud.row.color !== nearHud.row.other && nearHud.others === 1, JSON.stringify(nearHud));
     await o.context.close();
 
     for (const [hash, label] of [['#scope=R,36,-2,33,0,70', 'right'], ['#scope=L,41,-10,44,15,70', 'left']]) {
@@ -2265,7 +2321,7 @@ async function scopeTests(browser, base) {
     const { context, page } = await openSpecimen(browser, base, '#scope=R,60,50000,-50000,99999,45');
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
     const pose = await spec(page, () => window.__ssb.scope.pose);
-    check('scope: out-of-range numbers in a link clamp (yaw 45, pitch -45, roll 359), not break', pose.yaw === 45 && pose.pitch === -45 && pose.roll === 359 && pose.depth === 60, JSON.stringify(pose));
+    check('scope: out-of-range numbers in a link clamp (yaw 45, pitch -45, roll 359), not break', pose.yaw === 45 && pose.pitch === -45 && pose.roll === 359 && pose.depth <= 60 && pose.depth > 0, JSON.stringify(pose));   /* depth: 60, or the bone clamp's if the volume has already loaded (a race the E4 timing exposed) */
     await context.close();
   }
 

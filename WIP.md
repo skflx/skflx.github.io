@@ -219,6 +219,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   to the lining), the lining drawn as mucosa from inside. Bone
   stops the shaft (4 or 2.7 mm), mucosal contact is reported and a proximity
   HUD reads the distance fields at the tip; ostia and choanae are drawn as closed membranes (ST1b).
+  The tip is also the Specimen stage's 3D cursor (so CT opens on it, and leaving the scope leaves `#at=`), an inset in
+  the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
