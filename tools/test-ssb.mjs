@@ -2499,6 +2499,10 @@ function sphenoidRuleTests() {
   }
   check('sphenoid rule 9: conchal degrades optic type 2 to type 1', same(P({ pneum: 1, optic_type: 2 }), P({ pneum: 1, optic_type: 1 })));
   check('sphenoid rule 9: optic type 3 below sellar draws type 2', same(P({ pneum: 2, optic_type: 3 }), P({ pneum: 2, optic_type: 2 })) && SPH.model(P({ pneum: 2, optic_type: 3 })).notes.includes('optic_type'));
+  for (const k of ['ica_protrusion', 'ica_dehiscence']) {
+    check(`sphenoid rule 9: presellar ignores ${k}=1 (geometry equals the toggle-off model's)`, same(P({ pneum: 2, [k]: 1 }), P({ pneum: 2, [k]: 0 })));
+    check(`sphenoid rule 9: the HUD says what presellar degraded (${k})`, SPH.model(P({ pneum: 2, [k]: 1 })).notes.includes(k));
+  }
   check('sphenoid rule 9: optic type 3 at sellar is not degraded', SPH.model(P({ pneum: 3, optic_type: 3 })).notes.length === 0);
   check('sphenoid rule 9: every degrade happens at most once and never invents a parameter', Object.keys(SPH.degrade(P({ pneum: 1, ...noEffect })).p).sort().join() === Object.keys(D).sort().join());
 

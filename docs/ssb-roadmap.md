@@ -1104,7 +1104,7 @@ Don't: change `kit.js` beyond adding a primitive the scene needs (say so in the 
 Accept: rules 0–9 pinned in `test-ssb.mjs` (`--only lab`), computed from the solids on a 0.5 mm grid.
 Escalate: a rule cannot hold with the stated schematic sizes (report the numbers).
 
-### D2a — Presellar in rule 9        [ready] · Sonnet · depends: D2 merged
+### D2a — Presellar in rule 9        [review] · Sonnet · depends: D2 merged
 Goal: rule 9 as amended at CP-2a (`docs/ssb.md` §6.1).
 Read: `docs/ssb.md` §6.1 rules 2 and 9; `js/ssb/dioramas/sphenoid.js` `degrade()`.
 Touch: `js/ssb/dioramas/sphenoid.js`, `tools/test-ssb.mjs`.
@@ -1113,6 +1113,7 @@ Steps: in `degrade()`, with `pneum` = presellar, `ica_protrusion` and
 of the two pairs draws the same model as presellar with the toggle off, and
 the HUD names it.
 Accept: `node tools/test-ssb.mjs --only lab`.
+Result: `degrade()` has a presellar branch; four tests pin the two pairs (same solids as toggle off, HUD names them).
 
 ### P1/P2, T1, C1 — wave 3        [todo]
 P1 (Opus): `removes` units per step for the first procedures, mapped to
