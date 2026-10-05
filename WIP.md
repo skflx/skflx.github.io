@@ -114,6 +114,15 @@ owner's decision with a takedown note in the module's sources. Details not in
 Cummings Review were web-verified and are recorded in `meta.sources`; claims found
 only in the deck are labelled as such. Nothing in it is clinically verified.
 
+The facial-trauma family (`mandible-fractures`, `midface-fractures`,
+`orbit-noe-trauma`, `temporal-bone-trauma`, `facial-trauma-evaluation`) is built
+from the owner's eleven resident-review decks only (the temporal-bone deck's
+statistics cite Bailey's; the AO CMF content is still to come and is meant to be
+folded into these modules). It has no figures. Claims the decks do not state are
+marked "added" in their explanations and every deck-versus-standard disagreement
+sits under "Discrepancy:" or "Caveat:"; none of it is web-verified or clinically
+verified. `temporal-bone-trauma` is short because its source decks are thin.
+
 The viewer now loads React/htm from `js/vendor/` (pinned) rather than a CDN,
 and the default typeface is the site's own (`instrument`); the choice moved to
 `oksat:typeface` and is stored only when picked.
