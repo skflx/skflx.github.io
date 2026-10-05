@@ -124,7 +124,7 @@ never reloads.
   sampled every 0.5 mm, on its axis and on a ring of four points at the
   shaft radius (4 mm scope, or 2.7 mm, chosen in the controls, never in the
   URL), against the CT display volume (§5.6), and a pose that would block is
-  clamped to the last free depth. Only bone blocks (display ≥ 150); the
+  clamped to the last free depth. The tip is the shared 3D cursor (`state.cursor`, set once per animation frame that follows a pose change, so CT opens on it), and an inset in the controls shows the oblique CT slice through the tip spanned by the view direction and the camera's up, with the shaft drawn on it (hidden until the volume has loaded). The exposure is measured when the pose has rested 100 ms, not on every moving frame. Only bone blocks (display ≥ 150); the
   shaft length lying in mucosa is reported as mucosal contact, because this
   specimen is not decongested and a rigid scope displaces mucosa. A proximity
   HUD gives the distance in mm from the tip to each critical structure (ICA,
@@ -158,9 +158,8 @@ never reloads.
   no `ssb/ct/ct.json` the stage says so. Built for the Wormald
   building-block exercise: scroll the three planes, identify each frontal
   recess cell, and toggle its 3D block to check. The crosshair is the
-  Specimen stage's 3D cursor (`state.cursor`). *Not built yet:* the oblique
-  slice down the scope axis and the crosshair following the scope tip
-  (roadmap E4), and the 3D block toggle.
+  Specimen stage's 3D cursor (`state.cursor`), which the Endoscope stage moves
+  to its tip. *Not built yet:* the 3D block toggle.
 - **Procedure.** A procedure from the graph played as steps. Each step sets
   the station (camera pose), applies the cumulative dissection state (units
   the step `removes` disappear), highlights what comes into view, hatches

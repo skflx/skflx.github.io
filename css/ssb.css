@@ -660,3 +660,9 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   position: absolute; left: 0; right: 0; top: 0.5rem; margin: 0; text-align: center;
   font: 500 0.72rem/1.2 var(--font-mono); letter-spacing: 0.04em; color: var(--ssb-scope-ink);
 }
+.ssb-scope-hud-near { color: var(--signal); }
+.ssb-scope-inset {
+  display: block; width: 100%; max-width: 16rem; aspect-ratio: 1; image-rendering: pixelated;
+  background: var(--ssb-ct-bg); border: 1px solid var(--rule);
+}
+.ssb-scope-controls .ssb-lab-sec[hidden] { display: none; }

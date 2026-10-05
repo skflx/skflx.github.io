@@ -17,8 +17,8 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done, D2a follow-up) | `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | **standard specimen (N1, O6)**, then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig, exposure, collision + HUD done** (E1, E1b, E2, E2b, E3) | CT along the scope (E4), station poses (E5, Opus, after N1 and ST1b), flights (E6) |
-| 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D) | oblique slice down the scope (E4) |
+| 4 Endoscope | **rig, exposure, collision + HUD done** (E1, E1b, E2, E2b, E3); CT along the scope (E4) in review | station poses (E5, Opus, after N1 and ST1b), flights (E6) |
+| 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
@@ -752,7 +752,7 @@ The HUD sits in the controls panel; a stage-overlay HUD needs CSS (outside this
 WP's Touch). The existing pasted-link test now uses `L,30,-10,0,0,30` because
 `L,30,10,0,0,30` is inside bone and clamps to depth 16.
 
-### E4 — CT along the scope        [ready] · Sonnet · depends: E3 (same files)
+### E4 — CT along the scope        [review: PR open — cursor follows the tip, oblique inset, exposure on settle] · Sonnet · depends: E3 (same files)
 Goal: the CT follows the tip; exposure stops costing a raycast per dragged frame.
 Read: `docs/ssb.md` §3 (Endoscope, CT), §5.6; §4 "CP-2a" (E2b, E3) of this file; `js/ssb/volume.js` (`sharedVolume`, `obliqueSlice`); `js/ssb/mode-endoscope.js`; `js/ssb/ui-endoscope.js`.
 Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/mode-ct.js` (only to accept the cursor), `css/ssb.css`, `tools/test-ssb.mjs`.
@@ -767,6 +767,8 @@ Accept: after a pose change the CT crosshair equals T within a voxel; the
 inset's centre pixel samples the same value as `volume.sample(T)`; during a 30-frame
 drag `expose()` runs at most twice; E2b's exposure checks still pass; the CP-2a
 lazy-load test still passes (no `ct.u8.gz` request until the scope or CT opens).
+
+*Result (Sonnet, 2026-10-05):* `follow()` in `mode-endoscope.js` sets `state.cursor = T` and resamples the inset once per animation frame after a pose change; `ui-endoscope.js` paints it (shaft stops 4 px short of the tip and a ring marks it, so the centre pixel stays the CT's). `expose()` runs from a 100 ms settle timer (and on engage); a held pointer keeps it waiting. HUD near colour is the `.ssb-scope-hud-near` class. `test-ssb` 550/550. Consequences to know: (1) the cursor lives in the store, so leaving the scope now leaves `#at=x,y,z` in the URL (a scope link itself is unchanged; the old test expected an empty hash); (2) `mode-ct.js` needed no change; (3) the drag now uses pointer capture, because a release outside the canvas left the drag stuck and would have blocked the exposure forever; (4) the "out-of-range numbers in a link" test accepts a bone-clamped depth, since the volume can arrive before the check; (5) the Accept's "30-frame drag" is driven back to back, because software GL frames outlast 100 ms.
 
 ### E5 — Station poses        [todo] · **Opus** · depends: E3, N1, ST1b
 Write `ssb/geometry/stations.json` (`{"t.<id>.<side>": pose}`) for every

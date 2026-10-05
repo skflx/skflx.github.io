@@ -23,6 +23,10 @@
      the controls and never in the hash. Without the volume the scope still moves, unblocked.
    - The proximity HUD (E3): each distance field in ct.json `sdf`, read at the tip, nearest
      first, plus the shaft length lying in mucosa. No fields, no HUD.
+   - CT along the scope (E4): on each animation frame that follows a pose change the shared 3D cursor
+     (state.cursor) goes to the tip T, and a small inset shows the oblique CT slice through T spanned by the
+     view direction and the camera's up, with the shaft drawn on it. It exists once the volume has loaded.
+   - Exposure runs on settle (100 ms without a pose change, and on engage), not on every moving frame.
    - Station flights (E6) are not here.
 
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
@@ -45,6 +49,8 @@ const SPOT = { intensity: 350, angle: 0.72, penumbra: 0.55, decay: 2 };
 const EXPOSURE_D0 = 16;
 const EXPOSURE = { K: SPOT.intensity / (EXPOSURE_D0 * EXPOSURE_D0), floorMm: 3, farMm: 150, offAxisDeg: 15, min: 10, max: 2000 };
 const FILL = 0.5;                /* hemisphere fill left on in the scope: the lining beyond the light is dim, not black */
+const SETTLE_MS = 100;            /* the pose must rest this long before the exposure is measured */
+const INSET = { size: 129, pixel: 0.5 };   /* odd, so the centre pixel is T; 0.5 mm: a 64 mm square */
 const KEY_STEP = { depth: 1, yaw: 2, pitch: 2, roll: 5 };
 
 /* opts: { stage, store, graph, specimen }
@@ -69,6 +75,14 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let shaft = '4';                     /* '4' | '2.7' (mm): the collision ring's radius, SHAFT_RADII */
     let hud = { rows: [], contactMm: 0, limited: false };
     let limitedNext = false;
+    let ctVol = null;                    /* the shared volume, once loaded */
+    let insetData = null;                /* { ct, width, height, pixel, shaft: [x0, y0, x1, y1], center } for the UI */
+    const insetSubs = new Set();
+    let selfMove = false;
+    let followed = null;                 /* the pose key the cursor and the inset were last placed for */
+    let settleTimer = null;
+    let pendingKey = null;
+    let exposeRuns = 0;
     let lastPose = null;                 /* the pose to come back to when the Scope pill is pressed again */
 
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
@@ -114,6 +128,8 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         sharedVolume().then(async (vol) => {
             const fields = await loadFields(vol.meta).catch(() => []);
             ctAt = (p) => vol.sample(p[0], p[1], p[2]);
+            ctVol = vol;
+            followed = null;
             sdfFields = fields;
             exposed = null;
             sync();
@@ -149,7 +165,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
 
     /* `redraw` is false from inside a frame: the render that called us is the redraw (asking for another
        would keep the on-demand loop running forever). */
-    function apply(redraw = true) {
+    function apply(redraw = true, now = false) {
         const p = pose();
         const f = p && fulcra.get(p.side);
         if (!p || !f) return;
@@ -169,9 +185,30 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             camera.updateProjectionMatrix();
         }
         camera.updateMatrixWorld(true);
-        expose(p);
+        if (now) expose(p);
+        else scheduleExpose(p);
         if (redraw) stage.requestRender();
     }
+
+    /* Exposure on settle: a pose change restarts the clock (and a held drag keeps it running), and the measurement (one raycast burst) happens once the
+       pose has rested, so dragging costs none. A pose already measured is left alone. */
+    function scheduleExpose(p) {
+        const key = poseKey(p);
+        if (key === exposed || key === pendingKey) return;
+        pendingKey = key;
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(() => {
+            settleTimer = null;
+            pendingKey = null;
+            const q = pose();
+            if (!q || !engaged || !spot) return;
+            if (drag) { scheduleExpose(q); return; }          /* frames can outlast the clock on a slow GPU: a held pointer is not settled */
+            expose(q);
+            stage.requestRender();
+        }, SETTLE_MS);
+    }
+
+    const poseKey = (p) => `${p.side},${p.depth},${p.yaw},${p.pitch},${p.roll},${p.lens}`;
 
     /* The distance from the tip to the lining ahead: the median hit over five rays against the visible air-space
        surfaces drawn as mucosa (the air spaces and the septal mucosa), floored at 3 mm; no hit at all reads as the far limit. Only when the
@@ -179,9 +216,10 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     function expose(p) {
         if (!spot) return;
         const t0 = performance.now();
-        const key = `${p.side},${p.depth},${p.yaw},${p.pitch},${p.roll},${p.lens}`;
+        const key = poseKey(p);
         if (key === exposed) return;
         exposed = key;
+        exposeRuns += 1;
         const targets = [];
         stage.scene.updateMatrixWorld(true);
         stage.scene.traverse((o) => { if (o.isMesh && o.visible && o.userData && o.userData.drawn === 'mucosa') targets.push(o); });
@@ -204,6 +242,40 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     function onFrame() {
         renders += 1;
         apply(false);
+        follow();
+    }
+
+    /* ---------------- CT along the scope ---------------- */
+
+    /* Once per pose change, on an animation frame: the cursor goes to the tip and the inset is resampled. Never
+       from inside a store notification (the frame loop is outside it). */
+    function follow() {
+        const p = pose();
+        const f = p && fulcra.get(p.side);
+        if (!p || !f || !ctVol) return;
+        const key = poseKey(p);
+        if (key === followed) return;
+        followed = key;
+        const T = tipOf(f, p);
+        selfMove = true;                 /* the specimen's own change notice for this cursor must not reset the scope */
+        try { store.setCursor(T); } finally { selfMove = false; }
+        const fr = frameOf(p);
+        const n = INSET.size;
+        const half = (n - 1) / 2 * INSET.pixel;
+        const down = fr.up.map((x) => -x);                 /* image y grows downward */
+        const origin = T.map((x, i) => x - fr.v[i] * half - down[i] * half);
+        try {
+            const sl = ctVol.obliqueSlice({ origin, u: fr.v, v: down, width: n, height: n, pixel: INSET.pixel, ct: true, labels: false });
+            const at = (P) => {
+                const d = P.map((x, i) => x - T[i]);
+                return [(n - 1) / 2 + (d[0] * fr.v[0] + d[1] * fr.v[1] + d[2] * fr.v[2]) / INSET.pixel,
+                    (n - 1) / 2 - (d[0] * fr.up[0] + d[1] * fr.up[1] + d[2] * fr.up[2]) / INSET.pixel];
+            };
+            const a = at(f);
+            const b = at(T);
+            insetData = { ct: sl.ct, width: n, height: n, pixel: INSET.pixel, shaft: [a[0], a[1], b[0], b[1]], center: sl.ct[((n - 1) / 2) * n + (n - 1) / 2] };
+        } catch (e) { insetData = null; console.error(e); }
+        for (const fn of [...insetSubs]) { try { fn(); } catch (e) { console.error(e); } }
     }
 
     /* ---------------- taking over and giving back ---------------- */
@@ -229,12 +301,19 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         specimen.setBone('hidden');
         specimen.setMucosa(true, { inside: true });
         if (!stopFrames) stopFrames = stage.onFrame(onFrame);
-        apply();
+        apply(true, true);
         emit();
     }
 
     function disengage() {
         engaged = false;
+        drag = null;
+        clearTimeout(settleTimer);
+        settleTimer = null;
+        pendingKey = null;
+        followed = null;
+        insetData = null;
+        for (const fn of [...insetSubs]) { try { fn(); } catch (e) { console.error(e); } }
         const { lights, controls } = stage;
         if (stopFrames) { stopFrames(); stopFrames = null; }
         if (spot) spot.visible = false;
@@ -269,7 +348,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         if (state.scope) lastPose = state.scope;
         if (state.scope !== prev.scope) sync();
     });
-    specimen.onChange(() => { exposed = null; sync(); });          /* the specimen loading, or a layer change, may make the scope available */
+    specimen.onChange(() => { if (selfMove) return; exposed = null; sync(); });          /* the specimen loading, or a layer change, may make the scope available */
 
     /* ---------------- pose changes ---------------- */
 
@@ -309,6 +388,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     canvas.addEventListener('pointerdown', (e) => {
         if (!engaged || e.button !== 0) return;
         drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
+        try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* a release outside the canvas is then missed: the drag ends on the next pointerdown */ }
     });
     canvas.addEventListener('pointermove', (e) => {
         if (!engaged || !drag || e.pointerId !== drag.id) return;
@@ -371,6 +451,10 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         get shaft() { return { key: shaft, radius: SHAFT_RADII[shaft] }; },
         get collision() { return !!ctAt; },
         get hud() { return { rows: hud.rows.map((r) => ({ ...r })), contactMm: hud.contactMm, limited: hud.limited, clampMm }; },
+        get cursor() { const c = store.get().cursor; return c ? c.slice() : null; },
+        get exposeRuns() { return exposeRuns; },
+        get inset() { return insetData ? { width: insetData.width, height: insetData.height, pixel: insetData.pixel, shaft: insetData.shaft.slice(), center: insetData.center } : null; },
+        sampleAt: (ras) => (ctAt ? ctAt(ras) : null),
         get exposure() { return { distance: lastD, intensity: spot ? spot.intensity : null, ms: lastMs }; },
         lights: () => ({ spot: spot ? { on: spot.visible, intensity: spot.intensity, decay: spot.decay, angle: spot.angle } : null,
             hemi: stage.lights.hemi.intensity, head: stage.lights.head.intensity }),
@@ -388,6 +472,8 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         get tip() { return hook.tip; },
         get ready() { return available(); },
         get lastPose() { return lastPose; },
+        get inset() { return insetData; },
+        onInset(fn) { insetSubs.add(fn); return () => insetSubs.delete(fn); },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
     };
 }

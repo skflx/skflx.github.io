@@ -300,7 +300,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen, the lab and CT working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=367674e0'), import('./ui-endoscope.js?v=dc20be92')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=6504741a'), import('./ui-endoscope.js?v=e029d24e')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {
