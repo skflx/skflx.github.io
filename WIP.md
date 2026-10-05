@@ -165,7 +165,7 @@ deleted.
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
 links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
-- **Standard specimen (O6, N1 in review):** the page serves the UW head
+- **Standard specimen (O6, N1):** the page serves the UW head
   standardized — right half mirrored onto the left at R = 0, septum centred,
   thin midline plates where a paired air space would cross
   (`tools/ssb-pipeline/uw/normalize.py`, `docs/ssb.md` §5.1; `ct.json`
@@ -208,7 +208,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   valve, ala, columella, nasal bone, piriform aperture), sourced from
   PubMed-matched papers and Radiopaedia articles (verified against the
   atlas and abstracts 2026-10-03; three errors pending in ST0d). The face mask removed
-  the nose; the unmasked source stacks do contain it (ST6-0).
+  the nose; the unmasked source stacks do contain it (ST6-0), and ST6
+  (specced at CP-2b) restores it: skin, vestibule, internal valve.
 - **Specimen stage** (`mode-specimen.js`) — the packs in 3D: named views,
   bone X-ray/solid/hidden, region layers, landmarks, click-through
   picking, a 3D cursor shared with the CT crosshair, a section plane with
@@ -268,8 +269,8 @@ stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `lateral-wall` diorama; procedure mode and
-self-test after. Waiting on the owner: decisions O4–O5
-(`docs/ssb-roadmap.md` §2) and review of the dioramas and tier-1 content.
+self-test after. Waiting on the owner: review of the dioramas and tier-1 content
+(`docs/ssb-roadmap.md` §2).
 
 ---
 

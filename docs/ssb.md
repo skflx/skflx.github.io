@@ -251,7 +251,12 @@ only stays as scanned.
 Whatever is chosen, `ssb/LICENSE-data.md` records dataset, case id,
 license and attribution for every derived file. Faces are removed: the
 volume is cropped to the region and soft tissue outside a dilated bone
-envelope anterior to the facial skeleton is masked to air.
+envelope anterior to the facial skeleton is masked to air — except the
+external nose (O1 (c), roadmap ST6): between subnasale and nasion and
+between the alar-facial grooves (above S 28 also |R| ≤ 12, so the medial
+canthi stay masked), the unmasked skin, alae, columella and vestibule are
+restored, centred and mirrored with the rest. Lips, cheeks and eyelids
+stay masked.
 
 ### 5.2 Segmentation — the graph writes the label table
 
@@ -371,7 +376,8 @@ soft tissue is built three other ways, and each part says which:
 | Septal mucosa (and nasal floor, for the extended flap) | the faces of the `s.nasal-septum.M` (and `s.nasal-floor.*`) wall units that face each nasal cavity, meshed per side, each with a **chart**: the surface's sagittal projection (a, s) in mm and a lookup grid back onto it, so anything drawn on the septum is specified in 2D | specimen |
 | Small arteries (posterior septal and its branches, PLNA branches, septal AEA/PEA branches, nasopalatine, superior labial) | sweeps (§5.5) generated from **waypoints** — landmarks or chart points — at a stated depth below the surface; every point `inferred`, every waypoint cited | specimen-placed, inferred |
 | Flap territories (nasoseptal: short, full, extended; rescue incisions; later IT/MT/lateral wall flaps) | **overlays**: outlines computed at runtime on a chart from landmarks plus the graph's measurements and the procedure's steps, with parameters and presets like a diorama's | schematic on specimen |
-| External nose (naris, vestibule, valves, ala, columella; cartilage) | not in the specimen: the face mask (§5.1) removed it. Owner decision O1/O2 (§13) | — |
+| External nose (naris, vestibule, valves, ala, columella) | the specimen's own skin and vestibule, unmasked from the UW axial stack (§5.1; roadmap ST6, O1 (c), O2): skin surface `s.external-nose.M` drawn as `skin`, vestibule air `s.nasal-vestibule.<side>` (vestibular skin), the internal valve as the narrowest coronal airway section, which is also the vestibule \| cavity boundary | specimen, measured |
+| Nasal cartilages (ULC, LLC crura, septal cartilage outline) | not resolvable on this bone-window CT; schematic overlay with the full framework (roadmap ST7) | schematic |
 
 Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the
 committed `ssb/ct/` volume, not the raw crawl, so it can be rerun in any
@@ -447,7 +453,9 @@ inferior margin):
    posterior floor cut short of the hard–soft palate junction.
 5. *Anterior cut* — A: at the A of `lm.middle-turbinate-head.X` (the head of
    the middle turbinate); B, C: at `a_ant - anterior_margin` (the
-   mucocutaneous junction where the chart reaches it); on the floor chart
+   mucocutaneous junction where the chart reaches it — on the specimen the
+   chart's anterior edge is the internal valve plane, ST6's proxy for the
+   junction, which CT does not show); on the floor chart
    (C) the same A.
 6. *Outline* = pedicle → superior → anterior → inferior → posteroinferior,
    clipped to the chart polygons (septal, and floor for C).

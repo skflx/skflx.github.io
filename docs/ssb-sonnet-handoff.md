@@ -44,9 +44,9 @@ except for the two cross-lane waits marked ⏸.
 
 | Lane | WPs, in order |
 |---|---|
-| **A — content and dioramas** | ~~ST0d~~ → ~~D2~~ → **D2a** presellar in rule 9 |
-| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ~~N1~~ standard specimen (review) → **ST2c** floor mucosa → **ST1b** open airway lining → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
-| **C — scope runtime** | ~~E2b~~ → ~~E3~~ → **E4** CT along the scope (also: exposure on settle, CP-2a) |
+| **A — content and dioramas** | ~~ST0d~~ → ~~D2~~ → ~~D2a~~ (lane done; C1 is wave 3) |
+| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ~~N1~~ standard specimen → **ST2c** floor mucosa → **ST1b** open airway lining → **ST6** external nose → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
+| **C — scope runtime** | ~~E2b~~ → ~~E3~~ → ~~E4~~ → **E3b** the septum blocks the shaft (CP-2b) |
 
 *Re-planned at CP-2a (2026-10-03, `docs/ssb-roadmap.md` §4):* the owner
 asked for a normal, symmetric first release (O6). N1 builds it; every
@@ -54,7 +54,7 @@ left-side escalation of this wave (left ostium reach, left ostium margin,
 left floor unit) is resolved by it, so do not work around a left-side gap
 in the as-scanned data — report it.
 
-Not yours: **E5** station poses and the **ST6** nose spec (Opus).
+Not yours: **E5** station poses (Opus). ST6 is specced (CP-2b) and is lane B's.
 
 Prompt for each session (pick Sonnet as the model):
 
