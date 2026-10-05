@@ -34,6 +34,11 @@
    not block: this specimen is not decongested and a rigid scope displaces
    mucosa, so blocking at the air threshold would wall off the sphenoid and
    frontal ostia. The shaft length lying in mucosa is reported instead.
+
+   The septum (E3b) is not bone at this level (cartilage and mucosa, display <= ~120), so a second rule keeps
+   the rigid shaft on its own side of the midline: a sample point (axis or ring) with s * R < 0 (s = +1 right
+   scope, -1 left) blocks, except in the nasopharynx, behind and below the choanal arch. The midline is R = 0
+   because the standard specimen (N1, docs/ssb.md 5.1) centres the septum there.
    ============================================================= */
 
 export const LENSES = Object.freeze([0, 30, 45, 70]);
@@ -55,6 +60,8 @@ export const BONE_LEVEL = 150;
 export const SOFT_LEVEL = 78;
 export const SAMPLE_STEP_MM = 0.5;
 export const START_MM = 2;
+/* lm.choanal-arch.M's [A, S], used when the landmark is missing: the nasopharynx is A < arch.a and S < arch.s. */
+export const ARCH_DEFAULT = Object.freeze({ a: -51, s: 12 });
 
 const RAD = Math.PI / 180;
 const HASH_MAX = 96;
@@ -172,15 +179,19 @@ export function verticalFov(width, height) {
 /* ---------------- collision ---------------- */
 
 /* Sample the shaft of `pose` (fulcrum F) against ctAt(ras) -> display level (NaN or 0 = no data = free).
-   Returns { depth, blocked, contactMm }: `depth` is the pose's depth, or the last free sample when bone
-   blocks first (a pose that would block is clamped, not refused); `contactMm` is the length of the axis
+   `arch` is { a, s }: the choanal arch's A and S (the midline rule's nasopharynx exemption; ARCH_DEFAULT).
+   Returns { depth, blocked, by, contactMm }: `depth` is the pose's depth, or the last free sample when bone or
+   the midline blocks first (a pose that would block is clamped, not refused); `by` is 'bone' or 'septum' (the
+   midline rule fired and bone did not at that sample), null when free; `contactMm` is the length of the axis
    lying in mucosa (SOFT_LEVEL <= level < BONE_LEVEL) up to that depth. */
-export function shaftClearance(fulcrum, pose, ctAt, radius = SHAFT_RADIUS_MM) {
+export function shaftClearance(fulcrum, pose, ctAt, radius = SHAFT_RADIUS_MM, arch = ARCH_DEFAULT) {
     const d = shaftDir(pose);
     const e1 = perp(Math.abs(dot(d, S_AXIS)) > 0.99 ? A_AXIS : S_AXIS, d);
     const e2 = cross(d, e1);
     const ring = [e1, e2, scale(e1, -1), scale(e2, -1)].map((e) => scale(e, radius));
     const level = (p) => { const v = ctAt(p); return v === v ? v : 0; };
+    const sigma = pose.side === 'L' ? -1 : 1;
+    const crossed = (p) => sigma * p[0] < 0 && !(p[1] < arch.a && p[2] < arch.s);
     let contact = 0;
     let last = Math.min(pose.depth, START_MM - SAMPLE_STEP_MM);       /* the last depth known free */
     const steps = Math.floor((pose.depth - START_MM) / SAMPLE_STEP_MM + 1e-9) + 1;
@@ -190,12 +201,17 @@ export function shaftClearance(fulcrum, pose, ctAt, radius = SHAFT_RADIUS_MM) {
         const c = add(fulcrum, scale(d, at));
         const axis = level(c);
         let bone = axis >= BONE_LEVEL;
-        for (let m = 0; m < 4 && !bone; m++) bone = level(add(c, ring[m])) >= BONE_LEVEL;
-        if (bone) return { depth: Math.max(0, last), blocked: true, contactMm: contact };
+        let septum = crossed(c);
+        for (let m = 0; m < 4 && !bone; m++) {
+            const q = add(c, ring[m]);
+            bone = level(q) >= BONE_LEVEL;
+            septum = septum || crossed(q);
+        }
+        if (bone || septum) return { depth: Math.max(0, last), blocked: true, by: bone ? 'bone' : 'septum', contactMm: contact };
         if (axis >= SOFT_LEVEL) contact += SAMPLE_STEP_MM;
         last = at;
     }
-    return { depth: pose.depth, blocked: false, contactMm: contact };
+    return { depth: pose.depth, blocked: false, by: null, contactMm: contact };
 }
 
 /* ---------------- the proximity HUD ---------------- */

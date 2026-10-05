@@ -17,7 +17,7 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | ~~standard specimen (N1, O6)~~ done, then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope done** (E1, E1b, E2, E2b, E3, E4) | septum blocks the shaft (E3b), station poses (E5, Opus, after E3b and ST1b), flights (E6) |
+| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope done** (E1, E1b, E2, E2b, E3, E3b, E4) | station poses (E5, Opus, after E3b and ST1b), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -362,7 +362,7 @@ parallel sessions.
 | Lane | Order | Who |
 |---|---|---|
 | Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → **ST2c** floor mucosa → **ST1b** open airway lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
-| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → **E3b** the septum blocks the shaft (CP-2b) | Sonnet |
+| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → E3b (review) | Sonnet |
 | Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a) | Sonnet |
 | Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · then **E5** station poses (after E3b, ST1b) | Opus |
 
@@ -811,7 +811,7 @@ lazy-load test still passes (no `ct.u8.gz` request until the scope or CT opens).
 
 *Result (Sonnet, 2026-10-05):* `follow()` in `mode-endoscope.js` sets `state.cursor = T` and resamples the inset once per animation frame after a pose change; `ui-endoscope.js` paints it (shaft stops 4 px short of the tip and a ring marks it, so the centre pixel stays the CT's). `expose()` runs from a 100 ms settle timer (and on engage); a held pointer keeps it waiting. HUD near colour is the `.ssb-scope-hud-near` class. `test-ssb` 550/550. Consequences to know: (1) the cursor lives in the store, so leaving the scope now leaves `#at=x,y,z` in the URL (a scope link itself is unchanged; the old test expected an empty hash); (2) `mode-ct.js` needed no change; (3) the drag now uses pointer capture, because a release outside the canvas left the drag stuck and would have blocked the exposure forever; (4) the "out-of-range numbers in a link" test accepts a bone-clamped depth, since the volume can arrive before the check; (5) the Accept's "30-frame drag" is driven back to back, because software GL frames outlast 100 ms.
 
-### E3b — The septum blocks the shaft        [ready] · Sonnet · depends: E4, N1 (merged)
+### E3b — The septum blocks the shaft        [review] · Sonnet · depends: E4, N1 (merged)
 Goal: a rigid scope cannot be swung through the septum into the other side (CP-2b: on the standard specimen 4108 of the 6185 (A, S) columns where both nasal cavities face the septum have no voxel at E3's bone level, 150; the septum there is cartilage and mucosa, display ≤ ~120).
 Read: §4 "CP-2b" of this file; `js/ssb/scope.js` (`shaftClearance`, the side sign); `docs/ssb.md` §3 (Endoscope), §5.1 (standard specimen: the septum is centred on R = 0).
 Touch: `js/ssb/scope.js`, `js/ssb/mode-endoscope.js` (only to pass the arch point in), `tools/ssb-fixture-ct.mjs`, `tools/test-ssb.mjs`.
@@ -819,6 +819,8 @@ Don't: change the bone level, the ring, the sampling step, or any pinned pose's 
 Spec: in `shaftClearance`, a sample point P (axis or ring) also blocks when it lies on the far side of the midline, s·R(P) < 0 (s = +1 right scope, −1 left), **unless** it is in the nasopharynx: A(P) < A_arch and S(P) < S_arch, where (A_arch, S_arch) are `lm.choanal-arch.M`'s A and S (passed in by the mode; fallback A −51, S 12 if the landmark is missing). The midline is R = 0 because the standard specimen centres the septum there; say so in the code comment. The block is reported like bone (`blocked: true`, the HUD's "Bone limits the depth" becomes "The septum or bone limits the depth" when the midline rule fired — return which).
 Accept: fixture: a pose whose shaft crosses R = 0 in front of the arch clamps at the last depth with s·R ≥ 0 at every ring point; the same line below and behind the arch is not clamped. Real specimen: from `R` at yaw −30, pitch 0 (aimed across the septum) the clamped tip and all four ring points have R ≥ 0; the pinned sphenoid poses (both sides, R/L 58.5, −3, 19) and frontal poses (R/L 36, −2, 33, 0, 70) are unchanged; the full `test-ssb.mjs` passes.
 Escalate: a pinned pose clamps under the new rule (report the depth and which ring point crossed).
+
+*Result (Sonnet, 2026-10-05):* `shaftClearance(fulcrum, pose, ctAt, radius, arch)` in `scope.js` also blocks a sample (axis or ring) with s·R < 0 unless A < arch.a and S < arch.s; it returns `by` (`'bone'` | `'septum'` | null), and `limitedBy` reaches the hook and the HUD, which says "The septum or bone limits the depth." when the midline fired. `mode-endoscope.js` passes `lm.choanal-arch.M`'s A and S (`ARCH_DEFAULT` −51, 12 otherwise). `test-ssb` 572/572; the pinned sphenoid and frontal poses are unchanged. Pins changed (old → new): the pasted link `L,30,−10,0,0,30` now clamps at depth **26** (was 30; it swings medially), in the page check; the NaN / no-data check uses a straight-posterior pose (`yaw 0`) instead of the midline-crossing one, because the septum rule blocks on position, not data. The fixture file was not touched: the midline tests run in air (the fixture's own septum is bone and fires first).
 
 ### E5 — Station poses        [todo] · **Opus** · depends: E3b, N1, ST1b
 Write `ssb/geometry/stations.json` (`{"t.<id>.<side>": pose}`) for every

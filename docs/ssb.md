@@ -140,8 +140,12 @@ never reloads.
   the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
   `ui-endoscope.js`): a scope pose is a camera over the Specimen stage
   (`state.scope`, exclusive with the lab and CT), with a spotlight at the tip
-  and a 70° circular field of view; collision, the HUD and station flights
-  are the next work packages (`docs/ssb-roadmap.md`).
+  and a 70° circular field of view. Collision (E3, E3b): the shaft is clamped
+  at bone and at the midline (R = 0, where the standard specimen centres the
+  septum; the septum itself is below the bone level) except in the
+  nasopharynx, behind and below `lm.choanal-arch.M`; the HUD reports which
+  limit fired. Station flights are a later work package
+  (`docs/ssb-roadmap.md`).
 - **CT.** Axial, coronal and sagittal slices of the specimen volume, each
   on its own canvas, radiological convention (patient right on the image's
   left) with orientation letters; one crosshair in RAS mm shared by the

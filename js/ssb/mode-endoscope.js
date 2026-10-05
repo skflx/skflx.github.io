@@ -17,8 +17,9 @@
      Every change goes through the store, so the URL, the sliders and the
      image agree. Nothing here animates: a pose change is a cut, which is also
      what prefers-reduced-motion asks for.
-   - Collision (E3): the shaft is blocked by bone only (scope.js shaftClearance) against the CT
-     display volume; a pose that would block is clamped to the last free depth, whoever asked
+   - Collision (E3, E3b): the shaft is blocked by bone (scope.js shaftClearance) against the CT
+     display volume, and by the midline (R = 0, the standard specimen's septum) except in the nasopharynx,
+     behind and below lm.choanal-arch.M; a pose that would block is clamped to the last free depth, whoever asked
      (keys, sliders, a pasted link). The shaft is 4 mm (owner decision O4) or 2.7 mm, chosen in
      the controls and never in the hash. Without the volume the scope still moves, unblocked.
    - The proximity HUD (E3): each distance field in ct.json `sdf`, read at the tip, nearest
@@ -35,7 +36,7 @@
 import { loadLandmarks } from './geo-specimen.js?v=2e270611';
 import { sharedVolume, stamped, decode } from './volume.js?v=43c1f888';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, frameOf, hudRows, lightPostAngle, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=4ee7f38a';
+import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, frameOf, hudRows, lightPostAngle, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=9658ff9e';
 
 const DRAG_DEG_PER_PX = 0.15;
 const WHEEL_MM = 1;
@@ -60,6 +61,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     const { THREE, camera, canvas } = stage;
     const subs = new Set();
     const fulcra = new Map();            /* side -> RAS [r, a, s] */
+    let arch = ARCH_DEFAULT;             /* lm.choanal-arch.M's { a, s }: the midline rule's nasopharynx corner */
     let engaged = false;
     let saved = null;
     let spot = null;
@@ -73,8 +75,8 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let sdfFields = [];                  /* [{ id, name, at(ras) -> mm }] */
     let clampMm = 25;
     let shaft = '4';                     /* '4' | '2.7' (mm): the collision ring's radius, SHAFT_RADII */
-    let hud = { rows: [], contactMm: 0, limited: false };
-    let limitedNext = false;
+    let hud = { rows: [], contactMm: 0, limited: false, limitedBy: null };
+    let limitedNext = null;              /* what the last clamp was by ('bone' | 'septum'), reported by the pass it triggers */
     let ctVol = null;                    /* the shared volume, once loaded */
     let insetData = null;                /* { ct, width, height, pixel, shaft: [x0, y0, x1, y1], center } for the UI */
     const insetSubs = new Set();
@@ -94,6 +96,8 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             const lm = map.get(`lm.naris.${side}`);
             if (lm) fulcra.set(side, lm.ras.slice());
         }
+        const ca = map.get('lm.choanal-arch.M');
+        if (ca && Number.isFinite(ca.ras[1]) && Number.isFinite(ca.ras[2])) arch = { a: ca.ras[1], s: ca.ras[2] };
         sync();
     }).catch((e) => console.error(e));
 
@@ -141,16 +145,16 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     function enforce() {
         const p = pose();
         const f = p && fulcra.get(p.side);
-        if (!p || !f || !ctAt) { hud = { rows: [], contactMm: 0, limited: false }; return false; }
-        const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft]);
+        if (!p || !f || !ctAt) { hud = { rows: [], contactMm: 0, limited: false, limitedBy: null }; return false; }
+        const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft], arch);
         if (c.depth < p.depth - 1e-9) {
-            limitedNext = true;                /* the pass the clamp triggers reports it */
+            limitedNext = c.by;                /* the pass the clamp triggers reports it */
             setPose({ depth: c.depth });
             return true;
         }
         const names = new Map(sdfFields.map((x) => [x.id, x.name]));
-        hud = { rows: hudRows(sdfFields, tipOf(f, p)).map((r) => ({ ...r, name: names.get(r.id) })), contactMm: c.contactMm, limited: limitedNext };
-        limitedNext = false;
+        hud = { rows: hudRows(sdfFields, tipOf(f, p)).map((r) => ({ ...r, name: names.get(r.id) })), contactMm: c.contactMm, limited: !!limitedNext, limitedBy: limitedNext };
+        limitedNext = null;
         return false;
     }
 
@@ -450,7 +454,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         },
         get shaft() { return { key: shaft, radius: SHAFT_RADII[shaft] }; },
         get collision() { return !!ctAt; },
-        get hud() { return { rows: hud.rows.map((r) => ({ ...r })), contactMm: hud.contactMm, limited: hud.limited, clampMm }; },
+        get hud() { return { rows: hud.rows.map((r) => ({ ...r })), contactMm: hud.contactMm, limited: hud.limited, limitedBy: hud.limitedBy, clampMm }; },
         get cursor() { const c = store.get().cursor; return c ? c.slice() : null; },
         get exposeRuns() { return exposeRuns; },
         get inset() { return insetData ? { width: insetData.width, height: insetData.height, pixel: insetData.pixel, shaft: insetData.shaft.slice(), center: insetData.center } : null; },

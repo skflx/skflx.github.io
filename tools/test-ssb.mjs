@@ -1993,10 +1993,34 @@ function scopeCollisionTests() {
   const d0 = SC.shaftClearance(wallF, through, fxAt, 0).depth;
   const d27 = SC.shaftClearance(wallF, through, fxAt, R27).depth;
   check('scope collision (fixture): the ring matters — a thicker shaft clamps earlier (axis only > 2.7 mm > 4 mm)', d0 > d27 && d27 > hit.depth, `${d0} ${d27} ${hit.depth}`);
-  const nan = SC.shaftClearance(wallF, through, () => NaN, R4);
-  check('scope collision: NaN (outside the volume) and 0 (no data) never block', !nan.blocked && nan.depth === 20 && !SC.shaftClearance(wallF, through, () => 0, R4).blocked, JSON.stringify(nan));
+  const straightPost = { ...through, yaw: 0 };      /* not toward the midline: the E3b septum rule blocks on position, with or without data */
+  const nan = SC.shaftClearance(wallF, straightPost, () => NaN, R4);
+  check('scope collision: NaN (outside the volume) and 0 (no data) never block', !nan.blocked && nan.depth === 20 && !SC.shaftClearance(wallF, straightPost, () => 0, R4).blocked, JSON.stringify(nan));
   check('scope collision: blocked at the first sample leaves 1.5 mm free (the shaft cannot start inside bone)',
     (() => { const c = SC.shaftClearance(wallF, through, () => 255, R4); return c.blocked && c.depth === 1.5; })());
+
+  /* ---- the midline rule (E3b): in air, so only R = 0 can block ---- */
+  const air = () => 10;
+  const ringOf = (F0, p, r) => {
+    const d = SC.shaftDir(p);
+    const e1 = SC.norm(d[2] > 0.99 || d[2] < -0.99 ? [0, 1, 0] : [-d[0] * d[2], -d[1] * d[2], 1 - d[2] * d[2]]);
+    const e2 = [d[1] * e1[2] - d[2] * e1[1], d[2] * e1[0] - d[0] * e1[2], d[0] * e1[1] - d[1] * e1[0]];
+    const c = [0, 1, 2].map((k) => F0[k] + d[k] * p.depth);
+    return [c, ...[e1, e2, e1.map((v) => -v), e2.map((v) => -v)].map((e) => c.map((v, k) => v + e[k] * r))];
+  };
+  const acrossFront = { side: 'R', depth: 40, yaw: -45, pitch: 0, roll: 0, lens: 0 };
+  const mid = SC.shaftClearance([6, 10, 0], acrossFront, air, R4);
+  const midOk = ringOf([6, 10, 0], { ...acrossFront, depth: mid.depth }, R4).every((q) => q[0] >= 0);
+  const midNext = SC.shaftClearance([6, 10, 0], { ...acrossFront, depth: mid.depth + 0.5 }, air, R4);
+  check('scope midline (fixture, air): a shaft crossing R = 0 in front of the arch clamps at the last depth with R >= 0 at the axis and every ring point; the next 0.5 mm is blocked, by the septum',
+    mid.blocked && mid.by === 'septum' && mid.depth > 0 && mid.depth < 20 && midOk && midNext.blocked && midNext.depth === mid.depth, JSON.stringify([mid, midNext]));
+  const behind = SC.shaftClearance([6, -60, -5], acrossFront, air, R4);
+  check('scope midline (fixture, air): the same line behind and below the arch (A < -51, S < 12) is not clamped — the nasopharynx is exempt', !behind.blocked && behind.depth === 40 && behind.by === null, JSON.stringify(behind));
+  const above = SC.shaftClearance([6, -60, 20], acrossFront, air, R4);
+  check('scope midline (fixture, air): behind the arch but above it (S >= 12) is not exempt', above.blocked && above.by === 'septum', JSON.stringify(above));
+  const leftSide = SC.shaftClearance([-6, 10, 0], { ...acrossFront, side: 'L' }, air, R4);
+  check('scope midline (fixture, air): the left scope mirrors the right (same depth, blocked by the septum); an explicit arch replaces the default',
+    leftSide.by === 'septum' && leftSide.depth === mid.depth && !SC.shaftClearance([6, 10, 0], acrossFront, air, R4, { a: 20, s: 20 }).blocked, JSON.stringify(leftSide));
 
   /* ---- the HUD: distance fields ---- */
   const sdfBytes = FX.sdf;
@@ -2029,6 +2053,21 @@ function scopeCollisionTests() {
     deep.blocked && deep.depth === 85 && !clear(pose('R', 85, 0, 0)).blocked && clear(pose('R', 85.5, 0, 0)).depth === 85 && clear(pose('R', 100, 0, 0), R27).depth === 86, JSON.stringify(deep));
   const straight = clear(pose('R', 40, 0, 0));
   check('scope collision (specimen): mucosa does not block, and its length is reported (R 40, straight: free, 25 mm of shaft in mucosa — a regression pin)', !straight.blocked && straight.contactMm === 25, JSON.stringify(straight));
+
+  /* E3b on the real specimen: aimed across the septum, the clamped tip and its ring stay on the scope's own side. */
+  const archLm = lms['lm.choanal-arch.M'];
+  const arch = { a: archLm[1], s: archLm[2] };
+  for (const side of ['R', 'L']) {
+    const sg = side === 'R' ? 1 : -1;
+    const across = pose(side, 100, -30, 0);
+    const cl = SC.shaftClearance(F[side], across, ctAt, R4, arch);
+    const pts = ringOf(F[side], { ...across, depth: cl.depth }, R4);
+    const plain = SC.shaftClearance(F[side], across, ctAt, R4, { a: -1e9, s: -1e9 });     /* no exemption anywhere: the rule alone */
+    check(`scope midline (specimen): from ${side} at yaw -30, pitch 0 (aimed across the septum) the clamped tip and all four ring points are on the ${side} side of R = 0`,
+      cl.blocked && cl.depth < 100 && pts.every((q) => sg * q[0] >= 0) && plain.depth <= cl.depth, JSON.stringify([cl, plain, pts.map((q) => q.map((v) => +v.toFixed(2)))]));
+  }
+  const noArch = SC.shaftClearance(F.R, pose('R', 100, -30, 0), ctAt, R4);
+  check('scope midline (specimen): no arch passed -> the fallback (A -51, S 12) applies and gives the same clamp as the landmark', noArch.depth === SC.shaftClearance(F.R, pose('R', 100, -30, 0), ctAt, R4, arch).depth, JSON.stringify([noArch, arch]));
 
   /* Search yaw and pitch on a 1 degree grid for a free pose whose tip is within `tol` of the target; the closest wins. */
   const reach = (side, target, r) => {
@@ -2406,7 +2445,7 @@ async function scopeTests(browser, base) {
     const { context, page } = await openSpecimen(browser, base, '#scope=L,30,-10,0,0,30');
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
     const info = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash }));
-    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 30, yaw: -10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,30,-10,0,0,30', JSON.stringify(info));
+    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded (L,30,-10,... swings medially: the septum rule clamps it to depth 26, E3b)', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 26, yaw: -10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,26,-10,0,0,30', JSON.stringify(info));
     await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); });
     await nextFrames(page, 3);
     check('scope: selecting a structure while in the scope starts no camera flight (the scope owns the camera)', (await spec(page, () => window.__ssb.specimen.camera().flying)) === false);
