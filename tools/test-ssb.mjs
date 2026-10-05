@@ -1897,6 +1897,15 @@ function standardSpecimenTests() {
   const cR = json('ssb/geometry/charts.json').surfaces;
   const mirroredChart = cR['s.septal-mucosa.L'].grid.r.every((row, i) => row.every((v, j) => (v == null && cR['s.septal-mucosa.R'].grid.r[i][j] == null) || Math.abs(v + cR['s.septal-mucosa.R'].grid.r[i][j]) < 1e-9));
   check('standard: s.septal-mucosa.L\'s chart is the right chart with r negated', mirroredChart);
+  // ST2c: the floor mucosa, traced from the airway lining
+  const fR = cR['s.nasal-floor-mucosa.R'], fL = cR['s.nasal-floor-mucosa.L'];
+  const packs = json('ssb/models/packs.json').packs.soft.nodes;
+  check('floor mucosa: both sides are in the soft pack and the charts, at least 2 cm2 each', !!fR && !!fL && !!packs['s.nasal-floor-mucosa.R'] && !!packs['s.nasal-floor-mucosa.L'] && fR.area_cm2 >= 2 && fL.area_cm2 === fR.area_cm2, JSON.stringify([fR && fR.area_cm2, Object.keys(packs)]));
+  const cells = fR ? fR.grid.s.flat().filter(v => v != null) : [];
+  check('floor mucosa: the chart sits in the floor (S -5..3 mm, A -51..-10, lateral r 1..17 mm)', cells.length > 300 && Math.min(...cells) > -5 && Math.max(...cells) < 3 && fR.grid.origin[0] >= -52 && fR.grid.origin[0] + fR.grid.dims[0] <= -9 && fR.grid.origin[1] >= 0 && fR.grid.origin[1] + fR.grid.dims[1] <= 18, JSON.stringify({ n: cells.length, lo: Math.min(...cells), hi: Math.max(...cells) }));
+  const jr = fR ? fR.junction.rows.filter(r => r[0] >= -47) : [];
+  check('floor mucosa: the junction lies within 1 mm of the septal chart\'s bottom(a) over their shared A (a >= -47)', jr.length >= 30 && jr.every(r => r[5] <= 1.0), JSON.stringify({ n: jr.length, max: Math.max(...jr.map(r => r[5])) }));
+  check('floor mucosa: the left chart is the right one (symmetric specimen)', !!fL && JSON.stringify(fL.grid.s) === JSON.stringify(fR.grid.s) && JSON.stringify(fL.junction) === JSON.stringify(fR.junction));
 }
 
 /* ---------------- Endoscope: the math and the codec (Node only) ---------------- */

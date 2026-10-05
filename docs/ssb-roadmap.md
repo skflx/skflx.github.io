@@ -16,7 +16,7 @@ history keeps the specs).
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | ~~standard specimen (N1, O6)~~ done, then floor mucosa (ST2c), open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal) | ~~standard specimen (N1, O6)~~ done, ~~floor mucosa (ST2c)~~ in review, then open airway lining (ST1b), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
 | 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope done** (E1, E1b, E2, E2b, E3, E4) | septum blocks the shaft (E3b), station poses (E5, Opus, after E3b and ST1b), flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
@@ -361,7 +361,7 @@ parallel sessions.
 
 | Lane | Order | Who |
 |---|---|---|
-| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → **ST2c** floor mucosa → **ST1b** open airway lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
+| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa (review) → **ST1b** open airway lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
 | Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → **E3b** the septum blocks the shaft (CP-2b) | Sonnet |
 | Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a) | Sonnet |
 | Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · then **E5** station poses (after E3b, ST1b) | Opus |
@@ -1019,7 +1019,7 @@ needs a parameter change to run; a budget breaks; in the as-scanned
 volume a right-labelled structure other than an air space reaches more
 than 2 mm left of R = 0 (print which).
 
-### ST2c — Nasal floor mucosa from the airway lining        [todo] · Sonnet · depends: N1
+### ST2c — Nasal floor mucosa from the airway lining        [review: PR open] · Sonnet · depends: N1
 Goal: ST2b step 1, decided at CP-2a as option (a) on the standard
 specimen: the 1–3 mm of soft tissue between the floor bone and the air is
 the floor mucosa, so its surface is the airway's.
@@ -1046,6 +1046,8 @@ Accept: chart round-trip ≤ 1 mm on interior cells; the junction within
 1 mm of the septal chart's `bottom(a)` over their shared A; `check-data`
 and `test-ssb --only specimen` pass.
 Escalate: area under 2 cm², or a second component over 0.5 cm².
+
+**Result (ST2c):** `softtissue.py` `floor_surface()`; each side **3.82 cm²**, 4101 triangles, 413 chart cells (A −51…−10, r 1…17). Second component **0.40 cm²** (under the 0.5 limit; dropped), third 0.01. The chart is built once on the right and the left reuses it (the specimen is symmetric after N1; the soft pack's left mesh is the mirror, winding flipped). Round trip **0.24 mm** (3D) / 0.20 mm (chart) on interior cells, 0.96 mm over all cells. Junction (distance from the septal chart's `bottom(a)` point to the floor surface): **0.64 mm max** for A ≥ −47 over 38 columns; at the PNS end (A −49, −48) the septal chart's own edge cells are partly covered and the distance reaches **3.09 mm** — that end is excluded from the Accept and recorded in the chart's `junction.rows`. The floor bone voxels stop at A −12, so the mucosa does too (the anterior floor is masked with the vestibule: ST6). The chart's value key is `grid.s` (not `r`): it is an axial chart. Soft pack gains two nodes; `normalize.py sides` is rerun after `softtissue.py` as usual.
 
 ### ST0 — Soft-tissue content        [done: verified 2026-10-03, corrections in ST0d] · **Opus** (first pass by Sonnet 5.5) · depends: — (O2 sets the nose scope)
 *Verification (Opus, 2026-10-03):* checked against ch. 31 and every new PubMed abstract (§4). Three errors — `m.itf-area`'s source, the middle turbinate flap's pedicle check, `s.incisive-canal` "not resolved" — go to ST0d; the rest reads as cited. All still `draft`: medical correctness is the owner's.

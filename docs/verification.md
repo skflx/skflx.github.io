@@ -332,7 +332,7 @@ the URL, and caps solid bone. The standard specimen is pinned too
 about R = 0 outside the midline plates, no `.R` air touches `.L` air, paired
 landmarks and sweeps mirror within 0.01 mm, `.M` landmarks sit at R = 0, and
 the right septal surface lies at half the as-scanned thickness (read with
-`git show` at the commit `ct.json` names; CI checks out full history). Judging how the specimen *looks* stays a human
+`git show` at the commit `ct.json` names; CI checks out full history). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 
 The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never

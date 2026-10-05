@@ -10675,6 +10675,60 @@
     "cells": 1425,
     "unreliable_cells": 42,
     "filled_cells": 39
+   },
+   "s.nasal-floor-mucosa.R": {
+    "triangles": 4101,
+    "area_cm2": 3.82,
+    "components_cm2": [
+     3.82,
+     0.4,
+     0.01
+    ],
+    "chart_bbox_mm": {
+     "a": [
+      -51.0,
+      -10.0
+     ],
+     "r": [
+      1.0,
+      17.0
+     ]
+    },
+    "roundtrip_max_3d_mm": 0.24,
+    "roundtrip_max_3d_mm_all_cells": 0.956,
+    "roundtrip_max_chart_mm": 0.201,
+    "roundtrip_samples": 308,
+    "cells": 413,
+    "junction_max_mm": 0.64,
+    "junction_max_mm_incl_pns_end": 3.09,
+    "junction_cells": 38
+   },
+   "s.nasal-floor-mucosa.L": {
+    "triangles": 4101,
+    "area_cm2": 3.82,
+    "components_cm2": [
+     3.82,
+     0.4,
+     0.01
+    ],
+    "chart_bbox_mm": {
+     "a": [
+      -51.0,
+      -10.0
+     ],
+     "r": [
+      1.0,
+      17.0
+     ]
+    },
+    "roundtrip_max_3d_mm": 0.24,
+    "roundtrip_max_3d_mm_all_cells": 0.956,
+    "roundtrip_max_chart_mm": 0.201,
+    "roundtrip_samples": 308,
+    "cells": 413,
+    "junction_max_mm": 0.64,
+    "junction_max_mm_incl_pns_end": 3.09,
+    "junction_cells": 38
    }
   },
   "choanal_arch": [
@@ -10688,8 +10742,9 @@
    -1.0
   ],
   "ostium_inferior_margin_s_mm": {
-   "R": 23.5
+   "R": 23.5,
+   "L": 23.5
   },
-  "pack_bytes": 87858
+  "pack_bytes": 160088
  }
 }

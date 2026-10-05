@@ -306,10 +306,18 @@
   },
   "soft": {
    "file": "soft.glb.gz",
-   "bytes": 87858,
-   "bytes_uncompressed": 124932,
-   "triangles": 10000,
+   "bytes": 160088,
+   "bytes_uncompressed": 229164,
+   "triangles": 18202,
    "nodes": {
+    "s.nasal-floor-mucosa.L": {
+     "triangles": 4101,
+     "vertices": 2218
+    },
+    "s.nasal-floor-mucosa.R": {
+     "triangles": 4101,
+     "vertices": 2218
+    },
     "s.septal-mucosa.L": {
      "triangles": 5000,
      "vertices": 2624
@@ -322,8 +330,8 @@
   }
  },
  "totals": {
-  "bytes": 2876298,
-  "triangles": 322814
+  "bytes": 2948528,
+  "triangles": 331016
  },
  "license": "ssb/LICENSE-data.md"
 }
