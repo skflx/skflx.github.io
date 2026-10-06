@@ -45,7 +45,7 @@ except for the two cross-lane waits marked ⏸.
 | Lane | WPs, in order |
 |---|---|
 | **A — content and dioramas** | ~~ST0d~~ → ~~D2~~ → ~~D2a~~ (lane done; C1 is wave 3) |
-| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ~~N1~~ standard specimen → **ST2c** floor mucosa → **ST1b** open airway lining → **ST6** external nose → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
+| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ~~N1~~ standard specimen → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → **ST6** external nose → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
 | **C — scope runtime** | ~~E2b~~ → ~~E3~~ → ~~E4~~ → **E3b** the septum blocks the shaft (CP-2b) |
 
 *Re-planned at CP-2a (2026-10-03, `docs/ssb-roadmap.md` §4):* the owner
@@ -82,10 +82,9 @@ branch only when the WP truly needs its files, and say so in the PR.
 - **E3's Accept is a search, not CP-1's pose.** CP-1's pose (yaw -3, pitch
   15) is blocked by its own rule. Find the pose by searching yaw and pitch
   on a 1° grid, then pin what you find. The shaft is 4 mm (radius 2.0, O4).
-- **The scope image saturates** (E2b) and **ostia and choanae are drawn
-  as closed membranes** (ST1b). Neither is a test failure today; both are
-  the reason for their WPs. If E2b's white wedge turns out to be a mesh,
-  report which node: it is probably ST1b's problem.
+- **The scope image saturates** (E2b); ostia and choanae are open since
+  ST1b (the `lining` pack, drawn from inside). If a white wedge turns out
+  to be a mesh, report which node.
 - **The NSF superior incision starts at the ostium's inferior margin**
   (O5), measured by ST2b — not the landmark's centroid, and there is no
   `ostium_clearance` parameter any more.

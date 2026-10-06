@@ -21,16 +21,16 @@
    specimen, scope: the stages' hooks; materials: scene.js's hook on the
    tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=be23d375';
+import { loadGraph } from './graph.js?v=4d48d517';
 import { createStore, parseHash } from './state.js?v=82ca4b88';
 import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=d00531c0';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=08ae172e';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=0d76bb2d';
-import { mountTree } from './ui-tree.js?v=270c3e29';
-import { mountSearch } from './ui-search.js?v=c91f801a';
-import { mountPanel } from './ui-panel.js?v=cd60ab80';
+import { mountCt } from './mode-ct.js?v=36decaed';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=cd698ad6';
+import { mountTree } from './ui-tree.js?v=973ee5ec';
+import { mountSearch } from './ui-search.js?v=b543f52e';
+import { mountPanel } from './ui-panel.js?v=b19b17fc';
 
 const $ = (id) => document.getElementById(id);
 
@@ -277,7 +277,7 @@ function bootLab(graph, stageHandle) {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=9ecfec4e'), import('./ui-specimen.js?v=1c3c0f7f')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=4b1c54d0'), import('./ui-specimen.js?v=4bc16cc6')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -300,7 +300,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen, the lab and CT working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=29cc6982'), import('./ui-endoscope.js?v=e029d24e')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=def91e43'), import('./ui-endoscope.js?v=e029d24e')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {

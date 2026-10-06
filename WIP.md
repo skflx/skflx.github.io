@@ -223,7 +223,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   indicator, a spotlight at the tip with automatic exposure (K·D² from raycasts
   to the lining), the lining drawn as mucosa from inside. Bone
   stops the shaft (4 or 2.7 mm), mucosal contact is reported and a proximity
-  HUD reads the distance fields at the tip; ostia and choanae are drawn as closed membranes (ST1b).
+  HUD reads the distance fields at the tip; from inside, the lining is the open `lining` pack (`lining.py`, ST1b), so the scope can look through the choanae and the right sphenoid ostium (the left is closed in the specimen's labels).
   The tip is also the Specimen stage's 3D cursor (so CT opens on it, and leaving the scope leaves `#at=`), an inset in
   the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal

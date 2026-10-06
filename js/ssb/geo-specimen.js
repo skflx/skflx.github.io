@@ -20,7 +20,12 @@
      its graph entity's `kind` through kindForGraph: air spaces and cells are
      plain tinted (cells by their categorical CELL_TINT hue), the bony
      envelope is bone, anything else draws as its own tissue. `group` says
-     which layer owns it: bone | air | tissue.
+     which layer owns it: bone | air | tissue | lining.
+   - The lining pack (packs.json "lining": true, ST1b) is the airway lining
+     with its openings open, one surface over the union of every air space.
+     Its nodes repeat the air packs' "<id>.<side>" names (it is the same
+     structure), so the registry keys them "lining:<id>.<side>" and byId
+     skips them; picking one still reports the graph id.
    - Nothing here throws to a blank stage. A pack that cannot be fetched,
      decoded or parsed is recorded (problems, packs[name].error) and the
      others still load; status is ready | partial | error | absent.
@@ -33,10 +38,11 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=ffce2f7d';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=d1a450a5';
 import { kindForGraph, CELL_TINT } from './materials.js?v=d27e5b3d';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
+export const LINING_PREFIX = 'lining:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
 export const SWEEPS_FILE = 'ssb/geometry/sweeps.json';
 export const CT_HEADER_FILE = 'ssb/ct/ct.json';
@@ -129,7 +135,7 @@ export function listPacks(doc) {
     const out = [];
     for (const [name, def] of Object.entries(src)) {
         if (!PACK_NAME.test(name) || !def || typeof def.file !== 'string' || !PACK_FILE.test(def.file)) continue;
-        out.push({ name, file: def.file, nodes: def.nodes && typeof def.nodes === 'object' ? Object.keys(def.nodes) : [] });
+        out.push({ name, file: def.file, lining: def.lining === true, nodes: def.nodes && typeof def.nodes === 'object' ? Object.keys(def.nodes) : [] });
     }
     return out.sort((a, b) => (a.name === 'core' ? -1 : 0) - (b.name === 'core' ? -1 : 0));
 }
@@ -165,7 +171,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             const label = `${pack.name}: node ${String(u.name || mesh.name || '?').slice(0, 60)}`;
             if (!ID.test(id) || !SIDES.includes(side)) { problem(`${label} has no valid id and side in its extras; skipped.`); continue; }
             if (!graph.has(id)) { problem(`${label} names ${id}, which is not in the knowledge graph; skipped.`); continue; }
-            const key = `${id}.${side}`;
+            const key = `${pack.lining ? LINING_PREFIX : ''}${id}.${side}`;
             if (nodes.has(key)) { problem(`${label} repeats ${key}; skipped.`); continue; }
             const g = mesh.geometry;
             const pos = g && g.attributes ? g.attributes.position : null;
@@ -180,12 +186,12 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 continue;
             }
             const entity = graph.get(id);
-            const { look, group } = lookFor(id, entity);
+            const { look, group } = pack.lining ? { look: { kind: 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity);
             mesh.parent.remove(mesh);
             mesh.name = key;
             mesh.material.dispose();
             mesh.material = new THREE.MeshBasicMaterial();      /* replaced by mode-specimen per state */
-            mesh.userData = { id, side, key, pack: pack.name, look, group, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID };
+            mesh.userData = { id, side, key, pack: pack.name, look, group, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: !!pack.lining };
             root.add(mesh);
             nodes.set(key, mesh);
             triangles += tris;
@@ -220,7 +226,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             return status;
         }
         if (!list.length) { status = 'error'; problem('packs.json lists no usable pack.'); return status; }
-        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', nodes: [], expected: p.nodes.map((k) => String(k)) });
+        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, nodes: [], expected: p.nodes.map((k) => (p.lining ? LINING_PREFIX : '') + String(k)) });
 
         const take = async (p, bytesPromise) => {
             const pack = packs.get(p.name);
@@ -284,7 +290,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         THREE, root, nodes, packs, problems, load, boundsOf, dispose,
         get status() { return status; },
         get triangles() { return triangles; },
-        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id),
+        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining),
     };
 }
 

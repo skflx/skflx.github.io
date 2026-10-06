@@ -10746,5 +10746,32 @@
    "L": 23.5
   },
   "pack_bytes": 160088
+ },
+ "lining": {
+  "triangles": 50000,
+  "bytes": 468859,
+  "fallback_triangles": 271,
+  "membrane_triangles": 0,
+  "nodes": {
+   "s.agger-nasi-cell.L": 553,
+   "s.agger-nasi-cell.R": 541,
+   "s.anterior-ethmoid-cells.L": 754,
+   "s.anterior-ethmoid-cells.R": 779,
+   "s.ethmoid-bulla.R": 829,
+   "s.frontal-recess.L": 1127,
+   "s.frontal-recess.R": 1107,
+   "s.frontal-sinus.L": 1175,
+   "s.frontal-sinus.R": 1170,
+   "s.maxillary-sinus.L": 4009,
+   "s.maxillary-sinus.R": 4020,
+   "s.nasal-cavity.L": 9575,
+   "s.nasal-cavity.R": 9494,
+   "s.nasopharynx.M": 3797,
+   "s.posterior-ethmoid-cells.L": 2896,
+   "s.posterior-ethmoid-cells.R": 2924,
+   "s.sphenoid-sinus.L": 2233,
+   "s.sphenoid-sinus.R": 2216,
+   "s.ethmoid-bulla.L": 801
+  }
  }
 }
