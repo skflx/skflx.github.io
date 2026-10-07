@@ -15,7 +15,7 @@
    On phones the panel is a bottom sheet (ssb.css): the handle button
    toggles data-sheet; on desktop that attribute is inert.
    ============================================================= */
-import { renderText, TYPE_LABEL, REGION_LABEL, KIND_LABEL } from './graph.js?v=b6a0d0cc';
+import { renderText, TYPE_LABEL, REGION_LABEL, KIND_LABEL } from './graph.js?v=629f3ded';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

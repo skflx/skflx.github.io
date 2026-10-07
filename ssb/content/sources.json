@@ -2202,6 +2202,2042 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "18269022"
+    },
+    {
+      "id": "src.rowh-2015-canthotomy",
+      "cite": "Rowh AD, Ufberg JW, Chan TC, Vilke GM, Harrigan RA. Lateral canthotomy and cantholysis: emergency management of orbital compartment syndrome. J Emerg Med. 2015;48(3):325-330.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.jemermed.2014.11.002",
+      "pmid": "25524455",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25524455/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case report with an illustrated description of the procedure; the abstract gives no technical detail. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.haubner-2015-canthotomy",
+      "cite": "Haubner F, Jägle H, Nunes DP, et al. Orbital compartment: effects of emergent canthotomy and cantholysis. Eur Arch Otorhinolaryngol. 2015;272(2):479-483.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1007/s00405-014-3238-5",
+      "pmid": "25115315",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25115315/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Fresh-frozen cadaveric model, 8 orbits. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.oester-2012-septal-release",
+      "cite": "Oester AE, Fowler BT, Fleming JC. Inferior orbital septum release compared with lateral canthotomy and cantholysis in the management of orbital compartment syndrome. Ophthalmic Plast Reconstr Surg. 2012;28(1):40-43.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1097/IOP.0b013e31823646f3",
+      "pmid": "22262289",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22262289/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric model, 10 orbits. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.elpers-2021-vertical-lid-split",
+      "cite": "Elpers J, Areephanthu C, Timoney PJ, Nunery WR, Lee HBH, Fu R. Efficacy of vertical lid split versus lateral canthotomy and cantholysis in the management of orbital compartment syndrome. Orbit. 2021;40(3):222-227.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1080/01676830.2020.1767154",
+      "pmid": "32460574",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32460574/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric model, 7 orbits, one control. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.scoville-2023-canthotomy",
+      "cite": "Scoville NM, Ding L, Stacey AW. Success rates of lateral canthotomy and cantholysis for treatment of orbital compartment syndrome. Am J Emerg Med. 2023;70:140-143.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ajem.2023.05.037",
+      "pmid": "37290250",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37290250/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-centre cohort, 74 eyes. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.erickson-2020-rbh",
+      "cite": "Erickson BP, Garcia GA. Evidence-based algorithm for the management of acute traumatic retrobulbar haemorrhage. Br J Oral Maxillofac Surg. 2020;58(9):1091-1096.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.bjoms.2020.05.026",
+      "pmid": "32546417",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32546417/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-centre review of 42 consultations. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sun-2014-ocs",
+      "cite": "Sun MT, Chan WO, Selva D. Traumatic orbital compartment syndrome: importance of the lateral canthomy and cantholysis. Emerg Med Australas. 2014;26(3):274-278.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1111/1742-6723.12236",
+      "pmid": "24810151",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24810151/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective case series, 8 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kitaguchi-2019-bony-decompression",
+      "cite": "Kitaguchi Y, Takahashi Y, Sabundayo MS, Kakizaki H. Bony Orbital Decompression Following Lateral Canthotomy and Cantholysis for Traumatic Orbital Compartment Syndrome. J Craniofac Surg. 2019;30(1):231-234.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/SCS.0000000000004902",
+      "pmid": "30444775",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30444775/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective case series, 4 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zogheib-2022-ocs-fracture",
+      "cite": "Zogheib S, Sukkarieh G, Mjaess G, Zeid SA. Displaced Orbital Fractures with Concurrent Orbital Compartment Syndrome: A Case-Based Systematic Review. Facial Plast Surg. 2022;38(3):274-278.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1055/s-0041-1740290",
+      "pmid": "34905802",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34905802/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case-based systematic review of 18 published cases plus the authors' 2. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.luthra-2024-spoa",
+      "cite": "Luthra S, Kossler AL, Erickson BP, Homer NA. Orbital Subperiosteal Abscess Drainage: Transorbital vs. Endonasal Approach. J Clin Med. 2024;13(23):7011.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3390/jcm13237011",
+      "pmid": "39685468",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39685468/",
+      "note": "Full text read (PubMed Central PMC11642576, 2026-10-07) as well as the abstract. Retrospective single-centre review, 64 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.graham-2002-transcaruncular",
+      "cite": "Graham SM, Thomas RD, Carter KD, Nerad JA. The transcaruncular approach to the medial orbital wall. Laryngoscope. 2002;112(6):986-989.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/00005537-200206000-00009",
+      "pmid": "12160296",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12160296/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 49 patients (58 orbits). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mehta-2022-combined-drainage",
+      "cite": "Mehta A, Rathod R, Arora K, et al. Endoscope Assisted Combined Drainage of Sino-Orbital Abscess: Technique Revisited. Indian J Otolaryngol Head Neck Surg. 2022;74(2):172-177.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s12070-021-02751-1",
+      "pmid": "35813769",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35813769/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Technique series, 7 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.eviatar-2009-bidirectional",
+      "cite": "Eviatar E, Kessler A, Pitaro K. Bidirectional orbital approach enhances orbital abscess drainage. Rhinology. 2009;47(3):293-296.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4193/Rhin08.215",
+      "pmid": "19839253",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19839253/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective chart review, 22 patients; transnasal endoscopic technique. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.thakar-2000-orbital-cellulitis",
+      "cite": "Thakar A, Tandon DA, Thakar MD, Nivsarkar S. Orbital cellulitis revisited. Indian J Otolaryngol Head Neck Surg. 2000;52(3):235-242.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/BF03006191",
+      "pmid": "23119683",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23119683/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case series, 20 patients; 1993-2000 practice. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.gupta-2023-orbital-drain",
+      "cite": "Gupta P, Saini M, Sharma VK, Singh M, Abhaypal K, Mehta A. Postoperative Closed-Suction Drain in Anterior Orbitotomy. Cureus. 2023;15(11):e48624.",
+      "type": "trial",
+      "verified": false,
+      "doi": "10.7759/cureus.48624",
+      "pmid": "38084189",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38084189/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Randomized comparison, 25 patients, after anterior orbitotomy for orbital mass excision (not abscess). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.horowitz-2013-cranialization",
+      "cite": "Horowitz G, Amit M, Ben-Ari O, et al. Cranialization of the frontal sinus for secondary mucocele prevention following open surgery for benign frontal lesions. PLoS One. 2013;8(12):e83820.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1371/journal.pone.0083820",
+      "pmid": "24376760",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24376760/",
+      "note": "Full text read (PubMed Central PMC3871679, 2026-10-07) as well as the abstract. Retrospective single-centre series, 69 patients; benign frontal lesions. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.donath-2006-pericranial",
+      "cite": "Donath A, Sindwani R. Frontal sinus cranialization using the pericranial flap: an added layer of protection. Laryngoscope. 2006;116(9):1585-1588.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/01.mlg.0000232514.31101.39",
+      "pmid": "16954984",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16954984/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 19 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.vandijk-2012-cranialization",
+      "cite": "van Dijk JM, Wagemakers M, Korsten-Meijer AG, Kees Buiter CT, van der Laan BF, Mooij JJ. Cranialization of the frontal sinus--the final remedy for refractory chronic frontal sinusitis. J Neurosurg. 2012;116(3):531-535.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3171/2011.11.JNS101849",
+      "pmid": "22175720",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22175720/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Consecutive cohort of 15 patients with a literature search. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.choi-2012-posterior-table",
+      "cite": "Choi M, Li Y, Shapiro SA, Havlik RJ, Flores RL. A 10-year review of frontal sinus fractures: clinical outcomes of conservative management of posterior table fractures. Plast Reconstr Surg. 2012;130(2):399-406.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/PRS.0b013e3182589d91",
+      "pmid": "22495212",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22495212/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-centre review, 59 patients with posterior table involvement. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.johnson-2021-frontal-fracture-sr",
+      "cite": "Johnson NR, Roberts MJ. Frontal sinus fracture management: a systematic review and meta-analysis. Int J Oral Maxillofac Surg. 2021;50(1):75-82.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1016/j.ijom.2020.06.004",
+      "pmid": "32861554",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32861554/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 24 publications; one randomized trial, otherwise case series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.wolbert-2026-cranialization",
+      "cite": "Wolbert T, Vassallo M, Wood S, et al. Treatment of Displaced Posterior Table Frontal Sinus Fractures: To Cranialize or Not to Cranialize? A Systematic Review and Meta-Analysis. J Craniofac Surg. 2026 Jul 24. Online ahead of print.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1097/SCS.0000000000013080",
+      "pmid": "42496231",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42496231/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 55 studies. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.morse-2021-cranialization",
+      "cite": "Morse JC, Chandra RK. Is there still a role for cranialization in modern sinus surgery? Curr Opin Otolaryngol Head Neck Surg. 2021;29(1):53-58.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/MOO.0000000000000691",
+      "pmid": "33278134",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33278134/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Narrative review. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.burckhardt-2013-dural-septoplasty",
+      "cite": "Burckhardt B W, Guerra CP. Synthetic dural graft septoplasty in epistaxis from hereditary hemorrhagic telangiectasia. Colomb Med (Cali). 2013;44(3):189-191.",
+      "type": "review",
+      "verified": false,
+      "pmid": "24892618",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24892618/",
+      "note": "Full text read (PubMed Central PMC4002040, 2026-10-07) as well as the abstract. Single case report; its introduction is used for the description of the original Saunders septodermoplasty and its sequelae, its case section for one modified technique. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.harvey-2008-sdp-ktp",
+      "cite": "Harvey RJ, Kanagalingam J, Lund VJ. The impact of septodermoplasty and potassium-titanyl-phosphate (KTP) laser therapy in the treatment of hereditary hemorrhagic telangiectasia-related epistaxis. Am J Rhinol. 2008;22(2):182-187.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/ajr.2008.22.3145",
+      "pmid": "18416977",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18416977/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-unit audit, 131 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lesnik-2007-septectomy-sdp",
+      "cite": "Lesnik GT, Ross DA, Henderson KJ, Joe JK, Leder SB, White RI. Septectomy and septal dermoplasty for the treatment of severe transfusion-dependent epistaxis in patients with hereditary hemorrhagic telangiectasia and septal perforation. Am J Rhinol. 2007;21(3):312-315.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/ajr.2007.21.3017",
+      "pmid": "17621815",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17621815/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 9 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lund-1999-hht-algorithm",
+      "cite": "Lund VJ, Howard DJ. A treatment algorithm for the management of epistaxis in hereditary hemorrhagic telangiectasia. Am J Rhinol. 1999;13(4):319-322.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/105065899782102890",
+      "pmid": "10485021",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10485021/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Series of 50 patients, 1991-1997. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ichimura-2006-nasal-dermoplasty",
+      "cite": "Ichimura K, Tanaka H, Yamamoto Y, Nakamura K. Nasal dermoplasty for Japanese hereditary hemorrhagic telangiectasia. Auris Nasus Larynx. 2006;33(4):423-428.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.anl.2006.03.001",
+      "pmid": "16707240",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16707240/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 15 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lund-2017-nasal-closure",
+      "cite": "Lund VJ, Darby Y, Rimmer J, Amin M, Husain S. Nasal closure for severe hereditary haemorrhagic telangiectasia in 100 patients. The Lund modification of the Young's procedure: a 22-year experience. Rhinology. 2017;55(2):135-141.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4193/Rhin16.315",
+      "pmid": "28064338",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28064338/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-centre cohort of 100 patients with questionnaire data on 50. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.richer-2012-young",
+      "cite": "Richer SL, Geisthoff UW, Livada N, et al. The Young's procedure for severe epistaxis from hereditary hemorrhagic telangiectasia. Am J Rhinol Allergy. 2012;26(5):401-404.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/ajra.2012.26.3809",
+      "pmid": "23168156",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23168156/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Three-centre retrospective series, 43 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.timmins-2016-two-flap",
+      "cite": "Timmins BH, Hunter BN, Wilson KF, Ward PD. Treatment of severe refractory epistaxis in hereditary hemorrhagic telangiectasia using a two-flap nasal closure method. Int Forum Allergy Rhinol. 2016;6(5):544-548.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/alr.21703",
+      "pmid": "26751606",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26751606/",
+      "note": "Full text read (PubMed Central PMC4856581, 2026-10-07) as well as the abstract. Retrospective single-centre review, 13 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.andersen-2020-nasal-closure",
+      "cite": "Andersen JH, Kjeldsen AD. Patient-recorded benefit from nasal closure in a Danish cohort of patients with hereditary haemorrhagic telangiectasia. Eur Arch Otorhinolaryngol. 2020;277(3):791-800.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00405-019-05758-1",
+      "pmid": "31845036",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31845036/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-country cohort, 10 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.benaim-2025-hht-surgery",
+      "cite": "Benaim EH, Kallenberger EM, Mirmozaffari Y, et al. Surgical Management of Moderate to Severe Epistaxis in Hereditary Hemorrhagic Telangiectasia: Systematic Review and Meta-Analysis. Am J Rhinol Allergy. 2025;39(2):159-168.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1177/19458924241308952",
+      "pmid": "39906953",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39906953/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). PubMed Central record carries the abstract only; 20 studies, 546 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.bickerton-2025-nasal-closure",
+      "cite": "Bickerton R, Gera R, Ross T, Rennie C. Is nasal closure an effective treatment for severe refractory epistaxis in HHT? A scoping review and narrative synthesis. Rhinology. 2025;63(2):153-162.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.4193/Rhin24.448",
+      "pmid": "39907212",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39907212/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Scoping review of 10 studies, 192 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.metson-1988-ima-failures",
+      "cite": "Metson R, Lane R. Internal maxillary artery ligation for epistaxis: an analysis of failures. Laryngoscope. 1988;98(7):760-764.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1288/00005537-198807000-00015",
+      "pmid": "3386382",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3386382/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review, 100 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.strong-1995-ligation-embolization",
+      "cite": "Strong EB, Bell DA, Johnson LP, Jacobs JM. Intractable epistaxis: transantral ligation vs. embolization: efficacy review and cost analysis. Otolaryngol Head Neck Surg. 1995;113(6):674-678.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/S0194-59989570004-8",
+      "pmid": "7501376",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7501376/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective comparison, 21 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.morgan-1997-oroantral-fistula",
+      "cite": "Morgan MK, Aldren CP. Oroantral fistula: a complication of transantral ligation of the internal maxillary artery for epistaxis. J Laryngol Otol. 1997;111(5):468-470.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/s0022215100137661",
+      "pmid": "9205612",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9205612/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two case reports; the abstract also gives a general description of the operation. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mcdonald-1980-ima-followup",
+      "cite": "McDonald TJ, Pearson BW. Follow-up on maxillary artery ligation for epistaxis. Arch Otolaryngol. 1980;106(10):635-638.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1001/archotol.1980.00790340043011",
+      "pmid": "7417093",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7417093/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 46 ligations compared with 30 controls. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.morton-1991-ima-variability",
+      "cite": "Morton AL, Khan A. Internal maxillary artery variability in the pterygopalatine fossa. Otolaryngol Head Neck Surg. 1991;104(2):204-209.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1177/019459989110400208",
+      "pmid": "1901148",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1901148/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Serial cadaver dissections of the pterygopalatine fossa. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.nair-1982-transantral",
+      "cite": "Nair KK. Transantral ligation of the internal maxillary artery. Laryngoscope. 1982;92(9 Pt 1):1060-1063.",
+      "type": "cohort",
+      "verified": false,
+      "pmid": "7121160",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7121160/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Short comparative report; abstract states three points, no data. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pritikin-1998-endoscopic-ima",
+      "cite": "Pritikin JB, Caldarelli DD, Panje WR. Endoscopic ligation of the internal maxillary artery for treatment of intractable posterior epistaxis. Ann Otol Rhinol Laryngol. 1998;107(2):85-91.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1177/000348949810700201",
+      "pmid": "9486900",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9486900/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 10 patients treated endoscopically; used here only for the average transantral figures it quotes from the literature. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.neal-1985-external-ethmoidectomy",
+      "cite": "Neal GD. External ethmoidectomy. Otolaryngol Clin North Am. 1985;18(1):55-60.",
+      "type": "review",
+      "verified": false,
+      "pmid": "3991203",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3991203/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). One-sentence abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.schneider-2015-external-sinus",
+      "cite": "Schneider JS, Day A, Clavenna M, Russell PT, Duncavage J. Early Practice: External Sinus Surgery and Procedures and Complications. Otolaryngol Clin North Am. 2015;48(5):839-850.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.otc.2015.05.010",
+      "pmid": "26143105",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26143105/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of external sinus approaches; the abstract gives no technical detail. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.iseh-2010-mucocele",
+      "cite": "Iseh KR. Endoscopic and external surgical approach to paranasal sinus mucocele. J Surg Tech Case Rep. 2010;2(1):49-53.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4103/2006-8808.63728",
+      "pmid": "22091333",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22091333/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 18 patients with paranasal sinus mucocele, 14 treated by an external approach. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.grayson-2022-egpa",
+      "cite": "Grayson PC, Ponte C, Suppiah R, et al. 2022 American College of Rheumatology/European Alliance of Associations for Rheumatology Classification Criteria for Eosinophilic Granulomatosis with Polyangiitis. Ann Rheum Dis. 2022;81(3):309-314.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1136/annrheumdis-2021-221794",
+      "pmid": "35110334",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35110334/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Gives the seven items, their weights and the threshold of the 2022 ACR/EULAR EGPA classification criteria, with validation sensitivity and specificity. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sharma-2026-egpa-crs",
+      "cite": "Sharma A, Li AY, Kishibe T, et al. Chronic Rhinosinusitis and Nasal Polyps in Eosinophilic Granulomatosis With Polyangiitis: A Scoping Review. Int Forum Allergy Rhinol. 2026;16(9):996-1011.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1002/alr.70217",
+      "pmid": "42439219",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42439219/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Scoping review of CRS in EGPA (109 studies); supports CRSwNP as the predominant sinonasal phenotype, the clinical overlap with CRSwNP without EGPA, and rare biopsy-proven vasculitis. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ryoo-2025-gpa-egpa-sinus-ct",
+      "cite": "Ryoo I, Poésy S, Kaliaev A, Buch K, Sakai O. Comparison of Imaging Findings between Granulomatosis with Polyangiitis and Eosinophilic Granulomatosis with Polyangiitis on Sinus CT: Importance of High-Density Opacification of the Paranasal Sinuses. AJNR Am J Neuroradiol. 2025;46(2):355-361.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.3174/ajnr.A8485",
+      "pmid": "39824628",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39824628/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Sinus CT of 31 GPA and 22 EGPA patients; supports high-density sinus opacification as a CT feature favouring EGPA and bony destruction, sclerosis and adjacent-organ involvement favouring GPA. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.iwata-2023-egpa-sinus-ct",
+      "cite": "Iwata M, Fukutomi Y, Hamada Y, et al. Computed tomography findings of paranasal sinuses in patients with eosinophilic granulomatosis with polyangiitis: Comparison with other eosinophilic sinus diseases and clinical relevance of their severity. Allergol Int. 2023;72(3):428-436.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1016/j.alit.2023.02.003",
+      "pmid": "36997391",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36997391/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Lund-Mackay scores on sinus CT of 30 EGPA patients against other eosinophilic sinus diseases; supports milder average CT disease in EGPA and heterogeneity between patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.fernandez-ensenat-2025-egpa-ent",
+      "cite": "Fernández-Enseñat J, Benavides-Villanueva F, Martínez-Camerano A, Calvo-Rio V, Blanco R, Morales-Angulo C. Otorhinolaryngological manifestations in patients with eosinophilic granulomatosis with polyangiitis in a single university center. Acta Otorrinolaringol Esp (Engl Ed). 2025;76(5):512263.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.otoeng.2025.512263",
+      "pmid": "40543753",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40543753/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-centre retrospective series of 22 EGPA patients; supports the frequency of sinonasal involvement and that head and neck biopsies showed no vasculitis. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.almogairen-2026-gpa-egpa-ent",
+      "cite": "Almogairen S, Alsaleh S, Alhabib SF, et al. Ear-nose-throat manifestations of granulomatosis with polyangiitis and eosinophilic granulomatosis with polyangiitis: a cross-sectional study. Rheumatol Int. 2026;46(8).",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00296-026-06243-9",
+      "pmid": "42443467",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42443467/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cross-sectional comparison of ENT findings in 35 GPA and 15 EGPA patients; supports the sinonasal contrast between EGPA (oedema, allergic rhinitis, polyposis) and GPA (destructive lesions, saddle nose). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.bacciu-2006-egpa-ent",
+      "cite": "Bacciu A, Bacciu S, Mercante G, et al. Ear, nose and throat manifestations of Churg-Strauss syndrome. Acta Otolaryngol. 2006;126(5):503-9.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1080/00016480500437435",
+      "pmid": "16698700",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16698700/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-centre series of 28 patients with Churg-Strauss syndrome (1990 ACR criteria), 21 with ENT involvement; supports the pattern of ENT manifestations (polyposis, allergic rhinitis, crusting). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.molina-2023-egpa-dupilumab",
+      "cite": "Molina B, Padoan R, Urban ML, et al. Dupilumab for relapsing or refractory sinonasal and/or asthma manifestations in eosinophilic granulomatosis with polyangiitis: a European retrospective study. Ann Rheum Dis. 2023;82(12):1587-1593.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1136/ard-2023-224756",
+      "pmid": "37734881",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37734881/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective multicentre study of dupilumab in 51 EGPA patients, mostly for disabling ENT symptoms; supports use of dupilumab for EGPA ENT disease and the relapse and eosinophilia caution. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lam-2023-pcd-sinonasal",
+      "cite": "Lam YT, Papon JF, Alexandru M, et al. Sinonasal disease among patients with primary ciliary dyskinesia: an international study. ERJ Open Res. 2023;9(3).",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1183/23120541.00701-2022",
+      "pmid": "37228283",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37228283/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Baseline data of an international ENT cohort of 384 people with PCD; supports the frequency of chronic nasal problems, polyps, turbinate hypertrophy and the age pattern. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.plantier-2023-pcd-sinus-ct",
+      "cite": "Plantier DB, Pilan RRM, Athanazio R, Olm MAK, Gebrim EMS, Voegels RL. Computed Tomography Evaluation of the Paranasal Sinuses in Adults with Primary Ciliary Dyskinesia. Int Arch Otorhinolaryngol. 2023;27(1):e130-e137.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1055/s-0042-1749392",
+      "pmid": "36714901",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36714901/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective sinus CT series of 21 adults with PCD; supports the pattern of frontal and sphenoid aplasia and hypoplasia and the other anatomical findings that matter for surgical planning. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pifferi-2011-pcd-sinus-agenesis",
+      "cite": "Pifferi M, Bush A, Caramella D, et al. Agenesis of paranasal sinuses and nasal nitric oxide in primary ciliary dyskinesia. Eur Respir J. 2011;37(3):566-71.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1183/09031936.00068810",
+      "pmid": "20650983",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20650983/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Consecutive patients referred for PCD evaluation with sinus CT (41 PCD, 45 secondary ciliary dyskinesia); supports frontal or sphenoid aplasia or hypoplasia as part of the PCD spectrum and its relation to nasal NO. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pappa-2021-pcd-sinus-volume",
+      "cite": "Pappa AK, Sullivan KM, Lopez EM, et al. Sinus Development and Pneumatization in a Primary Ciliary Dyskinesia Cohort. Am J Rhinol Allergy. 2021;35(1):72-76.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1177/1945892420933175",
+      "pmid": "32551925",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32551925/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CT volumes of the maxillary, sphenoid and frontal sinuses in 17 PCD patients against matched controls; supports smaller sinus volumes in PCD. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.stack-2023-pcd-qol",
+      "cite": "Stack T, Norris M, Kim S, et al. Sinonasal quality of life in primary ciliary dyskinesia. Int Forum Allergy Rhinol. 2023;13(11):2101-2104.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/alr.23180",
+      "pmid": "37203268",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37203268/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). One-paragraph abstract comparing sinonasal quality of life in PCD with CRS without polyps and CF; supports only the comparative statement made in the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.plantier-2023-pcd-ess",
+      "cite": "Plantier DB, Pinna FR, Olm MAK, Athanázio R, Pilan RRM, Voegels RL. Outcomes of Endoscopic Sinus Surgery for Chronic Rhinosinusitis in Adults with Primary Ciliary Dyskinesia. Int Arch Otorhinolaryngol. 2023;27(3):e423-e427.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1055/s-0042-1746193",
+      "pmid": "37564476",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37564476/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Four adults with PCD and CRS operated endoscopically; supports only the descriptive statement that symptoms and endoscopic scores improved and olfaction did not, in four patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mazza-2016-pid-crs",
+      "cite": "Mazza JM, Lin SY. Primary immunodeficiency and recalcitrant chronic sinusitis: a systematic review. Int Forum Allergy Rhinol. 2016;6(10):1029-1033.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1002/alr.21789",
+      "pmid": "27187624",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27187624/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review (39 studies, mostly level 4 evidence) of primary immunodeficiency and recalcitrant CRS; supports the frequency of immune dysfunction in recalcitrant CRS and the workup and treatment summary. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.makary-2023-pad-crs-adults",
+      "cite": "Makary CA, Luong AU, Azar A, et al. Evaluation and treatment of rhinosinusitis with primary antibody deficiency in adults: Evidence-based review with recommendations. Int Forum Allergy Rhinol. 2023;13(12):2205-2230.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1002/alr.23206",
+      "pmid": "37300852",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37300852/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Evidence-based review with recommendations (42 studies) of rhinosinusitis in adults with primary antibody deficiency; supports the PAD prevalence ceiling in recalcitrant CRS, the need for immunology collaboration, and the weakness of the treatment evidence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ocampo-2013-antibody-deficiency-crs",
+      "cite": "Ocampo CJ, Peters AT. Antibody deficiency in chronic rhinosinusitis: epidemiology and burden of illness. Am J Rhinol Allergy. 2013;27(1):34-8.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.2500/ajra.2013.27.3831",
+      "pmid": "23406598",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23406598/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of four primary antibody deficiencies reported with CRS; supports which deficiencies are associated with CRS and the advice to screen refractory CRS. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.hagan-2010-cvid-sinus-ct",
+      "cite": "Hagan JB, Park MA, Kita H, Campeau NG. Reduced immunoglobulin M is associated with sinus mucosal thickening, osteitis and sinus surgery in patients with common variable immunodeficiency. Int Arch Allergy Immunol. 2010;152(1):81-6.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1159/000260088",
+      "pmid": "19940510",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19940510/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Sinus CT of 19 CVID patients; supports the relation of CT mucosal thickening and osteitis to low serum IgM. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.makary-2022-ig-replacement",
+      "cite": "Makary CA, Behnke J, Peppers B, Ramadan HH. Outcome of Immunoglobulin Replacement Therapy in Adults With Rhinosinusitis. Laryngoscope. 2022;132(4):732-736.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lary.29694",
+      "pmid": "34146351",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34146351/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective chart review of 58 adults with primary humoral immunodeficiency and rhinosinusitis on immunoglobulin replacement; supports before-and-after Lund-Mackay score and sinus surgery rates (uncontrolled). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.petersen-2026-pad-crs-cohort",
+      "cite": "Petersen AG, Zainali-Gill K, Larsen CS, Nielsen C, Ovesen T. Primary Antibody Deficiency in Patients With Chronic Rhinosinusitis: A Call for Immunologic Evaluation Prior to Biologic Therapy. Clin Otolaryngol. 2026;51(1):144-152.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1111/coa.70045",
+      "pmid": "41087302",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41087302/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Prospective cohort of 138 adults with CRS screened for primary antibody deficiency; supports the frequency of hypogammaglobulinemia and of fully diagnosed PAD in an unselected CRS clinic population. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.malik-2016-sinonasal-tb",
+      "cite": "Malik JN, Jan S, Monga S, Bahadur S. Sinonasal tuberculosis: Report of three atypical cases. Indian J Tuberc. 2016;63(4):268-272.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.ijtb.2015.06.001",
+      "pmid": "27998502",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27998502/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Report of three cases of primary sinonasal or nasal tuberculosis; supports only that it is rare, diagnosed by imaging and histology, and responded to antitubercular drugs in these cases. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.dey-2018-sinonasal-tb",
+      "cite": "Dey S, Misra S, Dutta M. Primary Sinonasal Tuberculosis: A Diagnostic Challenge. Turk Arch Otorhinolaryngol. 2018;56(2):117-121.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.5152/tao.2018.3191",
+      "pmid": "30197812",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30197812/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report of primary sinonasal tuberculosis; supports only that it mimics sinonasal granulomatous disease or neoplasm and the CT distribution in that case. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sardana-2014-septal-ulceration",
+      "cite": "Sardana K, Goel K. Nasal septal ulceration. Clin Dermatol. 2014;32(6):817-26.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.clindermatol.2014.02.022",
+      "pmid": "25441476",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25441476/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Narrative review of nasal septal ulceration; supports tuberculosis and leprosy among infective causes and the need for multiple tissue specimens. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.nwawka-2014-granulomatous-hn",
+      "cite": "Nwawka OK, Nadgir R, Fujita A, Sakai O. Granulomatous disease in the head and neck: developing a differential diagnosis. Radiographics. 2014;34(5):1240-56.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1148/rg.345130068",
+      "pmid": "25208278",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25208278/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Radiographics review of granulomatous disease in the head and neck; supports the list of infectious and non-infectious granulomatous causes and the overlap of their imaging with malignancy. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mcdougall-1975-leprosy-nose",
+      "cite": "McDougall AC, Rees RJ, Weddell AG, Kanan MW. The histopathology of lepromatous leprosy in the nose. J Pathol. 1975;115(4):215-26.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/path.1711150406",
+      "pmid": "1099180",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1099180/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Nasal biopsies of 31 early lepromatous and 4 borderline leprosy patients; supports bacilli in the nasal tissue of all lepromatous patients and nasal shedding. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pokala-2025-leprosy-saddle-nose",
+      "cite": "Pokala U, Poondru AR, Laxmi Santhi Swetha M S, Kavya V, Chukkapally S, Pokala N. A Case of Saddle Nose Deformity Secondary to Lepromatous Leprosy. Indian J Otolaryngol Head Neck Surg. 2025;77(2):1014-1018.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s12070-024-05238-x",
+      "pmid": "40065940",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40065940/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report of saddle nose from lepromatous leprosy; supports leprosy as a differential of atrophic rhinitis that does not respond to treatment, and septal involvement in advanced stages. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.espirito-santo-2022-hd-maxillofacial",
+      "cite": "do Espírito Santo RB, Serafim RA, Loureiro RM, et al. Clinical and radiological evaluation of maxillofacial and otorhinolaryngological manifestations of Hansen's disease. Sci Rep. 2022;12(1):14912.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1038/s41598-022-19072-0",
+      "pmid": "36050504",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36050504/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cross-sectional CT, rhinoscopy and oroscopy study of 21 current and 16 former Hansen's disease patients with 37 controls; supports the frequency of maxillary and nasal bone resorption in former patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.espirito-santo-2022-rhinomaxillary",
+      "cite": "do Espírito Santo RB, Serafim RA, Loureiro RM, et al. Clinical and radiological assessment of rhinomaxillary syndrome in Hansen's disease. Indian J Dermatol Venereol Leprol. 2022;88(4):483-493.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.25259/IJDVL_1203_20",
+      "pmid": "35138068",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35138068/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CT study of rhinomaxillary syndrome in 16 older former Hansen's disease patients; supports the CT and clinical definition of the syndrome and its saddle nose. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.navazo-2010-rhinoscleroma",
+      "cite": "Navazo Eguía AI, García Vicario F. [Rhinoscleroma]. Acta Otorrinolaringol Esp. 2010;61(2):160-2.",
+      "type": "review",
+      "verified": false,
+      "pmid": "20402002",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20402002/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Short Spanish-language abstract of a rhinoscleroma note; supports nasal involvement in all cases, endemic regions, diagnosis by bacterial evidence and the differential diagnosis. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.bailhache-2008-rhinoscleroma-sinuses",
+      "cite": "Bailhache A, Dehesdin D, François A, Marie JP, Choussy O. Rhinoscleroma of the sinuses. Rhinology. 2008;46(4):338-41.",
+      "type": "review",
+      "verified": false,
+      "pmid": "19146007",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19146007/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two cases of sinus rhinoscleroma with literature review; supports the sites of upper-airway involvement, the paranasal sinuses usually being free of disease, CT and MRI usefulness, treatment and recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lehir-1996-rhinoscleroma-orbit",
+      "cite": "Le Hir P, Marsot-Dupuch K, Bigel P, et al. Rhinoscleroma with orbital extension: CT and MRI. Neuroradiology. 1996;38(2):175-8.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/BF00604813",
+      "pmid": "8692435",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8692435/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single report of rhinoscleroma with orbital extension; supports the MRI signal and enhancement in that case and the mimicry of malignant sinonasal tumour or fungal sinusitis. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.botelho-nevers-2007-klebsiella",
+      "cite": "Botelho-Nevers E, Gouriet F, Lepidi H, et al. Chronic nasal infection caused by Klebsiella rhinoscleromatis or Klebsiella ozaenae: two forgotten infectious diseases. Int J Infect Dis. 2007;11(5):423-9.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.ijid.2006.10.005",
+      "pmid": "17337224",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17337224/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two cases and literature review of K. rhinoscleromatis and K. ozaenae chronic nasal infection; supports that rhinoscleroma is a forgotten chronic infection with specific diagnostic tools and effective treatments. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.das-2011-rhinosporidiosis",
+      "cite": "Das S, Kashyap B, Barua M, et al. Nasal rhinosporidiosis in humans: new interpretations and a review of the literature of this enigmatic disease. Med Mycol. 2011;49(3):311-5.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3109/13693786.2010.526640",
+      "pmid": "20954821",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20954821/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Three cases and a short review of nasal rhinosporidiosis; supports the cause, sites, polypoid mass, surgical excision as the only treatment and the need to follow for recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.almeida-2016-rhinosporidiosis-brazil",
+      "cite": "Almeida FA, Feitoza Lde M, Pinho JD, et al. Rhinosporidiosis: the largest case series in Brazil. Rev Soc Bras Med Trop. 2016;49(4):473-6.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1590/0037-8682-0193-2016",
+      "pmid": "27598634",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27598634/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series of 25 patients with rhinosporidiosis in Maranhao, Brazil; supports age and sex pattern, the vascular polypoid mass and treatment by excision in that series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.dey-2016-rhinosporidiosis-proptosis",
+      "cite": "Dey AK, Sharma R, Mittal K, et al. Rhinosporidiosis: A Rare Cause of Proptosis and an Imaging Dilemma for Sinonasal Masses. Case Rep Otolaryngol. 2016;2016:3573512.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1155/2016/3573512",
+      "pmid": "28042489",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28042489/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report of rhinosporidiosis with proptosis from nasolacrimal duct involvement; supports that nasolacrimal involvement can occur and that it is a differential for sinonasal masses. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.nanu-2024-septal-hematoma",
+      "cite": "Nanu DP, Adelsberg D, Nguyen SA, Radulovich NP, Carr MM. Unmasking Nasal Septal Hematoma/Abscess: A Systematic Review and Meta-analysis. OTO Open. 2024;8(4):e174.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1002/oto2.174",
+      "pmid": "39381799",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39381799/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of traumatic nasal septal hematoma or abscess (30 studies, 598 patients; surgical cases excluded); supports demographics, symptoms, organisms, delay to diagnosis and sequelae. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.jackson-2025-septal-hematoma-management",
+      "cite": "Jackson R, Jia W, Edafe O. Evaluation of the management of nasal septal haematoma and abscess: a systematic review. J Laryngol Otol. 2025;139(3):153-159.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/S0022215124001610",
+      "pmid": "39434415",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39434415/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of management of septal hematoma and abscess (17 articles, 503 patients); supports incision and drainage as the technique used in all studies and the low re-collection rate. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.alshaikh-2011-septal-abscess-children",
+      "cite": "Alshaikh N, Lo S. Nasal septal abscess in children: from diagnosis to management and prevention. Int J Pediatr Otorhinolaryngol. 2011;75(6):737-44.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2011.03.010",
+      "pmid": "21492944",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21492944/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Structured review of nasal septal abscess in children; supports its definition, causes, organisms, risks if untreated and the immediate management. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ali-2021-septal-hematoma-children",
+      "cite": "Ali HM, Zavala H, Chinnadurai S, Roby B. Nasal septal hematoma in children: Time to diagnosis and resulting complications. Int J Pediatr Otorhinolaryngol. 2021;145:110734.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2021.110734",
+      "pmid": "33930759",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33930759/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of 13 paediatric nasal septal hematomas in one hospital; supports the delay to diagnosis and the complication rate in that series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.luan-2021-septal-abscess-diabetes",
+      "cite": "Luan CW, Tsai MS, Liu CY, et al. Increased Risk of Nasal Septal Abscess After Septoplasty in Patients with Type 2 Diabetes Mellitus. Laryngoscope. 2021;131(8):E2420-E2425.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lary.29336",
+      "pmid": "33325554",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33325554/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Taiwan insurance-database cohort of 382 septoplasty patients with type 2 diabetes against 382 matched controls; supports type 2 diabetes as a risk factor for septal abscess after septoplasty. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.debnam-2007-septal-abscess-ct",
+      "cite": "Debnam JM, Gillenwater AM, Ginsberg LE. Nasal septal abscess in patients with immunosuppression. AJNR Am J Neuroradiol. 2007;28(10):1878-9.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.3174/ajnr.A0708",
+      "pmid": "17905891",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17905891/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CT of nasal septal abscess in two immunosuppressed patients; supports the CT appearance described, in two patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sheikh-2016-nasolabial-cysts",
+      "cite": "Sheikh AB, Chin OY, Fang CH, Liu JK, Baredes S, Eloy JA. Nasolabial cysts: A systematic review of 311 cases. Laryngoscope. 2016;126(1):60-6.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1002/lary.25433",
+      "pmid": "26153269",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26153269/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 311 nasolabial cysts (79 articles); supports definition, location, presentation, imaging use, treatment routes and recurrence counts. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.tsai-2024-nasolabial-cyst-meta",
+      "cite": "Tsai HW, Chao WC, Lee YH, Tsai YT, Tsai MS, Lee YC. Sublabial excision versus transnasal endoscopic marsupialization for nasolabial cysts: A systematic review and meta-analysis. Clin Otolaryngol. 2024;49(1):102-108.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1111/coa.14105",
+      "pmid": "37818679",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37818679/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Meta-analysis of sublabial excision against transnasal endoscopic marsupialization for nasolabial cysts; supports the comparison of operative outcomes and the lack of difference in recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.liu-2023-nasolabial-cyst-imaging",
+      "cite": "Liu S, Hao D, Yu L, et al. Comparative analysis of three common imaging modalities for nasolabial cysts. J Int Med Res. 2023;51(1):3000605221147201.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1177/03000605221147201",
+      "pmid": "36597377",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36597377/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective comparison of ultrasound, CT and MRI in 20 patients with 21 surgically proven nasolabial cysts; supports the cyst location and the modality sensitivities in that series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.chao-2009-nasolabial-cyst-marsupialization",
+      "cite": "Chao WC, Huang CC, Chang PH, Chen YL, Chen CW, Lee TJ. Management of nasolabial cysts by transnasal endoscopic marsupialization. Arch Otolaryngol Head Neck Surg. 2009;135(9):932-5.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1001/archoto.2009.111",
+      "pmid": "19770428",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19770428/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series of 57 patients with nasolabial cysts, 47 with preoperative CT; supports the operative time, hospitalization and recurrence comparison of two approaches. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pevsner-2000-npdc-ct",
+      "cite": "Pevsner PH, Bast WG, Lumerman H, Pivawer G. CT analysis of a complicated nasopalatine duct cyst. N Y State Dent J. 2000;66(6):18-20.",
+      "type": "review",
+      "verified": false,
+      "pmid": "11132298",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11132298/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CT analysis of a single nasopalatine duct cyst; supports the CT features stated in the abstract and the contrast with radicular cysts. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ramos-pena-2025-npdc",
+      "cite": "Ramos Peña DE, Alves MS, Xavier SP, et al. Nasopalatine duct cyst: a multicenter retrospective study of 63 cases and an integrative review of the clinical, imaginological and histopathological aspects. J Appl Oral Sci. 2025;33:e20240539.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1590/1678-7757-2024-0539",
+      "pmid": "40332164",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40332164/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Multicentre series of 63 nasopalatine duct cysts with an integrative review (1,003 reported cases); supports the radiographic appearance, the odontogenic mimics and symptom frequency. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.soares-2026-npdc-review",
+      "cite": "Soares AC, Braz GL, Dos Santos Figueiredo A, et al. Clinicopathological features of the nasopalatine duct cyst: A systematic review. Oral Maxillofac Surg. 2026;30(1).",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s10006-026-01515-x",
+      "pmid": "41721112",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41721112/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 2,734 nasopalatine duct cysts (168 studies); supports the proportion asymptomatic, the usual treatment and the low recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kang-2014-npdc-marsupialization",
+      "cite": "Kang JW, Kim HJ, Nam W, Kim CH. Endoscopic endonasal marsupialization of nasopalatine duct cyst. J Craniofac Surg. 2014;25(2):e155-6.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/SCS.0000000000000417",
+      "pmid": "24448528",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24448528/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Three nasopalatine duct cysts treated by endoscopic intranasal marsupialization against enucleation; supports only the descriptive statements in the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.janovic-2024-npdc-cbct",
+      "cite": "Janovic A, Bracanovic D, Antic S, Markovic-Vasiljkovic B. Morphological CBCT parameters for an accurate differentiation between nasopalatine duct cyst and the normal nasopalatine canal. Head Face Med. 2024;20(1):54.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1186/s13005-024-00458-6",
+      "pmid": "39342234",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39342234/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CBCT study of 19 nasopalatine duct cysts against 164 controls; supports that canal dimensions differ between cyst and normal canal, with the measured values. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kim-2008-organized-hematoma",
+      "cite": "Kim EY, Kim HJ, Chung SK, et al. Sinonasal organized hematoma: CT and MR imaging findings. AJNR Am J Neuroradiol. 2008;29(6):1204-8.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.3174/ajnr.A1042",
+      "pmid": "18403558",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18403558/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CT and MR images of 12 patients with pathologically proven sinonasal organized hematoma; supports the CT and MR findings and the location. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.hur-2015-organized-hematoma",
+      "cite": "Hur J, Kim JK, Byun JS, Lee WJ. Imaging characteristics of sinonasal organized hematoma. Acta Radiol. 2015;56(8):955-9.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1177/0284185114542364",
+      "pmid": "25024439",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25024439/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). CT of eight patients (MRI in one) with sinonasal organized hematoma; supports hyperdensity, smooth medial maxillary wall erosion and the ostial epicentre. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.wu-2013-organizing-hematoma",
+      "cite": "Wu AW, Ting JY, Borgie RC, et al. Diagnostic characteristics of sinonasal organizing hematomas: avoiding misdiagnosis. Int Forum Allergy Rhinol. 2013;3(7):598-602.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/alr.21147",
+      "pmid": "23307434",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23307434/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case series of seven sinonasal organizing hematomas; supports the presentation, non-diagnostic biopsy and the MRI T2 rim as the most diagnostic finding. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.song-2007-ohms",
+      "cite": "Song HM, Jang YJ, Chung YS, Lee BJ. Organizing hematoma of the maxillary sinus. Otolaryngol Head Neck Surg. 2007;136(4):616-20.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.otohns.2006.10.033",
+      "pmid": "17418261",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17418261/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Chart review of 20 patients with organizing hematoma of the maxillary sinus; supports presentation, CT findings and surgical results. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.jeong-2021-organized-hematoma-endoscopic",
+      "cite": "Jeong SH, Lee DH, Lim SC. Endoscopic Surgical Treatment of Maxillary Sinus Organized Hematoma. J Craniofac Surg. 2021;32(8):e687-e689.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/SCS.0000000000007582",
+      "pmid": "33840759",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33840759/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Series of 25 patients with maxillary sinus organized hematoma treated endoscopically; supports presentation, the operations used and the absence of recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.eissa-2021-organized-hematoma-mr-ct",
+      "cite": "Eissa L, Eid M, Razek AAKA. MR and CT imaging features of sino-nasal organized hematomas. Oral Radiol. 2021;37(2):297-304.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1007/s11282-020-00450-1",
+      "pmid": "32462337",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32462337/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). MR and CT of eight patients with organized hematoma; supports T2 hypointense matrix with marginal rim, frond-like enhancement and geographic bone remodeling. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.arnold-2019-nasal-fracture-septal",
+      "cite": "Arnold MA, Yanik SC, Suryadevara AC. Septal fractures predict poor outcomes after closed nasal reduction: Retrospective review and survey. Laryngoscope. 2019;129(8):1784-1790.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lary.27781",
+      "pmid": "30593703",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30593703/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of nasal bone fractures with a telephone survey after closed reduction; supports the outcome difference between patients with and without a septal fracture on CT. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.choi-2022-nasal-fracture-septal-deviation",
+      "cite": "Choi JH, Oh HM, Hwang JH, Kim KS, Lee SY. Do closed reduction and fracture patterns of the nasal bone affect nasal septum deviation? Arch Craniofac Surg. 2022;23(3):119-124.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.7181/acfs.2022.00661",
+      "pmid": "35811343",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35811343/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of 116 patients with isolated nasal bone fractures; supports the effect of closed reduction on septal deviation measured on CT. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.alafaleq-2019-medial-wall-fracture",
+      "cite": "Alafaleq M, Roul-Yvonnet F, Schouman T, Goudot P. A retrospective study of pure medial orbital wall fracture management. J Fr Ophtalmol. 2019;42(6):592-596.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.jfo.2019.01.003",
+      "pmid": "31088740",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31088740/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective study of 60 patients with isolated medial orbital wall fractures; supports presentation and conservative management. One percentage in the abstract is internally inconsistent and is not used. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.iinuma-1991-medial-wall-fracture",
+      "cite": "Iinuma T, Hirota Y, Kase Y, et al. [Isolated medial orbital wall fracture and late fronto-ethmoidal mucocele]. Nihon Jibiinkoka Gakkai Kaiho. 1991;94(12):1816-25.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.3950/jibiinkoka.94.12_1816",
+      "pmid": "1779265",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1779265/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Japanese-language abstract (truncated in PubMed) of 21 isolated medial orbital wall fractures on coronal CT, with two late fronto-ethmoidal mucoceles; supports ethmoid prolapse and late mucocele. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kim-2020-endoscopic-medial-wall",
+      "cite": "Kim T, Kim BK. Endoscopic slide-in orbital wall reconstruction for isolated medial blowout fractures. Arch Craniofac Surg. 2020;21(6):345-350.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.7181/acfs.2020.00605",
+      "pmid": "33663142",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33663142/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective comparison of endoscopic and transcaruncular repair in 40 patients with isolated medial orbital blowout fractures; supports the endoscopic repair route. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.wang-2021-zmc-fracture",
+      "cite": "Wang HD, Dillon J. Contemporary Management of Zygomaticomaxillary Complex Fractures. Semin Plast Surg. 2021;35(4):256-262.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1055/s-0041-1735812",
+      "pmid": "34819807",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34819807/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of ZMC fracture evaluation and management; supports the orbital-volume rationale for accurate zygoma reduction and the role of internal orbital reconstruction. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mehta-2025-zmc-infraorbital-nerve",
+      "cite": "Mehta UB, Londhe U, Bhate K, Bafna M, Pande S, Shetty L. Evaluating infra-orbital nerve injury in zygomaticomaxillary complex fractures: a systematic review and meta-analysis. Front Oral Health. 2025;6:1726808.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3389/froh.2025.1726808",
+      "pmid": "41424658",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41424658/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of infraorbital nerve injury in ZMC fractures (11 trials, 802 patients pooled); supports the pooled incidence and the early-decompression comparison. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.billing-2004-posttraumatic-mucocele",
+      "cite": "Billing KJ, Davis G, Selva D, Wilscek G, Mitchell R. Post-traumatic maxillary sinus mucocele. Ophthalmic Surg Lasers Imaging. 2004;35(2):152-5.",
+      "type": "review",
+      "verified": false,
+      "pmid": "15088827",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15088827/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two cases of post-traumatic maxillary sinus mucocele; supports only that maxillary mucocele can be a late complication of facial fracture even with a normal ostium. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.iwasaki-2026-zmc-mucocele",
+      "cite": "Iwasaki K, Takamura N, Sato A, et al. Maxillary Sinus Mucocele following Zygomaticomaxillary Complex Fracture Repair. Plast Reconstr Surg Glob Open. 2026;14(6):e7861.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/GOX.0000000000007861",
+      "pmid": "42325490",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42325490/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report of a maxillary sinus cyst 28 years after ZMC fracture repair; supports only the mechanism and combined approach described for that case. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.laine-1993-maxillofacial-trauma-radiology",
+      "cite": "Laine FJ, Conway WF, Laskin DM. Radiology of maxillofacial trauma. Curr Probl Diagn Radiol. 1993;22(4):145-88.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/0363-0188(93)90019-p",
+      "pmid": "8359033",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8359033/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Abstract (truncated in PubMed at 400 words) of a radiology review of maxillofacial trauma; supports the strut classification of facial fractures and the orbit being involved in almost every form. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.nishiguchi-2007-organized-hematoma",
+      "cite": "Nishiguchi T, Nakamura A, Mochizuki K, Tokuhara Y, Yamane H, Inoue Y. Expansile organized maxillary sinus hematoma: MR and CT findings and review of literature. AJNR Am J Neuroradiol. 2007;28(7):1375-7.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3174/ajnr.A0629",
+      "pmid": "17698545",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17698545/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two cases of expansile organized maxillary sinus hematoma with literature review; supports the definition of organized hematoma and that the pathogenesis is still uncertain. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.berlucchi-2021-posterior-septal-abscess",
+      "cite": "Berlucchi M, Tomasoni M, Bosio R, Rampinelli V. Spontaneous Abscess of the Posterior Nasal Septum: An Unusual Cause of Nasal Obstruction in Children. Ann Otol Rhinol Laryngol. 2021;130(8):966-969.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1177/0003489420987974",
+      "pmid": "33423503",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33423503/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report of spontaneous posterior septal abscess in a child; supports that septal abscess is mostly traumatic or secondary to infection, the endoscopy advice for non-traumatic cases and the listed intracranial complications. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.abd-rahim-2024-spontaneous-septal-abscess",
+      "cite": "Abd Rahim NN, Thong HK, Sabir Husin Athar PP. Spontaneous Nasal Septal Abscess: A Case Report. Cureus. 2024;16(4):e58007.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.7759/cureus.58007",
+      "pmid": "38738033",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38738033/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report of spontaneous septal abscess in an adult; supports that abscess is typically secondary to septal hematoma but can be idiopathic. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.buchanan-2026-npdc-106",
+      "cite": "Buchanan A, Charmelo S, Namazi F, et al. Nasopalatine duct cysts, case series of 106 cases with radiographic presentation and review of the literature. Oral Surg Oral Med Oral Pathol Oral Radiol. 2026;142(4):648-663.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.oooo.2026.04.023",
+      "pmid": "42288418",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42288418/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case series of 106 nasopalatine duct cysts from biopsy specimens, imaging features described in ten; supports the statement that the cysts are non-aggressive and slow growing and the size distribution. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.depaiva-2025-hmsc-sr",
+      "cite": "de Paiva JPG, Roldán DG, de Oliveira Vasconcelos RA, et al. Clinicopathological Profile of HPV-related Multiphenotypic Sinonasal Carcinoma: A Systematic Review. Head Neck Pathol. 2025;19(1):94.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s12105-025-01830-x",
+      "pmid": "40728682",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40728682/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 101 HPV-related multiphenotypic sinonasal carcinoma cases (32 studies); supports site, age, morphology, p16, HPV 33 prevalence and the favourable-outcome statements. Full text not available through the BioC service, so numbers beyond the abstract are not used. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.depaiva-2026-hmsc-52",
+      "cite": "Gonçalves de Paiva JP, Carrinho Ayroza Rangel AL, Epaminondas Silva de Araújo J, et al. Expanding HPV-Related Multiphenotypic Sinonasal Carcinoma Morphologic and Genotyping Profile: A Clinicopathological Study of 52 Latin American Cases. Am J Surg Pathol. 2026;50(6):629-641.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/PAS.0000000000002526",
+      "pmid": "42124445",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42124445/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 52 Latin American HMSC cases; supports the recurrence fraction, Ki-67, HPV genotype counts and 5-year survival figures quoted from the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.baba-2022-hmsc-radiology",
+      "cite": "Baba A, Kurokawa R, Fukuda T, et al. Radiological features of human papillomavirus-related multiphenotypic sinonasal carcinoma: systematic review and case series. Neuroradiology. 2022;64(10):2049-2058.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00234-022-03009-5",
+      "pmid": "35833947",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35833947/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review plus institutional case series (12 cases with CT and/or MRI); supports the CT and MRI features, sites and extension quoted. Small denominators (CT n=2, T2 n=5, T1 contrast n=8). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.bishop-2018-hmsc",
+      "cite": "Bishop JA, Westra WH. Human papillomavirus-related multiphenotypic sinonasal carcinoma: An emerging tumor type with a unique microscopic appearance and a paradoxical clinical behaviour. Oral Oncol. 2018;87:17-20.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.oraloncology.2018.10.011",
+      "pmid": "30527234",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30527234/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Narrative review of HPV-related multiphenotypic sinonasal carcinoma; supports the mixed salivary-type and squamous differentiation, the paradoxical behaviour and the distinction from adenoid cystic and squamous cell carcinoma. Carries no numbers. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.agarwal-2023-who-sinonasal-imaging",
+      "cite": "Agarwal A, Bhatt AA, Bathla G, et al. Update from the 5th Edition of the WHO Classification of Nasal, Paranasal, and Skull Base Tumors: Imaging Overview with Histopathologic and Genetic Correlation. AJNR Am J Neuroradiol. 2023;44(10):1116-1125.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3174/ajnr.A7960",
+      "pmid": "37591773",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37591773/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Imaging review of the 5th-edition WHO sinonasal and skull base chapter; supports only that SWI/SNF complex-deficient sinonasal carcinomas and HPV-related multiphenotypic sinonasal carcinoma are the two new entities. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kakkar-2022-smarca4",
+      "cite": "Kakkar A, Ashraf SF, Rathor A, et al. SMARCA4/BRG1-Deficient Sinonasal Carcinoma. Arch Pathol Lab Med. 2022;146(9):1122-1130.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.5858/arpa.2021-0001-OA",
+      "pmid": "34871352",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34871352/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Institutional cohort: 12 SMARCA4-deficient carcinomas among 299 poorly differentiated or undifferentiated sinonasal tumours; supports the frequency, morphology, immunophenotype and aggressive behaviour quoted. Outcome denominator is 7 patients with follow-up. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.agaimy-2023-swi-snf",
+      "cite": "Agaimy A. SWI/SNF-deficient Sinonasal Carcinomas. Adv Anat Pathol. 2023;30(2):95-103.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/PAP.0000000000000372",
+      "pmid": "36580412",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36580412/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of SWI/SNF-deficient sinonasal carcinomas; supports the definition of SMARCA4-deficient undifferentiated carcinoma and the SMARCA4-deficient subset of teratocarcinosarcoma. The approximate 80% figure for teratocarcinosarcoma is the review's statement. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.qiu-2026-swi-snf-17",
+      "cite": "Qiu Z, Surita A, Wang X, Qian Y, Zhu Z, Lv W. SWI/SNF-Deficient Sinonasal Carcinomas: A Retrospective Case Series of 17 Patients from a Single Institution. J Clin Med. 2026;15(8):2939.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3390/jcm15082939",
+      "pmid": "42074742",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42074742/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-institution series of 17 SWI/SNF-deficient sinonasal carcinomas (10 SMARCB1-deficient, 6 SMARCA4-deficient, 1 teratocarcinosarcoma); supports presentation of SMARCA4-deficient carcinoma and the pooled stage and skull base/orbital involvement. Stage and involvement counts are for all 17, not for the SMARCA4 subset. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.farkas-2026-smarca4-hn",
+      "cite": "Farkas M, Agaimy A, Švajdler M, et al. SMARCA4-deficient carcinoma of the head and neck region: report of 8 new sinonasal and non-sinonasal cases and literature review. Virchows Arch. 2026;488(5):1021-1037.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00428-026-04459-5",
+      "pmid": "41803273",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41803273/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Eight head and neck SMARCA4-deficient carcinomas (four sinonasal) with literature review; supports that sinonasal cases can mimic olfactory neuroblastoma, that the sinonasal tract is a hot-spot, and aggressive behaviour at advanced stage. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sciacca-2025-itac-non-itac",
+      "cite": "Sciacca M, Chillari F, Pergolizzi S, et al. ITAC and Non-ITAC Sinonasal Adenocarcinoma: Classification, Etiopathogenesis, Diagnosis and Therapy Focusing on Interdisciplinarity. Medicina (Kaunas). 2025;61(11):1895.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3390/medicina61111895",
+      "pmid": "41303732",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41303732/",
+      "note": "PMC full text (PMC12654441), read 2026-10-07. Review of intestinal-type and non-intestinal-type sinonasal adenocarcinoma; supports the WHO 5th-edition grouping, non-ITAC as a heterogeneous exclusion category, low- versus high-grade behaviour, immunoprofile, imaging statements (including that no distinctive imaging separates ITAC from non-ITAC) and surgical principles. Statements apply to sinonasal adenocarcinoma generally unless stated. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.arcovito-2024-sinonasal-adenocarcinoma",
+      "cite": "Arcovito G, Franchi A. Sinonasal Adenocarcinomas: An Update. Surg Pathol Clin. 2024;17(4):653-666.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.path.2024.07.005",
+      "pmid": "39489555",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39489555/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Update on sinonasal adenocarcinomas; supports that non-ITACs show neither intestinal nor salivary differentiation and are a diagnosis of exclusion without a proper histopathological and molecular definition. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.skalova-2024-smarcb1-adenocarcinoma",
+      "cite": "Skálová A, Taheri T, Bradová M, et al. SMARCB1-deficient sinonasal adenocarcinoma: a rare variant of SWI/SNF-deficient malignancy often misclassified as high-grade non-intestinal-type sinonasal adenocarcinoma or myoepithelial carcinoma. Virchows Arch. 2024;485(2):245-256.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00428-023-03650-2",
+      "pmid": "38085333",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38085333/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 14 SMARCB1-deficient sinonasal adenocarcinomas retrieved from over 200 high-grade epithelial sinonasal malignancies; supports that this entity is often first diagnosed as high-grade non-intestinal-type adenocarcinoma and behaves aggressively (follow-up on 8 patients only). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.turri-zanoni-2022-bsns",
+      "cite": "Turri-Zanoni M, Dalfino G, Lechner M, et al. Biphenotypic sinonasal sarcoma: European multicentre case-series and systematic literature review. Acta Otorhinolaryngol Ital. 2022;42(6):545-553.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.14639/0392-100X-N2087",
+      "pmid": "36654521",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36654521/",
+      "note": "PMC full text (PMC9853106), read 2026-10-07. European multicentre series of 15 biphenotypic sinonasal sarcomas treated endoscopically, with a literature review; supports presentation, surgical extent (including transnasal craniectomy and multilayer reconstruction), margins, adjuvant radiotherapy and survival quoted. Follow-up is short (mean 27.3 months). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.miglani-2019-bss-imaging",
+      "cite": "Miglani A, Lal D, Weindling SM, Wood CP, Hoxworth JM. Imaging characteristics and clinical outcomes of biphenotypic sinonasal sarcoma. Laryngoscope Investig Otolaryngol. 2019;4(5):484-488.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lio2.305",
+      "pmid": "31637290",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31637290/",
+      "note": "PMC full text (PMC6793931), read 2026-10-07. Five surgically treated biphenotypic sinonasal sarcomas with CT and MRI review; supports the imaging pattern (unilateral nasoethmoidal, hyperostosis, T2 isointense to grey matter) and recurrence in 2 of 5. Very small series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.leloarer-2019-bsns-41",
+      "cite": "Le Loarer F, Laffont S, Lesluyes T, et al. Clinicopathologic and Molecular Features of a Series of 41 Biphenotypic Sinonasal Sarcomas Expanding Their Molecular Spectrum. Am J Surg Pathol. 2019;43(6):747-754.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/PAS.0000000000001238",
+      "pmid": "30829729",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30829729/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 41 biphenotypic sinonasal sarcomas with clinicopathologic and molecular description; supports the sex and age distribution, recurrence fraction, immunophenotype and PAX3 fusion findings quoted. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.baric-2022-pcm-meta",
+      "cite": "Barić H, Trkulja V, Peterković V, Mrak G. Mortality and morbidity in surgically treated patients with petroclival meningiomas: a systematic review and meta-analysis of case series. Br J Neurosurg. 2022;36(4):501-10.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1080/02688697.2022.2033700",
+      "pmid": "35109722",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35109722/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Random-effects meta-analysis of 73 case series (3553 patients) of surgically treated petroclival meningiomas; supports pooled mortality, recurrence and cranial nerve deficit figures by approach. The series are predominantly transcranial; it says nothing about the endonasal route. Reporting quality varies. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.wagner-2022-pcm-64",
+      "cite": "Wagner A, Alraun M, Kahlig V, et al. Surgical and Functional Outcome after Resection of 64 Petroclival Meningiomas. Cancers (Basel). 2022;14(18):4517.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3390/cancers14184517",
+      "pmid": "36139677",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36139677/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 64 consecutive resected petroclival meningiomas at one centre; supports cavernous sinus infiltration, brainstem involvement, preoperative cranial nerve palsy, GTR in tumours without cavernous infiltration and the functional-resection principle. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pirayesh-2016-pcm-mri",
+      "cite": "Pirayesh A, Petrakakis I, Raab P, Polemikos M, Krauss JK, Nakamura M. Petroclival meningiomas: Magnetic resonance imaging factors predict tumor resectability and clinical outcome. Clin Neurol Neurosurg. 2016;147:90-7.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.clineuro.2016.06.002",
+      "pmid": "27315034",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27315034/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 18 surgically treated petroclival meningiomas; supports the MRI features (arachnoid plane, margin toward the brainstem, brainstem edema, T2 intensity) that predicted resectability and morbidity. Very small series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.shkarubo-2025-clival-meningioma-eea",
+      "cite": "Shkarubo AN, Chernov IV, Veselkov AA, Andreev DN, Bykanov AA, Panteleyev AA. Endoscopic transnasal resection of clival meningiomas. Analysis of surgical outcomes in 20 patients and literature review. Neurosurg Rev. 2025;48(1):702.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s10143-025-03795-5",
+      "pmid": "41085751",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41085751/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 20 clival and petroclival meningiomas resected by the endoscopic transsphenoidal transclival approach; supports the extent-of-resection counts and the statement that the route is an additional option beside transcranial approaches. Extent categories are the authors'. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ribeiro-2026-csm-natural-history",
+      "cite": "Ribeiro PC, Ramos R, Plácido A, et al. Cavernous sinus meningiomas: A retrospective study of natural history, growth dynamics, and treatment response over two decades. Surg Neurol Int. 2026;17:109.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.25259/SNI_1063_2025",
+      "pmid": "41783193",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41783193/",
+      "note": "PMC full text (PMC12954251), read 2026-10-07. 38 cavernous sinus meningiomas followed at one centre; supports presentation, growth rates, MRI characteristics (T2 signal, enhancement, extension) and the conservative-management finding. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.martinez-perez-2021-csm-srs",
+      "cite": "Martinez-Perez R, Florez-Perdomo W, Freeman L, Ung TH, Youssef AS. Long-term disease control and treatment outcomes of stereotactic radiosurgery in cavernous sinus meningiomas. J Neurooncol. 2021;152(3):439-449.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s11060-021-03732-8",
+      "pmid": "33772678",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33772678/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Pooled long-term SRS outcomes for cavernous sinus meningiomas (7 studies, 645 patients, median follow-up 74 months); supports progression-free survival and cranial nerve outcomes. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.leroy-2018-csm-rs-frt",
+      "cite": "Leroy HA, Tuleasca C, Reyns N, Levivier M. Radiosurgery and fractionated radiotherapy for cavernous sinus meningioma: a systematic review and meta-analysis. Acta Neurochir (Wien). 2018;160(12):2367-2378.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s00701-018-3711-9",
+      "pmid": "30393820",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30393820/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of radiosurgery and fractionated radiotherapy for cavernous sinus meningioma (36 studies, 2817 patients); supports 5-year progression-free survival by modality and the adverse-effect ranges. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zhang-2019-transcavernous-eea",
+      "cite": "Zhang Q, Wang Z, Guo H, et al. Direct Transcavernous Sinus Approach for Endoscopic Endonasal Resection of Intracavernous Sinus Tumors. World Neurosurg. 2019;128:e478-e487.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.wneu.2019.04.182",
+      "pmid": "31048053",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31048053/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 14 intracavernous tumours (8 pituitary adenomas, 3 meningiomas, 2 squamous cell carcinomas, 1 chondrosarcoma) resected by the endoscopic endonasal transcavernous route through the anterior wall; supports only the mixed-series figures. No meningioma-specific result is given in the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.agosti-2023-som-sr",
+      "cite": "Agosti E, Zeppieri M, De Maria L, et al. Surgical Treatment of Spheno-Orbital Meningiomas: A Systematic Review and Meta-Analysis of Surgical Techniques and Outcomes. J Clin Med. 2023;12(18):5840.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3390/jcm12185840",
+      "pmid": "37762781",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37762781/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Also read in PMC full text (PMC10531637), results and discussion. Systematic review and meta-analysis of 59 studies (1903 patients) on surgery for spheno-orbital meningioma; supports pooled GTR, recurrence, PFS, visual and proptosis outcomes, complications and the comparison of approaches. The abstract attributes the 23.5% GTR figure to endoscopic transorbital approaches whereas the full-text table gives 41.3% for ETOA and 23.5% for ETOA combined with EEA; that figure is therefore not used. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.couldwell-2026-som-grading",
+      "cite": "Couldwell WT, Nassiri F, Rawanduzy C, Cole K, Jha AK. Resectability of spheno-orbital meningiomas: surgical outcome in 93 cases and a proposed clinically relevant anatomical classification. J Neurosurg. 2026;144(2):336-345.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3171/2025.7.JNS242730",
+      "pmid": "41172370",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41172370/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 93 surgically treated spheno-orbital meningiomas with a proposed imaging-based orbital grading (1 to 4); supports the grade definitions, presenting features and grade-wise GTR and vision outcomes. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.porto-2025-som-recurrence",
+      "cite": "Porto E, Carone G, Fiore G, et al. Spheno-orbital meningiomas: predictors of recurrence and novel strategies for surgical management. J Neurosurg. 2025;143(2):365-374.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3171/2025.1.JNS241846",
+      "pmid": "40315600",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40315600/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 89 surgically treated spheno-orbital meningiomas at one centre; supports the sex ratio, recurrence rate and the finding that residual soft (not bony) tumour portion drives recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.porto-2025-ts-meta",
+      "cite": "Porto E, Fiore G, Casali C, et al. Evolution of Surgical Approaches for Trigeminal Schwannomas: A Meta-Regression Analysis from Past to Present. J Clin Med. 2025;14(13):4488.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3390/jcm14134488",
+      "pmid": "40648863",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40648863/",
+      "note": "PMC full text (PMC12249520), read 2026-10-07. Systematic review and meta-regression of surgical approaches to trigeminal schwannoma (15 studies, 583 surgeries); supports the Samii classification, its distribution, approach choice by type, pooled GTR, symptom improvement and complication rates. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pan-2025-ts-eea-tca",
+      "cite": "Pan LS, Xing SZ, Li SF, et al. Endoscopic endonasal versus transcranial approaches for trigeminal schwannomas: choosing the optimal surgical corridor based on tumour traits. Rhinology. 2025;63(6):725-735.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4193/Rhin25.245",
+      "pmid": "40853360",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40853360/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 101 trigeminal schwannomas (44 endoscopic endonasal, 57 transcranial) at one centre, stratified by Samii type; supports the comparative outcomes by type. Retrospective, non-randomised. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.yilmaz-2025-extracranial-ts-eea",
+      "cite": "Yilmaz E, Emengen A, Uzuner A, et al. Purely endoscopic endonasal resection of extracranial trigeminal schwannomas: a descriptive systematic review and institutional case series. J Clin Neurosci. 2025;141:111573.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.jocn.2025.111573",
+      "pmid": "40840179",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40840179/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Descriptive systematic review of purely endoscopic endonasal resection of extracranial trigeminal schwannoma (52 patients including 2 institutional cases); supports presentation, size, GTR and the caveat for middle or posterior fossa extension. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.stock-2024-gct-ppbs",
+      "cite": "Stock A, Calaminus G, Weisthoff M, et al. Imaging in malignant germ cell tumors involving the hypothalamo-neurohypophyseal axis: the evaluation of the posterior pituitary bright spot is essential. Neuroradiology. 2024;66(8):1405-1416.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00234-024-03384-1",
+      "pmid": "38844695",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38844695/",
+      "note": "PMC full text (PMC11246258), read 2026-10-07. Multicentre MRI study of 102 suprasellar and bifocal malignant germ cell tumours (67 suprasellar; 47 of them germinomas); supports MRI findings (posterior pituitary bright spot loss, stalk and posterior lobe involvement, clival cortical destruction), presentation, delay to treatment and the differential statements in its discussion. Population is mostly children and young adults. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zhou-2025-germinoma-meta",
+      "cite": "Zhou Z, Liu J, Yue Q, et al. Optimal treatment approach for intracranial germinoma: a systematic review and meta-analysis. BMC Cancer. 2025;25(1):26.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1186/s12885-024-13323-1",
+      "pmid": "39773126",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39773126/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of treatment of intracranial germinoma (37 studies); supports that treatment is biopsy or resection followed by radiotherapy with or without chemotherapy, similar prognosis across extents of resection, and the radiotherapy-field findings. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kremenevski-2023-germinoma",
+      "cite": "Kremenevski N, Buchfelder M, Hore N. Intracranial Germinomas: Diagnosis, Pathogenesis, Clinical Presentation, and Management. Curr Oncol Rep. 2023;25(7):765-775.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s11912-023-01416-2",
+      "pmid": "37036624",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37036624/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of intracranial germinoma; supports only that germinomas respond well to radiotherapy, chemotherapy or both with very high cure rates, and that early discrimination from other neoplasms matters. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.galluzzi-2025-temporal-bone-histiocytosis",
+      "cite": "Galluzzi F, Garavello W. Temporal bone histiocytosis in children: a systematic review. Int J Pediatr Otorhinolaryngol. 2025;195:112436.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2025.112436",
+      "pmid": "40561874",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40561874/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of temporal bone histiocytosis in children (8 retrospective studies, 84 subjects); supports the CT pattern, subsites, bilaterality, pituitary involvement and recurrence rate. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zhang-2026-lch-ent-meta",
+      "cite": "Zhang K, Dweydari M, Alshaikh A, et al. Common Otolaryngologic Clinical Manifestations and Symptoms of Langerhans Cell Histiocytosis and Evaluation of Treatment Regimens in Pediatric Patients: A Systematic Review and Meta-Analysis. Int J Pediatr Otorhinolaryngol. 2026;206:112875.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2026.112875",
+      "pmid": "42214999",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42214999/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of otolaryngologic manifestations of paediatric LCH (20 studies, 885 patients); supports the frequency of skull and otologic involvement, otorrhea, remission, recurrence and mortality figures. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.alwan-2026-lch-ent",
+      "cite": "Alwan M, Nguyen HM, Levi E. Otolaryngological manifestations of paediatric Langerhans cell histiocytosis: a systematic literature review and statewide case series. J Laryngol Otol. 2026;140(5):485-494.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/S0022215126104514",
+      "pmid": "41736288",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41736288/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Literature review of 73 studies (244 paediatric patients) plus a 25-patient institutional series on head and neck LCH; supports only that otologic and craniofacial bone involvement were the most common presentations and that recurrence was more common in multifocal and multisystem disease. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.goyal-2022-lch-adults",
+      "cite": "Goyal G, Tazi A, Go RS, et al. International expert consensus recommendations for the diagnosis and treatment of Langerhans cell histiocytosis in adults. Blood. 2022;139(17):2601-2621.",
+      "type": "consensus",
+      "verified": false,
+      "doi": "10.1182/blood.2021014343",
+      "pmid": "35271698",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35271698/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). International expert consensus for adult LCH; supports the neoplasm classification, local therapy for unifocal disease, FDG-PET staging and systemic options. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.modest-2016-temporal-bone-lch",
+      "cite": "Modest MC, Garcia JJ, Arndt CS, Carlson ML. Langerhans cell histiocytosis of the temporal bone: A review of 29 cases at a single center. Laryngoscope. 2016;126(8):1899-904.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lary.25773",
+      "pmid": "26535795",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26535795/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 29 temporal bones in 20 patients with LCH at one centre; supports presentation, bilaterality, intracranial spread and relapse rates. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.li-2024-sphenoid-lch",
+      "cite": "Li MS, Wu XL, Huang A, Wang H. Langerhans cell histiocytosis in sphenoid sinus with vision impairment: Case report and literature review. Sci Prog. 2024;107(3):368504241257129.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1177/00368504241257129",
+      "pmid": "39196602",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39196602/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report (child) of sphenoid sinus LCH impinging the optic canal with literature review; supports only that LCH can present as an isolated sphenoid sinus soft mass with vision loss. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.vaiani-2021-lch-hypothalamic",
+      "cite": "Vaiani E, Felizzia G, Lubieniecki F, Braier J, Belgorosky A. Paediatric Langerhans Cell Histiocytosis Disease: Long-Term Sequelae in the Hypothalamic Endocrine System. Horm Res Paediatr. 2021;94(1-2):9-17.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1159/000517040",
+      "pmid": "34167121",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34167121/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of hypothalamic-pituitary sequelae of paediatric LCH; supports the incidence range of central diabetes insipidus, its risk factors (including craniofacial bone lesions) and the germ cell tumour differential. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.long-2026-orbital-lch",
+      "cite": "Long P, Liu Y, Zhao Y, et al. Orbital Langerhans Cell Histiocytosis in Young Pediatric Patients: Two Case Reports and Literature Review. Pediatric Health Med Ther. 2026;17:565487.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.2147/PHMT.S565487",
+      "pmid": "41873372",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41873372/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two case reports (young children) of orbital LCH with literature review; supports only that focal orbital LCH is diagnostically challenging and was treated by subtotal resection with or without chemotherapy in two patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.yousefi-2022-opg-meta",
+      "cite": "Yousefi O, Azami P, Sabahi M, Dabecco R, Adada B, Borghei-Razavi H. Management of Optic Pathway Glioma: A Systematic Review and Meta-Analysis. Cancers (Basel). 2022;14(19):4781.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3390/cancers14194781",
+      "pmid": "36230704",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36230704/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of optic pathway glioma management; supports incidence share, pooled mortality and favourable-outcome rates by modality (no significant difference between modalities). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.albalkhi-2024-ophg-surgery",
+      "cite": "Albalkhi I, Shafqat A, Bin-Alamer O, et al. Complications and visual outcomes following surgical resection of pediatric optic pathway/hypothalamic gliomas: a systematic review and meta-analysis. Childs Nerv Syst. 2024;40(7):2033-2042.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s00381-024-06407-7",
+      "pmid": "38649470",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38649470/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of surgery for paediatric optic pathway and hypothalamic glioma (26 retrospective studies, 797 patients); supports GTR by location, visual outcomes, complications and progression. Heterogeneous retrospective data. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.taylor-2008-opg-mdc",
+      "cite": "Taylor T, Jaspan T, Milano G, et al. Radiological classification of optic pathway gliomas: experience of a modified functional classification system. Br J Radiol. 2008;81(970):761-6.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1259/bjr/65246351",
+      "pmid": "18796556",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18796556/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 72 children with optic pathway glioma from a clinical trial, classified on MRI by a modified Dodge classification; supports the site distribution by NF1 status. The classification's levels are not in the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.susam-sen-2026-optic-glioma",
+      "cite": "Susam Sen H, Varan A. Optic glioma in children: clinical presentation, diagnosis, and management. Expert Rev Anticancer Ther. 2026;26(10):1257-1267.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1080/14737140.2026.2672128",
+      "pmid": "42101910",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42101910/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Non-systematic review of optic glioma in children; supports only the general statements on tumour nature, treatment choice by location, age and NF1 status, and chemotherapy preference. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mccoy-2021-spoa",
+      "cite": "McCoy JL, Dixit R, Dohar JE, Tobey ABJ. Pediatric subperiosteal orbital abscess characterization and prediction of size, location, and management. Int J Pediatr Otorhinolaryngol. 2021;144:110693.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2021.110693",
+      "pmid": "33813099",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33813099/",
+      "note": "PMC full text (PMC8087643), read 2026-10-07. Retrospective review of 108 children with CT-diagnosed subperiosteal orbital abscess complicating sinusitis (one tertiary children's hospital, 2002-2016); supports the ROC-derived volume cut-off, its sensitivity and specificity, and how volume was computed (product of the three CT dimensions, not an ellipsoid)."
+    },
+    {
+      "id": "src.todman-2011-spa-volume",
+      "cite": "Todman MS, Enzer YR. Medical management versus surgical intervention of pediatric orbital cellulitis: the importance of subperiosteal abscess volume as a new criterion. Ophthalmic Plast Reconstr Surg. 2011;27(4):255-9.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/IOP.0b013e3182082b17",
+      "pmid": "21415801",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21415801/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of 29 children with subperiosteal abscess; supports the 1,250 mm3 volume below which no surgery was needed. The PubMed text prints the unit as 'mm' (superscript lost); the unit is read as mm3."
+    },
+    {
+      "id": "src.tabarino-2015-spoa-volume",
+      "cite": "Tabarino F, Elmaleh-Bergès M, Quesnel S, Lorrot M, Van Den Abbeele T, Teissier N. Subperiosteal orbital abscess: volumetric criteria for surgical drainage. Int J Pediatr Otorhinolaryngol. 2015;79(2):131-5.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2014.11.021",
+      "pmid": "25529362",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25529362/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective monocentric study, 32 children with subperiosteal orbital abscess among 83 with orbital cellulitis; volume from a spheroid model; supports the 500 mm3 and 5%-of-orbital-volume observations."
+    },
+    {
+      "id": "src.ryan-2009-orbital-cellulitis",
+      "cite": "Ryan JT, Preciado DA, Bauman N, Pena M, Bose S, Zalzal GH, et al. Management of pediatric orbital cellulitis in patients with radiographic findings of subperiosteal abscess. Otolaryngol Head Neck Surg. 2009;140(6):907-11.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.otohns.2009.02.014",
+      "pmid": "19467413",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19467413/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Chart review of 465 orbital cellulitis admissions with 68 subperiosteal abscesses; supports only that surgical patients had larger abscesses (>10 mm); the abstract does not say which dimension."
+    },
+    {
+      "id": "src.adil-2020-spa-meta",
+      "cite": "Adil EA, Muir ME, Kawai K, Dombrowski ND, Cunningham MJ. Pediatric Subperiosteal Abscess Secondary to Acute Sinusitis: A Systematic Review and Meta-analysis. Laryngoscope. 2020;130(12):2906-2912.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1002/lary.28570",
+      "pmid": "32065412",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32065412/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of pediatric subperiosteal abscess from acute sinusitis; supports the pooled risk ratio for surgery with abscess volume above each study's own threshold."
+    },
+    {
+      "id": "src.appachi-2020-spa-predictors",
+      "cite": "Appachi S, Bedwell JR. Predictors of surgical management for paediatric orbital subperiosteal abscesses. Curr Opin Otolaryngol Head Neck Surg. 2020;28(6):430-434.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/MOO.0000000000000668",
+      "pmid": "33027139",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33027139/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of predictors of surgery in pediatric orbital subperiosteal abscess; supports only that the volume cut-off differs between studies and that most data are retrospective case series."
+    },
+    {
+      "id": "src.wise-2009-afrs-ct",
+      "cite": "Wise SK, Rogers GA, Ghegan MD, Harvey RJ, Delgaudio JM, Schlosser RJ. Radiologic staging system for allergic fungal rhinosinusitis (AFRS). Otolaryngol Head Neck Surg. 2009;140(5):735-40.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1016/j.otohns.2008.12.053",
+      "pmid": "19393421",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19393421/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Proposes a CT bone-remodeling score for allergic fungal rhinosinusitis and scores 111 CT scans; the abstract gives the maximum points per sinus and the cohort scores but not which walls count toward each sinus."
+    },
+    {
+      "id": "src.philpott-2011-afrs",
+      "cite": "Philpott CM, Javer AR, Clark A. Allergic fungal rhinosinusitis - a new staging system. Rhinology. 2011;49(3):318-23.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.4193/Rhino10.121",
+      "pmid": "21858263",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21858263/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Describes the Philpott-Javer postoperative endoscopic score for allergic fungal rhinosinusitis (per-cavity mucosal grade 0-9 plus one point for mucin); the abstract does not define the individual grades."
+    },
+    {
+      "id": "src.okano-2022-meningioma-grades",
+      "cite": "Okano A, Miyawaki S, Teranishi Y, Ohara K, Hongo H, Sakai Y, et al. Advances in Molecular Biological and Translational Studies in World Health Organization Grades 2 and 3 Meningiomas: A Literature Review. Neurol Med Chir (Tokyo). 2022;62(8):347-360.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.2176/jns-nmc.2022-0114",
+      "pmid": "35871574",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35871574/",
+      "note": "PMC full text (PMC9464479), read 2026-10-07. Literature review of WHO grade 2 and 3 meningiomas; its Table 1 reproduces the 2021 WHO grading criteria (mitotic counts per 10 high-power fields of 0.16 mm2, brain invasion, subtypes, TERT promoter mutation, CDKN2A/B deletion) and supports the numeric criteria. The table lists rhabdoid and papillary subtypes under grade 3, which Torp 2022 and Wang 2024 contradict in text."
+    },
+    {
+      "id": "src.torp-2022-who-cns5-neurosurgeons",
+      "cite": "Torp SH, Solheim O, Skjulsvik AJ. The WHO 2021 Classification of Central Nervous System tumours: a practical update on what neurosurgeons need to know-a minireview. Acta Neurochir (Wien). 2022;164(9):2453-2464.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00701-022-05301-y",
+      "pmid": "35879477",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35879477/",
+      "note": "PMC full text (PMC9427889), read 2026-10-07. Minireview of the 2021 WHO classification for neurosurgeons; supports the meningioma grading text (chordoid and clear cell are grade 2, brain invasion is grade 2, rhabdoid and papillary no longer sufficient for grade 3, mitosis counts now per defined area, molecular testing not required when histology is definitive)."
+    },
+    {
+      "id": "src.wang-2024-icom-meningioma",
+      "cite": "Wang JZ, Landry AP, Raleigh DR, Sahm F, Walsh KM, Goldbrunner R, et al. Meningioma: International Consortium on Meningiomas consensus review on scientific advances and treatment paradigms for clinicians, researchers, and patients. Neuro Oncol. 2024;26(10):1742-1780.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1093/neuonc/noae082",
+      "pmid": "38695575",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38695575/",
+      "note": "PMC full text (PMC11449035), read 2026-10-07. International Consortium on Meningiomas consensus review; supports the molecular grade 3 criteria (TERT promoter hotspot mutation, homozygous CDKN2A/B loss), brain invasion alone as grade 2, the three-of-five atypia features, and that rhabdoid or papillary histology alone is insufficient for grade 3."
+    },
+    {
+      "id": "src.sahm-2025-cimpact8",
+      "cite": "Sahm F, Aldape KD, Brastianos PK, Brat DJ, Dahiya S, von Deimling A, et al. cIMPACT-NOW update 8: Clarifications on molecular risk parameters and recommendations for WHO grading of meningiomas. Neuro Oncol. 2025;27(2):319-330.",
+      "type": "consensus",
+      "verified": false,
+      "doi": "10.1093/neuonc/noae170",
+      "pmid": "39212325",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39212325/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). cIMPACT-NOW update 8 (not official WHO) on meningioma grading; supports only the stated clarifications and the proposal to assign grade 2 to grade 1 morphology with 1p plus 22q deletion and/or NF2 oncogenic variants."
+    },
+    {
+      "id": "src.pdq-paranasal-sinus-2024",
+      "cite": "PDQ Adult Treatment Editorial Board. Paranasal Sinus and Nasal Cavity Cancer Treatment (PDQ): Health Professional Version. In: PDQ Cancer Information Summaries [Internet]. Bethesda (MD): National Cancer Institute (US); 2002-.",
+      "type": "review",
+      "verified": false,
+      "pmid": "26389272",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26389272/",
+      "note": "NCI PDQ summary (health professional version, updated 2024-07-05), read 2026-10-07 from https://www.cancer.gov/types/head-and-neck/hp/adult/paranasal-sinus-treatment-pdq (the page reprints the AJCC 8th edition nasal cavity and paranasal sinus T, N and M tables with permission); supports the clinical N categories. The PubMed record is the PDQ summary; only the clinical N table is reproduced, not pathologic N."
+    },
+    {
+      "id": "src.lydiatt-2017-ajcc8-changes",
+      "cite": "Lydiatt WM, Patel SG, O'Sullivan B, Brandwein MS, Ridge JA, Migliacci JC, et al. Head and Neck cancers-major changes in the American Joint Committee on cancer eighth edition cancer staging manual. CA Cancer J Clin. 2017;67(2):122-137.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3322/caac.21389",
+      "pmid": "28128848",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28128848/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Summary of the major AJCC 8th edition head and neck changes; supports only that extranodal extension was added to the N category in all but viral-related cancers and mucosal melanoma."
+    },
+    {
+      "id": "src.yenigun-2016-ion",
+      "cite": "Yenigun A, Gun C, Uysal II, Nayman A. Radiological classification of the infraorbital canal and correlation with variants of neighboring structures. Eur Arch Otorhinolaryngol. 2016;273(1):139-44.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1007/s00405-015-3550-8",
+      "pmid": "25673024",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25673024/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 750 patients, axial and coronal CT; supports the three canal types in this scheme and the association of the most protruding type with maxillary sinus septa. The abstract does not say whether the percentages are per patient or per side."
+    },
+    {
+      "id": "src.acar-2018-ion",
+      "cite": "Açar G, Özen KE, Güler İ, Büyükmumcu M. Computed tomography evaluation of the morphometry and variations of the infraorbital canal relating to endoscopic surgery. Braz J Otorhinolaryngol. 2018;84(6):713-721.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1016/j.bjorl.2017.08.009",
+      "pmid": "28943288",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28943288/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 200 patients, multidetector CT; supports the four canal types (within the roof, partly protruding, within the sinus, zygomatic recess). The abstract does not say whether the percentages are per patient or per side."
+    },
+    {
+      "id": "src.orellana-donoso-2024-ioc",
+      "cite": "Orellana-Donoso M, Romero-Zucchino D, Fuentes-Abarca A, Aravena-Ríos P, Sanchis-Gimeno J, Konschake M, et al. Infraorbital canal variants and its clinical and surgical implications. A systematic review. Surg Radiol Anat. 2024;46(7):1027-1046.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s00276-024-03348-3",
+      "pmid": "38684553",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38684553/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of infraorbital canal variants (random-effects pooled prevalence); supports the statement that published schemes differ in number of types and numbering."
+    },
+    {
+      "id": "src.chandler-1984-jna",
+      "cite": "Chandler JR, Goulding R, Moskowitz L, Quencer RM. Nasopharyngeal angiofibromas: staging and management. Ann Otol Rhinol Laryngol. 1984;93(4 Pt 1):322-9.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1177/000348948409300408",
+      "pmid": "6087710",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6087710/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Proposes the Miami staging of nasopharyngeal angiofibroma from clinical evaluation and CT (23 patients); the abstract gives all four stage definitions and the original treatment recommendation per stage."
+    },
+    {
+      "id": "src.fisch-1983-jna",
+      "cite": "Fisch U. The infratemporal fossa approach for nasopharyngeal tumors. Laryngoscope. 1983;93(1):36-44.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1288/00005537-198301000-00007",
+      "pmid": "6185810",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6185810/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Presents the infratemporal fossa approach and a classification of juvenile nasopharyngeal angiofibroma; the abstract does not list the stage criteria, which were read from Oliveira 2012 (src.oliveira-2012-jna), so only the stage-by-surgery statements are cited to this record."
+    },
+    {
+      "id": "src.oliveira-2012-jna",
+      "cite": "Oliveira JA, Tavares MG, Aguiar CV, Azevedo JF, Sousa JR, Almeida PC, et al. Comparison between endoscopic and open surgery in 37 patients with nasopharyngeal angiofibroma. Braz J Otorhinolaryngol. 2012;78(1):75-80.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1590/s1808-86942012000100012",
+      "pmid": "22392242",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22392242/",
+      "note": "PMC full text (PMC9444542), read 2026-10-07. 37 patients with nasopharyngeal angiofibroma, endoscopic versus open surgery; its Methods reproduce the Fisch stages I-IV, which supports the stage criteria."
+    },
+    {
+      "id": "src.onerci-2006-jna",
+      "cite": "Onerci M, Oğretmenoğlu O, Yücel T. Juvenile nasopharyngeal angiofibroma: a revised staging system. Rhinology. 2006;44(1):39-45.",
+      "type": "classification",
+      "verified": false,
+      "pmid": "16550949",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16550949/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of 36 patients proposing a revised staging system; the abstract reports recurrence-site data but does not list the four stages, which were read from Alimli 2016 (src.alimli-2016-jna-mri). The abstract gives two different counts for pterygoid process base involvement in persistent disease (9 of 12 and 10 of 12)."
+    },
+    {
+      "id": "src.alimli-2016-jna-mri",
+      "cite": "Alimli AG, Ucar M, Oztunali C, Akkan K, Boyunaga O, Damar C, et al. Juvenile Nasopharyngeal Angiofibroma: Magnetic Resonance Imaging Findings. J Belg Soc Radiol. 2016;100(1):63.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.5334/jbr-btr.1090",
+      "pmid": "30038985",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30038985/",
+      "note": "PMC full text (PMC5854277), read 2026-10-07. MRI findings in a small series of juvenile nasopharyngeal angiofibroma staged with the Radkowski and Onerci systems; its Table 4 reproduces both systems' stage wording and supports the Onerci criteria."
+    },
+    {
+      "id": "src.liu-2009-petrosphenoidal-petrolingual",
+      "cite": "Liu XD, Xu QW, Che XM, Mao RL. Anatomy of the petrosphenoidal and petrolingual ligaments at the petrous apex. Clin Anat. 2009;22(3):302-6.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/ca.20771",
+      "pmid": "19173250",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19173250/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Surgical-microscope dissection of 10 specimens from five formalin-fixed adult cadaveric heads. Supports the course of the petrolingual ligament (petrous apex to the lingula), its relation to the lacerum segment of the ICA and to Meckel's cave, and its use as a landmark."
+    },
+    {
+      "id": "src.leonel-2022-lingual-process",
+      "cite": "Leonel LCPC, Rezende NC, Alexander AY, Agosti E, Rush D, Kenning TJ, et al. The Lingual Process of the Sphenoid Bone and the Petrolingual Ligament: Surgical Anatomy, Landmarks, and Clinical Relevance. Oper Neurosurg. 2022;23(6):e360-e368.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1227/ons.0000000000000407",
+      "pmid": "36227193",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36227193/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 72 dry-skull sides and 20 embalmed sides. Supports the petrolingual ligament's role between the ICA and the inferior Meckel's cave, its reported length and height, and the lingual-process variants; the abstract does not say which specimens the ligament measurements come from."
+    },
+    {
+      "id": "src.xie-2026-inferior-petrolingual",
+      "cite": "Xie T, Xie Q, Zhang X, Chen P, Liu S, Hu F, et al. The \"Inferior\" Petrolingual Ligament for Endoscopic Endonasal \"Lateral\" Transpetrosal Approach. Head Neck. 2026;48(4):994-1002.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/hed.70094",
+      "pmid": "41268655",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41268655/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Endoscopic endonasal transpterygoid dissections on nine formalin-fixed cadaveric heads (18 sides) plus one illustrative case. Supports the description of a further, 'inferior' petrolingual ligament and its use for lateral petrous apex access; a single-centre description that other series have not yet confirmed."
+    },
+    {
+      "id": "src.touska-2019-skull-base-ligaments",
+      "cite": "Touska P, Hasso S, Oztek A, Chinaka F, Connor SEJ. Skull base ligamentous mineralisation: evaluation using computed tomography and a review of the clinical relevance. Insights Imaging. 2019;10(1):55.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1186/s13244-019-0740-8",
+      "pmid": "31115710",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31115710/",
+      "note": "PMC full text (PMC6529485), read 2026-10-07. Retrospective review of 240 paranasal-sinus CT studies (ages 6-80, equal numbers per age group, UK) plus a limited systematic review. Its Table 1 gives each ligament's course, Table 2 the proportion mineralised, Table 4 the foramen size; supports ligament definitions, CT identification and clinical relevance. Prevalences are per patient (any degree of mineralisation), not per side, and come from an age-stratified sample, not from a population."
+    },
+    {
+      "id": "src.piagkou-2023-sphenoid-ligaments",
+      "cite": "Piagkou M, Fiska A, Tsakotos G, Triantafyllou G, Politis C, Koutserimpas C, et al. A morphological study on the sphenoid bone ligaments' ossification pattern. Surg Radiol Anat. 2023;45(11):1405-1417.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1007/s00276-023-03226-4",
+      "pmid": "37550483",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37550483/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 156 Greek adult dried skulls; reports ossification of the caroticoclinoid and the anterior and posterior interclinoid ligaments as separate entries. Dry-skull ossification rates are not comparable with CT mineralisation rates per patient."
+    },
+    {
+      "id": "src.zhao-2021-carotico-clinoid-foramen",
+      "cite": "Zhao X, Labib MA, Avci E, Preul MC, Baskaya MK, Little AS, et al. Navigating a Carotico-Clinoid Foramen and an Interclinoidal Bridge in the Endonasal Endoscopic Approach: An Anatomical and Technical Note. J Neurol Surg B Skull Base. 2021;82(5):534-539.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1055/s-0040-1715470",
+      "pmid": "34513559",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34513559/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). A single cadaveric head with both variants in both cavernous sinuses; supports the stepwise endoscopic management of an ossified caroticoclinoid ligament and interclinoid bridge, not their frequency."
+    },
+    {
+      "id": "src.joo-2012-carotid-cave",
+      "cite": "Joo W, Funaki T, Yoshioka F, Rhoton AL Jr. Microsurgical anatomy of the carotid cave. Neurosurgery. 2012;70(2 Suppl Operative):300-11.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1227/NEU.0b013e3182431767",
+      "pmid": "22113241",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22113241/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric specimens examined at 3-40x (20 paraclinoid areas). Supports the definition of the carotid cave, its relation to the distal dural ring and carotid collar, its depth and circumferential length, and the aneurysm implication."
+    },
+    {
+      "id": "src.katsuta-1997-jugular-foramen",
+      "cite": "Katsuta T, Rhoton AL Jr, Matsushima T. The jugular foramen: microsurgical anatomy and operative approaches. Neurosurgery. 1997;41(1):149-201.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1097/00006123-199707000-00030",
+      "pmid": "9218307",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9218307/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Microsurgical anatomy study; supports the three compartments of the jugular foramen, the position of CN IX relative to X and XI, and the dural penetration of the nerves. The abstract does not give specimen numbers."
+    },
+    {
+      "id": "src.li-2021-lower-cranial-nerves",
+      "cite": "Li L, London NR, Prevedello DM, Carrau RL. Endonasal access to lower cranial nerves: From foramina to upper parapharyngeal space. Head Neck. 2021;43(10):3225-3233.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/hed.26781",
+      "pmid": "34165854",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34165854/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Six cadaveric specimens (12 sides) dissected by transpterygoid EEA; distances measured on CT angiography of 30 patients with pulsatile tinnitus. Supports the exposure of the jugular foramen region from the nose, the courses of CN IX, X and XI after exit from the foramen, and the medial pterygoid plate distances."
+    },
+    {
+      "id": "src.scibilia-2021-posterior-paramedian",
+      "cite": "Scibilia A, Cebula H, Esposito F, Angileri FF, Raffa G, Todeschi J, et al. Endoscopic Endonasal Approach to the Ventral-Medial Portion of Posterior Paramedian Skull Base: A Morphometric Perspective of Surgical and Radiologic Anatomy. World Neurosurg. 2021;149:e687-e695.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1016/j.wneu.2021.01.116",
+      "pmid": "33540106",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33540106/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Five fresh head specimens dissected with pre- and post-dissection CT. Supports which parts of the jugular foramen the ipsilateral and contralateral-nostril endonasal routes expose; small series, no case outcomes."
+    },
+    {
+      "id": "src.abumanhal-2025-orbital-septum",
+      "cite": "Abumanhal M, Alsheikh O, Edward DP, Kakizaki H. Where is the orbit? Definition of orbital septum attachment sites. Saudi J Ophthalmol. 2025;39(2):125-127.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.4103/sjopt.sjopt_58_25",
+      "pmid": "40642364",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40642364/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). A short anatomical definition paper (the abstract does not state the specimen numbers or method). Supports the definition of the orbit as the space behind the septum and the septum's attachments in the upper, lower, medial and lateral regions."
+    },
+    {
+      "id": "src.zeppieri-2025-periorbital-cellulitis",
+      "cite": "Zeppieri M, Bourget D. Periorbital Cellulitis. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2025 Jan-. Updated 2025 Feb 6.",
+      "type": "review",
+      "verified": false,
+      "pmid": "29261970",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29261970/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports the orbital septum as a barrier between preseptal and postseptal tissues and the clinical separation of preseptal from orbital cellulitis."
+    },
+    {
+      "id": "src.capobianco-2026-orbital-cellulitis",
+      "cite": "Capobianco M, Zeppieri M. Orbital Cellulitis. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2026 Jan-. Updated 2026 Sep 14.",
+      "type": "review",
+      "verified": false,
+      "pmid": "29939678",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29939678/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports orbital cellulitis as postseptal infection and the paranasal sinuses, especially the ethmoids, as its usual source."
+    },
+    {
+      "id": "src.natori-1995-superior-orbital-fissure",
+      "cite": "Natori Y, Rhoton AL Jr. Microsurgical anatomy of the superior orbital fissure. Neurosurgery. 1995;36(4):762-75.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1227/00006123-199504000-00018",
+      "pmid": "7596508",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7596508/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric microsurgical study; supports which structures pass through each sector of the superior orbital fissure and that the superior ophthalmic vein lies in the lateral sector outside the annular tendon."
+    },
+    {
+      "id": "src.azzam-2023-ophthalmic-vein",
+      "cite": "Azzam D, Cypen S, Tao J. Anatomy, Head and Neck: Eye Ophthalmic Vein. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2023 Jan-. Updated 2023 Jul 24.",
+      "type": "review",
+      "verified": false,
+      "pmid": "32491535",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32491535/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports the origin, course, fissure passage and drainage of the superior ophthalmic vein and the accessory ophthalmic veins."
+    },
+    {
+      "id": "src.romano-2022-sov-imaging",
+      "cite": "Romano N, Urru A, Sasso R, Castaldi A. Imaging of superior ophthalmic vein: A pictorial overview. Clin Imaging. 2022;89:136-146.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.clinimag.2022.06.019",
+      "pmid": "35809476",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35809476/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Pictorial review; the abstract supports only that the vein is the largest of the orbit, is well identifiable on CT and MRI, and that changes in its appearance help the differential diagnosis."
+    },
+    {
+      "id": "src.srinivasan-2026-sov-access",
+      "cite": "Srinivasan S, McCloskey K, Jin Y, Thorell B, Anderson L, Suresh V, et al. Direct access of non-dilated superior ophthalmic vein for embolization of cavernous sinus dural arteriovenous fistula: a systematic review and illustrative case. Neuroradiology. 2026.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00234-026-04151-0",
+      "pmid": "42635760",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42635760/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Online-ahead-of-print PRISMA systematic review (five reports, eight access attempts) plus one case. Supports only that direct SOV access has been used as a salvage route to a cavernous sinus dural fistula; the authors state the evidence is too small to estimate success or safety."
+    },
+    {
+      "id": "src.chiavaras-2000-orbitofrontal-sulci",
+      "cite": "Chiavaras MM, Petrides M. Orbitofrontal sulci of the human and macaque monkey brain. J Comp Neurol. 2000;422(1):35-54.",
+      "type": "cohort",
+      "verified": false,
+      "pmid": "10842217",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10842217/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). MRI study of 100 normal adult human cerebral hemispheres (and macaque brains) in Talairach space. Supports the olfactory, medial, lateral and transverse orbital sulci, the four orbital gyri and the variability of the sulcal pattern. PubMed carries no DOI for this record."
+    },
+    {
+      "id": "src.li-2023-olfactory-sulcus-depth",
+      "cite": "Li Z, Abdul Manan H, Heitmann H, Witte V, Wirkner K, Riedel-Heller S, et al. The Association Between Depth of the Olfactory Sulcus, Age, Gender and Olfactory Function: An MRI-based Investigation in More Than 1000 Participants. Neuroscience. 2023;519:31-37.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.neuroscience.2023.03.017",
+      "pmid": "36934780",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36934780/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). T1 MRI of 1097 adults (olfactory dysfunction n = 604, normosmia n = 493) screened with Sniffin' Sticks. Supports only that olfactory sulcus depth was measured on MRI, was deeper on the right, and explained a small share of olfactory function; no figure from it is quoted."
+    },
+    {
+      "id": "src.dealmeida-2015-ogm-frontal-lobe",
+      "cite": "de Almeida JR, Carvalho F, Vaz Guimaraes Filho F, Kiehl TR, Koutourousiou M, Su S, et al. Comparison of endoscopic endonasal and bifrontal craniotomy approaches for olfactory groove meningiomas: A matched pair analysis of outcomes and frontal lobe changes on MRI. J Clin Neurosci. 2015;22(11):1733-41.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.jocn.2015.03.056",
+      "pmid": "26275331",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26275331/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 70 patients, 10 matched pairs (EEA versus bifrontal craniotomy). It concerns the frontal lobe as a whole, not the orbital gyri specifically, and the authors call the finding preliminary."
+    },
+    {
+      "id": "src.helwany-2023-palate",
+      "cite": "Helwany M, Rathee M. Anatomy, Head and Neck, Palate. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2023 Jan-. Updated 2023 Jun 5.",
+      "type": "review",
+      "verified": false,
+      "pmid": "32491749",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32491749/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports the bony make-up of the hard palate, its share of the palate, and the linings of its nasal and oral surfaces."
+    },
+    {
+      "id": "src.liu-2020-upper-pps",
+      "cite": "Liu Q, Wang H, Zhao W, Song X, Sun X, Yu H, et al. Endoscopic transnasal transmaxillary approach to the upper parapharyngeal space and the skull base. Eur Arch Otorhinolaryngol. 2020;277(3):801-807.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1007/s00405-019-05761-6",
+      "pmid": "31845034",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31845034/",
+      "note": "PMC full text (PMC7031166), read 2026-10-07. Six cadaveric heads dissected by a combined endoscopic transpterygoid and anterior transmaxillary approach, plus clinical application. Supports the boundaries and compartments of the parapharyngeal space as the authors state them in the Introduction (background, citing earlier work), and the endoscopic landmarks and dissection steps in Results."
+    },
+    {
+      "id": "src.li-2020-transpterygoid-pps",
+      "cite": "Li L, London NR Jr, Prevedello DM, Carrau RL. Endonasal endoscopic transpterygoid approach to the upper parapharyngeal space. Head Neck. 2020;42(9):2734-2740.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/hed.26127",
+      "pmid": "32129556",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32129556/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Six fresh cadaveric specimens (12 sides). Supports the prestyloid fat and poststyloid contents met on the endonasal transpterygoid route."
+    },
+    {
+      "id": "src.lassalle-2025-pps-compartments",
+      "cite": "Lassalle SL, Serrano Bernárdez VC, Cifone T, Rimoldi S, Benitez N, Diaz FD, et al. Compartmentalization of the human cephalic parapharyngeal space: a scoping review. Surg Radiol Anat. 2025;47(1):189.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00276-025-03698-6",
+      "pmid": "40813940",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40813940/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). PRISMA-ScR scoping review of 202 studies on how the space is divided; supports that the pre/poststyloid boundary is described differently across the literature (percentages are shares of reviewed studies)."
+    },
+    {
+      "id": "src.pistochini-2021-mppmtf",
+      "cite": "Pistochini A, Russo F, Coden E, Sileo G, Battaglia P, Bignami M, Volpi L, Castelnuovo P. Modified Posterior Pedicle Middle Turbinate Flap: An Additional Option for Skull Base Resurfacing. Laryngoscope. 2021;131(3):E767-E774.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/lary.29099",
+      "pmid": "33280115",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33280115/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Four flaps in two fresh-frozen cadaver heads plus one clinical case; supports that the vascular supply of the (modified) posterior pedicle middle turbinate flap is the middle turbinate branch of the sphenopalatine artery. PMID and DOI matched to the PubMed record; awaiting owner verification."
+    },
+    {
+      "id": "src.elsheikh-2013-spa-ligation-mt-necrosis",
+      "cite": "Elsheikh E, El-Anwar MW. Septal perforation and bilateral partial middle turbinate necrosis after bilateral sphenopalatine artery ligation. J Laryngol Otol. 2013;127(10):1025-1027.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/S0022215113001904",
+      "pmid": "24001033",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24001033/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report (typed review, as other case reports in this graph): posterior septal perforation and necrosis of the lower parts of both middle turbinates four months after bilateral sphenopalatine artery ligation for epistaxis; the authors conclude that ischaemic necrosis is a potential risk in areas whose only arterial supply is this artery. It does not discuss flaps. PMID and DOI matched to the PubMed record; awaiting owner verification."
     }
   ]
 }

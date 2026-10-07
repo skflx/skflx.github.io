@@ -264,6 +264,22 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   one source per chapter; conflicts were decided on evidence (e.g. lumbar
   drains stay for high-risk defects on trial evidence). As of 2026-09-28:
   about 1,030 entities (50 procedures, 78 conditions), 242 sources.
+  C1a (2026-10-07, Sonnet draft awaiting the Opus checkpoint CP-C1): the
+  procedures canthotomy/cantholysis, external orbitotomy, frontal sinus
+  cranialization, Lynch frontoethmoidectomy, septodermoplasty, Young's
+  procedure and transantral IMA ligation, from PubMed abstracts (PMC full
+  text where open); their 43 new sources are `verified: false` with a
+  `note` saying what was read.
+  C1b–C1f (2026-10-07, Sonnet drafts with an Opus first read, awaiting
+  CP-C1): inflammatory and benign conditions (EGPA, PCD, immunodeficiency,
+  granulomatous infections, septal hematoma/abscess, developmental cysts,
+  organized hematoma, nasal/medial-wall/ZMC fractures); neoplastic
+  conditions under WHO 5th-edition names; classifications (Cannady, WHO CNS
+  meningioma grade, AJCC clinical N, Wise AFRS score, more JNA systems) and
+  the SPOA volume threshold; parasellar, jugular foramen, orbital, frontal
+  lobe, palate and parapharyngeal structures with `geo: "none"`; and a
+  prior-SPA-ligation check on the middle turbinate flap. Same source rule
+  as C1a.
 - **UW reference crawl** (`ssb/reference/uw-sinusanatomy2/`,
   owner-reported permission) — every labeled frame's labels and arrow tips
   (`slices.json`), from which `tools/ssb-pipeline/uw/relate.py` tests the

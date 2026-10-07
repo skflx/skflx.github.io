@@ -2,12 +2,12 @@
    Data file -> first 8 hex of its SHA-256, so fetches of ssb/** are
    cache-busted the same way the module graph is (docs/ssb.md 7.2). */
 export const STAMPS = {
-    "ssb/content/ethmoid-frontal-orbit.json": "0c059490",
-    "ssb/content/nasal-maxillary-ppf.json": "baccc95e",
-    "ssb/content/pathology-inflammatory.json": "eee42381",
-    "ssb/content/pathology-neoplastic.json": "781d9627",
-    "ssb/content/sources.json": "5eb93c82",
-    "ssb/content/sphenoid-sellar-clival.json": "884e4f54",
+    "ssb/content/ethmoid-frontal-orbit.json": "40d783f7",
+    "ssb/content/nasal-maxillary-ppf.json": "eee8190f",
+    "ssb/content/pathology-inflammatory.json": "e2ec07ed",
+    "ssb/content/pathology-neoplastic.json": "2ae8f340",
+    "ssb/content/sources.json": "8a5376c8",
+    "ssb/content/sphenoid-sellar-clival.json": "83739bdc",
     "ssb/geometry/charts.json": "8793ca10",
     "ssb/geometry/labels.json": "945650f5",
     "ssb/geometry/landmarks.json": "6985ac4a",
