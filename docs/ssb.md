@@ -376,8 +376,9 @@ soft tissue is built three other ways, and each part says which:
 
 | Layer | Built as | Truth kind |
 |---|---|---|
-| Mucosa (sinus and nasal lining) | the air spaces' own surfaces — the air/tissue boundary *is* the mucosal surface — drawn with the `mucosa` material; no thickness is modelled | specimen |
-| Septal mucosa (and nasal floor, for the extended flap) | the faces of the `s.nasal-septum.M` (and `s.nasal-floor.*`) wall units that face each nasal cavity, meshed per side, each with a **chart**: the surface's sagittal projection (a, s) in mm and a lookup grid back onto it, so anything drawn on the septum is specified in 2D | specimen |
+| Mucosa (sinus and nasal lining) | the air spaces' own surfaces — the air/tissue boundary *is* the mucosal surface — drawn with the `mucosa` material; no thickness is modelled. Each air space is its own closed shell (the outside view), so every opening is a double membrane; from inside (the camera in the air box, or the scope) the `lining` pack is drawn instead: one surface over the union of every air label, split into nodes by the label each triangle faces, so openings are open (`lining.py`, ST1b). Its nodes repeat the shells' names; the viewer keys them `lining:<id>.<side>`, and a pick reports the graph id | specimen |
+| Septal mucosa | the faces of the `s.nasal-septum.M` wall unit that face each nasal cavity, meshed per side, with a **chart**: the surface's sagittal projection (a, s) in mm and a lookup grid back onto it, so anything drawn on the septum is specified in 2D | specimen |
+| Nasal floor mucosa (for the extended flap) | the floor bone `s.nasal-floor.*` is separated from the air by 1–3 mm of unlabelled soft tissue, the mucosa, so the surface is the airway lining itself: the cavity's lining triangles facing down (normal S ≤ −cos 45°) within 6 mm of floor-bone voxels, at or in front of the PNS plane (A ≥ −50), largest component (`softtissue.py`, ST2c). Its chart is axial, (a, r) → s, with r = \|R\| (the left chart is the right one: the standard specimen is symmetric), and a `junction` polyline against the septal chart's `bottom(a)` | specimen |
 | Small arteries (posterior septal and its branches, PLNA branches, septal AEA/PEA branches, nasopalatine, superior labial) | sweeps (§5.5) generated from **waypoints** — landmarks or chart points — at a stated depth below the surface; every point `inferred`, every waypoint cited | specimen-placed, inferred |
 | Flap territories (nasoseptal: short, full, extended; rescue incisions; later IT/MT/lateral wall flaps) | **overlays**: outlines computed at runtime on a chart from landmarks plus the graph's measurements and the procedure's steps, with parameters and presets like a diorama's | schematic on specimen |
 | External nose (naris, vestibule, valves, ala, columella) | the specimen's own skin and vestibule, unmasked from the UW axial stack (§5.1; roadmap ST6, O1 (c), O2): skin surface `s.external-nose.M` drawn as `skin`, vestibule air `s.nasal-vestibule.<side>` (vestibular skin), the internal valve as the narrowest coronal airway section, which is also the vestibule \| cavity boundary | specimen, measured |
@@ -413,8 +414,8 @@ What changed from the first pass is listed at the end.*
 **Inputs.** For side X: the septal chart `ssb/geometry/charts.json`
 `s.septal-mucosa.X` (chart (a, s) mm = RAS (A, S); `grid`, `polygon`,
 `unreliable`, `filled`), and for design C the floor chart
-`s.nasal-floor-mucosa.X` (chart (a, r), with its junction polyline to the
-septal chart; ST2b); the landmarks `lm.sphenoid-ostium.X`,
+`s.nasal-floor-mucosa.X` (chart (a, |R|) → `grid.s`, with its `junction` rows to
+the septal chart's `bottom(a)`; ST2c); the landmarks `lm.sphenoid-ostium.X`,
 `lm.choanal-arch.M`, `lm.middle-turbinate-head.X`; the ostium's inferior
 margin `s_f` (`landmarks.meta.json`, `lm.sphenoid-ostium.X`
 `inferior_margin_s_mm`, written by ST2b; right ≈ 23.5, the lowest S of the

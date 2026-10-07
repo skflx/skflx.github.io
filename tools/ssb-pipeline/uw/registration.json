@@ -10675,6 +10675,60 @@
     "cells": 1425,
     "unreliable_cells": 42,
     "filled_cells": 39
+   },
+   "s.nasal-floor-mucosa.R": {
+    "triangles": 4101,
+    "area_cm2": 3.82,
+    "components_cm2": [
+     3.82,
+     0.4,
+     0.01
+    ],
+    "chart_bbox_mm": {
+     "a": [
+      -51.0,
+      -10.0
+     ],
+     "r": [
+      1.0,
+      17.0
+     ]
+    },
+    "roundtrip_max_3d_mm": 0.24,
+    "roundtrip_max_3d_mm_all_cells": 0.956,
+    "roundtrip_max_chart_mm": 0.201,
+    "roundtrip_samples": 308,
+    "cells": 413,
+    "junction_max_mm": 0.64,
+    "junction_max_mm_incl_pns_end": 3.09,
+    "junction_cells": 38
+   },
+   "s.nasal-floor-mucosa.L": {
+    "triangles": 4101,
+    "area_cm2": 3.82,
+    "components_cm2": [
+     3.82,
+     0.4,
+     0.01
+    ],
+    "chart_bbox_mm": {
+     "a": [
+      -51.0,
+      -10.0
+     ],
+     "r": [
+      1.0,
+      17.0
+     ]
+    },
+    "roundtrip_max_3d_mm": 0.24,
+    "roundtrip_max_3d_mm_all_cells": 0.956,
+    "roundtrip_max_chart_mm": 0.201,
+    "roundtrip_samples": 308,
+    "cells": 413,
+    "junction_max_mm": 0.64,
+    "junction_max_mm_incl_pns_end": 3.09,
+    "junction_cells": 38
    }
   },
   "choanal_arch": [
@@ -10688,8 +10742,36 @@
    -1.0
   ],
   "ostium_inferior_margin_s_mm": {
-   "R": 23.5
+   "R": 23.5,
+   "L": 23.5
   },
-  "pack_bytes": 87858
+  "pack_bytes": 160088
+ },
+ "lining": {
+  "triangles": 50000,
+  "bytes": 468859,
+  "fallback_triangles": 271,
+  "membrane_triangles": 0,
+  "nodes": {
+   "s.agger-nasi-cell.L": 553,
+   "s.agger-nasi-cell.R": 541,
+   "s.anterior-ethmoid-cells.L": 754,
+   "s.anterior-ethmoid-cells.R": 779,
+   "s.ethmoid-bulla.R": 829,
+   "s.frontal-recess.L": 1127,
+   "s.frontal-recess.R": 1107,
+   "s.frontal-sinus.L": 1175,
+   "s.frontal-sinus.R": 1170,
+   "s.maxillary-sinus.L": 4009,
+   "s.maxillary-sinus.R": 4020,
+   "s.nasal-cavity.L": 9575,
+   "s.nasal-cavity.R": 9494,
+   "s.nasopharynx.M": 3797,
+   "s.posterior-ethmoid-cells.L": 2896,
+   "s.posterior-ethmoid-cells.R": 2924,
+   "s.sphenoid-sinus.L": 2233,
+   "s.sphenoid-sinus.R": 2216,
+   "s.ethmoid-bulla.L": 801
+  }
  }
 }

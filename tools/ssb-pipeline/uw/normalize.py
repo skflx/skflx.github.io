@@ -18,7 +18,7 @@ Stages (`all` runs them in this order, with the pipeline stages between them):
   labels   re-mirrors the label volume from the right half after walls.py, so the symmetry is exact (a
            marker watershed breaks ties by scan order); the air labels and the CT do not change.
   -        sweeps mirrored (below) so sdf.py sees symmetric tubes, then meshes.py, sdf.py, softtissue.py
-           (which runs sweeps_soft.py)
+           (which runs sweeps_soft.py), lining.py (the open airway lining, ST1b)
   sides    step 6: every paired landmark .L := .R with R negated, .M R := 0; sweeps.json .L := mirrored .R;
            s.septal-mucosa.L's chart := .R's with r negated. The as-scanned landmarks stay in the meta files
            under `asScanned`. Unpaired landmarks (one side only) stay as scanned and are listed.
@@ -524,6 +524,7 @@ def stage_all():
     run(PY, os.path.join(HERE, 'meshes.py'))
     run(PY, os.path.join(HERE, 'sdf.py'))
     run(PY, os.path.join(HERE, 'softtissue.py'))
+    run(PY, os.path.join(HERE, 'lining.py'))
     stage_sides()
 
 

@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=2e270611';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=c5c31dd8';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=d27e5b3d';
-import { PLANES } from './volume.js?v=43c1f888';
+import { PLANES } from './volume.js?v=d1a450a5';
 import { CT_PLANES } from './state.js?v=2a74ae90';
-import { REGION_LABEL } from './graph.js?v=83e53dae';
+import { REGION_LABEL } from './graph.js?v=4d48d517';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -204,6 +204,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     /* ---------------- looks, layers, selection ---------------- */
 
     const nodes = () => (specimen ? specimen.nodes : new Map());
+    const hasLining = () => !!specimen && [...specimen.nodes.values()].some((m) => m.userData.lining);
     const regionOf = (mesh) => mesh.userData.region || 'other';
 
     const centreCache = new Map();
@@ -244,12 +245,22 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function paint() {
         if (!specimen) return;
         const sel = store.get().selection;
+        /* from within, the open lining (ST1b: one surface, its openings open) is drawn in place of the per-compartment shells */
+        const within = layers.mucosa && (inside || insideForced);
+        const openLining = within && hasLining();
         for (const [key, mesh] of specimen.nodes) {
             const u = mesh.userData;
             const isSel = !!sel && u.id === sel;
             const primary = isSel && key === primaryKey;
             const partner = isSel && !primary;
             let look = u.look;
+            if (u.group === 'lining') {
+                u.drawn = look.kind;
+                mesh.material = stage.materialsFor(look, { selected: false, partner: false });
+                mesh.renderOrder = 0;
+                mesh.visible = openLining && !layers.hidden.has(regionOf(mesh));
+                continue;
+            }
             if (u.group === 'bone') {
                 if (layers.bone === 'xray') look = { ...look, xray: true };
             } else if (layers.mucosa && u.group === 'air') {
@@ -262,7 +273,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             u.drawn = look.kind;
             mesh.material = stage.materialsFor(look, { selected: primary, partner });
             mesh.renderOrder = isSel ? 5 : 0;
-            mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : !layers.hidden.has(regionOf(mesh)));
+            mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
         }
         for (const [, m] of markers) {
             const mine = !!sel && m.lm.id === sel;
@@ -509,7 +520,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function regions() {
         const out = new Map();
         for (const mesh of nodes().values()) {
-            if (mesh.userData.group === 'bone') continue;
+            if (mesh.userData.group === 'bone' || mesh.userData.lining) continue;
             const r = regionOf(mesh);
             if (!out.has(r)) out.set(r, { region: r, label: own(REGION_LABEL, r) ? REGION_LABEL[r] : r, count: 0, on: !layers.hidden.has(r) });
             out.get(r).count += 1;
@@ -650,7 +661,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (!installed) return [];
         const hits = stage.pickHits(x, y, specimen.root);
         const out = hits.map((h) => ({
-            key: h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
+            key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
             point: sceneToRas(h.point.toArray()), distance: h.distance,
         }));
         /* what the section cut away is not there to be picked */
@@ -850,7 +861,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             key, id: m.userData.id, side: m.userData.side, pack: m.userData.pack, group: m.userData.group, region: m.userData.region,
             visible: m.visible, look: m.userData.look, drawn: m.userData.drawn || m.userData.look.kind, triangles: m.userData.triangles, box: rasBox(key),
             material: m.material.type, transparent: !!m.material.transparent, depthWrite: m.material.depthWrite,
-            highlight: store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
+            lining: !!m.userData.lining,
+            highlight: !m.userData.lining && store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
             emissive: m.material.emissiveIntensity,
         })) : []),
         /* the mean of a node's vertices, in RAS mm (the world transform applied) */
