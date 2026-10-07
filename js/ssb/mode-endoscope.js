@@ -15,8 +15,8 @@
      the wheel inserts and withdraws, arrow keys yaw and pitch, + / - or
      PageUp / PageDown depth, Q / E roll, L cycles the lens; Shift = x5.
      Every change goes through the store, so the URL, the sliders and the
-     image agree. Nothing here animates: a pose change is a cut, which is also
-     what prefers-reduced-motion asks for.
+     image agree. A pose change is a cut; only a station flight (E6) moves the
+     pose over time, and under prefers-reduced-motion that is a cut too.
    - Collision (E3, E3b): the shaft is blocked by bone (scope.js shaftClearance) against the CT
      display volume, and by the midline (R = 0, the standard specimen's septum) except in the nasopharynx,
      behind and below lm.choanal-arch.M; a pose that would block is clamped to the last free depth, whoever asked
@@ -28,7 +28,13 @@
      (state.cursor) goes to the tip T, and a small inset shows the oblique CT slice through T spanned by the
      view direction and the camera's up, with the shaft drawn on it. It exists once the volume has loaded.
    - Exposure runs on settle (100 ms without a pose change, and on engage), not on every moving frame.
-   - Station flights (E6) are not here.
+   - Station flights (E6): ssb/geometry/stations.json (Opus's poses, never edited here) loads with the scope, or
+     sooner when `#scope=t.<id>[.<side>]` is pending in the store; the list in the controls and the link both end at
+     a station's stored pose. A flight interpolates depth, yaw, pitch and roll (shortest way round) over FLIGHT_MS
+     through the store, one pose per animation frame, so collision, the HUD, the URL and the CT inset follow as for
+     any pose change; the lens switches at the end, and a different nostril from the first step. A pose that would
+     block mid-flight is clamped as usual (a station's own pose is free by construction). Any other pose change,
+     a pointer press, the wheel or a key cancels the flight where it is.
 
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
@@ -36,7 +42,7 @@
 import { loadLandmarks } from './geo-specimen.js?v=2122b2b7';
 import { sharedVolume, stamped, decode } from './volume.js?v=61915bb8';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, frameOf, hudRows, lightPostAngle, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=9658ff9e';
+import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=844c8624';
 
 const DRAG_DEG_PER_PX = 0.15;
 const WHEEL_MM = 1;
@@ -53,6 +59,9 @@ const FILL = 0.5;                /* hemisphere fill left on in the scope: the li
 const SETTLE_MS = 100;            /* the pose must rest this long before the exposure is measured */
 const INSET = { size: 129, pixel: 0.5 };   /* odd, so the centre pixel is T; 0.5 mm: a 64 mm square */
 const KEY_STEP = { depth: 1, yaw: 2, pitch: 2, roll: 5 };
+const STATIONS_FILE = 'ssb/geometry/stations.json';
+const FLIGHT_MS = 600;
+const INTERNAL = Object.freeze({ source: 'scope', internal: true });     /* a pose change the mode itself makes (a flight step, a collision clamp): it must not cancel the flight */
 
 /* opts: { stage, store, graph, specimen }
      stage     scene.js's handle      store  the one store      graph  the knowledge graph
@@ -86,6 +95,11 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let pendingKey = null;
     let exposeRuns = 0;
     let lastPose = null;                 /* the pose to come back to when the Scope pill is pressed again */
+    let stations = new Map();            /* "t.<id>.<side>" -> { id, side, pose }, once ssb/geometry/stations.json has loaded */
+    let stationsState = 'idle';          /* 'idle' | 'loading' | 'ready' | 'failed' (missing or malformed: no list, links ignored) */
+    let stationsAsked = null;
+    let flight = null;                   /* { from, to, t0, raf } while a station flight runs */
+    const reduce = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
     const pose = () => store.get().scope;
@@ -149,7 +163,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft], arch);
         if (c.depth < p.depth - 1e-9) {
             limitedNext = c.by;                /* the pass the clamp triggers reports it */
-            setPose({ depth: c.depth });
+            store.setScope({ ...p, depth: c.depth }, INTERNAL);
             return true;
         }
         const names = new Map(sdfFields.map((x) => [x.id, x.name]));
@@ -162,6 +176,64 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         if (!Object.prototype.hasOwnProperty.call(SHAFT_RADII, key) || key === shaft) return false;
         shaft = key;
         sync();
+        return true;
+    }
+
+    /* ---------------- stations (E6) ---------------- */
+
+    /* Loaded with the scope (and sooner for a pending station link), once per page. A missing, unreadable or malformed
+       file leaves an empty table: no list, and a pending link is dropped, never an error. */
+    function loadStations() {
+        if (stationsAsked) return stationsAsked;
+        stationsState = 'loading';
+        stationsAsked = fetch(stamped(STATIONS_FILE)).then((r) => (r.ok ? r.json() : null)).catch(() => null).then((doc) => {
+            stations = parseStations(doc);
+            stationsState = stations.size ? 'ready' : 'failed';
+            resolvePending();
+            emit();
+        });
+        return stationsAsked;
+    }
+
+    /* A `#scope=t.<id>` link waiting in the store -> its pose (a cut), or dropped when the station is unknown. */
+    function resolvePending() {
+        const link = store.get().station;
+        if (!link || (stationsState !== 'ready' && stationsState !== 'failed')) return;
+        const hit = resolveStation(stations, parseStationLink(link));
+        store.resolveStation(hit ? hit.pose : null);
+    }
+
+    const listStations = () => [...stations].map(([key, s]) => ({ key, id: s.id, side: s.side, name: graph.nameOf(s.id), tier: graph.tierOf(s.id), pose: { ...s.pose } }));
+
+    function cancelFlight() {
+        if (!flight) return false;
+        cancelAnimationFrame(flight.raf);
+        flight = null;
+        emit();
+        return true;
+    }
+
+    /* Fly the scope to station `key` ("t.<id>.<side>"): false for an unknown key. */
+    function flyTo(key) {
+        const st = stations.get(key);
+        if (!st) return false;
+        const cur = pose();
+        const to = clampPose(st.pose);
+        cancelFlight();
+        if (!cur || reduce.matches) return store.setScope(to, INTERNAL) || samePose(cur, to);
+        if (samePose(cur, to)) return true;
+        const f = { from: { ...cur }, to, t0: performance.now(), raf: 0 };
+        flight = f;
+        const step = () => {
+            if (flight !== f) return;
+            const k = Math.min(1, (performance.now() - f.t0) / FLIGHT_MS);
+            store.setScope(flightPose(f.from, f.to, k * k * (3 - 2 * k)), INTERNAL);
+            if (flight !== f) return;                  /* something cancelled it from inside the change */
+            if (k >= 1) { flight = null; emit(); return; }
+            f.raf = requestAnimationFrame(step);
+        };
+        f.raf = requestAnimationFrame(step);
+        emit();
         return true;
     }
 
@@ -312,6 +384,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     function disengage() {
         engaged = false;
         drag = null;
+        cancelFlight();
         clearTimeout(settleTimer);
         settleTimer = null;
         pendingKey = null;
@@ -341,17 +414,23 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     function sync() {
         if (pose() && available() && enforce()) return;
         const want = !!pose() && available();
-        if (want) loadCollision();
+        if (want) { loadCollision(); loadStations(); }
         if (want && !engaged) engage();
         else if (!want && engaged) disengage();
         else if (engaged) { apply(); emit(); }
         else emit();
     }
 
-    store.subscribe((state, prev) => {
+    store.subscribe((state, prev, meta) => {
         if (state.scope) lastPose = state.scope;
+        if (flight && state.scope !== prev.scope && !(meta && meta.internal)) cancelFlight();
         if (state.scope !== prev.scope) sync();
+        if (state.station && state.station !== prev.station) {
+            if (stationsState === 'ready' || stationsState === 'failed') Promise.resolve().then(resolvePending);     /* not inside this notification */
+            else loadStations();
+        }
     });
+    if (store.get().station) loadStations();
     specimen.onChange(() => { if (selfMove) return; exposed = null; sync(); });          /* the specimen loading, or a layer change, may make the scope available */
 
     /* ---------------- pose changes ---------------- */
@@ -391,6 +470,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
 
     canvas.addEventListener('pointerdown', (e) => {
         if (!engaged || e.button !== 0) return;
+        cancelFlight();
         drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
         try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* a release outside the canvas is then missed: the drag ends on the next pointerdown */ }
     });
@@ -411,6 +491,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     canvas.addEventListener('wheel', (e) => {
         if (!engaged) return;
         e.preventDefault();
+        cancelFlight();
         nudge('depth', e.deltaY < 0 ? WHEEL_MM : -WHEEL_MM);
     }, { passive: false });
     canvas.addEventListener('keydown', (e) => {
@@ -429,7 +510,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             case 'l': case 'L': cycleLens(e.shiftKey ? -1 : 1); break;
             default: did = false;
         }
-        if (did) e.preventDefault();
+        if (did) { e.preventDefault(); cancelFlight(); }
     });
 
     /* ---------------- the test window ---------------- */
@@ -457,6 +538,9 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         get hud() { return { rows: hud.rows.map((r) => ({ ...r })), contactMm: hud.contactMm, limited: hud.limited, limitedBy: hud.limitedBy, clampMm }; },
         get cursor() { const c = store.get().cursor; return c ? c.slice() : null; },
         get exposeRuns() { return exposeRuns; },
+        get flying() { return !!flight; },
+        get stations() { return listStations(); },
+        get stationsState() { return stationsState; },
         get inset() { return insetData ? { width: insetData.width, height: insetData.height, pixel: insetData.pixel, shaft: insetData.shaft.slice(), center: insetData.center } : null; },
         sampleAt: (ras) => (ctAt ? ctAt(ras) : null),
         get exposure() { return { distance: lastD, intensity: spot ? spot.intensity : null, ms: lastMs }; },
@@ -466,7 +550,9 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     });
 
     return {
-        hook, enter, leave, setPose, nudge, cycleLens, setShaft,
+        hook, enter, leave, setPose, nudge, cycleLens, setShaft, flyTo,
+        get flying() { return !!flight; },
+        get stations() { return listStations(); },
         get shaft() { return shaft; },
         get hud() { return hook.hud; },
         LENSES, RANGES,

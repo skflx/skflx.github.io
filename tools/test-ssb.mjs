@@ -2099,6 +2099,7 @@ function scopeUnitTests() {
   check('state: applyHash adopts a pasted scope link and drops it when the hash has none', st.get().scope && (st.applyHash(''), st.get().scope === null));
 
   scopeCollisionTests();
+  stationUnitTests();
 }
 
 
@@ -2284,6 +2285,157 @@ function scopeCollisionTests() {
   const near3 = hudOf(nearPose);
   check('scope HUD (specimen): R 74, 3, 24 is free and 2.15 mm from the skull base (nearest first, the others farther) — the pose used by the page test to check the 3 mm signal rule',
     !clear(nearPose).blocked && near3[0].id === 's.anterior-cranial-fossa' && near(near3[0].mm, 2.15, 0.05) && near3[1].mm > 3, JSON.stringify(near3.slice(0, 2)));
+}
+
+/* ---------------- Endoscope: stations (E6, Node only) ---------------- */
+
+/* Opus's poses in ssb/geometry/stations.json (E5), held to the rules in the file's own `rule` string, plus the codec and
+   the flight math. A station that fails is reported with its numbers, never edited. */
+function stationUnitTests() {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p));
+  const json = (p) => JSON.parse(read(p).toString('utf8'));
+  const R4 = SC.SHAFT_RADII['4'];
+  const doc = json('ssb/geometry/stations.json');
+  const table = doc.stations;
+  const keys = Object.keys(table);
+  const meta = json('ssb/ct/ct.json');
+  const lb = zlib.gunzipSync(read('ssb/ct/labels.u16.gz'));
+  const labels = new Uint16Array(lb.buffer.slice(lb.byteOffset, lb.byteOffset + lb.length));
+  const vol = createVolume({ header: parseHeader(meta), ct: new Uint8Array(zlib.gunzipSync(read('ssb/ct/ct.u8.gz'))), labels, table: parseTable(json('ssb/geometry/labels.json')) });
+  const ctAt = (p) => vol.sample(p[0], p[1], p[2]);
+  const lms = json('ssb/geometry/landmarks.json');
+  const arch = { a: lms['lm.choanal-arch.M'][1], s: lms['lm.choanal-arch.M'][2] };
+  const AIR = new Set(['s.nasal-cavity.R', 's.nasal-cavity.L', 's.nasopharynx.M', 's.maxillary-sinus.R', 's.maxillary-sinus.L', 's.frontal-sinus.R', 's.frontal-sinus.L', 's.sphenoid-sinus.R', 's.sphenoid-sinus.L']);
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const angle = (a, b) => Math.acos(Math.max(-1, Math.min(1, dot(a, b) / (Math.hypot(...a) * Math.hypot(...b))))) * 180 / Math.PI;
+
+  /* a label's voxel centroid, RAS (the rule's "label whose voxel centroid is the point") */
+  const centroids = new Map();
+  const centroid = (name) => {
+    if (centroids.has(name)) return centroids.get(name);
+    const index = vol.labelIndices().find((i) => vol.describe(i).name === name);
+    let n = 0;
+    const sum = [0, 0, 0];
+    const [nx, ny] = vol.dims;
+    for (let q = 0; q < labels.length; q++) {
+      if (labels[q] !== index) continue;
+      const i = q % nx;
+      const j = Math.floor(q / nx) % ny;
+      const k = Math.floor(q / (nx * ny));
+      const r = vol.toRAS(i, j, k);
+      sum[0] += r[0]; sum[1] += r[1]; sum[2] += r[2];
+      n++;
+    }
+    const c = n ? sum.map((v) => v / n) : null;
+    centroids.set(name, c);
+    return c;
+  };
+  const targetOf = (t) => {
+    if (Array.isArray(t.between) && t.between.length === 2 && t.between.every((id) => lms[id])) return [0, 1, 2].map((m) => (lms[t.between[0]][m] + lms[t.between[1]][m]) / 2);
+    if (t.id) return lms[t.id] ? lms[t.id].slice() : centroid(t.id);
+    return Array.isArray(t.at) ? t.at.slice() : null;
+  };
+
+  const problems = { clamp: [], free: [], air: [], target: [] };
+  const rows = [];
+  for (const key of keys) {
+    const st = table[key];
+    const pose = st.pose;
+    const F = lms[`lm.naris.${pose.side}`];
+    const clamped = SC.clampPose(pose);
+    if (!clamped || Object.keys(clamped).some((f) => clamped[f] !== pose[f]) || Object.keys(pose).length !== 6) problems.clamp.push([key, pose]);
+    const cl = SC.shaftClearance(F, pose, ctAt, R4, arch);
+    if (cl.blocked || cl.depth !== pose.depth) problems.free.push([key, cl]);
+    const tip = SC.tipOf(F, pose);
+    const tipLab = vol.describe(vol.labelAt(tip[0], tip[1], tip[2]));
+    if (!tipLab || !AIR.has(tipLab.name)) problems.air.push([key, tipLab && tipLab.name, tip]);
+    const target = targetOf(st.target || {});
+    const off = target ? angle(SC.frameOf(pose).v, sub(target, tip)) : null;
+    if (off === null || !(off <= SC.FOV_DEG / 2)) problems.target.push([key, off, target]);
+    rows.push({ key, off });
+  }
+  const shown = (list) => JSON.stringify(list.map((x) => x.map((v) => (typeof v === 'number' ? +v.toFixed(2) : v))));
+  check(`stations (E6): all ${keys.length} stations have a pose clampPose leaves unchanged (six whole fields)`, keys.length >= 13 && problems.clamp.length === 0, JSON.stringify(problems.clamp));
+  check('stations (E6): every station is free under shaftClearance (4 mm shaft, the E3b midline rule, lm.choanal-arch.M) — not clamped, not blocked', problems.free.length === 0, JSON.stringify(problems.free));
+  check('stations (E6): every station\'s tip lies in an air label of the standard specimen (not in tissue)', problems.air.length === 0, shown(problems.air));
+  check('stations (E6): every station\'s target (landmark, label centroid, `between` midpoint or `at`) is within FOV_DEG / 2 = 35 degrees of the view axis', problems.target.length === 0, JSON.stringify(problems.target.map((x) => [x[0], x[1] === null ? null : +x[1].toFixed(2)])));
+
+  const mirrored = keys.filter((k) => k.endsWith('.L')).every((k) => {
+    const r = table[k.replace(/\.L$/, '.R')];
+    const l = table[k];
+    return !!r && l.pose.side === 'L' && r.pose.side === 'R' && ['depth', 'yaw', 'pitch', 'lens'].every((f) => l.pose[f] === r.pose[f]) && l.pose.roll === (360 - r.pose.roll) % 360;
+  });
+  check('stations (E6): every `.L` station is its `.R` station mirrored (same depth, yaw, pitch, lens; roll -> 360 - roll; side L), and has one', keys.some((k) => k.endsWith('.L')) && mirrored);
+  check('stations (E6): a midline (.M) station is posed from the right nostril', keys.filter((k) => k.endsWith('.M')).every((k) => table[k].pose.side === 'R'));
+
+  const stems = new Set(keys.map((k) => k.replace(/\.(R|L|M)$/, '')));
+  const unc = new Set(Object.keys(doc.uncovered));
+  const over = new Set(doc.overviews.ids);
+  const graphStations = [...GRAPH.keys()].filter((id) => GRAPH.get(id).type === 'stations');
+  const missing = graphStations.filter((id) => !stems.has(id) && !unc.has(id) && !over.has(id));
+  const stray = [...stems, ...unc, ...over].filter((id) => !GRAPH.has(id) || GRAPH.get(id).type !== 'stations');
+  const twice = graphStations.filter((id) => [stems.has(id), unc.has(id), over.has(id)].filter(Boolean).length > 1);
+  check('stations (E6): every graph `t.*` station is in `stations`, `uncovered` or `overviews` (exactly one), and nothing else is', graphStations.length >= 40 && missing.length === 0 && stray.length === 0 && twice.length === 0, JSON.stringify({ missing, stray, twice }));
+
+  /* ---- the codec: a link is a shape, a table lookup is the only thing it does ---- */
+  const L = SC.parseStationLink;
+  check('station link: `t.ser-0`, `t.ser-0.L`, `t.nsf-pedicle.M` parse (side null when absent)', JSON.stringify(L('t.ser-0')) === '{"id":"t.ser-0","side":null}' && L('t.ser-0.L').side === 'L' && L('t.nsf-pedicle.M').id === 't.nsf-pedicle');
+  const hostile = ['', 't.', 't.nope.X', 't.a b', 't.ser-0.R.R', 'x.ser-0', 'T.ser-0', 't.ser_0', 't./../x', 't.ser-0.r', '<script>', 't.' + 'a'.repeat(5000), 't.ser-0\n', 't.-a', 't.a-', 't.a--b', null, undefined, 7];
+  check('station link: hostile shapes are refused (no side but R|L|M, no underscores, slashes, spaces, newlines, doubled hyphens, markup, 5 kB, non-strings)', hostile.every((h) => L(h) === null), JSON.stringify(hostile.filter((h) => L(h) !== null)));
+  check('station link: a pose is not a station link and a station link is not a pose (parseScope refuses `t.ser-0`)', SC.parseScope('t.ser-0') === null && L('R,40,0,0,0,0') === null);
+  const parsed = SC.parseStations(doc);
+  check('station table: parseStations reads every entry of the real file into a whole pose, keyed t.<id>.<side>', parsed.size === keys.length && keys.every((k) => parsed.has(k) && JSON.stringify(parsed.get(k).pose) === JSON.stringify(table[k].pose)), `${parsed.size} of ${keys.length}`);
+  const hurt = SC.parseStations({ stations: {
+    'T.bad.R': { pose: table['t.ser-0.R'].pose }, 't.noside': { pose: table['t.ser-0.R'].pose }, 't.a.X': { pose: table['t.ser-0.R'].pose },
+    't.nopose.R': {}, 't.sidebad.R': { pose: { ...table['t.ser-0.R'].pose, side: 'Q' } }, 't.lensbad.R': { pose: { ...table['t.ser-0.R'].pose, lens: 15 } },
+    't.depth.R': { pose: { ...table['t.ser-0.R'].pose, depth: 'x' } }, 't.missing.R': { pose: { side: 'R', depth: 40 } },
+    't.ok.R': { pose: { ...table['t.ser-0.R'].pose, depth: 999, yaw: -999 } },
+  } });
+  check('station table: malformed entries are skipped (bad key, no side, no pose, bad side, bad lens, non-numeric or missing fields); out-of-range numbers clamp', [...hurt.keys()].join() === 't.ok.R' && hurt.get('t.ok.R').pose.depth === 120 && hurt.get('t.ok.R').pose.yaw === -45, JSON.stringify([...hurt.keys()]));
+  check('station table: a document that is not a table is an empty map (no list, links ignored)', [null, undefined, 3, 'x', [], {}, { stations: null }, { stations: [] }, { stations: 'x' }].every((d) => SC.parseStations(d).size === 0));
+  const rs = (text) => SC.resolveStation(parsed, L(text));
+  check('station link: `t.ser-0` is the right pose, `.L` the left, `t.nsf-pedicle` finds its midline station, a named side that does not exist does not fall back, and an unknown id is null',
+    rs('t.ser-0').pose.side === 'R' && rs('t.ser-0.L').pose.side === 'L' && rs('t.nsf-pedicle').pose.side === 'R' && rs('t.nsf-pedicle.M').id === 't.nsf-pedicle' && rs('t.nsf-pedicle.L') === null && rs('t.ser-0.M') === null && rs('t.nope') === null && SC.resolveStation(parsed, null) === null && SC.resolveStation(null, L('t.ser-0')) === null);
+
+  /* ---- the store: a pending link is state, shared like a pose ---- */
+  const has = (id) => GRAPH.has(id);
+  const tierOf = (id) => (GRAPH.has(id) ? GRAPH.get(id).entity.tier || 1 : 1);
+  const mk = (hash) => createStore({ has, tierOf, hash, prefs: { tier: 1 }, labs: { sphenoid: { params: [], presets: {} } } });
+  const st = mk('#scope=t.frontal-recess-70.L');
+  check('station link (store): `#scope=t.frontal-recess-70.L` is a pending station, no pose, no stage; the hash keeps it until it resolves', st.get().station === 't.frontal-recess-70.L' && st.get().scope === null && st.hash() === '#scope=t.frontal-recess-70.L', JSON.stringify(st.get()));
+  const seen = [];
+  st.subscribe((state, prev, m) => seen.push([state.scope && SC.formatScope(state.scope), state.station, m.source]));
+  const pose70 = parsed.get('t.frontal-recess-70.L').pose;
+  st.resolveStation(pose70);
+  check('station link (store): resolving writes the ordinary pose hash and clears the link (one change, source url)', st.get().station === null && st.hash() === '#scope=' + SC.formatScope(pose70) && seen.length === 1 && seen[0][2] === 'url', JSON.stringify([st.hash(), seen]));
+  const un = mk('#scope=t.nope');
+  un.resolveStation(null);
+  check('station link (store): an unknown station resolves to nothing — no pose, no link, an empty hash (ignored like any hostile link)', un.get().station === null && un.get().scope === null && un.hash() === '', JSON.stringify(un.get()));
+  check('station link (store): a pose wins over a link, a lab and a CT plane win over both, and hostile text is not a link',
+    mk('#scope=R,40,0,0,0,0').get().station === null && mk('#lab=sphenoid&scope=t.ser-0').get().station === null && mk('#ct=ax&scope=t.ser-0').get().station === null && mk('#scope=t.ser-0.X').get().station === null && mk('#scope=t.ser-0%0A').get().station === null);
+  const ap = mk('');
+  ap.applyHash('#scope=t.ser-0');
+  const pend = ap.get().station;
+  ap.setScope(pose70);
+  check('station link (store): a pasted link while on the specimen is pending; entering a pose, a lab or CT clears it; resolveStation with nothing pending is a no-op',
+    pend === 't.ser-0' && ap.get().station === null && ap.resolveStation(pose70) === false && (ap.applyHash('#scope=t.ser-0'), ap.setCt({ plane: 'ax', at: null }), ap.get().station === null));
+
+  /* ---- the flight: depth, yaw, pitch straight; roll the short way round; side at the start, lens at the end ---- */
+  const a = { side: 'R', depth: 40, yaw: 10, pitch: -4, roll: 350, lens: 0 };
+  const b = { side: 'L', depth: 20, yaw: -20, pitch: 8, roll: 10, lens: 70 };
+  const mid = SC.flightPose(a, b, 0.5);
+  check('flight: halfway is the mean of depth, yaw and pitch; roll goes 350 -> 10 through 0 (the short way, not through 180); the side is the target\'s, the lens is not yet',
+    mid.depth === 30 && mid.yaw === -5 && mid.pitch === 2 && near((mid.roll + 360) % 360, 0, 1e-9) && mid.side === 'L' && mid.lens === 0, JSON.stringify(mid));
+  const end = SC.flightPose(a, b, 1);
+  check('flight: the end is exactly the target (including the lens), a flight to itself is itself, and e = 0 is the start (with the target\'s side)',
+    SC.samePose(end, b) && SC.samePose(SC.flightPose(a, a, 0.37), { ...a, roll: a.roll }) && SC.samePose(SC.flightPose(a, b, 0), { ...a, side: 'L' }), JSON.stringify([end, SC.flightPose(a, b, 0)]));
+  const back = SC.flightPose({ ...a, roll: 10 }, { ...a, roll: 350 }, 0.5);
+  check('flight: roll the other way round (10 -> 350) also takes the short way, through 0', near((back.roll + 360) % 360, 0, 1e-9), String(back.roll));
+  let mono = true;
+  let prevRoll = 350;
+  for (let k = 1; k <= 10; k++) { const r = SC.flightPose(a, b, k / 10).roll; const step = (((r - prevRoll + 540) % 360) - 180); if (!(step > 0 && step < 5)) mono = false; prevRoll = r; }
+  check('flight: roll moves monotonically in small steps (no spin through the long way)', mono);
 }
 
 /* ---------------- Endoscope: the page ---------------- */
@@ -2489,6 +2641,149 @@ async function scopeTests(browser, base) {
       off.stage === 'specimen' && /^(#at=[-\d.,]+)?$/.test(off.hash) && !off.engaged && !off.active && off.bone === 'xray' && off.mucosa === false && off.controls === true && off.lights.head > 0 && off.lights.spot && !off.lights.spot.on && off.overlay, JSON.stringify(off));
     check('scope: leaving restores the orbit view (the camera is where it was before the scope: same distance to target, toCamera within 1e-3)',
       near(off.cam.distance, camBefore.distance, 0.5) && off.cam.toCamera.every((v, i) => near(v, camBefore.toCamera[i], 1e-3)), JSON.stringify([off.cam, camBefore]));
+    await context.close();
+  }
+
+  /* ===== station flights (E6) ===== */
+  const ST = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/stations.json'), 'utf8')).stations;
+  const stTier = (key) => (entity(key.replace(/\.(R|L|M)$/, '')) || {}).tier || 1;
+  const stName = (key) => entity(key.replace(/\.(R|L|M)$/, '')).name;
+  const stFor = (side, tier) => Object.keys(ST).filter((k) => k.endsWith(`.${side}`) || k.endsWith('.M')).filter((k) => stTier(k) <= tier);
+  const samePoseObj = (x, y) => !!x && !!y && ['side', 'depth', 'yaw', 'pitch', 'roll', 'lens'].every((f) => x[f] === y[f]);
+  const stList = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-scope-controls .ssb-scope-station')].map((b) => ({ key: b.dataset.station, text: b.querySelector('.ssb-scope-station-name').textContent, lens: b.querySelector('.ssb-scope-station-lens').textContent, pressed: b.getAttribute('aria-pressed') })));
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'ready', null, { timeout: 30000 });
+    await nextFrames(page, 3);
+    const l1 = await stList(page);
+    const want1 = stFor('R', 1);
+    check('stations (E6): the list shows the right nostril\'s stations and the midline ones at the page\'s tier (1), in file order, each with its graph name and its lens — and none of the uncovered or overviews',
+      l1.map((x) => x.key).join() === want1.join() && want1.length >= 4 && l1.every((x) => stName(x.key).startsWith(x.text) && x.lens === `${ST[x.key].pose.lens}°`) && !l1.some((x) => /overview|ethmoid-bulla|olfactory/.test(x.key)), JSON.stringify({ l1: l1.map((x) => x.key), want1 }));
+    check('stations (E6): the list is a labelled group of buttons, none pressed while the scope is not at a station', await page.evaluate(() => { const g = document.querySelector('#ssb-scope-controls .ssb-scope-stations'); return g.getAttribute('role') === 'group' && !!g.getAttribute('aria-label') && [...g.children].every((b) => b.tagName === 'BUTTON' && b.type === 'button'); }) && l1.every((x) => x.pressed === 'false'), JSON.stringify(l1.map((x) => x.pressed)));
+
+    /* the tier filter follows the page, and the left nostril gets the left ones */
+    await page.evaluate(() => { location.hash = '#tier=3&scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => document.querySelectorAll('#ssb-scope-controls .ssb-scope-station').length > 0 && !!document.querySelector('#ssb-scope-controls [data-station="t.nsf-pedicle.M"]'), null, { timeout: 5000 });
+    check('stations (E6): at tier 3 the deeper stations join (t.frontal-recess-70.R at tier 2, t.nsf-pedicle.M at tier 3)', (await stList(page)).map((x) => x.key).join() === stFor('R', 3).join(), JSON.stringify((await stList(page)).map((x) => x.key)));
+    await page.click('#ssb-scope-controls button[data-side="L"]');
+    check('stations (E6): the left nostril lists the .L stations and the midline ones', (await stList(page)).map((x) => x.key).join() === stFor('L', 3).join(), JSON.stringify((await stList(page)).map((x) => x.key)));
+    await page.click('#ssb-scope-controls button[data-side="R"]');
+
+    /* a flight: t.ser-0.R from R,40,0,0,0,0 */
+    await page.evaluate(() => { window.__flight = []; window.__flightTimer = setInterval(() => { const sc = window.__ssb.scope; window.__flight.push({ flying: sc.flying, pose: sc.pose }); }, 25); });
+    await page.click('#ssb-scope-controls [data-station="t.ser-0.R"]');
+    const during = await page.evaluate(() => window.__ssb.scope.flying);
+    await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
+    await page.waitForFunction((h) => location.hash === h, `#scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`, { timeout: 3000 }).catch(() => {});
+    const end1 = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash, tip: window.__ssb.scope.tip, flight: window.__flight.slice() }));
+    check('stations (E6): picking t.ser-0 starts a flight, which ends at the station\'s stored pose and the ordinary pose URL (#scope=R,32,-5,19,0,0)',
+      during === true && samePoseObj(end1.pose, ST['t.ser-0.R'].pose) && end1.hash === `#scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`, JSON.stringify([during, end1.pose, end1.hash]));
+    const mids = end1.flight.filter((x) => x.flying && x.pose && !samePoseObj(x.pose, ST['t.ser-0.R'].pose) && x.pose.pitch > 0 && x.pose.pitch < ST['t.ser-0.R'].pose.pitch);
+    check('stations (E6): the flight passes through poses between the two (a pitch strictly between 0 and the station\'s), not a cut', mids.length >= 1, JSON.stringify(end1.flight.filter((x) => x.flying).slice(0, 6).map((x) => x.pose && [x.pose.depth, x.pose.yaw, x.pose.pitch])));
+    const pressed = await stList(page);
+    check('stations (E6): at the station its button is the pressed one, and only it', pressed.filter((x) => x.pressed === 'true').map((x) => x.key).join() === 't.ser-0.R', JSON.stringify(pressed.map((x) => [x.key, x.pressed])));
+    const cam = await spec(page, () => window.__ssb.scope.camera());
+    check('stations (E6): the camera is at the station (camera at the tip, looking along the stored view) when the flight ends', cam.position.every((v, i) => near(v, end1.tip[i], 0.01)), JSON.stringify(cam.position));
+
+    /* roll the short way, lens at the end: t.third-pass-middle-meatus.R is lens 30, roll 315 */
+    await page.evaluate(() => { window.__flight.length = 0; });
+    await page.click('#ssb-scope-controls [data-station="t.third-pass-middle-meatus.R"]');
+    await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
+    const f2 = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, flight: window.__flight.filter((x) => x.flying).map((x) => x.pose) }));
+    const tgt2 = ST['t.third-pass-middle-meatus.R'].pose;
+    check('stations (E6): a 0 -> 315 roll goes the short way (never below 315 on the way) and the lens switches only at the end (0 until then, 30 after)',
+      samePoseObj(f2.pose, tgt2) && f2.flight.length >= 1 && f2.flight.every((q) => q.roll >= 315 || q.roll === 0) && f2.flight.filter((q) => q.lens !== 0 && !samePoseObj(q, tgt2)).length === 0 && f2.pose.lens === 30, JSON.stringify(f2.flight.map((q) => [q.roll, q.lens])));
+
+    /* a flight is a pose change like any other: collision keeps it free, the CT inset follows, the exposure settles */
+    await page.waitForTimeout(300);
+    const settled = await page.evaluate(() => { const sc = window.__ssb.scope; return { hud: sc.hud, cursor: sc.cursor, tip: sc.tip, inset: !!sc.inset }; });
+    check('stations (E6): after the flight the CT cursor is the tip, the scope is not limited by bone or the septum, and the inset has been resampled', settled.cursor && settled.cursor.every((v, i) => near(v, settled.tip[i], 1.0)) && !settled.hud.limited && settled.inset, JSON.stringify(settled.hud));
+
+    /* any input cancels the flight where it is */
+    const cancel = await page.evaluate(() => {      /* in one task, so no frame lets the flight finish between the pick and the key */
+      document.querySelector('#ssb-scope-controls [data-station="t.first-pass-floor.R"]').click();
+      const flyingNow = window.__ssb.scope.flying;
+      document.getElementById('ssb-canvas').dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true }));
+      return { flyingNow, stopped: { flying: window.__ssb.scope.flying, pose: window.__ssb.scope.pose } };
+    });
+    const { flyingNow, stopped } = cancel;
+    await page.waitForTimeout(900);
+    const later = await page.evaluate(() => window.__ssb.scope.pose);
+    check('stations (E6): a key press during a flight cancels it — the flight stops where it is and the pose does not go on to the station', flyingNow === true && stopped.flying === false && samePoseObj(stopped.pose, later) && !samePoseObj(later, ST['t.first-pass-floor.R'].pose), JSON.stringify([flyingNow, stopped, later]));
+    await page.evaluate(() => clearInterval(window.__flightTimer));
+    await page.evaluate(() => { location.hash = '#scope=L,30,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope.pose && window.__ssb.scope.pose.side === 'L', null, { timeout: 5000 });
+    await page.click('#ssb-scope-controls [data-station="t.nsf-pedicle.M"]');
+    await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
+    check('stations (E6): picking a midline (.M) station from the left scope switches to the right nostril (its pose is posed from the right) and arrives at the stored pose', samePoseObj(await spec(page, () => window.__ssb.scope.pose), ST['t.nsf-pedicle.M'].pose), JSON.stringify(await spec(page, () => window.__ssb.scope.pose)));
+    await context.close();
+  }
+
+  /* reduced motion: a cut */
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,0', { reducedMotion: 'reduce' });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'ready', null, { timeout: 30000 });
+    await nextFrames(page, 3);
+    await page.click('#ssb-scope-controls [data-station="t.ser-0.R"]');
+    const cut = await page.evaluate(() => ({ flying: window.__ssb.scope.flying, pose: window.__ssb.scope.pose }));
+    check('stations (E6): with prefers-reduced-motion the station is a cut — no flight, the stored pose at once', cut.flying === false && samePoseObj(cut.pose, ST['t.ser-0.R'].pose), JSON.stringify(cut));
+    await context.close();
+  }
+
+  /* deep links */
+  for (const [hash, key, note] of [['#scope=t.frontal-recess-70.L', 't.frontal-recess-70.L', 'a station with its side'], ['#scope=t.ser-0', 't.ser-0.R', 'no side: R'], ['#scope=t.nsf-pedicle', 't.nsf-pedicle.M', 'no side: the midline station'], ['#scope=t.nsf-pedicle.M', 't.nsf-pedicle.M', 'the midline station by name']]) {
+    const { context, page } = await openSpecimen(browser, base, hash);
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
+    await page.waitForFunction((h) => location.hash === h, `#scope=${SC.formatScope(ST[key].pose)}`, { timeout: 3000 }).catch(() => {});
+    const r = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash }));
+    check(`stations (E6): ${hash} (${note}) opens the scope at that station's stored pose and rewrites the URL to the ordinary pose form`, samePoseObj(r.pose, ST[key].pose) && r.hash === `#scope=${SC.formatScope(ST[key].pose)}`, JSON.stringify(r));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    await page.evaluate(() => { location.hash = '#scope=t.ser-0.L'; });
+    await page.waitForFunction(() => window.__ssb.scope.engaged, null, { timeout: 15000 });
+    check('stations (E6): a station link pasted while the page is open (a hash change) opens the scope too', samePoseObj(await spec(page, () => window.__ssb.scope.pose), ST['t.ser-0.L'].pose));
+    await context.close();
+  }
+  for (const hash of ['#scope=t.nope', '#scope=t.ser-0.X', '#scope=t.ser-0.M', '#scope=t.ser_0', '#scope=t.ser-0%0A', '#scope=t.nsf-pedicle.L']) {
+    const { context, page } = await openSpecimen(browser, base, hash);
+    await page.waitForFunction(() => window.__ssb.scope, null, { timeout: 15000 });
+    await page.waitForTimeout(1200);
+    const r = await page.evaluate(() => ({ active: window.__ssb.scope.active, engaged: window.__ssb.scope.engaged, hash: location.hash, stage: document.getElementById('ssb-app').dataset.stage, state: window.__ssb.scope.stationsState }));
+    check(`stations (E6): ${hash} is ignored like any hostile link — the specimen stage, no pose, a clean URL`, !r.active && !r.engaged && r.hash === '' && r.stage === 'specimen', JSON.stringify(r));
+    await context.close();
+  }
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#scope=t.ser-0', { abort: /\/ssb\/geometry\/stations\.json/, track: false });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.stationsState === 'failed', null, { timeout: 15000 });
+    await page.waitForTimeout(500);
+    const r = await page.evaluate(() => ({ active: window.__ssb.scope.active, hash: location.hash }));
+    check('stations (E6): with stations.json unreachable a station link is ignored and nothing throws', !r.active && r.hash === '' && errors.filter((e) => e.type === 'pageerror').length === 0, JSON.stringify([r, errors.slice(0, 3)]));
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 3);
+    const n = await page.evaluate(() => ({ list: document.querySelectorAll('#ssb-scope-controls .ssb-scope-station').length, hidden: [...document.querySelectorAll('#ssb-scope-controls .ssb-lab-sec')].filter((x) => x.querySelector('.ssb-scope-stations')).every((x) => x.hidden), state: window.__ssb.scope.stationsState }));
+    check('stations (E6): with stations.json unreachable the scope still works and the Stations section is hidden (no list, no error)', n.list === 0 && n.hidden && n.state === 'failed', JSON.stringify(n));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,0', { routes: { 'stations.json': (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{"stations": 7' }) }, track: false });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'failed', null, { timeout: 15000 });
+    const n = await page.evaluate(() => ({ list: document.querySelectorAll('#ssb-scope-controls .ssb-scope-station').length, engaged: window.__ssb.scope.engaged }));
+    check('stations (E6): a malformed stations.json is an empty table — no list, the scope unaffected', n.list === 0 && n.engaged, JSON.stringify(n));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const asked = [];
+    page.on('request', (r) => { if (/\/ssb\/geometry\/stations\.json/.test(r.url())) asked.push(r.url()); });
+    await nextFrames(page, 4);
+    await page.waitForTimeout(500);
+    const before = asked.length;
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'ready', null, { timeout: 30000 });
+    check('stations (E6): stations.json loads with the scope, not at page boot, and once', before === 0 && asked.length === 1, JSON.stringify([before, asked.length]));
     await context.close();
   }
 

@@ -12,14 +12,15 @@
    registry and its keys in that diorama's PARAMS, a CT plane is one of
    three names and its crosshair is three finite numbers clamped to the
    volume's bounds, an endoscope pose is six fields with a whitelisted side
-   and lens and clamped numbers (scope.js), numbers are parsed, clamped and snapped to the step,
+   and lens and clamped numbers, or a station link `t.<id>[.<side>]` that only
+   names a lookup key (scope.js), numbers are parsed, clamped and snapped to the step,
    unknown keys are ignored, and nothing here ever produces markup.
 
    Storage is `ssb:prefs` (tier), guarded: a blocked or full localStorage is
    a no-op, never an exception (docs/decisions.md section 3).
    ============================================================= */
 
-import { parseScope, formatScope, clampPose, samePose } from './scope.js?v=9658ff9e';
+import { parseScope, parseStationLink, formatScope, clampPose, samePose } from './scope.js?v=844c8624';
 
 export const TIER_MIN = 1;
 export const TIER_MAX = 3;
@@ -92,9 +93,10 @@ function sameLab(a, b) {
 }
 
 /* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&ct=<plane>&at=<r,a,s>&scope=<pose>&q=<full|lite>'
-   -> { selection?, tier?, lab?, ct?, scope?, cursor?, quality? } (a lab wins over
+   -> { selection?, tier?, lab?, ct?, scope?, station?, cursor?, quality? } (a lab wins over
    a ct, a ct over a scope; `at` without a plane is the specimen's 3D cursor,
-   `cursor`).
+   `cursor`; `scope=t.<id>` is a station link, `station`, kept as text until the
+   endoscope has read the station table and calls resolveStation).
    Only whitelisted keys, only valid values; anything else is dropped.
    `has(id)` is the graph's index lookup; `labs` maps a diorama name to its
    { params: PARAMS, presets: PRESETS }. A classification id naming a preset
@@ -127,8 +129,10 @@ export function parseHash(hash, has, labs = {}) {
     }
     const plane = out.lab ? null : clampCtPlane(params.get('ct'));
     const at = parseCtAt(params.get('at'));
-    const scope = out.lab || plane ? null : parseScope(params.get('scope'));
+    const scopeText = out.lab || plane ? null : params.get('scope');
+    const scope = parseScope(scopeText);
     if (scope) out.scope = scope;
+    else if (parseStationLink(scopeText)) out.station = scopeText;
     if (plane) out.ct = { plane, at };
     else if (at && !out.lab && params.get('ct') === null) out.cursor = at;     /* a bad `ct` still ignores the whole stage */
     const quality = clampQuality(params.get('q'));
@@ -158,6 +162,7 @@ export function formatHash(state, labs = {}) {
         parts.push('ct=' + CT_CODE[state.ct.plane]);
         if (state.ct.at) parts.push('at=' + atText(state.ct.at));
     } else if (!state.lab && state.scope) parts.push('scope=' + formatScope(state.scope));      /* the link is the pose alone: the shared cursor (`at`) is deliberately not written, so a reload opens CT at the volume centre */
+    else if (!state.lab && state.station && parseStationLink(state.station)) parts.push('scope=' + state.station);      /* a link not yet resolved to a pose survives a rewrite of the address bar */
     else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
@@ -247,14 +252,16 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, scope, cursor, quality }. Invariant: the
+/* state = { tier, selection, lab, ct, scope, station, cursor, quality }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is one of four: the specimen (lab, ct and scope all null), the variant lab
    (`lab`: { name, params } with every parameter present and clamped,
    normalizeLab), CT (`ct`: { plane, at }, normalizeCt), or the endoscope
    (`scope`: a whole pose, scope.js, shown on the specimen); entering one
-   leaves the others.
+   leaves the others. `station` is a station link (`t.<id>[.<side>]`) waiting for
+   the endoscope to turn it into a pose (resolveStation); it is never set with a
+   scope pose, a lab or CT.
    `cursor` is the one 3D cursor in RAS mm, shared by CT and the specimen: the
    CT crosshair is `ct.at`, which the store keeps equal to `cursor` while the
    CT stage shows, and `cursor` is what survives in the specimen stage (where
@@ -278,6 +285,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         lab: fromUrl.lab || null,
         ct: ct0,
         scope: ct0 ? null : fromUrl.scope || null,
+        station: ct0 || fromUrl.scope ? null : fromUrl.station || null,
         cursor: ct0 ? ct0.at : clampAt(fromUrl.cursor, ctBounds),
         quality: fromUrl.quality || null,
     });
@@ -287,7 +295,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const prev = state;
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
-            && samePose(next.scope, prev.scope) && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality) return false;
+            && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality) return false;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
         if (samePose(next.scope, prev.scope)) next.scope = prev.scope;
@@ -321,7 +329,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         setLab(lab, meta = { source: 'lab' }) {
             if (lab === null) return set({ lab: null }, meta);
             const next = normalizeLab(lab, labs);
-            return next ? set({ lab: next, ct: null, scope: null }, meta) : false;
+            return next ? set({ lab: next, ct: null, scope: null, station: null }, meta) : false;
         },
         /* Enter or change the CT stage ({ plane, at }), or leave it (null):
            the plane is whitelisted and the crosshair clamped to the bounds;
@@ -332,7 +340,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const next = normalizeCt(ct, ctBounds);
             if (!next) return false;
             const at = next.at || state.cursor;
-            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null, scope: null }, meta);
+            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null, scope: null, station: null }, meta);
         },
         /* Enter or change the endoscope ({ side, depth, yaw, pitch, roll, lens },
            clamped here too), or leave it (null, back to the specimen). Entering
@@ -340,7 +348,14 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         setScope(pose, meta = { source: 'scope' }) {
             if (pose === null) return set({ scope: null }, meta);
             const next = clampPose(pose);
-            return next ? set({ scope: next, lab: null, ct: null }, meta) : false;
+            return next ? set({ scope: next, lab: null, ct: null, station: null }, meta) : false;
+        },
+        /* Turn a pending station link into its pose (a whole pose) or drop it (null: an unknown station, or no
+           table). The one writer of `station` besides the hash. */
+        resolveStation(pose, meta = { source: 'url' }) {
+            if (!state.station) return false;
+            const next = pose ? clampPose(pose) : null;
+            return set({ station: null, scope: next, lab: null, ct: null }, meta);
         },
         /* Move the 3D cursor (RAS mm, clamped), or clear it (null). In the CT
            stage this is the crosshair; elsewhere it is remembered for the
@@ -358,7 +373,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             return set(state.ct ? { cursor, ct: { plane: state.ct.plane, at: cursor } } : { cursor }, { source: 'ct-bounds' });
         },
         /* Back to the specimen stage. */
-        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null }, meta); },
+        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
         applyHash(next) {
             const p = parseHash(next, has, labs);
@@ -366,7 +381,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
             const ct = p.ct ? normalizeCt(p.ct, ctBounds) : null;
             const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
-            return set({ selection, tier, lab: p.lab || null, ct, scope: ct ? null : p.scope || null, cursor, quality: p.quality || null }, { source: 'url' });
+            return set({ selection, tier, lab: p.lab || null, ct, scope: ct ? null : p.scope || null, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),

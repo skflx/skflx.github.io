@@ -126,6 +126,56 @@ export function formatScope(p) {
     return [p.side, num(p.depth), num(p.yaw), num(p.pitch), num(p.roll), p.lens].join(',');
 }
 
+/* ---------------- stations (E6) ---------------- */
+
+/* `#scope=t.<id>[.<side>]` is a station link: a graph station id (lowercase words joined by hyphens) and an optional
+   side. It is untrusted input like the pose form: the whitelist is the shape, and what it names is only ever a
+   lookup key into the station table (resolveStation), never markup or a path. Returns { id, side } (side null when
+   absent) or null. */
+const STATION_LINK = /^(t\.[a-z0-9]+(?:-[a-z0-9]+)*)(?:\.(R|L|M))?$/;
+export function parseStationLink(text) {
+    if (typeof text !== 'string' || text.length > HASH_MAX) return null;
+    const m = STATION_LINK.exec(text);
+    return m ? { id: m[1], side: m[2] || null } : null;
+}
+
+/* ssb/geometry/stations.json -> Map("t.<id>.<side>" -> { id, side, pose }). Only the `stations` table is read; an
+   entry whose key is not `t.<id>.R|L|M` or whose pose is not whole (a side R or L, the four numbers, a whitelisted lens)
+   is skipped, the numbers clamp to RANGES like any pose. A midline (.M) station is posed from the right nostril. A
+   malformed document is an empty map: the station list then hides and a station link is ignored. */
+export function parseStations(doc) {
+    const out = new Map();
+    const table = doc && typeof doc === 'object' ? doc.stations : null;
+    if (!table || typeof table !== 'object' || Array.isArray(table)) return out;
+    for (const [key, entry] of Object.entries(table)) {
+        const m = /^(t\.[a-z0-9]+(?:-[a-z0-9]+)*)\.(R|L|M)$/.exec(key);
+        const raw = entry && typeof entry === 'object' ? entry.pose : null;
+        if (!m || !raw || typeof raw !== 'object' || !SIDES.includes(raw.side) || !LENSES.includes(raw.lens)) continue;
+        if (!Object.keys(RANGES).every((k) => clampField(k, raw[k]) !== null)) continue;
+        out.set(key, { id: m[1], side: m[2], pose: clampPose(raw) });
+    }
+    return out;
+}
+
+/* A parsed link -> its entry in a parseStations map, or null. The side defaults to R; with no side given a midline
+   station (.M) is the fallback, so `t.nsf-pedicle` finds it. A side that is named must exist. */
+export function resolveStation(stations, link) {
+    if (!(stations instanceof Map) || !link) return null;
+    const key = `${link.id}.${link.side || 'R'}`;
+    const hit = stations.get(key) || (link.side ? null : stations.get(`${link.id}.M`));
+    return hit || null;
+}
+
+/* The pose halfway along the flight from `a` to `b` (e in 0..1, already eased): depth, yaw and pitch go straight, roll
+   goes the shortest way round, the side is the target's from the first step (a different fulcrum has no halfway) and
+   the lens is the target's only once the flight ends (e >= 1). The store snaps each step to RANGES. */
+export function flightPose(a, b, e) {
+    if (e >= 1) return { ...b };
+    const lerp = (x, y) => x + (y - x) * e;
+    const turn = ((b.roll - a.roll + 540) % 360) - 180;
+    return { side: b.side, depth: lerp(a.depth, b.depth), yaw: lerp(a.yaw, b.yaw), pitch: lerp(a.pitch, b.pitch), roll: (a.roll + turn * e + 360) % 360, lens: a.lens };
+}
+
 export function samePose(a, b) {
     if (a === b) return true;
     return !!a && !!b && a.side === b.side && a.depth === b.depth && a.yaw === b.yaw && a.pitch === b.pitch && a.roll === b.roll && a.lens === b.lens;

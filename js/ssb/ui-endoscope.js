@@ -1,14 +1,14 @@
 /* =============================================================
    ui-endoscope.js — the Endoscope stage's DOM: the field-of-view overlay
    (circular vignette, light-post indicator, pose readout) and the controls
-   (side, lens, depth / yaw / pitch / roll sliders), which live in the
+   (side, lens, depth / yaw / pitch / roll sliders, the station list), which live in the
    Specimen dock's body and show only while the scope does.
 
    Everything is written with textContent / attributes / properties; the URL
    never reaches markup. State flows one way: the store's pose -> sync();
    the controls only ever call endo.setPose / endo.enter.
    ============================================================= */
-import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=9658ff9e';
+import { LENSES, RANGES, SIDES, lightPostAngle, frameOf, samePose } from './scope.js?v=844c8624';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -120,6 +120,40 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     hudSec.append(hudList);
     poseSec.append(tipOut, fulcrumNote, keys, status);
 
+    /* ---- stations (E6): the covered ones for this nostril (and the midline ones), at or above the page's tier ---- */
+    const stationSec = section('Stations');
+    stationSec.hidden = true;
+    const stationList = el('div', 'ssb-scope-stations');
+    stationList.setAttribute('role', 'group');
+    stationList.setAttribute('aria-label', 'Endoscope stations');
+    stationSec.append(stationList, el('p', 'ssb-param-src', 'Each station is a stored pose on the reference specimen; picking one flies the scope there (a cut with reduced motion). The pose stays free: change the nostril, lens or angles from there.'));
+    let stationKey = '';
+    function renderStations() {
+        const p = endo.pose;
+        const tier = store.get().tier;
+        const shown = p ? endo.stations.filter((s) => (s.side === 'M' || s.side === p.side) && s.tier <= tier) : [];
+        stationSec.hidden = !shown.length;
+        const key = shown.map((s) => s.key).join('|');
+        if (key !== stationKey) {
+            stationKey = key;
+            stationList.replaceChildren();
+            for (const s of shown) {
+                const b = el('button', 'site-pill ssb-scope-station');
+                b.type = 'button';
+                b.dataset.station = s.key;
+                b.append(el('span', 'ssb-scope-station-name', s.name.replace(/,\s*\d+°$/, '')), el('span', 'ssb-scope-station-lens', `${s.pose.lens}°`));
+                b.title = `${s.name}: fly the scope here`;
+                stationList.append(b);
+            }
+        }
+        const here = new Map(endo.stations.map((s) => [s.key, s.pose]));
+        for (const b of stationList.querySelectorAll('button[data-station]')) {
+            const on = !!p && !endo.flying && samePose(here.get(b.dataset.station), p);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            b.classList.toggle('active', on);
+        }
+    }
+
     /* ---- CT along the scope (E4): the oblique slice through the tip, spanned by the view and the camera's up ---- */
     const ctSec = section('CT along the scope');
     ctSec.hidden = true;
@@ -188,6 +222,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
         mark(lensRow, 'lens', p.lens);
         mark(shaftRow, 'shaft', endo.shaft);
         renderHud();
+        renderStations();
         for (const [key, s] of sliders) {
             if (Number(s.range.value) !== p[key]) s.range.value = String(p[key]);
             s.out.textContent = `${fmt(p[key])} ${s.unit}`;
@@ -206,7 +241,8 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     root.addEventListener('click', (e) => {
         const b = e.target.closest('button');
         if (!b || !endo.pose) return;
-        if (b.dataset.shaft) endo.setShaft(b.dataset.shaft);
+        if (b.dataset.station) endo.flyTo(b.dataset.station);
+        else if (b.dataset.shaft) endo.setShaft(b.dataset.shaft);
         else if (b.dataset.side) endo.setPose({ side: b.dataset.side });
         else if (b.dataset.lens) endo.setPose({ lens: Number(b.dataset.lens) });
     });
@@ -221,7 +257,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     if (button) button.addEventListener('click', () => { if (!store.get().scope) endo.enter(); });
 
     endo.onChange(() => { sync(); pillState(); });
-    store.subscribe((state, prev) => { if (state.scope !== prev.scope) { sync(); pillState(); } });
+    store.subscribe((state, prev) => { if (state.scope !== prev.scope) { sync(); pillState(); } else if (state.tier !== prev.tier) renderStations(); });
     sync();
     pillState();
 }

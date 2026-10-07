@@ -666,3 +666,7 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   background: var(--ssb-ct-bg); border: 1px solid var(--rule);
 }
 .ssb-scope-controls .ssb-lab-sec[hidden] { display: none; }
+/* the station list (E6): one pill per station, the lens as a small mono tag */
+.ssb-scope-stations { display: flex; flex-direction: column; gap: 0.35rem; align-items: stretch; }
+.ssb-scope-station { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; text-align: left; }
+.ssb-scope-station-lens { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.04em; opacity: 0.75; flex: none; }
