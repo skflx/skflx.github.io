@@ -1,0 +1,492 @@
+{
+ "version": 1,
+ "rule": "Endoscope station poses on the standard specimen (E5, Opus, 2026-10-07). Key \"t.<id>.<side>\" (a midline station: \".M\", posed from the right nostril). pose: scope.js fields (fulcrum lm.naris.<side>). Every pose is free under scope.js shaftClearance with the 4 mm shaft and the E3b midline rule, its tip lies in airway air (not in mucosa: this specimen is not decongested, and a tip in tissue sees a uniform field), and its target is within the 35 degree half field. target: a landmark, or a label whose voxel centroid is the point, or an explicit RAS point \"at\" (between: the midpoint of two landmarks). measured: what a cone of rays (161, over the 70 degree field) hits first through the labelled air, in percent of the image; \"tissue\" is unlabelled soft tissue with no labelled wall within 8 mm behind it. The left poses are the right ones mirrored: the same side-relative depth, yaw and pitch, roll -> 360 - roll.",
+ "stations": {
+  "t.first-pass-floor.R": {
+   "pose": {
+    "side": "R",
+    "depth": 41,
+    "yaw": -5,
+    "pitch": -4,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "id": "s.nasopharynx.M"
+   },
+   "measured": {
+    "tip": [
+     3,
+     -36.3,
+     1.8
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 2.8,
+    "contactMm": 6.5,
+    "imageShare": {
+     "s.nasal-septum.M": 44,
+     "tissue": 29,
+     "s.inferior-turbinate.R": 16,
+     "s.sphenoid-floor.R": 5,
+     "s.nasal-floor.R": 5
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 100,
+     "s.nasopharynx.M": 24
+    }
+   }
+  },
+  "t.first-pass-floor.L": {
+   "pose": {
+    "side": "L",
+    "depth": 41,
+    "yaw": -5,
+    "pitch": -4,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "id": "s.nasopharynx.M"
+   },
+   "measured": {
+    "tip": [
+     -3,
+     -36.3,
+     1.8
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 2.8,
+    "contactMm": 6.5,
+    "imageShare": {
+     "s.nasal-septum.M": 44,
+     "tissue": 29,
+     "s.inferior-turbinate.L": 16,
+     "s.sphenoid-floor.L": 5,
+     "s.nasal-floor.L": 5
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 100,
+     "s.nasopharynx.M": 24
+    }
+   }
+  },
+  "t.second-pass-ser.R": {
+   "pose": {
+    "side": "R",
+    "depth": 32,
+    "yaw": -5,
+    "pitch": 19,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "id": "lm.sphenoid-ostium.R"
+   },
+   "measured": {
+    "tip": [
+     3.9,
+     -25.7,
+     15.1
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 1,
+    "contactMm": 0,
+    "imageShare": {
+     "s.nasal-septum.M": 52,
+     "s.middle-turbinate.R": 40,
+     "tissue": 7,
+     "s.sphenoid-face.R": 1,
+     "s.inferior-turbinate.R": 1
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 74,
+     "s.nasopharynx.M": 3
+    }
+   }
+  },
+  "t.second-pass-ser.L": {
+   "pose": {
+    "side": "L",
+    "depth": 32,
+    "yaw": -5,
+    "pitch": 19,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "id": "lm.sphenoid-ostium.L"
+   },
+   "measured": {
+    "tip": [
+     -3.9,
+     -25.7,
+     15.1
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 1,
+    "contactMm": 0,
+    "imageShare": {
+     "s.nasal-septum.M": 52,
+     "s.middle-turbinate.L": 40,
+     "tissue": 7,
+     "s.sphenoid-face.L": 1,
+     "s.inferior-turbinate.L": 1
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 74,
+     "s.nasopharynx.M": 3
+    }
+   }
+  },
+  "t.ser-0.R": {
+   "pose": {
+    "side": "R",
+    "depth": 49,
+    "yaw": -3,
+    "pitch": 18,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "id": "lm.sphenoid-ostium.R"
+   },
+   "measured": {
+    "tip": [
+     4.1,
+     -42.1,
+     19.8
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 14.7,
+    "contactMm": 10,
+    "imageShare": {
+     "s.nasal-septum.M": 31,
+     "s.middle-turbinate.R": 30,
+     "s.sphenoid-face.R": 23,
+     "tissue": 11,
+     "s.sphenoid-floor.R": 4,
+     "s.intersinus-septum.M": 1
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 100,
+     "s.sphenoid-sinus.R": 1
+    }
+   }
+  },
+  "t.ser-0.L": {
+   "pose": {
+    "side": "L",
+    "depth": 49,
+    "yaw": -3,
+    "pitch": 18,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "id": "lm.sphenoid-ostium.L"
+   },
+   "measured": {
+    "tip": [
+     -4.1,
+     -42.1,
+     19.8
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 14.7,
+    "contactMm": 10,
+    "imageShare": {
+     "s.nasal-septum.M": 31,
+     "s.middle-turbinate.L": 30,
+     "s.sphenoid-face.L": 23,
+     "tissue": 11,
+     "s.sphenoid-floor.L": 4,
+     "s.intersinus-septum.M": 1
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 100,
+     "s.sphenoid-sinus.L": 1
+    }
+   }
+  },
+  "t.nsf-pedicle.M": {
+   "pose": {
+    "side": "R",
+    "depth": 51,
+    "yaw": -3,
+    "pitch": 12,
+    "roll": 0,
+    "lens": 0
+   },
+   "target": {
+    "between": [
+     "lm.sphenoid-ostium.R",
+     "lm.choanal-arch.M"
+    ],
+    "at": [
+     0.84,
+     -50.73,
+     18.08
+    ]
+   },
+   "measured": {
+    "tip": [
+     3.9,
+     -45.4,
+     15.3
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 28.3,
+    "contactMm": 6,
+    "imageShare": {
+     "tissue": 43,
+     "s.sphenoid-face.R": 29,
+     "s.sphenoid-floor.R": 21,
+     "s.sphenoid-floor.L": 4,
+     "s.nasal-septum.M": 3
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 81,
+     "s.nasopharynx.M": 3
+    }
+   }
+  },
+  "t.frontal-recess-70.R": {
+   "pose": {
+    "side": "R",
+    "depth": 43,
+    "yaw": -2,
+    "pitch": 44,
+    "roll": 0,
+    "lens": 70
+   },
+   "target": {
+    "id": "lm.frontal-ostium.R"
+   },
+   "measured": {
+    "tip": [
+     5.5,
+     -26.5,
+     34.6
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 0.9,
+    "contactMm": 4,
+    "imageShare": {
+     "tissue": 93,
+     "s.lamina-papyracea.R": 4,
+     "s.middle-turbinate.R": 2
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 99,
+     "s.frontal-recess.R": 19,
+     "s.agger-nasi-cell.R": 10,
+     "s.frontal-sinus.R": 2
+    }
+   }
+  },
+  "t.frontal-recess-70.L": {
+   "pose": {
+    "side": "L",
+    "depth": 43,
+    "yaw": -2,
+    "pitch": 44,
+    "roll": 0,
+    "lens": 70
+   },
+   "target": {
+    "id": "lm.frontal-ostium.L"
+   },
+   "measured": {
+    "tip": [
+     -5.5,
+     -26.5,
+     34.6
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 0.9,
+    "contactMm": 4,
+    "imageShare": {
+     "tissue": 93,
+     "s.lamina-papyracea.L": 4,
+     "s.middle-turbinate.L": 2
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 99,
+     "s.frontal-recess.L": 19,
+     "s.agger-nasi-cell.L": 10,
+     "s.frontal-sinus.L": 2
+    }
+   }
+  },
+  "t.third-pass-middle-meatus.R": {
+   "pose": {
+    "side": "R",
+    "depth": 32,
+    "yaw": -3,
+    "pitch": 30,
+    "roll": 315,
+    "lens": 30
+   },
+   "target": {
+    "id": "s.ethmoid-bulla.R"
+   },
+   "measured": {
+    "tip": [
+     5.1,
+     -23.2,
+     20.7
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 1,
+    "contactMm": 2.5,
+    "imageShare": {
+     "s.middle-turbinate.R": 51,
+     "s.maxillary-medial-wall.R": 46,
+     "tissue": 3
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 100
+    }
+   }
+  },
+  "t.third-pass-middle-meatus.L": {
+   "pose": {
+    "side": "L",
+    "depth": 32,
+    "yaw": -3,
+    "pitch": 30,
+    "roll": 45,
+    "lens": 30
+   },
+   "target": {
+    "id": "s.ethmoid-bulla.L"
+   },
+   "measured": {
+    "tip": [
+     -5.1,
+     -23.2,
+     20.7
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 1,
+    "contactMm": 2.5,
+    "imageShare": {
+     "s.middle-turbinate.L": 51,
+     "s.maxillary-medial-wall.L": 46,
+     "tissue": 3
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 100
+    }
+   }
+  },
+  "t.nasopharynx-lateral.R": {
+   "pose": {
+    "side": "R",
+    "depth": 61,
+    "yaw": 3,
+    "pitch": -3,
+    "roll": 285,
+    "lens": 30
+   },
+   "target": {
+    "note": "the lateral nasopharyngeal wall at the torus level (the torus and the Eustachian tube are not segmented)",
+    "at": [
+     13,
+     -62,
+     2
+    ]
+   },
+   "measured": {
+    "tip": [
+     9.7,
+     -56.4,
+     1.5
+    ],
+    "tipIn": "s.nasopharynx.M",
+    "targetOffAxisDeg": 1.9,
+    "contactMm": 39.5,
+    "imageShare": {
+     "tissue": 100
+    },
+    "raysThrough": {
+     "s.nasopharynx.M": 100
+    }
+   }
+  },
+  "t.nasopharynx-lateral.L": {
+   "pose": {
+    "side": "L",
+    "depth": 61,
+    "yaw": 3,
+    "pitch": -3,
+    "roll": 75,
+    "lens": 30
+   },
+   "target": {
+    "note": "the lateral nasopharyngeal wall at the torus level (the torus and the Eustachian tube are not segmented)",
+    "at": [
+     -13,
+     -62,
+     2
+    ]
+   },
+   "measured": {
+    "tip": [
+     -9.7,
+     -56.4,
+     1.5
+    ],
+    "tipIn": "s.nasopharynx.M",
+    "targetOffAxisDeg": 1.9,
+    "contactMm": 39.5,
+    "imageShare": {
+     "tissue": 100
+    },
+    "raysThrough": {
+     "s.nasopharynx.M": 100
+    }
+   }
+  }
+ },
+ "uncovered": {
+  "t.olfactory-cleft-0": "closed in this specimen: the middle turbinate lies against the septum (not decongested), so every free pose aimed at the cribriform plate sees only turbinate and septum",
+  "t.frontal-recess-45": "from the middle turbinate axilla the 45 degree view is filled by the turbinate (mucosa apposed to the lateral wall); the recess is shown by t.frontal-recess-70",
+  "t.inferior-meatus-45": "needs the inferior turbinate medialised: no free tip lies under the turbinate in this specimen",
+  "t.septum-anterior": "needs the vestibule and the internal valve, masked until ST6 (external nose)",
+  "t.lacrimal-sac-0": "needs the anterior nasal cavity in front of the middle turbinate head, masked until ST6",
+  "t.ethmoid-bulla-0": "needs dissection: the uncinate process resected",
+  "t.basal-lamella-0": "needs dissection: the bulla opened",
+  "t.posterior-ethmoid-roof-0": "needs dissection: through the basal lamella",
+  "t.ethmoid-roof-30": "needs dissection: ethmoidectomy",
+  "t.frontal-sinus-70": "needs dissection: an enlarged frontal ostium (Draf IIa)",
+  "t.draf-iii-0": "needs dissection: septal window and frontal drillout",
+  "t.medial-orbital-floor-30": "needs dissection: a wide middle meatal antrostomy",
+  "t.medial-orbital-wall-0": "needs dissection: a completed sphenoethmoidectomy",
+  "t.infundibulum-45": "needs dissection: uncinectomy",
+  "t.maxillary-antrum-70": "needs dissection: a middle meatal antrostomy",
+  "t.spf-crista": "needs dissection: a lateral wall mucoperiosteal flap",
+  "t.ppf-transmaxillary": "needs dissection: posterior maxillary wall removed",
+  "t.sphenoid-face-0": "needs dissection: sphenoidotomy and posterior septectomy",
+  "t.sphenoid-lateral-recess-45": "needs dissection: sphenoidotomy and posterior septectomy",
+  "t.optic-canal-0": "needs dissection: posterior ethmoidectomy and sphenoidotomy",
+  "t.sella-open-30": "needs dissection: the sella opened",
+  "t.suprasellar-0": "needs dissection, and intradural structures the specimen does not have",
+  "t.clivus-0": "needs dissection, and intradural structures the specimen does not have",
+  "t.petrous-apex-45": "needs dissection: sphenoidotomy, posterior septectomy, clival recess",
+  "t.quadrangular-space-0": "needs dissection: transmaxillary-transpterygoid corridor",
+  "t.cvj-0": "needs posterior septectomy; C1 and the dens lie below the specimen crop",
+  "t.cavernous-sinus-30": "needs dissection: the sella opened"
+ },
+ "overviews": {
+  "ids": [
+   "t.nasal-cavity-overview",
+   "t.frontal-recess-sagittal",
+   "t.olfactory-fossa-coronal",
+   "t.acf-overview",
+   "t.ppf-itf-overview",
+   "t.central-skull-base-overview"
+  ],
+  "note": "scope null: an orbit-camera view, not an endoscope pose (procedure mode)"
+ }
+}

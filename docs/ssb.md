@@ -734,7 +734,7 @@ js/ssb/mode-*.js             explore, endoscope, ct, procedure, lab, quiz
 js/ssb/ui-*.js               panel, labels, tree/search, HUD, lab and CT controls
 js/vendor/three-<version>/   three.js module build + the addons used (§8)
 ssb/content/*.json           the knowledge graph
-ssb/geometry/*.json          labels, landmarks, sweeps, station poses
+ssb/geometry/*.json          labels, landmarks, sweeps, station poses (stations.json: E5; its `rule` string says how each pose was checked, `uncovered` lists the stations the intact specimen cannot show)
 ssb/models/, ssb/ct/         pipeline outputs
 tools/ssb-content.mjs        graph validator (CI)
 tools/ssb-pipeline/          offline geometry/CT pipeline

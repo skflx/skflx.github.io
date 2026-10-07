@@ -17,7 +17,7 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~ done; then external nose (ST6), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule done** (E1, E1b, E2, E2b, E3, E3b, E4) | station poses (E5, Opus), flights (E6) |
+| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses done** (E1, E1b, E2, E2b, E3, E3b, E4, E5) | station flights (E6) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -27,6 +27,8 @@ history keeps the specs).
 **Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2; O4 and O5 decided the same day, and ST3r (the flap contract) and the D1 amendments are written into `docs/ssb.md`. **Next:** wave 2's Sonnet lanes (`docs/ssb-sonnet-handoff.md`).
 
 **CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
+
+**E5 + ST1c (Opus, 2026-10-07):** ST1c reviewed (pass: the lining pack is deferred until the first look from within; `test-ssb` 589/589). E5 done: 7 of 40 stations posed on the specimen (13 sided poses), 27 `uncovered` with the reason, 6 overviews; both earlier pinned poses had the tip in tissue (§5 E5). E6 is rewritten around the file's `target` field, and **C1** is specced as six batches. **Next:** lane B ST6 → ST4d → ST5; lane C E6 (parallel with ST6: only `test-ssb.mjs` is shared); content lane C1a…C1f.
 
 **CP-2c (Opus, 2026-10-07):** E3b, ST2c and ST1b reviewed (§4, "CP-2c"): all three pass and are merged with CP-2b. CI on CP-2b was red from a test race (the lazily loaded collision volume and the store's 250 ms hash write), fixed in the tests. **Next:** lane B runs ST6 (the external nose), then ST4d, then ST5; Opus does E5 (station poses) — E3b and ST1b are in; follow-up WP **ST1c** (load the lining pack lazily) is small and runs first in lane B, before ST6 (same file, `mode-specimen.js`).
 
@@ -363,10 +365,10 @@ parallel sessions.
 
 | Lane | Order | Who |
 |---|---|---|
-| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → **ST1c** lazy lining (CP-2c) → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
-| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ (lane done until E6) | Sonnet |
+| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
+| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → **E6** station flights (after E5) | Sonnet |
 | Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a) | Sonnet |
-| Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · then **E5** station poses (after E3b, ST1b) | Opus |
+| Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · then CP-C1 reviews | Opus |
 
 **ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
 after ST4d: its contract (ST3r) is written.
@@ -874,17 +876,22 @@ Escalate: a pinned pose clamps under the new rule (report the depth and which ri
 
 *Result (Sonnet, 2026-10-05):* `shaftClearance(fulcrum, pose, ctAt, radius, arch)` in `scope.js` also blocks a sample (axis or ring) with s·R < 0 unless A < arch.a and S < arch.s; it returns `by` (`'bone'` | `'septum'` | null), and `limitedBy` reaches the hook and the HUD, which says "The septum or bone limits the depth." when the midline fired. `mode-endoscope.js` passes `lm.choanal-arch.M`'s A and S (`ARCH_DEFAULT` −51, 12 otherwise). `test-ssb` 572/572; the pinned sphenoid and frontal poses are unchanged. Pins changed (old → new): the pasted link `L,30,−10,0,0,30` now clamps at depth **26** (was 30; it swings medially), in the page check; the NaN / no-data check uses a straight-posterior pose (`yaw 0`) instead of the midline-crossing one, because the septum rule blocks on position, not data. The fixture file was not touched: the midline tests run in air (the fixture's own septum is bone and fires first).
 
-### E5 — Station poses        [todo] · **Opus** · depends: E3b, N1, ST1b
-Write `ssb/geometry/stations.json` (`{"t.<id>.<side>": pose}`) for every
-`t.*` the specimen covers, by driving the rig until the view shows what the
-station's `shows` lists; check each is collision-free. List stations the
-specimen cannot show (out of crop, needs dissection) for procedure mode.
+### E5 — Station poses        [done: Opus, 2026-10-07] · **Opus** · depends: E3b, N1, ST1b
+*Result:* `ssb/geometry/stations.json` — 7 of the graph's 40 stations posed (13 keys: six per side, `t.nsf-pedicle.M` from the right nostril), 27 listed as `uncovered` with the reason, 6 as `overviews` (scope `null`: orbit-camera views for procedure mode). Every pose is free (4 mm shaft, E3b midline rule), its tip is in airway air, and its `target` is inside the field; `measured` records what a 161-ray cone hits, so E6 and the checkpoint can re-check it without judgement. Left = right mirrored (roll → 360 − roll; checked: view and up vectors mirror exactly, hits identical). Solver and checks: scratch scripts, not committed (the method is the `rule` string in the file).
+Findings: (1) **the two earlier pinned poses put the tip in tissue** — `R,58.5,−3,19` inside `s.sphenoid-face.R`, `R,36,−2,33,0,70` inside `s.middle-turbinate.R`; the scope then looks out of mucosa, which is CP-2c's "near-uniform pink field". Collision blocks only at bone, so they stay valid poses, but stations require the tip in air. (2) The specimen is not decongested: at the sphenoethmoidal recess the air is ~2 mm wide, the olfactory cleft and the axilla are closed, the inferior meatus is not enterable — those stations are `uncovered`, not forced. (3) `t.septum-anterior` and `t.lacrimal-sac-0` wait on ST6 (the anterior cavity is masked); ST6 must re-run E6's station test, and add those two if its vestibule makes them reachable (an Opus pose, at its checkpoint).
 
-### E6 — Station flights        [todo] · Sonnet · depends: E5
-Station list in the endoscope UI from `t.*` (tier-filtered), flight between
-poses (interpolate pose parameters, not the camera), deep link
-`#scope=t.<id>`. Accept: every station's pose is collision-free and its
-first `shows` structure's centroid is inside the view frustum.
+### E6 — Station flights        [ready] · Sonnet · depends: E5 (merged)
+Goal: the endoscope can jump to any station the specimen covers, by list or by link.
+Read: this WP; E5's result above; the `rule` string in `ssb/geometry/stations.json`; `js/ssb/scope.js` (`clampPose`, `parseScope`, `formatScope`, `shaftClearance`, `frameOf`, `tipOf`, `FOV_DEG`); `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`; `docs/ssb.md` §3 (Endoscope).
+Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/scope.js` (codec only), `js/ssb/state.js` (hash), `css/ssb.css`, `tools/test-ssb.mjs`; docs pass.
+Don't: change `stations.json` or any pose in it (a pose that fails is reported, not edited); animate the camera directly (interpolate the pose, then the store); bend prefers-reduced-motion (a cut, no flight).
+Steps:
+1. Load `ssb/geometry/stations.json` lazily with the scope (as the volume is); a missing or malformed file hides the station list and throws nothing.
+2. A "Stations" list in the scope controls: the stations for the current side (and `.M` ones), named from the graph (`graph.nameOf`), tier-filtered like the rest of the page, each with its lens; the uncovered ones are not listed.
+3. Picking one flies there: interpolate depth, yaw, pitch and roll (shortest way round) over ~600 ms through the store, the lens switches at the end; a pose that would block mid-flight is clamped as usual (the end pose is free by construction). Reduced motion: a cut.
+4. Deep link `#scope=t.<id>` (and `t.<id>.<side>`; the side defaults to R): resolves to the station's pose and then writes the ordinary pose hash; an unknown id is ignored like any hostile link.
+Accept (`tools/test-ssb.mjs`, new Node and page checks): every station in the file has a pose `clampPose` leaves unchanged, is free under `shaftClearance` (4 mm, `lm.choanal-arch.M`), has its tip in an air label, and has its `target` (landmark, label centroid, `between` midpoint or `at`) within `FOV_DEG / 2` of `frameOf(pose).v`; every `.L` station is its `.R` mirrored (roll → 360 − roll); every graph `t.*` is in `stations`, `uncovered` or `overviews`; in the page, picking `t.ser-0` from the list ends at its pose and URL, `#scope=t.frontal-recess-70.L` opens at that pose, `#scope=t.nope` is ignored, reduced motion cuts; `check-data`, full `test-ssb`, `smoke-pages`.
+Escalate: a station fails a Node check (report which and the numbers); the list needs a design decision the controls have no place for.
 
 ### ST0d — Content corrections        [done: merged #97, CP-2a] · Sonnet · depends: — (folds in ST0c)
 Goal: apply the verification's ST0 findings; check the sources it did not
@@ -994,7 +1001,7 @@ Escalate: the union surface breaks the triangle or byte budget.
 Deviations from the spec's two rays (both are *tests*, `tools/test-ssb.mjs` `liningTests`): (1) a straight ray from 10 mm in front of `lm.sphenoid-ostium.R` starts in tissue (the recess is a cleft; the first hit is `s.nasal-cavity.R` with the lining *and* the shells). The test casts every ray from cavity air 8–12 mm from the cavity | sinus interface's centroid (2.5 mm from the landmark) whose straight path to it is all air (41 rays): the lining always first hits `s.sphenoid-sinus.R`, the shells always `s.nasal-cavity.R` (the sealed membrane). (2) `#scope=R,40,0,3,0,0` is no longer a view through the choana: after N1 its tip sits in the inferior turbinate's tail and the view ends in tissue at A −49.7 either way. The pinned pose is `R,40,-4,3,0,0` (free, tip in cavity air): the lining's first hit is A −55.4, the shells' A −49.7. Left sphenoid ostium: still closed in the labels, so still closed in the lining (not in this WP's accept).
 For CP-2c: at `#scope=R,58.5,-3,19,0,0` (the tip 2 mm from the ostium) the image is still a near-uniform pink field — the exposure (E2b), not a membrane.
 
-### ST1c — Load the lining pack lazily        [review] · Sonnet · depends: ST1b (merged)
+### ST1c — Load the lining pack lazily        [done: reviewed by Opus 2026-10-07] · Sonnet · depends: ST1b (merged)
 Goal: a specimen visitor who never looks from inside downloads no lining
 (CP-2c: `lining.glb.gz`, 469 KB, is fetched at boot for everyone, drawn
 only from within).
@@ -1351,12 +1358,35 @@ the HUD names it.
 Accept: `node tools/test-ssb.mjs --only lab`.
 Result: `degrade()` has a presellar branch; four tests pin the two pairs (same solids as toggle off, HUD names them).
 
-### P1/P2, T1, C1 — wave 3        [todo]
+### C1 — Content backlog, drafted by Sonnet, reviewed by Opus (O3)        [ready] · Sonnet (drafts) → Opus (review at a checkpoint) · depends: —
+Split into batches, one PR each, so a review reads one topic. Run them in order (they share the region files; each later batch branches from a master that has the earlier one), or in parallel only when they touch different files (listed per batch).
+
+Common to every batch:
+Read: `docs/authoring-ssb.md` (all: it is short and every rule binds); the region file(s) the batch touches, only to find ids and the house style; `ssb/content/sources.json` (the source record format); `docs/decisions.md` §7.
+Touch: the batch's region file(s); `ssb/content/sources.json` (new sources only); docs pass (`WIP.md` content line, this WP's status).
+Don't: set `review` to anything but `"draft"`; set a source `verified: true`; edit an existing entity's medical text (a disagreement with an existing entity is reported, not edited); add geometry, landmarks with coordinates, stations or pathways; rename an id.
+Sources: every number and every prevalence cites a `src.*`; journal papers only if found in PubMed with PMID and DOI stored (as ST0 did), textbooks with chapter and edition, Radiopaedia as type `atlas` with the fetch date. **If no source is in hand, write no number** (`conf: "low"` or leave the field out) — never an invented citation (`docs/authoring-ssb.md` §7.7). Abstract-only reading is allowed; say so in the source's `note`, and keep `why` within what the abstract supports.
+Accept: `node tools/ssb-content.mjs` and `node tools/check-data.mjs` pass; the PR lists every new id with its tier and the sources each cites, and a "check hardest" list (claims that go beyond an abstract, prevalences with unclear denominators, anything the executor was unsure of) — that list is what the Opus review reads first.
+Escalate: an item needs a geometry or anatomy-placement decision; two sources disagree on a number that matters and the batch cannot say why; an item would duplicate or contradict an existing entity.
+
+Batches:
+- **C1a — procedures** (`managedBy` targets): canthotomy/cantholysis, orbitotomy (as needed for orbital complications), frontal sinus cranialization, septodermoplasty and Young's procedure, transantral internal maxillary artery ligation, Lynch (external frontoethmoidectomy). Each with `steps` at the depth its sources support, `hazards` links to existing ids, and the conditions that already exist linked by `managedBy`. Files: the procedure's region file(s).
+- **C1b — inflammatory and other benign conditions** (`pathology-inflammatory.json`): EGPA, primary ciliary dyskinesia, immunodeficiency (as one condition with variants only if the sources split it), granulomatous infections, septal hematoma and abscess, developmental cysts, organizing hematoma, facial fractures (only their sinonasal/orbital relevance).
+- **C1c — neoplastic conditions** (`pathology-neoplastic.json`): HPV-related multiphenotypic sinonasal carcinoma, SMARCA4-deficient sinonasal carcinoma, non-intestinal-type adenocarcinoma, biphenotypic sinonasal sarcoma, petroclival / cavernous / spheno-orbital meningiomas, trigeminal schwannoma, germinoma, Langerhans cell histiocytosis, optic pathway glioma. WHO 5th edition naming where it applies.
+- **C1d — classifications and numbers**: silent sinus/SPOA drainage-size threshold, AFRS staging, Cannady (inverted papilloma), WHO CNS meningioma grade, AJCC N categories (sinonasal), infraorbital-nerve canal grading, JNA staging variants, olfactory neuroblastoma staging (Kadish, modified Kadish, Dulguerov, Hyams grade). Each classification's `levels` from its primary source.
+- **C1e — anatomy without geometry** (content only; nothing is placed on the specimen): petrolingual and parasellar ligaments, carotid cave, jugular foramen and CN IX–XI, orbital septum, superior ophthalmic vein, frontal lobe beyond the gyrus rectus, hard palate, parapharyngeal space.
+- **C1f — the CP-2a question**: whether prior sphenopalatine ligation endangers the middle turbinate flap's pedicle (the middle turbinate branch of the SPA). Find a source; if one supports it, add it to the flap's checks with that source; if none, report "no source" and change nothing.
+
+Owner-only items stay with the owner (§2): merging the two dry-eye hazards (vidian neurectomy vs vidian sacrifice in transpterygoid work); the optic nerve sheath incision wording.
+
+Checkpoint **CP-C1** (Opus, per batch or two batches together): read the "check hardest" list and every number against its source's abstract; reject or correct before merge; content stays `draft` until the owner verifies.
+
+### P1/P2, T1 — wave 3        [todo]
 P1 (Opus): `removes` units per step for the first procedures, mapped to
 existing wall and air nodes. P2 (Sonnet): the procedure player
 (`docs/ssb.md` §3). T1 (Sonnet): self-test — find it / name it / CT
 localize, Leitner reused unchanged, storage key registered per
-`docs/decisions.md` §3. C1: §6 backlog, split per O3.
+`docs/decisions.md` §3. C1 is specced above.
 
 ## 6. Content backlog
 
