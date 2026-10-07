@@ -16,8 +16,8 @@ history keeps the specs).
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining; external nose, in review) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~ done; external nose (ST6) in review; then waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses done** (E1, E1b, E2, E2b, E3, E3b, E4, E5); station flights in review (E6) | CP-2d review of E6 |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining; external nose) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~, ~~external nose (ST6)~~ done; then waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
+| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses, station flights done** (E1, E1b, E2, E2b, E3, E3b, E4, E5, E6) | stations the undecongested specimen cannot reach (27 of 40, E5) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
 | 7 Self-test | not started — wave 3 | T1 |
@@ -379,8 +379,8 @@ parallel sessions.
 
 | Lane | Order | Who |
 |---|---|---|
-| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose (review) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
-| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → ~~E5~~ → **E6** station flights (in review) | Sonnet |
+| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → ~~ST6~~ external nose (merged 2026-10-07) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
+| Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → ~~E5~~ → ~~E6~~ station flights (merged 2026-10-07) | Sonnet |
 | Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → ~~C1~~ content backlog (O3; merged 2026-10-07, owner priority O7: FESS + sellar/clival EEA anatomy) | Sonnet |
 | Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · then CP-C1 reviews | Opus |
 
@@ -894,7 +894,7 @@ Escalate: a pinned pose clamps under the new rule (report the depth and which ri
 *Result:* `ssb/geometry/stations.json` — 7 of the graph's 40 stations posed (13 keys: six per side, `t.nsf-pedicle.M` from the right nostril), 27 listed as `uncovered` with the reason, 6 as `overviews` (scope `null`: orbit-camera views for procedure mode). Every pose is free (4 mm shaft, E3b midline rule), its tip is in airway air, and its `target` is inside the field; `measured` records what a 161-ray cone hits, so E6 and the checkpoint can re-check it without judgement. Left = right mirrored (roll → 360 − roll; checked: view and up vectors mirror exactly, hits identical). Solver and checks: scratch scripts, not committed (the method is the `rule` string in the file).
 Findings: (1) **the two earlier pinned poses put the tip in tissue** — `R,58.5,−3,19` inside `s.sphenoid-face.R`, `R,36,−2,33,0,70` inside `s.middle-turbinate.R`; the scope then looks out of mucosa, which is CP-2c's "near-uniform pink field". Collision blocks only at bone, so they stay valid poses, but stations require the tip in air. (2) The specimen is not decongested: at the sphenoethmoidal recess the air is ~2 mm wide, the olfactory cleft and the axilla are closed, the inferior meatus is not enterable — those stations are `uncovered`, not forced. (3) `t.septum-anterior` and `t.lacrimal-sac-0` wait on ST6 (the anterior cavity is masked); ST6 must re-run E6's station test, and add those two if its vestibule makes them reachable (an Opus pose, at its checkpoint).
 
-### E6 — Station flights        [review] · Sonnet · depends: E5 (merged)
+### E6 — Station flights        [done: merged #115, owner 2026-10-07; no Opus checkpoint] · Sonnet · depends: E5 (merged)
 Note (ST6, 2026-10-07): the nose changed the volume (the vestibule label, the unmasked skin). A scratch copy of the Node checks below found all 13 poses unchanged and valid; the shaft contact (the `contactMm` pins) went up by 5 and 2 mm. Add `t.septum-anterior` and `t.lacrimal-sac-0` only with Opus poses.
 Goal: the endoscope can jump to any station the specimen covers, by list or by link.
 Read: this WP; E5's result above; the `rule` string in `ssb/geometry/stations.json`; `js/ssb/scope.js` (`clampPose`, `parseScope`, `formatScope`, `shaftClearance`, `frameOf`, `tipOf`, `FOV_DEG`); `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`; `docs/ssb.md` §3 (Endoscope).
@@ -909,6 +909,7 @@ Accept (`tools/test-ssb.mjs`, new Node and page checks): every station in the fi
 Escalate: a station fails a Node check (report which and the numbers); the list needs a design decision the controls have no place for.
 
 *Result (Sonnet, 2026-10-07):* `scope.js` gains the codec (`parseStationLink`, `parseStations`, `resolveStation`, `flightPose`); `state.js` holds a pending link as `state.station` (a link is `#scope=t.<id>[.<side>]`, kept in the URL until `store.resolveStation(pose|null)` turns it into the ordinary pose hash, source `url`); `mode-endoscope.js` loads `stations.json` with the scope (or when a link is pending), runs `flyTo(key)` (600 ms, smoothstep, one `store.setScope` per animation frame with meta `{ internal: true }`, so collision, the HUD, the URL and the CT inset behave as for any pose change; any other pose change, a pointer press, the wheel or a key cancels it) and cuts under `prefers-reduced-motion`; `ui-endoscope.js` adds a Stations section (this nostril's and the `.M` ones, at or above the page's tier, graph name plus lens; hidden with no table). All stations in the file pass the Node checks as stored (free, tip in air, target within 35°, mirrored, every graph `t.*` accounted for): none reported, no pose touched. Decisions to know: (1) the side switches on the first step of a flight (two nostrils have no halfway), so a `.M` station picked from the left scope moves to the right nostril; (2) a deep link does not raise the page's tier, so a tier-2 or tier-3 station opened by link is not in the list until the tier allows it; (3) a missing or malformed file hides the list and drops a pending link without an error.
+
 ### ST0d — Content corrections        [done: merged #97, CP-2a] · Sonnet · depends: — (folds in ST0c)
 Goal: apply the verification's ST0 findings; check the sources it did not
 read.
@@ -1254,7 +1255,7 @@ with tier filtering; the NSF overlay per ST3 (design presets as buttons,
 sliders for the parameters, area readout, incisions drawn on the surface,
 "schematic on specimen" badge). Tests per ST3.
 
-### ST6 — External nose: unmask, centre, vestibule and valve        [review] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
+### ST6 — External nose: unmask, centre, vestibule and valve        [done: merged #116, owner 2026-10-07; its checkpoint items stay open in the PR] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
 Goal: O1 (c) and O2's entry anatomy on the standard specimen: the
 specimen's own nose (skin, alae, columella, vestibule) unmasked from the
 UW axial stack, centred and mirrored like the rest (N1), the vestibule

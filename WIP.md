@@ -236,7 +236,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   The tip is also the Specimen stage's 3D cursor (so CT opens on it, and leaving the scope leaves `#at=`), an inset in
   the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
   Stations (E6): the controls list this nostril's covered stations from `ssb/geometry/stations.json` (Opus's poses, E5) at the page's tier;
-  picking one flies the scope there over ~600 ms (a cut with reduced motion), and `#scope=t.<id>[.<side>]` opens one. In review.
+  picking one flies the scope there over ~600 ms (a cut with reduced motion), and `#scope=t.<id>[.<side>]` opens one.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
