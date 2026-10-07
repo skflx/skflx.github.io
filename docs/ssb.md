@@ -144,8 +144,16 @@ never reloads.
   at bone and at the midline (R = 0, where the standard specimen centres the
   septum; the septum itself is below the bone level) except in the
   nasopharynx, behind and below `lm.choanal-arch.M`; the HUD reports which
-  limit fired. Station flights are a later work package
-  (`docs/ssb-roadmap.md`).
+  limit fired. Stations (E6): `ssb/geometry/stations.json` stores an
+  endoscope pose per station and side (Opus, E5; a midline `.M` station is
+  posed from the right nostril); the controls list this nostril's and the
+  midline ones at the page's tier, and picking one flies the pose there over
+  about 600 ms (depth, yaw, pitch; roll the short way round; the lens switches
+  at the end), through the store like any pose change, so collision, the HUD
+  and the CT inset follow; any other input cancels the flight, and
+  prefers-reduced-motion cuts. `#scope=t.<id>[.<side>]` opens a station (side
+  R when absent, the midline station for a midline id) and is rewritten to the
+  ordinary pose; an unknown id is ignored like any hostile link.
 - **CT.** Axial, coronal and sagittal slices of the specimen volume, each
   on its own canvas, radiological convention (patient right on the image's
   left) with orientation letters; one crosshair in RAS mm shared by the

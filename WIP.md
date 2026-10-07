@@ -235,6 +235,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   HUD reads the distance fields at the tip; from inside, the lining is the open `lining` pack (`lining.py`, ST1b; fetched on the first look from within, ST1c), so the scope can look through the choanae and the right sphenoid ostium (the left is closed in the specimen's labels).
   The tip is also the Specimen stage's 3D cursor (so CT opens on it, and leaving the scope leaves `#at=`), an inset in
   the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
+  Stations (E6): the controls list this nostril's covered stations from `ssb/geometry/stations.json` (Opus's poses, E5) at the page's tier;
+  picking one flies the scope there over ~600 ms (a cut with reduced motion), and `#scope=t.<id>[.<side>]` opens one. In review.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -289,8 +291,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
 backlog). Wave 1 was verified by Opus on 2026-10-03 (roadmap §4); wave 2
-starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: the endoscope's
-stations and a soft-tissue layer
+starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `lateral-wall` diorama; procedure mode and
