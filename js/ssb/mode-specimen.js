@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=c5c31dd8';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=2122b2b7';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=d27e5b3d';
-import { PLANES } from './volume.js?v=d1a450a5';
+import { PLANES } from './volume.js?v=61915bb8';
 import { CT_PLANES } from './state.js?v=2a74ae90';
-import { REGION_LABEL } from './graph.js?v=4d48d517';
+import { REGION_LABEL } from './graph.js?v=6f4c846f';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -104,6 +104,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let framed = false;             /* the default view has been applied */
     const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
+    let liningAsked = false;        /* the deferred lining pack has been requested (ST1c): the first look from within asks once */
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
@@ -248,6 +249,11 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         /* from within, the open lining (ST1b: one surface, its openings open) is drawn in place of the per-compartment shells */
         const within = layers.mucosa && (inside || insideForced);
         const openLining = within && hasLining();
+        /* the lining is fetched the first time the mucosa is seen from within; until it arrives the air shells are drawn as before */
+        if (within && !liningAsked) {
+            liningAsked = true;
+            specimen.loadLining().then(() => paint());
+        }
         for (const [key, mesh] of specimen.nodes) {
             const u = mesh.userData;
             const isSel = !!sel && u.id === sel;

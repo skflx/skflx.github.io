@@ -12,6 +12,7 @@ export const STAMPS = {
     "ssb/geometry/labels.json": "dc630b88",
     "ssb/geometry/landmarks.json": "22a05d72",
     "ssb/geometry/landmarks.meta.json": "d336166b",
+    "ssb/geometry/stations.json": "b93fbbcf",
     "ssb/geometry/sweeps.json": "71bde804",
     "ssb/geometry/sweeps.meta.json": "08c9f521",
     "ssb/models/core.glb.gz": "de512cea",

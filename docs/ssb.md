@@ -331,6 +331,11 @@ release points; the budget below bounds history growth.
 Rendering is on demand (a frame only when something changed), except during
 camera flights and pathway animation.
 
+The `lining` pack is not part of the boot: it is fetched once, the first time
+the mucosa layer is seen from within (the camera in the air box, or the scope),
+and until it arrives the air shells are drawn as before (`geo-specimen.js`
+`loadLining`, ST1c).
+
 ### 5.5 Sweeps
 
 `ssb/geometry/sweeps.json`: `{ "<id>.<side>": { "pts": [[r,a,s]…],
@@ -729,7 +734,7 @@ js/ssb/mode-*.js             explore, endoscope, ct, procedure, lab, quiz
 js/ssb/ui-*.js               panel, labels, tree/search, HUD, lab and CT controls
 js/vendor/three-<version>/   three.js module build + the addons used (§8)
 ssb/content/*.json           the knowledge graph
-ssb/geometry/*.json          labels, landmarks, sweeps, station poses
+ssb/geometry/*.json          labels, landmarks, sweeps, station poses (stations.json: E5; its `rule` string says how each pose was checked, `uncovered` lists the stations the intact specimen cannot show)
 ssb/models/, ssb/ct/         pipeline outputs
 tools/ssb-content.mjs        graph validator (CI)
 tools/ssb-pipeline/          offline geometry/CT pipeline
