@@ -27,7 +27,7 @@ REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 BONE_ID = 's.skull-base-region.M'      # PROPOSED id (not in the graph yet): the bony envelope of the crop
 BONE_LEVEL = 150                        # display (~ +650 HU)
 PACKS = {
-    'core': ['s.nasal-cavity', 's.nasopharynx', 's.maxillary-sinus', 's.skull-base-region'],
+    'core': ['s.nasal-cavity', 's.nasal-vestibule', 's.nasopharynx', 's.maxillary-sinus', 's.skull-base-region'],
     'ethmoid-frontal': ['s.frontal-sinus', 's.frontal-recess', 's.agger-nasi-cell', 's.ethmoid-bulla',
                         's.anterior-ethmoid-cells', 's.posterior-ethmoid-cells'],
     'sphenoid-sellar': ['s.sphenoid-sinus'],
@@ -46,8 +46,11 @@ THIN = set(PACKS['walls']) - {'s.nasal-septum', 's.inferior-turbinate', 's.middl
 WALL_BUDGET = {'s.nasal-septum': 6000, 's.inferior-turbinate': 4000, 's.middle-turbinate': 3500, 's.orbit': 3000,
                's.maxillary-anterior-wall': 3000, 's.frontal-sinus-anterior-table': 2500,
                's.frontal-sinus-posterior-table': 2500}
+# the material kind a node is drawn as when its graph kind is not it (node extras.kind; ST6): the vestibule is lined with
+# skin, not mucosa, and the external nose is skin
+KIND = {'s.nasal-vestibule': 'skin', 's.external-nose': 'skin'}
 # triangle budget per node (docs/ssb.md section 5.4: <= 400k on screen in total)
-BUDGET = {'s.skull-base-region': 110000, 's.nasal-cavity': 12000, 's.maxillary-sinus': 8000, 's.nasopharynx': 6000,
+BUDGET = {'s.skull-base-region': 110000, 's.nasal-cavity': 12000, 's.nasal-vestibule': 3000, 's.maxillary-sinus': 8000, 's.nasopharynx': 6000,
           's.sphenoid-sinus': 7000, 's.anterior-ethmoid-cells': 5000, 's.posterior-ethmoid-cells': 5000,
           's.frontal-sinus': 3000, 's.frontal-recess': 2500, 's.agger-nasi-cell': 1200, 's.ethmoid-bulla': 1500}
 
@@ -139,7 +142,10 @@ def write_glb(path, meshes):
                                                         'indices': a0 + 2, 'mode': 4}]})
         # three's GLTFLoader strips '.' from object names; extras land in userData intact
         cid, side = name.rsplit('.', 1)
-        nodes.append({'name': name, 'mesh': len(gl_meshes) - 1, 'extras': {'id': cid, 'side': side, 'name': name},
+        extras = {'id': cid, 'side': side, 'name': name}
+        if cid in KIND:
+            extras['kind'] = KIND[cid]
+        nodes.append({'name': name, 'mesh': len(gl_meshes) - 1, 'extras': extras,
                       'translation': [float(x) for x in lo + 32768 * scale], 'scale': [float(x) for x in scale]})
     binary = b''.join(bin_parts)
     binary += b'\0' * ((-len(binary)) % 4)

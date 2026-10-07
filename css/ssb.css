@@ -27,7 +27,7 @@
 
   /* Tissue kinds: the anatomical convention is the meaning (bone ivory, cut
      bone darker, artery red, vein blue, nerve yellow, dura grey-white, fat
-     yellow, mucosa pink); js/ssb/materials.js draws one procedural surface
+     yellow, mucosa pink, skin tan); js/ssb/materials.js draws one procedural surface
      per kind from these base colours. `space` tints see-through air spaces.
      The two "accent" tokens are the second colour of a pattern: the
      submucosal vessels and the septa between fat lobules. */
@@ -46,6 +46,7 @@
   --ssb-brain: #C7ADA5;
   --ssb-mucosa: #D98A82;
   --ssb-mucosa-vessel: #A8383F;
+  --ssb-skin: #E0B59A;
   /* Air cells: categorical hues by identity. The IFAC cells are grouped by
      class — anterior greens, posterior violets/ochre, medial blue — and the
      unclassified ethmoid cells are slate. */
@@ -111,6 +112,7 @@ html[data-theme="dark"] {
   --ssb-brain: #BBA199;
   --ssb-mucosa: #E0958C;
   --ssb-mucosa-vessel: #B5424A;
+  --ssb-skin: #D4A890;
   --ssb-cell-ethmoid: #9AA7B2;
   --ssb-cell-anc: #3DB58D;
   --ssb-cell-sac: #7FC45F;

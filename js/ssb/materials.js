@@ -2,7 +2,7 @@
    materials.js — the procedural tissue-material library (docs/ssb.md 7.4).
 
    One factory per tissue kind of the graph's `kind` vocabulary
-   (docs/authoring-ssb.md 6): bone, bone-cut, mucosa, cartilage, dura, fat,
+   (docs/authoring-ssb.md 6): bone, bone-cut, mucosa, skin, cartilage, dura, fat,
    muscle, artery, vein, nerve, gland, brain — plus the three categorical
    kinds that stay plain tinted surfaces (air-cell, space) and the flow
    pathway roles. Models carry geometry only (docs/ssb.md 5.3), so every
@@ -51,7 +51,7 @@
 
 /* Tissue kinds drawn by a procedural pattern. */
 export const TISSUE_KINDS = Object.freeze([
-    'bone', 'bone-cut', 'mucosa', 'cartilage', 'dura', 'fat', 'muscle', 'artery', 'vein', 'nerve', 'gland', 'brain',
+    'bone', 'bone-cut', 'mucosa', 'skin', 'cartilage', 'dura', 'fat', 'muscle', 'artery', 'vein', 'nerve', 'gland', 'brain',
 ]);
 /* Plain tinted kinds: categorical air-cell hues, see-through air spaces, and
    the pathway roles (a computed flow tube and its particles). */
@@ -352,6 +352,28 @@ SsbSurf ssbKind(vec3 p, vec3 n, vec3 w, vec3 ax, vec3 base) {
     return s;
 }`;
 
+/* Skin (ST6: the external nose and the vestibule's lining): matte, fine pores,
+   a slow flush; no vessels. It has no graph `kind` of its own: a model node
+   asks for it through its extras.kind (docs/ssb.md 5.3). */
+const GLSL_SKIN = /* glsl */`
+float ssbSkinPores(vec2 p) {
+    return ssbPit2(mat2(0.87, -0.5, 0.5, 0.87) * p / 0.55, 0.5) * ssbFade(0.12);
+}
+SsbSurf ssbKind(vec3 p, vec3 n, vec3 w, vec3 ax, vec3 base) {
+    SsbSurf s;
+    float mott = ssbFbm3(p, 12.0, 2);
+    float flush = smoothstep(0.40, 0.70, ssbFbm3(p + 23.0, 8.0, 2));
+    float micro = ssbFbm3(p, 1.3, SSB_OCT(2, 1));
+    float pore = SSB_TRI(ssbSkinPores, 0.0, p, w);
+    vec3 col = base * (0.93 + 0.14 * mott);
+    col = mix(col, col * vec3(1.05, 0.93, 0.93), flush * 0.4);
+    col = mix(col, col * 0.82, pore * 0.5);
+    s.albedo = col;
+    s.rough = (micro - 0.5) * 0.12 + pore * 0.1;
+    s.height = (micro - 0.5) * 0.06 - pore * 0.05;
+    return s;
+}`;
+
 const GLSL_CARTILAGE = /* glsl */`
 SsbSurf ssbKind(vec3 p, vec3 n, vec3 w, vec3 ax, vec3 base) {
     SsbSurf s;
@@ -516,6 +538,7 @@ const SPEC = {
     bone: { token: 'bone', rough: 0.72, glsl: GLSL_BONE },
     'bone-cut': { token: 'bone-cut', rough: 0.9, glsl: GLSL_BONE_CUT },
     mucosa: { token: 'mucosa', rough: 0.3, glsl: GLSL_MUCOSA, extra: 'mucosa-vessel' },
+    skin: { token: 'skin', rough: 0.62, glsl: GLSL_SKIN },
     cartilage: { token: 'cartilage', rough: 0.42, glsl: GLSL_CARTILAGE },
     dura: { token: 'dura', rough: 0.55, glsl: GLSL_DURA },
     fat: { token: 'fat', rough: 0.5, glsl: GLSL_FAT, extra: 'fat-septum' },

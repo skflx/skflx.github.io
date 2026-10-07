@@ -16,7 +16,7 @@ history keeps the specs).
 | 0 Architecture, schema, validator, draft graph | **done** | — |
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
-| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~ done; then external nose (ST6), waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
+| 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining; external nose, in review) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~ done; external nose (ST6) in review; then waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
 | 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses done** (E1, E1b, E2, E2b, E3, E3b, E4, E5); station flights in review (E6) | CP-2d review of E6 |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
 | 6 Procedure mode | not started — wave 3 | P1–P2 |
@@ -47,6 +47,20 @@ Decisions (detail and recommendations: `docs/ssb.md` §13). **O1–O3 were decid
 | O5 | NSF superior incision | (recommended: margin per design) | ST3r — **decided 2026-10-03: the superior incision starts at the level of the floor (inferior margin) of the sphenoid ostium, for every design** (Geltzeiler's technique; ch. 31 starts at the ostium's superior aspect, the graph's step at its inferior margin — the owner chose the latter). The margin below the septal top keeps one default (15) and applies where the incision rises forward (designs B, C) |
 | O6 | Symmetric "normal" specimen for the first release, variants later | (owner's own instruction) | N1 — **decided 2026-10-03 by the owner: as symmetric and standard as possible; septal deviation, ostium heights etc. later as variants.** Opus chose the method: right half mirrored (the left carries the anomalies), septum centred keeping its measured thickness (`docs/ssb.md` §5.1) |
 | — | Still open from before: strict CSP; publish while `draft`; name | as in §13 | — |
+| O7 | **Content priority** and the C1 calls | — | **Decided 2026-10-07 by the owner:** the priority is clear anatomy for FESS and for EEA to sellar/clival masses; other content waits behind it. C1f stays as the evidence shows (the prior-SPA-ligation check on the middle turbinate flap is kept). The C1c categories are accepted (LCH `malignant-neoplasm`, optic pathway glioma `benign-neoplasm`). Problems found in existing entities are **flagged, not fixed** for now (list below) |
+
+Flagged by C1 (owner 2026-10-07: keep as flags; fix later, FESS/EEA anatomy first). Each was found against the entity's own source or an open reproduction; detail in skflx/skflx.github.io#117:
+
+- `c.kadish`: class C's "(in the original system also cervical or distant metastasis)" is not supported. The original C has no metastasis; D is Morita's.
+- `c.dulguerov`: T3 "without dural invasion" is the *modified* system's wording, blended into the original.
+- `c.hyams`: grade III matrix ("scant or absent" vs "may be present") and grade IV rosettes differ from the original table.
+- `c.kadish`/Morita: the "32 vs 15 patients" split is not in the Morita abstract.
+- `c.jna-radkowski`: IIB, IIC, IIIA and IIIB wording differs from an open reproduction; the original's criteria were not readable.
+- `c.infraorbital-canal`: type 2/3 wording, "on coronal CT" and "larger sinuses" are not in the cited Ference abstract.
+- `s.petrosphenoidal-ligament`: insertion given as "lateral dorsum sellae"; sources say the posterior clinoid process.
+- `dz.smarcb1-deficient-carcinoma`: "no feature separates it from SNUC" on CT, with no source for it.
+- `s.gyrus-rectus`: "medial to the olfactory sulcus and tract" rests on a chapter citation only; no source read places the tract in the sulcus.
+- Back-links not yet added: ICA and Meckel's cave to the new parasellar ligaments and the carotid cave; gyrus rectus to the olfactory sulcus; the cellulitis conditions to `s.orbital-septum`; `dz.subperiosteal-orbital-abscess` to `m.spoa-drainage-volume-threshold`.
 
 Actions (no model can do these):
 
@@ -365,9 +379,9 @@ parallel sessions.
 
 | Lane | Order | Who |
 |---|---|---|
-| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
+| Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose (review) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
 | Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → ~~E5~~ → **E6** station flights (in review) | Sonnet |
-| Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a) | Sonnet |
+| Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → ~~C1~~ content backlog (O3; merged 2026-10-07, owner priority O7: FESS + sellar/clival EEA anatomy) | Sonnet |
 | Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · then CP-C1 reviews | Opus |
 
 **ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
@@ -881,6 +895,7 @@ Escalate: a pinned pose clamps under the new rule (report the depth and which ri
 Findings: (1) **the two earlier pinned poses put the tip in tissue** — `R,58.5,−3,19` inside `s.sphenoid-face.R`, `R,36,−2,33,0,70` inside `s.middle-turbinate.R`; the scope then looks out of mucosa, which is CP-2c's "near-uniform pink field". Collision blocks only at bone, so they stay valid poses, but stations require the tip in air. (2) The specimen is not decongested: at the sphenoethmoidal recess the air is ~2 mm wide, the olfactory cleft and the axilla are closed, the inferior meatus is not enterable — those stations are `uncovered`, not forced. (3) `t.septum-anterior` and `t.lacrimal-sac-0` wait on ST6 (the anterior cavity is masked); ST6 must re-run E6's station test, and add those two if its vestibule makes them reachable (an Opus pose, at its checkpoint).
 
 ### E6 — Station flights        [review] · Sonnet · depends: E5 (merged)
+Note (ST6, 2026-10-07): the nose changed the volume (the vestibule label, the unmasked skin). A scratch copy of the Node checks below found all 13 poses unchanged and valid; the shaft contact (the `contactMm` pins) went up by 5 and 2 mm. Add `t.septum-anterior` and `t.lacrimal-sac-0` only with Opus poses.
 Goal: the endoscope can jump to any station the specimen covers, by list or by link.
 Read: this WP; E5's result above; the `rule` string in `ssb/geometry/stations.json`; `js/ssb/scope.js` (`clampPose`, `parseScope`, `formatScope`, `shaftClearance`, `frameOf`, `tipOf`, `FOV_DEG`); `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`; `docs/ssb.md` §3 (Endoscope).
 Touch: `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js`, `js/ssb/scope.js` (codec only), `js/ssb/state.js` (hash), `css/ssb.css`, `tools/test-ssb.mjs`; docs pass.
@@ -1200,6 +1215,7 @@ Run `softtissue.py`; check every new sweep id resolves in the graph;
 `relate3d.py` agreement does not drop (report the before/after counts).
 
 ### ST4d — Waypoint corrections        [todo] · Sonnet · depends: N1, ST2c, ST6 (lane order)
+Note (ST6): the septal chart now ends at the valve plane (A −10), so the superior labial septal branch's waypoints were re-seated on that edge row (see ST6's result); decide whether the columella entry in front of the plane is drawn.
 Goal: apply the verification's ST4b findings and regenerate.
 Read: this file §4 verification "ST4b waypoints"; ST4a and ST4b above.
 Touch: `tools/ssb-pipeline/uw/sweeps-soft.json`; regenerated
@@ -1238,7 +1254,7 @@ with tier filtering; the NSF overlay per ST3 (design presets as buttons,
 sliders for the parameters, area readout, incisions drawn on the surface,
 "schematic on specimen" badge). Tests per ST3.
 
-### ST6 — External nose: unmask, centre, vestibule and valve        [ready after ST1c] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
+### ST6 — External nose: unmask, centre, vestibule and valve        [review] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
 Goal: O1 (c) and O2's entry anatomy on the standard specimen: the
 specimen's own nose (skin, alae, columella, vestibule) unmasked from the
 UW axial stack, centred and mirrored like the rest (N1), the vestibule
@@ -1329,6 +1345,9 @@ component under step 4's rule (the nostril is not closed off by it).
 Not in ST6: cartilage. O1's "cartilage as a schematic overlay" needs the
 framework's geometry (ULC/LLC crura) and goes to ST7.
 
+*Result (Sonnet, 2026-10-07; `normalize.py all` prints it as the `ST6 1..5, 7` lines):* (1) region: 99 levels S −8.5…40.5, pronasale (A 18.0, S 4.5), subnasale (7.0, −6.5), nasion (−5.5, 40.5) as measured at CP-2b; the grooves are the minimum of A(R) + 0.25 R (smoothed) inside the checkpoint's corridor |R| 19…24, because the profile is monotone at most levels and has no lowest point; 377k voxels, the outside air in front of the nose included (it reads 45, not 0). The skin within 1 mm of the source image's anterior border (flattened by it) is S 4.0…7.5, the tip only. (2) centring: |c| median 0.50 mm, **max 2.00 mm** (the limit, not over it; raw single rows reach 2.5 at the sill, removed by the 3×3 median); the columella pairs give c ≈ 0, the skin edges −0.5…−1; only region voxels move, to region voxels. (3) valve at A **−10.0**, section **116.0 mm²** (3 mm mean 117.8), centroid (4.66, −10.0, 13.58): the profile is flat, 112…131 mm² over A −16…−9, and 116 is above the checkpoint's 92–100 (Opus: the area against `src.bloom-2012-valve-ct`; with the cavity label alone the same plane reads 70). (4) vestibule 1277 mm³ per side, one piece, A −9.5…12.5, S 3.5…30.5 — it has no upper S bound, so the air under the nasal bones in front of the plane is vestibule too; 646 unlabelled airway voxels behind the plane (A −12…−10, S 0…11) join the cavity, which also moves the floor chart's anterior row from A −12 to −10. (5) pack `nose`: 7,998 triangles, 73 KB, 30 cm²; the vestibule is in `core` (2 × 3,000 budget); all packs 395,238 triangles (budget 400k) and 3.5 MB; CT + labels + distance fields 4.5 MB. (7) septal chart anterior edge A −10.0 (HEAD −3.0; the −9.5 in the spec was not HEAD's), area 14.48 cm² (was 15.19) on both sides. Tests: `check-data` and `test-ssb` pass; new Node and page checks for the labels, the landmark, the chart, the pack, the kind and the layer. **Re-pinned (old → new):** shaft contact at R 40 straight 25 → 30 mm and at the sphenoid pose 11 → 13 mm (the nostril's wall is tissue now; poses unchanged); the floor-chart check measures the last occupied row (≤ −10, its title's bound) instead of the padded grid end (≤ −9), because the row is now −10; the mucosa and scope checks expect the vestibule drawn as skin. All 13 station poses of E5, checked with a scratch copy of E6's Node checks (E6 had not merged): unchanged, free, tips in air labels, targets in the field, left = right mirrored.
+**Deviations (one-line files outside Touch, needed by the WP's own steps):** `meshes.py` (the vestibule in the `core` pack and its budget; `extras.kind` from a `KIND` map), `walls.py` (the vestibule in `AIR_IDS`, or its label is wiped; and the septum rule counts it as the side's airway, or the septal chart is ragged and 2 cm² smaller at its anterior end), `geo-specimen.js` (reads `extras.kind`), `mode-endoscope.js` / `ui-endoscope.js` (two stale sentences about the masked nose), `sweeps-soft.json`: **the superior labial septal branch's three waypoints (A −9…−8) were off the new chart, which ends at A −10, and `softtissue.py` stops on that; they are re-seated on the edge row, same S, per the entry's own "along the anterior septal margin" — Opus/ST4d to confirm or redraw the columella entry.** **For the checkpoint:** poses for `t.septum-anterior` and `t.lacrimal-sac-0` (E5 finding 3: reachable now? not tried, they are Opus poses); E6 must re-run its station test (the scratch check found nothing to change).
+
 ### ST7 — Full nasal framework        [later] · Opus spec → Sonnet build · depends: ST6
 Owner decision (O2, 2026-10-02): the atlas ultimately covers the entire nasal framework (ULC/LLC crura, ligaments, SMAS, dorsum, tip support), as its own diorama after ST6's entry anatomy. Not scheduled; spec after ST6.
 
@@ -1359,7 +1378,7 @@ the HUD names it.
 Accept: `node tools/test-ssb.mjs --only lab`.
 Result: `degrade()` has a presellar branch; four tests pin the two pairs (same solids as toggle off, HUD names them).
 
-### C1 — Content backlog, drafted by Sonnet, reviewed by Opus (O3)        [ready] · Sonnet (drafts) → Opus (review at a checkpoint) · depends: —
+### C1 — Content backlog, drafted by Sonnet, reviewed by Opus (O3)        [done] · Sonnet (drafts) → Opus (review at a checkpoint) · depends: —
 Split into batches, one PR each, so a review reads one topic. Run them in order (they share the region files; each later batch branches from a master that has the earlier one), or in parallel only when they touch different files (listed per batch).
 
 Common to every batch:
@@ -1372,11 +1391,17 @@ Escalate: an item needs a geometry or anatomy-placement decision; two sources di
 
 Batches:
 - **C1a — procedures** (`managedBy` targets): canthotomy/cantholysis, orbitotomy (as needed for orbital complications), frontal sinus cranialization, septodermoplasty and Young's procedure, transantral internal maxillary artery ligation, Lynch (external frontoethmoidectomy). Each with `steps` at the depth its sources support, `hazards` links to existing ids, and the conditions that already exist linked by `managedBy`. Files: the procedure's region file(s).
+  **[review]** C1a result: seven procedures drafted (`p.lateral-canthotomy-cantholysis`, `p.external-orbitotomy-drainage`, `p.frontal-sinus-cranialization`, `p.lynch-external-frontoethmoidectomy`, `p.septodermoplasty`, `p.young-procedure`, `p.transantral-ima-ligation`), every claim from a PubMed abstract or open PMC full text, new sources `verified: false`; the "check hardest" list is in the PR; `node tools/ssb-content.mjs`, `node tools/check-data.mjs` and `node tools/test-ssb.mjs` pass.
 - **C1b — inflammatory and other benign conditions** (`pathology-inflammatory.json`): EGPA, primary ciliary dyskinesia, immunodeficiency (as one condition with variants only if the sources split it), granulomatous infections, septal hematoma and abscess, developmental cysts, organizing hematoma, facial fractures (only their sinonasal/orbital relevance).
+  **[review]** C1b result: 14 conditions (`dz.egpa`, `dz.primary-ciliary-dyskinesia`, `dz.immunodeficiency-crs`, `dz.sinonasal-tuberculosis`, `dz.leprosy-nasal`, `dz.rhinoscleroma`, `dz.rhinosporidiosis`, `dz.septal-hematoma-abscess`, `dz.nasolabial-cyst`, `dz.nasopalatine-duct-cyst`, `dz.organized-hematoma`, `dz.nasal-fracture`, `dz.medial-orbital-wall-fracture`, `dz.zmc-fracture`) and `c.acr-eular-egpa`, from PubMed abstracts; syphilis and Le Fort skipped (no sinonasal source with content); every number traced to a cited abstract; check-hardest list in the PR.
 - **C1c — neoplastic conditions** (`pathology-neoplastic.json`): HPV-related multiphenotypic sinonasal carcinoma, SMARCA4-deficient sinonasal carcinoma, non-intestinal-type adenocarcinoma, biphenotypic sinonasal sarcoma, petroclival / cavernous / spheno-orbital meningiomas, trigeminal schwannoma, germinoma, Langerhans cell histiocytosis, optic pathway glioma. WHO 5th edition naming where it applies.
+  **[review]** C1c result: 11 conditions (`dz.hpv-multiphenotypic-sinonasal-carcinoma`, `dz.smarca4-deficient-sinonasal-carcinoma`, `dz.sinonasal-non-intestinal-adenocarcinoma`, `dz.biphenotypic-sinonasal-sarcoma`, `dz.petroclival-meningioma`, `dz.cavernous-sinus-meningioma`, `dz.spheno-orbital-meningioma`, `dz.trigeminal-schwannoma`, `dz.intracranial-germinoma`, `dz.langerhans-cell-histiocytosis`, `dz.optic-pathway-glioma`), WHO 5th-edition naming, from PubMed abstracts and seven open full texts; every number traced; LCH and optic pathway glioma categories are owner calls (PR).
 - **C1d — classifications and numbers**: silent sinus/SPOA drainage-size threshold, AFRS staging, Cannady (inverted papilloma), WHO CNS meningioma grade, AJCC N categories (sinonasal), infraorbital-nerve canal grading, JNA staging variants, olfactory neuroblastoma staging (Kadish, modified Kadish, Dulguerov, Hyams grade). Each classification's `levels` from its primary source.
+  **[review]** C1d result: `m.spoa-drainage-volume-threshold`, `c.wise-afrs-ct`, `c.cannady`, `c.who-cns-meningioma-grade`, `c.ajcc-sinonasal-n` (clinical N only), `c.infraorbital-canal-yenigun`, `c.jna-chandler`, `c.jna-fisch`, `c.jna-onerci`; classes from the primary source or an open reproduction that was read; existing ION, JNA and olfactory neuroblastoma systems checked against their sources and the discrepancies reported in the PR, not edited; silent sinus threshold, pathologic N, Sessions and Philpott-Javer grades skipped (criteria not readable).
 - **C1e — anatomy without geometry** (content only; nothing is placed on the specimen): petrolingual and parasellar ligaments, carotid cave, jugular foramen and CN IX–XI, orbital septum, superior ophthalmic vein, frontal lobe beyond the gyrus rectus, hard palate, parapharyngeal space.
+  **[review]** C1e result: 16 structures, all `geo: "none"` (`s.petrolingual-ligament`, `s.interclinoid-ligament`, `s.caroticoclinoid-ligament`, `s.carotid-cave`, `s.jugular-foramen`, `s.glossopharyngeal-nerve`, `s.vagus-nerve`, `s.accessory-nerve`, `s.orbital-septum`, `s.superior-ophthalmic-vein`, `s.orbital-gyri`, `s.olfactory-sulcus`, `s.hard-palate`, `s.parapharyngeal-space`, `s.prestyloid-compartment`, `s.poststyloid-compartment`); every `rel` edge stated by a source read; back-links from existing structures listed in the PR, not added.
 - **C1f — the CP-2a question**: whether prior sphenopalatine ligation endangers the middle turbinate flap's pedicle (the middle turbinate branch of the SPA). Find a source; if one supports it, add it to the flap's checks with that source; if none, report "no source" and change nothing.
+  **[review]** C1f result: a source was found for the mechanism, not for the flap itself. Added to `p.middle-turbinate-flap.preop`: check for prior sphenopalatine ligation, citing Pistochini 2021 (pedicle = middle turbinate branch of the SPA, cadaver) and Elsheikh 2013 (middle turbinate necrosis after SPA ligation, one case); no source reports flap outcome after ligation. Owner to accept or revert (one `preop` item).
 
 Owner-only items stay with the owner (§2): merging the two dry-eye hazards (vidian neurectomy vs vidian sacrifice in transpterygoid work); the optic nerve sheath incision wording.
 

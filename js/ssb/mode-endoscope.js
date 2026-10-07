@@ -9,8 +9,8 @@
    for the lining seen from inside (bone hidden, mucosa on: ST1). Leaving puts
    everything back: the camera, the lights, the layers.
 
-   - Fulcrum: lm.naris.<side> from landmarks.json. It is provisional (E1:
-     10 mm in front of the masked cavity) until the nose exists (ST6).
+   - Fulcrum: lm.naris.<side> from landmarks.json: the vestibule centroid at
+     the alar-rim band, inside the specimen's own nose (E1b, ST6).
    - Input (canvas focused): drag looks around (horizontal yaw, vertical pitch),
      the wheel inserts and withdraws, arrow keys yaw and pitch, + / - or
      PageUp / PageDown depth, Q / E roll, L cycles the lens; Shift = x5.
@@ -39,8 +39,8 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=2122b2b7';
-import { sharedVolume, stamped, decode } from './volume.js?v=61915bb8';
+import { loadLandmarks } from './geo-specimen.js?v=6f0deed2';
+import { sharedVolume, stamped, decode } from './volume.js?v=020824b5';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=844c8624';
 

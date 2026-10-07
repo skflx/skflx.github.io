@@ -335,7 +335,7 @@ the URL, and caps solid bone. The standard specimen is pinned too
 (`standardSpecimenTests`): the CT and the label volume are mirror-symmetric
 about R = 0 outside the midline plates, no `.R` air touches `.L` air, paired
 landmarks and sweeps mirror within 0.01 mm, `.M` landmarks sit at R = 0, and
-the right septal surface lies at half the as-scanned thickness (read with
+the right septal surface lies at half the as-scanned thickness, the nose is in (the vestibule labels, `lm.naris` in its air, the valve landmark in air and in front of the cavity's end, the septal chart ending at the valve plane, the `nose` pack and its `skin` kind, the Nose layer; ST6) (read with
 `git show` at the commit `ct.json` names; CI checks out full history). The open lining (ST1b) is pinned in `liningTests` (the pack is listed and within budget, one node per air label, no triangle on an air|air interface, every clear ray through the right ostium first hits the sinus with the lining where the shells stop it, a free pose looks through the choana past A −50) and in the scope and mucosa page checks (lining drawn and shells hidden from inside, not drawn from outside, picks report graph ids). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 

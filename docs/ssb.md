@@ -132,10 +132,10 @@ never reloads.
   ones within 3 mm in the signal colour. This mode is
   where the fulcrum constraint teaches why the frontal recess needs a 45–70°
   scope and why posterior septectomy opens binostril work.
-  The specimen's face mask removed the nose, so the fulcrum `lm.naris`
-  is measured from the unmasked axial stack, in memory
-  (`tools/ssb-pipeline/uw/nose.py`: the vestibule lumen at the alar-rim
-  band; method in the landmark meta); the scope
+  The fulcrum `lm.naris` is the centroid of the vestibule lumen at the
+  alar-rim band, measured on the unmasked axial stack
+  (`tools/ssb-pipeline/uw/nose.py`; method in the landmark meta), inside
+  the specimen's own nose (§5.1, ST6); the scope
   sees the air spaces' surfaces drawn as mucosa. Built (`js/ssb/scope.js`:
   the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
   `ui-endoscope.js`): a scope pose is a camera over the Specimen stage
@@ -268,7 +268,9 @@ external nose (O1 (c), roadmap ST6): between subnasale and nasion and
 between the alar-facial grooves (above S 28 also |R| ≤ 12, so the medial
 canthi stay masked), the unmasked skin, alae, columella and vestibule are
 restored, centred and mirrored with the rest. Lips, cheeks and eyelids
-stay masked.
+stay masked. The grooves, the centring and the valve rules are in
+`tools/ssb-pipeline/uw/nose.py` (ST6); the region comes from the raw UW
+stack, so `normalize.py` needs the crawl (`fetch.py`) from ST6 on.
 
 ### 5.2 Segmentation — the graph writes the label table
 
@@ -319,7 +321,9 @@ therefore `'wasm-unsafe-eval'`, a CSP loosening (§8, §13).
 The served specimen is the standardized one (§5.1): `normalize.py` writes the
 mirrored CT and labels from the as-scanned inputs, then reruns `walls.py`,
 `meshes.py`, `sdf.py` and `softtissue.py` on them and makes the side pairs
-exact (`normalize.py all`). The side-relative scope `yaw` means a mirrored pose
+exact (`normalize.py all`). Before the mirror it unmasks and centres the
+nose; after it, it measures the internal valve and labels the vestibule
+(ST6), and `nose.py pack` writes the `nose` pack last. The side-relative scope `yaw` means a mirrored pose
 keeps its yaw (`js/ssb/scope.js`).
 
 Git carries the binaries (GitHub Pages cannot serve LFS). Re-export only at
@@ -394,7 +398,7 @@ soft tissue is built three other ways, and each part says which:
 | Nasal floor mucosa (for the extended flap) | the floor bone `s.nasal-floor.*` is separated from the air by 1–3 mm of unlabelled soft tissue, the mucosa, so the surface is the airway lining itself: the cavity's lining triangles facing down (normal S ≤ −cos 45°) within 6 mm of floor-bone voxels, at or in front of the PNS plane (A ≥ −50), largest component (`softtissue.py`, ST2c). Its chart is axial, (a, r) → s, with r = \|R\| (the left chart is the right one: the standard specimen is symmetric), and a `junction` polyline against the septal chart's `bottom(a)` | specimen |
 | Small arteries (posterior septal and its branches, PLNA branches, septal AEA/PEA branches, nasopalatine, superior labial) | sweeps (§5.5) generated from **waypoints** — landmarks or chart points — at a stated depth below the surface; every point `inferred`, every waypoint cited | specimen-placed, inferred |
 | Flap territories (nasoseptal: short, full, extended; rescue incisions; later IT/MT/lateral wall flaps) | **overlays**: outlines computed at runtime on a chart from landmarks plus the graph's measurements and the procedure's steps, with parameters and presets like a diorama's | schematic on specimen |
-| External nose (naris, vestibule, valves, ala, columella) | the specimen's own skin and vestibule, unmasked from the UW axial stack (§5.1; roadmap ST6, O1 (c), O2): skin surface `s.external-nose.M` drawn as `skin`, vestibule air `s.nasal-vestibule.<side>` (vestibular skin), the internal valve as the narrowest coronal airway section, which is also the vestibule \| cavity boundary | specimen, measured |
+| External nose (naris, vestibule, valves, ala, columella) | the specimen's own skin and vestibule, unmasked from the UW axial stack (§5.1; ST6, O1 (c), O2): skin surface `s.external-nose.M` (pack `nose`, one open surface) and the vestibule air `s.nasal-vestibule.<side>` (the `core` pack; vestibular skin, not mucosa) are both drawn with the `skin` material, which a model node asks for through its glTF `extras.kind`; the Nose layer toggles the skin. The internal valve `s.internal-nasal-valve.<side>` is the centroid of the narrowest coronal section of the airway connected to `lm.naris` (a landmark, measured), and that plane is the vestibule \| cavity boundary, the limen nasi: a proxy for the mucocutaneous junction, which CT does not show. The flat section minimum and the tip cut flat by the source image's border are limits (`nose.py`) | specimen, measured |
 | Nasal cartilages (ULC, LLC crura, septal cartilage outline) | not resolvable on this bone-window CT; schematic overlay with the full framework (roadmap ST7) | schematic |
 
 Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the
@@ -437,8 +441,9 @@ From the septal chart: `top(a)`, `bottom(a)`, `post(s)`, `a_ant`. `top(a)`
 is interpolated linearly across columns with no data (the posterosuperior
 gap, A -45…-35) from the nearest occupied columns either side. In the
 reference specimen the septal surface stops about 4 mm in front of the
-rostrum and at the masked vestibule (until ST6): the overlay clips to what
-exists and says so.
+rostrum and at the internal valve plane (the vestibule is its own label
+since ST6, so the chart ends there): the overlay clips to what exists and
+says so.
 
 **Parameters** (sliders, presets as buttons, like a diorama):
 
@@ -490,8 +495,8 @@ the gain over B against ≈ 774 mm² and ≈ 20 mm (`m.nsf-extended-gain`),
 noting that the inferior meatus is not charted, so the drawn gain is the
 floor's only. The share of outline length on `unreliable` or `filled`
 cells, as an "approximate" badge when above 0; badge **schematic on
-specimen**; while the vestibule is masked, a note that B and C stop short
-of the mucocutaneous junction.
+specimen**; a note that B and C end at the internal valve plane, the proxy
+for the mucocutaneous junction, which CT does not show.
 
 **Tests `tools/test-ssb.mjs` must pin** (ST5):
 
@@ -818,7 +823,9 @@ and `ct` keeps the lab, and entering one leaves the other.
   submucosal vessel network and a wet sheen (the endoscope's main surface,
   tuned under a single spotlight); cartilage, dura (fibrous grain), fat
   (lobules cut by thin septa), muscle, artery, vein, nerve (lengthwise
-  striation), gland and brain follow. Air cells, air spaces and the flow
+  striation), gland and brain follow; `skin` (ST6: the external nose and the
+  vestibule's lining) is matte with fine pores and a slow flush, no vessels.
+  Air cells, air spaces and the flow
   pathway stay plain tinted surfaces. There are no textures and no UVs:
   every pattern is a function of the **world position in millimetres**
   (1 scene unit = 1 mm), so its scale is identical on every model and does
