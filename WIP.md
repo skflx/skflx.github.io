@@ -269,7 +269,11 @@ stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `lateral-wall` diorama; procedure mode and
-self-test after. Waiting on the owner: review of the dioramas and tier-1 content
+self-test after. The external nose beyond the entry anatomy — the full
+rhinoplasty framework, its envelope layers, vessels and nerves — is
+specced (2026-10-07) as the `nasal-framework` diorama (`docs/ssb.md`
+§6.2; roadmap ST7a–e), built to be the substrate of a later rhinoplasty
+model; nothing of it is built yet. Waiting on the owner: review of the dioramas and tier-1 content
 (`docs/ssb-roadmap.md` §2).
 
 ---
