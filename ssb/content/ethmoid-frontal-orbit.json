@@ -2913,6 +2913,173 @@
         "src.sertel-2016-pericranial-nose",
         "src.wang-2007-supratrochlear"
       ]
+    },
+    {
+      "id": "s.orbital-septum",
+      "name": "Orbital septum",
+      "kind": "ligament",
+      "region": "orbit",
+      "tier": 1,
+      "syn": [
+        "septum orbitale"
+      ],
+      "what": "Thin fibrous membrane that arises from the periosteum of the orbital rim and passes into the eyelids; the orbit is defined as the space behind it, so tissue in front of it is preseptal and tissue behind it is postseptal.",
+      "why": "It is why preseptal and postseptal infection are different diseases. Eyelid and periorbital infection in front of the septum is preseptal (periorbital) cellulitis, usually with normal vision and eye movements; infection behind it in the orbital fat and extraocular muscles is orbital cellulitis, with proptosis, pain, reduced vision or limited eye movement, and most bacterial cases arise by contiguous spread from the paranasal sinuses, especially the ethmoids (sinus disease is a frequent predisposing factor in children). The septum is a barrier, not a seal: infection can still cross it if treatment is delayed or inadequate.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "anterior-to",
+          "to": "s.orbital-fat",
+          "note": "orbital fat lies behind the septum"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.medial-canthal-tendon",
+          "note": "the septum faces the tendon's posterior surface"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Upper eyelid: it originates at the arcus marginalis and attaches to the levator aponeurosis several millimetres above the upper tarsal plate. Lower eyelid: it arises nasally from the arcus marginalis but temporally extends beyond the orbital margin onto the anterior surface of the maxilla (the space behind it is the recess of Eisler) and attaches to the lower eyelid retractors several millimetres below the lower tarsal plate."
+        },
+        {
+          "tier": 3,
+          "text": "Medially it originates from the anterior lacrimal crest, not the posterior one, and faces the posterior surface of the medial canthal tendon. Laterally it attaches to the levator aponeurosis and lower lid retractors around the lateral canthus, not directly to the orbital tubercle: a space containing orbital fat lies between them. These medial and lateral attachments were described as controversial before this review."
+        }
+      ],
+      "src": [
+        "src.abumanhal-2025-orbital-septum",
+        "src.zeppieri-2025-periorbital-cellulitis",
+        "src.capobianco-2026-orbital-cellulitis"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.superior-ophthalmic-vein",
+      "name": "Superior ophthalmic vein",
+      "kind": "vein",
+      "region": "orbit",
+      "tier": 2,
+      "syn": [
+        "SOV"
+      ],
+      "what": "The largest vein of the orbit. It begins in the anterior medial orbit where the supraorbital, supratrochlear and angular veins join, runs back diagonally from medial to lateral below the superior rectus and above the optic nerve, passes through the superior orbital fissure outside the common tendinous ring and drains into the cavernous sinus.",
+      "why": "It links the facial venous system and the orbit to the cavernous sinus, and is an important orbital venous drainage pathway; its appearance on CT or MRI is a clue in the differential diagnosis of orbital disease. When the usual venous routes are not feasible it has been exposed and cannulated directly as a salvage route to a cavernous sinus dural fistula.",
+      "geo": "none",
+      "ct": "Well identifiable on CT and MRI; changes in its calibre or appearance help the differential diagnosis.",
+      "rel": [
+        {
+          "r": "passes-through",
+          "to": "s.superior-orbital-fissure",
+          "note": "lateral sector, outside the annular tendon"
+        },
+        {
+          "r": "drains-to",
+          "to": "s.cavernous-sinus"
+        },
+        {
+          "r": "superior-to",
+          "to": "s.optic-nerve",
+          "note": "in the posterior orbit, below the superior rectus"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "In the superior orbital fissure it lies in the lateral sector with the trochlear, frontal and lacrimal nerves, all outside the annular tendon; the inferior ophthalmic vein runs in the inferior sector, below the tendon."
+        },
+        {
+          "tier": 3,
+          "text": "Accessory ophthalmic veins also occur: the medial ophthalmic vein in approximately 40% of the population and the middle ophthalmic vein in 1% to 20% (StatPearls summary; denominators and method not given)."
+        },
+        {
+          "tier": 3,
+          "text": "A 2026 systematic review found only five reports with eight direct SOV access attempts for cavernous sinus dural fistulas; six were completed and treated, two failed because a small, stenotic or fibrotic vein could not be traversed. The authors state the evidence is too small to estimate success or safety."
+        }
+      ],
+      "src": [
+        "src.azzam-2023-ophthalmic-vein",
+        "src.natori-1995-superior-orbital-fissure",
+        "src.romano-2022-sov-imaging",
+        "src.srinivasan-2026-sov-access"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.orbital-gyri",
+      "name": "Orbital gyri (orbitofrontal cortex)",
+      "kind": "brain",
+      "region": "acf",
+      "tier": 3,
+      "syn": [
+        "orbitofrontal gyri",
+        "orbitofrontal cortex",
+        "medial orbital gyrus",
+        "lateral orbital gyrus",
+        "anterior orbital gyrus",
+        "posterior orbital gyrus"
+      ],
+      "what": "The gyri of the orbital surface of the frontal lobe lateral to the gyrus rectus. The medial, lateral and transverse orbital sulci, which often form an H, X or K pattern lateral to the olfactory sulcus, divide the orbitofrontal cortex into four major gyri: the medial, lateral, anterior and posterior orbital gyri.",
+      "why": "They name the basal frontal brain lateral to the gyrus rectus ([[s.gyrus-rectus]]), the gyrus met first in a transcribriform window. The sulcal pattern varies from brain to brain (three main pattern types, and extra sulci in the human brain), so a given sulcus is not a fixed landmark and cannot be relied on to identify a gyrus on imaging or in the field.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "lateral-to",
+          "to": "s.gyrus-rectus",
+          "note": "the olfactory sulcus forms the lateral border of the gyrus rectus; the orbital sulci lie lateral to it"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.olfactory-sulcus"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Basis: 100 normal adult human hemispheres on MRI in standard stereotaxic space, with probability maps for the four main orbitofrontal sulci; a research atlas of sulcal variability, not a surgical series."
+        },
+        {
+          "tier": 3,
+          "text": "Frontal lobe after olfactory groove meningioma surgery: in a matched-pair comparison (10 pairs) postoperative FLAIR change was no different between endoscopic endonasal and bifrontal craniotomy on univariable analysis, but was lower after EEA on multivariable analysis adjusted for preoperative edema (p = 0.02). The authors call this preliminary, and it concerns the frontal lobe in general, not the orbital gyri specifically."
+        }
+      ],
+      "src": [
+        "src.chiavaras-2000-orbitofrontal-sulci",
+        "src.dealmeida-2015-ogm-frontal-lobe"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.olfactory-sulcus",
+      "name": "Olfactory sulcus",
+      "kind": "brain",
+      "region": "acf",
+      "tier": 3,
+      "syn": [
+        "sulcus olfactorius"
+      ],
+      "what": "The most medial of the orbitofrontal sulci. It forms the lateral border of the gyrus rectus and separates it from the orbital gyri lying further lateral.",
+      "why": "It is the groove that separates the gyrus rectus from the orbital gyri on the basal frontal surface. Its depth can be measured on MRI alongside olfactory bulb volume, but in a study of more than 1000 adults it explained only a minor share of the variance in olfactory function, which was largely determined by age.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "lateral-to",
+          "to": "s.gyrus-rectus",
+          "note": "forms its lateral border"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "On MRI the right olfactory sulcus was deeper than the left in all age groups in that study, and women had a deeper left sulcus than men; the study also reports normative depths by age band."
+        }
+      ],
+      "src": [
+        "src.chiavaras-2000-orbitofrontal-sulci",
+        "src.li-2023-olfactory-sulcus-depth"
+      ],
+      "review": "draft"
     }
   ],
   "landmarks": [

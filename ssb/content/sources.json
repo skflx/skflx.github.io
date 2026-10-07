@@ -3983,6 +3983,241 @@
       "pmid": "30038985",
       "url": "https://pubmed.ncbi.nlm.nih.gov/30038985/",
       "note": "PMC full text (PMC5854277), read 2026-10-07. MRI findings in a small series of juvenile nasopharyngeal angiofibroma staged with the Radkowski and Onerci systems; its Table 4 reproduces both systems' stage wording and supports the Onerci criteria."
+    },
+    {
+      "id": "src.liu-2009-petrosphenoidal-petrolingual",
+      "cite": "Liu XD, Xu QW, Che XM, Mao RL. Anatomy of the petrosphenoidal and petrolingual ligaments at the petrous apex. Clin Anat. 2009;22(3):302-6.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/ca.20771",
+      "pmid": "19173250",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19173250/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Surgical-microscope dissection of 10 specimens from five formalin-fixed adult cadaveric heads. Supports the course of the petrolingual ligament (petrous apex to the lingula), its relation to the lacerum segment of the ICA and to Meckel's cave, and its use as a landmark."
+    },
+    {
+      "id": "src.leonel-2022-lingual-process",
+      "cite": "Leonel LCPC, Rezende NC, Alexander AY, Agosti E, Rush D, Kenning TJ, et al. The Lingual Process of the Sphenoid Bone and the Petrolingual Ligament: Surgical Anatomy, Landmarks, and Clinical Relevance. Oper Neurosurg. 2022;23(6):e360-e368.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1227/ons.0000000000000407",
+      "pmid": "36227193",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36227193/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 72 dry-skull sides and 20 embalmed sides. Supports the petrolingual ligament's role between the ICA and the inferior Meckel's cave, its reported length and height, and the lingual-process variants; the abstract does not say which specimens the ligament measurements come from."
+    },
+    {
+      "id": "src.xie-2026-inferior-petrolingual",
+      "cite": "Xie T, Xie Q, Zhang X, Chen P, Liu S, Hu F, et al. The \"Inferior\" Petrolingual Ligament for Endoscopic Endonasal \"Lateral\" Transpetrosal Approach. Head Neck. 2026;48(4):994-1002.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/hed.70094",
+      "pmid": "41268655",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41268655/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Endoscopic endonasal transpterygoid dissections on nine formalin-fixed cadaveric heads (18 sides) plus one illustrative case. Supports the description of a further, 'inferior' petrolingual ligament and its use for lateral petrous apex access; a single-centre description that other series have not yet confirmed."
+    },
+    {
+      "id": "src.touska-2019-skull-base-ligaments",
+      "cite": "Touska P, Hasso S, Oztek A, Chinaka F, Connor SEJ. Skull base ligamentous mineralisation: evaluation using computed tomography and a review of the clinical relevance. Insights Imaging. 2019;10(1):55.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1186/s13244-019-0740-8",
+      "pmid": "31115710",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31115710/",
+      "note": "PMC full text (PMC6529485), read 2026-10-07. Retrospective review of 240 paranasal-sinus CT studies (ages 6-80, equal numbers per age group, UK) plus a limited systematic review. Its Table 1 gives each ligament's course, Table 2 the proportion mineralised, Table 4 the foramen size; supports ligament definitions, CT identification and clinical relevance. Prevalences are per patient (any degree of mineralisation), not per side, and come from an age-stratified sample, not from a population."
+    },
+    {
+      "id": "src.piagkou-2023-sphenoid-ligaments",
+      "cite": "Piagkou M, Fiska A, Tsakotos G, Triantafyllou G, Politis C, Koutserimpas C, et al. A morphological study on the sphenoid bone ligaments' ossification pattern. Surg Radiol Anat. 2023;45(11):1405-1417.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1007/s00276-023-03226-4",
+      "pmid": "37550483",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37550483/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 156 Greek adult dried skulls; reports ossification of the caroticoclinoid and the anterior and posterior interclinoid ligaments as separate entries. Dry-skull ossification rates are not comparable with CT mineralisation rates per patient."
+    },
+    {
+      "id": "src.zhao-2021-carotico-clinoid-foramen",
+      "cite": "Zhao X, Labib MA, Avci E, Preul MC, Baskaya MK, Little AS, et al. Navigating a Carotico-Clinoid Foramen and an Interclinoidal Bridge in the Endonasal Endoscopic Approach: An Anatomical and Technical Note. J Neurol Surg B Skull Base. 2021;82(5):534-539.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1055/s-0040-1715470",
+      "pmid": "34513559",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34513559/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). A single cadaveric head with both variants in both cavernous sinuses; supports the stepwise endoscopic management of an ossified caroticoclinoid ligament and interclinoid bridge, not their frequency."
+    },
+    {
+      "id": "src.joo-2012-carotid-cave",
+      "cite": "Joo W, Funaki T, Yoshioka F, Rhoton AL Jr. Microsurgical anatomy of the carotid cave. Neurosurgery. 2012;70(2 Suppl Operative):300-11.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1227/NEU.0b013e3182431767",
+      "pmid": "22113241",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22113241/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric specimens examined at 3-40x (20 paraclinoid areas). Supports the definition of the carotid cave, its relation to the distal dural ring and carotid collar, its depth and circumferential length, and the aneurysm implication."
+    },
+    {
+      "id": "src.katsuta-1997-jugular-foramen",
+      "cite": "Katsuta T, Rhoton AL Jr, Matsushima T. The jugular foramen: microsurgical anatomy and operative approaches. Neurosurgery. 1997;41(1):149-201.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1097/00006123-199707000-00030",
+      "pmid": "9218307",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9218307/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Microsurgical anatomy study; supports the three compartments of the jugular foramen, the position of CN IX relative to X and XI, and the dural penetration of the nerves. The abstract does not give specimen numbers."
+    },
+    {
+      "id": "src.li-2021-lower-cranial-nerves",
+      "cite": "Li L, London NR, Prevedello DM, Carrau RL. Endonasal access to lower cranial nerves: From foramina to upper parapharyngeal space. Head Neck. 2021;43(10):3225-3233.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/hed.26781",
+      "pmid": "34165854",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34165854/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Six cadaveric specimens (12 sides) dissected by transpterygoid EEA; distances measured on CT angiography of 30 patients with pulsatile tinnitus. Supports the exposure of the jugular foramen region from the nose, the courses of CN IX, X and XI after exit from the foramen, and the medial pterygoid plate distances."
+    },
+    {
+      "id": "src.scibilia-2021-posterior-paramedian",
+      "cite": "Scibilia A, Cebula H, Esposito F, Angileri FF, Raffa G, Todeschi J, et al. Endoscopic Endonasal Approach to the Ventral-Medial Portion of Posterior Paramedian Skull Base: A Morphometric Perspective of Surgical and Radiologic Anatomy. World Neurosurg. 2021;149:e687-e695.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1016/j.wneu.2021.01.116",
+      "pmid": "33540106",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33540106/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Five fresh head specimens dissected with pre- and post-dissection CT. Supports which parts of the jugular foramen the ipsilateral and contralateral-nostril endonasal routes expose; small series, no case outcomes."
+    },
+    {
+      "id": "src.abumanhal-2025-orbital-septum",
+      "cite": "Abumanhal M, Alsheikh O, Edward DP, Kakizaki H. Where is the orbit? Definition of orbital septum attachment sites. Saudi J Ophthalmol. 2025;39(2):125-127.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.4103/sjopt.sjopt_58_25",
+      "pmid": "40642364",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40642364/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). A short anatomical definition paper (the abstract does not state the specimen numbers or method). Supports the definition of the orbit as the space behind the septum and the septum's attachments in the upper, lower, medial and lateral regions."
+    },
+    {
+      "id": "src.zeppieri-2025-periorbital-cellulitis",
+      "cite": "Zeppieri M, Bourget D. Periorbital Cellulitis. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2025 Jan-. Updated 2025 Feb 6.",
+      "type": "review",
+      "verified": false,
+      "pmid": "29261970",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29261970/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports the orbital septum as a barrier between preseptal and postseptal tissues and the clinical separation of preseptal from orbital cellulitis."
+    },
+    {
+      "id": "src.capobianco-2026-orbital-cellulitis",
+      "cite": "Capobianco M, Zeppieri M. Orbital Cellulitis. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2026 Jan-. Updated 2026 Sep 14.",
+      "type": "review",
+      "verified": false,
+      "pmid": "29939678",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29939678/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports orbital cellulitis as postseptal infection and the paranasal sinuses, especially the ethmoids, as its usual source."
+    },
+    {
+      "id": "src.natori-1995-superior-orbital-fissure",
+      "cite": "Natori Y, Rhoton AL Jr. Microsurgical anatomy of the superior orbital fissure. Neurosurgery. 1995;36(4):762-75.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1227/00006123-199504000-00018",
+      "pmid": "7596508",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7596508/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric microsurgical study; supports which structures pass through each sector of the superior orbital fissure and that the superior ophthalmic vein lies in the lateral sector outside the annular tendon."
+    },
+    {
+      "id": "src.azzam-2023-ophthalmic-vein",
+      "cite": "Azzam D, Cypen S, Tao J. Anatomy, Head and Neck: Eye Ophthalmic Vein. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2023 Jan-. Updated 2023 Jul 24.",
+      "type": "review",
+      "verified": false,
+      "pmid": "32491535",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32491535/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports the origin, course, fissure passage and drainage of the superior ophthalmic vein and the accessory ophthalmic veins."
+    },
+    {
+      "id": "src.romano-2022-sov-imaging",
+      "cite": "Romano N, Urru A, Sasso R, Castaldi A. Imaging of superior ophthalmic vein: A pictorial overview. Clin Imaging. 2022;89:136-146.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.clinimag.2022.06.019",
+      "pmid": "35809476",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35809476/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Pictorial review; the abstract supports only that the vein is the largest of the orbit, is well identifiable on CT and MRI, and that changes in its appearance help the differential diagnosis."
+    },
+    {
+      "id": "src.srinivasan-2026-sov-access",
+      "cite": "Srinivasan S, McCloskey K, Jin Y, Thorell B, Anderson L, Suresh V, et al. Direct access of non-dilated superior ophthalmic vein for embolization of cavernous sinus dural arteriovenous fistula: a systematic review and illustrative case. Neuroradiology. 2026.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00234-026-04151-0",
+      "pmid": "42635760",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42635760/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Online-ahead-of-print PRISMA systematic review (five reports, eight access attempts) plus one case. Supports only that direct SOV access has been used as a salvage route to a cavernous sinus dural fistula; the authors state the evidence is too small to estimate success or safety."
+    },
+    {
+      "id": "src.chiavaras-2000-orbitofrontal-sulci",
+      "cite": "Chiavaras MM, Petrides M. Orbitofrontal sulci of the human and macaque monkey brain. J Comp Neurol. 2000;422(1):35-54.",
+      "type": "cohort",
+      "verified": false,
+      "pmid": "10842217",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10842217/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). MRI study of 100 normal adult human cerebral hemispheres (and macaque brains) in Talairach space. Supports the olfactory, medial, lateral and transverse orbital sulci, the four orbital gyri and the variability of the sulcal pattern. PubMed carries no DOI for this record."
+    },
+    {
+      "id": "src.li-2023-olfactory-sulcus-depth",
+      "cite": "Li Z, Abdul Manan H, Heitmann H, Witte V, Wirkner K, Riedel-Heller S, et al. The Association Between Depth of the Olfactory Sulcus, Age, Gender and Olfactory Function: An MRI-based Investigation in More Than 1000 Participants. Neuroscience. 2023;519:31-37.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.neuroscience.2023.03.017",
+      "pmid": "36934780",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36934780/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). T1 MRI of 1097 adults (olfactory dysfunction n = 604, normosmia n = 493) screened with Sniffin' Sticks. Supports only that olfactory sulcus depth was measured on MRI, was deeper on the right, and explained a small share of olfactory function; no figure from it is quoted."
+    },
+    {
+      "id": "src.dealmeida-2015-ogm-frontal-lobe",
+      "cite": "de Almeida JR, Carvalho F, Vaz Guimaraes Filho F, Kiehl TR, Koutourousiou M, Su S, et al. Comparison of endoscopic endonasal and bifrontal craniotomy approaches for olfactory groove meningiomas: A matched pair analysis of outcomes and frontal lobe changes on MRI. J Clin Neurosci. 2015;22(11):1733-41.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.jocn.2015.03.056",
+      "pmid": "26275331",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26275331/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 70 patients, 10 matched pairs (EEA versus bifrontal craniotomy). It concerns the frontal lobe as a whole, not the orbital gyri specifically, and the authors call the finding preliminary."
+    },
+    {
+      "id": "src.helwany-2023-palate",
+      "cite": "Helwany M, Rathee M. Anatomy, Head and Neck, Palate. In: StatPearls [Internet]. Treasure Island (FL): StatPearls Publishing; 2023 Jan-. Updated 2023 Jun 5.",
+      "type": "review",
+      "verified": false,
+      "pmid": "32491749",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32491749/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). StatPearls chapter (NCBI Bookshelf); the PubMed record carries its summary text. Supports the bony make-up of the hard palate, its share of the palate, and the linings of its nasal and oral surfaces."
+    },
+    {
+      "id": "src.liu-2020-upper-pps",
+      "cite": "Liu Q, Wang H, Zhao W, Song X, Sun X, Yu H, et al. Endoscopic transnasal transmaxillary approach to the upper parapharyngeal space and the skull base. Eur Arch Otorhinolaryngol. 2020;277(3):801-807.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1007/s00405-019-05761-6",
+      "pmid": "31845034",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31845034/",
+      "note": "PMC full text (PMC7031166), read 2026-10-07. Six cadaveric heads dissected by a combined endoscopic transpterygoid and anterior transmaxillary approach, plus clinical application. Supports the boundaries and compartments of the parapharyngeal space as the authors state them in the Introduction (background, citing earlier work), and the endoscopic landmarks and dissection steps in Results."
+    },
+    {
+      "id": "src.li-2020-transpterygoid-pps",
+      "cite": "Li L, London NR Jr, Prevedello DM, Carrau RL. Endonasal endoscopic transpterygoid approach to the upper parapharyngeal space. Head Neck. 2020;42(9):2734-2740.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/hed.26127",
+      "pmid": "32129556",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32129556/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Six fresh cadaveric specimens (12 sides). Supports the prestyloid fat and poststyloid contents met on the endonasal transpterygoid route."
+    },
+    {
+      "id": "src.lassalle-2025-pps-compartments",
+      "cite": "Lassalle SL, Serrano Bernárdez VC, Cifone T, Rimoldi S, Benitez N, Diaz FD, et al. Compartmentalization of the human cephalic parapharyngeal space: a scoping review. Surg Radiol Anat. 2025;47(1):189.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00276-025-03698-6",
+      "pmid": "40813940",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40813940/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). PRISMA-ScR scoping review of 202 studies on how the space is divided; supports that the pre/poststyloid boundary is described differently across the literature (percentages are shares of reviewed studies)."
     }
   ]
 }

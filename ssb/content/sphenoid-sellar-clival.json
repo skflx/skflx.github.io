@@ -3921,6 +3921,343 @@
       "src": [
         "src.chiu-2019-ch31"
       ]
+    },
+    {
+      "id": "s.petrolingual-ligament",
+      "name": "Petrolingual ligament",
+      "kind": "ligament",
+      "region": "petrous",
+      "tier": 3,
+      "syn": [
+        "PLL"
+      ],
+      "what": "Fibrous band running from the petrous apex to the lingula of the sphenoid bone that wraps part of the dorsal and lateral walls of the lacerum segment of the internal carotid artery.",
+      "why": "Together with the lingual process of the sphenoid it separates the ICA from the inferior part of Meckel's cave; it is a landmark for finding the ICA and the nerves at the petrous apex, and it has to be identified and removed before the ICA can be mobilized in endonasal approaches to Meckel's cave and the middle cranial fossa.",
+      "geo": "none",
+      "reliability": "usual",
+      "rel": [
+        {
+          "r": "attaches-to",
+          "to": "s.petrous-apex",
+          "note": "Liu 2009: spans from the petrous apex to the lingula"
+        },
+        {
+          "r": "borders",
+          "to": "s.internal-carotid-artery",
+          "note": "dorsal and lateral walls of the lacerum segment"
+        },
+        {
+          "r": "inferior-to",
+          "to": "s.meckels-cave",
+          "note": "just under the anteroinferior part of its anteromedial wall"
+        },
+        {
+          "r": "landmark-for",
+          "to": "s.internal-carotid-artery"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "In 10 specimens from five formalin-fixed heads the ligament surrounded part of the dorsal and lateral walls of the lacerum ICA in all of them; the neighbouring petrosphenoidal ligament ([[s.petrosphenoidal-ligament]]) ran from the petrous apex to the posterior clinoid process and its insertions varied in five specimens."
+        },
+        {
+          "tier": 3,
+          "text": "Reported dimensions: length 9 mm and height 4 mm (a series of 72 dry-skull sides and 20 embalmed sides; the abstract gives no spread and does not say which specimens were measured). The lingual process of the sphenoid, which the ligament runs to, had a mean length of 5 mm and height of 3 mm and partly closed the lateral carotid sulcus in 44 of 72 sides, formed a near-ring in 17 and was rudimentary in 11."
+        },
+        {
+          "tier": 3,
+          "text": "A further 'inferior' petrolingual ligament has been described in nine cadaveric heads: from the ventral middle cranial fossa to the ventrolateral foramen lacerum around the inferior lingula, above where the greater superficial petrosal nerve joins the vidian nerve; transecting it opens the lateral extradural petrous apex. It rests on one cadaveric series and is not yet an established landmark."
+        }
+      ],
+      "src": [
+        "src.liu-2009-petrosphenoidal-petrolingual",
+        "src.leonel-2022-lingual-process",
+        "src.xie-2026-inferior-petrolingual"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.interclinoid-ligament",
+      "name": "Interclinoid ligament",
+      "kind": "ligament",
+      "region": "parasellar",
+      "tier": 3,
+      "syn": [
+        "interclinoid bridge",
+        "interclinoidal bridge",
+        "sellar bridge"
+      ],
+      "what": "Ligament between the anterior and posterior clinoid processes (occasionally between the middle and posterior clinoid processes). When it mineralises completely it becomes a bony bridge enclosing a common interclinoid foramen.",
+      "why": "A mineralised bridge sits in the way of a posterior clinoidectomy or pituitary transposition: disconnecting it is the prerequisite to an effective posterior clinoidectomy, and the transition between the diaphragma sellae and the bridge has to be recognised. On CT angiography a mineralised bar in the parasellar region can be mistaken for a vascular lesion.",
+      "geo": "none",
+      "ct": "Mineralisation is well delineated on thin CT and is best assessed on double-oblique sagittal reconstructions. In Touska's series a completely mineralised interclinoid ligament enclosed a foramen of mean area 75.2 mm2 (SD 22 mm2, range 43-142 mm2).",
+      "reliability": "variable",
+      "rel": [
+        {
+          "r": "attaches-to",
+          "to": "s.anterior-clinoid-process",
+          "note": "occasionally the middle clinoid process instead"
+        },
+        {
+          "r": "attaches-to",
+          "to": "s.posterior-clinoid-process"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Mineralisation was seen in 22.1% of 240 patients' paranasal-sinus CT scans (ages 6-80, one UK centre; partial or complete, per patient), the most frequent of the six skull base ligaments studied. In 156 Greek dried skulls the anterior interclinoid ligament was ossified in 4.49% and the posterior interclinoid ligament in 6.41%. Different denominators (patients on CT versus skulls), definitions and populations explain the gap; neither figure is a surgical-population prevalence."
+        },
+        {
+          "tier": 3,
+          "text": "Naming is not settled: Touska and colleagues treat the caroticoclinoid ligament as the 'anterior interclinoid' ligament, while Piagkou and colleagues count the anterior interclinoid and caroticoclinoid ligaments separately. See [[s.caroticoclinoid-ligament]]."
+        },
+        {
+          "tier": 3,
+          "text": "Zhao and colleagues' cadaveric note, for a head with both an interclinoid bridge and a carotico-clinoid foramen: debulking the middle clinoid process lessens the obstacle effect, the interdural pituitary transposition can be done medial to the ossified carotico-clinoid ligament, and the bridge must be disconnected for an effective posterior clinoidectomy; they stress preoperative planning and stepwise disconnections. It describes one head, not a frequency or outcome."
+        },
+        {
+          "tier": 3,
+          "text": "Touska's review cites a case report in which a mineralised interclinoid ligament on CT angiography was misidentified as a para-posterior communicating artery aneurysm."
+        }
+      ],
+      "src": [
+        "src.touska-2019-skull-base-ligaments",
+        "src.piagkou-2023-sphenoid-ligaments",
+        "src.zhao-2021-carotico-clinoid-foramen"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.caroticoclinoid-ligament",
+      "name": "Caroticoclinoid ligament",
+      "kind": "ligament",
+      "region": "parasellar",
+      "tier": 3,
+      "syn": [
+        "carotico-clinoid ligament",
+        "caroticoclinoid bridge",
+        "carotico-clinoid foramen",
+        "clinocarotid canal"
+      ],
+      "what": "Ligament between the anterior and middle clinoid processes. When it mineralises completely it forms a bony ring (the carotico-clinoid foramen or clinocarotid canal) through which the internal carotid artery passes.",
+      "why": "An ossified ligament makes extradural anterior clinoid removal harder, needs more drilling and manipulation and raises the risk of carotid injury; it also alters the look of the middle clinoid process, the landmark for the anteromedial roof of the cavernous sinus and for the cavernous-to-clinoid ICA transition in endoscopic pituitary approaches. In a cadaveric technique note the pituitary transposition was performed medial to the ossified ligament after debulking the middle clinoid.",
+      "geo": "none",
+      "ct": "Mineralisation is best assessed on double-oblique axial reconstructions. A completely mineralised ligament formed a foramen of mean area 25.3 mm2 (SD 4.4 mm2) in Touska's series.",
+      "reliability": "variable",
+      "rel": [
+        {
+          "r": "attaches-to",
+          "to": "s.anterior-clinoid-process"
+        },
+        {
+          "r": "attaches-to",
+          "to": "s.middle-clinoid-process"
+        },
+        {
+          "r": "borders",
+          "to": "s.internal-carotid-artery",
+          "note": "may form a solid ring around the paraclinoid ICA when completely mineralised"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Mineralised in 17.5% of 240 patients' paranasal-sinus CT scans (per patient, partial or complete, one UK centre) and, in the same series, more often bilateral than unilateral; ossified in 24.36% of 156 Greek dried skulls. The two figures are not interchangeable (patients on CT versus skulls). It was frequently found together with a mineralised interclinoid ligament ([[s.interclinoid-ligament]]), 20 of the 64 patients with more than one mineralised ligament."
+        },
+        {
+          "tier": 3,
+          "text": "Touska's review calls it the 'caroticoclinoid (anterior interclinoid) ligament', whereas Piagkou's dry-skull study counts the caroticoclinoid and anterior interclinoid ligaments separately; the terminology is not settled."
+        }
+      ],
+      "src": [
+        "src.touska-2019-skull-base-ligaments",
+        "src.piagkou-2023-sphenoid-ligaments",
+        "src.zhao-2021-carotico-clinoid-foramen"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.carotid-cave",
+      "name": "Carotid cave",
+      "kind": "space",
+      "region": "parasellar",
+      "tier": 3,
+      "what": "Intradural pouch that extends below the level of the distal dural ring, between the wall of the internal carotid artery and the dural collar around it, on the medial and posterior side of the artery facing the upper carotid sulcus.",
+      "why": "It blurs the intradural/extradural line for paraclinoid aneurysms: an aneurysm arising at the level of the cave can look on imaging as if it extends below the upper edge of the anterior clinoid, yet may extend into the subarachnoid space and be a source of subarachnoid bleeding. Treating it needs the relationships of the cave to the ICA, the dural rings and the carotid collar. The superior hypophyseal artery frequently arises in the cave.",
+      "geo": "none",
+      "reliability": "usual",
+      "rel": [
+        {
+          "r": "borders",
+          "to": "s.internal-carotid-artery",
+          "note": "between the arterial wall and the dural collar"
+        },
+        {
+          "r": "borders",
+          "to": "s.distal-dural-ring",
+          "note": "the cave extends below the level of the ring"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "In a cadaver series the cave was found in 19 of 20 paraclinoid areas; its depth averaged 2.4 mm (range 1.5-5 mm) and its circumferential length 9.9 mm (range 4.5-12 mm)."
+        },
+        {
+          "tier": 3,
+          "text": "The distal dural ring is tightly adherent to the anterior and lateral walls of the ICA beside the anterior clinoid process and optic strut, but not to the medial and posterior walls facing the upper carotid sulcus, which is where the cave lies. The superior hypophyseal artery ([[s.superior-hypophyseal-artery]]) frequently arises in it."
+        }
+      ],
+      "src": [
+        "src.joo-2012-carotid-cave"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.jugular-foramen",
+      "name": "Jugular foramen",
+      "kind": "opening",
+      "region": "cvj",
+      "tier": 3,
+      "syn": [
+        "foramen jugulare"
+      ],
+      "what": "Skull base opening between the temporal and occipital bones (at their intrajugular processes, joined by a fibrous or osseous bridge). It has three compartments: a posterolateral venous sigmoid part that receives the sigmoid sinus, an anteromedial venous petrosal part that receives the inferior petrosal sinus, and a neural (intrajugular) part between them through which the glossopharyngeal, vagus and accessory nerves course.",
+      "why": "It is the skull base exit of cranial nerves IX, X and XI. Cadaveric work shows the medial, superior and anterior aspects of the jugular foramen region can be reached endonasally; the petrous and intrajugular parts were completely exposed through the contralateral nostril with the eustachian tube preserved, and ipsilateral access with eustachian tube removal gave wider exposure that reached the medial part of the sigmoid compartment. Lesions of the upper parapharyngeal space often involve this region.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "transmits",
+          "to": "s.glossopharyngeal-nerve"
+        },
+        {
+          "r": "transmits",
+          "to": "s.vagus-nerve"
+        },
+        {
+          "r": "transmits",
+          "to": "s.accessory-nerve"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "The petrosal part also receives tributaries from the hypoglossal canal, petroclival fissure and vertebral venous plexus and empties into the sigmoid part through an opening in the medial wall of the jugular bulb, between the glossopharyngeal nerve anteriorly and the vagus and accessory nerves posteriorly. The three nerves penetrate the dura at the medial margin of the intrajugular process of the temporal bone to reach the medial wall of the internal jugular vein."
+        },
+        {
+          "tier": 3,
+          "text": "Far-medial route: drilling the jugular tubercle above the hypoglossal canal ([[s.hypoglossal-canal]]) added 8 mm to the vertical length of the lateral corridor and allowed visualization of the distal cisternal segment of the lower cranial nerves (25 adult skulls and nine latex-injected heads)."
+        },
+        {
+          "tier": 3,
+          "text": "On CT angiography of 30 patients with pulsatile tinnitus the minimal distances from the medial pterygoid plate to the ICA, hypoglossal canal and jugular tubercle were 2.52 +/- 0.34, 2.86 +/- 0.36 and 3.18 +/- 0.33 cm (the abstract gives mean +/- SD without saying which; a non-surgical imaging population)."
+        }
+      ],
+      "src": [
+        "src.katsuta-1997-jugular-foramen",
+        "src.li-2021-lower-cranial-nerves",
+        "src.scibilia-2021-posterior-paramedian",
+        "src.morera-2010-far-medial"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.glossopharyngeal-nerve",
+      "name": "Glossopharyngeal nerve (CN IX)",
+      "kind": "nerve",
+      "region": "cvj",
+      "tier": 3,
+      "syn": [
+        "CN IX",
+        "cranial nerve IX",
+        "ninth cranial nerve"
+      ],
+      "what": "The ninth cranial nerve; with the vagus and accessory nerves it courses through the neural part of the jugular foramen, lying anterior to the other two at the opening in the jugular bulb's medial wall.",
+      "why": "Met where an endonasal transpterygoid dissection opens the poststyloid upper parapharyngeal space and where far-medial exposure reaches the foramen. After leaving the foramen it courses posterior to the ICA and runs inferiorly between the ICA and the internal jugular vein, so it lies behind the parapharyngeal carotid that endonasal landmarks lead you to.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "passes-through",
+          "to": "s.jugular-foramen"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.internal-carotid-artery",
+          "note": "after exit from the foramen, in the upper parapharyngeal space"
+        }
+      ],
+      "src": [
+        "src.katsuta-1997-jugular-foramen",
+        "src.li-2021-lower-cranial-nerves",
+        "src.li-2020-transpterygoid-pps"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.vagus-nerve",
+      "name": "Vagus nerve (CN X)",
+      "kind": "nerve",
+      "region": "cvj",
+      "tier": 3,
+      "syn": [
+        "CN X",
+        "cranial nerve X",
+        "tenth cranial nerve"
+      ],
+      "what": "The tenth cranial nerve; it courses through the neural part of the jugular foramen behind the glossopharyngeal nerve, together with the accessory nerve.",
+      "why": "In endonasal dissection of the upper parapharyngeal space the vagus lies in the poststyloid compartment close to the hypoglossal nerve, posterior to the ICA, with the accessory nerve running lateral to it; it is one of the cranial nerves exposed on entering that compartment.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "passes-through",
+          "to": "s.jugular-foramen"
+        },
+        {
+          "r": "posterior-to",
+          "to": "s.internal-carotid-artery",
+          "note": "after exit from the foramen; see the note on wording in the report"
+        }
+      ],
+      "src": [
+        "src.katsuta-1997-jugular-foramen",
+        "src.li-2021-lower-cranial-nerves",
+        "src.li-2020-transpterygoid-pps"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.accessory-nerve",
+      "name": "Accessory nerve (CN XI)",
+      "kind": "nerve",
+      "region": "cvj",
+      "tier": 3,
+      "syn": [
+        "CN XI",
+        "cranial nerve XI",
+        "spinal accessory nerve",
+        "eleventh cranial nerve"
+      ],
+      "what": "The eleventh cranial nerve; it courses through the neural part of the jugular foramen behind the glossopharyngeal nerve, together with the vagus nerve.",
+      "why": "After exiting the foramen it courses lateral to the vagus nerve and runs posterior to the internal jugular vein, so in endonasal poststyloid dissection it lies lateral to the vagus and posterior to the internal jugular vein.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "passes-through",
+          "to": "s.jugular-foramen"
+        },
+        {
+          "r": "lateral-to",
+          "to": "s.vagus-nerve",
+          "note": "after exit from the foramen"
+        }
+      ],
+      "src": [
+        "src.katsuta-1997-jugular-foramen",
+        "src.li-2021-lower-cranial-nerves"
+      ],
+      "review": "draft"
     }
   ],
   "landmarks": [

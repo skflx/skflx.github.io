@@ -3953,6 +3953,131 @@
         "src.grays-42",
         "src.radiopaedia-nasal-bone"
       ]
+    },
+    {
+      "id": "s.hard-palate",
+      "name": "Hard palate",
+      "kind": "bone-part",
+      "region": "nasal-cavity",
+      "tier": 1,
+      "syn": [
+        "bony palate"
+      ],
+      "what": "The anterior, immobile bony part of the palate, about two-thirds of its surface area: palatine processes of the maxilla in front and horizontal plates of the palatine bones behind. Its upper surface is the floor of the nasal cavity and is lined with respiratory epithelium; its lower surface is the roof of the mouth and is lined with oral mucosa containing salivary glands.",
+      "why": "It separates the nose from the mouth: the floor of the nose and the roof of the mouth are the two faces of one bony plate, lined by respiratory epithelium above and oral mucosa below. See [[s.nasal-floor]] for its upper surface, [[s.palatine-bone]] for its posterior bone, and [[s.incisive-canal]] and [[s.greater-palatine-canal]] for the passages through it.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "wall-of",
+          "to": "s.nasal-cavity",
+          "note": "floor: its upper surface"
+        }
+      ],
+      "src": [
+        "src.helwany-2023-palate"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.parapharyngeal-space",
+      "name": "Parapharyngeal space",
+      "kind": "space",
+      "region": "nasopharynx",
+      "tier": 3,
+      "syn": [
+        "PPS",
+        "upper parapharyngeal space",
+        "lateral pharyngeal space"
+      ],
+      "what": "Fascial space shaped like an inverted pyramid, its base at the skull base and its apex toward the greater cornu of the hyoid bone. It is limited anteriorly by the pterygomandibular raphe, laterally by the inner fascia of the masticatory space and the deep lobe of the parotid gland, medially by the buccopharyngeal and alar fasciae, and, generally, posteriorly by the posterior fascia of the carotid sheath. A fascia running back from the styloid process to the tensor veli palatini divides it into prestyloid (anterior) and poststyloid (posterior) compartments.",
+      "why": "Tumours of the upper space are reached endonasally by a transpterygoid route, with or without an anterior transmaxillary corridor. The medial pterygoid, tensor veli palatini and levator veli palatini muscles are the key landmarks into the upper space; the lateral pterygoid plate, foramen ovale and mandibular nerve guide the surgeon to the parapharyngeal internal carotid artery. The combined approach also gave a better view of the inferior limit of the upper space and eased control of the ICA.",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "contains",
+          "to": "s.internal-carotid-artery",
+          "note": "parapharyngeal segment"
+        }
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Where the prestyloid/poststyloid boundary lies is not agreed: a scoping review of 202 studies found the tensor-vascular-styloid fascia named in 43.6% of them and the styloid diaphragm in 30.7%, with several other structures in smaller shares, and proposed that the styloid diaphragm divides the space coronally. Use the term with the dividing structure named."
+        },
+        {
+          "tier": 3,
+          "text": "Endoscopic dissection (six heads): after enlarging the sinonasal corridor and drilling the pterygoid process below the nasal floor, a fat pad of the upper space lay between the tensor veli palatini and the medial pterygoid muscles, forming the lateral space; retracting those muscles exposed the levator veli palatini, and removing the soft tissue between the tensor and the superior constrictor exposed the medial space, which was dissected posteriorly to reach the poststyloid compartment."
+        }
+      ],
+      "src": [
+        "src.liu-2020-upper-pps",
+        "src.li-2020-transpterygoid-pps",
+        "src.lassalle-2025-pps-compartments"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.prestyloid-compartment",
+      "name": "Prestyloid parapharyngeal compartment",
+      "kind": "space",
+      "region": "nasopharynx",
+      "tier": 3,
+      "partOf": "s.parapharyngeal-space",
+      "what": "The anterior compartment of the parapharyngeal space, in front of the fascia that runs back from the styloid process to the tensor veli palatini. The endonasal dissection finds fat in it.",
+      "why": "Reached endonasally once the lateral pterygoid plate and muscle are displaced laterally as a unit: the posterior trunk of the mandibular nerve and the compartment's fat then come into view, and the poststyloid compartment lies deep to the styloid aponeurosis behind it. Tumours here most commonly arise from the deep lobe of the parotid gland (stated as background in the cadaver paper's Introduction).",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "anterior-to",
+          "to": "s.poststyloid-compartment"
+        }
+      ],
+      "src": [
+        "src.li-2020-transpterygoid-pps",
+        "src.liu-2020-upper-pps",
+        "src.lassalle-2025-pps-compartments"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "s.poststyloid-compartment",
+      "name": "Poststyloid parapharyngeal compartment",
+      "kind": "space",
+      "region": "nasopharynx",
+      "tier": 3,
+      "partOf": "s.parapharyngeal-space",
+      "what": "The posterior compartment of the parapharyngeal space, behind the fascia that runs back from the styloid process to the tensor veli palatini. It holds the internal carotid artery, the internal jugular vein and cranial nerves IX to XII (and, per the background text, the sympathetic chain).",
+      "why": "The neurovascular compartment: entering it endonasally by dissecting off the styloid aponeurosis exposes the ICA, the internal jugular vein and cranial nerves IX to XII. Tumours here usually arise from these neurovascular structures (stated as background in the cadaver paper's Introduction).",
+      "geo": "none",
+      "rel": [
+        {
+          "r": "contains",
+          "to": "s.internal-carotid-artery"
+        },
+        {
+          "r": "contains",
+          "to": "s.glossopharyngeal-nerve"
+        },
+        {
+          "r": "contains",
+          "to": "s.vagus-nerve"
+        },
+        {
+          "r": "contains",
+          "to": "s.accessory-nerve"
+        },
+        {
+          "r": "contains",
+          "to": "s.hypoglossal-nerve"
+        }
+      ],
+      "src": [
+        "src.li-2020-transpterygoid-pps",
+        "src.liu-2020-upper-pps",
+        "src.li-2021-lower-cranial-nerves",
+        "src.lassalle-2025-pps-compartments"
+      ],
+      "review": "draft"
     }
   ],
   "landmarks": [
