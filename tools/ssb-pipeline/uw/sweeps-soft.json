@@ -289,25 +289,25 @@
    "waypoints": [
     {
      "chart": [
-      -9,
+      -10,
       14
      ]
     },
     {
      "chart": [
-      -8,
+      -10,
       19
      ]
     },
     {
      "chart": [
-      -9,
+      -10,
       25
      ]
     }
    ],
    "variable": "Entry level at the columella varies; the specimen's face mask removed the entry.",
-   "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point."
+   "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point. ST6 (the external nose): the septal chart now ends at the internal valve plane, A -10, so the three waypoints that lay at A -9..-8 on the earlier chart (which reached A -3) are re-seated on that edge row with the same S: still the ascending segment along the anterior septal margin. The columella entry in front of the valve plane is not on the septal chart; ST4d / the checkpoint decides whether to draw it."
   },
   "s.superior-labial-septal-branch.R": {
    "surface": "s.septal-mucosa.R",
@@ -320,25 +320,25 @@
    "waypoints": [
     {
      "chart": [
-      -9,
+      -10,
       14
      ]
     },
     {
      "chart": [
-      -8,
+      -10,
       19
      ]
     },
     {
      "chart": [
-      -9,
+      -10,
       25
      ]
     }
    ],
    "variable": "Entry level at the columella varies; the specimen's face mask removed the entry.",
-   "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point."
+   "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point. ST6 (the external nose): the septal chart now ends at the internal valve plane, A -10, so the three waypoints that lay at A -9..-8 on the earlier chart (which reached A -3) are re-seated on that edge row with the same S: still the ascending segment along the anterior septal margin. The columella entry in front of the valve plane is not on the septal chart; ST4d / the checkpoint decides whether to draw it."
   }
  }
 }

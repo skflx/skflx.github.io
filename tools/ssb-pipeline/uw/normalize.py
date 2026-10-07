@@ -12,13 +12,17 @@ is idempotent.
 
 Stages (`all` runs them in this order, with the pipeline stages between them):
 
-  volume   steps 1-5: midline check, septum centring, mirror, midline plates, ct.json "standard".
-           Writes ssb/ct/ct.u8.gz, labels.u16.gz, ct.json, ssb/geometry/labels.json (append only).
+  volume   ST6 steps 1-2 (the external nose: unmask it from the raw UW stack, centre it; nose.py), then steps 1-5: midline
+           check, septum centring, mirror, midline plates, then ST6 steps 3-4 (the internal valve landmark and the
+           s.nasal-vestibule labels; nose.py), ct.json "standard".
+           Writes ssb/ct/ct.u8.gz, labels.u16.gz, ct.json, ssb/geometry/labels.json (append only), the valve landmark
+           s.internal-nasal-valve.R (stage `sides` mirrors it), and incoming/_recon/nose-region.npz (the standard
+           specimen's nose region, for nose.py pack).
   -        walls.py   (re-derives the wall units from the mirrored air labels)
   labels   re-mirrors the label volume from the right half after walls.py, so the symmetry is exact (a
            marker watershed breaks ties by scan order); the air labels and the CT do not change.
   -        sweeps mirrored (below) so sdf.py sees symmetric tubes, then meshes.py, sdf.py, softtissue.py
-           (which runs sweeps_soft.py), lining.py (the open airway lining, ST1b)
+           (which runs sweeps_soft.py), lining.py (the open airway lining, ST1b), nose.py pack (the nose pack, ST6)
   sides    step 6: every paired landmark .L := .R with R negated, .M R := 0; sweeps.json .L := mirrored .R;
            s.septal-mucosa.L's chart := .R's with r negated. The as-scanned landmarks stay in the meta files
            under `asScanned`. Unpaired landmarks (one side only) stay as scanned and are listed.
@@ -41,6 +45,7 @@ from skimage.measure import points_in_poly
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from volume import CACHE  # noqa: E402
+import nose  # noqa: E402
 
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 PY = sys.executable
@@ -58,7 +63,7 @@ PLATE_DILATE_MM = 1.0
 PLATE_HALF_MM = 0.5
 # air spaces: a label of one of these ids is "air" (walls.AIR_IDS)
 AIR_IDS = ('s.agger-nasi-cell', 's.anterior-ethmoid-cells', 's.ethmoid-bulla', 's.frontal-recess', 's.frontal-sinus',
-           's.maxillary-sinus', 's.nasal-cavity', 's.nasopharynx', 's.posterior-ethmoid-cells', 's.sphenoid-sinus')
+           's.maxillary-sinus', 's.nasal-cavity', 's.nasal-vestibule', 's.nasopharynx', 's.posterior-ethmoid-cells', 's.sphenoid-sinus')
 # right-labelled non-air units allowed to reach more than 2 mm left of R = 0 in the as-scanned head (owner, 2026-10-05)
 CROSSING_OK = ('s.frontal-sinus-anterior-table.R', 's.frontal-sinus-posterior-table.R')
 PLATE_LABEL = {'s.sphenoid-sinus': 's.intersinus-septum.M', 's.frontal-sinus': 's.frontal-intersinus-septum.M'}
@@ -361,6 +366,58 @@ def plates(fr, ct, lab, table, by_name, bone_disp):
     return out_ct, out_lab, info
 
 
+# ---------------------------------------------------------------- ST6 steps 3-4: valve landmark, vestibule labels
+def mirror_mask(M, mid):
+    """A mask of the right half (columns > mid) -> the same mask mirrored onto the left half (columns < mid)."""
+    out = np.zeros_like(M)
+    out[:, :, :mid] = M[:, :, mid + 1:][:, :, ::-1]
+    return out
+
+
+def nose_labels(fr, ct, lab, table, by_name):
+    """Append s.nasal-vestibule.R/.L to the label table and write the valve landmark (right). Returns (labels, report)."""
+    lm = json.load(open(os.path.join(REPO, 'ssb/geometry/landmarks.json')))
+    meta = json.load(open(os.path.join(REPO, 'ssb/geometry/landmarks.meta.json')))
+    naris = lm['lm.naris.R']
+    s_lo = meta['landmarks']['lm.naris.R']['band_s_mm'][0]
+    res = nose.valve_and_vestibule(ct, lab, by_name, fr.r, fr.a, fr.s, naris, s_lo)
+    nose.say_vestibule(res['report'])
+    names = {}
+    for sd in ('R', 'L'):
+        name = '%s.%s' % (nose.VESTIBULE, sd)
+        if name not in by_name:
+            idx = max(by_name.values()) + 1
+            by_name[name] = idx
+            table[idx] = name
+        names[sd] = by_name[name]
+    say('   appended label indices:', {k: v for k, v in names.items()})
+    out = lab.copy()
+    cav = {sd: by_name['%s.%s' % (nose.CAVITY, sd)] for sd in 'RL'}
+    out[res['join']] = cav['R']
+    out[mirror_mask(res['join'], fr.mid)] = cav['L']
+    out[res['vest']] = names['R']
+    out[mirror_mask(res['vest'], fr.mid)] = names['L']
+    # acceptance: lm.naris lies in the vestibule's air; the valve landmark lies in air
+    k, j, i = (int(round(v)) for v in ((naris[2] - fr.s[0]) / fr.step, (naris[1] - fr.a[0]) / fr.step, (naris[0] - fr.r[0]) / fr.step))
+    say('   lm.naris.R %s: label %s, display %d' % (naris, table[int(out[k, j, i])], ct[k, j, i]))
+    vc = res['valve']['centroid']
+    k, j, i = (int(round(v)) for v in ((vc[2] - fr.s[0]) / fr.step, (vc[1] - fr.a[0]) / fr.step, (vc[0] - fr.r[0]) / fr.step))
+    v_label, v_disp = table.get(int(out[k, j, i]), '-'), int(ct[k, j, i])
+    say('   valve landmark %s: label %s, display %d (%s)' % (vc, v_label, v_disp, 'in air' if 0 < v_disp < nose.AIR else 'NOT in air'))
+    v = res['valve']
+    lm['s.internal-nasal-valve.R'] = vc
+    lm['s.internal-nasal-valve.L'] = [-vc[0], vc[1], vc[2]]       # stage `sides` mirrors only landmarks that already have both sides
+    meta['landmarks']['s.internal-nasal-valve.R'] = {
+        'method': 'centroid of the right airway\'s coronal section of smallest area (3 mm moving mean) over A from lm.naris - 25 to - 10 mm: '
+                  'the airway is the air connected to lm.naris among the right nasal cavity and the unlabelled air in front of it (tools/ssb-pipeline/uw/nose.py, ST6); '
+                  'the left point is its mirror (N1)',
+        'a_mm': v['a'], 'section_area_mm2': round(v['area_mm2'], 1), 'smoothed_area_mm2': round(v['smoothed_area_mm2'], 1),
+        'window_a_mm': v['window_a'], 'in_air': bool(0 < v_disp < nose.AIR)}
+    json.dump(dict(sorted(lm.items())), open(os.path.join(REPO, 'ssb/geometry/landmarks.json'), 'w'), indent=1)
+    json.dump(meta, open(os.path.join(REPO, 'ssb/geometry/landmarks.meta.json'), 'w'), indent=1)
+    return out, res['report']
+
+
 # ---------------------------------------------------------------- volume stage
 def stage_volume():
     hdr, ct, lab, table = read_as_scanned()
@@ -370,6 +427,7 @@ def stage_volume():
     charts = json.load(open(asc('geometry/charts.json')))['surfaces']
     say('0. input: as-scanned ssb/ct + ssb/geometry at %s (cached under tools/ssb-pipeline/incoming/_recon/as-scanned)'
         % AS_SCANNED_COMMIT[:8])
+    ct, region, nose_rep = nose.unmask_stage(hdr, ct)                   # ST6 steps 1-2: the nose is unmasked and centred
     fit = midline_check(fr, lab, by_name, landmarks)
     crossing = crossing_check(fr, lab, table)
     bone_disp = int(np.median(ct[np.isin(lab, [by_name['s.sphenoid-face.R'], by_name['s.sphenoid-face.L']])]))
@@ -378,6 +436,12 @@ def stage_volume():
     say('   appended .L label indices:', appended or 'none')
     ct2, lab2, relabelled = mirror(fr, ct1, lab1, r2l, l2r, table)
     ct3, lab3, plate_info = plates(fr, ct2, lab2, table, by_name, bone_disp)
+    region_std = np.zeros_like(region)
+    region_std[:, :, fr.mid:] = region[:, :, fr.mid:]
+    region_std[:, :, :fr.mid] = region[:, :, fr.mid + 1:][:, :, ::-1]
+    lab3, vrep = nose_labels(fr, ct3, lab3, table, by_name)  # ST6 steps 3-4: the internal valve, the vestibule
+    os.makedirs(os.path.dirname(nose.REGION_FILE), exist_ok=True)
+    np.savez_compressed(nose.REGION_FILE, region=region_std.astype(np.uint8))
     gz_write(os.path.join(REPO, 'ssb/ct/ct.u8.gz'), ct3, np.uint8)
     gz_write(os.path.join(REPO, 'ssb/ct/labels.u16.gz'), lab3, '<u2')
     json.dump({'version': 1, 'labels': {str(k): v for k, v in sorted(table.items())}},
@@ -389,6 +453,14 @@ def stage_volume():
         'asScannedCommit': AS_SCANNED_COMMIT, 'sourceSide': 'R',
         'septumOffsetMm': {'median': sep['median'], 'max': sep['max']},
         'plates': {st: p['plateMm2'] for st, p in plate_info.items()},
+        'nose': {'method': 'the external nose unmasked from the UW axial stack between the alar-facial grooves (subnasale - 2 mm to the soft-tissue '
+                           'nasion; above S 28 |R| <= 12), each (S, A) row centred on R = 0, the internal valve at the narrowest coronal section of the '
+                           'airway, the vestibule labelled in front of it (tools/ssb-pipeline/uw/nose.py, ST6)',
+                 'centreOffsetMm': {'median': nose_rep['centre']['median_abs_mm'], 'max': nose_rep['centre']['max_abs_mm']},
+                 'regionVoxels': nose_rep['unmask']['voxels'],
+                 'valve': {'aMm': vrep['valve']['a'], 'areaMm2': vrep['valve']['area_mm2']},
+                 'vestibuleMm3': vrep['vestibule_mm3'],
+                 'note': 'the vestibule | cavity boundary is the valve plane (the limen nasi): a proxy for the mucocutaneous junction, which CT does not show'},
         'note': 'Standardized specimen: one head\'s right half, mirrored, with the septum centred - symmetric by '
                 'construction, not a real head.'}
     json.dump(H, open(os.path.join(REPO, 'ssb/ct/ct.json'), 'w'), indent=2, ensure_ascii=False)
@@ -515,6 +587,42 @@ def run(*cmd):
     subprocess.run(list(cmd), cwd=REPO, check=True)
 
 
+def chart_edges(doc):
+    """{surface: (anterior A of the chart's last occupied row, area cm2)} for the septal charts."""
+    out = {}
+    for name in ('s.septal-mucosa.R', 's.septal-mucosa.L'):
+        s = doc['surfaces'][name]
+        g = s['grid']
+        rows = [i for i, row in enumerate(g['r']) if any(v is not None for v in row)]
+        out[name] = (g['origin'][0] + max(rows), s['area_cm2'])
+    return out
+
+
+def report_nose():
+    """ST6 step 7 and the budgets: the septal charts' new anterior edge against HEAD's, and the packs against 5.4."""
+    def head(path):
+        return json.loads(subprocess.run(['git', 'show', 'HEAD:' + path], cwd=REPO, check=True, capture_output=True).stdout)
+    new = chart_edges(json.load(open(os.path.join(REPO, 'ssb/geometry/charts.json'))))
+    old = chart_edges(head('ssb/geometry/charts.json'))
+    for name in new:
+        say('ST6 7. %s: anterior edge A %.1f mm (was %.1f), area %.2f cm2 (was %.2f, %+.2f)'
+            % (name, new[name][0], old[name][0], new[name][1], old[name][1], new[name][1] - old[name][1]))
+    man = json.load(open(os.path.join(REPO, 'ssb/models/packs.json')))
+    was = head('ssb/models/packs.json')
+    tot, wtot = man['totals'], was['totals']
+    say('   packs: %d bytes, %d triangles (HEAD: %d, %d; 5.4 budgets: 12 MB, 400k triangles); new/changed: %s'
+        % (tot['bytes'], tot['triangles'], wtot['bytes'], wtot['triangles'],
+           {k: (p['bytes'], p['triangles']) for k, p in man['packs'].items() if k not in was['packs'] or was['packs'][k]['bytes'] != p['bytes']}))
+    core = man['packs']['core']
+    say('   first render (graph + core): core %d bytes (HEAD %d; 5.4 budget 2.5 MB)' % (core['bytes'], was['packs']['core']['bytes']))
+    ctb = sum(os.path.getsize(os.path.join(REPO, 'ssb/ct', f)) for f in os.listdir(os.path.join(REPO, 'ssb/ct')) if f.endswith('.gz'))
+    ctw = 0
+    for f in os.listdir(os.path.join(REPO, 'ssb/ct')):
+        if f.endswith('.gz'):
+            ctw += len(subprocess.run(['git', 'show', 'HEAD:ssb/ct/' + f], cwd=REPO, check=True, capture_output=True).stdout)
+    say('   CT + labels + distance fields: %d bytes (HEAD %d; 5.4 budget 6 MB)' % (ctb, ctw))
+
+
 def stage_all():
     os.makedirs(CACHE, exist_ok=True)
     stage_volume()
@@ -525,7 +633,9 @@ def stage_all():
     run(PY, os.path.join(HERE, 'sdf.py'))
     run(PY, os.path.join(HERE, 'softtissue.py'))
     run(PY, os.path.join(HERE, 'lining.py'))
+    run(PY, os.path.join(HERE, 'nose.py'), 'pack')
     stage_sides()
+    report_nose()
 
 
 if __name__ == '__main__':

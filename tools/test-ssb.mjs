@@ -911,7 +911,7 @@ function readPacks() {
       const iv = json.bufferViews[ia.bufferView];
       const idx = new Uint16Array(ia.count);
       for (let i = 0; i < ia.count; i++) idx[i] = dv.getUint16(bin + (iv.byteOffset || 0) + i * 2, true);
-      nodes.set(`${def.lining ? 'lining:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, pack: name, lining: def.lining === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
+      nodes.set(`${def.lining ? 'lining:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, kind: n.extras.kind || '', pack: name, lining: def.lining === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
     }
   }
   return { doc, nodes, files };
@@ -1062,6 +1062,14 @@ async function specimenUnitTests() {
     if ((n.side === 'R' && x <= 0) || (n.side === 'L' && x >= 0) || (n.side === 'M' && Math.abs(x) > 10)) wrong.push(`${key} ${r2(x)}`);
   }
   check('specimen packs: patient right is +x (every .R mesh centroid x > 0, .L < 0, midline pieces within 10 mm of x = 0)', wrong.length === 0, wrong.join('; '));
+  const noseNode = nodes.get('s.external-nose.M');
+  check('nose pack (ST6): pack "nose" holds exactly one node, s.external-nose.M, extras.kind skin, within 8000 triangles and 400 KB',
+    !!noseNode && noseNode.kind === 'skin' && noseNode.tris <= 8050 && !!doc.packs.nose && doc.packs.nose.bytes <= 400000 && Object.keys(doc.packs.nose.nodes).join() === 's.external-nose.M' && [...nodes.values()].filter((n) => n.pack === 'nose').length === 1);
+  check('nose pack (ST6): the skin lies on the front of the face — |R| <= 26, the tip at A 16..20, S from below subnasale to the nasion (-10..42)',
+    !!noseNode && Math.max(...noseNode.box.min.map(Math.abs).slice(0, 1), noseNode.box.max[0]) <= 26 && noseNode.box.max[1] >= 16 && noseNode.box.max[1] <= 20 && noseNode.box.min[2] >= -10 && noseNode.box.max[2] <= 42, noseNode ? `${noseNode.box.min.map(r2)}..${noseNode.box.max.map(r2)}` : 'absent');
+  check('nose pack (ST6): the vestibule (core pack) and its lining nodes carry extras.kind skin, as the pack\'s own node does; no other node carries a kind',
+    ['R', 'L'].every((sd) => nodes.has(`s.nasal-vestibule.${sd}`) && nodes.get(`s.nasal-vestibule.${sd}`).kind === 'skin' && nodes.get(`s.nasal-vestibule.${sd}`).pack === 'core' && nodes.has(`lining:s.nasal-vestibule.${sd}`) && nodes.get(`lining:s.nasal-vestibule.${sd}`).kind === 'skin')
+      && [...nodes.values()].filter((n) => n.kind).every((n) => n.kind === 'skin' && ['s.nasal-vestibule', 's.external-nose'].includes(n.id)), JSON.stringify([...nodes.values()].filter((n) => n.kind).map((n) => n.id)));
   check('specimen packs: the maxillary sinuses (spec): .R centroid x > 0 and .L < 0',
     nodes.has('s.maxillary-sinus.R') && nodes.has('s.maxillary-sinus.L') && cx(nodes.get('s.maxillary-sinus.R')) > 10 && cx(nodes.get('s.maxillary-sinus.L')) < -10);
 
@@ -1328,7 +1336,7 @@ async function specimenTests(browser, base) {
 
     const regionBoxes = await page.$$eval('#ssb-spec input[data-region]', (bs) => bs.map((b) => b.dataset.region));
     const nodes0 = await specNodes(page);
-    const wantRegions = [...new Set(nodes0.filter((n) => n.group !== 'bone').map((n) => n.region || 'other'))].sort();
+    const wantRegions = [...new Set(nodes0.filter((n) => n.group !== 'bone' && n.group !== 'nose').map((n) => n.region || 'other'))].sort();     /* the nose has a layer of its own (ST6) */
     check('layers: one toggle per region that holds air spaces or soft tissue, built from the loaded packs', regionBoxes.slice().sort().join() === wantRegions.join(), regionBoxes.join() + ' vs ' + wantRegions.join());
     await page.click('#ssb-spec input[data-region="maxillary"]');
     await nextFrames(page, 2);
@@ -1345,8 +1353,10 @@ async function specimenTests(browser, base) {
     await nextFrames(page, 2);
     const muc = await specNodes(page);
     check('mucosa: toggling the layer draws every air-space node as mucosa (outside: a translucent shell); bone is untouched',
-      airKeys.length > 0 && muc.filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa' && n.transparent) && muc.filter((n) => n.group === 'bone').every((n) => n.drawn === 'bone'),
-      JSON.stringify(muc.filter((n) => n.group === 'air' && n.drawn !== 'mucosa').map((n) => n.key)));
+      airKeys.length > 0 && muc.filter((n) => n.group === 'air').every((n) => n.drawn === (n.liningKind || 'mucosa') && n.transparent) && muc.filter((n) => n.group === 'bone').every((n) => n.drawn === 'bone'),
+      JSON.stringify(muc.filter((n) => n.group === 'air' && n.drawn !== (n.liningKind || 'mucosa')).map((n) => n.key)));
+    check('mucosa (ST6): the vestibule is lined with skin, not mucosa — its two nodes (and only they) draw as skin with the layer on',
+      muc.filter((n) => n.group === 'air' && n.drawn === 'skin').map((n) => n.key).sort().join() === 's.nasal-vestibule.L,s.nasal-vestibule.R', JSON.stringify(muc.filter((n) => n.group === 'air').map((n) => [n.key, n.drawn])));
     check('mucosa (ST1b/ST1c): seen from outside, no lining is drawn (nor fetched) — the outside view keeps the per-compartment shells', muc.filter((n) => n.lining).every((n) => !n.visible), JSON.stringify(muc.filter((n) => n.lining && n.visible).map((n) => n.key)));
     await page.click('#ssb-spec button[data-bone="hidden"]');     /* the envelope's ghost is hit first otherwise */
     await nextFrames(page, 2);
@@ -1358,11 +1368,27 @@ async function specimenTests(browser, base) {
     await page.click('.site-theme-toggle');
     await nextFrames(page, 3);
     check('mucosa: both themes compile — the layer still draws after the theme flips',
-      (await spec(page, () => window.__ssb.specimen.renders)) > r0 && (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa'));
+      (await spec(page, () => window.__ssb.specimen.renders)) > r0 && (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === (n.liningKind || 'mucosa')));
     await page.click('.site-theme-toggle');
     await page.click('#ssb-spec-mucosa');
     await nextFrames(page, 2);
     check('mucosa: toggling off restores every air space\'s own look', (await specNodes(page)).filter((n) => n.group === 'air').every((n) => n.drawn === n.look.kind));
+
+    /* the external nose (ST6): its own pack, drawn as skin, by a layer of its own that starts on */
+    const noseNodes = (await specNodes(page)).filter((n) => n.id === 's.external-nose');
+    check('nose (ST6): the nose pack loads one s.external-nose.M node, in the nose group, drawn as skin and visible; the Nose layer starts on',
+      noseNodes.length === 1 && noseNodes[0].key === 's.external-nose.M' && noseNodes[0].group === 'nose' && noseNodes[0].pack === 'nose' && noseNodes[0].drawn === 'skin' && noseNodes[0].visible
+        && (await spec(page, () => window.__ssb.specimen.noseOn)) === true && (await page.locator('#ssb-spec-nose').isChecked()), JSON.stringify(noseNodes));
+    check('nose (ST6): the nose is a layer of its own, not a region (the region list has no entry for it)',
+      !(await page.$$eval('#ssb-spec input[data-region]', (els) => els.map((e) => e.dataset.region))).some((r) => r === 'multiple'));
+    await page.click('#ssb-spec-nose');
+    await nextFrames(page, 2);
+    const noseOff = await specNodes(page);
+    check('nose (ST6): unchecking the Nose layer hides exactly the nose node; bone, air spaces and the rest stay as they were',
+      noseOff.filter((n) => !n.visible).map((n) => n.key).join() === 's.external-nose.M' && (await spec(page, () => window.__ssb.specimen.noseOn)) === false, JSON.stringify(noseOff.filter((n) => !n.visible).map((n) => n.key)));
+    await page.click('#ssb-spec-nose');
+    await nextFrames(page, 2);
+    check('nose (ST6): checking it again draws the skin again', (await specNodes(page)).find((n) => n.key === 's.external-nose.M').visible);
 
     /* landmarks: every marker is orientation geometry (never tier-filtered); labels are few and follow the tier */
     const lmAll = await spec(page, () => window.__ssb.specimen.landmarks.length);
@@ -1836,7 +1862,7 @@ function standardSpecimenTests() {
   /* no air of a .R space touches air of a .L space */
   const airSide = new Uint8Array(swap.length);          /* 0 not air, 1 a .R air space, 2 a .L air space */
   for (const [k, name] of Object.entries(table)) {
-    const m = /^s\.(agger-nasi-cell|anterior-ethmoid-cells|ethmoid-bulla|frontal-recess|frontal-sinus|maxillary-sinus|nasal-cavity|nasopharynx|posterior-ethmoid-cells|sphenoid-sinus)\.(R|L)$/.exec(name);
+    const m = /^s\.(agger-nasi-cell|anterior-ethmoid-cells|ethmoid-bulla|frontal-recess|frontal-sinus|maxillary-sinus|nasal-cavity|nasal-vestibule|nasopharynx|posterior-ethmoid-cells|sphenoid-sinus)\.(R|L)$/.exec(name);
     if (m) airSide[Number(k)] = m[2] === 'R' ? 1 : 2;
   }
   let touching = 0;
@@ -1906,10 +1932,76 @@ function standardSpecimenTests() {
   const packs = json('ssb/models/packs.json').packs.soft.nodes;
   check('floor mucosa: both sides are in the soft pack and the charts, at least 2 cm2 each', !!fR && !!fL && !!packs['s.nasal-floor-mucosa.R'] && !!packs['s.nasal-floor-mucosa.L'] && fR.area_cm2 >= 2 && fL.area_cm2 === fR.area_cm2, JSON.stringify([fR && fR.area_cm2, Object.keys(packs)]));
   const cells = fR ? fR.grid.s.flat().filter(v => v != null) : [];
-  check('floor mucosa: the chart sits in the floor (S -5..3 mm, A -51..-10, lateral r 1..17 mm)', cells.length > 300 && Math.min(...cells) > -5 && Math.max(...cells) < 3 && fR.grid.origin[0] >= -52 && fR.grid.origin[0] + fR.grid.dims[0] <= -9 && fR.grid.origin[1] >= 0 && fR.grid.origin[1] + fR.grid.dims[1] <= 18, JSON.stringify({ n: cells.length, lo: Math.min(...cells), hi: Math.max(...cells) }));
+  check('floor mucosa: the chart sits in the floor (S -5..3 mm, A -51..-10, lateral r 1..17 mm)', cells.length > 300 && Math.min(...cells) > -5 && Math.max(...cells) < 3 && fR.grid.origin[0] >= -52 && fR.grid.origin[0] + Math.max(...fR.grid.s.map((row, i) => (row.some((v) => v != null) ? i : -1))) <= -10 && fR.grid.origin[1] >= 0 && fR.grid.origin[1] + fR.grid.dims[1] <= 18, JSON.stringify({ n: cells.length, lo: Math.min(...cells), hi: Math.max(...cells) }));
   const jr = fR ? fR.junction.rows.filter(r => r[0] >= -47) : [];
   check('floor mucosa: the junction lies within 1 mm of the septal chart\'s bottom(a) over their shared A (a >= -47)', jr.length >= 30 && jr.every(r => r[5] <= 1.0), JSON.stringify({ n: jr.length, max: Math.max(...jr.map(r => r[5])) }));
   check('floor mucosa: the left chart is the right one (symmetric specimen)', !!fL && JSON.stringify(fL.grid.s) === JSON.stringify(fR.grid.s) && JSON.stringify(fL.junction) === JSON.stringify(fR.junction));
+
+  /* ST6: the external nose, the internal valve and the vestibule (the volume is already mirror-symmetric, N1's checks above) */
+  const A = hdr.affine;
+  const at = (p) => (Math.round((p[2] - A[2][3]) / A[2][2]) * ny + Math.round((p[1] - A[1][3]) / A[1][1])) * nx + Math.round((p[0] - A[0][3]) / A[0][0]);
+  const inAir = (p) => ct[at(p)] > 0 && ct[at(p)] < 78;
+  const vest = { R: byName.get('s.nasal-vestibule.R'), L: byName.get('s.nasal-vestibule.L') };
+  const meta = json('ssb/geometry/landmarks.meta.json').landmarks;
+  check('nose: s.nasal-vestibule.R and .L are in the label table', Number.isInteger(vest.R) && Number.isInteger(vest.L) && vest.R !== vest.L);
+  check('nose: lm.naris.<side> lies in its own side\'s s.nasal-vestibule air (display 0 < d < 78)',
+    ['R', 'L'].every((sd) => lab[at(lm[`lm.naris.${sd}`])] === vest[sd] && inAir(lm[`lm.naris.${sd}`])), JSON.stringify(['R', 'L'].map((sd) => [lm[`lm.naris.${sd}`], table[lab[at(lm[`lm.naris.${sd}`])]], ct[at(lm[`lm.naris.${sd}`])]])));
+  const valve = lm['s.internal-nasal-valve.R'];
+  const vmeta = meta['s.internal-nasal-valve.R'];
+  check('nose: the internal valve landmark (a pair, mirrored) lies in air at the valve plane, 10..25 mm behind lm.naris, and its meta records the method, plane and section area',
+    !!valve && !!lm['s.internal-nasal-valve.L'] && inAir(valve) && inAir(lm['s.internal-nasal-valve.L']) && valve[1] <= lm['lm.naris.R'][1] - 10 && valve[1] >= lm['lm.naris.R'][1] - 25
+      && !!vmeta && vmeta.a_mm === valve[1] && vmeta.section_area_mm2 > 20 && vmeta.in_air === true && /smallest area/.test(vmeta.method), JSON.stringify([valve, vmeta]));
+  /* the vestibule: in front of the valve plane, one piece per side, inside the nose, and the cavity stops at the plane */
+  const rowsOf = (v) => {
+    const out = [];
+    for (let n = 0; n < lab.length; n++) if (lab[n] === v) out.push(n);
+    return out;
+  };
+  const pieces = (voxels) => {
+    const seen = new Set();
+    const set = new Set(voxels);
+    let count = 0;
+    for (const s of voxels) {
+      if (seen.has(s)) continue;
+      count++;
+      const stack = [s];
+      seen.add(s);
+      while (stack.length) {
+        const q = stack.pop();
+        const i = q % nx;
+        for (const [d, ok] of [[1, i < nx - 1], [-1, i > 0], [nx, true], [-nx, true], [nx * ny, true], [-nx * ny, true]]) {
+          const m = q + d;
+          if (ok && set.has(m) && !seen.has(m)) { seen.add(m); stack.push(m); }
+        }
+      }
+    }
+    return count;
+  };
+  const vv = { R: rowsOf(vest.R), L: rowsOf(vest.L) };
+  const ext = (voxels) => {
+    let aMin = Infinity, aMax = -Infinity, rMax = 0;
+    for (const n of voxels) {
+      const i = n % nx, j = Math.floor(n / nx) % ny;
+      aMin = Math.min(aMin, A[1][3] + j * A[1][1]); aMax = Math.max(aMax, A[1][3] + j * A[1][1]); rMax = Math.max(rMax, Math.abs(A[0][3] + i * A[0][0]));
+    }
+    return { aMin, aMax, rMax, mm3: voxels.length * hdr.spacing[0] ** 3 };
+  };
+  const eR = ext(vv.R), eL = ext(vv.L);
+  check('nose: the vestibule is one 6-connected piece per side, 500..3000 mm3, in front of the valve plane (A > valve A) and inside the nose (|R| <= 20, A <= 18.5), and the left is the right mirrored in size',
+    pieces(vv.R) === 1 && pieces(vv.L) === 1 && [eR, eL].every((e) => e.mm3 >= 500 && e.mm3 <= 3000 && e.aMin > valve[1] && e.rMax <= 20 && e.aMax <= 18.5) && vv.R.length === vv.L.length, JSON.stringify({ eR, eL }));
+  const cavIdx = { R: byName.get('s.nasal-cavity.R'), L: byName.get('s.nasal-cavity.L') };
+  let cavFront = -Infinity;
+  for (let n = 0; n < lab.length; n++) if (lab[n] === cavIdx.R || lab[n] === cavIdx.L) cavFront = Math.max(cavFront, A[1][3] + Math.floor(n / nx) % ny * A[1][1]);
+  check('nose: the nasal cavity label ends at the valve plane (no cavity voxel more than 0.5 mm in front of it): the vestibule | cavity boundary is the plane', cavFront <= valve[1] + 0.5, `front ${cavFront}, plane ${valve[1]}`);
+  const sc = cR['s.septal-mucosa.R'].grid;
+  let edge = -Infinity;
+  sc.r.forEach((row, i) => { if (row.some((v) => v != null)) edge = Math.max(edge, sc.origin[0] + i); });
+  check('nose: the septal chart now ends at the valve plane (its last occupied row within 1 mm of the plane), on both sides alike',
+    Math.abs(edge - valve[1]) <= 1.0 && JSON.stringify(cR['s.septal-mucosa.L'].grid.origin) === JSON.stringify(sc.origin), `edge ${edge}, plane ${valve[1]}`);
+  check('nose: the unmasked nose is in the volume — skin tissue (display >= 78) at the pronasale (R 0, A 17, S 4.5), nothing at A 21.5 (the source image\'s border)',
+    ct[at([0, 17, 4.5])] >= 78 && ct[at([0, 21.5, 4.5])] === 0, JSON.stringify([ct[at([0, 17, 4.5])], ct[at([0, 21.5, 4.5])]]));
+  check('nose: ct.json `standard.nose` records the centring offset (median <= max <= 2 mm, the escalation limit), the region and the valve',
+    !!std.nose && std.nose.centreOffsetMm.median <= std.nose.centreOffsetMm.max && std.nose.centreOffsetMm.max <= 2.0 && std.nose.regionVoxels > 100000 && std.nose.valve.areaMm2 > 20 && std.nose.vestibuleMm3 > 500 && /limen nasi/.test(std.nose.note), JSON.stringify(std.nose));
 }
 
 /* ---------------- ST1b: the open airway lining (Node only, on the committed packs) ---------------- */
@@ -2187,7 +2279,7 @@ function scopeCollisionTests() {
   check('scope collision (specimen): straight posterior to depth 100 is stopped by bone at the last free depth (85 mm for the 4 mm shaft, 86 for 2.7) — a regression pin',
     deep.blocked && deep.depth === 85 && !clear(pose('R', 85, 0, 0)).blocked && clear(pose('R', 85.5, 0, 0)).depth === 85 && clear(pose('R', 100, 0, 0), R27).depth === 86, JSON.stringify(deep));
   const straight = clear(pose('R', 40, 0, 0));
-  check('scope collision (specimen): mucosa does not block, and its length is reported (R 40, straight: free, 25 mm of shaft in mucosa — a regression pin)', !straight.blocked && straight.contactMm === 25, JSON.stringify(straight));
+  check('scope collision (specimen): mucosa does not block, and its length is reported (R 40, straight: free, 30 mm of shaft in soft tissue — a regression pin; 25 before ST6, when the nostril\'s wall was masked and the shaft touched nothing there)', !straight.blocked && straight.contactMm === 30, JSON.stringify(straight));
 
   /* E3b on the real specimen: aimed across the septum, the clamped tip and its ring stay on the scope's own side. */
   const archLm = lms['lm.choanal-arch.M'];
@@ -2388,13 +2480,13 @@ async function scopeTests(browser, base) {
       lights.l.spot && lights.l.spot.on && lights.l.spot.decay === 2 && lights.l.head === 0 && lights.controls === false, JSON.stringify(lights));
     check('scope: the lining is seen from inside — bone hidden, mucosa on', lights.bone === 'hidden' && lights.mucosa === true, JSON.stringify(lights));
     const mat = (await specNodes(page)).filter((n) => n.group === 'air');
-    check('scope: every air-space node is drawn as mucosa, opaque (the camera is inside the airway)', mat.length > 0 && mat.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(mat.filter((n) => n.drawn !== 'mucosa' || n.transparent).map((n) => n.key)));
+    check('scope: every air-space node is drawn as its lining (mucosa; the vestibule\'s is skin), opaque (the camera is inside the airway)', mat.length > 0 && mat.every((n) => n.drawn === (n.liningKind || 'mucosa') && !n.transparent), JSON.stringify(mat.filter((n) => n.drawn !== (n.liningKind || 'mucosa') || n.transparent).map((n) => n.key)));
     /* ST1b: from within, the open lining is what is drawn; the per-compartment shells (closed membranes at every opening) are not */
     await page.waitForFunction(() => window.__ssb.specimen.packs.lining && window.__ssb.specimen.packs.lining.state === 'loaded', null, { timeout: 30000 });
     await nextFrames(page, 3);
     const matIn = (await specNodes(page)).filter((n) => n.group === 'air');
     const lin = (await specNodes(page)).filter((n) => n.lining);
-    check('scope (ST1b): the open lining is drawn in the shells\' place — every lining node visible as opaque mucosa, every air shell hidden', lin.length > 0 && lin.every((n) => n.visible && n.drawn === 'mucosa' && !n.transparent) && matIn.every((n) => !n.visible), JSON.stringify({ lining: lin.filter((n) => !n.visible).map((n) => n.key), shells: matIn.filter((n) => n.visible).map((n) => n.key) }));
+    check('scope (ST1b): the open lining is drawn in the shells\' place — every lining node visible and opaque (mucosa; the vestibule\'s skin), every air shell hidden', lin.length > 0 && lin.every((n) => n.visible && n.drawn === (n.id === 's.nasal-vestibule' ? 'skin' : 'mucosa') && !n.transparent) && matIn.every((n) => !n.visible), JSON.stringify({ lining: lin.filter((n) => !n.visible || n.drawn !== (n.id === 's.nasal-vestibule' ? 'skin' : 'mucosa')).map((n) => n.key), shells: matIn.filter((n) => n.visible).map((n) => n.key) }));
     const inHits = await page.evaluate(() => { const c = document.getElementById('ssb-canvas'); const r = c.getBoundingClientRect(); return window.__ssb.specimen.hits(r.left + r.width / 2, r.top + r.height / 2); });
     check('scope (ST1b): picking from inside returns graph ids (a lining hit reports the structure\'s own key, never the lining\'s)', inHits.length > 0 && inHits.every((h) => GRAPH.has(h.id) && !/^lining:/.test(h.key)), JSON.stringify(inHits.slice(0, 3).map((h) => [h.id, h.key])));
 
@@ -2594,12 +2686,12 @@ async function scopeTests(browser, base) {
     const sph = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, tip: window.__ssb.scope.tip, hud: window.__ssb.scope.hud, lm: window.__ssb.specimen.landmarks.find((l) => l.key === 'lm.sphenoid-ostium.R').ras }));
     check('scope: the pinned right sphenoid pose (R,58.5,-3,19) is not clamped and its tip is within 2.5 mm of lm.sphenoid-ostium.R',
       sph.pose.depth === 58.5 && Math.hypot(...sph.tip.map((v, i) => v - sph.lm[i])) <= 2.5 && !sph.hud.limited, JSON.stringify(sph));
-    check('scope: the HUD lists every distance field, nearest first, in mm; mucosal contact is reported (11 mm of shaft at the sphenoid pose)',
-      sph.hud.rows.length === 5 && sph.hud.rows.every((r, i, a) => i === 0 || a[i - 1].mm <= r.mm) && sph.hud.rows.every((r) => r.name && !/^s\./.test(r.name)) && sph.hud.contactMm === 11, JSON.stringify(sph.hud));
+    check('scope: the HUD lists every distance field, nearest first, in mm; mucosal contact is reported (13 mm of shaft at the sphenoid pose; 11 before ST6, which unmasked the nostril\'s wall)',
+      sph.hud.rows.length === 5 && sph.hud.rows.every((r, i, a) => i === 0 || a[i - 1].mm <= r.mm) && sph.hud.rows.every((r) => r.name && !/^s\./.test(r.name)) && sph.hud.contactMm === 13, JSON.stringify(sph.hud));
     const dom = await o.page.evaluate(() => ({ rows: [...document.querySelectorAll('.ssb-scope-hud-row')].map((e) => e.textContent), near: document.querySelectorAll('.ssb-scope-hud-row[data-near]').length,
       contact: (document.querySelector('.ssb-scope-hud-contact') || {}).textContent, hidden: document.querySelector('.ssb-scope-hud').closest('.ssb-lab-sec').hidden }));
     check('scope: the proximity section shows a row per structure with its graph name, and the mucosal contact line; none within 3 mm here, so none is flagged',
-      !dom.hidden && dom.rows.length === 5 && dom.rows[0].startsWith('Orbit:') && dom.near === 0 && /^Mucosal contact: 11 mm/.test(dom.contact), JSON.stringify(dom));
+      !dom.hidden && dom.rows.length === 5 && dom.rows[0].startsWith('Orbit:') && dom.near === 0 && /^Mucosal contact: 13 mm/.test(dom.contact), JSON.stringify(dom));
     /* the shaft: 2.7 mm goes deeper than 4 mm before bone */
     await slide(o.page, 'yaw', 0);
     await slide(o.page, 'pitch', 0);
@@ -2669,7 +2761,7 @@ async function scopeTests(browser, base) {
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
     await nextFrames(page, 3);
     const air = (await specNodes(page)).filter((n) => n.group === 'air');
-    check('scope: at depth 0 (the tip in front of the cavity, outside the air spaces\' box) the lining is still opaque, not 0.4-opacity shells', air.length > 0 && air.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(air.filter((n) => n.transparent).map((n) => n.key)));
+    check('scope: at depth 0 (the tip in front of the cavity, outside the air spaces\' box) the lining is still opaque, not 0.4-opacity shells', air.length > 0 && air.every((n) => n.drawn === (n.liningKind || 'mucosa') && !n.transparent), JSON.stringify(air.filter((n) => n.transparent).map((n) => n.key)));
     await context.close();
   }
   for (const hash of ['#scope=R,40,0,0,0,31', '#scope=X,40,0,0,0,0', '#scope=' + encodeURIComponent('<img src=x id=pwnscope onerror=window.__pwned=1>'), '#scope=R,1,2,3']) {

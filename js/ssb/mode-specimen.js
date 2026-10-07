@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=2122b2b7';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=ec2db323';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { token } from './materials.js?v=d27e5b3d';
-import { PLANES } from './volume.js?v=61915bb8';
+import { token } from './materials.js?v=b121b3b4';
+import { PLANES } from './volume.js?v=5726f041';
 import { CT_PLANES } from './state.js?v=2a74ae90';
-import { REGION_LABEL } from './graph.js?v=6f4c846f';
+import { REGION_LABEL } from './graph.js?v=b6a0d0cc';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -102,7 +102,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false, nose: true };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
     let liningAsked = false;        /* the deferred lining pack has been requested (ST1c): the first look from within asks once */
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
@@ -271,7 +271,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
                 if (layers.bone === 'xray') look = { ...look, xray: true };
             } else if (layers.mucosa && u.group === 'air') {
                 /* the lining: opaque from within, a translucent shell from outside (as X-ray ghosts the bone) */
-                look = inside || insideForced ? { kind: 'mucosa', doubleSide: true } : { kind: 'mucosa', translucent: true, doubleSide: true, opacity: 0.4 };
+                const lining = u.liningKind || 'mucosa';      /* the vestibule is lined with skin (ST6) */
+                look = inside || insideForced ? { kind: lining, doubleSide: true } : { kind: lining, translucent: true, doubleSide: true, opacity: 0.4 };
             }
             if (u.group !== 'bone' && isSel) {
                 look = { ...look, space: false, translucent: true, onTop: true, ...(partner ? { opacity: 0.3 } : {}) };
@@ -279,7 +280,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             u.drawn = look.kind;
             mesh.material = stage.materialsFor(look, { selected: primary, partner });
             mesh.renderOrder = isSel ? 5 : 0;
-            mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
+            mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : u.group === 'nose' ? layers.nose : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
         }
         for (const [, m] of markers) {
             const mine = !!sel && m.lm.id === sel;
@@ -506,6 +507,15 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (now !== inside) { inside = now; paint(); }
     }
 
+    /* The external nose (ST6): the skin of the specimen's own nose, drawn by default. */
+    function setNose(on) {
+        if (!!on === layers.nose) return false;
+        layers.nose = !!on;
+        paint();
+        emit();
+        return true;
+    }
+
     function setLandmarks(on) {
         if (!!on === layers.landmarks) return false;
         layers.landmarks = !!on;
@@ -526,7 +536,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function regions() {
         const out = new Map();
         for (const mesh of nodes().values()) {
-            if (mesh.userData.group === 'bone' || mesh.userData.lining) continue;
+            if (mesh.userData.group === 'bone' || mesh.userData.group === 'nose' || mesh.userData.lining) continue;
             const r = regionOf(mesh);
             if (!out.has(r)) out.set(r, { region: r, label: own(REGION_LABEL, r) ? REGION_LABEL[r] : r, count: 0, on: !layers.hidden.has(r) });
             out.get(r).count += 1;
@@ -845,6 +855,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get landmarksOn() { return layers.landmarks; },
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
+        get noseOn() { return layers.nose; },
         get mucosaInside() { return inside; },
         get sweeps() { return [...sweepList].filter(([, m]) => m.object.visible).map(([key]) => key); },
         get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
@@ -864,7 +875,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         info: () => stage.info(),
         /* every node: key, id, side, pack, layer group, region, visible, RAS box, triangles */
         nodes: () => (specimen ? [...specimen.nodes].map(([key, m]) => ({
-            key, id: m.userData.id, side: m.userData.side, pack: m.userData.pack, group: m.userData.group, region: m.userData.region,
+            key, id: m.userData.id, side: m.userData.side, pack: m.userData.pack, group: m.userData.group, liningKind: m.userData.liningKind, region: m.userData.region,
             visible: m.visible, look: m.userData.look, drawn: m.userData.drawn || m.userData.look.kind, triangles: m.userData.triangles, box: rasBox(key),
             material: m.material.type, transparent: !!m.material.transparent, depthWrite: m.material.depthWrite,
             lining: !!m.userData.lining,
@@ -944,7 +955,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setView, setBone, setRegion, setMucosa, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -956,6 +967,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get hasLandmarks() { return landmarks.size > 0; },
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
+        get noseOn() { return layers.nose; },
+        get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
         get hasSweeps() { return sweeps.size > 0; },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
         dispose,

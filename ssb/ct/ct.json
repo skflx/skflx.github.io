@@ -135,7 +135,7 @@
           "s.planum-sphenoidale"
         ],
         "source": "labels (walls.py)",
-        "voxels": 9734
+        "voxels": 9742
       },
       "s.orbit": {
         "file": "sdf-s.orbit.u8.gz",
@@ -148,7 +148,7 @@
           "s.frontal-sinus-floor"
         ],
         "source": "labels (walls.py)",
-        "voxels": 370360
+        "voxels": 370364
       },
       "s.internal-carotid-artery": {
         "file": "sdf-s.internal-carotid-artery.u8.gz",
@@ -186,6 +186,20 @@
       "s.frontal-sinus": 85.2,
       "s.frontal-recess": 77.2,
       "s.nasal-cavity": 69.5
+    },
+    "nose": {
+      "method": "the external nose unmasked from the UW axial stack between the alar-facial grooves (subnasale - 2 mm to the soft-tissue nasion; above S 28 |R| <= 12), each (S, A) row centred on R = 0, the internal valve at the narrowest coronal section of the airway, the vestibule labelled in front of it (tools/ssb-pipeline/uw/nose.py, ST6)",
+      "centreOffsetMm": {
+        "median": 0.5,
+        "max": 2.0
+      },
+      "regionVoxels": 376848,
+      "valve": {
+        "aMm": -10.0,
+        "areaMm2": 116.0
+      },
+      "vestibuleMm3": 1277.1,
+      "note": "the vestibule | cavity boundary is the valve plane (the limen nasi): a proxy for the mucocutaneous junction, which CT does not show"
     },
     "note": "Standardized specimen: one head's right half, mirrored, with the septum centred - symmetric by construction, not a real head."
   }

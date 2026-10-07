@@ -16,9 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=61915bb8';
+import { PLANES } from './volume.js?v=5726f041';
 import { CT_PLANES } from './state.js?v=2a74ae90';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=fb9ed57b';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=c7c47b0e';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -171,7 +171,12 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     mucBox.type = 'checkbox';
     mucBox.id = 'ssb-spec-mucosa';
     mucLabel.append(mucBox, el('span', null, 'Mucosa (air spaces drawn as their lining)'));
-    airSec.append(mucLabel);
+    const noseLabel = el('label', 'ssb-ct-check');
+    const noseBox = el('input');
+    noseBox.type = 'checkbox';
+    noseBox.id = 'ssb-spec-nose';
+    noseLabel.append(noseBox, el('span', null, 'Nose (the specimen\'s own skin; the face stays masked)'));
+    airSec.append(mucLabel, noseLabel);
     lmSec.append(lmLabel, swLabel);
 
     /* ---- section ---- */
@@ -234,6 +239,10 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
             if (r) box.checked = r.on;
         }
         mucBox.checked = specimen.mucosaOn;
+        noseBox.checked = specimen.noseOn;
+        noseBox.disabled = !specimen.hasNose;
+        noseLabel.classList.toggle('is-off', !specimen.hasNose);
+        airSec.hidden = regions.length === 0 && !specimen.hasNose;
         lmBox.checked = specimen.landmarksOn;
         lmBox.disabled = !specimen.hasLandmarks;
         lmLabel.classList.toggle('is-off', !specimen.hasLandmarks);
@@ -275,6 +284,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         const t = e.target;
         if (t === lmBox) specimen.setLandmarks(lmBox.checked);
         else if (t === mucBox) specimen.setMucosa(mucBox.checked);
+        else if (t === noseBox) specimen.setNose(noseBox.checked);
         else if (t === swBox) specimen.setSweeps(swBox.checked);
         else if (t === flipBox) specimen.flipSection();
         else if (t.matches('input[data-region]')) specimen.setRegion(t.dataset.region, t.checked);
