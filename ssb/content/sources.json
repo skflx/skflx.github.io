@@ -4218,6 +4218,26 @@
       "pmid": "40813940",
       "url": "https://pubmed.ncbi.nlm.nih.gov/40813940/",
       "note": "Abstract only (PubMed record, read 2026-10-07). PRISMA-ScR scoping review of 202 studies on how the space is divided; supports that the pre/poststyloid boundary is described differently across the literature (percentages are shares of reviewed studies)."
+    },
+    {
+      "id": "src.pistochini-2021-mppmtf",
+      "cite": "Pistochini A, Russo F, Coden E, Sileo G, Battaglia P, Bignami M, Volpi L, Castelnuovo P. Modified Posterior Pedicle Middle Turbinate Flap: An Additional Option for Skull Base Resurfacing. Laryngoscope. 2021;131(3):E767-E774.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1002/lary.29099",
+      "pmid": "33280115",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33280115/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Four flaps in two fresh-frozen cadaver heads plus one clinical case; supports that the vascular supply of the (modified) posterior pedicle middle turbinate flap is the middle turbinate branch of the sphenopalatine artery. PMID and DOI matched to the PubMed record; awaiting owner verification."
+    },
+    {
+      "id": "src.elsheikh-2013-spa-ligation-mt-necrosis",
+      "cite": "Elsheikh E, El-Anwar MW. Septal perforation and bilateral partial middle turbinate necrosis after bilateral sphenopalatine artery ligation. J Laryngol Otol. 2013;127(10):1025-1027.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/S0022215113001904",
+      "pmid": "24001033",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24001033/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report (typed review, as other case reports in this graph): posterior septal perforation and necrosis of the lower parts of both middle turbinates four months after bilateral sphenopalatine artery ligation for epistaxis; the authors conclude that ischaemic necrosis is a potential risk in areas whose only arterial supply is this artery. It does not discuss flaps. PMID and DOI matched to the PubMed record; awaiting owner verification."
     }
   ]
 }

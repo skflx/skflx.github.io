@@ -33,8 +33,8 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=605ff520';
-import { sharedVolume, stamped, decode } from './volume.js?v=53a086e3';
+import { loadLandmarks } from './geo-specimen.js?v=8a13c2e7';
+import { sharedVolume, stamped, decode } from './volume.js?v=56dac3f6';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, frameOf, hudRows, lightPostAngle, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=9658ff9e';
 

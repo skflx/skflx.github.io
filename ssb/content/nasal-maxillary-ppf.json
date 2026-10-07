@@ -8275,7 +8275,9 @@
       ],
       "src": [
         "src.chiu-2019-ch31",
-        "src.prevedello-2009-mtf"
+        "src.prevedello-2009-mtf",
+        "src.pistochini-2021-mppmtf",
+        "src.elsheikh-2013-spa-ligation-mt-necrosis"
       ],
       "preop": [
         {
@@ -8285,6 +8287,10 @@
         {
           "check": "Pedicle: the internal maxillary artery (prior infratemporal fossa surgery or tumour).",
           "why": "The atlas lists the middle turbinate flap among the flaps excluded when the internal maxillary artery is unavailable; prior sphenoid surgery and posterior septectomy endanger the septal branch, i.e. the nasoseptal flap."
+        },
+        {
+          "check": "Pedicle: prior sphenopalatine artery ligation or cautery on that side.",
+          "why": "The flap is pedicled on the middle turbinate branch of the sphenopalatine artery (cadaver study), and ischaemic necrosis of the middle turbinates has been reported after sphenopalatine ligation (one case, bilateral ligation). No source found reports the flap's outcome after prior ligation."
         }
       ]
     },

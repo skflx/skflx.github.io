@@ -367,7 +367,7 @@ parallel sessions.
 |---|---|---|
 | Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
 | Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → **E6** station flights (after E5) | Sonnet |
-| Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a; C1a in review) | Sonnet |
+| Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a; C1a–C1f in review, CP-C1 next) | Sonnet |
 | Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · then CP-C1 reviews | Opus |
 
 **ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
@@ -1358,7 +1358,7 @@ the HUD names it.
 Accept: `node tools/test-ssb.mjs --only lab`.
 Result: `degrade()` has a presellar branch; four tests pin the two pairs (same solids as toggle off, HUD names them).
 
-### C1 — Content backlog, drafted by Sonnet, reviewed by Opus (O3)        [ready] · Sonnet (drafts) → Opus (review at a checkpoint) · depends: —
+### C1 — Content backlog, drafted by Sonnet, reviewed by Opus (O3)        [review] · Sonnet (drafts) → Opus (review at a checkpoint) · depends: —
 Split into batches, one PR each, so a review reads one topic. Run them in order (they share the region files; each later batch branches from a master that has the earlier one), or in parallel only when they touch different files (listed per batch).
 
 Common to every batch:
@@ -1381,6 +1381,7 @@ Batches:
 - **C1e — anatomy without geometry** (content only; nothing is placed on the specimen): petrolingual and parasellar ligaments, carotid cave, jugular foramen and CN IX–XI, orbital septum, superior ophthalmic vein, frontal lobe beyond the gyrus rectus, hard palate, parapharyngeal space.
   **[review]** C1e result: 16 structures, all `geo: "none"` (`s.petrolingual-ligament`, `s.interclinoid-ligament`, `s.caroticoclinoid-ligament`, `s.carotid-cave`, `s.jugular-foramen`, `s.glossopharyngeal-nerve`, `s.vagus-nerve`, `s.accessory-nerve`, `s.orbital-septum`, `s.superior-ophthalmic-vein`, `s.orbital-gyri`, `s.olfactory-sulcus`, `s.hard-palate`, `s.parapharyngeal-space`, `s.prestyloid-compartment`, `s.poststyloid-compartment`); every `rel` edge stated by a source read; back-links from existing structures listed in the PR, not added.
 - **C1f — the CP-2a question**: whether prior sphenopalatine ligation endangers the middle turbinate flap's pedicle (the middle turbinate branch of the SPA). Find a source; if one supports it, add it to the flap's checks with that source; if none, report "no source" and change nothing.
+  **[review]** C1f result: a source was found for the mechanism, not for the flap itself. Added to `p.middle-turbinate-flap.preop`: check for prior sphenopalatine ligation, citing Pistochini 2021 (pedicle = middle turbinate branch of the SPA, cadaver) and Elsheikh 2013 (middle turbinate necrosis after SPA ligation, one case); no source reports flap outcome after ligation. Owner to accept or revert (one `preop` item).
 
 Owner-only items stay with the owner (§2): merging the two dry-eye hazards (vidian neurectomy vs vidian sacrifice in transpterygoid work); the optic nerve sheath incision wording.
 
