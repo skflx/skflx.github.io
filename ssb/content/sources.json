@@ -3765,6 +3765,224 @@
       "pmid": "42101910",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42101910/",
       "note": "Abstract only (PubMed record, read 2026-10-07). Non-systematic review of optic glioma in children; supports only the general statements on tumour nature, treatment choice by location, age and NF1 status, and chemotherapy preference. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mccoy-2021-spoa",
+      "cite": "McCoy JL, Dixit R, Dohar JE, Tobey ABJ. Pediatric subperiosteal orbital abscess characterization and prediction of size, location, and management. Int J Pediatr Otorhinolaryngol. 2021;144:110693.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2021.110693",
+      "pmid": "33813099",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33813099/",
+      "note": "PMC full text (PMC8087643), read 2026-10-07. Retrospective review of 108 children with CT-diagnosed subperiosteal orbital abscess complicating sinusitis (one tertiary children's hospital, 2002-2016); supports the ROC-derived volume cut-off, its sensitivity and specificity, and how volume was computed (product of the three CT dimensions, not an ellipsoid)."
+    },
+    {
+      "id": "src.todman-2011-spa-volume",
+      "cite": "Todman MS, Enzer YR. Medical management versus surgical intervention of pediatric orbital cellulitis: the importance of subperiosteal abscess volume as a new criterion. Ophthalmic Plast Reconstr Surg. 2011;27(4):255-9.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/IOP.0b013e3182082b17",
+      "pmid": "21415801",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21415801/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of 29 children with subperiosteal abscess; supports the 1,250 mm3 volume below which no surgery was needed. The PubMed text prints the unit as 'mm' (superscript lost); the unit is read as mm3."
+    },
+    {
+      "id": "src.tabarino-2015-spoa-volume",
+      "cite": "Tabarino F, Elmaleh-Bergès M, Quesnel S, Lorrot M, Van Den Abbeele T, Teissier N. Subperiosteal orbital abscess: volumetric criteria for surgical drainage. Int J Pediatr Otorhinolaryngol. 2015;79(2):131-5.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2014.11.021",
+      "pmid": "25529362",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25529362/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective monocentric study, 32 children with subperiosteal orbital abscess among 83 with orbital cellulitis; volume from a spheroid model; supports the 500 mm3 and 5%-of-orbital-volume observations."
+    },
+    {
+      "id": "src.ryan-2009-orbital-cellulitis",
+      "cite": "Ryan JT, Preciado DA, Bauman N, Pena M, Bose S, Zalzal GH, et al. Management of pediatric orbital cellulitis in patients with radiographic findings of subperiosteal abscess. Otolaryngol Head Neck Surg. 2009;140(6):907-11.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.otohns.2009.02.014",
+      "pmid": "19467413",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19467413/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Chart review of 465 orbital cellulitis admissions with 68 subperiosteal abscesses; supports only that surgical patients had larger abscesses (>10 mm); the abstract does not say which dimension."
+    },
+    {
+      "id": "src.adil-2020-spa-meta",
+      "cite": "Adil EA, Muir ME, Kawai K, Dombrowski ND, Cunningham MJ. Pediatric Subperiosteal Abscess Secondary to Acute Sinusitis: A Systematic Review and Meta-analysis. Laryngoscope. 2020;130(12):2906-2912.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1002/lary.28570",
+      "pmid": "32065412",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32065412/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of pediatric subperiosteal abscess from acute sinusitis; supports the pooled risk ratio for surgery with abscess volume above each study's own threshold."
+    },
+    {
+      "id": "src.appachi-2020-spa-predictors",
+      "cite": "Appachi S, Bedwell JR. Predictors of surgical management for paediatric orbital subperiosteal abscesses. Curr Opin Otolaryngol Head Neck Surg. 2020;28(6):430-434.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/MOO.0000000000000668",
+      "pmid": "33027139",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33027139/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of predictors of surgery in pediatric orbital subperiosteal abscess; supports only that the volume cut-off differs between studies and that most data are retrospective case series."
+    },
+    {
+      "id": "src.wise-2009-afrs-ct",
+      "cite": "Wise SK, Rogers GA, Ghegan MD, Harvey RJ, Delgaudio JM, Schlosser RJ. Radiologic staging system for allergic fungal rhinosinusitis (AFRS). Otolaryngol Head Neck Surg. 2009;140(5):735-40.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1016/j.otohns.2008.12.053",
+      "pmid": "19393421",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19393421/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Proposes a CT bone-remodeling score for allergic fungal rhinosinusitis and scores 111 CT scans; the abstract gives the maximum points per sinus and the cohort scores but not which walls count toward each sinus."
+    },
+    {
+      "id": "src.philpott-2011-afrs",
+      "cite": "Philpott CM, Javer AR, Clark A. Allergic fungal rhinosinusitis - a new staging system. Rhinology. 2011;49(3):318-23.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.4193/Rhino10.121",
+      "pmid": "21858263",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21858263/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Describes the Philpott-Javer postoperative endoscopic score for allergic fungal rhinosinusitis (per-cavity mucosal grade 0-9 plus one point for mucin); the abstract does not define the individual grades."
+    },
+    {
+      "id": "src.okano-2022-meningioma-grades",
+      "cite": "Okano A, Miyawaki S, Teranishi Y, Ohara K, Hongo H, Sakai Y, et al. Advances in Molecular Biological and Translational Studies in World Health Organization Grades 2 and 3 Meningiomas: A Literature Review. Neurol Med Chir (Tokyo). 2022;62(8):347-360.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.2176/jns-nmc.2022-0114",
+      "pmid": "35871574",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35871574/",
+      "note": "PMC full text (PMC9464479), read 2026-10-07. Literature review of WHO grade 2 and 3 meningiomas; its Table 1 reproduces the 2021 WHO grading criteria (mitotic counts per 10 high-power fields of 0.16 mm2, brain invasion, subtypes, TERT promoter mutation, CDKN2A/B deletion) and supports the numeric criteria. The table lists rhabdoid and papillary subtypes under grade 3, which Torp 2022 and Wang 2024 contradict in text."
+    },
+    {
+      "id": "src.torp-2022-who-cns5-neurosurgeons",
+      "cite": "Torp SH, Solheim O, Skjulsvik AJ. The WHO 2021 Classification of Central Nervous System tumours: a practical update on what neurosurgeons need to know-a minireview. Acta Neurochir (Wien). 2022;164(9):2453-2464.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00701-022-05301-y",
+      "pmid": "35879477",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35879477/",
+      "note": "PMC full text (PMC9427889), read 2026-10-07. Minireview of the 2021 WHO classification for neurosurgeons; supports the meningioma grading text (chordoid and clear cell are grade 2, brain invasion is grade 2, rhabdoid and papillary no longer sufficient for grade 3, mitosis counts now per defined area, molecular testing not required when histology is definitive)."
+    },
+    {
+      "id": "src.wang-2024-icom-meningioma",
+      "cite": "Wang JZ, Landry AP, Raleigh DR, Sahm F, Walsh KM, Goldbrunner R, et al. Meningioma: International Consortium on Meningiomas consensus review on scientific advances and treatment paradigms for clinicians, researchers, and patients. Neuro Oncol. 2024;26(10):1742-1780.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1093/neuonc/noae082",
+      "pmid": "38695575",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38695575/",
+      "note": "PMC full text (PMC11449035), read 2026-10-07. International Consortium on Meningiomas consensus review; supports the molecular grade 3 criteria (TERT promoter hotspot mutation, homozygous CDKN2A/B loss), brain invasion alone as grade 2, the three-of-five atypia features, and that rhabdoid or papillary histology alone is insufficient for grade 3."
+    },
+    {
+      "id": "src.sahm-2025-cimpact8",
+      "cite": "Sahm F, Aldape KD, Brastianos PK, Brat DJ, Dahiya S, von Deimling A, et al. cIMPACT-NOW update 8: Clarifications on molecular risk parameters and recommendations for WHO grading of meningiomas. Neuro Oncol. 2025;27(2):319-330.",
+      "type": "consensus",
+      "verified": false,
+      "doi": "10.1093/neuonc/noae170",
+      "pmid": "39212325",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39212325/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). cIMPACT-NOW update 8 (not official WHO) on meningioma grading; supports only the stated clarifications and the proposal to assign grade 2 to grade 1 morphology with 1p plus 22q deletion and/or NF2 oncogenic variants."
+    },
+    {
+      "id": "src.pdq-paranasal-sinus-2024",
+      "cite": "PDQ Adult Treatment Editorial Board. Paranasal Sinus and Nasal Cavity Cancer Treatment (PDQ): Health Professional Version. In: PDQ Cancer Information Summaries [Internet]. Bethesda (MD): National Cancer Institute (US); 2002-.",
+      "type": "review",
+      "verified": false,
+      "pmid": "26389272",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26389272/",
+      "note": "NCI PDQ summary (health professional version, updated 2024-07-05), read 2026-10-07 from https://www.cancer.gov/types/head-and-neck/hp/adult/paranasal-sinus-treatment-pdq (the page reprints the AJCC 8th edition nasal cavity and paranasal sinus T, N and M tables with permission); supports the clinical N categories. The PubMed record is the PDQ summary; only the clinical N table is reproduced, not pathologic N."
+    },
+    {
+      "id": "src.lydiatt-2017-ajcc8-changes",
+      "cite": "Lydiatt WM, Patel SG, O'Sullivan B, Brandwein MS, Ridge JA, Migliacci JC, et al. Head and Neck cancers-major changes in the American Joint Committee on cancer eighth edition cancer staging manual. CA Cancer J Clin. 2017;67(2):122-137.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3322/caac.21389",
+      "pmid": "28128848",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28128848/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Summary of the major AJCC 8th edition head and neck changes; supports only that extranodal extension was added to the N category in all but viral-related cancers and mucosal melanoma."
+    },
+    {
+      "id": "src.yenigun-2016-ion",
+      "cite": "Yenigun A, Gun C, Uysal II, Nayman A. Radiological classification of the infraorbital canal and correlation with variants of neighboring structures. Eur Arch Otorhinolaryngol. 2016;273(1):139-44.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1007/s00405-015-3550-8",
+      "pmid": "25673024",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25673024/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 750 patients, axial and coronal CT; supports the three canal types in this scheme and the association of the most protruding type with maxillary sinus septa. The abstract does not say whether the percentages are per patient or per side."
+    },
+    {
+      "id": "src.acar-2018-ion",
+      "cite": "Açar G, Özen KE, Güler İ, Büyükmumcu M. Computed tomography evaluation of the morphometry and variations of the infraorbital canal relating to endoscopic surgery. Braz J Otorhinolaryngol. 2018;84(6):713-721.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1016/j.bjorl.2017.08.009",
+      "pmid": "28943288",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28943288/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 200 patients, multidetector CT; supports the four canal types (within the roof, partly protruding, within the sinus, zygomatic recess). The abstract does not say whether the percentages are per patient or per side."
+    },
+    {
+      "id": "src.orellana-donoso-2024-ioc",
+      "cite": "Orellana-Donoso M, Romero-Zucchino D, Fuentes-Abarca A, Aravena-Ríos P, Sanchis-Gimeno J, Konschake M, et al. Infraorbital canal variants and its clinical and surgical implications. A systematic review. Surg Radiol Anat. 2024;46(7):1027-1046.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s00276-024-03348-3",
+      "pmid": "38684553",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38684553/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of infraorbital canal variants (random-effects pooled prevalence); supports the statement that published schemes differ in number of types and numbering."
+    },
+    {
+      "id": "src.chandler-1984-jna",
+      "cite": "Chandler JR, Goulding R, Moskowitz L, Quencer RM. Nasopharyngeal angiofibromas: staging and management. Ann Otol Rhinol Laryngol. 1984;93(4 Pt 1):322-9.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1177/000348948409300408",
+      "pmid": "6087710",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6087710/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Proposes the Miami staging of nasopharyngeal angiofibroma from clinical evaluation and CT (23 patients); the abstract gives all four stage definitions and the original treatment recommendation per stage."
+    },
+    {
+      "id": "src.fisch-1983-jna",
+      "cite": "Fisch U. The infratemporal fossa approach for nasopharyngeal tumors. Laryngoscope. 1983;93(1):36-44.",
+      "type": "classification",
+      "verified": false,
+      "doi": "10.1288/00005537-198301000-00007",
+      "pmid": "6185810",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6185810/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Presents the infratemporal fossa approach and a classification of juvenile nasopharyngeal angiofibroma; the abstract does not list the stage criteria, which were read from Oliveira 2012 (src.oliveira-2012-jna), so only the stage-by-surgery statements are cited to this record."
+    },
+    {
+      "id": "src.oliveira-2012-jna",
+      "cite": "Oliveira JA, Tavares MG, Aguiar CV, Azevedo JF, Sousa JR, Almeida PC, et al. Comparison between endoscopic and open surgery in 37 patients with nasopharyngeal angiofibroma. Braz J Otorhinolaryngol. 2012;78(1):75-80.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1590/s1808-86942012000100012",
+      "pmid": "22392242",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22392242/",
+      "note": "PMC full text (PMC9444542), read 2026-10-07. 37 patients with nasopharyngeal angiofibroma, endoscopic versus open surgery; its Methods reproduce the Fisch stages I-IV, which supports the stage criteria."
+    },
+    {
+      "id": "src.onerci-2006-jna",
+      "cite": "Onerci M, Oğretmenoğlu O, Yücel T. Juvenile nasopharyngeal angiofibroma: a revised staging system. Rhinology. 2006;44(1):39-45.",
+      "type": "classification",
+      "verified": false,
+      "pmid": "16550949",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16550949/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review of 36 patients proposing a revised staging system; the abstract reports recurrence-site data but does not list the four stages, which were read from Alimli 2016 (src.alimli-2016-jna-mri). The abstract gives two different counts for pterygoid process base involvement in persistent disease (9 of 12 and 10 of 12)."
+    },
+    {
+      "id": "src.alimli-2016-jna-mri",
+      "cite": "Alimli AG, Ucar M, Oztunali C, Akkan K, Boyunaga O, Damar C, et al. Juvenile Nasopharyngeal Angiofibroma: Magnetic Resonance Imaging Findings. J Belg Soc Radiol. 2016;100(1):63.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.5334/jbr-btr.1090",
+      "pmid": "30038985",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30038985/",
+      "note": "PMC full text (PMC5854277), read 2026-10-07. MRI findings in a small series of juvenile nasopharyngeal angiofibroma staged with the Radkowski and Onerci systems; its Table 4 reproduces both systems' stage wording and supports the Onerci criteria."
     }
   ]
 }

@@ -31,7 +31,8 @@
       },
       "endo": "Either side, 0°, middle meatus: a unilateral, firm, pale-pink to red, papillary or mulberry-surfaced polypoid mass, more opaque and warty than an inflammatory polyp and bleeding more readily; it often coexists with ordinary polyps, so a biopsy of the most anterior polyp can miss it.",
       "class": [
-        "c.krouse"
+        "c.krouse",
+        "c.cannady"
       ],
       "complications": [
         "dz.sinonasal-scc",
@@ -282,7 +283,10 @@
       "class": [
         "c.jna-radkowski",
         "c.jna-andrews-fisch",
-        "c.jna-upmc"
+        "c.jna-upmc",
+        "c.jna-chandler",
+        "c.jna-fisch",
+        "c.jna-onerci"
       ],
       "complications": [
         "h.imax-bleeding-ppf",
@@ -705,7 +709,8 @@
       },
       "endo": "Either side, 0°: a friable, irregular, often ulcerated or necrotic mass that bleeds easily; its edge can look like a polyp or papilloma.",
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "complications": [
         "h.postop-csf-leak",
@@ -804,7 +809,8 @@
       },
       "endo": "Either side, 0° then 30°, olfactory cleft: a friable, papillary or polypoid, pale-to-red mass between the middle turbinate and the septum that can pass for a polyp; check the opposite cleft.",
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "complications": [
         "h.postop-csf-leak",
@@ -881,7 +887,8 @@
       },
       "endo": "Either side: often a firm, smooth submucosal mass under intact mucosa that looks benign.",
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "complications": [
         "h.v2-injury",
@@ -1121,7 +1128,8 @@
       },
       "endo": "Either side: a large, fungating, necrotic, friable mass.",
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "managedBy": [
         "p.transcribriform-approach",
@@ -1180,7 +1188,8 @@
         "mri": "Heterogeneous enhancing mass; nonspecific."
       },
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "managedBy": [
         "p.transcribriform-approach",
@@ -1889,7 +1898,8 @@
       },
       "endo": "Midline, 0°, after bilateral ethmoidectomy and removal of the cribriform plate: hypervascular dura and tumor, often with hyperostotic bone and sometimes an intranasal part; after coagulation of the base and internal debulking, the capsule is rolled off the gyri recti and A2s in the arachnoid plane.",
       "class": [
-        "c.simpson"
+        "c.simpson",
+        "c.who-cns-meningioma-grade"
       ],
       "complications": [
         "h.postop-csf-leak",
@@ -1987,7 +1997,8 @@
       },
       "endo": "Midline, 0°, after removing tuberculum and planum bone: coagulate the dural base, debulk internally, then dissect the capsule off the optic nerves, chiasm, superior hypophyseal branches, A1/ACoA and stalk; open the medial optic canals to follow tumor into them.",
       "class": [
-        "c.simpson"
+        "c.simpson",
+        "c.who-cns-meningioma-grade"
       ],
       "complications": [
         "h.chiasm-devascularization",
@@ -2476,7 +2487,8 @@
         "mri": "Heterogeneous high T2 signal (5 of 5) and heterogeneous gadolinium enhancement (8 of 8); mean apparent diffusion coefficient in the 2 institutional cases measured was 1.17 and 1.09 ×10⁻³ mm²/s. None of the 12 showed perineural spread, neck lymph node metastasis or remote lesions."
       },
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "mimics": [
         "dz.adenoid-cystic-carcinoma",
@@ -2529,7 +2541,8 @@
         "ct": "No SMARCA4-specific CT pattern is described in the sources read. In a pooled series of 17 SWI/SNF-deficient sinonasal carcinomas (10 SMARCB1-deficient, 6 SMARCA4-deficient, 1 teratocarcinosarcoma), most were T4a at presentation with skull base involvement in 6 and orbital involvement in 3; the SMARCA4-deficient carcinomas mainly arose in the nasal cavity (3 of the 4 with site data)."
       },
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "mimics": [
         "dz.snuc",
@@ -2587,7 +2600,8 @@
         "mri": "Signal varies with mucin content, cellularity and hemorrhage or necrosis: mucin-producing adenocarcinomas are usually T2 hyperintense with gradual enhancement, those without mucin T2 iso- to hypointense; imaging features are often indistinguishable from other sinonasal cancers, including squamous cell carcinoma."
       },
       "class": [
-        "c.ajcc-sinonasal-t"
+        "c.ajcc-sinonasal-t",
+        "c.ajcc-sinonasal-n"
       ],
       "mimics": [
         "dz.itac",
@@ -2691,7 +2705,8 @@
         "mri": "In 18 surgically treated tumors the presence or absence of an arachnoid cleavage plane and an irregular tumor margin toward the brainstem correlated closely with resectability; brainstem edema was significantly related to surgical morbidity; high T2 signal correlated with soft consistency and/or vascularity at surgery. Cavernous sinus infiltration (53.1%) and brainstem involvement (43.8%) were recorded in the 64-patient series."
       },
       "class": [
-        "c.simpson"
+        "c.simpson",
+        "c.who-cns-meningioma-grade"
       ],
       "managedBy": [
         "p.transclival-approach"
@@ -2746,7 +2761,8 @@
         "mri": "In 38 tumors: T2 isointense in 78.9% (hyperintense 13.2%, hypointense 7.9%); intense, homogeneous enhancement in 73.7%; internal carotid compression graded with the Hirsch classification; frequent extension into the temporal fossa (76.3%), sella turcica (68.4%) and posterior fossa (47.4%). Volumetric measurement tracked growth better than linear measurement."
       },
       "class": [
-        "c.simpson"
+        "c.simpson",
+        "c.who-cns-meningioma-grade"
       ],
       "managedBy": [
         "p.transcavernous-approach"
@@ -2800,7 +2816,8 @@
         "mri": "Soft tumor portion and bony portion were identified and segmented separately on CT and MRI in an 89-patient series, and the postoperative volume of the soft portion predicted recurrence (p < 0.001). The imaging grade (1 to 4) records orbital hyperostosis, periorbital, intraorbital and rectus muscle involvement, and orbital apex or optic nerve involvement (the abstract does not say which modality)."
       },
       "class": [
-        "c.simpson"
+        "c.simpson",
+        "c.who-cns-meningioma-grade"
       ],
       "managedBy": [
         "p.optic-nerve-decompression"
@@ -3573,6 +3590,234 @@
       "src": [
         "src.simpson-1957",
         "src.who-cns-2021"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.cannady",
+      "name": "Cannady staging of inverted papilloma",
+      "of": "dz.inverted-papilloma",
+      "tier": 2,
+      "basis": "Three groups defined by tumor site and by recurrence after endoscopic resection in 445 patients pooled from 14 published reports, 1985 to 2006 (Cannady et al. 2007). Unlike [[c.krouse]], the groups were built from outcome data.",
+      "classes": [
+        {
+          "code": "A",
+          "label": "Nasal cavity, ethmoid, medial maxillary wall",
+          "criterion": "Inverted papilloma confined to the nasal cavity, the ethmoid sinus and the medial maxillary sinus.",
+          "why": "Recurrence 3.0% after endoscopic resection (234 patients in the pooled series)."
+        },
+        {
+          "code": "B",
+          "label": "Lateral maxillary, sphenoid or frontal sinus",
+          "criterion": "Inverted papilloma with lateral maxillary sinus, sphenoid sinus or frontal sinus involvement.",
+          "why": "Recurrence 19.8% after endoscopic resection (177 patients)."
+        },
+        {
+          "code": "C",
+          "label": "Extrasinus extension",
+          "criterion": "Inverted papilloma with extrasinus extension.",
+          "why": "Recurrence 35.3% after endoscopic resection (34 patients)."
+        }
+      ],
+      "caveats": "The groups come from a literature pool (mean follow-up 39.8 months) of tumors treated by endoscopic resection, so they predict recurrence for endoscopic surgery and say nothing validated about open surgery. All pair-wise differences in recurrence were statistically significant (chi-square, P < .05). The abstract does not define extrasinus extension (which structures count), does not say how associated carcinoma is staged, and reports only the pooled data although the design also included one institution's experience. The authors argue that other staging systems reflect the surgeon's judgment rather than outcome data; see [[c.krouse]] for the extent-based system it was set against.",
+      "src": [
+        "src.cannady-2007"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.who-cns-meningioma-grade",
+      "name": "CNS WHO grade of meningioma (2021, 5th edition)",
+      "of": "dz.olfactory-groove-meningioma",
+      "tier": 3,
+      "basis": "CNS WHO 2021 grading of meningioma: one grade (1 to 3) assigned within the tumor type regardless of subtype, from mitotic count, brain invasion, subtype, atypia features, and, for grade 3, two molecular criteria (TERT promoter mutation, homozygous CDKN2A/B deletion). It applies to every meningioma, including [[dz.planum-tuberculum-meningioma]], [[dz.petroclival-meningioma]], [[dz.cavernous-sinus-meningioma]] and [[dz.spheno-orbital-meningioma]]. Criteria are as reproduced in the open reviews cited; the WHO summary itself was not readable for this entity.",
+      "classes": [
+        {
+          "code": "1",
+          "label": "CNS WHO grade 1",
+          "criterion": "One of the grade 1 subtypes (meningothelial, fibrous, transitional, psammomatous, angiomatous, microcystic, secretory, lymphoplasmacyte-rich, metaplastic) and none of the grade 2 or grade 3 criteria below."
+        },
+        {
+          "code": "2",
+          "label": "CNS WHO grade 2 (atypical)",
+          "criterion": "Any one of: 4 to 19 mitotic figures in 10 consecutive high-power fields of 0.16 mm2 each; unequivocal brain invasion (not only perivascular spread or indentation of brain without a pial breach); chordoid or clear cell subtype; or at least three of five features (increased cellularity, small cells with a high nuclear to cytoplasmic ratio, prominent nucleoli, sheeting that is uninterrupted patternless or sheet-like growth, foci of spontaneous non-iatrogenic necrosis).",
+          "why": "Brain invasion can only be graded if brain tissue is in the specimen, and many extra-axial specimens contain none (Wang 2024)."
+        },
+        {
+          "code": "3",
+          "label": "CNS WHO grade 3 (anaplastic)",
+          "criterion": "Any one of: 20 or more mitotic figures in 10 consecutive high-power fields of 0.16 mm2 each (at least 12.5 per mm2); frank anaplasia (sarcoma-, carcinoma- or melanoma-like appearance); TERT promoter mutation; homozygous deletion of CDKN2A and/or CDKN2B.",
+          "why": "A TERT promoter hotspot mutation or homozygous CDKN2A/B loss gives grade 3 on its own, even when the histology looks lower grade (Wang 2024)."
+        }
+      ],
+      "caveats": "Okano 2022 lists the rhabdoid and papillary subtypes under grade 3, but Torp 2022 and Wang 2024 state that these subtypes alone are no longer sufficient for grade 3 and are graded like other meningiomas; follow the latter. Brain invasion alone is grade 2, yet its association with outcome without other higher-grade features remains unclear (Wang 2024), and its assessment is subjective and depends on sampling (Torp 2022). The molecular grade 3 alterations are rare, particularly without other worrisome histology (Wang 2024), and molecular testing is not required for diagnosis when histology is definitive (Torp 2022). The cIMPACT-NOW update 8 (2025, not official WHO) proposes grade 2 for grade 1 morphology with 1p deletion plus 22q deletion and/or NF2 oncogenic variants; that is not part of the 2021 criteria. Torp 2022 notes that mitotic counting changed in the 2021 edition from the number per 10 high-power fields to a defined area in mm2, which requires adjustment to the individual microscope. Grade describes the tumor, not the resection: see [[c.simpson]].",
+      "src": [
+        "src.who-cns-2021",
+        "src.okano-2022-meningioma-grades",
+        "src.torp-2022-who-cns5-neurosurgeons",
+        "src.wang-2024-icom-meningioma",
+        "src.sahm-2025-cimpact8"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.ajcc-sinonasal-n",
+      "name": "AJCC clinical N categories for maxillary sinus and nasal cavity/ethmoid carcinoma (8th ed.)",
+      "of": "dz.sinonasal-scc",
+      "tier": 2,
+      "basis": "AJCC Cancer Staging Manual, 8th edition, clinical regional lymph node (cN) categories for carcinomas of the maxillary sinus and of the nasal cavity and ethmoid sinus, as reprinted in the NCI PDQ summary. The criteria are the same for both sites. They sit beside the T categories in [[c.ajcc-sinonasal-t]]. Codes are prefixed c for clinical.",
+      "classes": [
+        {
+          "code": "cN0",
+          "label": "cN0",
+          "criterion": "No regional lymph node metastasis."
+        },
+        {
+          "code": "cN1",
+          "label": "cN1",
+          "criterion": "Metastasis in a single ipsilateral lymph node, 3 cm or less in greatest dimension, and ENE(-)."
+        },
+        {
+          "code": "cN2a",
+          "label": "cN2a",
+          "criterion": "Metastasis in a single ipsilateral node more than 3 cm but not more than 6 cm in greatest dimension, and ENE(-)."
+        },
+        {
+          "code": "cN2b",
+          "label": "cN2b",
+          "criterion": "Metastases in multiple ipsilateral nodes, none more than 6 cm in greatest dimension, and ENE(-)."
+        },
+        {
+          "code": "cN2c",
+          "label": "cN2c",
+          "criterion": "Metastases in bilateral or contralateral lymph nodes, none more than 6 cm in greatest dimension, and ENE(-)."
+        },
+        {
+          "code": "cN3a",
+          "label": "cN3a",
+          "criterion": "Metastasis in a lymph node more than 6 cm in greatest dimension and ENE(-)."
+        },
+        {
+          "code": "cN3b",
+          "label": "cN3b",
+          "criterion": "Metastasis in any node or nodes with clinically overt extranodal extension (ENEc).",
+          "why": "Clinically overt ENE moves any nodal disease to N3b regardless of size."
+        }
+      ],
+      "caveats": "ENE is extranodal extension; here it must be clinically overt (ENEc), not read from a pathology report. The PDQ reprint adds that the suffix U or L may be used with any N category for nodes above or below the lower border of the cricoid. Pathologic N (pN) is not modeled: a sinonasal pN table was not readable and no pN category is given here; the pN wording for ENE should be taken from the sinonasal chapter itself, not from another head and neck site. Lydiatt 2017 states that ENE was added to the N category in all but viral-related cancers and mucosal melanoma, so ENE also enters N for these carcinomas. Mucosal melanoma has no ENE in N and sarcomas and lymphomas are not staged by this table (see [[c.ajcc-sinonasal-t]]).",
+      "src": [
+        "src.ajcc-8",
+        "src.pdq-paranasal-sinus-2024",
+        "src.lydiatt-2017-ajcc8-changes"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.jna-chandler",
+      "name": "Chandler (Miami) staging of juvenile angiofibroma",
+      "of": "dz.jna",
+      "tier": 3,
+      "basis": "Clinical evaluation plus CT (Chandler et al. 1984, 23 patients); any intracranial extension is stage IV.",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Nasopharynx",
+          "criterion": "Tumor confined to the nasopharynx.",
+          "why": "The original series recommended surgical excision for stages I to III."
+        },
+        {
+          "code": "II",
+          "label": "Nasal cavity or sphenoid sinus",
+          "criterion": "Tumor extending into the nasal cavity and/or sphenoid sinus."
+        },
+        {
+          "code": "III",
+          "label": "Sinuses, fossae, orbit or cheek",
+          "criterion": "Tumor extending into one or more of the following: antrum, ethmoid sinus, pterygomaxillary and infratemporal fossae, orbit, and/or cheek."
+        },
+        {
+          "code": "IV",
+          "label": "Cranial cavity",
+          "criterion": "Tumor extending into the cranial cavity.",
+          "why": "The original series advised resection and/or radiation, with possible hormonal therapy, for stage IV."
+        }
+      ],
+      "caveats": "Intracranial extension is one stage whatever its route or depth, and the wide stage III lumps sinus, pterygomaxillary, infratemporal and orbital disease together, so it cannot separate an endonasal from an infratemporal operation; compare [[c.jna-radkowski]] and [[c.jna-andrews-fisch]]. The treatment advice is that of a 1984 series and predates endoscopic resection. Vascularity is not staged (see [[c.jna-upmc]]).",
+      "src": [
+        "src.chandler-1984-jna"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.jna-fisch",
+      "name": "Fisch staging of juvenile angiofibroma",
+      "of": "dz.jna",
+      "tier": 3,
+      "basis": "Radiologic extent in the original infratemporal fossa series (Fisch 1983); stage criteria as reproduced in an open surgical series (Oliveira 2012). Andrews et al. modified it into [[c.jna-andrews-fisch]].",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Nasopharynx and nasal cavity",
+          "criterion": "Tumor limited to the nasopharynx and nasal cavity with no bone destruction.",
+          "why": "Endoscopic surgery is described as a possible approach for stages I and II because morbidity is lower (Oliveira 2012)."
+        },
+        {
+          "code": "II",
+          "label": "Pterygomaxillary fossa and sinuses",
+          "criterion": "Tumor invading the pterygomaxillary fossa, the maxillary antrum, the ethmoid and sphenoid sinuses with bone destruction."
+        },
+        {
+          "code": "III",
+          "label": "Infratemporal fossa, orbit, parasellar region",
+          "criterion": "Tumor invading the infratemporal fossa, the orbit and the parasellar area, but remaining lateral to the cavernous sinus.",
+          "why": "The infratemporal fossa approach was described as allowing radical removal of type III tumors (Fisch 1983)."
+        },
+        {
+          "code": "IV",
+          "label": "Cavernous sinus, chiasm or pituitary fossa",
+          "criterion": "Tumor with invasion of the cavernous sinus, the optic chiasm or the pituitary fossa.",
+          "why": "Only subtotal removal by the infratemporal fossa approach; residual in the cavernous sinus was irradiated (Fisch 1983)."
+        }
+      ],
+      "caveats": "Fisch's abstract does not list the stages, so the criteria are those of a later series' Methods section and may be paraphrased from the original; the stage-by-surgery statements use Fisch's own type labels, and that they match the stages as reproduced there is assumed. Stage IV does not separate extradural from intradural intracranial disease, which [[c.jna-andrews-fisch]] does with IVa and IVb. Built for the open infratemporal approach; vascularity is not staged (see [[c.jna-upmc]]).",
+      "src": [
+        "src.fisch-1983-jna",
+        "src.oliveira-2012-jna"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.jna-onerci",
+      "name": "Onerci staging of juvenile angiofibroma",
+      "of": "dz.jna",
+      "tier": 3,
+      "basis": "Four stages proposed from a 36-patient series to reflect the sites most associated with persistent disease after endonasal or external resection (Onerci et al. 2006). The abstract does not list the stages; the criteria are those reproduced in an open MRI series (Alimli 2016).",
+      "classes": [
+        {
+          "code": "I",
+          "label": "Minimal extension",
+          "criterion": "Minimal extension into the nasal cavity, nasopharynx, ethmoid-sphenoid sinuses, or pterygomaxillary fossa."
+        },
+        {
+          "code": "II",
+          "label": "Maxillary sinus and pterygomaxillary fossa",
+          "criterion": "Extensive invasion of the maxillary sinuses and the pterygomaxillary fossa, extension into the anterior cranial fossa and limited extension into the infratemporal fossa."
+        },
+        {
+          "code": "III",
+          "label": "Sphenoid marrow, pterygoid base, infratemporal fossa, orbit",
+          "criterion": "Marrow involvement of the body and greater wing of the sphenoid bone and base of the pterygoid; extensive involvement of the infratemporal fossa, pterygoid plate, or orbital region; obliteration of the cavernous sinus."
+        },
+        {
+          "code": "IV",
+          "label": "Intracranial",
+          "criterion": "Intracranial extension between the pituitary and the internal carotid artery, tumor located lateral to the internal carotid artery, extension into the middle cranial fossa."
+        }
+      ],
+      "caveats": "Stage wording is copied from a reproduction, not from the original paper, and its placing of extension into the anterior cranial fossa under stage II should be checked against the original before it is relied on. The system was built on the finding that base of pterygoid process involvement was common in persistent disease: in the abstract, found in 10 of 12 patients with persistent disease and 3 of 24 without (the same abstract elsewhere counts 9 of 12). It is a small single-centre series, and like [[c.jna-radkowski]] it does not stage vascularity (see [[c.jna-upmc]]).",
+      "src": [
+        "src.onerci-2006-jna",
+        "src.alimli-2016-jna-mri"
       ],
       "review": "draft"
     }

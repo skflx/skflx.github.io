@@ -529,7 +529,8 @@
       "class": [
         "c.bent-kuhn-afrs",
         "c.fungal-rhinosinusitis",
-        "c.epos-2020-crs"
+        "c.epos-2020-crs",
+        "c.wise-afrs-ct"
       ],
       "tier": 2,
       "what": "A non-invasive, type 2 (IgE-mediated) hypersensitivity to fungi colonizing the sinuses, producing polyps and thick eosinophilic \"peanut-butter\" mucin that fills and expands the sinuses. Patients are typically young, atopic and immunocompetent, and disease is often unilateral or asymmetric.",
@@ -3677,6 +3678,80 @@
       "caveats": "Derived from 107 EGPA cases and 450 comparators and validated in a separate set of 119 cases and 437 comparators: sensitivity 85% (95% CI 77-91%), specificity 99% (95% CI 98-100%). The point values are from the abstract; the exact definition of each item is in the full paper, which this entry has not read, so the criterion wording above only names the items. Eleven items were identified by regression from 91 candidates and seven were retained.",
       "src": [
         "src.grayson-2022-egpa"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.wise-afrs-ct",
+      "name": "Wise CT bone-remodeling score for allergic fungal rhinosinusitis",
+      "of": "dz.afrs",
+      "tier": 3,
+      "basis": "A CT score of how much of the sinus bony walls is expanded or eroded (Wise et al. 2009): each paranasal sinus wall with expansion or erosion scores 1 point, capped per sinus, plus the intersinus septa, for a maximum of 24. It scores bone change, not opacification or mucosal disease.",
+      "classes": [
+        {
+          "code": "FRO",
+          "label": "Frontal sinus, each side",
+          "criterion": "One point per wall with expansion or erosion, maximum 3 points for each frontal sinus."
+        },
+        {
+          "code": "ETH",
+          "label": "Ethmoid complex, each side",
+          "criterion": "One point per wall with expansion or erosion, maximum 2 points for each ethmoid complex."
+        },
+        {
+          "code": "SPH",
+          "label": "Sphenoid sinus, each side",
+          "criterion": "One point per wall with expansion or erosion, maximum 3 points for each sphenoid sinus."
+        },
+        {
+          "code": "MAX",
+          "label": "Maxillary sinus, each side",
+          "criterion": "One point per wall with expansion or erosion, maximum 3 points for each maxillary sinus."
+        },
+        {
+          "code": "SEP",
+          "label": "Intersinus septa",
+          "criterion": "One point each for the frontal and the sphenoid intersinus septum, 2 points in all."
+        },
+        {
+          "code": "TOT",
+          "label": "Total score",
+          "criterion": "Sum of the components above, 0 to 24.",
+          "why": "In the 111 scored CT scans the mean was 7.8 (range 0 to 24)."
+        }
+      ],
+      "caveats": "Read from the abstract only: which walls count toward each sinus's maximum is not stated there. The abstract reports that males scored higher than females (mean 9.3 vs 5.6) and African American patients higher than Caucasian patients (9.6 vs 5.0) and says outcome prediction was still to be analysed, so it is a descriptive score, not a validated prognostic stage. It does not replace the diagnostic criteria in [[c.bent-kuhn-afrs]]. For follow-up after surgery a separate endoscopic score exists (Philpott-Javer 2011: each of the maxillary, ethmoid, frontal and sphenoid cavities scored 0 to 9 for mucosal oedema plus 1 point for fungal mucin, maximum 40 per side, built to refine the 4-stage (0 to 3) Kupferberg global grade); the individual grades are not given in the abstract and are not reproduced here.",
+      "src": [
+        "src.wise-2009-afrs-ct",
+        "src.philpott-2011-afrs"
+      ],
+      "review": "draft"
+    }
+  ],
+  "measurements": [
+    {
+      "id": "m.spoa-drainage-volume-threshold",
+      "name": "Subperiosteal orbital abscess volume at which drainage is favoured",
+      "tier": 3,
+      "unit": "mm3",
+      "value": {
+        "range": [
+          500,
+          1250
+        ]
+      },
+      "method": "CT",
+      "conf": "low",
+      "what": "CT volume of a subperiosteal orbital abscess above which published pediatric series found surgical drainage usually needed. The range runs from the lowest to the highest cut-off reported by the three series read; it is not a population distribution, and each cut-off was derived and measured differently.",
+      "population": "Children with a subperiosteal orbital abscess complicating sinusitis (retrospective single-centre series).",
+      "note": "Where the studies disagree: McCoy 2021 (108 children) took a receiver-operating-characteristic cut-off of 0.510 cm3 (510 mm3; sensitivity 71.2%, specificity 84.4%) and, using 0.500 cm3, found 42 of 49 (85.7%) abscesses at or above it were drained against 17 of 55 (30.9%) below it; its volume is the product of the three CT dimensions, not an ellipsoid, and a 1 cm3 reference left 41% of the smaller abscesses needing surgery. Tabarino 2015 (32 children with abscess, spheroid-model volume) reported that all patients with a volume above 500 mm3 (or above 5% of orbital volume) were operated on, against 30% (39%) of those with smaller volumes. Todman 2011 (29 patients, volume from the largest axial, coronal and sagittal dimensions) reported that volumes below 1,250 mm3 did not require surgery, and PubMed prints that unit without its superscript. Part of the gap is how volume was computed and what the cut-off means (an ROC optimum, a level above which all were drained, a level below which none were); the abstracts do not show that this accounts for all of it, and the series are small and retrospective. A review (Appachi 2020) states there is consensus that large-volume abscesses need drainage but that the cut-off differs between studies; a meta-analysis (Adil 2020) pooled a risk ratio of 3.61 for surgery above each study's own threshold. Ryan 2009 reported surgical patients had larger abscesses (>10 mm); its abstract does not say which dimension. McCoy 2021 frames a volume of 0.510 cm3 or larger, in any location, as a relative indication for surgery.",
+      "src": [
+        "src.mccoy-2021-spoa",
+        "src.tabarino-2015-spoa-volume",
+        "src.todman-2011-spa-volume",
+        "src.ryan-2009-orbital-cellulitis",
+        "src.appachi-2020-spa-predictors",
+        "src.adil-2020-spa-meta"
       ],
       "review": "draft"
     }

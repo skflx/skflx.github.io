@@ -5009,6 +5009,38 @@
         "src.chiu-2019-ch23"
       ],
       "review": "draft"
+    },
+    {
+      "id": "c.infraorbital-canal-yenigun",
+      "name": "Yenigun axial-CT classification of the infraorbital canal",
+      "of": "s.infraorbital-canal",
+      "tier": 3,
+      "basis": "Position of the infraorbital canal relative to the maxillary sinus on axial CT in 750 patients (Yenigun et al. 2016). Its numbering runs the opposite way to [[c.infraorbital-canal]]: here type 1 is the most protruding canal, so the same number means a different canal in the two schemes.",
+      "classes": [
+        {
+          "code": "Y1",
+          "label": "Totally protruding into the sinus",
+          "criterion": "The infraorbital canal is totally protruding into the maxillary sinus.",
+          "why": "Occurred together with maxillary sinus septa (significant on both sides); the protruded canal was twice as frequent, 25%, when septa were present."
+        },
+        {
+          "code": "Y2",
+          "label": "At the sinus floor or partly protruding",
+          "criterion": "The infraorbital canal is located at the floor of the maxillary sinus or is partially protruding into the maxillary sinus."
+        },
+        {
+          "code": "Y3",
+          "label": "Embedded in the maxilla or bulging on its outer face",
+          "criterion": "The infraorbital canal is totally embedded in the maxillary corpus or is bulging on the external face of the maxillary sinus."
+        }
+      ],
+      "caveats": "Do not map types across schemes by number. Roughly, Yenigun Y1 corresponds to the most protruding (descended, 'suspended') type of [[c.infraorbital-canal]] and Y3 to the canal within the bone, but Y2 here also includes a canal lying at the sinus floor and Y3 includes a canal bulging on the outer maxillary face, which the three-type scheme does not describe. Acar et al. 2018 (200 patients, multidetector CT) used four types: within the maxillary bony roof, partly protruding, within the sinus, and at the outer limit of the zygomatic recess; a systematic review (Orellana-Donoso 2024) pooled the literature into four variants with a different fourth type (in the orbital floor), so published schemes differ in both number of types and numbering. The abstracts do not state whether prevalences are per patient or per side, so none is quoted here.",
+      "src": [
+        "src.yenigun-2016-ion",
+        "src.acar-2018-ion",
+        "src.orellana-donoso-2024-ioc"
+      ],
+      "review": "draft"
     }
   ],
   "measurements": [
