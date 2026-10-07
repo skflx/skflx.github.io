@@ -2674,10 +2674,10 @@ async function scopeTests(browser, base) {
     await page.click('#ssb-scope-controls [data-station="t.ser-0.R"]');
     const during = await page.evaluate(() => window.__ssb.scope.flying);
     await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
-    await page.waitForFunction((h) => location.hash === h, `#scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`, { timeout: 3000 }).catch(() => {});
+    await page.waitForFunction((h) => location.hash.endsWith(h), `scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`, { timeout: 3000 }).catch(() => {});
     const end1 = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash, tip: window.__ssb.scope.tip, flight: window.__flight.slice() }));
-    check('stations (E6): picking t.ser-0 starts a flight, which ends at the station\'s stored pose and the ordinary pose URL (#scope=R,32,-5,19,0,0)',
-      during === true && samePoseObj(end1.pose, ST['t.ser-0.R'].pose) && end1.hash === `#scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`, JSON.stringify([during, end1.pose, end1.hash]));
+    check('stations (E6): picking t.ser-0 starts a flight, which ends at the station\'s stored pose and the ordinary pose URL (#scope=R,49,-3,18,0,0)',
+      during === true && samePoseObj(end1.pose, ST['t.ser-0.R'].pose) && end1.hash.endsWith(`scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`), JSON.stringify([during, end1.pose, end1.hash]));      /* the hash also carries tier=3 here */
     const mids = end1.flight.filter((x) => x.flying && x.pose && !samePoseObj(x.pose, ST['t.ser-0.R'].pose) && x.pose.pitch > 0 && x.pose.pitch < ST['t.ser-0.R'].pose.pitch);
     check('stations (E6): the flight passes through poses between the two (a pitch strictly between 0 and the station\'s), not a cut', mids.length >= 1, JSON.stringify(end1.flight.filter((x) => x.flying).slice(0, 6).map((x) => x.pose && [x.pose.depth, x.pose.yaw, x.pose.pitch])));
     const pressed = await stList(page);
@@ -2695,7 +2695,7 @@ async function scopeTests(browser, base) {
       samePoseObj(f2.pose, tgt2) && f2.flight.length >= 1 && f2.flight.every((q) => q.roll >= 315 || q.roll === 0) && f2.flight.filter((q) => q.lens !== 0 && !samePoseObj(q, tgt2)).length === 0 && f2.pose.lens === 30, JSON.stringify(f2.flight.map((q) => [q.roll, q.lens])));
 
     /* a flight is a pose change like any other: collision keeps it free, the CT inset follows, the exposure settles */
-    await page.waitForTimeout(300);
+    await page.waitForFunction(() => { const sc = window.__ssb.scope; return sc.cursor && sc.tip && sc.inset && sc.cursor.every((v, i) => Math.abs(v - sc.tip[i]) <= 1.0); }, null, { timeout: 8000 }).catch(() => {});      /* the cursor follows on an animation frame */
     const settled = await page.evaluate(() => { const sc = window.__ssb.scope; return { hud: sc.hud, cursor: sc.cursor, tip: sc.tip, inset: !!sc.inset }; });
     check('stations (E6): after the flight the CT cursor is the tip, the scope is not limited by bone or the septum, and the inset has been resampled', settled.cursor && settled.cursor.every((v, i) => near(v, settled.tip[i], 1.0)) && !settled.hud.limited && settled.inset, JSON.stringify(settled.hud));
 
