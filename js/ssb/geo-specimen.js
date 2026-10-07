@@ -41,7 +41,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=7431b28a';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=d56bc4a2';
 import { kindForGraph, CELL_TINT } from './materials.js?v=d27e5b3d';
 
 export const PACKS_FILE = 'ssb/models/packs.json';

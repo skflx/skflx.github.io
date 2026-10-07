@@ -16,9 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=7431b28a';
+import { PLANES } from './volume.js?v=d56bc4a2';
 import { CT_PLANES } from './state.js?v=2a74ae90';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=021156ed';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=236aded5';
 
 const SVG = 'http://www.w3.org/2000/svg';
 

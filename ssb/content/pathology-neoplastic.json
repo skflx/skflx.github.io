@@ -733,7 +733,8 @@
         "dz.nk-t-cell-lymphoma",
         "dz.gpa",
         "dz.acute-invasive-fungal-sinusitis",
-        "dz.chronic-invasive-fungal-sinusitis"
+        "dz.chronic-invasive-fungal-sinusitis",
+        "dz.hpv-multiphenotypic-sinonasal-carcinoma"
       ],
       "redFlags": [
         "Unilateral nasal symptoms with cheek numbness (V2), loose teeth, epiphora, diplopia or proptosis: image and biopsy — these are late signs of malignancy, not sinusitis.",
@@ -824,7 +825,8 @@
         "dz.reah",
         "dz.sinonasal-scc",
         "dz.crs-with-polyps",
-        "dz.olfactory-groove-meningioma"
+        "dz.olfactory-groove-meningioma",
+        "dz.sinonasal-non-intestinal-adenocarcinoma"
       ],
       "redFlags": [
         "Occupational hardwood or leather dust exposure with a unilateral olfactory-cleft \"polyp\": biopsy it.",
@@ -894,7 +896,8 @@
       ],
       "mimics": [
         "dz.sinonasal-schwannoma",
-        "dz.sinonasal-scc"
+        "dz.sinonasal-scc",
+        "dz.hpv-multiphenotypic-sinonasal-carcinoma"
       ],
       "redFlags": [
         "V2 or V3 numbness, pain or formication with a sinonasal or palatal mass: perineural spread until proven otherwise — contrast MRI with fat suppression along the whole nerve.",
@@ -1045,7 +1048,8 @@
         "dz.meningoencephalocele",
         "dz.nasal-glioma",
         "dz.crs-with-polyps",
-        "dz.ccad"
+        "dz.ccad",
+        "dz.smarca4-deficient-sinonasal-carcinoma"
       ],
       "redFlags": [
         "Unilateral olfactory-cleft mass: CT and MRI before biopsy (exclude an encephalocele), then biopsy — olfactory neuroblastoma, adenocarcinoma, melanoma, SNUC and meningioma share this site.",
@@ -1132,7 +1136,8 @@
         "dz.nk-t-cell-lymphoma",
         "dz.mucosal-melanoma",
         "dz.rhabdomyosarcoma",
-        "dz.acute-invasive-fungal-sinusitis"
+        "dz.acute-invasive-fungal-sinusitis",
+        "dz.smarca4-deficient-sinonasal-carcinoma"
       ],
       "redFlags": [
         "Progression over weeks with proptosis, diplopia or cranial neuropathy: expedite biopsy with a full immunohistochemical panel and staging — do not wait for a scheduled resection."
@@ -1186,7 +1191,8 @@
         "dz.nut-carcinoma",
         "dz.sinonasal-scc",
         "dz.olfactory-neuroblastoma",
-        "dz.sinonasal-neuroendocrine-carcinoma"
+        "dz.sinonasal-neuroendocrine-carcinoma",
+        "dz.smarca4-deficient-sinonasal-carcinoma"
       ],
       "redFlags": [
         "Any \"undifferentiated\" or \"basaloid\" sinonasal carcinoma: request SMARCB1 (INI1) and SMARCA4 immunostains."
@@ -1222,7 +1228,8 @@
       "mimics": [
         "dz.olfactory-neuroblastoma",
         "dz.snuc",
-        "dz.smarcb1-deficient-carcinoma"
+        "dz.smarcb1-deficient-carcinoma",
+        "dz.smarca4-deficient-sinonasal-carcinoma"
       ],
       "geo": "overlay",
       "src": [
@@ -1504,7 +1511,8 @@
         "dz.hypophysitis",
         "dz.skull-base-ica-aneurysm",
         "dz.chordoma",
-        "dz.skull-base-metastasis"
+        "dz.skull-base-metastasis",
+        "dz.intracranial-germinoma"
       ],
       "redFlags": [
         "Sudden severe headache, visual loss or ophthalmoplegia: [[dz.pituitary-apoplexy]] — hydrocortisone immediately, urgent MRI and neurosurgery.",
@@ -1631,7 +1639,8 @@
         "dz.pituitary-neuroendocrine-tumor",
         "dz.rathke-cleft-cyst",
         "dz.craniopharyngioma",
-        "dz.skull-base-metastasis"
+        "dz.skull-base-metastasis",
+        "dz.intracranial-germinoma"
       ],
       "redFlags": [
         "Diabetes insipidus at presentation with a sellar mass is unusual for an adenoma: think of hypophysitis, craniopharyngioma, metastasis, germinoma or histiocytosis."
@@ -2439,6 +2448,593 @@
       "geo": "overlay",
       "src": [
         "src.osborn-2018"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.hpv-multiphenotypic-sinonasal-carcinoma",
+      "name": "HPV-related multiphenotypic sinonasal carcinoma (HMSC)",
+      "syn": [
+        "HMSC",
+        "HPV-related multiphenotypic carcinoma",
+        "multiphenotypic sinonasal carcinoma",
+        "HPV-related carcinoma with adenoid cystic-like features"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.maxillary-sinus",
+        "s.orbit",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "tier": 3,
+      "what": "A recently recognized high-grade sinonasal carcinoma that mixes salivary-gland-type (adenoid cystic-like) and squamous differentiation and is defined by transcriptionally active HPV; it arises mainly in the nasal cavity in the sixth decade of life with no clear sex predilection, and was added as a new entity in the 2022 WHO classification.",
+      "why": "Its behavior is paradoxical: high-grade histology, locally destructive growth, advanced T stage and a tendency to recur locally, yet little potential for metastasis or death. In a systematic review of 101 cases most patients had surgical excision without recurrence or metastasis; in a 52-case series recurrence occurred in 15 of 42 patients with follow-up (35.71%) while 5-year overall, disease-specific and disease-free survival were 90.1%, 89.7% and 82.4%, and regional or distant metastasis and HPV coinfection correlated with poorer survival. At the table the point is the diagnosis: a basaloid or adenoid cystic-like sinonasal carcinoma with strong p16 should be tested for transcriptionally active HPV (in situ hybridization or RT-PCR) rather than being filed as adenoid cystic or squamous cell carcinoma, because the expected course differs from most high-grade head and neck carcinomas and could affect therapy.",
+      "imaging": {
+        "ct": "In 12 cases with CT and/or MRI (9 from the literature, 3 institutional): nasal cavity involved in 11 (91.7%), ethmoid in 6 (50.0%), maxillary sinus in 3 (25.0%); mean long diameter 46.3 mm; margins well defined and smooth in 11 (91.7%); heterogeneous enhancement on contrast CT (2 of 2); compressive change in the surrounding structures common (9 of 12, 75%); intraorbital or intracranial extension in few.",
+        "mri": "Heterogeneous high T2 signal (5 of 5) and heterogeneous gadolinium enhancement (8 of 8); mean apparent diffusion coefficient in the 2 institutional cases measured was 1.17 and 1.09 ×10⁻³ mm²/s. None of the 12 showed perineural spread, neck lymph node metastasis or remote lesions."
+      },
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "mimics": [
+        "dz.adenoid-cystic-carcinoma",
+        "dz.sinonasal-scc"
+      ],
+      "redFlags": [
+        "A basaloid or adenoid cystic-like sinonasal carcinoma with diffuse p16: ask for HPV in situ hybridization or RT-PCR before settling on adenoid cystic or squamous cell carcinoma.",
+        "Regional or distant metastasis, and HPV coinfection, correlated with poorer survival in a 52-case series, even though most patients do well."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Detection of transcriptionally active HPV by in situ hybridization or RT-PCR is described as critical for the definitive diagnosis; p16 is strongly expressed, while squamous and myoepithelial markers vary (systematic review of 101 cases)."
+        },
+        {
+          "tier": 3,
+          "text": "In 52 Latin American cases HPV type 33 was the commonest (34 of 52, 65.38%) and 9 (17.30%) had coinfections; Ki-67 was high (median 50.1 [30.7 to 66.3])."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.who-hn-2022",
+        "src.agarwal-2023-who-sinonasal-imaging",
+        "src.bishop-2018-hmsc",
+        "src.depaiva-2025-hmsc-sr",
+        "src.depaiva-2026-hmsc-52",
+        "src.baba-2022-hmsc-radiology"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.smarca4-deficient-sinonasal-carcinoma",
+      "name": "SMARCA4 (BRG1)-deficient sinonasal carcinoma",
+      "syn": [
+        "SMARCA4-deficient carcinoma",
+        "BRG1-deficient sinonasal carcinoma",
+        "SMARCA4-deficient undifferentiated sinonasal carcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.anterior-cranial-fossa-dura",
+        "s.orbit"
+      ],
+      "tier": 3,
+      "what": "A high-grade sinonasal carcinoma defined by loss of SMARCA4 (BRG1) protein with retained SMARCA2 and without glandular or squamous differentiation; it emerged from tumors previously called sinonasal undifferentiated carcinoma, neuroendocrine carcinoma and teratocarcinosarcoma, and belongs to the SWI/SNF-deficient group of sinonasal carcinomas that is new in the 2022 WHO classification.",
+      "why": "It is recognized by immunohistochemistry, not by imaging or by routine histology: in an institutional cohort of 299 poorly differentiated or undifferentiated sinonasal tumors, 12 were SMARCA4-deficient, looking like large cell neuroendocrine carcinoma (5), small cell neuroendocrine carcinoma (2) or teratocarcinosarcoma (5), with diffuse cytokeratin and only weak, focal neuroendocrine marker staining. Behavior is aggressive: 4 of 7 patients with follow-up died of disease and aggressive multimodality treatment gave better outcomes. In a series of 17 SWI/SNF-deficient sinonasal carcinomas (10 SMARCB1-deficient, 6 SMARCA4-deficient, 1 teratocarcinosarcoma) most patients presented at an advanced stage (T4a in 9), so SMARCA4 and SMARCB1 stains belong in the workup of every undifferentiated, neuroendocrine-like or teratocarcinosarcoma-like sinonasal tumor before a plan is made.",
+      "imaging": {
+        "ct": "No SMARCA4-specific CT pattern is described in the sources read. In a pooled series of 17 SWI/SNF-deficient sinonasal carcinomas (10 SMARCB1-deficient, 6 SMARCA4-deficient, 1 teratocarcinosarcoma), most were T4a at presentation with skull base involvement in 6 and orbital involvement in 3; the SMARCA4-deficient carcinomas mainly arose in the nasal cavity (3 of the 4 with site data)."
+      },
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "mimics": [
+        "dz.snuc",
+        "dz.smarcb1-deficient-carcinoma",
+        "dz.sinonasal-neuroendocrine-carcinoma",
+        "dz.olfactory-neuroblastoma"
+      ],
+      "redFlags": [
+        "Any undifferentiated, neuroendocrine-like or teratocarcinosarcoma-like sinonasal tumor: request SMARCA4 (BRG1) as well as SMARCB1 (INI1) immunostains.",
+        "Sinonasal cases can mimic olfactory neuroblastoma, and they often present at an advanced stage."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "SMARCA4 loss was diffuse and complete in 10 of 12 cases and showed focal retention in 2; SMARCA2 expression was retained in all 12 and IDH1/2 mutation was absent in all cases tested (single institution)."
+        },
+        {
+          "tier": 3,
+          "text": "The sinonasal tract is a recognized hot-spot for SMARCA4-deficient cancers; about 80% of sinonasal teratocarcinosarcomas are SMARCA4-deficient (review statement), so the two are closely linked."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.who-hn-2022",
+        "src.agarwal-2023-who-sinonasal-imaging",
+        "src.kakkar-2022-smarca4",
+        "src.agaimy-2023-swi-snf",
+        "src.qiu-2026-swi-snf-17",
+        "src.farkas-2026-smarca4-hn"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.sinonasal-non-intestinal-adenocarcinoma",
+      "name": "Sinonasal non-intestinal-type adenocarcinoma (non-ITAC)",
+      "syn": [
+        "non-ITAC",
+        "non-intestinal-type adenocarcinoma",
+        "non-intestinal adenocarcinoma",
+        "low-grade non-intestinal-type adenocarcinoma",
+        "high-grade non-intestinal-type adenocarcinoma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.anterior-cranial-fossa-dura"
+      ],
+      "tier": 2,
+      "what": "A sinonasal adenocarcinoma that shows neither intestinal nor salivary-gland differentiation, so it is defined by exclusion. Most are low-grade, arise in the nasal cavity or maxillary sinus, and have a respiratory-type immunoprofile (CK7 positive; CK20 and CDX2 negative), unlike intestinal-type adenocarcinoma ([[dz.itac]]); high-grade tumors are rare.",
+      "why": "Grade drives the behavior: low-grade tumors have a relatively indolent course and are treated by surgery, with adjuvant radiotherapy possibly omitted when margins are widely negative, whereas high-grade tumors behave aggressively, like ITAC, and are treated by resection plus adjuvant radiotherapy (review). For sinonasal adenocarcinoma in general the aim is complete en bloc resection with negative margins, the most important predictor of local control and survival, but margins are hard near the orbit, optic nerves and anterior skull base; endoscopic, open or combined routes are chosen by origin, size and extension rather than histology, and extensive resections need vascularized skull base reconstruction. It is a diagnosis of exclusion, so other primaries including metastases must be excluded, and the group lacks a proper histopathological and molecular definition.",
+      "imaging": {
+        "ct": "No distinctive radiological characteristic separates intestinal-type from non-intestinal-type adenocarcinoma. Sinonasal adenocarcinomas in general appear as a soft-tissue mass, occasionally with calcification reflecting mucin; high-grade tumors often destroy bone; an ethmoid tumor may extend to the skull base and to the frontal lobes.",
+        "mri": "Signal varies with mucin content, cellularity and hemorrhage or necrosis: mucin-producing adenocarcinomas are usually T2 hyperintense with gradual enhancement, those without mucin T2 iso- to hypointense; imaging features are often indistinguishable from other sinonasal cancers, including squamous cell carcinoma."
+      },
+      "class": [
+        "c.ajcc-sinonasal-t"
+      ],
+      "mimics": [
+        "dz.itac",
+        "dz.sinonasal-scc"
+      ],
+      "redFlags": [
+        "A tumor labeled high-grade non-intestinal-type adenocarcinoma may be a SMARCB1-deficient sinonasal adenocarcinoma: in a 14-case series the original diagnosis was usually high-grade non-ITAC or myoepithelial carcinoma, and 5 of the 8 patients with follow-up died of disease 2 to 20 months after diagnosis. Ask for SMARCB1 (INI1) immunostaining.",
+        "Because non-ITAC is a diagnosis of exclusion, a metastasis from another primary has to be ruled out before it is accepted."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "ITAC and non-ITAC are the only two adenocarcinoma entities in the sinonasal chapter of the 5th-edition WHO head and neck classification (review statement)."
+        },
+        {
+          "tier": 3,
+          "text": "Radiotherapy policy is not firmly established for ITAC or non-ITAC, and its indication is debated for low-stage disease with wide margins (review)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.who-hn-2022",
+        "src.sciacca-2025-itac-non-itac",
+        "src.arcovito-2024-sinonasal-adenocarcinoma",
+        "src.skalova-2024-smarcb1-adenocarcinoma"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.biphenotypic-sinonasal-sarcoma",
+      "name": "Biphenotypic sinonasal sarcoma (BSNS)",
+      "syn": [
+        "BSNS",
+        "BSS",
+        "sinonasal sarcoma with neural and myogenic features"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ethmoid-labyrinth",
+        "s.nasal-septum",
+        "s.lamina-papyracea",
+        "s.anterior-cranial-fossa"
+      ],
+      "tier": 3,
+      "what": "A rare low-grade, locally aggressive spindle-cell sarcoma of the upper nasal cavity and ethmoid with both neural and myogenic differentiation, characterized by PAX3 rearrangement (PAX3::MAML3 in 37 of 41 cases, 90%, in one series); it is commoner in middle-aged women (25 of 41 female, median age 49 years in that series).",
+      "why": "It is locally aggressive with a low risk of regional or distant spread but recurs even after adequate resection (local recurrence in 8 of 25 patients with follow-up, 32%, in a 41-case series; in 2 of 5, 40%, in a 5-case imaging series). In 15 patients treated endoscopically in 6 European centers (7 endonasal, 4 endoscopic transnasal craniectomy, 4 cranio-endoscopic), mean follow-up 27.3 months, systemic metastasis occurred in 1 and 5-year overall and disease-free survival were 100% and 80 ± 17.9%; the authors conclude that free-margin resection, with adjuvant radiotherapy for selected cases (2 of 15, for microscopically positive margins), is effective upfront. The tumor centers on the ethmoid (13 of 15 in the European series) and reaches the septum, lamina papyracea and anterior skull base; in that series the extent ranged from exclusive endonasal resection to resection including the ethmoidal roof and the dura of the anterior skull base, with multilayer transnasal reconstruction.",
+      "imaging": {
+        "ct": "In 5 tumors: unilateral, centered in the nasal cavity and ethmoid, median size 3.8 cm; all reached the nasal septum, lamina papyracea and anterior skull base, with erosion of the lamina papyracea in 2 and of the anterior skull base in 2; bone showed a mixed lytic and sclerotic pattern with definite hyperostosis in 4 (80%).",
+        "mri": "Isointense to mixed iso/hypointense on T1 and T2 (T2 signal similar to cerebral gray matter, with dark foci at hyperostosis; one tumor had mixed T2 hyperintensity); all tumors imaged with gadolinium (4 of the 5) enhanced."
+      },
+      "managedBy": [
+        "p.transcribriform-approach",
+        "p.skull-base-reconstruction"
+      ],
+      "redFlags": [
+        "A unilateral nasoethmoidal mass that is T2 isointense to gray matter with hyperostotic bone on CT: consider BSNS and plan for septal, lamina papyracea and anterior skull base involvement (present in all 5 tumors of the imaging series).",
+        "Positive microscopic margins or persistent or recurrent disease in a site that cannot be re-resected: the European series recommends adjuvant irradiation for positive margins and for persistence or recurrence in non-resectable areas."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Hyperostosis is not unique to BSNS: it also occurs with meningiomas, benign nasal tumors, other sinonasal malignancies and inflammatory disease (discussion of the 5-case imaging series)."
+        },
+        {
+          "tier": 3,
+          "text": "S100 protein and PAX3 were constantly positive and SOX10 negative; MyoD1 was focally positive in 91% and myogenin in 20%, so MyoD1 is the more sensitive marker of myogenic differentiation (41-case series)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.who-hn-2022",
+        "src.turri-zanoni-2022-bsns",
+        "src.miglani-2019-bss-imaging",
+        "src.leloarer-2019-bsns-41"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.petroclival-meningioma",
+      "name": "Petroclival meningioma",
+      "syn": [
+        "petroclival meningioma",
+        "clival meningioma",
+        "petroclival junction meningioma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.clivus",
+        "s.petroclival-synchondrosis",
+        "s.petrous-apex",
+        "s.pons",
+        "s.cavernous-sinus",
+        "s.meckels-cave",
+        "s.oculomotor-nerve"
+      ],
+      "tier": 3,
+      "what": "A meningioma of the clivus and petroclival junction that lies against the brainstem and cranial nerves and often grows into the cavernous sinus. In a series of 64 resected tumors the mean diameter was 37.3 mm, the cavernous sinus was infiltrated in 34 (53.1%) and the brainstem affected in 28 (43.8%); 73.4% of patients already had a cranial nerve palsy (trigeminal neuropathy 42.2%, hearing loss 32.8%, impaired vision 18.8%).",
+      "why": "Surgery is a trade of resection against cranial nerve and brainstem function: the paradigm has moved from radical to functional resection, and the authors of the 64-patient series advise that brainstem involvement and cavernous sinus infiltration decide which strategy is pursued. In a meta-analysis of 73 case series (3553 patients, mostly transcranial approaches) adjusted predicted mortality was 2.4% (supratentorial), 2.5% (infratentorial) and 1.2% (combined), the adjusted probability of any cranial nerve deficit 37.2%, 23.4% and 29.5%, and recurrence was negatively associated with gross-total resection; the commonest individual deficits were facial (14.4%), trigeminal (11.5%) and oculomotor (10.2%) nerves. The endoscopic endonasal transclival route has been reported as an additional option beside transcranial approaches: in 20 consecutive clival and petroclival meningiomas resection was total in 2 (10%), subtotal in 5 (25%) and partial in 13 (65%), and meningitis was the commonest complication. These sources do not say which tumors are suitable for the endonasal route.",
+      "imaging": {
+        "mri": "In 18 surgically treated tumors the presence or absence of an arachnoid cleavage plane and an irregular tumor margin toward the brainstem correlated closely with resectability; brainstem edema was significantly related to surgical morbidity; high T2 signal correlated with soft consistency and/or vascularity at surgery. Cavernous sinus infiltration (53.1%) and brainstem involvement (43.8%) were recorded in the 64-patient series."
+      },
+      "class": [
+        "c.simpson"
+      ],
+      "managedBy": [
+        "p.transclival-approach"
+      ],
+      "redFlags": [
+        "No arachnoid plane and an irregular margin toward the brainstem, especially with brainstem edema, marked a high-risk group in an 18-patient MRI series; limited resection may be preferred to avoid postoperative morbidity.",
+        "Cavernous sinus infiltration or brainstem involvement: the 64-patient series advises a functionally oriented rather than radical strategy."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Where the cavernous sinus was not infiltrated and gross-total resection was attempted, it was achieved in 21 of 30 (70.0%) in the 64-patient single-center series, which was mostly operated through a retrosigmoid approach."
+        },
+        {
+          "tier": 3,
+          "text": "Of 56 patients with a postoperative cranial nerve palsy, 36 (63.6%) had improved or resolved at last follow-up (64-patient series)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.baric-2022-pcm-meta",
+        "src.wagner-2022-pcm-64",
+        "src.pirayesh-2016-pcm-mri",
+        "src.shkarubo-2025-clival-meningioma-eea",
+        "src.simpson-1957"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.cavernous-sinus-meningioma",
+      "name": "Cavernous sinus meningioma",
+      "syn": [
+        "cavernous sinus meningioma",
+        "CSM",
+        "parasellar meningioma of the cavernous sinus"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.cavernous-sinus",
+        "s.internal-carotid-artery",
+        "s.oculomotor-nerve",
+        "s.trochlear-nerve",
+        "s.abducens-nerve",
+        "s.ophthalmic-nerve",
+        "s.maxillary-nerve",
+        "s.sella-turcica"
+      ],
+      "tier": 3,
+      "what": "A meningioma centered on the cavernous sinus, in close contact with the internal carotid artery and cranial nerves III to VI. In a 38-patient series (mean age 54.5 years, 81.6% women) diagnosis was incidental in 31.6% and symptom-driven in 68.4%, with ophthalmoplegia the commonest symptom.",
+      "why": "Many cavernous sinus meningiomas grow slowly, so management has moved from microsurgery toward observation and radiotherapy. In that series 24 patients (63.2%) were managed conservatively and most stayed stable; mean annual growth was 0.077 cm in diameter and 0.86 cm3 in volume, volume measured on MRI being more accurate than linear measurement, and symptoms and growth pattern predicted the need for treatment. After stereotactic radiosurgery, pooled progression-free survival was 93.4%, 84.9% and 81.3% at 5, 10 and 15 years (7 studies, 645 patients, median follow-up 74 months), cranial nerve deficits improved in 36.4% and new or worsened deficits occurred in 11.5%. In a larger meta-analysis (36 studies, 2817 patients) 5-year progression-free survival was 93.6% for gamma knife, 95.6% for linac radiosurgery and 97.4% for fractionated radiotherapy, with adverse radiation effects in 4.6 to 9.3%. Endoscopic endonasal transcavernous resection through the anterior wall has been reported in a mixed series of 14 intracavernous tumors including 3 meningiomas (gross-total resection in 11 of 14, 78.6%; one transient oculomotor palsy); the abstract gives no meningioma-specific result.",
+      "imaging": {
+        "mri": "In 38 tumors: T2 isointense in 78.9% (hyperintense 13.2%, hypointense 7.9%); intense, homogeneous enhancement in 73.7%; internal carotid compression graded with the Hirsch classification; frequent extension into the temporal fossa (76.3%), sella turcica (68.4%) and posterior fossa (47.4%). Volumetric measurement tracked growth better than linear measurement."
+      },
+      "class": [
+        "c.simpson"
+      ],
+      "managedBy": [
+        "p.transcavernous-approach"
+      ],
+      "redFlags": [
+        "Symptoms and tumor growth pattern predicted the need for treatment in the 38-patient series; stable, incidental tumors generally behaved indolently, which supports conservative management in selected patients."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "In the 38-patient series, 14 patients had surgery, radiosurgery or both and 71.4% of those treated showed progression, so active treatment did not guarantee radiological control (small single-center series)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.ribeiro-2026-csm-natural-history",
+        "src.martinez-perez-2021-csm-srs",
+        "src.leroy-2018-csm-rs-frt",
+        "src.zhang-2019-transcavernous-eea",
+        "src.simpson-1957"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.spheno-orbital-meningioma",
+      "name": "Spheno-orbital meningioma",
+      "syn": [
+        "SOM",
+        "sphenoid wing meningioma en plaque",
+        "hyperostosing sphenoid wing meningioma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.greater-wing-of-sphenoid",
+        "s.orbit",
+        "s.orbital-roof",
+        "s.periorbita",
+        "s.superior-orbital-fissure",
+        "s.optic-canal",
+        "s.optic-nerve",
+        "s.orbital-apex",
+        "s.anterior-clinoid-process",
+        "s.cavernous-sinus",
+        "s.lateral-pterygoid-muscle"
+      ],
+      "tier": 3,
+      "what": "A meningioma of the meninges around the sphenoid wing that spreads along the bone and into the orbit, producing hyperostosis (called pathognomonic by the authors of one series), proptosis and visual decline. It is predominantly a tumor of women (female-to-male ratio 8.9:1 in 89 patients; 71% female in 93 patients). Presenting features in the 93 patients were proptosis (74.2%), visual decline (57.0%) and cranial neuropathies (30.1%).",
+      "why": "Surgery aims to preserve vision and improve proptosis rather than to remove every trace of tumor. A proposed imaging grade (1 orbital hyperostosis; 2 periorbital involvement; 3a/3b intraorbital without/with rectus muscle invasion; 4 orbital apex or optic nerve) predicted resectability in 93 patients: gross-total resection of the orbital contents in 88.5%, 50.0%, 16.7% and 24.1% of grades 1 to 4, with vision stable or improved in 96.2%, 100%, 83.3% and 93.1%. In a meta-analysis of 59 studies (1903 patients), transcranial approaches had the highest gross-total resection rate (59.8%) with cranial nerve deficits in 21.0%; overall recurrence was 20.7%, 5- and 10-year progression-free survival 75.5% and 49.1%, proptosis improved in 79.3% and visual acuity in 57.5%, and CSF leak occurred in 3.9% overall but 20.3% (95% CI 0 to 46.7%) after combined transorbital and endonasal approaches. The authors note that endonasal approaches are particularly effective for decompressing the medial part of the optic canal, and transorbital approaches for hyperostotic bone and tumor lying more laterally. In an 89-patient series, residual soft tumor, not residual bone, correlated with recurrence (recurrence 22.5% after the first surgery).",
+      "imaging": {
+        "ct": "Expansion of the sphenoid bone with hyperostosis extending into the orbit; spread to the sphenoid, orbital roof, middle fossa, superior orbital fissure, optic canal, anterior clinoid or cavernous sinus and invasion of temporalis or lateral pterygoid muscle can give radiologic features resembling a malignancy.",
+        "mri": "Soft tumor portion and bony portion were identified and segmented separately on CT and MRI in an 89-patient series, and the postoperative volume of the soft portion predicted recurrence (p < 0.001). The imaging grade (1 to 4) records orbital hyperostosis, periorbital, intraorbital and rectus muscle involvement, and orbital apex or optic nerve involvement (the abstract does not say which modality)."
+      },
+      "class": [
+        "c.simpson"
+      ],
+      "managedBy": [
+        "p.optic-nerve-decompression"
+      ],
+      "redFlags": [
+        "Intraorbital (grade 3) or orbital apex or optic nerve (grade 4) tumor: gross-total resection of the orbital contents was achieved in only 16.7% and 24.1%, and was significantly less likely in grade 3 or 4 tumors (odds ratio 0.06, 95% CI 0.019 to 0.190) unless oncological removal was done in a patient with no functional vision.",
+        "Infiltration of the superior orbital fissure, cavernous sinus, extraocular muscles or cranial nerves limits complete removal; stereotactic radiosurgery alone or with hypofractionated radiotherapy is advocated for residual tumor near the cavernous sinus and orbital apex (discussion of the meta-analysis)."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "No correlation was found between postoperative bony tumor volume and recurrence (p > 0.05) but a significant one for soft tumor (p < 0.001); the authors conclude bone removal should be tailored to orbital compression or venous congestion, and maximal safe resection should target the soft portion."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.agosti-2023-som-sr",
+        "src.couldwell-2026-som-grading",
+        "src.porto-2025-som-recurrence",
+        "src.simpson-1957"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.trigeminal-schwannoma",
+      "name": "Trigeminal schwannoma",
+      "syn": [
+        "TS",
+        "trigeminal nerve schwannoma",
+        "Meckel cave schwannoma",
+        "trigeminal neurinoma"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.meckels-cave",
+        "s.trigeminal-ganglion",
+        "s.ophthalmic-nerve",
+        "s.maxillary-nerve",
+        "s.mandibular-nerve",
+        "s.cavernous-sinus",
+        "s.foramen-rotundum",
+        "s.foramen-ovale",
+        "s.pterygopalatine-fossa",
+        "s.infratemporal-fossa",
+        "s.orbit"
+      ],
+      "tier": 3,
+      "what": "An uncommon benign schwannoma of the trigeminal nerve that can spread to the middle cranial fossa, the posterior fossa, and extracranially into the pterygopalatine fossa, infratemporal fossa and orbit. The Samii classification records the extent: type A middle fossa, type B posterior fossa, type C dumbbell across both, type D extracranial. Facial numbness was the commonest presenting symptom (70.5%) of 52 extracranial cases. It is a different entity from the sinonasal and pterygopalatine schwannoma of [[dz.sinonasal-schwannoma]].",
+      "why": "The Samii type decides the corridor. In a meta-regression of 15 studies (583 surgeries) the types were A 22%, B 11%, C 42% and D 25%; endoscopic routes (endonasal or transorbital) were used in 40.7% of type A, 2.6% of type B, 21.1% of type C and 37.9% of type D tumors, retrosigmoid was the preferred route for 68.4% of type B, pooled gross-total resection was 73%, trigeminal symptoms improved in 17% and complications occurred in 11.6%. In 101 patients (44 endonasal, 57 transcranial) the endonasal route gave higher gross-total resection, shorter operating time, less intracranial infection and more improvement in facial numbness in pooled data and in type A tumors, similar outcomes in type C, and was advantageous in type D tumors of the infratemporal fossa, pterygopalatine fossa and medial orbit, with no neurological deficits observed. In 52 extracranial tumors resected by a purely endoscopic endonasal approach (mean diameter 38.6 ± 13.3 mm) gross-total resection was 93.1%, and tumors extending into the middle or posterior fossa may need a combined approach.",
+      "imaging": {
+        "mri": "Post-gadolinium T1 MRI shows which compartments the tumor occupies, which is what the Samii types record (A middle fossa, B posterior fossa, C dumbbell across middle and posterior fossae, D extracranial); the mean diameter of the extracranial tumors was 38.6 ± 13.3 mm (52 patients)."
+      },
+      "complications": [
+        "h.trigeminal-injury-meckel"
+      ],
+      "managedBy": [
+        "p.transpterygoid-approach"
+      ],
+      "redFlags": [
+        "Type B (posterior fossa) tumors: the retrosigmoid route was preferred for 68.4% and endoscopic routes were used in only 2.6% of the pooled series.",
+        "Type C (dumbbell) tumors: outcomes of endonasal and transcranial routes were similar in the 101-patient series, and gross-total resection of type C tumors fell over time in the pooled series, which the authors attribute to more complex cases in recent series."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "Tumor type was the dominant predictor of extent of resection, functional outcome and complications in the meta-regression; trigeminal impairment improved in 17% and worsening of trigeminal symptoms was rare."
+        },
+        {
+          "tier": 3,
+          "text": "The endonasal route offers a direct midline trajectory to Meckel's cave, while the transorbital route gives lateral access to the lateral cavernous sinus and Meckel's cave (introduction and discussion of the meta-regression)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.porto-2025-ts-meta",
+        "src.pan-2025-ts-eea-tca",
+        "src.yilmaz-2025-extracranial-ts-eea",
+        "src.kassam-2009-meckel"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.intracranial-germinoma",
+      "name": "Intracranial germinoma (sellar and suprasellar)",
+      "syn": [
+        "germinoma",
+        "suprasellar germinoma",
+        "neurohypophyseal germinoma",
+        "intracranial germ cell tumor"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.pituitary-gland",
+        "s.neurohypophysis",
+        "s.pituitary-stalk",
+        "s.hypothalamus",
+        "s.optic-chiasm",
+        "s.mammillary-bodies",
+        "s.sella-turcica",
+        "s.clivus"
+      ],
+      "tier": 3,
+      "what": "A malignant germ cell tumor of the midline brain, mostly of children and young adults, that in the sellar region arises in the posterior pituitary, stalk and hypothalamus (the hypothalamo-neurohypophyseal axis). Intracranial germ cell tumors lie mostly in the pineal region, then the suprasellar region; patients with tumors of the axis often present with diabetes insipidus and visual disturbance. In a cohort of 102 malignant germ cell tumors (median age 12.3 years, range 4.4 to 33.8), 67 were suprasellar and 47 of those (70.1%) were germinomas.",
+      "why": "For the surgeon the task is the diagnosis: treatment is biopsy or resection followed by radiotherapy with or without chemotherapy, a meta-analysis found similar prognosis across extents of resection, and germinomas respond well with very high cure rates, so securing the diagnosis early matters. Diagnosis is often delayed, with the longest median interval (312 days) for circumscribed suprasellar germinomas, and prolonged symptom intervals raise the risk of dissemination. Look-alikes include pituitary adenoma, Langerhans cell histiocytosis and inflammatory causes of central diabetes insipidus with stalk thickening; serum alpha-fetoprotein and beta-hCG help identify non-germinomatous tumors.",
+      "imaging": {
+        "mri": "Sagittal non-contrast T1 showed loss of the posterior pituitary bright spot in more than 90% of germ cell tumors of the region (98 evaluated), related to diabetes insipidus; every tumor involved the posterior lobe or the stalk. Suprasellar germinomas were smaller than non-germinomatous tumors and less often expanded (46.8% versus 85%); the suprasellar part expanded into the third ventricle or compressed diencephalic structures in 61.8% overall; contrast T1 of the neurocranium showed leptomeningeal dissemination at diagnosis in 17 of 90 patients. Cortical destruction of the clivus, suggesting osseous infiltration, was seen only in suprasellar tumors (18 patients) and more often in non-germinomatous ones."
+      },
+      "mimics": [
+        "dz.pituitary-neuroendocrine-tumor",
+        "dz.hypophysitis",
+        "dz.langerhans-cell-histiocytosis"
+      ],
+      "redFlags": [
+        "New diabetes insipidus in a child or young adult: loss of the posterior pituitary bright spot on T1 may be the earliest MRI sign, and diagnosis is often delayed.",
+        "Corticosteroids can make a pure germinoma appear to shrink in the short term (immune cell infiltration), so an apparent response must not be read as hypophysitis; stalk thickening from inflammation should regress within six months, which needs close follow-up to tell it from a small germ cell tumor (discussion of one MRI study)."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "A loss of the posterior pituitary bright spot is uncommon (about 20%) in pituitary adenomas, which instead expand the adenohypophysis; distinguishing a small germ cell tumor from Langerhans cell histiocytosis can be harder, and in non-secreting tumors skeletal evaluation may give the diagnosis (authors' discussion)."
+        },
+        {
+          "tier": 3,
+          "text": "In pure germinoma, focal-field radiotherapy had higher recurrence than craniospinal, whole-brain or whole-ventricle fields (pooled risk ratios 7.128, 4.094 and 3.361) and is not recommended; whole-ventricle irradiation is considered reasonable for localized disease (meta-analysis of 37 studies)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.stock-2024-gct-ppbs",
+        "src.zhou-2025-germinoma-meta",
+        "src.kremenevski-2023-germinoma"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.langerhans-cell-histiocytosis",
+      "name": "Langerhans cell histiocytosis (skull base, orbit, temporal bone)",
+      "syn": [
+        "LCH",
+        "eosinophilic granuloma"
+      ],
+      "category": "malignant-neoplasm",
+      "involves": [
+        "s.petrous-apex",
+        "s.sphenoid-sinus",
+        "s.optic-canal",
+        "s.orbit",
+        "s.pituitary-gland",
+        "s.pituitary-stalk",
+        "s.hypothalamus"
+      ],
+      "tier": 2,
+      "what": "A clonal histiocytic neoplasm in which Langerhans-type cells infiltrate bone and other organs, with MAPK-ERK pathway mutations in most cases. In the head and neck of children it most often shows as skull and temporal bone lesions; involvement of the orbit, the sphenoid or the sinuses is rarer, and the hypothalamic-pituitary region is the commonest central nervous system site.",
+      "why": "At the table it arrives as a destructive bone lesion that needs a biopsy, and in the ear it masquerades as infection. In a meta-analysis of 885 children with head and neck LCH, skull involvement was found in 48.8% (95% CI 38.1% to 59.8%) and otologic involvement in 36.8%, with otorrhea the commonest presenting symptom (22.8%), so LCH can mimic chronic or refractory ear infection; overall remission was 55.2%, recurrence 20% and mortality attributable to LCH 11.5%. Temporal bone disease was bilateral in one-third of 84 children and in 9 of 20 patients (45%) in a series of all ages in which relapse occurred in half, so both ears need evaluation and long follow-up. Treatment ranges from curettage and intralesional steroid to systemic chemotherapy, and recurrence is more common in multifocal and multisystem disease. In adults most unifocal disease may be cured by local therapy, systemic treatment (cladribine or cytarabine, with BRAF and MEK inhibitors emerging) is for multifocal or multisystem disease, and FDG-PET is recommended for staging. In the sellar region it appears as hypothalamic-pituitary infiltration with central diabetes insipidus (estimated incidence 11.5% to 24%), which can be the first manifestation and puts germ cell tumors in the differential.",
+      "imaging": {
+        "ct": "Temporal bone (84 children, 8 retrospective studies): osteolytic lesions without surrounding sclerosis and punched-out lesions centered in the squamous part; the mastoid, external and middle ear and temporal squama were most often involved, the petrous apex less often; one-third of cases were bilateral. In a single child with a sphenoid sinus soft mass, CT and MRI showed the mass impinging on the right optic canal.",
+        "mri": "MRI was helpful for detecting intracranial lesions of temporal bone disease (84 children, systematic review)."
+      },
+      "mimics": [
+        "dz.intracranial-germinoma"
+      ],
+      "redFlags": [
+        "Persistent otorrhea or a lytic temporal bone lesion in a child who does not settle on treatment for ear infection: consider LCH.",
+        "A soft-tissue mass in the sphenoid sinus with loss of vision: LCH is a reported cause (single pediatric case, biopsy-proven).",
+        "Craniofacial bone lesions are a recognized risk factor for central diabetes insipidus in LCH, which can also be its first manifestation."
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Otologic and craniofacial bone involvement were the commonest presentations in a review of 244 pediatric head and neck cases; otologic disease is rare but looks like otomastoiditis, and relapses can occur years after treatment (29 temporal bones in 20 patients)."
+        },
+        {
+          "tier": 2,
+          "text": "In 84 children with temporal bone histiocytosis, 52 (62%) had single-system disease and most extra-temporal involvement was the pituitary gland with diabetes insipidus; recurrence was 20.2% (17 of 84)."
+        },
+        {
+          "tier": 3,
+          "text": "Focal orbital LCH in young children is diagnostically challenging: two children with temporal-orbital lesions both had subtotal resection; only one received low-dose chemotherapy and corticosteroids afterwards, and the other later recurred with systemic disease (two case reports)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.goyal-2022-lch-adults",
+        "src.zhang-2026-lch-ent-meta",
+        "src.alwan-2026-lch-ent",
+        "src.galluzzi-2025-temporal-bone-histiocytosis",
+        "src.modest-2016-temporal-bone-lch",
+        "src.li-2024-sphenoid-lch",
+        "src.long-2026-orbital-lch",
+        "src.vaiani-2021-lch-hypothalamic"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.optic-pathway-glioma",
+      "name": "Optic pathway glioma",
+      "syn": [
+        "OPG",
+        "optic glioma",
+        "optic pathway/hypothalamic glioma",
+        "OPHG"
+      ],
+      "category": "benign-neoplasm",
+      "involves": [
+        "s.optic-nerve",
+        "s.optic-chiasm",
+        "s.hypothalamus",
+        "s.orbit"
+      ],
+      "tier": 3,
+      "what": "A slow-growing astrocytic tumor of the anterior visual pathway and often the hypothalamus, mostly of children; optic pathway glioma accounts for 3% to 5% of childhood CNS tumors and about 2% of pediatric glial lesions. On MRI, in 72 children (36.1% NF1-positive), NF1-positive tumors more commonly involved both optic nerves and multiple locations, whereas NF1-negative tumors more commonly involved the central chiasm and the hypothalamus.",
+      "why": "It is a tumor of the optic pathway and hypothalamus, which is why it matters for the chiasmatic and suprasellar region; none of the sources read describes an endonasal approach to it. Treatment is chosen by tumor location, age and NF1 status: chemotherapy is generally preferred to radiotherapy, especially under 5 years and in NF1, and mostly stabilizes the tumor, often temporarily (non-systematic review). A pooled analysis found a favorable visual outcome in 74% after chemotherapy, 81% after radiotherapy and 65% after surgery (overall 75%) without a significant difference between modalities, and pooled mortality of 12%. Resection, an essential strategy for symptomatic and large tumors or those with mass effect, is far more complete for intraorbital tumors than for chiasmatic or hypothalamic ones (gross-total 75.8% versus 9.6%); in 797 pediatric patients it carried hydrocephalus (35.4%), anterior pituitary dysfunction (19.6%) and transient diabetes insipidus (29%), visual acuity improved in 24.6% and tumors progressed in 12.8% over a mean 53.5 months.",
+      "imaging": {
+        "mri": "MRI allows a more detailed anatomical description than the original Dodge classification of 1958; a modified Dodge classification applied to 72 children recorded optic nerve, chiasm and hypothalamic involvement and was proposed for clinical trials. NF1-positive tumors more often involved both optic nerves (p = 0.021) and multiple locations (p = 0.001); NF1-negative tumors more often involved the central chiasm (p = 0.005) and hypothalamus (p = 0.003)."
+      },
+      "complications": [
+        "h.diabetes-insipidus",
+        "h.hypopituitarism"
+      ],
+      "redFlags": [
+        "After resection, monitor for hydrocephalus and follow for tumor progression and the need for adjuvant treatment (meta-analysis of resection)."
+      ],
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "BRAF alterations are found in most pilocytic astrocytomas, so MAPK pathway inhibition is a promising treatment for optic gliomas (non-systematic review)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.yousefi-2022-opg-meta",
+        "src.albalkhi-2024-ophg-surgery",
+        "src.taylor-2008-opg-mdc",
+        "src.susam-sen-2026-optic-glioma"
       ],
       "review": "draft"
     }

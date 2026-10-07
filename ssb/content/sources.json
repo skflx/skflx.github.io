@@ -3325,6 +3325,446 @@
       "pmid": "42288418",
       "url": "https://pubmed.ncbi.nlm.nih.gov/42288418/",
       "note": "Abstract only (PubMed record, read 2026-10-07). Case series of 106 nasopalatine duct cysts from biopsy specimens, imaging features described in ten; supports the statement that the cysts are non-aggressive and slow growing and the size distribution. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.depaiva-2025-hmsc-sr",
+      "cite": "de Paiva JPG, Roldán DG, de Oliveira Vasconcelos RA, et al. Clinicopathological Profile of HPV-related Multiphenotypic Sinonasal Carcinoma: A Systematic Review. Head Neck Pathol. 2025;19(1):94.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s12105-025-01830-x",
+      "pmid": "40728682",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40728682/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 101 HPV-related multiphenotypic sinonasal carcinoma cases (32 studies); supports site, age, morphology, p16, HPV 33 prevalence and the favourable-outcome statements. Full text not available through the BioC service, so numbers beyond the abstract are not used. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.depaiva-2026-hmsc-52",
+      "cite": "Gonçalves de Paiva JP, Carrinho Ayroza Rangel AL, Epaminondas Silva de Araújo J, et al. Expanding HPV-Related Multiphenotypic Sinonasal Carcinoma Morphologic and Genotyping Profile: A Clinicopathological Study of 52 Latin American Cases. Am J Surg Pathol. 2026;50(6):629-641.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/PAS.0000000000002526",
+      "pmid": "42124445",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42124445/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 52 Latin American HMSC cases; supports the recurrence fraction, Ki-67, HPV genotype counts and 5-year survival figures quoted from the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.baba-2022-hmsc-radiology",
+      "cite": "Baba A, Kurokawa R, Fukuda T, et al. Radiological features of human papillomavirus-related multiphenotypic sinonasal carcinoma: systematic review and case series. Neuroradiology. 2022;64(10):2049-2058.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s00234-022-03009-5",
+      "pmid": "35833947",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35833947/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review plus institutional case series (12 cases with CT and/or MRI); supports the CT and MRI features, sites and extension quoted. Small denominators (CT n=2, T2 n=5, T1 contrast n=8). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.bishop-2018-hmsc",
+      "cite": "Bishop JA, Westra WH. Human papillomavirus-related multiphenotypic sinonasal carcinoma: An emerging tumor type with a unique microscopic appearance and a paradoxical clinical behaviour. Oral Oncol. 2018;87:17-20.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.oraloncology.2018.10.011",
+      "pmid": "30527234",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30527234/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Narrative review of HPV-related multiphenotypic sinonasal carcinoma; supports the mixed salivary-type and squamous differentiation, the paradoxical behaviour and the distinction from adenoid cystic and squamous cell carcinoma. Carries no numbers. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.agarwal-2023-who-sinonasal-imaging",
+      "cite": "Agarwal A, Bhatt AA, Bathla G, et al. Update from the 5th Edition of the WHO Classification of Nasal, Paranasal, and Skull Base Tumors: Imaging Overview with Histopathologic and Genetic Correlation. AJNR Am J Neuroradiol. 2023;44(10):1116-1125.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3174/ajnr.A7960",
+      "pmid": "37591773",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37591773/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Imaging review of the 5th-edition WHO sinonasal and skull base chapter; supports only that SWI/SNF complex-deficient sinonasal carcinomas and HPV-related multiphenotypic sinonasal carcinoma are the two new entities. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kakkar-2022-smarca4",
+      "cite": "Kakkar A, Ashraf SF, Rathor A, et al. SMARCA4/BRG1-Deficient Sinonasal Carcinoma. Arch Pathol Lab Med. 2022;146(9):1122-1130.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.5858/arpa.2021-0001-OA",
+      "pmid": "34871352",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34871352/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Institutional cohort: 12 SMARCA4-deficient carcinomas among 299 poorly differentiated or undifferentiated sinonasal tumours; supports the frequency, morphology, immunophenotype and aggressive behaviour quoted. Outcome denominator is 7 patients with follow-up. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.agaimy-2023-swi-snf",
+      "cite": "Agaimy A. SWI/SNF-deficient Sinonasal Carcinomas. Adv Anat Pathol. 2023;30(2):95-103.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/PAP.0000000000000372",
+      "pmid": "36580412",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36580412/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of SWI/SNF-deficient sinonasal carcinomas; supports the definition of SMARCA4-deficient undifferentiated carcinoma and the SMARCA4-deficient subset of teratocarcinosarcoma. The approximate 80% figure for teratocarcinosarcoma is the review's statement. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.qiu-2026-swi-snf-17",
+      "cite": "Qiu Z, Surita A, Wang X, Qian Y, Zhu Z, Lv W. SWI/SNF-Deficient Sinonasal Carcinomas: A Retrospective Case Series of 17 Patients from a Single Institution. J Clin Med. 2026;15(8):2939.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3390/jcm15082939",
+      "pmid": "42074742",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42074742/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-institution series of 17 SWI/SNF-deficient sinonasal carcinomas (10 SMARCB1-deficient, 6 SMARCA4-deficient, 1 teratocarcinosarcoma); supports presentation of SMARCA4-deficient carcinoma and the pooled stage and skull base/orbital involvement. Stage and involvement counts are for all 17, not for the SMARCA4 subset. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.farkas-2026-smarca4-hn",
+      "cite": "Farkas M, Agaimy A, Švajdler M, et al. SMARCA4-deficient carcinoma of the head and neck region: report of 8 new sinonasal and non-sinonasal cases and literature review. Virchows Arch. 2026;488(5):1021-1037.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00428-026-04459-5",
+      "pmid": "41803273",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41803273/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Eight head and neck SMARCA4-deficient carcinomas (four sinonasal) with literature review; supports that sinonasal cases can mimic olfactory neuroblastoma, that the sinonasal tract is a hot-spot, and aggressive behaviour at advanced stage. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sciacca-2025-itac-non-itac",
+      "cite": "Sciacca M, Chillari F, Pergolizzi S, et al. ITAC and Non-ITAC Sinonasal Adenocarcinoma: Classification, Etiopathogenesis, Diagnosis and Therapy Focusing on Interdisciplinarity. Medicina (Kaunas). 2025;61(11):1895.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3390/medicina61111895",
+      "pmid": "41303732",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41303732/",
+      "note": "PMC full text (PMC12654441), read 2026-10-07. Review of intestinal-type and non-intestinal-type sinonasal adenocarcinoma; supports the WHO 5th-edition grouping, non-ITAC as a heterogeneous exclusion category, low- versus high-grade behaviour, immunoprofile, imaging statements (including that no distinctive imaging separates ITAC from non-ITAC) and surgical principles. Statements apply to sinonasal adenocarcinoma generally unless stated. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.arcovito-2024-sinonasal-adenocarcinoma",
+      "cite": "Arcovito G, Franchi A. Sinonasal Adenocarcinomas: An Update. Surg Pathol Clin. 2024;17(4):653-666.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.path.2024.07.005",
+      "pmid": "39489555",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39489555/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Update on sinonasal adenocarcinomas; supports that non-ITACs show neither intestinal nor salivary differentiation and are a diagnosis of exclusion without a proper histopathological and molecular definition. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.skalova-2024-smarcb1-adenocarcinoma",
+      "cite": "Skálová A, Taheri T, Bradová M, et al. SMARCB1-deficient sinonasal adenocarcinoma: a rare variant of SWI/SNF-deficient malignancy often misclassified as high-grade non-intestinal-type sinonasal adenocarcinoma or myoepithelial carcinoma. Virchows Arch. 2024;485(2):245-256.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00428-023-03650-2",
+      "pmid": "38085333",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38085333/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 14 SMARCB1-deficient sinonasal adenocarcinomas retrieved from over 200 high-grade epithelial sinonasal malignancies; supports that this entity is often first diagnosed as high-grade non-intestinal-type adenocarcinoma and behaves aggressively (follow-up on 8 patients only). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.turri-zanoni-2022-bsns",
+      "cite": "Turri-Zanoni M, Dalfino G, Lechner M, et al. Biphenotypic sinonasal sarcoma: European multicentre case-series and systematic literature review. Acta Otorhinolaryngol Ital. 2022;42(6):545-553.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.14639/0392-100X-N2087",
+      "pmid": "36654521",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36654521/",
+      "note": "PMC full text (PMC9853106), read 2026-10-07. European multicentre series of 15 biphenotypic sinonasal sarcomas treated endoscopically, with a literature review; supports presentation, surgical extent (including transnasal craniectomy and multilayer reconstruction), margins, adjuvant radiotherapy and survival quoted. Follow-up is short (mean 27.3 months). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.miglani-2019-bss-imaging",
+      "cite": "Miglani A, Lal D, Weindling SM, Wood CP, Hoxworth JM. Imaging characteristics and clinical outcomes of biphenotypic sinonasal sarcoma. Laryngoscope Investig Otolaryngol. 2019;4(5):484-488.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lio2.305",
+      "pmid": "31637290",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31637290/",
+      "note": "PMC full text (PMC6793931), read 2026-10-07. Five surgically treated biphenotypic sinonasal sarcomas with CT and MRI review; supports the imaging pattern (unilateral nasoethmoidal, hyperostosis, T2 isointense to grey matter) and recurrence in 2 of 5. Very small series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.leloarer-2019-bsns-41",
+      "cite": "Le Loarer F, Laffont S, Lesluyes T, et al. Clinicopathologic and Molecular Features of a Series of 41 Biphenotypic Sinonasal Sarcomas Expanding Their Molecular Spectrum. Am J Surg Pathol. 2019;43(6):747-754.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/PAS.0000000000001238",
+      "pmid": "30829729",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30829729/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 41 biphenotypic sinonasal sarcomas with clinicopathologic and molecular description; supports the sex and age distribution, recurrence fraction, immunophenotype and PAX3 fusion findings quoted. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.baric-2022-pcm-meta",
+      "cite": "Barić H, Trkulja V, Peterković V, Mrak G. Mortality and morbidity in surgically treated patients with petroclival meningiomas: a systematic review and meta-analysis of case series. Br J Neurosurg. 2022;36(4):501-10.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1080/02688697.2022.2033700",
+      "pmid": "35109722",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35109722/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Random-effects meta-analysis of 73 case series (3553 patients) of surgically treated petroclival meningiomas; supports pooled mortality, recurrence and cranial nerve deficit figures by approach. The series are predominantly transcranial; it says nothing about the endonasal route. Reporting quality varies. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.wagner-2022-pcm-64",
+      "cite": "Wagner A, Alraun M, Kahlig V, et al. Surgical and Functional Outcome after Resection of 64 Petroclival Meningiomas. Cancers (Basel). 2022;14(18):4517.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3390/cancers14184517",
+      "pmid": "36139677",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36139677/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 64 consecutive resected petroclival meningiomas at one centre; supports cavernous sinus infiltration, brainstem involvement, preoperative cranial nerve palsy, GTR in tumours without cavernous infiltration and the functional-resection principle. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pirayesh-2016-pcm-mri",
+      "cite": "Pirayesh A, Petrakakis I, Raab P, Polemikos M, Krauss JK, Nakamura M. Petroclival meningiomas: Magnetic resonance imaging factors predict tumor resectability and clinical outcome. Clin Neurol Neurosurg. 2016;147:90-7.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.clineuro.2016.06.002",
+      "pmid": "27315034",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27315034/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 18 surgically treated petroclival meningiomas; supports the MRI features (arachnoid plane, margin toward the brainstem, brainstem edema, T2 intensity) that predicted resectability and morbidity. Very small series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.shkarubo-2025-clival-meningioma-eea",
+      "cite": "Shkarubo AN, Chernov IV, Veselkov AA, Andreev DN, Bykanov AA, Panteleyev AA. Endoscopic transnasal resection of clival meningiomas. Analysis of surgical outcomes in 20 patients and literature review. Neurosurg Rev. 2025;48(1):702.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s10143-025-03795-5",
+      "pmid": "41085751",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41085751/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 20 clival and petroclival meningiomas resected by the endoscopic transsphenoidal transclival approach; supports the extent-of-resection counts and the statement that the route is an additional option beside transcranial approaches. Extent categories are the authors'. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ribeiro-2026-csm-natural-history",
+      "cite": "Ribeiro PC, Ramos R, Plácido A, et al. Cavernous sinus meningiomas: A retrospective study of natural history, growth dynamics, and treatment response over two decades. Surg Neurol Int. 2026;17:109.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.25259/SNI_1063_2025",
+      "pmid": "41783193",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41783193/",
+      "note": "PMC full text (PMC12954251), read 2026-10-07. 38 cavernous sinus meningiomas followed at one centre; supports presentation, growth rates, MRI characteristics (T2 signal, enhancement, extension) and the conservative-management finding. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.martinez-perez-2021-csm-srs",
+      "cite": "Martinez-Perez R, Florez-Perdomo W, Freeman L, Ung TH, Youssef AS. Long-term disease control and treatment outcomes of stereotactic radiosurgery in cavernous sinus meningiomas. J Neurooncol. 2021;152(3):439-449.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s11060-021-03732-8",
+      "pmid": "33772678",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33772678/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Pooled long-term SRS outcomes for cavernous sinus meningiomas (7 studies, 645 patients, median follow-up 74 months); supports progression-free survival and cranial nerve outcomes. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.leroy-2018-csm-rs-frt",
+      "cite": "Leroy HA, Tuleasca C, Reyns N, Levivier M. Radiosurgery and fractionated radiotherapy for cavernous sinus meningioma: a systematic review and meta-analysis. Acta Neurochir (Wien). 2018;160(12):2367-2378.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s00701-018-3711-9",
+      "pmid": "30393820",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30393820/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of radiosurgery and fractionated radiotherapy for cavernous sinus meningioma (36 studies, 2817 patients); supports 5-year progression-free survival by modality and the adverse-effect ranges. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zhang-2019-transcavernous-eea",
+      "cite": "Zhang Q, Wang Z, Guo H, et al. Direct Transcavernous Sinus Approach for Endoscopic Endonasal Resection of Intracavernous Sinus Tumors. World Neurosurg. 2019;128:e478-e487.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.wneu.2019.04.182",
+      "pmid": "31048053",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31048053/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 14 intracavernous tumours (8 pituitary adenomas, 3 meningiomas, 2 squamous cell carcinomas, 1 chondrosarcoma) resected by the endoscopic endonasal transcavernous route through the anterior wall; supports only the mixed-series figures. No meningioma-specific result is given in the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.agosti-2023-som-sr",
+      "cite": "Agosti E, Zeppieri M, De Maria L, et al. Surgical Treatment of Spheno-Orbital Meningiomas: A Systematic Review and Meta-Analysis of Surgical Techniques and Outcomes. J Clin Med. 2023;12(18):5840.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3390/jcm12185840",
+      "pmid": "37762781",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37762781/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Also read in PMC full text (PMC10531637), results and discussion. Systematic review and meta-analysis of 59 studies (1903 patients) on surgery for spheno-orbital meningioma; supports pooled GTR, recurrence, PFS, visual and proptosis outcomes, complications and the comparison of approaches. The abstract attributes the 23.5% GTR figure to endoscopic transorbital approaches whereas the full-text table gives 41.3% for ETOA and 23.5% for ETOA combined with EEA; that figure is therefore not used. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.couldwell-2026-som-grading",
+      "cite": "Couldwell WT, Nassiri F, Rawanduzy C, Cole K, Jha AK. Resectability of spheno-orbital meningiomas: surgical outcome in 93 cases and a proposed clinically relevant anatomical classification. J Neurosurg. 2026;144(2):336-345.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3171/2025.7.JNS242730",
+      "pmid": "41172370",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41172370/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 93 surgically treated spheno-orbital meningiomas with a proposed imaging-based orbital grading (1 to 4); supports the grade definitions, presenting features and grade-wise GTR and vision outcomes. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.porto-2025-som-recurrence",
+      "cite": "Porto E, Carone G, Fiore G, et al. Spheno-orbital meningiomas: predictors of recurrence and novel strategies for surgical management. J Neurosurg. 2025;143(2):365-374.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3171/2025.1.JNS241846",
+      "pmid": "40315600",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40315600/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 89 surgically treated spheno-orbital meningiomas at one centre; supports the sex ratio, recurrence rate and the finding that residual soft (not bony) tumour portion drives recurrence. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.porto-2025-ts-meta",
+      "cite": "Porto E, Fiore G, Casali C, et al. Evolution of Surgical Approaches for Trigeminal Schwannomas: A Meta-Regression Analysis from Past to Present. J Clin Med. 2025;14(13):4488.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3390/jcm14134488",
+      "pmid": "40648863",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40648863/",
+      "note": "PMC full text (PMC12249520), read 2026-10-07. Systematic review and meta-regression of surgical approaches to trigeminal schwannoma (15 studies, 583 surgeries); supports the Samii classification, its distribution, approach choice by type, pooled GTR, symptom improvement and complication rates. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pan-2025-ts-eea-tca",
+      "cite": "Pan LS, Xing SZ, Li SF, et al. Endoscopic endonasal versus transcranial approaches for trigeminal schwannomas: choosing the optimal surgical corridor based on tumour traits. Rhinology. 2025;63(6):725-735.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4193/Rhin25.245",
+      "pmid": "40853360",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40853360/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 101 trigeminal schwannomas (44 endoscopic endonasal, 57 transcranial) at one centre, stratified by Samii type; supports the comparative outcomes by type. Retrospective, non-randomised. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.yilmaz-2025-extracranial-ts-eea",
+      "cite": "Yilmaz E, Emengen A, Uzuner A, et al. Purely endoscopic endonasal resection of extracranial trigeminal schwannomas: a descriptive systematic review and institutional case series. J Clin Neurosci. 2025;141:111573.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.jocn.2025.111573",
+      "pmid": "40840179",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40840179/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Descriptive systematic review of purely endoscopic endonasal resection of extracranial trigeminal schwannoma (52 patients including 2 institutional cases); supports presentation, size, GTR and the caveat for middle or posterior fossa extension. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.stock-2024-gct-ppbs",
+      "cite": "Stock A, Calaminus G, Weisthoff M, et al. Imaging in malignant germ cell tumors involving the hypothalamo-neurohypophyseal axis: the evaluation of the posterior pituitary bright spot is essential. Neuroradiology. 2024;66(8):1405-1416.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00234-024-03384-1",
+      "pmid": "38844695",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38844695/",
+      "note": "PMC full text (PMC11246258), read 2026-10-07. Multicentre MRI study of 102 suprasellar and bifocal malignant germ cell tumours (67 suprasellar; 47 of them germinomas); supports MRI findings (posterior pituitary bright spot loss, stalk and posterior lobe involvement, clival cortical destruction), presentation, delay to treatment and the differential statements in its discussion. Population is mostly children and young adults. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zhou-2025-germinoma-meta",
+      "cite": "Zhou Z, Liu J, Yue Q, et al. Optimal treatment approach for intracranial germinoma: a systematic review and meta-analysis. BMC Cancer. 2025;25(1):26.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1186/s12885-024-13323-1",
+      "pmid": "39773126",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39773126/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of treatment of intracranial germinoma (37 studies); supports that treatment is biopsy or resection followed by radiotherapy with or without chemotherapy, similar prognosis across extents of resection, and the radiotherapy-field findings. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kremenevski-2023-germinoma",
+      "cite": "Kremenevski N, Buchfelder M, Hore N. Intracranial Germinomas: Diagnosis, Pathogenesis, Clinical Presentation, and Management. Curr Oncol Rep. 2023;25(7):765-775.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1007/s11912-023-01416-2",
+      "pmid": "37036624",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37036624/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of intracranial germinoma; supports only that germinomas respond well to radiotherapy, chemotherapy or both with very high cure rates, and that early discrimination from other neoplasms matters. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.galluzzi-2025-temporal-bone-histiocytosis",
+      "cite": "Galluzzi F, Garavello W. Temporal bone histiocytosis in children: a systematic review. Int J Pediatr Otorhinolaryngol. 2025;195:112436.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2025.112436",
+      "pmid": "40561874",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40561874/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of temporal bone histiocytosis in children (8 retrospective studies, 84 subjects); supports the CT pattern, subsites, bilaterality, pituitary involvement and recurrence rate. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zhang-2026-lch-ent-meta",
+      "cite": "Zhang K, Dweydari M, Alshaikh A, et al. Common Otolaryngologic Clinical Manifestations and Symptoms of Langerhans Cell Histiocytosis and Evaluation of Treatment Regimens in Pediatric Patients: A Systematic Review and Meta-Analysis. Int J Pediatr Otorhinolaryngol. 2026;206:112875.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1016/j.ijporl.2026.112875",
+      "pmid": "42214999",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42214999/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of otolaryngologic manifestations of paediatric LCH (20 studies, 885 patients); supports the frequency of skull and otologic involvement, otorrhea, remission, recurrence and mortality figures. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.alwan-2026-lch-ent",
+      "cite": "Alwan M, Nguyen HM, Levi E. Otolaryngological manifestations of paediatric Langerhans cell histiocytosis: a systematic literature review and statewide case series. J Laryngol Otol. 2026;140(5):485-494.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/S0022215126104514",
+      "pmid": "41736288",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41736288/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Literature review of 73 studies (244 paediatric patients) plus a 25-patient institutional series on head and neck LCH; supports only that otologic and craniofacial bone involvement were the most common presentations and that recurrence was more common in multifocal and multisystem disease. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.goyal-2022-lch-adults",
+      "cite": "Goyal G, Tazi A, Go RS, et al. International expert consensus recommendations for the diagnosis and treatment of Langerhans cell histiocytosis in adults. Blood. 2022;139(17):2601-2621.",
+      "type": "consensus",
+      "verified": false,
+      "doi": "10.1182/blood.2021014343",
+      "pmid": "35271698",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35271698/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). International expert consensus for adult LCH; supports the neoplasm classification, local therapy for unifocal disease, FDG-PET staging and systemic options. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.modest-2016-temporal-bone-lch",
+      "cite": "Modest MC, Garcia JJ, Arndt CS, Carlson ML. Langerhans cell histiocytosis of the temporal bone: A review of 29 cases at a single center. Laryngoscope. 2016;126(8):1899-904.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/lary.25773",
+      "pmid": "26535795",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26535795/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 29 temporal bones in 20 patients with LCH at one centre; supports presentation, bilaterality, intracranial spread and relapse rates. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.li-2024-sphenoid-lch",
+      "cite": "Li MS, Wu XL, Huang A, Wang H. Langerhans cell histiocytosis in sphenoid sinus with vision impairment: Case report and literature review. Sci Prog. 2024;107(3):368504241257129.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1177/00368504241257129",
+      "pmid": "39196602",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39196602/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single case report (child) of sphenoid sinus LCH impinging the optic canal with literature review; supports only that LCH can present as an isolated sphenoid sinus soft mass with vision loss. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.vaiani-2021-lch-hypothalamic",
+      "cite": "Vaiani E, Felizzia G, Lubieniecki F, Braier J, Belgorosky A. Paediatric Langerhans Cell Histiocytosis Disease: Long-Term Sequelae in the Hypothalamic Endocrine System. Horm Res Paediatr. 2021;94(1-2):9-17.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1159/000517040",
+      "pmid": "34167121",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34167121/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of hypothalamic-pituitary sequelae of paediatric LCH; supports the incidence range of central diabetes insipidus, its risk factors (including craniofacial bone lesions) and the germ cell tumour differential. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.long-2026-orbital-lch",
+      "cite": "Long P, Liu Y, Zhao Y, et al. Orbital Langerhans Cell Histiocytosis in Young Pediatric Patients: Two Case Reports and Literature Review. Pediatric Health Med Ther. 2026;17:565487.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.2147/PHMT.S565487",
+      "pmid": "41873372",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41873372/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two case reports (young children) of orbital LCH with literature review; supports only that focal orbital LCH is diagnostically challenging and was treated by subtotal resection with or without chemotherapy in two patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.yousefi-2022-opg-meta",
+      "cite": "Yousefi O, Azami P, Sabahi M, Dabecco R, Adada B, Borghei-Razavi H. Management of Optic Pathway Glioma: A Systematic Review and Meta-Analysis. Cancers (Basel). 2022;14(19):4781.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.3390/cancers14194781",
+      "pmid": "36230704",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36230704/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of optic pathway glioma management; supports incidence share, pooled mortality and favourable-outcome rates by modality (no significant difference between modalities). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.albalkhi-2024-ophg-surgery",
+      "cite": "Albalkhi I, Shafqat A, Bin-Alamer O, et al. Complications and visual outcomes following surgical resection of pediatric optic pathway/hypothalamic gliomas: a systematic review and meta-analysis. Childs Nerv Syst. 2024;40(7):2033-2042.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1007/s00381-024-06407-7",
+      "pmid": "38649470",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38649470/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review and meta-analysis of surgery for paediatric optic pathway and hypothalamic glioma (26 retrospective studies, 797 patients); supports GTR by location, visual outcomes, complications and progression. Heterogeneous retrospective data. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.taylor-2008-opg-mdc",
+      "cite": "Taylor T, Jaspan T, Milano G, et al. Radiological classification of optic pathway gliomas: experience of a modified functional classification system. Br J Radiol. 2008;81(970):761-6.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1259/bjr/65246351",
+      "pmid": "18796556",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18796556/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 72 children with optic pathway glioma from a clinical trial, classified on MRI by a modified Dodge classification; supports the site distribution by NF1 status. The classification's levels are not in the abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.susam-sen-2026-optic-glioma",
+      "cite": "Susam Sen H, Varan A. Optic glioma in children: clinical presentation, diagnosis, and management. Expert Rev Anticancer Ther. 2026;26(10):1257-1267.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1080/14737140.2026.2672128",
+      "pmid": "42101910",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42101910/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Non-systematic review of optic glioma in children; supports only the general statements on tumour nature, treatment choice by location, age and NF1 status, and chemotherapy preference. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
     }
   ]
 }
