@@ -2343,6 +2343,8 @@ async function scopeTests(browser, base) {
     };
     const slide = (page, key, value) => page.evaluate(([k, v]) => { const r = document.getElementById(`ssb-scope-${k}`); r.value = String(v); r.dispatchEvent(new Event('input', { bubbles: true })); }, [key, value]);
     let o = await open('#scope=L,30,10,0,0,30');
+    /* the store writes a scope-sourced hash 250 ms after the last change (main.js): wait for it to settle */
+    await o.page.waitForFunction(() => location.hash === '#scope=L,17,10,0,0,30', null, { timeout: 5000 }).catch(() => {});
     const clamped = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash, hud: window.__ssb.scope.hud }));
     check('scope: a pasted pose through bone is clamped to the last free depth, in the pose and in the URL (L,30,10,0,0,30 -> depth 17)',
       clamped.pose.depth === 17 && clamped.pose.yaw === 10 && clamped.hash === '#scope=L,17,10,0,0,30' && clamped.hud.limited === true, JSON.stringify(clamped));
