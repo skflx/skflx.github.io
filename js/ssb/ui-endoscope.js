@@ -110,7 +110,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     }
 
     const tipOut = el('p', 'ssb-param-src ssb-scope-tip');
-    const fulcrumNote = el('p', 'ssb-param-src', 'The pivot is the vestibule centroid (lm.naris) measured on the unmasked CT; the face stays masked until the nose is modelled. Bone stops the shaft; mucosa does not.');
+    const fulcrumNote = el('p', 'ssb-param-src', 'The pivot is the vestibule centroid (lm.naris) measured on the unmasked CT, inside the specimen\'s own nose (the rest of the face stays masked). Bone stops the shaft; mucosa does not.');
     const keys = el('p', 'ssb-param-src', 'Canvas focused: drag or arrow keys look around, wheel or + / − insert and withdraw, Q / E roll, L changes the lens, Shift for larger steps.');
     const status = el('p', 'ssb-param-src ssb-scope-status');
     const hudSec = section('Proximity');

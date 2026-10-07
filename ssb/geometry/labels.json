@@ -65,6 +65,8 @@
     "62": "s.middle-turbinate.L",
     "63": "s.orbit.R",
     "64": "s.orbit.L",
-    "65": "s.ethmoid-bulla.L"
+    "65": "s.ethmoid-bulla.L",
+    "66": "s.nasal-vestibule.R",
+    "67": "s.nasal-vestibule.L"
   }
 }

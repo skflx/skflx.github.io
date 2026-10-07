@@ -86,6 +86,16 @@ flagged `unreliable`). Its `soft` pack is listed in `packs.json` (`s.septal-muco
 `specimen.py` rewrites `landmarks.json`, so rerun stage D after it. Then `sweeps_soft.py` runs from `softtissue.py`: it turns the waypoints in `uw/sweeps-soft.json`
 (format in its docstring; empty until the soft-tissue vessels are specified) into sweeps on those charts and merges them into `sweeps.json`.
 
+Reconstruction, stage E (the external nose, ST6; needs the raw crawl, because the face mask removed the nose):
+
+    .venv/bin/python tools/ssb-pipeline/uw/nose.py unmask   # prints the region (grooves per level, voxels); writes incoming/_recon/nose-patch.npz
+    .venv/bin/python tools/ssb-pipeline/uw/normalize.py all # patches and centres the nose, measures the valve, labels the vestibule, then nose.py pack
+    .venv/bin/python tools/ssb-pipeline/uw/nose.py pack     # the `nose` pack from the committed volume and incoming/_recon/nose-region.npz (written by normalize.py)
+
+`normalize.py all` needs `fetch.py` to have run (the raw stack) and takes about four minutes. The region, the centring offset, the valve
+plane and the vestibule are described in `nose.py`'s docstring and printed as the `ST6 1..5, 7` lines. `nose.py` with no argument is E1b's
+nostril landmark (`--write` stores it).
+
 `relate.py` needs only the committed `slices.json`, so the graph's spatial
 claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps

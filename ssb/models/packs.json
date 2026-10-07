@@ -6,14 +6,15 @@
  "nodeNames": "<graph id>.<side>; node extras {id, side, name} (three.js strips dots from object names, so read userData.id / userData.side)",
  "notes": {
   "walls": "stage C resection units (tools/ssb-pipeline/uw/walls.py): each is the bone two named compartments share; several are proxies or orientation splits - the method per unit is in tools/ssb-pipeline/uw/registration.json \"walls.notes\". s.orbit is the orbital soft tissue (globe, fat, muscles) the walls face, not bone.",
-  "lining": "the open airway lining (tools/ssb-pipeline/uw/lining.py): one surface over the union of every air-space label, split into nodes by the air label each triangle faces. Node names repeat the air packs' because it is the same lining with the openings open; the viewer draws it instead of the per-compartment shells when the mucosa layer is seen from within (the outside view, the CT overlay and picking by id are unchanged)."
+  "lining": "the open airway lining (tools/ssb-pipeline/uw/lining.py): one surface over the union of every air-space label, split into nodes by the air label each triangle faces. Node names repeat the air packs' because it is the same lining with the openings open; the viewer draws it instead of the per-compartment shells when the mucosa layer is seen from within (the outside view, the CT overlay and picking by id are unchanged).",
+  "nose": "the external nose (tools/ssb-pipeline/uw/nose.py, ST6): the skin of the specimen's own nose, unmasked from the UW axial stack between the alar-facial grooves, one open surface (s.external-nose.M, extras.kind \"skin\"); the vestibule is s.nasal-vestibule in the core pack, also drawn as skin"
  },
  "packs": {
   "core": {
    "file": "core.glb.gz",
-   "bytes": 1377172,
-   "bytes_uncompressed": 1873052,
-   "triangles": 155998,
+   "bytes": 1430608,
+   "bytes_uncompressed": 1946920,
+   "triangles": 162000,
    "nodes": {
     "s.maxillary-sinus.L": {
      "triangles": 8000,
@@ -28,8 +29,16 @@
      "vertices": 5982
     },
     "s.nasal-cavity.R": {
-     "triangles": 11998,
-     "vertices": 5983
+     "triangles": 12000,
+     "vertices": 5984
+    },
+    "s.nasal-vestibule.L": {
+     "triangles": 3000,
+     "vertices": 1502
+    },
+    "s.nasal-vestibule.R": {
+     "triangles": 3000,
+     "vertices": 1502
     },
     "s.nasopharynx.M": {
      "triangles": 6000,
@@ -115,33 +124,33 @@
   },
   "walls": {
    "file": "walls.glb.gz",
-   "bytes": 978681,
-   "bytes_uncompressed": 1339832,
-   "triangles": 108216,
+   "bytes": 978598,
+   "bytes_uncompressed": 1339584,
+   "triangles": 108210,
    "nodes": {
     "s.basal-lamella.L": {
      "triangles": 2000,
-     "vertices": 1004
+     "vertices": 1000
     },
     "s.basal-lamella.R": {
      "triangles": 2000,
-     "vertices": 1004
+     "vertices": 1000
     },
     "s.clivus.M": {
      "triangles": 2000,
      "vertices": 1018
     },
     "s.cribriform-plate.L": {
-     "triangles": 1432,
-     "vertices": 718
+     "triangles": 1428,
+     "vertices": 716
     },
     "s.cribriform-plate.R": {
-     "triangles": 1828,
-     "vertices": 914
+     "triangles": 1824,
+     "vertices": 912
     },
     "s.fovea-ethmoidalis.L": {
-     "triangles": 2000,
-     "vertices": 1002
+     "triangles": 1998,
+     "vertices": 1001
     },
     "s.fovea-ethmoidalis.R": {
      "triangles": 2000,
@@ -152,8 +161,8 @@
      "vertices": 1004
     },
     "s.frontal-sinus-anterior-table.L": {
-     "triangles": 2500,
-     "vertices": 1252
+     "triangles": 2498,
+     "vertices": 1251
     },
     "s.frontal-sinus-anterior-table.R": {
      "triangles": 2500,
@@ -168,12 +177,12 @@
      "vertices": 1001
     },
     "s.frontal-sinus-posterior-table.L": {
-     "triangles": 2500,
-     "vertices": 1248
+     "triangles": 2498,
+     "vertices": 1247
     },
     "s.frontal-sinus-posterior-table.R": {
-     "triangles": 2500,
-     "vertices": 1248
+     "triangles": 2498,
+     "vertices": 1247
     },
     "s.inferior-turbinate.L": {
      "triangles": 4000,
@@ -212,12 +221,12 @@
      "vertices": 1502
     },
     "s.maxillary-medial-wall.L": {
-     "triangles": 1998,
-     "vertices": 998
+     "triangles": 2000,
+     "vertices": 1000
     },
     "s.maxillary-medial-wall.R": {
-     "triangles": 1998,
-     "vertices": 999
+     "triangles": 2000,
+     "vertices": 1000
     },
     "s.maxillary-posterior-wall.L": {
      "triangles": 1998,
@@ -236,24 +245,24 @@
      "vertices": 997
     },
     "s.middle-turbinate.L": {
-     "triangles": 3498,
-     "vertices": 1743
+     "triangles": 3500,
+     "vertices": 1744
     },
     "s.middle-turbinate.R": {
-     "triangles": 3498,
-     "vertices": 1743
+     "triangles": 3500,
+     "vertices": 1744
     },
     "s.nasal-floor.L": {
-     "triangles": 1998,
-     "vertices": 998
-    },
-    "s.nasal-floor.R": {
-     "triangles": 1998,
+     "triangles": 2000,
      "vertices": 999
     },
+    "s.nasal-floor.R": {
+     "triangles": 2000,
+     "vertices": 1000
+    },
     "s.nasal-septum.M": {
-     "triangles": 6000,
-     "vertices": 2966
+     "triangles": 5998,
+     "vertices": 2961
     },
     "s.orbit.L": {
      "triangles": 2998,
@@ -280,20 +289,20 @@
      "vertices": 1007
     },
     "s.sphenoid-face.L": {
-     "triangles": 1998,
-     "vertices": 991
+     "triangles": 2000,
+     "vertices": 990
     },
     "s.sphenoid-face.R": {
-     "triangles": 1998,
-     "vertices": 991
+     "triangles": 2000,
+     "vertices": 990
     },
     "s.sphenoid-floor.L": {
-     "triangles": 2000,
-     "vertices": 1008
+     "triangles": 1998,
+     "vertices": 1007
     },
     "s.sphenoid-floor.R": {
-     "triangles": 2000,
-     "vertices": 1008
+     "triangles": 1998,
+     "vertices": 1007
     },
     "s.sphenoid-lateral-wall.L": {
      "triangles": 2000,
@@ -307,34 +316,34 @@
   },
   "soft": {
    "file": "soft.glb.gz",
-   "bytes": 160088,
-   "bytes_uncompressed": 229164,
-   "triangles": 18202,
+   "bytes": 161603,
+   "bytes_uncompressed": 231700,
+   "triangles": 18432,
    "nodes": {
     "s.nasal-floor-mucosa.L": {
-     "triangles": 4101,
-     "vertices": 2218
+     "triangles": 4217,
+     "vertices": 2277
     },
     "s.nasal-floor-mucosa.R": {
-     "triangles": 4101,
-     "vertices": 2218
+     "triangles": 4217,
+     "vertices": 2277
     },
     "s.septal-mucosa.L": {
-     "triangles": 5000,
-     "vertices": 2624
+     "triangles": 4999,
+     "vertices": 2610
     },
     "s.septal-mucosa.R": {
-     "triangles": 5000,
-     "vertices": 2617
+     "triangles": 4999,
+     "vertices": 2609
     }
    }
   },
   "lining": {
    "file": "lining.glb.gz",
    "lining": true,
-   "bytes": 468859,
-   "bytes_uncompressed": 634596,
-   "triangles": 50000,
+   "bytes": 470347,
+   "bytes_uncompressed": 637628,
+   "triangles": 49998,
    "nodes": {
     "s.agger-nasi-cell.L": {
      "triangles": 553,
@@ -373,24 +382,24 @@
      "vertices": 607
     },
     "s.maxillary-sinus.L": {
-     "triangles": 4009,
-     "vertices": 2025
+     "triangles": 3765,
+     "vertices": 1903
     },
     "s.maxillary-sinus.R": {
-     "triangles": 4020,
-     "vertices": 2027
+     "triangles": 3796,
+     "vertices": 1915
     },
     "s.nasal-cavity.L": {
-     "triangles": 9575,
-     "vertices": 5011
+     "triangles": 8610,
+     "vertices": 4554
     },
     "s.nasal-cavity.R": {
-     "triangles": 9494,
-     "vertices": 4975
+     "triangles": 8533,
+     "vertices": 4520
     },
     "s.nasopharynx.M": {
-     "triangles": 3797,
-     "vertices": 1992
+     "triangles": 3518,
+     "vertices": 1845
     },
     "s.posterior-ethmoid-cells.L": {
      "triangles": 2896,
@@ -401,23 +410,43 @@
      "vertices": 1559
     },
     "s.sphenoid-sinus.L": {
-     "triangles": 2233,
-     "vertices": 1148
+     "triangles": 2181,
+     "vertices": 1122
     },
     "s.sphenoid-sinus.R": {
-     "triangles": 2216,
-     "vertices": 1143
+     "triangles": 2190,
+     "vertices": 1130
     },
     "s.ethmoid-bulla.L": {
      "triangles": 801,
      "vertices": 500
+    },
+    "s.nasal-vestibule.R": {
+     "triangles": 1356,
+     "vertices": 708
+    },
+    "s.nasal-vestibule.L": {
+     "triangles": 1393,
+     "vertices": 729
+    }
+   }
+  },
+  "nose": {
+   "file": "nose.glb.gz",
+   "bytes": 73497,
+   "bytes_uncompressed": 100016,
+   "triangles": 7998,
+   "nodes": {
+    "s.external-nose.M": {
+     "triangles": 7998,
+     "vertices": 4237
     }
    }
   }
  },
  "totals": {
-  "bytes": 3417387,
-  "triangles": 381016
+  "bytes": 3547240,
+  "triangles": 395238
  },
  "license": "ssb/LICENSE-data.md"
 }

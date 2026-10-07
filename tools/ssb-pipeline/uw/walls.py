@@ -346,9 +346,13 @@ def septum_turbinates(g, ct, lab, table, res, walls_lab):
     from skimage.morphology import convex_hull_image
     byname = {v: int(k) for k, v in table.items()}
     nR = lab == byname['s.nasal-cavity.R']; nL = lab == byname['s.nasal-cavity.L']
+    # ST6: a side's airway for the septum is its cavity and its vestibule (the vestibule is not a sinus: the septum
+    # runs on between the two vestibules); the turbinate hulls below stay the cavity's
+    vR = lab == byname['s.nasal-vestibule.R'] if 's.nasal-vestibule.R' in byname else np.zeros(g.shape, bool)
+    vL = lab == byname['s.nasal-vestibule.L'] if 's.nasal-vestibule.L' in byname else np.zeros(g.shape, bool)
     tissue = (lab == 0) & (ct >= AIR) & (walls_lab == 0)
-    dR = ndi.distance_transform_edt(~nR, sampling=g.step); dL = ndi.distance_transform_edt(~nL, sampling=g.step)
-    other = (lab > 0) & ~nR & ~nL
+    dR = ndi.distance_transform_edt(~(nR | vR), sampling=g.step); dL = ndi.distance_transform_edt(~(nL | vL), sampling=g.step)
+    other = (lab > 0) & ~nR & ~nL & ~vR & ~vL
     dO = ndi.distance_transform_edt(~other, sampling=g.step)
     # septum: tissue between the two airways (their distance gradients point opposite ways), nearer
     # to both airways than to any sinus, within 10 mm in total (bone, cartilage and mucosa)
@@ -546,7 +550,7 @@ def overlays(g, ct, labels, table, png_dir):
 
 
 AIR_IDS = ('s.agger-nasi-cell', 's.anterior-ethmoid-cells', 's.ethmoid-bulla', 's.frontal-recess', 's.frontal-sinus',
-           's.maxillary-sinus', 's.nasal-cavity', 's.nasopharynx', 's.posterior-ethmoid-cells', 's.sphenoid-sinus')
+           's.maxillary-sinus', 's.nasal-cavity', 's.nasal-vestibule', 's.nasopharynx', 's.posterior-ethmoid-cells', 's.sphenoid-sinus')
 
 if __name__ == '__main__':
     main()

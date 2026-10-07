@@ -20,7 +20,11 @@
      its graph entity's `kind` through kindForGraph: air spaces and cells are
      plain tinted (cells by their categorical CELL_TINT hue), the bony
      envelope is bone, anything else draws as its own tissue. `group` says
-     which layer owns it: bone | air | tissue | lining.
+     which layer owns it: bone | air | tissue | nose | lining. A node's extras
+     `kind` (ST6: "skin") names the material it is drawn as when its graph
+     entity has none: the external nose is a region with a skin of its own
+     (group nose), and an air space it lines (the vestibule) is lined with it
+     (`liningKind`) where the others are lined with mucosa.
    - The lining pack (packs.json "lining": true, ST1b) is the airway lining
      with its openings open, one surface over the union of every air space.
      Its nodes repeat the air packs' "<id>.<side>" names (it is the same
@@ -41,8 +45,8 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=56dac3f6';
-import { kindForGraph, CELL_TINT } from './materials.js?v=d27e5b3d';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=020824b5';
+import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=b121b3b4';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
 export const LINING_PREFIX = 'lining:';
@@ -52,6 +56,8 @@ export const CT_HEADER_FILE = 'ssb/ct/ct.json';
 /* The bony envelope of the region: its graph entity is a `region`, which has
    no material of its own, and it is the one region that is solid bone. */
 export const ENVELOPE_ID = 's.skull-base-region';
+/* The external nose: a region whose surface the specimen has (ST6), drawn as skin by its own layer. */
+export const NOSE_ID = 's.external-nose';
 
 const PACK_NAME = /^[a-z0-9][a-z0-9-]{0,39}$/;
 const PACK_FILE = /^[A-Za-z0-9._-]+\.glb\.gz$/;
@@ -81,10 +87,12 @@ const own = (o, k) => o !== null && typeof o === 'object' && Object.prototype.ha
    nasopharynx, which the graph calls regions) is see-through; a cell is an
    opaque block in its categorical hue; the envelope and every other bone is
    bone; any other tissue is drawn as itself. */
-export function lookFor(id, entity) {
+export function lookFor(id, entity, extraKind = '') {
     if (id === ENVELOPE_ID) return { look: { kind: 'bone' }, group: 'bone' };
+    const lined = isKind(extraKind) && extraKind !== 'space' ? extraKind : '';
+    if (id === NOSE_ID) return { look: { kind: lined || 'skin', doubleSide: true }, group: 'nose' };
     const kind = entity ? kindForGraph(entity.kind) : null;
-    if (kind === null || kind === 'space') return { look: { kind: 'space', space: true }, group: 'air' };
+    if (kind === null || kind === 'space') return { look: { kind: 'space', space: true }, group: 'air', ...(lined ? { liningKind: lined } : {}) };
     if (kind === 'air-cell') return { look: { kind, tint: own(CELL_TINT, id) ? CELL_TINT[id] : 'cell-ethmoid' }, group: 'air' };
     if (kind === 'bone' || kind === 'bone-cut') return { look: { kind: 'bone' }, group: 'bone' };
     return { look: { kind }, group: 'tissue' };
@@ -192,12 +200,13 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 continue;
             }
             const entity = graph.get(id);
-            const { look, group } = pack.lining ? { look: { kind: 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity);
+            const extraKind = typeof u.kind === 'string' ? u.kind : '';
+            const { look, group, liningKind = '' } = pack.lining ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
             mesh.parent.remove(mesh);
             mesh.name = key;
             mesh.material.dispose();
             mesh.material = new THREE.MeshBasicMaterial();      /* replaced by mode-specimen per state */
-            mesh.userData = { id, side, key, pack: pack.name, look, group, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: !!pack.lining };
+            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: !!pack.lining };
             root.add(mesh);
             nodes.set(key, mesh);
             triangles += tris;
