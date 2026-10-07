@@ -6,7 +6,7 @@ export const STAMPS = {
     "ssb/content/nasal-maxillary-ppf.json": "baccc95e",
     "ssb/content/pathology-inflammatory.json": "eee42381",
     "ssb/content/pathology-neoplastic.json": "781d9627",
-    "ssb/content/sources.json": "5eb93c82",
+    "ssb/content/sources.json": "34e246e6",
     "ssb/content/sphenoid-sellar-clival.json": "884e4f54",
     "ssb/geometry/charts.json": "9ea8d945",
     "ssb/geometry/labels.json": "dc630b88",

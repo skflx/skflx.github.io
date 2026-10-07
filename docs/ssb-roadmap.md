@@ -28,6 +28,8 @@ history keeps the specs).
 
 **CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
 
+**Realistic anatomy (Opus, 2026-10-07):** plan in `docs/realistic-anatomy.md` (four anatomy states, resegmentation, UW-page and Radiopaedia exemplars); its WPs join this board once the owner answers its §13.
+
 **E5 + ST1c (Opus, 2026-10-07):** ST1c reviewed (pass: the lining pack is deferred until the first look from within; `test-ssb` 589/589). E5 done: 7 of 40 stations posed on the specimen (13 sided poses), 27 `uncovered` with the reason, 6 overviews; both earlier pinned poses had the tip in tissue (§5 E5). E6 is rewritten around the file's `target` field, and **C1** is specced as six batches. **Next:** lane B ST6 → ST4d → ST5; lane C E6 (parallel with ST6: only `test-ssb.mjs` is shared); content lane C1a…C1f.
 
 **CP-2c (Opus, 2026-10-07):** E3b, ST2c and ST1b reviewed (§4, "CP-2c"): all three pass and are merged with CP-2b. CI on CP-2b was red from a test race (the lazily loaded collision volume and the store's 250 ms hash write), fixed in the tests. **Next:** lane B runs ST6 (the external nose), then ST4d, then ST5; Opus does E5 (station poses) — E3b and ST1b are in; follow-up WP **ST1c** (load the lining pack lazily) is small and runs first in lane B, before ST6 (same file, `mode-specimen.js`).
@@ -52,7 +54,7 @@ Actions (no model can do these):
 
 - Review the two dioramas' schematic proportions and tier-1 graph content;
   flip `review` to `verified` where right.
-- Record the UW authors' written permission beside `ssb/LICENSE-data.md`.
+- ~~Record the UW authors' written permission beside `ssb/LICENSE-data.md`~~ — done 2026-10-07 (email; terms recorded there, the email itself stays with the owner).
 - Look at the specimen's AEA–PEA spacing (21 mm vs population 12; inferred
   PEA).
 - ~~Read Table 31.2 in print~~ — done 2026-10-03 (owner's photos; see §4).

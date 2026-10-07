@@ -172,6 +172,13 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `standard`, and a note in the Specimen and CT controls). Landmarks that
   exist on one side only stay as scanned (listed in the roadmap, N1). The
   as-scanned head is the pipeline's input and becomes a variant later.
+- **Realistic anatomy (planned, not built):** `docs/realistic-anatomy.md`
+  plans four anatomy states (symmetric, normal asymmetry, variants,
+  pathology) over the specimen, a resegmentation of the UW head, an
+  inventory of the UW teaching pages' figures, and curated Radiopaedia
+  exemplars; awaiting the owner's decisions (its §13). The UW authors'
+  written permission arrived 2026-10-07 (`ssb/LICENSE-data.md`); the repo
+  credits the atlas and its institution, never the authors by name.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
   sagittal stacks are one CT (the coronal is another head,

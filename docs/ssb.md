@@ -83,8 +83,9 @@ Region ownership and the full inventory live in the graph
 External labeled imaging the graph is checked against, recorded under
 `ssb/reference/` with provenance:
 
-- **UW Interactive CT Sinus Anatomy** (LoGerfo, Richardson, Dalley, Anzai;
-  `ssb/reference/uw-sinusanatomy2/`) — labeled axial/coronal/sagittal stacks
+- **UW Interactive CT Sinus Anatomy** (University of Washington Department
+  of Radiology; `ssb/reference/uw-sinusanatomy2/`; credit the atlas and the
+  institution, never its individual authors by name) — labeled axial/coronal/sagittal stacks
   of a normal sinus CT, with every slice published as an unlabeled/labeled
   pair, plus normal-variant and inflammatory-disease pages. Its label
   vocabulary is crosswalked to graph ids (`crosswalk.json`), which fed
@@ -92,9 +93,10 @@ External labeled imaging the graph is checked against, recorded under
   extracted to label positions (`slices.json`), from which within-slice
   spatial relations test the graph's `rel` claims (`relations.json`,
   `tools/ssb-pipeline/uw/relate.py`) — a relational check available before
-  our own specimen exists, with the limits its README states. The owner reports the authors'
-  permission (2026-09); until its scope is confirmed in writing, no UW image
-  is copied into this repo. The unlabeled/labeled pairs are a ready-made
+  our own specimen exists, with the limits its README states. The authors' written
+  permission arrived 2026-10-07 (terms in `ssb/LICENSE-data.md`); until the
+  owner reads it as covering republication of the images themselves
+  (`docs/realistic-anatomy.md` §13), no UW image is copied into this repo. The unlabeled/labeled pairs are a ready-made
   CT recall deck (see the unlabeled slice, name the structures, reveal); using
   them in SSB needs that scope to cover republishing, because the site is
   HTTP-only and an HTTPS page cannot load its images (mixed content), so
@@ -972,8 +974,8 @@ Decided (owner, 2026-09-30):
   and nerves are sweeps placed at labeled points; thin lamellae get schematic
   touch-up.
 - **UW permission covers publishing 3D geometry and volumes derived from
-  its images** (owner-confirmed; record the authors' written permission with
-  the reference when available).
+  its images** (owner-confirmed; the authors' written permission arrived
+  2026-10-07, recorded in `ssb/LICENSE-data.md`).
 
 O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists what each unblocks:
 

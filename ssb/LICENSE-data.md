@@ -7,8 +7,9 @@ derived file. A replacement specimen gets its own section here.
 ## Reference specimen `uw-axial-sagittal`
 
 **Source.** *Interactive CT Sinus Anatomy*, University of Washington Department of
-Radiology, Seattle, at http://uwmsk.org/sinusanatomy2/. Authors: Sung E. LoGerfo, M.D.;
-Michael L. Richardson, M.D.; Robert W. Dalley, M.D.; Yoshimi Anzai, M.D. (c. 2009–2010).
+Radiology, Seattle, at http://uwmsk.org/sinusanatomy2/ (c. 2009–2010). Credit goes to the
+atlas and its institution; the repo does not name the atlas's individual authors (owner,
+2026-10-07: their privacy), here or in any other file or commit.
 
 **Case.** The atlas's axial stack (175 slices) and sagittal stack (137 slices). They are one
 adult head: the sagittal images are reformats of the axial acquisition. UW's coronal stack
@@ -17,16 +18,21 @@ shows a different head and is **not** used here (see
 shows normal anatomy only (n = 1). It carries no patient identifiers, and the external face
 is masked in the published volume.
 
-**Permission.** The SSB project owner reports that the authors permit publishing 3D
-geometry and volumes derived from the atlas images. This was confirmed by the owner and
-recorded on 2026-09-30 (`docs/ssb.md` §13). The authors' written permission has yet to be
-filed; add it to `ssb/reference/uw-sinusanatomy2/` when it arrives. The atlas's own images
-and page text are not redistributed. `ssb/reference/uw-sinusanatomy2/` holds text and
-label positions only.
+**Permission.** Written permission from the atlas's authors, by email to the owner on
+2026-10-07, in answer to a request to use the atlas's public CT images in a public,
+non-commercial 3D educational model of endoscopic sinus surgery. Its terms: the use is
+permitted, on condition that the work credits the atlas; the authors asked to see the
+finished model. The email stays with the owner and is not committed (it carries personal
+contact details). It covers what was asked: 3D geometry and volumes derived from the
+images, and the slices as inputs to that model. Whether it also covers serving the
+atlas's own images verbatim (a recall deck, side-by-side comparison) is an owner reading
+of the same email, recorded in `docs/realistic-anatomy.md` §13; until then the atlas's
+own images and page text are not redistributed, and `ssb/reference/uw-sinusanatomy2/`
+holds text and label positions only.
 
 **Attribution** (show wherever the specimen is displayed): *Specimen CT derived from
-Interactive CT Sinus Anatomy (LoGerfo, Richardson, Dalley, Anzai; University of Washington
-Department of Radiology), used with the authors' permission.*
+Interactive CT Sinus Anatomy, University of Washington Department of Radiology
+(uwmsk.org/sinusanatomy2), used with the authors' permission.*
 
 **What this is not.** The atlas was published as a screen capture of a bone-window display.
 It is not a DICOM export. The volume values are therefore 8-bit display levels, not HU
