@@ -8,7 +8,7 @@
    never reaches markup. State flows one way: the store's pose -> sync();
    the controls only ever call endo.setPose / endo.enter.
    ============================================================= */
-import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=4ee7f38a';
+import { LENSES, RANGES, SIDES, lightPostAngle, frameOf } from './scope.js?v=9658ff9e';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -175,7 +175,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
         }
         const contact = el('p', 'ssb-param-src ssb-scope-hud-contact', `Mucosal contact: ${fmt(h.contactMm)} mm of shaft`);
         hudList.append(contact);
-        if (h.limited) hudList.append(el('p', 'ssb-param-src ssb-scope-hud-limit', 'Bone limits the depth.'));
+        if (h.limited) hudList.append(el('p', 'ssb-param-src ssb-scope-hud-limit', h.limitedBy === 'septum' ? 'The septum or bone limits the depth.' : 'Bone limits the depth.'));
     }
 
     /* ---- follow the pose ---- */

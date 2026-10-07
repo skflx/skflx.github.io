@@ -299,7 +299,10 @@ Collision and the HUD are pinned too: on the synthetic fixture (a bony septum,
 a sphere's analytic distance) a pose through a wall clamps to the last free
 0.5 mm sample, a pose in air is untouched, the ring makes a thicker shaft
 clamp earlier, and a read distance field matches the analytic distance within
-a voxel; on the real specimen the searches (a 1° yaw/pitch grid) are re-run
+a voxel; the midline rule (E3b: the shaft stays on its own side of R = 0
+except behind and below `lm.choanal-arch.M`) is tested in air on the fixture
+and, on the real specimen, from both nostrils aimed across the septum; on the
+real specimen the searches (a 1° yaw/pitch grid) are re-run
 and the poses they find are pinned — right sphenoid ostium, both frontal
 ostia from a 70° lens, and no 0° pose reaching a frontal ostium (the left
 poses are the right ones mirrored: the standard specimen is symmetric, and

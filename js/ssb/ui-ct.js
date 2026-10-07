@@ -13,7 +13,7 @@
    fallback (docs/ssb.md 7.5).
    ============================================================= */
 import { PLANES, stamped } from './volume.js?v=43c1f888';
-import { CT_PLANES } from './state.js?v=82ca4b88';
+import { CT_PLANES } from './state.js?v=2a74ae90';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
