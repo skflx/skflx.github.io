@@ -1175,7 +1175,8 @@ async function canvasImage(page) {
 const isBg = (px, bg) => Math.abs(px[0] - bg[0]) + Math.abs(px[1] - bg[1]) + Math.abs(px[2] - bg[2]) <= 12;
 
 async function specimenTests(browser, base) {
-  const { nodes: truth } = readPacks();
+  /* what a page holds at boot: every pack but the lining, which waits for the first look from within (ST1c) */
+  const truth = new Map([...readPacks().nodes].filter(([, n]) => !n.lining));
 
   /* ===== boot, registry, materials ===== */
   {
@@ -1193,8 +1194,9 @@ async function specimenTests(browser, base) {
     check('specimen: the placeholder grid\'s axis letters are gone while the specimen shows', info.axisLabels.every((v) => v === 'hidden'), info.axisLabels.join());
 
     const listed = Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs);
-    check('specimen: every pack packs.json lists is loaded, node for node as listed (core first)',
-      listed.every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
+    const liningName = Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs).filter(([, d]) => d.lining === true).map(([n]) => n);
+    check('specimen: every pack packs.json lists, bar the deferred lining (ST1c), is loaded, node for node as listed (core first); the lining waits for the first look from within',
+      liningName.length === 1 && liningName.every((n) => info.packs[n] && info.packs[n].state === 'deferred' && info.packs[n].nodes.length === 0) && listed.filter((n) => !liningName.includes(n)).every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
     const everyNode = await specNodes(page);
     const nodes = everyNode.filter((n) => !n.lining);          /* the lining pack (ST1b) is checked on its own; the rest of these checks are about the structures */
     const keys = everyNode.map((n) => n.key).sort();
@@ -1345,7 +1347,7 @@ async function specimenTests(browser, base) {
     check('mucosa: toggling the layer draws every air-space node as mucosa (outside: a translucent shell); bone is untouched',
       airKeys.length > 0 && muc.filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa' && n.transparent) && muc.filter((n) => n.group === 'bone').every((n) => n.drawn === 'bone'),
       JSON.stringify(muc.filter((n) => n.group === 'air' && n.drawn !== 'mucosa').map((n) => n.key)));
-    check('mucosa (ST1b): seen from outside, the lining pack is not drawn — the outside view keeps the per-compartment shells', muc.filter((n) => n.lining).length > 0 && muc.filter((n) => n.lining).every((n) => !n.visible), JSON.stringify(muc.filter((n) => n.lining && n.visible).map((n) => n.key)));
+    check('mucosa (ST1b/ST1c): seen from outside, no lining is drawn (nor fetched) — the outside view keeps the per-compartment shells', muc.filter((n) => n.lining).every((n) => !n.visible), JSON.stringify(muc.filter((n) => n.lining && n.visible).map((n) => n.key)));
     await page.click('#ssb-spec button[data-bone="hidden"]');     /* the envelope's ghost is hit first otherwise */
     await nextFrames(page, 2);
     const mAim = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
@@ -2286,6 +2288,9 @@ function scopeCollisionTests() {
 
 /* ---------------- Endoscope: the page ---------------- */
 
+/* How many times this page has fetched the lining pack (the resource timing log sees requests made before a listener could attach). */
+const liningFetches = (page) => page.evaluate(() => performance.getEntriesByType('resource').filter((e) => /\/ssb\/models\/lining\.glb\.gz/.test(e.name)).length);
+
 async function scopeTests(browser, base) {
   /* ===== the CT volume loads only when asked, and once per page (CP-2a) ===== */
   {
@@ -2300,6 +2305,61 @@ async function scopeTests(browser, base) {
     await page.evaluate(() => { location.hash = '#ct=ax'; });
     await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready', null, { timeout: 30000 });
     check('scope: opening the scope and then CT fetches the CT volume once (one shared copy)', asked.length === 1, `${asked.length} requests`);
+    await context.close();
+  }
+
+  /* ===== the lining pack loads only when the mucosa is first seen from within (ST1c) ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const st = await page.evaluate(() => ({ status: window.__ssb.specimen.status, lining: window.__ssb.specimen.packs.lining }));
+    await page.click('#ssb-spec-mucosa');                                   /* the layer on, the camera still outside */
+    await nextFrames(page, 4);
+    await page.waitForTimeout(600);
+    const out = await page.evaluate(() => ({ status: window.__ssb.specimen.status, inside: window.__ssb.specimen.mucosaInside, lining: window.__ssb.specimen.packs.lining, problems: window.__ssb.specimen.problems }));
+    const askedOut = await liningFetches(page);
+    check('lining (ST1c): a specimen page that never goes inside requests no lining.glb.gz and reaches status ready, the lining pack deferred (not an error, no problems)',
+      askedOut === 0 && st.status === 'ready' && st.lining.state === 'deferred' && out.status === 'ready' && out.inside === false && out.lining.state === 'deferred' && out.problems.length === 0, JSON.stringify({ asked: askedOut, st, out }));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,-4,3,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
+    await page.waitForFunction(() => window.__ssb.specimen.packs.lining && window.__ssb.specimen.packs.lining.state === 'loaded', null, { timeout: 30000 });
+    await nextFrames(page, 3);
+    const nodes = await specNodes(page);
+    const lin = nodes.filter((n) => n.lining);
+    const shells = nodes.filter((n) => n.group === 'air');
+    const st = await page.evaluate(() => ({ status: window.__ssb.specimen.status, problems: window.__ssb.specimen.problems }));
+    check('lining (ST1c): entering the scope requests lining.glb.gz exactly once, then draws the lining nodes and hides the air shells (status stays ready)',
+      lin.length > 0 && lin.every((n) => n.visible) && shells.length > 0 && shells.every((n) => !n.visible) && st.status === 'ready' && st.problems.length === 0,
+      JSON.stringify({ lining: lin.length, shown: lin.filter((n) => n.visible).length, shells: shells.filter((n) => n.visible).map((n) => n.key), st }));
+    /* leaving and re-entering the scope does not fetch it again */
+    await page.evaluate(() => { location.hash = ''; });
+    await nextFrames(page, 3);
+    await page.evaluate(() => { location.hash = '#scope=R,40,-4,3,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 3);
+    await page.waitForTimeout(400);
+    check('lining (ST1c): the lining request happened exactly once, and re-entering the scope does not repeat it', (await liningFetches(page)) === 1, `${(await liningFetches(page))} requests`);
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#s=s.sphenoid-sinus');
+    await page.click('#ssb-spec-mucosa');
+    await page.waitForFunction(() => !window.__ssb.specimen.camera().flying, null, { timeout: 8000 });
+    for (let i = 0; i < 40 && !(await page.evaluate(() => window.__ssb.specimen.mucosaInside)); i++) {
+      await page.mouse.move(640, 400);
+      await page.mouse.wheel(0, -400);
+      await nextFrames(page, 3);
+    }
+    const inside = await page.evaluate(() => window.__ssb.specimen.mucosaInside);
+    await page.waitForFunction(() => window.__ssb.specimen.packs.lining && window.__ssb.specimen.packs.lining.state === 'loaded', null, { timeout: 30000 }).catch(() => {});
+    await nextFrames(page, 3);
+    const nodes = await specNodes(page);
+    const lin = nodes.filter((n) => n.lining);
+    const shells = nodes.filter((n) => n.group === 'air' && n.id !== 's.sphenoid-sinus');     /* the selected structure is always drawn */
+    check('lining (ST1c): going inside by the orbit camera requests lining.glb.gz exactly once, then draws the lining nodes with the air shells hidden',
+      inside && (await liningFetches(page)) === 1 && lin.length > 0 && lin.every((n) => n.visible) && shells.every((n) => !n.visible), JSON.stringify({ inside, asked: await liningFetches(page), lining: lin.length, shells: shells.filter((n) => n.visible).length }));
     await context.close();
   }
 
@@ -2330,8 +2390,11 @@ async function scopeTests(browser, base) {
     const mat = (await specNodes(page)).filter((n) => n.group === 'air');
     check('scope: every air-space node is drawn as mucosa, opaque (the camera is inside the airway)', mat.length > 0 && mat.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(mat.filter((n) => n.drawn !== 'mucosa' || n.transparent).map((n) => n.key)));
     /* ST1b: from within, the open lining is what is drawn; the per-compartment shells (closed membranes at every opening) are not */
+    await page.waitForFunction(() => window.__ssb.specimen.packs.lining && window.__ssb.specimen.packs.lining.state === 'loaded', null, { timeout: 30000 });
+    await nextFrames(page, 3);
+    const matIn = (await specNodes(page)).filter((n) => n.group === 'air');
     const lin = (await specNodes(page)).filter((n) => n.lining);
-    check('scope (ST1b): the open lining is drawn in the shells\' place — every lining node visible as opaque mucosa, every air shell hidden', lin.length > 0 && lin.every((n) => n.visible && n.drawn === 'mucosa' && !n.transparent) && mat.every((n) => !n.visible), JSON.stringify({ lining: lin.filter((n) => !n.visible).map((n) => n.key), shells: mat.filter((n) => n.visible).map((n) => n.key) }));
+    check('scope (ST1b): the open lining is drawn in the shells\' place — every lining node visible as opaque mucosa, every air shell hidden', lin.length > 0 && lin.every((n) => n.visible && n.drawn === 'mucosa' && !n.transparent) && matIn.every((n) => !n.visible), JSON.stringify({ lining: lin.filter((n) => !n.visible).map((n) => n.key), shells: matIn.filter((n) => n.visible).map((n) => n.key) }));
     const inHits = await page.evaluate(() => { const c = document.getElementById('ssb-canvas'); const r = c.getBoundingClientRect(); return window.__ssb.specimen.hits(r.left + r.width / 2, r.top + r.height / 2); });
     check('scope (ST1b): picking from inside returns graph ids (a lining hit reports the structure\'s own key, never the lining\'s)', inHits.length > 0 && inHits.every((h) => GRAPH.has(h.id) && !/^lining:/.test(h.key)), JSON.stringify(inHits.slice(0, 3).map((h) => [h.id, h.key])));
 

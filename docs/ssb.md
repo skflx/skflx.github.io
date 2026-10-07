@@ -331,6 +331,11 @@ release points; the budget below bounds history growth.
 Rendering is on demand (a frame only when something changed), except during
 camera flights and pathway animation.
 
+The `lining` pack is not part of the boot: it is fetched once, the first time
+the mucosa layer is seen from within (the camera in the air box, or the scope),
+and until it arrives the air shells are drawn as before (`geo-specimen.js`
+`loadLining`, ST1c).
+
 ### 5.5 Sweeps
 
 `ssb/geometry/sweeps.json`: `{ "<id>.<side>": { "pts": [[r,a,s]…],

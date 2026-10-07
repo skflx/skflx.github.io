@@ -25,7 +25,10 @@
      with its openings open, one surface over the union of every air space.
      Its nodes repeat the air packs' "<id>.<side>" names (it is the same
      structure), so the registry keys them "lining:<id>.<side>" and byId
-     skips them; picking one still reports the graph id.
+     skips them; picking one still reports the graph id. It is loaded
+     lazily (ST1c): load() registers it with state "deferred" and does not
+     fetch it, loadLining() fetches it the first time the caller looks from
+     within; a deferred pack never counts against the status.
    - Nothing here throws to a blank stage. A pack that cannot be fetched,
      decoded or parsed is recorded (problems, packs[name].error) and the
      others still load; status is ready | partial | error | absent.
@@ -154,6 +157,9 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     const packs = new Map();           /* name -> { name, file, state, error, nodes: [keys], expected: [keys] } */
     const problems = [];
     let status = 'idle';               /* idle | loading | ready | partial | error | absent */
+    let loadDone = null;               /* the promise of load(), awaited by loadLining() */
+    let liningPromise = null;          /* loadLining()'s one memoized promise */
+    let onPackCb = () => {};
     let triangles = 0;
     let disposed = false;
 
@@ -217,6 +223,12 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     async function load({ onPack = () => {}, idle = () => Promise.resolve() } = {}) {
         if (status !== 'idle') return status;
         status = 'loading';
+        onPackCb = onPack;
+        loadDone = run({ onPack, idle });
+        return loadDone;
+    }
+
+    async function run({ onPack, idle }) {
         let list;
         try {
             list = listPacks(await getJson(fetchFn, PACKS_FILE, 'The pack list'));
@@ -245,7 +257,10 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         };
 
         /* the first pack (core) alone, then a paint, then the rest fetched together */
-        const [first, ...rest] = list;
+        const [first, ...all] = list;
+        /* the lining pack waits for loadLining() */
+        const rest = all.filter((p) => !p.lining);
+        for (const p of all) if (p.lining) packs.get(p.name).state = 'deferred';
         await take(first, getPack(fetchFn, first.name, first.file));
         if (disposed) return status;
         /* without the first pack (core: the envelope, the nasal cavity, the frame of everything else) there is no specimen to add to */
@@ -258,9 +273,43 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             await take(rest[i], fetching[i]);
             if (disposed) return status;
         }
-        const states = [...packs.values()].map((p) => p.state);
+        const states = [...packs.values()].map((p) => p.state).filter((s) => s !== 'deferred');
         status = !nodes.size ? 'error' : states.every((s) => s === 'loaded') && !problems.length ? 'ready' : 'partial';
         return status;
+    }
+
+    /* Fetch and adopt every deferred pack, once: the second call returns the
+       same promise. Waits for load() first. Never rejects; a pack that fails
+       is recorded like any other (and a ready specimen becomes partial). */
+    function loadLining() {
+        if (liningPromise) return liningPromise;
+        liningPromise = (async () => {
+            try {
+                if (loadDone) await loadDone;
+                for (const pack of packs.values()) {
+                    if (disposed) return;
+                    if (pack.state !== 'deferred') continue;
+                    pack.state = 'loading';
+                    const before = problems.length;
+                    try {
+                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        if (disposed) return;
+                        adopt(scene, pack);
+                        pack.state = 'loaded';
+                    } catch (e) {
+                        pack.state = 'failed';
+                        pack.error = e && e.message ? String(e.message) : 'The pack could not be read.';
+                        problem(pack.error);
+                    }
+                    if (problems.length > before && status === 'ready') status = 'partial';
+                    try { onPackCb(pack); } catch (e) { console.error(e); }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return status;
+        })();
+        return liningPromise;
     }
 
     /* The RAS box of the named nodes (or all): { min, max } in mm, or null. */
@@ -287,7 +336,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     }
 
     return {
-        THREE, root, nodes, packs, problems, load, boundsOf, dispose,
+        THREE, root, nodes, packs, problems, load, loadLining, boundsOf, dispose,
         get status() { return status; },
         get triangles() { return triangles; },
         byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining),
