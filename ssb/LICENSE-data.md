@@ -24,11 +24,11 @@ non-commercial 3D educational model of endoscopic sinus surgery. Its terms: the 
 permitted, on condition that the work credits the atlas; the authors asked to see the
 finished model. The email stays with the owner and is not committed (it carries personal
 contact details). It covers what was asked: 3D geometry and volumes derived from the
-images, and the slices as inputs to that model. Whether it also covers serving the
-atlas's own images verbatim (a recall deck, side-by-side comparison) is an owner reading
-of the same email, recorded in `docs/realistic-anatomy.md` §13; until then the atlas's
-own images and page text are not redistributed, and `ssb/reference/uw-sinusanatomy2/`
-holds text and label positions only.
+images, and the slices as inputs to that model. The owner reads it as also covering
+serving the atlas's own images from this site (a recall deck, side-by-side comparison
+with the specimen), always with the attribution below (`docs/realistic-anatomy.md` §13,
+RA-O1, 2026-10-07). Any UW image committed to the repo gets its own row in a section
+for it here.
 
 **Attribution** (show wherever the specimen is displayed): *Specimen CT derived from
 Interactive CT Sinus Anatomy, University of Washington Department of Radiology
@@ -58,3 +58,20 @@ them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` ma
 | `ssb/reference/specimen-relations.json` | the graph's spatial claims tested against this specimen (numbers only) | `tools/ssb-pipeline/uw/relate3d.py` |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.
+
+## Population statistics `nasalseg`
+
+**Source.** *NasalSeg Dataset for Nasal Cavity and Paranasal Sinuses Segmentation from CT
+Images*, v2 (Zenodo, 2024-10-05, doi:10.5281/zenodo.13893419), described in *Scientific
+Data* (2024, doi:10.1038/s41597-024-04176-1). Creators: Zhang Y, Wang J, Pan T, Jiang Q, Ge J,
+Guo X, Jiang C, Lu J, Zhang J, Liu X, Tian M, Qi Y, Cheng Y, Zuo C.
+
+**Licence.** CC BY 4.0. Use approved by the owner, 2026-10-07 (`docs/realistic-anatomy.md`
+§13, RA-O6). No scan is redistributed; the archive stays in the gitignored drop zone.
+
+**Attribution** (show wherever these statistics are displayed): *Population data from the
+NasalSeg dataset (Zhang et al., 2024; CC BY 4.0), doi:10.5281/zenodo.13893419.*
+
+| File | What | Made by |
+|---|---|---|
+| `ssb/anatomy/population/nasalseg.json` | per-subject air volumes, extents, lining and completeness measures of the maxillary sinuses and nasal cavities; asymmetry summaries; the archive checks (duplicates, header corrections); head A placed in the distribution | `tools/ssb-pipeline/nasalseg/stats.py` with the visual review `tools/ssb-pipeline/nasalseg/review.json` |

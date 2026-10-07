@@ -10,8 +10,8 @@ Macintosh) is dated November 2009, consistent with a ~2009–2010 build.
 **Permission**: written, from the atlas's authors to the owner by email,
 2026-10-07: the public CT images may be used in the owner's public,
 non-commercial 3D educational model, crediting the atlas. Terms and scope:
-`ssb/LICENSE-data.md`. Serving the atlas's own images verbatim is still an
-owner reading of that email (`docs/realistic-anatomy.md` §13).
+`ssb/LICENSE-data.md`. The owner reads it as covering serving the atlas's
+own images from this site, credited (`docs/realistic-anatomy.md` §13, RA-O1).
 
 This crawl is a **text-only reference**: no image or page copy is committed
 to this repository (see `docs/ssb.md` / repo policy — content here is IDs,

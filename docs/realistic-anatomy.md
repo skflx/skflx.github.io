@@ -1,7 +1,7 @@
 # Realistic anatomy — scoping, implementation, execution and review plan
 
-**Status (2026-10-07): plan only; nothing in it is built.** Written by Opus
-for the owner. It extends SSB (`docs/ssb.md`) from one standardized head to
+**Status (2026-10-07): owner decisions RA-O1…O6 answered (§13); first WP
+done (POP0, NasalSeg population asymmetry, §4.4); the rest is plan.** Written by Opus for the owner. It extends SSB (`docs/ssb.md`) from one standardized head to
 a head that can be shown four ways — **symmetric**, **normal asymmetry**,
 **normal variants**, **pathology** — and grounds the last three in more CT:
 the remaining pages of the UW atlas and curated Radiopaedia cases. When the
@@ -68,10 +68,14 @@ anatomy = { base: standard | scanned[-b] | <exemplar head>,
 
 - *Symmetric* = `{base: standard}`; *Normal asymmetry* = `{base: scanned}`.
 - *Variants* and *Pathology* open a picker and apply to the current base.
-  **Default base for both: `standard`**, so the only difference from the
-  symmetric head is the thing being taught, and the contralateral side is a
-  built-in normal control (a right concha bullosa beside a normal left
-  middle turbinate). A switch moves the same variant onto `scanned`.
+  **Default base for both: `scanned`** (owner, RA-O3: variants and
+  pathology should look like a real patient's CT, so they sit on the real,
+  asymmetric head). A switch moves the same variant onto `standard`, where
+  the contralateral side becomes a clean normal control (a right concha
+  bullosa beside a normal left middle turbinate) — useful for isolating
+  one change, but not the default. Consequence: batch-1 variants and
+  pathology are built and tested on `scanned` first, so RA3b (the scanned
+  base) is on their critical path.
 - One variant per side per region in v1; curated **scenarios** (named sets,
   e.g. "typical preoperative CT") are precomputed combinations (§6.3).
 - Pathology composes over variants because disease follows anatomy (a Haller
@@ -90,9 +94,9 @@ This plan needs a fourth, and it must stay as distinct as the other three:
   UW Maxillary-Normal fig. 6 and Radiopaedia rID …; schematic". Picking an
   edited voxel or mesh reports that it is edited.
 
-Adding a truth kind changes a principle, so it is owner decision **RA-O2**
-(§13). If the owner declines, every edited state is badged *schematic on
-specimen* (the flap overlays' badge), which is honest but less precise.
+Adding a truth kind changes a principle; the owner approved it (RA-O2,
+2026-10-07), so `docs/ssb.md` §1.2 gains it when the first edited state
+ships (WP RA3a's docs pass).
 
 ### 2.3 What each state changes across the page
 
@@ -316,17 +320,21 @@ site.
    (numbers, poses, patches, meshes) lives under its own path
    (`ssb/exemplars/rp-<rID>/`) with a per-case `LICENSE.md` (CC BY-NC-SA 3.0,
    contributor, links), and the page shows the attribution wherever it is
-   displayed. The rest of SSB is not relicensed by it. RA-O4 (§13) decides
-   whether NC-SA data may be committed at all, or only numbers
-   (measurements and poses) are.
-2. **No pixels by default**, as for UW: commit derived numbers, poses and
-   edits, not case images. (Contributor names on Radiopaedia are required
-   attribution under its licence; the UW no-names rule does not apply to
-   them.)
-3. **Curated, small, polite.** An owner-approved shortlist of cases
-   (target 25–40), one case at a time, cached in the gitignored drop zone,
-   never in CI. Default: the owner (or an agent on the owner's explicit
-   go-ahead per batch, RA-O5) downloads the stack from the case viewer.
+   displayed. The rest of SSB is not relicensed by it. Decided (owner,
+   RA-O4, 2026-10-07): derived data may be committed — the cases are
+   public, and the licence asks for attribution and no commercial use,
+   both of which this site meets. ShareAlike still binds: files derived
+   from a case carry CC BY-NC-SA 3.0 and stay in its folder.
+2. **Images.** Case images may be shown with their attribution (licence,
+   RA-O4); a served image goes in the case's folder under the same licence,
+   after a check for burned-in text (none allowed). Derived numbers,
+   poses and edits are the default; images are added where a view needs
+   them. (Contributor names on Radiopaedia are required attribution under
+   its licence; the UW no-names rule does not apply to them.)
+3. **Curated, small, polite.** A shortlist of cases (target 25–40, Opus
+   picks, the owner may veto), fetched by an agent one case at a time with
+   a pause between requests (RA-O5), cached in the gitignored drop zone,
+   never in CI.
 4. **Per case, record**: rID, URL, title, contributor, licence line as shown,
    modality, plane(s), series description, slice count, apparent window,
    contrast, whether the stack is complete or key images only, burned-in
@@ -355,7 +363,7 @@ interorbital and skull dimensions) and, where ≥ 2 planes exist, from their
 mutual registration; grade A (≥ 2 planes, mutually consistent, dense), B
 (one dense stack), C (key images only — a 2D exemplar like the UW pages).
 
-### 4.4 Volumetric population data (owner decision RA-O6)
+### 4.4 Volumetric population data (approved, RA-O6)
 
 Single exemplars cannot say what *typical* asymmetry is. An open volumetric
 dataset can: **NasalSeg** (Zenodo record 13893419, Scientific Data 2024,
@@ -363,10 +371,64 @@ doi:10.1038/s41597-024-04176-1): 130 CT scans with left/right nasal cavity,
 nasopharynx and left/right maxillary sinus labels, CC BY 4.0 (record read
 2026-10-07). It gives paired left/right volumes and shapes for the
 maxillary sinuses and cavities across subjects — the normal-asymmetry
-distribution `scanned` should be compared against. It is a new source
-beyond the two the owner named, so it is the owner's call; nothing in the
-plan depends on it, and nothing derived from it would ship except summary
-statistics with its citation.
+distribution `scanned` should be compared against. Approved by the owner
+(RA-O6, 2026-10-07). What ships from it is numbers with its citation
+(`ssb/anatomy/population/nasalseg.json`, built by
+`tools/ssb-pipeline/nasalseg/stats.py`, WP POP0, done 2026-10-07); the scans
+themselves stay in the gitignored drop zone.
+
+**Who the subjects are** (dataset paper): 130 adults, 74 M / 56 F, aged
+24–82 (mean 54.6), the CT of PET/CT on one scanner at one Shanghai nuclear
+medicine centre, 0.586 × 0.586 × 1.5 mm, no sinus-disease exclusion stated.
+Not a sinus-clinic cohort (less disease-selected), but one ethnicity, one
+centre, older than a typical FESS population, and a low-dose CT. The labels
+are **air**, so disease shrinks them.
+
+**What the archive actually holds** (POP0's checks; the method is in the
+script's docstring, every correction is listed in the JSON):
+
+- **Byte-identical duplicates:** the 130 case ids hold **107 distinct
+  scans** (19 groups of 2–4 identical image + label arrays). Anyone using
+  NasalSeg as if n = 130 double-counts.
+- **Label headers:** 11 label files disagree with their image's header (z
+  flipped against the uncropped frame, or 1.0 mm instead of 1.5 mm slices),
+  while the arrays are voxel-aligned. Geometry is taken from the image.
+- **Swapped labels:** one case's nasal-cavity labels have right and left
+  swapped (sides are assigned by position).
+- **Label completeness:** every label misses about 6 % of the adjacent air
+  (the boundary sits a voxel inside it), so absolute volumes run low by
+  about that much while left/right indices barely move. A few labels stop
+  at flat cuts where air continues; those above a Tukey fence are excluded.
+- **Disease:** reviewed by eye per case (coronal + axial slice, uncertain
+  ones again at zoom; verdicts in `tools/ssb-pipeline/nasalseg/review.json`,
+  for the owner to spot-check): of 214 maxillary sinuses, 7 with mucosal
+  thickening / cyst / fluid, 6 opacified, 4 undecidable. Two slices per
+  sinus will miss some focal disease, so this undercounts it. The
+  automatic lining measure barely separates disease from clear and is kept
+  only as a number.
+
+**Results** (the *clear* subset: both maxillary sinuses clear and
+completely labelled, n = 88; asymmetry index AI = 100·(R − L)/mean):
+
+| | median volume R / L (mL, air) | \|AI\| median (IQR) | \|AI\| 95th pct | max |
+|---|---|---|---|---|
+| Maxillary sinus | 13.7 / 13.1 | 17 % (7–35) | 55 % | 167 % (a unilateral hypoplasia) |
+| Nasal cavity | 11.4 / 11.4 | 12 % (5–20) | 33 % | 51 % |
+
+Signed AI averages ≈ 0 for both (no side bias). **Cavity and maxillary
+asymmetry are independent** (Spearman ρ ≈ 0): the cavity's tracks the
+nasal cycle and the septum, the maxillary sinus's its own development. The
+`scanned` state and any asymmetry generator should vary them independently.
+
+**Head A against this population** (same method on its as-scanned labels;
+SSB's label boundaries differ, so compare indices, not volumes): its
+maxillary AI (−11 %) sits at the 34th percentile, ordinary. Its **nasal
+cavity AI (+75 %, left 2.8 mL vs right 6.0 mL) lies beyond every one of
+the 88 clear NasalSeg subjects** (max 51 %). Either head A's left cavity is
+genuinely extreme (septal bow plus a congested left inferior turbinate) or
+SSB's segmentation assigns left meatal air to other compartments. RS (§7)
+must settle which before RA3b ships `scanned` as *normal* asymmetry; if it
+is real, the state says this head is at the edge of normal, not typical.
 
 ---
 
@@ -457,10 +519,11 @@ observations within ±3 mm of the current slice plane are drawn as markers
 (colour by source, shape by kind) on head A, and the exemplar figures whose
 pose lies near the slice are listed beside it. Disagreement between an
 observation and head A's labels is the QA signal for resegmentation; for
-teaching, clicking an exemplar applies its variant to the specimen. If the
-owner reads the UW permission as covering republication (RA-O1), the figure
-itself can be shown side by side, served from this origin; until then the
-list shows caption, credit and a link out.
+teaching, clicking an exemplar applies its variant to the specimen. The
+UW permission covers showing the figures themselves (owner, RA-O1,
+2026-10-07), so the figure is shown side by side, served from this origin
+(the site is HTTP-only, so an HTTPS page cannot hotlink it), with the
+credit line beside it.
 
 ### 6.2 Data layout and the patch format
 
@@ -472,7 +535,7 @@ ssb/anatomy/
   scanned-b/                       head B, later
   patches/<base>/<entity>.<side>.<preset>.ssbp.gz
   overrides/<base>/<entity>.<side>.<preset>.glb.gz
-ssb/exemplars/rp-<rID>/            Radiopaedia-derived data + LICENSE.md (if RA-O4 allows)
+ssb/exemplars/rp-<rID>/            Radiopaedia-derived data (+ images where needed) + LICENSE.md (CC BY-NC-SA 3.0)
 ```
 
 `ssb/ct`, `ssb/geometry`, `ssb/models` stay the `standard` base, so nothing
@@ -801,6 +864,13 @@ Escalate: runtime > 2 s on the repo.
 ### Wave RA-1 — inventories and the state machinery (parallel)
 
 ```
+### POP0 — NasalSeg population statistics     [done 2026-10-07] · Opus
+tools/ssb-pipeline/nasalseg/stats.py (+ review.json) → ssb/anatomy/population/nasalseg.json;
+findings in §4.4 (107 distinct scans of 130 ids; asymmetry distributions; head A's cavity outlier).
+Follow-up for RS: explain head A's left-cavity volume (§4.4) before RA3b.
+```
+
+```
 ### FG1 — UW figure inventory (figures.json) [todo] · Sonnet (mechanics) + Opus (ids, roles) · depends: —
 Goal:     every UW page figure as data: page, file, plane, window, contrast, caption,
           abbreviation map, arrows (tail label → tip px), graph ids, role N/V/P, same-patient group.
@@ -858,15 +928,17 @@ Touch:    tools/ssb-pipeline/uw/normalize.py (a --base scanned path that skips s
 Don't:    hand-edit outputs; change the standard base's files.
 Accept:   check-data passes (every label a graph id); test-ssb specimen section runs on both
           bases (placement, picking, laterality); the scanned base's left cavity and inferior
-          turbinate volumes are printed beside the right's and match §3's figures ± 5 %.
+          turbinate volumes are printed beside the right's and match §3's figures ± 5 %; its
+          cavity and maxillary asymmetry indices are printed beside the NasalSeg percentiles
+          (§4.4), and the state's note says where this head sits in that range.
 Escalate: a stage cannot run per side without an anatomy decision.
 ```
 
 ```
-### RP1 — Radiopaedia shortlist (cases.json) [todo] · Sonnet (search, records) → Opus (choice) · depends: RA-O4, RA-O5
+### RP1 — Radiopaedia shortlist (cases.json) [ready] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
 Goal:     ≥ 1 candidate case per §4.3 queue item, each fully recorded; Opus picks ≤ 40.
 Touch:    ssb/reference/radiopaedia/cases.json, README.md (method, licence).
-Don't:    download stacks in this WP; commit images; record a case whose licence line differs
+Don't:    download stacks in this WP (RP2 does); record a case whose licence line differs
           from CC BY-NC-SA 3.0 without flagging it.
 Accept:   every record complete (§4.3 item 4); every queue item has a case or "none found".
 ```
@@ -912,7 +984,7 @@ Accept:   N figures: median landmark residual after TPS ≤ 3 mm, none > 6 mm; e
 ```
 ### RA4 — Exemplars layer in CT mode          [todo] · Sonnet · depends: FG2, RA3a
 Goal:     §6.1's overlay: observations near the slice as markers; nearby exemplars listed with
-          caption, credit, link (figures inline only if RA-O1 allows).
+          caption, credit and the figure itself (RA-O1), served from ssb/reference/uw-sinusanatomy2/figures/.
 Accept:   test-ssb --only ct: markers project to within 0.5 px of their RAS position; the list
           changes with the slice; no remote request is made by the page.
 ```
@@ -960,12 +1032,12 @@ where right.
 ### Wave RA-4 — batch 2, Radiopaedia volumes, head B
 
 ```
-RP2  fetch and record the chosen cases (owner or agent per RA-O5), grade A/B/C · Sonnet
+RP2  fetch (agent, one case at a time, RA-O5) and record the chosen cases, grade A/B/C · Sonnet
 RP3  stack → volume, pose, observations, population entries · Sonnet + Opus review
 RB1  head B: coronal stack → volume (spacing estimation), labels from its tips, scanned-b base · Opus + Sonnet
 VB2  variants batch 2 (§8.2) · Opus → Sonnet
 PB2  pathology batch 2 (§9.2) · Opus → Sonnet
-POP1 population.json + the asymmetry panel (paired L−R, n, sources; NasalSeg only if RA-O6) · Sonnet
+POP1 population.json + the asymmetry panel (paired L−R, n, sources; NasalSeg from POP0) · Sonnet
 ```
 
 **Checkpoint CP-RA4.**
@@ -988,7 +1060,7 @@ SX0  synthetic soft-tissue channel design (§9.3) · Opus; SX1 build · Sonnet
 
 ```
 RA-0  ── RA0c (after #114/#115) ── RA0d
-RA-1  P: FG1, RS0   V: RA3a → RA3b   C: C-RA   O: RA-O1…O7   (RP1 after RA-O4/O5)
+RA-1  P: FG1, RS0, POP0, RP1   V: RA3a → RA3b   C: C-RA   O: RA-O7, RA-O8
         └──────────── CP-RA1 ────────────┘
 RA-2  P: RS1 → RS6 (critical path), FG2   V: RA4
         └──────────── CP-RA2 ────────────┘
@@ -1074,18 +1146,18 @@ URL with one id removed from `index.json` must drop cleanly.
 
 ## 13. Owner decisions
 
-| ID | Question | Recommended |
-|---|---|---|
-| RA-O1 | Does the UW email ("Yes that is fine, it is public anyways. Be sure to credit us … would love to see the final version") cover **serving the atlas's own images** (the unlabeled/labeled recall deck; exemplar figures side by side), or only derived data? | Read it as covering derived data now; ask the authors one line ("may we also show the original slices, credited, from our site?") when sending them the first build, since they asked to see it. |
-| RA-O2 | Add **composite** as a fourth truth kind (§2.2)? | Yes. |
-| RA-O3 | Default base for Variants/Pathology: `standard` (isolates the variant) or `scanned` (realism)? | `standard`, with a one-click switch. |
-| RA-O4 | May **CC BY-NC-SA** Radiopaedia-derived data be committed (under `ssb/exemplars/` with per-case licences), or only numbers (poses, measurements)? | Commit numbers and patches under the per-case licence; no pixels. The site is non-commercial, so NC is met; SA applies to those files only. |
-| RA-O5 | Who downloads Radiopaedia stacks? | The owner, from the case viewer, for the ≤ 40 chosen cases; an agent only per batch on the owner's go-ahead, one case at a time. |
-| RA-O6 | Use **NasalSeg** (CC BY 4.0, 130 CTs) for population asymmetry statistics? | Yes, summary statistics only, cited. |
-| RA-O7 | Author names remain in **git history** before 2026-10-07 (commits that wrote the attribution). Rewriting `master` history is destructive (force-push, every clone and open PR breaks). | Leave history; the names are gone from the tree and the guard (RA0d) keeps them out. Rewrite only if the authors ask. |
-| RA-O8 | Scope of batch 3 (soft-tissue/contrast complications with a synthetic channel) | Plan it only after batches 1–2 are verified. |
+Answered by the owner on 2026-10-07 unless marked open.
 
----
+| ID | Question | Decision |
+|---|---|---|
+| RA-O1 | Does the UW email ("Yes that is fine, it is public anyways. Be sure to credit us … would love to see the final version") cover **serving the atlas's own images** (the unlabeled/labeled recall deck; exemplar figures side by side)? | **Yes.** The images may be served from this origin, always with the credit line of `ssb/LICENSE-data.md`. Send the authors the finished model, as they asked. |
+| RA-O2 | Add **composite** as a fourth truth kind (§2.2)? | **Yes.** |
+| RA-O3 | Default base for Variants/Pathology? | **`scanned`** — variants and pathology should look realistic, so they sit on the real asymmetric head; `standard` is one click away. |
+| RA-O4 | May Radiopaedia-derived data (and images) be committed? | **Yes** — the cases are public; attribute (contributor, Radiopaedia.org, rID, as links) and do not monetize, which this site does not. ShareAlike: derived files carry CC BY-NC-SA 3.0 in their own folder. |
+| RA-O5 | Who downloads Radiopaedia stacks? | An agent may fetch them, one case at a time, politely, from the shortlist (follows from RA-O4). |
+| RA-O6 | Use **NasalSeg** (CC BY 4.0, 130 CTs) for population asymmetry statistics? | **Yes** — started as WP POP0. |
+| RA-O7 | Author names remain in **git history** before 2026-10-07. Rewriting `master` history is destructive (force-push, every clone and open PR breaks). | *Open.* Recommended: leave history; the names are gone from the tree and RA0d keeps them out. Rewrite only if the authors ask. |
+| RA-O8 | Scope of batch 3 (soft-tissue/contrast complications with a synthetic channel) | *Open.* Recommended: plan it only after batches 1–2 are verified. |
 
 ## 14. Risks
 

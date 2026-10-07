@@ -176,7 +176,12 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   plans four anatomy states (symmetric, normal asymmetry, variants,
   pathology) over the specimen, a resegmentation of the UW head, an
   inventory of the UW teaching pages' figures, and curated Radiopaedia
-  exemplars; awaiting the owner's decisions (its §13). The UW authors'
+  exemplars. The owner answered its decisions on 2026-10-07 (its §13):
+  variants and pathology sit on the as-scanned head; UW and Radiopaedia
+  images may be shown, credited. First work done: NasalSeg population
+  asymmetry (`ssb/anatomy/population/nasalseg.json`, its §4.4) — the
+  archive holds 107 distinct scans, not 130, and head A's nasal-cavity
+  asymmetry lies beyond the clear population's range. The UW authors'
   written permission arrived 2026-10-07 (`ssb/LICENSE-data.md`); the repo
   credits the atlas and its institution, never the authors by name.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance

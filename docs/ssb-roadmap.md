@@ -28,7 +28,7 @@ history keeps the specs).
 
 **CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
 
-**Realistic anatomy (Opus, 2026-10-07):** plan in `docs/realistic-anatomy.md` (four anatomy states, resegmentation, UW-page and Radiopaedia exemplars); its WPs join this board once the owner answers its §13.
+**Realistic anatomy (Opus, 2026-10-07):** plan in `docs/realistic-anatomy.md` (four anatomy states, resegmentation, UW-page and Radiopaedia exemplars); the owner answered its §13 on 2026-10-07; POP0 (NasalSeg statistics) is done, the rest of its WPs join this board as they start.
 
 **E5 + ST1c (Opus, 2026-10-07):** ST1c reviewed (pass: the lining pack is deferred until the first look from within; `test-ssb` 589/589). E5 done: 7 of 40 stations posed on the specimen (13 sided poses), 27 `uncovered` with the reason, 6 overviews; both earlier pinned poses had the tip in tissue (§5 E5). E6 is rewritten around the file's `target` field, and **C1** is specced as six batches. **Next:** lane B ST6 → ST4d → ST5; lane C E6 (parallel with ST6: only `test-ssb.mjs` is shared); content lane C1a…C1f.
 

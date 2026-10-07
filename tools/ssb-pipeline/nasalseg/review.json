@@ -1,0 +1,455 @@
+{
+ "by": "Opus (Claude), for the owner to spot-check",
+ "cases": {
+  "P001": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P002": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P004": {
+   "L": "clear",
+   "R": "clear",
+   "note": "both sinuses small with clean walls (hypoplasia, not disease)"
+  },
+  "P005": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P007": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P008": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P009": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P011": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P012": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P013": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P014": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P015": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P016": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P017": {
+   "L": "clear",
+   "R": "clear",
+   "note": "right sinus small with clean walls (hypoplasia); marked asymmetry is anatomical"
+  },
+  "P018": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P019": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P020": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P021": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P022": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P023": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P024": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P025": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P026": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P028": {
+   "L": "clear",
+   "R": "thickening",
+   "note": "right: dome-shaped soft tissue on the floor (retention cyst or polyp)"
+  },
+  "P029": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P030": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P032": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P033": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P035": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P036": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P037": {
+   "L": "clear",
+   "R": "clear",
+   "note": "a label ends at a flat cut where air continues (label defect; see unlabelledAir)"
+  },
+  "P038": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P039": {
+   "L": "unsure",
+   "R": "unsure",
+   "note": "labels cut off along horizontal planes (label defect; label header gives 1.0 mm slices)"
+  },
+  "P040": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P042": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P043": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P044": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P045": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P046": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P047": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P050": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P051": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P052": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P053": {
+   "L": "opacified",
+   "R": "clear"
+  },
+  "P055": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P056": {
+   "L": "opacified",
+   "R": "clear"
+  },
+  "P057": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P058": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P059": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P060": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P063": {
+   "L": "clear",
+   "R": "unsure",
+   "note": "right label has a slanted cut (label defect)"
+  },
+  "P064": {
+   "L": "clear",
+   "R": "clear",
+   "note": "a label ends at a flat cut where air continues (label defect; see unlabelledAir)"
+  },
+  "P065": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P066": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P067": {
+   "L": "clear",
+   "R": "thickening",
+   "note": "right: lower half of the sinus without air"
+  },
+  "P068": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P069": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P070": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P071": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P072": {
+   "L": "clear",
+   "R": "thickening"
+  },
+  "P074": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P075": {
+   "L": "clear",
+   "R": "clear",
+   "note": "a label ends at a flat cut where air continues (label defect; see unlabelledAir)"
+  },
+  "P076": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P080": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P082": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P083": {
+   "L": "clear",
+   "R": "opacified",
+   "note": "right ethmoid also opacified"
+  },
+  "P085": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P086": {
+   "L": "clear",
+   "R": "clear",
+   "note": "a label ends at a flat cut where air continues (label defect; see unlabelledAir)"
+  },
+  "P087": {
+   "L": "thickening",
+   "R": "clear",
+   "note": "left: posterior dome of soft tissue"
+  },
+  "P088": {
+   "L": "clear",
+   "R": "thickening",
+   "note": "right: soft tissue in the lower sinus and a rounded nodule"
+  },
+  "P089": {
+   "L": "opacified",
+   "R": "clear",
+   "note": "left air label is a small pocket in an opacified sinus"
+  },
+  "P090": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P092": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P093": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P094": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P095": {
+   "L": "opacified",
+   "R": "clear"
+  },
+  "P096": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P097": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P098": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P099": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P100": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P101": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P103": {
+   "L": "clear",
+   "R": "clear",
+   "note": "a label ends at a flat cut where air continues (label defect; see unlabelledAir)"
+  },
+  "P104": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P105": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P106": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P107": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P108": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P109": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P110": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P112": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P113": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P114": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P115": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P116": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P117": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P119": {
+   "L": "clear",
+   "R": "clear",
+   "note": "a label ends at a flat cut where air continues (label defect; see unlabelledAir)"
+  },
+  "P120": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P121": {
+   "L": "unsure",
+   "R": "clear",
+   "note": "both sinuses very small; left heterogeneous"
+  },
+  "P122": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P123": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P124": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P125": {
+   "L": "clear",
+   "R": "clear"
+  },
+  "P126": {
+   "L": "clear",
+   "R": "opacified",
+   "note": "edge-enhancing reconstruction kernel, unlike the other scans"
+  },
+  "P127": {
+   "L": "clear",
+   "R": "thickening",
+   "note": "right: fluid level"
+  },
+  "P129": {
+   "L": "clear",
+   "R": "thickening",
+   "note": "right: thickened medial wall mucosa"
+  },
+  "P130": {
+   "L": "clear",
+   "R": "clear"
+  }
+ },
+ "date": "2026-10-07",
+ "method": "per case, one coronal and one axial slice through the maxillary sinuses (tools/ssb-pipeline/nasalseg/stats.py --png-dir); the uncertain ones again at higher zoom, three coronal levels and an axial slice, window L 0 / W 1400. clear = air fills the bony sinus; thickening = mucosal thickening, cyst, polyp or fluid with air in most of the sinus; opacified = most of the sinus without air; unsure = undecidable, or a label defect. A small sinus with clean walls is clear (hypoplasia is anatomy). Two slices per sinus can miss focal disease elsewhere, so the clear subset can still contain some."
+}

@@ -94,9 +94,9 @@ External labeled imaging the graph is checked against, recorded under
   spatial relations test the graph's `rel` claims (`relations.json`,
   `tools/ssb-pipeline/uw/relate.py`) — a relational check available before
   our own specimen exists, with the limits its README states. The authors' written
-  permission arrived 2026-10-07 (terms in `ssb/LICENSE-data.md`); until the
-  owner reads it as covering republication of the images themselves
-  (`docs/realistic-anatomy.md` §13), no UW image is copied into this repo. The unlabeled/labeled pairs are a ready-made
+  permission arrived 2026-10-07 (terms in `ssb/LICENSE-data.md`), and the
+  owner reads it as covering serving the images themselves, credited
+  (`docs/realistic-anatomy.md` §13, RA-O1). The unlabeled/labeled pairs are a ready-made
   CT recall deck (see the unlabeled slice, name the structures, reveal); using
   them in SSB needs that scope to cover republishing, because the site is
   HTTP-only and an HTTPS page cannot load its images (mixed content), so
