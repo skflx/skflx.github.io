@@ -4,9 +4,9 @@
 export const STAMPS = {
     "ssb/content/ethmoid-frontal-orbit.json": "824885af",
     "ssb/content/nasal-maxillary-ppf.json": "c3beacdf",
-    "ssb/content/pathology-inflammatory.json": "49e314b3",
+    "ssb/content/pathology-inflammatory.json": "7857a3ed",
     "ssb/content/pathology-neoplastic.json": "64e4d053",
-    "ssb/content/sources.json": "f7070dc5",
+    "ssb/content/sources.json": "f16b4495",
     "ssb/content/sphenoid-sellar-clival.json": "7b2032af",
     "ssb/geometry/charts.json": "9ea8d945",
     "ssb/geometry/labels.json": "dc630b88",

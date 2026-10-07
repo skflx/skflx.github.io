@@ -424,7 +424,8 @@
       "mimics": [
         "dz.crs-with-polyps",
         "dz.afrs",
-        "dz.mucocele"
+        "dz.mucocele",
+        "dz.primary-ciliary-dyskinesia"
       ],
       "geo": "overlay",
       "src": [
@@ -2148,7 +2149,8 @@
         "dz.sarcoidosis-sinonasal",
         "dz.chronic-invasive-fungal-sinusitis",
         "dz.acute-invasive-fungal-sinusitis",
-        "dz.sinonasal-scc"
+        "dz.sinonasal-scc",
+        "dz.egpa"
       ],
       "geo": "overlay",
       "src": [
@@ -2194,7 +2196,8 @@
         "dz.gpa",
         "dz.crs-without-polyps",
         "dz.cocaine-midline-destructive-lesion",
-        "dz.nk-t-cell-lymphoma"
+        "dz.nk-t-cell-lymphoma",
+        "dz.sinonasal-tuberculosis"
       ],
       "geo": "overlay",
       "src": [
@@ -2466,6 +2469,595 @@
         "src.crash-2004",
         "src.luxenberger-1998",
         "src.delano-1996"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.egpa",
+      "name": "Eosinophilic granulomatosis with polyangiitis (sinonasal disease)",
+      "syn": [
+        "EGPA",
+        "Churg-Strauss syndrome"
+      ],
+      "eponym": "Churg-Strauss",
+      "category": "inflammatory",
+      "involves": [
+        "s.nasal-cavity",
+        "s.ostiomeatal-complex",
+        "s.maxillary-sinus",
+        "s.anterior-ethmoid-cells",
+        "s.ethmoid-labyrinth"
+      ],
+      "class": [
+        "c.acr-eular-egpa"
+      ],
+      "tier": 2,
+      "what": "An ANCA-associated small- and medium-vessel vasculitis with eosinophil-rich tissue inflammation in which the nose and sinuses are among the most commonly involved organs. The sinonasal picture usually looks like chronic rhinosinusitis with nasal polyps, and it can precede recognition of the systemic vasculitis by several years.",
+      "why": "Treat new polyposis as a possible marker of a systemic disease rather than as isolated CRS with polyps: in a scoping review the sinonasal presentation was clinically indistinguishable from CRS with polyps without EGPA, and the median time from CRS onset to EGPA diagnosis was 66 months (35 patients with data). A sinus biopsy rarely proves vasculitis (head and neck biopsies in 7 patients in one series showed none), so the diagnosis rests on the clinical and laboratory picture, and a negative biopsy does not exclude it. Destructive sinonasal disease points to GPA rather than EGPA ([[dz.gpa]]). Off-label dupilumab has been used mainly for disabling ENT symptoms, but EGPA flares occurred in about a third of 51 patients, so the authors advise caution.",
+      "imaging": {
+        "ct": "Nasal polyps with sinus disease are the usual picture (CRS with polyps was the predominant sinonasal phenotype in a scoping review). Compared with GPA on sinus CT (22 EGPA, 31 GPA), EGPA showed more high-density opacification and higher mean attenuation of secretions (both P < .0001), as in allergic fungal sinusitis, whereas bony destruction, sclerotic wall change and involvement of adjacent organs were more frequent in GPA. By Lund-Mackay score (30 EGPA patients before treatment) disease was on average milder than in NSAID-exacerbated respiratory disease or eosinophilic CRS without asthma, with wide variation between patients: low scorers had only minor maxillary and anterior ethmoid findings, high scorers high ostiomeatal complex scores."
+      },
+      "redFlags": [
+        "Nasal polyps with obstructive airway disease and a blood eosinophil count at or above 1 x 10^9/L, or mononeuritis multiplex or motor neuropathy → think EGPA and involve rheumatology (these are items of the 2022 classification criteria, [[c.acr-eular-egpa]]).",
+        "Septal perforation, saddle nose or bony destruction → GPA is more likely: in one cross-sectional series (15 EGPA, 35 GPA) destructive lesions including saddle nose occurred only in GPA.",
+        "Negative sinus biopsy → does not exclude EGPA: biopsies in 7 patients in one series showed no vasculitis.",
+        "EGPA flare after starting dupilumab → in a 51-patient retrospective study, relapse on dupilumab was associated with blood eosinophilia in 14 of 16 patients."
+      ],
+      "mimics": [
+        "dz.gpa",
+        "dz.afrs",
+        "dz.crs-with-polyps"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "In a Spanish single-centre series, sinonasal involvement was the most frequent head and neck manifestation (82% of 22 patients meeting the 2022 criteria; 21 had head and neck data), and nasal polyps were the commonest finding (7 of 21). Polyps were not significantly associated with ANCA positivity or eosinophilia."
+        },
+        {
+          "tier": 2,
+          "text": "In an older series of 28 patients with Churg-Strauss syndrome (1990 ACR criteria), 21 had ENT involvement; of those 21, nasal polyposis was present in 16, allergic rhinitis in 9 and nasal crusting in 3."
+        },
+        {
+          "tier": 3,
+          "text": "Across 109 studies in a scoping review (1,087 patients with CRS and EGPA), nasal polyps were present in 753 (69.3%) and absent in 334 (30.7%); because the studies used different criteria and populations, treat the split as indicative, not as a prevalence."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.grayson-2022-egpa",
+        "src.sharma-2026-egpa-crs",
+        "src.ryoo-2025-gpa-egpa-sinus-ct",
+        "src.iwata-2023-egpa-sinus-ct",
+        "src.fernandez-ensenat-2025-egpa-ent",
+        "src.almogairen-2026-gpa-egpa-ent",
+        "src.bacciu-2006-egpa-ent",
+        "src.molina-2023-egpa-dupilumab"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.primary-ciliary-dyskinesia",
+      "name": "Primary ciliary dyskinesia (sinonasal disease)",
+      "syn": [
+        "PCD",
+        "ciliary dyskinesia CRS"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.frontal-sinus",
+        "s.sphenoid-sinus",
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.inferior-turbinate",
+        "s.middle-turbinate",
+        "s.nasal-septum"
+      ],
+      "tier": 2,
+      "what": "A rare inherited disorder of motile cilia that impairs mucociliary clearance and causes chronic sinopulmonary disease. In the nose it causes chronic nasal symptoms and chronic rhinosinusitis, in sinuses that are often underdeveloped.",
+      "why": "Read the CT for development before planning surgery: the frontal and sphenoid sinuses are frequently aplastic or hypoplastic, and marked turbinate hypertrophy and septal deviation are common, so check what is actually present before choosing the operation. Evidence for sinus surgery here is limited to very small series: in one series of four adults, symptom, quality-of-life and endoscopic scores improved at 3 and 6 months while olfaction did not. Sinonasal disease needs regular examination at every age, because in a 384-participant international cohort the only characteristic associated with more sinonasal disease was age 10 years or older.",
+      "imaging": {
+        "ct": "Adults (21 patients, Plantier): aplasia in 38.1% of frontal and 14.3% of sphenoid sinuses and hypoplasia in 47.6% of frontal, 54.8% of sphenoid and 40.5% of maxillary sinuses (percentages are per sinus); trabecular loss in 61.9% of ethmoid sinuses; mean Lund-Mackay score 13.5; marked bilateral inferior turbinate hypertrophy in 47.6%, marked middle turbinate hypertrophy in 38.1% and marked septal deviation in 47.6% (per patient). Images suggesting fungus ball, mucocele, osteoma, a possible antrochoanal polyp and frontal bone erosion were also found. In 17 patients with CT volumes (Pappa), maxillary, sphenoid and frontal sinus volumes were all significantly smaller than in matched controls."
+      },
+      "redFlags": [
+        "Frontal and/or sphenoid aplasia or hypoplasia on CT → may be part of the PCD spectrum and should prompt exclusion of PCD: in 86 patients evaluated for PCD, it was present in 30 of 41 with PCD (73%) against 17 of 45 (38%) with secondary ciliary dyskinesia.",
+        "Planning CT in PCD → expect incidental findings (fungus ball, mucocele, osteoma, frontal bone erosion were each reported in 21 adults) and absent or small sinuses."
+      ],
+      "mimics": [
+        "dz.cystic-fibrosis-sinusitis"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "In 384 participants (median age 16 years) of an international ENT cohort, chronic nasal problems were reported by 89%, nasal polyps found in 51 of 345 examined (15%), hypertrophic inferior turbinates in 127 of 341 (37%) and facial pain in 50 of 342 (15%); polyps, hypertrophic turbinates, deviated septum and facial pain were more common in adults, and hyposmia was reported by 24% of adults against 4% of children."
+        },
+        {
+          "tier": 3,
+          "text": "A single-centre comparison found PCD-related CRS had a more significant effect on sinonasal quality of life than CRS without nasal polyps and than cystic fibrosis, although PCD and CF share a mucociliary clearance defect (abstract only; no scores quoted here). See [[dz.cystic-fibrosis-sinusitis]]."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.lam-2023-pcd-sinonasal",
+        "src.plantier-2023-pcd-sinus-ct",
+        "src.pifferi-2011-pcd-sinus-agenesis",
+        "src.pappa-2021-pcd-sinus-volume",
+        "src.stack-2023-pcd-qol",
+        "src.plantier-2023-pcd-ess"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.immunodeficiency-crs",
+      "name": "Chronic rhinosinusitis with primary immunodeficiency (antibody deficiency)",
+      "syn": [
+        "immunodeficiency-associated CRS",
+        "primary antibody deficiency and rhinosinusitis",
+        "PAD-related CRS",
+        "CVID sinusitis"
+      ],
+      "category": "inflammatory",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.ethmoid-labyrinth",
+        "s.frontal-sinus",
+        "s.sphenoid-sinus",
+        "s.ostiomeatal-complex"
+      ],
+      "tier": 2,
+      "what": "Chronic or recurrent rhinosinusitis that is sustained by an immune defect, most often a primary antibody deficiency: common variable immunodeficiency (CVID), selective IgA deficiency, IgG subclass deficiency or specific antibody deficiency. It looks like ordinary CRS and is found by testing: in a prospective cohort of 138 adults with CRS no clinical characteristic predicted it. The sources read are about antibody deficiency and do not split the entity by immunodeficiency type; CF and ciliary disorders are separate causes of impaired clearance ([[dz.cystic-fibrosis-sinusitis]], [[dz.primary-ciliary-dyskinesia]]).",
+      "why": "Check quantitative serum immunoglobulins and functional antibody responses in recalcitrant CRS before repeating surgery and before starting biologic therapy. Reported prevalence depends on the population: primary antibody deficiency was found in up to 50% of patients with recalcitrant CRS in the evidence-based review, but in an unselected adult CRS clinic cohort 21% (29 of 138) had hypogammaglobulinemia and only four had a clinically diagnosed deficiency. Treatment is shared with clinical immunology; immunoglobulin replacement appears most effective at high dose early in the disease, and surgery in this group is less clearly supported than replacement, though it may help if done early.",
+      "imaging": {
+        "ct": "No CT pattern that identifies the immunodeficiency itself was found in the sources read. In 19 CVID patients, Lund-Mackay mucosal thickening was inversely related to serum IgM (R = -0.6398, p = 0.0032) and osteitis of the sinus bone was almost exclusively found in patients with IgM below 25 mg/dl (p = 0.0074)."
+      },
+      "redFlags": [
+        "Recalcitrant or recurrent CRS despite medical and surgical treatment → serum immunoglobulins and functional antibody responses (systematic review and review of primary antibody deficiencies in CRS both advise screening).",
+        "Before biologic therapy for CRS → immunoglobulin testing, because primary antibody deficiency is under-recognized and treatable (the authors of a 138-patient cohort).",
+        "Recurrent infections on immunoglobulin replacement → replacement does not remove them all: of 58 adults on replacement, 24 (41.4%) still reported 1 to 5 sinus infections a year."
+      ],
+      "mimics": [
+        "dz.crs-without-polyps"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Retrospective, uncontrolled data from 58 adults with primary humoral immunodeficiency and rhinosinusitis (30 CVID, 18 hypogammaglobulinemia, 10 specific antibody deficiency) on immunoglobulin replacement: mean Lund-Mackay score fell from 7.6 to 3.5, sinus surgery was needed before replacement in 11 (19%) and after it in 2 (3.4%), and 34 (58.6%) reported no further infections."
+        },
+        {
+          "tier": 3,
+          "text": "Among the antibody deficiencies reviewed, CRS is highly prevalent in CVID and selective IgA deficiency, the clinical relevance of IgG subclass deficiency is unclear, and specific antibody deficiency may matter more in refractory CRS."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.mazza-2016-pid-crs",
+        "src.makary-2023-pad-crs-adults",
+        "src.ocampo-2013-antibody-deficiency-crs",
+        "src.hagan-2010-cvid-sinus-ct",
+        "src.makary-2022-ig-replacement",
+        "src.petersen-2026-pad-crs-cohort"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.sinonasal-tuberculosis",
+      "name": "Sinonasal tuberculosis",
+      "syn": [
+        "nasal tuberculosis",
+        "primary sinonasal tuberculosis"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.nasal-cavity",
+        "s.lateral-nasal-wall",
+        "s.nasal-septum",
+        "s.maxillary-sinus"
+      ],
+      "tier": 2,
+      "what": "A rare mycobacterial granulomatous infection of the nose and paranasal sinuses, reported as primary disease in otherwise healthy, immunocompetent patients. Its signs and symptoms are non-specific and highly variable.",
+      "why": "Keep it in the differential of nasal and paranasal sinus disease, particularly with intractable symptoms or a unilateral mass: primary sinonasal tuberculosis mimics sinonasal granulomatous disease and neoplasm. The diagnosis in the reported cases rested on imaging, nasal endoscopy and biopsy histology; tissue should be taken from several sites when the septum is ulcerated. In three reported cases antitubercular drug therapy was successful.",
+      "imaging": {
+        "ct": "No reliable CT sign is established by the abstracts read. A single reported case (Dey) showed a sinonasal mass involving the lateral nasal wall and the paranasal sinuses, and granulomatous diseases of the head and neck have imaging that overlaps with malignancy (Nwawka), so imaging cannot separate tuberculosis from neoplasm or other granulomatous disease."
+      },
+      "redFlags": [
+        "Septal ulceration or perforation → infective causes include tuberculosis and leprosy as well as vasculitis; diagnosis often needs multiple tissue specimens from several sites, and lymphoma should be considered in chronic cases (Sardana 2014).",
+        "A granulomatous biopsy of the nose is not automatically GPA or sarcoidosis → infectious causes (tuberculosis, syphilis, leprosy, rhinoscleroma, fungal) are listed alongside them in the head and neck granulomatous differential."
+      ],
+      "mimics": [
+        "dz.gpa",
+        "dz.sarcoidosis-sinonasal"
+      ],
+      "geo": "none",
+      "src": [
+        "src.malik-2016-sinonasal-tb",
+        "src.dey-2018-sinonasal-tb",
+        "src.sardana-2014-septal-ulceration",
+        "src.nwawka-2014-granulomatous-hn"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.leprosy-nasal",
+      "name": "Leprosy of the nose (Hansen's disease, rhinomaxillary syndrome)",
+      "syn": [
+        "Hansen's disease of the nose",
+        "lepromatous leprosy rhinitis",
+        "rhinomaxillary syndrome"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.nasal-septum",
+        "s.inferior-turbinate",
+        "s.nasal-bone",
+        "s.piriform-aperture"
+      ],
+      "tier": 2,
+      "what": "Chronic infection with Mycobacterium leprae in which lepromatous disease harbors large numbers of bacilli in the nasal tissue, often for years without symptoms. In advanced disease septal involvement leads to saddle nose deformity, and in long-standing disease CT shows resorption of the nasal bones, nasal aperture and anterior maxilla (rhinomaxillary syndrome).",
+      "why": "Consider leprosy in a saddle nose or atrophic rhinitis that does not respond to routine treatment; in a reported case the diagnosis was made from acid-fast staining of the nasal discharge and a positive skin smear. CT is advised when rhinomaxillofacial bone change is suspected, and long-term care of former patients should include ENT evaluation, mainly to prevent secondary complications. Early diagnosis and treatment can minimize the damage.",
+      "imaging": {
+        "ct": "In a Brazilian study of 21 current and 16 former patients with 37 controls, severe resorption or atrophy of the anterior alveolar process of the maxilla was found in 8 of 16 former patients, 6 of 21 current patients and 4 of 37 controls, and of the nasal bones and aperture in 5 of 16 former patients, 0 of 21 current patients and two controls. In 16 older former patients examined by three-dimensional CT, 4 fully and 4 partly met radiological criteria for rhinomaxillary syndrome, and all with the full radiological syndrome had facial changes meeting the clinical criteria, including saddle nose and a concave middle third of the face. The criteria themselves were not read."
+      },
+      "redFlags": [
+        "Saddle nose or atrophic rhinitis that does not respond to routine treatment → acid-fast stain of nasal discharge and skin smear (one reported case, lepromatous leprosy).",
+        "Septal ulceration → leprosy and tuberculosis are among the infective causes; take multiple specimens (Sardana 2014)."
+      ],
+      "complications": [
+        "h.saddle-nose"
+      ],
+      "mimics": [
+        "dz.gpa"
+      ],
+      "geo": "none",
+      "src": [
+        "src.mcdougall-1975-leprosy-nose",
+        "src.pokala-2025-leprosy-saddle-nose",
+        "src.espirito-santo-2022-hd-maxillofacial",
+        "src.espirito-santo-2022-rhinomaxillary",
+        "src.sardana-2014-septal-ulceration"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.rhinoscleroma",
+      "name": "Rhinoscleroma",
+      "syn": [
+        "scleroma",
+        "Klebsiella rhinoscleromatis infection"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.nasal-cavity",
+        "s.nasopharynx",
+        "s.maxillary-sinus"
+      ],
+      "tier": 2,
+      "what": "A chronic, granulomatous infection of the upper airway caused by Klebsiella rhinoscleromatis. The nose is involved in all cases, often with extension to the nasopharynx, larynx, trachea and bronchi. It is endemic in parts of Africa, South-East Asia, Mexico, Central and South America and Central and Eastern Europe, and is seen in other countries with migration.",
+      "why": "Nasal symptoms are usually the first sign. Diagnosis rests on direct evidence of the bacterium (culture or immunohistochemistry on a nasal biopsy, with histology), and the differential diagnosis includes syphilis, midline granuloma and malignancy. Treatment is prolonged antibiotic therapy with reconstructive surgery when needed, but the disease is difficult to eradicate and recurs often. The paranasal sinuses are usually free of disease, so sinus or orbital extension is unusual and can mimic tumour or fungal sinusitis.",
+      "imaging": {
+        "ct": "CT and MRI are useful for diagnosis; the abstracts read describe no specific CT sign. The paranasal sinuses are usually free of disease (Bailhache).",
+        "mri": "In a single reported case with orbital extension the lesion was homogeneously low signal on T2-weighted images and enhanced with gadolinium; it could simulate a malignant sinonasal tumour or a fungal sinusitis, so the diagnosis must be considered in patients from endemic areas."
+      },
+      "redFlags": [
+        "Chronic rhinitis or nasal granuloma in a patient from or with links to an endemic area → rhinoscleroma and ozena should be kept in mind even in developed countries, with biopsy for histology and bacterial identification."
+      ],
+      "mimics": [
+        "dz.sinonasal-scc"
+      ],
+      "geo": "none",
+      "src": [
+        "src.navazo-2010-rhinoscleroma",
+        "src.bailhache-2008-rhinoscleroma-sinuses",
+        "src.lehir-1996-rhinoscleroma-orbit",
+        "src.botelho-nevers-2007-klebsiella"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.rhinosporidiosis",
+      "name": "Rhinosporidiosis",
+      "syn": [
+        "Rhinosporidium seeberi infection"
+      ],
+      "category": "infectious",
+      "involves": [
+        "s.nasal-cavity",
+        "s.nasopharynx",
+        "s.nasolacrimal-duct"
+      ],
+      "tier": 2,
+      "what": "A chronic infection of the mucous membranes by Rhinosporidium seeberi, an aquatic mesomycetozoan, that primarily affects the nose (also the conjunctiva and urethra) and presents as a polypoid mass growing inside the affected cavity. It is endemic in some Asian regions and in parts of Brazil, and isolated cases are reported elsewhere with migration.",
+      "why": "Keep it in mind for a polypoid, vascular-looking nasal or nasopharyngeal mass, including in patients from non-endemic countries. The only treatment is surgical excision, and the patient must be followed for recurrence. In a Brazilian series of 25 patients, most were children, adolescents or young adults, all lesions involved the entire nasal cavity as a vascular polypoid mass, and all were excised.",
+      "imaging": {
+        "ct": "The abstracts read describe no specific CT finding. In a reported case with proptosis from involvement of the nasolacrimal duct, the authors discuss typical CT and MRI features that the abstract does not state; they call CT and MRI invaluable, FNAC confirmatory, and rhinosporidiosis a necessary differential for sinonasal masses, which it may mimic as a more malignant lesion."
+      },
+      "redFlags": [
+        "Proptosis with a nasal mass → nasolacrimal duct involvement, a rare presentation reported in one case."
+      ],
+      "geo": "none",
+      "src": [
+        "src.das-2011-rhinosporidiosis",
+        "src.almeida-2016-rhinosporidiosis-brazil",
+        "src.dey-2016-rhinosporidiosis-proptosis"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.septal-hematoma-abscess",
+      "name": "Nasal septal hematoma and abscess",
+      "syn": [
+        "septal haematoma",
+        "septal abscess",
+        "NSH",
+        "NSA"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.nasal-septum",
+        "s.septal-cartilage",
+        "s.septal-mucosa"
+      ],
+      "tier": 1,
+      "what": "Blood (hematoma) or pus (abscess) collecting between the septal cartilage and the overlying mucoperichondrium or mucoperiosteum. It follows nasal trauma or nasal surgery, and an untreated hematoma can become an abscess; abscess is typically secondary to a hematoma but can be idiopathic, and a spontaneous posterior septal abscess has been reported in a child. This entity covers the hematoma and the abscess together as one continuum; the surgical hazard of creating one is [[h.septal-hematoma]].",
+      "why": "It is an emergency because delay destroys septal cartilage. Diagnosis is typically late (a mean 8.2 days from trauma in the meta-analysis of traumatic cases; a median 7 days in a paediatric series), and the reported sequelae are septal deformity or cartilage destruction (14.3% in the meta-analysis), saddle nose (3 of 13 children in one series) and, if an abscess is left, intracranial complications, facial deformity and delayed midface growth in children. Management is incision and drainage with antibiotics (in a management review of 17 articles and 503 patients incision and drainage was used in all, followed by quilting sutures, drains, nasal packing or a combination, and re-collection occurred in 18 patients, 3.6%); in children early septal reconstruction with autologous cartilage has been advised. After septoplasty, type 2 diabetes was an independent risk factor for abscess.",
+      "imaging": {
+        "ct": "The sources read describe CT only for the abscess: a fluid collection with thin rim enhancement within the cartilaginous septum, reported in two immunosuppressed patients (Debnam 2007). None of the sources read describes CT of the hematoma."
+      },
+      "redFlags": [
+        "Septal swelling and obstruction after nasal trauma or septal surgery → examine the septum and drain a collection; it is easily missed at first evaluation (a paediatric review found it missed in several settings before diagnosis).",
+        "Pain, fever or purulence with septal swelling → abscess: drainage, culture and antibiotics (Staphylococcus aureus was the commonest organism); intracranial abscess, meningitis and cavernous sinus thrombosis are the feared complications.",
+        "Picture of a septal abscess (nasal obstruction, headache, otalgia) with no recent trauma or infection and no anterior septal bulging → nasal endoscopy for a spontaneous posterior septal abscess (reported in a 10-year-old, confirmed on CT and MRI)."
+      ],
+      "complications": [
+        "h.septal-perforation",
+        "h.saddle-nose",
+        "dz.cavernous-sinus-thrombosis"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "Meta-analysis of traumatic septal hematoma or abscess (30 studies, 598 patients; surgical cases excluded): 72.1% male, mean age 21.6 years; presenting symptoms nasal obstruction or congestion 60.3% (95% CI 37.1-81.4), nasal pain 30.0% (17.2-44.6), swelling 20.4% (8.7-35.5), headache 15.5% (7.3-26.0) and fever 13.9% (7.3-22.2); Staphylococcus aureus 56.5% (49.0-63.8) of isolated organisms."
+        },
+        {
+          "tier": 2,
+          "text": "In a Taiwanese insurance-database cohort (382 septoplasty patients with type 2 diabetes against 382 matched controls), the cumulative incidence of septal abscess after septoplasty was higher with diabetes (adjusted hazard ratio 2.62, 95% CI 1.44-3.61), and higher still with a Diabetes Complications Severity Index of 1 or more (adjusted hazard ratio 3.58, 2.10-6.09)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.nanu-2024-septal-hematoma",
+        "src.jackson-2025-septal-hematoma-management",
+        "src.alshaikh-2011-septal-abscess-children",
+        "src.ali-2021-septal-hematoma-children",
+        "src.luan-2021-septal-abscess-diabetes",
+        "src.debnam-2007-septal-abscess-ct",
+        "src.berlucchi-2021-posterior-septal-abscess",
+        "src.abd-rahim-2024-spontaneous-septal-abscess"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nasolabial-cyst",
+      "name": "Nasolabial (nasoalveolar) cyst",
+      "syn": [
+        "nasoalveolar cyst",
+        "Klestadt cyst"
+      ],
+      "eponym": "Klestadt",
+      "category": "cystic",
+      "involves": [
+        "s.nasal-ala"
+      ],
+      "tier": 2,
+      "what": "A rare nonodontogenic cyst arising commonly in the nasal alar region, in the soft tissue between the nasolabial fold and the maxillary bone, usually presenting as facial swelling.",
+      "why": "Two routes are used: intraoral sublabial excision, long the standard, and transnasal endoscopic marsupialization, an alternative that has emerged more recently. In a meta-analysis marsupialization had a shorter operative time, less postoperative pain, fewer complications, fewer admissions and lower costs, with no significant difference in recurrence; in the systematic review of 311 cases recurrence was reported in 3 patients after sublabial excision and 2 after marsupialization. The commonest complication after treatment was postoperative facial or perinasal swelling.",
+      "imaging": {
+        "ct": "CT was the most commonly used imaging in reported cases (170 of 311 patients in the systematic review). In 20 patients with 21 surgically proven cysts, all lay in the soft tissue between the nasolabial fold and the maxillary bone; for the diagnosis the sensitivity was 95% for ultrasound, 80% for CT and 85% for MRI (a small single-centre series).",
+        "mri": "MRI had a sensitivity of 85% for nasolabial cysts in the same 20-patient series; the abstract does not describe signal characteristics."
+      },
+      "pearls": [
+        {
+          "tier": 3,
+          "text": "In one 57-patient series (47 with preoperative CT), the mean operative time was 91.3 minutes for sublabial excision (23 patients) and 29.5 minutes for transnasal endoscopic marsupialization (34 patients), the hospitalization rate was 100% against 59%, and neither group had major complications or recurrence during 6 to 85 months of follow-up."
+        },
+        {
+          "tier": 3,
+          "text": "Laterality in reported cases where it was stated: left 46.9%, right 37.5%, bilateral 10.9% (systematic review of 311 cases)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.sheikh-2016-nasolabial-cysts",
+        "src.tsai-2024-nasolabial-cyst-meta",
+        "src.liu-2023-nasolabial-cyst-imaging",
+        "src.chao-2009-nasolabial-cyst-marsupialization"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nasopalatine-duct-cyst",
+      "name": "Nasopalatine duct (incisive canal) cyst",
+      "syn": [
+        "incisive canal cyst",
+        "nasopalatine canal cyst",
+        "NPDC"
+      ],
+      "category": "cystic",
+      "involves": [
+        "s.incisive-canal"
+      ],
+      "tier": 2,
+      "what": "The most common nonodontogenic cyst of the jaws, arising in the nasopalatine (incisive) canal and appearing as a well-defined radiolucency between the upper central incisors. In a 106-case series it behaved as a non-aggressive, slow-growing lesion, and most were asymptomatic in a systematic review (54.16% of cases).",
+      "why": "Its position overlaps with odontogenic lesions of the upper incisors: a periapical cyst was the second most frequent clinical diagnostic hypothesis in a systematic review of 2,734 cases, and diagnosis needs radiographic and histopathological evaluation. Enucleation was the preferred treatment (544 cases, 95.94% of those with treatment reported) and recurrence was absent in most (375 cases, 93.05% of those with follow-up reported). Large cysts carry a risk of oronasal fistula; intranasal endoscopic marsupialization has been reported for them in a few cases and suggested as an initial option in selected cases.",
+      "imaging": {
+        "ct": "Midline location, smooth expansion with sclerotic margins and displacement of the tooth apices, in contrast to a radicular cyst in which the apices lie within the cyst (single reported case, Pevsner). On radiographs, a well-defined radiolucent lesion between the upper central incisors with a radiopaque margin (63-case series). On CBCT, the oral-opening mediolateral diameter, anterior wall expansion and mid-canal anteroposterior diameter were larger in 19 cysts than in 164 normal canals, and together they separated cysts from normal canals with a sensitivity of 98.8% and a specificity of 76.9%."
+      },
+      "geo": "none",
+      "src": [
+        "src.pevsner-2000-npdc-ct",
+        "src.ramos-pena-2025-npdc",
+        "src.buchanan-2026-npdc-106",
+        "src.soares-2026-npdc-review",
+        "src.kang-2014-npdc-marsupialization",
+        "src.janovic-2024-npdc-cbct"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.organized-hematoma",
+      "name": "Organized hematoma of the maxillary sinus",
+      "syn": [
+        "sinonasal organized hematoma",
+        "organizing hematoma of the maxillary sinus",
+        "OHMS"
+      ],
+      "category": "idiopathic",
+      "involves": [
+        "s.maxillary-sinus",
+        "s.maxillary-medial-wall",
+        "s.nasal-cavity"
+      ],
+      "tier": 2,
+      "what": "A non-neoplastic, benign but sometimes locally aggressive mass of hemorrhage, fibrosis and neovascularization that arises most often in the maxillary sinus and extends into the ipsilateral nasal cavity. It presents with nasal bleeding, obstruction or facial swelling, and its pathogenesis is still uncertain.",
+      "why": "It mimics a neoplasm clinically and on imaging, and a preoperative biopsy was consistently non-diagnostic before complete resection in one series, so the diagnosis rests on MRI and the resected specimen; the most diagnostic finding was a shell of T2 hypointensity around each lobule. Endoscopic removal was complete in all 25 patients of one series (13 by endoscopic medial maxillectomy and 12 by endoscopic sinus surgery) with no major complications or recurrence, and in a 20-patient series sublabial and endonasal endoscopic approaches, alone or combined, gave no recurrence. The lesion contains neovascularization and frond-like enhancing arteries have been shown on contrast CT in five patients.",
+      "imaging": {
+        "ct": "In 12 patients (Kim) the lesion was a unilateral mass of 2.2 to 6.0 cm (mean 4.2), expansile in nine, centred in the maxillary sinus in 11 and the nasal cavity in 1; the ipsilateral nasal cavity was involved in 9 of 11 maxillary lesions and smooth sinus wall erosion other than of the medial wall was seen in 8. In 8 patients, all lesions were hyperdense on precontrast CT, all had smooth erosion of the medial maxillary wall, and the epicentre was the secondary maxillary ostium (Hur). Other series describe heterogeneous enhancement, bony destruction in 25% and focal calcification in 15% of 20 patients (Song), and geographic bone remodeling with thinning of turbinates and sinus walls (Eissa). One series concluded that CT does not help to separate these lesions from neoplasm (Wu).",
+        "mri": "T2: marked heterogeneous hypointensity and isointensity with a hypointense peripheral rim, and marked irregular nodular, papillary or frond-like enhancement in all 10 patients imaged (Kim); the hypointense shells correspond to rims of fibrosis around lobules with fresh hemorrhage at the centre (Wu). Unrestricted diffusion with high ADC in the five patients examined (Eissa)."
+      },
+      "redFlags": [
+        "Unilateral expansile maxillary mass with epistaxis, smooth wall erosion, hyperdensity on non-contrast CT and a T2-hypointense rim → organized hematoma belongs in the differential before assuming malignancy; a nondiagnostic biopsy is typical.",
+        "Associated vascular lesions → 2 of 7 patients in one series had a vascular malformation or small hemangioma next to the mass on final pathology."
+      ],
+      "managedBy": [
+        "p.medial-maxillectomy"
+      ],
+      "mimics": [
+        "dz.sinonasal-scc"
+      ],
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "The bone changes are described differently between series: smooth erosion in a 12-patient and an 8-patient CT series (medial maxillary wall in all 8 of the latter) against bony destruction in 25% of 20 patients in a third."
+        },
+        {
+          "tier": 2,
+          "text": "Presentation: nasal bleeding in 14 of 25 (Jeong), epistaxis as the most common complaint in 70% of 20 (Song), and epistaxis as the primary complaint in 3 of 7 (Wu)."
+        }
+      ],
+      "geo": "none",
+      "src": [
+        "src.kim-2008-organized-hematoma",
+        "src.hur-2015-organized-hematoma",
+        "src.wu-2013-organizing-hematoma",
+        "src.song-2007-ohms",
+        "src.jeong-2021-organized-hematoma-endoscopic",
+        "src.eissa-2021-organized-hematoma-mr-ct",
+        "src.nishiguchi-2007-organized-hematoma"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.nasal-fracture",
+      "name": "Nasal bone and septal fracture",
+      "syn": [
+        "broken nose",
+        "nasal fracture",
+        "nasal bone fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.nasal-bone",
+        "s.nasal-septum"
+      ],
+      "tier": 1,
+      "what": "Fracture of the nasal bones from blunt facial trauma, often with a fracture or deviation of the septum. It is a common injury and is often managed initially with closed reduction of the nasal bones.",
+      "why": "The septum decides the result. After closed nasal reduction without septal reduction, over 90% of patients were satisfied overall, but those with a septal fracture on CT reported worse breathing outcomes (53.6% against 24.1% disagreed that reduction improved nasal breathing) and a septal fracture on imaging was a significant risk factor for later septorhinoplasty (11 patients, 2%, eventually had one). The authors advise counselling about the high risk of persistent deformity and obstruction and addressing a septal fracture early by closed septal reduction or early aggressive management. In 116 patients with isolated nasal bone fractures closed reduction reduced the extent of later septal deviation, so a patient who declines reduction should be told the likely outcome.",
+      "imaging": {
+        "ct": "A septal fracture seen on CT is the finding that predicted both the choice of closed reduction and a worse result after it. Septal deviation was measured on coronal CT as the angle between the most prominent point of the septum and the crista galli (the method used in the 116-patient series)."
+      },
+      "redFlags": [
+        "Septal fracture on CT → counsel on the high risk of posttraumatic deformity and obstruction despite closed reduction of the nasal bones.",
+        "Septal swelling or obstruction after nasal trauma → septal hematoma until proved otherwise ([[dz.septal-hematoma-abscess]]); it is easily missed."
+      ],
+      "complications": [
+        "dz.septal-hematoma-abscess"
+      ],
+      "geo": "none",
+      "src": [
+        "src.arnold-2019-nasal-fracture-septal",
+        "src.choi-2022-nasal-fracture-septal-deviation",
+        "src.nanu-2024-septal-hematoma"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.medial-orbital-wall-fracture",
+      "name": "Medial orbital wall (lamina papyracea) fracture",
+      "syn": [
+        "medial blowout fracture",
+        "isolated medial orbital wall fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.lamina-papyracea",
+        "s.ethmoid-labyrinth",
+        "s.orbit"
+      ],
+      "tier": 2,
+      "what": "A fracture of the thin medial wall of the orbit, from blunt orbital trauma, that may occur alone or with the orbital floor ([[dz.orbital-floor-fracture]]). Orbital content can prolapse into the ethmoid labyrinth.",
+      "why": "Most isolated fractures need no operation: of 60 patients 51 (85%) had no symptoms, 9 (15%) had diplopia, and 56 were managed conservatively, with surgery in 4 for persistent diplopia with enophthalmos. When repair is needed, endoscopic repair with mesh pushed into the orbit was not inferior to the transcaruncular route and took less time (44.7 against 73.9 minutes; 26 endoscopic and 14 external repairs), and diplopia, eye-movement limitation and enophthalmos resolved in all patients except one with preexisting strabismus. For the sinus surgeon the fracture also changes the ethmoid: in a 21-case CT study the plane through the pars membranacea was the most severely affected, and two late fronto-ethmoidal mucoceles appeared 23 and 14 years after the trauma ([[dz.mucocele]]).",
+      "imaging": {
+        "ct": "Coronal CT shows the extent of the medial wall defect, the volume of orbital content prolapsed into the ethmoid, and soft-tissue density around the prolapsed content; in 21 cases the coronal plane containing the pars membranacea was the most severely damaged, followed by the plane of the superior meatus. Three-dimensional CT confirmed the fracture location in a 60-patient series, and defect size on preoperative CT was compared between repair routes in 40 patients."
+      },
+      "redFlags": [
+        "Persistent diplopia (more than 2 weeks) with enophthalmos → surgical repair; this applied to 4 of the 60 patients in the series.",
+        "Old medial orbital trauma with proptosis, orbital or frontal swelling → late fronto-ethmoidal mucocele, reported in 2 of 21 patients in one series."
+      ],
+      "complications": [
+        "dz.mucocele"
+      ],
+      "geo": "none",
+      "src": [
+        "src.alafaleq-2019-medial-wall-fracture",
+        "src.iinuma-1991-medial-wall-fracture",
+        "src.kim-2020-endoscopic-medial-wall"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "dz.zmc-fracture",
+      "name": "Zygomaticomaxillary complex (tripod) fracture",
+      "syn": [
+        "ZMC fracture",
+        "tripod fracture",
+        "zygomatic complex fracture"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.orbit",
+        "s.orbital-floor",
+        "s.infraorbital-nerve",
+        "s.maxillary-sinus",
+        "s.maxillary-posterior-wall"
+      ],
+      "tier": 2,
+      "what": "A fracture of the cheek bone (zygoma) at its articulations, one of the most commonly treated facial fractures. Because it alters orbital volume, accurate reduction matters for more than appearance.",
+      "why": "Three points matter to a sinus and skull-base surgeon. The infraorbital nerve is injured in about half of patients (pooled incidence 51.9%, 95% CI 48-55%, from 11 trials and 802 patients), and surgical decompression within two weeks gave better sensory recovery than conservative treatment. Accurate reduction and fixation of the zygoma, with internal orbital reconstruction where needed, protects against functional sequelae from orbital volume change. And the maxillary sinus can be affected years later: maxillary mucocele is a late complication of facial fractures even when the ostium is normal (two cases), and in one patient a mucosa-lined closed cavity formed when an untreated orbital floor fracture contacted the anteriorly displaced posterior maxillary wall and produced a cyst 28 years after repair, drained by a combined subciliary and endoscopic endonasal approach.",
+      "imaging": {
+        "ct": "CT confirms the fracture (radiologically confirmed fractures defined the meta-analysis population) and allows a strut-based classification of facial fractures in which zygomatic (tripod) and zygomaticomaxillary fractures are complex strut fractures. Look at the orbital floor and the posterior maxillary wall: in the late-cyst case CT showed the bony partition and a posteriorly expanding cyst with bone erosion abutting the orbital contents."
+      },
+      "redFlags": [
+        "Cheek pain or swelling, proptosis or globe displacement years after a facial fracture → late maxillary sinus mucocele or cyst; image with CT (two reported cases of post-traumatic maxillary mucocele with proptosis and globe displacement).",
+        "Infraorbital numbness after ZMC fracture → the pooled incidence is about half; early decompression within two weeks was associated with better recovery."
+      ],
+      "complications": [
+        "dz.mucocele"
+      ],
+      "geo": "none",
+      "src": [
+        "src.wang-2021-zmc-fracture",
+        "src.mehta-2025-zmc-infraorbital-nerve",
+        "src.billing-2004-posttraumatic-mucocele",
+        "src.iwasaki-2026-zmc-mucocele",
+        "src.laine-1993-maxillofacial-trauma-radiology"
       ],
       "review": "draft"
     }
@@ -3035,6 +3627,56 @@
       "src": [
         "src.friedman-2013-iih",
         "src.schlosser-2006-spontaneous"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "c.acr-eular-egpa",
+      "name": "2022 ACR/EULAR classification criteria for eosinophilic granulomatosis with polyangiitis",
+      "of": "dz.egpa",
+      "tier": 3,
+      "basis": "Seven weighted items, summed only after a small- or medium-vessel vasculitis has been diagnosed and mimics of vasculitis excluded; a cumulative score of 6 or more classifies as EGPA (Grayson et al. 2022). Developed and validated as classification criteria for research, not as diagnostic criteria.",
+      "classes": [
+        {
+          "code": "eosinophils",
+          "label": "Maximum eosinophil count (+5)",
+          "criterion": "Maximum blood eosinophil count at or above 1 x 10^9/L."
+        },
+        {
+          "code": "airway",
+          "label": "Obstructive airway disease (+3)",
+          "criterion": "Obstructive airway disease, as named in the published criteria."
+        },
+        {
+          "code": "polyps",
+          "label": "Nasal polyps (+3)",
+          "criterion": "Nasal polyps, as named in the published criteria.",
+          "why": "The only sinonasal item in the criteria; polyps alone score 3 of the 6 points needed, so they cannot classify EGPA without other items."
+        },
+        {
+          "code": "ANCA",
+          "label": "cANCA or anti-PR3 positive (-3)",
+          "criterion": "Cytoplasmic ANCA or anti-proteinase 3 ANCA positivity; this item subtracts points."
+        },
+        {
+          "code": "extravascular",
+          "label": "Extravascular eosinophilic-predominant inflammation (+2)",
+          "criterion": "Extravascular eosinophil-predominant inflammation, as named in the published criteria."
+        },
+        {
+          "code": "neuropathy",
+          "label": "Mononeuritis multiplex or motor neuropathy (+1)",
+          "criterion": "Mononeuritis multiplex or motor neuropathy not due to radiculopathy."
+        },
+        {
+          "code": "hematuria",
+          "label": "Hematuria (-1)",
+          "criterion": "Hematuria; this item subtracts a point."
+        }
+      ],
+      "caveats": "Derived from 107 EGPA cases and 450 comparators and validated in a separate set of 119 cases and 437 comparators: sensitivity 85% (95% CI 77-91%), specificity 99% (95% CI 98-100%). The point values are from the abstract; the exact definition of each item is in the full paper, which this entry has not read, so the criterion wording above only names the items. Eleven items were identified by regression from 91 candidates and seven were retained.",
+      "src": [
+        "src.grayson-2022-egpa"
       ],
       "review": "draft"
     }
