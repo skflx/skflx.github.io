@@ -85,6 +85,7 @@
 import fs from 'fs';
 import path from 'path';
 import zlib from 'zlib';
+import { execFileSync } from 'child_process';
 import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 import { validate, contentFiles } from './ssb-content.mjs';
 import { buildFixture, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE } from './ssb-fixture-ct.mjs';
@@ -910,7 +911,7 @@ function readPacks() {
       const iv = json.bufferViews[ia.bufferView];
       const idx = new Uint16Array(ia.count);
       for (let i = 0; i < ia.count; i++) idx[i] = dv.getUint16(bin + (iv.byteOffset || 0) + i * 2, true);
-      nodes.set(`${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, pack: name, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
+      nodes.set(`${def.lining ? 'lining:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, pack: name, lining: def.lining === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
     }
   }
   return { doc, nodes, files };
@@ -1040,7 +1041,7 @@ function makeGlb(boxes) {
 
 async function specimenUnitTests() {
   const { doc, nodes, files } = readPacks();
-  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, k]));
+  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : '') + k]));
   check('specimen packs: every pack is a glTF 2.0 binary whose length field is true, with KHR_mesh_quantization required',
     Object.values(files).every((f) => f.magic === 0x46546c67 && f.version === 2 && f.length === f.size && (f.json.extensionsRequired || []).includes('KHR_mesh_quantization')),
     JSON.stringify(Object.entries(files).map(([k, f]) => [k, f.magic, f.version, f.length, f.size])));
@@ -1048,7 +1049,7 @@ async function specimenUnitTests() {
     listed.length === nodes.size && listed.every(([name, key]) => nodes.has(key) && nodes.get(key).pack === name), `${listed.length} listed, ${nodes.size} read`);
   const unknown = [...nodes.values()].filter((n) => !GRAPH.has(n.id));
   check('specimen packs: every node id is a graph entity', unknown.length === 0, unknown.map((n) => n.id).join(', '));
-  const named = [...nodes].filter(([key, n]) => key !== `${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
+  const named = [...nodes].filter(([key, n]) => key !== `${n.lining ? 'lining:' : ''}${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
   check('specimen packs: nodes are named <graph id>.<R|L|M>', named.length === 0, named.map(([k]) => k).join(', '));
   const outside = [...nodes].filter(([, n]) => n.box.min.some((v, i) => v < ctBox.min[i] - 5) || n.box.max.some((v, i) => v > ctBox.max[i] + 5));
   check('specimen packs: every mesh lies inside the CT volume (± 5 mm), so the 3D cursor and the CT share one frame',
@@ -1080,13 +1081,14 @@ async function specimenUnitTests() {
   for (const [k, p] of sided) {
     const m = /^(.+)\.(R|L)$/.exec(k);
     if (!PAIRS[m[1]]) continue;
+    if (!lm[`${m[1]}.${m[2] === 'R' ? 'L' : 'R'}`]) continue;     /* paired only: a one-sided landmark stays as scanned (N1, O6) and is not a mirror of the standard specimen */
     const own = nodes.get(`${PAIRS[m[1]]}.${m[2]}`);
     const other = nodes.get(`${PAIRS[m[1]]}.${m[2] === 'R' ? 'L' : 'R'}`);
     if (!own || !other) continue;
     rows.push({ k, own: nearestVertex(own, p), other: nearestVertex(other, p) });
   }
   check('landmarks vs meshes (data): each paired landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s',
-    rows.length >= 8 && rows.every((r) => r.own <= 4 && r.own < r.other), JSON.stringify(rows.map((r) => [r.k, r2(r.own), r2(r.other)])));
+    rows.length >= 6 && rows.every((r) => r.own <= 4 && r.own < r.other), JSON.stringify(rows.map((r) => [r.k, r2(r.own), r2(r.other)])));
 
   /* the cursor in the store: the shared CT crosshair, `at` without a plane in the hash */
   const has = (id) => GRAPH.has(id);
@@ -1128,7 +1130,7 @@ async function specimenUnitTests() {
 const RAW = { 'content-type': 'application/octet-stream' };
 
 /* routes: { '<file name under ssb/models/ or ssb/geometry/>': (route) => … }. */
-async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true } = {}) {
+async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true, abort = null } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion, deviceScaleFactor: viewport.width < 600 ? 2 : 1 });
   if (!webgl) {
     await context.addInitScript(() => {
@@ -1136,6 +1138,7 @@ async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280
       HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return typeof type === 'string' && /webgl/i.test(type) ? null : real.call(this, type, ...rest); };
     });
   }
+  if (abort) await context.route(abort, (route) => route.abort());
   if (routes) {
     await context.route(/\/ssb\/(models|geometry)\/[^/?#]+(?:[?#].*)?$/, (route) => {
       const name = new URL(route.request().url()).pathname.split('/').pop();
@@ -1192,12 +1195,13 @@ async function specimenTests(browser, base) {
     const listed = Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs);
     check('specimen: every pack packs.json lists is loaded, node for node as listed (core first)',
       listed.every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
-    const nodes = await specNodes(page);
-    const keys = nodes.map((n) => n.key).sort();
+    const everyNode = await specNodes(page);
+    const nodes = everyNode.filter((n) => !n.lining);          /* the lining pack (ST1b) is checked on its own; the rest of these checks are about the structures */
+    const keys = everyNode.map((n) => n.key).sort();
     check('specimen: the registry is exactly what the data holds (node keys match an independent read of the packs)', keys.join() === [...truth.keys()].sort().join(), `${keys.length} vs ${truth.size}`);
     check('specimen: every registry id is in the knowledge graph', nodes.every((n) => GRAPH.has(n.id)), nodes.filter((n) => !GRAPH.has(n.id)).map((n) => n.id).join());
     const off = [];
-    for (const n of nodes) {
+    for (const n of everyNode) {
       const t = truth.get(n.key);
       const d = Math.max(...[0, 1, 2].flatMap((i) => [Math.abs(n.box.min[i] - t.box.min[i]), Math.abs(n.box.max[i] - t.box.max[i])]));
       if (!(d < 0.05)) off.push(`${n.key} ${r2(d)}`);
@@ -1291,12 +1295,13 @@ async function specimenTests(browser, base) {
       const m = /^(.+)\.(R|L)$/.exec(k);
       if (!m || !PAIRS[m[1]]) continue;
       const other = m[2] === 'R' ? 'L' : 'R';
+      if (!lmk[`${m[1]}.${other}`]) continue;                      /* paired only (see the data check) */
       const own = await spec(page, ([key, p]) => window.__ssb.specimen.nearest(key, p), [`${PAIRS[m[1]]}.${m[2]}`, ras]);
       const far = await spec(page, ([key, p]) => window.__ssb.specimen.nearest(key, p), [`${PAIRS[m[1]]}.${other}`, ras]);
       if (own && far) rows.push({ k, own: own.distance, other: far.distance });
     }
-    check('frame: in the scene every sided landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s (the loader, the root transform and the landmark file agree)',
-      rows.length >= 8 && rows.every((x) => x.own <= 4 && x.own < x.other), JSON.stringify(rows.map((x) => [x.k, r2(x.own), r2(x.other)])));
+    check('frame: in the scene every paired landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s (the loader, the root transform and the landmark file agree)',
+      rows.length >= 6 && rows.every((x) => x.own <= 4 && x.own < x.other), JSON.stringify(rows.map((x) => [x.k, r2(x.own), r2(x.other)])));
     const centroids = {};
     for (const key of ['s.maxillary-sinus.R', 's.maxillary-sinus.L']) centroids[key] = await spec(page, (k) => window.__ssb.specimen.centroid(k), key);
     check('frame: in the scene the .R maxillary sinus centroid is at x > 0 and the .L at x < 0 (scene +x is patient right)', centroids['s.maxillary-sinus.R'][0] > 10 && centroids['s.maxillary-sinus.L'][0] < -10, JSON.stringify(centroids));
@@ -1325,7 +1330,7 @@ async function specimenTests(browser, base) {
     check('layers: one toggle per region that holds air spaces or soft tissue, built from the loaded packs', regionBoxes.slice().sort().join() === wantRegions.join(), regionBoxes.join() + ' vs ' + wantRegions.join());
     await page.click('#ssb-spec input[data-region="maxillary"]');
     await nextFrames(page, 2);
-    const after = await specNodes(page);
+    const after = (await specNodes(page)).filter((n) => !n.lining);
     check('layers: unchecking a region hides exactly its nodes', after.filter((n) => n.region === 'maxillary' && n.group !== 'bone').every((n) => !n.visible)
       && after.filter((n) => n.region !== 'maxillary' || n.group === 'bone').every((n) => n.visible), JSON.stringify(after.filter((n) => !n.visible).map((n) => n.key)));
     await page.click('#ssb-spec input[data-region="maxillary"]');
@@ -1340,6 +1345,7 @@ async function specimenTests(browser, base) {
     check('mucosa: toggling the layer draws every air-space node as mucosa (outside: a translucent shell); bone is untouched',
       airKeys.length > 0 && muc.filter((n) => n.group === 'air').every((n) => n.drawn === 'mucosa' && n.transparent) && muc.filter((n) => n.group === 'bone').every((n) => n.drawn === 'bone'),
       JSON.stringify(muc.filter((n) => n.group === 'air' && n.drawn !== 'mucosa').map((n) => n.key)));
+    check('mucosa (ST1b): seen from outside, the lining pack is not drawn — the outside view keeps the per-compartment shells', muc.filter((n) => n.lining).length > 0 && muc.filter((n) => n.lining).every((n) => !n.visible), JSON.stringify(muc.filter((n) => n.lining && n.visible).map((n) => n.key)));
     await page.click('#ssb-spec button[data-bone="hidden"]');     /* the envelope's ghost is hit first otherwise */
     await nextFrames(page, 2);
     const mAim = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
@@ -1446,7 +1452,7 @@ async function specimenTests(browser, base) {
   {
     const { context, page } = await openSpecimen(browser, base, '#s=s.maxillary-sinus', { reducedMotion: 'reduce' });
     const nodes = await specNodes(page);
-    const mine = nodes.filter((n) => n.id === 's.maxillary-sinus');
+    const mine = nodes.filter((n) => n.id === 's.maxillary-sinus' && !n.lining);
     const primary = mine.filter((n) => n.highlight === 'primary');
     const partner = mine.filter((n) => n.highlight === 'partner');
     check('selection: a deep link highlights the maxillary sinus — the side nearest the camera at full strength (patient right, from the right-front), the other side dimmed',
@@ -1784,6 +1790,248 @@ async function specimenTests(browser, base) {
   }
 }
 
+/* ---------------- The standard specimen (N1, O6; docs/ssb.md 5.1): symmetric by construction ---------------- */
+
+function standardSpecimenTests() {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p));
+  const json = (p) => JSON.parse(read(p).toString('utf8'));
+  const hdr = json('ssb/ct/ct.json');
+  const [nx, ny, nz] = hdr.dims;
+  const mid = (nx - 1) / 2;
+  const std = hdr.standard;
+  check('standard: ct.json carries the `standard` block (method, as-scanned commit, source side R, septum offset, plates, note)',
+    !!std && std.sourceSide === 'R' && /^[0-9a-f]{40}$/.test(std.asScannedCommit) && std.septumOffsetMm && std.septumOffsetMm.max >= std.septumOffsetMm.median && std.septumOffsetMm.median > 0
+      && std.plates && Object.keys(std.plates).length >= 2 && typeof std.note === 'string' && std.note.length > 20, JSON.stringify(std));
+  check('standard: voxel column nx/2 is R = 0 (the mirror plane), so a flip about it is exact', Number.isInteger(mid) && Math.abs(hdr.affine[0][3] + mid * hdr.spacing[0]) < 1e-9 && hdr.affine[0][0] === hdr.spacing[0]);
+  const ct = new Uint8Array(zlib.gunzipSync(read('ssb/ct/ct.u8.gz')));
+  const lb = zlib.gunzipSync(read('ssb/ct/labels.u16.gz'));
+  const lab = new Uint16Array(lb.buffer.slice(lb.byteOffset, lb.byteOffset + lb.length));
+  const table = json('ssb/geometry/labels.json').labels;
+  const byName = new Map(Object.entries(table).map(([k, v]) => [v, Number(k)]));
+  const swap = new Uint16Array(Math.max(...Object.keys(table).map(Number)) + 1).map((_, i) => i);
+  for (const [k, name] of Object.entries(table)) {
+    const m = /^(.+)\.(R|L)$/.exec(name);
+    if (m && byName.has(`${m[1]}.${m[2] === 'R' ? 'L' : 'R'}`)) swap[Number(k)] = byName.get(`${m[1]}.${m[2] === 'R' ? 'L' : 'R'}`);
+  }
+  check('standard: every .R label has a .L index (the table is complete for the mirror)', Object.values(table).filter((n) => n.endsWith('.R')).every((n) => byName.has(n.replace(/\.R$/, '.L'))));
+  let ctBad = 0;
+  let labBad = 0;
+  let leftOfRight = 0;
+  for (let k = 0; k < nz; k++) {
+    for (let j = 0; j < ny; j++) {
+      const row = (k * ny + j) * nx;
+      for (let i = 0; i < nx; i++) {
+        const o = 2 * mid - i;
+        if (i >= mid || Math.abs(i - mid) <= 1) continue;          /* |x| <= 0.5 holds the midline plates */
+        if (ct[row + i] !== ct[row + o]) ctBad++;
+        if (lab[row + i] !== swap[lab[row + o]]) labBad++;
+      }
+      for (let i = mid + 2; i < nx; i++) if (/\.L$/.test(table[lab[row + i]] || '')) leftOfRight++;
+    }
+  }
+  check('standard: the CT is mirror-symmetric about R = 0 outside |x| <= 0.5 (0 mismatching voxels)', ctBad === 0, `${ctBad} mismatches`);
+  check('standard: the label volume is mirror-symmetric about R = 0 outside |x| <= 0.5, labels side-mapped (0 mismatching voxels), and no .L label lies in the right half', labBad === 0 && leftOfRight === 0, `${labBad} mismatches, ${leftOfRight} .L voxels right of R = 0`);
+  /* no air of a .R space touches air of a .L space */
+  const airSide = new Uint8Array(swap.length);          /* 0 not air, 1 a .R air space, 2 a .L air space */
+  for (const [k, name] of Object.entries(table)) {
+    const m = /^s\.(agger-nasi-cell|anterior-ethmoid-cells|ethmoid-bulla|frontal-recess|frontal-sinus|maxillary-sinus|nasal-cavity|nasopharynx|posterior-ethmoid-cells|sphenoid-sinus)\.(R|L)$/.exec(name);
+    if (m) airSide[Number(k)] = m[2] === 'R' ? 1 : 2;
+  }
+  let touching = 0;
+  const strides = [1, nx, nx * ny];
+  for (let n = 0; n < lab.length; n++) {
+    const a = airSide[lab[n]];
+    if (!a) continue;
+    for (let d = 0; d < 3; d++) {
+      const m = n + strides[d];
+      if (m >= lab.length || (d === 0 && (n % nx) === nx - 1)) continue;
+      const b = airSide[lab[m]];
+      if (b && a !== b) touching++;
+    }
+  }
+  check('standard: no .R air voxel touches a .L air voxel (the midline plates close every paired space)', touching === 0, `${touching} face pairs`);
+
+  const lm = json('ssb/geometry/landmarks.json');
+  const paired = Object.keys(lm).filter((k) => k.endsWith('.R') && lm[k.replace(/\.R$/, '.L')]);
+  const off = paired.map((k) => { const l = lm[k.replace(/\.R$/, '.L')]; const r = lm[k]; return Math.hypot(l[0] + r[0], l[1] - r[1], l[2] - r[2]); });
+  check('standard: every paired landmark .L mirrors its .R within 0.01 mm (R negated)', paired.length >= 6 && off.every((d) => d <= 0.01), JSON.stringify(paired.map((k, i) => [k, off[i]])));
+  const mids = Object.entries(lm).filter(([k]) => k.endsWith('.M'));
+  check('standard: every .M landmark has R = 0', mids.length > 5 && mids.every(([, p]) => Math.abs(p[0]) < 1e-9), JSON.stringify(mids.filter(([, p]) => Math.abs(p[0]) >= 1e-9)));
+  const sw = json('ssb/geometry/sweeps.json');
+  const swPaired = Object.keys(sw).filter((k) => k.endsWith('.R') && sw[k.replace(/\.R$/, '.L')]);
+  const swOff = swPaired.map((k) => { const R = sw[k].pts; const L = sw[k.replace(/\.R$/, '.L')].pts; return R.length === L.length ? Math.max(...R.map((p, i) => Math.hypot(L[i][0] + p[0], L[i][1] - p[1], L[i][2] - p[2]))) : Infinity; });
+  check('standard: every paired sweep .L is its .R mirrored (R negated) point for point', swPaired.length >= 14 && swOff.every((d) => d <= 0.01), JSON.stringify(swPaired.map((k, i) => [k, swOff[i]])));
+
+  /* the septum is centred: the right surface lies at half the as-scanned thickness T = rR - rL, on interior chart cells */
+  let asScanned = null;
+  let why = '';
+  try {
+    asScanned = JSON.parse(execFileSync('git', ['show', `${std.asScannedCommit}:ssb/geometry/charts.json`], { cwd: ROOT, maxBuffer: 1 << 26 }).toString('utf8')).surfaces;
+  } catch (e) { why = `git cannot show ${std.asScannedCommit} (a shallow clone? CI checks out with fetch-depth 0)`; }
+  let septum = { n: 0, max: Infinity };
+  if (asScanned) {
+    const grid = (s) => {
+      const g = s.grid;
+      const bad = new Set([...s.filled.cells, ...s.unreliable.cells].map(([a, b]) => `${a},${b}`));
+      return { at: (a, b) => { const i = Math.round(a - g.origin[0]); const j = Math.round(b - g.origin[1]); return g.r[i] && g.r[i][j] != null ? g.r[i][j] : null; }, bad, g };
+    };
+    const aR = grid(asScanned['s.septal-mucosa.R']);
+    const aL = grid(asScanned['s.septal-mucosa.L']);
+    const nR = grid(json('ssb/geometry/charts.json').surfaces['s.septal-mucosa.R']);
+    const good = (a, b) => aR.at(a, b) != null && aL.at(a, b) != null && !aR.bad.has(`${a},${b}`) && !aL.bad.has(`${a},${b}`) && !nR.bad.has(`${a},${b}`);
+    let n = 0;
+    let max = 0;
+    for (let i = 0; i < aR.g.r.length; i++) {
+      for (let j = 0; j < aR.g.r[i].length; j++) {
+        const a = aR.g.origin[0] + i;
+        const b = aR.g.origin[1] + j;
+        let interior = true;
+        for (let da = -1; da <= 1 && interior; da++) for (let db = -1; db <= 1; db++) if (!good(a + da, b + db)) { interior = false; break; }
+        const now = nR.at(a, b);
+        if (!interior || now == null) continue;
+        n++;
+        max = Math.max(max, Math.abs(now - (aR.at(a, b) - aL.at(a, b)) / 2));
+      }
+    }
+    septum = { n, max: r2(max) };
+  }
+  check('standard: the right septal surface lies at T/2 (half the as-scanned thickness) within 0.5 mm on interior chart cells', !!asScanned && septum.n >= 300 && septum.max <= 0.5, why || JSON.stringify(septum));
+  const cR = json('ssb/geometry/charts.json').surfaces;
+  const mirroredChart = cR['s.septal-mucosa.L'].grid.r.every((row, i) => row.every((v, j) => (v == null && cR['s.septal-mucosa.R'].grid.r[i][j] == null) || Math.abs(v + cR['s.septal-mucosa.R'].grid.r[i][j]) < 1e-9));
+  check('standard: s.septal-mucosa.L\'s chart is the right chart with r negated', mirroredChart);
+  // ST2c: the floor mucosa, traced from the airway lining
+  const fR = cR['s.nasal-floor-mucosa.R'], fL = cR['s.nasal-floor-mucosa.L'];
+  const packs = json('ssb/models/packs.json').packs.soft.nodes;
+  check('floor mucosa: both sides are in the soft pack and the charts, at least 2 cm2 each', !!fR && !!fL && !!packs['s.nasal-floor-mucosa.R'] && !!packs['s.nasal-floor-mucosa.L'] && fR.area_cm2 >= 2 && fL.area_cm2 === fR.area_cm2, JSON.stringify([fR && fR.area_cm2, Object.keys(packs)]));
+  const cells = fR ? fR.grid.s.flat().filter(v => v != null) : [];
+  check('floor mucosa: the chart sits in the floor (S -5..3 mm, A -51..-10, lateral r 1..17 mm)', cells.length > 300 && Math.min(...cells) > -5 && Math.max(...cells) < 3 && fR.grid.origin[0] >= -52 && fR.grid.origin[0] + fR.grid.dims[0] <= -9 && fR.grid.origin[1] >= 0 && fR.grid.origin[1] + fR.grid.dims[1] <= 18, JSON.stringify({ n: cells.length, lo: Math.min(...cells), hi: Math.max(...cells) }));
+  const jr = fR ? fR.junction.rows.filter(r => r[0] >= -47) : [];
+  check('floor mucosa: the junction lies within 1 mm of the septal chart\'s bottom(a) over their shared A (a >= -47)', jr.length >= 30 && jr.every(r => r[5] <= 1.0), JSON.stringify({ n: jr.length, max: Math.max(...jr.map(r => r[5])) }));
+  check('floor mucosa: the left chart is the right one (symmetric specimen)', !!fL && JSON.stringify(fL.grid.s) === JSON.stringify(fR.grid.s) && JSON.stringify(fL.junction) === JSON.stringify(fR.junction));
+}
+
+/* ---------------- ST1b: the open airway lining (Node only, on the committed packs) ---------------- */
+
+function liningTests() {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p));
+  const json = (p) => JSON.parse(read(p).toString('utf8'));
+  const { doc, nodes } = readPacks();
+  const hdr = json('ssb/ct/ct.json');
+  const [nx, ny, nz] = hdr.dims;
+  const A = hdr.affine;
+  const lining = [...nodes].filter(([, n]) => n.lining).map(([, n]) => n);
+  const shells = [...nodes].filter(([, n]) => ['core', 'ethmoid-frontal', 'sphenoid-sellar'].includes(n.pack) && n.id !== 's.skull-base-region').map(([, n]) => n);
+  const lp = doc.packs.lining;
+  check('lining: packs.json lists a "lining" pack flagged lining:true, within its budgets (50k triangles, 1.5 MB), and every pack together stays inside §5.4 (400k triangles, 12 MB)',
+    !!lp && lp.lining === true && lp.triangles <= 50050 && lp.bytes <= 1500000 && doc.totals.triangles <= 400000 && doc.totals.bytes <= 12000000, JSON.stringify(lp && { t: lp.triangles, b: lp.bytes, totals: doc.totals }));
+  const want = shells.map((n) => `${n.id}.${n.side}`).sort().join();
+  check('lining: it carries exactly one node per air-space label (the air packs\' own names, so picking keeps graph ids)', lining.map((n) => `${n.id}.${n.side}`).sort().join() === want, `${lining.length} vs ${shells.length}`);
+
+  /* the labels, for the membrane rule */
+  const lb = zlib.gunzipSync(read('ssb/ct/labels.u16.gz'));
+  const lab = new Uint16Array(lb.buffer.slice(lb.byteOffset, lb.byteOffset + lb.length));
+  const table = json('ssb/geometry/labels.json').labels;
+  const airIdx = new Set(Object.entries(table).filter(([, name]) => shells.some((n) => `${n.id}.${n.side}` === name)).map(([k]) => Number(k)));
+  const Ainv = (() => {
+    const [[a, b, c], [d, e, f], [g, h, i]] = A.map((r) => r.slice(0, 3));
+    const det = a * (e * i - f * h) - b * (d * i - f * g) + c * (d * h - e * g);
+    return [[(e * i - f * h) / det, (c * h - b * i) / det, (b * f - c * e) / det], [(f * g - d * i) / det, (a * i - c * g) / det, (c * d - a * f) / det], [(d * h - e * g) / det, (b * g - a * h) / det, (a * e - b * d) / det]];
+  })();
+  const toIdx = (p) => { const q = [p[0] - A[0][3], p[1] - A[1][3], p[2] - A[2][3]]; return [0, 1, 2].map((r) => Math.round(Ainv[r][0] * q[0] + Ainv[r][1] * q[1] + Ainv[r][2] * q[2])); };
+  const L = (i, j, k) => (i < 0 || j < 0 || k < 0 || i >= nx || j >= ny || k >= nz ? 0 : lab[(k * ny + j) * nx + i]);
+  const labAt = (p) => { const [i, j, k] = toIdx(p); return L(i, j, k); };
+  const ras = (i, j, k) => [0, 1, 2].map((n) => A[n][0] * i + A[n][1] * j + A[n][2] * k + A[n][3]);
+  const NB = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+  /* A triangle centroid is on a membrane when the voxels within one voxel (0.5 mm) of it include a face between two different air labels and no tissue voxel lies within two voxels (1 mm). */
+  let membranes = 0;
+  let tris = 0;
+  for (const n of lining) {
+    for (let t = 0; t < n.idx.length; t += 3) {
+      const c = [0, 1, 2].map((m) => (n.pts[n.idx[t] * 3 + m] + n.pts[n.idx[t + 1] * 3 + m] + n.pts[n.idx[t + 2] * 3 + m]) / 3);
+      const [ci, cj, ck] = toIdx(c);
+      let iface = false;
+      let tissue = false;
+      for (let dk = -2; dk <= 2 && !tissue; dk++) for (let dj = -2; dj <= 2 && !tissue; dj++) for (let di = -2; di <= 2; di++) {
+        const l = L(ci + di, cj + dj, ck + dk);
+        if (!airIdx.has(l)) { tissue = true; break; }
+        if (Math.abs(di) <= 1 && Math.abs(dj) <= 1 && Math.abs(dk) <= 1) for (const [a, b, d] of NB) { const m = L(ci + di + a, cj + dj + b, ck + dk + d); if (m !== l && airIdx.has(m)) iface = true; }
+      }
+      if (iface && !tissue) membranes++;
+      tris++;
+    }
+  }
+  check('lining: no triangle lies on an air|air label interface unless within 1 mm of tissue (count 0)', tris > 40000 && membranes === 0, `${membranes} of ${tris}`);
+
+  /* first hit of a ray among a node set (Möller–Trumbore, both faces) */
+  const first = (set, o, d) => {
+    let best = null;
+    for (const n of set) {
+      const P = n.pts;
+      for (let t = 0; t < n.idx.length; t += 3) {
+        const a = n.idx[t] * 3, b = n.idx[t + 1] * 3, c = n.idx[t + 2] * 3;
+        const e1 = [P[b] - P[a], P[b + 1] - P[a + 1], P[b + 2] - P[a + 2]];
+        const e2 = [P[c] - P[a], P[c + 1] - P[a + 1], P[c + 2] - P[a + 2]];
+        const p = [d[1] * e2[2] - d[2] * e2[1], d[2] * e2[0] - d[0] * e2[2], d[0] * e2[1] - d[1] * e2[0]];
+        const det = e1[0] * p[0] + e1[1] * p[1] + e1[2] * p[2];
+        if (Math.abs(det) < 1e-12) continue;
+        const s = [o[0] - P[a], o[1] - P[a + 1], o[2] - P[a + 2]];
+        const u = (s[0] * p[0] + s[1] * p[1] + s[2] * p[2]) / det;
+        if (u < 0 || u > 1) continue;
+        const q = [s[1] * e1[2] - s[2] * e1[1], s[2] * e1[0] - s[0] * e1[2], s[0] * e1[1] - s[1] * e1[0]];
+        const v = (d[0] * q[0] + d[1] * q[1] + d[2] * q[2]) / det;
+        if (v < 0 || u + v > 1) continue;
+        const tt = (e2[0] * q[0] + e2[1] * q[1] + e2[2] * q[2]) / det;
+        if (tt > 1e-6 && (!best || tt < best.t)) best = { t: tt, id: `${n.id}.${n.side}`, point: [0, 1, 2].map((m) => o[m] + d[m] * tt) };
+      }
+    }
+    return best;
+  };
+
+  /* the right sphenoid ostium: the cavity | sinus interface (the one opening of that wall), and every straight, all-air path to it from the cavity 8-12 mm away */
+  const byName = new Map(Object.entries(table).map(([k, v]) => [v, Number(k)]));
+  const NC = byName.get('s.nasal-cavity.R');
+  const SS = byName.get('s.sphenoid-sinus.R');
+  const c = [0, 0, 0];
+  let nIface = 0;
+  for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+    if (L(i, j, k) !== NC) continue;
+    for (const [a, b, d] of NB) if (L(i + a, j + b, k + d) === SS) { const p = ras(i + a / 2, j + b / 2, k + d / 2); for (let m = 0; m < 3; m++) c[m] += p[m]; nIface++; }
+  }
+  for (let m = 0; m < 3; m++) c[m] /= Math.max(nIface, 1);
+  const lms = json('ssb/geometry/landmarks.json');
+  const os = lms['lm.sphenoid-ostium.R'];
+  check('lining: the right cavity | sinus interface exists (the patent ostium) and lies within 3 mm of lm.sphenoid-ostium.R', nIface >= 10 && Math.hypot(c[0] - os[0], c[1] - os[1], c[2] - os[2]) <= 3, JSON.stringify({ faces: nIface, c, os }));
+  const tally = { lining: new Set(), shells: new Set() };
+  let rays = 0;
+  for (let k = 0; k < nz; k += 2) for (let j = 0; j < ny; j += 2) for (let i = 0; i < nx; i += 2) {
+    if (L(i, j, k) !== NC) continue;
+    const p = ras(i, j, k);
+    const d0 = Math.hypot(p[0] - c[0], p[1] - c[1], p[2] - c[2]);
+    if (d0 < 8 || d0 > 12) continue;
+    const d = [(c[0] - p[0]) / d0, (c[1] - p[1]) / d0, (c[2] - p[2]) / d0];
+    let clear = true;
+    for (let t = 0; t < d0 + 0.5 && clear; t += 0.25) { const l = labAt([p[0] + d[0] * t, p[1] + d[1] * t, p[2] + d[2] * t]); clear = l === NC || l === SS; }
+    if (!clear) continue;
+    rays++;
+    tally.lining.add(first(lining, p, d).id);
+    tally.shells.add(first(shells, p, d).id);
+  }
+  check('lining: every ray through the right ostium (from cavity air 8-12 mm away, all-air path to the interface) first hits s.sphenoid-sinus.R with the lining, where the sealed shells stop it at s.nasal-cavity.R',
+    rays >= 20 && [...tally.lining].join() === 's.sphenoid-sinus.R' && [...tally.shells].join() === 's.nasal-cavity.R', JSON.stringify({ rays, lining: [...tally.lining], shells: [...tally.shells] }));
+
+  /* the choana: a free pose looking back from the cavity passes the PNS plane (A -50) before its first hit; with the shells the choanal membrane stops it at the plane */
+  const vol = createVolume({ header: parseHeader(hdr), ct: new Uint8Array(zlib.gunzipSync(read('ssb/ct/ct.u8.gz'))) });
+  const F = lms['lm.naris.R'];
+  const pose = { side: 'R', depth: 40, yaw: -4, pitch: 3, roll: 0, lens: 0 };
+  const tip = SC.tipOf(F, pose);
+  const v = SC.frameOf(pose).v;
+  const free = !SC.shaftClearance(F, pose, (p) => vol.sample(p[0], p[1], p[2]), SC.SHAFT_RADII['4']).blocked;
+  const hl = first(lining, tip, v);
+  const hs = first(shells, tip, v);
+  check('lining: from #scope=R,40,-4,3,0,0 (free, tip in cavity air) the view passes the PNS plane (A -50) before its first hit; the shells\' choanal membrane is hit at the plane',
+    free && labAt(tip) === NC && hl && hl.point[1] < -50 && hs && hs.point[1] >= -50, JSON.stringify({ free, tip, lining: hl, shells: hs }));
+}
+
 /* ---------------- Endoscope: the math and the codec (Node only) ---------------- */
 
 function scopeUnitTests() {
@@ -1878,10 +2126,34 @@ function scopeCollisionTests() {
   const d0 = SC.shaftClearance(wallF, through, fxAt, 0).depth;
   const d27 = SC.shaftClearance(wallF, through, fxAt, R27).depth;
   check('scope collision (fixture): the ring matters — a thicker shaft clamps earlier (axis only > 2.7 mm > 4 mm)', d0 > d27 && d27 > hit.depth, `${d0} ${d27} ${hit.depth}`);
-  const nan = SC.shaftClearance(wallF, through, () => NaN, R4);
-  check('scope collision: NaN (outside the volume) and 0 (no data) never block', !nan.blocked && nan.depth === 20 && !SC.shaftClearance(wallF, through, () => 0, R4).blocked, JSON.stringify(nan));
+  const straightPost = { ...through, yaw: 0 };      /* not toward the midline: the E3b septum rule blocks on position, with or without data */
+  const nan = SC.shaftClearance(wallF, straightPost, () => NaN, R4);
+  check('scope collision: NaN (outside the volume) and 0 (no data) never block', !nan.blocked && nan.depth === 20 && !SC.shaftClearance(wallF, straightPost, () => 0, R4).blocked, JSON.stringify(nan));
   check('scope collision: blocked at the first sample leaves 1.5 mm free (the shaft cannot start inside bone)',
     (() => { const c = SC.shaftClearance(wallF, through, () => 255, R4); return c.blocked && c.depth === 1.5; })());
+
+  /* ---- the midline rule (E3b): in air, so only R = 0 can block ---- */
+  const air = () => 10;
+  const ringOf = (F0, p, r) => {
+    const d = SC.shaftDir(p);
+    const e1 = SC.norm(d[2] > 0.99 || d[2] < -0.99 ? [0, 1, 0] : [-d[0] * d[2], -d[1] * d[2], 1 - d[2] * d[2]]);
+    const e2 = [d[1] * e1[2] - d[2] * e1[1], d[2] * e1[0] - d[0] * e1[2], d[0] * e1[1] - d[1] * e1[0]];
+    const c = [0, 1, 2].map((k) => F0[k] + d[k] * p.depth);
+    return [c, ...[e1, e2, e1.map((v) => -v), e2.map((v) => -v)].map((e) => c.map((v, k) => v + e[k] * r))];
+  };
+  const acrossFront = { side: 'R', depth: 40, yaw: -45, pitch: 0, roll: 0, lens: 0 };
+  const mid = SC.shaftClearance([6, 10, 0], acrossFront, air, R4);
+  const midOk = ringOf([6, 10, 0], { ...acrossFront, depth: mid.depth }, R4).every((q) => q[0] >= 0);
+  const midNext = SC.shaftClearance([6, 10, 0], { ...acrossFront, depth: mid.depth + 0.5 }, air, R4);
+  check('scope midline (fixture, air): a shaft crossing R = 0 in front of the arch clamps at the last depth with R >= 0 at the axis and every ring point; the next 0.5 mm is blocked, by the septum',
+    mid.blocked && mid.by === 'septum' && mid.depth > 0 && mid.depth < 20 && midOk && midNext.blocked && midNext.depth === mid.depth, JSON.stringify([mid, midNext]));
+  const behind = SC.shaftClearance([6, -60, -5], acrossFront, air, R4);
+  check('scope midline (fixture, air): the same line behind and below the arch (A < -51, S < 12) is not clamped — the nasopharynx is exempt', !behind.blocked && behind.depth === 40 && behind.by === null, JSON.stringify(behind));
+  const above = SC.shaftClearance([6, -60, 20], acrossFront, air, R4);
+  check('scope midline (fixture, air): behind the arch but above it (S >= 12) is not exempt', above.blocked && above.by === 'septum', JSON.stringify(above));
+  const leftSide = SC.shaftClearance([-6, 10, 0], { ...acrossFront, side: 'L' }, air, R4);
+  check('scope midline (fixture, air): the left scope mirrors the right (same depth, blocked by the septum); an explicit arch replaces the default',
+    leftSide.by === 'septum' && leftSide.depth === mid.depth && !SC.shaftClearance([6, 10, 0], acrossFront, air, R4, { a: 20, s: 20 }).blocked, JSON.stringify(leftSide));
 
   /* ---- the HUD: distance fields ---- */
   const sdfBytes = FX.sdf;
@@ -1915,6 +2187,21 @@ function scopeCollisionTests() {
   const straight = clear(pose('R', 40, 0, 0));
   check('scope collision (specimen): mucosa does not block, and its length is reported (R 40, straight: free, 25 mm of shaft in mucosa — a regression pin)', !straight.blocked && straight.contactMm === 25, JSON.stringify(straight));
 
+  /* E3b on the real specimen: aimed across the septum, the clamped tip and its ring stay on the scope's own side. */
+  const archLm = lms['lm.choanal-arch.M'];
+  const arch = { a: archLm[1], s: archLm[2] };
+  for (const side of ['R', 'L']) {
+    const sg = side === 'R' ? 1 : -1;
+    const across = pose(side, 100, -30, 0);
+    const cl = SC.shaftClearance(F[side], across, ctAt, R4, arch);
+    const pts = ringOf(F[side], { ...across, depth: cl.depth }, R4);
+    const plain = SC.shaftClearance(F[side], across, ctAt, R4, { a: -1e9, s: -1e9 });     /* no exemption anywhere: the rule alone */
+    check(`scope midline (specimen): from ${side} at yaw -30, pitch 0 (aimed across the septum) the clamped tip and all four ring points are on the ${side} side of R = 0`,
+      cl.blocked && cl.depth < 100 && pts.every((q) => sg * q[0] >= 0) && plain.depth <= cl.depth, JSON.stringify([cl, plain, pts.map((q) => q.map((v) => +v.toFixed(2)))]));
+  }
+  const noArch = SC.shaftClearance(F.R, pose('R', 100, -30, 0), ctAt, R4);
+  check('scope midline (specimen): no arch passed -> the fallback (A -51, S 12) applies and gives the same clamp as the landmark', noArch.depth === SC.shaftClearance(F.R, pose('R', 100, -30, 0), ctAt, R4, arch).depth, JSON.stringify([noArch, arch]));
+
   /* Search yaw and pitch on a 1 degree grid for a free pose whose tip is within `tol` of the target; the closest wins. */
   const reach = (side, target, r) => {
     let best = null;
@@ -1937,12 +2224,11 @@ function scopeCollisionTests() {
   const sphR = reach('R', lms['lm.sphenoid-ostium.R'], R4);
   check('scope collision (specimen): right sphenoid ostium — a 1 degree search finds a free pose with the tip within 2.5 mm; pinned: yaw -3, pitch 19, depth 58.5 (2.03 mm)',
     sphR.dist <= 2.5 && sphR.yaw === -3 && sphR.pitch === 19 && sphR.depth === 58.5, JSON.stringify(sphR));
+  /* the standard specimen (N1) is symmetric, so the left pose is the right one mirrored. Yaw is side-relative (scope.js: + swings the tip
+     laterally on the scope's own side), so the mirror image has the SAME yaw, i.e. the world-frame yaw negated. */
   const sphL = reach('L', lms['lm.sphenoid-ostium.L'], R4);
-  const sphL27 = reach('L', lms['lm.sphenoid-ostium.L'], R27);
-  /* E3's Accept says 2.5 mm per side; with E1b's fulcrum the 4 mm shaft gets no closer than 3.31 mm on the left (the verification's 2.4 mm used the
-     superseded fulcrum). This pins the measured gap and that the 2.7 mm shaft closes it; it is NOT the Accept — an Opus decision (see the roadmap). */
-  check('scope collision (specimen): OPEN — left sphenoid ostium, 4 mm shaft: the closest free tip is 3.31 mm away (yaw -2, pitch 24, depth 63), so the 2.5 mm Accept is not met; the 2.7 mm shaft reaches 1.55 mm (yaw 0, pitch 24, depth 64)',
-    sphL.dist > 2.5 && near(sphL.dist, 3.31, 0.02) && sphL.yaw === -2 && sphL.pitch === 24 && sphL.depth === 63 && sphL27.dist <= 2.5 && near(sphL27.dist, 1.55, 0.02) && sphL27.yaw === 0 && sphL27.pitch === 24 && sphL27.depth === 64, JSON.stringify([sphL, sphL27]));
+  check('scope collision (specimen): left sphenoid ostium — the same 1 degree search finds a free 4 mm pose within 2.5 mm, the right pose mirrored (the same side-relative yaw, ± 1 degree); pinned: yaw -3, pitch 19, depth 58.5 (2.03 mm)',
+    sphL.dist <= 2.5 && Math.abs(sphL.yaw - sphR.yaw) <= 1 && Math.abs(sphL.pitch - sphR.pitch) <= 1 && Math.abs(sphL.depth - sphR.depth) <= 1 && sphL.yaw === -3 && sphL.pitch === 19 && sphL.depth === 58.5, JSON.stringify([sphL, sphR]));
   const beside = [[0, 0, 5], [-5, 0, 0]].map((off) => {
     const T = lms['lm.sphenoid-ostium.R'];
     const P = [T[0] + off[0], T[1] + off[1], T[2] + off[2]];
@@ -1969,7 +2255,7 @@ function scopeCollisionTests() {
     const ang = Math.acos(Math.max(-1, Math.min(1, dot(v, sub(T, tip).map((x) => x / dist))))) * 180 / Math.PI;
     return { free: !clear(p).blocked, ang, dist, los: losFree(tip, T) };
   };
-  const frontal = { R: pose('R', 36, -2, 33, 0, 70), L: pose('L', 41, -10, 44, 15, 70) };
+  const frontal = { R: pose('R', 36, -2, 33, 0, 70), L: pose('L', 36, -2, 33, 0, 70) };   /* the standard specimen is symmetric: the left pose is the right one mirrored (yaw is side-relative, so the same yaw) */
   for (const side of ['R', 'L']) {
     const r = sees(frontal[side]);
     check(`scope collision (specimen): the ${side === 'R' ? 'right' : 'left'} frontal ostium from a 70 degree lens — a free pose (${JSON.stringify(frontal[side]).replace(/"/g, '')}) looks within 15 degrees of it, a bone-free line of sight of at most 25 mm`,
@@ -2043,6 +2329,11 @@ async function scopeTests(browser, base) {
     check('scope: the lining is seen from inside — bone hidden, mucosa on', lights.bone === 'hidden' && lights.mucosa === true, JSON.stringify(lights));
     const mat = (await specNodes(page)).filter((n) => n.group === 'air');
     check('scope: every air-space node is drawn as mucosa, opaque (the camera is inside the airway)', mat.length > 0 && mat.every((n) => n.drawn === 'mucosa' && !n.transparent), JSON.stringify(mat.filter((n) => n.drawn !== 'mucosa' || n.transparent).map((n) => n.key)));
+    /* ST1b: from within, the open lining is what is drawn; the per-compartment shells (closed membranes at every opening) are not */
+    const lin = (await specNodes(page)).filter((n) => n.lining);
+    check('scope (ST1b): the open lining is drawn in the shells\' place — every lining node visible as opaque mucosa, every air shell hidden', lin.length > 0 && lin.every((n) => n.visible && n.drawn === 'mucosa' && !n.transparent) && mat.every((n) => !n.visible), JSON.stringify({ lining: lin.filter((n) => !n.visible).map((n) => n.key), shells: mat.filter((n) => n.visible).map((n) => n.key) }));
+    const inHits = await page.evaluate(() => { const c = document.getElementById('ssb-canvas'); const r = c.getBoundingClientRect(); return window.__ssb.specimen.hits(r.left + r.width / 2, r.top + r.height / 2); });
+    check('scope (ST1b): picking from inside returns graph ids (a lining hit reports the structure\'s own key, never the lining\'s)', inHits.length > 0 && inHits.every((h) => GRAPH.has(h.id) && !/^lining:/.test(h.key)), JSON.stringify(inHits.slice(0, 3).map((h) => [h.id, h.key])));
 
     /* non-blank, inside a circular field of view */
     const { img } = await canvasImage(page);
@@ -2106,10 +2397,14 @@ async function scopeTests(browser, base) {
     await page.mouse.up();
     const after = await spec(page, () => window.__ssb.scope.pose);
     check('scope: dragging looks where the pointer goes — 100 px right turns the right scope\'s yaw by -15 degrees, 40 px up raises the pitch by 6', near(after.yaw - before.yaw, -15, 1.01) && near(after.pitch - before.pitch, 6, 1.01), JSON.stringify([before, after]));
+    /* the drag may end at the last free depth of the specimen's shaft path: withdraw 5 mm first, so the wheel has room */
+    await page.evaluate((d) => { const r = document.getElementById('ssb-scope-depth'); r.value = String(d); r.dispatchEvent(new Event('input', { bubbles: true })); }, after.depth - 5);
+    await nextFrames(page, 2);
+    const room = await spec(page, () => window.__ssb.scope.pose.depth);
     await page.mouse.wheel(0, -100);
     await nextFrames(page, 2);
     const wheel = await spec(page, () => window.__ssb.scope.pose.depth);
-    check('scope: the wheel inserts (scroll up +1 mm)', wheel === after.depth + 1, `${after.depth} -> ${wheel}`);
+    check('scope: the wheel inserts (scroll up +1 mm)', room === after.depth - 5 && wheel === room + 1, `${after.depth} -> ${room} -> ${wheel}`);
     await page.click('#ssb-scope-controls button[data-side="L"]');
     check('scope: the side button switches nostril — the fulcrum is lm.naris.L', (await spec(page, () => window.__ssb.scope.pose.side)) === 'L' && near((await spec(page, () => window.__ssb.scope.fulcrum[0])), (await spec(page, () => window.__ssb.specimen.landmarks)).find((l) => l.key === 'lm.naris.L').ras[0], 1e-6));
     await page.click('#ssb-scope-controls button[data-side="R"]');
@@ -2127,8 +2422,8 @@ async function scopeTests(browser, base) {
     await nextFrames(page, 3);
     const off = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash, engaged: window.__ssb.scope.engaged, active: window.__ssb.scope.active, bone: window.__ssb.specimen.bone, mucosa: window.__ssb.specimen.mucosaOn,
       controls: window.__ssb.scope.controlsEnabled(), lights: window.__ssb.scope.lights(), overlay: document.getElementById('ssb-scope').hidden, cam: window.__ssb.specimen.camera() }));
-    check('scope: leaving restores the specimen — stage and URL, bone X-ray, mucosa off, orbit controls and headlight back, the spotlight off, the overlay gone',
-      off.stage === 'specimen' && off.hash === '' && !off.engaged && !off.active && off.bone === 'xray' && off.mucosa === false && off.controls === true && off.lights.head > 0 && off.lights.spot && !off.lights.spot.on && off.overlay, JSON.stringify(off));
+    check('scope: leaving restores the specimen — stage and URL (the tip survives as the 3D cursor, `#at=`, E4), bone X-ray, mucosa off, orbit controls and headlight back, the spotlight off, the overlay gone',
+      off.stage === 'specimen' && /^(#at=[-\d.,]+)?$/.test(off.hash) && !off.engaged && !off.active && off.bone === 'xray' && off.mucosa === false && off.controls === true && off.lights.head > 0 && off.lights.spot && !off.lights.spot.on && off.overlay, JSON.stringify(off));
     check('scope: leaving restores the orbit view (the camera is where it was before the scope: same distance to target, toCamera within 1e-3)',
       near(off.cam.distance, camBefore.distance, 0.5) && off.cam.toCamera.every((v, i) => near(v, camBefore.toCamera[i], 1e-3)), JSON.stringify([off.cam, camBefore]));
     await context.close();
@@ -2159,6 +2454,61 @@ async function scopeTests(browser, base) {
     await context.close();
   }
 
+  /* ===== CT along the scope, and exposure on settle (E4) ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,52,-3,15,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision && window.__ssb.scope.inset, null, { timeout: 30000 });
+    await nextFrames(page, 4);
+    await page.waitForTimeout(300);
+    const ins = await page.evaluate(() => {
+      const s = window.__ssb.scope; const T = s.tip; const c = document.getElementById('ssb-scope-inset');
+      const px = c.getContext('2d').getImageData(c.width >> 1, c.height >> 1, 1, 1).data;
+      return { tip: T, cursor: s.cursor, inset: s.inset, sample: s.sampleAt(T), px: [...px], shown: !c.closest('.ssb-lab-sec').hidden, w: c.width, h: c.height };
+    });
+    const voxel = 1;     /* the display volume's voxel is 1 mm (ct.json) */
+    check('scope CT: after a pose change the shared cursor equals the tip within a voxel', ins.cursor && Math.hypot(...ins.cursor.map((v, i) => v - ins.tip[i])) <= voxel, JSON.stringify([ins.cursor, ins.tip]));
+    check('scope CT: the inset is shown once the volume has loaded, and its centre pixel is the volume sampled at the tip',
+      ins.shown && ins.w === ins.inset.width && near(ins.inset.center, ins.sample, 1e-4) && Math.abs(ins.px[0] - Math.max(0, Math.min(255, Math.round(ins.sample)))) <= 1, JSON.stringify(ins));
+    const shaft = ins.inset.shaft;
+    check('scope CT: the shaft is drawn ending at the centre pixel', near(shaft[2], (ins.w - 1) / 2, 1e-6) && near(shaft[3], (ins.h - 1) / 2, 1e-6), JSON.stringify(shaft));
+    /* the cursor follows a later pose change, and CT opens on it */
+    await page.evaluate(() => { const r = document.getElementById('ssb-scope-yaw'); r.value = '-1'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+    await nextFrames(page, 4);
+    const c2 = await page.evaluate(() => ({ tip: window.__ssb.scope.tip, cursor: window.__ssb.scope.cursor }));
+    check('scope CT: the cursor follows the next pose change', c2.cursor && Math.hypot(...c2.cursor.map((v, i) => v - c2.tip[i])) <= voxel && Math.hypot(...c2.cursor.map((v, i) => v - ins.cursor[i])) > 0.1, JSON.stringify([c2, ins.cursor]));
+    /* a 30-frame drag measures the exposure at most twice; a settled pose is exposed */
+    const box = await page.evaluate(() => { const b = document.getElementById('ssb-canvas').getBoundingClientRect(); return { x: b.left + b.width / 2, y: b.top + b.height / 2 }; });
+    await page.waitForTimeout(300);
+    const runs0 = await page.evaluate(() => window.__ssb.scope.exposeRuns);
+    await page.mouse.move(box.x, box.y);
+    await page.mouse.down();
+    const frames0 = await page.evaluate(() => window.__ssb.scope.renders);
+    for (let i = 1; i <= 30; i++) await page.mouse.move(box.x + i * 10, box.y - i * 6);      /* back to back: the pose never rests for 100 ms */
+    const dragFrames = (await page.evaluate(() => window.__ssb.scope.renders)) - frames0;
+    await page.mouse.up();
+    const runsDrag = (await page.evaluate(() => window.__ssb.scope.exposeRuns)) - runs0;
+    await page.waitForTimeout(400);
+    const runsSettled = (await page.evaluate(() => window.__ssb.scope.exposeRuns)) - runs0;
+    check('scope: during a 30-frame drag the exposure runs at most twice, and the settled pose is exposed once more', runsDrag <= 2 && runsSettled >= 1 && runsSettled <= 3, `${runsDrag} during (${dragFrames} frames), ${runsSettled} after`);
+    check('scope: the HUD near colour is a class, not an inline style (E4)', !(await page.evaluate(() => [...document.querySelectorAll('.ssb-scope-hud-row')].some((e) => e.style.color))) && (await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--signal'))).length > 0);
+    const tipEnd = await page.evaluate(() => window.__ssb.scope.tip);
+    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready', null, { timeout: 30000 });
+    const cc = await page.evaluate(() => window.__ssb.ct.cursor);
+    check('scope CT: leaving the scope for CT keeps the cursor where the tip was', cc && Math.hypot(...cc.map((v, i) => v - tipEnd[i])) <= voxel, JSON.stringify([cc, tipEnd]));
+    await context.close();
+  }
+  {
+    /* no volume, no inset: a scope whose CT never loads still moves and shows no inset */
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,30,0,0,0,0', { abort: /\/ssb\/ct\/ct\.u8\.gz/, track: false });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    await nextFrames(page, 4);
+    await page.waitForTimeout(500);
+    const none = await page.evaluate(() => ({ inset: window.__ssb.scope.inset, hidden: document.getElementById('ssb-scope-inset').closest('.ssb-lab-sec').hidden }));
+    check('scope CT: with no volume the inset is hidden and there is no error', none.inset === null && none.hidden === true, JSON.stringify(none));
+    await context.close();
+  }
+
   /* ===== collision and the proximity HUD on the page (E3) ===== */
   {
     /* a pasted link through bone is clamped, in the pose and the URL; the pinned poses are not */
@@ -2170,21 +2520,23 @@ async function scopeTests(browser, base) {
     };
     const slide = (page, key, value) => page.evaluate(([k, v]) => { const r = document.getElementById(`ssb-scope-${k}`); r.value = String(v); r.dispatchEvent(new Event('input', { bubbles: true })); }, [key, value]);
     let o = await open('#scope=L,30,10,0,0,30');
+    /* the store writes a scope-sourced hash 250 ms after the last change (main.js): wait for it to settle */
+    await o.page.waitForFunction(() => location.hash === '#scope=L,17,10,0,0,30', null, { timeout: 5000 }).catch(() => {});
     const clamped = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash, hud: window.__ssb.scope.hud }));
-    check('scope: a pasted pose through bone is clamped to the last free depth, in the pose and in the URL (L,30,10,0,0,30 -> depth 16)',
-      clamped.pose.depth === 16 && clamped.pose.yaw === 10 && clamped.hash === '#scope=L,16,10,0,0,30' && clamped.hud.limited === true, JSON.stringify(clamped));
+    check('scope: a pasted pose through bone is clamped to the last free depth, in the pose and in the URL (L,30,10,0,0,30 -> depth 17)',
+      clamped.pose.depth === 17 && clamped.pose.yaw === 10 && clamped.hash === '#scope=L,17,10,0,0,30' && clamped.hud.limited === true, JSON.stringify(clamped));
     await o.context.close();
 
     o = await open('#scope=R,58.5,-3,19,0,0');
     const sph = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, tip: window.__ssb.scope.tip, hud: window.__ssb.scope.hud, lm: window.__ssb.specimen.landmarks.find((l) => l.key === 'lm.sphenoid-ostium.R').ras }));
     check('scope: the pinned right sphenoid pose (R,58.5,-3,19) is not clamped and its tip is within 2.5 mm of lm.sphenoid-ostium.R',
       sph.pose.depth === 58.5 && Math.hypot(...sph.tip.map((v, i) => v - sph.lm[i])) <= 2.5 && !sph.hud.limited, JSON.stringify(sph));
-    check('scope: the HUD lists every distance field, nearest first, in mm; mucosal contact is reported (15 mm of shaft at the sphenoid pose)',
-      sph.hud.rows.length === 5 && sph.hud.rows.every((r, i, a) => i === 0 || a[i - 1].mm <= r.mm) && sph.hud.rows.every((r) => r.name && !/^s\./.test(r.name)) && sph.hud.contactMm === 15, JSON.stringify(sph.hud));
+    check('scope: the HUD lists every distance field, nearest first, in mm; mucosal contact is reported (11 mm of shaft at the sphenoid pose)',
+      sph.hud.rows.length === 5 && sph.hud.rows.every((r, i, a) => i === 0 || a[i - 1].mm <= r.mm) && sph.hud.rows.every((r) => r.name && !/^s\./.test(r.name)) && sph.hud.contactMm === 11, JSON.stringify(sph.hud));
     const dom = await o.page.evaluate(() => ({ rows: [...document.querySelectorAll('.ssb-scope-hud-row')].map((e) => e.textContent), near: document.querySelectorAll('.ssb-scope-hud-row[data-near]').length,
       contact: (document.querySelector('.ssb-scope-hud-contact') || {}).textContent, hidden: document.querySelector('.ssb-scope-hud').closest('.ssb-lab-sec').hidden }));
     check('scope: the proximity section shows a row per structure with its graph name, and the mucosal contact line; none within 3 mm here, so none is flagged',
-      !dom.hidden && dom.rows.length === 5 && dom.rows[0].startsWith('Orbit:') && dom.near === 0 && /^Mucosal contact: 15 mm/.test(dom.contact), JSON.stringify(dom));
+      !dom.hidden && dom.rows.length === 5 && dom.rows[0].startsWith('Orbit:') && dom.near === 0 && /^Mucosal contact: 11 mm/.test(dom.contact), JSON.stringify(dom));
     /* the shaft: 2.7 mm goes deeper than 4 mm before bone */
     await slide(o.page, 'yaw', 0);
     await slide(o.page, 'pitch', 0);
@@ -2200,13 +2552,13 @@ async function scopeTests(browser, base) {
     await o.context.close();
 
     o = await open('#scope=R,74,3,24,0,0');
-    const nearHud = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, row: (() => { const e = document.querySelector('.ssb-scope-hud-row[data-near]'); return e && { text: e.textContent, id: e.dataset.id, color: e.style.color }; })(),
+    const nearHud = await o.page.evaluate(() => ({ pose: window.__ssb.scope.pose, row: (() => { const e = document.querySelector('.ssb-scope-hud-row[data-near]'); return e && { text: e.textContent, id: e.dataset.id, color: getComputedStyle(e).color, cls: e.className, other: getComputedStyle(document.querySelector('.ssb-scope-hud-row:not([data-near])')).color, sig: (() => { const t = document.createElement('i'); t.style.color = 'var(--signal)'; document.body.append(t); const c = getComputedStyle(t).color; t.remove(); return c; })() }; })(),
       others: document.querySelectorAll('.ssb-scope-hud-row[data-near]').length }));
     check('scope: within 3 mm of a structure its row is drawn in the signal colour (R,74,3,24: the anterior cranial fossa, 2.2 mm) and only that row',
-      nearHud.pose.depth === 74 && nearHud.row && nearHud.row.id === 's.anterior-cranial-fossa' && /2\.2 mm/.test(nearHud.row.text) && /signal/.test(nearHud.row.color) && nearHud.others === 1, JSON.stringify(nearHud));
+      nearHud.pose.depth === 74 && nearHud.row && nearHud.row.id === 's.anterior-cranial-fossa' && /2\.2 mm/.test(nearHud.row.text) && /ssb-scope-hud-near/.test(nearHud.row.cls) && nearHud.row.color === nearHud.row.sig && nearHud.row.color !== nearHud.row.other && nearHud.others === 1, JSON.stringify(nearHud));
     await o.context.close();
 
-    for (const [hash, label] of [['#scope=R,36,-2,33,0,70', 'right'], ['#scope=L,41,-10,44,15,70', 'left']]) {
+    for (const [hash, label] of [['#scope=R,36,-2,33,0,70', 'right'], ['#scope=L,36,-2,33,0,70', 'left']]) {
       o = await open(hash);
       const f = await o.page.evaluate(() => window.__ssb.scope.pose);
       check(`scope: the pinned ${label} frontal pose (${hash.slice(7)}) opens unclamped`, f.depth === Number(hash.slice(7).split(',')[1]), JSON.stringify(f));
@@ -2224,16 +2576,18 @@ async function scopeTests(browser, base) {
     await page2.waitForFunction(() => window.__ssb && window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
     await nextFrames(page2, 3);
     const none = await page2.evaluate(() => ({ depth: window.__ssb.scope.pose.depth, rows: window.__ssb.scope.hud.rows.length, hidden: document.querySelector('.ssb-scope-hud').closest('.ssb-lab-sec').hidden }));
-    check('scope: with no distance fields in ct.json the Proximity section is hidden, nothing throws, and collision still clamps (depth 16)', none.rows === 0 && none.hidden && none.depth === 16 && errors2.length === 0, JSON.stringify([none, errors2]));
+    check('scope: with no distance fields in ct.json the Proximity section is hidden, nothing throws, and collision still clamps (depth 17)', none.rows === 0 && none.hidden && none.depth === 17 && errors2.length === 0, JSON.stringify([none, errors2]));
     await ctx2.close();
   }
 
   /* ===== a pasted link, hostile links, the other stages ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '#scope=L,30,-10,0,0,30');
-    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
+    /* the clamp needs the lazily loaded volume (collision), and the store writes the clamped hash 250 ms later (main.js) */
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
+    await page.waitForFunction(() => location.hash === '#scope=L,26,-10,0,0,30', null, { timeout: 5000 }).catch(() => {});
     const info = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, stage: document.getElementById('ssb-app').dataset.stage, hash: location.hash }));
-    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 30, yaw: -10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,30,-10,0,0,30', JSON.stringify(info));
+    check('scope: a pasted #scope= link opens the stage at that pose once the specimen has loaded (L,30,-10,... swings medially: the septum rule clamps it to depth 26, E3b)', info.stage === 'scope' && JSON.stringify(info.pose) === JSON.stringify({ side: 'L', depth: 26, yaw: -10, pitch: 0, roll: 0, lens: 30 }) && info.hash === '#scope=L,26,-10,0,0,30', JSON.stringify(info));
     await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); });
     await nextFrames(page, 3);
     check('scope: selecting a structure while in the scope starts no camera flight (the scope owns the camera)', (await spec(page, () => window.__ssb.specimen.camera().flying)) === false);
@@ -2265,7 +2619,7 @@ async function scopeTests(browser, base) {
     const { context, page } = await openSpecimen(browser, base, '#scope=R,60,50000,-50000,99999,45');
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 15000 });
     const pose = await spec(page, () => window.__ssb.scope.pose);
-    check('scope: out-of-range numbers in a link clamp (yaw 45, pitch -45, roll 359), not break', pose.yaw === 45 && pose.pitch === -45 && pose.roll === 359 && pose.depth === 60, JSON.stringify(pose));
+    check('scope: out-of-range numbers in a link clamp (yaw 45, pitch -45, roll 359), not break', pose.yaw === 45 && pose.pitch === -45 && pose.roll === 359 && pose.depth <= 60 && pose.depth > 0, JSON.stringify(pose));   /* depth: 60, or the bone clamp's if the volume has already loaded (a race the E4 timing exposed) */
     await context.close();
   }
 
@@ -2499,6 +2853,10 @@ function sphenoidRuleTests() {
   }
   check('sphenoid rule 9: conchal degrades optic type 2 to type 1', same(P({ pneum: 1, optic_type: 2 }), P({ pneum: 1, optic_type: 1 })));
   check('sphenoid rule 9: optic type 3 below sellar draws type 2', same(P({ pneum: 2, optic_type: 3 }), P({ pneum: 2, optic_type: 2 })) && SPH.model(P({ pneum: 2, optic_type: 3 })).notes.includes('optic_type'));
+  for (const k of ['ica_protrusion', 'ica_dehiscence']) {
+    check(`sphenoid rule 9: presellar ignores ${k}=1 (geometry equals the toggle-off model's)`, same(P({ pneum: 2, [k]: 1 }), P({ pneum: 2, [k]: 0 })));
+    check(`sphenoid rule 9: the HUD says what presellar degraded (${k})`, SPH.model(P({ pneum: 2, [k]: 1 })).notes.includes(k));
+  }
   check('sphenoid rule 9: optic type 3 at sellar is not degraded', SPH.model(P({ pneum: 3, optic_type: 3 })).notes.length === 0);
   check('sphenoid rule 9: every degrade happens at most once and never invents a parameter', Object.keys(SPH.degrade(P({ pneum: 1, ...noEffect })).p).sort().join() === Object.keys(D).sort().join());
 
@@ -2597,6 +2955,7 @@ async function main() {
   }
   if (ONLY === 'specimen') {
     await specimenUnitTests();
+    standardSpecimenTests();
     await specimenTests(browser, base);
     return finish(browser, server);
   }
@@ -3071,6 +3430,8 @@ async function main() {
 
   /* ===== 8. the Specimen stage (js/ssb/geo-specimen.js, mode-specimen.js, ui-specimen.js; docs/ssb.md 3, 5.3, 7) ===== */
   await specimenUnitTests();
+  standardSpecimenTests();
+  liningTests();
   await specimenTests(browser, base);
 
   /* ===== 9. the Endoscope stage (js/ssb/scope.js, mode-endoscope.js, ui-endoscope.js; docs/ssb.md 3) ===== */

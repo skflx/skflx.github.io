@@ -299,12 +299,18 @@ Collision and the HUD are pinned too: on the synthetic fixture (a bony septum,
 a sphere's analytic distance) a pose through a wall clamps to the last free
 0.5 mm sample, a pose in air is untouched, the ring makes a thicker shaft
 clamp earlier, and a read distance field matches the analytic distance within
-a voxel; on the real specimen the searches (a 1° yaw/pitch grid) are re-run
+a voxel; the midline rule (E3b: the shaft stays on its own side of R = 0
+except behind and below `lm.choanal-arch.M`) is tested in air on the fixture
+and, on the real specimen, from both nostrils aimed across the septum; on the
+real specimen the searches (a 1° yaw/pitch grid) are re-run
 and the poses they find are pinned — right sphenoid ostium, both frontal
-ostia from a 70° lens, and no 0° pose reaching a frontal ostium. A change to
+ostia from a 70° lens, and no 0° pose reaching a frontal ostium (the left
+poses are the right ones mirrored: the standard specimen is symmetric, and
+`yaw` is side-relative, so a mirrored pose has the same yaw). A change to
 the pipeline's CT, landmarks or distance fields moves those pins on purpose.
 How the image *looks* (spot intensity, cone, the lining from inside) is a
 human check: take a screenshot of `#scope=R,45,6,4,0,0`.
+CT along the scope is pinned in the page: after a pose change the shared cursor equals the tip within a voxel, the inset's centre pixel is the volume sampled at the tip, a back-to-back drag measures the exposure at most twice and the settled pose once more, and with the CT request blocked the inset stays hidden.
 
 **Specimen stage** (`js/ssb/geo-specimen.js`, `mode-specimen.js`,
 `ui-specimen.js`; `docs/ssb.md` §3 Explore) runs on the real committed packs
@@ -324,7 +330,12 @@ shared cursor (`state.cursor`, `#at=`) within 1 mm of an independent ray
 cast and CT lands there; selection frames without turning the camera (a cut
 under reduced motion), and an entity with no surface leaves the camera alone
 and says so; the section plane clips on the cursor, follows the slider and
-the URL, and caps solid bone. Judging how the specimen *looks* stays a human
+the URL, and caps solid bone. The standard specimen is pinned too
+(`standardSpecimenTests`): the CT and the label volume are mirror-symmetric
+about R = 0 outside the midline plates, no `.R` air touches `.L` air, paired
+landmarks and sweeps mirror within 0.01 mm, `.M` landmarks sit at R = 0, and
+the right septal surface lies at half the as-scanned thickness (read with
+`git show` at the commit `ct.json` names; CI checks out full history). The open lining (ST1b) is pinned in `liningTests` (the pack is listed and within budget, one node per air label, no triangle on an air|air interface, every clear ray through the right ostium first hits the sinus with the lining where the shells stop it, a free pose looks through the choana past A −50) and in the scope and mucosa page checks (lining drawn and shells hidden from inside, not drawn from outside, picks report graph ids). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 
 The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never

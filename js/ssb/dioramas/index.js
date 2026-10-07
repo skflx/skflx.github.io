@@ -9,7 +9,7 @@
    ============================================================= */
 import * as ethmoidRoof from './ethmoid-roof.js?v=65298400';
 import * as frontalRecess from './frontal-recess.js?v=14918edd';
-import * as sphenoid from './sphenoid.js?v=231d9c9c';
+import * as sphenoid from './sphenoid.js?v=80f1e260';
 
 export const DIORAMAS = Object.freeze({
     'ethmoid-roof': ethmoidRoof,

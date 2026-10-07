@@ -124,7 +124,7 @@ never reloads.
   sampled every 0.5 mm, on its axis and on a ring of four points at the
   shaft radius (4 mm scope, or 2.7 mm, chosen in the controls, never in the
   URL), against the CT display volume (§5.6), and a pose that would block is
-  clamped to the last free depth. Only bone blocks (display ≥ 150); the
+  clamped to the last free depth. The tip is the shared 3D cursor (`state.cursor`, set once per animation frame that follows a pose change, so CT opens on it), and an inset in the controls shows the oblique CT slice through the tip spanned by the view direction and the camera's up, with the shaft drawn on it (hidden until the volume has loaded). The exposure is measured when the pose has rested 100 ms, not on every moving frame. Only bone blocks (display ≥ 150); the
   shaft length lying in mucosa is reported as mucosal contact, because this
   specimen is not decongested and a rigid scope displaces mucosa. A proximity
   HUD gives the distance in mm from the tip to each critical structure (ICA,
@@ -140,8 +140,12 @@ never reloads.
   the pose math and the `#scope=` codec, pure; `mode-endoscope.js`,
   `ui-endoscope.js`): a scope pose is a camera over the Specimen stage
   (`state.scope`, exclusive with the lab and CT), with a spotlight at the tip
-  and a 70° circular field of view; collision, the HUD and station flights
-  are the next work packages (`docs/ssb-roadmap.md`).
+  and a 70° circular field of view. Collision (E3, E3b): the shaft is clamped
+  at bone and at the midline (R = 0, where the standard specimen centres the
+  septum; the septum itself is below the bone level) except in the
+  nasopharynx, behind and below `lm.choanal-arch.M`; the HUD reports which
+  limit fired. Station flights are a later work package
+  (`docs/ssb-roadmap.md`).
 - **CT.** Axial, coronal and sagittal slices of the specimen volume, each
   on its own canvas, radiological convention (patient right on the image's
   left) with orientation letters; one crosshair in RAS mm shared by the
@@ -158,9 +162,8 @@ never reloads.
   no `ssb/ct/ct.json` the stage says so. Built for the Wormald
   building-block exercise: scroll the three planes, identify each frontal
   recess cell, and toggle its 3D block to check. The crosshair is the
-  Specimen stage's 3D cursor (`state.cursor`). *Not built yet:* the oblique
-  slice down the scope axis and the crosshair following the scope tip
-  (roadmap E4), and the 3D block toggle.
+  Specimen stage's 3D cursor (`state.cursor`), which the Endoscope stage moves
+  to its tip. *Not built yet:* the 3D block toggle.
 - **Procedure.** A procedure from the graph played as steps. Each step sets
   the station (camera pose), applies the cumulative dissection state (units
   the step `removes` disappear), highlights what comes into view, hatches
@@ -241,12 +244,23 @@ olfactory septum stay as scanned. The as-scanned volume stays the
 pipeline's input (reproducible from the UW crawl, or from git at the
 commit WP N1 names) and becomes a variant later — a septal deviation, a
 closed ostium, asymmetric sinuses — rather than the default. Method and
-acceptance: roadmap WP N1.
+acceptance: roadmap WP N1; the script is `tools/ssb-pipeline/uw/normalize.py`.
+Decisions made when it ran (owner, 2026-10-05, simplicity first): the mirror
+plane is R = 0, not the septum's fitted plane (the fit's tilt is printed, and
+the gate is the fitted plane's R at the septum, not its extrapolation to the
+origin); the frontal sinus's tables, which cross R = 0 in the as-scanned
+head, are simply replaced by the mirror; a landmark that exists on one side
+only stays as scanned.
 
 Whatever is chosen, `ssb/LICENSE-data.md` records dataset, case id,
 license and attribution for every derived file. Faces are removed: the
 volume is cropped to the region and soft tissue outside a dilated bone
-envelope anterior to the facial skeleton is masked to air.
+envelope anterior to the facial skeleton is masked to air — except the
+external nose (O1 (c), roadmap ST6): between subnasale and nasion and
+between the alar-facial grooves (above S 28 also |R| ≤ 12, so the medial
+canthi stay masked), the unmasked skin, alae, columella and vestibule are
+restored, centred and mirrored with the rest. Lips, cheeks and eyelids
+stay masked.
 
 ### 5.2 Segmentation — the graph writes the label table
 
@@ -293,6 +307,12 @@ checks the gzip magic bytes rather than trusting headers. If the budgets
 below fail, the next step is Draco with its **JS** decoder (no WebAssembly,
 no `eval` — works under the current CSP); meshopt needs real WebAssembly and
 therefore `'wasm-unsafe-eval'`, a CSP loosening (§8, §13).
+
+The served specimen is the standardized one (§5.1): `normalize.py` writes the
+mirrored CT and labels from the as-scanned inputs, then reruns `walls.py`,
+`meshes.py`, `sdf.py` and `softtissue.py` on them and makes the side pairs
+exact (`normalize.py all`). The side-relative scope `yaw` means a mirrored pose
+keeps its yaw (`js/ssb/scope.js`).
 
 Git carries the binaries (GitHub Pages cannot serve LFS). Re-export only at
 release points; the budget below bounds history growth.
@@ -356,11 +376,13 @@ soft tissue is built three other ways, and each part says which:
 
 | Layer | Built as | Truth kind |
 |---|---|---|
-| Mucosa (sinus and nasal lining) | the air spaces' own surfaces — the air/tissue boundary *is* the mucosal surface — drawn with the `mucosa` material; no thickness is modelled | specimen |
-| Septal mucosa (and nasal floor, for the extended flap) | the faces of the `s.nasal-septum.M` (and `s.nasal-floor.*`) wall units that face each nasal cavity, meshed per side, each with a **chart**: the surface's sagittal projection (a, s) in mm and a lookup grid back onto it, so anything drawn on the septum is specified in 2D | specimen |
+| Mucosa (sinus and nasal lining) | the air spaces' own surfaces — the air/tissue boundary *is* the mucosal surface — drawn with the `mucosa` material; no thickness is modelled. Each air space is its own closed shell (the outside view), so every opening is a double membrane; from inside (the camera in the air box, or the scope) the `lining` pack is drawn instead: one surface over the union of every air label, split into nodes by the label each triangle faces, so openings are open (`lining.py`, ST1b). Its nodes repeat the shells' names; the viewer keys them `lining:<id>.<side>`, and a pick reports the graph id | specimen |
+| Septal mucosa | the faces of the `s.nasal-septum.M` wall unit that face each nasal cavity, meshed per side, with a **chart**: the surface's sagittal projection (a, s) in mm and a lookup grid back onto it, so anything drawn on the septum is specified in 2D | specimen |
+| Nasal floor mucosa (for the extended flap) | the floor bone `s.nasal-floor.*` is separated from the air by 1–3 mm of unlabelled soft tissue, the mucosa, so the surface is the airway lining itself: the cavity's lining triangles facing down (normal S ≤ −cos 45°) within 6 mm of floor-bone voxels, at or in front of the PNS plane (A ≥ −50), largest component (`softtissue.py`, ST2c). Its chart is axial, (a, r) → s, with r = \|R\| (the left chart is the right one: the standard specimen is symmetric), and a `junction` polyline against the septal chart's `bottom(a)` | specimen |
 | Small arteries (posterior septal and its branches, PLNA branches, septal AEA/PEA branches, nasopalatine, superior labial) | sweeps (§5.5) generated from **waypoints** — landmarks or chart points — at a stated depth below the surface; every point `inferred`, every waypoint cited | specimen-placed, inferred |
 | Flap territories (nasoseptal: short, full, extended; rescue incisions; later IT/MT/lateral wall flaps) | **overlays**: outlines computed at runtime on a chart from landmarks plus the graph's measurements and the procedure's steps, with parameters and presets like a diorama's | schematic on specimen |
-| External nose (naris, vestibule, valves, ala, columella; cartilage) | not in the specimen: the face mask (§5.1) removed it. Owner decision O1/O2 (§13) | — |
+| External nose (naris, vestibule, valves, ala, columella) | the specimen's own skin and vestibule, unmasked from the UW axial stack (§5.1; roadmap ST6, O1 (c), O2): skin surface `s.external-nose.M` drawn as `skin`, vestibule air `s.nasal-vestibule.<side>` (vestibular skin), the internal valve as the narrowest coronal airway section, which is also the vestibule \| cavity boundary | specimen, measured |
+| Nasal cartilages (ULC, LLC crura, septal cartilage outline) | not resolvable on this bone-window CT; schematic overlay with the full framework (roadmap ST7) | schematic |
 
 Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the
 committed `ssb/ct/` volume, not the raw crawl, so it can be rerun in any
@@ -392,8 +414,8 @@ What changed from the first pass is listed at the end.*
 **Inputs.** For side X: the septal chart `ssb/geometry/charts.json`
 `s.septal-mucosa.X` (chart (a, s) mm = RAS (A, S); `grid`, `polygon`,
 `unreliable`, `filled`), and for design C the floor chart
-`s.nasal-floor-mucosa.X` (chart (a, r), with its junction polyline to the
-septal chart; ST2b); the landmarks `lm.sphenoid-ostium.X`,
+`s.nasal-floor-mucosa.X` (chart (a, |R|) → `grid.s`, with its `junction` rows to
+the septal chart's `bottom(a)`; ST2c); the landmarks `lm.sphenoid-ostium.X`,
 `lm.choanal-arch.M`, `lm.middle-turbinate-head.X`; the ostium's inferior
 margin `s_f` (`landmarks.meta.json`, `lm.sphenoid-ostium.X`
 `inferior_margin_s_mm`, written by ST2b; right ≈ 23.5, the lowest S of the
@@ -436,7 +458,9 @@ inferior margin):
    posterior floor cut short of the hard–soft palate junction.
 5. *Anterior cut* — A: at the A of `lm.middle-turbinate-head.X` (the head of
    the middle turbinate); B, C: at `a_ant - anterior_margin` (the
-   mucocutaneous junction where the chart reaches it); on the floor chart
+   mucocutaneous junction where the chart reaches it — on the specimen the
+   chart's anterior edge is the internal valve plane, ST6's proxy for the
+   junction, which CT does not show); on the floor chart
    (C) the same A.
 6. *Outline* = pedicle → superior → anterior → inferior → posteroinferior,
    clipped to the chart polygons (septal, and floor for C).

@@ -19,7 +19,7 @@
    a no-op, never an exception (docs/decisions.md section 3).
    ============================================================= */
 
-import { parseScope, formatScope, clampPose, samePose } from './scope.js?v=4ee7f38a';
+import { parseScope, formatScope, clampPose, samePose } from './scope.js?v=9658ff9e';
 
 export const TIER_MIN = 1;
 export const TIER_MAX = 3;

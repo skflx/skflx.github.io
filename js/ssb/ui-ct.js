@@ -12,14 +12,29 @@
    The CT button works without WebGL: CT is CPU-drawn and is the documented
    fallback (docs/ssb.md 7.5).
    ============================================================= */
-import { PLANES } from './volume.js?v=4943c913';
-import { CT_PLANES } from './state.js?v=82ca4b88';
+import { PLANES, stamped } from './volume.js?v=d1a450a5';
+import { CT_PLANES } from './state.js?v=2a74ae90';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
     if (cls) node.className = cls;
     if (text !== undefined) node.textContent = text;
     return node;
+}
+
+/* The standard-specimen note (docs/ssb.md 5.1, O6): shown wherever the volume is shown, when ct.json has
+   a `standard` block. Resolves false when the header is absent or unreadable. */
+export const STANDARD_NOTE = 'Standardized specimen: one head\u2019s right half, mirrored, with the septum centred \u2014 symmetric by construction, not a real head.';
+let standardAnswer = null;
+export function isStandardSpecimen() {
+    if (!standardAnswer) {
+        standardAnswer = Promise.resolve()
+            .then(() => fetch(stamped('ssb/ct/ct.json')))
+            .then((res) => (res.ok ? res.json() : null))
+            .then((meta) => !!(meta && typeof meta === 'object' && meta.standard))
+            .catch(() => false);
+    }
+    return standardAnswer;
 }
 
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -146,6 +161,12 @@ export function mountCtControls({ dom, ct, store, graph, stageSwitch }) {
     const legendList = el('ul', 'ssb-ct-legend-list');
     legend.append(legendSummary, legendList);
     labels.append(toggle, legend);
+
+    /* ---- standard specimen ---- */
+    const standard = section('standard', 'Specimen');
+    standard.append(el('p', 'ssb-param-src', STANDARD_NOTE));
+    standard.hidden = true;
+    isStandardSpecimen().then((yes) => { standard.hidden = !yes; });
 
     /* ---- keys ---- */
     const keys = section('keys', 'Keys');

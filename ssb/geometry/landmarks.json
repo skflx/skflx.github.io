@@ -1,28 +1,28 @@
 {
  "lm.anterior-nasal-spine.M": [
-  1.04,
+  0.0,
   0.0,
   0.0
  ],
  "lm.choanal-arch.M": [
-  4.0,
-  -51.5,
+  0.0,
+  -51.0,
   12.0
  ],
  "lm.crista-galli-apex.M": [
-  -1.5,
+  0.0,
   -32.0,
   48.0
  ],
  "lm.dorsum-sellae-tip.M": [
-  -0.5,
+  0.0,
   -73.5,
   40.0
  ],
  "lm.foramen-rotundum-anterior.L": [
-  -22.39,
-  -59.1,
-  25.56
+  -16.66,
+  -55.56,
+  23.37
  ],
  "lm.foramen-rotundum-anterior.R": [
   16.66,
@@ -30,9 +30,9 @@
   23.37
  ],
  "lm.frontal-ostium.L": [
-  -8.84,
-  -17.82,
-  50.5
+  -5.86,
+  -20.35,
+  48.0
  ],
  "lm.frontal-ostium.R": [
   5.86,
@@ -45,8 +45,8 @@
   2.33
  ],
  "lm.incisive-canal.M": [
-  0.1,
-  -18.95,
+  0.0,
+  -19.08,
   -1.0
  ],
  "lm.infraorbital-foramen.L": [
@@ -55,9 +55,9 @@
   15.58
  ],
  "lm.middle-turbinate-head.L": [
-  -3.19,
-  -10.23,
-  28.88
+  -5.43,
+  -12.21,
+  28.57
  ],
  "lm.middle-turbinate-head.R": [
   5.43,
@@ -65,9 +65,9 @@
   28.57
  ],
  "lm.naris.L": [
-  -7.83,
-  4.22,
-  3.76
+  -6.55,
+  4.45,
+  4.7
  ],
  "lm.naris.R": [
   6.55,
@@ -80,9 +80,9 @@
   33.05
  ],
  "lm.sphenoid-ostium.L": [
-  -8.77,
-  -54.58,
-  28.6
+  -1.69,
+  -50.46,
+  24.16
  ],
  "lm.sphenoid-ostium.R": [
   1.69,
@@ -105,17 +105,17 @@
   40.28
  ],
  "s.clivus.M": [
-  -1.41,
+  0.0,
   -91.1,
   5.26
  ],
  "s.crista-galli.M": [
-  -1.42,
+  0.0,
   -35.42,
   43.39
  ],
  "s.dorsum-sellae.M": [
-  -0.91,
+  0.0,
   -76.16,
   37.27
  ],
@@ -135,13 +135,13 @@
   27.09
  ],
  "s.sella-turcica.M": [
-  2.53,
+  0.0,
   -68.94,
   37.99
  ],
  "s.superior-orbital-fissure.L": [
-  -18.07,
-  -60.37,
+  -17.81,
+  -57.44,
   37.44
  ],
  "s.superior-orbital-fissure.R": [
@@ -150,7 +150,7 @@
   37.44
  ],
  "s.vomer.M": [
-  -3.62,
+  0.0,
   -52.05,
   8.99
  ]

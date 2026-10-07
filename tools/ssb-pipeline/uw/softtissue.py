@@ -114,6 +114,91 @@ def septal_surface(lab, table, aff, side, spacing):
     return v, f, M.normals(v, f), filled
 
 
+FLOOR = 's.nasal-floor-mucosa'
+FLOOR_ABOVE_MM = 6.0          # ST2c: a lining triangle belongs to the floor if it lies within this of a floor-bone voxel
+FLOOR_COS = float(np.cos(np.pi / 4))
+PNS_A_MM = -50.0              # the PNS plane: the posterior bound
+FLOOR_MIN_CM2 = 2.0           # Escalate below this; also a second component over FLOOR_SECOND_CM2
+FLOOR_SECOND_CM2 = 0.5
+JUNCTION_PNS_MM = -47.0       # the junction is judged from here forward (the septal chart's PNS-end cells are partly covered)
+
+
+def tri_components(f):
+    """Connected components of triangles (linked by shared vertices): labels per triangle."""
+    used, inverse = np.unique(f.ravel(), return_inverse=True)
+    g = inverse.reshape(-1, 3)
+    e = np.concatenate([g[:, [0, 1]], g[:, [1, 2]]])
+    adj = sparse.coo_matrix((np.ones(len(e)), (e[:, 0], e[:, 1])), shape=(len(used), len(used)))
+    _, comp = sparse.csgraph.connected_components(adj, directed=False)
+    return comp[g[:, 0]]
+
+
+def floor_surface(lab, table, aff, spacing):
+    """s.nasal-floor-mucosa.R (ST2c). The floor bone (s.nasal-floor.R) is separated from the cavity air by
+    1-3 mm of unlabelled soft tissue: the floor mucosa. Its surface is the airway lining itself (marching
+    cubes on s.nasal-cavity.R, Taubin, as for the septal surface): the triangles whose normal (airway into
+    tissue) has S <= -cos 45 deg, whose centroid is within FLOOR_ABOVE_MM of a floor-bone voxel, at or behind
+    A = -50 (the PNS plane); the lateral edge is the normal rule (the floor turning into the inferior meatus
+    wall), the medial edge is the septal junction. Largest component. Returns v, f, normals, report."""
+    by = {v: int(k) for k, v in table.items()}
+    air = lab == by['s.nasal-cavity.R']
+    bone = lab == by['s.nasal-floor.R']
+    v, f = M.surface(air, aff)
+    v = M.taubin(v, f)
+    tri = v[f]
+    cen = tri.mean(1)
+    fn = np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0])
+    fn /= np.maximum(np.linalg.norm(fn, axis=1, keepdims=True), 1e-12)
+    d = ndi.distance_transform_edt(~bone, sampling=spacing)
+    inv = np.linalg.inv(np.array(aff))
+    ijk = cen @ inv[:3, :3].T + inv[:3, 3]
+    dist = ndi.map_coordinates(d, [ijk[:, 2], ijk[:, 1], ijk[:, 0]], order=1, mode='nearest')
+    keep = (fn[:, 2] <= -FLOOR_COS) & (dist <= FLOOR_ABOVE_MM) & (cen[:, 1] >= PNS_A_MM)
+    f = f[keep]
+    comp = tri_components(f)
+    areas = np.array([area_mm2(v, f[comp == c]) / 100 for c in range(comp.max() + 1)])
+    order = np.argsort(areas)[::-1]
+    f = f[comp == order[0]]
+    used, inv2 = np.unique(f.ravel(), return_inverse=True)
+    v, f = v[used], inv2.reshape(-1, 3)
+    if len(f) > BUDGET:
+        v, f = fast_simplification.simplify(v.astype(np.float32), f.astype(np.int32), 1 - BUDGET / len(f))
+        v, f = np.asarray(v, np.float64), np.asarray(f, np.int64)
+    return v, f, M.normals(v, f), {'components_cm2': [round(float(a), 2) for a in areas[order]]}
+
+
+def floor_chart(v, f, nrm):
+    """The axial chart (a, r) -> s: chart_of() on the coordinates reordered (S, A, R), so its value is S
+    and its grid axes are A and R. Cell normals keep the RAS order."""
+    w = v[:, [2, 1, 0]]
+    return chart_of(w, f, nrm)
+
+
+def junction(ch, septal, v, f):
+    """The septal chart's bottom(a) (the lowest occupied s at each a, as a RAS point) against the floor surface:
+    per a, [a, r_septal, s_septal, r_floor_medial, s_floor_medial, d], where d is the 3D distance from the
+    bottom(a) point to the floor surface and (r, s)_floor_medial is the floor chart's medial-most cell at that
+    a (the polyline the chart records). Over the A range both cover."""
+    g = septal['grid']
+    sr = np.array([[np.nan if x is None else x for x in row] for row in g['r']])
+    a0, s0 = g['origin']
+    pts, _ = dense(v, f, 0.3)
+    tree = cKDTree(pts)
+    rows = []
+    for i in range(ch['na']):
+        a = ch['a0'] + i
+        occ = np.nonzero(ch['occ'][i])[0]
+        k = int(round(a - a0))
+        if not len(occ) or not 0 <= k < sr.shape[0] or np.isnan(sr[k]).all():
+            continue
+        js = np.nonzero(~np.isnan(sr[k]))[0][0]
+        r_b, s_b = float(sr[k, js]), s0 + js
+        d, _ = tree.query([r_b, a, s_b])
+        j = occ[0]                                      # grid axis 1 is r: the smallest is the medial edge
+        rows.append([a, r_b, s_b, ch['s0'] + j, float(ch['r'][i, j]), float(d)])
+    return rows
+
+
 def area_mm2(v, f):
     return float(np.linalg.norm(np.cross(v[f[:, 1]] - v[f[:, 0]], v[f[:, 2]] - v[f[:, 0]]), axis=1).sum() / 2)
 
@@ -378,6 +463,40 @@ def main():
                                                'a spur, a deviation or a steep edge); a lookup there is approximate',
                                        'cells': [[round(ch['a0'] + int(i), 1), round(ch['s0'] + int(j), 1)] for i, j in zip(*np.nonzero(ch['unreliable']))]}}
         all_pts.append(v)
+
+    # ST2c: the nasal floor mucosa, from the airway lining; .L is the mirror (the specimen is symmetric after N1)
+    fv, ff, fnrm, frep = floor_surface(lab, table, aff, spacing)
+    assert frep['components_cm2'][0] >= FLOOR_MIN_CM2, f'floor mucosa area {frep["components_cm2"][0]} cm2 under {FLOOR_MIN_CM2}: escalate'
+    assert frep['components_cm2'][1] <= FLOOR_SECOND_CM2, f'a second floor component of {frep["components_cm2"][1]} cm2: escalate'
+    ch = floor_chart(fv, ff, fnrm)                          # built once, on the right: the left is its mirror
+    interior = ndi.binary_erosion(ch['occ'], structure=np.ones((3, 3), bool))
+    w = fv[:, [2, 1, 0]]
+    e3, ec, n = roundtrip(ch, w, ff, ndi.binary_dilation(ch['unreliable']) | ~interior)
+    e3_all, _, _ = roundtrip(ch, w, ff)
+    area = area_mm2(fv, ff)
+    jr = junction(ch, charts[f'{SURFACE}.R'], fv, ff)
+    jmax = max(r[-1] for r in jr if r[0] >= JUNCTION_PNS_MM)   # the septal chart's own edge cells (the PNS end) are partly covered
+    jall = max(r[-1] for r in jr)
+    rows = [[None if np.isnan(ch['r'][i, j]) else round(float(ch['r'][i, j]), 2) for j in range(ch['ns'])] for i in range(ch['na'])]
+    for side, sg in (('R', 1), ('L', -1)):
+        name = f'{FLOOR}.{side}'
+        built[name] = (fv * np.array([sg, 1, 1]), ff if sg == 1 else ff[:, ::-1], fnrm * np.array([sg, 1, 1]))
+        report[name] = {'triangles': int(len(ff)), 'area_cm2': round(area / 100, 2), 'components_cm2': frep['components_cm2'][:3],
+                        'chart_bbox_mm': {'a': [round(ch['a0'], 1), round(ch['a0'] + ch['na'], 1)], 'r': [round(ch['s0'], 1), round(ch['s0'] + ch['ns'], 1)]},
+                        'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_3d_mm_all_cells': round(e3_all, 3), 'roundtrip_max_chart_mm': round(ec, 3),
+                        'roundtrip_samples': n, 'cells': int(ch['occ'].sum()), 'junction_max_mm': round(jmax, 2),
+                        'junction_max_mm_incl_pns_end': round(jall, 2), 'junction_cells': len(jr)}
+        print(name, json.dumps(report[name]), flush=True)
+        charts[name] = {'rule': 'axial chart: chart (a, r) mm = (RAS A, |RAS R|), r >= 0 lateral to the midline on either side; s = RAS S of the surface at that (a, r). '
+                                'The left chart is the right one (the standard specimen is symmetric); its RAS R is -r. Normals (RAS order; R negated on the left) point from the airway into the tissue',
+                        'polygon': ch['polygon'],
+                        'grid': {'origin': [ch['a0'], ch['s0']], 'step': GRID_MM, 'dims': [ch['na'], ch['ns']], 's': rows},
+                        'area_cm2': report[name]['area_cm2'],
+                        'junction': {'rule': f'per a: the septal chart\'s bottom(a), the lowest occupied s of {SURFACE}.R at that a; '
+                                             'rows are [a, r_septal, s_septal, r_floor_medial, s_floor_medial, distance mm from the septal point to the floor surface]; the PNS end (a < -47) is the septal chart\'s partly covered edge',
+                                     'rows': [[round(x, 2) for x in r] for r in jr]}}
+    assert e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, f'{FLOOR}: chart round-trip error over {ROUNDTRIP_MAX_MM} mm'
+    assert jmax <= 1.0, f'{FLOOR}: the floor meets the septal chart\'s bottom(a) only within {jmax:.2f} mm'
 
     # pack
     items = [(k, *built[k]) for k in sorted(built)]

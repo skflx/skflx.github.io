@@ -16,8 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=4943c913';
-import { CT_PLANES } from './state.js?v=82ca4b88';
+import { PLANES } from './volume.js?v=d1a450a5';
+import { CT_PLANES } from './state.js?v=2a74ae90';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=eb1c4fbb';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -202,6 +203,10 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     const statusSec = section('Specimen');
     const statusText = el('p', 'ssb-param-src');
     statusSec.append(statusText);
+    const standardNote = el('p', 'ssb-param-src', STANDARD_NOTE);
+    standardNote.hidden = true;
+    isStandardSpecimen().then((yes) => { standardNote.hidden = !yes; sync(); });
+    statusSec.append(standardNote);
 
     /* ---- follow the mode ---- */
     let builtRegions = '';
@@ -253,7 +258,8 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         }
         const note = specimen.problem;
         statusText.textContent = specimen.status === 'partial' ? note : '';
-        statusSec.hidden = !(specimen.status === 'partial' && note);
+        statusText.hidden = !statusText.textContent;
+        statusSec.hidden = statusText.hidden && standardNote.hidden;
         place();
     }
 

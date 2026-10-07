@@ -165,9 +165,13 @@ deleted.
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
 links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
-- **Specimen served as scanned, for now:** the owner chose a symmetric
-  standard specimen for the first release (O6, `docs/ssb.md` §5.1); WP N1
-  builds it, until then the left side keeps the as-scanned anomalies.
+- **Standard specimen (O6, N1):** the page serves the UW head
+  standardized — right half mirrored onto the left at R = 0, septum centred,
+  thin midline plates where a paired air space would cross
+  (`tools/ssb-pipeline/uw/normalize.py`, `docs/ssb.md` §5.1; `ct.json`
+  `standard`, and a note in the Specimen and CT controls). Landmarks that
+  exist on one side only stay as scanned (listed in the roadmap, N1). The
+  as-scanned head is the pipeline's input and becomes a variant later.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
   sagittal stacks are one CT (the coronal is another head,
@@ -204,7 +208,8 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   valve, ala, columella, nasal bone, piriform aperture), sourced from
   PubMed-matched papers and Radiopaedia articles (verified against the
   atlas and abstracts 2026-10-03; three errors pending in ST0d). The face mask removed
-  the nose; the unmasked source stacks do contain it (ST6-0).
+  the nose; the unmasked source stacks do contain it (ST6-0), and ST6
+  (specced at CP-2b) restores it: skin, vestibule, internal valve.
 - **Specimen stage** (`mode-specimen.js`) — the packs in 3D: named views,
   bone X-ray/solid/hidden, region layers, landmarks, click-through
   picking, a 3D cursor shared with the CT crosshair, a section plane with
@@ -218,7 +223,9 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   indicator, a spotlight at the tip with automatic exposure (K·D² from raycasts
   to the lining), the lining drawn as mucosa from inside. Bone
   stops the shaft (4 or 2.7 mm), mucosal contact is reported and a proximity
-  HUD reads the distance fields at the tip; ostia and choanae are drawn as closed membranes (ST1b).
+  HUD reads the distance fields at the tip; from inside, the lining is the open `lining` pack (`lining.py`, ST1b), so the scope can look through the choanae and the right sphenoid ostium (the left is closed in the specimen's labels).
+  The tip is also the Specimen stage's 3D cursor (so CT opens on it, and leaving the scope leaves `#at=`), an inset in
+  the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -262,8 +269,8 @@ stations and a soft-tissue layer
 (`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
 nasoseptal and other flaps depend on, flap overlays, then the external
 nose) in parallel with the `lateral-wall` diorama; procedure mode and
-self-test after. Waiting on the owner: decisions O4–O5
-(`docs/ssb-roadmap.md` §2) and review of the dioramas and tier-1 content.
+self-test after. Waiting on the owner: review of the dioramas and tier-1 content
+(`docs/ssb-roadmap.md` §2).
 
 ---
 

@@ -124,7 +124,8 @@ export const lineSide = (x, z) => (Math.abs(x) - LINE_V[0]) * LINE_N[0] + (z - L
 /* ---------------- impossible combinations (rule 9) ---------------- */
 
 /* One table: with pneum = conchal the later parameters have no effect (they
-   take their defaults); optic type 3 needs at least sellar (below it, type
+   take their defaults); with presellar, ica_protrusion and ica_dehiscence
+   likewise; optic type 3 needs at least sellar (below it, type
    2 is drawn). Returns the parameters actually drawn and what was degraded. */
 export function degrade(params) {
     const p = { ...params };
@@ -137,6 +138,12 @@ export function degrade(params) {
         if (p.lateral_recess === 0) p.lr_extent = def('lr_extent');
         if (p.optic_type === 2 || p.optic_type === 3) { notes.push('optic_type'); p.optic_type = 1; }
         if (p.vidian_type === 1) { notes.push('vidian_type'); p.vidian_type = def('vidian_type'); }
+    } else if (p.pneum === 2) {
+        /* presellar: the air ends in front of the sella, so it never reaches the parasellar carotid */
+        for (const k of ['ica_protrusion', 'ica_dehiscence']) {
+            if (p[k] !== def(k)) { notes.push(k); p[k] = def(k); }
+        }
+        if (p.optic_type === 3) { notes.push('optic_type'); p.optic_type = 2; }
     } else if (p.optic_type === 3 && p.pneum < 3) {
         notes.push('optic_type');
         p.optic_type = 2;
