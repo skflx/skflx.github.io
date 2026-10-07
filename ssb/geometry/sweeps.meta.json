@@ -1205,7 +1205,7 @@
   },
   "s.posterior-septal-artery-inferior-branch.L": {
    "confidence": "low",
-   "length_mm": 25.8,
+   "length_mm": 25.7,
    "status_fraction": {
     "inferred": 1.0
    },
@@ -1292,7 +1292,7 @@
   },
   "s.posterior-septal-artery-inferior-branch.R": {
    "confidence": "low",
-   "length_mm": 25.8,
+   "length_mm": 25.7,
    "status_fraction": {
     "inferred": 1.0
    },
@@ -1539,7 +1539,7 @@
    ],
    "radius_source": "sweeps-soft.json (stated, not measured)",
    "source": "sweeps_soft.py",
-   "chart_unreliable_fraction": 0.11,
+   "chart_unreliable_fraction": 0.44,
    "notes": "",
    "variable": "Entry level at the columella varies; the specimen's face mask removed the entry.",
    "spec": {
@@ -1547,19 +1547,19 @@
     "waypoints": [
      {
       "chart": [
-       -9,
+       -10,
        14
       ]
      },
      {
       "chart": [
-       -8,
+       -10,
        19
       ]
      },
      {
       "chart": [
-       -9,
+       -10,
        25
       ]
      }
@@ -1570,7 +1570,7 @@
      "src.bleier-2011-bas-flap",
      "src.macarthur-2016-nasal-arteries"
     ],
-    "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point."
+    "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point. ST6 (the external nose): the septal chart now ends at the internal valve plane, A -10, so the three waypoints that lay at A -9..-8 on the earlier chart (which reached A -3) are re-seated on that edge row with the same S: still the ascending segment along the anterior septal margin. The columella entry in front of the valve plane is not on the septal chart; ST4d / the checkpoint decides whether to draw it."
    },
    "mirrored_from": "s.superior-labial-septal-branch.R",
    "method": "mirrored from .R (N1)",
@@ -1604,7 +1604,7 @@
    ],
    "radius_source": "sweeps-soft.json (stated, not measured)",
    "source": "sweeps_soft.py",
-   "chart_unreliable_fraction": 0.11,
+   "chart_unreliable_fraction": 0.44,
    "notes": "",
    "variable": "Entry level at the columella varies; the specimen's face mask removed the entry.",
    "spec": {
@@ -1612,19 +1612,19 @@
     "waypoints": [
      {
       "chart": [
-       -9,
+       -10,
        14
       ]
      },
      {
       "chart": [
-       -8,
+       -10,
        19
       ]
      },
      {
       "chart": [
-       -9,
+       -10,
        25
       ]
      }
@@ -1635,7 +1635,7 @@
      "src.bleier-2011-bas-flap",
      "src.macarthur-2016-nasal-arteries"
     ],
-    "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point."
+    "derivation": "Truncated: the artery enters at the columella and caudal septum, which the specimen's mask removed, so only an ascending segment along the anterior septal margin is drawn from the first on-chart point. ST6 (the external nose): the septal chart now ends at the internal valve plane, A -10, so the three waypoints that lay at A -9..-8 on the earlier chart (which reached A -3) are re-seated on that edge row with the same S: still the ascending segment along the anterior septal margin. The columella entry in front of the valve plane is not on the septal chart; ST4d / the checkpoint decides whether to draw it."
    }
   }
  }

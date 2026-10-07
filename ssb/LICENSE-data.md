@@ -15,7 +15,8 @@ adult head: the sagittal images are reformats of the axial acquisition. UW's cor
 shows a different head and is **not** used here (see
 `tools/ssb-pipeline/uw/registration.json`, `registration.specimen_identity`). The atlas
 shows normal anatomy only (n = 1). It carries no patient identifiers, and the external face
-is masked in the published volume.
+is masked in the published volume, except the specimen's own nose (skin, alae, columella and
+vestibule between the alar-facial grooves; lips, cheeks and eyelids stay masked).
 
 **Permission.** The SSB project owner reports that the authors permit publishing 3D
 geometry and volumes derived from the atlas images. This was confirmed by the owner and
@@ -41,7 +42,7 @@ them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` ma
 
 | File | What | Made by |
 |---|---|---|
-| `ssb/ct/ct.u8.gz`, `ssb/ct/ct.json` | the axial display volume resampled to 0.5 mm in the RAS frame (`docs/ssb.md` §4), cropped to the sinonasal / ventral skull base region, external face masked | `tools/ssb-pipeline/uw/specimen.py` |
+| `ssb/ct/ct.u8.gz`, `ssb/ct/ct.json` | the axial display volume resampled to 0.5 mm in the RAS frame (`docs/ssb.md` §4), cropped to the sinonasal / ventral skull base region, external face masked except the nose | `tools/ssb-pipeline/uw/specimen.py`, then `normalize.py` (the nose is unmasked from the raw stack by `nose.py`) |
 | `ssb/ct/labels.u16.gz`, `ssb/geometry/labels.json` | named air spaces on the same grid | `specimen.py` |
 | `ssb/geometry/landmarks.json`, `landmarks.meta.json` | landmark coordinates, RAS mm, with method per point | `specimen.py` |
 | `ssb/models/*.glb.gz`, `ssb/models/packs.json` | surfaces of the named air spaces and the bony envelope; the `walls` pack: bone resection units, septum, turbinates and orbital contents | `tools/ssb-pipeline/uw/meshes.py` |
@@ -49,6 +50,7 @@ them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` ma
 | `ssb/geometry/sweeps.json`, `sweeps.meta.json` | centrelines and radii of the ICA, optic, maxillary, vidian and infraorbital nerves, nasolacrimal duct, sphenopalatine and ethmoidal arteries; per point whether it was detected in the CT, labelled by UW or inferred | `tools/ssb-pipeline/uw/sweeps.py` |
 | `ssb/ct/sdf-*.u8.gz`, the `sdf` key of `ssb/ct/ct.json` | distance fields (mm) to the ICA, optic nerve, AEA, anterior skull base and orbit | `tools/ssb-pipeline/uw/sdf.py` |
 | `ssb/models/soft.glb.gz`, `ssb/geometry/charts.json`, `lm.choanal-arch.M` and `lm.naris.R/.L` in `ssb/geometry/landmarks.json` | the septal mucosa surfaces (the nasal cavities' lining facing the septum unit) and their sagittal charts; two landmarks derived from the labels and the volume (the nostrils are schematic offsets, method in `landmarks.meta.json`) | `tools/ssb-pipeline/uw/softtissue.py` |
+| `ssb/models/nose.glb.gz`, `s.nasal-vestibule.<side>` in `ssb/ct/labels.u16.gz` and the `core` pack, `s.internal-nasal-valve.<side>` in `ssb/geometry/landmarks.json`, the `standard.nose` block of `ssb/ct/ct.json` | the specimen's own nose: the skin surface (tissue against outside air between the alar-facial grooves), the vestibule label, the internal valve (the narrowest coronal section of the airway) | `tools/ssb-pipeline/uw/nose.py`, `normalize.py` (ST6) |
 | `ssb/reference/specimen-relations.json` | the graph's spatial claims tested against this specimen (numbers only) | `tools/ssb-pipeline/uw/relate3d.py` |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.

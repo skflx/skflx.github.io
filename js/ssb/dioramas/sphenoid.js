@@ -35,8 +35,8 @@
    optic canal faces air over more than none and less than half.
    Impossible combinations degrade by the table in degrade() (rule 9).
    ============================================================= */
-import { inside, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=e1944ddf';
-import { CELL_TINT } from '../materials.js?v=d27e5b3d';
+import { inside, band, superellipse, rasRoot, geometry, tubeGeometry, mesh, tag } from './kit.js?v=fa39e9b8';
+import { CELL_TINT } from '../materials.js?v=b121b3b4';
 
 export const TITLE = 'Sphenoid sinus';
 
