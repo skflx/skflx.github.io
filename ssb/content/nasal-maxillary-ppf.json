@@ -5618,7 +5618,8 @@
         "p.medial-maxillectomy",
         "p.prelacrimal-approach",
         "p.ppf-exposure",
-        "p.endoscopic-denker"
+        "p.endoscopic-denker",
+        "p.transantral-ima-ligation"
       ],
       "tier": 2,
       "site": "Antral roof, especially over a suspended or dehiscent infraorbital canal or a large Haller cell; V2 in the PPF.",
@@ -5640,7 +5641,8 @@
       "during": [
         "p.canine-fossa-trephination",
         "p.prelacrimal-approach",
-        "p.endoscopic-denker"
+        "p.endoscopic-denker",
+        "p.transantral-ima-ligation"
       ],
       "tier": 2,
       "site": "Anterior maxillary wall, medial part of the canine fossa and around the piriform aperture.",
@@ -5660,7 +5662,8 @@
       "name": "Oroantral fistula",
       "at": "s.maxillary-sinus-floor",
       "during": [
-        "p.canine-fossa-trephination"
+        "p.canine-fossa-trephination",
+        "p.transantral-ima-ligation"
       ],
       "tier": 2,
       "site": "Sublabial incision and anterior wall/floor of the maxillary sinus.",
@@ -5680,7 +5683,8 @@
       "at": "s.nasal-septum",
       "during": [
         "p.septoplasty",
-        "p.nasoseptal-flap"
+        "p.nasoseptal-flap",
+        "p.septodermoplasty"
       ],
       "tier": 1,
       "site": "Cartilaginous septum, typically where flaps were torn on both sides or where cartilage was left bare.",
@@ -5917,7 +5921,8 @@
         "p.ppf-exposure",
         "p.medial-maxillectomy",
         "p.transpterygoid-approach",
-        "p.endoscopic-denker"
+        "p.endoscopic-denker",
+        "p.transantral-ima-ligation"
       ],
       "tier": 3,
       "site": "Anterior (vascular) layer of the PPF behind the posterior maxillary wall.",
@@ -8161,6 +8166,260 @@
         "src.hadad-2011-hb2",
         "src.rivera-serrano-2011-lnwf"
       ]
+    },
+    {
+      "id": "p.septodermoplasty",
+      "name": "Septodermoplasty (Saunders) for HHT epistaxis",
+      "tier": 2,
+      "indications": [
+        "Moderate to severe epistaxis in [[dz.hht]] that medical and office measures have not controlled. Telangiectasia recurs after every local treatment, so the operation buys time: in an audit of 301 procedures in 131 patients (33 septodermoplasties, 268 KTP laser treatments) 78.3% of patients needed three or fewer procedures, and the mean interval between treatments was 473 days (SD 515) (Harvey 2008).",
+        "Place in the sequence: in 50 patients mild-to-moderate disease did well with sequential argon laser with or without septodermoplasty or hormones, while severe disease (more than one transfusion) stopped bleeding only with closure of the nostrils, [[p.young-procedure]] (Lund 1999).",
+        "A septal perforation in a transfusion-dependent patient: septectomy combined with dermoplasty in 9 patients gave a lasting improvement in quality of life and lower transfusion requirements (22.61 to 9.57; the abstract does not give the unit), because a perforation makes graft take less likely (Lesnik 2007)."
+      ],
+      "corridor": "Transnasal over the septum. The one modern variant described in the sources read uses a caudal hemitransfixion incision, one side at a time (Burckhardt 2013).",
+      "preop": [
+        {
+          "check": "HHT diagnosis, how severe the bleeding is (transfusion and iron needs), and whether the septum is already perforated.",
+          "why": "Severity decides septodermoplasty against closure (Lund 1999). A perforation reduces the chance of a successful graft, which is why septectomy was combined with it (Lesnik 2007). Atraumatic technique and non-adherent packing apply as for any HHT nasal operation ([[dz.hht]])."
+        },
+        {
+          "check": "Counsel on what the operation does and does not do.",
+          "why": "Recurrence of telangiectasia is inevitable and further laser is needed (Harvey 2008); smell is reduced and sinus infection more likely (Burckhardt 2013, describing the original operation)."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Make a caudal hemitransfixion incision and raise the septal mucosa off the perichondrium in a supra-perichondrial plane with a Cottle dissector, creating an upper and a lower tunnel on that side.",
+          "see": [
+            "s.septal-mucosa",
+            "s.septal-cartilage",
+            "s.nasal-septum"
+          ],
+          "risk": [
+            "h.septal-perforation"
+          ],
+          "think": "Stay on the perichondrium: the graft needs it as its bed, and a hole through it is a perforation ([[h.septal-perforation]]). This step is described in a single case report (Burckhardt 2013); the abstracts of the larger series do not give the technique."
+        },
+        {
+          "do": "Remove the telangiectatic septal mucosa. In the single case reported, small upper and lower mucosal flaps were left to cover the graft edges.",
+          "see": [
+            "s.septal-mucosa",
+            "s.kiesselbach-area"
+          ],
+          "think": "The original operation eliminates the nasal mucosa and replaces it with a skin graft, usually from the thigh and sometimes from the oral mucosa (Saunders 1960, as described in Burckhardt 2013)."
+        },
+        {
+          "do": "Lay the graft on the perichondrium. In the classic operation it is skin; in the reported variant a synthetic dural graft was used instead, which avoids a distant donor site. Fix it with an absorbable transfixing suture and an absorbable hemostatic dressing.",
+          "see": [
+            "s.septal-cartilage"
+          ],
+          "think": "Graft take was 100% in a Japanese series of 15 patients (Ichimura 2006). The synthetic graft rests on one patient with a year of follow-up and no perforation (Burckhardt 2013)."
+        },
+        {
+          "do": "Treat the other side as a separate stage: the single case reported did the second side three months after the first.",
+          "see": [
+            "s.nasal-septum"
+          ],
+          "think": "Whether both sides can be done in one stage is not stated in the sources read."
+        },
+        {
+          "do": "Follow up for peripheral telangiectasia at the graft margins and treat it with laser as it appears.",
+          "see": [
+            "s.kiesselbach-area"
+          ],
+          "think": "Septodermoplasty reduced the rate of subsequent KTP laser treatments from 1.83 to 0.78 (p = 0.012; Harvey 2008, units not defined in the abstract), so it lengthens the interval between treatments; it does not end them."
+        }
+      ],
+      "endpoints": [
+        "Diseased septal mucosa replaced with a graft that has taken, on intact perichondrium",
+        "Fewer and shorter-interval bleeds, with laser available for margin telangiectasia"
+      ],
+      "pitfalls": [
+        "Promising a cure: telangiectasia recurs (Harvey 2008).",
+        "Grafting over an existing perforation without addressing it (Lesnik 2007).",
+        "Loss of smell and more sinus infections after the original operation (Burckhardt 2013).",
+        "In a systematic review of 20 studies (546 patients) the commonest complications of the surgeries studied were partial dehiscence of a nasal closure, septal perforation and continued bleeding needing reoperation (Benaim 2025); the abstract does not split the figures by operation."
+      ],
+      "src": [
+        "src.burckhardt-2013-dural-septoplasty",
+        "src.harvey-2008-sdp-ktp",
+        "src.lesnik-2007-septectomy-sdp",
+        "src.lund-1999-hht-algorithm",
+        "src.ichimura-2006-nasal-dermoplasty",
+        "src.benaim-2025-hht-surgery"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.young-procedure",
+      "name": "Young's procedure (nasal closure) and its modifications",
+      "tier": 3,
+      "indications": [
+        "Severe, transfusion-dependent epistaxis in [[dz.hht]] that other treatment has not controlled. In 50 patients, severe disease (more than one transfusion) did not benefit from laser but stopped bleeding after closure of the nostrils (Lund 1999).",
+        "A permanent operation for a carefully selected few: of 10 patients in a Danish cohort none was free of complications and one asked for reversal, and the authors reserve the procedure for selected patients (Andersen 2020)."
+      ],
+      "corridor": "The skin of the nasal vestibule at the mucocutaneous junction, usually both sides: closure prevents air passing through the nasal cavity (Lund 2017).",
+      "preop": [
+        {
+          "check": "Counselling about permanence and side effects, and a trial of functional closure.",
+          "why": "The commonest complaint was loss of smell and taste (Lund 2017). Obligate mouth breathing, dryness, worse sleep apnea and wound breakdown with revision are expected side effects, and a reported case of posterior bleeding after closure needed multiple transfusions, intubation, bilateral embolization and reversal, because the nostrils could no longer be used for access (Timmins 2016). Timmins recommends a trial of functional closure with petroleum-jelly-soaked cotton balls in the nostrils before the permanent operation."
+        },
+        {
+          "check": "Laser photocoagulation of telangiectasias before closure.",
+          "why": "The procedure is usually combined with laser photocoagulation of the telangiectasias before closure (Timmins 2016)."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Make a circumferential incision through the skin at the mucocutaneous junction in the nasal vestibule.",
+          "see": [
+            "s.nasal-vestibule",
+            "lm.naris"
+          ],
+          "think": "This is the two-flap method (Timmins 2016). The traditional closure is a three-flap modified Young's procedure (the current standard is a modification of the nasal closure first reported for HHT by Lund and Howard), which may be combined with a lateral alotomy for an additional internal flap closure (Timmins 2016). The sources read do not give the three-flap design."
+        },
+        {
+          "do": "Elevate the skin back over the cartilage to make two flaps, far enough for a tension-free closure.",
+          "see": [
+            "s.nasal-vestibule",
+            "s.septal-cartilage"
+          ],
+          "think": "Is the closure tension-free? Dehiscence is the failure mode."
+        },
+        {
+          "do": "Close the two flaps to each other in a single layer (4-0 chromic suture in Timmins 2016), then repeat on the other side.",
+          "see": [
+            "s.nasal-vestibule"
+          ],
+          "think": "Both sides were closed from the start (ab initio) in 81% of Lund's 100 patients (Lund 2017). In 13 patients 5 had the three-flap closure, all of whom needed revision for dehiscence, against 3 of 8 with the two-flap closure; operating time was 3.12 hours against 1.44 hours (p = 0.0001) with no difference in epistaxis score or benefit score (Timmins 2016) — a single-centre comparison of small, successive groups."
+        },
+        {
+          "do": "Follow up for pinpoint openings and dehiscence along the line of closure and revise when bleeding resumes.",
+          "see": [
+            "s.nasal-vestibule"
+          ],
+          "think": "Six of 13 patients developed pinpoint openings; four of the six had no increase in bleeding, so a small air leak can be managed expectantly (Timmins 2016). Partial dehiscence is the commonly reported complication and is usually treated with revision surgery (Bickerton 2025, scoping review of 192 patients)."
+        }
+      ],
+      "endpoints": [
+        "Both nostrils sealed with a tension-free closure and no airflow through the nasal cavity",
+        "Bleeding stops and hemoglobin recovers"
+      ],
+      "pitfalls": [
+        "Tension at the closure, and dehiscence (Timmins 2016; Bickerton 2025).",
+        "Weak selection or counselling: reversal requested by one of 10 in a Danish cohort (Andersen 2020), while none of 43 asked for reversal in a three-centre series (Richer 2012).",
+        "Overstating benefit. Complete cessation of bleeding was reported in 94% (Lund 2017, 100 patients; the denominator for that figure is not stated in the abstract, which says 50 completed the questionnaires) and in 30 of 36 patients (83%) with a mean hemoglobin rise of 4.68 g/dL after a mean of 34 months (Richer 2012, 43 patients). These are uncontrolled series of selected patients.",
+        "Posterior epistaxis after closure may be hard to control with the nostrils closed (Timmins 2016)."
+      ],
+      "src": [
+        "src.timmins-2016-two-flap",
+        "src.lund-2017-nasal-closure",
+        "src.richer-2012-young",
+        "src.andersen-2020-nasal-closure",
+        "src.lund-1999-hht-algorithm",
+        "src.bickerton-2025-nasal-closure",
+        "src.benaim-2025-hht-surgery"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.transantral-ima-ligation",
+      "name": "Transantral internal maxillary artery ligation",
+      "tier": 2,
+      "indications": [
+        "Intractable posterior epistaxis after posterior nasal packing. Transantral ligation and percutaneous embolization were the two most common therapies in a 21-patient comparison (12 embolization, 5 ligation, 4 both) and had success rates of 89% and 94%, with no mortality or serious morbidity (Strong 1995). The authors conclude the choice should follow the individual patient.",
+        "Today endoscopic ligation of the terminal branches ([[p.spa-ligation]]) or transmaxillary IMAX control ([[p.ppf-exposure]]) is usually the first surgical choice; the transantral route remains where an endoscopic route is not available or has failed."
+      ],
+      "corridor": "Caldwell-Luc (sublabial) antrostomy, then the posterior wall of the antrum to the pterygomaxillary fossa, where the artery is clipped (Morgan 1997).",
+      "preop": [
+        {
+          "check": "Age, anemia and hypertension; the possibility of bleeding from other sources.",
+          "why": "Advanced age, anemia and a history of hypertension predicted failure in 100 consecutive patients; of 15 who bled afterwards, causes found in 12 were failure to identify the artery in the pterygomaxillary space (6), blood flow through partly closed clips (2), posterior ethmoidal arteries (2) and revascularization of the nasal blood supply (2) (Metson 1988)."
+        },
+        {
+          "check": "Is an endoscopic or embolization route better for this patient?",
+          "why": "The reported success rates are comparable and each has its strengths and weaknesses (Strong 1995). Pritikin 1998 quotes average rates of 89% (transantral) and 94% (embolization) and complication rates of 28% and 27% from the literature; that is a secondary figure."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Sublabial incision above the gingival sulcus, subperiosteal exposure of the anterior wall and a small antrostomy through the canine fossa ([[p.canine-fossa-trephination]]).",
+          "see": [
+            "s.canine-fossa",
+            "s.maxillary-anterior-wall",
+            "s.infraorbital-foramen",
+            "s.anterior-superior-alveolar-nerve"
+          ],
+          "risk": [
+            "h.infraorbital-nerve-injury",
+            "h.anterior-superior-alveolar-nerve-injury"
+          ],
+          "think": "The commonest complications are damage to the infraorbital nerve and the anterior superior alveolar nerve (Morgan 1997). In a comparison of 46 ligations with 30 controls, success and complication rates were both higher with ligation, and the authors call it valid only if infraorbital nerve injury is avoided (McDonald 1980)."
+        },
+        {
+          "do": "Through the antrum, remove a window in the posterior wall, incise the periosteum and find the internal maxillary artery in the pterygomaxillary fossa; the layers are described in [[p.ppf-exposure]].",
+          "see": [
+            "s.maxillary-posterior-wall",
+            "s.pterygopalatine-fossa",
+            "s.internal-maxillary-artery",
+            "s.pterygomaxillary-fissure"
+          ],
+          "risk": [
+            "h.imax-bleeding-ppf"
+          ],
+          "think": "Have I found the artery? Failure to identify it in the pterygomaxillary space was the commonest cause of surgical failure in Metson 1988. The third segment branches variably in the fossa, which can leave a branch uncontrolled (Morton 1991, cadaver series). The abstracts do not describe the posterior wall step itself; it is standard in the operation and is not sourced here."
+        },
+        {
+          "do": "Clip the artery. Only the trunk need be ligated (Nair 1982); check that every clip closes the vessel completely.",
+          "see": [
+            "s.internal-maxillary-artery"
+          ],
+          "risk": [
+            "h.imax-bleeding-ppf"
+          ],
+          "think": "Blood flow through partly closed clips caused two of the failures in Metson 1988."
+        },
+        {
+          "do": "Fashion a nasoantral window if the natural ostium is not intact, then close the sublabial wound.",
+          "see": [
+            "s.maxillary-sinus",
+            "s.maxillary-natural-ostium"
+          ],
+          "risk": [
+            "h.oroantral-fistula"
+          ],
+          "think": "A nasoantral window is optional and depends on the integrity of the sinus ostium; the oroantral fistulas reported after the operation were in patients with no window (Morgan 1997, two cases)."
+        },
+        {
+          "do": "If bleeding recurs, look for the causes found in Metson 1988: an unclipped artery or branch, a leaking clip, posterior ethmoidal arteries ([[p.aea-ligation]]) or collateral supply; embolization is the other route (Strong 1995).",
+          "see": [
+            "s.posterior-ethmoidal-artery",
+            "s.sphenopalatine-artery"
+          ],
+          "think": "Re-explore or image before repeating a clip: in Metson 1988 re-exploration or angiography established the cause in 12 of the 15 failures."
+        }
+      ],
+      "endpoints": [
+        "Internal maxillary artery clipped and bleeding controlled",
+        "Sublabial wound closed, with drainage of the antrum assured"
+      ],
+      "pitfalls": [
+        "Failing to find the artery (Metson 1988).",
+        "Partly closed clips (Metson 1988).",
+        "Infraorbital or anterior superior alveolar nerve injury (McDonald 1980; Morgan 1997).",
+        "Oroantral fistula where no nasoantral window was made (Morgan 1997).",
+        "Over-reading the success rates: they come from small retrospective series of intractable bleeding with selection effects, and the comparison in Strong 1995 has 21 patients."
+      ],
+      "src": [
+        "src.metson-1988-ima-failures",
+        "src.strong-1995-ligation-embolization",
+        "src.morgan-1997-oroantral-fistula",
+        "src.mcdonald-1980-ima-followup",
+        "src.morton-1991-ima-variability",
+        "src.nair-1982-transantral",
+        "src.pritikin-1998-endoscopic-ima"
+      ],
+      "review": "draft"
     }
   ],
   "stations": [

@@ -951,7 +951,9 @@
         "p.maxillary-antrostomy",
         "p.frontal-trephination",
         "p.osteoplastic-flap",
-        "p.optic-nerve-decompression"
+        "p.optic-nerve-decompression",
+        "p.frontal-sinus-cranialization",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "mimics": [
         "dz.mucus-retention-cyst",
@@ -1227,7 +1229,9 @@
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
         "p.maxillary-antrostomy",
-        "p.frontal-trephination"
+        "p.frontal-trephination",
+        "p.external-orbitotomy-drainage",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "mimics": [
         "dz.orbital-cellulitis",
@@ -1294,7 +1298,9 @@
       "managedBy": [
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
-        "p.maxillary-antrostomy"
+        "p.maxillary-antrostomy",
+        "p.external-orbitotomy-drainage",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "mimics": [
         "dz.subperiosteal-orbital-abscess",
@@ -2081,7 +2087,11 @@
         "src.faughnan-2020-hht",
         "src.tunkel-2020-epistaxis"
       ],
-      "review": "draft"
+      "review": "draft",
+      "managedBy": [
+        "p.septodermoplasty",
+        "p.young-procedure"
+      ]
     },
     {
       "id": "dz.gpa",
@@ -2294,7 +2304,8 @@
         "p.draf-iii",
         "p.osteoplastic-flap",
         "p.csf-leak-repair",
-        "p.frontal-trephination"
+        "p.frontal-trephination",
+        "p.frontal-sinus-cranialization"
       ],
       "pearls": [
         {
@@ -2405,7 +2416,8 @@
         "h.infraorbital-nerve-injury"
       ],
       "managedBy": [
-        "p.maxillary-antrostomy"
+        "p.maxillary-antrostomy",
+        "p.lateral-canthotomy-cantholysis"
       ],
       "mimics": [
         "dz.silent-sinus-syndrome"

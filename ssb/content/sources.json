@@ -2202,6 +2202,433 @@
       "type": "cadaver",
       "verified": true,
       "pmid": "18269022"
+    },
+    {
+      "id": "src.rowh-2015-canthotomy",
+      "cite": "Rowh AD, Ufberg JW, Chan TC, Vilke GM, Harrigan RA. Lateral canthotomy and cantholysis: emergency management of orbital compartment syndrome. J Emerg Med. 2015;48(3):325-330.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.jemermed.2014.11.002",
+      "pmid": "25524455",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25524455/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case report with an illustrated description of the procedure; the abstract gives no technical detail. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.haubner-2015-canthotomy",
+      "cite": "Haubner F, Jägle H, Nunes DP, et al. Orbital compartment: effects of emergent canthotomy and cantholysis. Eur Arch Otorhinolaryngol. 2015;272(2):479-483.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1007/s00405-014-3238-5",
+      "pmid": "25115315",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25115315/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Fresh-frozen cadaveric model, 8 orbits. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.oester-2012-septal-release",
+      "cite": "Oester AE, Fowler BT, Fleming JC. Inferior orbital septum release compared with lateral canthotomy and cantholysis in the management of orbital compartment syndrome. Ophthalmic Plast Reconstr Surg. 2012;28(1):40-43.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1097/IOP.0b013e31823646f3",
+      "pmid": "22262289",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22262289/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric model, 10 orbits. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.elpers-2021-vertical-lid-split",
+      "cite": "Elpers J, Areephanthu C, Timoney PJ, Nunery WR, Lee HBH, Fu R. Efficacy of vertical lid split versus lateral canthotomy and cantholysis in the management of orbital compartment syndrome. Orbit. 2021;40(3):222-227.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1080/01676830.2020.1767154",
+      "pmid": "32460574",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32460574/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Cadaveric model, 7 orbits, one control. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.scoville-2023-canthotomy",
+      "cite": "Scoville NM, Ding L, Stacey AW. Success rates of lateral canthotomy and cantholysis for treatment of orbital compartment syndrome. Am J Emerg Med. 2023;70:140-143.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.ajem.2023.05.037",
+      "pmid": "37290250",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37290250/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-centre cohort, 74 eyes. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.erickson-2020-rbh",
+      "cite": "Erickson BP, Garcia GA. Evidence-based algorithm for the management of acute traumatic retrobulbar haemorrhage. Br J Oral Maxillofac Surg. 2020;58(9):1091-1096.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.bjoms.2020.05.026",
+      "pmid": "32546417",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32546417/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-centre review of 42 consultations. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.sun-2014-ocs",
+      "cite": "Sun MT, Chan WO, Selva D. Traumatic orbital compartment syndrome: importance of the lateral canthomy and cantholysis. Emerg Med Australas. 2014;26(3):274-278.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1111/1742-6723.12236",
+      "pmid": "24810151",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24810151/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective case series, 8 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.kitaguchi-2019-bony-decompression",
+      "cite": "Kitaguchi Y, Takahashi Y, Sabundayo MS, Kakizaki H. Bony Orbital Decompression Following Lateral Canthotomy and Cantholysis for Traumatic Orbital Compartment Syndrome. J Craniofac Surg. 2019;30(1):231-234.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/SCS.0000000000004902",
+      "pmid": "30444775",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30444775/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective case series, 4 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.zogheib-2022-ocs-fracture",
+      "cite": "Zogheib S, Sukkarieh G, Mjaess G, Zeid SA. Displaced Orbital Fractures with Concurrent Orbital Compartment Syndrome: A Case-Based Systematic Review. Facial Plast Surg. 2022;38(3):274-278.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1055/s-0041-1740290",
+      "pmid": "34905802",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34905802/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case-based systematic review of 18 published cases plus the authors' 2. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.luthra-2024-spoa",
+      "cite": "Luthra S, Kossler AL, Erickson BP, Homer NA. Orbital Subperiosteal Abscess Drainage: Transorbital vs. Endonasal Approach. J Clin Med. 2024;13(23):7011.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3390/jcm13237011",
+      "pmid": "39685468",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39685468/",
+      "note": "Full text read (PubMed Central PMC11642576, 2026-10-07) as well as the abstract. Retrospective single-centre review, 64 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.graham-2002-transcaruncular",
+      "cite": "Graham SM, Thomas RD, Carter KD, Nerad JA. The transcaruncular approach to the medial orbital wall. Laryngoscope. 2002;112(6):986-989.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/00005537-200206000-00009",
+      "pmid": "12160296",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12160296/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 49 patients (58 orbits). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mehta-2022-combined-drainage",
+      "cite": "Mehta A, Rathod R, Arora K, et al. Endoscope Assisted Combined Drainage of Sino-Orbital Abscess: Technique Revisited. Indian J Otolaryngol Head Neck Surg. 2022;74(2):172-177.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s12070-021-02751-1",
+      "pmid": "35813769",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35813769/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Technique series, 7 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.eviatar-2009-bidirectional",
+      "cite": "Eviatar E, Kessler A, Pitaro K. Bidirectional orbital approach enhances orbital abscess drainage. Rhinology. 2009;47(3):293-296.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4193/Rhin08.215",
+      "pmid": "19839253",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19839253/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective chart review, 22 patients; transnasal endoscopic technique. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.thakar-2000-orbital-cellulitis",
+      "cite": "Thakar A, Tandon DA, Thakar MD, Nivsarkar S. Orbital cellulitis revisited. Indian J Otolaryngol Head Neck Surg. 2000;52(3):235-242.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/BF03006191",
+      "pmid": "23119683",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23119683/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Case series, 20 patients; 1993-2000 practice. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.gupta-2023-orbital-drain",
+      "cite": "Gupta P, Saini M, Sharma VK, Singh M, Abhaypal K, Mehta A. Postoperative Closed-Suction Drain in Anterior Orbitotomy. Cureus. 2023;15(11):e48624.",
+      "type": "trial",
+      "verified": false,
+      "doi": "10.7759/cureus.48624",
+      "pmid": "38084189",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38084189/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Randomized comparison, 25 patients, after anterior orbitotomy for orbital mass excision (not abscess). PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.horowitz-2013-cranialization",
+      "cite": "Horowitz G, Amit M, Ben-Ari O, et al. Cranialization of the frontal sinus for secondary mucocele prevention following open surgery for benign frontal lesions. PLoS One. 2013;8(12):e83820.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1371/journal.pone.0083820",
+      "pmid": "24376760",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24376760/",
+      "note": "Full text read (PubMed Central PMC3871679, 2026-10-07) as well as the abstract. Retrospective single-centre series, 69 patients; benign frontal lesions. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.donath-2006-pericranial",
+      "cite": "Donath A, Sindwani R. Frontal sinus cranialization using the pericranial flap: an added layer of protection. Laryngoscope. 2006;116(9):1585-1588.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/01.mlg.0000232514.31101.39",
+      "pmid": "16954984",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16954984/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 19 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.vandijk-2012-cranialization",
+      "cite": "van Dijk JM, Wagemakers M, Korsten-Meijer AG, Kees Buiter CT, van der Laan BF, Mooij JJ. Cranialization of the frontal sinus--the final remedy for refractory chronic frontal sinusitis. J Neurosurg. 2012;116(3):531-535.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.3171/2011.11.JNS101849",
+      "pmid": "22175720",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22175720/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Consecutive cohort of 15 patients with a literature search. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.choi-2012-posterior-table",
+      "cite": "Choi M, Li Y, Shapiro SA, Havlik RJ, Flores RL. A 10-year review of frontal sinus fractures: clinical outcomes of conservative management of posterior table fractures. Plast Reconstr Surg. 2012;130(2):399-406.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1097/PRS.0b013e3182589d91",
+      "pmid": "22495212",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22495212/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-centre review, 59 patients with posterior table involvement. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.johnson-2021-frontal-fracture-sr",
+      "cite": "Johnson NR, Roberts MJ. Frontal sinus fracture management: a systematic review and meta-analysis. Int J Oral Maxillofac Surg. 2021;50(1):75-82.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1016/j.ijom.2020.06.004",
+      "pmid": "32861554",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32861554/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 24 publications; one randomized trial, otherwise case series. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.wolbert-2026-cranialization",
+      "cite": "Wolbert T, Vassallo M, Wood S, et al. Treatment of Displaced Posterior Table Frontal Sinus Fractures: To Cranialize or Not to Cranialize? A Systematic Review and Meta-Analysis. J Craniofac Surg. 2026 Jul 24. Online ahead of print.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1097/SCS.0000000000013080",
+      "pmid": "42496231",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42496231/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Systematic review of 55 studies. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.morse-2021-cranialization",
+      "cite": "Morse JC, Chandra RK. Is there still a role for cranialization in modern sinus surgery? Curr Opin Otolaryngol Head Neck Surg. 2021;29(1):53-58.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1097/MOO.0000000000000691",
+      "pmid": "33278134",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33278134/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Narrative review. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.burckhardt-2013-dural-septoplasty",
+      "cite": "Burckhardt B W, Guerra CP. Synthetic dural graft septoplasty in epistaxis from hereditary hemorrhagic telangiectasia. Colomb Med (Cali). 2013;44(3):189-191.",
+      "type": "review",
+      "verified": false,
+      "pmid": "24892618",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24892618/",
+      "note": "Full text read (PubMed Central PMC4002040, 2026-10-07) as well as the abstract. Single case report; its introduction is used for the description of the original Saunders septodermoplasty and its sequelae, its case section for one modified technique. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.harvey-2008-sdp-ktp",
+      "cite": "Harvey RJ, Kanagalingam J, Lund VJ. The impact of septodermoplasty and potassium-titanyl-phosphate (KTP) laser therapy in the treatment of hereditary hemorrhagic telangiectasia-related epistaxis. Am J Rhinol. 2008;22(2):182-187.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/ajr.2008.22.3145",
+      "pmid": "18416977",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18416977/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective single-unit audit, 131 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lesnik-2007-septectomy-sdp",
+      "cite": "Lesnik GT, Ross DA, Henderson KJ, Joe JK, Leder SB, White RI. Septectomy and septal dermoplasty for the treatment of severe transfusion-dependent epistaxis in patients with hereditary hemorrhagic telangiectasia and septal perforation. Am J Rhinol. 2007;21(3):312-315.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/ajr.2007.21.3017",
+      "pmid": "17621815",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17621815/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 9 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lund-1999-hht-algorithm",
+      "cite": "Lund VJ, Howard DJ. A treatment algorithm for the management of epistaxis in hereditary hemorrhagic telangiectasia. Am J Rhinol. 1999;13(4):319-322.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/105065899782102890",
+      "pmid": "10485021",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10485021/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Series of 50 patients, 1991-1997. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.ichimura-2006-nasal-dermoplasty",
+      "cite": "Ichimura K, Tanaka H, Yamamoto Y, Nakamura K. Nasal dermoplasty for Japanese hereditary hemorrhagic telangiectasia. Auris Nasus Larynx. 2006;33(4):423-428.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/j.anl.2006.03.001",
+      "pmid": "16707240",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16707240/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective series, 15 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.lund-2017-nasal-closure",
+      "cite": "Lund VJ, Darby Y, Rimmer J, Amin M, Husain S. Nasal closure for severe hereditary haemorrhagic telangiectasia in 100 patients. The Lund modification of the Young's procedure: a 22-year experience. Rhinology. 2017;55(2):135-141.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4193/Rhin16.315",
+      "pmid": "28064338",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28064338/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-centre cohort of 100 patients with questionnaire data on 50. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.richer-2012-young",
+      "cite": "Richer SL, Geisthoff UW, Livada N, et al. The Young's procedure for severe epistaxis from hereditary hemorrhagic telangiectasia. Am J Rhinol Allergy. 2012;26(5):401-404.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.2500/ajra.2012.26.3809",
+      "pmid": "23168156",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23168156/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Three-centre retrospective series, 43 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.timmins-2016-two-flap",
+      "cite": "Timmins BH, Hunter BN, Wilson KF, Ward PD. Treatment of severe refractory epistaxis in hereditary hemorrhagic telangiectasia using a two-flap nasal closure method. Int Forum Allergy Rhinol. 2016;6(5):544-548.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1002/alr.21703",
+      "pmid": "26751606",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26751606/",
+      "note": "Full text read (PubMed Central PMC4856581, 2026-10-07) as well as the abstract. Retrospective single-centre review, 13 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.andersen-2020-nasal-closure",
+      "cite": "Andersen JH, Kjeldsen AD. Patient-recorded benefit from nasal closure in a Danish cohort of patients with hereditary haemorrhagic telangiectasia. Eur Arch Otorhinolaryngol. 2020;277(3):791-800.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1007/s00405-019-05758-1",
+      "pmid": "31845036",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31845036/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Single-country cohort, 10 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.benaim-2025-hht-surgery",
+      "cite": "Benaim EH, Kallenberger EM, Mirmozaffari Y, et al. Surgical Management of Moderate to Severe Epistaxis in Hereditary Hemorrhagic Telangiectasia: Systematic Review and Meta-Analysis. Am J Rhinol Allergy. 2025;39(2):159-168.",
+      "type": "meta-analysis",
+      "verified": false,
+      "doi": "10.1177/19458924241308952",
+      "pmid": "39906953",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39906953/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). PubMed Central record carries the abstract only; 20 studies, 546 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.bickerton-2025-nasal-closure",
+      "cite": "Bickerton R, Gera R, Ross T, Rennie C. Is nasal closure an effective treatment for severe refractory epistaxis in HHT? A scoping review and narrative synthesis. Rhinology. 2025;63(2):153-162.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.4193/Rhin24.448",
+      "pmid": "39907212",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39907212/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Scoping review of 10 studies, 192 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.metson-1988-ima-failures",
+      "cite": "Metson R, Lane R. Internal maxillary artery ligation for epistaxis: an analysis of failures. Laryngoscope. 1988;98(7):760-764.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1288/00005537-198807000-00015",
+      "pmid": "3386382",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3386382/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective review, 100 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.strong-1995-ligation-embolization",
+      "cite": "Strong EB, Bell DA, Johnson LP, Jacobs JM. Intractable epistaxis: transantral ligation vs. embolization: efficacy review and cost analysis. Otolaryngol Head Neck Surg. 1995;113(6):674-678.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1016/S0194-59989570004-8",
+      "pmid": "7501376",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7501376/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Retrospective comparison, 21 patients. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.morgan-1997-oroantral-fistula",
+      "cite": "Morgan MK, Aldren CP. Oroantral fistula: a complication of transantral ligation of the internal maxillary artery for epistaxis. J Laryngol Otol. 1997;111(5):468-470.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1017/s0022215100137661",
+      "pmid": "9205612",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9205612/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Two case reports; the abstract also gives a general description of the operation. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.mcdonald-1980-ima-followup",
+      "cite": "McDonald TJ, Pearson BW. Follow-up on maxillary artery ligation for epistaxis. Arch Otolaryngol. 1980;106(10):635-638.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1001/archotol.1980.00790340043011",
+      "pmid": "7417093",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7417093/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 46 ligations compared with 30 controls. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.morton-1991-ima-variability",
+      "cite": "Morton AL, Khan A. Internal maxillary artery variability in the pterygopalatine fossa. Otolaryngol Head Neck Surg. 1991;104(2):204-209.",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1177/019459989110400208",
+      "pmid": "1901148",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1901148/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Serial cadaver dissections of the pterygopalatine fossa. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.nair-1982-transantral",
+      "cite": "Nair KK. Transantral ligation of the internal maxillary artery. Laryngoscope. 1982;92(9 Pt 1):1060-1063.",
+      "type": "cohort",
+      "verified": false,
+      "pmid": "7121160",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7121160/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Short comparative report; abstract states three points, no data. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.pritikin-1998-endoscopic-ima",
+      "cite": "Pritikin JB, Caldarelli DD, Panje WR. Endoscopic ligation of the internal maxillary artery for treatment of intractable posterior epistaxis. Ann Otol Rhinol Laryngol. 1998;107(2):85-91.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1177/000348949810700201",
+      "pmid": "9486900",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9486900/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 10 patients treated endoscopically; used here only for the average transantral figures it quotes from the literature. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.neal-1985-external-ethmoidectomy",
+      "cite": "Neal GD. External ethmoidectomy. Otolaryngol Clin North Am. 1985;18(1):55-60.",
+      "type": "review",
+      "verified": false,
+      "pmid": "3991203",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3991203/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). One-sentence abstract. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.schneider-2015-external-sinus",
+      "cite": "Schneider JS, Day A, Clavenna M, Russell PT, Duncavage J. Early Practice: External Sinus Surgery and Procedures and Complications. Otolaryngol Clin North Am. 2015;48(5):839-850.",
+      "type": "review",
+      "verified": false,
+      "doi": "10.1016/j.otc.2015.05.010",
+      "pmid": "26143105",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26143105/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). Review of external sinus approaches; the abstract gives no technical detail. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
+    },
+    {
+      "id": "src.iseh-2010-mucocele",
+      "cite": "Iseh KR. Endoscopic and external surgical approach to paranasal sinus mucocele. J Surg Tech Case Rep. 2010;2(1):49-53.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.4103/2006-8808.63728",
+      "pmid": "22091333",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22091333/",
+      "note": "Abstract only (PubMed record, read 2026-10-07). 18 patients with paranasal sinus mucocele, 14 treated by an external approach. PMID and DOI matched to the PubMed record by the executor; awaiting owner verification."
     }
   ]
 }

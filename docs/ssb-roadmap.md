@@ -367,7 +367,7 @@ parallel sessions.
 |---|---|---|
 | Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose (CP-2b) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
 | Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → **E6** station flights (after E5) | Sonnet |
-| Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a) | Sonnet |
+| Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → **C1** content backlog (O3; first item in CP-2a; C1a in review) | Sonnet |
 | Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · then CP-C1 reviews | Opus |
 
 **ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
@@ -1371,6 +1371,7 @@ Escalate: an item needs a geometry or anatomy-placement decision; two sources di
 
 Batches:
 - **C1a — procedures** (`managedBy` targets): canthotomy/cantholysis, orbitotomy (as needed for orbital complications), frontal sinus cranialization, septodermoplasty and Young's procedure, transantral internal maxillary artery ligation, Lynch (external frontoethmoidectomy). Each with `steps` at the depth its sources support, `hazards` links to existing ids, and the conditions that already exist linked by `managedBy`. Files: the procedure's region file(s).
+  **[review]** C1a result: seven procedures drafted (`p.lateral-canthotomy-cantholysis`, `p.external-orbitotomy-drainage`, `p.frontal-sinus-cranialization`, `p.lynch-external-frontoethmoidectomy`, `p.septodermoplasty`, `p.young-procedure`, `p.transantral-ima-ligation`), every claim from a PubMed abstract or open PMC full text, new sources `verified: false`; the "check hardest" list is in the PR; `node tools/ssb-content.mjs`, `node tools/check-data.mjs` and `node tools/test-ssb.mjs` pass.
 - **C1b — inflammatory and other benign conditions** (`pathology-inflammatory.json`): EGPA, primary ciliary dyskinesia, immunodeficiency (as one condition with variants only if the sources split it), granulomatous infections, septal hematoma and abscess, developmental cysts, organizing hematoma, facial fractures (only their sinonasal/orbital relevance).
 - **C1c — neoplastic conditions** (`pathology-neoplastic.json`): HPV-related multiphenotypic sinonasal carcinoma, SMARCA4-deficient sinonasal carcinoma, non-intestinal-type adenocarcinoma, biphenotypic sinonasal sarcoma, petroclival / cavernous / spheno-orbital meningiomas, trigeminal schwannoma, germinoma, Langerhans cell histiocytosis, optic pathway glioma. WHO 5th edition naming where it applies.
 - **C1d — classifications and numbers**: silent sinus/SPOA drainage-size threshold, AFRS staging, Cannady (inverted papilloma), WHO CNS meningioma grade, AJCC N categories (sinonasal), infraorbital-nerve canal grading, JNA staging variants, olfactory neuroblastoma staging (Kadish, modified Kadish, Dulguerov, Hyams grade). Each classification's `levels` from its primary source.

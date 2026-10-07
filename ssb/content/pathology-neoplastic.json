@@ -520,7 +520,8 @@
         "p.draf-iib",
         "p.draf-iii",
         "p.osteoplastic-flap",
-        "p.anterior-ethmoidectomy"
+        "p.anterior-ethmoidectomy",
+        "p.frontal-sinus-cranialization"
       ],
       "mimics": [
         "dz.fibrous-dysplasia",
@@ -588,7 +589,8 @@
         "p.draf-iib",
         "p.draf-iii",
         "p.sphenoidotomy",
-        "p.maxillary-antrostomy"
+        "p.maxillary-antrostomy",
+        "p.frontal-sinus-cranialization"
       ],
       "mimics": [
         "dz.ossifying-fibroma",

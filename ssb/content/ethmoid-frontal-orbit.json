@@ -4232,7 +4232,9 @@
         "p.posterior-ethmoidectomy",
         "p.aea-ligation",
         "p.orbital-decompression",
-        "p.orbital-tumor-resection"
+        "p.orbital-tumor-resection",
+        "p.external-orbitotomy-drainage",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "site": "Retrobulbar or extraconal space behind a breached lamina or a retracted AEA/PEA.",
       "mechanism": "Arterial bleeding (retracted ethmoidal artery) raises pressure within minutes; venous bleeding from orbital fat after a lamina breach develops over hours. Pressure in the closed orbit compresses the optic nerve and its blood supply.",
@@ -4350,7 +4352,8 @@
       "during": [
         "p.anterior-ethmoidectomy",
         "p.posterior-ethmoidectomy",
-        "p.completion-sphenoethmoidectomy"
+        "p.completion-sphenoethmoidectomy",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "site": "Ethmoid roof, often posteriorly where it slopes lower than expected, or at a skull-base cell mistaken for an ethmoid partition.",
       "mechanism": "Instruments angled horizontally or upward in the posterior ethmoid, or a debrider running along the roof, pass through the fovea into the frontal lobe.",
@@ -4534,7 +4537,8 @@
       "tier": 2,
       "during": [
         "p.frontal-trephination",
-        "p.osteoplastic-flap"
+        "p.osteoplastic-flap",
+        "p.frontal-sinus-cranialization"
       ],
       "site": "Supraorbital notch and medial brow.",
       "mechanism": "Brow incision or periosteal elevation cuts or stretches the nerves.",
@@ -4575,7 +4579,8 @@
       "at": "s.frontal-sinus",
       "tier": 3,
       "during": [
-        "p.osteoplastic-flap"
+        "p.osteoplastic-flap",
+        "p.frontal-sinus-cranialization"
       ],
       "site": "Obliterated frontal sinus.",
       "mechanism": "Residual mucosa left in the sinus or recess (especially in bony crevices) keeps secreting behind the obliteration material. Posterior table erosion can mean mucosa already sits on dura, where it cannot be removed completely.",
@@ -4659,7 +4664,9 @@
       "during": [
         "p.aea-ligation",
         "p.frontal-trephination",
-        "p.subperiosteal-abscess-drainage"
+        "p.subperiosteal-abscess-drainage",
+        "p.external-orbitotomy-drainage",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "site": "Superomedial orbital rim.",
       "mechanism": "Supraperiosteal dissection or cutting through the periosteum at the trochlear fossa during Lynch-type incisions or trephination.",
@@ -4679,7 +4686,9 @@
       "tier": 3,
       "during": [
         "p.aea-ligation",
-        "p.subperiosteal-abscess-drainage"
+        "p.subperiosteal-abscess-drainage",
+        "p.external-orbitotomy-drainage",
+        "p.lynch-external-frontoethmoidectomy"
       ],
       "site": "Medial canthus and lacrimal crest.",
       "mechanism": "External (Lynch) incision placed too low or elevation that detaches the tendon from the lacrimal crest without repair.",
@@ -4720,7 +4729,8 @@
       "during": [
         "p.csf-leak-repair",
         "p.encephalocele-repair",
-        "p.transcribriform-approach"
+        "p.transcribriform-approach",
+        "p.frontal-sinus-cranialization"
       ],
       "site": "Cribriform, lateral lamella, ethmoid roof or frontal sinus posterior wall defects.",
       "mechanism": "Graft displacement, incomplete mucosal removal around the defect, missed second defect, or untreated raised intracranial pressure (spontaneous leaks).",
@@ -4760,7 +4770,8 @@
       "at": "s.orbit",
       "tier": 2,
       "during": [
-        "p.subperiosteal-abscess-drainage"
+        "p.subperiosteal-abscess-drainage",
+        "p.external-orbitotomy-drainage"
       ],
       "site": "Superior, superolateral or loculated abscesses; orbital (intraperiorbital) collections.",
       "mechanism": "An endoscopic medial approach reaches only medial collections; loculations and bleeding inflamed mucosa hide the rest.",
@@ -6786,6 +6797,401 @@
         "src.hegazy-2000",
         "src.wormald-textbook",
         "src.chiu-2019-ch26"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.lateral-canthotomy-cantholysis",
+      "name": "Lateral canthotomy and cantholysis (emergency orbital decompression)",
+      "tier": 1,
+      "indications": [
+        "Orbital compartment syndrome: a tense, proptotic orbit with threatened vision, most often from retrobulbar hemorrhage after trauma or surgery ([[h.orbital-hematoma]]; also after blowout-fracture repair, [[dz.orbital-floor-fracture]]).",
+        "A bedside clinical diagnosis: unilateral proptosis with eyelids that are hard to open under finger pressure, with or without a relative afferent pupillary defect (RAPD), falling vision or raised intraocular pressure. Do not wait for imaging when these are present.",
+        "A bridge, not an end point: if the orbit stays tight or the pupil stays abnormal after the release, bony decompression follows ([[p.orbital-decompression]])."
+      ],
+      "corridor": "Lateral canthus and its tendon, at the bedside with simple instruments (Rowh 2015) or in theatre.",
+      "preop": [
+        {
+          "check": "Vision, pupils (RAPD), proptosis, whether the lids open under finger pressure, motility, and intraocular pressure if it can be measured.",
+          "why": "Three findings related to the need for decompression in a review of 42 consultations at one trauma centre: relative proptosis, tight lids and an RAPD; lid oedema, ecchymosis, chemosis, subconjunctival hemorrhage and motility did not (Erickson 2020). In a cadaver model intraocular pressure tracked orbital compartment pressure closely (Spearman 0.978, Oester 2012), so it is a usable read-out of the effect of each release."
+        },
+        {
+          "check": "Is the procedure being delayed for imaging or for a consultant?",
+          "why": "In an eight-patient series the authors advised decompression before any further investigation (Sun 2014). CT adds little to the decision: globe tenting, the only radiographic sign that predicted surgery, was present in just 2 of the 7 eyes that needed decompression (Erickson 2020)."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Stop the operation or remove packing, call ophthalmology, and confirm the picture: proptosis, a tense orbit whose lids resist finger pressure, an RAPD, reduced vision or raised intraocular pressure. In a clear case do not wait for CT or for the specialist to arrive.",
+          "see": [
+            "s.orbit"
+          ],
+          "think": "Is this orbital compartment syndrome? Proptosis, tight lids and an RAPD together, or proptosis and tight lids without a large preseptal hematoma, predicted the need for decompression in Erickson 2020 (retrospective, one centre). Speed matters: in eight patients with traumatic orbital compartment syndrome, recovery was best when decompression came within about 2 hours of injury (Sun 2014) — a small uncontrolled series. The animal retinal-tolerance data are in [[h.orbital-hematoma]]."
+        },
+        {
+          "do": "Lateral canthotomy: divide the lateral canthus.",
+          "see": [
+            "s.orbit"
+          ],
+          "think": "A canthotomy alone only partly lowered intraocular pressure in all 8 cadaver orbits studied (Haubner 2015). It opens the way to the cantholysis; it is not the decompression."
+        },
+        {
+          "do": "Inferior cantholysis: release the inferior limb of the lateral canthal tendon until the lower lid distracts freely from the globe.",
+          "see": [
+            "s.orbit"
+          ],
+          "think": "This is the decompressing step. In the same cadaver model inferior cantholysis brought intraocular pressure under 20 mmHg in 7 of 8 orbits (Haubner 2015); in another cadaver model canthotomy with cantholysis lowered orbital pressure by an average of 56 mmHg (Oester 2012)."
+        },
+        {
+          "do": "Re-check vision, pupil, tension and intraocular pressure. If the orbit is still tight, add superior cantholysis.",
+          "see": [
+            "s.orbit"
+          ],
+          "think": "Superior cantholysis was needed for complete decompression in 2 of the 8 orbits, and septolysis added nothing after cantholysis (Haubner 2015). A second cadaver model disagrees on the septum: inferior septal release alone lowered orbital pressure about as much as canthotomy with cantholysis (52 against 56 mmHg on average), and the two together lowered it further (73–77 mmHg in total, either order; Oester 2012). The abstracts do not say why the two models differ; both are small cadaver studies."
+        },
+        {
+          "do": "If the orbit stays tight or the pupillary response stays abnormal, do not repeat the same step: arrange bony orbital decompression with ophthalmology ([[p.orbital-decompression]]).",
+          "see": [
+            "s.orbit",
+            "s.lamina-papyracea"
+          ],
+          "think": "In four patients decompressed for a persistently abnormal pupillary reflex and a tight orbit after canthotomy and cantholysis, the two with counting-fingers vision or better recovered completely; of two with no light perception, one improved slightly (Kitaguchi 2019) — four patients, no controls. A displaced orbital fracture does not exclude the syndrome (Zogheib 2022, 18 published cases)."
+        }
+      ],
+      "endpoints": [
+        "Lower lid distracts freely from the globe",
+        "Orbit softer and proptosis reduced, with vision, pupil and tension re-checked after each release",
+        "Bony decompression arranged if the orbit stays tight"
+      ],
+      "pitfalls": [
+        "Waiting for CT or the specialist in a clear case.",
+        "Stopping at the canthotomy: the cantholysis does the work.",
+        "Relying on the signs textbooks list: lid oedema, ecchymosis, chemosis, subconjunctival hemorrhage and motility did not separate the eyes that needed decompression from those that did not (Erickson 2020).",
+        "Assuming the first attempt worked: in a retrospective cohort of 74 eyes (success defined as intraocular pressure under 30 mmHg after the first attempt), emergency physicians succeeded in 68% and ophthalmologists in 79.2% (p = 0.413), and a failed first attempt went with poorer visual outcomes (Scoville 2023). Measure the pressure after the release.",
+        "A vertical lid split lowered orbital pressure about as much as canthotomy with cantholysis in a seven-orbit cadaver model, and the authors suggest it for physicians unfamiliar with eyelid surgery (Elpers 2021); it is an alternative to know, not a replacement the evidence has established."
+      ],
+      "src": [
+        "src.rowh-2015-canthotomy",
+        "src.haubner-2015-canthotomy",
+        "src.oester-2012-septal-release",
+        "src.elpers-2021-vertical-lid-split",
+        "src.scoville-2023-canthotomy",
+        "src.erickson-2020-rbh",
+        "src.sun-2014-ocs",
+        "src.kitaguchi-2019-bony-decompression",
+        "src.zogheib-2022-ocs-fracture"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.external-orbitotomy-drainage",
+      "name": "External orbitotomy for orbital abscess drainage",
+      "tier": 3,
+      "indications": [
+        "Subperiosteal orbital abscess that needs drainage and is better reached from outside. In one single-centre series, longer (front to back) and superior abscesses were drained externally more often and medial ones endoscopically (Luthra 2024); whether to drain at all is in [[dz.subperiosteal-orbital-abscess]].",
+        "Orbital (postseptal, intraperiosteal) abscess, which needs the periorbita opened, with the sinus source treated at the same sitting ([[dz.orbital-abscess]]).",
+        "A multiloculated cavity, where an endoscope passed through the external incision lets each loculus be opened under direct vision (Mehta 2022, 7 patients).",
+        "A medial abscess when the lamina papyracea is to be left intact or a drain is wanted (Luthra 2024). The alternative is [[p.subperiosteal-abscess-drainage]]."
+      ],
+      "corridor": "Subperiosteal plane of the medial, superior or lateral orbital wall through a transcaruncular, upper-eyelid-crease, subbrow or Lynch incision. In 44 external drainages the incisions were upper-eyelid crease 36.4%, transcaruncular 31.8%, subbrow 22.7% and Lynch 9.1% (Luthra 2024).",
+      "preop": [
+        {
+          "check": "Contrast CT: where the collection lies, how long it is front to back, and which sinuses are the source.",
+          "why": "Position and length steered the route in Luthra 2024. Frontal sinusitis with a superior collection also needs the brain imaged ([[dz.subperiosteal-orbital-abscess]])."
+        },
+        {
+          "check": "Baseline acuity, colour vision, pupils, motility and intraocular pressure.",
+          "why": "Vision is the clock ([[dz.orbital-abscess]]). A tense orbit with falling vision needs [[p.lateral-canthotomy-cantholysis]] without delay."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Deal with the sinus source at the same sitting: endoscopic sinus surgery was done together with the drainage in every patient of Luthra 2024, whichever route drained the abscess.",
+          "see": [
+            "s.orbit",
+            "s.lamina-papyracea"
+          ],
+          "think": "Is the infected sinus open? Orbit and sinus are treated in one anaesthetic."
+        },
+        {
+          "do": "Choose the incision. Medial: transcaruncular, through the conjunctiva between the plica and the caruncle, then blunt dissection to the medial orbital wall and into the subperiosteal space (Graham 2002; Shorr's technique as used in Luthra 2024). It gives wide medial and inferior wall exposure with less scarring than the Lynch–Howarth skin incision.",
+          "see": [
+            "s.medial-canthal-tendon",
+            "s.periorbita",
+            "s.lacrimal-sac"
+          ],
+          "risk": [
+            "h.medial-canthal-disruption"
+          ],
+          "think": "The same series also used upper-eyelid-crease, subbrow and Lynch incisions; it does not say which position each suited, so that is the operating surgeon's (usually oculoplastic) call."
+        },
+        {
+          "do": "Open the subperiosteal space and evacuate the abscess; irrigate. For a loculated cavity, open each loculus, if possible with an endoscope passed through the incision rather than by blind dissection.",
+          "see": [
+            "s.periorbita",
+            "s.orbit",
+            "s.orbital-fat"
+          ],
+          "risk": [
+            "h.incomplete-abscess-drainage",
+            "h.trochlea-injury"
+          ],
+          "think": "Is drainage complete? Blind external dissection risks injury to periorbital structures (Mehta 2022). An immediate fall in palpable orbital pressure on gentle globe palpation was used as the efficacy criterion in a transnasal endoscopic series (Eviatar 2009)."
+        },
+        {
+          "do": "For an abscess behind the periorbita, open the periorbita to reach it; add optic nerve decompression only if vision requires it.",
+          "see": [
+            "s.periorbita",
+            "s.orbital-fat",
+            "s.optic-nerve"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ],
+          "think": "In an older series of 20 patients with orbital cellulitis, 14 of 16 with postseptal disease were explored through an external ethmoidectomy approach, 2 of them with optic nerve decompression; postseptal intraperiosteal cellulitis and orbital abscess carried the worst result, with significant permanent visual disability in 8 of 10 (Thakar 2000)."
+        },
+        {
+          "do": "Decide on a drain. A Jackson-Pratt or Penrose drain was placed in 22 of 44 orbitotomies, more often for lateral and superior abscesses.",
+          "see": [
+            "s.orbit"
+          ],
+          "think": "Drain use made no significant difference to vision, complications or reoperation in Luthra 2024. In a randomized comparison of a closed-suction drain after anterior orbitotomy for orbital mass excision (25 patients), proptosis, lid swelling and motility recovered faster with the drain and the 30-day result was the same (Gupta 2023) — a different disease."
+        },
+        {
+          "do": "Close, then check vision, pupil and motility. If vision falls, re-image and re-drain or decompress ([[p.lateral-canthotomy-cantholysis]] for a tense orbit).",
+          "see": [
+            "s.orbit"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ]
+        }
+      ],
+      "endpoints": [
+        "Abscess evacuated, with orbital pressure falling on palpation",
+        "Vision stable or improving",
+        "Sinus source drained"
+      ],
+      "pitfalls": [
+        "Blind dissection for a loculated cavity (Mehta 2022).",
+        "Incomplete drainage: reoperation followed 34.1% of orbitotomies against 15.0% of endoscopic drainages (p = 0.115). External drainage went to the longer and superior abscesses, so the groups are not comparable (Luthra 2024).",
+        "The postoperative course differs: periorbital swelling at discharge after orbitotomy (45.5% against 0%, p = 0.0003), pain more often after endoscopic drainage (15.0% against 0%, p = 0.009), and a longer hospital stay after orbitotomy for medial abscesses (p = 0.028; Luthra 2024).",
+        "The Lynch–Howarth incision: risk to the medial canthal tendon or lacrimal canaliculi, scarring, webbing, delayed healing and suture abscess (Luthra 2024) — the reason the transcaruncular route was developed."
+      ],
+      "src": [
+        "src.luthra-2024-spoa",
+        "src.graham-2002-transcaruncular",
+        "src.mehta-2022-combined-drainage",
+        "src.eviatar-2009-bidirectional",
+        "src.thakar-2000-orbital-cellulitis",
+        "src.gupta-2023-orbital-drain"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.frontal-sinus-cranialization",
+      "name": "Frontal sinus cranialization",
+      "tier": 3,
+      "indications": [
+        "Frontal sinus fracture with posterior table involvement and obstruction of the nasofrontal outflow tract: obliteration or cranialization had the lowest complication rates (9% and 10%) in an 857-patient series (Rodriguez 2008), and a systematic review concludes both should be considered when the outflow tract is obstructed (Johnson 2021). See [[dz.frontal-sinus-fracture]].",
+        "Refractory chronic frontal sinusitis after definite failure of other options (15 patients over 20 years; van Dijk 2012).",
+        "Open excision of benign frontal lesions (osteoma, mucocele, fibrous dysplasia, encephalocele): in 69 patients cranialization was non-inferior to obliteration for preventing a secondary mucocele (Horowitz 2013).",
+        "Malignant tumors of the frontal sinus, where oncologic resection can leave a large dural defect (Morse 2021, narrative review)."
+      ],
+      "corridor": "Coronal incision and an osteoplastic bone flap hinged on pericranium, as in [[p.osteoplastic-flap]]; the posterior table is then removed so the dura and brain lie against the anterior table and sinus floor (Donath 2006).",
+      "preop": [
+        {
+          "check": "Is the posterior table displaced or comminuted, is there a CSF leak, and is the outflow tract obstructed?",
+          "why": "The evidence does not make displacement alone an indication. In 59 patients with posterior table involvement (46% comminuted or displaced, 19% with CSF leak) 78% were managed conservatively and only one was cranialized, with no intracranial infection except one death from a gunshot wound (Choi 2012). A meta-analysis of 2263 patients found no statistically significant difference in complication rates between cranialization, other surgery, endoscopic repair and observation (Wolbert 2026)."
+        },
+        {
+          "check": "Template of the sinus outline, mucosal disease and the posterior table on CT or navigation.",
+          "why": "As for [[p.osteoplastic-flap]]: an inaccurate outline enters the orbit or cranium."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Raise the coronal flap and the osteoplastic anterior table flap as in [[p.osteoplastic-flap]], keeping the pericranium vascularized.",
+          "see": [
+            "s.frontal-sinus-anterior-table",
+            "s.supratrochlear-artery",
+            "s.supraorbital-artery",
+            "s.supraorbital-nerve"
+          ],
+          "risk": [
+            "h.supraorbital-nerve-injury"
+          ],
+          "think": "The anterior table segment is later replaced in its original position (Horowitz 2013), so keep the osteotomy clean."
+        },
+        {
+          "do": "Drill out the posterior table and remove all sinus mucosa, so that the brain and dura come to rest against the anterior table and sinus floor.",
+          "see": [
+            "s.frontal-sinus-posterior-table",
+            "s.frontal-sinus",
+            "s.anterior-cranial-fossa-dura"
+          ],
+          "risk": [
+            "h.csf-repair-failure",
+            "h.mucocele-after-obliteration"
+          ],
+          "think": "Mucosa left behind is a future mucocele. In Horowitz 2013 all six secondary mucoceles needing revision followed obliteration (14.6% of that group), none followed cranialization. Look at the dura for tears before anything is laid on it."
+        },
+        {
+          "do": "Seal the nasofrontal outflow tract so the nose and the intracranial space are separated, as in [[p.osteoplastic-flap]], and lay a vascularized pericranial flap across the sinus floor as an added barrier.",
+          "see": [
+            "s.frontal-recess",
+            "s.supratrochlear-artery",
+            "s.supraorbital-artery"
+          ],
+          "risk": [
+            "h.csf-repair-failure"
+          ],
+          "think": "Is the pericranial flap still well perfused where it lies? In 19 patients cranialized with a pericranial flap there were no intraoperative complications and one postoperative CSF leak, in a patient with extensive skull base injuries, repaired endoscopically (Donath 2006)."
+        },
+        {
+          "do": "Replace the anterior table segment and fix it with pre-bent titanium plates; close over drains.",
+          "see": [
+            "s.frontal-sinus-anterior-table"
+          ],
+          "think": "In one centre's series: perioperative broad-spectrum antibiotics, two drains, neurosurgical intensive care, no routine lumbar drain (Horowitz 2013). That is that centre's protocol, not an established standard."
+        },
+        {
+          "do": "Watch for the intracranial complications: emergency CT for a new deficit or a fall in consciousness, and lumbar puncture with antibiotics for fever, severe headache, photophobia or altered consciousness (Horowitz 2013).",
+          "see": [
+            "s.anterior-cranial-fossa-dura"
+          ],
+          "risk": [
+            "h.tension-pneumocephalus",
+            "h.csf-repair-failure"
+          ],
+          "think": "Is this tension pneumocephalus or meningitis? MRI at three months and yearly afterwards looked for secondary mucocele (Horowitz 2013)."
+        }
+      ],
+      "endpoints": [
+        "Posterior table and all sinus mucosa removed; outflow tract sealed",
+        "Dura intact or repaired, with a vascularized pericranial layer between brain and nose",
+        "Anterior table replaced and fixed"
+      ],
+      "pitfalls": [
+        "Cranializing by reflex: in the posterior table series in which most patients were managed without cranialization there was no intracranial infection apart from one gunshot death (Choi 2012; retrospective, so selection is likely).",
+        "In a meta-analysis cranialization had the highest crude complication rate (13.0%, mostly meningitis and sinusitis 8.59%, then CSF leak 3.28% and mucocele 0.86%) against 5.93% for other surgery, but the difference was not statistically significant and the patients cranialized are the sickest (Wolbert 2026).",
+        "Residual mucosa or an unsealed recess leaving a mucocele ([[h.mucocele-after-obliteration]]).",
+        "Complications in the series that compared cranialization with obliteration were skin infection, telecanthus, diplopia, nasal deformity and epiphora, with 17.8% overall after cranialization against 29.2% after obliteration (not significant; Horowitz 2013, retrospective)."
+      ],
+      "src": [
+        "src.horowitz-2013-cranialization",
+        "src.donath-2006-pericranial",
+        "src.vandijk-2012-cranialization",
+        "src.rodriguez-2008-frontal-fracture",
+        "src.choi-2012-posterior-table",
+        "src.johnson-2021-frontal-fracture-sr",
+        "src.wolbert-2026-cranialization",
+        "src.morse-2021-cranialization"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "p.lynch-external-frontoethmoidectomy",
+      "name": "Lynch external frontoethmoidectomy",
+      "tier": 2,
+      "indications": [
+        "Ethmoid or frontoethmoidal disease that an endoscopic approach cannot safely reach or has failed. External sinus approaches are rarely used now, but their indications have not changed and they still arise in a career (Schneider 2015).",
+        "Orbital complications needing external drainage with ethmoid clearance: 14 of 16 patients with postseptal orbital infection in one older series were drained and explored through an external ethmoidectomy approach (Thakar 2000). Today the route is a minority choice (4 of 44 external drainages; Luthra 2024): see [[p.external-orbitotomy-drainage]].",
+        "Frontoethmoidal mucocele: in one series 14 of 18 paranasal sinus mucoceles were managed externally, with stents to drain the frontoethmoidal sinus, and the author advises reverting to the external approach at once if an endoscopic approach proves difficult (Iseh 2010). See [[dz.mucocele]].",
+        "Access to the anterior and posterior ethmoidal arteries when endoscopic ligation is unsafe ([[p.aea-ligation]])."
+      ],
+      "corridor": "Subperiosteal dissection through a curved incision between the medial canthus and the nasal dorsum, into the medial orbit and through the lamina papyracea into the ethmoid; the frontal sinus floor is reached above it.",
+      "preop": [
+        {
+          "check": "Is an external route needed at all, and could the same disease be reached endoscopically?",
+          "why": "External ethmoidectomy gave direct vision of consistent anatomy and a lower complication rate than other routes in its original description, and was used mainly for extensive or recurrent disease (Neal 1985). Endoscopic routes now cover most of this; the choice is the surgeon's."
+        },
+        {
+          "check": "CT of the lamina papyracea, ethmoid roof and frontal sinus; position of the anterior ethmoidal artery.",
+          "why": "The same planning as [[p.anterior-ethmoidectomy]] and [[p.aea-ligation]]: the roof and the artery are met under direct vision, not avoided."
+        }
+      ],
+      "steps": [
+        {
+          "do": "Mark and make the Lynch incision and raise the periosteum from the frontal process of the maxilla, lacrimal fossa and lamina papyracea. The incision, notching against webbing and the plane are as for the external route in [[p.aea-ligation]].",
+          "see": [
+            "s.medial-canthal-tendon",
+            "s.trochlea",
+            "lm.anterior-lacrimal-crest",
+            "s.frontal-process-maxilla"
+          ],
+          "risk": [
+            "h.medial-canthal-disruption",
+            "h.trochlea-injury"
+          ],
+          "think": "Stay subperiosteal. The Lynch–Howarth incision risks the medial canthal tendon and lacrimal canaliculi, scarring, webbing, delayed healing and suture abscess (Luthra 2024)."
+        },
+        {
+          "do": "Lift the lacrimal sac from the lacrimal fossa and retract it with the periorbita.",
+          "see": [
+            "s.lacrimal-sac",
+            "s.lacrimal-fossa",
+            "s.periorbita"
+          ],
+          "think": "The sac and canaliculi sit in the medial field and are at risk (Luthra 2024). No source read gives technical detail for this step."
+        },
+        {
+          "do": "Enter the ethmoid through the lamina papyracea and clear the labyrinth under direct vision, keeping to the skull base and the periorbita.",
+          "see": [
+            "s.lamina-papyracea",
+            "s.fovea-ethmoidalis",
+            "s.anterior-ethmoidal-artery"
+          ],
+          "risk": [
+            "h.ethmoid-roof-penetration",
+            "h.orbital-hematoma"
+          ],
+          "think": "Transorbital exploration of the ethmoid labyrinth gave direct visualization of consistent anatomy (Neal 1985). The roof is the weak point ([[h.ethmoid-roof-penetration]])."
+        },
+        {
+          "do": "For frontoethmoidal disease, open the frontal sinus floor through the same exposure and establish drainage. In the older external series this meant a stent in the frontoethmoidal tract for a variable period (Iseh 2010).",
+          "see": [
+            "s.frontal-sinus-floor",
+            "s.frontal-recess",
+            "s.frontal-sinus"
+          ],
+          "think": "Is the new drainage pathway wide enough to stay open? The abstract does not give the stent technique or duration, so none is stated here."
+        },
+        {
+          "do": "For an orbital abscess or mucocele reaching the orbit, open and drain it from this exposure ([[p.external-orbitotomy-drainage]]).",
+          "see": [
+            "s.periorbita",
+            "s.orbit"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ]
+        },
+        {
+          "do": "Close the periosteum and deep layers in exact apposition, then skin ([[p.aea-ligation]]). Check vision and eye movements at intervals afterwards.",
+          "see": [
+            "s.orbit"
+          ],
+          "risk": [
+            "h.orbital-hematoma"
+          ],
+          "think": "Pain, proptosis, falling vision or restricted movement is an orbital hematoma until proven otherwise ([[p.lateral-canthotomy-cantholysis]])."
+        }
+      ],
+      "endpoints": [
+        "Disease cleared or drained, with a patent frontoethmoidal pathway where the frontal sinus was opened",
+        "Orbit soft, vision intact, medial canthus and lacrimal system undisturbed"
+      ],
+      "pitfalls": [
+        "Medial canthal tendon or canalicular injury, and webbing (Luthra 2024).",
+        "Persisting with an endoscopic attempt that is not working: Iseh 2010 advises reverting to the external route at once."
+      ],
+      "src": [
+        "src.schneider-2015-external-sinus",
+        "src.neal-1985-external-ethmoidectomy",
+        "src.thakar-2000-orbital-cellulitis",
+        "src.iseh-2010-mucocele",
+        "src.luthra-2024-spoa"
       ],
       "review": "draft"
     }
