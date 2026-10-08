@@ -333,11 +333,13 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
 backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
-to sellar/clival masses, so wave 3 is procedure mode: P1b (states, built) beside
-P2 (player), then P3 (poses per state, the 2.7 mm shaft), then DC1
-(mucosal state, built); NasalSeg (PR #119) enters as population data (POP1, done) and
-16-bit heads (IN1); the soft-tissue lane continues with ST4d and ST5.
-Waiting on the owner: O8–O11, review of tier-1 FESS anatomy and the
+to sellar/clival masses, so wave 3 is procedure mode: the dissection
+states, the player, poses per state, the mucosal state, NasalSeg's
+population profiles and the 16-bit intake are built (P1b, P2, P3, DC1,
+POP1, IN1); CP-3 found that a step does not yet land on the view it
+opened, so P4 (the player's views) is next; the soft-tissue lane
+continues with ST4d and ST5.
+Waiting on the owner: O8–O12, the review of the dissected states (CP-3's links), review of tier-1 FESS anatomy and the
 dioramas (`docs/ssb-roadmap.md` §2). The external nose beyond the entry anatomy (the full rhinoplasty
 framework, its envelope layers, vessels and nerves) is specced
 (2026-10-07) as the `nasal-framework` diorama (`docs/ssb.md` §6.2;
