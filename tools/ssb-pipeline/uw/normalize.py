@@ -10,7 +10,7 @@ Input (step 0): the as-scanned files, read with `git show <AS_SCANNED_COMMIT>:<p
 incoming/_recon/as-scanned/ (gitignored). `normalize.py` never reads the committed ssb/ct as input, so a rerun
 is idempotent.
 
-Stages (`all` runs them in this order, with the pipeline stages between them):
+Stages (`all` runs them in this order, with the pipeline stages between them, and dissect.py, the dissection states, last):
 
   volume   ST6 steps 1-2 (the external nose: unmask it from the raw UW stack, centre it; nose.py), then steps 1-5: midline
            check, septum centring, mirror, midline plates, then ST6 steps 3-4 (the internal valve landmark and the
@@ -636,6 +636,7 @@ def stage_all():
     run(PY, os.path.join(HERE, 'nose.py'), 'pack')
     stage_sides()
     report_nose()
+    run(PY, os.path.join(HERE, 'dissect.py'))      # last: the dissection states read the finished base (P1b)
 
 
 if __name__ == '__main__':

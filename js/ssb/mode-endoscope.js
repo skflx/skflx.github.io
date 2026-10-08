@@ -36,11 +36,16 @@
      block mid-flight is clamped as usual (a station's own pose is free by construction). Any other pose change,
      a pointer press, the wheel or a key cancels the flight where it is.
 
+   - Procedure states (P2, docs/ssb.md 5.8): the procedure player hands in a derived volume (`setStateVolume`, volume.js
+     applyPatch) and collision, the tip's label and the exposure read it instead of the base; the CT inset and the CT
+     stage keep reading the base image. A station for a procedure step is looked up in `byState[<state key>]` first, then
+     in the intact table (`stationFor`, `flyTo(key, stateKey)`).
+
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=f26d9932';
-import { sharedVolume, stamped, decode } from './volume.js?v=de6fa514';
+import { loadLandmarks } from './geo-specimen.js?v=aabbe0c6';
+import { sharedVolume, stamped, decode } from './volume.js?v=50cad9b7';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=844c8624';
 
@@ -87,6 +92,9 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let hud = { rows: [], contactMm: 0, limited: false, limitedBy: null };
     let limitedNext = null;              /* what the last clamp was by ('bone' | 'septum'), reported by the pass it triggers */
     let ctVol = null;                    /* the shared volume, once loaded */
+    let stateVol = null;                 /* a dissected state's volume (P2): what collision and the tip's label read; the base stays the CT image */
+    let stateKey = null;
+    let byState = new Map();             /* state key -> Map("t.<id>.<side>" -> { id, side, pose }) from stations.json `byState` */
     let insetData = null;                /* { ct, width, height, pixel, shaft: [x0, y0, x1, y1], center } for the UI */
     const insetSubs = new Set();
     let selfMove = false;
@@ -145,7 +153,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         volumeAsked = true;
         sharedVolume().then(async (vol) => {
             const fields = await loadFields(vol.meta).catch(() => []);
-            ctAt = (p) => vol.sample(p[0], p[1], p[2]);
+            ctAt = (p) => (stateVol || vol).sample(p[0], p[1], p[2]);
             ctVol = vol;
             followed = null;
             sdfFields = fields;
@@ -172,6 +180,16 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         return false;
     }
 
+    /* The procedure player's dissected volume (or null: the base again). Re-runs the collision check, since a pose that
+       was blocked by bone that is now air is free, and one that was free may not be (a step back). */
+    function setStateVolume(vol, key = null) {
+        if (vol === stateVol && key === stateKey) return;
+        stateVol = vol;
+        stateKey = vol ? key : null;
+        exposed = null;
+        sync();
+    }
+
     function setShaft(key) {
         if (!Object.prototype.hasOwnProperty.call(SHAFT_RADII, key) || key === shaft) return false;
         shaft = key;
@@ -188,6 +206,9 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         stationsState = 'loading';
         stationsAsked = fetch(stamped(STATIONS_FILE)).then((r) => (r.ok ? r.json() : null)).catch(() => null).then((doc) => {
             stations = parseStations(doc);
+            byState = new Map();
+            const states = doc && doc.byState && typeof doc.byState === 'object' && !Array.isArray(doc.byState) ? doc.byState : {};
+            for (const [key, table] of Object.entries(states)) if (/^[0-9a-f]{10}$/.test(key)) byState.set(key, parseStations({ stations: table }));
             stationsState = stations.size ? 'ready' : 'failed';
             resolvePending();
             emit();
@@ -213,9 +234,25 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         return true;
     }
 
-    /* Fly the scope to station `key` ("t.<id>.<side>"): false for an unknown key. */
-    function flyTo(key) {
-        const st = stations.get(key);
+    /* A procedure step's station (`t.<id>`, no side) for the pose's nostril (else the midline) in a dissected state: the
+       state's own table first, then the intact one. Returns { key, pose, state } (state: true when it came from byState) or null. */
+    function stationFor(id, key = null) {
+        const p = pose();
+        const link = parseStationLink(id);
+        if (!link) return null;
+        for (const [table, own] of [[key ? byState.get(key) : null, true], [stations, false]]) {
+            if (!table) continue;
+            const hit = resolveStation(table, { id: link.id, side: link.side || (p ? p.side : 'R') }) || resolveStation(table, { id: link.id, side: 'M' });
+            if (hit) return { key: `${hit.id}.${hit.side}`, pose: { ...hit.pose }, state: own };
+        }
+        return null;
+    }
+
+    /* Fly the scope to station `key` ("t.<id>.<side>"), in the dissected state `inState` when one is given and carries its
+       own pose for it: false for an unknown key. */
+    function flyTo(key, inState = null) {
+        const own = inState ? byState.get(inState) : null;
+        const st = (own && own.get(key)) || stations.get(key);
         if (!st) return false;
         const cur = pose();
         const to = clampPose(st.pose);
@@ -535,6 +572,20 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         },
         get shaft() { return { key: shaft, radius: SHAFT_RADII[shaft] }; },
         get collision() { return !!ctAt; },
+        get stateKey() { return stateKey; },
+        /* the label under the tip in the volume the scope reads (the dissected one when a state is on) */
+        get tipLabel() {
+            const p = pose();
+            const f = p && fulcra.get(p.side);
+            const vol = stateVol || ctVol;
+            if (!f || !vol) return null;
+            const t = tipOf(f, p);
+            const index = vol.labelAt(t[0], t[1], t[2]);
+            const d = index ? vol.describe(index) : null;
+            return { index, name: d ? d.name : null };
+        },
+        get byState() { return [...byState].map(([k, m]) => [k, [...m.keys()]]); },
+        stationFor,
         get hud() { return { rows: hud.rows.map((r) => ({ ...r })), contactMm: hud.contactMm, limited: hud.limited, limitedBy: hud.limitedBy, clampMm }; },
         get cursor() { const c = store.get().cursor; return c ? c.slice() : null; },
         get exposeRuns() { return exposeRuns; },
@@ -550,7 +601,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     });
 
     return {
-        hook, enter, leave, setPose, nudge, cycleLens, setShaft, flyTo,
+        hook, enter, leave, setPose, nudge, cycleLens, setShaft, flyTo, setStateVolume, stationFor,
         get flying() { return !!flight; },
         get stations() { return listStations(); },
         get shaft() { return shaft; },

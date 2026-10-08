@@ -101,6 +101,21 @@ Reconstruction, stage E (the external nose, ST6; needs the raw crawl, because th
 plane and the vestibule are described in `nose.py`'s docstring and printed as the `ST6 1..5, 7` lines. `nose.py` with no argument is E1b's
 nostril landmark (`--write` stores it).
 
+Reconstruction, stage F (dissection states for procedure mode, P1b; needs only the committed `ssb/`, run last):
+
+    python3 tools/ssb-pipeline/uw/dissect.py    # dissection.json -> ssb/states/{index.json,<key>.ssbp.gz}, ssb/models/lining-<key>.glb.gz
+
+Evaluates the rules in `uw/dissection.json` (Opus's data; never edited here) on the standard specimen, a right-side unit on r >= 0
+and mirrored, a midline unit whole, with the guard (ICA, optic nerve, AEA fields, orbit) applied before and after the mirror. One
+state per distinct cumulative unit list at a procedure step or corridor position, keyed by the first 10 hex of the SHA-256 of the
+list (one unit per line). Per state: a patch (docs/ssb.md 5.8: u32 header length, JSON header, one u16 box per side R, L and midline;
+0 = unchanged, else the new label, the display becoming `ctFill`), a lining pack (`lining.py`'s method on the state's air, plus
+a remnant mesh `<id>.<side>@<cut>` for every wall label the state cuts partly; wall nodes it removes entirely are `hides` in the
+index). The state linings are listed in `ssb/states/index.json` and are **not** in `packs.json` (the Specimen stage loads every pack
+that file lists, so they are loaded on demand from the index). Prints one table: per unit, voxels against `measured`; per state,
+carved voxels, guard minima per field and side, bytes; and the antrostomy window's extent. `normalize.py all` runs it last. About
+three minutes; a rerun is byte-identical. `--no-lining` (development) skips the linings.
+
 `relate.py` needs only the committed `slices.json`, so the graph's spatial
 claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps

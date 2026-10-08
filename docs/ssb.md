@@ -617,34 +617,81 @@ which. The uncinate is fused into the maxillary medial wall unit here, so
 the uncinectomy opens the infundibular trough and the hiatus and leaves
 the wall; the natural ostium appears with the antrostomy.
 
-**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`).**
-- `ssb/states/index.json`: per state key (the first 10 hex of the SHA-256
-  of its unit list in application order): `units`, `usedBy`
-  (`"p.draf-i#2"`, `"fess:p.draf-i"`), its patch and lining files, `hides`
-  (wall nodes a state removes entirely), `remnants` (nodes it cuts
-  partly) and `measured`; plus `procedures` (step → state key) and
-  `corridors`.
+**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`; done).**
+- `ssb/states/index.json`: `version`, `base` (the first 10 hex of the SHA-256
+  of the base CT display and labels), `ctFill`, `states`, `procedures`,
+  `corridors`, and the unit voxel counts against `measured`. Per state key
+  (the first 10 hex of the SHA-256 of its unit list in application order,
+  one unit per line): `units`, `usedBy` (`"p.draf-i#2"` for a procedure
+  step, `"fess:p.draf-i#2"` for a corridor position), `patch`, `lining`,
+  `hides` (wall nodes a state removes entirely), `remnants` (wall node ->
+  the remnant node that replaces it in the state's lining pack) and
+  `measured` (carved voxels, bytes, guard minima per field and side, keep
+  violations, the post-mirror guard count, symmetry). `procedures[p]` is
+  `{entry, steps: {step: key}}` (`entry` null when the procedure starts on
+  the intact head); `corridors[c]` copies the data's entry and adds
+  `positions: [{procedure, step, state}]`.
 - `ssb/states/<key>.ssbp.gz`: a **patch**: a u32 header length, a JSON
   header (`version`, `base`, `state`, `units`, `ctFill`, `boxes:
-  [{ijk0, dims}]`), then per box a u16 array, x fastest: 0 = unchanged,
+  [{side, ijk0, dims}]`), then per box a u16 array, x fastest: 0 = unchanged,
   else the voxel's new label (its display becomes `ctFill`). Each patch is
   whole from the base (random access to any step), at most one box per
-  side and one for the midline. The format is the dense-box patch of the
-  realistic-anatomy plan (PR #119) with a constant display, so one loader
-  serves both.
-- `ssb/models/lining-<key>.glb.gz`: `lining.py` on the state's air, plus
-  remnant meshes `<id>.<side>@<cut>` for each wall unit a state cuts partly.
-  Listed in `packs.json` with `"state": <key>`; never loaded at boot.
+  side: `R` (voxels right of R = 0), `L`, and `M` (the R = 0 plane). The
+  format is the dense-box patch of the realistic-anatomy plan (PR #119)
+  with a constant display, so one loader serves both.
+- `ssb/models/lining-<key>.glb.gz`: `lining.py`'s method on the state's air
+  (built to 33 000 triangles with the remnants), plus remnant meshes
+  `<id>.<side>@<cut>` (the cut of the last unit that touched the wall; the
+  node's `extras.cut`) for each wall label a state cuts partly. **Not listed
+  in `packs.json`**: the Specimen stage loads every pack that file lists, so
+  the state linings are loaded on demand from the index (P2 decides how).
 - Distance fields are not recomputed: the guard keeps every cut away from
   the structures they measure.
-- Budgets: a state lining ≤ 350 kB gzip, all state packs ≤ 6 MB, a patch
-  ≤ 100 kB.
+- Budgets: a state lining <= 350 kB gzip, all state linings <= 6 MB, a patch
+  <= 100 kB (`tools/check-data.mjs` enforces them, and the `dissection.json`
+  <-> graph rule above).
+- Evaluation notes (where the data left a choice): anchors read voxel
+  centres; a right-side unit's box never reaches r < 0 and its result is
+  mirrored per unit, the guard applied again on the mirrored voxels; the
+  air sets of a right-side unit are its `.R` and `.M` labels, of a midline
+  unit all three sides; `exenterate` is the closing by Euclidean thresholds
+  (dilate to `r`, keep what is farther than `r` from outside the dilation);
+  the working air is the cumulative state, so a later unit sees the earlier
+  carves.
 
-**Runtime (WP P2).** `volume.js` gains a pure `applyPatch(volume, patch)`
-returning a derived volume (the base kept for undo and for CT); the
-endoscope's collision, tip label and stations read the state volume; the
-CT stage reads the base and outlines the carved voxels; the specimen stage
-swaps in the state's lining pack, hides `hides` and replaces `remnants`.
+**Runtime (WP P2, built).** `volume.js` has a pure `parsePatch(bytes, volume)`
+(refuses with a `VolumeError` a wrong `base`, a box outside `dims`, a label
+the table does not name, a body that is not the boxes' size, version 2) and
+`applyPatch(volume, patch)`, a derived volume with the same API plus
+`carvedAt` (the base is never touched). `js/ssb/mode-procedure.js` plays a
+procedure as the scope stage with `state.procedure = { id, step, cor }`
+behind it (§7.3), not a fifth stage: the endoscope's collision, tip label
+and exposure read the state volume (`setStateVolume`), the CT stage and the
+scope's CT inset keep the base image, the CT stage outlines the carved
+voxels (`mode-ct.js` `setCarved`; entering CT ends the procedure as it ends
+the scope, and the outline stays pinned until CT is left), the specimen
+stage swaps in the state's pack by key (`geo-specimen.js` `loadState` /
+`unloadState`, the last three kept) and draws a step's `see` structures and
+the `at` of its `risk` hazards through what hides them, hazards hatched.
+`ui-procedure.js` is the step list, the `think` behind "Think first" (click
+or `T`), Previous / Next / `[` `]`, the corridor picker and the state
+badge. Index shape read (P1b writes it; `parseIndex` is tolerant of the flat
+`"<p-id>#<n>"` form): `procedures: { "<p-id>": { "<step>": <key> } }`,
+`corridors: { "<key>": { name, procedures, positions: { "<p-id>#<n>": <key> } } }`.
+**Step n is 0..N**: 0 is the start (the entry state, or the intact specimen),
+n >= 1 the state after step n; N is the highest step the index lists for the
+procedure; a step the index does not list takes the nearest lower one (a
+step that removes nothing is the same state). A step the reader takes flies
+to its `station` (the state's `byState` pose first, then the intact one,
+else the pose stays and a note says so); a step loaded from the URL keeps the
+pose the URL gives. The index is fetched only when `js/ssb/stamps.js` lists
+`ssb/states/index.json` (`ssb/states` is one of the stamped data dirs), so a
+build without states makes no request. A state pack (`packs.json` entry with
+`"state": <key>`) holds the state's lining nodes `<id>.<side>` and its
+remnants (extras `cut`, or a name ending `@<cut>`); remnants replace the base
+wall of the same id and side, `hides` hide base nodes by key. The hides,
+remnants and state-lining paths are covered on real packs only once P1b's
+files exist (`--only procedure`, real-data section).
 
 **Stations.** `ssb/geometry/stations.json` gains `byState: {<state key>:
 {"t.<id>.<side>": {pose, target, measured}}}`, posed by E5's rule on the
@@ -1423,9 +1470,10 @@ is rewritten; a crosshair drag settles before the URL is replaced, like a
 lab slider. The stage is one of specimen, lab or CT: a hash with both `lab`
 and `ct` keeps the lab, and entering one leaves the other.
 
-The procedure hash (WP P2) is `#p=<p-id>&step=<n>[&cor=<corridor>]`: the
-procedure must be in `ssb/states/index.json` and the graph, `step` is
-clamped to its steps, and `cor` (a corridor key there that lists the
+The procedure hash (WP P2, built) is `#p=<p-id>&step=<n>[&cor=<corridor>]`
+(the pose follows as `scope=`): the store keeps only a well-formed `p-id` in
+the graph and clamps `step` to 0..99; the player, once the index has loaded,
+drops a procedure the index does not list and clamps `step` to its steps, and `cor` (a corridor key there that lists the
 procedure) makes the state accumulate the corridor's earlier procedures
 instead of the procedure's own `entry`. It implies the scope stage on the
 decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1) is

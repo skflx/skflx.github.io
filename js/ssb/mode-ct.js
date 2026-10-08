@@ -30,8 +30,8 @@
    `hook` is the read-only test window (window.__ssb.ct).
    ============================================================= */
 import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=b121b3b4';
-import { sharedVolume, PLANES } from './volume.js?v=de6fa514';
-import { CT_PLANES } from './state.js?v=4f14d108';
+import { sharedVolume, PLANES } from './volume.js?v=50cad9b7';
+import { CT_PLANES } from './state.js?v=28031b46';
 
 const LITTLE = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 const NEUTRAL_TOKEN = '--ssb-cell-ethmoid';
@@ -76,6 +76,8 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
     let palette = null;
     let announced = '';
     let announceTimer = 0;
+    let carvedAt = null;         /* (r, a, s) -> bool: the voxels a played dissection state carves, outlined over the base image (setCarved) */
+    let carvedGen = 0;
     let generation = 0;          /* bumped when the palette is read again (invalidates cached outlines) */
 
     /* ---------------- names and colours ---------------- */
@@ -122,6 +124,17 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
             cross: token('--ssb-ct-cross', '#FFB000'),
             selectFill: pack(select, 72),
         };
+    }
+
+    /* The player's carved-voxel test (a derived volume's carvedAt), or null to clear the outline. */
+    function setCarved(fn) {
+        const next = typeof fn === 'function' ? fn : null;
+        if (next === carvedAt) return;
+        carvedAt = next;
+        carvedGen += 1;
+        for (const p of CT_PLANES) views[p].carved = null;
+        if (status === 'ready') markAll();
+        emit();
     }
 
     function readSelection() {
@@ -313,6 +326,39 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
         return canvas;
     }
 
+    /* The voxels a dissected state carves (the procedure player, docs/ssb.md 5.8) outlined on the slice, over the base image:
+       the CT always shows the scan as it was, and the outline says what the played steps removed from it. One canvas pixel per
+       slice pixel, a carved pixel with an uncarved 4-neighbour; counts are kept for the test window. */
+    function carvedImage(v, sl, key) {
+        if (v.carved && v.carved.key === key) return v.carved.canvas;
+        const { width: w, height: h } = sl.geom;
+        const canvas = v.carved ? v.carved.canvas : document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const mask = new Uint8Array(w * h);
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                const p = vol.pixelToRAS(sl.geom, x, y);
+                mask[y * w + x] = carvedAt(p[0], p[1], p[2]) ? 1 : 0;
+            }
+        }
+        const ctx = canvas.getContext('2d');
+        const img = ctx.createImageData(w, h);
+        const px = new Uint32Array(img.data.buffer);
+        const ink = pack(parseColor(token('--signal', '#d33')) || [221, 51, 51]);
+        let count = 0;
+        for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+                if (!mask[y * w + x]) continue;
+                const edge = x === 0 || y === 0 || x === w - 1 || y === h - 1 || !mask[y * w + x - 1] || !mask[y * w + x + 1] || !mask[(y - 1) * w + x] || !mask[(y + 1) * w + x];
+                if (edge) { px[y * w + x] = ink; count += 1; }
+            }
+        }
+        ctx.putImageData(img, 0, 0);
+        v.carved = { key, canvas, count };
+        return canvas;
+    }
+
     function draw(plane) {
         const v = views[plane];
         if (status !== 'ready' || !vol || root.hidden) return;
@@ -349,6 +395,13 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
             const t = Math.max(1, Math.round(dpr));
             const key = `${sliceKey}|${dw}x${dh}|${t}|${[...selected].join(',')}|${palette.generation}`;
             ctx.drawImage(outlineImage(v, sl, dw, dh, t, key), dx, dy);
+        }
+
+        if (carvedAt) {
+            const layer = carvedImage(v, sl, `${sliceKey}|${carvedGen}|${palette.generation}`);
+            ctx.imageSmoothingEnabled = false;
+            ctx.drawImage(layer, 0, 0, g.width, g.height, dx, dy, dw, dh);
+            ctx.imageSmoothingEnabled = true;
         }
 
         /* the crosshair: four arms around a small gap, inside the image */
@@ -641,12 +694,15 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
         /* the canvas pixel (device) where the crosshair arms meet, and the image box */
         crosshair: (plane) => (views[plane].cross && views[plane].layout
             ? { ...views[plane].cross, box: { x: views[plane].layout.dx, y: views[plane].layout.dy, w: views[plane].layout.dw, h: views[plane].layout.dh } } : null),
+        get carved() { return !!carvedAt; },
+        carvedPixels: (plane) => (views[plane] && views[plane].carved ? views[plane].carved.count : 0),
+        sampleAt: (ras) => (vol ? vol.sample(ras[0], ras[1], ras[2]) : null),
         colorOf: (index) => (palette && palette.css.get(index)) || null,
         crossColor: () => (palette ? palette.cross : null),
     });
 
     return {
-        hook, legend, setPlane, scroll, nudge, setWindow, setPreset, cycleWindow, setOverlay,
+        hook, legend, setCarved, setPlane, scroll, nudge, setWindow, setPreset, cycleWindow, setOverlay,
         get status() { return status; },
         get window() { return { ...win }; },
         get overlay() { return overlay; },

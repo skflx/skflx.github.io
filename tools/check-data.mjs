@@ -25,6 +25,7 @@
    ============================================================= */
 import crypto from 'crypto';
 import fs from 'fs';
+import zlib from 'zlib';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
@@ -248,6 +249,94 @@ function checkSsb() {
   const geo = validateSsbGeometry(index);
   ok(geo.length === 0, 'ssb: specimen geometry names only graph ids',
     `ssb: ${geo.length} geometry reference problem(s):\n        ` + geo.slice(0, 20).join('\n        '));
+  checkDissection(index);
+}
+
+/* ---- SSB dissection states (docs/ssb.md 5.8; WP P1b) ----
+   (a) tools/ssb-pipeline/uw/dissection.json <-> the graph: every id a procedure step removes is realized by a unit
+   on that step or before it, or is listed unrealized; a step that removes something maps no unit only when all its
+   ids are unrealized; every unit on a step realizes one of that step's ids; unit names and `realizes` are graph ids.
+   (b) every label a patch writes is in labels.json; (c) the budgets, and the index agrees with the files. */
+function checkDissection(index) {
+  const dpath = rel('tools/ssb-pipeline/uw/dissection.json');
+  if (!fs.existsSync(dpath)) return;
+  const data = JSON.parse(fs.readFileSync(dpath, 'utf8'));
+  const errs = [];
+  const idOf = (unit) => unit.split('@')[0].replace(/\.[RLM]$/, '');
+  for (const [u, spec] of Object.entries(data.units)) {
+    if (!index.has(idOf(u))) errs.push(`unit ${u}: ${idOf(u)} is not a graph id`);
+    for (const r of spec.realizes || []) if (!index.has(r)) errs.push(`unit ${u}: realizes ${r}, not a graph id`);
+  }
+  for (const [pid, pd] of Object.entries(data.procedures)) {
+    const proc = index.get(pid);
+    if (!proc || proc.type !== 'procedures') { errs.push(`${pid}: not a graph procedure`); continue; }
+    const steps = proc.entity.steps || [];
+    const unreal = new Set(Object.keys(pd.unrealized || {}));
+    const realized = new Set();
+    for (const s of Object.keys(pd.steps)) if (!steps[Number(s)]) errs.push(`${pid} step ${s}: the procedure has no such step`);
+    for (let i = 0; i < steps.length; i++) {
+      const units = pd.steps[String(i)] || [];
+      const removes = steps[i].removes || [];
+      for (const u of units) {
+        if (!data.units[u]) { errs.push(`${pid} step ${i}: unit ${u} is not defined`); continue; }
+        const real = data.units[u].realizes || [];
+        if (!real.some((r) => removes.includes(r))) errs.push(`${pid} step ${i}: unit ${u} realizes none of the ids the step removes (${removes.join(', ') || 'none'})`);
+        real.forEach((r) => realized.add(r));
+      }
+      if (removes.length && !units.length && !removes.every((r) => unreal.has(r))) errs.push(`${pid} step ${i}: removes ${removes.join(', ')} but maps no unit and not all are unrealized`);
+      for (const r of removes) if (!realized.has(r) && !unreal.has(r)) errs.push(`${pid} step ${i}: removes ${r}, which no unit on this step or before realizes and the procedure does not list as unrealized`);
+    }
+    for (const r of unreal) if (!index.has(r)) errs.push(`${pid}: unrealized ${r} is not a graph id`);
+  }
+  ok(errs.length === 0, 'ssb dissection: dissection.json agrees with the graph (steps, removes, realizes, unrealized)',
+    `ssb dissection: ${errs.length} problem(s):\n        ` + errs.slice(0, 20).join('\n        '));
+
+  const ipath = rel('ssb/states/index.json');
+  if (!fs.existsSync(ipath)) { fail('ssb dissection: ssb/states/index.json is missing (run tools/ssb-pipeline/uw/dissect.py)'); return; }
+  const idx = JSON.parse(fs.readFileSync(ipath, 'utf8'));
+  {
+    /* The patches are made for one specimen: index.base is the first 10 hex of the SHA-256 of the raw CT and label arrays
+       dissect.py read (the player refuses a patch whose base differs). A specimen regenerated without rerunning dissect.py fails here. */
+    const h = crypto.createHash('sha256');
+    h.update(zlib.gunzipSync(fs.readFileSync(rel('ssb/ct/ct.u8.gz'))));
+    h.update(zlib.gunzipSync(fs.readFileSync(rel('ssb/ct/labels.u16.gz'))));
+    const want = h.digest('hex').slice(0, 10);
+    ok(idx.base === want, 'ssb dissection: ssb/states/index.json base is the hash of the committed specimen (rerun dissect.py after any specimen change)',
+      `ssb dissection: index.json base ${idx.base} is not the committed specimen's ${want}: rerun tools/ssb-pipeline/uw/dissect.py`);
+  }
+  const labels = new Set(Object.keys(JSON.parse(fs.readFileSync(rel('ssb/geometry/labels.json'), 'utf8')).labels).map(Number));
+  const bad = [];
+  let lining = 0;
+  for (const [key, st] of Object.entries(idx.states)) {
+    const sha = crypto.createHash('sha256').update(st.units.join('\n')).digest('hex').slice(0, 10);
+    if (sha !== key) bad.push(`${key}: not the hash of its unit list (${sha})`);
+    for (const u of st.units) if (!data.units[u]) bad.push(`${key}: unit ${u} is not in dissection.json`);
+    const pf = rel('ssb/states/' + st.patch), lf = rel('ssb/models/' + st.lining);
+    if (!fs.existsSync(pf) || !fs.existsSync(lf)) { bad.push(`${key}: patch or lining file is missing`); continue; }
+    const raw = zlib.gunzipSync(fs.readFileSync(pf));
+    const hl = raw.readUInt32LE(0);
+    const hdr = JSON.parse(raw.subarray(4, 4 + hl).toString('utf8'));
+    if (hdr.state !== key) bad.push(`${key}: patch header names state ${hdr.state}`);
+    let off = 4 + hl;
+    for (const b of hdr.boxes) {
+      const n = b.dims[0] * b.dims[1] * b.dims[2];
+      const a = new Uint16Array(raw.buffer.slice(raw.byteOffset + off, raw.byteOffset + off + n * 2));
+      off += n * 2;
+      const seen = new Set(a);
+      for (const v of seen) if (v !== 0 && !labels.has(v)) bad.push(`${key}: patch writes label ${v}, which is not in labels.json`);
+    }
+    if (off !== raw.length) bad.push(`${key}: patch length does not match its boxes`);
+    if (fs.statSync(pf).size > 100_000) bad.push(`${key}: patch is ${fs.statSync(pf).size} bytes (budget 100 kB)`);
+    const lb = fs.statSync(lf).size;
+    lining += lb;
+    if (lb > 350_000) bad.push(`${key}: state lining is ${lb} bytes (budget 350 kB)`);
+  }
+  if (lining > 6_000_000) bad.push(`state linings total ${lining} bytes (budget 6 MB)`);
+  const keys = new Set(Object.keys(idx.states));
+  for (const [p, pd] of Object.entries(idx.procedures)) for (const k of [pd.entry, ...Object.values(pd.steps)]) if (k && !keys.has(k)) bad.push(`procedure ${p}: state ${k} is not in the index`);
+  for (const [c, cd] of Object.entries(idx.corridors)) for (const pos of cd.positions) if (!keys.has(pos.state)) bad.push(`corridor ${c}: state ${pos.state} is not in the index`);
+  ok(bad.length === 0, `ssb dissection: ${keys.size} states: keys, patches (labels in labels.json, 100 kB), state linings (350 kB each, 6 MB in all) and the index agree`,
+    `ssb dissection: ${bad.length} problem(s):\n        ` + bad.slice(0, 20).join('\n        '));
 }
 
 /* ===========================================================

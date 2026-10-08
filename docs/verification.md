@@ -204,6 +204,15 @@ What it cannot check: medical correctness and whether a source supports the
 claim that cites it. That stays with the owner, who alone flips `review` to
 `verified`.
 
+### SSB dissection states (`ssb/states/`, `tools/ssb-pipeline/uw/dissect.py`)
+
+Offline pipeline (needs `pip install scipy scikit-image fast-simplification`, no crawl): `python3 tools/ssb-pipeline/uw/dissect.py`
+prints the unit table (voxels against `dissection.json`'s `measured`, within 5 %), per state the carved voxels, guard minima per field
+and side, patch and lining bytes, the post-mirror guard count and the antrostomy window's extent; a rerun is byte-identical (hash
+`ssb/states/*` and `ssb/models/lining-*`). In CI, `node tools/check-data.mjs` checks the `dissection.json` <-> graph rule (a scratch
+edit that unmaps a step with `removes` fails it), every label a patch writes against `labels.json`, and the budgets. The viewer does not
+read the states until P2.
+
 ### SSB page and variant lab (`ssb.html`)
 
 Smoke boots `ssb.html` (graph mode + a WebGL frame; headless Chromium runs
@@ -283,6 +292,19 @@ draws and selects (CT is the no-WebGL fallback); a server that sends
 `Content-Encoding: gzip` loads the same; phones show one plane at a time.
 Judging how the images *look* (window presets on the real head, outline
 contrast) stays a human check: `--shots` writes `ct-*.png`.
+
+**Procedure player** (`js/ssb/mode-procedure.js`, `ui-procedure.js`, `volume.js` patches;
+`docs/ssb.md` §5.8; `node tools/test-ssb.mjs --only procedure`) pins, in Node, `parsePatch` /
+`applyPatch` on a fixture patch (round trip; refusals of a wrong base, a box outside `dims`, an
+unknown label, a short or long body, version 2; exactly the box's voxels change and the base is
+byte-identical), the `#p=` codec and store (clamped step, hostile values dropped, exclusivity)
+and the index lookup; in the page, on a fixture index routed over a synthetic CT (a hole through
+the septum plate; the 2.7 mm telescope passes it): a pose through the hole is free at step 1 and
+clamps at step 0, the tip's label is the patch's, CT still samples the base and outlines the
+carved voxels, Next / Previous / `[` `]` rewrite the hash, the `think` is hidden until
+revealed, risk hazards hatch, a station is flown to (a cut under reduced motion), corridors, a
+damaged patch, no index (Play disabled, no request, zero console errors) and hostile hashes.
+The real-data section runs once `ssb/states/index.json` exists.
 
 **Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
 `docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,

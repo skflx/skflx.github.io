@@ -672,3 +672,24 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
 .ssb-scope-stations { display: flex; flex-direction: column; gap: 0.35rem; align-items: stretch; }
 .ssb-scope-station { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; text-align: left; }
 .ssb-scope-station-lens { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.04em; opacity: 0.75; flex: none; }
+
+/* ---------- procedure player (WP P2) ---------- */
+.ssb-proc { padding: 0 1rem 1rem; }
+.ssb-proc[hidden] { display: none; }
+.ssb-proc-title { margin: 0.2rem 0 0; font-weight: 600; }
+.ssb-proc-badge[data-state="dissected"] { color: var(--ink); font-weight: 500; }
+.ssb-proc-nav { margin: 0.5rem 0; }
+.ssb-proc-cor { margin-top: 0.4rem; }
+.ssb-proc-steps { list-style: none; margin: 0.5rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.ssb-proc-step { padding: 0.35rem 0.5rem; border-left: 2px solid var(--rule); }
+.ssb-proc-step.active { border-left-color: var(--signal); background: var(--paper-2, transparent); }
+.ssb-proc-go { all: unset; cursor: pointer; font: 500 0.72rem/1.2 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); }
+.ssb-proc-go:hover, .ssb-proc-step.active .ssb-proc-go { color: var(--ink); }
+.ssb-proc-go:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+.ssb-proc-do { margin-top: 0.15rem; font-size: 0.85rem; }
+.ssb-proc-more { margin-top: 0.35rem; }
+.ssb-proc-think-toggle { margin-top: 0.4rem; }
+.ssb-proc-think { margin: 0.35rem 0 0; }
+.ssb-proc-think[hidden] { display: none; }
+.ssb-play-note { margin-top: 0.35rem; }
+.ssb-play-note[hidden] { display: none; }

@@ -10780,5 +10780,25 @@
   "triangles": 7998,
   "bytes": 73497,
   "area_cm2": 30.0
+ },
+ "dissect": {
+  "states": 15,
+  "worstUnitDeviation": 0.0372,
+  "liningBytes": 4723375,
+  "keepViolations": 0,
+  "antrostomy": {
+   "carved": {
+    "voxels": 3618,
+    "A": 19.0,
+    "S": 9.5,
+    "R": 10.5
+   },
+   "medialWall": {
+    "voxels": 1959,
+    "A": 19.0,
+    "S": 9.5,
+    "R": 10.5
+   }
+  }
  }
 }

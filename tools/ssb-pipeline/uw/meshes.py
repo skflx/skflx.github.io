@@ -95,6 +95,14 @@ def normals(v, f):
     return vn / np.maximum(np.linalg.norm(vn, axis=1, keepdims=True), 1e-12)
 
 
+def mesh_node(cid, mask, aff, budget=None):
+    """One node's mesh from its voxel mask: the thin plates of the walls pack at a lower iso-level, every other
+    node at the default; `budget` overrides the node's triangle budget (a dissection remnant, dissect.py)."""
+    if cid in THIN:
+        return build(mask, aff, budget or WALL_BUDGET.get(cid, 2000), sigma=0.6, level=0.3)
+    return build(mask, aff, budget or BUDGET.get(cid, WALL_BUDGET.get(cid, 3000)))
+
+
 def build(mask, aff, budget, step=1, sigma=0.75, level=0.5):
     v, f = surface(mask, aff, sigma, step, level)
     v = taubin(v, f)
@@ -141,8 +149,11 @@ def write_glb(path, meshes):
         gl_meshes.append({'name': name, 'primitives': [{'attributes': {'POSITION': a0, 'NORMAL': a0 + 1},
                                                         'indices': a0 + 2, 'mode': 4}]})
         # three's GLTFLoader strips '.' from object names; extras land in userData intact
-        cid, side = name.rsplit('.', 1)
+        base, _, cut = name.partition('@')           # a dissection remnant is <id>.<side>@<cut> (dissect.py)
+        cid, side = base.rsplit('.', 1)
         extras = {'id': cid, 'side': side, 'name': name}
+        if cut:
+            extras['cut'] = cut
         if cid in KIND:
             extras['kind'] = KIND[cid]
         nodes.append({'name': name, 'mesh': len(gl_meshes) - 1, 'extras': extras,
@@ -174,10 +185,7 @@ def main():
         m = lab == int(idx)
         if m.sum() < 50:
             continue
-        if cid in THIN:
-            built[name] = build(m, aff, WALL_BUDGET.get(cid, 2000), sigma=0.6, level=0.3)
-        else:
-            built[name] = build(m, aff, BUDGET.get(cid, WALL_BUDGET.get(cid, 3000)))
+        built[name] = mesh_node(cid, m, aff)
         print(name, 'tris', len(built[name][1]), flush=True)
     # bony envelope: bone within 12 mm of the named air spaces (the sinus skeleton, not the
     # calvaria the crop box also cuts), specks removed, 1 mm marching cubes
