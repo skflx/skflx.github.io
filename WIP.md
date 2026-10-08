@@ -265,7 +265,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   scratch prototype built the states and posed the stations they open;
   `tools/ssb-pipeline/uw/dissect.py` evaluates the rules into 15 states
   (`ssb/states/index.json`, a patch and a lining pack each, not in
-  `packs.json`), which the player reads. Stations per state (P3, in review):
+  `packs.json`), which the player reads. Stations per state (P3):
   `ssb/geometry/stations.json` `byState` poses the 15 stations the states
   open (both sides; the midline ones from the right nostril), solved and
   re-checkable by `tools/ssb-pipeline/uw/stations.py`; the olfactory cleft and
@@ -328,7 +328,7 @@ owner decisions, waves of work packages with Opus checkpoints, content
 backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
 to sellar/clival masses, so wave 3 is procedure mode: P1b (states, built) beside
 P2 (player), then P3 (poses per state, the 2.7 mm shaft), then DC1
-(mucosal state); NasalSeg (PR #119) enters as population data (POP1, in review) and
+(mucosal state); NasalSeg (PR #119) enters as population data (POP1, done) and
 16-bit heads (IN1); the soft-tissue lane continues with ST4d and ST5.
 Waiting on the owner: O8–O11, review of tier-1 FESS anatomy and the
 dioramas (`docs/ssb-roadmap.md` §2). The external nose beyond the entry anatomy (the full rhinoplasty
