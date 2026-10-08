@@ -237,6 +237,13 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   (off by default; most points are inferred), a Mucosa layer drawing
   the air spaces as their lining (the vestibule's is skin) and a Nose layer
   (on by default) drawing the skin of the specimen's own nose.
+- **Procedure player** (`mode-procedure.js`, `ui-procedure.js`, `#p=…&step=…`;
+  `docs/ssb.md` §5.8) — a procedure plays step by step in the scope on a
+  dissected state (patch on the volume: collision, tip label; the state's
+  lining pack; `see` and hatched `risk` structures; the step's station), with
+  the `think` behind a click, `[` `]`, a corridor picker. Built and tested on a
+  fixture; waits for P1b's `ssb/states/` for real data (Play is disabled with
+  its reason until then).
 - **Endoscope stage** (`scope.js`, `mode-endoscope.js`, `ui-endoscope.js`,
   `#scope=`) — a first-person rigid scope as a camera pose over the
   Specimen stage: pivot at the nostril, depth / yaw / pitch / roll, a

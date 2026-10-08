@@ -138,6 +138,105 @@ export function buildFixture() {
     };
 }
 
+/* ---------------- procedure states (WP P2, docs/ssb.md 5.8) ----------------
+
+   A dissected-state fixture over the same phantom: one procedure (a real graph id, so its steps, `see` and `risk` are
+   the graph's own) of three indexed steps. The phantom's one bony plate between two air labels is the septum between the
+   two maxillary sinuses (|x| < 0.6 mm), so the holes are cylinders through it along the scope's shaft:
+
+     step 1  a hole through the plate along the shaft of POSE (state A)
+     step 2  nothing (the same state A)
+     step 3  a second hole higher up the plate (state B = both holes)
+
+   Each hole is the plate's bone voxels within HOLE_RADIUS_MM of its axis; a carved voxel takes the label of the sinus on its
+   side (+x is label 1, the right sinus). A hole is 4 mm across, so it passes the 2.7 mm telescope and not the 4 mm one
+   (the ring of the shaft's collision test is wider than the hole): the page tests switch to 2.7 mm. The scope's fulcrum is routed to FULCRUM (a `lm.naris.R` inside the phantom) and the
+   choanal arch to a point that exempts the whole phantom from the midline rule (scope.js shaftClearance), so the only thing
+   that stops POSE at step 0 is the bone plate. Nothing is written into the repo; test-ssb.mjs routes these in. */
+export const PROC = {
+    id: 'p.anterior-ethmoidectomy',
+    keys: { a: '1a2b3c4d5e', b: '6f7a8b9c0d' },
+    corridor: 'fixture-corridor',
+    holes: [{ center: [0, 8, -4] }, { center: [0, 12, 4] }],
+    dir: [-Math.SQRT1_2, -Math.SQRT1_2, 0],
+    halfLength: 6,
+    fulcrum: [4, 12, -4],
+    arch: [0, 30, 30],
+    pose: { side: 'R', depth: 5.5, yaw: -45, pitch: 0, roll: 0, lens: 0 },
+    station: { side: 'R', depth: 5.5, yaw: -45, pitch: 0, roll: 0, lens: 30 },
+};
+export const HOLE_RADIUS_MM = 2.0;
+
+/* The voxels a set of holes carves from the base: [{ index, i, j, k, label }] over the phantom. */
+export function carveHoles(fx, holes) {
+    const [nx, ny, nz] = DIMS;
+    const out = [];
+    const d = PROC.dir;
+    for (let k = 0; k < nz; k++) {
+        for (let j = 0; j < ny; j++) {
+            for (let i = 0; i < nx; i++) {
+                const n = (k * ny + j) * nx + i;
+                if (fx.ct[n] < 150) continue;
+                const p = [AFFINE[0][0] * i + AFFINE[0][3], AFFINE[1][1] * j + AFFINE[1][3], AFFINE[2][2] * k + AFFINE[2][3]];
+                for (const h of holes) {
+                    const q = [p[0] - h.center[0], p[1] - h.center[1], p[2] - h.center[2]];
+                    const along = q[0] * d[0] + q[1] * d[1] + q[2] * d[2];
+                    const r = Math.hypot(q[0] - along * d[0], q[1] - along * d[1], q[2] - along * d[2]);
+                    if (Math.abs(along) <= PROC.halfLength && r <= HOLE_RADIUS_MM) { out.push({ index: n, i, j, k, label: p[0] >= 0 ? 1 : 2 }); break; }
+                }
+            }
+        }
+    }
+    return out;
+}
+
+/* A patch (docs/ssb.md 5.8: u32 header length, JSON header, one u16 box) from carved voxels, as gzip bytes. `mutate` may
+   change the header (tests use it to make bad patches). */
+export function patchBytes(voxels, { state = 'fixture', base = 'synthetic-fixture', ctFill = 48, mutate = null, gz = true } = {}) {
+    const lo = [Infinity, Infinity, Infinity];
+    const hi = [-Infinity, -Infinity, -Infinity];
+    for (const v of voxels) for (const [a, c] of [[0, v.i], [1, v.j], [2, v.k]]) { lo[a] = Math.min(lo[a], c); hi[a] = Math.max(hi[a], c); }
+    const dims = voxels.length ? [0, 1, 2].map((a) => hi[a] - lo[a] + 1) : [1, 1, 1];
+    const ijk0 = voxels.length ? lo : [0, 0, 0];
+    const data = Buffer.alloc(dims[0] * dims[1] * dims[2] * 2);
+    for (const v of voxels) data.writeUInt16LE(v.label, (((v.k - ijk0[2]) * dims[1] + (v.j - ijk0[1])) * dims[0] + (v.i - ijk0[0])) * 2);
+    const header = { version: 1, base, state, units: [`fixture.${state}`], ctFill, boxes: [{ ijk0, dims }] };
+    if (mutate) mutate(header);
+    const json = Buffer.from(JSON.stringify(header));
+    const len = Buffer.alloc(4);
+    len.writeUInt32LE(json.length, 0);
+    const raw = Buffer.concat([len, json, data]);
+    return gz ? zlib.gzipSync(raw, { level: 9, mtime: 0 }) : raw;
+}
+
+/* The routed files of the procedure fixture, as { 'ssb/states/index.json': Buffer, ... }. */
+export function procedureFiles(fx = buildFixture()) {
+    const a = carveHoles(fx, [PROC.holes[0]]);
+    const b = carveHoles(fx, PROC.holes);
+    const index = {
+        version: 1,
+        base: 'synthetic-fixture',
+        states: {
+            [PROC.keys.a]: { units: ['fixture.a'], usedBy: [`${PROC.id}#1`], patch: `${PROC.keys.a}.ssbp.gz`, lining: null, hides: [], remnants: [], measured: { carved: a.length } },
+            [PROC.keys.b]: { units: ['fixture.a', 'fixture.b'], usedBy: [`${PROC.id}#3`], patch: `${PROC.keys.b}.ssbp.gz`, lining: null, hides: [], remnants: [], measured: { carved: b.length } },
+        },
+        procedures: { [PROC.id]: { 1: PROC.keys.a, 2: PROC.keys.a, 3: PROC.keys.b } },
+        corridors: { [PROC.corridor]: { name: 'Fixture corridor', procedures: [PROC.id], positions: { [`${PROC.id}#1`]: PROC.keys.b } } },
+    };
+    const stations = { version: 1, stations: {}, byState: { [PROC.keys.a]: { 't.medial-orbital-floor-30.R': { pose: PROC.station } } } };
+    const landmarks = { 'lm.naris.R': PROC.fulcrum, 'lm.choanal-arch.M': PROC.arch };
+    return {
+        voxels: { a, b },
+        files: {
+            'ssb/states/index.json': Buffer.from(JSON.stringify(index)),
+            [`ssb/states/${PROC.keys.a}.ssbp.gz`]: patchBytes(a, { state: 'a' }),
+            [`ssb/states/${PROC.keys.b}.ssbp.gz`]: patchBytes(b, { state: 'b' }),
+            'ssb/geometry/stations.json': Buffer.from(JSON.stringify(stations)),
+            'ssb/geometry/landmarks.json': Buffer.from(JSON.stringify(landmarks)),
+        },
+    };
+}
+
 /* The files as { 'ssb/ct/ct.json': Buffer, ... }. */
 export function fixtureFiles(fx = buildFixture()) {
     return {

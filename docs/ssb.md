@@ -640,11 +640,39 @@ the wall; the natural ostium appears with the antrostomy.
 - Budgets: a state lining ≤ 350 kB gzip, all state packs ≤ 6 MB, a patch
   ≤ 100 kB.
 
-**Runtime (WP P2).** `volume.js` gains a pure `applyPatch(volume, patch)`
-returning a derived volume (the base kept for undo and for CT); the
-endoscope's collision, tip label and stations read the state volume; the
-CT stage reads the base and outlines the carved voxels; the specimen stage
-swaps in the state's lining pack, hides `hides` and replaces `remnants`.
+**Runtime (WP P2, built).** `volume.js` has a pure `parsePatch(bytes, volume)`
+(refuses with a `VolumeError` a wrong `base`, a box outside `dims`, a label
+the table does not name, a body that is not the boxes' size, version 2) and
+`applyPatch(volume, patch)`, a derived volume with the same API plus
+`carvedAt` (the base is never touched). `js/ssb/mode-procedure.js` plays a
+procedure as the scope stage with `state.procedure = { id, step, cor }`
+behind it (§7.3), not a fifth stage: the endoscope's collision, tip label
+and exposure read the state volume (`setStateVolume`), the CT stage and the
+scope's CT inset keep the base image, the CT stage outlines the carved
+voxels (`mode-ct.js` `setCarved`; entering CT ends the procedure as it ends
+the scope, and the outline stays pinned until CT is left), the specimen
+stage swaps in the state's pack by key (`geo-specimen.js` `loadState` /
+`unloadState`, the last three kept) and draws a step's `see` structures and
+the `at` of its `risk` hazards through what hides them, hazards hatched.
+`ui-procedure.js` is the step list, the `think` behind "Think first" (click
+or `T`), Previous / Next / `[` `]`, the corridor picker and the state
+badge. Index shape read (P1b writes it; `parseIndex` is tolerant of the flat
+`"<p-id>#<n>"` form): `procedures: { "<p-id>": { "<step>": <key> } }`,
+`corridors: { "<key>": { name, procedures, positions: { "<p-id>#<n>": <key> } } }`.
+**Step n is 0..N**: 0 is the start (the entry state, or the intact specimen),
+n >= 1 the state after step n; N is the highest step the index lists for the
+procedure; a step the index does not list takes the nearest lower one (a
+step that removes nothing is the same state). A step the reader takes flies
+to its `station` (the state's `byState` pose first, then the intact one,
+else the pose stays and a note says so); a step loaded from the URL keeps the
+pose the URL gives. The index is fetched only when `js/ssb/stamps.js` lists
+`ssb/states/index.json` (`ssb/states` is one of the stamped data dirs), so a
+build without states makes no request. A state pack (`packs.json` entry with
+`"state": <key>`) holds the state's lining nodes `<id>.<side>` and its
+remnants (extras `cut`, or a name ending `@<cut>`); remnants replace the base
+wall of the same id and side, `hides` hide base nodes by key. The hides,
+remnants and state-lining paths are covered on real packs only once P1b's
+files exist (`--only procedure`, real-data section).
 
 **Stations.** `ssb/geometry/stations.json` gains `byState: {<state key>:
 {"t.<id>.<side>": {pose, target, measured}}}`, posed by E5's rule on the
@@ -1423,9 +1451,10 @@ is rewritten; a crosshair drag settles before the URL is replaced, like a
 lab slider. The stage is one of specimen, lab or CT: a hash with both `lab`
 and `ct` keeps the lab, and entering one leaves the other.
 
-The procedure hash (WP P2) is `#p=<p-id>&step=<n>[&cor=<corridor>]`: the
-procedure must be in `ssb/states/index.json` and the graph, `step` is
-clamped to its steps, and `cor` (a corridor key there that lists the
+The procedure hash (WP P2, built) is `#p=<p-id>&step=<n>[&cor=<corridor>]`
+(the pose follows as `scope=`): the store keeps only a well-formed `p-id` in
+the graph and clamps `step` to 0..99; the player, once the index has loaded,
+drops a procedure the index does not list and clamps `step` to its steps, and `cor` (a corridor key there that lists the
 procedure) makes the state accumulate the corridor's earlier procedures
 instead of the procedure's own `entry`. It implies the scope stage on the
 decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1) is

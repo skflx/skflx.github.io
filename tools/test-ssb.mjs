@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -88,7 +88,7 @@ import zlib from 'zlib';
 import { execFileSync } from 'child_process';
 import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 import { validate, contentFiles } from './ssb-content.mjs';
-import { buildFixture, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE } from './ssb-fixture-ct.mjs';
+import { buildFixture, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE, PROC, procedureFiles, patchBytes, carveHoles } from './ssb-fixture-ct.mjs';
 
 /* The browser modules under js/ have no package "type", so Node would reparse
    them and warn. Import them as data: URLs instead. The three below need
@@ -113,7 +113,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -213,8 +213,10 @@ const inRange = (v, r) => (r.closed ? v >= r.lo && v <= r.hi : v > r.lo && v < r
 
 const FX = buildFixture();
 const FX_FILES = fixtureFiles(FX);
-const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError } = await import(dataUrl(
-  sourceOf('js/ssb/volume.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`)));
+const VOLUME_URL = dataUrl(sourceOf('js/ssb/volume.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`));
+const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch } = await import(VOLUME_URL);
+const { parseIndex, stateKeyFor, stepCount } = await import(dataUrl(sourceOf('js/ssb/mode-procedure.js')
+  .replace(/from '\.\/volume\.js[^']*'/, `from '${VOLUME_URL}'`).replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`)));
 const arrEq = (a, b, tol = 1e-9) => a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= tol);
 
 /* A fetch that answers from a { 'ssb/ct/ct.json': Buffer } map. `decoded`: the
@@ -3324,6 +3326,354 @@ function sphenoidRuleTests() {
   void sorted;
 }
 
+
+/* ---------------- the procedure player (WP P2): volume patches, the hash, the index; then the page on a fixture ---------------- */
+
+const PF = procedureFiles(FX);
+const PROC_URL = `p=${PROC.id}`;
+const POSE_HASH = (o = {}) => { const p = { ...PROC.pose, ...o }; return `scope=${p.side},${p.depth},${p.yaw},${p.pitch},${p.roll},${p.lens}`; };
+const HOLE_TIP = [PROC.fulcrum[0] + PROC.dir[0] * PROC.pose.depth, PROC.fulcrum[1] + PROC.dir[1] * PROC.pose.depth, PROC.fulcrum[2] + PROC.dir[2] * PROC.pose.depth];
+
+async function procedureUnitTests() {
+  const header = parseHeader(FX.meta);
+  const base = createVolume({ header, ct: FX.ct, labels: FX.labels, table: parseTable(FX.table) });
+  const ctBefore = FX.ct.slice();
+  const labelsBefore = FX.labels.slice();
+  const voxels = PF.voxels.a;
+  const bytes = PF.files[`ssb/states/${PROC.keys.a}.ssbp.gz`];
+
+  /* ---- volume.js: parsePatch / applyPatch ---- */
+  const patch = await parsePatch(bytes, base);
+  const n = patch.boxes.reduce((t, b) => t + b.data.filter((v) => v !== 0).length, 0);
+  check('patch: parsePatch round-trips the fixture patch (gzip): state, ctFill, one box, every carved voxel and its label', patch.state === 'a' && patch.ctFill === 48 && patch.boxes.length === 1 && n === voxels.length && voxels.length > 0
+    && voxels.every((v) => { const b = patch.boxes[0]; return b.data[(((v.k - b.ijk0[2]) * b.dims[1] + (v.j - b.ijk0[1])) * b.dims[0] + (v.i - b.ijk0[0]))] === v.label; }), `${n} of ${voxels.length}`);
+  const rawPatch = await parsePatch(patchBytes(voxels, { state: 'a', gz: false }), base);
+  check('patch: bytes the server already decoded parse the same', rawPatch.boxes[0].data.every((v, i) => v === patch.boxes[0].data[i]) && rawPatch.ctFill === 48);
+  const refuse = async (what, p) => {
+    const e = await p.catch((err) => err);
+    check(`patch: ${what} is refused with a VolumeError`, e instanceof VolumeError, String(e && e.message));
+    return e;
+  };
+  await refuse('a box outside dims', parsePatch(patchBytes(voxels, { mutate: (h) => { h.boxes[0].ijk0 = [DIMS_FX[0], 0, 0]; } }), base));
+  await refuse('a box with a negative corner', parsePatch(patchBytes(voxels, { mutate: (h) => { h.boxes[0].ijk0 = [-1, 0, 0]; } }), base));
+  await refuse('a label index the table does not name', parsePatch(patchBytes(voxels.map((v, i) => (i === 0 ? { ...v, label: 40 } : v))), base));
+  await refuse('a wrong base', parsePatch(patchBytes(voxels, { base: 'another-specimen' }), base));
+  await refuse('a short body', parsePatch(zlib.gzipSync(zlib.gunzipSync(bytes).subarray(0, 60)), base));
+  await refuse('a long body', parsePatch(zlib.gzipSync(Buffer.concat([zlib.gunzipSync(bytes), Buffer.alloc(8)])), base));
+  const v2 = await refuse('version 2', parsePatch(patchBytes(voxels, { mutate: (h) => { h.version = 2; } }), base));
+  check('patch: version 2 is "unsupported", the others "invalid"', v2 && v2.code === 'unsupported');
+  await refuse('a ctFill outside 0..255', parsePatch(patchBytes(voxels, { ctFill: 300 }), base));
+  await refuse('a header length past the end', parsePatch(Buffer.from([255, 255, 0, 0, 1, 2]), base));
+
+  const derived = applyPatch(base, patch);
+  let changedCt = 0;
+  let changedLab = 0;
+  let wrong = 0;
+  const carved = new Map(voxels.map((v) => [v.index, v.label]));
+  for (let i = 0; i < FX.ct.length; i++) {
+    const c = derived.ct[i] !== ctBefore[i];
+    const l = derived.labels[i] !== labelsBefore[i];
+    if (c) changedCt += 1;
+    if (l) changedLab += 1;
+    if (carved.has(i) ? derived.ct[i] !== 48 || derived.labels[i] !== carved.get(i) : c || l) wrong += 1;
+  }
+  check('patch: applyPatch changes exactly the box\'s non-zero voxels (display ctFill, the new label) and nothing else', wrong === 0 && changedCt === voxels.length && changedLab === voxels.length, JSON.stringify({ wrong, changedCt, changedLab, expect: voxels.length }));
+  check('patch: the base volume is byte-identical after (CT and labels), and the derived one is a separate copy', FX.ct.every((v, i) => v === ctBefore[i]) && FX.labels.every((v, i) => v === labelsBefore[i]) && derived.ct !== base.ct && derived.labels !== base.labels);
+  const tipV = HOLE_TIP;
+  check('patch: the derived volume keeps the API — sample, labelAt, slice — and carvedAt says which voxels the patch changed',
+    derived.sample(...tipV) < 60 && base.sample(...tipV) > 200 && derived.labelAt(...tipV) === 1 && base.labelAt(...tipV) === 0
+    && derived.carvedAt(...tipV) === true && derived.carvedAt(...PROC.holes[1].center) === false && derived.carvedAt(30, 30, 30) === false
+    && derived.slice('axial', tipV[2]).ct.length === base.slice('axial', tipV[2]).ct.length && derived.carvedVoxels === voxels.length, JSON.stringify([derived.sample(...tipV), base.sample(...tipV), derived.labelAt(...tipV)]));
+  const noLabels = createVolume({ header, ct: FX.ct });
+  noLabels.table = base.table;
+  const patched2 = applyPatch(base, await parsePatch(PF.files[`ssb/states/${PROC.keys.b}.ssbp.gz`], base));
+  check('patch: state B carries both holes (the second is carved there and not in A)', patched2.carvedAt(...PROC.holes[1].center) === true && patched2.carvedAt(...tipV) === true && patched2.carvedVoxels === PF.voxels.b.length && PF.voxels.b.length > voxels.length);
+
+  /* ---- state.js: the hash codec and the store ---- */
+  const has = (id) => GRAPH.has(id);
+  const P = (h) => parseHash(h, has).procedure || null;
+  check('hash: #p=<id>&step=<n> parses to { id, step, cor: null }; a missing step is 0', JSON.stringify(P(`#p=${PROC.id}&step=2`)) === JSON.stringify({ id: PROC.id, step: 2, cor: null }) && P(`#p=${PROC.id}`).step === 0);
+  check('hash: step clamps to 0..99 and rounds; a non-number is 0', P(`#p=${PROC.id}&step=500`).step === 99 && P(`#p=${PROC.id}&step=-4`).step === 0 && P(`#p=${PROC.id}&step=1.6`).step === 2 && P(`#p=${PROC.id}&step=abc`).step === 0 && P(`#p=${PROC.id}&step=`).step === 0);
+  check('hash: an unknown p, a non-procedure id and markup are dropped', P('#p=p.not-in-the-graph') === null && P('#p=s.maxillary-sinus') === null && P('#p=%3Cimg%20src%3Dx%3E') === null && P('#p=p.') === null && P(`#p=${PROC.id}%22%3E%3Cb%3E`) === null && P('#step=2') === null);
+  check('hash: cor keeps a well-formed key and drops markup or junk', P(`#p=${PROC.id}&cor=${PROC.corridor}`).cor === PROC.corridor && P(`#p=${PROC.id}&cor=%3Cscript%3E`).cor === null && P(`#p=${PROC.id}&cor=${'a'.repeat(80)}`).cor === null && P(`#p=${PROC.id}&cor=A%20B`).cor === null);
+  check('hash: a lab or a CT plane wins over a procedure', parseHash(`#lab=sphenoid&p=${PROC.id}`, has, { sphenoid: SPH_LAB }).procedure === undefined && !!parseHash(`#lab=sphenoid&p=${PROC.id}`, has, { sphenoid: SPH_LAB }).lab && P(`#ct=ax&p=${PROC.id}`) === null);
+  const st = createStore({ has, tierOf: () => 1, hash: `#${PROC_URL}&step=3&cor=${PROC.corridor}&${POSE_HASH()}`, prefs: {}, labs: {} });
+  check('hash: the canonical form writes p, step, cor and the pose, in that order, and parses back to itself', st.hash() === `#${PROC_URL}&step=3&cor=${PROC.corridor}&${POSE_HASH()}` && JSON.stringify(parseHash(st.hash(), has).procedure) === JSON.stringify(st.get().procedure), st.hash());
+  const st2 = createStore({ has, tierOf: () => 1, hash: `#${PROC_URL}&step=1`, prefs: {}, labs: {} });
+  check('state: a procedure implies a scope pose (the default when the hash gives none)', !!st2.get().scope && st2.get().scope.side === 'R' && st2.get().procedure.step === 1);
+  st2.setProcedure({ id: PROC.id, step: 2, cor: null });
+  check('state: setProcedure changes the step and keeps the pose', st2.get().procedure.step === 2 && !!st2.get().scope);
+  check('state: setProcedure refuses an id that is not a procedure or not in the graph', st2.setProcedure({ id: 's.maxillary-sinus', step: 1 }) === false && st2.setProcedure({ id: 'p.nope', step: 1 }) === false && st2.get().procedure.step === 2);
+  st2.setScope(null);
+  check('state: leaving the scope ends the procedure', st2.get().procedure === null && st2.get().scope === null);
+  for (const [name, fn] of [['the lab', (s) => s.setLab({ name: 'sphenoid', params: {} })], ['CT', (s) => s.setCt({ plane: 'axial', at: null })], ['the specimen stage', (s) => s.leaveStage()]]) {
+    const s3 = createStore({ has, tierOf: () => 1, hash: `#${PROC_URL}&step=1`, prefs: {}, labs: { sphenoid: SPH_LAB } });
+    fn(s3);
+    check(`state: entering ${name} ends the procedure`, s3.get().procedure === null, JSON.stringify(s3.get().procedure));
+  }
+
+  /* ---- mode-procedure.js: the index and the step -> state lookup ---- */
+  const idx = parseIndex(JSON.parse(PF.files['ssb/states/index.json'].toString('utf8')));
+  check('index: the fixture index parses to two states, the steps of one procedure and one corridor', idx.states.size === 2 && stepCount(idx, PROC.id) === 3 && idx.corridors.size === 1 && idx.corridors.get(PROC.corridor).procedures[0] === PROC.id);
+  check('index: step 0 is the intact specimen; steps 1-2 are state A, step 3 state B; a step past the end takes the last',
+    stateKeyFor(idx, PROC.id, 0) === null && stateKeyFor(idx, PROC.id, 1) === PROC.keys.a && stateKeyFor(idx, PROC.id, 2) === PROC.keys.a && stateKeyFor(idx, PROC.id, 3) === PROC.keys.b && stateKeyFor(idx, PROC.id, 9) === PROC.keys.b);
+  check('index: in a corridor its own position wins, the others fall back to the procedure\'s', stateKeyFor(idx, PROC.id, 1, PROC.corridor) === PROC.keys.b && stateKeyFor(idx, PROC.id, 0, PROC.corridor) === null && stateKeyFor(idx, PROC.id, 2, 'no-such') === PROC.keys.a);
+  const flat = parseIndex({ version: 1, states: { [PROC.keys.a]: { patch: 'x.ssbp.gz' } }, procedures: { [`${PROC.id}#2`]: PROC.keys.a, [`${PROC.id}#3`]: 'ffffffffff', 'not-a-p#1': PROC.keys.a } });
+  check('index: the flat "<p-id>#<n>" form is read too, and a key no state has is dropped', stepCount(flat, PROC.id) === 2 && flat.steps.size === 1);
+  check('index: junk is an empty index', parseIndex(null).states.size === 0 && parseIndex({ version: 2, states: {} }).states.size === 0 && parseIndex('x').steps.size === 0 && parseIndex({ version: 1, states: { 'not-hex': {} } }).states.size === 0);
+}
+const DIMS_FX = FX.meta.dims;
+const SPH_LAB = { params: [], presets: {} };
+
+/* The page on the fixture: the CT volume, the states, the stations and the landmarks are routed; the packs are the real ones.
+   `index`: 'fixture' | 'absent' (stamps.js without the index: the page must not ask) | a body string; `patch`: an override for the state files. */
+async function openProc(browser, base, hash, { index = 'fixture', reducedMotion = 'no-preference', track = true, patches = null } = {}) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion });
+  const asked = [];
+  await context.route(FX_ROUTE, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    const body = FX_FILES[name];
+    return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
+  });
+  await context.route(/\/ssb\/geometry\/(stations|landmarks)\.json(?:[?#].*)?$/, (route) => route.fulfill({ status: 200, contentType: 'application/json', body: PF.files[`ssb/geometry/${new URL(route.request().url()).pathname.split('/').pop()}`] }));
+  await context.route(/\/ssb\/states\/[^?#]+(?:[?#].*)?$/, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    asked.push(name);
+    if (name.endsWith('index.json') && index !== 'fixture') return route.fulfill({ status: 200, contentType: 'application/json', body: index });
+    if (patches && patches[name]) return patches[name](route);
+    const body = PF.files[name];
+    return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
+  });
+  /* stamps.js lists what is on disk: the page asks for the index only when it is listed there */
+  await context.route(/\/js\/ssb\/stamps\.js(?:[?#].*)?$/, (route) => {
+    const src = sourceOf('js/ssb/stamps.js').replace(/^\s*"ssb\/states\/[^\n]*\n/gm, '');
+    return route.fulfill({ status: 200, contentType: 'text/javascript', body: index === 'absent' ? src : `${src}\nSTAMPS["ssb/states/index.json"] = "fixture0";\n` });
+  });
+  const page = await context.newPage();
+  const errors = collectErrors(page);
+  if (track) allErrors.push(errors);
+  await page.goto(`${base}/ssb.html${hash}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await page.waitForFunction(() => document.querySelectorAll('#ssb-tree button[data-id]').length > 0, null, { timeout: 20000 });
+  await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
+  return { context, page, errors, asked };
+}
+
+const proc = (page, fn, arg) => page.evaluate(fn, arg);
+const waitShown = (page, step, key = undefined) => page.waitForFunction(([n, k]) => { const p = window.__ssb.procedure; const s = p && p.shown; return s && s.step === n && !p.busy && (k === undefined || s.key === k); }, [step, key === undefined ? undefined : key], { timeout: 30000 });
+const procHash = (page) => page.evaluate(() => location.hash);
+
+async function procedureTests(browser, base) {
+  const ID = PROC.id;
+
+  /* ===== no index: Play is disabled with its reason, and the page asks for nothing ===== */
+  {
+    const { context, page, errors, asked } = await openProc(browser, base, `#s=${ID}`, { index: 'absent' });
+    await page.waitForSelector('button.ssb-play');
+    await page.waitForFunction(() => window.__ssb.procedure && window.__ssb.procedure.status === 'absent', null, { timeout: 20000 });
+    const play = await proc(page, () => { const b = document.querySelector('button.ssb-play'); const n = document.querySelector('.ssb-play-note'); return { disabled: b.disabled, title: b.title, note: n.textContent, hidden: n.hidden }; });
+    check('procedure: with no index the Play button is disabled and says why (no 404 fetched, zero console errors)', play.disabled && /No dissection states/.test(play.note) && !play.hidden && /No dissection states/.test(play.title) && asked.length === 0 && errors.length === 0, JSON.stringify({ play, asked, errors }));
+    await context.close();
+  }
+  {
+    const { context, page, errors } = await openProc(browser, base, `#s=${ID}`, { index: '{"version": 1, "states": ' });
+    await page.waitForFunction(() => window.__ssb.procedure && window.__ssb.procedure.status === 'failed', null, { timeout: 20000 });
+    const play = await proc(page, () => ({ disabled: document.querySelector('button.ssb-play').disabled, note: document.querySelector('.ssb-play-note').textContent }));
+    check('procedure: a malformed index disables Play with a reason, nothing throws', play.disabled && /could not be read|not in a format/.test(play.note) && errors.length === 0, JSON.stringify({ play, errors }));
+    await context.close();
+  }
+
+  /* ===== Play, and a procedure the index does not list ===== */
+  {
+    const { context, page } = await openProc(browser, base, `#s=${ID}`);
+    await page.waitForFunction(() => { const b = document.querySelector('button.ssb-play'); return b && !b.disabled; }, null, { timeout: 20000 });
+    await page.click('button.ssb-play');
+    await waitShown(page, 0);
+    const st = await proc(page, () => ({ hash: location.hash, stage: document.getElementById('ssb-app').dataset.stage, proc: !document.getElementById('ssb-proc').hidden, scope: window.__ssb.scope.active, key: window.__ssb.procedure.stateKey }));
+    check('procedure: Play starts the procedure at step 0 on the scope stage: the hash, the controls, the intact state', /p=p\.anterior-ethmoidectomy&step=0/.test(st.hash) && st.stage === 'scope' && st.proc && st.scope && st.key === null, JSON.stringify(st));
+    await page.evaluate(() => { location.hash = '#s=p.draf-iia'; });
+    await page.waitForFunction(() => { const b = document.querySelector('button.ssb-play'); return b && b.dataset.play === 'p.draf-iia'; }, null, { timeout: 10000 });
+    const other = await proc(page, () => ({ disabled: document.querySelector('button.ssb-play').disabled, note: document.querySelector('.ssb-play-note').textContent }));
+    check('procedure: a procedure the index does not list has Play disabled with its reason', other.disabled && /No dissection states are built for this procedure/.test(other.note), JSON.stringify(other));
+    await context.close();
+  }
+
+  /* ===== hostile and unknown hashes are ignored ===== */
+  for (const [name, hash] of [['markup in p', '#p=%3Cimg%20src%3Dx%20onerror%3D%22window.__pwn%3D1%22%3E&step=1'], ['a non-procedure id', '#p=s.maxillary-sinus&step=1'], ['a procedure the index does not list', '#p=p.draf-iia&step=2&cor=nope'], ['markup in cor', `#p=${ID}&step=1&cor=%3Cscript%3Ewindow.__pwn%3D1%3C%2Fscript%3E`]]) {
+    const { context, page, errors } = await openProc(browser, base, hash);
+    await page.waitForFunction(() => window.__ssb.procedure, null, { timeout: 20000 });
+    await page.waitForTimeout(400);
+    const r = await proc(page, () => ({ hash: location.hash, pwn: window.__pwn || null, imgs: document.querySelectorAll('#ssb-proc img, #ssb-proc script').length, shown: window.__ssb.procedure.shown, stage: document.getElementById('ssb-app').dataset.stage }));
+    const survives = name === 'markup in cor';
+    check(`procedure: a hostile #p= (${name}) is ignored — ${survives ? 'the procedure plays without the bad cor' : 'no procedure, no stage change'}, nothing executes, zero console errors`,
+      r.pwn === null && r.imgs === 0 && errors.length === 0 && (survives ? !/cor=/.test(r.hash) && /p=p\.anterior-ethmoidectomy&step=1/.test(r.hash) : !/p=/.test(r.hash) && r.shown === null), JSON.stringify({ r, errors }));
+    await context.close();
+  }
+
+  /* ===== step 1: the hole is open, the pose through it is free, the tip's label is the patch's ===== */
+  {
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=1`);
+    await waitShown(page, 1, PROC.keys.a);
+    await page.waitForFunction(() => window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
+    await page.click('#ssb-scope-controls button[data-shaft="2.7"]');          /* the 4 mm hole passes the 2.7 mm telescope; the shaft is never in the hash */
+    await page.evaluate((h) => { location.hash = h; }, `#${PROC_URL}&step=1&${POSE_HASH()}`);
+    await page.waitForFunction((d) => window.__ssb.scope.pose && window.__ssb.scope.pose.depth === d, PROC.pose.depth, { timeout: 10000 });
+    await nextFrames(page, 4);
+    const at1 = await proc(page, () => ({ pose: window.__ssb.scope.pose, tip: window.__ssb.scope.tip, label: window.__ssb.scope.tipLabel, sample: window.__ssb.scope.sampleAt(window.__ssb.scope.tip), hud: window.__ssb.scope.hud, key: window.__ssb.scope.stateKey, hash: location.hash, carved: window.__ssb.procedure.carvedVoxels }));
+    check('procedure: at step 1 the pose through the hole is free (depth kept, not limited) and the scope reads the dissected volume (the plate is air there)',
+      at1.pose.depth === PROC.pose.depth && !at1.hud.limited && at1.key === PROC.keys.a && at1.sample < 60 && at1.carved === PF.voxels.a.length, JSON.stringify(at1));
+    check('procedure: the tip\'s label there is the patch\'s (the right maxillary sinus\'s, where the base has none)', at1.label && at1.label.index === 1 && at1.label.name === 's.maxillary-sinus.R', JSON.stringify(at1.label));
+    check('procedure: the hash is canonical and carries the step and the pose', at1.hash === `#${PROC_URL}&step=1&${POSE_HASH()}`, at1.hash);
+
+    /* the think prompt stays hidden until revealed, by click or by key */
+    const think0 = await proc(page, () => { const t = document.querySelector('.ssb-proc-think'); const b = document.querySelector('.ssb-proc-think-toggle'); return { exists: !!t, hidden: t && t.hidden, expanded: b && b.getAttribute('aria-expanded'), text: t && t.textContent }; });
+    check('procedure: the step\'s `think` is hidden behind "Think first" until revealed', think0.exists && think0.hidden === true && think0.expanded === 'false', JSON.stringify(think0));
+    await page.click('.ssb-proc-think-toggle');
+    const think1 = await proc(page, () => ({ hidden: document.querySelector('.ssb-proc-think').hidden, expanded: document.querySelector('.ssb-proc-think-toggle').getAttribute('aria-expanded') }));
+    await page.keyboard.press('t');
+    const think2 = await proc(page, () => document.querySelector('.ssb-proc-think').hidden);
+    await page.keyboard.press('t');
+    const think3 = await proc(page, () => document.querySelector('.ssb-proc-think').hidden);
+    check('procedure: a click reveals the think, the T key hides and shows it', think1.hidden === false && think1.expanded === 'true' && think2 === true && think3 === false, JSON.stringify([think1, think2, think3]));
+
+    /* the step's structures and hazards are drawn through, the hazards hatched */
+    const em = await spec(page, () => ({ nodes: window.__ssb.specimen.nodes().filter((n) => n.emphasis).map((n) => ({ id: n.id, e: n.emphasis, hazard: n.hazard, visible: n.visible })), set: window.__ssb.specimen.emphasis }));
+    const lam = em.nodes.filter((n) => n.id === 's.lamina-papyracea');
+    check('procedure: step 1 hatches the `at` of its risk hazard (h.lamina-papyracea-breach -> s.lamina-papyracea) and draws it through what hides it', lam.length > 0 && lam.every((n) => n.hazard && n.e === 'hazard' && n.visible) && em.set.hazard.includes('s.lamina-papyracea'), JSON.stringify(em));
+    check('procedure: step 1 marks its `see` structures that the specimen has, and only those of the step', em.set.see.includes('s.uncinate-process') && em.nodes.every((n) => em.set.see.includes(n.id) || em.set.hazard.includes(n.id)), JSON.stringify(em.set));
+
+    /* Previous / Next and the keys */
+    await page.click('#ssb-proc button[data-act="next"]');
+    await waitShown(page, 2);
+    const h2 = await procHash(page);
+    await page.keyboard.press(']');
+    await waitShown(page, 3, PROC.keys.b);
+    const h3 = await procHash(page);
+    const at3 = await proc(page, () => ({ next: document.querySelector('#ssb-proc button[data-act="next"]').disabled, second: window.__ssb.procedure.carvedAt([0, 12, 4]), where: document.querySelector('.ssb-proc-where').textContent }));
+    check('procedure: Next and ] move one step and rewrite the hash; step 3 is the second state, with the second hole carved and Next disabled', /step=2/.test(h2) && /step=3/.test(h3) && at3.next && at3.second === true && /Step 3 of 3/.test(at3.where), JSON.stringify({ h2, h3, at3 }));
+    await page.keyboard.press(']');
+    await page.waitForTimeout(150);
+    check('procedure: ] past the last step does nothing', (await procHash(page)) === h3);
+    await page.click('#ssb-proc button[data-act="prev"]');
+    await waitShown(page, 2, PROC.keys.a);
+    await page.keyboard.press('[');
+    await waitShown(page, 1, PROC.keys.a);
+    const back1 = await proc(page, () => ({ second: window.__ssb.procedure.carvedAt([0, 12, 4]), hash: location.hash, pose: window.__ssb.scope.pose }));
+    check('procedure: Previous and [ step back one at a time; step 2 is the same state as step 1 (it removes nothing); the second hole closes again', back1.second === false && /step=1/.test(back1.hash), JSON.stringify(back1));
+
+    /* back to step 0: the same pose clamps */
+    await page.keyboard.press('[');
+    await waitShown(page, 0, null);
+    await nextFrames(page, 4);
+    const at0 = await proc(page, () => ({ pose: window.__ssb.scope.pose, hud: window.__ssb.scope.hud, key: window.__ssb.scope.stateKey, hash: location.hash, intact: window.__ssb.scope.sampleAt([0, 8, -4]) }));
+    check('procedure: stepping back to 0 clamps the same pose again at the plate (limited by bone), the base volume is what the scope reads', at0.pose.depth < PROC.pose.depth && at0.hud.limited && at0.hud.limitedBy === 'bone' && at0.key === null && at0.intact > 200 && at0.pose.yaw === PROC.pose.yaw, JSON.stringify(at0));
+
+    /* CT at that point: the base value, and the carved outline */
+    await page.keyboard.press(']');
+    await waitShown(page, 1, PROC.keys.a);
+    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready' && Object.values(window.__ssb.ct.renders).some((n) => n > 0), null, { timeout: 30000 });
+    await page.waitForFunction(() => window.__ssb.ct.carvedPixels('axial') > 0 || window.__ssb.ct.carvedPixels('coronal') > 0 || window.__ssb.ct.carvedPixels('sagittal') > 0, null, { timeout: 10000 }).catch(() => {});
+    const ctv = await proc(page, (tip) => ({
+      hash: location.hash, carved: window.__ssb.ct.carved, pinned: window.__ssb.procedure.pinned, base: window.__ssb.ct.sampleAt(tip), pixels: ['axial', 'coronal', 'sagittal'].map((pl) => window.__ssb.ct.carvedPixels(pl)),
+      proc: window.__ssb.procedure.shown, scope: window.__ssb.scope.engaged, stage: document.getElementById('ssb-app').dataset.stage,
+    }), HOLE_TIP);
+    check('procedure: CT at the tip still samples the base value (the scan as it was) and outlines the carved voxels; the procedure has ended and the outline is pinned',
+      /^#ct=/.test(ctv.hash) && !/p=/.test(ctv.hash) && ctv.stage === 'ct' && ctv.base > 200 && ctv.carved && ctv.pinned && ctv.pixels.some((n) => n > 0) && ctv.proc === null && !ctv.scope, JSON.stringify(ctv));
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    await page.waitForTimeout(200);
+    const after = await proc(page, () => ({ carved: window.__ssb.ct.carved, pinned: window.__ssb.procedure.pinned, key: window.__ssb.procedure.stateKey, nodes: window.__ssb.specimen.stateKey, em: window.__ssb.specimen.emphasis }));
+    check('procedure: leaving CT clears the pinned outline, and the specimen is intact again', !after.carved && !after.pinned && after.key === null && after.nodes === null && after.em.see.length === 0 && after.em.hazard.length === 0, JSON.stringify(after));
+    await context.close();
+  }
+
+  /* ===== a step lands on its station: the state's own pose first; a step with none keeps the pose and says so ===== */
+  for (const reduce of ['reduce', 'no-preference']) {
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=0&${POSE_HASH({ lens: 0 })}`, { reducedMotion: reduce });
+    await waitShown(page, 0);
+    await page.waitForFunction(() => window.__ssb.scope.engaged && window.__ssb.scope.collision && window.__ssb.scope.stationsState !== 'loading' && window.__ssb.scope.stationsState !== 'idle', null, { timeout: 30000 });
+    await page.click('#ssb-scope-controls button[data-shaft="2.7"]');
+    await page.keyboard.press(']');
+    await waitShown(page, 1, PROC.keys.a);
+    const flew = reduce === 'reduce' ? await proc(page, () => ({ flying: window.__ssb.scope.flying, lens: window.__ssb.scope.pose.lens })) : null;
+    await page.waitForFunction(() => !window.__ssb.scope.flying && window.__ssb.scope.pose.lens === 30, null, { timeout: 10000 });
+    const pose1 = await proc(page, () => window.__ssb.scope.pose);
+    check(`procedure: stepping to 1 flies to the step's station from the state's own table (lens 0 -> 30, the pose through the hole)${reduce === 'reduce' ? ', a cut under reduced motion' : ''}`,
+      pose1.lens === 30 && pose1.depth === PROC.station.depth && pose1.yaw === PROC.station.yaw && (reduce !== 'reduce' || (flew.flying === false && flew.lens === 30)), JSON.stringify({ pose1, flew }));
+    await page.keyboard.press(']');
+    await waitShown(page, 2, PROC.keys.a);
+    const keep = await proc(page, () => ({ pose: window.__ssb.scope.pose, note: window.__ssb.procedure.note, shown: document.querySelector('.ssb-proc-note').textContent }));
+    check('procedure: a step whose station has no pose here keeps the scope where it is and says so', keep.pose.lens === 30 && keep.pose.depth === PROC.station.depth && /No pose for this state/.test(keep.note) && /No pose for this state/.test(keep.shown), JSON.stringify(keep));
+    await context.close();
+  }
+
+  /* ===== corridors ===== */
+  {
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=1&cor=${PROC.corridor}&${POSE_HASH()}`);
+    await waitShown(page, 1, PROC.keys.b);
+    const cor = await proc(page, () => ({ hash: location.hash, buttons: [...document.querySelectorAll('#ssb-proc .ssb-proc-cor button')].map((b) => [b.dataset.cor, b.getAttribute('aria-pressed'), b.textContent]) }));
+    check('procedure: a corridor key in the hash picks the corridor\'s own state for the step (B at step 1), is kept in the hash and shown in the picker',
+      /cor=fixture-corridor/.test(cor.hash) && cor.buttons.length === 2 && cor.buttons[0][0] === '' && cor.buttons[1][0] === PROC.corridor && cor.buttons[1][1] === 'true' && cor.buttons[0][1] === 'false' && cor.buttons[1][2] === 'Fixture corridor', JSON.stringify(cor));
+    await page.click('#ssb-proc .ssb-proc-cor button[data-cor=""]');
+    await waitShown(page, 1, PROC.keys.a);
+    check('procedure: the picker\'s "Own entry" drops the corridor (state A again, no cor in the hash)', !/cor=/.test(await procHash(page)));
+    await context.close();
+  }
+  {
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=1&cor=not-a-corridor&${POSE_HASH()}`);
+    await waitShown(page, 1, PROC.keys.a);
+    check('procedure: an unknown corridor is dropped from the hash and the procedure\'s own state plays', !/cor=/.test(await procHash(page)));
+    await context.close();
+  }
+
+  /* ===== a state that cannot be loaded leaves the specimen intact, says so, and nothing else breaks ===== */
+  {
+    const bad = { [`ssb/states/${PROC.keys.a}.ssbp.gz`]: (route) => route.fulfill({ status: 200, body: Buffer.from('not a patch'), headers: { 'content-type': 'application/octet-stream' } }) };
+    const { context, page, errors } = await openProc(browser, base, `#${PROC_URL}&step=1&${POSE_HASH()}`, { patches: bad, track: false });
+    await waitShown(page, 1, null);
+    const r = await proc(page, () => ({ note: document.querySelector('.ssb-proc-note').textContent, hidden: document.querySelector('.ssb-proc-note').hidden, badge: document.querySelector('.ssb-proc-badge').textContent, engaged: window.__ssb.scope.engaged }));
+    check('procedure: a damaged patch shows the specimen intact with a note, the scope keeps working', /could not be loaded/.test(r.note) && !r.hidden && /intact/.test(r.badge) && r.engaged, JSON.stringify(r));
+    check('procedure: the damaged patch\'s only console noise is the player\'s own error line', errors.every((e) => /patch|VolumeError|dissection/i.test(e.text)), JSON.stringify(errors));
+    await context.close();
+  }
+
+  /* ===== real data: runs once P1b's ssb/states/index.json exists ===== */
+  if (fs.existsSync(path.join(ROOT, 'ssb/states/index.json'))) await procedureRealDataTests(browser, base);
+  else console.log('  (procedure: ssb/states/index.json is not in this build — the real-data checks are skipped until P1b merges)');
+}
+
+/* Every state of the committed index parses and applies on the real volume; the first state's lining pack replaces the base lining. */
+async function procedureRealDataTests(browser, base) {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p));
+  const json = (p) => JSON.parse(read(p).toString('utf8'));
+  const meta = json('ssb/ct/ct.json');
+  const lb = zlib.gunzipSync(read('ssb/ct/labels.u16.gz'));
+  const vol = createVolume({ header: parseHeader(meta), ct: new Uint8Array(zlib.gunzipSync(read('ssb/ct/ct.u8.gz'))), labels: new Uint16Array(lb.buffer.slice(lb.byteOffset, lb.byteOffset + lb.length)), table: parseTable(json('ssb/geometry/labels.json')) });
+  const index = json('ssb/states/index.json');
+  const keys = Object.keys(index.states || {});
+  let bad = [];
+  for (const key of keys) {
+    try {
+      const patch = await parsePatch(read(`ssb/states/${index.states[key].patch || key + '.ssbp.gz'}`), vol);
+      const derived = applyPatch(vol, patch);
+      if (!(derived.carvedVoxels > 0)) bad.push(`${key}: carves nothing`);
+    } catch (e) { bad.push(`${key}: ${e.message}`); }
+  }
+  check('procedure (real data): every state in ssb/states/index.json parses and applies on the real volume', keys.length > 0 && bad.length === 0, bad.slice(0, 3).join(' | '));
+  const parsed = parseIndex(index);
+  const first = [...parsed.steps].find(([k, v]) => v && /^p\./.test(k) && parsed.states.get(v) && parsed.states.get(v).hasLining);
+  if (!first) { check('procedure (real data): some state carries a lining pack', false, 'none of the indexed states has a lining'); return; }
+  const [stepKey, key] = first;
+  const [pid, n] = stepKey.split('#');
+  const { context, page } = await openProc(browser, base, `#p=${pid}&step=${n}`, { index: JSON.stringify(index) });
+  await page.waitForFunction((k) => window.__ssb.procedure && window.__ssb.procedure.shown && window.__ssb.procedure.shown.key === k && !window.__ssb.procedure.busy, key, { timeout: 60000 });
+  await nextFrames(page, 4);
+  const nodes = await specNodes(page);
+  const baseLining = nodes.filter((n2) => n2.lining && !n2.state);
+  const stateLining = nodes.filter((n2) => n2.lining && n2.state === key);
+  check('procedure (real data): the first lining state\'s pack replaces the base lining (the lining nodes on show are the state\'s, the base lining is hidden)', stateLining.length > 0 && stateLining.some((n2) => n2.visible) && baseLining.every((n2) => !n2.visible), JSON.stringify({ state: stateLining.length, base: baseLining.filter((n2) => n2.visible).length }));
+  await context.close();
+}
+
 async function sphenoidPageTests(browser, base) {
   const { context, page } = await open(browser, base, '#lab=sphenoid');
   const ps = await parts(page);
@@ -3412,6 +3762,11 @@ async function main() {
   if (ONLY === 'scope') {
     scopeUnitTests();
     await scopeTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'procedure') {
+    await procedureUnitTests();
+    await procedureTests(browser, base);
     return finish(browser, server);
   }
 
@@ -3887,6 +4242,8 @@ async function main() {
   /* ===== 9. the Endoscope stage (js/ssb/scope.js, mode-endoscope.js, ui-endoscope.js; docs/ssb.md 3) ===== */
   scopeUnitTests();
   await scopeTests(browser, base);
+  await procedureUnitTests();
+  await procedureTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

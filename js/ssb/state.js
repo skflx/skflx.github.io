@@ -20,7 +20,7 @@
    a no-op, never an exception (docs/decisions.md section 3).
    ============================================================= */
 
-import { parseScope, parseStationLink, formatScope, clampPose, samePose } from './scope.js?v=844c8624';
+import { parseScope, parseStationLink, formatScope, clampPose, samePose, POSE_DEFAULT } from './scope.js?v=844c8624';
 
 export const TIER_MIN = 1;
 export const TIER_MAX = 3;
@@ -92,6 +92,36 @@ function sameLab(a, b) {
     return keys.length === Object.keys(b.params).length && keys.every((k) => a.params[k] === b.params[k]);
 }
 
+/* ---------------- procedure player ---------------- */
+
+/* The procedure hash `p=<p-id>&step=<n>[&cor=<corridor>]` (docs/ssb.md 7.3). The store only knows the shape and the
+   graph; whether the id is in ssb/states/index.json, how many steps it has and which corridors list it are the
+   player's to check once the index has loaded (mode-procedure.js), which clamps `step` and drops an unknown `cor`. */
+export const STEP_MAX = 99;
+const PROCEDURE_ID = /^p\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const CORRIDOR_KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/* Any input -> an integer step in [0, STEP_MAX], or null when it is not a number. */
+export function clampStep(value) {
+    if (typeof value === 'string' && value.trim() === '') return null;
+    if (value === null || value === undefined || typeof value === 'boolean') return null;
+    const n = Number(value);
+    if (!Number.isFinite(n)) return null;
+    return Math.min(STEP_MAX, Math.max(0, Math.round(n)));
+}
+
+/* { id, step, cor } -> the same whitelisted (id must match the p-id shape and be in the graph, `has`), or null. */
+export function normalizeProcedure(proc, has) {
+    if (!proc || typeof proc.id !== 'string' || !PROCEDURE_ID.test(proc.id) || !has(proc.id)) return null;
+    const cor = typeof proc.cor === 'string' && proc.cor.length <= 48 && CORRIDOR_KEY.test(proc.cor) ? proc.cor : null;
+    return { id: proc.id, step: clampStep(proc.step) ?? 0, cor };
+}
+
+function sameProcedure(a, b) {
+    if (a === b) return true;
+    return !!a && !!b && a.id === b.id && a.step === b.step && a.cor === b.cor;
+}
+
 /* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&ct=<plane>&at=<r,a,s>&scope=<pose>&q=<full|lite>'
    -> { selection?, tier?, lab?, ct?, scope?, station?, cursor?, quality? } (a lab wins over
    a ct, a ct over a scope; `at` without a plane is the specimen's 3D cursor,
@@ -130,6 +160,8 @@ export function parseHash(hash, has, labs = {}) {
     const plane = out.lab ? null : clampCtPlane(params.get('ct'));
     const at = parseCtAt(params.get('at'));
     const scopeText = out.lab || plane ? null : params.get('scope');
+    const procedure = out.lab || plane ? null : normalizeProcedure({ id: params.get('p'), step: params.get('step'), cor: params.get('cor') }, has);
+    if (procedure) out.procedure = procedure;
     const scope = parseScope(scopeText);
     if (scope) out.scope = scope;
     else if (parseStationLink(scopeText)) out.station = scopeText;
@@ -157,6 +189,10 @@ export function formatHash(state, labs = {}) {
             const v = state.lab.params[p.key];
             if (v !== undefined && v !== p.default) parts.push(p.key + '=' + num(v));
         }
+    }
+    if (state.procedure && !state.lab && !state.ct) {
+        parts.push('p=' + state.procedure.id, 'step=' + state.procedure.step);
+        if (state.procedure.cor) parts.push('cor=' + state.procedure.cor);
     }
     if (state.ct && !state.lab && clampCtPlane(state.ct.plane)) {
         parts.push('ct=' + CT_CODE[state.ct.plane]);
@@ -252,7 +288,7 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, scope, station, cursor, quality }. Invariant: the
+/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is one of four: the specimen (lab, ct and scope all null), the variant lab
@@ -266,7 +302,9 @@ export function savePrefs(prefs) {
    CT crosshair is `ct.at`, which the store keeps equal to `cursor` while the
    CT stage shows, and `cursor` is what survives in the specimen stage (where
    `ct` is null) so a click on a 3D surface can land the CT crosshair there.
-   `quality` is the rendering override from the hash ('full' | 'lite'), null
+   `procedure` ({ id, step, cor }, normalizeProcedure) is the procedure player (mode-procedure.js): not a fifth stage but
+   the scope stage with a dissection state behind it, so it implies a scope pose (the default one when none is given) and
+   ends with the scope, the lab or CT. `quality` is the rendering override from the hash ('full' | 'lite'), null
    for the device's choice. The cursor is clamped to the volume's bounds,
    which only the loaded volume knows: setCtBounds() hands them in and
    re-clamps, and until then the limit is a sanity range.
@@ -279,15 +317,17 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
     const selection = fromUrl.selection || null;
     let ctBounds = null;
     const ct0 = fromUrl.ct ? normalizeCt(fromUrl.ct, ctBounds) : null;
+    const procedure0 = ct0 ? null : fromUrl.procedure || null;
     let state = Object.freeze({
         selection,
         tier: Math.max(fromUrl.tier || prefs.tier || TIER_DEFAULT, selection ? tierOf(selection) : TIER_MIN),
         lab: fromUrl.lab || null,
         ct: ct0,
-        scope: ct0 ? null : fromUrl.scope || null,
+        scope: ct0 ? null : fromUrl.scope || (procedure0 && !fromUrl.station ? clampPose(POSE_DEFAULT) : null),
         station: ct0 || fromUrl.scope ? null : fromUrl.station || null,
         cursor: ct0 ? ct0.at : clampAt(fromUrl.cursor, ctBounds),
         quality: fromUrl.quality || null,
+        procedure: procedure0,
     });
     const subs = new Set();
 
@@ -295,7 +335,9 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const prev = state;
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
-            && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality) return false;
+            && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality
+            && sameProcedure(next.procedure, prev.procedure)) return false;
+        if (sameProcedure(next.procedure, prev.procedure)) next.procedure = prev.procedure;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
         if (samePose(next.scope, prev.scope)) next.scope = prev.scope;
@@ -329,7 +371,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         setLab(lab, meta = { source: 'lab' }) {
             if (lab === null) return set({ lab: null }, meta);
             const next = normalizeLab(lab, labs);
-            return next ? set({ lab: next, ct: null, scope: null, station: null }, meta) : false;
+            return next ? set({ lab: next, ct: null, scope: null, station: null, procedure: null }, meta) : false;
         },
         /* Enter or change the CT stage ({ plane, at }), or leave it (null):
            the plane is whitelisted and the crosshair clamped to the bounds;
@@ -340,21 +382,31 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const next = normalizeCt(ct, ctBounds);
             if (!next) return false;
             const at = next.at || state.cursor;
-            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null, scope: null, station: null }, meta);
+            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null, scope: null, station: null, procedure: null }, meta);
         },
         /* Enter or change the endoscope ({ side, depth, yaw, pitch, roll, lens },
            clamped here too), or leave it (null, back to the specimen). Entering
            leaves the lab and CT. */
         setScope(pose, meta = { source: 'scope' }) {
-            if (pose === null) return set({ scope: null }, meta);
+            if (pose === null) return set({ scope: null, procedure: null }, meta);
             const next = clampPose(pose);
             return next ? set({ scope: next, lab: null, ct: null, station: null }, meta) : false;
+        },
+        /* Start, change or end (null) the procedure player. Starting puts the scope on `pose` (a whole pose; else the pose it
+           has, else the default) and leaves the lab and CT; the step is only bounded by STEP_MAX here (the player knows the
+           procedure's steps and clamps through this same method). */
+        setProcedure(proc, meta = { source: 'procedure' }, pose = null) {
+            if (proc === null) return set({ procedure: null }, meta);
+            const next = normalizeProcedure(proc, has);
+            if (!next) return false;
+            const start = (pose ? clampPose(pose) : null) || state.scope || (state.station ? null : clampPose(POSE_DEFAULT));
+            return set({ procedure: next, scope: start, station: start ? null : state.station, lab: null, ct: null }, meta);
         },
         /* Turn a pending station link into its pose (a whole pose) or drop it (null: an unknown station, or no
            table). The one writer of `station` besides the hash. */
         resolveStation(pose, meta = { source: 'url' }) {
             if (!state.station) return false;
-            const next = pose ? clampPose(pose) : null;
+            const next = (pose ? clampPose(pose) : null) || (state.procedure ? clampPose(POSE_DEFAULT) : null);      /* a procedure always has a pose */
             return set({ station: null, scope: next, lab: null, ct: null }, meta);
         },
         /* Move the 3D cursor (RAS mm, clamped), or clear it (null). In the CT
@@ -373,7 +425,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             return set(state.ct ? { cursor, ct: { plane: state.ct.plane, at: cursor } } : { cursor }, { source: 'ct-bounds' });
         },
         /* Back to the specimen stage. */
-        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null }, meta); },
+        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null, procedure: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
         applyHash(next) {
             const p = parseHash(next, has, labs);
@@ -381,7 +433,9 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
             const ct = p.ct ? normalizeCt(p.ct, ctBounds) : null;
             const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
-            return set({ selection, tier, lab: p.lab || null, ct, scope: ct ? null : p.scope || null, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null }, { source: 'url' });
+            const procedure = ct ? null : p.procedure || null;
+            const scope = ct ? null : p.scope || (procedure && !p.station ? state.scope || clampPose(POSE_DEFAULT) : null);
+            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),
