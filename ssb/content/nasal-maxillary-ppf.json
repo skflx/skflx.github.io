@@ -5673,6 +5673,25 @@
         "src.harvey-2009-itf"
       ],
       "review": "draft"
+    },
+    {
+      "id": "m.nasal-csa-decongestion",
+      "name": "Nasal mean cross-section, before and after decongestion",
+      "tier": 3,
+      "unit": "cm² (mean cross-section before decongestion)",
+      "value": {
+        "mean": 2.8
+      },
+      "method": "MRI",
+      "conf": "med",
+      "what": "Mean coronal cross-section of the nasal airway between the first vertical plane and the posterior septum, 2.8 cm² before and 3.8 cm² (+34.8 %) 10 minutes after topical xylometazoline 0.1 %. The gain was concentrated at the turbinates and least in the superior third and around the valve; the mucosal surface area did not change.",
+      "note": "Healthy volunteers, one nasal-cycle phase each; an MRI airway segmentation, not a CT threshold, so the absolute values are not comparable with this specimen's label (about 1.6 cm² per side over the same span). The reference specimen's decongested state is calibrated on the ratio 3.8 / 2.8, not on the absolute values (docs/ssb.md 5.9).",
+      "src": [
+        "src.xiao-2021-decongestion"
+      ],
+      "review": "draft",
+      "n": 10,
+      "population": "healthy adults aged 21–38"
     }
   ],
   "hazards": [

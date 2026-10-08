@@ -728,14 +728,18 @@ on the decongested state (the operations start by decongesting).
   unchanged. d is the smallest step (0.25 mm) that raises the specimen's
   mean per-side CSA over that span by at least the same ratio (3.8 / 2.8).
   Prototype: d = 1.0 mm gives × 1.39, and the superior third gains least in
-  absolute terms (0.13 cm² against 0.25 and 0.24). The ratio, not Xiao's
+  absolute terms (0.13 cm² against 0.25 and 0.24); the pipeline reproduces
+  it (`tools/ssb-pipeline/uw/mucosa.py decongested`, record in
+  `ssb/states/mucosa.json`, "never closer than 0.5 mm" read as: a voxel
+  adjacent to bone, at 0.5 mm, may change; bone itself never does). The ratio, not Xiao's
   absolute values, is used: the specimen's label is a bone-window CT
   threshold and Xiao's an MRI segmentation. Measured on NasalSeg's CTs at our
   threshold (POP1, 10–90 % of the cavity's length, CP-POP1), the standard
   specimen's two-side mean cross-section is ordinary (62nd percentile of
   the clear subjects), so the gap to Xiao's 2.8 cm² is method and
   population (MRI, adults aged 21–38), not a narrow head or a segmentation
-  defect.
+  defect. The operator never changes the septum's midplane (R = 0), so
+  decongestion cannot perforate it.
 - **Congested** is physiological: the congested phase of the nasal cycle,
   on both sides. Its target is POP1's median of the more congested side's
   mean cross-section against the subject's two-side mean (`profiles.summary
@@ -746,6 +750,41 @@ on the decongested state (the operations start by decongesting).
   used: at our threshold it is near the population's 5th percentile of
   sides, with a smaller/larger ratio at the 6th (POP1; POP0's "beyond every
   subject" compared rim-inclusive labels with ours).
+  **Built (DC1); turbinates only (CP-3b).** The CT grid is 0.5 mm, so
+  growing the tissue by d < 0.5 mm changes nothing and the first step that
+  does is a whole layer of voxels: with all three erectile labels advancing
+  the ratio goes 1.00 → 0.76 (d = 0.5 mm) → 0.66, and the target 0.873 is
+  not reachable within ± 0.04. With the two turbinates only, the first layer
+  gives 0.851 (d = 0.5 mm; the septum alone 0.909, both together 0.76), which
+  is within ± 0.04 and puts the largest loss in the middle third along A. The
+  shipped congested state is therefore the **turbinates' layer**, as POP1's
+  finding that the loss sits at the turbinates suggests. Accepted at CP-3b:
+  the septum's erectile tissue is the septal swell body opposite the middle
+  turbinate head (`s.septal-swell-body`), not the whole septal half the
+  three-label operator grows, so the turbinates alone are the closer
+  approximation on a 0.5 mm grid; adding the swell body as a bounded septal
+  region is a refinement for when it has geometry, not a correction; `mucosa.py congested --group all` builds the
+  three-label operator instead (ratio 0.76, outside the tolerance). The
+  patch writes one constant display (the median of the erectile soft tissue)
+  and the labels of the nearest turbinate. The owner may still overrule
+  (roadmap O8).
+- **Pipeline and files (WP DC1).** `mucosa.py` writes a patch and a lining
+  pack per state (`ssb/states/<key>.ssbp.gz`, `ssb/models/lining-<key>.glb.gz`;
+  key = first 10 hex of the SHA-256 of `mucosa.dec` / `mucosa.cong`), with the
+  calibration table in `ssb/states/mucosa.json`; `dissect.py` applies the
+  decongested operator first, so every dissection patch is whole from the
+  as-scanned base (it includes the decongested voxels) and records
+  `mucosa: "dec"`, and copies both mucosal states into `index.json` (`states`
+  with `units: []`, and a top-level `mucosa: {dec, cong}` naming their keys
+  and calibration). The erectile walls (turbinates, septum) get remnant meshes
+  `<id>.<side>@decongested` / `@congested` at half their usual triangle budget
+  (their surface moves in every mucosal state), so the lining keeps about
+  two thirds of the state budget. Runtime: `state.mu` (§7.3); the procedure
+  player (`mode-procedure.js`) loads a mucosal state like any other state
+  (patch → scope volume, pack → specimen) when `mu` is not `scan` and no
+  procedure plays, and a procedure always uses the decongested one (step 0
+  with no entry state is the decongested state itself); the toggle is in the
+  Specimen controls (`ui-specimen.js`). CT keeps the base image.
 - **What decongestion does not open.** At Xiao's ratio none of E5's three
   closed views opens. The olfactory cleft and the inferior meatus are
   closed to the 4 mm shaft, and open to the 2.7 mm telescope even as
@@ -1504,8 +1543,10 @@ the graph and clamps `step` to 0..99; the player, once the index has loaded,
 drops a procedure the index does not list and clamps `step` to its steps, and `cor` (a corridor key there that lists the
 procedure) makes the state accumulate the corridor's earlier procedures
 instead of the procedure's own `entry`. It implies the scope stage on the
-decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1) is
-ignored while a procedure plays; an unknown value is dropped.
+decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1, built;
+`state.mu`, default `scan`, not written when `scan`) is ignored while a
+procedure plays and not written to the hash then; an unknown value (any other
+case or text) is dropped.
 
 ### 7.4 Rendering
 

@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=a76d5509';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=b2395d85';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=b121b3b4';
-import { PLANES } from './volume.js?v=3c106763';
-import { CT_PLANES } from './state.js?v=7aa228b6';
-import { REGION_LABEL } from './graph.js?v=fb5e1ade';
+import { PLANES } from './volume.js?v=9c85159b';
+import { CT_PLANES } from './state.js?v=a96d143a';
+import { REGION_LABEL } from './graph.js?v=24b78a54';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -108,6 +108,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
+    let muNote = '';                /* the player's one line about the mucosal state (loading, could not load), shown by the layer controls */
     let dissect = null;             /* the procedure player's state (P2): { key, hides: Set of base node keys } while a dissected state is shown */
     let emphasis = { see: new Set(), hazard: new Set() };     /* graph ids the player marks: a step's `see` structures, and the `at` structures of its `risk` hazards (hatched) */
 
@@ -518,6 +519,15 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (dissect && key === dissect.key && hides.size === dissect.hides.size && [...hides].every((k) => dissect.hides.has(k))) { paint(); return false; }
         dissect = key ? { key, hides } : null;
         paint();
+        emit();
+        return true;
+    }
+
+    /* The mucosal state's status line (mode-procedure.js): '' clears it. */
+    function setMuNote(text) {
+        const next = typeof text === 'string' ? text.slice(0, 160) : '';
+        if (next === muNote) return false;
+        muNote = next;
         emit();
         return true;
     }
@@ -1009,10 +1019,11 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setState, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setState, setMuNote, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
+        get muNote() { return muNote; },
         get view() { return view; },
         get bone() { return layers.bone; },
         get landmarksOn() { return layers.landmarks; },

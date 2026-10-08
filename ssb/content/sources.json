@@ -4238,6 +4238,16 @@
       "pmid": "24001033",
       "url": "https://pubmed.ncbi.nlm.nih.gov/24001033/",
       "note": "Abstract only (PubMed record, read 2026-10-07). Single case report (typed review, as other case reports in this graph): posterior septal perforation and necrosis of the lower parts of both middle turbinates four months after bilateral sphenopalatine artery ligation for epistaxis; the authors conclude that ischaemic necrosis is a potential risk in areas whose only arterial supply is this artery. It does not discuss flaps. PMID and DOI matched to the PubMed record; awaiting owner verification."
+    },
+    {
+      "id": "src.xiao-2021-decongestion",
+      "cite": "Xiao Q, Bates AJ, Cetto R, Doorly DJ. The effect of decongestion on nasal airway patency and airflow. Sci Rep. 2021;11(1):14410.",
+      "type": "cohort",
+      "verified": false,
+      "doi": "10.1038/s41598-021-93769-6",
+      "pmid": "34257360",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34257360/",
+      "note": "PMID, DOI and citation matched to the PubMed record (read 2026-10-08; open access, PMC8277849). The abstract states 10 healthy subjects imaged by high-resolution MRI before and after a topical decongestant, and that decongestion mainly increases the cross-section in the turbinate region; the mean cross-section figures used here (2.8 to 3.8 cm², adults aged 21-38, xylometazoline 0.1 %, measured 10 minutes after) are from the full text as read by the work-package author and not re-read in this session. A small within-subject MRI series of healthy volunteers: it supports the size and location of the decongestion effect, not a population norm or any pathological state. Awaiting owner verification."
     }
   ]
 }

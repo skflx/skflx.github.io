@@ -43,6 +43,14 @@ export function clampTier(value) {
     return Math.min(TIER_MAX, Math.max(TIER_MIN, Math.round(n)));
 }
 
+/* The mucosal state (`mu=` in the hash, docs/ssb.md 5.9): decongested, as scanned (the default) or congested. An exact,
+   case-sensitive whitelist, like the quality. A procedure always plays decongested, whatever this says. */
+export const MU_MODES = Object.freeze(['dec', 'scan', 'cong']);
+export const MU_DEFAULT = 'scan';
+export function clampMu(value) {
+    return typeof value === 'string' && MU_MODES.includes(value) ? value : null;
+}
+
 /* ---------------- variant lab parameters ---------------- */
 
 const own = (o, k) => o !== null && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k);
@@ -169,6 +177,8 @@ export function parseHash(hash, has, labs = {}) {
     else if (at && !out.lab && params.get('ct') === null) out.cursor = at;     /* a bad `ct` still ignores the whole stage */
     const quality = clampQuality(params.get('q'));
     if (quality) out.quality = quality;
+    const mu = clampMu(params.get('mu'));
+    if (mu) out.mu = mu;
     return out;
 }
 
@@ -200,6 +210,7 @@ export function formatHash(state, labs = {}) {
     } else if (!state.lab && state.scope) parts.push('scope=' + formatScope(state.scope));      /* the link is the pose alone: the shared cursor (`at`) is deliberately not written, so a reload opens CT at the volume centre */
     else if (!state.lab && state.station && parseStationLink(state.station)) parts.push('scope=' + state.station);      /* a link not yet resolved to a pose survives a rewrite of the address bar */
     else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
+    if (clampMu(state.mu) && state.mu !== MU_DEFAULT && !state.procedure) parts.push('mu=' + state.mu);      /* a procedure forces decongested: nothing to share */
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
 }
@@ -288,7 +299,7 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure }. Invariant: the
+/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure, mu }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is one of four: the specimen (lab, ct and scope all null), the variant lab
@@ -305,7 +316,8 @@ export function savePrefs(prefs) {
    `procedure` ({ id, step, cor }, normalizeProcedure) is the procedure player (mode-procedure.js): not a fifth stage but
    the scope stage with a dissection state behind it, so it implies a scope pose (the default one when none is given) and
    ends with the scope, the lab or CT. `quality` is the rendering override from the hash ('full' | 'lite'), null
-   for the device's choice. The cursor is clamped to the volume's bounds,
+   for the device's choice. `mu` is the mucosal state ('dec' | 'scan' | 'cong', default 'scan'), independent of the stage: the
+   procedure player (mode-procedure.js) loads its patch and lining, and a procedure overrides it with decongested. The cursor is clamped to the volume's bounds,
    which only the loaded volume knows: setCtBounds() hands them in and
    re-clamps, and until then the limit is a sanity range.
    Subscribers get (state, previous, meta); meta.source names the origin
@@ -328,6 +340,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         cursor: ct0 ? ct0.at : clampAt(fromUrl.cursor, ctBounds),
         quality: fromUrl.quality || null,
         procedure: procedure0,
+        mu: fromUrl.mu || MU_DEFAULT,
     });
     const subs = new Set();
 
@@ -336,7 +349,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
             && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality
-            && sameProcedure(next.procedure, prev.procedure)) return false;
+            && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu) return false;
         if (sameProcedure(next.procedure, prev.procedure)) next.procedure = prev.procedure;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
@@ -424,6 +437,11 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const cursor = clampAt(state.cursor, ctBounds);
             return set(state.ct ? { cursor, ct: { plane: state.ct.plane, at: cursor } } : { cursor }, { source: 'ct-bounds' });
         },
+        /* The mucosal state (decongested | as scanned | congested): any other value is ignored. Never changes the stage. */
+        setMu(mu, meta = { source: 'mu' }) {
+            const next = clampMu(mu);
+            return next ? set({ mu: next }, meta) : false;
+        },
         /* Back to the specimen stage. */
         leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null, procedure: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
@@ -435,7 +453,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
             const procedure = ct ? null : p.procedure || null;
             const scope = ct ? null : p.scope || (procedure && !p.station ? state.scope || clampPose(POSE_DEFAULT) : null);
-            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure }, { source: 'url' });
+            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure, mu: p.mu || MU_DEFAULT }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),

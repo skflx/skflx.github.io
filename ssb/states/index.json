@@ -2,6 +2,31 @@
  "version": 1,
  "base": "04a4010393",
  "ctFill": 48,
+ "mucosa": {
+  "dec": {
+   "state": "c3ae3dbb3c",
+   "d": 1.0,
+   "ratio": 1.3894,
+   "target": 1.3571,
+   "erectileLabels": [
+    "s.inferior-turbinate.R",
+    "s.middle-turbinate.R",
+    "s.nasal-septum.M"
+   ],
+   "ctFill": 48
+  },
+  "cong": {
+   "state": "c79ec7a395",
+   "d": 0.5,
+   "ratio": 0.8513,
+   "target": 0.873,
+   "erectileLabels": [
+    "s.inferior-turbinate.R",
+    "s.middle-turbinate.R"
+   ],
+   "ctFill": 110
+  }
+ },
  "states": {
   "3a97cc5909": {
    "units": [
@@ -11,38 +36,45 @@
     "p.uncinectomy#1",
     "fess:p.uncinectomy#1"
    ],
+   "mucosa": "dec",
    "patch": "3a97cc5909.ssbp.gz",
    "lining": "lining-3a97cc5909.glb.gz",
    "hides": [],
-   "remnants": {},
+   "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested"
+   },
    "measured": {
-    "carvedVoxels": 8836,
-    "patchBytes": 3874,
-    "liningBytes": 317580,
+    "carvedVoxels": 47068,
+    "patchBytes": 20545,
+    "liningBytes": 314315,
     "liningTriangles": 33000,
-    "remnantTriangles": 0,
+    "remnantTriangles": 6556,
     "guardMinimaMm": {
      "R": {
-      "s.internal-carotid-artery": 25.0,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 12.6,
-      "s.anterior-ethmoidal-artery": 7.5,
+      "s.anterior-ethmoidal-artery": 5.85,
       "s.orbit": 1.0
      },
      "L": {
-      "s.internal-carotid-artery": 25.0,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 12.6,
-      "s.anterior-ethmoidal-artery": 7.5,
+      "s.anterior-ethmoidal-artery": 5.85,
       "s.orbit": 1.0
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 566755,
+     "asymmetricVoxels": 573072,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 8836,
+     "carved": 8906,
      "share": 0.0
     }
    }
@@ -54,11 +86,16 @@
    "usedBy": [
     "p.sphenoidotomy#4"
    ],
+   "mucosa": "dec",
    "patch": "b917514c1d.ssbp.gz",
    "lining": "lining-b917514c1d.glb.gz",
    "hides": [],
    "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.intersinus-septum.M": "s.intersinus-septum.M@transnasal",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
     "s.nasal-septum.M": "s.nasal-septum.M@transnasal",
     "s.sphenoid-face.L": "s.sphenoid-face.L@transnasal",
     "s.sphenoid-face.R": "s.sphenoid-face.R@transnasal",
@@ -66,33 +103,33 @@
     "s.sphenoid-floor.R": "s.sphenoid-floor.R@transnasal"
    },
    "measured": {
-    "carvedVoxels": 8059,
-    "patchBytes": 2239,
-    "liningBytes": 311564,
+    "carvedVoxels": 46270,
+    "patchBytes": 18389,
+    "liningBytes": 311273,
     "liningTriangles": 33000,
-    "remnantTriangles": 13728,
+    "remnantTriangles": 14290,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 9.75,
       "s.optic-nerve": 9.9,
-      "s.anterior-ethmoidal-artery": 24.8,
-      "s.orbit": 6.0
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      },
      "L": {
       "s.internal-carotid-artery": 9.75,
       "s.optic-nerve": 9.9,
-      "s.anterior-ethmoidal-artery": 24.8,
-      "s.orbit": 6.0
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 565176,
+     "asymmetricVoxels": 571473,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 8059,
+     "carved": 8108,
      "share": 0.0
     }
    }
@@ -106,43 +143,49 @@
     "p.maxillary-antrostomy#1",
     "fess:p.maxillary-antrostomy#1"
    ],
+   "mucosa": "dec",
    "patch": "d1dbe87b11.ssbp.gz",
    "lining": "lining-d1dbe87b11.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@antrostomy",
     "s.basal-lamella.R": "s.basal-lamella.R@antrostomy",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@antrostomy",
-    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@antrostomy"
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@antrostomy",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested"
    },
    "measured": {
-    "carvedVoxels": 16072,
-    "patchBytes": 4204,
-    "liningBytes": 314910,
-    "liningTriangles": 32998,
-    "remnantTriangles": 7072,
+    "carvedVoxels": 54352,
+    "patchBytes": 20573,
+    "liningBytes": 312294,
+    "liningTriangles": 33000,
+    "remnantTriangles": 13588,
     "guardMinimaMm": {
      "R": {
-      "s.internal-carotid-artery": 22.1,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 11.2,
-      "s.anterior-ethmoidal-artery": 7.5,
+      "s.anterior-ethmoidal-artery": 5.85,
       "s.orbit": 1.0
      },
      "L": {
-      "s.internal-carotid-artery": 22.1,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 11.2,
-      "s.anterior-ethmoidal-artery": 7.5,
+      "s.anterior-ethmoidal-artery": 5.85,
       "s.orbit": 1.0
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 568360,
+     "asymmetricVoxels": 574694,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 16072,
+     "carved": 16190,
      "share": 0.0
     }
    }
@@ -157,30 +200,36 @@
     "p.anterior-ethmoidectomy#1",
     "fess:p.anterior-ethmoidectomy#1"
    ],
+   "mucosa": "dec",
    "patch": "974ae048e4.ssbp.gz",
    "lining": "lining-974ae048e4.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@opened",
     "s.basal-lamella.R": "s.basal-lamella.R@opened",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@opened",
-    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@opened"
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@opened",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested"
    },
    "measured": {
-    "carvedVoxels": 24278,
-    "patchBytes": 7773,
-    "liningBytes": 314831,
-    "liningTriangles": 32998,
-    "remnantTriangles": 4540,
+    "carvedVoxels": 62494,
+    "patchBytes": 24194,
+    "liningBytes": 312484,
+    "liningTriangles": 33000,
+    "remnantTriangles": 11092,
     "guardMinimaMm": {
      "R": {
-      "s.internal-carotid-artery": 21.4,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 7.35,
       "s.anterior-ethmoidal-artery": 2.2,
       "s.orbit": 1.0
      },
      "L": {
-      "s.internal-carotid-artery": 21.4,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 7.35,
       "s.anterior-ethmoidal-artery": 2.2,
       "s.orbit": 1.0
@@ -188,12 +237,12 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 572086,
+     "asymmetricVoxels": 578391,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 24278,
+     "carved": 24332,
      "share": 0.0
     }
    }
@@ -208,11 +257,16 @@
     "p.transsellar-approach#1",
     "eea-sellar-clival:p.transsellar-approach#1"
    ],
+   "mucosa": "dec",
    "patch": "cd183d9fb0.ssbp.gz",
    "lining": "lining-cd183d9fb0.glb.gz",
    "hides": [],
    "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.intersinus-septum.M": "s.intersinus-septum.M@wide",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
     "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
     "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
     "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
@@ -220,33 +274,33 @@
     "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
    },
    "measured": {
-    "carvedVoxels": 24167,
-    "patchBytes": 5738,
-    "liningBytes": 312936,
+    "carvedVoxels": 60625,
+    "patchBytes": 21197,
+    "liningBytes": 313497,
     "liningTriangles": 33000,
-    "remnantTriangles": 11814,
+    "remnantTriangles": 12774,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 9.05,
       "s.optic-nerve": 7.09,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      },
      "L": {
       "s.internal-carotid-artery": 9.05,
       "s.optic-nerve": 7.09,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 571828,
+     "asymmetricVoxels": 577251,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 24167,
+     "carved": 22463,
      "share": 0.0
     }
    }
@@ -262,30 +316,36 @@
     "p.anterior-ethmoidectomy#4",
     "fess:p.anterior-ethmoidectomy#4"
    ],
+   "mucosa": "dec",
    "patch": "a7cb0a2f9e.ssbp.gz",
    "lining": "lining-a7cb0a2f9e.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
     "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@opened",
-    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@opened"
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@opened",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested"
    },
    "measured": {
-    "carvedVoxels": 25230,
-    "patchBytes": 8606,
-    "liningBytes": 314850,
+    "carvedVoxels": 63448,
+    "patchBytes": 25128,
+    "liningBytes": 312647,
     "liningTriangles": 32998,
-    "remnantTriangles": 4452,
+    "remnantTriangles": 11004,
     "guardMinimaMm": {
      "R": {
-      "s.internal-carotid-artery": 21.4,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 7.35,
       "s.anterior-ethmoidal-artery": 2.2,
       "s.orbit": 1.0
      },
      "L": {
-      "s.internal-carotid-artery": 21.4,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 7.35,
       "s.anterior-ethmoidal-artery": 2.2,
       "s.orbit": 1.0
@@ -293,12 +353,12 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 572554,
+     "asymmetricVoxels": 578860,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 25230,
+     "carved": 25286,
      "share": 0.0
     }
    }
@@ -315,12 +375,17 @@
     "p.transclival-approach#0",
     "eea-sellar-clival:p.transsellar-approach#2"
    ],
+   "mucosa": "dec",
    "patch": "f02a68d5b9.ssbp.gz",
    "lining": "lining-f02a68d5b9.glb.gz",
    "hides": [
     "s.intersinus-septum.M"
    ],
    "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
     "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
     "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
     "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
@@ -328,33 +393,33 @@
     "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
    },
    "measured": {
-    "carvedVoxels": 29416,
-    "patchBytes": 7249,
-    "liningBytes": 313593,
-    "liningTriangles": 32998,
-    "remnantTriangles": 10188,
+    "carvedVoxels": 65874,
+    "patchBytes": 23706,
+    "liningBytes": 313596,
+    "liningTriangles": 33000,
+    "remnantTriangles": 11148,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 9.05,
       "s.optic-nerve": 7.09,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      },
      "L": {
       "s.internal-carotid-artery": 9.05,
       "s.optic-nerve": 7.09,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 573562,
+     "asymmetricVoxels": 578985,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 29416,
+     "carved": 27712,
      "share": 0.0
     }
    }
@@ -372,12 +437,17 @@
     "eea-sellar-clival:p.transsellar-approach#4",
     "eea-sellar-clival:p.transclival-approach#0"
    ],
+   "mucosa": "dec",
    "patch": "580ec6ce1a.ssbp.gz",
    "lining": "lining-580ec6ce1a.glb.gz",
    "hides": [
     "s.intersinus-septum.M"
    ],
    "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
     "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
     "s.sella-turcica.M": "s.sella-turcica.M@sellar-opening",
     "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
@@ -386,33 +456,33 @@
     "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
    },
    "measured": {
-    "carvedVoxels": 32655,
-    "patchBytes": 8427,
-    "liningBytes": 313626,
+    "carvedVoxels": 69113,
+    "patchBytes": 25008,
+    "liningBytes": 313815,
     "liningTriangles": 32998,
-    "remnantTriangles": 10546,
+    "remnantTriangles": 11506,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 1.7,
       "s.optic-nerve": 6.12,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      },
      "L": {
       "s.internal-carotid-artery": 1.7,
       "s.optic-nerve": 6.12,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 574984,
+     "asymmetricVoxels": 580407,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 32655,
+     "carved": 30951,
      "share": 0.0
     }
    }
@@ -428,6 +498,7 @@
    "usedBy": [
     "p.transclival-approach#2"
    ],
+   "mucosa": "dec",
    "patch": "882fa0add6.ssbp.gz",
    "lining": "lining-882fa0add6.glb.gz",
    "hides": [
@@ -435,6 +506,10 @@
    ],
    "remnants": {
     "s.clivus.M": "s.clivus.M@clival-recess",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
     "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
     "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
     "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
@@ -442,33 +517,33 @@
     "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
    },
    "measured": {
-    "carvedVoxels": 33518,
-    "patchBytes": 8493,
-    "liningBytes": 313900,
+    "carvedVoxels": 69976,
+    "patchBytes": 25102,
+    "liningBytes": 313996,
     "liningTriangles": 32998,
-    "remnantTriangles": 10488,
+    "remnantTriangles": 11448,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 1.0,
       "s.optic-nerve": 7.09,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      },
      "L": {
       "s.internal-carotid-artery": 1.0,
       "s.optic-nerve": 7.09,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 575517,
+     "asymmetricVoxels": 580940,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 33518,
+     "carved": 31814,
      "share": 0.0
     }
    }
@@ -485,30 +560,36 @@
     "p.posterior-ethmoidectomy#0",
     "fess:p.posterior-ethmoidectomy#0"
    ],
+   "mucosa": "dec",
    "patch": "a07618be24.ssbp.gz",
    "lining": "lining-a07618be24.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@perforated",
     "s.basal-lamella.R": "s.basal-lamella.R@perforated",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@perforated",
-    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@perforated"
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@perforated",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested"
    },
    "measured": {
-    "carvedVoxels": 28484,
-    "patchBytes": 10472,
-    "liningBytes": 314576,
+    "carvedVoxels": 66700,
+    "patchBytes": 26903,
+    "liningBytes": 312333,
     "liningTriangles": 33000,
-    "remnantTriangles": 4240,
+    "remnantTriangles": 10796,
     "guardMinimaMm": {
      "R": {
-      "s.internal-carotid-artery": 17.4,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 6.4,
       "s.anterior-ethmoidal-artery": 2.2,
       "s.orbit": 1.0
      },
      "L": {
-      "s.internal-carotid-artery": 17.4,
+      "s.internal-carotid-artery": 15.35,
       "s.optic-nerve": 6.4,
       "s.anterior-ethmoidal-artery": 2.2,
       "s.orbit": 1.0
@@ -516,12 +597,12 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 574127,
+     "asymmetricVoxels": 580432,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 28484,
+     "carved": 28538,
      "share": 0.0
     }
    }
@@ -539,23 +620,29 @@
     "p.posterior-ethmoidectomy#1",
     "fess:p.posterior-ethmoidectomy#1"
    ],
+   "mucosa": "dec",
    "patch": "c415c355b0.ssbp.gz",
    "lining": "lining-c415c355b0.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
     "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
     "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested",
     "s.sphenoid-face.L": "s.sphenoid-face.L@to-skull-base",
     "s.sphenoid-face.R": "s.sphenoid-face.R@to-skull-base"
    },
    "measured": {
-    "carvedVoxels": 35268,
-    "patchBytes": 14744,
-    "liningBytes": 315841,
+    "carvedVoxels": 73642,
+    "patchBytes": 30378,
+    "liningBytes": 312174,
     "liningTriangles": 33000,
-    "remnantTriangles": 8008,
+    "remnantTriangles": 14564,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 8.3,
@@ -572,12 +659,12 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 577416,
+     "asymmetricVoxels": 583800,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 35268,
+     "carved": 35480,
      "share": 0.0
     }
    }
@@ -594,6 +681,7 @@
    "usedBy": [
     "eea-sellar-clival:p.transclival-approach#2"
    ],
+   "mucosa": "dec",
    "patch": "e6b67fc5cb.ssbp.gz",
    "lining": "lining-e6b67fc5cb.glb.gz",
    "hides": [
@@ -601,6 +689,10 @@
    ],
    "remnants": {
     "s.clivus.M": "s.clivus.M@clival-recess",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
     "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
     "s.sella-turcica.M": "s.sella-turcica.M@sellar-opening",
     "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
@@ -609,33 +701,33 @@
     "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
    },
    "measured": {
-    "carvedVoxels": 36809,
-    "patchBytes": 9681,
-    "liningBytes": 314054,
+    "carvedVoxels": 73267,
+    "patchBytes": 26359,
+    "liningBytes": 314380,
     "liningTriangles": 33000,
-    "remnantTriangles": 10846,
+    "remnantTriangles": 11806,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 1.0,
       "s.optic-nerve": 6.12,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      },
      "L": {
       "s.internal-carotid-artery": 1.0,
       "s.optic-nerve": 6.12,
-      "s.anterior-ethmoidal-artery": 15.7,
-      "s.orbit": 2.74
+      "s.anterior-ethmoidal-artery": 5.85,
+      "s.orbit": 2.69
      }
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 576965,
+     "asymmetricVoxels": 582388,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 36809,
+     "carved": 35105,
      "share": 0.0
     }
    }
@@ -656,23 +748,29 @@
     "fess:p.transethmoidal-sphenoidotomy#2",
     "fess:p.draf-i#1"
    ],
+   "mucosa": "dec",
    "patch": "3589e1abd6.ssbp.gz",
    "lining": "lining-3589e1abd6.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
     "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
     "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested",
     "s.sphenoid-face.L": "s.sphenoid-face.L@transethmoidal",
     "s.sphenoid-face.R": "s.sphenoid-face.R@transethmoidal"
    },
    "measured": {
-    "carvedVoxels": 44426,
-    "patchBytes": 18551,
-    "liningBytes": 317420,
-    "liningTriangles": 32998,
-    "remnantTriangles": 4812,
+    "carvedVoxels": 82914,
+    "patchBytes": 34237,
+    "liningBytes": 314474,
+    "liningTriangles": 33000,
+    "remnantTriangles": 11368,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 3.4,
@@ -689,12 +787,12 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 580493,
+     "asymmetricVoxels": 586933,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 44426,
+     "carved": 44752,
      "share": 0.0
     }
    }
@@ -716,23 +814,29 @@
     "fess:p.draf-i#2",
     "fess:p.draf-i#5"
    ],
+   "mucosa": "dec",
    "patch": "78b0c76006.ssbp.gz",
    "lining": "lining-78b0c76006.glb.gz",
    "hides": [],
    "remnants": {
     "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
     "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
     "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested",
     "s.sphenoid-face.L": "s.sphenoid-face.L@transethmoidal",
     "s.sphenoid-face.R": "s.sphenoid-face.R@transethmoidal"
    },
    "measured": {
-    "carvedVoxels": 48728,
-    "patchBytes": 22071,
-    "liningBytes": 317049,
-    "liningTriangles": 33000,
-    "remnantTriangles": 4812,
+    "carvedVoxels": 87488,
+    "patchBytes": 37075,
+    "liningBytes": 314790,
+    "liningTriangles": 32998,
+    "remnantTriangles": 11368,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 3.4,
@@ -749,12 +853,12 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 582644,
+     "asymmetricVoxels": 589220,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 48728,
+     "carved": 49326,
      "share": 0.0
     }
    }
@@ -775,6 +879,7 @@
     "p.draf-iia#2",
     "fess:p.draf-iia#2"
    ],
+   "mucosa": "dec",
    "patch": "4de666ec3a.ssbp.gz",
    "lining": "lining-4de666ec3a.glb.gz",
    "hides": [],
@@ -783,17 +888,22 @@
     "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
     "s.frontal-sinus-floor.L": "s.frontal-sinus-floor.L@draf-iia",
     "s.frontal-sinus-floor.R": "s.frontal-sinus-floor.R@draf-iia",
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
     "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
     "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested",
     "s.sphenoid-face.L": "s.sphenoid-face.L@transethmoidal",
     "s.sphenoid-face.R": "s.sphenoid-face.R@transethmoidal"
    },
    "measured": {
-    "carvedVoxels": 54026,
-    "patchBytes": 25493,
-    "liningBytes": 316645,
-    "liningTriangles": 32998,
-    "remnantTriangles": 8072,
+    "carvedVoxels": 92786,
+    "patchBytes": 40179,
+    "liningBytes": 314068,
+    "liningTriangles": 33000,
+    "remnantTriangles": 14628,
     "guardMinimaMm": {
      "R": {
       "s.internal-carotid-artery": 3.4,
@@ -810,14 +920,61 @@
     },
     "keepViolations": 0,
     "symmetry": {
-     "asymmetricVoxels": 585097,
+     "asymmetricVoxels": 591673,
      "of": 4516200
     },
     "postMirrorGuard": {
      "rejected": 0,
-     "carved": 54026,
+     "carved": 54624,
      "share": 0.0
     }
+   }
+  },
+  "c3ae3dbb3c": {
+   "units": [],
+   "usedBy": [
+    "mu=dec"
+   ],
+   "mucosa": "dec",
+   "patch": "c3ae3dbb3c.ssbp.gz",
+   "lining": "lining-c3ae3dbb3c.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+    "s.nasal-septum.M": "s.nasal-septum.M@decongested"
+   },
+   "measured": {
+    "carvedVoxels": 38162,
+    "liningBytes": 313255,
+    "liningTriangles": 33000,
+    "patchBytes": 15485,
+    "remnantTriangles": 6556
+   }
+  },
+  "c79ec7a395": {
+   "units": [],
+   "usedBy": [
+    "mu=cong"
+   ],
+   "mucosa": "cong",
+   "patch": "c79ec7a395.ssbp.gz",
+   "lining": "lining-c79ec7a395.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.inferior-turbinate.L": "s.inferior-turbinate.L@congested",
+    "s.inferior-turbinate.R": "s.inferior-turbinate.R@congested",
+    "s.middle-turbinate.L": "s.middle-turbinate.L@congested",
+    "s.middle-turbinate.R": "s.middle-turbinate.R@congested"
+   },
+   "measured": {
+    "carvedVoxels": 14064,
+    "liningBytes": 313488,
+    "liningTriangles": 33000,
+    "patchBytes": 9121,
+    "remnantTriangles": 7500
    }
   }
  },
@@ -1007,7 +1164,7 @@
  "units": {
   "s.uncinate-process.R@uncinectomy": {
    "voxels": [
-    4418
+    4453
    ],
    "measured": [
     4436
@@ -1015,7 +1172,7 @@
   },
   "s.posterior-fontanelle.R@antrostomy": {
    "voxels": [
-    3618
+    3642
    ],
    "measured": [
     3619
@@ -1023,7 +1180,7 @@
   },
   "s.ethmoid-bulla.R@opened": {
    "voxels": [
-    4103
+    4071
    ],
    "measured": [
     4088
@@ -1031,7 +1188,7 @@
   },
   "s.anterior-ethmoid-cells.R@to-skull-base": {
    "voxels": [
-    476
+    477
    ],
    "measured": [
     487
@@ -1039,7 +1196,7 @@
   },
   "s.basal-lamella.R@perforated": {
    "voxels": [
-    1627
+    1626
    ],
    "measured": [
     1628
@@ -1047,7 +1204,7 @@
   },
   "s.posterior-ethmoid-cells.R@to-skull-base": {
    "voxels": [
-    3392
+    3471
    ],
    "measured": [
     3437
@@ -1055,7 +1212,7 @@
   },
   "s.sphenoid-face.R@transethmoidal": {
    "voxels": [
-    4579
+    4636
    ],
    "measured": [
     4559
@@ -1063,7 +1220,7 @@
   },
   "s.sphenoid-face.R@transnasal": {
    "voxels": [
-    4155
+    4187
    ],
    "measured": [
     4139
@@ -1071,7 +1228,7 @@
   },
   "s.agger-nasi-cell.R@uncapped": {
    "voxels": [
-    2151
+    2287
    ],
    "measured": [
     2177
@@ -1087,7 +1244,7 @@
   },
   "s.nasal-septum.M@posterior-septectomy": {
    "voxels": [
-    5429
+    3471
    ],
    "measured": [
     5429
@@ -1103,7 +1260,7 @@
   },
   "s.sphenoid-face.R@wide": {
    "voxels": [
-    7055
+    7182
    ],
    "measured": [
     7040
@@ -1138,13 +1295,13 @@
  },
  "antrostomyWindow": {
   "carved": {
-   "voxels": 3618,
+   "voxels": 3642,
    "A": 19.0,
    "S": 9.5,
    "R": 10.5
   },
   "medialWall": {
-   "voxels": 1959,
+   "voxels": 1963,
    "A": 19.0,
    "S": 9.5,
    "R": 10.5

@@ -16,9 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=3c106763';
-import { CT_PLANES } from './state.js?v=7aa228b6';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=866c7ebb';
+import { PLANES } from './volume.js?v=9c85159b';
+import { CT_PLANES } from './state.js?v=a96d143a';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=779a1edf';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -149,6 +149,19 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     for (const mode of specimen.BONE_MODES) boneRow.append(pill(BONE[mode], { bone: mode }));
     boneSec.append(boneRow);
 
+    /* ---- mucosal state (docs/ssb.md 5.9): the player loads it; a procedure forces decongested ---- */
+    const muSec = section('Mucosal state');
+    const muRow = row('Mucosal state');
+    const MU = [
+        ['dec', 'Decongested', 'Mucosa: decongested (calibrated, Xiao 2021)'],
+        ['scan', 'As scanned', 'Mucosa: as scanned (the specimen\'s own; not decongested)'],
+        ['cong', 'Congested', 'Mucosa: congested (physiological nasal cycle, NasalSeg)'],
+    ];
+    for (const [key, label] of MU) muRow.append(pill(label, { mu: key }));
+    const muText = el('p', 'ssb-param-src');
+    muText.setAttribute('role', 'status');
+    muSec.append(muRow, muText);
+
     /* ---- air spaces by region ---- */
     const airSec = section('Air spaces and soft tissue');
     const airList = el('div', 'ssb-spec-checks');
@@ -218,6 +231,16 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     function sync() {
         mark(viewRow, 'view', specimen.view || '');
         mark(boneRow, 'bone', specimen.bone);
+        const st = store.get();
+        const forced = !!st.procedure;
+        const mu = forced ? 'dec' : st.mu;
+        mark(muRow, 'mu', mu);
+        for (const b of muRow.querySelectorAll('button[data-mu]')) {
+            b.disabled = forced;
+            b.title = forced ? 'A procedure always plays on the decongested mucosa.' : '';
+        }
+        const line = MU.find((m) => m[0] === mu)[2] + (forced ? ' (procedure)' : '');
+        muText.textContent = specimen.muNote && !forced ? `${line}. ${specimen.muNote}` : line;
 
         const regions = specimen.regions();
         const key = regions.map((r) => `${r.region}:${r.count}`).join('|');
@@ -278,6 +301,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         if (!b) return;
         if (b.dataset.view) specimen.setView(b.dataset.view);
         else if (b.dataset.bone) specimen.setBone(b.dataset.bone);
+        else if (b.dataset.mu) store.setMu(b.dataset.mu);
         else if (b.dataset.section) specimen.setSection(b.dataset.section === 'off' ? null : b.dataset.section);
     });
     root.addEventListener('change', (e) => {
@@ -306,7 +330,10 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     if (typeof wide.addEventListener === 'function') wide.addEventListener('change', () => { collapsed = !wide.matches; place(); });
 
     specimen.onChange(sync);
-    store.subscribe((state, prev) => { if (state.lab !== prev.lab || state.ct !== prev.ct) place(); });
+    store.subscribe((state, prev) => {
+        if (state.lab !== prev.lab || state.ct !== prev.ct) place();
+        if (state.mu !== prev.mu || state.procedure !== prev.procedure) sync();
+    });
     sync();
     place();
 }

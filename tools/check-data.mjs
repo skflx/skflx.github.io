@@ -308,8 +308,11 @@ function checkDissection(index) {
   const bad = [];
   let lining = 0;
   for (const [key, st] of Object.entries(idx.states)) {
-    const sha = crypto.createHash('sha256').update(st.units.join('\n')).digest('hex').slice(0, 10);
-    if (sha !== key) bad.push(`${key}: not the hash of its unit list (${sha})`);
+    /* a mucosal state (mucosa.py, docs/ssb.md 5.9) has no units: its key is the hash of "mucosa.<dec|cong>" */
+    const mucosal = st.units.length === 0 && ['dec', 'cong'].includes(st.mucosa);
+    const sha = crypto.createHash('sha256').update(mucosal ? 'mucosa.' + st.mucosa : st.units.join('\n')).digest('hex').slice(0, 10);
+    if (sha !== key) bad.push(`${key}: not the hash of its ${mucosal ? 'mucosal name' : 'unit list'} (${sha})`);
+    if (!mucosal && st.mucosa !== 'dec') bad.push(`${key}: a dissection state is built on the decongested mucosa (mucosa "dec"), not "${st.mucosa}"`);
     for (const u of st.units) if (!data.units[u]) bad.push(`${key}: unit ${u} is not in dissection.json`);
     const pf = rel('ssb/states/' + st.patch), lf = rel('ssb/models/' + st.lining);
     if (!fs.existsSync(pf) || !fs.existsSync(lf)) { bad.push(`${key}: patch or lining file is missing`); continue; }
@@ -333,6 +336,8 @@ function checkDissection(index) {
   }
   if (lining > 6_000_000) bad.push(`state linings total ${lining} bytes (budget 6 MB)`);
   const keys = new Set(Object.keys(idx.states));
+  for (const [mode, m] of Object.entries(idx.mucosa || {})) if (!keys.has(m.state) || idx.states[m.state].mucosa !== mode) bad.push(`mucosa ${mode}: state ${m.state} is not the ${mode} state of the index`);
+  for (const mode of ['dec', 'cong']) if (!(idx.mucosa && idx.mucosa[mode])) bad.push(`mucosa ${mode}: the index lists no ${mode} state (run mucosa.py then dissect.py)`);
   for (const [p, pd] of Object.entries(idx.procedures)) for (const k of [pd.entry, ...Object.values(pd.steps)]) if (k && !keys.has(k)) bad.push(`procedure ${p}: state ${k} is not in the index`);
   for (const [c, cd] of Object.entries(idx.corridors)) for (const pos of cd.positions) if (!keys.has(pos.state)) bad.push(`corridor ${c}: state ${pos.state} is not in the index`);
   ok(bad.length === 0, `ssb dissection: ${keys.size} states: keys, patches (labels in labels.json, 100 kB), state linings (350 kB each, 6 MB in all) and the index agree`,
