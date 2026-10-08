@@ -54,6 +54,9 @@ import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=c2522180';
 
 const DRAG_DEG_PER_PX = 0.15;
+const LIMIT_PROBE_MM = 0.5;               /* how much deeper a clamped pose is probed to keep reporting "limited" */
+/* The pose the clamp left the scope at, give or take the depth's rounding in the store. */
+const atClamp = (a, b) => ['side', 'yaw', 'pitch', 'roll', 'lens'].every((k) => a[k] === b[k]) && Math.abs(a.depth - b.depth) < 0.51;
 const WHEEL_MM = 1;
 const NEAR_MM = 0.4;
 const SPOT = { intensity: 350, angle: 0.72, penumbra: 0.55, decay: 2 };
@@ -96,7 +99,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let shaft = '4';                     /* '4' | '2.7' (mm): the collision ring's radius, SHAFT_RADII */
     let shaftWhy = null;                 /* { station, shaft } while a station that needs the 2.7 mm telescope put it on, else null */
     let hud = { rows: [], contactMm: 0, limited: false, limitedBy: null };
-    let limitedNext = null;              /* what the last clamp was by ('bone' | 'septum'), reported by the pass it triggers */
+    let limitedAt = null;                /* { pose, by }: the pose the last clamp left the scope at, and what by ('bone' | 'septum') */
     let ctVol = null;                    /* the shared volume, once loaded */
     let stateVol = null;                 /* a dissected state's volume (P2): what collision and the tip's label read; the base stays the CT image */
     let stateKey = null;
@@ -180,13 +183,20 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         if (!p || !f || !ctAt) { hud = { rows: [], contactMm: 0, limited: false, limitedBy: null }; return false; }
         const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft], arch, levels);
         if (c.depth < p.depth - 1e-9) {
-            limitedNext = c.by;                /* the pass the clamp triggers reports it */
+            limitedAt = { pose: { ...p, depth: c.depth }, by: c.by };
             store.setScope({ ...p, depth: c.depth }, INTERNAL);
             return true;
         }
+        /* "Limited" holds while the scope stays where the clamp left it and the volume still stops it a step deeper (a
+           state that opens the way clears it); any other pass, a re-render included, keeps reporting it. */
+        let by = null;
+        if (limitedAt && atClamp(limitedAt.pose, p)) {
+            const deeper = shaftClearance(f, { ...p, depth: p.depth + LIMIT_PROBE_MM }, ctAt, SHAFT_RADII[shaft], arch, levels);
+            by = deeper.depth < p.depth + LIMIT_PROBE_MM - 1e-9 ? deeper.by : null;
+        }
+        if (!by) limitedAt = null;
         const names = new Map(sdfFields.map((x) => [x.id, x.name]));
-        hud = { rows: hudRows(sdfFields, tipOf(f, p)).map((r) => ({ ...r, name: names.get(r.id) })), contactMm: c.contactMm, limited: !!limitedNext, limitedBy: limitedNext };
-        limitedNext = null;
+        hud = { rows: hudRows(sdfFields, tipOf(f, p)).map((r) => ({ ...r, name: names.get(r.id) })), contactMm: c.contactMm, limited: !!by, limitedBy: by };
         return false;
     }
 
