@@ -1,6 +1,7 @@
 """Population asymmetry statistics from NasalSeg (docs/realistic-anatomy.md section 4.4; owner decision RA-O6; WP POP0).
 
-    .venv/bin/python -I tools/ssb-pipeline/nasalseg/stats.py [--data DIR] [--png-dir DIR]
+    .venv/bin/python -I tools/ssb-pipeline/nasalseg/stats.py [stats] [--data DIR] [--png-dir DIR]
+    .venv/bin/python -I tools/ssb-pipeline/nasalseg/stats.py profiles [--data DIR]      (WP POP1; needs the stats run's JSON)
 
 Input: the NasalSeg archive (Zenodo record 13893419, CC BY 4.0), extracted to
 tools/ssb-pipeline/incoming/nasalseg/data/{images,labels}/ (gitignored; download NasalSeg.zip from
@@ -45,6 +46,23 @@ Method.
   * Head A (the UW specimen as scanned, before N1's mirroring) is measured the same way from its committed labels
     at normalize.py's AS_SCANNED_COMMIT, and placed as a percentile in the NasalSeg distribution. Its label
     boundaries are SSB's own (e.g. the cavity ends at the PNS plane), so compare indices, not volumes.
+
+Profiles (`profiles` subcommand, WP POP1; adds the `profiles` key to the JSON and changes nothing else).
+  * Subjects: the `clear` subset of the stats run (both maxillary sinuses `clear`, no label defect), read back from
+    the JSON, so POP0's numbers and subset are not recomputed.
+  * Per subject and side, the cavity label's anteroposterior axis runs from the centroid of its most anterior 5 % of
+    voxels to that of its most posterior 5 % (world mm). The profile is the cross-section perpendicular to that axis
+    in 1 mm sections (voxel volume in the section / 1 mm, cm2); the mean is taken from 10 % to 90 % of the label's
+    length along the axis, so neither the vestibule border nor the choana's cut decides it. Sensitivity spans
+    (20-80 %, 0-100 %) are reported for head A's placement.
+  * Two conventions, every number twice. `labelled`: the label as NasalSeg drew it (nostril to choana, with the
+    partial-volume rim). `restricted`: only voxels at or below our air threshold (display 78 = -482 HU by the
+    `toHU` of ssb/ct/ct.json), the convention of head A's labels.
+  * Per subject: mean cross-section of each side; the smaller / larger ratio of the side means (the smaller side is
+    the more congested); that side against the subject's two-side mean. Across subjects: median, p5, p25, p75, p95.
+  * Head A: the standard specimen (cavity plus vestibule labels, as the repo serves it) and the specimen as scanned
+    (AS_SCANNED_COMMIT, before the vestibule labels existed: cavity only), each measured the same way and placed as
+    a percentile of the subjects (the mean of its two sides against the subjects' two-side means).
 
 Deterministic: no randomness; JSON written with sorted keys.
 """
@@ -219,9 +237,12 @@ def percentile_of(value, dist):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('cmd', nargs='?', default='stats', choices=('stats', 'profiles'))
     ap.add_argument('--data', default=DATA)
     ap.add_argument('--png-dir')
     args = ap.parse_args()
+    if args.cmd == 'profiles':
+        return profiles(args)
     cases = sorted(f[:4] for f in os.listdir(os.path.join(args.data, 'labels')) if f.endswith('_seg.nrrd'))
     rows, rejected, nonstd, header_fixed, swaps, seen, dups = [], [], [], [], [], {}, {}
     for c in cases:
@@ -314,6 +335,10 @@ def main():
         'subjects': [{k: v for k, v in r.items() if k != 'nasopharynx.M'} for r in rows],
     }
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    if os.path.exists(OUT):
+        prev = json.load(open(OUT)).get('profiles')
+        if prev:
+            doc['profiles'] = prev                 # the profiles subcommand's key survives a stats re-run
     with open(OUT, 'w') as f:
         json.dump(doc, f, indent=1, sort_keys=True)
         f.write('\n')
@@ -365,6 +390,244 @@ def render_review(args, rows):
             sheet.paste(c, (x, y0 + 14)); sheet.paste(a, (x + c.width + 2, y0 + 14))
             dr.text((x + 2, y0 + 1), txt, fill=(255, 255, 0))
         sheet.save(os.path.join(args.png_dir, f'nasalseg-review-{sheet_no // per + 1}.png'))
+
+# ---- WP POP1: cross-section profiles -------------------------------------------------------------------------
+
+SPANS = {'10-90': (0.1, 0.9), '20-80': (0.2, 0.8), '0-100': (0.0, 1.0)}
+END_FRAC = 0.05
+MIN_LEN_MM = 10.0
+NS_ROOT = (0.1, 0.9)
+
+
+def section_profile(w, vox_mm3, posterior_sign):
+    """Cross-section (mm2) per 1 mm section along the anterior->posterior axis of the voxel cloud `w` (world mm, N x 3).
+    Returns (areas per section, section centres as fractions of the length, length mm) or None if the axis is undefined."""
+    n = len(w)
+    if n < 50:
+        return None
+    order = np.argsort(posterior_sign * w[:, 1], kind='stable')
+    k = max(1, int(END_FRAC * n))
+    ant, post = w[order[:k]].mean(0), w[order[-k:]].mean(0)
+    axis = post - ant
+    norm = float(np.linalg.norm(axis))
+    if norm < MIN_LEN_MM:
+        return None
+    axis /= norm
+    t = (w - ant) @ axis
+    t -= t.min()
+    length = float(t.max())
+    if length < MIN_LEN_MM:
+        return None
+    nb = int(np.ceil(length)) or 1
+    counts = np.bincount(np.minimum(t.astype(int), nb - 1), minlength=nb)
+    area = counts * vox_mm3                                  # volume in a 1 mm section = its mean cross-section in mm2
+    centres = (np.arange(nb) + 0.5) / length
+    return area, centres, length
+
+
+def span_mean_cm2(area, centres, lo, hi):
+    sel = (centres >= lo) & (centres <= hi)
+    return float(area[sel].mean() / 100.0) if sel.any() else None
+
+
+def side_measures(w, vox_mm3, sign):
+    p = section_profile(w, vox_mm3, sign)
+    if p is None:
+        return None
+    area, centres, length = p
+    out = {'lengthMm': round(length, 1), 'ml': round(len(w) * vox_mm3 / 1000.0, 3)}
+    for name, (lo, hi) in SPANS.items():
+        out['meanCm2.' + name] = span_mean_cm2(area, centres, lo, hi)
+    grid = np.linspace(0.1, 0.9, 9)
+    out['profileCm2'] = [float(v) for v in np.interp(grid, centres, area / 100.0)]
+    return out
+
+
+def subject_row(sides):
+    """sides: {'R': measures, 'L': measures} -> per-subject summary for each span."""
+    row = {'R': sides['R'], 'L': sides['L']}
+    for name in SPANS:
+        r, l = sides['R']['meanCm2.' + name], sides['L']['meanCm2.' + name]
+        if r is None or l is None:
+            return None
+        row['ratio.' + name] = min(r, l) / max(r, l)
+        row['twoSideMean.' + name] = (r + l) / 2.0
+        row['congestedVsMean.' + name] = min(r, l) / ((r + l) / 2.0)
+    return row
+
+
+def summarize_profiles(rows, span):
+    key = 'meanCm2.' + span
+    sides = [r[s][key] for r in rows for s in 'RL']
+    small = [min(r['R'][key], r['L'][key]) for r in rows]
+    large = [max(r['R'][key], r['L'][key]) for r in rows]
+    prof = {}
+    for cls, pick in (('moreCongested', min), ('lessCongested', max)):
+        stack = np.array([(r['R'] if pick(r['R'][key], r['L'][key]) == r['R'][key] else r['L'])['profileCm2'] for r in rows]
+                         if cls == 'moreCongested' else
+                         [(r['L'] if min(r['R'][key], r['L'][key]) == r['R'][key] else r['R'])['profileCm2'] for r in rows])
+        prof[cls] = {'atFractionOfLength': [round(v, 1) for v in np.linspace(0.1, 0.9, 9)],
+                     'medianCm2': [round(float(v), 3) for v in np.median(stack, axis=0)],
+                     'p25Cm2': [round(float(v), 3) for v in np.percentile(stack, 25, axis=0)],
+                     'p75Cm2': [round(float(v), 3) for v in np.percentile(stack, 75, axis=0)]}
+    return {
+        'sideMeanCm2': pct_n(sides), 'moreCongestedSideMeanCm2': pct_n(small), 'lessCongestedSideMeanCm2': pct_n(large),
+        'twoSideMeanCm2': pct_n([r['twoSideMean.' + span] for r in rows]),
+        'smallerOverLarger': pct_n([r['ratio.' + span] for r in rows]),
+        'moreCongestedOverMean': pct_n([r['congestedVsMean.' + span] for r in rows]),
+        'sideMl': pct_n([r[s]['ml'] for r in rows for s in 'RL']),
+        'lengthMm': pct_n([r[s]['lengthMm'] for r in rows for s in 'RL']),
+        'profileByClass': prof,
+    }
+
+
+def pct_n(a, qs=(5, 25, 50, 75, 95)):
+    a = np.asarray(a, float)
+    return {f'p{q}': round(float(np.percentile(a, q)), 3) for q in qs} | {'n': int(len(a))}
+
+
+def load_head_a(commit):
+    """Head A's volumes: (display u8 CT, labels, label table, affine, spacing); commit None = the working tree."""
+    def get(path):
+        if commit is None:
+            return open(os.path.join(REPO, path), 'rb').read()
+        return subprocess.run(['git', 'show', f'{commit}:{path}'], cwd=REPO, check=True, capture_output=True).stdout
+    ct = json.loads(get('ssb/ct/ct.json'))
+    table = json.loads(get('ssb/geometry/labels.json'))['labels']
+    nx, ny, nz = ct['dims']
+    img = np.frombuffer(gzip.decompress(get('ssb/ct/ct.u8.gz')), dtype=np.uint8).reshape(nz, ny, nx)
+    lab = np.frombuffer(gzip.decompress(get('ssb/ct/labels.u16.gz')), dtype='<u2').reshape(nz, ny, nx)
+    return img, lab, table, np.array(ct['affine'], float), float(np.prod(ct['spacing'])), ct
+
+
+def air_level(ct):
+    """Display level of the air threshold the pipeline uses (78) and its HU by the CT header's toHU."""
+    from_level = 78
+    pts = ct['values']['toHU']
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return from_level, float(np.interp(from_level, xs, ys))
+
+
+def head_a_measures(commit, with_vestibule):
+    img, lab, table, A, vox, ct = load_head_a(commit)
+    level, _ = air_level(ct)
+    by_name = {v: int(k) for k, v in table.items()}
+    out = {}
+    for conv in ('labelled', 'restricted'):
+        sides = {}
+        for side in 'RL':
+            ids = [by_name[f's.nasal-cavity.{side}']]
+            if with_vestibule:
+                ids.append(by_name[f's.nasal-vestibule.{side}'])
+            m = np.isin(lab, ids)
+            if conv == 'restricted':
+                m &= (img < level) & (img > 0)
+            kji = np.argwhere(m)
+            ijk = kji[:, ::-1].astype(float)
+            w = ijk @ A[:3, :3].T + A[:3, 3]
+            sides[side] = side_measures(w, vox, -1)           # RAS: +y is anterior
+        out[conv] = subject_row(sides)
+    return out
+
+
+def profiles(args):
+    doc = json.load(open(OUT))
+    clear_ids = sorted(r['id'] for r in doc['subjects']
+                       if r.get('review') == {'R': 'clear', 'L': 'clear'} and not r.get('labelDefect'))
+    _, thr_hu = air_level(load_head_a(None)[5])
+    rows = {'labelled': [], 'restricted': []}
+    undefined = []
+    for c in clear_ids:
+        img, d, o = read_nrrd(os.path.join(args.data, 'images', f'{c}_img.nrrd'))
+        lab, _, _ = read_nrrd(os.path.join(args.data, 'labels', f'{c}_seg.nrrd'))
+        mapping, _ = side_map(lab, d, o)
+        vox = abs(np.linalg.det(d))
+        per = {'labelled': {}, 'restricted': {}}
+        for v, (part, side) in mapping.items():
+            if part != 'cavity':
+                continue
+            m = lab == v
+            for conv in per:
+                mm = m if conv == 'labelled' else m & (img < thr_hu)
+                w = world(np.argwhere(mm).astype(float), d, o)
+                per[conv][side] = side_measures(w, vox, +1)      # LPS: +y is posterior
+        for conv, sides in per.items():
+            row = subject_row(sides) if all(sides.get(s) for s in 'RL') else None
+            if row is None:
+                undefined.append({'id': c, 'convention': conv})
+                continue
+            row['id'] = c
+            rows[conv].append(row)
+        print(c, {k: [round(v['meanCm2.10-90'], 2) for v in (per[k]['R'], per[k]['L'])] for k in per
+                  if per[k].get('R') and per[k].get('L')}, file=sys.stderr)
+
+    n_fail = len({u['id'] for u in undefined})
+    if n_fail > 0.05 * len(clear_ids):
+        raise SystemExit(f'ESCALATE: axis or span undefined for {n_fail} of {len(clear_ids)} subjects: {undefined}')
+
+    heads = {'standard': head_a_measures(None, True), 'standardCavityOnly': head_a_measures(None, False),
+             'asScanned': head_a_measures(AS_SCANNED_COMMIT, False)}
+    placement, spread = {}, {}
+    for hname, byconv in heads.items():
+        placement[hname] = {}
+        for conv, hrow in byconv.items():
+            placement[hname][conv] = {}
+            for span in SPANS:
+                two = [r['twoSideMean.' + span] for r in rows[conv]]
+                rat = [r['ratio.' + span] for r in rows[conv]]
+                placement[hname][conv][span] = {
+                    'twoSideMeanCm2': round(hrow['twoSideMean.' + span], 3),
+                    'twoSideMeanPercentile': percentile_of(hrow['twoSideMean.' + span], two),
+                    'smallerOverLarger': round(hrow['ratio.' + span], 3),
+                    'smallerOverLargerPercentile': percentile_of(hrow['ratio.' + span], rat),
+                    'sideMeanCm2': {s: round(hrow[s]['meanCm2.' + span], 3) for s in 'RL'}}
+            pcs = [placement[hname][conv][sp]['twoSideMeanPercentile'] for sp in SPANS]
+            spread[f'{hname}.{conv}'] = round(max(pcs) - min(pcs), 1)
+    out = {
+        'method': 'section profiles along the cavity label\'s anteroposterior axis; see the module docstring (Profiles)',
+        'airThreshold': {'displayLevel': 78, 'hu': round(thr_hu, 1)},
+        'subjects': {'clearIds': clear_ids, 'measured': {c: len(r) for c, r in rows.items()}, 'undefined': undefined},
+        'summary': {c: {sp: summarize_profiles(rows[c], sp) for sp in SPANS} for c in rows},
+        'headA': {'measures': {h: {c: {k: v for k, v in r.items() if k not in ('R', 'L')} | {
+            s: {'ml': r[s]['ml'], 'lengthMm': r[s]['lengthMm'], 'profileCm2': [round(x, 3) for x in r[s]['profileCm2']],
+                **{k: round(r[s][k], 3) for k in r[s] if k.startswith('meanCm2.')}} for s in 'RL'}
+            for c, r in byconv.items()} for h, byconv in heads.items()},
+            'placement': placement, 'percentileSpreadAcrossSpans': spread},
+        'perSubject': {c: [{'id': r['id'], 'R': round(r['R']['meanCm2.10-90'], 3), 'L': round(r['L']['meanCm2.10-90'], 3),
+                            'ratio': round(r['ratio.10-90'], 3)} for r in rows[c]] for c in rows},
+    }
+    def rnd(x):
+        if isinstance(x, float):
+            return round(x, 4)
+        if isinstance(x, dict):
+            return {k: rnd(v) for k, v in x.items()}
+        if isinstance(x, list):
+            return [rnd(v) for v in x]
+        return x
+    doc['profiles'] = rnd(out)
+    with open(OUT, 'w') as f:
+        json.dump(doc, f, indent=1, sort_keys=True)
+        f.write('\n')
+
+    print(f'{len(clear_ids)} clear subjects; threshold display 78 = {thr_hu:.1f} HU; undefined: {len(undefined)}')
+    print(f"{'convention':11} {'quantity':28} {'p5':>7} {'p25':>7} {'median':>7} {'p75':>7} {'p95':>7}")
+    for conv in rows:
+        sm = out['summary'][conv]['10-90']
+        for q in ('sideMl', 'sideMeanCm2', 'moreCongestedSideMeanCm2', 'lessCongestedSideMeanCm2', 'smallerOverLarger',
+                  'moreCongestedOverMean'):
+            d = sm[q]
+            print(f"{conv:11} {q:28} {d['p5']:7.2f} {d['p25']:7.2f} {d['p50']:7.2f} {d['p75']:7.2f} {d['p95']:7.2f}")
+    print('head A placement (two-side mean cross-section percentile / smaller-over-larger percentile), span 10-90:')
+    for h in placement:
+        for conv in placement[h]:
+            p = placement[h][conv]['10-90']
+            print(f"  {h:19} {conv:10} {p['twoSideMeanCm2']:.2f} cm2 -> {p['twoSideMeanPercentile']:5.1f}   "
+                  f"ratio {p['smallerOverLarger']:.2f} -> {p['smallerOverLargerPercentile']:5.1f}   "
+                  f"spread over spans {spread[h + '.' + conv]:.1f}")
+    bad = {k: v for k, v in spread.items() if v > 20 and not k.startswith('asScanned')}
+    if bad:
+        print('ESCALATE (report both): head A percentile depends on the span by more than 20 points:', bad)
+
 
 
 if __name__ == '__main__':
