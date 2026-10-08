@@ -36,8 +36,8 @@
 
    Imports no three.js. `hook` is the read-only test window (window.__ssb.procedure).
    ============================================================= */
-import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=8281d741';
-import { STAMPS } from './stamps.js?v=6c71e568';
+import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=6e4dc1a5';
+import { STAMPS } from './stamps.js?v=f63ce9c8';
 
 export const INDEX_FILE = 'ssb/states/index.json';
 const KEY = /^[0-9a-f]{10}$/;

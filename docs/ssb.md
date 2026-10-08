@@ -639,10 +639,14 @@ the wall; the natural ostium appears with the antrostomy.
   side: `R` (voxels right of R = 0), `L`, and `M` (the R = 0 plane). The
   format is the dense-box patch of the realistic-anatomy plan (PR #119)
   with a constant display, so one loader serves both.
-- `ssb/models/lining-<key>.glb.gz`: `lining.py`'s method on the state's air
+- `ssb/models/lining-<key>.glb.gz` (and `lining.glb.gz`): `lining.py`'s method on the state's air
   (built to 33 000 triangles with the remnants), plus remnant meshes
   `<id>.<side>@<cut>` (the cut of the last unit that touched the wall; the
-  node's `extras.cut`) for each wall label a state cuts partly. **Not listed
+  node's `extras.cut`) for each wall label a state cuts partly. Every lining pack
+  is cleaned by `meshes.py` `clean_lining` before it is written (zero-thickness
+  fins, two faces on the same three vertices, go; their cancelled normals are
+  rebuilt) and `tools/check-data.mjs` fails on a twin face or a zero normal in any
+  `lining*.glb.gz`. **Not listed
   in `packs.json`**: the Specimen stage loads every pack that file lists, so
   the state linings are loaded on demand from the index (P2 decides how).
 - Distance fields are not recomputed: the guard keeps every cut away from

@@ -341,9 +341,9 @@
   "lining": {
    "file": "lining.glb.gz",
    "lining": true,
-   "bytes": 470347,
-   "bytes_uncompressed": 637628,
-   "triangles": 49998,
+   "bytes": 470169,
+   "bytes_uncompressed": 637400,
+   "triangles": 49978,
    "nodes": {
     "s.agger-nasi-cell.L": {
      "triangles": 553,
@@ -382,27 +382,27 @@
      "vertices": 607
     },
     "s.maxillary-sinus.L": {
-     "triangles": 3765,
-     "vertices": 1903
+     "triangles": 3763,
+     "vertices": 1902
     },
     "s.maxillary-sinus.R": {
-     "triangles": 3796,
-     "vertices": 1915
+     "triangles": 3788,
+     "vertices": 1914
     },
     "s.nasal-cavity.L": {
-     "triangles": 8610,
-     "vertices": 4554
+     "triangles": 8608,
+     "vertices": 4551
     },
     "s.nasal-cavity.R": {
-     "triangles": 8533,
-     "vertices": 4520
+     "triangles": 8529,
+     "vertices": 4517
     },
     "s.nasopharynx.M": {
      "triangles": 3518,
      "vertices": 1845
     },
     "s.posterior-ethmoid-cells.L": {
-     "triangles": 2896,
+     "triangles": 2894,
      "vertices": 1540
     },
     "s.posterior-ethmoid-cells.R": {
@@ -426,8 +426,8 @@
      "vertices": 708
     },
     "s.nasal-vestibule.L": {
-     "triangles": 1393,
-     "vertices": 729
+     "triangles": 1391,
+     "vertices": 728
     }
    }
   },
@@ -445,8 +445,8 @@
   }
  },
  "totals": {
-  "bytes": 3547240,
-  "triangles": 395238
+  "bytes": 3547062,
+  "triangles": 395218
  },
  "license": "ssb/LICENSE-data.md"
 }
