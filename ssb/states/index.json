@@ -50,8 +50,8 @@
    "measured": {
     "carvedVoxels": 47068,
     "patchBytes": 20545,
-    "liningBytes": 314315,
-    "liningTriangles": 33000,
+    "liningBytes": 314161,
+    "liningTriangles": 32962,
     "remnantTriangles": 6556,
     "guardMinimaMm": {
      "R": {
@@ -105,8 +105,8 @@
    "measured": {
     "carvedVoxels": 46270,
     "patchBytes": 18389,
-    "liningBytes": 311273,
-    "liningTriangles": 33000,
+    "liningBytes": 311052,
+    "liningTriangles": 32949,
     "remnantTriangles": 14290,
     "guardMinimaMm": {
      "R": {
@@ -161,8 +161,8 @@
    "measured": {
     "carvedVoxels": 54352,
     "patchBytes": 20573,
-    "liningBytes": 312294,
-    "liningTriangles": 33000,
+    "liningBytes": 312135,
+    "liningTriangles": 32962,
     "remnantTriangles": 13588,
     "guardMinimaMm": {
      "R": {
@@ -218,8 +218,8 @@
    "measured": {
     "carvedVoxels": 62494,
     "patchBytes": 24194,
-    "liningBytes": 312484,
-    "liningTriangles": 33000,
+    "liningBytes": 312371,
+    "liningTriangles": 32968,
     "remnantTriangles": 11092,
     "guardMinimaMm": {
      "R": {
@@ -276,8 +276,8 @@
    "measured": {
     "carvedVoxels": 60625,
     "patchBytes": 21197,
-    "liningBytes": 313497,
-    "liningTriangles": 33000,
+    "liningBytes": 313359,
+    "liningTriangles": 32964,
     "remnantTriangles": 12774,
     "guardMinimaMm": {
      "R": {
@@ -334,8 +334,8 @@
    "measured": {
     "carvedVoxels": 63448,
     "patchBytes": 25128,
-    "liningBytes": 312647,
-    "liningTriangles": 32998,
+    "liningBytes": 312486,
+    "liningTriangles": 32962,
     "remnantTriangles": 11004,
     "guardMinimaMm": {
      "R": {
@@ -395,8 +395,8 @@
    "measured": {
     "carvedVoxels": 65874,
     "patchBytes": 23706,
-    "liningBytes": 313596,
-    "liningTriangles": 33000,
+    "liningBytes": 313492,
+    "liningTriangles": 32962,
     "remnantTriangles": 11148,
     "guardMinimaMm": {
      "R": {
@@ -458,8 +458,8 @@
    "measured": {
     "carvedVoxels": 69113,
     "patchBytes": 25008,
-    "liningBytes": 313815,
-    "liningTriangles": 32998,
+    "liningBytes": 313614,
+    "liningTriangles": 32954,
     "remnantTriangles": 11506,
     "guardMinimaMm": {
      "R": {
@@ -519,8 +519,8 @@
    "measured": {
     "carvedVoxels": 69976,
     "patchBytes": 25102,
-    "liningBytes": 313996,
-    "liningTriangles": 32998,
+    "liningBytes": 313756,
+    "liningTriangles": 32952,
     "remnantTriangles": 11448,
     "guardMinimaMm": {
      "R": {
@@ -578,8 +578,8 @@
    "measured": {
     "carvedVoxels": 66700,
     "patchBytes": 26903,
-    "liningBytes": 312333,
-    "liningTriangles": 33000,
+    "liningBytes": 312170,
+    "liningTriangles": 32964,
     "remnantTriangles": 10796,
     "guardMinimaMm": {
      "R": {
@@ -640,8 +640,8 @@
    "measured": {
     "carvedVoxels": 73642,
     "patchBytes": 30378,
-    "liningBytes": 312174,
-    "liningTriangles": 33000,
+    "liningBytes": 312057,
+    "liningTriangles": 32972,
     "remnantTriangles": 14564,
     "guardMinimaMm": {
      "R": {
@@ -703,8 +703,8 @@
    "measured": {
     "carvedVoxels": 73267,
     "patchBytes": 26359,
-    "liningBytes": 314380,
-    "liningTriangles": 33000,
+    "liningBytes": 314011,
+    "liningTriangles": 32944,
     "remnantTriangles": 11806,
     "guardMinimaMm": {
      "R": {
@@ -768,8 +768,8 @@
    "measured": {
     "carvedVoxels": 82914,
     "patchBytes": 34237,
-    "liningBytes": 314474,
-    "liningTriangles": 33000,
+    "liningBytes": 314323,
+    "liningTriangles": 32970,
     "remnantTriangles": 11368,
     "guardMinimaMm": {
      "R": {
@@ -834,8 +834,8 @@
    "measured": {
     "carvedVoxels": 87488,
     "patchBytes": 37075,
-    "liningBytes": 314790,
-    "liningTriangles": 32998,
+    "liningBytes": 314651,
+    "liningTriangles": 32966,
     "remnantTriangles": 11368,
     "guardMinimaMm": {
      "R": {
@@ -901,8 +901,8 @@
    "measured": {
     "carvedVoxels": 92786,
     "patchBytes": 40179,
-    "liningBytes": 314068,
-    "liningTriangles": 33000,
+    "liningBytes": 313968,
+    "liningTriangles": 32968,
     "remnantTriangles": 14628,
     "guardMinimaMm": {
      "R": {

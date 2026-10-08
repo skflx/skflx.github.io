@@ -38,8 +38,9 @@
 
    - Procedure states (P2, docs/ssb.md 5.8): the procedure player hands in a derived volume (`setStateVolume`, volume.js
      applyPatch) and collision, the tip's label and the exposure read it instead of the base; the CT inset and the CT
-     stage keep reading the base image. A station for a procedure step is looked up in `byState[<state key>]` first, then
-     in the intact table (`stationFor`, `flyTo(key, stateKey)`).
+     stage keep reading the base image. A station for a procedure step is looked up in the state's views first (`byState[<state key>]`,
+     then the byState tables of every state whose units its own include: a pose posed for A is free in every B that carries A's cuts),
+     then in the intact table (`stationFor(id, chain)`, `flyTo(key, chain)`; a chain is the state keys nearest first, `setViews`).
 
    - A station may carry `shaft: "2.7"` (stations.json; the olfactory cleft, the inferior meatus): flying to it, or opening
      its link, puts the 2.7 mm telescope on and `shaftWhy` says which station did; choosing a diameter by hand clears it.
@@ -47,8 +48,8 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=b2395d85';
-import { sharedVolume, stamped, decode } from './volume.js?v=9c85159b';
+import { loadLandmarks } from './geo-specimen.js?v=f29b81d7';
+import { sharedVolume, stamped, decode } from './volume.js?v=8281d741';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=c2522180';
 
@@ -100,6 +101,9 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let stateVol = null;                 /* a dissected state's volume (P2): what collision and the tip's label read; the base stays the CT image */
     let stateKey = null;
     let byState = new Map();             /* state key -> Map("t.<id>.<side>" -> { id, side, pose }) from stations.json `byState` */
+    let viewChain = [];                  /* the procedure player's state keys, nearest first: the views of the state on show (setViews) */
+    let viewMark = '';                   /* the station id ("t.<id>") of the step on show, marked in the list */
+    const viewSubs = new Set();
     let insetData = null;                /* { ct, width, height, pixel, shaft: [x0, y0, x1, y1], center } for the UI */
     const insetSubs = new Set();
     let selfMove = false;
@@ -256,31 +260,54 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         return true;
     }
 
-    /* A procedure step's station (`t.<id>`, no side) for the pose's nostril (else the midline) in a dissected state: the
-       state's own table first, then the intact one. Returns { key, pose, state } (state: true when it came from byState) or null. */
-    function stationFor(id, key = null) {
+    const chainOf = (c) => (Array.isArray(c) ? c : typeof c === 'string' && c ? [c] : []).filter((k) => typeof k === 'string');
+
+    /* The views of a state: its own byState table, then those of the states whose units it includes (the chain, nearest first),
+       a key posed by a nearer state shadowing a farther one. [{ key, id, side, name, tier, pose, shaft, from }] with `from` the
+       state key the pose was posed for. The intact table is not in it (`stations` lists that). */
+    function viewsOf(chain) {
+        const out = [];
+        const seen = new Set();
+        for (const from of chainOf(chain)) {
+            const table = byState.get(from);
+            if (!table) continue;
+            for (const [key, s] of table) {
+                if (seen.has(key)) continue;
+                seen.add(key);
+                out.push({ key, id: s.id, side: s.side, name: graph.nameOf(s.id), tier: graph.tierOf(s.id), pose: { ...s.pose }, shaft: s.shaft, from });
+            }
+        }
+        return out;
+    }
+
+    /* A procedure step's station (`t.<id>`, no side) for the pose's nostril (else the midline) in a dissected state: the chain's
+       tables nearest first, then the intact one. Returns { key, pose, from } (from: the state key the pose was posed for, null
+       for the intact table) or null. */
+    function stationFor(id, chain = null) {
         const p = pose();
         const link = parseStationLink(id);
         if (!link) return null;
-        for (const [table, own] of [[key ? byState.get(key) : null, true], [stations, false]]) {
+        const tables = [...chainOf(chain).map((k) => [byState.get(k), k]), [stations, null]];
+        for (const [table, from] of tables) {
             if (!table) continue;
             const hit = resolveStation(table, { id: link.id, side: link.side || (p ? p.side : 'R') }) || resolveStation(table, { id: link.id, side: 'M' });
-            if (hit) return { key: `${hit.id}.${hit.side}`, pose: { ...hit.pose }, state: own };
+            if (hit) return { key: `${hit.id}.${hit.side}`, pose: { ...hit.pose }, from, state: from !== null };
         }
         return null;
     }
 
-    /* Fly the scope to station `key` ("t.<id>.<side>"), in the dissected state `inState` when one is given and carries its
-       own pose for it: false for an unknown key. */
-    function flyTo(key, inState = null) {
-        const own = inState ? byState.get(inState) : null;
-        const st = (own && own.get(key)) || stations.get(key);
+    /* Fly the scope to station `key` ("t.<id>.<side>"): the chain's own pose for it when it has one, else the intact one. false for
+       an unknown key. `jump` sets the pose at once (a link opening on a step has nowhere to fly from). */
+    function flyTo(key, chain = null, { jump = false } = {}) {
+        let st = null;
+        for (const k of chainOf(chain)) { const t = byState.get(k); if (t && t.get(key)) { st = t.get(key); break; } }
+        st = st || stations.get(key);
         if (!st) return false;
         const cur = pose();
         const to = clampPose(st.pose);
         cancelFlight();
         needShaft(st.shaft, key);
-        if (!cur || reduce.matches) return store.setScope(to, INTERNAL) || samePose(cur, to);
+        if (!cur || jump || reduce.matches) return store.setScope(to, INTERNAL) || samePose(cur, to);
         if (samePose(cur, to)) return true;
         const f = { from: { ...cur }, to, t0: performance.now(), raf: 0 };
         flight = f;
@@ -296,6 +323,19 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         emit();
         return true;
     }
+
+    /* The player's state on show: its chain of state keys (nearest first; [] for none) and the step's station id. Not a pose change. */
+    function setViews(chain, mark = '') {
+        const next = chainOf(chain);
+        const m = typeof mark === 'string' ? mark : '';
+        if (next.length === viewChain.length && next.every((k, i) => k === viewChain[i]) && m === viewMark) return;
+        viewChain = next;
+        viewMark = m;
+        for (const fn of [...viewSubs]) { try { fn(); } catch (e) { console.error(e); } }      /* the station list only: not a pose or a volume change, so not `emit` */
+    }
+
+    /* The station table, once loaded (a link opening on a step needs it before it can land). Never rejects. */
+    const whenStations = () => loadStations().then(() => stationsState === 'ready');
 
     /* ---------------- the camera ---------------- */
 
@@ -609,7 +649,11 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             return { index, name: d ? d.name : null };
         },
         get byState() { return [...byState].map(([k, m]) => [k, [...m.keys()]]); },
+        get views() { return viewsOf(viewChain); },
+        get viewChain() { return viewChain.slice(); },
+        get viewMark() { return viewMark; },
         stationFor,
+        viewsOf,
         get hud() { return { rows: hud.rows.map((r) => ({ ...r })), contactMm: hud.contactMm, limited: hud.limited, limitedBy: hud.limitedBy, clampMm }; },
         get cursor() { const c = store.get().cursor; return c ? c.slice() : null; },
         get exposeRuns() { return exposeRuns; },
@@ -625,9 +669,13 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     });
 
     return {
-        hook, enter, leave, setPose, nudge, cycleLens, setShaft, flyTo, setStateVolume, stationFor,
+        hook, enter, leave, setPose, nudge, cycleLens, setShaft, flyTo, setStateVolume, stationFor, viewsOf, setViews, whenStations,
+        get views() { return viewsOf(viewChain); },
+        get viewChain() { return viewChain.slice(); },
+        get viewMark() { return viewMark; },
         get flying() { return !!flight; },
         get stations() { return listStations(); },
+        get stationsState() { return stationsState; },
         get shaft() { return shaft; },
         get shaftWhy() { return shaftWhy ? { ...shaftWhy } : null; },
         get hud() { return hook.hud; },
@@ -640,6 +688,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         get lastPose() { return lastPose; },
         get inset() { return insetData; },
         onInset(fn) { insetSubs.add(fn); return () => insetSubs.delete(fn); },
+        onViews(fn) { viewSubs.add(fn); return () => viewSubs.delete(fn); },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
     };
 }

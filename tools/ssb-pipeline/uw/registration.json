@@ -10784,7 +10784,7 @@
  "dissect": {
   "states": 15,
   "worstUnitDeviation": 0.3607,
-  "liningBytes": 5326879,
+  "liningBytes": 5324349,
   "keepViolations": 0,
   "antrostomy": {
    "carved": {

@@ -741,7 +741,6 @@
   }
  },
  "uncovered": {
-  "t.clivus-0": "the clival recess opens at the state of p.transclival-approach step 2, but the view is of intradural structures (basilar artery, pons, CN VI) the specimen does not have",
   "t.cvj-0": "needs the posterior septectomy (P1's EEA states have it), but C1 and the dens lie below the specimen crop",
   "t.draf-iii-0": "needs a septal window and frontal drillout (Draf III): outside O7's FESS corridor (P1 stops at Draf IIa)",
   "t.petrous-apex-45": "needs the medial petrous apex approach (behind the paraclival ICA), not modelled in P1; the clival recess state shows only the lateral sphenoid wall from there",
@@ -763,189 +762,42 @@
  },
  "byState": {
   "3589e1abd6": {
-   "t.frontal-recess-45.L": {
-    "pose": {
-     "side": "L",
-     "depth": 34,
-     "yaw": 2,
-     "pitch": 42,
-     "roll": 0,
-     "lens": 45
-    },
-    "target": {
-     "id": "lm.frontal-ostium.L"
-    },
-    "measured": {
-     "tip": [
-      -7.4,
-      -20.8,
-      27.5
-     ],
-     "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 6.2,
-     "contactMm": 12.0,
-     "imageShare": {
-      "s.middle-turbinate.L": 50,
-      "s.lamina-papyracea.L": 23,
-      "tissue": 9,
-      "s.nasal-cavity.L": 7,
-      "s.agger-nasi-cell.L": 6,
-      "s.fovea-ethmoidalis.L": 2,
-      "s.ethmoid-bulla.L": 1,
-      "s.frontal-recess.L": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.L": 100,
-      "s.agger-nasi-cell.L": 22,
-      "s.frontal-recess.L": 6,
-      "s.ethmoid-bulla.L": 4,
-      "s.anterior-ethmoid-cells.L": 1
-     }
-    }
-   },
-   "t.frontal-recess-45.R": {
+   "t.optic-canal-0.R": {
     "pose": {
      "side": "R",
-     "depth": 34,
-     "yaw": 2,
-     "pitch": 42,
-     "roll": 0,
-     "lens": 45
-    },
-    "target": {
-     "id": "lm.frontal-ostium.R"
-    },
-    "measured": {
-     "tip": [
-      7.4,
-      -20.8,
-      27.5
-     ],
-     "tipIn": "s.nasal-cavity.R",
-     "targetOffAxisDeg": 6.2,
-     "contactMm": 12.0,
-     "imageShare": {
-      "s.middle-turbinate.R": 48,
-      "s.lamina-papyracea.R": 25,
-      "s.nasal-cavity.R": 10,
-      "tissue": 9,
-      "s.agger-nasi-cell.R": 5,
-      "s.fovea-ethmoidalis.R": 2,
-      "s.ethmoid-bulla.R": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.R": 100,
-      "s.agger-nasi-cell.R": 22,
-      "s.frontal-recess.R": 6,
-      "s.ethmoid-bulla.R": 4,
-      "s.anterior-ethmoid-cells.R": 1
-     }
-    }
-   },
-   "t.medial-orbital-wall-0.L": {
-    "pose": {
-     "side": "L",
-     "depth": 38,
+     "depth": 62,
      "yaw": 4,
-     "pitch": 38,
+     "pitch": 24,
      "roll": 0,
      "lens": 0
     },
     "target": {
-     "id": "s.lamina-papyracea.L"
+     "at": [
+      11.79,
+      -65.01,
+      31.12
+     ],
+     "note": "voxel centroid of s.sphenoid-lateral-wall.R with S in (28, None)"
     },
     "measured": {
      "tip": [
-      -8.6,
-      -25.4,
-      28.1
+      10.5,
+      -52.1,
+      29.9
      ],
-     "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 13.3,
-     "contactMm": 16.5,
+     "tipIn": "s.posterior-ethmoid-cells.R",
+     "targetOffAxisDeg": 18.8,
+     "contactMm": 17.0,
      "imageShare": {
-      "s.lamina-papyracea.L": 40,
-      "s.posterior-ethmoid-cells.L": 11,
-      "s.lateral-lamella.L": 10,
-      "s.fovea-ethmoidalis.L": 9,
-      "s.ethmoid-bulla.L": 5,
-      "s.middle-turbinate.L": 3,
-      "s.sella-turcica.M": 3,
-      "s.basal-lamella.L": 2,
-      "s.frontal-recess.L": 2,
-      "s.planum-sphenoidale.M": 2,
-      "s.sphenoid-face.L": 2,
-      "s.anterior-ethmoid-cells.L": 1,
-      "s.sphenoid-lateral-wall.L": 1,
-      "s.intersinus-septum.M": 1,
-      "s.nasal-septum.M": 1,
-      "s.cribriform-plate.L": 1,
-      "s.orbit.L": 1,
-      "s.fovea-ethmoidalis.R": 1,
-      "s.nasal-cavity.L": 1,
-      "tissue": 1,
-      "s.sphenoid-sinus.L": 1
+      "s.sphenoid-lateral-wall.R": 35,
+      "s.sphenoid-sinus.R": 27,
+      "s.sella-turcica.M": 17,
+      "s.planum-sphenoidale.M": 15,
+      "s.clivus.M": 4,
+      "tissue": 2
      },
      "raysThrough": {
-      "s.ethmoid-bulla.L": 100,
-      "s.nasal-cavity.L": 100,
-      "s.anterior-ethmoid-cells.L": 47,
-      "s.posterior-ethmoid-cells.L": 44,
-      "s.frontal-recess.L": 25,
-      "s.sphenoid-sinus.L": 9
-     }
-    }
-   },
-   "t.medial-orbital-wall-0.R": {
-    "pose": {
-     "side": "R",
-     "depth": 38,
-     "yaw": 4,
-     "pitch": 38,
-     "roll": 0,
-     "lens": 0
-    },
-    "target": {
-     "id": "s.lamina-papyracea.R"
-    },
-    "measured": {
-     "tip": [
-      8.6,
-      -25.4,
-      28.1
-     ],
-     "tipIn": "s.nasal-cavity.R",
-     "targetOffAxisDeg": 13.3,
-     "contactMm": 16.5,
-     "imageShare": {
-      "s.lamina-papyracea.R": 35,
-      "s.posterior-ethmoid-cells.R": 11,
-      "s.fovea-ethmoidalis.R": 11,
-      "s.lateral-lamella.R": 8,
-      "s.ethmoid-bulla.R": 6,
-      "s.anterior-ethmoid-cells.R": 5,
-      "s.basal-lamella.R": 3,
-      "s.sphenoid-face.R": 3,
-      "s.cribriform-plate.R": 3,
-      "s.sella-turcica.M": 3,
-      "s.middle-turbinate.R": 2,
-      "s.sphenoid-lateral-wall.R": 2,
-      "s.planum-sphenoidale.M": 1,
-      "s.frontal-recess.R": 1,
-      "tissue": 1,
-      "s.nasal-septum.M": 1,
-      "s.fovea-ethmoidalis.L": 1,
-      "s.nasal-cavity.R": 1,
-      "s.intersinus-septum.M": 1,
-      "s.sphenoid-sinus.R": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.R": 100,
-      "s.ethmoid-bulla.R": 100,
-      "s.anterior-ethmoid-cells.R": 48,
-      "s.posterior-ethmoid-cells.R": 43,
-      "s.frontal-recess.R": 27,
-      "s.sphenoid-sinus.R": 8
+      "s.sphenoid-sinus.R": 100
      }
     }
    },
@@ -974,7 +826,7 @@
      ],
      "tipIn": "s.posterior-ethmoid-cells.L",
      "targetOffAxisDeg": 18.8,
-     "contactMm": 22.5,
+     "contactMm": 17.0,
      "imageShare": {
       "s.sphenoid-lateral-wall.L": 33,
       "s.sphenoid-sinus.L": 29,
@@ -988,123 +840,231 @@
      }
     }
    },
-   "t.optic-canal-0.R": {
+   "t.medial-orbital-wall-0.R": {
     "pose": {
      "side": "R",
-     "depth": 62,
+     "depth": 38,
      "yaw": 4,
-     "pitch": 24,
+     "pitch": 38,
      "roll": 0,
      "lens": 0
     },
     "target": {
-     "at": [
-      11.79,
-      -65.01,
-      31.12
-     ],
-     "note": "voxel centroid of s.sphenoid-lateral-wall.R with S in (28, None)"
+     "id": "s.lamina-papyracea.R"
     },
     "measured": {
      "tip": [
-      10.5,
-      -52.1,
-      29.9
+      8.6,
+      -25.4,
+      28.1
      ],
-     "tipIn": "s.posterior-ethmoid-cells.R",
-     "targetOffAxisDeg": 18.8,
-     "contactMm": 22.5,
+     "tipIn": "s.nasal-cavity.R",
+     "targetOffAxisDeg": 13.3,
+     "contactMm": 13.5,
      "imageShare": {
-      "s.sphenoid-lateral-wall.R": 35,
-      "s.sphenoid-sinus.R": 27,
-      "s.sella-turcica.M": 17,
-      "s.planum-sphenoidale.M": 15,
-      "s.clivus.M": 4,
-      "tissue": 2
+      "s.lamina-papyracea.R": 35,
+      "s.posterior-ethmoid-cells.R": 11,
+      "s.fovea-ethmoidalis.R": 11,
+      "s.lateral-lamella.R": 8,
+      "s.ethmoid-bulla.R": 6,
+      "s.anterior-ethmoid-cells.R": 5,
+      "s.cribriform-plate.R": 4,
+      "s.basal-lamella.R": 3,
+      "s.sphenoid-face.R": 3,
+      "s.sella-turcica.M": 3,
+      "s.sphenoid-lateral-wall.R": 2,
+      "tissue": 2,
+      "s.planum-sphenoidale.M": 1,
+      "s.frontal-recess.R": 1,
+      "s.middle-turbinate.R": 1,
+      "s.nasal-septum.M": 1,
+      "s.fovea-ethmoidalis.L": 1,
+      "s.intersinus-septum.M": 1,
+      "s.nasal-cavity.R": 1,
+      "s.sphenoid-sinus.R": 1
      },
      "raysThrough": {
-      "s.sphenoid-sinus.R": 100
+      "s.nasal-cavity.R": 100,
+      "s.ethmoid-bulla.R": 100,
+      "s.anterior-ethmoid-cells.R": 48,
+      "s.posterior-ethmoid-cells.R": 43,
+      "s.frontal-recess.R": 27,
+      "s.sphenoid-sinus.R": 8
+     }
+    }
+   },
+   "t.medial-orbital-wall-0.L": {
+    "pose": {
+     "side": "L",
+     "depth": 38,
+     "yaw": 4,
+     "pitch": 38,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "id": "s.lamina-papyracea.L"
+    },
+    "measured": {
+     "tip": [
+      -8.6,
+      -25.4,
+      28.1
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 13.3,
+     "contactMm": 13.5,
+     "imageShare": {
+      "s.lamina-papyracea.L": 40,
+      "s.posterior-ethmoid-cells.L": 11,
+      "s.lateral-lamella.L": 10,
+      "s.fovea-ethmoidalis.L": 9,
+      "s.ethmoid-bulla.L": 5,
+      "s.sella-turcica.M": 3,
+      "s.basal-lamella.L": 2,
+      "s.frontal-recess.L": 2,
+      "s.planum-sphenoidale.M": 2,
+      "s.cribriform-plate.L": 2,
+      "s.sphenoid-face.L": 2,
+      "s.nasal-septum.M": 2,
+      "s.anterior-ethmoid-cells.L": 1,
+      "s.sphenoid-lateral-wall.L": 1,
+      "s.intersinus-septum.M": 1,
+      "s.middle-turbinate.L": 1,
+      "s.orbit.L": 1,
+      "s.fovea-ethmoidalis.R": 1,
+      "s.nasal-cavity.L": 1,
+      "tissue": 1,
+      "s.sphenoid-sinus.L": 1
+     },
+     "raysThrough": {
+      "s.ethmoid-bulla.L": 100,
+      "s.nasal-cavity.L": 100,
+      "s.anterior-ethmoid-cells.L": 47,
+      "s.posterior-ethmoid-cells.L": 45,
+      "s.frontal-recess.L": 25,
+      "s.sphenoid-sinus.L": 9
+     }
+    }
+   },
+   "t.frontal-recess-45.R": {
+    "pose": {
+     "side": "R",
+     "depth": 34,
+     "yaw": 2,
+     "pitch": 42,
+     "roll": 0,
+     "lens": 45
+    },
+    "target": {
+     "id": "lm.frontal-ostium.R"
+    },
+    "measured": {
+     "tip": [
+      7.4,
+      -20.8,
+      27.5
+     ],
+     "tipIn": "s.nasal-cavity.R",
+     "targetOffAxisDeg": 6.2,
+     "contactMm": 12.0,
+     "imageShare": {
+      "tissue": 48,
+      "s.lamina-papyracea.R": 27,
+      "s.agger-nasi-cell.R": 10,
+      "s.nasal-cavity.R": 7,
+      "s.middle-turbinate.R": 5,
+      "s.fovea-ethmoidalis.R": 2,
+      "s.ethmoid-bulla.R": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.R": 100,
+      "s.agger-nasi-cell.R": 17,
+      "s.frontal-recess.R": 6,
+      "s.ethmoid-bulla.R": 4,
+      "s.anterior-ethmoid-cells.R": 1
+     }
+    }
+   },
+   "t.frontal-recess-45.L": {
+    "pose": {
+     "side": "L",
+     "depth": 34,
+     "yaw": 2,
+     "pitch": 42,
+     "roll": 0,
+     "lens": 45
+    },
+    "target": {
+     "id": "lm.frontal-ostium.L"
+    },
+    "measured": {
+     "tip": [
+      -7.4,
+      -20.8,
+      27.5
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 6.2,
+     "contactMm": 12.0,
+     "imageShare": {
+      "tissue": 45,
+      "s.lamina-papyracea.L": 26,
+      "s.nasal-cavity.L": 11,
+      "s.middle-turbinate.L": 7,
+      "s.agger-nasi-cell.L": 7,
+      "s.fovea-ethmoidalis.L": 2,
+      "s.ethmoid-bulla.L": 1,
+      "s.frontal-recess.L": 1,
+      "s.anterior-ethmoid-cells.L": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.agger-nasi-cell.L": 17,
+      "s.frontal-recess.L": 6,
+      "s.ethmoid-bulla.L": 4,
+      "s.anterior-ethmoid-cells.L": 1
      }
     }
    }
   },
   "3a97cc5909": {
-   "t.ethmoid-bulla-0.L": {
-    "pose": {
-     "side": "L",
-     "depth": 36,
-     "yaw": 4,
-     "pitch": 38,
-     "roll": 0,
-     "lens": 0
-    },
-    "target": {
-     "id": "s.ethmoid-bulla.L"
-    },
-    "measured": {
-     "tip": [
-      -8.5,
-      -23.8,
-      26.9
-     ],
-     "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 9.0,
-     "contactMm": 16.5,
-     "imageShare": {
-      "tissue": 47,
-      "s.lamina-papyracea.L": 17,
-      "s.nasal-cavity.L": 11,
-      "s.basal-lamella.L": 8,
-      "s.middle-turbinate.L": 6,
-      "s.maxillary-medial-wall.L": 6,
-      "s.ethmoid-bulla.L": 2,
-      "s.lateral-lamella.L": 1,
-      "s.orbit.L": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.L": 100,
-      "s.frontal-recess.L": 34,
-      "s.ethmoid-bulla.L": 12,
-      "s.anterior-ethmoid-cells.L": 2
-     }
-    }
-   },
-   "t.ethmoid-bulla-0.R": {
+   "t.infundibulum-45.R": {
     "pose": {
      "side": "R",
-     "depth": 36,
+     "depth": 32,
      "yaw": 4,
-     "pitch": 38,
-     "roll": 0,
-     "lens": 0
+     "pitch": 30,
+     "roll": 270,
+     "lens": 45
     },
     "target": {
-     "id": "s.ethmoid-bulla.R"
+     "at": [
+      11.34,
+      -25.58,
+      21.95
+     ],
+     "note": "voxel centroid of s.maxillary-medial-wall.R with A in (-31, -19), S in (18, None)"
     },
     "measured": {
      "tip": [
       8.5,
-      -23.8,
-      26.9
+      -23.2,
+      20.7
      ],
      "tipIn": "s.nasal-cavity.R",
-     "targetOffAxisDeg": 9.0,
-     "contactMm": 16.5,
+     "targetOffAxisDeg": 3.6,
+     "contactMm": 10.0,
      "imageShare": {
-      "tissue": 43,
-      "s.lamina-papyracea.R": 19,
-      "s.nasal-cavity.R": 14,
-      "s.basal-lamella.R": 9,
-      "s.middle-turbinate.R": 6,
-      "s.maxillary-medial-wall.R": 6,
-      "s.ethmoid-bulla.R": 3,
-      "s.anterior-ethmoid-cells.R": 1
+      "s.maxillary-medial-wall.R": 83,
+      "s.nasal-cavity.R": 15,
+      "s.maxillary-sinus.R": 1,
+      "tissue": 1,
+      "s.middle-turbinate.R": 1
      },
      "raysThrough": {
       "s.nasal-cavity.R": 100,
-      "s.frontal-recess.R": 32,
-      "s.ethmoid-bulla.R": 14,
-      "s.anterior-ethmoid-cells.R": 2
+      "s.maxillary-sinus.R": 3
      }
     }
    },
@@ -1133,7 +1093,7 @@
      ],
      "tipIn": "s.nasal-cavity.L",
      "targetOffAxisDeg": 3.6,
-     "contactMm": 14.0,
+     "contactMm": 10.0,
      "imageShare": {
       "s.maxillary-medial-wall.L": 78,
       "s.nasal-cavity.L": 20,
@@ -1146,93 +1106,89 @@
      }
     }
    },
-   "t.infundibulum-45.R": {
+   "t.ethmoid-bulla-0.R": {
     "pose": {
      "side": "R",
-     "depth": 32,
+     "depth": 36,
      "yaw": 4,
-     "pitch": 30,
-     "roll": 270,
-     "lens": 45
+     "pitch": 38,
+     "roll": 0,
+     "lens": 0
     },
     "target": {
-     "at": [
-      11.34,
-      -25.58,
-      21.95
-     ],
-     "note": "voxel centroid of s.maxillary-medial-wall.R with A in (-31, -19), S in (18, None)"
+     "id": "s.ethmoid-bulla.R"
     },
     "measured": {
      "tip": [
       8.5,
-      -23.2,
-      20.7
+      -23.8,
+      26.9
      ],
      "tipIn": "s.nasal-cavity.R",
-     "targetOffAxisDeg": 3.6,
-     "contactMm": 14.0,
+     "targetOffAxisDeg": 9.0,
+     "contactMm": 13.5,
      "imageShare": {
-      "s.maxillary-medial-wall.R": 83,
-      "s.nasal-cavity.R": 15,
-      "s.maxillary-sinus.R": 1,
-      "tissue": 1,
-      "s.middle-turbinate.R": 1
+      "tissue": 44,
+      "s.lamina-papyracea.R": 19,
+      "s.nasal-cavity.R": 14,
+      "s.basal-lamella.R": 9,
+      "s.maxillary-medial-wall.R": 6,
+      "s.middle-turbinate.R": 4,
+      "s.ethmoid-bulla.R": 3,
+      "s.anterior-ethmoid-cells.R": 1,
+      "s.cribriform-plate.R": 1
      },
      "raysThrough": {
       "s.nasal-cavity.R": 100,
-      "s.maxillary-sinus.R": 3
+      "s.frontal-recess.R": 32,
+      "s.ethmoid-bulla.R": 14,
+      "s.anterior-ethmoid-cells.R": 2
+     }
+    }
+   },
+   "t.ethmoid-bulla-0.L": {
+    "pose": {
+     "side": "L",
+     "depth": 36,
+     "yaw": 4,
+     "pitch": 38,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "id": "s.ethmoid-bulla.L"
+    },
+    "measured": {
+     "tip": [
+      -8.5,
+      -23.8,
+      26.9
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 9.0,
+     "contactMm": 13.5,
+     "imageShare": {
+      "tissue": 48,
+      "s.lamina-papyracea.L": 17,
+      "s.nasal-cavity.L": 11,
+      "s.basal-lamella.L": 8,
+      "s.maxillary-medial-wall.L": 6,
+      "s.middle-turbinate.L": 4,
+      "s.ethmoid-bulla.L": 2,
+      "s.lateral-lamella.L": 1,
+      "s.orbit.L": 1,
+      "s.cribriform-plate.L": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.frontal-recess.L": 34,
+      "s.ethmoid-bulla.L": 12,
+      "s.anterior-ethmoid-cells.L": 2
      }
     }
    }
   },
   "4de666ec3a": {
-   "t.frontal-sinus-70.L": {
-    "pose": {
-     "side": "L",
-     "depth": 42,
-     "yaw": -4,
-     "pitch": 44,
-     "roll": 0,
-     "lens": 70
-    },
-    "target": {
-     "id": "s.frontal-sinus.L"
-    },
-    "measured": {
-     "tip": [
-      -4.4,
-      -25.7,
-      33.9
-     ],
-     "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 6.4,
-     "contactMm": 15.0,
-     "imageShare": {
-      "s.frontal-recess.L": 17,
-      "s.lamina-papyracea.L": 17,
-      "tissue": 14,
-      "s.middle-turbinate.L": 12,
-      "s.frontal-sinus-anterior-table.L": 8,
-      "s.frontal-sinus-posterior-table.L": 8,
-      "s.frontal-sinus.L": 8,
-      "s.fovea-ethmoidalis.L": 8,
-      "s.nasal-cavity.L": 4,
-      "s.frontal-intersinus-septum.M": 1,
-      "s.frontal-sinus-anterior-table.R": 1,
-      "s.lateral-lamella.L": 1,
-      "s.anterior-ethmoid-cells.L": 1,
-      "s.agger-nasi-cell.L": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.L": 100,
-      "s.frontal-recess.L": 76,
-      "s.agger-nasi-cell.L": 29,
-      "s.frontal-sinus.L": 20,
-      "s.anterior-ethmoid-cells.L": 7
-     }
-    }
-   },
    "t.frontal-sinus-70.R": {
     "pose": {
      "side": "R",
@@ -1253,66 +1209,111 @@
      ],
      "tipIn": "s.nasal-cavity.R",
      "targetOffAxisDeg": 6.4,
-     "contactMm": 15.0,
+     "contactMm": 10.0,
      "imageShare": {
+      "tissue": 19,
       "s.lamina-papyracea.R": 17,
-      "s.frontal-recess.R": 14,
-      "tissue": 12,
-      "s.middle-turbinate.R": 12,
-      "s.fovea-ethmoidalis.R": 11,
+      "s.frontal-recess.R": 17,
+      "s.fovea-ethmoidalis.R": 12,
       "s.frontal-sinus-anterior-table.R": 10,
       "s.frontal-sinus.R": 7,
       "s.frontal-sinus-posterior-table.R": 7,
-      "s.nasal-cavity.R": 4,
       "s.frontal-intersinus-septum.M": 3,
-      "s.lateral-lamella.R": 2,
-      "s.frontal-sinus-floor.R": 1
+      "s.lateral-lamella.R": 3,
+      "s.middle-turbinate.R": 2,
+      "s.frontal-sinus-floor.R": 1,
+      "s.nasal-cavity.R": 1
      },
      "raysThrough": {
       "s.nasal-cavity.R": 100,
-      "s.frontal-recess.R": 77,
+      "s.frontal-recess.R": 84,
       "s.agger-nasi-cell.R": 30,
       "s.frontal-sinus.R": 22,
-      "s.anterior-ethmoid-cells.R": 7
+      "s.anterior-ethmoid-cells.R": 13
+     }
+    }
+   },
+   "t.frontal-sinus-70.L": {
+    "pose": {
+     "side": "L",
+     "depth": 42,
+     "yaw": -4,
+     "pitch": 44,
+     "roll": 0,
+     "lens": 70
+    },
+    "target": {
+     "id": "s.frontal-sinus.L"
+    },
+    "measured": {
+     "tip": [
+      -4.4,
+      -25.7,
+      33.9
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 6.4,
+     "contactMm": 10.0,
+     "imageShare": {
+      "s.frontal-recess.L": 20,
+      "tissue": 18,
+      "s.lamina-papyracea.L": 17,
+      "s.fovea-ethmoidalis.L": 10,
+      "s.frontal-sinus-anterior-table.L": 8,
+      "s.frontal-sinus-posterior-table.L": 8,
+      "s.frontal-sinus.L": 8,
+      "s.middle-turbinate.L": 2,
+      "s.lateral-lamella.L": 2,
+      "s.nasal-cavity.L": 2,
+      "s.frontal-intersinus-septum.M": 1,
+      "s.fovea-ethmoidalis.R": 1,
+      "s.anterior-ethmoid-cells.L": 1,
+      "s.frontal-sinus-anterior-table.R": 1,
+      "s.agger-nasi-cell.L": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.frontal-recess.L": 84,
+      "s.agger-nasi-cell.L": 29,
+      "s.frontal-sinus.L": 20,
+      "s.anterior-ethmoid-cells.L": 12
      }
     }
    }
   },
   "580ec6ce1a": {
-   "t.cavernous-sinus-30.L": {
+   "t.sella-open-30.M": {
     "pose": {
-     "side": "L",
-     "depth": 68,
-     "yaw": 2,
-     "pitch": 16,
+     "side": "R",
+     "depth": 74,
+     "yaw": -2,
+     "pitch": 20,
      "roll": 60,
      "lens": 30
     },
     "target": {
-     "at": [
-      -11.39,
-      -70.53,
-      28.26
-     ],
-     "note": "voxel centroid of s.sphenoid-lateral-wall.L with S in (24, None), A in (None, -62)"
+     "id": "lm.sella-floor-center.M"
     },
     "measured": {
      "tip": [
-      -8.8,
-      -60.9,
-      23.4
+      4.1,
+      -65.0,
+      30.0
      ],
-     "tipIn": "s.sphenoid-sinus.L",
-     "targetOffAxisDeg": 15.1,
-     "contactMm": 42.0,
+     "tipIn": "s.sphenoid-sinus.R",
+     "targetOffAxisDeg": 12.6,
+     "contactMm": 13.0,
      "imageShare": {
-      "s.sphenoid-lateral-wall.L": 62,
-      "s.sphenoid-sinus.L": 28,
-      "tissue": 7,
-      "s.clivus.M": 3
+      "tissue": 59,
+      "s.sella-turcica.M": 24,
+      "s.sphenoid-sinus.R": 6,
+      "s.sphenoid-sinus.L": 6,
+      "s.sphenoid-lateral-wall.L": 2,
+      "s.clivus.M": 2
      },
      "raysThrough": {
-      "s.sphenoid-sinus.L": 100
+      "s.sphenoid-sinus.R": 100,
+      "s.sphenoid-sinus.L": 45
      }
     }
    },
@@ -1341,7 +1342,7 @@
      ],
      "tipIn": "s.sphenoid-sinus.R",
      "targetOffAxisDeg": 15.1,
-     "contactMm": 42.0,
+     "contactMm": 30.5,
      "imageShare": {
       "s.sphenoid-lateral-wall.R": 70,
       "s.sphenoid-sinus.R": 19,
@@ -1353,88 +1354,183 @@
      }
     }
    },
-   "t.sella-open-30.M": {
+   "t.cavernous-sinus-30.L": {
     "pose": {
-     "side": "R",
-     "depth": 74,
-     "yaw": -2,
-     "pitch": 20,
+     "side": "L",
+     "depth": 68,
+     "yaw": 2,
+     "pitch": 16,
      "roll": 60,
      "lens": 30
     },
     "target": {
-     "id": "lm.sella-floor-center.M"
+     "at": [
+      -11.39,
+      -70.53,
+      28.26
+     ],
+     "note": "voxel centroid of s.sphenoid-lateral-wall.L with S in (24, None), A in (None, -62)"
     },
     "measured": {
      "tip": [
-      4.1,
-      -65.0,
-      30.0
+      -8.8,
+      -60.9,
+      23.4
      ],
-     "tipIn": "s.sphenoid-sinus.R",
-     "targetOffAxisDeg": 12.6,
-     "contactMm": 20.5,
+     "tipIn": "s.sphenoid-sinus.L",
+     "targetOffAxisDeg": 15.1,
+     "contactMm": 30.5,
      "imageShare": {
-      "tissue": 59,
-      "s.sella-turcica.M": 24,
-      "s.sphenoid-sinus.R": 6,
-      "s.sphenoid-sinus.L": 6,
-      "s.sphenoid-lateral-wall.L": 2,
-      "s.clivus.M": 2
+      "s.sphenoid-lateral-wall.L": 62,
+      "s.sphenoid-sinus.L": 28,
+      "tissue": 7,
+      "s.clivus.M": 3
      },
      "raysThrough": {
-      "s.sphenoid-sinus.R": 100,
-      "s.sphenoid-sinus.L": 45
+      "s.sphenoid-sinus.L": 100
      }
     }
    }
   },
-  "974ae048e4": {
-   "t.basal-lamella-0.L": {
+  "78b0c76006": {
+   "t.frontal-recess-45.R": {
+    "pose": {
+     "side": "R",
+     "depth": 34,
+     "yaw": 2,
+     "pitch": 42,
+     "roll": 0,
+     "lens": 45
+    },
+    "target": {
+     "id": "lm.frontal-ostium.R"
+    },
+    "measured": {
+     "tip": [
+      7.4,
+      -20.8,
+      27.5
+     ],
+     "tipIn": "s.nasal-cavity.R",
+     "targetOffAxisDeg": 6.2,
+     "contactMm": 12.0,
+     "imageShare": {
+      "s.lamina-papyracea.R": 32,
+      "s.agger-nasi-cell.R": 18,
+      "s.fovea-ethmoidalis.R": 13,
+      "tissue": 8,
+      "s.frontal-recess.R": 6,
+      "s.middle-turbinate.R": 6,
+      "s.frontal-sinus-posterior-table.R": 4,
+      "s.lateral-lamella.R": 4,
+      "s.nasal-cavity.R": 2,
+      "s.fovea-ethmoidalis.L": 2,
+      "s.frontal-sinus.R": 1,
+      "s.ethmoid-bulla.R": 1,
+      "s.lateral-lamella.L": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.R": 100,
+      "s.agger-nasi-cell.R": 83,
+      "s.frontal-recess.R": 49,
+      "s.ethmoid-bulla.R": 8,
+      "s.anterior-ethmoid-cells.R": 8,
+      "s.frontal-sinus.R": 4
+     }
+    }
+   },
+   "t.frontal-recess-45.L": {
     "pose": {
      "side": "L",
-     "depth": 48,
+     "depth": 34,
      "yaw": 2,
-     "pitch": 40,
+     "pitch": 42,
+     "roll": 0,
+     "lens": 45
+    },
+    "target": {
+     "id": "lm.frontal-ostium.L"
+    },
+    "measured": {
+     "tip": [
+      -7.4,
+      -20.8,
+      27.5
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 6.2,
+     "contactMm": 12.0,
+     "imageShare": {
+      "s.lamina-papyracea.L": 38,
+      "s.agger-nasi-cell.L": 12,
+      "s.fovea-ethmoidalis.L": 9,
+      "s.frontal-recess.L": 7,
+      "tissue": 7,
+      "s.middle-turbinate.L": 7,
+      "s.frontal-sinus-posterior-table.L": 4,
+      "s.lateral-lamella.L": 4,
+      "s.frontal-sinus.L": 2,
+      "s.anterior-ethmoid-cells.L": 2,
+      "s.fovea-ethmoidalis.R": 1,
+      "s.ethmoid-bulla.L": 1,
+      "s.nasal-cavity.L": 1,
+      "s.frontal-intersinus-septum.M": 1,
+      "s.frontal-sinus-posterior-table.R": 1,
+      "s.lateral-lamella.R": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.agger-nasi-cell.L": 84,
+      "s.frontal-recess.L": 51,
+      "s.ethmoid-bulla.L": 9,
+      "s.anterior-ethmoid-cells.L": 8,
+      "s.frontal-sinus.L": 6
+     }
+    }
+   }
+  },
+  "882fa0add6": {
+   "t.clivus-0.M": {
+    "pose": {
+     "side": "R",
+     "depth": 76,
+     "yaw": -3,
+     "pitch": 14,
      "roll": 0,
      "lens": 0
     },
     "target": {
      "at": [
-      -7.6,
-      -35.69,
-      40.31
+      0.0,
+      -77.93,
+      23.89
      ],
-     "note": "the part of s.basal-lamella.L the pose images: the centroid of its voxels inside the 35 degree half field (the label's own centroid lies off the plate, below the view)"
+     "note": "centroid of the voxels s.clivus.M@clival-recess carves (the extradural part of the clival opening; the prepontine cistern behind it is intradural and not in the specimen)"
     },
     "measured": {
      "tip": [
-      -7.8,
-      -32.3,
-      35.6
+      2.7,
+      -69.2,
+      23.1
      ],
-     "tipIn": "s.anterior-ethmoid-cells.L",
-     "targetOffAxisDeg": 15.0,
-     "contactMm": 14.5,
+     "tipIn": "s.sphenoid-sinus.R",
+     "targetOffAxisDeg": 16.5,
+     "contactMm": 2.0,
      "imageShare": {
-      "s.lamina-papyracea.L": 28,
-      "s.fovea-ethmoidalis.L": 17,
-      "s.posterior-ethmoid-cells.L": 17,
-      "s.basal-lamella.L": 14,
-      "s.lateral-lamella.L": 12,
-      "s.anterior-ethmoid-cells.L": 6,
-      "s.sphenoid-face.L": 2,
-      "tissue": 1,
-      "s.ethmoid-bulla.L": 1,
-      "s.orbit.L": 1
+      "tissue": 86,
+      "s.clivus.M": 4,
+      "s.sella-turcica.M": 4,
+      "s.sphenoid-sinus.R": 3,
+      "s.sphenoid-sinus.L": 3
      },
      "raysThrough": {
-      "s.anterior-ethmoid-cells.L": 98,
-      "s.posterior-ethmoid-cells.L": 58,
-      "s.ethmoid-bulla.L": 51
+      "s.sphenoid-sinus.R": 100,
+      "s.sphenoid-sinus.L": 30
      }
     }
-   },
+   }
+  },
+  "974ae048e4": {
    "t.basal-lamella-0.R": {
     "pose": {
      "side": "R",
@@ -1460,7 +1556,7 @@
      ],
      "tipIn": "s.anterior-ethmoid-cells.R",
      "targetOffAxisDeg": 15.0,
-     "contactMm": 14.5,
+     "contactMm": 11.5,
      "imageShare": {
       "s.lamina-papyracea.R": 25,
       "s.posterior-ethmoid-cells.R": 19,
@@ -1479,213 +1575,54 @@
       "s.ethmoid-bulla.R": 52
      }
     }
-   }
-  },
-  "a7cb0a2f9e": {
-   "t.ethmoid-roof-30.L": {
-    "pose": {
-     "side": "L",
-     "depth": 44,
-     "yaw": -2,
-     "pitch": 44,
-     "roll": 345,
-     "lens": 30
-    },
-    "target": {
-     "at": [
-      -5.2,
-      -29.19,
-      45.67
-     ],
-     "note": "voxel centroid of s.fovea-ethmoidalis.L with A in (-40, None)"
-    },
-    "measured": {
-     "tip": [
-      -5.4,
-      -27.2,
-      35.3
-     ],
-     "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 8.8,
-     "contactMm": 9.0,
-     "imageShare": {
-      "s.lateral-lamella.L": 38,
-      "s.fovea-ethmoidalis.L": 23,
-      "s.anterior-ethmoid-cells.L": 11,
-      "s.frontal-recess.L": 8,
-      "tissue": 6,
-      "s.lamina-papyracea.L": 6,
-      "s.nasal-cavity.L": 6,
-      "s.frontal-sinus-posterior-table.L": 1,
-      "s.basal-lamella.L": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.L": 100,
-      "s.anterior-ethmoid-cells.L": 52,
-      "s.frontal-recess.L": 30,
-      "s.ethmoid-bulla.L": 2
-     }
-    }
    },
-   "t.ethmoid-roof-30.R": {
-    "pose": {
-     "side": "R",
-     "depth": 44,
-     "yaw": -2,
-     "pitch": 44,
-     "roll": 15,
-     "lens": 30
-    },
-    "target": {
-     "at": [
-      4.59,
-      -29.09,
-      45.54
-     ],
-     "note": "voxel centroid of s.fovea-ethmoidalis.R with A in (-40, None)"
-    },
-    "measured": {
-     "tip": [
-      5.4,
-      -27.2,
-      35.3
-     ],
-     "tipIn": "s.nasal-cavity.R",
-     "targetOffAxisDeg": 6.9,
-     "contactMm": 9.0,
-     "imageShare": {
-      "s.lateral-lamella.R": 39,
-      "s.fovea-ethmoidalis.R": 27,
-      "s.anterior-ethmoid-cells.R": 11,
-      "tissue": 7,
-      "s.nasal-cavity.R": 4,
-      "s.frontal-recess.R": 4,
-      "s.lamina-papyracea.R": 4,
-      "s.frontal-sinus-posterior-table.R": 1,
-      "s.basal-lamella.R": 1
-     },
-     "raysThrough": {
-      "s.nasal-cavity.R": 100,
-      "s.anterior-ethmoid-cells.R": 50,
-      "s.frontal-recess.R": 30,
-      "s.ethmoid-bulla.R": 3
-     }
-    }
-   }
-  },
-  "b917514c1d": {
-   "t.sphenoid-face-0.L": {
+   "t.basal-lamella-0.L": {
     "pose": {
      "side": "L",
-     "depth": 72,
-     "yaw": -2,
-     "pitch": 20,
+     "depth": 48,
+     "yaw": 2,
+     "pitch": 40,
      "roll": 0,
      "lens": 0
     },
     "target": {
      "at": [
-      -2.0,
-      -68.0,
-      30.0
-     ]
+      -7.6,
+      -35.69,
+      40.31
+     ],
+     "note": "the part of s.basal-lamella.L the pose images: the centroid of its voxels inside the 35 degree half field (the label's own centroid lies off the plate, below the view)"
     },
     "measured": {
      "tip": [
-      -4.2,
-      -63.2,
-      29.3
+      -7.8,
+      -32.3,
+      35.6
      ],
-     "tipIn": "s.sphenoid-sinus.L",
-     "targetOffAxisDeg": 25.1,
-     "contactMm": 20.5,
-     "imageShare": {
-      "s.sella-turcica.M": 45,
-      "s.sphenoid-sinus.L": 32,
-      "s.clivus.M": 14,
-      "s.intersinus-septum.M": 6,
-      "s.sphenoid-lateral-wall.L": 4
-     },
-     "raysThrough": {
-      "s.sphenoid-sinus.L": 100
-     }
-    }
-   },
-   "t.sphenoid-face-0.R": {
-    "pose": {
-     "side": "R",
-     "depth": 72,
-     "yaw": -2,
-     "pitch": 20,
-     "roll": 0,
-     "lens": 0
-    },
-    "target": {
-     "at": [
-      2.0,
-      -68.0,
-      30.0
-     ]
-    },
-    "measured": {
-     "tip": [
-      4.2,
-      -63.2,
-      29.3
-     ],
-     "tipIn": "s.sphenoid-sinus.R",
-     "targetOffAxisDeg": 25.1,
-     "contactMm": 20.5,
-     "imageShare": {
-      "s.sella-turcica.M": 48,
-      "s.sphenoid-sinus.R": 26,
-      "s.clivus.M": 14,
-      "s.intersinus-septum.M": 10,
-      "s.sphenoid-lateral-wall.R": 1
-     },
-     "raysThrough": {
-      "s.sphenoid-sinus.R": 100
-     }
-    }
-   }
-  },
-  "c415c355b0": {
-   "t.posterior-ethmoid-roof-0.L": {
-    "pose": {
-     "side": "L",
-     "depth": 58,
-     "yaw": 0,
-     "pitch": 34,
-     "roll": 0,
-     "lens": 0
-    },
-    "target": {
-     "at": [
-      -5.94,
-      -46.9,
-      39.38
-     ],
-     "note": "voxel centroid of s.fovea-ethmoidalis.L with A in (None, -40)"
-    },
-    "measured": {
-     "tip": [
-      -6.5,
-      -43.6,
-      37.1
-     ],
-     "tipIn": "s.posterior-ethmoid-cells.L",
-     "targetOffAxisDeg": 8.8,
+     "tipIn": "s.anterior-ethmoid-cells.L",
+     "targetOffAxisDeg": 15.0,
      "contactMm": 11.5,
      "imageShare": {
-      "s.fovea-ethmoidalis.L": 67,
-      "s.posterior-ethmoid-cells.L": 24,
-      "s.sphenoid-face.L": 9
+      "s.lamina-papyracea.L": 28,
+      "s.fovea-ethmoidalis.L": 17,
+      "s.posterior-ethmoid-cells.L": 17,
+      "s.basal-lamella.L": 14,
+      "s.lateral-lamella.L": 12,
+      "s.anterior-ethmoid-cells.L": 6,
+      "s.sphenoid-face.L": 2,
+      "tissue": 1,
+      "s.ethmoid-bulla.L": 1,
+      "s.orbit.L": 1
      },
      "raysThrough": {
-      "s.posterior-ethmoid-cells.L": 100
+      "s.anterior-ethmoid-cells.L": 98,
+      "s.posterior-ethmoid-cells.L": 58,
+      "s.ethmoid-bulla.L": 51
      }
     }
-   },
+   }
+  },
+  "a07618be24": {
    "t.posterior-ethmoid-roof-0.R": {
     "pose": {
      "side": "R",
@@ -1711,7 +1648,243 @@
      ],
      "tipIn": "s.posterior-ethmoid-cells.R",
      "targetOffAxisDeg": 10.7,
-     "contactMm": 11.5,
+     "contactMm": 8.5,
+     "imageShare": {
+      "s.fovea-ethmoidalis.R": 69,
+      "s.posterior-ethmoid-cells.R": 20,
+      "s.sphenoid-face.R": 11
+     },
+     "raysThrough": {
+      "s.posterior-ethmoid-cells.R": 100
+     }
+    }
+   },
+   "t.posterior-ethmoid-roof-0.L": {
+    "pose": {
+     "side": "L",
+     "depth": 58,
+     "yaw": 0,
+     "pitch": 34,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "at": [
+      -5.94,
+      -46.9,
+      39.38
+     ],
+     "note": "voxel centroid of s.fovea-ethmoidalis.L with A in (None, -40)"
+    },
+    "measured": {
+     "tip": [
+      -6.5,
+      -43.6,
+      37.1
+     ],
+     "tipIn": "s.posterior-ethmoid-cells.L",
+     "targetOffAxisDeg": 8.8,
+     "contactMm": 8.5,
+     "imageShare": {
+      "s.fovea-ethmoidalis.L": 68,
+      "s.posterior-ethmoid-cells.L": 20,
+      "s.sphenoid-face.L": 11
+     },
+     "raysThrough": {
+      "s.posterior-ethmoid-cells.L": 100
+     }
+    }
+   }
+  },
+  "a7cb0a2f9e": {
+   "t.ethmoid-roof-30.R": {
+    "pose": {
+     "side": "R",
+     "depth": 44,
+     "yaw": -2,
+     "pitch": 44,
+     "roll": 15,
+     "lens": 30
+    },
+    "target": {
+     "at": [
+      4.59,
+      -29.09,
+      45.54
+     ],
+     "note": "voxel centroid of s.fovea-ethmoidalis.R with A in (-40, None)"
+    },
+    "measured": {
+     "tip": [
+      5.4,
+      -27.2,
+      35.3
+     ],
+     "tipIn": "s.nasal-cavity.R",
+     "targetOffAxisDeg": 6.9,
+     "contactMm": 8.5,
+     "imageShare": {
+      "s.lateral-lamella.R": 39,
+      "s.fovea-ethmoidalis.R": 27,
+      "s.anterior-ethmoid-cells.R": 11,
+      "tissue": 7,
+      "s.nasal-cavity.R": 4,
+      "s.frontal-recess.R": 4,
+      "s.lamina-papyracea.R": 4,
+      "s.frontal-sinus-posterior-table.R": 1,
+      "s.basal-lamella.R": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.R": 100,
+      "s.anterior-ethmoid-cells.R": 50,
+      "s.frontal-recess.R": 30,
+      "s.ethmoid-bulla.R": 3
+     }
+    }
+   },
+   "t.ethmoid-roof-30.L": {
+    "pose": {
+     "side": "L",
+     "depth": 44,
+     "yaw": -2,
+     "pitch": 44,
+     "roll": 345,
+     "lens": 30
+    },
+    "target": {
+     "at": [
+      -5.2,
+      -29.19,
+      45.67
+     ],
+     "note": "voxel centroid of s.fovea-ethmoidalis.L with A in (-40, None)"
+    },
+    "measured": {
+     "tip": [
+      -5.4,
+      -27.2,
+      35.3
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 8.8,
+     "contactMm": 8.5,
+     "imageShare": {
+      "s.lateral-lamella.L": 38,
+      "s.fovea-ethmoidalis.L": 23,
+      "s.anterior-ethmoid-cells.L": 11,
+      "s.frontal-recess.L": 8,
+      "tissue": 6,
+      "s.lamina-papyracea.L": 6,
+      "s.nasal-cavity.L": 6,
+      "s.frontal-sinus-posterior-table.L": 1,
+      "s.basal-lamella.L": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.anterior-ethmoid-cells.L": 52,
+      "s.frontal-recess.L": 30,
+      "s.ethmoid-bulla.L": 2
+     }
+    }
+   }
+  },
+  "b917514c1d": {
+   "t.sphenoid-face-0.R": {
+    "pose": {
+     "side": "R",
+     "depth": 68,
+     "yaw": -2,
+     "pitch": 24,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "id": "lm.sella-floor-center.M"
+    },
+    "measured": {
+     "tip": [
+      4.4,
+      -57.6,
+      32.4
+     ],
+     "tipIn": "s.sphenoid-sinus.R",
+     "targetOffAxisDeg": 27.8,
+     "contactMm": 17.5,
+     "imageShare": {
+      "s.sella-turcica.M": 73,
+      "s.sphenoid-sinus.R": 13,
+      "s.planum-sphenoidale.M": 7,
+      "s.intersinus-septum.M": 4,
+      "s.clivus.M": 2,
+      "tissue": 1
+     },
+     "raysThrough": {
+      "s.sphenoid-sinus.R": 100
+     }
+    }
+   },
+   "t.sphenoid-face-0.L": {
+    "pose": {
+     "side": "L",
+     "depth": 68,
+     "yaw": -2,
+     "pitch": 24,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "id": "lm.sella-floor-center.M"
+    },
+    "measured": {
+     "tip": [
+      -4.4,
+      -57.6,
+      32.4
+     ],
+     "tipIn": "s.sphenoid-sinus.L",
+     "targetOffAxisDeg": 27.8,
+     "contactMm": 17.5,
+     "imageShare": {
+      "s.sella-turcica.M": 65,
+      "s.sphenoid-sinus.L": 23,
+      "s.planum-sphenoidale.M": 7,
+      "s.clivus.M": 2,
+      "tissue": 1,
+      "s.intersinus-septum.M": 1
+     },
+     "raysThrough": {
+      "s.sphenoid-sinus.L": 100
+     }
+    }
+   }
+  },
+  "c415c355b0": {
+   "t.posterior-ethmoid-roof-0.R": {
+    "pose": {
+     "side": "R",
+     "depth": 58,
+     "yaw": 0,
+     "pitch": 34,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "at": [
+      5.79,
+      -46.97,
+      39.37
+     ],
+     "note": "voxel centroid of s.fovea-ethmoidalis.R with A in (None, -40)"
+    },
+    "measured": {
+     "tip": [
+      6.5,
+      -43.6,
+      37.1
+     ],
+     "tipIn": "s.posterior-ethmoid-cells.R",
+     "targetOffAxisDeg": 10.7,
+     "contactMm": 8.5,
      "imageShare": {
       "s.fovea-ethmoidalis.R": 67,
       "s.posterior-ethmoid-cells.R": 24,
@@ -1721,45 +1894,136 @@
       "s.posterior-ethmoid-cells.R": 100
      }
     }
-   }
-  },
-  "d1dbe87b11": {
-   "t.maxillary-antrum-70.L": {
+   },
+   "t.posterior-ethmoid-roof-0.L": {
     "pose": {
      "side": "L",
-     "depth": 30,
-     "yaw": 4,
-     "pitch": 28,
-     "roll": 120,
-     "lens": 70
+     "depth": 58,
+     "yaw": 0,
+     "pitch": 34,
+     "roll": 0,
+     "lens": 0
     },
     "target": {
-     "id": "s.maxillary-sinus.L"
+     "at": [
+      -5.94,
+      -46.9,
+      39.38
+     ],
+     "note": "voxel centroid of s.fovea-ethmoidalis.L with A in (None, -40)"
     },
     "measured": {
      "tip": [
-      -8.4,
-      -22.0,
-      18.8
+      -6.5,
+      -43.6,
+      37.1
      ],
-     "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 7.5,
-     "contactMm": 15.0,
+     "tipIn": "s.posterior-ethmoid-cells.L",
+     "targetOffAxisDeg": 8.8,
+     "contactMm": 8.5,
      "imageShare": {
-      "s.maxillary-medial-wall.L": 52,
-      "s.maxillary-posterior-wall.L": 20,
-      "s.maxillary-sinus.L": 12,
-      "s.orbital-floor.L": 10,
-      "s.nasal-cavity.L": 4,
-      "s.maxillary-anterior-wall.L": 2,
-      "tissue": 1
+      "s.fovea-ethmoidalis.L": 67,
+      "s.posterior-ethmoid-cells.L": 24,
+      "s.sphenoid-face.L": 9
      },
      "raysThrough": {
-      "s.nasal-cavity.L": 100,
-      "s.maxillary-sinus.L": 45
+      "s.posterior-ethmoid-cells.L": 100
+     }
+    }
+   }
+  },
+  "cd183d9fb0": {
+   "t.ser-0.R": {
+    "pose": {
+     "side": "R",
+     "depth": 49,
+     "yaw": -3,
+     "pitch": 18,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "id": "lm.sphenoid-ostium.R"
+    },
+    "measured": {
+     "tip": [
+      4.1,
+      -42.1,
+      19.8
+     ],
+     "tipIn": "s.nasal-cavity.R",
+     "targetOffAxisDeg": 14.7,
+     "contactMm": 6.0,
+     "imageShare": {
+      "s.sphenoid-sinus.R": 21,
+      "s.sella-turcica.M": 13,
+      "s.sphenoid-lateral-wall.R": 11,
+      "s.sphenoid-lateral-wall.L": 10,
+      "s.planum-sphenoidale.M": 9,
+      "s.sphenoid-sinus.L": 7,
+      "s.middle-turbinate.R": 7,
+      "s.intersinus-septum.M": 6,
+      "tissue": 6,
+      "s.clivus.M": 5,
+      "s.sphenoid-floor.R": 4,
+      "s.sphenoid-floor.L": 2
+     },
+     "raysThrough": {
+      "s.nasal-cavity.R": 100,
+      "s.sphenoid-sinus.R": 78,
+      "s.sphenoid-sinus.L": 28,
+      "s.nasal-cavity.L": 9,
+      "s.posterior-ethmoid-cells.R": 5
      }
     }
    },
+   "t.ser-0.L": {
+    "pose": {
+     "side": "L",
+     "depth": 49,
+     "yaw": -3,
+     "pitch": 18,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "id": "lm.sphenoid-ostium.L"
+    },
+    "measured": {
+     "tip": [
+      -4.1,
+      -42.1,
+      19.8
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 14.7,
+     "contactMm": 6.0,
+     "imageShare": {
+      "s.sphenoid-sinus.L": 20,
+      "s.sella-turcica.M": 16,
+      "s.sphenoid-lateral-wall.L": 12,
+      "s.planum-sphenoidale.M": 9,
+      "s.clivus.M": 7,
+      "s.sphenoid-lateral-wall.R": 7,
+      "s.intersinus-septum.M": 7,
+      "s.sphenoid-floor.L": 5,
+      "s.sphenoid-sinus.R": 4,
+      "s.middle-turbinate.L": 4,
+      "s.nasal-cavity.L": 3,
+      "tissue": 2,
+      "s.sphenoid-floor.R": 2
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.sphenoid-sinus.L": 83,
+      "s.sphenoid-sinus.R": 28,
+      "s.nasal-cavity.R": 15,
+      "s.posterior-ethmoid-cells.L": 6
+     }
+    }
+   }
+  },
+  "d1dbe87b11": {
    "t.maxillary-antrum-70.R": {
     "pose": {
      "side": "R",
@@ -1780,7 +2044,7 @@
      ],
      "tipIn": "s.nasal-cavity.R",
      "targetOffAxisDeg": 7.5,
-     "contactMm": 15.0,
+     "contactMm": 10.0,
      "imageShare": {
       "s.maxillary-medial-wall.R": 52,
       "s.maxillary-posterior-wall.R": 19,
@@ -1796,53 +2060,39 @@
      }
     }
    },
-   "t.medial-orbital-floor-30.L": {
+   "t.maxillary-antrum-70.L": {
     "pose": {
      "side": "L",
      "depth": 30,
-     "yaw": 6,
-     "pitch": 34,
-     "roll": 90,
-     "lens": 30
+     "yaw": 4,
+     "pitch": 28,
+     "roll": 120,
+     "lens": 70
     },
     "target": {
-     "at": [
-      -18.13,
-      -29.21,
-      26.13
-     ],
-     "note": "voxel centroid of s.orbital-floor.L with R in (None, 22)"
+     "id": "s.maxillary-sinus.L"
     },
     "measured": {
      "tip": [
-      -9.1,
-      -20.3,
-      21.5
+      -8.4,
+      -22.0,
+      18.8
      ],
      "tipIn": "s.nasal-cavity.L",
-     "targetOffAxisDeg": 9.6,
-     "contactMm": 15.5,
+     "targetOffAxisDeg": 7.5,
+     "contactMm": 10.0,
      "imageShare": {
-      "s.orbital-floor.L": 27,
-      "s.lamina-papyracea.L": 25,
-      "s.maxillary-sinus.L": 16,
-      "s.maxillary-posterior-wall.L": 10,
-      "tissue": 8,
-      "s.nasal-cavity.L": 6,
-      "s.maxillary-medial-wall.L": 4,
-      "s.basal-lamella.L": 2,
-      "s.orbit.L": 1,
-      "s.ethmoid-bulla.L": 1,
-      "s.posterior-ethmoid-cells.L": 1,
-      "s.middle-turbinate.L": 1
+      "s.maxillary-medial-wall.L": 52,
+      "s.maxillary-posterior-wall.L": 20,
+      "s.maxillary-sinus.L": 12,
+      "s.orbital-floor.L": 10,
+      "s.nasal-cavity.L": 4,
+      "s.maxillary-anterior-wall.L": 2,
+      "tissue": 1
      },
      "raysThrough": {
       "s.nasal-cavity.L": 100,
-      "s.maxillary-sinus.L": 76,
-      "s.frontal-recess.L": 11,
-      "s.ethmoid-bulla.L": 7,
-      "s.posterior-ethmoid-cells.L": 2,
-      "s.anterior-ethmoid-cells.L": 1
+      "s.maxillary-sinus.L": 45
      }
     }
    },
@@ -1871,7 +2121,7 @@
      ],
      "tipIn": "s.nasal-cavity.R",
      "targetOffAxisDeg": 9.6,
-     "contactMm": 15.5,
+     "contactMm": 13.5,
      "imageShare": {
       "s.orbital-floor.R": 27,
       "s.lamina-papyracea.R": 24,
@@ -1881,18 +2131,107 @@
       "s.nasal-cavity.R": 4,
       "s.maxillary-medial-wall.R": 2,
       "s.orbit.R": 2,
-      "s.basal-lamella.R": 2,
       "s.posterior-ethmoid-cells.R": 2,
-      "s.ethmoid-bulla.R": 1,
-      "s.middle-turbinate.R": 1
+      "s.basal-lamella.R": 2,
+      "s.ethmoid-bulla.R": 1
      },
      "raysThrough": {
       "s.nasal-cavity.R": 100,
       "s.maxillary-sinus.R": 77,
       "s.frontal-recess.R": 11,
       "s.ethmoid-bulla.R": 6,
-      "s.posterior-ethmoid-cells.R": 2,
+      "s.posterior-ethmoid-cells.R": 3,
       "s.anterior-ethmoid-cells.R": 2
+     }
+    }
+   },
+   "t.medial-orbital-floor-30.L": {
+    "pose": {
+     "side": "L",
+     "depth": 30,
+     "yaw": 6,
+     "pitch": 34,
+     "roll": 90,
+     "lens": 30
+    },
+    "target": {
+     "at": [
+      -18.13,
+      -29.21,
+      26.13
+     ],
+     "note": "voxel centroid of s.orbital-floor.L with R in (None, 22)"
+    },
+    "measured": {
+     "tip": [
+      -9.1,
+      -20.3,
+      21.5
+     ],
+     "tipIn": "s.nasal-cavity.L",
+     "targetOffAxisDeg": 9.6,
+     "contactMm": 13.5,
+     "imageShare": {
+      "s.orbital-floor.L": 27,
+      "s.lamina-papyracea.L": 25,
+      "s.maxillary-sinus.L": 16,
+      "s.maxillary-posterior-wall.L": 10,
+      "tissue": 9,
+      "s.nasal-cavity.L": 6,
+      "s.maxillary-medial-wall.L": 4,
+      "s.basal-lamella.L": 2,
+      "s.posterior-ethmoid-cells.L": 1,
+      "s.orbit.L": 1,
+      "s.ethmoid-bulla.L": 1
+     },
+     "raysThrough": {
+      "s.nasal-cavity.L": 100,
+      "s.maxillary-sinus.L": 76,
+      "s.frontal-recess.L": 11,
+      "s.ethmoid-bulla.L": 7,
+      "s.posterior-ethmoid-cells.L": 3,
+      "s.anterior-ethmoid-cells.L": 1
+     }
+    }
+   }
+  },
+  "e6b67fc5cb": {
+   "t.clivus-0.M": {
+    "pose": {
+     "side": "R",
+     "depth": 76,
+     "yaw": -3,
+     "pitch": 14,
+     "roll": 0,
+     "lens": 0
+    },
+    "target": {
+     "at": [
+      0.0,
+      -77.94,
+      23.96
+     ],
+     "note": "centroid of the voxels s.clivus.M@clival-recess carves (the extradural part of the clival opening; the prepontine cistern behind it is intradural and not in the specimen)"
+    },
+    "measured": {
+     "tip": [
+      2.7,
+      -69.2,
+      23.1
+     ],
+     "tipIn": "s.sphenoid-sinus.R",
+     "targetOffAxisDeg": 16.3,
+     "contactMm": 2.0,
+     "imageShare": {
+      "tissue": 88,
+      "s.clivus.M": 4,
+      "s.sphenoid-sinus.R": 3,
+      "s.sphenoid-sinus.L": 3,
+      "s.sella-turcica.M": 2
+     },
+     "raysThrough": {
+      "s.sphenoid-sinus.R": 100,
+      "s.sphenoid-sinus.L": 31
      }
     }
    }
@@ -1902,38 +2241,38 @@
     "pose": {
      "side": "R",
      "depth": 62,
-     "yaw": -2,
-     "pitch": 24,
+     "yaw": -3,
+     "pitch": 16,
      "roll": 0,
      "lens": 0
     },
     "target": {
-     "at": [
-      0.0,
-      -68.0,
-      30.0
-     ]
+     "id": "lm.sella-floor-center.M"
     },
     "measured": {
      "tip": [
-      4.6,
-      -52.2,
-      29.9
+      3.4,
+      -55.1,
+      21.8
      ],
      "tipIn": "s.sphenoid-sinus.R",
-     "targetOffAxisDeg": 27.4,
-     "contactMm": 20.5,
+     "targetOffAxisDeg": 24.2,
+     "contactMm": 2.0,
      "imageShare": {
-      "s.sella-turcica.M": 42,
-      "s.planum-sphenoidale.M": 29,
-      "s.sphenoid-sinus.R": 12,
-      "s.clivus.M": 9,
-      "s.sphenoid-sinus.L": 6,
-      "s.sphenoid-lateral-wall.R": 2
+      "s.clivus.M": 29,
+      "s.sella-turcica.M": 29,
+      "carotid-prominence.R": 10,
+      "s.sphenoid-sinus.L": 8,
+      "tissue": 7,
+      "s.sphenoid-sinus.R": 6,
+      "s.sphenoid-lateral-wall.R": 6,
+      "carotid-prominence.L": 3,
+      "s.sphenoid-lateral-wall.L": 1,
+      "s.sphenoid-floor.R": 1
      },
      "raysThrough": {
       "s.sphenoid-sinus.R": 100,
-      "s.sphenoid-sinus.L": 22
+      "s.sphenoid-sinus.L": 38
      }
     }
    },
@@ -1957,7 +2296,7 @@
      ],
      "tipIn": "s.sphenoid-sinus.R",
      "targetOffAxisDeg": 13.0,
-     "contactMm": 1.5,
+     "contactMm": 0.0,
      "imageShare": {
       "s.sphenoid-lateral-wall.L": 43,
       "s.sella-turcica.M": 25,
@@ -1993,7 +2332,7 @@
      ],
      "tipIn": "s.sphenoid-sinus.L",
      "targetOffAxisDeg": 13.0,
-     "contactMm": 1.5,
+     "contactMm": 0.0,
      "imageShare": {
       "s.sphenoid-lateral-wall.R": 43,
       "s.sphenoid-sinus.R": 22,

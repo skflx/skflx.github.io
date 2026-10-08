@@ -128,29 +128,43 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     const stationList = el('div', 'ssb-scope-stations');
     stationList.setAttribute('role', 'group');
     stationList.setAttribute('aria-label', 'Endoscope stations');
-    stationSec.append(stationList, el('p', 'ssb-param-src', 'Each station is a stored pose on the reference specimen; picking one flies the scope there (a cut with reduced motion). The pose stays free: change the nostril, lens or angles from there.'));
+    stationSec.append(stationList, el('p', 'ssb-param-src', 'Each station is a stored pose on the reference specimen (while a procedure plays, This state holds the poses that see what its cuts opened); picking one flies the scope there (a cut with reduced motion). The pose stays free: change the nostril, lens or angles from there.'));
     let stationKey = '';
+    const groupHead = (text) => el('p', 'ssb-param-src ssb-scope-station-group', text);
+    function stationButton(s, group, marked) {
+        const b = el('button', 'site-pill ssb-scope-station');
+        b.type = 'button';
+        b.dataset.station = s.key;
+        b.dataset.group = group;
+        b.append(el('span', 'ssb-scope-station-name', s.name.replace(/,\s*\d+°$/, '')), el('span', 'ssb-scope-station-lens', `${s.pose.lens}°`));
+        if (marked) { b.append(el('span', 'ssb-scope-station-lens ssb-scope-station-step', 'step')); b.setAttribute('aria-current', 'step'); }
+        b.title = `${s.name}: fly the scope here${s.shaft ? ` (${s.shaft} mm telescope)` : ''}${marked ? ' (the station of this step)' : ''}`;
+        return b;
+    }
+    /* While a procedure plays, the state's views come first under "This state" (its own poses, then those of the states it
+       includes), then the nostril's intact stations; with no state on show it is the intact list alone. */
     function renderStations() {
         const p = endo.pose;
         const tier = store.get().tier;
-        const shown = p ? endo.stations.filter((s) => (s.side === 'M' || s.side === p.side) && s.tier <= tier) : [];
-        stationSec.hidden = !shown.length;
-        const key = shown.map((s) => s.key).join('|');
+        const fits = (s) => (s.side === 'M' || s.side === p.side) && s.tier <= tier;
+        const own = p ? endo.views.filter(fits) : [];
+        const intact = p ? endo.stations.filter(fits) : [];
+        const mark = endo.viewMark;
+        stationSec.hidden = !own.length && !intact.length;
+        const key = [own.map((s) => s.key + '@' + s.from), '|', intact.map((s) => s.key), '|', mark].join(',');
         if (key !== stationKey) {
             stationKey = key;
             stationList.replaceChildren();
-            for (const s of shown) {
-                const b = el('button', 'site-pill ssb-scope-station');
-                b.type = 'button';
-                b.dataset.station = s.key;
-                b.append(el('span', 'ssb-scope-station-name', s.name.replace(/,\s*\d+°$/, '')), el('span', 'ssb-scope-station-lens', `${s.pose.lens}°`));
-                b.title = `${s.name}: fly the scope here${s.shaft ? ` (${s.shaft} mm telescope)` : ''}`;
-                stationList.append(b);
+            if (own.length) {
+                stationList.append(groupHead('This state'));
+                for (const s of own) stationList.append(stationButton(s, 'state', !!mark && s.id === mark));
+                if (intact.length) stationList.append(groupHead('Reference stations'));
             }
+            for (const s of intact) stationList.append(stationButton(s, 'intact', !own.length && !!mark && s.id === mark));
         }
-        const here = new Map(endo.stations.map((s) => [s.key, s.pose]));
+        const here = { state: new Map(endo.views.map((s) => [s.key, s.pose])), intact: new Map(endo.stations.map((s) => [s.key, s.pose])) };
         for (const b of stationList.querySelectorAll('button[data-station]')) {
-            const on = !!p && !endo.flying && samePose(here.get(b.dataset.station), p);
+            const on = !!p && !endo.flying && samePose(here[b.dataset.group].get(b.dataset.station), p);
             b.setAttribute('aria-pressed', on ? 'true' : 'false');
             b.classList.toggle('active', on);
         }
@@ -249,7 +263,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     root.addEventListener('click', (e) => {
         const b = e.target.closest('button');
         if (!b || !endo.pose) return;
-        if (b.dataset.station) endo.flyTo(b.dataset.station);
+        if (b.dataset.station) endo.flyTo(b.dataset.station, b.dataset.group === 'state' ? endo.viewChain : null);
         else if (b.dataset.shaft) endo.setShaft(b.dataset.shaft);
         else if (b.dataset.side) endo.setPose({ side: b.dataset.side });
         else if (b.dataset.lens) endo.setPose({ lens: Number(b.dataset.lens) });
@@ -265,6 +279,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     if (button) button.addEventListener('click', () => { if (!store.get().scope) endo.enter(); });
 
     endo.onChange(() => { sync(); pillState(); });
+    endo.onViews(renderStations);
     store.subscribe((state, prev) => { if (state.scope !== prev.scope) { sync(); pillState(); } else if (state.tier !== prev.tier) renderStations(); });
     sync();
     pillState();

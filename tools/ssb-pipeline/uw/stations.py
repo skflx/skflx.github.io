@@ -15,7 +15,7 @@ lens, target, what should fill the image) is solved on the state's volume (the b
      view axis it is kept (its numbers are re-measured here);
   2. otherwise (or with --search) a grid over depth, yaw and pitch (2-unit steps) keeps the poses that are free with
      the tip in air, rolls (15 degree steps) keep the target in view, a stride-thinned shortlist is ray-cast, and the
-     best five are refined on a 0.5 grid. Rank: the share of the 161 rays that first hit a wanted label or pass
+     best five are refined on the scope's own grid (depth 0.5, yaw and pitch 1). Rank: the share of the 161 rays that first hit a wanted label or pass
      through a wanted air label, then the shorter mucosal contact.
 A station that cannot be posed is reported with its best candidate's numbers, never forced.
 Left = right mirrored (the same depth, yaw, pitch, lens; roll -> 360 - roll); the mirrored pose is CHECKED on the same
@@ -218,10 +218,14 @@ def fibonacci_dirs(v, up, right):
     return unit(v * np.cos(theta)[:, None] + (right * np.cos(phi)[:, None] + up * np.sin(phi)[:, None]) * np.sin(theta)[:, None])
 
 
-def cast(vol, tip, v, up, right, air):
+PROMINENCE_S = 24.0     # a sphenoid lateral wall hit above this S is the carotid prominence (WP P4, `prominence` rows)
+
+
+def cast(vol, tip, v, up, right, air, prominence=False):
     """What a cone of NRAYS rays sees: ({label name or 'tissue': %}, {air label name: % of rays through it}).
     First hit = the first sample with display >= SOFT; an unlabelled hit takes a labelled wall within 8 mm behind it,
-    else 'tissue' (E5's definition)."""
+    else 'tissue' (E5's definition). With `prominence`, a hit on s.sphenoid-lateral-wall.* above S = PROMINENCE_S is
+    counted as 'carotid-prominence' (the wall's upper part, where the carotid and optic canals bulge into the sinus)."""
     dirs = fibonacci_dirs(v, up, right)
     ts = np.arange(STEP, RAY_MM + 1e-9, STEP)
     pts = tip[None, None, :] + dirs[:, None, :] * ts[None, :, None]
@@ -245,6 +249,8 @@ def cast(vol, tip, v, up, right, air):
                 ahead = ahead[(ahead != 0) & ~np.isin(ahead, list(air))]
                 lid = int(ahead[0]) if len(ahead) else 0
             key = nm.get(lid, 'tissue') if lid else 'tissue'
+            if prominence and key.rsplit('.', 1)[0] == 's.sphenoid-lateral-wall' and tip[2] + dirs[r][2] * ts[f] > PROMINENCE_S:
+                key = 'carotid-prominence.' + key.rsplit('.', 1)[1]
         shares[key] = shares.get(key, 0) + 1
     pct = lambda d: {k: int(round(100 * c / NRAYS)) for k, c in sorted(d.items(), key=lambda kv: -kv[1]) if round(100 * c / NRAYS) >= 1}
     return pct(shares), pct(through)
@@ -258,11 +264,12 @@ def _bounded(label, **b):
 
 
 TABLE = [
+    # The order is the order of a state's views: the first is what the state opens, where the player lands (WP P4).
     # station, state reached at, prototype pose (depth, yaw, pitch, roll, lens), target, wanted (hit) labels, wanted (air passed)
-    dict(id='t.ethmoid-bulla-0', at='p.uncinectomy#1', proto=(36, 4, 38, 0, 0), target=_bounded('s.ethmoid-bulla'),
-         want=['s.ethmoid-bulla', 's.lamina-papyracea', 's.basal-lamella'], air=['s.ethmoid-bulla']),
     dict(id='t.infundibulum-45', at='p.uncinectomy#1', proto=(32, 4, 30, 270, 45), target=_bounded('s.maxillary-medial-wall', a=(-31, -19), s=(18, None)),
          want=['s.maxillary-medial-wall'], air=[]),
+    dict(id='t.ethmoid-bulla-0', at='p.uncinectomy#1', proto=(36, 4, 38, 0, 0), target=_bounded('s.ethmoid-bulla'),
+         want=['s.ethmoid-bulla', 's.lamina-papyracea', 's.basal-lamella'], air=['s.ethmoid-bulla']),
     dict(id='t.maxillary-antrum-70', at='p.maxillary-antrostomy#1', proto=(30, 4, 28, 240, 70), target=_bounded('s.maxillary-sinus'),
          want=['s.maxillary-medial-wall', 's.maxillary-posterior-wall', 's.orbital-floor'], air=['s.maxillary-sinus']),
     dict(id='t.medial-orbital-floor-30', at='p.maxillary-antrostomy#1', proto=(30, 6, 34, 270, 30), target=_bounded('s.orbital-floor', r=(None, 22)),
@@ -281,16 +288,35 @@ TABLE = [
          want=['s.middle-turbinate', 's.lamina-papyracea'], air=['s.agger-nasi-cell', 's.frontal-recess']),
     dict(id='t.frontal-sinus-70', at='p.draf-iia#2', proto=(42, -4, 44, 0, 70), target=_bounded('s.frontal-sinus'),
          want=[], air=['s.frontal-sinus', 's.frontal-recess']),
-    dict(id='t.sphenoid-face-0', at='p.transsellar-approach#2', proto=(62, -2, 24, 0, 0), target={'point': (0, -68, 30)}, side='M',
-         want=['s.sella-turcica', 's.planum-sphenoidale', 's.clivus'], air=[]),
-    dict(id='t.sphenoid-face-0', at='p.sphenoidotomy#4', proto=(72, -2, 20, 0, 0), target={'point': (2, -68, 30)},
-         want=['s.sella-turcica', 's.clivus', 's.intersinus-septum'], air=[]),
+    # P4 re-poses both sphenoid-face rows for a recognizable posterior wall: target the sella floor, ranked by the share of rays that hit
+    # the sella, planum, clivus and carotid prominences together, then by lower mucosal contact (CP-3 finding 3).
+    dict(id='t.sphenoid-face-0', at='p.transsellar-approach#2', proto=(62, -2, 24, 0, 0), target={'lm': 'lm.sella-floor-center.M'}, side='M',
+         want=['s.sella-turcica', 's.planum-sphenoidale', 's.clivus', 'carotid-prominence'], air=[], prominence=True, both=3, search=True, tipIn=['s.sphenoid-sinus']),
+    dict(id='t.sphenoid-face-0', at='p.sphenoidotomy#4', proto=(72, -2, 20, 0, 0), target={'lm': 'lm.sella-floor-center.M'},
+         want=['s.sella-turcica', 's.planum-sphenoidale', 's.clivus', 'carotid-prominence'], air=[], prominence=True, search=True, tipIn=['s.sphenoid-sinus']),
     dict(id='t.sphenoid-lateral-recess-45', at='p.transsellar-approach#2', proto=(62, -4, 14, 60, 45), target=_bounded('s.sphenoid-lateral-wall'), side='L', via='R',
          want=['s.sphenoid-lateral-wall', 's.sella-turcica'], air=[]),
     dict(id='t.sella-open-30', at='p.transsellar-approach#4', proto=(74, -2, 20, 60, 30), target={'id': 'lm.sella-floor-center'}, side='M',
          want=['s.sella-turcica', 'tissue'], air=[]),
     dict(id='t.cavernous-sinus-30', at='p.transsellar-approach#4', proto=(68, 2, 16, 300, 30), target=_bounded('s.sphenoid-lateral-wall', s=(24, None), a=(None, -62)),
          want=['s.sphenoid-lateral-wall'], air=[]),
+    # P4: the four corridor positions that had no view of their own. The agger uncapped (Draf I step 3), the posterior ethmoid through the
+    # perforated basal lamella, the rostrum out and the sphenoid face widened, the clival recess drilled (both the EEA corridor's state and
+    # the standalone transclival procedure's).
+    dict(id='t.frontal-recess-45', at='p.draf-i#2', proto=(34, 2, 42, 0, 45), target={'id': 'lm.frontal-ostium'},
+         want=['s.middle-turbinate', 's.lamina-papyracea'], air=['s.agger-nasi-cell', 's.frontal-recess']),
+    dict(id='t.posterior-ethmoid-roof-0', at='p.posterior-ethmoidectomy#0', proto=(58, 0, 34, 0, 0), target=_bounded('s.fovea-ethmoidalis', a=(None, -40)),
+         want=['s.fovea-ethmoidalis', 's.sphenoid-face'], air=[]),
+    dict(id='t.ser-0', at='p.transsellar-approach#1', proto=(49, -3, 18, 0, 0), target={'id': 'lm.sphenoid-ostium'},
+         want=['s.sphenoid-floor', 's.sella-turcica', 's.clivus', 's.sphenoid-lateral-wall'], air=['s.sphenoid-sinus']),
+    dict(id='t.clivus-0', at='eea-sellar-clival:p.transclival-approach#2', proto=(68, 2, 16, 0, 0), side='M',
+         target={'carvedDiff': ('eea-sellar-clival:p.transclival-approach#2', 'eea-sellar-clival:p.transclival-approach#0')},
+         note='centroid of the voxels s.clivus.M@clival-recess carves (the extradural part of the clival opening; the prepontine cistern behind it is intradural and not in the specimen)',
+         want=['s.clivus', 's.dorsum-sellae', 'tissue'], air=[], tipIn=['s.sphenoid-sinus']),
+    dict(id='t.clivus-0', at='p.transclival-approach#2', proto=(68, 2, 16, 0, 0), side='M',
+         target={'carvedDiff': ('p.transclival-approach#2', 'p.transclival-approach#0')},
+         note='centroid of the voxels s.clivus.M@clival-recess carves (the extradural part of the clival opening; the prepontine cistern behind it is intradural and not in the specimen)',
+         want=['s.clivus', 's.dorsum-sellae', 'tissue'], air=[], tipIn=['s.sphenoid-sinus']),
     dict(id='t.olfactory-cleft-0', at=None, shaft='2.7', proto=(48, -8, 40, 0, 0), target=_bounded('s.cribriform-plate'),
          want=['s.cribriform-plate'], air=[]),
     dict(id='t.inferior-meatus-45', at=None, shaft='2.7', proto=(22, 6, -4, 300, 45), target={'point': (12, -25, 6)},
@@ -322,19 +348,41 @@ class Solver:
         return self.vols[key]
 
     def state_key(self, at):
+        """`p.<id>#<n>` (the procedure alone) or `<corridor>:p.<id>#<n>` (that position of a corridor) -> a state key."""
         if at is None:
             return None
-        proc, step = at.split('#')
+        cor, _, pos = at.rpartition(':')
+        proc, step = pos.split('#')
+        if cor:
+            for q in self.index['corridors'][cor]['positions']:
+                if q['procedure'] == proc and q['step'] == step:
+                    return q['state']
+            raise SystemExit(f'{at}: not a position of corridor {cor}')
         steps = self.index['procedures'][proc]['steps']
         if step not in steps:
             raise SystemExit(f'{at}: not a step with a state in ssb/states/index.json')
         return steps[step]
+
+    def carved(self, key):
+        """The voxels a state's patch carves (a boolean array on the base grid)."""
+        m = np.zeros(self.base.lab.shape, bool)
+        for i0, j0, k0, arr in read_patch(os.path.join(REPO, 'ssb/states', f'{key}.ssbp.gz'))[1]:
+            nz, ny, nx = arr.shape
+            m[k0:k0 + nz, j0:j0 + ny, i0:i0 + nx] |= arr != 0
+        return m
 
     def centroid(self, spec, side):
         """The target point of a row for `side` (R, L or M): a graph id's landmark, a label centroid within bounds, or a fixed point."""
         if 'point' in spec:
             p = np.array(spec['point'], float)
             return p if side != 'L' else np.array(mirror(p))
+        if 'lm' in spec:                                    # an exact landmark id, whatever the row's side
+            return np.array(self.lm[spec['lm']], float)
+        if 'carvedDiff' in spec:                            # the centroid of what a state carves beyond an earlier one
+            a, b = (self.state_key(x) for x in spec['carvedDiff'])
+            k, j, i = np.nonzero(self.carved(a) & ~self.carved(b))
+            o = self.base.o
+            return np.array([o[0] + i.mean() * 0.5, o[1] + j.mean() * 0.5, o[2] + k.mean() * 0.5])
         if 'id' in spec:
             ident = spec['id'] + ('.M' if side == 'M' else f'.{side}')
             return np.array(self.lm.get(ident) or self.lm[spec['id'] + '.R' if side != 'L' else spec['id'] + '.L'], float)
@@ -355,6 +403,12 @@ class Solver:
                 keep &= arr < hi
         return np.array([r[keep].mean(), a[keep].mean(), s[keep].mean()])
 
+    def tip_ids(self, row):
+        """The labels the tip may lie in: every airway label, or the row's `tipIn` structures only."""
+        if not row.get('tipIn'):
+            return self.air
+        return {i for i in self.air if self.names[i].rsplit('.', 1)[0] in row['tipIn']}
+
     def evaluate(self, vol, side, pose, target, shaft, row):
         depth, yaw, pitch, roll, lens = pose
         F = self.lm[f'lm.naris.{side}']
@@ -363,11 +417,13 @@ class Solver:
         lab = int(vol.label(tip[None])[0])
         d, v, up, right = frame_of(side, np.array([yaw], float), np.array([pitch], float), np.array([roll], float), np.array([lens], float))
         off = float(off_axis(v, tip[None], target)[0])
-        shares, through = cast(vol, tip, v[0], up[0], right[0], self.air)
+        shares, through = cast(vol, tip, v[0], up[0], right[0], self.air, row.get('prominence', False))
         want = set(row['want']) | set()
         w = sum(c for k, c in shares.items() if k.rsplit('.', 1)[0] in want or k in want)
         a = sum(c for k, c in through.items() if k.rsplit('.', 1)[0] in set(row['air']))
-        return dict(free=bool(free[0]), contact=float(contact[0]), tip=tip, tipIn=self.names.get(lab), tipAir=lab in self.air,
+        if row.get('both') and min(shares.get('carotid-prominence.R', 0), shares.get('carotid-prominence.L', 0)) < row['both']:
+            w -= 100            # the view must show both prominences (at least `both` rays each): a view without them ranks last
+        return dict(free=bool(free[0]), contact=float(contact[0]), tip=tip, tipIn=self.names.get(lab), tipAir=lab in self.tip_ids(row),
                     off=off, shares=shares, through=through, score=max(w, a) / 100.0 if (row['want'] or row['air']) else 0.0)
 
     def search(self, vol, side, lens, target, shaft, row, log=say):
@@ -380,7 +436,7 @@ class Solver:
             P = np.full(len(D), float(pitch))
             tips = tip_of(F, side, D, Y, P)
             labs = vol.label(tips)
-            inair = np.isin(labs, list(self.air))
+            inair = np.isin(labs, list(self.tip_ids(row)))
             if not inair.any():
                 continue
             free, _ = clearance(vol, F, side, D[inair], Y[inair], P[inair], RADII[shaft], self.arch)
@@ -391,7 +447,7 @@ class Solver:
             return None
         c = np.array(cands)
         keep = []
-        for roll in range(0, 360, 15):
+        for roll in ([0] if lens == 0 else range(0, 360, 15)):         # a 0 degree lens only turns the image about the view: keep it upright
             _, v, _, _ = frame_of(side, c[:, 1], c[:, 2], np.full(len(c), float(roll)), np.full(len(c), float(lens)))
             off = off_axis(v, tip_of(F, side, c[:, 0], c[:, 1], c[:, 2]), target)
             for idx in np.nonzero(off <= OFF_MAX)[0]:
@@ -411,8 +467,8 @@ class Solver:
         for _, _, (depth, yaw, pitch, roll) in scored[:5]:
             local = None
             for dd in (-1, -0.5, 0, 0.5, 1):
-                for yy in (-1, -0.5, 0, 0.5, 1):
-                    for pp in (-1, -0.5, 0, 0.5, 1):
+                for yy in (-1, 0, 1):             # yaw and pitch step 1 degree in scope.js RANGES (depth 0.5): a pose must be whole
+                    for pp in (-1, 0, 1):
                         pose = (depth + dd, yaw + yy, pitch + pp, roll, lens)
                         if not (0 <= pose[0] <= 120 and -45 <= pose[1] <= 45 and -45 <= pose[2] <= 45):
                             continue
@@ -465,7 +521,7 @@ class Solver:
                 e = self.evaluate(vol, nostril, pose, target, shaft, row)
                 ok = e['free'] and e['tipAir'] and e['off'] <= OFF_MAX
                 how = 'prototype'
-                if (not ok) or force_search:
+                if (not ok) or force_search or row.get('search'):
                     log(f"  {row['id']} {tside}: " + ('prototype failed ' + str({k: e[k] for k in ('free', 'tipAir', 'off')}) if not ok else 'search requested'))
                     hit = None if row['target'].get('inView') else self.search(vol, nostril, row['proto'][4], target, shaft, row, log)
                     if hit:
@@ -500,7 +556,11 @@ def entry(nostril, pose, target, e, row, tside):
     if row.get('shaft'):
         st['shaft'] = row['shaft']
     t = row['target']
-    if 'id' in t:
+    if 'lm' in t:
+        st['target'] = {'id': t['lm']}
+    elif 'carvedDiff' in t:
+        st['target'] = {'at': [round(float(x), 2) for x in target], 'note': row['note']}
+    elif 'id' in t:
         st['target'] = {'id': f"{t['id']}.{tside}"}
     elif 'label' in t and not any(k in t for k in ('r', 'a', 's', 'inView')):
         st['target'] = {'id': f"{t['label']}.{tside}"}
@@ -547,7 +607,7 @@ def write(table, doc):
             else:
                 by.setdefault(skey, {})[f'{sid}.{tside}'] = ent
             unc.pop(sid, None)
-    doc['byState'] = {k: dict(sorted(v.items())) for k, v in sorted(by.items())}
+    doc['byState'] = {k: v for k, v in sorted(by.items())}      # a state's views stay in TABLE order: the first is what the state opens (WP P4)
     if RULE_P3 not in doc['rule']:
         doc['rule'] = doc['rule'].rstrip() + ' ' + RULE_P3
     return doc
