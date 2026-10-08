@@ -1,0 +1,4083 @@
+{
+ "checks": {
+  "cases": 130,
+  "duplicateGroups": [
+   [
+    "P002",
+    "P003"
+   ],
+   [
+    "P005",
+    "P006"
+   ],
+   [
+    "P009",
+    "P010"
+   ],
+   [
+    "P026",
+    "P027"
+   ],
+   [
+    "P030",
+    "P031"
+   ],
+   [
+    "P033",
+    "P034"
+   ],
+   [
+    "P040",
+    "P041"
+   ],
+   [
+    "P047",
+    "P048",
+    "P049"
+   ],
+   [
+    "P053",
+    "P054"
+   ],
+   [
+    "P060",
+    "P061",
+    "P062"
+   ],
+   [
+    "P072",
+    "P073"
+   ],
+   [
+    "P076",
+    "P077",
+    "P078",
+    "P079"
+   ],
+   [
+    "P080",
+    "P081"
+   ],
+   [
+    "P083",
+    "P084"
+   ],
+   [
+    "P090",
+    "P091"
+   ],
+   [
+    "P101",
+    "P102"
+   ],
+   [
+    "P110",
+    "P111"
+   ],
+   [
+    "P117",
+    "P118"
+   ],
+   [
+    "P127",
+    "P128"
+   ]
+  ],
+  "labelHeaderCorrected": [
+   {
+    "airAsStored": 0.953,
+    "airFlipped": 0.525,
+    "id": "P025"
+   },
+   {
+    "airAsStored": 0.903,
+    "airFlipped": 0.458,
+    "id": "P039"
+   },
+   {
+    "airAsStored": 0.97,
+    "airFlipped": 0.708,
+    "id": "P042"
+   },
+   {
+    "airAsStored": 0.973,
+    "airFlipped": 0.713,
+    "id": "P074"
+   },
+   {
+    "airAsStored": 0.866,
+    "airFlipped": 0.458,
+    "id": "P089"
+   },
+   {
+    "airAsStored": 0.889,
+    "airFlipped": 0.546,
+    "id": "P096"
+   },
+   {
+    "airAsStored": 0.938,
+    "airFlipped": 0.511,
+    "id": "P100"
+   },
+   {
+    "airAsStored": 0.876,
+    "airFlipped": 0.496,
+    "id": "P101"
+   },
+   {
+    "airAsStored": 0.932,
+    "airFlipped": 0.521,
+    "id": "P105"
+   },
+   {
+    "airAsStored": 0.941,
+    "airFlipped": 0.58,
+    "id": "P108"
+   },
+   {
+    "airAsStored": 0.903,
+    "airFlipped": 0.428,
+    "id": "P129"
+   }
+  ],
+  "labelsSwappedBySide": [
+   {
+    "id": "P047",
+    "pairs": [
+     "cavity"
+    ]
+   }
+  ],
+  "measured": 107,
+  "nasopharynxTruncated": 105,
+  "nonStandardOrientation": [],
+  "rejected": [],
+  "unique": 107
+ },
+ "headA": {
+  "AI": {
+   "cavity": 74.74,
+   "maxillary": -10.76
+  },
+  "cavity.L": 2.758,
+  "cavity.R": 6.049,
+  "maxillary.L": 15.255,
+  "maxillary.R": 13.698,
+  "percentileAbsAI_clear": {
+   "cavity": 100.0,
+   "maxillary": 34.1
+  }
+ },
+ "labelMap": {
+  "1": "s.maxillary-sinus.R",
+  "2": "s.maxillary-sinus.L",
+  "3": "s.nasal-cavity.R",
+  "4": "s.nasal-cavity.L",
+  "5": "s.nasopharynx.M"
+ },
+ "liningMmBySinusReview": {
+  "clear": {
+   "n": 197,
+   "p25": 0.09,
+   "p5": 0.05,
+   "p50": 0.13,
+   "p75": 0.18,
+   "p95": 0.31
+  },
+  "opacified": {
+   "n": 6,
+   "p25": 0.09,
+   "p5": 0.01,
+   "p50": 0.23,
+   "p75": 0.74,
+   "p95": 1.58
+  },
+  "thickening": {
+   "n": 7,
+   "p25": 0.17,
+   "p5": 0.15,
+   "p50": 0.2,
+   "p75": 0.23,
+   "p95": 0.34
+  },
+  "unsure": {
+   "n": 4,
+   "p25": 0.08,
+   "p5": 0.08,
+   "p50": 0.1,
+   "p75": 0.14,
+   "p95": 0.16
+  }
+ },
+ "method": "* Archive integrity (found 2026-10-07): the archive's 130 cases hold byte-identical duplicates (same image and\n    label arrays under different ids); each duplicate group is measured once, under its lowest id, and listed. In\n    some cases the label file's header disagrees with its image's (z direction flipped against the uncropped frame,\n    or 1.0 mm instead of 1.5 mm slices) while the arrays are voxel-aligned; geometry is therefore taken from the\n    image header, and the alignment is checked (the labelled voxels must be mostly air, HU < -400, as stored and\n    clearly less so flipped). Each correction is listed.\n  * Label map, from the labels' world positions (LPS: +x is patient left, +y posterior): 1 right maxillary sinus,\n    2 left maxillary sinus, 3 right nasal cavity, 4 left nasal cavity, 5 nasopharynx. Within each pair the side is\n    assigned by position (the more +x label is left); a case whose integers disagree with that is listed as\n    swapped. Checked per case: the maxillary labels lateral to the cavity labels, the nasopharynx posterior; a case\n    that fails is listed and left out. The nasopharynx is cut by the published crop in most cases, so it is not\n    measured.\n  * Volumes in mL from voxel counts times the voxel volume (|det| of the direction matrix). The labels are AIR\n    (the dataset's authors segmented by an air threshold), so a sinus with thickened mucosa or fluid has a smaller\n    label than its bony cavity.\n  * Apparent lining thickness (mm), per maxillary sinus: soft-tissue voxels (-50..150 HU, unlabelled) reachable\n    from the air label within ~4.7 mm in plane (8 in-plane geodesic steps per slice; bone stops it), divided by the\n    air label's in-plane boundary area. A clear sinus reads about the mucosa plus partial volume; thickened mucosa,\n    fluid or a cyst raise it. It cannot see a sinus that is almost entirely opacified (the air label is then a\n    small pocket that may sit in fluid of other density), nor tell hypoplasia from opacification.\n  * Label completeness, per maxillary sinus: `unlabelledAir` = unlabelled air voxels (< -400 HU) reachable from the\n    label through air within 3 face-connected steps, over (those + the label). Every label misses some (the\n    annotators' boundary sits about a voxel inside the air; the median is printed), so absolute volumes run low by\n    about that fraction while left/right indices barely move. A label that stops at a flat cut where air\n    continues scores high; sinuses above the Tukey upper fence (Q3 + 1.5 IQR, printed) are left out of `clear`.\n  * Every case is also reviewed by eye (review.json beside this script: per maxillary sinus `clear`,\n    `thickening` (mucosal thickening, cyst or polyp with air still filling most of the sinus), `opacified` (most\n    of the sinus without air), or `unsure`, from a coronal and an axial slice through it; the reviewer and date\n    are recorded there). The `clear` subset, from which the normal-asymmetry statistics are taken, is the cases\n    whose two maxillary sinuses are both `clear`. The review is one look at two slices, not a read of the scan.\n  * Extents (mm) of each maxillary air label along the world axes: transverse (x), anteroposterior (y),\n    craniocaudal (z), each the 2nd..98th percentile span of the voxel coordinates.\n  * Asymmetry index AI = 100 * (R - L) / ((R + L) / 2). Laterality rests on the file headers (the anatomy cannot\n    verify left from right), so summaries lead with |AI|; the signed mean is a sanity check (expected near 0).\n  * Head A (the UW specimen as scanned, before N1's mirroring) is measured the same way from its committed labels\n    at normalize.py's AS_SCANNED_COMMIT, and placed as a percentile in the NasalSeg distribution. Its label\n    boundaries are SSB's own (e.g. the cavity ends at the PNS plane), so compare indices, not volumes.",
+ "review": {
+  "by": "Opus (Claude), for the owner to spot-check",
+  "counts": {
+   "clear": 197,
+   "opacified": 6,
+   "thickening": 7,
+   "unsure": 4
+  },
+  "date": "2026-10-07",
+  "method": "per case, one coronal and one axial slice through the maxillary sinuses (tools/ssb-pipeline/nasalseg/stats.py --png-dir); the uncertain ones again at higher zoom, three coronal levels and an axial slice, window L 0 / W 1400. clear = air fills the bony sinus; thickening = mucosal thickening, cyst, polyp or fluid with air in most of the sinus; opacified = most of the sinus without air; unsure = undecidable, or a label defect. A small sinus with clean walls is clear (hypoplasia is anatomy). Two slices per sinus can miss focal disease elsewhere, so the clear subset can still contain some."
+ },
+ "source": {
+  "cite": "Zhang Y, Wang J, Pan T, Jiang Q, Ge J, Guo X, Jiang C, Lu J, Zhang J, Liu X, Tian M, Qi Y, Cheng Y, Zuo C. NasalSeg Dataset for Nasal Cavity and Paranasal Sinuses Segmentation from CT Images [dataset], v2. Zenodo; 2024 Oct 5. doi:10.5281/zenodo.13893419. Described in Sci Data (2024), doi:10.1038/s41597-024-04176-1.",
+  "doi": "10.5281/zenodo.13893419",
+  "labels": "air spaces, threshold-based (per the dataset paper); the archive is cropped to the region",
+  "licence": "CC BY 4.0",
+  "name": "NasalSeg",
+  "paperDoi": "10.1038/s41597-024-04176-1",
+  "population": "130 adults (74 male, 56 female; age 24-82, mean 54.6 +/- 12.1), CT of PET/CT on one scanner (Siemens Biograph 64) at one Shanghai nuclear medicine centre; 0.586 x 0.586 mm in plane, 1.5 mm slices; no sinus-disease exclusion stated (read 2026-10-07)",
+  "url": "https://zenodo.org/records/13893419"
+ },
+ "subjects": [
+  {
+   "cavity.L": {
+    "ml": 12.106
+   },
+   "cavity.R": {
+    "ml": 13.2
+   },
+   "id": "P001",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 33.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.095,
+    "ml": 14.071,
+    "unlabelledAir": 0.0328
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 34.5,
+     "transverse": 21.7
+    },
+    "liningMm": 0.087,
+    "ml": 14.971,
+    "unlabelledAir": 0.0779
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.558
+   },
+   "cavity.R": {
+    "ml": 12.442
+   },
+   "id": "P002",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.6,
+     "cc": 34.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.25,
+    "ml": 21.719,
+    "unlabelledAir": 0.0553
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 36.0,
+     "transverse": 24.6
+    },
+    "liningMm": 0.152,
+    "ml": 20.293,
+    "unlabelledAir": 0.0414
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.611
+   },
+   "cavity.R": {
+    "ml": 12.91
+   },
+   "id": "P004",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 22.5,
+     "transverse": 12.9
+    },
+    "liningMm": 0.207,
+    "ml": 5.708,
+    "unlabelledAir": 0.0732
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 14.6,
+     "cc": 19.5,
+     "transverse": 15.8
+    },
+    "liningMm": 0.053,
+    "ml": 2.741,
+    "unlabelledAir": 0.049
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 16.697
+   },
+   "cavity.R": {
+    "ml": 12.161
+   },
+   "id": "P005",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 34.5,
+     "transverse": 19.3
+    },
+    "liningMm": 0.107,
+    "ml": 12.929,
+    "unlabelledAir": 0.0478
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 28.5,
+     "transverse": 18.2
+    },
+    "liningMm": 0.201,
+    "ml": 11.112,
+    "unlabelledAir": 0.0891
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.352
+   },
+   "cavity.R": {
+    "ml": 18.314
+   },
+   "id": "P007",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.6,
+     "cc": 39.0,
+     "transverse": 25.2
+    },
+    "liningMm": 0.25,
+    "ml": 25.393,
+    "unlabelledAir": 0.0567
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 36.9,
+     "cc": 39.0,
+     "transverse": 28.1
+    },
+    "liningMm": 0.124,
+    "ml": 27.904,
+    "unlabelledAir": 0.0414
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.748
+   },
+   "cavity.R": {
+    "ml": 10.748
+   },
+   "id": "P008",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 19.3,
+     "cc": 18.0,
+     "transverse": 14.1
+    },
+    "liningMm": 0.185,
+    "ml": 3.683,
+    "unlabelledAir": 0.0363
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 24.0,
+     "cc": 22.5,
+     "transverse": 15.8
+    },
+    "liningMm": 0.191,
+    "ml": 5.599,
+    "unlabelledAir": 0.0233
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.441
+   },
+   "cavity.R": {
+    "ml": 9.158
+   },
+   "id": "P009",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.2,
+     "cc": 28.5,
+     "transverse": 18.2
+    },
+    "liningMm": 0.095,
+    "ml": 11.276,
+    "unlabelledAir": 0.0515
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 34.5,
+     "transverse": 19.9
+    },
+    "liningMm": 0.244,
+    "ml": 13.743,
+    "unlabelledAir": 0.0239
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.109
+   },
+   "cavity.R": {
+    "ml": 8.888
+   },
+   "id": "P011",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 25.5,
+     "transverse": 21.1
+    },
+    "liningMm": 0.124,
+    "ml": 10.512,
+    "unlabelledAir": 0.0914
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.2,
+     "cc": 31.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.14,
+    "ml": 14.989,
+    "unlabelledAir": 0.0681
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.012
+   },
+   "cavity.R": {
+    "ml": 13.694
+   },
+   "id": "P012",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 31.5,
+     "transverse": 18.2
+    },
+    "liningMm": 0.077,
+    "ml": 10.338,
+    "unlabelledAir": 0.0711
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 37.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.244,
+    "ml": 17.415,
+    "unlabelledAir": 0.0637
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.884
+   },
+   "cavity.R": {
+    "ml": 12.248
+   },
+   "id": "P013",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 22.3,
+     "cc": 18.0,
+     "transverse": 12.3
+    },
+    "liningMm": 0.124,
+    "ml": 4.002,
+    "unlabelledAir": 0.1015
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 24.0,
+     "cc": 22.5,
+     "transverse": 11.7
+    },
+    "liningMm": 0.056,
+    "ml": 4.157,
+    "unlabelledAir": 0.0786
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.215
+   },
+   "cavity.R": {
+    "ml": 9.662
+   },
+   "id": "P014",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 35.2,
+     "cc": 36.0,
+     "transverse": 26.4
+    },
+    "liningMm": 0.144,
+    "ml": 17.607,
+    "unlabelledAir": 0.0664
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 34.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.13,
+    "ml": 17.0,
+    "unlabelledAir": 0.0561
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.474
+   },
+   "cavity.R": {
+    "ml": 10.631
+   },
+   "id": "P015",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 27.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.157,
+    "ml": 11.54,
+    "unlabelledAir": 0.0737
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 36.3,
+     "cc": 34.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.119,
+    "ml": 15.927,
+    "unlabelledAir": 0.0975
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.588
+   },
+   "cavity.R": {
+    "ml": 14.45
+   },
+   "id": "P016",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 32.0,
+     "transverse": 19.3
+    },
+    "liningMm": 0.275,
+    "ml": 12.145,
+    "unlabelledAir": 0.0388
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 34.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.205,
+    "ml": 14.394,
+    "unlabelledAir": 0.0484
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.083
+   },
+   "cavity.R": {
+    "ml": 12.516
+   },
+   "id": "P017",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.6,
+     "cc": 42.0,
+     "transverse": 25.8
+    },
+    "liningMm": 0.057,
+    "ml": 26.525,
+    "unlabelledAir": 0.0674
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 14.6,
+     "cc": 25.5,
+     "transverse": 11.1
+    },
+    "liningMm": 0.135,
+    "ml": 2.358,
+    "unlabelledAir": 0.0415
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.219
+   },
+   "cavity.R": {
+    "ml": 11.551
+   },
+   "id": "P018",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 19.3,
+     "cc": 24.0,
+     "transverse": 17.0
+    },
+    "liningMm": 0.242,
+    "ml": 5.758,
+    "unlabelledAir": 0.0431
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 22.3,
+     "cc": 24.0,
+     "transverse": 16.4
+    },
+    "liningMm": 0.076,
+    "ml": 6.18,
+    "unlabelledAir": 0.0773
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.56
+   },
+   "cavity.R": {
+    "ml": 11.765
+   },
+   "id": "P019",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 30.0,
+     "transverse": 19.9
+    },
+    "liningMm": 0.179,
+    "ml": 10.953,
+    "unlabelledAir": 0.0215
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 27.5,
+     "cc": 33.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.4,
+    "ml": 13.908,
+    "unlabelledAir": 0.019
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.514
+   },
+   "cavity.R": {
+    "ml": 12.863
+   },
+   "id": "P020",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 36.0,
+     "transverse": 24.6
+    },
+    "liningMm": 0.169,
+    "ml": 17.101,
+    "unlabelledAir": 0.0666
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 34.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.071,
+    "ml": 16.61,
+    "unlabelledAir": 0.0494
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 15.166
+   },
+   "cavity.R": {
+    "ml": 13.541
+   },
+   "id": "P021",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.2,
+     "cc": 36.0,
+     "transverse": 25.2
+    },
+    "liningMm": 0.2,
+    "ml": 16.49,
+    "unlabelledAir": 0.0999
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 34.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.153,
+    "ml": 18.603,
+    "unlabelledAir": 0.0757
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.507
+   },
+   "cavity.R": {
+    "ml": 11.403
+   },
+   "id": "P022",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 37.5,
+     "transverse": 27.5
+    },
+    "liningMm": 0.151,
+    "ml": 21.245,
+    "unlabelledAir": 0.0602
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 36.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.207,
+    "ml": 14.627,
+    "unlabelledAir": 0.0802
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 6.928
+   },
+   "cavity.R": {
+    "ml": 8.852
+   },
+   "id": "P023",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 31.5,
+     "transverse": 19.9
+    },
+    "liningMm": 0.181,
+    "ml": 11.882,
+    "unlabelledAir": 0.0263
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 30.0,
+     "transverse": 20.5
+    },
+    "liningMm": 0.074,
+    "ml": 11.613,
+    "unlabelledAir": 0.0671
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.173
+   },
+   "cavity.R": {
+    "ml": 10.181
+   },
+   "id": "P024",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.5,
+     "cc": 34.5,
+     "transverse": 20.5
+    },
+    "liningMm": 0.118,
+    "ml": 13.14,
+    "unlabelledAir": 0.0665
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 33.0,
+     "transverse": 18.8
+    },
+    "liningMm": 0.097,
+    "ml": 9.58,
+    "unlabelledAir": 0.0936
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.97
+   },
+   "cavity.R": {
+    "ml": 9.31
+   },
+   "id": "P025",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 31.5,
+     "transverse": 21.1
+    },
+    "liningMm": 0.143,
+    "ml": 12.681,
+    "unlabelledAir": 0.0302
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 24.0,
+     "transverse": 18.8
+    },
+    "liningMm": 0.138,
+    "ml": 8.196,
+    "unlabelledAir": 0.0426
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 15.412
+   },
+   "cavity.R": {
+    "ml": 12.885
+   },
+   "id": "P026",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 35.7,
+     "cc": 27.0,
+     "transverse": 19.3
+    },
+    "liningMm": 0.167,
+    "ml": 11.384,
+    "unlabelledAir": 0.0483
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 35.2,
+     "cc": 28.5,
+     "transverse": 20.5
+    },
+    "liningMm": 0.091,
+    "ml": 11.048,
+    "unlabelledAir": 0.0802
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.105
+   },
+   "cavity.R": {
+    "ml": 10.643
+   },
+   "id": "P028",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 43.5,
+     "transverse": 29.9
+    },
+    "liningMm": 0.141,
+    "ml": 26.627,
+    "unlabelledAir": 0.051
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 40.5,
+     "transverse": 29.9
+    },
+    "liningMm": 0.196,
+    "ml": 17.044,
+    "unlabelledAir": 0.073
+   },
+   "review": {
+    "L": "clear",
+    "R": "thickening"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.535
+   },
+   "cavity.R": {
+    "ml": 14.923
+   },
+   "id": "P029",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 37.5,
+     "cc": 39.0,
+     "transverse": 25.8
+    },
+    "liningMm": 0.104,
+    "ml": 21.398,
+    "unlabelledAir": 0.0684
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 43.4,
+     "cc": 37.5,
+     "transverse": 24.6
+    },
+    "liningMm": 0.055,
+    "ml": 21.283,
+    "unlabelledAir": 0.0778
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.935
+   },
+   "cavity.R": {
+    "ml": 12.343
+   },
+   "id": "P030",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 42.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.18,
+    "ml": 19.718,
+    "unlabelledAir": 0.0173
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 37.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.253,
+    "ml": 17.753,
+    "unlabelledAir": 0.0582
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.913
+   },
+   "cavity.R": {
+    "ml": 9.524
+   },
+   "id": "P032",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 25.8,
+     "cc": 30.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.101,
+    "ml": 11.143,
+    "unlabelledAir": 0.0573
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 27.5,
+     "cc": 30.0,
+     "transverse": 23.4
+    },
+    "liningMm": 0.066,
+    "ml": 12.926,
+    "unlabelledAir": 0.0867
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.878
+   },
+   "cavity.R": {
+    "ml": 13.194
+   },
+   "id": "P033",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 39.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.073,
+    "ml": 22.397,
+    "unlabelledAir": 0.0528
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 34.2,
+     "cc": 36.0,
+     "transverse": 22.3
+    },
+    "liningMm": 0.115,
+    "ml": 19.972,
+    "unlabelledAir": 0.071
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 16.982
+   },
+   "cavity.R": {
+    "ml": 14.16
+   },
+   "id": "P035",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 25.8,
+     "cc": 31.5,
+     "transverse": 15.8
+    },
+    "liningMm": 0.114,
+    "ml": 7.773,
+    "unlabelledAir": 0.0962
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 34.5,
+     "transverse": 17.0
+    },
+    "liningMm": 0.096,
+    "ml": 10.132,
+    "unlabelledAir": 0.0692
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.159
+   },
+   "cavity.R": {
+    "ml": 14.951
+   },
+   "id": "P036",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 33.0,
+     "transverse": 26.4
+    },
+    "liningMm": 0.148,
+    "ml": 12.784,
+    "unlabelledAir": 0.0428
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 33.0,
+     "transverse": 28.1
+    },
+    "liningMm": 0.194,
+    "ml": 16.007,
+    "unlabelledAir": 0.0367
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.081
+   },
+   "cavity.R": {
+    "ml": 8.96
+   },
+   "id": "P037",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 20.5,
+     "cc": 16.5,
+     "transverse": 15.2
+    },
+    "liningMm": 0.072,
+    "ml": 3.854,
+    "unlabelledAir": 0.0882
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 21.1,
+     "cc": 25.5,
+     "transverse": 15.8
+    },
+    "liningMm": 0.318,
+    "ml": 5.443,
+    "unlabelledAir": 0.0154
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.102
+   },
+   "cavity.R": {
+    "ml": 12.499
+   },
+   "id": "P038",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 34.5,
+     "transverse": 22.3
+    },
+    "liningMm": 0.052,
+    "ml": 15.403,
+    "unlabelledAir": 0.0535
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 31.5,
+     "transverse": 21.1
+    },
+    "liningMm": 0.195,
+    "ml": 14.938,
+    "unlabelledAir": 0.1053
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.014
+   },
+   "cavity.R": {
+    "ml": 9.766
+   },
+   "id": "P039",
+   "labelDefect": [
+    "R"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 36.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.078,
+    "ml": 12.577,
+    "unlabelledAir": 0.1319
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 30.0,
+     "transverse": 19.9
+    },
+    "liningMm": 0.128,
+    "ml": 8.922,
+    "unlabelledAir": 0.1548
+   },
+   "review": {
+    "L": "unsure",
+    "R": "unsure"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.432
+   },
+   "cavity.R": {
+    "ml": 12.889
+   },
+   "id": "P040",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 36.0,
+     "transverse": 27.5
+    },
+    "liningMm": 0.121,
+    "ml": 21.475,
+    "unlabelledAir": 0.0264
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 33.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.086,
+    "ml": 14.741,
+    "unlabelledAir": 0.0712
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.804
+   },
+   "cavity.R": {
+    "ml": 9.279
+   },
+   "id": "P042",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 40.5,
+     "transverse": 25.2
+    },
+    "liningMm": 0.126,
+    "ml": 26.22,
+    "unlabelledAir": 0.0735
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 34.6,
+     "cc": 40.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.055,
+    "ml": 28.236,
+    "unlabelledAir": 0.0639
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.894
+   },
+   "cavity.R": {
+    "ml": 10.737
+   },
+   "id": "P043",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 30.2,
+     "transverse": 17.6
+    },
+    "liningMm": 0.037,
+    "ml": 9.09,
+    "unlabelledAir": 0.0933
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 31.7,
+     "transverse": 22.3
+    },
+    "liningMm": 0.1,
+    "ml": 12.362,
+    "unlabelledAir": 0.0593
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.476
+   },
+   "cavity.R": {
+    "ml": 10.705
+   },
+   "id": "P044",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 33.0,
+     "transverse": 27.0
+    },
+    "liningMm": 0.128,
+    "ml": 11.578,
+    "unlabelledAir": 0.0803
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 37.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.111,
+    "ml": 14.776,
+    "unlabelledAir": 0.0867
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.069
+   },
+   "cavity.R": {
+    "ml": 14.015
+   },
+   "id": "P045",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 37.5,
+     "transverse": 29.9
+    },
+    "liningMm": 0.114,
+    "ml": 22.487,
+    "unlabelledAir": 0.101
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 34.6,
+     "cc": 36.0,
+     "transverse": 25.8
+    },
+    "liningMm": 0.127,
+    "ml": 22.049,
+    "unlabelledAir": 0.0319
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.868
+   },
+   "cavity.R": {
+    "ml": 12.838
+   },
+   "id": "P046",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 36.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.169,
+    "ml": 14.601,
+    "unlabelledAir": 0.0496
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 37.5,
+     "transverse": 21.1
+    },
+    "liningMm": 0.237,
+    "ml": 12.805,
+    "unlabelledAir": 0.0573
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 8.688
+   },
+   "cavity.R": {
+    "ml": 8.176
+   },
+   "id": "P047",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 33.0,
+     "transverse": 19.9
+    },
+    "liningMm": 0.082,
+    "ml": 11.406,
+    "unlabelledAir": 0.1263
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 25.5,
+     "transverse": 16.4
+    },
+    "liningMm": 0.068,
+    "ml": 6.63,
+    "unlabelledAir": 0.1042
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.536
+   },
+   "cavity.R": {
+    "ml": 10.025
+   },
+   "id": "P050",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 31.5,
+     "transverse": 21.1
+    },
+    "liningMm": 0.256,
+    "ml": 11.757,
+    "unlabelledAir": 0.0236
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 30.6,
+     "transverse": 19.9
+    },
+    "liningMm": 0.326,
+    "ml": 10.728,
+    "unlabelledAir": 0.0518
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.759
+   },
+   "cavity.R": {
+    "ml": 12.224
+   },
+   "id": "P051",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 34.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.254,
+    "ml": 18.708,
+    "unlabelledAir": 0.0622
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 30.0,
+     "transverse": 19.9
+    },
+    "liningMm": 0.055,
+    "ml": 11.008,
+    "unlabelledAir": 0.0997
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.619
+   },
+   "cavity.R": {
+    "ml": 11.343
+   },
+   "id": "P052",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 33.0,
+     "transverse": 29.3
+    },
+    "liningMm": 0.097,
+    "ml": 22.999,
+    "unlabelledAir": 0.0485
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 35.2,
+     "cc": 34.5,
+     "transverse": 28.7
+    },
+    "liningMm": 0.187,
+    "ml": 20.0,
+    "unlabelledAir": 0.0498
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.63
+   },
+   "cavity.R": {
+    "ml": 9.352
+   },
+   "id": "P053",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 18.8,
+     "cc": 19.5,
+     "transverse": 11.1
+    },
+    "liningMm": 0.213,
+    "ml": 2.951,
+    "unlabelledAir": 0.0532
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 30.0,
+     "transverse": 19.3
+    },
+    "liningMm": 0.037,
+    "ml": 11.688,
+    "unlabelledAir": 0.0954
+   },
+   "review": {
+    "L": "opacified",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.357
+   },
+   "cavity.R": {
+    "ml": 15.478
+   },
+   "id": "P055",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 43.5,
+     "transverse": 29.3
+    },
+    "liningMm": 0.103,
+    "ml": 29.337,
+    "unlabelledAir": 0.0626
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 35.7,
+     "cc": 43.5,
+     "transverse": 31.6
+    },
+    "liningMm": 0.166,
+    "ml": 30.711,
+    "unlabelledAir": 0.0354
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.738
+   },
+   "cavity.R": {
+    "ml": 12.144
+   },
+   "id": "P056",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 8.8,
+     "cc": 10.5,
+     "transverse": 14.6
+    },
+    "liningMm": 0.9,
+    "ml": 0.756,
+    "unlabelledAir": 0.0905
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 34.5,
+     "transverse": 22.3
+    },
+    "liningMm": 0.116,
+    "ml": 13.865,
+    "unlabelledAir": 0.0726
+   },
+   "review": {
+    "L": "opacified",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.592
+   },
+   "cavity.R": {
+    "ml": 14.078
+   },
+   "id": "P057",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.6,
+     "cc": 30.0,
+     "transverse": 15.8
+    },
+    "liningMm": 0.299,
+    "ml": 8.829,
+    "unlabelledAir": 0.0653
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 27.0,
+     "transverse": 17.0
+    },
+    "liningMm": 0.175,
+    "ml": 9.025,
+    "unlabelledAir": 0.0477
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.324
+   },
+   "cavity.R": {
+    "ml": 11.801
+   },
+   "id": "P058",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 34.5,
+     "transverse": 25.2
+    },
+    "liningMm": 0.107,
+    "ml": 18.539,
+    "unlabelledAir": 0.0385
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 36.0,
+     "transverse": 31.6
+    },
+    "liningMm": 0.21,
+    "ml": 19.743,
+    "unlabelledAir": 0.0167
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.745
+   },
+   "cavity.R": {
+    "ml": 10.488
+   },
+   "id": "P059",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 22.5,
+     "transverse": 17.0
+    },
+    "liningMm": 0.309,
+    "ml": 6.753,
+    "unlabelledAir": 0.0481
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.8,
+     "cc": 28.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.105,
+    "ml": 10.292,
+    "unlabelledAir": 0.0464
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 15.229
+   },
+   "cavity.R": {
+    "ml": 11.59
+   },
+   "id": "P060",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 34.5,
+     "transverse": 28.7
+    },
+    "liningMm": 0.134,
+    "ml": 17.878,
+    "unlabelledAir": 0.0514
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 39.0,
+     "transverse": 28.7
+    },
+    "liningMm": 0.151,
+    "ml": 23.931,
+    "unlabelledAir": 0.034
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.093
+   },
+   "cavity.R": {
+    "ml": 12.259
+   },
+   "id": "P063",
+   "labelDefect": [
+    "R"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 18.8,
+     "cc": 19.5,
+     "transverse": 12.3
+    },
+    "liningMm": 0.236,
+    "ml": 3.402,
+    "unlabelledAir": 0.1071
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 17.6,
+     "cc": 15.0,
+     "transverse": 11.1
+    },
+    "liningMm": 0.171,
+    "ml": 2.164,
+    "unlabelledAir": 0.2234
+   },
+   "review": {
+    "L": "clear",
+    "R": "unsure"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.381
+   },
+   "cavity.R": {
+    "ml": 8.707
+   },
+   "id": "P064",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 20.5,
+     "cc": 22.5,
+     "transverse": 16.4
+    },
+    "liningMm": 0.432,
+    "ml": 5.494,
+    "unlabelledAir": 0.0337
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 18.8,
+     "cc": 18.0,
+     "transverse": 14.1
+    },
+    "liningMm": 0.451,
+    "ml": 3.794,
+    "unlabelledAir": 0.0519
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.55
+   },
+   "cavity.R": {
+    "ml": 10.973
+   },
+   "id": "P065",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 31.5,
+     "transverse": 23.4
+    },
+    "liningMm": 0.155,
+    "ml": 13.098,
+    "unlabelledAir": 0.0741
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 33.0,
+     "transverse": 24.6
+    },
+    "liningMm": 0.238,
+    "ml": 13.698,
+    "unlabelledAir": 0.063
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.844
+   },
+   "cavity.R": {
+    "ml": 16.163
+   },
+   "id": "P066",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 34.5,
+     "transverse": 18.8
+    },
+    "liningMm": 0.218,
+    "ml": 11.217,
+    "unlabelledAir": 0.0471
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 36.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.073,
+    "ml": 16.667,
+    "unlabelledAir": 0.071
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.797
+   },
+   "cavity.R": {
+    "ml": 10.527
+   },
+   "id": "P067",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 31.5,
+     "transverse": 24.6
+    },
+    "liningMm": 0.086,
+    "ml": 16.181,
+    "unlabelledAir": 0.0432
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 27.5,
+     "cc": 31.5,
+     "transverse": 24.6
+    },
+    "liningMm": 0.218,
+    "ml": 7.671,
+    "unlabelledAir": 0.0866
+   },
+   "review": {
+    "L": "clear",
+    "R": "thickening"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.451
+   },
+   "cavity.R": {
+    "ml": 14.673
+   },
+   "id": "P068",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 27.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.109,
+    "ml": 10.008,
+    "unlabelledAir": 0.0701
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 22.5,
+     "transverse": 16.4
+    },
+    "liningMm": 0.072,
+    "ml": 6.595,
+    "unlabelledAir": 0.0899
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.868
+   },
+   "cavity.R": {
+    "ml": 10.817
+   },
+   "id": "P069",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 21.1,
+     "cc": 22.5,
+     "transverse": 14.6
+    },
+    "liningMm": 0.302,
+    "ml": 4.819,
+    "unlabelledAir": 0.0383
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 22.9,
+     "cc": 27.0,
+     "transverse": 14.6
+    },
+    "liningMm": 0.195,
+    "ml": 5.436,
+    "unlabelledAir": 0.0999
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.495
+   },
+   "cavity.R": {
+    "ml": 9.61
+   },
+   "id": "P070",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 31.5,
+     "transverse": 20.5
+    },
+    "liningMm": 0.328,
+    "ml": 14.692,
+    "unlabelledAir": 0.0817
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 31.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.115,
+    "ml": 15.303,
+    "unlabelledAir": 0.0419
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.867
+   },
+   "cavity.R": {
+    "ml": 12.927
+   },
+   "id": "P071",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 37.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.062,
+    "ml": 19.901,
+    "unlabelledAir": 0.0543
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 40.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.152,
+    "ml": 23.959,
+    "unlabelledAir": 0.0601
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.478
+   },
+   "cavity.R": {
+    "ml": 10.335
+   },
+   "id": "P072",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 22.3,
+     "cc": 16.5,
+     "transverse": 13.5
+    },
+    "liningMm": 0.286,
+    "ml": 3.93,
+    "unlabelledAir": 0.004
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 19.9,
+     "cc": 15.0,
+     "transverse": 11.1
+    },
+    "liningMm": 0.148,
+    "ml": 2.432,
+    "unlabelledAir": 0.0195
+   },
+   "review": {
+    "L": "clear",
+    "R": "thickening"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.985
+   },
+   "cavity.R": {
+    "ml": 11.849
+   },
+   "id": "P074",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 41.0,
+     "cc": 49.5,
+     "transverse": 32.8
+    },
+    "liningMm": 0.093,
+    "ml": 39.515,
+    "unlabelledAir": 0.0723
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 38.1,
+     "cc": 48.0,
+     "transverse": 31.6
+    },
+    "liningMm": 0.081,
+    "ml": 31.362,
+    "unlabelledAir": 0.1093
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.008
+   },
+   "cavity.R": {
+    "ml": 15.991
+   },
+   "id": "P075",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 36.0,
+     "transverse": 22.3
+    },
+    "liningMm": 0.131,
+    "ml": 17.097,
+    "unlabelledAir": 0.085
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 24.0,
+     "transverse": 15.2
+    },
+    "liningMm": 0.076,
+    "ml": 6.734,
+    "unlabelledAir": 0.0593
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.62
+   },
+   "cavity.R": {
+    "ml": 10.149
+   },
+   "id": "P076",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 36.3,
+     "cc": 39.0,
+     "transverse": 27.0
+    },
+    "liningMm": 0.049,
+    "ml": 22.177,
+    "unlabelledAir": 0.0789
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.2,
+     "cc": 36.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.149,
+    "ml": 15.391,
+    "unlabelledAir": 0.0657
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.288
+   },
+   "cavity.R": {
+    "ml": 7.992
+   },
+   "id": "P080",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 33.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.146,
+    "ml": 16.191,
+    "unlabelledAir": 0.0251
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 34.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.166,
+    "ml": 17.181,
+    "unlabelledAir": 0.0311
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.255
+   },
+   "cavity.R": {
+    "ml": 14.039
+   },
+   "id": "P082",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 35.2,
+     "cc": 42.0,
+     "transverse": 26.4
+    },
+    "liningMm": 0.258,
+    "ml": 20.955,
+    "unlabelledAir": 0.0624
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 39.0,
+     "transverse": 25.2
+    },
+    "liningMm": 0.106,
+    "ml": 18.003,
+    "unlabelledAir": 0.0262
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.92
+   },
+   "cavity.R": {
+    "ml": 17.053
+   },
+   "id": "P083",
+   "labelDefect": [
+    "R"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 35.7,
+     "cc": 36.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.115,
+    "ml": 15.226,
+    "unlabelledAir": 0.0491
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 11.7,
+     "cc": 15.0,
+     "transverse": 10.7
+    },
+    "liningMm": 0.245,
+    "ml": 0.613,
+    "unlabelledAir": 0.1444
+   },
+   "review": {
+    "L": "clear",
+    "R": "opacified"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.974
+   },
+   "cavity.R": {
+    "ml": 11.885
+   },
+   "id": "P085",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 39.0,
+     "transverse": 24.0
+    },
+    "liningMm": 0.071,
+    "ml": 20.618,
+    "unlabelledAir": 0.0824
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 36.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.377,
+    "ml": 17.436,
+    "unlabelledAir": 0.0692
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.398
+   },
+   "cavity.R": {
+    "ml": 10.04
+   },
+   "id": "P086",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 25.8,
+     "cc": 28.5,
+     "transverse": 17.6
+    },
+    "liningMm": 0.188,
+    "ml": 7.049,
+    "unlabelledAir": 0.0381
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 24.0,
+     "transverse": 18.8
+    },
+    "liningMm": 0.104,
+    "ml": 6.077,
+    "unlabelledAir": 0.0709
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.675
+   },
+   "cavity.R": {
+    "ml": 8.477
+   },
+   "id": "P087",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.5,
+     "cc": 40.5,
+     "transverse": 24.0
+    },
+    "liningMm": 0.146,
+    "ml": 10.015,
+    "unlabelledAir": 0.0954
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 33.0,
+     "transverse": 25.8
+    },
+    "liningMm": 0.219,
+    "ml": 8.341,
+    "unlabelledAir": 0.0936
+   },
+   "review": {
+    "L": "thickening",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.76
+   },
+   "cavity.R": {
+    "ml": 10.677
+   },
+   "id": "P088",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 34.6,
+     "cc": 33.0,
+     "transverse": 22.3
+    },
+    "liningMm": 0.157,
+    "ml": 15.001,
+    "unlabelledAir": 0.0416
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 37.5,
+     "cc": 27.0,
+     "transverse": 24.0
+    },
+    "liningMm": 0.377,
+    "ml": 11.295,
+    "unlabelledAir": 0.0508
+   },
+   "review": {
+    "L": "clear",
+    "R": "thickening"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 8.519
+   },
+   "cavity.R": {
+    "ml": 9.284
+   },
+   "id": "P089",
+   "labelDefect": [
+    "L"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 9.8,
+     "cc": 10.5,
+     "transverse": 6.9
+    },
+    "liningMm": 0.0,
+    "ml": 0.058,
+    "unlabelledAir": 0.6424
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 17.0,
+     "cc": 22.5,
+     "transverse": 13.3
+    },
+    "liningMm": 0.059,
+    "ml": 3.509,
+    "unlabelledAir": 0.1255
+   },
+   "review": {
+    "L": "opacified",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.459
+   },
+   "cavity.R": {
+    "ml": 10.901
+   },
+   "id": "P090",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 34.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.156,
+    "ml": 15.647,
+    "unlabelledAir": 0.0573
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 31.5,
+     "transverse": 25.8
+    },
+    "liningMm": 0.062,
+    "ml": 14.073,
+    "unlabelledAir": 0.0519
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.042
+   },
+   "cavity.R": {
+    "ml": 11.091
+   },
+   "id": "P092",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 28.5,
+     "transverse": 18.2
+    },
+    "liningMm": 0.118,
+    "ml": 8.395,
+    "unlabelledAir": 0.0969
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 31.6,
+     "transverse": 25.8
+    },
+    "liningMm": 0.11,
+    "ml": 15.526,
+    "unlabelledAir": 0.0565
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 20.057
+   },
+   "cavity.R": {
+    "ml": 18.199
+   },
+   "id": "P093",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 33.0,
+     "transverse": 15.8
+    },
+    "liningMm": 0.076,
+    "ml": 11.865,
+    "unlabelledAir": 0.0765
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 42.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.214,
+    "ml": 16.414,
+    "unlabelledAir": 0.0875
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 8.216
+   },
+   "cavity.R": {
+    "ml": 8.634
+   },
+   "id": "P094",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 28.5,
+     "transverse": 18.8
+    },
+    "liningMm": 0.061,
+    "ml": 9.564,
+    "unlabelledAir": 0.0853
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 31.5,
+     "transverse": 20.5
+    },
+    "liningMm": 0.052,
+    "ml": 13.038,
+    "unlabelledAir": 0.0777
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.912
+   },
+   "cavity.R": {
+    "ml": 10.44
+   },
+   "id": "P095",
+   "labelDefect": [
+    "L"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 0.6,
+     "cc": 3.0,
+     "transverse": 2.7
+    },
+    "liningMm": 1.807,
+    "ml": 0.009,
+    "unlabelledAir": 0.55
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 21.1,
+     "cc": 25.5,
+     "transverse": 22.8
+    },
+    "liningMm": 0.07,
+    "ml": 8.011,
+    "unlabelledAir": 0.0434
+   },
+   "review": {
+    "L": "opacified",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.233
+   },
+   "cavity.R": {
+    "ml": 9.017
+   },
+   "id": "P096",
+   "labelDefect": [
+    "L"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 36.3,
+     "cc": 37.5,
+     "transverse": 28.1
+    },
+    "liningMm": 0.058,
+    "ml": 19.694,
+    "unlabelledAir": 0.1438
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 36.3,
+     "cc": 36.0,
+     "transverse": 27.0
+    },
+    "liningMm": 0.046,
+    "ml": 21.23,
+    "unlabelledAir": 0.1213
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.617
+   },
+   "cavity.R": {
+    "ml": 9.178
+   },
+   "id": "P097",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 35.2,
+     "cc": 37.5,
+     "transverse": 27.5
+    },
+    "liningMm": 0.259,
+    "ml": 24.277,
+    "unlabelledAir": 0.0448
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 35.7,
+     "cc": 37.5,
+     "transverse": 28.1
+    },
+    "liningMm": 0.323,
+    "ml": 23.234,
+    "unlabelledAir": 0.062
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.72
+   },
+   "cavity.R": {
+    "ml": 10.212
+   },
+   "id": "P098",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 23.4,
+     "cc": 18.0,
+     "transverse": 13.5
+    },
+    "liningMm": 0.14,
+    "ml": 3.673,
+    "unlabelledAir": 0.0938
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 22.3,
+     "cc": 16.5,
+     "transverse": 13.5
+    },
+    "liningMm": 0.177,
+    "ml": 3.067,
+    "unlabelledAir": 0.0641
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.09
+   },
+   "cavity.R": {
+    "ml": 10.783
+   },
+   "id": "P099",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 39.0,
+     "transverse": 24.6
+    },
+    "liningMm": 0.105,
+    "ml": 17.606,
+    "unlabelledAir": 0.0777
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 34.0,
+     "cc": 36.0,
+     "transverse": 24.6
+    },
+    "liningMm": 0.122,
+    "ml": 17.781,
+    "unlabelledAir": 0.0792
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 15.271
+   },
+   "cavity.R": {
+    "ml": 15.93
+   },
+   "id": "P100",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 31.5,
+     "transverse": 19.9
+    },
+    "liningMm": 0.092,
+    "ml": 14.002,
+    "unlabelledAir": 0.0929
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 34.5,
+     "transverse": 21.7
+    },
+    "liningMm": 0.19,
+    "ml": 13.085,
+    "unlabelledAir": 0.0563
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.17
+   },
+   "cavity.R": {
+    "ml": 10.273
+   },
+   "id": "P101",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 37.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.171,
+    "ml": 21.2,
+    "unlabelledAir": 0.0525
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 31.5,
+     "transverse": 24.6
+    },
+    "liningMm": 0.139,
+    "ml": 16.903,
+    "unlabelledAir": 0.0828
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 23.399
+   },
+   "cavity.R": {
+    "ml": 18.293
+   },
+   "id": "P103",
+   "labelDefect": [
+    "L"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 17.6,
+     "cc": 15.0,
+     "transverse": 17.0
+    },
+    "liningMm": 0.213,
+    "ml": 2.331,
+    "unlabelledAir": 0.153
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 19.9,
+     "cc": 16.5,
+     "transverse": 13.5
+    },
+    "liningMm": 0.161,
+    "ml": 2.277,
+    "unlabelledAir": 0.0805
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.929
+   },
+   "cavity.R": {
+    "ml": 11.7
+   },
+   "id": "P104",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.6,
+     "cc": 30.0,
+     "transverse": 25.2
+    },
+    "liningMm": 0.153,
+    "ml": 16.132,
+    "unlabelledAir": 0.0843
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.8,
+     "cc": 33.0,
+     "transverse": 26.4
+    },
+    "liningMm": 0.111,
+    "ml": 17.392,
+    "unlabelledAir": 0.1009
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.126
+   },
+   "cavity.R": {
+    "ml": 10.008
+   },
+   "id": "P105",
+   "labelDefect": [
+    "R"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 30.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.046,
+    "ml": 11.047,
+    "unlabelledAir": 0.1152
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 27.0,
+     "transverse": 21.1
+    },
+    "liningMm": 0.025,
+    "ml": 10.22,
+    "unlabelledAir": 0.141
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.227
+   },
+   "cavity.R": {
+    "ml": 11.196
+   },
+   "id": "P106",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 27.0,
+     "transverse": 19.3
+    },
+    "liningMm": 0.215,
+    "ml": 9.526,
+    "unlabelledAir": 0.0773
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 30.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.056,
+    "ml": 11.092,
+    "unlabelledAir": 0.0537
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 13.126
+   },
+   "cavity.R": {
+    "ml": 13.782
+   },
+   "id": "P107",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 28.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.075,
+    "ml": 13.14,
+    "unlabelledAir": 0.0639
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 27.0,
+     "transverse": 20.5
+    },
+    "liningMm": 0.102,
+    "ml": 8.59,
+    "unlabelledAir": 0.0823
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.157
+   },
+   "cavity.R": {
+    "ml": 8.87
+   },
+   "id": "P108",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 30.0,
+     "transverse": 22.3
+    },
+    "liningMm": 0.2,
+    "ml": 14.146,
+    "unlabelledAir": 0.0319
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 28.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.097,
+    "ml": 12.752,
+    "unlabelledAir": 0.0519
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 8.824
+   },
+   "cavity.R": {
+    "ml": 10.064
+   },
+   "id": "P109",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 27.0,
+     "cc": 24.0,
+     "transverse": 15.2
+    },
+    "liningMm": 0.17,
+    "ml": 6.694,
+    "unlabelledAir": 0.0703
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 25.5,
+     "transverse": 16.8
+    },
+    "liningMm": 0.112,
+    "ml": 8.273,
+    "unlabelledAir": 0.0834
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.266
+   },
+   "cavity.R": {
+    "ml": 10.462
+   },
+   "id": "P110",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 34.5,
+     "transverse": 25.2
+    },
+    "liningMm": 0.096,
+    "ml": 14.692,
+    "unlabelledAir": 0.0679
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 30.0,
+     "transverse": 17.6
+    },
+    "liningMm": 0.307,
+    "ml": 10.89,
+    "unlabelledAir": 0.0581
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.572
+   },
+   "cavity.R": {
+    "ml": 14.948
+   },
+   "id": "P112",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 28.5,
+     "transverse": 18.8
+    },
+    "liningMm": 0.112,
+    "ml": 9.458,
+    "unlabelledAir": 0.0535
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.8,
+     "cc": 24.0,
+     "transverse": 14.6
+    },
+    "liningMm": 0.074,
+    "ml": 6.609,
+    "unlabelledAir": 0.0567
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 18.859
+   },
+   "cavity.R": {
+    "ml": 14.267
+   },
+   "id": "P113",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 36.0,
+     "transverse": 23.4
+    },
+    "liningMm": 0.086,
+    "ml": 14.719,
+    "unlabelledAir": 0.0623
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 27.0,
+     "transverse": 20.5
+    },
+    "liningMm": 0.078,
+    "ml": 10.119,
+    "unlabelledAir": 0.0829
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.194
+   },
+   "cavity.R": {
+    "ml": 8.647
+   },
+   "id": "P114",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 23.4,
+     "cc": 21.0,
+     "transverse": 12.3
+    },
+    "liningMm": 0.131,
+    "ml": 3.598,
+    "unlabelledAir": 0.1204
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 19.5,
+     "transverse": 16.4
+    },
+    "liningMm": 0.445,
+    "ml": 5.51,
+    "unlabelledAir": 0.0175
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 16.477
+   },
+   "cavity.R": {
+    "ml": 11.62
+   },
+   "id": "P115",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 37.5,
+     "transverse": 26.4
+    },
+    "liningMm": 0.071,
+    "ml": 19.652,
+    "unlabelledAir": 0.0453
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 36.0,
+     "transverse": 25.2
+    },
+    "liningMm": 0.173,
+    "ml": 17.117,
+    "unlabelledAir": 0.0621
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.834
+   },
+   "cavity.R": {
+    "ml": 7.299
+   },
+   "id": "P116",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 36.0,
+     "transverse": 27.0
+    },
+    "liningMm": 0.088,
+    "ml": 16.993,
+    "unlabelledAir": 0.0566
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.8,
+     "cc": 33.0,
+     "transverse": 27.0
+    },
+    "liningMm": 0.155,
+    "ml": 14.253,
+    "unlabelledAir": 0.0785
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.881
+   },
+   "cavity.R": {
+    "ml": 13.295
+   },
+   "id": "P117",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 21.0,
+     "transverse": 17.0
+    },
+    "liningMm": 0.061,
+    "ml": 7.111,
+    "unlabelledAir": 0.0726
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 29.9,
+     "cc": 27.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.133,
+    "ml": 12.701,
+    "unlabelledAir": 0.0526
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.24
+   },
+   "cavity.R": {
+    "ml": 11.403
+   },
+   "id": "P119",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 21.7,
+     "cc": 22.5,
+     "transverse": 12.9
+    },
+    "liningMm": 0.209,
+    "ml": 4.459,
+    "unlabelledAir": 0.0407
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 22.9,
+     "cc": 24.0,
+     "transverse": 15.2
+    },
+    "liningMm": 0.096,
+    "ml": 5.501,
+    "unlabelledAir": 0.1111
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.004
+   },
+   "cavity.R": {
+    "ml": 10.514
+   },
+   "id": "P120",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 31.1,
+     "cc": 34.5,
+     "transverse": 22.9
+    },
+    "liningMm": 0.124,
+    "ml": 14.471,
+    "unlabelledAir": 0.1021
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 32.2,
+     "cc": 31.5,
+     "transverse": 23.4
+    },
+    "liningMm": 0.122,
+    "ml": 14.215,
+    "unlabelledAir": 0.0783
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 14.973
+   },
+   "cavity.R": {
+    "ml": 10.317
+   },
+   "id": "P121",
+   "labelDefect": [
+    "L",
+    "R"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 19.3,
+     "cc": 18.0,
+     "transverse": 10.5
+    },
+    "liningMm": 0.076,
+    "ml": 1.538,
+    "unlabelledAir": 0.1934
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 19.9,
+     "cc": 13.5,
+     "transverse": 8.2
+    },
+    "liningMm": 0.12,
+    "ml": 1.182,
+    "unlabelledAir": 0.1844
+   },
+   "review": {
+    "L": "unsure",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 7.83
+   },
+   "cavity.R": {
+    "ml": 7.595
+   },
+   "id": "P122",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 28.1,
+     "cc": 28.5,
+     "transverse": 24.6
+    },
+    "liningMm": 0.232,
+    "ml": 11.711,
+    "unlabelledAir": 0.0591
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 25.5,
+     "transverse": 23.4
+    },
+    "liningMm": 0.046,
+    "ml": 10.154,
+    "unlabelledAir": 0.0575
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.224
+   },
+   "cavity.R": {
+    "ml": 7.965
+   },
+   "id": "P123",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 33.4,
+     "cc": 33.0,
+     "transverse": 22.9
+    },
+    "liningMm": 0.166,
+    "ml": 17.748,
+    "unlabelledAir": 0.0314
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 28.5,
+     "transverse": 22.3
+    },
+    "liningMm": 0.137,
+    "ml": 12.239,
+    "unlabelledAir": 0.0416
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 8.567
+   },
+   "cavity.R": {
+    "ml": 8.817
+   },
+   "id": "P124",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 22.3,
+     "cc": 36.0,
+     "transverse": 23.4
+    },
+    "liningMm": 0.183,
+    "ml": 12.483,
+    "unlabelledAir": 0.0365
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 26.4,
+     "cc": 36.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.16,
+    "ml": 12.933,
+    "unlabelledAir": 0.07
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 10.577
+   },
+   "cavity.R": {
+    "ml": 10.331
+   },
+   "id": "P125",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 21.7,
+     "cc": 24.0,
+     "transverse": 17.0
+    },
+    "liningMm": 0.118,
+    "ml": 6.419,
+    "unlabelledAir": 0.0651
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 22.5,
+     "transverse": 16.4
+    },
+    "liningMm": 0.144,
+    "ml": 6.101,
+    "unlabelledAir": 0.0533
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 12.134
+   },
+   "cavity.R": {
+    "ml": 13.282
+   },
+   "id": "P126",
+   "labelDefect": [
+    "R"
+   ],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 30.5,
+     "cc": 27.0,
+     "transverse": 17.0
+    },
+    "liningMm": 0.06,
+    "ml": 8.33,
+    "unlabelledAir": 0.099
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 12.9,
+     "cc": 21.0,
+     "transverse": 15.2
+    },
+    "liningMm": 0.054,
+    "ml": 3.183,
+    "unlabelledAir": 0.2098
+   },
+   "review": {
+    "L": "clear",
+    "R": "opacified"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 9.575
+   },
+   "cavity.R": {
+    "ml": 11.043
+   },
+   "id": "P127",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 29.3,
+     "cc": 25.5,
+     "transverse": 16.4
+    },
+    "liningMm": 0.138,
+    "ml": 7.403,
+    "unlabelledAir": 0.1103
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 28.7,
+     "cc": 18.0,
+     "transverse": 18.8
+    },
+    "liningMm": 0.242,
+    "ml": 6.031,
+    "unlabelledAir": 0.0719
+   },
+   "review": {
+    "L": "clear",
+    "R": "thickening"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 6.19
+   },
+   "cavity.R": {
+    "ml": 8.305
+   },
+   "id": "P129",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 32.2,
+     "cc": 33.0,
+     "transverse": 21.7
+    },
+    "liningMm": 0.169,
+    "ml": 14.186,
+    "unlabelledAir": 0.0436
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 25.2,
+     "cc": 29.1,
+     "transverse": 15.8
+    },
+    "liningMm": 0.186,
+    "ml": 5.578,
+    "unlabelledAir": 0.0388
+   },
+   "review": {
+    "L": "clear",
+    "R": "thickening"
+   }
+  },
+  {
+   "cavity.L": {
+    "ml": 11.602
+   },
+   "cavity.R": {
+    "ml": 10.542
+   },
+   "id": "P130",
+   "labelDefect": [],
+   "maxillary.L": {
+    "extentMm": {
+     "ap": 24.0,
+     "cc": 30.0,
+     "transverse": 16.4
+    },
+    "liningMm": 0.159,
+    "ml": 8.324,
+    "unlabelledAir": 0.0532
+   },
+   "maxillary.R": {
+    "extentMm": {
+     "ap": 24.6,
+     "cc": 34.5,
+     "transverse": 18.8
+    },
+    "liningMm": 0.067,
+    "ml": 10.737,
+    "unlabelledAir": 0.0775
+   },
+   "review": {
+    "L": "clear",
+    "R": "clear"
+   }
+  }
+ ],
+ "summary": {
+  "all": {
+   "cavity": {
+    "absAI": {
+     "n": 107,
+     "p25": 4.83,
+     "p5": 1.15,
+     "p50": 11.51,
+     "p75": 19.83,
+     "p95": 32.99
+    },
+    "mlL": {
+     "n": 107,
+     "p25": 9.56,
+     "p5": 7.75,
+     "p50": 11.17,
+     "p75": 13.09,
+     "p95": 16.16
+    },
+    "mlR": {
+     "n": 107,
+     "p25": 10.02,
+     "p5": 8.36,
+     "p50": 11.04,
+     "p75": 12.9,
+     "p95": 15.97
+    },
+    "signedAI": {
+     "mean": 0.4,
+     "sd": 17.76
+    }
+   },
+   "maxillary": {
+    "absAI": {
+     "n": 107,
+     "p25": 7.65,
+     "p5": 2.31,
+     "p50": 20.92,
+     "p75": 37.11,
+     "p95": 110.38
+    },
+    "extentMm": {
+     "ap": {
+      "n": 214,
+      "p25": 26.4,
+      "p5": 18.8,
+      "p50": 29.9,
+      "p75": 32.65,
+      "p95": 35.7
+     },
+     "cc": {
+      "n": 214,
+      "p25": 27.0,
+      "p5": 16.5,
+      "p50": 31.5,
+      "p75": 36.0,
+      "p95": 40.5
+     },
+     "transverse": {
+      "n": 214,
+      "p25": 17.0,
+      "p5": 12.3,
+      "p50": 21.7,
+      "p75": 24.6,
+      "p95": 28.7
+     }
+    },
+    "mlL": {
+     "n": 107,
+     "p25": 8.36,
+     "p5": 3.09,
+     "p50": 12.68,
+     "p75": 17.61,
+     "p95": 25.06
+    },
+    "mlR": {
+     "n": 107,
+     "p25": 7.84,
+     "p5": 2.52,
+     "p50": 12.75,
+     "p75": 16.64,
+     "p95": 23.72
+    },
+    "signedAI": {
+     "mean": -2.51,
+     "sd": 51.7
+    }
+   },
+   "spearmanCavityVsMaxillaryAI": -0.047
+  },
+  "clear": {
+   "cavity": {
+    "absAI": {
+     "n": 88,
+     "p25": 4.94,
+     "p5": 1.21,
+     "p50": 12.05,
+     "p75": 19.88,
+     "p95": 32.89
+    },
+    "mlL": {
+     "n": 88,
+     "p25": 9.7,
+     "p5": 7.85,
+     "p50": 11.39,
+     "p75": 13.09,
+     "p95": 16.1
+    },
+    "mlR": {
+     "n": 88,
+     "p25": 10.06,
+     "p5": 8.34,
+     "p50": 11.4,
+     "p75": 12.99,
+     "p95": 15.77
+    },
+    "signedAI": {
+     "mean": 0.91,
+     "sd": 18.08
+    }
+   },
+   "maxillary": {
+    "absAI": {
+     "n": 88,
+     "p25": 7.0,
+     "p5": 2.23,
+     "p50": 17.24,
+     "p75": 35.2,
+     "p95": 55.22
+    },
+    "extentMm": {
+     "ap": {
+      "n": 176,
+      "p25": 27.0,
+      "p5": 21.55,
+      "p50": 30.5,
+      "p75": 32.8,
+      "p95": 35.7
+     },
+     "cc": {
+      "n": 176,
+      "p25": 28.5,
+      "p5": 21.0,
+      "p50": 33.0,
+      "p75": 36.0,
+      "p95": 40.5
+     },
+     "transverse": {
+      "n": 176,
+      "p25": 18.65,
+      "p5": 14.1,
+      "p50": 22.3,
+      "p75": 24.75,
+      "p95": 28.7
+     }
+    },
+    "mlL": {
+     "n": 88,
+     "p25": 9.55,
+     "p5": 4.16,
+     "p50": 13.12,
+     "p75": 18.04,
+     "p95": 25.0
+    },
+    "mlR": {
+     "n": 88,
+     "p25": 9.98,
+     "p5": 4.6,
+     "p50": 13.72,
+     "p75": 17.03,
+     "p95": 23.95
+    },
+    "signedAI": {
+     "mean": -2.99,
+     "sd": 33.07
+    }
+   },
+   "spearmanCavityVsMaxillaryAI": -0.007
+  },
+  "clearCount": 88,
+  "flaggedCount": 19
+ },
+ "unlabelledAir": {
+  "fence": 0.1356,
+  "median": 0.0646,
+  "sinusesAboveFence": 11
+ },
+ "version": 1
+}

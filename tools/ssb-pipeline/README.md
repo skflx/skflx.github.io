@@ -106,3 +106,15 @@ claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps
 terms the crosswalk lacks to graph ids. Method and limits:
 `ssb/reference/uw-sinusanatomy2/README.md`.
+
+## `nasalseg/` — population asymmetry (NasalSeg, CC BY 4.0)
+
+    # download NasalSeg.zip from https://zenodo.org/records/13893419 into incoming/nasalseg/, unzip to incoming/nasalseg/data/
+    .venv/bin/python -I tools/ssb-pipeline/nasalseg/stats.py [--png-dir DIR]   # -> ssb/anatomy/population/nasalseg.json
+
+Reads the archive's NRRD images and labels (no extra dependency: the reader is in the script), de-duplicates
+byte-identical cases, takes geometry from the image header where a label header disagrees, assigns sides by
+position, and measures the maxillary sinuses and nasal cavities. `review.json` holds the per-case visual verdicts
+(clear / thickening / opacified / unsure) that define the clear subset; `--png-dir` writes the review sheets they
+were made from. It also measures head A (as scanned, from git) the same way. Method and limits: the script's
+docstring; results and their reading: `docs/realistic-anatomy.md` §4.4; provenance: `ssb/LICENSE-data.md`.

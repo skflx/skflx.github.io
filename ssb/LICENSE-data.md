@@ -7,8 +7,9 @@ derived file. A replacement specimen gets its own section here.
 ## Reference specimen `uw-axial-sagittal`
 
 **Source.** *Interactive CT Sinus Anatomy*, University of Washington Department of
-Radiology, Seattle, at http://uwmsk.org/sinusanatomy2/. Authors: Sung E. LoGerfo, M.D.;
-Michael L. Richardson, M.D.; Robert W. Dalley, M.D.; Yoshimi Anzai, M.D. (c. 2009–2010).
+Radiology, Seattle, at http://uwmsk.org/sinusanatomy2/ (c. 2009–2010). Credit goes to the
+atlas and its institution; the repo does not name the atlas's individual authors (owner,
+2026-10-07: their privacy), here or in any other file or commit.
 
 **Case.** The atlas's axial stack (175 slices) and sagittal stack (137 slices). They are one
 adult head: the sagittal images are reformats of the axial acquisition. UW's coronal stack
@@ -18,16 +19,21 @@ shows normal anatomy only (n = 1). It carries no patient identifiers, and the ex
 is masked in the published volume, except the specimen's own nose (skin, alae, columella and
 vestibule between the alar-facial grooves; lips, cheeks and eyelids stay masked).
 
-**Permission.** The SSB project owner reports that the authors permit publishing 3D
-geometry and volumes derived from the atlas images. This was confirmed by the owner and
-recorded on 2026-09-30 (`docs/ssb.md` §13). The authors' written permission has yet to be
-filed; add it to `ssb/reference/uw-sinusanatomy2/` when it arrives. The atlas's own images
-and page text are not redistributed. `ssb/reference/uw-sinusanatomy2/` holds text and
-label positions only.
+**Permission.** Written permission from the atlas's authors, by email to the owner on
+2026-10-07, in answer to a request to use the atlas's public CT images in a public,
+non-commercial 3D educational model of endoscopic sinus surgery. Its terms: the use is
+permitted, on condition that the work credits the atlas; the authors asked to see the
+finished model. The email stays with the owner and is not committed (it carries personal
+contact details). It covers what was asked: 3D geometry and volumes derived from the
+images, and the slices as inputs to that model. The owner reads it as also covering
+serving the atlas's own images from this site (a recall deck, side-by-side comparison
+with the specimen), always with the attribution below (`docs/realistic-anatomy.md` §13,
+RA-O1, 2026-10-07). Any UW image committed to the repo gets its own row in a section
+for it here.
 
 **Attribution** (show wherever the specimen is displayed): *Specimen CT derived from
-Interactive CT Sinus Anatomy (LoGerfo, Richardson, Dalley, Anzai; University of Washington
-Department of Radiology), used with the authors' permission.*
+Interactive CT Sinus Anatomy, University of Washington Department of Radiology
+(uwmsk.org/sinusanatomy2), used with the authors' permission.*
 
 **What this is not.** The atlas was published as a screen capture of a bone-window display.
 It is not a DICOM export. The volume values are therefore 8-bit display levels, not HU
@@ -54,3 +60,20 @@ them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` ma
 | `ssb/reference/specimen-relations.json` | the graph's spatial claims tested against this specimen (numbers only) | `tools/ssb-pipeline/uw/relate3d.py` |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.
+
+## Population statistics `nasalseg`
+
+**Source.** *NasalSeg Dataset for Nasal Cavity and Paranasal Sinuses Segmentation from CT
+Images*, v2 (Zenodo, 2024-10-05, doi:10.5281/zenodo.13893419), described in *Scientific
+Data* (2024, doi:10.1038/s41597-024-04176-1). Creators: Zhang Y, Wang J, Pan T, Jiang Q, Ge J,
+Guo X, Jiang C, Lu J, Zhang J, Liu X, Tian M, Qi Y, Cheng Y, Zuo C.
+
+**Licence.** CC BY 4.0. Use approved by the owner, 2026-10-07 (`docs/realistic-anatomy.md`
+§13, RA-O6). No scan is redistributed; the archive stays in the gitignored drop zone.
+
+**Attribution** (show wherever these statistics are displayed): *Population data from the
+NasalSeg dataset (Zhang et al., 2024; CC BY 4.0), doi:10.5281/zenodo.13893419.*
+
+| File | What | Made by |
+|---|---|---|
+| `ssb/anatomy/population/nasalseg.json` | per-subject air volumes, extents, lining and completeness measures of the maxillary sinuses and nasal cavities; asymmetry summaries; the archive checks (duplicates, header corrections); head A placed in the distribution | `tools/ssb-pipeline/nasalseg/stats.py` with the visual review `tools/ssb-pipeline/nasalseg/review.json` |
