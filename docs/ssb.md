@@ -785,7 +785,7 @@ on the decongested state (the operations start by decongesting).
   three-label operator instead (ratio 0.76, outside the tolerance). The
   patch writes one constant display (the median of the erectile soft tissue)
   and the labels of the nearest turbinate. The owner may still overrule
-  (roadmap O8).
+  (roadmap O13, decided as recommended).
 - **Pipeline and files (WP DC1).** `mucosa.py` writes a patch and a lining
   pack per state (`ssb/states/<key>.ssbp.gz`, `ssb/models/lining-<key>.glb.gz`;
   key = first 10 hex of the SHA-256 of `mucosa.dec` / `mucosa.cong`), with the
@@ -1079,9 +1079,9 @@ grid at 0.5 mm, as the frontal-recess rules are; none written in):
 *Spec by Opus, 2026-10-07. Every number below is from a PubMed record
 read for this spec (abstracts only; the source set, its PMIDs and what each
 supports are in roadmap WP ST7a), or it is marked schematic. Owner
-decisions O7 (where it is drawn) and O8 (which population and class the
-defaults come from) are open (§13): either answer changes defaults, not
-structure. Not built.*
+decisions O14 (where it is drawn; open) and O8 (which population and class
+the defaults come from; decided 2026-10-08: mixed and labelled, modal
+classes) are in §13: either answer changes defaults, not structure. Not built.*
 
 **What it is for.** The external nose as rhinoplasty sees it: the
 framework (bone, cartilage, ligaments), the soft-tissue envelope in its
@@ -1232,7 +1232,7 @@ fits the deep fat at the default sidewall thickness (rule 10).
 | `depressor_type` | choice I · II · III | I | `c.depressor-septi-type` |
 | `sesamoid` | toggle (one extra cartilage in the hinge area) | off | `v.nasal-sesamoid-cartilage` |
 
-*Defaults for a variant choice* (pending O8): the modal class among those
+*Defaults for a variant choice* (O8, decided 2026-10-08): the modal class among those
 that draw the structure, so the default is what a surgeon meets most often
 — angular type III (the modal drawn type; IV, absent, is 26.3 %), nerve
 type I (50 %), depressor type I (62 %), nasal bone S (88 %). Under O6
@@ -1767,7 +1767,8 @@ O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists
 
 Open, from the ST7 spec (2026-10-07; §6.2):
 
-- **O7 — Where the nasal framework is drawn.** (a) In the variant lab
+- **O14 — Where the nasal framework is drawn** (open; numbered O7 until
+  2026-10-08, when it collided with the content-priority O7). (a) In the variant lab
   only, as an idealized diorama; (b) fitted under the specimen's own skin
   and on its nasal bones in the Specimen stage (schematic on specimen,
   n = 1 envelope); (c) both, the lab first. Recommended: (c) — the lab
@@ -1785,7 +1786,7 @@ Open, from the ST7 spec (2026-10-07; §6.2):
   class (what a surgeon meets most) or the textbook configuration.
   Recommended: (a) now with (c) later; modal classes; in fit mode the
   envelope is the specimen's own, so O8 matters least where the specimen
-  speaks.
+  speaks. **Decided 2026-10-08 by the owner: as recommended.**
 
 1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
    needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
@@ -1793,9 +1794,10 @@ Open, from the ST7 spec (2026-10-07; §6.2):
    markers (the wiki's precedent), prioritizing owner review of tier 1.
 3. Name and URL (`SSB`, `ssb.html`) — working title.
 
-Open from P1 (Opus, 2026-10-08; recommendations in `docs/ssb-roadmap.md` §2):
+From P1 (Opus, 2026-10-08), **all decided 2026-10-08 by the owner as recommended** (`docs/ssb-roadmap.md` §2):
 
-- **O8 — What "edema" means in the mucosa toggle.** The physiological
+- **O13 — What "edema" means in the mucosa toggle** (numbered O8 until
+  it collided with ST7's O8). The physiological
   congested phase (turbinates and septal swell body, calibrated on NasalSeg,
   §5.9), or the mucosal edema of rhinosinusitis (sinus lining, polyps:
   pathology, PR #119's `fill` operator). Recommended: the toggle is
