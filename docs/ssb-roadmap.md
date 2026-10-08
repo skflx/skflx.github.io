@@ -585,9 +585,9 @@ Report for the owner's review.
 | P (pipeline) | **P1b** dissection states | **P3** poses per state → **DC1** mucosal state | DC1 reruns the states decongested; it only turns tissue into air, so P3's poses stay free and in air |
 | V (viewer) | **P2** procedure player (on a fixture) | **IN1** 16-bit heads, after P3 (shares `volume.js`, `scope.js` and `mode-endoscope.js`) | P2's real-data checks switch on when P1b's `ssb/states/index.json` exists |
 | B (soft tissue) | ST4d | ST5 | ST4d moves the ICA sweeps on the sellar route: whichever of ST4d and P1b merges second reruns `dissect.py` (the guard reads the ICA field) |
-| N (population) | **POP1** after #119 merges | — | needs the NasalSeg archive in the drop zone |
+| N (population) | **POP1** (#119 merged 2026-10-08) | — | fetches the NasalSeg archive into the drop zone (224 MB, Zenodo; reachable from a session) |
 | Opus | — | **CP-3** after P1b, P2, P3 | — |
-| Owner | merge or close #119; O8–O11; tier-1 FESS anatomy | review the dissected states (CP-3's URLs) | — |
+| Owner | O8–O12; tier-1 FESS anatomy | review the dissected states (CP-3's URLs) | — |
 
 **CP-3 (Opus)** — after P1b, P2 and P3. Read each PR against its Accept; then on screen, per state of both corridors: the cavity in the three CT planes (preoperative scan, carved outline) and from the scope at its station; the guard (no cut within 1 mm of the ICA, optic nerve, AEA or orbit); the lamina, skull base, turbinates and the posterior table untouched; the antrostomy's size; the sellar opening's lateral edges against the carotid prominences; left = right. Write the URLs of each state for the owner's review.
 
@@ -1911,7 +1911,7 @@ Steps:
 Accept: `python mucosa.py decongested` prints d with a ratio within 1.35–1.45 (prototype: d = 1.0 mm, × 1.39), the superior third's absolute gain the smallest (prototype 0.13 against 0.25 and 0.24 cm²), 0 bone voxels and 0 voxels within 0.5 mm of bone changed; `node tools/test-ssb.mjs --only mucosa`: the toggle loads the patch and the lining; a pose whose tip is in inferior-turbinate tissue as scanned is in air decongested; every intact station and every `byState` pose still passes in the decongested state; `mu` is whitelisted; a procedure forces decongested; `node tools/ssb-content.mjs`, `check-data`, the full suite, `smoke-pages`.
 Escalate: the ratio needs d > 2 mm; any intact or `byState` station fails in the decongested state.
 
-### POP1 — NasalSeg cross-section profiles        [todo] · Sonnet · depends: #119 merged (`tools/ssb-pipeline/nasalseg/stats.py`); the archive in the drop zone
+### POP1 — NasalSeg cross-section profiles        [ready] · Sonnet · depends: #119 (merged with P1, 2026-10-08); the archive in the drop zone (download it: `tools/ssb-pipeline/nasalseg/stats.py` docstring)
 Goal: per clear NasalSeg subject and side, the nasal cavity's coronal cross-section profile, its mean, and the more- against the less-congested side; head A placed against them.
 Read: `docs/ssb.md` §5.9, §5.10; `tools/ssb-pipeline/nasalseg/stats.py` (docstring: duplicates, header fixes, side assignment, the clear subset); `docs/realistic-anatomy.md` §4.4 (PR #119).
 Touch: `tools/ssb-pipeline/nasalseg/stats.py` (a `profiles` subcommand); `ssb/anatomy/population/nasalseg.json` (new keys only); docs pass.
