@@ -17,8 +17,9 @@
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
 import { PLANES } from './volume.js?v=f02e3f8a';
-import { CT_PLANES } from './state.js?v=a96d143a';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=ede6cddb';
+import { CT_PLANES } from './state.js?v=32a9e616';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=aafb924d';
+import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
@@ -129,7 +130,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         return b;
     };
     const mark = (container, attr, value) => {
-        for (const b of container.querySelectorAll(`button[data-${attr}]`)) {
+        for (const b of container.querySelectorAll(`button[data-${attr.replace(/[A-Z]/g, (c) => '-' + c.toLowerCase())}]`)) {
             const on = b.dataset[attr] === value;
             b.setAttribute('aria-pressed', on ? 'true' : 'false');
             b.classList.toggle('active', on);
@@ -166,6 +167,39 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     const airSec = section('Air spaces and soft tissue');
     const airList = el('div', 'ssb-spec-checks');
     airSec.append(airList);
+
+    /* ---- the nasoseptal flap overlay (flap.js; docs/ssb.md 5.7): a soft-tissue control, shown from the flap's own tier ---- */
+    const flapSec = section('Nasoseptal flap');
+    const flapDesigns = row('Flap design');
+    flapDesigns.append(pill('Off', { flapDesign: 'off' }));
+    for (const d of DESIGNS) flapDesigns.append(pill(DESIGN_LABEL[d], { flapDesign: d }));
+    const flapSides = row('Flap side');
+    for (const [sd, label] of [['R', 'Right'], ['L', 'Left']]) flapSides.append(pill(label, { flapSide: sd }));
+    const flapSliders = new Map();
+    for (const prm of PARAMS) {
+        const box = el('div', 'ssb-param');
+        const hd = el('div', 'ssb-param-head');
+        const lb = el('label', 'ssb-param-label', prm.label);
+        lb.htmlFor = `ssb-flap-${prm.hash}`;
+        const val = el('output', 'ssb-param-value');
+        val.htmlFor = lb.htmlFor;
+        hd.append(lb, val);
+        const rg = el('input', 'ssb-range');
+        rg.type = 'range';
+        rg.id = lb.htmlFor;
+        rg.min = String(prm.min);
+        rg.max = String(prm.max);
+        rg.step = String(prm.step);
+        rg.dataset.flapParam = prm.key;
+        box.append(hd, rg);
+        flapSliders.set(prm.key, { box, rg, val, prm });
+    }
+    const flapBadge = el('p', 'ssb-param-src ssb-flap-badge', 'schematic on specimen');
+    const flapReadout = el('dl', 'ssb-flap-readout');
+    flapReadout.setAttribute('aria-live', 'polite');
+    const flapNotes = el('ul', 'ssb-flap-notes');
+    const flapLit = el('p', 'ssb-param-src');
+    flapSec.append(flapDesigns, flapSides, ...[...flapSliders.values()].map((x) => x.box), flapBadge, flapReadout, flapNotes, flapLit);
 
     /* ---- landmarks ---- */
     const lmSec = section('Landmarks');
@@ -227,6 +261,43 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     statusSec.append(standardNote);
 
     /* ---- follow the mode ---- */
+    const dt = (label, value) => { const a = el('dt', null, label); const b = el('dd', null, value); return [a, b]; };
+    const cm2 = (v) => `${v.toFixed(2)} cm²`;
+    function syncFlap() {
+        const st = store.get();
+        const f = st.flap;
+        flapSec.hidden = !specimen.hasFlap || !(f || st.tier >= specimen.flapTier);
+        mark(flapDesigns, 'flapDesign', f ? f.design : 'off');
+        mark(flapSides, 'flapSide', f ? f.side : '');
+        for (const b of flapSides.querySelectorAll('button')) b.disabled = !f;
+        for (const { box, rg, val, prm } of flapSliders.values()) {
+            box.hidden = !f || !prm.designs.includes(f.design);
+            const v = f ? f.params[prm.key] : PARAM_DEFAULTS[prm.key];
+            if (Number(rg.value) !== v) rg.value = String(v);
+            val.textContent = `${v} mm`;
+            rg.setAttribute('aria-valuetext', `${prm.label} ${v} mm`);
+        }
+        const now = specimen.flapReadout;
+        const on = !!f;
+        flapBadge.hidden = !on;
+        flapReadout.hidden = !on;
+        flapNotes.hidden = !on;
+        flapLit.hidden = !on;
+        flapReadout.textContent = '';
+        flapNotes.textContent = '';
+        flapLit.textContent = '';
+        if (!on || !now) return;
+        if (now.status !== 'ready') { flapNotes.append(el('li', null, now.text)); return; }
+        const r = now.result;
+        const rows = [dt('Area', now.design === 'rescue' ? '0 cm² (no flap is raised)' : cm2(now.areas.total))];
+        if (now.areas.floor > 0) rows.push(dt('Septum', cm2(now.areas.septal)), dt('Nasal floor', cm2(now.areas.floor)));
+        rows.push(dt('Pedicle height', `${r.pedicleHeight.toFixed(1)} mm`), dt('Length', `${r.length.toFixed(1)} mm`));
+        for (const [a, b] of rows) flapReadout.append(a, b);
+        if (r.approx > 0) flapNotes.append(el('li', null, `approximate: ${Math.round(r.approx * 100)}% of the outline lies on charted cells that are filled or unreliable`));
+        for (const n of r.notes) flapNotes.append(el('li', null, n));
+        flapLit.textContent = now.literature.length ? 'Literature: ' + now.literature.map((l) => `${l.name} ${l.value} ${l.unit}`.trim()).join('; ') : '';
+    }
+
     let builtRegions = '';
     function sync() {
         mark(viewRow, 'view', specimen.view || '');
@@ -273,6 +344,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         swBox.disabled = !specimen.hasSweeps;
         swLabel.classList.toggle('is-off', !specimen.hasSweeps);
 
+        syncFlap();
         const sec = specimen.section;
         mark(secRow, 'section', sec.axis || 'off');
         slider.hidden = !sec.axis;
@@ -303,6 +375,18 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         else if (b.dataset.bone) specimen.setBone(b.dataset.bone);
         else if (b.dataset.mu) store.setMu(b.dataset.mu);
         else if (b.dataset.section) specimen.setSection(b.dataset.section === 'off' ? null : b.dataset.section);
+        else if (b.dataset.flapDesign) {
+            const cur = store.get().flap;
+            store.setFlap(b.dataset.flapDesign === 'off' ? null : { design: b.dataset.flapDesign, side: cur ? cur.side : 'R', params: cur ? cur.params : PARAM_DEFAULTS });
+        } else if (b.dataset.flapSide) {
+            const cur = store.get().flap;
+            if (cur) store.setFlap({ ...cur, side: b.dataset.flapSide });
+        }
+    });
+    root.addEventListener('input', (e) => {
+        const key = e.target && e.target.dataset ? e.target.dataset.flapParam : null;
+        const cur = store.get().flap;
+        if (key && cur) store.setFlap({ ...cur, params: { ...cur.params, [key]: Number(e.target.value) } }, { source: 'slider' });
     });
     root.addEventListener('change', (e) => {
         const t = e.target;
@@ -332,7 +416,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     specimen.onChange(sync);
     store.subscribe((state, prev) => {
         if (state.lab !== prev.lab || state.ct !== prev.ct) place();
-        if (state.mu !== prev.mu || state.procedure !== prev.procedure) sync();
+        if (state.mu !== prev.mu || state.procedure !== prev.procedure || state.flap !== prev.flap || state.tier !== prev.tier) sync();
     });
     sync();
     place();
