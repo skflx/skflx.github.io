@@ -5,7 +5,7 @@ Architecture and the reasons behind it: `docs/ssb.md`. How work is handed
 to a model and checked: `docs/delegation.md`. Current state in prose:
 `WIP.md`.
 
-Last re-planned: 2026-10-07 (Opus, CP-2c). Update the board in the same PR as the
+Last re-planned: 2026-10-08 (Opus, O7: FESS and sellar/clival EEA anatomy first). Update the board in the same PR as the
 work; when a wave closes, shrink its finished WPs to one line each (git
 history keeps the specs).
 
@@ -17,9 +17,9 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining; external nose) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~, ~~external nose (ST6)~~ done; then waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses, station flights done** (E1, E1b, E2, E2b, E3, E3b, E4, E5, E6) | stations the undecongested specimen cannot reach (27 of 40, E5) |
+| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses, station flights done** (E1, E1b, E2, E2b, E3, E3b, E4, E5, E6) | the 27 uncovered stations: 22 open with P1's dissection states, 3 need decongestion, 2 need Opus poses (ST6 in) |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
-| 6 Procedure mode | not started — wave 3 | P1–P2 |
+| 6 Procedure mode | not started — **next (O7)** | P1 (FESS + sellar/clival dissection states), then P2 |
 | 7 Self-test | not started — wave 3 | T1 |
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
@@ -27,6 +27,15 @@ history keeps the specs).
 **Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2; O4 and O5 decided the same day, and ST3r (the flap contract) and the D1 amendments are written into `docs/ssb.md`. **Next:** wave 2's Sonnet lanes (`docs/ssb-sonnet-handoff.md`).
 
 **CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
+
+**O7 re-plan (Opus, 2026-10-08).** Merged 2026-10-07: ST6, E6 and C1a–C1f (C1 had an Opus first read, but neither ST6 nor E6 had an Opus checkpoint). The owner's priority (O7) is clear anatomy for FESS and for EEA to sellar/clival masses; everything else waits. Of E5's 27 `uncovered` stations, **22 need a dissection step** (uncinectomy, bulla, basal lamella, antrostomy, sphenoidotomy and posterior septectomy, sella open, Draf), **3 need decongestion** (olfactory cleft, frontal recess 45°, inferior meatus 45°) and **2 waited on ST6** (septum anterior, lacrimal sac). Procedure mode is therefore the lever for both FESS and sellar/clival views. **Next, in order:**
+(1) **P1** (Opus), scoped to FESS (uncinectomy → bulla → basal lamella → posterior ethmoid → sphenoidotomy → frontal recess, plus the antrostomy) and the transsphenoidal → sellar → transclival corridor. Per step, `removes` maps to existing wall and air nodes. It must also decide how a dissected state becomes geometry: hiding meshes is not enough, because stations need the tip in air and collision is read from the volume (see P1/P2).
+(2) **P2** (Sonnet): the procedure player.
+(3) Opus poses for the stations each dissection state opens, plus `t.septum-anterior` and `t.lacrimal-sac-0` now that ST6 is in.
+(4) A decongestion WP (Opus spec) for the 3 closed views.
+(5) **ST4d** for the carotid and other sweeps on the sellar/clival route.
+(6) **ST5** (the flap overlay; reconstruction is part of EEA).
+Owner in parallel: verify tier-1 FESS anatomy (nothing is `verified` yet). Deferred: T1, ST7, more pathology content, the C1 flags (§2). Open from ST6 (#116): valve area 116 mm² against 92–100; the re-seated superior labial branch waypoints.
 
 **E5 + ST1c (Opus, 2026-10-07):** ST1c reviewed (pass: the lining pack is deferred until the first look from within; `test-ssb` 589/589). E5 done: 7 of 40 stations posed on the specimen (13 sided poses), 27 `uncovered` with the reason, 6 overviews; both earlier pinned poses had the tip in tissue (§5 E5). E6 is rewritten around the file's `target` field, and **C1** is specced as six batches. **Next:** lane B ST6 → ST4d → ST5; lane C E6 (parallel with ST6: only `test-ssb.mjs` is shared); content lane C1a…C1f.
 
@@ -382,7 +391,7 @@ parallel sessions.
 | Pipeline (`tools/ssb-pipeline/uw/`, `ssb/geometry/`, `ssb/models/`) then the overlay | ~~E1b~~ → ~~ST2b~~ (partial; rest in ST2c) → ~~N1~~ standard specimen (O6) → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → ~~ST6~~ external nose (merged 2026-10-07) → **ST4d** waypoint corrections (reruns ST4c) → **ST5** soft-tissue panel + NSF overlay | Sonnet |
 | Scope runtime (`js/ssb/*endoscope*`, `scope.js`) | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → ~~E5~~ → ~~E6~~ station flights (merged 2026-10-07) | Sonnet |
 | Content and dioramas | ~~ST0d~~ · ~~D2~~ → ~~D2a~~ → ~~C1~~ content backlog (O3; merged 2026-10-07, owner priority O7: FESS + sellar/clival EEA anatomy) | Sonnet |
-| Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · then CP-C1 reviews | Opus |
+| Specs | ~~ST3r~~ (done 2026-10-03) · ~~ST6 spec~~ (CP-2b) · ~~E5~~ station poses (2026-10-07) · **P1** (O7: FESS + sellar/clival dissection states) → poses for newly opened stations → decongestion spec | Opus |
 
 **ST5** (flap overlay and soft-tissue panel) closes the pipeline lane
 after ST4d: its contract (ST3r) is written.
@@ -1408,9 +1417,12 @@ Owner-only items stay with the owner (§2): merging the two dry-eye hazards (vid
 
 Checkpoint **CP-C1** (Opus, per batch or two batches together): read the "check hardest" list and every number against its source's abstract; reject or correct before merge; content stays `draft` until the owner verifies.
 
-### P1/P2, T1 — wave 3        [todo]
+### P1/P2, T1 — wave 3        [todo; P1 next, per O7]
 P1 (Opus): `removes` units per step for the first procedures, mapped to
-existing wall and air nodes. P2 (Sonnet): the procedure player
+existing wall and air nodes. **Scope per O7:** FESS (uncinectomy, bulla, basal lamella, posterior ethmoid, sphenoidotomy, frontal recess, middle meatal antrostomy) and the transsphenoidal → sellar → transclival corridor first. **Geometry contract to decide in P1:**
+- Stations need the tip in an air label, and `scope.js` collision reads the volume. A dissected state must therefore change the air and collision data (carve the removed labels to air in a derived volume, or a per-step mask), not only hide meshes.
+- Each state then unlocks E5 `uncovered` stations; their reasons in `ssb/geometry/stations.json` name the step each needs.
+- Steps whose sources are thin (C1a check-hardest) stay out until sourced. P2 (Sonnet): the procedure player
 (`docs/ssb.md` §3). T1 (Sonnet): self-test — find it / name it / CT
 localize, Leitner reused unchanged, storage key registered per
 `docs/decisions.md` §3. C1 is specced above.
