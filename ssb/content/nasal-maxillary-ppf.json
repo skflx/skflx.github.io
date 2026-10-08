@@ -6774,6 +6774,9 @@
             "s.uncinate-process",
             "s.ethmoid-infundibulum"
           ],
+          "removes": [
+            "s.uncinate-process"
+          ],
           "risk": [
             "h.orbital-entry-uncinectomy",
             "h.nasolacrimal-duct-injury"
@@ -6878,6 +6881,9 @@
             "s.posterior-fontanelle",
             "s.maxillary-natural-ostium",
             "s.inferior-turbinate"
+          ],
+          "removes": [
+            "s.posterior-fontanelle"
           ],
           "risk": [
             "h.nasolacrimal-duct-injury",

@@ -72,6 +72,11 @@ same-height cells for medial/lateral, and the same for the other two axes. It wr
 `ssb/reference/specimen-relations.json`. Check images (`--png-dir`): `reconC-walls-*.png`,
 `reconC-mesh-walls.png`, `reconC-sweeps-*.png`.
 
+Dissection states (procedure mode; `docs/ssb.md` §5.8): `uw/dissection.json` is Opus's data, the units
+(rules over the base's labels, landmarks and distance fields), the step → unit map of each procedure, and the
+FESS and EEA corridors. WP P1b adds `uw/dissect.py`, which evaluates it into `ssb/states/` and per-state lining
+packs; until then the file is data only, checked by hand against `ssb/content/` (the rule is in §5.8).
+
 Reconstruction, stage D (soft tissue; needs only the committed `ssb/`, not the crawl; run after stage C):
 
     .venv/bin/python tools/ssb-pipeline/uw/softtissue.py      # -> ssb/models/soft.glb.gz, ssb/geometry/charts.json,
@@ -101,3 +106,15 @@ claims can be re-tested after any content change without the images.
 `orient.json` records the verified image orientation; `vocab-extra.json` maps
 terms the crosswalk lacks to graph ids. Method and limits:
 `ssb/reference/uw-sinusanatomy2/README.md`.
+
+## `nasalseg/` — population asymmetry (NasalSeg, CC BY 4.0)
+
+    # download NasalSeg.zip from https://zenodo.org/records/13893419 into incoming/nasalseg/, unzip to incoming/nasalseg/data/
+    .venv/bin/python -I tools/ssb-pipeline/nasalseg/stats.py [--png-dir DIR]   # -> ssb/anatomy/population/nasalseg.json
+
+Reads the archive's NRRD images and labels (no extra dependency: the reader is in the script), de-duplicates
+byte-identical cases, takes geometry from the image header where a label header disagrees, assigns sides by
+position, and measures the maxillary sinuses and nasal cavities. `review.json` holds the per-case visual verdicts
+(clear / thickening / opacified / unsure) that define the clear subset; `--png-dir` writes the review sheets they
+were made from. It also measures head A (as scanned, from git) the same way. Method and limits: the script's
+docstring; results and their reading: `docs/realistic-anatomy.md` §4.4; provenance: `ssb/LICENSE-data.md`.

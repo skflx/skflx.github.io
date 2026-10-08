@@ -3,16 +3,15 @@
 Source: **Interactive CT Sinus Anatomy**, University of Washington Department of
 Radiology, Seattle — http://uwmsk.org/sinusanatomy2/
 
-Authors (from the site's home page): Sung E. LoGerfo, M.D.; Michael L.
-Richardson, M.D.; Robert W. Dalley, M.D.; Yoshimi Anzai, M.D. Image EXIF data
-(Adobe Photoshop CS4, Macintosh) is dated November 2009, consistent with a
-~2009–2010 build.
+Credit is to the atlas and its institution; this repo does not name its
+individual authors (owner, 2026-10-07). Image EXIF data (Adobe Photoshop CS4,
+Macintosh) is dated November 2009, consistent with a ~2009–2010 build.
 
-**Permission**: owner-reported (the SSB project owner, an ENT resident) as
-having the authors' permission to use this site's content, reported
-2026-09-27, scope unspecified. This has not been independently verified by
-this crawl; treat the scope of that permission as unconfirmed until the owner
-clarifies what may be reproduced (labels/text vs. images) and where.
+**Permission**: written, from the atlas's authors to the owner by email,
+2026-10-07: the public CT images may be used in the owner's public,
+non-commercial 3D educational model, crediting the atlas. Terms and scope:
+`ssb/LICENSE-data.md`. The owner reads it as covering serving the atlas's
+own images from this site, credited (`docs/realistic-anatomy.md` §13, RA-O1).
 
 This crawl is a **text-only reference**: no image or page copy is committed
 to this repository (see `docs/ssb.md` / repo policy — content here is IDs,

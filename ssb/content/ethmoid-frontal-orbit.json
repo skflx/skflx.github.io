@@ -5173,6 +5173,9 @@
             "s.retrobullar-recess",
             "s.hiatus-semilunaris"
           ],
+          "removes": [
+            "s.ethmoid-bulla"
+          ],
           "risk": [
             "h.lamina-papyracea-breach"
           ],
@@ -5207,6 +5210,10 @@
             "s.bullar-lamella",
             "s.anterior-ethmoidal-artery",
             "s.fovea-ethmoidalis"
+          ],
+          "removes": [
+            "s.bullar-lamella",
+            "s.anterior-ethmoid-cells"
           ],
           "risk": [
             "h.aea-transection",
@@ -5279,6 +5286,9 @@
             "lm.basal-lamella-entry",
             "s.basal-lamella-horizontal"
           ],
+          "removes": [
+            "s.basal-lamella"
+          ],
           "risk": [
             "h.lamina-papyracea-breach"
           ],
@@ -5290,6 +5300,9 @@
           "see": [
             "s.posterior-ethmoid-cells",
             "s.lamina-papyracea"
+          ],
+          "removes": [
+            "s.posterior-ethmoid-cells"
           ],
           "risk": [
             "h.medial-rectus-injury",
@@ -5616,6 +5629,9 @@
             "s.terminal-recess",
             "s.agger-nasi-cell"
           ],
+          "removes": [
+            "s.uncinate-process"
+          ],
           "risk": [
             "h.lamina-papyracea-breach",
             "h.retained-frontal-cells"
@@ -5629,6 +5645,9 @@
             "s.agger-nasi-cell",
             "lm.middle-turbinate-axilla",
             "s.frontal-recess"
+          ],
+          "removes": [
+            "s.agger-nasi-cell"
           ],
           "risk": [
             "h.frontal-recess-stenosis"
@@ -5664,6 +5683,9 @@
             "s.bullar-lamella",
             "s.anterior-ethmoidal-artery",
             "lm.bullar-lamella-skull-base"
+          ],
+          "removes": [
+            "s.bullar-lamella"
           ],
           "risk": [
             "h.aea-transection"
@@ -5758,6 +5780,10 @@
         {
           "do": "Enlarge the ostium anteriorly (beak) with a frontal sinus punch or angled drill, between the lamina papyracea and the MT.",
           "see": [
+            "s.frontal-beak",
+            "s.frontal-sinus-floor"
+          ],
+          "removes": [
             "s.frontal-beak",
             "s.frontal-sinus-floor"
           ],
