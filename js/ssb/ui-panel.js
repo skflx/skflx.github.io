@@ -12,10 +12,14 @@
    the answer to annotate changes with no change of selection (it touches
    nothing else, least of all the sheet).
 
+   A procedure's page has a Play button (WP P2): `player` is a late-bound { api } the page fills once the procedure player
+   has mounted; the button is disabled, with its reason as text, until the player has read ssb/states/index.json and the
+   index lists the procedure. mountPanel's refreshPlay() re-reads that state when the player's changes.
+
    On phones the panel is a bottom sheet (ssb.css): the handle button
    toggles data-sheet; on desktop that attribute is inert.
    ============================================================= */
-import { renderText, TYPE_LABEL, REGION_LABEL, KIND_LABEL } from './graph.js?v=037c5fea';
+import { renderText, TYPE_LABEL, REGION_LABEL, KIND_LABEL } from './graph.js?v=c9de5e78';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -27,7 +31,7 @@ function el(tag, cls, text) {
 const asList = (v) => (Array.isArray(v) ? v : typeof v === 'string' && v ? [v] : []);
 const words = (s) => String(s).replace(/-/g, ' ');
 
-export function mountPanel({ panel, body, handle, title, live, graph, store, annotate = null }) {
+export function mountPanel({ panel, body, handle, title, live, graph, store, annotate = null, player = null }) {
     /* ---- small builders ---- */
 
     const rich = (tag, cls, text) => {
@@ -93,6 +97,37 @@ export function mountPanel({ panel, body, handle, title, live, graph, store, ann
         }) || section('Pearls');
         if (more) sec.append(el('p', 'ssb-note', `${more} more at a higher depth.`));
         return sec;
+    }
+
+    /* Play (WP P2): enabled only when the procedure player is there, has read the state index and the index lists this procedure. */
+    function playState(id) {
+        const api = player ? player.api : null;
+        if (!api) return { enabled: false, reason: 'The scope is not available here: it needs the 3D view and the reference specimen.' };
+        if (api.status === 'idle') api.ensure();          /* may settle at once (no index listed): read the status after */
+        if (api.status === 'idle' || api.status === 'loading') return { enabled: false, reason: 'Checking for dissection states…' };
+        if (api.status !== 'ready') return { enabled: false, reason: api.reason || 'No dissection states are available.' };
+        return api.canPlay(id) ? { enabled: true, reason: '' } : { enabled: false, reason: 'No dissection states are built for this procedure yet.' };
+    }
+
+    function paintPlay(btn, note) {
+        const st = playState(btn.dataset.play);
+        btn.disabled = !st.enabled;
+        btn.title = st.enabled ? 'Play this procedure step by step in the scope, on the dissected specimen' : st.reason;
+        note.textContent = st.reason;
+        note.hidden = !st.reason;
+    }
+
+    function playSec(e) {
+        const btn = el('button', 'site-btn site-btn-sm ssb-play', 'Play in the scope');
+        btn.type = 'button';
+        btn.dataset.play = e.id;
+        const note = el('p', 'ssb-note ssb-play-note');
+        paintPlay(btn, note);
+        return section('Play', btn, note);
+    }
+
+    function refreshPlay() {
+        for (const btn of body.querySelectorAll('button.ssb-play')) paintPlay(btn, btn.parentElement.querySelector('.ssb-play-note'));
     }
 
     /* ---- per-type bodies: each returns an array of sections (nulls are skipped) ---- */
@@ -185,6 +220,7 @@ export function mountPanel({ panel, body, handle, title, live, graph, store, ann
         principles: (e) => [textSec('The rule', e.rule), textSec('Why', e.why), textSec('When it fails', e.caveat)],
         procedures(e) {
             return [
+                playSec(e),
                 listSec('Indications', e.indications, (t) => rich('span', 'ssb-text', t)),
                 textSec('Corridor', e.corridor),
                 listSec('Preoperative CT review', e.preop, (c) => {
@@ -372,6 +408,11 @@ export function mountPanel({ panel, body, handle, title, live, graph, store, ann
     }
 
     body.addEventListener('click', (ev) => {
+        const play = ev.target.closest('button.ssb-play');
+        if (play) {
+            if (!play.disabled && player && player.api) player.api.play(play.dataset.play);
+            return;
+        }
         const b = ev.target.closest('[data-ref]');
         if (b) store.select(b.dataset.ref, { source: 'panel' });
     });
@@ -397,5 +438,5 @@ export function mountPanel({ panel, body, handle, title, live, graph, store, ann
         panel.dataset.sheet = 'open';
         handle.setAttribute('aria-expanded', 'true');
     }
-    return { refresh: refreshNote };
+    return { refresh: refreshNote, refreshPlay };
 }

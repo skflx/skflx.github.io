@@ -36,12 +36,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=a916e9c1';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=f4e1eebc';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=b121b3b4';
-import { PLANES } from './volume.js?v=016a354d';
-import { CT_PLANES } from './state.js?v=4f14d108';
-import { REGION_LABEL } from './graph.js?v=037c5fea';
+import { PLANES } from './volume.js?v=651dd4a3';
+import { CT_PLANES } from './state.js?v=28031b46';
+import { REGION_LABEL } from './graph.js?v=c9de5e78';
 
 export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
 
@@ -108,6 +108,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
+    let dissect = null;             /* the procedure player's state (P2): { key, hides: Set of base node keys } while a dissected state is shown */
+    let emphasis = { see: new Set(), hazard: new Set() };     /* graph ids the player marks: a step's `see` structures, and the `at` structures of its `risk` hazards (hatched) */
 
     const active = () => { const s = store.get(); return !s.lab && !s.ct; };
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
@@ -205,7 +207,9 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     /* ---------------- looks, layers, selection ---------------- */
 
     const nodes = () => (specimen ? specimen.nodes : new Map());
-    const hasLining = () => !!specimen && [...specimen.nodes.values()].some((m) => m.userData.lining);
+    /* the lining on show: the base's, or the dissected state's own when it carries one */
+    const stateLined = () => !!dissect && !!specimen && [...specimen.nodes.values()].some((m) => m.userData.lining && m.userData.state === dissect.key);
+    const hasLining = () => !!specimen && [...specimen.nodes.values()].some((m) => m.userData.lining && !m.userData.state);
     const regionOf = (mesh) => mesh.userData.region || 'other';
 
     const centreCache = new Map();
@@ -248,7 +252,10 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         const sel = store.get().selection;
         /* from within, the open lining (ST1b: one surface, its openings open) is drawn in place of the per-compartment shells */
         const within = layers.mucosa && (inside || insideForced);
-        const openLining = within && hasLining();
+        const ownLining = stateLined();
+        const openLining = within && (ownLining || hasLining());
+        const replaced = new Set();     /* base walls a dissected state replaces by their remnants */
+        if (dissect) for (const m of specimen.nodes.values()) if (m.userData.state === dissect.key && m.userData.remnant) replaced.add(`${m.userData.id}.${m.userData.side}`);
         /* the lining is fetched the first time the mucosa is seen from within; until it arrives the air shells are drawn as before */
         if (within && !liningAsked) {
             liningAsked = true;
@@ -260,13 +267,17 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             const primary = isSel && key === primaryKey;
             const partner = isSel && !primary;
             let look = u.look;
+            if (u.state && !(dissect && dissect.key === u.state)) { mesh.visible = false; continue; }          /* another state's pack, not on show */
+            if (!u.state && dissect && (dissect.hides.has(key) || replaced.has(`${u.id}.${u.side}`))) { mesh.visible = false; continue; }
             if (u.group === 'lining') {
                 u.drawn = look.kind;
                 mesh.material = stage.materialsFor(look, { selected: false, partner: false });
                 mesh.renderOrder = 0;
-                mesh.visible = openLining && !layers.hidden.has(regionOf(mesh));
+                mesh.visible = openLining && (u.state ? true : !ownLining) && !layers.hidden.has(regionOf(mesh));
                 continue;
             }
+            const seen = emphasis.see.has(u.id);
+            const hazardous = emphasis.hazard.has(u.id);
             if (u.group === 'bone') {
                 if (layers.bone === 'xray') look = { ...look, xray: true };
             } else if (layers.mucosa && u.group === 'air') {
@@ -277,10 +288,13 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             if (u.group !== 'bone' && isSel) {
                 look = { ...look, space: false, translucent: true, onTop: true, ...(partner ? { opacity: 0.3 } : {}) };
             }
+            if ((seen || hazardous) && !isSel) look = { ...look, xray: false, space: false, translucent: true, onTop: true, opacity: 0.55 };
             u.drawn = look.kind;
-            mesh.material = stage.materialsFor(look, { selected: primary, partner });
-            mesh.renderOrder = isSel ? 5 : 0;
-            mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : u.group === 'nose' ? layers.nose : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
+            mesh.material = stage.materialsFor(look, { selected: primary, partner, hazard: hazardous });
+            u.hazard = hazardous;
+            u.emphasis = hazardous ? 'hazard' : seen ? 'see' : '';
+            mesh.renderOrder = isSel || seen || hazardous ? 5 : 0;
+            mesh.visible = isSel || seen || hazardous || (u.group === 'bone' ? layers.bone !== 'hidden' : u.group === 'nose' ? layers.nose : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
         }
         for (const [, m] of markers) {
             const mine = !!sel && m.lm.id === sel;
@@ -489,6 +503,42 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (!!on === layers.mucosa && force === insideForced) return false;
         layers.mucosa = !!on;
         insideForced = force;
+        paint();
+        emit();
+        return true;
+    }
+
+    /* The procedure player's dissected state (docs/ssb.md 5.8), or null for the intact specimen: `hides` are base node keys
+       the state removes entirely; its pack's remnants replace the walls they cut partly and its lining replaces the base
+       lining. The pack itself is geo-specimen's (loadState); this only says which one is on show. */
+    function setState(next) {
+        const key = next && typeof next.key === 'string' ? next.key : null;
+        const hides = new Set(next && Array.isArray(next.hides) ? next.hides.filter((k) => typeof k === 'string') : []);
+        if (!key && !dissect) return false;
+        if (dissect && key === dissect.key && hides.size === dissect.hides.size && [...hides].every((k) => dissect.hides.has(k))) { paint(); return false; }
+        dissect = key ? { key, hides } : null;
+        paint();
+        emit();
+        return true;
+    }
+
+    /* A state's pack (geo-specimen loadState / unloadState): repaint when it arrives or goes. */
+    function loadState(key) {
+        return specimen ? specimen.loadState(key).then((added) => { paint(); emit(); return added; }) : Promise.resolve([]);
+    }
+    function unloadState(key) {
+        const gone = specimen ? specimen.unloadState(key) : false;
+        if (gone) paint();
+        return gone;
+    }
+
+    /* Mark structures by graph id: `see` (a step's structures, drawn through what hides them) and `hazard` (the `at` of its
+       risk hazards, drawn the same and hatched). Empty lists clear. */
+    function setEmphasis({ see = [], hazard = [] } = {}) {
+        const next = { see: new Set(see.filter((i) => typeof i === 'string')), hazard: new Set(hazard.filter((i) => typeof i === 'string')) };
+        const same = (a, b) => a.size === b.size && [...a].every((i) => b.has(i));
+        if (same(next.see, emphasis.see) && same(next.hazard, emphasis.hazard)) return false;
+        emphasis = next;
         paint();
         emit();
         return true;
@@ -857,6 +907,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get mucosaInside() { return inside; },
+        get stateKey() { return dissect ? dissect.key : null; },
+        get emphasis() { return { see: [...emphasis.see], hazard: [...emphasis.hazard] }; },
         get sweeps() { return [...sweepList].filter(([, m]) => m.object.visible).map(([key]) => key); },
         get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
         get cap() { return { shown: !!cap.plane && cap.plane.visible, plane: cap.plane ? cap.plane.position.toArray() : null }; },
@@ -878,7 +930,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             key, id: m.userData.id, side: m.userData.side, pack: m.userData.pack, group: m.userData.group, liningKind: m.userData.liningKind, region: m.userData.region,
             visible: m.visible, look: m.userData.look, drawn: m.userData.drawn || m.userData.look.kind, triangles: m.userData.triangles, box: rasBox(key),
             material: m.material.type, transparent: !!m.material.transparent, depthWrite: m.material.depthWrite,
-            lining: !!m.userData.lining,
+            lining: !!m.userData.lining, state: m.userData.state || '', remnant: !!m.userData.remnant,
+            hazard: !!m.userData.hazard, emphasis: m.userData.emphasis || '',
             highlight: !m.userData.lining && store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
             emissive: m.material.emissiveIntensity,
         })) : []),
@@ -955,7 +1008,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setState, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -968,6 +1021,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
+        get stateKey() { return dissect ? dissect.key : null; },
         get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
         get hasSweeps() { return sweeps.size > 0; },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },

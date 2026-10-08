@@ -293,6 +293,19 @@ draws and selects (CT is the no-WebGL fallback); a server that sends
 Judging how the images *look* (window presets on the real head, outline
 contrast) stays a human check: `--shots` writes `ct-*.png`.
 
+**Procedure player** (`js/ssb/mode-procedure.js`, `ui-procedure.js`, `volume.js` patches;
+`docs/ssb.md` §5.8; `node tools/test-ssb.mjs --only procedure`) pins, in Node, `parsePatch` /
+`applyPatch` on a fixture patch (round trip; refusals of a wrong base, a box outside `dims`, an
+unknown label, a short or long body, version 2; exactly the box's voxels change and the base is
+byte-identical), the `#p=` codec and store (clamped step, hostile values dropped, exclusivity)
+and the index lookup; in the page, on a fixture index routed over a synthetic CT (a hole through
+the septum plate; the 2.7 mm telescope passes it): a pose through the hole is free at step 1 and
+clamps at step 0, the tip's label is the patch's, CT still samples the base and outlines the
+carved voxels, Next / Previous / `[` `]` rewrite the hash, the `think` is hidden until
+revealed, risk hazards hatch, a station is flown to (a cut under reduced motion), corridors, a
+damaged patch, no index (Play disabled, no request, zero console errors) and hostile hashes.
+The real-data section runs once `ssb/states/index.json` exists.
+
 **Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
 `docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
 the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the

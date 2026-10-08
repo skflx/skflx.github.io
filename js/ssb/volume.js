@@ -22,7 +22,7 @@
    Imports stamps.js only; no DOM is touched, so the tests run this module
    in plain Node.
    ============================================================= */
-import { STAMPS } from './stamps.js?v=40a00ddd';
+import { STAMPS } from './stamps.js?v=179a2349';
 
 export const CT_META = 'ssb/ct/ct.json';
 export const CT_DATA = 'ssb/ct/ct.u8.gz';
@@ -382,12 +382,103 @@ export function createVolume({ header, ct, labels = null, table = null }) {
         header, dims: header.dims, spacing: header.spacing, affine: A, ct, labels, count,
         step, axisStep, bounds, center, windows: header.windows, hasLabels: !!labels,
         labelIndices: () => [...nameOf.keys()],
+        table: nameOf,
         toRAS, toVoxel, clampRAS, toHU, describe,
         value: (i, j, k) => (i >= 0 && i < nx && j >= 0 && j < ny && k >= 0 && k < nz ? ct[k * nx * ny + j * nx + i] : NaN),
         sample: (r, a, s) => { const v = toVoxel(r, a, s); return trilinear(v[0], v[1], v[2]); },
         labelAt: (r, a, s) => { const v = toVoxel(r, a, s); return labelVoxel(v[0], v[1], v[2]); },
         planeGeometry, pixelToRAS, rasToPixel, slice, obliqueSlice,
     };
+}
+
+/* ---------------- dissection patches (docs/ssb.md 5.8) ---------------- */
+
+const PATCH_HEADER_MAX = 1 << 16;
+const PATCH_BOXES_MAX = 16;
+const BAD_PATCH = (why) => new VolumeError('invalid', `A dissection patch is not usable: ${why}.`);
+
+/* The bytes of a patch (gzip or already decoded) -> { state, units, ctFill, boxes: [{ ijk0, dims, data: Uint16Array }] }.
+   Layout: u32 header length, a JSON header { version: 1, base, state, units, ctFill, boxes: [{ ijk0, dims }] }, then per
+   box one u16 array, x fastest: 0 = unchanged, else the voxel's new label (its CT display becomes ctFill). Refused with a
+   VolumeError('invalid') unless the base names this volume's specimen, every box lies inside the volume, every label is in its
+   table and the body is exactly the boxes' size; version 2 or any other is 'unsupported'. Pure: touches no volume. */
+export async function parsePatch(bytes, volume) {
+    const raw = bytes instanceof ArrayBuffer ? bytes : bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+    const buf = await decode(raw);
+    if (buf.byteLength < 4) throw BAD_PATCH('it is shorter than its header length');
+    const view = new DataView(buf);
+    const headLen = view.getUint32(0, true);
+    if (headLen < 2 || headLen > PATCH_HEADER_MAX || 4 + headLen > buf.byteLength) throw BAD_PATCH('its header length is wrong');
+    let head;
+    try { head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, headLen))); } catch (e) { throw BAD_PATCH('its header is not JSON'); }
+    if (!head || typeof head !== 'object') throw BAD_PATCH('its header is not an object');
+    if (head.version !== 1) throw new VolumeError('unsupported', `A dissection patch has an unsupported version (${String(head.version)}).`);
+    const specimen = volume && volume.header ? volume.header.specimen : '';
+    if (typeof head.base !== 'string' || head.base !== specimen) throw BAD_PATCH('it was made for a different specimen');
+    if (!Number.isInteger(head.ctFill) || head.ctFill < 0 || head.ctFill > 255) throw BAD_PATCH('ctFill must be an integer in 0..255');
+    if (!Array.isArray(head.boxes) || head.boxes.length > PATCH_BOXES_MAX) throw BAD_PATCH('its box list is missing or too long');
+    const dims = volume.dims;
+    let total = 0;
+    const spec = head.boxes.map((b) => {
+        const ok = b && Array.isArray(b.ijk0) && Array.isArray(b.dims) && b.ijk0.length === 3 && b.dims.length === 3
+            && b.ijk0.every((n, a) => Number.isInteger(n) && n >= 0 && Number.isInteger(b.dims[a]) && b.dims[a] >= 1 && n + b.dims[a] <= dims[a]);
+        if (!ok) throw BAD_PATCH('a box lies outside the volume');
+        total += b.dims[0] * b.dims[1] * b.dims[2];
+        return { ijk0: b.ijk0.slice(), dims: b.dims.slice() };
+    });
+    if (buf.byteLength !== 4 + headLen + total * 2) throw BAD_PATCH('its body is not the size of its boxes');
+    let at = 4 + headLen;
+    const boxes = spec.map((b) => {
+        const n = b.dims[0] * b.dims[1] * b.dims[2];
+        const data = new Uint16Array(n);
+        for (let i = 0; i < n; i++) data[i] = view.getUint16(at + i * 2, true);
+        at += n * 2;
+        for (let i = 0; i < n; i++) if (data[i] !== 0 && !volume.table.has(data[i])) throw BAD_PATCH(`label ${data[i]} is not in the label table`);
+        return { ...b, data };
+    });
+    return {
+        state: typeof head.state === 'string' ? head.state.slice(0, 40) : '',
+        units: Array.isArray(head.units) ? head.units.filter((u) => typeof u === 'string').slice(0, 64) : [],
+        ctFill: head.ctFill, boxes,
+    };
+}
+
+/* A volume with the patch applied: the same API, new arrays (the base is not touched), plus `carvedAt(r, a, s)` (does the
+   patch change the voxel nearest that point?), `carvedVoxels` and `base`. Pure; Node-testable. */
+export function applyPatch(volume, patch) {
+    const [nx, ny] = volume.dims;
+    const ct = volume.ct.slice();
+    const labels = volume.labels ? volume.labels.slice() : new Uint16Array(volume.count);
+    let carved = 0;
+    for (const b of patch.boxes) {
+        const [i0, j0, k0] = b.ijk0;
+        const [bx, by, bz] = b.dims;
+        let n = 0;
+        for (let k = 0; k < bz; k++) {
+            for (let j = 0; j < by; j++) {
+                const row = (k0 + k) * nx * ny + (j0 + j) * nx + i0;
+                for (let i = 0; i < bx; i++, n++) {
+                    const v = b.data[n];
+                    if (v !== 0) { ct[row + i] = patch.ctFill; labels[row + i] = v; carved += 1; }
+                }
+            }
+        }
+    }
+    const derived = createVolume({ header: volume.header, ct, labels, table: volume.table });
+    const carvedAt = (r, a, s) => {
+        const v = volume.toVoxel(r, a, s);
+        const i = Math.round(v[0]);
+        const j = Math.round(v[1]);
+        const k = Math.round(v[2]);
+        for (const b of patch.boxes) {
+            const x = i - b.ijk0[0];
+            const y = j - b.ijk0[1];
+            const z = k - b.ijk0[2];
+            if (x >= 0 && y >= 0 && z >= 0 && x < b.dims[0] && y < b.dims[1] && z < b.dims[2] && b.data[(z * b.dims[1] + y) * b.dims[0] + x] !== 0) return true;
+        }
+        return false;
+    };
+    return Object.assign(derived, { carvedAt, carvedVoxels: carved, base: volume, meta: volume.meta, state: patch.state });
 }
 
 /* ---------------- loading ---------------- */
