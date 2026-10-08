@@ -106,28 +106,33 @@ def interface_check(v, f, lab, air, aff, spacing):
     return int(((di <= INTERFACE_MM) & (dt > TISSUE_MM)).sum())
 
 
+def build_lining(lab, table, aff, spacing, budget):
+    """The lining of the air in `lab`: [(node name, verts, faces, normals)] split by the label each triangle
+    faces, and the report {union, fallback, bad}. Asserts the membrane check, as the base lining does."""
+    ids = air_label_ids(table)
+    air = np.isin(lab, ids)
+    v, f, nrm = M.build(air, aff, budget)
+    face_lab, fallback = facing_labels(v, f, nrm, lab, air, aff)
+    bad = interface_check(v, f, lab, air, aff, (spacing,) * 3)
+    assert bad == 0, 'the lining has a membrane across an opening'
+    items = []
+    for idx in sorted(set(int(x) for x in np.unique(face_lab)) - {0}):
+        sv, sf, sn = subset(v, f, nrm, face_lab == idx)
+        items.append((table[str(idx)], sv, sf, sn))
+    return items, {'air': int(air.sum()), 'labels': len(ids), 'union': (len(v), len(f)), 'fallback': fallback, 'bad': bad}
+
+
 def main():
     hdr, ct, lab, table = M.read_volume()
     aff, spacing = hdr['affine'], hdr['spacing'][0]
-    ids = air_label_ids(table)
-    air = np.isin(lab, ids)
-    print('air voxels', int(air.sum()), 'labels', len(ids))
-
-    v, f, nrm = M.build(air, aff, LINING_BUDGET)
-    print('union surface: %d triangles, %d vertices' % (len(f), len(v)))
-    face_lab, fallback = facing_labels(v, f, nrm, lab, air, aff)
+    items, rep = build_lining(lab, table, aff, spacing, LINING_BUDGET)
+    print('air voxels', rep['air'], 'labels', rep['labels'])
+    print('union surface: %d triangles, %d vertices' % (rep['union'][1], rep['union'][0]))
+    fallback, bad = rep['fallback'], rep['bad']
     print('triangles with no air voxel within %.1f mm along the normal (took the nearest air label): %d' % (PROBE_MM[-1], fallback))
-    bad = interface_check(v, f, lab, air, aff, (spacing,) * 3)
     print('triangle centroids within %.1f mm of an air|air interface and over %.1f mm from tissue: %d' % (INTERFACE_MM, TISSUE_MM, bad))
-    assert bad == 0, 'the lining has a membrane across an opening'
-
-    items = []
-    for idx in sorted(set(int(x) for x in np.unique(face_lab)) - {0}):
-        name = table[str(idx)]
-        keep = face_lab == idx
-        sv, sf, sn = subset(v, f, nrm, keep)
-        items.append((name, sv, sf, sn))
-        print('  %-34s %6d triangles' % (name, len(sf)))
+    for name, _, f_, _ in items:
+        print('  %-34s %6d triangles' % (name, len(f_)))
     out = os.path.join(REPO, 'ssb/models/lining.glb.gz')
     raw, gz = M.write_glb(out, items)
     tris = int(sum(len(f_) for _, _, f_, _ in items))

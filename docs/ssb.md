@@ -617,28 +617,47 @@ which. The uncinate is fused into the maxillary medial wall unit here, so
 the uncinectomy opens the infundibular trough and the hiatus and leaves
 the wall; the natural ostium appears with the antrostomy.
 
-**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`).**
-- `ssb/states/index.json`: per state key (the first 10 hex of the SHA-256
-  of its unit list in application order): `units`, `usedBy`
-  (`"p.draf-i#2"`, `"fess:p.draf-i"`), its patch and lining files, `hides`
-  (wall nodes a state removes entirely), `remnants` (nodes it cuts
-  partly) and `measured`; plus `procedures` (step → state key) and
-  `corridors`.
+**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`; done).**
+- `ssb/states/index.json`: `version`, `base` (the first 10 hex of the SHA-256
+  of the base CT display and labels), `ctFill`, `states`, `procedures`,
+  `corridors`, and the unit voxel counts against `measured`. Per state key
+  (the first 10 hex of the SHA-256 of its unit list in application order,
+  one unit per line): `units`, `usedBy` (`"p.draf-i#2"` for a procedure
+  step, `"fess:p.draf-i#2"` for a corridor position), `patch`, `lining`,
+  `hides` (wall nodes a state removes entirely), `remnants` (wall node ->
+  the remnant node that replaces it in the state's lining pack) and
+  `measured` (carved voxels, bytes, guard minima per field and side, keep
+  violations, the post-mirror guard count, symmetry). `procedures[p]` is
+  `{entry, steps: {step: key}}` (`entry` null when the procedure starts on
+  the intact head); `corridors[c]` copies the data's entry and adds
+  `positions: [{procedure, step, state}]`.
 - `ssb/states/<key>.ssbp.gz`: a **patch**: a u32 header length, a JSON
   header (`version`, `base`, `state`, `units`, `ctFill`, `boxes:
-  [{ijk0, dims}]`), then per box a u16 array, x fastest: 0 = unchanged,
+  [{side, ijk0, dims}]`), then per box a u16 array, x fastest: 0 = unchanged,
   else the voxel's new label (its display becomes `ctFill`). Each patch is
   whole from the base (random access to any step), at most one box per
-  side and one for the midline. The format is the dense-box patch of the
-  realistic-anatomy plan (PR #119) with a constant display, so one loader
-  serves both.
-- `ssb/models/lining-<key>.glb.gz`: `lining.py` on the state's air, plus
-  remnant meshes `<id>.<side>@<cut>` for each wall unit a state cuts partly.
-  Listed in `packs.json` with `"state": <key>`; never loaded at boot.
+  side: `R` (voxels right of R = 0), `L`, and `M` (the R = 0 plane). The
+  format is the dense-box patch of the realistic-anatomy plan (PR #119)
+  with a constant display, so one loader serves both.
+- `ssb/models/lining-<key>.glb.gz`: `lining.py`'s method on the state's air
+  (built to 33 000 triangles with the remnants), plus remnant meshes
+  `<id>.<side>@<cut>` (the cut of the last unit that touched the wall; the
+  node's `extras.cut`) for each wall label a state cuts partly. **Not listed
+  in `packs.json`**: the Specimen stage loads every pack that file lists, so
+  the state linings are loaded on demand from the index (P2 decides how).
 - Distance fields are not recomputed: the guard keeps every cut away from
   the structures they measure.
-- Budgets: a state lining ≤ 350 kB gzip, all state packs ≤ 6 MB, a patch
-  ≤ 100 kB.
+- Budgets: a state lining <= 350 kB gzip, all state linings <= 6 MB, a patch
+  <= 100 kB (`tools/check-data.mjs` enforces them, and the `dissection.json`
+  <-> graph rule above).
+- Evaluation notes (where the data left a choice): anchors read voxel
+  centres; a right-side unit's box never reaches r < 0 and its result is
+  mirrored per unit, the guard applied again on the mirrored voxels; the
+  air sets of a right-side unit are its `.R` and `.M` labels, of a midline
+  unit all three sides; `exenterate` is the closing by Euclidean thresholds
+  (dilate to `r`, keep what is farther than `r` from outside the dilation);
+  the working air is the cumulative state, so a later unit sees the earlier
+  carves.
 
 **Runtime (WP P2).** `volume.js` gains a pure `applyPatch(volume, patch)`
 returning a derived volume (the base kept for undo and for CT); the

@@ -110,6 +110,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
 │   ├── reference/          #   external atlases crosswalked to the graph (text only)
 │   ├── ct/                 #   specimen CT, label and distance-field volumes (pipeline output)
+│   ├── states/             #   dissection states for procedure mode: index.json + one patch per state (pipeline output, dissect.py)
 │   ├── geometry/           #   label table, landmarks, vessel/nerve sweeps (pipeline output, keyed by graph ids)
 │   ├── models/             #   specimen meshes, gzipped glTF packs (pipeline output)
 │   └── LICENSE-data.md     #   provenance and permission of the specimen data

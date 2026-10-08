@@ -1,0 +1,1154 @@
+{
+ "version": 1,
+ "base": "04a4010393",
+ "ctFill": 48,
+ "states": {
+  "3a97cc5909": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy"
+   ],
+   "usedBy": [
+    "p.uncinectomy#1",
+    "fess:p.uncinectomy#1"
+   ],
+   "patch": "3a97cc5909.ssbp.gz",
+   "lining": "lining-3a97cc5909.glb.gz",
+   "hides": [],
+   "remnants": {},
+   "measured": {
+    "carvedVoxels": 8836,
+    "patchBytes": 3874,
+    "liningBytes": 317580,
+    "liningTriangles": 33000,
+    "remnantTriangles": 0,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 25.0,
+      "s.optic-nerve": 12.6,
+      "s.anterior-ethmoidal-artery": 7.5,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 25.0,
+      "s.optic-nerve": 12.6,
+      "s.anterior-ethmoidal-artery": 7.5,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 566755,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 8836,
+     "share": 0.0
+    }
+   }
+  },
+  "b917514c1d": {
+   "units": [
+    "s.sphenoid-face.R@transnasal"
+   ],
+   "usedBy": [
+    "p.sphenoidotomy#4"
+   ],
+   "patch": "b917514c1d.ssbp.gz",
+   "lining": "lining-b917514c1d.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.intersinus-septum.M": "s.intersinus-septum.M@transnasal",
+    "s.nasal-septum.M": "s.nasal-septum.M@transnasal",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@transnasal",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@transnasal",
+    "s.sphenoid-floor.L": "s.sphenoid-floor.L@transnasal",
+    "s.sphenoid-floor.R": "s.sphenoid-floor.R@transnasal"
+   },
+   "measured": {
+    "carvedVoxels": 8059,
+    "patchBytes": 2239,
+    "liningBytes": 311564,
+    "liningTriangles": 33000,
+    "remnantTriangles": 13728,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 9.75,
+      "s.optic-nerve": 9.9,
+      "s.anterior-ethmoidal-artery": 24.8,
+      "s.orbit": 6.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 9.75,
+      "s.optic-nerve": 9.9,
+      "s.anterior-ethmoidal-artery": 24.8,
+      "s.orbit": 6.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 565176,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 8059,
+     "share": 0.0
+    }
+   }
+  },
+  "d1dbe87b11": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy"
+   ],
+   "usedBy": [
+    "p.maxillary-antrostomy#1",
+    "fess:p.maxillary-antrostomy#1"
+   ],
+   "patch": "d1dbe87b11.ssbp.gz",
+   "lining": "lining-d1dbe87b11.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@antrostomy",
+    "s.basal-lamella.R": "s.basal-lamella.R@antrostomy",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@antrostomy",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@antrostomy"
+   },
+   "measured": {
+    "carvedVoxels": 16072,
+    "patchBytes": 4204,
+    "liningBytes": 314910,
+    "liningTriangles": 32998,
+    "remnantTriangles": 7072,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 22.1,
+      "s.optic-nerve": 11.2,
+      "s.anterior-ethmoidal-artery": 7.5,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 22.1,
+      "s.optic-nerve": 11.2,
+      "s.anterior-ethmoidal-artery": 7.5,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 568360,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 16072,
+     "share": 0.0
+    }
+   }
+  },
+  "974ae048e4": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened"
+   ],
+   "usedBy": [
+    "p.anterior-ethmoidectomy#1",
+    "fess:p.anterior-ethmoidectomy#1"
+   ],
+   "patch": "974ae048e4.ssbp.gz",
+   "lining": "lining-974ae048e4.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@opened",
+    "s.basal-lamella.R": "s.basal-lamella.R@opened",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@opened",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@opened"
+   },
+   "measured": {
+    "carvedVoxels": 24278,
+    "patchBytes": 7773,
+    "liningBytes": 314831,
+    "liningTriangles": 32998,
+    "remnantTriangles": 4540,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 21.4,
+      "s.optic-nerve": 7.35,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 21.4,
+      "s.optic-nerve": 7.35,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 572086,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 24278,
+     "share": 0.0
+    }
+   }
+  },
+  "cd183d9fb0": {
+   "units": [
+    "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-rostrum.M@removed",
+    "s.sphenoid-face.R@wide"
+   ],
+   "usedBy": [
+    "p.transsellar-approach#1",
+    "eea-sellar-clival:p.transsellar-approach#1"
+   ],
+   "patch": "cd183d9fb0.ssbp.gz",
+   "lining": "lining-cd183d9fb0.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.intersinus-septum.M": "s.intersinus-septum.M@wide",
+    "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
+    "s.sphenoid-floor.L": "s.sphenoid-floor.L@wide",
+    "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
+   },
+   "measured": {
+    "carvedVoxels": 24167,
+    "patchBytes": 5738,
+    "liningBytes": 312936,
+    "liningTriangles": 33000,
+    "remnantTriangles": 11814,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 9.05,
+      "s.optic-nerve": 7.09,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     },
+     "L": {
+      "s.internal-carotid-artery": 9.05,
+      "s.optic-nerve": 7.09,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 571828,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 24167,
+     "share": 0.0
+    }
+   }
+  },
+  "a7cb0a2f9e": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened",
+    "s.anterior-ethmoid-cells.R@to-skull-base"
+   ],
+   "usedBy": [
+    "p.anterior-ethmoidectomy#4",
+    "fess:p.anterior-ethmoidectomy#4"
+   ],
+   "patch": "a7cb0a2f9e.ssbp.gz",
+   "lining": "lining-a7cb0a2f9e.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
+    "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@opened",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@opened"
+   },
+   "measured": {
+    "carvedVoxels": 25230,
+    "patchBytes": 8606,
+    "liningBytes": 314850,
+    "liningTriangles": 32998,
+    "remnantTriangles": 4452,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 21.4,
+      "s.optic-nerve": 7.35,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 21.4,
+      "s.optic-nerve": 7.35,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 572554,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 25230,
+     "share": 0.0
+    }
+   }
+  },
+  "f02a68d5b9": {
+   "units": [
+    "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-rostrum.M@removed",
+    "s.sphenoid-face.R@wide",
+    "s.intersinus-septum.M@flush"
+   ],
+   "usedBy": [
+    "p.transsellar-approach#2",
+    "p.transclival-approach#0",
+    "eea-sellar-clival:p.transsellar-approach#2"
+   ],
+   "patch": "f02a68d5b9.ssbp.gz",
+   "lining": "lining-f02a68d5b9.glb.gz",
+   "hides": [
+    "s.intersinus-septum.M"
+   ],
+   "remnants": {
+    "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
+    "s.sphenoid-floor.L": "s.sphenoid-floor.L@wide",
+    "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
+   },
+   "measured": {
+    "carvedVoxels": 29416,
+    "patchBytes": 7249,
+    "liningBytes": 313593,
+    "liningTriangles": 32998,
+    "remnantTriangles": 10188,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 9.05,
+      "s.optic-nerve": 7.09,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     },
+     "L": {
+      "s.internal-carotid-artery": 9.05,
+      "s.optic-nerve": 7.09,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 573562,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 29416,
+     "share": 0.0
+    }
+   }
+  },
+  "580ec6ce1a": {
+   "units": [
+    "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-rostrum.M@removed",
+    "s.sphenoid-face.R@wide",
+    "s.intersinus-septum.M@flush",
+    "s.sella-turcica.M@sellar-opening"
+   ],
+   "usedBy": [
+    "p.transsellar-approach#4",
+    "eea-sellar-clival:p.transsellar-approach#4",
+    "eea-sellar-clival:p.transclival-approach#0"
+   ],
+   "patch": "580ec6ce1a.ssbp.gz",
+   "lining": "lining-580ec6ce1a.glb.gz",
+   "hides": [
+    "s.intersinus-septum.M"
+   ],
+   "remnants": {
+    "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
+    "s.sella-turcica.M": "s.sella-turcica.M@sellar-opening",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
+    "s.sphenoid-floor.L": "s.sphenoid-floor.L@wide",
+    "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
+   },
+   "measured": {
+    "carvedVoxels": 32655,
+    "patchBytes": 8427,
+    "liningBytes": 313626,
+    "liningTriangles": 32998,
+    "remnantTriangles": 10546,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 1.7,
+      "s.optic-nerve": 6.12,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     },
+     "L": {
+      "s.internal-carotid-artery": 1.7,
+      "s.optic-nerve": 6.12,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 574984,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 32655,
+     "share": 0.0
+    }
+   }
+  },
+  "882fa0add6": {
+   "units": [
+    "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-rostrum.M@removed",
+    "s.sphenoid-face.R@wide",
+    "s.intersinus-septum.M@flush",
+    "s.clivus.M@clival-recess"
+   ],
+   "usedBy": [
+    "p.transclival-approach#2"
+   ],
+   "patch": "882fa0add6.ssbp.gz",
+   "lining": "lining-882fa0add6.glb.gz",
+   "hides": [
+    "s.intersinus-septum.M"
+   ],
+   "remnants": {
+    "s.clivus.M": "s.clivus.M@clival-recess",
+    "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
+    "s.sphenoid-floor.L": "s.sphenoid-floor.L@wide",
+    "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
+   },
+   "measured": {
+    "carvedVoxels": 33518,
+    "patchBytes": 8493,
+    "liningBytes": 313900,
+    "liningTriangles": 32998,
+    "remnantTriangles": 10488,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 1.0,
+      "s.optic-nerve": 7.09,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     },
+     "L": {
+      "s.internal-carotid-artery": 1.0,
+      "s.optic-nerve": 7.09,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 575517,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 33518,
+     "share": 0.0
+    }
+   }
+  },
+  "a07618be24": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened",
+    "s.anterior-ethmoid-cells.R@to-skull-base",
+    "s.basal-lamella.R@perforated"
+   ],
+   "usedBy": [
+    "p.posterior-ethmoidectomy#0",
+    "fess:p.posterior-ethmoidectomy#0"
+   ],
+   "patch": "a07618be24.ssbp.gz",
+   "lining": "lining-a07618be24.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@perforated",
+    "s.basal-lamella.R": "s.basal-lamella.R@perforated",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@perforated",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@perforated"
+   },
+   "measured": {
+    "carvedVoxels": 28484,
+    "patchBytes": 10472,
+    "liningBytes": 314576,
+    "liningTriangles": 33000,
+    "remnantTriangles": 4240,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 17.4,
+      "s.optic-nerve": 6.4,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 17.4,
+      "s.optic-nerve": 6.4,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 574127,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 28484,
+     "share": 0.0
+    }
+   }
+  },
+  "c415c355b0": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened",
+    "s.anterior-ethmoid-cells.R@to-skull-base",
+    "s.basal-lamella.R@perforated",
+    "s.posterior-ethmoid-cells.R@to-skull-base"
+   ],
+   "usedBy": [
+    "p.posterior-ethmoidectomy#1",
+    "fess:p.posterior-ethmoidectomy#1"
+   ],
+   "patch": "c415c355b0.ssbp.gz",
+   "lining": "lining-c415c355b0.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
+    "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@to-skull-base",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@to-skull-base"
+   },
+   "measured": {
+    "carvedVoxels": 35268,
+    "patchBytes": 14744,
+    "liningBytes": 315841,
+    "liningTriangles": 33000,
+    "remnantTriangles": 8008,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 8.3,
+      "s.optic-nerve": 4.1,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 8.3,
+      "s.optic-nerve": 4.1,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 577416,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 35268,
+     "share": 0.0
+    }
+   }
+  },
+  "e6b67fc5cb": {
+   "units": [
+    "s.nasal-septum.M@posterior-septectomy",
+    "s.sphenoid-rostrum.M@removed",
+    "s.sphenoid-face.R@wide",
+    "s.intersinus-septum.M@flush",
+    "s.sella-turcica.M@sellar-opening",
+    "s.clivus.M@clival-recess"
+   ],
+   "usedBy": [
+    "eea-sellar-clival:p.transclival-approach#2"
+   ],
+   "patch": "e6b67fc5cb.ssbp.gz",
+   "lining": "lining-e6b67fc5cb.glb.gz",
+   "hides": [
+    "s.intersinus-septum.M"
+   ],
+   "remnants": {
+    "s.clivus.M": "s.clivus.M@clival-recess",
+    "s.nasal-septum.M": "s.nasal-septum.M@posterior-septectomy",
+    "s.sella-turcica.M": "s.sella-turcica.M@sellar-opening",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@wide",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@wide",
+    "s.sphenoid-floor.L": "s.sphenoid-floor.L@wide",
+    "s.sphenoid-floor.R": "s.sphenoid-floor.R@wide"
+   },
+   "measured": {
+    "carvedVoxels": 36809,
+    "patchBytes": 9681,
+    "liningBytes": 314054,
+    "liningTriangles": 33000,
+    "remnantTriangles": 10846,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 1.0,
+      "s.optic-nerve": 6.12,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     },
+     "L": {
+      "s.internal-carotid-artery": 1.0,
+      "s.optic-nerve": 6.12,
+      "s.anterior-ethmoidal-artery": 15.7,
+      "s.orbit": 2.74
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 576965,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 36809,
+     "share": 0.0
+    }
+   }
+  },
+  "3589e1abd6": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened",
+    "s.anterior-ethmoid-cells.R@to-skull-base",
+    "s.basal-lamella.R@perforated",
+    "s.posterior-ethmoid-cells.R@to-skull-base",
+    "s.sphenoid-face.R@transethmoidal"
+   ],
+   "usedBy": [
+    "p.transethmoidal-sphenoidotomy#2",
+    "p.draf-i#1",
+    "fess:p.transethmoidal-sphenoidotomy#2",
+    "fess:p.draf-i#1"
+   ],
+   "patch": "3589e1abd6.ssbp.gz",
+   "lining": "lining-3589e1abd6.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
+    "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@transethmoidal",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@transethmoidal"
+   },
+   "measured": {
+    "carvedVoxels": 44426,
+    "patchBytes": 18551,
+    "liningBytes": 317420,
+    "liningTriangles": 32998,
+    "remnantTriangles": 4812,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 3.4,
+      "s.optic-nerve": 1.6,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 3.4,
+      "s.optic-nerve": 1.6,
+      "s.anterior-ethmoidal-artery": 2.2,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 580493,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 44426,
+     "share": 0.0
+    }
+   }
+  },
+  "78b0c76006": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened",
+    "s.anterior-ethmoid-cells.R@to-skull-base",
+    "s.basal-lamella.R@perforated",
+    "s.posterior-ethmoid-cells.R@to-skull-base",
+    "s.sphenoid-face.R@transethmoidal",
+    "s.agger-nasi-cell.R@uncapped"
+   ],
+   "usedBy": [
+    "p.draf-i#2",
+    "p.draf-i#5",
+    "fess:p.draf-i#2",
+    "fess:p.draf-i#5"
+   ],
+   "patch": "78b0c76006.ssbp.gz",
+   "lining": "lining-78b0c76006.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
+    "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@transethmoidal",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@transethmoidal"
+   },
+   "measured": {
+    "carvedVoxels": 48728,
+    "patchBytes": 22071,
+    "liningBytes": 317049,
+    "liningTriangles": 33000,
+    "remnantTriangles": 4812,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 3.4,
+      "s.optic-nerve": 1.6,
+      "s.anterior-ethmoidal-artery": 1.0,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 3.4,
+      "s.optic-nerve": 1.6,
+      "s.anterior-ethmoidal-artery": 1.0,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 582644,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 48728,
+     "share": 0.0
+    }
+   }
+  },
+  "4de666ec3a": {
+   "units": [
+    "s.uncinate-process.R@uncinectomy",
+    "s.posterior-fontanelle.R@antrostomy",
+    "s.ethmoid-bulla.R@opened",
+    "s.anterior-ethmoid-cells.R@to-skull-base",
+    "s.basal-lamella.R@perforated",
+    "s.posterior-ethmoid-cells.R@to-skull-base",
+    "s.sphenoid-face.R@transethmoidal",
+    "s.agger-nasi-cell.R@uncapped",
+    "s.frontal-sinus-floor.R@draf-iia"
+   ],
+   "usedBy": [
+    "p.draf-iia#2",
+    "fess:p.draf-iia#2"
+   ],
+   "patch": "4de666ec3a.ssbp.gz",
+   "lining": "lining-4de666ec3a.glb.gz",
+   "hides": [],
+   "remnants": {
+    "s.basal-lamella.L": "s.basal-lamella.L@to-skull-base",
+    "s.basal-lamella.R": "s.basal-lamella.R@to-skull-base",
+    "s.frontal-sinus-floor.L": "s.frontal-sinus-floor.L@draf-iia",
+    "s.frontal-sinus-floor.R": "s.frontal-sinus-floor.R@draf-iia",
+    "s.maxillary-medial-wall.L": "s.maxillary-medial-wall.L@to-skull-base",
+    "s.maxillary-medial-wall.R": "s.maxillary-medial-wall.R@to-skull-base",
+    "s.sphenoid-face.L": "s.sphenoid-face.L@transethmoidal",
+    "s.sphenoid-face.R": "s.sphenoid-face.R@transethmoidal"
+   },
+   "measured": {
+    "carvedVoxels": 54026,
+    "patchBytes": 25493,
+    "liningBytes": 316645,
+    "liningTriangles": 32998,
+    "remnantTriangles": 8072,
+    "guardMinimaMm": {
+     "R": {
+      "s.internal-carotid-artery": 3.4,
+      "s.optic-nerve": 1.6,
+      "s.anterior-ethmoidal-artery": 1.0,
+      "s.orbit": 1.0
+     },
+     "L": {
+      "s.internal-carotid-artery": 3.4,
+      "s.optic-nerve": 1.6,
+      "s.anterior-ethmoidal-artery": 1.0,
+      "s.orbit": 1.0
+     }
+    },
+    "keepViolations": 0,
+    "symmetry": {
+     "asymmetricVoxels": 585097,
+     "of": 4516200
+    },
+    "postMirrorGuard": {
+     "rejected": 0,
+     "carved": 54026,
+     "share": 0.0
+    }
+   }
+  }
+ },
+ "procedures": {
+  "p.uncinectomy": {
+   "entry": null,
+   "steps": {
+    "1": "3a97cc5909"
+   }
+  },
+  "p.maxillary-antrostomy": {
+   "entry": "3a97cc5909",
+   "steps": {
+    "1": "d1dbe87b11"
+   }
+  },
+  "p.anterior-ethmoidectomy": {
+   "entry": "d1dbe87b11",
+   "steps": {
+    "1": "974ae048e4",
+    "4": "a7cb0a2f9e"
+   }
+  },
+  "p.posterior-ethmoidectomy": {
+   "entry": "a7cb0a2f9e",
+   "steps": {
+    "0": "a07618be24",
+    "1": "c415c355b0"
+   }
+  },
+  "p.transethmoidal-sphenoidotomy": {
+   "entry": "c415c355b0",
+   "steps": {
+    "2": "3589e1abd6"
+   }
+  },
+  "p.sphenoidotomy": {
+   "entry": null,
+   "steps": {
+    "4": "b917514c1d"
+   }
+  },
+  "p.draf-i": {
+   "entry": "3589e1abd6",
+   "steps": {
+    "1": "3589e1abd6",
+    "2": "78b0c76006",
+    "5": "78b0c76006"
+   }
+  },
+  "p.draf-iia": {
+   "entry": "78b0c76006",
+   "steps": {
+    "2": "4de666ec3a"
+   }
+  },
+  "p.transsellar-approach": {
+   "entry": null,
+   "steps": {
+    "1": "cd183d9fb0",
+    "2": "f02a68d5b9",
+    "4": "580ec6ce1a"
+   }
+  },
+  "p.transclival-approach": {
+   "entry": null,
+   "steps": {
+    "0": "f02a68d5b9",
+    "2": "882fa0add6"
+   }
+  }
+ },
+ "corridors": {
+  "fess": {
+   "name": "FESS: uncinectomy to Draf IIa",
+   "sides": [
+    "R",
+    "L"
+   ],
+   "mucosa": "decongested",
+   "procedures": [
+    "p.uncinectomy",
+    "p.maxillary-antrostomy",
+    "p.anterior-ethmoidectomy",
+    "p.posterior-ethmoidectomy",
+    "p.transethmoidal-sphenoidotomy",
+    "p.draf-i",
+    "p.draf-iia"
+   ],
+   "positions": [
+    {
+     "procedure": "p.uncinectomy",
+     "step": "1",
+     "state": "3a97cc5909"
+    },
+    {
+     "procedure": "p.maxillary-antrostomy",
+     "step": "1",
+     "state": "d1dbe87b11"
+    },
+    {
+     "procedure": "p.anterior-ethmoidectomy",
+     "step": "1",
+     "state": "974ae048e4"
+    },
+    {
+     "procedure": "p.anterior-ethmoidectomy",
+     "step": "4",
+     "state": "a7cb0a2f9e"
+    },
+    {
+     "procedure": "p.posterior-ethmoidectomy",
+     "step": "0",
+     "state": "a07618be24"
+    },
+    {
+     "procedure": "p.posterior-ethmoidectomy",
+     "step": "1",
+     "state": "c415c355b0"
+    },
+    {
+     "procedure": "p.transethmoidal-sphenoidotomy",
+     "step": "2",
+     "state": "3589e1abd6"
+    },
+    {
+     "procedure": "p.draf-i",
+     "step": "1",
+     "state": "3589e1abd6"
+    },
+    {
+     "procedure": "p.draf-i",
+     "step": "2",
+     "state": "78b0c76006"
+    },
+    {
+     "procedure": "p.draf-i",
+     "step": "5",
+     "state": "78b0c76006"
+    },
+    {
+     "procedure": "p.draf-iia",
+     "step": "2",
+     "state": "4de666ec3a"
+    }
+   ]
+  },
+  "eea-sellar-clival": {
+   "name": "EEA: transsphenoidal, sellar, transclival",
+   "sides": [
+    "M"
+   ],
+   "mucosa": "decongested",
+   "procedures": [
+    "p.transsellar-approach",
+    "p.transclival-approach"
+   ],
+   "positions": [
+    {
+     "procedure": "p.transsellar-approach",
+     "step": "1",
+     "state": "cd183d9fb0"
+    },
+    {
+     "procedure": "p.transsellar-approach",
+     "step": "2",
+     "state": "f02a68d5b9"
+    },
+    {
+     "procedure": "p.transsellar-approach",
+     "step": "4",
+     "state": "580ec6ce1a"
+    },
+    {
+     "procedure": "p.transclival-approach",
+     "step": "0",
+     "state": "580ec6ce1a"
+    },
+    {
+     "procedure": "p.transclival-approach",
+     "step": "2",
+     "state": "e6b67fc5cb"
+    }
+   ]
+  }
+ },
+ "units": {
+  "s.uncinate-process.R@uncinectomy": {
+   "voxels": [
+    4418
+   ],
+   "measured": [
+    4436
+   ]
+  },
+  "s.posterior-fontanelle.R@antrostomy": {
+   "voxels": [
+    3618
+   ],
+   "measured": [
+    3619
+   ]
+  },
+  "s.ethmoid-bulla.R@opened": {
+   "voxels": [
+    4103
+   ],
+   "measured": [
+    4088
+   ]
+  },
+  "s.anterior-ethmoid-cells.R@to-skull-base": {
+   "voxels": [
+    476
+   ],
+   "measured": [
+    487
+   ]
+  },
+  "s.basal-lamella.R@perforated": {
+   "voxels": [
+    1627
+   ],
+   "measured": [
+    1628
+   ]
+  },
+  "s.posterior-ethmoid-cells.R@to-skull-base": {
+   "voxels": [
+    3392
+   ],
+   "measured": [
+    3437
+   ]
+  },
+  "s.sphenoid-face.R@transethmoidal": {
+   "voxels": [
+    4579
+   ],
+   "measured": [
+    4559
+   ]
+  },
+  "s.sphenoid-face.R@transnasal": {
+   "voxels": [
+    4155
+   ],
+   "measured": [
+    4139
+   ]
+  },
+  "s.agger-nasi-cell.R@uncapped": {
+   "voxels": [
+    2151
+   ],
+   "measured": [
+    2177
+   ]
+  },
+  "s.frontal-sinus-floor.R@draf-iia": {
+   "voxels": [
+    2649
+   ],
+   "measured": [
+    2631
+   ]
+  },
+  "s.nasal-septum.M@posterior-septectomy": {
+   "voxels": [
+    5429
+   ],
+   "measured": [
+    5429
+   ]
+  },
+  "s.sphenoid-rostrum.M@removed": {
+   "voxels": [
+    5091
+   ],
+   "measured": [
+    5091
+   ]
+  },
+  "s.sphenoid-face.R@wide": {
+   "voxels": [
+    7055
+   ],
+   "measured": [
+    7040
+   ]
+  },
+  "s.intersinus-septum.M@flush": {
+   "voxels": [
+    5249
+   ],
+   "measured": [
+    5452
+   ]
+  },
+  "s.sella-turcica.M@sellar-opening": {
+   "voxels": [
+    3239
+   ],
+   "measured": [
+    3239
+   ]
+  },
+  "s.clivus.M@clival-recess": {
+   "voxels": [
+    4102,
+    4154
+   ],
+   "measured": [
+    4101,
+    4153
+   ]
+  }
+ },
+ "antrostomyWindow": {
+  "carved": {
+   "voxels": 3618,
+   "A": 19.0,
+   "S": 9.5,
+   "R": 10.5
+  },
+  "medialWall": {
+   "voxels": 1959,
+   "A": 19.0,
+   "S": 9.5,
+   "R": 10.5
+  }
+ },
+ "note": "tools/ssb-pipeline/uw/dissect.py output (docs/ssb.md 5.8). usedBy: \"<procedure>#<step>\" or \"<corridor>:<procedure>#<step>\". remnants maps a wall node to the remnant node that replaces it in the state lining pack; hides lists wall nodes the state removes entirely. The state lining packs are not listed in packs.json: they are loaded on demand from \"lining\"."
+}

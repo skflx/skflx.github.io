@@ -204,6 +204,15 @@ What it cannot check: medical correctness and whether a source supports the
 claim that cites it. That stays with the owner, who alone flips `review` to
 `verified`.
 
+### SSB dissection states (`ssb/states/`, `tools/ssb-pipeline/uw/dissect.py`)
+
+Offline pipeline (needs `pip install scipy scikit-image fast-simplification`, no crawl): `python3 tools/ssb-pipeline/uw/dissect.py`
+prints the unit table (voxels against `dissection.json`'s `measured`, within 5 %), per state the carved voxels, guard minima per field
+and side, patch and lining bytes, the post-mirror guard count and the antrostomy window's extent; a rerun is byte-identical (hash
+`ssb/states/*` and `ssb/models/lining-*`). In CI, `node tools/check-data.mjs` checks the `dissection.json` <-> graph rule (a scratch
+edit that unmaps a step with `removes` fails it), every label a patch writes against `labels.json`, and the budgets. The viewer does not
+read the states until P2.
+
 ### SSB page and variant lab (`ssb.html`)
 
 Smoke boots `ssb.html` (graph mode + a WebGL frame; headless Chromium runs

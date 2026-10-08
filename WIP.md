@@ -250,13 +250,16 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   Stations (E6): the controls list this nostril's covered stations from `ssb/geometry/stations.json` (Opus's poses, E5) at the page's tier;
   picking one flies the scope there over ~600 ms (a cut with reduced motion), and `#scope=t.<id>[.<side>]` opens one.
 - **Procedure mode** (P1, 2026-10-08; contract `docs/ssb.md` §5.8–5.10) —
-  specified, not built. A dissection state changes the volume the scope
+  pipeline built (P1b, in review), player not yet. A dissection state changes the volume the scope
   reads (removed voxels become air), so collision and stations see the
   opened cavity. The cuts are rules in `tools/ssb-pipeline/uw/dissection.json`
   (FESS from uncinectomy to Draf IIa; transsphenoidal, sellar and clival
   recess openings), mapped to the `removes` of those procedures' steps; a
-  scratch prototype built the states and posed the stations they open.
-  Next: the pipeline (P1b) and the player (P2), then poses per state (P3)
+  scratch prototype built the states and posed the stations they open;
+  `tools/ssb-pipeline/uw/dissect.py` now evaluates the rules into 15 states
+  (`ssb/states/index.json`, a patch and a lining pack each; not read by the
+  viewer yet, and not in `packs.json`).
+  Next: the player (P2), then poses per state (P3)
   and the decongested · as scanned · congested mucosa (DC1).
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
@@ -312,7 +315,7 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
 backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
-to sellar/clival masses, so wave 3 is procedure mode: P1b (states) beside
+to sellar/clival masses, so wave 3 is procedure mode: P1b (states, built) beside
 P2 (player), then P3 (poses per state, the 2.7 mm shaft), then DC1
 (mucosal state); NasalSeg (PR #119) enters as population data (POP1) and
 16-bit heads (IN1); the soft-tissue lane continues with ST4d and ST5.
