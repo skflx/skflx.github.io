@@ -113,6 +113,57 @@ def build(mask, aff, budget, step=1, sigma=0.75, level=0.5):
 
 
 # ---------------------------------------------------------------- glb
+def subset(v, f, n, keep):
+    """The triangles `keep` of (v, f) as their own mesh, vertices reindexed, normals carried over."""
+    ff = f[keep]
+    used, inv = np.unique(ff, return_inverse=True)
+    return v[used], inv.reshape(ff.shape), n[used]
+
+
+def clean_lining(items):
+    """Defect 1 of WP P4 (CP-3, the black triangle in t.sella-open-30). The union lining is decimated in one piece and its
+    vertex normals are area-weighted over every face at a vertex, so a zero-thickness fin (two faces on the same three
+    vertices, wound oppositely) cancels its own vertices' normals to zero: the shader normalizes (0, 0, 0) and the fin
+    is drawn black. Both faces of a fin go (a fin is a flap, not part of the surface), the normal of any vertex left
+    with none is rebuilt from the faces it still has (else from its neighbours'), and vertices no face uses are dropped.
+    -> [(name, verts, faces, normals)], the number of fin faces removed, the number of normals rebuilt."""
+    out, fins, rebuilt = [], 0, 0
+    for name, v, f, n in items:
+        key = np.sort(f, axis=1)
+        _, inv, cnt = np.unique(key, axis=0, return_inverse=True, return_counts=True)
+        keep = cnt[inv.ravel()] == 1
+        fins += int((~keep).sum())
+        v, f, n = subset(v, f, n, keep)
+        n = n.copy()
+        bad = np.linalg.norm(n, axis=1) < 0.3
+        rebuilt += int(bad.sum())
+        if bad.any():
+            fn = np.cross(v[f[:, 1]] - v[f[:, 0]], v[f[:, 2]] - v[f[:, 0]])
+            acc = np.zeros_like(v)
+            for c in range(3):
+                np.add.at(acc, f[:, c], fn)
+            ok = np.linalg.norm(acc, axis=1) > 1e-9
+            fix = bad & ok
+            n[fix] = acc[fix] / np.linalg.norm(acc[fix], axis=1, keepdims=True)
+            bad &= ~fix
+            if bad.any():                                      # a vertex whose own faces cancel: its neighbours' normals
+                e = np.concatenate([f[:, [0, 1]], f[:, [1, 2]], f[:, [2, 0]]])
+                e = np.concatenate([e, e[:, ::-1]])
+                good = np.linalg.norm(n, axis=1) >= 0.3
+                for _ in range(3):
+                    sel = bad[e[:, 0]] & good[e[:, 1]]
+                    if not sel.any():
+                        break
+                    acc = np.zeros_like(v)
+                    np.add.at(acc, e[sel, 0], n[e[sel, 1]])
+                    got = bad & (np.linalg.norm(acc, axis=1) > 1e-9)
+                    n[got] = acc[got] / np.linalg.norm(acc[got], axis=1, keepdims=True)
+                    good |= got
+                    bad &= ~got
+        out.append((name, v, f, n))
+    return out, fins, rebuilt
+
+
 def write_glb(path, meshes):
     """meshes: [(name, verts RAS mm float (N,3), faces (M,3), normals (N,3))]."""
     bin_parts, views, accessors, gl_meshes, nodes = [], [], [], [], []

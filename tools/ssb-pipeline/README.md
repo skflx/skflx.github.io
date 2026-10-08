@@ -81,7 +81,7 @@ Reconstruction, stage D (soft tissue; needs only the committed `ssb/`, not the c
 
     .venv/bin/python tools/ssb-pipeline/uw/softtissue.py      # -> ssb/models/soft.glb.gz, ssb/geometry/charts.json,
                                                               #    lm.choanal-arch.M and lm.naris.R/.L in landmarks.json
-    .venv/bin/python tools/ssb-pipeline/uw/lining.py          # -> ssb/models/lining.glb.gz (the open airway lining, ST1b); run after meshes.py and softtissue.py, which rewrite packs.json
+    .venv/bin/python tools/ssb-pipeline/uw/lining.py          # -> ssb/models/lining.glb.gz (the open airway lining, ST1b; fins dropped by `meshes.py` `clean_lining`, L1); run after meshes.py and softtissue.py, which rewrite packs.json
     .venv/bin/python tools/ssb-pipeline/uw/sweeps_soft.py --selftest   # the waypoint-sweep machinery, nothing written
     node tools/stamp-assets.mjs && node tools/check-data.mjs
 

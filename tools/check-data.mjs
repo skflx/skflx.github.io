@@ -250,6 +250,52 @@ function checkSsb() {
   ok(geo.length === 0, 'ssb: specimen geometry names only graph ids',
     `ssb: ${geo.length} geometry reference problem(s):\n        ` + geo.slice(0, 20).join('\n        '));
   checkDissection(index);
+  checkLiningMeshes();
+}
+
+/* ---- SSB lining packs (WP L1): no zero-thickness fins, no zero normals ----
+   A fin is two faces on the same three vertices; its area-weighted vertex normals cancel to zero and it is drawn
+   black. Every ssb/models/lining*.glb.gz (the base lining, the mucosal and dissection-state packs) must be free of
+   both; the cleaner is meshes.py clean_lining. Reads the quantized glTF meshes written by meshes.py write_glb. */
+function glbMeshes(buf) {
+  const jl = buf.readUInt32LE(12);
+  const doc = JSON.parse(buf.slice(20, 20 + jl).toString());
+  const bin = buf.slice(20 + jl + 8);
+  const view = (a) => { const v = doc.bufferViews[doc.accessors[a].bufferView]; return bin.subarray(v.byteOffset, v.byteOffset + v.byteLength); };
+  return doc.nodes.map((nd) => {
+    const p = doc.meshes[nd.mesh].primitives[0];
+    const n = doc.accessors[p.attributes.NORMAL], ix = doc.accessors[p.indices];
+    const nb = view(p.attributes.NORMAL), ib = view(p.indices);
+    const idx = ix.componentType === 5123 ? new Uint16Array(ib.buffer, ib.byteOffset, ix.count) : new Uint32Array(ib.buffer, ib.byteOffset, ix.count);
+    return { name: nd.name, count: n.count, nb, idx };
+  });
+}
+function liningDefects(buf) {
+  let twins = 0, zero = 0;
+  for (const m of glbMeshes(buf)) {
+    const seen = new Set();
+    for (let i = 0; i < m.idx.length; i += 3) {
+      const t = [m.idx[i], m.idx[i + 1], m.idx[i + 2]].sort((a, b) => a - b).join(',');
+      if (seen.has(t)) twins++; else seen.add(t);
+    }
+    for (let v = 0; v < m.count; v++) {
+      const x = (m.nb[v * 4] << 24 >> 24) / 127, y = (m.nb[v * 4 + 1] << 24 >> 24) / 127, z = (m.nb[v * 4 + 2] << 24 >> 24) / 127;
+      if (Math.hypot(x, y, z) < 0.25) zero++;
+    }
+  }
+  return { twins, zero };
+}
+function checkLiningMeshes() {
+  const dir = rel('ssb/models');
+  if (!fs.existsSync(dir)) return;
+  const files = fs.readdirSync(dir).filter((f) => /^lining.*\.glb\.gz$/.test(f)).sort();
+  for (const f of files) {
+    let d;
+    try { d = liningDefects(zlib.gunzipSync(fs.readFileSync(path.join(dir, f)))); }
+    catch (e) { fail(`ssb lining: ${f} unreadable — ${e.message}`); continue; }
+    ok(d.twins === 0 && d.zero === 0, `ssb lining: ${f} has no twin faces or zero normals`,
+      `ssb lining: ${f} has ${d.twins} twin face(s) and ${d.zero} zero-length normal(s) (rerun lining.py / mucosa.py / dissect.py)`);
+  }
 }
 
 /* ---- SSB dissection states (docs/ssb.md 5.8; WP P1b) ----

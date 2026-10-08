@@ -21,7 +21,7 @@ air.fill and the label of the nearest voxel of the unit's own air sets. A right-
 mirrored at R = 0 (labels .R -> .L), the guard applied again on the mirrored voxels (a rejected voxel stays as it
 was); a midline unit is computed whole. Anchors read voxel centres. The distance fields are not recomputed.
 
-Every mesh of a lining pack (the lining and the remnants) is cleaned before it is written (clean_lining, WP P4): a
+Every mesh of a lining pack (the lining and the remnants) is cleaned before it is written (meshes.py clean_lining, WP P4): a
 zero-thickness fin, two faces on the same three vertices, cancels its vertices' area-weighted normals to zero and
 is drawn black, so both of its faces go and a vertex left with no normal gets one back from its faces or neighbours.
 
@@ -456,50 +456,6 @@ def wall_nodes(base):
     return {idx: n for n, idx in base.index.items() if n.rsplit('.', 1)[0] in walls and n.rsplit('.', 1)[0] != 's.orbit'}
 
 
-def clean_lining(items):
-    """Defect 1 of WP P4 (CP-3, the black triangle in t.sella-open-30). The union lining is decimated in one piece and its
-    vertex normals are area-weighted over every face at a vertex, so a zero-thickness fin (two faces on the same three
-    vertices, wound oppositely) cancels its own vertices' normals to zero: the shader normalizes (0, 0, 0) and the fin
-    is drawn black. Both faces of a fin go (a fin is a flap, not part of the surface), the normal of any vertex left
-    with none is rebuilt from the faces it still has (else from its neighbours'), and vertices no face uses are dropped.
-    -> [(name, verts, faces, normals)], the number of fin faces removed, the number of normals rebuilt."""
-    out, fins, rebuilt = [], 0, 0
-    for name, v, f, n in items:
-        key = np.sort(f, axis=1)
-        _, inv, cnt = np.unique(key, axis=0, return_inverse=True, return_counts=True)
-        keep = cnt[inv.ravel()] == 1
-        fins += int((~keep).sum())
-        v, f, n = L.subset(v, f, n, keep)
-        n = n.copy()
-        bad = np.linalg.norm(n, axis=1) < 0.3
-        rebuilt += int(bad.sum())
-        if bad.any():
-            fn = np.cross(v[f[:, 1]] - v[f[:, 0]], v[f[:, 2]] - v[f[:, 0]])
-            acc = np.zeros_like(v)
-            for c in range(3):
-                np.add.at(acc, f[:, c], fn)
-            ok = np.linalg.norm(acc, axis=1) > 1e-9
-            fix = bad & ok
-            n[fix] = acc[fix] / np.linalg.norm(acc[fix], axis=1, keepdims=True)
-            bad &= ~fix
-            if bad.any():                                      # a vertex whose own faces cancel: its neighbours' normals
-                e = np.concatenate([f[:, [0, 1]], f[:, [1, 2]], f[:, [2, 0]]])
-                e = np.concatenate([e, e[:, ::-1]])
-                good = np.linalg.norm(n, axis=1) >= 0.3
-                for _ in range(3):
-                    sel = bad[e[:, 0]] & good[e[:, 1]]
-                    if not sel.any():
-                        break
-                    acc = np.zeros_like(v)
-                    np.add.at(acc, e[sel, 0], n[e[sel, 1]])
-                    got = bad & (np.linalg.norm(acc, axis=1) > 1e-9)
-                    n[got] = acc[got] / np.linalg.norm(acc[got], axis=1, keepdims=True)
-                    good |= got
-                    bad &= ~got
-        out.append((name, v, f, n))
-    return out, fins, rebuilt
-
-
 def write_lining(base, st, key, data, with_lining):
     """The state's lining pack with its remnants: (file, bytes, triangles, hides, remnants)."""
     owner_cut = {}
@@ -526,11 +482,11 @@ def write_lining(base, st, key, data, with_lining):
         items.append((rn, v, f, n))
         remnants[name] = rn
         rem_tris += len(f)
-    items, fins, rebuilt = clean_lining(items)                 # the remnants too: a fin cancels a vertex normal in any area-weighted mesh
+    items, fins, rebuilt = M.clean_lining(items)                 # the remnants too: a fin cancels a vertex normal in any area-weighted mesh
     rep = {}
     if with_lining:
         lin, rep = L.build_lining(st.lab, base.table, base.hdr['affine'], base.step, max(8000, STATE_BUDGET - rem_tris))
-        lin, f2, r2 = clean_lining(lin)
+        lin, f2, r2 = M.clean_lining(lin)
         rep.update({'finFaces': fins + f2, 'normalsRebuilt': rebuilt + r2})
         items = lin + items
     path = os.path.join(REPO, 'ssb/models/lining-%s.glb.gz' % key)
