@@ -1342,7 +1342,7 @@ against the 9.3 mm point, not ST4b's construction; recompute the
 specimen's areas with the floor strip and say what the masked vestibule
 still removes. ST5 builds on this, not on the first pass.
 
-### ST5 — Soft-tissue panel and NSF overlay        [ready] · Sonnet · depends: ST1b, ST2b, ST6, ST4d (contract: ST3r, done; the anterior cut is at ST6's valve plane)
+### ST5 — Soft-tissue panel and NSF overlay        [review] · Sonnet · depends: ST1b, ST2b, ST6, ST4d (contract: ST3r, done; the anterior cut is at ST6's valve plane)
 Read: `docs/ssb.md` §5.7 (the revised contract — not the first pass in git history), §6 (diorama parameter/URL pattern), §7.3–§7.4; `js/ssb/mode-specimen.js`, `js/ssb/ui-specimen.js`, `js/ssb/state.js`.
 Touch: new `js/ssb/flap.js` (pure geometry on chart data: no DOM, no three.js import, so Node tests it), `js/ssb/mode-specimen.js`, `js/ssb/ui-specimen.js`, `js/ssb/state.js` (`#flap=`), `css/ssb.css`, `tools/test-ssb.mjs`.
 Accept: every test in §5.7's list, the outline computation in Node and the drawing in the page; areas printed for each design and side in the PR.
@@ -1350,6 +1350,7 @@ Specimen stage: a soft-tissue group (Mucosa, Septal mucosa, Vessels, Flap)
 with tier filtering; the NSF overlay per ST3 (design presets as buttons,
 sliders for the parameters, area readout, incisions drawn on the surface,
 "schematic on specimen" badge). Tests per ST3.
+Result: `js/ssb/flap.js` (pure chart geometry), the overlay in `mode-specimen.js`/`ui-specimen.js`, `#flap=` in `state.js`, `--only flap` (Node construction + page). Areas (cm²) short / full / extended: R 9.1 / 9.9 / 13.5, L 9.1 / 9.9 / 13.4; pedicle 11.5 mm. **For CP-ST5 (decisions the contract left open, `docs/ssb.md` §5.7 "As built"):** (1) the superior-incision formula for A cannot be level at `s_f` and keep a margin (the septum's top is within 8 mm of `s_f` over the sphenoid), so A is level at `s_f` with no margin; (2) the test list's "stays `top_margin` below `top(a)`" cannot hold at the start point, so the pin is "at `s_f` or at most `top(a) - top_margin`"; (3) the rescue window's placement; (4) the Table 31.2 maximum is not in the graph, so it is not shown.
 
 ### ST6 — External nose: unmask, centre, vestibule and valve        [done: merged #116, owner 2026-10-07; checkpoint items closed at CP-ST6, §4] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
 Goal: O1 (c) and O2's entry anatomy on the standard specimen: the

@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap] [--int16]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -97,7 +97,9 @@ const dataUrl = (source) => 'data:text/javascript;base64,' + Buffer.from(source)
 const sourceOf = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const { KINDS, TISSUE_KINDS, GRAPH_KINDS, TOKENS, kindForGraph, detectQuality } = await import(dataUrl(sourceOf('js/ssb/materials.js')));
 const SCOPE_URL = dataUrl(sourceOf('js/ssb/scope.js'));
-const { parseHash, formatHash, clampQuality, createStore, normalizeCt } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`)));
+const FLAP_URL = dataUrl(sourceOf('js/ssb/flap.js'));
+const FL = await import(FLAP_URL);
+const { parseHash, formatHash, clampQuality, createStore, normalizeCt, normalizeFlap } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`).replace(/from '\.\/flap\.js[^']*'/, `from '${FLAP_URL}'`)));
 const SC = await import(SCOPE_URL);
 const { rasToScene, sceneToRas } = await import(dataUrl(sourceOf('js/ssb/frame.js')));
 const KIT_URL = dataUrl(sourceOf('js/ssb/dioramas/kit.js')
@@ -113,7 +115,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -4253,6 +4255,247 @@ async function mucosaTests(browser, base) {
 }
 
 
+
+/* ---------------- the nasoseptal flap overlay (WP ST5, docs/ssb.md 5.7) ---------------- */
+
+const readJson = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
+
+/* One side's inputs from the committed data, as the page builds them. */
+function flapInputs(side, data) {
+  const lm = (id) => data.landmarks[id];
+  return {
+    side, septal: data.charts[`s.septal-mucosa.${side}`], floor: data.charts[`s.nasal-floor-mucosa.${side}`],
+    ostium: lm(`lm.sphenoid-ostium.${side}`), arch: lm('lm.choanal-arch.M'), mtHead: lm(`lm.middle-turbinate-head.${side}`),
+    sf: data.meta[`lm.sphenoid-ostium.${side}`].inferior_margin_s_mm,
+  };
+}
+
+/* An independent point-in-polygon (winding number) and triangle area (Heron), so the readout is not checked against its own code. */
+function windingInside(poly, x, y) {
+  let w = 0;
+  for (let i = 0; i < poly.length; i++) {
+    const [x1, y1] = poly[i];
+    const [x2, y2] = poly[(i + 1) % poly.length];
+    const left = (x2 - x1) * (y - y1) - (x - x1) * (y2 - y1);
+    if (y1 <= y) { if (y2 > y && left > 0) w++; } else if (y2 <= y && left < 0) w--;
+  }
+  return w !== 0;
+}
+function independentArea(node, project, poly) {
+  let mm2 = 0;
+  for (let t = 0; t < node.idx.length; t += 3) {
+    const P = [0, 1, 2].map((k) => [node.pts[node.idx[t + k] * 3], node.pts[node.idx[t + k] * 3 + 1], node.pts[node.idx[t + k] * 3 + 2]]);
+    const c = [0, 1, 2].map((i) => (P[0][i] + P[1][i] + P[2][i]) / 3);
+    const [u, v] = project(...c);
+    if (!windingInside(poly, u, v)) continue;
+    const d = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+    const a = d(P[0], P[1]); const b = d(P[1], P[2]); const cc = d(P[2], P[0]);
+    const sp = (a + b + cc) / 2;
+    mm2 += Math.sqrt(Math.max(0, sp * (sp - a) * (sp - b) * (sp - cc)));
+  }
+  return mm2;
+}
+
+function flapUnitTests() {
+  const data = { charts: readJson('ssb/geometry/charts.json').surfaces, landmarks: readJson('ssb/geometry/landmarks.json'), meta: readJson('ssb/geometry/landmarks.meta.json').landmarks };
+  const sweeps = readJson('ssb/geometry/sweeps.json');
+  const { nodes } = readPacks();
+  const SIDES = ['R', 'L'];
+  const area = (side, design, params = {}) => {
+    const f = FL.computeFlap(flapInputs(side, data), design, params);
+    const sep = f.septal ? FL.meshArea(nodes.get(`s.septal-mucosa.${side}`), FL.projectSeptal, f.septal).mm2 / 100 : 0;
+    const flo = f.floor ? FL.meshArea(nodes.get(`s.nasal-floor-mucosa.${side}`), FL.projectFloor, f.floor).mm2 / 100 : 0;
+    return { f, sep, flo, total: sep + flo };
+  };
+
+  /* the pedicle contains the posterior septal artery, from a source independent of this construction (ST4d places the sweeps) */
+  for (const side of SIDES) {
+    const inp = flapInputs(side, data);
+    const p = FL.septalProfile(inp.septal);
+    const f = FL.computeFlap(inp, 'full');
+    for (const branch of ['inferior', 'superior']) {
+      const sw = sweeps[`s.posterior-septal-artery-${branch}-branch.${side}`];
+      const [, a, s] = sw ? sw.pts[0] : [0, NaN, NaN];
+      check(`flap (pedicle, ${side}): the first point of the posterior septal artery ${branch} branch lies in the pedicle's chart box (s between the choanal arch and the ostium's inferior margin, a within 4 mm of the posterior edge)`,
+        !!sw && s >= inp.arch[2] && s <= inp.sf && Math.abs(a - FL.postAt(p, s)) <= 4, `a ${a} s ${s}; arch ${inp.arch[2]} sf ${inp.sf} post ${FL.postAt(p, s)}`);
+    }
+    check(`flap (pedicle, ${side}): the pedicle's height is the choanal arch to the ostium's inferior margin and lies in 8-16 mm`, f.pedicleHeight >= 8 && f.pedicleHeight <= 16 && near(f.pedicleHeight, inp.sf - inp.arch[2], 0.001), String(f.pedicleHeight));
+  }
+
+  /* the superior incision */
+  for (const side of SIDES) {
+    const inp = flapInputs(side, data);
+    const p = FL.septalProfile(inp.septal);
+    const starts = FL.DESIGNS.map((d) => FL.computeFlap(inp, d).superior[0]);
+    check(`flap (superior, ${side}): the incision starts at the ostium's inferior margin (post(sf), sf) in every design`, starts.every((q) => near(q[1], inp.sf, 0.002) && near(q[0], FL.postAt(p, inp.sf), 0.002)), JSON.stringify(starts));
+    const lvl = FL.computeFlap(inp, 'short').superior;
+    check(`flap (superior, ${side}): short is level at sf (every vertex), whatever top_margin says`, lvl.every((q) => near(q[1], inp.sf, 0.002)) && JSON.stringify(FL.computeFlap(inp, 'short', { top_margin: 5 }).superior) === JSON.stringify(FL.computeFlap(inp, 'short', { top_margin: 20 }).superior));
+    let bad = 0;
+    let samples = 0;
+    let rose = 0;
+    for (const design of ['full', 'extended']) {
+      for (let top = 5; top <= 20; top++) {
+        for (const ant of [0, 3, 10]) {
+          const sup = FL.computeFlap(inp, design, { top_margin: top, anterior_margin: ant }).superior;
+          for (let i = 0; i < sup.length; i++) {
+            const pts = i + 1 < sup.length ? [sup[i], [(sup[i][0] + sup[i + 1][0]) / 2, (sup[i][1] + sup[i + 1][1]) / 2]] : [sup[i]];
+            for (const [a, s] of pts) {
+              samples++;
+              const ceiling = FL.topAt(p, a) - top;
+              if (s < inp.sf - 0.002 || s > FL.topAt(p, a) + 0.002 || (s > inp.sf + 0.002 && s > ceiling + 0.002)) bad++;
+              if (s > inp.sf + 0.5) rose++;
+            }
+          }
+        }
+      }
+    }
+    check(`flap (superior, ${side}): B and C never run below sf, and every sample (vertices and segment midpoints, over top_margin 5-20 x anterior_margin) is either at sf or at most top(a) - top_margin; the rule is the exact max(sf, top - margin)`, bad === 0 && samples > 500, `${bad} of ${samples}`);
+    check(`flap (superior, ${side}): B and C do rise above sf for a small margin (the incision follows the septum's top, Fig. 31.3 B)`, rose > 0, String(rose));
+  }
+
+  /* the area readout against an independent sum */
+  for (const side of SIDES) {
+    for (const design of ['short', 'full', 'extended']) {
+      const a = area(side, design);
+      const sep = independentArea(nodes.get(`s.septal-mucosa.${side}`), FL.projectSeptal, a.f.septal) / 100;
+      const flo = a.f.floor ? independentArea(nodes.get(`s.nasal-floor-mucosa.${side}`), FL.projectFloor, a.f.floor) / 100 : 0;
+      check(`flap (area, ${side} ${design}): the readout equals an independent point-in-polygon and Heron sum over the meshes within 2 % (${a.total.toFixed(2)} cm2)`, a.total > 1 && Math.abs(a.total - (sep + flo)) <= 0.02 * (sep + flo), `${a.total} vs ${sep + flo}`);
+    }
+  }
+
+  /* the ladder, containment, rescue */
+  for (const side of SIDES) {
+    const A = { short: area(side, 'short'), full: area(side, 'full'), extended: area(side, 'extended'), rescue: area(side, 'rescue') };
+    console.log(`  flap areas ${side}: short ${A.short.total.toFixed(2)} cm2 (septum ${A.short.sep.toFixed(2)}), full ${A.full.total.toFixed(2)} (septum ${A.full.sep.toFixed(2)}), extended ${A.extended.total.toFixed(2)} (septum ${A.extended.sep.toFixed(2)} + floor ${A.extended.flo.toFixed(2)}), rescue ${A.rescue.total.toFixed(2)}; pedicle ${A.full.f.pedicleHeight} mm; length short ${A.short.f.length.toFixed(1)} / full ${A.full.f.length.toFixed(1)} mm; approximate share short ${A.short.f.approx} full ${A.full.f.approx}`);
+    check(`flap (ladder, ${side}): short < full < extended, strictly`, A.short.total < A.full.total && A.full.total < A.extended.total, JSON.stringify([A.short.total, A.full.total, A.extended.total]));
+    const inside = (poly, pts) => pts.every(([x, y]) => FL.inPolygon(poly, x, y));
+    check(`flap (ladder, ${side}): the short outline lies inside the full one, and full's septal part is extended's`, inside(A.full.f.septal, A.short.f.septal) && JSON.stringify(A.full.f.septal) === JSON.stringify(A.extended.f.septal));
+    const sc = data.charts[`s.septal-mucosa.${side}`];
+    const fc = data.charts[`s.nasal-floor-mucosa.${side}`];
+    const within = (poly, chart) => poly.every(([x, y]) => FL.inPolygon(chart.polygon, x, y) || FL.distToPolygon(chart.polygon, x, y) <= 1.01);
+    check(`flap (chart, ${side}): every outline vertex lies inside its chart's polygon (the polygon is simplified: within 1 mm of its boundary counts)`,
+      ['short', 'full', 'extended'].every((d) => within(A[d].f.septal, sc)) && within(A.extended.f.floor, fc), '');
+    check(`flap (rescue, ${side}): zero area, the same pedicle as full, a window of the set size on the contralateral side`,
+      A.rescue.total === 0 && !A.rescue.f.septal && JSON.stringify(A.rescue.f.pedicle) === JSON.stringify(A.full.f.pedicle) && A.rescue.f.window.side === (side === 'R' ? 'L' : 'R')
+      && near(A.rescue.f.window.polygon[1][0] - A.rescue.f.window.polygon[0][0], 5, 0.002) && near(FL.computeFlap(flapInputs(side, data), 'rescue', { window: 8 }).window.polygon[2][1] - FL.computeFlap(flapInputs(side, data), 'rescue', { window: 8 }).window.polygon[1][1], 8, 0.002));
+    const widths = [0, 4, 8, 12, 20].map((w) => area(side, 'extended', { floor_width: w }).flo);
+    check(`flap (floor, ${side}): the floor strip grows with floor_width (0 -> nothing, and the default is the full charted width: ${widths.map((v) => v.toFixed(2)).join(' / ')} cm2)`, widths[0] === 0 && widths.every((v, i) => i === 0 || v > widths[i - 1] - 1e-9) && widths[2] > 0 && near(area(side, 'extended').flo, widths[4], 1e-9), JSON.stringify(widths));
+    check(`flap (anterior margin, ${side}): more anterior_margin shrinks full`, area(side, 'full', { anterior_margin: 10 }).total < area(side, 'full', { anterior_margin: 0 }).total);
+  }
+
+  /* sides differ only through their own charts and landmarks */
+  const R = flapInputs('R', data);
+  const L = flapInputs('L', data);
+  const h = (inp, design = 'extended') => FL.computeFlap(inp, design).hash;
+  check('flap (sides): swapping the data swaps the outlines — the side label alone changes nothing, and each side\'s hash follows its own sf', h({ ...R, side: 'L' }) === h(R) && h({ ...R, sf: R.sf + 2 }) !== h(R) && h({ ...L, sf: R.sf + 2 }) === h({ ...R, sf: R.sf + 2, side: 'L' }));
+  check('flap (sides): the right flap does not move when only the left data change', h({ ...R }) === h(R) && FL.computeFlap({ ...R }, 'full').hash === FL.computeFlap({ ...R, floor: null }, 'full').hash);
+  const hashes = [0, 1, 2].map(() => FL.computeFlap(R, 'full', { top_margin: 12, anterior_margin: 2 }).hash);
+  check('flap (determinism): the same parameters give the same polygon hash, and a different parameter another', new Set(hashes).size === 1 && hashes[0] !== FL.computeFlap(R, 'full', { top_margin: 13, anterior_margin: 2 }).hash && /^[0-9a-f]{8}$/.test(hashes[0]), hashes[0]);
+  check('flap (inputs): missing landmarks or charts give an invalid flap, never an exception', [{ ...R, septal: null }, { ...R, arch: null }, { ...R, sf: NaN }, { ...R, mtHead: null }].every((i) => FL.computeFlap(i, 'full').valid === false) && !FL.computeFlap(R, 'bogus').valid);
+
+  /* the codec: hostile values clamp or are ignored */
+  const has = (id) => GRAPH.has(id);
+  const parse = (hash) => parseHash(hash, has, {});
+  check('flap (hash): `#flap=full.L&top=12&ant=3` round-trips and a design\'s defaults are not written', parse('#flap=full.L&top=12&ant=3').flap.side === 'L' && formatHash({ tier: 1, flap: parse('#flap=full.L&top=12&ant=3').flap }) === '#flap=full.L&top=12&ant=3' && formatHash({ tier: 1, flap: parse('#flap=extended').flap }) === '#flap=extended.R');
+  check('flap (hash): hostile numbers clamp to the slider range (or take the default) and snap to its step', (() => {
+    const f = parse('#flap=full.R&top=9999&ant=-5&fw=abc&win=NaN').flap;
+    const g = parse('#flap=extended.R&top=7.4&fw=3.6').flap;
+    return f.params.top_margin === 20 && f.params.anterior_margin === 0 && f.params.floor_width === 20 && f.params.window === 5 && g.params.top_margin === 7 && g.params.floor_width === 4;
+  })());
+  check('flap (hash): an unknown design, a bad side, prototype keys and over-long values are ignored', ['#flap=bogus', '#flap=full.X', '#flap=__proto__', '#flap=constructor.R', '#flap=', '#flap=' + 'a'.repeat(5000), '#flap=full.R.R', '#flap=%3Cimg%20src%3Dx%3E', '#flap=FULL'].every((x) => parse(x).flap === undefined)
+    && parse('#flap=full.R&top=%3Cscript%3E').flap.params.top_margin === 15);
+  check('flap (hash): a lab or a CT link ignores the overlay, and the overlay is not written with one', parseHash('#lab=sphenoid&flap=full.R', has, { sphenoid: { params: [], presets: {} } }).flap === undefined && parse('#ct=ax&flap=full.R').flap === undefined && !/flap/.test(formatHash({ tier: 1, flap: { design: 'full', side: 'R', params: { ...FL.PARAM_DEFAULTS } }, ct: { plane: 'axial', at: [0, 0, 0] } })));
+  const store = createStore({ has, tierOf: () => 1, hash: '#flap=short.R', prefs: {} });
+  check('flap (store): setFlap whitelists and clamps, null clears, and a new object with the same values is no change', store.get().flap.design === 'short'
+    && store.setFlap({ design: 'extended', side: 'L', params: { top_margin: 999, floor_width: -3, nope: 1 } }) && store.get().flap.params.top_margin === 20 && store.get().flap.params.floor_width === 0
+    && !store.setFlap({ design: 'bogus' }) && !store.setFlap({ design: 'extended', side: 'L', params: { top_margin: 20, floor_width: 0 } }) && store.setFlap(null) && store.get().flap === null);
+  check('flap (store): applyHash adopts and drops the overlay; leaving a stage keeps it', (() => { const s = createStore({ has, tierOf: () => 1, hash: '', prefs: {} }); s.applyHash('#flap=full.L&top=11'); const on = s.get().flap && s.get().flap.params.top_margin === 11; s.leaveStage(); const kept = !!s.get().flap; s.applyHash(''); return on && kept && s.get().flap === null; })());
+  check('flap (sliders): every slider has a graph entry for its range and a default inside it', FL.PARAMS.every((q) => GRAPH.has(q.from) && q.default >= q.min && q.default <= q.max && q.step > 0) && new Set(FL.PARAMS.map((q) => q.hash)).size === FL.PARAMS.length);
+  return nodes;
+}
+
+async function flapTests(browser, base, nodes) {
+  const data = { charts: readJson('ssb/geometry/charts.json').surfaces, landmarks: readJson('ssb/geometry/landmarks.json'), meta: readJson('ssb/geometry/landmarks.meta.json').landmarks };
+  const want = (side, design, params = {}) => {
+    const f = FL.computeFlap(flapInputs(side, data), design, params);
+    return (f.septal ? FL.meshArea(nodes.get(`s.septal-mucosa.${side}`), FL.projectSeptal, f.septal).mm2 : 0) / 100 + (f.floor ? FL.meshArea(nodes.get(`s.nasal-floor-mucosa.${side}`), FL.projectFloor, f.floor).mm2 : 0) / 100;
+  };
+  const ready = (page) => page.waitForFunction(() => { const f = window.__ssb.specimen.flap; return f && f.status === 'ready'; }, null, { timeout: 30000 });
+  const hashNow = (page) => page.evaluate(() => new Promise((res) => { const t0 = performance.now(); const tick = () => (performance.now() - t0 > 600 ? res(window.__ssb.hash) : setTimeout(tick, 50)); tick(); }));
+
+  const { context, page, errors } = await openSpecimen(browser, base, '#flap=full.R');
+  await ready(page);
+  await nextFrames(page, 3);
+  let info = await page.evaluate(() => window.__ssb.specimen.flap);
+  check(`flap (page): \`#flap=full.R\` draws the overlay on the real packs, with an area equal to the Node reading of the same meshes within 1 % (${info.areas.total.toFixed(2)} vs ${want('R', 'full').toFixed(2)} cm2)`, info.drawn >= 3 && Math.abs(info.areas.total - want('R', 'full')) <= 0.01 * want('R', 'full'), JSON.stringify(info.areas));
+  check('flap (page): the polygon hash in the page equals the Node one (the same construction on the same data)', info.result.hash === FL.computeFlap(flapInputs('R', data), 'full').hash, info.result.hash);
+  const ui = await page.evaluate(() => {
+    const sec = [...document.querySelectorAll('#ssb-spec .ssb-lab-sec')].find((x) => /Nasoseptal flap/.test(x.textContent));
+    return sec ? { shown: !sec.hidden && sec.offsetParent !== null, text: sec.textContent, pressed: [...sec.querySelectorAll('button[aria-pressed="true"]')].map((b) => b.textContent), sliders: [...sec.querySelectorAll('input[type=range]')].filter((r) => !r.closest('.ssb-param').hidden).map((r) => r.dataset.flapParam) } : null;
+  });
+  check('flap (page): the control shows the badge "schematic on specimen", the area, the pedicle height, the length and the literature from the graph; Full and Right are pressed; only B\'s sliders show',
+    !!ui && ui.shown && /schematic on specimen/i.test(ui.text) && /Area/.test(ui.text) && /cm²/.test(ui.text) && /Pedicle height/.test(ui.text) && /Length/.test(ui.text) && /Literature: .*17\.12/.test(ui.text)
+    && ui.pressed.includes('Full (B)') && ui.pressed.includes('Right') && JSON.stringify(ui.sliders) === JSON.stringify(['top_margin', 'anterior_margin']), JSON.stringify(ui));
+
+  const area = async () => (await page.evaluate(() => window.__ssb.specimen.flap)).areas.total;
+  const designs = {};
+  for (const key of ['short', 'full', 'extended', 'rescue']) {
+    await page.click(`#ssb-spec button[data-flap-design="${key}"]`);
+    await page.waitForFunction((k) => { const f = window.__ssb.specimen.flap; return f && f.status === 'ready' && f.design === k; }, key, { timeout: 15000 });
+    designs[key] = await area();
+  }
+  check('flap (page): the four design buttons switch the overlay; areas rise short < full < extended and rescue is 0, each equal to the Node reading within 1 %',
+    designs.short < designs.full && designs.full < designs.extended && designs.rescue === 0 && ['short', 'full', 'extended'].every((k) => Math.abs(designs[k] - want('R', k)) <= 0.01 * want('R', k)), JSON.stringify(designs));
+  check('flap (page): the hash follows the design (`flap=rescue.R`)', /(^|#|&)flap=rescue\.R/.test(await hashNow(page)));
+  await page.click('#ssb-spec button[data-flap-design="extended"]');
+  await page.waitForFunction(() => { const f = window.__ssb.specimen.flap; return f && f.design === 'extended' && f.areas && f.areas.floor > 0; }, null, { timeout: 15000 });
+  await nextFrames(page, 2);
+  const shown = await page.evaluate(() => ({ sliders: [...document.querySelectorAll('#ssb-spec input[data-flap-param]')].filter((r) => !r.closest('.ssb-param').hidden).map((r) => r.dataset.flapParam), text: document.querySelector('.ssb-flap-readout').textContent, drawn: window.__ssb.specimen.flap.drawn }));
+  check('flap (page): Extended shows the floor slider and the septum and floor parts separately, and draws both surfaces', shown.sliders.includes('floor_width') && /Septum/.test(shown.text) && /Nasal floor/.test(shown.text) && shown.drawn >= 5, JSON.stringify(shown));
+  await page.$eval('#ssb-flap-fw', (r) => { r.value = '4'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+  await page.waitForFunction(() => window.__ssb.specimen.flap.params.floor_width === 4, null, { timeout: 15000 });
+  const narrow = await area();
+  check('flap (page): the floor-width slider narrows the flap (the area drops, equal to the Node reading) and the hash says fw=4', narrow < designs.extended && Math.abs(narrow - want('R', 'extended', { floor_width: 4 })) <= 0.01 * narrow && /fw=4/.test(await hashNow(page)), `${narrow} vs ${designs.extended}`);
+  await page.click('#ssb-spec button[data-flap-side="L"]');
+  await page.waitForFunction(() => window.__ssb.specimen.flap.side === 'L' && window.__ssb.specimen.flap.status === 'ready', null, { timeout: 15000 });
+  check('flap (page): the side buttons move the overlay to the left charts and meshes (flap=extended.L, area equal to the Node reading)', Math.abs((await area()) - want('L', 'extended', { floor_width: 4 })) <= 0.01 * narrow && /flap=extended\.L/.test(await hashNow(page)));
+  await page.click('#ssb-spec button[data-flap-design="off"]');
+  await page.waitForFunction(() => window.__ssb.specimen.flap === null, null, { timeout: 5000 });
+  const off = await page.evaluate(() => ({ sec: [...document.querySelectorAll('#ssb-spec .ssb-lab-sec')].find((x) => /Nasoseptal flap/.test(x.textContent)).hidden, hash: window.__ssb.hash }));
+  check('flap (page): Off removes the overlay and its hash keys; at tier 1 the control hides again (the flap is a tier-3 procedure)', !/flap|fw=/.test(off.hash) && off.sec === true, JSON.stringify(off));
+  check('flap (page): no real console errors', errors.length === 0, JSON.stringify(errors));
+  await context.close();
+
+  /* tier gating and a link at tier 1 */
+  const t3 = await openSpecimen(browser, base, '#tier=3');
+  const vis = await t3.page.evaluate(() => { const sec = [...document.querySelectorAll('#ssb-spec .ssb-lab-sec')].find((x) => /Nasoseptal flap/.test(x.textContent)); return !!sec && !sec.hidden; });
+  check('flap (page): at tier 3 the control is offered (no overlay until a design is picked)', vis && (await t3.page.evaluate(() => window.__ssb.specimen.flap)) === null);
+  await t3.context.close();
+
+  /* hostile hash in the page */
+  for (const bad of ['flap=bogus', 'flap=full.R&top=9999&ant=zzz&fw=-9', 'flap=%3Cimg%20src%3Dx%20onerror%3D1%3E', 'flap=full.X']) {
+    const h = await openSpecimen(browser, base, `#${bad}`);
+    await nextFrames(h.page, 3);
+    const got = await h.page.evaluate(() => ({ flap: window.__ssb.specimen.flap, hash: window.__ssb.hash, pwned: !!window.__pwned }));
+    const okState = bad === 'flap=full.R&top=9999&ant=zzz&fw=-9' ? got.flap && got.flap.params.top_margin === 20 && got.flap.params.anterior_margin === 0 : got.flap === null;
+    check(`flap (hostile): #${bad} clamps or is ignored — nothing executes, no console errors`, okState && !got.pwned && h.errors.length === 0, JSON.stringify(got) + JSON.stringify(h.errors));
+    await h.context.close();
+  }
+
+  /* a lab or CT link carrying the overlay does not draw it */
+  const lab = await openSpecimen(browser, base, '#ct=ax&at=0,0,0&flap=full.R', { wait: 'none' });
+  await lab.page.waitForFunction(() => window.__ssb && window.__ssb.hash !== undefined, null, { timeout: 20000 });
+  check('flap (page): a CT link ignores the overlay', !/flap/.test(await lab.page.evaluate(() => window.__ssb.hash)));
+  await lab.context.close();
+
+  /* the same overlay at the phone width: the control is reachable from the Layers panel */
+  const phone = await openSpecimen(browser, base, '#flap=short.R', { viewport: { width: 390, height: 844 } });
+  await ready(phone.page);
+  const fits = await phone.page.evaluate(() => { const d = document.getElementById('ssb-spec-dock'); return { hidden: d.hidden, w: d.getBoundingClientRect().width, vw: window.innerWidth, scrollX: document.documentElement.scrollWidth }; });
+  check('flap (phone): the overlay draws at 390 px and the page does not scroll sideways', fits.scrollX <= fits.vw + 1, JSON.stringify(fits));
+  await phone.context.close();
+}
+
 /* ---------------- the population panel (WP POP2a, docs/ssb.md 5.10) ---------------- */
 
 const POP_FILE = 'ssb/anatomy/population/nasalseg.json';
@@ -4397,6 +4640,10 @@ async function main() {
   }
   if (ONLY === 'population') {
     await populationTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'flap') {
+    await flapTests(browser, base, flapUnitTests());
     return finish(browser, server);
   }
   if (ONLY === 'mucosa') {
@@ -4883,6 +5130,7 @@ async function main() {
   await mucosaUnitTests(scopeWindow);
   await mucosaTests(browser, base);
   await populationTests(browser, base);
+  await flapTests(browser, base, flapUnitTests());
 
   /* ===== screenshots ===== */
   if (SHOTS) {

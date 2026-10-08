@@ -381,6 +381,13 @@ the right septal surface lies at half the as-scanned thickness, the nose is in (
 `git show` at the commit `ct.json` names; CI checks out full history). The open lining (ST1b) is pinned in `liningTests` (the pack is listed and within budget, one node per air label, no triangle on an air|air interface, every clear ray through the right ostium first hits the sinus with the lining where the shells stop it, a free pose looks through the choana past A −50) and in the scope and mucosa page checks (lining drawn and shells hidden from inside, not drawn from outside, picks report graph ids). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 
+**Flap overlay** (`js/ssb/flap.js`, `docs/ssb.md` §5.7; `node tools/test-ssb.mjs --only flap`) pins, in Node
+on the committed charts, landmarks and soft pack, the posterior septal artery's first points inside the
+pedicle, the superior incision's rule over a parameter grid, the area readout against an independent
+point-in-polygon and Heron sum (2 %), the short < full < extended ladder and rescue's zero area, sides
+and determinism, and the `#flap=` codec on hostile input; then in the page the controls, the readout
+against the Node areas, the hash, tier gating and the phone width. It prints each design's area per side.
+
 The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never
 runs in CI: its proof is the overlay PNGs each stage writes and
 `ssb/reference/specimen-relations.json` (the graph's spatial claims tested

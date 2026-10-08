@@ -70,6 +70,9 @@
   /* Vessels (signal: act, they bleed) and nerves/ducts (ink) as tubes on the specimen. */
   --ssb-sweep-artery: var(--signal);
   --ssb-sweep-nerve: var(--ink);
+  /* The nasoseptal flap overlay: incisions and the shaded flap are the act signal (red), the pedicle that stays attached the science signal. */
+  --ssb-flap: var(--signal);
+  --ssb-flap-pedicle: var(--signal-2);
 
   /* CT stage: dark in both themes (like the endoscope and Airway's stage).
      The orientation letters use the gizmo's axis hues, lightened for a dark
@@ -372,6 +375,12 @@ html[data-theme="dark"] {
 .ssb-spec-slider { padding-bottom: 0.2rem; }
 .ssb-spec .ssb-ct-check + .ssb-ct-check, .ssb-spec .ssb-ct-check + .ssb-param-src { margin-top: 0.3rem; }
 .ssb-spec-label { z-index: 1; }
+.ssb-flap-badge { text-transform: uppercase; letter-spacing: 0.06em; color: var(--signal); }
+.ssb-flap-readout { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.75rem; margin: 0.5rem 0 0; font-size: 0.78rem; }
+.ssb-flap-readout dt { color: var(--ink-faint); }
+.ssb-flap-readout dd { margin: 0; font-variant-numeric: tabular-nums; }
+.ssb-flap-notes { margin: 0.35rem 0 0; padding-left: 1rem; font-size: 0.72rem; color: var(--ink-faint); }
+.ssb-flap-notes:empty { display: none; }
 
 /* ===== population panel (WP POP2a): ink for the population, --signal for the head it is read against ===== */
 .ssb-pop { margin: 0 1rem 1rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }

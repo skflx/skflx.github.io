@@ -24,12 +24,12 @@
    tissue-material library).
    ============================================================= */
 import { loadGraph } from './graph.js?v=521683c7';
-import { createStore, parseHash } from './state.js?v=a96d143a';
+import { createStore, parseHash } from './state.js?v=32a9e616';
 import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=5520535d';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=59798490';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=ede6cddb';
+import { mountCt } from './mode-ct.js?v=5bc32cf5';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=aafb924d';
 import { mountTree } from './ui-tree.js?v=26bfb5c8';
 import { mountSearch } from './ui-search.js?v=c5587a22';
 import { mountPanel } from './ui-panel.js?v=039b7dd1';
@@ -283,7 +283,7 @@ function bootLab(graph, stageHandle) {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=96db802b'), import('./ui-specimen.js?v=4d1ad53c')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=cb5bd54d'), import('./ui-specimen.js?v=4a68d044')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },

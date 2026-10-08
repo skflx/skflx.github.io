@@ -1,8 +1,8 @@
 /* =============================================================
    state.js — the one SSB store, its URL-hash codec, and ssb:* storage.
 
-   Everything else subscribes to this store. It imports only scope.js (pure
-   math, no imports of its own: the `#scope=` codec): the graph is injected
+   Everything else subscribes to this store. It imports only scope.js and flap.js (pure
+   math, no imports of their own: the `#scope=` codec, the flap overlay's parameters): the graph is injected
    (`has`, `tierOf`), which keeps the module graph one-way (docs/ssb.md 7.1).
 
    The URL hash is the shareable state (`#s=s.uncinate-process&tier=2`,
@@ -21,6 +21,7 @@
    ============================================================= */
 
 import { parseScope, parseStationLink, formatScope, clampPose, samePose, POSE_DEFAULT } from './scope.js?v=c2522180';
+import { DESIGNS, SIDES, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 export const TIER_MIN = 1;
 export const TIER_MAX = 3;
@@ -98,6 +99,41 @@ function sameLab(a, b) {
     if (!a || !b || a.name !== b.name) return false;
     const keys = Object.keys(a.params);
     return keys.length === Object.keys(b.params).length && keys.every((k) => a.params[k] === b.params[k]);
+}
+
+/* ---------------- flap overlay ---------------- */
+
+/* The nasoseptal flap overlay (`flap=<design>.<side>&top=&ant=&fw=&win=`, flap.js, docs/ssb.md 5.7): { design, side, params }
+   with every parameter present and clamped. It is an overlay on the specimen, not a stage, so it rides along with any
+   stage and is written to the hash only on the specimen and the scope. */
+export function normalizeFlap(flap) {
+    if (!flap || typeof flap.design !== 'string' || !DESIGNS.includes(flap.design)) return null;
+    const side = SIDES.includes(flap.side) ? flap.side : 'R';
+    const params = { ...PARAM_DEFAULTS };
+    for (const p of PARAMS) {
+        const v = own(flap.params, p.key) ? clampParam(p, flap.params[p.key]) : null;
+        if (v !== null) params[p.key] = v;
+    }
+    return { design: flap.design, side, params };
+}
+
+function sameFlap(a, b) {
+    if (a === b) return true;
+    if (!a || !b || a.design !== b.design || a.side !== b.side) return false;
+    return PARAMS.every((p) => a.params[p.key] === b.params[p.key]);
+}
+
+const FLAP_VALUE = /^([a-z]+)(?:\.([RL]))?$/;
+function parseFlap(params) {
+    const raw = params.get('flap');
+    const m = typeof raw === 'string' && raw.length <= 16 ? FLAP_VALUE.exec(raw) : null;
+    if (!m || !DESIGNS.includes(m[1])) return null;
+    const values = {};
+    for (const p of PARAMS) {
+        const v = params.get(p.hash);
+        if (v !== null) values[p.key] = v;
+    }
+    return normalizeFlap({ design: m[1], side: m[2] || 'R', params: values });
 }
 
 /* ---------------- procedure player ---------------- */
@@ -179,6 +215,8 @@ export function parseHash(hash, has, labs = {}) {
     if (quality) out.quality = quality;
     const mu = clampMu(params.get('mu'));
     if (mu) out.mu = mu;
+    const flap = out.lab || plane ? null : parseFlap(params);      /* an overlay on the specimen: a lab or CT link ignores it */
+    if (flap) out.flap = flap;
     return out;
 }
 
@@ -210,6 +248,13 @@ export function formatHash(state, labs = {}) {
     } else if (!state.lab && state.scope) parts.push('scope=' + formatScope(state.scope));      /* the link is the pose alone: the shared cursor (`at`) is deliberately not written, so a reload opens CT at the volume centre */
     else if (!state.lab && state.station && parseStationLink(state.station)) parts.push('scope=' + state.station);      /* a link not yet resolved to a pose survives a rewrite of the address bar */
     else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
+    if (state.flap && !state.lab && !state.ct) {
+        const f = normalizeFlap(state.flap);
+        if (f) {
+            parts.push(`flap=${f.design}.${f.side}`);
+            for (const p of PARAMS) if (p.designs.includes(f.design) && f.params[p.key] !== p.default) parts.push(p.hash + '=' + num(f.params[p.key]));
+        }
+    }
     if (clampMu(state.mu) && state.mu !== MU_DEFAULT && !state.procedure) parts.push('mu=' + state.mu);      /* a procedure forces decongested: nothing to share */
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
@@ -299,7 +344,7 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure, mu }. Invariant: the
+/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure, mu, flap }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is one of four: the specimen (lab, ct and scope all null), the variant lab
@@ -317,7 +362,7 @@ export function savePrefs(prefs) {
    the scope stage with a dissection state behind it, so it implies a scope pose (the default one when none is given) and
    ends with the scope, the lab or CT. `quality` is the rendering override from the hash ('full' | 'lite'), null
    for the device's choice. `mu` is the mucosal state ('dec' | 'scan' | 'cong', default 'scan'), independent of the stage: the
-   procedure player (mode-procedure.js) loads its patch and lining, and a procedure overrides it with decongested. The cursor is clamped to the volume's bounds,
+   procedure player (mode-procedure.js) loads its patch and lining, and a procedure overrides it with decongested. `flap` ({ design, side, params }, normalizeFlap) is the nasoseptal flap overlay on the specimen (flap.js), independent of the stage. The cursor is clamped to the volume's bounds,
    which only the loaded volume knows: setCtBounds() hands them in and
    re-clamps, and until then the limit is a sanity range.
    Subscribers get (state, previous, meta); meta.source names the origin
@@ -341,6 +386,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         quality: fromUrl.quality || null,
         procedure: procedure0,
         mu: fromUrl.mu || MU_DEFAULT,
+        flap: fromUrl.flap || null,
     });
     const subs = new Set();
 
@@ -349,9 +395,10 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
             && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality
-            && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu) return false;
+            && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu && sameFlap(next.flap, prev.flap)) return false;
         if (sameProcedure(next.procedure, prev.procedure)) next.procedure = prev.procedure;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
+        if (sameFlap(next.flap, prev.flap)) next.flap = prev.flap;
         if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
         if (samePose(next.scope, prev.scope)) next.scope = prev.scope;
         if (sameAt(next.cursor, prev.cursor)) next.cursor = prev.cursor;
@@ -442,6 +489,13 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const next = clampMu(mu);
             return next ? set({ mu: next }, meta) : false;
         },
+        /* The nasoseptal flap overlay ({ design, side, params }, whitelisted and clamped here too), or off (null). Never
+           changes the stage. */
+        setFlap(flap, meta = { source: 'flap' }) {
+            if (flap === null) return set({ flap: null }, meta);
+            const next = normalizeFlap(flap);
+            return next ? set({ flap: next }, meta) : false;
+        },
         /* Back to the specimen stage. */
         leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null, procedure: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
@@ -453,7 +507,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
             const procedure = ct ? null : p.procedure || null;
             const scope = ct ? null : p.scope || (procedure && !p.station ? state.scope || clampPose(POSE_DEFAULT) : null);
-            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure, mu: p.mu || MU_DEFAULT }, { source: 'url' });
+            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure, mu: p.mu || MU_DEFAULT, flap: p.flap || null }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),

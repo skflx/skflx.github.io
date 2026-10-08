@@ -541,6 +541,49 @@ for the mucocutaneous junction, which CT does not show.
 - determinism: the same parameters give the same polygon (hash it);
 - hostile `#flap=` values clamp or are ignored (as `#lab=` does).
 
+**As built (ST5; `js/ssb/flap.js`, `#flap=`).** The construction is pure chart
+geometry, tested in Node and drawn in the page on the soft pack's own meshes
+(the triangles inside the outline are shaded; the incisions are lines lifted
+0.2 mm off the lining; the pedicle is drawn in the science signal). Readings
+the contract left open, and what the code does:
+
+- The outline lives on cell *edges* (half a cell beyond the outermost occupied
+  cell), so the outermost triangles are inside it; the chart's own polygon is
+  simplified, so the "inside its chart polygon" test allows 1 mm.
+- *Superior incision, A.* The formula `min(s_f, top(a) - top_margin)` cannot be
+  level and stay at or above `s_f` at once: the septum's top is only a few mm
+  above `s_f` over the sphenoid, so a 15 mm margin would drop the incision below
+  the ostium. The code draws A level at `s_f` clipped to `top(a)`, and
+  `top_margin` does not apply to it (the parameter table already says B and C
+  only). **For Opus:** say whether A should carry a margin of its own.
+- *Superior incision, B and C.* `max(s_f, top(a) - top_margin)` exactly (a
+  vertex is added where the rising line crosses `s_f`), clipped to `top(a)`.
+  Where the septum's top is within `top_margin` of `s_f` (the posterior part)
+  the incision stays at `s_f` and is therefore closer than `top_margin` to
+  the top: the test pins "at `s_f` or at most `top(a) - top_margin`", not the
+  stronger reading the contract's list states, which no construction that also
+  starts at `s_f` can meet. The olfactory-risk note is shown below 10 mm.
+- *Floor (C).* A strip exactly `floor_width` wide from the junction's floor-side
+  point, clipped to the occupied floor cells, from the junction rows' own
+  cut-off at A -47 (the PNS end is a partly covered edge) to the same anterior
+  cut as the septal part. The default 20 mm is wider than the chart, so it is the
+  full charted width; the floor slider caps nothing at the chart. The inferior
+  meatus is not charted.
+- *Rescue window.* A square of `window` mm on the other side's chart with its
+  inferior-posterior corner at the pedicle's top (`post(s_f)`, `s_f`): the contract
+  gives no placement, so this is schematic.
+- *Readouts.* Areas are the 3-D area of the triangles whose centroid projects
+  inside the outline (septal and floor separately), the pedicle height is
+  `s_f - s_c`, the length is the longest chord of the outline, "approximate" is
+  the share of the outline on `filled` or `unreliable` cells, and the literature
+  line is read from the graph's `m.nsf-area`, `m.nsf-extended-gain` and
+  `m.choana-to-sphenoid-ostium` (no number is typed in code; the 25.1 cm²
+  maximum of Table 31.2 is not in the graph, so it is not shown).
+- *Specimen result.* The flap areas are smaller than the literature mean for B
+  (`m.nsf-area`): the specimen's charted septum stops at the valve plane and a
+  few mm in front of the rostrum, and the flap is part of it. `--only flap` prints
+  each design's areas per side; compare them there, not here.
+
 **Not in this contract** (later, on other surfaces): the inferior meatus
 (a lateral-wall chart), inferior and middle turbinate flaps and the lateral
 nasal wall flaps, regional flaps, the contralateral reverse flap that
@@ -1489,6 +1532,7 @@ js/ssb/stamps.js             GENERATED: data-asset path → hash (for fetch URLs
 js/ssb/graph.js              load + index content; text renderer; search
 js/ssb/state.js              one store (mode, tier, layers, selection, camera, step);
                              URL-hash codec; ssb:* storage (guarded)
+js/ssb/flap.js               the nasoseptal flap overlay's geometry (§5.7): pure, no imports
 js/ssb/scene.js              renderer, cameras, lights, on-demand loop, quality choice
 js/ssb/materials.js          procedural tissue materials: one shader hook per kind (three passed in)
 js/ssb/geo-specimen.js       pack loading (gzip → GLTFLoader.parse), unit registry, dissection states
@@ -1574,6 +1618,13 @@ decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1, built;
 `state.mu`, default `scan`, not written when `scan`) is ignored while a
 procedure plays and not written to the hash then; an unknown value (any other
 case or text) is dropped.
+
+The flap overlay key (§5.7, WP ST5, built) is `flap=<short|full|extended|rescue>[.<R|L>]`
+with `top`, `ant`, `fw`, `win` for its sliders (`state.flap`; the side defaults to
+`R`; values are clamped and snapped to the step, parameters at their default are
+not written). It is an overlay on the specimen, not a stage: a lab or CT link
+ignores it and the hash does not write it there. Its controls are offered from
+the flap's own tier (3) or whenever an overlay is on.
 
 ### 7.4 Rendering
 
