@@ -305,7 +305,7 @@ async function bootSpecimen(graph, stageHandle) {
 
 /* The population panel (WP POP2a) sits in the Specimen dock; a missing data file just leaves it hidden. */
 function bootPopulation() {
-    import('./ui-population.js?v=34913bcb')
+    import('./ui-population.js?v=98ffe5e1')
         .then(({ mountPopulation }) => mountPopulation({ body: $('ssb-spec-body'), store }))
         .catch((e) => console.error(e));
 }

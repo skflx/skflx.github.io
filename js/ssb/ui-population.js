@@ -114,7 +114,7 @@ export function mountPopulation({ body, store, fetchFn }) {
             ['Standard specimen, section', `${mm2(c.standard.twoSide)} mm², percentile ${pct(c.standard.twoSidePct)}`],
             ['As-scanned head, section', `${mm2(c.asScanned.twoSide)} mm², percentile ${pct(c.asScanned.twoSidePct)}`],
             ['Smaller / larger side', `${ratio(c.ratio.p50)} (IQR ${range(c.ratio, ratio)})`],
-            ['Standard specimen, ratio', `${ratio(c.standard.ratio)}, percentile ${pct(c.standard.ratioPct)}`],
+            ['Standard specimen, ratio', `${ratio(c.standard.ratio)}, percentile ${pct(c.standard.ratioPct)} (one side mirrored, so symmetric by construction)`],
             ['As-scanned head, ratio', `${ratio(c.asScanned.ratio)}, percentile ${pct(c.asScanned.ratioPct)}`],
         ];
         const dl = el('dl', 'ssb-pop-dl');

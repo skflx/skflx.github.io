@@ -4298,7 +4298,7 @@ async function populationTests(browser, base) {
       `${mm2(cs.twoSideMeanCm2)} mm², percentile ${pc(cs.twoSideMeanPercentile)}`,
       `${mm2(ca.twoSideMeanCm2)} mm², percentile ${pc(ca.twoSideMeanPercentile)}`,
       `${f2(S.smallerOverLarger.p50)} (IQR ${iq(S.smallerOverLarger, f2)})`,
-      `${f2(cs.smallerOverLarger)}, percentile ${pc(cs.smallerOverLargerPercentile)}`,
+      `${f2(cs.smallerOverLarger)}, percentile ${pc(cs.smallerOverLargerPercentile)} (one side mirrored, so symmetric by construction)`,
       `${f2(ca.smallerOverLarger)}, percentile ${pc(ca.smallerOverLargerPercentile)}`,
     ];
     check('population (page): the nasal cavity numbers (median, IQR, the standard specimen and the as-scanned head with percentiles, the side ratio likewise) equal the JSON\'s', JSON.stringify(cavity) === JSON.stringify(want), JSON.stringify({ cavity, want }));
@@ -4882,6 +4882,7 @@ async function main() {
   await procedureTests(browser, base);
   await mucosaUnitTests(scopeWindow);
   await mucosaTests(browser, base);
+  await populationTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {
