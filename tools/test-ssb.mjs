@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population] [--int16]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -113,7 +113,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -4252,6 +4252,115 @@ async function mucosaTests(browser, base) {
   }
 }
 
+
+/* ---------------- the population panel (WP POP2a, docs/ssb.md 5.10) ---------------- */
+
+const POP_FILE = 'ssb/anatomy/population/nasalseg.json';
+const popDoc = () => JSON.parse(fs.readFileSync(path.join(ROOT, POP_FILE), 'utf8'));
+
+async function populationTests(browser, base) {
+  const doc = popDoc();
+  const S = doc.profiles.summary.restricted['10-90'];
+  const P = doc.profiles.headA.placement;
+  const mm2 = (v) => String(Math.round(v * 100));
+  const iq = (b, f) => `${f(b.p25)}–${f(b.p75)}`;
+  const f1 = (v) => v.toFixed(1);
+  const f2 = (v) => v.toFixed(2);
+  const pc = (v) => String(Math.round(v));
+
+  /* the loader's own reading: the file as the panel will see it */
+  const stampsSrc = sourceOf('js/ssb/stamps.js');
+  const POP = await import(dataUrl(sourceOf('js/ssb/population.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl(stampsSrc)}'`)));
+  const model = POP.readPopulation(doc);
+  check('population (unit): the file reads to a model, n is the clear count, the profile has one point per fraction in all four series',
+    model && model.n === doc.summary.clearCount && model.profile.x.length === S.profileByClass.lessCongested.atFractionOfLength.length
+    && [model.profile.more.median, model.profile.less.median, model.profile.more.p25, model.profile.standard].every((a) => a.length === model.profile.x.length), JSON.stringify(model && model.n));
+  const broken = (mut) => { const d = popDoc(); mut(d); return POP.readPopulation(d); };
+  check('population (unit): a missing or malformed piece makes the reader return null (no throw)',
+    broken((d) => { delete d.profiles.headA.placement.standard; }) === null
+    && broken((d) => { d.profiles.summary.restricted['10-90'].profileByClass.moreCongested.medianCm2.pop(); }) === null
+    && broken((d) => { d.summary.clearCount = 'many'; }) === null
+    && POP.readPopulation(null) === null && POP.readPopulation('x') === null && POP.readPopulation({}) === null);
+  check('population (unit): the data file is stamped, so the page may fetch it', new RegExp(`"${POP_FILE}": "[0-9a-f]{8}"`).test(stampsSrc));
+
+  /* a structure selected: the panel opens with the file's numbers */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#s=s.nasal-cavity');
+    await page.waitForFunction(() => { const d = document.getElementById('ssb-pop'); return d && !d.hidden; }, null, { timeout: 20000 });
+    const open = await page.evaluate(() => document.getElementById('ssb-pop').open);
+    check('population (page): selecting the nasal cavity shows the section, open', open === true);
+    const text = (sel) => page.evaluate((q) => (document.querySelector(q) || {}).textContent || '', sel);
+    const cavity = await page.evaluate(() => [...document.querySelectorAll('#ssb-pop [data-pop="cavity"] dd')].map((d) => d.textContent));
+    const cs = P.standard.restricted['10-90'];
+    const ca = P.asScanned.restricted['10-90'];
+    const want = [
+      `${mm2(S.twoSideMeanCm2.p50)} mm² (IQR ${iq(S.twoSideMeanCm2, (v) => mm2(v))})`,
+      `${mm2(cs.twoSideMeanCm2)} mm², percentile ${pc(cs.twoSideMeanPercentile)}`,
+      `${mm2(ca.twoSideMeanCm2)} mm², percentile ${pc(ca.twoSideMeanPercentile)}`,
+      `${f2(S.smallerOverLarger.p50)} (IQR ${iq(S.smallerOverLarger, f2)})`,
+      `${f2(cs.smallerOverLarger)}, percentile ${pc(cs.smallerOverLargerPercentile)} (one side mirrored, so symmetric by construction)`,
+      `${f2(ca.smallerOverLarger)}, percentile ${pc(ca.smallerOverLargerPercentile)}`,
+    ];
+    check('population (page): the nasal cavity numbers (median, IQR, the standard specimen and the as-scanned head with percentiles, the side ratio likewise) equal the JSON\'s', JSON.stringify(cavity) === JSON.stringify(want), JSON.stringify({ cavity, want }));
+    const conv = await text('#ssb-pop [data-pop="convention"]');
+    check('population (page): the convention line carries n, the threshold and the span from the file', conv.includes(`${doc.summary.clearCount} clear adults`) && conv.includes(`${Math.abs(Math.round(doc.profiles.airThreshold.hu))} HU`) && /10–90 %/.test(conv), conv);
+    check('population (page): with the cavity selected the other structures\' blocks are hidden', await page.evaluate(() => ['maxillary', 'nasopharynx'].every((k) => document.querySelector(`#ssb-pop [data-pop="${k}"]`).hidden)));
+
+    const chart = await page.evaluate(() => {
+      const svg = document.querySelector('#ssb-pop svg.ssb-pop-chart');
+      const pts = (cls) => svg.querySelector(`polyline.${cls}`).getAttribute('points').trim().split(/\s+/).length;
+      return { less: pts('ssb-pop-less'), more: pts('ssb-pop-more'), std: pts('ssb-pop-std'), dots: svg.querySelectorAll('circle.ssb-pop-pt').length,
+        axes: [...svg.querySelectorAll('text.ssb-pop-axis')].map((t) => t.textContent), role: svg.getAttribute('role'), alt: document.getElementById(svg.getAttribute('aria-describedby')).textContent };
+    });
+    const nx = S.profileByClass.lessCongested.atFractionOfLength.length;
+    check('population (page): the chart has one point per profile fraction in each series, labelled in mm² and fraction of length', chart.less === nx && chart.more === nx && chart.std === nx && chart.dots === nx && chart.axes.some((t) => /mm²/.test(t)) && chart.axes.some((t) => /fraction of cavity length/.test(t)), JSON.stringify(chart));
+    check('population (page): the text alternative lists the medians', chart.role === 'img' && chart.alt.includes(`${mm2(S.profileByClass.lessCongested.medianCm2[0])} mm²`) && chart.alt.includes(`${mm2(S.profileByClass.moreCongested.medianCm2[nx - 1])} mm²`), chart.alt.slice(0, 160));
+
+    /* maxillary */
+    await page.evaluate(() => { location.hash = '#s=s.maxillary-sinus'; });
+    await page.waitForFunction(() => !document.querySelector('#ssb-pop [data-pop="maxillary"]').hidden, null, { timeout: 10000 });
+    const mx = await page.evaluate(() => [...document.querySelectorAll('#ssb-pop [data-pop="maxillary"] dd')].map((d) => d.textContent));
+    const M = doc.summary.clear.maxillary;
+    const wantMx = [
+      `${f1(M.mlR.p50)} mL (IQR ${iq(M.mlR, f1)})`, `${f1(M.mlL.p50)} mL (IQR ${iq(M.mlL, f1)})`,
+      `right ${f1(doc.headA['maxillary.R'])} mL, left ${f1(doc.headA['maxillary.L'])} mL`,
+      `${doc.headA.AI.maxillary < 0 ? '−' : ''}${Math.abs(doc.headA.AI.maxillary).toFixed(1)} %, |AI| at percentile ${pc(doc.headA.percentileAbsAI_clear.maxillary)}`,
+    ];
+    check('population (page): the maxillary volumes, the head\'s volumes and its asymmetry percentile equal the JSON\'s', JSON.stringify(mx) === JSON.stringify(wantMx), JSON.stringify({ mx, wantMx }));
+    check('population (page): the panel adds nothing to the hash (only the selection and its tier)', !/pop|mu=|scope/.test(await page.evaluate(() => window.__ssb.hash)));
+    check('population (page): no real console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+
+  /* nothing selected: closed, both measured blocks present once opened */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    await page.waitForFunction(() => { const d = document.getElementById('ssb-pop'); return d && !d.hidden; }, null, { timeout: 20000 });
+    const before = await page.evaluate(() => window.__ssb.hash);
+    await page.click('#ssb-pop > summary');
+    const info = await page.evaluate(() => ({ open: document.getElementById('ssb-pop').open, hidden: ['cavity', 'maxillary'].map((k) => document.querySelector(`#ssb-pop [data-pop="${k}"]`).hidden), hash: window.__ssb.hash }));
+    check('population (page): with nothing selected it starts closed; opening it shows the cavity and the maxillary sinus and leaves the hash alone', before === info.hash && info.open === true && info.hidden.every((h) => h === false));
+    await context.close();
+  }
+
+  /* the file gone or broken: no section, no error */
+  for (const [label, fulfill] of [['404', { status: 404, body: 'not found' }], ['malformed JSON', { status: 200, contentType: 'application/json', body: '{"summary": ' }], ['wrong shape', { status: 200, contentType: 'application/json', body: '{"summary":{"clearCount":3}}' }]]) {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    await context.route(/\/ssb\/anatomy\/population\/nasalseg\.json(?:[?#].*)?$/, (route) => route.fulfill(fulfill));
+    const page = await context.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+    await page.goto(`${base}/ssb.html#s=s.nasal-cavity`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
+    await page.waitForFunction(() => !window.__ssb.specimen.installed || window.__ssb.specimen.renders > 0, null, { timeout: 20000 });
+    await nextFrames(page, 4);
+    const hidden = await page.evaluate(() => { const d = document.getElementById('ssb-pop'); return !d || d.hidden || d.children.length === 0; });
+    check(`population (page): the file served as ${label} hides the section and raises no console error`, hidden && errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+}
+
 /* ---------------- the suite ---------------- */
 
 async function main() {
@@ -4284,6 +4393,10 @@ async function main() {
   if (ONLY === 'procedure') {
     await procedureUnitTests();
     await procedureTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'population') {
+    await populationTests(browser, base);
     return finish(browser, server);
   }
   if (ONLY === 'mucosa') {
@@ -4769,6 +4882,7 @@ async function main() {
   await procedureTests(browser, base);
   await mucosaUnitTests(scopeWindow);
   await mucosaTests(browser, base);
+  await populationTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

@@ -19,6 +19,9 @@ and lists it in packs.json as the pack "lining" with "lining": true (its node na
 packs' on purpose; the viewer keys them apart and draws them instead of the air shells when the
 mucosa layer is seen from within, docs/ssb.md 5.7).
 
+Each mesh is then cleaned (meshes.py clean_lining, WP L1, the same cleaner dissect.py applies to the state linings):
+both faces of a zero-thickness fin go and a vertex left with no normal gets one back.
+
 Checked here and asserted: no triangle centroid lies within 0.5 mm of an air | air label interface
 unless it is within 1 mm of tissue (count 0), and the budgets hold.
 """
@@ -79,13 +82,6 @@ def facing_labels(v, f, nrm, lab, air, aff):
     return out, left
 
 
-def subset(v, f, n, keep):
-    """The triangles `keep` of (v, f) as their own mesh, vertices reindexed, normals carried over."""
-    ff = f[keep]
-    used, inv = np.unique(ff, return_inverse=True)
-    return v[used], inv.reshape(ff.shape), n[used]
-
-
 def interface_check(v, f, lab, air, aff, spacing):
     """Count the triangles whose centroid is within INTERFACE_MM of an air | air label interface and
     farther than TISSUE_MM from tissue (a surface there would be a membrane across an opening)."""
@@ -117,7 +113,7 @@ def build_lining(lab, table, aff, spacing, budget):
     assert bad == 0, 'the lining has a membrane across an opening'
     items = []
     for idx in sorted(set(int(x) for x in np.unique(face_lab)) - {0}):
-        sv, sf, sn = subset(v, f, nrm, face_lab == idx)
+        sv, sf, sn = M.subset(v, f, nrm, face_lab == idx)
         items.append((table[str(idx)], sv, sf, sn))
     return items, {'air': int(air.sum()), 'labels': len(ids), 'union': (len(v), len(f)), 'fallback': fallback, 'bad': bad}
 
@@ -126,7 +122,9 @@ def main():
     hdr, ct, lab, table = M.read_volume()
     aff, spacing = hdr['affine'], hdr['spacing'][0]
     items, rep = build_lining(lab, table, aff, spacing, LINING_BUDGET)
+    items, fins, rebuilt = M.clean_lining(items)         # zero-thickness fins and the normals they cancel (WP L1)
     print('air voxels', rep['air'], 'labels', rep['labels'])
+    print('fin faces dropped: %d; vertex normals rebuilt: %d' % (fins, rebuilt))
     print('union surface: %d triangles, %d vertices' % (rep['union'][1], rep['union'][0]))
     fallback, bad = rep['fallback'], rep['bad']
     print('triangles with no air voxel within %.1f mm along the normal (took the nearest air label): %d' % (PROBE_MM[-1], fallback))
@@ -150,7 +148,7 @@ def main():
     man['totals'] = {'bytes': int(sum(p['bytes'] for p in man['packs'].values())),
                      'triangles': int(sum(p['triangles'] for p in man['packs'].values()))}
     json.dump(man, open(pj, 'w'), indent=1)
-    write_results('lining', {'triangles': tris, 'bytes': gz, 'fallback_triangles': fallback, 'membrane_triangles': bad,
+    write_results('lining', {'triangles': tris, 'bytes': gz, 'fallback_triangles': fallback, 'membrane_triangles': bad, 'fin_faces': fins, 'normals_rebuilt': rebuilt,
                              'nodes': {k: int(len(f_)) for k, _, f_, _ in items}})
     print('lining pack: %d bytes, %d triangles; all packs %s' % (gz, tris, json.dumps(man['totals'])))
 

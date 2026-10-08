@@ -948,8 +948,8 @@
    },
    "measured": {
     "carvedVoxels": 38162,
-    "liningBytes": 313255,
-    "liningTriangles": 33000,
+    "liningBytes": 313025,
+    "liningTriangles": 32948,
     "patchBytes": 15485,
     "remnantTriangles": 6556
    }
@@ -971,8 +971,8 @@
    },
    "measured": {
     "carvedVoxels": 14064,
-    "liningBytes": 313488,
-    "liningTriangles": 33000,
+    "liningBytes": 313227,
+    "liningTriangles": 32932,
     "patchBytes": 9121,
     "remnantTriangles": 7500
    }

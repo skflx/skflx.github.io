@@ -23,16 +23,16 @@
    specimen, scope, procedure: the stages' hooks; materials: scene.js's hook on the
    tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=fa3d2f6f';
+import { loadGraph } from './graph.js?v=521683c7';
 import { createStore, parseHash } from './state.js?v=a96d143a';
 import { DIORAMAS, LAB_SPECS } from './dioramas/index.js?v=5520535d';
 import { mountLab } from './mode-lab.js?v=fe0c3438';
 import { mountLabControls } from './ui-lab.js?v=e3714361';
-import { mountCt } from './mode-ct.js?v=93fbc737';
-import { buildCtDom, mountCtControls } from './ui-ct.js?v=1230a294';
-import { mountTree } from './ui-tree.js?v=680965c6';
-import { mountSearch } from './ui-search.js?v=eb82ef49';
-import { mountPanel } from './ui-panel.js?v=67d8a48d';
+import { mountCt } from './mode-ct.js?v=59798490';
+import { buildCtDom, mountCtControls } from './ui-ct.js?v=ede6cddb';
+import { mountTree } from './ui-tree.js?v=26bfb5c8';
+import { mountSearch } from './ui-search.js?v=c5587a22';
+import { mountPanel } from './ui-panel.js?v=039b7dd1';
 
 const $ = (id) => document.getElementById(id);
 
@@ -283,7 +283,7 @@ function bootLab(graph, stageHandle) {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=8486d65d'), import('./ui-specimen.js?v=44955dbd')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=96db802b'), import('./ui-specimen.js?v=4d1ad53c')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -292,6 +292,7 @@ async function bootSpecimen(graph, stageHandle) {
         mountSpecimenControls({
             dock: $('ssb-spec-dock'), body: $('ssb-spec-body'), toggle: $('ssb-spec-toggle'), stageHost: $('ssb-stage'), specimen, store,
         });
+        bootPopulation();
         await bootEndoscope(graph, stageHandle);
     } catch (e) {
         console.error(e);
@@ -302,11 +303,18 @@ async function bootSpecimen(graph, stageHandle) {
     }
 }
 
+/* The population panel (WP POP2a) sits in the Specimen dock; a missing data file just leaves it hidden. */
+function bootPopulation() {
+    import('./ui-population.js?v=98ffe5e1')
+        .then(({ mountPopulation }) => mountPopulation({ body: $('ssb-spec-body'), store }))
+        .catch((e) => console.error(e));
+}
+
 /* The endoscope rides on the specimen (its dock, its meshes), so it mounts right after it; a failure
    here leaves the specimen, the lab and CT working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=4bc0718c'), import('./ui-endoscope.js?v=22fea635')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=e0ea8df2'), import('./ui-endoscope.js?v=22fea635')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
         await bootProcedure(graph);
@@ -322,7 +330,7 @@ async function bootEndoscope(graph, stageHandle) {
    the carved outline. A failure leaves the Play button disabled with its reason and everything else working. */
 async function bootProcedure(graph) {
     try {
-        const [{ mountProcedure }, { mountProcedureControls }] = await Promise.all([import('./mode-procedure.js?v=73a5dad3'), import('./ui-procedure.js?v=48724f01')]);
+        const [{ mountProcedure }, { mountProcedureControls }] = await Promise.all([import('./mode-procedure.js?v=4d58f541'), import('./ui-procedure.js?v=27a0bf3d')]);
         proc = mountProcedure({ store, graph, specimen, endo, ct });
         mountProcedureControls({ body: $('ssb-spec-body'), player: proc, store, graph });
         player.api = proc;

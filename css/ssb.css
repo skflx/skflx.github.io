@@ -372,6 +372,30 @@ html[data-theme="dark"] {
 .ssb-spec-slider { padding-bottom: 0.2rem; }
 .ssb-spec .ssb-ct-check + .ssb-ct-check, .ssb-spec .ssb-ct-check + .ssb-param-src { margin-top: 0.3rem; }
 .ssb-spec-label { z-index: 1; }
+
+/* ===== population panel (WP POP2a): ink for the population, --signal for the head it is read against ===== */
+.ssb-pop { margin: 0 1rem 1rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
+.ssb-pop > summary { cursor: pointer; margin: 0; }
+.ssb-pop-body { margin-top: 0.5rem; }
+.ssb-pop-block { margin-top: 0.7rem; }
+.ssb-pop-h { margin: 0 0 0.25rem; font-size: 0.8rem; font-weight: 600; color: var(--ink); }
+.ssb-pop-dl { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 0.6rem; margin: 0; font-size: 0.75rem; }
+.ssb-pop-dl dt { color: var(--ink-muted); }
+.ssb-pop-dl dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.ssb-pop-chart { display: block; width: 100%; height: auto; margin-top: 0.5rem; }
+.ssb-pop-grid { stroke: var(--rule); stroke-width: 0.5; }
+.ssb-pop-tick, .ssb-pop-axis { fill: var(--ink-faint); font: 7px var(--font-mono, monospace); }
+.ssb-pop-band-less { fill: var(--ink); fill-opacity: 0.12; }
+.ssb-pop-band-more { fill: var(--ink-muted); fill-opacity: 0.12; }
+.ssb-pop-line { fill: none; stroke-width: 1.4; }
+.ssb-pop-less { stroke: var(--ink); }
+.ssb-pop-more { stroke: var(--ink-muted); stroke-dasharray: 3 2; }
+.ssb-pop-std { stroke: var(--signal); }
+.ssb-pop-pt { fill: var(--signal); }
+.ssb-pop-key { list-style: none; margin: 0.3rem 0 0; padding: 0; font-size: 0.7rem; color: var(--ink-muted); }
+.ssb-pop-key li::before { content: ''; display: inline-block; width: 1.1rem; margin-right: 0.4rem; vertical-align: middle; border-top: 2px solid var(--ink); }
+.ssb-pop-key li[data-swatch="ssb-pop-more"]::before { border-top: 2px dashed var(--ink-muted); }
+.ssb-pop-key li[data-swatch="ssb-pop-std"]::before { border-top-color: var(--signal); }
 .ssb-geo-note {
   margin: 0 0 0.75rem; padding: 0.4rem 0.6rem;
   background: var(--wash); border-left: 2px solid var(--signal-2);
