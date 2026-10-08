@@ -141,7 +141,7 @@ export function parseStationLink(text) {
 
 /* ssb/geometry/stations.json -> Map("t.<id>.<side>" -> { id, side, pose }). Only the `stations` table is read; an
    entry whose key is not `t.<id>.R|L|M` or whose pose is not whole (a side R or L, the four numbers, a whitelisted lens)
-   is skipped, the numbers clamp to RANGES like any pose. A midline (.M) station is posed from the right nostril. A
+   is skipped, the numbers clamp to RANGES like any pose. A `shaft` of "2.7" is kept (the pose is free only for the 2.7 mm telescope, WP P3); any other value is none. A midline (.M) station is posed from the right nostril. A
    malformed document is an empty map: the station list then hides and a station link is ignored. */
 export function parseStations(doc) {
     const out = new Map();
@@ -152,7 +152,9 @@ export function parseStations(doc) {
         const raw = entry && typeof entry === 'object' ? entry.pose : null;
         if (!m || !raw || typeof raw !== 'object' || !SIDES.includes(raw.side) || !LENSES.includes(raw.lens)) continue;
         if (!Object.keys(RANGES).every((k) => clampField(k, raw[k]) !== null)) continue;
-        out.set(key, { id: m[1], side: m[2], pose: clampPose(raw) });
+        /* `shaft` ("4" | "2.7"): the telescope the pose needs; null = any (the 4 mm default) */
+        const shaft = typeof entry.shaft === 'string' && Object.prototype.hasOwnProperty.call(SHAFT_RADII, entry.shaft) && entry.shaft !== '4' ? entry.shaft : null;
+        out.set(key, { id: m[1], side: m[2], pose: clampPose(raw), shaft });
     }
     return out;
 }

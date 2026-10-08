@@ -2193,7 +2193,7 @@ function scopeUnitTests() {
   check('state: applyHash adopts a pasted scope link and drops it when the hash has none', st.get().scope && (st.applyHash(''), st.get().scope === null));
 
   scopeCollisionTests();
-  stationUnitTests();
+  return stationUnitTests();
 }
 
 
@@ -2388,7 +2388,6 @@ function scopeCollisionTests() {
 function stationUnitTests() {
   const read = (p) => fs.readFileSync(path.join(ROOT, p));
   const json = (p) => JSON.parse(read(p).toString('utf8'));
-  const R4 = SC.SHAFT_RADII['4'];
   const doc = json('ssb/geometry/stations.json');
   const table = doc.stations;
   const keys = Object.keys(table);
@@ -2439,7 +2438,7 @@ function stationUnitTests() {
     const F = lms[`lm.naris.${pose.side}`];
     const clamped = SC.clampPose(pose);
     if (!clamped || Object.keys(clamped).some((f) => clamped[f] !== pose[f]) || Object.keys(pose).length !== 6) problems.clamp.push([key, pose]);
-    const cl = SC.shaftClearance(F, pose, ctAt, R4, arch);
+    const cl = SC.shaftClearance(F, pose, ctAt, SC.SHAFT_RADII[st.shaft || '4'], arch);
     if (cl.blocked || cl.depth !== pose.depth) problems.free.push([key, cl]);
     const tip = SC.tipOf(F, pose);
     const tipLab = vol.describe(vol.labelAt(tip[0], tip[1], tip[2]));
@@ -2451,7 +2450,7 @@ function stationUnitTests() {
   }
   const shown = (list) => JSON.stringify(list.map((x) => x.map((v) => (typeof v === 'number' ? +v.toFixed(2) : v))));
   check(`stations (E6): all ${keys.length} stations have a pose clampPose leaves unchanged (six whole fields)`, keys.length >= 13 && problems.clamp.length === 0, JSON.stringify(problems.clamp));
-  check('stations (E6): every station is free under shaftClearance (4 mm shaft, the E3b midline rule, lm.choanal-arch.M) — not clamped, not blocked', problems.free.length === 0, JSON.stringify(problems.free));
+  check('stations (E6): every station is free under shaftClearance (its shaft: 4 mm, or 2.7 mm where the entry says so; the E3b midline rule, lm.choanal-arch.M) — not clamped, not blocked', problems.free.length === 0, JSON.stringify(problems.free));
   check('stations (E6): every station\'s tip lies in an air label of the standard specimen (not in tissue)', problems.air.length === 0, shown(problems.air));
   check('stations (E6): every station\'s target (landmark, label centroid, `between` midpoint or `at`) is within FOV_DEG / 2 = 35 degrees of the view axis', problems.target.length === 0, JSON.stringify(problems.target.map((x) => [x[0], x[1] === null ? null : +x[1].toFixed(2)])));
 
@@ -2463,14 +2462,15 @@ function stationUnitTests() {
   check('stations (E6): every `.L` station is its `.R` station mirrored (same depth, yaw, pitch, lens; roll -> 360 - roll; side L), and has one', keys.some((k) => k.endsWith('.L')) && mirrored);
   check('stations (E6): a midline (.M) station is posed from the right nostril', keys.filter((k) => k.endsWith('.M')).every((k) => table[k].pose.side === 'R'));
 
-  const stems = new Set(keys.map((k) => k.replace(/\.(R|L|M)$/, '')));
+  const byState = doc.byState || {};
+  const stems = new Set([...keys, ...Object.values(byState).flatMap((t) => Object.keys(t))].map((k) => k.replace(/\.(R|L|M)$/, '')));
   const unc = new Set(Object.keys(doc.uncovered));
   const over = new Set(doc.overviews.ids);
   const graphStations = [...GRAPH.keys()].filter((id) => GRAPH.get(id).type === 'stations');
   const missing = graphStations.filter((id) => !stems.has(id) && !unc.has(id) && !over.has(id));
   const stray = [...stems, ...unc, ...over].filter((id) => !GRAPH.has(id) || GRAPH.get(id).type !== 'stations');
-  const twice = graphStations.filter((id) => [stems.has(id), unc.has(id), over.has(id)].filter(Boolean).length > 1);
-  check('stations (E6): every graph `t.*` station is in `stations`, `uncovered` or `overviews` (exactly one), and nothing else is', graphStations.length >= 40 && missing.length === 0 && stray.length === 0 && twice.length === 0, JSON.stringify({ missing, stray, twice }));
+  const twice = graphStations.filter((id) => [stems.has(id), unc.has(id), over.has(id)].filter(Boolean).length > 1 || (keys.some((k) => k.startsWith(`${id}.`)) && Object.values(byState).some((t) => Object.keys(t).some((k) => k.startsWith(`${id}.`)))));
+  check('stations (E6, P3): every graph `t.*` station is in `stations` or `byState` (one or the other), `uncovered` or `overviews` (exactly one of the three groups), and nothing else is', graphStations.length >= 40 && missing.length === 0 && stray.length === 0 && twice.length === 0, JSON.stringify({ missing, stray, twice }));
 
   /* ---- the codec: a link is a shape, a table lookup is the only thing it does ---- */
   const L = SC.parseStationLink;
@@ -2479,6 +2479,8 @@ function stationUnitTests() {
   check('station link: hostile shapes are refused (no side but R|L|M, no underscores, slashes, spaces, newlines, doubled hyphens, markup, 5 kB, non-strings)', hostile.every((h) => L(h) === null), JSON.stringify(hostile.filter((h) => L(h) !== null)));
   check('station link: a pose is not a station link and a station link is not a pose (parseScope refuses `t.ser-0`)', SC.parseScope('t.ser-0') === null && L('R,40,0,0,0,0') === null);
   const parsed = SC.parseStations(doc);
+  const slim = keys.filter((k) => table[k].shaft === '2.7');
+  check('stations (P3): the olfactory cleft and the inferior meatus (both sides) carry shaft "2.7", parseStations keeps it, and no other intact station asks for it', slim.sort().join() === ['t.inferior-meatus-45.L', 't.inferior-meatus-45.R', 't.olfactory-cleft-0.L', 't.olfactory-cleft-0.R'].join() && slim.every((k) => parsed.get(k).shaft === '2.7') && keys.filter((k) => !slim.includes(k)).every((k) => parsed.get(k).shaft === null) && ['3', '', 7, null, {}, '4'].every((v) => SC.parseStations({ stations: { 't.a-b.R': { pose: table[keys[0]].pose, shaft: v } } }).get('t.a-b.R').shaft === null), JSON.stringify(slim));
   check('station table: parseStations reads every entry of the real file into a whole pose, keyed t.<id>.<side>', parsed.size === keys.length && keys.every((k) => parsed.has(k) && JSON.stringify(parsed.get(k).pose) === JSON.stringify(table[k].pose)), `${parsed.size} of ${keys.length}`);
   const hurt = SC.parseStations({ stations: {
     'T.bad.R': { pose: table['t.ser-0.R'].pose }, 't.noside': { pose: table['t.ser-0.R'].pose }, 't.a.X': { pose: table['t.ser-0.R'].pose },
@@ -2530,6 +2532,62 @@ function stationUnitTests() {
   let prevRoll = 350;
   for (let k = 1; k <= 10; k++) { const r = SC.flightPose(a, b, k / 10).roll; const step = (((r - prevRoll + 540) % 360) - 180); if (!(step > 0 && step < 5)) mono = false; prevRoll = r; }
   check('flight: roll moves monotonically in small steps (no spin through the long way)', mono);
+  return { vol, ctAt, lms, arch, targetOf, angle, sub, AIR };
+}
+
+/* ---------------- Endoscope: poses per dissected state (P3, Node only) ---------------- */
+
+/* `byState` in ssb/geometry/stations.json is held to E5's rule on each state's own volume: the base with its patch applied
+   (volume.js applyPatch), the tip in an airway label of that state, the target within the half field, the shaft the entry
+   asks for. A pose that fails is reported with its numbers, never edited (tools/ssb-pipeline/uw/stations.py re-poses). */
+async function stationStateTests(w) {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p));
+  const json = (p) => JSON.parse(read(p).toString('utf8'));
+  if (!fs.existsSync(path.join(ROOT, 'ssb/states/index.json'))) { console.log('  (stations per state: ssb/states/index.json is not in this build — skipped)'); return; }
+  const doc = json('ssb/geometry/stations.json');
+  const by = doc.byState || {};
+  const index = json('ssb/states/index.json');
+  const AIR = new Set(['s.nasal-cavity', 's.nasopharynx', 's.maxillary-sinus', 's.frontal-sinus', 's.sphenoid-sinus', 's.agger-nasi-cell', 's.anterior-ethmoid-cells', 's.ethmoid-bulla', 's.frontal-recess', 's.posterior-ethmoid-cells']);
+  const keys = Object.keys(by);
+  const problems = { free: [], air: [], target: [], shape: [], mirror: [] };
+  let poses = 0;
+  for (const key of keys) {
+    if (!index.states[key]) { problems.shape.push([key, 'not a state of ssb/states/index.json']); continue; }
+    const derived = applyPatch(w.vol, await parsePatch(read(`ssb/states/${index.states[key].patch}`), w.vol, index.base));
+    const ctAt = (p) => derived.sample(p[0], p[1], p[2]);
+    const table = by[key];
+    for (const [k, st] of Object.entries(table)) {
+      poses += 1;
+      const pose = st.pose;
+      const F = w.lms[`lm.naris.${pose.side}`];
+      const clamped = SC.clampPose(pose);
+      if (!clamped || Object.keys(pose).length !== 6 || Object.keys(clamped).some((f) => clamped[f] !== pose[f])) problems.shape.push([key, k, 'not a whole pose']);
+      if (!/^t\.[a-z0-9-]+\.(R|L|M)$/.test(k) || (st.shaft !== undefined && st.shaft !== '2.7')) problems.shape.push([key, k, 'key or shaft']);
+      const cl = SC.shaftClearance(F, pose, ctAt, SC.SHAFT_RADII[st.shaft || '4'], w.arch);
+      if (cl.blocked || cl.depth !== pose.depth) problems.free.push([key, k, cl]);
+      const tip = SC.tipOf(F, pose);
+      const lab = derived.describe(derived.labelAt(tip[0], tip[1], tip[2]));
+      if (!lab || !AIR.has(lab.name.replace(/\.(R|L|M)$/, ''))) problems.air.push([key, k, lab && lab.name, tip]);
+      const target = w.targetOf(st.target || {});
+      const off = target ? w.angle(SC.frameOf(pose).v, w.sub(target, tip)) : null;
+      if (off === null || !(off <= SC.FOV_DEG / 2)) problems.target.push([key, k, off, target]);
+      if (k.endsWith('.M') && pose.side !== 'R') problems.shape.push([key, k, 'a midline station is posed from the right nostril']);
+      if (k.endsWith('.L')) {
+        const r = table[k.replace(/\.L$/, '.R')];
+        const ok = !!r && ['depth', 'yaw', 'pitch', 'lens'].every((f) => pose[f] === r.pose[f]) && pose.side !== r.pose.side && pose.roll === (360 - r.pose.roll) % 360 && (st.shaft || null) === (r.shaft || null);
+        if (!ok) problems.mirror.push([key, k]);
+      }
+    }
+  }
+  const shown = (list) => JSON.stringify(list.map((x) => x.map((v) => (typeof v === 'number' ? +v.toFixed(2) : v))));
+  check(`stations per state (P3): ${poses} poses over ${keys.length} states, every byState key is a state of ssb/states/index.json and every pose is whole`, keys.length >= 8 && poses >= 20 && problems.shape.length === 0, shown(problems.shape));
+  check('stations per state (P3): every pose is free in its own state\'s volume (the patch applied; its shaft; the E3b midline rule) — not clamped, not blocked', problems.free.length === 0, JSON.stringify(problems.free));
+  check('stations per state (P3): every pose\'s tip lies in an airway label of that state (a space, an ethmoid cell or the frontal recess; never tissue or the vestibule)', problems.air.length === 0, shown(problems.air));
+  check('stations per state (P3): every target is within FOV_DEG / 2 = 35 degrees of the view axis', problems.target.length === 0, shown(problems.target));
+  check('stations per state (P3): every .L pose is its .R pose mirrored (side flipped, roll -> 360 - roll, the rest equal), and has one', problems.mirror.length === 0, JSON.stringify(problems.mirror));
+  const covered = new Set(keys.flatMap((k) => Object.keys(by[k])).map((k) => k.replace(/\.(R|L|M)$/, '')));
+  const stepStates = new Set(Object.values(index.procedures).flatMap((p) => Object.values(p.steps)));
+  check('stations per state (P3): the twelve stations P3 poses are there, and each state that carries a pose is one a procedure step reaches', ['t.ethmoid-bulla-0', 't.infundibulum-45', 't.maxillary-antrum-70', 't.medial-orbital-floor-30', 't.basal-lamella-0', 't.ethmoid-roof-30', 't.posterior-ethmoid-roof-0', 't.optic-canal-0', 't.medial-orbital-wall-0', 't.frontal-recess-45', 't.frontal-sinus-70', 't.sphenoid-face-0', 't.sphenoid-lateral-recess-45', 't.sella-open-30', 't.cavernous-sinus-30'].every((id) => covered.has(id)) && keys.every((k) => stepStates.has(k)), JSON.stringify([...covered]));
 }
 
 /* ---------------- Endoscope: the page ---------------- */
@@ -2752,7 +2810,7 @@ async function scopeTests(browser, base) {
     const l1 = await stList(page);
     const want1 = stFor('R', 1);
     check('stations (E6): the list shows the right nostril\'s stations and the midline ones at the page\'s tier (1), in file order, each with its graph name and its lens — and none of the uncovered or overviews',
-      l1.map((x) => x.key).join() === want1.join() && want1.length >= 4 && l1.every((x) => stName(x.key).startsWith(x.text) && x.lens === `${ST[x.key].pose.lens}°`) && !l1.some((x) => /overview|ethmoid-bulla|olfactory/.test(x.key)), JSON.stringify({ l1: l1.map((x) => x.key), want1 }));
+      l1.map((x) => x.key).join() === want1.join() && want1.length >= 4 && l1.every((x) => stName(x.key).startsWith(x.text) && x.lens === `${ST[x.key].pose.lens}°`) && !l1.some((x) => /overview|ethmoid-bulla/.test(x.key)), JSON.stringify({ l1: l1.map((x) => x.key), want1 }));
     check('stations (E6): the list is a labelled group of buttons, none pressed while the scope is not at a station', await page.evaluate(() => { const g = document.querySelector('#ssb-scope-controls .ssb-scope-stations'); return g.getAttribute('role') === 'group' && !!g.getAttribute('aria-label') && [...g.children].every((b) => b.tagName === 'BUTTON' && b.type === 'button'); }) && l1.every((x) => x.pressed === 'false'), JSON.stringify(l1.map((x) => x.pressed)));
 
     /* the tier filter follows the page, and the left nostril gets the left ones */
@@ -2838,6 +2896,36 @@ async function scopeTests(browser, base) {
     await page.evaluate(() => { location.hash = '#scope=t.ser-0.L'; });
     await page.waitForFunction(() => window.__ssb.scope.engaged, null, { timeout: 15000 });
     check('stations (E6): a station link pasted while the page is open (a hash change) opens the scope too', samePoseObj(await spec(page, () => window.__ssb.scope.pose), ST['t.ser-0.L'].pose));
+    await context.close();
+  }
+  {
+    /* a station that is free only for the 2.7 mm telescope (P3): flying to it, or opening its link, puts that telescope on and says why */
+    const slim = 't.olfactory-cleft-0.R';
+    const read = (page) => page.evaluate(() => { const n = document.querySelector('#ssb-scope-controls .ssb-scope-shaft-note'); return { shaft: window.__ssb.scope.shaft.key, why: window.__ssb.scope.shaftWhy, pose: window.__ssb.scope.pose, note: n && !n.hidden ? n.textContent : null, pressed: [...document.querySelectorAll('#ssb-scope-controls [data-shaft]')].filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.shaft) }; });
+    const { context, page } = await openSpecimen(browser, base, '#tier=3&scope=R,40,0,0,0,0');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'ready' && !!document.querySelector('#ssb-scope-controls [data-station="t.olfactory-cleft-0.R"]'), null, { timeout: 30000 });
+    const before = await read(page);
+    await page.click(`#ssb-scope-controls [data-station="${slim}"]`);
+    await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
+    const at = await read(page);
+    check('stations (P3): flying to t.olfactory-cleft-0.R switches the shaft to 2.7 mm (the 4 mm pill is no longer pressed), the controls say why, and the scope arrives at the stored pose, not clamped', before.shaft === '4' && before.note === null && at.shaft === '2.7' && at.pressed.join() === '2.7' && at.why && at.why.station === slim && /olfactory/i.test(at.note || '') && /2\.7 mm/.test(at.note || '') && samePoseObj(at.pose, ST[slim].pose), JSON.stringify([before, at]));
+    await page.click('#ssb-scope-controls [data-shaft="4"]');
+    const back = await read(page);
+    check('stations (P3): choosing a diameter by hand ends the reason (the note hides, the 4 mm pill is pressed)', back.shaft === '4' && back.why === null && back.note === null && back.pressed.join() === '4', JSON.stringify(back));
+    await page.click(`#ssb-scope-controls [data-station="${slim}"]`);
+    await page.waitForFunction(() => !window.__ssb.scope.flying && window.__ssb.scope.shaft.key === '2.7', null, { timeout: 10000 });
+    await page.click('#ssb-scope-controls [data-station="t.ser-0.R"]');
+    await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
+    const after = await read(page);
+    check('stations (P3): flying on to a 4 mm station drops the reason and leaves the shaft as it is (the 2.7 mm telescope also fits there)', after.shaft === '2.7' && after.why === null && after.note === null && samePoseObj(after.pose, ST['t.ser-0.R'].pose), JSON.stringify(after));
+    await context.close();
+  }
+  {
+    const { context, page } = await openSpecimen(browser, base, '#scope=t.inferior-meatus-45.L');
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'ready', null, { timeout: 30000 });
+    await page.waitForTimeout(500);
+    const r = await page.evaluate(() => ({ shaft: window.__ssb.scope.shaft.key, why: window.__ssb.scope.shaftWhy, pose: window.__ssb.scope.pose, hash: location.hash }));
+    check('stations (P3): the link #scope=t.inferior-meatus-45.L opens the scope on the 2.7 mm telescope, at the stored pose', r.shaft === '2.7' && r.why && r.why.station === 't.inferior-meatus-45.L' && samePoseObj(r.pose, ST['t.inferior-meatus-45.L'].pose), JSON.stringify(r));
     await context.close();
   }
   for (const hash of ['#scope=t.nope', '#scope=t.ser-0.X', '#scope=t.ser-0.M', '#scope=t.ser_0', '#scope=t.ser-0%0A', '#scope=t.nsf-pedicle.L']) {
@@ -3762,7 +3850,7 @@ async function main() {
     return finish(browser, server);
   }
   if (ONLY === 'scope') {
-    scopeUnitTests();
+    await stationStateTests(scopeUnitTests());
     await scopeTests(browser, base);
     return finish(browser, server);
   }
@@ -4242,7 +4330,7 @@ async function main() {
   await specimenTests(browser, base);
 
   /* ===== 9. the Endoscope stage (js/ssb/scope.js, mode-endoscope.js, ui-endoscope.js; docs/ssb.md 3) ===== */
-  scopeUnitTests();
+  await stationStateTests(scopeUnitTests());
   await scopeTests(browser, base);
   await procedureUnitTests();
   await procedureTests(browser, base);

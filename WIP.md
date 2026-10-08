@@ -254,20 +254,24 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   HUD reads the distance fields at the tip; from inside, the lining is the open `lining` pack (`lining.py`, ST1b; fetched on the first look from within, ST1c), so the scope can look through the choanae and the right sphenoid ostium (the left is closed in the specimen's labels).
   The tip is also the Specimen stage's 3D cursor (so CT opens on it, and leaving the scope leaves `#at=`), an inset in
   the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
-  Stations (E6): the controls list this nostril's covered stations from `ssb/geometry/stations.json` (Opus's poses, E5) at the page's tier;
+  Stations (E6): the controls list this nostril's covered stations from `ssb/geometry/stations.json` (Opus's intact poses, E5, plus the two 2.7 mm ones) at the page's tier;
   picking one flies the scope there over ~600 ms (a cut with reduced motion), and `#scope=t.<id>[.<side>]` opens one.
 - **Procedure mode** (P1, 2026-10-08; contract `docs/ssb.md` §5.8–5.10) —
-  pipeline built (P1b, in review), player not yet. A dissection state changes the volume the scope
+  pipeline built (P1b) and player built (P2), both merged. A dissection state changes the volume the scope
   reads (removed voxels become air), so collision and stations see the
   opened cavity. The cuts are rules in `tools/ssb-pipeline/uw/dissection.json`
   (FESS from uncinectomy to Draf IIa; transsphenoidal, sellar and clival
   recess openings), mapped to the `removes` of those procedures' steps; a
   scratch prototype built the states and posed the stations they open;
-  `tools/ssb-pipeline/uw/dissect.py` now evaluates the rules into 15 states
-  (`ssb/states/index.json`, a patch and a lining pack each; not read by the
-  viewer yet, and not in `packs.json`).
-  Next: the player (P2), then poses per state (P3)
-  and the decongested · as scanned · congested mucosa (DC1).
+  `tools/ssb-pipeline/uw/dissect.py` evaluates the rules into 15 states
+  (`ssb/states/index.json`, a patch and a lining pack each, not in
+  `packs.json`), which the player reads. Stations per state (P3, in review):
+  `ssb/geometry/stations.json` `byState` poses the 15 stations the states
+  open (both sides; the midline ones from the right nostril), solved and
+  re-checkable by `tools/ssb-pipeline/uw/stations.py`; the olfactory cleft and
+  the inferior meatus are intact poses with `shaft: "2.7"`, and flying to one
+  switches the scope to the 2.7 mm telescope and says why.
+  Next: the decongested · as scanned · congested mucosa (DC1), then CP-3.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
