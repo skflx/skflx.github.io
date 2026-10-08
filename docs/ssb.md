@@ -863,6 +863,11 @@ mucosal state → dissection.
   than 20 points, because its end sections are the vestibule border and the
   choanal cut, where the conventions differ most; the JSON keeps all three
   spans.
+- **Population panel (WP POP2a).** The Specimen dock's "Population (NasalSeg)"
+  section (`js/ssb/population.js`, `js/ssb/ui-population.js`) reads the file
+  above and nothing else: the 10–90 % restricted rows, the standard specimen
+  and the as-scanned head set against the clear subjects' median and IQR.
+  It hides itself when the file is missing or malformed.
 - **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented

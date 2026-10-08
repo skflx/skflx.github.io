@@ -30,7 +30,7 @@
    `hook` is the read-only test window (window.__ssb.ct).
    ============================================================= */
 import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=b121b3b4';
-import { sharedVolume, PLANES } from './volume.js?v=8281d741';
+import { sharedVolume, PLANES } from './volume.js?v=22fefdc5';
 import { CT_PLANES } from './state.js?v=a96d143a';
 
 const LITTLE = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;

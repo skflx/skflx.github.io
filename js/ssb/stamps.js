@@ -67,4 +67,5 @@ export const STAMPS = {
     "ssb/states/f02a68d5b9.ssbp.gz": "7236ca29",
     "ssb/states/index.json": "dd073025",
     "ssb/states/mucosa.json": "e8c59619",
+    "ssb/anatomy/population/nasalseg.json": "ce9cf344",
 };
