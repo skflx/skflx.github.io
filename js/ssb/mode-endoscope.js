@@ -47,10 +47,10 @@
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=2f804465';
-import { sharedVolume, stamped, decode } from './volume.js?v=870c5777';
+import { loadLandmarks } from './geo-specimen.js?v=b2395d85';
+import { sharedVolume, stamped, decode } from './volume.js?v=9c85159b';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=c518cfe8';
+import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=c2522180';
 
 const DRAG_DEG_PER_PX = 0.15;
 const WHEEL_MM = 1;
@@ -89,6 +89,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let lastMs = 0;
     const raycaster = new THREE.Raycaster();
     let ctAt = null;                     /* RAS -> CT display level, once the volume has loaded */
+    let levels = undefined;              /* the head's { soft, bone } (ct.json `levels`), else scope.js's defaults */
     let sdfFields = [];                  /* [{ id, name, at(ras) -> mm }] */
     let clampMm = 25;
     let shaft = '4';                     /* '4' | '2.7' (mm): the collision ring's radius, SHAFT_RADII */
@@ -159,6 +160,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             const fields = await loadFields(vol.meta).catch(() => []);
             ctAt = (p) => (stateVol || vol).sample(p[0], p[1], p[2]);
             ctVol = vol;
+            levels = vol.levels || undefined;
             followed = null;
             sdfFields = fields;
             exposed = null;
@@ -172,7 +174,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         const p = pose();
         const f = p && fulcra.get(p.side);
         if (!p || !f || !ctAt) { hud = { rows: [], contactMm: 0, limited: false, limitedBy: null }; return false; }
-        const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft], arch);
+        const c = shaftClearance(f, p, ctAt, SHAFT_RADII[shaft], arch, levels);
         if (c.depth < p.depth - 1e-9) {
             limitedNext = c.by;                /* the pass the clamp triggers reports it */
             store.setScope({ ...p, depth: c.depth }, INTERNAL);
@@ -407,7 +409,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             };
             const a = at(f);
             const b = at(T);
-            insetData = { ct: sl.ct, width: n, height: n, pixel: INSET.pixel, shaft: [a[0], a[1], b[0], b[1]], center: sl.ct[((n - 1) / 2) * n + (n - 1) / 2] };
+            insetData = { ct: sl.ct, width: n, height: n, pixel: INSET.pixel, shaft: [a[0], a[1], b[0], b[1]], range: ctVol.range, center: sl.ct[((n - 1) / 2) * n + (n - 1) / 2] };
         } catch (e) { insetData = null; console.error(e); }
         for (const fn of [...insetSubs]) { try { fn(); } catch (e) { console.error(e); } }
     }

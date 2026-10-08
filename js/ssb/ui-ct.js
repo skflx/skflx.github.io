@@ -12,8 +12,8 @@
    The CT button works without WebGL: CT is CPU-drawn and is the documented
    fallback (docs/ssb.md 7.5).
    ============================================================= */
-import { PLANES, stamped } from './volume.js?v=870c5777';
-import { CT_PLANES } from './state.js?v=34605e00';
+import { PLANES, stamped } from './volume.js?v=9c85159b';
+import { CT_PLANES } from './state.js?v=a96d143a';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -138,8 +138,8 @@ export function mountCtControls({ dom, ct, store, graph, stageSwitch }) {
         input.type = 'range';
         input.id = id;
         input.dataset.key = key;
-        input.min = key === 'width' ? '1' : '0';
-        input.max = String(ct.valueMax);
+        input.min = key === 'width' ? '1' : String(ct.valueMin);
+        input.max = String(key === 'width' ? ct.valueMax - ct.valueMin : ct.valueMax);
         input.step = '1';
         row.append(lbl, input, out);
         return { row, input, out };
@@ -218,6 +218,9 @@ export function mountCtControls({ dom, ct, store, graph, stageSwitch }) {
             b.classList.toggle('active', on);
         }
         const w = ct.window;
+        level.input.min = String(ct.valueMin);
+        level.input.max = String(ct.valueMax);
+        width.input.max = String(ct.valueMax - ct.valueMin);
         for (const b of presetRow.querySelectorAll('button[data-preset]')) {
             const on = b.dataset.preset === w.name;
             b.setAttribute('aria-pressed', on ? 'true' : 'false');

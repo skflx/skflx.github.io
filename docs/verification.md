@@ -272,7 +272,12 @@ Playwright routing (nothing is written into `ssb/`, and the suite passes
 whether or not the real volume is in the tree; "no volume" is a routed 404).
 `node tools/ssb-fixture-ct.mjs [dir]` writes the same files to a directory
 for a manual look. `node tools/test-ssb.mjs --only ct` runs just this
-section. It pins, in plain Node: the affine round trip (also rotated and
+section; add `--int16` (with `--only ct` or `--only scope`) to serve the page the same phantom as a 16-bit HU head
+(`buildFixture({ dtype: 'int16' })`, WP IN1) and expect the same results. The plain-Node part also pins the int16 volume
+(header, array type, loader, sampling through the fixture's mapping) and that `shaftClearance` with the header's `levels`
+gives the u8 head's answer on 150 poses. The intake script has its own self-test (needs numpy and scipy, not run in CI):
+`.venv/bin/python -I tools/ssb-pipeline/intake/intake.py selftest` round-trips a synthetic NIfTI and NRRD into the frame
+within 0.5 voxel. It pins, in plain Node: the affine round trip (also rotated and
 sheared), exact trilinear sampling on a linear field, slices equal to
 `sample()`/`labelAt()` pixel for pixel, the radiological orientation, oblique
 planes, gzip by magic bytes (raw bytes pass through, damage is refused), the

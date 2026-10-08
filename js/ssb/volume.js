@@ -1,8 +1,8 @@
 /* =============================================================
    volume.js — the CT and label volumes as typed arrays (docs/ssb.md 5.6).
 
-   Loads ssb/ct/ct.json + ct.u8.gz + labels.u16.gz (+ the label table),
-   format in docs/ssb.md 5.3. Everything after the download is plain CPU
+   Loads ssb/ct/ct.json + ct.u8.gz (or ct.i16.gz, a 16-bit head in HU, WP IN1)
+   + labels.u16.gz (+ the label table), format in docs/ssb.md 5.3. Everything after the download is plain CPU
    arithmetic, so it needs no WebGL and no 3D textures:
 
    - voxel <-> RAS mm through the file's affine and its inverse (RAS is
@@ -26,6 +26,9 @@ import { STAMPS } from './stamps.js?v=2aa7b8f2';
 
 export const CT_META = 'ssb/ct/ct.json';
 export const CT_DATA = 'ssb/ct/ct.u8.gz';
+export const CT_DATA_I16 = 'ssb/ct/ct.i16.gz';
+/* the value range a head spans: display levels, or HU for a 16-bit head (the CT stage's window and LUT bounds) */
+export const VALUE_RANGE = Object.freeze({ uint8: Object.freeze([0, 255]), int16: Object.freeze([-1024, 3071]) });
 
 const DIM_MAX = 2048;
 const VOXELS_MAX = 1 << 28;
@@ -104,7 +107,8 @@ export function parseHeader(meta) {
     const bad = (why) => new VolumeError('invalid', `ct.json: ${why}.`);
     if (!meta || typeof meta !== 'object') throw bad('not an object');
     if (meta.version !== 1) throw new VolumeError('unsupported', `ct.json: unsupported version ${String(meta.version)}.`);
-    if (meta.dtype !== 'uint8') throw bad('dtype must be uint8');
+    if (meta.dtype !== 'uint8' && meta.dtype !== 'int16') throw bad('dtype must be uint8 or int16');
+    if (meta.dtype === 'int16' && !(meta.values && meta.values.kind === 'HU')) throw bad('an int16 volume needs values.kind "HU"');
     const dims = meta.dims;
     if (!Array.isArray(dims) || dims.length !== 3 || !dims.every((n) => Number.isInteger(n) && n >= 1 && n <= DIM_MAX)) throw bad('dims must be three integers');
     if (dims[0] * dims[1] * dims[2] > VOXELS_MAX) throw bad('volume too large');
@@ -126,6 +130,9 @@ export function parseHeader(meta) {
             if (/^[a-z][a-z0-9-]{0,23}$/.test(name) && w && finite(w.center) && finite(w.width) && w.width > 0) windows[name] = { center: w.center, width: w.width };
         }
     }
+    /* per-head collision levels in the volume's own values: { soft: the air threshold, bone }, or null (scope.js defaults) */
+    const lv = meta.levels;
+    const levels = lv && typeof lv === 'object' && finite(lv.air) && finite(lv.bone) && lv.air < lv.bone ? { soft: lv.air, bone: lv.bone } : null;
     let labels = null;
     const l = meta.labels;
     if (l && typeof l === 'object' && typeof l.file === 'string' && /^[A-Za-z0-9._-]+$/.test(l.file) && (l.dtype === undefined || l.dtype === 'uint16')) {
@@ -137,6 +144,7 @@ export function parseHeader(meta) {
         labels = { file: `ssb/ct/${l.file}`, table };
     }
     return {
+        dtype: meta.dtype, range: VALUE_RANGE[meta.dtype].slice(), levels,
         dims: dims.slice(), spacing: spacing.slice(), affine, inverse, toHU, windows, labels,
         values: meta.values && typeof meta.values === 'object' ? { kind: String(meta.values.kind || ''), note: String(meta.values.note || '') } : { kind: '', note: '' },
         specimen: typeof meta.specimen === 'string' ? meta.specimen : '',
@@ -197,13 +205,13 @@ const LITTLE = new Uint8Array(new Uint16Array([1]).buffer)[0] === 1;
 
 /* ---------------- the volume ---------------- */
 
-/* header: parseHeader(); ct: Uint8Array (x fastest); labels: Uint16Array or null;
+/* header: parseHeader(); ct: Uint8Array, or Int16Array for an int16 head (x fastest); labels: Uint16Array or null;
    table: Map(index -> label name) or null. Throws VolumeError('invalid') on a
    size mismatch. */
 export function createVolume({ header, ct, labels = null, table = null }) {
     const [nx, ny, nz] = header.dims;
     const count = nx * ny * nz;
-    if (!(ct instanceof Uint8Array) || ct.length !== count) throw new VolumeError('invalid', 'The CT data does not match the dimensions in ct.json.');
+    if (!(ct instanceof (header.dtype === 'int16' ? Int16Array : Uint8Array)) || ct.length !== count) throw new VolumeError('invalid', 'The CT data does not match the dimensions in ct.json.');
     if (labels !== null && (!(labels instanceof Uint16Array) || labels.length !== count)) labels = null;
     const A = header.affine;
     const B = header.inverse;
@@ -277,6 +285,7 @@ export function createVolume({ header, ct, labels = null, table = null }) {
     /* the approximate value -> HU inverse (display only); null without a table */
     const hu = header.toHU;
     function toHU(v) {
+        if (header.dtype === 'int16') return finite(v) ? v : null;      /* already HU */
         if (!hu || !finite(v)) return null;
         if (v <= hu[0][0]) return hu[0][1];
         for (let n = 1; n < hu.length; n++) {
@@ -380,7 +389,7 @@ export function createVolume({ header, ct, labels = null, table = null }) {
 
     return {
         header, dims: header.dims, spacing: header.spacing, affine: A, ct, labels, count,
-        step, axisStep, bounds, center, windows: header.windows, hasLabels: !!labels,
+        step, axisStep, bounds, center, windows: header.windows, hasLabels: !!labels, dtype: header.dtype, range: header.range, levels: header.levels,
         labelIndices: () => [...nameOf.keys()],
         table: nameOf,
         toRAS, toVoxel, clampRAS, toHU, describe,
@@ -524,8 +533,9 @@ export async function loadVolume({ fetchFn = (url) => fetch(url) } = {}) {
         } catch (e) { return null; }
     };
 
+    const i16 = header.dtype === 'int16';
     const [ctBuf, labBuf, tableDoc] = await Promise.all([
-        binary(CT_DATA, count, true),
+        binary(i16 ? CT_DATA_I16 : CT_DATA, i16 ? count * 2 : count, true),
         header.labels ? binary(header.labels.file, count * 2, false) : null,
         header.labels && header.labels.table ? json(header.labels.table) : null,
     ]);
@@ -539,7 +549,15 @@ export async function loadVolume({ fetchFn = (url) => fetch(url) } = {}) {
             for (let n = 0; n < count; n++) labels[n] = view.getUint16(n * 2, true);
         }
     }
-    const vol = createVolume({ header, ct: new Uint8Array(ctBuf), labels, table: parseTable(tableDoc) });
+    let ct;
+    if (!i16) ct = new Uint8Array(ctBuf);
+    else if (LITTLE) ct = new Int16Array(ctBuf);
+    else {
+        const view = new DataView(ctBuf);
+        ct = new Int16Array(count);
+        for (let n = 0; n < count; n++) ct[n] = view.getInt16(n * 2, true);
+    }
+    const vol = createVolume({ header, ct, labels, table: parseTable(tableDoc) });
     vol.meta = meta;                     /* the raw header, for optional blocks (the endoscope's `sdf`) */
     return vol;
 }
