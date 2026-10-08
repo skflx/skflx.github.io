@@ -11,8 +11,12 @@
    - the CT stage: the carved voxels as an outline over the base image (mode-ct.js setCarved), which stays up if the reader
      goes from the procedure to CT (the procedure then ends, as the scope does) until CT is left;
    - the step: its `see` structures and the `at` of its `risk` hazards drawn through what hides them (hazards hatched), and
-     its station flown to (through the store, `endo.flyTo`) on a step the reader takes: the state's own pose first, else the
-     intact one, else the pose is kept and a note says so.
+     the scope landing on what the state opened (WP P4) on a step the reader takes (a flight through the store, `endo.flyTo`) and on a
+     `#p=…&step=n` link that carries no `scope=` (a jump): the views of a state are its own byState poses, then those of every state
+     whose units its own include (a pose posed for A is free wherever A's cuts are all made), nearest first, then the intact ones;
+     the landing is the step's own station when the state's own poses have one for it, else the state's own first view (what it
+     opened), else the nearest inherited one, else the intact pose of the step's station, else the pose is kept and a note says so.
+     A link with `scope=` keeps it.
 
    ssb/states/index.json loads on first use (a procedure shown, a Play press, a `#p=` hash) and never at boot, and only when
    stamps.js lists it (a build without states asks for nothing, so no 404 reaches the console). Missing or
@@ -32,8 +36,8 @@
 
    Imports no three.js. `hook` is the read-only test window (window.__ssb.procedure).
    ============================================================= */
-import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=9c85159b';
-import { STAMPS } from './stamps.js?v=2aa7b8f2';
+import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=8281d741';
+import { STAMPS } from './stamps.js?v=6c71e568';
 
 export const INDEX_FILE = 'ssb/states/index.json';
 const KEY = /^[0-9a-f]{10}$/;
@@ -44,6 +48,10 @@ const KEEP_STATES = 3;
 
 const own = (o, k) => o !== null && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k);
 const ids = (v) => (Array.isArray(v) ? v : typeof v === 'string' && v ? [v] : []).filter((x) => typeof x === 'string');
+/* The index's `remnants` ({ "<wall node>": "<id>.<side>@<cut>" }) -> the graph ids of the walls the state cuts (a mucosal remnant is not a cut). */
+const cutIds = (v) => (v && typeof v === 'object' && !Array.isArray(v)
+    ? [...new Set(Object.entries(v).filter(([w, r]) => typeof w === 'string' && typeof r === 'string' && /@/.test(r) && !/@(?:decongested|congested|scanned)$/.test(r)).map(([w]) => w.replace(/\.(?:R|L|M)$/, '')))]
+    : []);
 
 /* Fold { "<p-id>": { "<n>": key } } and { "<p-id>#<n>": key } into Map("<p-id>#<n>" -> key | null). */
 function stepMap(src) {
@@ -91,7 +99,7 @@ export function parseIndex(doc) {
             if (!KEY.test(key) || !s || typeof s !== 'object') continue;
             const patch = typeof s.patch === 'string' && PATCH_FILE.test(s.patch) ? s.patch : `${key}.ssbp.gz`;
             const lining = typeof s.lining === 'string' && LINING_FILE.test(s.lining) ? s.lining : '';
-            out.states.set(key, { patch, lining, hasLining: !!lining, hides: ids(s.hides), remnants: ids(s.remnants), units: ids(s.units), usedBy: ids(s.usedBy) });
+            out.states.set(key, { patch, lining, hasLining: !!lining, hides: ids(s.hides), remnants: ids(s.remnants), cuts: cutIds(s.remnants), units: ids(s.units), usedBy: ids(s.usedBy) });
         }
     }
     if (doc.mucosa && typeof doc.mucosa === 'object') {
@@ -161,7 +169,8 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
     let derived = null;                   /* the volume of the state on show (null: the intact specimen) */
     let note = '';
     let busy = false;
-    let flyNext = false;                  /* the next state to show came from a step the reader took: fly to its station */
+    let flyNext = false;                  /* the next state to show came from a step the reader took: land on its view (a flight) */
+    let jumpNext = false;                 /* ... came from a #p= link with no scope key: land on its view at once */
     let muShown = null;                   /* 'dec' | 'cong' on show (no procedure), else null */
     let pinned = false;                   /* CT is showing the outline of a state whose procedure has ended */
     const patches = new Map();            /* key -> parsed patch, most recent last (KEEP_STATES) */
@@ -170,6 +179,22 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
     const procedure = () => store.get().procedure;
     const stepsOf = (id) => { const e = graph.get(id); return e && Array.isArray(e.steps) ? e.steps : []; };
+    const stationOf = (id, step) => { const s = step >= 1 ? stepsOf(id)[step - 1] : null; return s && typeof s.station === 'string' ? s.station : ''; };
+
+    /* The state keys whose byState poses are free in `key`: itself, then each state whose units are a proper subset of its own,
+       the one with the most units first (the mucosal states carry none and are left out). */
+    function chainOf(key) {
+        const info = key && index ? index.states.get(key) : null;
+        if (!info) return [];
+        const mine = new Set(info.units);
+        const sub = [];
+        for (const [k, s] of index.states) {
+            if (k === key || !s.units.length || s.units.length >= mine.size || !s.units.every((u) => mine.has(u))) continue;
+            sub.push([k, s.units.length]);
+        }
+        sub.sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+        return [key, ...sub.map(([k]) => k)];
+    }
 
     /* ---------------- the index ---------------- */
 
@@ -216,13 +241,16 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         return patch;
     }
 
-    function emphasisFor(id, step) {
+    /* A step's `see` and its hazards' `at`, minus the walls the state cuts: only a thin rim of a cut wall is left, and drawn through
+       the lining (emphasis is, by design) it reads as a detached slab; the opened cavity shows the cut itself (WP P4, CP-3). */
+    function emphasisFor(id, step, key) {
         if (step < 1) return { see: [], hazard: [] };
         const s = stepsOf(id)[step - 1];
         if (!s) return { see: [], hazard: [] };
+        const cut = new Set(key && index && index.states.has(key) ? index.states.get(key).cuts : []);
         const hazard = [];
         for (const h of ids(s.risk)) { const e = graph.get(h); if (e) hazard.push(...ids(e.at)); }
-        return { see: ids(s.see), hazard };
+        return { see: ids(s.see).filter((x) => !cut.has(x)), hazard: hazard.filter((x) => !cut.has(x)) };
     }
 
     function release({ keepCt = false } = {}) {
@@ -232,8 +260,9 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         note = '';
         busy = false;
         flyNext = false;
+        jumpNext = false;
         muShown = null;
-        if (endo) endo.setStateVolume(null);
+        if (endo) { endo.setStateVolume(null); endo.setViews([], ''); }
         specimen.setState(null);
         specimen.setEmphasis({});
         if (ct && !keepCt) { ct.setCarved(null); pinned = false; }
@@ -333,33 +362,83 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         shown = { id: now.id, step, cor, key: vol ? key : null };
         note = problem;
         busy = false;
-        if (endo) endo.setStateVolume(vol, vol ? key : null);
+        if (endo) {
+            endo.setStateVolume(vol, vol ? key : null);
+            endo.setViews(vol ? chainOf(key) : [], stationOf(now.id, step));
+        }
         if (ct) { ct.setCarved(vol ? vol.carvedAt : null); pinned = false; }
         specimen.setState(vol && key ? { key, hides: index.states.get(key).hides } : null);
-        specimen.setEmphasis(emphasisFor(now.id, step));
+        specimen.setEmphasis(emphasisFor(now.id, step, vol ? key : null));
         if (vol && key) {
             const at = packsLoaded.indexOf(key);
             if (at >= 0) packsLoaded.splice(at, 1);
             packsLoaded.push(key);
             while (packsLoaded.length > KEEP_STATES) specimen.unloadState(packsLoaded.shift());
         }
-        if (flyNext) { flyNext = false; fly(now.id, step, key); }
+        if (jumpNext) {                                         /* a link: its hashchange listener (above) runs after the page's own, in the same task as this store change; wait it out */
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            if (mine !== seq) return;
+        }
+        const jump = jumpNext && linkBare;
+        const land = flyNext || jump;
+        flyNext = false;
+        jumpNext = false;
+        linkBare = false;
+        if (land && (vol || step >= 1)) {            /* step 0 of the intact specimen has no station and no state: nothing to land on */
+            emit();
+            if (endo && (endo.stationsState === 'idle' || endo.stationsState === 'loading')) await endo.whenStations();
+            if (mine !== seq) return;
+            landOn(now.id, step, vol ? key : null, jump);
+        }
         emit();
     }
 
-    /* The step's station: the state's own pose, else the intact one, else the pose stays and the note says so. */
-    function fly(id, step, key) {
-        if (!endo || step < 1) return;
-        const s = stepsOf(id)[step - 1];
-        if (!s || !s.station) return;
-        const hit = endo.stationFor(s.station, key);
-        if (!hit) { note = 'No pose for this state; the scope stays where it is.'; return; }
-        endo.flyTo(hit.key, hit.state ? key : null);
+    /* Where the scope lands on a state: see the header. `key` is the state on show (null: the intact specimen, whose only views are
+       the intact stations). A state with views never leaves the reader on a pose from another state's corridor. */
+    function landOn(id, step, key, jump) {
+        if (!endo) return;
+        const chain = key ? chainOf(key) : [];
+        const want = stationOf(id, step);
+        const p = endo.pose;
+        const views = endo.viewsOf(chain);
+        const mine = (v) => !p || v.side === 'M' || v.side === p.side;
+        const first = (list) => list.find(mine) || list[0] || null;
+        let hit = want ? endo.stationFor(want, chain.slice(0, 1)) : null;          /* the step's station, in the state's own table */
+        if (hit && hit.from === null) hit = null;
+        if (!hit) {
+            const v = first(views.filter((x) => x.from === chain[0])) || first(views);      /* what the state opened, else the nearest inherited */
+            if (v) hit = { key: v.key, from: v.from };
+        }
+        if (!hit && want) hit = endo.stationFor(want, null);                       /* the intact pose: free in every state */
+        if (!hit) { if (want) note = 'No pose for this state; the scope stays where it is.'; return; }
+        endo.flyTo(hit.key, hit.from ? chain : null, { jump });
     }
 
     /* ---------------- following the store ---------------- */
 
-    store.subscribe((state, prev) => {
+    /* A link that opens on a step with no `scope=` lands on the state's view at once. The page rewrites the address bar to the
+       canonical hash (with the pose) in its own subscriber, before this one runs, so what the link said is read from the
+       hashchange event's newURL (which the rewrite does not touch; the listener runs a task after the store change, which the
+       landing waits for) and the page's first hash from the navigation entry. */
+    const bare = (hash) => !/(?:^#|&)scope=/.test(hash || '');
+    const firstHash = () => {
+        try {
+            const nav = performance.getEntriesByType('navigation')[0];
+            const at = nav && typeof nav.name === 'string' ? nav.name.indexOf('#') : -1;
+            if (at >= 0) return nav.name.slice(at);
+        } catch (e) { /* no navigation timing: the live hash */ }
+        try { return location.hash; } catch (e) { return ''; }
+    };
+    let linkBare = false;                                                              /* the last hashchange's hash carried no scope= */
+    try {
+        window.addEventListener('hashchange', (e) => {
+            const url = e && typeof e.newURL === 'string' ? e.newURL : '';
+            linkBare = bare(url.indexOf('#') >= 0 ? url.slice(url.indexOf('#')) : '');
+        });
+    } catch (e) { /* no window: no links */ }
+
+    store.subscribe((state, prev, meta) => {
+        if (meta && meta.source === 'url' && state.procedure && state.procedure !== prev.procedure) jumpNext = true;
         if (state.procedure === prev.procedure) {
             if (pinned && !state.ct) { if (ct) ct.setCarved(null); pinned = false; emit(); }
             if (state.mu !== prev.mu && !state.procedure) applyMu();                  /* a procedure plays decongested whatever mu says */
@@ -375,7 +454,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         if (!prev.procedure) { shown = null; note = ''; muShown = null; specimen.setMuNote(''); }
         apply();
     });
-    if (store.get().procedure) apply();
+    if (store.get().procedure) { jumpNext = true; linkBare = bare(firstHash()); apply(); }
     else if (store.get().mu !== 'scan') applyMu();
 
     /* ---------------- what the reader does ---------------- */
@@ -383,6 +462,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
     function play(id, cor = null) {
         if (!canPlay(id)) { ensure().then(emit); return false; }
         flyNext = false;
+        jumpNext = false;
         return store.setProcedure({ id, step: 0, cor }, { source: 'procedure' }, endo ? endo.lastPose : null);
     }
 
@@ -392,6 +472,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         const step = Math.min(stepCount(index, proc.id), Math.max(0, Math.round(Number(n))));
         if (!Number.isFinite(step) || step === proc.step) return false;
         flyNext = true;
+        jumpNext = false;
         const ok = store.setProcedure({ ...proc, step });
         if (!ok) flyNext = false;
         return ok;
@@ -404,6 +485,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         if (!proc || !index) return false;
         const next = cor && index.corridors.has(cor) && index.corridors.get(cor).procedures.includes(proc.id) ? cor : null;
         flyNext = false;
+        jumpNext = false;
         return store.setProcedure({ ...proc, cor: next });
     }
 

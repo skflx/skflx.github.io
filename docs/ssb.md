@@ -672,7 +672,9 @@ voxels (`mode-ct.js` `setCarved`; entering CT ends the procedure as it ends
 the scope, and the outline stays pinned until CT is left), the specimen
 stage swaps in the state's pack by key (`geo-specimen.js` `loadState` /
 `unloadState`, the last three kept) and draws a step's `see` structures and
-the `at` of its `risk` hazards through what hides them, hazards hatched.
+the `at` of its `risk` hazards through what hides them, hazards hatched
+(minus the walls the state cuts: only a thin rim of one is left, which drawn
+through the lining reads as a detached slab; the opened cavity shows the cut).
 `ui-procedure.js` is the step list, the `think` behind "Think first" (click
 or `T`), Previous / Next / `[` `]`, the corridor picker and the state
 badge. Index shape read (P1b writes it; `parseIndex` is tolerant of the flat
@@ -681,10 +683,10 @@ badge. Index shape read (P1b writes it; `parseIndex` is tolerant of the flat
 **Step n is 0..N**: 0 is the start (the entry state, or the intact specimen),
 n >= 1 the state after step n; N is the highest step the index lists for the
 procedure; a step the index does not list takes the nearest lower one (a
-step that removes nothing is the same state). A step the reader takes flies
-to its `station` (the state's `byState` pose first, then the intact one,
-else the pose stays and a note says so); a step loaded from the URL keeps the
-pose the URL gives. The index is fetched only when `js/ssb/stamps.js` lists
+step that removes nothing is the same state). A step lands on what its state
+opened (WP P4): the scope flies (a step the reader takes) or jumps (a `#p=…&step=n`
+link with no `scope=`) to a view of the state, by the rule under **Stations**
+below; a link that carries `scope=` keeps its pose. The index is fetched only when `js/ssb/stamps.js` lists
 `ssb/states/index.json` (`ssb/states` is one of the stamped data dirs), so a
 build without states makes no request. A state pack (`packs.json` entry with
 `"state": <key>`) holds the state's lining nodes `<id>.<side>` and its
@@ -701,8 +703,24 @@ searches only when that fails; `check` re-tests every committed pose, `write`
 re-poses after a regeneration of the states). The tip must lie in an airway
 label *of that state* (a space, an ethmoid cell, the frontal recess; not the
 vestibule). A station the contralateral nostril reaches is keyed by its
-target's side. A step's station is looked up in its state first,
-then in the intact `stations`. A pose may carry `"shaft": "2.7"` when only
+target's side. A pose posed for state A is free in every state B whose units include A's
+(carving and decongestion only turn tissue into air; `--only scope` tests it on every
+such pair), so the **views of a state** are its own `byState` poses, then those of
+each state whose units are a proper subset of its own (most units first, a key
+posed by a nearer state shadowing a farther one), then the intact `stations`. The
+**landing** of a step is: the step's own station when the state's *own* poses have one
+for it; else the first of the state's own views (the
+order of `TABLE` in `stations.py`: what the state opens comes first); else the
+nearest inherited view; else the intact pose of the step's station; else the pose
+stays and a note says so. The procedure also lands on step 0 of a position that
+has a state (the posterior ethmoidectomy and the transclival approach, in their
+corridors). The station list shows "This state" (the views, the step's station
+marked) above the nostril's intact stations. A row of `stations.py` may name its
+state as `<corridor>:<p-id>#<n>` (a corridor position), a target as `lm` (an exact
+landmark), `carvedDiff` (the centroid of what one state carves beyond another) or
+`prominence` ranking (the share of rays on the sphenoid lateral wall above S = 24, the
+carotid prominences, with `both`: a minimum share on each side); a 0° lens is
+searched with the roll fixed at 0. A pose may carry `"shaft": "2.7"` when only
 the 2.7 mm telescope reaches it (the olfactory cleft and the inferior
 meatus, §5.9); flying there switches the shaft and the controls say so.
 

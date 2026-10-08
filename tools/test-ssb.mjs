@@ -2526,8 +2526,8 @@ function stationUnitTests() {
   const graphStations = [...GRAPH.keys()].filter((id) => GRAPH.get(id).type === 'stations');
   const missing = graphStations.filter((id) => !stems.has(id) && !unc.has(id) && !over.has(id));
   const stray = [...stems, ...unc, ...over].filter((id) => !GRAPH.has(id) || GRAPH.get(id).type !== 'stations');
-  const twice = graphStations.filter((id) => [stems.has(id), unc.has(id), over.has(id)].filter(Boolean).length > 1 || (keys.some((k) => k.startsWith(`${id}.`)) && Object.values(byState).some((t) => Object.keys(t).some((k) => k.startsWith(`${id}.`)))));
-  check('stations (E6, P3): every graph `t.*` station is in `stations` or `byState` (one or the other), `uncovered` or `overviews` (exactly one of the three groups), and nothing else is', graphStations.length >= 40 && missing.length === 0 && stray.length === 0 && twice.length === 0, JSON.stringify({ missing, stray, twice }));
+  const twice = graphStations.filter((id) => [stems.has(id), unc.has(id), over.has(id)].filter(Boolean).length > 1);
+  check('stations (E6, P3, P4): every graph `t.*` station is in `stations` and/or `byState`, `uncovered` or `overviews` (exactly one of those three groups; a station may have both an intact pose and poses for dissected states), and nothing else is', graphStations.length >= 40 && missing.length === 0 && stray.length === 0 && twice.length === 0, JSON.stringify({ missing, stray, twice }));
 
   /* ---- the codec: a link is a shape, a table lookup is the only thing it does ---- */
   const L = SC.parseStationLink;
@@ -2642,9 +2642,40 @@ async function stationStateTests(w) {
   check('stations per state (P3): every pose\'s tip lies in an airway label of that state (a space, an ethmoid cell or the frontal recess; never tissue or the vestibule)', problems.air.length === 0, shown(problems.air));
   check('stations per state (P3): every target is within FOV_DEG / 2 = 35 degrees of the view axis', problems.target.length === 0, shown(problems.target));
   check('stations per state (P3): every .L pose is its .R pose mirrored (side flipped, roll -> 360 - roll, the rest equal), and has one', problems.mirror.length === 0, JSON.stringify(problems.mirror));
+  /* P4: a pose posed for state A is free in every state B whose units include A's (carving and decongestion only turn tissue into air):
+     the premise the player's inherited views stand on, tested here on every such pair with the pose's own shaft. */
+  const unitsOf = (k) => index.states[k].units || [];
+  const donorsOf = (b) => { const mine = new Set(unitsOf(b)); return Object.keys(by).filter((a) => a !== b && unitsOf(a).length && unitsOf(a).length < mine.size && unitsOf(a).every((u) => mine.has(u))); };
+  const inherit = { free: [], air: [] };
+  let pairs = 0;
+  for (const b of Object.keys(index.states)) {
+    if (!unitsOf(b).length) continue;
+    const donors = donorsOf(b);
+    if (!donors.length) continue;
+    const derived = applyPatch(w.vol, await parsePatch(read(`ssb/states/${index.states[b].patch}`), w.vol, index.base));
+    const ctAt = (pt) => derived.sample(pt[0], pt[1], pt[2]);
+    for (const a of donors) {
+      for (const [k, st] of Object.entries(by[a])) {
+        pairs += 1;
+        const F = w.lms[`lm.naris.${st.pose.side}`];
+        const cl = SC.shaftClearance(F, st.pose, ctAt, SC.SHAFT_RADII[st.shaft || '4'], w.arch);
+        if (cl.blocked || cl.depth !== st.pose.depth) inherit.free.push([a, '->', b, k]);
+        const tip = SC.tipOf(F, st.pose);
+        const lab = derived.describe(derived.labelAt(tip[0], tip[1], tip[2]));
+        if (!lab || !AIR.has(lab.name.replace(/\.(R|L|M)$/, ''))) inherit.air.push([a, '->', b, k, lab && lab.name]);
+      }
+    }
+  }
+  check(`stations per state (P4): ${pairs} inherited poses (a pose of state A in every state B whose units include A's) are free in B with the tip in B's airway`, pairs > 20 && inherit.free.length === 0 && inherit.air.length === 0, JSON.stringify(inherit));
   const covered = new Set(keys.flatMap((k) => Object.keys(by[k])).map((k) => k.replace(/\.(R|L|M)$/, '')));
-  const stepStates = new Set(Object.values(index.procedures).flatMap((p) => Object.values(p.steps)));
-  check('stations per state (P3): the twelve stations P3 poses are there, and each state that carries a pose is one a procedure step reaches', ['t.ethmoid-bulla-0', 't.infundibulum-45', 't.maxillary-antrum-70', 't.medial-orbital-floor-30', 't.basal-lamella-0', 't.ethmoid-roof-30', 't.posterior-ethmoid-roof-0', 't.optic-canal-0', 't.medial-orbital-wall-0', 't.frontal-recess-45', 't.frontal-sinus-70', 't.sphenoid-face-0', 't.sphenoid-lateral-recess-45', 't.sella-open-30', 't.cavernous-sinus-30'].every((id) => covered.has(id)) && keys.every((k) => stepStates.has(k)), JSON.stringify([...covered]));
+  const positions = Object.values(index.corridors).flatMap((c) => c.positions.map((q) => [c, q]));
+  const without = positions.filter(([c, q]) => !(by[q.state] && Object.keys(by[q.state]).length)).map(([c, q]) => `${q.procedure}#${q.step}`);
+  check('stations per state (P4): every corridor position\'s state carries a view of its own (the four that had none included)', positions.length >= 14 && without.length === 0, JSON.stringify(without));
+  const SP = (k, id) => Object.keys(by[k] || {}).some((x) => x.startsWith(`${id}.`));
+  check('stations per state (P4): the new views are there: the agger uncapped (t.frontal-recess-45), the posterior ethmoid through the perforation (t.posterior-ethmoid-roof-0), the widened sphenoid face (t.ser-0) and the drilled clival recess (t.clivus-0, in the corridor\'s state and the standalone procedure\'s)',
+    SP('78b0c76006', 't.frontal-recess-45') && SP('a07618be24', 't.posterior-ethmoid-roof-0') && SP('cd183d9fb0', 't.ser-0') && SP('e6b67fc5cb', 't.clivus-0') && SP('882fa0add6', 't.clivus-0'));
+  const stepStates = new Set([...Object.values(index.procedures).flatMap((p) => Object.values(p.steps)), ...Object.values(index.corridors).flatMap((c) => c.positions.map((q) => q.state))]);
+  check('stations per state (P3): the stations P3 and P4 pose are there, and each state that carries a pose is one a procedure step or a corridor position reaches', ['t.ser-0', 't.clivus-0', 't.ethmoid-bulla-0', 't.infundibulum-45', 't.maxillary-antrum-70', 't.medial-orbital-floor-30', 't.basal-lamella-0', 't.ethmoid-roof-30', 't.posterior-ethmoid-roof-0', 't.optic-canal-0', 't.medial-orbital-wall-0', 't.frontal-recess-45', 't.frontal-sinus-70', 't.sphenoid-face-0', 't.sphenoid-lateral-recess-45', 't.sella-open-30', 't.cavernous-sinus-30'].every((id) => covered.has(id)) && keys.every((k) => stepStates.has(k)), JSON.stringify([...covered]));
 }
 
 /* ---------------- Endoscope: the page ---------------- */
@@ -3572,7 +3603,7 @@ const SPH_LAB = { params: [], presets: {} };
 
 /* The page on the fixture: the CT volume, the states, the stations and the landmarks are routed; the packs are the real ones.
    `index`: 'fixture' | 'absent' (stamps.js without the index: the page must not ask) | a body string; `patch`: an override for the state files. */
-async function openProc(browser, base, hash, { index = 'fixture', reducedMotion = 'no-preference', track = true, patches = null, real = false } = {}) {
+async function openProc(browser, base, hash, { index = 'fixture', reducedMotion = 'no-preference', track = true, patches = null, real = false, stationsBody = null } = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion });
   const asked = [];
   if (!real) {                      /* real: the page reads the committed specimen, states and stamps as served (P1b's data) */
@@ -3581,7 +3612,7 @@ async function openProc(browser, base, hash, { index = 'fixture', reducedMotion 
     const body = FX_FILES[name];
     return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
   });
-  await context.route(/\/ssb\/geometry\/(stations|landmarks)\.json(?:[?#].*)?$/, (route) => route.fulfill({ status: 200, contentType: 'application/json', body: PF.files[`ssb/geometry/${new URL(route.request().url()).pathname.split('/').pop()}`] }));
+  await context.route(/\/ssb\/geometry\/(stations|landmarks)\.json(?:[?#].*)?$/, (route) => route.fulfill({ status: 200, contentType: 'application/json', body: (stationsBody && /stations\.json/.test(route.request().url()) ? stationsBody : PF.files[`ssb/geometry/${new URL(route.request().url()).pathname.split('/').pop()}`]) }));
   await context.route(/\/ssb\/states\/[^?#]+(?:[?#].*)?$/, (route) => {
     const name = new URL(route.request().url()).pathname.replace(/^\//, '');
     asked.push(name);
@@ -3749,7 +3780,53 @@ async function procedureTests(browser, base) {
     await page.keyboard.press(']');
     await waitShown(page, 2, PROC.keys.a);
     const keep = await proc(page, () => ({ pose: window.__ssb.scope.pose, note: window.__ssb.procedure.note, shown: document.querySelector('.ssb-proc-note').textContent }));
-    check('procedure: a step whose station has no pose here keeps the scope where it is and says so', keep.pose.lens === 30 && keep.pose.depth === PROC.station.depth && /No pose for this state/.test(keep.note) && /No pose for this state/.test(keep.shown), JSON.stringify(keep));
+    check('procedure (P4): a step whose own station has no view here lands on the state\'s first view (here the one it is already at), without a note', keep.pose.lens === 30 && keep.pose.depth === PROC.station.depth && keep.note === '' && keep.shown === '', JSON.stringify(keep));
+    await context.close();
+  }
+
+  /* ===== a state with no view at all: the pose stays and the note says so ===== */
+  {
+    const bare = JSON.stringify({ version: 1, stations: {}, byState: {} });
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=0&${POSE_HASH({ lens: 0 })}`, { stationsBody: bare });
+    await waitShown(page, 0);
+    await page.waitForFunction(() => window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
+    await page.click('#ssb-scope-controls button[data-shaft="2.7"]');
+    await page.keyboard.press(']');
+    await waitShown(page, 1, PROC.keys.a);
+    const keep = await proc(page, () => ({ pose: window.__ssb.scope.pose, note: window.__ssb.procedure.note, shown: document.querySelector('.ssb-proc-note').textContent }));
+    check('procedure: a step whose station has no pose anywhere keeps the scope where it is and says so', keep.pose.lens === 0 && /No pose for this state/.test(keep.note) && /No pose for this state/.test(keep.shown), JSON.stringify(keep));
+    await context.close();
+  }
+
+  /* ===== P4: a link with no scope lands on the state's view at once; a link with a scope keeps it; the list ===== */
+  {
+    const { context, page } = await openProc(browser, base, `#p=${ID}&step=3&tier=3`);
+    await waitShown(page, 3, PROC.keys.b);
+    await page.waitForFunction(() => window.__ssb.scope.pose && window.__ssb.scope.pose.lens === 30, null, { timeout: 15000 });
+    const r = await proc(page, () => ({ pose: window.__ssb.scope.pose, flying: window.__ssb.scope.flying, chain: window.__ssb.scope.viewChain, views: window.__ssb.scope.views.map((v) => [v.key, v.from]), hash: location.hash }));
+    check('procedure (P4): a bare #p= link on state B lands at once on the view it inherits from state A (A\'s units are B\'s)',
+      r.pose.lens === 30 && r.pose.yaw === PROC.station.yaw && r.flying === false && JSON.stringify(r.chain) === JSON.stringify([PROC.keys.b, PROC.keys.a]) && r.views.length === 1 && r.views[0][1] === PROC.keys.a, JSON.stringify(r));
+    await context.close();
+  }
+  {
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=3&${POSE_HASH({ lens: 0 })}&tier=3`);
+    await waitShown(page, 3, PROC.keys.b);
+    await page.waitForTimeout(600);
+    const pose = await proc(page, () => window.__ssb.scope.pose);
+    check('procedure (P4): a link that carries scope= keeps its pose (no landing)', pose.lens === 0 && pose.yaw === PROC.pose.yaw, JSON.stringify(pose));
+    const list = await proc(page, () => ({ heads: [...document.querySelectorAll('#ssb-scope-controls .ssb-scope-station-group')].map((n) => n.textContent), first: (document.querySelector('#ssb-scope-controls .ssb-scope-stations button') || {}).dataset }));
+    check('procedure (P4): while a procedure plays the station list opens with "This state" and the state\'s views (the inherited one included)', list.heads[0] === 'This state' && !!list.first && list.first.group === 'state' && list.first.station === 't.medial-orbital-floor-30.R', JSON.stringify(list));
+    await context.close();
+  }
+  {
+    const { context, page } = await openProc(browser, base, `#${PROC_URL}&step=0&${POSE_HASH({ lens: 0 })}&tier=3`);
+    await waitShown(page, 0);
+    await page.waitForFunction(() => window.__ssb.scope.engaged && window.__ssb.scope.collision && window.__ssb.scope.stationsState !== 'loading' && window.__ssb.scope.stationsState !== 'idle', null, { timeout: 30000 });
+    await page.click('#ssb-scope-controls button[data-shaft="2.7"]');
+    await page.keyboard.press(']');
+    await waitShown(page, 1, PROC.keys.a);
+    const mark = await proc(page, () => [...document.querySelectorAll('#ssb-scope-controls .ssb-scope-stations button[aria-current]')].map((b) => [b.dataset.station, b.dataset.group]));
+    check('procedure (P4): the step\'s own station is marked in the list', JSON.stringify(mark) === JSON.stringify([['t.medial-orbital-floor-30.R', 'state']]), JSON.stringify(mark));
     await context.close();
   }
 
@@ -3784,8 +3861,86 @@ async function procedureTests(browser, base) {
   }
 
   /* ===== real data: runs once P1b's ssb/states/index.json exists ===== */
-  if (fs.existsSync(path.join(ROOT, 'ssb/states/index.json'))) await procedureRealDataTests(browser, base);
+  if (fs.existsSync(path.join(ROOT, 'ssb/states/index.json'))) { await procedureRealDataTests(browser, base); await procedureLandingTests(browser, base); }
   else console.log('  (procedure: ssb/states/index.json is not in this build — the real-data checks are skipped until P1b merges)');
+}
+
+/* WP P4: every corridor position lands the scope on a view of its state, by a bare #p= link (a jump) and by Next (a flight), and the
+   landing is the one the rule picks: the step's own station when the state's own poses have one, else the state's
+   own first view, else the nearest inherited one, else the intact pose. The expectation below is computed from the committed data
+   independently of the player. */
+async function procedureLandingTests(browser, base) {
+  const read = (p) => JSON.parse(fs.readFileSync(path.join(ROOT, p), 'utf8'));
+  const idx = read('ssb/states/index.json');
+  const doc = read('ssb/geometry/stations.json');
+  const parsed = parseIndex(idx);
+  const AIRN = new Set(['s.nasal-cavity', 's.nasopharynx', 's.maxillary-sinus', 's.frontal-sinus', 's.sphenoid-sinus', 's.agger-nasi-cell', 's.anterior-ethmoid-cells', 's.ethmoid-bulla', 's.frontal-recess', 's.posterior-ethmoid-cells']);
+  const unitsOf = (k) => (parsed.states.get(k) || { units: [] }).units;
+  const chainOf = (key) => {
+    if (!key) return [];
+    const mine = new Set(unitsOf(key));
+    const sub = [...parsed.states.keys()].filter((k) => k !== key && unitsOf(k).length && unitsOf(k).length < mine.size && unitsOf(k).every((u) => mine.has(u)));
+    sub.sort((a, b) => unitsOf(b).length - unitsOf(a).length || (a < b ? -1 : 1));
+    return [key, ...sub];
+  };
+  const stationOf = (pid, step) => { const e = entity(pid); const s = step >= 1 && e && e.steps ? e.steps[step - 1] : null; return s && s.station ? s.station : ''; };
+  const expected = (pid, step, cor) => {
+    const key = stateKeyFor(parsed, pid, step, cor) || parsed.mucosa.dec || null;
+    const chain = chainOf(key);
+    const want = stationOf(pid, step);
+    const find = (table, id) => (table ? table[`${id}.R`] || table[`${id}.M`] : null);
+    const views = [];
+    const seen = new Set();
+    for (const k of chain) for (const [name, v] of Object.entries(doc.byState[k] || {})) if (!seen.has(name)) { seen.add(name); views.push({ name, v, from: k }); }
+    const mine = (list) => { const m = list.filter((x) => x.name.endsWith('.M') || x.name.endsWith('.R')); return m[0] || list[0]; };
+    let hit = null;
+    if (want) hit = find(doc.byState[chain[0]], want);
+    if (!hit && views.length) { const own = views.filter((x) => x.from === chain[0]); const pick = mine(own.length ? own : views); hit = pick ? pick.v : null; }
+    if (!hit && want) hit = find(doc.stations, want);
+    return { key, chain, want, pose: hit ? hit.pose : null };
+  };
+  const samePoseObj = (a, b) => !!a && !!b && ['side', 'depth', 'yaw', 'pitch', 'roll', 'lens'].every((f) => a[f] === b[f]);
+  const positions = [...parsed.corridors].flatMap(([cor, c]) => c.order.map(([k]) => { const m = /^(.+)#(\d+)$/.exec(k); return { cor, pid: m[1], step: Number(m[2]) }; }));
+  const landed = (page, want) => page.waitForFunction((w) => { const s = window.__ssb.scope; const p = s.pose; return !s.flying && p && ['side', 'depth', 'yaw', 'pitch', 'roll', 'lens'].every((f) => p[f] === w[f]); }, want, { timeout: 15000 });
+
+  /* ---- every corridor position, by a link with no scope= ---- */
+  {
+    const first = positions[0];
+    const { context, page } = await openProc(browser, base, `#p=${first.pid}&step=${first.step}&cor=${first.cor}`, { real: true });
+    const bad = [];
+    for (const [n, q] of positions.entries()) {
+      const exp = expected(q.pid, q.step, q.cor);
+      if (n > 0) await page.evaluate((h) => { location.hash = h; }, `#p=${q.pid}&step=${q.step}&cor=${q.cor}`);
+      try {
+        await page.waitForFunction(([id, step, k]) => { const p = window.__ssb.procedure; const s = p && p.shown; return s && s.id === id && s.step === step && s.key === k && !p.busy; }, [q.pid, q.step, exp.key], { timeout: 60000 });
+        if (!exp.pose) { bad.push([q.pid, q.step, 'no view in the data']); continue; }
+        await landed(page, exp.pose);
+        const got = await page.evaluate(() => { const l = window.__ssb.scope.tipLabel; return { limited: window.__ssb.scope.hud.limited, tip: l && l.name, flying: window.__ssb.scope.flying, note: window.__ssb.procedure.note }; });
+        const tipOk = got.tip && AIRN.has(got.tip.replace(/\.(R|L|M)$/, ''));
+        if (got.limited || got.flying || !tipOk || got.note) bad.push([q.pid, q.step, JSON.stringify(got)]);
+      } catch (e) { bad.push([q.pid, q.step, 'did not land on ' + JSON.stringify(exp.pose)]); }
+    }
+    check(`procedure (P4, real data): a bare link to each of the ${positions.length} corridor positions lands at once on its expected view — pose exact (so free, not clamped), the tip in the state's airway, no note`, positions.length >= 14 && bad.length === 0, JSON.stringify(bad));
+    await context.close();
+  }
+
+  /* ---- Next, a flight, through the corridors; a link with scope= keeps its pose ---- */
+  for (const [pid, cor, last] of [['p.transsellar-approach', 'eea-sellar-clival', 4], ['p.transclival-approach', 'eea-sellar-clival', 2], ['p.draf-i', 'fess', 5], ['p.posterior-ethmoidectomy', 'fess', 1]]) {
+    const { context, page } = await openProc(browser, base, `#p=${pid}&step=0&cor=${cor}&scope=R,40,0,0,0,0`, { real: true });
+    await page.waitForFunction(() => window.__ssb.procedure.shown && !window.__ssb.procedure.busy && window.__ssb.scope.stationsState === 'ready', null, { timeout: 60000 });
+    await page.waitForTimeout(400);
+    const kept = await page.evaluate(() => window.__ssb.scope.pose);
+    const bad = [];
+    for (let step = 1; step <= last; step++) {
+      const exp = expected(pid, step, cor);
+      await page.keyboard.press(']');
+      await waitShown(page, step, exp.key);
+      if (!exp.pose) continue;
+      try { await landed(page, exp.pose); } catch (e) { bad.push([step, JSON.stringify(await page.evaluate(() => window.__ssb.scope.pose)), JSON.stringify(exp.pose)]); }
+    }
+    check(`procedure (P4, real data): ${pid} in ${cor}: a link with scope= keeps its pose at step 0, and Next to each step to ${last} flies to the expected view`, samePoseObj(kept, { side: 'R', depth: 40, yaw: 0, pitch: 0, roll: 0, lens: 0 }) && bad.length === 0, JSON.stringify({ kept, bad }));
+    await context.close();
+  }
 }
 
 /* Every state of the committed index parses and applies on the real volume; the first state's lining pack replaces the base lining. */
