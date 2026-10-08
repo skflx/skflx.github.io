@@ -729,8 +729,10 @@ on the decongested state (the operations start by decongesting).
   cross-section is ordinary (37th percentile), so the gap to Xiao's 2.8 cm²
   is method and population (MRI, adults aged 21–38), not a narrow head or a
   segmentation defect.
-- **Congested** waits on POP1: per NasalSeg subject, the more congested
-  side's CSA profile against the subject's mean, as a median ratio. Head
+- **Congested** has its data from POP1 (`profiles` in
+  `ssb/anatomy/population/nasalseg.json`): per NasalSeg subject, the more
+  congested side's mean CSA against the subject's two-side mean, as a median
+  ratio; DC1 reads it after the checkpoint settles the span (§5.10). Head
   A's own left side is not used: its cavity asymmetry is beyond every clear
   NasalSeg subject (POP0, PR #119), and its mid-cavity cross-section
   (0.63 cm²) is below every one of them (the smallest is 1.09).
@@ -783,6 +785,14 @@ mucosal state → dissection.
   which it does not label: that is the resegmentation's job (PR #119, RS).
   A voxel-level check (a model trained on NasalSeg, run on head A) is WP
   SEG1, waiting on an owner decision (O12).
+- **Cross-section profiles (POP1).** Per clear subject and side, the cavity
+  label's section profile along its own anteroposterior axis (1 mm sections,
+  mean from 10 to 90 % of the length), reported as labelled and restricted
+  to our air threshold; method in the docstring of
+  `tools/ssb-pipeline/nasalseg/stats.py`. Head A's labels are already at our
+  threshold, so only the restricted rows compare like with like. Its
+  percentile depends on the span by more than 20 points, so the JSON keeps
+  all three spans and no single placement is quoted here.
 - **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented
