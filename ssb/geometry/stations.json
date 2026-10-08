@@ -447,36 +447,187 @@
      "s.nasopharynx.M": 100
     }
    }
+  },
+  "t.septum-anterior.R": {
+   "pose": {
+    "side": "R",
+    "depth": 18.0,
+    "yaw": -16.0,
+    "pitch": 24.0,
+    "roll": 0.0,
+    "lens": 0.0
+   },
+   "target": {
+    "note": "the anterior septum above the nasal floor, behind the vestibule: the centroid of s.nasal-septum.M voxels with -25 < A < -8 and S < 22",
+    "at": [
+     0.0,
+     -17.14,
+     11.85
+    ]
+   },
+   "measured": {
+    "tip": [
+     2.0,
+     -11.4,
+     12.0
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 25.8,
+    "contactMm": 0.0,
+    "imageShare": {
+     "s.nasal-septum.M": 96,
+     "s.middle-turbinate.R": 2,
+     "tissue": 1,
+     "s.maxillary-medial-wall.R": 1
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 86,
+     "s.nasopharynx.M": 1
+    }
+   }
+  },
+  "t.septum-anterior.L": {
+   "pose": {
+    "side": "L",
+    "depth": 18.0,
+    "yaw": -16.0,
+    "pitch": 24.0,
+    "roll": 0.0,
+    "lens": 0.0
+   },
+   "target": {
+    "note": "the anterior septum above the nasal floor, behind the vestibule: the centroid of s.nasal-septum.M voxels with -25 < A < -8 and S < 22",
+    "at": [
+     -0.0,
+     -17.14,
+     11.85
+    ]
+   },
+   "measured": {
+    "tip": [
+     -2.0,
+     -11.4,
+     12.0
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 25.8,
+    "contactMm": 0.0,
+    "imageShare": {
+     "s.nasal-septum.M": 97,
+     "s.maxillary-medial-wall.L": 1,
+     "s.middle-turbinate.L": 1,
+     "tissue": 1
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 85
+    }
+   }
+  },
+  "t.lacrimal-sac-0.R": {
+   "pose": {
+    "side": "R",
+    "depth": 20.0,
+    "yaw": 4.0,
+    "pitch": 42.0,
+    "roll": 0.0,
+    "lens": 0.0
+   },
+   "target": {
+    "note": "the lateral nasal wall mucosa in front of the middle turbinate, at the level of the axilla: the sac lies lateral to it, behind the frontal process of the maxilla (not segmented)",
+    "at": [
+     6.5,
+     -15.0,
+     29.0
+    ]
+   },
+   "measured": {
+    "tip": [
+     7.6,
+     -10.4,
+     18.1
+    ],
+    "tipIn": "s.nasal-cavity.R",
+    "targetOffAxisDeg": 26.3,
+    "contactMm": 14.0,
+    "imageShare": {
+     "tissue": 35,
+     "s.middle-turbinate.R": 24,
+     "s.maxillary-medial-wall.R": 19,
+     "s.nasal-septum.M": 14,
+     "s.lamina-papyracea.R": 4,
+     "s.orbit.R": 3
+    },
+    "raysThrough": {
+     "s.nasal-cavity.R": 98
+    }
+   }
+  },
+  "t.lacrimal-sac-0.L": {
+   "pose": {
+    "side": "L",
+    "depth": 20.0,
+    "yaw": 4.0,
+    "pitch": 42.0,
+    "roll": 0.0,
+    "lens": 0.0
+   },
+   "target": {
+    "note": "the lateral nasal wall mucosa in front of the middle turbinate, at the level of the axilla: the sac lies lateral to it, behind the frontal process of the maxilla (not segmented)",
+    "at": [
+     -6.5,
+     -15.0,
+     29.0
+    ]
+   },
+   "measured": {
+    "tip": [
+     -7.6,
+     -10.4,
+     18.1
+    ],
+    "tipIn": "s.nasal-cavity.L",
+    "targetOffAxisDeg": 26.3,
+    "contactMm": 14.0,
+    "imageShare": {
+     "tissue": 35,
+     "s.middle-turbinate.L": 22,
+     "s.maxillary-medial-wall.L": 22,
+     "s.nasal-septum.M": 14,
+     "s.lamina-papyracea.L": 3,
+     "s.orbit.L": 2
+    },
+    "raysThrough": {
+     "s.nasal-cavity.L": 98
+    }
+   }
   }
  },
  "uncovered": {
-  "t.olfactory-cleft-0": "closed in this specimen: the middle turbinate lies against the septum (not decongested), so every free pose aimed at the cribriform plate sees only turbinate and septum",
-  "t.frontal-recess-45": "from the middle turbinate axilla the 45 degree view is filled by the turbinate (mucosa apposed to the lateral wall); the recess is shown by t.frontal-recess-70",
-  "t.inferior-meatus-45": "needs the inferior turbinate medialised: no free tip lies under the turbinate in this specimen",
-  "t.septum-anterior": "needs the vestibule and the internal valve, masked until ST6 (external nose)",
-  "t.lacrimal-sac-0": "needs the anterior nasal cavity in front of the middle turbinate head, masked until ST6",
-  "t.ethmoid-bulla-0": "needs dissection: the uncinate process resected",
-  "t.basal-lamella-0": "needs dissection: the bulla opened",
-  "t.posterior-ethmoid-roof-0": "needs dissection: through the basal lamella",
-  "t.ethmoid-roof-30": "needs dissection: ethmoidectomy",
-  "t.frontal-sinus-70": "needs dissection: an enlarged frontal ostium (Draf IIa)",
-  "t.draf-iii-0": "needs dissection: septal window and frontal drillout",
-  "t.medial-orbital-floor-30": "needs dissection: a wide middle meatal antrostomy",
-  "t.medial-orbital-wall-0": "needs dissection: a completed sphenoethmoidectomy",
-  "t.infundibulum-45": "needs dissection: uncinectomy",
-  "t.maxillary-antrum-70": "needs dissection: a middle meatal antrostomy",
-  "t.spf-crista": "needs dissection: a lateral wall mucoperiosteal flap",
-  "t.ppf-transmaxillary": "needs dissection: posterior maxillary wall removed",
-  "t.sphenoid-face-0": "needs dissection: sphenoidotomy and posterior septectomy",
-  "t.sphenoid-lateral-recess-45": "needs dissection: sphenoidotomy and posterior septectomy",
-  "t.optic-canal-0": "needs dissection: posterior ethmoidectomy and sphenoidotomy",
-  "t.sella-open-30": "needs dissection: the sella opened",
-  "t.suprasellar-0": "needs dissection, and intradural structures the specimen does not have",
-  "t.clivus-0": "needs dissection, and intradural structures the specimen does not have",
-  "t.petrous-apex-45": "needs dissection: sphenoidotomy, posterior septectomy, clival recess",
-  "t.quadrangular-space-0": "needs dissection: transmaxillary-transpterygoid corridor",
-  "t.cvj-0": "needs posterior septectomy; C1 and the dens lie below the specimen crop",
-  "t.cavernous-sinus-30": "needs dissection: the sella opened"
+  "t.basal-lamella-0": "needs dissection: posable at the state of p.anterior-ethmoidectomy step 1 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.cavernous-sinus-30": "needs dissection: posable at the state of p.transsellar-approach step 4 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.clivus-0": "the clival recess opens at the state of p.transclival-approach step 2, but the view is of intradural structures (basilar artery, pons, CN VI) the specimen does not have",
+  "t.cvj-0": "needs the posterior septectomy (P1's EEA states have it), but C1 and the dens lie below the specimen crop",
+  "t.draf-iii-0": "needs a septal window and frontal drillout (Draf III): outside O7's FESS corridor (P1 stops at Draf IIa)",
+  "t.ethmoid-bulla-0": "needs dissection: posable at the state of p.uncinectomy step 1 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.ethmoid-roof-30": "needs dissection: posable at the state of p.anterior-ethmoidectomy step 4 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.frontal-recess-45": "opens at the Draf I entry state (after the sphenoethmoidectomy and the upper uncinate, docs/ssb.md 5.8): P1 prototype R,34,2,42,0,45, 6 degrees off axis, rays into the agger and the recess. Posed per state by WP P3; intact, the turbinate fills the 45 degree view",
+  "t.frontal-sinus-70": "needs dissection: posable at the state of p.draf-iia step 2 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.inferior-meatus-45": "closed to the 4 mm shaft, decongested or not (the shaft meets the inferior turbinate's bone); posable with the 2.7 mm telescope, tip lateral to the turbinate (P1 prototype R,22,6,-4,300,45 as scanned; R,26,6,2,300,45 decongested; the lateral wall fills about 90 % of the image). Waits on the stations' shaft field (WP P3)",
+  "t.infundibulum-45": "needs dissection: posable at the state of p.uncinectomy step 1 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.maxillary-antrum-70": "needs dissection: posable at the state of p.maxillary-antrostomy step 1 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.medial-orbital-floor-30": "needs dissection: posable at the state of p.maxillary-antrostomy step 1 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.medial-orbital-wall-0": "needs dissection: posable at the state of p.transethmoidal-sphenoidotomy step 2 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.olfactory-cleft-0": "closed to the 4 mm shaft, decongested or not (P1: decongestion at Xiao 2021's ratio barely changes the superior third, as that study found); posable with the 2.7 mm telescope on the intact specimen (P1 prototype R,48,-8,40,0,0: the cribriform plate fills 96 % of the image, tip in the cleft at R 1.4). Waits on the stations' shaft field (WP P3)",
+  "t.optic-canal-0": "needs dissection: posable at the state of p.transethmoidal-sphenoidotomy step 2 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.petrous-apex-45": "needs the medial petrous apex approach (behind the paraclival ICA), not modelled in P1; the clival recess state shows only the lateral sphenoid wall from there",
+  "t.posterior-ethmoid-roof-0": "needs dissection: posable at the state of p.posterior-ethmoidectomy step 1 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.ppf-transmaxillary": "needs the posterior maxillary wall removed (transmaxillary corridor): outside O7's corridors",
+  "t.quadrangular-space-0": "needs the transmaxillary-transpterygoid corridor: outside O7's corridors",
+  "t.sella-open-30": "needs dissection: posable at the state of p.transsellar-approach step 4 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.spf-crista": "needs a lateral wall mucoperiosteal flap (soft tissue, not a volume cut): outside P1",
+  "t.sphenoid-face-0": "needs dissection: posable at the state of p.transsellar-approach step 2 (midline) and p.sphenoidotomy step 4 (one side) (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.sphenoid-lateral-recess-45": "needs dissection: posable at the state of p.transsellar-approach step 2 (docs/ssb.md 5.8; P1 prototype pose in docs/ssb-roadmap.md P3), written to byState by WP P3",
+  "t.suprasellar-0": "needs the sellar opening and the tuberculum/planum (a transplanum extension, outside O7's corridor), and intradural structures the specimen does not have"
  },
  "overviews": {
   "ids": [

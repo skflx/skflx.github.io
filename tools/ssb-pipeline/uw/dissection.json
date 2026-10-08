@@ -1,0 +1,739 @@
+{
+ "version": 1,
+ "rule": "Dissection units for procedure mode (P1, Opus, 2026-10-08; contract: docs/ssb.md 5.8). Anatomy as data: each unit is a rule over the base's own labels, landmarks and distance fields, evaluated by the pipeline (WP P1b, dissect.py), never a hand-drawn voxel set. A unit is named <graph id>.<side>@<cut>: the structure it resects, on the right (mirrored to the left on the standard specimen) or the midline, and the cut. A carved voxel becomes air: display = air.fill, label = the nearest air label among the unit's own air spaces (window: a + b; exenterate: group; region: into), so the scope's tip-in-air rule and its collision both read the dissected state from the volume. Boxes are side-relative (r = +R on the right, -R on the left) and every bound is a number or an anchor expression '<anchor> +/- mm': an anchor is '<label id without side>.<rmin|rmax|amin|amax|smin|smax>' over that label's voxels in the base (the unit's side; for a midline unit, .M when the label exists, else .R, which the standard specimen's symmetry makes safe), or 'lm.<id>.<r|a|s>' (the unit's side, else .M, else .R); r in an anchor is side-relative, like the box. measured: the voxels the P1 prototype (scratch, not committed) carved for each unit on the standard specimen, on the right side or the midline before mirroring, applied in the procedure chain's order; P1b reproduces them.",
+ "air": {
+  "fill": 48,
+  "level": 78,
+  "why": "48 is the specimen's median display in labelled air (ssb/ct/ct.json values); 78 is the pipeline's air threshold, which scope.js also uses (SOFT_LEVEL)"
+ },
+ "guard": {
+  "marginMm": 1.0,
+  "fields": [
+   "s.internal-carotid-artery",
+   "s.optic-nerve",
+   "s.anterior-ethmoidal-artery"
+  ],
+  "labels": [
+   "s.orbit"
+  ],
+  "why": "No unit carves within 1 mm of the ICA, optic nerve or AEA tubes (ssb/ct sdf fields) or of the orbital contents, on either side, after mirroring. A modelling invariant, not a clinical number: FESS preserves the AEA and the lamina (p.anterior-ethmoidectomy endpoints), the sellar and clival openings stop at the carotid prominences (p.transsellar-approach step 4, p.transclival-approach step 2), and the ICA and AEA tubes are partly inferred sweeps, so a margin is kept rather than trusting their surface to the voxel. The ICA sweeps are not exactly mirror-symmetric (the prototype's mirrored left carve came to 0.7 mm of the left ICA), so the guard is applied again after mirroring."
+ },
+ "keep": {
+  "fess": [
+   "s.orbit",
+   "s.lamina-papyracea",
+   "s.orbital-floor",
+   "s.fovea-ethmoidalis",
+   "s.lateral-lamella",
+   "s.cribriform-plate",
+   "s.frontal-sinus-anterior-table",
+   "s.frontal-sinus-posterior-table",
+   "s.frontal-sinus-floor",
+   "s.middle-turbinate",
+   "s.inferior-turbinate",
+   "s.nasal-septum.M",
+   "s.maxillary-anterior-wall",
+   "s.maxillary-posterior-wall",
+   "s.maxillary-sinus-floor",
+   "s.nasal-floor",
+   "s.planum-sphenoidale.M",
+   "s.sella-turcica.M",
+   "s.clivus.M",
+   "s.sphenoid-lateral-wall",
+   "s.sphenoid-floor",
+   "s.intersinus-septum.M",
+   "s.frontal-intersinus-septum.M"
+  ],
+  "eea": [
+   "s.orbit",
+   "s.lamina-papyracea",
+   "s.orbital-floor",
+   "s.fovea-ethmoidalis",
+   "s.lateral-lamella",
+   "s.cribriform-plate",
+   "s.middle-turbinate",
+   "s.inferior-turbinate",
+   "s.planum-sphenoidale.M",
+   "s.sphenoid-lateral-wall",
+   "s.nasal-floor",
+   "s.maxillary-medial-wall",
+   "s.posterior-ethmoid-cells"
+  ],
+  "why": "A keep list names labels no voxel of the unit may take, on both sides (an id without a side means .R, .L and .M). FESS keeps the lamina, the skull base, both turbinates and the septum (p.anterior-ethmoidectomy, p.posterior-ethmoidectomy endpoints: MT preserved and stable, partitions taken to a smooth skull base); the frontal sinus floor is kept until Draf IIa removes it. The EEA corridor keeps the posterior ethmoid (the transsphenoidal route opens the sphenoid from the sphenoethmoidal recess, p.transsellar-approach step 1) and the planum (a transplanum extension is a different procedure)."
+ },
+ "units": {
+  "s.uncinate-process.R@uncinectomy": {
+   "realizes": [
+    "s.uncinate-process"
+   ],
+   "op": "window",
+   "a": [
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.maxillary-sinus",
+    "s.agger-nasi-cell",
+    "s.ethmoid-bulla"
+   ],
+   "sumMm": 8.0,
+   "box": {
+    "r": [
+     "s.ethmoid-bulla.rmin + 1.5",
+     "s.ethmoid-bulla.rmax + 3"
+    ],
+    "a": [
+     "s.ethmoid-bulla.amax - 5",
+     "lm.middle-turbinate-head.a - 6"
+    ],
+    "s": [
+     "s.inferior-turbinate.smax + 0.5",
+     "s.agger-nasi-cell.smin + 1.5"
+    ]
+   },
+   "keep": "fess",
+   "keepAlso": [
+    "s.maxillary-medial-wall"
+   ],
+   "shell": {
+    "s.ethmoid-bulla": 1.0,
+    "s.agger-nasi-cell": 1.0
+   },
+   "truth": "proxy: the specimen has no uncinate, infundibulum or hiatus label, and the uncinate's bone is fused into the s.maxillary-medial-wall wall unit (the infundibulum is collapsed tissue at this resolution). The unit therefore takes the unlabelled tissue between the middle meatus and the medial wall, agger and bulla, above the inferior turbinate and in front of the bulla's anterior face: it opens the infundibular trough and the hiatus and exposes the bulla face. It leaves the medial wall, so the natural ostium is not opened here; it appears with the antrostomy (s.posterior-fontanelle.R@antrostomy). The bulla and agger keep a 1 mm wall (later units open them). Taking the medial wall here instead opened a 12.5 x 10.5 mm window into the antrum at the uncinectomy step, the size of an antrostomy",
+   "basis": "p.uncinectomy steps 1-3 (from the superior attachment down to the IT; the natural ostium is then seen, step 4)",
+   "measured": {
+    "voxels": 4436
+   }
+  },
+  "s.posterior-fontanelle.R@antrostomy": {
+   "realizes": [
+    "s.posterior-fontanelle"
+   ],
+   "op": "window",
+   "a": [
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.maxillary-sinus"
+   ],
+   "sumMm": 7.0,
+   "box": {
+    "r": [
+     "s.ethmoid-bulla.rmin + 1.5",
+     "s.ethmoid-bulla.rmax + 3"
+    ],
+    "a": [
+     "s.ethmoid-bulla.amin - 0.5",
+     "lm.middle-turbinate-head.a - 6"
+    ],
+    "s": [
+     "s.inferior-turbinate.smax + 0.5",
+     "s.ethmoid-bulla.smin + 1"
+    ]
+   },
+   "keep": "fess",
+   "truth": "a window in s.maxillary-medial-wall (the wall unit between the maxillary sinus and the nasal cavity), from the natural ostium region back into the posterior fontanelle and down to the IT attachment",
+   "basis": "p.maxillary-antrostomy step 1 (posteriorly into the posterior fontanelle, inferiorly toward the IT); its endpoints give the size: typically 1-2 cm for CRS (src.epos-2020, src.chiu-2019-ch06)",
+   "measured": {
+    "voxels": 3619
+   }
+  },
+  "s.ethmoid-bulla.R@opened": {
+   "realizes": [
+    "s.ethmoid-bulla"
+   ],
+   "op": "window+exenterate",
+   "a": [
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.ethmoid-bulla"
+   ],
+   "sumMm": 7.0,
+   "group": [
+    "s.nasal-cavity",
+    "s.ethmoid-bulla"
+   ],
+   "closeMm": 2.5,
+   "box": {
+    "r": [
+     "s.ethmoid-bulla.rmin - 1.5",
+     "s.ethmoid-bulla.rmax + 2"
+    ],
+    "a": [
+     "s.ethmoid-bulla.amin - 0.5",
+     "s.ethmoid-bulla.amax + 2"
+    ],
+    "s": [
+     "s.ethmoid-bulla.smin - 4",
+     "s.ethmoid-bulla.smax + 1.5"
+    ]
+   },
+   "keep": "fess",
+   "basis": "p.anterior-ethmoidectomy steps 1-2 (enter inferomedially, remove the anterior and medial walls, take the lateral wall to the lamina papyracea)",
+   "measured": {
+    "voxels": 4088
+   }
+  },
+  "s.anterior-ethmoid-cells.R@to-skull-base": {
+   "realizes": [
+    "s.anterior-ethmoid-cells",
+    "s.bullar-lamella"
+   ],
+   "op": "exenterate",
+   "group": [
+    "s.nasal-cavity",
+    "s.ethmoid-bulla",
+    "s.anterior-ethmoid-cells"
+   ],
+   "closeMm": 2.5,
+   "box": {
+    "r": [
+     "s.anterior-ethmoid-cells.rmin + 0.5",
+     "s.anterior-ethmoid-cells.rmax + 2"
+    ],
+    "a": [
+     "s.basal-lamella.amin",
+     "s.ethmoid-bulla.amax + 2"
+    ],
+    "s": [
+     "s.ethmoid-bulla.smin - 4",
+     "s.anterior-ethmoid-cells.smax + 0.5"
+    ]
+   },
+   "keep": "fess",
+   "basis": "p.anterior-ethmoidectomy step 4 (suprabullar cells and the bullar lamella up to the skull base, after locating the AEA; the AEA guard keeps it). The frontal recess cells (agger) are left for p.draf-i",
+   "truth": "the bullar lamella has no label; it is among the partitions this exenteration removes",
+   "measured": {
+    "voxels": 487
+   }
+  },
+  "s.basal-lamella.R@perforated": {
+   "realizes": [
+    "s.basal-lamella"
+   ],
+   "op": "window",
+   "a": [
+    "s.nasal-cavity",
+    "s.ethmoid-bulla",
+    "s.anterior-ethmoid-cells"
+   ],
+   "b": [
+    "s.posterior-ethmoid-cells"
+   ],
+   "sumMm": 6.0,
+   "box": {
+    "r": [
+     "s.basal-lamella.rmin",
+     "s.basal-lamella.rmax"
+    ],
+    "a": [
+     "s.basal-lamella.amin - 4",
+     "s.basal-lamella.amax + 3.5"
+    ],
+    "s": [
+     "s.basal-lamella.smin - 1.5",
+     "s.basal-lamella.smax - 4.5"
+    ]
+   },
+   "keep": "fess",
+   "truth": "s.basal-lamella is a proxy plane (walls.py); the opening is the window between the anterior and posterior groups through it",
+   "basis": "p.posterior-ethmoidectomy step 0 (perforate inferomedially, at the junction of its vertical and horizontal parts)",
+   "measured": {
+    "voxels": 1628
+   }
+  },
+  "s.posterior-ethmoid-cells.R@to-skull-base": {
+   "realizes": [
+    "s.posterior-ethmoid-cells"
+   ],
+   "op": "exenterate",
+   "group": [
+    "s.nasal-cavity",
+    "s.ethmoid-bulla",
+    "s.anterior-ethmoid-cells",
+    "s.posterior-ethmoid-cells"
+   ],
+   "closeMm": 2.5,
+   "box": {
+    "r": [
+     "s.posterior-ethmoid-cells.rmin + 1",
+     "s.posterior-ethmoid-cells.rmax + 0.5"
+    ],
+    "a": [
+     "s.posterior-ethmoid-cells.amin - 0.5",
+     "s.basal-lamella.amax + 4.5"
+    ],
+    "s": [
+     "s.posterior-ethmoid-cells.smin - 0.5",
+     "s.posterior-ethmoid-cells.smax + 1.5"
+    ]
+   },
+   "keep": "fess",
+   "basis": "p.posterior-ethmoidectomy steps 1 and 3 (to the lamina and up to the skull base, posterior to anterior)",
+   "measured": {
+    "voxels": 3437
+   }
+  },
+  "s.sphenoid-face.R@transethmoidal": {
+   "realizes": [
+    "s.sphenoid-face"
+   ],
+   "op": "window",
+   "a": [
+    "s.posterior-ethmoid-cells",
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.sphenoid-sinus"
+   ],
+   "sumMm": 6.0,
+   "box": {
+    "r": [
+     "s.sphenoid-face.rmin",
+     "s.sphenoid-face.rmax - 1"
+    ],
+    "a": [
+     "s.sphenoid-face.amin - 2.5",
+     "s.sphenoid-face.amax + 3"
+    ],
+    "s": [
+     "s.sphenoid-face.smin + 0.5",
+     "s.sphenoid-face.smax - 3.5"
+    ]
+   },
+   "keep": "fess",
+   "basis": "p.transethmoidal-sphenoidotomy step 2 (open the face inferomedially and join it to the natural ostium); the optic and ICA guards keep it off the lateral wall's prominences",
+   "measured": {
+    "voxels": 4559
+   }
+  },
+  "s.sphenoid-face.R@transnasal": {
+   "realizes": [
+    "s.sphenoid-face"
+   ],
+   "op": "window",
+   "a": [
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.sphenoid-sinus"
+   ],
+   "sumMm": 6.0,
+   "box": {
+    "r": [
+     "s.sphenoid-face.rmin - 0.5",
+     "lm.sphenoid-ostium.r + 8"
+    ],
+    "a": [
+     "s.sphenoid-face.amin - 1.5",
+     "s.sphenoid-face.amax + 2"
+    ],
+    "s": [
+     "lm.choanal-arch.s + 4",
+     "lm.sphenoid-ostium.s + 6"
+    ]
+   },
+   "keep": "eea",
+   "basis": "p.sphenoidotomy step 4 (enlarge the natural ostium inferiorly and medially; stop above the posterior septal artery unless no flap is needed)",
+   "truth": "the inferior stop is the choanal arch + 4 mm, a modelling stand-in for 'above the posterior septal artery' (the artery is a sweep; its course across the face is inferred)",
+   "measured": {
+    "voxels": 4139
+   }
+  },
+  "s.agger-nasi-cell.R@uncapped": {
+   "realizes": [
+    "s.agger-nasi-cell"
+   ],
+   "op": "exenterate",
+   "group": [
+    "s.nasal-cavity",
+    "s.ethmoid-bulla",
+    "s.anterior-ethmoid-cells",
+    "s.agger-nasi-cell",
+    "s.frontal-recess",
+    "s.frontal-sinus"
+   ],
+   "closeMm": 2.0,
+   "box": {
+    "r": [
+     "s.frontal-recess.rmin",
+     "s.frontal-recess.rmax + 3"
+    ],
+    "a": [
+     "s.frontal-recess.amin - 0.5",
+     "s.frontal-recess.amax + 2"
+    ],
+    "s": [
+     "s.frontal-recess.smin - 0.5",
+     "s.frontal-recess.smax + 1"
+    ]
+   },
+   "keep": "fess",
+   "basis": "p.draf-i steps 2 and 4 (uncap the agger nasi roof; remove supra agger and suprabullar cell caps that do not enter the sinus); the frontal sinus floor is kept, so the ostium is untouched (step 6)",
+   "measured": {
+    "voxels": 2177
+   }
+  },
+  "s.frontal-sinus-floor.R@draf-iia": {
+   "realizes": [
+    "s.frontal-sinus-floor"
+   ],
+   "op": "window",
+   "a": [
+    "s.frontal-recess",
+    "s.agger-nasi-cell",
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.frontal-sinus"
+   ],
+   "sumMm": 6.0,
+   "box": {
+    "r": [
+     "s.frontal-recess.rmin",
+     "s.frontal-sinus-floor.rmin + 6"
+    ],
+    "a": [
+     "s.frontal-sinus-floor.amin - 1",
+     "s.frontal-sinus-floor.amax + 4.5"
+    ],
+    "s": [
+     "s.frontal-recess.smax - 8",
+     "lm.frontal-ostium.s + 6"
+    ]
+   },
+   "keep": "fess",
+   "keepExcept": [
+    "s.frontal-sinus-floor"
+   ],
+   "basis": "p.draf-iia step 2 (enlarge the ostium between the lamina papyracea and the MT; widen forward, not backward: the posterior table stays in keep)",
+   "measured": {
+    "voxels": 2631
+   }
+  },
+  "s.nasal-septum.M@posterior-septectomy": {
+   "realizes": [
+    "s.perpendicular-plate",
+    "s.vomer"
+   ],
+   "op": "region",
+   "labels": [
+    "s.nasal-septum.M"
+   ],
+   "into": [
+    "s.nasal-cavity.R",
+    "s.nasal-cavity.L"
+   ],
+   "split": "side",
+   "box": {
+    "a": [
+     "s.nasal-septum.amin",
+     "s.nasal-septum.amin + 15"
+    ],
+    "s": [
+     "lm.choanal-arch.s",
+     "s.nasal-septum.smax"
+    ]
+   },
+   "truth": "the posterior 15 mm of the septum above the choanal arch. 15 mm is the middle of the graph's 1-2 cm (s.nasal-septum, tier-3 pearl); the inferior limit at the choanal arch is a modelling choice (keeps the vomer's floor attachment), listed for the owner; the anterior limit is well behind the MT heads, as p.transsellar-approach step 1 requires",
+   "basis": "p.transsellar-approach step 1 (detach the posterior bony septum, not forward of the MT heads), p.transclival-approach step 0",
+   "check": "the box's anterior bound must lie behind lm.middle-turbinate-head.a",
+   "measured": {
+    "voxels": 5429
+   }
+  },
+  "s.sphenoid-rostrum.M@removed": {
+   "realizes": [
+    "s.sphenoid-rostrum"
+   ],
+   "op": "region",
+   "labels": null,
+   "into": [
+    "s.nasal-cavity.R",
+    "s.nasal-cavity.L",
+    "s.sphenoid-sinus.R",
+    "s.sphenoid-sinus.L"
+   ],
+   "box": {
+    "r": [
+     -3,
+     3
+    ],
+    "a": [
+     "s.sphenoid-face.amin - 1.5",
+     "s.sphenoid-face.amax + 2"
+    ],
+    "s": [
+     "lm.choanal-arch.s",
+     "lm.sphenoid-ostium.s + 1"
+    ]
+   },
+   "keep": "eea",
+   "truth": "the rostrum has no label: every non-air voxel within 3 mm of the midline between the two faces, below the ostia",
+   "basis": "p.transsellar-approach step 1 (remove the rostrum), p.transclival-approach step 0",
+   "measured": {
+    "voxels": 5091
+   }
+  },
+  "s.sphenoid-face.R@wide": {
+   "realizes": [
+    "s.sphenoid-face"
+   ],
+   "op": "window",
+   "a": [
+    "s.nasal-cavity"
+   ],
+   "b": [
+    "s.sphenoid-sinus"
+   ],
+   "sumMm": 7.0,
+   "box": {
+    "r": [
+     "s.sphenoid-face.rmin - 0.5",
+     "s.sphenoid-face.rmax"
+    ],
+    "a": [
+     "s.sphenoid-face.amin - 3.5",
+     "s.sphenoid-face.amax + 4"
+    ],
+    "s": [
+     "s.sphenoid-face.smin - 4.5",
+     "s.sphenoid-face.smax - 1.5"
+    ]
+   },
+   "keep": "eea",
+   "basis": "p.transsellar-approach step 1 (open both sphenoids widely), p.transclival-approach step 0 (wide bilateral sphenoidotomy)",
+   "measured": {
+    "voxels": 7040
+   }
+  },
+  "s.intersinus-septum.M@flush": {
+   "realizes": [
+    "s.intersinus-septum"
+   ],
+   "op": "region",
+   "labels": [
+    "s.intersinus-septum.M"
+   ],
+   "into": [
+    "s.sphenoid-sinus.R",
+    "s.sphenoid-sinus.L"
+   ],
+   "box": {},
+   "basis": "p.transsellar-approach step 2 (flush with the posterior wall); the ICA guard keeps the voxels where the septum inserts on the carotid prominence (h.septum-avulsion-ica)",
+   "measured": {
+    "voxels": 5452
+   }
+  },
+  "s.sella-turcica.M@sellar-opening": {
+   "realizes": [
+    "s.sella-turcica"
+   ],
+   "op": "region",
+   "labels": [
+    "s.sella-turcica.M"
+   ],
+   "into": [
+    "s.sphenoid-sinus.R",
+    "s.sphenoid-sinus.L"
+   ],
+   "nearAirMm": 3.0,
+   "nearAir": [
+    "s.sphenoid-sinus"
+   ],
+   "box": {},
+   "truth": "the bone of the sellar floor and face within 3 mm of the opened sphenoid air, between the ICA guards; the gland and the dura are not segmented (they read as tissue behind the opening)",
+   "basis": "p.transsellar-approach step 4 (open the floor at its thin central-inferior part and widen it from cavernous sinus to cavernous sinus and from the tuberculum to the floor)",
+   "measured": {
+    "voxels": 3239
+   }
+  },
+  "s.clivus.M@clival-recess": {
+   "realizes": [
+    "s.clivus"
+   ],
+   "op": "region",
+   "labels": [
+    "s.clivus.M"
+   ],
+   "into": [
+    "s.sphenoid-sinus.R",
+    "s.sphenoid-sinus.L"
+   ],
+   "nearAirMm": 4.0,
+   "nearAir": [
+    "s.sphenoid-sinus"
+   ],
+   "box": {},
+   "truth": "the clivus label's bone within 4 mm of the opened sphenoid air, between the ICA guards: the clival recess (middle third) drilled from the sellar floor to the sphenoid floor; the dura and the basilar plexus behind it are not segmented",
+   "basis": "p.transclival-approach step 2",
+   "measured": {
+    "voxels": [
+     4101,
+     4153
+    ],
+    "note": "order-dependent: fewer when the sella is still closed (p.transclival-approach alone) than after p.transsellar-approach in the corridor"
+   }
+  }
+ },
+ "procedures": {
+  "p.uncinectomy": {
+   "entry": [],
+   "steps": {
+    "1": [
+     "s.uncinate-process.R@uncinectomy"
+    ]
+   }
+  },
+  "p.maxillary-antrostomy": {
+   "entry": [
+    "p.uncinectomy"
+   ],
+   "steps": {
+    "1": [
+     "s.posterior-fontanelle.R@antrostomy"
+    ]
+   }
+  },
+  "p.anterior-ethmoidectomy": {
+   "entry": [
+    "p.maxillary-antrostomy"
+   ],
+   "steps": {
+    "1": [
+     "s.ethmoid-bulla.R@opened"
+    ],
+    "4": [
+     "s.anterior-ethmoid-cells.R@to-skull-base"
+    ]
+   }
+  },
+  "p.posterior-ethmoidectomy": {
+   "entry": [
+    "p.anterior-ethmoidectomy"
+   ],
+   "steps": {
+    "0": [
+     "s.basal-lamella.R@perforated"
+    ],
+    "1": [
+     "s.posterior-ethmoid-cells.R@to-skull-base"
+    ]
+   }
+  },
+  "p.transethmoidal-sphenoidotomy": {
+   "entry": [
+    "p.posterior-ethmoidectomy"
+   ],
+   "steps": {
+    "2": [
+     "s.sphenoid-face.R@transethmoidal"
+    ]
+   }
+  },
+  "p.sphenoidotomy": {
+   "entry": [],
+   "steps": {
+    "4": [
+     "s.sphenoid-face.R@transnasal"
+    ]
+   }
+  },
+  "p.draf-i": {
+   "entry": [
+    "p.transethmoidal-sphenoidotomy"
+   ],
+   "steps": {
+    "1": [
+     "s.uncinate-process.R@uncinectomy"
+    ],
+    "2": [
+     "s.agger-nasi-cell.R@uncapped"
+    ],
+    "5": [
+     "s.anterior-ethmoid-cells.R@to-skull-base"
+    ]
+   }
+  },
+  "p.draf-iia": {
+   "entry": [
+    "p.draf-i"
+   ],
+   "steps": {
+    "2": [
+     "s.frontal-sinus-floor.R@draf-iia"
+    ]
+   },
+   "unrealized": {
+    "s.frontal-beak": "the beak is part of the s.frontal-sinus-anterior-table wall unit and is not separable from it on this specimen; v1 widens the floor only"
+   }
+  },
+  "p.transsellar-approach": {
+   "entry": [],
+   "steps": {
+    "1": [
+     "s.nasal-septum.M@posterior-septectomy",
+     "s.sphenoid-rostrum.M@removed",
+     "s.sphenoid-face.R@wide"
+    ],
+    "2": [
+     "s.intersinus-septum.M@flush"
+    ],
+    "4": [
+     "s.sella-turcica.M@sellar-opening"
+    ]
+   },
+   "unrealized": {
+    "s.accessory-sphenoid-septum": "not segmented (no label); the specimen's sphenoid has no accessory septum labelled"
+   }
+  },
+  "p.transclival-approach": {
+   "entry": [],
+   "steps": {
+    "0": [
+     "s.nasal-septum.M@posterior-septectomy",
+     "s.sphenoid-rostrum.M@removed",
+     "s.sphenoid-face.R@wide",
+     "s.intersinus-septum.M@flush"
+    ],
+    "2": [
+     "s.clivus.M@clival-recess"
+    ]
+   },
+   "unrealized": {
+    "s.dorsum-sellae": "upper third (step 3) needs pituitary transposition; the gland, dura and posterior clinoids are not segmented",
+    "s.posterior-clinoid-process": "as s.dorsum-sellae"
+   }
+  }
+ },
+ "corridors": {
+  "fess": {
+   "name": "FESS: uncinectomy to Draf IIa",
+   "procedures": [
+    "p.uncinectomy",
+    "p.maxillary-antrostomy",
+    "p.anterior-ethmoidectomy",
+    "p.posterior-ethmoidectomy",
+    "p.transethmoidal-sphenoidotomy",
+    "p.draf-i",
+    "p.draf-iia"
+   ],
+   "sides": [
+    "R",
+    "L"
+   ],
+   "mucosa": "decongested"
+  },
+  "eea-sellar-clival": {
+   "name": "EEA: transsphenoidal, sellar, transclival",
+   "procedures": [
+    "p.transsellar-approach",
+    "p.transclival-approach"
+   ],
+   "sides": [
+    "M"
+   ],
+   "mucosa": "decongested"
+  }
+ }
+}

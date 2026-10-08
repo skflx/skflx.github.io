@@ -237,6 +237,15 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   the controls shows the oblique CT slice through it along the view, and the exposure is measured once the pose has rested 100 ms.
   Stations (E6): the controls list this nostril's covered stations from `ssb/geometry/stations.json` (Opus's poses, E5) at the page's tier;
   picking one flies the scope there over ~600 ms (a cut with reduced motion), and `#scope=t.<id>[.<side>]` opens one.
+- **Procedure mode** (P1, 2026-10-08; contract `docs/ssb.md` §5.8–5.10) —
+  specified, not built. A dissection state changes the volume the scope
+  reads (removed voxels become air), so collision and stations see the
+  opened cavity. The cuts are rules in `tools/ssb-pipeline/uw/dissection.json`
+  (FESS from uncinectomy to Draf IIa; transsphenoidal, sellar and clival
+  recess openings), mapped to the `removes` of those procedures' steps; a
+  scratch prototype built the states and posed the stations they open.
+  Next: the pipeline (P1b) and the player (P2), then poses per state (P3)
+  and the decongested · as scanned · congested mucosa (DC1).
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -290,13 +299,13 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
-backlog). Wave 1 was verified by Opus on 2026-10-03 (roadmap §4); wave 2
-starts with its corrections (lanes and prompts: `docs/ssb-sonnet-handoff.md`). In short: a soft-tissue layer
-(`docs/ssb.md` §5.7 — mucosa, septal surfaces, the vessels the
-nasoseptal and other flaps depend on, flap overlays, then the external
-nose) in parallel with the `lateral-wall` diorama; procedure mode and
-self-test after. Waiting on the owner: review of the dioramas and tier-1 content
-(`docs/ssb-roadmap.md` §2).
+backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
+to sellar/clival masses, so wave 3 is procedure mode: P1b (states) beside
+P2 (player), then P3 (poses per state, the 2.7 mm shaft), then DC1
+(mucosal state); NasalSeg (PR #119) enters as population data (POP1) and
+16-bit heads (IN1); the soft-tissue lane continues with ST4d and ST5.
+Waiting on the owner: O8–O11, review of tier-1 FESS anatomy and the
+dioramas (`docs/ssb-roadmap.md` §2).
 
 ---
 

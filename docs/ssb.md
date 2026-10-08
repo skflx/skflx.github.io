@@ -176,7 +176,15 @@ never reloads.
   the station (camera pose), applies the cumulative dissection state (units
   the step `removes` disappear), highlights what comes into view, hatches
   the step's hazards, and poses the step's `think` as a prompt before
-  revealing it. Scrub forward and back.
+  revealing it. Scrub forward and back. A dissection state is a change to
+  the *volume*, not only to the meshes: the removed units become air in the
+  CT display and label arrays the scope reads, so collision, the tip-in-air
+  rule of the stations and the proximity HUD all see the opened cavity
+  (contract: §5.8). Procedures chain into corridors (FESS: uncinectomy to
+  Draf IIa; EEA: transsphenoidal, sellar, transclival), played on the
+  decongested mucosa (§5.9), both sides at once for FESS. The CT stage keeps
+  showing the preoperative scan, as image guidance does, with the removed
+  voxels outlined.
 - **Variant lab (dioramas).** Parametric models driven by classification
   presets and sliders: drag olfactory fossa depth from Keros I to III and
   watch the lateral lamella lengthen and the AEA drop into a mesentery;
@@ -202,8 +210,10 @@ for orientation.
 - **One conversion, at one boundary:** `rasToScene([r, a, s]) → [r, s, -a]`
   (three.js is Y-up, right-handed). Nothing in `ssb/` stores scene
   coordinates. 1 scene unit = 1 mm.
-- Laterality in geometry names: `<id>.R` / `.L` / `.M`. Dissection states in
-  geometry names: `<id>.<side>@<state>` (e.g. `s.frontal-beak.M@drilled`).
+- Laterality in geometry names: `<id>.R` / `.L` / `.M`. Dissection units in
+  geometry names: `<id>.<side>@<cut>` (e.g. `s.uncinate-process.R@uncinectomy`,
+  `s.sella-turcica.M@sellar-opening`): the structure resected and the cut;
+  a remnant mesh of a partly resected wall carries the same name (§5.8).
 
 ## 5. Geometry
 
@@ -534,6 +544,180 @@ interpolated across the no-data gap; the pedicle test checks a sweep
 placed from an independent source (the first pass placed the sweep from
 this very construction).
 
+### 5.8 Dissection states (P1, 2026-10-08)
+
+**Why the volume, not the meshes.** A station needs its tip in an air
+label, the scope's collision samples the CT display volume, and the
+proximity HUD reads distance fields. Hiding a resected structure's mesh
+changes none of these: the scope would still stop at bone that is gone and
+look at a lining that seals the opened cell. A dissection state is
+therefore a change to the CT display and label arrays: every removed voxel
+becomes air (display `air.fill`, label the nearest air space the unit
+opens into), and the lining is re-meshed on the opened air.
+
+**Anatomy as data.** `tools/ssb-pipeline/uw/dissection.json` (Opus) holds
+the units, their rules, and which procedure step applies which unit. A
+unit is a **rule over the base's own labels, landmarks and distance
+fields**, never a hand-drawn voxel set, so it re-runs on any base (§5.10).
+Its name is `<graph id>.<side>@<cut>` (§4); `realizes` lists the content
+ids it stands for. Three operators:
+
+| `op` | Removes | Used for |
+|---|---|---|
+| `window` | voxels in the box with d(a) + d(b) ≤ `sumMm`, a and b two air-space sets: the rule `walls.py` uses to define a wall, so a resection is a window in what two compartments share. `shell` keeps a wall of given mm around named air spaces (opened by a later unit) | uncinectomy, antrostomy, basal lamella, sphenoidotomy, Draf IIa |
+| `exenterate` | the morphological closing (ball of `closeMm`) of a group of air spaces, inside the box: partitions thinner than about 2 × `closeMm` go, thicker walls stay | bulla, anterior and posterior ethmoid, agger and frontal recess cells |
+| `region` | every voxel of the named labels (or any non-air voxel) in the box, optionally only within `nearAirMm` of named air | posterior septectomy, rostrum, intersinus septum, sellar opening, clival recess |
+
+Boxes are side-relative (r = σR) and every bound is a number or an anchor
+expression on a label's extent or a landmark (`"s.ethmoid-bulla.amax - 5"`,
+`"lm.middle-turbinate-head.a - 6"`), resolved on the base. Common rules:
+a `keep` list (lamina, skull base, turbinates, septum for FESS; the posterior
+ethmoid and planum for the EEA corridor) is never carved, on either side;
+the **guard** keeps every carved voxel ≥ 1 mm from the ICA, optic nerve
+and AEA tubes and the orbital contents, re-applied after mirroring (the ICA
+sweeps are not exactly symmetric). On the standard specimen the right side
+is computed and mirrored; midline units are computed whole.
+
+**Procedures, states, corridors.** `procedures` maps each step of a
+procedure to its units; `entry` lists the procedures assumed complete
+before step 0 (a Draf I in a full FESS comes after the sphenoethmoidectomy,
+per its own step 0). A **state** is the cumulative unit list at a step
+(entry chain, then the steps up to it) or at a position in a corridor;
+identical lists are one state. On the standard specimen: 15 states, 10 on
+the FESS side (uncinectomy → antrostomy → bulla → anterior ethmoid →
+basal lamella → posterior ethmoid → transethmoidal sphenoidotomy → Draf I
+→ Draf IIa, plus the transnasal sphenoidotomy alone) and 5 on the EEA
+corridor (posterior septectomy, rostrum and wide sphenoidotomies →
+intersinus septum → sellar opening → clival recess, and the transclival
+approach alone). Consistency with the graph (checked in CI from P1b on):
+every id a step `removes` is realized by a unit on that step or before it,
+or listed under the procedure's `unrealized` with the reason; every unit
+on a step realizes at least one id that step removes; every unit name is a
+graph id. Unrealized in v1: the frontal beak (inseparable from the anterior
+table wall unit), the accessory sphenoid septum (not segmented), the dorsum
+and posterior clinoids (upper clival third: pituitary transposition is
+intradural, not modelled).
+
+**Truth kind.** A state is *specimen, dissected (rule-based cut)*: the
+cut is schematic even where the bone is real, and several units stand in
+for structures the specimen does not segment (uncinate, bullar lamella,
+rostrum; the basal lamella is a proxy plane). Each unit's `truth` says
+which. The uncinate is fused into the maxillary medial wall unit here, so
+the uncinectomy opens the infundibular trough and the hiatus and leaves
+the wall; the natural ostium appears with the antrostomy.
+
+**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`).**
+- `ssb/states/index.json`: per state key (the first 10 hex of the SHA-256
+  of its unit list in application order): `units`, `usedBy`
+  (`"p.draf-i#2"`, `"fess:p.draf-i"`), its patch and lining files, `hides`
+  (wall nodes a state removes entirely), `remnants` (nodes it cuts
+  partly) and `measured`; plus `procedures` (step → state key) and
+  `corridors`.
+- `ssb/states/<key>.ssbp.gz`: a **patch**: a u32 header length, a JSON
+  header (`version`, `base`, `state`, `units`, `ctFill`, `boxes:
+  [{ijk0, dims}]`), then per box a u16 array, x fastest: 0 = unchanged,
+  else the voxel's new label (its display becomes `ctFill`). Each patch is
+  whole from the base (random access to any step), at most one box per
+  side and one for the midline. The format is the dense-box patch of the
+  realistic-anatomy plan (PR #119) with a constant display, so one loader
+  serves both.
+- `ssb/models/lining-<key>.glb.gz`: `lining.py` on the state's air, plus
+  remnant meshes `<id>.<side>@<cut>` for each wall unit a state cuts partly.
+  Listed in `packs.json` with `"state": <key>`; never loaded at boot.
+- Distance fields are not recomputed: the guard keeps every cut away from
+  the structures they measure.
+- Budgets: a state lining ≤ 350 kB gzip, all state packs ≤ 6 MB, a patch
+  ≤ 100 kB.
+
+**Runtime (WP P2).** `volume.js` gains a pure `applyPatch(volume, patch)`
+returning a derived volume (the base kept for undo and for CT); the
+endoscope's collision, tip label and stations read the state volume; the
+CT stage reads the base and outlines the carved voxels; the specimen stage
+swaps in the state's lining pack, hides `hides` and replaces `remnants`.
+
+**Stations.** `ssb/geometry/stations.json` gains `byState: {<state key>:
+{"t.<id>.<side>": {pose, target, measured}}}`, posed by E5's rule on the
+committed state (WP P3). A step's station is looked up in its state first,
+then in the intact `stations`. A pose may carry `"shaft": "2.7"` when only
+the 2.7 mm telescope reaches it (the olfactory cleft and the inferior
+meatus, §5.9); flying there switches the shaft and the controls say so.
+
+### 5.9 Mucosal state: decongested · as scanned · congested
+
+The specimen is not decongested (CP-1, E5): its per-side nasal-cavity
+cross-section averages 1.6 cm² between the MT head and the choana, and the
+as-scanned left side 0.65 cm². A three-way toggle shows the mucosa
+decongested, as scanned, or congested, as a patch on the base (the same
+format as §5.8), applied before any dissection; procedure mode always plays
+on the decongested state (the operations start by decongesting).
+
+- **Operator** (WP DC1): soft tissue (display 78 ≤ v < 120) of the
+  erectile labels, inferior and middle turbinate and the side's half of the
+  septum, within d mm of that side's nasal-cavity air recedes to air, never
+  closer than 0.5 mm to bone (display ≥ 120), between the choana and the
+  internal valve. The congested state grows the same tissue into the air.
+- **Decongested, calibrated** on Xiao et al. 2021 (Sci Rep, full text; MRI
+  of 10 healthy adults aged 21–38, before and 10 minutes after
+  xylometazoline 0.1%): the mean cross-section between the first vertical
+  plane and the posterior septum rose from 2.8 to 3.8 cm² (34.8 %), least
+  in the superior third and around the valve, with the surface area
+  unchanged. d is the smallest step (0.25 mm) that raises the specimen's
+  mean per-side CSA over that span by at least the same ratio (3.8 / 2.8).
+  Prototype: d = 1.0 mm gives × 1.39, and the superior third gains least in
+  absolute terms (0.13 cm² against 0.25 and 0.24). The ratio, not Xiao's
+  absolute values, is used: the specimen's label is a bone-window CT
+  threshold and Xiao's an MRI segmentation, and head A's own CSA sits well
+  below Xiao's undecongested mean (POP1 places it against NasalSeg).
+- **Congested** waits on POP1: per NasalSeg subject, the more congested
+  side's CSA profile against the subject's mean, as a median ratio. Head
+  A's own left side is not used: its cavity asymmetry is beyond every clear
+  NasalSeg subject (POP0, PR #119).
+- **What decongestion does not open.** At Xiao's ratio none of E5's three
+  closed views opens. The olfactory cleft and the inferior meatus are
+  closed to the 4 mm shaft, and open to the 2.7 mm telescope even as
+  scanned (P1 prototype: the cribriform plate fills 96 % of the cleft view;
+  the lateral wall 89 % of the meatus view with the tip lateral to the
+  inferior turbinate). The 45° frontal recess view opens with the Draf I
+  entry state. Mucosal edema of rhinosinusitis (sinus lining, polyps) is
+  pathology, the realistic-anatomy plan's `fill` operator, not this toggle.
+
+### 5.10 New data: population, more heads, 16-bit CT
+
+A **head** is a base: a CT and a label volume (every name a graph id) in
+the §4 frame, plus everything the pipeline derives from them. Everything
+downstream — walls, meshes, lining, distance fields, dissection units,
+mucosal states, station poses — is a rule over a head's labels and
+landmarks, so a new head gets FESS and the EEA corridor by re-running the
+pipeline once it has the labels those rules name. Layer order on any
+head: base → variant → condition (the realistic-anatomy plan, PR #119) →
+mucosal state → dissection.
+
+- **Population (NasalSeg, CC BY 4.0, 130 CTs of which 107 distinct; POP0 in
+  PR #119).** Numbers ship, scans do not. Uses: (1) *placement*: every
+  base's cavity and maxillary volumes, asymmetry indices and (POP1)
+  cross-section profiles as percentiles, shown with population truth;
+  (2) *calibration*: the congested state, and the mild / typical / marked
+  grades of asymmetry variants; (3) *averaged normal*: a population
+  reference (median and IQR profiles; a mean shape of the five NasalSeg
+  structures registered onto the head as a ghost overlay), population
+  truth, not a head. Deforming a head toward the population median is a
+  composite and covers only the five structures NasalSeg labels: owner
+  decision O9.
+- **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
+  hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
+  calibrate the variant layer, and bases of their own once resegmented
+  (their five labels do not include the ethmoid that FESS units need).
+- **16-bit intake (WP IN1).** `ct.json` gains `dtype: "int16"` with
+  `values.kind: "HU"` (windows in HU, no LUT) and per-head `levels: {air,
+  bone}`; `volume.js` reads both dtypes, and the scope's `BONE_LEVEL` and
+  `SOFT_LEVEL` come from the header (defaulting to today's 150 and 78) so
+  collision behaves the same on any head. `tools/ssb-pipeline/intake/` reads
+  NRRD (the reader in `tools/ssb-pipeline/nasalseg/stats.py`, PR #119) and
+  NIfTI (an in-script header reader; DICOM would need `pydicom`, an owner
+  decision), places the head in the §4 frame on the RA landmark set, and
+  writes it under `ssb/anatomy/<head>/` with its licence line in
+  `ssb/LICENSE-data.md`. Head A stays 8-bit.
+
 ## 6. Dioramas
 
 A diorama is an ES module `js/ssb/dioramas/<name>.js`, registered in
@@ -812,6 +996,14 @@ is rewritten; a crosshair drag settles before the URL is replaced, like a
 lab slider. The stage is one of specimen, lab or CT: a hash with both `lab`
 and `ct` keeps the lab, and entering one leaves the other.
 
+The procedure hash (WP P2) is `#p=<p-id>&step=<n>[&cor=<corridor>]`: the
+procedure must be in `ssb/states/index.json` and the graph, `step` is
+clamped to its steps, and `cor` (a corridor key there that lists the
+procedure) makes the state accumulate the corridor's earlier procedures
+instead of the procedure's own `entry`. It implies the scope stage on the
+decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1) is
+ignored while a procedure plays; an unknown value is dropped.
+
 ### 7.4 Rendering
 
 - **Materials: one procedural surface per tissue kind** (`materials.js`).
@@ -1016,3 +1208,21 @@ O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists
 2. **Publish while `draft`?** Recommended: publish with visible unverified
    markers (the wiki's precedent), prioritizing owner review of tier 1.
 3. Name and URL (`SSB`, `ssb.html`) — working title.
+
+Open from P1 (Opus, 2026-10-08; recommendations in `docs/ssb-roadmap.md` §2):
+
+- **O8 — What "edema" means in the mucosa toggle.** The physiological
+  congested phase (turbinates and septal swell body, calibrated on NasalSeg,
+  §5.9), or the mucosal edema of rhinosinusitis (sinus lining, polyps:
+  pathology, PR #119's `fill` operator). Recommended: the toggle is
+  decongested · as scanned · congested; inflammatory edema is a condition.
+- **O9 — "Averaged normal anatomy."** A population reference shown beside
+  the head (percentiles, profiles, a mean-shape ghost: population truth), or
+  a head deformed toward the NasalSeg median (composite, five structures
+  only). Recommended: the reference now, the deformed head only after it.
+- **O10 — Posterior septectomy extent.** 15 mm of posterior septum (the
+  middle of the graph's 1–2 cm), from the choanal arch up. Is the arch the
+  right inferior limit for the corridor you teach?
+- **O11 — FESS on both sides at once.** Procedure mode carves both sides
+  (the scope chooses the nostril); one dissected side beside an intact one
+  needs per-side lining packs. Recommended: both sides now.

@@ -72,6 +72,11 @@ same-height cells for medial/lateral, and the same for the other two axes. It wr
 `ssb/reference/specimen-relations.json`. Check images (`--png-dir`): `reconC-walls-*.png`,
 `reconC-mesh-walls.png`, `reconC-sweeps-*.png`.
 
+Dissection states (procedure mode; `docs/ssb.md` §5.8): `uw/dissection.json` is Opus's data, the units
+(rules over the base's labels, landmarks and distance fields), the step → unit map of each procedure, and the
+FESS and EEA corridors. WP P1b adds `uw/dissect.py`, which evaluates it into `ssb/states/` and per-state lining
+packs; until then the file is data only, checked by hand against `ssb/content/` (the rule is in §5.8).
+
 Reconstruction, stage D (soft tissue; needs only the committed `ssb/`, not the crawl; run after stage C):
 
     .venv/bin/python tools/ssb-pipeline/uw/softtissue.py      # -> ssb/models/soft.glb.gz, ssb/geometry/charts.json,

@@ -5,7 +5,7 @@ Architecture and the reasons behind it: `docs/ssb.md`. How work is handed
 to a model and checked: `docs/delegation.md`. Current state in prose:
 `WIP.md`.
 
-Last re-planned: 2026-10-08 (Opus, O7: FESS and sellar/clival EEA anatomy first). Update the board in the same PR as the
+Last re-planned: 2026-10-08 (Opus, P1: the dissection contract and data; wave 3 specced: P1b, P2, P3, DC1, POP1, IN1). Update the board in the same PR as the
 work; when a wave closes, shrink its finished WPs to one line each (git
 history keeps the specs).
 
@@ -17,9 +17,9 @@ history keeps the specs).
 | 1 Walking skeleton, graph mode | **done** | — |
 | 2 Variant lab | **3 of 4 dioramas** (sphenoid done with D2a) | `lateral-wall` (later) |
 | 3 Reference specimen | **done** (stages B, C; Specimen stage; vessel tubes; mucosa layer; septal surfaces; incisive canal; standard specimen; floor mucosa; open airway lining; external nose) | ~~standard specimen (N1, O6)~~, ~~floor mucosa (ST2c)~~, ~~open airway lining (ST1b)~~, ~~external nose (ST6)~~ done; then waypoint corrections (ST4d), flap overlay (ST5); hand segmentation (owner, optional) |
-| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses, station flights done** (E1, E1b, E2, E2b, E3, E3b, E4, E5, E6) | the 27 uncovered stations: 22 open with P1's dissection states, 3 need decongestion, 2 need Opus poses (ST6 in) |
+| 4 Endoscope | **rig, exposure, collision + HUD, CT along the scope, septum rule, station poses, station flights done** (E1, E1b, E2, E2b, E3, E3b, E4, E5, E6); `t.septum-anterior` and `t.lacrimal-sac-0` posed (P1) | 25 uncovered: 15 posable on P1's states (P3), 2 with the 2.7 mm shaft (P3), 8 outside O7's corridors or intradural |
 | 5 CT mode | **done** (triplanar, overlay, cursor shared with 3D; oblique slice along the scope as the scope inset, E4) | — |
-| 6 Procedure mode | not started — **next (O7)** | P1 (FESS + sellar/clival dissection states), then P2 |
+| 6 Procedure mode | **P1 done** (contract `docs/ssb.md` §5.8, data `tools/ssb-pipeline/uw/dissection.json`, `removes` on 15 steps) | P1b (states) ∥ P2 (player) → P3 (poses per state); DC1 (mucosal state) |
 | 7 Self-test | not started — wave 3 | T1 |
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | ∞ Content | all `draft` (state: `WIP.md`) | owner review (tier 1 first); backlog §6 |
@@ -27,6 +27,8 @@ history keeps the specs).
 **Decided (2026-10-02):** O1–O3 answered (§2). **Verified (2026-10-03):** CP-1 and the Opus wave-1 WPs (ST0, ST3, ST4b, D1), first-passed by a Sonnet-class model, were re-checked by Opus (§4, "Opus verification of wave 1"): the fulcrum is misplaced (left one inside the septum), E3's Accept was unsatisfiable, the scope image saturates and ostia are sealed membranes, three content errors, ST3's floor cut contradicts the atlas, D1's type 4 rule is inverted. Corrective WPs are in wave 2; O4 and O5 decided the same day, and ST3r (the flap contract) and the D1 amendments are written into `docs/ssb.md`. **Next:** wave 2's Sonnet lanes (`docs/ssb-sonnet-handoff.md`).
 
 **CP-2a (Opus, 2026-10-03):** wave 2's first PRs reviewed (§4, "CP-2a"): E2b and D2 pass; E3 passes (the lazy, shared CT load it needed was added at the checkpoint); ST2b's partial is merged as is. All four merged 2026-10-03. **O6 (owner, 2026-10-03): normal before variant** — the page serves a standard specimen (right half mirrored, septum centred; `docs/ssb.md` §5.1), which also resolves every left-side escalation of this wave. **Next:** N1, then the rest of the pipeline lane on the standard specimen.
+
+**P1 + wave-3 plan (Opus, 2026-10-08).** P1 is done in this PR (§5 P1): a dissection state changes the CT display and label volume, not only the meshes, so collision, the tip-in-air rule and the HUD see the opened cavity (`docs/ssb.md` §5.8); the units are rules over the base's own labels, landmarks and distance fields in `tools/ssb-pipeline/uw/dissection.json`, so they re-run on any base (NasalSeg-informed or a new 16-bit head, §5.10); the 10 FESS and EEA procedures' steps now carry `removes`. A scratch prototype of the rules built the 15 states and posed 16 stations on them (every pose free, tip in air, target in field, left = right mirrored); the counts are in the data file and the poses in P3's table. Findings that change the plan: (1) the specimen has no uncinate label: the uncinate is fused into the maxillary medial wall unit, so the uncinectomy opens the infundibular trough and the natural ostium appears with the antrostomy (an 18.5 × 9 mm window, inside the graph's sourced "typically 1–2 cm"); (2) **decongestion is not what closes E5's three views**: the olfactory cleft and inferior meatus are closed to the 4 mm shaft and open to the 2.7 mm telescope even as scanned, and the 45° frontal recess opens with Draf I's entry state; (3) the specimen's nasal cross-section (1.6 cm² per side) is well below the one MRI source's undecongested mean (2.8 cm²), so the decongested state is calibrated on that source's ratio (× 1.36, d = 1.0 mm of erectile mucosa) and NasalSeg will place the head (POP1); (4) `t.septum-anterior` and `t.lacrimal-sac-0` are posed (ST6 made them reachable). NasalSeg (#119, open) is folded in as population data (placement, calibration, a reference "averaged normal") and its scans as future 16-bit heads (IN1). **Next, in order:** lane P runs **P1b** (the states) while lane V runs **P2** (the player, on a fixture); then **P3** (poses per state, the 2.7 mm shaft), then **DC1** (mucosal state); **IN1** after P2; **POP1** after #119 merges; lane B continues ST4d → ST5. **CP-3** (Opus) after P1b, P2 and P3. Owner: O8–O11 (§2), tier-1 FESS anatomy, and the P1 checks (§2).
 
 **O7 re-plan (Opus, 2026-10-08).** Merged 2026-10-07: ST6, E6 and C1a–C1f (C1 had an Opus first read, but neither ST6 nor E6 had an Opus checkpoint). The owner's priority (O7) is clear anatomy for FESS and for EEA to sellar/clival masses; everything else waits. Of E5's 27 `uncovered` stations, **22 need a dissection step** (uncinectomy, bulla, basal lamella, antrostomy, sphenoidotomy and posterior septectomy, sella open, Draf), **3 need decongestion** (olfactory cleft, frontal recess 45°, inferior meatus 45°) and **2 waited on ST6** (septum anterior, lacrimal sac). Procedure mode is therefore the lever for both FESS and sellar/clival views. **Next, in order:**
 (1) **P1** (Opus), scoped to FESS (uncinectomy → bulla → basal lamella → posterior ethmoid → sphenoidotomy → frontal recess, plus the antrostomy) and the transsphenoidal → sellar → transclival corridor. Per step, `removes` maps to existing wall and air nodes. It must also decide how a dissected state becomes geometry: hiding meshes is not enough, because stations need the tip in air and collision is read from the volume (see P1/P2).
@@ -57,6 +59,10 @@ Decisions (detail and recommendations: `docs/ssb.md` §13). **O1–O3 were decid
 | O6 | Symmetric "normal" specimen for the first release, variants later | (owner's own instruction) | N1 — **decided 2026-10-03 by the owner: as symmetric and standard as possible; septal deviation, ostium heights etc. later as variants.** Opus chose the method: right half mirrored (the left carries the anomalies), septum centred keeping its measured thickness (`docs/ssb.md` §5.1) |
 | — | Still open from before: strict CSP; publish while `draft`; name | as in §13 | — |
 | O7 | **Content priority** and the C1 calls | — | **Decided 2026-10-07 by the owner:** the priority is clear anatomy for FESS and for EEA to sellar/clival masses; other content waits behind it. C1f stays as the evidence shows (the prior-SPA-ligation check on the middle turbinate flap is kept). The C1c categories are accepted (LCH `malignant-neoplasm`, optic pathway glioma `benign-neoplasm`). Problems found in existing entities are **flagged, not fixed** for now (list below) |
+| O8 | **What "edema" means in the mucosa toggle** (`docs/ssb.md` §5.9) | Decongested · as scanned · congested, the congested end from NasalSeg (physiological); the mucosal edema of rhinosinusitis is a condition (PR #119's pathology layer) | DC1's labels and its congested half |
+| O9 | **"Averaged normal anatomy"** from NasalSeg (§5.10) | A population reference beside the head now (percentiles, median cross-section profile, a mean-shape ghost of the 5 NasalSeg structures: population truth); a head deformed toward the median only later (composite, 5 structures only) | POP1's scope; a later WP |
+| O10 | **Posterior septectomy extent** in the EEA states | 15 mm (the middle of the graph's 1–2 cm), from the choanal arch up, well behind the MT heads: confirm the inferior limit | P1b (it runs as written; a change is one data line) |
+| O11 | **FESS on both sides at once** in procedure mode | Yes now (the scope picks the nostril); one dissected side beside an intact one later (per-side lining packs) | P1b, P2 |
 
 Flagged by C1 (owner 2026-10-07: keep as flags; fix later, FESS/EEA anatomy first). Each was found against the entity's own source or an open reproduction; detail in skflx/skflx.github.io#117:
 
@@ -72,6 +78,9 @@ Flagged by C1 (owner 2026-10-07: keep as flags; fix later, FESS/EEA anatomy firs
 - Back-links not yet added: ICA and Meckel's cave to the new parasellar ligaments and the carotid cave; gyrus rectus to the olfactory sulcus; the cellulitis conditions to `s.orbital-septum`; `dz.subperiosteal-orbital-abscess` to `m.spoa-drainage-volume-threshold`.
 
 Actions (no model can do these):
+
+- **P1 checks (2026-10-08):** look at the dissected states once P1b lands (CP-3 lists the URLs). Specifically: the uncinectomy (`docs/ssb.md` §5.8: the uncinate is fused into the medial wall unit, so the step opens the infundibular trough and the natural ostium appears with the antrostomy); the antrostomy window (18.5 × 9 mm on the prototype); the sellar opening's lateral limit (the ICA tube, 29 % inferred, plus 1 mm); O10.
+- **ST6 items (CP-ST6, §4):** the valve plane at A −10 (its section profile is flat, so the plane is weakly determined; glance at it on CT); whether the superior labial branch should be drawn into the columella (it stays truncated at the valve plane until you say).
 
 - Review the two dioramas' schematic proportions and tier-1 graph content;
   flip `review` to `verified` where right.
@@ -549,8 +558,26 @@ steps, endoscope frames at every station (through open ostia, exposure
 legible), sphenoid diorama proportions and rules (with D1's amendments).
 Report for the owner's review.
 
-**Wave 3** — E6 station flights; ST6 nose; P1/P2 procedure mode (NSF first:
-harvest, rotation, inset); T1 self-test; C1 content backlog (per O3).
+**CP-ST6 and E6 (Opus, 2026-10-08, with P1).** Neither had an Opus checkpoint before merging; read on the merged state.
+
+- **Valve area, 116 mm² against "92–100": the range is withdrawn, not the measurement.** The 92–100 mm² was CP-2b's own reading of the unmasked stack under an earlier airway definition, not a literature range: `src.bloom-2012-valve-ct`'s abstract reports angles and comparisons, no area. ST6's definition (the smallest coronal section of the airway connected to `lm.naris`, vestibule and cavity together) is the documented one, and its profile is flat (112–131 mm² over A −16…−9), so the plane is weakly determined; with the cavity label alone the same plane reads 70. No claim in the graph rests on the number. Accepted as the specimen's measurement under that definition; the owner glances at the plane (§2 actions).
+- **Superior labial septal branch: the re-seat is accepted.** The three waypoints moved from A −9…−8 to the chart's new anterior edge (A −10) at the same S: still the ascending segment along the anterior septal margin, which is what the entry's sources support. The columella entry in front of the valve plane is not drawn: the septal chart ends at the plane and no waypoint in front of it is sourced. It stays truncated, as its `derivation` says, until the owner asks for it (§2); ST4d does not touch it.
+- **E6's stations re-checked on the merged volume** (P1's port of `scope.js`): the 13 E5 poses are free, their tips are in air labels and their targets in the field; the image shares differ from the stored ones by a few points (ray sampling), which the Node checks do not pin.
+
+**Wave 3 — procedure mode first (O7), then the mucosa and new data.** Lanes are separate Sonnet sessions (`docs/delegation.md` §6). Rows share no **Touch** files except `js/ssb/stamps.js` and the stamps in `ssb.html` (stamp-only conflicts: `docs/ssb-sonnet-handoff.md` "Merging lanes").
+
+| Lane | Now | Then | Notes |
+|---|---|---|---|
+| P (pipeline) | **P1b** dissection states | **P3** poses per state → **DC1** mucosal state | DC1 reruns the states decongested; it only turns tissue into air, so P3's poses stay free and in air |
+| V (viewer) | **P2** procedure player (on a fixture) | **IN1** 16-bit heads, after P3 (shares `volume.js`, `scope.js` and `mode-endoscope.js`) | P2's real-data checks switch on when P1b's `ssb/states/index.json` exists |
+| B (soft tissue) | ST4d | ST5 | ST4d moves the ICA sweeps on the sellar route: whichever of ST4d and P1b merges second reruns `dissect.py` (the guard reads the ICA field) |
+| N (population) | **POP1** after #119 merges | — | needs the NasalSeg archive in the drop zone |
+| Opus | — | **CP-3** after P1b, P2, P3 | — |
+| Owner | merge or close #119; O8–O11; tier-1 FESS anatomy | review the dissected states (CP-3's URLs) | — |
+
+**CP-3 (Opus)** — after P1b, P2 and P3. Read each PR against its Accept; then on screen, per state of both corridors: the cavity in the three CT planes (preoperative scan, carved outline) and from the scope at its station; the guard (no cut within 1 mm of the ICA, optic nerve, AEA or orbit); the lamina, skull base, turbinates and the posterior table untouched; the antrostomy's size; the sellar opening's lateral edges against the carotid prominences; left = right. Write the URLs of each state for the owner's review.
+
+Deferred (after O7's corridors work): T1 self-test; ST7; NSF in procedure mode (harvest, rotation, inset: after ST5); Draf III, transpterygoid and transplanum states; the C1 flags (§2).
 
 ## 5. Work packages
 
@@ -1264,7 +1291,7 @@ with tier filtering; the NSF overlay per ST3 (design presets as buttons,
 sliders for the parameters, area readout, incisions drawn on the surface,
 "schematic on specimen" badge). Tests per ST3.
 
-### ST6 — External nose: unmask, centre, vestibule and valve        [done: merged #116, owner 2026-10-07; its checkpoint items stay open in the PR] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
+### ST6 — External nose: unmask, centre, vestibule and valve        [done: merged #116, owner 2026-10-07; checkpoint items closed at CP-ST6, §4] · Sonnet · depends: ST1b (merged), ST1c (lane B, same file) · spec: Opus, CP-2b
 Goal: O1 (c) and O2's entry anatomy on the standard specimen: the
 specimen's own nose (skin, alae, columella, vestibule) unmasked from the
 UW axial stack, centred and mirrored like the rest (N1), the vestibule
@@ -1417,15 +1444,124 @@ Owner-only items stay with the owner (§2): merging the two dry-eye hazards (vid
 
 Checkpoint **CP-C1** (Opus, per batch or two batches together): read the "check hardest" list and every number against its source's abstract; reject or correct before merge; content stays `draft` until the owner verifies.
 
-### P1/P2, T1 — wave 3        [todo; P1 next, per O7]
-P1 (Opus): `removes` units per step for the first procedures, mapped to
-existing wall and air nodes. **Scope per O7:** FESS (uncinectomy, bulla, basal lamella, posterior ethmoid, sphenoidotomy, frontal recess, middle meatal antrostomy) and the transsphenoidal → sellar → transclival corridor first. **Geometry contract to decide in P1:**
-- Stations need the tip in an air label, and `scope.js` collision reads the volume. A dissected state must therefore change the air and collision data (carve the removed labels to air in a derived volume, or a per-step mask), not only hide meshes.
-- Each state then unlocks E5 `uncovered` stations; their reasons in `ssb/geometry/stations.json` name the step each needs.
-- Steps whose sources are thin (C1a check-hardest) stay out until sourced. P2 (Sonnet): the procedure player
-(`docs/ssb.md` §3). T1 (Sonnet): self-test — find it / name it / CT
-localize, Leitner reused unchanged, storage key registered per
-`docs/decisions.md` §3. C1 is specced above.
+### P1 — Dissection contract and data (FESS, sellar/clival EEA)        [done: Opus, 2026-10-08, this PR] · **Opus** · depends: — (O7)
+*Result:* the contract is `docs/ssb.md` §5.8 (a state changes the CT display and label volume; units are rules; patches, state linings, `byState` stations), the mucosal state §5.9 and new data §5.10. The data is `tools/ssb-pipeline/uw/dissection.json`: 16 units (`<id>.<side>@<cut>`, each with `realizes`, an operator, an anchored box, a keep list, a `truth` note where it stands in for an unsegmented structure, its `basis` in the procedure's own steps, and `measured` voxels), the step → unit map for 10 procedures with each procedure's `entry` and `unrealized` ids, and two corridors. `removes` added to 15 steps (`p.uncinectomy`, `p.maxillary-antrostomy`, `p.anterior-ethmoidectomy`, `p.posterior-ethmoidectomy`, `p.transethmoidal-sphenoidotomy`, `p.sphenoidotomy`, `p.draf-i`, `p.draf-iia`, `p.transsellar-approach`, `p.transclival-approach`): ids the steps' own text already names; no new medical claim, every procedure's sources `verified: true`, none of C1a's thin steps involved (C1a's procedures are outside both corridors). `t.septum-anterior` and `t.lacrimal-sac-0` posed in `stations.json` (E5's rule; free under 4 mm, tips in air, targets in field, mirrored), and every `uncovered` reason rewritten to say what opens it.
+Method: a scratch prototype (not committed, as E5's solver was) evaluated the data file as written: 15 states, guard minima ≥ 1.0 mm on every state after mirroring, the keep labels untouched, the antrostomy window 18.5 × 9 mm. Station poses on those states: P3's table. Decongestion and shaft findings: §1 "P1 + wave-3 plan" and `docs/ssb.md` §5.9.
+What P1 did not do: Draf III, transplanum, transpterygoid, transmaxillary and the upper clival third (outside O7's corridors or intradural); the NSF in procedure mode (after ST5); a contralateral-control (one side dissected) view (O11).
+
+### P1b — Dissection states (the pipeline)        [ready] · Sonnet · depends: P1 (this PR merged)
+Goal: `dissect.py` evaluates `dissection.json` on the standard specimen and writes every state's patch, lining pack and index, reproducing P1's counts.
+Read: `docs/ssb.md` §5.8 (all), §5.3, §5.7 (the lining row); `tools/ssb-pipeline/uw/dissection.json` (its `rule`, `air`, `guard`, `keep`, then the units); the docstrings of `walls.py` (the wall rule, `Grid`), `lining.py`, `meshes.py`, `sdf.py`, and `normalize.py`'s `all`.
+Touch: `tools/ssb-pipeline/uw/dissect.py` (new); `lining.py` and `meshes.py` (factor out a function that meshes a given air or label mask, unchanged output for the base); `normalize.py` (`all` runs `dissect.py` last); `ssb/states/**` (new); `ssb/models/lining-*.glb.gz`, `ssb/models/packs.json` (state packs with `"state"`); `tools/check-data.mjs` (the checks of step 6); `tools/ssb-pipeline/README.md`; docs pass.
+Don't: change `dissection.json` (a rule that cannot be implemented as written is an escalation, not an edit); change content, `stations.json`, or any base output (`ssb/ct`, base packs: the states are additive); hand-edit an output; recompute the distance fields per state.
+Steps:
+1. Parse `dissection.json`: anchors per its `rule` (side-relative r; a midline unit's label anchor is `.M`, else `.R`; a landmark `.side`, else `.M`, else `.R`); `keep` (an id without a side is all three), `keepAlso`, `keepExcept`; the guard: each listed field from `ssb/ct/sdf-*.u8.gz` resampled trilinearly to the CT grid, and the distance to the `s.orbit` labels.
+2. Operators on a working copy of the base (CT display, labels): `window` (Euclidean distances to the a and b air sets within the box, padded by `sumMm`; `shell` keeps voxels within the given mm of the named air), `exenterate` (binary closing of the group's air with a ball of `round(closeMm / 0.5)` voxels), `region` (`labels`, or every non-air voxel; `nearAir` / `nearAirMm`; `split: "side"` sends R ≥ 0 to `into[0]` and R < 0 to `into[1]`). Every operator acts only on voxels with display ≥ `air.level`, outside keep, inside the guard; a carved voxel takes display `air.fill` and the label of the nearest voxel of the unit's own air sets (a ∪ b, `group`, or `into`).
+3. States: for each procedure step in `procedures` and each corridor position, the unit list (the `entry` chain's units, then the steps up to it; in a corridor, the earlier procedures' units instead of `entry`), applied in that order, `.R` and `.M` units only; then mirror R → L at R = 0 (labels `.R` → `.L`); then the guard again on both sides, restoring any voxel it rejects (print the count). Dedupe identical unit lists; key = the first 10 hex of SHA-256 of the list joined by newlines.
+4. Outputs per state: the patch (`docs/ssb.md` §5.8: u32 header length, JSON header, one u16 box per side and one for the midline, gzip with mtime 0); the lining pack (`lining.py`'s method on the state's air union, its budget rules), plus remnant meshes `<id>.<side>@<cut>` for every wall label a state cuts partly and `hides` for any it removes entirely; `packs.json` entries with `"state"`.
+5. `ssb/states/index.json`: `version`, `base`, `states` (`units`, `usedBy`, `patch`, `lining`, `hides`, `remnants`, `measured`: carved voxels, per-unit voxels, guard minima, symmetry count), `procedures` (step → state key), `corridors` (from the data, with each position's state key).
+6. `check-data.mjs`: (a) the `dissection.json` ↔ graph rule of §5.8 (every id a step `removes` realized on that step or before, or listed `unrealized`; a step with `removes` but no units only when all are unrealized; every unit on a step realizes one of that step's ids; unit names and `realizes` are graph ids); (b) every label index in a patch is in `labels.json`; (c) the budgets of §5.8.
+7. Print one table: per unit, voxels against `measured`; per state, carved voxels, guard minima per field and per side, the post-mirror guard count, bytes; the antrostomy window's sagittal extent (`s.posterior-fontanelle.R@antrostomy` with the uncinectomy before it: the medial-wall voxels carved, longest A and S spans).
+Accept: `python tools/ssb-pipeline/uw/dissect.py` prints 15 states; every unit's voxels within ± 5 % of `measured` (the clival recess has two values, by order); guard minima ≥ 0.9 mm (the field's 1 mm grid) on both sides of every state; 0 keep-label voxels changed; the post-mirror guard count ≤ 0.1 % of the state's carved voxels; the antrostomy window's longest sagittal span within 10–20 mm (the graph's "typically 1–2 cm for CRS"; prototype 18.5 × 9 mm); state linings ≤ 350 kB each and ≤ 6 MB together; a rerun is byte-identical. `node tools/check-data.mjs` (with step 6's checks; a scratch edit that unmaps one step makes it fail, not committed), `node tools/test-ssb.mjs` (full: nothing outside the new data changes), `node tools/smoke-pages.mjs`, `node tools/stamp-assets.mjs`.
+Escalate: a unit is off by more than 5 % and the cause is how the rule reads (quote the line); the guard rejects more than 1 % of a unit; a state lining breaks its budget; a keep-label voxel would change; ST4d has merged and moved the ICA field (rerun and report the new counts instead of matching the old).
+
+### P2 — Procedure player        [ready] · Sonnet · depends: P1 (this PR merged); runs beside P1b (shares no Touch files but the stamps)
+Goal: a procedure (or a corridor) plays step by step in the scope on its dissected state: the volume the scope reads, the lining it sees, the station it flies to, and the step's text with the `think` as a recall prompt.
+Read: `docs/ssb.md` §3 (Procedure, Endoscope), §5.8 ("Runtime", "Stations", the patch format), §7.3 (the procedure hash); `docs/authoring-ssb.md` §5 (the Procedure fields); `tools/ssb-pipeline/uw/dissection.json` (`procedures`, `corridors` only); `js/ssb/state.js`, `js/ssb/volume.js` (header validation, `VolumeError`), `js/ssb/mode-endoscope.js` (`ctAt`, the label lookup, stations, `flyTo`), `js/ssb/mode-specimen.js` and `js/ssb/geo-specimen.js` (pack loading, the lining), `js/ssb/ui-panel.js` (the procedure section), `tools/ssb-fixture-ct.mjs`.
+Touch: `js/ssb/mode-procedure.js`, `js/ssb/ui-procedure.js` (new); `js/ssb/volume.js` (`parsePatch`, `applyPatch`); `js/ssb/state.js` (procedure state, hash); `js/ssb/mode-endoscope.js` (reads the state volume; station lookup in `byState` first); `js/ssb/mode-specimen.js`, `js/ssb/geo-specimen.js` (state lining swap, `hides`, `remnants`); `js/ssb/mode-ct.js` (the carved outline); `js/ssb/ui-panel.js` (a Play button); `js/ssb/main.js` (mount); `ssb.html`, `css/ssb.css`; `tools/ssb-fixture-ct.mjs` (fixture states); `tools/test-ssb.mjs` (`--only procedure`); stamps; docs pass.
+Don't: change `dissection.json`, content, `stations.json` or anything under `ssb/`; write a fixture file into `ssb/` (route it, as the CT fixture is); move the camera except through a pose in the store; let any URL value reach markup except as `textContent`; weaken an existing test.
+Steps:
+1. `volume.js`: `parsePatch(bytes)` (gzip by magic bytes, as the volume; header checks: version 1, `base` equal to the volume's `specimen`, every box inside `dims`, every label index in the table, byte length = Σ box sizes × 2; else a `VolumeError`) and `applyPatch(volume, patch)` → a derived volume with the same API (`sample`, `labelAt`, slices) and `carvedAt(r, a, s)`; the base volume is untouched. Pure; Node-testable.
+2. `state.js`: `state.procedure = { id, step, cor } | null`; the hash `p`, `step`, `cor` per §7.3 (whitelisted against the loaded index and the graph; `step` clamped; canonical form rewritten); a procedure implies the scope stage and is exclusive with the lab and CT, like the scope.
+3. `mode-procedure.js`: load `ssb/states/index.json` lazily on first use (missing or malformed: Play is disabled with a one-line reason, nothing throws); resolve (procedure, step, cor) → state key; load and cache the patch and the lining pack (the last three); hand the derived volume to the endoscope (collision, tip label) and to CT (base image, carved outline), and the pack to the specimen (lining swap, `hides`, `remnants`); for the step's `station`, look up `stations.byState[key]`, then `stations.stations`, else keep the pose and say "no pose for this state"; fly with E6's `flyTo` (reduced motion: a cut); highlight the step's `see` ids; hatch the `at` structures of its `risk` hazards with the existing hazard hatching.
+4. `ui-procedure.js`: the step list (`do`, `see`, `risk`, the `think` collapsed behind "Think first" until revealed, by click or key), Previous / Next and the `[` `]` keys, a corridor picker (the index's corridors), the state badge ("Specimen, dissected — rule-based cut", plus the mucosal state once DC1 exists).
+5. `ui-panel.js`: a Play button on any procedure the index lists.
+6. Fixture (`tools/ssb-fixture-ct.mjs`): an index with one procedure of three steps over the synthetic volume: step 1 carves a 4 mm hole through a bone plate between two air labels, step 2 nothing, step 3 a second hole; patches built in memory and routed like the CT fixture; `lining: null` (the player keeps the base lining when a state has none).
+Accept (`node tools/test-ssb.mjs --only procedure`):
+- Node: `parsePatch` round-trips a fixture patch; it refuses a box outside `dims`, an unknown label index, a wrong `base`, a short body and version 2, each with a `VolumeError`; `applyPatch` changes exactly the box's non-zero voxels (display `ctFill`, the new label) and nothing else, and the base volume is byte-identical after; the hash codec clamps `step`, drops an unknown `p` or `cor`, ignores markup, and writes the canonical form.
+- Page, on the fixture: `#p=<fixture>&step=1` makes a pose through the hole free that clamps at step 0 (same pose, both read through the store), and the tip's label there is the patch's label; CT at that point still samples the base value and draws the outline; stepping back to 0 clamps the pose again; Next / Previous and `[` `]` move one step and rewrite the hash; the `think` is hidden until revealed; a step's risk hazards hatch their `at` structure; with no index the Play button is disabled with its reason and there are zero console errors; reduced motion cuts the flight; a hostile `#p=` is ignored.
+- Real data (runs only when `ssb/states/index.json` exists, i.e. once P1b has merged): every state's patch parses and applies; the first FESS state's lining pack replaces the base lining (the lining node count changes, no console error).
+- Plus `node tools/check-data.mjs`, the full `node tools/test-ssb.mjs`, `node tools/smoke-pages.mjs`.
+Escalate: the store needs a fifth exclusive stage; the patch format cannot carry what P1b writes; a check can only be written against real data before P1b merges (leave it for the real-data section and say so).
+
+### P3 — Station poses per state, and the 2.7 mm shaft        [todo] · Sonnet (solver) → Opus (CP-3) · depends: P1b, P2
+Goal: `stations.json` `byState` poses for the stations in the table below, each passing E5's rule on the committed state; the stations' `shaft` field; the two 2.7 mm intact poses.
+Read: `docs/ssb.md` §5.8 ("Stations"), §3 (Endoscope); the `rule` string of `ssb/geometry/stations.json`; this WP's table; `js/ssb/scope.js` (`shaftClearance`, `frameOf`, `tipOf`, `parseStations`); the E6 station checks in `tools/test-ssb.mjs`.
+Touch: `ssb/geometry/stations.json` (`byState`; the `uncovered` entries that move; the two intact 2.7 mm poses); `tools/ssb-pipeline/uw/stations.py` (new: the solver, committed so a re-pose after a regeneration is a command); `js/ssb/scope.js` (`parseStations` reads `shaft` and `byState`); `js/ssb/mode-endoscope.js`, `js/ssb/ui-endoscope.js` (a flight to a `shaft: "2.7"` station switches the shaft and the controls say why); `tools/test-ssb.mjs`; docs pass.
+Don't: change a pose in `stations.stations` other than adding the two 2.7 mm ones; change `dissection.json`; force a pose (a station that fails is reported).
+Steps:
+1. `stations.py`: for (station, state key, lens, target, tip air set, wanted labels, side), test the prototype pose first; if it fails, search depth / yaw / pitch (2-unit grid, then 0.5 refinement) and roll (15°) for free poses (4 mm unless the row says 2.7) with the tip in the tip set (an airway label: E6's check does not count `s.nasal-vestibule` as one) and the target within 30° of the view, ranked by the share of rays that pass through or first hit the wanted labels, then by lower mucosal contact. Write `measured` as E5 did.
+2. Left = right mirrored (roll → 360 − roll) for sided stations, checked, not assumed; a midline station is posed from the right nostril (`.M`). A station whose `where` says "through the contralateral nostril" is keyed by its target side, with `pose.side` the other nostril.
+3. Remove from `uncovered` every station that now has a pose (intact or in `byState`); keep the others' reasons as P1 wrote them.
+Accept (`node tools/test-ssb.mjs --only scope`, new Node checks): every `byState` pose is free in its state's volume (the patch applied to the CT, `shaftClearance` with its shaft and `lm.choanal-arch.M`), its tip is in an air label of that state, its target within `FOV_DEG / 2`; every `byState` key is a state in `ssb/states/index.json`; sided stations mirror; every graph `t.*` is in `stations`, `byState`, `uncovered` or `overviews`; in the page, flying to the olfactory cleft station switches the shaft to 2.7 mm and the controls say so. Plus `check-data`, the full suite, `smoke-pages`.
+Escalate: a table row cannot be posed (report the best candidate's numbers); a station needs a state that no procedure step reaches.
+
+Prototype poses (P1; on the prototype's states, which P1b reproduces): `R, depth, yaw, pitch, roll, lens`; "off" is the target's angle from the view axis; shares are % of 161 rays (first hit; "into" = rays that pass through that air space).
+
+| Station (key side) | State reached at | Pose | Off | What the image shows |
+|---|---|---|---|---|
+| `t.ethmoid-bulla-0` (R/L) | `p.uncinectomy#1` | R,36,4,38,0,0 | 9.5° | bulla face (tissue) 49, lamina 24, basal lamella 12; 20 into the bulla |
+| `t.infundibulum-45` (R/L) | `p.uncinectomy#1` | R,32,4,30,270,45 | 3.6° | the medial wall of the opened infundibular trough 98 |
+| `t.maxillary-antrum-70` (R/L) | `p.maxillary-antrostomy#1` | R,30,4,28,240,70 | 7.2° | 47 into the antrum; medial 58, posterior 25, orbital floor 13 |
+| `t.medial-orbital-floor-30` (R/L) | `p.maxillary-antrostomy#1` | R,30,6,34,270,30 | 9.6° | orbital floor 33, lamina 33; 78 into the antrum |
+| `t.basal-lamella-0` (R/L) | `p.anterior-ethmoidectomy#1` | R,48,2,40,0,0 | 15.0° | lamina 34, fovea 26, basal lamella 23; tip in the opened anterior ethmoid |
+| `t.ethmoid-roof-30` (R/L) | `p.anterior-ethmoidectomy#4` | R,44,−2,44,15,30 | 6.9° | lateral lamella 50, fovea 33 |
+| `t.posterior-ethmoid-roof-0` (R/L) | `p.posterior-ethmoidectomy#1` | R,58,0,34,0,0 | 10.7° | fovea 88, sphenoid face 12; tip in the posterior ethmoid |
+| `t.optic-canal-0` (R/L) | `p.transethmoidal-sphenoidotomy#2` | R,62,4,24,0,0 | 18.8° | sphenoid lateral wall 52, planum 21, sella 21 |
+| `t.medial-orbital-wall-0` (R/L) | `p.transethmoidal-sphenoidotomy#2` | R,38,4,38,0,0 | 13.3° | lamina 52, fovea 13, lateral lamella 12 |
+| `t.frontal-recess-45` (R/L) | `p.draf-i#1` (the sphenoidotomy state) | R,34,2,42,0,45 | 6.2° | MT 62, lamina 32; 31 into the agger |
+| `t.frontal-sinus-70` (R/L) | `p.draf-iia#2` | R,42,−4,44,0,70 | 6.3° | 22 into the frontal sinus, 76 through the recess |
+| `t.sphenoid-face-0` (M) | `p.transsellar-approach#2` | R,62,−2,24,0,0 | 27.4° | sella 54, planum 34, clivus 11 |
+| `t.sphenoid-face-0` (R/L) | `p.sphenoidotomy#4` | R,72,−2,20,0,0 | 25.1° | sella 65, clivus 17, intersinus septum 15 |
+| `t.sphenoid-lateral-recess-45` (L target, right nostril) | `p.transsellar-approach#2` | R,62,−4,14,60,45 | 13.0° | left lateral wall 52, sella 32 |
+| `t.sella-open-30` (M) | `p.transsellar-approach#4` | R,74,−2,20,60,30 | 12.6° | tissue behind the opening (gland, not segmented) 66, sellar rim 29 |
+| `t.cavernous-sinus-30` (R/L) | `p.transsellar-approach#4` | R,68,2,16,300,30 | 15.1° | lateral sphenoid wall 86 (mucosal contact 42 mm: prefer a pose with less) |
+| `t.olfactory-cleft-0` (R/L), **2.7 mm** | intact | R,48,−8,40,0,0 | 19.3° | cribriform plate 96; tip in the cleft (R 1.4) |
+| `t.inferior-meatus-45` (R/L), **2.7 mm** | intact | R,22,6,−4,300,45 | 22.3° | lateral wall 89, IT 11; tip lateral to the IT (R 8.8) |
+
+Targets (for the solver, as P1 used them): the bulla and the maxillary sinus, the frontal sinus, the basal lamella and the lamina: their label centroids; the medial wall (infundibulum): `s.maxillary-medial-wall.R` with −31 < A < −19, S > 18; the orbital floor: R < 22; the ethmoid roof: `s.fovea-ethmoidalis.R` with A > −40, the posterior roof A < −40; the optic canal: `s.sphenoid-lateral-wall.R` with S > 28; the cavernous sinus: the same with S > 24, A < −62; the sphenoid face: (0, −68, 30), one side (2, −68, 30); the lateral recess: `s.sphenoid-lateral-wall.L`; the sella: `lm.sella-floor-center.M`; the frontal recess: `lm.frontal-ostium.R`; the cleft: `s.cribriform-plate.R`; the inferior meatus: (12, −25, 6).
+
+### DC1 — Mucosal state: decongested (and, after POP1, congested)        [todo] · Sonnet · depends: P1b, P3 (same files: `mode-endoscope.js`, `test-ssb.mjs`)
+Goal: the decongested · as scanned · congested toggle of `docs/ssb.md` §5.9, as patches and lining packs; the dissection states rebuilt on the decongested base.
+Read: `docs/ssb.md` §5.9, §5.8 ("Pipeline outputs", the patch format); `dissect.py` (P1b: the patch and lining writers); `state.js`; `mode-specimen.js`, `mode-endoscope.js`.
+Touch: `tools/ssb-pipeline/uw/mucosa.py` (new); `dissect.py` (an optional mucosal patch applied to the base first); `ssb/states/**` (mucosal patches; the dissection states regenerated); `ssb/models/lining-*.glb.gz`, `packs.json`; `js/ssb/state.js` (`mu`), `js/ssb/mode-specimen.js`, `js/ssb/mode-endoscope.js`, `js/ssb/ui-specimen.js` (the toggle), `js/ssb/mode-procedure.js` (forces decongested); `tools/test-ssb.mjs` (`--only mucosa`); docs pass. Content: one measurement entity for Xiao 2021's numbers (below), `review: "draft"`, its source with PMID and DOI from PubMed and `verified: false`.
+Don't: change bone (display ≥ 120) or any label other than the three erectile ones and the nasal cavity; build the congested state before POP1 has merged (skip it; do not invent a ratio); calibrate on Xiao's absolute values.
+Steps:
+1. `mucosa.py decongested`: the operator of §5.9 between `lm.choanal-arch.M`'s A and `s.internal-nasal-valve`'s A; the per-side mean nasal-cavity cross-section over A from `lm.middle-turbinate-head.a − 3` to `lm.choanal-arch.a + 1` (prototype −15.2…−50); the smallest d in 0.25 mm steps with ratio ≥ 3.8 / 2.8; print the table of d against the ratio and the three thirds' absolute gains (S thirds of the cavity's own extent); write the patch and its lining.
+2. Rerun `dissect.py` on the decongested base; `index.json` records the mucosal state of each state.
+3. Runtime: three pills (Decongested · As scanned · Congested, the last disabled until its patch exists) with the badge "Mucosa: decongested (calibrated, Xiao 2021)"; `#…&mu=dec|scan|cong`; procedure mode forces decongested and greys the toggle.
+4. Content: `m.nasal-csa-decongestion` (or the id the authoring rules give it): the mean cross-section between the first vertical plane and the posterior septum, 2.8 cm² before and 3.8 cm² after decongestion; method MRI; n 10; population healthy adults aged 21–38; xylometazoline 0.1 %; source Xiao Q, Bates AJ, Cetto R, Doorly DJ, Sci Rep 2021;11:14410, PMID 34257360, doi 10.1038/s41598-021-93769-6 (full text, PMC8277849).
+Accept: `python mucosa.py decongested` prints d with a ratio within 1.35–1.45 (prototype: d = 1.0 mm, × 1.39), the superior third's absolute gain the smallest (prototype 0.13 against 0.25 and 0.24 cm²), 0 bone voxels and 0 voxels within 0.5 mm of bone changed; `node tools/test-ssb.mjs --only mucosa`: the toggle loads the patch and the lining; a pose whose tip is in inferior-turbinate tissue as scanned is in air decongested; every intact station and every `byState` pose still passes in the decongested state; `mu` is whitelisted; a procedure forces decongested; `node tools/ssb-content.mjs`, `check-data`, the full suite, `smoke-pages`.
+Escalate: the ratio needs d > 2 mm; any intact or `byState` station fails in the decongested state.
+
+### POP1 — NasalSeg cross-section profiles        [todo] · Sonnet · depends: #119 merged (`tools/ssb-pipeline/nasalseg/stats.py`); the archive in the drop zone
+Goal: per clear NasalSeg subject and side, the nasal cavity's coronal cross-section profile, its mean, and the more- against the less-congested side; head A placed against them.
+Read: `docs/ssb.md` §5.9, §5.10; `tools/ssb-pipeline/nasalseg/stats.py` (docstring: duplicates, header fixes, side assignment, the clear subset); `docs/realistic-anatomy.md` §4.4 (PR #119).
+Touch: `tools/ssb-pipeline/nasalseg/stats.py` (a `profiles` subcommand); `ssb/anatomy/population/nasalseg.json` (new keys only); docs pass.
+Don't: commit any image data; change POP0's numbers or subset.
+Steps: per clear subject and side, resample the cavity label onto the subject's anteroposterior axis (the direction from the cavity label's anterior to its posterior extent, in world mm) in 1 mm sections; the profile from 10 % to 90 % of that length (so neither the vestibule border nor the choana's cut decides it); per subject: mean cross-section per side, the smaller / larger ratio of the side means; across subjects: median, IQR, 5th and 95th percentiles; head A as scanned and the standard specimen measured the same way and placed as percentiles.
+Accept: the subcommand prints the table and head A's percentiles; the JSON is deterministic (sorted keys, a rerun byte-identical); `check-data` passes.
+Escalate: the axis or the 10–90 % span cannot be defined for more than 5 % of subjects; head A's percentile depends on the span choice by more than 20 points (report both).
+
+### IN1 — 16-bit heads: the volume format and an intake path        [todo] · Sonnet · depends: P2 (same `volume.js`), P3 (same `scope.js`, `mode-endoscope.js`)
+Goal: any head with HU values (NasalSeg's scans, a future 16-bit CT) loads and drives the scope like head A.
+Read: `docs/ssb.md` §5.10, §5.6, §5.3; `js/ssb/volume.js`, `js/ssb/scope.js` (`BONE_LEVEL`, `SOFT_LEVEL`, `shaftClearance`), `js/ssb/mode-endoscope.js`; `tools/ssb-fixture-ct.mjs`; the NRRD reader in `tools/ssb-pipeline/nasalseg/stats.py`.
+Touch: `js/ssb/volume.js` (`dtype: "int16"`, `values.kind: "HU"`, `levels`); `js/ssb/scope.js` (the levels as `shaftClearance` arguments, defaulting to today's constants); `js/ssb/mode-endoscope.js` (passes the header's levels); `tools/ssb-fixture-ct.mjs` (an int16 variant of the fixture); `tools/ssb-pipeline/intake/` (new: NRRD and NIfTI readers, the resample into the §4 frame given landmark correspondences, writing to `incoming/` only); `tools/test-ssb.mjs`; docs pass.
+Don't: ship a head (no file under `ssb/` changes); add a Python dependency (DICOM needs `pydicom`: escalate); change head A's files or behaviour.
+Accept: `node tools/test-ssb.mjs --only ct` and `--only scope` pass on the int16 fixture with the same results as on the u8 fixture (levels mapped through `toHU`); the full suite unchanged on head A; the intake script round-trips a synthetic NIfTI and a synthetic NRRD written by its own self-test into the frame within 0.5 voxel.
+Escalate: a real head is needed to test something; the RA landmark set is needed for the frame and is not in the graph yet (PR #119's RS6).
+
+### T1 — Self-test        [later] · Sonnet · depends: P2
+Find it / name it / CT localize, Leitner reused unchanged, storage key registered per `docs/decisions.md` §3. After O7's corridors work.
+
+### Launch prompts (owner)
+Start each in a new session (`docs/delegation.md` §5); P1b and P2 can run at the same time.
+
+- Lane P, Sonnet: `Execute work package P1b in docs/ssb-roadmap.md, following docs/delegation.md §3. Open a PR when its Accept commands pass; do not merge.`
+- Lane V, Sonnet: `Execute work package P2 in docs/ssb-roadmap.md, following docs/delegation.md §3. Open a PR when its Accept commands pass; do not merge.`
+- After P1b and P2 merge, lane P, Sonnet: `Execute work package P3 in docs/ssb-roadmap.md, following docs/delegation.md §3. Open a PR when its Accept commands pass; do not merge.`
+- After P3: the same prompt with DC1, and in another session with IN1; after #119 merges and the NasalSeg archive is in the drop zone: with POP1.
+- Checkpoint, Opus, after P1b, P2 and P3: `Run checkpoint CP-3 in docs/ssb-roadmap.md, following docs/delegation.md §4. PRs: <links>.`
 
 ## 6. Content backlog
 

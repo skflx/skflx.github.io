@@ -6732,6 +6732,9 @@
             "s.sphenoid-face",
             "s.posterior-septal-artery"
           ],
+          "removes": [
+            "s.sphenoid-face"
+          ],
           "risk": [
             "h.nsf-pedicle-injury",
             "h.ica-injury-sphenoidotomy",
@@ -6837,6 +6840,9 @@
           "see": [
             "s.sphenoid-sinus",
             "s.sphenoid-ostium"
+          ],
+          "removes": [
+            "s.sphenoid-face"
           ],
           "risk": [
             "h.sphenoid-ostium-stenosis"
@@ -7129,7 +7135,9 @@
           ],
           "removes": [
             "s.sphenoid-rostrum",
-            "s.sphenoid-face"
+            "s.sphenoid-face",
+            "s.perpendicular-plate",
+            "s.vomer"
           ],
           "risk": [
             "h.nsf-pedicle-injury",
@@ -7173,6 +7181,9 @@
             "s.sella-turcica",
             "s.sellar-dura",
             "s.anterior-intercavernous-sinus"
+          ],
+          "removes": [
+            "s.sella-turcica"
           ],
           "risk": [
             "h.cavernous-ica-injury-sellar",
@@ -7490,7 +7501,9 @@
           "removes": [
             "s.sphenoid-rostrum",
             "s.intersinus-septum",
-            "s.sphenoid-face"
+            "s.sphenoid-face",
+            "s.perpendicular-plate",
+            "s.vomer"
           ],
           "risk": [
             "h.nsf-pedicle-injury",
@@ -7516,6 +7529,9 @@
           "see": [
             "s.clivus",
             "s.basilar-plexus"
+          ],
+          "removes": [
+            "s.clivus"
           ],
           "risk": [
             "h.basilar-plexus-bleeding",
