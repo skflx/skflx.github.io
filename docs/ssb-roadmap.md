@@ -2005,7 +2005,7 @@ Start each in a new session (`docs/delegation.md` §5); P1b and P2 can run at th
 - Lane V, Sonnet: `Execute work package P2 in docs/ssb-roadmap.md, following docs/delegation.md §3. Open a PR when its Accept commands pass; do not merge.`
 - After P1b and P2 merge, lane P, Sonnet: `Execute work package P3 in docs/ssb-roadmap.md, following docs/delegation.md §3. Open a PR when its Accept commands pass; do not merge.`
 - After P3 (merged): the same prompt with DC1, and in another session with IN1 (POP1 done, #126).
-- CP-3 done (§4); P4 in review. Lane V, Sonnet, was: `Execute work package P4 in docs/ssb-roadmap.md, following docs/delegation.md §3. Open a PR when its Accept commands pass; do not merge.`
+- CP-3 and P4 done (§4, #132). Next: the owner reviews the states (CP-3's links; a bare `#p=…&step=n` link now lands on its view).
 
 ## 6. Content backlog
 
