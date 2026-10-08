@@ -391,7 +391,7 @@ shaft pass" (label ≠ tissue along sampled points) and "how close is the ICA"
 
 `js/ssb/volume.js` loads and serves them. `ssb/ct/ct.json` carries `dims`,
 `spacing`, the voxel → RAS `affine` (row-major, any axis order or sign; the
-inverse is computed), `dtype: uint8`, `windows` (presets in the file's own
+inverse is computed), `dtype: uint8` (or `int16`, §5.10), `windows` (presets in the file's own
 value units), `values.toHU` (a piecewise-linear display → HU table) and the
 label file and table; `ct.u8.gz` and `labels.u16.gz` are gzip of raw voxels,
 x fastest, then y, then z (labels little-endian); the table,
@@ -803,16 +803,21 @@ mucosal state → dissection.
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented
   (their five labels do not include the ethmoid that FESS units need).
-- **16-bit intake (WP IN1).** `ct.json` gains `dtype: "int16"` with
-  `values.kind: "HU"` (windows in HU, no LUT) and per-head `levels: {air,
-  bone}`; `volume.js` reads both dtypes, and the scope's `BONE_LEVEL` and
-  `SOFT_LEVEL` come from the header (defaulting to today's 150 and 78) so
-  collision behaves the same on any head. `tools/ssb-pipeline/intake/` reads
-  NRRD (the reader in `tools/ssb-pipeline/nasalseg/stats.py`, PR #119) and
-  NIfTI (an in-script header reader; DICOM would need `pydicom`, an owner
-  decision), places the head in the §4 frame on the RA landmark set, and
-  writes it under `ssb/anatomy/<head>/` with its licence line in
-  `ssb/LICENSE-data.md`. Head A stays 8-bit.
+- **16-bit intake (WP IN1, built).** `ct.json` takes `dtype: "int16"` with
+  `values.kind: "HU"` (windows in HU, no LUT; the data file is `ct.i16.gz`,
+  little-endian) and optional per-head `levels: {air, bone}` in the file's own
+  values. `volume.js` reads both dtypes (`vol.range`, `vol.levels`; `toHU` is
+  the identity on an HU head); the CT stage's window and LUT span the head's
+  range; the scope's collision takes `levels` as `shaftClearance`'s last
+  argument (`mode-endoscope.js` passes the header's), defaulting to `BONE_LEVEL`
+  150 and `SOFT_LEVEL` 78, so collision behaves the same on any head. Outside
+  the volume is "no data" on any scale (neither bone nor mucosa). Head A stays
+  8-bit. `tools/ssb-pipeline/intake/intake.py` reads NIfTI-1 and NRRD (DICOM
+  would need `pydicom`, an owner decision), fits a rigid transform to the §4
+  frame from landmark correspondences it is given, resamples to an isotropic
+  grid and writes `incoming/<name>/` only; shipping a head under `ssb/` (with
+  its licence line in `ssb/LICENSE-data.md`) is a separate decision. The RA
+  landmark set (RS6) is what the correspondences will be once it exists.
 
 ## 6. Dioramas
 

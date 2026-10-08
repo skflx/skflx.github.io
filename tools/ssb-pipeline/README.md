@@ -145,3 +145,13 @@ position, and measures the maxillary sinuses and nasal cavities. `review.json` h
 (clear / thickening / opacified / unsure) that define the clear subset; `--png-dir` writes the review sheets they
 were made from. It also measures head A (as scanned, from git) the same way. Method and limits: the script's
 docstring; results and their reading: `docs/realistic-anatomy.md` §4.4; provenance: `ssb/LICENSE-data.md`.
+
+## `intake/` — 16-bit heads (WP IN1)
+
+    .venv/bin/python -I tools/ssb-pipeline/intake/intake.py convert --in head.nii.gz --landmarks lm.json --name head01 [--spacing 0.5]
+    .venv/bin/python -I tools/ssb-pipeline/intake/intake.py selftest
+
+A NIfTI-1 or NRRD CT in HU -> `incoming/<name>/{ct.json,ct.i16.gz}` (dtype int16, `values.kind` HU, `levels` from head A's
+display levels) in the docs/ssb.md 4 frame, from landmark correspondences (`{"landmarks": [{"id", "src", "dst"}]}`, at
+least three, rigid fit, RMS gate). Writes nowhere but `incoming/`; DICOM is not supported (needs `pydicom`: an owner
+decision). Method and limits: the script's docstring.

@@ -58,6 +58,8 @@ export const SHAFT_RADII = Object.freeze({ '4': 2.0, '2.7': 1.35 });
 export const SHAFT_RADIUS_MM = SHAFT_RADII['4'];
 export const BONE_LEVEL = 150;
 export const SOFT_LEVEL = 78;
+/* `levels` is { soft, bone } in the volume's own values (ct.json `levels`: air -> soft); a 16-bit head passes HU. */
+export const LEVELS_DEFAULT = Object.freeze({ bone: BONE_LEVEL, soft: SOFT_LEVEL });
 export const SAMPLE_STEP_MM = 0.5;
 export const START_MM = 2;
 /* lm.choanal-arch.M's [A, S], used when the landmark is missing: the nasopharynx is A < arch.a and S < arch.s. */
@@ -230,18 +232,19 @@ export function verticalFov(width, height) {
 
 /* ---------------- collision ---------------- */
 
-/* Sample the shaft of `pose` (fulcrum F) against ctAt(ras) -> display level (NaN or 0 = no data = free).
+/* Sample the shaft of `pose` (fulcrum F) against ctAt(ras) -> the volume's value (NaN = outside the volume = free; 0 is no data on a u8 head).
    `arch` is { a, s }: the choanal arch's A and S (the midline rule's nasopharynx exemption; ARCH_DEFAULT).
    Returns { depth, blocked, by, contactMm }: `depth` is the pose's depth, or the last free sample when bone or
    the midline blocks first (a pose that would block is clamped, not refused); `by` is 'bone' or 'septum' (the
    midline rule fired and bone did not at that sample), null when free; `contactMm` is the length of the axis
-   lying in mucosa (SOFT_LEVEL <= level < BONE_LEVEL) up to that depth. */
-export function shaftClearance(fulcrum, pose, ctAt, radius = SHAFT_RADIUS_MM, arch = ARCH_DEFAULT) {
+   lying in mucosa (levels.soft <= level < levels.bone) up to that depth. */
+export function shaftClearance(fulcrum, pose, ctAt, radius = SHAFT_RADIUS_MM, arch = ARCH_DEFAULT, levels = LEVELS_DEFAULT) {
+    const { bone: boneLevel, soft: softLevel } = levels;
     const d = shaftDir(pose);
     const e1 = perp(Math.abs(dot(d, S_AXIS)) > 0.99 ? A_AXIS : S_AXIS, d);
     const e2 = cross(d, e1);
     const ring = [e1, e2, scale(e1, -1), scale(e2, -1)].map((e) => scale(e, radius));
-    const level = (p) => { const v = ctAt(p); return v === v ? v : 0; };
+    const level = (p) => { const v = ctAt(p); return v === v ? v : -Infinity; };      /* outside the volume: neither bone nor mucosa, on any head's scale */
     const sigma = pose.side === 'L' ? -1 : 1;
     const crossed = (p) => sigma * p[0] < 0 && !(p[1] < arch.a && p[2] < arch.s);
     let contact = 0;
@@ -252,15 +255,15 @@ export function shaftClearance(fulcrum, pose, ctAt, radius = SHAFT_RADIUS_MM, ar
         if (at < START_MM || (n === steps && at - last < 1e-9)) continue;
         const c = add(fulcrum, scale(d, at));
         const axis = level(c);
-        let bone = axis >= BONE_LEVEL;
+        let bone = axis >= boneLevel;
         let septum = crossed(c);
         for (let m = 0; m < 4 && !bone; m++) {
             const q = add(c, ring[m]);
-            bone = level(q) >= BONE_LEVEL;
+            bone = level(q) >= boneLevel;
             septum = septum || crossed(q);
         }
         if (bone || septum) return { depth: Math.max(0, last), blocked: true, by: bone ? 'bone' : 'septum', contactMm: contact };
-        if (axis >= SOFT_LEVEL) contact += SAMPLE_STEP_MM;
+        if (axis >= softLevel) contact += SAMPLE_STEP_MM;
         last = at;
     }
     return { depth: pose.depth, blocked: false, by: null, contactMm: contact };

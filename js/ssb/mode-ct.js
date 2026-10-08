@@ -30,14 +30,14 @@
    `hook` is the read-only test window (window.__ssb.ct).
    ============================================================= */
 import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=b121b3b4';
-import { sharedVolume, PLANES } from './volume.js?v=e32fcaae';
-import { CT_PLANES } from './state.js?v=206fc37e';
+import { sharedVolume, PLANES } from './volume.js?v=3c106763';
+import { CT_PLANES } from './state.js?v=7aa228b6';
 
 const LITTLE = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 const NEUTRAL_TOKEN = '--ssb-cell-ethmoid';
 const DRAG_PX = 5;          /* a press that moves less than this is a click */
 const WHEEL_PX = 80;        /* wheel travel per slice */
-const VALUE_MAX = 255;      /* the volume is uint8 */
+const VALUE_RANGE_U8 = [0, 255];     /* until a volume has loaded; a 16-bit head spans HU (volume.js VALUE_RANGE) */
 const MINUS = '−';
 
 /* '#abc' | '#aabbcc' | 'rgb(r, g, b)' -> [r, g, b] (or null). */
@@ -65,6 +65,8 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
     let vol = null;
     let status = 'idle';         /* idle | loading | ready | absent | error */
     let problem = '';
+    let valueMin = VALUE_RANGE_U8[0];
+    let valueMax = VALUE_RANGE_U8[1];
     let win = { name: '', center: 128, width: 255 };
     let overlay = true;
     let hover = null;            /* what is under the pointer while it rests on a view */
@@ -187,8 +189,8 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
 
     function setWindow({ center = win.center, width = win.width, name = null } = {}) {
         if (!finite(center) || !finite(width)) return false;
-        const w = Math.min(VALUE_MAX, Math.max(1, Math.round(width)));
-        const c = Math.min(VALUE_MAX, Math.max(0, Math.round(center)));
+        const w = Math.min(valueMax - valueMin, Math.max(1, Math.round(width)));
+        const c = Math.min(valueMax, Math.max(valueMin, Math.round(center)));
         let label = name;
         if (label === null) {
             label = '';
@@ -272,16 +274,16 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
         const ctx = canvas.getContext('2d');
         const img = ctx.createImageData(width, height);
         const px = new Uint32Array(img.data.buffer);
-        const lut = new Uint32Array(VALUE_MAX + 1);
+        const lut = new Uint32Array(valueMax - valueMin + 1);
         const lo = win.center - win.width / 2;
-        for (let n = 0; n <= VALUE_MAX; n++) {
+        for (let n = valueMin; n <= valueMax; n++) {
             const g = Math.round(255 * Math.min(1, Math.max(0, (n - lo) / win.width)));
-            lut[n] = pack([g, g, g]);
+            lut[n - valueMin] = pack([g, g, g]);
         }
         const data = sl.ct;
         for (let n = 0; n < data.length; n++) {
             const val = data[n];
-            px[n] = val === val ? lut[Math.min(VALUE_MAX, Math.max(0, Math.round(val)))] : 0;   /* NaN: outside the volume */
+            px[n] = val === val ? lut[Math.min(valueMax, Math.max(valueMin, Math.round(val))) - valueMin] : 0;   /* NaN: outside the volume */
         }
         ctx.putImageData(img, 0, 0);
         v.gray = { key, canvas };
@@ -534,7 +536,7 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
             if (e.pointerId !== drag.id) return;
             if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) > DRAG_PX) drag.moved = true;
             if (drag.windowing) {
-                const k = VALUE_MAX / 300;
+                const k = (valueMax - valueMin) / 300;
                 setWindow({ width: win.width + (e.clientX - drag.x) * k, center: win.center - (e.clientY - drag.y) * k, name: '' });
             } else {
                 const ras = rasFromClient(plane, e.clientX, e.clientY);
@@ -612,9 +614,10 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
             return;
         }
         store.setCtBounds(vol.bounds);
+        [valueMin, valueMax] = vol.range;
         const names = Object.keys(vol.windows);
         const first = vol.windows.bone ? 'bone' : names[0];
-        win = first ? { name: first, center: Math.round(vol.windows[first].center), width: Math.round(vol.windows[first].width) } : { name: '', center: 128, width: 255 };
+        win = first ? { name: first, center: Math.round(vol.windows[first].center), width: Math.round(vol.windows[first].width) } : { name: '', center: Math.round((valueMin + valueMax) / 2), width: valueMax - valueMin };
         overlay = vol.hasLabels;
         readPalette();
         readSelection();
@@ -708,7 +711,8 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
         get overlay() { return overlay; },
         get hasLabels() { return !!vol && vol.hasLabels; },
         get windows() { return vol ? Object.keys(vol.windows) : []; },
-        get valueMax() { return VALUE_MAX; },
+        get valueMin() { return valueMin; },
+        get valueMax() { return valueMax; },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
     };
 }
