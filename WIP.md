@@ -336,7 +336,7 @@ backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
 to sellar/clival masses, so wave 3 is procedure mode: the dissection
 states, the player, poses per state, the mucosal state, NasalSeg's
 population profiles and the 16-bit intake are built (P1b, P2, P3, DC1,
-POP1, IN1); CP-3 found that a step does not yet land on the view it
+POP1, IN1; the population panel POP2a is in review); CP-3 found that a step does not yet land on the view it
 opened, and P4 fixed that (every corridor position, by step or link,
 lands on a view of its state); the soft-tissue lane
 continues with ST4d and ST5.
