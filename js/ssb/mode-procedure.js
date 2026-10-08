@@ -26,12 +26,14 @@
 
    Imports no three.js. `hook` is the read-only test window (window.__ssb.procedure).
    ============================================================= */
-import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=651dd4a3';
+import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=50cad9b7';
 import { STAMPS } from './stamps.js?v=179a2349';
 
 export const INDEX_FILE = 'ssb/states/index.json';
 const KEY = /^[0-9a-f]{10}$/;
 const PATCH_FILE = /^[A-Za-z0-9._-]+\.ssbp\.gz$/;
+const LINING_FILE = /^lining-[0-9a-f]{10}\.glb\.gz$/;          /* a state's pack, under ssb/models/ */
+const BASE = /^[0-9a-f]{10}$/;
 const KEEP_STATES = 3;
 
 const own = (o, k) => o !== null && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k);
@@ -49,32 +51,56 @@ function stepMap(src) {
     for (const [k, v] of Object.entries(src)) {
         const flat = /^(p\.[a-z0-9-]+)#(\d+)$/.exec(k);
         if (flat) put(flat[1], flat[2], v);
-        else if (v && typeof v === 'object' && !Array.isArray(v)) for (const [n, key] of Object.entries(v)) put(k, n, key);
+        else if (v && typeof v === 'object' && !Array.isArray(v)) {
+            const steps = v.steps && typeof v.steps === 'object' && !Array.isArray(v.steps) ? v.steps : v;      /* P1b: { entry, steps } */
+            for (const [n, key] of Object.entries(steps)) put(k, n, key);
+        }
     }
     return out;
+}
+
+/* A corridor's positions: P1b writes an ordered list [{ procedure, step, state }]; a map like stepMap's is also read. */
+function positionList(src) {
+    const out = [];
+    if (Array.isArray(src)) {
+        for (const p of src.slice(0, 200)) {
+            if (!p || typeof p !== 'object') continue;
+            const step = Number(p.step);
+            if (/^p\.[a-z0-9-]+$/.test(p.procedure) && Number.isInteger(step) && step >= 0 && step <= 99 && typeof p.state === 'string' && KEY.test(p.state)) out.push([`${p.procedure}#${step}`, p.state]);
+        }
+        return out;
+    }
+    return [...stepMap(src)];
 }
 
 /* ssb/states/index.json -> { states: Map(key -> { patch, hasLining, hides, remnants, units, usedBy }), steps: Map("<p-id>#<n>" -> key|null),
    corridors: Map(key -> { name, procedures, positions: Map }) }. Anything malformed is dropped; a document that is not an index
    is empty. */
 export function parseIndex(doc) {
-    const out = { states: new Map(), steps: new Map(), corridors: new Map() };
+    const out = { base: '', states: new Map(), steps: new Map(), entries: new Map(), corridors: new Map() };
     if (!doc || typeof doc !== 'object' || doc.version !== 1) return out;
+    if (typeof doc.base === 'string' && BASE.test(doc.base)) out.base = doc.base;
     if (doc.states && typeof doc.states === 'object') {
         for (const [key, s] of Object.entries(doc.states)) {
             if (!KEY.test(key) || !s || typeof s !== 'object') continue;
             const patch = typeof s.patch === 'string' && PATCH_FILE.test(s.patch) ? s.patch : `${key}.ssbp.gz`;
-            out.states.set(key, { patch, hasLining: typeof s.lining === 'string' && s.lining !== '', hides: ids(s.hides), remnants: ids(s.remnants), units: ids(s.units), usedBy: ids(s.usedBy) });
+            const lining = typeof s.lining === 'string' && LINING_FILE.test(s.lining) ? s.lining : '';
+            out.states.set(key, { patch, lining, hasLining: !!lining, hides: ids(s.hides), remnants: ids(s.remnants), units: ids(s.units), usedBy: ids(s.usedBy) });
         }
     }
     out.steps = stepMap(doc.procedures);
+    if (doc.procedures && typeof doc.procedures === 'object') {                     /* P1b: the state before step 0 (the entry chain) */
+        for (const [id, v] of Object.entries(doc.procedures)) {
+            if (/^p\.[a-z0-9-]+$/.test(id) && v && typeof v.entry === 'string' && KEY.test(v.entry)) out.entries.set(id, v.entry);
+        }
+    }
     for (const [k, v] of [...out.steps]) if (typeof v === 'string' && !out.states.has(v)) out.steps.delete(k);          /* a key no state has */
     if (doc.corridors && typeof doc.corridors === 'object') {
         for (const [key, c] of Object.entries(doc.corridors)) {
             if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(key) || !c || typeof c !== 'object') continue;
-            const positions = stepMap(c.positions);
-            for (const [k, v] of [...positions]) if (typeof v === 'string' && !out.states.has(v)) positions.delete(k);
-            out.corridors.set(key, { name: typeof c.name === 'string' ? c.name.slice(0, 120) : key, procedures: ids(c.procedures).filter((i) => /^p\./.test(i)), positions });
+            const order = positionList(c.positions).filter(([, v]) => out.states.has(v));
+            const positions = new Map(order);
+            out.corridors.set(key, { name: typeof c.name === 'string' ? c.name.slice(0, 120) : key, procedures: ids(c.procedures).filter((i) => /^p\./.test(i)), positions, order });
         }
     }
     return out;
@@ -94,11 +120,21 @@ export function stepCount(index, id) {
    nearest listed step at or below `step`. */
 export function stateKeyFor(index, id, step, cor = null) {
     const corridor = cor ? index.corridors.get(cor) : null;
+    if (corridor && corridor.procedures.includes(id)) {
+        /* In a corridor the state accumulates in its own order: the last position at or before (this procedure, this step). */
+        const at = corridor.procedures.indexOf(id);
+        let key = null;
+        for (const [k, v] of corridor.order) {
+            const m = /^(.+)#(\d+)$/.exec(k);
+            const i = m ? corridor.procedures.indexOf(m[1]) : -1;
+            if (i >= 0 && (i < at || (i === at && Number(m[2]) <= step))) key = v;
+        }
+        return key;
+    }
     for (let n = step; n >= 0; n--) {
-        if (corridor && corridor.positions.has(`${id}#${n}`)) return corridor.positions.get(`${id}#${n}`);
         if (index.steps.has(`${id}#${n}`)) return index.steps.get(`${id}#${n}`);
     }
-    return null;
+    return index.entries && index.entries.has(id) ? index.entries.get(id) : null;     /* before its first cut: the entry chain's state */
 }
 
 /* opts: { store, graph, specimen, endo, ct, fetchFn? } (endo and ct may be null: the player then only drives what exists). */
@@ -161,7 +197,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         const info = index.states.get(key);
         const res = await fetchFn(stamped(`ssb/states/${info.patch}`));
         if (!res.ok) throw new Error(`${info.patch}: HTTP ${res.status}`);
-        const patch = await parsePatch(await res.arrayBuffer(), base);
+        const patch = await parsePatch(await res.arrayBuffer(), base, index.base);
         patches.set(key, patch);
         while (patches.size > KEEP_STATES) patches.delete(patches.keys().next().value);
         return patch;
@@ -225,7 +261,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         }
         if (mine !== seq) return;
         if (key) {
-            try { await specimenReady(); await specimen.loadState(key); } catch (e) { console.error(e); }
+            try { await specimenReady(); await specimen.loadState(key, index.states.get(key).lining); } catch (e) { console.error(e); }
             if (mine !== seq) return;
         }
         derived = vol;

@@ -3427,9 +3427,10 @@ const SPH_LAB = { params: [], presets: {} };
 
 /* The page on the fixture: the CT volume, the states, the stations and the landmarks are routed; the packs are the real ones.
    `index`: 'fixture' | 'absent' (stamps.js without the index: the page must not ask) | a body string; `patch`: an override for the state files. */
-async function openProc(browser, base, hash, { index = 'fixture', reducedMotion = 'no-preference', track = true, patches = null } = {}) {
+async function openProc(browser, base, hash, { index = 'fixture', reducedMotion = 'no-preference', track = true, patches = null, real = false } = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion });
   const asked = [];
+  if (!real) {                      /* real: the page reads the committed specimen, states and stamps as served (P1b's data) */
   await context.route(FX_ROUTE, (route) => {
     const name = new URL(route.request().url()).pathname.replace(/^\//, '');
     const body = FX_FILES[name];
@@ -3449,6 +3450,7 @@ async function openProc(browser, base, hash, { index = 'fixture', reducedMotion 
     const src = sourceOf('js/ssb/stamps.js').replace(/^\s*"ssb\/states\/[^\n]*\n/gm, '');
     return route.fulfill({ status: 200, contentType: 'text/javascript', body: index === 'absent' ? src : `${src}\nSTAMPS["ssb/states/index.json"] = "fixture0";\n` });
   });
+  }
   const page = await context.newPage();
   const errors = collectErrors(page);
   if (track) allErrors.push(errors);
@@ -3653,7 +3655,7 @@ async function procedureRealDataTests(browser, base) {
   let bad = [];
   for (const key of keys) {
     try {
-      const patch = await parsePatch(read(`ssb/states/${index.states[key].patch || key + '.ssbp.gz'}`), vol);
+      const patch = await parsePatch(read(`ssb/states/${index.states[key].patch || key + '.ssbp.gz'}`), vol, index.base);
       const derived = applyPatch(vol, patch);
       if (!(derived.carvedVoxels > 0)) bad.push(`${key}: carves nothing`);
     } catch (e) { bad.push(`${key}: ${e.message}`); }
@@ -3664,7 +3666,7 @@ async function procedureRealDataTests(browser, base) {
   if (!first) { check('procedure (real data): some state carries a lining pack', false, 'none of the indexed states has a lining'); return; }
   const [stepKey, key] = first;
   const [pid, n] = stepKey.split('#');
-  const { context, page } = await openProc(browser, base, `#p=${pid}&step=${n}`, { index: JSON.stringify(index) });
+  const { context, page } = await openProc(browser, base, `#p=${pid}&step=${n}`, { real: true });
   await page.waitForFunction((k) => window.__ssb.procedure && window.__ssb.procedure.shown && window.__ssb.procedure.shown.key === k && !window.__ssb.procedure.busy, key, { timeout: 60000 });
   await nextFrames(page, 4);
   const nodes = await specNodes(page);

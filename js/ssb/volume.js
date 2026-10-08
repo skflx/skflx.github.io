@@ -400,9 +400,11 @@ const BAD_PATCH = (why) => new VolumeError('invalid', `A dissection patch is not
 /* The bytes of a patch (gzip or already decoded) -> { state, units, ctFill, boxes: [{ ijk0, dims, data: Uint16Array }] }.
    Layout: u32 header length, a JSON header { version: 1, base, state, units, ctFill, boxes: [{ ijk0, dims }] }, then per
    box one u16 array, x fastest: 0 = unchanged, else the voxel's new label (its CT display becomes ctFill). Refused with a
-   VolumeError('invalid') unless the base names this volume's specimen, every box lies inside the volume, every label is in its
-   table and the body is exactly the boxes' size; version 2 or any other is 'unsupported'. Pure: touches no volume. */
-export async function parsePatch(bytes, volume) {
+   VolumeError('invalid') unless the base is `expectedBase` (the state index's `base`: P1b writes the first 10 hex of the SHA-256
+   of the specimen's raw CT and label arrays, and check-data pins it to the committed volume) or, with none given, this volume's
+   specimen name; every box lies inside the volume, every label is in its table and the body is exactly the boxes' size;
+   version 2 or any other is 'unsupported'. Pure: touches no volume. */
+export async function parsePatch(bytes, volume, expectedBase = '') {
     const raw = bytes instanceof ArrayBuffer ? bytes : bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
     const buf = await decode(raw);
     if (buf.byteLength < 4) throw BAD_PATCH('it is shorter than its header length');
@@ -413,8 +415,8 @@ export async function parsePatch(bytes, volume) {
     try { head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, headLen))); } catch (e) { throw BAD_PATCH('its header is not JSON'); }
     if (!head || typeof head !== 'object') throw BAD_PATCH('its header is not an object');
     if (head.version !== 1) throw new VolumeError('unsupported', `A dissection patch has an unsupported version (${String(head.version)}).`);
-    const specimen = volume && volume.header ? volume.header.specimen : '';
-    if (typeof head.base !== 'string' || head.base !== specimen) throw BAD_PATCH('it was made for a different specimen');
+    const want = typeof expectedBase === 'string' && expectedBase ? expectedBase : (volume && volume.header ? volume.header.specimen : '');
+    if (typeof head.base !== 'string' || !want || head.base !== want) throw BAD_PATCH('it was made for a different specimen');
     if (!Number.isInteger(head.ctFill) || head.ctFill < 0 || head.ctFill > 255) throw BAD_PATCH('ctFill must be an integer in 0..255');
     if (!Array.isArray(head.boxes) || head.boxes.length > PATCH_BOXES_MAX) throw BAD_PATCH('its box list is missing or too long');
     const dims = volume.dims;

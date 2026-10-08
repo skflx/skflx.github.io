@@ -51,7 +51,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=651dd4a3';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=50cad9b7';
 import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=b121b3b4';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
@@ -338,8 +338,14 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
        until unloadState. Resolves with the nodes it added ([] for a state that has no pack: the base lining stays). Never
        rejects: a pack that cannot be read is recorded as any other and the state is shown without it. */
     const stateLoads = new Map();
-    function loadState(key) {
-        const pack = [...packs.values()].find((p) => p.stateKey === key);
+    function loadState(key, file = '') {
+        let pack = [...packs.values()].find((p) => p.stateKey === key);
+        /* A state pack packs.json does not list (P1b indexes them in ssb/states/index.json, so the boot never sees them): the
+           file the index names, registered here as a deferred pack. Only lining-<key>.glb.gz for this very key is accepted. */
+        if (!pack && STATE_KEY.test(key) && file === `lining-${key}.glb.gz`) {
+            pack = { name: `state-${key}`, file, state: 'deferred', error: '', lining: false, stateKey: key, nodes: [], expected: [] };
+            packs.set(pack.name, pack);
+        }
         if (!pack) return Promise.resolve([]);
         if (stateLoads.has(key)) return stateLoads.get(key);
         const job = (async () => {

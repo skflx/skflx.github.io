@@ -294,6 +294,16 @@ function checkDissection(index) {
   const ipath = rel('ssb/states/index.json');
   if (!fs.existsSync(ipath)) { fail('ssb dissection: ssb/states/index.json is missing (run tools/ssb-pipeline/uw/dissect.py)'); return; }
   const idx = JSON.parse(fs.readFileSync(ipath, 'utf8'));
+  {
+    /* The patches are made for one specimen: index.base is the first 10 hex of the SHA-256 of the raw CT and label arrays
+       dissect.py read (the player refuses a patch whose base differs). A specimen regenerated without rerunning dissect.py fails here. */
+    const h = crypto.createHash('sha256');
+    h.update(zlib.gunzipSync(fs.readFileSync(rel('ssb/ct/ct.u8.gz'))));
+    h.update(zlib.gunzipSync(fs.readFileSync(rel('ssb/ct/labels.u16.gz'))));
+    const want = h.digest('hex').slice(0, 10);
+    ok(idx.base === want, 'ssb dissection: ssb/states/index.json base is the hash of the committed specimen (rerun dissect.py after any specimen change)',
+      `ssb dissection: index.json base ${idx.base} is not the committed specimen's ${want}: rerun tools/ssb-pipeline/uw/dissect.py`);
+  }
   const labels = new Set(Object.keys(JSON.parse(fs.readFileSync(rel('ssb/geometry/labels.json'), 'utf8')).labels).map(Number));
   const bad = [];
   let lining = 0;
