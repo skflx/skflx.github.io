@@ -483,8 +483,9 @@ inferior margin):
    `s_f - s_c` must lie in 8–16 mm (`m.choana-to-sphenoid-ostium`, 10–15;
    right specimen ≈ 11.5).
 2. *Superior incision* — starts at (`post(s_f)`, `s_f`) for every design
-   (O5) and runs forward. A (`short`): level, `s_sup(a) = min(s_f, top(a) -
-   top_margin)`. B, C: it rises to follow the septum's top, `s_sup(a) =
+   (O5) and runs forward. A (`short`): level, `s_sup(a) = min(s_f, top(a))`
+   (CP-ST5: no margin of its own; where the septum's top rises forward the
+   cut stays at `s_f`, far below it). B, C: it rises to follow the septum's top, `s_sup(a) =
    max(s_f, top(a) - top_margin)`, which is level near the sphenoid and
    higher forward, as in Fig. 31.3 B.
 3. *Posteroinferior cut* — down the posterior edge from `s_c` along the
@@ -528,10 +529,11 @@ for the mucocutaneous junction, which CT does not show.
   4 mm of `post(s)`), both sides — a cross-check of two sources (Zhang
   2014: the dominant branch below the ostium plane; Pinheiro-Neto 2011:
   9.3 mm below the ostium);
-- the superior incision starts at `s_f` in every design; for B and C it
-  stays at least `top_margin` below `top(a)` at every sample, for every
-  parameter in range (property test over a grid), and never below `s_f`;
-  for A it is level;
+- the superior incision starts at `s_f` in every design; for B and C every
+  sample is either at `s_f` or at most `top(a) - top_margin`, and none is
+  below `s_f` (CP-ST5: near the sphenoid, where `s_f` is closer than
+  `top_margin` to the top, the cut stays at `s_f`), for every parameter in
+  range (property test over a grid); for A it is level;
 - the area readout equals an independent point-in-polygon sum over the
   meshes within 2 %;
 - `short` ⊂ `full` ⊂ `extended` (areas strictly increasing), each inside
