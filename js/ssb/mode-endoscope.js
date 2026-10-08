@@ -41,13 +41,16 @@
      stage keep reading the base image. A station for a procedure step is looked up in `byState[<state key>]` first, then
      in the intact table (`stationFor`, `flyTo(key, stateKey)`).
 
+   - A station may carry `shaft: "2.7"` (stations.json; the olfactory cleft, the inferior meatus): flying to it, or opening
+     its link, puts the 2.7 mm telescope on and `shaftWhy` says which station did; choosing a diameter by hand clears it.
+
    Imports no three.js: THREE comes from the stage. `hook` is the read-only
    test window (window.__ssb.scope).
    ============================================================= */
-import { loadLandmarks } from './geo-specimen.js?v=aabbe0c6';
-import { sharedVolume, stamped, decode } from './volume.js?v=50cad9b7';
+import { loadLandmarks } from './geo-specimen.js?v=22d41fbb';
+import { sharedVolume, stamped, decode } from './volume.js?v=e32fcaae';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=844c8624';
+import { ARCH_DEFAULT, LENSES, POSE_DEFAULT, RANGES, SHAFT_RADII, clampPose, flightPose, frameOf, hudRows, lightPostAngle, parseStationLink, parseStations, resolveStation, samePose, sdfSampler, shaftClearance, tipOf, verticalFov } from './scope.js?v=c518cfe8';
 
 const DRAG_DEG_PER_PX = 0.15;
 const WHEEL_MM = 1;
@@ -89,6 +92,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
     let sdfFields = [];                  /* [{ id, name, at(ras) -> mm }] */
     let clampMm = 25;
     let shaft = '4';                     /* '4' | '2.7' (mm): the collision ring's radius, SHAFT_RADII */
+    let shaftWhy = null;                 /* { station, shaft } while a station that needs the 2.7 mm telescope put it on, else null */
     let hud = { rows: [], contactMm: 0, limited: false, limitedBy: null };
     let limitedNext = null;              /* what the last clamp was by ('bone' | 'septum'), reported by the pass it triggers */
     let ctVol = null;                    /* the shared volume, once loaded */
@@ -190,11 +194,18 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         sync();
     }
 
-    function setShaft(key) {
+    function applyShaft(key) {
         if (!Object.prototype.hasOwnProperty.call(SHAFT_RADII, key) || key === shaft) return false;
         shaft = key;
         sync();
         return true;
+    }
+
+    /* The user's choice: it also ends a station's reason for the 2.7 mm telescope. */
+    function setShaft(key) {
+        const changed = applyShaft(key);
+        if (changed && shaftWhy) { shaftWhy = null; emit(); }
+        return changed;
     }
 
     /* ---------------- stations (E6) ---------------- */
@@ -221,10 +232,19 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         const link = store.get().station;
         if (!link || (stationsState !== 'ready' && stationsState !== 'failed')) return;
         const hit = resolveStation(stations, parseStationLink(link));
+        if (hit) needShaft(hit.shaft, `${hit.id}.${hit.side}`);
         store.resolveStation(hit ? hit.pose : null);
     }
 
-    const listStations = () => [...stations].map(([key, s]) => ({ key, id: s.id, side: s.side, name: graph.nameOf(s.id), tier: graph.tierOf(s.id), pose: { ...s.pose } }));
+    const listStations = () => [...stations].map(([key, s]) => ({ key, id: s.id, side: s.side, name: graph.nameOf(s.id), tier: graph.tierOf(s.id), pose: { ...s.pose }, shaft: s.shaft }));
+
+    /* A station that is free only for the 2.7 mm telescope puts it on, and says so (`shaftWhy`); a station that is not
+       leaves the shaft as the user has it and drops the reason. */
+    function needShaft(wanted, key) {
+        if (!wanted) { shaftWhy = null; return; }
+        shaftWhy = { station: key, shaft: wanted };
+        if (!applyShaft(wanted)) emit();
+    }
 
     function cancelFlight() {
         if (!flight) return false;
@@ -257,6 +277,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         const cur = pose();
         const to = clampPose(st.pose);
         cancelFlight();
+        needShaft(st.shaft, key);
         if (!cur || reduce.matches) return store.setScope(to, INTERNAL) || samePose(cur, to);
         if (samePose(cur, to)) return true;
         const f = { from: { ...cur }, to, t0: performance.now(), raf: 0 };
@@ -571,6 +592,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
             return { position: toRas(camera.position), view: dir(0, 0, -1), up: dir(0, 1, 0), fov: camera.fov, near: camera.near };
         },
         get shaft() { return { key: shaft, radius: SHAFT_RADII[shaft] }; },
+        get shaftWhy() { return shaftWhy ? { ...shaftWhy } : null; },
         get collision() { return !!ctAt; },
         get stateKey() { return stateKey; },
         /* the label under the tip in the volume the scope reads (the dissected one when a state is on) */
@@ -605,6 +627,7 @@ export function mountEndoscope({ stage, store, graph, specimen }) {
         get flying() { return !!flight; },
         get stations() { return listStations(); },
         get shaft() { return shaft; },
+        get shaftWhy() { return shaftWhy ? { ...shaftWhy } : null; },
         get hud() { return hook.hud; },
         LENSES, RANGES,
         get engaged() { return engaged; },

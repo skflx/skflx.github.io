@@ -8,7 +8,7 @@
    never reaches markup. State flows one way: the store's pose -> sync();
    the controls only ever call endo.setPose / endo.enter.
    ============================================================= */
-import { LENSES, RANGES, SIDES, lightPostAngle, frameOf, samePose } from './scope.js?v=844c8624';
+import { LENSES, RANGES, SIDES, lightPostAngle, frameOf, samePose } from './scope.js?v=c518cfe8';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -78,7 +78,9 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     for (const l of LENSES) lensRow.append(pill(`${l}°`, { lens: String(l) }, `${l} degree lens`));
     const shaftRow = row('Scope diameter');
     shaftRow.append(pill('4 mm', { shaft: '4' }, '4 mm telescope'), pill('2.7 mm', { shaft: '2.7' }, '2.7 mm telescope'));
-    poseSec.append(sideRow, lensRow, shaftRow);
+    const shaftNote = el('p', 'ssb-param-src ssb-scope-shaft-note');
+    shaftNote.hidden = true;
+    poseSec.append(sideRow, lensRow, shaftRow, shaftNote);
 
     /* ---- sliders ---- */
     const SLIDERS = [
@@ -142,7 +144,7 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
                 b.type = 'button';
                 b.dataset.station = s.key;
                 b.append(el('span', 'ssb-scope-station-name', s.name.replace(/,\s*\d+°$/, '')), el('span', 'ssb-scope-station-lens', `${s.pose.lens}°`));
-                b.title = `${s.name}: fly the scope here`;
+                b.title = `${s.name}: fly the scope here${s.shaft ? ` (${s.shaft} mm telescope)` : ''}`;
                 stationList.append(b);
             }
         }
@@ -221,6 +223,10 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
         mark(sideRow, 'side', p.side);
         mark(lensRow, 'lens', p.lens);
         mark(shaftRow, 'shaft', endo.shaft);
+        const why = endo.shaftWhy;
+        const named = why ? endo.stations.find((x) => x.key === why.station) : null;
+        shaftNote.hidden = !why;
+        shaftNote.textContent = why ? `${named ? named.name.replace(/,\s*\d+°$/, '') : 'This station'} is reached with the ${why.shaft} mm telescope only: the 4 mm shaft meets bone on the way.` : '';
         renderHud();
         renderStations();
         for (const [key, s] of sliders) {

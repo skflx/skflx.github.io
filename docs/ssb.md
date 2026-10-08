@@ -695,7 +695,13 @@ files exist (`--only procedure`, real-data section).
 
 **Stations.** `ssb/geometry/stations.json` gains `byState: {<state key>:
 {"t.<id>.<side>": {pose, target, measured}}}`, posed by E5's rule on the
-committed state (WP P3). A step's station is looked up in its state first,
+committed state (WP P3, `tools/ssb-pipeline/uw/stations.py`: it ports
+`scope.js`, tests P1's prototype pose on the state's own volume first and
+searches only when that fails; `check` re-tests every committed pose, `write`
+re-poses after a regeneration of the states). The tip must lie in an airway
+label *of that state* (a space, an ethmoid cell, the frontal recess; not the
+vestibule). A station the contralateral nostril reaches is keyed by its
+target's side. A step's station is looked up in its state first,
 then in the intact `stations`. A pose may carry `"shaft": "2.7"` when only
 the 2.7 mm telescope reaches it (the olfactory cleft and the inferior
 meatus, §5.9); flying there switches the shaft and the controls say so.

@@ -101,6 +101,18 @@ Reconstruction, stage E (the external nose, ST6; needs the raw crawl, because th
 plane and the vestibule are described in `nose.py`'s docstring and printed as the `ST6 1..5, 7` lines. `nose.py` with no argument is E1b's
 nostril landmark (`--write` stores it).
 
+Station poses (P3; needs only the committed `ssb/`, after `dissect.py`):
+
+    python3 tools/ssb-pipeline/uw/stations.py check    # re-test every committed pose (intact and byState), change nothing
+    python3 tools/ssb-pipeline/uw/stations.py solve    # print the table (--search forces the search, --only=<station id>)
+    python3 tools/ssb-pipeline/uw/stations.py write    # rewrite `byState` and the two 2.7 mm poses in ssb/geometry/stations.json
+
+Ports `js/ssb/scope.js` (shaft direction, `frameOf`, `shaftClearance`) onto each state's volume (the base with its patch applied) and
+solves P3's table in `docs/ssb-roadmap.md`: the prototype pose first; if it is not free, tip-in-air and in view, a grid over depth, yaw and
+pitch (2 units, then 0.5) with roll in 15 degree steps, ranked by the share of 161 rays that hit a wanted label or pass through a wanted
+air space, then by less mucosal contact. Left is the mirrored right pose and is verified on the left. Needs numpy, scipy and the
+`meshes.py` imports. A station that cannot be posed is reported, never forced. `solve` takes about a minute.
+
 Reconstruction, stage F (dissection states for procedure mode, P1b; needs only the committed `ssb/`, run last):
 
     python3 tools/ssb-pipeline/uw/dissect.py    # dissection.json -> ssb/states/{index.json,<key>.ssbp.gz}, ssb/models/lining-<key>.glb.gz
