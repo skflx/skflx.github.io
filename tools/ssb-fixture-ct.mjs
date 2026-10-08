@@ -22,7 +22,11 @@
    the same layout the site serves (<dir>/ssb/ct/*, <dir>/ssb/geometry/labels.json),
    and tools/test-ssb.mjs routes the page's requests to it.
 
-   Usage:  node tools/ssb-fixture-ct.mjs [dir]   # default: a fresh temp dir; prints it
+   buildFixture({ dtype: 'int16' }) is the same phantom as a 16-bit head (WP IN1): every display value mapped linearly
+   (0 -> -1000, 255 -> 1500) into int16 HU (ct.i16.gz, values.kind HU, windows and `levels` in HU, no toHU table), so
+   a test can run on either and expect the same picture and the same collision. fx.ct stays the u8 array; fx.ct16 is the HU array.
+
+   Usage:  node tools/ssb-fixture-ct.mjs [dir] [--int16]   # default: a fresh temp dir; prints it
    Pure Node, zero dependencies.
    ============================================================= */
 import fs from 'fs';
@@ -71,7 +75,14 @@ function rng(seed) {
     };
 }
 
-export function buildFixture() {
+/* u8 display value -> HU: linear over the whole byte (0 -> -1000, 255 -> 1500), so a window, a LUT and a level map
+   exactly and the page renders the same picture on either head. (The u8 header's own toHU table is clamped and only
+   approximate, display values not being HU; a 16-bit head has no such table.) */
+export const displayToHU = (v) => -1000 + (v * 2500) / 255;
+/* scope.js's constants (BONE_LEVEL 150, air 78) in HU, so collision matches the u8 head */
+export const LEVELS_HU = { air: displayToHU(78), bone: displayToHU(150) };
+
+export function buildFixture({ dtype = 'uint8' } = {}) {
     const [nx, ny, nz] = DIMS;
     const ct = new Uint8Array(nx * ny * nz);
     const labels = new Uint16Array(nx * ny * nz);
@@ -125,11 +136,21 @@ export function buildFixture() {
         specimen: 'synthetic-fixture',
         license: 'none (synthetic phantom for tests)',
     };
+    let ct16 = null;
+    if (dtype === 'int16') {
+        ct16 = Int16Array.from(ct, (v) => Math.round(displayToHU(v)));
+        const slope = 2500 / 255;
+        meta.dtype = 'int16';
+        meta.values = { kind: 'HU', note: 'Hounsfield units (the u8 phantom mapped linearly, 0 -> -1000, 255 -> 1500)' };
+        meta.windows = Object.fromEntries(Object.entries(meta.windows).map(([k, w]) => [k, { center: Math.round(displayToHU(w.center)), width: Math.round(w.width * slope) }]));
+        meta.levels = { air: Math.round(LEVELS_HU.air), bone: Math.round(LEVELS_HU.bone) };
+    }
     const table = { version: 1, labels: Object.fromEntries(SITES.filter((s) => s.name).map((s) => [String(s.index), s.name])) };
     const raw16 = Buffer.alloc(labels.length * 2);
     labels.forEach((v, at) => raw16.writeUInt16LE(v, at * 2));
     return {
-        meta, table, ct, labels,
+        meta, table, ct, ct16, labels,
+        ct16Gz: ct16 ? zlib.gzipSync(Buffer.from(ct16.buffer, ct16.byteOffset, ct16.byteLength), { level: 9 }) : null,
         ctGz: zlib.gzipSync(Buffer.from(ct.buffer, ct.byteOffset, ct.byteLength), { level: 9 }),
         labelsGz: zlib.gzipSync(raw16, { level: 9 }),
         sites: SITES,
@@ -241,15 +262,15 @@ export function procedureFiles(fx = buildFixture()) {
 export function fixtureFiles(fx = buildFixture()) {
     return {
         'ssb/ct/ct.json': Buffer.from(JSON.stringify(fx.meta, null, 2)),
-        'ssb/ct/ct.u8.gz': fx.ctGz,
+        ...(fx.ct16 ? { 'ssb/ct/ct.i16.gz': fx.ct16Gz } : { 'ssb/ct/ct.u8.gz': fx.ctGz }),
         'ssb/ct/labels.u16.gz': fx.labelsGz,
         [`ssb/ct/sdf-${SDF_SPHERE.id}.u8.gz`]: fx.sdfGz,
         'ssb/geometry/labels.json': Buffer.from(JSON.stringify(fx.table, null, 2)),
     };
 }
 
-export function writeFixture(dir) {
-    const files = fixtureFiles();
+export function writeFixture(dir, { int16 = false } = {}) {
+    const files = fixtureFiles(buildFixture({ dtype: int16 ? 'int16' : 'uint8' }));
     for (const [rel, data] of Object.entries(files)) {
         const abs = path.join(dir, rel);
         fs.mkdirSync(path.dirname(abs), { recursive: true });
@@ -259,8 +280,9 @@ export function writeFixture(dir) {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-    const dir = process.argv[2] || fs.mkdtempSync(path.join(os.tmpdir(), 'ssb-fixture-ct-'));
-    const out = writeFixture(dir);
+    const rest = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+    const dir = rest[0] || fs.mkdtempSync(path.join(os.tmpdir(), 'ssb-fixture-ct-'));
+    const out = writeFixture(dir, { int16: process.argv.includes('--int16') });
     console.log(`wrote ${out.files.length} files under ${out.dir}`);
     for (const f of out.files) console.log('  ' + f);
 }

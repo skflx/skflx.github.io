@@ -8,7 +8,7 @@
    never reaches markup. State flows one way: the store's pose -> sync();
    the controls only ever call endo.setPose / endo.enter.
    ============================================================= */
-import { LENSES, RANGES, SIDES, lightPostAngle, frameOf, samePose } from './scope.js?v=c518cfe8';
+import { LENSES, RANGES, SIDES, lightPostAngle, frameOf, samePose } from './scope.js?v=c2522180';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -171,9 +171,11 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
         if (!d || !g2d) return;
         if (inset.width !== d.width) { inset.width = d.width; inset.height = d.height; }
         const img = g2d.createImageData(d.width, d.height);
+        const [lo, hi] = d.range || [0, 255];           /* display levels as they are; a 16-bit head's HU span scaled onto 0..255 */
+        const k = hi - lo === 255 ? 1 : 255 / (hi - lo);
         for (let i = 0; i < d.ct.length; i++) {
             const v = d.ct[i];
-            const g = v === v ? Math.max(0, Math.min(255, Math.round(v))) : 24;      /* NaN: outside the volume */
+            const g = v === v ? Math.max(0, Math.min(255, Math.round((v - lo) * k))) : 24;      /* NaN: outside the volume */
             img.data[4 * i] = img.data[4 * i + 1] = img.data[4 * i + 2] = g;
             img.data[4 * i + 3] = 255;
         }

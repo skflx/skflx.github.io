@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure] [--int16]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -88,7 +88,7 @@ import zlib from 'zlib';
 import { execFileSync } from 'child_process';
 import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 import { validate, contentFiles } from './ssb-content.mjs';
-import { buildFixture, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE, PROC, procedureFiles, patchBytes, carveHoles } from './ssb-fixture-ct.mjs';
+import { buildFixture, displayToHU, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE, PROC, procedureFiles, patchBytes, carveHoles } from './ssb-fixture-ct.mjs';
 
 /* The browser modules under js/ have no package "type", so Node would reparse
    them and warn. Import them as data: URLs instead. The three below need
@@ -212,7 +212,11 @@ const inRange = (v, r) => (r.closed ? v >= r.lo && v <= r.hi : v > r.lo && v < r
 /* ---------------- CT: the synthetic fixture (tools/ssb-fixture-ct.mjs) ---------------- */
 
 const FX = buildFixture();
-const FX_FILES = fixtureFiles(FX);
+const FX_U8_FILES = fixtureFiles(FX);
+/* --int16 serves the page tests the same phantom as a 16-bit HU head (WP IN1): `--only ct --int16`, `--only scope --int16` */
+const INT16 = args.includes('--int16');
+const FX_FILES = INT16 ? fixtureFiles(buildFixture({ dtype: 'int16' })) : FX_U8_FILES;
+const SOFT_WIN = JSON.parse(FX_FILES['ssb/ct/ct.json']).windows.soft;      /* centre 60, width 40 on the u8 head; the same window in HU on the 16-bit one */
 const VOLUME_URL = dataUrl(sourceOf('js/ssb/volume.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`));
 const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch } = await import(VOLUME_URL);
 const { parseIndex, stateKeyFor, stepCount } = await import(dataUrl(sourceOf('js/ssb/mode-procedure.js')
@@ -337,17 +341,17 @@ async function ctUnitTests() {
     isGzip(gz) && !isGzip(raw) && out1.equals(raw) && out2.equals(raw) && damaged instanceof VolumeError && damaged.code === 'invalid', String(damaged));
 
   /* loading, through an injected fetch */
-  const good = await loadVolume({ fetchFn: fetchFrom(FX_FILES) });
+  const good = await loadVolume({ fetchFn: fetchFrom(FX_U8_FILES) });
   check('loader: the fixture loads (gzip) with its labels and table', good.dims.join() === '64,56,48' && good.hasLabels && good.labelAt(...site.center) === 1 && good.ct.every((v, n) => v === FX.ct[n]));
-  const plain = await loadVolume({ fetchFn: fetchFrom(FX_FILES, { decoded: true }) });
+  const plain = await loadVolume({ fetchFn: fetchFrom(FX_U8_FILES, { decoded: true }) });
   check('loader: bytes the server already decoded (Content-Encoding) load the same', plain.ct.every((v, n) => v === FX.ct[n]) && plain.labels.every((v, n) => v === FX.labels[n]));
   const absent = await loadVolume({ fetchFn: fetchFrom({}) }).catch((e) => e);
   check('loader: a missing ct.json is VolumeError absent', absent instanceof VolumeError && absent.code === 'absent', String(absent));
-  const noData = await loadVolume({ fetchFn: fetchFrom({ 'ssb/ct/ct.json': FX_FILES['ssb/ct/ct.json'] }) }).catch((e) => e);
+  const noData = await loadVolume({ fetchFn: fetchFrom({ 'ssb/ct/ct.json': FX_U8_FILES['ssb/ct/ct.json'] }) }).catch((e) => e);
   check('loader: ct.json without ct.u8.gz is VolumeError invalid', noData instanceof VolumeError && noData.code === 'invalid', String(noData));
-  const noLabels = await loadVolume({ fetchFn: fetchFrom({ 'ssb/ct/ct.json': FX_FILES['ssb/ct/ct.json'], 'ssb/ct/ct.u8.gz': FX_FILES['ssb/ct/ct.u8.gz'] }) }).catch((e) => e);
+  const noLabels = await loadVolume({ fetchFn: fetchFrom({ 'ssb/ct/ct.json': FX_U8_FILES['ssb/ct/ct.json'], 'ssb/ct/ct.u8.gz': FX_U8_FILES['ssb/ct/ct.u8.gz'] }) }).catch((e) => e);
   check('loader: a missing label volume only drops the labels', noLabels.hasLabels === false && noLabels.dims.join() === '64,56,48' && noLabels.labelAt(...site.center) === 0);
-  const short = await loadVolume({ fetchFn: fetchFrom({ ...FX_FILES, 'ssb/ct/ct.u8.gz': zlib.gzipSync(Buffer.alloc(100)) }) }).catch((e) => e);
+  const short = await loadVolume({ fetchFn: fetchFrom({ ...FX_U8_FILES, 'ssb/ct/ct.u8.gz': zlib.gzipSync(Buffer.alloc(100)) }) }).catch((e) => e);
   check('loader: CT data that does not match the dims is VolumeError invalid', short instanceof VolumeError && short.code === 'invalid', String(short));
   const headers = [{ version: 2 }, { dims: [0, 4, 4] }, { dims: [4, 4] }, { spacing: [1, 0, 1] }, { dtype: 'float32' }, { affine: [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 1]] }, { affine: 'x' }];
   const refused = headers.filter((patch) => { try { parseHeader({ ...FX.meta, ...patch }); return false; } catch (e) { return e instanceof VolumeError; } }).length;
@@ -355,6 +359,59 @@ async function ctUnitTests() {
   const evil = parseHeader({ ...FX.meta, labels: { file: '../../etc/passwd', dtype: 'uint16', table: 'https://example.com/x.json' } });
   const evil2 = parseHeader({ ...FX.meta, labels: { file: 'labels.u16.gz', table: '../../secret.json' } });
   check('loader: label file and table names cannot leave ssb/ct and ssb/geometry', evil.labels === null && evil2.labels.table === null, JSON.stringify([evil.labels, evil2.labels]));
+
+  /* a 16-bit head (WP IN1): the same phantom as int16 HU (ssb-fixture-ct.mjs), the volume format's second dtype */
+  const FX16 = buildFixture({ dtype: 'int16' });
+  const FX16_FILES = fixtureFiles(FX16);
+  const h16 = parseHeader(FX16.meta);
+  const vol16 = createVolume({ header: h16, ct: FX16.ct16, labels: FX.labels, table: parseTable(FX16.table) });
+  const vol8 = createVolume({ header: parseHeader(FX.meta), ct: FX.ct, labels: FX.labels, table: parseTable(FX.table) });
+  check('int16: the header parses (dtype, HU values, levels, windows in HU, range) and the u8 head has no levels',
+    h16.dtype === 'int16' && h16.values.kind === 'HU' && h16.toHU === null && h16.range.join() === '-1024,3071' && h16.levels && h16.levels.soft === FX16.meta.levels.air && h16.levels.bone === FX16.meta.levels.bone
+    && h16.windows.bone.width === FX16.meta.windows.bone.width && vol8.levels === null && vol8.dtype === 'uint8' && vol8.range.join() === '0,255', JSON.stringify([h16.levels, h16.range]));
+  const badInt = [{ values: { kind: 'display' } }, { values: undefined }, { dtype: 'int32' }].filter((patch) => { try { parseHeader({ ...FX16.meta, ...patch }); return false; } catch (e) { return e instanceof VolumeError; } }).length;
+  const oddLevels = [{ air: 5, bone: 1 }, { air: 'x', bone: 9 }, null, { bone: 9 }].map((levels) => parseHeader({ ...FX16.meta, levels }).levels);
+  check('int16: an int16 header must say HU; nonsense levels are dropped (scope.js defaults), never half-used', badInt === 3 && oddLevels.every((l) => l === null), JSON.stringify([badInt, oddLevels]));
+  const wrongArray = (() => { try { createVolume({ header: h16, ct: FX.ct }); return false; } catch (e) { return e instanceof VolumeError; } })()
+    && (() => { try { createVolume({ header: parseHeader(FX.meta), ct: FX16.ct16 }); return false; } catch (e) { return e instanceof VolumeError; } })();
+  check('int16: a volume takes the array type its header names (Int16Array for int16, Uint8Array for uint8) and refuses the other', wrongArray);
+  let worst16 = 0;
+  for (const [r, a, z] of [[10, 3, -4], [-10, 3, -4], [0, 0, 0], [4, 14, 8], [5.3, -2.2, 6.7], [-20.1, 9.4, 12], [0.3, 5, -3]]) {
+    worst16 = Math.max(worst16, Math.abs(vol16.sample(r, a, z) - displayToHU(vol8.sample(r, a, z))));
+  }
+  check('int16: trilinear sampling is the u8 head\'s through the fixture\'s mapping (within the int16 rounding, 0.5 HU), and toHU is the identity on a head that is already HU',
+    worst16 <= 0.5 + 1e-9 && vol16.toHU(-37) === -37 && vol16.toHU(NaN) === null && vol8.toHU(0) === -1000, `worst16 ${worst16}`);
+  const good16 = await loadVolume({ fetchFn: fetchFrom(FX16_FILES) });
+  const plain16 = await loadVolume({ fetchFn: fetchFrom(FX16_FILES, { decoded: true }) });
+  check('int16 loader: ct.i16.gz loads (gzip, and bytes the server already decoded) with its labels, as an Int16Array equal to the source', good16.ct instanceof Int16Array && good16.hasLabels && good16.ct.every((v, n) => v === FX16.ct16[n]) && plain16.ct.every((v, n) => v === FX16.ct16[n]));
+  const no16 = await loadVolume({ fetchFn: fetchFrom({ 'ssb/ct/ct.json': FX16_FILES['ssb/ct/ct.json'], 'ssb/ct/ct.u8.gz': FX_U8_FILES['ssb/ct/ct.u8.gz'] }) }).catch((e) => e);
+  const short16 = await loadVolume({ fetchFn: fetchFrom({ ...FX16_FILES, 'ssb/ct/ct.i16.gz': zlib.gzipSync(Buffer.alloc(FX.ct.length)) }) }).catch((e) => e);
+  check('int16 loader: an int16 header does not read ct.u8.gz, and a data file of one byte per voxel is VolumeError invalid',
+    no16 instanceof VolumeError && no16.code === 'invalid' && short16 instanceof VolumeError && short16.code === 'invalid', String(no16) + String(short16));
+  /* collision: the same shaft, the same answer, on either head, when the levels go through the same mapping */
+  const lv16 = { bone: h16.levels.bone, soft: h16.levels.soft };
+  const at8 = (p) => vol8.sample(p[0], p[1], p[2]);
+  const at16 = (p) => vol16.sample(p[0], p[1], p[2]);
+  const archFx = { a: 1e9, s: 1e9 };
+  let poses = 0;
+  let agree = 0;
+  let contactSeen = 0;
+  let defaultsDiffer = 0;
+  for (const side of ['R', 'L']) for (const F of [[10, 3, -4], [-10, 3, -4], [6, 10, 0], [4, 14, 8], [0, -6, -12]]) for (const yaw of [-90, -45, 0, 45, 90]) for (const pitch of [-30, 0, 30]) {
+    const pose = { side, depth: 30, yaw, pitch, roll: 0, lens: 0 };
+    const a = SC.shaftClearance(F, pose, at8, SC.SHAFT_RADII['4'], archFx);
+    const b = SC.shaftClearance(F, pose, at16, SC.SHAFT_RADII['4'], archFx, lv16);
+    const c = SC.shaftClearance(F, pose, at16, SC.SHAFT_RADII['4'], archFx);
+    poses++;
+    if (a.depth === b.depth && a.blocked === b.blocked && a.by === b.by && Math.abs(a.contactMm - b.contactMm) < 1e-9) agree++;
+    if (a.contactMm > 0) contactSeen++;
+    if (c.depth !== a.depth || c.contactMm !== a.contactMm) defaultsDiffer++;
+  }
+  check('int16 collision: shaftClearance with the header\'s levels gives the u8 head\'s depth, blocker and mucosal contact on every pose through the phantom', poses === 150 && agree === poses && contactSeen >= 8, `${agree}/${poses} agree, ${contactSeen} with contact`);
+  check('int16 collision: the levels are the point (HU values read against the u8 defaults 150 / 78 give other answers)', defaultsDiffer > 10, `${defaultsDiffer} poses differ`);
+  const dflt = SC.shaftClearance([10, 3, -4], { side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 }, at8, SC.SHAFT_RADII['4'], archFx);
+  const dflt2 = SC.shaftClearance([10, 3, -4], { side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 }, at8, SC.SHAFT_RADII['4'], archFx, SC.LEVELS_DEFAULT);
+  check('scope levels: omitting them is scope.js\'s BONE_LEVEL 150 / SOFT_LEVEL 78, unchanged', SC.LEVELS_DEFAULT.bone === SC.BONE_LEVEL && SC.LEVELS_DEFAULT.soft === SC.SOFT_LEVEL && JSON.stringify(dflt) === JSON.stringify(dflt2));
 
   /* the CT state codec */
   const has = (id) => GRAPH.has(id);
@@ -525,7 +582,7 @@ async function ctTests(browser, base) {
       info.status === 'ready' && info.stage === 'ct' && info.pressed === 'true' && info.views.length === 3 && info.views.every((v) => v.w > 150 && v.h > 120)
       && !info.canvasHidden, JSON.stringify(info.views));
     check('CT: the volume came through the fixture route (dims 64 x 56 x 48) and the crosshair is where the URL put it', info.dims.join() === '64,56,48' && arrEq(info.cursor, RSIN, 1e-6) && info.plane === 'axial', JSON.stringify(info));
-    check('CT: the truth badge says specimen CT and display values, not HU', info.truthShown && /Specimen CT/.test(info.truth) && /not HU/.test(info.truth), info.truth);
+    check(INT16 ? 'CT: the truth badge says specimen CT and HU (a 16-bit head)' : 'CT: the truth badge says specimen CT and display values, not HU', info.truthShown && /Specimen CT/.test(info.truth) && (INT16 ? !/not HU/.test(info.truth) && /HU/.test(info.truth) : /not HU/.test(info.truth)), info.truth);
     check('CT: the hash is canonical', info.hash === `#ct=ax&at=${RSIN.join(',')}`, info.hash);
 
     for (const plane of ['axial', 'coronal', 'sagittal']) {
@@ -685,7 +742,7 @@ async function ctTests(browser, base) {
     const softTissue = await lumaAt(page, 'axial', tissue);
     const w = await page.evaluate(() => window.__ssb.ct.window);
     check('CT: the soft window (centre 60, width 40) is recorded and lifts soft tissue (value 60) from dark grey to mid grey while air stays black',
-      w.name === 'soft' && w.center === 60 && w.width === 40 && boneTissue.luma < 85 && softTissue.luma > boneTissue.luma + 40 && soft.dark > 0.3 && Math.abs(soft.mean - bone.mean) > 8,
+      w.name === 'soft' && w.center === SOFT_WIN.center && w.width === SOFT_WIN.width && boneTissue.luma < 85 && softTissue.luma > boneTissue.luma + 40 && soft.dark > 0.3 && Math.abs(soft.mean - bone.mean) > 8,
       JSON.stringify({ w, boneTissue, softTissue, bone, soft }));
     await page.$eval('#ssb-ct-width', (input) => { input.value = '120'; input.dispatchEvent(new Event('input', { bubbles: true })); });
     const cw = await page.evaluate(() => ({ w: window.__ssb.ct.window, out: document.querySelector('#ssb-ct output[for="ssb-ct-width"]').textContent }));

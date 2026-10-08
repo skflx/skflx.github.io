@@ -1939,13 +1939,14 @@ Why it waits: it needs a deep-learning stack in the offline pipeline (PyTorch an
 Steps (if approved): train on the clear subjects with a held-out split (Dice on held-out NasalSeg cases reported first); convert head A to HU (`ct.json` `toHU`) and NasalSeg's spacing; infer; map head A's labels to NasalSeg's convention (cavity + vestibule, partial-volume rim at NasalSeg's measured threshold); report Dice and the 95th-percentile surface distance per structure and side.
 Accept: the held-out NasalSeg Dice is printed beside head A's; head A's numbers within the held-out range, or each structure outside it explained by a named convention difference or reported as a segmentation defect.
 
-### IN1 — 16-bit heads: the volume format and an intake path        [todo] · Sonnet · depends: P2 (same `volume.js`), P3 (same `scope.js`, `mode-endoscope.js`)
+### IN1 — 16-bit heads: the volume format and an intake path        [review] · Sonnet · depends: P2 (same `volume.js`), P3 (same `scope.js`, `mode-endoscope.js`)
 Goal: any head with HU values (NasalSeg's scans, a future 16-bit CT) loads and drives the scope like head A.
 Read: `docs/ssb.md` §5.10, §5.6, §5.3; `js/ssb/volume.js`, `js/ssb/scope.js` (`BONE_LEVEL`, `SOFT_LEVEL`, `shaftClearance`), `js/ssb/mode-endoscope.js`; `tools/ssb-fixture-ct.mjs`; the NRRD reader in `tools/ssb-pipeline/nasalseg/stats.py`.
 Touch: `js/ssb/volume.js` (`dtype: "int16"`, `values.kind: "HU"`, `levels`); `js/ssb/scope.js` (the levels as `shaftClearance` arguments, defaulting to today's constants); `js/ssb/mode-endoscope.js` (passes the header's levels); `tools/ssb-fixture-ct.mjs` (an int16 variant of the fixture); `tools/ssb-pipeline/intake/` (new: NRRD and NIfTI readers, the resample into the §4 frame given landmark correspondences, writing to `incoming/` only); `tools/test-ssb.mjs`; docs pass.
 Don't: ship a head (no file under `ssb/` changes); add a Python dependency (DICOM needs `pydicom`: escalate); change head A's files or behaviour.
 Accept: `node tools/test-ssb.mjs --only ct` and `--only scope` pass on the int16 fixture with the same results as on the u8 fixture (levels mapped through `toHU`); the full suite unchanged on head A; the intake script round-trips a synthetic NIfTI and a synthetic NRRD written by its own self-test into the frame within 0.5 voxel.
 Escalate: a real head is needed to test something; the RA landmark set is needed for the frame and is not in the graph yet (PR #119's RS6).
+Result: `dtype: int16` / `levels` read by `volume.js`, passed to `shaftClearance`, window/LUT span HU; `--int16` runs `--only ct` and `--only scope` on the HU phantom with identical results; `intake.py` (NIfTI, NRRD, rigid landmark fit) self-test round-trips within 0.02 voxel. Not done: the RA landmark set (RS6) is not in the graph, so the intake takes caller-supplied correspondences; no real head was run.
 
 ### T1 — Self-test        [later] · Sonnet · depends: P2
 Find it / name it / CT localize, Leitner reused unchanged, storage key registered per `docs/decisions.md` §3. After O7's corridors work.
