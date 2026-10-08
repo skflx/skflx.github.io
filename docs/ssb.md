@@ -730,18 +730,22 @@ on the decongested state (the operations start by decongesting).
   Prototype: d = 1.0 mm gives × 1.39, and the superior third gains least in
   absolute terms (0.13 cm² against 0.25 and 0.24). The ratio, not Xiao's
   absolute values, is used: the specimen's label is a bone-window CT
-  threshold and Xiao's an MRI segmentation. Measured the same way on
-  NasalSeg's CTs (§5.10, "Label conventions"), head A's mid-cavity
-  cross-section is ordinary (37th percentile), so the gap to Xiao's 2.8 cm²
-  is method and population (MRI, adults aged 21–38), not a narrow head or a
-  segmentation defect.
-- **Congested** has its data from POP1 (`profiles` in
-  `ssb/anatomy/population/nasalseg.json`): per NasalSeg subject, the more
-  congested side's mean CSA against the subject's two-side mean, as a median
-  ratio; DC1 reads it after the checkpoint settles the span (§5.10). Head
-  A's own left side is not used: its cavity asymmetry is beyond every clear
-  NasalSeg subject (POP0, PR #119), and its mid-cavity cross-section
-  (0.63 cm²) is below every one of them (the smallest is 1.09).
+  threshold and Xiao's an MRI segmentation. Measured on NasalSeg's CTs at our
+  threshold (POP1, 10–90 % of the cavity's length, CP-POP1), the standard
+  specimen's two-side mean cross-section is ordinary (62nd percentile of
+  the clear subjects), so the gap to Xiao's 2.8 cm² is method and
+  population (MRI, adults aged 21–38), not a narrow head or a segmentation
+  defect.
+- **Congested** is physiological: the congested phase of the nasal cycle,
+  on both sides. Its target is POP1's median of the more congested side's
+  mean cross-section against the subject's two-side mean (`profiles.summary
+  .restricted["10-90"].moreCongestedOverMean` in
+  `ssb/anatomy/population/nasalseg.json`, span settled at CP-POP1); d is the
+  0.1 mm step whose ratio is closest to it. In NasalSeg the loss sits in the
+  middle of the cavity, at the turbinates. Head A's own left side is not
+  used: at our threshold it is near the population's 5th percentile of
+  sides, with a smaller/larger ratio at the 6th (POP1; POP0's "beyond every
+  subject" compared rim-inclusive labels with ours).
 - **What decongestion does not open.** At Xiao's ratio none of E5's three
   closed views opens. The olfactory cleft and the inferior meatus are
   closed to the 4 mm shaft, and open to the 2.7 mm telescope even as
@@ -783,7 +787,8 @@ mucosal state → dissection.
   values is −279 HU. Compared at one convention (our threshold, cavity plus
   vestibule), head A's cavity, 7.7 mL per side, is at the 42nd percentile
   of NasalSeg's; its maxillary sinus, 13.7 mL, at the 51st; its mid-cavity
-  cross-section at the 37th. Our labels leave less adjacent air unlabelled
+  cross-section (one section) at the 37th, its mean over 10–90 % of the
+  length at the 62nd (POP1). Our labels leave less adjacent air unlabelled
   than NasalSeg's (cavity 3.9 % against a median of 10 %; maxillary 1.5 %
   against 6 %). So for the five structures NasalSeg labels, the
   approximated segmentation holds. NasalSeg cannot check what the FESS
@@ -796,9 +801,11 @@ mucosal state → dissection.
   mean from 10 to 90 % of the length), reported as labelled and restricted
   to our air threshold; method in the docstring of
   `tools/ssb-pipeline/nasalseg/stats.py`. Head A's labels are already at our
-  threshold, so only the restricted rows compare like with like. Its
-  percentile depends on the span by more than 20 points, so the JSON keeps
-  all three spans and no single placement is quoted here.
+  threshold, so only the restricted rows compare like with like. The
+  span is 10–90 % (CP-POP1): only 0–100 % moves head A's percentile by more
+  than 20 points, because its end sections are the vestibule border and the
+  choanal cut, where the conventions differ most; the JSON keeps all three
+  spans.
 - **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented
