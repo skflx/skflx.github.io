@@ -340,7 +340,7 @@ POP1, IN1); CP-3 found that a step does not yet land on the view it
 opened, and P4 fixed that (every corridor position, by step or link,
 lands on a view of its state); the soft-tissue lane
 continues with ST4d and ST5.
-Waiting on the owner: O8–O12, the review of the dissected states (CP-3's links), review of tier-1 FESS anatomy and the
+Waiting on the owner: O14 (where the nasal framework is drawn), the review of the dissected states (CP-3's links), review of tier-1 FESS anatomy and the
 dioramas (`docs/ssb-roadmap.md` §2). The external nose beyond the entry anatomy (the full rhinoplasty
 framework, its envelope layers, vessels and nerves) is specced
 (2026-10-07) as the `nasal-framework` diorama (`docs/ssb.md` §6.2;
