@@ -24,10 +24,16 @@
    lining, hides, remnants, measured } }, procedures: { "<p-id>": { "<step>": <key> } } (also flat "<p-id>#<step>"),
    corridors: { "<key>": { name, procedures: [p-id], positions: { "<p-id>#<step>": <key> } } } }.
 
+   The mucosal state (WP DC1, docs/ssb.md 5.9) rides on the same machinery: `mu=dec|cong` (state.mu) is a state of the index
+   with no units (index.mucosa: { dec: { state }, cong: { state } }), loaded as any state is, handed to the endoscope and
+   the specimen, and ended by `mu=scan`. A procedure always plays decongested (every dissection state is built on it, and
+   step 0 of a procedure with no entry state is the decongested state itself), whatever state.mu says; when the procedure
+   ends, state.mu comes back.
+
    Imports no three.js. `hook` is the read-only test window (window.__ssb.procedure).
    ============================================================= */
-import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=e32fcaae';
-import { STAMPS } from './stamps.js?v=bc1ac08c';
+import { sharedVolume, stamped, parsePatch, applyPatch } from './volume.js?v=870c5777';
+import { STAMPS } from './stamps.js?v=2aa7b8f2';
 
 export const INDEX_FILE = 'ssb/states/index.json';
 const KEY = /^[0-9a-f]{10}$/;
@@ -77,7 +83,7 @@ function positionList(src) {
    corridors: Map(key -> { name, procedures, positions: Map }) }. Anything malformed is dropped; a document that is not an index
    is empty. */
 export function parseIndex(doc) {
-    const out = { base: '', states: new Map(), steps: new Map(), entries: new Map(), corridors: new Map() };
+    const out = { base: '', states: new Map(), steps: new Map(), entries: new Map(), corridors: new Map(), mucosa: {} };
     if (!doc || typeof doc !== 'object' || doc.version !== 1) return out;
     if (typeof doc.base === 'string' && BASE.test(doc.base)) out.base = doc.base;
     if (doc.states && typeof doc.states === 'object') {
@@ -86,6 +92,12 @@ export function parseIndex(doc) {
             const patch = typeof s.patch === 'string' && PATCH_FILE.test(s.patch) ? s.patch : `${key}.ssbp.gz`;
             const lining = typeof s.lining === 'string' && LINING_FILE.test(s.lining) ? s.lining : '';
             out.states.set(key, { patch, lining, hasLining: !!lining, hides: ids(s.hides), remnants: ids(s.remnants), units: ids(s.units), usedBy: ids(s.usedBy) });
+        }
+    }
+    if (doc.mucosa && typeof doc.mucosa === 'object') {
+        for (const mode of ['dec', 'cong']) {
+            const m = doc.mucosa[mode];
+            if (m && typeof m.state === 'string' && out.states.has(m.state)) out.mucosa[mode] = m.state;
         }
     }
     out.steps = stepMap(doc.procedures);
@@ -150,6 +162,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
     let note = '';
     let busy = false;
     let flyNext = false;                  /* the next state to show came from a step the reader took: fly to its station */
+    let muShown = null;                   /* 'dec' | 'cong' on show (no procedure), else null */
     let pinned = false;                   /* CT is showing the outline of a state whose procedure has ended */
     const patches = new Map();            /* key -> parsed patch, most recent last (KEEP_STATES) */
     const packsLoaded = [];               /* state keys whose pack is on the specimen, most recent last */
@@ -219,6 +232,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         note = '';
         busy = false;
         flyNext = false;
+        muShown = null;
         if (endo) endo.setStateVolume(null);
         specimen.setState(null);
         specimen.setEmphasis({});
@@ -230,6 +244,57 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
     const specimenReady = () => (specimen.ready ? Promise.resolve() : new Promise((resolve) => {
         const off = specimen.onChange(() => { if (specimen.ready) { off(); resolve(); } });
     }));
+
+    /* The mucosal state alone (no procedure): the same hand-overs as a state of the procedure, without a step. */
+    async function applyMu() {
+        if (procedure()) return;
+        const mode = store.get().mu;
+        if (mode === 'scan') {
+            if (muShown || derived) { muShown = null; release(); }
+            specimen.setMuNote('');
+            return;
+        }
+        await ensure();
+        const mine = ++seq;
+        if (procedure() || store.get().mu !== mode) return;
+        const key = status === 'ready' && index.mucosa[mode];
+        if (!key) {
+            specimen.setMuNote(status === 'ready' ? 'This mucosal state is not built.' : reason);
+            store.setMu('scan');
+            return;
+        }
+        busy = true;
+        specimen.setMuNote('Loading the mucosal state…');
+        emit();
+        let vol = null;
+        try {
+            const base = await sharedVolume();
+            if (mine !== seq) return;
+            vol = applyPatch(base, await patchFor(key, base));
+            await specimenReady();
+            await specimen.loadState(key, index.states.get(key).lining);
+        } catch (e) {
+            console.error(e);
+        }
+        if (mine !== seq) return;
+        busy = false;
+        if (!vol) {
+            specimen.setMuNote('The mucosal state could not be loaded; the specimen is shown as scanned.');
+            store.setMu('scan');
+            return;
+        }
+        derived = vol;
+        shown = null;
+        muShown = mode;
+        specimen.setMuNote('');
+        if (endo) endo.setStateVolume(vol, key);
+        specimen.setState({ key, hides: index.states.get(key).hides });
+        const at = packsLoaded.indexOf(key);
+        if (at >= 0) packsLoaded.splice(at, 1);
+        packsLoaded.push(key);
+        while (packsLoaded.length > KEEP_STATES) specimen.unloadState(packsLoaded.shift());
+        emit();
+    }
 
     /* Bring the store's procedure on show: validate against the index, load the state, hand it over. */
     async function apply() {
@@ -244,13 +309,13 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         const cor = now.cor && index.corridors.has(now.cor) && index.corridors.get(now.cor).procedures.includes(now.id) ? now.cor : null;
         const step = Math.min(now.step, stepCount(index, now.id));
         if (cor !== now.cor || step !== now.step) { store.setProcedure({ id: now.id, step, cor }); return; }      /* the store re-enters apply with the clean value */
-        const key = stateKeyFor(index, now.id, step, cor);
+        const key = stateKeyFor(index, now.id, step, cor) || index.mucosa.dec || null;       /* step 0 of an intact start: the decongested state */
         busy = true;
         emit();
         let vol = null;
         let problem = '';
         try {
-            if (key) {
+            if (key) {                                  /* a state that cannot be loaded leaves the intact specimen */
                 const base = await sharedVolume();
                 if (mine !== seq) return;
                 vol = applyPatch(base, await patchFor(key, base));
@@ -297,18 +362,21 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
     store.subscribe((state, prev) => {
         if (state.procedure === prev.procedure) {
             if (pinned && !state.ct) { if (ct) ct.setCarved(null); pinned = false; emit(); }
+            if (state.mu !== prev.mu && !state.procedure) applyMu();                  /* a procedure plays decongested whatever mu says */
             return;
         }
         if (!state.procedure) {
             const toCt = !!state.ct && !!derived;
             release({ keepCt: toCt });
             pinned = toCt;
+            if (state.mu !== 'scan') applyMu();                                       /* the reader's mucosal state comes back */
             return;
         }
-        if (!prev.procedure) { shown = null; note = ''; }
+        if (!prev.procedure) { shown = null; note = ''; muShown = null; specimen.setMuNote(''); }
         apply();
     });
     if (store.get().procedure) apply();
+    else if (store.get().mu !== 'scan') applyMu();
 
     /* ---------------- what the reader does ---------------- */
 
@@ -349,6 +417,7 @@ export function mountProcedure({ store, graph, specimen, endo, ct = null, fetchF
         get shown() { return shown ? { ...shown } : null; },
         get note() { return note; },
         get stateKey() { return shown ? shown.key : null; },
+        get mucosa() { return shown ? 'dec' : muShown; },                       /* the mucosal state on show: a procedure's is always decongested */
         get carvedVoxels() { return derived ? derived.carvedVoxels : 0; },
         get pinned() { return pinned; },
         get states() { return index ? [...index.states.keys()] : []; },

@@ -306,6 +306,21 @@ revealed, risk hazards hatch, a station is flown to (a cut under reduced motion)
 damaged patch, no index (Play disabled, no request, zero console errors) and hostile hashes.
 The real-data section runs once `ssb/states/index.json` exists.
 
+**Mucosal state** (`tools/ssb-pipeline/uw/mucosa.py`, `js/ssb/mode-procedure.js`,
+`ui-specimen.js`; `docs/ssb.md` §5.9; `node tools/test-ssb.mjs --only mucosa`) pins, from the
+committed patches read as a page reads them: the decongested patch changes only erectile soft
+tissue (turbinates, septum half) to the side's nasal-cavity air between the choana and the valve,
+0 bone voxels, the midplane untouched, mirror-symmetric, and raises the mean cross-section over
+the measured span by 1.35-1.45 (computed from the arrays, not read from the record), the
+superior third least; the congested patch grows only turbinate tissue into that air and lands
+within 0.04 of POP1's median (read from `nasalseg.json`), its largest loss in the middle third
+along A; a pose whose tip is in inferior-turbinate tissue as scanned is in air decongested;
+every intact station is still free with its tip in air decongested (the congested failures are
+printed, not an error); in the page, `#mu=` loads the patch and lining pack (the base lining
+hides, the erectile remnants show), the pills swap states and the hash follows, a procedure
+plays decongested and greys the toggle, and hostile `mu` values are ignored. Judging how the
+decongested lining looks (turbinates, the middle meatus) stays a human check.
+
 **Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
 `docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
 the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the

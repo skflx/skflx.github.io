@@ -10783,18 +10783,18 @@
  },
  "dissect": {
   "states": 15,
-  "worstUnitDeviation": 0.0372,
-  "liningBytes": 4723375,
+  "worstUnitDeviation": 0.3607,
+  "liningBytes": 5326879,
   "keepViolations": 0,
   "antrostomy": {
    "carved": {
-    "voxels": 3618,
+    "voxels": 3642,
     "A": 19.0,
     "S": 9.5,
     "R": 10.5
    },
    "medialWall": {
-    "voxels": 1959,
+    "voxels": 1963,
     "A": 19.0,
     "S": 9.5,
     "R": 10.5

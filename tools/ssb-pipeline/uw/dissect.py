@@ -42,6 +42,8 @@ STATE_LINING_BYTES = 350_000
 ALL_STATES_BYTES = 6_000_000
 PATCH_BYTES = 100_000
 NEAREST_PAD_MM = 20.0           # how far past a unit's box the fill label is looked for
+MUCOSA = 255                    # `owner` of a voxel the mucosal state (mucosa.py) changed: not one of the units
+ERECTILE_REMNANT = 0.5          # scale of the budget of an erectile wall's remnant (turbinates, septum): they change in every mucosal state
 MIN_REMNANT = 50                # voxels: fewer remaining and the wall node is hidden (meshes.py skips the same)
 SIDES = ('R', 'L', 'M')
 AXES = ('r', 'a', 's')          # box axes, in the order of a voxel index's (i, j, k)
@@ -190,11 +192,12 @@ class State:
         self.base = base
         self.ct = base.ct.copy()
         self.lab = base.lab.copy()
-        self.owner = np.zeros(base.g.shape, np.uint8)           # 1 + the unit's number in the data file's order
+        self.owner = np.zeros(base.g.shape, np.uint8)           # 1 + the unit's number in the data file's order; MUCOSA for the mucosal state
+        self.mucosa = None                                      # 'decongested' | 'congested' | None: the cut name of a wall only the mucosal state changed
 
     def copy(self):
         s = State.__new__(State)
-        s.base, s.ct, s.lab, s.owner = self.base, self.ct.copy(), self.lab.copy(), self.owner.copy()
+        s.base, s.ct, s.lab, s.owner, s.mucosa = self.base, self.ct.copy(), self.lab.copy(), self.owner.copy(), self.mucosa
         return s
 
 
@@ -384,7 +387,7 @@ def enumerate_states(data):
     return states, procedures, corridors
 
 
-def compute_states(base, data, states):
+def compute_states(base, data, states, root=None):
     """DFS over the prefix trie of the states' unit lists; the working copy is cloned only at a branch."""
     order = {n: i + 1 for i, n in enumerate(data['units'])}
     trie = {}
@@ -411,12 +414,12 @@ def compute_states(base, data, states):
             say('  %-46s after %-2d units: %6d voxels (candidates %d, guard rejected %d, mirror rejected %d) %.1fs'
                 % (u, len(prefix), stats['voxels'], stats['candidates'], stats['rejected'], stats['mirrorRejected'], stats['seconds']))
             walk(child, cur, prefix + [u])
-    walk(trie, State(base), [])
+    walk(trie, root or State(base), [])
     return results, unit_stats
 
 
 # ---------------------------------------------------------------- outputs
-def write_patch(path, base, st, key, units, fill):
+def write_patch(path, base, st, key, units, fill, extra=None):
     changed = (st.lab != base.lab) | (st.ct != base.ct)
     newlab = np.where(changed, st.lab, 0).astype(np.uint16)
     mid = base.mid
@@ -431,12 +434,16 @@ def write_patch(path, base, st, key, units, fill):
         arr = np.where(sub, newlab, 0)[lo[2]:hi[2], lo[1]:hi[1], lo[0]:hi[0]]
         boxes.append({'side': side, 'ijk0': list(lo), 'dims': [hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]]})
         blobs.append(np.ascontiguousarray(arr).astype('<u2').tobytes())
-    hdr = json.dumps({'version': 1, 'base': base.hash, 'state': key, 'units': units, 'ctFill': fill, 'boxes': boxes},
-                     separators=(',', ':')).encode()
+    head = {'version': 1, 'base': base.hash, 'state': key, 'units': units, 'ctFill': fill, 'boxes': boxes}
+    head.update(extra or {})
+    hdr = json.dumps(head, separators=(',', ':')).encode()
     raw = struct.pack('<I', len(hdr)) + hdr + b''.join(blobs)
     with gzip.GzipFile(path, 'wb', compresslevel=9, mtime=0) as fh:
         fh.write(raw)
     return int(changed.sum()), os.path.getsize(path), changed
+
+
+ERECTILE_WALLS = ('s.inferior-turbinate', 's.middle-turbinate', 's.nasal-septum')
 
 
 def wall_nodes(base):
@@ -454,16 +461,18 @@ def write_lining(base, st, key, data, with_lining):
     rem_tris = 0
     for idx, name in sorted(walls.items(), key=lambda x: x[1]):
         before, after = int((base.lab == idx).sum()), int((st.lab == idx).sum())
-        if after == before:
+        diff = (base.lab == idx) != (st.lab == idx)
+        if not diff.any():
             continue
         cid = name.rsplit('.', 1)[0]
         if after < MIN_REMNANT:
             hides.append(name)
             continue
-        hit = (base.lab == idx) & (st.lab != idx)
-        last = int(st.owner[hit].max())
-        cut = names[last - 1].split('@')[1]
-        budget = max(300, int(round(M.WALL_BUDGET.get(cid, 2000) * after / before)))
+        vals = st.owner[diff]
+        units_only = vals[vals != MUCOSA]
+        cut = names[int(units_only.max()) - 1].split('@')[1] if units_only.size else st.mucosa
+        scale = ERECTILE_REMNANT if cid in ERECTILE_WALLS else 1.0
+        budget = max(300, int(round(M.WALL_BUDGET.get(cid, 2000) * min(1.0, after / before) * scale)))
         v, f, n = M.mesh_node(cid, st.lab == idx, base.hdr['affine'], budget)
         rn = '%s@%s' % (name, cut)
         items.append((rn, v, f, n))
@@ -504,6 +513,7 @@ def antrostomy_window(base, data, results, states):
 
 def main():
     ap = argparse.ArgumentParser()
+    ap.add_argument('--scanned', action='store_true', help='development: build the states on the as-scanned mucosa (the index is then not for commit)')
     ap.add_argument('--no-lining', action='store_true', help='development: skip the lining packs (patches and index only; the index is then not for commit)')
     args = ap.parse_args()
     t0 = time.time()
@@ -513,7 +523,16 @@ def main():
     say('base %s: %s voxels, mid i=%d' % (base.hash, 'x'.join(str(n) for n in base.g.shape), base.mid))
     states, procedures, corridors = enumerate_states(data)
     say('%d states' % len(states))
-    results, unit_stats = compute_states(base, data, states)
+    # the mucosal state is the base of every dissection state: procedure mode plays on the decongested mucosa (docs/ssb.md 5.9)
+    import mucosa as MU
+    rec = MU.load_record()
+    root = None
+    if 'decongested' in rec and not args.scanned:
+        assert rec['base'] == base.hash, 'ssb/states/mucosa.json is for another base: rerun mucosa.py'
+        root = State(base)
+        say('mucosa: decongested, d = %.2f mm, %d voxels' % (rec['decongested']['d'], MU.apply_decongested(root, base, rec['decongested']['d'])))
+        root.mucosa = 'decongested'
+    results, unit_stats = compute_states(base, data, states, root)
     os.makedirs(OUT, exist_ok=True)
 
     # per unit against `measured`
@@ -541,7 +560,7 @@ def main():
     for key in sorted(states, key=lambda k: (len(states[k]['units']), k)):
         st = results[key]
         s = states[key]
-        n, pbytes, changed = write_patch(os.path.join(OUT, key + '.ssbp.gz'), base, st, key, s['units'], data['air']['fill'])
+        n, pbytes, changed = write_patch(os.path.join(OUT, key + '.ssbp.gz'), base, st, key, s['units'], data['air']['fill'], {'mucosa': 'dec'} if root else None)
         assert pbytes <= PATCH_BYTES, '%s: patch %d bytes' % (key, pbytes)
         # keep: no voxel a unit carved had a label its keep list protects (on either side)
         viol = 0
@@ -561,7 +580,7 @@ def main():
             minima[side] = {f: (round(float(v[m].min()), 2) if m.any() else None) for f, v in base.guard_fields.items()}
         lin = write_lining(base, st, key, data, not args.no_lining)
         total_lining += lin['bytes']
-        index_states[key] = {'units': s['units'], 'usedBy': s['usedBy'], 'patch': key + '.ssbp.gz', 'lining': lin['file'],
+        index_states[key] = {'units': s['units'], 'usedBy': s['usedBy'], 'mucosa': 'dec' if root else 'scan', 'patch': key + '.ssbp.gz', 'lining': lin['file'],
                              'hides': lin['hides'], 'remnants': lin['remnants'],
                              'measured': {'carvedVoxels': n, 'patchBytes': pbytes, 'liningBytes': lin['bytes'],
                                           'liningTriangles': lin['triangles'], 'remnantTriangles': lin['remnantTriangles'],
@@ -591,7 +610,17 @@ def main():
     aw = antrostomy_window(base, data, results, states)
     say('antrostomy window (s.posterior-fontanelle.R@antrostomy after the uncinectomy): ' + json.dumps(aw))
 
-    doc = {'version': 1, 'base': base.hash, 'ctFill': data['air']['fill'], 'states': index_states,
+    mucosal = {}
+    for kind, mode in (('decongested', 'dec'), ('congested', 'cong')):
+        e = rec.get(kind)
+        if not e:
+            continue
+        index_states[e['key']] = {'units': [], 'usedBy': ['mu=' + mode], 'mucosa': mode, 'patch': e['patch'], 'lining': e['lining'], 'hides': e['hides'],
+                                  'remnants': e['remnants'], 'measured': e['measured']}
+        mucosal[mode] = {'state': e['key'], 'd': e['d'], 'ratio': e['ratio'], 'target': e['target'], 'erectileLabels': e['erectileLabels'], 'ctFill': e['ctFill']}
+        total_lining += e['measured']['liningBytes']
+    assert total_lining <= ALL_STATES_BYTES, 'state linings total %d bytes with the mucosal ones' % total_lining
+    doc = {'version': 1, 'base': base.hash, 'ctFill': data['air']['fill'], 'mucosa': mucosal, 'states': index_states,
            'procedures': procedures, 'corridors': corridors,
            'units': {u: {'voxels': r['voxels'], 'measured': r['measured']} for u, r in unit_report.items()},
            'antrostomyWindow': aw,

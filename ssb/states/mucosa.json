@@ -1,0 +1,508 @@
+{
+ "base": "04a4010393",
+ "congested": {
+  "boneVoxelsChanged": 0,
+  "changedVoxels": 14064,
+  "ctFill": 110,
+  "d": 0.5,
+  "deltaAThirdsCm2": [
+   -0.063,
+   -0.095,
+   -0.077
+  ],
+  "erectileLabels": [
+   "s.inferior-turbinate.R",
+   "s.middle-turbinate.R"
+  ],
+  "gainSThirdsCm2": [
+   -0.097,
+   -0.089,
+   -0.049
+  ],
+  "hides": [],
+  "key": "c79ec7a395",
+  "lining": "lining-c79ec7a395.glb.gz",
+  "meanCsaCm2AsScanned": 1.584,
+  "measured": {
+   "carvedVoxels": 14064,
+   "liningBytes": 313488,
+   "liningTriangles": 33000,
+   "patchBytes": 9121,
+   "remnantTriangles": 7500
+  },
+  "mode": "cong",
+  "patch": "c79ec7a395.ssbp.gz",
+  "ratio": 0.8513,
+  "remnants": {
+   "s.inferior-turbinate.L": "s.inferior-turbinate.L@congested",
+   "s.inferior-turbinate.R": "s.inferior-turbinate.R@congested",
+   "s.middle-turbinate.L": "s.middle-turbinate.L@congested",
+   "s.middle-turbinate.R": "s.middle-turbinate.R@congested"
+  },
+  "table": [
+   {
+    "d": 0.1,
+    "gainAThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "gainSThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ratio": 1.0,
+    "voxels": 0
+   },
+   {
+    "d": 0.2,
+    "gainAThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "gainSThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ratio": 1.0,
+    "voxels": 0
+   },
+   {
+    "d": 0.3,
+    "gainAThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "gainSThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ratio": 1.0,
+    "voxels": 0
+   },
+   {
+    "d": 0.4,
+    "gainAThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "gainSThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ratio": 1.0,
+    "voxels": 0
+   },
+   {
+    "d": 0.5,
+    "gainAThirds": [
+     -0.063,
+     -0.095,
+     -0.077
+    ],
+    "gainSThirds": [
+     -0.097,
+     -0.089,
+     -0.049
+    ],
+    "ratio": 0.8513,
+    "voxels": 7032
+   },
+   {
+    "d": 0.6,
+    "gainAThirds": [
+     -0.063,
+     -0.095,
+     -0.077
+    ],
+    "gainSThirds": [
+     -0.097,
+     -0.089,
+     -0.049
+    ],
+    "ratio": 0.8513,
+    "voxels": 7032
+   },
+   {
+    "d": 0.7,
+    "gainAThirds": [
+     -0.063,
+     -0.095,
+     -0.077
+    ],
+    "gainSThirds": [
+     -0.097,
+     -0.089,
+     -0.049
+    ],
+    "ratio": 0.8513,
+    "voxels": 7032
+   },
+   {
+    "d": 0.8,
+    "gainAThirds": [
+     -0.099,
+     -0.143,
+     -0.116
+    ],
+    "gainSThirds": [
+     -0.137,
+     -0.142,
+     -0.079
+    ],
+    "ratio": 0.7739,
+    "voxels": 10697
+   },
+   {
+    "d": 0.9,
+    "gainAThirds": [
+     -0.112,
+     -0.159,
+     -0.131
+    ],
+    "gainSThirds": [
+     -0.151,
+     -0.162,
+     -0.09
+    ],
+    "ratio": 0.7458,
+    "voxels": 12032
+   },
+   {
+    "d": 1.0,
+    "gainAThirds": [
+     -0.141,
+     -0.21,
+     -0.169
+    ],
+    "gainSThirds": [
+     -0.207,
+     -0.202,
+     -0.111
+    ],
+    "ratio": 0.6717,
+    "voxels": 15524
+   },
+   {
+    "d": 1.1,
+    "gainAThirds": [
+     -0.141,
+     -0.21,
+     -0.169
+    ],
+    "gainSThirds": [
+     -0.207,
+     -0.202,
+     -0.111
+    ],
+    "ratio": 0.6717,
+    "voxels": 15524
+   },
+   {
+    "d": 1.2,
+    "gainAThirds": [
+     -0.176,
+     -0.253,
+     -0.202
+    ],
+    "gainSThirds": [
+     -0.249,
+     -0.25,
+     -0.133
+    ],
+    "ratio": 0.6012,
+    "voxels": 18901
+   },
+   {
+    "d": 1.3,
+    "gainAThirds": [
+     -0.192,
+     -0.269,
+     -0.216
+    ],
+    "gainSThirds": [
+     -0.263,
+     -0.272,
+     -0.142
+    ],
+    "ratio": 0.5724,
+    "voxels": 20296
+   },
+   {
+    "d": 1.4,
+    "gainAThirds": [
+     -0.192,
+     -0.269,
+     -0.216
+    ],
+    "gainSThirds": [
+     -0.263,
+     -0.272,
+     -0.142
+    ],
+    "ratio": 0.5724,
+    "voxels": 20296
+   },
+   {
+    "d": 1.5,
+    "gainAThirds": [
+     -0.241,
+     -0.331,
+     -0.269
+    ],
+    "gainSThirds": [
+     -0.342,
+     -0.337,
+     -0.162
+    ],
+    "ratio": 0.469,
+    "voxels": 25235
+   }
+  ],
+  "target": 0.873
+ },
+ "decongested": {
+  "boneVoxelsChanged": 0,
+  "changedVoxels": 38162,
+  "ctFill": 48,
+  "d": 1.0,
+  "deltaAThirdsCm2": [
+   0.19,
+   0.232,
+   0.195
+  ],
+  "erectileLabels": [
+   "s.inferior-turbinate.R",
+   "s.middle-turbinate.R",
+   "s.nasal-septum.M"
+  ],
+  "gainSThirdsCm2": [
+   0.248,
+   0.237,
+   0.131
+  ],
+  "hides": [],
+  "key": "c3ae3dbb3c",
+  "lining": "lining-c3ae3dbb3c.glb.gz",
+  "meanCsaCm2AsScanned": 1.584,
+  "measured": {
+   "carvedVoxels": 38162,
+   "liningBytes": 313255,
+   "liningTriangles": 33000,
+   "patchBytes": 15485,
+   "remnantTriangles": 6556
+  },
+  "mode": "dec",
+  "patch": "c3ae3dbb3c.ssbp.gz",
+  "ratio": 1.3894,
+  "remnants": {
+   "s.inferior-turbinate.L": "s.inferior-turbinate.L@decongested",
+   "s.inferior-turbinate.R": "s.inferior-turbinate.R@decongested",
+   "s.middle-turbinate.L": "s.middle-turbinate.L@decongested",
+   "s.middle-turbinate.R": "s.middle-turbinate.R@decongested",
+   "s.nasal-septum.M": "s.nasal-septum.M@decongested"
+  },
+  "table": [
+   {
+    "d": 0.25,
+    "gainAThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "gainSThirds": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "ratio": 1.0,
+    "voxels": 0
+   },
+   {
+    "d": 0.5,
+    "gainAThirds": [
+     0.105,
+     0.131,
+     0.104
+    ],
+    "gainSThirds": [
+     0.132,
+     0.128,
+     0.079
+    ],
+    "ratio": 1.2143,
+    "voxels": 10493
+   },
+   {
+    "d": 0.75,
+    "gainAThirds": [
+     0.144,
+     0.176,
+     0.142
+    ],
+    "gainSThirds": [
+     0.175,
+     0.177,
+     0.11
+    ],
+    "ratio": 1.2914,
+    "voxels": 14247
+   },
+   {
+    "d": 1.0,
+    "gainAThirds": [
+     0.19,
+     0.232,
+     0.195
+    ],
+    "gainSThirds": [
+     0.248,
+     0.237,
+     0.131
+    ],
+    "ratio": 1.3894,
+    "voxels": 19081
+   },
+   {
+    "d": 1.25,
+    "gainAThirds": [
+     0.216,
+     0.259,
+     0.229
+    ],
+    "gainSThirds": [
+     0.288,
+     0.277,
+     0.139
+    ],
+    "ratio": 1.4449,
+    "voxels": 21854
+   },
+   {
+    "d": 1.5,
+    "gainAThirds": [
+     0.241,
+     0.288,
+     0.269
+    ],
+    "gainSThirds": [
+     0.343,
+     0.313,
+     0.142
+    ],
+    "ratio": 1.5037,
+    "voxels": 24750
+   },
+   {
+    "d": 1.75,
+    "gainAThirds": [
+     0.251,
+     0.298,
+     0.288
+    ],
+    "gainSThirds": [
+     0.362,
+     0.332,
+     0.143
+    ],
+    "ratio": 1.5287,
+    "voxels": 26028
+   },
+   {
+    "d": 2.0,
+    "gainAThirds": [
+     0.264,
+     0.315,
+     0.318
+    ],
+    "gainSThirds": [
+     0.401,
+     0.353,
+     0.144
+    ],
+    "ratio": 1.5667,
+    "voxels": 27874
+   },
+   {
+    "d": 2.25,
+    "gainAThirds": [
+     0.272,
+     0.323,
+     0.34
+    ],
+    "gainSThirds": [
+     0.419,
+     0.37,
+     0.144
+    ],
+    "ratio": 1.5898,
+    "voxels": 29091
+   },
+   {
+    "d": 2.5,
+    "gainAThirds": [
+     0.276,
+     0.33,
+     0.361
+    ],
+    "gainSThirds": [
+     0.444,
+     0.38,
+     0.144
+    ],
+    "ratio": 1.6113,
+    "voxels": 30153
+   },
+   {
+    "d": 2.75,
+    "gainAThirds": [
+     0.282,
+     0.335,
+     0.375
+    ],
+    "gainSThirds": [
+     0.458,
+     0.389,
+     0.144
+    ],
+    "ratio": 1.6257,
+    "voxels": 30888
+   },
+   {
+    "d": 3.0,
+    "gainAThirds": [
+     0.285,
+     0.337,
+     0.389
+    ],
+    "gainSThirds": [
+     0.473,
+     0.393,
+     0.144
+    ],
+    "ratio": 1.6377,
+    "voxels": 31488
+   }
+  ],
+  "target": 1.3571
+ },
+ "note": "tools/ssb-pipeline/uw/mucosa.py output (docs/ssb.md 5.9); dissect.py copies the states into index.json",
+ "span": {
+  "aMm": [
+   -50.0,
+   -15.5
+  ],
+  "operatorAMm": [
+   -51.0,
+   -10.0
+  ]
+ },
+ "version": 1
+}

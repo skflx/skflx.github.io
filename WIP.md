@@ -271,7 +271,14 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   re-checkable by `tools/ssb-pipeline/uw/stations.py`; the olfactory cleft and
   the inferior meatus are intact poses with `shaft: "2.7"`, and flying to one
   switches the scope to the 2.7 mm telescope and says why.
-  Next: the decongested · as scanned · congested mucosa (DC1), then CP-3.
+  The mucosal state (DC1, `docs/ssb.md` §5.9; `mucosa.py`): a decongested ·
+  as scanned · congested toggle in the Specimen controls (`#mu=`), as patches
+  and lining packs; the decongested one is calibrated on a published ratio
+  (a recession of the turbinates' and septum's soft tissue by 1 mm) and is the
+  base of every dissection state, so a procedure always plays decongested.
+  The congested one is a one-voxel layer on the turbinates (the 0.5 mm grid
+  cannot grow less; with the septum too it overshoots the NasalSeg target):
+  that choice awaits the owner and the checkpoint. Next: CP-3.
 - **CT mode** (`mode-ct.js`, `docs/ssb.md` §3) — axial/coronal/sagittal
   canvases with a shared crosshair, window presets, label outlines and
   hover names, without WebGL.
@@ -328,7 +335,7 @@ owner decisions, waves of work packages with Opus checkpoints, content
 backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
 to sellar/clival masses, so wave 3 is procedure mode: P1b (states, built) beside
 P2 (player), then P3 (poses per state, the 2.7 mm shaft), then DC1
-(mucosal state); NasalSeg (PR #119) enters as population data (POP1, done) and
+(mucosal state, built); NasalSeg (PR #119) enters as population data (POP1, done) and
 16-bit heads (IN1); the soft-tissue lane continues with ST4d and ST5.
 Waiting on the owner: O8–O11, review of tier-1 FESS anatomy and the
 dioramas (`docs/ssb-roadmap.md` §2). The external nose beyond the entry anatomy (the full rhinoplasty

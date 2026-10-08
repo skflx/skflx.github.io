@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -113,7 +113,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -3825,6 +3825,221 @@ async function sphenoidPageTests(browser, base) {
   await sel.context.close();
 }
 
+
+/* ---------------- Mucosal state: decongested and congested (DC1, docs/ssb.md 5.9) ---------------- */
+
+/* The two patches of ssb/states/index.json `mucosa`, read the way a page reads them (parsePatch, applyPatch) and measured from the
+   arrays: what they may change, the cross-section ratios they were calibrated to (the congested target is read from
+   ssb/anatomy/population/nasalseg.json, never typed here), and the intact stations in each. `w` is stationUnitTests' window. */
+async function mucosaUnitTests(w) {
+  const read = (p) => fs.readFileSync(path.join(ROOT, p));
+  const json = (p) => JSON.parse(read(p).toString('utf8'));
+  if (!fs.existsSync(path.join(ROOT, 'ssb/states/mucosa.json'))) { console.log('  (mucosa: ssb/states/mucosa.json is not in this build — skipped)'); return; }
+  const index = json('ssb/states/index.json');
+  const rec = json('ssb/states/mucosa.json');
+  const parsed = parseIndex(index);
+  check('mucosa: the index lists a decongested and a congested state, units-free, and the page-side parser reads them', ['dec', 'cong'].every((m) => parsed.mucosa[m] && parsed.states.get(parsed.mucosa[m]).units.length === 0 && index.states[parsed.mucosa[m]].mucosa === m), JSON.stringify(parsed.mucosa));
+  check('mucosa: every dissection state is built on the decongested mucosa', Object.values(index.states).filter((st) => st.units.length).every((st) => st.mucosa === 'dec'));
+
+  const vol = w.vol;
+  const [nx, ny, nz] = vol.dims;
+  const meta = json('ssb/ct/ct.json');
+  const ct0 = new Uint8Array(zlib.gunzipSync(read('ssb/ct/ct.u8.gz')));
+  const lb = zlib.gunzipSync(read('ssb/ct/labels.u16.gz'));
+  const lab0 = new Uint16Array(lb.buffer.slice(lb.byteOffset, lb.byteOffset + lb.length));
+  const nameOf = (i) => (vol.describe(i) || {}).name;
+  const idOf = (name) => vol.labelIndices().find((i) => nameOf(i) === name);
+  const lm = w.lms;
+  const level = json('tools/ssb-pipeline/uw/dissection.json').air.level;
+  const aLo = lm['lm.choanal-arch.M'][1], aHi = lm['s.internal-nasal-valve.R'][1];
+  const erectile = new Set(['s.inferior-turbinate.R', 's.inferior-turbinate.L', 's.middle-turbinate.R', 's.middle-turbinate.L', 's.nasal-septum.M']);
+  const slab = nx * ny;
+  const mid = (nx - 1) / 2;
+  const ncR = idOf('s.nasal-cavity.R');
+  const ncL = idOf('s.nasal-cavity.L');
+  const span = [lm['lm.choanal-arch.M'][1] + 1, lm['lm.middle-turbinate-head.R'][1] - 3];
+  /* mean coronal cross-section (cm^2) of the right nasal cavity's air over the span, from arrays */
+  const csa = (ct, lab) => {
+    let sum = 0;
+    let n = 0;
+    for (let j = 0; j < ny; j++) {
+      const a = vol.toRAS(0, j, 0)[1];
+      if (a < span[0] - 1e-9 || a > span[1] + 1e-9) continue;
+      let c = 0;
+      for (let k = 0; k < nz; k++) for (let i = 0; i < nx; i++) { const q = k * slab + j * nx + i; if (lab[q] === ncR && ct[q] < level) c++; }
+      sum += c;
+      n++;
+    }
+    return (sum / n) * meta.spacing[0] * meta.spacing[2] / 100;
+  };
+  const asScanned = csa(ct0, lab0);
+
+  const patches = {};
+  for (const mode of ['dec', 'cong']) {
+    const key = parsed.mucosa[mode];
+    patches[mode] = await parsePatch(read(`ssb/states/${index.states[key].patch}`), vol, index.base);
+  }
+  const target = json('ssb/anatomy/population/nasalseg.json').profiles.summary.restricted['10-90'].moreCongestedOverMean.p50;
+  for (const mode of ['dec', 'cong']) {
+    const patch = patches[mode];
+    const ct = new Uint8Array(ct0);
+    const lab = new Uint16Array(lab0);
+    const bad = { from: 0, to: 0, bone: 0, midplane: 0, span: 0, side: 0 };
+    let changed = 0;
+    const seen = new Map();
+    for (const b of patch.boxes) {
+      const [dx, dy, dz] = b.dims;
+      for (let z = 0; z < dz; z++) for (let y = 0; y < dy; y++) for (let x = 0; x < dx; x++) {
+        const v = b.data[(z * dy + y) * dx + x];
+        if (!v) continue;
+        const i = b.ijk0[0] + x, j = b.ijk0[1] + y, k = b.ijk0[2] + z;
+        const q = k * slab + j * nx + i;
+        changed++;
+        const [r, a] = vol.toRAS(i, j, k);
+        const was = nameOf(lab0[q]);
+        const now = nameOf(v);
+        if (ct0[q] >= 120) bad.bone++;
+        if (Math.abs(r) < 1e-9) bad.midplane++;
+        if (a < aLo - 1e-9 || a > aHi + 1e-9) bad.span++;
+        if (mode === 'dec') {
+          if (!erectile.has(was) || ct0[q] < level || (now !== 's.nasal-cavity.R' && now !== 's.nasal-cavity.L') || (r > 0) !== (now === 's.nasal-cavity.R')) bad.from++;
+        } else if (!/^s\.(inferior|middle)-turbinate\./.test(now) || (was !== 's.nasal-cavity.R' && was !== 's.nasal-cavity.L') || ct0[q] >= level) bad.from++;
+        if ((r > 0) !== (was.endsWith('.R') || (now.endsWith('.R'))) && was !== 's.nasal-septum.M') bad.side++;
+        ct[q] = patch.ctFill;
+        lab[q] = v;
+        seen.set(`${i},${j},${k}`, v);
+      }
+    }
+    let asym = 0;
+    for (const key of seen.keys()) { const [i, j, k] = key.split(',').map(Number); if (!seen.has(`${2 * mid - i},${j},${k}`)) asym++; }
+    const ratio = csa(ct, lab) / asScanned;
+    const lo = mode === 'dec' ? 1.35 : target - 0.04;
+    const hi = mode === 'dec' ? 1.45 : target + 0.04;
+    check(`mucosa (${mode}): only erectile soft tissue ${mode === 'dec' ? 'recedes to air (the side\'s nasal cavity)' : 'is grown into the side\'s nasal-cavity air (a turbinate label)'}, between the choana and the valve, 0 bone voxels, the midplane untouched`,
+      changed > 5000 && bad.from === 0 && bad.bone === 0 && bad.midplane === 0 && bad.span === 0, JSON.stringify({ changed, ...bad }));
+    check(`mucosa (${mode}): the patch is its own mirror (left = right)`, asym === 0, String(asym));
+    check(`mucosa (${mode}): the mean cross-section ratio over A ${span.map((v) => v.toFixed(1)).join('..')} is ${mode === 'dec' ? '1.35-1.45 (Xiao 3.8 / 2.8 = 1.357)' : `within 0.04 of POP1's median ${target} (nasalseg.json)`}, measured from the arrays: ${ratio.toFixed(4)}`, ratio >= lo && ratio <= hi, ratio.toFixed(4));
+    check(`mucosa (${mode}): the display it writes is ${mode === 'dec' ? 'air (below the soft-tissue level)' : 'soft tissue (the level up to bone)'}: ${patch.ctFill}`, mode === 'dec' ? patch.ctFill < level : patch.ctFill >= level && patch.ctFill < 120);
+    check(`mucosa (${mode}): the recorded calibration agrees with the arrays (d ${rec[mode === 'dec' ? 'decongested' : 'congested'].d} mm, ratio ${rec[mode === 'dec' ? 'decongested' : 'congested'].ratio})`, Math.abs(rec[mode === 'dec' ? 'decongested' : 'congested'].ratio - ratio) < 5e-4);
+  }
+
+  /* the thirds along S and A (decongested): the superior third gains least */
+  {
+    const air = (ct, lab, q) => lab[q] === ncR && ct[q] < level;
+    const ct = new Uint8Array(ct0), lab = new Uint16Array(lab0);
+    const patch = patches.dec;
+    for (const b of patch.boxes) { const [dx, dy, dz] = b.dims; for (let z = 0; z < dz; z++) for (let y = 0; y < dy; y++) for (let x = 0; x < dx; x++) { const v = b.data[(z * dy + y) * dx + x]; if (v) { const q = (b.ijk0[2] + z) * slab + (b.ijk0[1] + y) * nx + b.ijk0[0] + x; ct[q] = patch.ctFill; lab[q] = v; } } }
+    let sMin = Infinity, sMax = -Infinity;
+    for (let q = 0; q < lab0.length; q++) if (lab0[q] === ncR) { const s2 = vol.toRAS(0, 0, Math.floor(q / slab))[2]; if (s2 < sMin) sMin = s2; if (s2 > sMax) sMax = s2; }
+    const gain = [0, 0, 0];
+    for (let q = 0; q < lab0.length; q++) {
+      if (air(ct, lab, q) === air(ct0, lab0, q)) continue;
+      const a = vol.toRAS(0, Math.floor(q / nx) % ny, 0)[1];
+      if (a < span[0] - 1e-9 || a > span[1] + 1e-9) continue;
+      const s2 = vol.toRAS(0, 0, Math.floor(q / slab))[2];
+      gain[Math.min(2, Math.floor(3 * (s2 - sMin) / (sMax - sMin + 1e-9)))]++;
+    }
+    check('mucosa (dec): the superior third of the cavity gains least in cross-section (the least erectile tissue, as in Xiao 2021)', gain[2] < gain[0] && gain[2] < gain[1], JSON.stringify(gain));
+  }
+
+  /* congested: where along A the loss sits (the middle third, where the turbinates are) */
+  {
+    const patch = patches.cong;
+    const lost = [0, 0, 0];
+    const frac = (a) => Math.min(2, Math.max(0, Math.floor(3 * (span[1] - a) / (span[1] - span[0] + 1e-9))));
+    for (const b of patch.boxes) {
+      const [dx, dy, dz] = b.dims;
+      for (let z = 0; z < dz; z++) for (let y = 0; y < dy; y++) for (let x = 0; x < dx; x++) {
+        if (!b.data[(z * dy + y) * dx + x]) continue;
+        const [r, a] = vol.toRAS(b.ijk0[0] + x, b.ijk0[1] + y, b.ijk0[2] + z);
+        if (r > 0 && a >= span[0] - 1e-9 && a <= span[1] + 1e-9) lost[frac(a)]++;
+      }
+    }
+    check('mucosa (cong): the largest loss along A is in the middle third of the span', lost[1] > lost[0] && lost[1] > lost[2], JSON.stringify(lost));
+  }
+
+  /* a pose whose tip is in inferior-turbinate tissue as scanned is in air decongested; every intact station still passes there */
+  const dec = applyPatch(vol, patches.dec);
+  const cong = applyPatch(vol, patches.cong);
+  {
+    const F = lm['lm.naris.R'];
+    let found = null;
+    for (let depth = 20; depth <= 70 && !found; depth += 0.5) for (let yaw = -30; yaw <= 30 && !found; yaw += 2) for (let pitch = -30; pitch <= 30 && !found; pitch += 2) {
+      const pose = { side: 'R', depth, yaw, pitch, roll: 0, lens: 0 };
+      const tip = SC.tipOf(F, pose);
+      const was = vol.describe(vol.labelAt(tip[0], tip[1], tip[2]));
+      const now = dec.describe(dec.labelAt(tip[0], tip[1], tip[2]));
+      if (was && was.name === 's.inferior-turbinate.R' && vol.sample(tip[0], tip[1], tip[2]) >= level && now && now.name === 's.nasal-cavity.R' && dec.sample(tip[0], tip[1], tip[2]) < level) found = { pose, tip };
+    }
+    check('mucosa (dec): a pose whose tip is in inferior-turbinate tissue as scanned (display >= the soft level) is in nasal-cavity air decongested', !!found, JSON.stringify(found));
+  }
+  const stations = json('ssb/geometry/stations.json').stations;
+  const failing = (v) => {
+    const out = [];
+    for (const [key, st] of Object.entries(stations)) {
+      const pose = st.pose;
+      const F = lm[`lm.naris.${pose.side}`];
+      const cl = SC.shaftClearance(F, pose, (p) => v.sample(p[0], p[1], p[2]), SC.SHAFT_RADII[st.shaft || '4'], w.arch);
+      const tip = SC.tipOf(F, pose);
+      const lab = v.describe(v.labelAt(tip[0], tip[1], tip[2]));
+      if (cl.blocked || cl.depth !== pose.depth || !lab || !w.AIR.has(lab.name)) out.push(key);
+    }
+    return out;
+  };
+  const keys = Object.keys(stations);
+  const decFail = failing(dec);
+  check(`mucosa (dec): every one of the ${keys.length} intact stations is still free with its tip in air in the decongested volume`, decFail.length === 0, decFail.join(' '));
+  const congFail = failing(cong);
+  console.log(`  (mucosa (cong): ${congFail.length} of ${keys.length} intact stations close in the congested volume — reported, not an error: ${congFail.join(' ') || 'none'})`);
+  check('mucosa (cong): the failures of the congested volume are listed (a narrow view may close; the others stay)', congFail.length < keys.length);
+}
+
+/* The page: the toggle loads the patch and the lining; a procedure forces decongested and gives the choice back. */
+async function mucosaTests(browser, base) {
+  if (!fs.existsSync(path.join(ROOT, 'ssb/states/mucosa.json'))) return;
+  const index = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/states/index.json'), 'utf8'));
+  const decKey = index.mucosa.dec.state;
+  const congKey = index.mucosa.cong.state;
+  const settle = (page, mode, key) => page.waitForFunction(([m, k]) => { const p = window.__ssb.procedure; return p && p.mucosa === m && !p.busy && window.__ssb.scope && window.__ssb.scope.stateKey === k; }, [mode, key], { timeout: 90000 });
+  const pills = (page) => page.$$eval('#ssb-spec button[data-mu]', (bs) => bs.map((b) => [b.dataset.mu, b.getAttribute('aria-pressed'), b.disabled]));
+
+  const { context, page, errors } = await openProc(browser, base, '#scope=R,40,0,0,0,0&mu=dec', { real: true });
+  await settle(page, 'dec', decKey);
+  await nextFrames(page, 4);
+  check('mucosa (page): `#mu=dec` loads the decongested patch into the scope and the specimen (state key on both), the base lining hides, and the hash keeps mu', (await page.evaluate(() => window.__ssb.specimen.stateKey)) === decKey && /mu=dec/.test(await page.evaluate(() => window.__ssb.hash)));
+  const nodes = await specNodes(page);
+  check('mucosa (page): the decongested lining pack is on show, with the turbinate and septum remnants', nodes.filter((n) => n.lining && n.state === decKey).length > 3 && nodes.filter((n) => n.lining && n.state === decKey && n.visible).length > 0 && nodes.filter((n) => n.lining && !n.state).every((n) => !n.visible) && nodes.some((n) => n.state === decKey && /^s\.inferior-turbinate\.R@decongested$/.test(n.key.replace(/^state:[0-9a-f]+:/, ''))), JSON.stringify(nodes.filter((n) => n.state === decKey).map((n) => n.key)));
+  check('mucosa (page): the three pills show Decongested pressed, with the badge naming the calibration', JSON.stringify(await pills(page)) === JSON.stringify([['dec', 'true', false], ['scan', 'false', false], ['cong', 'false', false]]) && /Mucosa: decongested \(calibrated, Xiao 2021\)/.test(await page.textContent('#ssb-spec')), JSON.stringify(await pills(page)));
+  await page.$eval('#ssb-spec button[data-mu="cong"]', (b) => b.click());
+  await settle(page, 'cong', congKey);
+  check('mucosa (page): Congested swaps the state (the scope reads the congested volume), the hash says mu=cong', /mu=cong/.test(await page.evaluate(() => window.__ssb.hash)) && /physiological/.test(await page.textContent('#ssb-spec')));
+  await page.$eval('#ssb-spec button[data-mu="scan"]', (b) => b.click());
+  await page.waitForFunction(() => window.__ssb.procedure.mucosa === null && window.__ssb.scope.stateKey === null && window.__ssb.specimen.stateKey === null, null, { timeout: 30000 });
+  await nextFrames(page, 3);
+  check('mucosa (page): As scanned puts the base back (no state key; the base lining shows) and drops mu from the hash', !/mu=/.test(await page.evaluate(() => window.__ssb.hash)) && (await specNodes(page)).filter((n) => n.lining && !n.state).some((n) => n.visible));
+  check('mucosa (page): no real console errors across the three states', errors.length === 0, JSON.stringify(errors));
+  await context.close();
+
+  /* a procedure forces decongested and greys the toggle; ending it brings the reader's choice back */
+  const second = await openProc(browser, base, '#p=p.uncinectomy&step=1&mu=cong', { real: true });
+  const p2 = second.page;
+  await p2.waitForFunction(() => window.__ssb.procedure && window.__ssb.procedure.shown && !window.__ssb.procedure.busy, null, { timeout: 90000 });
+  check('mucosa (procedure): a procedure plays decongested whatever `mu` says; the toggle is greyed with Decongested pressed and the hash carries no mu',
+    (await p2.evaluate(() => window.__ssb.procedure.mucosa)) === 'dec' && JSON.stringify(await pills(p2)) === JSON.stringify([['dec', 'true', true], ['scan', 'false', true], ['cong', 'false', true]]) && !/mu=/.test(await p2.evaluate(() => window.__ssb.hash)));
+  await p2.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+  await p2.waitForFunction(() => !window.__ssb.procedure.shown, null, { timeout: 30000 });
+  check('mucosa (procedure): with the procedure ended the toggle is live again', (await pills(p2)).every((x) => x[2] === false));
+  await second.context.close();
+
+  /* hostile and unknown values */
+  for (const bad of ['mu=%3Cimg%20src%3Dx%20onerror%3D1%3E', 'mu=DEC', 'mu=', 'mu=dec%20scan']) {
+    const { context: c3, page: p3, errors: e3 } = await openProc(browser, base, `#scope=R,40,0,0,0,0&${bad}`, { real: true });
+    await nextFrames(p3, 3);
+    check(`mucosa (hostile): ${bad} is ignored — as scanned, no mu in the hash, nothing executes`, (await p3.evaluate(() => window.__ssb.procedure.mucosa)) === null && !/mu=/.test(await p3.evaluate(() => window.__ssb.hash)) && e3.length === 0, JSON.stringify(e3));
+    await c3.close();
+  }
+}
+
 /* ---------------- the suite ---------------- */
 
 async function main() {
@@ -3857,6 +4072,11 @@ async function main() {
   if (ONLY === 'procedure') {
     await procedureUnitTests();
     await procedureTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'mucosa') {
+    await mucosaUnitTests(scopeUnitTests());
+    await mucosaTests(browser, base);
     return finish(browser, server);
   }
 
@@ -4330,10 +4550,13 @@ async function main() {
   await specimenTests(browser, base);
 
   /* ===== 9. the Endoscope stage (js/ssb/scope.js, mode-endoscope.js, ui-endoscope.js; docs/ssb.md 3) ===== */
-  await stationStateTests(scopeUnitTests());
+  const scopeWindow = scopeUnitTests();
+  await stationStateTests(scopeWindow);
   await scopeTests(browser, base);
   await procedureUnitTests();
   await procedureTests(browser, base);
+  await mucosaUnitTests(scopeWindow);
+  await mucosaTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {
