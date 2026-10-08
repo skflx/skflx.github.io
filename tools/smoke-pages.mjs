@@ -78,6 +78,14 @@ const PAGES = [
     return figureReady(p, 'larynx');
   } },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
+  /* OLSB: the layered SVG drew and a hash step resolved (unlisted page). */
+  { path: 'OLSB.html#p=mastoidectomy&s=6', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
+      && document.querySelectorAll('#olsb-svg .s').length > 20
+      && /Facial recess/.test(document.getElementById('olsb-step-title').textContent)) },
+  /* Regression class as above: the hash is untrusted and only selects data. */
+  { path: 'OLSB.html#p=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
+    ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
+      && !document.getElementById('pwn') && !window.__pwned) },
 ];
 
 /* An ASCII 3D figure (js/ascii3d.js) mounted and drew. With themeFlip,

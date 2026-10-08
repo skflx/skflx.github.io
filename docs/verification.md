@@ -121,6 +121,13 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   its code and flips the button to **Copied**; a query like
   `<img src=x onerror=…>` renders as text (results go through `esc()`).
 
+### OLSB (`OLSB.html`)
+- Boots with zero console errors and draws the layered SVG
+  (`html[data-olsb="ready"]`); `#p=mastoidectomy&s=6` opens the facial
+  recess step; a payload in `#p=` selects nothing and never becomes markup.
+  Look at it at 390px and 1280px in both themes after a geometry change:
+  label placement is hand-tuned per structure (`at`, `lab`).
+
 ### Wiki sync (`wiki/sync/sync-vault.mjs`)
 `tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and
 asserts: dry run writes nothing; only allowlisted folders + `MOC.md` leave;

@@ -160,6 +160,30 @@ deleted.
 
 ---
 
+## OLSB — middle ear & mastoid (`OLSB.html`)
+
+**State:** Unlisted (nothing links to it; `noindex`). A schematic lateral
+view of a right temporal bone as layered inline SVG drawn by `js/olsb.js`
+from the data in `js/olsb-anatomy.js`: eight layers (skin, soft tissue,
+cortex, canal & TM, middle ear, mastoid cavity, facial nerve, deep hazards),
+a TM state (intact / perforation / flap up / grafted), three viewports
+(field, canal, recess) and a see-through mode. Two stepped procedures,
+tympanoplasty (postauricular underlay) and canal-wall-up mastoidectomy with
+facial recess; each step sets the layers and view, names its focus
+structures, and gives one action and one hazard. Tap a structure for its
+note. `#p=<procedure>&s=<n>` links a step (matched against the data).
+No storage. Self-contained (in `SELF_CONTAINED`).
+
+It is a tool page, not a site figure, so it is SVG rather than ASCII 3D
+(`docs/decisions.md` §8 governs figures). Geometry is invented and spread
+apart for legibility; all content is draft and unverified (owner, §7).
+
+**Next:** Owner review of the anatomy and the step text. Possible
+expansion toward SSB-style depth (real geometry, a graph); more procedures
+(canal wall down, stapedotomy, cochlear implant).
+
+---
+
 ## SSB — Sinus & Skull Base 3D
 
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep

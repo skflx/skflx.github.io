@@ -1,0 +1,225 @@
+/* =============================================================
+   olsb.css — OLSB (otology / lateral skull base): --olsb-* tokens +
+   page layout. Rides on css/site.css; no second palette.
+
+   Tissue colours follow the anatomical convention (and SSB's --ssb-*
+   tissue tokens): bone ivory, drilled bone darker, otic capsule dense
+   ivory, nerve yellow, vein blue, artery red, dura grey, fascia pale.
+   Site signals keep their meaning: --signal (act) is every incision,
+   --signal-2 (science) every reference line (temporal line, Donaldson's).
+
+   Layout: >=960px is stage | side panel; below that the stage is on top.
+   ============================================================= */
+
+/* ===== TOKENS ===== */
+:root {
+  --olsb-stage: var(--surface);
+  --olsb-bone: #E6DCC0;
+  --olsb-bone-cut: #CDBB90;
+  --olsb-bone-dark: #A8946A;
+  --olsb-otic: #F3E6B4;
+  --olsb-otic-edge: #9C8040;
+  --olsb-plate: #B9A576;
+  --olsb-sinusplate: #8C9DB8;
+  --olsb-air: #2B2A2E;
+  --olsb-tm: #D9D4CB;
+  --olsb-tm-edge: #8B8173;
+  --olsb-skin: #E0B59A;
+  --olsb-crease: #9C6E55;
+  --olsb-fascia: #EDE6D8;
+  --olsb-fascia-edge: #A99D87;
+  --olsb-nerve: #E2C43A;
+  --olsb-nerve-edge: #8A7316;
+  --olsb-vein: #3B62AE;
+  --olsb-artery: #C0392B;
+  --olsb-dura: #B7BAB8;
+  --olsb-ossicle: #F7F3E8;
+  --olsb-ossicle-edge: #5E5646;
+  --olsb-mucosa: #D98A82;
+  --olsb-recess: #2B2A2E;
+  --olsb-zone: #2445B0;     /* Macewen's triangle: a surface marking (science) */
+  --olsb-dim: 0.42;
+}
+html[data-theme="dark"] {
+  --olsb-bone: #CFC3A2;
+  --olsb-bone-cut: #A99569;
+  --olsb-bone-dark: #85744F;
+  --olsb-otic: #EADCA4;
+  --olsb-otic-edge: #6E5A2A;
+  --olsb-plate: #9C8A5E;
+  --olsb-sinusplate: #6F84A8;
+  --olsb-air: #0B0C0E;
+  --olsb-tm: #BDB7AC;
+  --olsb-tm-edge: #5F574B;
+  --olsb-skin: #C99C82;
+  --olsb-crease: #7A5240;
+  --olsb-fascia: #D8D0BF;
+  --olsb-fascia-edge: #857A66;
+  --olsb-nerve: #DCC34A;
+  --olsb-nerve-edge: #6E5C12;
+  --olsb-vein: #5A82D2;
+  --olsb-artery: #E0473A;
+  --olsb-dura: #A9ADAB;
+  --olsb-ossicle: #F2EEE2;
+  --olsb-ossicle-edge: #3D382E;
+  --olsb-mucosa: #D0857D;
+  --olsb-recess: #0B0C0E;
+  --olsb-zone: #8EA7FF;
+}
+
+/* ===== PAGE ===== */
+.olsb { max-width: var(--maxw); margin: 0 auto; padding: clamp(1.25rem, 4vw, 2.5rem) var(--gutter) 3rem; }
+.olsb-head { margin-bottom: 1.25rem; max-width: 46rem; }
+.olsb-head h1 {
+  margin: 0.4rem 0 0.5rem; font-size: var(--step-3); font-weight: 740; font-stretch: 118%;
+  letter-spacing: -0.035em; line-height: 0.95;
+}
+.olsb-head p { margin: 0; color: var(--ink-muted); }
+.olsb-notice {
+  margin: 0 0 1.25rem; padding: 0.5rem 0.75rem; font-size: 0.875rem;
+  background: var(--wash); border-left: 2px solid var(--signal);
+}
+.olsb-problem { color: var(--bad); }
+
+.olsb-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+/* Phones: diagram, then the step card, then the controls. */
+.olsb-grid > .olsb-controls { order: 3; }
+@media (min-width: 960px) {
+  .olsb-grid { grid-template-columns: minmax(0, 1fr) clamp(19rem, 30vw, 25rem); grid-template-rows: auto 1fr; align-items: start; }
+  .olsb-stagecol { grid-column: 1; grid-row: 1; }
+  .olsb-grid > .olsb-controls { grid-column: 1; grid-row: 2; order: 0; }
+  .olsb-side { grid-column: 2; grid-row: 1 / 3; }
+  .olsb-side { position: sticky; top: 64px; max-height: calc(100vh - 76px); overflow: auto; }
+}
+
+/* ===== STAGE ===== */
+.olsb-stage {
+  position: relative; background: var(--olsb-stage);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+}
+#olsb-svg { display: block; width: 100%; height: auto; aspect-ratio: 760 / 520; touch-action: manipulation; }
+.olsb-orient {
+  position: absolute; left: 0.6rem; bottom: 0.5rem; margin: 0;
+  font: 400 0.68rem/1.3 var(--font-mono); letter-spacing: 0.04em; color: var(--ink-faint);
+  pointer-events: none;
+}
+
+.olsb-controls { display: grid; gap: 0.75rem; align-content: start; }
+.olsb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; }
+.olsb-row > .site-kicker { min-width: 4.5rem; }
+.olsb-toggle {
+  display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px;
+  padding: 0.25rem 0.6rem 0.25rem 0.45rem; cursor: pointer;
+  font: 400 0.8rem/1 var(--font-mono); color: var(--ink-muted);
+  border: 1px solid var(--rule-strong); border-radius: var(--radius);
+}
+.olsb-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.olsb-toggle input { margin: 0; accent-color: var(--ink); }
+.olsb-toggle:has(input:checked) { color: var(--ink); }
+.olsb-swatch { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1px solid var(--rule-strong); }
+.olsb-swatch.L-skin { background: var(--olsb-skin); }
+.olsb-swatch.L-soft { background: var(--olsb-fascia); }
+.olsb-swatch.L-cortex { background: var(--olsb-bone); }
+.olsb-swatch.L-tm { background: var(--olsb-tm); }
+.olsb-swatch.L-me { background: var(--olsb-ossicle); }
+.olsb-swatch.L-mastoid { background: var(--olsb-bone-cut); }
+.olsb-swatch.L-fn { background: var(--olsb-nerve); }
+.olsb-swatch.L-deep { background: var(--olsb-vein); }
+
+/* ===== DRAWING ===== */
+#olsb-svg .s { transition: opacity 0.2s; }
+#olsb-svg .s:not(.inert) { cursor: pointer; }
+#olsb-svg path { stroke-linecap: round; stroke-linejoin: round; }
+#olsb-svg .ln { fill: none; }
+#olsb-svg .hit { fill: none; stroke: transparent; stroke-width: 14px; vector-effect: non-scaling-stroke; pointer-events: stroke; }
+#olsb-svg .hair { stroke-width: 2px; vector-effect: non-scaling-stroke; }
+
+#olsb-svg .k-bone { fill: var(--olsb-bone); stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-bonecut { fill: var(--olsb-bone-cut); stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-bonedark { fill: var(--olsb-bone-dark); stroke: var(--olsb-bone-dark); }
+#olsb-svg .k-bonedark.ln { fill: none; }
+#olsb-svg .k-plate { fill: var(--olsb-plate); stroke: var(--olsb-plate); }
+#olsb-svg .k-plate.ln { fill: none; }
+#olsb-svg .k-sinusplate { stroke: var(--olsb-sinusplate); }
+#olsb-svg .k-lamina { stroke: var(--olsb-bone-dark); stroke-dasharray: 3 2; }
+#olsb-svg .k-otic { stroke: var(--olsb-otic); filter: drop-shadow(0 0 0.6px var(--olsb-otic-edge)); }
+#olsb-svg .k-air { fill: var(--olsb-air); }
+#olsb-svg .k-recess { fill: var(--olsb-recess); fill-opacity: 0.55; stroke: var(--olsb-recess); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 3 2; }
+#olsb-svg .k-mark { fill: var(--olsb-bone-dark); }
+#olsb-svg .k-zone { fill: var(--olsb-zone); fill-opacity: 0.16; stroke: var(--olsb-zone); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
+#olsb-svg .s:not(.is-focus):not(.is-sel) .k-zone { fill-opacity: 0; stroke-opacity: 0.35; }
+#olsb-svg .k-refline { stroke: var(--signal-2); stroke-dasharray: 7 4; }
+#olsb-svg .k-dura { fill: var(--olsb-dura); fill-opacity: 0.85; }
+#olsb-svg .k-vein { stroke: var(--olsb-vein); fill: var(--olsb-vein); }
+#olsb-svg .k-vein.ln { fill: none; stroke-opacity: 0.9; }
+#olsb-svg .k-artery { stroke: var(--olsb-artery); }
+#olsb-svg .k-nerve { stroke: var(--olsb-nerve); fill: var(--olsb-nerve); }
+#olsb-svg .k-nerve.ln { fill: none; }
+#olsb-svg .k-nervemark { fill: var(--olsb-nerve-edge); }
+#olsb-svg .k-ossicle { stroke: var(--olsb-ossicle-edge); fill: var(--olsb-ossicle); }
+#olsb-svg .k-ossicle.ln { fill: none; stroke: var(--olsb-ossicle); filter: drop-shadow(0 0 0.7px var(--olsb-ossicle-edge)); }
+#olsb-svg path.k-ossicle:not(.ln) { stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-tendon { stroke: var(--olsb-ossicle-edge); }
+#olsb-svg .k-mucosa { fill: var(--olsb-mucosa); fill-opacity: 0.75; }
+#olsb-svg .k-tm { fill: var(--olsb-tm); fill-opacity: 0.55; stroke: var(--olsb-tm-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-annulus { stroke: var(--olsb-tm-edge); }
+#olsb-svg .k-rim { stroke: var(--ink); stroke-dasharray: 2 2; }
+#olsb-svg .k-fascia { fill: var(--olsb-fascia); fill-opacity: 0.85; stroke: var(--olsb-fascia-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-skin { fill: var(--olsb-skin); stroke: var(--olsb-crease); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .L-tm .k-skin { fill-opacity: 0.6; stroke-dasharray: 3 2; }
+#olsb-svg .k-crease { stroke: var(--olsb-crease); stroke-dasharray: 2 4; }
+#olsb-svg .k-incision { stroke: var(--signal); stroke-width: 2.5px; }
+#olsb-svg .k-incision2 { stroke: var(--signal); stroke-dasharray: 8 5; }
+
+/* See-through: the overlying surfaces go faint so the projection of
+   deeper structures shows under them. */
+#olsb-svg.is-ghost .L-cortex, #olsb-svg.is-ghost .L-skin, #olsb-svg.is-ghost .L-soft { opacity: 0.22; }
+/* A step's focus: everything else steps back, except the large surfaces. */
+#olsb-svg.has-focus .s:not(.is-focus):not(.inert):not(.bg):not(.is-sel) { opacity: var(--olsb-dim); }
+#olsb-svg.has-focus .s.inert { opacity: var(--olsb-dim); }
+#olsb-svg .s.is-sel path:not(.hit) { filter: drop-shadow(0 0 1.5px var(--ink)); }
+
+/* Labels: name beside a dot, haloed with the stage colour. */
+#olsb-svg .labels { pointer-events: none; }
+#olsb-svg .lbl circle { fill: var(--ink); stroke: var(--olsb-stage); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .lbl text {
+  font-family: var(--font-mono); font-weight: 500; fill: var(--ink-muted);
+  stroke: var(--olsb-stage); stroke-linejoin: round; paint-order: stroke;
+}
+#olsb-svg .lbl.is-strong text { fill: var(--ink); font-weight: 600; }
+
+/* ===== SIDE PANEL ===== */
+.olsb-procs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.35rem; }
+.olsb-sub { margin: 0 0 1rem; color: var(--ink-faint); font-size: 0.875rem; }
+.olsb-card { padding: 1rem 1rem 0.9rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); }
+.olsb-card h2 { margin: 0.3rem 0 0.6rem; font-size: var(--step-1); font-weight: 680; letter-spacing: -0.01em; line-height: 1.2; }
+.olsb-card dl { margin: 0; display: grid; gap: 0.55rem; }
+.olsb-card dt { font: 500 0.68rem/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.olsb-card dd { margin: 0.2rem 0 0; font-size: 0.925rem; line-height: 1.45; }
+.olsb-card dd.hz { padding-left: 0.6rem; border-left: 2px solid var(--signal); }
+.olsb-nav { display: flex; gap: 0.4rem; margin-top: 0.9rem; }
+.olsb-nav .site-btn { flex: 1; }
+.olsb-steps { list-style: none; counter-reset: st; margin: 1rem 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.olsb-steps li { counter-increment: st; border-bottom: 1px solid var(--rule); }
+.olsb-steplink {
+  display: flex; gap: 0.7rem; width: 100%; padding: 0.5rem 0; text-align: left; cursor: pointer;
+  background: none; border: 0; font: 400 0.9rem/1.3 var(--font-sans); color: var(--ink-muted);
+}
+.olsb-steplink::before { content: counter(st, decimal-leading-zero); font: 400 0.75rem/1.6 var(--font-mono); color: var(--ink-faint); }
+.olsb-steplink:hover { color: var(--ink); }
+.olsb-steplink[aria-current="step"] { color: var(--ink); font-weight: 600; }
+.olsb-steplink[aria-current="step"]::before { color: var(--signal); }
+
+.olsb-info { margin-top: 1rem; }
+.olsb-info-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+.olsb-info p.note { margin: 0; font-size: 0.925rem; line-height: 1.5; }
+
+.olsb-inview { margin-top: 1.25rem; display: grid; gap: 0.6rem; }
+.olsb-inview-grp p { margin: 0 0 0.3rem; }
+.olsb-chip {
+  display: inline-block; margin: 0 0.3rem 0.3rem 0; padding: 0.25rem 0.5rem; cursor: pointer;
+  font: 400 0.76rem/1.2 var(--font-mono); color: var(--ink-muted); text-align: left;
+  background: transparent; border: 1px solid var(--rule); border-radius: var(--radius);
+}
+.olsb-chip:hover { color: var(--ink); border-color: var(--ink); }
+.olsb-chip.active { color: var(--bg); background: var(--ink); border-color: var(--ink); }

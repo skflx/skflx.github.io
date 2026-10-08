@@ -100,6 +100,9 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/airway-*.js      #   app, engine, question bank
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
+├── OLSB.html               # OLSB — layered middle ear/mastoid schematic, stepped by procedure (unlisted; draft)
+│   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
+│   └── js/olsb*.js         #   anatomy + procedure data, SVG renderer
 │
 ├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens

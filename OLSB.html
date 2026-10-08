@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex">
+    <title>OLSB Otology &amp; Lateral Skull Base | skflx.MD</title>
+    <meta name="description" content="A layered schematic of the middle ear and mastoid for walking through tympanoplasty and mastoidectomy step by step. Draft content; not a clinical reference.">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <script src="js/theme-boot.js?v=61b69b81"></script>
+    <link rel="stylesheet" href="css/site.css?v=3efb923c">
+    <link rel="stylesheet" href="css/olsb.css?v=5a0ca643">
+</head>
+<body>
+    <header class="site-topbar">
+        <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
+        <span class="site-topbar-title">OLSB &middot; Middle ear &amp; mastoid</span>
+        <div class="site-topbar-actions">
+            <button class="site-theme-toggle" type="button" aria-label="Night mode" aria-pressed="false">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="olsb">
+        <div class="olsb-head">
+            <p class="site-kicker">Otology &amp; lateral skull base</p>
+            <h1>Middle ear &amp; mastoid</h1>
+            <p>A right temporal bone seen from the side, as the surgeon sees it, in layers from skin to the deep hazards. Pick a procedure and step through it: each step peels to the layer you are working in and names its landmarks and its hazard.</p>
+        </div>
+        <p class="olsb-notice" role="note"><strong>Draft, schematic.</strong> Not to scale and not a clinical reference: structures at different depths are projected onto one plane and spread apart to stay legible. Nothing here has been verified yet.</p>
+        <noscript><p class="olsb-problem">The diagram is drawn by script; it needs JavaScript.</p></noscript>
+        <p class="olsb-problem" id="olsb-problem" hidden></p>
+
+        <div class="olsb-grid">
+            <section class="olsb-stagecol" aria-label="Diagram">
+                <div class="olsb-stage">
+                    <svg id="olsb-svg" viewBox="120 100 760 520" role="img" aria-label="Layered schematic of a right temporal bone, lateral view; anterior to the right, superior up"></svg>
+                    <p class="olsb-orient">Right ear &middot; lateral &middot; A &rarr; &middot; S &uarr;</p>
+                </div>
+            </section>
+            <section class="olsb-controls" aria-label="Diagram controls">
+                    <div class="olsb-row" id="olsb-layers" role="group" aria-label="Layers"><span class="site-kicker">Layers</span></div>
+                    <div class="olsb-row" role="group" aria-label="View">
+                        <span class="site-kicker">View</span>
+                        <button class="site-pill" type="button" data-view="field">Field</button>
+                        <button class="site-pill" type="button" data-view="canal">Canal</button>
+                        <button class="site-pill" type="button" data-view="recess">Recess</button>
+                        <label class="olsb-toggle"><input type="checkbox" id="olsb-ghost"><span>See-through</span></label>
+                        <label class="olsb-toggle"><input type="checkbox" id="olsb-names"><span>All names</span></label>
+                    </div>
+                    <div class="olsb-row" role="group" aria-label="Tympanic membrane">
+                        <span class="site-kicker">TM</span>
+                        <button class="site-pill" type="button" data-tm="intact">Intact</button>
+                        <button class="site-pill" type="button" data-tm="perf">Perforation</button>
+                        <button class="site-pill" type="button" data-tm="flap">Flap up</button>
+                        <button class="site-pill" type="button" data-tm="graft">Grafted</button>
+                    </div>
+            </section>
+
+            <aside class="olsb-side" aria-label="Procedure">
+                <div class="olsb-procs" id="olsb-procs" role="group" aria-label="Procedure"></div>
+                <p class="olsb-sub" id="olsb-proc-sub"></p>
+                <div class="olsb-card" aria-live="polite">
+                    <p class="site-kicker" id="olsb-step-n"></p>
+                    <h2 id="olsb-step-title"></h2>
+                    <dl>
+                        <div><dt>Do</dt><dd id="olsb-step-act"></dd></div>
+                        <div><dt>Hazard</dt><dd class="hz" id="olsb-step-hazard"></dd></div>
+                    </dl>
+                    <div class="olsb-nav">
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-prev">&larr; Prev</button>
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-reset" title="Back to this step's layers">Reset</button>
+                        <button class="site-btn site-btn-sm site-btn-primary" type="button" id="olsb-next">Next &rarr;</button>
+                    </div>
+                </div>
+                <ol class="olsb-steps" id="olsb-steps" aria-label="Steps"></ol>
+
+                <div class="olsb-card olsb-info" id="olsb-info" hidden>
+                    <div class="olsb-info-head">
+                        <p class="site-kicker" id="olsb-info-layer"></p>
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-info-close">Close</button>
+                    </div>
+                    <h2 id="olsb-info-name"></h2>
+                    <p class="note" id="olsb-info-note"></p>
+                </div>
+
+                <div class="olsb-inview">
+                    <p class="site-kicker">In view &middot; tap to read</p>
+                    <div id="olsb-inview"></div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <a href="index.html">skflx.MD</a>
+        <span>Schematic study aid; not to scale, not a clinical reference.</span>
+        <span class="push">&larr; &rarr; step &middot; Esc clears</span>
+    </footer>
+
+    <script src="js/olsb-anatomy.js?v=5f597aa9"></script>
+    <script src="js/olsb.js?v=013da094"></script>
+    <script src="js/site.js?v=dd67d957"></script>
+</body>
+</html>
