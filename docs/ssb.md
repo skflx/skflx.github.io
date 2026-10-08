@@ -666,12 +666,16 @@ on the decongested state (the operations start by decongesting).
   Prototype: d = 1.0 mm gives × 1.39, and the superior third gains least in
   absolute terms (0.13 cm² against 0.25 and 0.24). The ratio, not Xiao's
   absolute values, is used: the specimen's label is a bone-window CT
-  threshold and Xiao's an MRI segmentation, and head A's own CSA sits well
-  below Xiao's undecongested mean (POP1 places it against NasalSeg).
+  threshold and Xiao's an MRI segmentation. Measured the same way on
+  NasalSeg's CTs (§5.10, "Label conventions"), head A's mid-cavity
+  cross-section is ordinary (37th percentile), so the gap to Xiao's 2.8 cm²
+  is method and population (MRI, adults aged 21–38), not a narrow head or a
+  segmentation defect.
 - **Congested** waits on POP1: per NasalSeg subject, the more congested
   side's CSA profile against the subject's mean, as a median ratio. Head
   A's own left side is not used: its cavity asymmetry is beyond every clear
-  NasalSeg subject (POP0, PR #119).
+  NasalSeg subject (POP0, PR #119), and its mid-cavity cross-section
+  (0.63 cm²) is below every one of them (the smallest is 1.09).
 - **What decongestion does not open.** At Xiao's ratio none of E5's three
   closed views opens. The olfactory cleft and the inferior meatus are
   closed to the 4 mm shaft, and open to the 2.7 mm telescope even as
@@ -703,6 +707,24 @@ mucosal state → dissection.
   truth, not a head. Deforming a head toward the population median is a
   composite and covers only the five structures NasalSeg labels: owner
   decision O9.
+- **Label conventions (checked 2026-10-08 on 91 distinct clear NasalSeg
+  subjects; scratch script, method for POP1).** NasalSeg's labels and ours
+  differ in convention more than in quality. Its nasal cavity runs from the
+  nostril to the choana (vestibule included: anteroposterior span median
+  66 mm, against 42 mm for our cavity label alone) and takes in the
+  partial-volume rim: a median 26 % of its voxels lie above our air
+  threshold (display 78, about −482 HU), and the 95th percentile of their
+  values is −279 HU. Compared at one convention (our threshold, cavity plus
+  vestibule), head A's cavity, 7.7 mL per side, is at the 42nd percentile
+  of NasalSeg's; its maxillary sinus, 13.7 mL, at the 51st; its mid-cavity
+  cross-section at the 37th. Our labels leave less adjacent air unlabelled
+  than NasalSeg's (cavity 3.9 % against a median of 10 %; maxillary 1.5 %
+  against 6 %). So for the five structures NasalSeg labels, the
+  approximated segmentation holds. NasalSeg cannot check what the FESS
+  units stand on (the uncinate, the ethmoid partitions, the infundibulum),
+  which it does not label: that is the resegmentation's job (PR #119, RS).
+  A voxel-level check (a model trained on NasalSeg, run on head A) is WP
+  SEG1, waiting on an owner decision (O12).
 - **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented
@@ -1226,3 +1248,7 @@ Open from P1 (Opus, 2026-10-08; recommendations in `docs/ssb-roadmap.md` §2):
 - **O11 — FESS on both sides at once.** Procedure mode carves both sides
   (the scope chooses the nostril); one dissected side beside an intact one
   needs per-side lining packs. Recommended: both sides now.
+- **O12 — A voxel-level check against a NasalSeg-trained model** (roadmap
+  SEG1). Recommended: not now (a deep-learning stack in the pipeline; the
+  distribution check of §5.10 found no defect in the five structures it
+  can see, and it cannot see the ethmoid).
