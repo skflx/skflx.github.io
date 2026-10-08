@@ -1307,7 +1307,8 @@ Result: `softtissue.py` regenerated everything; every new sweep id resolves in t
 Run `softtissue.py`; check every new sweep id resolves in the graph;
 `relate3d.py` agreement does not drop (report the before/after counts).
 
-### ST4d — Waypoint corrections        [ready] · Sonnet · depends: N1, ST2c, ST6 (lane order)
+### ST4d — Waypoint corrections        [review] · Sonnet · depends: N1, ST2c, ST6 (lane order)
+Result (Sonnet, 2026-10-08): `sweeps-soft.json` corrected, `softtissue.py` then `normalize.py sides` rerun (the usual order; needs the as-scanned cache, `normalize.ensure_as_scanned()`). Chart starts/ends: PSA branches (A −45, S 14.86 = ostium 24.16 − 9.3), nasopalatine end (A −19.08, S 0, the column's lowest occupied S), AEA entry (A −19.56, S 34.56 = top 36.56 − 2); the 3D points sit 0.8 mm (the sweep `depth`) along the normal from these, so the nasopalatine end reads S −0.6 in 3D. `relate3d.py` agreement unchanged (92 agree, 2 mixed, 2 untestable before and after; the committed `specimen-relations.json` is stale against both and was left alone). Only the sweeps and their meta changed in `ssb/geometry/`. `test-ssb` full run fails one check (procedure step-back clamp) identically on unmodified master; `--only procedure` passes.
 Note (ST6): the septal chart now ends at the valve plane (A −10), so the superior labial septal branch's waypoints were re-seated on that edge row (see ST6's result); decide whether the columella entry in front of the plane is drawn.
 Goal: apply the verification's ST4b findings and regenerate.
 Read: this file §4 verification "ST4b waypoints"; ST4a and ST4b above.
