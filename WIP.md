@@ -317,7 +317,10 @@ P2 (player), then P3 (poses per state, the 2.7 mm shaft), then DC1
 (mucosal state); NasalSeg (PR #119) enters as population data (POP1) and
 16-bit heads (IN1); the soft-tissue lane continues with ST4d and ST5.
 Waiting on the owner: O8–O11, review of tier-1 FESS anatomy and the
-dioramas (`docs/ssb-roadmap.md` §2).
+dioramas (`docs/ssb-roadmap.md` §2). The external nose beyond the entry anatomy (the full rhinoplasty
+framework, its envelope layers, vessels and nerves) is specced
+(2026-10-07) as the `nasal-framework` diorama (`docs/ssb.md` §6.2;
+roadmap ST7a–e), deferred behind O7; nothing of it is built yet.
 
 ---
 

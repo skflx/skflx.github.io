@@ -40,12 +40,12 @@ now stand**, not to the first-pass text in git history.
 ## Lanes — one session per lane, in this order
 
 WPs inside a lane share files, so they run in order. Lanes run in parallel,
-except for the two cross-lane waits marked ⏸.
+except for the cross-lane waits marked ⏸ (ST7a waits on lane B's ST6).
 
 | Lane | WPs, in order |
 |---|---|
-| **A — content and dioramas** | ~~ST0d~~ → ~~D2~~ → ~~D2a~~ (lane done; C1 is wave 3) |
-| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ~~N1~~ standard specimen → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay |
+| **A — content and dioramas** | ~~ST0d~~ → ~~D2~~ → ~~D2a~~ → **ST7b** kit primitives (ready) → **ST7a** nasal framework content (after ST6 merges ⏸) → **ST7c** `nasal-framework` diorama; C1 batches interleave (they share only `sources.json`) |
+| **B — pipeline, then the overlay** | ~~E1b~~ → ~~ST2b~~ (partial) → ~~N1~~ standard specimen → ~~ST2c~~ floor mucosa → ~~ST1b~~ open airway lining → ~~ST1c~~ lazy lining → **ST6** external nose → **ST4d** waypoint corrections → **ST5** soft-tissue panel + NSF overlay → **ST7d** the specimen's bony nose |
 | **C — scope runtime** | ~~E2b~~ → ~~E3~~ → ~~E4~~ → ~~E3b~~ → **E6** station flights |
 
 *Re-planned at CP-2a (2026-10-03, `docs/ssb-roadmap.md` §4):* the owner
@@ -55,6 +55,10 @@ left floor unit) is resolved by it, so do not work around a left-side gap
 in the as-scanned data — report it.
 
 Not yours: **E5** station poses (Opus). ST6 is specced (CP-2b) and is lane B's.
+ST7e (the fit on the specimen) is not executable until Opus rewrites it at
+CP-ST7c. The ST7 trap: §6.2's depths, offsets and attachments are the
+only placements allowed — a muscle or ligament end with no `attaches-to`
+edge is a stop, not a guess.
 
 Prompt for each session (pick Sonnet as the model):
 
