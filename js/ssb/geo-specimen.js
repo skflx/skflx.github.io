@@ -56,7 +56,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=fce69b20';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=b4ad308f';
 import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
 
 export const PACKS_FILE = 'ssb/models/packs.json';

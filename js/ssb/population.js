@@ -14,7 +14,7 @@
    vestibule; the "labelled" rows follow NasalSeg's own boundaries and are
    never shown.
    ============================================================= */
-import { STAMPS } from './stamps.js?v=2ff2c15f';
+import { STAMPS } from './stamps.js?v=19d5fcd2';
 
 export const FILE = 'ssb/anatomy/population/nasalseg.json';
 export const SPAN = '10-90';

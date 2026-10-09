@@ -4346,6 +4346,17 @@
         "src.bleier-2011-bas-flap"
       ],
       "review": "draft"
+    },
+    {
+      "id": "lm.posterior-nasal-spine",
+      "name": "Posterior nasal spine",
+      "of": "s.palatine-bone",
+      "tier": 2,
+      "locate": "Midline bony projection at the posterior edge of the hard palate, formed by the horizontal plates of the two palatine bones; the posterior counterpart of [[lm.anterior-nasal-spine]].",
+      "src": [
+        "src.grays-42"
+      ],
+      "review": "draft"
     }
   ],
   "variants": [

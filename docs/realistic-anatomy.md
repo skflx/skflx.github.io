@@ -979,7 +979,7 @@ Accept:   every record complete (§4.3 item 4); every queue item has a case or "
 ```
 
 ```
-### C-RA — Graph additions                  [todo] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
+### C-RA — Graph additions                  [review] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
 Goal:     the ids and landmarks of §8.3 with sources and prevalences (denominators).
 Ruling:   (Opus, 2026-10-09) frontal sinus hypoplasia/aplasia is a variant node; extensive
           frontal pneumatization is NOT a variant: it is a measurement on s.frontal-sinus
@@ -987,6 +987,7 @@ Ruling:   (Opus, 2026-10-09) frontal sinus hypoplasia/aplasia is a variant node;
           its source. A prevalence or cut-off that no source states is left out, not
           estimated; ids follow docs/authoring-ssb.md; everything stays review: "draft".
 Accept:   tools/ssb-content.mjs passes; Opus review at CP-RA1.
+Result:   (2026-10-09) drafted: `v.ethmoid-bulla-hyperpneumatization`, `v.pterygoid-process-pneumatization`, `m.frontal-sinus-volume`, `dz.septal-perforation`, `s.globe` + `lm.globe-center`, `lm.posterior-nasal-spine`; prevalences added to `v.frontal-sinus-aplasia` and `v.lateral-recess-pneumatization`; six sources. Open items are listed in the PR.
 ```
 
 **Checkpoint CP-RA1 (Opus):** FG1, RS0, RA3a, RA3b, RP1, C-RA. §12 checklist.

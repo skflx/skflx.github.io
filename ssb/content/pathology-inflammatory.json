@@ -3061,6 +3061,37 @@
         "src.laine-1993-maxillofacial-trauma-radiology"
       ],
       "review": "draft"
+    },
+    {
+      "id": "dz.septal-perforation",
+      "name": "Septal perforation or absent septum",
+      "syn": [
+        "nasal septal perforation",
+        "NSP",
+        "perforated septum"
+      ],
+      "category": "traumatic",
+      "involves": [
+        "s.nasal-septum",
+        "s.septal-cartilage",
+        "s.septal-mucosa"
+      ],
+      "tier": 1,
+      "what": "A full-thickness defect through the nasal septum, from a small hole to near or total absence of the septum. This entity is the established finding; the surgical hazard of creating one is [[h.septal-perforation]].",
+      "why": "The septum is the midline reference for the whole nasal cavity, so a perforation changes the operation: the septum cannot be assumed present or centred, a nasoseptal flap pedicle or donor mucosa may be unusable on that side, and a defect must be known before it is enlarged. On a specimen it also means the left and right airways communicate.",
+      "imaging": {
+        "ct": "A defect in the septal plate on axial and coronal CT, usually best seen on bone window for the bony part and soft-tissue window for the cartilage; report its size in two dimensions (the approach of the imaging series read) and whether bony septum remains."
+      },
+      "pearls": [
+        {
+          "tier": 2,
+          "text": "In a CT review of 3,708 consecutive facial-bone CT patients at one urban hospital, 2.05% had a septal perforation. This is a hospital imaging population, not a general-population estimate; the abstract read gives no definition and no location breakdown."
+        }
+      ],
+      "src": [
+        "src.gold-2017-septal-perforation"
+      ],
+      "review": "draft"
     }
   ],
   "classifications": [
