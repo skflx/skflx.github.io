@@ -23,6 +23,17 @@ All four write sections of `uw/registration.json` (numbers only, no pixels); eac
 script's docstring states its method. The coronal stack is a different specimen
 from the axial and sagittal stacks (`registration.specimen_identity`).
 
+Resegmentation ground truth (WP RS0; numpy + scipy only, no crawl):
+
+    python3 -I tools/ssb-pipeline/uw/score.py split      # -> ssb/reference/uw-sinusanatomy2/split.json (made once; committed)
+    python3 -I tools/ssb-pipeline/uw/score.py            # baseline: today's labels, as-scanned and served; --labels DIR for candidates
+
+`split.json` is the fixed 70/30 seed/held-out division of the head-A arrow tips; segmentation reads seed tips only.
+`score.py` prints the held-out tip hit rate per structure with Wilson CIs, and the topology checks. Do not rerun
+`split` unless the ground truth itself is meant to move (it moves every later score). Method, caveats (the current
+labels were grown from these tips, so the baseline is optimistic) and `--tol`: the script's docstring;
+`docs/realistic-anatomy.md` §7.1.
+
 Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
 
     .venv/bin/python tools/ssb-pipeline/uw/specimen.py   # -> ssb/ct/{ct.json,ct.u8.gz,labels.u16.gz},
