@@ -21,8 +21,8 @@
   "summary": {
    "traced": 73,
    "notTraced": 15,
-   "review": 15,
-   "captionMiss": 8
+   "review": 17,
+   "captionMiss": 10
   },
   "softFigures": [
    "Cor.frontalmucocele",
@@ -136,35 +136,20 @@
      "ringBright": 0.09,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      2,
-      402
-     ],
-     "tip": [
-      6,
-      425
-     ],
-     "tipBy": "head",
-     "headRatio": 2.8,
-     "ringBright": 0.35,
-     "suspect": true,
-     "touchesBone": false
     }
    ],
    "marks": [],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 3,
     "nonAnnotation": {
      "noHead": 3,
      "curved": 3,
      "tooLong": 1,
      "shortNotHead": 4,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -308,7 +293,8 @@
      "curved": 5,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -476,7 +462,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -676,7 +663,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -795,7 +783,8 @@
      "curved": 6,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -964,7 +953,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 13
+     "onBone": 13,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1131,7 +1121,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 12
+     "onBone": 12,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1318,7 +1309,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1351,11 +1343,11 @@
    ],
    "saturatedPct": 0.0,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "§4.1: the graph has frontal aplasia only; hypoplasia is a new id",
-   "proposedNew": [
-    "v.frontal-sinus-hypoplasia"
+   "ids": [
+    "s.frontal-sinus",
+    "v.frontal-sinus-aplasia"
    ],
+   "note": "CP-RA1 (Opus): v.frontal-sinus-aplasia covers aplasia and hypoplasia (C-RA)",
    "role": [
     "V"
    ],
@@ -1408,22 +1400,6 @@
      "ringBright": 0.01,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      2,
-      409
-     ],
-     "tip": [
-      72,
-      256
-     ],
-     "tipBy": "head",
-     "headRatio": 3.6,
-     "ringBright": 0.08,
-     "suspect": false,
-     "touchesBone": false
     }
    ],
    "marks": [
@@ -1453,7 +1429,8 @@
      "curved": 1,
      "tooLong": 1,
      "shortNotHead": 1,
-     "onBone": 7
+     "onBone": 7,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1486,12 +1463,12 @@
    ],
    "saturatedPct": 0.0,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "§4.1: both are new ids (no id string given)",
-   "proposedNew": [
-    "extensive frontal pneumatization",
-    "bulla hyperpneumatization"
+   "ids": [
+    "s.frontal-sinus",
+    "m.frontal-sinus-volume",
+    "v.ethmoid-bulla-hyperpneumatization"
    ],
+   "note": "CP-RA1 (Opus): extensive pneumatization is a measurement, not a variant (C-RA ruling)",
    "role": [
     "V"
    ],
@@ -1558,7 +1535,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 3,
-     "onBone": 6
+     "onBone": 6,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1628,7 +1606,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 4,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1705,7 +1684,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1797,35 +1777,20 @@
      "ringBright": 0.0,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      86,
-      327
-     ],
-     "tip": [
-      111,
-      355
-     ],
-     "tipBy": "head",
-     "headRatio": 3.8,
-     "ringBright": 0.14,
-     "suspect": true,
-     "touchesBone": false
     }
    ],
    "marks": [],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 2,
     "nonAnnotation": {
      "noHead": 3,
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 8,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -1948,7 +1913,8 @@
      "curved": 0,
      "tooLong": 1,
      "shortNotHead": 0,
-     "onBone": 8
+     "onBone": 8,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -2128,7 +2094,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -2298,7 +2265,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -2370,22 +2338,6 @@
      "ringBright": 0.0,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      3,
-      256
-     ],
-     "tip": [
-      14,
-      218
-     ],
-     "tipBy": "head",
-     "headRatio": 2.5,
-     "ringBright": 0.27,
-     "suspect": true,
-     "touchesBone": false
     }
    ],
    "marks": [
@@ -2416,14 +2368,15 @@
    ],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 7,
     "nonAnnotation": {
      "noHead": 4,
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 8,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -2492,7 +2445,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -2781,7 +2735,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 8,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -2910,7 +2865,8 @@
      "curved": 8,
      "tooLong": 0,
      "shortNotHead": 7,
-     "onBone": 14
+     "onBone": 14,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -3049,7 +3005,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 7
+     "onBone": 7,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -3159,7 +3116,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -3291,7 +3249,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 4,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -3473,7 +3432,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -3573,7 +3533,8 @@
      "curved": 9,
      "tooLong": 0,
      "shortNotHead": 8,
-     "onBone": 5
+     "onBone": 5,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -3688,7 +3649,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 4,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -3795,7 +3757,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -3893,24 +3856,7 @@
      "idsReason": "no crosswalk term for this label"
     }
    ],
-   "arrows": [
-    {
-     "label": null,
-     "tail": [
-      388,
-      176
-     ],
-     "tip": [
-      389,
-      266
-     ],
-     "tipBy": "head",
-     "headRatio": 3.0,
-     "ringBright": 0.38,
-     "suspect": true,
-     "touchesBone": false
-    }
-   ],
+   "arrows": [],
    "marks": [
     {
      "kind": "arrowhead",
@@ -3922,15 +3868,16 @@
     }
    ],
    "maskCheck": {
-    "status": "clean",
-    "suspectArrows": 1,
+    "status": "review",
+    "suspectArrows": 0,
     "specks": 4,
     "nonAnnotation": {
      "noHead": 6,
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -3938,7 +3885,9 @@
      "arrowhead": false,
      "asterisk": false
     },
-    "captionCueMissing": []
+    "captionCueMissing": [
+     "arrow"
+    ]
    }
   },
   {
@@ -4018,7 +3967,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4132,7 +4082,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 3,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4188,24 +4139,7 @@
      "idsReason": "no crosswalk term for this label"
     }
    ],
-   "arrows": [
-    {
-     "label": null,
-     "tail": [
-      613,
-      602
-     ],
-     "tip": [
-      582,
-      596
-     ],
-     "tipBy": "head",
-     "headRatio": 4.8,
-     "ringBright": 0.18,
-     "suspect": true,
-     "touchesBone": false
-    }
-   ],
+   "arrows": [],
    "marks": [
     {
      "kind": "arrowhead",
@@ -4218,14 +4152,15 @@
    ],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 2,
     "nonAnnotation": {
      "noHead": 4,
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4268,22 +4203,6 @@
    "group": null,
    "labels": [],
    "arrows": [
-    {
-     "label": null,
-     "tail": [
-      3,
-      133
-     ],
-     "tip": [
-      8,
-      170
-     ],
-     "tipBy": "head",
-     "headRatio": 5.0,
-     "ringBright": 0.52,
-     "suspect": true,
-     "touchesBone": false
-    },
     {
      "label": null,
      "tail": [
@@ -4396,14 +4315,15 @@
    ],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 5,
     "nonAnnotation": {
      "noHead": 4,
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 5,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4467,22 +4387,6 @@
    ],
    "arrows": [
     {
-     "label": null,
-     "tail": [
-      650,
-      2
-     ],
-     "tip": [
-      626,
-      23
-     ],
-     "tipBy": "head",
-     "headRatio": 7.3,
-     "ringBright": 0.59,
-     "suspect": true,
-     "touchesBone": true
-    },
-    {
      "label": "EB",
      "tail": [
       453,
@@ -4534,14 +4438,15 @@
    "marks": [],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 2,
     "nonAnnotation": {
      "noHead": 3,
      "curved": 9,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 8
+     "onBone": 8,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4635,7 +4540,8 @@
      "curved": 7,
      "tooLong": 0,
      "shortNotHead": 12,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4769,7 +4675,8 @@
      "curved": 4,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4838,7 +4745,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -4914,22 +4822,6 @@
      "ringBright": 0.0,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      376,
-      297
-     ],
-     "tip": [
-      362,
-      276
-     ],
-     "tipBy": "head",
-     "headRatio": 3.0,
-     "ringBright": 0.09,
-     "suspect": false,
-     "touchesBone": false
     }
    ],
    "marks": [
@@ -4951,7 +4843,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 7,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5045,7 +4938,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 4,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5111,35 +5005,20 @@
      "ringBright": 0.02,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      269,
-      429
-     ],
-     "tip": [
-      225,
-      410
-     ],
-     "tipBy": "head",
-     "headRatio": 5.0,
-     "ringBright": 0.47,
-     "suspect": true,
-     "touchesBone": false
     }
    ],
    "marks": [],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 1,
     "nonAnnotation": {
      "noHead": 1,
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5172,9 +5051,14 @@
    ],
    "saturatedPct": 0.5,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "§4.1 marks dz.crs-with-polyps with \"?\"",
+   "ids": [
+    "s.maxillary-sinus"
+   ],
    "idCandidates": [
+    {
+     "id": "dz.antrochoanal-polyp",
+     "inGraph": true
+    },
     {
      "id": "dz.crs-with-polyps",
      "inGraph": true
@@ -5183,45 +5067,13 @@
    "mimicOf": [
     "dz.mucus-retention-cyst"
    ],
+   "note": "CP-RA1 (Opus): the caption says polyp and retention cyst cannot be told apart, so no dz id is asserted",
    "role": [
     "P"
    ],
    "group": null,
    "labels": [],
-   "arrows": [
-    {
-     "label": null,
-     "tail": [
-      576,
-      135
-     ],
-     "tip": [
-      558,
-      90
-     ],
-     "tipBy": "head",
-     "headRatio": 5.0,
-     "ringBright": 0.91,
-     "suspect": true,
-     "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      314,
-      404
-     ],
-     "tip": [
-      381,
-      395
-     ],
-     "tipBy": "head",
-     "headRatio": 5.5,
-     "ringBright": 0.46,
-     "suspect": true,
-     "touchesBone": false
-    }
-   ],
+   "arrows": [],
    "marks": [
     {
      "kind": "arrowhead",
@@ -5233,15 +5085,16 @@
     }
    ],
    "maskCheck": {
-    "status": "clean",
-    "suspectArrows": 2,
+    "status": "review",
+    "suspectArrows": 0,
     "specks": 0,
     "nonAnnotation": {
      "noHead": 2,
      "curved": 6,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 2
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5249,7 +5102,9 @@
      "arrowhead": false,
      "asterisk": false
     },
-    "captionCueMissing": []
+    "captionCueMissing": [
+     "arrow"
+    ]
    }
   },
   {
@@ -5413,7 +5268,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5533,7 +5389,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5679,7 +5536,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -5819,7 +5677,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -5990,7 +5849,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -6177,7 +6037,8 @@
      "curved": 4,
      "tooLong": 1,
      "shortNotHead": 2,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -6298,7 +6159,8 @@
      "curved": 0,
      "tooLong": 1,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -6421,7 +6283,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -6561,7 +6424,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 5
+     "onBone": 5,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -6594,11 +6458,12 @@
    ],
    "saturatedPct": 0.36,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "§4.1: a new id (no id string given)",
-   "proposedNew": [
-    "bulla hyperpneumatization"
+   "ids": [
+    "v.ethmoid-bulla-hyperpneumatization",
+    "s.ethmoid-bulla",
+    "s.ostiomeatal-complex"
    ],
+   "note": "CP-RA1 (Opus): the C-RA variant",
    "role": [
     "V"
    ],
@@ -6664,7 +6529,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 5
+     "onBone": 5,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -6810,7 +6676,8 @@
      "curved": 4,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -6921,22 +6788,6 @@
     {
      "label": null,
      "tail": [
-      280,
-      2
-     ],
-     "tip": [
-      299,
-      7
-     ],
-     "tipBy": "head",
-     "headRatio": 5.0,
-     "ringBright": 0.98,
-     "suspect": true,
-     "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
       140,
       306
      ],
@@ -6954,14 +6805,15 @@
    "marks": [],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 5,
     "nonAnnotation": {
      "noHead": 6,
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -7082,7 +6934,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -7140,22 +6993,6 @@
     }
    ],
    "arrows": [
-    {
-     "label": null,
-     "tail": [
-      327,
-      119
-     ],
-     "tip": [
-      350,
-      133
-     ],
-     "tipBy": "head",
-     "headRatio": 2.8,
-     "ringBright": 0.17,
-     "suspect": true,
-     "touchesBone": false
-    },
     {
      "label": null,
      "tail": [
@@ -7261,14 +7098,15 @@
    ],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 2,
+    "suspectArrows": 1,
     "specks": 6,
     "nonAnnotation": {
      "noHead": 4,
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 7,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -7421,7 +7259,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -7454,8 +7293,11 @@
    ],
    "saturatedPct": 0.0,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "§4.1 gives no id (\"—\")",
+   "ids": [
+    "s.anterior-ethmoid-cells",
+    "s.posterior-ethmoid-cells"
+   ],
+   "note": "CP-RA1 (Opus): the arrowheads mark the cells; the caption names no disease",
    "role": [
     "P"
    ],
@@ -7525,22 +7367,6 @@
      "ringBright": 0.0,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      11,
-      202
-     ],
-     "tip": [
-      47,
-      169
-     ],
-     "tipBy": "head",
-     "headRatio": 2.5,
-     "ringBright": 0.09,
-     "suspect": false,
-     "touchesBone": false
     }
    ],
    "marks": [
@@ -7578,7 +7404,8 @@
      "curved": 4,
      "tooLong": 0,
      "shortNotHead": 5,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -7719,35 +7546,20 @@
      "ringBright": 0.0,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      116,
-      461
-     ],
-     "tip": [
-      89,
-      438
-     ],
-     "tipBy": "head",
-     "headRatio": 10.0,
-     "ringBright": 0.59,
-     "suspect": true,
-     "touchesBone": false
     }
    ],
    "marks": [],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 1,
     "nonAnnotation": {
      "noHead": 2,
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 7
+     "onBone": 7,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -7780,10 +7592,17 @@
    ],
    "saturatedPct": 0.0,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "not in the §4.1 table (the table has no row for this file)",
-   "role": null,
-   "roleReason": "not stated in §4.1",
+   "ids": [
+    "s.frontal-sinus",
+    "s.anterior-ethmoid-cells",
+    "s.posterior-ethmoid-cells",
+    "s.sphenoid-sinus",
+    "pw.sphenoethmoidal-recess-drainage"
+   ],
+   "note": "CP-RA1 (Opus): from its caption and labels (FS, AE, PE, SpS)",
+   "role": [
+    "P"
+   ],
    "group": null,
    "labels": [
     {
@@ -7844,22 +7663,6 @@
     }
    ],
    "arrows": [
-    {
-     "label": null,
-     "tail": [
-      48,
-      109
-     ],
-     "tip": [
-      72,
-      2
-     ],
-     "tipBy": "head",
-     "headRatio": 3.0,
-     "ringBright": 0.08,
-     "suspect": false,
-     "touchesBone": false
-    },
     {
      "label": "AE",
      "tail": [
@@ -7944,7 +7747,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 1
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -8062,7 +7866,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 3,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -8365,7 +8170,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 5,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -8470,7 +8276,8 @@
      "curved": 5,
      "tooLong": 0,
      "shortNotHead": 3,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -8605,7 +8412,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -8807,7 +8615,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 5
+     "onBone": 5,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -8931,7 +8740,8 @@
      "curved": 0,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 2
+     "onBone": 2,
+     "atBorder": 0
     },
     "unreadShortLabels": 1,
     "captionCues": {
@@ -9138,7 +8948,8 @@
      "curved": 9,
      "tooLong": 0,
      "shortNotHead": 16,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -9323,7 +9134,8 @@
      "curved": 5,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -9464,7 +9276,8 @@
      "curved": 3,
      "tooLong": 0,
      "shortNotHead": 2,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -9616,7 +9429,8 @@
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -9649,11 +9463,11 @@
    ],
    "saturatedPct": 0.0,
    "abbreviations": {},
-   "ids": null,
-   "idsReason": "§4.1: v.pterygoid-pneumatization is a new id (gaps.md proposed a synonym; it is a distinct extension)",
-   "proposedNew": [
-    "v.pterygoid-pneumatization"
+   "ids": [
+    "v.pterygoid-process-pneumatization",
+    "s.pterygoid-process"
    ],
+   "note": "CP-RA1 (Opus): the C-RA variant",
    "role": [
     "V"
    ],
@@ -9743,7 +9557,8 @@
      "curved": 11,
      "tooLong": 0,
      "shortNotHead": 8,
-     "onBone": 4
+     "onBone": 4,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -9779,8 +9594,10 @@
     "BO": "basi-occiput",
     "ES": "ethmoid sinuses"
    },
-   "ids": null,
-   "idsReason": "§4.1: Opus judges which of the two",
+   "ids": [
+    "s.sphenoid-sinus",
+    "c.sphenoid-pneumatization"
+   ],
    "idCandidates": [
     {
      "id": "v.conchal-sphenoid",
@@ -9791,6 +9608,7 @@
      "inGraph": true
     }
    ],
+   "note": "CP-RA1 (Opus): small anterior air cells in a mostly solid sphenoid body; one axial slice cannot place the air against the sella's anterior wall, which decides conchal vs presellar, so both stay candidates",
    "role": [
     "V"
    ],
@@ -9857,22 +9675,6 @@
      "ringBright": 0.0,
      "suspect": false,
      "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      378,
-      356
-     ],
-     "tip": [
-      356,
-      385
-     ],
-     "tipBy": "head",
-     "headRatio": 5.0,
-     "ringBright": 0.62,
-     "suspect": true,
-     "touchesBone": false
     }
    ],
    "marks": [
@@ -9887,14 +9689,15 @@
    ],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 1,
+    "suspectArrows": 0,
     "specks": 1,
     "nonAnnotation": {
      "noHead": 1,
      "curved": 6,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 3
+     "onBone": 3,
+     "atBorder": 1
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -9976,22 +9779,6 @@
     {
      "label": null,
      "tail": [
-      487,
-      45
-     ],
-     "tip": [
-      480,
-      2
-     ],
-     "tipBy": "head",
-     "headRatio": 2.7,
-     "ringBright": 0.55,
-     "suspect": true,
-     "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
       303,
       125
      ],
@@ -10003,22 +9790,6 @@
      "headRatio": 2.7,
      "ringBright": 0.0,
      "suspect": false,
-     "touchesBone": false
-    },
-    {
-     "label": null,
-     "tail": [
-      507,
-      244
-     ],
-     "tip": [
-      500,
-      265
-     ],
-     "tipBy": "head",
-     "headRatio": 4.0,
-     "ringBright": 0.19,
-     "suspect": true,
      "touchesBone": false
     },
     {
@@ -10050,14 +9821,15 @@
    ],
    "maskCheck": {
     "status": "clean",
-    "suspectArrows": 2,
+    "suspectArrows": 0,
     "specks": 0,
     "nonAnnotation": {
      "noHead": 3,
      "curved": 1,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 5
+     "onBone": 5,
+     "atBorder": 2
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -10171,7 +9943,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 0,
-     "onBone": 0
+     "onBone": 0,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {
@@ -10294,7 +10067,8 @@
      "curved": 2,
      "tooLong": 0,
      "shortNotHead": 1,
-     "onBone": 1
+     "onBone": 1,
+     "atBorder": 0
     },
     "unreadShortLabels": 0,
     "captionCues": {

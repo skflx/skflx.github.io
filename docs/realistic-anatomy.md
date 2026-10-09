@@ -905,7 +905,7 @@ Follow-up for RS: explain head A's left-cavity volume (§4.4) before RA3b.
 ```
 
 ```
-### FG1 — UW figure inventory (figures.json) [review] · Sonnet (mechanics) + Opus (ids, roles) · depends: —
+### FG1 — UW figure inventory (figures.json) [done 2026-10-09, #151; CP-RA1] · Sonnet (mechanics) + Opus (ids, roles) · depends: —
 Goal:     every UW page figure as data: page, file, plane, window, contrast, caption,
           abbreviation map, arrows (tail label → tip px), graph ids, role N/V/P, same-patient group.
 Read:     this file §4.1, §5; ssb/reference/uw-sinusanatomy2/README.md "Per-slice extraction";
@@ -948,7 +948,7 @@ Result:   `python3 -I tools/ssb-pipeline/uw/score.py` prints the baseline (as-sc
 ```
 
 ```
-### RA3a — Anatomy state, patch format, loader   [review] · Sonnet · depends: #115 merged (state.js)
+### RA3a — Anatomy state, patch format, loader   [done 2026-10-09, #147] · Sonnet · depends: #115 merged (state.js)
 Goal:     state.anatomy, the #anat/#v/#dz whitelist, volume.js applyPatch, override-node
           loading — with no real patches yet (test patches built in the test).
 Read:     this file §2, §6.2–6.4; docs/ssb.md §5.6, §7.3; js/ssb/state.js, volume.js,
@@ -968,7 +968,7 @@ Result:   `node tools/test-ssb.mjs --only anatomy` pins all of it on synthetic p
 ```
 
 ```
-### RA3b — The scanned base                  [review — PR #152] · Sonnet · depends: RA3a
+### RA3b — The scanned base                  [done 2026-10-09, #152] · Sonnet · depends: RA3a
 Goal:     head A as scanned, served as ssb/anatomy/scanned/, built by the same stages minus
           the mirror; both sides computed where stage D assumed symmetry.
 Read:     docs/ssb.md §5.1, §5.3, §5.7; normalize.py docstring; softtissue.py, lining.py.
@@ -1015,7 +1015,7 @@ Ruling 2: (Opus, 2026-10-09, on draft #152) (1) The Specimen stage draws the bas
 ```
 
 ```
-### RP1 — Radiopaedia shortlist (cases.json) [review] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
+### RP1 — Radiopaedia shortlist (cases.json) [done 2026-10-09, #149; pick at CP-RA1] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
 Goal:     ≥ 1 candidate case per §4.3 queue item, each fully recorded; Opus picks ≤ 40.
 Touch:    ssb/reference/radiopaedia/cases.json, README.md (method, licence).
 Don't:    download stacks in this WP (RP2 does); record a case whose licence line differs
@@ -1034,7 +1034,7 @@ Result:   (2026-10-09) 47 search-result records in ssb/reference/radiopaedia/cas
 ```
 
 ```
-### C-RA — Graph additions                  [review] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
+### C-RA — Graph additions                  [done 2026-10-09, #146] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
 Goal:     the ids and landmarks of §8.3 with sources and prevalences (denominators).
 Ruling:   (Opus, 2026-10-09) frontal sinus hypoplasia/aplasia is a variant node; extensive
           frontal pneumatization is NOT a variant: it is a measurement on s.frontal-sinus
@@ -1046,6 +1046,38 @@ Result:   (2026-10-09) drafted: `v.ethmoid-bulla-hyperpneumatization`, `v.pteryg
 ```
 
 **Checkpoint CP-RA1 (Opus):** FG1, RS0, RA3a, RA3b, RP1, C-RA. §12 checklist.
+
+**CP-RA1 held 2026-10-09 (Opus).** Outcomes; the numbers live in the files named.
+
+- **FG1 tips.** Spot-check of the 15 figures FG1 proposed, plus 3 more chosen afterwards to test the rule
+  below, on overlays (`figures.py overlay`). Every false positive (5 in the sample, 3 of 3 out of
+  sample) had its tip or tail within a few pixels of the image edge, a frame or cortex line; FG1's
+  `suspect` flag caught none of them and flagged four true tips. `figures.py` now drops arrows within
+  `BORDER_PX` of the edge (`nonAnnotation.atBorder`). After it, every detected tip in the sample
+  was correct, but recall is about two thirds (thick or bone-adjacent arrows are missed;
+  `captionCueMissing` lists them). **Use:** FG1 tips are pointers for exemplar alignment and figure
+  captions, never ground truth for scoring (RS scores against `split.json`). The 8 null ids are
+  filled in `figures.py`'s table (C-RA's new ids where they fit); `Axial.sphenoidhypo` keeps
+  conchal vs presellar as candidates, since one axial slice cannot place the air against the sella.
+- **RP1 pick.** 38 of 47 in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`, with each drop's
+  reason). The owner reads the picked pages (the "owner reads" fields) and may veto; RP2 waits on
+  RA-O5.
+- **C-RA.** Merged as draft after one unsourced imaging sentence was removed. Open, listed in #146:
+  pterygoid pneumatization and hyperpneumatized-bulla prevalences, a numeric cut-off for extensive
+  frontal pneumatization. `dz.septal-perforation` sits under `traumatic` for want of an
+  etiology-neutral category; the owner may move it.
+- **RA3a/RA3b.** Loader and scanned base merged. Added at review: the credit and base checks, and the
+  rule that the endoscope and procedures never ride a non-standard base (they read the standard
+  head; the later choice wins). The scanned head's cavity asymmetry is beyond every clear NasalSeg
+  subject on a measure that is not like for like (§6, the state's note); RS settles whether that
+  is anatomy or labelling.
+- **§12.2 checklist.** Provenance: no UW author names; Radiopaedia derived data waits on RA-O5.
+  Circularity: RS0's seed/held-out split is disjoint by construction; the baseline is a
+  resubstitution score (§7.1). Anatomy: `scanned` viewed in 3D (front view asymmetric), CT and
+  scope; laterality held. Determinism: `normalize.py --base scanned` and `figures.py build` rerun
+  byte-identical apart from intended changes. Not applicable yet: spectrum, drainage, proximity
+  (no variant or pathology patch exists).
+- **Next (RA-2):** the RS1–RS6 specs (Opus), then RS1. FG2 and RA4 wait on RS.
 
 ### Wave RA-2 — resegmentation and alignment
 

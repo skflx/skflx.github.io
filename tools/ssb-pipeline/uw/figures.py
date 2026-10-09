@@ -53,6 +53,7 @@ HEAD_RATIO = 2.5      # arrow head width / shaft width; cortex ribbons (also >= 
 MAX_ARROW_PX = 170
 SUSPECT_RING = 0.10   # share of bright (bone) pixels in the ring round an arrow; above it the arrow may be a cortex line
 RING_P25 = 140        # annotation sits beside darker tissue or air; cortex specks sit inside bright bone
+BORDER_PX = 12        # an arrow with its tip or tail this close to the image edge is a frame or cortex line (CP-RA1 spot-check)
 
 # ---- §4.1, transcribed. ids: graph ids the table gives with confidence; cand: ids it marks uncertain ("?" or "or");
 # new: ids/ideas it marks (new); mimic: "mimic of"; note: its remark. role: N/V/P; groups: see GROUPS.
@@ -68,8 +69,8 @@ TABLE = {
     'Cor.FSDP1': T(['s.frontal-recess', 's.hiatus-semilunaris', 's.ethmoid-bulla'], 'N'),
     'Cor.VariantFSDP1': T(['v.uncinate-insertion-skull-base', 'pw.frontal-drainage-infundibular'], 'V'),
     'Cor.VariantFSDP2': T(['v.uncinate-insertion-lamina-papyracea'], 'V'),
-    'Axial.FShypo': T(role='V', new=['v.frontal-sinus-hypoplasia'], why='§4.1: the graph has frontal aplasia only; hypoplasia is a new id'),
-    'Cor.PneumFS': T(role='V', new=['extensive frontal pneumatization', 'bulla hyperpneumatization'], why='§4.1: both are new ids (no id string given)'),
+    'Axial.FShypo': T(['s.frontal-sinus', 'v.frontal-sinus-aplasia'], 'V', note='CP-RA1 (Opus): v.frontal-sinus-aplasia covers aplasia and hypoplasia (C-RA)'),
+    'Cor.PneumFS': T(['s.frontal-sinus', 'm.frontal-sinus-volume', 'v.ethmoid-bulla-hyperpneumatization'], 'V', note='CP-RA1 (Opus): extensive pneumatization is a measurement, not a variant (C-RA ruling)'),
     'Cor.pneumCG': T(['v.crista-galli-pneumatization'], 'V', note='incidental left ZMC fracture: exclude'),
     'Cor.frontalinflamm3': T([PI], 'P', note='pattern: sporadic'),
     'Cor.frontalinflamm2': T([PI], 'P', note='pattern: OMU'),
@@ -104,7 +105,7 @@ TABLE = {
     'Aggressivesinus1': T(['s.retroantral-fat-pad'], 'P', note='§4.1: red flag for AIFS (dz.acute-invasive-fungal-sinusitis)'),
     'Cor.MRCmax1': T(['dz.mucus-retention-cyst'], 'P', mimic=['dz.mucocele']),
     'Sag.MRCmax3': T(['dz.mucus-retention-cyst'], 'P', mimic=['dz.mucocele']),
-    'Cor.Maxpolyp': T(role='P', cand=['dz.crs-with-polyps'], mimic=['dz.mucus-retention-cyst'], why='§4.1 marks dz.crs-with-polyps with "?"'),
+    'Cor.Maxpolyp': T(['s.maxillary-sinus'], 'P', cand=['dz.antrochoanal-polyp', 'dz.crs-with-polyps'], mimic=['dz.mucus-retention-cyst'], note='CP-RA1 (Opus): the caption says polyp and retention cyst cannot be told apart, so no dz id is asserted'),
     'AntrochoanalPolyp1': T(['dz.antrochoanal-polyp'], 'P'),
     'Axial.ethmoid1': T(['s.crista-galli', 's.anterior-clinoid-process', 's.optic-canal'], 'N', note='§4.1 also names the ethmoidal arteries (no id given); canal QA'),
     'Axial.ethmoid2': T(['s.basal-lamella', 's.lamina-papyracea'], 'N', note='basal lamella QA'),
@@ -114,14 +115,14 @@ TABLE = {
     'Axial.Aggernasicell': T(['s.agger-nasi-cell'], 'N'), 'Cor.Aggernasicell': T(['s.agger-nasi-cell'], 'N'),
     'Sag.Aggernasicell': T(['s.agger-nasi-cell'], 'N'),
     'Cor.ethmoidbulla1': T(['s.ethmoid-bulla', 's.uncinate-process'], 'N'),
-    'Cor.ethmoidbulla3': T(role='V', new=['bulla hyperpneumatization'], why='§4.1: a new id (no id string given)'),
+    'Cor.ethmoidbulla3': T(['v.ethmoid-bulla-hyperpneumatization', 's.ethmoid-bulla', 's.ostiomeatal-complex'], 'V', note='CP-RA1 (Opus): the C-RA variant'),
     'Axial.hallercell1': T(['v.infraorbital-ethmoid-cell'], 'V'), 'Cor.Hallercell1': T(['v.infraorbital-ethmoid-cell'], 'V'),
     'Sag.hallercell': T(['v.infraorbital-ethmoid-cell'], 'V'),
     'Axial.antethmoidinf': T([PI], 'P', note='pattern: OMU'),
     'Sag.ethmoidinflamm3': T([PI], 'P', note='pattern: SER'),
-    'Axial.ethmoidinflamm4': T(role='P', why='§4.1 gives no id ("—")'),
+    'Axial.ethmoidinflamm4': T(['s.anterior-ethmoid-cells', 's.posterior-ethmoid-cells'], 'P', note='CP-RA1 (Opus): the arrowheads mark the cells; the caption names no disease'),
     'Cor.ethmoidinfunddz1': T([PI, 'v.uncinate-insertion-skull-base'], 'PV', note='pattern: infundibular'),
-    'Sag.OMU&Sps': T(why='not in the §4.1 table (the table has no row for this file)'),
+    'Sag.OMU&Sps': T(['s.frontal-sinus', 's.anterior-ethmoid-cells', 's.posterior-ethmoid-cells', 's.sphenoid-sinus', 'pw.sphenoethmoidal-recess-drainage'], 'P', note='CP-RA1 (Opus): from its caption and labels (FS, AE, PE, SpS)'),
     'Mucocele1': T(['dz.mucocele'], 'P'),
     'Orbitalcellulitis2': T(['dz.orbital-cellulitis', 'c.chandler'], 'P'),
     'Axial.CSthrombosis': T(['dz.cavernous-sinus-thrombosis'], 'P'), 'Sag.CSthrombosis': T(['dz.cavernous-sinus-thrombosis'], 'P'),
@@ -134,8 +135,8 @@ TABLE = {
     'Cor.Pneumsphenoid1': T(['v.lateral-recess-pneumatization', 'v.v2-protrusion-sphenoid'], 'V'),
     'Axial.BilatOnodicells1': T(['v.sphenoethmoidal-cell'], 'V'),
     'Cor.Onodicell3': T(['v.sphenoethmoidal-cell', 'v.pneumatized-anterior-clinoid'], 'V'),
-    'axial.pneum.ptyp': T(role='V', new=['v.pterygoid-pneumatization'], why='§4.1: v.pterygoid-pneumatization is a new id (gaps.md proposed a synonym; it is a distinct extension)'),
-    'Axial.sphenoidhypo': T(role='V', cand=['v.conchal-sphenoid', 'v.presellar-sphenoid'], why='§4.1: Opus judges which of the two'),
+    'axial.pneum.ptyp': T(['v.pterygoid-process-pneumatization', 's.pterygoid-process'], 'V', note='CP-RA1 (Opus): the C-RA variant'),
+    'Axial.sphenoidhypo': T(['s.sphenoid-sinus', 'c.sphenoid-pneumatization'], 'V', cand=['v.conchal-sphenoid', 'v.presellar-sphenoid'], note='CP-RA1 (Opus): small anterior air cells in a mostly solid sphenoid body; one axial slice cannot place the air against the sella\'s anterior wall, which decides conchal vs presellar, so both stay candidates'),
     'Sphenoidsinus1': T([PI], 'P', note='pattern: SER'), 'Sphenoidsinus2': T([PI], 'P', note='pattern: SER'),
     'Sphenoidsinus3': T([PI], 'P', note='pattern: SER'),
     'Mucocele3': T(['dz.mucocele'], 'P'), 'Mucocele5': T(['dz.mucocele'], 'P'),
@@ -336,7 +337,7 @@ def trace(g, abbr, site_abbr, terms, star_ok=False):
     rest = ndi.binary_closing(mask & ~text_px, iterations=2)  # bridges stroke gaps (a shaft crossing a bright septum)
     comps = cc_label(rest, connectivity=2)
     arrows, heads, stars, specks = [], [], [], 0
-    contam = {'noHead': 0, 'curved': 0, 'tooLong': 0, 'shortNotHead': 0, 'onBone': 0}
+    contam = {'noHead': 0, 'curved': 0, 'tooLong': 0, 'shortNotHead': 0, 'onBone': 0, 'atBorder': 0}
     boxes = [t['box'] for t in texts if t['text'] and not re.fullmatch(r'[*.]+', t['text'])]
     touch_zone = ndi.binary_dilation(thickd, iterations=2)
     for r in regionprops(comps):
@@ -404,6 +405,10 @@ def trace(g, abbr, site_abbr, terms, star_ok=False):
         tip = cpix[np.argmax(((cpix - np.array(tail)) ** 2).sum(1))]
         if np.hypot(tip[0] - head_at[0], tip[1] - head_at[1]) > 3.2 * dt.max() + 3:  # the widest point is not at the apex end
             contam['noHead'] += 1
+            continue
+        H, W = g.shape[:2]
+        if min(min(px, py, W - 1 - px, H - 1 - py) for px, py in (tip, tail)) < BORDER_PX:
+            contam['atBorder'] += 1     # CP-RA1: every arrow within BORDER_PX of the edge was a cortex or frame line, in and out of sample
             continue
         lab = None
         if boxes:
