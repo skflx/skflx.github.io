@@ -1259,7 +1259,7 @@ async function specimenTests(browser, base) {
       axisLabels: [...document.querySelectorAll('.ssb-axis-label')].map((e) => getComputedStyle(e).visibility),
     }));
     check('specimen: boots to status ready with no problems, the Specimen pill pressed, and no stage message', info.status === 'ready' && info.problems.length === 0 && info.pressed === 'true' && info.stage === 'specimen' && info.msgHidden, JSON.stringify(info));
-    check('specimen: the stage note is provenance (reference specimen, UW CT atlas, draft), not the placeholder', info.noteShown && /Reference specimen · UW CT atlas · draft/.test(info.note) && !/Placeholder/i.test(info.note), info.note);
+    check('specimen: the stage note is provenance (reference specimen, UW atlas credit, draft), not the placeholder', info.noteShown && /Reference specimen · from Interactive CT Sinus Anatomy, Univ\. of Washington Radiology · draft/.test(info.note) && !/Placeholder/i.test(info.note), info.note);
     check('specimen: the placeholder grid\'s axis letters are gone while the specimen shows', info.axisLabels.every((v) => v === 'hidden'), info.axisLabels.join());
 
     const listed = Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs);
@@ -2687,6 +2687,45 @@ async function stationStateTests(w) {
 const liningFetches = (page) => page.evaluate(() => performance.getEntriesByType('resource').filter((e) => /\/ssb\/models\/lining\.glb\.gz/.test(e.name)).length);
 
 async function scopeTests(browser, base) {
+  /* ===== the UW credit (WP RA0c) is on the page in every stage that shows the specimen ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const credit = () => page.evaluate(() => {
+      const el = document.getElementById('ssb-credit'); const a = el && el.querySelector('a'); const r = el && el.getBoundingClientRect();
+      return { text: el ? el.textContent : '', shown: !!el && getComputedStyle(el).display !== 'none' && r.height > 0 && r.top >= 0 && r.bottom <= innerHeight, fits: !!el && el.scrollWidth <= el.clientWidth + 1,
+        href: a ? a.getAttribute('href') : '', rel: a ? a.getAttribute('rel') : '', stage: document.getElementById('ssb-app').dataset.stage };
+    });
+    const okCredit = (c) => c.shown && c.fits && /University of Washington Department of Radiology/.test(c.text) && /Interactive CT Sinus Anatomy/.test(c.text) && c.href === 'http://uwmsk.org/sinusanatomy2/' && /noopener/.test(c.rel);
+    const seen = [await credit()];
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
+    seen.push(await credit());
+    await page.evaluate(() => { location.hash = '#ct=ax'; });
+    await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'ct', null, { timeout: 30000 });
+    seen.push(await credit());
+    check('credit: the full UW attribution and its link show, in view without scrolling, in the Specimen, Scope and CT stages', seen.length === 3 && seen.every(okCredit), JSON.stringify(seen));
+    const ni = await page.evaluate(() => ['Washington', 'Radiology'].every((w) => document.getElementById('ssb-stage-note').textContent.includes(w)));
+    check('credit: the stage note names the institution', ni);
+    await context.close();
+  }
+  /* on a phone the credit line sits in the closed sheet, so the stage note carries the institution, wrapped, never truncated */
+  {
+    const { context, page } = await openSpecimen(browser, base, '', { viewport: { width: 390, height: 844 } });
+    const notes = [];
+    const note = () => page.evaluate(() => { const n = document.getElementById('ssb-stage-note'); const r = n.getBoundingClientRect();
+      return { text: n.textContent, whole: n.scrollWidth <= n.clientWidth + 1 && n.scrollHeight <= n.clientHeight + 1, inView: r.height > 0 && r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth }; });
+    notes.push(await note());
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
+    notes.push(await note());
+    check('credit: at phone width the stage note names the University of Washington in full, in view, in Specimen and Scope', notes.every((n) => n.whole && n.inView && /University of Washington|Univ\. of Washington/.test(n.text)), JSON.stringify(notes));
+    await page.evaluate(() => { location.hash = '#ct=ax'; });
+    await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'ct', null, { timeout: 30000 });
+    const ct = await page.evaluate(() => { const el = document.getElementById('ssb-credit'); const r = el.getBoundingClientRect();
+      return { sheet: document.getElementById('ssb-panel').dataset.sheet, inView: r.height > 0 && r.top >= 0 && r.bottom <= innerHeight, whole: el.scrollWidth <= el.clientWidth + 1, text: el.textContent }; });
+    check('credit: at phone width the CT stage, which hides the stage note, keeps the full credit line in view with the sheet closed', ct.sheet === 'closed' && ct.inView && ct.whole && /University of Washington Department of Radiology/.test(ct.text), JSON.stringify(ct));
+    await context.close();
+  }
   /* ===== the CT volume loads only when asked, and once per page (CP-2a) ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '');

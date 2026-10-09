@@ -266,10 +266,15 @@ html[data-theme="dark"] {
 .ssb-axis-label[data-axis="a"] { color: var(--ssb-axis-a); }
 .ssb-axis-label[data-axis="s"] { color: var(--ssb-axis-s); }
 
-/* The stage's truth badge: always visible, bottom-left. */
+/* The stage's truth badge: always visible, bottom-left. One line on desktop,
+   where the panel foot carries the full credit; on a phone it wraps rather
+   than truncating, since it names the atlas's institution (RA0c). */
 .ssb-stage-note {
   position: absolute; left: var(--gutter); bottom: 0.6rem; max-width: calc(100% - 2 * var(--gutter));
   pointer-events: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (max-width: 959px) {
+  .ssb-stage-note { white-space: normal; }
 }
 .ssb-stage-msg {
   position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
@@ -587,6 +592,8 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
 }
 .ssb-grabber { width: 2.5rem; height: 3px; border-radius: 2px; background: var(--rule-strong); }
 .ssb-sheet-title { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ssb-credit { flex: none; margin: 0; padding: 0.5rem var(--gutter); border-top: 1px solid var(--rule); font-size: 0.75rem; line-height: 1.4; color: var(--ink-muted); overflow-wrap: anywhere; }
+.ssb-credit a { color: inherit; text-decoration: underline; }
 .ssb-panel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0.25rem var(--gutter) 1.5rem; }
 .ssb-empty { margin: 1rem 0; max-width: 24rem; color: var(--ink-muted); }
 
@@ -642,7 +649,10 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
    sheet shows either the lab controls or the details. */
 @media (max-width: 959px) {
   .ssb-panel[data-sheet="closed"] .ssb-panel-body,
+  .ssb-panel[data-sheet="closed"] .ssb-credit,
   .ssb-panel[data-sheet="closed"] .ssb-sheet-tabs { display: none; }
+  /* CT hides the stage note, so on a phone its closed sheet keeps the credit */
+  .ssb[data-stage="ct"] .ssb-panel[data-sheet="closed"] .ssb-credit { display: block; }
   .ssb[data-stage="lab"] .ssb-panel[data-sheet="open"][data-view="controls"] .ssb-lab-sheet {
     display: block; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
   }
