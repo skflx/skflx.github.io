@@ -861,7 +861,7 @@ them (see §13 RA-O7).
 ```
 
 ```
-### RA0c — UW credit on the page             [review] · Sonnet · depends: #114, #115 merged (same files)
+### RA0c — UW credit on the page             [done 2026-10-09, #143] · Sonnet · depends: #114, #115 merged (same files)
 Goal:     the full attribution of ssb/LICENSE-data.md is visible wherever the specimen is
           shown (today the note says only "UW CT atlas").
 Read:     ssb/LICENSE-data.md "Attribution"; docs/ssb.md §7.5; js/ssb/mode-specimen.js PROVENANCE.
@@ -927,7 +927,7 @@ Escalate: annotation and bone overlap in > 10 % of figures.
 ```
 
 ```
-### RS0 — Ground-truth split and scorer      [done] · Sonnet · depends: —
+### RS0 — Ground-truth split and scorer      [done 2026-10-09, #142] · Sonnet · depends: —
 Goal:     the held-out arrow-tip split and a scorer any labels file can be run against (§7.1).
 Touch:    tools/ssb-pipeline/uw/score.py (new); ssb/reference/uw-sinusanatomy2/split.json.
 Steps:    stratified 70/30 split of head-A tips by crosswalked id and slice region, seed fixed;
@@ -981,6 +981,11 @@ Accept:   every record complete (§4.3 item 4); every queue item has a case or "
 ```
 ### C-RA — Graph additions                  [todo] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
 Goal:     the ids and landmarks of §8.3 with sources and prevalences (denominators).
+Ruling:   (Opus, 2026-10-09) frontal sinus hypoplasia/aplasia is a variant node; extensive
+          frontal pneumatization is NOT a variant: it is a measurement on s.frontal-sinus
+          (as gaps.md recommends), with the extent definition and any cut-off quoted from
+          its source. A prevalence or cut-off that no source states is left out, not
+          estimated; ids follow docs/authoring-ssb.md; everything stays review: "draft".
 Accept:   tools/ssb-content.mjs passes; Opus review at CP-RA1.
 ```
 
