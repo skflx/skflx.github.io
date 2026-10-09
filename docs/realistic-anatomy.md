@@ -997,7 +997,7 @@ Ruling:   (Opus, 2026-10-09, on the first run's four gates) no gate is relaxed f
 ```
 
 ```
-### RP1 — Radiopaedia shortlist (cases.json) [ready] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
+### RP1 — Radiopaedia shortlist (cases.json) [review] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
 Goal:     ≥ 1 candidate case per §4.3 queue item, each fully recorded; Opus picks ≤ 40.
 Touch:    ssb/reference/radiopaedia/cases.json, README.md (method, licence).
 Don't:    download stacks in this WP (RP2 does); record a case whose licence line differs
@@ -1011,6 +1011,8 @@ Ruling:   (Opus, 2026-10-09) radiopaedia.org serves an anti-bot challenge to non
           contrast, complete vs key images, burned-in text) is the string "owner reads",
           never inferred. The shortlist is ranked so the owner reads at most 40 pages. RA-O5
           is reopened (§13), and RP2 waits on it.
+Result:   (2026-10-09) 47 search-result records in ssb/reference/radiopaedia/cases.json; 7 queue groups
+          "none found" with their queries; all page-only fields "owner reads".
 ```
 
 ```
