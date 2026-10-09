@@ -4,6 +4,7 @@
     python3 tools/ssb-pipeline/uw/score.py                  # score today's labels: the as-scanned head AND the served one
     python3 tools/ssb-pipeline/uw/score.py --labels DIR     # any labels: DIR holds ct.json, labels.u16.gz, labels.json
     python3 tools/ssb-pipeline/uw/score.py --labels as-scanned|served [--set heldout|seed|all] [--tol 1] [--json OUT]
+    python3 tools/ssb-pipeline/uw/score.py --labels DIR --declared tools/ssb-pipeline/uw/rs/declared.json   # + coverage (RS1)
 
 Needs numpy and scipy only (no fetched images): the tips are read from split.json, which `split` builds from
 slices.json + crosswalk.json + vocab-extra.json and the axial/sagittal tip positions in registration.json.
@@ -293,12 +294,60 @@ def topology(lab, aff, step, table):
         ridge = (d == ndi.maximum_filter(d, size=3)) & m
         v = 2 * d[ridge]
         th.append((names[k], int(full.sum()), float(np.median(v)), float(np.percentile(v, 95))))
+    if not th:
+        print('bone units: none labelled in these labels (an air-only candidate); thickness not evaluable')
+        res['bone_units'] = {'n': 0}
+        return res
     print('bone units: %d with voxels; thickness (2 x ridge of the distance transform, mm): median over units %.1f, '
           'per-unit medians %.1f..%.1f' % (len(th), float(np.median([t[2] for t in th])), min(t[2] for t in th), max(t[2] for t in th)))
     print('  thicker than 0: %d / %d. Upper limits: NOT EVALUABLE (section 7.1 says "stated limits"; none are stated in the docs).' % (
         sum(t[2] > 0 for t in th), len(th)))
     res['bone_units'] = {'n': len(th), 'thinnest_median_mm': round(min(t[2] for t in th), 2), 'thickest_median_mm': round(max(t[2] for t in th), 2)}
     return res
+
+
+# ---------------------------------------------------------------- coverage of the declared label set (RS1)
+def coverage(declared_path, lab, table):
+    """Every id in declared.json has a label (both sides for a sided id, M for a midline one). Reported over the ids whose
+    step is done, and over the whole declared set; a null id is a term the graph lacks and is listed, never counted."""
+    dec = json.load(open(declared_path))
+    sides = defaultdict(set)
+    for k, v in table.items():
+        if (lab == k).any():
+            b, _, s = v.rpartition('.')
+            sides[b].add(s)
+    rows = []
+    for e in dec['ids']:
+        if e['id'] is None:
+            rows.append({'term': e['term'], 'step': e['step'], 'id': None, 'covered': False, 'sides': []})
+            continue
+        want = {'M'} if e.get('midline') else {'R', 'L'}
+        have = sides.get(e['id'], set())
+        rows.append({'id': e['id'], 'step': e['step'], 'status': e['status'], 'covered': want <= have, 'sides': sorted(have)})
+    done = [r for r in rows if r.get('status') == 'done']
+    out = {'done_ids': len(done), 'done_covered': sum(r['covered'] for r in done),
+           'declared_ids': sum(r['id'] is not None for r in rows), 'declared_covered': sum(r['covered'] for r in rows if r['id']),
+           'null_terms': [r['term'] for r in rows if r['id'] is None],
+           'done_missing': [r['id'] for r in done if not r['covered']], 'rows': rows}
+    print('\n== coverage of %s ==' % os.path.relpath(declared_path, REPO))
+    print('ids whose step is done: %d / %d labelled; whole declared set: %d / %d labelled; terms with no graph id: %d (%s)' % (
+        out['done_covered'], out['done_ids'], out['declared_covered'], out['declared_ids'], len(out['null_terms']), ', '.join(out['null_terms'])))
+    if out['done_missing']:
+        print('  done but not labelled: %s' % ', '.join(out['done_missing']))
+    out['done_set'] = sorted(r['id'] for r in done)
+    return out
+
+
+def print_declared_identity(rows, cov):
+    """The Accept gate of section 7.1: identity over the declared set (tips of the declared ids whose step is done)."""
+    ids = set(cov['done_set'])
+    sel = [r for r in rows if r['n'] and set(r['structure'].split('+')) & ids]
+    n = sum(r['n'] for r in sel); k = sum(r['hit'] for r in sel); lo, hi = wilson(k, n)
+    big = [r for r in sel if r['n'] >= 10]
+    below = [r['structure'] for r in big if r['hit'] / r['n'] < 0.90]
+    print('identity over the declared set (done ids): %d / %d = %.1f %%  [%.1f, %.1f]; structures with n >= 10: %d, below 90 %%: %d %s' % (
+        k, n, 100 * k / max(n, 1), 100 * lo, 100 * hi, len(big), len(below), below or ''))
+    return {'hit': k, 'n': n, 'ci': [lo, hi], 'below_90_n_ge_10': below}
 
 
 def graph_consistency():
@@ -317,6 +366,7 @@ def main():
     ap.add_argument('--labels', default='both', help='as-scanned | served | both (default) | a directory')
     ap.add_argument('--set', dest='subset', default='heldout', choices=['heldout', 'seed', 'all'])
     ap.add_argument('--tol', type=int, default=1, help='voxel tolerance (Chebyshev), default 1')
+    ap.add_argument('--declared', help='declared.json (RS1): also report coverage of its ids and identity over them')
     ap.add_argument('--json', help='also write the results here')
     ap.add_argument('--seed', type=int, default=SEED)
     a = ap.parse_args()
@@ -341,6 +391,9 @@ def main():
         rows = score_tips(split, lab, aff, step, table, which, a.tol, a.subset, rmin=0.0 if right_only else None)
         print_identity(rows, title, '%s (tol %d voxel = %.1f mm)' % (a.subset, a.tol, a.tol * step))
         results[which] = {'identity': rows, 'topology': topology(lab, aff, step, table)}
+        if a.declared:
+            results['coverage'] = coverage(a.declared, lab, table)
+            results[which]['declared_identity'] = print_declared_identity(rows, results['coverage'])
     results['graph'] = graph_consistency()
     reg = json.load(open(os.path.join(HERE, 'registration.json')))['labels']['axial_vs_sagittal']
     print('context: axial-vs-sagittal tip disagreement, median %.2f mm all tips, %.2f mm point-like structures (labels3d.py)' % (

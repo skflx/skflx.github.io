@@ -45,6 +45,19 @@ Resegmentation ground truth (WP RS0; numpy + scipy only, no crawl):
 labels were grown from these tips, so the baseline is optimistic) and `--tol`: the script's docstring;
 `docs/realistic-anatomy.md` §7.1.
 
+Resegmentation harness (WP RS1; needs the venv and the crawl, writes only the gitignored `incoming/_rs/`, never `ssb/`):
+
+    .venv/bin/python -I tools/ssb-pipeline/uw/reseg.py all   # work -> air -> export -> score (stages also run singly; `selftest` tests the guard)
+
+`reseg.py` rebuilds `specimen.py`'s air compartments on the native 0.3437 x 0.3437 x 0.625 mm grid from the SEED tips of
+`split.json` only (`seed_tips` drops held-out rows unread and `guard` raises on any other tip), exports a candidate on the
+served 0.5 mm grid to `incoming/_rs/candidate/` (laid out like `ssb/ct` + `ssb/geometry/labels.json`), and scores it with
+`score.py --labels DIR --declared tools/ssb-pipeline/uw/rs/declared.json` at `--tol 1` and `--tol 6` beside today's
+as-scanned labels (`score-RS1.json`). `rs/declared.json` is the label set RS commits to, each id with the step that adds it
+(a `null` id is a term the graph lacks, for Opus); `--declared` reports coverage over it and identity over its done ids.
+The candidate is in the as-scanned frame (the tips' frame), not the standardized one. Method and limits: the script's
+docstring; `docs/realistic-anatomy.md` section 7.2 and WP RS1.
+
 Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
 
     .venv/bin/python tools/ssb-pipeline/uw/specimen.py   # -> ssb/ct/{ct.json,ct.u8.gz,labels.u16.gz},
