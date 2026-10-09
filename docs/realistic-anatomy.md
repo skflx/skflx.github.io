@@ -979,6 +979,21 @@ Accept:   check-data passes (every label a graph id); test-ssb specimen section 
           cavity and maxillary asymmetry indices are printed beside the NasalSeg percentiles
           (§4.4), and the state's note says where this head sits in that range.
 Escalate: a stage cannot run per side without an anatomy decision.
+Ruling:   (Opus, 2026-10-09, on the first run's four gates) no gate is relaxed for the scanned
+          base. (1) Vestibule: keep each side's largest component; smaller components go back
+          to s.nasal-cavity, their voxel count printed, and the stage still fails if they total
+          more than 2 % of the largest (a leak, not a speck). (2)–(4) A stage-D product (floor
+          or septal chart, floor mucosa, soft sweep) that fails its gate on a side is left out
+          of the scanned base, never loosened, and listed in its index.json entry as
+          `absent: [{ id, side, reason }]` with the measured number. The flap overlay stays a
+          standard-head tool: on a base whose charts are absent it is disabled with a note.
+          The nasopalatine waypoints stay authored on the standard head; per-base waypoints
+          are RS work. The left floor goes to the resegmentation (§5.1). Touch adds
+          tools/test-ssb.mjs (the specimen section on both bases, and a plain visit still on
+          `standard`) and js/ssb/ui-specimen.js (the state's note; the flap control disabled
+          when charts are absent); walls.py runs unmodified. Default base: resolveAnatomy uses
+          the index's default base only when a link names a variant or condition, so a plain
+          visit stays on the standard head; keep that, and test it.
 ```
 
 ```
