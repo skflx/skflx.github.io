@@ -4931,9 +4931,12 @@ async function anatomyUnitTests() {
     && live.setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === true && live.hash() === '#anat=scanned' && live.setAnatomy(null) === true && live.hash() === '');
   live.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
   live.setCt({ plane: 'axial', at: null });
-  live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
   live.leaveStage();
-  check('anatomy store: the anatomy is orthogonal to the stage — entering and leaving CT, the scope and the specimen keeps it', live.get().anatomy.base === 'scanned');
+  const keptCt = live.get().anatomy.base;
+  live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+  check('anatomy store: the anatomy is orthogonal to CT and the specimen (entering and leaving keeps it); the scope, which reads the standard head only, takes the page back to it',
+    keptCt === 'scanned' && live.get().anatomy.base === 'standard' && !!live.get().scope, JSON.stringify({ keptCt, base: live.get().anatomy.base }));
+  live.leaveStage();
   live.applyHash('#anat=scanned-b');
   check('anatomy store: Back/Forward to a link the index does not allow drops the anatomy', live.get().anatomy === ANATOMY_DEFAULT);
   live.applyHash(canon);
@@ -5116,6 +5119,22 @@ function readScannedLabels() {
 function scannedBaseUnitTests() {
   const index = readJson('ssb/anatomy/index.json');
   const entry = index.bases && index.bases.scanned;
+  {
+    /* the endoscope and the procedure read the standard head only: a non-standard base never rides with them, the later choice wins */
+    const mk = (hash) => createStore({ has: (id) => GRAPH.has(id), tierOf: () => 1, hash, prefs: { tier: 1 }, labs: {}, anatomyDoc: index });
+    const a = mk('#scope=R,40,0,0,0,0');
+    a.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
+    const picked = a.get();
+    const b = mk('#anat=scanned');
+    b.setScope({ side: 'R', depth: 40, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+    const entered = b.get();
+    const c = mk('#anat=scanned');
+    check('scanned base vs the endoscope: picking Normal asymmetry in the Scope stage leaves the scope (back to the specimen, on the scanned head)',
+      picked.anatomy.base === 'scanned' && !picked.scope && !picked.station && !picked.procedure, JSON.stringify({ base: picked.anatomy.base, scope: !!picked.scope }));
+    check('scanned base vs the endoscope: entering the scope from the scanned head returns to the standard head (the scope never flies a mirrored head labelled as scanned)',
+      !!entered.scope && entered.anatomy.base === 'standard', JSON.stringify({ base: entered.anatomy.base, scope: !!entered.scope }));
+    check('scanned base vs the endoscope: a plain #anat=scanned link keeps its base and no scope', c.get().anatomy.base === 'scanned' && !c.get().scope);
+  }
   check('scanned base: ssb/anatomy/index.json lists it, with a root, a note and the numbers the pipeline printed (written, never typed)',
     !!entry && entry.root === SCANNED && typeof entry.note === 'string' && entry.note.length > 40 && !!entry.volumesMl && !!entry.asymmetryIndex && Array.isArray(entry.absent), JSON.stringify(Object.keys(entry || {})));
   const { doc, nodes, files } = readPacks(SCANNED);

@@ -45,7 +45,7 @@ import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=34e04a58';
 import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=32324b32';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
-import { CT_PLANES } from './state.js?v=7455c8cc';
+import { CT_PLANES } from './state.js?v=3a54b0af';
 import { REGION_LABEL } from './graph.js?v=ef6d8734';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';

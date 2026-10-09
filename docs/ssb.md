@@ -921,8 +921,9 @@ label the base changed against the as-scanned labels, as voxel counts per (from,
 step, the wall-unit step; the nose unmask changes display values), with tissue becoming an air label or the reverse an escalation.
 The CT stage reads the base's volume and the Specimen stage draws the base's own packs, landmarks and sweeps
 (`createSpecimen({ root })` in `geo-specimen.js`, `followBase` in `mode-specimen.js`; Symmetric <-> Normal asymmetry swaps them live and
-keeps the camera). The dissected states and the Endoscope and procedure stages are the standard head's: on another base the stage loads
-no state pack, and they read the standard volume. `tools/test-ssb.mjs --only scanned` tests the base's data (packs, placement,
+keeps the camera). The dissected states and the Endoscope and procedure stages are the standard head's, so the store never pairs
+them with another base and the later choice wins: picking Normal asymmetry leaves the scope or procedure, and entering either
+goes back to the standard head (`set()` in `state.js`). `tools/test-ssb.mjs --only scanned` tests the base's data (packs, placement,
 laterality, labels, landmarks, volumes and transitions recounted from the label file, the absent list), the Specimen stage on it
 (boot, placement, laterality on screen, picking, not mirrored, the live swap) and its CT and pages.
 

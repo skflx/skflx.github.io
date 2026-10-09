@@ -592,6 +592,13 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
     function set(patch, meta = {}) {
         const prev = state;
         const next = { ...prev, ...patch };
+        /* The endoscope and the procedure player read the standard head's volume only, so a non-standard base never
+           rides with them: the later choice wins. Picking a base leaves the scope; entering the scope (or a procedure)
+           goes back to the standard head. */
+        if (next.anatomy && !next.anatomy.pending && next.anatomy.base !== ANAT_STANDARD && (next.scope || next.station || next.procedure)) {
+            if (own(patch, 'anatomy') && !sameAnatomy(next.anatomy, prev.anatomy)) Object.assign(next, { scope: null, station: null, procedure: null });
+            else next.anatomy = ANATOMY_DEFAULT;
+        }
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
             && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality
             && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu && sameFlap(next.flap, prev.flap)

@@ -17,8 +17,8 @@
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
 import { PLANES, loadAnatomyIndex } from './volume.js?v=32324b32';
-import { CT_PLANES, anatomyIsDefault } from './state.js?v=7455c8cc';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=50a690f2';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=3a54b0af';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=4c153a53';
 import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';

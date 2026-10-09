@@ -274,13 +274,20 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     function pillState() {
         if (!button) return;
         button.disabled = !endo.available && !endo.pose;
-        button.title = button.disabled ? 'The endoscope needs the reference specimen, which has not loaded.' : 'Endoscope: first-person view through a rigid scope';
+        const a = store.get().anatomy;
+        const offBase = !!a && !a.pending && a.base !== 'standard';
+        button.title = button.disabled ? 'The endoscope needs the reference specimen, which has not loaded.'
+            : offBase ? 'Endoscope: runs on the symmetric head for now, so this returns to it'
+            : 'Endoscope: first-person view through a rigid scope';
     }
     if (button) button.addEventListener('click', () => { if (!store.get().scope) endo.enter(); });
 
     endo.onChange(() => { sync(); pillState(); });
     endo.onViews(renderStations);
-    store.subscribe((state, prev) => { if (state.scope !== prev.scope) { sync(); pillState(); } else if (state.tier !== prev.tier) renderStations(); });
+    store.subscribe((state, prev) => {
+        if (state.scope !== prev.scope) { sync(); pillState(); } else if (state.tier !== prev.tier) renderStations();
+        if (state.anatomy !== prev.anatomy) pillState();
+    });
     sync();
     pillState();
 }
