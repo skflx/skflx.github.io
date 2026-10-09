@@ -893,12 +893,13 @@ Escalate: annotation and bone overlap in > 10 % of figures.
 ```
 
 ```
-### RS0 — Ground-truth split and scorer      [todo] · Sonnet · depends: —
+### RS0 — Ground-truth split and scorer      [review] · Sonnet · depends: —
 Goal:     the held-out arrow-tip split and a scorer any labels file can be run against (§7.1).
 Touch:    tools/ssb-pipeline/uw/score.py (new); ssb/reference/uw-sinusanatomy2/split.json.
 Steps:    stratified 70/30 split of head-A tips by crosswalked id and slice region, seed fixed;
           scorer prints per-structure hit rate with Wilson CI and the topology checks of §7.1.
 Accept:   scorer runs on today's labels and prints the baseline (it becomes the number RS must beat).
+Result:   `python3 -I tools/ssb-pipeline/uw/score.py` prints the baseline (as-scanned labels are the headline; the tips live in that frame). Caveats are in its docstring.
 ```
 
 ```
