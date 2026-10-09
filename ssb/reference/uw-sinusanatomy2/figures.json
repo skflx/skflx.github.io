@@ -1,0 +1,10466 @@
+{
+ "meta": {
+  "source": "Interactive CT Sinus Anatomy, University of Washington Department of Radiology, Seattle (http://uwmsk.org/sinusanatomy2/)",
+  "credit": "the atlas and its institution; no individual author is named (ssb/LICENSE-data.md)",
+  "about": "numbers and text only; no image is stored. Regenerate with tools/ssb-pipeline/uw/figures.py (README of this folder, \"Figure inventory\").",
+  "method": {
+   "seed": ">= 240, outside thick bright regions (opening r=5, parts >= 700 px, +1 px)",
+   "grow": ">= 200 within 3 px of a seed",
+   "saturatedPct": "thick bright area >= 4.0% of the image",
+   "tailLabelPx": 40,
+   "ocrScales": [
+    2,
+    3,
+    4
+   ],
+   "ocr": "rapidocr-onnxruntime 1.2.3"
+  },
+  "notSeparableReason": "annotation not separable by threshold (saturated window)",
+  "count": 88,
+  "placements": 91,
+  "summary": {
+   "traced": 73,
+   "notTraced": 15,
+   "review": 15,
+   "captionMiss": 8
+  },
+  "softFigures": [
+   "Cor.frontalmucocele",
+   "Sag.frontalmucocele",
+   "axial.frontalmucocele",
+   "Epidabscess1",
+   "Epidabscess3",
+   "Aggressivesinus1",
+   "AntrochoanalPolyp1",
+   "Orbitalcellulitis2",
+   "Axial.CSthrombosis",
+   "Sag.CSthrombosis",
+   "Cor.CSthrombosis",
+   "Mucocele3",
+   "Mucocele5",
+   "Axial.SphenoidCSthrombosis",
+   "Cor.SphenoidCSthrombosis"
+  ],
+  "abbreviationConflicts": {
+   "FS": [
+    "foramen spinosum",
+    "frontal sinus"
+   ],
+   "AG": [
+    "agger nasi",
+    "agger nasi cell"
+   ],
+   "PE": [
+    "posterior ethmoid",
+    "posterior ethmois sinus"
+   ],
+   "U": [
+    "uncinate",
+    "uncinate process"
+   ],
+   "FSDP": [
+    "frontal sinus drainage pathway",
+    "frontal sinus drainage pathyway"
+   ],
+   "AE": [
+    "anterior ethmoid",
+    "anterior ethmoid sinus"
+   ],
+   "AC": [
+    "anterior clinoid",
+    "anterior clinoid process"
+   ]
+  },
+  "frame": "image px, origin top-left, as the page serves the file; left-right is not asserted"
+ },
+ "figures": [
+  {
+   "id": "Axial.frontalsinus1",
+   "file": "images/Axial.frontalsinus1.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Axial image with arrows pointing to the frontal sinuses."
+    }
+   ],
+   "size": [
+    503,
+    428
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "s.frontal-sinus"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Fronta, sinus",
+     "text": "frontal sinus",
+     "read": "fuzzy-term",
+     "conf": 0.87,
+     "box": [
+      206,
+      105,
+      323,
+      127
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "frontal sinus",
+     "tail": [
+      226,
+      95
+     ],
+     "tip": [
+      216,
+      59
+     ],
+     "tipBy": "label",
+     "headRatio": 4.0,
+     "ringBright": 0.09,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      2,
+      402
+     ],
+     "tip": [
+      6,
+      425
+     ],
+     "tipBy": "head",
+     "headRatio": 2.8,
+     "ringBright": 0.35,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 3,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 3,
+     "tooLong": 1,
+     "shortNotHead": 4,
+     "onBone": 3
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.frontalsinus1",
+   "file": "images/Cor.frontalsinus1.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image of frontal sinuses (FS)."
+    }
+   ],
+   "size": [
+    422,
+    439
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 1.72,
+   "abbreviations": {},
+   "ids": [
+    "s.frontal-sinus",
+    "s.nasal-septum"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-site",
+     "conf": 0.664,
+     "box": [
+      289,
+      105,
+      318,
+      125
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-site",
+     "conf": 0.664,
+     "box": [
+      163,
+      115,
+      192,
+      135
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "Nasa. bone",
+     "text": null,
+     "read": "unread",
+     "conf": 0.884,
+     "box": [
+      275,
+      186,
+      381,
+      206
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "Nasa Septum",
+     "text": "nasal septum",
+     "read": "fuzzy-term",
+     "conf": 0.885,
+     "box": [
+      307,
+      290,
+      406,
+      307
+     ],
+     "ids": [
+      "s.nasal-septum"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      272,
+      197
+     ],
+     "tip": [
+      245,
+      197
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "nasal septum",
+     "tail": [
+      301,
+      298
+     ],
+     "tip": [
+      232,
+      298
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 6,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 5,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.FSDP2",
+   "file": "images/Sag.FSDP2.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Sagittal image shows frontal sinus ostium (*) and arrow pointing to the superior compartment of the FSDP. (FS: frontal sinus, AG: agger nasi, PE: posterior ethmoid, SpS: sphenoid sinus, MT: middle turbinate, IT: inferior turbinate)"
+    }
+   ],
+   "size": [
+    559,
+    438
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "AG": "agger nasi",
+    "PE": "posterior ethmoid",
+    "SpS": "sphenoid sinus",
+    "MT": "middle turbinate",
+    "IT": "inferior turbinate"
+   },
+   "ids": [
+    "lm.frontal-ostium",
+    "s.frontal-recess",
+    "s.agger-nasi-cell"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.659,
+     "box": [
+      98,
+      101,
+      122,
+      118
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      270,
+      182,
+      294,
+      197
+     ],
+     "ids": [
+      "s.posterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "AG",
+     "text": "AG",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      174,
+      203,
+      200,
+      220
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for \"agger nasi\""
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.737,
+     "box": [
+      342,
+      216,
+      374,
+      235
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.661,
+     "box": [
+      231,
+      253,
+      260,
+      272
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "IT",
+     "text": "IT",
+     "read": "exact-caption",
+     "conf": 0.659,
+     "box": [
+      249,
+      325,
+      266,
+      341
+     ],
+     "ids": [
+      "s.inferior-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      218,
+      126
+     ],
+     "tip": [
+      199,
+      167
+     ],
+     "tipBy": "head",
+     "headRatio": 4.1,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": [
+     "asterisk"
+    ]
+   }
+  },
+  {
+   "id": "Sag.FSDP5",
+   "file": "images/Sag.FSDP5.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Sagittal image with arrows demonstrating frontal sinus drainage pathway and hiatus semilunaris which drains to middle meatus. (FS: frontal sinus, SpS: sphenoid sinus, MT: middle turbinate, IT: inferior turbinate)"
+    }
+   ],
+   "size": [
+    426,
+    358
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "SpS": "sphenoid sinus",
+    "MT": "middle turbinate",
+    "IT": "inferior turbinate"
+   },
+   "ids": [
+    "pw.frontal-drainage",
+    "s.hiatus-semilunaris"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      44,
+      84,
+      69,
+      103
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.685,
+     "box": [
+      268,
+      152,
+      303,
+      171
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    },
+    {
+     "raw": "FSDP",
+     "text": "FSDP",
+     "read": "exact-site",
+     "conf": 0.796,
+     "box": [
+      31,
+      185,
+      80,
+      203
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.657,
+     "box": [
+      215,
+      209,
+      242,
+      226
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "Hiatas semilunaris",
+     "text": "hiatus semilunaris",
+     "read": "fuzzy-term",
+     "conf": 0.887,
+     "box": [
+      85,
+      223,
+      212,
+      239
+     ],
+     "ids": [
+      "s.hiatus-semilunaris"
+     ]
+    },
+    {
+     "raw": "IT",
+     "text": "IT",
+     "read": "exact-caption",
+     "conf": 0.577,
+     "box": [
+      224,
+      260,
+      238,
+      274
+     ],
+     "ids": [
+      "s.inferior-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "FSDP",
+     "tail": [
+      99,
+      196
+     ],
+     "tip": [
+      128,
+      179
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.07,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      86,
+      153
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      149,
+      212
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      179,
+      217
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      203,
+      315
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.FSDP6",
+   "file": "images/Cor.FSDP6.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image with arrowheads demonstrating frontal sinus recess. (NS: nasal septum, MS: maxillary sinus)"
+    }
+   ],
+   "size": [
+    737,
+    486
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.99,
+   "abbreviations": {
+    "NS": "nasal septum",
+    "MS": "maxillary sinus"
+   },
+   "ids": [
+    "s.frontal-recess"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "NS",
+     "text": "NS",
+     "read": "exact-caption",
+     "conf": 0.662,
+     "box": [
+      320,
+      333,
+      361,
+      361
+     ],
+     "ids": [
+      "s.nasal-septum"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.664,
+     "box": [
+      493,
+      362,
+      534,
+      386
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      401,
+      162
+     ],
+     "tip": [
+      381,
+      155
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      391,
+      207
+     ],
+     "tip": [
+      371,
+      201
+     ],
+     "tipBy": "head",
+     "headRatio": 5.1,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 7,
+     "curved": 6,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.FSDP1",
+   "file": "images/Cor.FSDP1.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image demonstrating frontal recess (arrows), hiatus semilunaris (*) and middle meatus (arrowheads). (EB: ethmoid bulla, MT: middle turbinate, MS: maxillary sinus)"
+    }
+   ],
+   "size": [
+    569,
+    506
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "EB": "ethmoid bulla",
+    "MT": "middle turbinate",
+    "MS": "maxillary sinus"
+   },
+   "ids": [
+    "s.frontal-recess",
+    "s.hiatus-semilunaris",
+    "s.ethmoid-bulla"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-caption",
+     "conf": 0.664,
+     "box": [
+      324,
+      231,
+      346,
+      246
+     ],
+     "ids": [
+      "s.ethmoid-bulla"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.635,
+     "box": [
+      250,
+      303,
+      274,
+      319
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      409,
+      344,
+      440,
+      363
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      134,
+      360,
+      164,
+      379
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "EB",
+     "tail": [
+      299,
+      227
+     ],
+     "tip": [
+      273,
+      233
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      232,
+      297
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      229,
+      319
+     ],
+     "approx": true
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      260,
+      254
+     ],
+     "approx": true
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      260,
+      266
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 13
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.VariantFSDP1",
+   "file": "images/Cor.VariantFSDP1.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image with arrows demonstrating the inferior compartment of FSDP draining to ethmoid infundibulum because anterior process of uncinate attaches to skull base. (FS: frontal sinus, EB: ethmoid bulla, U: uncinate, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    575,
+    482
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "EB": "ethmoid bulla",
+    "U": "uncinate",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "v.uncinate-insertion-skull-base",
+    "pw.frontal-drainage-infundibular"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.624,
+     "box": [
+      337,
+      99,
+      358,
+      115
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "FsDPncdestheethmoid infundibudm",
+     "text": null,
+     "read": "unread",
+     "conf": 0.877,
+     "box": [
+      61,
+      206,
+      291,
+      219
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-caption",
+     "conf": 0.664,
+     "box": [
+      334,
+      231,
+      352,
+      242
+     ],
+     "ids": [
+      "s.ethmoid-bulla"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.649,
+     "box": [
+      317,
+      313,
+      339,
+      329
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "FS",
+     "tail": [
+      347,
+      118
+     ],
+     "tip": [
+      345,
+      155
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.01,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      279,
+      196
+     ],
+     "tip": [
+      327,
+      196
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.03,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      270,
+      230
+     ],
+     "tip": [
+      310,
+      231
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 12
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.VariantFSDP2",
+   "file": "images/Cor.VariantFSDP2.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image with arrows demonstrating the inferior compartment of the FSDP includes the middle meatus because the anterior uncinate process attaches to the lamina papyracea. (FS: frontal sinus, LP: lamina papyracea)"
+    }
+   ],
+   "size": [
+    400,
+    307
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "LP": "lamina papyracea"
+   },
+   "ids": [
+    "v.uncinate-insertion-lamina-papyracea"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.658,
+     "box": [
+      272,
+      22,
+      291,
+      38
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "FSDPinuludesthe",
+     "text": null,
+     "read": "unread",
+     "conf": 0.883,
+     "box": [
+      48,
+      133,
+      166,
+      149
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "middlemeatus",
+     "text": "middle meatus",
+     "read": "fuzzy-term",
+     "conf": 0.905,
+     "box": [
+      48,
+      152,
+      140,
+      166
+     ],
+     "ids": [
+      "s.middle-meatus"
+     ]
+    },
+    {
+     "raw": "LP",
+     "text": "LP",
+     "read": "exact-caption",
+     "conf": 0.642,
+     "box": [
+      281,
+      152,
+      303,
+      165
+     ],
+     "ids": [
+      "s.lamina-papyracea"
+     ]
+    },
+    {
+     "raw": "uncinate",
+     "text": null,
+     "read": "unread",
+     "conf": 0.801,
+     "box": [
+      262,
+      195,
+      335,
+      211
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": "FS",
+     "tail": [
+      280,
+      41
+     ],
+     "tip": [
+      279,
+      75
+     ],
+     "tipBy": "label",
+     "headRatio": 3.3,
+     "ringBright": 0.1,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      156,
+      129
+     ],
+     "tip": [
+      232,
+      128
+     ],
+     "tipBy": "label",
+     "headRatio": 4.1,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      156,
+      165
+     ],
+     "tip": [
+      239,
+      167
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      274,
+      158
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.FShypo",
+   "file": "images/Axial.FShypo.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Axial image with arrows demonstrating hypoplastic frontal sinuses (FS)."
+    }
+   ],
+   "size": [
+    568,
+    517
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "§4.1: the graph has frontal aplasia only; hypoplasia is a new id",
+   "proposedNew": [
+    "v.frontal-sinus-hypoplasia"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Fs hypoplasia",
+     "text": null,
+     "read": "unread",
+     "conf": 0.915,
+     "box": [
+      258,
+      216,
+      387,
+      242
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      274,
+      211
+     ],
+     "tip": [
+      253,
+      115
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      364,
+      206
+     ],
+     "tip": [
+      373,
+      118
+     ],
+     "tipBy": "head",
+     "headRatio": 2.7,
+     "ringBright": 0.01,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      2,
+      409
+     ],
+     "tip": [
+      72,
+      256
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.08,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      276,
+      106
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      295,
+      143
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 5,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 1,
+     "tooLong": 1,
+     "shortNotHead": 1,
+     "onBone": 7
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.PneumFS",
+   "file": "images/Cor.PneumFS.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image with arrows demonstrating overly pneumatized frontal sinuses. Also note enlarged ethmoid bulla air cells (arrowheads)."
+    }
+   ],
+   "size": [
+    365,
+    478
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "§4.1: both are new ids (no id string given)",
+   "proposedNew": [
+    "extensive frontal pneumatization",
+    "bulla hyperpneumatization"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      256,
+      106
+     ],
+     "tip": [
+      293,
+      131
+     ],
+     "tipBy": "head",
+     "headRatio": 4.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      103,
+      110
+     ],
+     "tip": [
+      69,
+      140
+     ],
+     "tipBy": "head",
+     "headRatio": 3.2,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      247,
+      238
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      123,
+      240
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 7,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 3,
+     "onBone": 6
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.pneumCG",
+   "file": "images/Cor.pneumCG.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Normal.html",
+     "caption": "Coronal image with arrow pointing to pneumatized crista galli. Pneumatized crista galli may communicate with the frontal recess and can potentially obstruct the frontal sinus ostium. Incidentally noted is a tripod fracture involving the left maxillary sinus."
+    }
+   ],
+   "size": [
+    425,
+    465
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.crista-galli-pneumatization"
+   ],
+   "note": "incidental left ZMC fracture: exclude",
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      221,
+      107
+     ],
+     "tip": [
+      223,
+      76
+     ],
+     "tipBy": "head",
+     "headRatio": 5.7,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 4,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.frontalinflamm3",
+   "file": "images/Cor.frontalinflamm3.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronal image with arrow pointing to isolated right frontal sinus (FS) disease."
+    }
+   ],
+   "size": [
+    596,
+    475
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.68,
+   "abbreviations": {},
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: sporadic",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-site",
+     "conf": 0.662,
+     "box": [
+      183,
+      147,
+      217,
+      173
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      372,
+      191
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 3,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": [
+     "arrow"
+    ]
+   }
+  },
+  {
+   "id": "Cor.frontalinflamm2",
+   "file": "images/Cor.frontalinflamm2.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronal image illustrating sinus disease involving the anterior ethmoid sinus (arrows) and maxillary sinus (MS). Pattern of sinus disease indicates involvement of the anterior ostiomeatal unit. (MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    367,
+    358
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: OMU",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.547,
+     "box": [
+      191,
+      215,
+      216,
+      232
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-site",
+     "conf": 0.571,
+     "box": [
+      256,
+      251,
+      284,
+      269
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      190,
+      147
+     ],
+     "tip": [
+      190,
+      195
+     ],
+     "tipBy": "head",
+     "headRatio": 2.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      86,
+      327
+     ],
+     "tip": [
+      111,
+      355
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.14,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 8,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.OMU4",
+   "file": "images/Cor.OMU4.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronal image demonstrating more diffuse anterior ostiomeatal sinus disease. Small arrow showing involvement of frontal recess and anterior ethmoid region, long arrow pointing to maxillary sinus ostium and infundibulum and arrowheads showing involvement of the hiatus semilunaris. Right maxillary sinus (MS) is hypoplastic."
+    },
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image demonstrating more extensive pattern of anterior ostiomeatal unit sinus disease with short arrow pointing to frontal recess, long arrow pointing to maxillary sinus ostium and infundibulum region with arrowheads marking the area of the hiatus semilunaris and middle meatus. Right maxillary sinus (MS) is hypoplastic."
+    }
+   ],
+   "size": [
+    819,
+    584
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.42,
+   "abbreviations": {},
+   "ids": [
+    "c.sinonasal-inflammatory-patterns",
+    "v.maxillary-sinus-hypoplasia"
+   ],
+   "note": "pattern: OMU; right maxillary hypoplasia",
+   "role": [
+    "P",
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-site",
+     "conf": 0.658,
+     "box": [
+      219,
+      348,
+      262,
+      374
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      375,
+      42
+     ],
+     "tip": [
+      372,
+      134
+     ],
+     "tipBy": "head",
+     "headRatio": 2.7,
+     "ringBright": 0.05,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      378,
+      251
+     ],
+     "tip": [
+      387,
+      224
+     ],
+     "tipBy": "head",
+     "headRatio": 3.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      375,
+      306
+     ],
+     "tip": [
+      402,
+      318
+     ],
+     "tipBy": "head",
+     "headRatio": 7.1,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 0,
+     "tooLong": 1,
+     "shortNotHead": 0,
+     "onBone": 8
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.anteriorOMU",
+   "file": "images/Sag.anteriorOMU.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Sagittal image showing anterior ostiomeatal sinus disease involving the frontal sinus ostium (small arrowhead), frontal sinus drainage pathway (small arrows), hiatus semilunaris (large arrowhead) and anterior ethmoid sinus (AE). (FS: frontal sinus, MT: middle turbinate)"
+    },
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Sagittal image with small arrowhead pointing to frontal sinus ostium, short arrows showing frontal sinus drainage involvement and large arrowhead showing involvement of hitus semilunaris again demonstrating anterior ostiomeatal pattern of disease. There is also involvement of the anterior ethmoid sinus (AE). (FS: frontal sinus, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    444,
+    420
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: anterior OMU",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-site",
+     "conf": 0.617,
+     "box": [
+      253,
+      48,
+      277,
+      66
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      124,
+      71,
+      145,
+      85
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "AE",
+     "tail": [
+      262,
+      69
+     ],
+     "tip": [
+      205,
+      157
+     ],
+     "tipBy": "label",
+     "headRatio": 3.8,
+     "ringBright": 0.04,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      114,
+      164
+     ],
+     "tip": [
+      146,
+      164
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      205,
+      217
+     ],
+     "tip": [
+      224,
+      197
+     ],
+     "tipBy": "head",
+     "headRatio": 5.9,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      129,
+      218
+     ],
+     "tip": [
+      156,
+      197
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      252,
+      260
+     ],
+     "tip": [
+      233,
+      270
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.03,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      160,
+      121
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.FSDP",
+   "file": "images/Sag.FSDP.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Sagitttal image demonstrating both anterior and posterior ostiomeatal sinus disease. There is mucosal thickening involving the FSDP, AE and sphenoid sinus ostium and sphenoethmoidal recess. (FS: frontal sinus, FSDP: frontal sinus drainage pathway, U: uncinate, HS: hiatus semilunaris, AE: anterior ethmoid, MT: middle turbinate, SpS: sphenoid sinus, double arrowheads: sphenoid sinus ostium and sphenoethmoidal recess)"
+    }
+   ],
+   "size": [
+    513,
+    423
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.56,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "FSDP": "frontal sinus drainage pathway",
+    "U": "uncinate",
+    "HS": "hiatus semilunaris",
+    "AE": "anterior ethmoid",
+    "MT": "middle turbinate",
+    "SpS": "sphenoid sinus"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "patterns: OMU + SER",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-caption",
+     "conf": 0.663,
+     "box": [
+      138,
+      107,
+      161,
+      124
+     ],
+     "ids": [
+      "s.anterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      63,
+      113,
+      83,
+      127
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "FSDP",
+     "text": "FSDP",
+     "read": "exact-caption",
+     "conf": 0.798,
+     "box": [
+      18,
+      173,
+      58,
+      190
+     ],
+     "ids": [
+      "s.frontal-recess"
+     ]
+    },
+    {
+     "raw": "sps",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.638,
+     "box": [
+      303,
+      186,
+      334,
+      205
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    },
+    {
+     "raw": "HS",
+     "text": "HS",
+     "read": "exact-caption",
+     "conf": 0.648,
+     "box": [
+      159,
+      248,
+      179,
+      262
+     ],
+     "ids": [
+      "s.hiatus-semilunaris"
+     ]
+    }
+   ],
+   "arrows": [],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      145,
+      151
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      263,
+      201
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      350,
+      214
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      274,
+      220
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "axial.MRCfrontal2",
+   "file": "images/axial.MRCfrontal2.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Axial image of the frontal sinuses (FS) with arrow pointing to a mucus retention cyst along the non-dependant right frontal sinus air cell."
+    }
+   ],
+   "size": [
+    402,
+    357
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucus-retention-cyst"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "F3",
+     "text": "FS",
+     "read": "confusion-site",
+     "conf": 0.646,
+     "box": [
+      122,
+      49,
+      145,
+      65
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      233,
+      42
+     ],
+     "tip": [
+      195,
+      45
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      3,
+      256
+     ],
+     "tip": [
+      14,
+      218
+     ],
+     "tipBy": "head",
+     "headRatio": 2.5,
+     "ringBright": 0.27,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      116,
+      40
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      136,
+      96
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      397,
+      323
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 7,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 8,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.MRCfrontal1",
+   "file": "images/Cor.MRCfrontal1.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronal image of the frontal sinuses with large arrow pointing to mucus retention cyst."
+    }
+   ],
+   "size": [
+    338,
+    433
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucus-retention-cyst"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      76,
+      196
+     ],
+     "tip": [
+      131,
+      138
+     ],
+     "tipBy": "head",
+     "headRatio": 3.2,
+     "ringBright": 0.03,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.frontalmucocele",
+   "file": "images/Cor.frontalmucocele.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronl image with small arrow pointing to superior orbital roof and large arrow pointing to expansile frontal sinus mucocele extending into the orbit causing inferolateral displacement of the left globe. (CG: crista galli)"
+    }
+   ],
+   "size": [
+    375,
+    375
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "histogram: 20.3% thick saturated area"
+   ],
+   "saturatedPct": 20.3,
+   "abbreviations": {
+    "CG": "crista galli"
+   },
+   "ids": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "frontalmucocele",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Sag.frontalmucocele",
+   "file": "images/Sag.frontalmucocele.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Sagittal image with arrow demonstrating large frontal sinus mucocele with orbital extension causing inferior displacement of the globe."
+    }
+   ],
+   "size": [
+    401,
+    369
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "§4.1 soft marker"
+   ],
+   "saturatedPct": 11.06,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "frontalmucocele",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "axial.frontalmucocele",
+   "file": "images/axial.frontalmucocele.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Axial image with arrow pointing to the expansile left frontal mucocele that has encroached into the orbit and is displacing the globe."
+    }
+   ],
+   "size": [
+    395,
+    377
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "§4.1 soft marker"
+   ],
+   "saturatedPct": 12.51,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "frontalmucocele",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Epidabscess1",
+   "file": "images/Epidabscess1.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Axial post-contrast image shows arrowhead pointing to the peripherally enhancing intracranial extra-axial fluid collection containing small foci of gas which communicates with the left frontal sinus disease marked by the arrow. This patient developed an epidural abscess related to his frontal sinus disease."
+    }
+   ],
+   "size": [
+    324,
+    288
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast"
+   ],
+   "saturatedPct": 15.01,
+   "abbreviations": {},
+   "ids": [
+    "dz.epidural-abscess"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Epidabscess3",
+   "file": "images/Epidabscess3.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronal post-contrast image with arrows demonstrating large epidural abscess with both intracranial and orbital extension in a different patient. Also note the extensive unilateral sinus disease."
+    }
+   ],
+   "size": [
+    288,
+    308
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast"
+   ],
+   "saturatedPct": 22.38,
+   "abbreviations": {},
+   "ids": [
+    "dz.epidural-abscess"
+   ],
+   "idsReason": "§4.1 marks dz.subperiosteal-orbital-abscess with \"?\"",
+   "idCandidates": [
+    {
+     "id": "dz.subperiosteal-orbital-abscess",
+     "inGraph": true
+    }
+   ],
+   "note": "another patient than Epidabscess1 (caption)",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Osteoma2",
+   "file": "images/Osteoma2.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Axial image with arrows pointing to large left frontal sinus osteoma extending intracranially and obstructing the contralateral right frontal sinus (FS)."
+    }
+   ],
+   "size": [
+    437,
+    402
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.osteoma"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "frontalosteoma",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-site",
+     "conf": 0.659,
+     "box": [
+      167,
+      45,
+      186,
+      59
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      277,
+      231
+     ],
+     "tip": [
+      271,
+      151
+     ],
+     "tipBy": "head",
+     "headRatio": 4.1,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      225,
+      85
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 11,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 8,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Osteoma3",
+   "file": "images/Osteoma3.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Coronal image with arrows pointing to the large frontal sinus osteoma extending intracranially and into the frontal recess. Note the inferior displacement of the left globe."
+    }
+   ],
+   "size": [
+    489,
+    431
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.osteoma"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "frontalosteoma",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Orbit",
+     "text": null,
+     "read": "unread",
+     "conf": 0.823,
+     "box": [
+      372,
+      256,
+      412,
+      274
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      364,
+      64
+     ],
+     "tip": [
+      348,
+      99
+     ],
+     "tipBy": "head",
+     "headRatio": 5.7,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      210,
+      115
+     ],
+     "tip": [
+      241,
+      137
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      269,
+      268
+     ],
+     "tip": [
+      249,
+      261
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      72,
+      394
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 9,
+    "nonAnnotation": {
+     "noHead": 9,
+     "curved": 8,
+     "tooLong": 0,
+     "shortNotHead": 7,
+     "onBone": 14
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Osteoma4",
+   "file": "images/Osteoma4.jpg",
+   "pages": [
+    {
+     "page": "Frontal-Abnormal.html",
+     "caption": "Sagittal image with arrows pointing to the large frontal osteoma extending intracranially and into the frontal recess. Arrowheads point to the hiatus semilunaris. (MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    462,
+    474
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "dz.osteoma"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "frontalosteoma",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.561,
+     "box": [
+      243,
+      294,
+      271,
+      313
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      258,
+      148
+     ],
+     "tip": [
+      209,
+      184
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      21,
+      207
+     ],
+     "tip": [
+      87,
+      169
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.08,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      206,
+      258
+     ],
+     "tip": [
+      187,
+      268
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "MT",
+     "tail": [
+      224,
+      280
+     ],
+     "tip": [
+      206,
+      292
+     ],
+     "tipBy": "label",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 6,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 7
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.max.1",
+   "file": "images/Axial.max.1.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Axial image of the maxillary sinuses at the level of the nasal septum marked by arrowhead. (MS: maxillary sinus, NLD: nasolacrimal duct, IT: inferior turbinate)"
+    }
+   ],
+   "size": [
+    455,
+    505
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MS": "maxillary sinus",
+    "NLD": "nasolacrimal duct",
+    "IT": "inferior turbinate"
+   },
+   "ids": [
+    "s.maxillary-sinus",
+    "s.nasolacrimal-duct"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "NLD",
+     "text": "NLD",
+     "read": "exact-caption",
+     "conf": 0.748,
+     "box": [
+      266,
+      149,
+      298,
+      165
+     ],
+     "ids": [
+      "s.nasolacrimal-duct"
+     ]
+    },
+    {
+     "raw": "NS",
+     "text": "NS",
+     "read": "exact-site",
+     "conf": 0.522,
+     "box": [
+      127,
+      171,
+      151,
+      186
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "'T",
+     "text": null,
+     "read": "unread",
+     "conf": 0.512,
+     "box": [
+      192,
+      220,
+      208,
+      236
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      245,
+      178
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 0
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.OMU2",
+   "file": "images/Cor.OMU2.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Coronal image with arrow pointing to maxillary sinus ostium (MO) with (..) illustrating the infundibulum joining the hiatus semilunaris (*). (MS: maxillary sinus, MT: middle turbinate)"
+    },
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image with arrows showing involvement of the anterior ethmoid air cells. Note the right maxillary sinus mucus retention cyst and paradoxical curvature of right middle turbinate."
+    }
+   ],
+   "size": [
+    524,
+    447
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MS": "maxillary sinus",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "s.ethmoid-infundibulum",
+    "s.hiatus-semilunaris"
+   ],
+   "note": "§4.1: not a clean normal: Maxillary-Abnormal captions the same image with anterior ethmoid disease, a right MRC and a right paradoxical MT",
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "MO",
+     "text": null,
+     "read": "unread",
+     "conf": 0.664,
+     "box": [
+      159,
+      292,
+      183,
+      306
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "Jncinate",
+     "text": null,
+     "read": "unread",
+     "conf": 0.883,
+     "box": [
+      194,
+      340,
+      248,
+      356
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.597,
+     "box": [
+      128,
+      342,
+      150,
+      356
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      219,
+      337
+     ],
+     "tip": [
+      215,
+      271
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "asterisk",
+     "at": [
+      232,
+      249
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 12,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 4,
+     "onBone": 3
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.max2",
+   "file": "images/Sag.max2.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Sagittal image showing hiatus semilunaris (*) with uncinate process and ethmoid bulla (EB) superiorly. (MT: middle turbinate, FS: frontal sinus, FSDP: frontal sinus drainage pathyway)"
+    }
+   ],
+   "size": [
+    447,
+    478
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MT": "middle turbinate",
+    "FS": "frontal sinus",
+    "FSDP": "frontal sinus drainage pathyway"
+   },
+   "ids": [
+    "s.uncinate-process",
+    "s.ethmoid-bulla"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.628,
+     "box": [
+      68,
+      116,
+      88,
+      129
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "ESDP",
+     "text": null,
+     "read": "unread",
+     "conf": 0.778,
+     "box": [
+      76,
+      182,
+      121,
+      200
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-site",
+     "conf": 0.666,
+     "box": [
+      191,
+      204,
+      214,
+      219
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.637,
+     "box": [
+      266,
+      271,
+      293,
+      291
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "ncinate",
+     "text": null,
+     "read": "unread",
+     "conf": 0.84,
+     "box": [
+      101,
+      273,
+      160,
+      286
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      124,
+      198
+     ],
+     "tip": [
+      152,
+      205
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      136,
+      268
+     ],
+     "tip": [
+      175,
+      267
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.01,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "asterisk",
+     "at": [
+      213,
+      261
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      224,
+      272
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 3,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.Maxhypo",
+   "file": "images/Axial.Maxhypo.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Axial images with arrows showing hypoplastic maxillary sinuses. The nasal septum is also absent. A septum can be absent due to either congenital or acquired (surgery, cocaine abuse or Wegener's granulomatosis) disorders."
+    }
+   ],
+   "size": [
+    508,
+    508
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.maxillary-sinus-hypoplasia"
+   ],
+   "idCandidates": [
+    {
+     "id": "dz.cocaine-midline-destructive-lesion",
+     "inGraph": true
+    },
+    {
+     "id": "dz.gpa",
+     "inGraph": true
+    }
+   ],
+   "proposedNew": [
+    "dz.septal-perforation"
+   ],
+   "note": "absent septum: §4.1 gives a new dz.septal-perforation or the existing causes (candidates)",
+   "role": [
+    "V",
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      427,
+      266
+     ],
+     "tip": [
+      391,
+      219
+     ],
+     "tipBy": "head",
+     "headRatio": 3.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      85,
+      272
+     ],
+     "tip": [
+      119,
+      220
+     ],
+     "tipBy": "head",
+     "headRatio": 3.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 5,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 9,
+     "tooLong": 0,
+     "shortNotHead": 8,
+     "onBone": 5
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.PneumMT",
+   "file": "images/Axial.PneumMT.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Axial image with arrow showing pneumatization of the middle turbinate (MT) also known as a concha bullosa which can potentially narrow the middle meatus. (MS: maxillary sinus)"
+    }
+   ],
+   "size": [
+    441,
+    510
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MS": "maxillary sinus"
+   },
+   "ids": [
+    "v.concha-bullosa"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Concha Bullosa",
+     "text": null,
+     "read": "unread",
+     "conf": 0.895,
+     "box": [
+      47,
+      53,
+      163,
+      68
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.659,
+     "box": [
+      295,
+      153,
+      323,
+      170
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-site",
+     "conf": 0.663,
+     "box": [
+      191,
+      174,
+      219,
+      194
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      135,
+      78
+     ],
+     "tip": [
+      182,
+      116
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.16,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 4,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.pneumMT",
+   "file": "images/Cor.pneumMT.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Coronal image with arrowhead showing concha bullosa of middle turbinate. Concha bullosa can potentially obstruct the maxillary sinus drainage pathway by narrowing the infundibulum and middle meatus."
+    }
+   ],
+   "size": [
+    442,
+    361
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.concha-bullosa"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Concha Bullosa",
+     "text": null,
+     "read": "unread",
+     "conf": 0.904,
+     "box": [
+      72,
+      241,
+      212,
+      263
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "IT",
+     "text": "IT",
+     "read": "exact-site",
+     "conf": 0.656,
+     "box": [
+      246,
+      254,
+      268,
+      276
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      181,
+      224
+     ],
+     "tip": [
+      163,
+      235
+     ],
+     "tipBy": "head",
+     "headRatio": 4.5,
+     "ringBright": 0.1,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      18,
+      114
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Paradox.MT.curve",
+   "file": "images/Paradox.MT.curve.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Coronal image with arrow pointing to paradoxical curvature of the middle turbinate (MT) with convexity of the bone directed laterally. Paradoxical curvature can potentially narrow or obstruct the infundibulum or middle meatus."
+    }
+   ],
+   "size": [
+    399,
+    347
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.paradoxical-middle-turbinate"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Paradoxical",
+     "text": null,
+     "read": "unread",
+     "conf": 0.909,
+     "box": [
+      19,
+      219,
+      109,
+      235
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "curve-",
+     "text": null,
+     "read": "unread",
+     "conf": 0.732,
+     "box": [
+      109,
+      221,
+      159,
+      235
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-site",
+     "conf": 0.662,
+     "box": [
+      76,
+      235,
+      107,
+      257
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "IT",
+     "text": "IT",
+     "read": "exact-site",
+     "conf": 0.644,
+     "box": [
+      171,
+      271,
+      194,
+      293
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      388,
+      176
+     ],
+     "tip": [
+      389,
+      266
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.38,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      249,
+      290
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 6,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.SeptDeviatnSpur",
+   "file": "images/Cor.SeptDeviatnSpur.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Coronal image with arrow pointing to nasal spur and septal deviation which if severe enough can narrow or compress the middle turbinate laterally and the middle meatus. (MS: maxillary sinus)"
+    }
+   ],
+   "size": [
+    580,
+    515
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MS": "maxillary sinus"
+   },
+   "ids": [
+    "v.septal-deviation",
+    "v.septal-spur"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.549,
+     "box": [
+      98,
+      320,
+      138,
+      342
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      388,
+      308
+     ],
+     "tip": [
+      252,
+      313
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.12,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Maxseptum",
+   "file": "images/Cor.Maxseptum.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Normal.html",
+     "caption": "Coronal image with arrows illustrating thin bony septum in the maxillary sinuses (MS)."
+    }
+   ],
+   "size": [
+    483,
+    453
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.maxillary-sinus-septa"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-site",
+     "conf": 0.617,
+     "box": [
+      324,
+      263,
+      356,
+      281
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-site",
+     "conf": 0.617,
+     "box": [
+      132,
+      266,
+      163,
+      284
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": "MS",
+     "tail": [
+      140,
+      240
+     ],
+     "tip": [
+      161,
+      217
+     ],
+     "tipBy": "label",
+     "headRatio": 3.2,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "MS",
+     "tail": [
+      354,
+      241
+     ],
+     "tip": [
+      327,
+      217
+     ],
+     "tipBy": "label",
+     "headRatio": 3.2,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 3,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 3,
+     "onBone": 3
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.Maxillarysinus",
+   "file": "images/Axial.Maxillarysinus.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Axial image showing mucosal thicknening and an air-fluid level in the maxillary sinus (MS)."
+    }
+   ],
+   "size": [
+    825,
+    605
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.acute-rhinosinusitis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-site",
+     "conf": 0.626,
+     "box": [
+      236,
+      300,
+      279,
+      326
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      613,
+      602
+     ],
+     "tip": [
+      582,
+      596
+     ],
+     "tipBy": "head",
+     "headRatio": 4.8,
+     "ringBright": 0.18,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      502,
+      460
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.OMU5",
+   "file": "images/Cor.OMU5.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image with (*) showing obstruction of the infundibulum and on left side involvement of the hiatus semilunaris. Small arrows also demonstrate sinus disease of the anterior ethmoid air cells and larger arrows point to bilateral maxillary sinus mucosal thickening. Pattern of sinus disease involves the anterior ostiomeatal unit."
+    }
+   ],
+   "size": [
+    325,
+    356
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "patterns: infundibular + OMU",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      3,
+      133
+     ],
+     "tip": [
+      8,
+      170
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.52,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      91,
+      159
+     ],
+     "tip": [
+      120,
+      158
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      239,
+      159
+     ],
+     "tip": [
+      206,
+      159
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      51,
+      305
+     ],
+     "tip": [
+      30,
+      330
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      279,
+      308
+     ],
+     "tip": [
+      299,
+      336
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      98,
+      114
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      215,
+      124
+     ],
+     "approx": true
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      202,
+      224
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      116,
+      225
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      208,
+      351
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 5,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 5,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Inflamm2",
+   "file": "images/Cor.Inflamm2.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image with small arrows illustrating involvement of the maxillary sinus ostium and infundibulum and large arrow pointing to maxillary sinus mucosal thickening. (U: uncinate, EB: ethmoid bulla)"
+    }
+   ],
+   "size": [
+    696,
+    694
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "viewed: viewed: bone window; wide cortical saturation of the maxillary and facial bone, soft tissue stays dark",
+    "histogram: 4.2% thick saturated area"
+   ],
+   "saturatedPct": 4.2,
+   "abbreviations": {
+    "U": "uncinate",
+    "EB": "ethmoid bulla"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: infundibular",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      392,
+      300,
+      428,
+      324
+     ],
+     "ids": [
+      "s.ethmoid-bulla"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      650,
+      2
+     ],
+     "tip": [
+      626,
+      23
+     ],
+     "tipBy": "head",
+     "headRatio": 7.3,
+     "ringBright": 0.59,
+     "suspect": true,
+     "touchesBone": true
+    },
+    {
+     "label": "EB",
+     "tail": [
+      453,
+      320
+     ],
+     "tip": [
+      411,
+      355
+     ],
+     "tipBy": "head",
+     "headRatio": 3.2,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      472,
+      342
+     ],
+     "tip": [
+      429,
+      376
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.07,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      552,
+      544
+     ],
+     "tip": [
+      505,
+      483
+     ],
+     "tipBy": "head",
+     "headRatio": 3.2,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 9,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 8
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.acutesinus1",
+   "file": "images/Axial.acutesinus1.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Axial image with arrow pointing to air-fluid level in maxillary sinus in acute sinusitis. Note the slightly bubbly appearing fluid."
+    }
+   ],
+   "size": [
+    401,
+    405
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.acute-rhinosinusitis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      41,
+      335
+     ],
+     "tip": [
+      46,
+      361
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.13,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      232,
+      380
+     ],
+     "tip": [
+      244,
+      352
+     ],
+     "tipBy": "head",
+     "headRatio": 2.7,
+     "ringBright": 0.52,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      247,
+      336
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 2,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 7,
+     "tooLong": 0,
+     "shortNotHead": 12,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.acutesinus2",
+   "file": "images/Axial.acutesinus2.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Axial image demonstrating additional case of acute sinusitis with arrows pointing to air-fluid levels in the ethmoid and sphenoid sinuses."
+    }
+   ],
+   "size": [
+    386,
+    389
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.acute-rhinosinusitis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      322,
+      109
+     ],
+     "tip": [
+      251,
+      114
+     ],
+     "tipBy": "head",
+     "headRatio": 2.9,
+     "ringBright": 0.06,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      195,
+      299
+     ],
+     "tip": [
+      197,
+      244
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      190,
+      11
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      209,
+      37
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      170,
+      37
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      56,
+      180
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      324,
+      219
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      359,
+      366
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 4,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.foamysinus",
+   "file": "images/Cor.foamysinus.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image with large arrow pointing to \"foamy\" maxillary sinus disease."
+    }
+   ],
+   "size": [
+    257,
+    297
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.acute-rhinosinusitis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      244,
+      279
+     ],
+     "tip": [
+      205,
+      227
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.01,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Aggressivesinus3",
+   "file": "images/Aggressivesinus3.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Axial image demonstrating air-fluid level in left maxillary sinus with arrow pointing to bony erosion of the posterior maxillary sinus wall in a case of acute sinusitis."
+    }
+   ],
+   "size": [
+    409,
+    300
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.acute-rhinosinusitis"
+   ],
+   "mimicOf": [
+    "dz.acute-invasive-fungal-sinusitis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      142,
+      86
+     ],
+     "tip": [
+      186,
+      64
+     ],
+     "tipBy": "head",
+     "headRatio": 2.8,
+     "ringBright": 0.15,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      334,
+      248
+     ],
+     "tip": [
+      304,
+      218
+     ],
+     "tipBy": "head",
+     "headRatio": 2.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      376,
+      297
+     ],
+     "tip": [
+      362,
+      276
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.09,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      184,
+      94
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 7,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Aggressivesinus1",
+   "file": "images/Aggressivesinus1.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Axial image in soft tissue window with arrow pointing to posterior extension of sinus disease through the posterior maxillary sinus wall into the retroantral fat pad."
+    }
+   ],
+   "size": [
+    607,
+    477
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "caption: soft tissue window"
+   ],
+   "saturatedPct": 6.94,
+   "abbreviations": {},
+   "ids": [
+    "s.retroantral-fat-pad"
+   ],
+   "note": "§4.1: red flag for AIFS (dz.acute-invasive-fungal-sinusitis)",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Cor.MRCmax1",
+   "file": "images/Cor.MRCmax1.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image with arrow pointing to right maxillary sinus mucus retention cyst (MRC). Notice how sinus air partially surrounds the MRC in contrast to a mucocele which completely fills and expands the sinus."
+    }
+   ],
+   "size": [
+    454,
+    439
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucus-retention-cyst"
+   ],
+   "mimicOf": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "maxillary-mrc",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [],
+   "arrows": [],
+   "marks": [],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 6,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 4,
+     "onBone": 3
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": [
+     "arrow"
+    ]
+   }
+  },
+  {
+   "id": "Sag.MRCmax3",
+   "file": "images/Sag.MRCmax3.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Sagittal image with arrow pointing to maxillary sinus mucus retention cyst."
+    }
+   ],
+   "size": [
+    443,
+    432
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 1.29,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucus-retention-cyst"
+   ],
+   "mimicOf": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "maxillary-mrc",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      257,
+      225
+     ],
+     "tip": [
+      184,
+      288
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      269,
+      429
+     ],
+     "tip": [
+      225,
+      410
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.47,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Maxpolyp",
+   "file": "images/Cor.Maxpolyp.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Coronal image with arrow pointing to maxillary sinus polyp. Often on imaging a polyp and mucus retention cyst cannot be differentiated, but is usually of little clinical consequence."
+    }
+   ],
+   "size": [
+    579,
+    407
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.5,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "§4.1 marks dz.crs-with-polyps with \"?\"",
+   "idCandidates": [
+    {
+     "id": "dz.crs-with-polyps",
+     "inGraph": true
+    }
+   ],
+   "mimicOf": [
+    "dz.mucus-retention-cyst"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      576,
+      135
+     ],
+     "tip": [
+      558,
+      90
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.91,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      314,
+      404
+     ],
+     "tip": [
+      381,
+      395
+     ],
+     "tipBy": "head",
+     "headRatio": 5.5,
+     "ringBright": 0.46,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      552,
+      299
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 2,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 6,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "AntrochoanalPolyp1",
+   "file": "images/AntrochoanalPolyp1.jpg",
+   "pages": [
+    {
+     "page": "Maxillary-Abnormal.html",
+     "caption": "Axial image demonstrates an antrochoanal polyp that completely fills the maxillary sinus with arrow pointing to widened infundibular region with extension into the middle meatus and nasal cavity."
+    }
+   ],
+   "size": [
+    505,
+    442
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "§4.1 soft marker"
+   ],
+   "saturatedPct": 16.53,
+   "abbreviations": {},
+   "ids": [
+    "dz.antrochoanal-polyp"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Axial.ethmoid1",
+   "file": "images/Axial.ethmoid1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Axial view shows small arrows demonstrating bony canal for anterior and posterior ethmoidal arteries (CG: crista galli, AC: anterior clinoid process, OC: optic canal, SP: sphenoid sinus)."
+    }
+   ],
+   "size": [
+    458,
+    490
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "CG": "crista galli",
+    "AC": "anterior clinoid process",
+    "OC": "optic canal",
+    "SP": "sphenoid sinus"
+   },
+   "ids": [
+    "s.crista-galli",
+    "s.anterior-clinoid-process",
+    "s.optic-canal"
+   ],
+   "note": "§4.1 also names the ethmoidal arteries (no id given); canal QA",
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "CG",
+     "text": "CG",
+     "read": "exact-caption",
+     "conf": 0.654,
+     "box": [
+      226,
+      104,
+      250,
+      120
+     ],
+     "ids": [
+      "s.crista-galli"
+     ]
+    },
+    {
+     "raw": "SP",
+     "text": "SP",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      226,
+      221,
+      248,
+      235
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    },
+    {
+     "raw": "AC",
+     "text": "AC",
+     "read": "exact-caption",
+     "conf": 0.657,
+     "box": [
+      175,
+      230,
+      199,
+      248
+     ],
+     "ids": [
+      "s.anterior-clinoid-process"
+     ]
+    },
+    {
+     "raw": "OC",
+     "text": "OC",
+     "read": "exact-caption",
+     "conf": 0.588,
+     "box": [
+      301,
+      253,
+      324,
+      269
+     ],
+     "ids": [
+      "s.optic-canal"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "OC",
+     "tail": [
+      298,
+      256
+     ],
+     "tip": [
+      274,
+      237
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.ethmoid2",
+   "file": "images/Axial.ethmoid2.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Axial image showing normal ethmoid sinus anatomy. Arrows point to the lateral attachment of the basal lamellae to lamina papyracea separating anterior and posterior ethmoid sinuses (AE: anterior ethmoid, PE: posterior ethmoid, NS: nasal septum, SpS: sphenoid sinus)"
+    }
+   ],
+   "size": [
+    445,
+    489
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "AE": "anterior ethmoid",
+    "PE": "posterior ethmoid",
+    "NS": "nasal septum",
+    "SpS": "sphenoid sinus"
+   },
+   "ids": [
+    "s.basal-lamella",
+    "s.lamina-papyracea"
+   ],
+   "note": "basal lamella QA",
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      198,
+      88,
+      219,
+      104
+     ],
+     "ids": [
+      "s.anterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "NS",
+     "text": "NS",
+     "read": "exact-caption",
+     "conf": 0.657,
+     "box": [
+      218,
+      125,
+      243,
+      142
+     ],
+     "ids": [
+      "s.nasal-septum"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      185,
+      174,
+      207,
+      191
+     ],
+     "ids": [
+      "s.posterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.669,
+     "box": [
+      209,
+      252,
+      239,
+      271
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    }
+   ],
+   "arrows": [],
+   "marks": [],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": [
+     "arrow"
+    ]
+   }
+  },
+  {
+   "id": "Sag.ethmoidnormal",
+   "file": "images/Sag.ethmoidnormal.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Sagittal image with arrowhead demonstrating anterior ethmoid drainage to hiatus semilunaris and middle meatus. Arrow showing posterior ethmoid drainage to sphenoethmoidal recess and superior meatus. (AG: agger nasi cell, AE: anterior ethmoid, PE: posterior ethmoid, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    443,
+    479
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "AG": "agger nasi cell",
+    "AE": "anterior ethmoid",
+    "PE": "posterior ethmoid",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "s.sphenoethmoidal-recess"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "AG",
+     "text": "AG",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      143,
+      206,
+      168,
+      223
+     ],
+     "ids": [
+      "s.agger-nasi-cell"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.635,
+     "box": [
+      284,
+      209,
+      310,
+      228
+     ],
+     "ids": [
+      "s.posterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-caption",
+     "conf": 0.658,
+     "box": [
+      184,
+      210,
+      209,
+      227
+     ],
+     "ids": [
+      "s.anterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.528,
+     "box": [
+      257,
+      286,
+      283,
+      303
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "PE",
+     "tail": [
+      348,
+      238
+     ],
+     "tip": [
+      322,
+      269
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      219,
+      270
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.basallamella",
+   "file": "images/Cor.basallamella.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Coronal image with arrowhead showing lateral attachment of basal lamellae to lamina papyracea marked by the arrow. (CG: crista galli, *: cribriform plate, FE: fovea ethmoidalis, MT: middle turbinate, IT: inferior turbinate)"
+    }
+   ],
+   "size": [
+    434,
+    405
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "CG": "crista galli",
+    "*": "cribriform plate",
+    "FE": "fovea ethmoidalis",
+    "MT": "middle turbinate",
+    "IT": "inferior turbinate"
+   },
+   "ids": [
+    "s.basal-lamella",
+    "s.cribriform-plate",
+    "s.fovea-ethmoidalis"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "CG",
+     "text": "CG",
+     "read": "exact-caption",
+     "conf": 0.651,
+     "box": [
+      205,
+      124,
+      230,
+      142
+     ],
+     "ids": [
+      "s.crista-galli"
+     ]
+    },
+    {
+     "raw": "-MT",
+     "text": null,
+     "read": "unread",
+     "conf": 0.72,
+     "box": [
+      218,
+      225,
+      258,
+      241
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "IT",
+     "text": "IT",
+     "read": "exact-caption",
+     "conf": 0.644,
+     "box": [
+      184,
+      307,
+      202,
+      325
+     ],
+     "ids": [
+      "s.inferior-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      160,
+      183
+     ],
+     "tip": [
+      132,
+      182
+     ],
+     "tipBy": "head",
+     "headRatio": 5.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      193,
+      194
+     ],
+     "approx": true
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      207,
+      232
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 0
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.basallamella2",
+   "file": "images/Sag.basallamella2.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Sagittal image with arrow showing vertical attachment of basal lamellae to anterior skull base separating the anterior ethmoid (AE) and posterior ethmoid (PE) sinuses. (FS: frontal sinus, AG: agger nasi cell, SpS: sphenoid sinus, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    498,
+    479
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "AG": "agger nasi cell",
+    "SpS": "sphenoid sinus",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "s.basal-lamella"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.63,
+     "box": [
+      123,
+      138,
+      146,
+      154
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-site",
+     "conf": 0.647,
+     "box": [
+      181,
+      206,
+      202,
+      221
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "AG",
+     "text": "AG",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      147,
+      229,
+      168,
+      243
+     ],
+     "ids": [
+      "s.agger-nasi-cell"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-site",
+     "conf": 0.666,
+     "box": [
+      231,
+      235,
+      250,
+      248
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "3rS",
+     "text": null,
+     "read": "unread",
+     "conf": 0.545,
+     "box": [
+      320,
+      277,
+      351,
+      294
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.568,
+     "box": [
+      211,
+      304,
+      234,
+      320
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      233,
+      166
+     ],
+     "tip": [
+      233,
+      220
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      138,
+      184
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 3
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.Aggernasicell",
+   "file": "images/Axial.Aggernasicell.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Axial image demonstrating an Agger Nasi air cell which is the most anterior ethmoid air cell. (AE: anterior ethmoid, PE: posterior ethmoid, SpS: sphenoid sinus)"
+    }
+   ],
+   "size": [
+    472,
+    456
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "AE": "anterior ethmoid",
+    "PE": "posterior ethmoid",
+    "SpS": "sphenoid sinus"
+   },
+   "ids": [
+    "s.agger-nasi-cell"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": {
+    "id": "aggernasicell",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Agger Nasi Cell",
+     "text": "Agger Nasi Cell",
+     "read": "term",
+     "conf": 0.878,
+     "box": [
+      262,
+      38,
+      382,
+      60
+     ],
+     "ids": [
+      "s.agger-nasi-cell"
+     ]
+    },
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      251,
+      129,
+      276,
+      145
+     ],
+     "ids": [
+      "s.anterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      257,
+      198,
+      281,
+      214
+     ],
+     "ids": [
+      "s.posterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.648,
+     "box": [
+      234,
+      236,
+      272,
+      257
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "Agger Nasi Cell",
+     "tail": [
+      295,
+      63
+     ],
+     "tip": [
+      266,
+      89
+     ],
+     "tipBy": "label",
+     "headRatio": 3.2,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      74,
+      178
+     ],
+     "tip": [
+      35,
+      128
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.12,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      341,
+      225
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      129,
+      236
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      318,
+      258
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      191,
+      282
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 3,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 4,
+     "tooLong": 1,
+     "shortNotHead": 2,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Aggernasicell",
+   "file": "images/Cor.Aggernasicell.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Coronal image with arrowhead showing Agger Nasi air cell. (MS: maxillary sinus, MT: middle turbinate, IT: inferior turbinate)"
+    }
+   ],
+   "size": [
+    419,
+    456
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MS": "maxillary sinus",
+    "MT": "middle turbinate",
+    "IT": "inferior turbinate"
+   },
+   "ids": [
+    "s.agger-nasi-cell"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": {
+    "id": "aggernasicell",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Agger Nast Cell",
+     "text": "agger nasi cell",
+     "read": "fuzzy-term",
+     "conf": 0.843,
+     "box": [
+      244,
+      216,
+      384,
+      237
+     ],
+     "ids": [
+      "s.agger-nasi-cell"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.664,
+     "box": [
+      204,
+      273,
+      230,
+      291
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.662,
+     "box": [
+      285,
+      342,
+      314,
+      360
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    },
+    {
+     "raw": "IT",
+     "text": "IT",
+     "read": "exact-caption",
+     "conf": 0.651,
+     "box": [
+      228,
+      354,
+      245,
+      369
+     ],
+     "ids": [
+      "s.inferior-turbinate"
+     ]
+    }
+   ],
+   "arrows": [],
+   "marks": [],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 0,
+     "tooLong": 1,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": [
+     "arrowhead"
+    ]
+   }
+  },
+  {
+   "id": "Sag.Aggernasicell",
+   "file": "images/Sag.Aggernasicell.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Sagittal image shows Agger Nasi air cell. (FS: frontal sinus, PE: posterior ethmoid, SpS: sphenoid sinus)"
+    }
+   ],
+   "size": [
+    399,
+    422
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "PE": "posterior ethmoid",
+    "SpS": "sphenoid sinus"
+   },
+   "ids": [
+    "s.agger-nasi-cell"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": {
+    "id": "aggernasicell",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.663,
+     "box": [
+      50,
+      102,
+      74,
+      118
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      192,
+      192,
+      218,
+      210
+     ],
+     "ids": [
+      "s.posterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "Agger Nasi cell",
+     "text": "Agger Nasi cell",
+     "read": "term",
+     "conf": 0.894,
+     "box": [
+      0,
+      231,
+      114,
+      251
+     ],
+     "ids": [
+      "s.agger-nasi-cell"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.691,
+     "box": [
+      259,
+      234,
+      294,
+      254
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    }
+   ],
+   "arrows": [],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.ethmoidbulla1",
+   "file": "images/Cor.ethmoidbulla1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Coronal image shows ethmoid bulla air cells superior to uncinate processes. The (*) highlight the hiatus semilunaris. Ethmoid bulla air cells are part of the anterior ethmoid sinuses and make up the superior border of the hiatus semilunaris. (EB:ethmoid bulla, U: uncinate process, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    470,
+    469
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.85,
+   "abbreviations": {
+    "EB": "ethmoid bulla",
+    "U": "uncinate process",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "s.ethmoid-bulla",
+    "s.uncinate-process"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      189,
+      201,
+      213,
+      217
+     ],
+     "ids": [
+      "s.ethmoid-bulla"
+     ]
+    },
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      260,
+      201,
+      284,
+      217
+     ],
+     "ids": [
+      "s.ethmoid-bulla"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.652,
+     "box": [
+      196,
+      278,
+      219,
+      294
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [],
+   "marks": [
+    {
+     "kind": "asterisk",
+     "at": [
+      260,
+      269
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      196,
+      270
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      178,
+      283
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      275,
+      287
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 7,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 5
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.ethmoidbulla3",
+   "file": "images/Cor.ethmoidbulla3.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Coronal image with arrows pointing to enlarged ethmoid bulla encroaching on the OMU. Ethmoid bulla air cells can demonstrate variable pneumatization."
+    }
+   ],
+   "size": [
+    666,
+    611
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.36,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "§4.1: a new id (no id string given)",
+   "proposedNew": [
+    "bulla hyperpneumatization"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      599,
+      172
+     ],
+     "tip": [
+      510,
+      215
+     ],
+     "tipBy": "head",
+     "headRatio": 3.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      79,
+      183
+     ],
+     "tip": [
+      175,
+      204
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      603,
+      544
+     ],
+     "tip": [
+      577,
+      551
+     ],
+     "tipBy": "head",
+     "headRatio": 5.6,
+     "ringBright": 0.96,
+     "suspect": true,
+     "touchesBone": true
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 5
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.hallercell1",
+   "file": "images/Axial.hallercell1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Axial image with arrow pointing to an infraorbital ethmoid air cell (Haller cell). If present, a Haller cell can cause narrowing of the infundibulum and maxillary sinus ostuim potentially causing obstruction. (MS: maxillary sinus, NLD: nasolacrimal duct)"
+    }
+   ],
+   "size": [
+    477,
+    499
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MS": "maxillary sinus",
+    "NLD": "nasolacrimal duct"
+   },
+   "ids": [
+    "v.infraorbital-ethmoid-cell"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": {
+    "id": "hallercell",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Haller Cell",
+     "text": null,
+     "read": "unread",
+     "conf": 0.881,
+     "box": [
+      99,
+      36,
+      178,
+      54
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "NLD",
+     "text": "NLD",
+     "read": "exact-caption",
+     "conf": 0.737,
+     "box": [
+      236,
+      91,
+      272,
+      109
+     ],
+     "ids": [
+      "s.nasolacrimal-duct"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.66,
+     "box": [
+      160,
+      166,
+      188,
+      184
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "NLD",
+     "tail": [
+      213,
+      101
+     ],
+     "tip": [
+      233,
+      96
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      321,
+      93
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      54,
+      162
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      430,
+      169
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 5,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 4,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Hallercell1",
+   "file": "images/Cor.Hallercell1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Coronal image with arrowhead pointing to infraorbital ethmoid air cell ( Haller cell) which is narrowing the maxillary sinus ostium and infundibulum. (MT: middle turbinate, MS: maxillary sinus)"
+    }
+   ],
+   "size": [
+    435,
+    448
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "MT": "middle turbinate",
+    "MS": "maxillary sinus"
+   },
+   "ids": [
+    "v.infraorbital-ethmoid-cell"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": {
+    "id": "hallercell",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Orbit",
+     "text": null,
+     "read": "unread",
+     "conf": 0.831,
+     "box": [
+      77,
+      196,
+      127,
+      219
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.663,
+     "box": [
+      191,
+      268,
+      223,
+      290
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      309,
+      326,
+      343,
+      346
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    },
+    {
+     "raw": "Haller Cell",
+     "text": null,
+     "read": "unread",
+     "conf": 0.88,
+     "box": [
+      80,
+      327,
+      169,
+      344
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      280,
+      2
+     ],
+     "tip": [
+      299,
+      7
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.98,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      140,
+      306
+     ],
+     "tip": [
+      123,
+      319
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 5,
+    "nonAnnotation": {
+     "noHead": 6,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.hallercell",
+   "file": "images/Sag.hallercell.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Normal.html",
+     "caption": "Sagittal image with arrowhead pointing to infraorbital ethmoid air cell (Haller cell). (FS: frontal sinus, MS: maxillary sinus)"
+    }
+   ],
+   "size": [
+    446,
+    454
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "MS": "maxillary sinus"
+   },
+   "ids": [
+    "v.infraorbital-ethmoid-cell"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": {
+    "id": "hallercell",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      56,
+      120,
+      83,
+      138
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "Haller Cell",
+     "text": null,
+     "read": "unread",
+     "conf": 0.895,
+     "box": [
+      52,
+      225,
+      145,
+      245
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "MS",
+     "text": "MS",
+     "read": "exact-caption",
+     "conf": 0.605,
+     "box": [
+      129,
+      366,
+      161,
+      386
+     ],
+     "ids": [
+      "s.maxillary-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      94,
+      272
+     ],
+     "tip": [
+      88,
+      252
+     ],
+     "tipBy": "head",
+     "headRatio": 5.1,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.antethmoidinf",
+   "file": "images/Axial.antethmoidinf.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Axial image with arrowheads pointing to anterior ethmoid sinus disease. Long arrows point to clear posterior ethmoid air cells. Short arrows point to clear sphenoid sinus with (*) marking the sphenoid sinus ostium."
+    }
+   ],
+   "size": [
+    360,
+    430
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: OMU",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Sps",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.691,
+     "box": [
+      163,
+      281,
+      198,
+      301
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      327,
+      119
+     ],
+     "tip": [
+      350,
+      133
+     ],
+     "tipBy": "head",
+     "headRatio": 2.8,
+     "ringBright": 0.17,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      265,
+      190
+     ],
+     "tip": [
+      213,
+      192
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.17,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      200,
+      60
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      336,
+      106
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      240,
+      135
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      120,
+      161
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      162,
+      267
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      188,
+      270
+     ],
+     "approx": true
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      293,
+      158
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      252,
+      205
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      328,
+      217
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    },
+    {
+     "kind": "asterisk",
+     "at": [
+      235,
+      221
+     ],
+     "approx": true,
+     "by": "speck (caption names an asterisk)"
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 2,
+    "specks": 6,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 7,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": true
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.ethmoidinflamm3",
+   "file": "images/Sag.ethmoidinflamm3.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Sagittal image with arrows pointing to posterior ethmoid sinus disease and arrowheads showing involvement of the ostium and sphenoethmidal recess. (SpS: sphenoid sinus, FS: frontal sinus, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    411,
+    382
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "SpS": "sphenoid sinus",
+    "FS": "frontal sinus",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: SER",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.663,
+     "box": [
+      79,
+      103,
+      102,
+      119
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.71,
+     "box": [
+      257,
+      198,
+      286,
+      217
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.66,
+     "box": [
+      125,
+      223,
+      151,
+      243
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      219,
+      147
+     ],
+     "tip": [
+      200,
+      184
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "SpS",
+     "tail": [
+      250,
+      177
+     ],
+     "tip": [
+      233,
+      206
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      225,
+      253
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      243,
+      260
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.ethmoidinflamm4",
+   "file": "images/Axial.ethmoidinflamm4.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Axial image with arrowheads pointing to both anterior and posterior ethmoid sinus disease."
+    }
+   ],
+   "size": [
+    368,
+    290
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "§4.1 gives no id (\"—\")",
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      218,
+      57
+     ],
+     "tip": [
+      238,
+      50
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      137,
+      62
+     ],
+     "tip": [
+      117,
+      56
+     ],
+     "tipBy": "head",
+     "headRatio": 5.1,
+     "ringBright": 0.01,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      128,
+      126
+     ],
+     "tip": [
+      108,
+      120
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      232,
+      127
+     ],
+     "tip": [
+      251,
+      120
+     ],
+     "tipBy": "head",
+     "headRatio": 5.1,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      11,
+      202
+     ],
+     "tip": [
+      47,
+      169
+     ],
+     "tipBy": "head",
+     "headRatio": 2.5,
+     "ringBright": 0.09,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      166,
+      21
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      160,
+      34
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      311,
+      148
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 5,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 4,
+     "tooLong": 0,
+     "shortNotHead": 5,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.ethmoidinfunddz1",
+   "file": "images/Cor.ethmoidinfunddz1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Coronal image with arrowhead pointing to ethmoid infundibulum sinus disease. In this patient the arrows are pointing to the uncinate process which connects to the skull base so the inferior compartment of the frontal sinus drainage pathway (FSDP) is the ethmoid infundibulum. (FS: frontal sinus, MT: middle turbinate)"
+    }
+   ],
+   "size": [
+    441,
+    464
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.71,
+   "abbreviations": {
+    "FS": "frontal sinus",
+    "MT": "middle turbinate"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns",
+    "v.uncinate-insertion-skull-base"
+   ],
+   "note": "pattern: infundibular",
+   "role": [
+    "P",
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FS",
+     "text": "FS",
+     "read": "exact-caption",
+     "conf": 0.663,
+     "box": [
+      243,
+      142,
+      261,
+      155
+     ],
+     "ids": [
+      "s.frontal-sinus"
+     ]
+    },
+    {
+     "raw": "Ethmoidanfundibulum",
+     "text": "ethmoid infundibulum",
+     "read": "fuzzy-term",
+     "conf": 0.871,
+     "box": [
+      272,
+      162,
+      393,
+      175
+     ],
+     "ids": [
+      "s.ethmoid-infundibulum"
+     ]
+    },
+    {
+     "raw": "MT",
+     "text": "MT",
+     "read": "exact-caption",
+     "conf": 0.66,
+     "box": [
+      231,
+      279,
+      252,
+      294
+     ],
+     "ids": [
+      "s.middle-turbinate"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "ethmoid infundibulum",
+     "tail": [
+      253,
+      186
+     ],
+     "tip": [
+      265,
+      168
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.03,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      185,
+      203
+     ],
+     "tip": [
+      232,
+      202
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      196,
+      245
+     ],
+     "tip": [
+      243,
+      243
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      116,
+      461
+     ],
+     "tip": [
+      89,
+      438
+     ],
+     "tipBy": "head",
+     "headRatio": 10.0,
+     "ringBright": 0.59,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 7
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.OMU&Sps",
+   "file": "images/Sag.OMU&Sps.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Sagittal image demonstrates more extensive involvement of the paranasal sinuses including frontal sinus (FS) and frontal sinus drainage pathway (large arow), both anterior ethmoid (AE) and posterior ethmoid sinuses (PE) marked by arrows, and sphenoid sinus (SpS) with arrowhead pointing to sphenoid sinus ostium and sphenoethmoidal recess."
+    }
+   ],
+   "size": [
+    399,
+    351
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "not in the §4.1 table (the table has no row for this file)",
+   "role": null,
+   "roleReason": "not stated in §4.1",
+   "group": null,
+   "labels": [
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-site",
+     "conf": 0.639,
+     "box": [
+      107,
+      90,
+      136,
+      109
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "FSI",
+     "text": null,
+     "read": "unread",
+     "conf": 0.624,
+     "box": [
+      51,
+      95,
+      87,
+      120
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-site",
+     "conf": 0.664,
+     "box": [
+      160,
+      116,
+      186,
+      134
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "Sps",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.745,
+     "box": [
+      194,
+      181,
+      228,
+      201
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      48,
+      109
+     ],
+     "tip": [
+      72,
+      2
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.08,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "AE",
+     "tail": [
+      121,
+      113
+     ],
+     "tip": [
+      120,
+      141
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "PE",
+     "tail": [
+      170,
+      138
+     ],
+     "tip": [
+      169,
+      172
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      54,
+      166
+     ],
+     "tip": [
+      95,
+      166
+     ],
+     "tipBy": "head",
+     "headRatio": 3.2,
+     "ringBright": 0.19,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      58,
+      130
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      187,
+      240
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      328,
+      311
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 1,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 3
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Mucocele1",
+   "file": "images/Mucocele1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Axial image with arrows pointing to expansile ethmoid mucocele."
+    }
+   ],
+   "size": [
+    451,
+    434
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": [],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      193,
+      59
+     ],
+     "tip": [
+      209,
+      95
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      125,
+      207
+     ],
+     "tip": [
+      170,
+      179
+     ],
+     "tipBy": "head",
+     "headRatio": 4.5,
+     "ringBright": 0.06,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      225,
+      45
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      161,
+      47
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      332,
+      288
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      88,
+      330
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 3,
+    "nonAnnotation": {
+     "noHead": 8,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 3,
+     "onBone": 2
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Orbitalcellulitis2",
+   "file": "images/Orbitalcellulitis2.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Axial post-contrast image with arrowheads pointing to orbital extension of ethmoid sinus disease marked by arrow."
+    }
+   ],
+   "size": [
+    336,
+    301
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast",
+    "histogram: only 1.1% thick saturated area (soft window without clipped bone)"
+   ],
+   "saturatedPct": 1.1,
+   "abbreviations": {},
+   "ids": [
+    "dz.orbital-cellulitis",
+    "c.chandler"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": null,
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Axial.CSthrombosis",
+   "file": "images/Axial.CSthrombosis.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Axial post-contrast image demonstrates ethmoid sinus disease (large arrow) with orbital extension (arrowheads) resulting in cavernous sinus thrombosis (small arrow) and proptosis of left globe. Heterogeneous low density material within the enlarged cavernous sinus represents thrombus."
+    }
+   ],
+   "size": [
+    405,
+    389
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast",
+    "histogram: only 3.3% thick saturated area (soft window without clipped bone)"
+   ],
+   "saturatedPct": 3.34,
+   "abbreviations": {},
+   "ids": [
+    "dz.cavernous-sinus-thrombosis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "csthrombosis-ethmoid",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Sag.CSthrombosis",
+   "file": "images/Sag.CSthrombosis.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Sagittal post-contrast image again demonstrating the cavernous sinus thrombosis with clot (arrow) and orbital extension of disease marked by the arrowheads."
+    }
+   ],
+   "size": [
+    391,
+    332
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast"
+   ],
+   "saturatedPct": 14.53,
+   "abbreviations": {},
+   "ids": [
+    "dz.cavernous-sinus-thrombosis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "csthrombosis-ethmoid",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Cor.CSthrombosis",
+   "file": "images/Cor.CSthrombosis.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Coronal post-contrast image with arrow demonstrating the enlarged cavernous sinus due to sinus thrombosis with clot (arrowhead)."
+    }
+   ],
+   "size": [
+    383,
+    335
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast"
+   ],
+   "saturatedPct": 11.85,
+   "abbreviations": {},
+   "ids": [
+    "dz.cavernous-sinus-thrombosis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "csthrombosis-ethmoid",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Axial.ethmoidosteoma1",
+   "file": "images/Axial.ethmoidosteoma1.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Axial image with arrow pointing to benign osteoma arising from the anterior ethmoid sinuses (AE) with adjacent orbital extension resulting in proptosis. Osteomas can result in narrowing and obstruction of the infundibulum and middle meatus. They are most common in the frontal sinuses. (SpS: sphenoid sinus)"
+    }
+   ],
+   "size": [
+    418,
+    411
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "SpS": "sphenoid sinus"
+   },
+   "ids": [
+    "dz.osteoma"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "ethmoid-osteoma",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Orbit",
+     "text": null,
+     "read": "unread",
+     "conf": 0.815,
+     "box": [
+      105,
+      49,
+      143,
+      67
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-site",
+     "conf": 0.665,
+     "box": [
+      243,
+      84,
+      266,
+      99
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "Sps",
+     "text": "SpS",
+     "read": "exact-caption",
+     "conf": 0.748,
+     "box": [
+      212,
+      183,
+      241,
+      200
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      171,
+      17
+     ],
+     "tip": [
+      170,
+      50
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      379,
+      85
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      138,
+      86
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      4,
+      353
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      7,
+      391
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 6,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 5,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.ethmoidosteoma2",
+   "file": "images/Cor.ethmoidosteoma2.jpg",
+   "pages": [
+    {
+     "page": "Ethmoid-Abnormal.html",
+     "caption": "Coronal image with arrow pointing to the ethmoid osteoma extending into orbit and arrowhead showing involvement of the fovea ethmoidalis.(CG: crista galli)"
+    }
+   ],
+   "size": [
+    330,
+    429
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "CG": "crista galli"
+   },
+   "ids": [
+    "dz.osteoma"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "ethmoid-osteoma",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "CG",
+     "text": "CG",
+     "read": "exact-caption",
+     "conf": 0.657,
+     "box": [
+      159,
+      189,
+      183,
+      206
+     ],
+     "ids": [
+      "s.crista-galli"
+     ]
+    },
+    {
+     "raw": "globe",
+     "text": null,
+     "read": "unread",
+     "conf": 0.823,
+     "box": [
+      43,
+      283,
+      81,
+      303
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      324,
+      232
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      286,
+      377
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 8,
+     "curved": 5,
+     "tooLong": 0,
+     "shortNotHead": 3,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": [
+     "arrow"
+    ]
+   }
+  },
+  {
+   "id": "Axial.sphenoid1",
+   "file": "images/Axial.sphenoid1.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Axial image shows sphenoid sinus (SpS) and the sphenoethmoidal recess marked by the (*). (AE: anterior ethmoid, PE: posterior ethmoid, CC: carotid canal, NS: nasal septum)"
+    }
+   ],
+   "size": [
+    458,
+    462
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "AE": "anterior ethmoid",
+    "PE": "posterior ethmoid",
+    "CC": "carotid canal",
+    "NS": "nasal septum"
+   },
+   "ids": [
+    "s.sphenoid-sinus",
+    "s.sphenoethmoidal-recess"
+   ],
+   "note": "§4.1 also names the carotid canal (no id given)",
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "NS",
+     "text": "NS",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      228,
+      77,
+      251,
+      92
+     ],
+     "ids": [
+      "s.nasal-septum"
+     ]
+    },
+    {
+     "raw": "AE",
+     "text": "AE",
+     "read": "exact-caption",
+     "conf": 0.665,
+     "box": [
+      257,
+      121,
+      278,
+      135
+     ],
+     "ids": [
+      "s.anterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      259,
+      181,
+      280,
+      195
+     ],
+     "ids": [
+      "s.posterior-ethmoid-cells"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.681,
+     "box": [
+      214,
+      258,
+      246,
+      279
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "CC",
+     "text": "CC",
+     "read": "exact-caption",
+     "conf": 0.632,
+     "box": [
+      182,
+      283,
+      206,
+      300
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for \"carotid canal\""
+    }
+   ],
+   "arrows": [],
+   "marks": [],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": [
+     "asterisk"
+    ]
+   }
+  },
+  {
+   "id": "Cor.sphenoid1",
+   "file": "images/Cor.sphenoid1.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Coronal image of the sphenoid sinus (SpS) and neighboring structures. (FR: foramen rotundum, VC: vidian canal, OC: optic canal, AC: anterior clinoid, PtP: pterygoid plate)"
+    }
+   ],
+   "size": [
+    439,
+    415
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FR": "foramen rotundum",
+    "VC": "vidian canal",
+    "OC": "optic canal",
+    "AC": "anterior clinoid",
+    "PtP": "pterygoid plate"
+   },
+   "ids": [
+    "s.foramen-rotundum",
+    "s.vidian-canal",
+    "s.optic-canal"
+   ],
+   "note": "canal QA",
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "00",
+     "text": null,
+     "read": "unread",
+     "conf": 0.552,
+     "box": [
+      155,
+      82,
+      177,
+      96
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "AC",
+     "text": "AC",
+     "read": "exact-caption",
+     "conf": 0.664,
+     "box": [
+      294,
+      119,
+      314,
+      134
+     ],
+     "ids": [
+      "s.anterior-clinoid-process"
+     ]
+    },
+    {
+     "raw": "FR",
+     "text": "FR",
+     "read": "exact-caption",
+     "conf": 0.663,
+     "box": [
+      87,
+      169,
+      108,
+      184
+     ],
+     "ids": [
+      "s.foramen-rotundum"
+     ]
+    },
+    {
+     "raw": "Sps",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.627,
+     "box": [
+      202,
+      185,
+      229,
+      201
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "PtP",
+     "text": "PtP",
+     "read": "exact-caption",
+     "conf": 0.69,
+     "box": [
+      40,
+      298,
+      75,
+      313
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for \"pterygoid plate\""
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      165,
+      99
+     ],
+     "tip": [
+      164,
+      131
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "FR",
+     "tail": [
+      100,
+      189
+     ],
+     "tip": [
+      120,
+      209
+     ],
+     "tipBy": "label",
+     "headRatio": 3.2,
+     "ringBright": 0.01,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      157,
+      300
+     ],
+     "tip": [
+      157,
+      252
+     ],
+     "tipBy": "head",
+     "headRatio": 4.2,
+     "ringBright": 0.06,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      321,
+      286
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      88,
+      306
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 4,
+    "nonAnnotation": {
+     "noHead": 0,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 5
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": false,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sag.sphenoid",
+   "file": "images/Sag.sphenoid.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Sagittal image showing the sphenoid sinus (SpS) with sinus ostium (*) and arrow demonstrating the sphenoethmoidal recess (SER). (PE: posterior ethmois sinus)"
+    }
+   ],
+   "size": [
+    486,
+    460
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "PE": "posterior ethmois sinus"
+   },
+   "ids": [
+    "lm.sphenoid-ostium",
+    "s.sphenoethmoidal-recess"
+   ],
+   "role": [
+    "N"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "PE",
+     "text": "PE",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      267,
+      185,
+      290,
+      201
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for \"posterior ethmois sinus\""
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.703,
+     "box": [
+      361,
+      208,
+      393,
+      227
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "SER",
+     "text": null,
+     "read": "unread",
+     "conf": 0.727,
+     "box": [
+      201,
+      319,
+      236,
+      337
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      223,
+      316
+     ],
+     "tip": [
+      271,
+      269
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.02,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      83,
+      97
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "review",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 0,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 2
+    },
+    "unreadShortLabels": 1,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": true
+    },
+    "captionCueMissing": [
+     "asterisk"
+    ]
+   }
+  },
+  {
+   "id": "Axial.Pneumsphenoid1",
+   "file": "images/Axial.Pneumsphenoid1.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Axial image with large arrows pointing to pneumatized lateral recesses of the sphenoid sinus (SpS). (FO: foramen ovale, FS: foramen spinosum)"
+    }
+   ],
+   "size": [
+    436,
+    489
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "FO": "foramen ovale",
+    "FS": "foramen spinosum"
+   },
+   "ids": [
+    "v.lateral-recess-pneumatization"
+   ],
+   "note": "FS in this caption is foramen spinosum, not frontal sinus",
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "FO",
+     "text": "FO",
+     "read": "exact-caption",
+     "conf": 0.614,
+     "box": [
+      94,
+      173,
+      120,
+      190
+     ],
+     "ids": [
+      "s.foramen-ovale"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.684,
+     "box": [
+      206,
+      219,
+      238,
+      236
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "Pneumatized lateral",
+     "text": null,
+     "read": "unread",
+     "conf": 0.921,
+     "box": [
+      141,
+      344,
+      277,
+      360
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "recess sphenoid sinus",
+     "text": "sphenoid sinus",
+     "read": "fuzzy-term",
+     "conf": 0.869,
+     "box": [
+      140,
+      363,
+      293,
+      378
+     ],
+     "ids": [
+      "s.sphenoid-sinus"
+     ]
+    }
+   ],
+   "arrows": [
+    {
+     "label": "FO",
+     "tail": [
+      114,
+      194
+     ],
+     "tip": [
+      148,
+      250
+     ],
+     "tipBy": "label",
+     "headRatio": 5.1,
+     "ringBright": 0.25,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      200,
+      338
+     ],
+     "tip": [
+      181,
+      254
+     ],
+     "tipBy": "label",
+     "headRatio": 3.2,
+     "ringBright": 0.09,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      237,
+      341
+     ],
+     "tip": [
+      259,
+      263
+     ],
+     "tipBy": "label",
+     "headRatio": 3.2,
+     "ringBright": 0.1,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      173,
+      314
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      384,
+      369
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      387,
+      413
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      35,
+      414
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      371,
+      438
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 2,
+    "specks": 16,
+    "nonAnnotation": {
+     "noHead": 2,
+     "curved": 9,
+     "tooLong": 0,
+     "shortNotHead": 16,
+     "onBone": 3
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Pneumsphenoid1",
+   "file": "images/Cor.Pneumsphenoid1.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Coronal image showing pneumatized lateral recesses of sphenoid sinus (SpS) and foramen rotundum (FR) bulging into the sinus. Arrows point to optic canals superior to sphenoid sinus and medial to anterior clinoid processes."
+    }
+   ],
+   "size": [
+    354,
+    521
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.lateral-recess-pneumatization",
+    "v.v2-protrusion-sphenoid"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "optic sanas",
+     "text": "optic canal",
+     "read": "fuzzy-term",
+     "conf": 0.866,
+     "box": [
+      149,
+      177,
+      235,
+      195
+     ],
+     "ids": [
+      "s.optic-canal"
+     ]
+    },
+    {
+     "raw": "SpS",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.736,
+     "box": [
+      159,
+      261,
+      197,
+      282
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "FR",
+     "text": "FR",
+     "read": "exact-site",
+     "conf": 0.666,
+     "box": [
+      112,
+      308,
+      136,
+      324
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "FR",
+     "text": "FR",
+     "read": "exact-site",
+     "conf": 0.657,
+     "box": [
+      240,
+      308,
+      263,
+      323
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": "optic canal",
+     "tail": [
+      153,
+      202
+     ],
+     "tip": [
+      155,
+      229
+     ],
+     "tipBy": "label",
+     "headRatio": 3.6,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": "optic canal",
+     "tail": [
+      222,
+      204
+     ],
+     "tip": [
+      222,
+      230
+     ],
+     "tipBy": "label",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      157,
+      8
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      10,
+      136
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      252,
+      299
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      123,
+      300
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      290,
+      434
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 9,
+    "nonAnnotation": {
+     "noHead": 5,
+     "curved": 5,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.BilatOnodicells1",
+   "file": "images/Axial.BilatOnodicells1.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Axial image with arrows showing bilateral onodi air cells. Onodi air cells represent contigous extension of the posterior ethmoid air cells into the sphenoid sinus and are closely associated with the optic nerve. Due to their close association with the optic nerve the nerve can be at increased risk of injury during sinus surgery."
+    }
+   ],
+   "size": [
+    447,
+    502
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.sphenoethmoidal-cell"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Bilateral Onodi Cells",
+     "text": null,
+     "read": "unread",
+     "conf": 0.891,
+     "box": [
+      152,
+      288,
+      312,
+      306
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      400,
+      68
+     ],
+     "tip": [
+      389,
+      47
+     ],
+     "tipBy": "head",
+     "headRatio": 2.6,
+     "ringBright": 0.33,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      314,
+      268
+     ],
+     "tip": [
+      269,
+      240
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.05,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      155,
+      271
+     ],
+     "tip": [
+      193,
+      245
+     ],
+     "tipBy": "head",
+     "headRatio": 3.6,
+     "ringBright": 0.04,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      415,
+      69
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      6,
+      436
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      402,
+      495
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 6,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 3,
+     "tooLong": 0,
+     "shortNotHead": 2,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Cor.Onodicell3",
+   "file": "images/Cor.Onodicell3.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Coronal image showing bilateral onodi air cells with pneumatized anterior clinoid processes (AC) and arrows pointing to the optic canals."
+    }
+   ],
+   "size": [
+    491,
+    337
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "v.sphenoethmoidal-cell",
+    "v.pneumatized-anterior-clinoid"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "AC",
+     "text": "AC",
+     "read": "exact-site",
+     "conf": 0.666,
+     "box": [
+      162,
+      51,
+      189,
+      72
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "AC",
+     "text": "AC",
+     "read": "exact-site",
+     "conf": 0.664,
+     "box": [
+      304,
+      52,
+      333,
+      76
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    },
+    {
+     "raw": "cnodi",
+     "text": null,
+     "read": "unread",
+     "conf": 0.817,
+     "box": [
+      194,
+      129,
+      237,
+      146
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    },
+    {
+     "raw": "cells",
+     "text": null,
+     "read": "unread",
+     "conf": 0.774,
+     "box": [
+      260,
+      129,
+      295,
+      146
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      173,
+      123
+     ],
+     "tip": [
+      187,
+      96
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      325,
+      130
+     ],
+     "tip": [
+      310,
+      102
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      18,
+      187
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "axial.pneum.ptyp",
+   "file": "images/axial.pneum.ptyp.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Axial image with arrows pointing to pneumatized pterygoid plates (PP)."
+    }
+   ],
+   "size": [
+    449,
+    518
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": null,
+   "idsReason": "§4.1: v.pterygoid-pneumatization is a new id (gaps.md proposed a synonym; it is a distinct extension)",
+   "proposedNew": [
+    "v.pterygoid-pneumatization"
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "Pneum PP",
+     "text": null,
+     "read": "unread",
+     "conf": 0.812,
+     "box": [
+      191,
+      296,
+      266,
+      313
+     ],
+     "ids": null,
+     "idsReason": "label not read"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      306,
+      266
+     ],
+     "tip": [
+      311,
+      286
+     ],
+     "tipBy": "head",
+     "headRatio": 3.0,
+     "ringBright": 0.08,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      207,
+      292
+     ],
+     "tip": [
+      186,
+      269
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      248,
+      291
+     ],
+     "tip": [
+      270,
+      276
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      178,
+      349
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 9,
+    "nonAnnotation": {
+     "noHead": 6,
+     "curved": 11,
+     "tooLong": 0,
+     "shortNotHead": 8,
+     "onBone": 4
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Axial.sphenoidhypo",
+   "file": "images/Axial.sphenoidhypo.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Normal.html",
+     "caption": "Axial image with arrow pointing to hypoplastic sphenoid sinus. (BO: basi-occiput, ES: ethmoid sinuses)"
+    }
+   ],
+   "size": [
+    381,
+    397
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "BO": "basi-occiput",
+    "ES": "ethmoid sinuses"
+   },
+   "ids": null,
+   "idsReason": "§4.1: Opus judges which of the two",
+   "idCandidates": [
+    {
+     "id": "v.conchal-sphenoid",
+     "inGraph": true
+    },
+    {
+     "id": "v.presellar-sphenoid",
+     "inGraph": true
+    }
+   ],
+   "role": [
+    "V"
+   ],
+   "group": null,
+   "labels": [
+    {
+     "raw": "ES",
+     "text": "ES",
+     "read": "exact-caption",
+     "conf": 0.646,
+     "box": [
+      258,
+      71,
+      285,
+      91
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for \"ethmoid sinuses\""
+    },
+    {
+     "raw": "BO",
+     "text": "BO",
+     "read": "exact-caption",
+     "conf": 0.661,
+     "box": [
+      190,
+      225,
+      220,
+      245
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for \"basi-occiput\""
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      367,
+      81
+     ],
+     "tip": [
+      341,
+      59
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.04,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      273,
+      155
+     ],
+     "tip": [
+      212,
+      186
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      378,
+      356
+     ],
+     "tip": [
+      356,
+      385
+     ],
+     "tipBy": "head",
+     "headRatio": 5.0,
+     "ringBright": 0.62,
+     "suspect": true,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      249,
+      80
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 1,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 6,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 3
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sphenoidsinus2",
+   "file": "images/Sphenoidsinus2.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Coronal image of the sphenoid sinuses with arrow pointing to isolated left sphenoid sinus disease. Again notice the close anatomic proximity to the optic canal (OC) and foramen rotundum (FR). (AC: anterior clinoid process)"
+    }
+   ],
+   "size": [
+    510,
+    338
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "AC": "anterior clinoid process"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: SER",
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "sphenoid-sinusitis",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "AC",
+     "text": "AC",
+     "read": "exact-caption",
+     "conf": 0.653,
+     "box": [
+      179,
+      146,
+      208,
+      166
+     ],
+     "ids": [
+      "s.anterior-clinoid-process"
+     ]
+    },
+    {
+     "raw": "FR",
+     "text": "FR",
+     "read": "exact-site",
+     "conf": 0.665,
+     "box": [
+      351,
+      178,
+      376,
+      196
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      487,
+      45
+     ],
+     "tip": [
+      480,
+      2
+     ],
+     "tipBy": "head",
+     "headRatio": 2.7,
+     "ringBright": 0.55,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      303,
+      125
+     ],
+     "tip": [
+      304,
+      160
+     ],
+     "tipBy": "head",
+     "headRatio": 2.7,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      507,
+      244
+     ],
+     "tip": [
+      500,
+      265
+     ],
+     "tipBy": "head",
+     "headRatio": 4.0,
+     "ringBright": 0.19,
+     "suspect": true,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      454,
+      304
+     ],
+     "tip": [
+      366,
+      264
+     ],
+     "tipBy": "head",
+     "headRatio": 3.5,
+     "ringBright": 0.05,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      350,
+      206
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 2,
+    "specks": 0,
+    "nonAnnotation": {
+     "noHead": 3,
+     "curved": 1,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 5
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": false,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sphenoidsinus3",
+   "file": "images/Sphenoidsinus3.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Sagittal image showing sphenoid sinus disease (SpS) with arrow showing obstructed sinus ostium and arrowhead pointing to sphenoethmoidal recess."
+    }
+   ],
+   "size": [
+    450,
+    346
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {},
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: SER",
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "sphenoid-sinusitis",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "Sps",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.676,
+     "box": [
+      266,
+      206,
+      305,
+      230
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      200,
+      198
+     ],
+     "tip": [
+      232,
+      232
+     ],
+     "tipBy": "head",
+     "headRatio": 3.8,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    },
+    {
+     "label": null,
+     "tail": [
+      218,
+      257
+     ],
+     "tip": [
+      198,
+      264
+     ],
+     "tipBy": "head",
+     "headRatio": 5.4,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      397,
+      335
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 1,
+    "nonAnnotation": {
+     "noHead": 1,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 0,
+     "onBone": 0
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Sphenoidsinus1",
+   "file": "images/Sphenoidsinus1.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Axial image with large arrow showing left sphenoid sinus (SpS) disease with ostruction of the ostium (arrowhead). (EB: ethmoid bulla)"
+    }
+   ],
+   "size": [
+    465,
+    439
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "bone",
+   "contrast": false,
+   "windowEvidence": [
+    "no saturated window cue"
+   ],
+   "saturatedPct": 0.0,
+   "abbreviations": {
+    "EB": "ethmoid bulla"
+   },
+   "ids": [
+    "c.sinonasal-inflammatory-patterns"
+   ],
+   "note": "pattern: SER",
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "sphenoid-sinusitis",
+    "basis": "table ⧉?",
+    "confirmed": null
+   },
+   "labels": [
+    {
+     "raw": "EB",
+     "text": "EB",
+     "read": "exact-caption",
+     "conf": 0.666,
+     "box": [
+      190,
+      113,
+      216,
+      130
+     ],
+     "ids": [
+      "s.ethmoid-bulla"
+     ]
+    },
+    {
+     "raw": "Sps",
+     "text": "SpS",
+     "read": "exact-site",
+     "conf": 0.619,
+     "box": [
+      237,
+      247,
+      275,
+      269
+     ],
+     "ids": null,
+     "idsReason": "no crosswalk term for this label"
+    }
+   ],
+   "arrows": [
+    {
+     "label": null,
+     "tail": [
+      347,
+      366
+     ],
+     "tip": [
+      291,
+      288
+     ],
+     "tipBy": "head",
+     "headRatio": 3.5,
+     "ringBright": 0.0,
+     "suspect": false,
+     "touchesBone": false
+    }
+   ],
+   "marks": [
+    {
+     "kind": "arrowhead",
+     "at": [
+      248,
+      204
+     ],
+     "approx": true
+    },
+    {
+     "kind": "arrowhead",
+     "at": [
+      395,
+      244
+     ],
+     "approx": true
+    }
+   ],
+   "maskCheck": {
+    "status": "clean",
+    "suspectArrows": 0,
+    "specks": 2,
+    "nonAnnotation": {
+     "noHead": 4,
+     "curved": 2,
+     "tooLong": 0,
+     "shortNotHead": 1,
+     "onBone": 1
+    },
+    "unreadShortLabels": 0,
+    "captionCues": {
+     "arrow": true,
+     "arrowhead": true,
+     "asterisk": false
+    },
+    "captionCueMissing": []
+   }
+  },
+  {
+   "id": "Mucocele3",
+   "file": "images/Mucocele3.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Axial image shows arrows pointing to a large expansile mass in the sphenoid sinus (SpS) extending into the posterior ethmoid sinus (PE) which was due to a large sphenoid sinus mucocele. (AE: anterior ethmoid sinus)"
+    }
+   ],
+   "size": [
+    439,
+    395
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "§4.1 soft marker"
+   ],
+   "saturatedPct": 20.96,
+   "abbreviations": {
+    "AE": "anterior ethmoid sinus"
+   },
+   "ids": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "sphenoid-mucocele",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Mucocele5",
+   "file": "images/Mucocele5.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Sagittal image demonstrating large expansile sphenoid sinus (SpS) mucocele extending into the posterior ethmoid sinus (PE) and is being displaced anteriorly. (NP: nasopharynx)"
+    }
+   ],
+   "size": [
+    417,
+    422
+   ],
+   "plane": "sagittal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": false,
+   "windowEvidence": [
+    "§4.1 soft marker"
+   ],
+   "saturatedPct": 10.23,
+   "abbreviations": {
+    "NP": "nasopharynx"
+   },
+   "ids": [
+    "dz.mucocele"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "sphenoid-mucocele",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Axial.SphenoidCSthrombosis",
+   "file": "images/Axial.SphenoidCSthrombosis.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Axial post-contrast image demonstrating sphenoid sinus disease (SpS) with cavernous sinus thrombosis (CS) and orbital involvement. There is also ethmoid sinus disease."
+    }
+   ],
+   "size": [
+    364,
+    346
+   ],
+   "plane": "axial",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast",
+    "histogram: only 1.6% thick saturated area (soft window without clipped bone)"
+   ],
+   "saturatedPct": 1.58,
+   "abbreviations": {},
+   "ids": [
+    "dz.cavernous-sinus-thrombosis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "csthrombosis-sphenoid",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  },
+  {
+   "id": "Cor.SphenoidCSthrombosis",
+   "file": "images/Cor.SphenoidCSthrombosis.jpg",
+   "pages": [
+    {
+     "page": "Sphenoid-Abnormal.html",
+     "caption": "Coronal post-contrast image showing sphenoid sinus disease (SpS) and cavernous sinus thrombosis (CS)."
+    }
+   ],
+   "size": [
+    403,
+    334
+   ],
+   "plane": "coronal",
+   "planeBy": "caption",
+   "window": "soft",
+   "contrast": true,
+   "windowEvidence": [
+    "caption: post-contrast"
+   ],
+   "saturatedPct": 11.52,
+   "abbreviations": {},
+   "ids": [
+    "dz.cavernous-sinus-thrombosis"
+   ],
+   "role": [
+    "P"
+   ],
+   "group": {
+    "id": "csthrombosis-sphenoid",
+    "basis": "table ⧉",
+    "confirmed": null
+   },
+   "labels": null,
+   "arrows": null,
+   "marks": null,
+   "arrowsReason": "annotation not separable by threshold (saturated window)"
+  }
+ ]
+}

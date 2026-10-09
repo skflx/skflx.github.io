@@ -905,7 +905,7 @@ Follow-up for RS: explain head A's left-cavity volume (§4.4) before RA3b.
 ```
 
 ```
-### FG1 — UW figure inventory (figures.json) [todo] · Sonnet (mechanics) + Opus (ids, roles) · depends: —
+### FG1 — UW figure inventory (figures.json) [review] · Sonnet (mechanics) + Opus (ids, roles) · depends: —
 Goal:     every UW page figure as data: page, file, plane, window, contrast, caption,
           abbreviation map, arrows (tail label → tip px), graph ids, role N/V/P, same-patient group.
 Read:     this file §4.1, §5; ssb/reference/uw-sinusanatomy2/README.md "Per-slice extraction";
@@ -932,6 +932,9 @@ Ruling:   (Opus, 2026-10-09, after the first run measured 15 of 89 figures with 
           each figure's thin-component mask checked (not a sample). `figures.py` unescapes
           HTML entities in `src` (`Sag.OMU&amp;Sps.jpg`). The rapidocr pin in requirements.txt
           is updated to the version that installs, with the version recorded in the README.
+Result:   (Sonnet, 2026-10-09) figures.py + figures.json + schema check in check-data; PR open, spot-check list and the
+          measured limits are in the PR. The ≥ 250 thin-component mask alone does not isolate the annotation (resampled JPEGs
+          fragment strokes; cortex clips at 255 in bone windows too), so arrows are told from cortex by shape: see the README.
 ```
 
 ```
