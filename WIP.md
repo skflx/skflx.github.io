@@ -178,18 +178,22 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `standard`, and a note in the Specimen and CT controls). Landmarks that
   exist on one side only stay as scanned (listed in the roadmap, N1). The
   as-scanned head is the pipeline's input and becomes a variant later.
-- **Realistic anatomy (planned, not built):** `docs/realistic-anatomy.md`
+- **Realistic anatomy (in progress):** `docs/realistic-anatomy.md`
   plans four anatomy states (symmetric, normal asymmetry, variants,
   pathology) over the specimen, a resegmentation of the UW head, an
   inventory of the UW teaching pages' figures, and curated Radiopaedia
-  exemplars. The owner answered its decisions on 2026-10-07 (its §13):
-  variants and pathology sit on the as-scanned head; UW and Radiopaedia
-  images may be shown, credited. First work done: NasalSeg population
-  asymmetry and cross-section profiles (`ssb/anatomy/population/nasalseg.json`, its §4.4; POP1) — the
-  archive holds 107 distinct scans, not 130, and head A's nasal-cavity
-  asymmetry lies beyond the clear population's range. The UW authors'
-  written permission arrived 2026-10-07 (`ssb/LICENSE-data.md`); the repo
-  credits the atlas and its institution, never the authors by name.
+  exemplars; its §11 "Handoff" is the next agent's order of work. Built:
+  NasalSeg population asymmetry and cross-section profiles
+  (`ssb/anatomy/population/nasalseg.json`, its §4.4; the archive holds 107
+  distinct scans, not 130), the anatomy state with the `scanned` base
+  (Normal asymmetry), the UW figure inventory (FG1) and the Radiopaedia
+  shortlist (RP1). Resegmentation: RS1 and RS2a are candidates under the
+  gitignored `incoming/_rs/` (nothing served changes until RS6); the
+  ethmoid lamellae resisted the sheet filter, so they come from control
+  points placed by eye (RS2c; owner, RA-O9). Radiopaedia stacks are fetched
+  in the owner's browser (RA-O5). The UW authors' written permission is in
+  `ssb/LICENSE-data.md`; the repo credits the atlas and its institution,
+  never the authors by name.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
   sagittal stacks are one CT (the coronal is another head,
