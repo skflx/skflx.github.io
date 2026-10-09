@@ -266,11 +266,15 @@ html[data-theme="dark"] {
 .ssb-axis-label[data-axis="a"] { color: var(--ssb-axis-a); }
 .ssb-axis-label[data-axis="s"] { color: var(--ssb-axis-s); }
 
-/* The stage's truth badge: always visible, bottom-left. It wraps rather than
-   truncating: it names the atlas's institution in full (RA0c). */
+/* The stage's truth badge: always visible, bottom-left. One line on desktop,
+   where the panel foot carries the full credit; on a phone it wraps rather
+   than truncating, since it names the atlas's institution (RA0c). */
 .ssb-stage-note {
   position: absolute; left: var(--gutter); bottom: 0.6rem; max-width: calc(100% - 2 * var(--gutter));
-  pointer-events: none;
+  pointer-events: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (max-width: 959px) {
+  .ssb-stage-note { white-space: normal; }
 }
 .ssb-stage-msg {
   position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
