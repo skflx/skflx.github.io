@@ -1082,11 +1082,13 @@ Result:   (2026-10-09) drafted: `v.ethmoid-bulla-hyperpneumatization`, `v.pteryg
 ### Wave RA-2 — resegmentation and alignment
 
 ```
-### RS1–RS6 — Resegment head A                [todo] · Opus (rules, sheet identity, cell rules) + Sonnet (filters, plumbing, scorer runs)
+### RS1–RS6 — Resegment head A                [RS1, RS2 ready; RS3–RS6 specified after RS2] · Opus + Sonnet
 RS1 native-grid working volume · RS2 lamella sheets and identity (§7.2.2) · RS3 ethmoid cell
 instances + shared rule set (§7.2.3) · RS4 openings and channels (§7.2.4, with the consumer list)
 · RS5 canals as labels, sweeps from detected centrelines (§7.2.5) · RS6 added bone units and
-the RA landmark set (§7.2.6, §6.1).
+the RA landmark set (§7.2.6, §6.1). The served head is rebuilt once, at the end (RS6, CP-RA2):
+until then every RS output is a candidate under the gitignored incoming/_rs/, scored by
+score.py --labels, and nothing in ssb/ct, ssb/geometry, ssb/models or ssb/anatomy changes.
 Accept (whole RS): score.py held-out identity ≥ 95 % overall and ≥ 90 % per structure with ≥ 10
           tips, over RS's declared label set (§7.1 "Baseline"), and full coverage of that set;
           boundary review ≥ 90 % correct on the review slices; topology checks pass; relate3d
@@ -1096,6 +1098,96 @@ Accept (whole RS): score.py held-out identity ≥ 95 % overall and ≥ 90 % per 
 Escalate: any cell the rules cannot classify that an expert would name; any wall the boundary
           review marks missing that the sheet filter cannot recover (→ owner: hand correction
           in 3D Slicer is the documented fallback, docs/ssb-roadmap.md §2).
+```
+
+```
+### RS1 — Native-grid working volume and the honest baseline   [ready] · Sonnet · depends: RS0, CP-RA1
+Goal:     a resegmentation harness that rebuilds today's air labels on the native grid from
+          SEED tips only, exports a candidate the scorer reads, and records the honest
+          baseline and the declared label set every later RS step is scored against.
+Read:     §7.1 (incl. "Baseline"), §7.2.1; specimen.py (steps 1-4) and its docstring;
+          score.py docstring; split.json; tools/ssb-pipeline/README.md stage B.
+Touch:    tools/ssb-pipeline/uw/reseg.py (new; stages `work`, `air`, `export`, `score`);
+          tools/ssb-pipeline/uw/rs/declared.json (new); score.py only to accept --labels on a
+          candidate dir and to report coverage of declared.json; tools/ssb-pipeline/README.md;
+          this WP's status line.
+Don't:    read held-out tips anywhere in reseg.py (assert it: the split's held-out set is
+          never loaded); change specimen.py, the served files, or split.json; hand-place a seed.
+Steps:    1. `work`: specimen-native.npz -> the working volume in RAS at native spacing
+             (0.3437 x 0.3437 x 0.625 mm), plus the face/hull masks of specimen.py steps 2-3,
+             cached under incoming/_rs/work.npz.
+          2. `air`: specimen.py's marker watershed and cuts (choanae, frontal ostium,
+             intersinus septum, the basal-lamella PROXY) on the working volume, seeded from
+             split.json's seed tips only; the proxy stays until RS2 replaces it, named as such.
+          3. `export`: resample to the served 0.5 mm grid (label = the native label covering
+             most of the output voxel, ties to the lower index) into incoming/_rs/candidate/,
+             laid out like ssb/ct + ssb/geometry/labels.json, so score.py --labels reads it.
+          4. declared.json: the ids RS commits to label, each with the RS step that adds it:
+             RS1 the current air compartments; RS2 s.uncinate-process, s.basal-lamella (its
+             -vertical and -horizontal parts where the graph splits it), s.bullar-lamella, and
+             the superior turbinate's ground lamella as s.ethmoid-ground-lamellae (no own id;
+             a new one is content work, never invented here);
+             RS3 the ethmoid cell instances; RS4 the openings and channels of §7.2.4; RS5 the
+             canals of §7.2.5; RS6 the bone units of §7.2.6. Ids not in the graph are listed
+             with "id": null and the term, for Opus.
+          5. `score`: score.py on the candidate at --tol 1 and --tol 6, coverage over the
+             declared ids whose step is done, topology checks; written to
+             incoming/_rs/score-RS1.json and quoted in the PR beside today's (resubstitution)
+             baseline.
+Accept:   reseg.py runs end to end from a clean incoming/ (after fetch.py and specimen.py's
+          inputs) and reruns byte-identical; the held-out guard is tested (feeding it a
+          held-out tip raises); the candidate scores within the CI of today's labels at
+          --tol 6 for every labelled structure with n >= 10, or the PR explains each
+          difference; check-data passes; no served file changes (git diff).
+Escalate: the seed-only rebuild loses a compartment outright (a structure whose only tips
+          were held out); the native grid and the served grid disagree on laterality or frame.
+```
+
+```
+### RS2 — Lamella sheets and their identity      [ready] · Sonnet (filter, plumbing) + Opus (rules review) · depends: RS1
+Goal:     the uncinate process, basal lamella, bullar lamella and the superior turbinate's
+          ground lamella (s.ethmoid-ground-lamellae) as labelled sheets on the native grid,
+          found by a sheetness filter
+          and named by attachment rules held as data; the basal lamella replaces the proxy.
+Read:     §7.2.2; FG1's figures.json entries Axial.ethmoid2, Cor.basallamella,
+          Sag.basallamella2 (their tips are pointers, CP-RA1); walls.py (the wall units the
+          rules attach to); the graph entries of the four lamellae and their `partOf`/`attachesTo`
+          edges.
+Touch:    reseg.py (`sheets` stage); tools/ssb-pipeline/uw/rs/sheets.json (new: the rules);
+          declared.json status; README; this WP's status line.
+Don't:    tune a rule to the held-out tips; draw or paint a sheet; change served files.
+Steps:    1. Sheetness: multiscale Hessian on the working volume's bone (sigma 0.35, 0.5,
+             0.75 mm; bright plates: one large negative eigenvalue, two small), hysteresis
+             thresholded, thinned to a 1-voxel medial surface, split into components.
+          2. Rules (sheets.json, one object per lamella, every number a named parameter):
+             - uncinate: attaches anteriorly to the lateral nasal wall unit (frontal process of
+               maxilla / lacrimal) or the agger nasi cell wall; has a free posterior-superior
+               edge facing air; lies medial to the maxillary ostium and lateral to the middle
+               turbinate; its free edge bounds the hiatus semilunaris.
+             - basal lamella: continuous from the lamina papyracea laterally to the skull base
+               superiorly and the middle turbinate medially; separates anterior from posterior
+               ethmoid air (every air path between their seed tips crosses it).
+             - bullar lamella: the posterior wall of the bulla's air, between bulla and
+               retrobullar recess, reaching the lamina papyracea.
+             - superior turbinate ground lamella: posterior to the basal lamella, from the
+               superior turbinate to the lamina papyracea / skull base.
+             A component is named only if exactly one candidate per side meets every rule;
+             otherwise the lamella is unassigned with the per-rule scores written out.
+          3. The basal lamella's side splits anterior from posterior ethmoid air (replacing
+             the proxy plane); the uncinate's free edge and the bulla's face bound the hiatus
+             air (input to RS4).
+          4. Review sheet: for each lamella and side, PNGs of the sheet over the working
+             volume in three planes through its centroid, and over the matching UW figure
+             slice (head A is those stacks), written to incoming/_rs/review/ for the CP.
+Accept:   each named lamella is one component per side; the basal lamella separates the
+          anterior and posterior ethmoid seeds' air (no 6-connected path between them avoids
+          it); score.py (candidate) for s.anterior-ethmoid-cells and s.posterior-ethmoid-cells
+          does not fall at --tol 6 against RS1's; the topology check for those two air labels
+          (single component) is reported before and after; the review sheet exists; reruns
+          byte-identical; no served file changes.
+Escalate: a lamella with no unique candidate on a side (report the per-rule scores, do not
+          relax a rule); a dehiscent or fenestrated lamella that would need a call on where
+          the wall "is"; a rule that needs an anatomical parameter not stated in sheets.json.
 ```
 
 ```
