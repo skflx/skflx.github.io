@@ -915,9 +915,16 @@ of it). A stage-D product (septal or floor chart and surface, soft sweep, landma
 out, never loosened, and listed in the index entry as `absent: [{ id, side, reason }]` with the measured number; the flap overlay
 is a standard-head tool, so a base whose index entry lists a flap chart as absent has the overlay disabled with a note
 (`ui-specimen.js`). The entry also carries the pipeline's volumes, the cavity and maxillary asymmetry indices with their
-percentiles among the NasalSeg clear subjects, and the state's note, which the Normal asymmetry state shows. The CT stage reads
-the base's volume; the Specimen stage still draws `ssb/models/` on every base. `tools/test-ssb.mjs --only scanned` tests the base's
-data (packs, placement, laterality, labels, landmarks, volumes recounted from the label file, the absent list) and its pages.
+percentiles among the NasalSeg clear subjects, the state's note (which the Normal asymmetry state shows; it names cavity + vestibule
+as the closest comparison with NasalSeg's nasal cavity and says the comparison is not like for like), and `labelTransitions`: every
+label the base changed against the as-scanned labels, as voxel counts per (from, to) pair, attributed to a step (the vestibule + valve
+step, the wall-unit step; the nose unmask changes display values), with tissue becoming an air label or the reverse an escalation.
+The CT stage reads the base's volume and the Specimen stage draws the base's own packs, landmarks and sweeps
+(`createSpecimen({ root })` in `geo-specimen.js`, `followBase` in `mode-specimen.js`; Symmetric <-> Normal asymmetry swaps them live and
+keeps the camera). The dissected states and the Endoscope and procedure stages are the standard head's: on another base the stage loads
+no state pack, and they read the standard volume. `tools/test-ssb.mjs --only scanned` tests the base's data (packs, placement,
+laterality, labels, landmarks, volumes and transitions recounted from the label file, the absent list), the Specimen stage on it
+(boot, placement, laterality on screen, picking, not mirrored, the live swap) and its CT and pages.
 
 ### 5.10 New data: population, more heads, 16-bit CT
 

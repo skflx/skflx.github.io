@@ -40,15 +40,17 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=27222a89';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=b44d7355';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=34e04a58';
-import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile } from './volume.js?v=642e1ad9';
+import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=32324b32';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
 import { CT_PLANES } from './state.js?v=7455c8cc';
-import { REGION_LABEL } from './graph.js?v=c994c9c0';
+import { REGION_LABEL } from './graph.js?v=ef6d8734';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
+/* A base other than the standard head is its own data (docs/ssb.md 5.11); the note says which head is on show. */
+export const PROVENANCE_SCANNED = 'Head as scanned, not mirrored · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
 
 /* Camera views, as RAS directions from the specimen toward the camera. The
    default is the anterior-oblique from the patient's right-front and a little
@@ -93,6 +95,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const subs = new Set();
 
     let specimen = null;
+    let dataRoot = 'ssb';           /* the data root `specimen` was loaded from: the standard head's ssb/, or a base's ssb/anatomy/<base>/ (RA3b) */
     let status = 'idle';            /* idle | loading | ready | partial | error | absent */
     let problem = '';
     let installed = false;
@@ -658,13 +661,13 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     /* ---------------- the nasoseptal flap overlay (flap.js) ---------------- */
 
-    const FLAP_FILES = ['ssb/geometry/charts.json', 'ssb/geometry/landmarks.meta.json'];
+    const flapFiles = () => [`${dataRoot}/geometry/charts.json`, `${dataRoot}/geometry/landmarks.meta.json`];
     const flapWanted = () => !!store.get().flap;
 
     function loadFlapData() {
         if (flapAsked) return;
         flapAsked = true;
-        Promise.all(FLAP_FILES.map((f) => fetch(stamped(f)).then((r) => (r.ok ? r.json() : null)).catch(() => null))).then(([charts, meta]) => {
+        Promise.all(flapFiles().map((f) => fetch(stamped(f)).then((r) => (r.ok ? r.json() : null)).catch(() => null))).then(([charts, meta]) => {
             flapData = charts && charts.surfaces && meta && meta.landmarks ? { charts: charts.surfaces, meta: meta.landmarks } : false;
             rebuildFlap();
         });
@@ -809,7 +812,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         dom.msg.hidden = !text || !active();
         dom.msg.textContent = text;
         const partial = status === 'partial' && failed.length > 0;
-        dom.note.textContent = partial ? `${PROVENANCE} · ${failed.length} of ${specimen.packs.size} packs could not be loaded` : PROVENANCE;
+        const provenance = dataRoot === 'ssb' ? PROVENANCE : PROVENANCE_SCANNED;
+        dom.note.textContent = partial ? `${provenance} · ${failed.length} of ${specimen.packs.size} packs could not be loaded` : provenance;
         dom.note.title = partial ? failed.map((p) => p.error).join(' ') : '';
     }
 
@@ -895,41 +899,58 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         });
     }
 
+    /* The data root the store's anatomy asks for: the base's (a pending link, not yet checked against the index, is the standard head). */
+    function wantedRoot() {
+        const a = store.get().anatomy;
+        try { return baseRoot(a && !a.pending && typeof a.base === 'string' ? a.base : 'standard'); } catch (e) { return 'ssb'; }
+    }
+
     async function start() {
         if (started) return;
         started = true;
+        await begin();
+    }
+
+    /* Load the specimen of the wanted root: the packs, and the landmarks, sweeps and CT header beside them. */
+    async function begin() {
+        dataRoot = wantedRoot();
+        const myRoot = dataRoot;
         status = 'loading';
-        specimen = createSpecimen({ graph });
+        specimen = createSpecimen({ graph, root: myRoot });
         pendingFrame = store.get().selection;
         if (flapWanted()) loadFlapData();
         showStatus();
         /* the CT header and the landmarks are small; neither blocks the packs */
-        loadCtBounds().then((b) => {
-            if (!b) return;
+        loadCtBounds({ root: myRoot }).then((b) => {
+            if (!b || myRoot !== dataRoot) return;
             ctBounds = b;
             store.setCtBounds(b);
             applySection();
             emit();
         });
-        loadLandmarks({ graph }).then((l) => {
+        loadLandmarks({ graph, root: myRoot }).then((l) => {
+            if (myRoot !== dataRoot) return;
             landmarks = l;
             if (installed) { buildMarkers(); paint(); }
             if (flapWanted()) rebuildFlap();
             emit();
         });
-        loadSweeps({ graph }).then((w) => {
+        loadSweeps({ graph, root: myRoot }).then((w) => {
+            if (myRoot !== dataRoot) return;
             sweeps = w;
             if (installed) { buildSweeps(); paint(); }
             emit();
         });
         const paintTwice = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         let result = 'error';
+        const mine = specimen;
         try {
-            result = await specimen.load({ onPack, idle: paintTwice });
+            result = await mine.load({ onPack, idle: paintTwice });
         } catch (e) {
             console.error(e);
             problem = 'An unexpected error stopped the load.';
         }
+        if (mine !== specimen) return;           /* the base changed while this one was loading: its successor owns the status now */
         status = result;
         followAnatomy();
         if (!problem && specimen.problems.length) problem = specimen.problems[0];
@@ -938,6 +959,29 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         showStatus();
         if (panel) panel.refresh();
         emit();
+    }
+
+    /* The anatomy's base changed to one with another data root (Symmetric <-> Normal asymmetry): give the specimen back and load
+       the new base's own packs, landmarks and sweeps. The camera stays where it is; the layers the viewer chose stay chosen. */
+    function followBase() {
+        if (!started || wantedRoot() === dataRoot) return;
+        const pose = installed ? stage.pose() : saved;
+        if (installed) stage.setSpecimen(null);
+        if (specimen) specimen.dispose();
+        for (const m of markers.values()) markerRoot.remove(m.object);
+        markers.clear();
+        landmarks = new Map();
+        for (const m of sweepList.values()) { sweepRoot.remove(m.object); m.object.geometry.dispose(); }
+        sweepList.clear();
+        sweeps = new Map();
+        clearFlapObjects();
+        flapData = null; flapAsked = false; flapNow = null; flapMeshes.clear();
+        installed = false; specimen = null; ctBounds = null; primaryKey = null; focusKey = null; airBox = null; liningAsked = false;
+        problem = ''; pendingFrame = store.get().selection;
+        anat.key = ''; anat.stems = []; anat.hides = new Set(); anat.status = 'none'; anat.problems = []; anat.gen++;
+        framed = true;
+        saved = pose;
+        begin().then(() => { if (flapWanted()) loadFlapData(); if (pose && installed && active()) stage.setPose(pose); });
     }
 
     /* ---------------- entering and leaving the stage ---------------- */
@@ -1114,7 +1158,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             emit();
         }
         if (state.flap !== prev.flap) rebuildFlap();
-        if (state.anatomy !== prev.anatomy) followAnatomy();
+        if (state.anatomy !== prev.anatomy) { followBase(); followAnatomy(); }
         if (state.tier !== prev.tier && now) stage.requestRender();
     });
     stage.onTheme(() => { colours(); stage.requestRender(); });
@@ -1154,6 +1198,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     const rasBox = (key) => specimen.boundsOf([key]);
     const hook = Object.freeze({
+        get dataRoot() { return dataRoot; },
         get status() { return status; },
         get problem() { return problem; },
         get problems() { return specimen ? specimen.problems.slice() : []; },

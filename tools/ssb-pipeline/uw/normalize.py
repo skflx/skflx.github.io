@@ -824,6 +824,7 @@ def stage_scanned_volume(root):
         open(os.path.join(R_, 'geometry', f), 'wb').write(open(asc('geometry/' + f), 'rb').read())
     os.makedirs(os.path.join(root, 'tools', 'ssb-pipeline', 'incoming', '_recon'), exist_ok=True)
     np.savez_compressed(os.path.join(root, 'tools', 'ssb-pipeline', 'incoming', '_recon', 'nose-region.npz'), region=region.astype(np.uint8))
+    np.save(os.path.join(root, 'tools', 'ssb-pipeline', 'incoming', '_recon', 'labels-after-nose.npy'), lab1)     # for the transition table
     say('   wrote the scanned volume and as-scanned geometry under', os.path.relpath(R_, REPO))
 
 
@@ -898,22 +899,92 @@ def scanned_report():
     return out
 
 
-def write_index(report, absent):
+TRANSITION_MIN = 20        # pairs under this many voxels are summed into one row per step
+
+
+def scanned_transitions(root):
+    """RA3b ruling 2: exact accounting of every label the scanned base changed against the as-scanned labels, per step, by voxel counts.
+    Steps own pairs by construction (the label volume at the end of each): `ST6 vestibule + valve` (as-scanned -> after normalize.py's
+    nose step: may only move unlabelled or cavity voxels into the vestibule or the cavity) and `wall units` (after the nose step -> final,
+    after walls.py re-derived the wall units: may not touch an air label). The nose unmask changes the display values of its region and no
+    label. ESCALATE when a tissue voxel (display >= 78) became an air label, an air-valued voxel left an air label, or a pair is owned
+    by the wrong step. Prints the table; returns what index.json records."""
+    hdr, ct0, lab0, _ = read_as_scanned()
+    nz, ny, nx = ct0.shape
+    R_ = os.path.join(SCANNED_OUT, 'ct')
+    lab2 = np.frombuffer(gzip.open(os.path.join(R_, 'labels.u16.gz')).read(), '<u2').reshape(nz, ny, nx)
+    ct2 = np.frombuffer(gzip.open(os.path.join(R_, 'ct.u8.gz')).read(), np.uint8).reshape(nz, ny, nx)
+    lab1 = np.load(os.path.join(root, 'tools', 'ssb-pipeline', 'incoming', '_recon', 'labels-after-nose.npy'))
+    table = {int(k): v for k, v in json.load(open(os.path.join(SCANNED_OUT, 'geometry/labels.json')))['labels'].items()}
+    table[0] = '(unlabelled)'
+    air = np.zeros(max(table) + 1, bool)
+    for k, v in table.items():
+        if k and is_air(v):
+            air[k] = True
+    ml = (hdr['spacing'][0] / 10.0) ** 3
+
+    def step(name, a, b, owns):
+        ch = a != b
+        pairs, cnt = np.unique(np.stack([a[ch], b[ch]], 1), axis=0, return_counts=True)
+        rows = sorted(((table[int(x)], table[int(y)], int(c)) for (x, y), c in zip(pairs, cnt)), key=lambda r: -r[2])
+        wrong = [r for r in rows if not owns(r[0], r[1])]
+        big = [r for r in rows if r[2] >= TRANSITION_MIN]
+        rest = sum(r[2] for r in rows if r[2] < TRANSITION_MIN)
+        say('\nRA3b label transitions - %s: %d voxels change label (%.3f mL), %d (from, to) pairs' % (name, int(ch.sum()), ch.sum() * ml, len(rows)))
+        for f, t, c in big:
+            say('  %-34s -> %-34s %7d  (%.3f mL)' % (f, t, c, c * ml))
+        if rest:
+            say('  %d smaller pairs (< %d voxels each) %s %d' % (len(rows) - len(big), TRANSITION_MIN, ' ' * 30, rest))
+        if wrong:
+            raise SystemExit('ESCALATE: %s owns a label change it should not: %s' % (name, wrong[:6]))
+        return {'voxels': int(ch.sum()), 'pairs': [{'from': f, 'to': t, 'voxels': c} for f, t, c in big], 'smallerPairsVoxels': int(rest), 'pairCount': len(rows)}
+    cav_like = lambda n: n.startswith(('s.nasal-cavity.', 's.nasal-vestibule.', '(unlabelled)'))
+    s1 = step('ST6 vestibule + valve (normalize.py)', lab0, lab1, lambda f, t: cav_like(f) and cav_like(t) and f != t)
+    s2 = step('wall units (walls.py re-run on the labels after the vestibule step)', lab1, lab2,
+              lambda f, t: not (f != '(unlabelled)' and is_air(f)) and not (t != '(unlabelled)' and is_air(t)))
+    nose_ct = int((ct0 != ct2).sum())
+    labs_in_nose = int(((ct0 != ct2) & (lab0 != lab1)).sum())
+    say('\nRA3b nose unmask (ST6 step 1; no centring): %d voxels change display value; %d of them take a label in the vestibule step above (the unmasked airway is what the vestibule is labelled on)' % (nose_ct, labs_in_nose))
+    a0, a2 = air[lab0], air[lab2]
+    ch = lab0 != lab2
+    t2a = int((ch & ~a0 & a2 & (ct2 >= 78)).sum())
+    a2n = int((ch & a0 & ~a2).sum())
+    say('RA3b tissue <-> air: tissue voxels (display >= 78) that became an air label: %d; voxels that left an air label for a non-air label: %d' % (t2a, a2n))
+    if t2a or a2n:
+        raise SystemExit('ESCALATE: tissue became an air label (%d voxels) or an air label was lost (%d voxels)' % (t2a, a2n))
+    net = {}
+    for name in ('s.nasal-cavity', 's.nasal-vestibule', 's.inferior-turbinate', 's.middle-turbinate', 's.nasal-septum', 's.maxillary-sinus'):
+        for sd in ('R', 'L', 'M'):
+            n = '%s.%s' % (name, sd)
+            ids = [k for k, v in table.items() if v == n]
+            if not ids:
+                continue
+            was, now = int((lab0 == ids[0]).sum()), int((lab2 == ids[0]).sum())
+            net[n] = {'asScannedVoxels': was, 'scannedVoxels': now, 'asScannedMl': round(was * ml, 3), 'scannedMl': round(now * ml, 3)}
+            say('  net %-26s as scanned %8d voxels (%.3f mL) -> %8d (%.3f mL), %+d' % (n, was, was * ml, now, now * ml, now - was))
+    return {'noseUnmask': {'displayChangedVoxels': nose_ct, 'labelledInVestibuleStep': labs_in_nose}, 'vestibuleAndValve': s1, 'wallUnits': s2,
+            'tissueBecameAirLabel': t2a, 'airLabelLost': a2n, 'net': net}
+
+
+def write_index(report, absent, transitions):
     """The `scanned` entry of ssb/anatomy/index.json: written, never typed. It keeps every other key of the file."""
     idx = json.load(open(ANATOMY_INDEX)) if os.path.exists(ANATOMY_INDEX) else {'version': 1}
     idx.setdefault('bases', {}); idx.setdefault('variants', {}); idx.setdefault('conditions', {}); idx.setdefault('compat', [])
     cav, mx = report['asymmetryIndex']['cavity'], report['asymmetryIndex']['maxillary']
     cvs = report['asymmetryIndex']['cavityPlusVestibule']
     vols = report['volumesMl']
-    where = ('cavity asymmetry %+.0f %% (|AI| beyond all %d clear NasalSeg subjects, whose 95th percentile is %.0f %% and maximum %.0f %%)'
-             % (cav['ai'], report['nasalSeg']['clearSubjects'], cav['clearAbsAi']['p95'], cav['clearAbsAiMax']) if cav['beyondAllClear'] else
-             'cavity asymmetry %+.0f %% (|AI| at the %.0fth percentile of the %d clear NasalSeg subjects)' % (cav['ai'], cav['absAiPercentileClear'], report['nasalSeg']['clearSubjects']))
-    edge = ('Its cavity asymmetry lies outside the range of every clear NasalSeg subject: either the left cavity is genuinely extreme (septal bow, a congested left inferior turbinate) or the labels give left meatal air to other compartments, which the resegmentation (RS) has to settle; it is not a typical head.'
-            if cav['beyondAllClear'] else 'Its asymmetry lies within the range of the clear NasalSeg subjects.')
-    note = ('Head A as scanned (not mirrored, septum not centred): %s; maxillary asymmetry %+.0f %% (|AI| at the %.0fth percentile). %s '
-            'Much of the cavity and turbinate asymmetry is physiological (the nasal cycle; the mucosa is undecongested). '
+    n_clear = report['nasalSeg']['clearSubjects']
+    where = ('|AI| beyond all %d clear NasalSeg subjects (95th percentile %.0f %%, maximum %.0f %%)' % (n_clear, cvs['clearAbsAi']['p95'], cvs['clearAbsAiMax']) if cvs['beyondAllClear']
+             else '|AI| at the %.0fth percentile of the %d clear NasalSeg subjects' % (cvs['absAiPercentileClear'], n_clear))
+    note = ('Head A as scanned (not mirrored, septum not centred). The closest comparison with NasalSeg\'s nasal cavity, which includes the vestibule, is cavity + vestibule: '
+            'asymmetry %+.0f %%, %s; the cavity label alone is %+.0f %%. Maxillary asymmetry %+.0f %% (|AI| at the %.0fth percentile). '
+            'The comparison is not like for like: NasalSeg labels CT at its HU threshold, this head\'s labels sit on display levels of a screen capture (ssb/LICENSE-data.md). '
+            '%s'
+            'Part of the cavity and turbinate asymmetry may be physiological, consistent with the nasal cycle in undecongested mucosa. '
             'Charts and soft products that failed their gate on this head are absent, not loosened (see absent).'
-            % (where, mx['ai'], mx['absAiPercentileClear'], edge))
+            % (cvs['ai'], where, cav['ai'], mx['ai'], mx['absAiPercentileClear'],
+               ('The left side may be genuinely extreme (septal bow, a congested left inferior turbinate) or the labels may give left meatal air to other compartments; '
+                'the numbers are consistent with either, and the resegmentation (RS) is to separate them. ' if cvs['beyondAllClear'] else '')))
     idx['bases']['scanned'] = {
         'label': 'Normal asymmetry (head A as scanned)',
         'root': 'ssb/anatomy/scanned',
@@ -924,6 +995,7 @@ def write_index(report, absent):
         'asymmetryIndex': report['asymmetryIndex'],
         'population': 'ssb/anatomy/population/nasalseg.json',
         'absent': absent,
+        'labelTransitions': transitions,
     }
     json.dump(idx, open(ANATOMY_INDEX, 'w'), indent=2, ensure_ascii=False)
     open(ANATOMY_INDEX, 'a').write('\n')
@@ -948,7 +1020,7 @@ def stage_scanned():
     export_scanned(root)
     absent = json.load(open(os.path.join(root, 'ssb', 'geometry', 'absent.json')))
     say('absent on the scanned base (RA3b ruling: a stage-D product that fails its gate is left out, never loosened):', json.dumps(absent, indent=1))
-    write_index(scanned_report(), absent)
+    write_index(scanned_report(), absent, scanned_transitions(root))
 
 
 if __name__ == '__main__':

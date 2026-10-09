@@ -62,10 +62,14 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=642e1ad9';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=32324b32';
 import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
+/* A base's data root (volume.js baseRoot): the standard head is ssb/ itself, every other base a full copy of that layout in
+   ssb/anatomy/<base>/. The specimen reads packs.json, the packs, the landmarks, the sweeps and the CT header of ONE root. */
+const DATA_ROOT = /^ssb(?:\/anatomy\/(?:scanned|scanned-b))?$/;
+const rootOrStandard = (root) => (typeof root === 'string' && DATA_ROOT.test(root) ? root : 'ssb');
 export const LINING_PREFIX = 'lining:';
 export const POPULATION_PREFIX = 'population:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
@@ -177,7 +181,9 @@ export function listPacks(doc) {
 /* ---------------- the specimen ---------------- */
 
 /* opts: { graph, fetchFn?, warn? }. The handle is the registry; load() fills it. */
-export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+    const dataRoot = rootOrStandard(dataRootIn);
+    const fetchPack = (p) => getPack(fetchFn, p.name, p.file, `${dataRoot}/models`);
     const root = new THREE.Group();
     root.name = 'specimen';
     /* the one RAS -> scene conversion (a proper rotation, so winding survives) */
@@ -272,7 +278,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     async function run({ onPack, idle }) {
         let list;
         try {
-            list = listPacks(await getJson(fetchFn, PACKS_FILE, 'The pack list'));
+            list = listPacks(await getJson(fetchFn, `${dataRoot}/models/packs.json`, 'The pack list'));
         } catch (e) {
             status = e && e.code === 'absent' ? 'absent' : 'error';
             problem(e && e.message ? e.message : 'The pack list could not be read.');
@@ -302,13 +308,13 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         /* the lining pack waits for loadLining() */
         const rest = all.filter((p) => !p.lining && !p.stateKey && !p.population);
         for (const p of all) if (p.lining || p.stateKey || p.population) packs.get(p.name).state = 'deferred';
-        await take(first, getPack(fetchFn, first.name, first.file));
+        await take(first, fetchPack(first));
         if (disposed) return status;
         /* without the first pack (core: the envelope, the nasal cavity, the frame of everything else) there is no specimen to add to */
         if (packs.get(first.name).state === 'failed') { status = 'error'; return status; }
         await idle();
         if (disposed) return status;
-        const fetching = rest.map((p) => getPack(fetchFn, p.name, p.file).catch((e) => Promise.reject(e)));
+        const fetching = rest.map((p) => fetchPack(p).catch((e) => Promise.reject(e)));
         for (let i = 0; i < rest.length; i++) {
             fetching[i].catch(() => {});                       /* handled in take(); no unhandled rejection while waiting on an earlier pack */
             await take(rest[i], fetching[i]);
@@ -333,7 +339,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                     pack.state = 'loading';
                     const before = problems.length;
                     try {
-                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        const scene = await readPack(pack, await fetchPack(pack));
                         if (disposed) return;
                         adopt(scene, pack);
                         pack.state = 'loaded';
@@ -358,6 +364,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
        rejects: a pack that cannot be read is recorded as any other and the state is shown without it. */
     const stateLoads = new Map();
     function loadState(key, file = '') {
+        if (dataRoot !== 'ssb') return Promise.resolve([]);          /* the dissected states are the standard head's (ssb/states): another base shows its own lining only */
         let pack = [...packs.values()].find((p) => p.stateKey === key);
         /* A state pack packs.json does not list (P1b indexes them in ssb/states/index.json, so the boot never sees them): the
            file the index names, registered here as a deferred pack. Only lining-<key>.glb.gz for this very key is accepted. */
@@ -373,7 +380,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 if (pack.state === 'deferred') {
                     pack.state = 'loading';
                     try {
-                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        const scene = await readPack(pack, await fetchPack(pack));
                         if (disposed) return [];
                         adopt(scene, pack);
                         pack.state = 'loaded';
@@ -477,7 +484,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 if (pack.state === 'deferred' || pack.state === 'failed') {
                     pack.state = 'loading';
                     try {
-                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        const scene = await readPack(pack, await fetchPack(pack));
                         if (disposed) return [];
                         adopt(scene, pack);
                         pack.state = 'loaded';
@@ -548,11 +555,11 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
 /* { "<id>.<side>": [r, a, s] } -> Map("<id>.<side>" -> { id, side, ras }) for
    the entries whose id is in the graph and whose point is finite and near the
    head. Absent or unreadable: an empty map (the layer is then just empty). */
-export async function loadLandmarks({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+export async function loadLandmarks({ graph, root = 'ssb', fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
     const out = new Map();
     let doc;
     try {
-        const res = await fetchFn(stamped(LANDMARKS_FILE));
+        const res = await fetchFn(stamped(`${rootOrStandard(root)}/geometry/landmarks.json`));
         if (!res.ok) return out;
         doc = await res.json();
     } catch (e) { return out; }
@@ -573,11 +580,11 @@ export async function loadLandmarks({ graph, fetchFn = (url) => fetch(url), warn
    whose points are finite, near the head and at least two. A radius list that
    does not match the points falls back to 0.5 mm. Absent or unreadable: an
    empty map (the layer is then just empty). */
-export async function loadSweeps({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+export async function loadSweeps({ graph, root = 'ssb', fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
     const out = new Map();
     let doc;
     try {
-        const res = await fetchFn(stamped(SWEEPS_FILE));
+        const res = await fetchFn(stamped(`${rootOrStandard(root)}/geometry/sweeps.json`));
         if (!res.ok) return out;
         doc = await res.json();
     } catch (e) { return out; }
@@ -596,9 +603,9 @@ export async function loadSweeps({ graph, fetchFn = (url) => fetch(url), warn = 
 
 /* The CT volume's RAS box from its header alone, or null (absent, invalid):
    the 3D cursor clamps to it before the volume itself is downloaded. */
-export async function loadCtBounds({ fetchFn = (url) => fetch(url) } = {}) {
+export async function loadCtBounds({ root = 'ssb', fetchFn = (url) => fetch(url) } = {}) {
     try {
-        const res = await fetchFn(stamped(CT_HEADER_FILE));
+        const res = await fetchFn(stamped(`${rootOrStandard(root)}/ct/ct.json`));
         if (!res.ok) return null;
         return headerBounds(parseHeader(await res.json()));
     } catch (e) { return null; }
