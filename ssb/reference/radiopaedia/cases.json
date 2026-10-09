@@ -1,0 +1,1064 @@
+{
+  "_meta": {
+    "wp": "RP1",
+    "date": "2026-10-09",
+    "method": "See README.md. Built from search results only; no case page was read or fetched under the RP1 ruling.",
+    "licenceNote": "Every licence value is \"owner reads\": no result showed a per-case licence line. Radiopaedia general terms: CC BY-NC-SA 3.0 (docs/realistic-anatomy.md 4.3), read per case.",
+    "flags": "FLAG in a reason marks a modality that is not CT. The owner reads the page before any case is chosen."
+  },
+  "cases": [
+    {
+      "rID": "19115",
+      "url": "https://radiopaedia.org/cases/olfactory-fossa-1",
+      "title": "Olfactory fossa",
+      "contributor": "Mark Holland",
+      "licence": "owner reads",
+      "modality": "CT and MRI (both listed)",
+      "planes": "owner reads",
+      "series": "CT: \"Multiple annotated images from various CT scans of different patients.\"; MRI: \"Cribriform defect with meningocele.\"",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "CT is annotated images from several patients, not one stack (as described)",
+      "burnedInText": "owner reads",
+      "id": "k1",
+      "queue": "keros-iii",
+      "serves": [
+        "v.keros-type-3",
+        "c.keros"
+      ],
+      "tags": [
+        "keros type",
+        "lateral lamella",
+        "cribriform plate defect",
+        "meningocoele",
+        "legacy"
+      ],
+      "reason": "The only case under the radiopaedia \"keros type\" tag; Keros grade shown is not stated in the results.",
+      "note": "Two WebFetch calls were made on this page before the RP1 ruling; they returned no licence line and no counts."
+    },
+    {
+      "rID": "48734",
+      "url": "https://radiopaedia.org/cases/lamina-papyracea-dehiscence",
+      "title": "Lamina papyracea dehiscence",
+      "contributor": "Shailaja Muniraj",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "lp1",
+      "queue": "lamina-papyracea-dehiscence",
+      "serves": [
+        "v.lamina-papyracea-dehiscence",
+        "h.lamina-papyracea-breach"
+      ],
+      "reason": "Dehiscence of the right medial lamina papyracea with orbital fat herniating into the ipsilateral ethmoid sinus, no muscle entrapment (50-year-old man, 2016)."
+    },
+    {
+      "rID": "14034",
+      "url": "https://radiopaedia.org/cases/onodi-cells",
+      "title": "Onodi cells",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "on1",
+      "queue": "onodi-optic-nerve",
+      "serves": [
+        "v.sphenoethmoidal-cell",
+        "h.optic-nerve-injury-onodi"
+      ],
+      "reason": "Bilateral aerated cavities lateral to the optic canal extending into the anterior clinoid processes, CT for chronic sinusitis (25-year-old man)."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/clinoid-process-aeration",
+      "title": "Clinoid process aeration",
+      "contributor": "Qaqish (Radiology Across Borders, as named in results)",
+      "licence": "owner reads",
+      "modality": "MRI and non-enhanced CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "acp1",
+      "queue": "pneumatized-anterior-clinoid",
+      "serves": [
+        "v.pneumatized-anterior-clinoid"
+      ],
+      "reason": "Aeration of the left anterior clinoid process connected to the sphenoid sinus on non-enhanced CT; described as a normal variant."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/pneumatisation-of-dorsum-sella",
+      "title": "Pneumatization of dorsum sella",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ps1",
+      "queue": "conchal-presellar-postsellar",
+      "serves": [
+        "v.postsellar-sphenoid",
+        "c.sphenoid-pneumatization"
+      ],
+      "reason": "Incidental pneumatization classified in the case as most likely Hardy grade IVB."
+    },
+    {
+      "rID": "owner reads",
+      "url": "owner reads",
+      "title": "Accessory maxillary ostium and deviated nasal septum with a spur",
+      "contributor": "Fernando Figueredo Savi",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "amo1",
+      "queue": "accessory-maxillary-ostium",
+      "serves": [
+        "v.accessory-maxillary-ostium",
+        "v.septal-spur",
+        "v.septal-deviation"
+      ],
+      "reason": "CT case, diagnosis certain, published 21 Aug 2024; also covers the septal spur queue item."
+    },
+    {
+      "rID": "owner reads",
+      "url": "owner reads",
+      "title": "Pneumatised uncinate processes",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "pu1",
+      "queue": "pneumatized-uncinate",
+      "serves": [
+        "v.pneumatized-uncinate"
+      ],
+      "reason": "Listed in the incoming-links section of the radiopaedia uncinate process article; the case page itself did not appear in results, so its URL is unknown."
+    },
+    {
+      "rID": "owner reads",
+      "url": "owner reads",
+      "title": "Bony nasal septal spur bridging the middle meatus",
+      "contributor": "Roberto Schubert",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "sd1",
+      "queue": "septal-deviation-mladina",
+      "serves": [
+        "v.septal-spur"
+      ],
+      "reason": "CT case, diagnosis certain, published 2012; spur bridging the middle meatus. No Mladina type is stated in the results."
+    },
+    {
+      "rID": "88476",
+      "url": "https://radiopaedia.org/cases/sinonasal-polyposis-15",
+      "title": "Sinonasal polyposis",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "sd2",
+      "queue": "septal-deviation-mladina",
+      "serves": [
+        "v.septal-deviation",
+        "dz.crs-with-polyps"
+      ],
+      "reason": "Septal deviation convex to the right on CT, no spur described. No Mladina type is stated in the results."
+    },
+    {
+      "rID": "191881",
+      "url": "https://radiopaedia.org/cases/silent-sinus-syndrome-16",
+      "title": "Silent sinus syndrome",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ss1",
+      "queue": "silent-sinus-syndrome",
+      "serves": [
+        "dz.silent-sinus-syndrome"
+      ],
+      "reason": "Small right maxillary sinus with inward-bowing walls and downward displacement of the orbital floor (published Sept 2024)."
+    },
+    {
+      "rID": "197035",
+      "url": "https://radiopaedia.org/cases/maxillary-silent-sinus-syndrome-1",
+      "title": "Maxillary silent sinus syndrome",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ss2",
+      "queue": "silent-sinus-syndrome",
+      "serves": [
+        "dz.silent-sinus-syndrome"
+      ],
+      "reason": "Small right maxillary sinus with inward bowing and enlarged right orbit (15-year-old female, published Oct 2024)."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/sinonasal-polyposis-with-suprasellar-mass-presumably-meningioma-1",
+      "title": "Sinonasal polyposis with suprasellar mass (presumably meningioma)",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "pp1",
+      "queue": "sinonasal-polyposis",
+      "serves": [
+        "dz.crs-with-polyps"
+      ],
+      "reason": "Multiple lobular soft-tissue masses in the nasal cavity and sinuses with slight bone expansion, no destruction (57-year-old man, 2015)."
+    },
+    {
+      "rID": "88476",
+      "url": "https://radiopaedia.org/cases/sinonasal-polyposis-15",
+      "title": "Sinonasal polyposis",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "pp2",
+      "queue": "sinonasal-polyposis",
+      "serves": [
+        "dz.crs-with-polyps"
+      ],
+      "reason": "Same case as sd2; listed here because it is the polyposis exemplar found by the polyposis search."
+    },
+    {
+      "rID": "29086",
+      "url": "https://radiopaedia.org/cases/allergic-fungal-sinusitis",
+      "title": "Allergic fungal sinusitis",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "unenhanced CT (per description)",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "af1",
+      "queue": "afrs",
+      "serves": [
+        "dz.afrs"
+      ],
+      "reason": "Near-complete opacification of left-sided sinuses by centrally hyperdense material with a hypodense mucosal rim (25-year-old man)."
+    },
+    {
+      "rID": "182864",
+      "url": "https://radiopaedia.org/cases/allergic-fungal-rhinosinusitis",
+      "title": "Allergic fungal rhinosinusitis",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT (per description)",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "af2",
+      "queue": "afrs",
+      "serves": [
+        "dz.afrs"
+      ],
+      "reason": "Complete opacification of bilateral frontal, sphenoid, ethmoid and maxillary sinuses and nasal cavities with tubular hyperdense areas (60-year-old woman)."
+    },
+    {
+      "rID": "28818",
+      "url": "https://radiopaedia.org/cases/invasive-fungal-sinusitis",
+      "title": "Invasive fungal sinusitis",
+      "contributor": "Abdrabou",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ai1",
+      "queue": "acute-invasive-fungal-sinusitis",
+      "serves": [
+        "dz.acute-invasive-fungal-sinusitis"
+      ],
+      "reason": "Soft tissue filling right sinuses with invasion of the medial and inferior orbital walls; biopsy mucormycosis (70-year-old man, diabetic)."
+    },
+    {
+      "rID": "33669",
+      "url": "https://radiopaedia.org/cases/acute-invasive-fungal-sinusitis",
+      "title": "Acute invasive fungal sinusitis",
+      "contributor": "Hoang",
+      "licence": "owner reads",
+      "modality": "MRI",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ai2",
+      "queue": "acute-invasive-fungal-sinusitis",
+      "serves": [
+        "dz.acute-invasive-fungal-sinusitis"
+      ],
+      "reason": "FLAG: imaging is MRI (absent mucosal enhancement, left ethmoid and sphenoid; 15-year-old male), not bone-window CT; listed as a soft-tissue exemplar for the later synthetic channel."
+    },
+    {
+      "rID": "92723",
+      "url": "owner reads",
+      "title": "owner reads",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ip1",
+      "queue": "inverted-papilloma",
+      "urlCandidates": [
+        "https://radiopaedia.org/cases/inverted-papilloma-sinonasal",
+        "https://radiopaedia.org/cases/right-sinonasal-inverted-papilloma"
+      ],
+      "serves": [
+        "dz.inverted-papilloma"
+      ],
+      "reason": "Large right nasal cavity mass with maxillary hyperostosis and lateral maxillary wall erosion, cerebriform MRI pattern (55-year-old man). Which URL belongs to which rID was not stated."
+    },
+    {
+      "rID": "180759",
+      "url": "owner reads",
+      "title": "owner reads",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ip2",
+      "queue": "inverted-papilloma",
+      "urlCandidates": [
+        "https://radiopaedia.org/cases/inverted-papilloma-sinonasal",
+        "https://radiopaedia.org/cases/right-sinonasal-inverted-papilloma"
+      ],
+      "serves": [
+        "dz.inverted-papilloma"
+      ],
+      "reason": "Enhancing right ethmoid mass with thinning and erosion of the medial and superior orbital wall (60-year-old woman); hyperostosis not described."
+    },
+    {
+      "rID": "5022",
+      "url": "https://radiopaedia.org/cases/juvenile-angiofibroma-1",
+      "title": "Juvenile angiofibroma",
+      "contributor": "Frank Gaillard",
+      "licence": "owner reads",
+      "modality": "CT and angiography",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "jn1",
+      "queue": "jna",
+      "serves": [
+        "dz.jna"
+      ],
+      "reason": "Left nasopharyngeal mass widening the sphenopalatine foramen and pterygopalatine fossa (16-year-old man, published 2008)."
+    },
+    {
+      "rID": "17502",
+      "url": "https://radiopaedia.org/cases/juvenile-nasopharygeal-angiofibroma",
+      "title": "Juvenile nasopharygeal angiofibroma [sic]",
+      "contributor": "Aneesh Km",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "jn2",
+      "queue": "jna",
+      "serves": [
+        "dz.jna"
+      ],
+      "reason": "Intensely enhancing mass at the posterior choana and nasopharynx (20-year-old man, diagnosis labelled probable)."
+    },
+    {
+      "rID": "97386",
+      "url": "https://radiopaedia.org/cases/juvenile-nasal-angiofibroma",
+      "title": "Juvenile nasal angiofibroma",
+      "contributor": "Irvine Sihlahla (University of Cape Town)",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "jn3",
+      "queue": "jna",
+      "serves": [
+        "dz.jna"
+      ],
+      "reason": "15-year-old with epistaxis and nasal obstruction, diagnosis labelled certain (2022); modality not stated in results."
+    },
+    {
+      "rID": "31874",
+      "url": "https://radiopaedia.org/cases/juvenile-nasopharyngeal-angiofibroma-3",
+      "title": "Juvenile nasopharyngeal angiofibroma",
+      "contributor": "Bruno Di Muzio",
+      "licence": "owner reads",
+      "modality": "MRI",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "jn4",
+      "queue": "jna",
+      "serves": [
+        "dz.jna"
+      ],
+      "reason": "FLAG: MRI. Right nasal fossa mass into posterior ethmoid and sphenoid sinuses (13-year-old boy). URL assigned by elimination among the four JNA URLs seen."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/fibrous-dysplasia-craniofacial-2",
+      "title": "Fibrous dysplasia - craniofacial",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "fd1",
+      "queue": "fibrous-dysplasia",
+      "serves": [
+        "dz.fibrous-dysplasia"
+      ],
+      "reason": "Ground-glass expansile lesion spanning sphenoid, crista galli, turbinates, right ethmoid, frontal and parietal bones."
+    },
+    {
+      "rID": "50935",
+      "url": "https://radiopaedia.org/cases/craniofacial-fibrous-dysplasia-11",
+      "title": "Craniofacial fibrous dysplasia",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "fd2",
+      "queue": "fibrous-dysplasia",
+      "serves": [
+        "dz.fibrous-dysplasia"
+      ],
+      "reason": "34-year-old man, 2017; imaging findings not in the results."
+    },
+    {
+      "rID": "34584",
+      "url": "https://radiopaedia.org/cases/fibrous-dysplasia-of-the-skull",
+      "title": "Fibrous dysplasia of the skull",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "fd3",
+      "queue": "fibrous-dysplasia",
+      "serves": [
+        "dz.fibrous-dysplasia"
+      ],
+      "reason": "30-year-old woman, 2015, diagnosis labelled probable; imaging findings not in the results."
+    },
+    {
+      "rID": "99618",
+      "url": "https://radiopaedia.org/cases/frontal-sinus-osteoma-12",
+      "title": "Frontal sinus osteoma",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "os1",
+      "queue": "osteoma",
+      "serves": [
+        "dz.osteoma"
+      ],
+      "reason": "About 10 x 7 mm bony mass on the nasal side of the left frontal sinus next to the outflow tract (25-year-old woman)."
+    },
+    {
+      "rID": "84521",
+      "url": "https://radiopaedia.org/cases/frontal-sinus-ivory-osteoma",
+      "title": "Frontal sinus ivory osteoma",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "os2",
+      "queue": "osteoma",
+      "serves": [
+        "dz.osteoma"
+      ],
+      "reason": "Well-circumscribed uniformly very dense mass, ivory type (25-year-old woman)."
+    },
+    {
+      "rID": "17542",
+      "url": "https://radiopaedia.org/cases/fronto-ethmoidal-osteoma-1",
+      "title": "Fronto-ethmoidal osteoma",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "non-contrast CT, bone windows",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "os3",
+      "queue": "osteoma",
+      "serves": [
+        "dz.osteoma"
+      ],
+      "reason": "Left frontal-ethmoid osteoma extending into the left frontal sinus (25-year-old man)."
+    },
+    {
+      "rID": "24249",
+      "url": "https://radiopaedia.org/cases/frontal-osteoma",
+      "title": "Frontal osteoma",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "os4",
+      "queue": "osteoma",
+      "serves": [
+        "dz.osteoma"
+      ],
+      "reason": "35-year-old man after earlier sinonasal surgery; findings text not in the results."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/osteoma-of-the-ethmoid-air-cell",
+      "title": "Osteoma of the ethmoid air cell",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "os5",
+      "queue": "osteoma",
+      "serves": [
+        "dz.osteoma"
+      ],
+      "reason": "Ethmoid-located osteoma by title only; nothing else in the results."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/ethmoid-sinus-osteoma-1",
+      "title": "Ethmoid sinus osteoma",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "os6",
+      "queue": "osteoma",
+      "serves": [
+        "dz.osteoma"
+      ],
+      "reason": "Ethmoid-located osteoma by title only; nothing else in the results."
+    },
+    {
+      "rID": "148752",
+      "url": "https://radiopaedia.org/cases/fronto-ethmoidal-sinus-mucocele-2",
+      "title": "Fronto-ethmoidal sinus mucocele",
+      "contributor": "Sharifkashani S",
+      "licence": "owner reads",
+      "modality": "non-contrast CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "mu1",
+      "queue": "mucocele",
+      "serves": [
+        "dz.mucocele"
+      ],
+      "reason": "Expansile fluid lesion in the right fronto-ethmoidal sinus eroding the frontal floor and orbital roof (65-year-old woman, published 7 Jul 2022)."
+    },
+    {
+      "rID": "100209",
+      "url": "https://radiopaedia.org/cases/frontal-sinus-mucocele-4",
+      "title": "Frontal sinus mucocele",
+      "contributor": "Radiology Department, Farabi Eye Hospital",
+      "licence": "owner reads",
+      "modality": "non-contrast MDCT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "mu2",
+      "queue": "mucocele",
+      "serves": [
+        "dz.mucocele"
+      ],
+      "reason": "Pathology-proved frontal mucocele (40-year-old man, published 29 May 2022)."
+    },
+    {
+      "rID": "100250",
+      "url": "https://radiopaedia.org/cases/frontoethmoidal-mucocele-7",
+      "title": "Frontoethmoidal mucocele",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "non-contrast CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "mu3",
+      "queue": "mucocele",
+      "serves": [
+        "dz.mucocele"
+      ],
+      "reason": "Large expansile lesion bulging into the orbit through a bone defect, compressing the medial rectus (55-year-old woman, published 30 May 2022)."
+    },
+    {
+      "rID": "89683",
+      "url": "owner reads",
+      "title": "owner reads",
+      "contributor": "Ammar Haouimi",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ac1",
+      "queue": "antrochoanal-polyp",
+      "urlCandidates": [
+        "https://radiopaedia.org/cases/antrochoanal-polyp-22",
+        "https://radiopaedia.org/cases/antrochoanal-polyp-19",
+        "https://assets.radiopaedia.org/cases/antrochoanal-polyp-4"
+      ],
+      "serves": [
+        "dz.antrochoanal-polyp"
+      ],
+      "reason": "Polypoid mass from the right maxillary sinus widening the ostium and prolapsing into the nasopharynx, no bony destruction (35-year-old man, 17 May 2021). rID-to-URL mapping not stated."
+    },
+    {
+      "rID": "79011",
+      "url": "owner reads",
+      "title": "owner reads",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "ac2",
+      "queue": "antrochoanal-polyp",
+      "urlCandidates": [
+        "https://radiopaedia.org/cases/antrochoanal-polyp-22",
+        "https://radiopaedia.org/cases/antrochoanal-polyp-19",
+        "https://assets.radiopaedia.org/cases/antrochoanal-polyp-4"
+      ],
+      "serves": [
+        "dz.antrochoanal-polyp"
+      ],
+      "reason": "Near-complete sinus opacification with a hyperdense mass filling the right nasal cavity (50-year-old man). rID-to-URL mapping not stated."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/skull-base-encephalocoele-and-csf-leak-mr-cisternography",
+      "title": "Skull base encephalocoele and CSF leak (MR cisternography)",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT and MR cisternography",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "cs1",
+      "queue": "encephalocele-csf-leak",
+      "serves": [
+        "dz.meningoencephalocele",
+        "dz.csf-leak-spontaneous"
+      ],
+      "reason": "Left frontal sinus bone defect, irregular left cribriform plate with a focal defect to the lamina papyracea (20-year-old man, 2025)."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/csf-rhinorrhea-1",
+      "title": "CSF rhinorrhea",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT cisternography",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "cs2",
+      "queue": "encephalocele-csf-leak",
+      "serves": [
+        "dz.csf-leak-spontaneous"
+      ],
+      "reason": "About 3 mm defect in the posterior wall of the left frontal sinus with contrast leaking into frontal sinus and anterior ethmoid cells."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/csf-rhinorrhoea-from-encephalocoele-secondary-to-pseudotumour-cerebri",
+      "title": "CSF rhinorrhea from encephalocoele secondary to pseudotumor cerebri",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "CT and MRI",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "cs3",
+      "queue": "encephalocele-csf-leak",
+      "serves": [
+        "dz.meningoencephalocele",
+        "dz.csf-leak-spontaneous"
+      ],
+      "reason": "Sphenoid scalloping with a meningo(encephalo)coele rupturing into the sphenoid sinus (2016)."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/frontoethmoidal-meningoencephalocele-1",
+      "title": "Frontoethmoidal meningoencephalocele",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "cs4",
+      "queue": "encephalocele-csf-leak",
+      "serves": [
+        "dz.meningoencephalocele"
+      ],
+      "reason": "CSF in the frontal sinus and CSF with brain tissue in ethmoid cells through the cribriform plate (2016)."
+    },
+    {
+      "rID": "owner reads",
+      "url": "https://radiopaedia.org/cases/post-traumatic-csf-rhinorrhoea",
+      "title": "Post-traumatic CSF rhinorrhea",
+      "contributor": "owner reads",
+      "licence": "owner reads",
+      "modality": "owner reads",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "cs5",
+      "queue": "encephalocele-csf-leak",
+      "serves": [
+        "dz.csf-leak-traumatic"
+      ],
+      "reason": "Traumatic-leak counterpart; URL spelling as in results (\"post-traumatic-csf-rhinorrhoea\")."
+    },
+    {
+      "rID": "78917",
+      "url": "https://radiopaedia.org/cases/normal-paranasal-sinus-ct-annotated",
+      "title": "Normal paranasal sinus CT (annotated)",
+      "contributor": "Tabby A. Kennedy",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "nm1",
+      "queue": "normal-sinus-ct",
+      "serves": [
+        "normal asymmetry population"
+      ],
+      "reason": "Annotated normal sinus CT (June 2020), tagged ostiomeatal complex and uncinate process."
+    },
+    {
+      "rID": "53200",
+      "url": "https://radiopaedia.org/cases/normal-paranasal-sinuses-and-petrous-temporal-bones",
+      "title": "Normal paranasal sinuses and petrous temporal bones",
+      "contributor": "Yaïr Glick",
+      "licence": "owner reads",
+      "modality": "CT (high-resolution, per description)",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "nm2",
+      "queue": "normal-sinus-ct",
+      "serves": [
+        "normal asymmetry population"
+      ],
+      "reason": "45-year-old woman; the case notes an underdeveloped frontal sinus as a common variant."
+    },
+    {
+      "rID": "98459",
+      "url": "https://radiopaedia.org/cases/normal-ct-paranasal-sinuses-3",
+      "title": "Normal CT paranasal sinuses",
+      "contributor": "Stefan Tigges (Emory University)",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "nm3",
+      "queue": "normal-sinus-ct",
+      "serves": [
+        "normal asymmetry population"
+      ],
+      "reason": "Normal sinus CT, published March 2022."
+    },
+    {
+      "rID": "90117",
+      "url": "https://radiopaedia.org/images/55143379?case_id=90117",
+      "title": "Normal paranasal sinuses (CT)",
+      "contributor": "Dalia Ibrahim",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "axial (image shown)",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "bone window (per description)",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "nm4",
+      "queue": "normal-sinus-ct",
+      "serves": [
+        "normal asymmetry population"
+      ],
+      "reason": "Axial bone-window normal sinus CT (June 2021); rID taken from the case_id in the URL."
+    },
+    {
+      "rID": "56635",
+      "url": "owner reads",
+      "title": "Paranasal sinuses: annotated CT",
+      "contributor": "Jeffrey Cheng",
+      "licence": "owner reads",
+      "modality": "CT",
+      "planes": "owner reads",
+      "series": "owner reads",
+      "sliceCount": "owner reads",
+      "window": "owner reads",
+      "contrast": "owner reads",
+      "stack": "owner reads",
+      "burnedInText": "owner reads",
+      "id": "nm5",
+      "queue": "normal-sinus-ct",
+      "serves": [
+        "normal asymmetry population"
+      ],
+      "reason": "Annotated facial bones CT demonstrating the paranasal sinuses."
+    }
+  ],
+  "noneFound": {
+    "asymmetric-ethmoid-roof": [
+      "Keros type 3 asymmetric ethmoid roof Gera (radiopaedia.org)",
+      "anterior ethmoidal artery low-lying ethmoid roof deep olfactory fossa"
+    ],
+    "ica-optic-canal-dehiscence-protrusion": [
+      "internal carotid artery dehiscence sphenoid sinus CT",
+      "optic canal dehiscence protrusion sphenoid",
+      "optic nerve protrusion sphenoid sinus variant CT dehiscent optic canal",
+      "carotid artery bulging into sphenoid sinus aberrant kissing carotids"
+    ],
+    "ifac-cells (supra agger, supra agger frontal, suprabullar, suprabullar frontal, supraorbital ethmoid, frontal septal)": [
+      "frontal cell Kuhn agger nasi supra agger frontal cell suprabullar CT",
+      "supraorbital ethmoid cell frontal septal cell",
+      "frontal cell type Kuhn frontal recess CT case",
+      "supra bulla / suprabullar / frontal bulla / supraorbital ethmoid cell case CT"
+    ],
+    "aea-below-skull-base": [
+      "anterior ethmoidal artery canal CT skull base mesentery",
+      "anterior ethmoidal artery low-lying ethmoid roof deep olfactory fossa"
+    ],
+    "sphenoid-septum-on-carotid": [
+      "sphenoid sinus septum carotid canal insertion (no radiopaedia.org result at all)"
+    ],
+    "conchal-presellar (postsellar has ps1)": [
+      "sphenoid sinus pneumatization conchal presellar postsellar"
+    ],
+    "fungal-ball": [
+      "fungal ball mycetoma maxillary sinus CT (no case page returned)"
+    ]
+  }
+}
