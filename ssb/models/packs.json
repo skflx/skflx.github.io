@@ -7,7 +7,8 @@
  "notes": {
   "walls": "stage C resection units (tools/ssb-pipeline/uw/walls.py): each is the bone two named compartments share; several are proxies or orientation splits - the method per unit is in tools/ssb-pipeline/uw/registration.json \"walls.notes\". s.orbit is the orbital soft tissue (globe, fat, muscles) the walls face, not bone.",
   "lining": "the open airway lining (tools/ssb-pipeline/uw/lining.py): one surface over the union of every air-space label, split into nodes by the air label each triangle faces. Node names repeat the air packs' because it is the same lining with the openings open; the viewer draws it instead of the per-compartment shells when the mucosa layer is seen from within (the outside view, the CT overlay and picking by id are unchanged).",
-  "nose": "the external nose (tools/ssb-pipeline/uw/nose.py, ST6): the skin of the specimen's own nose, unmasked from the UW axial stack between the alar-facial grooves, one open surface (s.external-nose.M, extras.kind \"skin\"); the vestibule is s.nasal-vestibule in the core pack, also drawn as skin"
+  "nose": "the external nose (tools/ssb-pipeline/uw/nose.py, ST6): the skin of the specimen's own nose, unmasked from the UW axial stack between the alar-facial grooves, one open surface (s.external-nose.M, extras.kind \"skin\"); the vestibule is s.nasal-vestibule in the core pack, also drawn as skin",
+  "population": "the region at least half of the aligned clear NasalSeg subjects' maxillary sinuses occupy (tools/ssb-pipeline/nasalseg/meanshape.py, POP2b): population truth in the specimen's frame, drawn as a ghost on request by the Population panel, never at boot and never a head"
  },
  "packs": {
   "core": {
@@ -440,6 +441,23 @@
     "s.external-nose.M": {
      "triangles": 7998,
      "vertices": 4237
+    }
+   }
+  },
+  "population": {
+   "file": "population.glb.gz",
+   "population": true,
+   "bytes": 62985,
+   "bytes_uncompressed": 86292,
+   "triangles": 7000,
+   "nodes": {
+    "s.maxillary-sinus.R@nasalseg-majority": {
+     "triangles": 3500,
+     "vertices": 1752
+    },
+    "s.maxillary-sinus.L@nasalseg-majority": {
+     "triangles": 3500,
+     "vertices": 1752
     }
    }
   }

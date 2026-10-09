@@ -36,7 +36,8 @@ export const STAMPS = {
     "ssb/models/lining-f02a68d5b9.glb.gz": "f81b80c0",
     "ssb/models/lining.glb.gz": "42688c15",
     "ssb/models/nose.glb.gz": "202cdf5a",
-    "ssb/models/packs.json": "11d37841",
+    "ssb/models/packs.json": "d0da8ef8",
+    "ssb/models/population.glb.gz": "05f20c5d",
     "ssb/models/soft.glb.gz": "8c1421fd",
     "ssb/models/sphenoid-sellar.glb.gz": "cca1aa8f",
     "ssb/models/walls.glb.gz": "433139fe",
@@ -67,5 +68,5 @@ export const STAMPS = {
     "ssb/states/f02a68d5b9.ssbp.gz": "7236ca29",
     "ssb/states/index.json": "5f979d8c",
     "ssb/states/mucosa.json": "75ae5f00",
-    "ssb/anatomy/population/nasalseg.json": "ce9cf344",
+    "ssb/anatomy/population/nasalseg.json": "f33bb79b",
 };

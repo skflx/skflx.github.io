@@ -878,11 +878,10 @@ mucosal state → dissection.
   cross-section profiles as percentiles, shown with population truth;
   (2) *calibration*: the congested state, and the mild / typical / marked
   grades of asymmetry variants; (3) *averaged normal*: a population
-  reference (median and IQR profiles; a mean shape of the five NasalSeg
-  structures registered onto the head as a ghost overlay), population
-  truth, not a head. Deforming a head toward the population median is a
-  composite and covers only the five structures NasalSeg labels: owner
-  decision O9.
+  reference (median and IQR profiles; the population maxillary sinus as a
+  ghost overlay, below), population truth, not a head. Deforming a head
+  toward the population median is a composite and covers only the five
+  structures NasalSeg labels: owner decision O9.
 - **Label conventions (checked 2026-10-08 on 91 distinct clear NasalSeg
   subjects; scratch script, method for POP1).** NasalSeg's labels and ours
   differ in convention more than in quality. Its nasal cavity runs from the
@@ -917,6 +916,24 @@ mucosal state → dissection.
   above and nothing else: the 10–90 % restricted rows, the standard specimen
   and the as-scanned head set against the clear subjects' median and IQR.
   It hides itself when the file is missing or malformed.
+- **Population sinus (WP POP2b).** `tools/ssb-pipeline/nasalseg/meanshape.py`
+  aligns each clear subject rigidly (no scale; four label centroids, the cavities
+  and maxillary sinuses, onto the standard specimen's; the residual RMS is
+  reported and recorded) and votes: the region at least half of the aligned
+  maxillary labels (at our air threshold) occupy, on the specimen's own grid, is
+  the shape. It writes `ssb/models/population.glb.gz` (nodes
+  `s.maxillary-sinus.<side>@nasalseg-majority`, `extras.kind` "ghost"; packs.json
+  `"population": true`, so never loaded at boot) and the `meanShape` key of the
+  JSON. It is an aligned majority, not any one person's sinus, and it runs a
+  little under the median volume (a vote loses what subjects do not share). The
+  cavity and the nasopharynx are not drawn from the population (CP-POP2b: a
+  rigid fit cannot register a thin convoluted passage, and the crop cuts the
+  nasopharynx); the cavity's reference is the median profile above. The panel's
+  toggle (`ui-population.js`, `setPopulation` in `mode-specimen.js`,
+  `loadPopulationPack` in `geo-specimen.js`) loads the pack on demand and gives
+  it back when switched off; the `ghost` material kind is unlit, translucent and
+  depth-tested, one token colour (`--ssb-ghost`). The ghost is registered as
+  `population:<id>.<side>`: never selected, picked or counted among the regions.
 - **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented

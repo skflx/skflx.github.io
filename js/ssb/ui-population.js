@@ -10,7 +10,7 @@
    section is a <details>: closed until asked for, opened by selecting one
    of the structures it covers.
    ============================================================= */
-import { loadPopulation, FIVE } from './population.js?v=dd38fac3';
+import { loadPopulation, FIVE } from './population.js?v=8ace5c24';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const MINUS = '−';
@@ -90,7 +90,7 @@ export function chartAlt(model) {
 /* ---- the section ---- */
 
 /* body: the Specimen dock's body. Returns { ready } resolving to true when the section was built. */
-export function mountPopulation({ body, store, fetchFn }) {
+export function mountPopulation({ body, store, fetchFn, specimen = null }) {
     const root = el('details', 'ssb-pop');
     root.id = 'ssb-pop';
     root.hidden = true;
@@ -143,6 +143,21 @@ export function mountPopulation({ body, store, fetchFn }) {
             ['Asymmetry index (R−L)', `${signed(m.head.ai)} %, |AI| at percentile ${pct(m.head.aiPct)}`],
         ]) mxl.append(el('dt', null, k), el('dd', null, v));
         mx.append(mxl);
+
+        /* The population sinus (POP2b): offered only when the file carries its numbers and the specimen can load the pack. */
+        const ms = model.meanShape;
+        if (ms && specimen && specimen.hasPopulation) {
+            const row = el('label', 'ssb-ct-check');
+            const box = el('input');
+            box.type = 'checkbox';
+            box.id = 'ssb-pop-ghost';
+            row.append(box, el('span', null, `Show the population sinus (NasalSeg, majority of ${ms.n} aligned CTs)`));
+            const cap = el('p', 'ssb-param-src', `An aligned majority, not any one person’s sinus: the region at least half of the ${ms.n} aligned clear scans’ sinuses occupy (rigid fit on four label centroids, median residual ${ms.rmsMedianMm.toFixed(1)} mm). Volume right ${ml(ms.R.majorityMl)} mL, left ${ml(ms.L.majorityMl)} mL, beside the medians ${ml(ms.R.medianMl)} and ${ml(ms.L.medianMl)} mL.`);
+            cap.dataset.pop = 'ghost-caption';
+            mx.append(row, cap);
+            box.addEventListener('change', () => { specimen.setPopulation(box.checked); });
+            if (typeof specimen.onChange === 'function') specimen.onChange(() => { box.checked = specimen.populationOn; });
+        }
 
         const np = el('div', 'ssb-pop-block');
         np.dataset.pop = 'nasopharynx';

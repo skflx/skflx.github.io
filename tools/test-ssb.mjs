@@ -972,7 +972,7 @@ function readPacks() {
       const iv = json.bufferViews[ia.bufferView];
       const idx = new Uint16Array(ia.count);
       for (let i = 0; i < ia.count; i++) idx[i] = dv.getUint16(bin + (iv.byteOffset || 0) + i * 2, true);
-      nodes.set(`${def.lining ? 'lining:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, kind: n.extras.kind || '', pack: name, lining: def.lining === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
+      nodes.set(`${def.lining ? 'lining:' : def.population ? 'population:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, kind: n.extras.kind || '', pack: name, lining: def.lining === true, population: def.population === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
     }
   }
   return { doc, nodes, files };
@@ -1102,7 +1102,7 @@ function makeGlb(boxes) {
 
 async function specimenUnitTests() {
   const { doc, nodes, files } = readPacks();
-  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : '') + k]));
+  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : def.population ? 'population:' : '') + k.split('@')[0]]));
   check('specimen packs: every pack is a glTF 2.0 binary whose length field is true, with KHR_mesh_quantization required',
     Object.values(files).every((f) => f.magic === 0x46546c67 && f.version === 2 && f.length === f.size && (f.json.extensionsRequired || []).includes('KHR_mesh_quantization')),
     JSON.stringify(Object.entries(files).map(([k, f]) => [k, f.magic, f.version, f.length, f.size])));
@@ -1110,7 +1110,7 @@ async function specimenUnitTests() {
     listed.length === nodes.size && listed.every(([name, key]) => nodes.has(key) && nodes.get(key).pack === name), `${listed.length} listed, ${nodes.size} read`);
   const unknown = [...nodes.values()].filter((n) => !GRAPH.has(n.id));
   check('specimen packs: every node id is a graph entity', unknown.length === 0, unknown.map((n) => n.id).join(', '));
-  const named = [...nodes].filter(([key, n]) => key !== `${n.lining ? 'lining:' : ''}${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
+  const named = [...nodes].filter(([key, n]) => key !== `${n.lining ? 'lining:' : n.population ? 'population:' : ''}${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
   check('specimen packs: nodes are named <graph id>.<R|L|M>', named.length === 0, named.map(([k]) => k).join(', '));
   const outside = [...nodes].filter(([, n]) => n.box.min.some((v, i) => v < ctBox.min[i] - 5) || n.box.max.some((v, i) => v > ctBox.max[i] + 5));
   check('specimen packs: every mesh lies inside the CT volume (± 5 mm), so the 3D cursor and the CT share one frame',
@@ -1130,7 +1130,7 @@ async function specimenUnitTests() {
     !!noseNode && Math.max(...noseNode.box.min.map(Math.abs).slice(0, 1), noseNode.box.max[0]) <= 26 && noseNode.box.max[1] >= 16 && noseNode.box.max[1] <= 20 && noseNode.box.min[2] >= -10 && noseNode.box.max[2] <= 42, noseNode ? `${noseNode.box.min.map(r2)}..${noseNode.box.max.map(r2)}` : 'absent');
   check('nose pack (ST6): the vestibule (core pack) and its lining nodes carry extras.kind skin, as the pack\'s own node does; no other node carries a kind',
     ['R', 'L'].every((sd) => nodes.has(`s.nasal-vestibule.${sd}`) && nodes.get(`s.nasal-vestibule.${sd}`).kind === 'skin' && nodes.get(`s.nasal-vestibule.${sd}`).pack === 'core' && nodes.has(`lining:s.nasal-vestibule.${sd}`) && nodes.get(`lining:s.nasal-vestibule.${sd}`).kind === 'skin')
-      && [...nodes.values()].filter((n) => n.kind).every((n) => n.kind === 'skin' && ['s.nasal-vestibule', 's.external-nose'].includes(n.id)), JSON.stringify([...nodes.values()].filter((n) => n.kind).map((n) => n.id)));
+      && [...nodes.values()].filter((n) => n.kind && !n.population).every((n) => n.kind === 'skin' && ['s.nasal-vestibule', 's.external-nose'].includes(n.id)), JSON.stringify([...nodes.values()].filter((n) => n.kind).map((n) => n.id)));
   check('specimen packs: the maxillary sinuses (spec): .R centroid x > 0 and .L < 0',
     nodes.has('s.maxillary-sinus.R') && nodes.has('s.maxillary-sinus.L') && cx(nodes.get('s.maxillary-sinus.R')) > 10 && cx(nodes.get('s.maxillary-sinus.L')) < -10);
 
@@ -1245,7 +1245,7 @@ const isBg = (px, bg) => Math.abs(px[0] - bg[0]) + Math.abs(px[1] - bg[1]) + Mat
 
 async function specimenTests(browser, base) {
   /* what a page holds at boot: every pack but the lining, which waits for the first look from within (ST1c) */
-  const truth = new Map([...readPacks().nodes].filter(([, n]) => !n.lining));
+  const truth = new Map([...readPacks().nodes].filter(([, n]) => !n.lining && !n.population));
 
   /* ===== boot, registry, materials ===== */
   {
@@ -1264,8 +1264,9 @@ async function specimenTests(browser, base) {
 
     const listed = Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs);
     const liningName = Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs).filter(([, d]) => d.lining === true).map(([n]) => n);
+    const popName = Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs).filter(([, d]) => d.population === true).map(([n]) => n);
     check('specimen: every pack packs.json lists, bar the deferred lining (ST1c), is loaded, node for node as listed (core first); the lining waits for the first look from within',
-      liningName.length === 1 && liningName.every((n) => info.packs[n] && info.packs[n].state === 'deferred' && info.packs[n].nodes.length === 0) && listed.filter((n) => !liningName.includes(n)).every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
+      liningName.length === 1 && liningName.concat(popName).every((n) => info.packs[n] && info.packs[n].state === 'deferred' && info.packs[n].nodes.length === 0) && listed.filter((n) => !liningName.includes(n) && !popName.includes(n)).every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
     const everyNode = await specNodes(page);
     const nodes = everyNode.filter((n) => !n.lining);          /* the lining pack (ST1b) is checked on its own; the rest of these checks are about the structures */
     const keys = everyNode.map((n) => n.key).sort();
@@ -4570,6 +4571,49 @@ async function populationTests(browser, base) {
       `${doc.headA.AI.maxillary < 0 ? '−' : ''}${Math.abs(doc.headA.AI.maxillary).toFixed(1)} %, |AI| at percentile ${pc(doc.headA.percentileAbsAI_clear.maxillary)}`,
     ];
     check('population (page): the maxillary volumes, the head\'s volumes and its asymmetry percentile equal the JSON\'s', JSON.stringify(mx) === JSON.stringify(wantMx), JSON.stringify({ mx, wantMx }));
+    /* the population sinus (POP2b): the toggle loads the deferred pack, the caption is the file's, off gives the pack back */
+    const MS = doc.meanShape;
+    const packDef = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs.population;
+    const packBytes = fs.statSync(path.join(ROOT, 'ssb/models', packDef.file)).size;
+    check('population (pack): ≤ 300 kB, flagged population (so never loaded at boot), nodes are the maxillary sinus id + side + @nasalseg-majority',
+      packBytes <= 300000 && packDef.population === true && !packDef.lining && !packDef.state
+      && Object.keys(packDef.nodes).sort().join() === 's.maxillary-sinus.L@nasalseg-majority,s.maxillary-sinus.R@nasalseg-majority', `${packBytes} B ${Object.keys(packDef.nodes)}`);
+    check('population (file): meanShape has n, the alignment RMS and each side\'s majority volume within 15 % of the median it sits beside',
+      MS && MS.n === doc.profiles.subjects.clearIds.length && MS.alignRmsMm.p95 <= 6
+      && ['R', 'L'].every((k) => Math.abs(MS.sides[k].gapPercent) <= 15 && Math.abs(100 * (MS.sides[k].majorityVolumeMl - MS.sides[k].medianVolumeMl) / MS.sides[k].medianVolumeMl - MS.sides[k].gapPercent) < 0.1), JSON.stringify(MS));
+    const popState = () => page.evaluate(() => { const s = window.__ssb.specimen; return { pack: s.packs.population && s.packs.population.state, on: s.populationOn, nodes: s.nodes().filter((n) => n.key.startsWith('population:')) }; });
+    const ghostBox = '#ssb-pop [data-pop="maxillary"] #ssb-pop-ghost';
+    const idle = await popState();
+    check('population (ghost): the toggle is offered with the file\'s n, off, and the pack is not loaded at boot',
+      (await page.evaluate((q) => { const b = document.querySelector(q); return !!b && !b.checked && b.parentElement.textContent.includes('majority of'); }, ghostBox))
+      && (await page.evaluate((q) => document.querySelector(q).parentElement.textContent, ghostBox)).includes(`majority of ${MS.n} aligned CTs`)
+      && idle.pack === 'deferred' && idle.nodes.length === 0 && !idle.on, JSON.stringify(idle));
+    const cap = await text('#ssb-pop [data-pop="ghost-caption"]');
+    check('population (ghost): the caption says it is an aligned majority, not one person\'s sinus, and its volumes equal the file\'s',
+      /aligned majority, not any one person/.test(cap) && cap.includes(`right ${f1(MS.sides.R.majorityVolumeMl)} mL, left ${f1(MS.sides.L.majorityVolumeMl)} mL`)
+      && cap.includes(`${f1(MS.sides.R.medianVolumeMl)} and ${f1(MS.sides.L.medianVolumeMl)} mL`) && cap.includes(`${f1(MS.alignRmsMm.median)} mm`), cap);
+    const hashBefore = await page.evaluate(() => window.__ssb.hash);
+    await page.click(ghostBox);
+    await page.waitForFunction(() => { const s = window.__ssb.specimen; return s.packs.population && s.packs.population.state === 'loaded'; }, null, { timeout: 20000 });
+    await nextFrames(page, 3);
+    const on = await popState();
+    check('population (ghost): on, the pack loads two ghost nodes (unlit, translucent, depth-tested), shown, in the specimen\'s frame',
+      on.on && on.nodes.length === 2 && on.nodes.every((n) => n.group === 'ghost' && n.drawn === 'ghost' && n.visible && n.material === 'MeshBasicMaterial' && n.transparent && n.depthWrite === false && n.look.kind === 'ghost')
+      && on.nodes.map((n) => n.key).sort().join() === 'population:s.maxillary-sinus.L,population:s.maxillary-sinus.R', JSON.stringify(on.nodes.map((n) => [n.key, n.group, n.drawn, n.visible, n.look, n.material, n.transparent, n.depthWrite])));
+    const own = await page.evaluate(() => { const n = window.__ssb.specimen.nodes(); const b = (k) => n.find((m) => m.key === k).box; return ['R', 'L'].map((sd) => ({ ghost: b(`population:s.maxillary-sinus.${sd}`), own: b(`s.maxillary-sinus.${sd}`) })); });
+    const near = (a, b) => [0, 1, 2].every((i) => Math.abs((a.min[i] + a.max[i]) / 2 - (b.min[i] + b.max[i]) / 2) < 6);
+    check('population (ghost): each ghost sits beside the specimen\'s own sinus on its own side (box centres within 6 mm)', own.every((o) => o.ghost && o.own && near(o.ghost, o.own)), JSON.stringify(own));
+    const sel = await page.evaluate(() => window.__ssb.specimen.nodes().filter((n) => n.id === 's.maxillary-sinus').map((n) => [n.key.startsWith('population:'), n.highlight]));
+    check('population (ghost): with the maxillary sinus selected only the specimen\'s own sinus is highlighted, never the ghost; the hash is unchanged',
+      sel.length === 4 && sel.filter(([g, h]) => g).every(([, h]) => h === null) && sel.filter(([g, h]) => !g).every(([, h]) => h !== null) && hashBefore === await page.evaluate(() => window.__ssb.hash), JSON.stringify(sel));
+    await page.click(ghostBox);
+    await page.waitForFunction(() => window.__ssb.specimen.packs.population.state === 'deferred', null, { timeout: 10000 });
+    const off = await popState();
+    check('population (ghost): off, the pack is given back (no ghost node, pack deferred again), and it loads again on the next ask',
+      !off.on && off.nodes.length === 0 && off.pack === 'deferred');
+    await page.click(ghostBox);
+    await page.waitForFunction(() => window.__ssb.specimen.packs.population.state === 'loaded', null, { timeout: 20000 });
+    check('population (ghost): the second ask loads it again', (await popState()).nodes.length === 2);
     check('population (page): the panel adds nothing to the hash (only the selection and its tier)', !/pop|mu=|scope/.test(await page.evaluate(() => window.__ssb.hash)));
     check('population (page): no real console errors', errors.length === 0, JSON.stringify(errors));
     await context.close();
@@ -4583,6 +4627,23 @@ async function populationTests(browser, base) {
     await page.click('#ssb-pop > summary');
     const info = await page.evaluate(() => ({ open: document.getElementById('ssb-pop').open, hidden: ['cavity', 'maxillary'].map((k) => document.querySelector(`#ssb-pop [data-pop="${k}"]`).hidden), hash: window.__ssb.hash }));
     check('population (page): with nothing selected it starts closed; opening it shows the cavity and the maxillary sinus and leaves the hash alone', before === info.hash && info.open === true && info.hidden.every((h) => h === false));
+    await context.close();
+  }
+
+  /* a file without meanShape keeps the section and offers no toggle */
+  {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const stripped = popDoc();
+    delete stripped.meanShape;
+    await context.route(/\/ssb\/anatomy\/population\/nasalseg\.json(?:[?#].*)?$/, (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(stripped) }));
+    const page = await context.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+    await page.goto(`${base}/ssb.html#s=s.maxillary-sinus`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page.waitForFunction(() => { const d = document.getElementById('ssb-pop'); return d && !d.hidden; }, null, { timeout: 40000 });
+    check('population (ghost): a file without meanShape keeps the section and offers no toggle, with no console error',
+      await page.evaluate(() => !document.getElementById('ssb-pop-ghost') && !document.querySelector('[data-pop="ghost-caption"]')) && errors.length === 0, JSON.stringify(errors));
     await context.close();
   }
 
@@ -5008,8 +5069,9 @@ async function main() {
       check(`q=${q}: hazard hatching shows over every kind (stripes in the probe)`, weak.length === 0, weak.join(', '));
       const lite = probes.keys.filter((k) => k.includes('SSB_LITE')).length;
       check(`q=${q}: the patterned programs are ${q === 'lite' ? '' : 'not '}the lite variants`, q === 'lite' ? lite > 0 : lite === 0, `${lite} lite programs`);
+      /* + 4: the unlit ghost kind (POP2b) is a MeshBasicMaterial, so it owns programs of its own (30 without it, 34 with it, measured) */
       check(`q=${q}: programs are shared per kind (${probes.materials} materials, ${probes.programs} programs)`,
-        probes.programs <= 2 * TISSUE_KINDS.length + 5 && probes.programs < probes.materials + 2, `${probes.programs} programs`);
+        probes.programs <= 2 * TISSUE_KINDS.length + 5 + 4 && probes.programs < probes.materials + 2, `${probes.programs} programs`);
       check(`q=${q}: no shader compile or GL errors were logged`, errors.length === 0, errors.slice(0, 2).map((e) => e.text.slice(0, 300)).join(' | '));
       await context.close();
     }

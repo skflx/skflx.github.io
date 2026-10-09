@@ -14,7 +14,7 @@
    vestibule; the "labelled" rows follow NasalSeg's own boundaries and are
    never shown.
    ============================================================= */
-import { STAMPS } from './stamps.js?v=b3b6b3b4';
+import { STAMPS } from './stamps.js?v=2ff2c15f';
 
 export const FILE = 'ssb/anatomy/population/nasalseg.json';
 export const SPAN = '10-90';
@@ -56,6 +56,20 @@ function headCavity(placement, measures) {
     };
 }
 
+/* The population sinus's numbers (POP2b, written by nasalseg/meanshape.py), or null: the toggle is then not offered. */
+function readMeanShape(doc) {
+    const ms = get(doc, 'meanShape');
+    if (!ms || !Number.isInteger(ms.n) || ms.n < 1) return null;
+    const rms = get(ms, 'alignRmsMm', 'median');
+    const side = (k) => {
+        const v = get(ms, 'sides', k);
+        return v && num(v.majorityVolumeMl) && num(v.medianVolumeMl) && num(v.gapPercent) ? { majorityMl: v.majorityVolumeMl, medianMl: v.medianVolumeMl, gapPercent: v.gapPercent } : null;
+    };
+    const R = side('R');
+    const L = side('L');
+    return num(rms) && R && L ? { n: ms.n, rmsMedianMm: rms, R, L } : null;
+}
+
 /* doc (parsed JSON) -> model, or null when anything the panel needs is absent or malformed. */
 export function readPopulation(doc) {
     try {
@@ -84,7 +98,7 @@ export function readPopulation(doc) {
         if (!mxL || !mxR || !num(vL) || !num(vR) || !num(ai) || !num(aiPct)) return null;
 
         return {
-            n, thresholdHu: hu,
+            n, thresholdHu: hu, meanShape: readMeanShape(doc),
             cavity: {
                 twoSide: { ...twoSide, p25: twoSide.p25 * MM2, p50: twoSide.p50 * MM2, p75: twoSide.p75 * MM2 },
                 ratio,
