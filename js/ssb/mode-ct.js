@@ -30,8 +30,8 @@
    `hook` is the read-only test window (window.__ssb.ct).
    ============================================================= */
 import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=34e04a58';
-import { sharedVolume, anatomyVolume, loadAnatomyIndex, PLANES } from './volume.js?v=ca255144';
-import { CT_PLANES, anatomyIsDefault } from './state.js?v=7455c8cc';
+import { sharedVolume, anatomyVolume, loadAnatomyIndex, PLANES } from './volume.js?v=32324b32';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=3a54b0af';
 
 const LITTLE = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 const NEUTRAL_TOKEN = '--ssb-cell-ethmoid';

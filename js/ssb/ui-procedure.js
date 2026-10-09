@@ -8,7 +8,7 @@
    *em* / **strong**, which go through graph.renderText (it escapes first, docs/ssb.md 7.6). The URL (`#p=`, `step`, `cor`)
    only ever selects an entry the store has whitelisted, and reaches the page as text.
    ============================================================= */
-import { renderText } from './graph.js?v=bda4471f';
+import { renderText } from './graph.js?v=ef6d8734';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

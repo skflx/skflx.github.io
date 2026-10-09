@@ -1,6 +1,7 @@
 """Reference specimen, stage D: soft-tissue surfaces, charts and landmarks, from the committed volume.
 
     .venv/bin/python tools/ssb-pipeline/uw/softtissue.py     # after specimen.py, walls.py, meshes.py
+    .venv/bin/python tools/ssb-pipeline/uw/softtissue.py --per-side   # a head that is not mirrored (normalize.py --base scanned)
 
 Reads only ssb/ (ct.u8.gz, labels.u16.gz, ct.json, geometry/labels.json), so any session can rerun it;
 nothing here needs the raw UW crawl. The specimen is a bone-window CT: soft tissue is not segmented,
@@ -25,6 +26,10 @@ centroid lies within 1 mm of a septum voxel, largest connected patch only. Norma
 outward normals, i.e. they point from the airway into the septum. The chart is the sagittal projection:
 chart (a, s) = RAS (A, S) in mm, and r = the surface's R coordinate, so a flap outlined on the chart
 lands on the surface by lookup. Chart round-trip error is printed and bounded on the interior, reliable cells (an edge cell is only partly covered, so its centre is extrapolated; a flagged cell is flagged); the all-cell maximum is reported beside it.
+The nasal floor mucosa (ST2c) is built on the right and mirrored for the left, because the standard specimen is
+symmetric; with --per-side (the scanned base, RA3b) each side's floor is its own surface from its own cavity and floor
+bone, charted in |R| (the left surface reflected through the frame's R = 0 plane, as the right chart's convention says
+"lateral to the midline"), and each junction is judged against that side's septal chart.
 Finally runs sweeps_soft.py (vessel sweeps snapped to these charts; a no-op while sweeps-soft.json is empty).
 Deterministic: gzip with mtime 0, no randomness other than a seeded sample.
 """
@@ -120,6 +125,12 @@ FLOOR_COS = float(np.cos(np.pi / 4))
 PNS_A_MM = -50.0              # the PNS plane: the posterior bound
 FLOOR_MIN_CM2 = 2.0           # Escalate below this; also a second component over FLOOR_SECOND_CM2
 FLOOR_SECOND_CM2 = 0.5
+FLOOR_RULE_STD = ('axial chart: chart (a, r) mm = (RAS A, |RAS R|), r >= 0 lateral to the midline on either side; s = RAS S of the surface at that (a, r). '
+                  'The left chart is the right one (the standard specimen is symmetric); its RAS R is -r. Normals (RAS order; R negated on the left) point from the airway into the tissue')
+FLOOR_RULE_MIRROR = FLOOR_RULE_STD
+FLOOR_RULE_SIDE = ('axial chart: chart (a, r) mm = (RAS A, |RAS R|), r >= 0 lateral to the frame\'s R = 0 plane on either side; s = RAS S of the surface at that (a, r). '
+                   'Each side is its own surface from its own cavity and floor bone (the head is not mirrored); the left surface is reflected through R = 0 to be charted, '
+                   'so its RAS R is -r. Normals (RAS order) point from the airway into the tissue')
 JUNCTION_PNS_MM = -47.0       # the junction is judged from here forward (the septal chart's PNS-end cells are partly covered)
 
 
@@ -133,16 +144,30 @@ def tri_components(f):
     return comp[g[:, 0]]
 
 
-def floor_surface(lab, table, aff, spacing):
-    """s.nasal-floor-mucosa.R (ST2c). The floor bone (s.nasal-floor.R) is separated from the cavity air by
+PER_SIDE = '--per-side' in sys.argv
+ABSENT = []            # --per-side: stage-D products that failed a gate on a side: left out, never loosened (RA3b ruling)
+
+
+def gate(ok, name, side, reason, problems):
+    """A gate of this stage. Standard path: an assertion, as always. --per-side: the product is left out of the base and listed
+    (id, side, reason with the measured number) in ABSENT, written to ssb/geometry/absent.json; no threshold moves."""
+    if ok:
+        return
+    if not PER_SIDE:
+        raise AssertionError(reason)
+    problems.append(reason)
+
+
+def floor_surface(lab, table, aff, spacing, side='R'):
+    """s.nasal-floor-mucosa.<side> (ST2c). The floor bone (s.nasal-floor.<side>) is separated from the cavity air by
     1-3 mm of unlabelled soft tissue: the floor mucosa. Its surface is the airway lining itself (marching
     cubes on s.nasal-cavity.R, Taubin, as for the septal surface): the triangles whose normal (airway into
     tissue) has S <= -cos 45 deg, whose centroid is within FLOOR_ABOVE_MM of a floor-bone voxel, at or behind
     A = -50 (the PNS plane); the lateral edge is the normal rule (the floor turning into the inferior meatus
     wall), the medial edge is the septal junction. Largest component. Returns v, f, normals, report."""
     by = {v: int(k) for k, v in table.items()}
-    air = lab == by['s.nasal-cavity.R']
-    bone = lab == by['s.nasal-floor.R']
+    air = lab == by[f's.nasal-cavity.{side}']
+    bone = lab == by[f's.nasal-floor.{side}']
     v, f = M.surface(air, aff)
     v = M.taubin(v, f)
     tri = v[f]
@@ -426,6 +451,34 @@ def turbinate_heads(lab, table, aff):
     return out, info
 
 
+def soft_sweeps_per_side(sweeps_soft):
+    """--per-side: each soft sweep on its own, against the charts this base has. The waypoints are authored on the standard head
+    (sweeps-soft.json is not edited per base); a sweep whose chart is absent, or whose path leaves its chart, is left out of the
+    base and listed in ABSENT with the stage's own message. The as-scanned versions of these sweeps (an earlier pipeline's, on
+    other charts) are dropped first, so a base carries a soft sweep only if this run generated it."""
+    spec = json.load(open(sweeps_soft.SPEC))
+    sp, mp = os.path.join(REPO, 'ssb/geometry/sweeps.json'), os.path.join(REPO, 'ssb/geometry/sweeps.meta.json')
+    sw, doc = json.load(open(sp)), json.load(open(mp))
+    for k in spec.get('sweeps', {}):
+        sw.pop(k, None); doc['sweeps'].pop(k, None)
+    json.dump(sw, open(sp, 'w'), indent=1); json.dump(doc, open(mp, 'w'), indent=1)
+    have = json.load(open(os.path.join(REPO, 'ssb/geometry/charts.json')))['surfaces']
+    one = os.path.join(HERE, '_one-sweep.json')
+    for key in sorted(spec.get('sweeps', {})):
+        entry = spec['sweeps'][key]
+        sid, side = entry['surface'].rsplit('.', 1)
+        if entry['surface'] not in have:
+            ABSENT.append({'id': key.rsplit('.', 1)[0], 'side': key.rsplit('.', 1)[1], 'reason': f'{entry["surface"]} is absent on this base'})
+            continue
+        json.dump({'version': 1, 'sweeps': {key: entry}}, open(one, 'w'))
+        try:
+            sweeps_soft.run(spec_path=one)
+        except SystemExit as e:
+            ABSENT.append({'id': key.rsplit('.', 1)[0], 'side': key.rsplit('.', 1)[1], 'reason': str(e)})
+    if os.path.exists(one):
+        os.remove(one)
+
+
 def main():
     hdr, ct, lab, table = M.read_volume()
     aff, spacing = hdr['affine'], hdr['spacing'][0]
@@ -449,8 +502,14 @@ def main():
             'max_abs_r_mm': round(mid, 2), 'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_3d_mm_all_cells': round(e3_all, 3), 'roundtrip_max_chart_mm': round(ec, 3), 'roundtrip_samples': n,
                         'cells': int(ch['occ'].sum()), 'unreliable_cells': int(ch['unreliable'].sum()), 'filled_cells': len(filled)}
         print(name, json.dumps(report[name]), flush=True)
-        assert e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, f'{name}: chart round-trip error over {ROUNDTRIP_MAX_MM} mm'
-        assert mid <= 15.0, f'{name}: reaches {mid} mm from the midsagittal plane'
+        problems = []
+        gate(e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, name, side, f'{name}: chart round-trip error {max(e3, ec):.2f} mm over {ROUNDTRIP_MAX_MM} mm', problems)
+        gate(mid <= 15.0, name, side, f'{name}: reaches {mid:.1f} mm from the midsagittal plane (limit 15 mm)', problems)
+        all_pts.append(v)
+        if problems:
+            ABSENT.append({'id': SURFACE, 'side': side, 'reason': '; '.join(problems)})
+            del built[name]
+            continue
         rows = [[None if np.isnan(ch['r'][i, j]) else round(float(ch['r'][i, j]), 2) for j in range(ch['ns'])] for i in range(ch['na'])]
         nrows = [[None if not ch['occ'][i, j] else [round(float(x), 2) for x in ch['n'][i, j]] for j in range(ch['ns'])] for i in range(ch['na'])]
         charts[name] = {'rule': 'chart (a, s) mm = RAS (A, S); r = RAS R of the surface at that (a, s); sagittal projection',
@@ -462,41 +521,64 @@ def main():
                         'unreliable': {'rule': f'chart cells whose surface samples span more than {FOLD_MM} mm in R (the surface folds across the cell: '
                                                'a spur, a deviation or a steep edge); a lookup there is approximate',
                                        'cells': [[round(ch['a0'] + int(i), 1), round(ch['s0'] + int(j), 1)] for i, j in zip(*np.nonzero(ch['unreliable']))]}}
-        all_pts.append(v)
 
-    # ST2c: the nasal floor mucosa, from the airway lining; .L is the mirror (the specimen is symmetric after N1)
-    fv, ff, fnrm, frep = floor_surface(lab, table, aff, spacing)
-    assert frep['components_cm2'][0] >= FLOOR_MIN_CM2, f'floor mucosa area {frep["components_cm2"][0]} cm2 under {FLOOR_MIN_CM2}: escalate'
-    assert frep['components_cm2'][1] <= FLOOR_SECOND_CM2, f'a second floor component of {frep["components_cm2"][1]} cm2: escalate'
-    ch = floor_chart(fv, ff, fnrm)                          # built once, on the right: the left is its mirror
-    interior = ndi.binary_erosion(ch['occ'], structure=np.ones((3, 3), bool))
-    w = fv[:, [2, 1, 0]]
-    e3, ec, n = roundtrip(ch, w, ff, ndi.binary_dilation(ch['unreliable']) | ~interior)
-    e3_all, _, _ = roundtrip(ch, w, ff)
-    area = area_mm2(fv, ff)
-    jr = junction(ch, charts[f'{SURFACE}.R'], fv, ff)
-    jmax = max(r[-1] for r in jr if r[0] >= JUNCTION_PNS_MM)   # the septal chart's own edge cells (the PNS end) are partly covered
-    jall = max(r[-1] for r in jr)
-    rows = [[None if np.isnan(ch['r'][i, j]) else round(float(ch['r'][i, j]), 2) for j in range(ch['ns'])] for i in range(ch['na'])]
+    # ST2c: the nasal floor mucosa, from the airway lining. The standard specimen is symmetric after N1, so its floor is built
+    # once on the right and the left is the mirror; --per-side (a head that is not mirrored) builds each side from its own air
+    # and floor bone and charts the left in |R| (reflected through the frame's R = 0 plane, winding reversed)
     for side, sg in (('R', 1), ('L', -1)):
+        if side == 'L' and not PER_SIDE:
+            name = f'{FLOOR}.L'
+            built[name] = (fv * np.array([-1, 1, 1]), ff[:, ::-1], fnrm * np.array([-1, 1, 1]))
+            report[name] = {**report[f'{FLOOR}.R']}
+            print(name, json.dumps(report[name]), flush=True)
+            charts[name] = {**charts[f'{FLOOR}.R'], 'rule': FLOOR_RULE_MIRROR}
+            continue
+        fv, ff, fnrm, frep = floor_surface(lab, table, aff, spacing, side)
+        problems = []
+        gate(frep['components_cm2'][0] >= FLOOR_MIN_CM2, FLOOR, side, f'{FLOOR}.{side} area {frep["components_cm2"][0]} cm2 under {FLOOR_MIN_CM2}: escalate', problems)
+        gate(frep['components_cm2'][1] <= FLOOR_SECOND_CM2, FLOOR, side, f'a second {FLOOR}.{side} component of {frep["components_cm2"][1]} cm2: escalate', problems)
+        cv, cf, cn = (fv, ff, fnrm) if sg == 1 else (fv * np.array([-1, 1, 1]), ff[:, ::-1], fnrm * np.array([-1, 1, 1]))
+        ch = floor_chart(cv, cf, cn)
+        interior = ndi.binary_erosion(ch['occ'], structure=np.ones((3, 3), bool))
+        w = cv[:, [2, 1, 0]]
+        e3, ec, n = roundtrip(ch, w, cf, ndi.binary_dilation(ch['unreliable']) | ~interior)
+        e3_all, _, _ = roundtrip(ch, w, cf)
+        area = area_mm2(cv, cf)
+        if f'{SURFACE}.{side}' not in charts:      # --per-side: the junction is judged against this side's septal chart, which is absent
+            ABSENT.append({'id': FLOOR, 'side': side, 'reason': f'{SURFACE}.{side} is absent, so the floor-septum junction cannot be judged'
+                           + (f' ({"; ".join(problems)})' if problems else '')})
+            continue
+        sept = charts[f'{SURFACE}.{side}']
+        if sg == -1:       # the junction is judged in the chart frame: the left septal chart's r is negative, the reflected floor's positive
+            sept = {'grid': {**sept['grid'], 'r': [[None if x is None else -x for x in row] for row in sept['grid']['r']]}}
+        jr = junction(ch, sept, cv, cf)
+        if not [r for r in jr if r[0] >= JUNCTION_PNS_MM]:
+            gate(False, FLOOR, side, f'{FLOOR}.{side}: the floor and the septal chart share no A range to judge a junction on', problems)
+            ABSENT.append({'id': FLOOR, 'side': side, 'reason': '; '.join(problems)})
+            continue
+        jmax = max(r[-1] for r in jr if r[0] >= JUNCTION_PNS_MM)   # the septal chart's own edge cells (the PNS end) are partly covered
+        jall = max(r[-1] for r in jr)
+        rows = [[None if np.isnan(ch['r'][i, j]) else round(float(ch['r'][i, j]), 2) for j in range(ch['ns'])] for i in range(ch['na'])]
         name = f'{FLOOR}.{side}'
-        built[name] = (fv * np.array([sg, 1, 1]), ff if sg == 1 else ff[:, ::-1], fnrm * np.array([sg, 1, 1]))
+        gate(e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, FLOOR, side, f'{name}: chart round-trip error {max(e3, ec):.2f} mm over {ROUNDTRIP_MAX_MM} mm', problems)
+        gate(jmax <= 1.0, FLOOR, side, f'{name}: the floor meets the septal chart\'s bottom(a) only within {jmax:.2f} mm (limit 1.0 mm; {jall:.2f} mm with the PNS end)', problems)
+        built[name] = (fv, ff, fnrm)
         report[name] = {'triangles': int(len(ff)), 'area_cm2': round(area / 100, 2), 'components_cm2': frep['components_cm2'][:3],
                         'chart_bbox_mm': {'a': [round(ch['a0'], 1), round(ch['a0'] + ch['na'], 1)], 'r': [round(ch['s0'], 1), round(ch['s0'] + ch['ns'], 1)]},
                         'roundtrip_max_3d_mm': round(e3, 3), 'roundtrip_max_3d_mm_all_cells': round(e3_all, 3), 'roundtrip_max_chart_mm': round(ec, 3),
                         'roundtrip_samples': n, 'cells': int(ch['occ'].sum()), 'junction_max_mm': round(jmax, 2),
                         'junction_max_mm_incl_pns_end': round(jall, 2), 'junction_cells': len(jr)}
         print(name, json.dumps(report[name]), flush=True)
-        charts[name] = {'rule': 'axial chart: chart (a, r) mm = (RAS A, |RAS R|), r >= 0 lateral to the midline on either side; s = RAS S of the surface at that (a, r). '
-                                'The left chart is the right one (the standard specimen is symmetric); its RAS R is -r. Normals (RAS order; R negated on the left) point from the airway into the tissue',
+        charts[name] = {'rule': FLOOR_RULE_SIDE if PER_SIDE else FLOOR_RULE_MIRROR if side == 'L' else FLOOR_RULE_STD,
                         'polygon': ch['polygon'],
                         'grid': {'origin': [ch['a0'], ch['s0']], 'step': GRID_MM, 'dims': [ch['na'], ch['ns']], 's': rows},
                         'area_cm2': report[name]['area_cm2'],
-                        'junction': {'rule': f'per a: the septal chart\'s bottom(a), the lowest occupied s of {SURFACE}.R at that a; '
+                        'junction': {'rule': f'per a: the septal chart\'s bottom(a), the lowest occupied s of {SURFACE}.{side} at that a; '
                                              'rows are [a, r_septal, s_septal, r_floor_medial, s_floor_medial, distance mm from the septal point to the floor surface]; the PNS end (a < -47) is the septal chart\'s partly covered edge',
                                      'rows': [[round(x, 2) for x in r] for r in jr]}}
-    assert e3 <= ROUNDTRIP_MAX_MM and ec <= ROUNDTRIP_MAX_MM, f'{FLOOR}: chart round-trip error over {ROUNDTRIP_MAX_MM} mm'
-    assert jmax <= 1.0, f'{FLOOR}: the floor meets the septal chart\'s bottom(a) only within {jmax:.2f} mm'
+        if problems:
+            ABSENT.append({'id': FLOOR, 'side': side, 'reason': '; '.join(problems)})
+            del built[name]; del charts[name]
 
     # pack
     items = [(k, *built[k]) for k in sorted(built)]
@@ -544,6 +626,8 @@ def main():
             mm['landmarks'][key]['inferior_margin_method'] = ('lowest S of the cavity | sinus label interface within 6 mm of the landmark'
                                                               if minfo['source'].startswith('cavity') else minfo['source'])
             margins[side] = sm
+        elif PER_SIDE:
+            ABSENT.append({'id': 'lm.sphenoid-ostium.inferior-margin', 'side': side, 'reason': minfo.get('refused', 'no margin')})
     json.dump(mm, open(mp, 'w'), indent=1)
     print('lm.incisive-canal.M', canal, cinfo)
     heads, hinfo = turbinate_heads(lab, table, aff)
@@ -554,7 +638,12 @@ def main():
     json.dump(mm, open(mp, 'w'), indent=1)
     print(heads, hinfo)
     import sweeps_soft
-    sweeps_soft.run()                  # surface-snapped vessel sweeps from sweeps-soft.json (no-op while it is empty)
+    if PER_SIDE:
+        soft_sweeps_per_side(sweeps_soft)
+        json.dump(ABSENT, open(os.path.join(REPO, 'ssb/geometry/absent.json'), 'w'), indent=1)
+        print('absent on this base (a gate failed; nothing loosened):', json.dumps(ABSENT, indent=1))
+    else:
+        sweeps_soft.run()              # surface-snapped vessel sweeps from sweeps-soft.json (no-op while it is empty)
     write_results('softtissue', {'surfaces': report, 'choanal_arch': arch, 'incisive_canal': canal, 'ostium_inferior_margin_s_mm': margins, 'pack_bytes': gz})
 
 

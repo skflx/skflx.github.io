@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap|anatomy] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap|anatomy|scanned] [--int16]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -115,7 +115,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | anatomy | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | anatomy | scanned | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -941,12 +941,12 @@ async function ctTests(browser, base) {
 /* Every pack packs.json lists, parsed without three.js: node key -> { id, side,
    pack, pts (RAS mm, dequantized through the node's own transform), box, tris }.
    An independent reading of the data: the page's loader is checked against it. */
-function readPacks() {
-  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8'));
+function readPacks(root = 'ssb') {
+  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, root, 'models/packs.json'), 'utf8'));
   const nodes = new Map();
   const files = {};
   for (const [name, def] of Object.entries(doc.packs)) {
-    const b = zlib.gunzipSync(fs.readFileSync(path.join(ROOT, 'ssb/models', def.file)));
+    const b = zlib.gunzipSync(fs.readFileSync(path.join(ROOT, root, 'models', def.file)));
     const dv = new DataView(b.buffer, b.byteOffset, b.byteLength);
     const json = JSON.parse(b.subarray(20, 20 + dv.getUint32(12, true)).toString());
     const bin = 20 + dv.getUint32(12, true) + 8;
@@ -978,15 +978,16 @@ function readPacks() {
   return { doc, nodes, files };
 }
 
-const ctBox = (() => {
-  const h = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/ct/ct.json'), 'utf8'));
+const ctBoxOf = (root) => {
+  const h = JSON.parse(fs.readFileSync(path.join(ROOT, root, 'ct/ct.json'), 'utf8'));
   const lo = [Infinity, Infinity, Infinity];
   const hi = [-Infinity, -Infinity, -Infinity];
   for (const i of [0, h.dims[0] - 1]) for (const j of [0, h.dims[1] - 1]) for (const k of [0, h.dims[2] - 1]) {
     for (let n = 0; n < 3; n++) { const v = h.affine[n][0] * i + h.affine[n][1] * j + h.affine[n][2] * k + h.affine[n][3]; lo[n] = Math.min(lo[n], v); hi[n] = Math.max(hi[n], v); }
   }
   return { min: lo, max: hi };
-})();
+};
+const ctBox = ctBoxOf('ssb');
 
 /* Nearest vertex of a parsed node to a RAS point, mm. */
 function nearestVertex(node, p) {
@@ -4930,9 +4931,12 @@ async function anatomyUnitTests() {
     && live.setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === true && live.hash() === '#anat=scanned' && live.setAnatomy(null) === true && live.hash() === '');
   live.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
   live.setCt({ plane: 'axial', at: null });
-  live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
   live.leaveStage();
-  check('anatomy store: the anatomy is orthogonal to the stage — entering and leaving CT, the scope and the specimen keeps it', live.get().anatomy.base === 'scanned');
+  const keptCt = live.get().anatomy.base;
+  live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+  check('anatomy store: the anatomy is orthogonal to CT and the specimen (entering and leaving keeps it); the scope, which reads the standard head only, takes the page back to it',
+    keptCt === 'scanned' && live.get().anatomy.base === 'standard' && !!live.get().scope, JSON.stringify({ keptCt, base: live.get().anatomy.base }));
+  live.leaveStage();
   live.applyHash('#anat=scanned-b');
   check('anatomy store: Back/Forward to a link the index does not allow drops the anatomy', live.get().anatomy === ANATOMY_DEFAULT);
   live.applyHash(canon);
@@ -4963,7 +4967,10 @@ async function openAnat(browser, base, hash, { index = 'fixture', patches = null
   await context.route(ANAT_ROUTE, (route) => {
     const name = new URL(route.request().url()).pathname.replace(/^\//, '');
     asked.push(name);
-    const body = served[name];
+    /* the fixture's scanned base shows the Specimen stage the standard head's own packs, landmarks and sweeps (the stage loads a base's models and geometry) */
+    const std = /^ssb\/anatomy\/scanned\/((?:models|geometry)\/(?:[A-Za-z0-9._-]+))$/.exec(name);
+    const fromDisk = std && !served[name] && fs.existsSync(path.join(ROOT, 'ssb', std[1])) ? fs.readFileSync(path.join(ROOT, 'ssb', std[1])) : null;
+    const body = served[name] || fromDisk;
     return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
   });
   await context.route(/\/js\/ssb\/stamps\.js(?:[?#].*)?$/, (route) => {
@@ -5055,7 +5062,7 @@ async function anatomyTests(browser, base) {
     const sel = await nodes();
     check('anatomy specimen: selecting the structure finds the override and not the node it replaced (still hidden, the override shown)', framed && !sel.find((n) => n.key === 's.middle-turbinate.R').visible && sel.find((n) => n.key === `anatomy:${ANAT_STEM}:s.middle-turbinate.R`).visible, JSON.stringify(sel));
     await page.click('#ssb-anatomy button[data-anat="standard"]');
-    await page.waitForFunction(() => window.__ssb.specimen.anatomy.overrides.length === 0 && window.__ssb.specimen.anatomy.status === 'none', null, { timeout: 20000 });
+    await page.waitForFunction(() => window.__ssb.specimen.anatomy.overrides.length === 0 && window.__ssb.specimen.anatomy.status === 'none' && window.__ssb.specimen.dataRoot === 'ssb' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
     const off = await nodes();
     check('anatomy specimen: clearing the anatomy gives the override pack back and restores the base node (visible, no override left)', off.length === 2 && off.find((n) => n.key === 's.middle-turbinate.R').visible && !off.some((n) => /^anatomy:/.test(n.key)), JSON.stringify(off));
     await page.evaluate(() => { location.hash = '#anat=scanned&v=v.concha-bullosa.R:typical&s=s.middle-turbinate'; });
@@ -5087,6 +5094,272 @@ async function anatomyTests(browser, base) {
 }
 
 /* ---------------- the suite ---------------- */
+
+/* ---------------- the scanned base (WP RA3b): head A as scanned, ssb/anatomy/scanned/, on its own data ---------------- */
+
+const SCANNED = 'ssb/anatomy/scanned';
+
+/* The scanned label volume, read from the file (independent of the page): the table, the header, and a counter. */
+function readScannedLabels() {
+  const hdr = readJson(`${SCANNED}/ct/ct.json`);
+  const table = readJson(`${SCANNED}/geometry/labels.json`).labels;
+  const lab = new Uint16Array(zlib.gunzipSync(fs.readFileSync(path.join(ROOT, SCANNED, 'ct/labels.u16.gz'))).buffer.slice(0));
+  const byName = Object.fromEntries(Object.entries(table).map(([k, v]) => [v, Number(k)]));
+  const [nx, ny] = hdr.dims;
+  const ras = (n) => [0, 1, 2].map((c) => hdr.affine[c][3] + hdr.affine[c][c] * n[c]);
+  const centroid = (name) => {
+    let sx = 0, sy = 0, sz = 0, n = 0;
+    const want = byName[name];
+    for (let idx = 0; idx < lab.length; idx++) if (lab[idx] === want) { sx += idx % nx; sy += Math.floor(idx / nx) % ny; sz += Math.floor(idx / (nx * ny)); n++; }
+    return { n, mean: [sx / n, sy / n, sz / n], ml: n * hdr.spacing[0] ** 3 / 1000 };
+  };
+  return { hdr, table, byName, lab, centroid, ras };
+}
+
+function scannedBaseUnitTests() {
+  const index = readJson('ssb/anatomy/index.json');
+  const entry = index.bases && index.bases.scanned;
+  {
+    /* the endoscope and the procedure read the standard head only: a non-standard base never rides with them, the later choice wins */
+    const mk = (hash) => createStore({ has: (id) => GRAPH.has(id), tierOf: () => 1, hash, prefs: { tier: 1 }, labs: {}, anatomyDoc: index });
+    const a = mk('#scope=R,40,0,0,0,0');
+    a.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
+    const picked = a.get();
+    const b = mk('#anat=scanned');
+    b.setScope({ side: 'R', depth: 40, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+    const entered = b.get();
+    const c = mk('#anat=scanned');
+    check('scanned base vs the endoscope: picking Normal asymmetry in the Scope stage leaves the scope (back to the specimen, on the scanned head)',
+      picked.anatomy.base === 'scanned' && !picked.scope && !picked.station && !picked.procedure, JSON.stringify({ base: picked.anatomy.base, scope: !!picked.scope }));
+    check('scanned base vs the endoscope: entering the scope from the scanned head returns to the standard head (the scope never flies a mirrored head labelled as scanned)',
+      !!entered.scope && entered.anatomy.base === 'standard', JSON.stringify({ base: entered.anatomy.base, scope: !!entered.scope }));
+    check('scanned base vs the endoscope: a plain #anat=scanned link keeps its base and no scope', c.get().anatomy.base === 'scanned' && !c.get().scope);
+  }
+  check('scanned base: ssb/anatomy/index.json lists it, with a root, a note and the numbers the pipeline printed (written, never typed)',
+    !!entry && entry.root === SCANNED && typeof entry.note === 'string' && entry.note.length > 40 && !!entry.volumesMl && !!entry.asymmetryIndex && Array.isArray(entry.absent), JSON.stringify(Object.keys(entry || {})));
+  const { doc, nodes, files } = readPacks(SCANNED);
+  const box = ctBoxOf(SCANNED);
+  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : def.population ? 'population:' : '') + k.split('@')[0]]));
+  check('scanned packs: every pack is a glTF 2.0 binary with a true length field, and the nodes in each file are exactly the nodes packs.json lists for it',
+    Object.values(files).every((f) => f.magic === 0x46546c67 && f.version === 2 && f.length === f.size && (f.json.extensionsRequired || []).includes('KHR_mesh_quantization'))
+      && listed.length === nodes.size && listed.every(([name, key]) => nodes.has(key) && nodes.get(key).pack === name), `${listed.length} listed, ${nodes.size} read`);
+  const unknown = [...nodes.values()].filter((n) => !GRAPH.has(n.id));
+  check('scanned packs: every node id is a graph entity, named <graph id>.<R|L|M>', unknown.length === 0
+    && [...nodes].every(([key, n]) => key === `${n.lining ? 'lining:' : n.population ? 'population:' : ''}${n.id}.${n.side}` && ['R', 'L', 'M'].includes(n.side)), unknown.map((n) => n.id).join(', '));
+  const outside = [...nodes].filter(([, n]) => n.box.min.some((v, i) => v < box.min[i] - 5) || n.box.max.some((v, i) => v > box.max[i] + 5));
+  check('scanned packs (placement): every mesh lies inside the scanned CT volume (± 5 mm), so the cursor and the CT share one frame', outside.length === 0, outside.map(([k]) => k).join('; '));
+  const cx = (n) => { let t = 0; for (let i = 0; i < n.pts.length; i += 3) t += n.pts[i]; return t / (n.pts.length / 3); };
+  const wrong = [...nodes].filter(([, n]) => { const x = cx(n); return (n.side === 'R' && x <= 0) || (n.side === 'L' && x >= 0) || (n.side === 'M' && Math.abs(x) > 10); }).map(([k, n]) => `${k} ${r2(cx(n))}`);
+  check('scanned packs (laterality): patient right is +x — every .R mesh centroid x > 0, .L < 0, midline pieces within 10 mm of x = 0 — in a head that is not mirrored', wrong.length === 0, wrong.join('; '));
+  check('scanned packs: the head is NOT mirrored — the two maxillary sinus meshes differ in size (a real head), unlike the standard specimen\'s',
+    nodes.has('s.maxillary-sinus.R') && nodes.has('s.maxillary-sinus.L') && nodes.get('s.maxillary-sinus.R').tris !== nodes.get('s.maxillary-sinus.L').tris
+      && nodes.get('s.maxillary-sinus.R').pts.length !== 0 && JSON.stringify(nodes.get('s.maxillary-sinus.R').box.max.map(r2)) !== JSON.stringify(nodes.get('s.maxillary-sinus.L').box.min.map((v, i) => r2(i === 0 ? -v : v))));
+  const L = readScannedLabels();
+  const stdTable = readJson('ssb/geometry/labels.json').labels;
+  const notGraph = Object.values(L.table).filter((n) => !GRAPH.has(n.replace(/\.(R|L|M)$/, '')));
+  check('scanned labels: every name in the label table is a graph id with a side, and an index means the same name as on the standard head (one append-only table)',
+    notGraph.length === 0 && Object.entries(L.table).every(([k, v]) => stdTable[k] === v), notGraph.join(', '));
+  check('scanned CT header: a real, un-normalized head — it carries `scanned` and not `standard`, and the same grid as the standard volume',
+    !!L.hdr.scanned && !L.hdr.standard && JSON.stringify(L.hdr.dims) === JSON.stringify(readJson('ssb/ct/ct.json').dims) && JSON.stringify(L.hdr.affine) === JSON.stringify(readJson('ssb/ct/ct.json').affine));
+  const vol = (n) => L.centroid(n).ml;
+  const rec = { cavityR: vol('s.nasal-cavity.R'), cavityL: vol('s.nasal-cavity.L'), turbR: vol('s.inferior-turbinate.R'), turbL: vol('s.inferior-turbinate.L'), maxR: vol('s.maxillary-sinus.R'), maxL: vol('s.maxillary-sinus.L') };
+  const v = entry.volumesMl;
+  check('scanned volumes: an independent recount of the label file gives the cavity, inferior turbinate and maxillary volumes index.json records (to 0.002 mL)',
+    near(rec.cavityR, v.cavity.R, 0.002) && near(rec.cavityL, v.cavity.L, 0.002) && near(rec.turbR, v.inferiorTurbinate.R, 0.002) && near(rec.turbL, v.inferiorTurbinate.L, 0.002)
+      && near(rec.maxR, v.maxillary.R, 0.002) && near(rec.maxL, v.maxillary.L, 0.002), JSON.stringify([rec, v]));
+  const ai = (r, l) => 100 * (r - l) / ((r + l) / 2);
+  check('scanned asymmetry indices: the recorded cavity and maxillary AI are 100·(R − L)/mean of those volumes, each with its percentile among the NasalSeg clear subjects',
+    near(ai(rec.cavityR, rec.cavityL), entry.asymmetryIndex.cavity.ai, 0.05) && near(ai(rec.maxR, rec.maxL), entry.asymmetryIndex.maxillary.ai, 0.05)
+      && typeof entry.asymmetryIndex.cavity.absAiPercentileClear === 'number' && typeof entry.asymmetryIndex.maxillary.absAiPercentileClear === 'number' && entry.nasalSeg === undefined
+      && entry.asymmetryIndex.cavity.beyondAllClear === (Math.abs(entry.asymmetryIndex.cavity.ai) > entry.asymmetryIndex.cavity.clearAbsAiMax), JSON.stringify(entry.asymmetryIndex));
+  check('scanned note (ruling 2): it names cavity + vestibule as the closest comparison with NasalSeg, quotes both asymmetries, says the comparison is not like for like (HU threshold against display levels of a screen capture), and states the explanations as hypotheses',
+    /closest comparison/.test(entry.note) && /cavity \+ vestibule/.test(entry.note) && /asymmetry [+-]?\d+ %/.test(entry.note) && /NasalSeg/.test(entry.note) && /not like for like/.test(entry.note) && /HU threshold/.test(entry.note) && /display levels of a screen capture/.test(entry.note)
+      && /\bmay\b/.test(entry.note) && /consistent with/.test(entry.note) && !/(is|are) physiological/.test(entry.note) && !/this head sits at the edge of normal/.test(entry.note), entry.note);
+  /* ruling 2: exact accounting of every label the base changed against the as-scanned labels, attributed to a step; tissue <-> air is an escalation */
+  const tr = entry.labelTransitions;
+  const sumStep = (st) => st.pairs.reduce((a, q) => a + q.voxels, 0) + st.smallerPairsVoxels;
+  check('scanned label transitions: the index records a table per step (vestibule + valve, wall units), its pairs plus the smaller ones summing to the step\'s changed voxels, and no tissue voxel became an air label or the reverse',
+    !!tr && sumStep(tr.vestibuleAndValve) === tr.vestibuleAndValve.voxels && sumStep(tr.wallUnits) === tr.wallUnits.voxels && tr.vestibuleAndValve.voxels > 0 && tr.tissueBecameAirLabel === 0 && tr.airLabelLost === 0, JSON.stringify(tr && { v: tr.vestibuleAndValve.voxels, w: tr.wallUnits.voxels, t: tr.tissueBecameAirLabel, a: tr.airLabelLost }));
+  const vox = (n) => L.centroid(n).n;
+  check('scanned label transitions: the recorded net voxel counts of the cavity, vestibule and turbinates are an independent recount of the label file, and each step only moves the classes it may (the vestibule step touches only unlabelled, cavity and vestibule; the wall-unit step no air label)',
+    ['s.nasal-cavity.R', 's.nasal-cavity.L', 's.nasal-vestibule.R', 's.nasal-vestibule.L', 's.inferior-turbinate.R', 's.inferior-turbinate.L'].every((n) => tr.net[n] && tr.net[n].scannedVoxels === vox(n))
+      && tr.vestibuleAndValve.pairs.every((q) => /^(\(unlabelled\)|s\.nasal-(cavity|vestibule)\.[RL])$/.test(q.from) && /^s\.nasal-(cavity|vestibule)\.[RL]$/.test(q.to))
+      && tr.wallUnits.pairs.every((q) => ![q.from, q.to].some((x) => /^s\.(nasal-cavity|nasal-vestibule|maxillary-sinus|sphenoid-sinus|frontal-sinus|nasopharynx|agger-nasi-cell|ethmoid-bulla|frontal-recess|anterior-ethmoid-cells|posterior-ethmoid-cells)\./.test(x))), JSON.stringify(Object.keys(tr.net)));
+  /* the ruling: a stage-D product that failed its gate is absent — listed with the measured number, and truly not in the base */
+  const charts = readJson(`${SCANNED}/geometry/charts.json`).surfaces;
+  const sweeps = readJson(`${SCANNED}/geometry/sweeps.json`);
+  const absent = entry.absent;
+  check('scanned absent list: every entry is { id, side, reason } with the measured number in the reason, and the id is a graph id or a landmark',
+    absent.length > 0 && absent.every((a) => (GRAPH.has(a.id) || /^lm\./.test(a.id)) && ['R', 'L', 'M'].includes(a.side) && /\d/.test(a.reason)), JSON.stringify(absent));
+  const stillThere = absent.filter((a) => charts[`${a.id}.${a.side}`] || nodes.has(`${a.id}.${a.side}`) || sweeps[`${a.id}.${a.side}`]);
+  check('scanned absent list: nothing listed as absent is in the base — not a chart, not a pack node, not a sweep (a failing gate is never loosened)', stillThere.length === 0, JSON.stringify(stillThere));
+  check('scanned charts: every chart the base keeps has its surface in the soft pack',
+    Object.keys(charts).every((k) => nodes.has(k)), Object.keys(charts).join());
+  /* landmarks, as the standard head's data check does it: paired ones on their own side, within 4 mm of their own side's mesh and nearer it than the other's */
+  const lm = readJson(`${SCANNED}/geometry/landmarks.json`);
+  const badSide = Object.entries(lm).filter(([k, p]) => (k.endsWith('.R') && p[0] <= 0) || (k.endsWith('.L') && p[0] >= 0));
+  check('scanned landmarks: every .R landmark has x > 0 and every .L landmark x < 0 (measured on this head, not mirrored)', badSide.length === 0, badSide.map(([k, p]) => `${k} ${p}`).join(', '));
+  const PAIRS = { 'lm.sphenoid-ostium': 's.sphenoid-sinus', 'lm.frontal-ostium': 's.frontal-recess', 'lm.sphenopalatine-foramen': 's.nasal-cavity',
+    'lm.infraorbital-foramen': 's.maxillary-sinus', 'lm.greater-palatine-foramen': 's.maxillary-sinus', 'lm.vidian-canal-anterior': 's.sphenoid-sinus',
+    'lm.foramen-rotundum-anterior': 's.sphenoid-sinus' };
+  const lrows = [];
+  for (const [k, p] of Object.entries(lm)) {
+    const m = /^(.+)\.(R|L)$/.exec(k);
+    if (!m || !PAIRS[m[1]] || !lm[`${m[1]}.${m[2] === 'R' ? 'L' : 'R'}`]) continue;
+    const own = nodes.get(`${PAIRS[m[1]]}.${m[2]}`), other = nodes.get(`${PAIRS[m[1]]}.${m[2] === 'R' ? 'L' : 'R'}`);
+    if (own && other) lrows.push({ k, own: nearestVertex(own, p), other: nearestVertex(other, p) });
+  }
+  check('scanned landmarks vs meshes: each paired landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s',
+    lrows.length >= 6 && lrows.every((q) => q.own <= 4 && q.own < q.other), JSON.stringify(lrows.map((q) => [q.k, r2(q.own), r2(q.other)])));
+  /* the registry the page builds from the real index */
+  const reg = buildAnatomyRegistry(index, (id) => GRAPH.has(id));
+  check('scanned registry: the index adds the base; a plain visit still resolves to the standard head, and only a link that names a variant or condition defaults to the scanned base',
+    reg.bases.has('scanned') && reg.defaultBase === 'scanned' && resolveAnatomy({ base: undefined, variants: [], conditions: [] }, reg) === ANATOMY_DEFAULT
+      && resolveAnatomy({ base: 'scanned', variants: [], conditions: [] }, reg).base === 'scanned');
+  const withVariant = buildAnatomyRegistry({ ...index, variants: { 'v.concha-bullosa': { sides: ['R'], presets: ['typical'] } } }, (id) => GRAPH.has(id));
+  const viaDefault = resolveAnatomy({ variants: [{ id: 'v.concha-bullosa', side: 'R', preset: null }], conditions: [] }, withVariant);
+  check('scanned registry: a link that names a variant and no base lands on the scanned base (RA-O3), and with a base named the base is the link\'s',
+    viaDefault && viaDefault.base === 'scanned' && resolveAnatomy({ base: 'standard', variants: [{ id: 'v.concha-bullosa', side: 'R', preset: null }], conditions: [] }, withVariant).base === 'standard');
+}
+
+async function scannedBaseTests(browser, base) {
+  const L = readScannedLabels();
+  const entry = readJson('ssb/anatomy/index.json').bases.scanned;
+  /* a plain visit stays on the standard head with the real index present: Symmetric pressed, Normal asymmetry enabled, no anatomy in the hash */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '');
+    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 20000 });
+    const pills = Object.fromEntries((await anatPills(page)).map((q) => [q.k, q]));
+    const st = await page.evaluate(() => ({ hash: location.hash, base: window.__ssb.hash }));
+    check('scanned page: a plain visit stays on the standard head — Symmetric pressed, Normal asymmetry enabled and not pressed, no anatomy in the address, the standard note shown',
+      pills.standard.pressed === 'true' && !pills.scanned.disabled && pills.scanned.pressed === 'false' && st.hash === '' && st.base === '' && !/as scanned/i.test(await page.evaluate(() => document.getElementById('ssb-stage-note').textContent)), JSON.stringify({ pills, st }));
+    check('scanned page: zero console errors on a plain visit with the index present', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* CT on the scanned base: the volume is the base's, a point in each cavity picks that side's label (laterality, picking), and the left is not the right mirrored */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#ct=ax&anat=scanned', { wait: 'none' });
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === 'scanned|', null, { timeout: 30000 });
+    const probe = {};
+    for (const name of ['s.nasal-cavity.R', 's.nasal-cavity.L', 's.maxillary-sinus.R', 's.maxillary-sinus.L', 's.inferior-turbinate.L']) {
+      const c = L.centroid(name);
+      let ras = L.ras(c.mean.map(Math.round));
+      // the centroid of a curved space may fall outside it: take the nearest member voxel of the label along the rows through the centroid
+      const want = L.byName[name], [nx, ny, nz] = L.hdr.dims;
+      let best = null;
+      for (let dk = -3; dk <= 3 && !best; dk++) for (let dj = -6; dj <= 6 && !best; dj++) for (let di = -6; di <= 6; di++) {
+        const i = Math.round(c.mean[0]) + di, j = Math.round(c.mean[1]) + dj, k = Math.round(c.mean[2]) + dk;
+        if (i >= 0 && j >= 0 && k >= 0 && i < nx && j < ny && k < nz && L.lab[k * nx * ny + j * nx + i] === want) { best = [i, j, k]; break; }
+      }
+      probe[name] = { want, ras: best ? L.ras(best) : ras };
+    }
+    const got = await page.evaluate((p) => Object.fromEntries(Object.entries(p).map(([k, v]) => [k, window.__ssb.ct.labelAt(v.ras)])), probe);
+    check('scanned page (CT): the stage loads ssb/anatomy/scanned/ and a point inside each structure picks that structure and side (cavity R and L, maxillary R and L, left inferior turbinate)',
+      Object.entries(probe).every(([k, v]) => got[k] === v.want), JSON.stringify({ got, probe }));
+    const sides = probe['s.nasal-cavity.R'].ras[0] > 0 && probe['s.nasal-cavity.L'].ras[0] < 0 && probe['s.maxillary-sinus.R'].ras[0] > 0 && probe['s.maxillary-sinus.L'].ras[0] < 0;
+    check('scanned page (CT, laterality): the points picked for .R lie at x > 0 and for .L at x < 0 in the page\'s frame', sides, JSON.stringify(probe));
+    check('scanned page (CT): zero console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* the Specimen stage on the scanned base (ruling 2): its own packs, never the mirrored head; placement, picking and laterality on screen */
+  {
+    const truthS = new Map([...readPacks(SCANNED).nodes].filter(([, n]) => !n.lining && !n.population));
+    const truthStd = new Map([...readPacks().nodes].filter(([, n]) => !n.lining && !n.population));
+    const boxD = (a, b) => Math.max(...[0, 1, 2].flatMap((i) => [Math.abs(a.min[i] - b.min[i]), Math.abs(a.max[i] - b.max[i])]));
+    const { context, page, errors } = await openSpecimen(browser, base, '#anat=scanned');
+    await page.waitForFunction(() => window.__ssb.specimen.dataRoot === 'ssb/anatomy/scanned' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    await nextFrames(page, 3);
+    const info = await spec(page, () => ({ status: window.__ssb.specimen.status, problems: window.__ssb.specimen.problems, root: window.__ssb.specimen.dataRoot, note: document.getElementById('ssb-stage-note').textContent, msgHidden: document.getElementById('ssb-stage-msg').hidden }));
+    check('scanned specimen: a link to the scanned base boots the Specimen stage on ssb/anatomy/scanned/ — ready, no problems — and the stage note says the head is as scanned, not mirrored',
+      info.status === 'ready' && info.problems.length === 0 && info.root === SCANNED && info.msgHidden && /Head as scanned, not mirrored/.test(info.note) && /University of Washington|Univ\. of Washington/.test(info.note), JSON.stringify(info));
+    const nodes = (await specNodes(page)).filter((n) => !n.lining);
+    check('scanned specimen: the registry is exactly the scanned packs\' nodes (an independent read of ssb/anatomy/scanned/models), every id in the graph',
+      nodes.map((n) => n.key).sort().join() === [...truthS.keys()].sort().join() && nodes.every((n) => GRAPH.has(n.id)), `${nodes.length} vs ${truthS.size}`);
+    const sbox = ctBoxOf(SCANNED);
+    const off = nodes.filter((n) => !(boxD(n.box, truthS.get(n.key).box) < 0.05)).map((n) => n.key);
+    check('scanned specimen (placement): the loader places every scanned mesh exactly where the data says (max error < 0.05 mm), inside the scanned CT volume (± 5 mm)',
+      off.length === 0 && nodes.every((n) => n.box.min.every((v, i) => v >= sbox.min[i] - 5) && n.box.max.every((v, i) => v <= sbox.max[i] + 5)), off.join());
+    const mR = nodes.find((n) => n.key === 's.maxillary-sinus.R'), mL = nodes.find((n) => n.key === 's.maxillary-sinus.L');
+    const mirrored = (a, b) => [0, 1, 2].every((i) => Math.abs((i === 0 ? -b.max[0] : b.min[i]) - (i === 0 ? a.min[0] : a.min[i])) < 0.6 && Math.abs((i === 0 ? -b.min[0] : b.max[i]) - (i === 0 ? a.max[0] : a.max[i])) < 0.6);
+    check('scanned specimen: Normal asymmetry never draws the mirrored head — the .L maxillary sinus is not the .R one reflected, and differs from the standard head\'s (whose left is the right mirrored)',
+      !mirrored(mR.box, mL.box) && boxD(mL.box, truthStd.get('s.maxillary-sinus.L').box) > 0.4, JSON.stringify([mR.box, mL.box]));
+    const lmS = readJson(`${SCANNED}/geometry/landmarks.json`);
+    const lmP = Object.fromEntries((await spec(page, () => window.__ssb.specimen.landmarks)).map((l) => [l.key, l.ras]));
+    check('scanned specimen: the landmarks on show are the scanned base\'s own file\'s (not the standard head\'s)', Object.keys(lmP).length > 10 && Object.entries(lmP).every(([k, v]) => lmS[k] && lmS[k].every((x, i) => Math.abs(x - v[i]) < 1e-6)), String(Object.keys(lmP).length));
+    /* laterality on screen */
+    await clickView(page, 'anterior');
+    await page.click('#ssb-spec button[data-bone="hidden"]');
+    await nextFrames(page, 2);
+    const sR = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
+    const sL = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.L'));
+    check('scanned specimen (laterality on screen): in the anterior view the .R maxillary sinus is on the viewer\'s left and the .L on the right', sR && sL && sR.x < sL.x, JSON.stringify([sR, sL]));
+    const cR = await spec(page, (k) => window.__ssb.specimen.centroid(k), 's.maxillary-sinus.R');
+    const cL = await spec(page, (k) => window.__ssb.specimen.centroid(k), 's.maxillary-sinus.L');
+    check('scanned specimen (laterality): in the scene the .R maxillary sinus centroid is at x > 10 and the .L at x < -10', cR[0] > 10 && cL[0] < -10, JSON.stringify([cR, cL]));
+    /* picking: the ray through each side's sinus hits that side's node, and a click selects it */
+    for (const side of ['R', 'L']) {
+      const key = `s.maxillary-sinus.${side}`;
+      const n = nodes.find((q) => q.key === key);
+      const aim = [0, 1, 2].map((i) => (n.box.min[i] + n.box.max[i]) / 2);
+      const at = await project(page, aim);
+      const hits = await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y), [at.x, at.y]);
+      check(`scanned specimen (picking): a ray through the middle of the scanned ${key} hits that node (and not the other side's)`, hits.some((h) => h.key === key) && !hits.some((h) => h.key === `s.maxillary-sinus.${side === 'R' ? 'L' : 'R'}`), JSON.stringify(hits.map((h) => h.key)));
+      await page.mouse.click(at.x, at.y);
+      const picked = await page.evaluate(() => ({ sel: window.__ssb.selection, primary: window.__ssb.specimen.primary }));
+      check(`scanned specimen (picking): clicking there selects ${key}'s structure and highlights that side`, picked.sel === 's.maxillary-sinus' && /^s\.maxillary-sinus\.(R|L)$/.test(picked.primary || '') , JSON.stringify(picked));
+    }
+    check('scanned specimen: zero console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* Symmetric <-> Normal asymmetry on a live page: the stage swaps its data and the plain state is the standard head's exactly */
+  {
+    const truthS = new Map([...readPacks(SCANNED).nodes].filter(([, n]) => !n.lining && !n.population));
+    const truthStd = new Map([...readPacks().nodes].filter(([, n]) => !n.lining && !n.population));
+    const { context, page, errors } = await openSpecimen(browser, base, '');
+    check('scanned specimen (switch): a plain visit loads ssb/ (the standard head)', (await page.evaluate(() => window.__ssb.specimen.dataRoot)) === 'ssb');
+    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 20000 });
+    await page.click('#ssb-anatomy button[data-anat="scanned"]');
+    await page.waitForFunction(() => window.__ssb.specimen.dataRoot === 'ssb/anatomy/scanned' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    await nextFrames(page, 3);
+    let nodes = (await specNodes(page)).filter((n) => !n.lining);
+    const same = (truth) => nodes.map((n) => n.key).sort().join() === [...truth.keys()].sort().join() && nodes.every((n) => n.box.min.every((v, i) => Math.abs(v - truth.get(n.key).box.min[i]) < 0.05) && n.box.max.every((v, i) => Math.abs(v - truth.get(n.key).box.max[i]) < 0.05));
+    check('scanned specimen (switch): Normal asymmetry swaps the stage to the scanned base\'s packs, node for node and mm for mm; the hash says so', same(truthS) && (await page.evaluate(() => location.hash)) === '#anat=scanned', await page.evaluate(() => location.hash));
+    await page.click('#ssb-anatomy button[data-anat="standard"]');
+    await page.waitForFunction(() => window.__ssb.specimen.dataRoot === 'ssb' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    await nextFrames(page, 3);
+    nodes = (await specNodes(page)).filter((n) => !n.lining);
+    check('scanned specimen (switch): Symmetric puts the standard head back exactly, and the hash loses the anatomy', same(truthStd) && (await page.evaluate(() => location.hash)) === '', await page.evaluate(() => location.hash));
+    check('scanned specimen (switch): zero console errors through the swaps', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* the Normal asymmetry pill: the state's note is the index's, the flap overlay is off with a note, and a flap link is dropped */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#tier=3&anat=scanned');
+    await page.waitForFunction(() => document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') === 'true', null, { timeout: 20000 });
+    await page.waitForFunction((n) => [...document.querySelectorAll('.ssb-param-src')].some((e) => e.textContent === n), entry.note, { timeout: 10000 });
+    const info = await page.evaluate(() => ({
+      notes: [...document.querySelectorAll('.ssb-param-src')].map((e) => ({ t: e.textContent, hidden: e.hidden })),
+      designs: [...document.querySelectorAll('#ssb-spec button[data-flap-design]')].map((b) => b.disabled),
+    }));
+    const noteShown = info.notes.find((n) => n.t === entry.note);
+    check('scanned page: the state\'s note is index.json\'s own text — cavity asymmetry and where it sits against the NasalSeg range — shown on the Normal asymmetry state', noteShown && !noteShown.hidden, JSON.stringify(info.notes.map((n) => n.t.slice(0, 60))));
+    const gone = info.notes.find((n) => /standard-head tool/.test(n.t));
+    const flapCharts = entry.absent.filter((a) => ['s.septal-mucosa', 's.nasal-floor-mucosa'].includes(a.id));
+    check('scanned page: the flap overlay is disabled with a note naming the absent charts and their measured reasons (a standard-head tool), every design button disabled',
+      flapCharts.length > 0 ? gone && !gone.hidden && flapCharts.every((a) => gone.t.includes(`${a.id}.${a.side}`)) && info.designs.length > 0 && info.designs.every(Boolean) : true, JSON.stringify(info));
+    await context.close();
+  }
+  {
+    /* a flap link on the scanned base: the overlay does not stay on */
+    const { context, page, errors } = await openSpecimen(browser, base, '#tier=3&flap=extended.R&anat=scanned');
+    await page.waitForFunction(() => document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') === 'true', null, { timeout: 20000 });
+    await page.waitForTimeout(600);
+    const flapOn = await page.evaluate(() => /flap=/.test(location.hash) || /flap=/.test(window.__ssb.hash));
+    check('scanned page: a link that asks for a flap on a base whose charts are absent ends with the overlay off and the flap out of the address', entry.absent.some((a) => ['s.septal-mucosa', 's.nasal-floor-mucosa'].includes(a.id)) ? !flapOn : true, await page.evaluate(() => location.hash));
+    check('scanned page: zero console errors through the scanned-base pages', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+}
 
 async function main() {
   let server = null;
@@ -5131,6 +5404,11 @@ async function main() {
   if (ONLY === 'anatomy') {
     await anatomyUnitTests();
     await anatomyTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'scanned') {
+    scannedBaseUnitTests();
+    await scannedBaseTests(browser, base);
     return finish(browser, server);
   }
   if (ONLY === 'mucosa') {
@@ -5621,6 +5899,8 @@ async function main() {
   await flapTests(browser, base, flapUnitTests());
   await anatomyUnitTests();
   await anatomyTests(browser, base);
+  scannedBaseUnitTests();
+  await scannedBaseTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

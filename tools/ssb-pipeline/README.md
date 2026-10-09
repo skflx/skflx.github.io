@@ -119,6 +119,15 @@ Reconstruction, stage E (the external nose, ST6; needs the raw crawl, because th
     .venv/bin/python tools/ssb-pipeline/uw/normalize.py all # patches and centres the nose, measures the valve, labels the vestibule, then nose.py pack
     .venv/bin/python tools/ssb-pipeline/uw/nose.py pack     # the `nose` pack from the committed volume and incoming/_recon/nose-region.npz (written by normalize.py)
 
+The head as scanned (not mirrored, WP RA3b) is a separate build into `ssb/anatomy/scanned/`:
+
+    .venv/bin/python tools/ssb-pipeline/uw/normalize.py --base scanned   # about three minutes; deterministic
+
+It runs `walls`, `meshes`, `sdf`, `softtissue --per-side`, `lining` and `nose pack` from a scratch copy of this directory under
+`incoming/_recon/scanned-root/`, so the standard specimen's files are never read or written, and writes the `scanned` entry of
+`ssb/anatomy/index.json` from the numbers it prints. A stage-D product that fails its gate on a side is left out and listed as `absent`
+(nothing is loosened); the vestibule keeps each side's largest component. It prints a label transition table (as-scanned label -> scanned label, voxel counts, per step) and stops if tissue became an air label or the reverse. Method: the `normalize.py` docstring.
+
 `normalize.py all` needs `fetch.py` to have run (the raw stack) and takes about four minutes. The region, the centring offset, the valve
 plane and the vestibule are described in `nose.py`'s docstring and printed as the `ST6 1..5, 7` lines. `nose.py` with no argument is E1b's
 nostril landmark (`--write` stores it).
