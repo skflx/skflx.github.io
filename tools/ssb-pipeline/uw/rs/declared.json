@@ -73,40 +73,64 @@
    "id": "s.uncinate-process",
    "term": "uncinate process",
    "step": "RS2",
-   "status": "pending",
+   "status": "done",
    "note": "labelled as a sheet in RS2; the removable bone unit is RS6 (same id)"
   },
   {
    "id": "s.basal-lamella",
    "term": "basal lamella",
    "step": "RS2",
-   "status": "pending",
+   "status": "done",
    "note": "replaces the RS1 proxy plane, same id, method recorded"
   },
   {
    "id": "s.basal-lamella-vertical",
-   "term": "basal lamella, vertical (sagittal) part",
+   "term": "basal lamella, vertical part (anterior, near-coronal)",
    "step": "RS2",
-   "status": "pending"
+   "status": "done",
+   "note": "RS2b: the graph's meaning (Opus ruling 2, RS2)"
   },
   {
    "id": "s.basal-lamella-horizontal",
-   "term": "basal lamella, horizontal (coronal) part",
+   "term": "basal lamella, horizontal part (posterior, near-axial)",
    "step": "RS2",
-   "status": "pending"
+   "status": "done",
+   "note": "RS2b: the graph's meaning (Opus ruling 2, RS2)"
   },
   {
    "id": "s.bullar-lamella",
    "term": "bullar lamella",
    "step": "RS2",
-   "status": "pending"
+   "status": "done"
   },
   {
    "id": "s.ethmoid-ground-lamellae",
    "term": "ground lamella of the superior turbinate",
    "step": "RS2",
-   "status": "pending",
+   "status": "done",
    "note": "no own id for the superior turbinate's ground lamella: the concept id is used; a new id is content work for Opus"
+  },
+  {
+   "id": "s.sphenoid-face",
+   "term": "sphenoid face (anterior wall of the sphenoid body)",
+   "step": "RS2",
+   "status": "done",
+   "note": "ruling 2026-10-09: the sheet that decides which air is sphenoid; labelled on both sides"
+  },
+  {
+   "id": "s.intersinus-septum",
+   "term": "intersinus septum of the sphenoid",
+   "step": "RS2",
+   "status": "done",
+   "midline": true,
+   "note": "ruling 2026-10-09: splits the sphenoid into .R and .L; labelled only when exactly one candidate meets every rule"
+  },
+  {
+   "id": "s.accessory-sphenoid-septum",
+   "term": "accessory sphenoid septum",
+   "step": "RS2",
+   "status": "done",
+   "note": "every other candidate that meets the septum's rules"
   },
   {
    "id": "v.supra-agger-cell",

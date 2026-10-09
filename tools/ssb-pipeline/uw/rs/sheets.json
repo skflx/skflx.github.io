@@ -1,0 +1,141 @@
+{
+ "version": 1,
+ "doc": "Rules of the sheet stage (docs/realistic-anatomy.md section 7.2.2, WP RS2), held as data; every number is a named parameter. reseg.py `sheets` reads SEED tips only; no number here was chosen from a held-out tip, and none was changed after a score had been computed. `filter` is the sheetness filter and the cutting of its medial surface into candidates. A candidate is NAMED for a lamella only when exactly one candidate per side meets every rule (touching passers of a sheet with `merge_gap_mm` count as one; `dominance_ratio` is the septum's extra condition); otherwise the lamella is unassigned and every candidate's per-rule scores go to incoming/_rs/sheets-report.json. Distances are mm in the working volume's RAS frame (+r is the patient's right). An `end` is the extreme `end_fraction` of a candidate's voxels along the stated axis; `roi` bounds the candidate's centroid (|r|, a, s); a `probe` looks along the plate normal, up to `probe_mm` each way; `late` rules (the expensive ones) are evaluated only when the earlier rules pass.",
+ "filter": {
+  "sigmas_mm": [0.35, 0.5, 0.75],
+  "alpha_plate": 0.5,
+  "c_display": 10.0,
+  "min_peak_display": 85,
+  "hysteresis_low": 0.2,
+  "hysteresis_high": 0.4,
+  "nms_step_mm": 0.4,
+  "junction_radius_mm": 1.0,
+  "junction_lambda2": 0.1,
+  "junction_attach_angle_deg": 30,
+  "link_mm": 1.0,
+  "max_normal_angle_deg": 20,
+  "min_component_vox": 40,
+  "min_component_area_mm2": 4.0,
+  "end_fraction": 0.15,
+  "patch_split_min_area_mm2": 400,
+  "patch_angle_deg": 30,
+  "assemble_gap_mm": 1.5,
+  "assemble_angle_deg": 15
+ },
+ "rules": {
+  "sphenoid_body": {"face_fill_mm": 3.0, "face_gap_mm": 0.5, "posterior_fraction": 0.8, "report_min_cm3": 0.02, "min_cover_fraction": 0.3},
+  "sphenoid_septum": {"fit_degree": 1, "extend_near_mm": 2.0},
+  "label_dilate_mm": 0.4,
+  "review_halfwidth_mm": 22
+ },
+ "sheets": {
+  "uncinate": {
+   "label": "s.uncinate-process",
+   "roi": {"abs_r": [3, 20], "a": [-42, -10], "s": [16, 48]},
+   "pool_min_area_mm2": 8,
+   "report_top": 6,
+   "figure_ids": ["Cor.ethmoidbulla1", "Sag.max2"],
+   "merge_gap_mm": 1.0,
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 25},
+    {"name": "parasagittal", "type": "normal_abs", "axis": "r", "min": 0.5},
+    {"name": "a_extent", "type": "extent_min_mm", "axis": "a", "value": 6},
+    {"name": "anterior_attachment", "type": "any_of", "rules": [{"type": "reaches", "end": "anterior", "target": "seed:anterior process maxilla", "within_mm": 3.0}, {"type": "reaches", "end": "anterior", "target": "air:s.agger-nasi-cell", "within_mm": 1.5}]},
+    {"name": "free_posterior_edge_in_air", "type": "probe", "points": "end:posterior", "dir": "both", "in": "air", "probe_mm": 2.0, "min_fraction": 0.5},
+    {"name": "lateral_to_middle_turbinate", "type": "abs_r_vs_seed", "term": "middle turbinate", "relation": "greater", "margin_mm": 0.0},
+    {"name": "medial_to_maxillary_ostium", "type": "abs_r_vs_air_band", "label": "s.maxillary-sinus", "band_mm": 4.0, "relation": "less", "margin_mm": 0.0},
+    {"name": "free_edge_bounds_hiatus", "type": "any_of", "rules": [{"type": "reaches", "end": "posterior", "target": "air:s.ethmoid-bulla", "within_mm": 4.0}, {"type": "reaches", "end": "posterior", "target": "seed:ethmoid bulla", "within_mm": 4.0}, {"type": "reaches", "end": "posterior", "target": "seed:hiatus semilunaris", "within_mm": 3.0}]}
+   ]
+  },
+  "basal-lamella": {
+   "label": "s.basal-lamella",
+   "roi": {"abs_r": [3, 22], "a": [-58, -24], "s": [14, 52]},
+   "pool_min_area_mm2": 8,
+   "report_top": 6,
+   "figure_ids": ["Axial.ethmoid2", "Cor.basallamella", "Sag.basallamella2"],
+   "split": {"ref_mm": 2.0, "anterior_terms": ["anterior ethmoid", "anterior ethmoid sinus"], "posterior_terms": ["posterior ethmoid", "posterior ethmoid air cells"], "barrier_vox": 1},
+   "merge_gap_mm": 1.0,
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 40},
+    {"name": "not_sagittal", "type": "normal_abs", "axis": "r", "max": 0.6},
+    {"type": "reaches", "target": "lamina_papyracea", "name": "reaches_lamina_papyracea", "end": "lateral", "within_mm": 1.5},
+    {"name": "reaches_skull_base", "type": "reaches", "end": "superior", "target": "skull_base", "within_mm": 1.5},
+    {"name": "reaches_middle_turbinate", "type": "reaches", "end": "medial", "target": "ridge_near_seed:middle turbinate:5.0", "within_mm": 1.5},
+    {"name": "separates_anterior_from_posterior_ethmoid_air", "type": "separates_air", "late": true, "ref_mm": 2.0, "anterior_terms": ["anterior ethmoid", "anterior ethmoid sinus"], "posterior_terms": ["posterior ethmoid", "posterior ethmoid air cells"], "barrier_vox": 1}
+   ]
+  },
+  "bullar-lamella": {
+   "label": "s.bullar-lamella",
+   "roi": {"abs_r": [3, 20], "a": [-50, -24], "s": [18, 48]},
+   "pool_min_area_mm2": 8,
+   "report_top": 6,
+   "figure_ids": ["Cor.ethmoidbulla1", "Sag.max2"],
+   "merge_gap_mm": 1.0,
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 20},
+    {"name": "coronal", "type": "normal_abs", "axis": "a", "min": 0.5},
+    {"name": "not_horizontal", "type": "normal_abs", "axis": "s", "max": 0.6},
+    {"type": "reaches", "target": "lamina_papyracea", "name": "reaches_lamina_papyracea", "end": "lateral", "within_mm": 1.5},
+    {"name": "bounds_bulla_air", "type": "any_of", "rules": [{"type": "reaches", "end": "anterior", "target": "air:s.ethmoid-bulla", "within_mm": 2.0}, {"type": "reaches", "end": "anterior", "target": "seed:ethmoid bulla", "within_mm": 3.5}]},
+    {"name": "air_on_both_faces", "type": "probe", "points": "all", "dir": "both", "in": "air", "probe_mm": 2.0, "min_fraction": 0.5}
+   ]
+  },
+  "ground-lamella": {
+   "label": "s.ethmoid-ground-lamellae",
+   "roi": {"abs_r": [2, 22], "a": [-64, -30], "s": [14, 50]},
+   "pool_min_area_mm2": 8,
+   "report_top": 6,
+   "figure_ids": ["Axial.ethmoid2", "Sag.ethmoidnormal"],
+   "merge_gap_mm": 1.0,
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 25},
+    {"name": "coronal", "type": "normal_abs", "axis": "a", "min": 0.4},
+    {"name": "posterior_to_basal_lamella", "type": "relative_to_sheet", "sheet": "basal-lamella", "min_gap_mm": 3.0},
+    {"name": "reaches_lamina_papyracea_or_skull_base", "type": "any_of", "rules": [{"type": "reaches", "target": "lamina_papyracea", "end": "lateral", "within_mm": 2.0}, {"type": "reaches", "end": "superior", "target": "skull_base", "within_mm": 2.0}]},
+    {"name": "medial_end_free_in_nasal_air", "type": "reaches", "end": "medial", "target": "air:s.nasal-cavity", "within_mm": 2.0},
+    {"name": "air_on_both_faces", "type": "probe", "points": "all", "dir": "both", "in": "air", "probe_mm": 2.0, "min_fraction": 0.5}
+   ]
+  },
+  "sphenoid-face": {
+   "label": "s.sphenoid-face",
+   "roi": {"abs_r": [0, 28], "a": [-58, -40], "s": [12, 50]},
+   "pool_min_area_mm2": 20,
+   "report_top": 8,
+   "figure_ids": ["Axial.sphenoid1", "Sag.sphenoid", "Cor.sphenoid1"],
+   "merge_gap_mm": 5.0,
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 60},
+    {"name": "coronal", "type": "normal_abs", "axis": "a", "min": 0.6},
+    {"name": "s_extent", "type": "extent_min_mm", "axis": "s", "value": 8},
+    {"name": "r_extent", "type": "extent_min_mm", "axis": "r", "value": 4},
+    {"name": "sphenoid_air_behind", "type": "probe", "points": "all", "dir": "posterior", "in": "sphenoid_body_air", "probe_mm": 2.0, "min_fraction": 0.4},
+    {"name": "non_sphenoid_air_in_front", "type": "probe", "points": "all", "dir": "anterior", "in": "not_sphenoid_body_air", "probe_mm": 2.0, "min_fraction": 0.4}
+   ]
+  },
+  "intersinus-septum": {
+   "label": "s.intersinus-septum",
+   "roi": {"abs_r": [0, 24], "a": [-82, -44], "s": [10, 45]},
+   "pool_min_area_mm2": 20,
+   "report_top": 8,
+   "dominance_ratio": 1.5,
+   "figure_ids": ["Axial.sphenoid1", "Cor.sphenoid1"],
+   "clip_to_mask": {"mask": "sphenoid_air", "dilate_mm": 1.0},
+   "assemble_gap_mm": 3.0,
+   "assemble_angle_deg": 20,
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 40},
+    {"name": "sagittal", "type": "normal_abs", "axis": "r", "min": 0.7},
+    {"name": "inside_sphenoid_air", "type": "inside_mask", "mask": "sphenoid_air", "dilate_mm": 1.5, "min_fraction": 0.8},
+    {"name": "sphenoid_air_on_both_faces", "type": "probe", "points": "all", "dir": "both", "in": "sphenoid_air", "probe_mm": 2.0, "interior_mm": 1.5, "min_fraction": 0.5},
+    {"name": "attached_to_sphenoid_face", "type": "reaches", "end": "anterior", "target": "sheet:sphenoid-face", "within_mm": 3.0},
+    {"name": "attached_posteriorly_or_to_sella_floor", "type": "any_of", "rules": [{"type": "reaches", "end": "posterior", "target": "sphenoid_posterior_wall", "within_mm": 2.0}, {"type": "reaches", "end": "superior", "target": "sphenoid_superior_wall", "within_mm": 2.0}]}
+   ]
+  },
+  "accessory-sphenoid-septum": {
+   "label": "s.accessory-sphenoid-septum",
+   "derived": true,
+   "figure_ids": ["Axial.sphenoid1", "Cor.sphenoid1"],
+   "doc": "Not evaluated on its own: every other candidate that meets every rule of intersinus-septum (the dominance condition aside) is an accessory septum."
+  }
+ }
+}
