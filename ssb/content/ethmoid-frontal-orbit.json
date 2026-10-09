@@ -1624,6 +1624,10 @@
         {
           "tier": 3,
           "text": "The anteroposterior depth at the ostium decides whether a Draf IIb or III is feasible; measure it on the sagittal CT for each side. Authors measure it differently — nasal beak to posterior table at the ostium, or from the forward projection of the olfactory fossa to the anterior table — but the question is the same: will a drill fit in front of the skull base? About 10 mm is often quoted as the minimum, and a posterior table less than 5 mm from the skin in front of the nasal beak rules out a Draf III."
+        },
+        {
+          "tier": 2,
+          "text": "How far a sinus pneumatizes is graded, not typed ([[m.frontal-sinus-volume]]). One CT series grades each side by its lateral reach: hypoplasia is minimal pneumatization under the supraorbital line, a medium sinus reaches over that line but stays medial to the mid-orbital line, and hyperplasia extends lateral to the mid-orbital line (supraorbital line: a horizontal tangent to the superior orbital margins; mid-orbital line: a vertical line midway between the medial and lateral orbital borders). That series gives no millimetre or volume cut-off for hyperplasia, so call it by landmark on coronal CT rather than by a number. Hyperplasia was 7.9% of sides (96/1,220) in that one Omani series; this is a graded extent of the normal sinus, not a separate variant ([[v.frontal-sinus-aplasia]] is its other end)."
         }
       ],
       "src": [
@@ -1632,7 +1636,9 @@
         "src.lang-1989",
         "src.chiu-2019-ch10",
         "src.chiu-2019-ch11",
-        "src.chiu-2019-ch32"
+        "src.chiu-2019-ch32",
+        "src.alhatmi-2023-frontal-variations",
+        "src.dhakal-2025-sinus-volumes"
       ],
       "review": "draft"
     },
@@ -2076,6 +2082,10 @@
         {
           "r": "contains",
           "to": "s.orbital-fat"
+        },
+        {
+          "r": "contains",
+          "to": "s.globe"
         }
       ],
       "pearls": [
@@ -3080,6 +3090,25 @@
         "src.li-2023-olfactory-sulcus-depth"
       ],
       "review": "draft"
+    },
+    {
+      "id": "s.globe",
+      "name": "Globe",
+      "kind": "region",
+      "region": "orbit",
+      "tier": 1,
+      "partOf": "s.orbit",
+      "syn": [
+        "eyeball",
+        "bulbus oculi"
+      ],
+      "what": "The eyeball, lying in the anterior orbit within the muscle cone and orbital fat.",
+      "why": "It is the reference for every orbital check during ethmoid and medial-wall work: it is what you feel and watch move when you press the eye ([[pr.orbital-ballottement]]), and its centre is the fixed point the orbital landmarks are measured from.",
+      "geo": "none",
+      "src": [
+        "src.rhoton-2002-orbit"
+      ],
+      "review": "draft"
     }
   ],
   "landmarks": [
@@ -3335,6 +3364,17 @@
       "src": [
         "src.wormald-textbook",
         "src.chiu-2019-ch32"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "lm.globe-center",
+      "name": "Globe centre",
+      "of": "s.globe",
+      "tier": 2,
+      "locate": "Geometric centre of the globe (the centre of the eyeball), used as the origin for orbital distances. Position is specimen data, not content.",
+      "src": [
+        "src.rhoton-2002-orbit"
       ],
       "review": "draft"
     }
@@ -3667,10 +3707,51 @@
           "src": "src.lang-1989",
           "conf": "low",
           "note": "Unilateral aplasia/hypoplasia; spread reflects whether hypoplasia is counted."
+        },
+        {
+          "value": "2",
+          "unit": "% sides",
+          "method": "CT",
+          "src": "src.alhatmi-2023-frontal-variations",
+          "conf": "med",
+          "n": "24/1,220 sides",
+          "population": "Omani adults referred for paranasal sinus CT (Sultan Qaboos University Hospital, 2019–2020); one radiologist; categories after Guerram: aplasia = no pneumatization, hypoplasia = minimal pneumatization under the supraorbital line.",
+          "note": "Aplasia, right and left pooled; right 13/610 (2.1%), left 11/610 (1.8%)."
+        },
+        {
+          "value": "5.4",
+          "unit": "% sides",
+          "method": "CT",
+          "src": "src.alhatmi-2023-frontal-variations",
+          "conf": "med",
+          "n": "66/1,220 sides",
+          "population": "Omani adults referred for paranasal sinus CT (Sultan Qaboos University Hospital, 2019–2020); one radiologist; categories after Guerram: aplasia = no pneumatization, hypoplasia = minimal pneumatization under the supraorbital line.",
+          "note": "Hypoplasia, right and left pooled; right 39/610 (6.4%), left 27/610 (4.4%). This series defines hypoplasia relative to the supraorbital line; the Lang figures above do not state a definition, which may explain part of the spread."
+        },
+        {
+          "value": "2",
+          "unit": "% patients",
+          "method": "CT",
+          "src": "src.alhatmi-2023-frontal-variations",
+          "conf": "med",
+          "n": "12/610 patients",
+          "population": "Omani adults referred for paranasal sinus CT (Sultan Qaboos University Hospital, 2019–2020); one radiologist; categories after Guerram: aplasia = no pneumatization, hypoplasia = minimal pneumatization under the supraorbital line.",
+          "note": "Bilateral aplasia, as the paper's bilateral column; the paper does not say how its unilateral and bilateral tables relate."
+        },
+        {
+          "value": "3.4",
+          "unit": "% patients",
+          "method": "CT",
+          "src": "src.alhatmi-2023-frontal-variations",
+          "conf": "med",
+          "n": "21/610 patients",
+          "population": "Omani adults referred for paranasal sinus CT (Sultan Qaboos University Hospital, 2019–2020); one radiologist; categories after Guerram: aplasia = no pneumatization, hypoplasia = minimal pneumatization under the supraorbital line.",
+          "note": "Bilateral hypoplasia, as the paper's bilateral column."
         }
       ],
       "src": [
-        "src.lang-1989"
+        "src.lang-1989",
+        "src.alhatmi-2023-frontal-variations"
       ],
       "review": "draft"
     },
@@ -3815,6 +3896,19 @@
       "src": [
         "src.stammberger-1991",
         "src.wormald-textbook"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "v.ethmoid-bulla-hyperpneumatization",
+      "name": "Hyperpneumatized ethmoid bulla",
+      "of": "s.ethmoid-bulla",
+      "tier": 2,
+      "def": "An ethmoid bulla enlarged by pneumatization beyond its usual size. CT: an enlarged air-filled bulla. The source read gives no size criterion, so this entry sets no cut-off.",
+      "why": "A large bulla sits in front of the ostiomeatal complex and the frontal recess's posterior limit; in the one case report read, an enlarged bulla accompanied an obstructed ostiomeatal complex on one side while the other side stayed patent, so judge its effect on each side's outflow on coronal CT rather than assuming it.",
+      "geo": "diorama",
+      "src": [
+        "src.alomair-2025-giant-bulla"
       ],
       "review": "draft"
     }
@@ -4331,6 +4425,26 @@
       "note": "Combined multi-surgeon historical series; CSF leak was the most common major complication, and minor complications (mostly orbital penetration and MT adhesions) occurred in 6.9%; modern registry data vary with definitions and with revision and extended cases.",
       "src": [
         "src.may-1994"
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "m.frontal-sinus-volume",
+      "name": "Frontal sinus volume",
+      "tier": 3,
+      "unit": "cm³",
+      "value": {
+        "median": 2.59
+      },
+      "method": "CT",
+      "conf": "low",
+      "what": "Air volume of one frontal sinus on CT, the continuous measure of how far the sinus pneumatizes (the extent that [[s.frontal-sinus]] grades from hypoplasia to hyperplasia).",
+      "n": 154,
+      "population": "Patients aged 4 to 91 years (median 29), one Nepalese tertiary hospital, volumes marked by hand in InVesalius; children included.",
+      "note": "Value is the pooled bilateral median; IQR 1.42–4.59. By side, median (IQR): right 2.27 (0.94–4.12), left 3.04 (1.22–5.04). By sex, male right 2.80 (1.23–5.53) and left 3.83 (1.96–6.06); female right 1.87 (0.67–2.97) and left 2.34 (0.93–4.15). The source reports medians and IQRs only, no range, and does not define hypoplasia or hyperpneumatization; the extent categories and their landmark definitions are quoted on [[s.frontal-sinus]] (Al Hatmi), which states no numeric cut-off. Open: a source stating a volume or dimension cut-off for extensive pneumatization was not found.",
+      "src": [
+        "src.dhakal-2025-sinus-volumes",
+        "src.alhatmi-2023-frontal-variations"
       ],
       "review": "draft"
     }
