@@ -332,9 +332,9 @@ site.
    them. (Contributor names on Radiopaedia are required attribution under
    its licence; the UW no-names rule does not apply to them.)
 3. **Curated, small, polite.** A shortlist of cases (target 25–40, Opus
-   picks, the owner may veto), fetched by an agent one case at a time with
-   a pause between requests (RA-O5), cached in the gitignored drop zone,
-   never in CI.
+   picks, the owner may veto), cached in the gitignored drop zone, never in
+   CI. Who fetches is RA-O5, reopened: the site challenges non-browser
+   clients, and no agent works around it.
 4. **Per case, record**: rID, URL, title, contributor, licence line as shown,
    modality, plane(s), series description, slice count, apparent window,
    contrast, whether the stack is complete or key images only, burned-in
@@ -923,7 +923,15 @@ Steps:    1. Annotation mask: pixels ≥ 250 in thin components (verify per imag
 Accept:   figures.json validates (a schema check added to check-data or a pipeline self-test);
           every figure has plane, window, ≥ 1 graph id or an explicit null with reason; Opus
           spot-check of 15 figures' tips (checkpoint item).
-Escalate: annotation and bone overlap in > 10 % of figures.
+Escalate: annotation and bone overlap in > 10 % of the bone-window figures.
+Ruling:   (Opus, 2026-10-09, after the first run measured 15 of 89 figures with saturated
+          bone/contrast at the annotation value) the soft-tissue and post-contrast figures
+          are recorded in full (plane, window, contrast, caption, abbreviation map, ids,
+          role, group) with `arrows: null` and the reason "annotation not separable by
+          threshold (saturated window)"; tips are traced on the bone-window figures only,
+          each figure's thin-component mask checked (not a sample). `figures.py` unescapes
+          HTML entities in `src` (`Sag.OMU&amp;Sps.jpg`). The rapidocr pin in requirements.txt
+          is updated to the version that installs, with the version recorded in the README.
 ```
 
 ```
@@ -971,19 +979,44 @@ Accept:   check-data passes (every label a graph id); test-ssb specimen section 
           cavity and maxillary asymmetry indices are printed beside the NasalSeg percentiles
           (§4.4), and the state's note says where this head sits in that range.
 Escalate: a stage cannot run per side without an anatomy decision.
+Ruling:   (Opus, 2026-10-09, on the first run's four gates) no gate is relaxed for the scanned
+          base. (1) Vestibule: keep each side's largest component; smaller components go back
+          to s.nasal-cavity, their voxel count printed, and the stage still fails if they total
+          more than 2 % of the largest (a leak, not a speck). (2)–(4) A stage-D product (floor
+          or septal chart, floor mucosa, soft sweep) that fails its gate on a side is left out
+          of the scanned base, never loosened, and listed in its index.json entry as
+          `absent: [{ id, side, reason }]` with the measured number. The flap overlay stays a
+          standard-head tool: on a base whose charts are absent it is disabled with a note.
+          The nasopalatine waypoints stay authored on the standard head; per-base waypoints
+          are RS work. The left floor goes to the resegmentation (§5.1). Touch adds
+          tools/test-ssb.mjs (the specimen section on both bases, and a plain visit still on
+          `standard`) and js/ssb/ui-specimen.js (the state's note; the flap control disabled
+          when charts are absent); walls.py runs unmodified. Default base: resolveAnatomy uses
+          the index's default base only when a link names a variant or condition, so a plain
+          visit stays on the standard head; keep that, and test it.
 ```
 
 ```
-### RP1 — Radiopaedia shortlist (cases.json) [ready] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
+### RP1 — Radiopaedia shortlist (cases.json) [review] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
 Goal:     ≥ 1 candidate case per §4.3 queue item, each fully recorded; Opus picks ≤ 40.
 Touch:    ssb/reference/radiopaedia/cases.json, README.md (method, licence).
 Don't:    download stacks in this WP (RP2 does); record a case whose licence line differs
           from CC BY-NC-SA 3.0 without flagging it.
 Accept:   every record complete (§4.3 item 4); every queue item has a case or "none found".
+Ruling:   (Opus, 2026-10-09) radiopaedia.org serves an anti-bot challenge to non-browser
+          clients ("unsanctioned scraping by bots"). No agent works around it: no scripted
+          browser, no header spoofing, no curl of case pages. Records are built from search
+          results only (rID, URL, title, contributor, tags, the snippet's own words). Every
+          field only the case page shows (licence line, planes, series, slice counts,
+          contrast, complete vs key images, burned-in text) is the string "owner reads",
+          never inferred. The shortlist is ranked so the owner reads at most 40 pages. RA-O5
+          is reopened (§13), and RP2 waits on it.
+Result:   (2026-10-09) 47 search-result records in ssb/reference/radiopaedia/cases.json; 7 queue groups
+          "none found" with their queries; all page-only fields "owner reads".
 ```
 
 ```
-### C-RA — Graph additions                  [todo] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
+### C-RA — Graph additions                  [review] · Sonnet drafts → Opus reviews (O3) · depends: — (after #114 merges: sources.json)
 Goal:     the ids and landmarks of §8.3 with sources and prevalences (denominators).
 Ruling:   (Opus, 2026-10-09) frontal sinus hypoplasia/aplasia is a variant node; extensive
           frontal pneumatization is NOT a variant: it is a measurement on s.frontal-sinus
@@ -991,6 +1024,7 @@ Ruling:   (Opus, 2026-10-09) frontal sinus hypoplasia/aplasia is a variant node;
           its source. A prevalence or cut-off that no source states is left out, not
           estimated; ids follow docs/authoring-ssb.md; everything stays review: "draft".
 Accept:   tools/ssb-content.mjs passes; Opus review at CP-RA1.
+Result:   (2026-10-09) drafted: `v.ethmoid-bulla-hyperpneumatization`, `v.pterygoid-process-pneumatization`, `m.frontal-sinus-volume`, `dz.septal-perforation`, `s.globe` + `lm.globe-center`, `lm.posterior-nasal-spine`; prevalences added to `v.frontal-sinus-aplasia` and `v.lateral-recess-pneumatization`; six sources. Open items are listed in the PR.
 ```
 
 **Checkpoint CP-RA1 (Opus):** FG1, RS0, RA3a, RA3b, RP1, C-RA. §12 checklist.
@@ -1199,7 +1233,7 @@ Answered by the owner on 2026-10-07 unless marked open.
 | RA-O2 | Add **composite** as a fourth truth kind (§2.2)? | **Yes.** |
 | RA-O3 | Default base for Variants/Pathology? | **`scanned`** — variants and pathology should look realistic, so they sit on the real asymmetric head; `standard` is one click away. |
 | RA-O4 | May Radiopaedia-derived data (and images) be committed? | **Yes** — the cases are public; attribute (contributor, Radiopaedia.org, rID, as links) and do not monetize, which this site does not. ShareAlike: derived files carry CC BY-NC-SA 3.0 in their own folder. |
-| RA-O5 | Who downloads Radiopaedia stacks? | An agent may fetch them, one case at a time, politely, from the shortlist (follows from RA-O4). |
+| RA-O5 | Who downloads Radiopaedia stacks? | An agent may fetch them, one case at a time, politely, from the shortlist (follows from RA-O4). **Reopened 2026-10-09:** the site now challenges non-browser clients as unsanctioned scraping, so an agent may not fetch. Options for the owner: ask Radiopaedia for sanctioned access (its Developers/licensing contact), or download the ≤ 40 chosen cases in a browser into the drop zone. RP2 waits. |
 | RA-O6 | Use **NasalSeg** (CC BY 4.0, 130 CTs) for population asymmetry statistics? | **Yes** — started as WP POP0. |
 | RA-O7 | Author names remain in **git history** before 2026-10-07. Rewriting `master` history is destructive (force-push, every clone and open PR breaks). | *Open.* Recommended: leave history; the names are gone from the tree and RA0d keeps them out. Rewrite only if the authors ask. |
 | RA-O8 | Scope of batch 3 (soft-tissue/contrast complications with a synthetic channel) | *Open.* Recommended: plan it only after batches 1–2 are verified. |
