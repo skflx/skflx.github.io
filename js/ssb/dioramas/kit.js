@@ -27,7 +27,7 @@
    PARAMS for the URL whitelist.
    ============================================================= */
 import { rasToScene } from '../frame.js?v=f554e767';
-import { isKind } from '../materials.js?v=02954c7e';
+import { isKind } from '../materials.js?v=34e04a58';
 
 /* ---------------- implicit tests ---------------- */
 

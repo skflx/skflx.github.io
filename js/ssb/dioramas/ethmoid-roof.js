@@ -44,7 +44,7 @@
    artery and its drop are seen through the cut face rather than hidden in
    the cells.
    ============================================================= */
-import { band, superellipse, rasRoot, geometry, tubeGeometry, ribbonGeometry, mesh, tag } from './kit.js?v=4db6d3c1';
+import { band, superellipse, rasRoot, geometry, tubeGeometry, ribbonGeometry, mesh, tag } from './kit.js?v=aace6cfc';
 
 export const TITLE = 'Ethmoid roof';
 

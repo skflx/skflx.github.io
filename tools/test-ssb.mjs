@@ -4597,8 +4597,8 @@ async function populationTests(browser, base) {
     await page.waitForFunction(() => { const s = window.__ssb.specimen; return s.packs.population && s.packs.population.state === 'loaded'; }, null, { timeout: 20000 });
     await nextFrames(page, 3);
     const on = await popState();
-    check('population (ghost): on, the pack loads two ghost nodes (unlit, translucent, depth-tested), shown, in the specimen\'s frame',
-      on.on && on.nodes.length === 2 && on.nodes.every((n) => n.group === 'ghost' && n.drawn === 'ghost' && n.visible && n.material === 'MeshBasicMaterial' && n.transparent && n.depthWrite === false && n.look.kind === 'ghost')
+    check('population (ghost): on, the pack loads two ghost nodes (unlit fresnel rim, translucent, depth-tested), shown, in the specimen\'s frame',
+      on.on && on.nodes.length === 2 && on.nodes.every((n) => n.group === 'ghost' && n.drawn === 'ghost' && n.visible && n.material === 'ShaderMaterial' && n.transparent && n.depthWrite === false && n.look.kind === 'ghost')
       && on.nodes.map((n) => n.key).sort().join() === 'population:s.maxillary-sinus.L,population:s.maxillary-sinus.R', JSON.stringify(on.nodes.map((n) => [n.key, n.group, n.drawn, n.visible, n.look, n.material, n.transparent, n.depthWrite])));
     const own = await page.evaluate(() => { const n = window.__ssb.specimen.nodes(); const b = (k) => n.find((m) => m.key === k).box; return ['R', 'L'].map((sd) => ({ ghost: b(`population:s.maxillary-sinus.${sd}`), own: b(`s.maxillary-sinus.${sd}`) })); });
     const near = (a, b) => [0, 1, 2].every((i) => Math.abs((a.min[i] + a.max[i]) / 2 - (b.min[i] + b.max[i]) / 2) < 6);

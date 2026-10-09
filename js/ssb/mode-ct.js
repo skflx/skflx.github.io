@@ -29,7 +29,7 @@
 
    `hook` is the read-only test window (window.__ssb.ct).
    ============================================================= */
-import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=02954c7e';
+import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=34e04a58';
 import { sharedVolume, PLANES } from './volume.js?v=fce69b20';
 import { CT_PLANES } from './state.js?v=32a9e616';
 

@@ -710,6 +710,9 @@ export function createMaterials(THREE, opts = {}) {
     function material(look, { hazard = false, selected = false, partner = false } = {}) {
         const kind = SPEC[look.kind] ? look.kind : 'space';
         if (look.xray) return xrayMaterial(kind, look, { selected, partner });
+        /* The population ghost reads by its rim (fresnel), so the specimen's own structure stays visible inside it;
+           a hatched one stays flat so its stripes have something to show on. */
+        if (kind === 'ghost' && !hazard) return xrayMaterial(kind, look, { selected: false, partner: false });
         const patterned = !!SPEC[kind].glsl && !look.ghost && !look.space;
         const name = look.tint || SPEC[kind].token;
         const key = [patterned ? kind : 'plain:' + kind, name, look.space ? 's' : '', look.ghost ? 'g' : '', look.translucent ? 't' : '',

@@ -152,7 +152,7 @@ export function mountPopulation({ body, store, fetchFn, specimen = null }) {
             box.type = 'checkbox';
             box.id = 'ssb-pop-ghost';
             row.append(box, el('span', null, `Show the population sinus (NasalSeg, majority of ${ms.n} aligned CTs)`));
-            const cap = el('p', 'ssb-param-src', `An aligned majority, not any one person’s sinus: the region at least half of the ${ms.n} aligned clear scans’ sinuses occupy (rigid fit on four label centroids, median residual ${ms.rmsMedianMm.toFixed(1)} mm). Volume right ${ml(ms.R.majorityMl)} mL, left ${ml(ms.L.majorityMl)} mL, beside the medians ${ml(ms.R.medianMl)} and ${ml(ms.L.medianMl)} mL.`);
+            const cap = el('p', 'ssb-param-src', `An aligned majority, not any one person’s sinus: the region at least half of the ${ms.n} aligned clear scans’ sinuses occupy (rigid fit on four label centroids, median residual ${ms.rmsMedianMm.toFixed(1)} mm). Volume right ${ml(ms.R.majorityMl)} mL, left ${ml(ms.L.majorityMl)} mL, beside the medians at our air threshold, ${ml(ms.R.medianMl)} and ${ml(ms.L.medianMl)} mL (the volumes above are as NasalSeg labelled them). A majority keeps only what most sinuses share, so it is smaller than the median sinus.`);
             cap.dataset.pop = 'ghost-caption';
             mx.append(row, cap);
             box.addEventListener('change', () => { specimen.setPopulation(box.checked); });
