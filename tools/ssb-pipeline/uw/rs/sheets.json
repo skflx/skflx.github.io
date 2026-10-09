@@ -126,7 +126,7 @@
     {"name": "area", "type": "area_min_mm2", "value": 40},
     {"name": "sagittal", "type": "normal_abs", "axis": "r", "min": 0.7},
     {"name": "inside_sphenoid_air", "type": "inside_mask", "mask": "sphenoid_air", "dilate_mm": 1.5, "min_fraction": 0.8},
-    {"name": "sphenoid_air_on_both_faces", "type": "probe", "points": "all", "dir": "both", "in": "sphenoid_air", "probe_mm": 2.0, "min_fraction": 0.5},
+    {"name": "sphenoid_air_on_both_faces", "type": "probe", "points": "all", "dir": "both", "in": "sphenoid_air", "probe_mm": 2.0, "interior_mm": 1.5, "min_fraction": 0.5},
     {"name": "attached_to_sphenoid_face", "type": "reaches", "end": "anterior", "target": "sheet:sphenoid-face", "within_mm": 3.0},
     {"name": "attached_posteriorly_or_to_sella_floor", "type": "any_of", "rules": [{"type": "reaches", "end": "posterior", "target": "sphenoid_posterior_wall", "within_mm": 2.0}, {"type": "reaches", "end": "superior", "target": "sphenoid_superior_wall", "within_mm": 2.0}]}
    ]

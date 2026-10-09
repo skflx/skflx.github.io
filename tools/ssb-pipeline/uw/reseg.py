@@ -964,6 +964,11 @@ def eval_rule(rule, c, ctx, sheet_side=None):
         if rule['points'].startswith('end:'):
             m = c.end_mask(rule['points'][4:], F['end_fraction'])
             pts, nrm = pts[m], nrm[m]
+        if rule.get('interior_mm'):       # the sheet's interior: farther than interior_mm from any ridge voxel of another sheet
+            own = np.isin(ctx.ridge_flat, np.ravel_multi_index(c.vox.T, ctx.lab.shape))
+            from scipy.spatial import cKDTree
+            far = cKDTree(ctx.ridge_pts[~own]).query(ctx.ras(pts))[0] > rule['interior_mm']
+            pts, nrm = pts[far], nrm[far]
         nz = nrm[:, ::-1] / ctx.samp
         mk = ctx.mask(rule['in'], side if rule.get('sided') else None)
         steps = np.arange(0.35, rule['probe_mm'] + 1e-6, 0.35)
@@ -979,7 +984,7 @@ def eval_rule(rule, c, ctx, sheet_side=None):
         else:
             hit = ray(sgn_a if rule['dir'] == 'posterior' else -sgn_a)
         v = float(hit.mean()) if len(hit) else 0.0
-        return v >= rule['min_fraction'], round(v, 2), 'fraction of %s points with %s within %g mm along the normal (%s) >= %g' % (rule['points'], rule['in'], rule['probe_mm'], rule['dir'], rule['min_fraction'])
+        return v >= rule['min_fraction'], round(v, 2), 'fraction of %s points (interior only: %s) with %s within %g mm along the normal (%s) >= %g' % (rule['points'], rule.get('interior_mm'), rule['in'], rule['probe_mm'], rule['dir'], rule['min_fraction'])
     if t == 'inside_mask':
         m = ctx.mask(rule['mask'], side if rule.get('sided') else None)
         key = ('dil', rule['mask'], rule['dilate_mm'])
@@ -1292,7 +1297,7 @@ def stage_sheets():
     comps = assemble(comps, F, g, cell)
     ctx = Ctx(g, ct, lab2, index, tips); ctx.F = F
     from scipy.spatial import cKDTree
-    ctx.ridge_pts = ctx.ras(vox); ctx.ridge_tree = cKDTree(ctx.ridge_pts); ctx.fragments = ctx_fragments
+    ctx.ridge_flat = np.ravel_multi_index(vox.T, ct.shape); ctx.ridge_pts = ctx.ras(vox); ctx.ridge_tree = cKDTree(ctx.ridge_pts); ctx.fragments = ctx_fragments
     out = {'filter': {k: F[k] for k in F}, 'ridge_voxels_after_junction_cut': int(len(vox)), 'junction_voxels_cut': n_junction,
            'components_total': int(comp.max() + 1), 'fragments_kept': n_fragments, 'components_kept': len(comps), 'cell_area_mm2_per_voxel': round(cell, 4),
            'seed_tips_only': True, 'sheets': {}}

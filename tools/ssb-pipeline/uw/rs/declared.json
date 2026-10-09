@@ -85,17 +85,17 @@
   },
   {
    "id": "s.basal-lamella-vertical",
-   "term": "basal lamella, vertical (sagittal) part",
+   "term": "basal lamella, vertical part (anterior, near-coronal)",
    "step": "RS2",
    "status": "done",
-   "note": "not split in RS2: the graph (vertical = anterior, near-coronal; horizontal = posterior, near-axial) and this term (vertical = sagittal, horizontal = coronal) disagree on which part is which, and the split is a call on where one part ends; Opus to rule"
+   "note": "RS2b: the graph's meaning (Opus ruling 2, RS2)"
   },
   {
    "id": "s.basal-lamella-horizontal",
-   "term": "basal lamella, horizontal (coronal) part",
+   "term": "basal lamella, horizontal part (posterior, near-axial)",
    "step": "RS2",
    "status": "done",
-   "note": "not split in RS2: the graph (vertical = anterior, near-coronal; horizontal = posterior, near-axial) and this term (vertical = sagittal, horizontal = coronal) disagree on which part is which, and the split is a call on where one part ends; Opus to rule"
+   "note": "RS2b: the graph's meaning (Opus ruling 2, RS2)"
   },
   {
    "id": "s.bullar-lamella",
