@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap|anatomy] [--int16]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -99,7 +99,7 @@ const { KINDS, TISSUE_KINDS, GRAPH_KINDS, TOKENS, kindForGraph, detectQuality } 
 const SCOPE_URL = dataUrl(sourceOf('js/ssb/scope.js'));
 const FLAP_URL = dataUrl(sourceOf('js/ssb/flap.js'));
 const FL = await import(FLAP_URL);
-const { parseHash, formatHash, clampQuality, createStore, normalizeCt, normalizeFlap } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`).replace(/from '\.\/flap\.js[^']*'/, `from '${FLAP_URL}'`)));
+const { parseHash, formatHash, clampQuality, createStore, normalizeCt, normalizeFlap, buildAnatomyRegistry, resolveAnatomy, ANATOMY_DEFAULT, anatomyIsDefault } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`).replace(/from '\.\/flap\.js[^']*'/, `from '${FLAP_URL}'`)));
 const SC = await import(SCOPE_URL);
 const { rasToScene, sceneToRas } = await import(dataUrl(sourceOf('js/ssb/frame.js')));
 const KIT_URL = dataUrl(sourceOf('js/ssb/dioramas/kit.js')
@@ -115,7 +115,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | anatomy | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -220,7 +220,7 @@ const INT16 = args.includes('--int16');
 const FX_FILES = INT16 ? fixtureFiles(buildFixture({ dtype: 'int16' })) : FX_U8_FILES;
 const SOFT_WIN = JSON.parse(FX_FILES['ssb/ct/ct.json']).windows.soft;      /* centre 60, width 40 on the u8 head; the same window in HU on the 16-bit one */
 const VOLUME_URL = dataUrl(sourceOf('js/ssb/volume.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`));
-const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch } = await import(VOLUME_URL);
+const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch, parseAnatomyPatch, checkAnatomyPatch, applyAnatomyPatch, anatomyVolume, anatomyPatchFile, anatomyOverrideFile, baseRoot, loadAnatomyIndex, forgetAnatomy } = await import(VOLUME_URL);
 const { parseIndex, stateKeyFor, stepCount } = await import(dataUrl(sourceOf('js/ssb/mode-procedure.js')
   .replace(/from '\.\/volume\.js[^']*'/, `from '${VOLUME_URL}'`).replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`)));
 const arrEq = (a, b, tol = 1e-9) => a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= tol);
@@ -4704,6 +4704,388 @@ async function populationTests(browser, base) {
   }
 }
 
+
+/* ---------------- anatomy state, patch format, loader (WP RA3a; docs/realistic-anatomy.md 6.2-6.4) ---------------- */
+
+/* Every patch and every file below is built here and served by routes or a fake fetch: nothing is written into ssb/. */
+const ANAT_BOX = { ijk0: [20, 18, 14], dims: [6, 5, 4] };
+const ANAT_BOX2 = { ijk0: [22, 19, 15], dims: [6, 5, 4] };       /* overlaps ANAT_BOX */
+const ANAT_LABEL = 5;                                             /* s.fixture-unknown.R: in the table, and not under the box in the base */
+const ANAT_STEM = 'v.concha-bullosa.R.typical';
+const ANAT_INDEX = {
+  version: 1,
+  bases: { scanned: { note: 'synthetic' } },
+  variants: {
+    'v.concha-bullosa': { sides: ['R', 'L'], presets: ['typical', 'bulbous'], default: 'typical', region: 'middle-turbinate', boxes: { R: { min: [-8, 0, -6], max: [-4, 8, 0] }, L: { min: [4, 0, -6], max: [8, 8, 0] } } },
+    'v.suprabullar-cell': { sides: ['R', 'L'], presets: ['typical'], boxes: { R: { min: [-9, 0, -4], max: [-5, 6, 2] }, L: { min: [5, 0, -4], max: [9, 6, 2] } } },
+    'v.supra-agger-cell': { sides: ['R'], presets: ['typical'], boxes: { R: { min: [-30, -30, 10], max: [-20, -20, 20] } } },
+  },
+  conditions: {
+    'dz.mucocele': { sides: ['R', 'L', 'M'], presets: ['typical'], boxes: { R: { min: [-50, 20, 20], max: [-40, 30, 30] }, L: { min: [40, 20, 20], max: [50, 30, 30] } } },
+    'dz.osteoma': { sides: ['R'], presets: ['typical'] },
+  },
+  compat: [['v.concha-bullosa.R', 'v.suprabullar-cell.R']],
+};
+
+/* The bytes of an anatomy patch (docs/ssb.md 5.11): u32 LE header length, JSON header, then per box ct (u8 | i16), labels (u16), each sdf (u8), x fastest. */
+function anatPatchBytes({ boxes = [ANAT_BOX], ctType = 'u8', label = ANAT_LABEL, mutate = null, gz = true, body = null, head = {} } = {}) {
+  const header = {
+    version: 1, base: 'scanned', entity: 'v.concha-bullosa', side: 'R', preset: 'typical', params: { bulbousness: 0.5 }, truth: 'composite',
+    calibratedOn: ['uw-fig:Cor.pneumMT'], assumed: ['AP extent'],
+    boxes: boxes.map((b) => ({ ijk0: b.ijk0, dims: b.dims, ct: ctType, labels: 'u16', ...(b.sdf ? { sdf: Object.fromEntries(Object.keys(b.sdf).map((k) => [k, 'u8'])) } : {}) })),
+    landmarks: { 'lm.test.R': [1, 2, 3] }, sweeps: {}, replacesNodes: ['s.middle-turbinate.R'], addsNodes: [], ...head,
+  };
+  if (mutate) mutate(header);
+  const json = Buffer.from(JSON.stringify(header));
+  const parts = [];
+  const len = Buffer.alloc(4); len.writeUInt32LE(json.length, 0);
+  for (const b of boxes) {
+    const n = b.dims[0] * b.dims[1] * b.dims[2];
+    const ct = ctType === 'u8' ? Buffer.alloc(n) : Buffer.alloc(n * 2);
+    for (let i = 0; i < n; i++) { if (ctType === 'u8') ct[i] = 100 + (i % 50); else ct.writeInt16LE(3000 + (i % 50), i * 2); }
+    const lab = Buffer.alloc(n * 2);
+    for (let i = 0; i < n; i++) lab.writeUInt16LE(typeof label === 'function' ? label(i) : label, i * 2);
+    parts.push(ct, lab);
+    for (const fill of Object.values(b.sdf || {})) parts.push(Buffer.alloc(n, fill));
+  }
+  const raw = Buffer.concat([len, json, body ? body : Buffer.concat(parts)]);
+  return gz ? zlib.gzipSync(raw) : raw;
+}
+const boxIndices = (box, dims) => {
+  const out = new Set();
+  for (let k = 0; k < box.dims[2]; k++) for (let j = 0; j < box.dims[1]; j++) for (let i = 0; i < box.dims[0]; i++) out.add((box.ijk0[2] + k) * dims[0] * dims[1] + (box.ijk0[1] + j) * dims[0] + box.ijk0[0] + i);
+  return out;
+};
+const ANAT_REF = { id: 'v.concha-bullosa', side: 'R', preset: 'typical' };
+
+async function anatomyUnitTests() {
+  const header = parseHeader(FX.meta);
+  const table = parseTable(FX.table);
+  const base = createVolume({ header, ct: FX.ct, labels: FX.labels, table });
+  const ctBefore = FX.ct.slice();
+  const labelsBefore = FX.labels.slice();
+  const dims = header.dims;
+  const bytes = anatPatchBytes({ boxes: [{ ...ANAT_BOX, sdf: { 's.orbit': 7 } }] });
+
+  /* ---- volume.js: the patch ---- */
+  const patch = await parseAnatomyPatch(bytes, { base: 'scanned', ref: ANAT_REF });
+  const nBox = ANAT_BOX.dims[0] * ANAT_BOX.dims[1] * ANAT_BOX.dims[2];
+  check('anatomy patch: parses (gzip) to its header fields, one dense box and its sdf array',
+    patch.entity === 'v.concha-bullosa' && patch.side === 'R' && patch.preset === 'typical' && patch.truth === 'composite' && patch.calibratedOn[0] === 'uw-fig:Cor.pneumMT'
+    && patch.replacesNodes.join() === 's.middle-turbinate.R' && patch.landmarks['lm.test.R'].join() === '1,2,3' && patch.boxes.length === 1
+    && patch.boxes[0].ct.length === nBox && patch.boxes[0].labels.length === nBox && patch.boxes[0].sdf['s.orbit'].length === nBox && patch.boxes[0].sdf['s.orbit'][0] === 7 && patch.boxes[0].ct[3] === 103);
+  const rawPatch = await parseAnatomyPatch(anatPatchBytes({ gz: false }), { base: 'scanned', ref: ANAT_REF });
+  check('anatomy patch: bytes the server already decoded parse the same', rawPatch.boxes[0].ct.length === nBox && rawPatch.boxes[0].labels[0] === ANAT_LABEL);
+
+  const derived = applyAnatomyPatch(base, patch);
+  const inBox = boxIndices(ANAT_BOX, dims);
+  let wrong = 0;
+  let changedCt = 0;
+  let changedLab = 0;
+  for (let i = 0; i < FX.ct.length; i++) {
+    const c = derived.ct[i] !== ctBefore[i];
+    const l = derived.labels[i] !== labelsBefore[i];
+    changedCt += c ? 1 : 0;
+    changedLab += l ? 1 : 0;
+    if (inBox.has(i) ? !c || !l || derived.labels[i] !== ANAT_LABEL : c || l) wrong += 1;
+  }
+  check('anatomy patch: applyAnatomyPatch changes exactly its box in the CT and in the labels (every voxel of it, none outside)', wrong === 0 && changedCt === nBox && changedLab === nBox, JSON.stringify({ wrong, changedCt, changedLab, nBox }));
+  check('anatomy patch: the base volume is byte-identical after, the derived one a separate copy; patchedVoxels and patchedAt say where',
+    FX.ct.every((v, i) => v === ctBefore[i]) && FX.labels.every((v, i) => v === labelsBefore[i]) && derived.ct !== base.ct && derived.patchedVoxels === nBox
+    && derived.patchedAt(...derived.toRAS(22, 20, 15)) === true && derived.patchedAt(...derived.toRAS(25, 22, 17)) === true && derived.patchedAt(...derived.toRAS(26, 22, 17)) === false && derived.patchedAt(...derived.toRAS(19, 20, 15)) === false && derived.patchedAt(...derived.toRAS(20, 18, 18 + 1)) === false);
+  check('anatomy patch: labelAt and sample read the patch (label 5 and the display value) at a voxel centre; the base does not',
+    derived.labelAt(...derived.toRAS(22, 20, 15)) === ANAT_LABEL && base.labelAt(...derived.toRAS(22, 20, 15)) !== ANAT_LABEL && derived.sample(...derived.toRAS(22, 20, 15)) >= 100 && derived.base === base && derived.patches.length === 1);
+  const second = await parseAnatomyPatch(anatPatchBytes({ boxes: [ANAT_BOX2], label: 2, head: { entity: 'v.suprabullar-cell' } }), { base: 'scanned' });
+  const both = applyAnatomyPatch(derived, second);
+  const overlap = derived.toRAS(24, 20, 16);
+  check('anatomy patch: patches compose in order — over the overlap the later one wins, outside it each keeps its own box',
+    both.labelAt(...overlap) === 2 && both.labelAt(...derived.toRAS(20, 18, 14)) === ANAT_LABEL && both.labelAt(...derived.toRAS(27, 23, 18)) === 2 && both.patches.length === 2 && both.base === derived);
+
+  const refuse = async (what, p) => {
+    const e = await p.catch((err) => err);
+    check(`anatomy patch: ${what} is refused with a VolumeError`, e instanceof VolumeError, String(e && e.message));
+    return e;
+  };
+  const parseOnly = (b) => parseAnatomyPatch(b, { base: 'scanned', ref: ANAT_REF });
+  const applyTo = async (b) => applyAnatomyPatch(base, await parseOnly(b));
+  await refuse('a box outside the volume', applyTo(anatPatchBytes({ boxes: [{ ijk0: [dims[0] - 2, 0, 0], dims: [6, 5, 4] }] })));
+  await refuse('a box with a negative corner', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].ijk0 = [-1, 0, 0]; } })));
+  await refuse('a zero dimension', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].dims = [0, 5, 4]; } })));
+  await refuse('a fractional dimension', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].dims = [6.5, 5, 4]; } })));
+  await refuse('a dimension that is not a number', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].dims = [6, '5', 4]; } })));
+  await refuse('a label the table does not name', applyTo(anatPatchBytes({ label: 40 })));
+  await refuse('an empty box list', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes = []; } })));
+  await refuse('more than 16 boxes', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes = Array.from({ length: 17 }, () => h.boxes[0]); } })));
+  await refuse('an i16 box on an 8-bit volume', applyTo(anatPatchBytes({ ctType: 'i16' })));
+  await refuse('a ct type that is neither', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].ct = 'f32'; } })));
+  await refuse('a truth kind other than "composite"', parseOnly(anatPatchBytes({ mutate: (h) => { h.truth = 'specimen'; } })));
+  await refuse('a patch made for another base', parseAnatomyPatch(anatPatchBytes(), { base: 'standard', ref: ANAT_REF }));
+  await refuse('a patch for another entity, side or preset than the one asked for', parseAnatomyPatch(anatPatchBytes(), { base: 'scanned', ref: { ...ANAT_REF, side: 'L' } }));
+  await refuse('an entity that is not a v.* or dz.* id', parseOnly(anatPatchBytes({ mutate: (h) => { h.entity = 's.maxillary-sinus'; } })));
+  await refuse('a node name that is markup', parseOnly(anatPatchBytes({ mutate: (h) => { h.replacesNodes = ['<img src=x onerror=alert(1)>']; } })));
+  await refuse('a landmark that is not three numbers', parseOnly(anatPatchBytes({ mutate: (h) => { h.landmarks = { 'lm.test.R': [1, 2] }; } })));
+  await refuse('an sdf entry that is not u8', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].sdf = { 's.orbit': 'f32' }; } })));
+  await refuse('a short body', parseOnly(zlib.gzipSync(zlib.gunzipSync(bytes).subarray(0, 60))));
+  await refuse('a long body', parseOnly(zlib.gzipSync(Buffer.concat([zlib.gunzipSync(anatPatchBytes()), Buffer.alloc(8)]))));
+  await refuse('a header length past the end', parseOnly(Buffer.from([255, 255, 0, 0, 1, 2])));
+  await refuse('a header that is not JSON', parseOnly(Buffer.concat([Buffer.from([4, 0, 0, 0]), Buffer.from('nope')])));
+  const v2 = await refuse('version 2', parseOnly(anatPatchBytes({ mutate: (h) => { h.version = 2; } })));
+  check('anatomy patch: version 2 is "unsupported", the others "invalid"', v2 && v2.code === 'unsupported');
+  const fx16 = buildFixture({ dtype: 'int16' });
+  const v16 = createVolume({ header: parseHeader(fx16.meta), ct: fx16.ct16, labels: FX.labels, table });
+  const d16 = applyAnatomyPatch(v16, await parseOnly(anatPatchBytes({ ctType: 'i16' })));
+  const u8on16 = await Promise.resolve().then(async () => applyAnatomyPatch(v16, await parseOnly(anatPatchBytes()))).catch((err) => err);
+  check('anatomy patch: a 16-bit head takes an i16 box (values beyond the base range stay exact) and refuses a u8 one',
+    d16.ct[boxIndices(ANAT_BOX, dims).values().next().value] === 3000 && d16.patchedVoxels === nBox && u8on16 instanceof VolumeError, String(u8on16 && u8on16.message));
+
+  /* ---- the file names are built from validated tokens only ---- */
+  check('anatomy paths: base roots and file names follow docs/realistic-anatomy.md 6.2',
+    baseRoot('standard') === 'ssb' && baseRoot('scanned') === 'ssb/anatomy/scanned' && baseRoot('scanned-b') === 'ssb/anatomy/scanned-b'
+    && anatomyPatchFile('scanned', ANAT_REF) === `ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz` && anatomyOverrideFile('standard', ANAT_REF) === `ssb/anatomy/overrides/standard/${ANAT_STEM}.glb.gz`);
+  const bad = (fn) => { try { fn(); return false; } catch (e) { return e instanceof VolumeError; } };
+  check('anatomy paths: a base or an entry that is not a plain token is refused, never joined into a path',
+    bad(() => baseRoot('../etc')) && bad(() => baseRoot('scanned/../..')) && bad(() => baseRoot('')) && bad(() => baseRoot(null))
+    && bad(() => anatomyPatchFile('scanned', { ...ANAT_REF, id: 'v.../../x' })) && bad(() => anatomyPatchFile('scanned', { ...ANAT_REF, preset: '../x' })) && bad(() => anatomyPatchFile('scanned', { ...ANAT_REF, side: 'X' }))
+    && bad(() => anatomyOverrideFile('scanned', { ...ANAT_REF, id: 's.maxillary-sinus' })) && bad(() => anatomyPatchFile('scanned', null)));
+
+  /* ---- the loader, on a fake fetch that records every URL ---- */
+  const asked = [];
+  const files = {
+    'ssb/anatomy/scanned/ct/ct.json': FX_U8_FILES['ssb/ct/ct.json'], 'ssb/anatomy/scanned/ct/ct.u8.gz': FX_U8_FILES['ssb/ct/ct.u8.gz'],
+    'ssb/anatomy/scanned/ct/labels.u16.gz': FX_U8_FILES['ssb/ct/labels.u16.gz'], 'ssb/anatomy/scanned/geometry/labels.json': FX_U8_FILES['ssb/geometry/labels.json'],
+    [`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`]: anatPatchBytes(),
+  };
+  const spy = fetchFrom(files);
+  const fetchFn = (url) => { asked.push(String(url).split('?')[0]); return spy(url); };
+  forgetAnatomy();
+  const plain = await anatomyVolume({ base: 'scanned', variants: [], conditions: [] }, { fetchFn });
+  const edited = await anatomyVolume({ base: 'scanned', variants: [ANAT_REF], conditions: [] }, { fetchFn });
+  check('anatomy loader: a base other than the standard one is read from ssb/anatomy/<base>/ (CT, labels, its own table) and nothing from ssb/ct',
+    plain.dims.join() === '64,56,48' && plain.hasLabels && plain.table.get(1) === 's.maxillary-sinus.R' && asked.some((u) => u === 'ssb/anatomy/scanned/ct/ct.json') && asked.some((u) => u === 'ssb/anatomy/scanned/geometry/labels.json')
+    && !asked.some((u) => u.startsWith('ssb/ct/') || u === 'ssb/geometry/labels.json'), asked.join(' '));
+  check('anatomy loader: a variant is its patch laid over the base — fetched from patches/<base>/<entity>.<side>.<preset>.ssbp.gz — and the result is that patched volume',
+    edited.patchedVoxels === nBox && edited.patches[0].entity === 'v.concha-bullosa' && edited.labelAt(...edited.toRAS(22, 20, 15)) === ANAT_LABEL && asked.includes(`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`));
+  const refused = await anatomyVolume({ base: 'scanned', variants: [{ ...ANAT_REF, preset: 'bulbous' }], conditions: [] }, { fetchFn }).catch((e) => e);
+  check('anatomy loader: an entry with no patch file rejects with a VolumeError (absent), not a blank page', refused instanceof VolumeError && refused.code === 'absent', String(refused && refused.message));
+  const wrongKind = await anatomyVolume({ base: 'scanned', variants: [{ ...ANAT_REF }], conditions: [] }, { fetchFn: fetchFrom({ ...files, [`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`]: anatPatchBytes({ head: { side: 'L' } }) }) }).catch((e) => e);
+  check('anatomy loader: a patch file that is another entry than its name says is refused', wrongKind instanceof VolumeError, String(wrongKind && wrongKind.message));
+  check('anatomy loader: with no index listed in stamps.js nothing is fetched and the answer is null', (await loadAnatomyIndex({ fetchFn: () => { throw new Error('asked'); } })) === null);
+
+  /* ---- state.js: registry, whitelist, hash ---- */
+  const has = (id) => GRAPH.has(id);
+  const REG = buildAnatomyRegistry(ANAT_INDEX, has);
+  const A = (h, reg = REG) => parseHash(h, has, {}, reg).anatomy || null;
+  check('anatomy registry: built from the index and the graph — the listed base, variants (with defaults) and conditions, and only those',
+    REG.bases.has('scanned') && REG.defaultBase === 'scanned' && REG.variants.size === 3 && REG.conditions.size === 2 && REG.variants.get('v.concha-bullosa').default === 'typical'
+    && buildAnatomyRegistry({ ...ANAT_INDEX, variants: { 'v.not-in-the-graph': ANAT_INDEX.variants['v.concha-bullosa'], 'x.bad': {}, 'v.concha-bullosa': { sides: [], presets: ['typical'] } } }, has).variants.size === 0
+    && buildAnatomyRegistry(null, has).bases.size === 0 && buildAnatomyRegistry({ version: 2 }, has).variants.size === 0);
+  const canon = '#anat=scanned&v=v.concha-bullosa.R:typical';
+  check('anatomy hash: #anat/#v parse to the canonical stack and format back to themselves', JSON.stringify(A(canon)) === JSON.stringify({ base: 'scanned', variants: [{ id: 'v.concha-bullosa', side: 'R', preset: 'typical' }], conditions: [] })
+    && formatHash({ ...createStore({ has, tierOf: () => 1, hash: canon, prefs: {}, anatomyDoc: ANAT_INDEX }).get() }) === canon);
+  check('anatomy hash: a preset left out is the entity\'s default and the canonical form writes it; a base left out is the listed default (scanned), or standard when none is listed',
+    A('#v=v.concha-bullosa.L').base === 'scanned' && A('#v=v.concha-bullosa.L').variants[0].preset === 'typical'
+    && createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.L:bulbous&dz=dz.mucocele.L', prefs: {}, anatomyDoc: ANAT_INDEX }).hash() === '#anat=scanned&v=v.concha-bullosa.L:bulbous&dz=dz.mucocele.L:typical'
+    && A('#v=v.concha-bullosa.L', buildAnatomyRegistry({ ...ANAT_INDEX, bases: {} }, has)).base === 'standard');
+  check('anatomy hash: the plain standard head is the default and writes nothing', createStore({ has, tierOf: () => 1, hash: '#anat=standard', prefs: {}, anatomyDoc: ANAT_INDEX }).hash() === '' && anatomyIsDefault(A('#anat=standard')));
+  const dropped = [
+    ['an unknown variant id', '#anat=scanned&v=v.not-in-the-graph.R'], ['a variant the index does not list', '#anat=scanned&v=v.frontal-septal-cell.R'], ['an unknown preset', '#anat=scanned&v=v.concha-bullosa.R:enormous'],
+    ['a side the entity does not offer', '#anat=scanned&v=v.supra-agger-cell.L'], ['the M side on a paired variant', '#anat=scanned&v=v.concha-bullosa.M'], ['a base the index does not list', '#anat=scanned-b&v=v.concha-bullosa.R'],
+    ['an unknown base', '#anat=elsewhere'], ['a condition id in v', '#anat=scanned&v=dz.mucocele.R'], ['a variant id in dz', '#anat=scanned&dz=v.concha-bullosa.R'],
+    ['the same entry twice', '#anat=scanned&v=v.concha-bullosa.R,v.concha-bullosa.R:bulbous'], ['two entries whose extents overlap and are not in compat', '#anat=scanned&v=v.concha-bullosa.L,v.suprabullar-cell.L'],
+    ['two conditions (v1: one)', '#anat=scanned&dz=dz.mucocele.R,dz.mucocele.L'], ['a pair with no extents and no compat entry', '#anat=scanned&v=v.concha-bullosa.R&dz=dz.osteoma.R'],
+    ['markup in an id', '#anat=scanned&v=%3Cimg%20src%3Dx%3E.R'], ['markup in the base', '#anat=%3Cscript%3E'], ['a ref with no side', '#anat=scanned&v=v.concha-bullosa'],
+    ['more than eight entries', `#anat=scanned&v=${Array.from({ length: 9 }, () => 'v.concha-bullosa.R').join(',')}`], ['an over-long value', `#anat=scanned&v=v.concha-bullosa.R:${'a'.repeat(600)}`],
+    ['one bad entry among good ones (all or nothing)', '#anat=scanned&v=v.concha-bullosa.R,v.nope.L'],
+  ];
+  for (const [what, h] of dropped) check(`anatomy hash: ${what} drops the whole anatomy key`, A(h) === null, JSON.stringify(A(h)));
+  check('anatomy hash: pairs the index allows pass — disjoint extents, or listed in compat even where they overlap',
+    A('#anat=scanned&v=v.concha-bullosa.R,v.concha-bullosa.L,v.suprabullar-cell.R') !== null && A('#anat=scanned&v=v.concha-bullosa.R,v.suprabullar-cell.R') !== null && A('#anat=scanned&v=v.concha-bullosa.R&dz=dz.mucocele.R') !== null);
+  const st = createStore({ has, tierOf: () => 1, hash: '#s=s.maxillary-sinus&tier=2&anat=scanned&v=v.nope.R&q=lite', prefs: {}, anatomyDoc: ANAT_INDEX });
+  check('anatomy hash: a dropped anatomy leaves every other key alone and the hash is rewritten canonical', st.get().anatomy === ANATOMY_DEFAULT && st.hash() === '#s=s.maxillary-sinus&tier=2&q=lite', st.hash());
+  const ordered = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R&mu=cong&q=full&ct=ax&at=1,2,3', prefs: {}, anatomyDoc: ANAT_INDEX }).hash();
+  check('anatomy hash: the anatomy rides along with a CT stage, after the stage and before mu and q', ordered === '#ct=ax&at=1,2,3&anat=scanned&v=v.concha-bullosa.R:typical&mu=cong&q=full', ordered);
+  const rt = createStore({ has, tierOf: () => 1, hash: ordered, prefs: {}, anatomyDoc: ANAT_INDEX });
+  check('anatomy hash: a canonical hash parses back to the same state and the same hash', rt.hash() === ordered && JSON.stringify(rt.get().anatomy) === JSON.stringify(st.get().anatomy === ANATOMY_DEFAULT ? rt.get().anatomy : null));
+
+  /* the store: pending until the index arrives */
+  const early = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R:typical&mu=cong', prefs: {} });
+  check('anatomy store: before the index loads the link\'s anatomy is pending (shape-checked), still in the hash, and counts as the standard head',
+    early.get().anatomy.pending === true && early.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical&mu=cong' && anatomyIsDefault(early.get().anatomy) && early.get().anatomyIndex === null);
+  check('anatomy store: a shape that is not a ref is never pending', createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=%3Cb%3E', prefs: {} }).get().anatomy === ANATOMY_DEFAULT);
+  const seen = [];
+  early.subscribe((s, p, m) => seen.push([m.source, s.anatomy.pending === true, s.anatomyIndex !== null]));
+  early.setAnatomyRegistry(ANAT_INDEX);
+  check('anatomy store: the index resolves a pending anatomy to its canonical form, subscribers hear it once, the registry is in the state',
+    early.get().anatomy.pending !== true && early.get().anatomy.base === 'scanned' && early.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical&mu=cong' && seen.length === 1 && seen[0][2] === true && early.get().anatomyIndex.variants.size === 3, JSON.stringify(seen));
+  const late = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R:typical', prefs: {} });
+  late.setAnatomyRegistry(null);
+  check('anatomy store: a page with no index drops a pending anatomy and rewrites the hash', late.get().anatomy === ANATOMY_DEFAULT && late.hash() === '' && late.get().anatomyIndex !== null);
+  const junk = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R:enormous', prefs: {} });
+  junk.setAnatomyRegistry(ANAT_INDEX);
+  check('anatomy store: an invalid pending anatomy is dropped when the index arrives', junk.get().anatomy === ANATOMY_DEFAULT && junk.hash() === '');
+  const live = createStore({ has, tierOf: () => 1, hash: '', prefs: {}, anatomyDoc: ANAT_INDEX });
+  check('anatomy store: setAnatomy takes an allowed stack, refuses one the index does not allow (state unchanged), and null is the standard head',
+    live.setAnatomy({ base: 'scanned', variants: [{ id: 'v.concha-bullosa', side: 'R', preset: null }], conditions: [] }) === true && live.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical'
+    && live.setAnatomy({ base: 'scanned', variants: [{ id: 'v.nope', side: 'R', preset: 'x' }], conditions: [] }) === false && live.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical'
+    && live.setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === true && live.hash() === '#anat=scanned' && live.setAnatomy(null) === true && live.hash() === '');
+  live.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
+  live.setCt({ plane: 'axial', at: null });
+  live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+  live.leaveStage();
+  check('anatomy store: the anatomy is orthogonal to the stage — entering and leaving CT, the scope and the specimen keeps it', live.get().anatomy.base === 'scanned');
+  live.applyHash('#anat=scanned-b');
+  check('anatomy store: Back/Forward to a link the index does not allow drops the anatomy', live.get().anatomy === ANATOMY_DEFAULT);
+  live.applyHash(canon);
+  check('anatomy store: Back/Forward to a canonical link adopts it', live.get().anatomy.variants.length === 1 && live.hash() === canon);
+  check('anatomy store: setAnatomy before the index has loaded refuses everything', createStore({ has, tierOf: () => 1, hash: '', prefs: {} }).setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === false);
+}
+
+/* The page on the fixture, with an anatomy index: `index` is a body, 'absent' (stamps.js without it: the page must not ask) or 'fixture'.
+   The scanned base is the same synthetic volume served under ssb/anatomy/scanned/; the override pack is a box named for the middle turbinate. */
+const ANAT_ROUTE = /\/ssb\/anatomy\/[^?#]+(?:[?#].*)?$/;
+async function openAnat(browser, base, hash, { index = 'fixture', patches = null, overrideNodes = [{ id: 's.middle-turbinate', side: 'R', center: [-6, 4, -2], half: 2 }], wait = 'specimen', track = true } = {}) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  const asked = [];
+  await context.route(FX_ROUTE, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    const body = FX_U8_FILES[name];
+    return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
+  });
+  const patchFile = `ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`;
+  const served = {
+    'ssb/anatomy/scanned/ct/ct.json': FX_U8_FILES['ssb/ct/ct.json'], 'ssb/anatomy/scanned/ct/ct.u8.gz': FX_U8_FILES['ssb/ct/ct.u8.gz'],
+    'ssb/anatomy/scanned/ct/labels.u16.gz': FX_U8_FILES['ssb/ct/labels.u16.gz'], 'ssb/anatomy/scanned/geometry/labels.json': FX_U8_FILES['ssb/geometry/labels.json'],
+    [patchFile]: anatPatchBytes(),
+    [`ssb/anatomy/overrides/scanned/${ANAT_STEM}.glb.gz`]: zlib.gzipSync(makeGlb(overrideNodes)),
+    'ssb/anatomy/index.json': Buffer.from(index === 'fixture' ? JSON.stringify(ANAT_INDEX) : String(index)),
+    ...(patches || {}),
+  };
+  await context.route(ANAT_ROUTE, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    asked.push(name);
+    const body = served[name];
+    return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
+  });
+  await context.route(/\/js\/ssb\/stamps\.js(?:[?#].*)?$/, (route) => {
+    const src = sourceOf('js/ssb/stamps.js').replace(/^\s*"ssb\/anatomy\/[^\n]*\n/gm, '');
+    return route.fulfill({ status: 200, contentType: 'text/javascript', body: index === 'absent' ? src : `${src}\nSTAMPS["ssb/anatomy/index.json"] = "anat0000";\n` });
+  });
+  const page = await context.newPage();
+  const errors = collectErrors(page);
+  if (track) allErrors.push(errors);
+  await page.goto(`${base}/ssb.html${hash}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await page.waitForFunction(() => document.querySelectorAll('#ssb-tree button[data-id]').length > 0, null, { timeout: 20000 });
+  if (wait === 'specimen') await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
+  if (wait === 'ct') await page.waitForFunction(() => window.__ssb.ct && !['idle', 'loading'].includes(window.__ssb.ct.status), null, { timeout: 20000 });
+  return { context, page, errors, asked };
+}
+const anatPills = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-anatomy button[data-anat]')].map((b) => ({ k: b.dataset.anat, disabled: b.disabled, pressed: b.getAttribute('aria-pressed'), text: b.textContent })));
+const waitAnat = (page, status) => page.waitForFunction((s) => window.__ssb.specimen && window.__ssb.specimen.anatomy.status === s, status, { timeout: 30000 });
+
+async function anatomyTests(browser, base) {
+  /* ===== no index: the pills are there and disabled, the page asks for nothing, a hostile link is dropped ===== */
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, '#s=s.maxillary-sinus&anat=scanned&v=v.concha-bullosa.R%3Cb%3E', { index: 'absent' });
+    await page.waitForFunction(() => window.__ssb.hash !== null && !/anat|v=/.test(window.__ssb.hash), null, { timeout: 10000 });
+    const pills = await anatPills(page);
+    const byKey = Object.fromEntries(pills.map((p) => [p.k, p]));
+    check('anatomy page (no index): the four pills read Symmetric · Normal asymmetry · Variants · Pathology; only Symmetric is enabled and pressed',
+      pills.map((p) => p.text).join(' · ') === 'Symmetric · Normal asymmetry · Variants · Pathology' && !byKey.standard.disabled && byKey.standard.pressed === 'true' && ['scanned', 'variants', 'pathology'].every((k) => byKey[k].disabled && byKey[k].pressed === 'false'), JSON.stringify(pills));
+    check('anatomy page (no index): the page asks for nothing under ssb/anatomy/ (no 404), a hostile anatomy link is dropped and the hash rewritten without it, zero console errors',
+      asked.length === 0 && errors.length === 0 && (await page.evaluate(() => location.hash)) === '#s=s.maxillary-sinus&tier=1' && (await page.evaluate(() => window.__ssb.hash)) === '#s=s.maxillary-sinus&tier=1', JSON.stringify({ asked, errors, hash: await page.evaluate(() => location.hash) }));
+    check('anatomy page (no index): the specimen is the standard head and says so (the "symmetric by construction" note is shown, the anatomy hook idle)',
+      (await page.evaluate(() => window.__ssb.specimen.anatomy.status)) === 'none' && (await page.evaluate(() => window.__ssb.specimen.anatomy.overrides.length)) === 0);
+    await context.close();
+  }
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, '', { index: '{"version": 1, "variants": ' });
+    await page.waitForFunction(() => document.querySelectorAll('#ssb-anatomy button').length === 4);
+    const pills = await anatPills(page);
+    check('anatomy page (damaged index): a damaged index.json is an index with nothing in it — pills disabled, hash untouched',
+      pills.filter((p) => p.k !== 'standard').every((p) => p.disabled) && (await page.evaluate(() => window.__ssb.hash)) === '' && asked.includes('ssb/anatomy/index.json'), JSON.stringify({ pills, asked }));
+    await context.close();
+  }
+
+  /* ===== with an index: the pills enable, a link applies, the CT shows exactly the patch's box ===== */
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R&ct=ax`, { wait: 'ct' });
+    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 30000 });
+    const pills = Object.fromEntries((await anatPills(page)).map((p) => [p.k, p]));
+    check('anatomy page: with an index the pills enable for what it lists (Normal asymmetry, Variants, Pathology) and Variants is the pressed one',
+      ['standard', 'scanned', 'variants', 'pathology'].every((k) => !pills[k].disabled) && pills.variants.pressed === 'true' && pills.standard.pressed === 'false' && pills.scanned.pressed === 'false', JSON.stringify(pills));
+    check('anatomy page: the canonical hash has the preset the link left out; the stage kicker says "edited"',
+      (await page.evaluate(() => location.hash)) === `#ct=ax&anat=scanned&v=v.concha-bullosa.R:typical` && (await page.evaluate(() => document.getElementById('ssb-anatomy').dataset.edited)) === 'true');
+    check('anatomy page: the CT is the scanned base from ssb/anatomy/scanned/ with the patch fetched from patches/scanned/; the standard ssb/ct/ct.json is not what the stage loaded',
+      asked.includes('ssb/anatomy/scanned/ct/ct.json') && asked.includes(`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`) && (await page.evaluate(() => window.__ssb.ct.anatomy.key)) === `scanned|${ANAT_STEM}`, JSON.stringify(asked));
+    const inside = [await page.evaluate(() => window.__ssb.ct.anatomy)];
+    const vox = (i, j, k) => [0.75 * i - 24, 20.25 - 0.75 * j, k - 18];
+    const probes = { inside: vox(22, 20, 15), corner: vox(25, 22, 17), outside: vox(19, 20, 15), above: vox(22, 20, 18) };
+    const got = await page.evaluate((p) => Object.fromEntries(Object.entries(p).map(([k, r]) => [k, { label: window.__ssb.ct.labelAt(r), patched: window.__ssb.ct.patchedAt(r), value: window.__ssb.ct.sampleAt(r) }])), probes);
+    check('anatomy page (CT): inside the patch\'s box the label is the patch\'s and the display value is its own; one voxel outside it is the base', got.inside.label === ANAT_LABEL && got.corner.label === ANAT_LABEL && got.inside.patched && got.corner.patched && got.inside.value >= 100 && !got.outside.patched && !got.above.patched && got.outside.label !== ANAT_LABEL && got.above.label !== ANAT_LABEL, JSON.stringify(got));
+    check('anatomy page (CT): the patch voxel count is exactly the box and the truth badge names the edit as a composite, schematic',
+      inside[0].patchedVoxels === ANAT_BOX.dims[0] * ANAT_BOX.dims[1] * ANAT_BOX.dims[2] && /edited: .*Concha bullosa.* R \(typical\) · composite, schematic/i.test(await page.evaluate(() => document.querySelector('.ssb-ct-truth').textContent)), await page.evaluate(() => document.querySelector('.ssb-ct-truth').textContent));
+    // the Symmetric pill puts the standard volume back, and the hash is empty of anatomy
+    await page.click('#ssb-anatomy button[data-anat="standard"]');
+    await page.waitForFunction(() => window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === '' && window.__ssb.ct.anatomy.patchedVoxels === 0, null, { timeout: 20000 });
+    const back = await page.evaluate((r) => ({ label: window.__ssb.ct.labelAt(r), hash: location.hash }), probes.inside);
+    check('anatomy page (CT): Symmetric reloads the standard volume — the patched voxel is the base\'s again — and the hash loses the anatomy', back.label !== ANAT_LABEL && back.hash === '#ct=ax', JSON.stringify(back));
+    await page.click('#ssb-anatomy button[data-anat="scanned"]');
+    await page.waitForFunction(() => window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === 'scanned|', null, { timeout: 20000 });
+    const asym = await page.evaluate((r) => ({ label: window.__ssb.ct.labelAt(r), patched: window.__ssb.ct.anatomy.patchedVoxels, hash: location.hash, pressed: document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') }), probes.inside);
+    check('anatomy page (CT): Normal asymmetry loads the bare scanned base — no patch — and presses its pill', asym.label !== ANAT_LABEL && asym.patched === 0 && asym.hash === '#ct=ax&anat=scanned' && asym.pressed === 'true', JSON.stringify(asym));
+    check('anatomy page (CT): zero console errors through the switches', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+
+  /* ===== the specimen: override nodes hide the base nodes and give them back on clear ===== */
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`);
+    await waitAnat(page, 'ready');
+    const nodes = () => page.evaluate(() => window.__ssb.specimen.nodes().filter((n) => n.id === 's.middle-turbinate').map((n) => ({ key: n.key, side: n.side, visible: n.visible })));
+    const on = await nodes();
+    const info = await page.evaluate(() => window.__ssb.specimen.anatomy);
+    const baseR = on.find((n) => n.key === 's.middle-turbinate.R');
+    const baseL = on.find((n) => n.key === 's.middle-turbinate.L');
+    const over = on.find((n) => n.key === `anatomy:${ANAT_STEM}:s.middle-turbinate.R`);
+    check('anatomy specimen: the override node is adopted under anatomy:<stem>:<id>.<side> and shown; the base node it replaces is hidden; the other side is untouched',
+      baseR && !baseR.visible && over && over.visible && baseL && baseL.visible && info.hidden.join() === 's.middle-turbinate.R' && info.status === 'ready', JSON.stringify({ on, info }));
+    check('anatomy specimen: the pack came from overrides/<base>/<stem>.glb.gz and was asked for once', asked.filter((u) => u === `ssb/anatomy/overrides/scanned/${ANAT_STEM}.glb.gz`).length === 1, JSON.stringify(asked));
+    const framed = await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id="s.middle-turbinate"]').click(); return true; });
+    await page.waitForFunction(() => window.__ssb.selection === 's.middle-turbinate');
+    const sel = await nodes();
+    check('anatomy specimen: selecting the structure finds the override and not the node it replaced (still hidden, the override shown)', framed && !sel.find((n) => n.key === 's.middle-turbinate.R').visible && sel.find((n) => n.key === `anatomy:${ANAT_STEM}:s.middle-turbinate.R`).visible, JSON.stringify(sel));
+    await page.click('#ssb-anatomy button[data-anat="standard"]');
+    await page.waitForFunction(() => window.__ssb.specimen.anatomy.overrides.length === 0 && window.__ssb.specimen.anatomy.status === 'none', null, { timeout: 20000 });
+    const off = await nodes();
+    check('anatomy specimen: clearing the anatomy gives the override pack back and restores the base node (visible, no override left)', off.length === 2 && off.find((n) => n.key === 's.middle-turbinate.R').visible && !off.some((n) => /^anatomy:/.test(n.key)), JSON.stringify(off));
+    await page.evaluate(() => { location.hash = '#anat=scanned&v=v.concha-bullosa.R:typical&s=s.middle-turbinate'; });
+    await waitAnat(page, 'ready');
+    const again = await nodes();
+    check('anatomy specimen: the same anatomy applied again from the address bar hides the base once more', !again.find((n) => n.key === 's.middle-turbinate.R').visible && again.some((n) => /^anatomy:/.test(n.key) && n.visible), JSON.stringify(again));
+    check('anatomy specimen: zero console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  {
+    /* an override pack that is missing never leaves a hole: the base node stays */
+    const { context, page, errors } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`, { patches: { [`ssb/anatomy/overrides/scanned/${ANAT_STEM}.glb.gz`]: null }, track: false });
+    await page.waitForFunction(() => window.__ssb.specimen && window.__ssb.specimen.anatomy.status !== 'loading' && window.__ssb.specimen.anatomy.status !== 'none', null, { timeout: 40000 });
+    const nodes = await page.evaluate(() => window.__ssb.specimen.nodes().filter((n) => n.id === 's.middle-turbinate').map((n) => ({ key: n.key, visible: n.visible })));
+    const info = await page.evaluate(() => window.__ssb.specimen.anatomy);
+    check('anatomy specimen: an override pack that cannot be read leaves the base node showing (no hole), and the status says partial', nodes.find((n) => n.key === 's.middle-turbinate.R').visible && info.hidden.length === 0 && info.status === 'partial' && info.problems.length === 1, JSON.stringify({ nodes, info }));
+    check('anatomy specimen: the only console noise for the missing pack is its own 404', errors.length > 0 && errors.every((e) => /404/.test(e.text)), JSON.stringify(errors));
+    await context.close();
+  }
+  {
+    /* a node the patch does not list is not adopted */
+    const { context, page } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`, { overrideNodes: [{ id: 's.middle-turbinate', side: 'R', center: [-6, 4, -2], half: 2 }, { id: 's.inferior-turbinate', side: 'R', center: [-8, 4, -6], half: 2 }] });
+    await waitAnat(page, 'ready');
+    const keys = await page.evaluate(() => window.__ssb.specimen.anatomy.overrides.map((o) => o.key));
+    const warned = await page.evaluate(() => window.__ssb.specimen.problems.some((p) => /not one of the nodes its patch/.test(p)));
+    check('anatomy specimen: an override pack can only carry the nodes its patch replaces or adds — an extra node is skipped with a problem recorded', keys.join() === `anatomy:${ANAT_STEM}:s.middle-turbinate.R` && warned, JSON.stringify(keys));
+    await context.close();
+  }
+}
+
 /* ---------------- the suite ---------------- */
 
 async function main() {
@@ -4744,6 +5126,11 @@ async function main() {
   }
   if (ONLY === 'flap') {
     await flapTests(browser, base, flapUnitTests());
+    return finish(browser, server);
+  }
+  if (ONLY === 'anatomy') {
+    await anatomyUnitTests();
+    await anatomyTests(browser, base);
     return finish(browser, server);
   }
   if (ONLY === 'mucosa') {
@@ -5232,6 +5619,8 @@ async function main() {
   await mucosaTests(browser, base);
   await populationTests(browser, base);
   await flapTests(browser, base, flapUnitTests());
+  await anatomyUnitTests();
+  await anatomyTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

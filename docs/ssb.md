@@ -30,11 +30,15 @@ data, ever.
    overlay, procedures and self-test are renderings of that graph; geometry
    is keyed by the same ids. A fact is written once and cannot disagree with
    itself across views.
-2. **Label the kind of truth.** Three kinds, never blurred:
+2. **Label the kind of truth.** Four kinds, never blurred:
    *specimen* — one real adult anatomy, CT-derived (n = 1);
    *diorama* — an idealized parametric model that shows a variant or a
    classification cleanly; *population* — literature values with their
-   spread, method and denominator. Every view carries a badge saying which it
+   spread, method and denominator; *composite* — a real specimen with a
+   declared edit (owner RA-O2, `docs/realistic-anatomy.md` §2.2): the badge
+   names the edit, its parameters and what it was calibrated on, and picking
+   an edited voxel or mesh reports that it is edited. The machinery for it
+   exists (§5.11); no edited state ships yet. Every view carries a badge saying which it
    is, and every measurement shows the specimen's own value beside the
    population range.
 3. **Surgical granularity.** Meshes are cut into the smallest unit a surgeon
@@ -861,6 +865,47 @@ on the decongested state (the operations start by decongesting).
   entry state. Mucosal edema of rhinosinusitis (sinus lining, polyps) is
   pathology, the realistic-anatomy plan's `fill` operator, not this toggle.
 
+### 5.11 Anatomy state: bases and patches (WP RA3a)
+
+`state.anatomy = { base, variants, conditions }` (`docs/realistic-anatomy.md`
+§2.1, §6.4) is the layer stack over the volume and the packs: a **base**
+(`standard`, the mirrored reference head, which is `ssb/ct`, `ssb/geometry`,
+`ssb/models` where they always were; `scanned` and `scanned-b`, each a full
+copy of that layout under `ssb/anatomy/<base>/`), then **variants**, then
+**conditions**, each entry a **patch** laid over the base. It is independent of
+the stage. `ssb/anatomy/index.json` is the registry; when `js/ssb/stamps.js`
+does not list it the page asks for nothing and the anatomy is the standard
+head. Its shape (`buildAnatomyRegistry`, `js/ssb/state.js`):
+`{ version: 1, bases: { scanned: {…} }, variants: { "<v-id>": entity }, conditions: { "<dz-id>": entity }, compat: [[ "<id>.<side>", "<id>.<side>" ]] }`
+with `entity = { sides, presets, default?, bases?, region?, boxes?: { "<side>": { min, max } } }` (extents in RAS mm).
+An entry the graph lacks, or with no side or preset, is dropped. Compatibility: no ref twice, one condition,
+one variant per side per `region`, and two different refs only when the pair is in `compat` or both
+entries give an extent and the extents do not overlap.
+
+**Patch file** `ssb/anatomy/patches/<base>/<entity>.<side>.<preset>.ssbp.gz`:
+gzip of u32 LE header length, a JSON header (`docs/realistic-anatomy.md` §6.2: `version` 1, `base`, `entity`, `side`,
+`preset`, `params`, `truth` `"composite"`, `calibratedOn`, `assumed`, `boxes` `[{ ijk0, dims, ct: "u8"|"i16", labels: "u16", sdf?: { "<id>": "u8" } }]`,
+`landmarks`, `sweeps`, `replacesNodes`, `addsNodes`), then per box, in order, its dense arrays, x fastest, little
+endian: `ct` (u8, or i16 on a 16-bit head), `labels` (u16), then one u8 array per `sdf` key in header order.
+`parseAnatomyPatch` (`js/ssb/volume.js`) refuses, with a `VolumeError`, a wrong version (`unsupported`), base, entity,
+side or preset (against what was asked for), a non-`composite` truth, a box with non-integer, zero or negative
+dimensions or corner, more than 16 boxes, node names that are not `<id>.<side>`, and a body that is not exactly the
+boxes' size; `applyAnatomyPatch` also refuses a box outside the volume, a ct type that is not the volume's, and a label the table
+does not name. A box REPLACES every voxel of its extent (CT and labels), nothing outside it; patches apply in order, the
+later winning an overlap; the base volume is never touched. Carried but not applied yet: `sdf`, `landmarks`, `sweeps`
+(the scope still reads the standard head's distance fields).
+
+**Override packs** `ssb/anatomy/overrides/<base>/<entity>.<side>.<preset>.glb.gz` (not in `packs.json`) hold the
+whole-node replacements a patch names: the specimen stage loads one only for the nodes of its header
+(`replacesNodes` ∪ `addsNodes`; any other node is skipped with a problem recorded), registers them as
+`anatomy:<stem>:<id>.<side>`, hides the base nodes of `replacesNodes` whose replacement arrived (never leaves a hole)
+and gives it all back when the anatomy is cleared. CT shows `anatomyVolume(anatomy)` (the base's volume, then each
+patch); a procedure still plays on the standard head.
+
+**URL**: `anat=standard|scanned|scanned-b` + `v=<v-id>.<R|L|M>[:<preset>],…` + `dz=<dz-id>.<R|L|M>[:<preset>],…`
+(§7.3). The Anatomy pills (Symmetric · Normal asymmetry · Variants · Pathology, `ui-specimen.js`) enable only for what
+the index lists; the Variants and Pathology pickers are WP RA5.
+
 ### 5.10 New data: population, more heads, 16-bit CT
 
 A **head** is a base: a CT and a label volume (every name a graph id) in
@@ -1626,6 +1671,13 @@ and to the volume's own bounds after (`setCtBounds`), and the canonical hash
 is rewritten; a crosshair drag settles before the URL is replaced, like a
 lab slider. The stage is one of specimen, lab or CT: a hash with both `lab`
 and `ct` keeps the lab, and entering one leaves the other.
+
+The anatomy hash is `#anat=<base>&v=<ref>,…&dz=<ref>,…` (§5.11; `<ref>` is `<id>.<R|L|M>[:<preset>]`), whitelisted
+against `ssb/anatomy/index.json` and the graph: an unknown id, a side, preset or base the index does not offer, a pair
+it does not allow, a malformed value or more than eight entries drops the **whole** anatomy key and the hash is
+rewritten canonical (every preset explicit, written after the stage and before `mu` and `q`). The index loads after the store exists, so
+until it arrives the link's anatomy is `pending` (shape-checked, written back unchanged) and every consumer treats it as the
+standard head. `v` or `dz` without `anat` takes the index's default base (`scanned` when listed).
 
 The procedure hash (WP P2, built) is `#p=<p-id>&step=<n>[&cor=<corridor>]`
 (the pose follows as `scope=`): the store keeps only a well-formed `p-id` in

@@ -392,6 +392,15 @@ the right septal surface lies at half the as-scanned thickness, the nose is in (
 `git show` at the commit `ct.json` names; CI checks out full history). The open lining (ST1b) is pinned in `liningTests` (the pack is listed and within budget, one node per air label, no triangle on an air|air interface, every clear ray through the right ostium first hits the sinus with the lining where the shells stop it, a free pose looks through the choana past A −50) and in the scope and mucosa page checks (lining drawn and shells hidden from inside, not drawn from outside, picks report graph ids). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 
+**Anatomy state** (`state.js`, `volume.js`, `geo-specimen.js`, `mode-specimen.js`, `mode-ct.js`, `ui-specimen.js`;
+`docs/ssb.md` §5.11; `node tools/test-ssb.mjs --only anatomy`) builds its own patches, index and override pack inside the test
+(nothing is written into `ssb/`) and pins, in Node, that a patch changes exactly its box in the CT and the labels and
+nothing else, the base staying byte-identical; the refusals (box outside, bad dimensions, unknown label, wrong base or
+entry, short or long body, version 2, node names that are markup); the loader's URLs; and the hash whitelist and
+canonicalisation (unknown id, preset, side, base, incompatible pair, markup, all-or-nothing); then in the page the
+disabled pills with no index (and no request), the pills with one, CT showing the patch's box, and the override node
+hiding the base node and giving it back on clear.
+
 **Flap overlay** (`js/ssb/flap.js`, `docs/ssb.md` §5.7; `node tools/test-ssb.mjs --only flap`) pins, in Node
 on the committed charts, landmarks and soft pack, the posterior septal artery's first points inside the
 pedicle, the superior incision's rule over a parameter grid, the area readout against an independent
