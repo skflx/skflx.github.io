@@ -845,9 +845,10 @@ Steps:    1. PROVENANCE → "Reference specimen · from Interactive CT Sinus Ana
           3. Test: the credit text is present in Specimen, CT and Scope stages.
 Accept:   check-data, smoke-pages, test-ssb pass; the test of step 3 passes.
 Escalate: the text does not fit at phone width without truncating the institution's name.
-Result:   PROVENANCE and the static note name the atlas and institution; a `#ssb-credit` line at the
-          panel foot (wraps, no truncation) carries the full attribution and link; test-ssb `credit:`
-          checks cover Specimen, Scope and CT.
+Result:   PROVENANCE and the static note name the atlas and institution; the stage note wraps
+          rather than truncating. A `#ssb-credit` line at the foot of the Details panel carries the
+          full attribution and link (on a phone it shows in the closed sheet in CT, which hides the
+          stage note). test-ssb `credit:` checks cover Specimen, Scope and CT at desktop and phone width.
 ```
 
 ```

@@ -266,10 +266,11 @@ html[data-theme="dark"] {
 .ssb-axis-label[data-axis="a"] { color: var(--ssb-axis-a); }
 .ssb-axis-label[data-axis="s"] { color: var(--ssb-axis-s); }
 
-/* The stage's truth badge: always visible, bottom-left. */
+/* The stage's truth badge: always visible, bottom-left. It wraps rather than
+   truncating: it names the atlas's institution in full (RA0c). */
 .ssb-stage-note {
   position: absolute; left: var(--gutter); bottom: 0.6rem; max-width: calc(100% - 2 * var(--gutter));
-  pointer-events: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  pointer-events: none;
 }
 .ssb-stage-msg {
   position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
@@ -646,6 +647,8 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
   .ssb-panel[data-sheet="closed"] .ssb-panel-body,
   .ssb-panel[data-sheet="closed"] .ssb-credit,
   .ssb-panel[data-sheet="closed"] .ssb-sheet-tabs { display: none; }
+  /* CT hides the stage note, so on a phone its closed sheet keeps the credit */
+  .ssb[data-stage="ct"] .ssb-panel[data-sheet="closed"] .ssb-credit { display: block; }
   .ssb[data-stage="lab"] .ssb-panel[data-sheet="open"][data-view="controls"] .ssb-lab-sheet {
     display: block; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
   }
