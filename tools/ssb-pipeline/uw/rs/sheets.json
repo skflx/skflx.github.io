@@ -1,5 +1,5 @@
 {
- "version": 2,
+ "version": 3,
  "doc": "Rules of the sheet stage (docs/realistic-anatomy.md section 7.2.2, WP RS2), held as data; every number is a named parameter. reseg.py `sheets` reads SEED tips only; no number here was chosen from a held-out tip, and none was changed after a score had been computed. `filter` is the sheetness filter and the cutting of its medial surface into candidates. A candidate is NAMED for a lamella only when exactly one candidate per side meets every rule (passers of a sheet within `merge_gap_mm` of each other, and, where `merge_angle_deg` is given, with plate normals within that angle, count as one lamella; `dominance_ratio` is the septum's extra condition); otherwise the lamella is unassigned and every candidate's per-rule scores go to incoming/_rs/sheets-report.json. Distances are mm in the working volume's RAS frame (+r is the patient's right). An `end` is the extreme `end_fraction` of a candidate's voxels along the stated axis; `roi` bounds the candidate's centroid (|r|, a, s); a `probe` looks along the plate normal, up to `probe_mm` each way; `late` rules (the expensive ones) are evaluated only when the earlier rules pass.",
  "filter": {
   "sigmas_mm": [0.35, 0.5, 0.75],
@@ -30,6 +30,7 @@
  },
  "sheets": {
   "uncinate": {
+   "deferred": "RS4: the two right passers are a real tie (6.2 mm, 77 deg); the infundibulum and hiatus air give the sheet its defining target",
    "label": "s.uncinate-process",
    "roi": {"abs_r": [3, 20], "a": [-42, -10], "s": [16, 48]},
    "pool_min_area_mm2": 8,
@@ -56,14 +57,14 @@
    "figure_ids": ["Cor.basallamella", "Sag.basallamella2"],
    "merge_gap_mm": 5.0,
    "merge_angle_deg": 15,
-   "doc": "RS2b step 1. The vertical lamella of the middle turbinate: a sagittal sheet medial to the ethmoid air, reaching the roof of the nasal cavity (the cribriform plate) superiorly, with air medially and a free inferior edge in nasal-cavity air. No seed tip enters any rule. The basal lamella's medial target.",
+   "doc": "RS2b step 1, rule form v3 (Opus ruling on RS2b). The vertical lamella of the middle turbinate: a sagittal sheet medial to the ethmoid air whose top lies at the olfactory cleft roof, with nasal-cavity air medially and, over its interior, on both faces of its lower half. No seed tip enters any rule. The basal lamella's medial target.",
    "rules": [
     {"name": "area", "type": "area_min_mm2", "value": 40},
     {"name": "sagittal", "type": "normal_abs", "axis": "r", "min": 0.6},
     {"name": "medial_to_ethmoid_air", "type": "abs_r_vs_air", "labels": ["s.anterior-ethmoid-cells", "s.posterior-ethmoid-cells"], "margin_mm": 0.0},
-    {"name": "reaches_cribriform_roof", "type": "reaches", "end": "superior", "target": "cribriform_roof", "within_mm": 1.5},
+    {"name": "top_at_olfactory_cleft_roof", "type": "top_near_roof", "labels": ["s.nasal-cavity"], "within_mm": 2.0},
     {"name": "nasal_air_medially", "type": "probe", "points": "all", "dir": "medial", "in": "labels:s.nasal-cavity", "sided": true, "probe_mm": 2.0, "min_fraction": 0.5},
-    {"name": "free_inferior_edge_in_nasal_air", "type": "probe", "points": "end:inferior", "dir": "both", "in": "labels:s.nasal-cavity", "sided": true, "probe_mm": 2.0, "min_fraction": 0.5}
+    {"name": "lower_half_nasal_air_both_faces", "type": "probe", "points": "lower_half", "dir": "both", "in": "labels:s.nasal-cavity", "sided": true, "probe_mm": 2.0, "interior_mm": 1.5, "min_fraction": 0.5}
    ]
   },
   "basal-lamella": {
@@ -85,6 +86,7 @@
    ]
   },
   "bullar-lamella": {
+   "deferred": "RS3: the bulla is a cell; its lamella waits for the cell instance",
    "label": "s.bullar-lamella",
    "roi": {"abs_r": [3, 20], "a": [-50, -24], "s": [18, 48]},
    "pool_min_area_mm2": 8,

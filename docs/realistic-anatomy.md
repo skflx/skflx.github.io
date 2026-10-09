@@ -1225,7 +1225,7 @@ Ruling 2: (Opus, 2026-10-09, on #158) RS2 is split. RS2a = the filter, the sphen
 ```
 
 ```
-### RS2b — Ethmoid lamellae                    [STOPPED 2026-10-09: the MT lamella is not named (Escalate); rule set v2 and its numbers are on the PR] · Sonnet · depends: RS2a
+### RS2b — Ethmoid lamellae                    [STOPPED again 2026-10-09 under rule set v3: the MT lamella is not named on either side; per-rule scores on the PR] · Sonnet · depends: RS2a
 Goal:     name the middle turbinate's vertical lamella, the basal lamella, the uncinate and the
           bullar lamella (R) with the RS2 method, and split anterior from posterior ethmoid at the
           basal lamella instead of the proxy.

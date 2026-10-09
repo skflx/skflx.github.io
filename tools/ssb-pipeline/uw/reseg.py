@@ -898,12 +898,6 @@ class Ctx:
             sel = np.where(m, kk, -1).max(axis=0)
             jj, ii = np.nonzero(m.any(axis=0))
             return self.ras(np.column_stack([sel[jj, ii], jj, ii]))
-        if spec == 'cribriform_roof':                              # the roof of this side's nasal-cavity air (the olfactory cleft's roof is the cribriform plate)
-            m = self.mask('labels:s.nasal-cavity', side)
-            kk = np.arange(m.shape[0])[:, None, None]
-            sel = np.where(m, kk, -1).max(axis=0)
-            jj, ii = np.nonzero(m.any(axis=0))
-            return self.ras(np.column_stack([sel[jj, ii], jj, ii]))
         if spec in self.extra:
             return self.extra[spec]
         raise KeyError(spec)
@@ -958,6 +952,20 @@ def eval_rule(rule, c, ctx, sheet_side=None):
             return False, None, 'no %s air on side %s' % (','.join(rule['labels']), side)
         ref = float(np.median(np.abs(ctx.ras(np.argwhere(m))[:, 0]))); v = float(np.median(np.abs(c.p[:, 0])))
         return v <= ref - rule['margin_mm'], round(v - ref, 1), 'median |r| less than that of the %s air by %g mm' % (','.join(rule['labels']), rule['margin_mm'])
+    if t == 'top_near_roof':                                     # RS2b v3: the sheet's top against the roof of this side's `labels` air medial to it, per a-column, median over the a-range
+        m = ctx.label_mask(rule['labels'], side)
+        kk, jj, ii = np.nonzero(m)
+        r_air = np.abs(ctx.ras(np.column_stack([kk, jj, ii]))[:, 0]); s_air = ctx.ras(np.column_stack([kk, jj, ii]))[:, 2]
+        gaps = []
+        for j in np.unique(c.vox[:, 1]):
+            cj = c.vox[:, 1] == j
+            air = (jj == j) & (r_air < np.abs(c.p[cj, 0]).mean())
+            if air.any():
+                gaps.append(abs(float(s_air[air].max() - c.p[cj, 2].max())))
+        if not gaps:
+            return False, None, 'no %s air medial to the sheet in any of its a-columns' % ','.join(rule['labels'])
+        v = float(np.median(gaps))
+        return v <= rule['within_mm'], round(v, 2), 'median over the a-range of |roof of the medial %s air - the sheet top| <= %g mm' % (','.join(rule['labels']), rule['within_mm'])
     if t == 'relative_to_sheet':
         o = ctx.named.get((rule['sheet'], side))
         if o is None:
@@ -968,6 +976,9 @@ def eval_rule(rule, c, ctx, sheet_side=None):
         pts, nrm = c.vox, c.n
         if rule['points'].startswith('end:'):
             m = c.end_mask(rule['points'][4:], F['end_fraction'])
+            pts, nrm = pts[m], nrm[m]
+        elif rule['points'] == 'lower_half':                       # the voxels at or below the sheet's median height
+            m = c.p[:, 2] <= np.median(c.p[:, 2])
             pts, nrm = pts[m], nrm[m]
         if rule.get('interior_mm'):       # the sheet's interior: farther than interior_mm from any ridge voxel of another sheet
             own = np.isin(ctx.ridge_flat, np.ravel_multi_index(c.vox.T, ctx.lab.shape))
@@ -1332,6 +1343,9 @@ def stage_sheets():
     out['basal_lamella_split'] = {}; out['basal_lamella_parts'] = {}; parts_map = np.zeros(lab2.shape, np.uint8)
     for sh in ('middle-turbinate', 'basal-lamella', 'uncinate', 'bullar-lamella', 'ground-lamella'):
         for side in 'RL':
+            if 'deferred' in cfg['sheets'][sh]:       # Opus's ruling on RS2b: neither named nor failed
+                out['sheets']['%s.%s' % (sh, side)] = {'sheet': sh, 'side': side, 'status': 'deferred: ' + cfg['sheets'][sh]['deferred'], 'top_candidates': []}
+                continue
             c, info, _ = evaluate_sheet(sh, cfg['sheets'][sh], comps, ctx, side)
             out['sheets']['%s.%s' % (sh, side)] = info
             if c is not None:
@@ -1533,7 +1547,7 @@ def selftest():
     for nm, sp_ in cfg['sheets'].items():
         for rl in sp_.get('rules', []):
             assert rl['name'] and rl['type'] in ('area_min_mm2', 'extent_min_mm', 'normal_abs', 'reaches', 'abs_r_vs_seed', 'abs_r_vs_air_band',
-                                                 'relative_to_sheet', 'probe', 'inside_mask', 'separates_air', 'any_of', 'abs_r_vs_air'), (nm, rl)
+                                                 'relative_to_sheet', 'probe', 'inside_mask', 'separates_air', 'any_of', 'abs_r_vs_air', 'top_near_roof'), (nm, rl)
         assert sp_['label'] in ids, 'sheets.json names an id the graph does not have: %s' % sp_['label']
     # the basal-lamella machinery on a synthetic box: a complete coronal sheet separates the two references, a holed one does not
     g3 = Grid((0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (20, 20, 20))
@@ -1565,6 +1579,10 @@ def selftest():
         assert dict(ls) == {'medial': True, 'lateral': False}, (sd, ls)
     pl = Comp(1, np.column_stack([kk.ravel(), jj.ravel(), np.full(400, 20)]), nrm4[:, ::-1], g4, 1.0)
     assert eval_rule({'name': 'x', 'type': 'abs_r_vs_air', 'labels': ['s.nasal-cavity'], 'margin_mm': 0.0}, pl, c4, 'R')[0] is False   # the plate is lateral to that air
+    rf = {'name': 'x', 'type': 'top_near_roof', 'labels': ['s.nasal-cavity'], 'within_mm': 2.0}      # R air spans s = 0..19, medial to the plate at r = 10
+    lab4[:, :, 11:20] = 0; lab4[:19, :, 11:20] = 7; lab4[:, :, 11:20] &= 7; c4.lab = lab4
+    top = lambda k1: Comp(1, np.column_stack([np.arange(k1 - 4, k1 + 1), np.zeros(5, int), np.full(5, 20)]), np.tile([1.0, 0.0, 0.0], (5, 1))[:, ::-1], g4, 1.0)
+    assert eval_rule(rf, top(18), c4, 'R')[0] and not eval_rule(rf, top(8), c4, 'R')[0], 'top_near_roof'
     pv, ph = Comp(1, np.array([[0, 0, 0]]), np.array([[0.2, 1.0, 0.0]]), g4, 1.0), Comp(2, np.array([[1, 1, 1]]), np.array([[1.0, 0.2, 0.0]]), g4, 1.0)
     pm = np.zeros(g4.shape, np.uint8)
     both = Comp.merge([pv, ph]); bp = basal_parts(both, pm, 'R')

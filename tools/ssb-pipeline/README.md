@@ -69,7 +69,7 @@ another rule file (a what-if for review). Outputs are candidates under `incoming
 WP RS2b adds the middle turbinate's vertical lamella (`s.middle-turbinate`) as the first ethmoid sheet, ahead of the basal lamella
 whose medial target is now that named sheet; the uncinate's passers are merged within `merge_gap_mm` and `merge_angle_deg`; a
 named basal lamella is split into its graph parts in `incoming/_rs/basal-parts.npz` (the label volume keeps the parent id).
-New rule forms: probe `dir` `medial`/`lateral`, `abs_r_vs_air`, target `cribriform_roof`.
+New rule forms: probe `dir` `medial`/`lateral` and `points` `lower_half`, `abs_r_vs_air`, `top_near_roof` (rule set v3, Opus's ruling). Sheets marked `deferred` in `sheets.json` (the uncinate, the bullar lamella) are reported as deferred, not evaluated.
 
 Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
 
