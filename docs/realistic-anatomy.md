@@ -1225,7 +1225,7 @@ Ruling 2: (Opus, 2026-10-09, on #158) RS2 is split. RS2a = the filter, the sphen
 ```
 
 ```
-### RS2b — Ethmoid lamellae                    [ready after RS2a] · Sonnet · depends: RS2a
+### RS2b — Ethmoid lamellae                    [stopped 2026-10-09: v2 and v3 name no middle turbinate; RA-O9 (owner)] · Sonnet · depends: RS2a
 Goal:     name the middle turbinate's vertical lamella, the basal lamella, the uncinate and the
           bullar lamella (R) with the RS2 method, and split anterior from posterior ethmoid at the
           basal lamella instead of the proxy.
@@ -1457,6 +1457,7 @@ Answered by the owner on 2026-10-07 unless marked open.
 | RA-O6 | Use **NasalSeg** (CC BY 4.0, 130 CTs) for population asymmetry statistics? | **Yes** — started as WP POP0. |
 | RA-O7 | Author names remain in **git history** before 2026-10-07. Rewriting `master` history is destructive (force-push, every clone and open PR breaks). | *Open.* Recommended: leave history; the names are gone from the tree and RA0d keeps them out. Rewrite only if the authors ask. |
 | RA-O8 | Scope of batch 3 (soft-tissue/contrast complications with a synthetic channel) | *Open.* Recommended: plan it only after batches 1–2 are verified. |
+| RA-O9 | The ethmoid lamellae (middle turbinate vertical lamella, basal lamella, uncinate) are not recoverable by the sheet filter on this head: two rule revisions (RS2b v2, v3) named no middle turbinate, and a third shaped by the candidates' diagnostics would be fitting one head. | *Open.* (A) Hand-trace them in 3D Slicer on head A's native volume (the documented fallback; the owner or a delegate traces, the owner verifies; the traced sheets enter the pipeline as a committed, provenance-marked input, not as edited output). (B) Keep RS2a's gains, keep the basal-lamella proxy, and continue RS3–RS6 on it, revisiting the lamellae later. (C) Opus places a few control points per lamella on review slices of head A's own stacks and a spline sheet is fitted through them, owner verifies. Recommended: **C, then A for anything C cannot place**; B in the meantime if RS3 should not wait. |
 
 ## 14. Risks
 
