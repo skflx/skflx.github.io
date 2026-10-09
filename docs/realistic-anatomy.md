@@ -1101,7 +1101,7 @@ Escalate: any cell the rules cannot classify that an expert would name; any wall
 ```
 
 ```
-### RS1 — Native-grid working volume and the honest baseline   [review: harness built; Escalate fired for the left lateral sphenoid recess, see the PR] · Sonnet · depends: RS0, CP-RA1
+### RS1 — Native-grid working volume and the honest baseline   [done 2026-10-09, #156; its Escalate (the left lateral sphenoid recess) is ruled in RS2] · Sonnet · depends: RS0, CP-RA1
 Goal:     a resegmentation harness that rebuilds today's air labels on the native grid from
           SEED tips only, exports a candidate the scorer reads, and records the honest
           baseline and the declared label set every later RS step is scored against.
@@ -1188,6 +1188,27 @@ Accept:   each named lamella is one component per side; the basal lamella separa
 Escalate: a lamella with no unique candidate on a side (report the per-rule scores, do not
           relax a rule); a dehiscent or fenestrated lamella that would need a call on where
           the wall "is"; a rule that needs an anatomical parameter not stated in sheets.json.
+Ruling:   (Opus, 2026-10-09, from RS1 #156) the seed-only rebuild gives the left lateral
+          sphenoid recess to the posterior ethmoid (its only tips were held out) and, with no
+          complete septum found, splits the sphenoid front/back instead of left/right. RS2 adds
+          two sheets, by the same rules-as-data method, before the lamellae above:
+          - sphenoid face: the anterior wall of the sphenoid body (the sphenoethmoidal
+            junction), from the skull base to the choana's roof; air posterior to it and
+            within the sphenoid body, reached through the sinus, is sphenoid, so the lateral
+            recess and the pterygoid recesses join the sphenoid without a seed in them. A
+            posterior ethmoid cell that crosses it superolaterally (an Onodi cell) is not
+            decided here: report it for RS3.
+          - intersinus septum: the dominant sagittally oriented sheet inside the sphenoid
+            body, attached to the sphenoid face and the posterior wall (or the sella floor),
+            often off the midline or deviated. It, not a watershed, splits the sphenoid into
+            .R and .L; where it is incomplete, the split follows its surface extended along
+            its own fit, and the PR says how much was extended.
+          Accept adds: the left sphenoid's tips at --tol 6 back to today's count or better; the
+          sphenoid .L label is on the patient's left (Dice with today's .L reported); no
+          posterior ethmoid air posterior to the sphenoid face. Ids: s.sphenoid-face and
+          s.intersinus-septum (both in the graph); an accessory septum is
+          s.accessory-sphenoid-septum. RS1's two null ids (posterior ethmoidal canal,
+          nasolacrimal canal) are content work before RS5, not RS2's.
 ```
 
 ```
