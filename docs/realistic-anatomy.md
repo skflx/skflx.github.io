@@ -668,6 +668,36 @@ a Haller cell (no uncinate, no infundibulum) or to classify frontal cells
   the IFAC drainage rules pinned for the diorama are re-run on the
   specimen's own cells and must hold.
 
+**Baseline (RS0, 2026-10-09; Opus reading).** Run
+`python3 -I tools/ssb-pipeline/uw/score.py` for the numbers; they are not copied here. What
+they mean for RS:
+
+- **The headline mixes coverage with accuracy.** Most held-out misses are tips on structures
+  that have no label at all (bones such as the frontal bone and the frontal process of the
+  maxilla, the nasolacrimal duct, foramina and fissures, and the pterygopalatine fossa, which
+  `walls.py` seeds only on its offline grid). So RS scores two things separately:
+  **coverage**, meaning every id in RS's declared label set (RS1 writes it down) has a label,
+  and **identity**, the hit rate over the structures that are labelled. The ≥ 95 % / ≥ 90 %
+  targets apply to identity over the declared set. Tips on ids outside the set are reported,
+  never gated.
+- **±1 voxel is tighter than the ground truth.** For labelled structures, almost every
+  ±1-voxel miss is a hit at `--tol 6` (3 mm), and the axial and sagittal tips of one structure
+  disagree by several mm (the scorer prints the median). The identity gate is therefore
+  `--tol 1` as specified, read alongside `--tol 6`. A candidate that loses ground at `--tol 6`
+  has lost a structure. A candidate that moves only at `--tol 1` has moved within the tips'
+  noise. **The boundary review and the topology checks are what tell a better segmentation
+  from today's**; the tip metric mostly guards coverage.
+- **Today's labels are a resubstitution score.** They were grown from these tips, held-out ones
+  included, so an honest RS may score lower at `--tol 1`. That alone is not a regression; a
+  drop at `--tol 6` is.
+- **Topology failures are concrete RS targets:** the anterior ethmoid cells, the ethmoid bulla,
+  the frontal recess and the nasal cavity are split into several components, and one sphenoid
+  sinus is not joined to its side's cavity in the as-scanned head (RS3, RS4).
+- **Not evaluable yet, to be defined in the RS specs:** "no air label crosses the anterior
+  cranial fossa" needs an intracranial compartment in the served labels (RS6 adds it from
+  `walls.py`'s grid). Upper limits on bone thickness are set per unit in RS6's spec, from
+  sources; no number is assumed here.
+
 ### 7.2 Method
 
 1. **Native grid.** Segment on the native 0.3437 × 0.3437 × 0.625 mm volume
@@ -893,7 +923,7 @@ Escalate: annotation and bone overlap in > 10 % of figures.
 ```
 
 ```
-### RS0 — Ground-truth split and scorer      [review] · Sonnet · depends: —
+### RS0 — Ground-truth split and scorer      [done] · Sonnet · depends: —
 Goal:     the held-out arrow-tip split and a scorer any labels file can be run against (§7.1).
 Touch:    tools/ssb-pipeline/uw/score.py (new); ssb/reference/uw-sinusanatomy2/split.json.
 Steps:    stratified 70/30 split of head-A tips by crosswalked id and slice region, seed fixed;
@@ -960,7 +990,8 @@ RS1 native-grid working volume · RS2 lamella sheets and identity (§7.2.2) · R
 instances + shared rule set (§7.2.3) · RS4 openings and channels (§7.2.4, with the consumer list)
 · RS5 canals as labels, sweeps from detected centrelines (§7.2.5) · RS6 added bone units and
 the RA landmark set (§7.2.6, §6.1).
-Accept (whole RS): score.py held-out ≥ 95 % overall and ≥ 90 % per structure with ≥ 10 tips;
+Accept (whole RS): score.py held-out identity ≥ 95 % overall and ≥ 90 % per structure with ≥ 10
+          tips, over RS's declared label set (§7.1 "Baseline"), and full coverage of that set;
           boundary review ≥ 90 % correct on the review slices; topology checks pass; relate3d
           contradictions not increased; diorama IFAC rules hold on the specimen's cells;
           test-ssb passes on both rebuilt bases (thresholds unchanged, or each change argued
