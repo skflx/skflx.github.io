@@ -16,9 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=fce69b20';
-import { CT_PLANES } from './state.js?v=32a9e616';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=96bc6c91';
+import { PLANES } from './volume.js?v=e724eb59';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=7455c8cc';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=9c3c7635';
 import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -257,8 +257,13 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     statusSec.append(statusText);
     const standardNote = el('p', 'ssb-param-src', STANDARD_NOTE);
     standardNote.hidden = true;
-    isStandardSpecimen().then((yes) => { standardNote.hidden = !yes; sync(); });
+    let standardHead = false;
+    isStandardSpecimen().then((yes) => { standardHead = yes; sync(); });
     statusSec.append(standardNote);
+    /* what the specimen is now (docs/realistic-anatomy.md 2.2): the standardized head, the head as scanned, or an edit of one */
+    const anatomyNote = el('p', 'ssb-param-src');
+    anatomyNote.hidden = true;
+    statusSec.append(anatomyNote);
 
     /* ---- follow the mode ---- */
     const dt = (label, value) => { const a = el('dt', null, label); const b = el('dd', null, value); return [a, b]; };
@@ -299,7 +304,19 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     }
 
     let builtRegions = '';
+    function syncAnatomyNote() {
+        const a = store.get().anatomy;
+        const plain = anatomyIsDefault(a);
+        standardNote.hidden = !standardHead || !plain;
+        const edits = plain ? [] : [...a.variants, ...a.conditions].map((r) => `${r.id} ${r.side} (${r.preset})`);
+        const text = plain ? '' : edits.length
+            ? `Specimen, edited (${a.base === 'standard' ? 'standardized head' : 'head as scanned'}): ${edits.join('; ')}. Composite: a real specimen with a declared edit, schematic.`
+            : 'The head as scanned, with its own asymmetry. The CT and the labels are the real ones; nothing is mirrored.';
+        anatomyNote.textContent = text;
+        anatomyNote.hidden = !text;
+    }
     function sync() {
+        syncAnatomyNote();
         mark(viewRow, 'view', specimen.view || '');
         mark(boneRow, 'bone', specimen.bone);
         const st = store.get();
@@ -416,8 +433,39 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     specimen.onChange(sync);
     store.subscribe((state, prev) => {
         if (state.lab !== prev.lab || state.ct !== prev.ct) place();
-        if (state.mu !== prev.mu || state.procedure !== prev.procedure || state.flap !== prev.flap || state.tier !== prev.tier) sync();
+        if (state.mu !== prev.mu || state.procedure !== prev.procedure || state.flap !== prev.flap || state.tier !== prev.tier || state.anatomy !== prev.anatomy) sync();
     });
+    mountAnatomyPills(store);
     sync();
     place();
+}
+
+/* The Anatomy pills in the toolbar (ssb.html #ssb-anatomy): Symmetric (the standardized head), Normal asymmetry (the head
+   as scanned), Variants and Pathology. A pill is enabled only for what ssb/anatomy/index.json lists, so with no index
+   (today) they stay disabled; Variants and Pathology open their pickers in WP RA5, which waits for the first entries, so
+   until then they only show the state. Everything is read from the store; nothing here touches markup beyond the pills. */
+export function mountAnatomyPills(store) {
+    const group = document.getElementById('ssb-anatomy');
+    if (!group) return;
+    const pill = (name) => group.querySelector(`button[data-anat="${name}"]`);
+    const [standard, scanned, variants, pathology] = ['standard', 'scanned', 'variants', 'pathology'].map(pill);
+    if (!standard || !scanned || !variants || !pathology) return;
+    const press = (b, on) => { b.setAttribute('aria-pressed', on ? 'true' : 'false'); b.classList.toggle('active', on); };
+    function sync() {
+        const { anatomy: a, anatomyIndex: reg } = store.get();
+        const plain = anatomyIsDefault(a);
+        standard.disabled = false;
+        scanned.disabled = !reg || !reg.bases.has('scanned');
+        variants.disabled = !reg || reg.variants.size === 0;
+        pathology.disabled = !reg || reg.conditions.size === 0;
+        press(standard, plain || (a.base === 'standard' && !a.variants.length && !a.conditions.length));
+        press(scanned, !plain && a.base === 'scanned' && !a.variants.length && !a.conditions.length);
+        press(variants, !plain && a.variants.length > 0);
+        press(pathology, !plain && a.conditions.length > 0);
+        group.dataset.edited = !plain && (a.variants.length > 0 || a.conditions.length > 0) ? 'true' : 'false';
+    }
+    standard.addEventListener('click', () => store.setAnatomy(null));
+    scanned.addEventListener('click', () => store.setAnatomy({ base: 'scanned', variants: [], conditions: [] }));
+    store.subscribe((state, prev) => { if (state.anatomy !== prev.anatomy || state.anatomyIndex !== prev.anatomyIndex) sync(); });
+    sync();
 }

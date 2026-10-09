@@ -40,12 +40,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=ea7b9301';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=eef9dd4c';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=34e04a58';
-import { PLANES, stamped } from './volume.js?v=fce69b20';
+import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile } from './volume.js?v=e724eb59';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
-import { CT_PLANES } from './state.js?v=32a9e616';
+import { CT_PLANES } from './state.js?v=7455c8cc';
 import { REGION_LABEL } from './graph.js?v=2a57f507';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
@@ -115,6 +115,9 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
     let muNote = '';                /* the player's one line about the mucosal state (loading, could not load), shown by the layer controls */
+    /* The anatomy stack's override packs (docs/realistic-anatomy.md 6.2): the edited state's whole-node replacements, loaded
+       after the packs and given back when the anatomy changes. `hides` are the base node keys they stand in for. */
+    const anat = { key: '', gen: 0, chain: Promise.resolve(), stems: [], hides: new Set(), status: 'none', problems: [] };
     let dissect = null;             /* the procedure player's state (P2): { key, hides: Set of base node keys } while a dissected state is shown */
     let emphasis = { see: new Set(), hazard: new Set() };     /* graph ids the player marks: a step's `see` structures, and the `at` structures of its `risk` hazards (hatched) */
 
@@ -292,6 +295,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             const partner = isSel && !primary;
             let look = u.look;
             if (u.state && !(dissect && dissect.key === u.state)) { mesh.visible = false; continue; }          /* another state's pack, not on show */
+            if (!u.anatomy && anat.hides.has(key)) { mesh.visible = false; continue; }                           /* a node the edited anatomy replaces */
             if (!u.state && dissect && (dissect.hides.has(key) || replaced.has(`${u.id}.${u.side}`))) { mesh.visible = false; continue; }
             if (u.group === 'lining') {
                 u.drawn = look.kind;
@@ -842,6 +846,55 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         emit();
     }
 
+    /* Follow state.anatomy: give back the previous override packs, then fetch each entry's patch (its node lists are in the
+       header), load the override pack of every entry that has nodes, and hide the base nodes whose replacement arrived. Runs
+       one after another and a superseded run does nothing, so a quick change of anatomy never leaves two sets of nodes. */
+    function followAnatomy() {
+        const a = store.get().anatomy;
+        const refs = a && !a.pending ? [...a.variants, ...a.conditions] : [];
+        const key = refs.length ? `${a.base}|${refs.map((r) => `${r.id}.${r.side}.${r.preset}`).join(',')}` : '';
+        if (key === anat.key || !specimen) return;
+        anat.key = key;
+        const gen = ++anat.gen;
+        anat.chain = anat.chain.then(async () => {
+            if (!specimen) return;
+            for (const stem of anat.stems) specimen.unloadOverride(stem);
+            anat.stems = [];
+            anat.hides = new Set();
+            anat.problems = [];
+            specimen.setReplaced([]);
+            anat.status = refs.length ? 'loading' : 'none';
+            paint();
+            emit();
+            if (gen !== anat.gen || !refs.length) return;
+            const hides = new Set();
+            for (const ref of refs) {
+                try {
+                    const patch = await loadAnatomyPatch(a.base, ref);
+                    if (gen !== anat.gen) return;
+                    const names = [...patch.replacesNodes, ...patch.addsNodes];
+                    if (!names.length) continue;
+                    const stem = `${ref.id}.${ref.side}.${ref.preset}`;
+                    anat.stems.push(stem);
+                    const added = await specimen.loadOverride(stem, anatomyOverrideFile(a.base, ref), names);
+                    if (gen !== anat.gen) return;
+                    if (names.some((n) => !added.includes(`anatomy:${stem}:${n}`))) anat.problems.push(`${stem}: its override pack did not load completely.`);
+                    for (const n of patch.replacesNodes) if (specimen.nodes.has(`anatomy:${stem}:${n}`)) hides.add(n);     /* only what has its replacement: never a hole */
+                } catch (e) {
+                    anat.problems.push(e && e.message ? String(e.message) : 'An anatomy patch could not be read.');
+                    console.error(e);
+                }
+            }
+            if (gen !== anat.gen) return;
+            anat.hides = hides;
+            specimen.setReplaced(hides);
+            anat.status = anat.problems.length ? 'partial' : 'ready';
+            choosePrimary();
+            paint();
+            emit();
+        });
+    }
+
     async function start() {
         if (started) return;
         started = true;
@@ -878,6 +931,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             problem = 'An unexpected error stopped the load.';
         }
         status = result;
+        followAnatomy();
         if (!problem && specimen.problems.length) problem = specimen.problems[0];
         if (status === 'error' && specimen.problems.length) problem = specimen.problems.join(' ');
         pendingFrame = null;
@@ -1060,6 +1114,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             emit();
         }
         if (state.flap !== prev.flap) rebuildFlap();
+        if (state.anatomy !== prev.anatomy) followAnatomy();
         if (state.tier !== prev.tier && now) stage.requestRender();
     });
     stage.onTheme(() => { colours(); stage.requestRender(); });
@@ -1112,6 +1167,13 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get populationOn() { return layers.population; },
+        /* the edited anatomy on show: its status, the base nodes it hides and the override nodes standing in for them */
+        get anatomy() {
+            return {
+                status: anat.status, key: anat.key, problems: anat.problems.slice(), hidden: [...anat.hides],
+                overrides: specimen ? [...specimen.nodes].filter(([, m]) => m.userData.anatomy).map(([k, m]) => ({ key: k, visible: m.visible, id: m.userData.id, side: m.userData.side })) : [],
+            };
+        },
         get mucosaInside() { return inside; },
         get flap() { return flapNow ? { status: flapNow.status, design: flapNow.design, side: flapNow.side, params: { ...flapNow.params }, areas: flapNow.areas ? { ...flapNow.areas } : null, result: flapNow.result, drawn: flapRoot.visible ? flapRoot.children.length : 0 } : null; },
         get stateKey() { return dissect ? dissect.key : null; },

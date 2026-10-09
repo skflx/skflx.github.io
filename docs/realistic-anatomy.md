@@ -945,7 +945,7 @@ Result:   `python3 -I tools/ssb-pipeline/uw/score.py` prints the baseline (as-sc
 ```
 
 ```
-### RA3a — Anatomy state, patch format, loader   [todo] · Sonnet · depends: #115 merged (state.js)
+### RA3a — Anatomy state, patch format, loader   [review] · Sonnet · depends: #115 merged (state.js)
 Goal:     state.anatomy, the #anat/#v/#dz whitelist, volume.js applyPatch, override-node
           loading — with no real patches yet (test patches built in the test).
 Read:     this file §2, §6.2–6.4; docs/ssb.md §5.6, §7.3; js/ssb/state.js, volume.js,
@@ -958,6 +958,10 @@ Accept:   test-ssb --only anatomy: a synthetic patch changes exactly its box in 
           an invalid header (box outside, unknown label, bad dims) is refused; an unknown id,
           preset or incompatible pair drops the anatomy key and the hash is rewritten canonical;
           override nodes hide base nodes and restore them on clear.
+Result:   `node tools/test-ssb.mjs --only anatomy` pins all of it on synthetic patches built in the test; the
+          format and URL are in `docs/ssb.md` §5.11 and §7.3. Open for the checkpoint: the volume.js patch entry points are
+          `parseAnatomyPatch`/`applyAnatomyPatch` (`applyPatch` is the dissection patch's), the index.json shape is `ssb.md` §5.11,
+          and a non-standard base resolves its label table inside its own root (`ssb/anatomy/<base>/geometry/`).
 ```
 
 ```
