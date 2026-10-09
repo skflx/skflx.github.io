@@ -1,7 +1,10 @@
 # Realistic anatomy — scoping, implementation, execution and review plan
 
-**Status (2026-10-07): owner decisions RA-O1…O6 answered (§13); first WP
-done (POP0, NasalSeg population asymmetry, §4.4); the rest is plan.** Written by Opus for the owner. It extends SSB (`docs/ssb.md`) from one standardized head to
+**Status (2026-10-09): waves RA-0 and RA-1 done except RA0d (the
+`scanned` base ships as Normal asymmetry); RS1 and RS2a done, RS2b stopped,
+and the ethmoid lamellae now come from control points (RS2c, RA-O9 decided
+C, then A); Radiopaedia access approved through the owner's browser
+(RA-O5). What to do next, in order: §11 "Handoff".** Written by Opus for the owner. It extends SSB (`docs/ssb.md`) from one standardized head to
 a head that can be shown four ways — **symmetric**, **normal asymmetry**,
 **normal variants**, **pathology** — and grounds the last three in more CT:
 the remaining pages of the UW atlas and curated Radiopaedia cases. When the
@@ -153,13 +156,8 @@ variant is `geo: diorama` or `none` and every condition `geo: overlay` or
 (`ethmoid-roof`, `frontal-recess`, `sphenoid`), whose rules (IFAC drainage,
 Keros, sphenoid exposure) are pinned in `tools/test-ssb.mjs`.
 
-**Open PRs touching the same ground** (scanned for context only):
-[skflx/skflx.github.io#115](https://github.com/skflx/skflx.github.io/pull/115)
-(E6, station flights — `js/ssb/state.js`, `scope.js`, `mode-endoscope.js`;
-stations posed on the standard head, which §2.3 must re-validate per base)
-and [skflx/skflx.github.io#114](https://github.com/skflx/skflx.github.io/pull/114)
-(C1a, seven procedures + sources — content this plan's panels will link
-to). Nothing here should start in `state.js` until #115 merges.
+This section is the plan's starting point (2026-10-07). What has been
+built since is in each WP's status line (§10) and in `WIP.md`.
 
 ---
 
@@ -333,8 +331,9 @@ site.
    its licence; the UW no-names rule does not apply to them.)
 3. **Curated, small, polite.** A shortlist of cases (target 25–40, Opus
    picks, the owner may veto), cached in the gitignored drop zone, never in
-   CI. Who fetches is RA-O5, reopened: the site challenges non-browser
-   clients, and no agent works around it.
+   CI. Who fetches is RA-O5, decided 2026-10-09: access is approved, through
+   the owner's own browser, because the site challenges non-browser clients
+   and no agent works around it.
 4. **Per case, record**: rID, URL, title, contributor, licence line as shown,
    modality, plane(s), series description, slice count, apparent window,
    contrast, whether the stack is complete or key images only, burned-in
@@ -1082,7 +1081,7 @@ Result:   (2026-10-09) drafted: `v.ethmoid-bulla-hyperpneumatization`, `v.pteryg
 ### Wave RA-2 — resegmentation and alignment
 
 ```
-### RS1–RS6 — Resegment head A                [RS1, RS2 ready; RS3–RS6 specified after RS2] · Opus + Sonnet
+### RS1–RS6 — Resegment head A                [RS1, RS2a done; RS2b stopped → RS2c; RS3–RS6 specified as each predecessor lands] · Opus + Sonnet
 RS1 native-grid working volume · RS2 lamella sheets and identity (§7.2.2) · RS3 ethmoid cell
 instances + shared rule set (§7.2.3) · RS4 openings and channels (§7.2.4, with the consumer list)
 · RS5 canals as labels, sweeps from detected centrelines (§7.2.5) · RS6 added bone units and
@@ -1269,6 +1268,90 @@ Ruling:   (Opus, 2026-10-09, on RS2b's escalation, branch claude/RS2b-ethmoid-la
 ```
 
 ```
+### RS2c — Ethmoid lamellae from control points (RA-O9, option C)   [todo] · Opus (points) + Sonnet (fit, plumbing) · depends: RS2a; the UW crawl in incoming/ (fetch.py)
+Goal:     the middle turbinate's vertical lamella (s.middle-turbinate), the basal lamella
+          (s.basal-lamella, with its -vertical and -horizontal parts) and the uncinate
+          (s.uncinate-process), per side, as sheets fitted through control points Opus places
+          by eye on head A's own native stacks. The anterior/posterior ethmoid split moves
+          from the proxy plane to the fitted basal lamella.
+Read:     RA-O9 (§13); RS2's and RS2b's WP text and rulings; #158's body (why the filter
+          fails here); rs/sheets.json and reseg.py's sheet rasterizer; the README of the RS
+          split (what is held out, so as not to open it).
+Touch:    tools/ssb-pipeline/uw/rs/lamellae.json (new, committed: the control points, an
+          input placed by eye, not pipeline output), reseg.py (read, fit, rasterize, use as
+          the partition), rs/declared.json status, the RS README, this WP's status line.
+Don't:    open split.json or any held-out tip while placing points (step 1); move a point
+          after seeing a score, unless the move is argued from anatomy and disclosed (RS2's
+          rule); change served files (nothing under ssb/ changes until RS6).
+Steps:    1. (Opus, not delegated) on review slices of the native axial stack and its
+             coronal and sagittal reformats: per sheet and side, ≥ 8 points on ≥ 4 slices
+             spread over the sheet, including its attachments (MT lamella: the skull-base
+             insertion at the cribriform/fovea junction and the lower border of the
+             turbinate; basal lamella: the lamina papyracea laterally, the MT medially;
+             uncinate: the lateral wall and its superior attachment, read as one of
+             c.uncinate-superior-attachment's classes). Each point: plane, slice index,
+             RAS mm in the native frame, confidence (sure / probable) and one line on what
+             was seen. A sheet-side without 8 sure-or-probable points is marked "C cannot
+             place" and goes to option A (the owner, 3D Slicer).
+          2. (Sonnet) per sheet: the dominant plane from the points' PCA; a thin-plate spline
+             of the height over that plane, its smoothing fixed before any score as the value
+             with the smallest leave-one-out residual; clipped to the points' hull in the
+             plane plus 2 mm; rasterized one voxel thick on the native grid. Where a sheet
+             crosses the air of a compartment it does not bound, report the clash; do not
+             trim by hand.
+          3. The basal lamella replaces the proxy as the AE/PE partition; the MT lamella
+             bounds the ethmoid medially; the uncinate is stored as a sheet for RS4 (it
+             defines the infundibulum) and changes no label in this WP.
+          4. score.py --labels on the held-out tips, the proxy's partition beside it.
+Accept:   per sheet, leave-one-out residual median ≤ 1.5 mm and none > 3 mm; AE/PE held-out
+          identity at tol 1 not below the proxy's (both recorded), the other structures' not
+          worse; reruns byte-identical; review PNGs (incoming/, not committed) at every
+          control slice show the sheet on the wall the point names; lamellae.json carries
+          its provenance (placed by eye by Opus, date, source stack, frame, review: draft).
+Escalate: a sheet-side C cannot place (→ A); a held-out score below the proxy's; a sheet
+          through a structure it cannot cross.
+Owner:    verifies the sheets on the review slices at CP-RA2 (§12.3).
+```
+
+```
+### POP3 — NasalSeg relations                  [todo] · Sonnet · depends: POP0, POP1 (done); the NasalSeg archive in the drop zone (stats.py docstring)
+Goal:     relationship measurements between the structures NasalSeg labels (and the bone its
+          CT shows), on the clear subjects, as numbers in nasalseg.json under a new key
+          `relations`; head A (as scanned) placed in each.
+Read:     §4.4; stats.py (docstring: duplicates, header fixes, sides, the clear subset);
+          POP1's profiles method; normalize.py (how head A's midsagittal plane is found).
+Touch:    tools/ssb-pipeline/nasalseg/stats.py (a `relations` subcommand; rerunning `stats`
+          must keep the `profiles`, `meanShape` and `relations` keys it does not write:
+          today it drops `meanShape`), nasalseg.json, the script's docstring, §4.4.
+Don't:    commit image data; change POP0's or POP1's numbers or subset; add a dependency.
+Steps:    1. Field of view per distinct scan: the superior and inferior extent of the image
+             against the labels (does it reach the cribriform plate, the frontal sinus, the
+             sphenoid?). This decides which bony relations can be measured at all; report it
+             before measuring anything above the maxillary roof.
+          2. Maxillary floor against the nasal floor, per side (mm, + = sinus floor below):
+             the 2nd-percentile S of the maxillary air label against that of the cavity label
+             over the same A range.
+          3. Minimum cross-section of the cavity and its position along POP1's axis (the
+             acoustic-rhinometry analogue), restricted convention, and the cavity length.
+          4. Septal deviation: the septal midsurface (midway between the two cavity labels'
+             medial faces, per coronal section) against the midsagittal plane found from the
+             bone (as normalize.py finds head A's); magnitude, side, and where (A, S).
+          5. Turbinate tissue proxy per side: soft tissue (-50..150 HU) inside each cavity's
+             per-section hull, lateral to the midsurface; its asymmetry against the septal
+             deviation's side, and the cavity AI against both (Spearman, n stated).
+          6. Head A's own values for 2–5 from its as-scanned labels, as percentiles.
+Accept:   reruns byte-identical; every number stated with n and the subset; stats.py rerun
+          leaves the other keys byte-identical; the step-5 relation is written with the
+          sentence "a single scan cannot separate compensatory hypertrophy from the phase of
+          the nasal cycle" beside it.
+Escalate: a measure step 1 shows the field of view cannot support; a midsagittal fit that
+          fails on more than 10 % of subjects.
+Then:     new m.* ids for the measures that hold (a content WP, Opus reviews; source
+          src.* NasalSeg) and their place in the population panel and the variant presets
+          (v.septal-deviation's mild/typical/marked anchors, §12.2 item 3).
+```
+
+```
 ### FG2 — Figure poses in head A's frame      [todo] · Sonnet (search) + Opus (landmarks, review) · depends: FG1, RS6
 Goal:     a plane pose and TPS for every N and V figure (P figures where bone-window), written
           to ssb/anatomy/sources.json; observations to observations.json.
@@ -1331,12 +1414,12 @@ where right.
 ### Wave RA-4 — batch 2, Radiopaedia volumes, head B
 
 ```
-RP2  fetch (agent, one case at a time, RA-O5) and record the chosen cases, grade A/B/C · Sonnet
+RP2  fetch in the owner's browser (RA-O5), one case at a time, and record the chosen cases, grade A/B/C · owner + Sonnet
 RP3  stack → volume, pose, observations, population entries · Sonnet + Opus review
 RB1  head B: coronal stack → volume (spacing estimation), labels from its tips, scanned-b base · Opus + Sonnet
 VB2  variants batch 2 (§8.2) · Opus → Sonnet
 PB2  pathology batch 2 (§9.2) · Opus → Sonnet
-POP1 population.json + the asymmetry panel (paired L−R, n, sources; NasalSeg from POP0) · Sonnet
+(POP1 here was the asymmetry panel: built as POP2a/POP2b on docs/ssb-roadmap.md's board.)
 ```
 
 **Checkpoint CP-RA4.**
@@ -1365,7 +1448,7 @@ RA-2  P: RS1 → RS6 (critical path), FG2   V: RA4
         └──────────── CP-RA2 ────────────┘
 RA-3  OP1 → VB1 ∥ PB1 → RA5
         └──────────── CP-RA3 ────────────┘
-RA-4  RP2 → RP3, RB1, VB2, PB2, POP1 → CP-RA4
+RA-4  RP2 → RP3, RB1, VB2, PB2 → CP-RA4      (POP3 and RP2's fetch run beside RA-2: §11 Handoff)
 RA-5  SC1, ST-RA, T-RA, SX0/SX1
 ```
 
@@ -1385,6 +1468,35 @@ RA-5  SC1, ST-RA, T-RA, SX0/SX1
   (§1.2 truth kinds, a new §5.8 "Anatomy states", §7.3 URL keys); this file
   then keeps only §4–§5 (sources and limits) and §13 history, or is
   deleted per "prefer deleting to keeping".
+
+### Handoff (2026-10-09)
+
+Nothing is running and nothing is open: every PR so far is merged; the
+RS2b branch `claude/RS2b-ethmoid-lamellae` is kept unmerged as the record
+of v2 and v3. The next orchestrator (Opus) works in this order, one Sonnet
+session at a time (usage):
+
+1. **RS2c** (critical path): place the control points yourself (step 1:
+   run `fetch.py` for the crawl first; do not open the split), then
+   delegate steps 2–4. Then specify **RS3** on the fitted basal lamella.
+2. **RP2** (beside it): give the owner one checklist per picked case in
+   `ssb/reference/radiopaedia/cases.json` (`_meta.pick`): what to open,
+   what to save where in the drop zone, which "owner reads" fields to fill.
+   The owner may veto any pick. Then spec RP3.
+3. **POP3** (beside it, Sonnet): NasalSeg relations; fixes `stats.py`
+   dropping `meanShape`.
+4. **RA0d** (any time, small): the name guard.
+5. **Content before RS5**: graph ids for the posterior ethmoidal canal and
+   the nasolacrimal canal.
+
+Small follow-ups, not blocking: `ssb/reference/specimen-relations.json` is
+stale against `relate3d.py` (rerun it); the 25.1 cm² flap maximum needs a
+measurement node with its source before the readout shows it; the E6
+flight test samples on a timer and fails on one slow frame.
+
+Waiting on the owner: review of `ssb.html#anat=scanned` and its asymmetry
+note; CP-3 (`docs/ssb-roadmap.md` §4) and the flap
+(`ssb.html#tier=3&flap=full.R`); O14; RA-O7; RA-O8; RP2's browser fetch.
 
 ---
 
@@ -1453,11 +1565,11 @@ Answered by the owner on 2026-10-07 unless marked open.
 | RA-O2 | Add **composite** as a fourth truth kind (§2.2)? | **Yes.** |
 | RA-O3 | Default base for Variants/Pathology? | **`scanned`** — variants and pathology should look realistic, so they sit on the real asymmetric head; `standard` is one click away. |
 | RA-O4 | May Radiopaedia-derived data (and images) be committed? | **Yes** — the cases are public; attribute (contributor, Radiopaedia.org, rID, as links) and do not monetize, which this site does not. ShareAlike: derived files carry CC BY-NC-SA 3.0 in their own folder. |
-| RA-O5 | Who downloads Radiopaedia stacks? | An agent may fetch them, one case at a time, politely, from the shortlist (follows from RA-O4). **Reopened 2026-10-09:** the site now challenges non-browser clients as unsanctioned scraping, so an agent may not fetch. Options for the owner: ask Radiopaedia for sanctioned access (its Developers/licensing contact), or download the ≤ 40 chosen cases in a browser into the drop zone. RP2 waits. |
+| RA-O5 | Who downloads Radiopaedia stacks? | First: an agent, one case at a time (2026-10-07). Reopened 2026-10-09 when the site began challenging non-browser clients. **Decided (owner, 2026-10-09): access approved.** The cloud container gets HTTP 406 from radiopaedia.org, and no agent works around the challenge (no scraping service or proxy, no header spoofing, no headless or cloud browser). RP2 therefore runs in the owner's own browser: the owner opens the picked cases (by hand, or with Claude driving that browser at reading pace), saves each stack into the drop zone, and fills the "owner reads" fields from the same page. |
 | RA-O6 | Use **NasalSeg** (CC BY 4.0, 130 CTs) for population asymmetry statistics? | **Yes** — started as WP POP0. |
 | RA-O7 | Author names remain in **git history** before 2026-10-07. Rewriting `master` history is destructive (force-push, every clone and open PR breaks). | *Open.* Recommended: leave history; the names are gone from the tree and RA0d keeps them out. Rewrite only if the authors ask. |
 | RA-O8 | Scope of batch 3 (soft-tissue/contrast complications with a synthetic channel) | *Open.* Recommended: plan it only after batches 1–2 are verified. |
-| RA-O9 | The ethmoid lamellae (middle turbinate vertical lamella, basal lamella, uncinate) are not recoverable by the sheet filter on this head: two rule revisions (RS2b v2, v3) named no middle turbinate, and a third shaped by the candidates' diagnostics would be fitting one head. | *Open.* (A) Hand-trace them in 3D Slicer on head A's native volume (the documented fallback; the owner or a delegate traces, the owner verifies; the traced sheets enter the pipeline as a committed, provenance-marked input, not as edited output). (B) Keep RS2a's gains, keep the basal-lamella proxy, and continue RS3–RS6 on it, revisiting the lamellae later. (C) Opus places a few control points per lamella on review slices of head A's own stacks and a spline sheet is fitted through them, owner verifies. Recommended: **C, then A for anything C cannot place**; B in the meantime if RS3 should not wait. |
+| RA-O9 | The ethmoid lamellae (middle turbinate vertical lamella, basal lamella, uncinate) are not recoverable by the sheet filter on this head: two rule revisions (RS2b v2, v3) named no middle turbinate, and a third shaped by the candidates' diagnostics would be fitting one head. | **Decided (owner, 2026-10-09): C, then A** for any sheet-side C cannot place (WP RS2c). B is not taken: RS3 waits for RS2c. The options were: (A) Hand-trace them in 3D Slicer on head A's native volume (the documented fallback; the owner or a delegate traces, the owner verifies; the traced sheets enter the pipeline as a committed, provenance-marked input, not as edited output). (B) Keep RS2a's gains, keep the basal-lamella proxy, and continue RS3–RS6 on it, revisiting the lamellae later. (C) Opus places a few control points per lamella on review slices of head A's own stacks and a spline sheet is fitted through them, owner verifies. |
 
 ## 14. Risks
 
