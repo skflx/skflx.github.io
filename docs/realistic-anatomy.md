@@ -957,7 +957,7 @@ Result:   `node tools/test-ssb.mjs --only anatomy` pins all of it on synthetic p
 ```
 
 ```
-### RA3b — The scanned base                  [todo] · Sonnet · depends: RA3a
+### RA3b — The scanned base                  [blocked: Escalate fired 2026-10-09 (four stages need an anatomy call; branch claude/RA3b-scanned-base)] · Sonnet · depends: RA3a
 Goal:     head A as scanned, served as ssb/anatomy/scanned/, built by the same stages minus
           the mirror; both sides computed where stage D assumed symmetry.
 Read:     docs/ssb.md §5.1, §5.3, §5.7; normalize.py docstring; softtissue.py, lining.py.
