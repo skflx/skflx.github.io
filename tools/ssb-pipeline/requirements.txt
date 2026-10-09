@@ -3,7 +3,7 @@ numpy==2.4.6
 pillow==12.3.0
 scipy==1.17.1
 scikit-image==0.26.0
-rapidocr-onnxruntime==1.4.4
+rapidocr-onnxruntime==1.2.3
 onnxruntime==1.30.0
 fast-simplification==0.2.0
 matplotlib==3.11.2

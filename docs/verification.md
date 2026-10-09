@@ -413,6 +413,10 @@ runs in CI: its proof is the overlay PNGs each stage writes and
 `ssb/reference/specimen-relations.json` (the graph's spatial claims tested
 against the 3D geometry); `tools/check-data.mjs` pins only that every name
 in the specimen data — packs, label table, landmarks, sweeps — is a graph id.
+The figure inventory (`ssb/reference/uw-sinusanatomy2/figures.json`, `uw/figures.py`) is the same kind of
+offline output: `check-data` pins its schema (plane, window, a graph id or a null with a reason, coordinates
+inside the image, no image file in that folder); how well its tips match the pictures is judged on the
+`figures.py overlay` check images and at a checkpoint, not in CI.
 
 `node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
 screenshots of each diorama, CT mode and the specimen for a visual check. Judging how a material

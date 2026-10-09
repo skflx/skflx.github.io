@@ -333,6 +333,10 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   (`slices.json`), from which `tools/ssb-pipeline/uw/relate.py` tests the
   graph's spatial claims (as of 2026-09-28: 60 testable, 58 agree, the
   other 2 a documented arrow-placement artifact).
+  `figures.json` (WP FG1) inventories the eight Normal/Abnormal pages'
+  figures: plane, window, caption abbreviations, traced arrows on the
+  bone-window ones, and the ids, roles and candidate same-patient groups
+  transcribed from `docs/realistic-anatomy.md` §4.1 (Opus fills the nulls).
 
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content

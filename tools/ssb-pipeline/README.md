@@ -12,6 +12,17 @@ which is gitignored.
     .venv/bin/python tools/ssb-pipeline/uw/extract.py   # labeled frames → ssb/reference/uw-sinusanatomy2/slices.json
     python3 tools/ssb-pipeline/uw/relate.py             # slices + graph → relations.json (stdlib only)
 
+Figure inventory (WP FG1; the static pages only, not the atlas stacks; needs the venv):
+
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py build     # pages + images -> ssb/reference/uw-sinusanatomy2/figures.json
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py overlay ID [ID…] [--out DIR]   # check PNG of one figure's mask, labels and tips
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py sheet [--out DIR]               # contact sheets of every traced figure
+
+`figures.py` fetches the eight Normal/Abnormal pages and their images into `incoming/` itself (it unescapes
+`&amp;` in an `src` and percent-encodes the request, which `fetch.py` does not). Numbers and text only are
+written; check images go to the system temp directory. Method, limits and the schema: the "Figure inventory"
+section of `ssb/reference/uw-sinusanatomy2/README.md`.
+
 Reconstruction, stage A (feasibility, registration, scale; needs the fetched images):
 
     .venv/bin/python tools/ssb-pipeline/uw/volume.py     # stacks -> incoming/.../_recon/*.npy; framing and scout checks
