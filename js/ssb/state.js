@@ -16,6 +16,12 @@
    names a lookup key (scope.js), numbers are parsed, clamped and snapped to the step,
    unknown keys are ignored, and nothing here ever produces markup.
 
+   The anatomy state (`anat=`, `v=`, `dz=`, docs/realistic-anatomy.md 6.4) is whitelisted against a registry built from
+   ssb/anatomy/index.json (buildAnatomyRegistry): an id the index or the graph does not list, a side or preset the entity
+   does not offer, a base it is not built on, or a pair the registry does not allow drops the whole anatomy key, never
+   a part of it. The index loads after the store exists, so a link's anatomy waits as `pending` (shape-checked only, and
+   still written back to the address bar) until setAnatomyRegistry resolves it.
+
    Storage is `ssb:prefs` (tier), guarded: a blocked or full localStorage is
    a no-op, never an exception (docs/decisions.md section 3).
    ============================================================= */
@@ -50,6 +56,181 @@ export const MU_MODES = Object.freeze(['dec', 'scan', 'cong']);
 export const MU_DEFAULT = 'scan';
 export function clampMu(value) {
     return typeof value === 'string' && MU_MODES.includes(value) ? value : null;
+}
+
+
+/* ---------------- anatomy state (docs/realistic-anatomy.md 2.1, 6.3, 6.4) ---------------- */
+
+/* `anat=standard|scanned|scanned-b` + `v=<v-id>.<R|L>[:<preset>],…` + `dz=<dz-id>.<R|L|M>[:<preset>],…`. The base is a layer
+   under the variants, the variants under the conditions, applied in that order. `standard` (the mirrored reference
+   head) is always valid; every other base, and every variant or condition, exists only if ssb/anatomy/index.json lists it. */
+export const ANAT_BASES = Object.freeze(['standard', 'scanned', 'scanned-b']);
+export const ANAT_STANDARD = 'standard';
+export const ANATOMY_DEFAULT = Object.freeze({ base: ANAT_STANDARD, variants: Object.freeze([]), conditions: Object.freeze([]) });
+export const ANAT_LIST_MAX = 8;
+export const ANAT_SIDES = Object.freeze(['R', 'L', 'M']);
+const ANAT_TOKEN = '[a-z0-9]+(?:-[a-z0-9]+)*';
+const ANAT_ID = { v: new RegExp(`^v\\.${ANAT_TOKEN}$`), dz: new RegExp(`^dz\\.${ANAT_TOKEN}$`) };
+const ANAT_PRESET = new RegExp(`^${ANAT_TOKEN}$`);
+const ANAT_REF = new RegExp(`^((?:v|dz)\\.${ANAT_TOKEN})\\.(R|L|M)(?::(${ANAT_TOKEN}))?$`);
+const ANAT_TEXT_MAX = 512;
+
+/* ssb/anatomy/index.json + the graph's `has` -> the registry the whitelist reads:
+   { bases: Set (non-standard, listed), defaultBase, variants: Map(id -> entity), conditions: Map, compat: Set('a|b') }.
+   An entity is { id, sides, presets, default, bases, region, boxes: { R?: { min, max } } } (boxes in RAS mm, the patch's
+   extent). Entries with a bad id, an id the graph lacks, no side or no preset are dropped, never repaired. Pure. */
+export function buildAnatomyRegistry(doc, has = () => true) {
+    const reg = { bases: new Set(), defaultBase: ANAT_STANDARD, variants: new Map(), conditions: new Map(), compat: new Set() };
+    if (!doc || typeof doc !== 'object' || doc.version !== 1) return reg;
+    if (doc.bases && typeof doc.bases === 'object') {
+        for (const name of Object.keys(doc.bases)) if (name !== ANAT_STANDARD && ANAT_BASES.includes(name)) reg.bases.add(name);
+    }
+    if (reg.bases.has('scanned')) reg.defaultBase = 'scanned';       /* owner RA-O3: variants and pathology sit on the real, asymmetric head by default */
+    const point = (a) => Array.isArray(a) && a.length === 3 && a.every(Number.isFinite);
+    const collect = (src, prefix, into) => {
+        if (!src || typeof src !== 'object') return;
+        for (const [id, def] of Object.entries(src)) {
+            if (!ANAT_ID[prefix].test(id) || !has(id) || !def || typeof def !== 'object') continue;
+            const sides = Array.isArray(def.sides) ? [...new Set(def.sides.filter((x) => ANAT_SIDES.includes(x)))] : [];
+            const presets = Array.isArray(def.presets) ? [...new Set(def.presets.filter((x) => typeof x === 'string' && ANAT_PRESET.test(x) && x.length <= 40))] : [];
+            if (!sides.length || !presets.length) continue;
+            const fallback = reg.bases.size ? [ANAT_STANDARD, ...reg.bases] : [ANAT_STANDARD];
+            const bases = Array.isArray(def.bases) ? def.bases.filter((b) => b === ANAT_STANDARD || reg.bases.has(b)) : fallback;
+            const boxes = {};
+            if (def.boxes && typeof def.boxes === 'object') {
+                for (const side of sides) {
+                    const b = own(def.boxes, side) ? def.boxes[side] : null;
+                    if (b && point(b.min) && point(b.max) && b.min.every((v, n) => v <= b.max[n])) boxes[side] = { min: b.min.slice(), max: b.max.slice() };
+                }
+            }
+            into.set(id, {
+                id, sides, presets, bases,
+                default: typeof def.default === 'string' && presets.includes(def.default) ? def.default : presets[0],
+                region: typeof def.region === 'string' && ANAT_PRESET.test(def.region) ? def.region : '',
+                boxes,
+            });
+        }
+    };
+    collect(doc.variants, 'v', reg.variants);
+    collect(doc.conditions, 'dz', reg.conditions);
+    if (Array.isArray(doc.compat)) {
+        for (const pair of doc.compat) {
+            if (!Array.isArray(pair) || pair.length !== 2 || !pair.every((r) => typeof r === 'string' && ANAT_REF.test(r))) continue;
+            reg.compat.add([pair[0], pair[1]].sort().join('|'));
+        }
+    }
+    return reg;
+}
+
+/* Does the registry list anything to pick (a non-standard base, a variant or a condition)? */
+export const anatomyListed = (reg) => !!reg && (reg.bases.size > 0 || reg.variants.size > 0 || reg.conditions.size > 0);
+
+/* 'a.R:typical,b.L' -> [{ id, side, preset|null }], or null when anything is not a well-formed ref of that kind. */
+function parseAnatomyRefs(text, kind) {
+    if (text === null || text === '') return [];
+    if (typeof text !== 'string' || text.length > ANAT_TEXT_MAX) return null;
+    const out = [];
+    for (const part of text.split(',')) {
+        const m = ANAT_REF.exec(part);
+        if (!m || !ANAT_ID[kind].test(m[1])) return null;
+        out.push({ id: m[1], side: m[2], preset: m[3] || null });
+    }
+    return out.length <= ANAT_LIST_MAX ? out : null;
+}
+
+/* URLSearchParams -> the anatomy as the link wrote it, shape-checked only: { base: string|null, variants, conditions },
+   `undefined` when the link has no anatomy key, `null` when it has one that is not well formed. */
+function parseAnatomyRaw(params) {
+    const anat = params.get('anat');
+    const v = params.get('v');
+    const dz = params.get('dz');
+    if (anat === null && v === null && dz === null) return undefined;
+    if (anat !== null && !ANAT_BASES.includes(anat)) return null;
+    const variants = parseAnatomyRefs(v, 'v');
+    const conditions = parseAnatomyRefs(dz, 'dz');
+    if (!variants || !conditions) return null;
+    return { base: anat, variants, conditions };
+}
+
+const refKey = (r) => `${r.id}.${r.side}`;
+function boxesOverlap(a, b) {
+    return a && b && [0, 1, 2].every((n) => a.min[n] <= b.max[n] && b.min[n] <= a.max[n]);
+}
+
+/* The compatibility rules of 6.3 for an ordered list of resolved refs: no ref twice; one condition (v1); one variant per
+   side per region (when the index names a region); and two different refs only when the pipeline built and tested the
+   pair (`compat`) or the index gives both an extent and the extents do not overlap. */
+function compatible(refs, reg) {
+    const seen = new Set();
+    const conditions = refs.filter((r) => r.entity.id.startsWith('dz.'));
+    if (conditions.length > 1) return false;
+    for (const r of refs) {
+        const key = refKey(r);
+        if (seen.has(key)) return false;
+        seen.add(key);
+    }
+    for (let i = 0; i < refs.length; i++) {
+        for (let j = i + 1; j < refs.length; j++) {
+            const a = refs[i];
+            const b = refs[j];
+            if (reg.compat.has([refKey(a), refKey(b)].sort().join('|'))) continue;
+            const ea = a.entity.boxes[a.side];
+            const eb = b.entity.boxes[b.side];
+            if (!ea || !eb || boxesOverlap(ea, eb)) return false;
+            if (a.entity.region && a.entity.region === b.entity.region && a.side === b.side) return false;
+        }
+    }
+    return true;
+}
+
+/* { base, variants, conditions } (a link's raw form, or a canonical one) + the registry -> the canonical anatomy
+   { base, variants: [{ id, side, preset }], conditions }, every preset explicit, or null when ANY part is not allowed. */
+export function resolveAnatomy(raw, reg) {
+    if (!raw || typeof raw !== 'object' || !reg) return null;
+    const entries = (raw.variants || []).length + (raw.conditions || []).length;
+    const base = typeof raw.base === 'string' ? raw.base : entries ? reg.defaultBase : ANAT_STANDARD;
+    if (base !== ANAT_STANDARD && !reg.bases.has(base)) return null;
+    const refs = [];
+    const take = (list, map) => {
+        const out = [];
+        for (const r of list || []) {
+            if (!r || typeof r.id !== 'string' || !map.has(r.id)) return null;
+            const entity = map.get(r.id);
+            const preset = r.preset === null || r.preset === undefined ? entity.default : r.preset;
+            if (!ANAT_SIDES.includes(r.side) || !entity.sides.includes(r.side) || !entity.presets.includes(preset) || !entity.bases.includes(base)) return null;
+            out.push({ id: r.id, side: r.side, preset });
+            refs.push({ id: r.id, side: r.side, entity });
+        }
+        return out;
+    };
+    const variants = take(raw.variants, reg.variants);
+    const conditions = take(raw.conditions, reg.conditions);
+    if (!variants || !conditions || variants.length > ANAT_LIST_MAX || !compatible(refs, reg)) return null;
+    if (base === ANAT_STANDARD && !variants.length && !conditions.length) return ANATOMY_DEFAULT;
+    return { base, variants, conditions };
+}
+
+export function sameAnatomy(a, b) {
+    if (a === b) return true;
+    if (!a || !b || a.base !== b.base || !!a.pending !== !!b.pending) return false;
+    const same = (x, y) => x.length === y.length && x.every((r, n) => r.id === y[n].id && r.side === y[n].side && r.preset === y[n].preset);
+    return same(a.variants, b.variants) && same(a.conditions, b.conditions);
+}
+
+/* Is the anatomy anything but the plain standard head (and resolved, so a pending link counts as the standard head)? */
+export const anatomyIsDefault = (a) => !a || a.pending === true || (a.base === ANAT_STANDARD && !a.variants.length && !a.conditions.length);
+
+/* The hash text of an anatomy, canonical: the base, then the variants, then the conditions, each ref with its preset
+   (a link may leave a preset out; the canonical form never does, so it parses back to itself without a registry).
+   A pending anatomy (not yet resolved against the index) writes back what the link said. */
+export function formatAnatomy(a) {
+    if (!a || (a.base === ANAT_STANDARD && !a.variants.length && !a.conditions.length && !a.pending)) return [];
+    const ref = (r) => `${r.id}.${r.side}${r.preset ? ':' + r.preset : ''}`;
+    const parts = [];
+    if (a.base && ANAT_BASES.includes(a.base)) parts.push('anat=' + a.base);
+    if (a.variants.length) parts.push('v=' + a.variants.map(ref).join(','));
+    if (a.conditions.length) parts.push('dz=' + a.conditions.map(ref).join(','));
+    return parts;
 }
 
 /* ---------------- variant lab parameters ---------------- */
@@ -171,11 +352,13 @@ function sameProcedure(a, b) {
    a ct, a ct over a scope; `at` without a plane is the specimen's 3D cursor,
    `cursor`; `scope=t.<id>` is a station link, `station`, kept as text until the
    endoscope has read the station table and calls resolveStation).
+   `anat`/`v`/`dz` -> `anatomy`: resolved against the registry (the 4th argument; the whole key is dropped if any part is
+   not allowed), or, before the index has loaded (none given), kept as `{ ..., pending: true }` after a shape check.
    Only whitelisted keys, only valid values; anything else is dropped.
    `has(id)` is the graph's index lookup; `labs` maps a diorama name to its
    { params: PARAMS, presets: PRESETS }. A classification id naming a preset
    (`c.keros=III`) is applied first, then explicit parameters over it. */
-export function parseHash(hash, has, labs = {}) {
+export function parseHash(hash, has, labs = {}, registry = null) {
     const out = {};
     if (typeof hash !== 'string' || hash.length > HASH_MAX) return out;
     let params;
@@ -215,6 +398,13 @@ export function parseHash(hash, has, labs = {}) {
     if (quality) out.quality = quality;
     const mu = clampMu(params.get('mu'));
     if (mu) out.mu = mu;
+    const anatomy = parseAnatomyRaw(params);
+    if (anatomy) {
+        if (registry) {
+            const resolved = resolveAnatomy(anatomy, registry);
+            if (resolved) out.anatomy = resolved;
+        } else out.anatomy = { base: anatomy.base, variants: anatomy.variants, conditions: anatomy.conditions, pending: true };
+    }
     const flap = out.lab || plane ? null : parseFlap(params);      /* an overlay on the specimen: a lab or CT link ignores it */
     if (flap) out.flap = flap;
     return out;
@@ -255,6 +445,7 @@ export function formatHash(state, labs = {}) {
             for (const p of PARAMS) if (p.designs.includes(f.design) && f.params[p.key] !== p.default) parts.push(p.hash + '=' + num(f.params[p.key]));
         }
     }
+    parts.push(...formatAnatomy(state.anatomy));        /* orthogonal to the stage: it rides along with any of them */
     if (clampMu(state.mu) && state.mu !== MU_DEFAULT && !state.procedure) parts.push('mu=' + state.mu);      /* a procedure forces decongested: nothing to share */
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
@@ -344,7 +535,7 @@ export function savePrefs(prefs) {
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure, mu, flap }. Invariant: the
+/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure, mu, flap, anatomy, anatomyIndex }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is one of four: the specimen (lab, ct and scope all null), the variant lab
@@ -363,14 +554,20 @@ export function savePrefs(prefs) {
    ends with the scope, the lab or CT. `quality` is the rendering override from the hash ('full' | 'lite'), null
    for the device's choice. `mu` is the mucosal state ('dec' | 'scan' | 'cong', default 'scan'), independent of the stage: the
    procedure player (mode-procedure.js) loads its patch and lining, and a procedure overrides it with decongested. `flap` ({ design, side, params }, normalizeFlap) is the nasoseptal flap overlay on the specimen (flap.js), independent of the stage. The cursor is clamped to the volume's bounds,
+   `anatomy` ({ base, variants, conditions }, resolveAnatomy; ANATOMY_DEFAULT is the standard head) is the layer stack
+   over the volume and the packs, independent of the stage; while the index has not loaded it is `pending` (shape-checked,
+   not yet whitelisted) and every consumer treats it as the standard head. `anatomyIndex` is the registry
+   (buildAnatomyRegistry) once setAnatomyRegistry has been called, else null; the UI reads what can be picked from it.
+   The cursor is clamped to the volume's bounds,
    which only the loaded volume knows: setCtBounds() hands them in and
    re-clamps, and until then the limit is a sanity range.
    Subscribers get (state, previous, meta); meta.source names the origin
    ('url', 'tree', 'search', 'panel', 'tier', 'scene', 'lab', 'slider', 'ct', 'scope',
    'cursor', 'ct-bounds') so the URL sync can tell a hash-driven change from
    a click, and a slider or crosshair drag from a deliberate step. */
-export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs = {} }) {
-    const fromUrl = parseHash(hash, has, labs);
+export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs = {}, anatomyDoc = null }) {
+    let registry = anatomyDoc ? buildAnatomyRegistry(anatomyDoc, has) : null;
+    const fromUrl = parseHash(hash, has, labs, registry);
     const selection = fromUrl.selection || null;
     let ctBounds = null;
     const ct0 = fromUrl.ct ? normalizeCt(fromUrl.ct, ctBounds) : null;
@@ -387,6 +584,8 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         procedure: procedure0,
         mu: fromUrl.mu || MU_DEFAULT,
         flap: fromUrl.flap || null,
+        anatomy: fromUrl.anatomy || ANATOMY_DEFAULT,
+        anatomyIndex: registry,
     });
     const subs = new Set();
 
@@ -395,7 +594,9 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
             && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality
-            && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu && sameFlap(next.flap, prev.flap)) return false;
+            && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu && sameFlap(next.flap, prev.flap)
+            && sameAnatomy(next.anatomy, prev.anatomy) && next.anatomyIndex === prev.anatomyIndex) return false;
+        if (sameAnatomy(next.anatomy, prev.anatomy)) next.anatomy = prev.anatomy;
         if (sameProcedure(next.procedure, prev.procedure)) next.procedure = prev.procedure;
         if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         if (sameFlap(next.flap, prev.flap)) next.flap = prev.flap;
@@ -496,18 +697,34 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const next = normalizeFlap(flap);
             return next ? set({ flap: next }, meta) : false;
         },
+        /* The anatomy stack ({ base, variants, conditions }), or null for the standard head. Whitelisted against the
+           registry here too: anything the registry does not allow is refused (false) and the state is left as it was.
+           Never changes the stage. */
+        setAnatomy(anatomy, meta = { source: 'anatomy' }) {
+            if (anatomy === null) return set({ anatomy: ANATOMY_DEFAULT }, meta);
+            const next = registry ? resolveAnatomy(anatomy, registry) : null;
+            return next ? set({ anatomy: next }, meta) : false;
+        },
+        /* Hand in ssb/anatomy/index.json's parsed body (or null: the page has none). Builds the registry, then resolves
+           the anatomy the link carried: allowed -> canonical, otherwise the key is dropped and the hash rewritten. */
+        setAnatomyRegistry(doc, meta = { source: 'anatomy' }) {
+            registry = buildAnatomyRegistry(doc, has);
+            const a = state.anatomy;
+            const resolved = resolveAnatomy(a, registry);
+            return set({ anatomyIndex: registry, anatomy: resolved || ANATOMY_DEFAULT }, meta);
+        },
         /* Back to the specimen stage. */
         leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null, procedure: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
         applyHash(next) {
-            const p = parseHash(next, has, labs);
+            const p = parseHash(next, has, labs, registry);
             const selection = p.selection || null;
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
             const ct = p.ct ? normalizeCt(p.ct, ctBounds) : null;
             const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
             const procedure = ct ? null : p.procedure || null;
             const scope = ct ? null : p.scope || (procedure && !p.station ? state.scope || clampPose(POSE_DEFAULT) : null);
-            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure, mu: p.mu || MU_DEFAULT, flap: p.flap || null }, { source: 'url' });
+            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure, mu: p.mu || MU_DEFAULT, flap: p.flap || null, anatomy: p.anatomy || ANATOMY_DEFAULT }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
         hash: () => formatHash(state, labs),

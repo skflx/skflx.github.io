@@ -50,13 +50,19 @@
      (loadPopulationPack) and gives it back (unloadPopulationPack). Its nodes (extras kind "ghost") are registered as
      "population:<id>.<side>" (group ghost, userData.population), so byId, picking and the region list never see them.
 
+   - An anatomy override pack (docs/realistic-anatomy.md 6.2, WP RA3a) is the whole-node replacement an edited state brings:
+     ssb/anatomy/overrides/<base>/<entity>.<side>.<preset>.glb.gz, named by the patch it goes with (its `replacesNodes` and
+     `addsNodes`, the only nodes it may carry). Never listed in packs.json, never loaded at boot: the stage asks for it by
+     its stem (loadOverride) and gives it back (unloadOverride). Its nodes are registered as "anatomy:<stem>:<id>.<side>"
+     and stand in for the base nodes setReplaced() hides, so byId finds the override and not the node it replaced.
+
    The only new three.js importer besides scene.js: one module instance, the
    same unstamped vendor URLs (js/vendor/README.md).
    ============================================================= */
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=50d70779';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=ca255144';
 import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
@@ -80,6 +86,9 @@ const LIMIT_TRIANGLES = 600000;  /* all packs together (docs/ssb.md 5.4 budgets 
 const GLB_MAGIC = 0x46546c67;    /* 'glTF' */
 const STATE_KEY = /^[0-9a-f]{10}$/;
 const CUT = /^[a-z0-9][a-z0-9-]{0,39}$/;
+const OVERRIDE_STEM = /^(?:v|dz)\.[a-z0-9]+(?:-[a-z0-9]+)*\.(?:R|L|M)\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const OVERRIDE_FILE = /^ssb\/anatomy\/overrides\/(?:standard|scanned|scanned-b)\/([A-Za-z0-9._-]+)\.glb\.gz$/;
+const NODE_KEY = /^[a-z]+\.[a-z0-9-]+\.(?:R|L|M)$/;
 
 export class SpecimenError extends Error {
     /* code: 'absent' (no packs.json), 'network', 'invalid', 'unsupported'. */
@@ -123,9 +132,9 @@ async function getJson(fetchFn, file, what) {
 }
 
 /* One pack's bytes, decoded; throws SpecimenError. */
-async function getPack(fetchFn, name, file) {
+async function getPack(fetchFn, name, file, dir = 'ssb/models') {
     let res;
-    try { res = await fetchFn(stamped(`ssb/models/${file}`)); } catch (e) { throw new SpecimenError('network', `${name}: the file could not be fetched.`); }
+    try { res = await fetchFn(stamped(`${dir}/${file}`)); } catch (e) { throw new SpecimenError('network', `${name}: the file could not be fetched.`); }
     if (!res.ok) throw new SpecimenError(res.status === 404 ? 'absent' : 'network', `${name}: the file could not be fetched (HTTP ${res.status}).`);
     let raw;
     try { raw = await res.arrayBuffer(); } catch (e) { throw new SpecimenError('network', `${name}: the download was cut off.`); }
@@ -206,7 +215,9 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             const remnant = isState && cut !== '';
             const lined = !!pack.lining || (isState && !remnant);
             const ghost = !!pack.population;
-            const key = `${isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ghost ? POPULATION_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
+            const isOverride = !!pack.anatomyKey;
+            if (isOverride && !pack.allowed.has(`${id}.${side}`)) { problem(`${label} (${id}.${side}) is not one of the nodes its patch replaces or adds; skipped.`); continue; }
+            const key = `${isOverride ? `anatomy:${pack.anatomyKey}:` : isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ghost ? POPULATION_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
             if (nodes.has(key)) { problem(`${label} repeats ${key}; skipped.`); continue; }
             const g = mesh.geometry;
             const pos = g && g.attributes ? g.attributes.position : null;
@@ -227,7 +238,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             mesh.name = key;
             mesh.material.dispose();
             mesh.material = new THREE.MeshBasicMaterial();      /* replaced by mode-specimen per state */
-            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, population: ghost, state: pack.stateKey || '', remnant, cut };
+            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, population: ghost, state: pack.stateKey || '', remnant, cut, anatomy: pack.anatomyKey || '' };
             root.add(mesh);
             nodes.set(key, mesh);
             triangles += tris;
@@ -398,6 +409,61 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         return true;
     }
 
+    /* An anatomy override pack (an edited state's whole-node replacements): `stem` is "<entity>.<side>.<preset>", `file` the
+       ssb/anatomy/overrides/<base>/<stem>.glb.gz it is read from, `nodes` the "<id>.<side>" names its patch replaces or adds
+       (the only ones adopted). Fetched once, adopted under "anatomy:<stem>:<id>.<side>" and kept until unloadOverride.
+       Resolves with the keys it added; never rejects (a pack that cannot be read is recorded as any other). */
+    const overrideLoads = new Map();
+    function loadOverride(stem, file, nodeNames) {
+        const m = typeof file === 'string' ? OVERRIDE_FILE.exec(file) : null;
+        if (!OVERRIDE_STEM.test(stem) || !m || m[1] !== stem || !Array.isArray(nodeNames)) return Promise.resolve([]);
+        if (overrideLoads.has(stem)) return overrideLoads.get(stem);
+        const allowed = new Set(nodeNames.filter((n) => typeof n === 'string' && NODE_KEY.test(n)));
+        const pack = { name: `anatomy-${stem}`, file: m[1] + '.glb.gz', dir: file.slice(0, file.lastIndexOf('/')), state: 'deferred', error: '', lining: false, population: false, stateKey: '', anatomyKey: stem, allowed, nodes: [], expected: [...allowed].map((k) => `anatomy:${stem}:${k}`) };
+        packs.set(pack.name, pack);
+        const job = (async () => {
+            try {
+                if (loadDone) await loadDone;
+                pack.state = 'loading';
+                try {
+                    const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file, pack.dir));
+                    if (disposed) return [];
+                    adopt(scene, pack);
+                    pack.state = 'loaded';
+                } catch (e) {
+                    pack.state = 'failed';
+                    pack.error = e && e.message ? String(e.message) : 'The pack could not be read.';
+                    problem(pack.error);
+                }
+                try { onPackCb(pack); } catch (e) { console.error(e); }
+            } catch (e) { console.error(e); }
+            return pack.nodes.slice();
+        })();
+        overrideLoads.set(stem, job);
+        return job;
+    }
+
+    /* Drop an override pack's meshes: the base nodes it replaced come back when the caller clears setReplaced(). */
+    function unloadOverride(stem) {
+        const pack = packs.get(`anatomy-${stem}`);
+        if (!pack || pack.state === 'loading') return false;
+        for (const [k, mesh] of [...nodes]) {
+            if (mesh.userData.anatomy !== stem) continue;
+            triangles -= mesh.userData.triangles || 0;
+            if (mesh.geometry) mesh.geometry.dispose();
+            if (mesh.material && typeof mesh.material.dispose === 'function') mesh.material.dispose();
+            root.remove(mesh);
+            nodes.delete(k);
+        }
+        packs.delete(pack.name);
+        overrideLoads.delete(stem);
+        return true;
+    }
+
+    /* The base nodes ("<id>.<side>" keys) an edited state replaces: they stay in the registry but byId no longer offers them. */
+    let replaced = new Set();
+    function setReplaced(keys) { replaced = new Set(keys); }
+
     /* The population pack (the toggle): fetched once on request, adopted under "population:<id>.<side>" and kept until
        unloadPopulationPack. Resolves with the nodes it added ([] when packs.json lists no population pack). Never
        rejects: a pack that cannot be read is recorded as any other. */
@@ -470,10 +536,10 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     }
 
     return {
-        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, loadPopulationPack, unloadPopulationPack, boundsOf, dispose,
+        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, loadOverride, unloadOverride, setReplaced, loadPopulationPack, unloadPopulationPack, boundsOf, dispose,
         get status() { return status; },
         get triangles() { return triangles; },
-        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant && !m.userData.population),
+        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant && !m.userData.population && !replaced.has(m.userData.key)),
     };
 }
 

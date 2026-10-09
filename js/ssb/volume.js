@@ -102,8 +102,9 @@ function invert3(a) {
     ];
 }
 
-/* Validate ct.json -> the fields the volume uses; throws VolumeError('invalid'). */
-export function parseHeader(meta) {
+/* Validate ct.json -> the fields the volume uses; throws VolumeError('invalid'). `root` is the data root the volume lives
+   under (baseRoot): its label file and table are resolved inside it and nowhere else. */
+export function parseHeader(meta, root = 'ssb') {
     const bad = (why) => new VolumeError('invalid', `ct.json: ${why}.`);
     if (!meta || typeof meta !== 'object') throw bad('not an object');
     if (meta.version !== 1) throw new VolumeError('unsupported', `ct.json: unsupported version ${String(meta.version)}.`);
@@ -138,10 +139,10 @@ export function parseHeader(meta) {
     if (l && typeof l === 'object' && typeof l.file === 'string' && /^[A-Za-z0-9._-]+$/.test(l.file) && (l.dtype === undefined || l.dtype === 'uint16')) {
         let table = null;
         if (typeof l.table === 'string') {
-            if (/^[A-Za-z0-9._-]+\.json$/.test(l.table)) table = `ssb/ct/${l.table}`;
-            else if (/^\.\.\/geometry\/[A-Za-z0-9._-]+\.json$/.test(l.table)) table = `ssb/geometry/${l.table.slice(12)}`;
+            if (/^[A-Za-z0-9._-]+\.json$/.test(l.table)) table = `${root}/ct/${l.table}`;
+            else if (/^\.\.\/geometry\/[A-Za-z0-9._-]+\.json$/.test(l.table)) table = `${root}/geometry/${l.table.slice(12)}`;
         }
-        labels = { file: `ssb/ct/${l.file}`, table };
+        labels = { file: `${root}/ct/${l.file}`, table };
     }
     return {
         dtype: meta.dtype, range: VALUE_RANGE[meta.dtype].slice(), levels,
@@ -497,18 +498,18 @@ export function applyPatch(volume, patch) {
 /* Fetch and decode the volume. fetchFn is injectable for tests. Missing
    ct.json -> VolumeError('absent'); missing labels -> a volume without
    them (CT mode then has no overlay). */
-export async function loadVolume({ fetchFn = (url) => fetch(url) } = {}) {
+export async function loadVolume({ fetchFn = (url) => fetch(url), root = 'ssb' } = {}) {
     let res;
     try {
-        res = await fetchFn(stamped(CT_META));
+        res = await fetchFn(stamped(`${root}/ct/ct.json`));
     } catch (e) {
         throw new VolumeError('network', 'The CT header could not be fetched.');
     }
-    if (res.status === 404) throw new VolumeError('absent', 'ssb/ct/ct.json was not found.');
+    if (res.status === 404) throw new VolumeError('absent', `${root}/ct/ct.json was not found.`);
     if (!res.ok) throw new VolumeError('network', `ct.json: HTTP ${res.status}.`);
     let meta;
     try { meta = await res.json(); } catch (e) { throw new VolumeError('invalid', 'ct.json is not valid JSON.'); }
-    const header = parseHeader(meta);
+    const header = parseHeader(meta, root);
     const count = header.dims[0] * header.dims[1] * header.dims[2];
 
     const binary = async (file, expected, required) => {
@@ -535,7 +536,7 @@ export async function loadVolume({ fetchFn = (url) => fetch(url) } = {}) {
 
     const i16 = header.dtype === 'int16';
     const [ctBuf, labBuf, tableDoc] = await Promise.all([
-        binary(i16 ? CT_DATA_I16 : CT_DATA, i16 ? count * 2 : count, true),
+        binary(`${root}/ct/${i16 ? 'ct.i16.gz' : 'ct.u8.gz'}`, i16 ? count * 2 : count, true),
         header.labels ? binary(header.labels.file, count * 2, false) : null,
         header.labels && header.labels.table ? json(header.labels.table) : null,
     ]);
@@ -568,4 +569,239 @@ let shared = null;
 export function sharedVolume() {
     if (!shared) shared = loadVolume().catch((e) => { shared = null; throw e; });
     return shared;
+}
+
+/* ---------------- anatomy: bases and patches (docs/realistic-anatomy.md 6.2, docs/ssb.md 5.11) ---------------- */
+
+export const ANATOMY_INDEX = 'ssb/anatomy/index.json';
+const BASE_NAME = /^(?:standard|scanned|scanned-b)$/;
+const ANATOMY_TOKEN = '[a-z0-9]+(?:-[a-z0-9]+)*';
+const ENTITY_ID = new RegExp(`^(?:v|dz)\\.${ANATOMY_TOKEN}$`);
+const PRESET_NAME = new RegExp(`^${ANATOMY_TOKEN}$`);
+const NODE_NAME = /^[a-z]+\.[a-z0-9-]+\.(?:R|L|M)$/;
+const ANATOMY_BOXES_MAX = 16;
+const ANATOMY_VOXELS_MAX = 1 << 24;
+const ANATOMY_NODES_MAX = 64;
+const BAD_ANATOMY = (why) => new VolumeError('invalid', `An anatomy patch is not usable: ${why}.`);
+
+/* The data root a base lives under: the standard head is ssb/ itself (ssb/ct, ssb/geometry, ssb/models never moved),
+   every other base a full copy of that layout in ssb/anatomy/<base>/. Anything else is refused, never joined. */
+export function baseRoot(base) {
+    if (typeof base !== 'string' || !BASE_NAME.test(base)) throw new VolumeError('invalid', 'Unknown anatomy base.');
+    return base === 'standard' ? 'ssb' : `ssb/anatomy/${base}`;
+}
+
+/* A ref { id, side, preset } (the state's variants and conditions) -> the stem its patch and override pack share. Every part
+   is checked against the same patterns the URL whitelist uses, so a path is only ever built from validated tokens. */
+function refStem(ref) {
+    if (!ref || typeof ref.id !== 'string' || !ENTITY_ID.test(ref.id) || !['R', 'L', 'M'].includes(ref.side) || typeof ref.preset !== 'string' || !PRESET_NAME.test(ref.preset)) {
+        throw new VolumeError('invalid', 'An anatomy entry is malformed.');
+    }
+    return `${ref.id}.${ref.side}.${ref.preset}`;
+}
+function knownBase(base) {
+    baseRoot(base);
+    return base;
+}
+export const anatomyPatchFile = (base, ref) => `ssb/anatomy/patches/${knownBase(base)}/${refStem(ref)}.ssbp.gz`;
+export const anatomyOverrideFile = (base, ref) => `ssb/anatomy/overrides/${knownBase(base)}/${refStem(ref)}.glb.gz`;
+
+/* ssb/anatomy/index.json as parsed JSON, or null. The page asks only when stamps.js lists the file (as it does for the
+   dissection index), so a build with no anatomy index makes no request and logs no 404; an unreadable one is null too. */
+export async function loadAnatomyIndex({ fetchFn = (url) => fetch(url) } = {}) {
+    if (!own(STAMPS, ANATOMY_INDEX)) return null;
+    try {
+        const res = await fetchFn(stamped(ANATOMY_INDEX));
+        return res.ok ? await res.json() : null;
+    } catch (e) { return null; }
+}
+
+const dtypeBytes = { u8: 1, i16: 2 };
+const plainObject = (o) => o !== null && typeof o === 'object' && !Array.isArray(o);
+
+/* The bytes of an anatomy patch (gzip or already decoded) -> the patch, validated against everything the header and the
+   body can be checked against without a volume. Layout: u32 LE header length, a JSON header (docs/realistic-anatomy.md
+   6.2: version 1, base, entity, side, preset, params, truth "composite", calibratedOn, assumed, boxes [{ ijk0, dims, ct,
+   labels, sdf }], landmarks, sweeps, replacesNodes, addsNodes), then per box in order its dense arrays, x fastest, little
+   endian: ct (u8, or i16 for a 16-bit head), labels (u16), then one u8 array per `sdf` key in the header's order.
+   `expect` is what the caller asked for ({ base, ref }): a patch made for another base, entity, side or preset is refused.
+   Version 2 or any other is 'unsupported'. Pure: touches no volume (checkAnatomyPatch does that part). */
+export async function parseAnatomyPatch(bytes, expect = {}) {
+    const raw = bytes instanceof ArrayBuffer ? bytes : bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+    const buf = await decode(raw);
+    if (buf.byteLength < 4) throw BAD_ANATOMY('it is shorter than its header length');
+    const view = new DataView(buf);
+    const headLen = view.getUint32(0, true);
+    if (headLen < 2 || headLen > PATCH_HEADER_MAX || 4 + headLen > buf.byteLength) throw BAD_ANATOMY('its header length is wrong');
+    let head;
+    try { head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 4, headLen))); } catch (e) { throw BAD_ANATOMY('its header is not JSON'); }
+    if (!plainObject(head)) throw BAD_ANATOMY('its header is not an object');
+    if (head.version !== 1) throw new VolumeError('unsupported', `An anatomy patch has an unsupported version (${String(head.version)}).`);
+    if (typeof head.base !== 'string' || !BASE_NAME.test(head.base)) throw BAD_ANATOMY('its base is not a known one');
+    if (typeof head.entity !== 'string' || !ENTITY_ID.test(head.entity)) throw BAD_ANATOMY('its entity is not a v.* or dz.* id');
+    if (!['R', 'L', 'M'].includes(head.side)) throw BAD_ANATOMY('its side must be R, L or M');
+    if (typeof head.preset !== 'string' || !PRESET_NAME.test(head.preset)) throw BAD_ANATOMY('its preset is malformed');
+    if (head.truth !== 'composite') throw BAD_ANATOMY('its truth kind must be "composite"');
+    if (expect.base !== undefined && head.base !== expect.base) throw BAD_ANATOMY('it was made for a different base');
+    if (expect.ref && (head.entity !== expect.ref.id || head.side !== expect.ref.side || head.preset !== expect.ref.preset)) throw BAD_ANATOMY('it is not the entry that was asked for');
+    const strings = (list, what, max, pattern = null) => {
+        if (list === undefined) return [];
+        if (!Array.isArray(list) || list.length > max || !list.every((t) => typeof t === 'string' && t.length <= 120 && (!pattern || pattern.test(t)))) throw BAD_ANATOMY(`${what} is malformed`);
+        return list.slice();
+    };
+    const calibratedOn = strings(head.calibratedOn, 'calibratedOn', 16);
+    const assumed = strings(head.assumed, 'assumed', 16);
+    const replacesNodes = strings(head.replacesNodes, 'replacesNodes', ANATOMY_NODES_MAX, NODE_NAME);
+    const addsNodes = strings(head.addsNodes, 'addsNodes', ANATOMY_NODES_MAX, NODE_NAME);
+    if (head.params !== undefined && !plainObject(head.params)) throw BAD_ANATOMY('params must be an object');
+    if (head.sweeps !== undefined && !plainObject(head.sweeps)) throw BAD_ANATOMY('sweeps must be an object');
+    const landmarks = {};
+    if (head.landmarks !== undefined) {
+        if (!plainObject(head.landmarks)) throw BAD_ANATOMY('landmarks must be an object');
+        for (const [key, p] of Object.entries(head.landmarks)) {
+            if (!NODE_NAME.test(key) && !/^[A-Za-z0-9._-]{1,80}$/.test(key)) throw BAD_ANATOMY('a landmark key is malformed');
+            if (!Array.isArray(p) || p.length !== 3 || !p.every(finite)) throw BAD_ANATOMY(`landmark ${key} is not three numbers`);
+            landmarks[key] = p.slice();
+        }
+    }
+    if (!Array.isArray(head.boxes) || head.boxes.length < 1 || head.boxes.length > ANATOMY_BOXES_MAX) throw BAD_ANATOMY('its box list is missing, empty or too long');
+    let total = 0;
+    const spec = head.boxes.map((b) => {
+        const ok = plainObject(b) && Array.isArray(b.ijk0) && Array.isArray(b.dims) && b.ijk0.length === 3 && b.dims.length === 3
+            && b.ijk0.every((n) => Number.isInteger(n) && n >= 0) && b.dims.every((n) => Number.isInteger(n) && n >= 1 && n <= DIM_MAX);
+        if (!ok) throw BAD_ANATOMY('a box has a corner or dimensions that are not whole numbers');
+        if (b.ct !== 'u8' && b.ct !== 'i16') throw BAD_ANATOMY('a box\'s ct must be "u8" or "i16"');
+        if (b.labels !== 'u16') throw BAD_ANATOMY('a box\'s labels must be "u16"');
+        const sdf = b.sdf === undefined ? [] : plainObject(b.sdf) ? Object.entries(b.sdf) : null;
+        if (!sdf || sdf.length > 8 || !sdf.every(([id, t]) => /^[a-z]+\.[a-z0-9-]+$/.test(id) && t === 'u8')) throw BAD_ANATOMY('a box\'s sdf must map graph ids to "u8"');
+        const n = b.dims[0] * b.dims[1] * b.dims[2];
+        total += n;
+        return { ijk0: b.ijk0.slice(), dims: b.dims.slice(), n, ctType: b.ct, sdf: sdf.map(([id]) => id) };
+    });
+    if (total > ANATOMY_VOXELS_MAX) throw BAD_ANATOMY('its boxes hold too many voxels');
+    const need = spec.reduce((t, b) => t + b.n * (dtypeBytes[b.ctType] + 2 + b.sdf.length), 0);
+    if (buf.byteLength !== 4 + headLen + need) throw BAD_ANATOMY('its body is not the size of its boxes');
+    let at = 4 + headLen;
+    const boxes = spec.map((b) => {
+        let ct;
+        if (b.ctType === 'u8') ct = new Uint8Array(buf.slice(at, at + b.n));
+        else { ct = new Int16Array(b.n); for (let i = 0; i < b.n; i++) ct[i] = view.getInt16(at + i * 2, true); }
+        at += b.n * dtypeBytes[b.ctType];
+        const labels = new Uint16Array(b.n);
+        for (let i = 0; i < b.n; i++) labels[i] = view.getUint16(at + i * 2, true);
+        at += b.n * 2;
+        const sdf = {};
+        for (const id of b.sdf) { sdf[id] = new Uint8Array(buf.slice(at, at + b.n)); at += b.n; }
+        return { ijk0: b.ijk0, dims: b.dims, ctType: b.ctType, ct, labels, sdf };
+    });
+    return Object.freeze({
+        version: 1, base: head.base, entity: head.entity, side: head.side, preset: head.preset, truth: 'composite',
+        params: head.params ? { ...head.params } : {}, calibratedOn, assumed, landmarks, sweeps: head.sweeps ? { ...head.sweeps } : {},
+        replacesNodes, addsNodes, boxes,
+    });
+}
+
+/* The checks that need the volume: every box lies inside it, its ct type is the volume's, and every label is in the table.
+   Throws VolumeError('invalid'); returns the patch. */
+export function checkAnatomyPatch(volume, patch) {
+    const dims = volume.dims;
+    const want = volume.dtype === 'int16' ? 'i16' : 'u8';
+    for (const b of patch.boxes) {
+        if (!b.ijk0.every((n, a) => n + b.dims[a] <= dims[a])) throw BAD_ANATOMY('a box lies outside the volume');
+        if (b.ctType !== want) throw BAD_ANATOMY(`a box's ct is ${b.ctType}, the volume's is ${want}`);
+        for (let i = 0; i < b.labels.length; i++) if (b.labels[i] !== 0 && !volume.table.has(b.labels[i])) throw BAD_ANATOMY(`label ${b.labels[i]} is not in the label table`);
+    }
+    return patch;
+}
+
+/* A volume with the patch laid over it: the same API, new arrays (the base is not touched), plus `patchedAt(r, a, s)` (is
+   the voxel nearest that point inside one of the patch's boxes?), `patchedVoxels` and `base`. Each box REPLACES every
+   voxel of its extent, CT and labels (a dense box, 6.2); it changes nothing outside it. A patch's sdf arrays are carried
+   on the patch, not applied here. Pure; Node-testable. */
+export function applyAnatomyPatch(volume, patch) {
+    checkAnatomyPatch(volume, patch);
+    const [nx, ny] = volume.dims;
+    const ct = volume.ct.slice();
+    const labels = volume.labels ? volume.labels.slice() : new Uint16Array(volume.count);
+    let changed = 0;
+    for (const b of patch.boxes) {
+        const [i0, j0, k0] = b.ijk0;
+        const [bx, by, bz] = b.dims;
+        let n = 0;
+        for (let k = 0; k < bz; k++) {
+            for (let j = 0; j < by; j++) {
+                const row = (k0 + k) * nx * ny + (j0 + j) * nx + i0;
+                for (let i = 0; i < bx; i++, n++) { ct[row + i] = b.ct[n]; labels[row + i] = b.labels[n]; }
+            }
+        }
+        changed += b.ct.length;
+    }
+    const derived = createVolume({ header: volume.header, ct, labels, table: volume.table });
+    const patchedAt = (r, a, s) => {
+        const v = volume.toVoxel(r, a, s);
+        const i = Math.round(v[0]);
+        const j = Math.round(v[1]);
+        const k = Math.round(v[2]);
+        return patch.boxes.some((b) => i >= b.ijk0[0] && j >= b.ijk0[1] && k >= b.ijk0[2] && i < b.ijk0[0] + b.dims[0] && j < b.ijk0[1] + b.dims[1] && k < b.ijk0[2] + b.dims[2]);
+    };
+    return Object.assign(derived, { patchedAt, patchedVoxels: changed, base: volume, meta: volume.meta, patches: [...(volume.patches || []), patch] });
+}
+
+async function fetchBytes(fetchFn, file) {
+    let res;
+    try { res = await fetchFn(stamped(file)); } catch (e) { throw new VolumeError('network', `${file} could not be fetched.`); }
+    if (res.status === 404) throw new VolumeError('absent', `${file} was not found.`);
+    if (!res.ok) throw new VolumeError('network', `${file}: HTTP ${res.status}.`);
+    return res.arrayBuffer();
+}
+
+/* One entry's patch, fetched and parsed (volume-free checks only), once per page: the specimen stage reads its node lists
+   and the CT stage lays it over the volume, from the same promise. A failure is forgotten so the next ask retries. */
+const patchLoads = new Map();
+export function loadAnatomyPatch(base, ref, { fetchFn = null } = {}) {
+    const file = anatomyPatchFile(base, ref);
+    const key = fetchFn ? null : file;
+    if (key && patchLoads.has(key)) return patchLoads.get(key);
+    const job = fetchBytes(fetchFn || ((url) => fetch(url)), file).then((bytes) => parseAnatomyPatch(bytes, { base, ref }));
+    if (key) {
+        patchLoads.set(key, job);
+        job.catch(() => patchLoads.delete(key));
+    }
+    return job;
+}
+
+/* Back to the page's start: forget what was fetched (tests; a changed index). */
+export function forgetAnatomy() { patchLoads.clear(); baseLoads.clear(); derivedLoads.clear(); }
+
+const baseLoads = new Map();
+const derivedLoads = new Map();
+const DERIVED_KEEP = 2;       /* each derived volume holds its own CT and label arrays (about 27 MB decoded): keep the last two */
+
+/* The volume of an anatomy ({ base, variants, conditions }, as the store holds it): the base's volume, then each variant's
+   patch and then each condition's, in order. The standard head with nothing on it is the page's shared volume itself. A
+   base other than the standard one is a full ssb/-layout copy under ssb/anatomy/<base>/. Rejects with a VolumeError; a
+   failure is forgotten. `fetchFn` is for tests (nothing is then cached across calls). */
+export function anatomyVolume(anatomy, { fetchFn = null } = {}) {
+    const base = anatomy && anatomy.base ? anatomy.base : 'standard';
+    const refs = anatomy ? [...(anatomy.variants || []), ...(anatomy.conditions || [])] : [];
+    const root = baseRoot(base);
+    const baseVolume = () => {
+        if (fetchFn) return loadVolume({ fetchFn, root });
+        if (base === 'standard') return sharedVolume();
+        if (!baseLoads.has(base)) baseLoads.set(base, loadVolume({ root }).catch((e) => { baseLoads.delete(base); throw e; }));
+        return baseLoads.get(base);
+    };
+    if (!refs.length) return baseVolume();
+    const key = fetchFn ? null : `${base}|${refs.map((r) => `${r.id}.${r.side}.${r.preset}`).join(',')}`;
+    if (key && derivedLoads.has(key)) return derivedLoads.get(key);
+    const job = (async () => {
+        const [vol, ...patches] = await Promise.all([baseVolume(), ...refs.map((r) => loadAnatomyPatch(base, r, { fetchFn }))]);
+        return patches.reduce((v, patch) => applyAnatomyPatch(v, patch), vol);
+    })();
+    if (key) {
+        derivedLoads.set(key, job);
+        job.catch(() => derivedLoads.delete(key));
+        while (derivedLoads.size > DERIVED_KEEP) derivedLoads.delete(derivedLoads.keys().next().value);
+    }
+    return job;
 }

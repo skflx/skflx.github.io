@@ -30,8 +30,8 @@
    `hook` is the read-only test window (window.__ssb.ct).
    ============================================================= */
 import { token, kindForGraph, kindToken, CELL_TINT } from './materials.js?v=34e04a58';
-import { sharedVolume, PLANES } from './volume.js?v=50d70779';
-import { CT_PLANES } from './state.js?v=32a9e616';
+import { sharedVolume, anatomyVolume, loadAnatomyIndex, PLANES } from './volume.js?v=ca255144';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=7455c8cc';
 
 const LITTLE = new Uint8Array(new Uint32Array([1]).buffer)[0] === 1;
 const NEUTRAL_TOKEN = '--ssb-cell-ethmoid';
@@ -59,11 +59,12 @@ const sideText = (side) => (side === 'R' ? ' (right)' : side === 'L' ? ' (left)'
 const fixed = (v, n = 1) => (Math.abs(v) < 0.05 ? 0 : v).toFixed(n);
 
 /* dom: the skeleton ui-ct.js builds (views, caption, tip, letters, readout, msg, truth, live). */
-export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
+export function mountCt({ store, graph, dom, loadFn = sharedVolume, anatomyFn = anatomyVolume, indexFn = loadAnatomyIndex }) {
     const { root } = dom;
     const views = {};
     let vol = null;
     let status = 'idle';         /* idle | loading | ready | absent | error */
+    let loadedKey = '';          /* the anatomy the loaded (or loading) volume is for: '' is the standard head */
     let problem = '';
     let valueMin = VALUE_RANGE_U8[0];
     let valueMax = VALUE_RANGE_U8[1];
@@ -461,7 +462,7 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
 
     function showMessage() {
         const text = status === 'loading' ? 'Loading the CT volume…'
-            : status === 'absent' ? 'There is no CT volume in this build yet (ssb/ct/ct.json was not found). The structure list, search and panels still work.'
+            : status === 'absent' ? (loadedKey ? 'There is no CT volume for this anatomy in this build yet. The structure list, search and panels still work.' : 'There is no CT volume in this build yet (ssb/ct/ct.json was not found). The structure list, search and panels still work.')
                 : status === 'error' ? `The CT volume could not be loaded. ${problem}` : '';
         dom.msg.textContent = text;
         dom.msg.hidden = !text;
@@ -474,7 +475,8 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
         showMessage();
         if (status === 'ready') {
             const h = vol.header;
-            dom.truth.textContent = `Specimen CT · ${h.specimen || 'unnamed'} · n = 1 · ${h.values.kind === 'display' ? 'display values, not HU' : 'HU'}`;
+            const edits = (vol.patches || []).map((p) => `${graph.has(p.entity) ? graph.nameOf(p.entity) : p.entity} ${p.side} (${p.preset})`);
+            dom.truth.textContent = `Specimen CT · ${h.specimen || 'unnamed'} · n = 1 · ${h.values.kind === 'display' ? 'display values, not HU' : 'HU'}${edits.length ? ` · edited: ${edits.join('; ')} · composite, schematic` : ''}`;
             dom.truth.title = h.values.note || '';
             dom.truth.hidden = false;
         } else dom.truth.hidden = true;
@@ -596,14 +598,21 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
 
     /* ---------------- loading ---------------- */
 
+    /* The anatomy the CT shows: a pending or plain-standard stack is the shared volume itself (loadFn), anything else is the
+       anatomy loader's (a scanned base, with or without patches laid over it). The key says which one a volume is for. */
+    const anatomyKey = (a) => (anatomyIsDefault(a) ? '' : `${a.base}|${[...a.variants, ...a.conditions].map((r) => `${r.id}.${r.side}.${r.preset}`).join(',')}`);
+
     async function start() {
         if (status === 'loading' || status === 'ready') return;
         status = 'loading';
         problem = '';
+        const anatomy = store.get().anatomy;
+        loadedKey = anatomyKey(anatomy);
         syncStage();
         emit();
         try {
-            vol = await loadFn();
+            vol = loadedKey ? await anatomyFn(anatomy) : await loadFn();
+            if (loadedKey !== anatomyKey(store.get().anatomy)) { status = 'idle'; return start(); }      /* the anatomy changed while it loaded */
         } catch (e) {
             vol = null;
             status = e && e.code === 'absent' ? 'absent' : 'error';
@@ -637,6 +646,13 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
             if (!state.ct || !prev.ct || state.ct.plane !== prev.ct.plane) syncStage();
             if (status === 'ready' && state.ct) { readout(); markAll(); }
             emit();
+        }
+        if (state.anatomy !== prev.anatomy && anatomyKey(state.anatomy) !== loadedKey && status !== 'idle' && status !== 'loading') {
+            status = 'idle';          /* another head: load it when the stage is on show, else on the next visit */
+            loadedKey = '';
+            syncStage();
+            if (state.ct) start();
+            else emit();
         }
         if (state.selection !== prev.selection && status === 'ready') {
             readSelection();
@@ -675,6 +691,9 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
     root.hidden = !store.get().ct;
     syncStage();
     if (store.get().ct) start();
+    /* The anatomy index is read once, here (CT needs only the graph, so this mounts on every page): the store then
+       whitelists the link's anatomy against it. A page with no index resolves it to the standard head. */
+    Promise.resolve().then(() => indexFn()).catch(() => null).then((doc) => store.setAnatomyRegistry(doc));
 
     /* ---------------- the test window ---------------- */
 
@@ -690,6 +709,9 @@ export function mountCt({ store, graph, dom, loadFn = sharedVolume }) {
         get renders() { return { ...renders }; },
         get hover() { return hover ? { ...hover } : null; },
         get problem() { return problem; },
+        get anatomy() { return { key: loadedKey, status, patchedVoxels: vol && vol.patchedVoxels ? vol.patchedVoxels : 0, patches: vol && vol.patches ? vol.patches.map((p) => `${p.entity}.${p.side}.${p.preset}`) : [] }; },
+        labelAt: (ras) => (vol && vol.hasLabels ? vol.labelAt(ras[0], ras[1], ras[2]) : null),
+        patchedAt: (ras) => (vol && vol.patchedAt ? vol.patchedAt(ras[0], ras[1], ras[2]) : false),
         get selectedLabels() { return [...selected]; },
         describeAt: (ras) => describeAt(ras),
         rasAt: (plane, x, y) => (status === 'ready' ? rasFromClient(plane, x, y) : null),
