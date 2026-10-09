@@ -58,6 +58,14 @@ as-scanned labels (`score-RS1.json`). `rs/declared.json` is the label set RS com
 The candidate is in the as-scanned frame (the tips' frame), not the standardized one. Method and limits: the script's
 docstring; `docs/realistic-anatomy.md` section 7.2 and WP RS1.
 
+Lamella sheets (WP RS2; same inputs and sandbox as above, `reseg.py sheets|export2|score2`, or `rs2` for the three):
+`rs/sheets.json` holds the sheetness filter's parameters and, per lamella, the rules that name a sheet (the uncinate process,
+basal, bullar and superior-turbinate ground lamellae, the sphenoid face and the intersinus septum), every number a named
+parameter. A sheet is named only when exactly one candidate per side meets every rule; otherwise it stays unassigned and the
+per-rule scores of its best candidates are in `incoming/_rs/sheets-report.json`. `--rules ALT.json` runs the same code on
+another rule file (a what-if for review). Outputs are candidates under `incoming/_rs/` (`candidate-RS2/`, `score-RS2.json`,
+`review/*.png`, each PNG listing the UW stack frame and FG1 figures to compare with); nothing in `ssb/` changes.
+
 Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
 
     .venv/bin/python tools/ssb-pipeline/uw/specimen.py   # -> ssb/ct/{ct.json,ct.u8.gz,labels.u16.gz},

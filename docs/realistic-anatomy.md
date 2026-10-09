@@ -1144,7 +1144,7 @@ Escalate: the seed-only rebuild loses a compartment outright (a structure whose 
 ```
 
 ```
-### RS2 — Lamella sheets and their identity      [ready] · Sonnet (filter, plumbing) + Opus (rules review) · depends: RS1
+### RS2 — Lamella sheets and their identity      [review 2026-10-09; Escalate fired: the septum and the ethmoid lamellae are unassigned, see the PR] · Sonnet (filter, plumbing) + Opus (rules review) · depends: RS1
 Goal:     the uncinate process, basal lamella, bullar lamella and the superior turbinate's
           ground lamella (s.ethmoid-ground-lamellae) as labelled sheets on the native grid,
           found by a sheetness filter
