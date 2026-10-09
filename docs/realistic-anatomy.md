@@ -332,9 +332,9 @@ site.
    them. (Contributor names on Radiopaedia are required attribution under
    its licence; the UW no-names rule does not apply to them.)
 3. **Curated, small, polite.** A shortlist of cases (target 25–40, Opus
-   picks, the owner may veto), fetched by an agent one case at a time with
-   a pause between requests (RA-O5), cached in the gitignored drop zone,
-   never in CI.
+   picks, the owner may veto), cached in the gitignored drop zone, never in
+   CI. Who fetches is RA-O5, reopened: the site challenges non-browser
+   clients, and no agent works around it.
 4. **Per case, record**: rID, URL, title, contributor, licence line as shown,
    modality, plane(s), series description, slice count, apparent window,
    contrast, whether the stack is complete or key images only, burned-in
@@ -923,7 +923,15 @@ Steps:    1. Annotation mask: pixels ≥ 250 in thin components (verify per imag
 Accept:   figures.json validates (a schema check added to check-data or a pipeline self-test);
           every figure has plane, window, ≥ 1 graph id or an explicit null with reason; Opus
           spot-check of 15 figures' tips (checkpoint item).
-Escalate: annotation and bone overlap in > 10 % of figures.
+Escalate: annotation and bone overlap in > 10 % of the bone-window figures.
+Ruling:   (Opus, 2026-10-09, after the first run measured 15 of 89 figures with saturated
+          bone/contrast at the annotation value) the soft-tissue and post-contrast figures
+          are recorded in full (plane, window, contrast, caption, abbreviation map, ids,
+          role, group) with `arrows: null` and the reason "annotation not separable by
+          threshold (saturated window)"; tips are traced on the bone-window figures only,
+          each figure's thin-component mask checked (not a sample). `figures.py` unescapes
+          HTML entities in `src` (`Sag.OMU&amp;Sps.jpg`). The rapidocr pin in requirements.txt
+          is updated to the version that installs, with the version recorded in the README.
 ```
 
 ```
@@ -980,6 +988,14 @@ Touch:    ssb/reference/radiopaedia/cases.json, README.md (method, licence).
 Don't:    download stacks in this WP (RP2 does); record a case whose licence line differs
           from CC BY-NC-SA 3.0 without flagging it.
 Accept:   every record complete (§4.3 item 4); every queue item has a case or "none found".
+Ruling:   (Opus, 2026-10-09) radiopaedia.org serves an anti-bot challenge to non-browser
+          clients ("unsanctioned scraping by bots"). No agent works around it: no scripted
+          browser, no header spoofing, no curl of case pages. Records are built from search
+          results only (rID, URL, title, contributor, tags, the snippet's own words). Every
+          field only the case page shows (licence line, planes, series, slice counts,
+          contrast, complete vs key images, burned-in text) is the string "owner reads",
+          never inferred. The shortlist is ranked so the owner reads at most 40 pages. RA-O5
+          is reopened (§13), and RP2 waits on it.
 ```
 
 ```
@@ -1199,7 +1215,7 @@ Answered by the owner on 2026-10-07 unless marked open.
 | RA-O2 | Add **composite** as a fourth truth kind (§2.2)? | **Yes.** |
 | RA-O3 | Default base for Variants/Pathology? | **`scanned`** — variants and pathology should look realistic, so they sit on the real asymmetric head; `standard` is one click away. |
 | RA-O4 | May Radiopaedia-derived data (and images) be committed? | **Yes** — the cases are public; attribute (contributor, Radiopaedia.org, rID, as links) and do not monetize, which this site does not. ShareAlike: derived files carry CC BY-NC-SA 3.0 in their own folder. |
-| RA-O5 | Who downloads Radiopaedia stacks? | An agent may fetch them, one case at a time, politely, from the shortlist (follows from RA-O4). |
+| RA-O5 | Who downloads Radiopaedia stacks? | An agent may fetch them, one case at a time, politely, from the shortlist (follows from RA-O4). **Reopened 2026-10-09:** the site now challenges non-browser clients as unsanctioned scraping, so an agent may not fetch. Options for the owner: ask Radiopaedia for sanctioned access (its Developers/licensing contact), or download the ≤ 40 chosen cases in a browser into the drop zone. RP2 waits. |
 | RA-O6 | Use **NasalSeg** (CC BY 4.0, 130 CTs) for population asymmetry statistics? | **Yes** — started as WP POP0. |
 | RA-O7 | Author names remain in **git history** before 2026-10-07. Rewriting `master` history is destructive (force-push, every clone and open PR breaks). | *Open.* Recommended: leave history; the names are gone from the tree and RA0d keeps them out. Rewrite only if the authors ask. |
 | RA-O8 | Scope of batch 3 (soft-tissue/contrast complications with a synthetic channel) | *Open.* Recommended: plan it only after batches 1–2 are verified. |
