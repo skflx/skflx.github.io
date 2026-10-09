@@ -1209,6 +1209,45 @@ Ruling:   (Opus, 2026-10-09, from RS1 #156) the seed-only rebuild gives the left
           s.intersinus-septum (both in the graph); an accessory septum is
           s.accessory-sphenoid-septum. RS1's two null ids (posterior ethmoidal canal,
           nasolacrimal canal) are content work before RS5, not RS2's.
+Ruling 2: (Opus, 2026-10-09, on #158) RS2 is split. RS2a = the filter, the sphenoid face and the
+          intersinus septum, export and score: it is #158, merged once (1) and (2) below are in.
+          (1) Septum rule form: a septum faces bone only where it inserts, so
+              `sphenoid_air_on_both_faces` is measured over the sheet's interior (voxels farther
+              than 1.5 mm from where it meets another wall), threshold unchanged at 0.5. It is a
+              change of form, argued from anatomy; lowering the threshold after seeing 0.49 would
+              be tuning and is not allowed. If the septum still fails, .L stays RS1's split and
+              the PR says so.
+          (2) declared.json follows the graph: s.basal-lamella-vertical is the anterior,
+              near-coronal part; s.basal-lamella-horizontal the posterior, near-axial part.
+          The face's ≤ 3 mm gap fill (ostium, seams) stands, recorded as a wall-position call.
+          The 1,100-line size is accepted for #158 (candidate-only code); later RS WPs keep the
+          800-line stop.
+```
+
+```
+### RS2b — Ethmoid lamellae                    [ready after RS2a] · Sonnet · depends: RS2a
+Goal:     name the middle turbinate's vertical lamella, the basal lamella, the uncinate and the
+          bullar lamella (R) with the RS2 method, and split anterior from posterior ethmoid at the
+          basal lamella instead of the proxy.
+Read:     RS2's WP text and both rulings; #158's body (per-rule failures, review PNGs).
+Touch:    reseg.py, rs/sheets.json, declared.json status, README, this WP's status line.
+Don't:    change a threshold after seeing its score; read held-out tips; change served files.
+Steps:    1. Middle turbinate vertical lamella (s.middle-turbinate, the graph's id): a sagittal
+             sheet medial to the ethmoid air and lateral to the olfactory cleft, reaching the
+             cribriform plate / skull base superiorly, with a free inferior edge in nasal-cavity
+             air. Named first; it replaces "ridge near the MT seeds" as the basal lamella's medial
+             target (touch within the existing reach).
+          2. Uncinate: candidates that pass every rule and lie within the assembly tolerance of
+             each other (gap and angle as the face's, named parameters) are fragments of one
+             sheet and are assembled before the uniqueness test; two that are not are still a tie
+             and are escalated.
+          3. Bullar lamella: R only. L waits for RS3 (the bulla is a cell; RS1 has no .L bulla air
+             without held-out tips).
+          4. Basal split as RS2 step 3, now on a named sheet; vertical/horizontal parts per the
+             graph (Ruling 2).
+Accept:   as RS2's, for these sheets; plus each sheet's rule-set history disclosed as in #158.
+Escalate: as RS2's; also when the MT lamella cannot be named (then RS2b stops: the basal
+          lamella has nothing to attach to).
 ```
 
 ```
