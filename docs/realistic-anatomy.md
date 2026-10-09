@@ -1248,6 +1248,24 @@ Steps:    1. Middle turbinate vertical lamella (s.middle-turbinate, the graph's 
 Accept:   as RS2's, for these sheets; plus each sheet's rule-set history disclosed as in #158.
 Escalate: as RS2's; also when the MT lamella cannot be named (then RS2b stops: the basal
           lamella has nothing to attach to).
+Ruling:   (Opus, 2026-10-09, on RS2b's escalation, branch claude/RS2b-ethmoid-lamellae) rule set
+          v3, a change of form disclosed as such:
+          (1) middle turbinate: `reaches_cribriform_roof` taken per air column was vacuous (any
+              sheet in air touches its own column's roof). It becomes: the sheet's top lies
+              within 2 mm of the olfactory cleft's roof, i.e. the highest nasal-cavity air medial
+              to the sheet, taken as the median over the sheet's a-range. The "free inferior
+              edge" is replaced: the turbinate's body is curled bone with mucosa, not a free
+              edge, so the rule is that the sheet's lower half has nasal-cavity air on both
+              faces (the common meatus medially, the middle meatus laterally), fraction over
+              its interior as RS2a's septum rule, threshold 0.5.
+          (2) v2's right-side passer is not removed by hand: v3 must reject it on its own, or
+              the WP escalates again with the per-rule scores.
+          (3) scope: RS2b is the middle turbinate and the basal lamella (with its split). The
+              uncinate's two right passers are 6.2 mm and 77 deg apart: a real tie, so it waits
+              for RS4, where the infundibulum and hiatus air give it a defining target (the sheet
+              between the infundibulum and the middle meatus). The bullar lamella waits for
+              RS3's bulla cell. Both are recorded as deferred, not failed.
+          (4) The assembly angle is the filter's 15 deg, as used.
 ```
 
 ```
