@@ -1,0 +1,314 @@
+{
+ "version": 1,
+ "doc": "The ids resegmentation commits to label (docs/realistic-anatomy.md section 7.1 \"Baseline\", WP RS1). `step` is the RS work package that adds the label; `status` is \"done\" once that step's candidate labels it (score.py --declared reports coverage over the done ids and over all). An entry with \"id\": null is a term the graph has no id for: listed for Opus, never invented. Sided ids are covered when both R and L are labelled; \"midline\" ids when M is.",
+ "not_rs": [
+  {
+   "id": "s.nasal-vestibule",
+   "note": "labelled by normalize.py from the nose pack (ST6), not by resegmentation"
+  }
+ ],
+ "ids": [
+  {
+   "id": "s.nasal-cavity",
+   "term": "nasal cavity",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.maxillary-sinus",
+   "term": "maxillary sinus",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.frontal-sinus",
+   "term": "frontal sinus",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.frontal-recess",
+   "term": "frontal recess",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.sphenoid-sinus",
+   "term": "sphenoid sinus",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.anterior-ethmoid-cells",
+   "term": "anterior ethmoid cells",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.posterior-ethmoid-cells",
+   "term": "posterior ethmoid cells",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.agger-nasi-cell",
+   "term": "agger nasi cell",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.ethmoid-bulla",
+   "term": "ethmoid bulla",
+   "step": "RS1",
+   "status": "done"
+  },
+  {
+   "id": "s.nasopharynx",
+   "term": "nasopharynx",
+   "step": "RS1",
+   "status": "done",
+   "midline": true
+  },
+  {
+   "id": "s.uncinate-process",
+   "term": "uncinate process",
+   "step": "RS2",
+   "status": "pending",
+   "note": "labelled as a sheet in RS2; the removable bone unit is RS6 (same id)"
+  },
+  {
+   "id": "s.basal-lamella",
+   "term": "basal lamella",
+   "step": "RS2",
+   "status": "pending",
+   "note": "replaces the RS1 proxy plane, same id, method recorded"
+  },
+  {
+   "id": "s.basal-lamella-vertical",
+   "term": "basal lamella, vertical (sagittal) part",
+   "step": "RS2",
+   "status": "pending"
+  },
+  {
+   "id": "s.basal-lamella-horizontal",
+   "term": "basal lamella, horizontal (coronal) part",
+   "step": "RS2",
+   "status": "pending"
+  },
+  {
+   "id": "s.bullar-lamella",
+   "term": "bullar lamella",
+   "step": "RS2",
+   "status": "pending"
+  },
+  {
+   "id": "s.ethmoid-ground-lamellae",
+   "term": "ground lamella of the superior turbinate",
+   "step": "RS2",
+   "status": "pending",
+   "note": "no own id for the superior turbinate's ground lamella: the concept id is used; a new id is content work for Opus"
+  },
+  {
+   "id": "v.supra-agger-cell",
+   "term": "supra agger cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.supra-agger-frontal-cell",
+   "term": "supra agger frontal cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.suprabullar-cell",
+   "term": "suprabullar cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.suprabullar-frontal-cell",
+   "term": "suprabullar frontal cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.supraorbital-ethmoid-cell",
+   "term": "supraorbital ethmoid cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.frontal-septal-cell",
+   "term": "frontal septal cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.infraorbital-ethmoid-cell",
+   "term": "infraorbital ethmoid (Haller) cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "v.sphenoethmoidal-cell",
+   "term": "sphenoethmoidal (Onodi) cell",
+   "step": "RS3",
+   "status": "pending",
+   "note": "variant id, not a structure id: whether a cell instance carries it, or an s.* id plus a classification, is for the RS3 spec (Opus)"
+  },
+  {
+   "id": "s.frontal-ostium",
+   "term": "frontal ostium",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.maxillary-natural-ostium",
+   "term": "maxillary natural ostium",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.sphenoid-ostium",
+   "term": "sphenoid ostium",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.ethmoid-infundibulum",
+   "term": "infundibulum",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.hiatus-semilunaris",
+   "term": "hiatus semilunaris",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.middle-meatus",
+   "term": "middle meatus",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.superior-meatus",
+   "term": "superior meatus",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.inferior-meatus",
+   "term": "inferior meatus",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.sphenoethmoidal-recess",
+   "term": "sphenoethmoidal recess",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.olfactory-cleft",
+   "term": "olfactory cleft",
+   "step": "RS4",
+   "status": "pending"
+  },
+  {
+   "id": "s.optic-canal",
+   "term": "optic canal",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.vidian-canal",
+   "term": "vidian canal",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.foramen-rotundum",
+   "term": "foramen rotundum",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.petrous-carotid-canal",
+   "term": "carotid canal",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.carotid-prominence",
+   "term": "carotid prominence",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.anterior-ethmoidal-canal",
+   "term": "anterior ethmoidal canal",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.infraorbital-canal",
+   "term": "infraorbital canal",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": "s.sphenopalatine-foramen",
+   "term": "sphenopalatine foramen",
+   "step": "RS5",
+   "status": "pending"
+  },
+  {
+   "id": null,
+   "term": "posterior ethmoidal canal",
+   "step": "RS5",
+   "status": "pending",
+   "note": "no canal id in the graph (s.posterior-ethmoidal-foramen is the foramen; s.anterior-ethmoidal-canal exists): for Opus"
+  },
+  {
+   "id": null,
+   "term": "nasolacrimal canal",
+   "step": "RS5",
+   "status": "pending",
+   "note": "no canal id in the graph (s.nasolacrimal-duct is the duct): for Opus"
+  },
+  {
+   "id": "s.superior-turbinate",
+   "term": "superior turbinate",
+   "step": "RS6",
+   "status": "pending"
+  },
+  {
+   "id": "s.crista-galli",
+   "term": "crista galli",
+   "step": "RS6",
+   "status": "pending"
+  },
+  {
+   "id": "s.anterior-clinoid-process",
+   "term": "anterior clinoid",
+   "step": "RS6",
+   "status": "pending"
+  },
+  {
+   "id": "s.pterygoid-process",
+   "term": "pterygoid process",
+   "step": "RS6",
+   "status": "pending"
+  }
+ ]
+}

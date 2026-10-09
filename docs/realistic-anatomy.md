@@ -1101,7 +1101,7 @@ Escalate: any cell the rules cannot classify that an expert would name; any wall
 ```
 
 ```
-### RS1 — Native-grid working volume and the honest baseline   [ready] · Sonnet · depends: RS0, CP-RA1
+### RS1 — Native-grid working volume and the honest baseline   [review: harness built; Escalate fired for the left lateral sphenoid recess, see the PR] · Sonnet · depends: RS0, CP-RA1
 Goal:     a resegmentation harness that rebuilds today's air labels on the native grid from
           SEED tips only, exports a candidate the scorer reads, and records the honest
           baseline and the declared label set every later RS step is scored against.
