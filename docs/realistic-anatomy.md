@@ -994,6 +994,21 @@ Ruling:   (Opus, 2026-10-09, on the first run's four gates) no gate is relaxed f
           when charts are absent); walls.py runs unmodified. Default base: resolveAnatomy uses
           the index's default base only when a link names a variant or condition, so a plain
           visit stays on the standard head; keep that, and test it.
+Ruling 2: (Opus, 2026-10-09, on draft #152) (1) The Specimen stage draws the base's own packs:
+          Touch adds js/ssb/geo-specimen.js and js/ssb/mode-specimen.js, which load
+          `<baseRoot(base)>/models/packs.json` when state.anatomy.base is not `standard`;
+          test-ssb runs the specimen section (placement, picking, laterality on screen) on
+          the scanned base too. "Normal asymmetry" must never draw the mirrored head.
+          (2) The ±5 % check against §3 is replaced by exact accounting: the pipeline prints
+          a label transition table (as-scanned label -> scanned-base label, voxel counts) and
+          attributes every changed class to a named step (vestibule split, valve, nose
+          unmask, wall units). Tissue voxels that became an air label, or the reverse, are
+          an escalation with their counts; the turbinate's loss against the as-scanned
+          labels is explained by that table, not tolerated. (3) The state's note states
+          hypotheses as hypotheses ("may", "consistent with"), names cavity+vestibule as
+          the comparison closest to NasalSeg's nasal cavity, and says the comparison is not
+          like for like: NasalSeg labels CT at its HU threshold, this head's labels sit on
+          display levels of a screen capture (ssb/LICENSE-data.md).
 ```
 
 ```
