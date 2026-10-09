@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/ssb.css?v=1c233153">
+    <link rel="stylesheet" href="css/ssb.css?v=2acbcd4a">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -62,6 +62,13 @@
                     <button class="site-pill" type="button" data-stage="ct" aria-pressed="false" disabled title="Triplanar CT of the reference specimen">CT</button>
                     <button class="site-pill" type="button" data-stage="scope" aria-pressed="false" disabled title="Endoscope: first-person view through a rigid scope">Scope</button>
                 </div>
+                <div class="ssb-anatomy" id="ssb-anatomy" role="group" aria-label="Anatomy">
+                    <span class="site-kicker">Anatomy</span>
+                    <button class="site-pill active" type="button" data-anat="standard" aria-pressed="true" disabled title="The standardized head: one head&rsquo;s right half, mirrored, septum centred">Symmetric</button>
+                    <button class="site-pill" type="button" data-anat="scanned" aria-pressed="false" disabled title="The head as scanned, with its own asymmetry (not in this build yet)">Normal asymmetry</button>
+                    <button class="site-pill" type="button" data-anat="variants" aria-pressed="false" disabled title="Anatomic variants (none in this build yet)">Variants</button>
+                    <button class="site-pill" type="button" data-anat="pathology" aria-pressed="false" disabled title="Pathology (none in this build yet)">Pathology</button>
+                </div>
             </div>
             <div class="ssb-stage" id="ssb-stage">
                 <canvas id="ssb-canvas" tabindex="0" aria-label="3D stage: the reference specimen or a variant-lab diorama. Drag to orbit, scroll to zoom, arrow keys to pan; click a structure to open it, click the same spot again to step to the next one under it."></canvas>
@@ -102,7 +109,7 @@
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=fc5e6916"></script>
+    <script type="module" src="js/ssb/main.js?v=87179dbb"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>
