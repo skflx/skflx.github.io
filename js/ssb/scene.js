@@ -30,7 +30,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { OrbitControls } from '../vendor/three-0.186.1/examples/jsm/controls/OrbitControls.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=b121b3b4';
+import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=34e04a58';
 
 export { rasToScene };
 

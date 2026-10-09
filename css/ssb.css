@@ -61,6 +61,8 @@
   /* A computed flow pathway and its particles. */
   --ssb-flow: #159EC4;
   --ssb-flow-particle: #E8FBFF;
+  /* The population ghost (NasalSeg majority shape): a shape drawn from a population, the science signal. */
+  --ssb-ghost: var(--signal-2);
   /* Hazard sites are hatched with this (never colour alone: the HUD names them). */
   --ssb-hazard: #231815;
   /* Parts of the selected entity glow with this. */
@@ -126,6 +128,7 @@ html[data-theme="dark"] {
   --ssb-cell-fsc: #5A8BE0;
   --ssb-flow: #3CC8EE;
   --ssb-flow-particle: #F2FDFF;
+  --ssb-ghost: var(--signal-2);
   --ssb-hazard: #120C0A;
   --ssb-select: #FFC233;
   --ssb-ct-bg: #060708;

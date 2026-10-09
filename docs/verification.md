@@ -326,6 +326,17 @@ hides, the erectile remnants show), the pills swap states and the hash follows, 
 plays decongested and greys the toggle, and hostile `mu` values are ignored. Judging how the
 decongested lining looks (turbinates, the middle meatus) stays a human check.
 
+**Population sinus** (`tools/ssb-pipeline/nasalseg/meanshape.py`, `js/ssb/ui-population.js`,
+`geo-specimen.js`, `mode-specimen.js`; `docs/ssb.md` §5.10; `node tools/test-ssb.mjs --only population`)
+pins: the pack is at most 300 kB, flagged `population` (never loaded at boot) and its nodes are the maxillary
+sinus's graph id plus a side and `@nasalseg-majority`; the `meanShape` key's volumes sit within 15 % of the
+medians beside them and its alignment RMS 95th percentile within 6 mm; in the page, the toggle is off and the
+pack deferred at boot, the caption's numbers equal the file's, on loads two ghost nodes (unlit, translucent,
+not depth-writing) whose boxes lie beside the specimen's own sinus on the same side, the selection never
+highlights a ghost, off gives the pack back and a second ask loads it again, and a file without `meanShape`
+keeps the section with no toggle. Re-running `meanshape.py` must reproduce the pack, the manifest entry and the JSON
+byte for byte. Judging how the ghost reads beside the sinus stays a human check.
+
 **Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
 `docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
 the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the

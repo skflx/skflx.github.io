@@ -146,6 +146,13 @@ position, and measures the maxillary sinuses and nasal cavities. `review.json` h
 were made from. It also measures head A (as scanned, from git) the same way. Method and limits: the script's
 docstring; results and their reading: `docs/realistic-anatomy.md` §4.4; provenance: `ssb/LICENSE-data.md`.
 
+    .venv/bin/python -I tools/ssb-pipeline/nasalseg/meanshape.py   # POP2b: -> ssb/models/population.glb.gz, packs.json, nasalseg.json "meanShape"
+
+`meanshape.py` (after `stats.py` and `stats.py profiles`) aligns the clear subjects rigidly onto the standard specimen and
+writes the population maxillary sinus (the region at least half of them occupy) as a ghost pack, loaded on demand by the
+Population panel; it prints the alignment RMS and each side's volume beside the population median, and writes nothing if
+either exceeds its limit. Method and limits: the script's docstring; `docs/ssb.md` §5.10.
+
 ## `intake/` — 16-bit heads (WP IN1)
 
     .venv/bin/python -I tools/ssb-pipeline/intake/intake.py convert --in head.nii.gz --landmarks lm.json --name head01 [--spacing 0.5]

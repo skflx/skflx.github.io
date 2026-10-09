@@ -45,17 +45,23 @@
      whose name ends in "@<cut>", is a remnant "<id>.<side>@<cut>" of a base wall, drawn in its place: userData.remnant),
      so they never collide with the base nodes; the others are the state's lining (userData.lining, userData.state).
 
+   - A population pack (packs.json "population": true, POP2b) is the NasalSeg majority maxillary sinus, drawn as a ghost
+     beside the specimen's own: never loaded at boot or by loadLining(); the Population panel's toggle asks for it
+     (loadPopulationPack) and gives it back (unloadPopulationPack). Its nodes (extras kind "ghost") are registered as
+     "population:<id>.<side>" (group ghost, userData.population), so byId, picking and the region list never see them.
+
    The only new three.js importer besides scene.js: one module instance, the
    same unstamped vendor URLs (js/vendor/README.md).
    ============================================================= */
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=f02e3f8a';
-import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=b121b3b4';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=fce69b20';
+import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
 export const LINING_PREFIX = 'lining:';
+export const POPULATION_PREFIX = 'population:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
 export const SWEEPS_FILE = 'ssb/geometry/sweeps.json';
 export const CT_HEADER_FILE = 'ssb/ct/ct.json';
@@ -154,7 +160,7 @@ export function listPacks(doc) {
     const out = [];
     for (const [name, def] of Object.entries(src)) {
         if (!PACK_NAME.test(name) || !def || typeof def.file !== 'string' || !PACK_FILE.test(def.file)) continue;
-        out.push({ name, file: def.file, lining: def.lining === true, stateKey: typeof def.state === 'string' && STATE_KEY.test(def.state) ? def.state : '', nodes: def.nodes && typeof def.nodes === 'object' ? Object.keys(def.nodes) : [] });
+        out.push({ name, file: def.file, lining: def.lining === true, population: def.population === true, stateKey: typeof def.state === 'string' && STATE_KEY.test(def.state) ? def.state : '', nodes: def.nodes && typeof def.nodes === 'object' ? Object.keys(def.nodes) : [] });
     }
     return out.sort((a, b) => (a.name === 'core' ? -1 : 0) - (b.name === 'core' ? -1 : 0));
 }
@@ -171,6 +177,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
 
     const nodes = new Map();           /* "<id>.<side>" -> mesh */
     const packs = new Map();           /* name -> { name, file, state, error, nodes: [keys], expected: [keys] } */
+    let populationLoad = null;         /* loadPopulationPack()'s memoized promise, cleared by unloadPopulationPack() */
     const problems = [];
     let status = 'idle';               /* idle | loading | ready | partial | error | absent */
     let loadDone = null;               /* the promise of load(), awaited by loadLining() */
@@ -198,7 +205,8 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             const cut = isState && typeof u.cut === 'string' && CUT.test(u.cut) ? u.cut : (isState && /@([a-z0-9-]{1,40})$/.exec(nodeName) || [])[1] || '';
             const remnant = isState && cut !== '';
             const lined = !!pack.lining || (isState && !remnant);
-            const key = `${isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
+            const ghost = !!pack.population;
+            const key = `${isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ghost ? POPULATION_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
             if (nodes.has(key)) { problem(`${label} repeats ${key}; skipped.`); continue; }
             const g = mesh.geometry;
             const pos = g && g.attributes ? g.attributes.position : null;
@@ -214,12 +222,12 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             }
             const entity = graph.get(id);
             const extraKind = typeof u.kind === 'string' ? u.kind : '';
-            const { look, group, liningKind = '' } = lined ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
+            const { look, group, liningKind = '' } = ghost ? { look: { kind: 'ghost', ghost: true }, group: 'ghost' } : lined ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
             mesh.parent.remove(mesh);
             mesh.name = key;
             mesh.material.dispose();
             mesh.material = new THREE.MeshBasicMaterial();      /* replaced by mode-specimen per state */
-            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, state: pack.stateKey || '', remnant, cut };
+            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, population: ghost, state: pack.stateKey || '', remnant, cut };
             root.add(mesh);
             nodes.set(key, mesh);
             triangles += tris;
@@ -260,7 +268,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             return status;
         }
         if (!list.length) { status = 'error'; problem('packs.json lists no usable pack.'); return status; }
-        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, stateKey: p.stateKey, nodes: [], expected: p.nodes.map((k) => (p.stateKey ? `state:${p.stateKey}:` : p.lining ? LINING_PREFIX : '') + String(k)) });
+        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, population: p.population, stateKey: p.stateKey, nodes: [], expected: p.nodes.map((k) => (p.stateKey ? `state:${p.stateKey}:` : p.lining ? LINING_PREFIX : p.population ? POPULATION_PREFIX : '') + String(k)) });
 
         const take = async (p, bytesPromise) => {
             const pack = packs.get(p.name);
@@ -281,8 +289,8 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         /* the first pack (core) alone, then a paint, then the rest fetched together */
         const [first, ...all] = list;
         /* the lining pack waits for loadLining() */
-        const rest = all.filter((p) => !p.lining && !p.stateKey);
-        for (const p of all) if (p.lining || p.stateKey) packs.get(p.name).state = 'deferred';
+        const rest = all.filter((p) => !p.lining && !p.stateKey && !p.population);
+        for (const p of all) if (p.lining || p.stateKey || p.population) packs.get(p.name).state = 'deferred';
         await take(first, getPack(fetchFn, first.name, first.file));
         if (disposed) return status;
         /* without the first pack (core: the envelope, the nasal cavity, the frame of everything else) there is no specimen to add to */
@@ -310,7 +318,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 if (loadDone) await loadDone;
                 for (const pack of packs.values()) {
                     if (disposed) return;
-                    if (pack.state !== 'deferred' || pack.stateKey) continue;
+                    if (pack.state !== 'deferred' || pack.stateKey || pack.population) continue;
                     pack.state = 'loading';
                     const before = problems.length;
                     try {
@@ -390,6 +398,54 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         return true;
     }
 
+    /* The population pack (the toggle): fetched once on request, adopted under "population:<id>.<side>" and kept until
+       unloadPopulationPack. Resolves with the nodes it added ([] when packs.json lists no population pack). Never
+       rejects: a pack that cannot be read is recorded as any other. */
+    function loadPopulationPack() {
+        const pack = [...packs.values()].find((p) => p.population);
+        if (!pack) return Promise.resolve([]);
+        if (populationLoad) return populationLoad;
+        populationLoad = (async () => {
+            try {
+                if (loadDone) await loadDone;
+                if (pack.state === 'deferred' || pack.state === 'failed') {
+                    pack.state = 'loading';
+                    try {
+                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        if (disposed) return [];
+                        adopt(scene, pack);
+                        pack.state = 'loaded';
+                    } catch (e) {
+                        pack.state = 'failed';
+                        pack.error = e && e.message ? String(e.message) : 'The pack could not be read.';
+                        problem(pack.error);
+                    }
+                    try { onPackCb(pack); } catch (e) { console.error(e); }
+                }
+            } catch (e) { console.error(e); }
+            return pack.nodes.slice();
+        })();
+        return populationLoad;
+    }
+
+    /* Drop the population pack's meshes: the pack goes back to 'deferred'. */
+    function unloadPopulationPack() {
+        const pack = [...packs.values()].find((p) => p.population);
+        if (!pack || pack.state === 'loading') return false;
+        for (const [k, mesh] of [...nodes]) {
+            if (!mesh.userData.population) continue;
+            triangles -= mesh.userData.triangles || 0;
+            if (mesh.geometry) mesh.geometry.dispose();
+            if (mesh.material && typeof mesh.material.dispose === 'function') mesh.material.dispose();
+            root.remove(mesh);
+            nodes.delete(k);
+        }
+        pack.nodes = [];
+        pack.state = 'deferred';
+        populationLoad = null;
+        return true;
+    }
+
     /* The RAS box of the named nodes (or all): { min, max } in mm, or null. */
     function boundsOf(keys = null) {
         const box = new THREE.Box3();
@@ -414,10 +470,10 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     }
 
     return {
-        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, boundsOf, dispose,
+        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, loadPopulationPack, unloadPopulationPack, boundsOf, dispose,
         get status() { return status; },
         get triangles() { return triangles; },
-        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant),
+        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant && !m.userData.population),
     };
 }
 
