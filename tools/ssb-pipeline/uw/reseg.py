@@ -815,7 +815,7 @@ class Ctx:
         self.samp = np.array([g.sp[2], g.sp[1], g.sp[0]])
         self.air = ct < S.AIR
         self.named = {}                  # (sheet, side) -> Comp
-        self.ridge_pts = None; self.ridge_tree = None   # every ridge voxel, for targets that are 'whatever sheet is near X'
+        self.ridge_pts = None                            # every ridge voxel (the interior test of a probe)
         self.best = {}                   # (sheet, side) -> the best-scoring candidate object, for the review sheet
         self.extra = {}                  # masks and point sets added by later steps (sphenoid air after the face, ...)
         self._c = {}
@@ -884,13 +884,6 @@ class Ctx:
         if kind == 'air':                                         # the surface of the union of these RS1 labels, this side
             m = self.label_mask(arg.split(','), side)
             return self.ras(np.argwhere(m & ~ndi.binary_erosion(m)))
-        if kind == 'ridge_near_seed':                              # every ridge voxel (any component) within r mm of this term's seed tips
-            term, _, rad = arg.rpartition(':')
-            sd = self.seeds(term, side)
-            if not len(sd):
-                return np.zeros((0, 3))
-            near = np.unique(np.concatenate(self.ridge_tree.query_ball_point(sd, float(rad)))).astype(int)
-            return self.ridge_pts[near]
         if kind == 'sheet':
             return np.concatenate([c.p for (n, sd), c in sorted(self.named.items()) if n == arg and (side is None or sd == side)] or [np.zeros((0, 3))])
         if spec == 'lamina_papyracea' or spec == 'skull_base':    # the lateral / upper limit of this side's ethmoid air
@@ -901,6 +894,12 @@ class Ctx:
                 sel = key.argmax(axis=2)
                 kk, jj = np.nonzero(m.any(axis=2))
                 return self.ras(np.column_stack([kk, jj, sel[kk, jj]]))
+            kk = np.arange(m.shape[0])[:, None, None]
+            sel = np.where(m, kk, -1).max(axis=0)
+            jj, ii = np.nonzero(m.any(axis=0))
+            return self.ras(np.column_stack([sel[jj, ii], jj, ii]))
+        if spec == 'cribriform_roof':                              # the roof of this side's nasal-cavity air (the olfactory cleft's roof is the cribriform plate)
+            m = self.mask('labels:s.nasal-cavity', side)
             kk = np.arange(m.shape[0])[:, None, None]
             sel = np.where(m, kk, -1).max(axis=0)
             jj, ii = np.nonzero(m.any(axis=0))
@@ -953,6 +952,12 @@ def eval_rule(rule, c, ctx, sheet_side=None):
         ref = float(np.median(np.abs(ctx.ras(np.argwhere(m[k0:top + 1]) + [k0, 0, 0])[:, 0])))
         v = float(np.median(np.abs(c.p[:, 0])))
         return v <= ref - rule['margin_mm'], round(v - ref, 1), 'median |r| less than the top %g mm of %s by %g mm' % (rule['band_mm'], rule['label'], rule['margin_mm'])
+    if t == 'abs_r_vs_air':                                      # median |r| of the sheet against that of the union of these labels' air
+        m = ctx.label_mask(rule['labels'], side)
+        if not m.any():
+            return False, None, 'no %s air on side %s' % (','.join(rule['labels']), side)
+        ref = float(np.median(np.abs(ctx.ras(np.argwhere(m))[:, 0]))); v = float(np.median(np.abs(c.p[:, 0])))
+        return v <= ref - rule['margin_mm'], round(v - ref, 1), 'median |r| less than that of the %s air by %g mm' % (','.join(rule['labels']), rule['margin_mm'])
     if t == 'relative_to_sheet':
         o = ctx.named.get((rule['sheet'], side))
         if o is None:
@@ -981,6 +986,9 @@ def eval_rule(rule, c, ctx, sheet_side=None):
             return hit
         if rule['dir'] == 'both':
             hit = ray(1.0) & ray(-1.0)
+        elif rule['dir'] in ('medial', 'lateral'):               # along the normal, towards / away from the midline of this side
+            sg = (1.0 if side == 'R' else -1.0) * (1.0 if rule['dir'] == 'lateral' else -1.0)
+            hit = ray(np.where(nrm[:, 0] > 0, sg, -sg)[:, None])
         else:
             hit = ray(sgn_a if rule['dir'] == 'posterior' else -sgn_a)
         v = float(hit.mean()) if len(hit) else 0.0
@@ -1101,7 +1109,8 @@ def evaluate_sheet(name, spec, comps, ctx, side):
             return x
         for i in range(len(passing)):
             for j in range(i + 1, len(passing)):
-                if trees[i].query(passing[j]['comp'].p)[0].min() <= spec['merge_gap_mm']:
+                if trees[i].query(passing[j]['comp'].p)[0].min() <= spec['merge_gap_mm'] and (
+                        'merge_angle_deg' not in spec or abs(float(passing[i]['comp'].axis_vec @ passing[j]['comp'].axis_vec)) >= math.cos(math.radians(spec['merge_angle_deg']))):
                     par[find(i)] = find(j)
         by = {}
         for i, r in enumerate(passing):
@@ -1259,6 +1268,17 @@ def split_ethmoid(ctx, side, c, rule, lab2, index):
             'barrier_vox': rule['barrier_vox'], 'reference_voxels': {'anterior': int(ant.sum()), 'posterior': int(post.sum())}}
 
 
+def basal_parts(c, parts_map, side):
+    """The graph's two parts of the NAMED basal lamella (Ruling 2): a voxel is the horizontal (posterior, near-axial) part where its
+    plate normal is closer to the axial axis than to the coronal one (|n_s| > |n_a|), else the vertical (anterior, near-coronal)
+    part. Written to basal-parts.npz (1 vertical, 2 horizontal); the label volume carries the parent s.basal-lamella only, because
+    score.py scores a tip against one id."""
+    hz = np.abs(c.n[:, 2]) > np.abs(c.n[:, 1])
+    parts_map[tuple(c.vox[~hz].T)] = 1; parts_map[tuple(c.vox[hz].T)] = 2
+    row = lambda m: {'voxels': int(m.sum()), 'area_mm2': round(float(m.sum()) * c.apv, 1), 'centroid_ras': [round(float(x), 1) for x in c.p[m].mean(0)] if m.any() else None}
+    return {'vertical': row(~hz), 'horizontal': row(hz), 'rule': '|n_s| > |n_a| -> horizontal'}
+
+
 def load_sheetness(ct, g, F):
     """The sheetness field is a cache (incoming/_rs/sheet.npz) keyed by the filter parameters; quantised to float16 so a
     rerun with and without the cache sees identical numbers."""
@@ -1296,8 +1316,7 @@ def stage_sheets():
     ctx_fragments = comps
     comps = assemble(comps, F, g, cell)
     ctx = Ctx(g, ct, lab2, index, tips); ctx.F = F
-    from scipy.spatial import cKDTree
-    ctx.ridge_flat = np.ravel_multi_index(vox.T, ct.shape); ctx.ridge_pts = ctx.ras(vox); ctx.ridge_tree = cKDTree(ctx.ridge_pts); ctx.fragments = ctx_fragments
+    ctx.ridge_flat = np.ravel_multi_index(vox.T, ct.shape); ctx.ridge_pts = ctx.ras(vox); ctx.fragments = ctx_fragments
     out = {'filter': {k: F[k] for k in F}, 'ridge_voxels_after_junction_cut': int(len(vox)), 'junction_voxels_cut': n_junction,
            'components_total': int(comp.max() + 1), 'fragments_kept': n_fragments, 'components_kept': len(comps), 'cell_area_mm2_per_voxel': round(cell, 4),
            'seed_tips_only': True, 'sheets': {}}
@@ -1310,8 +1329,8 @@ def stage_sheets():
         named.append(('intersinus-septum', 'M', sep))
     named += [('accessory-sphenoid-septum', c.side, c) for c in sorted(acc, key=lambda c: -c.area)]
     ctx.lab = lab2; ctx._c = {k: v for k, v in ctx._c.items() if k[0] == 'xx'}
-    out['basal_lamella_split'] = {}
-    for sh in ('basal-lamella', 'uncinate', 'bullar-lamella', 'ground-lamella'):
+    out['basal_lamella_split'] = {}; out['basal_lamella_parts'] = {}; parts_map = np.zeros(lab2.shape, np.uint8)
+    for sh in ('middle-turbinate', 'basal-lamella', 'uncinate', 'bullar-lamella', 'ground-lamella'):
         for side in 'RL':
             c, info, _ = evaluate_sheet(sh, cfg['sheets'][sh], comps, ctx, side)
             out['sheets']['%s.%s' % (sh, side)] = info
@@ -1319,6 +1338,7 @@ def stage_sheets():
                 ctx.named[(sh, side)] = c; named.append((sh, side, c))
                 if sh == 'basal-lamella':
                     out['basal_lamella_split'][side] = split_ethmoid(ctx, side, c, cfg['sheets'][sh]['split'], lab2, index)
+                    out['basal_lamella_parts'][side] = basal_parts(c, parts_map, side)
                     ctx._c = {}
             elif sh == 'basal-lamella':
                 out['basal_lamella_split'][side] = {'side': side, 'kept': 'RS1 proxy plane (a = %.2f mm, midway between the seed tips%s)' % (
@@ -1343,6 +1363,8 @@ def stage_sheets():
             lab2[m] = index[nm]
             lab_names['%s.%s#%d' % (sh, sd, c.id)] = {'label': nm, 'voxels': int(m.sum())}
     out['labels'] = lab_names
+    if parts_map.any():
+        save_npz(os.path.join(RS, 'basal-parts.npz'), parts=parts_map)
     out['volumes_cm3'] = {k: vol_cm3(ctx, lab2 == v) for k, v in sorted(index.items()) if (lab2 == v).any()}
     out['index'] = {k: v for k, v in sorted(index.items()) if (lab2 == v).any()}
     save_npz(os.path.join(RS, 'air2.npz'), labels=lab2.astype(np.uint16))
@@ -1511,7 +1533,7 @@ def selftest():
     for nm, sp_ in cfg['sheets'].items():
         for rl in sp_.get('rules', []):
             assert rl['name'] and rl['type'] in ('area_min_mm2', 'extent_min_mm', 'normal_abs', 'reaches', 'abs_r_vs_seed', 'abs_r_vs_air_band',
-                                                 'relative_to_sheet', 'probe', 'inside_mask', 'separates_air', 'any_of'), (nm, rl)
+                                                 'relative_to_sheet', 'probe', 'inside_mask', 'separates_air', 'any_of', 'abs_r_vs_air'), (nm, rl)
         assert sp_['label'] in ids, 'sheets.json names an id the graph does not have: %s' % sp_['label']
     # the basal-lamella machinery on a synthetic box: a complete coronal sheet separates the two references, a holed one does not
     g3 = Grid((0.0, 0.0, 0.0), (1.0, 1.0, 1.0), (20, 20, 20))
@@ -1529,6 +1551,25 @@ def selftest():
     lab_s = lab3.copy(); lab_s[:, :, :] = 1
     split_ethmoid(c3, 'R', plate, rule3, lab_s, ix3)
     assert (lab_s[:, 11:, :] == 1).all() and (lab_s[:, :9, :] == 2).all(), 'split_ethmoid misplaces the sides'
+    # RS2b: a sagittal plate at r=10 with nasal air on its medial side only: the medial probe passes, the lateral one fails, on R; mirrored on L
+    g4 = Grid((-10.0, 0.0, 0.0), (1.0, 1.0, 1.0), (20, 20, 21))                    # r = -10..10 along the last axis
+    lab4 = np.zeros(g4.shape, np.uint16)
+    ix4 = {'s.nasal-cavity.R': 7, 's.nasal-cavity.L': 8}
+    lab4[:, :, 11:20] = 7; lab4[:, :, 1:9] = 8                   # R: air at r = 1..9 (medial of a plate at r = 10); L: air at r = -9..-1
+    c4 = Ctx(g4, np.zeros(g4.shape, np.float32), lab4, ix4, {}); c4.F = Fc
+    kk, jj = np.meshgrid(np.arange(20), np.arange(20), indexing='ij')
+    nrm4 = np.tile([1.0, 0.0, 0.0], (400, 1))
+    for sd, ii, med, lat in (('R', 20, 1, 0), ('L', 0, 1, 0)):
+        pl = Comp(1, np.column_stack([kk.ravel(), jj.ravel(), np.full(400, ii)]), nrm4[:, ::-1], g4, 1.0)
+        ls = [(d, eval_rule({'name': 'x', 'type': 'probe', 'points': 'all', 'dir': d, 'in': 'labels:s.nasal-cavity', 'sided': True, 'probe_mm': 2.0, 'min_fraction': 0.5}, pl, c4, sd)[0]) for d in ('medial', 'lateral')]
+        assert dict(ls) == {'medial': True, 'lateral': False}, (sd, ls)
+    pl = Comp(1, np.column_stack([kk.ravel(), jj.ravel(), np.full(400, 20)]), nrm4[:, ::-1], g4, 1.0)
+    assert eval_rule({'name': 'x', 'type': 'abs_r_vs_air', 'labels': ['s.nasal-cavity'], 'margin_mm': 0.0}, pl, c4, 'R')[0] is False   # the plate is lateral to that air
+    pv, ph = Comp(1, np.array([[0, 0, 0]]), np.array([[0.2, 1.0, 0.0]]), g4, 1.0), Comp(2, np.array([[1, 1, 1]]), np.array([[1.0, 0.2, 0.0]]), g4, 1.0)
+    pm = np.zeros(g4.shape, np.uint8)
+    both = Comp.merge([pv, ph]); bp = basal_parts(both, pm, 'R')
+    assert bp['vertical']['voxels'] == 1 and bp['horizontal']['voxels'] == 1 and pm[0, 0, 0] == 1 and pm[1, 1, 1] == 2, bp
+    print('selftest ok (RS2b): lateral/medial probe, abs_r_vs_air, basal-lamella parts')
     print('selftest ok (sheets): synthetic plate = one component, normal along r; a complete sheet separates the ethmoid references and a holed one does not; sheets.json ids in the graph')
     print('selftest ok: guard refuses a held-out and a forged tip; %d seed tips; regrid rule; %d declared entries' % (len(seeds), len(dec['ids'])))
 

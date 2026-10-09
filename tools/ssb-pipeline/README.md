@@ -66,6 +66,11 @@ per-rule scores of its best candidates are in `incoming/_rs/sheets-report.json`.
 another rule file (a what-if for review). Outputs are candidates under `incoming/_rs/` (`candidate-RS2/`, `score-RS2.json`,
 `review/*.png`, each PNG listing the UW stack frame and FG1 figures to compare with); nothing in `ssb/` changes.
 
+WP RS2b adds the middle turbinate's vertical lamella (`s.middle-turbinate`) as the first ethmoid sheet, ahead of the basal lamella
+whose medial target is now that named sheet; the uncinate's passers are merged within `merge_gap_mm` and `merge_angle_deg`; a
+named basal lamella is split into its graph parts in `incoming/_rs/basal-parts.npz` (the label volume keeps the parent id).
+New rule forms: probe `dir` `medial`/`lateral`, `abs_r_vs_air`, target `cribriform_roof`.
+
 Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
 
     .venv/bin/python tools/ssb-pipeline/uw/specimen.py   # -> ssb/ct/{ct.json,ct.u8.gz,labels.u16.gz},

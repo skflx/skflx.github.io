@@ -1,6 +1,6 @@
 {
- "version": 1,
- "doc": "Rules of the sheet stage (docs/realistic-anatomy.md section 7.2.2, WP RS2), held as data; every number is a named parameter. reseg.py `sheets` reads SEED tips only; no number here was chosen from a held-out tip, and none was changed after a score had been computed. `filter` is the sheetness filter and the cutting of its medial surface into candidates. A candidate is NAMED for a lamella only when exactly one candidate per side meets every rule (touching passers of a sheet with `merge_gap_mm` count as one; `dominance_ratio` is the septum's extra condition); otherwise the lamella is unassigned and every candidate's per-rule scores go to incoming/_rs/sheets-report.json. Distances are mm in the working volume's RAS frame (+r is the patient's right). An `end` is the extreme `end_fraction` of a candidate's voxels along the stated axis; `roi` bounds the candidate's centroid (|r|, a, s); a `probe` looks along the plate normal, up to `probe_mm` each way; `late` rules (the expensive ones) are evaluated only when the earlier rules pass.",
+ "version": 2,
+ "doc": "Rules of the sheet stage (docs/realistic-anatomy.md section 7.2.2, WP RS2), held as data; every number is a named parameter. reseg.py `sheets` reads SEED tips only; no number here was chosen from a held-out tip, and none was changed after a score had been computed. `filter` is the sheetness filter and the cutting of its medial surface into candidates. A candidate is NAMED for a lamella only when exactly one candidate per side meets every rule (passers of a sheet within `merge_gap_mm` of each other, and, where `merge_angle_deg` is given, with plate normals within that angle, count as one lamella; `dominance_ratio` is the septum's extra condition); otherwise the lamella is unassigned and every candidate's per-rule scores go to incoming/_rs/sheets-report.json. Distances are mm in the working volume's RAS frame (+r is the patient's right). An `end` is the extreme `end_fraction` of a candidate's voxels along the stated axis; `roi` bounds the candidate's centroid (|r|, a, s); a `probe` looks along the plate normal, up to `probe_mm` each way; `late` rules (the expensive ones) are evaluated only when the earlier rules pass.",
  "filter": {
   "sigmas_mm": [0.35, 0.5, 0.75],
   "alpha_plate": 0.5,
@@ -35,7 +35,8 @@
    "pool_min_area_mm2": 8,
    "report_top": 6,
    "figure_ids": ["Cor.ethmoidbulla1", "Sag.max2"],
-   "merge_gap_mm": 1.0,
+   "merge_gap_mm": 5.0,
+   "merge_angle_deg": 15,
    "rules": [
     {"name": "area", "type": "area_min_mm2", "value": 25},
     {"name": "parasagittal", "type": "normal_abs", "axis": "r", "min": 0.5},
@@ -47,12 +48,31 @@
     {"name": "free_edge_bounds_hiatus", "type": "any_of", "rules": [{"type": "reaches", "end": "posterior", "target": "air:s.ethmoid-bulla", "within_mm": 4.0}, {"type": "reaches", "end": "posterior", "target": "seed:ethmoid bulla", "within_mm": 4.0}, {"type": "reaches", "end": "posterior", "target": "seed:hiatus semilunaris", "within_mm": 3.0}]}
    ]
   },
+  "middle-turbinate": {
+   "label": "s.middle-turbinate",
+   "roi": {"abs_r": [3, 14], "a": [-50, -14], "s": [12, 46]},
+   "pool_min_area_mm2": 8,
+   "report_top": 6,
+   "figure_ids": ["Cor.basallamella", "Sag.basallamella2"],
+   "merge_gap_mm": 5.0,
+   "merge_angle_deg": 15,
+   "doc": "RS2b step 1. The vertical lamella of the middle turbinate: a sagittal sheet medial to the ethmoid air, reaching the roof of the nasal cavity (the cribriform plate) superiorly, with air medially and a free inferior edge in nasal-cavity air. No seed tip enters any rule. The basal lamella's medial target.",
+   "rules": [
+    {"name": "area", "type": "area_min_mm2", "value": 40},
+    {"name": "sagittal", "type": "normal_abs", "axis": "r", "min": 0.6},
+    {"name": "medial_to_ethmoid_air", "type": "abs_r_vs_air", "labels": ["s.anterior-ethmoid-cells", "s.posterior-ethmoid-cells"], "margin_mm": 0.0},
+    {"name": "reaches_cribriform_roof", "type": "reaches", "end": "superior", "target": "cribriform_roof", "within_mm": 1.5},
+    {"name": "nasal_air_medially", "type": "probe", "points": "all", "dir": "medial", "in": "labels:s.nasal-cavity", "sided": true, "probe_mm": 2.0, "min_fraction": 0.5},
+    {"name": "free_inferior_edge_in_nasal_air", "type": "probe", "points": "end:inferior", "dir": "both", "in": "labels:s.nasal-cavity", "sided": true, "probe_mm": 2.0, "min_fraction": 0.5}
+   ]
+  },
   "basal-lamella": {
    "label": "s.basal-lamella",
    "roi": {"abs_r": [3, 22], "a": [-58, -24], "s": [14, 52]},
    "pool_min_area_mm2": 8,
    "report_top": 6,
    "figure_ids": ["Axial.ethmoid2", "Cor.basallamella", "Sag.basallamella2"],
+   "parts": {"horizontal_if": "|n_s| > |n_a|"},
    "split": {"ref_mm": 2.0, "anterior_terms": ["anterior ethmoid", "anterior ethmoid sinus"], "posterior_terms": ["posterior ethmoid", "posterior ethmoid air cells"], "barrier_vox": 1},
    "merge_gap_mm": 1.0,
    "rules": [
@@ -60,7 +80,7 @@
     {"name": "not_sagittal", "type": "normal_abs", "axis": "r", "max": 0.6},
     {"type": "reaches", "target": "lamina_papyracea", "name": "reaches_lamina_papyracea", "end": "lateral", "within_mm": 1.5},
     {"name": "reaches_skull_base", "type": "reaches", "end": "superior", "target": "skull_base", "within_mm": 1.5},
-    {"name": "reaches_middle_turbinate", "type": "reaches", "end": "medial", "target": "ridge_near_seed:middle turbinate:5.0", "within_mm": 1.5},
+    {"name": "reaches_middle_turbinate", "type": "reaches", "end": "medial", "target": "sheet:middle-turbinate", "within_mm": 1.5},
     {"name": "separates_anterior_from_posterior_ethmoid_air", "type": "separates_air", "late": true, "ref_mm": 2.0, "anterior_terms": ["anterior ethmoid", "anterior ethmoid sinus"], "posterior_terms": ["posterior ethmoid", "posterior ethmoid air cells"], "barrier_vox": 1}
    ]
   },
