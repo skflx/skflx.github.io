@@ -288,8 +288,9 @@ html[data-theme="dark"] {
 .ssb-stage-mode { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
 .ssb-stage-mode .site-pill { min-height: 32px; padding-inline: 0.5rem; }     /* four stages must still fit one row beside the depth selector at 1280 */
 .ssb-stage-mode .site-pill:disabled { opacity: 0.5; cursor: not-allowed; }
-/* The anatomy layers (symmetric / as scanned / variants / pathology) sit on a row of their own under depth and stage. */
-.ssb-anatomy { flex: 1 0 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; }
+/* The anatomy layers (symmetric / as scanned / variants / pathology) sit under the search box: the stage keeps its size. */
+.ssb-anatomy { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; margin-top: 0.5rem; }
+.ssb-anatomy .site-kicker { flex: 0 0 100%; }
 .ssb-anatomy .site-pill { min-height: 32px; padding-inline: 0.5rem; }
 .ssb-anatomy .site-pill:disabled { opacity: 0.5; cursor: not-allowed; }
 .ssb-anatomy[data-edited="true"] .site-kicker::after { content: " \00b7  edited"; color: var(--signal); }

@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/ssb.css?v=2acbcd4a">
+    <link rel="stylesheet" href="css/ssb.css?v=76f22a27">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -39,6 +39,13 @@
                 <label class="visually-hidden" for="ssb-search">Search structures, conditions and procedures</label>
                 <input class="ssb-search" id="ssb-search" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search"
                     placeholder="Search: uncinate, Keros, AEA&hellip;">
+                <div class="ssb-anatomy" id="ssb-anatomy" role="group" aria-label="Anatomy">
+                    <span class="site-kicker">Anatomy</span>
+                    <button class="site-pill active" type="button" data-anat="standard" aria-pressed="true" disabled title="The standardized head: one head&rsquo;s right half, mirrored, septum centred">Symmetric</button>
+                    <button class="site-pill" type="button" data-anat="scanned" aria-pressed="false" disabled title="The head as scanned, with its own asymmetry (not in this build yet)">Normal asymmetry</button>
+                    <button class="site-pill" type="button" data-anat="variants" aria-pressed="false" disabled title="Anatomic variants (none in this build yet)">Variants</button>
+                    <button class="site-pill" type="button" data-anat="pathology" aria-pressed="false" disabled title="Pathology (none in this build yet)">Pathology</button>
+                </div>
             </div>
             <div class="ssb-nav-scroll">
                 <div id="ssb-results" hidden></div>
@@ -61,13 +68,6 @@
                     <button class="site-pill" type="button" data-stage="lab" aria-pressed="false" disabled title="Variant lab: parametric dioramas">Lab</button>
                     <button class="site-pill" type="button" data-stage="ct" aria-pressed="false" disabled title="Triplanar CT of the reference specimen">CT</button>
                     <button class="site-pill" type="button" data-stage="scope" aria-pressed="false" disabled title="Endoscope: first-person view through a rigid scope">Scope</button>
-                </div>
-                <div class="ssb-anatomy" id="ssb-anatomy" role="group" aria-label="Anatomy">
-                    <span class="site-kicker">Anatomy</span>
-                    <button class="site-pill active" type="button" data-anat="standard" aria-pressed="true" disabled title="The standardized head: one head&rsquo;s right half, mirrored, septum centred">Symmetric</button>
-                    <button class="site-pill" type="button" data-anat="scanned" aria-pressed="false" disabled title="The head as scanned, with its own asymmetry (not in this build yet)">Normal asymmetry</button>
-                    <button class="site-pill" type="button" data-anat="variants" aria-pressed="false" disabled title="Anatomic variants (none in this build yet)">Variants</button>
-                    <button class="site-pill" type="button" data-anat="pathology" aria-pressed="false" disabled title="Pathology (none in this build yet)">Pathology</button>
                 </div>
             </div>
             <div class="ssb-stage" id="ssb-stage">
