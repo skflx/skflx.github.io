@@ -831,7 +831,7 @@ them (see §13 RA-O7).
 ```
 
 ```
-### RA0c — UW credit on the page             [todo] · Sonnet · depends: #114, #115 merged (same files)
+### RA0c — UW credit on the page             [review] · Sonnet · depends: #114, #115 merged (same files)
 Goal:     the full attribution of ssb/LICENSE-data.md is visible wherever the specimen is
           shown (today the note says only "UW CT atlas").
 Read:     ssb/LICENSE-data.md "Attribution"; docs/ssb.md §7.5; js/ssb/mode-specimen.js PROVENANCE.
@@ -845,6 +845,9 @@ Steps:    1. PROVENANCE → "Reference specimen · from Interactive CT Sinus Ana
           3. Test: the credit text is present in Specimen, CT and Scope stages.
 Accept:   check-data, smoke-pages, test-ssb pass; the test of step 3 passes.
 Escalate: the text does not fit at phone width without truncating the institution's name.
+Result:   PROVENANCE and the static note name the atlas and institution; a `#ssb-credit` line at the
+          panel foot (wraps, no truncation) carries the full attribution and link; test-ssb `credit:`
+          checks cover Specimen, Scope and CT.
 ```
 
 ```

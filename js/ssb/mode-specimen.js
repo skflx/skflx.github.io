@@ -48,7 +48,7 @@ import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorP
 import { CT_PLANES } from './state.js?v=32a9e616';
 import { REGION_LABEL } from './graph.js?v=2a57f507';
 
-export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
+export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
 
 /* Camera views, as RAS directions from the specimen toward the camera. The
    default is the anterior-oblique from the patient's right-front and a little
