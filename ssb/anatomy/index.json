@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "bases": {
+    "scanned": {
+      "label": "Normal asymmetry (head A as scanned)",
+      "root": "ssb/anatomy/scanned",
+      "truth": "specimen",
+      "note": "Head A as scanned (not mirrored, septum not centred): cavity asymmetry +78 % (|AI| beyond all 88 clear NasalSeg subjects, whose 95th percentile is 33 % and maximum 51 %); maxillary asymmetry -11 % (|AI| at the 34th percentile). Its cavity asymmetry lies outside the range of every clear NasalSeg subject: either the left cavity is genuinely extreme (septal bow, a congested left inferior turbinate) or the labels give left meatal air to other compartments, which the resegmentation (RS) has to settle; it is not a typical head. Much of the cavity and turbinate asymmetry is physiological (the nasal cycle; the mucosa is undecongested). Charts and soft products that failed their gate on this head are absent, not loosened (see absent).",
+      "generatedBy": "tools/ssb-pipeline/uw/normalize.py --base scanned",
+      "volumesMl": {
+        "cavity": {
+          "R": 5.511,
+          "L": 2.432,
+          "asScannedLabelsR": 6.049,
+          "asScannedLabelsL": 2.758
+        },
+        "vestibule": {
+          "R": 1.679,
+          "L": 1.504,
+          "asScannedLabelsR": null,
+          "asScannedLabelsL": null
+        },
+        "inferiorTurbinate": {
+          "R": 2.219,
+          "L": 4.576,
+          "asScannedLabelsR": 2.35,
+          "asScannedLabelsL": 4.798
+        },
+        "maxillary": {
+          "R": 13.698,
+          "L": 15.255,
+          "asScannedLabelsR": 13.698,
+          "asScannedLabelsL": 15.255
+        },
+        "cavityPlusVestibule": {
+          "R": 7.19,
+          "L": 3.936
+        }
+      },
+      "asymmetryIndex": {
+        "cavity": {
+          "ai": 77.53,
+          "absAiPercentileClear": 100.0,
+          "clearAbsAiMax": 51.13,
+          "beyondAllClear": true,
+          "clearAbsAi": {
+            "p25": 4.94,
+            "p50": 12.05,
+            "p75": 19.88,
+            "p95": 32.89
+          }
+        },
+        "cavityPlusVestibule": {
+          "ai": 58.49,
+          "absAiPercentileClear": 100.0,
+          "clearAbsAiMax": 51.13,
+          "beyondAllClear": true,
+          "clearAbsAi": {
+            "p25": 4.94,
+            "p50": 12.05,
+            "p75": 19.88,
+            "p95": 32.89
+          }
+        },
+        "maxillary": {
+          "ai": -10.76,
+          "absAiPercentileClear": 34.1,
+          "clearAbsAiMax": 167.34,
+          "beyondAllClear": false,
+          "clearAbsAi": {
+            "p25": 7.0,
+            "p50": 17.24,
+            "p75": 35.2,
+            "p95": 55.22
+          }
+        }
+      },
+      "population": "ssb/anatomy/population/nasalseg.json",
+      "absent": [
+        {
+          "id": "s.nasal-floor-mucosa",
+          "side": "R",
+          "reason": "s.nasal-floor-mucosa.R: the floor meets the septal chart's bottom(a) only within 1.62 mm (limit 1.0 mm; 4.25 mm with the PNS end)"
+        },
+        {
+          "id": "s.nasal-floor-mucosa",
+          "side": "L",
+          "reason": "s.nasal-floor-mucosa.L area 0.51 cm2 under 2.0: escalate; s.nasal-floor-mucosa.L: the floor meets the septal chart's bottom(a) only within 6.78 mm (limit 1.0 mm; 29.31 mm with the PNS end)"
+        },
+        {
+          "id": "lm.sphenoid-ostium.inferior-margin",
+          "side": "L",
+          "reason": "opening is 11.5 mm tall (> 8.0 mm)"
+        },
+        {
+          "id": "s.nasopalatine-artery",
+          "side": "L",
+          "reason": "s.nasopalatine-artery.L: the path leaves the surface chart near waypoint 1 (chart a=-18.5, s=3.9)"
+        },
+        {
+          "id": "s.superior-labial-septal-branch",
+          "side": "L",
+          "reason": "s.superior-labial-septal-branch.L: the path leaves the surface chart near waypoint 0 (chart a=-10.0, s=14.0)"
+        },
+        {
+          "id": "s.superior-labial-septal-branch",
+          "side": "R",
+          "reason": "s.superior-labial-septal-branch.R: the path leaves the surface chart near waypoint 0 (chart a=-10.0, s=14.0)"
+        }
+      ]
+    }
+  },
+  "variants": {},
+  "conditions": {},
+  "compat": []
+}

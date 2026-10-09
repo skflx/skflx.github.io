@@ -16,12 +16,31 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES } from './volume.js?v=ca255144';
+import { PLANES, loadAnatomyIndex } from './volume.js?v=642e1ad9';
 import { CT_PLANES, anatomyIsDefault } from './state.js?v=7455c8cc';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=71e1cbcc';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=8184d34a';
 import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';
+
+/* What ssb/anatomy/index.json says about each non-standard base, for the note and the flap control: { note, absent: [{ id, side, reason }] }.
+   Only strings of a bounded length and a known shape get through; everything reaches the page through textContent. */
+const ABSENT_ID = /^[a-z0-9][a-z0-9.\-]{0,79}$/;
+export function parseBaseInfo(doc) {
+    const out = new Map();
+    const bases = doc && typeof doc === 'object' && doc.bases && typeof doc.bases === 'object' ? doc.bases : {};
+    for (const name of Object.keys(bases)) {
+        const b = bases[name];
+        if (!b || typeof b !== 'object' || !/^[a-z][a-z0-9-]{0,23}$/.test(name)) continue;
+        const absent = Array.isArray(b.absent) ? b.absent.filter((a) => a && ABSENT_ID.test(String(a.id)) && ['R', 'L', 'M'].includes(a.side) && typeof a.reason === 'string')
+            .slice(0, 40).map((a) => ({ id: a.id, side: a.side, reason: a.reason.slice(0, 300) })) : [];
+        out.set(name, { note: typeof b.note === 'string' ? b.note.slice(0, 1500) : '', absent });
+    }
+    return out;
+}
+/* The soft-tissue charts the flap overlay is computed on (js/ssb/flap.js): a base whose index entry lists one as absent has no overlay. */
+const FLAP_CHARTS = ['s.septal-mucosa', 's.nasal-floor-mucosa'];
+export const flapUnavailable = (info, base) => (info.get(base) ? info.get(base).absent.filter((a) => FLAP_CHARTS.includes(a.id)) : []);
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -199,7 +218,9 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     flapReadout.setAttribute('aria-live', 'polite');
     const flapNotes = el('ul', 'ssb-flap-notes');
     const flapLit = el('p', 'ssb-param-src');
-    flapSec.append(flapDesigns, flapSides, ...[...flapSliders.values()].map((x) => x.box), flapBadge, flapReadout, flapNotes, flapLit);
+    const flapGone = el('p', 'ssb-param-src');
+    flapGone.hidden = true;
+    flapSec.append(flapGone, flapDesigns, flapSides, ...[...flapSliders.values()].map((x) => x.box), flapBadge, flapReadout, flapNotes, flapLit);
 
     /* ---- landmarks ---- */
     const lmSec = section('Landmarks');
@@ -264,14 +285,21 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     const anatomyNote = el('p', 'ssb-param-src');
     anatomyNote.hidden = true;
     statusSec.append(anatomyNote);
+    let baseInfo = new Map();          /* index.json's per-base note and absent list, once read */
+    loadAnatomyIndex().then((doc) => { baseInfo = parseBaseInfo(doc); sync(); });
 
     /* ---- follow the mode ---- */
     const dt = (label, value) => { const a = el('dt', null, label); const b = el('dd', null, value); return [a, b]; };
     const cm2 = (v) => `${v.toFixed(2)} cm²`;
     function syncFlap() {
         const st = store.get();
+        const gone = flapUnavailable(baseInfo, st.anatomy && st.anatomy.base);
+        if (gone.length && st.flap) { store.setFlap(null); return; }      /* the base has no charts to compute it on: the overlay goes off, and sync runs again */
         const f = st.flap;
-        flapSec.hidden = !specimen.hasFlap || !(f || st.tier >= specimen.flapTier);
+        flapGone.hidden = !gone.length;
+        flapGone.textContent = gone.length ? 'The flap overlay is a standard-head tool: on this head its charts are absent (' + gone.map((a) => `${a.id}.${a.side}: ${a.reason}`).join('; ') + ').' : '';
+        for (const b of flapDesigns.querySelectorAll('button')) b.disabled = gone.length > 0;
+        flapSec.hidden = !specimen.hasFlap || !(f || st.tier >= specimen.flapTier || gone.length);
         mark(flapDesigns, 'flapDesign', f ? f.design : 'off');
         mark(flapSides, 'flapSide', f ? f.side : '');
         for (const b of flapSides.querySelectorAll('button')) b.disabled = !f;
@@ -311,7 +339,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         const edits = plain ? [] : [...a.variants, ...a.conditions].map((r) => `${r.id} ${r.side} (${r.preset})`);
         const text = plain ? '' : edits.length
             ? `Specimen, edited (${a.base === 'standard' ? 'standardized head' : 'head as scanned'}): ${edits.join('; ')}. Composite: a real specimen with a declared edit, schematic.`
-            : 'The head as scanned, with its own asymmetry. The CT and the labels are the real ones; nothing is mirrored.';
+            : ((baseInfo.get(a.base) && baseInfo.get(a.base).note) || 'The head as scanned, with its own asymmetry. The CT and the labels are the real ones; nothing is mirrored.');
         anatomyNote.textContent = text;
         anatomyNote.hidden = !text;
     }

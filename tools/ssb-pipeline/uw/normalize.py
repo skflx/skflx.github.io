@@ -689,6 +689,34 @@ def side_swap(table, by_name):
     return swap
 
 
+VEST_SMALL_MAX = 0.02      # RA3b ruling: components other than the largest may total at most this fraction of it (a speck, not a leak)
+
+
+def largest_vestibule(fr, res, sd):
+    """RA3b ruling on the vestibule rule: keep this side's largest component; the smaller ones go back to s.nasal-cavity (their voxel
+    count is printed) and the stage still fails when they total more than 2 % of the largest. The leak check (nose.VEST_LIMITS) is
+    judged on the kept component. Mutates and returns res: res['vest'] is the kept component, res['join'] gains the rest."""
+    from scipy import ndimage as ndi_
+    cc, n = ndi_.label(res['vest'])
+    sizes = np.bincount(cc.ravel())[1:]
+    big = int(np.argmax(sizes)) + 1
+    small = res['vest'] & (cc != big)
+    n_small, n_big = int(small.sum()), int(sizes.max())
+    say('   side %s: vestibule components %d (voxels %s); kept the largest (%d voxels); %d voxels (%.2f %% of it) of the smaller ones go back to the cavity'
+        % (sd, n, sorted(int(x) for x in sizes)[::-1], n_big, n_small, 100.0 * n_small / n_big))
+    if n_small > VEST_SMALL_MAX * n_big:
+        raise SystemExit('ESCALATE: side %s: the smaller vestibule components total %d voxels, more than %g %% of the largest (%d)' % (sd, n_small, 100 * VEST_SMALL_MAX, n_big))
+    res['vest'] = cc == big
+    res['join'] = res['join'] | small
+    kk, jj, ii = np.nonzero(res['vest'])
+    ext = {'abs_r_mm': float(np.abs(fr.r[ii]).max()), 'max_a_mm': float(fr.a[jj].max()), 'min_a_mm': float(fr.a[jj].min()), 's_mm': [float(fr.s[kk].min()), float(fr.s[kk].max())]}
+    leak = ext['abs_r_mm'] > nose.VEST_LIMITS['abs_r_mm'] or ext['max_a_mm'] > nose.VEST_LIMITS['max_a_mm']
+    rep = res['report']
+    rep.update({'vestibule_voxels': n_big, 'vestibule_mm3': round(n_big * nose.STEP ** 3, 1), 'components': 1, 'extent': ext, 'leak': bool(leak),
+                'returned_to_cavity_voxels': n_small, 'join_voxels': int(res['join'].sum())})
+    return res
+
+
 def scanned_nose(fr, ct, lab, table, by_name, V):
     """ST6 for a head that is not mirrored: lm.naris, the internal valve and the vestibule on EACH side from that side's own
     airway (nose.valve_and_vestibule is written for the right; the left is run on the volume flipped along R with the sides
@@ -720,6 +748,7 @@ def scanned_nose(fr, ct, lab, table, by_name, V):
             res['vest'] = res['vest'][:, :, ::-1]; res['join'] = res['join'][:, :, ::-1]
             res['valve']['centroid'] = [round(-res['valve']['centroid'][0], 2) or 0.0, res['valve']['centroid'][1], res['valve']['centroid'][2]]
         say('   side %s (%s):' % (sd, 'as scanned' if sd == 'R' else 'run on the volume flipped along R'))
+        res = largest_vestibule(fr, res, sd)
         nose.say_vestibule(res['report'])
         rep[sd] = res['report']
         joins[sd], vests[sd] = res['join'], res['vest']
@@ -869,7 +898,7 @@ def scanned_report():
     return out
 
 
-def write_index(report):
+def write_index(report, absent):
     """The `scanned` entry of ssb/anatomy/index.json: written, never typed. It keeps every other key of the file."""
     idx = json.load(open(ANATOMY_INDEX)) if os.path.exists(ANATOMY_INDEX) else {'version': 1}
     idx.setdefault('bases', {}); idx.setdefault('variants', {}); idx.setdefault('conditions', {}); idx.setdefault('compat', [])
@@ -879,9 +908,12 @@ def write_index(report):
     where = ('cavity asymmetry %+.0f %% (|AI| beyond all %d clear NasalSeg subjects, whose 95th percentile is %.0f %% and maximum %.0f %%)'
              % (cav['ai'], report['nasalSeg']['clearSubjects'], cav['clearAbsAi']['p95'], cav['clearAbsAiMax']) if cav['beyondAllClear'] else
              'cavity asymmetry %+.0f %% (|AI| at the %.0fth percentile of the %d clear NasalSeg subjects)' % (cav['ai'], cav['absAiPercentileClear'], report['nasalSeg']['clearSubjects']))
-    note = ('Head A as scanned (not mirrored, septum not centred): %s; maxillary asymmetry %+.0f %% (|AI| at the %.0fth percentile). '
-            'Much of the cavity and turbinate asymmetry is physiological (the nasal cycle; the mucosa is undecongested): this head sits at the edge of normal, not at its centre.'
-            % (where, mx['ai'], mx['absAiPercentileClear']))
+    edge = ('Its cavity asymmetry lies outside the range of every clear NasalSeg subject: either the left cavity is genuinely extreme (septal bow, a congested left inferior turbinate) or the labels give left meatal air to other compartments, which the resegmentation (RS) has to settle; it is not a typical head.'
+            if cav['beyondAllClear'] else 'Its asymmetry lies within the range of the clear NasalSeg subjects.')
+    note = ('Head A as scanned (not mirrored, septum not centred): %s; maxillary asymmetry %+.0f %% (|AI| at the %.0fth percentile). %s '
+            'Much of the cavity and turbinate asymmetry is physiological (the nasal cycle; the mucosa is undecongested). '
+            'Charts and soft products that failed their gate on this head are absent, not loosened (see absent).'
+            % (where, mx['ai'], mx['absAiPercentileClear'], edge))
     idx['bases']['scanned'] = {
         'label': 'Normal asymmetry (head A as scanned)',
         'root': 'ssb/anatomy/scanned',
@@ -891,6 +923,7 @@ def write_index(report):
         'volumesMl': vols,
         'asymmetryIndex': report['asymmetryIndex'],
         'population': 'ssb/anatomy/population/nasalseg.json',
+        'absent': absent,
     }
     json.dump(idx, open(ANATOMY_INDEX, 'w'), indent=2, ensure_ascii=False)
     open(ANATOMY_INDEX, 'a').write('\n')
@@ -913,7 +946,9 @@ def stage_scanned():
     run_in(PY, os.path.join(uw, 'lining.py'))
     run_in(PY, os.path.join(uw, 'nose.py'), 'pack')
     export_scanned(root)
-    write_index(scanned_report())
+    absent = json.load(open(os.path.join(root, 'ssb', 'geometry', 'absent.json')))
+    say('absent on the scanned base (RA3b ruling: a stage-D product that fails its gate is left out, never loosened):', json.dumps(absent, indent=1))
+    write_index(scanned_report(), absent)
 
 
 if __name__ == '__main__':

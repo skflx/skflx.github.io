@@ -1,0 +1,167 @@
+{
+ "lm.anterior-nasal-spine.M": [
+  1.04,
+  0.0,
+  0.0
+ ],
+ "lm.choanal-arch.M": [
+  4.0,
+  -51.5,
+  12.0
+ ],
+ "lm.crista-galli-apex.M": [
+  -1.5,
+  -32.0,
+  48.0
+ ],
+ "lm.dorsum-sellae-tip.M": [
+  -0.5,
+  -73.5,
+  40.0
+ ],
+ "lm.foramen-rotundum-anterior.L": [
+  -22.39,
+  -59.1,
+  25.56
+ ],
+ "lm.foramen-rotundum-anterior.R": [
+  16.66,
+  -55.56,
+  23.37
+ ],
+ "lm.frontal-ostium.L": [
+  -8.84,
+  -17.82,
+  50.5
+ ],
+ "lm.frontal-ostium.R": [
+  5.86,
+  -20.35,
+  48.0
+ ],
+ "lm.greater-palatine-foramen.L": [
+  -17.99,
+  -48.02,
+  2.33
+ ],
+ "lm.incisive-canal.M": [
+  0.1,
+  -18.95,
+  -1.0
+ ],
+ "lm.infraorbital-foramen.L": [
+  -28.78,
+  -14.88,
+  15.58
+ ],
+ "lm.middle-turbinate-head.L": [
+  -3.77,
+  -14.54,
+  28.96
+ ],
+ "lm.middle-turbinate-head.R": [
+  5.49,
+  -15.55,
+  28.71
+ ],
+ "lm.naris.L": [
+  -7.83,
+  4.22,
+  3.76
+ ],
+ "lm.naris.R": [
+  6.55,
+  4.45,
+  4.7
+ ],
+ "lm.sella-floor-center.M": [
+  0.0,
+  -68.94,
+  33.05
+ ],
+ "lm.sphenoid-ostium.L": [
+  -8.77,
+  -54.58,
+  28.6
+ ],
+ "lm.sphenoid-ostium.R": [
+  1.69,
+  -50.46,
+  24.16
+ ],
+ "lm.sphenopalatine-foramen.R": [
+  9.24,
+  -51.52,
+  21.02
+ ],
+ "lm.vidian-canal-anterior.R": [
+  13.24,
+  -66.75,
+  16.85
+ ],
+ "s.anterior-clinoid-process.R": [
+  18.15,
+  -61.43,
+  40.28
+ ],
+ "s.clivus.M": [
+  -1.41,
+  -91.1,
+  5.26
+ ],
+ "s.crista-galli.M": [
+  -1.42,
+  -35.42,
+  43.39
+ ],
+ "s.dorsum-sellae.M": [
+  -0.91,
+  -76.16,
+  37.27
+ ],
+ "s.foramen-lacerum.L": [
+  -25.83,
+  -71.25,
+  14.4
+ ],
+ "s.foramen-ovale.L": [
+  -26.72,
+  -65.65,
+  17.22
+ ],
+ "s.internal-nasal-valve.L": [
+  -3.49,
+  -14.0,
+  18.94
+ ],
+ "s.internal-nasal-valve.R": [
+  5.31,
+  -15.0,
+  15.39
+ ],
+ "s.petrous-apex.R": [
+  25.12,
+  -89.3,
+  27.09
+ ],
+ "s.sella-turcica.M": [
+  2.53,
+  -68.94,
+  37.99
+ ],
+ "s.superior-orbital-fissure.L": [
+  -18.07,
+  -60.37,
+  37.44
+ ],
+ "s.superior-orbital-fissure.R": [
+  17.81,
+  -57.44,
+  37.44
+ ],
+ "s.vomer.M": [
+  -3.62,
+  -52.05,
+  8.99
+ ]
+}

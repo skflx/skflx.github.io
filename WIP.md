@@ -165,10 +165,12 @@ deleted.
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
 links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
-- **Anatomy state (RA3a, loader only):** `state.anatomy` (base + variant and condition patches, `#anat=`/`#v=`/`#dz=`) is
-  whitelisted against `ssb/anatomy/index.json`, which does not exist yet, so the Anatomy pills show Symmetric only and the
-  rest stay disabled. The patch format, loader and override-node hiding are built and tested on synthetic patches
-  (`docs/ssb.md` §5.11); the scanned base (RA3b) and the first real patches come next.
+- **Anatomy state (RA3a loader, RA3b scanned base):** `state.anatomy` (base + variant and condition patches, `#anat=`/`#v=`/`#dz=`) is
+  whitelisted against `ssb/anatomy/index.json`, which lists the scanned base (head A as scanned, `ssb/anatomy/scanned/`, built by
+  `normalize.py --base scanned`); Normal asymmetry is enabled, Variants and Pathology wait for entries. The CT stage loads the
+  scanned volume; the Specimen stage still draws the standard head's packs on every base (loading a base's packs is not built).
+  Products that failed their gate on this head are `absent` in its index entry and the flap overlay is off there
+  (`docs/ssb.md` §5.11). The patch format, loader and override-node hiding are tested on synthetic patches.
 - **Standard specimen (O6, N1):** the page serves the UW head
   standardized — right half mirrored onto the left at R = 0, septum centred,
   thin midline plates where a paired air space would cross
