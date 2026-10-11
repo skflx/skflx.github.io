@@ -182,7 +182,14 @@ dioramas of a right ear as layered inline SVG, drawn by `js/olsb.js`:
   cholesteatoma route.
 
 `js/olsb-glossary.js` holds each anatomical id once (name, note,
-directional `rel`). Tapping a structure lights its neighbours with their
+directional `rel`). `js/olsb-shapes.js` draws the ossicles, the
+mid-modiolar cochlear section and the air-cell honeycomb from millimetre
+outlines; every diorama is calibrated in px/mm with a live scale bar
+(textbook sizes: TM about 9 mm, footplate 3 x 1.4 mm, facial nerve about
+1.5-2 mm, sigmoid about 7 mm, cochlea about 9 x 5 mm), with form shading
+(domes, pits), hatched section bone and cased nerves and vessels. Where
+depths stack, structures are still spread apart, and the coronal cochlea
+is drawn at three quarters size to fit. Tapping a structure lights its neighbours with their
 direction, lists where else it is drawn, and jumps there (to a step that
 shows it). A find-it quiz asks for any visible structure. Links:
 `#d=<diorama>&p=<tour>&s=<n>` (older `#p=` links still resolve). No

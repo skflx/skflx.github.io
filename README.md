@@ -102,7 +102,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/cpt-search.js    #   code table + search
 ├── OLSB.html               # OLSB — layered middle ear/mastoid dioramas: surgical lateral + medial wall, axial, coronal (unlisted; draft)
 │   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
-│   └── js/olsb*.js         #   glossary (names, notes, relations), one file per diorama, SVG renderer
+│   └── js/olsb*.js         #   glossary, mm shape library, one file per diorama, SVG renderer
 │
 ├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens

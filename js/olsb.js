@@ -26,7 +26,8 @@
         quiz: null      /* { target, right, asked, flash: {id, ok}, reveal } */
     };
     var els = {};
-    var svg, labelLayer, quizTimer = null;
+    var svg, labelLayer, scaleBar, quizTimer = null;
+    var CASED = { nerve: 1, vein: 1, artery: 1, arterywall: 1, canal: 1, muscle: 1 };
     var REL = {};
 
     function $(id) { return document.getElementById(id); }
@@ -97,15 +98,41 @@
         var mk = sv('marker', { id: 'olsb-arrow', viewBox: '0 0 10 10', refX: '8', refY: '5', markerWidth: '6', markerHeight: '6', orient: 'auto-start-reverse' });
         mk.appendChild(sv('path', { d: 'M 0 0 L 10 5 L 0 10 Z', 'class': 'arrowhead' }));
         defs.appendChild(mk);
+        /* Cut bone: hatching over the bone colour (classic section convention). */
+        var hatch = sv('pattern', { id: 'olsb-hatch', patternUnits: 'userSpaceOnUse', width: '7', height: '7', patternTransform: 'rotate(45)' });
+        hatch.appendChild(sv('rect', { width: '7', height: '7', 'class': 'hatch-bg' }));
+        hatch.appendChild(sv('line', { x1: '0', y1: '0', x2: '0', y2: '7', 'class': 'hatch-ln' }));
+        defs.appendChild(hatch);
+        /* Form shading: a dome is lit from above-front, a pit is dark at its rim. */
+        function grad(id, attrs, stops) {
+            var g = sv('radialGradient', attrs);
+            g.setAttribute('id', id);
+            stops.forEach(function (st) { g.appendChild(sv('stop', { offset: st[0], 'class': st[1] })); });
+            defs.appendChild(g);
+        }
+        grad('olsb-dome', { cx: '0.38', cy: '0.32', r: '0.72' }, [['0', 'sh-hi'], ['0.55', 'sh-clear'], ['1', 'sh-lo']]);
+        grad('olsb-pit', { cx: '0.5', cy: '0.42', r: '0.6' }, [['0', 'sh-clear'], ['0.7', 'sh-lo-soft'], ['1', 'sh-lo']]);
         svg.appendChild(defs);
 
         dio().structures.slice().sort(function (a, b) { return a.z - b.z; }).forEach(function (def) {
             var g = sv('g', { 'class': 's L-' + def.layer + (def.inert ? ' inert' : '') + (def.bg ? ' bg' : ''), 'data-id': def.id });
+            if (def.clip) {
+                var cp = sv('clipPath', { id: 'olsb-clip-' + def.id });
+                cp.appendChild(sv('path', { d: def.clip }));
+                defs.appendChild(cp);
+                g.setAttribute('clip-path', 'url(#olsb-clip-' + def.id + ')');
+            }
+            /* Tubes (nerves, vessels, canals) get a darker casing under them. */
+            if (def.line && def.w && CASED[def.kind]) {
+                g.appendChild(sv('path', { d: def.d, 'class': 'casing c-' + def.kind, 'stroke-width': def.w + Math.max(1.6, def.w * 0.22) }));
+            }
             var shape = sv('path', { d: def.d, 'class': 'k-' + def.kind + (def.line ? ' ln' : '') + (def.hair ? ' hair' : '') });
             if (def.evenodd) shape.setAttribute('fill-rule', 'evenodd');
             if (def.w) shape.setAttribute('stroke-width', def.w);
             if (def.arrow) shape.setAttribute('marker-end', 'url(#olsb-arrow)');
             g.appendChild(shape);
+            if (def.inner) g.appendChild(sv('path', { d: def.d, 'class': 'lumen', 'stroke-width': def.w * 0.42 }));
+            if (def.shade) g.appendChild(sv('path', { d: def.d, 'class': 'shade', fill: 'url(#olsb-' + def.shade + ')', 'fill-rule': def.evenodd ? 'evenodd' : 'nonzero' }));
             if (!def.inert) {
                 if (def.line) g.appendChild(sv('path', { d: def.d, 'class': 'hit' }));
                 var t = sv('title', {});
@@ -117,6 +144,10 @@
             els[def.id] = { def: def, g: g, shape: shape, label: null };
         });
 
+        scaleBar = sv('g', { 'class': 'scalebar', 'aria-hidden': 'true' });
+        scaleBar.appendChild(sv('path', {}));
+        scaleBar.appendChild(sv('text', {}));
+        svg.appendChild(scaleBar);
         labelLayer = sv('g', { 'class': 'labels', 'aria-hidden': 'true' });
         svg.appendChild(labelLayer);
         dio().structures.forEach(function (def) {
@@ -164,6 +195,7 @@
         var px = svg.getBoundingClientRect().width || BASE_W;
         /* labels keep a near-constant on-screen size: user units per CSS pixel */
         var k = vb[2] / Math.max(px, 1) * Math.max(0.8, Math.min(1, px / BASE_W + 0.25));
+        drawScaleBar(vb, k);
         svg.classList.toggle('is-ghost', st.ghost);
         svg.classList.toggle('has-focus', hasFocus || hasRel);
 
@@ -214,6 +246,22 @@
         renderQuiz();
         renderInView();
         renderInfo();
+    }
+
+    /* A 1/2/5/10 mm bar, bottom right of whatever is in view. */
+    function drawScaleBar(vb, k) {
+        var ppm = dio().scale;
+        scaleBar.style.display = ppm ? '' : 'none';
+        if (!ppm) return;
+        var mm = [10, 5, 2, 1].filter(function (m) { return m * ppm <= vb[2] * 0.22; })[0] || 1;
+        var len = mm * ppm, m = 14 * k, x1 = vb[0] + vb[2] - m, x0 = x1 - len, y = vb[1] + vb[3] - m, t = 4 * k;
+        scaleBar.firstChild.setAttribute('d', 'M ' + x0 + ' ' + (y - t) + ' L ' + x0 + ' ' + y + ' L ' + x1 + ' ' + y + ' L ' + x1 + ' ' + (y - t));
+        var tx = scaleBar.lastChild;
+        tx.textContent = mm + ' mm';
+        tx.setAttribute('x', (x0 + x1) / 2);
+        tx.setAttribute('y', y - 6 * k);
+        tx.setAttribute('font-size', 10.5 * k);
+        tx.setAttribute('stroke-width', 3 * k);
     }
 
     /* ---------- side panel and controls ---------- */

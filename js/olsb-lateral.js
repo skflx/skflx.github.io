@@ -20,16 +20,19 @@
 (function () {
     'use strict';
 
-    var ell = window.OLSB.ell;
+    var ell = window.OLSB.ell, SH = window.OLSB.shapes;
+    /* About 13.3 px per mm (TM about 9 mm tall). Sizes follow textbook
+       dimensions; positions are a projection, spread where depths stack. */
+    var MM = 13.3;
 
     /* Shared outlines. */
-    var CORTEX = 'M 800 238 C 700 228, 560 215, 420 205 C 320 198, 230 190, 175 205 C 160 260, 165 340, 200 420 '
-        + 'C 240 490, 290 545, 345 575 C 380 590, 410 575, 420 540 C 430 505, 455 470, 500 455 '
+    var CORTEX = 'M 800 238 C 700 228, 560 215, 420 205 C 300 196, 200 186, 140 200 C 128 260, 134 350, 170 430 '
+        + 'C 215 505, 280 555, 345 578 C 380 592, 412 578, 422 540 C 432 505, 455 470, 500 455 '
         + 'C 560 445, 640 440, 690 410 C 730 385, 770 330, 800 300 Z';
     var SKIN = 'M 860 110 L 860 600 L 120 600 L 110 150 C 300 110, 600 100, 860 110 Z';
     var EAC = ell(560, 335, 62, 80);              /* bony canal (porus), seen end-on */
-    var CAVITY = 'M 492 238 L 337 228 C 332 300, 337 380, 352 440 C 367 480, 390 510, 410 515 '
-        + 'C 440 515, 466 490, 476 450 C 482 400, 484 340, 486 290 Z';
+    var CAVITY = 'M 492 238 L 262 226 C 254 300, 260 392, 290 452 C 318 500, 360 524, 400 526 '
+        + 'C 442 524, 468 492, 478 450 C 484 400, 486 340, 488 290 Z';
     var TM_CX = 562, TM_CY = 344, TM_RX = 48, TM_RY = 60;
     var TM = ell(TM_CX, TM_CY, TM_RX, TM_RY);
     var PERF = ell(585, 368, 14, 16);             /* anteroinferior central perforation */
@@ -57,57 +60,55 @@
         { id: 'lumen', layer: 'base', z: 5, kind: 'air', d: EAC, inert: true },
 
         /* ---- mastoid cavity (drilled) ---- */
-        { id: 'cavity', layer: 'mastoid', z: 10, bg: true, kind: 'bonecut', d: CAVITY, at: [400, 470], lab: 'b' },
-        { id: 'antrum', layer: 'mastoid', z: 31, kind: 'air', d: ell(455, 262, 26, 17), at: [434, 268], lab: 'l' },
-        { id: 'koerner', layer: 'mastoid', z: 33, kind: 'lamina', line: true, w: 2.5, d: 'M 430 252 L 480 270', at: [431, 253], lab: 'l' },
-        { id: 'tegmen', layer: 'mastoid', z: 32, kind: 'plate', line: true, w: 5, d: 'M 340 229 L 490 238', at: [400, 232], lab: 't' },
-        { id: 'sigplate', layer: 'mastoid', z: 32, kind: 'sinusplate', line: true, w: 6, d: 'M 337 232 C 332 300, 337 380, 352 440 C 360 462, 372 482, 386 497', at: [340, 360], lab: 'r' },
-        { id: 'sinodural', layer: 'mastoid', z: 34, kind: 'mark', d: 'M 337 228 L 352 229 L 338 243 Z', at: [338, 230], lab: 'l' },
-        { id: 'pcw', layer: 'mastoid', z: 33, kind: 'plate', line: true, w: 7, d: 'M 493 248 C 490 320, 488 390, 480 446', at: [490, 400], lab: 'r' },
-        { id: 'lscc', layer: 'mastoid', z: 35, kind: 'otic', line: true, w: 5, d: 'M 436 279 C 440 268, 470 266, 476 279', at: [456, 276], lab: 'b' },
-        { id: 'digastric', layer: 'mastoid', z: 34, kind: 'plate', line: true, w: 4, d: 'M 385 505 C 410 496, 440 482, 466 472', at: [418, 494], lab: 'b' },
+        { id: 'cavity', layer: 'mastoid', z: 10, bg: true, kind: 'bonecut', shade: 'pit', d: CAVITY, at: [380, 480], lab: 'b' },
+        { id: 'cells-open', layer: 'mastoid', z: 11, inert: true, kind: 'cellopen', clip: CAVITY, d: SH.aircells(258, 222, 236, 310, 90, 6, 17, 7) },
+        { id: 'antrum', layer: 'mastoid', z: 31, kind: 'air', shade: 'pit', d: ell(458, 268, 38, 23), at: [422, 270], lab: 'l' },
+        { id: 'koerner', layer: 'mastoid', z: 33, kind: 'lamina', line: true, w: 3, d: 'M 425 248 L 498 272', at: [425, 249], lab: 'l' },
+        { id: 'tegmen', layer: 'mastoid', z: 32, kind: 'plate', line: true, w: 6, d: 'M 264 228 L 490 238', at: [360, 232], lab: 't' },
+        { id: 'sigplate', layer: 'mastoid', z: 32, kind: 'sinusplate', line: true, w: 8, d: 'M 262 230 C 254 300, 260 392, 290 452 C 302 474, 316 490, 332 502', at: [264, 380], lab: 'r' },
+        { id: 'sinodural', layer: 'mastoid', z: 34, kind: 'mark', d: 'M 262 226 L 282 227 L 263 246 Z', at: [263, 230], lab: 'l' },
+        { id: 'pcw', layer: 'mastoid', z: 33, kind: 'plate', line: true, w: 7, d: 'M 493 248 C 490 320, 488 390, 480 446', at: [490, 410], lab: 'r' },
+        { id: 'lscc', layer: 'mastoid', z: 35, kind: 'canal', line: true, w: 11, d: 'M 422 296 C 428 270, 496 266, 506 296', at: [430, 292], lab: 'l' },
+        { id: 'digastric', layer: 'mastoid', z: 34, kind: 'plate', line: true, w: 5, d: 'M 330 502 C 380 494, 430 482, 470 474', at: [392, 494], lab: 'b' },
 
         /* ---- deep hazards ---- */
-        { id: 'mcfdura', layer: 'deep', z: 20, kind: 'dura', d: 'M 337 229 L 492 238 C 560 240, 610 244, 650 246 C 640 222, 600 200, 520 192 C 440 186, 360 184, 326 196 Z', at: [500, 214], lab: 't' },
-        { id: 'sigmoid', layer: 'deep', z: 21, kind: 'vein', line: true, w: 30, d: 'M 318 214 C 314 320, 322 420, 352 478 C 380 525, 420 540, 465 528 C 505 515, 535 485, 552 458', at: [316, 300], lab: 'l' },
-        { id: 'transverse', layer: 'deep', z: 21, kind: 'vein', line: true, w: 26, d: 'M 318 214 C 280 202, 230 195, 178 198', at: [230, 198], lab: 't' },
-        { id: 'jb', layer: 'deep', z: 22, kind: 'vein', d: ell(556, 442, 22, 17), at: [556, 446], lab: 'b' },
-        { id: 'ica', layer: 'deep', z: 22, kind: 'artery', line: true, w: 16, d: 'M 646 478 C 646 430, 644 380, 662 334', at: [650, 420], lab: 'r' },
-        { id: 'pscc', layer: 'deep', z: 24, kind: 'otic', line: true, w: 4, d: 'M 426 270 C 416 280, 416 305, 426 316', at: [420, 312], lab: 'b' },
-        { id: 'donaldson', layer: 'deep', z: 25, kind: 'refline', line: true, hair: true, d: 'M 478 279 L 338 300', at: [360, 297], lab: 't' },
-        { id: 'els', layer: 'deep', z: 23, kind: 'dura', d: ell(366, 345, 17, 26), at: [366, 352], lab: 'r' },
+        { id: 'mcfdura', layer: 'deep', z: 20, kind: 'dura', d: 'M 262 226 L 492 238 C 560 240, 610 244, 650 246 C 640 222, 600 200, 520 192 C 420 184, 300 182, 250 196 Z', at: [480, 212], lab: 't' },
+        { id: 'sigmoid', layer: 'deep', z: 21, kind: 'vein', line: true, w: 94, d: 'M 212 205 C 204 320, 210 420, 244 482 C 280 540, 370 570, 450 552 C 505 538, 535 500, 552 462', at: [192, 330], lab: 'l' },
+        { id: 'transverse', layer: 'deep', z: 21, kind: 'vein', line: true, w: 84, d: 'M 212 205 C 180 196, 150 192, 100 192', at: [160, 186], lab: 't' },
+        { id: 'jb', layer: 'deep', z: 22, kind: 'vein', shade: 'dome', d: ell(556, 452, 58, 38), at: [556, 456], lab: 'b' },
+        { id: 'ica', layer: 'deep', z: 22, kind: 'artery', line: true, w: 60, d: 'M 650 492 C 650 440, 648 390, 668 340', at: [672, 430], lab: 'r' },
+        { id: 'pscc', layer: 'deep', z: 24, kind: 'canal', line: true, w: 9, inner: true, d: 'M 410 262 C 386 282, 386 330, 410 350', at: [404, 352], lab: 'b' },
+        { id: 'donaldson', layer: 'deep', z: 25, kind: 'refline', line: true, hair: true, d: 'M 506 294 L 262 306', at: [330, 302], lab: 't' },
+        { id: 'els', layer: 'deep', z: 23, kind: 'dura', d: ell(318, 352, 26, 40), at: [318, 392], lab: 'b' },
 
         /* ---- facial nerve layer ---- */
-        { id: 'fn', label: 'Facial nerve (tympanic + mastoid)', layer: 'fn', z: 40, kind: 'nerve', line: true, w: 7,
-          d: 'M 614 283 C 585 292, 548 308, 515 306 C 495 304, 482 298, 476 308 C 470 330, 470 380, 468 470', at: [470, 360], lab: 'l' },
-        { id: 'fn-tymp', layer: 'fn', z: 41, kind: 'nervemark', d: ell(572, 297, 3, 3), at: [572, 297], lab: 'r' },
-        { id: 'genu2', layer: 'fn', z: 41, kind: 'nervemark', d: ell(476, 306, 3, 3), at: [476, 306], lab: 'l' },
-        { id: 'smf', layer: 'fn', z: 41, kind: 'nervemark', d: ell(468, 470, 4, 4), at: [468, 472], lab: 'r' },
-        { id: 'geniculate', layer: 'fn', z: 41, kind: 'nerve', d: ell(614, 283, 7, 6), at: [618, 280], lab: 'r' },
-        { id: 'chorda', layer: 'fn', z: 42, kind: 'nerve', line: true, w: 2.4,
-          d: 'M 470 420 C 480 380, 498 335, 514 312 C 540 300, 575 296, 606 296', at: [548, 299], lab: 'b' },
-        { id: 'chorda-wall', layer: 'fn', z: 66, needs: ['mastoid'], kind: 'nerve', line: true, w: 2.4, inert: true,
-          d: 'M 476 400 C 486 370, 498 335, 514 312' },
-        { id: 'recess', layer: 'fn', z: 64, needs: ['mastoid'], kind: 'recess', d: 'M 479 312 L 508 316 L 472 405 Z', at: [482, 330], lab: 'l' },
-        { id: 'buttress', layer: 'fn', z: 65, needs: ['mastoid'], kind: 'plate', d: 'M 478 300 L 500 297 L 506 309 L 481 310 Z', at: [492, 300], lab: 't' },
+        { id: 'fn', label: 'Facial nerve (tympanic + mastoid)', layer: 'fn', z: 40, kind: 'nerve', line: true, w: 18,
+          d: 'M 614 283 C 585 294, 550 311, 522 311 C 502 310, 490 300, 485 316 C 480 345, 480 395, 474 472', at: [478, 384], lab: 'l' },
+        { id: 'fn-tymp', layer: 'fn', z: 41, kind: 'nervemark', d: ell(572, 301, 3, 3), at: [572, 301], lab: 'r' },
+        { id: 'genu2', layer: 'fn', z: 41, kind: 'nervemark', d: ell(486, 312, 3, 3), at: [486, 312], lab: 'l' },
+        { id: 'smf', layer: 'fn', z: 41, kind: 'nervemark', d: ell(474, 472, 5, 5), at: [474, 474], lab: 'r' },
+        { id: 'geniculate', layer: 'fn', z: 41, kind: 'nerve', shade: 'dome', d: ell(616, 283, 13, 11), at: [624, 276], lab: 'r' },
+        { id: 'chorda', layer: 'fn', z: 42, kind: 'nerve', line: true, w: 4.5,
+          d: 'M 478 440 C 488 400, 504 345, 520 314 C 546 302, 578 298, 606 298', at: [548, 299], lab: 'b' },
+        { id: 'chorda-wall', layer: 'fn', z: 66, needs: ['mastoid'], kind: 'nerve', line: true, w: 4.5, inert: true,
+          d: 'M 482 420 C 492 385, 505 345, 520 314' },
+        { id: 'recess', layer: 'fn', z: 64, needs: ['mastoid'], kind: 'recess', d: 'M 493 318 L 518 318 L 486 425 Z', at: [492, 340], lab: 'l' },
+        { id: 'buttress', layer: 'fn', z: 65, needs: ['mastoid'], kind: 'plate', d: 'M 486 302 L 514 300 L 520 314 L 492 316 Z', at: [500, 301], lab: 't' },
 
-        /* ---- middle ear ---- */
-        { id: 'promontory', layer: 'me', z: 50, kind: 'mucosa', d: ell(564, 352, 26, 22), at: [572, 352], lab: 'r' },
-        { id: 'rw', layer: 'me', z: 52, kind: 'air', d: ell(530, 378, 9, 7), at: [530, 380], lab: 'b' },
-        { id: 'ow', layer: 'me', z: 52, kind: 'air', d: ell(545, 326, 11, 5), at: [554, 326], lab: 'r' },
-        { id: 'stapes', layer: 'me', z: 56, kind: 'ossicle', line: true, w: 2.6, d: 'M 532 327 L 539 318 L 548 327 M 530 328 L 551 328', at: [539, 320], lab: 'b' },
-        { id: 'sinustymp', layer: 'me', z: 52, kind: 'air', d: ell(512, 348, 7, 10), at: [508, 350], lab: 'l' },
-        { id: 'pyramid', layer: 'me', z: 53, kind: 'bone', d: 'M 514 324 L 524 318 L 522 328 Z', at: [518, 324], lab: 'l' },
-        { id: 'stapedius', layer: 'me', z: 54, kind: 'tendon', line: true, w: 1.2, d: 'M 522 322 L 538 320', inert: true },
-        { id: 'cochleariform', layer: 'me', z: 53, kind: 'bone', d: 'M 584 296 C 592 296, 594 306, 586 308 Z', at: [590, 302], lab: 'r' },
-        { id: 'tensor-tendon', layer: 'me', z: 54, kind: 'tendon', line: true, w: 1.4, d: 'M 586 302 L 555 293', inert: true },
-        { id: 'et', layer: 'me', z: 52, kind: 'air', d: ell(605, 332, 8, 12), at: [608, 336], lab: 'r' },
-        { id: 'incus', layer: 'me', z: 55, kind: 'ossicle', line: true, w: 4,
-          d: 'M 482 288 L 528 272 M 531 276 L 536 316', at: [533, 292], lab: 'l' },
-        { id: 'incus-body', layer: 'me', z: 55, kind: 'ossicle', d: ell(530, 272, 9, 8), inert: true },
-        { id: 'isj', layer: 'me', z: 57, kind: 'ossicle', d: ell(537, 317, 3, 3), at: [537, 316], lab: 'l' },
-        { id: 'malleus', label: 'Malleus (manubrium)', layer: 'me', z: 56, kind: 'ossicle', line: true, w: 4.5, d: 'M 549 272 L 553 291 L 562 344', at: [556, 318], lab: 'r' },
-        { id: 'malleus-head', layer: 'me', z: 56, kind: 'ossicle', d: ell(548, 266, 8, 9), inert: true },
+        /* ---- middle ear (ossicles from js/olsb-shapes.js, true size) ---- */
+        { id: 'promontory', layer: 'me', z: 50, kind: 'mucosa', shade: 'dome', d: ell(566, 356, 30, 25), at: [578, 356], lab: 'r' },
+        { id: 'rw', layer: 'me', z: 52, kind: 'air', shade: 'pit', d: ell(526, 382, 13, 11), at: [526, 394], lab: 'b' },
+        { id: 'ow', layer: 'me', z: 52, kind: 'air', shade: 'pit', d: ell(528, 327, 24, 12), at: [552, 330], lab: 'r' },
+        { id: 'stapes', layer: 'me', z: 56, kind: 'ossicle', evenodd: true, d: SH.stapesEnd(528, 327, MM), at: [528, 338], lab: 'b' },
+        { id: 'sinustymp', layer: 'me', z: 52, kind: 'air', shade: 'pit', d: ell(504, 354, 8, 12), at: [499, 356], lab: 'l' },
+        { id: 'pyramid', layer: 'me', z: 53, kind: 'bone', shade: 'dome', d: 'M 504 334 L 518 324 L 516 340 Z', at: [508, 334], lab: 'l' },
+        { id: 'stapedius', layer: 'me', z: 54, kind: 'tendon', line: true, w: 1.4, d: 'M 516 331 L 526 326', inert: true },
+        { id: 'cochleariform', layer: 'me', z: 53, kind: 'bone', d: 'M 584 296 C 594 295, 597 308, 587 310 Z', at: [592, 304], lab: 'r' },
+        { id: 'tensor-tendon', layer: 'me', z: 54, kind: 'tendon', line: true, w: 1.6, d: 'M 586 303 L 553 271', inert: true },
+        { id: 'et', layer: 'me', z: 52, kind: 'air', shade: 'pit', d: ell(606, 334, 9, 13), at: [610, 338], lab: 'r' },
+        { id: 'incus', layer: 'me', z: 55, kind: 'ossicle', d: SH.incusLat(517, 248, MM), at: [527, 292], lab: 'l' },
+        { id: 'isj', layer: 'me', z: 57, kind: 'ossicle', d: ell(523, 323, 3, 3), at: [523, 323], lab: 'l' },
+        { id: 'malleus', label: 'Malleus (manubrium)', layer: 'me', z: 56, kind: 'ossicle', d: SH.malleusLat(550, 289, MM), at: [559, 322], lab: 'r' },
 
         /* ---- cortex ---- */
         { id: 'cortex', layer: 'cortex', z: 60, bg: true, kind: 'bone', d: CORTEX + ' ' + EAC, dDrilled: CORTEX + ' ' + EAC + ' ' + CAVITY, evenodd: true, at: [260, 420], lab: 'b' },
@@ -206,6 +207,7 @@
         structures: S,
         tours: [TYMPANOPLASTY, MASTOID],
         views: VIEWS,
+        scale: MM,
         tmStates: ['intact', 'perf', 'flap', 'graft']
     });
 })();

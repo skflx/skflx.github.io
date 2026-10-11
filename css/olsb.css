@@ -42,6 +42,15 @@
   --olsb-muscle: #A94A3F;
   --olsb-brain: #C7ADA5;
   --olsb-perilymph: #9DB8C9;
+  /* Form shading (domes lit from above-front, pits dark at the rim). */
+  --olsb-light: #FFFFFF;
+  --olsb-light-a: 0.55;
+  --olsb-shadow: #2A2116;
+  --olsb-shadow-a: 0.32;
+  --olsb-casing-nerve: #8A7316;
+  --olsb-casing-vein: #213F7A;
+  --olsb-casing-artery: #7E1F16;
+  --olsb-cell: #B7A57C;
   --olsb-dim: 0.42;
 }
 html[data-theme="dark"] {
@@ -73,6 +82,13 @@ html[data-theme="dark"] {
   --olsb-muscle: #B85448;
   --olsb-brain: #8F7C76;
   --olsb-perilymph: #6F8FA6;
+  --olsb-light-a: 0.28;
+  --olsb-shadow: #000000;
+  --olsb-shadow-a: 0.45;
+  --olsb-casing-nerve: #5E4E0C;
+  --olsb-casing-vein: #1B305C;
+  --olsb-casing-artery: #6A1A12;
+  --olsb-cell: #7D6C47;
 }
 
 /* ===== PAGE ===== */
@@ -143,7 +159,7 @@ html[data-theme="dark"] {
 .sw-muscle { background: var(--olsb-muscle); }
 .sw-wall { background: var(--olsb-wall); }
 .sw-brain { background: var(--olsb-brain); }
-.sw-oticfill, .sw-oticring, .sw-innerline, .sw-innerfill { background: var(--olsb-otic); }
+.sw-oticfill, .sw-canal, .sw-innerline, .sw-innerfill, .sw-perilymph { background: var(--olsb-otic); }
 .sw-zone, .sw-cone, .sw-dimline, .sw-refline { background: var(--signal-2); }
 .sw-route, .sw-incision { background: var(--signal); }
 
@@ -163,7 +179,6 @@ html[data-theme="dark"] {
 #olsb-svg .k-plate.ln { fill: none; }
 #olsb-svg .k-sinusplate { stroke: var(--olsb-sinusplate); }
 #olsb-svg .k-lamina { stroke: var(--olsb-bone-dark); stroke-dasharray: 3 2; }
-#olsb-svg .k-otic { stroke: var(--olsb-otic); filter: drop-shadow(0 0 0.6px var(--olsb-otic-edge)); }
 #olsb-svg .k-air { fill: var(--olsb-air); }
 #olsb-svg .k-recess { fill: var(--olsb-recess); fill-opacity: 0.55; stroke: var(--olsb-recess); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 3 2; }
 #olsb-svg .k-mark { fill: var(--olsb-bone-dark); }
@@ -195,7 +210,6 @@ html[data-theme="dark"] {
 /* Kinds added for the cut-plane dioramas. */
 #olsb-svg .k-wall { fill: var(--olsb-wall); stroke: var(--olsb-bone-dark); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
 #olsb-svg .k-oticfill { fill: var(--olsb-otic); stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
-#olsb-svg .k-oticring { fill: var(--olsb-perilymph); stroke: var(--olsb-otic); stroke-width: 5; }
 #olsb-svg .k-innerline { stroke: var(--olsb-otic-edge); stroke-dasharray: 4 3; }
 #olsb-svg .k-innerfill { fill: var(--olsb-perilymph); fill-opacity: 0.55; stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
 #olsb-svg .k-muscle { stroke: var(--olsb-muscle); stroke-opacity: 0.85; }
@@ -217,6 +231,31 @@ html[data-theme="dark"] {
 #olsb-svg .k-route2 { stroke-dasharray: 5 3; }
 #olsb-svg .arrowhead { fill: var(--ink-muted); }
 #olsb-svg .k-zone.ln { fill: none; }
+
+/* Rendering: section hatching, form shading, tube casings, canal lumens. */
+#olsb-svg .hatch-bg { fill: var(--olsb-bone); }
+#olsb-svg .hatch-ln { stroke: var(--olsb-bone-dark); stroke-width: 0.9; stroke-opacity: 0.45; }
+#olsb-svg .k-bonesec { fill: url(#olsb-hatch); }
+#olsb-svg .sh-hi { stop-color: var(--olsb-light); stop-opacity: var(--olsb-light-a); }
+#olsb-svg .sh-clear { stop-color: var(--olsb-light); stop-opacity: 0; }
+#olsb-svg .sh-lo { stop-color: var(--olsb-shadow); stop-opacity: var(--olsb-shadow-a); }
+#olsb-svg .sh-lo-soft { stop-color: var(--olsb-shadow); stop-opacity: 0.08; }
+#olsb-svg .shade { pointer-events: none; stroke: none; }
+#olsb-svg .casing { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#olsb-svg .c-nerve { stroke: var(--olsb-casing-nerve); }
+#olsb-svg .c-vein { stroke: var(--olsb-casing-vein); }
+#olsb-svg .c-artery, #olsb-svg .c-arterywall { stroke: var(--olsb-casing-artery); }
+#olsb-svg .c-canal { stroke: var(--olsb-otic-edge); }
+#olsb-svg .c-muscle { stroke: var(--olsb-casing-artery); stroke-opacity: 0.6; }
+#olsb-svg .k-canal { stroke: var(--olsb-otic); }
+#olsb-svg .lumen { fill: none; stroke: var(--olsb-perilymph); stroke-linecap: round; pointer-events: none; }
+#olsb-svg .k-cellopen { fill: var(--olsb-cell); fill-opacity: 0.55; stroke: var(--olsb-bone-dark); stroke-width: 0.8px; vector-effect: non-scaling-stroke; stroke-opacity: 0.6; }
+#olsb-svg .k-cells { fill: var(--olsb-air); fill-opacity: 0.82; stroke: var(--olsb-bone-dark); stroke-width: 0.8px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-ridge { stroke: var(--olsb-bone-dark); stroke-opacity: 0.55; }
+#olsb-svg .k-spiral { stroke: var(--olsb-otic-edge); fill: none; }
+#olsb-svg .k-perilymph { fill: var(--olsb-perilymph); stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .scalebar path { fill: none; stroke: var(--signal-2); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#olsb-svg .scalebar text { font-family: var(--font-mono); fill: var(--signal-2); text-anchor: middle; stroke: var(--olsb-stage); paint-order: stroke; stroke-linejoin: round; }
 
 /* See-through: the overlying surfaces go faint so the projection of
    deeper structures shows under them. */
@@ -290,3 +329,6 @@ html[data-theme="dark"] {
 .olsb-chip:hover { color: var(--ink); border-color: var(--ink); }
 .olsb-chip.active { color: var(--bg); background: var(--ink); border-color: var(--ink); }
 .olsb [hidden] { display: none !important; }
+@media (max-width: 600px) {
+  .olsb-orient { position: static; padding: 0.3rem 0.6rem 0.45rem; border-top: 1px solid var(--rule); }
+}
