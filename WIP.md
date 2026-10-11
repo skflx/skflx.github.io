@@ -172,9 +172,13 @@ z superior, origin at the oval window), placed from textbook dimensions
 and relations: facial nerve segment by segment, ossicles on the drum,
 three canals in their mutual planes, a spiral cochlea with scalae and
 lamina, Voronoi mastoid air cells, sigmoid/jugular bulb/carotid, dura and
-brain. Two grids: 0.3 mm for the specimen, 0.1 mm for the tympanic
-cavity and labyrinth, built and carved in a Web Worker (the volume file
-itself). Drill states carve it with margins round the hazards: flap up,
+brain. Three grids, each replacing the coarser one inside its box: 0.3 mm
+for the specimen, 0.1 mm for the tympanic cavity and labyrinth, and an
+8 mm cube at 0.05 mm rebuilt round the point you look at when you are
+close (within the fine box), all built and carved in a Web Worker (the
+volume file itself; no worker, no cube). Walking (WASD) moves at a speed
+set by the free space ahead and stops half a millimetre short of a wall,
+so the middle ear can be walked like a room. Drill states carve it with margins round the hazards: flap up,
 cortical mastoidectomy, facial recess, canal wall down,
 translabyrinthine, middle fossa. Rendered as blocky voxels (face shade,
 vertex AO, coarse openness for cavity depth) with layers, see-through

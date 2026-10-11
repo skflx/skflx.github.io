@@ -141,7 +141,8 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   relation's axis). After moving anatomy, also look: isolate the ossicles,
   nerves and inner ear (`#m=3d&L=ossicles.nerves.inner.muscles&cam=…`)
   from lateral, above, front and medial, and step the guided flight with
-  the fine grid loaded (`#olsb3d-stage[data-fine="ready"]`).
+  the fine grid loaded (`#olsb3d-stage[data-fine="ready"]`) and, for the close
+  views, the detail cube (`data-micro="ready"`).
 
 ### Wiki sync (`wiki/sync/sync-vault.mjs`)
 `tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and

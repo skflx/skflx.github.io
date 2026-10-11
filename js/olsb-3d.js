@@ -43,7 +43,7 @@ const st = {
     sel: null, focus: [], tour: 0, step: -1, moved: false
 };
 /* One per grid: metadata from the build, label arrays per drill state, what is shown, its meshes. */
-const lv = { coarse: null, fine: null };
+const lv = { coarse: null, fine: null, micro: null };
 let renderer, scene, camera, canvas, stage, needs = true, tween = null, built = false, worker = null;
 let matSolid, matGhost;
 const cam = { target: new THREE.Vector3(), pos: new THREE.Vector3() };
@@ -59,7 +59,12 @@ function el(tag, cls, text) {
 const gl = (id) => O.glossary[id] || {};
 const nameOf = (id) => gl(id).name || id;
 const labelOf = (code) => V.LABELS[code];
-const fineOn = () => !!(st.detail && lv.fine && lv.fine.lab);
+/* Grids from coarse to fine; a finer one, when drawn, replaces the coarser voxels inside its box. */
+const ORDER = ['coarse', 'fine', 'micro'];
+const on = (n) => !!(lv[n] && lv[n].lab && (n === 'coarse' || st.detail));
+const active = () => ORDER.filter(on);
+const finerBox = (n) => { const f = ORDER[ORDER.indexOf(n) + 1]; return f && on(f) ? lv[f].box : null; };
+const fineOn = () => on('fine');
 
 /* ---------- mode switch ---------- */
 function setMode(m, write) {
@@ -130,17 +135,17 @@ function startWorker() {
     try {
         if (!tag || typeof Worker !== 'function') return null;
         const w = new Worker(tag.src);
-        const waiting = [];
+        const waiting = new Map();
+        let seq = 0;
         w.onmessage = (e) => {
-            const m = e.data;
-            const i = waiting.findIndex((x) => m.type === 'error' || (x.level === m.level && (m.type === 'built' || x.state === m.state)));
-            if (i < 0) return;
-            const x = waiting.splice(i, 1)[0];
-            if (m.type === 'error') x.reject(new Error(m.message)); else x.resolve(m);
+            const m = e.data || {}, x = waiting.get(m.id);
+            if (!x) return;
+            waiting.delete(m.id);
+            if (m.error) x.reject(new Error(m.error)); else x.resolve(m);
         };
-        w.onerror = (e) => { e.preventDefault(); waiting.splice(0).forEach((x) => x.reject(new Error('worker failed'))); worker = null; };
+        w.onerror = (e) => { e.preventDefault(); waiting.forEach((x) => x.reject(new Error('worker failed'))); waiting.clear(); worker = null; };
         return {
-            ask: (msg) => new Promise((resolve, reject) => { waiting.push({ level: msg.level, state: msg.state, resolve, reject }); w.postMessage(msg); })
+            ask: (msg) => new Promise((resolve, reject) => { const id = ++seq; waiting.set(id, { resolve, reject }); w.postMessage(Object.assign({ id }, msg)); })
         };
     } catch (e) { return null; }
 }
@@ -154,16 +159,63 @@ function ask(msg) {
         } else resolve({ lab: V.carve(local[msg.level], msg.state) });
     }, 20));
 }
+function levelFrom(name, m) {
+    const box = [m.o[0], m.o[1], m.o[2], m.o[0] + m.nx * m.vox, m.o[1] + m.ny * m.vox, m.o[2] + m.nz * m.vox];
+    return { name, nx: m.nx, ny: m.ny, nz: m.nz, vox: m.vox, o: m.o, box, anchors: m.anchors, labs: { intact: m.lab }, lab: null, shown: null, meshes: [], quads: [] };
+}
 async function buildLevel(name) {
-    const m = await ask({ type: 'build', level: name });
-    lv[name] = { name, nx: m.nx, ny: m.ny, nz: m.nz, vox: m.vox, o: m.o, anchors: m.anchors, labs: { intact: m.lab }, lab: null, shown: null, meshes: [], quads: [] };
+    lv[name] = levelFrom(name, await ask({ type: 'build', level: name }));
 }
 async function labsFor(state) {
-    const names = ['coarse', 'fine'].filter((n) => lv[n] && (n === 'coarse' || st.detail));
+    const names = ORDER.filter((n) => lv[n] && (n === 'coarse' || st.detail));
     await Promise.all(names.map(async (n) => {
         const L = lv[n];
-        if (!L.labs[state]) L.labs[state] = (await ask({ type: 'carve', level: n, state })).lab;
+        if (L.labs[state]) return;
+        const lab = (await ask({ type: 'carve', level: n, state })).lab;
+        /* the worker may have moved on to a new detail cube: keep only labels that fit this one */
+        if (lab.length === L.nx * L.ny * L.nz && lv[n] === L) L.labs[state] = lab;
     }));
+}
+
+/* The detail cube: when you look closely at something inside the fine box, the worker builds
+   the 8 mm round it at 0.05 mm and it replaces the fine voxels there. Only with a worker. */
+let microBusy = false, microAgain = false;
+function microBox(t) {
+    const F = V.LEVELS.fine, s = V.LEVELS.micro.size, b = [0, 0, 0, 0, 0, 0];
+    for (let a = 0; a < 3; a++) {
+        let lo = Math.min(F.box[a + 3] - s, Math.max(F.box[a], t[a] - s / 2));
+        lo = F.box[a] + Math.round((lo - F.box[a]) / F.vox) * F.vox;
+        b[a] = +lo.toFixed(4);
+        b[a + 3] = +(lo + s).toFixed(4);
+    }
+    return b;
+}
+async function updateMicro() {
+    if (!worker || !st.detail || !on('fine')) return;
+    if (microBusy) { microAgain = true; return; }
+    const t = toM(cam.target);
+    if (cam.pos.distanceTo(cam.target) > 18 || !inBox(t, V.LEVELS.fine.box)) return;
+    const M = lv.micro, c = M && [0, 1, 2].map((a) => (M.box[a] + M.box[a + 3]) / 2);
+    if (M && Math.hypot(t[0] - c[0], t[1] - c[1], t[2] - c[2]) < 2.5) return;
+    microBusy = true;
+    stage.setAttribute('data-micro', 'building');
+    try {
+        const L = levelFrom('micro', await ask({ type: 'build', level: 'micro', box: microBox(t) }));
+        while (!L.labs[st.state]) {
+            const want = st.state, lab = (await ask({ type: 'carve', level: 'micro', state: want })).lab;
+            L.labs[want] = lab;
+        }
+        if (lv.micro) lv.micro.meshes.forEach((m) => { scene.remove(m); m.geometry.dispose(); });
+        lv.micro = L;
+        useState();
+        remesh();
+        placeTags();
+        stage.setAttribute('data-micro', 'ready');
+    } catch (e) {
+        stage.setAttribute('data-micro', 'failed');
+    }
+    microBusy = false;
+    if (microAgain) { microAgain = false; updateMicro(); }
 }
 
 /* ---------- visibility ---------- */
@@ -198,7 +250,8 @@ function computeShown(L, vt) {
 }
 /* shown value at a model point (mm), from whichever grid covers it */
 function shownAt(x, y, z) {
-    for (const L of fineOn() ? [lv.fine, lv.coarse] : [lv.coarse]) {
+    for (const n of active().reverse()) {
+        const L = lv[n];
         const i = Math.floor((x - L.o[0]) / L.vox), j = Math.floor((y - L.o[1]) / L.vox), k = Math.floor((z - L.o[2]) / L.vox);
         if (i >= 0 && j >= 0 && k >= 0 && i < L.nx && j < L.ny && k < L.nz) return L.shown[i + L.nx * (j + L.ny * k)];
     }
@@ -211,7 +264,7 @@ const FACES = [
     [0, 1, 0.84], [0, -1, 0.7], [1, 1, 0.78], [1, -1, 0.74], [2, 1, 1.0], [2, -1, 0.56]
 ];
 /* vertex occlusion by how many of the three neighbours are solid; gentler on the fine grid, whose steps are small */
-const AO = { coarse: [0.5, 0.68, 0.84, 1], fine: [0.7, 0.8, 0.9, 1] };
+const AO = { coarse: [0.5, 0.68, 0.84, 1], fine: [0.7, 0.8, 0.9, 1], micro: [0.78, 0.86, 0.94, 1] };
 function hash(i) { let h = Math.imul(i ^ (i >>> 15), 2246822519); h ^= h >>> 13; return ((h >>> 0) % 1000) / 1000; }
 
 /* Large-scale occlusion on the coarse grid, in 0.9 mm cells: the share of 14 directions
@@ -260,7 +313,7 @@ function buildMesh(L, openAt, skipBox) {
     const skip = (i, j, k) => i >= sk[0][0] && i < sk[0][1] && j >= sk[1][0] && j < sk[1][1] && k >= sk[2][0] && k < sk[2][1];
     /* neighbours past the edge of the fine grid come from the coarse one */
     const at = (i, j, k) => (i < 0 || j < 0 || k < 0 || i >= nx || j >= ny || k >= nz)
-        ? (L.name === 'fine' ? shownAt(o[0] + (i + 0.5) * v, o[1] + (j + 0.5) * v, o[2] + (k + 0.5) * v) : 0)
+        ? (L.name !== 'coarse' ? shownAt(o[0] + (i + 0.5) * v, o[1] + (j + 0.5) * v, o[2] + (k + 0.5) * v) : 0)
         : shown[i + nx * (j + ny * k)];
     const counts = [0, 0];
     let out = null;
@@ -333,7 +386,7 @@ function colorize() {
         base[l.code] = [tmp.r, tmp.g, tmp.b];
     });
     const cut = [TONES.cut.r, TONES.cut.g, TONES.cut.b];
-    ['coarse', 'fine'].forEach((n) => {
+    ORDER.forEach((n) => {
         const L = lv[n];
         if (!L) return;
         L.meshes.forEach((mesh, m) => {
@@ -368,18 +421,18 @@ function material(ghost) {
 function remesh() {
     if (!lv.coarse || !lv.coarse.lab) return;
     const vt = visTable();
-    computeShown(lv.coarse, vt);
-    if (fineOn()) computeShown(lv.fine, vt);
+    const act = active();
+    act.forEach((n) => computeShown(lv[n], vt));
     const openAt = openness();
     let faces = 0;
-    ['coarse', 'fine'].forEach((n) => {
+    ORDER.forEach((n) => {
         const L = lv[n];
         if (!L) return;
         L.meshes.forEach((m) => { scene.remove(m); m.geometry.dispose(); });
         L.meshes = [];
         L.quads = [];
-        if (n === 'fine' && !fineOn()) return;
-        L.quads = buildMesh(L, openAt, n === 'coarse' && fineOn() ? V.LEVELS.fine.box : null);
+        if (!act.includes(n)) return;
+        L.quads = buildMesh(L, openAt, finerBox(n));
         L.quads.forEach((b, m) => {
             const g = new THREE.BufferGeometry();
             g.setAttribute('position', new THREE.BufferAttribute(b.pos, 3));
@@ -405,11 +458,14 @@ function pickRay(ndcX, ndcY) {
     rc.setFromCamera(new THREE.Vector2(ndcX, ndcY), camera);
     return march(toM(rc.ray.origin), toM(rc.ray.direction));
 }
-/* First solid voxel along o + t d (t < maxT), over both grids. */
+/* First solid voxel along o + t d (t < maxT), over every drawn grid. */
 function march(o, d, maxT) {
-    const a = marchGrid(lv.coarse, o, d, maxT, fineOn() ? V.LEVELS.fine.box : null);
-    const b = fineOn() ? marchGrid(lv.fine, o, d, maxT, null) : null;
-    return a && b ? (a.t < b.t ? a : b) : a || b;
+    let best = null;
+    active().forEach((n) => {
+        const h = marchGrid(lv[n], o, d, maxT, finerBox(n));
+        if (h && (!best || h.t < best.t)) best = h;
+    });
+    return best;
 }
 function marchGrid(L, o, d, maxT, skipBox) {
     const v = L.vox, nx = L.nx, ny = L.ny, nz = L.nz, dims = [nx, ny, nz];
@@ -458,7 +514,7 @@ function applyCam() {
     camera.position.copy(cam.pos);
     camera.up.set(0, 1, 0);
     camera.lookAt(cam.target);
-    camera.near = Math.max(0.02, Math.min(0.5, cam.pos.distanceTo(cam.target) * 0.01));
+    camera.near = Math.max(0.01, Math.min(0.5, cam.pos.distanceTo(cam.target) * 0.004));
     camera.updateProjectionMatrix();
     needs = true;
 }
@@ -497,8 +553,6 @@ function dolly(f) {
 const keys = new Set();
 function walk(dt) {
     if (!keys.size) return false;
-    /* speed scales with how far you stand from what you look at: slow inside the ear, quick outside */
-    const sp = Math.min(30, Math.max(2.5, cam.pos.distanceTo(cam.target) * 0.6)) * (keys.has('shift') ? 3 : 1) * dt;
     const fwd = cam.target.clone().sub(cam.pos).normalize(), right = new THREE.Vector3().crossVectors(fwd, camera.up).normalize();
     const mv = new THREE.Vector3();
     if (keys.has('w') || keys.has('arrowup')) mv.add(fwd);
@@ -509,7 +563,17 @@ function walk(dt) {
     if (keys.has('q') || keys.has('c')) mv.y -= 1;
     if (keys.has('arrowleft')) lookAround(-220 * dt, 0);
     if (keys.has('arrowright')) lookAround(220 * dt, 0);
-    if (mv.lengthSq()) { mv.setLength(sp); cam.pos.add(mv); cam.target.add(mv); applyCam(); }
+    if (mv.lengthSq()) {
+        /* Walk like a game camera: speed follows the free space ahead (slow in the 2 mm middle
+           ear, quick in the open), and you stop at a wall instead of passing into it. */
+        const eye = toM(cam.pos), dir = toM(mv.clone().normalize());
+        const inside = shownAt(eye[0], eye[1], eye[2]) === 1;
+        const hit = inside ? null : march(eye, dir, 60);
+        const clear = hit ? hit.t : 60;
+        const speed = Math.min(30, Math.max(0.5, clear * 1.6)) * (keys.has('shift') ? 3 : 1);
+        const stepLen = Math.min(speed * dt, inside ? 1e9 : Math.max(0, clear - 0.5));
+        if (stepLen > 0) { mv.setLength(stepLen); cam.pos.add(mv); cam.target.add(mv); applyCam(); }
+    }
     return true;
 }
 
@@ -574,7 +638,7 @@ function wireInput() {
 let settleT = null;
 function settle() {
     clearTimeout(settleT);
-    settleT = setTimeout(() => { st.moved = true; writeHash(); }, 400);
+    settleT = setTimeout(() => { st.moved = true; writeHash(); updateMicro(); }, 400);
 }
 function focusOn(pm) {
     const t = toW(pm), off = cam.pos.clone().sub(cam.target);
@@ -769,9 +833,10 @@ async function setState(id) {
     remesh();
     placeTags();
     writeHash();
+    updateMicro();
 }
 function useState() {
-    ['coarse', 'fine'].forEach((n) => { if (lv[n]) lv[n].lab = lv[n].labs[st.state] || null; });
+    ORDER.forEach((n) => { if (lv[n]) lv[n].lab = lv[n].labs[st.state] || null; });
 }
 function status(text) {
     const s = $('olsb3d-status');
@@ -881,7 +946,7 @@ function frame(now) {
         cam.pos.lerpVectors(tween.p0, tween.p1, e);
         cam.target.lerpVectors(tween.q0, tween.q1, e);
         applyCam();
-        if (k >= 1) tween = null;
+        if (k >= 1) { tween = null; updateMicro(); }
     }
     if (walk(dt)) needs = true;
     if (needs && !$('olsb3d').hidden) {
@@ -928,6 +993,7 @@ async function loadFine() {
         remesh();
         placeTags();
         stage.setAttribute('data-fine', 'ready');
+        updateMicro();
     } catch (e) {
         st.detail = false;
         renderControls();

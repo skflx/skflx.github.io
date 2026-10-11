@@ -163,7 +163,9 @@
     /* ---------- grid and painting ---------- */
     var LEVELS = {
         coarse: { vox: 0.3, box: [-16, -25, -18, 16, 18, 12] },
-        fine: { vox: 0.1, box: [-7.6, -10, -5.4, 8.6, 5.9, 9.3] }
+        fine: { vox: 0.1, box: [-7.6, -10, -5.4, 8.6, 5.9, 9.3] },
+        /* a cube of this many mm, rebuilt round wherever you look closely inside the fine box */
+        micro: { vox: 0.05, size: 8 }
     };
     function Grid(vox, box) {
         this.vox = vox;
@@ -796,28 +798,30 @@
         ]
     }];
 
-    /* Two grids: the whole specimen, and the tympanic cavity and labyrinth at a third of the
-       size. The fine box sits on coarse voxel boundaries so the two meshes meet edge to edge. */
+    /* Three grids: the whole specimen; the tympanic cavity and labyrinth at a third of the
+       voxel size; and a movable detail cube at half that again. Each sits on the boundaries of
+       the grid it refines, so the meshes meet edge to edge. */
     O.volume = { build: build, carve: carve, LEVELS: LEVELS, LABELS: LABELS, LAYERS: LAYERS, STATES: STATES, VIEWS: VIEWS, TOURS: TOURS, codes: C };
 
-    /* As a Web Worker: build a level once, then carve its states on request.
-       Replies carry the labels as transferable buffers. */
+    /* As a Web Worker: build a level (the micro level with the box it is asked for), then
+       carve its states on request. Replies echo the request id and carry the labels as
+       transferable buffers. */
     if (typeof window === 'undefined' && typeof importScripts === 'function') {
         var vols = {};
         self.onmessage = function (e) {
             var m = e.data || {}, out;
             try {
                 if (m.type === 'build') {
-                    var v = vols[m.level] = build(LEVELS[m.level]);
+                    var lv = LEVELS[m.level];
+                    var v = vols[m.level] = build({ vox: lv.vox, box: m.box || lv.box });
                     out = new Uint8Array(v.lab);
-                    self.postMessage({ type: 'built', level: m.level, nx: v.nx, ny: v.ny, nz: v.nz, vox: v.vox, o: v.o, anchors: v.anchors, lab: out }, [out.buffer]);
+                    self.postMessage({ id: m.id, nx: v.nx, ny: v.ny, nz: v.nz, vox: v.vox, o: v.o, anchors: v.anchors, lab: out }, [out.buffer]);
                 } else if (m.type === 'carve') {
                     out = carve(vols[m.level], m.state);
-                    if (out === vols[m.level].lab) out = new Uint8Array(out);
-                    self.postMessage({ type: 'carved', level: m.level, state: m.state, lab: out }, [out.buffer]);
+                    self.postMessage({ id: m.id, lab: out }, [out.buffer]);
                 }
             } catch (err) {
-                self.postMessage({ type: 'error', message: String(err && err.message || err) });
+                self.postMessage({ id: m.id, error: String(err && err.message || err) });
             }
         };
     }
