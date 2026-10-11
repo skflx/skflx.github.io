@@ -226,7 +226,10 @@ content to work; neither is scheduled.
 
 **State:** Node suites and browser suites are listed under Commands in
 `CLAUDE.md`; what each one proves is in `docs/verification.md`. CI runs the
-verification suites on every PR. Security: `docs/security.md` (audit 2026-09-23).
+fast tier (`check-data`, `lint-oksat`, the page smoke test) on every PR and a
+subsystem's suite when its files change; the SSB suite runs as four parallel
+shards (`SHARDS` in `tools/test-ssb.mjs`). Security: `docs/security.md` (audit
+2026-09-23).
 
 **Next:** GitHub Pages cannot send headers, so `frame-ancestors` and HSTS are out
 of reach without a proxy host. Whether that matters is the owner's call.
