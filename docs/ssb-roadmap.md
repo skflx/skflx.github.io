@@ -23,7 +23,7 @@ work it records.
 | 7 Self-test | not started | T1 (deferred) |
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
 | 3c External nose and rhinoplasty framework (`docs/ssb.md` §6.2) | specced (ST7); deferred behind O7 | ST7b (ready) → ST7a → ST7c; ST7d; ST7e (O14 decided) |
-| Realistic anatomy (design `docs/ssb.md` §14; sources `docs/realistic-anatomy.md`) | in progress (§3) | RS2c (critical path), then RP2 (owner fetch), RP3 (spec pending), POP3, RA0d; then RS3–RS6, OP1, VB1/PB1, RA5 |
+| Realistic anatomy (design `docs/ssb.md` §14; sources `docs/realistic-anatomy.md`) | in progress (§3) | RS2c (critical path), then RP2 (owner fetch), RP3 (specced, waits on RP2), POP3, RA0d; then RS3–RS6, OP1, VB1/PB1, RA5 |
 | ∞ Content | all `draft` | owner review (tier 1 first); backlog §6 |
 
 ## 2. Owner — decisions and actions
@@ -51,6 +51,8 @@ Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
 ### Open
 
 - **RA-O7** Author names remain in git history before 2026-10-07. Recommended: leave history; rewrite only if the authors ask. (`docs/realistic-anatomy.md` §13.)
+- **RP3, serve case material?** Whether any Radiopaedia volume or image is ever served. RP3 commits none. (`docs/ssb-roadmap.md` §3a, RP3 Owner line.)
+- **RP3, pool into the population file?** Whether Radiopaedia entries may go into `ssb/anatomy/population.json`. Its share-alike licence (CC BY-NC-SA 3.0) would then cover that file.
 - **Carried from `docs/ssb.md` §13:**
   - Strict CSP. Recommended: keep it; gzip first, then Draco's JS decoder. `'wasm-unsafe-eval'` only if the budgets fail.
   - Publish while `draft`. Recommended: yes, with visible unverified markers.
@@ -80,7 +82,7 @@ Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
 - **AEA–PEA spacing:** 21 mm in this specimen against 12 mm in the population; the PEA is inferred.
 - **Tier-1 FESS anatomy and the two dioramas' schematic proportions:** flip `review` to `verified` only where right. Nothing is `verified` yet. In this repo, `verified` on a source means exists-as-cited, not supports-the-claim.
 - **Figure depictions and captions** (Fig. 2 and the Larynx): schematic; check against the owner's sources (`docs/decisions.md` §7).
-- **Radiopaedia (RP2):** veto any pick in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`), then open each in your browser, save its stack (`docs/realistic-anatomy.md` §4.3), and fill the "owner reads" fields.
+- **Radiopaedia (RP2):** veto any pick in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`), then open each in your browser, save its stack to `tools/ssb-pipeline/incoming/radiopaedia/<rID>/` (gitignored; `docs/realistic-anatomy.md` §4.3), and fill the "owner reads" fields.
 - **Optional:** full texts of Daniel & Palhazi 2018, Daniel 2014, Çavuş Özkan 2020 and Letourneau & Daniel 1988, and a sourced cephalic-malposition threshold (ST7 sources); hand segmentation in 3D Slicer, or a contrast CT.
 
 ## 3. Open work packages
@@ -493,9 +495,6 @@ findings in docs/realistic-anatomy.md §4.4 (107 distinct scans of 130 ids; asym
 Follow-up for RS: explain head A's left-cavity volume (docs/realistic-anatomy.md §4.4) before RA3b.
 ```
 
-```
-### FG1 — UW figure inventory (figures.json) [done 2026-10-09, #151; CP-RA1] · Sonnet (mechanics) + Opus (ids, roles) · depends: —
-### RP1 — Radiopaedia shortlist (cases.json) [done 2026-10-09, #149; pick at CP-RA1] · Sonnet (search, records) → Opus (choice) · depends: — (RA-O4, RA-O5 decided)
 ### Wave RA-2 — resegmentation and alignment
 
 ```
@@ -753,6 +752,74 @@ PB2  pathology batch 2 (R9.2) · Opus → Sonnet
 (POP1 here was the asymmetry panel: built as POP2a/POP2b on docs/ssb-roadmap.md's board.)
 ```
 
+```
+### RP3 — Radiopaedia stacks → volume, pose, observations, population entries   [todo: specced 2026-10-11, waits on RP2] · Sonnet (intake, fits, files) + Opus (points, review) · depends: RP2; for step 5 also RS6 (RA landmark set) and FG2 (pose fields)
+Goal:     each picked case RP2 delivers with grade A or B and a CC BY-NC-SA 3.0 licence line becomes
+          numbers in its own ssb/exemplars/rp-<rID>/: volume header and spacing, pose in head A's
+          frame, observations (R6.1) and, for a normal case, population entries. No pixel is committed.
+Read:     docs/realistic-anatomy.md §4.2, §4.3, §4.4, §5 items 2, 5, 6, 10; docs/ssb.md §4, §14 R6.1,
+          R6.2; ssb/reference/radiopaedia/ (README, RP2's records); the docstrings of tools/ssb-pipeline/
+          uw/scale.py, uw/register.py, uw/labels3d.py, intake/intake.py and nasalseg/stats.py.
+Touch:    tools/ssb-pipeline/radiopaedia/rp.py (new: a subcommand per step, `all`, `selftest`);
+          ssb/exemplars/rp-<rID>/ (new: LICENSE.md, volume.json, points.json, pose.json,
+          observations.json, population.json); tools/check-data.mjs (step 8's check); a
+          radiopaedia/ section in tools/ssb-pipeline/README.md; this status line.
+Don't:    fetch from radiopaedia.org (RA-O5: inputs are the owner's saves in tools/ssb-pipeline/
+          incoming/radiopaedia/<rID>/); change ssb/anatomy/**, ssb/{ct,geometry,models,states,content},
+          cases.json, ssb/LICENSE-data.md, js/**, stamp-assets.mjs, or the uw/, nasalseg/, intake/
+          scripts (port their methods); commit an image, slice or volume, or a case-derived number
+          outside its folder; move a point or a spacing after seeing a residual (RS2's rule).
+Steps:    1. Intake. Skip, with the reason in the PR table: a vetoed or incomplete record, a licence
+             line other than CC BY-NC-SA 3.0 (flagged to the owner), recorded burned-in text, grade C
+             (no folder: a 2D exemplar for FG2's method, later). Per plane: scroll order, count =
+             sliceCount, one size; colour beyond JPEG noise is an annotation. Orientation from
+             anatomy; laterality by radiological convention, checked against the case text's side.
+          2. Spacing. In-plane mm/px from anatomy (globes, interorbital and skull dimensions; scale.py's
+             references, inverse-variance). Slice spacing: grade A by registering one plane's stack to
+             the other's (register.py's model), grade B across slices as §4.2 says for head B. Grade A
+             also needs the planes' own in-plane estimates within 10 % of each other (§5 item 5).
+          3. Points (Opus, not delegated): points.json on the case's own slices: frame landmarks (ANS,
+             porions, orbitales), RA landmarks where visible, the points and measures its `serves` ids
+             need, one seed per maxillary sinus and cavity if normal. Each: plane, slice, pixel,
+             sure/probable, one line on what was seen; provenance (Opus, date), review: draft.
+          4. Volume. Its own §4 frame (labels3d.py's rule), isotropic 0.5 mm, trilinear, 8-bit display
+             values kept (toHU only where the window was read); ct.u8.gz (gzip mtime 0) and the review
+             sheets to incoming/_rp/<rID>/; volume.json: dims, spacing, affine, every estimate and its
+             method, frame residual, window as read, SHA-256 of the inputs and of the volume.
+          5. Pose. Similarity + TPS from the case's RA landmarks to the scanned base's
+             (ssb/anatomy/scanned/geometry/landmarks.json, read only), in R6.1's fields as FG2 writes
+             them; the scale is head size, never fed back into the spacing; leave-one-out residuals;
+             under 5 landmarks, no pose.
+          6. Observations: R6.1's schema, source rp:<rID>, raw in voxels, ras via the pose or null,
+             sigmaMm from spacing and confidence; measures as ratios to a local reference (§5 item 5).
+          7. Population entries, owner-confirmed normal cases only (§5 item 2): maxillary sinus and
+             nasal cavity per side and AI by stats.py's formulas on air grown from the seeds (threshold
+             from the stack's own air and soft-tissue peaks; cavity only with naris and choana in view,
+             §5 item 10 beside it); percentile among nasalseg.json's clear subjects; n = 1, not like for like.
+          8. Licence: rp.py writes LICENSE.md from the record (CC BY-NC-SA 3.0 and its link; the licence
+             line verbatim and date read; contributor, Radiopaedia.org and rID as links; case URL; each
+             file and how it was made). check-data: every file in the folder is listed there; LICENSE.md
+             names licence, rID, contributor; each JSON's source is rp:<that rID>; every `of` a graph id;
+             no image or volume file.
+          9. Review (Opus), on the sheets (points in three planes; the case at its pose beside head A):
+             the images show `serves` on the side named, each landmark on its structure; signed in the PR.
+Accept:   rp.py selftest (synthetic stack of known spacing, orientation and similarity: spacing within
+          2 %, landmarks within 0.5 mm, nothing written under ssb/); rp.py all twice, git status clean;
+          node tools/check-data.mjs passes, and fails on an unlisted scratch file in a case folder (not
+          committed); git diff --exit-code ssb/anatomy ssb/reference js; pose median leave-one-out
+          ≤ 3 mm, none > 6 mm (FG2's), else recorded as failed, never forced. PR table per picked case:
+          grade RP2 → RP3, planes, spacing per method, plane agreement, residuals, AI, or skip reason.
+Escalate: grade C needed as a volume; a licence line missing or unreadable; burned-in text or an
+          annotation the record missed (never masked); spacing not estimable (no globe, one plane with
+          no through-plane anatomy, uneven slices) or planes > 10 % apart; the case text's side against
+          the image's; a frame landmark out of view (a substitute is Opus's call); a landmark or measure
+          needing an anatomy call or a parameter not in R8, R9 or the graph; an id the graph lacks.
+Owner:    at CP-RA4, per case, from the PR table and the sheets: licence line and contributor against
+          the page; each anatomy call (side, the class the case states, "normal"); only the owner sets
+          verified. Open, not decided here: serving an exemplar volume or image (R14, R6.6, §5.1
+          defacing); pooling entries into ssb/anatomy/population.json (ShareAlike would bind it).
+```
+
 **Checkpoint CP-RA4.**
 
 ### Wave RA-5 — integration
@@ -789,7 +856,7 @@ Nothing is running and no PR is open. The RS2b branch `claude/RS2b-ethmoid-lamel
 Next, in order:
 
 1. **RS2c** (critical path): run `fetch.py` for the crawl first (do not open the split), place the control points, then delegate the fit and plumbing. Then specify **RS3** on the fitted basal lamella.
-2. **RP2** (beside it): the owner's checklist per picked case was given 2026-10-11. The picks in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`) are vetoable. Then specify **RP3**.
+2. **RP2** (beside it): the owner's checklist per picked case was given 2026-10-11. The picks in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`) are vetoable. RP3 is specced (§3a); it waits on RP2's records.
 3. **POP3** (beside it, Sonnet): NasalSeg relations; fixes `stats.py` dropping `meanShape`.
 4. **RA0d** (any time, small): the name guard.
 5. **Content before RS5**: graph ids for the posterior ethmoidal canal and the nasolacrimal canal.
@@ -865,6 +932,8 @@ Realistic anatomy (moved 2026-10-11):
 - **C-RA** — Graph additions — done 2026-10-09, #146
 - **RS1** — Native-grid working volume and the honest baseline — done 2026-10-09, #156; its Escalate (the left lateral sphenoid recess) is ruled in RS2
 - **RS2b** — Ethmoid lamellae — stopped 2026-10-09: v2 and v3 name no middle turbinate; RA-O9 (owner)
+- **FG1** — UW figure inventory (figures.json) — done 2026-10-09, #151; CP-RA1
+- **RP1** — Radiopaedia shortlist (cases.json) — done 2026-10-09, #149; pick at CP-RA1
 
 ## 5. Owner review links (CP-3, dissected states)
 
