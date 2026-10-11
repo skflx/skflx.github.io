@@ -1883,88 +1883,32 @@ packages, checkpoints and order live in `docs/ssb-roadmap.md`.**
 
 ## 13. Owner decisions
 
-Decided (owner, 2026-09-30):
+The board is `docs/ssb-roadmap.md` §2: one line per decision, plus the owner's
+open actions. This section keeps the options and rationale that shape the code,
+and the decisions still open.
 
-- **Vendor three.js** — approved (same-origin, pinned; `js/vendor/README.md`).
-- **Reference specimen: reconstruct from the UW atlas.** Its axial stack is
-  treated as a CT volume, registered against UW's own coronal and sagittal
-  reformats, scaled from the globe, and segmented with the labeled arrow tips
-  as named seeds — gated on a feasibility check. Bone window only: vessels
-  and nerves are sweeps placed at labeled points; thin lamellae get schematic
-  touch-up.
-- **UW permission covers publishing 3D geometry and volumes derived from
-  its images** (owner-confirmed; the authors' written permission arrived
-  2026-10-07, recorded in `ssb/LICENSE-data.md`).
+### Decided
 
-O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists what each unblocks:
+- **Vendor three.js** (2026-09-30): approved, same-origin and pinned (`js/vendor/README.md`).
+- **Reference specimen from the UW atlas** (2026-09-30): the axial stack treated as a CT volume, registered to UW's reformats, scaled from the globe, segmented from the labelled arrow tips; bone window only, with vessels and nerves as sweeps.
+- **UW permission** covers publishing 3D geometry and volumes derived from its images (owner-confirmed; written permission 2026-10-07, `ssb/LICENSE-data.md`).
+- **O1, external nose: specimen skin for naris and ala, cartilage as a schematic overlay** (2026-10-02).
+- **O2, nose scope: entry anatomy now;** the full framework is ST7 (2026-10-02).
+- **O3, content split: Sonnet drafts, Opus reviews adversarially; Opus authors geometry** (2026-10-02).
+- **O4, scope diameter: the 4 mm telescope is modelled, 2.7 mm selectable** (2026-10-03). The 3 mm and 4 mm checks showed that only the measured nostril, not a provisional fulcrum, gives a collision-free path to the sphenoid ostium.
+- **O5, NSF superior incision starts at the floor of the sphenoid ostium, for every design** (2026-10-03). This follows the owner's reading over ch. 31's superior-aspect start. The margin below the septal top keeps one default (15) where the incision rises forward (designs B and C).
+- **O6, normal before variant: right half mirrored, septum centred** (2026-10-03). Septal deviation and ostium heights come later as variants.
+- **O7, content priority: clear FESS and EEA-to-sellar/clival anatomy first** (2026-10-07). C1 problems are flagged, not fixed.
+- **O8, framework defaults: mixed populations, each labelled; modal variant classes** (2026-10-08).
+- **O9, population reference beside the head** (2026-10-08): percentiles, a median profile and a mean-shape ghost of the five NasalSeg structures. A deformed head only after that.
+- **O10, posterior septectomy: 15 mm from the choanal arch up** (2026-10-08). The inferior limit is still to be confirmed.
+- **O11, FESS on both sides at once** (2026-10-08). One dissected side beside an intact one needs per-side lining packs, later.
+- **O12, NasalSeg-trained voxel check (SEG1): not now** (2026-10-08). It adds a deep-learning stack to the pipeline, and the ethmoid and uncinate, which it cannot see, are the approximate structures.
+- **O13, mucosa toggle: decongested · as scanned · congested** (2026-10-08). The congested end is physiological (turbinates and septal swell body, from NasalSeg). Rhinosinusitis edema is a condition, in the pathology layer.
+- **O14, nasal framework drawn: both, lab first** (2026-10-11, as recommended): the variant lab, then fitted under the specimen's skin and on its nasal bones (ST7e).
 
-- **O1 — Source of the external nose.** (a) Unmask a nose-only box of the
-  specimen (real n = 1 naris, vestibule and alar skin; touches the "faces
-  are removed" rule of §5.1), (b) a parametric nose diorama registered to
-  the piriform aperture and ANS (schematic), or (c) both — specimen skin
-  surface, cartilage as an overlay. Recommended: (c), if the nose is in the
-  source's field of view (roadmap ST6-0 checks). **Decided: (c).**
-- **O2 — Nose scope.** Entry anatomy only (vestibule, valves, ala,
-  columella: the scope's fulcrum and walls) or also the rhinoplasty
-  framework (ULC/LLC and crura, ligaments, SMAS). Recommended: entry anatomy
-  now; the framework later as its own diorama. **Decided:** entry anatomy now; the full nasal framework is the intended end state (roadmap ST7).
-- **O3 — Content authoring split.** Sonnet drafts the content backlog and
-  checks citations, Opus reviews adversarially; Opus keeps authoring
-  anything that places geometry. Recommended: yes. **Decided: yes.**
-- **O6 — Normal before variant (owner, 2026-10-03).** The first release
-  is a working *normal* atlas and endoscope: as symmetric and standard as
-  the data allow, even though no real head is; septal deviation, ostium
-  heights and other asymmetries come later as variants. Implemented as the
-  standard specimen of §5.1 (right half mirrored, septum centred; WP N1).
+### Open
 
-Open, from the ST7 spec (2026-10-07; §6.2):
-
-- **O14 — Where the nasal framework is drawn** (open; numbered O7 until
-  2026-10-08, when it collided with the content-priority O7). (a) In the variant lab
-  only, as an idealized diorama; (b) fitted under the specimen's own skin
-  and on its nasal bones in the Specimen stage (schematic on specimen,
-  n = 1 envelope); (c) both, the lab first. Recommended: (c) — the lab
-  build is needed either way and is where the rules are tested; the fit
-  follows ST6 and the specimen's bony nose (roadmap ST7d, ST7e).
-- **O8 — Where the defaults come from.** The numbers in hand come from
-  different populations: Caucasian cadaver series for the ligaments,
-  crura and vessels; Korean, Chinese and Thai series for the septal
-  cartilage, the keystone overlap and the envelope thickness; an Egyptian
-  series for the ULC. (a) Mixed defaults, each labelled with its
-  population — no real nose is the default, but every number is cited;
-  (b) Caucasian-series numbers only, schematic where none exist (the
-  envelope would become schematic); (c) a `population` choice, once a
-  complete second set exists. And for variant classes: the modal drawn
-  class (what a surgeon meets most) or the textbook configuration.
-  Recommended: (a) now with (c) later; modal classes; in fit mode the
-  envelope is the specimen's own, so O8 matters least where the specimen
-  speaks. **Decided 2026-10-08 by the owner: as recommended.**
-
-1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
-   needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
-2. **Publish while `draft`?** Recommended: publish with visible unverified
-   markers (the wiki's precedent), prioritizing owner review of tier 1.
-3. Name and URL (`SSB`, `ssb.html`) — working title.
-
-From P1 (Opus, 2026-10-08), **all decided 2026-10-08 by the owner as recommended** (`docs/ssb-roadmap.md` §2):
-
-- **O13 — What "edema" means in the mucosa toggle** (numbered O8 until
-  it collided with ST7's O8). The physiological
-  congested phase (turbinates and septal swell body, calibrated on NasalSeg,
-  §5.9), or the mucosal edema of rhinosinusitis (sinus lining, polyps:
-  pathology, PR #119's `fill` operator). Recommended: the toggle is
-  decongested · as scanned · congested; inflammatory edema is a condition.
-- **O9 — "Averaged normal anatomy."** A population reference shown beside
-  the head (percentiles, profiles, a mean-shape ghost: population truth), or
-  a head deformed toward the NasalSeg median (composite, five structures
-  only). Recommended: the reference now, the deformed head only after it.
-- **O10 — Posterior septectomy extent.** 15 mm of posterior septum (the
-  middle of the graph's 1–2 cm), from the choanal arch up. Is the arch the
-  right inferior limit for the corridor you teach?
-- **O11 — FESS on both sides at once.** Procedure mode carves both sides
-  (the scope chooses the nostril); one dissected side beside an intact one
-  needs per-side lining packs. Recommended: both sides now.
-- **O12 — A voxel-level check against a NasalSeg-trained model** (roadmap
-  SEG1). Recommended: not now (a deep-learning stack in the pipeline; the
-  distribution check of §5.10 found no defect in the five structures it
-  can see, and it cannot see the ethmoid).
+- **Strict CSP.** Recommended: keep it. Gzip first, then Draco's JS decoder. `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
+- **Publish while `draft`.** Recommended: yes, with visible unverified markers, and owner review of tier 1 first.
+- **Name and URL** (`SSB`, `ssb.html`). Working title.
