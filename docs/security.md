@@ -36,13 +36,16 @@ vault. `tools/check-data.mjs` enforces the page rules below in CI.
 5. **`target="_blank"` carries `rel="noopener"`** (plus `noreferrer` on the
    one-pager).
 6. **Self-contained pages make no remote request at all** —
-   `index.html`, `cpt-search.html`, `airway-jeopardy.html`, `ssb.html`.
+   `index.html`, `cpt-search.html`, `airway-jeopardy.html`, `ssb.html`,
+   `OLSB.html`.
    Their CSPs name no remote origin. (`ssb.html` reads its content with
    same-origin `fetch`, covered by `default-src 'self'`; its citation links
    to DOI/PubMed are plain navigations built in `js/ssb/ui-panel.js` from
    validated ids, `rel="noopener"`, and request nothing until clicked. The
    URL hash is untrusted: `js/ssb/state.js` matches it against the graph
-   index and it never reaches markup.) OKSAT pages may fetch optional Google Fonts
+   index and it never reaches markup. `OLSB.html` starts a same-origin
+   Web Worker from its own stamped `js/olsb-volume.js`, allowed by
+   `script-src 'self'`.) OKSAT pages may fetch optional Google Fonts
    (only when a non-default typeface is picked).
 
 Changing any of these (a new CDN, loosening a CSP) is an owner decision —

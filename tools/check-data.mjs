@@ -51,6 +51,109 @@ function loadWindow(absPath) {
 }
 
 /* ===========================================================
+   OLSB dioramas <-> glossary (OLSB.html)
+   Every drawn structure names a glossary entry, every relation and
+   every tour step points at something that exists, and the page loads
+   the glossary before the dioramas it lists.
+   =========================================================== */
+function checkOlsb() {
+  console.log('\nolsb: dioramas, glossary, relations, tours');
+  const html = fs.readFileSync(rel('OLSB.html'), 'utf8');
+  const files = [...html.matchAll(/<script\b(?![^>]*type="module")[^>]*\bsrc="(js\/olsb-[a-z]+\.js)/g)].map((m) => m[1]);
+  ok(files[0] === 'js/olsb-glossary.js' && files.length > 1, 'OLSB.html loads the glossary first, then the dioramas',
+    `OLSB.html script order: ${files.join(', ')}`);
+  const win = {};
+  for (const f of files) new Function('window', fs.readFileSync(rel(f), 'utf8') + '\n;return window;')(win);
+  const O = win.OLSB;
+  if (!O) { fail('window.OLSB missing'); return; }
+  const G = O.glossary;
+  const DIRS = new Set(['sup', 'inf', 'ant', 'post', 'med', 'lat']);
+  const badRel = [];
+  for (const [id, e] of Object.entries(G)) {
+    if (!e.name || !e.note) badRel.push(`${id}: no name/note`);
+    for (const [dir, list] of Object.entries(e.rel || {})) {
+      if (!DIRS.has(dir)) badRel.push(`${id}: direction ${dir}`);
+      for (const o of list) if (!G[o]) badRel.push(`${id}.${dir} -> ${o}`);
+    }
+  }
+  ok(badRel.length === 0, `glossary: ${Object.keys(G).length} entries, every relation resolves`, `glossary: ${badRel.slice(0, 5).join('; ')}`);
+  const dioIds = new Set();
+  for (const d of O.dioramas) {
+    const problems = [];
+    if (dioIds.has(d.id)) problems.push('duplicate diorama id');
+    dioIds.add(d.id);
+    const layers = new Set(d.layers.map((l) => l.id).concat(['base']));
+    const ids = new Set();
+    for (const s of d.structures) {
+      if (ids.has(s.id)) problems.push(`duplicate ${s.id}`);
+      ids.add(s.id);
+      if (!layers.has(s.layer)) problems.push(`${s.id}: layer ${s.layer}`);
+      if (!s.inert && !G[s.id]) problems.push(`${s.id}: no glossary entry`);
+      if (!s.inert && !s.at) problems.push(`${s.id}: no label anchor`);
+    }
+    const views = new Set(d.views.map((v) => v.id));
+    for (const t of d.tours) for (const st of t.steps) {
+      for (const f of st.focus || []) if (!ids.has(f)) problems.push(`${t.id}/${st.title}: focus ${f}`);
+      for (const l of st.layers || []) if (!layers.has(l)) problems.push(`${t.id}/${st.title}: layer ${l}`);
+      if (st.view && !views.has(st.view)) problems.push(`${t.id}/${st.title}: view ${st.view}`);
+    }
+    ok(problems.length === 0, `diorama ${d.id}: structures, tours and views resolve`, `diorama ${d.id}: ${problems.slice(0, 5).join('; ')}`);
+  }
+  checkOlsbVolume(O);
+}
+
+/* The 3D model (js/olsb-volume.js): its labels are glossary entries, its tour resolves, every
+   structure it names is actually built, and its geometry agrees with every directional relation
+   in the glossary between two structures it draws. A relation is tested over the columns both
+   structures occupy along its axis (so a plate above a cavity counts where they overlap), or by
+   centroid when they share none. */
+function checkOlsbVolume(O) {
+  const V = O.volume;
+  if (!V) { fail('OLSB.volume missing (js/olsb-volume.js not loaded by OLSB.html)'); return; }
+  const G = O.glossary;
+  const unknown = V.LABELS.filter((l) => l && !G[l.id]).map((l) => l.id);
+  ok(unknown.length === 0, '3D model: every label is a glossary entry', `3D labels without a glossary entry: ${unknown.join(', ')}`);
+  const vol = V.build(V.LEVELS.coarse);
+  const { nx, ny, lab, vox } = vol;
+  const byId = {};
+  for (let i = 0; i < lab.length; i++) if (lab[i]) (byId[V.LABELS[lab[i]].id] ||= []).push(i);
+  const empty = V.LABELS.filter((l) => l && !l.drilled && !byId[l.id]).map((l) => l.id);
+  ok(empty.length === 0, '3D model: every label is built', `3D labels with no voxels: ${[...new Set(empty)].join(', ')}`);
+  const problems = [];
+  const states = new Set(V.STATES.map((x) => x.id)), views = new Set(V.VIEWS.map((x) => x.id)), layers = new Set(V.LAYERS.map((x) => x.id));
+  for (const t of V.TOURS) for (const sp of t.steps) {
+    if (!states.has(sp.state)) problems.push(`${sp.title}: state ${sp.state}`);
+    if (!views.has(sp.view)) problems.push(`${sp.title}: view ${sp.view}`);
+    for (const l of sp.layers) if (!layers.has(l)) problems.push(`${sp.title}: layer ${l}`);
+    for (const f of sp.focus) if (!byId[f]) problems.push(`${sp.title}: focus ${f} not in the model`);
+  }
+  for (const s of V.STATES) { try { V.carve(vol, s.id); } catch (e) { problems.push(`carve ${s.id}: ${e.message}`); } }
+  ok(problems.length === 0, '3D model: tour steps, views and drill states resolve', `3D model: ${problems.slice(0, 5).join('; ')}`);
+
+  const AX = { sup: 2, inf: 2, ant: 1, post: 1, lat: 0, med: 0 }, SG = { sup: 1, inf: -1, ant: 1, post: -1, lat: 1, med: -1 };
+  const coord = (i) => [i % nx, ((i / nx) | 0) % ny, (i / (nx * ny)) | 0];
+  const mean = (id, ax) => byId[id].reduce((a, i) => a + coord(i)[ax], 0) / byId[id].length;
+  function offset(a, b, ax) {
+    const key = (c) => (ax === 0 ? c[1] * 65536 + c[2] : ax === 1 ? c[0] * 65536 + c[2] : c[0] * 65536 + c[1]);
+    const cols = new Map();
+    for (const i of byId[a]) { const c = coord(i), e = cols.get(key(c)) || [0, 0, 0, 0]; e[0] += c[ax]; e[1]++; cols.set(key(c), e); }
+    for (const i of byId[b]) { const c = coord(i), e = cols.get(key(c)); if (e) { e[2] += c[ax]; e[3]++; } }
+    let d = 0, n = 0;
+    for (const e of cols.values()) if (e[3]) { d += e[2] / e[3] - e[0] / e[1]; n++; }
+    return (n ? d / n : mean(b, ax) - mean(a, ax)) * vox;
+  }
+  const wrong = [];
+  let tested = 0;
+  for (const [id, e] of Object.entries(G)) for (const [dir, list] of Object.entries(e.rel || {})) for (const o of list) {
+    if (!byId[id] || !byId[o]) continue;
+    tested++;
+    const d = offset(id, o, AX[dir]) * SG[dir];
+    if (!(d > 0)) wrong.push(`${o} is not ${dir} to ${id} (${d.toFixed(1)} mm)`);
+  }
+  ok(wrong.length === 0 && tested > 40, `3D model agrees with the glossary's relations (${tested} tested)`, `3D model vs glossary: ${wrong.slice(0, 5).join('; ')}`);
+}
+
+/* ===========================================================
    1. OKSAT manifest <-> modules
    =========================================================== */
 function checkOksat() {
@@ -155,7 +258,7 @@ const VENDOR_SHA384 = {
 };
 
 /* Pages that must make no third-party request at all. */
-const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'ssb.html']);
+const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'ssb.html', 'OLSB.html']);
 
 function checkSecurity() {
   console.log('\nsecurity: vendored scripts + page policies');
@@ -528,5 +631,6 @@ checkSecurity();
 checkStamps();
 checkSsb();
 checkFigures();
+checkOlsb();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

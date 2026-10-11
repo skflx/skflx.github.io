@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="robots" content="noindex">
+    <title>OLSB Otology &amp; Lateral Skull Base | skflx.MD</title>
+    <meta name="description" content="Layered schematics of the middle ear and mastoid: a surgical lateral view stepped through tympanoplasty and mastoidectomy, and medial-wall, axial and coronal dioramas for relational anatomy. Draft content; not a clinical reference.">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <script src="js/theme-boot.js?v=61b69b81"></script>
+    <link rel="stylesheet" href="css/site.css?v=3efb923c">
+    <link rel="stylesheet" href="css/olsb.css?v=0afddfc9">
+</head>
+<body>
+    <header class="site-topbar">
+        <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
+        <span class="site-topbar-title">OLSB &middot; Middle ear &amp; mastoid</span>
+        <div class="site-topbar-actions">
+            <button class="site-theme-toggle" type="button" aria-label="Night mode" aria-pressed="false">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="olsb">
+        <div class="olsb-head">
+            <p class="site-kicker">Otology &amp; lateral skull base</p>
+            <h1>Middle ear &amp; mastoid</h1>
+            <p>A right temporal bone you can walk through, built voxel by voxel in millimetres: open it with the drill states, cut it in any plane, hide the bone to see what runs through it. Four diagrams beside it: the surgeon's lateral view, layered from skin to the deep hazards, and three cut planes (the medial wall, an axial cut through the posterior tympanum, a coronal cut through the attic). Tap any structure to light up its neighbours.</p>
+        </div>
+        <p class="olsb-notice" role="note"><strong>Draft, schematic.</strong> Not a clinical reference: the 3D model is reconstructed from textbook dimensions, not a scan, and the diagrams spread structures apart to stay legible. Nothing here has been verified yet.</p>
+        <noscript><p class="olsb-problem">The diagrams are drawn by script; they need JavaScript.</p></noscript>
+        <p class="olsb-problem" id="olsb-problem" hidden></p>
+
+        <div class="olsb-procs olsb-mode" id="olsb-mode" role="group" aria-label="Mode" hidden>
+            <button class="site-pill" type="button" data-mode="3d" aria-pressed="false">3D model</button>
+            <button class="site-pill" type="button" data-mode="2d" aria-pressed="false">Diagrams</button>
+        </div>
+
+        <div class="olsb3d" id="olsb3d" hidden>
+            <div class="olsb-grid">
+                <section class="olsb-stagecol" aria-label="3D model">
+                    <div class="olsb-stage olsb3d-stage" id="olsb3d-stage">
+                        <canvas id="olsb3d-canvas" aria-label="Voxel model of a right temporal bone; drag to turn, scroll to zoom, W A S D to move"></canvas>
+                        <div class="olsb3d-tags" id="olsb3d-tags" aria-hidden="true"></div>
+                        <span class="olsb3d-hover" id="olsb3d-hover" hidden></span>
+                        <canvas class="olsb3d-compass" id="olsb3d-compass" width="144" height="144" aria-hidden="true"></canvas>
+                        <p class="olsb3d-status" id="olsb3d-status" hidden></p>
+                        <p class="olsb-orient">Right ear &middot; drag turn &middot; right-drag or shift pan &middot; wheel zoom &middot; WASD QE move &middot; double-click centre</p>
+                    </div>
+                </section>
+                <section class="olsb-controls" aria-label="3D controls">
+                    <div class="olsb-row" role="group" aria-label="Drill state"><span class="site-kicker">Drill</span><span class="olsb-views" id="olsb3d-states"></span></div>
+                    <p class="olsb-sub olsb3d-desc" id="olsb3d-state-desc"></p>
+                    <div class="olsb-row" id="olsb3d-layers" role="group" aria-label="Layers"></div>
+                    <div class="olsb-row" role="group" aria-label="Cut plane">
+                        <span class="site-kicker">Cut</span><span class="olsb-views" id="olsb3d-cut"></span>
+                        <input type="range" id="olsb3d-cutpos" min="2" max="98" value="50" aria-label="Cut position">
+                        <button class="site-pill" type="button" id="olsb3d-cutflip">Flip</button>
+                    </div>
+                    <div class="olsb-row" role="group" aria-label="View"><span class="site-kicker">View</span><span class="olsb-views" id="olsb3d-views"></span></div>
+                    <div class="olsb-row" role="group" aria-label="Display">
+                        <span class="site-kicker">Show</span>
+                        <button class="site-pill" type="button" id="olsb3d-ghost" aria-pressed="false">See-through bone</button>
+                        <button class="site-pill" type="button" id="olsb3d-isolate" aria-pressed="false">Isolate selection</button>
+                        <button class="site-pill" type="button" id="olsb3d-names" aria-pressed="false">All names</button>
+                        <button class="site-pill" type="button" id="olsb3d-fly" aria-pressed="false" title="Drag turns your head instead of the model (F)">Fly</button>
+                        <button class="site-pill" type="button" id="olsb3d-pixels" aria-pressed="false">Big pixels</button>
+                        <button class="site-pill" type="button" id="olsb3d-detail" aria-pressed="false" title="The middle ear and labyrinth at 0.1 mm voxels, and 0.05 mm round whatever you look at closely (the rest at 0.3 mm)">Fine detail</button>
+                    </div>
+                </section>
+                <aside class="olsb-side" aria-label="Guided flight">
+                    <p class="site-kicker">Guided flight</p>
+                    <p class="olsb-sub" id="olsb3d-tour-sub"></p>
+                    <button class="site-btn site-btn-sm site-btn-primary" type="button" id="olsb3d-start">Start the flight &rarr;</button>
+                    <div class="olsb-card" id="olsb3d-stepcard" aria-live="polite" hidden>
+                        <p class="site-kicker" id="olsb3d-step-n"></p>
+                        <h2 id="olsb3d-step-title"></h2>
+                        <dl>
+                            <div><dt id="olsb3d-term-a"></dt><dd id="olsb3d-step-act"></dd></div>
+                            <div><dt id="olsb3d-term-b"></dt><dd class="hz" id="olsb3d-step-hazard"></dd></div>
+                        </dl>
+                        <div class="olsb-nav">
+                            <button class="site-btn site-btn-sm" type="button" id="olsb3d-prev">&larr; Prev</button>
+                            <button class="site-btn site-btn-sm site-btn-primary" type="button" id="olsb3d-next">Next &rarr;</button>
+                        </div>
+                    </div>
+                    <ol class="olsb-steps" id="olsb3d-steps" aria-label="Steps"></ol>
+                    <div class="olsb-card olsb-info" id="olsb3d-info" hidden>
+                        <div class="olsb-info-head">
+                            <p class="site-kicker" id="olsb3d-info-layer"></p>
+                            <span>
+                                <button class="site-btn site-btn-sm" type="button" id="olsb3d-info-fly">Go to</button>
+                                <button class="site-btn site-btn-sm" type="button" id="olsb3d-info-close">Close</button>
+                            </span>
+                        </div>
+                        <h2 id="olsb3d-info-name"></h2>
+                        <p class="note" id="olsb3d-info-note"></p>
+                        <div class="olsb-info-sec" id="olsb3d-info-rel-wrap">
+                            <p class="site-kicker">Neighbours &middot; where they lie relative to it</p>
+                            <div id="olsb3d-info-rel"></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <div id="olsb2d">
+        <div class="olsb-dios">
+            <div class="olsb-procs" id="olsb-dioramas" role="group" aria-label="Diorama"></div>
+            <p class="olsb-sub" id="olsb-dio-sub"></p>
+        </div>
+
+        <div class="olsb-grid">
+            <section class="olsb-stagecol" aria-label="Diagram">
+                <div class="olsb-stage">
+                    <svg id="olsb-svg" viewBox="120 100 760 520" role="img" aria-label="Layered schematic of a right ear"></svg>
+                    <p class="olsb-orient" id="olsb-orient"></p>
+                </div>
+            </section>
+            <section class="olsb-controls" aria-label="Diagram controls">
+                <div class="olsb-row" id="olsb-layers" role="group" aria-label="Layers"><span class="site-kicker">Layers</span></div>
+                <div class="olsb-row" role="group" aria-label="View">
+                    <span class="site-kicker">View</span>
+                    <span class="olsb-views" id="olsb-views"></span>
+                    <label class="olsb-toggle"><input type="checkbox" id="olsb-ghost"><span>See-through</span></label>
+                    <label class="olsb-toggle"><input type="checkbox" id="olsb-names"><span>All names</span></label>
+                    <button class="site-pill" type="button" id="olsb-quiz-toggle" aria-pressed="false">Quiz: find it</button>
+                </div>
+                <div class="olsb-row" id="olsb-tm-row" role="group" aria-label="Tympanic membrane">
+                    <span class="site-kicker">TM</span>
+                    <button class="site-pill" type="button" data-tm="intact">Intact</button>
+                    <button class="site-pill" type="button" data-tm="perf">Perforation</button>
+                    <button class="site-pill" type="button" data-tm="flap">Flap up</button>
+                    <button class="site-pill" type="button" data-tm="graft">Grafted</button>
+                </div>
+            </section>
+
+            <aside class="olsb-side" aria-label="Tour">
+                <div class="olsb-procs" id="olsb-procs" role="group" aria-label="Tour"></div>
+                <p class="olsb-sub" id="olsb-proc-sub"></p>
+                <div class="olsb-card" id="olsb-stepcard" aria-live="polite">
+                    <p class="site-kicker" id="olsb-step-n"></p>
+                    <h2 id="olsb-step-title"></h2>
+                    <dl>
+                        <div><dt id="olsb-term-a"></dt><dd id="olsb-step-act"></dd></div>
+                        <div><dt id="olsb-term-b"></dt><dd class="hz" id="olsb-step-hazard"></dd></div>
+                    </dl>
+                    <div class="olsb-nav">
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-prev">&larr; Prev</button>
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-reset" title="Back to this step's layers">Reset</button>
+                        <button class="site-btn site-btn-sm site-btn-primary" type="button" id="olsb-next">Next &rarr;</button>
+                    </div>
+                </div>
+                <div class="olsb-card olsb-quiz" id="olsb-quiz" aria-live="polite" hidden>
+                    <div class="olsb-info-head">
+                        <p class="site-kicker">Find it &middot; <span id="olsb-quiz-score"></span></p>
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-quiz-stop">Stop</button>
+                    </div>
+                    <h2 id="olsb-quiz-prompt"></h2>
+                    <p class="olsb-quiz-fb" id="olsb-quiz-feedback"></p>
+                    <div class="olsb-nav"><button class="site-btn site-btn-sm" type="button" id="olsb-quiz-skip">Skip</button></div>
+                </div>
+                <ol class="olsb-steps" id="olsb-steps" aria-label="Steps"></ol>
+
+                <div class="olsb-card olsb-info" id="olsb-info" hidden>
+                    <div class="olsb-info-head">
+                        <p class="site-kicker" id="olsb-info-layer"></p>
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-info-close">Close</button>
+                    </div>
+                    <h2 id="olsb-info-name"></h2>
+                    <p class="note" id="olsb-info-note"></p>
+                    <div class="olsb-info-sec" id="olsb-info-rel-wrap">
+                        <p class="site-kicker">Neighbours &middot; where they lie relative to it</p>
+                        <div id="olsb-info-rel"></div>
+                    </div>
+                    <div class="olsb-info-sec" id="olsb-info-also-wrap">
+                        <p class="site-kicker">Also drawn in</p>
+                        <div id="olsb-info-also"></div>
+                    </div>
+                </div>
+
+                <div class="olsb-inview" id="olsb-inview-wrap">
+                    <p class="site-kicker">In view &middot; tap to read</p>
+                    <div id="olsb-inview"></div>
+                </div>
+            </aside>
+        </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <a href="index.html">skflx.MD</a>
+        <span>Draft study aid; reconstructed, not a clinical reference.</span>
+        <span class="push">&larr; &rarr; step &middot; Esc clears &middot; F fly</span>
+    </footer>
+
+    <script src="js/olsb-glossary.js?v=50689025"></script>
+    <script src="js/olsb-shapes.js?v=9aa31ace"></script>
+    <script src="js/olsb-lateral.js?v=d78b91ca"></script>
+    <script src="js/olsb-medial.js?v=a59d3a29"></script>
+    <script src="js/olsb-axial.js?v=0ab68c87"></script>
+    <script src="js/olsb-coronal.js?v=67295331"></script>
+    <script src="js/olsb-volume.js?v=7de56576"></script>
+    <script src="js/olsb.js?v=d91c0015"></script>
+    <script type="module" src="js/olsb-3d.js?v=f8db5970"></script>
+    <script src="js/site.js?v=dd67d957"></script>
+</body>
+</html>
