@@ -114,8 +114,8 @@ pathology wait. The external nose is the specimen's own. All content is `draft`;
 only the owner sets `verified`.
 
 **Next:** the board is `docs/ssb-roadmap.md` (§1 status, §2 owner decisions and
-actions, §3 open work packages). The realistic-anatomy plan's next step is
-`docs/realistic-anatomy.md` §11 (RS2c).
+actions, §3 open work packages). Realistic anatomy's next step is RS2c
+(`docs/ssb-roadmap.md` §3a; design `docs/ssb.md` §14).
 
 ---
 

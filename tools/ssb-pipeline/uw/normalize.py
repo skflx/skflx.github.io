@@ -30,7 +30,7 @@ Stages (`all` runs them in this order, with the pipeline stages between them, an
 
 Deterministic: gzip mtime 0, no randomness.
 
---base scanned (WP RA3b, docs/realistic-anatomy.md 6.2): the same stages minus the mirror and the centring. It starts from the
+--base scanned (WP RA3b, docs/ssb.md §14, R6.2): the same stages minus the mirror and the centring. It starts from the
 same as-scanned input, runs ST6 step 1 (the nose unmasked) but not step 2 (no centring), step 1 above (the midline check, printed),
 then skips steps 2-5 and the sides stage: the septum stays where it was scanned, the left half is the head's own, and nothing is
 mirrored. The valve and the vestibule (ST6 steps 3-4) are computed on each side from that side's own naris; walls.py, meshes.py,

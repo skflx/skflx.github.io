@@ -50,7 +50,7 @@
      (loadPopulationPack) and gives it back (unloadPopulationPack). Its nodes (extras kind "ghost") are registered as
      "population:<id>.<side>" (group ghost, userData.population), so byId, picking and the region list never see them.
 
-   - An anatomy override pack (docs/realistic-anatomy.md 6.2, WP RA3a) is the whole-node replacement an edited state brings:
+   - An anatomy override pack (docs/ssb.md §14, R6.2, WP RA3a) is the whole-node replacement an edited state brings:
      ssb/anatomy/overrides/<base>/<entity>.<side>.<preset>.glb.gz, named by the patch it goes with (its `replacesNodes` and
      `addsNodes`, the only nodes it may carry). Never listed in packs.json, never loaded at boot: the stage asks for it by
      its stem (loadOverride) and gives it back (unloadOverride). Its nodes are registered as "anatomy:<stem>:<id>.<side>"
@@ -62,7 +62,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=32324b32';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=2a1b9fd8';
 import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
 
 export const PACKS_FILE = 'ssb/models/packs.json';

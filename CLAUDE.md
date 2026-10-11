@@ -58,7 +58,7 @@ Every figure except Fig. 1 is real geometry rendered into a monospace grid: one 
 `cpt-search.html` — `css/site.css` + a page `<style>`, logic in `js/cpt-search.js`. The legacy main stylesheet it used was deleted in the 2026-09 redesign; do not recreate a second token set.
 
 ### SSB — Sinus & Skull Base 3D (`ssb.html`)
-A 3D atlas of the sinuses and ventral skull base, driven by a typed knowledge graph (`ssb/content/`): every fact is a node with typed edges and sources, and geometry is keyed by the same ids. **Read `docs/ssb.md` before any SSB work** (architecture, URL keys in §7.3, phase plan). The board is `docs/ssb-roadmap.md`; anatomy states beyond the standard head are `docs/realistic-anatomy.md`; content rules are `docs/authoring-ssb.md`.
+A 3D atlas of the sinuses and ventral skull base, driven by a typed knowledge graph (`ssb/content/`): every fact is a node with typed edges and sources, and geometry is keyed by the same ids. **Read `docs/ssb.md` before any SSB work** (architecture, URL keys in §7.3, phase plan). The board is `docs/ssb-roadmap.md`; anatomy states beyond the standard head are designed in `docs/ssb.md` §14 (sources in `docs/realistic-anatomy.md`); content rules are `docs/authoring-ssb.md`.
 
 Rules that bite:
 - **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/`, `ssb/models/`, `ssb/states/`, `ssb/anatomy/`, `ssb/reference/*/figures.json` and `ssb/geometry/stations.json` come from `tools/ssb-pipeline/` (`uw/`, `nasalseg/`). Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.

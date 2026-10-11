@@ -16,7 +16,7 @@
    names a lookup key (scope.js), numbers are parsed, clamped and snapped to the step,
    unknown keys are ignored, and nothing here ever produces markup.
 
-   The anatomy state (`anat=`, `v=`, `dz=`, docs/realistic-anatomy.md 6.4) is whitelisted against a registry built from
+   The anatomy state (`anat=`, `v=`, `dz=`, docs/ssb.md §14, R6.4) is whitelisted against a registry built from
    ssb/anatomy/index.json (buildAnatomyRegistry): an id the index or the graph does not list, a side or preset the entity
    does not offer, a base it is not built on, or a pair the registry does not allow drops the whole anatomy key, never
    a part of it. The index loads after the store exists, so a link's anatomy waits as `pending` (shape-checked only, and
@@ -59,7 +59,7 @@ export function clampMu(value) {
 }
 
 
-/* ---------------- anatomy state (docs/realistic-anatomy.md 2.1, 6.3, 6.4) ---------------- */
+/* ---------------- anatomy state (docs/ssb.md §14, R2.1, 6.3, 6.4) ---------------- */
 
 /* `anat=standard|scanned|scanned-b` + `v=<v-id>.<R|L>[:<preset>],…` + `dz=<dz-id>.<R|L|M>[:<preset>],…`. The base is a layer
    under the variants, the variants under the conditions, applied in that order. `standard` (the mirrored reference

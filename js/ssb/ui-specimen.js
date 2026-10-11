@@ -16,9 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES, loadAnatomyIndex } from './volume.js?v=32324b32';
-import { CT_PLANES, anatomyIsDefault } from './state.js?v=3a54b0af';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=4c153a53';
+import { PLANES, loadAnatomyIndex } from './volume.js?v=2a1b9fd8';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=893232f8';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=73a8bf43';
 import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -281,7 +281,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     let standardHead = false;
     isStandardSpecimen().then((yes) => { standardHead = yes; sync(); });
     statusSec.append(standardNote);
-    /* what the specimen is now (docs/realistic-anatomy.md 2.2): the standardized head, the head as scanned, or an edit of one */
+    /* what the specimen is now (docs/ssb.md §14, R2.2): the standardized head, the head as scanned, or an edit of one */
     const anatomyNote = el('p', 'ssb-param-src');
     anatomyNote.hidden = true;
     statusSec.append(anatomyNote);

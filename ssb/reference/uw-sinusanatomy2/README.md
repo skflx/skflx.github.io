@@ -220,7 +220,7 @@ bone; an asterisk is read by OCR, or taken from a speck only where the caption n
 
 **Soft-tissue and post-contrast figures** clip bone and contrast at the annotation value (a large share of the
 image at 255), so the mask cannot be trusted there: they are recorded in full with `arrows`, `labels` and
-`marks` `null` and the reason in `meta.notSeparableReason` (FG1 ruling, `docs/realistic-anatomy.md` §10).
+`marks` `null` and the reason in `meta.notSeparableReason` (FG1 ruling, `docs/ssb-roadmap.md` §3a).
 `windowEvidence` says what decided each window: the caption ("soft tissue window", "post-contrast"), §4.1's
 soft marker, or the histogram (`saturatedPct`, the area of thick saturated regions). `Cor.Inflamm2` is
 saturated by the facial bone but a bone window on sight; §4.1 does not mark `Cor.frontalmucocele` and
