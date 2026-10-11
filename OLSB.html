@@ -7,11 +7,11 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="robots" content="noindex">
     <title>OLSB Otology &amp; Lateral Skull Base | skflx.MD</title>
-    <meta name="description" content="A layered schematic of the middle ear and mastoid for walking through tympanoplasty and mastoidectomy step by step. Draft content; not a clinical reference.">
+    <meta name="description" content="Layered schematics of the middle ear and mastoid: a surgical lateral view stepped through tympanoplasty and mastoidectomy, and medial-wall, axial and coronal dioramas for relational anatomy. Draft content; not a clinical reference.">
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/olsb.css?v=5a0ca643">
+    <link rel="stylesheet" href="css/olsb.css?v=47b59656">
 </head>
 <body>
     <header class="site-topbar">
@@ -28,53 +28,66 @@
         <div class="olsb-head">
             <p class="site-kicker">Otology &amp; lateral skull base</p>
             <h1>Middle ear &amp; mastoid</h1>
-            <p>A right temporal bone seen from the side, as the surgeon sees it, in layers from skin to the deep hazards. Pick a procedure and step through it: each step peels to the layer you are working in and names its landmarks and its hazard.</p>
+            <p>Four dioramas of a right ear: the surgeon's lateral view, layered from skin to the deep hazards, and three cut planes for what a projection hides (the medial wall, an axial cut through the posterior tympanum, a coronal cut through the attic). Step through a tour, or tap any structure to light up its neighbours.</p>
         </div>
-        <p class="olsb-notice" role="note"><strong>Draft, schematic.</strong> Not to scale and not a clinical reference: structures at different depths are projected onto one plane and spread apart to stay legible. Nothing here has been verified yet.</p>
-        <noscript><p class="olsb-problem">The diagram is drawn by script; it needs JavaScript.</p></noscript>
+        <p class="olsb-notice" role="note"><strong>Draft, schematic.</strong> Not to scale and not a clinical reference: shapes are invented and spread apart to stay legible. Nothing here has been verified yet.</p>
+        <noscript><p class="olsb-problem">The diagrams are drawn by script; they need JavaScript.</p></noscript>
         <p class="olsb-problem" id="olsb-problem" hidden></p>
+
+        <div class="olsb-dios">
+            <div class="olsb-procs" id="olsb-dioramas" role="group" aria-label="Diorama"></div>
+            <p class="olsb-sub" id="olsb-dio-sub"></p>
+        </div>
 
         <div class="olsb-grid">
             <section class="olsb-stagecol" aria-label="Diagram">
                 <div class="olsb-stage">
-                    <svg id="olsb-svg" viewBox="120 100 760 520" role="img" aria-label="Layered schematic of a right temporal bone, lateral view; anterior to the right, superior up"></svg>
-                    <p class="olsb-orient">Right ear &middot; lateral &middot; A &rarr; &middot; S &uarr;</p>
+                    <svg id="olsb-svg" viewBox="120 100 760 520" role="img" aria-label="Layered schematic of a right ear"></svg>
+                    <p class="olsb-orient" id="olsb-orient"></p>
                 </div>
             </section>
             <section class="olsb-controls" aria-label="Diagram controls">
-                    <div class="olsb-row" id="olsb-layers" role="group" aria-label="Layers"><span class="site-kicker">Layers</span></div>
-                    <div class="olsb-row" role="group" aria-label="View">
-                        <span class="site-kicker">View</span>
-                        <button class="site-pill" type="button" data-view="field">Field</button>
-                        <button class="site-pill" type="button" data-view="canal">Canal</button>
-                        <button class="site-pill" type="button" data-view="recess">Recess</button>
-                        <label class="olsb-toggle"><input type="checkbox" id="olsb-ghost"><span>See-through</span></label>
-                        <label class="olsb-toggle"><input type="checkbox" id="olsb-names"><span>All names</span></label>
-                    </div>
-                    <div class="olsb-row" role="group" aria-label="Tympanic membrane">
-                        <span class="site-kicker">TM</span>
-                        <button class="site-pill" type="button" data-tm="intact">Intact</button>
-                        <button class="site-pill" type="button" data-tm="perf">Perforation</button>
-                        <button class="site-pill" type="button" data-tm="flap">Flap up</button>
-                        <button class="site-pill" type="button" data-tm="graft">Grafted</button>
-                    </div>
+                <div class="olsb-row" id="olsb-layers" role="group" aria-label="Layers"><span class="site-kicker">Layers</span></div>
+                <div class="olsb-row" role="group" aria-label="View">
+                    <span class="site-kicker">View</span>
+                    <span class="olsb-views" id="olsb-views"></span>
+                    <label class="olsb-toggle"><input type="checkbox" id="olsb-ghost"><span>See-through</span></label>
+                    <label class="olsb-toggle"><input type="checkbox" id="olsb-names"><span>All names</span></label>
+                    <button class="site-pill" type="button" id="olsb-quiz-toggle" aria-pressed="false">Quiz: find it</button>
+                </div>
+                <div class="olsb-row" id="olsb-tm-row" role="group" aria-label="Tympanic membrane">
+                    <span class="site-kicker">TM</span>
+                    <button class="site-pill" type="button" data-tm="intact">Intact</button>
+                    <button class="site-pill" type="button" data-tm="perf">Perforation</button>
+                    <button class="site-pill" type="button" data-tm="flap">Flap up</button>
+                    <button class="site-pill" type="button" data-tm="graft">Grafted</button>
+                </div>
             </section>
 
-            <aside class="olsb-side" aria-label="Procedure">
-                <div class="olsb-procs" id="olsb-procs" role="group" aria-label="Procedure"></div>
+            <aside class="olsb-side" aria-label="Tour">
+                <div class="olsb-procs" id="olsb-procs" role="group" aria-label="Tour"></div>
                 <p class="olsb-sub" id="olsb-proc-sub"></p>
-                <div class="olsb-card" aria-live="polite">
+                <div class="olsb-card" id="olsb-stepcard" aria-live="polite">
                     <p class="site-kicker" id="olsb-step-n"></p>
                     <h2 id="olsb-step-title"></h2>
                     <dl>
-                        <div><dt>Do</dt><dd id="olsb-step-act"></dd></div>
-                        <div><dt>Hazard</dt><dd class="hz" id="olsb-step-hazard"></dd></div>
+                        <div><dt id="olsb-term-a"></dt><dd id="olsb-step-act"></dd></div>
+                        <div><dt id="olsb-term-b"></dt><dd class="hz" id="olsb-step-hazard"></dd></div>
                     </dl>
                     <div class="olsb-nav">
                         <button class="site-btn site-btn-sm" type="button" id="olsb-prev">&larr; Prev</button>
                         <button class="site-btn site-btn-sm" type="button" id="olsb-reset" title="Back to this step's layers">Reset</button>
                         <button class="site-btn site-btn-sm site-btn-primary" type="button" id="olsb-next">Next &rarr;</button>
                     </div>
+                </div>
+                <div class="olsb-card olsb-quiz" id="olsb-quiz" aria-live="polite" hidden>
+                    <div class="olsb-info-head">
+                        <p class="site-kicker">Find it &middot; <span id="olsb-quiz-score"></span></p>
+                        <button class="site-btn site-btn-sm" type="button" id="olsb-quiz-stop">Stop</button>
+                    </div>
+                    <h2 id="olsb-quiz-prompt"></h2>
+                    <p class="olsb-quiz-fb" id="olsb-quiz-feedback"></p>
+                    <div class="olsb-nav"><button class="site-btn site-btn-sm" type="button" id="olsb-quiz-skip">Skip</button></div>
                 </div>
                 <ol class="olsb-steps" id="olsb-steps" aria-label="Steps"></ol>
 
@@ -85,9 +98,17 @@
                     </div>
                     <h2 id="olsb-info-name"></h2>
                     <p class="note" id="olsb-info-note"></p>
+                    <div class="olsb-info-sec" id="olsb-info-rel-wrap">
+                        <p class="site-kicker">Neighbours &middot; where they lie relative to it</p>
+                        <div id="olsb-info-rel"></div>
+                    </div>
+                    <div class="olsb-info-sec" id="olsb-info-also-wrap">
+                        <p class="site-kicker">Also drawn in</p>
+                        <div id="olsb-info-also"></div>
+                    </div>
                 </div>
 
-                <div class="olsb-inview">
+                <div class="olsb-inview" id="olsb-inview-wrap">
                     <p class="site-kicker">In view &middot; tap to read</p>
                     <div id="olsb-inview"></div>
                 </div>
@@ -101,8 +122,12 @@
         <span class="push">&larr; &rarr; step &middot; Esc clears</span>
     </footer>
 
-    <script src="js/olsb-anatomy.js?v=5f597aa9"></script>
-    <script src="js/olsb.js?v=013da094"></script>
+    <script src="js/olsb-glossary.js?v=675b5634"></script>
+    <script src="js/olsb-lateral.js?v=dd3d3c5c"></script>
+    <script src="js/olsb-medial.js?v=285ecbec"></script>
+    <script src="js/olsb-axial.js?v=95a719e3"></script>
+    <script src="js/olsb-coronal.js?v=f87f992c"></script>
+    <script src="js/olsb.js?v=5f14b66a"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>

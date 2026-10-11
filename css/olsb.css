@@ -38,6 +38,10 @@
   --olsb-mucosa: #D98A82;
   --olsb-recess: #2B2A2E;
   --olsb-zone: #2445B0;     /* Macewen's triangle: a surface marking (science) */
+  --olsb-wall: #EADFD0;      /* mucosa-lined bone of the cavity walls */
+  --olsb-muscle: #A94A3F;
+  --olsb-brain: #C7ADA5;
+  --olsb-perilymph: #9DB8C9;
   --olsb-dim: 0.42;
 }
 html[data-theme="dark"] {
@@ -65,6 +69,10 @@ html[data-theme="dark"] {
   --olsb-mucosa: #D0857D;
   --olsb-recess: #0B0C0E;
   --olsb-zone: #8EA7FF;
+  --olsb-wall: #9C8F7E;
+  --olsb-muscle: #B85448;
+  --olsb-brain: #8F7C76;
+  --olsb-perilymph: #6F8FA6;
 }
 
 /* ===== PAGE ===== */
@@ -98,6 +106,7 @@ html[data-theme="dark"] {
   border: 1px solid var(--rule); border-radius: var(--radius);
 }
 #olsb-svg { display: block; width: 100%; height: auto; aspect-ratio: 760 / 520; touch-action: manipulation; }
+#olsb-svg text { user-select: none; }
 .olsb-orient {
   position: absolute; left: 0.6rem; bottom: 0.5rem; margin: 0;
   font: 400 0.68rem/1.3 var(--font-mono); letter-spacing: 0.04em; color: var(--ink-faint);
@@ -117,14 +126,26 @@ html[data-theme="dark"] {
 .olsb-toggle input { margin: 0; accent-color: var(--ink); }
 .olsb-toggle:has(input:checked) { color: var(--ink); }
 .olsb-swatch { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1px solid var(--rule-strong); }
-.olsb-swatch.L-skin { background: var(--olsb-skin); }
-.olsb-swatch.L-soft { background: var(--olsb-fascia); }
-.olsb-swatch.L-cortex { background: var(--olsb-bone); }
-.olsb-swatch.L-tm { background: var(--olsb-tm); }
-.olsb-swatch.L-me { background: var(--olsb-ossicle); }
-.olsb-swatch.L-mastoid { background: var(--olsb-bone-cut); }
-.olsb-swatch.L-fn { background: var(--olsb-nerve); }
-.olsb-swatch.L-deep { background: var(--olsb-vein); }
+/* Layer swatch: the colour of the layer's first structure kind. */
+.sw-skin { background: var(--olsb-skin); }
+.sw-fascia { background: var(--olsb-fascia); }
+.sw-bone, .sw-bonehi { background: var(--olsb-bone); }
+.sw-bonecut { background: var(--olsb-bone-cut); }
+.sw-bonedark, .sw-plate, .sw-mark { background: var(--olsb-bone-dark); }
+.sw-tm, .sw-tmline, .sw-graft { background: var(--olsb-tm); }
+.sw-air, .sw-recess { background: var(--olsb-air); }
+.sw-mucosa, .sw-mucosaline { background: var(--olsb-mucosa); }
+.sw-nerve { background: var(--olsb-nerve); }
+.sw-dura { background: var(--olsb-dura); }
+.sw-vein, .sw-veinwall { background: var(--olsb-vein); }
+.sw-artery, .sw-arterywall { background: var(--olsb-artery); }
+.sw-ossicle, .sw-ghost { background: var(--olsb-ossicle); }
+.sw-muscle { background: var(--olsb-muscle); }
+.sw-wall { background: var(--olsb-wall); }
+.sw-brain { background: var(--olsb-brain); }
+.sw-oticfill, .sw-oticring, .sw-innerline, .sw-innerfill { background: var(--olsb-otic); }
+.sw-zone, .sw-cone, .sw-dimline, .sw-refline { background: var(--signal-2); }
+.sw-route, .sw-incision { background: var(--signal); }
 
 /* ===== DRAWING ===== */
 #olsb-svg .s { transition: opacity 0.2s; }
@@ -171,13 +192,44 @@ html[data-theme="dark"] {
 #olsb-svg .k-incision { stroke: var(--signal); stroke-width: 2.5px; }
 #olsb-svg .k-incision2 { stroke: var(--signal); stroke-dasharray: 8 5; }
 
+/* Kinds added for the cut-plane dioramas. */
+#olsb-svg .k-wall { fill: var(--olsb-wall); stroke: var(--olsb-bone-dark); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-oticfill { fill: var(--olsb-otic); stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-oticring { fill: var(--olsb-perilymph); stroke: var(--olsb-otic); stroke-width: 5; }
+#olsb-svg .k-innerline { stroke: var(--olsb-otic-edge); stroke-dasharray: 4 3; }
+#olsb-svg .k-innerfill { fill: var(--olsb-perilymph); fill-opacity: 0.55; stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
+#olsb-svg .k-muscle { stroke: var(--olsb-muscle); stroke-opacity: 0.85; }
+#olsb-svg .k-veinwall { fill: var(--olsb-vein); fill-opacity: 0.8; }
+#olsb-svg .k-arterywall { fill: var(--olsb-artery); stroke: var(--olsb-artery); fill-opacity: 0.85; stroke-opacity: 0.8; }
+#olsb-svg .k-arterywall.ln { fill: none; }
+#olsb-svg .k-ghost { fill: var(--olsb-ossicle); fill-opacity: 0.45; stroke: var(--olsb-ossicle-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
+#olsb-svg .k-zone2 { fill: var(--olsb-air); fill-opacity: 0.18; stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 3 3; }
+#olsb-svg .k-tmline { stroke: var(--olsb-tm-edge); }
+#olsb-svg .k-mucosaline { stroke: var(--olsb-mucosa); }
+#olsb-svg .k-bonehi { fill: var(--olsb-bone); stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-space { fill: var(--olsb-zone); fill-opacity: 0.3; stroke: var(--olsb-zone); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-fold { stroke: var(--olsb-tm-edge); stroke-dasharray: 2 2; }
+#olsb-svg .k-brain { fill: var(--olsb-brain); }
+#olsb-svg .k-cone { fill: var(--olsb-zone); fill-opacity: 0.12; stroke: var(--olsb-zone); stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-dasharray: 6 4; }
+#olsb-svg .k-cone2 { fill: var(--olsb-zone); fill-opacity: 0.28; stroke: var(--olsb-zone); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-dimline, #olsb-svg .k-route2 { stroke: var(--signal-2); }
+#olsb-svg .k-route { stroke: var(--signal); stroke-dasharray: 6 4; }
+#olsb-svg .k-route2 { stroke-dasharray: 5 3; }
+#olsb-svg .arrowhead { fill: var(--ink-muted); }
+#olsb-svg .k-zone.ln { fill: none; }
+
 /* See-through: the overlying surfaces go faint so the projection of
    deeper structures shows under them. */
 #olsb-svg.is-ghost .L-cortex, #olsb-svg.is-ghost .L-skin, #olsb-svg.is-ghost .L-soft { opacity: 0.22; }
 /* A step's focus: everything else steps back, except the large surfaces. */
 #olsb-svg.has-focus .s:not(.is-focus):not(.inert):not(.bg):not(.is-sel) { opacity: var(--olsb-dim); }
-#olsb-svg.has-focus .s.inert { opacity: var(--olsb-dim); }
-#olsb-svg .s.is-sel path:not(.hit) { filter: drop-shadow(0 0 1.5px var(--ink)); }
+#olsb-svg.has-focus .s.inert:not(.bg) { opacity: var(--olsb-dim); }
+#olsb-svg .s.is-sel path:not(.hit) { filter: drop-shadow(0 0 1.5px var(--ink)) drop-shadow(0 0 1.5px var(--ink)); }
+#olsb-svg .s.is-rel path:not(.hit) { filter: drop-shadow(0 0 1.2px var(--signal-2)); }
+/* Quiz feedback: the site's outcome colours. */
+#olsb-svg .s.q-ok path:not(.hit) { filter: drop-shadow(0 0 2px var(--ok)) drop-shadow(0 0 2px var(--ok)); }
+#olsb-svg .s.q-bad path:not(.hit) { filter: drop-shadow(0 0 2px var(--bad)) drop-shadow(0 0 2px var(--bad)); }
+#olsb-svg .s.q-target path:not(.hit) { filter: drop-shadow(0 0 2px var(--ok)) drop-shadow(0 0 2px var(--ok)); }
 
 /* Labels: name beside a dot, haloed with the stage colour. */
 #olsb-svg .labels { pointer-events: none; }
@@ -213,6 +265,20 @@ html[data-theme="dark"] {
 .olsb-info { margin-top: 1rem; }
 .olsb-info-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
 .olsb-info p.note { margin: 0; font-size: 0.925rem; line-height: 1.5; }
+.olsb-info-sec { margin-top: 0.9rem; padding-top: 0.7rem; border-top: 1px solid var(--rule); }
+.olsb-info-sec > .site-kicker { margin: 0 0 0.4rem; }
+.olsb-rel-row { display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 0.5rem; align-items: baseline; }
+.olsb-rel-dir { font: 500 0.7rem/1.9 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--signal-2); }
+.olsb-chip.is-hidden { border-style: dashed; }
+.olsb-chip:disabled { opacity: 0.55; cursor: default; }
+.olsb-dios { margin-bottom: 1rem; }
+.olsb-dios .olsb-sub { margin-bottom: 0; }
+.olsb-views { display: contents; }
+.olsb-views[hidden] { display: none; }
+.olsb-quiz h2 { font-size: var(--step-2); }
+.olsb-quiz-fb { margin: 0; font-size: 0.9rem; color: var(--ink-muted); }
+.olsb-quiz-fb.ok { color: var(--ok); }
+.olsb-quiz-fb.bad { color: var(--bad); }
 
 .olsb-inview { margin-top: 1.25rem; display: grid; gap: 0.6rem; }
 .olsb-inview-grp p { margin: 0 0 0.3rem; }
@@ -223,3 +289,4 @@ html[data-theme="dark"] {
 }
 .olsb-chip:hover { color: var(--ink); border-color: var(--ink); }
 .olsb-chip.active { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+.olsb [hidden] { display: none !important; }

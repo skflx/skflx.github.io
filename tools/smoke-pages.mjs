@@ -82,6 +82,14 @@ const PAGES = [
   { path: 'OLSB.html#p=mastoidectomy&s=6', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
       && document.querySelectorAll('#olsb-svg .s').length > 20
       && /Facial recess/.test(document.getElementById('olsb-step-title').textContent)) },
+  /* A cut-plane diorama: selecting a structure lists its neighbours. */
+  { path: 'OLSB.html#d=axial&p=posterior&s=2', ready: async (p) => {
+    await wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
+      && /posterior wall/.test(document.getElementById('olsb-step-title').textContent));
+    await p.click('#olsb-svg [data-id="sinustymp"]', { force: true });
+    return wait(p, () => document.querySelectorAll('#olsb-info-rel .olsb-chip').length > 2
+      && document.querySelectorAll('#olsb-svg .s.is-rel').length > 0);
+  } },
   /* Regression class as above: the hash is untrusted and only selects data. */
   { path: 'OLSB.html#p=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
     ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
