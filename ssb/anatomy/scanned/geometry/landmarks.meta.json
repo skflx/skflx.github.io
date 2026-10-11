@@ -1,0 +1,204 @@
+{
+ "frame": "RAS mm, origin ANS projected on the midsagittal plane, axial parallel to Frankfort (tools/ssb-pipeline/uw/registration.json \"frame\")",
+ "specimen": "uw-axial-sagittal",
+ "landmarks": {
+  "lm.anterior-nasal-spine.M": {
+   "method": "image search: anterior-most bone within 7 px of the midsagittal plane at the nasal floor (labels3d.find_ans)"
+  },
+  "lm.crista-galli-apex.M": {
+   "method": "highest bone (display >= 125) within 3 mm of the MSP and 6 mm (AP) of the crista galli tips"
+  },
+  "lm.dorsum-sellae-tip.M": {
+   "method": "highest bone (display >= 125) within 3 mm of the MSP and 5 mm (AP) of the dorsum tips"
+  },
+  "lm.foramen-rotundum-anterior.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "lm.foramen-rotundum-anterior.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 2,
+   "spread_mm": 0.32
+  },
+  "lm.frontal-ostium.L": {
+   "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
+   "area_mm2": 32.666666666666664
+  },
+  "lm.frontal-ostium.R": {
+   "method": "centroid of the narrowest cross-section of the frontal outflow (axial level) below the sinus body",
+   "area_mm2": 53.666666666666664
+  },
+  "lm.greater-palatine-foramen.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 19,
+   "spread_mm": 2.78
+  },
+  "lm.infraorbital-foramen.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 13,
+   "spread_mm": 3.65
+  },
+  "lm.sella-floor-center.M": {
+   "method": "half-level crossing between the fossa contents and the sphenoid air below the sella tips, on the midline at the tips' AP position"
+  },
+  "lm.sphenoid-ostium.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 2,
+   "spread_mm": 0.31
+  },
+  "lm.sphenoid-ostium.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 7,
+   "spread_mm": 3.21,
+   "inferior_margin_s_mm": 23.5,
+   "inferior_margin_method": "lowest S of the cavity | sinus label interface within 6 mm of the landmark"
+  },
+  "lm.sphenopalatine-foramen.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 5,
+   "spread_mm": 1.24
+  },
+  "lm.vidian-canal-anterior.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "s.anterior-clinoid-process.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 5,
+   "spread_mm": 0.63
+  },
+  "s.clivus.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "s.crista-galli.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 9,
+   "spread_mm": 1.28
+  },
+  "s.dorsum-sellae.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 10,
+   "spread_mm": 1.56
+  },
+  "s.foramen-lacerum.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 3,
+   "spread_mm": 0.62
+  },
+  "s.foramen-ovale.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 7,
+   "spread_mm": 1.25
+  },
+  "s.petrous-apex.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 6,
+   "spread_mm": 0.96
+  },
+  "s.sella-turcica.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 17,
+   "spread_mm": 2.88
+  },
+  "s.superior-orbital-fissure.L": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 4,
+   "spread_mm": 1.0
+  },
+  "s.superior-orbital-fissure.R": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 4,
+   "spread_mm": 1.0
+  },
+  "s.vomer.M": {
+   "method": "median of UW arrow tips (axial + sagittal)",
+   "n_tips": 6,
+   "spread_mm": 0.94
+  },
+  "lm.choanal-arch.M": {
+   "method": "highest point (median of the top voxel row) of the nasal cavity | nasopharynx boundary within 4 mm (R) of the septum's mean R; specimen.py cuts that boundary at the PNS plane (softtissue.py)",
+   "n_boundary_voxels": 287,
+   "septum_mean_r": 0.24
+  },
+  "lm.naris.R": {
+   "method": "vestibule lumen of the unmasked axial stack: air (0 < display < 78) on this side of the midline with tissue (>= 78) within 12 mm medially and laterally on the same row, A -2..16, S 0..10; centroid of the lumen voxels in the 3 mm S band of largest lumen area, found on this side itself (tools/ssb-pipeline/uw/nose.py, E1b; the scanned base is not mirrored, RA3b)",
+   "band_s_mm": [
+    3.5,
+    6.0
+   ],
+   "lumen_area_mm2": 115.5,
+   "n_voxels": 2773
+  },
+  "lm.naris.L": {
+   "method": "vestibule lumen of the unmasked axial stack: air (0 < display < 78) on this side of the midline with tissue (>= 78) within 12 mm medially and laterally on the same row, A -2..16, S 0..10; centroid of the lumen voxels in the 3 mm S band of largest lumen area, found on this side itself (tools/ssb-pipeline/uw/nose.py, E1b; the scanned base is not mirrored, RA3b)",
+   "band_s_mm": [
+    2.5,
+    5.0
+   ],
+   "lumen_area_mm2": 123.0,
+   "n_voxels": 2953
+  },
+  "lm.middle-turbinate-head.R": {
+   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
+   "n_front_voxels": 40,
+   "a_range_mm": [
+    -54.0,
+    -15.0
+   ]
+  },
+  "lm.middle-turbinate-head.L": {
+   "method": "centroid of the middle-turbinate wall unit within 1 mm (A) of its anterior-most voxel (proxy for the axilla; softtissue.py)",
+   "n_front_voxels": 92,
+   "a_range_mm": [
+    -52.0,
+    -14.0
+   ]
+  },
+  "lm.incisive-canal.M": {
+   "method": "topmost point of the midline-most bone-bounded display 78-150 channel (>= 5 mm in S) in |R| <= 4, A -24..-8, S -14..-1; the box top clips it, so S is a lower bound (softtissue.py, ST2b)",
+   "run_s_mm": 12.5,
+   "n_voxels": 463,
+   "n_candidates": 4,
+   "candidate_centroid_abs_r_mm": [
+    0.05,
+    1.64,
+    2.36,
+    3.14
+   ],
+   "a_range_mm": [
+    -23.5,
+    -11.5
+   ],
+   "s_range_mm": [
+    -13.0,
+    -1.0
+   ]
+  },
+  "s.internal-nasal-valve.R": {
+   "method": "centroid of this side's coronal section of smallest area (3 mm moving mean) over A from lm.naris - 25 to - 10 mm: the airway is the air connected to lm.naris among this side's nasal cavity and the unlabelled air in front of it (tools/ssb-pipeline/uw/nose.py, ST6; computed on each side, RA3b)",
+   "a_mm": -15.0,
+   "section_area_mm2": 93.0,
+   "smoothed_area_mm2": 93.0,
+   "window_a_mm": [
+    -20.5,
+    -5.5
+   ],
+   "in_air": true
+  },
+  "s.internal-nasal-valve.L": {
+   "method": "centroid of this side's coronal section of smallest area (3 mm moving mean) over A from lm.naris - 25 to - 10 mm: the airway is the air connected to lm.naris among this side's nasal cavity and the unlabelled air in front of it (tools/ssb-pipeline/uw/nose.py, ST6; computed on each side, RA3b)",
+   "a_mm": -14.0,
+   "section_area_mm2": 45.0,
+   "smoothed_area_mm2": 45.4,
+   "window_a_mm": [
+    -21.0,
+    -6.0
+   ],
+   "in_air": false
+  }
+ }
+}

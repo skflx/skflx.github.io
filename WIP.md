@@ -189,6 +189,12 @@ expansion toward SSB-style depth (real geometry, a graph); more procedures
 **State:** `ssb.html` runs graph mode (tree, search, depth, panels, deep
 links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
 
+- **Anatomy state (RA3a loader, RA3b scanned base):** `state.anatomy` (base + variant and condition patches, `#anat=`/`#v=`/`#dz=`) is
+  whitelisted against `ssb/anatomy/index.json`, which lists the scanned base (head A as scanned, `ssb/anatomy/scanned/`, built by
+  `normalize.py --base scanned`); Normal asymmetry is enabled, Variants and Pathology wait for entries. The CT and Specimen stages load the
+  scanned base's own data (the Specimen stage swaps live; the Endoscope, procedures and dissected states stay on the standard head, and choosing one returns the page to it).
+  Products that failed their gate on this head are `absent` in its index entry and the flap overlay is off there
+  (`docs/ssb.md` §5.11). The patch format, loader and override-node hiding are tested on synthetic patches.
 - **Standard specimen (O6, N1):** the page serves the UW head
   standardized — right half mirrored onto the left at R = 0, septum centred,
   thin midline plates where a paired air space would cross
@@ -196,18 +202,22 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   `standard`, and a note in the Specimen and CT controls). Landmarks that
   exist on one side only stay as scanned (listed in the roadmap, N1). The
   as-scanned head is the pipeline's input and becomes a variant later.
-- **Realistic anatomy (planned, not built):** `docs/realistic-anatomy.md`
+- **Realistic anatomy (in progress):** `docs/realistic-anatomy.md`
   plans four anatomy states (symmetric, normal asymmetry, variants,
   pathology) over the specimen, a resegmentation of the UW head, an
   inventory of the UW teaching pages' figures, and curated Radiopaedia
-  exemplars. The owner answered its decisions on 2026-10-07 (its §13):
-  variants and pathology sit on the as-scanned head; UW and Radiopaedia
-  images may be shown, credited. First work done: NasalSeg population
-  asymmetry and cross-section profiles (`ssb/anatomy/population/nasalseg.json`, its §4.4; POP1) — the
-  archive holds 107 distinct scans, not 130, and head A's nasal-cavity
-  asymmetry lies beyond the clear population's range. The UW authors'
-  written permission arrived 2026-10-07 (`ssb/LICENSE-data.md`); the repo
-  credits the atlas and its institution, never the authors by name.
+  exemplars; its §11 "Handoff" is the next agent's order of work. Built:
+  NasalSeg population asymmetry and cross-section profiles
+  (`ssb/anatomy/population/nasalseg.json`, its §4.4; the archive holds 107
+  distinct scans, not 130), the anatomy state with the `scanned` base
+  (Normal asymmetry), the UW figure inventory (FG1) and the Radiopaedia
+  shortlist (RP1). Resegmentation: RS1 and RS2a are candidates under the
+  gitignored `incoming/_rs/` (nothing served changes until RS6); the
+  ethmoid lamellae resisted the sheet filter, so they come from control
+  points placed by eye (RS2c; owner, RA-O9). Radiopaedia stacks are fetched
+  in the owner's browser (RA-O5). The UW authors' written permission is in
+  `ssb/LICENSE-data.md`; the repo credits the atlas and its institution,
+  never the authors by name.
 - **Reference specimen** (`tools/ssb-pipeline/uw/`, provenance
   `ssb/LICENSE-data.md`) — reconstructed from the UW atlas: its axial and
   sagittal stacks are one CT (the coronal is another head,
@@ -353,6 +363,10 @@ links) and four stages. Phase-by-phase status: `docs/ssb-roadmap.md` §1.
   (`slices.json`), from which `tools/ssb-pipeline/uw/relate.py` tests the
   graph's spatial claims (as of 2026-09-28: 60 testable, 58 agree, the
   other 2 a documented arrow-placement artifact).
+  `figures.json` (WP FG1) inventories the eight Normal/Abnormal pages'
+  figures: plane, window, caption abbreviations, traced arrows on the
+  bone-window ones, and the ids, roles and candidate same-patient groups
+  transcribed from `docs/realistic-anatomy.md` §4.1 (Opus fills the nulls).
 
 **Next:** Tracked task by task in `docs/ssb-roadmap.md` (status board,
 owner decisions, waves of work packages with Opus checkpoints, content
@@ -360,11 +374,11 @@ backlog). The owner's priority (O7) is clear anatomy for FESS and for EEA
 to sellar/clival masses, so wave 3 is procedure mode: the dissection
 states, the player, poses per state, the mucosal state, NasalSeg's
 population profiles and the 16-bit intake are built (P1b, P2, P3, DC1,
-POP1, IN1); CP-3 found that a step does not yet land on the view it
+POP1, IN1; the population panel POP2a is merged and the population maxillary sinus, POP2b, is in review); CP-3 found that a step does not yet land on the view it
 opened, and P4 fixed that (every corridor position, by step or link,
 lands on a view of its state); the soft-tissue lane
-continues with ST4d and ST5.
-Waiting on the owner: O8–O12, the review of the dissected states (CP-3's links), review of tier-1 FESS anatomy and the
+has ST4d merged and the flap overlay (ST5: `flap.js`, `#flap=`, the Nasoseptal flap control, areas per design and side) in review.
+Waiting on the owner: O14 (where the nasal framework is drawn), the review of the dissected states (CP-3's links), review of tier-1 FESS anatomy and the
 dioramas (`docs/ssb-roadmap.md` §2). The external nose beyond the entry anatomy (the full rhinoplasty
 framework, its envelope layers, vessels and nerves) is specced
 (2026-10-07) as the `nasal-framework` diorama (`docs/ssb.md` §6.2;

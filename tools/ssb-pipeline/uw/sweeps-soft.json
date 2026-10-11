@@ -11,11 +11,9 @@
    ],
    "waypoints": [
     {
-     "lm": "lm.middle-turbinate-head.L",
-     "offset": [
-      0,
-      -7.35,
-      5.5
+     "chart": [
+      -19.56,
+      34.56
      ]
     },
     {
@@ -32,7 +30,7 @@
     }
    ],
    "variable": "Entry depends on the turbinate's axilla, which the specimen approximates with the turbinate head.",
-   "derivation": "Entry: 7.35 mm behind the septal projection of the middle turbinate head (Gras-Cabrerizo 2016, mean of 10 cavities), near the top of the septum. Descent is a schematic line; the paper gives the entry, not the course."
+   "derivation": "Entry: A = A(lm.middle-turbinate-head.L) - 7.35 = -12.21 - 7.35 = -19.56 (Gras-Cabrerizo 2016, 7.35 mm behind the septal projection of the middle turbinate head, mean of 10 cavities); height: S = top(a) - 2 mm = 36.56 - 2 = 34.56 on the septal chart's upper edge; the top of the septal surface, no source gives it. Descent is a schematic line; the paper gives the entry, not the course."
   },
   "s.anterior-ethmoidal-septal-branch.R": {
    "surface": "s.septal-mucosa.R",
@@ -43,11 +41,9 @@
    ],
    "waypoints": [
     {
-     "lm": "lm.middle-turbinate-head.R",
-     "offset": [
-      0,
-      -7.35,
-      5.5
+     "chart": [
+      -19.56,
+      34.56
      ]
     },
     {
@@ -64,7 +60,7 @@
     }
    ],
    "variable": "Entry depends on the turbinate's axilla, which the specimen approximates with the turbinate head.",
-   "derivation": "Entry: 7.35 mm behind the septal projection of the middle turbinate head (Gras-Cabrerizo 2016, mean of 10 cavities), near the top of the septum. Descent is a schematic line; the paper gives the entry, not the course."
+   "derivation": "Entry: A = A(lm.middle-turbinate-head.R) - 7.35 = -12.21 - 7.35 = -19.56 (Gras-Cabrerizo 2016, 7.35 mm behind the septal projection of the middle turbinate head, mean of 10 cavities); height: S = top(a) - 2 mm = 36.56 - 2 = 34.56 on the septal chart's upper edge; the top of the septal surface, no source gives it. Descent is a schematic line; the paper gives the entry, not the course."
   },
   "s.nasopalatine-artery.L": {
    "surface": "s.septal-mucosa.L",
@@ -89,13 +85,13 @@
     },
     {
      "chart": [
-      -12,
-      9
+      -19.08,
+      0
      ]
     }
    ],
-   "variable": "The incisive-canal end is derived from a mean (39.6 ± 4.3 mm) measured on sagittal CT in 9 heads.",
-   "derivation": "End at the incisive canal, placed 39.6 mm in front of the choanal arch level (Bleier 2011: the flap length from the incisive canal to the sphenoid face at the choanal arch), i.e. A -11.9, near the septal chart's floor edge (the chart's lower edge rises toward the nose, so the end sits a few mm above the floor line). The canal itself is not resolved in the specimen. The start continues the inferior branch."
+   "variable": "The incisive-canal end is the specimen's own canal (lm.incisive-canal.M); the artery's course to it is schematic.",
+   "derivation": "End at the incisive canal: the septal chart cell nearest lm.incisive-canal.M (A -19.08), at the lowest occupied S of its column (S 0; the canal's own S is a lower bound, clipped by the box). Bleier 2011 and MacArthur 2016 are kept as sources for the artery's role (the pedicle's anterior supply), not for its position. The start continues the inferior branch; the course between is a straight chart segment, schematic."
   },
   "s.nasopalatine-artery.R": {
    "surface": "s.septal-mucosa.R",
@@ -120,13 +116,13 @@
     },
     {
      "chart": [
-      -12,
-      9
+      -19.08,
+      0
      ]
     }
    ],
-   "variable": "The incisive-canal end is derived from a mean (39.6 ± 4.3 mm) measured on sagittal CT in 9 heads.",
-   "derivation": "End at the incisive canal, placed 39.6 mm in front of the choanal arch level (Bleier 2011: the flap length from the incisive canal to the sphenoid face at the choanal arch), i.e. A -11.9, near the septal chart's floor edge (the chart's lower edge rises toward the nose, so the end sits a few mm above the floor line). The canal itself is not resolved in the specimen. The start continues the inferior branch."
+   "variable": "The incisive-canal end is the specimen's own canal (lm.incisive-canal.M); the artery's course to it is schematic.",
+   "derivation": "End at the incisive canal: the septal chart cell nearest lm.incisive-canal.M (A -19.08), at the lowest occupied S of its column (S 0; the canal's own S is a lower bound, clipped by the box). Bleier 2011 and MacArthur 2016 are kept as sources for the artery's role (the pedicle's anterior supply), not for its position. The start continues the inferior branch; the course between is a straight chart segment, schematic."
   },
   "s.posterior-septal-artery-inferior-branch.L": {
    "surface": "s.septal-mucosa.L",
@@ -140,8 +136,8 @@
    "waypoints": [
     {
      "chart": [
-      -42,
-      20
+      -45,
+      14.86
      ]
     },
     {
@@ -164,7 +160,7 @@
     }
    ],
    "variable": "Which branch is dominant, and where the artery divides, vary between sides and people (Zhang 2014: dominant inferior in 61.5%, division near the sphenopalatine foramen in 65.4%).",
-   "derivation": "Start: the middle of the strip between the choanal arch (S 12.0) and the sphenoid ostium on the chart's posterior edge (the specimen's septal surface ends about 4 mm in front of the rostrum). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed. On the left the septal surface starts 3 mm further forward at this height (A -43), so the start is moved there."
+   "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.L) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed."
   },
   "s.posterior-septal-artery-inferior-branch.R": {
    "surface": "s.septal-mucosa.R",
@@ -178,8 +174,8 @@
    "waypoints": [
     {
      "chart": [
-      -44,
-      18
+      -45,
+      14.86
      ]
     },
     {
@@ -202,7 +198,7 @@
     }
    ],
    "variable": "Which branch is dominant, and where the artery divides, vary between sides and people (Zhang 2014: dominant inferior in 61.5%, division near the sphenopalatine foramen in 65.4%).",
-   "derivation": "Start: the middle of the strip between the choanal arch (S 12.0) and the sphenoid ostium on the chart's posterior edge (the specimen's septal surface ends about 4 mm in front of the rostrum). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed. On the right a gap in the septal surface at A -46, S 14-15 forces the start 2 mm forward (A -44)."
+   "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.R) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed."
   },
   "s.posterior-septal-artery-superior-branch.L": {
    "surface": "s.septal-mucosa.L",
@@ -210,13 +206,14 @@
    "radius": 0.4,
    "src": [
     "src.zhang-2014-psa",
-    "src.macarthur-2016-nasal-arteries"
+    "src.macarthur-2016-nasal-arteries",
+    "src.pinheiro-neto-2011-nsf-dimensions"
    ],
    "waypoints": [
     {
      "chart": [
-      -42,
-      20
+      -45,
+      14.86
      ]
     },
     {
@@ -239,7 +236,7 @@
     }
    ],
    "variable": "Course of the superior branch is not described in the sources read for this pass; it is drawn short, toward the upper septum.",
-   "derivation": "Start as the inferior branch. The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it. On the left the septal surface starts 3 mm further forward at this height (A -43), so the start is moved there."
+   "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.L) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it."
   },
   "s.posterior-septal-artery-superior-branch.R": {
    "surface": "s.septal-mucosa.R",
@@ -247,13 +244,14 @@
    "radius": 0.4,
    "src": [
     "src.zhang-2014-psa",
-    "src.macarthur-2016-nasal-arteries"
+    "src.macarthur-2016-nasal-arteries",
+    "src.pinheiro-neto-2011-nsf-dimensions"
    ],
    "waypoints": [
     {
      "chart": [
-      -44,
-      18
+      -45,
+      14.86
      ]
     },
     {
@@ -276,7 +274,7 @@
     }
    ],
    "variable": "Course of the superior branch is not described in the sources read for this pass; it is drawn short, toward the upper septum.",
-   "derivation": "Start as the inferior branch. The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it. On the right a gap in the septal surface at A -46, S 14-15 forces the start 2 mm forward (A -44)."
+   "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.R) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it."
   },
   "s.superior-labial-septal-branch.L": {
    "surface": "s.septal-mucosa.L",

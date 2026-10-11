@@ -4248,6 +4248,65 @@
       "pmid": "34257360",
       "url": "https://pubmed.ncbi.nlm.nih.gov/34257360/",
       "note": "PMID, DOI and citation matched to the PubMed record (read 2026-10-08; open access, PMC8277849). The abstract states 10 healthy subjects imaged by high-resolution MRI before and after a topical decongestant, and that decongestion mainly increases the cross-section in the turbinate region; the mean cross-section figures used here (2.8 to 3.8 cm², adults aged 21-38, xylometazoline 0.1 %, measured 10 minutes after) are from the full text as read by the work-package author and not re-read in this session. A small within-subject MRI series of healthy volunteers: it supports the size and location of the decongestion effect, not a population norm or any pathological state. Awaiting owner verification."
+    },
+    {
+      "id": "src.alhatmi-2023-frontal-variations",
+      "cite": "Al Hatmi AS, Al Ajmi E, Albalushi H, Al Lawati M, Sirasanagandla SR. Anatomical variations of the frontal sinus: a computed tomography-based study. F1000Res. 2023;12:71.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.12688/f1000research.129498.2",
+      "pmid": "37811203",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10556568/",
+      "note": "Full text read from PMC (2026-10-09). Retrospective single-centre CT review: 610 Omani adults (1,220 frontal sinuses), one radiologist reading. Volumetric categories after Guerram et al. (that paper was not read): aplasia = no pneumatization; hypoplasia = minimal pneumatization under the supraorbital line; medium = over the supraorbital line but medial to the mid-orbital line; hyperplasia = lateral to the mid-orbital line. States no numeric (mm or volume) cut-off. Its tables are internally inconsistent (Table 1 is labelled unilateral but counts sides; abstract and Table 2 disagree on one p value; Table 3 pools differently), so only the Table 1 per-side counts and the bilateral per-patient counts are used. One population, one reader: supports prevalence in this population, not a norm. Awaiting owner verification."
+    },
+    {
+      "id": "src.tomovic-2013-sphenoid-hrct",
+      "cite": "Tomovic S, Esmaeili A, Chan NJ, Shukla PA, Choudhry OJ, Liu JK, Eloy JA. High-resolution computed tomography analysis of variations of the sphenoid sinus. J Neurol Surg B Skull Base. 2013;74(2):82-90.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1055/s-0033-1333619",
+      "pmid": "24436893",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24436893/",
+      "note": "Full text read from PMC3699211 (2026-10-09). Retrospective HRCT review of 170 patients (two observers, data averaged; United States, mixed ethnicity: 65 African American, 55 Hispanic, 26 Caucasian, 6 Asian, 18 undefined). Defines the lateral recess as lateral pneumatization into the greater wing and pterygoid processes and reports it per patient (72.4%); it does not report pterygoid process pneumatization separately, so it cannot support a pterygoid-specific prevalence. Awaiting owner verification."
+    },
+    {
+      "id": "src.li-2022-lateral-recess-pterygoid",
+      "cite": "Li L, London NR Jr, Prevedello DM, Carrau RL. Endonasal exposure of lateral recess of the sphenoid sinus: significance of pterygoid process pneumatization. Am J Rhinol Allergy. 2022 (in press at time of reading).",
+      "type": "cadaver",
+      "verified": false,
+      "doi": "10.1177/19458924221139019",
+      "pmid": "36373591",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36373591/",
+      "note": "Abstract only (publisher/institutional record, read 2026-10-09). Six cadaveric specimens (11 sides) preselected for a lateral recess, plus CT of 120 patients (240 sides). Defines three types: 1 = no identifiable lateral recess; 2 = lateral pneumatization of the greater wing above the vidian canal; 3 = pneumatization of both the greater wing and the pterygoid process. The abstract reports no prevalence of any type; it states only that caudal pterygoid extent did not correlate with superolateral extent in type 3 (P > .05). Volume, issue and pages not yet given on the record read. Awaiting owner verification."
+    },
+    {
+      "id": "src.gold-2017-septal-perforation",
+      "cite": "Gold M, Boyack I, Caputo N, Pearlman AN. Imaging prevalence of nasal septal perforation in an urban population. Clin Imaging. 2017;43.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.1016/j.clinimag.2017.02.002",
+      "pmid": "28242555",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28242555/",
+      "note": "Abstract only (institutional record of the PubMed abstract, read 2026-10-09). Facial bone CT of 3,708 consecutive patients at one urban hospital; prevalence of septal perforation 2.05%; size measured in two dimensions on CT. A hospital imaging population, not a general-population estimate; the record read gives no definition of perforation and no page range. Awaiting owner verification."
+    },
+    {
+      "id": "src.dhakal-2025-sinus-volumes",
+      "cite": "Dhakal A, Shrestha BL, Pokharel M, Shrestha S, Karki S, Shrestha KS. Computerized tomography-based volumetric analysis of the maxillary, sphenoid, and frontal sinuses: an observational study. JNMA J Nepal Med Assoc. 2025;63(281):33-36.",
+      "type": "CT-series",
+      "verified": false,
+      "doi": "10.31729/jnma.8859",
+      "pmid": "40655518",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11930040",
+      "note": "Full text read from PMC (2026-10-09). Cross-sectional CT study at one Nepalese tertiary hospital: 154 patients aged 4 to 91 years (median 29), volumes measured by manual marking in InVesalius 3.1.1 by one observer. Reports medians with IQR only (no mean, SD or range) and does not define aplasia, hypoplasia or hyperpneumatization. Includes children, whose sinuses are still growing; the Discussion's male left IQR upper bound (6.96) conflicts with the Results (6.06). Awaiting owner verification."
+    },
+    {
+      "id": "src.alomair-2025-giant-bulla",
+      "cite": "Al Omair A, AlHumaizi A, AlZabin A, Almajed E. Giant pneumatized ethmoid bulla: a rare anatomical variation. J Radiol Case Rep. 2025;19(1).",
+      "type": "review",
+      "verified": false,
+      "doi": "10.3941/jrcr.5563",
+      "url": "https://radiologycases.com/index.php/radiologycases/article/view/5563",
+      "note": "Abstract only (journal page, read 2026-10-09). Single case report (typed review, as other case reports in this graph): an enlarged pneumatized ethmoid bulla with an obstructed left ostiomeatal complex and a patent right one. It gives no definition, size criterion or prevalence number, and cites no source for its statement that giant ethmoid bulla is relatively uncommon; it supports the existence of the variant and one OMC finding only. Awaiting owner verification."
     }
   ]
 }

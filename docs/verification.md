@@ -333,6 +333,17 @@ hides, the erectile remnants show), the pills swap states and the hash follows, 
 plays decongested and greys the toggle, and hostile `mu` values are ignored. Judging how the
 decongested lining looks (turbinates, the middle meatus) stays a human check.
 
+**Population sinus** (`tools/ssb-pipeline/nasalseg/meanshape.py`, `js/ssb/ui-population.js`,
+`geo-specimen.js`, `mode-specimen.js`; `docs/ssb.md` §5.10; `node tools/test-ssb.mjs --only population`)
+pins: the pack is at most 300 kB, flagged `population` (never loaded at boot) and its nodes are the maxillary
+sinus's graph id plus a side and `@nasalseg-majority`; the `meanShape` key's volumes sit within 15 % of the
+medians beside them and its alignment RMS 95th percentile within 6 mm; in the page, the toggle is off and the
+pack deferred at boot, the caption's numbers equal the file's, on loads two ghost nodes (unlit, translucent,
+not depth-writing) whose boxes lie beside the specimen's own sinus on the same side, the selection never
+highlights a ghost, off gives the pack back and a second ask loads it again, and a file without `meanShape`
+keeps the section with no toggle. Re-running `meanshape.py` must reproduce the pack, the manifest entry and the JSON
+byte for byte. Judging how the ghost reads beside the sinus stays a human check.
+
 **Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
 `docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
 the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the
@@ -388,11 +399,31 @@ the right septal surface lies at half the as-scanned thickness, the nose is in (
 `git show` at the commit `ct.json` names; CI checks out full history). The open lining (ST1b) is pinned in `liningTests` (the pack is listed and within budget, one node per air label, no triangle on an air|air interface, every clear ray through the right ostium first hits the sinus with the lining where the shells stop it, a free pose looks through the choana past A −50) and in the scope and mucosa page checks (lining drawn and shells hidden from inside, not drawn from outside, picks report graph ids). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
 check (`--shots` writes `spec-*.png`).
 
+**Anatomy state** (`state.js`, `volume.js`, `geo-specimen.js`, `mode-specimen.js`, `mode-ct.js`, `ui-specimen.js`;
+`docs/ssb.md` §5.11; `node tools/test-ssb.mjs --only anatomy`) builds its own patches, index and override pack inside the test
+(nothing is written into `ssb/`) and pins, in Node, that a patch changes exactly its box in the CT and the labels and
+nothing else, the base staying byte-identical; the refusals (box outside, bad dimensions, unknown label, wrong base or
+entry, short or long body, version 2, node names that are markup); the loader's URLs; and the hash whitelist and
+canonicalisation (unknown id, preset, side, base, incompatible pair, markup, all-or-nothing); then in the page the
+disabled pills with no index (and no request), the pills with one, CT showing the patch's box, and the override node
+hiding the base node and giving it back on clear.
+
+**Flap overlay** (`js/ssb/flap.js`, `docs/ssb.md` §5.7; `node tools/test-ssb.mjs --only flap`) pins, in Node
+on the committed charts, landmarks and soft pack, the posterior septal artery's first points inside the
+pedicle, the superior incision's rule over a parameter grid, the area readout against an independent
+point-in-polygon and Heron sum (2 %), the short < full < extended ladder and rescue's zero area, sides
+and determinism, and the `#flap=` codec on hostile input; then in the page the controls, the readout
+against the Node areas, the hash, tier gating and the phone width. It prints each design's area per side.
+
 The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never
 runs in CI: its proof is the overlay PNGs each stage writes and
 `ssb/reference/specimen-relations.json` (the graph's spatial claims tested
 against the 3D geometry); `tools/check-data.mjs` pins only that every name
 in the specimen data — packs, label table, landmarks, sweeps — is a graph id.
+The figure inventory (`ssb/reference/uw-sinusanatomy2/figures.json`, `uw/figures.py`) is the same kind of
+offline output: `check-data` pins its schema (plane, window, a graph id or a null with a reason, coordinates
+inside the image, no image file in that folder); how well its tips match the pictures is judged on the
+`figures.py overlay` check images and at a checkpoint, not in CI.
 
 `node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
 screenshots of each diorama, CT mode and the specimen for a visual check. Judging how a material

@@ -10748,10 +10748,12 @@
   "pack_bytes": 161603
  },
  "lining": {
-  "triangles": 49998,
-  "bytes": 470347,
+  "triangles": 49978,
+  "bytes": 470169,
   "fallback_triangles": 271,
   "membrane_triangles": 0,
+  "fin_faces": 20,
+  "normals_rebuilt": 0,
   "nodes": {
    "s.agger-nasi-cell.L": 553,
    "s.agger-nasi-cell.R": 541,
@@ -10762,18 +10764,18 @@
    "s.frontal-recess.R": 1107,
    "s.frontal-sinus.L": 1175,
    "s.frontal-sinus.R": 1170,
-   "s.maxillary-sinus.L": 3765,
-   "s.maxillary-sinus.R": 3796,
-   "s.nasal-cavity.L": 8610,
-   "s.nasal-cavity.R": 8533,
+   "s.maxillary-sinus.L": 3763,
+   "s.maxillary-sinus.R": 3788,
+   "s.nasal-cavity.L": 8608,
+   "s.nasal-cavity.R": 8529,
    "s.nasopharynx.M": 3518,
-   "s.posterior-ethmoid-cells.L": 2896,
+   "s.posterior-ethmoid-cells.L": 2894,
    "s.posterior-ethmoid-cells.R": 2924,
    "s.sphenoid-sinus.L": 2181,
    "s.sphenoid-sinus.R": 2190,
    "s.ethmoid-bulla.L": 801,
    "s.nasal-vestibule.R": 1356,
-   "s.nasal-vestibule.L": 1393
+   "s.nasal-vestibule.L": 1391
   }
  },
  "nose": {
@@ -10784,7 +10786,7 @@
  "dissect": {
   "states": 15,
   "worstUnitDeviation": 0.3607,
-  "liningBytes": 5324349,
+  "liningBytes": 5323858,
   "keepViolations": 0,
   "antrostomy": {
    "carved": {

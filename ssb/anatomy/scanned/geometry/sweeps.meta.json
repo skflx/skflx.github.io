@@ -1,0 +1,1334 @@
+{
+ "frame": "RAS mm (docs/ssb.md section 4); points ordered proximal -> distal (arteries from the heart, nerves from the brain, the duct from the sac down)",
+ "specimen": "uw-axial-sagittal",
+ "method": ", per point of every sweep:\n  detected  found in this CT: a canal lumen (bone all round), or the optic nerve in orbital fat\n  labelled  a UW arrow tip for the structure (an expert's point on these images)\n  inferred  not seen in the data: placed by a stated rule between detected / labelled points\nA sweep's confidence is \"high\" when every point is detected, \"medium\" when its course is detected\nand only short ends are inferred, \"low\" when most of it is inferred.\n\nThe CT is a bone-window display volume without contrast, so vessels show only where bone encloses them\n(the petrous carotid canal) and nerves only where a canal encloses them or orbital fat outlines them.\n\nDetectors (all on the committed 0.5 mm volume):\n  canal tracker   step 0.5 mm along the canal, re-centre each step on the point farthest from bone in\n                  the plane across the canal, stop when fewer than 60 % of 24 rays in that plane meet\n                  bone within 4 mm (enclosure)\n  ring chain      slice by slice along a grid axis: lumen pixels with bone in >= 85 % of 16 directions\n                  within 3 mm, linked to the nearest component within 1.5 mm of the previous slice\n  necks           where two tissue compartments of walls.py meet through a gap in bone (optic canal:\n                  orbit | intracranial; sphenopalatine foramen: retromaxillary | nasal cavity)\n  optic nerve     per coronal slice, the brightest soft-tissue point (soft window) in the central part\n                  of the orbit's cross-section (inside the muscle cone), kept while it is >= 4 display\n                  levels brighter than the fat around it and moves <= 2 mm per slice\nRadii: the graph has no vessel or nerve calibre measurements yet, so radii are stated defaults\n(DEFAULT_RADIUS), except where a canal lumen is detected and the structure fills it (petrous ICA).",
+ "default_radius_mm": {
+  "s.internal-carotid-artery": 2.3,
+  "s.optic-nerve": 1.6,
+  "s.maxillary-nerve": 1.2,
+  "s.vidian-nerve": 0.6,
+  "s.infraorbital-nerve": 1.1,
+  "s.anterior-ethmoidal-artery": 0.5,
+  "s.posterior-ethmoidal-artery": 0.4,
+  "s.sphenopalatine-artery": 0.8,
+  "s.nasolacrimal-duct": 1.5
+ },
+ "sweeps": {
+  "s.anterior-ethmoidal-artery.R": {
+   "confidence": "low",
+   "length_mm": 9.7,
+   "status_fraction": {
+    "labelled": 0.09,
+    "inferred": 0.91
+   },
+   "status": [
+    "labelled",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "the one UW \"anterior ethmoidal artery canal\" tip, snapped to the lamina papyracea, is the labelled point; the course across the ethmoid roof to the lateral lamella is inferred: 1 mm under the labelled roof at the same coronal level (a canal in a mesentery below the roof would not be found by this rule)"
+   ],
+   "points": {
+    "lm.anterior-ethmoidal-foramen": [
+     10.0,
+     -24.0,
+     40.0
+    ],
+    "lm.aea-lateral-lamella-entry": [
+     2.5,
+     -25.5,
+     46.0
+    ]
+   }
+  },
+  "s.anterior-ethmoidal-artery.L": {
+   "confidence": "low",
+   "length_mm": 8.6,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "mirrored from the other side's UW tip; the course across the ethmoid roof to the lateral lamella is inferred: 1 mm under the labelled roof at the same coronal level (a canal in a mesentery below the roof would not be found by this rule)"
+   ],
+   "points": {
+    "lm.anterior-ethmoidal-foramen": [
+     -11.0,
+     -24.0,
+     40.0
+    ],
+    "lm.aea-lateral-lamella-entry": [
+     -5.5,
+     -25.5,
+     46.5
+    ]
+   }
+  },
+  "s.infraorbital-nerve.R": {
+   "confidence": "low",
+   "length_mm": 25.6,
+   "status_fraction": {
+    "detected": 0.31,
+    "inferred": 0.69
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain) from the foramen back; the groove behind it and the course to the inferior orbital fissure are inferred along the top of the labelled orbital floor"
+   ],
+   "canal": {
+    "length_mm": 8.6,
+    "method": "ring chain",
+    "seed": "the other side's UW tips, mirrored"
+   },
+   "points": {
+    "canal_posterior": [
+     28.5,
+     -23.5,
+     20.2
+    ],
+    "lm.infraorbital-foramen": [
+     27.4,
+     -18.0,
+     14.9
+    ]
+   }
+  },
+  "s.infraorbital-nerve.L": {
+   "confidence": "low",
+   "length_mm": 26.4,
+   "status_fraction": {
+    "detected": 0.36,
+    "inferred": 0.64
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain) from the foramen back; the groove behind it and the course to the inferior orbital fissure are inferred along the top of the labelled orbital floor"
+   ],
+   "canal": {
+    "length_mm": 10.4,
+    "method": "ring chain",
+    "seed": "UW inferior orbital foramen tips"
+   },
+   "points": {
+    "canal_posterior": [
+     -29.0,
+     -22.5,
+     20.5
+    ],
+    "lm.infraorbital-foramen": [
+     -27.4,
+     -16.0,
+     14.8
+    ]
+   }
+  },
+  "s.internal-carotid-artery.R": {
+   "confidence": "medium",
+   "length_mm": 51.1,
+   "status_fraction": {
+    "detected": 0.69,
+    "inferred": 0.31
+   },
+   "status": [
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "petrous: detected canal lumen (clamped 1.6-2.8 mm); cavernous: default 2.3 mm",
+   "notes": [
+    "petrous canal seeded from UW petrous carotid canal tips",
+    "cavernous course inferred: shortest soft-tissue path from the end of the bony canal to the space beneath the anterior clinoid that keeps ~2.5 mm from bone (it hugs the carotid sulcus of the sphenoid body); no contrast, so the vessel itself is not seen there"
+   ],
+   "canal": {
+    "length_mm": 37.0,
+    "lumen_radius_mm_median": 2.05,
+    "enclosure_median": 0.88
+   },
+   "points": {
+    "canal_end": [
+     13.2,
+     -72.5,
+     25.3
+    ],
+    "clinoid_space": [
+     16.5,
+     -60.5,
+     33.5
+    ]
+   }
+  },
+  "s.internal-carotid-artery.L": {
+   "confidence": "medium",
+   "length_mm": 50.1,
+   "status_fraction": {
+    "detected": 0.73,
+    "inferred": 0.27
+   },
+   "status": [
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "petrous: detected canal lumen (clamped 1.6-2.8 mm); cavernous: default 2.3 mm",
+   "notes": [
+    "petrous canal seeded from the mirrored right-side tips",
+    "this side's anterior clinoid ring was not found; the other side's, mirrored, set the search box",
+    "cavernous course inferred: shortest soft-tissue path from the end of the bony canal to the space beneath the anterior clinoid that keeps ~2.5 mm from bone (it hugs the carotid sulcus of the sphenoid body); no contrast, so the vessel itself is not seen there"
+   ],
+   "canal": {
+    "length_mm": 37.7,
+    "lumen_radius_mm_median": 2.01,
+    "enclosure_median": 0.83
+   },
+   "points": {
+    "canal_end": [
+     -13.5,
+     -71.0,
+     26.9
+    ],
+    "clinoid_space": [
+     -17.0,
+     -60.5,
+     34.0
+    ]
+   }
+  },
+  "s.maxillary-nerve.R": {
+   "confidence": "low",
+   "length_mm": 11.9,
+   "status_fraction": {
+    "detected": 0.38,
+    "inferred": 0.62
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain); 3 mm behind (towards the trigeminal ganglion) and 4 mm in front (into the pterygopalatine fossa) continue the canal axis and are inferred"
+   ],
+   "canal": {
+    "length_mm": 5.0,
+    "seed": "UW foramen rotundum tips"
+   },
+   "points": {}
+  },
+  "s.maxillary-nerve.L": {
+   "confidence": "low",
+   "length_mm": 9.4,
+   "status_fraction": {
+    "detected": 0.2,
+    "inferred": 0.8
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "detected",
+    "detected",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "canal detected (ring chain); 3 mm behind (towards the trigeminal ganglion) and 4 mm in front (into the pterygopalatine fossa) continue the canal axis and are inferred"
+   ],
+   "canal": {
+    "length_mm": 2.5,
+    "seed": "the other side's canal, mirrored, as the search seed"
+   },
+   "points": {}
+  },
+  "s.nasolacrimal-duct.R": {
+   "confidence": "high",
+   "length_mm": 13.4,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "status": [
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "bony nasolacrimal canal detected (ring chain, axial slices); the sac above and the meatal opening below are where bone stops enclosing the lumen"
+   ],
+   "canal": {
+    "length_mm": 15.0,
+    "lumen_radius_mm_median": 1.0,
+    "seed": "UW nasolacrimal duct tips",
+    "tip_track_distance_mm_median": 1.79
+   },
+   "points": {
+    "lm.nasolacrimal-duct-top": [
+     11.3,
+     -19.0,
+     27.0
+    ],
+    "lm.hasner-valve": [
+     12.3,
+     -23.0,
+     14.5
+    ]
+   }
+  },
+  "s.nasolacrimal-duct.L": {
+   "confidence": "high",
+   "length_mm": 12.1,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "status": [
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "bony nasolacrimal canal detected (ring chain, axial slices); the sac above and the meatal opening below are where bone stops enclosing the lumen"
+   ],
+   "canal": {
+    "length_mm": 12.9,
+    "lumen_radius_mm_median": 1.5,
+    "seed": "the other side's UW tips, mirrored",
+    "tip_track_distance_mm_median": 1.81
+   },
+   "points": {
+    "lm.nasolacrimal-duct-top": [
+     -12.0,
+     -19.5,
+     26.5
+    ],
+    "lm.hasner-valve": [
+     -12.5,
+     -22.0,
+     15.0
+    ]
+   }
+  },
+  "s.optic-nerve.R": {
+   "confidence": "high",
+   "length_mm": 32.9,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "status": [
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "intraorbital nerve followed in orbital fat to a = -29.6 mm (globe)"
+   ],
+   "canal": {
+    "length_mm": 7.3,
+    "lumen_radius_mm_median": 2.01,
+    "enclosure_median": 0.71,
+    "neck_ras": [
+     12.3,
+     -54.9,
+     39.5
+    ]
+   },
+   "points": {
+    "lm.optic-canal-cranial-opening": [
+     11.0,
+     -56.4,
+     40.6
+    ],
+    "lm.optic-canal-orbital-opening": [
+     15.3,
+     -52.1,
+     37.9
+    ]
+   }
+  },
+  "s.optic-nerve.L": {
+   "confidence": "high",
+   "length_mm": 34.6,
+   "status_fraction": {
+    "detected": 1.0
+   },
+   "status": [
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected",
+    "detected"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "intraorbital nerve followed in orbital fat to a = -28.8 mm (globe)"
+   ],
+   "canal": {
+    "length_mm": 8.5,
+    "lumen_radius_mm_median": 2.01,
+    "enclosure_median": 0.71,
+    "neck_ras": [
+     -12.8,
+     -54.6,
+     39.1
+    ]
+   },
+   "points": {
+    "lm.optic-canal-cranial-opening": [
+     -11.3,
+     -57.0,
+     40.9
+    ],
+    "lm.optic-canal-orbital-opening": [
+     -15.8,
+     -51.3,
+     37.6
+    ]
+   }
+  },
+  "s.posterior-ethmoidal-artery.R": {
+   "confidence": "low",
+   "length_mm": 10.4,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "inferred: foramen placed 6 mm in front of the detected optic canal orbital opening (m.pea-to-optic-canal, population mean) at the top of the labelled lamina papyracea; course 1 mm under the labelled roof to its medial edge"
+   ],
+   "points": {
+    "lm.posterior-ethmoidal-foramen": [
+     10.0,
+     -46.1,
+     40.0
+    ]
+   }
+  },
+  "s.posterior-ethmoidal-artery.L": {
+   "confidence": "low",
+   "length_mm": 5.1,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "inferred: foramen placed 6 mm in front of the detected optic canal orbital opening (m.pea-to-optic-canal, population mean) at the top of the labelled lamina papyracea; course 1 mm under the labelled roof to its medial edge"
+   ],
+   "points": {
+    "lm.posterior-ethmoidal-foramen": [
+     -12.5,
+     -45.3,
+     39.5
+    ]
+   }
+  },
+  "s.sphenopalatine-artery.R": {
+   "confidence": "low",
+   "length_mm": 6.3,
+   "status_fraction": {
+    "detected": 0.14,
+    "inferred": 0.86
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "detected",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "the foramen is detected (where the retromaxillary and nasal compartments meet through the lateral nasal wall); the vessel is not visible without contrast: its course from the centre of the pterygopalatine fossa through the foramen to 4 mm onto the nasal side is inferred"
+   ],
+   "points": {
+    "lm.sphenopalatine-foramen": [
+     11.1,
+     -50.3,
+     20.0
+    ]
+   }
+  },
+  "s.sphenopalatine-artery.L": {
+   "confidence": "low",
+   "length_mm": 6.3,
+   "status_fraction": {
+    "detected": 0.14,
+    "inferred": 0.86
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "detected",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "the foramen is detected (where the retromaxillary and nasal compartments meet through the lateral nasal wall); the vessel is not visible without contrast: its course from the centre of the pterygopalatine fossa through the foramen to 4 mm onto the nasal side is inferred"
+   ],
+   "points": {
+    "lm.sphenopalatine-foramen": [
+     -12.0,
+     -50.7,
+     19.6
+    ]
+   }
+  },
+  "s.vidian-nerve.R": {
+   "confidence": "low",
+   "length_mm": 20.0,
+   "status_fraction": {
+    "labelled": 0.05,
+    "inferred": 0.95
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "labelled",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "UW vidian canal tips (median) are the one labelled point; course drawn straight (AP) at that point's depth below the sphenoid floor (1.1 mm) and side, from the level of the petrous canal's end (a = -72.5) to the level of the foramen rotundum's anterior opening (a = -51.5); the canal itself is not resolved by the detectors"
+   ],
+   "points": {
+    "lm.vidian-canal-posterior-end": [
+     13.2,
+     -72.5,
+     16.9
+    ]
+   }
+  },
+  "s.vidian-nerve.L": {
+   "confidence": "low",
+   "length_mm": 19.5,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "default (DEFAULT_RADIUS in sweeps.py; the graph has no calibre measurement)",
+   "notes": [
+    "mirrored from the other side's UW tips; course drawn straight (AP) at that point's depth below the sphenoid floor (1.1 mm) and side, from the level of the petrous canal's end (a = -71.0) to the level of the foramen rotundum's anterior opening (a = -51.5); the canal itself is not resolved by the detectors"
+   ],
+   "points": {
+    "lm.vidian-canal-posterior-end": [
+     -13.2,
+     -71.0,
+     16.9
+    ]
+   }
+  },
+  "s.anterior-ethmoidal-septal-branch.L": {
+   "confidence": "low",
+   "length_mm": 15.3,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.15,
+   "notes": "",
+   "variable": "Entry depends on the turbinate's axilla, which the specimen approximates with the turbinate head.",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -19.56,
+       34.56
+      ]
+     },
+     {
+      "chart": [
+       -20,
+       28
+      ]
+     },
+     {
+      "chart": [
+       -21,
+       20
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.3,
+    "src": [
+     "src.gras-cabrerizo-2016-aea-septal"
+    ],
+    "derivation": "Entry: A = A(lm.middle-turbinate-head.L) - 7.35 = -12.21 - 7.35 = -19.56 (Gras-Cabrerizo 2016, 7.35 mm behind the septal projection of the middle turbinate head, mean of 10 cavities); height: S = top(a) - 2 mm = 36.56 - 2 = 34.56 on the septal chart's upper edge; the top of the septal surface, no source gives it. Descent is a schematic line; the paper gives the entry, not the course."
+   }
+  },
+  "s.anterior-ethmoidal-septal-branch.R": {
+   "confidence": "low",
+   "length_mm": 16.2,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.08,
+   "notes": "",
+   "variable": "Entry depends on the turbinate's axilla, which the specimen approximates with the turbinate head.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -19.56,
+       34.56
+      ]
+     },
+     {
+      "chart": [
+       -20,
+       28
+      ]
+     },
+     {
+      "chart": [
+       -21,
+       20
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.3,
+    "src": [
+     "src.gras-cabrerizo-2016-aea-septal"
+    ],
+    "derivation": "Entry: A = A(lm.middle-turbinate-head.R) - 7.35 = -12.21 - 7.35 = -19.56 (Gras-Cabrerizo 2016, 7.35 mm behind the septal projection of the middle turbinate head, mean of 10 cavities); height: S = top(a) - 2 mm = 36.56 - 2 = 34.56 on the septal chart's upper edge; the top of the septal surface, no source gives it. Descent is a schematic line; the paper gives the entry, not the course."
+   }
+  },
+  "s.nasopalatine-artery.R": {
+   "confidence": "low",
+   "length_mm": 17.2,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.25,
+   "notes": "",
+   "variable": "The incisive-canal end is the specimen's own canal (lm.incisive-canal.M); the artery's course to it is schematic.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -26,
+       5
+      ]
+     },
+     {
+      "chart": [
+       -18,
+       7
+      ]
+     },
+     {
+      "chart": [
+       -19.08,
+       0
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.bleier-2011-bas-flap",
+     "src.macarthur-2016-nasal-arteries"
+    ],
+    "derivation": "End at the incisive canal: the septal chart cell nearest lm.incisive-canal.M (A -19.08), at the lowest occupied S of its column (S 0; the canal's own S is a lower bound, clipped by the box). Bleier 2011 and MacArthur 2016 are kept as sources for the artery's role (the pedicle's anterior supply), not for its position. The start continues the inferior branch; the course between is a straight chart segment, schematic."
+   }
+  },
+  "s.posterior-septal-artery-inferior-branch.L": {
+   "confidence": "low",
+   "length_mm": 24.4,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.35,
+   "notes": "",
+   "variable": "Which branch is dominant, and where the artery divides, vary between sides and people (Zhang 2014: dominant inferior in 61.5%, division near the sphenopalatine foramen in 65.4%).",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -45,
+       14.86
+      ]
+     },
+     {
+      "chart": [
+       -44,
+       15
+      ]
+     },
+     {
+      "chart": [
+       -38,
+       9
+      ]
+     },
+     {
+      "chart": [
+       -26,
+       4
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.5,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries",
+     "src.pinheiro-neto-2011-nsf-dimensions"
+    ],
+    "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.L) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed."
+   }
+  },
+  "s.posterior-septal-artery-inferior-branch.R": {
+   "confidence": "low",
+   "length_mm": 22.8,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.0,
+   "notes": "",
+   "variable": "Which branch is dominant, and where the artery divides, vary between sides and people (Zhang 2014: dominant inferior in 61.5%, division near the sphenopalatine foramen in 65.4%).",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -45,
+       14.86
+      ]
+     },
+     {
+      "chart": [
+       -44,
+       13
+      ]
+     },
+     {
+      "chart": [
+       -38,
+       8
+      ]
+     },
+     {
+      "chart": [
+       -26,
+       4
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.5,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries",
+     "src.pinheiro-neto-2011-nsf-dimensions"
+    ],
+    "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.R) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). Course: down the posterior border, then anteroinferiorly (Zhang 2014); the straight chart segments between waypoints are schematic, not observed."
+   }
+  },
+  "s.posterior-septal-artery-superior-branch.L": {
+   "confidence": "low",
+   "length_mm": 23.3,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.22,
+   "notes": "",
+   "variable": "Course of the superior branch is not described in the sources read for this pass; it is drawn short, toward the upper septum.",
+   "spec": {
+    "surface": "s.septal-mucosa.L",
+    "waypoints": [
+     {
+      "chart": [
+       -45,
+       14.86
+      ]
+     },
+     {
+      "chart": [
+       -40,
+       23
+      ]
+     },
+     {
+      "chart": [
+       -34,
+       23
+      ]
+     },
+     {
+      "chart": [
+       -28,
+       27
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries",
+     "src.pinheiro-neto-2011-nsf-dimensions"
+    ],
+    "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.L) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it."
+   }
+  },
+  "s.posterior-septal-artery-superior-branch.R": {
+   "confidence": "low",
+   "length_mm": 21.7,
+   "status_fraction": {
+    "inferred": 1.0
+   },
+   "status": [
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred",
+    "inferred"
+   ],
+   "radius_source": "sweeps-soft.json (stated, not measured)",
+   "source": "sweeps_soft.py",
+   "chart_unreliable_fraction": 0.0,
+   "notes": "",
+   "variable": "Course of the superior branch is not described in the sources read for this pass; it is drawn short, toward the upper septum.",
+   "spec": {
+    "surface": "s.septal-mucosa.R",
+    "waypoints": [
+     {
+      "chart": [
+       -45,
+       14.86
+      ]
+     },
+     {
+      "chart": [
+       -40,
+       21
+      ]
+     },
+     {
+      "chart": [
+       -34,
+       23
+      ]
+     },
+     {
+      "chart": [
+       -28,
+       27
+      ]
+     }
+    ],
+    "depth": 0.8,
+    "radius": 0.4,
+    "src": [
+     "src.zhang-2014-psa",
+     "src.macarthur-2016-nasal-arteries",
+     "src.pinheiro-neto-2011-nsf-dimensions"
+    ],
+    "derivation": "Start: on the chart's posterior edge at S = S(lm.sphenoid-ostium.R) - 9.3 = 24.16 - 9.3 = 14.86 (m.psa-to-sphenoid-ostium: the artery lies 9.3 mm below the ostium; Pinheiro-Neto 2011), at the lowest occupied A of the cells either side of that S (A -45; the chart's posterior edge there). The direction (forward and up along the upper septum, ending about 10 mm below its top) is schematic and has no cited waypoint; verify before relying on it."
+   }
+  }
+ }
+}

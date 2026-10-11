@@ -4692,9 +4692,22 @@
       "src": [
         "src.wang-2010-sphenoid-extensions",
         "src.chiu-2019-ch27",
-        "src.chiu-2019-ch24"
+        "src.chiu-2019-ch24",
+        "src.tomovic-2013-sphenoid-hrct"
       ],
-      "review": "draft"
+      "review": "draft",
+      "prev": [
+        {
+          "value": "72.4",
+          "unit": "% patients",
+          "method": "CT",
+          "src": "src.tomovic-2013-sphenoid-hrct",
+          "conf": "low",
+          "n": "123/170 patients (averaged over two observers)",
+          "population": "Retrospective HRCT review, United States; 65 African American, 55 Hispanic, 26 Caucasian, 6 Asian, 18 undefined; mixed with respect to sex (74 men, 96 women).",
+          "note": "This series defines the recess as pneumatization into the greater wing and pterygoid processes. By group: African American 84.6% (55/65), Hispanic 58.2% (32/55), Caucasian 80.8% (21/26), Asian 66.7% (4/6). Far higher than the textbook ranges in the text above, which use stricter reach criteria and do not state a method."
+        }
+      ]
     },
     {
       "id": "v.conchal-sphenoid",
@@ -5046,6 +5059,19 @@
           "src": "src.rhoton-2002-supratentorial-arteries",
           "conf": "low"
         }
+      ],
+      "review": "draft"
+    },
+    {
+      "id": "v.pterygoid-process-pneumatization",
+      "name": "Pneumatized pterygoid process",
+      "of": "s.pterygoid-process",
+      "tier": 2,
+      "def": "Sphenoid air that reaches the pterygoid process as well as the greater wing: type 3 of a three-type lateral recess scheme (type 1, no identifiable lateral recess; type 2, lateral pneumatization of the greater wing above the vidian canal; type 3, pneumatization of both the greater wing and the pterygoid process). CT: air within the pterygoid process, read on coronal and axial bone windows.",
+      "why": "It extends the lateral recess below the vidian canal into the pterygoid base, which is what a transpterygoid exposure of the recess has to follow. In the series that defined the types, the extent of caudal pterygoid pneumatization did not correlate with the superolateral extent of the recess in type 3 (P > .05), so measure each direction separately on CT.",
+      "geo": "diorama",
+      "src": [
+        "src.li-2022-lateral-recess-pterygoid"
       ],
       "review": "draft"
     }

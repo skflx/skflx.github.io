@@ -31,19 +31,26 @@
      flat face in the cut-bone colour, drawn with the stencil buffer on the
      bone envelope (a closed surface whose cavities are the air spaces).
 
+   - Flap: the nasoseptal flap overlay (flap.js; `state.flap`, `#flap=`): outlines computed on the septal and floor
+     charts, drawn on the soft pack's meshes with the triangles inside shaded, and an area readout. Schematic on
+     specimen: a construction from landmarks and the graph's ranges, not a segmentation.
+
    Imports no three.js directly: THREE comes from the stage; geo-specimen.js
    is the importer. main.js loads this module with a dynamic import, so a
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=f29b81d7';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=b44d7355';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { token } from './materials.js?v=b121b3b4';
-import { PLANES } from './volume.js?v=8281d741';
-import { CT_PLANES } from './state.js?v=a96d143a';
-import { REGION_LABEL } from './graph.js?v=fa3d2f6f';
+import { token } from './materials.js?v=34e04a58';
+import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=32324b32';
+import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
+import { CT_PLANES } from './state.js?v=3a54b0af';
+import { REGION_LABEL } from './graph.js?v=ef6d8734';
 
-export const PROVENANCE = 'Reference specimen · UW CT atlas · draft';
+export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
+/* A base other than the standard head is its own data (docs/ssb.md 5.11); the note says which head is on show. */
+export const PROVENANCE_SCANNED = 'Head as scanned, not mirrored · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
 
 /* Camera views, as RAS directions from the specimen toward the camera. The
    default is the anterior-oblique from the patient's right-front and a little
@@ -65,6 +72,7 @@ const AGAIN_PX = 3;           /* a second click this close to the last steps dee
 const LABELS_MAX = 8;         /* landmark labels at once */
 const MARKER_MM = 1.15;
 const CURSOR_ARM = 5;         /* mm */
+const FLAP_LIFT = 0.2;        /* mm: how far an incision line floats off the lining it is drawn on */
 const SECTION_EPS = 0.05;     /* mm: keeps what lies exactly on the plane (the cursor) */
 const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
@@ -87,6 +95,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const subs = new Set();
 
     let specimen = null;
+    let dataRoot = 'ssb';           /* the data root `specimen` was loaded from: the standard head's ssb/, or a base's ssb/anatomy/<base>/ (RA3b) */
     let status = 'idle';            /* idle | loading | ready | partial | error | absent */
     let problem = '';
     let installed = false;
@@ -102,13 +111,16 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false, nose: true };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false, nose: true, population: false };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
     let liningAsked = false;        /* the deferred lining pack has been requested (ST1c): the first look from within asks once */
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
     let muNote = '';                /* the player's one line about the mucosal state (loading, could not load), shown by the layer controls */
+    /* The anatomy stack's override packs (docs/realistic-anatomy.md 6.2): the edited state's whole-node replacements, loaded
+       after the packs and given back when the anatomy changes. `hides` are the base node keys they stand in for. */
+    const anat = { key: '', gen: 0, chain: Promise.resolve(), stems: [], hides: new Set(), status: 'none', problems: [] };
     let dissect = null;             /* the procedure player's state (P2): { key, hides: Set of base node keys } while a dissected state is shown */
     let emphasis = { see: new Set(), hazard: new Set() };     /* graph ids the player marks: a step's `see` structures, and the `at` structures of its `risk` hazards (hatched) */
 
@@ -131,6 +143,19 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const sweepArtery = new THREE.MeshBasicMaterial();
     const sweepMaterials = [sweepFront, sweepArtery];
     let sweeps = new Map();
+
+    /* the flap overlay: lines (incisions, the pedicle, the rescue window) and the shaded triangles inside the outline */
+    const flapRoot = new THREE.Group();
+    flapRoot.name = 'flap';
+    flapRoot.visible = false;
+    const flapCut = new THREE.LineBasicMaterial();
+    const flapCutBehind = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.3, depthFunc: THREE.GreaterDepth, depthWrite: false });
+    const flapPedicle = new THREE.LineBasicMaterial();
+    const flapFill = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.35, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+    let flapData = null;            /* { charts, meta }: charts.json and landmarks.meta.json, fetched the first time a flap is asked for */
+    let flapAsked = false;
+    let flapNow = null;             /* the readout of what is drawn: { status, design, side, params, result, areas, ... } */
+    const flapMeshes = new Map();   /* node key -> { pts (RAS), idx }, cached */
 
     const cursorMarker = new THREE.Group();   /* a crosshair that shows through everything */
     cursorMarker.name = 'cursor';
@@ -165,6 +190,10 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         markerBehind.color.set(landmark);
         sweepFront.color.set(token('--ssb-sweep-nerve', '#444444'));
         sweepArtery.color.set(token('--ssb-sweep-artery', '#C0392B'));
+        flapCut.color.set(token('--ssb-flap', '#C0392B'));
+        flapCutBehind.color.set(token('--ssb-flap', '#C0392B'));
+        flapPedicle.color.set(token('--ssb-flap-pedicle', '#2445B0'));
+        flapFill.color.set(token('--ssb-flap', '#C0392B'));
         const cross = token('--ssb-ct-cross', '#FFB000');
         cursorLineMaterial.color.set(cross);
         cursorDotMaterial.color.set(cross);
@@ -269,12 +298,20 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             const partner = isSel && !primary;
             let look = u.look;
             if (u.state && !(dissect && dissect.key === u.state)) { mesh.visible = false; continue; }          /* another state's pack, not on show */
+            if (!u.anatomy && anat.hides.has(key)) { mesh.visible = false; continue; }                           /* a node the edited anatomy replaces */
             if (!u.state && dissect && (dissect.hides.has(key) || replaced.has(`${u.id}.${u.side}`))) { mesh.visible = false; continue; }
             if (u.group === 'lining') {
                 u.drawn = look.kind;
                 mesh.material = stage.materialsFor(look, { selected: false, partner: false });
                 mesh.renderOrder = 0;
                 mesh.visible = openLining && (u.state ? true : !ownLining) && !layers.hidden.has(regionOf(mesh));
+                continue;
+            }
+            if (u.group === 'ghost') {                  /* the population sinus (POP2b): one translucent unlit tint, never selected or emphasised */
+                u.drawn = look.kind;
+                mesh.material = stage.materialsFor(look, { selected: false, partner: false });
+                mesh.renderOrder = 6;
+                mesh.visible = layers.population;
                 continue;
             }
             const seen = emphasis.see.has(u.id);
@@ -577,6 +614,23 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
+    /* The population sinus (POP2b): on loads the deferred pack and shows it, off hides it and gives the pack back. */
+    async function setPopulation(on) {
+        if (!specimen || !!on === layers.population) return false;
+        layers.population = !!on;
+        if (on) {
+            paint();
+            emit();
+            await specimen.loadPopulationPack();
+            if (!layers.population) specimen.unloadPopulationPack();       /* switched off while it was loading */
+        } else {
+            specimen.unloadPopulationPack();
+        }
+        paint();
+        emit();
+        return true;
+    }
+
     function setLandmarks(on) {
         if (!!on === layers.landmarks) return false;
         layers.landmarks = !!on;
@@ -597,12 +651,154 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function regions() {
         const out = new Map();
         for (const mesh of nodes().values()) {
-            if (mesh.userData.group === 'bone' || mesh.userData.group === 'nose' || mesh.userData.lining) continue;
+            if (mesh.userData.group === 'bone' || mesh.userData.group === 'nose' || mesh.userData.lining || mesh.userData.population) continue;
             const r = regionOf(mesh);
             if (!out.has(r)) out.set(r, { region: r, label: own(REGION_LABEL, r) ? REGION_LABEL[r] : r, count: 0, on: !layers.hidden.has(r) });
             out.get(r).count += 1;
         }
         return [...out.values()].sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    /* ---------------- the nasoseptal flap overlay (flap.js) ---------------- */
+
+    const flapFiles = () => [`${dataRoot}/geometry/charts.json`, `${dataRoot}/geometry/landmarks.meta.json`];
+    const flapWanted = () => !!store.get().flap;
+
+    function loadFlapData() {
+        if (flapAsked) return;
+        flapAsked = true;
+        Promise.all(flapFiles().map((f) => fetch(stamped(f)).then((r) => (r.ok ? r.json() : null)).catch(() => null))).then(([charts, meta]) => {
+            flapData = charts && charts.surfaces && meta && meta.landmarks ? { charts: charts.surfaces, meta: meta.landmarks } : false;
+            rebuildFlap();
+        });
+    }
+
+    /* A soft-pack node's triangles in RAS mm (the world transform applied), or null while its pack has not arrived. */
+    function meshOf(key) {
+        if (flapMeshes.has(key)) return flapMeshes.get(key);
+        const mesh = specimen && specimen.nodes.get(key);
+        if (!mesh || !mesh.geometry.index) return null;
+        mesh.updateWorldMatrix(true, false);
+        const pos = mesh.geometry.attributes.position;
+        const v = new THREE.Vector3();
+        const pts = new Float64Array(pos.count * 3);
+        for (let i = 0; i < pos.count; i++) {
+            const ras = sceneToRas(v.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld).toArray());
+            pts.set(ras, i * 3);
+        }
+        const out = { pts, idx: Array.from(mesh.geometry.index.array) };
+        flapMeshes.set(key, out);
+        return out;
+    }
+
+    function flapInputs(side) {
+        const lm = (id) => { const l = landmarks.get(id); return l ? l.ras : null; };
+        const m = flapData.meta[`lm.sphenoid-ostium.${side}`];
+        return {
+            side, septal: flapData.charts[`s.septal-mucosa.${side}`], floor: flapData.charts[`s.nasal-floor-mucosa.${side}`],
+            ostium: lm(`lm.sphenoid-ostium.${side}`), arch: lm('lm.choanal-arch.M'), mtHead: lm(`lm.middle-turbinate-head.${side}`),
+            sf: m ? m.inferior_margin_s_mm : NaN,
+        };
+    }
+
+    function clearFlapObjects() {
+        for (const o of [...flapRoot.children]) {
+            flapRoot.remove(o);
+            if (o.geometry) o.geometry.dispose();
+        }
+    }
+
+    /* The literature beside the readout, read from the graph entries the sliders are named for (no number is typed here). */
+    function literature() {
+        const out = [];
+        for (const id of ['m.nsf-area', 'm.nsf-extended-gain', 'm.choana-to-sphenoid-ostium']) {
+            const e = graph.get(id);
+            if (!e || !e.value) continue;
+            const v = e.value.mean !== undefined ? String(e.value.mean) : Array.isArray(e.value.range) ? e.value.range.join('–') : '';
+            if (v) out.push({ id, name: e.name, value: v, unit: e.unit || '' });
+        }
+        return out;
+    }
+
+    /* Draw a chart polygon / polyline as a line on the surface it lies on. */
+    function lineOn(points, lookup, closed, mat, behind = true) {
+        const ras = [];
+        for (const [u, w] of densify(points, 1, closed)) {
+            const hit = lookup(u, w);
+            if (!hit) continue;
+            const n = hit.normal || [0, 0, 0];
+            ras.push(hit.ras[0] - n[0] * FLAP_LIFT, hit.ras[1] - n[1] * FLAP_LIFT, hit.ras[2] - n[2] * FLAP_LIFT);
+        }
+        if (closed && ras.length >= 6) ras.push(ras[0], ras[1], ras[2]);
+        if (ras.length < 6) return;
+        const g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.Float32BufferAttribute(ras, 3));
+        const front = new THREE.Line(g, mat);
+        front.renderOrder = 25;
+        flapRoot.add(front);
+        if (behind) {
+            const back = new THREE.Line(g.clone(), flapCutBehind);
+            back.renderOrder = 24;
+            flapRoot.add(back);
+        }
+    }
+
+    function fillOf(mesh, tris) {
+        if (!tris.length) return;
+        const pos = new Float32Array(tris.length * 9);
+        tris.forEach((t, n) => { for (let k = 0; k < 3; k++) for (let c = 0; c < 3; c++) pos[n * 9 + k * 3 + c] = mesh.pts[mesh.idx[t * 3 + k] * 3 + c]; });
+        const g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        const fill = new THREE.Mesh(g, flapFill);
+        fill.renderOrder = 22;
+        flapRoot.add(fill);
+    }
+
+    /* Recompute and redraw the overlay from state.flap, the data and the meshes. Status: off | loading | unavailable | ready. */
+    function rebuildFlap() {
+        clearFlapObjects();
+        const want = store.get().flap;
+        flapRoot.visible = !!want;
+        if (!want) { flapNow = null; stage.requestRender(); emit(); return; }
+        const note = (status, text) => { flapNow = { status, text, design: want.design, side: want.side, params: want.params, result: null, areas: null, literature: [] }; stage.requestRender(); emit(); };
+        if (!flapAsked) loadFlapData();
+        if (flapData === null) return note('loading', 'Loading the soft-tissue charts…');
+        if (flapData === false) return note('unavailable', 'The soft-tissue charts are not in this build.');
+        const septalKey = `s.septal-mucosa.${want.side}`;
+        const floorKey = `s.nasal-floor-mucosa.${want.side}`;
+        const septal = meshOf(septalKey);
+        if (!septal) return note('loading', 'Waiting for the septal surface…');
+        const inputs = flapInputs(want.side);
+        const result = computeFlap(inputs, want.design, want.params);
+        if (!result.valid) return note('unavailable', 'A landmark the construction needs is missing from this specimen.');
+        const areas = { septal: 0, floor: 0, total: 0 };
+        const septalLookup = (chart) => (a, s) => septalPoint(chart, a, s);
+        const floorLookup = (a, r) => floorPoint(inputs.floor, want.side, a, r);
+        lineOn(result.pedicle, septalLookup(inputs.septal), false, flapPedicle);
+        if (result.septal) {
+            lineOn(result.superior, septalLookup(inputs.septal), false, flapCut);
+            const hit = meshArea(septal, projectSeptal, result.septal);
+            areas.septal = hit.mm2 / 100;
+            fillOf(septal, hit.tris);
+            lineOn(result.septal, septalLookup(inputs.septal), true, flapCut);
+        } else lineOn(result.superior, septalLookup(inputs.septal), false, flapCut);
+        if (result.floor) {
+            const floor = meshOf(floorKey);
+            if (floor) {
+                const hit = meshArea(floor, projectFloor, result.floor);
+                areas.floor = hit.mm2 / 100;
+                fillOf(floor, hit.tris);
+            }
+            lineOn(result.floor, floorLookup, true, flapCut);
+        }
+        if (result.window) {
+            const other = flapInputs(result.window.side);
+            lineOn(result.window.polygon, septalLookup(other.septal), true, flapCut);
+        }
+        areas.total = areas.septal + areas.floor;
+        flapNow = { status: 'ready', text: '', design: want.design, side: want.side, params: result.params, result, areas, literature: literature() };
+        stage.requestRender();
+        emit();
     }
 
     /* ---------------- loading ---------------- */
@@ -616,13 +812,14 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         dom.msg.hidden = !text || !active();
         dom.msg.textContent = text;
         const partial = status === 'partial' && failed.length > 0;
-        dom.note.textContent = partial ? `${PROVENANCE} · ${failed.length} of ${specimen.packs.size} packs could not be loaded` : PROVENANCE;
+        const provenance = dataRoot === 'ssb' ? PROVENANCE : PROVENANCE_SCANNED;
+        dom.note.textContent = partial ? `${provenance} · ${failed.length} of ${specimen.packs.size} packs could not be loaded` : provenance;
         dom.note.title = partial ? failed.map((p) => p.error).join(' ') : '';
     }
 
     function install() {
         if (installed || !specimen) return;
-        specimen.root.add(markerRoot, sweepRoot, cursorMarker);
+        specimen.root.add(markerRoot, sweepRoot, flapRoot, cursorMarker);
         buildSweeps();
         installed = true;
         stage.setSpecimen(specimen.root);
@@ -639,6 +836,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (pack.state === 'loaded' && !installed) install();
         if (installed) {
             buildMarkers();
+            if (flapWanted()) rebuildFlap();
             choosePrimary();
             paint();
             if (pendingFrame && store.get().selection === pendingFrame && specimen.byId(pendingFrame).length && active()) {
@@ -652,46 +850,138 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         emit();
     }
 
+    /* Follow state.anatomy: give back the previous override packs, then fetch each entry's patch (its node lists are in the
+       header), load the override pack of every entry that has nodes, and hide the base nodes whose replacement arrived. Runs
+       one after another and a superseded run does nothing, so a quick change of anatomy never leaves two sets of nodes. */
+    function followAnatomy() {
+        const a = store.get().anatomy;
+        const refs = a && !a.pending ? [...a.variants, ...a.conditions] : [];
+        const key = refs.length ? `${a.base}|${refs.map((r) => `${r.id}.${r.side}.${r.preset}`).join(',')}` : '';
+        if (key === anat.key || !specimen) return;
+        anat.key = key;
+        const gen = ++anat.gen;
+        anat.chain = anat.chain.then(async () => {
+            if (!specimen) return;
+            for (const stem of anat.stems) specimen.unloadOverride(stem);
+            anat.stems = [];
+            anat.hides = new Set();
+            anat.problems = [];
+            specimen.setReplaced([]);
+            anat.status = refs.length ? 'loading' : 'none';
+            paint();
+            emit();
+            if (gen !== anat.gen || !refs.length) return;
+            const hides = new Set();
+            for (const ref of refs) {
+                try {
+                    const patch = await loadAnatomyPatch(a.base, ref);
+                    if (gen !== anat.gen) return;
+                    const names = [...patch.replacesNodes, ...patch.addsNodes];
+                    if (!names.length) continue;
+                    const stem = `${ref.id}.${ref.side}.${ref.preset}`;
+                    anat.stems.push(stem);
+                    const added = await specimen.loadOverride(stem, anatomyOverrideFile(a.base, ref), names);
+                    if (gen !== anat.gen) return;
+                    if (names.some((n) => !added.includes(`anatomy:${stem}:${n}`))) anat.problems.push(`${stem}: its override pack did not load completely.`);
+                    for (const n of patch.replacesNodes) if (specimen.nodes.has(`anatomy:${stem}:${n}`)) hides.add(n);     /* only what has its replacement: never a hole */
+                } catch (e) {
+                    anat.problems.push(e && e.message ? String(e.message) : 'An anatomy patch could not be read.');
+                    console.error(e);
+                }
+            }
+            if (gen !== anat.gen) return;
+            anat.hides = hides;
+            specimen.setReplaced(hides);
+            anat.status = anat.problems.length ? 'partial' : 'ready';
+            choosePrimary();
+            paint();
+            emit();
+        });
+    }
+
+    /* The data root the store's anatomy asks for: the base's (a pending link, not yet checked against the index, is the standard head). */
+    function wantedRoot() {
+        const a = store.get().anatomy;
+        try { return baseRoot(a && !a.pending && typeof a.base === 'string' ? a.base : 'standard'); } catch (e) { return 'ssb'; }
+    }
+
     async function start() {
         if (started) return;
         started = true;
+        await begin();
+    }
+
+    /* Load the specimen of the wanted root: the packs, and the landmarks, sweeps and CT header beside them. */
+    async function begin() {
+        dataRoot = wantedRoot();
+        const myRoot = dataRoot;
         status = 'loading';
-        specimen = createSpecimen({ graph });
+        specimen = createSpecimen({ graph, root: myRoot });
         pendingFrame = store.get().selection;
+        if (flapWanted()) loadFlapData();
         showStatus();
         /* the CT header and the landmarks are small; neither blocks the packs */
-        loadCtBounds().then((b) => {
-            if (!b) return;
+        loadCtBounds({ root: myRoot }).then((b) => {
+            if (!b || myRoot !== dataRoot) return;
             ctBounds = b;
             store.setCtBounds(b);
             applySection();
             emit();
         });
-        loadLandmarks({ graph }).then((l) => {
+        loadLandmarks({ graph, root: myRoot }).then((l) => {
+            if (myRoot !== dataRoot) return;
             landmarks = l;
             if (installed) { buildMarkers(); paint(); }
+            if (flapWanted()) rebuildFlap();
             emit();
         });
-        loadSweeps({ graph }).then((w) => {
+        loadSweeps({ graph, root: myRoot }).then((w) => {
+            if (myRoot !== dataRoot) return;
             sweeps = w;
             if (installed) { buildSweeps(); paint(); }
             emit();
         });
         const paintTwice = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         let result = 'error';
+        const mine = specimen;
         try {
-            result = await specimen.load({ onPack, idle: paintTwice });
+            result = await mine.load({ onPack, idle: paintTwice });
         } catch (e) {
             console.error(e);
             problem = 'An unexpected error stopped the load.';
         }
+        if (mine !== specimen) return;           /* the base changed while this one was loading: its successor owns the status now */
         status = result;
+        followAnatomy();
         if (!problem && specimen.problems.length) problem = specimen.problems[0];
         if (status === 'error' && specimen.problems.length) problem = specimen.problems.join(' ');
         pendingFrame = null;
         showStatus();
         if (panel) panel.refresh();
         emit();
+    }
+
+    /* The anatomy's base changed to one with another data root (Symmetric <-> Normal asymmetry): give the specimen back and load
+       the new base's own packs, landmarks and sweeps. The camera stays where it is; the layers the viewer chose stay chosen. */
+    function followBase() {
+        if (!started || wantedRoot() === dataRoot) return;
+        const pose = installed ? stage.pose() : saved;
+        if (installed) stage.setSpecimen(null);
+        if (specimen) specimen.dispose();
+        for (const m of markers.values()) markerRoot.remove(m.object);
+        markers.clear();
+        landmarks = new Map();
+        for (const m of sweepList.values()) { sweepRoot.remove(m.object); m.object.geometry.dispose(); }
+        sweepList.clear();
+        sweeps = new Map();
+        clearFlapObjects();
+        flapData = null; flapAsked = false; flapNow = null; flapMeshes.clear();
+        installed = false; specimen = null; ctBounds = null; primaryKey = null; focusKey = null; airBox = null; liningAsked = false;
+        problem = ''; pendingFrame = store.get().selection;
+        anat.key = ''; anat.stems = []; anat.hides = new Set(); anat.status = 'none'; anat.problems = []; anat.gen++;
+        framed = true;
+        saved = pose;
+        begin().then(() => { if (flapWanted()) loadFlapData(); if (pose && installed && active()) stage.setPose(pose); });
     }
 
     /* ---------------- entering and leaving the stage ---------------- */
@@ -738,11 +1028,11 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (!installed) return [];
         const hits = stage.pickHits(x, y, specimen.root);
         const out = hits.map((h) => ({
-            key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
+            key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker, population: !!h.part.userData.population,
             point: sceneToRas(h.point.toArray()), distance: h.distance,
         }));
         /* what the section cut away is not there to be picked */
-        return out.filter((h) => !clipped(h.point)).sort((a, b) => (b.marker - a.marker) || (a.distance - b.distance));
+        return out.filter((h) => !clipped(h.point) && !h.population).sort((a, b) => (b.marker - a.marker) || (a.distance - b.distance));
     }
 
     const canvas = stage.canvas;
@@ -867,15 +1157,18 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             if (section.axis) applySection();
             emit();
         }
+        if (state.flap !== prev.flap) rebuildFlap();
+        if (state.anatomy !== prev.anatomy) { followBase(); followAnatomy(); }
         if (state.tier !== prev.tier && now) stage.requestRender();
     });
     stage.onTheme(() => { colours(); stage.requestRender(); });
     colours();
     /* Everything this stage made on the GPU side, given back (the page going away, or a caller that is done). */
     function dispose() {
+        clearFlapObjects();
         for (const m of sweepList.values()) m.object.geometry.dispose();
         if (cap.plane) { cap.back.material.dispose(); cap.front.material.dispose(); cap.plane.geometry.dispose(); }
-        for (const o of [markerGeometry, markerFront, markerBehind, ...sweepMaterials, cursorLineMaterial, cursorDotMaterial]) o.dispose();
+        for (const o of [markerGeometry, markerFront, markerBehind, ...sweepMaterials, flapCut, flapCutBehind, flapPedicle, flapFill, cursorLineMaterial, cursorDotMaterial]) o.dispose();
         if (specimen) specimen.dispose();
     }
     window.addEventListener('pagehide', dispose);
@@ -905,6 +1198,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     const rasBox = (key) => specimen.boundsOf([key]);
     const hook = Object.freeze({
+        get dataRoot() { return dataRoot; },
         get status() { return status; },
         get problem() { return problem; },
         get problems() { return specimen ? specimen.problems.slice() : []; },
@@ -917,7 +1211,16 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
+        get populationOn() { return layers.population; },
+        /* the edited anatomy on show: its status, the base nodes it hides and the override nodes standing in for them */
+        get anatomy() {
+            return {
+                status: anat.status, key: anat.key, problems: anat.problems.slice(), hidden: [...anat.hides],
+                overrides: specimen ? [...specimen.nodes].filter(([, m]) => m.userData.anatomy).map(([k, m]) => ({ key: k, visible: m.visible, id: m.userData.id, side: m.userData.side })) : [],
+            };
+        },
         get mucosaInside() { return inside; },
+        get flap() { return flapNow ? { status: flapNow.status, design: flapNow.design, side: flapNow.side, params: { ...flapNow.params }, areas: flapNow.areas ? { ...flapNow.areas } : null, result: flapNow.result, drawn: flapRoot.visible ? flapRoot.children.length : 0 } : null; },
         get stateKey() { return dissect ? dissect.key : null; },
         get emphasis() { return { see: [...emphasis.see], hazard: [...emphasis.hazard] }; },
         get sweeps() { return [...sweepList].filter(([, m]) => m.object.visible).map(([key]) => key); },
@@ -943,7 +1246,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             material: m.material.type, transparent: !!m.material.transparent, depthWrite: m.material.depthWrite,
             lining: !!m.userData.lining, state: m.userData.state || '', remnant: !!m.userData.remnant,
             hazard: !!m.userData.hazard, emphasis: m.userData.emphasis || '',
-            highlight: !m.userData.lining && store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
+            highlight: !m.userData.lining && !m.userData.population && store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
             emissive: m.material.emissiveIntensity,
         })) : []),
         /* the mean of a node's vertices, in RAS mm (the world transform applied) */
@@ -1019,7 +1322,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setState, setMuNote, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setState, setMuNote, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setPopulation, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -1033,9 +1336,14 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
+        get populationOn() { return layers.population; },
+        get hasPopulation() { return !!specimen && [...specimen.packs.values()].some((p) => p.population); },
         get stateKey() { return dissect ? dissect.key : null; },
         get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
         get hasSweeps() { return sweeps.size > 0; },
+        get flapReadout() { return flapNow; },
+        get flapTier() { return graph.tierOf('p.nasoseptal-flap'); },
+        get hasFlap() { return !!specimen && specimen.nodes.has('s.septal-mucosa.R') && specimen.nodes.has('s.septal-mucosa.L'); },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
         dispose,
     };

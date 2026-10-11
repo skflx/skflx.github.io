@@ -61,6 +61,8 @@
   /* A computed flow pathway and its particles. */
   --ssb-flow: #159EC4;
   --ssb-flow-particle: #E8FBFF;
+  /* The population ghost (NasalSeg majority shape): a shape drawn from a population, the science signal. */
+  --ssb-ghost: var(--signal-2);
   /* Hazard sites are hatched with this (never colour alone: the HUD names them). */
   --ssb-hazard: #231815;
   /* Parts of the selected entity glow with this. */
@@ -70,6 +72,9 @@
   /* Vessels (signal: act, they bleed) and nerves/ducts (ink) as tubes on the specimen. */
   --ssb-sweep-artery: var(--signal);
   --ssb-sweep-nerve: var(--ink);
+  /* The nasoseptal flap overlay: incisions and the shaded flap are the act signal (red), the pedicle that stays attached the science signal. */
+  --ssb-flap: var(--signal);
+  --ssb-flap-pedicle: var(--signal-2);
 
   /* CT stage: dark in both themes (like the endoscope and Airway's stage).
      The orientation letters use the gizmo's axis hues, lightened for a dark
@@ -123,6 +128,7 @@ html[data-theme="dark"] {
   --ssb-cell-fsc: #5A8BE0;
   --ssb-flow: #3CC8EE;
   --ssb-flow-particle: #F2FDFF;
+  --ssb-ghost: var(--signal-2);
   --ssb-hazard: #120C0A;
   --ssb-select: #FFC233;
   --ssb-ct-bg: #060708;
@@ -260,10 +266,15 @@ html[data-theme="dark"] {
 .ssb-axis-label[data-axis="a"] { color: var(--ssb-axis-a); }
 .ssb-axis-label[data-axis="s"] { color: var(--ssb-axis-s); }
 
-/* The stage's truth badge: always visible, bottom-left. */
+/* The stage's truth badge: always visible, bottom-left. One line on desktop,
+   where the panel foot carries the full credit; on a phone it wraps rather
+   than truncating, since it names the atlas's institution (RA0c). */
 .ssb-stage-note {
   position: absolute; left: var(--gutter); bottom: 0.6rem; max-width: calc(100% - 2 * var(--gutter));
   pointer-events: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (max-width: 959px) {
+  .ssb-stage-note { white-space: normal; }
 }
 .ssb-stage-msg {
   position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
@@ -277,6 +288,12 @@ html[data-theme="dark"] {
 .ssb-stage-mode { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
 .ssb-stage-mode .site-pill { min-height: 32px; padding-inline: 0.5rem; }     /* four stages must still fit one row beside the depth selector at 1280 */
 .ssb-stage-mode .site-pill:disabled { opacity: 0.5; cursor: not-allowed; }
+/* The anatomy layers (symmetric / as scanned / variants / pathology) sit under the search box: the stage keeps its size. */
+.ssb-anatomy { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; margin-top: 0.5rem; }
+.ssb-anatomy .site-kicker { flex: 0 0 100%; }
+.ssb-anatomy .site-pill { min-height: 32px; padding-inline: 0.5rem; }
+.ssb-anatomy .site-pill:disabled { opacity: 0.5; cursor: not-allowed; }
+.ssb-anatomy[data-edited="true"] .site-kicker::after { content: " \00b7  edited"; color: var(--signal); }
 
 /* ===== VARIANT LAB: dock (desktop), controls, HUD, badge ===== */
 .ssb-lab-dock, .ssb-spec-dock {
@@ -372,6 +389,36 @@ html[data-theme="dark"] {
 .ssb-spec-slider { padding-bottom: 0.2rem; }
 .ssb-spec .ssb-ct-check + .ssb-ct-check, .ssb-spec .ssb-ct-check + .ssb-param-src { margin-top: 0.3rem; }
 .ssb-spec-label { z-index: 1; }
+.ssb-flap-badge { text-transform: uppercase; letter-spacing: 0.06em; color: var(--signal); }
+.ssb-flap-readout { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.75rem; margin: 0.5rem 0 0; font-size: 0.78rem; }
+.ssb-flap-readout dt { color: var(--ink-faint); }
+.ssb-flap-readout dd { margin: 0; font-variant-numeric: tabular-nums; }
+.ssb-flap-notes { margin: 0.35rem 0 0; padding-left: 1rem; font-size: 0.72rem; color: var(--ink-faint); }
+.ssb-flap-notes:empty { display: none; }
+
+/* ===== population panel (WP POP2a): ink for the population, --signal for the head it is read against ===== */
+.ssb-pop { margin: 0 1rem 1rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
+.ssb-pop > summary { cursor: pointer; margin: 0; }
+.ssb-pop-body { margin-top: 0.5rem; }
+.ssb-pop-block { margin-top: 0.7rem; }
+.ssb-pop-h { margin: 0 0 0.25rem; font-size: 0.8rem; font-weight: 600; color: var(--ink); }
+.ssb-pop-dl { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 0.6rem; margin: 0; font-size: 0.75rem; }
+.ssb-pop-dl dt { color: var(--ink-muted); }
+.ssb-pop-dl dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.ssb-pop-chart { display: block; width: 100%; height: auto; margin-top: 0.5rem; }
+.ssb-pop-grid { stroke: var(--rule); stroke-width: 0.5; }
+.ssb-pop-tick, .ssb-pop-axis { fill: var(--ink-faint); font: 7px var(--font-mono, monospace); }
+.ssb-pop-band-less { fill: var(--ink); fill-opacity: 0.12; }
+.ssb-pop-band-more { fill: var(--ink-muted); fill-opacity: 0.12; }
+.ssb-pop-line { fill: none; stroke-width: 1.4; }
+.ssb-pop-less { stroke: var(--ink); }
+.ssb-pop-more { stroke: var(--ink-muted); stroke-dasharray: 3 2; }
+.ssb-pop-std { stroke: var(--signal); }
+.ssb-pop-pt { fill: var(--signal); }
+.ssb-pop-key { list-style: none; margin: 0.3rem 0 0; padding: 0; font-size: 0.7rem; color: var(--ink-muted); }
+.ssb-pop-key li::before { content: ''; display: inline-block; width: 1.1rem; margin-right: 0.4rem; vertical-align: middle; border-top: 2px solid var(--ink); }
+.ssb-pop-key li[data-swatch="ssb-pop-more"]::before { border-top: 2px dashed var(--ink-muted); }
+.ssb-pop-key li[data-swatch="ssb-pop-std"]::before { border-top-color: var(--signal); }
 .ssb-geo-note {
   margin: 0 0 0.75rem; padding: 0.4rem 0.6rem;
   background: var(--wash); border-left: 2px solid var(--signal-2);
@@ -551,6 +598,8 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
 }
 .ssb-grabber { width: 2.5rem; height: 3px; border-radius: 2px; background: var(--rule-strong); }
 .ssb-sheet-title { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ssb-credit { flex: none; margin: 0; padding: 0.5rem var(--gutter); border-top: 1px solid var(--rule); font-size: 0.75rem; line-height: 1.4; color: var(--ink-muted); overflow-wrap: anywhere; }
+.ssb-credit a { color: inherit; text-decoration: underline; }
 .ssb-panel-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0.25rem var(--gutter) 1.5rem; }
 .ssb-empty { margin: 1rem 0; max-width: 24rem; color: var(--ink-muted); }
 
@@ -606,7 +655,10 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
    sheet shows either the lab controls or the details. */
 @media (max-width: 959px) {
   .ssb-panel[data-sheet="closed"] .ssb-panel-body,
+  .ssb-panel[data-sheet="closed"] .ssb-credit,
   .ssb-panel[data-sheet="closed"] .ssb-sheet-tabs { display: none; }
+  /* CT hides the stage note, so on a phone its closed sheet keeps the credit */
+  .ssb[data-stage="ct"] .ssb-panel[data-sheet="closed"] .ssb-credit { display: block; }
   .ssb[data-stage="lab"] .ssb-panel[data-sheet="open"][data-view="controls"] .ssb-lab-sheet {
     display: block; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
   }

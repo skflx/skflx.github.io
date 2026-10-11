@@ -22,7 +22,7 @@
    than the HTML pass: main.js?v=... imports ./scene.js, which the CDN
    caches on its own clock. So this tool also
      1. regenerates js/ssb/stamps.js (data file -> hash, for fetch URLs)
-        from every file under ssb/content, ssb/geometry, ssb/models, ssb/ct, ssb/states;
+        from every file under ssb/content, ssb/geometry, ssb/models, ssb/ct, ssb/states, ssb/anatomy;
      2. topologically sorts the .js files under js/ssb by relative static and dynamic
         imports and rewrites each specifier to ./x.js?v=<hash of x>
         leaves-first, so a changed leaf re-stamps every importer up to the
@@ -70,7 +70,7 @@ export function stampHtml(html) {
 
 const SSB_MODULE_DIR = 'js/ssb';
 const SSB_STAMPS_FILE = 'js/ssb/stamps.js';
-const SSB_DATA_DIRS = ['ssb/content', 'ssb/geometry', 'ssb/models', 'ssb/ct', 'ssb/states'];
+const SSB_DATA_DIRS = ['ssb/content', 'ssb/geometry', 'ssb/models', 'ssb/ct', 'ssb/states', 'ssb/anatomy'];
 const SSB_VENDOR = /^js\/vendor\/three-[^/]+\//;
 
 /* Every import/export-from/dynamic-import with a string-literal specifier.

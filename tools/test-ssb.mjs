@@ -77,7 +77,7 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap|anatomy|scanned] [--int16]
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -97,7 +97,9 @@ const dataUrl = (source) => 'data:text/javascript;base64,' + Buffer.from(source)
 const sourceOf = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const { KINDS, TISSUE_KINDS, GRAPH_KINDS, TOKENS, kindForGraph, detectQuality } = await import(dataUrl(sourceOf('js/ssb/materials.js')));
 const SCOPE_URL = dataUrl(sourceOf('js/ssb/scope.js'));
-const { parseHash, formatHash, clampQuality, createStore, normalizeCt } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`)));
+const FLAP_URL = dataUrl(sourceOf('js/ssb/flap.js'));
+const FL = await import(FLAP_URL);
+const { parseHash, formatHash, clampQuality, createStore, normalizeCt, normalizeFlap, buildAnatomyRegistry, resolveAnatomy, ANATOMY_DEFAULT, anatomyIsDefault } = await import(dataUrl(sourceOf('js/ssb/state.js').replace(/from '\.\/scope\.js[^']*'/, `from '${SCOPE_URL}'`).replace(/from '\.\/flap\.js[^']*'/, `from '${FLAP_URL}'`)));
 const SC = await import(SCOPE_URL);
 const { rasToScene, sceneToRas } = await import(dataUrl(sourceOf('js/ssb/frame.js')));
 const KIT_URL = dataUrl(sourceOf('js/ssb/dioramas/kit.js')
@@ -113,7 +115,7 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | anatomy | scanned | lab: just that section (development; `lab` is the sphenoid diorama) */
 
 const results = [];
 function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
@@ -218,7 +220,7 @@ const INT16 = args.includes('--int16');
 const FX_FILES = INT16 ? fixtureFiles(buildFixture({ dtype: 'int16' })) : FX_U8_FILES;
 const SOFT_WIN = JSON.parse(FX_FILES['ssb/ct/ct.json']).windows.soft;      /* centre 60, width 40 on the u8 head; the same window in HU on the 16-bit one */
 const VOLUME_URL = dataUrl(sourceOf('js/ssb/volume.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`));
-const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch } = await import(VOLUME_URL);
+const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch, parseAnatomyPatch, checkAnatomyPatch, applyAnatomyPatch, anatomyVolume, anatomyPatchFile, anatomyOverrideFile, baseRoot, loadAnatomyIndex, forgetAnatomy } = await import(VOLUME_URL);
 const { parseIndex, stateKeyFor, stepCount } = await import(dataUrl(sourceOf('js/ssb/mode-procedure.js')
   .replace(/from '\.\/volume\.js[^']*'/, `from '${VOLUME_URL}'`).replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`)));
 const arrEq = (a, b, tol = 1e-9) => a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= tol);
@@ -939,12 +941,12 @@ async function ctTests(browser, base) {
 /* Every pack packs.json lists, parsed without three.js: node key -> { id, side,
    pack, pts (RAS mm, dequantized through the node's own transform), box, tris }.
    An independent reading of the data: the page's loader is checked against it. */
-function readPacks() {
-  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8'));
+function readPacks(root = 'ssb') {
+  const doc = JSON.parse(fs.readFileSync(path.join(ROOT, root, 'models/packs.json'), 'utf8'));
   const nodes = new Map();
   const files = {};
   for (const [name, def] of Object.entries(doc.packs)) {
-    const b = zlib.gunzipSync(fs.readFileSync(path.join(ROOT, 'ssb/models', def.file)));
+    const b = zlib.gunzipSync(fs.readFileSync(path.join(ROOT, root, 'models', def.file)));
     const dv = new DataView(b.buffer, b.byteOffset, b.byteLength);
     const json = JSON.parse(b.subarray(20, 20 + dv.getUint32(12, true)).toString());
     const bin = 20 + dv.getUint32(12, true) + 8;
@@ -970,21 +972,22 @@ function readPacks() {
       const iv = json.bufferViews[ia.bufferView];
       const idx = new Uint16Array(ia.count);
       for (let i = 0; i < ia.count; i++) idx[i] = dv.getUint16(bin + (iv.byteOffset || 0) + i * 2, true);
-      nodes.set(`${def.lining ? 'lining:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, kind: n.extras.kind || '', pack: name, lining: def.lining === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
+      nodes.set(`${def.lining ? 'lining:' : def.population ? 'population:' : ''}${n.extras.id}.${n.extras.side}`, { id: n.extras.id, side: n.extras.side, kind: n.extras.kind || '', pack: name, lining: def.lining === true, population: def.population === true, pts, idx, box: { min: lo, max: hi }, tris: ia.count / 3 });
     }
   }
   return { doc, nodes, files };
 }
 
-const ctBox = (() => {
-  const h = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/ct/ct.json'), 'utf8'));
+const ctBoxOf = (root) => {
+  const h = JSON.parse(fs.readFileSync(path.join(ROOT, root, 'ct/ct.json'), 'utf8'));
   const lo = [Infinity, Infinity, Infinity];
   const hi = [-Infinity, -Infinity, -Infinity];
   for (const i of [0, h.dims[0] - 1]) for (const j of [0, h.dims[1] - 1]) for (const k of [0, h.dims[2] - 1]) {
     for (let n = 0; n < 3; n++) { const v = h.affine[n][0] * i + h.affine[n][1] * j + h.affine[n][2] * k + h.affine[n][3]; lo[n] = Math.min(lo[n], v); hi[n] = Math.max(hi[n], v); }
   }
   return { min: lo, max: hi };
-})();
+};
+const ctBox = ctBoxOf('ssb');
 
 /* Nearest vertex of a parsed node to a RAS point, mm. */
 function nearestVertex(node, p) {
@@ -1100,7 +1103,7 @@ function makeGlb(boxes) {
 
 async function specimenUnitTests() {
   const { doc, nodes, files } = readPacks();
-  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : '') + k]));
+  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : def.population ? 'population:' : '') + k.split('@')[0]]));
   check('specimen packs: every pack is a glTF 2.0 binary whose length field is true, with KHR_mesh_quantization required',
     Object.values(files).every((f) => f.magic === 0x46546c67 && f.version === 2 && f.length === f.size && (f.json.extensionsRequired || []).includes('KHR_mesh_quantization')),
     JSON.stringify(Object.entries(files).map(([k, f]) => [k, f.magic, f.version, f.length, f.size])));
@@ -1108,7 +1111,7 @@ async function specimenUnitTests() {
     listed.length === nodes.size && listed.every(([name, key]) => nodes.has(key) && nodes.get(key).pack === name), `${listed.length} listed, ${nodes.size} read`);
   const unknown = [...nodes.values()].filter((n) => !GRAPH.has(n.id));
   check('specimen packs: every node id is a graph entity', unknown.length === 0, unknown.map((n) => n.id).join(', '));
-  const named = [...nodes].filter(([key, n]) => key !== `${n.lining ? 'lining:' : ''}${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
+  const named = [...nodes].filter(([key, n]) => key !== `${n.lining ? 'lining:' : n.population ? 'population:' : ''}${n.id}.${n.side}` || !['R', 'L', 'M'].includes(n.side));
   check('specimen packs: nodes are named <graph id>.<R|L|M>', named.length === 0, named.map(([k]) => k).join(', '));
   const outside = [...nodes].filter(([, n]) => n.box.min.some((v, i) => v < ctBox.min[i] - 5) || n.box.max.some((v, i) => v > ctBox.max[i] + 5));
   check('specimen packs: every mesh lies inside the CT volume (± 5 mm), so the 3D cursor and the CT share one frame',
@@ -1128,7 +1131,7 @@ async function specimenUnitTests() {
     !!noseNode && Math.max(...noseNode.box.min.map(Math.abs).slice(0, 1), noseNode.box.max[0]) <= 26 && noseNode.box.max[1] >= 16 && noseNode.box.max[1] <= 20 && noseNode.box.min[2] >= -10 && noseNode.box.max[2] <= 42, noseNode ? `${noseNode.box.min.map(r2)}..${noseNode.box.max.map(r2)}` : 'absent');
   check('nose pack (ST6): the vestibule (core pack) and its lining nodes carry extras.kind skin, as the pack\'s own node does; no other node carries a kind',
     ['R', 'L'].every((sd) => nodes.has(`s.nasal-vestibule.${sd}`) && nodes.get(`s.nasal-vestibule.${sd}`).kind === 'skin' && nodes.get(`s.nasal-vestibule.${sd}`).pack === 'core' && nodes.has(`lining:s.nasal-vestibule.${sd}`) && nodes.get(`lining:s.nasal-vestibule.${sd}`).kind === 'skin')
-      && [...nodes.values()].filter((n) => n.kind).every((n) => n.kind === 'skin' && ['s.nasal-vestibule', 's.external-nose'].includes(n.id)), JSON.stringify([...nodes.values()].filter((n) => n.kind).map((n) => n.id)));
+      && [...nodes.values()].filter((n) => n.kind && !n.population).every((n) => n.kind === 'skin' && ['s.nasal-vestibule', 's.external-nose'].includes(n.id)), JSON.stringify([...nodes.values()].filter((n) => n.kind).map((n) => n.id)));
   check('specimen packs: the maxillary sinuses (spec): .R centroid x > 0 and .L < 0',
     nodes.has('s.maxillary-sinus.R') && nodes.has('s.maxillary-sinus.L') && cx(nodes.get('s.maxillary-sinus.R')) > 10 && cx(nodes.get('s.maxillary-sinus.L')) < -10);
 
@@ -1243,7 +1246,7 @@ const isBg = (px, bg) => Math.abs(px[0] - bg[0]) + Math.abs(px[1] - bg[1]) + Mat
 
 async function specimenTests(browser, base) {
   /* what a page holds at boot: every pack but the lining, which waits for the first look from within (ST1c) */
-  const truth = new Map([...readPacks().nodes].filter(([, n]) => !n.lining));
+  const truth = new Map([...readPacks().nodes].filter(([, n]) => !n.lining && !n.population));
 
   /* ===== boot, registry, materials ===== */
   {
@@ -1257,13 +1260,14 @@ async function specimenTests(browser, base) {
       axisLabels: [...document.querySelectorAll('.ssb-axis-label')].map((e) => getComputedStyle(e).visibility),
     }));
     check('specimen: boots to status ready with no problems, the Specimen pill pressed, and no stage message', info.status === 'ready' && info.problems.length === 0 && info.pressed === 'true' && info.stage === 'specimen' && info.msgHidden, JSON.stringify(info));
-    check('specimen: the stage note is provenance (reference specimen, UW CT atlas, draft), not the placeholder', info.noteShown && /Reference specimen · UW CT atlas · draft/.test(info.note) && !/Placeholder/i.test(info.note), info.note);
+    check('specimen: the stage note is provenance (reference specimen, UW atlas credit, draft), not the placeholder', info.noteShown && /Reference specimen · from Interactive CT Sinus Anatomy, Univ\. of Washington Radiology · draft/.test(info.note) && !/Placeholder/i.test(info.note), info.note);
     check('specimen: the placeholder grid\'s axis letters are gone while the specimen shows', info.axisLabels.every((v) => v === 'hidden'), info.axisLabels.join());
 
     const listed = Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs);
     const liningName = Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs).filter(([, d]) => d.lining === true).map(([n]) => n);
+    const popName = Object.entries(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs).filter(([, d]) => d.population === true).map(([n]) => n);
     check('specimen: every pack packs.json lists, bar the deferred lining (ST1c), is loaded, node for node as listed (core first); the lining waits for the first look from within',
-      liningName.length === 1 && liningName.every((n) => info.packs[n] && info.packs[n].state === 'deferred' && info.packs[n].nodes.length === 0) && listed.filter((n) => !liningName.includes(n)).every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
+      liningName.length === 1 && liningName.concat(popName).every((n) => info.packs[n] && info.packs[n].state === 'deferred' && info.packs[n].nodes.length === 0) && listed.filter((n) => !liningName.includes(n) && !popName.includes(n)).every((n) => info.packs[n] && info.packs[n].state === 'loaded' && info.packs[n].nodes.length === info.packs[n].expected.length && info.packs[n].expected.every((k) => info.packs[n].nodes.includes(k))), JSON.stringify(info.packs).slice(0, 400));
     const everyNode = await specNodes(page);
     const nodes = everyNode.filter((n) => !n.lining);          /* the lining pack (ST1b) is checked on its own; the rest of these checks are about the structures */
     const keys = everyNode.map((n) => n.key).sort();
@@ -2684,6 +2688,45 @@ async function stationStateTests(w) {
 const liningFetches = (page) => page.evaluate(() => performance.getEntriesByType('resource').filter((e) => /\/ssb\/models\/lining\.glb\.gz/.test(e.name)).length);
 
 async function scopeTests(browser, base) {
+  /* ===== the UW credit (WP RA0c) is on the page in every stage that shows the specimen ===== */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    const credit = () => page.evaluate(() => {
+      const el = document.getElementById('ssb-credit'); const a = el && el.querySelector('a'); const r = el && el.getBoundingClientRect();
+      return { text: el ? el.textContent : '', shown: !!el && getComputedStyle(el).display !== 'none' && r.height > 0 && r.top >= 0 && r.bottom <= innerHeight, fits: !!el && el.scrollWidth <= el.clientWidth + 1,
+        href: a ? a.getAttribute('href') : '', rel: a ? a.getAttribute('rel') : '', stage: document.getElementById('ssb-app').dataset.stage };
+    });
+    const okCredit = (c) => c.shown && c.fits && /University of Washington Department of Radiology/.test(c.text) && /Interactive CT Sinus Anatomy/.test(c.text) && c.href === 'http://uwmsk.org/sinusanatomy2/' && /noopener/.test(c.rel);
+    const seen = [await credit()];
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
+    seen.push(await credit());
+    await page.evaluate(() => { location.hash = '#ct=ax'; });
+    await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'ct', null, { timeout: 30000 });
+    seen.push(await credit());
+    check('credit: the full UW attribution and its link show, in view without scrolling, in the Specimen, Scope and CT stages', seen.length === 3 && seen.every(okCredit), JSON.stringify(seen));
+    const ni = await page.evaluate(() => ['Washington', 'Radiology'].every((w) => document.getElementById('ssb-stage-note').textContent.includes(w)));
+    check('credit: the stage note names the institution', ni);
+    await context.close();
+  }
+  /* on a phone the credit line sits in the closed sheet, so the stage note carries the institution, wrapped, never truncated */
+  {
+    const { context, page } = await openSpecimen(browser, base, '', { viewport: { width: 390, height: 844 } });
+    const notes = [];
+    const note = () => page.evaluate(() => { const n = document.getElementById('ssb-stage-note'); const r = n.getBoundingClientRect();
+      return { text: n.textContent, whole: n.scrollWidth <= n.clientWidth + 1 && n.scrollHeight <= n.clientHeight + 1, inView: r.height > 0 && r.top >= 0 && r.bottom <= innerHeight && r.left >= 0 && r.right <= innerWidth }; });
+    notes.push(await note());
+    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
+    notes.push(await note());
+    check('credit: at phone width the stage note names the University of Washington in full, in view, in Specimen and Scope', notes.every((n) => n.whole && n.inView && /University of Washington|Univ\. of Washington/.test(n.text)), JSON.stringify(notes));
+    await page.evaluate(() => { location.hash = '#ct=ax'; });
+    await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'ct', null, { timeout: 30000 });
+    const ct = await page.evaluate(() => { const el = document.getElementById('ssb-credit'); const r = el.getBoundingClientRect();
+      return { sheet: document.getElementById('ssb-panel').dataset.sheet, inView: r.height > 0 && r.top >= 0 && r.bottom <= innerHeight, whole: el.scrollWidth <= el.clientWidth + 1, text: el.textContent }; });
+    check('credit: at phone width the CT stage, which hides the stage note, keeps the full credit line in view with the sheet closed', ct.sheet === 'closed' && ct.inView && ct.whole && /University of Washington Department of Radiology/.test(ct.text), JSON.stringify(ct));
+    await context.close();
+  }
   /* ===== the CT volume loads only when asked, and once per page (CP-2a) ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '');
@@ -4252,7 +4295,1071 @@ async function mucosaTests(browser, base) {
   }
 }
 
+
+
+/* ---------------- the nasoseptal flap overlay (WP ST5, docs/ssb.md 5.7) ---------------- */
+
+const readJson = (f) => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
+
+/* One side's inputs from the committed data, as the page builds them. */
+function flapInputs(side, data) {
+  const lm = (id) => data.landmarks[id];
+  return {
+    side, septal: data.charts[`s.septal-mucosa.${side}`], floor: data.charts[`s.nasal-floor-mucosa.${side}`],
+    ostium: lm(`lm.sphenoid-ostium.${side}`), arch: lm('lm.choanal-arch.M'), mtHead: lm(`lm.middle-turbinate-head.${side}`),
+    sf: data.meta[`lm.sphenoid-ostium.${side}`].inferior_margin_s_mm,
+  };
+}
+
+/* An independent point-in-polygon (winding number) and triangle area (Heron), so the readout is not checked against its own code. */
+function windingInside(poly, x, y) {
+  let w = 0;
+  for (let i = 0; i < poly.length; i++) {
+    const [x1, y1] = poly[i];
+    const [x2, y2] = poly[(i + 1) % poly.length];
+    const left = (x2 - x1) * (y - y1) - (x - x1) * (y2 - y1);
+    if (y1 <= y) { if (y2 > y && left > 0) w++; } else if (y2 <= y && left < 0) w--;
+  }
+  return w !== 0;
+}
+function independentArea(node, project, poly) {
+  let mm2 = 0;
+  for (let t = 0; t < node.idx.length; t += 3) {
+    const P = [0, 1, 2].map((k) => [node.pts[node.idx[t + k] * 3], node.pts[node.idx[t + k] * 3 + 1], node.pts[node.idx[t + k] * 3 + 2]]);
+    const c = [0, 1, 2].map((i) => (P[0][i] + P[1][i] + P[2][i]) / 3);
+    const [u, v] = project(...c);
+    if (!windingInside(poly, u, v)) continue;
+    const d = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+    const a = d(P[0], P[1]); const b = d(P[1], P[2]); const cc = d(P[2], P[0]);
+    const sp = (a + b + cc) / 2;
+    mm2 += Math.sqrt(Math.max(0, sp * (sp - a) * (sp - b) * (sp - cc)));
+  }
+  return mm2;
+}
+
+function flapUnitTests() {
+  const data = { charts: readJson('ssb/geometry/charts.json').surfaces, landmarks: readJson('ssb/geometry/landmarks.json'), meta: readJson('ssb/geometry/landmarks.meta.json').landmarks };
+  const sweeps = readJson('ssb/geometry/sweeps.json');
+  const { nodes } = readPacks();
+  const SIDES = ['R', 'L'];
+  const area = (side, design, params = {}) => {
+    const f = FL.computeFlap(flapInputs(side, data), design, params);
+    const sep = f.septal ? FL.meshArea(nodes.get(`s.septal-mucosa.${side}`), FL.projectSeptal, f.septal).mm2 / 100 : 0;
+    const flo = f.floor ? FL.meshArea(nodes.get(`s.nasal-floor-mucosa.${side}`), FL.projectFloor, f.floor).mm2 / 100 : 0;
+    return { f, sep, flo, total: sep + flo };
+  };
+
+  /* the pedicle contains the posterior septal artery, from a source independent of this construction (ST4d places the sweeps) */
+  for (const side of SIDES) {
+    const inp = flapInputs(side, data);
+    const p = FL.septalProfile(inp.septal);
+    const f = FL.computeFlap(inp, 'full');
+    for (const branch of ['inferior', 'superior']) {
+      const sw = sweeps[`s.posterior-septal-artery-${branch}-branch.${side}`];
+      const [, a, s] = sw ? sw.pts[0] : [0, NaN, NaN];
+      check(`flap (pedicle, ${side}): the first point of the posterior septal artery ${branch} branch lies in the pedicle's chart box (s between the choanal arch and the ostium's inferior margin, a within 4 mm of the posterior edge)`,
+        !!sw && s >= inp.arch[2] && s <= inp.sf && Math.abs(a - FL.postAt(p, s)) <= 4, `a ${a} s ${s}; arch ${inp.arch[2]} sf ${inp.sf} post ${FL.postAt(p, s)}`);
+    }
+    check(`flap (pedicle, ${side}): the pedicle's height is the choanal arch to the ostium's inferior margin and lies in 8-16 mm`, f.pedicleHeight >= 8 && f.pedicleHeight <= 16 && near(f.pedicleHeight, inp.sf - inp.arch[2], 0.001), String(f.pedicleHeight));
+  }
+
+  /* the superior incision */
+  for (const side of SIDES) {
+    const inp = flapInputs(side, data);
+    const p = FL.septalProfile(inp.septal);
+    const starts = FL.DESIGNS.map((d) => FL.computeFlap(inp, d).superior[0]);
+    check(`flap (superior, ${side}): the incision starts at the ostium's inferior margin (post(sf), sf) in every design`, starts.every((q) => near(q[1], inp.sf, 0.002) && near(q[0], FL.postAt(p, inp.sf), 0.002)), JSON.stringify(starts));
+    const lvl = FL.computeFlap(inp, 'short').superior;
+    check(`flap (superior, ${side}): short is level at sf (every vertex), whatever top_margin says`, lvl.every((q) => near(q[1], inp.sf, 0.002)) && JSON.stringify(FL.computeFlap(inp, 'short', { top_margin: 5 }).superior) === JSON.stringify(FL.computeFlap(inp, 'short', { top_margin: 20 }).superior));
+    let bad = 0;
+    let samples = 0;
+    let rose = 0;
+    for (const design of ['full', 'extended']) {
+      for (let top = 5; top <= 20; top++) {
+        for (const ant of [0, 3, 10]) {
+          const sup = FL.computeFlap(inp, design, { top_margin: top, anterior_margin: ant }).superior;
+          for (let i = 0; i < sup.length; i++) {
+            const pts = i + 1 < sup.length ? [sup[i], [(sup[i][0] + sup[i + 1][0]) / 2, (sup[i][1] + sup[i + 1][1]) / 2]] : [sup[i]];
+            for (const [a, s] of pts) {
+              samples++;
+              const ceiling = FL.topAt(p, a) - top;
+              if (s < inp.sf - 0.002 || s > FL.topAt(p, a) + 0.002 || (s > inp.sf + 0.002 && s > ceiling + 0.002)) bad++;
+              if (s > inp.sf + 0.5) rose++;
+            }
+          }
+        }
+      }
+    }
+    check(`flap (superior, ${side}): B and C never run below sf, and every sample (vertices and segment midpoints, over top_margin 5-20 x anterior_margin) is either at sf or at most top(a) - top_margin; the rule is the exact max(sf, top - margin)`, bad === 0 && samples > 500, `${bad} of ${samples}`);
+    check(`flap (superior, ${side}): B and C do rise above sf for a small margin (the incision follows the septum's top, Fig. 31.3 B)`, rose > 0, String(rose));
+  }
+
+  /* the area readout against an independent sum */
+  for (const side of SIDES) {
+    for (const design of ['short', 'full', 'extended']) {
+      const a = area(side, design);
+      const sep = independentArea(nodes.get(`s.septal-mucosa.${side}`), FL.projectSeptal, a.f.septal) / 100;
+      const flo = a.f.floor ? independentArea(nodes.get(`s.nasal-floor-mucosa.${side}`), FL.projectFloor, a.f.floor) / 100 : 0;
+      check(`flap (area, ${side} ${design}): the readout equals an independent point-in-polygon and Heron sum over the meshes within 2 % (${a.total.toFixed(2)} cm2)`, a.total > 1 && Math.abs(a.total - (sep + flo)) <= 0.02 * (sep + flo), `${a.total} vs ${sep + flo}`);
+    }
+  }
+
+  /* the ladder, containment, rescue */
+  for (const side of SIDES) {
+    const A = { short: area(side, 'short'), full: area(side, 'full'), extended: area(side, 'extended'), rescue: area(side, 'rescue') };
+    console.log(`  flap areas ${side}: short ${A.short.total.toFixed(2)} cm2 (septum ${A.short.sep.toFixed(2)}), full ${A.full.total.toFixed(2)} (septum ${A.full.sep.toFixed(2)}), extended ${A.extended.total.toFixed(2)} (septum ${A.extended.sep.toFixed(2)} + floor ${A.extended.flo.toFixed(2)}), rescue ${A.rescue.total.toFixed(2)}; pedicle ${A.full.f.pedicleHeight} mm; length short ${A.short.f.length.toFixed(1)} / full ${A.full.f.length.toFixed(1)} mm; approximate share short ${A.short.f.approx} full ${A.full.f.approx}`);
+    check(`flap (ladder, ${side}): short < full < extended, strictly`, A.short.total < A.full.total && A.full.total < A.extended.total, JSON.stringify([A.short.total, A.full.total, A.extended.total]));
+    const inside = (poly, pts) => pts.every(([x, y]) => FL.inPolygon(poly, x, y));
+    check(`flap (ladder, ${side}): the short outline lies inside the full one, and full's septal part is extended's`, inside(A.full.f.septal, A.short.f.septal) && JSON.stringify(A.full.f.septal) === JSON.stringify(A.extended.f.septal));
+    const sc = data.charts[`s.septal-mucosa.${side}`];
+    const fc = data.charts[`s.nasal-floor-mucosa.${side}`];
+    const within = (poly, chart) => poly.every(([x, y]) => FL.inPolygon(chart.polygon, x, y) || FL.distToPolygon(chart.polygon, x, y) <= 1.01);
+    check(`flap (chart, ${side}): every outline vertex lies inside its chart's polygon (the polygon is simplified: within 1 mm of its boundary counts)`,
+      ['short', 'full', 'extended'].every((d) => within(A[d].f.septal, sc)) && within(A.extended.f.floor, fc), '');
+    check(`flap (rescue, ${side}): zero area, the same pedicle as full, a window of the set size on the contralateral side`,
+      A.rescue.total === 0 && !A.rescue.f.septal && JSON.stringify(A.rescue.f.pedicle) === JSON.stringify(A.full.f.pedicle) && A.rescue.f.window.side === (side === 'R' ? 'L' : 'R')
+      && near(A.rescue.f.window.polygon[1][0] - A.rescue.f.window.polygon[0][0], 5, 0.002) && near(FL.computeFlap(flapInputs(side, data), 'rescue', { window: 8 }).window.polygon[2][1] - FL.computeFlap(flapInputs(side, data), 'rescue', { window: 8 }).window.polygon[1][1], 8, 0.002));
+    const widths = [0, 4, 8, 12, 20].map((w) => area(side, 'extended', { floor_width: w }).flo);
+    check(`flap (floor, ${side}): the floor strip grows with floor_width (0 -> nothing, and the default is the full charted width: ${widths.map((v) => v.toFixed(2)).join(' / ')} cm2)`, widths[0] === 0 && widths.every((v, i) => i === 0 || v > widths[i - 1] - 1e-9) && widths[2] > 0 && near(area(side, 'extended').flo, widths[4], 1e-9), JSON.stringify(widths));
+    check(`flap (anterior margin, ${side}): more anterior_margin shrinks full`, area(side, 'full', { anterior_margin: 10 }).total < area(side, 'full', { anterior_margin: 0 }).total);
+  }
+
+  /* sides differ only through their own charts and landmarks */
+  const R = flapInputs('R', data);
+  const L = flapInputs('L', data);
+  const h = (inp, design = 'extended') => FL.computeFlap(inp, design).hash;
+  check('flap (sides): swapping the data swaps the outlines — the side label alone changes nothing, and each side\'s hash follows its own sf', h({ ...R, side: 'L' }) === h(R) && h({ ...R, sf: R.sf + 2 }) !== h(R) && h({ ...L, sf: R.sf + 2 }) === h({ ...R, sf: R.sf + 2, side: 'L' }));
+  check('flap (sides): the right flap does not move when only the left data change', h({ ...R }) === h(R) && FL.computeFlap({ ...R }, 'full').hash === FL.computeFlap({ ...R, floor: null }, 'full').hash);
+  const hashes = [0, 1, 2].map(() => FL.computeFlap(R, 'full', { top_margin: 12, anterior_margin: 2 }).hash);
+  check('flap (determinism): the same parameters give the same polygon hash, and a different parameter another', new Set(hashes).size === 1 && hashes[0] !== FL.computeFlap(R, 'full', { top_margin: 13, anterior_margin: 2 }).hash && /^[0-9a-f]{8}$/.test(hashes[0]), hashes[0]);
+  check('flap (inputs): missing landmarks or charts give an invalid flap, never an exception', [{ ...R, septal: null }, { ...R, arch: null }, { ...R, sf: NaN }, { ...R, mtHead: null }].every((i) => FL.computeFlap(i, 'full').valid === false) && !FL.computeFlap(R, 'bogus').valid);
+
+  /* the codec: hostile values clamp or are ignored */
+  const has = (id) => GRAPH.has(id);
+  const parse = (hash) => parseHash(hash, has, {});
+  check('flap (hash): `#flap=full.L&top=12&ant=3` round-trips and a design\'s defaults are not written', parse('#flap=full.L&top=12&ant=3').flap.side === 'L' && formatHash({ tier: 1, flap: parse('#flap=full.L&top=12&ant=3').flap }) === '#flap=full.L&top=12&ant=3' && formatHash({ tier: 1, flap: parse('#flap=extended').flap }) === '#flap=extended.R');
+  check('flap (hash): hostile numbers clamp to the slider range (or take the default) and snap to its step', (() => {
+    const f = parse('#flap=full.R&top=9999&ant=-5&fw=abc&win=NaN').flap;
+    const g = parse('#flap=extended.R&top=7.4&fw=3.6').flap;
+    return f.params.top_margin === 20 && f.params.anterior_margin === 0 && f.params.floor_width === 20 && f.params.window === 5 && g.params.top_margin === 7 && g.params.floor_width === 4;
+  })());
+  check('flap (hash): an unknown design, a bad side, prototype keys and over-long values are ignored', ['#flap=bogus', '#flap=full.X', '#flap=__proto__', '#flap=constructor.R', '#flap=', '#flap=' + 'a'.repeat(5000), '#flap=full.R.R', '#flap=%3Cimg%20src%3Dx%3E', '#flap=FULL'].every((x) => parse(x).flap === undefined)
+    && parse('#flap=full.R&top=%3Cscript%3E').flap.params.top_margin === 15);
+  check('flap (hash): a lab or a CT link ignores the overlay, and the overlay is not written with one', parseHash('#lab=sphenoid&flap=full.R', has, { sphenoid: { params: [], presets: {} } }).flap === undefined && parse('#ct=ax&flap=full.R').flap === undefined && !/flap/.test(formatHash({ tier: 1, flap: { design: 'full', side: 'R', params: { ...FL.PARAM_DEFAULTS } }, ct: { plane: 'axial', at: [0, 0, 0] } })));
+  const store = createStore({ has, tierOf: () => 1, hash: '#flap=short.R', prefs: {} });
+  check('flap (store): setFlap whitelists and clamps, null clears, and a new object with the same values is no change', store.get().flap.design === 'short'
+    && store.setFlap({ design: 'extended', side: 'L', params: { top_margin: 999, floor_width: -3, nope: 1 } }) && store.get().flap.params.top_margin === 20 && store.get().flap.params.floor_width === 0
+    && !store.setFlap({ design: 'bogus' }) && !store.setFlap({ design: 'extended', side: 'L', params: { top_margin: 20, floor_width: 0 } }) && store.setFlap(null) && store.get().flap === null);
+  check('flap (store): applyHash adopts and drops the overlay; leaving a stage keeps it', (() => { const s = createStore({ has, tierOf: () => 1, hash: '', prefs: {} }); s.applyHash('#flap=full.L&top=11'); const on = s.get().flap && s.get().flap.params.top_margin === 11; s.leaveStage(); const kept = !!s.get().flap; s.applyHash(''); return on && kept && s.get().flap === null; })());
+  check('flap (sliders): every slider has a graph entry for its range and a default inside it', FL.PARAMS.every((q) => GRAPH.has(q.from) && q.default >= q.min && q.default <= q.max && q.step > 0) && new Set(FL.PARAMS.map((q) => q.hash)).size === FL.PARAMS.length);
+  return nodes;
+}
+
+async function flapTests(browser, base, nodes) {
+  const data = { charts: readJson('ssb/geometry/charts.json').surfaces, landmarks: readJson('ssb/geometry/landmarks.json'), meta: readJson('ssb/geometry/landmarks.meta.json').landmarks };
+  const want = (side, design, params = {}) => {
+    const f = FL.computeFlap(flapInputs(side, data), design, params);
+    return (f.septal ? FL.meshArea(nodes.get(`s.septal-mucosa.${side}`), FL.projectSeptal, f.septal).mm2 : 0) / 100 + (f.floor ? FL.meshArea(nodes.get(`s.nasal-floor-mucosa.${side}`), FL.projectFloor, f.floor).mm2 : 0) / 100;
+  };
+  const ready = (page) => page.waitForFunction(() => { const f = window.__ssb.specimen.flap; return f && f.status === 'ready'; }, null, { timeout: 30000 });
+  const hashNow = (page) => page.evaluate(() => new Promise((res) => { const t0 = performance.now(); const tick = () => (performance.now() - t0 > 600 ? res(window.__ssb.hash) : setTimeout(tick, 50)); tick(); }));
+
+  const { context, page, errors } = await openSpecimen(browser, base, '#flap=full.R');
+  await ready(page);
+  await nextFrames(page, 3);
+  let info = await page.evaluate(() => window.__ssb.specimen.flap);
+  check(`flap (page): \`#flap=full.R\` draws the overlay on the real packs, with an area equal to the Node reading of the same meshes within 1 % (${info.areas.total.toFixed(2)} vs ${want('R', 'full').toFixed(2)} cm2)`, info.drawn >= 3 && Math.abs(info.areas.total - want('R', 'full')) <= 0.01 * want('R', 'full'), JSON.stringify(info.areas));
+  check('flap (page): the polygon hash in the page equals the Node one (the same construction on the same data)', info.result.hash === FL.computeFlap(flapInputs('R', data), 'full').hash, info.result.hash);
+  const ui = await page.evaluate(() => {
+    const sec = [...document.querySelectorAll('#ssb-spec .ssb-lab-sec')].find((x) => /Nasoseptal flap/.test(x.textContent));
+    return sec ? { shown: !sec.hidden && sec.offsetParent !== null, text: sec.textContent, pressed: [...sec.querySelectorAll('button[aria-pressed="true"]')].map((b) => b.textContent), sliders: [...sec.querySelectorAll('input[type=range]')].filter((r) => !r.closest('.ssb-param').hidden).map((r) => r.dataset.flapParam) } : null;
+  });
+  check('flap (page): the control shows the badge "schematic on specimen", the area, the pedicle height, the length and the literature from the graph; Full and Right are pressed; only B\'s sliders show',
+    !!ui && ui.shown && /schematic on specimen/i.test(ui.text) && /Area/.test(ui.text) && /cm²/.test(ui.text) && /Pedicle height/.test(ui.text) && /Length/.test(ui.text) && /Literature: .*17\.12/.test(ui.text)
+    && ui.pressed.includes('Full (B)') && ui.pressed.includes('Right') && JSON.stringify(ui.sliders) === JSON.stringify(['top_margin', 'anterior_margin']), JSON.stringify(ui));
+
+  const area = async () => (await page.evaluate(() => window.__ssb.specimen.flap)).areas.total;
+  const designs = {};
+  for (const key of ['short', 'full', 'extended', 'rescue']) {
+    await page.click(`#ssb-spec button[data-flap-design="${key}"]`);
+    await page.waitForFunction((k) => { const f = window.__ssb.specimen.flap; return f && f.status === 'ready' && f.design === k; }, key, { timeout: 15000 });
+    designs[key] = await area();
+  }
+  check('flap (page): the four design buttons switch the overlay; areas rise short < full < extended and rescue is 0, each equal to the Node reading within 1 %',
+    designs.short < designs.full && designs.full < designs.extended && designs.rescue === 0 && ['short', 'full', 'extended'].every((k) => Math.abs(designs[k] - want('R', k)) <= 0.01 * want('R', k)), JSON.stringify(designs));
+  check('flap (page): the hash follows the design (`flap=rescue.R`)', /(^|#|&)flap=rescue\.R/.test(await hashNow(page)));
+  await page.click('#ssb-spec button[data-flap-design="extended"]');
+  await page.waitForFunction(() => { const f = window.__ssb.specimen.flap; return f && f.design === 'extended' && f.areas && f.areas.floor > 0; }, null, { timeout: 15000 });
+  await nextFrames(page, 2);
+  const shown = await page.evaluate(() => ({ sliders: [...document.querySelectorAll('#ssb-spec input[data-flap-param]')].filter((r) => !r.closest('.ssb-param').hidden).map((r) => r.dataset.flapParam), text: document.querySelector('.ssb-flap-readout').textContent, drawn: window.__ssb.specimen.flap.drawn }));
+  check('flap (page): Extended shows the floor slider and the septum and floor parts separately, and draws both surfaces', shown.sliders.includes('floor_width') && /Septum/.test(shown.text) && /Nasal floor/.test(shown.text) && shown.drawn >= 5, JSON.stringify(shown));
+  await page.$eval('#ssb-flap-fw', (r) => { r.value = '4'; r.dispatchEvent(new Event('input', { bubbles: true })); });
+  await page.waitForFunction(() => window.__ssb.specimen.flap.params.floor_width === 4, null, { timeout: 15000 });
+  const narrow = await area();
+  check('flap (page): the floor-width slider narrows the flap (the area drops, equal to the Node reading) and the hash says fw=4', narrow < designs.extended && Math.abs(narrow - want('R', 'extended', { floor_width: 4 })) <= 0.01 * narrow && /fw=4/.test(await hashNow(page)), `${narrow} vs ${designs.extended}`);
+  await page.click('#ssb-spec button[data-flap-side="L"]');
+  await page.waitForFunction(() => window.__ssb.specimen.flap.side === 'L' && window.__ssb.specimen.flap.status === 'ready', null, { timeout: 15000 });
+  check('flap (page): the side buttons move the overlay to the left charts and meshes (flap=extended.L, area equal to the Node reading)', Math.abs((await area()) - want('L', 'extended', { floor_width: 4 })) <= 0.01 * narrow && /flap=extended\.L/.test(await hashNow(page)));
+  await page.click('#ssb-spec button[data-flap-design="off"]');
+  await page.waitForFunction(() => window.__ssb.specimen.flap === null, null, { timeout: 5000 });
+  const off = await page.evaluate(() => ({ sec: [...document.querySelectorAll('#ssb-spec .ssb-lab-sec')].find((x) => /Nasoseptal flap/.test(x.textContent)).hidden, hash: window.__ssb.hash }));
+  check('flap (page): Off removes the overlay and its hash keys; at tier 1 the control hides again (the flap is a tier-3 procedure)', !/flap|fw=/.test(off.hash) && off.sec === true, JSON.stringify(off));
+  check('flap (page): no real console errors', errors.length === 0, JSON.stringify(errors));
+  await context.close();
+
+  /* tier gating and a link at tier 1 */
+  const t3 = await openSpecimen(browser, base, '#tier=3');
+  const vis = await t3.page.evaluate(() => { const sec = [...document.querySelectorAll('#ssb-spec .ssb-lab-sec')].find((x) => /Nasoseptal flap/.test(x.textContent)); return !!sec && !sec.hidden; });
+  check('flap (page): at tier 3 the control is offered (no overlay until a design is picked)', vis && (await t3.page.evaluate(() => window.__ssb.specimen.flap)) === null);
+  await t3.context.close();
+
+  /* hostile hash in the page */
+  for (const bad of ['flap=bogus', 'flap=full.R&top=9999&ant=zzz&fw=-9', 'flap=%3Cimg%20src%3Dx%20onerror%3D1%3E', 'flap=full.X']) {
+    const h = await openSpecimen(browser, base, `#${bad}`);
+    await nextFrames(h.page, 3);
+    const got = await h.page.evaluate(() => ({ flap: window.__ssb.specimen.flap, hash: window.__ssb.hash, pwned: !!window.__pwned }));
+    const okState = bad === 'flap=full.R&top=9999&ant=zzz&fw=-9' ? got.flap && got.flap.params.top_margin === 20 && got.flap.params.anterior_margin === 0 : got.flap === null;
+    check(`flap (hostile): #${bad} clamps or is ignored — nothing executes, no console errors`, okState && !got.pwned && h.errors.length === 0, JSON.stringify(got) + JSON.stringify(h.errors));
+    await h.context.close();
+  }
+
+  /* a lab or CT link carrying the overlay does not draw it */
+  const lab = await openSpecimen(browser, base, '#ct=ax&at=0,0,0&flap=full.R', { wait: 'none' });
+  await lab.page.waitForFunction(() => window.__ssb && window.__ssb.hash !== undefined, null, { timeout: 20000 });
+  check('flap (page): a CT link ignores the overlay', !/flap/.test(await lab.page.evaluate(() => window.__ssb.hash)));
+  await lab.context.close();
+
+  /* the same overlay at the phone width: the control is reachable from the Layers panel */
+  const phone = await openSpecimen(browser, base, '#flap=short.R', { viewport: { width: 390, height: 844 } });
+  await ready(phone.page);
+  const fits = await phone.page.evaluate(() => { const d = document.getElementById('ssb-spec-dock'); return { hidden: d.hidden, w: d.getBoundingClientRect().width, vw: window.innerWidth, scrollX: document.documentElement.scrollWidth }; });
+  check('flap (phone): the overlay draws at 390 px and the page does not scroll sideways', fits.scrollX <= fits.vw + 1, JSON.stringify(fits));
+  await phone.context.close();
+}
+
+/* ---------------- the population panel (WP POP2a, docs/ssb.md 5.10) ---------------- */
+
+const POP_FILE = 'ssb/anatomy/population/nasalseg.json';
+const popDoc = () => JSON.parse(fs.readFileSync(path.join(ROOT, POP_FILE), 'utf8'));
+
+async function populationTests(browser, base) {
+  const doc = popDoc();
+  const S = doc.profiles.summary.restricted['10-90'];
+  const P = doc.profiles.headA.placement;
+  const mm2 = (v) => String(Math.round(v * 100));
+  const iq = (b, f) => `${f(b.p25)}–${f(b.p75)}`;
+  const f1 = (v) => v.toFixed(1);
+  const f2 = (v) => v.toFixed(2);
+  const pc = (v) => String(Math.round(v));
+
+  /* the loader's own reading: the file as the panel will see it */
+  const stampsSrc = sourceOf('js/ssb/stamps.js');
+  const POP = await import(dataUrl(sourceOf('js/ssb/population.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl(stampsSrc)}'`)));
+  const model = POP.readPopulation(doc);
+  check('population (unit): the file reads to a model, n is the clear count, the profile has one point per fraction in all four series',
+    model && model.n === doc.summary.clearCount && model.profile.x.length === S.profileByClass.lessCongested.atFractionOfLength.length
+    && [model.profile.more.median, model.profile.less.median, model.profile.more.p25, model.profile.standard].every((a) => a.length === model.profile.x.length), JSON.stringify(model && model.n));
+  const broken = (mut) => { const d = popDoc(); mut(d); return POP.readPopulation(d); };
+  check('population (unit): a missing or malformed piece makes the reader return null (no throw)',
+    broken((d) => { delete d.profiles.headA.placement.standard; }) === null
+    && broken((d) => { d.profiles.summary.restricted['10-90'].profileByClass.moreCongested.medianCm2.pop(); }) === null
+    && broken((d) => { d.summary.clearCount = 'many'; }) === null
+    && POP.readPopulation(null) === null && POP.readPopulation('x') === null && POP.readPopulation({}) === null);
+  check('population (unit): the data file is stamped, so the page may fetch it', new RegExp(`"${POP_FILE}": "[0-9a-f]{8}"`).test(stampsSrc));
+
+  /* a structure selected: the panel opens with the file's numbers */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#s=s.nasal-cavity');
+    await page.waitForFunction(() => { const d = document.getElementById('ssb-pop'); return d && !d.hidden; }, null, { timeout: 20000 });
+    const open = await page.evaluate(() => document.getElementById('ssb-pop').open);
+    check('population (page): selecting the nasal cavity shows the section, open', open === true);
+    const text = (sel) => page.evaluate((q) => (document.querySelector(q) || {}).textContent || '', sel);
+    const cavity = await page.evaluate(() => [...document.querySelectorAll('#ssb-pop [data-pop="cavity"] dd')].map((d) => d.textContent));
+    const cs = P.standard.restricted['10-90'];
+    const ca = P.asScanned.restricted['10-90'];
+    const want = [
+      `${mm2(S.twoSideMeanCm2.p50)} mm² (IQR ${iq(S.twoSideMeanCm2, (v) => mm2(v))})`,
+      `${mm2(cs.twoSideMeanCm2)} mm², percentile ${pc(cs.twoSideMeanPercentile)}`,
+      `${mm2(ca.twoSideMeanCm2)} mm², percentile ${pc(ca.twoSideMeanPercentile)}`,
+      `${f2(S.smallerOverLarger.p50)} (IQR ${iq(S.smallerOverLarger, f2)})`,
+      `${f2(cs.smallerOverLarger)}, percentile ${pc(cs.smallerOverLargerPercentile)} (one side mirrored, so symmetric by construction)`,
+      `${f2(ca.smallerOverLarger)}, percentile ${pc(ca.smallerOverLargerPercentile)}`,
+    ];
+    check('population (page): the nasal cavity numbers (median, IQR, the standard specimen and the as-scanned head with percentiles, the side ratio likewise) equal the JSON\'s', JSON.stringify(cavity) === JSON.stringify(want), JSON.stringify({ cavity, want }));
+    const conv = await text('#ssb-pop [data-pop="convention"]');
+    check('population (page): the convention line carries n, the threshold and the span from the file', conv.includes(`${doc.summary.clearCount} clear adults`) && conv.includes(`${Math.abs(Math.round(doc.profiles.airThreshold.hu))} HU`) && /10–90 %/.test(conv), conv);
+    check('population (page): with the cavity selected the other structures\' blocks are hidden', await page.evaluate(() => ['maxillary', 'nasopharynx'].every((k) => document.querySelector(`#ssb-pop [data-pop="${k}"]`).hidden)));
+
+    const chart = await page.evaluate(() => {
+      const svg = document.querySelector('#ssb-pop svg.ssb-pop-chart');
+      const pts = (cls) => svg.querySelector(`polyline.${cls}`).getAttribute('points').trim().split(/\s+/).length;
+      return { less: pts('ssb-pop-less'), more: pts('ssb-pop-more'), std: pts('ssb-pop-std'), dots: svg.querySelectorAll('circle.ssb-pop-pt').length,
+        axes: [...svg.querySelectorAll('text.ssb-pop-axis')].map((t) => t.textContent), role: svg.getAttribute('role'), alt: document.getElementById(svg.getAttribute('aria-describedby')).textContent };
+    });
+    const nx = S.profileByClass.lessCongested.atFractionOfLength.length;
+    check('population (page): the chart has one point per profile fraction in each series, labelled in mm² and fraction of length', chart.less === nx && chart.more === nx && chart.std === nx && chart.dots === nx && chart.axes.some((t) => /mm²/.test(t)) && chart.axes.some((t) => /fraction of cavity length/.test(t)), JSON.stringify(chart));
+    check('population (page): the text alternative lists the medians', chart.role === 'img' && chart.alt.includes(`${mm2(S.profileByClass.lessCongested.medianCm2[0])} mm²`) && chart.alt.includes(`${mm2(S.profileByClass.moreCongested.medianCm2[nx - 1])} mm²`), chart.alt.slice(0, 160));
+
+    /* maxillary */
+    await page.evaluate(() => { location.hash = '#s=s.maxillary-sinus'; });
+    await page.waitForFunction(() => !document.querySelector('#ssb-pop [data-pop="maxillary"]').hidden, null, { timeout: 10000 });
+    const mx = await page.evaluate(() => [...document.querySelectorAll('#ssb-pop [data-pop="maxillary"] dd')].map((d) => d.textContent));
+    const M = doc.summary.clear.maxillary;
+    const wantMx = [
+      `${f1(M.mlR.p50)} mL (IQR ${iq(M.mlR, f1)})`, `${f1(M.mlL.p50)} mL (IQR ${iq(M.mlL, f1)})`,
+      `right ${f1(doc.headA['maxillary.R'])} mL, left ${f1(doc.headA['maxillary.L'])} mL`,
+      `${doc.headA.AI.maxillary < 0 ? '−' : ''}${Math.abs(doc.headA.AI.maxillary).toFixed(1)} %, |AI| at percentile ${pc(doc.headA.percentileAbsAI_clear.maxillary)}`,
+    ];
+    check('population (page): the maxillary volumes, the head\'s volumes and its asymmetry percentile equal the JSON\'s', JSON.stringify(mx) === JSON.stringify(wantMx), JSON.stringify({ mx, wantMx }));
+    /* the population sinus (POP2b): the toggle loads the deferred pack, the caption is the file's, off gives the pack back */
+    const MS = doc.meanShape;
+    const packDef = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs.population;
+    const packBytes = fs.statSync(path.join(ROOT, 'ssb/models', packDef.file)).size;
+    check('population (pack): ≤ 300 kB, flagged population (so never loaded at boot), nodes are the maxillary sinus id + side + @nasalseg-majority',
+      packBytes <= 300000 && packDef.population === true && !packDef.lining && !packDef.state
+      && Object.keys(packDef.nodes).sort().join() === 's.maxillary-sinus.L@nasalseg-majority,s.maxillary-sinus.R@nasalseg-majority', `${packBytes} B ${Object.keys(packDef.nodes)}`);
+    check('population (file): meanShape has n, the alignment RMS and each side\'s majority volume within 15 % of the median it sits beside',
+      MS && MS.n === doc.profiles.subjects.clearIds.length && MS.alignRmsMm.p95 <= 6
+      && ['R', 'L'].every((k) => Math.abs(MS.sides[k].gapPercent) <= 15 && Math.abs(100 * (MS.sides[k].majorityVolumeMl - MS.sides[k].medianVolumeMl) / MS.sides[k].medianVolumeMl - MS.sides[k].gapPercent) < 0.1), JSON.stringify(MS));
+    const popState = () => page.evaluate(() => { const s = window.__ssb.specimen; return { pack: s.packs.population && s.packs.population.state, on: s.populationOn, nodes: s.nodes().filter((n) => n.key.startsWith('population:')) }; });
+    const ghostBox = '#ssb-pop [data-pop="maxillary"] #ssb-pop-ghost';
+    const idle = await popState();
+    check('population (ghost): the toggle is offered with the file\'s n, off, and the pack is not loaded at boot',
+      (await page.evaluate((q) => { const b = document.querySelector(q); return !!b && !b.checked && b.parentElement.textContent.includes('majority of'); }, ghostBox))
+      && (await page.evaluate((q) => document.querySelector(q).parentElement.textContent, ghostBox)).includes(`majority of ${MS.n} aligned CTs`)
+      && idle.pack === 'deferred' && idle.nodes.length === 0 && !idle.on, JSON.stringify(idle));
+    const cap = await text('#ssb-pop [data-pop="ghost-caption"]');
+    check('population (ghost): the caption says it is an aligned majority, not one person\'s sinus, and its volumes equal the file\'s',
+      /aligned majority, not any one person/.test(cap) && cap.includes(`right ${f1(MS.sides.R.majorityVolumeMl)} mL, left ${f1(MS.sides.L.majorityVolumeMl)} mL`)
+      && cap.includes(`${f1(MS.sides.R.medianVolumeMl)} and ${f1(MS.sides.L.medianVolumeMl)} mL`) && cap.includes(`${f1(MS.alignRmsMm.median)} mm`), cap);
+    const hashBefore = await page.evaluate(() => window.__ssb.hash);
+    await page.click(ghostBox);
+    await page.waitForFunction(() => { const s = window.__ssb.specimen; return s.packs.population && s.packs.population.state === 'loaded'; }, null, { timeout: 20000 });
+    await nextFrames(page, 3);
+    const on = await popState();
+    check('population (ghost): on, the pack loads two ghost nodes (unlit fresnel rim, translucent, depth-tested), shown, in the specimen\'s frame',
+      on.on && on.nodes.length === 2 && on.nodes.every((n) => n.group === 'ghost' && n.drawn === 'ghost' && n.visible && n.material === 'ShaderMaterial' && n.transparent && n.depthWrite === false && n.look.kind === 'ghost')
+      && on.nodes.map((n) => n.key).sort().join() === 'population:s.maxillary-sinus.L,population:s.maxillary-sinus.R', JSON.stringify(on.nodes.map((n) => [n.key, n.group, n.drawn, n.visible, n.look, n.material, n.transparent, n.depthWrite])));
+    const own = await page.evaluate(() => { const n = window.__ssb.specimen.nodes(); const b = (k) => n.find((m) => m.key === k).box; return ['R', 'L'].map((sd) => ({ ghost: b(`population:s.maxillary-sinus.${sd}`), own: b(`s.maxillary-sinus.${sd}`) })); });
+    const near = (a, b) => [0, 1, 2].every((i) => Math.abs((a.min[i] + a.max[i]) / 2 - (b.min[i] + b.max[i]) / 2) < 6);
+    check('population (ghost): each ghost sits beside the specimen\'s own sinus on its own side (box centres within 6 mm)', own.every((o) => o.ghost && o.own && near(o.ghost, o.own)), JSON.stringify(own));
+    const sel = await page.evaluate(() => window.__ssb.specimen.nodes().filter((n) => n.id === 's.maxillary-sinus').map((n) => [n.key.startsWith('population:'), n.highlight]));
+    check('population (ghost): with the maxillary sinus selected only the specimen\'s own sinus is highlighted, never the ghost; the hash is unchanged',
+      sel.length === 4 && sel.filter(([g, h]) => g).every(([, h]) => h === null) && sel.filter(([g, h]) => !g).every(([, h]) => h !== null) && hashBefore === await page.evaluate(() => window.__ssb.hash), JSON.stringify(sel));
+    await page.click(ghostBox);
+    await page.waitForFunction(() => window.__ssb.specimen.packs.population.state === 'deferred', null, { timeout: 10000 });
+    const off = await popState();
+    check('population (ghost): off, the pack is given back (no ghost node, pack deferred again), and it loads again on the next ask',
+      !off.on && off.nodes.length === 0 && off.pack === 'deferred');
+    await page.click(ghostBox);
+    await page.waitForFunction(() => window.__ssb.specimen.packs.population.state === 'loaded', null, { timeout: 20000 });
+    check('population (ghost): the second ask loads it again', (await popState()).nodes.length === 2);
+    check('population (page): the panel adds nothing to the hash (only the selection and its tier)', !/pop|mu=|scope/.test(await page.evaluate(() => window.__ssb.hash)));
+    check('population (page): no real console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+
+  /* nothing selected: closed, both measured blocks present once opened */
+  {
+    const { context, page } = await openSpecimen(browser, base, '');
+    await page.waitForFunction(() => { const d = document.getElementById('ssb-pop'); return d && !d.hidden; }, null, { timeout: 20000 });
+    const before = await page.evaluate(() => window.__ssb.hash);
+    await page.click('#ssb-pop > summary');
+    const info = await page.evaluate(() => ({ open: document.getElementById('ssb-pop').open, hidden: ['cavity', 'maxillary'].map((k) => document.querySelector(`#ssb-pop [data-pop="${k}"]`).hidden), hash: window.__ssb.hash }));
+    check('population (page): with nothing selected it starts closed; opening it shows the cavity and the maxillary sinus and leaves the hash alone', before === info.hash && info.open === true && info.hidden.every((h) => h === false));
+    await context.close();
+  }
+
+  /* a file without meanShape keeps the section and offers no toggle */
+  {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    const stripped = popDoc();
+    delete stripped.meanShape;
+    await context.route(/\/ssb\/anatomy\/population\/nasalseg\.json(?:[?#].*)?$/, (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(stripped) }));
+    const page = await context.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+    await page.goto(`${base}/ssb.html#s=s.maxillary-sinus`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page.waitForFunction(() => { const d = document.getElementById('ssb-pop'); return d && !d.hidden; }, null, { timeout: 40000 });
+    check('population (ghost): a file without meanShape keeps the section and offers no toggle, with no console error',
+      await page.evaluate(() => !document.getElementById('ssb-pop-ghost') && !document.querySelector('[data-pop="ghost-caption"]')) && errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+
+  /* the file gone or broken: no section, no error */
+  for (const [label, fulfill] of [['404', { status: 404, body: 'not found' }], ['malformed JSON', { status: 200, contentType: 'application/json', body: '{"summary": ' }], ['wrong shape', { status: 200, contentType: 'application/json', body: '{"summary":{"clearCount":3}}' }]]) {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    await context.route(/\/ssb\/anatomy\/population\/nasalseg\.json(?:[?#].*)?$/, (route) => route.fulfill(fulfill));
+    const page = await context.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
+    await page.goto(`${base}/ssb.html#s=s.nasal-cavity`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
+    await page.waitForFunction(() => !window.__ssb.specimen.installed || window.__ssb.specimen.renders > 0, null, { timeout: 20000 });
+    await nextFrames(page, 4);
+    const hidden = await page.evaluate(() => { const d = document.getElementById('ssb-pop'); return !d || d.hidden || d.children.length === 0; });
+    check(`population (page): the file served as ${label} hides the section and raises no console error`, hidden && errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+}
+
+
+/* ---------------- anatomy state, patch format, loader (WP RA3a; docs/realistic-anatomy.md 6.2-6.4) ---------------- */
+
+/* Every patch and every file below is built here and served by routes or a fake fetch: nothing is written into ssb/. */
+const ANAT_BOX = { ijk0: [20, 18, 14], dims: [6, 5, 4] };
+const ANAT_BOX2 = { ijk0: [22, 19, 15], dims: [6, 5, 4] };       /* overlaps ANAT_BOX */
+const ANAT_LABEL = 5;                                             /* s.fixture-unknown.R: in the table, and not under the box in the base */
+const ANAT_STEM = 'v.concha-bullosa.R.typical';
+const ANAT_INDEX = {
+  version: 1,
+  bases: { scanned: { note: 'synthetic' } },
+  variants: {
+    'v.concha-bullosa': { sides: ['R', 'L'], presets: ['typical', 'bulbous'], default: 'typical', region: 'middle-turbinate', boxes: { R: { min: [-8, 0, -6], max: [-4, 8, 0] }, L: { min: [4, 0, -6], max: [8, 8, 0] } } },
+    'v.suprabullar-cell': { sides: ['R', 'L'], presets: ['typical'], boxes: { R: { min: [-9, 0, -4], max: [-5, 6, 2] }, L: { min: [5, 0, -4], max: [9, 6, 2] } } },
+    'v.supra-agger-cell': { sides: ['R'], presets: ['typical'], boxes: { R: { min: [-30, -30, 10], max: [-20, -20, 20] } } },
+  },
+  conditions: {
+    'dz.mucocele': { sides: ['R', 'L', 'M'], presets: ['typical'], boxes: { R: { min: [-50, 20, 20], max: [-40, 30, 30] }, L: { min: [40, 20, 20], max: [50, 30, 30] } } },
+    'dz.osteoma': { sides: ['R'], presets: ['typical'] },
+  },
+  compat: [['v.concha-bullosa.R', 'v.suprabullar-cell.R']],
+};
+
+/* The bytes of an anatomy patch (docs/ssb.md 5.11): u32 LE header length, JSON header, then per box ct (u8 | i16), labels (u16), each sdf (u8), x fastest. */
+function anatPatchBytes({ boxes = [ANAT_BOX], ctType = 'u8', label = ANAT_LABEL, mutate = null, gz = true, body = null, head = {} } = {}) {
+  const header = {
+    version: 1, base: 'scanned', entity: 'v.concha-bullosa', side: 'R', preset: 'typical', params: { bulbousness: 0.5 }, truth: 'composite',
+    calibratedOn: ['uw-fig:Cor.pneumMT'], assumed: ['AP extent'],
+    boxes: boxes.map((b) => ({ ijk0: b.ijk0, dims: b.dims, ct: ctType, labels: 'u16', ...(b.sdf ? { sdf: Object.fromEntries(Object.keys(b.sdf).map((k) => [k, 'u8'])) } : {}) })),
+    landmarks: { 'lm.test.R': [1, 2, 3] }, sweeps: {}, replacesNodes: ['s.middle-turbinate.R'], addsNodes: [], ...head,
+  };
+  if (mutate) mutate(header);
+  const json = Buffer.from(JSON.stringify(header));
+  const parts = [];
+  const len = Buffer.alloc(4); len.writeUInt32LE(json.length, 0);
+  for (const b of boxes) {
+    const n = b.dims[0] * b.dims[1] * b.dims[2];
+    const ct = ctType === 'u8' ? Buffer.alloc(n) : Buffer.alloc(n * 2);
+    for (let i = 0; i < n; i++) { if (ctType === 'u8') ct[i] = 100 + (i % 50); else ct.writeInt16LE(3000 + (i % 50), i * 2); }
+    const lab = Buffer.alloc(n * 2);
+    for (let i = 0; i < n; i++) lab.writeUInt16LE(typeof label === 'function' ? label(i) : label, i * 2);
+    parts.push(ct, lab);
+    for (const fill of Object.values(b.sdf || {})) parts.push(Buffer.alloc(n, fill));
+  }
+  const raw = Buffer.concat([len, json, body ? body : Buffer.concat(parts)]);
+  return gz ? zlib.gzipSync(raw) : raw;
+}
+const boxIndices = (box, dims) => {
+  const out = new Set();
+  for (let k = 0; k < box.dims[2]; k++) for (let j = 0; j < box.dims[1]; j++) for (let i = 0; i < box.dims[0]; i++) out.add((box.ijk0[2] + k) * dims[0] * dims[1] + (box.ijk0[1] + j) * dims[0] + box.ijk0[0] + i);
+  return out;
+};
+const ANAT_REF = { id: 'v.concha-bullosa', side: 'R', preset: 'typical' };
+
+async function anatomyUnitTests() {
+  const header = parseHeader(FX.meta);
+  const table = parseTable(FX.table);
+  const base = createVolume({ header, ct: FX.ct, labels: FX.labels, table });
+  const ctBefore = FX.ct.slice();
+  const labelsBefore = FX.labels.slice();
+  const dims = header.dims;
+  const bytes = anatPatchBytes({ boxes: [{ ...ANAT_BOX, sdf: { 's.orbit': 7 } }] });
+
+  /* ---- volume.js: the patch ---- */
+  const patch = await parseAnatomyPatch(bytes, { base: 'scanned', ref: ANAT_REF });
+  const nBox = ANAT_BOX.dims[0] * ANAT_BOX.dims[1] * ANAT_BOX.dims[2];
+  check('anatomy patch: parses (gzip) to its header fields, one dense box and its sdf array',
+    patch.entity === 'v.concha-bullosa' && patch.side === 'R' && patch.preset === 'typical' && patch.truth === 'composite' && patch.calibratedOn[0] === 'uw-fig:Cor.pneumMT'
+    && patch.replacesNodes.join() === 's.middle-turbinate.R' && patch.landmarks['lm.test.R'].join() === '1,2,3' && patch.boxes.length === 1
+    && patch.boxes[0].ct.length === nBox && patch.boxes[0].labels.length === nBox && patch.boxes[0].sdf['s.orbit'].length === nBox && patch.boxes[0].sdf['s.orbit'][0] === 7 && patch.boxes[0].ct[3] === 103);
+  const rawPatch = await parseAnatomyPatch(anatPatchBytes({ gz: false }), { base: 'scanned', ref: ANAT_REF });
+  check('anatomy patch: bytes the server already decoded parse the same', rawPatch.boxes[0].ct.length === nBox && rawPatch.boxes[0].labels[0] === ANAT_LABEL);
+
+  const derived = applyAnatomyPatch(base, patch);
+  const inBox = boxIndices(ANAT_BOX, dims);
+  let wrong = 0;
+  let changedCt = 0;
+  let changedLab = 0;
+  for (let i = 0; i < FX.ct.length; i++) {
+    const c = derived.ct[i] !== ctBefore[i];
+    const l = derived.labels[i] !== labelsBefore[i];
+    changedCt += c ? 1 : 0;
+    changedLab += l ? 1 : 0;
+    if (inBox.has(i) ? !c || !l || derived.labels[i] !== ANAT_LABEL : c || l) wrong += 1;
+  }
+  check('anatomy patch: applyAnatomyPatch changes exactly its box in the CT and in the labels (every voxel of it, none outside)', wrong === 0 && changedCt === nBox && changedLab === nBox, JSON.stringify({ wrong, changedCt, changedLab, nBox }));
+  check('anatomy patch: the base volume is byte-identical after, the derived one a separate copy; patchedVoxels and patchedAt say where',
+    FX.ct.every((v, i) => v === ctBefore[i]) && FX.labels.every((v, i) => v === labelsBefore[i]) && derived.ct !== base.ct && derived.patchedVoxels === nBox
+    && derived.patchedAt(...derived.toRAS(22, 20, 15)) === true && derived.patchedAt(...derived.toRAS(25, 22, 17)) === true && derived.patchedAt(...derived.toRAS(26, 22, 17)) === false && derived.patchedAt(...derived.toRAS(19, 20, 15)) === false && derived.patchedAt(...derived.toRAS(20, 18, 18 + 1)) === false);
+  check('anatomy patch: labelAt and sample read the patch (label 5 and the display value) at a voxel centre; the base does not',
+    derived.labelAt(...derived.toRAS(22, 20, 15)) === ANAT_LABEL && base.labelAt(...derived.toRAS(22, 20, 15)) !== ANAT_LABEL && derived.sample(...derived.toRAS(22, 20, 15)) >= 100 && derived.base === base && derived.patches.length === 1);
+  const second = await parseAnatomyPatch(anatPatchBytes({ boxes: [ANAT_BOX2], label: 2, head: { entity: 'v.suprabullar-cell' } }), { base: 'scanned' });
+  const both = applyAnatomyPatch(derived, second);
+  const overlap = derived.toRAS(24, 20, 16);
+  check('anatomy patch: patches compose in order — over the overlap the later one wins, outside it each keeps its own box',
+    both.labelAt(...overlap) === 2 && both.labelAt(...derived.toRAS(20, 18, 14)) === ANAT_LABEL && both.labelAt(...derived.toRAS(27, 23, 18)) === 2 && both.patches.length === 2 && both.base === derived);
+
+  const refuse = async (what, p) => {
+    const e = await p.catch((err) => err);
+    check(`anatomy patch: ${what} is refused with a VolumeError`, e instanceof VolumeError, String(e && e.message));
+    return e;
+  };
+  const parseOnly = (b) => parseAnatomyPatch(b, { base: 'scanned', ref: ANAT_REF });
+  const applyTo = async (b) => applyAnatomyPatch(base, await parseOnly(b));
+  await refuse('a box outside the volume', applyTo(anatPatchBytes({ boxes: [{ ijk0: [dims[0] - 2, 0, 0], dims: [6, 5, 4] }] })));
+  await refuse('a box with a negative corner', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].ijk0 = [-1, 0, 0]; } })));
+  await refuse('a zero dimension', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].dims = [0, 5, 4]; } })));
+  await refuse('a fractional dimension', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].dims = [6.5, 5, 4]; } })));
+  await refuse('a dimension that is not a number', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].dims = [6, '5', 4]; } })));
+  await refuse('a label the table does not name', applyTo(anatPatchBytes({ label: 40 })));
+  await refuse('an empty box list', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes = []; } })));
+  await refuse('more than 16 boxes', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes = Array.from({ length: 17 }, () => h.boxes[0]); } })));
+  await refuse('an i16 box on an 8-bit volume', applyTo(anatPatchBytes({ ctType: 'i16' })));
+  await refuse('a ct type that is neither', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].ct = 'f32'; } })));
+  await refuse('a truth kind other than "composite"', parseOnly(anatPatchBytes({ mutate: (h) => { h.truth = 'specimen'; } })));
+  await refuse('a patch made for another base', parseAnatomyPatch(anatPatchBytes(), { base: 'standard', ref: ANAT_REF }));
+  await refuse('a patch for another entity, side or preset than the one asked for', parseAnatomyPatch(anatPatchBytes(), { base: 'scanned', ref: { ...ANAT_REF, side: 'L' } }));
+  await refuse('an entity that is not a v.* or dz.* id', parseOnly(anatPatchBytes({ mutate: (h) => { h.entity = 's.maxillary-sinus'; } })));
+  await refuse('a node name that is markup', parseOnly(anatPatchBytes({ mutate: (h) => { h.replacesNodes = ['<img src=x onerror=alert(1)>']; } })));
+  await refuse('a landmark that is not three numbers', parseOnly(anatPatchBytes({ mutate: (h) => { h.landmarks = { 'lm.test.R': [1, 2] }; } })));
+  await refuse('an sdf entry that is not u8', parseOnly(anatPatchBytes({ mutate: (h) => { h.boxes[0].sdf = { 's.orbit': 'f32' }; } })));
+  await refuse('a short body', parseOnly(zlib.gzipSync(zlib.gunzipSync(bytes).subarray(0, 60))));
+  await refuse('a long body', parseOnly(zlib.gzipSync(Buffer.concat([zlib.gunzipSync(anatPatchBytes()), Buffer.alloc(8)]))));
+  await refuse('a header length past the end', parseOnly(Buffer.from([255, 255, 0, 0, 1, 2])));
+  await refuse('a header that is not JSON', parseOnly(Buffer.concat([Buffer.from([4, 0, 0, 0]), Buffer.from('nope')])));
+  const v2 = await refuse('version 2', parseOnly(anatPatchBytes({ mutate: (h) => { h.version = 2; } })));
+  check('anatomy patch: version 2 is "unsupported", the others "invalid"', v2 && v2.code === 'unsupported');
+  const fx16 = buildFixture({ dtype: 'int16' });
+  const v16 = createVolume({ header: parseHeader(fx16.meta), ct: fx16.ct16, labels: FX.labels, table });
+  const d16 = applyAnatomyPatch(v16, await parseOnly(anatPatchBytes({ ctType: 'i16' })));
+  const u8on16 = await Promise.resolve().then(async () => applyAnatomyPatch(v16, await parseOnly(anatPatchBytes()))).catch((err) => err);
+  check('anatomy patch: a 16-bit head takes an i16 box (values beyond the base range stay exact) and refuses a u8 one',
+    d16.ct[boxIndices(ANAT_BOX, dims).values().next().value] === 3000 && d16.patchedVoxels === nBox && u8on16 instanceof VolumeError, String(u8on16 && u8on16.message));
+
+  /* ---- the file names are built from validated tokens only ---- */
+  check('anatomy paths: base roots and file names follow docs/realistic-anatomy.md 6.2',
+    baseRoot('standard') === 'ssb' && baseRoot('scanned') === 'ssb/anatomy/scanned' && baseRoot('scanned-b') === 'ssb/anatomy/scanned-b'
+    && anatomyPatchFile('scanned', ANAT_REF) === `ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz` && anatomyOverrideFile('standard', ANAT_REF) === `ssb/anatomy/overrides/standard/${ANAT_STEM}.glb.gz`);
+  const bad = (fn) => { try { fn(); return false; } catch (e) { return e instanceof VolumeError; } };
+  check('anatomy paths: a base or an entry that is not a plain token is refused, never joined into a path',
+    bad(() => baseRoot('../etc')) && bad(() => baseRoot('scanned/../..')) && bad(() => baseRoot('')) && bad(() => baseRoot(null))
+    && bad(() => anatomyPatchFile('scanned', { ...ANAT_REF, id: 'v.../../x' })) && bad(() => anatomyPatchFile('scanned', { ...ANAT_REF, preset: '../x' })) && bad(() => anatomyPatchFile('scanned', { ...ANAT_REF, side: 'X' }))
+    && bad(() => anatomyOverrideFile('scanned', { ...ANAT_REF, id: 's.maxillary-sinus' })) && bad(() => anatomyPatchFile('scanned', null)));
+
+  /* ---- the loader, on a fake fetch that records every URL ---- */
+  const asked = [];
+  const files = {
+    'ssb/anatomy/scanned/ct/ct.json': FX_U8_FILES['ssb/ct/ct.json'], 'ssb/anatomy/scanned/ct/ct.u8.gz': FX_U8_FILES['ssb/ct/ct.u8.gz'],
+    'ssb/anatomy/scanned/ct/labels.u16.gz': FX_U8_FILES['ssb/ct/labels.u16.gz'], 'ssb/anatomy/scanned/geometry/labels.json': FX_U8_FILES['ssb/geometry/labels.json'],
+    [`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`]: anatPatchBytes(),
+  };
+  const spy = fetchFrom(files);
+  const fetchFn = (url) => { asked.push(String(url).split('?')[0]); return spy(url); };
+  forgetAnatomy();
+  const plain = await anatomyVolume({ base: 'scanned', variants: [], conditions: [] }, { fetchFn });
+  const edited = await anatomyVolume({ base: 'scanned', variants: [ANAT_REF], conditions: [] }, { fetchFn });
+  check('anatomy loader: a base other than the standard one is read from ssb/anatomy/<base>/ (CT, labels, its own table) and nothing from ssb/ct',
+    plain.dims.join() === '64,56,48' && plain.hasLabels && plain.table.get(1) === 's.maxillary-sinus.R' && asked.some((u) => u === 'ssb/anatomy/scanned/ct/ct.json') && asked.some((u) => u === 'ssb/anatomy/scanned/geometry/labels.json')
+    && !asked.some((u) => u.startsWith('ssb/ct/') || u === 'ssb/geometry/labels.json'), asked.join(' '));
+  check('anatomy loader: a variant is its patch laid over the base — fetched from patches/<base>/<entity>.<side>.<preset>.ssbp.gz — and the result is that patched volume',
+    edited.patchedVoxels === nBox && edited.patches[0].entity === 'v.concha-bullosa' && edited.labelAt(...edited.toRAS(22, 20, 15)) === ANAT_LABEL && asked.includes(`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`));
+  const refused = await anatomyVolume({ base: 'scanned', variants: [{ ...ANAT_REF, preset: 'bulbous' }], conditions: [] }, { fetchFn }).catch((e) => e);
+  check('anatomy loader: an entry with no patch file rejects with a VolumeError (absent), not a blank page', refused instanceof VolumeError && refused.code === 'absent', String(refused && refused.message));
+  const wrongKind = await anatomyVolume({ base: 'scanned', variants: [{ ...ANAT_REF }], conditions: [] }, { fetchFn: fetchFrom({ ...files, [`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`]: anatPatchBytes({ head: { side: 'L' } }) }) }).catch((e) => e);
+  check('anatomy loader: a patch file that is another entry than its name says is refused', wrongKind instanceof VolumeError, String(wrongKind && wrongKind.message));
+  check('anatomy loader: with no index listed in stamps.js nothing is fetched and the answer is null', (await loadAnatomyIndex({ fetchFn: () => { throw new Error('asked'); } })) === null);
+
+  /* ---- state.js: registry, whitelist, hash ---- */
+  const has = (id) => GRAPH.has(id);
+  const REG = buildAnatomyRegistry(ANAT_INDEX, has);
+  const A = (h, reg = REG) => parseHash(h, has, {}, reg).anatomy || null;
+  check('anatomy registry: built from the index and the graph — the listed base, variants (with defaults) and conditions, and only those',
+    REG.bases.has('scanned') && REG.defaultBase === 'scanned' && REG.variants.size === 3 && REG.conditions.size === 2 && REG.variants.get('v.concha-bullosa').default === 'typical'
+    && buildAnatomyRegistry({ ...ANAT_INDEX, variants: { 'v.not-in-the-graph': ANAT_INDEX.variants['v.concha-bullosa'], 'x.bad': {}, 'v.concha-bullosa': { sides: [], presets: ['typical'] } } }, has).variants.size === 0
+    && buildAnatomyRegistry(null, has).bases.size === 0 && buildAnatomyRegistry({ version: 2 }, has).variants.size === 0);
+  const canon = '#anat=scanned&v=v.concha-bullosa.R:typical';
+  check('anatomy hash: #anat/#v parse to the canonical stack and format back to themselves', JSON.stringify(A(canon)) === JSON.stringify({ base: 'scanned', variants: [{ id: 'v.concha-bullosa', side: 'R', preset: 'typical' }], conditions: [] })
+    && formatHash({ ...createStore({ has, tierOf: () => 1, hash: canon, prefs: {}, anatomyDoc: ANAT_INDEX }).get() }) === canon);
+  check('anatomy hash: a preset left out is the entity\'s default and the canonical form writes it; a base left out is the listed default (scanned), or standard when none is listed',
+    A('#v=v.concha-bullosa.L').base === 'scanned' && A('#v=v.concha-bullosa.L').variants[0].preset === 'typical'
+    && createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.L:bulbous&dz=dz.mucocele.L', prefs: {}, anatomyDoc: ANAT_INDEX }).hash() === '#anat=scanned&v=v.concha-bullosa.L:bulbous&dz=dz.mucocele.L:typical'
+    && A('#v=v.concha-bullosa.L', buildAnatomyRegistry({ ...ANAT_INDEX, bases: {} }, has)).base === 'standard');
+  check('anatomy hash: the plain standard head is the default and writes nothing', createStore({ has, tierOf: () => 1, hash: '#anat=standard', prefs: {}, anatomyDoc: ANAT_INDEX }).hash() === '' && anatomyIsDefault(A('#anat=standard')));
+  const dropped = [
+    ['an unknown variant id', '#anat=scanned&v=v.not-in-the-graph.R'], ['a variant the index does not list', '#anat=scanned&v=v.frontal-septal-cell.R'], ['an unknown preset', '#anat=scanned&v=v.concha-bullosa.R:enormous'],
+    ['a side the entity does not offer', '#anat=scanned&v=v.supra-agger-cell.L'], ['the M side on a paired variant', '#anat=scanned&v=v.concha-bullosa.M'], ['a base the index does not list', '#anat=scanned-b&v=v.concha-bullosa.R'],
+    ['an unknown base', '#anat=elsewhere'], ['a condition id in v', '#anat=scanned&v=dz.mucocele.R'], ['a variant id in dz', '#anat=scanned&dz=v.concha-bullosa.R'],
+    ['the same entry twice', '#anat=scanned&v=v.concha-bullosa.R,v.concha-bullosa.R:bulbous'], ['two entries whose extents overlap and are not in compat', '#anat=scanned&v=v.concha-bullosa.L,v.suprabullar-cell.L'],
+    ['two conditions (v1: one)', '#anat=scanned&dz=dz.mucocele.R,dz.mucocele.L'], ['a pair with no extents and no compat entry', '#anat=scanned&v=v.concha-bullosa.R&dz=dz.osteoma.R'],
+    ['markup in an id', '#anat=scanned&v=%3Cimg%20src%3Dx%3E.R'], ['markup in the base', '#anat=%3Cscript%3E'], ['a ref with no side', '#anat=scanned&v=v.concha-bullosa'],
+    ['more than eight entries', `#anat=scanned&v=${Array.from({ length: 9 }, () => 'v.concha-bullosa.R').join(',')}`], ['an over-long value', `#anat=scanned&v=v.concha-bullosa.R:${'a'.repeat(600)}`],
+    ['one bad entry among good ones (all or nothing)', '#anat=scanned&v=v.concha-bullosa.R,v.nope.L'],
+  ];
+  for (const [what, h] of dropped) check(`anatomy hash: ${what} drops the whole anatomy key`, A(h) === null, JSON.stringify(A(h)));
+  check('anatomy hash: pairs the index allows pass — disjoint extents, or listed in compat even where they overlap',
+    A('#anat=scanned&v=v.concha-bullosa.R,v.concha-bullosa.L,v.suprabullar-cell.R') !== null && A('#anat=scanned&v=v.concha-bullosa.R,v.suprabullar-cell.R') !== null && A('#anat=scanned&v=v.concha-bullosa.R&dz=dz.mucocele.R') !== null);
+  const st = createStore({ has, tierOf: () => 1, hash: '#s=s.maxillary-sinus&tier=2&anat=scanned&v=v.nope.R&q=lite', prefs: {}, anatomyDoc: ANAT_INDEX });
+  check('anatomy hash: a dropped anatomy leaves every other key alone and the hash is rewritten canonical', st.get().anatomy === ANATOMY_DEFAULT && st.hash() === '#s=s.maxillary-sinus&tier=2&q=lite', st.hash());
+  const ordered = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R&mu=cong&q=full&ct=ax&at=1,2,3', prefs: {}, anatomyDoc: ANAT_INDEX }).hash();
+  check('anatomy hash: the anatomy rides along with a CT stage, after the stage and before mu and q', ordered === '#ct=ax&at=1,2,3&anat=scanned&v=v.concha-bullosa.R:typical&mu=cong&q=full', ordered);
+  const rt = createStore({ has, tierOf: () => 1, hash: ordered, prefs: {}, anatomyDoc: ANAT_INDEX });
+  check('anatomy hash: a canonical hash parses back to the same state and the same hash', rt.hash() === ordered && JSON.stringify(rt.get().anatomy) === JSON.stringify(st.get().anatomy === ANATOMY_DEFAULT ? rt.get().anatomy : null));
+
+  /* the store: pending until the index arrives */
+  const early = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R:typical&mu=cong', prefs: {} });
+  check('anatomy store: before the index loads the link\'s anatomy is pending (shape-checked), still in the hash, and counts as the standard head',
+    early.get().anatomy.pending === true && early.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical&mu=cong' && anatomyIsDefault(early.get().anatomy) && early.get().anatomyIndex === null);
+  check('anatomy store: a shape that is not a ref is never pending', createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=%3Cb%3E', prefs: {} }).get().anatomy === ANATOMY_DEFAULT);
+  const seen = [];
+  early.subscribe((s, p, m) => seen.push([m.source, s.anatomy.pending === true, s.anatomyIndex !== null]));
+  early.setAnatomyRegistry(ANAT_INDEX);
+  check('anatomy store: the index resolves a pending anatomy to its canonical form, subscribers hear it once, the registry is in the state',
+    early.get().anatomy.pending !== true && early.get().anatomy.base === 'scanned' && early.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical&mu=cong' && seen.length === 1 && seen[0][2] === true && early.get().anatomyIndex.variants.size === 3, JSON.stringify(seen));
+  const late = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R:typical', prefs: {} });
+  late.setAnatomyRegistry(null);
+  check('anatomy store: a page with no index drops a pending anatomy and rewrites the hash', late.get().anatomy === ANATOMY_DEFAULT && late.hash() === '' && late.get().anatomyIndex !== null);
+  const junk = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R:enormous', prefs: {} });
+  junk.setAnatomyRegistry(ANAT_INDEX);
+  check('anatomy store: an invalid pending anatomy is dropped when the index arrives', junk.get().anatomy === ANATOMY_DEFAULT && junk.hash() === '');
+  const live = createStore({ has, tierOf: () => 1, hash: '', prefs: {}, anatomyDoc: ANAT_INDEX });
+  check('anatomy store: setAnatomy takes an allowed stack, refuses one the index does not allow (state unchanged), and null is the standard head',
+    live.setAnatomy({ base: 'scanned', variants: [{ id: 'v.concha-bullosa', side: 'R', preset: null }], conditions: [] }) === true && live.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical'
+    && live.setAnatomy({ base: 'scanned', variants: [{ id: 'v.nope', side: 'R', preset: 'x' }], conditions: [] }) === false && live.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical'
+    && live.setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === true && live.hash() === '#anat=scanned' && live.setAnatomy(null) === true && live.hash() === '');
+  live.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
+  live.setCt({ plane: 'axial', at: null });
+  live.leaveStage();
+  const keptCt = live.get().anatomy.base;
+  live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+  check('anatomy store: the anatomy is orthogonal to CT and the specimen (entering and leaving keeps it); the scope, which reads the standard head only, takes the page back to it',
+    keptCt === 'scanned' && live.get().anatomy.base === 'standard' && !!live.get().scope, JSON.stringify({ keptCt, base: live.get().anatomy.base }));
+  live.leaveStage();
+  live.applyHash('#anat=scanned-b');
+  check('anatomy store: Back/Forward to a link the index does not allow drops the anatomy', live.get().anatomy === ANATOMY_DEFAULT);
+  live.applyHash(canon);
+  check('anatomy store: Back/Forward to a canonical link adopts it', live.get().anatomy.variants.length === 1 && live.hash() === canon);
+  check('anatomy store: setAnatomy before the index has loaded refuses everything', createStore({ has, tierOf: () => 1, hash: '', prefs: {} }).setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === false);
+}
+
+/* The page on the fixture, with an anatomy index: `index` is a body, 'absent' (stamps.js without it: the page must not ask) or 'fixture'.
+   The scanned base is the same synthetic volume served under ssb/anatomy/scanned/; the override pack is a box named for the middle turbinate. */
+const ANAT_ROUTE = /\/ssb\/anatomy\/[^?#]+(?:[?#].*)?$/;
+async function openAnat(browser, base, hash, { index = 'fixture', patches = null, overrideNodes = [{ id: 's.middle-turbinate', side: 'R', center: [-6, 4, -2], half: 2 }], wait = 'specimen', track = true } = {}) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  const asked = [];
+  await context.route(FX_ROUTE, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    const body = FX_U8_FILES[name];
+    return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
+  });
+  const patchFile = `ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`;
+  const served = {
+    'ssb/anatomy/scanned/ct/ct.json': FX_U8_FILES['ssb/ct/ct.json'], 'ssb/anatomy/scanned/ct/ct.u8.gz': FX_U8_FILES['ssb/ct/ct.u8.gz'],
+    'ssb/anatomy/scanned/ct/labels.u16.gz': FX_U8_FILES['ssb/ct/labels.u16.gz'], 'ssb/anatomy/scanned/geometry/labels.json': FX_U8_FILES['ssb/geometry/labels.json'],
+    [patchFile]: anatPatchBytes(),
+    [`ssb/anatomy/overrides/scanned/${ANAT_STEM}.glb.gz`]: zlib.gzipSync(makeGlb(overrideNodes)),
+    'ssb/anatomy/index.json': Buffer.from(index === 'fixture' ? JSON.stringify(ANAT_INDEX) : String(index)),
+    ...(patches || {}),
+  };
+  await context.route(ANAT_ROUTE, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    asked.push(name);
+    /* the fixture's scanned base shows the Specimen stage the standard head's own packs, landmarks and sweeps (the stage loads a base's models and geometry) */
+    const std = /^ssb\/anatomy\/scanned\/((?:models|geometry)\/(?:[A-Za-z0-9._-]+))$/.exec(name);
+    const fromDisk = std && !served[name] && fs.existsSync(path.join(ROOT, 'ssb', std[1])) ? fs.readFileSync(path.join(ROOT, 'ssb', std[1])) : null;
+    const body = served[name] || fromDisk;
+    return body ? route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } }) : route.fulfill({ status: 404, body: 'not found' });
+  });
+  await context.route(/\/js\/ssb\/stamps\.js(?:[?#].*)?$/, (route) => {
+    const src = sourceOf('js/ssb/stamps.js').replace(/^\s*"ssb\/anatomy\/[^\n]*\n/gm, '');
+    return route.fulfill({ status: 200, contentType: 'text/javascript', body: index === 'absent' ? src : `${src}\nSTAMPS["ssb/anatomy/index.json"] = "anat0000";\n` });
+  });
+  const page = await context.newPage();
+  const errors = collectErrors(page);
+  if (track) allErrors.push(errors);
+  await page.goto(`${base}/ssb.html${hash}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await page.waitForFunction(() => document.querySelectorAll('#ssb-tree button[data-id]').length > 0, null, { timeout: 20000 });
+  if (wait === 'specimen') await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
+  if (wait === 'ct') await page.waitForFunction(() => window.__ssb.ct && !['idle', 'loading'].includes(window.__ssb.ct.status), null, { timeout: 20000 });
+  return { context, page, errors, asked };
+}
+const anatPills = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-anatomy button[data-anat]')].map((b) => ({ k: b.dataset.anat, disabled: b.disabled, pressed: b.getAttribute('aria-pressed'), text: b.textContent })));
+const waitAnat = (page, status) => page.waitForFunction((s) => window.__ssb.specimen && window.__ssb.specimen.anatomy.status === s, status, { timeout: 30000 });
+
+async function anatomyTests(browser, base) {
+  /* ===== no index: the pills are there and disabled, the page asks for nothing, a hostile link is dropped ===== */
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, '#s=s.maxillary-sinus&anat=scanned&v=v.concha-bullosa.R%3Cb%3E', { index: 'absent' });
+    await page.waitForFunction(() => window.__ssb.hash !== null && !/anat|v=/.test(window.__ssb.hash), null, { timeout: 10000 });
+    const pills = await anatPills(page);
+    const byKey = Object.fromEntries(pills.map((p) => [p.k, p]));
+    check('anatomy page (no index): the four pills read Symmetric · Normal asymmetry · Variants · Pathology; only Symmetric is enabled and pressed',
+      pills.map((p) => p.text).join(' · ') === 'Symmetric · Normal asymmetry · Variants · Pathology' && !byKey.standard.disabled && byKey.standard.pressed === 'true' && ['scanned', 'variants', 'pathology'].every((k) => byKey[k].disabled && byKey[k].pressed === 'false'), JSON.stringify(pills));
+    check('anatomy page (no index): the page asks for nothing under ssb/anatomy/ (no 404), a hostile anatomy link is dropped and the hash rewritten without it, zero console errors',
+      asked.length === 0 && errors.length === 0 && (await page.evaluate(() => location.hash)) === '#s=s.maxillary-sinus&tier=1' && (await page.evaluate(() => window.__ssb.hash)) === '#s=s.maxillary-sinus&tier=1', JSON.stringify({ asked, errors, hash: await page.evaluate(() => location.hash) }));
+    check('anatomy page (no index): the specimen is the standard head and says so (the "symmetric by construction" note is shown, the anatomy hook idle)',
+      (await page.evaluate(() => window.__ssb.specimen.anatomy.status)) === 'none' && (await page.evaluate(() => window.__ssb.specimen.anatomy.overrides.length)) === 0);
+    await context.close();
+  }
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, '', { index: '{"version": 1, "variants": ' });
+    await page.waitForFunction(() => document.querySelectorAll('#ssb-anatomy button').length === 4);
+    const pills = await anatPills(page);
+    check('anatomy page (damaged index): a damaged index.json is an index with nothing in it — pills disabled, hash untouched',
+      pills.filter((p) => p.k !== 'standard').every((p) => p.disabled) && (await page.evaluate(() => window.__ssb.hash)) === '' && asked.includes('ssb/anatomy/index.json'), JSON.stringify({ pills, asked }));
+    await context.close();
+  }
+
+  /* ===== with an index: the pills enable, a link applies, the CT shows exactly the patch's box ===== */
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R&ct=ax`, { wait: 'ct' });
+    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 30000 });
+    const pills = Object.fromEntries((await anatPills(page)).map((p) => [p.k, p]));
+    check('anatomy page: with an index the pills enable for what it lists (Normal asymmetry, Variants, Pathology) and Variants is the pressed one',
+      ['standard', 'scanned', 'variants', 'pathology'].every((k) => !pills[k].disabled) && pills.variants.pressed === 'true' && pills.standard.pressed === 'false' && pills.scanned.pressed === 'false', JSON.stringify(pills));
+    check('anatomy page: the canonical hash has the preset the link left out; the stage kicker says "edited"',
+      (await page.evaluate(() => location.hash)) === `#ct=ax&anat=scanned&v=v.concha-bullosa.R:typical` && (await page.evaluate(() => document.getElementById('ssb-anatomy').dataset.edited)) === 'true');
+    check('anatomy page: the CT is the scanned base from ssb/anatomy/scanned/ with the patch fetched from patches/scanned/; the standard ssb/ct/ct.json is not what the stage loaded',
+      asked.includes('ssb/anatomy/scanned/ct/ct.json') && asked.includes(`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`) && (await page.evaluate(() => window.__ssb.ct.anatomy.key)) === `scanned|${ANAT_STEM}`, JSON.stringify(asked));
+    const inside = [await page.evaluate(() => window.__ssb.ct.anatomy)];
+    const vox = (i, j, k) => [0.75 * i - 24, 20.25 - 0.75 * j, k - 18];
+    const probes = { inside: vox(22, 20, 15), corner: vox(25, 22, 17), outside: vox(19, 20, 15), above: vox(22, 20, 18) };
+    const got = await page.evaluate((p) => Object.fromEntries(Object.entries(p).map(([k, r]) => [k, { label: window.__ssb.ct.labelAt(r), patched: window.__ssb.ct.patchedAt(r), value: window.__ssb.ct.sampleAt(r) }])), probes);
+    check('anatomy page (CT): inside the patch\'s box the label is the patch\'s and the display value is its own; one voxel outside it is the base', got.inside.label === ANAT_LABEL && got.corner.label === ANAT_LABEL && got.inside.patched && got.corner.patched && got.inside.value >= 100 && !got.outside.patched && !got.above.patched && got.outside.label !== ANAT_LABEL && got.above.label !== ANAT_LABEL, JSON.stringify(got));
+    check('anatomy page (CT): the patch voxel count is exactly the box and the truth badge names the edit as a composite, schematic',
+      inside[0].patchedVoxels === ANAT_BOX.dims[0] * ANAT_BOX.dims[1] * ANAT_BOX.dims[2] && /edited: .*Concha bullosa.* R \(typical\) · composite, schematic/i.test(await page.evaluate(() => document.querySelector('.ssb-ct-truth').textContent)), await page.evaluate(() => document.querySelector('.ssb-ct-truth').textContent));
+    // the Symmetric pill puts the standard volume back, and the hash is empty of anatomy
+    await page.click('#ssb-anatomy button[data-anat="standard"]');
+    await page.waitForFunction(() => window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === '' && window.__ssb.ct.anatomy.patchedVoxels === 0, null, { timeout: 20000 });
+    const back = await page.evaluate((r) => ({ label: window.__ssb.ct.labelAt(r), hash: location.hash }), probes.inside);
+    check('anatomy page (CT): Symmetric reloads the standard volume — the patched voxel is the base\'s again — and the hash loses the anatomy', back.label !== ANAT_LABEL && back.hash === '#ct=ax', JSON.stringify(back));
+    await page.click('#ssb-anatomy button[data-anat="scanned"]');
+    await page.waitForFunction(() => window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === 'scanned|', null, { timeout: 20000 });
+    const asym = await page.evaluate((r) => ({ label: window.__ssb.ct.labelAt(r), patched: window.__ssb.ct.anatomy.patchedVoxels, hash: location.hash, pressed: document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') }), probes.inside);
+    check('anatomy page (CT): Normal asymmetry loads the bare scanned base — no patch — and presses its pill', asym.label !== ANAT_LABEL && asym.patched === 0 && asym.hash === '#ct=ax&anat=scanned' && asym.pressed === 'true', JSON.stringify(asym));
+    check('anatomy page (CT): zero console errors through the switches', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+
+  /* ===== the specimen: override nodes hide the base nodes and give them back on clear ===== */
+  {
+    const { context, page, errors, asked } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`);
+    await waitAnat(page, 'ready');
+    const nodes = () => page.evaluate(() => window.__ssb.specimen.nodes().filter((n) => n.id === 's.middle-turbinate').map((n) => ({ key: n.key, side: n.side, visible: n.visible })));
+    const on = await nodes();
+    const info = await page.evaluate(() => window.__ssb.specimen.anatomy);
+    const baseR = on.find((n) => n.key === 's.middle-turbinate.R');
+    const baseL = on.find((n) => n.key === 's.middle-turbinate.L');
+    const over = on.find((n) => n.key === `anatomy:${ANAT_STEM}:s.middle-turbinate.R`);
+    check('anatomy specimen: the override node is adopted under anatomy:<stem>:<id>.<side> and shown; the base node it replaces is hidden; the other side is untouched',
+      baseR && !baseR.visible && over && over.visible && baseL && baseL.visible && info.hidden.join() === 's.middle-turbinate.R' && info.status === 'ready', JSON.stringify({ on, info }));
+    check('anatomy specimen: the pack came from overrides/<base>/<stem>.glb.gz and was asked for once', asked.filter((u) => u === `ssb/anatomy/overrides/scanned/${ANAT_STEM}.glb.gz`).length === 1, JSON.stringify(asked));
+    const framed = await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id="s.middle-turbinate"]').click(); return true; });
+    await page.waitForFunction(() => window.__ssb.selection === 's.middle-turbinate');
+    const sel = await nodes();
+    check('anatomy specimen: selecting the structure finds the override and not the node it replaced (still hidden, the override shown)', framed && !sel.find((n) => n.key === 's.middle-turbinate.R').visible && sel.find((n) => n.key === `anatomy:${ANAT_STEM}:s.middle-turbinate.R`).visible, JSON.stringify(sel));
+    await page.click('#ssb-anatomy button[data-anat="standard"]');
+    await page.waitForFunction(() => window.__ssb.specimen.anatomy.overrides.length === 0 && window.__ssb.specimen.anatomy.status === 'none' && window.__ssb.specimen.dataRoot === 'ssb' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    const off = await nodes();
+    check('anatomy specimen: clearing the anatomy gives the override pack back and restores the base node (visible, no override left)', off.length === 2 && off.find((n) => n.key === 's.middle-turbinate.R').visible && !off.some((n) => /^anatomy:/.test(n.key)), JSON.stringify(off));
+    await page.evaluate(() => { location.hash = '#anat=scanned&v=v.concha-bullosa.R:typical&s=s.middle-turbinate'; });
+    await waitAnat(page, 'ready');
+    const again = await nodes();
+    check('anatomy specimen: the same anatomy applied again from the address bar hides the base once more', !again.find((n) => n.key === 's.middle-turbinate.R').visible && again.some((n) => /^anatomy:/.test(n.key) && n.visible), JSON.stringify(again));
+    check('anatomy specimen: zero console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  {
+    /* an override pack that is missing never leaves a hole: the base node stays */
+    const { context, page, errors } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`, { patches: { [`ssb/anatomy/overrides/scanned/${ANAT_STEM}.glb.gz`]: null }, track: false });
+    await page.waitForFunction(() => window.__ssb.specimen && window.__ssb.specimen.anatomy.status !== 'loading' && window.__ssb.specimen.anatomy.status !== 'none', null, { timeout: 40000 });
+    const nodes = await page.evaluate(() => window.__ssb.specimen.nodes().filter((n) => n.id === 's.middle-turbinate').map((n) => ({ key: n.key, visible: n.visible })));
+    const info = await page.evaluate(() => window.__ssb.specimen.anatomy);
+    check('anatomy specimen: an override pack that cannot be read leaves the base node showing (no hole), and the status says partial', nodes.find((n) => n.key === 's.middle-turbinate.R').visible && info.hidden.length === 0 && info.status === 'partial' && info.problems.length === 1, JSON.stringify({ nodes, info }));
+    check('anatomy specimen: the only console noise for the missing pack is its own 404', errors.length > 0 && errors.every((e) => /404/.test(e.text)), JSON.stringify(errors));
+    await context.close();
+  }
+  {
+    /* a node the patch does not list is not adopted */
+    const { context, page } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`, { overrideNodes: [{ id: 's.middle-turbinate', side: 'R', center: [-6, 4, -2], half: 2 }, { id: 's.inferior-turbinate', side: 'R', center: [-8, 4, -6], half: 2 }] });
+    await waitAnat(page, 'ready');
+    const keys = await page.evaluate(() => window.__ssb.specimen.anatomy.overrides.map((o) => o.key));
+    const warned = await page.evaluate(() => window.__ssb.specimen.problems.some((p) => /not one of the nodes its patch/.test(p)));
+    check('anatomy specimen: an override pack can only carry the nodes its patch replaces or adds — an extra node is skipped with a problem recorded', keys.join() === `anatomy:${ANAT_STEM}:s.middle-turbinate.R` && warned, JSON.stringify(keys));
+    await context.close();
+  }
+}
+
 /* ---------------- the suite ---------------- */
+
+/* ---------------- the scanned base (WP RA3b): head A as scanned, ssb/anatomy/scanned/, on its own data ---------------- */
+
+const SCANNED = 'ssb/anatomy/scanned';
+
+/* The scanned label volume, read from the file (independent of the page): the table, the header, and a counter. */
+function readScannedLabels() {
+  const hdr = readJson(`${SCANNED}/ct/ct.json`);
+  const table = readJson(`${SCANNED}/geometry/labels.json`).labels;
+  const lab = new Uint16Array(zlib.gunzipSync(fs.readFileSync(path.join(ROOT, SCANNED, 'ct/labels.u16.gz'))).buffer.slice(0));
+  const byName = Object.fromEntries(Object.entries(table).map(([k, v]) => [v, Number(k)]));
+  const [nx, ny] = hdr.dims;
+  const ras = (n) => [0, 1, 2].map((c) => hdr.affine[c][3] + hdr.affine[c][c] * n[c]);
+  const centroid = (name) => {
+    let sx = 0, sy = 0, sz = 0, n = 0;
+    const want = byName[name];
+    for (let idx = 0; idx < lab.length; idx++) if (lab[idx] === want) { sx += idx % nx; sy += Math.floor(idx / nx) % ny; sz += Math.floor(idx / (nx * ny)); n++; }
+    return { n, mean: [sx / n, sy / n, sz / n], ml: n * hdr.spacing[0] ** 3 / 1000 };
+  };
+  return { hdr, table, byName, lab, centroid, ras };
+}
+
+function scannedBaseUnitTests() {
+  const index = readJson('ssb/anatomy/index.json');
+  const entry = index.bases && index.bases.scanned;
+  {
+    /* the endoscope and the procedure read the standard head only: a non-standard base never rides with them, the later choice wins */
+    const mk = (hash) => createStore({ has: (id) => GRAPH.has(id), tierOf: () => 1, hash, prefs: { tier: 1 }, labs: {}, anatomyDoc: index });
+    const a = mk('#scope=R,40,0,0,0,0');
+    a.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
+    const picked = a.get();
+    const b = mk('#anat=scanned');
+    b.setScope({ side: 'R', depth: 40, yaw: 0, pitch: 0, roll: 0, lens: 0 });
+    const entered = b.get();
+    const c = mk('#anat=scanned');
+    check('scanned base vs the endoscope: picking Normal asymmetry in the Scope stage leaves the scope (back to the specimen, on the scanned head)',
+      picked.anatomy.base === 'scanned' && !picked.scope && !picked.station && !picked.procedure, JSON.stringify({ base: picked.anatomy.base, scope: !!picked.scope }));
+    check('scanned base vs the endoscope: entering the scope from the scanned head returns to the standard head (the scope never flies a mirrored head labelled as scanned)',
+      !!entered.scope && entered.anatomy.base === 'standard', JSON.stringify({ base: entered.anatomy.base, scope: !!entered.scope }));
+    check('scanned base vs the endoscope: a plain #anat=scanned link keeps its base and no scope', c.get().anatomy.base === 'scanned' && !c.get().scope);
+  }
+  check('scanned base: ssb/anatomy/index.json lists it, with a root, a note and the numbers the pipeline printed (written, never typed)',
+    !!entry && entry.root === SCANNED && typeof entry.note === 'string' && entry.note.length > 40 && !!entry.volumesMl && !!entry.asymmetryIndex && Array.isArray(entry.absent), JSON.stringify(Object.keys(entry || {})));
+  const { doc, nodes, files } = readPacks(SCANNED);
+  const box = ctBoxOf(SCANNED);
+  const listed = Object.entries(doc.packs).flatMap(([name, def]) => Object.keys(def.nodes).map((k) => [name, (def.lining ? 'lining:' : def.population ? 'population:' : '') + k.split('@')[0]]));
+  check('scanned packs: every pack is a glTF 2.0 binary with a true length field, and the nodes in each file are exactly the nodes packs.json lists for it',
+    Object.values(files).every((f) => f.magic === 0x46546c67 && f.version === 2 && f.length === f.size && (f.json.extensionsRequired || []).includes('KHR_mesh_quantization'))
+      && listed.length === nodes.size && listed.every(([name, key]) => nodes.has(key) && nodes.get(key).pack === name), `${listed.length} listed, ${nodes.size} read`);
+  const unknown = [...nodes.values()].filter((n) => !GRAPH.has(n.id));
+  check('scanned packs: every node id is a graph entity, named <graph id>.<R|L|M>', unknown.length === 0
+    && [...nodes].every(([key, n]) => key === `${n.lining ? 'lining:' : n.population ? 'population:' : ''}${n.id}.${n.side}` && ['R', 'L', 'M'].includes(n.side)), unknown.map((n) => n.id).join(', '));
+  const outside = [...nodes].filter(([, n]) => n.box.min.some((v, i) => v < box.min[i] - 5) || n.box.max.some((v, i) => v > box.max[i] + 5));
+  check('scanned packs (placement): every mesh lies inside the scanned CT volume (± 5 mm), so the cursor and the CT share one frame', outside.length === 0, outside.map(([k]) => k).join('; '));
+  const cx = (n) => { let t = 0; for (let i = 0; i < n.pts.length; i += 3) t += n.pts[i]; return t / (n.pts.length / 3); };
+  const wrong = [...nodes].filter(([, n]) => { const x = cx(n); return (n.side === 'R' && x <= 0) || (n.side === 'L' && x >= 0) || (n.side === 'M' && Math.abs(x) > 10); }).map(([k, n]) => `${k} ${r2(cx(n))}`);
+  check('scanned packs (laterality): patient right is +x — every .R mesh centroid x > 0, .L < 0, midline pieces within 10 mm of x = 0 — in a head that is not mirrored', wrong.length === 0, wrong.join('; '));
+  check('scanned packs: the head is NOT mirrored — the two maxillary sinus meshes differ in size (a real head), unlike the standard specimen\'s',
+    nodes.has('s.maxillary-sinus.R') && nodes.has('s.maxillary-sinus.L') && nodes.get('s.maxillary-sinus.R').tris !== nodes.get('s.maxillary-sinus.L').tris
+      && nodes.get('s.maxillary-sinus.R').pts.length !== 0 && JSON.stringify(nodes.get('s.maxillary-sinus.R').box.max.map(r2)) !== JSON.stringify(nodes.get('s.maxillary-sinus.L').box.min.map((v, i) => r2(i === 0 ? -v : v))));
+  const L = readScannedLabels();
+  const stdTable = readJson('ssb/geometry/labels.json').labels;
+  const notGraph = Object.values(L.table).filter((n) => !GRAPH.has(n.replace(/\.(R|L|M)$/, '')));
+  check('scanned labels: every name in the label table is a graph id with a side, and an index means the same name as on the standard head (one append-only table)',
+    notGraph.length === 0 && Object.entries(L.table).every(([k, v]) => stdTable[k] === v), notGraph.join(', '));
+  check('scanned CT header: a real, un-normalized head — it carries `scanned` and not `standard`, and the same grid as the standard volume',
+    !!L.hdr.scanned && !L.hdr.standard && JSON.stringify(L.hdr.dims) === JSON.stringify(readJson('ssb/ct/ct.json').dims) && JSON.stringify(L.hdr.affine) === JSON.stringify(readJson('ssb/ct/ct.json').affine));
+  const vol = (n) => L.centroid(n).ml;
+  const rec = { cavityR: vol('s.nasal-cavity.R'), cavityL: vol('s.nasal-cavity.L'), turbR: vol('s.inferior-turbinate.R'), turbL: vol('s.inferior-turbinate.L'), maxR: vol('s.maxillary-sinus.R'), maxL: vol('s.maxillary-sinus.L') };
+  const v = entry.volumesMl;
+  check('scanned volumes: an independent recount of the label file gives the cavity, inferior turbinate and maxillary volumes index.json records (to 0.002 mL)',
+    near(rec.cavityR, v.cavity.R, 0.002) && near(rec.cavityL, v.cavity.L, 0.002) && near(rec.turbR, v.inferiorTurbinate.R, 0.002) && near(rec.turbL, v.inferiorTurbinate.L, 0.002)
+      && near(rec.maxR, v.maxillary.R, 0.002) && near(rec.maxL, v.maxillary.L, 0.002), JSON.stringify([rec, v]));
+  const ai = (r, l) => 100 * (r - l) / ((r + l) / 2);
+  check('scanned asymmetry indices: the recorded cavity and maxillary AI are 100·(R − L)/mean of those volumes, each with its percentile among the NasalSeg clear subjects',
+    near(ai(rec.cavityR, rec.cavityL), entry.asymmetryIndex.cavity.ai, 0.05) && near(ai(rec.maxR, rec.maxL), entry.asymmetryIndex.maxillary.ai, 0.05)
+      && typeof entry.asymmetryIndex.cavity.absAiPercentileClear === 'number' && typeof entry.asymmetryIndex.maxillary.absAiPercentileClear === 'number' && entry.nasalSeg === undefined
+      && entry.asymmetryIndex.cavity.beyondAllClear === (Math.abs(entry.asymmetryIndex.cavity.ai) > entry.asymmetryIndex.cavity.clearAbsAiMax), JSON.stringify(entry.asymmetryIndex));
+  check('scanned note (ruling 2): it names cavity + vestibule as the closest comparison with NasalSeg, quotes both asymmetries, says the comparison is not like for like (HU threshold against display levels of a screen capture), and states the explanations as hypotheses',
+    /closest comparison/.test(entry.note) && /cavity \+ vestibule/.test(entry.note) && /asymmetry [+-]?\d+ %/.test(entry.note) && /NasalSeg/.test(entry.note) && /not like for like/.test(entry.note) && /HU threshold/.test(entry.note) && /display levels of a screen capture/.test(entry.note)
+      && /\bmay\b/.test(entry.note) && /consistent with/.test(entry.note) && !/(is|are) physiological/.test(entry.note) && !/this head sits at the edge of normal/.test(entry.note), entry.note);
+  /* ruling 2: exact accounting of every label the base changed against the as-scanned labels, attributed to a step; tissue <-> air is an escalation */
+  const tr = entry.labelTransitions;
+  const sumStep = (st) => st.pairs.reduce((a, q) => a + q.voxels, 0) + st.smallerPairsVoxels;
+  check('scanned label transitions: the index records a table per step (vestibule + valve, wall units), its pairs plus the smaller ones summing to the step\'s changed voxels, and no tissue voxel became an air label or the reverse',
+    !!tr && sumStep(tr.vestibuleAndValve) === tr.vestibuleAndValve.voxels && sumStep(tr.wallUnits) === tr.wallUnits.voxels && tr.vestibuleAndValve.voxels > 0 && tr.tissueBecameAirLabel === 0 && tr.airLabelLost === 0, JSON.stringify(tr && { v: tr.vestibuleAndValve.voxels, w: tr.wallUnits.voxels, t: tr.tissueBecameAirLabel, a: tr.airLabelLost }));
+  const vox = (n) => L.centroid(n).n;
+  check('scanned label transitions: the recorded net voxel counts of the cavity, vestibule and turbinates are an independent recount of the label file, and each step only moves the classes it may (the vestibule step touches only unlabelled, cavity and vestibule; the wall-unit step no air label)',
+    ['s.nasal-cavity.R', 's.nasal-cavity.L', 's.nasal-vestibule.R', 's.nasal-vestibule.L', 's.inferior-turbinate.R', 's.inferior-turbinate.L'].every((n) => tr.net[n] && tr.net[n].scannedVoxels === vox(n))
+      && tr.vestibuleAndValve.pairs.every((q) => /^(\(unlabelled\)|s\.nasal-(cavity|vestibule)\.[RL])$/.test(q.from) && /^s\.nasal-(cavity|vestibule)\.[RL]$/.test(q.to))
+      && tr.wallUnits.pairs.every((q) => ![q.from, q.to].some((x) => /^s\.(nasal-cavity|nasal-vestibule|maxillary-sinus|sphenoid-sinus|frontal-sinus|nasopharynx|agger-nasi-cell|ethmoid-bulla|frontal-recess|anterior-ethmoid-cells|posterior-ethmoid-cells)\./.test(x))), JSON.stringify(Object.keys(tr.net)));
+  /* the ruling: a stage-D product that failed its gate is absent — listed with the measured number, and truly not in the base */
+  const charts = readJson(`${SCANNED}/geometry/charts.json`).surfaces;
+  const sweeps = readJson(`${SCANNED}/geometry/sweeps.json`);
+  const absent = entry.absent;
+  check('scanned absent list: every entry is { id, side, reason } with the measured number in the reason, and the id is a graph id or a landmark',
+    absent.length > 0 && absent.every((a) => (GRAPH.has(a.id) || /^lm\./.test(a.id)) && ['R', 'L', 'M'].includes(a.side) && /\d/.test(a.reason)), JSON.stringify(absent));
+  const stillThere = absent.filter((a) => charts[`${a.id}.${a.side}`] || nodes.has(`${a.id}.${a.side}`) || sweeps[`${a.id}.${a.side}`]);
+  check('scanned absent list: nothing listed as absent is in the base — not a chart, not a pack node, not a sweep (a failing gate is never loosened)', stillThere.length === 0, JSON.stringify(stillThere));
+  check('scanned charts: every chart the base keeps has its surface in the soft pack',
+    Object.keys(charts).every((k) => nodes.has(k)), Object.keys(charts).join());
+  /* landmarks, as the standard head's data check does it: paired ones on their own side, within 4 mm of their own side's mesh and nearer it than the other's */
+  const lm = readJson(`${SCANNED}/geometry/landmarks.json`);
+  const badSide = Object.entries(lm).filter(([k, p]) => (k.endsWith('.R') && p[0] <= 0) || (k.endsWith('.L') && p[0] >= 0));
+  check('scanned landmarks: every .R landmark has x > 0 and every .L landmark x < 0 (measured on this head, not mirrored)', badSide.length === 0, badSide.map(([k, p]) => `${k} ${p}`).join(', '));
+  const PAIRS = { 'lm.sphenoid-ostium': 's.sphenoid-sinus', 'lm.frontal-ostium': 's.frontal-recess', 'lm.sphenopalatine-foramen': 's.nasal-cavity',
+    'lm.infraorbital-foramen': 's.maxillary-sinus', 'lm.greater-palatine-foramen': 's.maxillary-sinus', 'lm.vidian-canal-anterior': 's.sphenoid-sinus',
+    'lm.foramen-rotundum-anterior': 's.sphenoid-sinus' };
+  const lrows = [];
+  for (const [k, p] of Object.entries(lm)) {
+    const m = /^(.+)\.(R|L)$/.exec(k);
+    if (!m || !PAIRS[m[1]] || !lm[`${m[1]}.${m[2] === 'R' ? 'L' : 'R'}`]) continue;
+    const own = nodes.get(`${PAIRS[m[1]]}.${m[2]}`), other = nodes.get(`${PAIRS[m[1]]}.${m[2] === 'R' ? 'L' : 'R'}`);
+    if (own && other) lrows.push({ k, own: nearestVertex(own, p), other: nearestVertex(other, p) });
+  }
+  check('scanned landmarks vs meshes: each paired landmark lies within 4 mm of its own side\'s mesh and nearer it than the other side\'s',
+    lrows.length >= 6 && lrows.every((q) => q.own <= 4 && q.own < q.other), JSON.stringify(lrows.map((q) => [q.k, r2(q.own), r2(q.other)])));
+  /* the registry the page builds from the real index */
+  const reg = buildAnatomyRegistry(index, (id) => GRAPH.has(id));
+  check('scanned registry: the index adds the base; a plain visit still resolves to the standard head, and only a link that names a variant or condition defaults to the scanned base',
+    reg.bases.has('scanned') && reg.defaultBase === 'scanned' && resolveAnatomy({ base: undefined, variants: [], conditions: [] }, reg) === ANATOMY_DEFAULT
+      && resolveAnatomy({ base: 'scanned', variants: [], conditions: [] }, reg).base === 'scanned');
+  const withVariant = buildAnatomyRegistry({ ...index, variants: { 'v.concha-bullosa': { sides: ['R'], presets: ['typical'] } } }, (id) => GRAPH.has(id));
+  const viaDefault = resolveAnatomy({ variants: [{ id: 'v.concha-bullosa', side: 'R', preset: null }], conditions: [] }, withVariant);
+  check('scanned registry: a link that names a variant and no base lands on the scanned base (RA-O3), and with a base named the base is the link\'s',
+    viaDefault && viaDefault.base === 'scanned' && resolveAnatomy({ base: 'standard', variants: [{ id: 'v.concha-bullosa', side: 'R', preset: null }], conditions: [] }, withVariant).base === 'standard');
+}
+
+async function scannedBaseTests(browser, base) {
+  const L = readScannedLabels();
+  const entry = readJson('ssb/anatomy/index.json').bases.scanned;
+  /* a plain visit stays on the standard head with the real index present: Symmetric pressed, Normal asymmetry enabled, no anatomy in the hash */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '');
+    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 20000 });
+    const pills = Object.fromEntries((await anatPills(page)).map((q) => [q.k, q]));
+    const st = await page.evaluate(() => ({ hash: location.hash, base: window.__ssb.hash }));
+    check('scanned page: a plain visit stays on the standard head — Symmetric pressed, Normal asymmetry enabled and not pressed, no anatomy in the address, the standard note shown',
+      pills.standard.pressed === 'true' && !pills.scanned.disabled && pills.scanned.pressed === 'false' && st.hash === '' && st.base === '' && !/as scanned/i.test(await page.evaluate(() => document.getElementById('ssb-stage-note').textContent)), JSON.stringify({ pills, st }));
+    check('scanned page: zero console errors on a plain visit with the index present', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* CT on the scanned base: the volume is the base's, a point in each cavity picks that side's label (laterality, picking), and the left is not the right mirrored */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#ct=ax&anat=scanned', { wait: 'none' });
+    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === 'scanned|', null, { timeout: 30000 });
+    const probe = {};
+    for (const name of ['s.nasal-cavity.R', 's.nasal-cavity.L', 's.maxillary-sinus.R', 's.maxillary-sinus.L', 's.inferior-turbinate.L']) {
+      const c = L.centroid(name);
+      let ras = L.ras(c.mean.map(Math.round));
+      // the centroid of a curved space may fall outside it: take the nearest member voxel of the label along the rows through the centroid
+      const want = L.byName[name], [nx, ny, nz] = L.hdr.dims;
+      let best = null;
+      for (let dk = -3; dk <= 3 && !best; dk++) for (let dj = -6; dj <= 6 && !best; dj++) for (let di = -6; di <= 6; di++) {
+        const i = Math.round(c.mean[0]) + di, j = Math.round(c.mean[1]) + dj, k = Math.round(c.mean[2]) + dk;
+        if (i >= 0 && j >= 0 && k >= 0 && i < nx && j < ny && k < nz && L.lab[k * nx * ny + j * nx + i] === want) { best = [i, j, k]; break; }
+      }
+      probe[name] = { want, ras: best ? L.ras(best) : ras };
+    }
+    const got = await page.evaluate((p) => Object.fromEntries(Object.entries(p).map(([k, v]) => [k, window.__ssb.ct.labelAt(v.ras)])), probe);
+    check('scanned page (CT): the stage loads ssb/anatomy/scanned/ and a point inside each structure picks that structure and side (cavity R and L, maxillary R and L, left inferior turbinate)',
+      Object.entries(probe).every(([k, v]) => got[k] === v.want), JSON.stringify({ got, probe }));
+    const sides = probe['s.nasal-cavity.R'].ras[0] > 0 && probe['s.nasal-cavity.L'].ras[0] < 0 && probe['s.maxillary-sinus.R'].ras[0] > 0 && probe['s.maxillary-sinus.L'].ras[0] < 0;
+    check('scanned page (CT, laterality): the points picked for .R lie at x > 0 and for .L at x < 0 in the page\'s frame', sides, JSON.stringify(probe));
+    check('scanned page (CT): zero console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* the Specimen stage on the scanned base (ruling 2): its own packs, never the mirrored head; placement, picking and laterality on screen */
+  {
+    const truthS = new Map([...readPacks(SCANNED).nodes].filter(([, n]) => !n.lining && !n.population));
+    const truthStd = new Map([...readPacks().nodes].filter(([, n]) => !n.lining && !n.population));
+    const boxD = (a, b) => Math.max(...[0, 1, 2].flatMap((i) => [Math.abs(a.min[i] - b.min[i]), Math.abs(a.max[i] - b.max[i])]));
+    const { context, page, errors } = await openSpecimen(browser, base, '#anat=scanned');
+    await page.waitForFunction(() => window.__ssb.specimen.dataRoot === 'ssb/anatomy/scanned' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    await nextFrames(page, 3);
+    const info = await spec(page, () => ({ status: window.__ssb.specimen.status, problems: window.__ssb.specimen.problems, root: window.__ssb.specimen.dataRoot, note: document.getElementById('ssb-stage-note').textContent, msgHidden: document.getElementById('ssb-stage-msg').hidden }));
+    check('scanned specimen: a link to the scanned base boots the Specimen stage on ssb/anatomy/scanned/ — ready, no problems — and the stage note says the head is as scanned, not mirrored',
+      info.status === 'ready' && info.problems.length === 0 && info.root === SCANNED && info.msgHidden && /Head as scanned, not mirrored/.test(info.note) && /University of Washington|Univ\. of Washington/.test(info.note), JSON.stringify(info));
+    const nodes = (await specNodes(page)).filter((n) => !n.lining);
+    check('scanned specimen: the registry is exactly the scanned packs\' nodes (an independent read of ssb/anatomy/scanned/models), every id in the graph',
+      nodes.map((n) => n.key).sort().join() === [...truthS.keys()].sort().join() && nodes.every((n) => GRAPH.has(n.id)), `${nodes.length} vs ${truthS.size}`);
+    const sbox = ctBoxOf(SCANNED);
+    const off = nodes.filter((n) => !(boxD(n.box, truthS.get(n.key).box) < 0.05)).map((n) => n.key);
+    check('scanned specimen (placement): the loader places every scanned mesh exactly where the data says (max error < 0.05 mm), inside the scanned CT volume (± 5 mm)',
+      off.length === 0 && nodes.every((n) => n.box.min.every((v, i) => v >= sbox.min[i] - 5) && n.box.max.every((v, i) => v <= sbox.max[i] + 5)), off.join());
+    const mR = nodes.find((n) => n.key === 's.maxillary-sinus.R'), mL = nodes.find((n) => n.key === 's.maxillary-sinus.L');
+    const mirrored = (a, b) => [0, 1, 2].every((i) => Math.abs((i === 0 ? -b.max[0] : b.min[i]) - (i === 0 ? a.min[0] : a.min[i])) < 0.6 && Math.abs((i === 0 ? -b.min[0] : b.max[i]) - (i === 0 ? a.max[0] : a.max[i])) < 0.6);
+    check('scanned specimen: Normal asymmetry never draws the mirrored head — the .L maxillary sinus is not the .R one reflected, and differs from the standard head\'s (whose left is the right mirrored)',
+      !mirrored(mR.box, mL.box) && boxD(mL.box, truthStd.get('s.maxillary-sinus.L').box) > 0.4, JSON.stringify([mR.box, mL.box]));
+    const lmS = readJson(`${SCANNED}/geometry/landmarks.json`);
+    const lmP = Object.fromEntries((await spec(page, () => window.__ssb.specimen.landmarks)).map((l) => [l.key, l.ras]));
+    check('scanned specimen: the landmarks on show are the scanned base\'s own file\'s (not the standard head\'s)', Object.keys(lmP).length > 10 && Object.entries(lmP).every(([k, v]) => lmS[k] && lmS[k].every((x, i) => Math.abs(x - v[i]) < 1e-6)), String(Object.keys(lmP).length));
+    /* laterality on screen */
+    await clickView(page, 'anterior');
+    await page.click('#ssb-spec button[data-bone="hidden"]');
+    await nextFrames(page, 2);
+    const sR = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.R'));
+    const sL = await spec(page, () => window.__ssb.specimen.screenOf('s.maxillary-sinus.L'));
+    check('scanned specimen (laterality on screen): in the anterior view the .R maxillary sinus is on the viewer\'s left and the .L on the right', sR && sL && sR.x < sL.x, JSON.stringify([sR, sL]));
+    const cR = await spec(page, (k) => window.__ssb.specimen.centroid(k), 's.maxillary-sinus.R');
+    const cL = await spec(page, (k) => window.__ssb.specimen.centroid(k), 's.maxillary-sinus.L');
+    check('scanned specimen (laterality): in the scene the .R maxillary sinus centroid is at x > 10 and the .L at x < -10', cR[0] > 10 && cL[0] < -10, JSON.stringify([cR, cL]));
+    /* picking: the ray through each side's sinus hits that side's node, and a click selects it */
+    for (const side of ['R', 'L']) {
+      const key = `s.maxillary-sinus.${side}`;
+      const n = nodes.find((q) => q.key === key);
+      const aim = [0, 1, 2].map((i) => (n.box.min[i] + n.box.max[i]) / 2);
+      const at = await project(page, aim);
+      const hits = await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y), [at.x, at.y]);
+      check(`scanned specimen (picking): a ray through the middle of the scanned ${key} hits that node (and not the other side's)`, hits.some((h) => h.key === key) && !hits.some((h) => h.key === `s.maxillary-sinus.${side === 'R' ? 'L' : 'R'}`), JSON.stringify(hits.map((h) => h.key)));
+      await page.mouse.click(at.x, at.y);
+      const picked = await page.evaluate(() => ({ sel: window.__ssb.selection, primary: window.__ssb.specimen.primary }));
+      check(`scanned specimen (picking): clicking there selects ${key}'s structure and highlights that side`, picked.sel === 's.maxillary-sinus' && /^s\.maxillary-sinus\.(R|L)$/.test(picked.primary || '') , JSON.stringify(picked));
+    }
+    check('scanned specimen: zero console errors', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* Symmetric <-> Normal asymmetry on a live page: the stage swaps its data and the plain state is the standard head's exactly */
+  {
+    const truthS = new Map([...readPacks(SCANNED).nodes].filter(([, n]) => !n.lining && !n.population));
+    const truthStd = new Map([...readPacks().nodes].filter(([, n]) => !n.lining && !n.population));
+    const { context, page, errors } = await openSpecimen(browser, base, '');
+    check('scanned specimen (switch): a plain visit loads ssb/ (the standard head)', (await page.evaluate(() => window.__ssb.specimen.dataRoot)) === 'ssb');
+    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 20000 });
+    await page.click('#ssb-anatomy button[data-anat="scanned"]');
+    await page.waitForFunction(() => window.__ssb.specimen.dataRoot === 'ssb/anatomy/scanned' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    await nextFrames(page, 3);
+    let nodes = (await specNodes(page)).filter((n) => !n.lining);
+    const same = (truth) => nodes.map((n) => n.key).sort().join() === [...truth.keys()].sort().join() && nodes.every((n) => n.box.min.every((v, i) => Math.abs(v - truth.get(n.key).box.min[i]) < 0.05) && n.box.max.every((v, i) => Math.abs(v - truth.get(n.key).box.max[i]) < 0.05));
+    check('scanned specimen (switch): Normal asymmetry swaps the stage to the scanned base\'s packs, node for node and mm for mm; the hash says so', same(truthS) && (await page.evaluate(() => location.hash)) === '#anat=scanned', await page.evaluate(() => location.hash));
+    await page.click('#ssb-anatomy button[data-anat="standard"]');
+    await page.waitForFunction(() => window.__ssb.specimen.dataRoot === 'ssb' && window.__ssb.specimen.status === 'ready', null, { timeout: 40000 });
+    await nextFrames(page, 3);
+    nodes = (await specNodes(page)).filter((n) => !n.lining);
+    check('scanned specimen (switch): Symmetric puts the standard head back exactly, and the hash loses the anatomy', same(truthStd) && (await page.evaluate(() => location.hash)) === '', await page.evaluate(() => location.hash));
+    check('scanned specimen (switch): zero console errors through the swaps', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+  /* the Normal asymmetry pill: the state's note is the index's, the flap overlay is off with a note, and a flap link is dropped */
+  {
+    const { context, page, errors } = await openSpecimen(browser, base, '#tier=3&anat=scanned');
+    await page.waitForFunction(() => document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') === 'true', null, { timeout: 20000 });
+    await page.waitForFunction((n) => [...document.querySelectorAll('.ssb-param-src')].some((e) => e.textContent === n), entry.note, { timeout: 10000 });
+    const info = await page.evaluate(() => ({
+      notes: [...document.querySelectorAll('.ssb-param-src')].map((e) => ({ t: e.textContent, hidden: e.hidden })),
+      designs: [...document.querySelectorAll('#ssb-spec button[data-flap-design]')].map((b) => b.disabled),
+    }));
+    const noteShown = info.notes.find((n) => n.t === entry.note);
+    check('scanned page: the state\'s note is index.json\'s own text — cavity asymmetry and where it sits against the NasalSeg range — shown on the Normal asymmetry state', noteShown && !noteShown.hidden, JSON.stringify(info.notes.map((n) => n.t.slice(0, 60))));
+    const gone = info.notes.find((n) => /standard-head tool/.test(n.t));
+    const flapCharts = entry.absent.filter((a) => ['s.septal-mucosa', 's.nasal-floor-mucosa'].includes(a.id));
+    check('scanned page: the flap overlay is disabled with a note naming the absent charts and their measured reasons (a standard-head tool), every design button disabled',
+      flapCharts.length > 0 ? gone && !gone.hidden && flapCharts.every((a) => gone.t.includes(`${a.id}.${a.side}`)) && info.designs.length > 0 && info.designs.every(Boolean) : true, JSON.stringify(info));
+    await context.close();
+  }
+  {
+    /* a flap link on the scanned base: the overlay does not stay on */
+    const { context, page, errors } = await openSpecimen(browser, base, '#tier=3&flap=extended.R&anat=scanned');
+    await page.waitForFunction(() => document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') === 'true', null, { timeout: 20000 });
+    await page.waitForTimeout(600);
+    const flapOn = await page.evaluate(() => /flap=/.test(location.hash) || /flap=/.test(window.__ssb.hash));
+    check('scanned page: a link that asks for a flap on a base whose charts are absent ends with the overlay off and the flap out of the address', entry.absent.some((a) => ['s.septal-mucosa', 's.nasal-floor-mucosa'].includes(a.id)) ? !flapOn : true, await page.evaluate(() => location.hash));
+    check('scanned page: zero console errors through the scanned-base pages', errors.length === 0, JSON.stringify(errors));
+    await context.close();
+  }
+}
 
 async function main() {
   let server = null;
@@ -4284,6 +5391,24 @@ async function main() {
   if (ONLY === 'procedure') {
     await procedureUnitTests();
     await procedureTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'population') {
+    await populationTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'flap') {
+    await flapTests(browser, base, flapUnitTests());
+    return finish(browser, server);
+  }
+  if (ONLY === 'anatomy') {
+    await anatomyUnitTests();
+    await anatomyTests(browser, base);
+    return finish(browser, server);
+  }
+  if (ONLY === 'scanned') {
+    scannedBaseUnitTests();
+    await scannedBaseTests(browser, base);
     return finish(browser, server);
   }
   if (ONLY === 'mucosa') {
@@ -4648,8 +5773,9 @@ async function main() {
       check(`q=${q}: hazard hatching shows over every kind (stripes in the probe)`, weak.length === 0, weak.join(', '));
       const lite = probes.keys.filter((k) => k.includes('SSB_LITE')).length;
       check(`q=${q}: the patterned programs are ${q === 'lite' ? '' : 'not '}the lite variants`, q === 'lite' ? lite > 0 : lite === 0, `${lite} lite programs`);
+      /* + 4: the unlit ghost kind (POP2b) is a MeshBasicMaterial, so it owns programs of its own (30 without it, 34 with it, measured) */
       check(`q=${q}: programs are shared per kind (${probes.materials} materials, ${probes.programs} programs)`,
-        probes.programs <= 2 * TISSUE_KINDS.length + 5 && probes.programs < probes.materials + 2, `${probes.programs} programs`);
+        probes.programs <= 2 * TISSUE_KINDS.length + 5 + 4 && probes.programs < probes.materials + 2, `${probes.programs} programs`);
       check(`q=${q}: no shader compile or GL errors were logged`, errors.length === 0, errors.slice(0, 2).map((e) => e.text.slice(0, 300)).join(' | '));
       await context.close();
     }
@@ -4769,6 +5895,12 @@ async function main() {
   await procedureTests(browser, base);
   await mucosaUnitTests(scopeWindow);
   await mucosaTests(browser, base);
+  await populationTests(browser, base);
+  await flapTests(browser, base, flapUnitTests());
+  await anatomyUnitTests();
+  await anatomyTests(browser, base);
+  scannedBaseUnitTests();
+  await scannedBaseTests(browser, base);
 
   /* ===== screenshots ===== */
   if (SHOTS) {

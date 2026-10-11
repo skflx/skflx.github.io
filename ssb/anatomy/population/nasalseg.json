@@ -209,6 +209,30 @@
    "p95": 0.16
   }
  },
+ "meanShape": {
+  "alignRmsMm": {
+   "max": 7.12,
+   "median": 2.31,
+   "p95": 4.97
+  },
+  "method": "rigid four-centroid alignment, no scale; occupancy vote >= 0.5 of the maxillary labels at our air threshold on the specimen grid",
+  "n": 88,
+  "node": "s.maxillary-sinus.<side>@nasalseg-majority",
+  "sides": {
+   "L": {
+    "gapPercent": -10.9,
+    "majorityVolumeMl": 11.37,
+    "medianVolumeMl": 12.77,
+    "n": 88
+   },
+   "R": {
+    "gapPercent": -12.8,
+    "majorityVolumeMl": 11.22,
+    "medianVolumeMl": 12.87,
+    "n": 88
+   }
+  }
+ },
  "method": "* Archive integrity (found 2026-10-07): the archive's 130 cases hold byte-identical duplicates (same image and\n    label arrays under different ids); each duplicate group is measured once, under its lowest id, and listed. In\n    some cases the label file's header disagrees with its image's (z direction flipped against the uncropped frame,\n    or 1.0 mm instead of 1.5 mm slices) while the arrays are voxel-aligned; geometry is therefore taken from the\n    image header, and the alignment is checked (the labelled voxels must be mostly air, HU < -400, as stored and\n    clearly less so flipped). Each correction is listed.\n  * Label map, from the labels' world positions (LPS: +x is patient left, +y posterior): 1 right maxillary sinus,\n    2 left maxillary sinus, 3 right nasal cavity, 4 left nasal cavity, 5 nasopharynx. Within each pair the side is\n    assigned by position (the more +x label is left); a case whose integers disagree with that is listed as\n    swapped. Checked per case: the maxillary labels lateral to the cavity labels, the nasopharynx posterior; a case\n    that fails is listed and left out. The nasopharynx is cut by the published crop in most cases, so it is not\n    measured.\n  * Volumes in mL from voxel counts times the voxel volume (|det| of the direction matrix). The labels are AIR\n    (the dataset's authors segmented by an air threshold), so a sinus with thickened mucosa or fluid has a smaller\n    label than its bony cavity.\n  * Apparent lining thickness (mm), per maxillary sinus: soft-tissue voxels (-50..150 HU, unlabelled) reachable\n    from the air label within ~4.7 mm in plane (8 in-plane geodesic steps per slice; bone stops it), divided by the\n    air label's in-plane boundary area. A clear sinus reads about the mucosa plus partial volume; thickened mucosa,\n    fluid or a cyst raise it. It cannot see a sinus that is almost entirely opacified (the air label is then a\n    small pocket that may sit in fluid of other density), nor tell hypoplasia from opacification.\n  * Label completeness, per maxillary sinus: `unlabelledAir` = unlabelled air voxels (< -400 HU) reachable from the\n    label through air within 3 face-connected steps, over (those + the label). Every label misses some (the\n    annotators' boundary sits about a voxel inside the air; the median is printed), so absolute volumes run low by\n    about that fraction while left/right indices barely move. A label that stops at a flat cut where air\n    continues scores high; sinuses above the Tukey upper fence (Q3 + 1.5 IQR, printed) are left out of `clear`.\n  * Every case is also reviewed by eye (review.json beside this script: per maxillary sinus `clear`,\n    `thickening` (mucosal thickening, cyst or polyp with air still filling most of the sinus), `opacified` (most\n    of the sinus without air), or `unsure`, from a coronal and an axial slice through it; the reviewer and date\n    are recorded there). The `clear` subset, from which the normal-asymmetry statistics are taken, is the cases\n    whose two maxillary sinuses are both `clear`. The review is one look at two slices, not a read of the scan.\n  * Extents (mm) of each maxillary air label along the world axes: transverse (x), anteroposterior (y),\n    craniocaudal (z), each the 2nd..98th percentile span of the voxel coordinates.\n  * Asymmetry index AI = 100 * (R - L) / ((R + L) / 2). Laterality rests on the file headers (the anatomy cannot\n    verify left from right), so summaries lead with |AI|; the signed mean is a sanity check (expected near 0).\n  * Head A (the UW specimen as scanned, before N1's mirroring) is measured the same way from its committed labels\n    at normalize.py's AS_SCANNED_COMMIT, and placed as a percentile in the NasalSeg distribution. Its label\n    boundaries are SSB's own (e.g. the cavity ends at the PNS plane), so compare indices, not volumes.",
  "profiles": {
   "airThreshold": {

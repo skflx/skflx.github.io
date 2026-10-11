@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "dims": [
+    209,
+    225,
+    193
+  ],
+  "spacing": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "affine": [
+    [
+      0.5,
+      0,
+      0,
+      -52.0
+    ],
+    [
+      0,
+      0.5,
+      0,
+      -90.0
+    ],
+    [
+      0,
+      0,
+      0.5,
+      -16.0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "affineNote": "voxel (i,j,k,1) -> RAS mm (docs/ssb.md §4); row-major",
+  "dtype": "uint8",
+  "values": {
+    "kind": "display",
+    "note": "bone-window display level from the source images, not HU. toHU assumes a linear window through air = 45 -> -1000 HU and brain = 111 -> +35 HU (about 15.7 HU per level, W ~4000 / L ~300); uncertain by roughly +/-50 HU in soft tissue and more near saturation. 0 = no data (outside the reconstruction circle, and the masked face).",
+    "toHU": [
+      [
+        0,
+        -1000
+      ],
+      [
+        45,
+        -1000
+      ],
+      [
+        226,
+        1838
+      ],
+      [
+        255,
+        2293
+      ]
+    ]
+  },
+  "windows": {
+    "bone": {
+      "center": 128,
+      "width": 255
+    },
+    "sinus": {
+      "center": 96,
+      "width": 128
+    },
+    "soft": {
+      "center": 111,
+      "width": 26
+    }
+  },
+  "labels": {
+    "file": "labels.u16.gz",
+    "dtype": "uint16",
+    "table": "../geometry/labels.json"
+  },
+  "specimen": "uw-axial-sagittal",
+  "license": "ssb/LICENSE-data.md",
+  "sdf": {
+    "dims": [
+      105,
+      113,
+      97
+    ],
+    "spacing": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "affine": [
+      [
+        1.0,
+        0,
+        0,
+        -52.0
+      ],
+      [
+        0,
+        1.0,
+        0,
+        -90.0
+      ],
+      [
+        0,
+        0,
+        1.0,
+        -16.0
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "affineNote": "voxel (i,j,k,1) -> RAS mm, row-major; a 1 mm grid over the CT box (every second CT voxel centre)",
+    "dtype": "uint8",
+    "scale": 0.1,
+    "clampMm": 25.0,
+    "note": "mm to the nearest surface of the structure = value * scale; 0 inside; 250 = 25 mm or farther. Built by tools/ssb-pipeline/uw/sdf.py from walls.py labels and sweeps.json; what is inferred is in ssb/geometry/sweeps.meta.json",
+    "fields": {
+      "s.anterior-cranial-fossa": {
+        "file": "sdf-s.anterior-cranial-fossa.u8.gz",
+        "hud": "skull base",
+        "what": "nearest skull-base bone of the anterior cranial fossa floor (ethmoid roof, lateral lamella, cribriform plate, planum)",
+        "units": [
+          "s.fovea-ethmoidalis",
+          "s.lateral-lamella",
+          "s.cribriform-plate",
+          "s.planum-sphenoidale"
+        ],
+        "source": "labels (walls.py)",
+        "voxels": 12359
+      },
+      "s.orbit": {
+        "file": "sdf-s.orbit.u8.gz",
+        "hud": "orbit",
+        "what": "nearest orbital wall (lamina papyracea, orbital floor, frontal sinus floor) or orbital contents",
+        "units": [
+          "s.orbit",
+          "s.lamina-papyracea",
+          "s.orbital-floor",
+          "s.frontal-sinus-floor"
+        ],
+        "source": "labels (walls.py)",
+        "voxels": 367027
+      },
+      "s.internal-carotid-artery": {
+        "file": "sdf-s.internal-carotid-artery.u8.gz",
+        "hud": "ICA",
+        "what": "surface of the ICA tube",
+        "source": "sweeps.json",
+        "inferred_fraction_of_centreline": 0.28
+      },
+      "s.optic-nerve": {
+        "file": "sdf-s.optic-nerve.u8.gz",
+        "hud": "optic nerve",
+        "what": "surface of the optic nerve tube",
+        "source": "sweeps.json",
+        "inferred_fraction_of_centreline": 0.0
+      },
+      "s.anterior-ethmoidal-artery": {
+        "file": "sdf-s.anterior-ethmoidal-artery.u8.gz",
+        "hud": "AEA",
+        "what": "surface of the AEA tube",
+        "source": "sweeps.json",
+        "inferred_fraction_of_centreline": 0.95
+      }
+    }
+  },
+  "scanned": {
+    "method": "head A as scanned: the same stages as the standard head without the septum centring, the mirror, the midline plates, the nose centring and the landmark/sweep/chart mirroring (tools/ssb-pipeline/uw/normalize.py --base scanned, WP RA3b); the nose is unmasked from the UW axial stack as for the standard head",
+    "asScannedCommit": "37fa476240afb7568d652814e82801e7f1cb7c97",
+    "midline": {
+      "fit": "R = 2.664 + 0.0401 A + -0.0589 S",
+      "septumVoxels": 14330,
+      "landmarksM": 11,
+      "offsetAtOriginMm": 2.66,
+      "tiltDeg": 4.07,
+      "offsetAtSeptumCentroidMm": 0.3,
+      "extentMm": [
+        -1.33,
+        1.35
+      ]
+    },
+    "nose": {
+      "regionVoxels": 376848,
+      "centred": false,
+      "valve": {
+        "R": {
+          "aMm": -15.0,
+          "areaMm2": 93.0
+        },
+        "L": {
+          "aMm": -14.0,
+          "areaMm2": 45.0
+        }
+      },
+      "vestibuleMm3": {
+        "R": 1679.2,
+        "L": 1503.6
+      }
+    }
+  }
+}

@@ -12,6 +12,17 @@ which is gitignored.
     .venv/bin/python tools/ssb-pipeline/uw/extract.py   # labeled frames → ssb/reference/uw-sinusanatomy2/slices.json
     python3 tools/ssb-pipeline/uw/relate.py             # slices + graph → relations.json (stdlib only)
 
+Figure inventory (WP FG1; the static pages only, not the atlas stacks; needs the venv):
+
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py build     # pages + images -> ssb/reference/uw-sinusanatomy2/figures.json
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py overlay ID [ID…] [--out DIR]   # check PNG of one figure's mask, labels and tips
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py sheet [--out DIR]               # contact sheets of every traced figure
+
+`figures.py` fetches the eight Normal/Abnormal pages and their images into `incoming/` itself (it unescapes
+`&amp;` in an `src` and percent-encodes the request, which `fetch.py` does not). Numbers and text only are
+written; check images go to the system temp directory. Method, limits and the schema: the "Figure inventory"
+section of `ssb/reference/uw-sinusanatomy2/README.md`.
+
 Reconstruction, stage A (feasibility, registration, scale; needs the fetched images):
 
     .venv/bin/python tools/ssb-pipeline/uw/volume.py     # stacks -> incoming/.../_recon/*.npy; framing and scout checks
@@ -22,6 +33,38 @@ Reconstruction, stage A (feasibility, registration, scale; needs the fetched ima
 All four write sections of `uw/registration.json` (numbers only, no pixels); each
 script's docstring states its method. The coronal stack is a different specimen
 from the axial and sagittal stacks (`registration.specimen_identity`).
+
+Resegmentation ground truth (WP RS0; numpy + scipy only, no crawl):
+
+    python3 -I tools/ssb-pipeline/uw/score.py split      # -> ssb/reference/uw-sinusanatomy2/split.json (made once; committed)
+    python3 -I tools/ssb-pipeline/uw/score.py            # baseline: today's labels, as-scanned and served; --labels DIR for candidates
+
+`split.json` is the fixed 70/30 seed/held-out division of the head-A arrow tips; segmentation reads seed tips only.
+`score.py` prints the held-out tip hit rate per structure with Wilson CIs, and the topology checks. Do not rerun
+`split` unless the ground truth itself is meant to move (it moves every later score). Method, caveats (the current
+labels were grown from these tips, so the baseline is optimistic) and `--tol`: the script's docstring;
+`docs/realistic-anatomy.md` §7.1.
+
+Resegmentation harness (WP RS1; needs the venv and the crawl, writes only the gitignored `incoming/_rs/`, never `ssb/`):
+
+    .venv/bin/python -I tools/ssb-pipeline/uw/reseg.py all   # work -> air -> export -> score (stages also run singly; `selftest` tests the guard)
+
+`reseg.py` rebuilds `specimen.py`'s air compartments on the native 0.3437 x 0.3437 x 0.625 mm grid from the SEED tips of
+`split.json` only (`seed_tips` drops held-out rows unread and `guard` raises on any other tip), exports a candidate on the
+served 0.5 mm grid to `incoming/_rs/candidate/` (laid out like `ssb/ct` + `ssb/geometry/labels.json`), and scores it with
+`score.py --labels DIR --declared tools/ssb-pipeline/uw/rs/declared.json` at `--tol 1` and `--tol 6` beside today's
+as-scanned labels (`score-RS1.json`). `rs/declared.json` is the label set RS commits to, each id with the step that adds it
+(a `null` id is a term the graph lacks, for Opus); `--declared` reports coverage over it and identity over its done ids.
+The candidate is in the as-scanned frame (the tips' frame), not the standardized one. Method and limits: the script's
+docstring; `docs/realistic-anatomy.md` section 7.2 and WP RS1.
+
+Lamella sheets (WP RS2; same inputs and sandbox as above, `reseg.py sheets|export2|score2`, or `rs2` for the three):
+`rs/sheets.json` holds the sheetness filter's parameters and, per lamella, the rules that name a sheet (the uncinate process,
+basal, bullar and superior-turbinate ground lamellae, the sphenoid face and the intersinus septum), every number a named
+parameter. A sheet is named only when exactly one candidate per side meets every rule; otherwise it stays unassigned and the
+per-rule scores of its best candidates are in `incoming/_rs/sheets-report.json`. `--rules ALT.json` runs the same code on
+another rule file (a what-if for review). Outputs are candidates under `incoming/_rs/` (`candidate-RS2/`, `score-RS2.json`,
+`review/*.png`, each PNG listing the UW stack frame and FG1 figures to compare with); nothing in `ssb/` changes.
 
 Reconstruction, stage B (the reference specimen the viewer loads; run after stage A):
 
@@ -81,7 +124,7 @@ Reconstruction, stage D (soft tissue; needs only the committed `ssb/`, not the c
 
     .venv/bin/python tools/ssb-pipeline/uw/softtissue.py      # -> ssb/models/soft.glb.gz, ssb/geometry/charts.json,
                                                               #    lm.choanal-arch.M and lm.naris.R/.L in landmarks.json
-    .venv/bin/python tools/ssb-pipeline/uw/lining.py          # -> ssb/models/lining.glb.gz (the open airway lining, ST1b); run after meshes.py and softtissue.py, which rewrite packs.json
+    .venv/bin/python tools/ssb-pipeline/uw/lining.py          # -> ssb/models/lining.glb.gz (the open airway lining, ST1b; fins dropped by `meshes.py` `clean_lining`, L1); run after meshes.py and softtissue.py, which rewrite packs.json
     .venv/bin/python tools/ssb-pipeline/uw/sweeps_soft.py --selftest   # the waypoint-sweep machinery, nothing written
     node tools/stamp-assets.mjs && node tools/check-data.mjs
 
@@ -96,6 +139,15 @@ Reconstruction, stage E (the external nose, ST6; needs the raw crawl, because th
     .venv/bin/python tools/ssb-pipeline/uw/nose.py unmask   # prints the region (grooves per level, voxels); writes incoming/_recon/nose-patch.npz
     .venv/bin/python tools/ssb-pipeline/uw/normalize.py all # patches and centres the nose, measures the valve, labels the vestibule, then nose.py pack
     .venv/bin/python tools/ssb-pipeline/uw/nose.py pack     # the `nose` pack from the committed volume and incoming/_recon/nose-region.npz (written by normalize.py)
+
+The head as scanned (not mirrored, WP RA3b) is a separate build into `ssb/anatomy/scanned/`:
+
+    .venv/bin/python tools/ssb-pipeline/uw/normalize.py --base scanned   # about three minutes; deterministic
+
+It runs `walls`, `meshes`, `sdf`, `softtissue --per-side`, `lining` and `nose pack` from a scratch copy of this directory under
+`incoming/_recon/scanned-root/`, so the standard specimen's files are never read or written, and writes the `scanned` entry of
+`ssb/anatomy/index.json` from the numbers it prints. A stage-D product that fails its gate on a side is left out and listed as `absent`
+(nothing is loosened); the vestibule keeps each side's largest component. It prints a label transition table (as-scanned label -> scanned label, voxel counts, per step) and stops if tissue became an air label or the reverse. Method: the `normalize.py` docstring.
 
 `normalize.py all` needs `fetch.py` to have run (the raw stack) and takes about four minutes. The region, the centring offset, the valve
 plane and the vestibule are described in `nose.py`'s docstring and printed as the `ST6 1..5, 7` lines. `nose.py` with no argument is E1b's
@@ -145,6 +197,13 @@ position, and measures the maxillary sinuses and nasal cavities. `review.json` h
 (clear / thickening / opacified / unsure) that define the clear subset; `--png-dir` writes the review sheets they
 were made from. It also measures head A (as scanned, from git) the same way. Method and limits: the script's
 docstring; results and their reading: `docs/realistic-anatomy.md` §4.4; provenance: `ssb/LICENSE-data.md`.
+
+    .venv/bin/python -I tools/ssb-pipeline/nasalseg/meanshape.py   # POP2b: -> ssb/models/population.glb.gz, packs.json, nasalseg.json "meanShape"
+
+`meanshape.py` (after `stats.py` and `stats.py profiles`) aligns the clear subjects rigidly onto the standard specimen and
+writes the population maxillary sinus (the region at least half of them occupy) as a ghost pack, loaded on demand by the
+Population panel; it prints the alignment RMS and each side's volume beside the population median, and writes nothing if
+either exceeds its limit. Method and limits: the script's docstring; `docs/ssb.md` §5.10.
 
 ## `intake/` — 16-bit heads (WP IN1)
 

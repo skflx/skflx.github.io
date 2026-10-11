@@ -30,11 +30,15 @@ data, ever.
    overlay, procedures and self-test are renderings of that graph; geometry
    is keyed by the same ids. A fact is written once and cannot disagree with
    itself across views.
-2. **Label the kind of truth.** Three kinds, never blurred:
+2. **Label the kind of truth.** Four kinds, never blurred:
    *specimen* — one real adult anatomy, CT-derived (n = 1);
    *diorama* — an idealized parametric model that shows a variant or a
    classification cleanly; *population* — literature values with their
-   spread, method and denominator. Every view carries a badge saying which it
+   spread, method and denominator; *composite* — a real specimen with a
+   declared edit (owner RA-O2, `docs/realistic-anatomy.md` §2.2): the badge
+   names the edit, its parameters and what it was calibrated on, and picking
+   an edited voxel or mesh reports that it is edited. The machinery for it
+   exists (§5.11); no edited state ships yet. Every view carries a badge saying which it
    is, and every measurement shows the specimen's own value beside the
    population range.
 3. **Surgical granularity.** Meshes are cut into the smallest unit a surgeon
@@ -483,8 +487,9 @@ inferior margin):
    `s_f - s_c` must lie in 8–16 mm (`m.choana-to-sphenoid-ostium`, 10–15;
    right specimen ≈ 11.5).
 2. *Superior incision* — starts at (`post(s_f)`, `s_f`) for every design
-   (O5) and runs forward. A (`short`): level, `s_sup(a) = min(s_f, top(a) -
-   top_margin)`. B, C: it rises to follow the septum's top, `s_sup(a) =
+   (O5) and runs forward. A (`short`): level, `s_sup(a) = min(s_f, top(a))`
+   (CP-ST5: no margin of its own; where the septum's top rises forward the
+   cut stays at `s_f`, far below it). B, C: it rises to follow the septum's top, `s_sup(a) =
    max(s_f, top(a) - top_margin)`, which is level near the sphenoid and
    higher forward, as in Fig. 31.3 B.
 3. *Posteroinferior cut* — down the posterior edge from `s_c` along the
@@ -528,10 +533,11 @@ for the mucocutaneous junction, which CT does not show.
   4 mm of `post(s)`), both sides — a cross-check of two sources (Zhang
   2014: the dominant branch below the ostium plane; Pinheiro-Neto 2011:
   9.3 mm below the ostium);
-- the superior incision starts at `s_f` in every design; for B and C it
-  stays at least `top_margin` below `top(a)` at every sample, for every
-  parameter in range (property test over a grid), and never below `s_f`;
-  for A it is level;
+- the superior incision starts at `s_f` in every design; for B and C every
+  sample is either at `s_f` or at most `top(a) - top_margin`, and none is
+  below `s_f` (CP-ST5: near the sphenoid, where `s_f` is closer than
+  `top_margin` to the top, the cut stays at `s_f`), for every parameter in
+  range (property test over a grid); for A it is level;
 - the area readout equals an independent point-in-polygon sum over the
   meshes within 2 %;
 - `short` ⊂ `full` ⊂ `extended` (areas strictly increasing), each inside
@@ -540,6 +546,49 @@ for the mucocutaneous junction, which CT does not show.
   and landmarks (swapping the data swaps the outlines);
 - determinism: the same parameters give the same polygon (hash it);
 - hostile `#flap=` values clamp or are ignored (as `#lab=` does).
+
+**As built (ST5; `js/ssb/flap.js`, `#flap=`).** The construction is pure chart
+geometry, tested in Node and drawn in the page on the soft pack's own meshes
+(the triangles inside the outline are shaded; the incisions are lines lifted
+0.2 mm off the lining; the pedicle is drawn in the science signal). Readings
+the contract left open, and what the code does:
+
+- The outline lives on cell *edges* (half a cell beyond the outermost occupied
+  cell), so the outermost triangles are inside it; the chart's own polygon is
+  simplified, so the "inside its chart polygon" test allows 1 mm.
+- *Superior incision, A.* The formula `min(s_f, top(a) - top_margin)` cannot be
+  level and stay at or above `s_f` at once: the septum's top is only a few mm
+  above `s_f` over the sphenoid, so a 15 mm margin would drop the incision below
+  the ostium. The code draws A level at `s_f` clipped to `top(a)`, and
+  `top_margin` does not apply to it (the parameter table already says B and C
+  only). **For Opus:** say whether A should carry a margin of its own.
+- *Superior incision, B and C.* `max(s_f, top(a) - top_margin)` exactly (a
+  vertex is added where the rising line crosses `s_f`), clipped to `top(a)`.
+  Where the septum's top is within `top_margin` of `s_f` (the posterior part)
+  the incision stays at `s_f` and is therefore closer than `top_margin` to
+  the top: the test pins "at `s_f` or at most `top(a) - top_margin`", not the
+  stronger reading the contract's list states, which no construction that also
+  starts at `s_f` can meet. The olfactory-risk note is shown below 10 mm.
+- *Floor (C).* A strip exactly `floor_width` wide from the junction's floor-side
+  point, clipped to the occupied floor cells, from the junction rows' own
+  cut-off at A -47 (the PNS end is a partly covered edge) to the same anterior
+  cut as the septal part. The default 20 mm is wider than the chart, so it is the
+  full charted width; the floor slider caps nothing at the chart. The inferior
+  meatus is not charted.
+- *Rescue window.* A square of `window` mm on the other side's chart with its
+  inferior-posterior corner at the pedicle's top (`post(s_f)`, `s_f`): the contract
+  gives no placement, so this is schematic.
+- *Readouts.* Areas are the 3-D area of the triangles whose centroid projects
+  inside the outline (septal and floor separately), the pedicle height is
+  `s_f - s_c`, the length is the longest chord of the outline, "approximate" is
+  the share of the outline on `filled` or `unreliable` cells, and the literature
+  line is read from the graph's `m.nsf-area`, `m.nsf-extended-gain` and
+  `m.choana-to-sphenoid-ostium` (no number is typed in code; the 25.1 cm²
+  maximum of Table 31.2 is not in the graph, so it is not shown).
+- *Specimen result.* The flap areas are smaller than the literature mean for B
+  (`m.nsf-area`): the specimen's charted septum stops at the valve plane and a
+  few mm in front of the rostrum, and the flap is part of it. `--only flap` prints
+  each design's areas per side; compare them there, not here.
 
 **Not in this contract** (later, on other surfaces): the inferior meatus
 (a lateral-wall chart), inferior and middle turbinate flaps and the lateral
@@ -639,10 +688,14 @@ the wall; the natural ostium appears with the antrostomy.
   side: `R` (voxels right of R = 0), `L`, and `M` (the R = 0 plane). The
   format is the dense-box patch of the realistic-anatomy plan (PR #119)
   with a constant display, so one loader serves both.
-- `ssb/models/lining-<key>.glb.gz`: `lining.py`'s method on the state's air
+- `ssb/models/lining-<key>.glb.gz` (and `lining.glb.gz`): `lining.py`'s method on the state's air
   (built to 33 000 triangles with the remnants), plus remnant meshes
   `<id>.<side>@<cut>` (the cut of the last unit that touched the wall; the
-  node's `extras.cut`) for each wall label a state cuts partly. **Not listed
+  node's `extras.cut`) for each wall label a state cuts partly. Every lining pack
+  is cleaned by `meshes.py` `clean_lining` before it is written (zero-thickness
+  fins, two faces on the same three vertices, go; their cancelled normals are
+  rebuilt) and `tools/check-data.mjs` fails on a twin face or a zero normal in any
+  `lining*.glb.gz`. **Not listed
   in `packs.json`**: the Specimen stage loads every pack that file lists, so
   the state linings are loaded on demand from the index (P2 decides how).
 - Distance fields are not recomputed: the guard keeps every cut away from
@@ -785,7 +838,7 @@ on the decongested state (the operations start by decongesting).
   three-label operator instead (ratio 0.76, outside the tolerance). The
   patch writes one constant display (the median of the erectile soft tissue)
   and the labels of the nearest turbinate. The owner may still overrule
-  (roadmap O8).
+  (roadmap O13, decided as recommended).
 - **Pipeline and files (WP DC1).** `mucosa.py` writes a patch and a lining
   pack per state (`ssb/states/<key>.ssbp.gz`, `ssb/models/lining-<key>.glb.gz`;
   key = first 10 hex of the SHA-256 of `mucosa.dec` / `mucosa.cong`), with the
@@ -812,6 +865,68 @@ on the decongested state (the operations start by decongesting).
   entry state. Mucosal edema of rhinosinusitis (sinus lining, polyps) is
   pathology, the realistic-anatomy plan's `fill` operator, not this toggle.
 
+### 5.11 Anatomy state: bases and patches (WP RA3a)
+
+`state.anatomy = { base, variants, conditions }` (`docs/realistic-anatomy.md`
+§2.1, §6.4) is the layer stack over the volume and the packs: a **base**
+(`standard`, the mirrored reference head, which is `ssb/ct`, `ssb/geometry`,
+`ssb/models` where they always were; `scanned` and `scanned-b`, each a full
+copy of that layout under `ssb/anatomy/<base>/`), then **variants**, then
+**conditions**, each entry a **patch** laid over the base. It is independent of
+the stage. `ssb/anatomy/index.json` is the registry; when `js/ssb/stamps.js`
+does not list it the page asks for nothing and the anatomy is the standard
+head. Its shape (`buildAnatomyRegistry`, `js/ssb/state.js`):
+`{ version: 1, bases: { scanned: {…} }, variants: { "<v-id>": entity }, conditions: { "<dz-id>": entity }, compat: [[ "<id>.<side>", "<id>.<side>" ]] }`
+with `entity = { sides, presets, default?, bases?, region?, boxes?: { "<side>": { min, max } } }` (extents in RAS mm).
+An entry the graph lacks, or with no side or preset, is dropped. Compatibility: no ref twice, one condition,
+one variant per side per `region`, and two different refs only when the pair is in `compat` or both
+entries give an extent and the extents do not overlap.
+
+**Patch file** `ssb/anatomy/patches/<base>/<entity>.<side>.<preset>.ssbp.gz`:
+gzip of u32 LE header length, a JSON header (`docs/realistic-anatomy.md` §6.2: `version` 1, `base`, `entity`, `side`,
+`preset`, `params`, `truth` `"composite"`, `calibratedOn`, `assumed`, `boxes` `[{ ijk0, dims, ct: "u8"|"i16", labels: "u16", sdf?: { "<id>": "u8" } }]`,
+`landmarks`, `sweeps`, `replacesNodes`, `addsNodes`), then per box, in order, its dense arrays, x fastest, little
+endian: `ct` (u8, or i16 on a 16-bit head), `labels` (u16), then one u8 array per `sdf` key in header order.
+`parseAnatomyPatch` (`js/ssb/volume.js`) refuses, with a `VolumeError`, a wrong version (`unsupported`), base, entity,
+side or preset (against what was asked for), a non-`composite` truth, a box with non-integer, zero or negative
+dimensions or corner, more than 16 boxes, node names that are not `<id>.<side>`, and a body that is not exactly the
+boxes' size; `applyAnatomyPatch` also refuses a box outside the volume, a ct type that is not the volume's, and a label the table
+does not name. A box REPLACES every voxel of its extent (CT and labels), nothing outside it; patches apply in order, the
+later winning an overlap; the base volume is never touched. Carried but not applied yet: `sdf`, `landmarks`, `sweeps`
+(the scope still reads the standard head's distance fields).
+
+**Override packs** `ssb/anatomy/overrides/<base>/<entity>.<side>.<preset>.glb.gz` (not in `packs.json`) hold the
+whole-node replacements a patch names: the specimen stage loads one only for the nodes of its header
+(`replacesNodes` ∪ `addsNodes`; any other node is skipped with a problem recorded), registers them as
+`anatomy:<stem>:<id>.<side>`, hides the base nodes of `replacesNodes` whose replacement arrived (never leaves a hole)
+and gives it all back when the anatomy is cleared. CT shows `anatomyVolume(anatomy)` (the base's volume, then each
+patch); a procedure still plays on the standard head.
+
+**URL**: `anat=standard|scanned|scanned-b` + `v=<v-id>.<R|L|M>[:<preset>],…` + `dz=<dz-id>.<R|L|M>[:<preset>],…`
+(§7.3). The Anatomy pills (Symmetric · Normal asymmetry · Variants · Pathology, `ui-specimen.js`) enable only for what
+the index lists; the Variants and Pathology pickers are WP RA5.
+
+**The scanned base (WP RA3b)** is `ssb/anatomy/scanned/{ct,geometry,models}`, regenerated by
+`tools/ssb-pipeline/uw/normalize.py --base scanned`: head A as scanned, with the standard head's stages minus the septum
+centring, the mirror, the midline plates, the nose centring and the sides step, and with each side computed on its own
+(the valve and vestibule; `softtissue.py --per-side` for the floor). Its label table is the standard one, so an index means
+the same name on every base. The vestibule keeps each side's largest component (smaller ones go back to the cavity, at most 2 %
+of it). A stage-D product (septal or floor chart and surface, soft sweep, landmark margin) that fails its gate on a side is left
+out, never loosened, and listed in the index entry as `absent: [{ id, side, reason }]` with the measured number; the flap overlay
+is a standard-head tool, so a base whose index entry lists a flap chart as absent has the overlay disabled with a note
+(`ui-specimen.js`). The entry also carries the pipeline's volumes, the cavity and maxillary asymmetry indices with their
+percentiles among the NasalSeg clear subjects, the state's note (which the Normal asymmetry state shows; it names cavity + vestibule
+as the closest comparison with NasalSeg's nasal cavity and says the comparison is not like for like), and `labelTransitions`: every
+label the base changed against the as-scanned labels, as voxel counts per (from, to) pair, attributed to a step (the vestibule + valve
+step, the wall-unit step; the nose unmask changes display values), with tissue becoming an air label or the reverse an escalation.
+The CT stage reads the base's volume and the Specimen stage draws the base's own packs, landmarks and sweeps
+(`createSpecimen({ root })` in `geo-specimen.js`, `followBase` in `mode-specimen.js`; Symmetric <-> Normal asymmetry swaps them live and
+keeps the camera). The dissected states and the Endoscope and procedure stages are the standard head's, so the store never pairs
+them with another base and the later choice wins: picking Normal asymmetry leaves the scope or procedure, and entering either
+goes back to the standard head (`set()` in `state.js`). `tools/test-ssb.mjs --only scanned` tests the base's data (packs, placement,
+laterality, labels, landmarks, volumes and transitions recounted from the label file, the absent list), the Specimen stage on it
+(boot, placement, laterality on screen, picking, not mirrored, the live swap) and its CT and pages.
+
 ### 5.10 New data: population, more heads, 16-bit CT
 
 A **head** is a base: a CT and a label volume (every name a graph id) in
@@ -829,11 +944,10 @@ mucosal state → dissection.
   cross-section profiles as percentiles, shown with population truth;
   (2) *calibration*: the congested state, and the mild / typical / marked
   grades of asymmetry variants; (3) *averaged normal*: a population
-  reference (median and IQR profiles; a mean shape of the five NasalSeg
-  structures registered onto the head as a ghost overlay), population
-  truth, not a head. Deforming a head toward the population median is a
-  composite and covers only the five structures NasalSeg labels: owner
-  decision O9.
+  reference (median and IQR profiles; the population maxillary sinus as a
+  ghost overlay, below), population truth, not a head. Deforming a head
+  toward the population median is a composite and covers only the five
+  structures NasalSeg labels: owner decision O9.
 - **Label conventions (checked 2026-10-08 on 91 distinct clear NasalSeg
   subjects; scratch script, method for POP1).** NasalSeg's labels and ours
   differ in convention more than in quality. Its nasal cavity runs from the
@@ -863,6 +977,29 @@ mucosal state → dissection.
   than 20 points, because its end sections are the vestibule border and the
   choanal cut, where the conventions differ most; the JSON keeps all three
   spans.
+- **Population panel (WP POP2a).** The Specimen dock's "Population (NasalSeg)"
+  section (`js/ssb/population.js`, `js/ssb/ui-population.js`) reads the file
+  above and nothing else: the 10–90 % restricted rows, the standard specimen
+  and the as-scanned head set against the clear subjects' median and IQR.
+  It hides itself when the file is missing or malformed.
+- **Population sinus (WP POP2b).** `tools/ssb-pipeline/nasalseg/meanshape.py`
+  aligns each clear subject rigidly (no scale; four label centroids, the cavities
+  and maxillary sinuses, onto the standard specimen's; the residual RMS is
+  reported and recorded) and votes: the region at least half of the aligned
+  maxillary labels (at our air threshold) occupy, on the specimen's own grid, is
+  the shape. It writes `ssb/models/population.glb.gz` (nodes
+  `s.maxillary-sinus.<side>@nasalseg-majority`, `extras.kind` "ghost"; packs.json
+  `"population": true`, so never loaded at boot) and the `meanShape` key of the
+  JSON. It is an aligned majority, not any one person's sinus, and it runs a
+  little under the median volume (a vote loses what subjects do not share). The
+  cavity and the nasopharynx are not drawn from the population (CP-POP2b: a
+  rigid fit cannot register a thin convoluted passage, and the crop cuts the
+  nasopharynx); the cavity's reference is the median profile above. The panel's
+  toggle (`ui-population.js`, `setPopulation` in `mode-specimen.js`,
+  `loadPopulationPack` in `geo-specimen.js`) loads the pack on demand and gives
+  it back when switched off; the `ghost` material kind is unlit, translucent and
+  depth-tested, one token colour (`--ssb-ghost`). The ghost is registered as
+  `population:<id>.<side>`: never selected, picked or counted among the regions.
 - **Variants from NasalSeg.** Subjects at chosen percentiles (maxillary
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented
@@ -1079,9 +1216,9 @@ grid at 0.5 mm, as the frontal-recess rules are; none written in):
 *Spec by Opus, 2026-10-07. Every number below is from a PubMed record
 read for this spec (abstracts only; the source set, its PMIDs and what each
 supports are in roadmap WP ST7a), or it is marked schematic. Owner
-decisions O7 (where it is drawn) and O8 (which population and class the
-defaults come from) are open (§13): either answer changes defaults, not
-structure. Not built.*
+decisions O14 (where it is drawn; open) and O8 (which population and class
+the defaults come from; decided 2026-10-08: mixed and labelled, modal
+classes) are in §13: either answer changes defaults, not structure. Not built.*
 
 **What it is for.** The external nose as rhinoplasty sees it: the
 framework (bone, cartilage, ligaments), the soft-tissue envelope in its
@@ -1232,7 +1369,7 @@ fits the deep fat at the default sidewall thickness (rule 10).
 | `depressor_type` | choice I · II · III | I | `c.depressor-septi-type` |
 | `sesamoid` | toggle (one extra cartilage in the hinge area) | off | `v.nasal-sesamoid-cartilage` |
 
-*Defaults for a variant choice* (pending O8): the modal class among those
+*Defaults for a variant choice* (O8, decided 2026-10-08): the modal class among those
 that draw the structure, so the default is what a surgeon meets most often
 — angular type III (the modal drawn type; IV, absent, is 26.3 %), nerve
 type I (50 %), depressor type I (62 %), nasal bone S (88 %). Under O6
@@ -1480,6 +1617,7 @@ js/ssb/stamps.js             GENERATED: data-asset path → hash (for fetch URLs
 js/ssb/graph.js              load + index content; text renderer; search
 js/ssb/state.js              one store (mode, tier, layers, selection, camera, step);
                              URL-hash codec; ssb:* storage (guarded)
+js/ssb/flap.js               the nasoseptal flap overlay's geometry (§5.7): pure, no imports
 js/ssb/scene.js              renderer, cameras, lights, on-demand loop, quality choice
 js/ssb/materials.js          procedural tissue materials: one shader hook per kind (three passed in)
 js/ssb/geo-specimen.js       pack loading (gzip → GLTFLoader.parse), unit registry, dissection states
@@ -1555,6 +1693,13 @@ is rewritten; a crosshair drag settles before the URL is replaced, like a
 lab slider. The stage is one of specimen, lab or CT: a hash with both `lab`
 and `ct` keeps the lab, and entering one leaves the other.
 
+The anatomy hash is `#anat=<base>&v=<ref>,…&dz=<ref>,…` (§5.11; `<ref>` is `<id>.<R|L|M>[:<preset>]`), whitelisted
+against `ssb/anatomy/index.json` and the graph: an unknown id, a side, preset or base the index does not offer, a pair
+it does not allow, a malformed value or more than eight entries drops the **whole** anatomy key and the hash is
+rewritten canonical (every preset explicit, written after the stage and before `mu` and `q`). The index loads after the store exists, so
+until it arrives the link's anatomy is `pending` (shape-checked, written back unchanged) and every consumer treats it as the
+standard head. `v` or `dz` without `anat` takes the index's default base (`scanned` when listed).
+
 The procedure hash (WP P2, built) is `#p=<p-id>&step=<n>[&cor=<corridor>]`
 (the pose follows as `scope=`): the store keeps only a well-formed `p-id` in
 the graph and clamps `step` to 0..99; the player, once the index has loaded,
@@ -1565,6 +1710,13 @@ decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1, built;
 `state.mu`, default `scan`, not written when `scan`) is ignored while a
 procedure plays and not written to the hash then; an unknown value (any other
 case or text) is dropped.
+
+The flap overlay key (§5.7, WP ST5, built) is `flap=<short|full|extended|rescue>[.<R|L>]`
+with `top`, `ant`, `fw`, `win` for its sliders (`state.flap`; the side defaults to
+`R`; values are clamped and snapped to the step, parameters at their default are
+not written). It is an overlay on the specimen, not a stage: a lab or CT link
+ignores it and the hash does not write it there. Its controls are offered from
+the flap's own tier (3) or whenever an overlay is on.
 
 ### 7.4 Rendering
 
@@ -1767,7 +1919,8 @@ O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists
 
 Open, from the ST7 spec (2026-10-07; §6.2):
 
-- **O7 — Where the nasal framework is drawn.** (a) In the variant lab
+- **O14 — Where the nasal framework is drawn** (open; numbered O7 until
+  2026-10-08, when it collided with the content-priority O7). (a) In the variant lab
   only, as an idealized diorama; (b) fitted under the specimen's own skin
   and on its nasal bones in the Specimen stage (schematic on specimen,
   n = 1 envelope); (c) both, the lab first. Recommended: (c) — the lab
@@ -1785,7 +1938,7 @@ Open, from the ST7 spec (2026-10-07; §6.2):
   class (what a surgeon meets most) or the textbook configuration.
   Recommended: (a) now with (c) later; modal classes; in fit mode the
   envelope is the specimen's own, so O8 matters least where the specimen
-  speaks.
+  speaks. **Decided 2026-10-08 by the owner: as recommended.**
 
 1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
    needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
@@ -1793,9 +1946,10 @@ Open, from the ST7 spec (2026-10-07; §6.2):
    markers (the wiki's precedent), prioritizing owner review of tier 1.
 3. Name and URL (`SSB`, `ssb.html`) — working title.
 
-Open from P1 (Opus, 2026-10-08; recommendations in `docs/ssb-roadmap.md` §2):
+From P1 (Opus, 2026-10-08), **all decided 2026-10-08 by the owner as recommended** (`docs/ssb-roadmap.md` §2):
 
-- **O8 — What "edema" means in the mucosa toggle.** The physiological
+- **O13 — What "edema" means in the mucosa toggle** (numbered O8 until
+  it collided with ST7's O8). The physiological
   congested phase (turbinates and septal swell body, calibrated on NasalSeg,
   §5.9), or the mucosal edema of rhinosinusitis (sinus lining, polyps:
   pathology, PR #119's `fill` operator). Recommended: the toggle is

@@ -193,3 +193,62 @@ septation). Consequences:
   second head) but are not mapped into the 3D frame.
 - Left–right is assumed radiological (patient right on image left); no label
   names a side.
+
+## Figure inventory (`figures.json`, WP FG1)
+
+Every image on the eight Normal/Abnormal pages as data: page(s) and caption(s) (a file shown on two pages keeps
+each page's caption), plane, window, contrast, the caption's own abbreviation map, the labels read from the
+image, arrows (tail → tip, px), point marks (arrowheads, asterisks), graph ids, role N/V/P, and a candidate
+same-patient group. Numbers and text only; `tools/check-data.mjs` fails on a schema error, an id that is not in
+the graph, a coordinate outside its image, or an image file in this folder. Regenerate with
+`tools/ssb-pipeline/uw/figures.py build` (`tools/ssb-pipeline/README.md`). Counts are in `meta.summary`.
+
+**What is transcribed and what is measured.** Ids, roles and groups come from `docs/realistic-anatomy.md` §4.1
+and are never inferred; an id the graph lacks or the table marks uncertain sits in `idCandidates` /
+`proposedNew` with its reason and `ids` stays `null`. Plane (caption first, file name as the cross-check),
+window, contrast, labels, arrows and marks are measured from the page and the pixels. Image coordinates are
+those of the file the page serves, origin top-left; no label names a side, so left-right is not asserted.
+
+**Annotation mask.** "Pixels ≥ 250 in thin components" does not isolate the annotation on these files: they
+are resampled JPEGs, so a stroke's core sits at 240–255 and its anti-aliased edge at 160–230 (a threshold at 250
+fragments arrows and glyphs), and bone cortex clips at 255 too. The mask is: seeds ≥ 240 outside thick bright
+regions, grown to ≥ 200 within 3 px of a seed. Arrows are then told from cortex ribbons by shape, not by value
+(a straight shaft whose widest point, the head, is at one end and is at least 2.5× the shaft width, with the
+apex within a head's length of it); a standalone arrowhead is a compact convex blob not lying inside bright
+bone; an asterisk is read by OCR, or taken from a speck only where the caption names an asterisk. Parameters:
+`meta.method`.
+
+**Soft-tissue and post-contrast figures** clip bone and contrast at the annotation value (a large share of the
+image at 255), so the mask cannot be trusted there: they are recorded in full with `arrows`, `labels` and
+`marks` `null` and the reason in `meta.notSeparableReason` (FG1 ruling, `docs/realistic-anatomy.md` §10).
+`windowEvidence` says what decided each window: the caption ("soft tissue window", "post-contrast"), §4.1's
+soft marker, or the histogram (`saturatedPct`, the area of thick saturated regions). `Cor.Inflamm2` is
+saturated by the facial bone but a bone window on sight; §4.1 does not mark `Cor.frontalmucocele` and
+`Mucocele3` as soft, but their histograms and appearance do. Compare `windowEvidence` before relying on a window.
+
+**Per-figure check (`maskCheck`).** `captionCueMissing` lists what the caption names (arrow, arrowhead, asterisk)
+that no detection matches; `nonAnnotation` counts the components rejected, by reason; `unreadShortLabels` counts
+labels OCR did not resolve to a caption abbreviation or a graph term. `status: "review"` means one of the first
+or last is non-zero, and the figure's tips need a person. An arrow's `suspect` flag marks one with bright bone
+close around it (it may be a cortex line, or a real arrow that touches bone). Known failure classes: a cortex
+line taken for an arrow (a straight, tapered edge), a thick or bone-adjacent arrow missed, and OCR confusions
+(`S`↔`3`) snapped through the caption's own map (`labels[].read` says how). A figure can also show no arrows its
+caption describes (`Axial.ethmoid2`).
+
+**Labels.** `labels[].text` is the snapped abbreviation or term; `raw` is what OCR read. `ids` come only from the
+caption's own expansion of the abbreviation, or the full word, matched exactly against the crosswalk's terms;
+otherwise `null` with the reason. Abbreviations that mean different things across captions are in
+`meta.abbreviationConflicts` (e.g. `FS`: frontal sinus, and foramen spinosum on one sphenoid page).
+
+**Same-patient groups** are candidates from §4.1's ⧉ marks (`basis`), all `confirmed: null`: Opus confirms by
+comparing anatomy across planes (§5 item 4).
+
+**Reproduce a figure's tips.** In the pipeline venv (`tools/ssb-pipeline/README.md`):
+
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py overlay <id> [<id>…] [--out DIR]   # mask, labels, tail→tip
+    .venv/bin/python -I tools/ssb-pipeline/uw/figures.py sheet [--out DIR]                    # all traced figures, six to a sheet
+
+The images are fetched into the gitignored `tools/ssb-pipeline/incoming/` on first use; the check PNGs go to the
+system temp directory by default, and the script refuses to write them inside the repository. Versions: the
+OCR engine and its version are in `meta.method.ocr` (the `requirements.txt` pin was moved to the version that
+installs).

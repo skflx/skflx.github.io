@@ -45,17 +45,33 @@
      whose name ends in "@<cut>", is a remnant "<id>.<side>@<cut>" of a base wall, drawn in its place: userData.remnant),
      so they never collide with the base nodes; the others are the state's lining (userData.lining, userData.state).
 
+   - A population pack (packs.json "population": true, POP2b) is the NasalSeg majority maxillary sinus, drawn as a ghost
+     beside the specimen's own: never loaded at boot or by loadLining(); the Population panel's toggle asks for it
+     (loadPopulationPack) and gives it back (unloadPopulationPack). Its nodes (extras kind "ghost") are registered as
+     "population:<id>.<side>" (group ghost, userData.population), so byId, picking and the region list never see them.
+
+   - An anatomy override pack (docs/realistic-anatomy.md 6.2, WP RA3a) is the whole-node replacement an edited state brings:
+     ssb/anatomy/overrides/<base>/<entity>.<side>.<preset>.glb.gz, named by the patch it goes with (its `replacesNodes` and
+     `addsNodes`, the only nodes it may carry). Never listed in packs.json, never loaded at boot: the stage asks for it by
+     its stem (loadOverride) and gives it back (unloadOverride). Its nodes are registered as "anatomy:<stem>:<id>.<side>"
+     and stand in for the base nodes setReplaced() hides, so byId finds the override and not the node it replaced.
+
    The only new three.js importer besides scene.js: one module instance, the
    same unstamped vendor URLs (js/vendor/README.md).
    ============================================================= */
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=8281d741';
-import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=b121b3b4';
+import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=32324b32';
+import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
+/* A base's data root (volume.js baseRoot): the standard head is ssb/ itself, every other base a full copy of that layout in
+   ssb/anatomy/<base>/. The specimen reads packs.json, the packs, the landmarks, the sweeps and the CT header of ONE root. */
+const DATA_ROOT = /^ssb(?:\/anatomy\/(?:scanned|scanned-b))?$/;
+const rootOrStandard = (root) => (typeof root === 'string' && DATA_ROOT.test(root) ? root : 'ssb');
 export const LINING_PREFIX = 'lining:';
+export const POPULATION_PREFIX = 'population:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
 export const SWEEPS_FILE = 'ssb/geometry/sweeps.json';
 export const CT_HEADER_FILE = 'ssb/ct/ct.json';
@@ -74,6 +90,9 @@ const LIMIT_TRIANGLES = 600000;  /* all packs together (docs/ssb.md 5.4 budgets 
 const GLB_MAGIC = 0x46546c67;    /* 'glTF' */
 const STATE_KEY = /^[0-9a-f]{10}$/;
 const CUT = /^[a-z0-9][a-z0-9-]{0,39}$/;
+const OVERRIDE_STEM = /^(?:v|dz)\.[a-z0-9]+(?:-[a-z0-9]+)*\.(?:R|L|M)\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const OVERRIDE_FILE = /^ssb\/anatomy\/overrides\/(?:standard|scanned|scanned-b)\/([A-Za-z0-9._-]+)\.glb\.gz$/;
+const NODE_KEY = /^[a-z]+\.[a-z0-9-]+\.(?:R|L|M)$/;
 
 export class SpecimenError extends Error {
     /* code: 'absent' (no packs.json), 'network', 'invalid', 'unsupported'. */
@@ -117,9 +136,9 @@ async function getJson(fetchFn, file, what) {
 }
 
 /* One pack's bytes, decoded; throws SpecimenError. */
-async function getPack(fetchFn, name, file) {
+async function getPack(fetchFn, name, file, dir = 'ssb/models') {
     let res;
-    try { res = await fetchFn(stamped(`ssb/models/${file}`)); } catch (e) { throw new SpecimenError('network', `${name}: the file could not be fetched.`); }
+    try { res = await fetchFn(stamped(`${dir}/${file}`)); } catch (e) { throw new SpecimenError('network', `${name}: the file could not be fetched.`); }
     if (!res.ok) throw new SpecimenError(res.status === 404 ? 'absent' : 'network', `${name}: the file could not be fetched (HTTP ${res.status}).`);
     let raw;
     try { raw = await res.arrayBuffer(); } catch (e) { throw new SpecimenError('network', `${name}: the download was cut off.`); }
@@ -154,7 +173,7 @@ export function listPacks(doc) {
     const out = [];
     for (const [name, def] of Object.entries(src)) {
         if (!PACK_NAME.test(name) || !def || typeof def.file !== 'string' || !PACK_FILE.test(def.file)) continue;
-        out.push({ name, file: def.file, lining: def.lining === true, stateKey: typeof def.state === 'string' && STATE_KEY.test(def.state) ? def.state : '', nodes: def.nodes && typeof def.nodes === 'object' ? Object.keys(def.nodes) : [] });
+        out.push({ name, file: def.file, lining: def.lining === true, population: def.population === true, stateKey: typeof def.state === 'string' && STATE_KEY.test(def.state) ? def.state : '', nodes: def.nodes && typeof def.nodes === 'object' ? Object.keys(def.nodes) : [] });
     }
     return out.sort((a, b) => (a.name === 'core' ? -1 : 0) - (b.name === 'core' ? -1 : 0));
 }
@@ -162,7 +181,9 @@ export function listPacks(doc) {
 /* ---------------- the specimen ---------------- */
 
 /* opts: { graph, fetchFn?, warn? }. The handle is the registry; load() fills it. */
-export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+    const dataRoot = rootOrStandard(dataRootIn);
+    const fetchPack = (p) => getPack(fetchFn, p.name, p.file, `${dataRoot}/models`);
     const root = new THREE.Group();
     root.name = 'specimen';
     /* the one RAS -> scene conversion (a proper rotation, so winding survives) */
@@ -171,6 +192,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
 
     const nodes = new Map();           /* "<id>.<side>" -> mesh */
     const packs = new Map();           /* name -> { name, file, state, error, nodes: [keys], expected: [keys] } */
+    let populationLoad = null;         /* loadPopulationPack()'s memoized promise, cleared by unloadPopulationPack() */
     const problems = [];
     let status = 'idle';               /* idle | loading | ready | partial | error | absent */
     let loadDone = null;               /* the promise of load(), awaited by loadLining() */
@@ -198,7 +220,10 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             const cut = isState && typeof u.cut === 'string' && CUT.test(u.cut) ? u.cut : (isState && /@([a-z0-9-]{1,40})$/.exec(nodeName) || [])[1] || '';
             const remnant = isState && cut !== '';
             const lined = !!pack.lining || (isState && !remnant);
-            const key = `${isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
+            const ghost = !!pack.population;
+            const isOverride = !!pack.anatomyKey;
+            if (isOverride && !pack.allowed.has(`${id}.${side}`)) { problem(`${label} (${id}.${side}) is not one of the nodes its patch replaces or adds; skipped.`); continue; }
+            const key = `${isOverride ? `anatomy:${pack.anatomyKey}:` : isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ghost ? POPULATION_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
             if (nodes.has(key)) { problem(`${label} repeats ${key}; skipped.`); continue; }
             const g = mesh.geometry;
             const pos = g && g.attributes ? g.attributes.position : null;
@@ -214,12 +239,12 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             }
             const entity = graph.get(id);
             const extraKind = typeof u.kind === 'string' ? u.kind : '';
-            const { look, group, liningKind = '' } = lined ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
+            const { look, group, liningKind = '' } = ghost ? { look: { kind: 'ghost', ghost: true }, group: 'ghost' } : lined ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
             mesh.parent.remove(mesh);
             mesh.name = key;
             mesh.material.dispose();
             mesh.material = new THREE.MeshBasicMaterial();      /* replaced by mode-specimen per state */
-            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, state: pack.stateKey || '', remnant, cut };
+            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, population: ghost, state: pack.stateKey || '', remnant, cut, anatomy: pack.anatomyKey || '' };
             root.add(mesh);
             nodes.set(key, mesh);
             triangles += tris;
@@ -253,14 +278,14 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     async function run({ onPack, idle }) {
         let list;
         try {
-            list = listPacks(await getJson(fetchFn, PACKS_FILE, 'The pack list'));
+            list = listPacks(await getJson(fetchFn, `${dataRoot}/models/packs.json`, 'The pack list'));
         } catch (e) {
             status = e && e.code === 'absent' ? 'absent' : 'error';
             problem(e && e.message ? e.message : 'The pack list could not be read.');
             return status;
         }
         if (!list.length) { status = 'error'; problem('packs.json lists no usable pack.'); return status; }
-        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, stateKey: p.stateKey, nodes: [], expected: p.nodes.map((k) => (p.stateKey ? `state:${p.stateKey}:` : p.lining ? LINING_PREFIX : '') + String(k)) });
+        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, population: p.population, stateKey: p.stateKey, nodes: [], expected: p.nodes.map((k) => (p.stateKey ? `state:${p.stateKey}:` : p.lining ? LINING_PREFIX : p.population ? POPULATION_PREFIX : '') + String(k)) });
 
         const take = async (p, bytesPromise) => {
             const pack = packs.get(p.name);
@@ -281,15 +306,15 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         /* the first pack (core) alone, then a paint, then the rest fetched together */
         const [first, ...all] = list;
         /* the lining pack waits for loadLining() */
-        const rest = all.filter((p) => !p.lining && !p.stateKey);
-        for (const p of all) if (p.lining || p.stateKey) packs.get(p.name).state = 'deferred';
-        await take(first, getPack(fetchFn, first.name, first.file));
+        const rest = all.filter((p) => !p.lining && !p.stateKey && !p.population);
+        for (const p of all) if (p.lining || p.stateKey || p.population) packs.get(p.name).state = 'deferred';
+        await take(first, fetchPack(first));
         if (disposed) return status;
         /* without the first pack (core: the envelope, the nasal cavity, the frame of everything else) there is no specimen to add to */
         if (packs.get(first.name).state === 'failed') { status = 'error'; return status; }
         await idle();
         if (disposed) return status;
-        const fetching = rest.map((p) => getPack(fetchFn, p.name, p.file).catch((e) => Promise.reject(e)));
+        const fetching = rest.map((p) => fetchPack(p).catch((e) => Promise.reject(e)));
         for (let i = 0; i < rest.length; i++) {
             fetching[i].catch(() => {});                       /* handled in take(); no unhandled rejection while waiting on an earlier pack */
             await take(rest[i], fetching[i]);
@@ -310,11 +335,11 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 if (loadDone) await loadDone;
                 for (const pack of packs.values()) {
                     if (disposed) return;
-                    if (pack.state !== 'deferred' || pack.stateKey) continue;
+                    if (pack.state !== 'deferred' || pack.stateKey || pack.population) continue;
                     pack.state = 'loading';
                     const before = problems.length;
                     try {
-                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        const scene = await readPack(pack, await fetchPack(pack));
                         if (disposed) return;
                         adopt(scene, pack);
                         pack.state = 'loaded';
@@ -339,6 +364,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
        rejects: a pack that cannot be read is recorded as any other and the state is shown without it. */
     const stateLoads = new Map();
     function loadState(key, file = '') {
+        if (dataRoot !== 'ssb') return Promise.resolve([]);          /* the dissected states are the standard head's (ssb/states): another base shows its own lining only */
         let pack = [...packs.values()].find((p) => p.stateKey === key);
         /* A state pack packs.json does not list (P1b indexes them in ssb/states/index.json, so the boot never sees them): the
            file the index names, registered here as a deferred pack. Only lining-<key>.glb.gz for this very key is accepted. */
@@ -354,7 +380,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
                 if (pack.state === 'deferred') {
                     pack.state = 'loading';
                     try {
-                        const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file));
+                        const scene = await readPack(pack, await fetchPack(pack));
                         if (disposed) return [];
                         adopt(scene, pack);
                         pack.state = 'loaded';
@@ -390,6 +416,109 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
         return true;
     }
 
+    /* An anatomy override pack (an edited state's whole-node replacements): `stem` is "<entity>.<side>.<preset>", `file` the
+       ssb/anatomy/overrides/<base>/<stem>.glb.gz it is read from, `nodes` the "<id>.<side>" names its patch replaces or adds
+       (the only ones adopted). Fetched once, adopted under "anatomy:<stem>:<id>.<side>" and kept until unloadOverride.
+       Resolves with the keys it added; never rejects (a pack that cannot be read is recorded as any other). */
+    const overrideLoads = new Map();
+    function loadOverride(stem, file, nodeNames) {
+        const m = typeof file === 'string' ? OVERRIDE_FILE.exec(file) : null;
+        if (!OVERRIDE_STEM.test(stem) || !m || m[1] !== stem || !Array.isArray(nodeNames)) return Promise.resolve([]);
+        if (overrideLoads.has(stem)) return overrideLoads.get(stem);
+        const allowed = new Set(nodeNames.filter((n) => typeof n === 'string' && NODE_KEY.test(n)));
+        const pack = { name: `anatomy-${stem}`, file: m[1] + '.glb.gz', dir: file.slice(0, file.lastIndexOf('/')), state: 'deferred', error: '', lining: false, population: false, stateKey: '', anatomyKey: stem, allowed, nodes: [], expected: [...allowed].map((k) => `anatomy:${stem}:${k}`) };
+        packs.set(pack.name, pack);
+        const job = (async () => {
+            try {
+                if (loadDone) await loadDone;
+                pack.state = 'loading';
+                try {
+                    const scene = await readPack(pack, await getPack(fetchFn, pack.name, pack.file, pack.dir));
+                    if (disposed) return [];
+                    adopt(scene, pack);
+                    pack.state = 'loaded';
+                } catch (e) {
+                    pack.state = 'failed';
+                    pack.error = e && e.message ? String(e.message) : 'The pack could not be read.';
+                    problem(pack.error);
+                }
+                try { onPackCb(pack); } catch (e) { console.error(e); }
+            } catch (e) { console.error(e); }
+            return pack.nodes.slice();
+        })();
+        overrideLoads.set(stem, job);
+        return job;
+    }
+
+    /* Drop an override pack's meshes: the base nodes it replaced come back when the caller clears setReplaced(). */
+    function unloadOverride(stem) {
+        const pack = packs.get(`anatomy-${stem}`);
+        if (!pack || pack.state === 'loading') return false;
+        for (const [k, mesh] of [...nodes]) {
+            if (mesh.userData.anatomy !== stem) continue;
+            triangles -= mesh.userData.triangles || 0;
+            if (mesh.geometry) mesh.geometry.dispose();
+            if (mesh.material && typeof mesh.material.dispose === 'function') mesh.material.dispose();
+            root.remove(mesh);
+            nodes.delete(k);
+        }
+        packs.delete(pack.name);
+        overrideLoads.delete(stem);
+        return true;
+    }
+
+    /* The base nodes ("<id>.<side>" keys) an edited state replaces: they stay in the registry but byId no longer offers them. */
+    let replaced = new Set();
+    function setReplaced(keys) { replaced = new Set(keys); }
+
+    /* The population pack (the toggle): fetched once on request, adopted under "population:<id>.<side>" and kept until
+       unloadPopulationPack. Resolves with the nodes it added ([] when packs.json lists no population pack). Never
+       rejects: a pack that cannot be read is recorded as any other. */
+    function loadPopulationPack() {
+        const pack = [...packs.values()].find((p) => p.population);
+        if (!pack) return Promise.resolve([]);
+        if (populationLoad) return populationLoad;
+        populationLoad = (async () => {
+            try {
+                if (loadDone) await loadDone;
+                if (pack.state === 'deferred' || pack.state === 'failed') {
+                    pack.state = 'loading';
+                    try {
+                        const scene = await readPack(pack, await fetchPack(pack));
+                        if (disposed) return [];
+                        adopt(scene, pack);
+                        pack.state = 'loaded';
+                    } catch (e) {
+                        pack.state = 'failed';
+                        pack.error = e && e.message ? String(e.message) : 'The pack could not be read.';
+                        problem(pack.error);
+                    }
+                    try { onPackCb(pack); } catch (e) { console.error(e); }
+                }
+            } catch (e) { console.error(e); }
+            return pack.nodes.slice();
+        })();
+        return populationLoad;
+    }
+
+    /* Drop the population pack's meshes: the pack goes back to 'deferred'. */
+    function unloadPopulationPack() {
+        const pack = [...packs.values()].find((p) => p.population);
+        if (!pack || pack.state === 'loading') return false;
+        for (const [k, mesh] of [...nodes]) {
+            if (!mesh.userData.population) continue;
+            triangles -= mesh.userData.triangles || 0;
+            if (mesh.geometry) mesh.geometry.dispose();
+            if (mesh.material && typeof mesh.material.dispose === 'function') mesh.material.dispose();
+            root.remove(mesh);
+            nodes.delete(k);
+        }
+        pack.nodes = [];
+        pack.state = 'deferred';
+        populationLoad = null;
+        return true;
+    }
+
     /* The RAS box of the named nodes (or all): { min, max } in mm, or null. */
     function boundsOf(keys = null) {
         const box = new THREE.Box3();
@@ -414,10 +543,10 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
     }
 
     return {
-        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, boundsOf, dispose,
+        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, loadOverride, unloadOverride, setReplaced, loadPopulationPack, unloadPopulationPack, boundsOf, dispose,
         get status() { return status; },
         get triangles() { return triangles; },
-        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant),
+        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant && !m.userData.population && !replaced.has(m.userData.key)),
     };
 }
 
@@ -426,11 +555,11 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
 /* { "<id>.<side>": [r, a, s] } -> Map("<id>.<side>" -> { id, side, ras }) for
    the entries whose id is in the graph and whose point is finite and near the
    head. Absent or unreadable: an empty map (the layer is then just empty). */
-export async function loadLandmarks({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+export async function loadLandmarks({ graph, root = 'ssb', fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
     const out = new Map();
     let doc;
     try {
-        const res = await fetchFn(stamped(LANDMARKS_FILE));
+        const res = await fetchFn(stamped(`${rootOrStandard(root)}/geometry/landmarks.json`));
         if (!res.ok) return out;
         doc = await res.json();
     } catch (e) { return out; }
@@ -451,11 +580,11 @@ export async function loadLandmarks({ graph, fetchFn = (url) => fetch(url), warn
    whose points are finite, near the head and at least two. A radius list that
    does not match the points falls back to 0.5 mm. Absent or unreadable: an
    empty map (the layer is then just empty). */
-export async function loadSweeps({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
+export async function loadSweeps({ graph, root = 'ssb', fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
     const out = new Map();
     let doc;
     try {
-        const res = await fetchFn(stamped(SWEEPS_FILE));
+        const res = await fetchFn(stamped(`${rootOrStandard(root)}/geometry/sweeps.json`));
         if (!res.ok) return out;
         doc = await res.json();
     } catch (e) { return out; }
@@ -474,9 +603,9 @@ export async function loadSweeps({ graph, fetchFn = (url) => fetch(url), warn = 
 
 /* The CT volume's RAS box from its header alone, or null (absent, invalid):
    the 3D cursor clamps to it before the volume itself is downloaded. */
-export async function loadCtBounds({ fetchFn = (url) => fetch(url) } = {}) {
+export async function loadCtBounds({ root = 'ssb', fetchFn = (url) => fetch(url) } = {}) {
     try {
-        const res = await fetchFn(stamped(CT_HEADER_FILE));
+        const res = await fetchFn(stamped(`${rootOrStandard(root)}/ct/ct.json`));
         if (!res.ok) return null;
         return headerBounds(parseHeader(await res.json()));
     } catch (e) { return null; }

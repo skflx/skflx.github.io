@@ -250,6 +250,122 @@ function checkSsb() {
   ok(geo.length === 0, 'ssb: specimen geometry names only graph ids',
     `ssb: ${geo.length} geometry reference problem(s):\n        ` + geo.slice(0, 20).join('\n        '));
   checkDissection(index);
+  checkUwFigures(index);
+  checkLiningMeshes();
+}
+
+/* ---- UW figure inventory (WP FG1): ssb/reference/uw-sinusanatomy2/figures.json ----
+   Numbers and text only. Every figure has a plane and a window; ids are graph ids or an explicit null with its
+   reason; arrows are null only for a soft/contrast window and then say why; every coordinate lies inside the image;
+   role is N/V/P or null with a reason; group members agree. Writer: tools/ssb-pipeline/uw/figures.py. */
+function checkUwFigures(index) {
+  const fpath = rel('ssb/reference/uw-sinusanatomy2/figures.json');
+  if (!fs.existsSync(fpath)) return;
+  const errs = [];
+  let data;
+  try { data = JSON.parse(fs.readFileSync(fpath, 'utf8')); } catch (e) { fail(`uw figures: not valid JSON — ${e.message}`); return; }
+  const figs = Array.isArray(data.figures) ? data.figures : [];
+  const meta = data.meta || {};
+  const str = (v) => typeof v === 'string' && v.trim() !== '';
+  const inside = (pt, w, h) => Array.isArray(pt) && pt.length === 2 && pt.every(Number.isInteger) && pt[0] >= 0 && pt[1] >= 0 && pt[0] <= w && pt[1] <= h;
+  const seen = new Set(); const groups = new Map();
+  if (!figs.length) errs.push('no figures');
+  if (meta.count !== figs.length) errs.push(`meta.count ${meta.count} != ${figs.length} figures`);
+  if (!str(meta.notSeparableReason)) errs.push('meta.notSeparableReason missing');
+  for (const f of figs) {
+    const w = f && f.size && f.size[0], h = f && f.size && f.size[1];
+    const at = `figure ${f && f.id}`;
+    if (!f || !str(f.id) || seen.has(f.id)) { errs.push(`${at}: missing or duplicate id`); continue; }
+    seen.add(f.id);
+    if (!str(f.file) || !/^images\/[^/]+\.jpg$/.test(f.file)) errs.push(`${at}: bad file`);
+    if (!Number.isInteger(w) || !Number.isInteger(h) || w <= 0 || h <= 0) { errs.push(`${at}: bad size`); continue; }
+    if (!Array.isArray(f.pages) || !f.pages.length || !f.pages.every((p) => str(p.page) && str(p.caption))) errs.push(`${at}: pages need a page and a caption`);
+    if (!['axial', 'coronal', 'sagittal'].includes(f.plane)) errs.push(`${at}: plane must be axial|coronal|sagittal (${f.plane})`);
+    if (!['bone', 'soft'].includes(f.window)) errs.push(`${at}: window must be bone|soft`);
+    if (typeof f.contrast !== 'boolean') errs.push(`${at}: contrast must be boolean`);
+    if (!f.abbreviations || typeof f.abbreviations !== 'object') errs.push(`${at}: abbreviations must be an object`);
+    if (f.ids === null) { if (!str(f.idsReason)) errs.push(`${at}: ids null without idsReason`); }
+    else if (!Array.isArray(f.ids) || !f.ids.length) errs.push(`${at}: ids must be null (with a reason) or a non-empty list`);
+    else for (const id of f.ids) if (!index.has(id)) errs.push(`${at}: ${id} is not a graph id`);
+    for (const c of f.idCandidates || []) if (!str(c.id) || typeof c.inGraph !== 'boolean' || c.inGraph !== index.has(c.id)) errs.push(`${at}: idCandidates entry ${c && c.id} disagrees with the graph`);
+    if (f.role === null) { if (!str(f.roleReason)) errs.push(`${at}: role null without roleReason`); }
+    else if (!Array.isArray(f.role) || !f.role.length || !f.role.every((r) => ['N', 'V', 'P'].includes(r))) errs.push(`${at}: role must be null or a subset of N, V, P`);
+    if (f.arrows === null) {
+      if (f.window !== 'soft' && !f.contrast) errs.push(`${at}: arrows null on a bone window`);
+      if (f.arrowsReason !== meta.notSeparableReason) errs.push(`${at}: arrows null without the not-separable reason`);
+      if (f.labels !== null || f.marks !== null) errs.push(`${at}: labels and marks must be null with arrows`);
+    } else {
+      if (f.window !== 'bone') errs.push(`${at}: traced arrows on a ${f.window} window`);
+      if (!Array.isArray(f.arrows) || !Array.isArray(f.marks) || !Array.isArray(f.labels)) { errs.push(`${at}: arrows, marks and labels must be arrays`); continue; }
+      for (const a of f.arrows) {
+        if (!inside(a.tail, w, h) || !inside(a.tip, w, h)) errs.push(`${at}: arrow outside the image`);
+        if (a.label !== null && !str(a.label)) errs.push(`${at}: arrow label must be null or text`);
+      }
+      for (const m of f.marks) if (!['arrowhead', 'asterisk'].includes(m.kind) || !inside(m.at, w, h)) errs.push(`${at}: bad point mark`);
+      for (const l of f.labels) {
+        if (!Array.isArray(l.box) || l.box.length !== 4 || !l.box.every(Number.isFinite)) errs.push(`${at}: bad label box`);
+        if (l.ids === null) { if (!str(l.idsReason)) errs.push(`${at}: label "${l.raw}" ids null without a reason`); }
+        else for (const id of l.ids) if (!index.has(id)) errs.push(`${at}: label ${l.text} maps to ${id}, not a graph id`);
+      }
+      if (!f.maskCheck || !['clean', 'review'].includes(f.maskCheck.status)) errs.push(`${at}: maskCheck missing`);
+    }
+    if (f.group) {
+      if (!str(f.group.id) || !str(f.group.basis) || !(f.group.confirmed === null || typeof f.group.confirmed === 'boolean')) errs.push(`${at}: bad group`);
+      else groups.set(f.group.id, (groups.get(f.group.id) || 0) + 1);
+    }
+  }
+  for (const [g, n] of groups) if (n < 2) errs.push(`group ${g} has one member`);
+  const dir = rel('ssb/reference/uw-sinusanatomy2');
+  const pix = fs.readdirSync(dir).filter((n) => /\.(jpe?g|png|gif|webp)$/i.test(n));
+  if (pix.length) errs.push(`image files in ${dir}: ${pix.join(', ')} (no image is committed)`);
+  if (fs.statSync(fpath).size > 400 * 1024) errs.push('figures.json is over 400 KB: numbers and text only');
+  ok(errs.length === 0, `uw figures: ${figs.length} figure(s), schema and graph ids consistent`,
+    `uw figures: ${errs.length} problem(s):\n        ` + errs.slice(0, 20).join('\n        '));
+}
+
+/* ---- SSB lining packs (WP L1): no zero-thickness fins, no zero normals ----
+   A fin is two faces on the same three vertices; its area-weighted vertex normals cancel to zero and it is drawn
+   black. Every ssb/models/lining*.glb.gz (the base lining, the mucosal and dissection-state packs) must be free of
+   both; the cleaner is meshes.py clean_lining. Reads the quantized glTF meshes written by meshes.py write_glb. */
+function glbMeshes(buf) {
+  const jl = buf.readUInt32LE(12);
+  const doc = JSON.parse(buf.slice(20, 20 + jl).toString());
+  const bin = buf.slice(20 + jl + 8);
+  const view = (a) => { const v = doc.bufferViews[doc.accessors[a].bufferView]; return bin.subarray(v.byteOffset, v.byteOffset + v.byteLength); };
+  return doc.nodes.map((nd) => {
+    const p = doc.meshes[nd.mesh].primitives[0];
+    const n = doc.accessors[p.attributes.NORMAL], ix = doc.accessors[p.indices];
+    const nb = view(p.attributes.NORMAL), ib = view(p.indices);
+    const idx = ix.componentType === 5123 ? new Uint16Array(ib.buffer, ib.byteOffset, ix.count) : new Uint32Array(ib.buffer, ib.byteOffset, ix.count);
+    return { name: nd.name, count: n.count, nb, idx };
+  });
+}
+function liningDefects(buf) {
+  let twins = 0, zero = 0;
+  for (const m of glbMeshes(buf)) {
+    const seen = new Set();
+    for (let i = 0; i < m.idx.length; i += 3) {
+      const t = [m.idx[i], m.idx[i + 1], m.idx[i + 2]].sort((a, b) => a - b).join(',');
+      if (seen.has(t)) twins++; else seen.add(t);
+    }
+    for (let v = 0; v < m.count; v++) {
+      const x = (m.nb[v * 4] << 24 >> 24) / 127, y = (m.nb[v * 4 + 1] << 24 >> 24) / 127, z = (m.nb[v * 4 + 2] << 24 >> 24) / 127;
+      if (Math.hypot(x, y, z) < 0.25) zero++;
+    }
+  }
+  return { twins, zero };
+}
+function checkLiningMeshes() {
+  const dir = rel('ssb/models');
+  if (!fs.existsSync(dir)) return;
+  const files = fs.readdirSync(dir).filter((f) => /^lining.*\.glb\.gz$/.test(f)).sort();
+  for (const f of files) {
+    let d;
+    try { d = liningDefects(zlib.gunzipSync(fs.readFileSync(path.join(dir, f)))); }
+    catch (e) { fail(`ssb lining: ${f} unreadable — ${e.message}`); continue; }
+    ok(d.twins === 0 && d.zero === 0, `ssb lining: ${f} has no twin faces or zero normals`,
+      `ssb lining: ${f} has ${d.twins} twin face(s) and ${d.zero} zero-length normal(s) (rerun lining.py / mucosa.py / dissect.py)`);
+  }
 }
 
 /* ---- SSB dissection states (docs/ssb.md 5.8; WP P1b) ----

@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/ssb.css?v=bbcfc7e3">
+    <link rel="stylesheet" href="css/ssb.css?v=76f22a27">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -39,6 +39,13 @@
                 <label class="visually-hidden" for="ssb-search">Search structures, conditions and procedures</label>
                 <input class="ssb-search" id="ssb-search" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search"
                     placeholder="Search: uncinate, Keros, AEA&hellip;">
+                <div class="ssb-anatomy" id="ssb-anatomy" role="group" aria-label="Anatomy">
+                    <span class="site-kicker">Anatomy</span>
+                    <button class="site-pill active" type="button" data-anat="standard" aria-pressed="true" disabled title="The standardized head: one head&rsquo;s right half, mirrored, septum centred">Symmetric</button>
+                    <button class="site-pill" type="button" data-anat="scanned" aria-pressed="false" disabled title="The head as scanned, with its own asymmetry (not in this build yet)">Normal asymmetry</button>
+                    <button class="site-pill" type="button" data-anat="variants" aria-pressed="false" disabled title="Anatomic variants (none in this build yet)">Variants</button>
+                    <button class="site-pill" type="button" data-anat="pathology" aria-pressed="false" disabled title="Pathology (none in this build yet)">Pathology</button>
+                </div>
             </div>
             <div class="ssb-nav-scroll">
                 <div id="ssb-results" hidden></div>
@@ -81,7 +88,7 @@
                 <p class="ssb-stage-msg" id="ssb-stage-msg" hidden></p>
                 <section class="ssb-ct" id="ssb-ct" aria-label="CT: axial, coronal and sagittal slices" hidden></section>
                 <span class="ssb-truth" id="ssb-truth" hidden></span>
-                <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Reference specimen &middot; UW CT atlas &middot; draft</span>
+                <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Reference specimen &middot; from Interactive CT Sinus Anatomy, Univ. of Washington Radiology &middot; draft</span>
             </div>
         </div>
 
@@ -96,12 +103,13 @@
             </div>
             <div class="ssb-lab-sheet" id="ssb-lab-sheet"></div>
             <div class="ssb-panel-body" id="ssb-panel-body"><p class="ssb-empty">Loading&hellip;</p></div>
+            <p class="ssb-credit" id="ssb-credit">Credits: specimen CT derived from <a href="http://uwmsk.org/sinusanatomy2/" target="_blank" rel="noopener">Interactive CT Sinus Anatomy</a>, University of Washington Department of Radiology, used with the authors&rsquo; permission.</p>
         </aside>
 
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=a0739223"></script>
+    <script type="module" src="js/ssb/main.js?v=dd66371d"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>
