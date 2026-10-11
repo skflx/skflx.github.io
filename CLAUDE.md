@@ -20,8 +20,8 @@ node tools/check-data.mjs        # data + security invariants + asset stamps (de
 node tools/test-wiki-sync.mjs    # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs       # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, keyboard
-node tools/lint-oksat.mjs <slug> # OKSAT module quality spec (new modules must come back clean)
-node tools/test-ssb.mjs          # SSB: variant lab (dioramas, pathway rules, picking, hash), CT mode on a synthetic volume, the specimen on the real packs
+node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
+node tools/test-ssb.mjs          # SSB: every section (variant lab, CT, specimen, endoscope, procedure…); --only a,b for some; CI runs it as --shard i/4
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 
 # ASCII 3D figures: preview as text, then refresh the baked no-JS frames

@@ -12,18 +12,23 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  # Run the slow suites only when something they exercise changed.
+  # check-data (every invariant, the security rules included) and the page
+  # smoke test always run, so a cross-cutting regression still fails. A push
+  # to master runs everything.
+  changes:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ssb: ${{ steps.changes.outputs.ssb }}
+      oksat: ${{ steps.changes.outputs.oksat }}
+      wiki: ${{ steps.changes.outputs.wiki }}
     steps:
       - uses: actions/checkout@v4
         with:
-          # The change detector below diffs against the PR's base branch.
+          # The change detector diffs against the PR's base branch.
           fetch-depth: 0
 
-      # Run the slow suites only when something they exercise changed.
-      # check-data (every invariant) and the page smoke test always run, so
-      # a cross-cutting regression still fails. A push to master runs
-      # everything.
       - name: Detect what changed
         id: changes
         run: |
@@ -33,13 +38,23 @@ jobs:
             changed="ALL"
           fi
           echo "Changed files:"; echo "$changed"
-          shared='css/site\.css|js/site\.js|js/theme-boot\.js|tools/smoke-lib\.mjs|package(-lock)?\.json'
+          shared='css/site\.css|js/site\.js|js/theme-boot\.js|tools/smoke-lib\.mjs|tools/console-allowlist\.json|package(-lock)?\.json|\.github/workflows/'
           match() { [ "$changed" = "ALL" ] || echo "$changed" | grep -Eq "^($1|$shared)"; echo $?; }
           flag() { if [ "$(match "$2")" = "0" ]; then echo "$1=true" >> "$GITHUB_OUTPUT"; else echo "$1=false" >> "$GITHUB_OUTPUT"; fi; }
-          flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-)'
+          # SSB: the page, its data, and the only files outside them test-ssb reads (the pipeline's
+          # dissection rules, the materials vocabulary in authoring-ssb.md). The rest of tools/ssb-pipeline/
+          # never runs here; its outputs are committed under ssb/, which this already matches.
+          flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-content|ssb-fixture-ct)\.mjs|tools/ssb-pipeline/uw/dissection\.json|docs/authoring-ssb\.md'
           flag oksat 'js/oksat-|js/mcq-modules/pediatrics|js/vendor/(react|htm)|css/oksat\.css|oksat(-study)?\.html|tools/test-oksat-engine'
           flag wiki  'wiki/|tools/test-wiki-sync'
           cat "$GITHUB_OUTPUT"
+
+  verify:
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
@@ -51,10 +66,14 @@ jobs:
       - name: Check committed data
         run: node tools/check-data.mjs
 
+      # Every OKSAT module against the quality spec; zero deps, instant.
+      - name: Lint OKSAT modules
+        run: node tools/lint-oksat.mjs
+
       # The wiki sync is the privacy boundary for the Obsidian vault;
       # zero deps, synthetic fixtures only.
       - name: Wiki sync behavior tests
-        if: steps.changes.outputs.wiki == 'true'
+        if: needs.changes.outputs.wiki == 'true'
         run: node tools/test-wiki-sync.mjs
 
       - name: Install dev dependencies
@@ -69,11 +88,39 @@ jobs:
       - name: Smoke-test every page
         run: node tools/smoke-pages.mjs
 
-      # SSB variant lab: dioramas, computed pathway rules, picking, hash.
-      - name: SSB behavior tests
-        if: steps.changes.outputs.ssb == 'true'
-        run: node tools/test-ssb.mjs
-
       - name: OKSAT engine behavior tests
-        if: steps.changes.outputs.oksat == 'true'
+        if: needs.changes.outputs.oksat == 'true'
         run: node tools/test-oksat-engine.mjs
+
+  # The SSB suite is most of CI's time, so it runs as parallel shards. The
+  # split lives in tools/test-ssb.mjs (SHARDS), which refuses a shard count
+  # other than its own: change both together.
+  ssb:
+    needs: changes
+    if: needs.changes.outputs.ssb == 'true'
+    name: ssb (shard ${{ matrix.shard }}/4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The standard-specimen checks `git show` the as-scanned commit.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dev dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: SSB behavior tests
+        run: node tools/test-ssb.mjs --shard ${{ matrix.shard }}/4
