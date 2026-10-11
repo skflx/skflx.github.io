@@ -131,6 +131,17 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   `rel` target exists, and every step's `focus`/`layers`/`view` resolve.
   Look at every tour step at 390px and 1280px in both themes after a
   geometry change: label placement is hand-tuned per structure (`at`, `lab`).
+- The 3D model: `#m=3d&s=1` builds the volume (in its worker), meshes it
+  (`#olsb3d-stage[data-faces]`), and a click on it selects a structure; a
+  payload in `#m=3d&st=…&cam=…` selects nothing. `tools/check-data.mjs`
+  builds the coarse volume in Node: every label is a glossary entry and is
+  built, every tour step's state/view/layers/focus resolve, every drill
+  state carves, and every glossary relation between two drawn structures
+  holds in the geometry (compared over the columns both occupy along the
+  relation's axis). After moving anatomy, also look: isolate the ossicles,
+  nerves and inner ear (`#m=3d&L=ossicles.nerves.inner.muscles&cam=…`)
+  from lateral, above, front and medial, and step the guided flight with
+  the fine grid loaded (`#olsb3d-stage[data-fine="ready"]`).
 
 ### Wiki sync (`wiki/sync/sync-vault.mjs`)
 `tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and

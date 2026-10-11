@@ -52,6 +52,11 @@
   --olsb-casing-artery: #7E1F16;
   --olsb-cell: #B7A57C;
   --olsb-dim: 0.42;
+  /* 3D model: air spaces drawn as a cast, drilled bone, the stage. */
+  --olsb-cast: #7FB7C9;
+  --olsb-cast-2: #9CC7B4;
+  --olsb-cut: #CDBB90;
+  --olsb-stage3d: #1E1F22;
 }
 html[data-theme="dark"] {
   --olsb-bone: #CFC3A2;
@@ -89,6 +94,10 @@ html[data-theme="dark"] {
   --olsb-casing-vein: #1B305C;
   --olsb-casing-artery: #6A1A12;
   --olsb-cell: #7D6C47;
+  --olsb-cast: #4F8EA3;
+  --olsb-cast-2: #6FA48E;
+  --olsb-cut: #A99569;
+  --olsb-stage3d: #0E0F11;
 }
 
 /* ===== PAGE ===== */
@@ -329,6 +338,51 @@ html[data-theme="dark"] {
 .olsb-chip:hover { color: var(--ink); border-color: var(--ink); }
 .olsb-chip.active { color: var(--bg); background: var(--ink); border-color: var(--ink); }
 .olsb [hidden] { display: none !important; }
+
+/* ===== 3D MODEL ===== */
+.olsb-mode { margin-bottom: 1rem; }
+.olsb3d-stage { aspect-ratio: 4 / 3; overflow: hidden; background: var(--olsb-stage3d); }
+@media (max-width: 600px) { .olsb3d-stage { aspect-ratio: 3 / 4; } }
+#olsb3d-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; outline: none; }
+#olsb3d-canvas:active { cursor: grabbing; }
+#olsb3d-canvas.is-pixels { image-rendering: pixelated; }
+.olsb3d-stage .olsb-orient { position: absolute; color: #B9B6AE; background: rgba(0, 0, 0, 0.35); padding: 0.15rem 0.4rem; border-radius: 2px; }
+.olsb3d-tags { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.olsb3d-tag {
+  position: absolute; transform: translate(-50%, -130%); white-space: nowrap;
+  padding: 0.1rem 0.35rem; font: 500 0.7rem/1.2 var(--font-mono); color: #F4F1EA;
+  background: rgba(14, 15, 17, 0.72); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 2px;
+}
+.olsb3d-tag::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 1px; height: 5px; background: rgba(255, 255, 255, 0.5); }
+.olsb3d-tag.is-sel { border-color: var(--signal); color: #fff; font-weight: 600; }
+.olsb3d-tag.is-focus { border-color: var(--signal); }
+.olsb3d-tag.is-behind { opacity: 0.45; border-style: dashed; }
+.olsb3d-hover {
+  position: absolute; pointer-events: none; padding: 0.1rem 0.35rem; font: 400 0.7rem/1.2 var(--font-mono);
+  color: #F4F1EA; background: rgba(14, 15, 17, 0.8); border-radius: 2px;
+}
+.olsb3d-compass { position: absolute; right: 0.5rem; bottom: 0.5rem; width: 72px; height: 72px; pointer-events: none; }
+.olsb3d-status {
+  position: absolute; inset: 0; margin: 0; display: grid; place-items: center; padding: 1rem; text-align: center;
+  font: 400 0.85rem/1.4 var(--font-mono); color: #D8D4CA;
+}
+.olsb3d-desc { margin: -0.4rem 0 0; }
+#olsb3d-cutpos { flex: 1 1 8rem; min-width: 6rem; accent-color: var(--signal-2); }
+.olsb3d-layer { display: inline-flex; align-items: center; gap: 0.35rem; }
+.olsb3d-sw-bone { background: var(--olsb-bone); }
+.olsb3d-sw-canal { background: var(--olsb-skin); }
+.olsb3d-sw-ossicles { background: var(--olsb-ossicle); }
+.olsb3d-sw-nerves { background: var(--olsb-nerve); }
+.olsb3d-sw-muscles { background: var(--olsb-muscle); }
+.olsb3d-sw-inner { background: var(--olsb-perilymph); }
+.olsb3d-sw-vessels { background: linear-gradient(90deg, var(--olsb-artery) 50%, var(--olsb-vein) 50%); }
+.olsb3d-sw-dura { background: var(--olsb-dura); }
+.olsb3d-sw-brain { background: var(--olsb-brain); }
+.olsb3d-sw-air { background: var(--olsb-cast); }
+.olsb3d .olsb-side .olsb-steps { margin-top: 0.75rem; }
+@media (max-width: 600px) {
+  .olsb3d-stage .olsb-orient { display: none; }
+}
 @media (max-width: 600px) {
   .olsb-orient { position: static; padding: 0.3rem 0.6rem 0.45rem; border-top: 1px solid var(--rule); }
 }

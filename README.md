@@ -100,9 +100,11 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/airway-*.js      #   app, engine, question bank
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
-├── OLSB.html               # OLSB — layered middle ear/mastoid dioramas: surgical lateral + medial wall, axial, coronal (unlisted; draft)
+├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; draft)
 │   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
-│   └── js/olsb*.js         #   glossary, mm shape library, one file per diorama, SVG renderer
+│   ├── js/olsb-volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)
+│   ├── js/olsb-3d.js       #   ES module: voxel mesher, camera (orbit/fly/walk), picking, panels (three.js, vendored)
+│   └── js/olsb*.js         #   glossary, mm shape library, one file per 2D diagram, SVG renderer
 │
 ├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens

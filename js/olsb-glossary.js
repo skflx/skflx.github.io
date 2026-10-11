@@ -759,6 +759,79 @@
         "temporallobe": {
             "name": "Temporal lobe",
             "note": "Over the middle fossa dura, above the tegmen."
+        },
+        "tbone": {
+            "name": "Temporal bone",
+            "note": "Petrous and mastoid bone around the ear: the block every structure here is drilled out of. Cut faces of the 3D model show it in section."
+        },
+        "oticcap": {
+            "name": "Otic capsule",
+            "note": "The dense enchondral bone around the labyrinth: harder, paler and less vascular than the surrounding bone, and it does not remodel. Its bulge into the middle ear is the promontory; into the antrum, the lateral canal.",
+            "rel": {
+                "lat": [
+                    "promontory"
+                ]
+            }
+        },
+        "fcanal": {
+            "name": "Fallopian canal",
+            "note": "The bony canal of the facial nerve, from the fundus of the IAC to the stylomastoid foramen. Commonly dehiscent over the oval window. In the 3D model it is the bone shell around the nerve; drilling states keep a shell of it.",
+            "rel": {
+                "lat": [
+                    "recess"
+                ],
+                "med": [
+                    "sinustymp"
+                ]
+            }
+        },
+        "fn-meatal": {
+            "name": "Facial nerve: meatal segment",
+            "note": "In the internal auditory canal, in its anterosuperior quadrant, above the cochlear nerve and in front of the superior vestibular nerve (Bill's bar separates them at the fundus).",
+            "rel": {
+                "inf": [
+                    "cn8"
+                ]
+            }
+        },
+        "fn-lab": {
+            "name": "Facial nerve: labyrinthine segment",
+            "note": "Fundus to geniculate ganglion, about 3-5 mm: the narrowest part of the fallopian canal (the meatal foramen), between the cochlea in front and the superior canal ampulla behind. Middle fossa approach territory.",
+            "rel": {
+                "ant": [
+                    "cochlea"
+                ],
+                "post": [
+                    "ssc",
+                    "vestibule"
+                ]
+            }
+        },
+        "cn8": {
+            "name": "Vestibulocochlear nerve",
+            "note": "Fills most of the internal auditory canal: the cochlear nerve anteroinferior, the superior and inferior vestibular nerves posterior. Shown here as one bundle."
+        },
+        "pfdura": {
+            "name": "Posterior fossa dura",
+            "note": "Over the posterior face of the petrous bone, medial to the sigmoid sinus. Trautmann's triangle (between the sigmoid, the superior petrosal sinus and the bony labyrinth) is the window onto it from the mastoid.",
+            "rel": {
+                "med": [
+                    "cerebellum"
+                ]
+            }
+        },
+        "cerebellum": {
+            "name": "Cerebellum",
+            "note": "In the posterior fossa, behind the posterior fossa dura."
+        },
+        "stapedius": {
+            "name": "Stapedius muscle",
+            "note": "In its own canal just anterior to the mastoid segment of the facial nerve (which supplies it); its tendon leaves the pyramidal eminence for the stapes neck.",
+            "rel": {
+                "post": [
+                    "fn"
+                ]
+            }
         }
     };
 

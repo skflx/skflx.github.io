@@ -162,8 +162,30 @@ deleted.
 
 ## OLSB — middle ear & mastoid (`OLSB.html`)
 
-**State:** Unlisted (nothing links to it; `noindex`). Four schematic
-dioramas of a right ear as layered inline SVG, drawn by `js/olsb.js`:
+**State:** Unlisted (nothing links to it; `noindex`). Two modes behind
+one switch: a 3D model (the default) and four 2D diagrams (the fallback
+without WebGL, and every `#d=`/`#p=` link).
+
+**3D model** (`js/olsb-volume.js` + `js/olsb-3d.js`): a right temporal
+bone as a labelled voxel volume in millimetres (x lateral, y anterior,
+z superior, origin at the oval window), placed from textbook dimensions
+and relations: facial nerve segment by segment, ossicles on the drum,
+three canals in their mutual planes, a spiral cochlea with scalae and
+lamina, Voronoi mastoid air cells, sigmoid/jugular bulb/carotid, dura and
+brain. Two grids: 0.3 mm for the specimen, 0.1 mm for the tympanic
+cavity and labyrinth, built and carved in a Web Worker (the volume file
+itself). Drill states carve it with margins round the hazards: flap up,
+cortical mastoidectomy, facial recess, canal wall down,
+translabyrinthine, middle fossa. Rendered as blocky voxels (face shade,
+vertex AO, coarse openness for cavity depth) with layers, see-through
+bone, isolate, a cut plane (axial/coronal/sagittal), names, big pixels;
+orbit, fly (F) and WASD walking; click to select (neighbours from the
+glossary), double-click to centre. A nine-step guided flight, and view
+links (`#m=3d&st=&L=&cut=&cam=` or `&s=<step>`). `tools/check-data.mjs`
+checks every label against the glossary and the geometry against every
+glossary relation between two drawn structures.
+
+**2D diagrams**, layered inline SVG drawn by `js/olsb.js`:
 
 - **Surgical lateral** (`js/olsb-lateral.js`): the surgeon's projection in
   eight layers, skin to deep hazards, with TM states, field/canal/recess
@@ -200,10 +222,13 @@ It is a tool page, not a site figure, so it is SVG rather than ASCII 3D
 apart for legibility; all content, including the relations, is draft and
 unverified (owner, §7).
 
-**Next:** Owner review of the anatomy, notes and relations. Candidates: a
-facial nerve course diorama (labyrinthine segment to stylomastoid
-foramen), more procedures (canal wall down, stapedotomy, cochlear
-implant), and SSB-style depth (real geometry, a graph).
+**Next:** Owner review of the anatomy, notes and relations, the 3D
+geometry first (positions are reconstructed from dimensions, not traced
+from a scan). Candidates: segmenting a real temporal bone CT into the
+same labels (SSB's pipeline), a find-it quiz in 3D, more drill states
+(cochlear implant, stapedotomy), anatomical variants (sclerotic mastoid
+is already a build option, `pneu`; a high jugular bulb, a dehiscent
+tegmen or superior canal).
 
 ---
 

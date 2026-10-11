@@ -90,6 +90,22 @@ const PAGES = [
     return wait(p, () => document.querySelectorAll('#olsb-info-rel .olsb-chip').length > 2
       && document.querySelectorAll('#olsb-svg .s.is-rel').length > 0);
   } },
+  /* OLSB 3D model: the voxel volume built (in its worker), meshed, and a tour step resolved;
+     a click on the model selects a structure and lists its neighbours. */
+  { path: 'OLSB.html#m=3d&s=1', ready: async (p) => {
+    await wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
+      && Number(document.getElementById('olsb3d-stage').getAttribute('data-faces')) > 10000
+      && /The block/.test(document.getElementById('olsb3d-step-title').textContent), 40000);
+    await p.waitForTimeout(900);   /* the camera's flight to the step's view */
+    await p.locator('#olsb3d-canvas').scrollIntoViewIfNeeded();
+    const box = await p.locator('#olsb3d-canvas').boundingBox();
+    await p.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.55);
+    return wait(p, () => !document.getElementById('olsb3d-info').hidden
+      && document.getElementById('olsb3d-info-name').textContent.length > 2);
+  } },
+  { path: 'OLSB.html#m=3d&st=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&cam=' + encodeURIComponent('<b>'),
+    ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
+      && !document.getElementById('pwn') && !window.__pwned, 40000) },
   /* Regression class as above: the hash is untrusted and only selects data. */
   { path: 'OLSB.html#p=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
     ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
