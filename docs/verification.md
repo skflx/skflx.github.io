@@ -124,9 +124,13 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 ### OLSB (`OLSB.html`)
 - Boots with zero console errors and draws the layered SVG
   (`html[data-olsb="ready"]`); `#p=mastoidectomy&s=6` opens the facial
-  recess step; a payload in `#p=` selects nothing and never becomes markup.
-  Look at it at 390px and 1280px in both themes after a geometry change:
-  label placement is hand-tuned per structure (`at`, `lab`).
+  recess step; `#d=axial&p=posterior&s=2` opens a cut-plane tour and tapping
+  the sinus tympani lists and lights its neighbours; a payload in `#p=`
+  selects nothing and never becomes markup. `tools/check-data.mjs` checks
+  that every drawn structure has a glossary entry and a label anchor, every
+  `rel` target exists, and every step's `focus`/`layers`/`view` resolve.
+  Look at every tour step at 390px and 1280px in both themes after a
+  geometry change: label placement is hand-tuned per structure (`at`, `lab`).
 
 ### Wiki sync (`wiki/sync/sync-vault.mjs`)
 `tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and

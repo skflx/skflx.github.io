@@ -51,6 +51,57 @@ function loadWindow(absPath) {
 }
 
 /* ===========================================================
+   OLSB dioramas <-> glossary (OLSB.html)
+   Every drawn structure names a glossary entry, every relation and
+   every tour step points at something that exists, and the page loads
+   the glossary before the dioramas it lists.
+   =========================================================== */
+function checkOlsb() {
+  console.log('\nolsb: dioramas, glossary, relations, tours');
+  const html = fs.readFileSync(rel('OLSB.html'), 'utf8');
+  const files = [...html.matchAll(/<script\b[^>]*\bsrc="(js\/olsb-[a-z]+\.js)/g)].map((m) => m[1]);
+  ok(files[0] === 'js/olsb-glossary.js' && files.length > 1, 'OLSB.html loads the glossary first, then the dioramas',
+    `OLSB.html script order: ${files.join(', ')}`);
+  const win = {};
+  for (const f of files) new Function('window', fs.readFileSync(rel(f), 'utf8') + '\n;return window;')(win);
+  const O = win.OLSB;
+  if (!O) { fail('window.OLSB missing'); return; }
+  const G = O.glossary;
+  const DIRS = new Set(['sup', 'inf', 'ant', 'post', 'med', 'lat']);
+  const badRel = [];
+  for (const [id, e] of Object.entries(G)) {
+    if (!e.name || !e.note) badRel.push(`${id}: no name/note`);
+    for (const [dir, list] of Object.entries(e.rel || {})) {
+      if (!DIRS.has(dir)) badRel.push(`${id}: direction ${dir}`);
+      for (const o of list) if (!G[o]) badRel.push(`${id}.${dir} -> ${o}`);
+    }
+  }
+  ok(badRel.length === 0, `glossary: ${Object.keys(G).length} entries, every relation resolves`, `glossary: ${badRel.slice(0, 5).join('; ')}`);
+  const dioIds = new Set();
+  for (const d of O.dioramas) {
+    const problems = [];
+    if (dioIds.has(d.id)) problems.push('duplicate diorama id');
+    dioIds.add(d.id);
+    const layers = new Set(d.layers.map((l) => l.id).concat(['base']));
+    const ids = new Set();
+    for (const s of d.structures) {
+      if (ids.has(s.id)) problems.push(`duplicate ${s.id}`);
+      ids.add(s.id);
+      if (!layers.has(s.layer)) problems.push(`${s.id}: layer ${s.layer}`);
+      if (!s.inert && !G[s.id]) problems.push(`${s.id}: no glossary entry`);
+      if (!s.inert && !s.at) problems.push(`${s.id}: no label anchor`);
+    }
+    const views = new Set(d.views.map((v) => v.id));
+    for (const t of d.tours) for (const st of t.steps) {
+      for (const f of st.focus || []) if (!ids.has(f)) problems.push(`${t.id}/${st.title}: focus ${f}`);
+      for (const l of st.layers || []) if (!layers.has(l)) problems.push(`${t.id}/${st.title}: layer ${l}`);
+      if (st.view && !views.has(st.view)) problems.push(`${t.id}/${st.title}: view ${st.view}`);
+    }
+    ok(problems.length === 0, `diorama ${d.id}: structures, tours and views resolve`, `diorama ${d.id}: ${problems.slice(0, 5).join('; ')}`);
+  }
+}
+
+/* ===========================================================
    1. OKSAT manifest <-> modules
    =========================================================== */
 function checkOksat() {
@@ -528,5 +579,6 @@ checkSecurity();
 checkStamps();
 checkSsb();
 checkFigures();
+checkOlsb();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

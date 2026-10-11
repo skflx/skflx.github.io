@@ -162,25 +162,41 @@ deleted.
 
 ## OLSB — middle ear & mastoid (`OLSB.html`)
 
-**State:** Unlisted (nothing links to it; `noindex`). A schematic lateral
-view of a right temporal bone as layered inline SVG drawn by `js/olsb.js`
-from the data in `js/olsb-anatomy.js`: eight layers (skin, soft tissue,
-cortex, canal & TM, middle ear, mastoid cavity, facial nerve, deep hazards),
-a TM state (intact / perforation / flap up / grafted), three viewports
-(field, canal, recess) and a see-through mode. Two stepped procedures,
-tympanoplasty (postauricular underlay) and canal-wall-up mastoidectomy with
-facial recess; each step sets the layers and view, names its focus
-structures, and gives one action and one hazard. Tap a structure for its
-note. `#p=<procedure>&s=<n>` links a step (matched against the data).
-No storage. Self-contained (in `SELF_CONTAINED`).
+**State:** Unlisted (nothing links to it; `noindex`). Four schematic
+dioramas of a right ear as layered inline SVG, drawn by `js/olsb.js`:
+
+- **Surgical lateral** (`js/olsb-lateral.js`): the surgeon's projection in
+  eight layers, skin to deep hazards, with TM states, field/canal/recess
+  viewports and see-through. Tours: tympanoplasty (postauricular underlay)
+  and canal-wall-up mastoidectomy with facial recess (action + hazard per
+  step).
+- **Medial wall** (`js/olsb-medial.js`): the tympanic cavity from lateral
+  with TM, malleus and incus removed: divisions, the LSCC / facial nerve /
+  oval window / promontory / round window stack, retrotympanum, anterior
+  wall and epitympanum, inner ear projected, ossicles as a ghost.
+- **Axial: posterior tympanum** (`js/olsb-axial.js`): CT-style cut at the
+  round window; the posterior wall lateral to medial and three lines of
+  sight (canal, facial recess, angled endoscope).
+- **Coronal: the attic** (`js/olsb-coronal.js`): compartment widths,
+  scutum, Prussak's space, the medial stack, roof and floor, the attic
+  cholesteatoma route.
+
+`js/olsb-glossary.js` holds each anatomical id once (name, note,
+directional `rel`). Tapping a structure lights its neighbours with their
+direction, lists where else it is drawn, and jumps there (to a step that
+shows it). A find-it quiz asks for any visible structure. Links:
+`#d=<diorama>&p=<tour>&s=<n>` (older `#p=` links still resolve). No
+storage. Self-contained (in `SELF_CONTAINED`).
 
 It is a tool page, not a site figure, so it is SVG rather than ASCII 3D
 (`docs/decisions.md` §8 governs figures). Geometry is invented and spread
-apart for legibility; all content is draft and unverified (owner, §7).
+apart for legibility; all content, including the relations, is draft and
+unverified (owner, §7).
 
-**Next:** Owner review of the anatomy and the step text. Possible
-expansion toward SSB-style depth (real geometry, a graph); more procedures
-(canal wall down, stapedotomy, cochlear implant).
+**Next:** Owner review of the anatomy, notes and relations. Candidates: a
+facial nerve course diorama (labyrinthine segment to stylomastoid
+foramen), more procedures (canal wall down, stapedotomy, cochlear
+implant), and SSB-style depth (real geometry, a graph).
 
 ---
 
