@@ -5962,7 +5962,7 @@ async function finish(browser, server) {
   console.log(`\n=== SSB behavior tests: ${timings.join(', ')} ===`);
   for (const r of failed) console.log(`  FAIL  ${r.name}  — ${r.detail || ''}`);
   console.log(`\n${failed.length ? 'FAILED' : 'OK'} — ${results.length - failed.length}/${results.length} checks passed.`);
-  process.exit(failures ? 1 : 0);
+  process.exit(failed.length ? 1 : 0);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
