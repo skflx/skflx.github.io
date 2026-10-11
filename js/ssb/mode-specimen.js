@@ -40,12 +40,12 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=b44d7355';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=93a997c8';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=34e04a58';
-import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=32324b32';
+import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=2a1b9fd8';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
-import { CT_PLANES } from './state.js?v=3a54b0af';
+import { CT_PLANES } from './state.js?v=893232f8';
 import { REGION_LABEL } from './graph.js?v=ef6d8734';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
@@ -118,7 +118,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
     const section = { axis: null, flip: false };
     let muNote = '';                /* the player's one line about the mucosal state (loading, could not load), shown by the layer controls */
-    /* The anatomy stack's override packs (docs/realistic-anatomy.md 6.2): the edited state's whole-node replacements, loaded
+    /* The anatomy stack's override packs (docs/ssb.md §14, R6.2): the edited state's whole-node replacements, loaded
        after the packs and given back when the anatomy changes. `hides` are the base node keys they stand in for. */
     const anat = { key: '', gen: 0, chain: Promise.resolve(), stems: [], hides: new Set(), status: 'none', problems: [] };
     let dissect = null;             /* the procedure player's state (P2): { key, hides: Set of base node keys } while a dissected state is shown */

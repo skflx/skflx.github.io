@@ -571,7 +571,7 @@ export function sharedVolume() {
     return shared;
 }
 
-/* ---------------- anatomy: bases and patches (docs/realistic-anatomy.md 6.2, docs/ssb.md 5.11) ---------------- */
+/* ---------------- anatomy: bases and patches (docs/ssb.md §14, R6.2, docs/ssb.md 5.11) ---------------- */
 
 export const ANATOMY_INDEX = 'ssb/anatomy/index.json';
 const BASE_NAME = /^(?:standard|scanned|scanned-b)$/;
@@ -620,8 +620,7 @@ const dtypeBytes = { u8: 1, i16: 2 };
 const plainObject = (o) => o !== null && typeof o === 'object' && !Array.isArray(o);
 
 /* The bytes of an anatomy patch (gzip or already decoded) -> the patch, validated against everything the header and the
-   body can be checked against without a volume. Layout: u32 LE header length, a JSON header (docs/realistic-anatomy.md
-   6.2: version 1, base, entity, side, preset, params, truth "composite", calibratedOn, assumed, boxes [{ ijk0, dims, ct,
+   body can be checked against without a volume. Layout: u32 LE header length, a JSON header (docs/ssb.md §14, R6.2: version 1, base, entity, side, preset, params, truth "composite", calibratedOn, assumed, boxes [{ ijk0, dims, ct,
    labels, sdf }], landmarks, sweeps, replacesNodes, addsNodes), then per box in order its dense arrays, x fastest, little
    endian: ct (u8, or i16 for a 16-bit head), labels (u16), then one u8 array per `sdf` key in the header's order.
    `expect` is what the caller asked for ({ base, ref }): a patch made for another base, entity, side or preset is refused.

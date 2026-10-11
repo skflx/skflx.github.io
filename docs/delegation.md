@@ -28,7 +28,7 @@ A WP may go to Sonnet only when all of these hold:
    number the pipeline prints. "Looks right" is a checkpoint item, not an
    acceptance criterion.
 3. **It needs no owner decision** that is still open (`docs/ssb.md` §13,
-   `docs/ssb-roadmap.md` §Owner decisions).
+   `docs/ssb-roadmap.md` §2).
 4. **Its read list fits.** The WP names the sections to read (e.g.
    `docs/ssb.md` §5.5, §7.4), not whole documents.
 
@@ -134,7 +134,8 @@ lands in the orchestrator's context). So:
   Escalate line costs a paragraph at the checkpoint; one that guesses an
   anatomy call costs a corrective WP.
 - **Merge soon after a checkpoint**, so lanes branch from a current
-  `master` and conflicts stay stamp-only (recipe:
-  `docs/ssb-sonnet-handoff.md` "Merging lanes"). Merges, stamp conflicts
-  and docs passes are mechanical: a Sonnet (or smaller) session at low
-  effort is enough.
+  `master`. Conflicts in `?v=` stamps (`ssb.html`, `js/ssb/main.js`, the
+  module imports, `js/ssb/stamps.js`) are resolved by taking either side,
+  then `node tools/stamp-assets.mjs` and `node tools/check-data.mjs`; never
+  hand-pick hashes. Merges, stamp conflicts and docs passes are mechanical:
+  a Sonnet (or smaller) session at low effort is enough.

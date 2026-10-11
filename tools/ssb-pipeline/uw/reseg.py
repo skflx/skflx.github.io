@@ -1,4 +1,4 @@
-"""Resegmentation harness, work packages RS1 and RS2 (docs/realistic-anatomy.md section 7.2 steps 1-2, section 10).
+"""Resegmentation harness, work packages RS1 and RS2 (docs/ssb.md §14, R7.2 steps 1-2, section 10).
 
     .venv/bin/python -I tools/ssb-pipeline/uw/reseg.py all        # work, air, export, score (RS1), then sheets, export2, score2 (RS2)
     .venv/bin/python -I tools/ssb-pipeline/uw/reseg.py work|air|export|score|sheets|export2|score2|rs2|selftest [--rules ALT.json]

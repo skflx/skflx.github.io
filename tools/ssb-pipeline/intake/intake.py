@@ -12,7 +12,7 @@ supported here (owner decision). Reads a file given on the command line; writes 
 Landmarks (`--landmarks`): JSON {"landmarks": [{"id": "lm.x", "src": [x, y, z], "dst": [x, y, z]}, ...]} with at least
 three non-collinear points. `src` is the point in the SOURCE file's world frame expressed as RAS mm (an NRRD in LPS is
 converted before it is compared, so a point read off in 3D Slicer, which shows RAS, goes in as shown); `dst` is the same
-point in the 4 frame. The set is whatever the caller has; the RA landmark set (docs/realistic-anatomy.md 6.1) is the
+point in the 4 frame. The set is whatever the caller has; the RA landmark set (docs/ssb.md §14, R6.1) is the
 intended one once RS6 puts it in the graph, and nothing here depends on which points are used.
 
 Method.

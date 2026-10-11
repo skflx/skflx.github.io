@@ -1,4 +1,4 @@
-"""Held-out arrow-tip split and label scorer (docs/realistic-anatomy.md section 7.1; work package RS0).
+"""Held-out arrow-tip split and label scorer (docs/ssb.md §14, R7.1; work package RS0).
 
     python3 tools/ssb-pipeline/uw/score.py split            # write ssb/reference/uw-sinusanatomy2/split.json (once)
     python3 tools/ssb-pipeline/uw/score.py                  # score today's labels: the as-scanned head AND the served one

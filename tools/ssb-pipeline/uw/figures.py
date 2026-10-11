@@ -1,5 +1,5 @@
 """UW teaching-page figures -> ssb/reference/uw-sinusanatomy2/figures.json (WP FG1,
-docs/realistic-anatomy.md §10; sources §4.1, limits §5). Numbers and text only: no pixel is stored.
+docs/ssb-roadmap.md §3a; sources §4.1, limits §5). Numbers and text only: no pixel is stored.
 
     python3 -I figures.py build              # incoming/ pages + images -> figures.json (fetches what is missing)
     python3 -I figures.py overlay ID [ID..]  # check PNG (mask, labels, tips) -> --out DIR (default: system temp)
@@ -19,7 +19,7 @@ anti-aliased edge at 160-230, so "pixels >= 250 in thin components" alone fragme
 glyphs. The mask is therefore: SEED = pixels >= HI that are not in a thick bright region (opening of
 >= HI by a disk of THICK_R, dilated 1 px), grown to pixels >= LO within REACH px of a seed, minus the
 thick region. Saturated tissue (soft-tissue and post-contrast windows clip bone at 255) makes the
-mask unusable there (docs/realistic-anatomy.md §10, FG1 ruling): those figures are recorded in full
+mask unusable there (docs/ssb-roadmap.md §3a, FG1 ruling): those figures are recorded in full
 with `arrows: null` and the reason below; tips are traced on the bone-window figures only. Each
 traced figure carries a `maskCheck` (components that were not text, arrow or mark, and whether the
 caption's own arrow/arrowhead/asterisk words found a match).

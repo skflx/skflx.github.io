@@ -43,7 +43,7 @@ Resegmentation ground truth (WP RS0; numpy + scipy only, no crawl):
 `score.py` prints the held-out tip hit rate per structure with Wilson CIs, and the topology checks. Do not rerun
 `split` unless the ground truth itself is meant to move (it moves every later score). Method, caveats (the current
 labels were grown from these tips, so the baseline is optimistic) and `--tol`: the script's docstring;
-`docs/realistic-anatomy.md` §7.1.
+`docs/ssb.md` §14, R7.1.
 
 Resegmentation harness (WP RS1; needs the venv and the crawl, writes only the gitignored `incoming/_rs/`, never `ssb/`):
 
@@ -56,7 +56,7 @@ served 0.5 mm grid to `incoming/_rs/candidate/` (laid out like `ssb/ct` + `ssb/g
 as-scanned labels (`score-RS1.json`). `rs/declared.json` is the label set RS commits to, each id with the step that adds it
 (a `null` id is a term the graph lacks, for Opus); `--declared` reports coverage over it and identity over its done ids.
 The candidate is in the as-scanned frame (the tips' frame), not the standardized one. Method and limits: the script's
-docstring; `docs/realistic-anatomy.md` section 7.2 and WP RS1.
+docstring; `docs/ssb.md` §14, R7.2 and WP RS1.
 
 Lamella sheets (WP RS2; same inputs and sandbox as above, `reseg.py sheets|export2|score2`, or `rs2` for the three):
 `rs/sheets.json` holds the sheetness filter's parameters and, per lamella, the rules that name a sheet (the uncinate process,

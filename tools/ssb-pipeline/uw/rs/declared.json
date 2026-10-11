@@ -1,6 +1,6 @@
 {
  "version": 1,
- "doc": "The ids resegmentation commits to label (docs/realistic-anatomy.md section 7.1 \"Baseline\", WP RS1). `step` is the RS work package that adds the label; `status` is \"done\" once that step's candidate labels it (score.py --declared reports coverage over the done ids and over all). An entry with \"id\": null is a term the graph has no id for: listed for Opus, never invented. Sided ids are covered when both R and L are labelled; \"midline\" ids when M is.",
+ "doc": "The ids resegmentation commits to label (docs/ssb.md §14, R7.1 \"Baseline\", WP RS1). `step` is the RS work package that adds the label; `status` is \"done\" once that step's candidate labels it (score.py --declared reports coverage over the done ids and over all). An entry with \"id\": null is a term the graph has no id for: listed for Opus, never invented. Sided ids are covered when both R and L are labelled; \"midline\" ids when M is.",
  "not_rs": [
   {
    "id": "s.nasal-vestibule",

@@ -35,7 +35,7 @@ data, ever.
    *diorama* — an idealized parametric model that shows a variant or a
    classification cleanly; *population* — literature values with their
    spread, method and denominator; *composite* — a real specimen with a
-   declared edit (owner RA-O2, `docs/realistic-anatomy.md` §2.2): the badge
+   declared edit (owner RA-O2, `docs/ssb.md` §14, R2.2): the badge
    names the edit, its parameters and what it was calibrated on, and picking
    an edited voxel or mesh reports that it is edited. The machinery for it
    exists (§5.11); no edited state ships yet. Every view carries a badge saying which it
@@ -867,8 +867,7 @@ on the decongested state (the operations start by decongesting).
 
 ### 5.11 Anatomy state: bases and patches (WP RA3a)
 
-`state.anatomy = { base, variants, conditions }` (`docs/realistic-anatomy.md`
-§2.1, §6.4) is the layer stack over the volume and the packs: a **base**
+`state.anatomy = { base, variants, conditions }` (`docs/ssb.md` §14, R2.1, §6.4) is the layer stack over the volume and the packs: a **base**
 (`standard`, the mirrored reference head, which is `ssb/ct`, `ssb/geometry`,
 `ssb/models` where they always were; `scanned` and `scanned-b`, each a full
 copy of that layout under `ssb/anatomy/<base>/`), then **variants**, then
@@ -883,7 +882,7 @@ one variant per side per `region`, and two different refs only when the pair is 
 entries give an extent and the extents do not overlap.
 
 **Patch file** `ssb/anatomy/patches/<base>/<entity>.<side>.<preset>.ssbp.gz`:
-gzip of u32 LE header length, a JSON header (`docs/realistic-anatomy.md` §6.2: `version` 1, `base`, `entity`, `side`,
+gzip of u32 LE header length, a JSON header (`docs/ssb.md` §14, R6.2: `version` 1, `base`, `entity`, `side`,
 `preset`, `params`, `truth` `"composite"`, `calibratedOn`, `assumed`, `boxes` `[{ ijk0, dims, ct: "u8"|"i16", labels: "u16", sdf?: { "<id>": "u8" } }]`,
 `landmarks`, `sweeps`, `replacesNodes`, `addsNodes`), then per box, in order, its dense arrays, x fastest, little
 endian: `ct` (u8, or i16 on a 16-bit head), `labels` (u16), then one u8 array per `sdf` key in header order.
@@ -1883,88 +1882,602 @@ packages, checkpoints and order live in `docs/ssb-roadmap.md`.**
 
 ## 13. Owner decisions
 
-Decided (owner, 2026-09-30):
+The board is `docs/ssb-roadmap.md` §2: one line per decision, plus the owner's
+open actions. This section keeps the options and rationale that shape the code,
+and the decisions still open.
 
-- **Vendor three.js** — approved (same-origin, pinned; `js/vendor/README.md`).
-- **Reference specimen: reconstruct from the UW atlas.** Its axial stack is
-  treated as a CT volume, registered against UW's own coronal and sagittal
-  reformats, scaled from the globe, and segmented with the labeled arrow tips
-  as named seeds — gated on a feasibility check. Bone window only: vessels
-  and nerves are sweeps placed at labeled points; thin lamellae get schematic
-  touch-up.
-- **UW permission covers publishing 3D geometry and volumes derived from
-  its images** (owner-confirmed; the authors' written permission arrived
-  2026-10-07, recorded in `ssb/LICENSE-data.md`).
+### Decided
 
-O1–O3 were decided by the owner on 2026-10-02 (below); the roadmap's §2 lists what each unblocks:
+- **Vendor three.js** (2026-09-30): approved, same-origin and pinned (`js/vendor/README.md`).
+- **Reference specimen from the UW atlas** (2026-09-30): the axial stack treated as a CT volume, registered to UW's reformats, scaled from the globe, segmented from the labelled arrow tips; bone window only, with vessels and nerves as sweeps.
+- **UW permission** covers publishing 3D geometry and volumes derived from its images (owner-confirmed; written permission 2026-10-07, `ssb/LICENSE-data.md`).
+- **O1, external nose: specimen skin for naris and ala, cartilage as a schematic overlay** (2026-10-02).
+- **O2, nose scope: entry anatomy now;** the full framework is ST7 (2026-10-02).
+- **O3, content split: Sonnet drafts, Opus reviews adversarially; Opus authors geometry** (2026-10-02).
+- **O4, scope diameter: the 4 mm telescope is modelled, 2.7 mm selectable** (2026-10-03). The 3 mm and 4 mm checks showed that only the measured nostril, not a provisional fulcrum, gives a collision-free path to the sphenoid ostium.
+- **O5, NSF superior incision starts at the floor of the sphenoid ostium, for every design** (2026-10-03). This follows the owner's reading over ch. 31's superior-aspect start. The margin below the septal top keeps one default (15) where the incision rises forward (designs B and C).
+- **O6, normal before variant: right half mirrored, septum centred** (2026-10-03). Septal deviation and ostium heights come later as variants.
+- **O7, content priority: clear FESS and EEA-to-sellar/clival anatomy first** (2026-10-07). C1 problems are flagged, not fixed.
+- **O8, framework defaults: mixed populations, each labelled; modal variant classes** (2026-10-08).
+- **O9, population reference beside the head** (2026-10-08): percentiles, a median profile and a mean-shape ghost of the five NasalSeg structures. A deformed head only after that.
+- **O10, posterior septectomy: 15 mm from the choanal arch up** (2026-10-08). The inferior limit is still to be confirmed.
+- **O11, FESS on both sides at once** (2026-10-08). One dissected side beside an intact one needs per-side lining packs, later.
+- **O12, NasalSeg-trained voxel check (SEG1): not now** (2026-10-08). It adds a deep-learning stack to the pipeline, and the ethmoid and uncinate, which it cannot see, are the approximate structures.
+- **O13, mucosa toggle: decongested · as scanned · congested** (2026-10-08). The congested end is physiological (turbinates and septal swell body, from NasalSeg). Rhinosinusitis edema is a condition, in the pathology layer.
+- **O14, nasal framework drawn: both, lab first** (2026-10-11, as recommended): the variant lab, then fitted under the specimen's skin and on its nasal bones (ST7e).
 
-- **O1 — Source of the external nose.** (a) Unmask a nose-only box of the
-  specimen (real n = 1 naris, vestibule and alar skin; touches the "faces
-  are removed" rule of §5.1), (b) a parametric nose diorama registered to
-  the piriform aperture and ANS (schematic), or (c) both — specimen skin
-  surface, cartilage as an overlay. Recommended: (c), if the nose is in the
-  source's field of view (roadmap ST6-0 checks). **Decided: (c).**
-- **O2 — Nose scope.** Entry anatomy only (vestibule, valves, ala,
-  columella: the scope's fulcrum and walls) or also the rhinoplasty
-  framework (ULC/LLC and crura, ligaments, SMAS). Recommended: entry anatomy
-  now; the framework later as its own diorama. **Decided:** entry anatomy now; the full nasal framework is the intended end state (roadmap ST7).
-- **O3 — Content authoring split.** Sonnet drafts the content backlog and
-  checks citations, Opus reviews adversarially; Opus keeps authoring
-  anything that places geometry. Recommended: yes. **Decided: yes.**
-- **O6 — Normal before variant (owner, 2026-10-03).** The first release
-  is a working *normal* atlas and endoscope: as symmetric and standard as
-  the data allow, even though no real head is; septal deviation, ostium
-  heights and other asymmetries come later as variants. Implemented as the
-  standard specimen of §5.1 (right half mirrored, septum centred; WP N1).
+### Open
 
-Open, from the ST7 spec (2026-10-07; §6.2):
+- **Strict CSP.** Recommended: keep it. Gzip first, then Draco's JS decoder. `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
+- **Publish while `draft`.** Recommended: yes, with visible unverified markers, and owner review of tier 1 first.
+- **Name and URL** (`SSB`, `ssb.html`). Working title.
 
-- **O14 — Where the nasal framework is drawn** (open; numbered O7 until
-  2026-10-08, when it collided with the content-priority O7). (a) In the variant lab
-  only, as an idealized diorama; (b) fitted under the specimen's own skin
-  and on its nasal bones in the Specimen stage (schematic on specimen,
-  n = 1 envelope); (c) both, the lab first. Recommended: (c) — the lab
-  build is needed either way and is where the rules are tested; the fit
-  follows ST6 and the specimen's bony nose (roadmap ST7d, ST7e).
-- **O8 — Where the defaults come from.** The numbers in hand come from
-  different populations: Caucasian cadaver series for the ligaments,
-  crura and vessels; Korean, Chinese and Thai series for the septal
-  cartilage, the keystone overlap and the envelope thickness; an Egyptian
-  series for the ULC. (a) Mixed defaults, each labelled with its
-  population — no real nose is the default, but every number is cited;
-  (b) Caucasian-series numbers only, schematic where none exist (the
-  envelope would become schematic); (c) a `population` choice, once a
-  complete second set exists. And for variant classes: the modal drawn
-  class (what a surgeon meets most) or the textbook configuration.
-  Recommended: (a) now with (c) later; modal classes; in fit mode the
-  envelope is the specimen's own, so O8 matters least where the specimen
-  speaks. **Decided 2026-10-08 by the owner: as recommended.**
+## 14. Realistic anatomy
 
-1. **Keep the CSP strict** (recommended: gzip, then Draco's JS decoder if
-   needed). `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
-2. **Publish while `draft`?** Recommended: publish with visible unverified
-   markers (the wiki's precedent), prioritizing owner review of tier 1.
-3. Name and URL (`SSB`, `ssb.html`) — working title.
+Moved from `docs/realistic-anatomy.md` on 2026-10-11, as that plan asked once accepted. Sources, limits and owner decisions stay there (its §4, §5, §13). Its work packages and handoff are in `docs/ssb-roadmap.md` §3a–§4. Sections here are numbered `R…` so they do not collide with §1–§13 above; the plan's own `§` references were rewritten to match.
 
-From P1 (Opus, 2026-10-08), **all decided 2026-10-08 by the owner as recommended** (`docs/ssb-roadmap.md` §2):
+### R1. Goal, and what "realistic" means here
 
-- **O13 — What "edema" means in the mucosa toggle** (numbered O8 until
-  it collided with ST7's O8). The physiological
-  congested phase (turbinates and septal swell body, calibrated on NasalSeg,
-  §5.9), or the mucosal edema of rhinosinusitis (sinus lining, polyps:
-  pathology, PR #119's `fill` operator). Recommended: the toggle is
-  decongested · as scanned · congested; inflammatory edema is a condition.
-- **O9 — "Averaged normal anatomy."** A population reference shown beside
-  the head (percentiles, profiles, a mean-shape ghost: population truth), or
-  a head deformed toward the NasalSeg median (composite, five structures
-  only). Recommended: the reference now, the deformed head only after it.
-- **O10 — Posterior septectomy extent.** 15 mm of posterior septum (the
-  middle of the graph's 1–2 cm), from the choanal arch up. Is the arch the
-  right inferior limit for the corridor you teach?
-- **O11 — FESS on both sides at once.** Procedure mode carves both sides
-  (the scope chooses the nostril); one dissected side beside an intact one
-  needs per-side lining packs. Recommended: both sides now.
-- **O12 — A voxel-level check against a NasalSeg-trained model** (roadmap
-  SEG1). Recommended: not now (a deep-learning stack in the pipeline; the
-  distribution check of §5.10 found no defect in the five structures it
-  can see, and it cannot see the ethmoid).
+The page today serves the UW axial/sagittal head **standardized**: right half
+mirrored, septum centred (O6, `docs/ssb.md` §5.1). That was right for a
+first release and is wrong as an end state — no head is symmetric, and the
+things a sinus surgeon must learn to read on a preoperative CT are exactly
+the departures from the standard head.
+
+**Goal.** One toggle, four anatomy states, each honest about what kind of
+truth it shows:
+
+| State (UI label) | What the learner sees | Built from | Truth kind (badge) |
+|---|---|---|---|
+| `standard` (Symmetric) | the current standardized head | N1, unchanged | specimen, standardized |
+| `scanned` (Normal asymmetry) | a real head as scanned: septal bow, unequal cavities, one-sided cells | UW head A without N1; later UW head B (docs/realistic-anatomy.md §4.2) | specimen |
+| `variant` (Variants) | a base head with one named variant applied (or a curated set) | the variant on a real head where one exists; else a constrained edit of the base, calibrated on exemplars | specimen, or **composite** (new) |
+| `pathology` (Pathology) | a base head with a condition laid over it | condition operators calibrated on exemplars | composite |
+
+**Non-goals.** No patient data. No statistical shape model sold as a real
+head. No disease the bone-window specimen cannot show honestly without a
+synthetic soft-tissue channel (those wait for R9.3). No new external runtime
+dependency; everything stays offline-pipeline → committed data → static page.
+
+**What the owner gets at the end.** A CT and a 3D head in which "show me a
+right concha bullosa", "this patient's left Haller cell narrowing the
+infundibulum", "Lund–Mackay 2 in the left maxillary with an OMU pattern" or
+"a frontal mucocele pushing the globe down" are one click, each with the
+graph's text, prevalence (with its denominator), the exemplar it was
+calibrated on, and the stations where it changes the operation.
+
+---
+
+### R2. The four states — semantics
+
+#### R2.1 Layers, not modes
+
+The four states are **layers over a base**, not exclusive modes:
+
+```
+anatomy = { base: standard | scanned[-b] | <exemplar head>,
+            variants: [ {id, side, preset} … ],      // applied in order
+            conditions: [ {id, side, preset} … ] }   // applied after variants
+```
+
+- *Symmetric* = `{base: standard}`; *Normal asymmetry* = `{base: scanned}`.
+- *Variants* and *Pathology* open a picker and apply to the current base.
+  **Default base for both: `scanned`** (owner, RA-O3: variants and
+  pathology should look like a real patient's CT, so they sit on the real,
+  asymmetric head). A switch moves the same variant onto `standard`, where
+  the contralateral side becomes a clean normal control (a right concha
+  bullosa beside a normal left middle turbinate) — useful for isolating
+  one change, but not the default. Consequence: batch-1 variants and
+  pathology are built and tested on `scanned` first, so RA3b (the scanned
+  base) is on their critical path.
+- One variant per side per region in v1; curated **scenarios** (named sets,
+  e.g. "typical preoperative CT") are precomputed combinations (R6.3).
+- Pathology composes over variants because disease follows anatomy (a Haller
+  cell narrows the infundibulum; an infundibular pattern then opacifies the
+  maxillary sinus behind it). The pipeline proves each allowed combination
+  (R6.3, compatibility table).
+
+#### R2.2 Truth kinds
+
+`docs/ssb.md` §1.2 has three truth kinds: specimen, diorama, population.
+This plan needs a fourth, and it must stay as distinct as the other three:
+
+- **composite** — *a real specimen with a declared edit*. The badge names the
+  edit, its parameters, and the exemplar(s) it was calibrated on:
+  "Specimen, edited: right concha bullosa (bulbous, 11 mm), calibrated on
+  UW Maxillary-Normal fig. 6 and Radiopaedia rID …; schematic". Picking an
+  edited voxel or mesh reports that it is edited.
+
+Adding a truth kind changes a principle; the owner approved it (RA-O2,
+2026-10-07), so `docs/ssb.md` §1.2 gains it when the first edited state
+ships (WP RA3a's docs pass).
+
+#### R2.3 What each state changes across the page
+
+| Consumer | standard | scanned | variant / pathology |
+|---|---|---|---|
+| CT volume, labels | as now | own volume | base + patches (R6.2) |
+| Specimen packs | as now | own packs | base packs with node overrides |
+| Distance fields (scope HUD) | as now | own | patched where the edit changes them (dehiscence, Onodi) |
+| Landmarks, sweeps, charts | as now | own, per side (no mirror) | patch overrides by key |
+| Endoscope stations (E5, E6 in PR #115) | posed | re-validated; invalid poses say so | re-validated per patch |
+| Flap overlay (ST5), septal charts | as now | recomputed per side | septal deviation recomputes the chart |
+| Variant lab | unchanged | unchanged | a lab diorama can link to "see it on the specimen" |
+| Graph panels | as now | + asymmetry measurements | + the entity's panel, prevalence, exemplar list |
+
+---
+
+### R3. What exists now (2026-10-07)
+
+**Specimen A** (UW axial + sagittal stacks, one head): 0.3437 mm in-plane,
+0.625 mm slices, bone-window 8-bit display, served on a 0.5 mm grid in RAS.
+Labels: the named air spaces (agger nasi cell, anterior and posterior
+ethmoid cells as two lumps, bulla, frontal recess and sinus, maxillary,
+nasal cavity, nasopharynx, sphenoid), the stage-C wall units, septum,
+inferior and middle turbinates, orbits (`ssb/geometry/labels.json`). The
+basal lamella is a **proxy plane**; there is no uncinate, superior
+turbinate, ostium, infundibulum, hiatus, meatus, sphenoethmoidal recess or
+individual ethmoid cell label; canals and vessels are sweeps, many points
+inferred. The as-scanned (pre-N1) files are reproducible from git
+(`normalize.py` `AS_SCANNED_COMMIT`). Its left side carries the head's
+asymmetries: a left cavity with less than half the right's air and a left
+inferior turbinate twice the right's volume against a septum bowed slightly
+right, a left sphenoid ostium closed by mucosa, an unlabelled left bulla
+(`docs/ssb.md` §5.1). Most of that is **physiological** — the nasal cycle
+congests one side's turbinates and mucosa at a time, and this specimen is
+not decongested — which the `scanned` state must say rather than present
+as structure.
+
+**Specimen B** (UW coronal stack, a different adult head, 109 labeled
+frames): not used for geometry (`registration.specimen_identity`). It is
+a second real normal head with visibly different ethmoid partitions,
+maxillary septa and sphenoid septation — real normal variation we already
+have permission for.
+
+**UW teaching pages**: 8 pages (Frontal/Maxillary/Ethmoid/Sphenoid ×
+Normal/Abnormal), crawled 2026-10-07 into the gitignored drop zone
+(`tools/ssb-pipeline/incoming/uw-sinusanatomy2/`): 87 figure files, three
+reused across pages, one listed file missing on the server
+(`Sag.OMU&Sps.jpg`, HTTP 404). Single slices, ~300–800 px, labels and arrows
+baked in, captions spell out every abbreviation. Inventory: docs/realistic-anatomy.md §4.1.
+
+**Graph**: variants (`v.*`) and conditions (`dz.*`) are already rich; every
+variant is `geo: diorama` or `none` and every condition `geo: overlay` or
+`none` — **nothing is yet drawn on the specimen**. Three dioramas exist
+(`ethmoid-roof`, `frontal-recess`, `sphenoid`), whose rules (IFAC drainage,
+Keros, sphenoid exposure) are pinned in `tools/test-ssb.mjs`.
+
+This section is the plan's starting point (2026-10-07). What has been
+built since is in each WP's status line (docs/ssb-roadmap.md §3) and in `WIP.md`.
+
+---
+
+### R6. Architecture
+
+#### R6.1 The anatomy registry — keeping track of where everything is
+
+The owner asked for "something internally to keep track of the overall
+positions … and overlay them". That is three files and one viewer overlay,
+all in the existing RAS frame (`docs/ssb.md` §4: origin ANS, axial ∥
+Frankfort, x = 0 midsagittal):
+
+- **`ssb/anatomy/sources.json`** — every source item: a base volume (head A,
+  head B, a graded Radiopaedia volume) or a 2D figure (UW page image,
+  Radiopaedia key image). Per item: id (`uw-fig:Cor.pneumMT`,
+  `uw-head:A`, `rp:<rID>`), licence and attribution key, modality, plane,
+  window, contrast, grade (A/B/C), same-patient group, and its **pose**:
+  for a volume, the similarity + TPS transform to head A's frame; for a
+  figure, a plane `{origin, u, v, mmPerPx}` in head A's frame with a fit
+  residual and an identifiability margin (best vs. second-best fit).
+- **`ssb/anatomy/observations.json`** — every extracted fact as an
+  observation: `{id, source, kind: point|contour|measure, of: <graph id>,
+  side, raw (source px or voxel), ras (in head A frame), sigmaMm, method}`.
+  UW arrow tips, Radiopaedia annotations read by eye, measured ratios.
+  Numbers only, no pixels.
+- **`ssb/anatomy/population.json`** — per graph id or measurement, the
+  aggregated observations across heads (n, per-side values, paired L−R
+  differences), beside the graph's literature values. The asymmetry panel
+  and preset ranges read it.
+- **RA landmark set** — the landmarks every pose and TPS uses, chosen to be
+  visible in at least two planes and present in the graph: ANS, crista
+  galli apex, sella floor centre, dorsum sellae tip, choanal arch, frontal
+  ostia, sphenoid ostia, middle turbinate heads, foramen rotundum (anterior),
+  infraorbital foramina, greater palatine foramina, optic canal openings,
+  globe centres **(new landmarks)**. Missing ones are added to the graph as
+  `lm.*` (content) and to `landmarks.json` (geometry) in RS6.
+
+**Overlay viewer (dev and teaching).** CT mode gains an *Exemplars* layer:
+observations within ±3 mm of the current slice plane are drawn as markers
+(colour by source, shape by kind) on head A, and the exemplar figures whose
+pose lies near the slice are listed beside it. Disagreement between an
+observation and head A's labels is the QA signal for resegmentation; for
+teaching, clicking an exemplar applies its variant to the specimen. The
+UW permission covers showing the figures themselves (owner, RA-O1,
+2026-10-07), so the figure is shown side by side, served from this origin
+(the site is HTTP-only, so an HTTPS page cannot hotlink it), with the
+credit line beside it.
+
+#### R6.2 Data layout and the patch format
+
+```
+ssb/anatomy/
+  index.json                       registry of states: bases, variants, conditions, scenarios, compat
+  sources.json  observations.json  population.json
+  scanned/                         a full base: ct/, geometry/, models/ in the ssb/ layout
+  scanned-b/                       head B, later
+  patches/<base>/<entity>.<side>.<preset>.ssbp.gz
+  overrides/<base>/<entity>.<side>.<preset>.glb.gz
+ssb/exemplars/rp-<rID>/            Radiopaedia-derived data (+ images where needed) + LICENSE.md (CC BY-NC-SA 3.0)
+```
+
+`ssb/ct`, `ssb/geometry`, `ssb/models` stay the `standard` base, so nothing
+existing moves. `labels.json` stays the one append-only table for every
+base and patch (a variant's new air space is labelled with its graph id,
+e.g. `v.infraorbital-ethmoid-cell.R`; `check-data.mjs` already requires
+every name to be a graph id).
+
+**Patch (`.ssbp.gz`)** — gzip of a small JSON header (length-prefixed) then
+raw arrays:
+
+```
+{ "version": 1, "base": "standard", "entity": "v.concha-bullosa", "side": "R",
+  "preset": "typical", "params": {…}, "truth": "composite",
+  "calibratedOn": ["uw-fig:Cor.pneumMT", "rp:<rID>"], "assumed": ["AP extent"],
+  "boxes": [ { "ijk0": [i,j,k], "dims": [ni,nj,nk],
+               "ct": "u8", "labels": "u16", "sdf": { "<id>": "u8" } } ],
+  "landmarks": { "<key>": [r,a,s] }, "sweeps": { "<key>": {…} },
+  "replacesNodes": ["s.middle-turbinate.R", "s.nasal-cavity.R"],
+  "addsNodes": ["v.concha-bullosa.R"] }
+```
+
+Dense boxes (not sparse lists): simple to apply and test, and a box around
+a variant is small (a concha bullosa box is ~25 × 40 × 30 mm = 60k voxels at
+0.5 mm). `js/ssb/volume.js` gains a pure `applyPatch(volume, patch)` with
+the same header validation as `ct.json` (dims, box inside the volume, label
+indices in the table). Override packs replace whole nodes named in
+`replacesNodes` (no mesh stitching); the specimen stage hides the base
+nodes of those names while the patch is active.
+
+#### R6.3 Composition and the compatibility table
+
+Patches apply in order: variants, then conditions. Two patches are
+compatible when their boxes do not overlap, or when the pipeline has built
+and tested their combination. `index.json` carries `compat` (pairs the
+pipeline built and tested) and `scenarios` (named precomputed combinations,
+each its own patch set with its own override nodes, so no runtime remeshing
+of combined edits). v1: one variant per side per region + one condition.
+
+#### R6.4 State, URL, UI
+
+- **State**: `state.anatomy = {base, variants, conditions}` in the one
+  store, orthogonal to the stage (specimen, lab, CT, scope). Changing it
+  reloads volume/packs through the existing lazy loaders and re-validates
+  the scope pose (a pose that becomes blocked is clamped as now and the HUD
+  says why).
+- **URL** (whitelist, `docs/ssb.md` §7.3 rules):
+  `#anat=standard|scanned|scanned-b` + `&v=<v-id>.<R|L>[:<preset>]` +
+  `&dz=<dz-id>.<R|L|M>[:<preset>]`. Ids must be in `index.json` *and* the
+  graph; presets in the entity's preset list; combinations in `compat` or
+  the whole anatomy key is dropped. Nothing reaches markup except through
+  `textContent`.
+- **UI**: a four-pill *Anatomy* group beside *Stage* (Symmetric · Normal
+  asymmetry · Variants · Pathology); Variants and Pathology open a picker
+  grouped by region, filtered by depth tier, each entry showing side,
+  presets, prevalence and the exemplar count. The truth badge and the
+  provenance note follow the state (including the UW credit line,
+  WP RA0c).
+
+#### R6.5 Edit operators (pipeline)
+
+One Python module, `tools/ssb-pipeline/anatomy/ops.py`, each operator a pure
+function `(ct, labels, landmarks, params) → patch` with stated invariants,
+mirroring the diorama contract (`PARAMS` with ranges and `from` graph ids,
+`PRESETS`, self-test):
+
+| Operator | Does | Used for |
+|---|---|---|
+| `pneumatize` | turns a bony/soft region into air, keeping a cortical shell of given thickness | concha bullosa, crista galli, ACP, pterygoid, uncinate pneumatization, lateral recess extension |
+| `grow_cell` | inserts an air cell (superellipsoid, oriented on landmarks) with a 0.5–1 mm wall, repartitioning the ethmoid air it displaces | Haller, Onodi, IFAC cells, bulla hyperpneumatization, agger size |
+| `deflate` | shrinks a sinus with wall thickening/retraction by type | maxillary hypoplasia (by `c.maxillary-sinus-hypoplasia` type), frontal hypoplasia/aplasia, conchal sphenoid, silent sinus |
+| `deform` | smooth displacement field in a box (bone, air and labels move together) | septal deviation (Mladina types), spur, paradoxical MT, Keros depth / lateral lamella, roof asymmetry, mucocele expansion, globe displacement |
+| `plate` | inserts or removes a thin bony plate | maxillary septa, sphenoid septum on the ICA, bullar lamella deficiency |
+| `dehisce` | removes bone over a structure for a given arc and length | lamina papyracea, ICA, optic canal, AEA canal |
+| `reroute` | moves a sweep and builds its bony support (canal or mesentery) | AEA in a mesentery, suspended infraorbital canal |
+| `fill` | fills air with tissue of a target HU: shell (thickening), level (fluid, with gravity), dome (cyst), lobules (polyps), core with calcifications (fungal ball), expansile (mucocele, AFRS) | the inflammatory conditions (R9) |
+| `bone_mass` | adds lobulated bone or ground-glass density | osteoma, fibrous dysplasia, focal hyperostosis (inverted papilloma) |
+| `erode` | removes bone and extends tissue beyond the wall | aggressive sinusitis, AIFS, malignancy (later) |
+
+**Texture realism.** Edited voxels must look like CT, not like painted
+labels: bone and soft-tissue display values sampled from head A's own
+voxels of the same tissue and thickness; partial-volume blur from the
+point-spread width measured on head A's sharpest air–bone edges; noise
+matched to head A's measured σ per tissue. HU targets go through the
+inverse of `ct.json` `toHU` (about 15.7 HU per display level; soft tissue
+is only a few levels wide in this bone window, which is why R9.3 waits for
+a synthetic soft-tissue channel).
+
+#### R6.6 Budgets
+
+Per state, the `docs/ssb.md` §5.4 budgets hold (CT + labels + fields
+≤ 6 MB on first entry; first render ≤ 2.5 MB). A second full base adds
+about the size of today's `ssb/ct` + `ssb/models` to the repo and loads only
+when chosen. Patches and override packs: target ≤ 250 kB each, ≤ 8 MB for
+the whole catalogue. Git history grows with every re-export, so bases and
+patches are re-exported at checkpoints, not per WP.
+
+---
+
+### R7. Resegmentation of head A ("much more robust and accurate")
+
+Every edit and every state is only as good as head A's labels. The current
+ones were good enough for a normal atlas and are not good enough to graft
+a Haller cell (no uncinate, no infundibulum) or to classify frontal cells
+(no individual cells). This is the critical path.
+
+#### R7.1 Ground truth and metrics
+
+- **Held-out split.** The head-A arrow tips (`slices.json`, axial and
+  sagittal) are split once, stratified by structure and slice region,
+  fixed seed, into **seed (70 %)** and **held-out (30 %)**; the split list
+  is committed (`ssb/reference/uw-sinusanatomy2/split.json`). Segmentation
+  reads only seeds; the score reads only held-out tips.
+- **Identity metric**: held-out tip hit rate per structure — the tip's voxel
+  (± 1 voxel) carries the crosswalked id. Target ≥ 95 % overall, ≥ 90 % for
+  every structure with ≥ 10 held-out tips; report Wilson 95 % CIs, since
+  small-n structures can reach 100 % by chance.
+- **Boundary metric.** Tips say nothing about walls between compartments.
+  On review slices (every 5 mm per plane through the ethmoid–frontal
+  region), our label outlines are drawn over **the very UW labeled frame
+  that is that slice** (head A *is* those stacks, so alignment is exact by
+  construction). Opus marks each partition wall correct / misplaced (> 1 mm)
+  / missing; target ≥ 90 % correct.
+- **Topology checks** (automatic): every air label is one component; each
+  sinus and cell reaches its expected meatus through its ostium (shortest
+  air path, as the frontal-recess diorama computes); no air label crosses
+  the orbit or anterior cranial fossa; bone units are thicker than 0 and
+  thinner than stated limits.
+- **Graph consistency**: `relate3d.py` contradictions do not increase;
+  the IFAC drainage rules pinned for the diorama are re-run on the
+  specimen's own cells and must hold.
+
+**Baseline (RS0, 2026-10-09; Opus reading).** Run
+`python3 -I tools/ssb-pipeline/uw/score.py` for the numbers; they are not copied here. What
+they mean for RS:
+
+- **The headline mixes coverage with accuracy.** Most held-out misses are tips on structures
+  that have no label at all (bones such as the frontal bone and the frontal process of the
+  maxilla, the nasolacrimal duct, foramina and fissures, and the pterygopalatine fossa, which
+  `walls.py` seeds only on its offline grid). So RS scores two things separately:
+  **coverage**, meaning every id in RS's declared label set (RS1 writes it down) has a label,
+  and **identity**, the hit rate over the structures that are labelled. The ≥ 95 % / ≥ 90 %
+  targets apply to identity over the declared set. Tips on ids outside the set are reported,
+  never gated.
+- **±1 voxel is tighter than the ground truth.** For labelled structures, almost every
+  ±1-voxel miss is a hit at `--tol 6` (3 mm), and the axial and sagittal tips of one structure
+  disagree by several mm (the scorer prints the median). The identity gate is therefore
+  `--tol 1` as specified, read alongside `--tol 6`. A candidate that loses ground at `--tol 6`
+  has lost a structure. A candidate that moves only at `--tol 1` has moved within the tips'
+  noise. **The boundary review and the topology checks are what tell a better segmentation
+  from today's**; the tip metric mostly guards coverage.
+- **Today's labels are a resubstitution score.** They were grown from these tips, held-out ones
+  included, so an honest RS may score lower at `--tol 1`. That alone is not a regression; a
+  drop at `--tol 6` is.
+- **Topology failures are concrete RS targets:** the anterior ethmoid cells, the ethmoid bulla,
+  the frontal recess and the nasal cavity are split into several components, and one sphenoid
+  sinus is not joined to its side's cavity in the as-scanned head (RS3, RS4).
+- **Not evaluable yet, to be defined in the RS specs:** "no air label crosses the anterior
+  cranial fossa" needs an intracranial compartment in the served labels (RS6 adds it from
+  `walls.py`'s grid). Upper limits on bone thickness are set per unit in RS6's spec, from
+  sources; no number is assumed here.
+
+#### R7.2 Method
+
+1. **Native grid.** Segment on the native 0.3437 × 0.3437 × 0.625 mm volume
+   (`incoming/_recon/specimen-native.npz`), export to the served 0.5 mm grid
+   last, so thin lamellae are found before resampling blurs them.
+2. **Lamellae as sheets.** A multiscale Hessian sheetness filter on bone
+   (bright plates: one large-magnitude eigenvalue, two small) finds thin
+   septa; each sheet is identified by attachment rules and seeds:
+   uncinate (lateral wall/agger anteriorly, free posterior edge at the
+   hiatus), bullar lamella, basal lamella (lamina papyracea laterally,
+   skull base superiorly, middle turbinate medially — **replaces the proxy
+   plane**, same id, method recorded), ground lamella of the superior
+   turbinate. UW figures `Axial.ethmoid2`, `Cor.basallamella`,
+   `Sag.basallamella2` are its review references.
+3. **Ethmoid cells as instances.** Inside ethmoid air: distance-to-bone,
+   h-maxima markers, watershed constrained by the detected sheets; each cell
+   gets centroid, volume, neighbours, and its drainage (which meatus its air
+   reaches). Classification by rule — agger nasi, bulla, supra agger, supra
+   agger frontal, suprabullar, suprabullar frontal, supraorbital ethmoid,
+   frontal septal, infraorbital ethmoid, sphenoethmoidal — with **one rule
+   set shared** with the frontal-recess diorama (criteria as data, not two
+   implementations). A cell no rule claims stays a generic anterior or
+   posterior ethmoid cell.
+4. **Openings and channels as air sub-labels**: frontal ostium, maxillary
+   natural ostium, sphenoid ostium (narrowest cross-section rules, as the
+   frontal ostium already is), infundibulum, hiatus semilunaris, middle,
+   superior and inferior meatus, sphenoethmoidal recess, olfactory cleft.
+   Each is `partOf` its parent in the graph; every consumer that tests for
+   `s.nasal-cavity` (collision, lining, floor chart) is listed in the WP and
+   switched to "the id or anything `partOf` it" in the same change.
+5. **Canals as labels**: optic, vidian, foramen rotundum, carotid canal /
+   prominence, anterior and posterior ethmoidal canals, infraorbital canal,
+   nasolacrimal canal, sphenopalatine foramen — from the lumen detector
+   `sweeps.py` already has; sweeps then follow the detected centrelines
+   where detected. `Cor.sphenoid1` and `Axial.ethmoid1` are review
+   references.
+6. **Bone units added**: superior turbinate, crista galli, anterior clinoid,
+   pterygoid process, uncinate (as a removable unit).
+7. **Then rebuild both bases**: `normalize.py all` for `standard`, the same
+   stages without mirroring for `scanned`. Stage-D steps that assume
+   symmetry (the floor chart's "left = right", the sides step) compute each
+   side for `scanned`.
+
+---
+
+### R8. Variants catalogue
+
+#### R8.1 Batch 1 (high-yield preoperative CT review, UW exemplars exist)
+
+| Variant | Operator | Parameters (ranges `from`) | Exemplars | Acceptance rule (pinned in tests) |
+|---|---|---|---|---|
+| `v.concha-bullosa` (lamellar / bulbous / extensive, `c.middle-turbinate-pneumatization`) | `pneumatize` MT | type, AP extent, width ratio | UW `Axial.PneumMT`, `Cor.pneumMT` | the cell's air is enclosed by MT bone; middle meatus width at the infundibulum's level decreases monotonically with width |
+| `v.paradoxical-middle-turbinate` | `deform` MT | curvature | UW `Paradox.MT.curve` | MT convexity faces lateral; meatus width reported |
+| `v.septal-deviation`, `v.septal-spur` (`c.mladina-septal` types) | `deform` septum (N1's centring, inverted and parameterized) | type, apex A/S, amplitude | UW `Cor.SeptDeviatnSpur` | septum keeps its thickness; the convex side's airway narrows; septal chart recomputed; scope collision blocks where it should |
+| `v.infraorbital-ethmoid-cell` | `grow_cell` on the medial orbital floor | size ratio, AP position | UW `Axial/Cor/Sag.hallercell` | the cell lies below the orbit, lateral to the infundibulum; the infundibulum's minimum cross-section decreases with size |
+| `v.uncinate-insertion-*` (`c.uncinate-superior-attachment` 1/5/6) | re-attach the uncinate's superior end (needs RS uncinate) | attachment | UW `Cor.VariantFSDP1/2` | the frontal drainage pathway reaches the infundibulum (5, 6) or the middle meatus (1) — the diorama's rule, now on the specimen |
+| `v.maxillary-sinus-septa` | `plate` | position, height | UW `Cor.Maxseptum` | a plate divides but does not seal the sinus unless asked |
+| `v.maxillary-sinus-hypoplasia` (`c.maxillary-sinus-hypoplasia`) | `deflate` | type, volume ratio | UW `Axial.Maxhypo`, `Cor.OMU4` | orbital floor lowers, uncinate lateralizes by type |
+| `v.frontal-sinus-aplasia`, frontal hypoplasia **(new)** | `deflate` | volume ratio | UW `Axial.FShypo` | the recess persists; ostium position |
+| `v.crista-galli-pneumatization` | `pneumatize` | extent, connection to the recess | UW `Cor.pneumCG` | — |
+| `v.sphenoethmoidal-cell` (Onodi) | `grow_cell` superolateral to the sphenoid, to the optic canal | extent, optic contact | UW `Axial.BilatOnodicells1`, `Cor.Onodicell3` | optic canal bulges into the cell; optic SDF patched; `h.optic-nerve-injury-onodi` hatched |
+| `v.pneumatized-anterior-clinoid` | `pneumatize` ACP | extent | UW `Cor.Onodicell3` | lateral OCR deepens (the sphenoid diorama's measure, on the specimen) |
+| `v.lateral-recess-pneumatization`, pterygoid **(new)** | `pneumatize` greater wing / pterygoid | extent | UW `Axial/Cor.Pneumsphenoid1`, `axial.pneum.ptyp` | V2 / vidian protrude when present |
+| bulla hyperpneumatization **(new)** | `grow_cell` (enlarge) | size ratio | UW `Cor.ethmoidbulla3`, `Cor.PneumFS` | hiatus narrows |
+
+#### R8.2 Batch 2 (Radiopaedia exemplars needed)
+
+`v.keros-type-3`, `v.asymmetric-ethmoid-roof`, `v.gera-class-3` (`deform`
+skull base; the ethmoid-roof diorama's rules on the specimen);
+`v.aea-in-mesentery`, `v.anterior-ethmoidal-canal-dehiscence` (`reroute`,
+`dehisce`); `v.lamina-papyracea-dehiscence`, `v.ica-dehiscence`,
+`v.optic-canal-dehiscence`, `v.ica-protrusion`, `v.optic-canal-protrusion`,
+`v.intersinus-septum-on-ica` (`dehisce`, `deform`, `plate`; scope HUD
+distances must fall where bone is removed); the IFAC cells
+(`v.supra-agger-cell` … `v.frontal-septal-cell`; `grow_cell`; the computed
+frontal drainage pathway re-run on the specimen must reproduce the
+diorama's push rules); `v.accessory-maxillary-ostium`;
+`v.pneumatized-uncinate`; `v.conchal-sphenoid`, `v.presellar-sphenoid`,
+`v.postsellar-sphenoid` (the sphenoid diorama's exposure measures on the
+specimen); `v.v2-protrusion-sphenoid`, `v.vidian-canal-protrusion`.
+
+#### R8.3 Graph additions this plan needs (content WP C-RA, Sonnet drafts → Opus reviews, O3)
+
+New variants: frontal sinus hypoplasia; extensive frontal pneumatization
+(or a measurement on `s.frontal-sinus` — Opus decides; gaps.md recommended
+against a variant); ethmoid bulla hyperpneumatization; pterygoid process
+pneumatization. New condition or finding: septal perforation / absent
+septum. New landmarks for the RA set: globe centres, optic canal openings
+on both sides where missing, greater palatine foramina, PNS. Synonyms from
+`gaps.md` still open. Every new prevalence carries its denominator.
+
+---
+
+### R9. Pathology catalogue
+
+#### R9.1 Batch 1 — inflammatory patterns (bone-window CT is the clinical study)
+
+Sinus CT for inflammatory disease is a non-contrast bone-algorithm scan,
+the same modality as the specimen, so these are representable honestly:
+
+| Condition / preset | Operator | Parameters | Exemplars |
+|---|---|---|---|
+| mucosal thickening by sinus, scored by `c.lund-mackay` (0 / partial / total per sinus; OMC 0/2) | `fill` shell, inward along the air boundary | thickness per sinus, score preset | UW `Axial.Maxillarysinus`, `Cor.OMU5`, `Cor.Inflamm2` |
+| `c.sinonasal-inflammatory-patterns`: infundibular, OMU, SER, sporadic (sinonasal polyposis in 9.2) | presets of the above, driven by drainage topology (RS openings) | pattern, side | UW `Cor.frontalinflamm2/3`, `Cor.OMU4`, `Sag.anteriorOMU`, `Sag.FSDP`, `Sag.ethmoidinflamm3`, `Sphenoidsinus1–3` |
+| `dz.acute-rhinosinusitis`: air–fluid level, bubbly/foamy secretions | `fill` level with gravity (supine default), bubble option | fill fraction, scan position | UW `Axial.acutesinus1/2`, `Cor.foamysinus` |
+| `dz.mucus-retention-cyst` | `fill` dome on a wall | base point, radius | UW `axial.MRCfrontal2`, `Cor.MRCfrontal1`, `Cor.MRCmax1`, `Sag.MRCmax3` |
+| polyp in the maxillary sinus (CT mimic of MRC) | `fill` lobule | size | UW `Cor.Maxpolyp` |
+
+Rule (pinned): a pattern's opacification follows drainage — an
+infundibular preset opacifies the maxillary sinus and spares the frontal;
+OMU adds the frontal and anterior ethmoid; SER the posterior ethmoid and
+sphenoid. The rule is checked against the specimen's own drainage graph,
+so a variant that changes drainage (a Haller cell, uncinate to the skull
+base) changes what a pattern opacifies — the anatomy–disease link the
+owner wants taught.
+
+#### R9.2 Batch 2 — lesions with bone signatures
+
+`dz.mucocele` (frontal with orbital extension and globe displacement;
+ethmoid; sphenoid into the posterior ethmoid — `fill` expansile + `deform`
+walls and orbit; UW `Cor/Sag/axial.frontalmucocele`, `Mucocele1/3/5`);
+`dz.osteoma` (`bone_mass`; UW `Osteoma2/3/4`, `Axial/Cor.ethmoidosteoma*`);
+`dz.antrochoanal-polyp` (`fill` the sinus + a stalk through the ostium to
+the choana; UW `AntrochoanalPolyp1`); `dz.fungal-ball` (hyperdense core,
+punctate calcification, sclerotic wall), `dz.afrs` (expansile, double
+density, thinned bone), `dz.crs-with-polyps` / sinonasal polyposis,
+`dz.silent-sinus-syndrome` (with `v.maxillary-sinus-atelectasis`),
+`dz.inverted-papilloma` (focal hyperostosis at the attachment — the
+surgical teaching point), `dz.fibrous-dysplasia`, `dz.jna` (PPF widening,
+SPF erosion) — Radiopaedia exemplars.
+
+#### R9.3 Batch 3 — soft-tissue and contrast findings (needs a synthetic channel)
+
+Orbital and intracranial complications (`dz.orbital-cellulitis`,
+`dz.subperiosteal-orbital-abscess`, `dz.cavernous-sinus-thrombosis`,
+`dz.epidural-abscess`, …), aggressive sinusitis and AIFS beyond the bone
+(retroantral fat), malignancy. The specimen is an 8-bit bone-window display:
+soft tissue spans a handful of levels and there is no contrast. These need
+a **synthetic soft-tissue channel** — a second volume generated from labels
+(tissue class → HU distribution, enhancement as a parameter), shown in a
+soft-tissue/contrast window and badged schematic. It is its own design
+(WP SX0, Opus) and starts only after batches 1–2 work.
+
+---
+
+### R12. Review plan
+
+#### R12.1 Automatic (every PR)
+
+`node tools/check-data.mjs` (graph ids in every label table and patch;
+licence ledger: every file under `ssb/anatomy/` and `ssb/exemplars/` maps
+to a licence entry; the name guard of RA0d) · `node tools/smoke-pages.mjs`
+· `node tools/test-ssb.mjs` with new sections `--only anatomy`, `--only
+variants`, `--only pathology` · pipeline self-tests (`ops.py --selftest`,
+`score.py`). Thresholds are set in the WP that introduces them and change
+only at a checkpoint with the reason written down.
+
+#### R12.2 Checkpoint checklist (Opus, each CP-RA)
+
+1. **Provenance.** Each new file traces to a source in `sources.json` with
+   licence, attribution and (for UW) no individual names.
+2. **Circularity.** Seeds and held-out tips disjoint; no variant validated
+   only on its calibration exemplar.
+3. **Spectrum.** Presets labelled mild/typical/marked with the anchor of each;
+   no exemplar size presented as typical.
+4. **Assumed vs. measured.** Every patch header's `assumed` list is honest;
+   spot-check three against the exemplar.
+5. **Anatomy.** Look at every new state in all three CT planes and in 3D, at
+   tier 1 and 3; check laterality on screen (radiological convention) and in
+   the scope.
+6. **Drainage.** The pathways and the pattern rule agree with the anatomy
+   after every edit.
+7. **Proximity.** Where bone was removed or a cell added near the ICA, optic
+   nerve, orbit, skull base or AEA, the HUD distances changed as they must.
+8. **Budgets and determinism.** Sizes within R6.6; a rerun reproduces
+   byte-identical outputs.
+9. **Board.** WP statuses updated in the roadmap in the same PR.
+
+#### R12.3 Owner review (medical correctness)
+
+Only the owner sets `verified` (`docs/decisions.md` §7). Queue, in order:
+`scanned` (does the head look like a real CT; is the nasal-cycle note
+right) → resegmentation sheets (uncinate, basal lamella, frontal cells) →
+variants batch 1 → inflammatory patterns → batch 2. Each item: the state's
+URL, the exemplar list, the measured parameters, and the specific question
+(e.g. "is a *typical* concha bullosa this large?").
+
+#### R12.4 Adversarial tests worth writing
+
+A Haller cell grafted onto `scanned` (where the left infundibulum is already
+narrow) must not seal the maxillary ostium unless the preset says so; an
+Onodi cell must not enter the optic canal; an OMU pattern over
+`v.uncinate-insertion-skull-base` must include the frontal sinus (drainage
+through the infundibulum) while over `…-lamina-papyracea` it may spare it;
+a mucocele's globe displacement must not intersect the orbital walls; an
+air–fluid level in a supine scan must lie in a coronal plane; a scenario's
+URL with one id removed from `index.json` must drop cleanly.
+
+---
+
+### R14. Risks
+
+| Risk | Effect | Mitigation |
+|---|---|---|
+| Resegmentation stalls on thin lamellae at this resolution | no uncinate → batch 1 blocked | sheetness on the native grid; boundary review; the owner's 3D Slicer hand-correction fallback |
+| Edits look painted | learners learn the artefact | texture from head A, PSF and noise matched, blinded crop test |
+| Exemplars mislead about size | florid = "typical" | mild/typical/marked presets, population anchors (docs/realistic-anatomy.md §5.2) |
+| Radiopaedia access or licence friction | batch 2 thin | small owner-curated list; numbers only; UW and head B cover batch 1 |
+| Repo growth from bases | slow clones | re-export at checkpoints; patches small; a third base only with an owner decision |
+| Two bases double every downstream test | CI time | tests parameterized by base; the slow ones run on `standard` in CI and on all bases at checkpoints |
+| Merge churn with lane B | rework | resegmentation scheduled after ST5 or folded into its checkpoint (docs/ssb-roadmap.md §3) |

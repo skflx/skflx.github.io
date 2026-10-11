@@ -4714,7 +4714,7 @@ async function populationTests(browser, base) {
 }
 
 
-/* ---------------- anatomy state, patch format, loader (WP RA3a; docs/realistic-anatomy.md 6.2-6.4) ---------------- */
+/* ---------------- anatomy state, patch format, loader (WP RA3a; docs/ssb.md §14, R6.2-6.4) ---------------- */
 
 /* Every patch and every file below is built here and served by routes or a fake fetch: nothing is written into ssb/. */
 const ANAT_BOX = { ijk0: [20, 18, 14], dims: [6, 5, 4] };
@@ -4848,7 +4848,7 @@ async function anatomyUnitTests() {
     d16.ct[boxIndices(ANAT_BOX, dims).values().next().value] === 3000 && d16.patchedVoxels === nBox && u8on16 instanceof VolumeError, String(u8on16 && u8on16.message));
 
   /* ---- the file names are built from validated tokens only ---- */
-  check('anatomy paths: base roots and file names follow docs/realistic-anatomy.md 6.2',
+  check('anatomy paths: base roots and file names follow docs/ssb.md §14, R6.2',
     baseRoot('standard') === 'ssb' && baseRoot('scanned') === 'ssb/anatomy/scanned' && baseRoot('scanned-b') === 'ssb/anatomy/scanned-b'
     && anatomyPatchFile('scanned', ANAT_REF) === `ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz` && anatomyOverrideFile('standard', ANAT_REF) === `ssb/anatomy/overrides/standard/${ANAT_STEM}.glb.gz`);
   const bad = (fn) => { try { fn(); return false; } catch (e) { return e instanceof VolumeError; } };
