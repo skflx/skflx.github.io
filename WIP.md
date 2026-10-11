@@ -493,15 +493,18 @@ modules, would both put the content back to work; neither is scheduled.
 
 ## Verification
 
-**State:** Four Node suites, run in CI on every PR: `check-data.mjs`
-(committed data + security invariants: CSP on every page, no inline or
-third-party script, vendored-file hashes; and that every `css/`/`js/`
-reference carries a current `?v=` stamp from `stamp-assets.mjs`),
-`test-wiki-sync.mjs` (the vault
-boundary), `smoke-pages.mjs` (every page boots with no real console errors,
-plus the `?m=` XSS regression), `test-oksat-engine.mjs` (answer lock, SRS
-writes, keyboard, legacy migration). With React/htm vendored the browser
-suites are hermetic and run in a network-restricted sandbox.
+**State:** On every PR CI runs the fast tier: `check-data.mjs` (committed
+data + security invariants: CSP on every page, no inline or third-party
+script, vendored-file hashes; and that every `css/`/`js/` reference carries a
+current `?v=` stamp from `stamp-assets.mjs`), `lint-oksat.mjs` over every
+module, and `smoke-pages.mjs` (every page boots with no real console errors,
+plus the URL-injection probes). The subsystem suites run when a file they
+exercise changed (a push to `master` runs all of them): `test-wiki-sync.mjs`
+(the vault boundary), `test-oksat-engine.mjs` (answer lock, SRS writes,
+keyboard, legacy migration) and `test-ssb.mjs`, which is most of CI's time and
+so runs as four parallel shards (`--shard i/4`; the split is `SHARDS` in the
+file). Every page script is same-origin, so the browser suites run in a
+network-restricted sandbox. The how and why: `docs/verification.md`.
 
 Security audit 2026-09-23: `docs/security.md` (one high-severity reflected
 XSS fixed; CSP added site-wide; CDN scripts vendored).

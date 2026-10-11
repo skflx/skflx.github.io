@@ -10,13 +10,25 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
-node tools/lint-oksat.mjs <slug>          # a new OKSAT module against the quality spec (not run in CI; older modules predate it)
-node tools/test-ssb.mjs                   # SSB: variant lab (dioramas, pathway rules, picking, hash) + CT mode
+node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
+node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
+node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
 ```
 
-In CI (`.github/workflows/ci.yml`) `check-data` and the page smoke test always run; the SSB,
-OKSAT-engine and wiki-sync suites run only when a file they exercise changed (a push to
-`master` runs everything). Locally, run whichever suite your change touches.
+In CI (`.github/workflows/ci.yml`) `check-data`, `lint-oksat` and the page smoke test always
+run; the SSB, OKSAT-engine and wiki-sync suites run only when a file they exercise changed (a
+push to `master`, or a change to the workflow or the shared harness, runs everything). Changes
+to `tools/ssb-pipeline/` do not start the SSB suite unless they touch `dissection.json`, the
+one pipeline file it reads: the pipeline's outputs are committed under `ssb/`, which does.
+Locally, run whichever suite your change touches.
+
+The SSB suite runs in CI as four parallel jobs, `node tools/test-ssb.mjs --shard i/4`. The
+split is `SHARDS` in `tools/test-ssb.mjs`, balanced on measured section times; the file refuses
+to run if a section is in no shard or two, and the workflow's matrix and the `/4` must change
+with it. A new section goes in the lightest shard. Each check prints as it runs and the
+summary gives each section's time and check count, so a slow or hung section shows in the log.
+Wall-clock checks (a flight sampled mid-way, frames counted over a second) are the ones a
+loaded machine can break: running shards side by side on one box is not what CI does.
 
 The browser suites need a real Chromium and nothing else: every page script
 is same-origin (React/htm are vendored in `js/vendor/`), so they run in a

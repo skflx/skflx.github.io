@@ -77,7 +77,9 @@
      reduced motion adds no transition, leaving puts the specimen back;
    - zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only ct|specimen|scope|procedure|mucosa|population|flap|anatomy|scanned] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only <section>[,...] | --shard i/N] [--int16]
+           sections: dioramas lab ct specimen scope procedure mucosa population flap anatomy scanned
+           (SECTIONS, near the end); --shard is CI's split (SHARDS), each section in exactly one.
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
    Exits nonzero on any failed check.
@@ -115,10 +117,16 @@ const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] :
 const BASE = opt('--base', null);
 const HEADED = args.includes('--headed');
 const SHOTS = opt('--shots', null);
-const ONLY = opt('--only', null);   /* --only ct | specimen | scope | procedure | mucosa | population | flap | anatomy | scanned | lab: just that section (development; `lab` is the sphenoid diorama) */
+const ONLY = opt('--only', null);   /* --only <section>[,<section>...]: just those sections (SECTIONS below; `lab` is the sphenoid diorama, `dioramas` the other two) */
+const SHARD = opt('--shard', null);  /* --shard i/N: the i-th of CI's N shards (SHARDS below) */
 
 const results = [];
-function check(name, cond, detail) { results.push({ name, ok: !!cond, detail }); }
+/* Each result prints as it lands, so a crash or a hang still leaves everything before it in the log. */
+function check(name, cond, detail) {
+  const ok = !!cond;
+  results.push({ name, ok, detail });
+  console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${name}${ok ? '' : '  — ' + (detail || '')}`);
+}
 const near = (a, b, tol = 0.05) => Math.abs(a - b) <= tol;
 const r2 = (v) => Math.round(v * 100) / 100;
 
@@ -5361,62 +5369,9 @@ async function scannedBaseTests(browser, base) {
   }
 }
 
-async function main() {
-  let server = null;
-  let base = BASE;
-  if (!base) { server = await startServer(); base = server.origin; }
-  const browser = await launchBrowser({ headed: HEADED });
+/* ---------------- the variant lab: the ethmoid-roof and frontal-recess dioramas, hostile #lab=, the stage switch, materials ---------------- */
 
-  if (ONLY === 'ct') {
-    await ctUnitTests();
-    await ctTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'lab') {
-    sphenoidRuleTests();
-    await sphenoidPageTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'specimen') {
-    await specimenUnitTests();
-    standardSpecimenTests();
-    await specimenTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'scope') {
-    await stationStateTests(scopeUnitTests());
-    await scopeTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'procedure') {
-    await procedureUnitTests();
-    await procedureTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'population') {
-    await populationTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'flap') {
-    await flapTests(browser, base, flapUnitTests());
-    return finish(browser, server);
-  }
-  if (ONLY === 'anatomy') {
-    await anatomyUnitTests();
-    await anatomyTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'scanned') {
-    scannedBaseUnitTests();
-    await scannedBaseTests(browser, base);
-    return finish(browser, server);
-  }
-  if (ONLY === 'mucosa') {
-    await mucosaUnitTests(scopeUnitTests());
-    await mucosaTests(browser, base);
-    return finish(browser, server);
-  }
-
+async function dioramaTests(browser, base) {
   /* ===== 1. each diorama loads; parts resolve in the graph ===== */
   const REQUIRED = {
     'ethmoid-roof': ['s.cribriform-plate.R', 's.lateral-lamella.R', 's.lateral-lamella.L', 's.fovea-ethmoidalis.R', 's.crista-galli.M',
@@ -5638,10 +5593,6 @@ async function main() {
     check('an unknown diorama name is ignored (specimen stage, empty hash)', g.lab === null && g.hash === '' && !g.pwn, JSON.stringify(g));
     await bad.context.close();
   }
-
-  /* ===== 4b. the sphenoid diorama: rules 0-9 of docs/ssb.md 6.1 ===== */
-  sphenoidRuleTests();
-  await sphenoidPageTests(browser, base);
 
   /* ===== 5. stage switch, reduced motion, phones ===== */
   {
@@ -5876,33 +5827,9 @@ async function main() {
       await context.close();
     }
   }
+}
 
-  /* ===== 7. CT mode (js/ssb/volume.js, mode-ct.js, ui-ct.js; docs/ssb.md 3, 5.6) ===== */
-  await ctUnitTests();
-  await ctTests(browser, base);
-
-  /* ===== 8. the Specimen stage (js/ssb/geo-specimen.js, mode-specimen.js, ui-specimen.js; docs/ssb.md 3, 5.3, 7) ===== */
-  await specimenUnitTests();
-  standardSpecimenTests();
-  liningTests();
-  await specimenTests(browser, base);
-
-  /* ===== 9. the Endoscope stage (js/ssb/scope.js, mode-endoscope.js, ui-endoscope.js; docs/ssb.md 3) ===== */
-  const scopeWindow = scopeUnitTests();
-  await stationStateTests(scopeWindow);
-  await scopeTests(browser, base);
-  await procedureUnitTests();
-  await procedureTests(browser, base);
-  await mucosaUnitTests(scopeWindow);
-  await mucosaTests(browser, base);
-  await populationTests(browser, base);
-  await flapTests(browser, base, flapUnitTests());
-  await anatomyUnitTests();
-  await anatomyTests(browser, base);
-  scannedBaseUnitTests();
-  await scannedBaseTests(browser, base);
-
-  /* ===== screenshots ===== */
+async function labShots(browser, base) {
   if (SHOTS) {
     for (const [name, cls, code] of [['ethmoid-roof', 'c.keros', 'III'], ['frontal-recess', 'c.ifac', 'SBFC']]) {
       for (const [kind, viewport] of [['desktop', { width: 1280, height: 800 }], ['phone', { width: 390, height: 844 }]]) {
@@ -5923,7 +5850,9 @@ async function main() {
       }
     }
   }
+}
 
+async function ctShots(browser, base) {
   if (SHOTS) {
     const at = `#ct=ax&at=${FX.sites[0].center.join(',')}`;
     for (const [kind, viewport, hash] of [['desktop', { width: 1280, height: 800 }, at], ['phone', { width: 390, height: 844 }, '#ct=cor&at=10,3,-4']]) {
@@ -5942,7 +5871,82 @@ async function main() {
       await context.close();
     }
   }
+}
 
+/* ---------------- the suite: named sections, and the CI shards ---------------- */
+
+/* The scope's Node checks feed both the station-state and the mucosa checks: run them once per process. */
+let scopeWindow = null;
+const scopeWin = () => scopeWindow || (scopeWindow = scopeUnitTests());
+
+/* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
+const SECTIONS = {
+  dioramas: async (browser, base) => { await dioramaTests(browser, base); await labShots(browser, base); },
+  lab: async (browser, base) => { sphenoidRuleTests(); await sphenoidPageTests(browser, base); },
+  ct: async (browser, base) => { await ctUnitTests(); await ctTests(browser, base); await ctShots(browser, base); },
+  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); },
+  scope: async (browser, base) => { await stationStateTests(scopeWin()); await scopeTests(browser, base); },
+  procedure: async (browser, base) => { await procedureUnitTests(); await procedureTests(browser, base); },
+  mucosa: async (browser, base) => { await mucosaUnitTests(scopeWin()); await mucosaTests(browser, base); },
+  population: (browser, base) => populationTests(browser, base),
+  flap: (browser, base) => flapTests(browser, base, flapUnitTests()),
+  anatomy: async (browser, base) => { await anatomyUnitTests(); await anatomyTests(browser, base); },
+  scanned: async (browser, base) => { scannedBaseUnitTests(); await scannedBaseTests(browser, base); },
+};
+
+/* CI runs one shard per job (`--shard i/N`), balanced on measured section times. Every section is in exactly
+   one shard, checked here, so a new section cannot be left out of CI: put it in the lightest shard. */
+const SHARDS = [
+  ['scope'],
+  ['procedure', 'flap', 'population'],
+  ['specimen', 'scanned'],
+  ['dioramas', 'lab', 'ct', 'mucosa', 'anatomy'],
+];
+{
+  const sharded = SHARDS.flat();
+  const missing = Object.keys(SECTIONS).filter((s) => !sharded.includes(s));
+  const extra = sharded.filter((s, i) => !SECTIONS[s] || sharded.indexOf(s) !== i);
+  if (missing.length || extra.length) {
+    console.error(`test-ssb: SHARDS must hold every section once (missing: ${missing.join(', ') || '-'}; unknown or repeated: ${extra.join(', ') || '-'})`);
+    process.exit(2);
+  }
+}
+
+/* --only a,b | --shard i/N | neither (everything). A name or shard that matches nothing is an error, never an empty pass. */
+function pickSections() {
+  const usage = (msg) => { console.error(`test-ssb: ${msg}\n  sections: ${Object.keys(SECTIONS).join(', ')}\n  shards: 1..${SHARDS.length} as --shard i/${SHARDS.length}`); process.exit(2); };
+  if (ONLY && SHARD) usage('--only and --shard are exclusive');
+  if (ONLY) {
+    const names = ONLY.split(',').map((s) => s.trim()).filter(Boolean);
+    const bad = names.filter((n) => !SECTIONS[n]);
+    if (!names.length || bad.length) usage(`unknown section "${bad.join(', ') || ONLY}"`);
+    return Object.keys(SECTIONS).filter((n) => names.includes(n));
+  }
+  if (SHARD) {
+    const m = /^(\d+)\/(\d+)$/.exec(SHARD);
+    if (!m || Number(m[2]) !== SHARDS.length || Number(m[1]) < 1 || Number(m[1]) > SHARDS.length) usage(`bad --shard "${SHARD}"`);
+    return Object.keys(SECTIONS).filter((n) => SHARDS[Number(m[1]) - 1].includes(n));
+  }
+  return Object.keys(SECTIONS);
+}
+
+const timings = [];
+
+async function main() {
+  const picked = pickSections();
+  let server = null;
+  let base = BASE;
+  if (!base) { server = await startServer(); base = server.origin; }
+  const browser = await launchBrowser({ headed: HEADED });
+
+  console.log('=== SSB behavior tests ===');
+  for (const name of picked) {
+    const t0 = Date.now();
+    const n0 = results.length;
+    console.log(`\n--- ${name} ---`);
+    await SECTIONS[name](browser, base);
+    timings.push(`${name} ${Math.round((Date.now() - t0) / 1000)}s (${results.length - n0} checks)`);
+  }
   return finish(browser, server);
 }
 
@@ -5954,11 +5958,11 @@ async function finish(browser, server) {
   await browser.close();
   if (server) await server.close();
 
-  const failures = results.filter((r) => !r.ok).length;
-  console.log('=== SSB behavior tests ===');
-  for (const r of results) console.log(`  ${r.ok ? 'PASS' : 'FAIL'}  ${r.name}${r.ok ? '' : '  — ' + (r.detail || '')}`);
-  console.log(`\n${failures ? 'FAILED' : 'OK'} — ${results.length - failures}/${results.length} checks passed.`);
-  process.exit(failures ? 1 : 0);
+  const failed = results.filter((r) => !r.ok);
+  console.log(`\n=== SSB behavior tests: ${timings.join(', ')} ===`);
+  for (const r of failed) console.log(`  FAIL  ${r.name}  — ${r.detail || ''}`);
+  console.log(`\n${failed.length ? 'FAILED' : 'OK'} — ${results.length - failed.length}/${results.length} checks passed.`);
+  process.exit(failed.length ? 1 : 0);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
