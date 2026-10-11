@@ -1,0 +1,388 @@
+/* =============================================================
+   olsb.css — OLSB (otology / lateral skull base): --olsb-* tokens +
+   page layout. Rides on css/site.css; no second palette.
+
+   Tissue colours follow the anatomical convention (and SSB's --ssb-*
+   tissue tokens): bone ivory, drilled bone darker, otic capsule dense
+   ivory, nerve yellow, vein blue, artery red, dura grey, fascia pale.
+   Site signals keep their meaning: --signal (act) is every incision,
+   --signal-2 (science) every reference line (temporal line, Donaldson's).
+
+   Layout: >=960px is stage | side panel; below that the stage is on top.
+   ============================================================= */
+
+/* ===== TOKENS ===== */
+:root {
+  --olsb-stage: var(--surface);
+  --olsb-bone: #E6DCC0;
+  --olsb-bone-cut: #CDBB90;
+  --olsb-bone-dark: #A8946A;
+  --olsb-otic: #F3E6B4;
+  --olsb-otic-edge: #9C8040;
+  --olsb-plate: #B9A576;
+  --olsb-sinusplate: #8C9DB8;
+  --olsb-air: #2B2A2E;
+  --olsb-tm: #D9D4CB;
+  --olsb-tm-edge: #8B8173;
+  --olsb-skin: #E0B59A;
+  --olsb-crease: #9C6E55;
+  --olsb-fascia: #EDE6D8;
+  --olsb-fascia-edge: #A99D87;
+  --olsb-nerve: #E2C43A;
+  --olsb-nerve-edge: #8A7316;
+  --olsb-vein: #3B62AE;
+  --olsb-artery: #C0392B;
+  --olsb-dura: #B7BAB8;
+  --olsb-ossicle: #F7F3E8;
+  --olsb-ossicle-edge: #5E5646;
+  --olsb-mucosa: #D98A82;
+  --olsb-recess: #2B2A2E;
+  --olsb-zone: #2445B0;     /* Macewen's triangle: a surface marking (science) */
+  --olsb-wall: #EADFD0;      /* mucosa-lined bone of the cavity walls */
+  --olsb-muscle: #A94A3F;
+  --olsb-brain: #C7ADA5;
+  --olsb-perilymph: #9DB8C9;
+  /* Form shading (domes lit from above-front, pits dark at the rim). */
+  --olsb-light: #FFFFFF;
+  --olsb-light-a: 0.55;
+  --olsb-shadow: #2A2116;
+  --olsb-shadow-a: 0.32;
+  --olsb-casing-nerve: #8A7316;
+  --olsb-casing-vein: #213F7A;
+  --olsb-casing-artery: #7E1F16;
+  --olsb-cell: #B7A57C;
+  --olsb-dim: 0.42;
+  /* 3D model: air spaces drawn as a cast, drilled bone, the stage. */
+  --olsb-cast: #7FB7C9;
+  --olsb-cast-2: #9CC7B4;
+  --olsb-cut: #CDBB90;
+  --olsb-stage3d: #1E1F22;
+}
+html[data-theme="dark"] {
+  --olsb-bone: #CFC3A2;
+  --olsb-bone-cut: #A99569;
+  --olsb-bone-dark: #85744F;
+  --olsb-otic: #EADCA4;
+  --olsb-otic-edge: #6E5A2A;
+  --olsb-plate: #9C8A5E;
+  --olsb-sinusplate: #6F84A8;
+  --olsb-air: #0B0C0E;
+  --olsb-tm: #BDB7AC;
+  --olsb-tm-edge: #5F574B;
+  --olsb-skin: #C99C82;
+  --olsb-crease: #7A5240;
+  --olsb-fascia: #D8D0BF;
+  --olsb-fascia-edge: #857A66;
+  --olsb-nerve: #DCC34A;
+  --olsb-nerve-edge: #6E5C12;
+  --olsb-vein: #5A82D2;
+  --olsb-artery: #E0473A;
+  --olsb-dura: #A9ADAB;
+  --olsb-ossicle: #F2EEE2;
+  --olsb-ossicle-edge: #3D382E;
+  --olsb-mucosa: #D0857D;
+  --olsb-recess: #0B0C0E;
+  --olsb-zone: #8EA7FF;
+  --olsb-wall: #9C8F7E;
+  --olsb-muscle: #B85448;
+  --olsb-brain: #8F7C76;
+  --olsb-perilymph: #6F8FA6;
+  --olsb-light-a: 0.28;
+  --olsb-shadow: #000000;
+  --olsb-shadow-a: 0.45;
+  --olsb-casing-nerve: #5E4E0C;
+  --olsb-casing-vein: #1B305C;
+  --olsb-casing-artery: #6A1A12;
+  --olsb-cell: #7D6C47;
+  --olsb-cast: #4F8EA3;
+  --olsb-cast-2: #6FA48E;
+  --olsb-cut: #A99569;
+  --olsb-stage3d: #0E0F11;
+}
+
+/* ===== PAGE ===== */
+.olsb { max-width: var(--maxw); margin: 0 auto; padding: clamp(1.25rem, 4vw, 2.5rem) var(--gutter) 3rem; }
+.olsb-head { margin-bottom: 1.25rem; max-width: 46rem; }
+.olsb-head h1 {
+  margin: 0.4rem 0 0.5rem; font-size: var(--step-3); font-weight: 740; font-stretch: 118%;
+  letter-spacing: -0.035em; line-height: 0.95;
+}
+.olsb-head p { margin: 0; color: var(--ink-muted); }
+.olsb-notice {
+  margin: 0 0 1.25rem; padding: 0.5rem 0.75rem; font-size: 0.875rem;
+  background: var(--wash); border-left: 2px solid var(--signal);
+}
+.olsb-problem { color: var(--bad); }
+
+.olsb-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+/* Phones: diagram, then the step card, then the controls. */
+.olsb-grid > .olsb-controls { order: 3; }
+@media (min-width: 960px) {
+  .olsb-grid { grid-template-columns: minmax(0, 1fr) clamp(19rem, 30vw, 25rem); grid-template-rows: auto 1fr; align-items: start; }
+  .olsb-stagecol { grid-column: 1; grid-row: 1; }
+  .olsb-grid > .olsb-controls { grid-column: 1; grid-row: 2; order: 0; }
+  .olsb-side { grid-column: 2; grid-row: 1 / 3; }
+  .olsb-side { position: sticky; top: 64px; max-height: calc(100vh - 76px); overflow: auto; }
+}
+
+/* ===== STAGE ===== */
+.olsb-stage {
+  position: relative; background: var(--olsb-stage);
+  border: 1px solid var(--rule); border-radius: var(--radius);
+}
+#olsb-svg { display: block; width: 100%; height: auto; aspect-ratio: 760 / 520; touch-action: manipulation; }
+#olsb-svg text { user-select: none; }
+.olsb-orient {
+  position: absolute; left: 0.6rem; bottom: 0.5rem; margin: 0;
+  font: 400 0.68rem/1.3 var(--font-mono); letter-spacing: 0.04em; color: var(--ink-faint);
+  pointer-events: none;
+}
+
+.olsb-controls { display: grid; gap: 0.75rem; align-content: start; }
+.olsb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; }
+.olsb-row > .site-kicker { min-width: 4.5rem; }
+.olsb-toggle {
+  display: inline-flex; align-items: center; gap: 0.4rem; min-height: 32px;
+  padding: 0.25rem 0.6rem 0.25rem 0.45rem; cursor: pointer;
+  font: 400 0.8rem/1 var(--font-mono); color: var(--ink-muted);
+  border: 1px solid var(--rule-strong); border-radius: var(--radius);
+}
+.olsb-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.olsb-toggle input { margin: 0; accent-color: var(--ink); }
+.olsb-toggle:has(input:checked) { color: var(--ink); }
+.olsb-swatch { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1px solid var(--rule-strong); }
+/* Layer swatch: the colour of the layer's first structure kind. */
+.sw-skin { background: var(--olsb-skin); }
+.sw-fascia { background: var(--olsb-fascia); }
+.sw-bone, .sw-bonehi { background: var(--olsb-bone); }
+.sw-bonecut { background: var(--olsb-bone-cut); }
+.sw-bonedark, .sw-plate, .sw-mark { background: var(--olsb-bone-dark); }
+.sw-tm, .sw-tmline, .sw-graft { background: var(--olsb-tm); }
+.sw-air, .sw-recess { background: var(--olsb-air); }
+.sw-mucosa, .sw-mucosaline { background: var(--olsb-mucosa); }
+.sw-nerve { background: var(--olsb-nerve); }
+.sw-dura { background: var(--olsb-dura); }
+.sw-vein, .sw-veinwall { background: var(--olsb-vein); }
+.sw-artery, .sw-arterywall { background: var(--olsb-artery); }
+.sw-ossicle, .sw-ghost { background: var(--olsb-ossicle); }
+.sw-muscle { background: var(--olsb-muscle); }
+.sw-wall { background: var(--olsb-wall); }
+.sw-brain { background: var(--olsb-brain); }
+.sw-oticfill, .sw-canal, .sw-innerline, .sw-innerfill, .sw-perilymph { background: var(--olsb-otic); }
+.sw-zone, .sw-cone, .sw-dimline, .sw-refline { background: var(--signal-2); }
+.sw-route, .sw-incision { background: var(--signal); }
+
+/* ===== DRAWING ===== */
+#olsb-svg .s { transition: opacity 0.2s; }
+#olsb-svg .s:not(.inert) { cursor: pointer; }
+#olsb-svg path { stroke-linecap: round; stroke-linejoin: round; }
+#olsb-svg .ln { fill: none; }
+#olsb-svg .hit { fill: none; stroke: transparent; stroke-width: 14px; vector-effect: non-scaling-stroke; pointer-events: stroke; }
+#olsb-svg .hair { stroke-width: 2px; vector-effect: non-scaling-stroke; }
+
+#olsb-svg .k-bone { fill: var(--olsb-bone); stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-bonecut { fill: var(--olsb-bone-cut); stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-bonedark { fill: var(--olsb-bone-dark); stroke: var(--olsb-bone-dark); }
+#olsb-svg .k-bonedark.ln { fill: none; }
+#olsb-svg .k-plate { fill: var(--olsb-plate); stroke: var(--olsb-plate); }
+#olsb-svg .k-plate.ln { fill: none; }
+#olsb-svg .k-sinusplate { stroke: var(--olsb-sinusplate); }
+#olsb-svg .k-lamina { stroke: var(--olsb-bone-dark); stroke-dasharray: 3 2; }
+#olsb-svg .k-air { fill: var(--olsb-air); }
+#olsb-svg .k-recess { fill: var(--olsb-recess); fill-opacity: 0.55; stroke: var(--olsb-recess); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 3 2; }
+#olsb-svg .k-mark { fill: var(--olsb-bone-dark); }
+#olsb-svg .k-zone { fill: var(--olsb-zone); fill-opacity: 0.16; stroke: var(--olsb-zone); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
+#olsb-svg .s:not(.is-focus):not(.is-sel) .k-zone { fill-opacity: 0; stroke-opacity: 0.35; }
+#olsb-svg .k-refline { stroke: var(--signal-2); stroke-dasharray: 7 4; }
+#olsb-svg .k-dura { fill: var(--olsb-dura); fill-opacity: 0.85; }
+#olsb-svg .k-vein { stroke: var(--olsb-vein); fill: var(--olsb-vein); }
+#olsb-svg .k-vein.ln { fill: none; stroke-opacity: 0.9; }
+#olsb-svg .k-artery { stroke: var(--olsb-artery); }
+#olsb-svg .k-nerve { stroke: var(--olsb-nerve); fill: var(--olsb-nerve); }
+#olsb-svg .k-nerve.ln { fill: none; }
+#olsb-svg .k-nervemark { fill: var(--olsb-nerve-edge); }
+#olsb-svg .k-ossicle { stroke: var(--olsb-ossicle-edge); fill: var(--olsb-ossicle); }
+#olsb-svg .k-ossicle.ln { fill: none; stroke: var(--olsb-ossicle); filter: drop-shadow(0 0 0.7px var(--olsb-ossicle-edge)); }
+#olsb-svg path.k-ossicle:not(.ln) { stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-tendon { stroke: var(--olsb-ossicle-edge); }
+#olsb-svg .k-mucosa { fill: var(--olsb-mucosa); fill-opacity: 0.75; }
+#olsb-svg .k-tm { fill: var(--olsb-tm); fill-opacity: 0.55; stroke: var(--olsb-tm-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-annulus { stroke: var(--olsb-tm-edge); }
+#olsb-svg .k-rim { stroke: var(--ink); stroke-dasharray: 2 2; }
+#olsb-svg .k-fascia { fill: var(--olsb-fascia); fill-opacity: 0.85; stroke: var(--olsb-fascia-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-skin { fill: var(--olsb-skin); stroke: var(--olsb-crease); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .L-tm .k-skin { fill-opacity: 0.6; stroke-dasharray: 3 2; }
+#olsb-svg .k-crease { stroke: var(--olsb-crease); stroke-dasharray: 2 4; }
+#olsb-svg .k-incision { stroke: var(--signal); stroke-width: 2.5px; }
+#olsb-svg .k-incision2 { stroke: var(--signal); stroke-dasharray: 8 5; }
+
+/* Kinds added for the cut-plane dioramas. */
+#olsb-svg .k-wall { fill: var(--olsb-wall); stroke: var(--olsb-bone-dark); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-oticfill { fill: var(--olsb-otic); stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-innerline { stroke: var(--olsb-otic-edge); stroke-dasharray: 4 3; }
+#olsb-svg .k-innerfill { fill: var(--olsb-perilymph); fill-opacity: 0.55; stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
+#olsb-svg .k-muscle { stroke: var(--olsb-muscle); stroke-opacity: 0.85; }
+#olsb-svg .k-veinwall { fill: var(--olsb-vein); fill-opacity: 0.8; }
+#olsb-svg .k-arterywall { fill: var(--olsb-artery); stroke: var(--olsb-artery); fill-opacity: 0.85; stroke-opacity: 0.8; }
+#olsb-svg .k-arterywall.ln { fill: none; }
+#olsb-svg .k-ghost { fill: var(--olsb-ossicle); fill-opacity: 0.45; stroke: var(--olsb-ossicle-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 4 3; }
+#olsb-svg .k-zone2 { fill: var(--olsb-air); fill-opacity: 0.18; stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-dasharray: 3 3; }
+#olsb-svg .k-tmline { stroke: var(--olsb-tm-edge); }
+#olsb-svg .k-mucosaline { stroke: var(--olsb-mucosa); }
+#olsb-svg .k-bonehi { fill: var(--olsb-bone); stroke: var(--olsb-bone-dark); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-space { fill: var(--olsb-zone); fill-opacity: 0.3; stroke: var(--olsb-zone); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-fold { stroke: var(--olsb-tm-edge); stroke-dasharray: 2 2; }
+#olsb-svg .k-brain { fill: var(--olsb-brain); }
+#olsb-svg .k-cone { fill: var(--olsb-zone); fill-opacity: 0.12; stroke: var(--olsb-zone); stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-dasharray: 6 4; }
+#olsb-svg .k-cone2 { fill: var(--olsb-zone); fill-opacity: 0.28; stroke: var(--olsb-zone); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-dimline, #olsb-svg .k-route2 { stroke: var(--signal-2); }
+#olsb-svg .k-route { stroke: var(--signal); stroke-dasharray: 6 4; }
+#olsb-svg .k-route2 { stroke-dasharray: 5 3; }
+#olsb-svg .arrowhead { fill: var(--ink-muted); }
+#olsb-svg .k-zone.ln { fill: none; }
+
+/* Rendering: section hatching, form shading, tube casings, canal lumens. */
+#olsb-svg .hatch-bg { fill: var(--olsb-bone); }
+#olsb-svg .hatch-ln { stroke: var(--olsb-bone-dark); stroke-width: 0.9; stroke-opacity: 0.45; }
+#olsb-svg .k-bonesec { fill: url(#olsb-hatch); }
+#olsb-svg .sh-hi { stop-color: var(--olsb-light); stop-opacity: var(--olsb-light-a); }
+#olsb-svg .sh-clear { stop-color: var(--olsb-light); stop-opacity: 0; }
+#olsb-svg .sh-lo { stop-color: var(--olsb-shadow); stop-opacity: var(--olsb-shadow-a); }
+#olsb-svg .sh-lo-soft { stop-color: var(--olsb-shadow); stop-opacity: 0.08; }
+#olsb-svg .shade { pointer-events: none; stroke: none; }
+#olsb-svg .casing { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#olsb-svg .c-nerve { stroke: var(--olsb-casing-nerve); }
+#olsb-svg .c-vein { stroke: var(--olsb-casing-vein); }
+#olsb-svg .c-artery, #olsb-svg .c-arterywall { stroke: var(--olsb-casing-artery); }
+#olsb-svg .c-canal { stroke: var(--olsb-otic-edge); }
+#olsb-svg .c-muscle { stroke: var(--olsb-casing-artery); stroke-opacity: 0.6; }
+#olsb-svg .k-canal { stroke: var(--olsb-otic); }
+#olsb-svg .lumen { fill: none; stroke: var(--olsb-perilymph); stroke-linecap: round; pointer-events: none; }
+#olsb-svg .k-cellopen { fill: var(--olsb-cell); fill-opacity: 0.55; stroke: var(--olsb-bone-dark); stroke-width: 0.8px; vector-effect: non-scaling-stroke; stroke-opacity: 0.6; }
+#olsb-svg .k-cells { fill: var(--olsb-air); fill-opacity: 0.82; stroke: var(--olsb-bone-dark); stroke-width: 0.8px; vector-effect: non-scaling-stroke; }
+#olsb-svg .k-ridge { stroke: var(--olsb-bone-dark); stroke-opacity: 0.55; }
+#olsb-svg .k-spiral { stroke: var(--olsb-otic-edge); fill: none; }
+#olsb-svg .k-perilymph { fill: var(--olsb-perilymph); stroke: var(--olsb-otic-edge); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .scalebar path { fill: none; stroke: var(--signal-2); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+#olsb-svg .scalebar text { font-family: var(--font-mono); fill: var(--signal-2); text-anchor: middle; stroke: var(--olsb-stage); paint-order: stroke; stroke-linejoin: round; }
+
+/* See-through: the overlying surfaces go faint so the projection of
+   deeper structures shows under them. */
+#olsb-svg.is-ghost .L-cortex, #olsb-svg.is-ghost .L-skin, #olsb-svg.is-ghost .L-soft { opacity: 0.22; }
+/* A step's focus: everything else steps back, except the large surfaces. */
+#olsb-svg.has-focus .s:not(.is-focus):not(.inert):not(.bg):not(.is-sel) { opacity: var(--olsb-dim); }
+#olsb-svg.has-focus .s.inert:not(.bg) { opacity: var(--olsb-dim); }
+#olsb-svg .s.is-sel path:not(.hit) { filter: drop-shadow(0 0 1.5px var(--ink)) drop-shadow(0 0 1.5px var(--ink)); }
+#olsb-svg .s.is-rel path:not(.hit) { filter: drop-shadow(0 0 1.2px var(--signal-2)); }
+/* Quiz feedback: the site's outcome colours. */
+#olsb-svg .s.q-ok path:not(.hit) { filter: drop-shadow(0 0 2px var(--ok)) drop-shadow(0 0 2px var(--ok)); }
+#olsb-svg .s.q-bad path:not(.hit) { filter: drop-shadow(0 0 2px var(--bad)) drop-shadow(0 0 2px var(--bad)); }
+#olsb-svg .s.q-target path:not(.hit) { filter: drop-shadow(0 0 2px var(--ok)) drop-shadow(0 0 2px var(--ok)); }
+
+/* Labels: name beside a dot, haloed with the stage colour. */
+#olsb-svg .labels { pointer-events: none; }
+#olsb-svg .lbl circle { fill: var(--ink); stroke: var(--olsb-stage); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+#olsb-svg .lbl text {
+  font-family: var(--font-mono); font-weight: 500; fill: var(--ink-muted);
+  stroke: var(--olsb-stage); stroke-linejoin: round; paint-order: stroke;
+}
+#olsb-svg .lbl.is-strong text { fill: var(--ink); font-weight: 600; }
+
+/* ===== SIDE PANEL ===== */
+.olsb-procs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.35rem; }
+.olsb-sub { margin: 0 0 1rem; color: var(--ink-faint); font-size: 0.875rem; }
+.olsb-card { padding: 1rem 1rem 0.9rem; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); }
+.olsb-card h2 { margin: 0.3rem 0 0.6rem; font-size: var(--step-1); font-weight: 680; letter-spacing: -0.01em; line-height: 1.2; }
+.olsb-card dl { margin: 0; display: grid; gap: 0.55rem; }
+.olsb-card dt { font: 500 0.68rem/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+.olsb-card dd { margin: 0.2rem 0 0; font-size: 0.925rem; line-height: 1.45; }
+.olsb-card dd.hz { padding-left: 0.6rem; border-left: 2px solid var(--signal); }
+.olsb-nav { display: flex; gap: 0.4rem; margin-top: 0.9rem; }
+.olsb-nav .site-btn { flex: 1; }
+.olsb-steps { list-style: none; counter-reset: st; margin: 1rem 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.olsb-steps li { counter-increment: st; border-bottom: 1px solid var(--rule); }
+.olsb-steplink {
+  display: flex; gap: 0.7rem; width: 100%; padding: 0.5rem 0; text-align: left; cursor: pointer;
+  background: none; border: 0; font: 400 0.9rem/1.3 var(--font-sans); color: var(--ink-muted);
+}
+.olsb-steplink::before { content: counter(st, decimal-leading-zero); font: 400 0.75rem/1.6 var(--font-mono); color: var(--ink-faint); }
+.olsb-steplink:hover { color: var(--ink); }
+.olsb-steplink[aria-current="step"] { color: var(--ink); font-weight: 600; }
+.olsb-steplink[aria-current="step"]::before { color: var(--signal); }
+
+.olsb-info { margin-top: 1rem; }
+.olsb-info-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
+.olsb-info p.note { margin: 0; font-size: 0.925rem; line-height: 1.5; }
+.olsb-info-sec { margin-top: 0.9rem; padding-top: 0.7rem; border-top: 1px solid var(--rule); }
+.olsb-info-sec > .site-kicker { margin: 0 0 0.4rem; }
+.olsb-rel-row { display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 0.5rem; align-items: baseline; }
+.olsb-rel-dir { font: 500 0.7rem/1.9 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--signal-2); }
+.olsb-chip.is-hidden { border-style: dashed; }
+.olsb-chip:disabled { opacity: 0.55; cursor: default; }
+.olsb-dios { margin-bottom: 1rem; }
+.olsb-dios .olsb-sub { margin-bottom: 0; }
+.olsb-views { display: contents; }
+.olsb-views[hidden] { display: none; }
+.olsb-quiz h2 { font-size: var(--step-2); }
+.olsb-quiz-fb { margin: 0; font-size: 0.9rem; color: var(--ink-muted); }
+.olsb-quiz-fb.ok { color: var(--ok); }
+.olsb-quiz-fb.bad { color: var(--bad); }
+
+.olsb-inview { margin-top: 1.25rem; display: grid; gap: 0.6rem; }
+.olsb-inview-grp p { margin: 0 0 0.3rem; }
+.olsb-chip {
+  display: inline-block; margin: 0 0.3rem 0.3rem 0; padding: 0.25rem 0.5rem; cursor: pointer;
+  font: 400 0.76rem/1.2 var(--font-mono); color: var(--ink-muted); text-align: left;
+  background: transparent; border: 1px solid var(--rule); border-radius: var(--radius);
+}
+.olsb-chip:hover { color: var(--ink); border-color: var(--ink); }
+.olsb-chip.active { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+.olsb [hidden] { display: none !important; }
+
+/* ===== 3D MODEL ===== */
+.olsb-mode { margin-bottom: 1rem; }
+.olsb3d-stage { aspect-ratio: 4 / 3; overflow: hidden; background: var(--olsb-stage3d); }
+@media (max-width: 600px) { .olsb3d-stage { aspect-ratio: 3 / 4; } }
+#olsb3d-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; outline: none; }
+#olsb3d-canvas:active { cursor: grabbing; }
+#olsb3d-canvas.is-pixels { image-rendering: pixelated; }
+.olsb3d-stage .olsb-orient { position: absolute; color: #B9B6AE; background: rgba(0, 0, 0, 0.35); padding: 0.15rem 0.4rem; border-radius: 2px; }
+.olsb3d-tags { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.olsb3d-tag {
+  position: absolute; transform: translate(-50%, -130%); white-space: nowrap;
+  padding: 0.1rem 0.35rem; font: 500 0.7rem/1.2 var(--font-mono); color: #F4F1EA;
+  background: rgba(14, 15, 17, 0.72); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 2px;
+}
+.olsb3d-tag::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 1px; height: 5px; background: rgba(255, 255, 255, 0.5); }
+.olsb3d-tag.is-sel { border-color: var(--signal); color: #fff; font-weight: 600; }
+.olsb3d-tag.is-focus { border-color: var(--signal); }
+.olsb3d-tag.is-behind { opacity: 0.45; border-style: dashed; }
+.olsb3d-hover {
+  position: absolute; pointer-events: none; padding: 0.1rem 0.35rem; font: 400 0.7rem/1.2 var(--font-mono);
+  color: #F4F1EA; background: rgba(14, 15, 17, 0.8); border-radius: 2px;
+}
+.olsb3d-compass { position: absolute; right: 0.5rem; bottom: 0.5rem; width: 72px; height: 72px; pointer-events: none; }
+.olsb3d-status {
+  position: absolute; inset: 0; margin: 0; display: grid; place-items: center; padding: 1rem; text-align: center;
+  font: 400 0.85rem/1.4 var(--font-mono); color: #D8D4CA;
+}
+.olsb3d-desc { margin: -0.4rem 0 0; }
+#olsb3d-cutpos { flex: 1 1 8rem; min-width: 6rem; accent-color: var(--signal-2); }
+.olsb3d-layer { display: inline-flex; align-items: center; gap: 0.35rem; }
+.olsb3d-sw-bone { background: var(--olsb-bone); }
+.olsb3d-sw-canal { background: var(--olsb-skin); }
+.olsb3d-sw-ossicles { background: var(--olsb-ossicle); }
+.olsb3d-sw-nerves { background: var(--olsb-nerve); }
+.olsb3d-sw-muscles { background: var(--olsb-muscle); }
+.olsb3d-sw-inner { background: var(--olsb-perilymph); }
+.olsb3d-sw-vessels { background: linear-gradient(90deg, var(--olsb-artery) 50%, var(--olsb-vein) 50%); }
+.olsb3d-sw-dura { background: var(--olsb-dura); }
+.olsb3d-sw-brain { background: var(--olsb-brain); }
+.olsb3d-sw-air { background: var(--olsb-cast); }
+.olsb3d .olsb-side .olsb-steps { margin-top: 0.75rem; }
+@media (max-width: 600px) {
+  .olsb3d-stage .olsb-orient { display: none; }
+}
+@media (max-width: 600px) {
+  .olsb-orient { position: static; padding: 0.3rem 0.6rem 0.45rem; border-top: 1px solid var(--rule); }
+}

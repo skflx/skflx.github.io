@@ -102,6 +102,82 @@ its CSP, so it runs on bad conference-room wifi or none.
 
 ---
 
+## OLSB — middle ear & mastoid (`OLSB.html`)
+
+**State:** Unlisted (nothing links to it; `noindex`). Two modes behind
+one switch: a 3D model (the default) and four 2D diagrams (the fallback
+without WebGL, and every `#d=`/`#p=` link).
+
+**3D model** (`js/olsb-volume.js` + `js/olsb-3d.js`): a right temporal
+bone as a labelled voxel volume in millimetres (x lateral, y anterior,
+z superior, origin at the oval window), placed from textbook dimensions
+and relations: facial nerve segment by segment, ossicles on the drum,
+three canals in their mutual planes, a spiral cochlea with scalae and
+lamina, Voronoi mastoid air cells, sigmoid/jugular bulb/carotid, dura and
+brain. Three grids, each replacing the coarser one inside its box: 0.3 mm
+for the specimen, 0.1 mm for the tympanic cavity and labyrinth, and an
+8 mm cube at 0.05 mm rebuilt round the point you look at when you are
+close (within the fine box), all built and carved in a Web Worker (the
+volume file itself; no worker, no cube). Walking (WASD) moves at a speed
+set by the free space ahead and stops half a millimetre short of a wall,
+so the middle ear can be walked like a room. Drill states carve it with margins round the hazards: flap up,
+cortical mastoidectomy, facial recess, canal wall down,
+translabyrinthine, middle fossa. Rendered as blocky voxels (face shade,
+vertex AO, coarse openness for cavity depth) with layers, see-through
+bone, isolate, a cut plane (axial/coronal/sagittal), names, big pixels;
+orbit, fly (F) and WASD walking; click to select (neighbours from the
+glossary), double-click to centre. A nine-step guided flight, and view
+links (`#m=3d&st=&L=&cut=&cam=` or `&s=<step>`). `tools/check-data.mjs`
+checks every label against the glossary and the geometry against every
+glossary relation between two drawn structures.
+
+**2D diagrams**, layered inline SVG drawn by `js/olsb.js`:
+
+- **Surgical lateral** (`js/olsb-lateral.js`): the surgeon's projection in
+  eight layers, skin to deep hazards, with TM states, field/canal/recess
+  viewports and see-through. Tours: tympanoplasty (postauricular underlay)
+  and canal-wall-up mastoidectomy with facial recess (action + hazard per
+  step).
+- **Medial wall** (`js/olsb-medial.js`): the tympanic cavity from lateral
+  with TM, malleus and incus removed: divisions, the LSCC / facial nerve /
+  oval window / promontory / round window stack, retrotympanum, anterior
+  wall and epitympanum, inner ear projected, ossicles as a ghost.
+- **Axial: posterior tympanum** (`js/olsb-axial.js`): CT-style cut at the
+  round window; the posterior wall lateral to medial and three lines of
+  sight (canal, facial recess, angled endoscope).
+- **Coronal: the attic** (`js/olsb-coronal.js`): compartment widths,
+  scutum, Prussak's space, the medial stack, roof and floor, the attic
+  cholesteatoma route.
+
+`js/olsb-glossary.js` holds each anatomical id once (name, note,
+directional `rel`). `js/olsb-shapes.js` draws the ossicles, the
+mid-modiolar cochlear section and the air-cell honeycomb from millimetre
+outlines; every diorama is calibrated in px/mm with a live scale bar
+(textbook sizes: TM about 9 mm, footplate 3 x 1.4 mm, facial nerve about
+1.5-2 mm, sigmoid about 7 mm, cochlea about 9 x 5 mm), with form shading
+(domes, pits), hatched section bone and cased nerves and vessels. Where
+depths stack, structures are still spread apart, and the coronal cochlea
+is drawn at three quarters size to fit. Tapping a structure lights its neighbours with their
+direction, lists where else it is drawn, and jumps there (to a step that
+shows it). A find-it quiz asks for any visible structure. Links:
+`#d=<diorama>&p=<tour>&s=<n>` (older `#p=` links still resolve). No
+storage. Self-contained (in `SELF_CONTAINED`).
+
+It is a tool page, not a site figure, so it is SVG rather than ASCII 3D
+(`docs/decisions.md` §8 governs figures). Geometry is invented and spread
+apart for legibility; all content, including the relations, is draft and
+unverified (owner, §7).
+
+**Next:** Owner review of the anatomy, notes and relations, the 3D
+geometry first (positions are reconstructed from dimensions, not traced
+from a scan). Candidates: segmenting a real temporal bone CT into the
+same labels (SSB's pipeline), a find-it quiz in 3D, more drill states
+(cochlear implant, stapedotomy), anatomical variants (sclerotic mastoid
+is already a build option, `pneu`; a high jugular bulb, a dehiscent
+tegmen or superior canal).
+
+---
+
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
 **State:** Graph mode and these stages work: Specimen, Endoscope (including
