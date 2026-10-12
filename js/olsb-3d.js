@@ -12,13 +12,13 @@
    in a Web Worker running js/olsb-volume.js itself (main thread if a
    worker cannot start).
 
-   Meshing: every face between a shown voxel and one that is not becomes
-   a quad, coloured by its label's --olsb-* token and shaded per face, by
-   vertex ambient occlusion and by a coarse openness term (deep cavities
-   go dark): the blocky look of a voxel game, with no lights. Hidden
-   layers, the cut plane and the drill state only change which voxels
-   are shown, so a section is just its cut faces. Picking walks the ray
-   through the grids (no mesh raycast).
+   Surfaces come from js/olsb-mesh.js (in the worker): smooth surface nets
+   on the shown voxels, or blocks. This module lights them (a soft sky and a
+   lamp riding on the camera), colours them from the --olsb-* tokens (the
+   selection tinted, the rest stepped back), and swaps them in when they
+   arrive. Hidden layers, the cut plane and the drill state only change
+   which voxels are shown, so a section is just its cut faces. Picking walks
+   the ray through the grids (no mesh raycast).
 
    Hash: #m=3d[&st=][&s=tour step | &L=layers&cut=&cam=], matched against
    the data, never rendered. Strings reach the DOM through textContent.
@@ -38,7 +38,7 @@ const toM = (v) => [v.z, v.x, v.y];
 
 const st = {
     state: 'intact', layers: new Set(DEFAULT_LAYERS),
-    ghost: false, names: false, pixels: false, fly: false, isolate: false, detail: true,
+    ghost: false, names: false, pixels: false, blocks: false, fly: false, isolate: false, detail: true,
     cut: { axis: 'none', pos: 0.5, flip: false },
     sel: null, focus: [], tour: 0, step: -1, moved: false
 };
@@ -155,13 +155,13 @@ function ask(msg) {
     return new Promise((resolve) => setTimeout(() => {
         if (msg.type === 'build') {
             const v = local[msg.level] = V.build(V.LEVELS[msg.level]);
-            resolve({ nx: v.nx, ny: v.ny, nz: v.nz, vox: v.vox, o: v.o, anchors: v.anchors, lab: new Uint8Array(v.lab) });
+            resolve({ nx: v.nx, ny: v.ny, nz: v.nz, vox: v.vox, o: v.o, anchors: v.anchors, lab: new Uint8Array(v.lab), dep: v.dep });
         } else resolve({ lab: V.carve(local[msg.level], msg.state) });
     }, 20));
 }
 function levelFrom(name, m) {
     const box = [m.o[0], m.o[1], m.o[2], m.o[0] + m.nx * m.vox, m.o[1] + m.ny * m.vox, m.o[2] + m.nz * m.vox];
-    return { name, nx: m.nx, ny: m.ny, nz: m.nz, vox: m.vox, o: m.o, box, anchors: m.anchors, labs: { intact: m.lab }, lab: null, shown: null, meshes: [], quads: [] };
+    return { name, nx: m.nx, ny: m.ny, nz: m.nz, vox: m.vox, o: m.o, box, anchors: m.anchors, dep: m.dep, labs: { intact: m.lab }, lab: null, shown: null, meshes: [], quads: [] };
 }
 async function buildLevel(name) {
     lv[name] = levelFrom(name, await ask({ type: 'build', level: name }));
@@ -233,145 +233,18 @@ function visTable() {
     });
     return t;
 }
-function computeShown(L, vt) {
-    const lab = L.lab, n = lab.length;
-    const shown = L.shown && L.shown.length === n ? L.shown : new Uint8Array(n);
-    for (let i = 0; i < n; i++) shown[i] = vt[lab[i]];
-    if (st.cut.axis !== 'none') {
-        const ax = { sag: 0, cor: 1, ax: 2 }[st.cut.axis], C = V.LEVELS.coarse;
-        const mm = C.box[ax] + (C.box[ax + 3] - C.box[ax]) * st.cut.pos;
-        const cutAt = Math.round((mm - L.o[ax]) / L.vox), nx = L.nx, ny = L.ny;
-        for (let k = 0; k < L.nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-            const c = ax === 0 ? i : ax === 1 ? j : k;
-            if (st.cut.flip ? c < cutAt : c >= cutAt) shown[i + nx * (j + ny * k)] = 0;
-        }
-    }
-    L.shown = shown;
-}
-/* shown value at a model point (mm), from whichever grid covers it */
+/* shown value at a model point (mm), from whichever drawn grid covers it */
 function shownAt(x, y, z) {
-    for (const n of active().reverse()) {
-        const L = lv[n];
+    const act = active();
+    for (let a = act.length - 1; a >= 0; a--) {
+        const L = lv[act[a]];
         const i = Math.floor((x - L.o[0]) / L.vox), j = Math.floor((y - L.o[1]) / L.vox), k = Math.floor((z - L.o[2]) / L.vox);
-        if (i >= 0 && j >= 0 && k >= 0 && i < L.nx && j < L.ny && k < L.nz) return L.shown[i + L.nx * (j + L.ny * k)];
+        if (L.shown && i >= 0 && j >= 0 && k >= 0 && i < L.nx && j < L.ny && k < L.nz) return L.shown[i + L.nx * (j + L.ny * k)];
     }
     return 0;
 }
 
-/* ---------- meshing ---------- */
-const FACES = [
-    /* axis, sign, shade (x lat, y ant, z sup): top brightest, bottom darkest */
-    [0, 1, 0.84], [0, -1, 0.7], [1, 1, 0.78], [1, -1, 0.74], [2, 1, 1.0], [2, -1, 0.56]
-];
-/* vertex occlusion by how many of the three neighbours are solid; gentler on the fine grid, whose steps are small */
-const AO = { coarse: [0.5, 0.68, 0.84, 1], fine: [0.7, 0.8, 0.9, 1], micro: [0.78, 0.86, 0.94, 1] };
-function hash(i) { let h = Math.imul(i ^ (i >>> 15), 2246822519); h ^= h >>> 13; return ((h >>> 0) % 1000) / 1000; }
-
-/* Large-scale occlusion on the coarse grid, in 0.9 mm cells: the share of 14 directions
-   that escape within a few millimetres. Deep cavities and crevices go dark, edges stay lit. */
-const ODIRS = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1],
-    [1, 1, 1], [1, 1, -1], [1, -1, 1], [1, -1, -1], [-1, 1, 1], [-1, 1, -1], [-1, -1, 1], [-1, -1, -1]];
-function openness() {
-    const L = lv.coarse, shown = L.shown, nx = L.nx, ny = L.ny, nz = L.nz, F = 3, REACH = 8;
-    const cx = Math.ceil(nx / F), cy = Math.ceil(ny / F), cz = Math.ceil(nz / F), n = cx * cy * cz;
-    const cnt = new Uint16Array(n);
-    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) {
-        const row = nx * (j + ny * k), crow = cx * (((j / F) | 0) + cy * ((k / F) | 0));
-        for (let i = 0; i < nx; i++) if (shown[row + i] === 1) cnt[crow + ((i / F) | 0)]++;
-    }
-    const occ = new Uint8Array(n), lim = F * F * F * 0.45;
-    for (let c = 0; c < n; c++) occ[c] = cnt[c] > lim ? 1 : 0;
-    const open = new Float32Array(n);
-    for (let k = 0; k < cz; k++) for (let j = 0; j < cy; j++) for (let i = 0; i < cx; i++) {
-        let esc = 0;
-        for (let d = 0; d < 14; d++) {
-            const D = ODIRS[d];
-            let x = i, y = j, z = k, hit = false;
-            for (let r = 0; r < REACH; r++) {
-                x += D[0]; y += D[1]; z += D[2];
-                if (x < 0 || y < 0 || z < 0 || x >= cx || y >= cy || z >= cz) break;
-                if (occ[x + cx * (y + cy * z)]) { hit = true; break; }
-            }
-            if (!hit) esc++;
-        }
-        open[i + cx * (j + cy * k)] = esc / 14;
-    }
-    const s = L.vox * F;
-    return (x, y, z) => {
-        const i = Math.floor((x - L.o[0]) / s), j = Math.floor((y - L.o[1]) / s), k = Math.floor((z - L.o[2]) / s);
-        if (i < 0 || j < 0 || k < 0 || i >= cx || j >= cy || k >= cz) return 1;
-        return Math.min(1, open[i + cx * (j + cy * k)] / 0.64);
-    };
-}
-
-function buildMesh(L, openAt, skipBox) {
-    const lab = L.lab, shown = L.shown, nx = L.nx, ny = L.ny, nz = L.nz, v = L.vox, o = L.o;
-    const strides = [1, nx, nx * ny], dims = [nx, ny, nz];
-    const cav = V.codes.cavity, aoT = AO[L.name];
-    /* skip voxels inside the fine box (coarse grid, when the fine one is drawn) */
-    const sk = skipBox ? [0, 1, 2].map((a) => [Math.round((skipBox[a] - o[a]) / v), Math.round((skipBox[a + 3] - o[a]) / v)]) : null;
-    const skip = (i, j, k) => i >= sk[0][0] && i < sk[0][1] && j >= sk[1][0] && j < sk[1][1] && k >= sk[2][0] && k < sk[2][1];
-    /* neighbours past the edge of the fine grid come from the coarse one */
-    const at = (i, j, k) => (i < 0 || j < 0 || k < 0 || i >= nx || j >= ny || k >= nz)
-        ? (L.name !== 'coarse' ? shownAt(o[0] + (i + 0.5) * v, o[1] + (j + 0.5) * v, o[2] + (k + 0.5) * v) : 0)
-        : shown[i + nx * (j + ny * k)];
-    const counts = [0, 0];
-    let out = null;
-    for (let pass = 0; pass < 2; pass++) {
-        if (pass) out = counts.map((n) => ({ n, pos: new Int16Array(n * 12), col: new Uint8Array(n * 12), shade: new Uint8Array(n * 4),
-            lab: new Uint8Array(n), drilled: new Uint8Array(n), idx: new Uint32Array(n * 6) }));
-        const q = [0, 0];
-        for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-            const idx = i + nx * (j + ny * k), s = shown[idx];
-            if (!s || (sk && skip(i, j, k))) continue;
-            for (let f = 0; f < 6; f++) {
-                const ax = FACES[f][0], sg = FACES[f][1];
-                const c = (ax === 0 ? i : ax === 1 ? j : k) + sg;
-                const inside = c >= 0 && c < dims[ax];
-                const nb = inside ? shown[idx + sg * strides[ax]] : at(ax === 0 ? c : i, ax === 1 ? c : j, ax === 2 ? c : k);
-                if (s === 1 ? nb === 1 : nb !== 0) continue;
-                const m = s === 1 ? 0 : 1;
-                if (!pass) { counts[m]++; continue; }
-                emit(out[m], q[m]++, i, j, k, f, lab[idx], inside && lab[idx + sg * strides[ax]] === cav, s === 1, idx);
-            }
-        }
-    }
-    return out;
-
-    function emit(b, qi, i, j, k, f, code, drilled, solid, idx) {
-        const ax = FACES[f][0], sg = FACES[f][1], u = (ax + 1) % 3, w = (ax + 2) % 3;
-        const base = [i, j, k], front = [i, j, k];
-        front[ax] += sg;
-        const plane = base[ax] + (sg > 0 ? 1 : 0);
-        const ao = [3, 3, 3, 3];
-        for (let c = 0; c < 4; c++) {
-            const cu = c === 1 || c === 2 ? 1 : 0, cw = c >= 2 ? 1 : 0;
-            if (solid) {
-                const p1 = front.slice(), p2 = front.slice(), p3 = front.slice();
-                p1[u] += cu ? 1 : -1; p2[w] += cw ? 1 : -1; p3[u] += cu ? 1 : -1; p3[w] += cw ? 1 : -1;
-                const s1 = at(p1[0], p1[1], p1[2]) === 1 ? 1 : 0, s2 = at(p2[0], p2[1], p2[2]) === 1 ? 1 : 0, s3 = at(p3[0], p3[1], p3[2]) === 1 ? 1 : 0;
-                ao[c] = s1 && s2 ? 0 : 3 - (s1 + s2 + s3);
-            }
-            const p = [0, 0, 0];
-            p[ax] = plane; p[u] = base[u] + cu; p[w] = base[w] + cw;
-            const bb = qi * 12 + c * 3;
-            b.pos[bb] = p[1]; b.pos[bb + 1] = p[2]; b.pos[bb + 2] = p[0];   /* three: X = ant, Y = sup, Z = lat */
-        }
-        const op = solid ? 0.42 + 0.58 * Math.pow(openAt(o[0] + (front[0] + 0.5) * v, o[1] + (front[1] + 0.5) * v, o[2] + (front[2] + 0.5) * v), 1.3) : 1;
-        const jit = (0.94 + 0.06 * hash(idx)) * op;
-        for (let c = 0; c < 4; c++) b.shade[qi * 4 + c] = Math.round(255 * FACES[f][2] * aoT[ao[c]] * jit);
-        b.lab[qi] = code;
-        b.drilled[qi] = drilled ? 1 : 0;
-        const b4 = qi * 4, ii = qi * 6;
-        /* split the quad along the diagonal that keeps the occlusion gradient smooth */
-        if (ao[0] + ao[2] > ao[1] + ao[3]) {
-            b.idx[ii] = b4; b.idx[ii + 1] = b4 + 1; b.idx[ii + 2] = b4 + 2; b.idx[ii + 3] = b4; b.idx[ii + 4] = b4 + 2; b.idx[ii + 5] = b4 + 3;
-        } else {
-            b.idx[ii] = b4 + 1; b.idx[ii + 1] = b4 + 2; b.idx[ii + 2] = b4 + 3; b.idx[ii + 3] = b4 + 1; b.idx[ii + 4] = b4 + 3; b.idx[ii + 5] = b4;
-        }
-    }
-}
-
+/* ---------- surfaces (js/olsb-mesh.js, in the worker when there is one) ---------- */
 /* Colours from the tokens. The selection is tinted with the act signal; with a selection,
    whatever is neither it, its neighbours nor bone steps back. A step's focus only names. */
 function colorize() {
@@ -391,9 +264,23 @@ function colorize() {
         if (!L) return;
         L.meshes.forEach((mesh, m) => {
             const b = L.quads[m];
+            const qc = (q) => (b.drilled[q] && labelOf(b.lab[q]).layer === 'bone' ? cut : base[b.lab[q]]);
+            /* smooth surfaces: each vertex takes the mean colour of the quads meeting at its
+               corner, so a boundary between two tissues is a soft line, not a staircase */
+            let acc = null;
+            if (b.vc) {
+                acc = new Float32Array(b.ncorner * 4);
+                for (let q = 0; q < b.n; q++) {
+                    const c = qc(q);
+                    for (let k = 0; k < 4; k++) { const a = b.vc[q * 4 + k] * 4; acc[a] += c[0]; acc[a + 1] += c[1]; acc[a + 2] += c[2]; acc[a + 3]++; }
+                }
+            }
+            const mix = [0, 0, 0];
             for (let q = 0; q < b.n; q++) {
-                const c = b.drilled[q] && labelOf(b.lab[q]).layer === 'bone' ? cut : base[b.lab[q]];
+                const cq = qc(q);
                 for (let k = 0; k < 4; k++) {
+                    let c = cq;
+                    if (acc) { const a = b.vc[q * 4 + k] * 4, w = acc[a + 3]; mix[0] = acc[a] / w; mix[1] = acc[a + 1] / w; mix[2] = acc[a + 2] / w; c = mix; }
                     const s = b.shade[q * 4 + k] / 255, bb = q * 12 + k * 3;
                     /* the attribute holds the square root of linear colour, so 8 bits keep the dark steps */
                     b.col[bb] = Math.round(255 * Math.sqrt(Math.min(1, c[0] * s)));
@@ -407,23 +294,39 @@ function colorize() {
     needs = true;
 }
 
-/* Vertex colours arrive as square roots of linear colour; square them back. */
+/* Lit surfaces: vertex colours arrive as square roots of linear colour (8 bits keep the dark
+   steps) and are squared back before lighting. Soft and slightly sheened, like wet specimen. */
 function material(ghost) {
     const m = ghost
-        ? new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.13, depthWrite: false, side: THREE.DoubleSide })
-        : new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
+        ? new THREE.MeshStandardMaterial({ vertexColors: true, transparent: true, opacity: 0.14, depthWrite: false, side: THREE.DoubleSide, roughness: 0.9 })
+        : new THREE.MeshStandardMaterial({ vertexColors: true, side: THREE.DoubleSide, roughness: 0.58, metalness: 0 });
     m.onBeforeCompile = (sh) => {
         sh.fragmentShader = sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\n\tdiffuseColor.rgb *= diffuseColor.rgb;');
     };
     return m;
 }
 
+/* Ask for new surfaces; the old ones stay on screen until they arrive, and only the latest
+   request is installed. The page keeps its own shown arrays for picking and walking. */
+let meshSeq = 0;
 function remesh() {
     if (!lv.coarse || !lv.coarse.lab) return;
-    const vt = visTable();
-    const act = active();
-    act.forEach((n) => computeShown(lv[n], vt));
-    const openAt = openness();
+    const t0 = performance.now(), seq = ++meshSeq;
+    const act = active(), vt = visTable();
+    const opts = { vt, cut: { axis: st.cut.axis, pos: st.cut.pos, flip: st.cut.flip }, cutBox: V.LEVELS.coarse.box, blocks: st.blocks, cav: V.codes.cavity };
+    act.forEach((n) => O.mesh.computeShown(lv[n], vt, opts.cut, opts.cutBox));
+    const job = worker
+        ? ask({ type: 'mesh', state: st.state, levels: act, opts })
+        : new Promise((resolve) => setTimeout(() => resolve({ meshes: O.mesh.meshAll(act.map((n) => lv[n]), opts) }), 0));
+    stage.setAttribute('data-meshing', 'busy');
+    job.then((res) => {
+        if (seq !== meshSeq) return;
+        install(res.meshes, act);
+        stage.setAttribute('data-meshing', 'idle');
+        stage.setAttribute('data-remesh-ms', String(Math.round(performance.now() - t0)));
+    }).catch(() => { if (seq === meshSeq) stage.setAttribute('data-meshing', 'failed'); });
+}
+function install(meshes, act) {
     let faces = 0;
     ORDER.forEach((n) => {
         const L = lv[n];
@@ -431,11 +334,13 @@ function remesh() {
         L.meshes.forEach((m) => { scene.remove(m); m.geometry.dispose(); });
         L.meshes = [];
         L.quads = [];
-        if (!act.includes(n)) return;
-        L.quads = buildMesh(L, openAt, finerBox(n));
+        if (!act.includes(n) || !meshes[n]) return;
+        L.quads = meshes[n];
         L.quads.forEach((b, m) => {
+            b.col = new Uint8Array(b.n * 12);
             const g = new THREE.BufferGeometry();
             g.setAttribute('position', new THREE.BufferAttribute(b.pos, 3));
+            g.setAttribute('normal', new THREE.BufferAttribute(b.nrm, 3, true));
             g.setAttribute('color', new THREE.BufferAttribute(b.col, 3, true));
             g.setIndex(new THREE.BufferAttribute(b.idx, 1));
             const mesh = new THREE.Mesh(g, m ? matGhost : matSolid);
@@ -449,6 +354,7 @@ function remesh() {
         });
     });
     colorize();
+    placeTags();
     stage.setAttribute('data-faces', String(faces));
 }
 
@@ -501,13 +407,16 @@ function marchGrid(L, o, d, maxT, skipBox) {
 }
 
 /* ---------- camera: orbit about a target, or fly; keys walk in both ---------- */
+const FOV = 42;
 function setView(id, animate) {
     const vw = V.VIEWS.find((x) => x.id === id) || V.VIEWS[0];
-    flyTo(toW(vw.eye), toW(vw.target), animate);
+    stage.classList.toggle('is-scope', !!vw.scope);
+    flyTo(toW(vw.eye), toW(vw.target), animate, vw.fov || FOV);
 }
-function flyTo(pos, target, animate) {
-    if (!animate) { tween = null; cam.pos.copy(pos); cam.target.copy(target); applyCam(); return; }
-    tween = { t0: performance.now(), dur: 750, p0: cam.pos.clone(), q0: cam.target.clone(), p1: pos.clone(), q1: target.clone() };
+function flyTo(pos, target, animate, fov) {
+    const f1 = fov || camera.fov;
+    if (!animate) { tween = null; cam.pos.copy(pos); cam.target.copy(target); camera.fov = f1; applyCam(); return; }
+    tween = { t0: performance.now(), dur: 750, p0: cam.pos.clone(), q0: cam.target.clone(), p1: pos.clone(), q1: target.clone(), f0: camera.fov, f1 };
     needs = true;
 }
 function applyCam() {
@@ -783,7 +692,7 @@ function renderControls() {
         lb.appendChild(b);
     });
     pills($('olsb3d-views'), V.VIEWS, () => false, (v) => { st.moved = true; setView(v.id, true); settle(); });
-    ['ghost', 'names', 'fly', 'pixels', 'isolate', 'detail'].forEach((k) => { const b = $('olsb3d-' + k); if (b) b.setAttribute('aria-pressed', String(!!st[k])); });
+    ['ghost', 'names', 'fly', 'pixels', 'blocks', 'isolate', 'detail'].forEach((k) => { const b = $('olsb3d-' + k); if (b) b.setAttribute('aria-pressed', String(!!st[k])); });
     pills($('olsb3d-cut'), CUTS, (c) => c.id === st.cut.axis, (c) => {
         st.cut.axis = c.id; st.moved = true;
         renderControls(); remesh(); faceCut(); placeTags(); writeHash();
@@ -808,7 +717,7 @@ function faceCut() {
 function toggle(k) {
     st[k] = !st[k];
     renderControls();
-    if (k === 'ghost' || k === 'isolate') remesh();
+    if (k === 'ghost' || k === 'isolate' || k === 'blocks') remesh();
     if (k === 'detail') {
         if (st.detail && !lv.fine) loadFine();
         else labsFor(st.state).then(() => { useState(); remesh(); placeTags(); });
@@ -945,6 +854,7 @@ function frame(now) {
         const k = Math.min(1, (now - tween.t0) / tween.dur), e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
         cam.pos.lerpVectors(tween.p0, tween.p1, e);
         cam.target.lerpVectors(tween.q0, tween.q1, e);
+        camera.fov = tween.f0 + (tween.f1 - tween.f0) * e;
         applyCam();
         if (k >= 1) { tween = null; updateMicro(); }
     }
@@ -961,7 +871,7 @@ function frame(now) {
 
 /* ---------- boot ---------- */
 function wireControls() {
-    ['ghost', 'names', 'fly', 'pixels', 'isolate', 'detail'].forEach((k) => { const b = $('olsb3d-' + k); if (b) b.addEventListener('click', () => toggle(k)); });
+    ['ghost', 'names', 'fly', 'pixels', 'blocks', 'isolate', 'detail'].forEach((k) => { const b = $('olsb3d-' + k); if (b) b.addEventListener('click', () => toggle(k)); });
     let ct = null;
     $('olsb3d-cutpos').addEventListener('input', (e) => {
         st.cut.pos = Number(e.target.value) / 100;
@@ -978,7 +888,6 @@ function wireControls() {
     new MutationObserver(() => {
         if (!renderer) return;
         readTones();
-        scene.background = TONES.stage3d;
         colorize();
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 }
@@ -1006,7 +915,7 @@ async function boot3d() {
     stage = $('olsb3d-stage');
     canvas = $('olsb3d-canvas');
     try {
-        renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+        renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
     } catch (e) {
         status('This browser could not start WebGL, so the 3D model cannot be drawn. The diagrams still work.');
         return;
@@ -1014,10 +923,19 @@ async function boot3d() {
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     scene = new THREE.Scene();
     readTones();
-    scene.background = TONES.stage3d;
+    /* the stage's own graded background shows through (css/olsb.css) */
+    renderer.setClearColor(0x000000, 0);
     matSolid = material(false);
     matGhost = material(true);
     camera = new THREE.PerspectiveCamera(42, 1, 0.05, 600);
+    /* Light: a soft sky over a dark ground, and a lamp riding on the camera, a little above
+       and to the left, the way a microscope or endoscope lights the field. */
+    scene.add(new THREE.HemisphereLight(0xfff4e6, 0x2a221c, 1.15));
+    const lamp = new THREE.DirectionalLight(0xffffff, 2.1);
+    lamp.position.set(-0.35, 0.6, 1);
+    lamp.target.position.set(0, 0, -1);
+    camera.add(lamp, lamp.target);
+    scene.add(camera);
     /* a small device keeps to the coarse grid unless asked */
     st.detail = (navigator.deviceMemory || 8) >= 4 && Math.min(screen.width, screen.height) >= 600;
     resize();
@@ -1026,6 +944,10 @@ async function boot3d() {
     buildRelations();
     status('Building the temporal bone…');
     worker = startWorker();
+    if (worker) {
+        const tag = document.querySelector('script[src*="olsb-mesh.js"]');
+        try { await worker.ask({ type: 'init', meshUrl: tag.src }); } catch (e) { worker = null; }
+    }
     try {
         const t0 = performance.now();
         await buildLevel('coarse');

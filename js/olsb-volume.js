@@ -174,6 +174,10 @@
         this.ny = Math.round((box[4] - box[1]) / vox);
         this.nz = Math.round((box[5] - box[2]) / vox);
         this.lab = new Uint8Array(this.nx * this.ny * this.nz);
+        /* Sub-voxel depth: how far (in voxels, 0-1 as 0-255) a voxel's centre lies inside the
+           shape that gave it its label, or outside the skull for empty space. The viewer puts
+           surfaces where these meet, not on voxel faces. 255 = a voxel or more, or unknown. */
+        this.dep = new Uint8Array(this.nx * this.ny * this.nz).fill(255);
     }
     Grid.prototype.p = function (i, j, k) {
         var v = this.vox, o = this.o;
@@ -245,7 +249,19 @@
         opts = opts || {};
         var vox = opts.vox || LEVELS.coarse.vox;
         var g = new Grid(vox, opts.box || LEVELS.coarse.box);
-        var lab = g.lab, minR = vox * 0.62;
+        var lab = g.lab, dep = g.dep, minR = vox * 0.62, DQ = 255 / vox;
+        function D(i, mm) { var q = Math.round(mm * DQ); dep[i] = q < 0 ? 0 : q > 255 ? 255 : q; }
+        /* paint inside a shape (a union of same-label shapes keeps the deepest), or note that a
+           voxel just outside it now has that shape's surface within mm of its centre */
+        function IN(i, code, mm) {
+            var q = Math.round(mm * DQ); q = q < 0 ? 0 : q > 255 ? 255 : q;
+            if (lab[i] === code) { if (q > dep[i]) dep[i] = q; } else { lab[i] = code; dep[i] = q; }
+        }
+        function OUT(i, code, mm) {
+            if (lab[i] === code || mm >= vox) return;
+            var q = Math.round(mm * DQ);
+            if (q < dep[i]) dep[i] = q < 0 ? 0 : q;
+        }
 
         /* paint a tube (pts with radius, or r) with grow mm extra; only over codes allowed by `over` (null: any) */
         function tube(pts, code, r, grow, over, n) {
@@ -254,24 +270,28 @@
             line = line.map(function (q) { return [q[0], q[1], q[2], Math.max(minR, q[3]) + (grow || 0)]; });
             for (var s = 0; s < line.length - 1; s++) {
                 var a = line[s], b = line[s + 1];
-                g.each(lineBox([a, b], 0.01), function (x, y, z, i) {
-                    if (over && !over[lab[i]]) return;
+                g.each(lineBox([a, b], vox), function (x, y, z, i) {
                     var q = segDist([x, y, z], a, b);
-                    if (q.d <= a[3] + (b[3] - a[3]) * q.t) lab[i] = code;
+                    var r = a[3] + (b[3] - a[3]) * q.t;
+                    if (q.d > r) { OUT(i, code, q.d - r); return; }
+                    if (over && !over[lab[i]]) return;
+                    IN(i, code, r - q.d);
                 });
             }
             return line;
         }
         /* paint an ellipsoid (optionally in a basis u,v,w and with superellipse power) */
         function blob(c, r, code, over, pw, basis) {
-            var m = Math.max(r[0], r[1], r[2]);
+            var m = Math.max(r[0], r[1], r[2]) + vox, mr = Math.min(r[0], r[1], r[2]);
             pw = pw || 2;
             g.each([c[0] - m, c[1] - m, c[2] - m, c[0] + m, c[1] + m, c[2] + m], function (x, y, z, i) {
-                if (over && !over[lab[i]]) return;
                 var d = [x - c[0], y - c[1], z - c[2]];
                 if (basis) d = [dot(d, basis[0]), dot(d, basis[1]), dot(d, basis[2])];
                 var s = Math.pow(Math.abs(d[0] / r[0]), pw) + Math.pow(Math.abs(d[1] / r[1]), pw) + Math.pow(Math.abs(d[2] / r[2]), pw);
-                if (s <= 1) lab[i] = code;
+                var e = (Math.pow(s, 1 / pw) - 1) * mr;     /* approximate signed distance */
+                if (e > 0) { OUT(i, code, e); return; }
+                if (over && !over[lab[i]]) return;
+                IN(i, code, -e);
             });
         }
         function mask(codes) { var m = new Uint8Array(256); codes.forEach(function (c) { m[c] = 1; }); return m; }
@@ -286,6 +306,13 @@
         var sigLine = spline(SIGMOID, 6);
         g.all(function (x, y, z, i) {
             var cx = cortexX(y, z), fz = floorZ(x, y), bz = baseZ(x, y), p = [x, y, z];
+            /* depth to the nearest region surface: cortex, skull base, specimen cut, dura */
+            var sa = (x - SPEC_C[0]) / SPEC_R[0], sb = (y - SPEC_C[1]) / SPEC_R[1], sc = (z - SPEC_C[2]) / SPEC_R[2];
+            var spec = Math.abs(Math.pow(sa * sa * sa * sa + sb * sb * sb * sb + sc * sc * sc * sc, 0.25) - 1) * 14.6;
+            var dd = Math.min(Math.abs(x - cx), Math.abs(z - bz), spec);
+            if (x < cx - 1.6) dd = Math.min(dd, Math.abs(z - fz), Math.abs(z - fz - 0.7));
+            if (x < 3.5) dd = Math.min(dd, Math.abs(pfSide(p)), Math.abs(pfSide(p) - 0.7));
+            D(i, dd);
             if (x > cx || z < bz || !inSpecimen(x, y, z)) return;          /* outside */
             if (y > 7.5 && z < 2.5 && x > 2.5) return;                     /* glenoid fossa (TMJ) */
             if (x < cx - 1.6 && z > fz) { lab[i] = z > fz + 0.7 ? C.temporallobe : C.mcfdura; return; }
@@ -338,7 +365,7 @@
                     var t = ((x - (SX[a0] + SX[b0]) / 2) * ux + (y - (SY[a0] + SY[b0]) / 2) * uy + (z - (SZ[a0] + SZ[b0]) / 2) * uz) / ul;
                     if (-t < best) best = -t;
                 }
-                if (best > septum / 2) lab[i] = code;
+                if (best > septum / 2) IN(i, code, best - septum / 2); else OUT(i, code, septum / 2 - best);
             });
         }
         if (pneu > 0) {
@@ -358,7 +385,10 @@
             var t = tmX(y, z);
             if (rho > 1 || x < t - 0.3) return;
             if (annRho(y, z) <= 1 ? x <= t + 0.25 : x <= tmFlat(y, z) + 0.25) return;
-            lab[i] = rho > 1 - EAC_SKIN / Math.min(EAC_R[0], EAC_R[1]) ? C.eac : 0;
+            var mr = Math.min(EAC_R[0], EAC_R[1]), skinAt = 1 - EAC_SKIN / mr;
+            var tmEnd = x - (annRho(y, z) <= 1 ? t : tmFlat(y, z)) - 0.25;
+            lab[i] = rho > skinAt ? C.eac : 0;
+            D(i, Math.min(rho > skinAt ? Math.min((rho - skinAt) * mr, (1 - rho) * mr) : (skinAt - rho) * mr, tmEnd));
         });
         /* Posterior canal wall: the bone behind the canal, lateral to the drum. */
         g.each([2, -8, -6, 14, 1, 5], function (x, y, z, i) {
@@ -371,19 +401,19 @@
         function under(x, y, z) { return z < floorZ(x, y) - 0.8; }
         g.each([-1.6, -4.6, -7.2, 7.6, 5.4, 8.4], function (x, y, z, i) {
             if (!under(x, y, z) || lab[i] === C.eac || lab[i] === 0 || lab[i] === C.mcfdura) return;
-            var code = 0, s;
+            var code = 0, s, dd = 9;
             if (z > 3.6) {
                 s = Math.pow(Math.abs((x - 3.2) / 4.0), 4) + Math.pow(Math.abs((y - 0.2) / 4.6), 4) + Math.pow(Math.abs((z - 5.9) / 2.5), 4);
-                if (s <= 1 && x < 7.2) code = C.epitympanum;
+                if (s <= 1 && x < 7.2) { code = C.epitympanum; dd = Math.min((1 - Math.pow(s, 0.25)) * 2.5, 7.2 - x, floorZ(x, y) - 0.8 - z); }
                 if (code && x > 5.9 && z < 4.7 && y > 0 && y < 1.8) code = C.prussak;
             } else if (z < -4.6) {
                 s = Math.pow(Math.abs((x - 1.0) / 2.5), 4) + Math.pow(Math.abs((y - 0.4) / 3.6), 4) + Math.pow(Math.abs((z + 5.1) / 1.9), 4);
-                if (s <= 1 && x < tmX(y, z) - 0.25) code = C.hypotympanum;
+                if (s <= 1 && x < tmX(y, z) - 0.25) { code = C.hypotympanum; dd = Math.min((1 - Math.pow(s, 0.25)) * 1.9, tmX(y, z) - 0.25 - x); }
             } else if (y > -3.9 && y < 4.4 && x > -1.0) {
                 var xl = annRho(y, z) <= 1.06 ? tmX(y, z) - 0.25 : 3.4;
-                if (x < xl) code = y > 3.1 ? C.protympanum : y < -3.0 ? C.retrotympanum : C.mesotympanum;
+                if (x < xl) { code = y > 3.1 ? C.protympanum : y < -3.0 ? C.retrotympanum : C.mesotympanum; dd = Math.min(xl - x, x + 1.0, y + 3.9, 4.4 - y); }
             }
-            if (code) lab[i] = code;
+            if (code) IN(i, code, dd);
         });
         tube([[4.1, -3.9, 6.3, 1.4], [3.6, -5.6, 5.7, 1.4], [3.2, -6.4, 5.4, 1.5]], C.aditus, null, 0, BONY);
         blob([3.0, -8.6, 5.0], [3.0, 3.3, 2.5], C.antrum, BONY);
@@ -455,8 +485,9 @@
             var fy = (y - 0.7) / 1.5, fz = (z - 4.2) / 0.9, inFlac = fy * fy + fz * fz <= 1 && z > 3.4;
             if (r > 1.06 && !inFlac) return;
             var d = Math.abs(x - t);
-            if (r > 0.93 && r <= 1.06 && d < 0.45 && !inFlac) lab[i] = C.annulus;
-            else if (d < 0.27) lab[i] = inFlac ? C.flaccida : C.tm;
+            if (r > 0.93 && r <= 1.06 && d < 0.45 && !inFlac) IN(i, C.annulus, 0.45 - d);
+            else if (d < 0.27) IN(i, inFlac ? C.flaccida : C.tm, 0.27 - d);
+            else OUT(i, C.tm, d - 0.27);
         });
 
         /* 7. Ossicles. */
@@ -520,7 +551,7 @@
         var anchors = anchorsOf(g);
 
         return {
-            nx: g.nx, ny: g.ny, nz: g.nz, vox: vox, o: g.o, lab: lab,
+            nx: g.nx, ny: g.ny, nz: g.nz, vox: vox, o: g.o, lab: lab, dep: dep,
             labels: LABELS, layers: LAYERS, codes: C, anchors: anchors,
             lines: { fn: fnLines, chorda: chordaLine, sigmoid: sigLine, ssc: sccLines.ssc },
             p: function (i, j, k) { return g.p(i, j, k); }
@@ -566,11 +597,12 @@
                     var d = len(sub(p, line[s])) - line[s][3];
                     if (d < best) { best = d; bi = s; }
                 }
-                if (best > 0) return;
+                if (best > 0) { OUT(i, C.cochlea, best); return; }
                 var c = line[bi], off = dot(sub(p, c), COCH.a);
                 var rad = sub(sub(c, COCH.B), mul(COCH.a, dot(sub(c, COCH.B), COCH.a)));
                 var inward = -dot(sub(p, c), nrm(rad));
-                lab[i] = Math.abs(off) < 0.17 && inward > -0.1 && bi > 4 ? C_COCHCAP : C.cochlea;
+                var lam = Math.abs(off) < 0.17 && inward > -0.1 && bi > 4;
+                IN(i, lam ? C_COCHCAP : C.cochlea, lam ? 0.17 - Math.abs(off) : -best);
             });
             tube([COCH.B.concat(0.45), add(COCH.B, mul(COCH.a, 2.2)).concat(0.3)], C.cn8);
         }
@@ -701,8 +733,11 @@
                 each([5, -9, 6, 14, 13, 12], function (x, y, z, i) {         /* the craniotomy: squama above the floor */
                     if (cut[lab[i]] && z > floorZ(x, y) - 0.6) lab[i] = CAV;
                 });
-                each([-15.5, -4.5, -1.2, 0.5, 9.5, 11], function (x, y, z, i) {
+                each([-16, -6, -1.2, 4, 12, 12], function (x, y, z, i) {
                     var c = lab[i];
+                    /* a round window in the floor, bevelled wider toward the craniotomy */
+                    var fx = (x + 7) / 7.5, fy = (y - 2.6) / 5.8, widen = 1 + Math.max(0, z - 2) * 0.045;
+                    if (fx * fx + fy * fy > widen * widen) return;
                     if (!(cut[c] || c === C.tegmen || c === C.tegment || c === C.mcfdura || c === C.temporallobe || c === C.oticcap)) return;
                     var p = [x, y, z];
                     if (c === C.oticcap && tubeDist(p, ssc, 0.45) < 0.3) return;   /* blue-line the superior canal */
@@ -750,13 +785,14 @@
     }
 
     /* ---------- views and the guided tour ----------
-       Camera poses in model mm: eye and target. */
+       Camera poses in model mm: eye and target; fov in degrees (default 42; a microscope is
+       narrow, an endoscope wide), scope: drawn in a round endoscope frame. */
     var VIEWS = [
         { id: 'surgeon', name: 'Surgeon', eye: [62, -34, 30], target: [3, -6, -1] },
-        { id: 'canal', name: 'Down the canal', eye: [17, 2.6, 2.4], target: [0.6, -1.0, -0.6] },
+        { id: 'canal', name: 'Down the canal', eye: [17, 2.6, 2.4], target: [0.6, -1.0, -0.6], fov: 34 },
         { id: 'mastoid', name: 'Into the mastoid', eye: [30, -30, 15], target: [0, -5, 0] },
-        { id: 'endo', name: 'Endoscope at the drum', eye: [7.0, 2.2, -1.2], target: [0.2, -2.6, 0.2] },
-        { id: 'inside', name: 'In the middle ear', eye: [2.4, 3.5, -0.9], target: [0.4, -3.6, 0.2] },
+        { id: 'endo', name: 'Endoscope at the drum', eye: [7.0, 2.2, -1.2], target: [0.2, -2.6, 0.2], fov: 78, scope: true },
+        { id: 'inside', name: 'In the middle ear', eye: [2.4, 3.5, -0.9], target: [0.4, -3.6, 0.2], fov: 84, scope: true },
         { id: 'above', name: 'From above', eye: [-3, -7, 34], target: [-4, 1, 0] },
         { id: 'behind', name: 'From behind', eye: [26, -64, 16], target: [0, -4, -1] },
         { id: 'front', name: 'From in front', eye: [30, 60, 10], target: [0, 0, -1] },
@@ -803,22 +839,46 @@
        the grid it refines, so the meshes meet edge to edge. */
     O.volume = { build: build, carve: carve, LEVELS: LEVELS, LABELS: LABELS, LAYERS: LAYERS, STATES: STATES, VIEWS: VIEWS, TOURS: TOURS, codes: C };
 
-    /* As a Web Worker: build a level (the micro level with the box it is asked for), then
-       carve its states on request. Replies echo the request id and carry the labels as
-       transferable buffers. */
+    /* As a Web Worker: build a level (the micro level with the box it is asked for), carve its
+       states, and mesh them (with js/olsb-mesh.js, whose stamped URL the page sends first).
+       It keeps every level's labels per state; replies echo the request id and carry copies
+       (or the meshes) as transferable buffers. */
     if (typeof window === 'undefined' && typeof importScripts === 'function') {
-        var vols = {};
+        var vols = {}, shownBuf = {};
+        var copy = function (a) { return new Uint8Array(a); };
         self.onmessage = function (e) {
             var m = e.data || {}, out;
             try {
-                if (m.type === 'build') {
+                if (m.type === 'init') {
+                    importScripts(m.meshUrl);
+                    self.postMessage({ id: m.id });
+                } else if (m.type === 'build') {
                     var lv = LEVELS[m.level];
                     var v = vols[m.level] = build({ vox: lv.vox, box: m.box || lv.box });
-                    out = new Uint8Array(v.lab);
-                    self.postMessage({ id: m.id, nx: v.nx, ny: v.ny, nz: v.nz, vox: v.vox, o: v.o, anchors: v.anchors, lab: out }, [out.buffer]);
+                    v.labs = { intact: v.lab };
+                    out = copy(v.lab);
+                    var dp = copy(v.dep);
+                    self.postMessage({ id: m.id, nx: v.nx, ny: v.ny, nz: v.nz, vox: v.vox, o: v.o, anchors: v.anchors, lab: out, dep: dp }, [out.buffer, dp.buffer]);
                 } else if (m.type === 'carve') {
-                    out = carve(vols[m.level], m.state);
+                    var V0 = vols[m.level];
+                    if (!V0.labs[m.state]) V0.labs[m.state] = carve(V0, m.state);
+                    out = copy(V0.labs[m.state]);
                     self.postMessage({ id: m.id, lab: out }, [out.buffer]);
+                } else if (m.type === 'mesh') {
+                    var levels = m.levels.map(function (n) {
+                        var W = vols[n], lab = W.labs[m.state] || (W.labs[m.state] = carve(W, m.state));
+                        var box = [W.o[0], W.o[1], W.o[2], W.o[0] + W.nx * W.vox, W.o[1] + W.ny * W.vox, W.o[2] + W.nz * W.vox];
+                        return { name: n, nx: W.nx, ny: W.ny, nz: W.nz, vox: W.vox, o: W.o, box: box, lab: lab, dep: W.dep, shown: shownBuf[n] };
+                    });
+                    var res = O.mesh.meshAll(levels, m.opts), list = [], meta = {};
+                    levels.forEach(function (L) {
+                        shownBuf[L.name] = L.shown;
+                        meta[L.name] = { o: L.o, vox: L.vox, box: L.box };
+                        res[L.name].forEach(function (b) {
+                            ['pos', 'nrm', 'shade', 'lab', 'drilled', 'idx', 'vc'].forEach(function (k) { if (b[k]) list.push(b[k].buffer); });
+                        });
+                    });
+                    self.postMessage({ id: m.id, meshes: res, meta: meta }, list);
                 }
             } catch (err) {
                 self.postMessage({ id: m.id, error: String(err && err.message || err) });

@@ -142,7 +142,10 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   nerves and inner ear (`#m=3d&L=ossicles.nerves.inner.muscles&cam=…`)
   from lateral, above, front and medial, and step the guided flight with
   the fine grid loaded (`#olsb3d-stage[data-fine="ready"]`) and, for the close
-  views, the detail cube (`data-micro="ready"`).
+  views, the detail cube (`data-micro="ready"`); meshing runs in the worker,
+  so wait for `data-meshing` to leave `busy` (`data-remesh-ms` is the time
+  it took). Check both Smooth (default) and Blocks: thin structures (chorda,
+  stapes crura, GSPN) are where smoothing loses most.
 
 ### Wiki sync (`wiki/sync/sync-vault.mjs`)
 `tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and

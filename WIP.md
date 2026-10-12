@@ -180,8 +180,15 @@ volume file itself; no worker, no cube). Walking (WASD) moves at a speed
 set by the free space ahead and stops half a millimetre short of a wall,
 so the middle ear can be walked like a room. Drill states carve it with margins round the hazards: flap up,
 cortical mastoidectomy, facial recess, canal wall down,
-translabyrinthine, middle fossa. Rendered as blocky voxels (face shade,
-vertex AO, coarse openness for cavity depth) with layers, see-through
+translabyrinthine, middle fossa. Rendered as smooth lit surfaces
+(`js/olsb-mesh.js`, in the worker): a surface net whose vertices sit on
+the half level of an occupancy field softened by each voxel's sub-voxel
+depth to the shape that painted it (so shapes come out at their analytic
+size, not in voxel steps), normals from that field, colours blended across
+tissue boundaries, a coarse openness term darkening cavities; a Blocks
+toggle keeps the voxel look. Views carry a field of view (the canal view
+narrow like a microscope, the endoscope views wide and in a round frame).
+Layers, see-through
 bone, isolate, a cut plane (axial/coronal/sagittal), names, big pixels;
 orbit, fly (F) and WASD walking; click to select (neighbours from the
 glossary), double-click to centre. A nine-step guided flight, and view
