@@ -92,6 +92,14 @@ its CSP, so it runs on bad conference-room wifi or none.
 
 ---
 
+## PDF chapter splitter (`pdf-chapter-splitter.html`)
+
+**State:** Working. Logic in `js/pdf-chapter-splitter.js`; pdf-lib and JSZip are
+vendored (`js/vendor/README.md`), so the page makes no third-party request.
+It reads a PDF in memory and writes nothing to storage except the theme.
+
+**Next:** nothing planned.
+
 ## CPT search (`cpt-search.html`)
 
 **State:** Working, on the shared system (`css/site.css`). Logic in

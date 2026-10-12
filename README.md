@@ -60,6 +60,9 @@ and defaulting to `prefers-color-scheme`.
   Progress is local to the browser; nothing is uploaded.
 - **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for
   otolaryngology.
+- **PDF Chapter Splitter** (`pdf-chapter-splitter.html`) — lossless split of a
+  PDF into chapters by its outline or custom boundaries, single files or ZIP;
+  runs entirely in the browser.
 - **Airway Rounds** (`airway-jeopardy.html`) — team-based ENT/H&N airway quiz
   (Rounds, Jeopardy board, quick quiz, browse). Makes no third-party request
   (its CSP enforces that), so it works on conference-room wifi or none at all.
@@ -100,6 +103,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/airway-*.js      #   app, engine, question bank
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
+├── pdf-chapter-splitter.html # PDF chapter splitter (client-side)
+│   └── js/pdf-chapter-splitter.js #   page logic (pdf-lib + JSZip in js/vendor/)
 ├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; draft)
 │   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
 │   ├── js/olsb-volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)

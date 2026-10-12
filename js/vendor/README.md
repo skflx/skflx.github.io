@@ -11,6 +11,8 @@ origin (supply-chain and availability risk), lets every page run
 | `react-18.3.1.production.min.js` | `react@18.3.1` → `umd/react.production.min.js` | MIT (`LICENSE-react.txt`) |
 | `react-dom-18.3.1.production.min.js` | `react-dom@18.3.1` → `umd/react-dom.production.min.js` | MIT (same authors, same text) |
 | `htm-3.1.1.umd.js` | `htm@3.1.1` → `dist/htm.umd.js` | Apache-2.0 (`LICENSE-htm.txt`) |
+| `pdf-lib-1.17.1.min.js` | `pdf-lib@1.17.1` → `dist/pdf-lib.min.js` | MIT (`LICENSE-pdf-lib.txt`) |
+| `jszip-3.10.1.min.js` | `jszip@3.10.1` → `dist/jszip.min.js` | MIT or GPLv3, used under MIT (`LICENSE-jszip.txt`) |
 
 `tools/check-data.mjs` pins the SHA-384 of each file, so an accidental edit
 fails CI. To upgrade: `npm pack <pkg>@<version>`, copy the same path out of

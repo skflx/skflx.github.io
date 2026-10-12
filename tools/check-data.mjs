@@ -246,6 +246,8 @@ const VENDOR_SHA384 = {
   'js/vendor/react-18.3.1.production.min.js': 'DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z',
   'js/vendor/react-dom-18.3.1.production.min.js': 'gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1',
   'js/vendor/htm-3.1.1.umd.js': 'toVdrLSMaw7Y55MowcKqkmFL/Ek6Sky62NOk0b5sDDZBu2wcoPyyQUt9unDVjXhL',
+  'js/vendor/pdf-lib-1.17.1.min.js': 'weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI',
+  'js/vendor/jszip-3.10.1.min.js': '+mbV2IY1Zk/X1p/nWllGySJSUN8uMs+gUAN10Or95UBH0fpj6GfKgPmgC5EXieXG',
   /* three.js 0.186.1 (SSB). The two build files are byte-identical to the npm
      tarball; each addon differs from it only in its bare 'three' import,
      rewritten to a relative path (js/vendor/README.md). */
@@ -258,7 +260,7 @@ const VENDOR_SHA384 = {
 };
 
 /* Pages that must make no third-party request at all. */
-const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'ssb.html', 'OLSB.html']);
+const SELF_CONTAINED = new Set(['airway-jeopardy.html', 'index.html', 'cpt-search.html', 'ssb.html', 'OLSB.html', 'pdf-chapter-splitter.html']);
 
 function checkSecurity() {
   console.log('\nsecurity: vendored scripts + page policies');

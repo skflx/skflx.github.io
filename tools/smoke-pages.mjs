@@ -78,6 +78,8 @@ const PAGES = [
     return figureReady(p, 'larynx');
   } },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },
+  /* PDF chapter splitter: both vendored libraries loaded and the page logic ran (it wires the theme toggle). */
+  { path: 'pdf-chapter-splitter.html', ready: (p) => wait(p, () => !!window.PDFLib && !!window.JSZip && !!document.querySelector('.tool-title')) },
   /* OLSB: the layered SVG drew and a hash step resolved (unlisted page). */
   { path: 'OLSB.html#p=mastoidectomy&s=6', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
       && document.querySelectorAll('#olsb-svg .s').length > 20

@@ -133,6 +133,9 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   its code and flips the button to **Copied**; a query like
   `<img src=x onerror=…>` renders as text (results go through `esc()`).
 
+### PDF chapter splitter (`pdf-chapter-splitter.html`)
+- Boots with zero console errors, with `PDFLib` and `JSZip` defined (smoke).
+
 ### OLSB (`OLSB.html`)
 - Boots with zero console errors and draws the layered SVG
   (`html[data-olsb="ready"]`); `#p=mastoidectomy&s=6` opens the facial
