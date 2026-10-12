@@ -11,6 +11,12 @@
    Foundation Surgery Reference (CMF); the owner will add AO content
    later. NOE and orbital fractures are in the separate
    orbit-noe-trauma module.
+   Added from the AO text (Cienfuegos et al., Principles of Internal
+   Fixation of the Craniomaxillofacial Skeleton, AO Foundation 2012, as
+   supplied in the owner's mastery note): posterior buttress access,
+   palatal fracture subtypes and the unrecognized-split pitfall, Le Fort
+   I plating, the Zingg classification, and the rotation argument for
+   multi-point fixation.
    No figures: the decks' images are unlabeled screenshots, CT
    studies, or manufacturer slides; none is used.
    Discrepancy policy: the highest-ranked source is keyed;
@@ -28,6 +34,8 @@ const meta = {
     sources: [
         'Resident review decks (owner): Midface Trauma (Scott); Resident Review Midface Fractures 2017 (Moneta); Mandible and Midface Trauma 08-2022; ZMC and Mandible Trauma 09-2018; All of Facial Trauma; PGY-2 Trauma Crash Course (KLS Martin)',
         'AO Foundation Surgery Reference, craniomaxillofacial trauma (referenced by the decks; the owner will add content)',
+        'Cienfuegos R, Figari M, Lim TC, Cornelius CP, Kunz C, Antonyshyn O, Shumrick KA, Chadwell JB. Principles of Internal Fixation of the Craniomaxillofacial Skeleton. AO Foundation; 2012 (owner mastery note: buttresses, palatal fractures, Zingg, fixation ladder)',
+        'AO-text figures (palatal fracture incidence, plate counts, the Zingg wording) are single-source; unvetted',
         'Claims marked "added" (Keen approach, coronoid impingement, septal hematoma, Le Fort mobility testing) are standard teaching not stated in the decks; unvetted',
     ],
 };
@@ -49,6 +57,7 @@ const CONCEPTS = {
     'angle-class':          { label: 'Angle Classification',         domain: 'buttresses' },
     'occlusion-terms':      { label: 'Overjet, Overbite, Crossbite', domain: 'buttresses' },
     'fracture-patterns':    { label: 'Fracture Pattern Vocabulary',  domain: 'buttresses' },
+    'posterior-buttress':   { label: 'Posterior Buttress',           domain: 'buttresses' },
 
     // le fort
     'lefort-1':             { label: 'Le Fort I',                    domain: 'lefort' },
@@ -57,6 +66,8 @@ const CONCEPTS = {
     'lefort-exam':          { label: 'Le Fort Examination',          domain: 'lefort' },
     'lefort-goals':         { label: 'Le Fort Goals & Approaches',   domain: 'lefort' },
     'order-of-operation':   { label: 'Order of Operation',           domain: 'lefort' },
+    'palatal-fracture':     { label: 'Palatal Fractures',            domain: 'lefort' },
+    'lefort-fixation':      { label: 'Le Fort Plating',              domain: 'lefort' },
 
     // nasal
     'nasal-epi':            { label: 'Nasal Fracture Basics',        domain: 'nasal' },
@@ -67,6 +78,7 @@ const CONCEPTS = {
     'zygoma-anatomy':       { label: 'Zygoma Articulations',         domain: 'zmc' },
     'zmc-lines':            { label: 'ZMC Fracture Lines',           domain: 'zmc' },
     'zmc-orbit':            { label: 'Sphenozygomatic Alignment',    domain: 'zmc' },
+    'zingg':                { label: 'Zingg Classification',         domain: 'zmc' },
     'zygomatic-arch':       { label: 'Isolated Arch Fractures',      domain: 'zmc' },
     'gillies':              { label: 'Gillies Approach',             domain: 'zmc' },
     'keen':                 { label: 'Keen Approach',                domain: 'zmc' },
@@ -74,6 +86,7 @@ const CONCEPTS = {
     // fixation
     'zmc-closed':           { label: 'ZMC Closed Reduction',         domain: 'fixation' },
     'point-fixation':       { label: '1- to 4-Point Fixation',       domain: 'fixation' },
+    'zmc-rotation':         { label: 'Rotation & Verifying Reduction', domain: 'fixation' },
     'forced-duction':       { label: 'Forced Duction & Ophthalmology', domain: 'fixation' },
     'coronal':              { label: 'Coronal Approach Risks',       domain: 'fixation' },
 
@@ -82,6 +95,7 @@ const CONCEPTS = {
     'case-zmc':             { label: 'Case: ZMC Fracture',           domain: 'cases' },
     'case-arch':            { label: 'Case: Isolated Arch',          domain: 'cases' },
     'case-nasal':           { label: 'Case: Nasal Fracture',         domain: 'cases' },
+    'case-palate':          { label: 'Case: Le Fort I with Palatal Split', domain: 'cases' },
 };
 
 const ITEMS = [
@@ -136,6 +150,21 @@ const ITEMS = [
     brief: 'Do a full head and neck exam; prioritize vision, occlusion, sensation, and airway.',
     detailed: 'The overview lists the pattern vocabulary: midface (Le Fort 1 to 3, NOE 1 to 3, palatoalveolar, nasal, orbit floor, roof, medial and lateral walls, combined; ZMC combination or isolated arch), mandible (parasymphysis and symphysis, body, angle and ramus, condyle), and cranial vault and skull base (frontal sinus anterior table, posterior table, recess; temporal bone; sphenoid; cribriform). Pearl: describe each fracture as open or closed, displaced or not, comminuted or not, then classify.',
     concepts: ['fracture-patterns'],
+},
+
+{
+    id: 'q33', type: 'mcq', section: 'Buttresses & Occlusion',
+    stem: 'Why is the posterior (pterygomaxillary) buttress not plated directly in midface repair?',
+    options: [
+        { id: 'a', text: 'It is not load-bearing in the adult'  },
+        { id: 'b', text: 'It is surgically inaccessible, so it is restored indirectly by reducing the anterior buttresses and setting the occlusion'  },
+        { id: 'c', text: 'It heals reliably in every fracture pattern without any reduction'  },
+        { id: 'd', text: 'It is exposed only through the coronal approach, which is reserved for Le Fort III'  },
+    ],
+    correct: 'b',
+    brief: 'The posterior buttress cannot be exposed; its alignment follows from accurate anterior buttress reduction and occlusion.',
+    detailed: 'The pterygomaxillary buttress runs from the maxillary tuberosity to the pterygoid plates, deep behind the maxilla. Fixing the medial and lateral buttresses with the teeth in the premorbid bite re-establishes AP position and the posterior height indirectly. Pearl: a posterior open bite after plating means the maxilla is still tipped or telescoped at the unseen posterior buttress, so recheck the anterior reduction rather than the bite alone. Source: AO text (single source for the wording "inaccessible, restored indirectly"); the decks list the buttress but do not discuss access.',
+    concepts: ['vertical-buttresses', 'posterior-buttress'],
 },
 
 // ════════════════ LE FORT FRACTURES ════════════════
@@ -234,6 +263,47 @@ Notes: involves the orbit; must check occlusion; significant bleeding; CSF leak 
     brief: 'IMF devices, expose everything, MMF, plate, soft tissue.',
     detailed: 'Exposing every fracture before fixation lets you see which pieces move and avoid fixing a segment in the wrong position. MMF sets the occlusion that all the plating references. Pearl: a missed fracture that stays mobile will pull the construct out of position.',
     concepts: ['order-of-operation'],
+},
+
+{
+    id: 'q34', type: 'recall', section: 'Le Fort Fractures',
+    stem: 'Name the palatal fracture subtypes that accompany Le Fort fractures, and the pitfall of an unrecognized sagittal split.',
+    answer: `• Sagittal (midline)
+• Parasagittal (para-alveolar)
+• Transverse
+
+Pitfall: placing MMF on an unrecognized sagittal split telescopes or rotates the maxillary halves, fixing the patient in a crossbite with a distorted arch width`,
+    brief: 'Palatal splits are sagittal, parasagittal, or transverse; an unrecognized sagittal split makes MMF register the wrong arch form.',
+    detailed: 'MMF aligns each maxillary segment to the mandible, so if the maxilla is in two pieces, each half is pulled to a different place and the arch collapses or splays. Look for a midline palatal mucosal tear, a step or gap between the central incisors, and a split in the axial bone window. Pearl: the same lesion can be asymmetric, with a parasagittal split on one side only. Caveat: the AO text gives an incidence of 8 to 15% of Le Fort fractures and describes the unrecognized-split outcome as a widened intercanine distance; both are single-source, and a PubMed search found no indexed series to confirm them. The direction of the arch distortion varies with the displacement of the halves.',
+    concepts: ['palatal-fracture'],
+},
+{
+    id: 'q35', type: 'mcq', section: 'Le Fort Fractures',
+    stem: 'A Le Fort I has an unrecognized sagittal palatal split and the surgeon places MMF first, then plates the pyriform and zygomaticomaxillary buttresses. What is the expected result?',
+    options: [
+        { id: 'a', text: 'Normal occlusion, because MMF always reduces the palate'  },
+        { id: 'b', text: 'An anterior open bite from posterior premature contact'  },
+        { id: 'c', text: 'The halves are held telescoped or rotated, locking in a crossbite with an abnormal arch width'  },
+        { id: 'd', text: 'Nonunion of the pterygoid plates only'  },
+    ],
+    correct: 'c',
+    brief: 'MMF cannot reduce a palate that is in two pieces; the halves are fixed malpositioned.',
+    detailed: 'The occlusion is the reference for every plate in the construct, so a malpositioned half becomes a permanent crossbite once the buttresses are plated to it. The remedy is to reduce and stabilize the palate first and then use MMF to register the maxilla to the mandible. Reconciling with q11: the AO text puts palatal fixation before MMF, the 2022 deck puts exposure of all fractures before MMF; the two agree if the palate is among the fractures you expose and fix before locking. Pearl: check the width of the reduced maxillary arch against the intact mandibular arch before locking.',
+    concepts: ['palatal-fracture', 'order-of-operation'],
+},
+{
+    id: 'q36', type: 'mcq', section: 'Le Fort Fractures',
+    stem: 'What is the standard open fixation of a Le Fort I once the palate and occlusion are set?',
+    options: [
+        { id: 'a', text: 'Coronal approach with plates at both zygomaticofrontal sutures and arches'  },
+        { id: 'b', text: 'A single plate across the nasofrontal junction'  },
+        { id: 'c', text: 'Closed treatment with MMF and no hardware'  },
+        { id: 'd', text: 'Sublabial exposure with four miniplates: two at the pyriform aperture and two at the zygomaticomaxillary buttresses'  },
+    ],
+    correct: 'd',
+    brief: 'Le Fort I is plated at the medial and lateral buttresses on both sides, typically with 1.5 to 2.0 mm L or curved plates.',
+    detailed: 'These are the four buttress points that carry occlusal load upward. Le Fort II adds the infraorbital rims (transconjunctival or subciliary) and the nasofrontal junction (Lynch or subbrow); Le Fort III adds both zygomaticofrontal sutures, the zygomatic arches, and the nasofrontal junction through a coronal approach. Pearl: each higher Le Fort level reuses the lower plates and adds exposure at the new fracture lines. Source: AO text for the plate count and sizes; the decks name the approaches (q10) but not the plate count.',
+    concepts: ['lefort-fixation', 'lefort-goals'],
 },
 
 // ════════════════ NASAL BONE FRACTURES ════════════════
@@ -365,6 +435,32 @@ Sutures: ZF, ZS, ZM`,
     concepts: ['keen'],
 },
 
+{
+    id: 'q37', type: 'recall', section: 'Zygomaticomaxillary Complex',
+    stem: 'State the Zingg classification of zygomatic fractures.',
+    answer: `• Type A — incomplete fracture of one component:
+   A1 zygomatic arch alone, A2 lateral orbital rim, A3 infraorbital rim
+• Type B — complete tetrapod fracture: all four articulations disjoined, without severe comminution
+• Type C — complex, comminuted fracture with fragmentation of the malar body and orbital walls`,
+    brief: 'A is an incomplete single-component fracture, B is the complete tetrapod fracture, C is comminuted.',
+    detailed: 'Type A fractures leave the zygoma attached at the other three articulations, so they are often stable. Type B is the classic ZMC: the zygoma is one piece but free at the zygomaticofrontal suture, zygomaticomaxillary buttress, arch, and infraorbital rim and floor. Type C is the group that tends to need more than two-point fixation or orbital reconstruction. Pearl: the Zingg type predicts the fixation escalation in q22 to q24, but the final choice follows the reduction you can verify, not the label. Source: AO text; not in the decks.',
+    concepts: ['zingg'],
+},
+{
+    id: 'q38', type: 'mcq', section: 'Zygomaticomaxillary Complex',
+    stem: 'CT shows the zygoma as a single intact fragment, separated at the zygomaticofrontal suture, the zygomaticomaxillary buttress, the arch, and the infraorbital rim and orbital floor. Which Zingg type?',
+    options: [
+        { id: 'a', text: 'Type A3'  },
+        { id: 'b', text: 'Type C'  },
+        { id: 'c', text: 'Type B'  },
+        { id: 'd', text: 'Type A1'  },
+    ],
+    correct: 'c',
+    brief: 'All four articulations disjoined without major comminution is the tetrapod, Zingg B.',
+    detailed: 'A1 to A3 involve one component only (arch, lateral rim, infraorbital rim). Type C would show a comminuted malar body or orbital walls. Unlike Le Fort III, the fracture does not leave the zygoma attached to the facial skeleton while detaching the face from the skull; here the zygoma alone is displaced. Pearl: a tetrapod fracture rotates around its axis, so judging reduction at one suture can mislead (q39).',
+    concepts: ['zingg', 'zmc-lines'],
+},
+
 // ════════════════ ZMC REDUCTION & FIXATION ════════════════
 
 {
@@ -446,6 +542,21 @@ Sutures: ZF, ZS, ZM`,
     brief: 'Coronal: scar, time, temporal hollowing, temporal branch injury.',
     detailed: 'Ectropion and entropion belong to the subciliary and transconjunctival approaches to the orbital floor. Pearl: resuspending the temporalis at closure limits hollowing.',
     concepts: ['coronal'],
+},
+
+{
+    id: 'q39', type: 'mcq', section: 'ZMC Reduction & Fixation',
+    stem: 'After a Zingg B fracture is plated at the zygomaticofrontal suture, the suture looks perfectly aligned, yet the malar eminence is flat and the orbital floor has a gap. What is the most likely explanation?',
+    options: [
+        { id: 'a', text: 'The zygomaticofrontal suture is a narrow linear hinge, so the zygoma can stay rotated or tipped posterolaterally despite an aligned plate'  },
+        { id: 'b', text: 'The plate was too thin'  },
+        { id: 'c', text: 'Zygomaticofrontal alignment alone always confirms three-dimensional reduction'  },
+        { id: 'd', text: 'The arch must have been intact'  },
+    ],
+    correct: 'a',
+    brief: 'One suture does not constrain rotation; confirm at the sphenozygomatic suture (greater wing of the sphenoid) and the zygomaticomaxillary buttress before final tightening.',
+    detailed: 'The greater wing of the sphenoid on the lateral orbital wall is the most accurate landmark of rotational reduction (see q16). A single point is a pivot, so the bone can swing around it; a second point at the buttress or rim removes one rotational axis. Caveat: the AO text labels one-point as rarely stable and four-point as "mandatory" in comminuted or panfacial injuries, counting ZM, zygomaticofrontal, infraorbital rim, and arch; the decks count by exposure sites (q22 to q24), so a "two-point" in one source may be a "three-point" in another. "Mandatory" is an overstatement of what the evidence supports and is only a teaching rule. Pearl: the orbital floor gap is the cue to explore and reconstruct the floor.',
+    concepts: ['zmc-rotation', 'point-fixation', 'zmc-orbit'],
 },
 
 // ════════════════ CASES ════════════════
@@ -533,6 +644,34 @@ Sutures: ZF, ZS, ZM`,
     brief: 'Within 3 hours, or after 5 to 10 days; always examine the septum.',
     detailed: 'At 4 hours he is just past the first window, so the second window applies. The septum should be examined for hematoma, which needs drainage. Pearl: counsel that cosmesis or obstruction decide whether to intervene.',
     concepts: ['case-nasal', 'nasal-timing', 'nasal-epi'],
+},
+{
+    id: 'q40', type: 'mcq', section: 'Cases',
+    stem: 'A 28-year-old is brought in after a motor vehicle collision. The maxilla rocks as a unit when you grasp the upper incisors; the nasal bridge and infraorbital rims are stable and the medial canthi do not move. There is a midline palatal mucosal tear and a step between the hemi-arches, and the left side closes in crossbite. CT shows a horizontal fracture through the pyriform aperture, zygomaticomaxillary buttresses, and pterygomaxillary junction, with a midline sagittal split of the hard palate. What is the injury?',
+    options: [
+        { id: 'a', text: 'Le Fort I with a sagittal palatal fracture'  },
+        { id: 'b', text: 'Le Fort II'  },
+        { id: 'c', text: 'Le Fort III'  },
+        { id: 'd', text: 'Isolated alveolar process fracture'  },
+    ],
+    correct: 'a',
+    brief: 'A mobile tooth-bearing maxilla with a stable nasal bridge and orbit is Le Fort I; the palatal tear and step signal a sagittal split.',
+    detailed: 'Le Fort II would move the nasofrontal junction and infraorbital rims; Le Fort III would move the medial canthi and zygomas. The palatal step and the crossbite are the clues that the maxilla is in two segments. Pearl: ask for the axial bone window when the exam finds an arch step.',
+    concepts: ['case-palate', 'lefort-1', 'palatal-fracture'],
+},
+{
+    id: 'q41', type: 'mcq', section: 'Cases',
+    stem: '(Same patient: Le Fort I with a sagittal palatal split.) After airway and hemorrhage control, what is the sequence?',
+    options: [
+        { id: 'a', text: 'MMF first, plate the pyriform and zygomaticomaxillary buttresses, and leave the palate to heal'  },
+        { id: 'b', text: 'Coronal approach with plating at both zygomaticofrontal sutures, then MMF'  },
+        { id: 'c', text: 'Closed treatment with MMF for six weeks'  },
+        { id: 'd', text: 'Reduce and stabilize the palate (splint or plate across the anterior alveolar ridge), then MMF, then plate the pyriform and zygomaticomaxillary buttresses sublabially'  },
+    ],
+    correct: 'd',
+    brief: 'Restore arch form first, set the occlusion, then plate the four buttress points.',
+    detailed: 'MMF before palatal fixation locks the halves in the wrong position (q35), and closed treatment cannot control a two-piece maxilla. The coronal approach is for Le Fort III. After fixation, confirm the occlusion in the premorbid bite, check the intercanine and intermolar widths against the mandibular arch, and recheck the anterior buttress reduction to infer the posterior one (q33). Pearl: expose all fractures before locking, as in q11.',
+    concepts: ['case-palate', 'lefort-fixation', 'order-of-operation'],
 },
 ];
 

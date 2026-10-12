@@ -11,6 +11,12 @@
    add AO content later. The apex-syndrome slides cite Badakere A,
    Patil-Chhablani P. Orbital apex syndrome: a review. Eye Brain 2019
    (doi 10.2147/EB.S180190).
+   Added from the AO text (Cienfuegos et al., Principles of Internal
+   Fixation of the Craniomaxillofacial Skeleton, AO Foundation 2012, as
+   supplied in the owner's mastery note): the floor and inferomedial
+   strut, the volume-enophthalmos relation, retrobulbar hematoma
+   features, the trapdoor 24-hour rule, and the canthopexy vector.
+   Checked in PubMed: Kolk 2007 (0.93 mm per cm3) and Gerbino 2010.
    No figures: the decks' images are unlabeled CT or surgical
    photographs; none is used.
    Discrepancy policy: the highest-ranked source is keyed;
@@ -29,6 +35,9 @@ const meta = {
         'Resident review decks (owner): Orbit Trauma 2020 (Baker); Orbital and Temporal Bone Trauma (Pandrangi); All of Facial Trauma; Resident Review Midface Fractures 2017 (Moneta)',
         'Badakere A, Patil-Chhablani P. Orbital apex syndrome: a review. Eye Brain 2019;11:63-72 (doi 10.2147/EB.S180190), as cited in the Baker deck',
         'AO Foundation Surgery Reference, craniomaxillofacial trauma (referenced by the decks; the owner will add content)',
+        'Cienfuegos R, et al. Principles of Internal Fixation of the Craniomaxillofacial Skeleton. AO Foundation; 2012 (owner mastery note)',
+        'Kolk A, et al. Secondary post-traumatic enophthalmos: high-resolution MRI compared with multislice CT in postoperative orbital volume measurement. J Oral Maxillofac Surg 2007;65:1926-34 (doi 10.1016/j.joms.2006.06.269)',
+        'Gerbino G, et al. Surgical management of orbital trapdoor fracture in a pediatric population. J Oral Maxillofac Surg 2010;68:1310-6 (doi 10.1016/j.joms.2009.12.037)',
         'Claims marked "added" (canthotomy, the bimanual canthal test, steroid response in Tolosa-Hunt) are standard teaching not stated in the decks; unvetted',
     ],
 };
@@ -46,6 +55,7 @@ const CONCEPTS = {
 
     // anatomy & examination
     'orbital-bones':        { label: 'Orbital Skeleton',             domain: 'anatomy' },
+    'orbital-floor-anatomy':{ label: 'Floor, Strut & Medial Wall',   domain: 'anatomy' },
     'foramina-distances':   { label: 'Ethmoidal Arteries & Optic Nerve', domain: 'anatomy' },
     'canthal-tendons':      { label: 'Canthal Tendons',              domain: 'anatomy' },
     'lid-layers':           { label: 'Eyelid Layers',                domain: 'anatomy' },
@@ -60,6 +70,8 @@ const CONCEPTS = {
 
     // timing, approaches & repair
     'timing':               { label: 'Timing of Repair',             domain: 'repair' },
+    'trapdoor':             { label: 'Pediatric Trapdoor Fracture',  domain: 'repair' },
+    'retrobulbar-hematoma': { label: 'Retrobulbar Hematoma',         domain: 'repair' },
     'orbital-emergencies':  { label: 'Orbital Emergencies',          domain: 'repair' },
     'lid-approaches':       { label: 'Subciliary vs Transconjunctival', domain: 'repair' },
     'materials':            { label: 'Implant Materials',            domain: 'repair' },
@@ -70,6 +82,7 @@ const CONCEPTS = {
     'telecanthus':          { label: 'Telecanthus & Canthal Tests',  domain: 'noe' },
     'noe-types':            { label: 'Markowitz NOE Types',          domain: 'noe' },
     'noe-repair':           { label: 'NOE Repair by Type',           domain: 'noe' },
+    'canthopexy':           { label: 'Transnasal Canthopexy Vector', domain: 'noe' },
     'noe-approaches':       { label: 'NOE Approaches',               domain: 'noe' },
     'noe-complications':    { label: 'CSF Leak & Lacrimal Injury',   domain: 'noe' },
 
@@ -83,6 +96,7 @@ const CONCEPTS = {
     'case-blowout':         { label: 'Case: Pediatric White-Eyed Blowout', domain: 'cases' },
     'case-noe':             { label: 'Case: Telecanthus & NOE',      domain: 'cases' },
     'case-apex':            { label: 'Case: Visual Loss After Trauma', domain: 'cases' },
+    'case-floor':           { label: 'Case: Adult Floor Blowout',    domain: 'cases' },
 };
 
 const ITEMS = [
@@ -154,6 +168,21 @@ Lower: skin, orbicularis oculi, septum, retractors, conjunctiva`,
     brief: 'Afferent system first, then globe position, lids, lacrimal system, motility with forced duction, and sensation.',
     detailed: 'Ophthalmology evaluation belongs in the standard work-up (pre- and postoperatively). A pulsating exophthalmos suggests a carotid-cavernous fistula. Pearl: any decrease in visual acuity, a pupillary defect, or a rising IOP changes the urgency of the whole case.',
     concepts: ['orbital-exam'],
+},
+
+{
+    id: 'q31', type: 'mcq', section: 'Orbital Anatomy & Examination',
+    stem: 'Which statement about the orbital floor and its junction with the medial wall is correct?',
+    options: [
+        { id: 'a', text: 'The floor is thickest posteromedial to the infraorbital canal, which is why blowouts spare it'  },
+        { id: 'b', text: 'The lamina papyracea is the thick transition zone that supports implants'  },
+        { id: 'c', text: 'The floor is thinnest posteromedial to the infraorbital canal, and the thick inferomedial strut behind it is the ledge on which an implant rests'  },
+        { id: 'd', text: 'The infraorbital canal marks the thinnest part of the lateral floor'  },
+    ],
+    correct: 'c',
+    brief: 'Thin floor medial to the canal fractures first; the inferomedial (maxillo-ethmoidal) strut is the thick posterior ledge.',
+    detailed: 'The floor is formed by the orbital plate of the maxilla and is about 0.5 mm thick medial to the infraorbital groove, the typical blowout site, whereas the canal itself is reinforced. The lamina papyracea (ethmoid) is the thin medial wall. The inferomedial strut is the thicker bone where wall and floor meet; an implant seated on it is supported posteriorly instead of hanging into the maxillary sinus. Pearl: an implant that is too short or tilted off the strut leaves the posteromedial bulge uncorrected, the usual cause of residual enophthalmos. Source: AO text; the decks do not discuss the strut.',
+    concepts: ['orbital-floor-anatomy', 'orbital-bones'],
 },
 
 // ════════════════ ORBITAL FRACTURES ════════════════
@@ -228,6 +257,21 @@ Lower: skin, orbicularis oculi, septum, retractors, conjunctiva`,
     concepts: ['roof-fractures'],
 },
 
+{
+    id: 'q32', type: 'mcq', section: 'Orbital Fractures',
+    stem: 'A CT volumetric comparison shows a 3 mL increase in orbital volume after a floor and medial wall fracture. About how much enophthalmos is expected?',
+    options: [
+        { id: 'a', text: 'Under 1 mm'  },
+        { id: 'b', text: 'About 2.5 to 3 mm, above the 2 mm surgical threshold'  },
+        { id: 'c', text: 'About 8 to 10 mm'  },
+        { id: 'd', text: 'None; volume changes alter only the vertical globe position'  },
+    ],
+    correct: 'b',
+    brief: 'Each 1 mL of added orbital volume gives roughly 0.8 to 1.0 mm of enophthalmos.',
+    detailed: 'Three milliliters at 0.8 to 1.0 mm per mL predicts about 2.4 to 3 mm, so it crosses the early enophthalmos > 2 mm indication. Caveat: the per-mL value is an empiric average; Kolk et al. (J Oral Maxillofac Surg 2007, doi 10.1016/j.joms.2006.06.269) measured 0.93 mm per cm³ in 36 postoperative enophthalmic orbits, a selected group with failed or incomplete reconstruction, so the slope may not transfer to the acute injury, and it varies with where the volume is added (the posteromedial bulge counts more). Edema masks enophthalmos early. Pearl: volume increase is what you correct with the implant, not the bone defect size alone.',
+    concepts: ['enophthalmos', 'surgical-indications'],
+},
+
 // ════════════════ TIMING, APPROACHES & REPAIR ════════════════
 
 {
@@ -293,6 +337,35 @@ Complications:
     brief: 'Autologous (cartilage, bone) or alloplastic (PDS, titanium, Teflon) implants; the dreaded complications are diplopia, hematoma, and blindness.',
     detailed: 'Intraoperative CT, where available, is listed as a pearl: it confirms implant position. Pearl: the posterior ledge of the floor, the orbital apex proximity, and the infraorbital nerve at the canal are the points of risk.',
     concepts: ['materials', 'repair-complications'],
+},
+
+{
+    id: 'q33', type: 'recall', section: 'Timing, Approaches & Repair',
+    stem: 'List the features of a retrobulbar hematoma and the sequence of treatment.',
+    answer: `• Progressive proptosis, intense orbital pain, chemosis
+• Ophthalmoplegia, mydriasis, decreasing visual acuity
+• Intraocular pressure above about 40 mmHg
+
+Treatment:
+• Lateral canthotomy and inferior cantholysis at the bedside; do not delay for imaging
+• If IOP stays elevated, emergent surgical orbital decompression`,
+    brief: 'A tense, painful proptotic orbit with falling vision is an orbital compartment syndrome: decompress at the bedside first.',
+    detailed: 'Bleeding into the closed orbit raises pressure above the perfusion pressure of the optic nerve and retina, and vision can be lost irreversibly if it is not relieved promptly. Pearl: cantholysis is complete only when the lower lid falls free from the orbital rim; recheck vision and pressure afterwards. Caveat: the 40 mmHg threshold is from the AO text alone; the diagnosis is clinical, so do not wait for a measurement when vision is falling.',
+    concepts: ['retrobulbar-hematoma', 'orbital-emergencies'],
+},
+{
+    id: 'q34', type: 'mcq', section: 'Timing, Approaches & Repair',
+    stem: 'When should a pediatric trapdoor fracture with a trapped inferior rectus be released?',
+    options: [
+        { id: 'a', text: 'After 2 weeks, when swelling has settled'  },
+        { id: 'b', text: 'At 7 to 10 days, as for an adult blowout'  },
+        { id: 'c', text: 'Only if diplopia persists at 6 weeks'  },
+        { id: 'd', text: 'Within 24 hours, as a surgical emergency'  },
+    ],
+    correct: 'd',
+    brief: 'A trapped muscle is ischemic: release within 24 hours to limit permanent restrictive diplopia.',
+    detailed: 'Elastic pediatric bone springs open and snaps shut on the herniated muscle and periorbita, so the eye is white and quiet but the upgaze is lost, with nausea, vomiting, and possible bradycardia from the oculocardiac reflex. Gerbino et al. (J Oral Maxillofac Surg 2010, doi 10.1016/j.joms.2009.12.037) found residual diplopia in 1 of 12 repaired within 24 hours, 3 of 8 at 24 to 96 hours, and 4 of 4 after 96 hours. Caveat: this is a 24-patient retrospective series without a comparison group, and later presentation may also mark more severe entrapment, so the dose-response is suggestive, not causal. Discrepancy: q11 follows the Pandrangi deck and classes white-eyed entrapment as urgent; the AO text and this series call it an emergency within 24 hours. Treat any nonresolving oculocardiac reflex as emergent in either scheme.',
+    concepts: ['trapdoor', 'timing', 'entrapment'],
 },
 
 // ════════════════ NASO-ORBITO-ETHMOID FRACTURES ════════════════
@@ -378,6 +451,21 @@ Notes: type II often has nasolacrimal duct injury; types II and III are hard to 
     brief: 'Laceration, direct incisions, coronal, orbital, sublabial.',
     detailed: 'The coronal approach is used for wide exposure of the nasofrontal region and for calvarial bone graft harvest. Pearl: use an existing laceration when it already exposes the injury.',
     concepts: ['noe-approaches'],
+},
+
+{
+    id: 'q35', type: 'mcq', section: 'Naso-Orbito-Ethmoid Fractures',
+    stem: 'In a type III NOE fracture, where must the transnasal canthopexy wire or suture be anchored, and what happens if the vector is placed anteriorly?',
+    options: [
+        { id: 'a', text: 'Anterior and inferior to the anterior lacrimal crest; the eyelid tightens against the globe'  },
+        { id: 'b', text: 'Straight across at the level of the anterior lacrimal crest; no consequence'  },
+        { id: 'c', text: 'Posterior and superior to the posterior lacrimal crest; an anterior vector rounds the canthus, recreates telecanthus, and loses lid-to-globe apposition'  },
+        { id: 'd', text: 'At the contralateral lateral orbital tubercle; the intercanthal distance is unaffected'  },
+    ],
+    correct: 'c',
+    brief: 'Pull the tendon posteriorly and superiorly, behind the posterior lacrimal crest, to restore the natural canthal angle.',
+    detailed: 'The medial canthal tendon normally wraps around the lacrimal sac fossa and keeps the lid against the globe, so the restoring vector is back and up. A wire passed through the contralateral nasal bone or an equivalent anchor, set under tension, pulls the tendons toward each other, which is why overcorrection is deliberate (see q19). Caveat: the AO text lists lateral eyelid laxity and epiphora from lacrimal pump failure as consequences of an anterior vector; the rounded canthus and telecanthus are well supported, the laxity and pump failure are single-source. It also gives a target intercanthal distance of 30 to 32 mm and equates the normal with the palpebral fissure width; the module’s 30 to 35 mm (q16) is keyed.',
+    concepts: ['canthopexy', 'noe-repair', 'telecanthus'],
 },
 
 // ════════════════ APEX & FISSURE SYNDROMES ════════════════
@@ -521,6 +609,34 @@ Notes: type II often has nasolacrimal duct injury; types II and III are hard to 
     brief: 'Same nerves minus the optic nerve: superior orbital fissure syndrome.',
     detailed: 'Cavernous sinus involvement would add V2 numbness or sympathetic signs. Tolosa-Hunt needs a painful granulomatous process and exclusion of trauma. Pearl: the optic nerve status separates apex from fissure syndromes at the bedside.',
     concepts: ['case-apex', 'sof-syndrome'],
+},
+{
+    id: 'q36', type: 'mcq', section: 'Cases',
+    stem: 'A 45-year-old was struck in the right orbit 10 days ago. Swelling has settled. Hertel exophthalmometry shows 3 mm of enophthalmos compared with the left, and he has diplopia on down-gaze. CT shows a posteromedial floor and medial wall defect of about 2.5 cm² with the inferior rectus sitting within it but moving normally on forced duction. What is the best interpretation?',
+    options: [
+        { id: 'a', text: 'Observe: diplopia on down-gaze alone is not an indication'  },
+        { id: 'b', text: 'Emergent release, as for a trapdoor fracture'  },
+        { id: 'c', text: 'Urgent lateral canthotomy for retrobulbar hematoma'  },
+        { id: 'd', text: 'Reconstruction is indicated: a defect of 2 cm² or more, enophthalmos above 2 mm, and about 3 to 4 mL of expansion to correct'  },
+    ],
+    correct: 'd',
+    brief: 'A large posteromedial defect with early enophthalmos above 2 mm predicts more, and the volume must be restored.',
+    detailed: 'Three millimeters at 0.8 to 1.0 mm per mL implies roughly 3 to 3.75 mL of added volume (q32). A defect over 50% of the floor or 2 cm², persistent diplopia in down-gaze, and enophthalmos above 2 mm each independently support repair (q8). Forced duction that moves freely argues against entrapment, so this is non-urgent repair rather than a release. Pearl: the timing is days to two weeks, after edema resolves enough to measure enophthalmos honestly.',
+    concepts: ['case-floor', 'enophthalmos', 'surgical-indications'],
+},
+{
+    id: 'q37', type: 'mcq', section: 'Cases',
+    stem: '(Same patient.) At surgery through a transconjunctival approach, which implant placement and risk apply?',
+    options: [
+        { id: 'a', text: 'Seat the implant posteriorly on the inferomedial strut to restore volume; risk of entropion'  },
+        { id: 'b', text: 'Place the implant only along the anterior floor; risk of ectropion'  },
+        { id: 'c', text: 'Leave the medial wall unrepaired; the floor implant restores the volume'  },
+        { id: 'd', text: 'Insert a thick block into the maxillary sinus to support the globe'  },
+    ],
+    correct: 'a',
+    brief: 'Rest the implant on the posterior ledge (inferomedial strut) so the posteromedial bulge is corrected; transconjunctival risk is entropion.',
+    detailed: 'An implant that stops short of the strut leaves the posteromedial volume uncorrected, so enophthalmos persists. The same defect that includes the medial wall needs medial wall coverage, because the volume expansion comes from both. Subciliary approaches risk ectropion instead (q13). Pearl: intraoperative imaging or a forced duction test after placement confirms position and free motion (Baker deck).',
+    concepts: ['case-floor', 'orbital-floor-anatomy', 'lid-approaches'],
 },
 ];
 
