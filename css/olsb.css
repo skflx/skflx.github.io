@@ -57,6 +57,7 @@
   --olsb-cast-2: #9CC7B4;
   --olsb-cut: #CDBB90;
   --olsb-stage3d: #1E1F22;
+  --olsb-stage3d-hi: #3A3833;
 }
 html[data-theme="dark"] {
   --olsb-bone: #CFC3A2;
@@ -98,6 +99,7 @@ html[data-theme="dark"] {
   --olsb-cast-2: #6FA48E;
   --olsb-cut: #A99569;
   --olsb-stage3d: #0E0F11;
+  --olsb-stage3d-hi: #24231F;
 }
 
 /* ===== PAGE ===== */
@@ -341,7 +343,15 @@ html[data-theme="dark"] {
 
 /* ===== 3D MODEL ===== */
 .olsb-mode { margin-bottom: 1rem; }
-.olsb3d-stage { aspect-ratio: 4 / 3; overflow: hidden; background: var(--olsb-stage3d); }
+.olsb3d-stage {
+  aspect-ratio: 4 / 3; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 38%, var(--olsb-stage3d-hi), var(--olsb-stage3d) 72%);
+}
+/* Endoscope views: the round field of a rigid scope. */
+.olsb3d-stage.is-scope::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle closest-side at 50% 50%, transparent 93%, var(--olsb-stage3d) 99%);
+}
 @media (max-width: 600px) { .olsb3d-stage { aspect-ratio: 3 / 4; } }
 #olsb3d-canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; outline: none; }
 #olsb3d-canvas:active { cursor: grabbing; }

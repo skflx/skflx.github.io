@@ -103,7 +103,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; draft)
 │   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
 │   ├── js/olsb-volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)
-│   ├── js/olsb-3d.js       #   ES module: voxel mesher, camera (orbit/fly/walk), picking, panels (three.js, vendored)
+│   ├── js/olsb-mesh.js     #   the mesher: smooth surfaces (or blocks) from the labelled grids; runs in that worker
+│   ├── js/olsb-3d.js       #   ES module: lit scene, camera (orbit/fly/walk), picking, panels (three.js, vendored)
 │   └── js/olsb*.js         #   glossary, mm shape library, one file per 2D diagram, SVG renderer
 │
 ├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)

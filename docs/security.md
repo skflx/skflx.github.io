@@ -44,7 +44,8 @@ vault. `tools/check-data.mjs` enforces the page rules below in CI.
    validated ids, `rel="noopener"`, and request nothing until clicked. The
    URL hash is untrusted: `js/ssb/state.js` matches it against the graph
    index and it never reaches markup. `OLSB.html` starts a same-origin
-   Web Worker from its own stamped `js/olsb-volume.js`, allowed by
+   Web Worker from its own stamped `js/olsb-volume.js`, which imports the
+   stamped `js/olsb-mesh.js` URL the page passes it, both allowed by
    `script-src 'self'`.) OKSAT pages may fetch optional Google Fonts
    (only when a non-default typeface is picked).
 
