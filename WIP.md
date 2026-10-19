@@ -70,7 +70,11 @@ Module families, and their status:
   evaluation. Built from the owner's resident-review decks; deck-versus-standard
   disagreements sit under "Discrepancy:" or "Caveat:". The AO CMF content is not
   yet folded in.
-- **Rhinology:** allergy and allergy testing.
+- **Rhinology:** allergy and allergy testing; AERD and biologics, built from
+  two open-access reviews (Priessnitz 2026, CC BY; Dominas 2020) with keyed
+  numbers checked against the primary papers on PubMed. It reuses Priessnitz
+  Figure 2 under CC BY and carries an eicosanoid schematic drawn for it (SVG),
+  because the Dominas pathway figure is wrong about COX-1 and COX-2.
 
 None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls

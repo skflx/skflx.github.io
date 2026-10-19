@@ -117,6 +117,16 @@ window.OKSAT_MANIFEST = [
     data: 'js/mcq-modules/allergy-testing.js',
   },
   {
+    slug: 'aerd-biologics',
+    title: 'AERD & Biologics',
+    kicker: 'Rhinology / Allergy',
+    subspecialty: 'rhinology',
+    count: 64,
+    accent: '#6E4A6B',
+    desc: 'The eicosanoid defect, diagnosis and the aspirin challenge, ESS, aspirin therapy after desensitization and leukotriene modifiers, the six biologics and their trials, phenotype-based selection, evidence appraisal, and cases.',
+    data: 'js/mcq-modules/aerd-biologics.js',
+  },
+  {
     slug: 'mandible-fractures',
     title: 'Mandible Fractures',
     kicker: 'Facial Plastics & Recon',
