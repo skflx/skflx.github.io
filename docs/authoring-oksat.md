@@ -153,6 +153,12 @@ recall gate. Third-party figures keep their license terms: `otoplasty` reuses
 StatPearls figures (CC BY-NC-ND 4.0), so they are copied unmodified (no crops
 or annotations) and credited in the file header and `meta.sources`.
 
+A figure can be drawn for the module instead of copied, as an SVG in
+`img/oksat/<slug>/` (`aerd-biologics` does this where its source figure is
+wrong). It is loaded as an `<img>`, so it cannot read the site's tokens or
+fonts: give it its own white background, system fonts, and the two signal
+colours as fixed hex values, and label it schematic.
+
 See `js/mcq-modules/lip-reconstruction.js` for the reference implementation.
 
 ---

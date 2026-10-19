@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720" width="960" height="720" font-family="Helvetica, Arial, sans-serif" font-size="15">
+  <title>Arachidonic acid metabolism in AERD (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/>
+    </marker>
+    <marker id="tee" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M5,0 L5,10" stroke="#1d1d1b" stroke-width="2.5"/>
+    </marker>
+    <marker id="teeB" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="9" markerHeight="9" orient="auto">
+      <path d="M5,0 L5,10" stroke="#2f5d8a" stroke-width="2.5"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="720" fill="#ffffff"/>
+
+  <g fill="none" stroke="#1d1d1b" stroke-width="1.4">
+    <rect x="370" y="16" width="220" height="34" rx="4"/>
+    <rect x="370" y="84" width="220" height="34" rx="4"/>
+    <!-- 5-LO column -->
+    <rect x="40" y="168" width="250" height="34" rx="4"/>
+    <rect x="40" y="240" width="250" height="34" rx="4"/>
+    <rect x="40" y="312" width="250" height="52" rx="4"/>
+    <rect x="40" y="402" width="250" height="34" rx="4" stroke="#b23a2e" stroke-width="2.2"/>
+    <rect x="40" y="474" width="250" height="70" rx="4"/>
+    <!-- COX column -->
+    <rect x="355" y="168" width="250" height="34" rx="4"/>
+    <rect x="355" y="240" width="250" height="34" rx="4"/>
+    <rect x="345" y="330" width="130" height="52" rx="4" stroke="#2f5d8a" stroke-width="2.2"/>
+    <rect x="490" y="330" width="130" height="52" rx="4" stroke="#b23a2e" stroke-width="2.2"/>
+    <rect x="345" y="420" width="130" height="34" rx="4"/>
+    <rect x="490" y="420" width="130" height="70" rx="4"/>
+    <!-- 15-LOX column -->
+    <rect x="680" y="168" width="250" height="34" rx="4" stroke="#b23a2e" stroke-width="2.2"/>
+    <rect x="680" y="240" width="250" height="34" rx="4"/>
+    <rect x="680" y="330" width="250" height="34" rx="4"/>
+  </g>
+
+  <!-- product flow -->
+  <g stroke="#1d1d1b" stroke-width="1.4" fill="none" marker-end="url(#arr)">
+    <path d="M480,50 L480,82"/>
+    <path d="M400,118 L165,166"/>
+    <path d="M480,118 L480,166"/>
+    <path d="M560,118 L805,166"/>
+    <path d="M165,202 L165,238"/>
+    <path d="M165,274 L165,310"/>
+    <path d="M165,364 L165,400"/>
+    <path d="M165,436 L165,472"/>
+    <path d="M480,202 L480,238"/>
+    <path d="M450,274 L410,328"/>
+    <path d="M510,274 L555,328"/>
+    <path d="M410,382 L410,418"/>
+    <path d="M555,382 L555,418"/>
+    <path d="M805,202 L805,238"/>
+    <path d="M805,274 L805,328"/>
+  </g>
+
+  <text x="480" y="38" text-anchor="middle">Membrane phospholipids</text>
+  <text x="488" y="72" font-size="13" fill="#444">cPLA2</text>
+  <text x="480" y="106" text-anchor="middle" font-weight="bold">Arachidonic acid</text>
+
+  <!-- 5-lipoxygenase pathway -->
+  <text x="165" y="190" text-anchor="middle">5-lipoxygenase (5-LO, with FLAP)</text>
+  <text x="165" y="262" text-anchor="middle">LTA4</text>
+  <text x="165" y="333" text-anchor="middle">LTC4 synthase</text>
+  <text x="165" y="354" text-anchor="middle" font-size="12.5" fill="#444">mast cells, eosinophils, adherent platelets</text>
+  <text x="165" y="424" text-anchor="middle" fill="#b23a2e" font-weight="bold">LTC4 → LTD4 → LTE4  ↑</text>
+  <text x="165" y="496" text-anchor="middle" font-size="13.5">Receptors: CysLT1R, CysLT2R,</text>
+  <text x="165" y="515" text-anchor="middle" font-size="13.5">GPR99 (CysLT3R, LTE4-preferring)</text>
+  <text x="165" y="534" text-anchor="middle" font-size="12.5" fill="#444">urinary LTE4 = biomarker</text>
+
+  <!-- cyclooxygenase pathway -->
+  <text x="480" y="190" text-anchor="middle">COX-1 / COX-2 (enzymes)</text>
+  <text x="480" y="262" text-anchor="middle">PGH2</text>
+  <text x="410" y="352" text-anchor="middle" fill="#2f5d8a" font-weight="bold">PGE2  ↓</text>
+  <text x="410" y="372" text-anchor="middle" font-size="12" fill="#444">mPGES-1</text>
+  <text x="555" y="352" text-anchor="middle" fill="#b23a2e" font-weight="bold">PGD2  ↑</text>
+  <text x="555" y="372" text-anchor="middle" font-size="12" fill="#444">HPGDS, mast cell</text>
+  <text x="410" y="442" text-anchor="middle">EP2 receptor</text>
+  <text x="555" y="441" text-anchor="middle" font-size="13">DP1, CRTH2 (DP2)</text>
+  <text x="555" y="461" text-anchor="middle" font-size="12.5">metabolite</text>
+  <text x="555" y="479" text-anchor="middle" font-size="12.5">9α,11β-PGF2</text>
+
+  <!-- 15-lipoxygenase pathway -->
+  <text x="805" y="190" text-anchor="middle">15-LOX-1 (airway epithelium)</text>
+  <text x="805" y="262" text-anchor="middle">15-HETE</text>
+  <text x="798" y="296" text-anchor="end" font-size="12" fill="#444">epithelial–mast cell</text>
+  <text x="798" y="311" text-anchor="end" font-size="12" fill="#444">transmetabolism</text>
+  <text x="805" y="352" text-anchor="middle">15-oxo-ETE</text>
+
+  <!-- drug inhibition -->
+  <path d="M10,185 L38,185" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#tee)"/>
+  <text x="6" y="160" font-size="12.5">zileuton</text>
+  <path d="M628,222 L608,200" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#tee)"/>
+  <text x="614" y="240" font-size="12.5">aspirin /</text>
+  <text x="614" y="255" font-size="12.5">NSAIDs</text>
+  <text x="614" y="270" font-size="12.5">(COX-1)</text>
+  <path d="M100,580 L100,546" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#tee)"/>
+  <text x="40" y="598" font-size="12.5">montelukast (CysLT1R only)</text>
+
+  <!-- PGE2 / EP2 brake -->
+  <path d="M345,437 C316,437 316,196 292,196" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="6 4" fill="none" marker-end="url(#teeB)"/>
+  <text x="345" y="532" font-size="13" fill="#2f5d8a">EP2 signalling brakes 5-LO and mast cell activation.</text>
+  <text x="345" y="550" font-size="13" fill="#2f5d8a">In AERD, PGE2 is low and COX-1-dependent:</text>
+  <text x="345" y="568" font-size="13" fill="#2f5d8a">blocking COX-1 removes the brake.</text>
+  <text x="680" y="532" font-size="13" fill="#444">Selective COX-2 inhibitors spare</text>
+  <text x="680" y="550" font-size="13" fill="#444">COX-1 and are generally tolerated.</text>
+
+  <!-- legend -->
+  <g font-size="12.5">
+    <rect x="40" y="652" width="16" height="12" fill="none" stroke="#b23a2e" stroke-width="2.2"/>
+    <text x="62" y="663">increased in AERD</text>
+    <rect x="200" y="652" width="16" height="12" fill="none" stroke="#2f5d8a" stroke-width="2.2"/>
+    <text x="222" y="663">decreased in AERD</text>
+    <path d="M360,658 L392,658" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#tee)"/>
+    <text x="402" y="663">inhibits</text>
+    <text x="40" y="694" fill="#444">Schematic. COX-1 and COX-2 are enzymes that convert arachidonic acid to PGH2; they are not its products.</text>
+  </g>
+</svg>
