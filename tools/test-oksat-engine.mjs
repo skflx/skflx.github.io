@@ -25,6 +25,9 @@
    answers/firstCorrect/modes are written once and never overwritten).
    Review: an answered item whose srs nextReview <= today opens fresh at the
    gate; one review attempt per due date moves only srs (box, nextReview).
+   Navigation: "Continue" opens the first open item (unanswered or due);
+   "Next unanswered" (or `u`) walks open items forward; the jump slider
+   (input.ok-jump-range, 1-based) jumps when released.
    pediatrics q1: correct='b' (used to pick a deliberate wrong answer).
 
    Usage:  node tools/test-oksat-engine.mjs [--base <url>] [--headed]
@@ -217,6 +220,36 @@ async function main() {
     await page.waitForTimeout(200);
     const srs2 = await ls(page, SRS);
     check('6e: one review attempt per due date', srs2.items.q1.box === 2, `box after 2nd click=${srs2.items.q1.box}`);
+    await context.close();
+  }
+
+  /* ---- Case 7: navigation (Continue, next unanswered, jump slider) ---- */
+  {
+    const future = '2099-01-01';
+    const seed = `try{localStorage.setItem('${PROGRESS}',JSON.stringify({v:1,answers:{q1:'b',q2:'a',q4:'a'},firstCorrect:{q1:true,q2:false,q4:false},modes:{q1:'mcq',q2:'mcq',q4:'mcq'}}));` +
+      `localStorage.setItem('${SRS}',JSON.stringify({v:1,items:{q1:{box:2,nextReview:'${future}'},q2:{box:1,nextReview:'${future}'},q4:{box:1,nextReview:'${future}'}}}));}catch(e){}`;
+    const { context, page } = await openStudy(browser, base, seed);
+    const qnum = () => page.evaluate(() => { const m = document.body.innerText.match(/Question (\d+) of/i); return m ? +m[1] : null; });
+    await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Continue/.test(b.textContent)), null, { timeout: 8000 });
+    await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find((x) => /Continue/.test(x.textContent)); b && b.click(); });
+    await page.waitForTimeout(400);
+    check('7a: Continue opens the first unanswered item', (await qnum()) === 3, `landed on Q${await qnum()}`);
+    await page.keyboard.press('u');
+    await page.waitForTimeout(400);
+    check('7b: "u" skips answered items to the next unanswered', (await qnum()) === 5, `landed on Q${await qnum()}`);
+    const label = await page.evaluate(() => { const b = document.querySelector('.ok-next-open'); return b ? b.textContent : ''; });
+    check('7c: next-unanswered button counts what is left', /Next unanswered · \d+ left/.test(label), `label=${label}`);
+    await page.evaluate(() => {
+      const r = document.querySelector('input.ok-jump-range');
+      const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+      set.call(r, '10'); r.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    await page.waitForTimeout(200);
+    const preview = await page.evaluate(() => document.querySelector('.ok-jump-preview').textContent);
+    check('7d: dragging previews without jumping', (await qnum()) === 5 && /^Q10 of/.test(preview), `at Q${await qnum()}, preview=${preview}`);
+    await page.evaluate(() => document.querySelector('input.ok-jump-range').dispatchEvent(new PointerEvent('pointerup', { bubbles: true })));
+    await page.waitForTimeout(400);
+    check('7e: releasing the slider jumps to that question', (await qnum()) === 10, `landed on Q${await qnum()}`);
     await context.close();
   }
 

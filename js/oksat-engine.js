@@ -255,6 +255,24 @@
       if (!pool.length) return;
       goToItem(pool[Math.floor(Math.random() * pool.length)].id);
     };
+    // Open = unanswered, or due for review (nothing to draw yet). "Next
+    // unanswered" walks these forward from the current item, wrapping.
+    const isOpen = (qId) => !shownAttempt(qId);
+    const openCount = filteredItems.filter((q) => isOpen(q.id)).length;
+    const handleNextOpen = () => {
+      const n = filteredItems.length;
+      for (let k = 1; k <= n; k++) {
+        const q = filteredItems[(Math.max(currentIdx, -1) + k + n) % n];
+        if (q && q.id !== currentId && isOpen(q.id)) { goToItem(q.id); return; }
+      }
+    };
+    const jumpToIdx = (idx) => { const q = filteredItems[idx]; if (q && q.id !== currentId) goToItem(q.id); };
+    // Status for the jump slider's preview.
+    const statusOf = (qId) => {
+      const a = shownAttempt(qId);
+      if (a) return a.correct ? 'correct' : 'missed';
+      return isDue(qId) ? 'due for review' : 'unanswered';
+    };
     const handleConceptClick = (conceptId) => {
       setReviewMode(false);
       setConceptFilter(conceptId);
@@ -306,6 +324,7 @@
         setView('home'); return;
       }
       if (key === 'r') { e.preventDefault(); handleRandom(); return; }
+      if (key === 'u') { e.preventDefault(); handleNextOpen(); return; }
       if (key === 'd' && answered && currentItem.detailed) { e.preventDefault(); setShowDetailed((v) => !v); return; }
 
       // Recall gate (mcq, unanswered, nothing opened yet): `c` opens the
@@ -350,7 +369,7 @@
                 totalAnswered=${totalAnswered} totalCorrect=${totalCorrect}
                 firstCorrect=${firstCorrect} answers=${answers}
                 dueCount=${dueIds.length} onReview=${startReview}
-                onStart=${() => { setReviewMode(false); setConceptFilter(null); ITEMS[0] && goToItem(ITEMS[0].id); }}
+                onStart=${() => { setReviewMode(false); setConceptFilter(null); const first = ITEMS.find((q) => isOpen(q.id)) || ITEMS[0]; first && goToItem(first.id); }}
                 onJump=${goToItem}
                 onConceptClick=${handleConceptClick} />`
             : html`<${ItemView}
@@ -361,6 +380,7 @@
                 choicesShown=${choicesShown} onShowChoices=${showChoices}
                 showDetailed=${showDetailed} setShowDetailed=${setShowDetailed}
                 onNext=${handleNext} onPrev=${handlePrev} onRandom=${handleRandom} onHome=${() => setView('home')}
+                openCount=${openCount} onNextOpen=${handleNextOpen} onJumpIdx=${jumpToIdx} statusOf=${statusOf}
                 currentIdx=${currentIdx} total=${filteredItems.length} globalTotal=${ITEMS.length}
                 conceptFilter=${conceptFilter} setConceptFilter=${setConceptFilter}
                 reviewMode=${reviewMode} exitReview=${() => setReviewMode(false)}
@@ -535,7 +555,10 @@
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
+  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
+    // Jump slider: the index being previewed while dragging (null = idle).
+    // The jump commits on release so the page does not scroll mid-drag.
+    const [scrub, setScrub] = useState(null);
     if (!item) {
       return html`
         <div className="fade-up" style=${{ textAlign: 'center', padding: '3rem 0', color: C.textMuted }}>
@@ -722,6 +745,25 @@
           <button className="ok-btn" onClick=${onRandom} title="Random" aria-label="Random question"><${Shuffle} size=${16} style=${{ color: C.textMuted }} /></button>
           <button className="ok-btn ok-btn--primary ok-btn--flex" onClick=${onNext}><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.9rem' }}>${answered ? 'Next' : 'Skip'}</span><${ChevronRight} size=${16} /></button>
         </div>
+        ${(() => {
+          const others = openCount - (answered ? 0 : 1);
+          const label = others > 0 ? `Next unanswered · ${openCount} left` : (openCount ? 'This is the last unanswered' : 'All answered');
+          return html`<button className="ok-btn ok-btn--block ok-next-open" onClick=${onNextOpen} disabled=${others < 1} title="Next unanswered (u)"><span className="display-font" style=${{ fontWeight: 500, fontSize: '0.88rem' }}>${label}</span></button>`;
+        })()}
+        ${total > 1 ? (() => {
+          const idx = scrub != null ? scrub : Math.max(currentIdx, 0);
+          const q = filteredItems[idx];
+          const preview = q ? `Q${idx + 1} of ${total}${q.section ? ' · ' + q.section : ''} · ${statusOf(q.id)}` : '';
+          const commit = () => { if (scrub != null) { const i = scrub; setScrub(null); onJumpIdx(i); } };
+          return html`
+            <div className="ok-jump">
+              <div className="ok-jump-head"><span className="display-font">Jump to</span><span className="ok-jump-preview">${preview}</span></div>
+              <input type="range" className="ok-jump-range" min="1" max=${total} step="1" value=${idx + 1}
+                aria-label="Jump to question" aria-valuetext=${preview}
+                onChange=${(e) => setScrub(Number(e.target.value) - 1)}
+                onPointerUp=${commit} onKeyUp=${commit} onTouchEnd=${commit} onBlur=${commit} />
+            </div>`;
+        })() : null}
 
         <div className="ok-dotrow" aria-hidden="true">
           ${Array.from({ length: total }, (_, i) => {

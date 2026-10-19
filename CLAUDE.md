@@ -19,7 +19,7 @@ node tools/stamp-assets.mjs      # rewrites stale stamps in every root *.html
 node tools/check-data.mjs        # data + security invariants + asset stamps (deps-free, instant)
 node tools/test-wiki-sync.mjs    # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs       # every page boots, zero real console errors
-node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, review attempts, keyboard
+node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, review attempts, keyboard, navigation
 node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
 node tools/test-ssb.mjs          # SSB: every section (variant lab, CT, specimen, endoscope, procedure…); --only a,b for some; CI runs it as --shard i/4
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
