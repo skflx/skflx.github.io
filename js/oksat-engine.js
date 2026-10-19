@@ -126,6 +126,13 @@
       : ITEMS[0]?.id);
     const [conceptFilter, setConceptFilter] = useState(initialConcept);
     const [reviewMode, setReviewMode] = useState(false);
+    // Review queue: the due ids frozen when a review starts, so answering an
+    // item (which moves it out of "due") does not pull it from under the learner.
+    const [reviewQueue, setReviewQueue] = useState([]);
+    // Review attempts this session (qId → { value, correct, mode }). A due item
+    // opens fresh, at the gate, and can be answered once per review; the first
+    // attempt in `answers`/`firstCorrect` stays the locked, honest record.
+    const [reviewAnswers, setReviewAnswers] = useState({});
     const [answers, setAnswers] = useState(() => load(PROGRESS_KEY, {}).answers || {});
     const [firstCorrect, setFirstCorrect] = useState(() => load(PROGRESS_KEY, {}).firstCorrect || {});
     const [modes, setModes] = useState(() => load(PROGRESS_KEY, {}).modes || {});
@@ -153,10 +160,20 @@
 
     const filteredItems = useMemo(() => {
       let pool = ITEMS;
-      if (reviewMode) { const set = new Set(dueIds); pool = pool.filter((q) => set.has(q.id)); }
+      if (reviewMode) { const set = new Set(reviewQueue); pool = pool.filter((q) => set.has(q.id)); }
       if (conceptFilter) pool = pool.filter((q) => q.concepts.includes(conceptFilter));
       return pool;
-    }, [conceptFilter, reviewMode, dueIds, ITEMS]);
+    }, [conceptFilter, reviewMode, reviewQueue, ITEMS]);
+
+    // An answered item whose review date has come is open for a fresh attempt.
+    const isDue = (qId) => { const s = srs.items[qId]; return !!(answers[qId] && s && s.nextReview && s.nextReview <= today()); };
+    // The attempt to draw for an item: this session's review, else nothing if
+    // it is due (fresh gate), else the locked first attempt.
+    const shownAttempt = (qId) => {
+      if (reviewAnswers[qId]) return reviewAnswers[qId];
+      if (isDue(qId)) return null;
+      return answers[qId] ? { value: answers[qId], correct: firstCorrect[qId], mode: modes[qId] } : null;
+    };
 
     const currentItem = useMemo(() => ITEMS.find((q) => q.id === currentId) || ITEMS[0], [currentId, ITEMS]);
     const currentIdx = filteredItems.findIndex((q) => q.id === currentId);
@@ -164,10 +181,15 @@
     const totalCorrect = Object.values(firstCorrect).filter(Boolean).length;
 
     const recordAnswer = (qId, value, correct, nextBox, mode) => {
-      if (answers[qId]) return;
-      setAnswers((prev) => ({ ...prev, [qId]: value }));
-      setFirstCorrect((prev) => ({ ...prev, [qId]: correct }));
-      if (mode) setModes((prev) => ({ ...prev, [qId]: mode }));
+      if (answers[qId]) {
+        // Review attempt: once per due date; moves only the Leitner box.
+        if (reviewAnswers[qId] || !isDue(qId)) return;
+        setReviewAnswers((prev) => ({ ...prev, [qId]: { value, correct, mode } }));
+      } else {
+        setAnswers((prev) => ({ ...prev, [qId]: value }));
+        setFirstCorrect((prev) => ({ ...prev, [qId]: correct }));
+        if (mode) setModes((prev) => ({ ...prev, [qId]: mode }));
+      }
       setSrs((prev) => {
         const cur = prev.items[qId] || { box: 1 };
         let box;
@@ -213,7 +235,8 @@
       const qId = confItem;
       if (qId && window.OKSATStore) {
         const it = ITEMS.find((q) => q.id === qId);
-        OKSATStore.recordConfidence(slug, reviewer, qId, tier, !!firstCorrect[qId], it ? it.concepts : [], sessionRef.current);
+        const att = shownAttempt(qId);
+        OKSATStore.recordConfidence(slug, reviewer, qId, tier, !!(att && att.correct), it ? it.concepts : [], sessionRef.current);
       }
       dismissConf();
     };
@@ -240,7 +263,7 @@
     };
     const startReview = () => {
       if (!dueIds.length) return;
-      setConceptFilter(null); setReviewMode(true);
+      setConceptFilter(null); setReviewQueue(dueIds); setReviewMode(true);
       goToItem(dueIds[0]);
     };
 
@@ -262,7 +285,7 @@
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const tgt = e.target;
       if (tgt && tgt.matches && tgt.matches('input, textarea, select, [contenteditable]')) return;
-      const answered = !!answers[currentId];
+      const answered = !!shownAttempt(currentId);
       const isRecall = currentItem.type === 'recall';
       const key = e.key;
 
@@ -332,7 +355,8 @@
                 onConceptClick=${handleConceptClick} />`
             : html`<${ItemView}
                 DOMAINS=${DOMAINS} CONCEPTS=${CONCEPTS} ITEMS=${ITEMS}
-                item=${currentItem} answer=${answers[currentId]} isCorrect=${firstCorrect[currentId]} mode=${modes[currentId]}
+                item=${currentItem} answer=${shownAttempt(currentId)?.value} isCorrect=${shownAttempt(currentId)?.correct} mode=${shownAttempt(currentId)?.mode}
+                retake=${!!reviewAnswers[currentId] || isDue(currentId)}
                 onSelect=${handleSelect} revealed=${revealed} onReveal=${() => setRevealed(true)} onGrade=${handleGrade}
                 choicesShown=${choicesShown} onShowChoices=${showChoices}
                 showDetailed=${showDetailed} setShowDetailed=${setShowDetailed}
@@ -511,7 +535,7 @@
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
+  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
     if (!item) {
       return html`
         <div className="fade-up" style=${{ textAlign: 'center', padding: '3rem 0', color: C.textMuted }}>
@@ -551,7 +575,7 @@
             <${Home} size=${14} /><span className="display-font" style=${{ letterSpacing: '0.01em', fontWeight: 500 }}>Menu</span>
           </button>
           <div className="display-font" style=${{ fontSize: '0.72rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-            ${reviewMode ? html`<span style=${{ color: C.ochre }}>Review</span>` : null}
+            ${reviewMode || retake ? html`<span style=${{ color: C.ochre }}>Review</span>` : null}
             ${item.difficulty ? html`<span style=${{ color: C.ochre }}>${item.difficulty}</span>` : null}
             ${conceptFilter ? html`<span>Filter · ${filterConcept ? filterConcept.label : conceptFilter}</span>` : html`<span>Question ${currentIdx + 1} of ${total}</span>`}
           </div>

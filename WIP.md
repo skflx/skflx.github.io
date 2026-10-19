@@ -56,7 +56,8 @@ exists; then add a `Curriculum vitae` item to `.hero-links` in `index.html`.
 `js/mcq-modules/`, each with one manifest entry; the shared engine renders all
 of them. Every question opens on a recall gate: reveal and self-grade, or show
 the choices and answer as a locked-first-attempt MCQ. The engine records which
-path settled each item. Leitner boxes resurface misses. Progress stays in the
+path settled each item. Leitner boxes resurface misses: a due item reopens
+fresh, answers hidden, and each review moves its box. Progress stays in the
 browser; nothing is uploaded.
 
 Module families, and their status:
