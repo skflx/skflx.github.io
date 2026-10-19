@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Natural history of AERD (schematic, not to scale)</title>
+  <rect width="820" height="330" fill="#ffffff"/>
+
+  <line x1="60" y1="150" x2="770" y2="150" stroke="#1d1d1b" stroke-width="2"/>
+  <path d="M770,144 L782,150 L770,156 z" fill="#1d1d1b"/>
+  <text x="790" y="155" font-size="13" fill="#444">time</text>
+
+  <g fill="#ffffff" stroke="#1d1d1b" stroke-width="2">
+    <circle cx="80" cy="150" r="9"/>
+    <circle cx="240" cy="150" r="9"/>
+    <circle cx="400" cy="150" r="9"/>
+    <circle cx="560" cy="150" r="9" stroke="#b23a2e" fill="#f6e4e1"/>
+    <circle cx="720" cy="150" r="9" stroke="#2f5d8a" fill="#e7edf3"/>
+  </g>
+
+  <g text-anchor="middle">
+    <text x="80" y="104" font-weight="bold">1 · Rhinitis</text>
+    <text x="80" y="122" font-size="13">congestion, rhinorrhea</text>
+    <text x="240" y="186" font-weight="bold">2 · Hyposmia</text>
+    <text x="240" y="204" font-size="13">nasal polyps (CRSwNP)</text>
+    <text x="400" y="104" font-weight="bold">3 · Asthma</text>
+    <text x="400" y="122" font-size="13">≈2 years after nasal onset</text>
+    <text x="560" y="186" font-weight="bold" fill="#b23a2e">4 · NSAID reactions</text>
+    <text x="560" y="204" font-size="13">≈4 years later</text>
+    <text x="720" y="104" font-weight="bold" fill="#2f5d8a">5 · Diagnosis</text>
+    <text x="720" y="122" font-size="13">often years later</text>
+  </g>
+
+  <!-- delay bracket -->
+  <path d="M80,240 L80,250 L720,250 L720,240" stroke="#2f5d8a" stroke-width="1.6" fill="none"/>
+  <text x="400" y="272" text-anchor="middle" font-size="14" fill="#2f5d8a" font-weight="bold">average gap from symptom onset to diagnosis ≈ 10 years</text>
+
+  <g font-size="12.5" fill="#444">
+    <text x="20" y="30">Median age at onset ≈ 34 years (late childhood to adulthood). The drug reaction comes last, so earlier NSAID</text>
+    <text x="20" y="48">tolerance does not exclude AERD, and patients told to avoid NSAIDs after polyps never find out (Dominas §3).</text>
+    <text x="20" y="304">Not to scale. The order is the robust fact; Dominas leaves unclear whether "4 years later" counts from asthma</text>
+    <text x="20" y="320">or from the first nasal symptom (Szczeklik 2000, Berges-Gimeno 2002).</text>
+  </g>
+</svg>

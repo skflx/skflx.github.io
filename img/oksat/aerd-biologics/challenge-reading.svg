@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 480" width="780" height="480" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Reading an oral aspirin challenge (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+  </defs>
+  <rect width="780" height="480" fill="#ffffff"/>
+
+  <g fill="none" stroke="#1d1d1b" stroke-width="1.4">
+    <rect x="250" y="16" width="280" height="44" rx="22"/>
+    <rect x="20" y="112" width="250" height="78" rx="4" stroke="#2f5d8a" stroke-width="2"/>
+    <rect x="440" y="112" width="220" height="44" rx="22"/>
+    <rect x="560" y="212" width="200" height="56" rx="4" stroke="#b23a2e" stroke-width="2"/>
+    <rect x="250" y="212" width="270" height="56" rx="22"/>
+    <rect x="430" y="320" width="330" height="56" rx="4" stroke="#b23a2e" stroke-width="2"/>
+    <rect x="20" y="320" width="330" height="56" rx="4"/>
+  </g>
+  <g stroke="#1d1d1b" stroke-width="1.4" fill="none" marker-end="url(#arr)">
+    <path d="M300,60 L180,110"/>
+    <path d="M480,60 L540,110"/>
+    <path d="M620,156 L660,210"/>
+    <path d="M500,156 L430,210"/>
+    <path d="M460,268 L540,318"/>
+    <path d="M320,268 L220,318"/>
+  </g>
+  <g font-size="12.5" fill="#444" font-weight="bold">
+    <text x="222" y="86">no</text><text x="520" y="86">yes</text>
+    <text x="650" y="186">yes</text><text x="452" y="186">no</text>
+    <text x="510" y="296">yes</text><text x="252" y="296">no</text>
+  </g>
+
+  <text x="390" y="43" text-anchor="middle">Reaction at a provoking dose?</text>
+  <text x="145" y="136" text-anchor="middle" font-size="13.5">No reaction through 325 mg (1-day)</text>
+  <text x="145" y="154" text-anchor="middle" font-size="13.5">or ≥650 mg (multi-day protocol)</text>
+  <text x="145" y="178" text-anchor="middle" font-weight="bold" fill="#2f5d8a">Negative</text>
+  <text x="550" y="139" text-anchor="middle">FEV1 fall ≥ 20%?</text>
+  <text x="660" y="236" text-anchor="middle" font-weight="bold" fill="#b23a2e">Positive</text>
+  <text x="660" y="256" text-anchor="middle" font-size="13">bronchial reaction</text>
+  <text x="385" y="236" text-anchor="middle">Clear naso-ocular reaction?</text>
+  <text x="385" y="256" text-anchor="middle" font-size="12.5" fill="#444">congestion, rhinorrhea, conjunctival injection</text>
+  <text x="595" y="344" text-anchor="middle" font-weight="bold" fill="#b23a2e">Positive (EAACI definition)</text>
+  <text x="595" y="364" text-anchor="middle" font-size="13">AERD confirmed; can continue to desensitize</text>
+  <text x="185" y="344" text-anchor="middle" font-size="13.5">Mild or nonspecific symptoms only:</text>
+  <text x="185" y="364" text-anchor="middle" font-size="13.5">not positive; keep escalating, observed</text>
+
+  <g font-size="13">
+    <text x="20" y="410">Discrepancy: Dominas defines a positive challenge by a fall in FEV1 of more than 20% only. EAACI (Kowalski 2019)</text>
+    <text x="20" y="428">accepts FEV1 ≥20% and/or clear naso-ocular or extrabronchial symptoms.</text>
+    <text x="20" y="450">On leukotriene-modifier pretreatment, expect more naso-ocular and fewer bronchial reactions (White 2006).</text>
+    <text x="20" y="472" font-size="12.5" fill="#444">Schematic. The bottom-left branch is clinical practice, not stated in either review.</text>
+  </g>
+</svg>

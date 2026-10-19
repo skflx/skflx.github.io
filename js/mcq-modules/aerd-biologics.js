@@ -28,6 +28,12 @@
    Figures in img/oksat/aerd-biologics/:
    • priessnitz-fig2-algorithm.png — Priessnitz et al. 2026, Figure 2,
      reproduced (resized, grayscale) under CC BY 4.0 with attribution.
+   • Eleven more SVG diagrams drawn for this module (schematic), attached
+     as explanation images to the harder items: type2-cascade-targets,
+     il4-receptors, il5-vs-il5ra, transcellular-ltc4, natural-history,
+     challenge-timeline, challenge-reading, atad-timeline,
+     atad-snot22-mcid, score-directions, persistence-bars. Each carries
+     its sources and labels its knowledge additions in its own caption.
    • eicosanoid-pathway.svg — drawn for this module (schematic). Dominas
      Figure 1 was deliberately NOT reused: it shows arachidonic acid
      "broken down into" COX-1 and COX-2, which item q9 corrects. */
@@ -179,6 +185,8 @@ const ITEMS = [
         correct: 'b',
         brief: 'Transcellular synthesis: the leukocyte makes LTA4, the platelet stuck to it finishes LTC4. Platelet–leukocyte aggregates are enriched in AERD.',
         detailed: `Dominas: platelets adhere to neutrophils, monocytes and eosinophils, which are enriched in the sinonasal tissue of AERD, and platelets express LTC4 synthase, contributing to cysteinyl leukotriene production; 5-LO dysregulation is therefore achieved through several cell types, each a drug target (§2).\n\nApplication: this is why antiplatelet strategies were studied: ifetroban (thromboxane receptor antagonist) and prasugrel, which blocks transcellular CysLT synthesis and was being tested for reducing challenge reactions (Dominas §5.8).\n\nKnowledge addition: the adhesion is P-selectin-dependent (Laidlaw and Boyce, JACI 2015, cited by Dominas as ref 52). Cahill 2019 found high-dose aspirin did not change platelet–leukocyte aggregates (item q27).\n\nPearl: eosinophils and mast cells have their own LTC4 synthase; the platelet step matters most for neutrophil- and monocyte-derived LTA4.`,
+        explanationImage: IMG + 'transcellular-ltc4.svg',
+        explanationImageAlt: 'Schematic: a neutrophil converts arachidonic acid by 5-LO and FLAP to LTA4 and is labelled no LTC4 synthase; LTA4 passes across a P-selectin adhesion zone to an adherent platelet whose LTC4 synthase makes LTC4, exported as LTC4, LTD4, LTE4, marked increased in AERD. Caption notes antiplatelet drugs studied in AERD.',
         concepts: ['platelets', 'cysteinyl-leukotrienes'],
     },
     {
@@ -201,6 +209,8 @@ const ITEMS = [
         answer: `Alarmins: IL-33 and TSLP (both reviews); IL-25 (Priessnitz).\nTargets: ILC2s (rapid IL-5 and IL-13 → eosinophil recruitment, mucus hypersecretion) and mast cells.\nLink: TSLP drives mast-cell PGD2 generation; IL-33 and TSLP signals reach effector cells through mast-cell mediators such as PGD2.`,
         brief: 'The epithelium sits upstream of the whole cascade. That position is the rationale for tezepelumab (anti-TSLP), which acts above IL-4, IL-5, IL-13 and mast-cell activation.',
         detailed: `Dominas: IL-33 and TSLP are overexpressed in AERD polyp tissue; blocking them prevented aspirin-induced changes in lung function and mast-cell mediator release (mechanistic work, not a clinical trial); one theory is that mast cells relay the upstream IL-33 and TSLP signal through PGD2 (§2, citing Buchheit 2016, "TSLP controls PGD2 generation").\n\nPriessnitz adds macrophages, which interact with epithelium and innate cells to sustain inflammation and remodelling (§1.1).\n\nApplication: IL-33 and TSLP are named as candidate biomarkers of activity and response, not yet validated (Priessnitz §4.5).\n\nPearl: ILC2s make IL-5 and IL-13 without antigen or IgE, which is how AERD can be intensely type 2 in a non-atopic patient.`,
+        explanationImage: IMG + 'type2-cascade-targets.svg',
+        explanationImageAlt: 'Schematic cascade: airway epithelium releases TSLP, IL-33 and IL-25 to Th2 cells and ILC2s, which make IL-5 and IL-4 with IL-13. IL-5 acts on IL-5Rα on eosinophils; IL-4 and IL-13 act on IL-4Rα, driving IgE class switch, mucus and FeNO; IgE binds FcεRI on mast cells, whose mediators are PGD2, cysteinyl leukotrienes, histamine and tryptase. Side boxes mark where tezepelumab, mepolizumab and reslizumab, benralizumab, dupilumab and omalizumab block.',
         concepts: ['alarmins', 'pgd2-mast-cell'],
     },
     {
@@ -256,6 +266,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'The nose comes first and the drug reaction comes last. Median onset is about 34 years, and the average gap from symptoms to diagnosis is about 10 years.',
         detailed: `Dominas §3: AERD presents from late childhood to adulthood, median onset about 34 years (Berges-Gimeno 2002). Nasal congestion and rhinorrhea are usually first; hyposmia tends to come later and signals CRSwNP. Asthma develops about 2 years after the first upper airway symptoms, and aspirin intolerance typically 4 years later (Szczeklik 2000).\n\nApplication: because the NSAID reaction comes last, many patients took NSAIDs without trouble earlier in life and keep taking them, which is one reason for the 10-year diagnostic gap (Dominas §1, §3).\n\nCaveat: "4 years later" is ambiguous in Dominas (after asthma, or after the first symptom); the order, not the interval, is the robust fact.\n\nPearl: rapid polyp recurrence after ESS is itself a prompt to look for AERD.`,
+        explanationImage: IMG + 'natural-history.svg',
+        explanationImageAlt: 'Timeline, not to scale: 1 rhinitis, 2 hyposmia and nasal polyps, 3 asthma about 2 years after nasal onset, 4 NSAID reactions about 4 years later, 5 diagnosis; a bracket marks an average gap of about 10 years from symptom onset to diagnosis. Median onset about 34 years.',
         concepts: ['natural-history'],
     },
     {
@@ -314,6 +326,8 @@ const ITEMS = [
         answer: `Doses: 40.5 mg → 81 mg → 162.5 mg → 325 mg.\nInterval: every 90 minutes until a reaction or 325 mg.\nMeasured before each dose: symptom scores, vital signs, spirometry; FEV1 every 30 minutes up to 120 minutes after the final dose.\nDesensitized: tolerates a repeat of the provoking dose and at least one further dose, reaching 325 mg or more.\nDuration: about 9 hours (mean 9 h 29 min); 93% finish in 1 day.\nEntry: stable asthma, FEV1 ≥70% predicted.`,
         brief: 'Start at 40.5 mg and step up every 90 minutes. Desensitization is reached by pushing through the reaction: repeat the provoking dose, then keep going.',
         detailed: `DeGregorio 2019 (PubMed 30391549; Dominas cites it as 2018), 44 patients: 93% completed in 1 day, 2 chose 2 days, 1 stopped for abdominal pain and diarrhea; none needed epinephrine, an ED visit or admission. Dominas gives the start dose, the 90-minute interval, the 325 mg ceiling and the measurements (§4, §5.3); the intermediate doses are from DeGregorio.\n\nApplication: the same day both diagnoses AERD (a reaction) and desensitizes, so challenge and treatment are one visit.\n\nCaveat: dosing differs by country with the available tablet strengths; some European protocols use 50 or 100 mg multiples up to 800 mg (Dominas §5.3).`,
+        explanationImage: IMG + 'challenge-timeline.svg',
+        explanationImageAlt: 'Timeline over 9 hours of the 1-day aspirin protocol. Lane A: doses of 40.5, 81, 162.5 and 325 mg every 90 minutes with no reaction, then 2 hours of observation, negative. Lane B: reaction 30 to 60 minutes after 81 mg, treated, then 81 mg repeated, 162.5 and 325 mg, desensitized. Ticks mark FEV1 every 30 minutes.',
         concepts: ['challenge-protocol'],
     },
     {
@@ -328,6 +342,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'Most reactions come between about 45 and 100 mg, within 30 to 60 minutes. No new reactions occur at 650 mg and above, which is why reaching that dose without a reaction rules out AERD.',
         detailed: `Dominas §4: typical provoking dose 30 to 150 mg, average 60 to 75 mg (Szczeklik 2003); doses usually start at 20 to 40 mg with most symptoms between 45 and 100 mg within 30 to 60 minutes; increments 3 hours or less apart; no additional reactions at 650 mg and greater (Hope 2009). If no response occurs regardless of dose, the patient does not have aspirin sensitivity.\n\nCaveat: the 1-day protocol stops at 325 mg; the 650 mg statement comes from the older multi-day data. Whether a negative challenge at 325 mg is as secure as one at 650 mg is not addressed in either review.\n\nPearl: the 90-minute interval exists because reactions can take up to an hour to appear.`,
+        explanationImage: IMG + 'challenge-timeline.svg',
+        explanationImageAlt: 'Timeline over 9 hours of the 1-day aspirin protocol. Lane A: doses of 40.5, 81, 162.5 and 325 mg every 90 minutes with no reaction, then 2 hours of observation, negative. Lane B: reaction 30 to 60 minutes after 81 mg, treated, then 81 mg repeated, 162.5 and 325 mg, desensitized. Ticks mark FEV1 every 30 minutes.',
         concepts: ['challenge-protocol', 'challenge-reading'],
     },
     {
@@ -342,6 +358,8 @@ const ITEMS = [
         correct: 'b',
         brief: 'A fall in FEV1 of more than 20% is the bronchial criterion, but an unequivocal upper airway (naso-ocular) reaction also counts as positive.',
         detailed: `Discrepancy: Dominas defines a positive reaction as a fall in FEV1 greater than 20% and uses spirometry because the response may not be evident on examination (§4, citing Nizankowska 2000). It does not say whether isolated naso-ocular reactions count.\n\nKnowledge addition: the EAACI position paper (Kowalski 2019, Priessnitz ref 12) accepts a positive oral challenge as an FEV1 fall of 20% or more and/or clear naso-ocular or extrabronchial symptoms. In practice the reaction is often mainly upper airway, especially on leukotriene-modifier pretreatment (item q19).\n\nApplication: this patient has AERD. To desensitize, settle the reaction, repeat the 81 mg dose, and continue (item q16).`,
+        explanationImage: IMG + 'challenge-reading.svg',
+        explanationImageAlt: 'Decision flow: no reaction through 325 mg (or 650 mg multi-day) is negative; a reaction with FEV1 fall of 20% or more is positive (bronchial); otherwise a clear naso-ocular reaction is positive by the EAACI definition; mild nonspecific symptoms are not positive. Notes the Dominas FEV1-only definition and that leukotriene-modifier pretreatment shifts reactions to the upper airway.',
         concepts: ['challenge-reading'],
     },
     {
@@ -356,6 +374,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'Leukotriene-modifier pretreatment makes the challenge safer by shifting reactions away from the bronchi.',
         detailed: `Dominas §4: clinicians can use leukotriene-modifying drugs during challenge protocols to limit the severity of the reaction; with montelukast and zileuton pretreatment, AERD patients had a 10% to 20% increase in FEV1, less severe asthma attacks and fewer lower respiratory tract symptoms (White 2006; Li 2019).\n\nCaveat: the claim that upper airway reactions are preserved (so the diagnosis is not masked) is from White 2006 as summarized in the allergy literature, not stated in Dominas. Whether zileuton pretreatment causes false-negative challenges is not addressed in either review; the owner should verify local practice.\n\nPearl: pretreatment changes what a positive challenge looks like. Expect more naso-ocular and fewer bronchial reactions (item q18).`,
+        explanationImage: IMG + 'challenge-reading.svg',
+        explanationImageAlt: 'Decision flow: no reaction through 325 mg (or 650 mg multi-day) is negative; a reaction with FEV1 fall of 20% or more is positive (bronchial); otherwise a clear naso-ocular reaction is positive by the EAACI definition; mild nonspecific symptoms are not positive. Notes the Dominas FEV1-only definition and that leukotriene-modifier pretreatment shifts reactions to the upper airway.',
         concepts: ['challenge-protocol', 'leukotriene-modifiers'],
     },
 
@@ -387,6 +407,8 @@ const ITEMS = [
         correct: 'c',
         brief: 'Two to four weeks postoperatively: the mucosa has begun to heal and the leukotriene-producing polyp burden is at its lowest.',
         detailed: `Dominas §5.1 and §5.3: desensitization has optimal effects roughly 2 to 4 weeks postoperatively (Lee and Stevenson 2011) and is thought to be safer after surgery because the leukotriene-containing polyp tissue burden is reduced.\n\nApplication: in Case 2 the revision ESS and the desensitization are scheduled as a pair.\n\nPearl: waiting months lets polyps regrow, which erases the reason to wait.`,
+        explanationImage: IMG + 'atad-timeline.svg',
+        explanationImageAlt: 'Timeline: ESS at day 0 lowers urinary LTE4 and raises PGE2; desensitization in a 2 to 4 week window; then a bar of daily aspirin indefinitely; a dashed gap labelled more than 48 hours off leads to a red X, tolerance lost, restart only by supervised redesensitization. Caption lists harms and about 40% discontinuation.',
         concepts: ['atad-maintenance', 'ess'],
     },
     {
@@ -429,6 +451,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'Statistically significant, probably clinically meaningful on average, but not certainly so. Dominas makes the same point: the mean, not the 95% CI, exceeded the MCID.',
         detailed: `Chu 2019 (PubMed 31518069; Dominas §5.3): mean daily aspirin dose 800 mg; quality of life improved (RR 2.00), SNOT-22 mean difference 10.27 (95% CI 6.39 to 14.15, moderate certainty); respiratory symptoms improved (high certainty). MCID 9.0 from Chowdhury 2017.\n\nMethodological points: an MCID describes the average patient; a mean change above it does not mean most patients cross it. The trials used high daily doses, so the result may not transfer to lower maintenance doses.\n\nCaveat: Dominas prints the CI with negative signs (−6.39 to −14.15) beside a positive "improvement"; the sign convention is lower-is-better, the magnitude is the same.\n\nPearl: ATAD also slows polyp regrowth, lengthens surgery-free intervals, improves smell and reduces steroid need (Dominas §5.3).`,
+        explanationImage: IMG + 'atad-snot22-mcid.svg',
+        explanationImageAlt: 'Chart of SNOT-22 improvement versus placebo with aspirin desensitization: point estimate 10.27 with a 95% confidence interval from 6.39 to 14.15, a vertical dashed line at the MCID of 9.0, and a shaded zone below the MCID. The interval excludes zero, but its lower bound lies below the MCID.',
         concepts: ['atad-efficacy', 'evidence-quality'],
     },
     {
@@ -457,6 +481,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'Aspirin must be taken daily in perpetuity; tolerance is lost if it is stopped for more than 48 hours.',
         detailed: `Dominas §5.3: after desensitization, aspirin must be taken daily; desensitization is lost if aspirin is discontinued for over 48 hours. Desensitization must be supervised by a trained physician in an equipped clinic, because severe reactions can occur.\n\nApplication: every planned procedure, GI illness or nonadherence episode becomes a redesensitization. This is part of why biologics are often preferred in patients with frequent planned surgery (a clinical judgment, not a trial result).\n\nCaveat: maintenance dose varies; Dominas notes country differences and up to 800 mg/day in some European protocols. US practice commonly uses 650 mg twice daily or 325 mg twice daily (knowledge addition; the allergy-testing module gives the same). Cahill 2019 used 1,300 mg daily.`,
+        explanationImage: IMG + 'atad-timeline.svg',
+        explanationImageAlt: 'Timeline: ESS at day 0 lowers urinary LTE4 and raises PGE2; desensitization in a 2 to 4 week window; then a bar of daily aspirin indefinitely; a dashed gap labelled more than 48 hours off leads to a red X, tolerance lost, restart only by supervised redesensitization. Caption lists harms and about 40% discontinuation.',
         concepts: ['atad-maintenance'],
     },
     {
@@ -514,6 +540,8 @@ const ITEMS = [
         answer: `Omalizumab — free IgE (anti-IgE).\nDupilumab — IL-4 receptor α (blocks IL-4 and IL-13).\nMepolizumab — IL-5.\nReslizumab — IL-5.\nBenralizumab — IL-5 receptor α (depletes eosinophils).\nTezepelumab — thymic stromal lymphopoietin (TSLP).`,
         brief: 'Five targets in three tiers: upstream alarmin (TSLP), cytokine receptor (IL-4Rα), and effector pathways (IgE, IL-5, IL-5Rα).',
         detailed: `Priessnitz §3 reviews each in turn. Neither review covers a biologic designed for AERD; all were developed for asthma, CRSwNP or atopic disease, and AERD use is extrapolated from those trials and their AERD subgroups (Priessnitz §1).\n\nPearl: the higher the target sits in the cascade, the broader the expected effect across phenotypes, the logic behind tezepelumab in mixed or low-eosinophil disease (Priessnitz §3.5).`,
+        explanationImage: IMG + 'type2-cascade-targets.svg',
+        explanationImageAlt: 'Schematic cascade: airway epithelium releases TSLP, IL-33 and IL-25 to Th2 cells and ILC2s, which make IL-5 and IL-4 with IL-13. IL-5 acts on IL-5Rα on eosinophils; IL-4 and IL-13 act on IL-4Rα, driving IgE class switch, mucus and FeNO; IgE binds FcεRI on mast cells, whose mediators are PGD2, cysteinyl leukotrienes, histamine and tryptase. Side boxes mark where tezepelumab, mepolizumab and reslizumab, benralizumab, dupilumab and omalizumab block.',
         concepts: ['biologic-targets'],
     },
     {
@@ -528,6 +556,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'One receptor chain, two cytokines. Blocking IL-4Rα shuts down IgE synthesis, eosinophil recruitment, mucus hypersecretion and alternative macrophage activation together.',
         detailed: `Priessnitz §3.2.1: dupilumab is a fully human monoclonal antibody against IL-4Rα; because the subunit is shared by both cytokine pathways, it suppresses multiple downstream components of type 2 inflammation. The type I/type II receptor composition is a knowledge addition.\n\nApplication: dupilumab was first approved for atopic dermatitis, then for moderate-to-severe eosinophilic or steroid-dependent asthma, and was the first biologic approved for CRSwNP (Dominas §5.5).\n\nPearl: it is not a depleting antibody. Blood eosinophils can transiently rise on dupilumab (item q36), the opposite of benralizumab.`,
+        explanationImage: IMG + 'il4-receptors.svg',
+        explanationImageAlt: 'Schematic of two receptors in a cell membrane: type I, IL-4Rα with the common gamma chain, binding IL-4 only; type II, IL-4Rα with IL-13Rα1, binding IL-4 or IL-13. Both signal to STAT6. A dupilumab antibody is drawn on the IL-4Rα chain of each.',
         concepts: ['dupilumab'],
     },
     {
@@ -542,6 +572,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'Dupilumab raised nasal PGE2 and lowered nasal and urinary LTE4, IgE and nasal albumin, yet nasal eosinophilia was unchanged. Its effect is not eosinophil depletion.',
         detailed: `Buchheit 2022 (PubMed 35460728): smell, sinonasal symptoms and lung function improved within 1 month and stayed improved at 3 months. Baseline smell loss correlated with lower nasal PGE2. Dupilumab increased nasal PGE2 and decreased nasal albumin (a leak marker), nasal and urinary LTE4, and serum and nasal IgE; inferior turbinate transcripts of epithelial dysfunction and leukocyte activation and migration fell. There were no dupilumab-induced changes in nasal eosinophilia. The authors attribute the effect to reduced IL-4Rα signalling on granulocytes, epithelial cells and B cells.\n\nApplication: this is the mechanistic answer to why depleting eosinophils (anti-IL-5) often fails the nose while dupilumab succeeds (item q41).\n\nDiscrepancy: the draft said dupilumab "downregulates LTC4 synthase and 15-LOX-1 and upregulates COX-2"; the paper reports mediator levels and transcripts, not those specific enzyme changes.`,
+        explanationImage: IMG + 'type2-cascade-targets.svg',
+        explanationImageAlt: 'Schematic cascade: airway epithelium releases TSLP, IL-33 and IL-25 to Th2 cells and ILC2s, which make IL-5 and IL-4 with IL-13. IL-5 acts on IL-5Rα on eosinophils; IL-4 and IL-13 act on IL-4Rα, driving IgE class switch, mucus and FeNO; IgE binds FcεRI on mast cells, whose mediators are PGD2, cysteinyl leukotrienes, histamine and tryptase. Side boxes mark where tezepelumab, mepolizumab and reslizumab, benralizumab, dupilumab and omalizumab block.',
         concepts: ['dupilumab', 'pge2-brake'],
     },
     {
@@ -570,6 +602,8 @@ const ITEMS = [
         correct: 'b',
         brief: 'Know each scale’s direction. Higher Lund–Mackay, SNOT-22, NPS and NCS mean worse disease; higher UPSIT means better smell.',
         detailed: `Discrepancy: Priessnitz §3.2.2 writes the four severity scores as increases. The SINUS trials (Bachert 2019; 724 patients, 204 [28%] with AERD) reported improvements in all of them, and the review itself says the AERD subgroup achieved polyp shrinkage and less sinus opacification. Read the magnitudes as placebo-adjusted reductions (LMS −6.33, SNOT-22 −24.35, NPS −1.89, NCS −1.17) and UPSIT +10.17.\n\nCaveat: these subgroup values are as reported by Priessnitz; the primary AERD-subgroup publication was not checked for this module. AERD in SINUS was defined by history, not challenge.\n\nPearl: scales: NPS 0 to 8 (0 to 4 per side), NCS 0 to 3, SNOT-22 0 to 110, Lund–Mackay 0 to 24, UPSIT 0 to 40.`,
+        explanationImage: IMG + 'score-directions.svg',
+        explanationImageAlt: 'Table of outcome scales with range and direction of improvement: NPS 0–8 lower, NCS 0–3 lower, SNOT-22 0–110 lower, Lund–Mackay 0–24 lower, UPSIT 0–40 higher, ACT 5–25 higher, ACQ-6 0–6 lower, FEV1 higher. Printed dupilumab values +1.89, +1.17, +24.35, +6.33 are shown in red and corrected to negative; UPSIT +10.17 stays positive.',
         concepts: ['dupilumab', 'evidence-quality'],
     },
     {
@@ -598,6 +632,8 @@ const ITEMS = [
         correct: 'b',
         brief: 'Less free IgE means fewer FcεRI receptors and calmer mast cells, so both the leukotriene and the PGD2 arms fall.',
         detailed: `Priessnitz §3.1.1: omalizumab is a humanized antibody binding circulating IgE, preventing FcεRI-mediated mast cell and basophil activation, and downregulating FcεRI expression. In AERD this may reduce mast-cell reactivity and blunt aspirin-induced mediator release. Binding the Cε3 domain is a knowledge addition.\n\nDominas §5.5 (Hayashi 2016, n=21): LTE4 down 76.2%, 9α,11β-PGF2 down 89.0%; symptoms improved within the first week in 52.4% and within 3 months in 18 of 21 (3 non-responders).\n\nDiscrepancy: the draft assigned the 76.2%/89.0% figures to the 2020 randomized trial. They are from the 2016 open study. The 2020 trial is item q38.\n\nPearl: the effect occurs even though AERD reactions are not IgE-mediated; the target is mast-cell readiness, not the drug.`,
+        explanationImage: IMG + 'type2-cascade-targets.svg',
+        explanationImageAlt: 'Schematic cascade: airway epithelium releases TSLP, IL-33 and IL-25 to Th2 cells and ILC2s, which make IL-5 and IL-4 with IL-13. IL-5 acts on IL-5Rα on eosinophils; IL-4 and IL-13 act on IL-4Rα, driving IgE class switch, mucus and FeNO; IgE binds FcεRI on mast cells, whose mediators are PGD2, cysteinyl leukotrienes, histamine and tryptase. Side boxes mark where tezepelumab, mepolizumab and reslizumab, benralizumab, dupilumab and omalizumab block.',
         concepts: ['omalizumab', 'pgd2-mast-cell'],
     },
     {
@@ -626,6 +662,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'Ligand neutralization starves eosinophils of IL-5; receptor targeting with an afucosylated Fc actively destroys them, so benralizumab gives near-total depletion in blood and tissue.',
         detailed: `Priessnitz §3.3.1 and §3.4.1: mepolizumab and reslizumab are humanized antibodies to IL-5 that reduce eosinophil maturation, survival and recruitment. Benralizumab is an afucosylated humanized antibody to IL-5Rα; binding promotes NK-cell-mediated apoptosis, depleting circulating and tissue eosinophils almost completely. FcγRIIIa and the effect of afucosylation on Fc binding are knowledge additions.\n\nApplication: reslizumab is given intravenously by weight and carries a risk of infusion reactions and occasional asymptomatic CPK elevation (Priessnitz §3.3.4); its anaphylaxis boxed warning is a knowledge addition. Benralizumab raises a theoretical concern about helminth infection, not confirmed in practice (§3.4.4).\n\nPearl: depletion depth is not the same as sinonasal benefit (item q41).`,
+        explanationImage: IMG + 'il5-vs-il5ra.svg',
+        explanationImageAlt: 'Two panels: left, mepolizumab or reslizumab antibody binds IL-5 so it cannot reach the empty IL-5Rα on an eosinophil; right, benralizumab binds IL-5Rα on the eosinophil and its afucosylated Fc engages FcγRIIIa on an NK cell, causing ADCC and near-complete depletion. A box notes that IL-4/IL-13, mast cells and leukotrienes continue.',
         concepts: ['anti-il5', 'biologic-safety'],
     },
     {
@@ -654,6 +692,8 @@ const ITEMS = [
         correct: 'c',
         brief: 'Eosinophil depletion controls eosinophilic asthma, but the AERD nose runs on more than eosinophils. Switching to dupilumab or tezepelumab is the usual next step.',
         detailed: `Priessnitz §3.4.2: in OSTRO (CRSwNP, 29.2% AERD) benralizumab improved NPS, nasal blockage, SNOT-22 and UPSIT, without an AERD-specific analysis. Some patients had less congestion and slower recurrence, others ongoing sinus symptoms despite complete blood eosinophil suppression; case reports describe better asthma control with persistent anosmia and obstruction that resolved after switching to tezepelumab, attributed to residual mast-cell or leukotriene activity (Yamashita 2024). Another study found variable impact, mean SNOT-22 −8.91 over 24 weeks.\n\nKnowledge addition: benralizumab is approved for asthma and EGPA but not for CRSwNP.\n\nCaveat: the tezepelumab switch evidence here is a single case report, not a series. The dupilumab switch evidence is a real-world cohort (Bavaro 2021).\n\nPearl: Buchheit 2022 found dupilumab helped without changing nasal eosinophils (item q33): the two findings fit together.`,
+        explanationImage: IMG + 'il5-vs-il5ra.svg',
+        explanationImageAlt: 'Two panels: left, mepolizumab or reslizumab antibody binds IL-5 so it cannot reach the empty IL-5Rα on an eosinophil; right, benralizumab binds IL-5Rα on the eosinophil and its afucosylated Fc engages FcγRIIIa on an NK cell, causing ADCC and near-complete depletion. A box notes that IL-4/IL-13, mast cells and leukotrienes continue.',
         concepts: ['anti-il5'],
     },
     {
@@ -668,6 +708,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'NAVIGATOR AERD subgroup: exacerbations −83% (95% CI 66 to 91). Tezepelumab’s AERD evidence is strongest for the lower airway.',
         detailed: `Carr 2024 (PubMed 38802635): pre-specified and post hoc NAVIGATOR subgroup analyses (210 mg SC every 4 weeks, 52 weeks); patients with aspirin or NSAID sensitivity had the greatest reduction, 83% (95% CI 66 to 91). Laidlaw 2023 (PubMed 37692126): in patients with nasal polyps in the prior 2 years, exacerbations fell 85% (n=118), and SNOT-22 −10.58 vs placebo at week 52. Pooled PATHWAY/NAVIGATOR: FEV1 +0.23 L over placebo in the overall population, consistent in AERD (Priessnitz §3.5.3).\n\nMethodological point: "aspirin or NSAID sensitivity" was taken from history, not challenge, and the subgroup is small, hence the wide CI.\n\nPearl: TSLP sits upstream of dendritic cells, ILC2s and mast cells, which is why efficacy does not depend on eosinophil count (Priessnitz §3.5.1).`,
+        explanationImage: IMG + 'type2-cascade-targets.svg',
+        explanationImageAlt: 'Schematic cascade: airway epithelium releases TSLP, IL-33 and IL-25 to Th2 cells and ILC2s, which make IL-5 and IL-4 with IL-13. IL-5 acts on IL-5Rα on eosinophils; IL-4 and IL-13 act on IL-4Rα, driving IgE class switch, mucus and FeNO; IgE binds FcεRI on mast cells, whose mediators are PGD2, cysteinyl leukotrienes, histamine and tryptase. Side boxes mark where tezepelumab, mepolizumab and reslizumab, benralizumab, dupilumab and omalizumab block.',
         concepts: ['tezepelumab'],
     },
     {
@@ -706,7 +748,9 @@ const ITEMS = [
         ],
         correct: 'b',
         brief: 'Dupilumab was the only biologic with significant improvement: median SNOT-22 51 → 19, steroid bursts 2 → 0, antibiotic courses 1 → 0. Most discontinuations elsewhere were for inadequate sinonasal response.',
-        detailed: `Wangberg 2022 (PubMed 34597850): 74 patients; 41.9% had tried more than one biologic. No statistically significant change in those outcomes on anti-IgE or anti-IL-5/IL-5Rα.\n\nDiscrepancy: Priessnitz §3.6 splits discontinuation as about 50% for benralizumab and omalizumab and nearly 70% for mepolizumab and reslizumab; the abstract pools the IL-5 agents (26.9% persistence, i.e. about 73% discontinuation). The split is not checkable from the abstract.\n\nMethodological points: retrospective and single-centre; patients with worse sinus disease may have been channelled to dupilumab, and earlier biologics were tried before dupilumab existed, so "still prescribed" also reflects time and sequence.\n\nPearl: a subset with predominantly eosinophil-driven disease does well long term on benralizumab alone (Priessnitz §3.6).`,
+        detailed: `Wangberg 2022 (PubMed 34597850): 74 patients; 41.9% had tried more than one biologic. No statistically significant change in those outcomes on anti-IgE or anti-IL-5/IL-5Rα.\n\nDiscrepancy: Priessnitz §3.6 splits discontinuation as about 50% for benralizumab and omalizumab and nearly 70% for mepolizumab and reslizumab; the abstract pools the IL-5 agents (26.9% persistence, i.e. about 73% discontinuation). The split is not checkable from the abstract.\n\nMethodological points: retrospective (Priessnitz calls it multicentre; the abstract describes a real-world clinic pilot); patients with worse sinus disease may have been channelled to dupilumab, and earlier biologics were tried before dupilumab existed, so "still prescribed" also reflects time and sequence.\n\nPearl: a subset with predominantly eosinophil-driven disease does well long term on benralizumab alone (Priessnitz §3.6).`,
+        explanationImage: IMG + 'persistence-bars.svg',
+        explanationImageAlt: 'Bar charts. A, Wangberg 2022: still prescribed at study end, anti-IL-4Rα 98% (49/50), anti-IgE 48.6% (17/35), anti-IL-5/IL-5Rα 26.9% (7/26). B, Kumar 2026: ATAD persisted about 60% and stopped about 40%; biologics persisted about 80% and stopped about 20%. A box states the discontinuation ratio 2.0 and persistence ratio 1.33.',
         concepts: ['real-world', 'evidence-quality'],
     },
     {
@@ -765,6 +809,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'Twice the discontinuation is not twice the persistence: 60% vs 80% is a ratio of 1.33. About 25% of patients switched agents.',
         detailed: `Kumar 2026 (PubMed 41269030): contemporary AERD care commonly includes aspirin desensitization (55%) and biologics (48%); ATAD has higher discontinuation; biologic patients are younger; about 25% switch to other agents. Priessnitz §5.1 phrases it as about 25% transitioning from ATAD to a biologic for inadequate control or intolerance.\n\nDiscrepancy: the draft stated biologics have "twice the persistence". Correct the arithmetic before quoting it.\n\nMethodological point: utilization data describe what was done, not what works. Patients on biologics were younger and probably differed in severity and insurance, so discontinuation rates are not a comparison of efficacy.\n\nPearl: ATAD is cheap and biologics are expensive; Priessnitz notes that cost-effectiveness in AERD is unstudied (§5.3).`,
+        explanationImage: IMG + 'persistence-bars.svg',
+        explanationImageAlt: 'Bar charts. A, Wangberg 2022: still prescribed at study end, anti-IL-4Rα 98% (49/50), anti-IgE 48.6% (17/35), anti-IL-5/IL-5Rα 26.9% (7/26). B, Kumar 2026: ATAD persisted about 60% and stopped about 40%; biologics persisted about 80% and stopped about 20%. A box states the discontinuation ratio 2.0 and persistence ratio 1.33.',
         concepts: ['real-world', 'evidence-quality'],
     },
     {
@@ -860,6 +906,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'An unequivocal naso-ocular reaction at a provoking dose is a positive challenge, and on montelukast that is the expected form. The same visit can become desensitization.',
         detailed: `Rungs used: provoking dose and timing (q17), reading the challenge and the definitional discrepancy (q18), leukotriene-modifier pretreatment shifting reactions upward (q19), desensitization definition (q16), PGD2 and flushing (q6).\n\nApplication: AERD is now established, so his future NSAID exposure, his surgical plan (q20, q21) and his biologic options (q47) all follow from this result.`,
+        explanationImage: IMG + 'challenge-timeline.svg',
+        explanationImageAlt: 'Timeline over 9 hours of the 1-day aspirin protocol. Lane A: doses of 40.5, 81, 162.5 and 325 mg every 90 minutes with no reaction, then 2 hours of observation, negative. Lane B: reaction 30 to 60 minutes after 81 mg, treated, then 81 mg repeated, 162.5 and 325 mg, desensitized. Ticks mark FEV1 every 30 minutes.',
         concepts: ['case-new-dx', 'challenge-reading'],
     },
     {
@@ -874,6 +922,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'Surgery removes the leukotriene-producing tissue; desensitizing into that window makes the reaction milder and starts maintenance before regrowth.',
         detailed: `Rungs used: ESS lowers LTE4 and raises PGE2 (q20); timing (q21); ATAD efficacy and the MCID problem (q24).\n\nApplication: tell her the realistic benefit (SNOT-22 about 10 points on average, with slower regrowth and less steroid use) and the realistic cost (GI adverse events, q25; daily dosing for life, q26).`,
+        explanationImage: IMG + 'atad-timeline.svg',
+        explanationImageAlt: 'Timeline: ESS at day 0 lowers urinary LTE4 and raises PGE2; desensitization in a 2 to 4 week window; then a bar of daily aspirin indefinitely; a dashed gap labelled more than 48 hours off leads to a red X, tolerance lost, restart only by supervised redesensitization. Caption lists harms and about 40% discontinuation.',
         concepts: ['case-atad', 'atad-maintenance', 'ess'],
     },
     {
@@ -902,6 +952,8 @@ const ITEMS = [
         correct: 'c',
         brief: 'Desensitization is a state, not a cure. After 48 hours off aspirin she is fully sensitive again.',
         detailed: `Rungs used: the 48-hour rule (q26); class-wide COX-1 cross-reactivity (q1); COX-2 selectivity (q3).\n\nCaveat: acetaminophen is a weak COX-1 inhibitor; higher single doses have provoked reactions in a minority of AERD patients (knowledge addition, not in either source). Many clinicians give the first COX-2 inhibitor dose under observation.\n\nPearl: put "AERD, not desensitized; avoid NSAIDs" in the chart the day aspirin stops.`,
+        explanationImage: IMG + 'atad-timeline.svg',
+        explanationImageAlt: 'Timeline: ESS at day 0 lowers urinary LTE4 and raises PGE2; desensitization in a 2 to 4 week window; then a bar of daily aspirin indefinitely; a dashed gap labelled more than 48 hours off leads to a red X, tolerance lost, restart only by supervised redesensitization. Caption lists harms and about 40% discontinuation.',
         concepts: ['case-atad', 'atad-maintenance', 'cox-selectivity'],
     },
     {
@@ -916,6 +968,8 @@ const ITEMS = [
         correct: 'a',
         brief: 'Read biomarkers against the therapy. On anti-IL-5, a low eosinophil count is expected; disease activity is shown by the polyps, the symptoms, the admissions and the FeNO.',
         detailed: `Rungs used: anti-IL-5 mechanism (q39); eosinophil depletion without nasal control (q41); biomarker meanings (q48); dupilumab acting without eosinophil change (q33).\n\nThe naive answer, that low eosinophils mean the disease is not type 2, ignores that the count was measured on an eosinophil-lowering drug.\n\nKnowledge addition: FeNO above about 25 to 50 ppb is generally taken as raised in adults (ATS); 40 ppb is intermediate to raised.`,
+        explanationImage: IMG + 'il5-vs-il5ra.svg',
+        explanationImageAlt: 'Two panels: left, mepolizumab or reslizumab antibody binds IL-5 so it cannot reach the empty IL-5Rα on an eosinophil; right, benralizumab binds IL-5Rα on the eosinophil and its afucosylated Fc engages FcγRIIIa on an NK cell, causing ADCC and near-complete depletion. A box notes that IL-4/IL-13, mast cells and leukotrienes continue.',
         concepts: ['case-switch', 'biomarkers', 'anti-il5'],
     },
     {
@@ -930,6 +984,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'Biologic failure → dupilumab or tezepelumab. Dupilumab has a real-world switch cohort after anti-IL-5 failure and the most consistent sinonasal evidence.',
         detailed: `Rungs used: the failure box of the phenotype framework (q47); Bavaro 2021, AERD patients with inadequate response to anti-IL-5 or anti-IL-5Rα who improved in SNOT-22, ACT and exacerbations after switching to dupilumab (Priessnitz §3.6); Wangberg persistence (q45); EVEREST (q46).\n\nWhy the distractors fail: more IL-5 blockade cannot help when IL-5 is already neutralized; stacking two IL-5-pathway agents adds nothing mechanistic; omalizumab is matched to allergic asthma, not chosen by default.\n\nPearl: revision surgery may still be needed, but it should not be the substitute for an effective biologic.`,
+        explanationImage: IMG + 'priessnitz-fig2-algorithm.png',
+        explanationImageAlt: 'Priessnitz Figure 2 flow chart: severe CRSwNP to dupilumab; allergic or IgE-mediated asthma to omalizumab; severe eosinophilic asthma to mepolizumab with prominent sinonasal disease or benralizumab without; mixed phenotype to tezepelumab; biologic failure to dupilumab or tezepelumab.',
         concepts: ['case-switch', 'phenotype-algorithm', 'real-world'],
     },
     {
@@ -958,6 +1014,8 @@ const ITEMS = [
         correct: 'd',
         brief: 'Her problem is severe eosinophilic asthma without prominent sinonasal disease: benralizumab. Dupilumab’s advantage is mostly in the nose, which is already controlled.',
         detailed: `Rungs used: phenotype framework (q47); anti-IL-5Rα mechanism and depth of depletion (q39); a subset with eosinophil-driven disease does well on benralizumab alone (q45 pearl); biomarkers (q48): very high eosinophils, low FeNO, no atopy.\n\nThe naive answer is dupilumab, "the best AERD biologic". Mepolizumab is also reasonable and has CRSwNP data if the nose relapses; the framework places it where sinonasal disease is prominent.\n\nKnowledge addition: the dupilumab asthma trials excluded baseline eosinophils above 1,500 cells/µL, and the label cautions about eosinophilic conditions; at 1,250 the transient rise on dupilumab is a further reason to prefer an eosinophil-depleting agent.`,
+        explanationImage: IMG + 'priessnitz-fig2-algorithm.png',
+        explanationImageAlt: 'Priessnitz Figure 2 flow chart: severe CRSwNP to dupilumab; allergic or IgE-mediated asthma to omalizumab; severe eosinophilic asthma to mepolizumab with prominent sinonasal disease or benralizumab without; mixed phenotype to tezepelumab; biologic failure to dupilumab or tezepelumab.',
         concepts: ['case-eos-asthma', 'phenotype-algorithm', 'anti-il5'],
     },
     {

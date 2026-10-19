@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Transcellular LTC4 synthesis by platelet–leukocyte aggregates (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b23a2e"/></marker>
+  </defs>
+  <rect width="800" height="400" fill="#ffffff"/>
+
+  <!-- neutrophil -->
+  <circle cx="180" cy="170" r="122" fill="#f5f4f0" stroke="#1d1d1b" stroke-width="1.8"/>
+  <text x="180" y="80" text-anchor="middle" font-weight="bold">Neutrophil</text>
+  <text x="180" y="122" text-anchor="middle">arachidonic acid</text>
+  <path d="M180,130 L180,156" stroke="#1d1d1b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="180" y="176" text-anchor="middle">5-LO + FLAP</text>
+  <path d="M180,184 L180,210" stroke="#1d1d1b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="180" y="230" text-anchor="middle" font-weight="bold">LTA4</text>
+  <text x="180" y="262" text-anchor="middle" font-size="13" fill="#2f5d8a">no LTC4 synthase</text>
+
+  <!-- adhesion -->
+  <rect x="300" y="150" width="72" height="40" fill="#ecebe7"/>
+  <text x="336" y="276" text-anchor="middle" font-size="12.5" fill="#444">P-selectin adhesion</text>
+  <path d="M336,262 L336,194" stroke="#9a978f" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <!-- platelet -->
+  <ellipse cx="472" cy="170" rx="100" ry="68" fill="#f6e4e1" stroke="#b23a2e" stroke-width="2"/>
+  <text x="472" y="132" text-anchor="middle" font-weight="bold">Adherent platelet</text>
+  <text x="472" y="166" text-anchor="middle">LTC4 synthase</text>
+  <path d="M472,174 L472,186" stroke="#1d1d1b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="472" y="204" text-anchor="middle" font-weight="bold" fill="#b23a2e">LTC4</text>
+  <text x="472" y="222" text-anchor="middle" font-size="12" fill="#444">no 5-LO of its own</text>
+
+  <!-- LTA4 hand-off -->
+  <path d="M206,226 C280,236 330,172 414,160" stroke="#1d1d1b" stroke-width="1.6" fill="none" marker-end="url(#arr)"/>
+
+  <!-- export -->
+  <path d="M572,170 L610,170" stroke="#b23a2e" stroke-width="2" marker-end="url(#arrR)"/>
+  <text x="618" y="164" font-weight="bold" fill="#b23a2e">LTC4 → LTD4 → LTE4</text>
+  <text x="618" y="184" font-size="13">cysteinyl leukotrienes</text>
+  <text x="618" y="202" font-size="13">↑ in AERD</text>
+
+  <g font-size="13.5">
+    <text x="20" y="334">Neither cell can make LTC4 alone; the pair can. Platelet–leukocyte aggregates are enriched in AERD</text>
+    <text x="20" y="353">sinonasal tissue, which adds to cysteinyl leukotriene overproduction (Dominas §2). This is why antiplatelet</text>
+    <text x="20" y="372">drugs (prasugrel, the thromboxane-receptor antagonist ifetroban) were studied in AERD (Dominas §5.8).</text>
+    <text x="20" y="392" font-size="12.5" fill="#444">Schematic. P-selectin adhesion is a knowledge addition (Laidlaw and Boyce, JACI 2015).</text>
+  </g>
+</svg>

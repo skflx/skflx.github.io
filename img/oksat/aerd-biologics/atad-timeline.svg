@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 376" width="860" height="376" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>ESS, aspirin desensitization, maintenance and the 48-hour rule (schematic)</title>
+  <rect width="860" height="376" fill="#ffffff"/>
+
+  <!-- base line -->
+  <line x1="40" y1="160" x2="650" y2="160" stroke="#cfcdc7" stroke-width="2"/>
+
+  <!-- ESS -->
+  <rect x="34" y="140" width="12" height="40" fill="#1d1d1b"/>
+  <text x="40" y="128" text-anchor="middle" font-weight="bold">ESS</text>
+  <text x="40" y="204" text-anchor="middle" font-size="12.5" fill="#444">day 0</text>
+  <text x="60" y="74" font-size="13">polyp tissue removed:</text>
+  <text x="60" y="92" font-size="13">urinary LTE4 ↓, PGE2 ↑, milder reactions</text>
+  <path d="M60,98 L100,150" stroke="#9a978f" stroke-width="1" fill="none"/>
+
+  <!-- window -->
+  <rect x="170" y="148" width="80" height="24" fill="#e7edf3" stroke="#2f5d8a" stroke-width="1.6"/>
+  <text x="210" y="204" text-anchor="middle" font-size="13" font-weight="bold" fill="#2f5d8a">2–4 weeks</text>
+  <text x="210" y="221" text-anchor="middle" font-size="12.5" fill="#444">desensitize here</text>
+  <path d="M210,148 L210,124" stroke="#2f5d8a" stroke-width="1.2"/>
+  <text x="210" y="118" text-anchor="middle" font-size="13">1-day desensitization (to ≥325 mg)</text>
+
+  <!-- maintenance -->
+  <rect x="250" y="152" width="310" height="16" rx="4" fill="#1d1d1b"/>
+  <text x="405" y="140" text-anchor="middle" font-size="13.5" font-weight="bold">daily aspirin, indefinitely</text>
+  <text x="405" y="194" text-anchor="middle" font-size="12.5" fill="#444">e.g. 650 or 325 mg twice daily (US);</text>
+  <text x="405" y="210" text-anchor="middle" font-size="12.5" fill="#444">dosing varies by country</text>
+
+  <!-- gap -->
+  <rect x="568" y="152" width="50" height="16" fill="#ffffff" stroke="#b23a2e" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="593" y="140" text-anchor="middle" font-size="13" font-weight="bold" fill="#b23a2e">&gt;48 h off</text>
+  <path d="M630,150 L650,170 M650,150 L630,170" stroke="#b23a2e" stroke-width="3"/>
+  <text x="664" y="166" font-size="13.5" font-weight="bold" fill="#b23a2e">tolerance lost</text>
+  <text x="664" y="188" font-size="12.5">fully sensitive again:</text>
+  <text x="664" y="204" font-size="12.5">NSAIDs can react; restart</text>
+  <text x="664" y="220" font-size="12.5">only by supervised</text>
+  <text x="664" y="236" font-size="12.5">redesensitization</text>
+
+  <g font-size="13">
+    <text x="20" y="276">Why the window: the leukotriene-producing polyp burden is lowest and the mucosa has begun to heal (Dominas §5.1, §5.3).</text>
+    <text x="20" y="296">Why the rule: the desensitized state lasts only while aspirin is taken daily; any surgery, GI illness or missed doses</text>
+    <text x="20" y="314">beyond 48 hours means a new supervised desensitization. A selective COX-2 inhibitor remains an analgesic option.</text>
+    <text x="20" y="336">Harms: about 4× more discontinuation-level adverse events (gastritis, bleeding); ATAD stopped in ≈40% in practice.</text>
+    <text x="20" y="362" font-size="12.5" fill="#444">Not to scale. Sources: Dominas 2020; Chu 2019 (harms); Kumar 2026 (discontinuation).</text>
+  </g>
+</svg>
