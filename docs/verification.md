@@ -110,6 +110,9 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - **SRS write**: `oksat:srs:<slug>:<rev>` gains an item with Leitner `box`
   1–5 and a `nextReview` date. A cold recall jumps two boxes; a correct MCQ,
   one; a miss resets to box 1.
+- **Navigation**: **Continue** opens the first unanswered (or due) item; `u` and
+  **Next unanswered** skip answered items, wrapping; the jump slider
+  (`input.ok-jump-range`) previews while dragged and jumps only on release.
 - **Review attempt**: an answered item whose `nextReview` has passed opens at
   the gate with its old answer hidden and its options enabled; answering it
   moves `box` and `nextReview` but leaves `answers`/`firstCorrect` alone, and
@@ -117,7 +120,7 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - **Keyboard**: at the gate space/enter reveals and `c` opens the choices;
   then `1`–`4` self-grade a revealed answer, or `1`–`9`/`a`–`d` select an
   option once the choices are open; `←`/`→` navigate, space/enter advance,
-  `r` random, `h`/esc home (`docs/design-principles.md` §1.6). Automated:
+  `u` next unanswered, `r` random, `h`/esc home (`docs/design-principles.md` §1.6). Automated:
   `c` opens choices + `1` selects, space reveals + `4` grades cold, `→`
   advances, `h` home.
 - **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*` (now by

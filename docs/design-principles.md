@@ -33,8 +33,10 @@ only tokens, never raw values, so a retheme is a one-block edit.
 6. **Keyboard first.** At the gate, space/enter reveals the answer for a memory
    attempt and `c` opens the choices; then 1–4 self-grade a revealed answer, or
    1–9/a–d select an option once the choices are open. ←/→ navigate,
-   space/enter advance once answered, `r` random, `h`/esc home. The pointer is
-   optional.
+   space/enter advance once answered, `u` next unanswered (or due), `r` random,
+   `h`/esc home. The pointer is optional. Below the item, a jump slider
+   previews any question (number, section, status) and jumps on release, and
+   **Continue** on the module home opens the first unanswered question.
 7. **Token-driven theming.** Light/dark (`data-theme`) and font sets
    (`data-font`) are attribute switches on `<html>`; no component knows which
    theme it is in.
