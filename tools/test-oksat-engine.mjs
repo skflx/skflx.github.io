@@ -21,8 +21,10 @@
    it and tags progress mode 'mcq'. The recall path ("Reveal answer", or space)
    shows the answer and a 1–4 self-grade that tags mode 'recall'.
    An MCQ option button renders the option id uppercased in a fixed-width
-   leading cell; the button is disabled once answered (first-attempt lock,
-   recordAnswer() early-returns if answers[qId] exists).
+   leading cell; the button is disabled once answered (first-attempt lock:
+   answers/firstCorrect/modes are written once and never overwritten).
+   Review: an answered item whose srs nextReview <= today opens fresh at the
+   gate; one review attempt per due date moves only srs (box, nextReview).
    pediatrics q1: correct='b' (used to pick a deliberate wrong answer).
 
    Usage:  node tools/test-oksat-engine.mjs [--base <url>] [--headed]
@@ -186,6 +188,35 @@ async function main() {
     check('5b: recall grade recorded as correct', id0 && prog.firstCorrect[id0] === true, `firstCorrect=${JSON.stringify(prog && prog.firstCorrect)}`);
     check('5c: recall answer tagged mode "recall"', id0 && prog.modes && prog.modes[id0] === 'recall', `modes=${JSON.stringify(prog && prog.modes)}`);
     check('5d: "knew it cold" jumps Leitner box to 3', id0 && srs.items[id0] && srs.items[id0].box === 3, `box=${id0 && srs.items[id0] && srs.items[id0].box}`);
+    await context.close();
+  }
+
+  /* ---- Case 6: review attempt on a due item ---- */
+  {
+    // q1 answered wrong long ago, due since 2020: review must open it fresh,
+    // accept a new answer, move the Leitner box, and leave the first attempt alone.
+    const seed = `try{localStorage.setItem('${PROGRESS}',JSON.stringify({v:1,answers:{q1:'a'},firstCorrect:{q1:false},modes:{q1:'mcq'}}));` +
+      `localStorage.setItem('${SRS}',JSON.stringify({v:1,items:{q1:{box:1,nextReview:'2020-01-01'}}}));}catch(e){}`;
+    const { context, page } = await openStudy(browser, base, seed);
+    await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Review due/.test(b.textContent)), null, { timeout: 8000 });
+    await page.evaluate(() => { const b = [...document.querySelectorAll('button')].find((x) => /Review due/.test(x.textContent)); b && b.click(); });
+    await page.waitForTimeout(400);
+    const atGate = await page.evaluate(() => [...document.querySelectorAll('button')].some((b) => /Show the choices/.test(b.textContent)) && !document.querySelector('[role="radiogroup"]'));
+    check('6a: due item opens at the gate, old answer hidden', atGate, 'no fresh recall gate on the due item');
+    await openChoices(page);
+    const anyLocked = await page.$$eval(optionButtons, (bs) => bs.some((b) => b.disabled));
+    check('6b: review options are answerable (not locked)', !anyLocked, 'options disabled on a due item');
+    await page.$$eval(optionButtons, (bs) => { const b = bs.find((x) => x.textContent.trim().startsWith('B')); b && b.click(); });
+    await page.waitForTimeout(300);
+    const prog = await ls(page, PROGRESS);
+    const srs = await ls(page, SRS);
+    const t = new Date().toISOString().split('T')[0];
+    check('6c: first attempt unchanged by review', prog.answers.q1 === 'a' && prog.firstCorrect.q1 === false, `progress=${JSON.stringify(prog)}`);
+    check('6d: correct review moves box 1→2, next review in the future', srs.items.q1.box === 2 && srs.items.q1.nextReview > t, `srs=${JSON.stringify(srs.items.q1)}`);
+    await page.$$eval(optionButtons, (bs) => { const b = bs.find((x) => x.textContent.trim().startsWith('A')); b && b.click(); });
+    await page.waitForTimeout(200);
+    const srs2 = await ls(page, SRS);
+    check('6e: one review attempt per due date', srs2.items.q1.box === 2, `box after 2nd click=${srs2.items.q1.box}`);
     await context.close();
   }
 

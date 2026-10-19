@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 450" width="780" height="450" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Type I and type II IL-4 receptors and dupilumab (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+  </defs>
+  <rect width="780" height="450" fill="#ffffff"/>
+
+  <text x="190" y="30" text-anchor="middle" font-weight="bold">Type I receptor</text>
+  <text x="190" y="50" text-anchor="middle" font-size="13.5" fill="#444">mainly blood-derived cells (B and T cells)</text>
+  <text x="560" y="30" text-anchor="middle" font-weight="bold">Type II receptor</text>
+  <text x="560" y="50" text-anchor="middle" font-size="13.5" fill="#444">epithelium, smooth muscle, fibroblasts, myeloid cells</text>
+
+  <!-- membrane -->
+  <rect x="20" y="236" width="740" height="22" fill="#ecebe7"/>
+  <text x="30" y="252" font-size="12" fill="#666">cell membrane</text>
+
+  <!-- ligands -->
+  <circle cx="165" cy="105" r="26" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="165" y="110" text-anchor="middle" font-weight="bold">IL-4</text>
+  <circle cx="510" cy="100" r="26" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="510" y="105" text-anchor="middle" font-weight="bold">IL-4</text>
+  <circle cx="615" cy="100" r="26" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="615" y="105" text-anchor="middle" font-weight="bold">IL-13</text>
+  <text x="562" y="104" text-anchor="middle" font-size="13" fill="#444">or</text>
+
+  <!-- receptor chains: IL-4Rα in red -->
+  <g stroke-width="2">
+    <rect x="140" y="150" width="34" height="140" rx="10" fill="#f6e4e1" stroke="#b23a2e"/>
+    <rect x="196" y="150" width="34" height="140" rx="10" fill="#ffffff" stroke="#1d1d1b"/>
+    <rect x="490" y="150" width="34" height="140" rx="10" fill="#f6e4e1" stroke="#b23a2e"/>
+    <rect x="546" y="150" width="34" height="140" rx="10" fill="#ffffff" stroke="#1d1d1b"/>
+  </g>
+  <g stroke="#1d1d1b" stroke-width="1.3" fill="none" marker-end="url(#arr)">
+    <path d="M168,131 L176,148"/>
+    <path d="M520,126 L530,148"/>
+    <path d="M605,126 L575,148"/>
+  </g>
+  <g font-size="13" text-anchor="middle">
+    <text x="157" y="312" fill="#b23a2e" font-weight="bold">IL-4Rα</text>
+    <text x="213" y="312">γc</text>
+    <text x="507" y="312" fill="#b23a2e" font-weight="bold">IL-4Rα</text>
+    <text x="563" y="312">IL-13Rα1</text>
+  </g>
+  <text x="190" y="336" text-anchor="middle" font-size="13.5">binds IL-4 only</text>
+  <text x="560" y="336" text-anchor="middle" font-size="13.5">binds IL-4 and IL-13</text>
+  <text x="190" y="354" text-anchor="middle" font-size="12.5" fill="#444">JAK1/JAK3 → STAT6</text>
+  <text x="560" y="354" text-anchor="middle" font-size="12.5" fill="#444">JAK1/TYK2 → STAT6</text>
+
+  <!-- dupilumab antibodies on both IL-4Rα chains -->
+  <g stroke="#1d1d1b" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M100,200 L124,200 M124,200 L138,188 M124,200 L138,212"/>
+    <path d="M450,200 L474,200 M474,200 L488,188 M474,200 L488,212"/>
+  </g>
+  <text x="96" y="186" text-anchor="end" font-size="13.5" font-weight="bold">dupilumab</text>
+  <text x="446" y="186" text-anchor="end" font-size="13.5" font-weight="bold">dupilumab</text>
+
+  <g font-size="13.5">
+    <text x="20" y="392">Dupilumab binds the IL-4Rα chain, which is part of both receptors, so it blocks IL-4 signalling through</text>
+    <text x="20" y="411">type I and type II and IL-13 signalling through type II. It neutralizes signalling; it does not deplete cells.</text>
+    <text x="20" y="436" font-size="12.5" fill="#444">Schematic. Receptor composition and JAK pairs are standard immunology, not from the module’s two reviews.</text>
+  </g>
+</svg>

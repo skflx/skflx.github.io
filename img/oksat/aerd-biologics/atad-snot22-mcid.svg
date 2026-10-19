@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 350" width="760" height="350" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>ATAD effect on SNOT-22 versus the MCID (Chu 2019 meta-analysis)</title>
+  <rect width="760" height="350" fill="#ffffff"/>
+
+  <text x="20" y="28" font-weight="bold">Aspirin desensitization vs placebo: SNOT-22 improvement (points)</text>
+  <text x="20" y="48" font-size="13" fill="#444">5 RCTs, 233 patients, mean daily dose 800 mg (Chu 2019)</text>
+
+  <!-- below-MCID zone -->
+  <rect x="70" y="80" width="360" height="110" fill="#f2f2ef"/>
+  <text x="250" y="100" text-anchor="middle" font-size="12.5" fill="#444">smaller than the MCID</text>
+
+  <!-- gridline at 0 and MCID -->
+  <line x1="70" y1="76" x2="70" y2="200" stroke="#1d1d1b" stroke-width="1.4"/>
+  <line x1="430" y1="76" x2="430" y2="200" stroke="#2f5d8a" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="434" y="74" font-size="13" font-weight="bold" fill="#2f5d8a">MCID 9.0</text>
+  <text x="74" y="74" font-size="12.5" fill="#444">no effect</text>
+
+  <!-- CI and point -->
+  <line x1="325.6" y1="145" x2="636" y2="145" stroke="#b23a2e" stroke-width="2.5"/>
+  <line x1="325.6" y1="135" x2="325.6" y2="155" stroke="#b23a2e" stroke-width="2.5"/>
+  <line x1="636" y1="135" x2="636" y2="155" stroke="#b23a2e" stroke-width="2.5"/>
+  <circle cx="480.8" cy="145" r="7" fill="#b23a2e" stroke="#ffffff" stroke-width="2"/>
+  <text x="480.8" y="128" text-anchor="middle" font-size="13.5" font-weight="bold">mean 10.27</text>
+  <text x="325.6" y="176" text-anchor="middle" font-size="12.5">6.39</text>
+  <text x="636" y="176" text-anchor="middle" font-size="12.5">14.15</text>
+
+  <!-- axis -->
+  <line x1="70" y1="200" x2="710" y2="200" stroke="#1d1d1b" stroke-width="1.2"/>
+  <g stroke="#1d1d1b"><path d="M70,200 v6 M150,200 v6 M230,200 v6 M310,200 v6 M390,200 v6 M470,200 v6 M550,200 v6 M630,200 v6 M710,200 v6"/></g>
+  <g font-size="12" text-anchor="middle" fill="#444">
+    <text x="70" y="222">0</text><text x="150" y="222">2</text><text x="230" y="222">4</text><text x="310" y="222">6</text><text x="390" y="222">8</text><text x="470" y="222">10</text><text x="550" y="222">12</text><text x="630" y="222">14</text><text x="710" y="222">16</text>
+  </g>
+  <text x="390" y="242" text-anchor="middle" font-size="12.5" fill="#444">SNOT-22 improvement vs placebo (95% CI)</text>
+
+  <g font-size="13.5">
+    <text x="20" y="276">• The interval excludes 0: the effect is statistically significant.</text>
+    <text x="20" y="296">• The mean is above the MCID: the average effect is probably clinically meaningful.</text>
+    <text x="20" y="316">• The lower bound (6.39) is below the MCID: a clinically unimportant average effect is not excluded.</text>
+    <text x="20" y="340" font-size="12.5" fill="#444">MCID 9.0 from Chowdhury 2017. An MCID describes the average patient, not the share of patients who improve.</text>
+  </g>
+</svg>

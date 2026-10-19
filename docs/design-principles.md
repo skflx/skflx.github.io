@@ -26,7 +26,10 @@ only tokens, never raw values, so a retheme is a one-block edit.
 5. **First-attempt honesty.** An answer locks on first attempt — whether
    recalled from memory or picked from the choices — no re-answering to game
    the score. Spaced repetition (Leitner, 5 boxes) resurfaces what was missed;
-   the progress dots show the truthful record.
+   the progress dots show the truthful record. Reviews are separate attempts:
+   when an item comes due it reopens fresh at the gate, with the old answer
+   hidden, and one attempt per due date moves only its Leitner box and next
+   date. The first attempt is never overwritten.
 6. **Keyboard first.** At the gate, space/enter reveals the answer for a memory
    attempt and `c` opens the choices; then 1–4 self-grade a revealed answer, or
    1–9/a–d select an option once the choices are open. ←/→ navigate,

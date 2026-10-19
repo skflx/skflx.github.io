@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 655" width="880" height="655" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Type 2 cascade and where each biologic acts (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+    <marker id="tee" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto"><path d="M5,0 L5,10" stroke="#b23a2e" stroke-width="3"/></marker>
+  </defs>
+  <rect width="880" height="655" fill="#ffffff"/>
+
+  <!-- cascade boxes -->
+  <g fill="none" stroke="#1d1d1b" stroke-width="1.4">
+    <rect x="236" y="20" width="408" height="46" rx="4"/>
+    <rect x="236" y="96" width="408" height="46" rx="4"/>
+    <rect x="236" y="172" width="194" height="44" rx="4"/>
+    <rect x="450" y="172" width="194" height="44" rx="4"/>
+    <rect x="236" y="246" width="194" height="44" rx="4"/>
+    <rect x="450" y="246" width="194" height="44" rx="4"/>
+    <rect x="236" y="320" width="194" height="74" rx="4"/>
+    <rect x="450" y="320" width="194" height="74" rx="4"/>
+    <rect x="236" y="424" width="408" height="44" rx="4"/>
+    <rect x="236" y="498" width="408" height="74" rx="4" stroke="#b23a2e" stroke-width="2"/>
+  </g>
+  <g stroke="#1d1d1b" stroke-width="1.4" fill="none" marker-end="url(#arr)">
+    <path d="M440,66 L440,94"/>
+    <path d="M380,142 L333,170"/>
+    <path d="M500,142 L547,170"/>
+    <path d="M333,216 L333,244"/>
+    <path d="M547,216 L547,244"/>
+    <path d="M333,290 L333,318"/>
+    <path d="M547,290 L547,318"/>
+    <path d="M547,394 L547,422"/>
+    <path d="M440,468 L440,496"/>
+  </g>
+  <!-- alarmins act directly on mast cells -->
+  <path d="M236,50 L222,50 L222,535 L234,535" stroke="#1d1d1b" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#arr)"/>
+
+  <text x="440" y="40" text-anchor="middle" font-weight="bold">Airway epithelium</text>
+  <text x="440" y="58" text-anchor="middle" font-size="13.5">alarmins: TSLP · IL-33 · IL-25</text>
+  <text x="440" y="124" text-anchor="middle">Th2 cells · ILC2s</text>
+  <text x="333" y="199" text-anchor="middle" font-weight="bold">IL-5</text>
+  <text x="547" y="199" text-anchor="middle" font-weight="bold">IL-4 · IL-13</text>
+  <text x="333" y="273" text-anchor="middle" font-size="14">IL-5Rα on eosinophils</text>
+  <text x="547" y="273" text-anchor="middle" font-size="14">IL-4Rα (type I and II)</text>
+  <text x="333" y="345" text-anchor="middle" font-size="13.5">Eosinophil maturation,</text>
+  <text x="333" y="363" text-anchor="middle" font-size="13.5">recruitment, survival</text>
+  <text x="333" y="381" text-anchor="middle" font-size="12.5" fill="#444">blood count = biomarker</text>
+  <text x="547" y="343" text-anchor="middle" font-size="13.5">B-cell IgE class switch</text>
+  <text x="547" y="361" text-anchor="middle" font-size="13.5">mucus, barrier loss</text>
+  <text x="547" y="379" text-anchor="middle" font-size="13.5">iNOS → FeNO</text>
+  <text x="440" y="451" text-anchor="middle">IgE → FcεRI on mast cells and basophils</text>
+  <text x="440" y="520" text-anchor="middle" font-weight="bold" fill="#b23a2e">Mast cell mediators</text>
+  <text x="440" y="540" text-anchor="middle" font-size="13.5">PGD2 · cysteinyl leukotrienes · histamine · tryptase</text>
+  <text x="440" y="560" text-anchor="middle" font-size="13.5">PGD2 → CRTH2 recruits eosinophils, basophils, ILC2s</text>
+
+  <!-- drug pills -->
+  <g stroke="#1d1d1b" stroke-width="1.2" fill="#f2f2ef">
+    <rect x="668" y="23" width="200" height="40" rx="8"/>
+    <rect x="12" y="174" width="200" height="40" rx="8"/>
+    <rect x="12" y="248" width="200" height="40" rx="8"/>
+    <rect x="668" y="248" width="200" height="40" rx="8"/>
+    <rect x="668" y="426" width="200" height="40" rx="8"/>
+  </g>
+  <g stroke="#b23a2e" stroke-width="2" fill="none" marker-end="url(#tee)">
+    <path d="M668,43 L648,43"/>
+    <path d="M212,194 L232,194"/>
+    <path d="M212,268 L232,268"/>
+    <path d="M668,268 L648,268"/>
+    <path d="M668,446 L648,446"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="768" y="40" font-weight="bold">tezepelumab</text>
+    <text x="768" y="56" font-size="12.5" fill="#444">anti-TSLP: upstream of all</text>
+    <text x="112" y="191" font-weight="bold">mepolizumab · reslizumab</text>
+    <text x="112" y="207" font-size="12.5" fill="#444">anti-IL-5: neutralize ligand</text>
+    <text x="112" y="265" font-weight="bold">benralizumab</text>
+    <text x="112" y="281" font-size="12.5" fill="#444">anti-IL-5Rα: ADCC kills cell</text>
+    <text x="768" y="265" font-weight="bold">dupilumab</text>
+    <text x="768" y="281" font-size="12.5" fill="#444">anti-IL-4Rα: IL-4 + IL-13</text>
+    <text x="768" y="443" font-weight="bold">omalizumab</text>
+    <text x="768" y="459" font-size="12.5" fill="#444">anti-IgE: FcεRI falls</text>
+  </g>
+
+  <g font-size="12.5" fill="#444">
+    <text x="12" y="600">Red bar = what the drug blocks. Dashed line: TSLP and IL-33 also activate mast cells directly, so only tezepelumab acts above them.</text>
+    <text x="12" y="619">AERD-specific: dupilumab raised nasal PGE2 and lowered nasal and urinary LTE4 without changing nasal eosinophils (Buchheit 2022).</text>
+    <text x="12" y="638">Schematic; simplified (mast cells and eosinophils also make IL-4, IL-13 and leukotrienes).</text>
+  </g>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 420" width="860" height="420" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Brigham 1-day aspirin challenge and desensitization (schematic)</title>
+  <rect width="860" height="420" fill="#ffffff"/>
+
+  <text x="20" y="28" font-weight="bold">1-day protocol: 40.5 → 81 → 162.5 → 325 mg, one step every 90 minutes</text>
+  <text x="20" y="48" font-size="13" fill="#444">Before each dose: symptom score, vital signs, spirometry. FEV1 every 30 min, to 120 min after the last dose.</text>
+
+  <!-- lane A -->
+  <text x="20" y="92" font-size="13.5" font-weight="bold">A · No reaction</text>
+  <line x1="70" y1="112" x2="590" y2="112" stroke="#1d1d1b" stroke-width="2"/>
+  <line x1="430" y1="112" x2="590" y2="112" stroke="#9a978f" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+  <g fill="#1d1d1b">
+    <circle cx="70" cy="112" r="7"/><circle cx="190" cy="112" r="7"/><circle cx="310" cy="112" r="7"/><circle cx="430" cy="112" r="7"/>
+  </g>
+  <g font-size="13" text-anchor="middle">
+    <text x="70" y="138">40.5</text><text x="190" y="138">81</text><text x="310" y="138">162.5</text><text x="430" y="138">325 mg</text>
+    <text x="510" y="102" fill="#444" font-size="12.5">observe 2 h</text>
+  </g>
+  <text x="604" y="108" font-size="13.5" font-weight="bold">Negative:</text>
+  <text x="604" y="126" font-size="13">AERD unlikely (classic multi-day</text>
+  <text x="604" y="142" font-size="13">protocols go to ≥650 mg)</text>
+
+  <!-- lane B -->
+  <text x="20" y="194" font-size="13.5" font-weight="bold">B · Reaction at 81 mg, then desensitization</text>
+  <line x1="70" y1="216" x2="790" y2="216" stroke="#1d1d1b" stroke-width="2"/>
+  <rect x="230" y="200" width="40" height="32" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.6"/>
+  <line x1="630" y1="216" x2="790" y2="216" stroke="#9a978f" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
+  <g fill="#1d1d1b">
+    <circle cx="70" cy="216" r="7"/><circle cx="510" cy="216" r="7"/><circle cx="630" cy="216" r="7"/>
+  </g>
+  <circle cx="190" cy="216" r="8" fill="#b23a2e"/>
+  <circle cx="390" cy="216" r="8" fill="#ffffff" stroke="#b23a2e" stroke-width="2.4"/>
+  <g font-size="13" text-anchor="middle">
+    <text x="70" y="244">40.5</text>
+    <text x="190" y="244" fill="#b23a2e" font-weight="bold">81</text>
+    <text x="250" y="252" fill="#b23a2e" font-size="12.5">reaction</text>
+    <text x="250" y="267" fill="#b23a2e" font-size="12.5">30–60 min</text>
+    <text x="390" y="244" fill="#b23a2e">81 again</text>
+    <text x="510" y="244">162.5</text>
+    <text x="630" y="244">325 mg</text>
+    <text x="710" y="206" fill="#444" font-size="12.5">observe</text>
+  </g>
+  <text x="330" y="207" font-size="12.5" fill="#444" text-anchor="middle">treat, let it settle</text>
+  <text x="604" y="290" font-size="13.5" font-weight="bold">Desensitized:</text>
+  <text x="604" y="308" font-size="13">tolerates the provoking dose again</text>
+  <text x="604" y="324" font-size="13">and ≥1 further dose, to ≥325 mg</text>
+
+  <!-- time axis -->
+  <line x1="70" y1="360" x2="800" y2="360" stroke="#1d1d1b" stroke-width="1.2"/>
+  <g stroke="#1d1d1b" stroke-width="1">
+    <path d="M70,360 v6 M110,360 v3 M150,360 v6 M190,360 v3 M230,360 v6 M270,360 v3 M310,360 v6 M350,360 v3 M390,360 v6 M430,360 v3 M470,360 v6 M510,360 v3 M550,360 v6 M590,360 v3 M630,360 v6 M670,360 v3 M710,360 v6 M750,360 v3 M790,360 v6"/>
+  </g>
+  <g font-size="12" text-anchor="middle" fill="#444">
+    <text x="70" y="380">0 h</text><text x="150" y="380">1</text><text x="230" y="380">2</text><text x="310" y="380">3</text><text x="390" y="380">4</text><text x="470" y="380">5</text><text x="550" y="380">6</text><text x="630" y="380">7</text><text x="710" y="380">8</text><text x="790" y="380">9 h</text>
+  </g>
+  <text x="20" y="408" font-size="12.5" fill="#444">Short ticks = FEV1 every 30 min. Mean completion 9 h 29 min; 93% finish in 1 day (DeGregorio 2019). Lane B repeat timing is illustrative.</text>
+</svg>

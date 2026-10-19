@@ -110,6 +110,10 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - **SRS write**: `oksat:srs:<slug>:<rev>` gains an item with Leitner `box`
   1–5 and a `nextReview` date. A cold recall jumps two boxes; a correct MCQ,
   one; a miss resets to box 1.
+- **Review attempt**: an answered item whose `nextReview` has passed opens at
+  the gate with its old answer hidden and its options enabled; answering it
+  moves `box` and `nextReview` but leaves `answers`/`firstCorrect` alone, and
+  a second click in the same review changes nothing.
 - **Keyboard**: at the gate space/enter reveals and `c` opens the choices;
   then `1`–`4` self-grade a revealed answer, or `1`–`9`/`a`–`d` select an
   option once the choices are open; `←`/`→` navigate, space/enter advance,
