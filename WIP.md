@@ -20,14 +20,19 @@ mirrors it as `--ok-*` tokens; Airway's dark stage uses its night palette.
 
 ## Figures: ASCII 3D (`js/ascii3d.js`, `js/diagrams/`)
 
-**State:** A software renderer draws each figure except Fig. 1 into a
+**State:** A software renderer draws every figure into a
 monospace grid (z-buffered, Blinn-Phong shading mapped to glyphs, contour
 glyphs at silhouettes and part edges). Figures turn, take drag and arrow keys,
 re-shade on a theme flip, and stop off-screen or under reduced motion. The same
 core runs in Node (`tools/ascii3d.mjs`), which bakes the no-JS frames.
 
-- **Fig. 2** (one-pager, Research): binaural pitch fusion. Schematic, not data;
-  owner to vet the depiction and caption.
+- **Fig. 1** (one-pager, About): the owner's cochlea, fitted to their CT (A, B,
+  H, lateral-wall CDL), with the FLEX28 on the lateral wall and the spiral
+  ganglion ending near 1.75 turns. Turn count, canal width, ganglion radius
+  and the full-insertion contact angles are assumed; owner to vet.
+- **Fig. 2** (one-pager, Research): binaural pitch fusion in two bimodal
+  listeners, narrow vs broad. Widths follow the published 1-4 octave range;
+  the curves are schematic. Owner to vet the depiction and caption.
 - **Leitner staircase** (OKSAT hub): its intervals are checked against the engine.
 - **Larynx** (Airway setup screen): schematic adult-male proportions; owner to vet.
 
@@ -40,9 +45,8 @@ semicircular canal planes.
 ## One-pager (`index.html`)
 
 **State:** An index: name beside a background-removed portrait, then five open
-numbered sections with sticky heads on desktop. Fig. 1 (the cochlea, drawn to
-the owner's own implant; `tools/gen-cochlea.py`) sits in About; Fig. 2 in
-Research. The residency year is computed in `js/onepager.js` and duplicated as
+numbered sections with sticky heads on desktop. Fig. 1 (the cochlea, fitted to
+the owner's own CT and implant) sits in About; Fig. 2 in Research. The residency year is computed in `js/onepager.js` and duplicated as
 a no-JS fallback in the HTML; change both or neither.
 
 **Next (owner):** add the CV. The hero link is removed until `documents/cv.pdf`

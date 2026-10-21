@@ -1,14 +1,19 @@
 /* =============================================================
    fusion — Fig. 2 on the one-pager (index.html, 04 Research).
-   Binaural pitch fusion as a shaded surface ribbed by twelve
-   curves, one fusion function per electrode of a twelve-channel
-   array (the FLEX28 of Fig. 1): the chance that a tone in the
-   hearing-aid ear is heard as one sound with that electrode. The
-   fused region (P >= .5) is blue; its width is the fusion range.
+   Binaural pitch fusion in two bimodal listeners, side by side.
+   Each panel is a hidden-line waterfall of twelve curves, one per
+   electrode of a twelve-channel array (apex in front, base behind):
+   the chance that a tone in the hearing-aid ear is heard as one
+   sound with that electrode. The fused span (P >= .5) is blue; its
+   width is the fusion range. Left, a listener at the narrow end of
+   the bimodal range; right, one at the broad end, where most of
+   the tone axis fuses with any electrode.
 
-   SCHEMATIC, NOT DATA. Curve centers follow electrode order
-   (apex = low pitch) and every width is invented; the caption in
-   index.html says so. Owner review: docs/decisions.md §7.
+   SCHEMATIC, NOT DATA. Widths are set to the range reported for
+   bimodal CI users, 1-4 octaves (Reiss et al. 2014, JARO 15:235);
+   curve centers, their spacing and the per-electrode jitter are
+   invented. The caption in index.html says so. Owner review:
+   docs/decisions.md §7.
    Preview: node tools/ascii3d.mjs render fusion --inks
    Schema:  docs/diagrams.md
    ============================================================= */
@@ -17,59 +22,73 @@
     if (!window.ASCII3D) return;
 
     var N = 12;                 /* channels */
-    var X0 = 0, X1 = 10;        /* tone axis, low -> high (log frequency) */
-    var DZ = 0.8;               /* electrode spacing, front (apex) -> back (base) */
-    var H = 2.6;                /* height of P(fused) = 1 */
-    var WIDTH = 1.35;           /* half-width at P = 0.5 */
+    var OCT = 5;                /* tone axis: 125 Hz to 4 kHz, in octaves */
+    var DZ = 0.5;               /* electrode spacing, front (apex) -> back (base) */
+    var LIFT = 0.36;            /* each curve's baseline steps up: a ridgeline */
+    var H = 1.15;               /* height of P(fused) = 1 */
+    var GAP = 1.6;              /* space between the panels, octaves */
 
-    function center(e) { return 1.6 + e * 0.62; }
-    function P(e, x) { return 1 / (1 + Math.pow((x - center(e)) / WIDTH, 4)); }
-
-    /* ink by meaning: fused (P >= .5) blue; near-zero floor faint */
-    function inkFor(p) { return p >= 0.5 ? 'science' : p < 0.1 ? 'faint' : 'ink'; }
-
-    var parts = [
-        /* the fusion surface, electrodes interpolated between curves */
-        {
-            kind: 'heightfield', x: [X0, X1, 60], z: [0, (N - 1) * DZ, 44],
-            fn: function (x, z) { return H * P(z / DZ, x); },
-            inkAt: function (x, z) { return inkFor(P(z / DZ, x)); }
-        }
+    /* the two listeners: fusion range (P >= .5) in octaves, and an
+       invented electrode-to-electrode wobble so neither looks ideal */
+    var LISTENERS = [
+        { x0: 0, range: 1.0, wobble: 0.15, title: 'narrow fusion\n~1 octave' },
+        { x0: OCT + GAP, range: 3.6, wobble: 0.5, title: 'broad fusion\n~3.5 octaves' }
     ];
-    /* one rib per electrode: the measured curve, split where its ink changes */
-    for (var e = 0; e < N; e++) {
-        var run = [], cls = null;
-        for (var i = 0; i <= 80; i++) {
-            var x = X0 + (X1 - X0) * i / 80, pr = P(e, x), k = inkFor(pr);
-            var pt = [x, H * pr + 0.02, e * DZ];
-            if (k !== cls && run.length) {
+
+    function center(e) { return 0.9 + e * 0.27; }                 /* octaves above 125 Hz */
+    function jitter(e) { return Math.sin(e * 2.3 + 0.7); }        /* fixed, -1..1 */
+    function half(L, e) { return (L.range + L.wobble * jitter(e)) / 2; }
+    function P(L, e, x) { return 1 / (1 + Math.pow((x - center(e)) / half(L, e), 4)); }
+
+    var parts = [], labels = [];
+    LISTENERS.forEach(function (L) {
+        for (var e = 0; e < N; e++) {
+            /* an opaque curtain under each curve hides the curves behind it */
+            parts.push({
+                kind: 'surface', ink: 'ghost',
+                fn: (function (e) { return function (u, v) { return [L.x0 + u, e * LIFT + v * H * P(L, e, u), e * DZ]; }; })(e),
+                u: [0, OCT, 80], v: [-0.6, 1, 2]
+            });
+            /* the curve, split where its ink changes */
+            var run = [], cls = null;
+            for (var i = 0; i <= 120; i++) {
+                var x = OCT * i / 120, pr = P(L, e, x), k = pr >= 0.5 ? 'science' : 'ink';
+                var pt = [L.x0 + x, e * LIFT + H * pr + 0.02, e * DZ - 0.01];
+                if (k !== cls && run.length) {
+                    run.push(pt);
+                    parts.push({ kind: 'line', points: run, ink: cls });
+                    run = [];
+                }
+                cls = k;
                 run.push(pt);
-                parts.push({ kind: 'line', points: run, ink: cls });
-                run = [];
             }
-            cls = k;
-            run.push(pt);
+            if (run.length > 1) parts.push({ kind: 'line', points: run, ink: cls });
         }
-        if (run.length > 1) parts.push({ kind: 'line', points: run, ink: cls });
-    }
+        /* tone axis, octave ticks */
+        var ticks = [];
+        for (var o = 0; o <= OCT; o++) ticks.push([L.x0 + o, 0, -0.45]);
+        parts.push({ kind: 'line', points: [[L.x0, 0, -0.45], [L.x0 + OCT, 0, -0.45]], ink: 'faint' });
+        parts.push({ kind: 'points', points: ticks, glyph: '+', ink: 'faint' });
+        labels.push({ at: [L.x0 + OCT / 2, (N - 1) * LIFT + H, (N - 1) * DZ], text: L.title, ink: L.range > 2 ? 'science' : 'ink', align: 'center', dy: -4, mark: false });
+        labels.push({ at: [L.x0, 0, -0.45], text: '125 Hz', ink: 'faint', align: 'center', dy: 1, mark: false });
+        labels.push({ at: [L.x0 + OCT, 0, -0.45], text: '4 kHz', ink: 'faint', align: 'center', dy: 1, mark: false });
+    });
     /* the array: one contact per curve, down the left edge */
     var contacts = [];
-    for (var c = 0; c < N; c++) contacts.push([X0 - 0.7, 0, c * DZ]);
+    for (var c = 0; c < N; c++) contacts.push([-0.35, c * LIFT, c * DZ]);
     parts.push({ kind: 'points', points: contacts, glyph: 'o', ink: 'signal' });
-    /* tone axis */
-    parts.push({ kind: 'line', points: [[X0, 0, -0.6], [X1, 0, -0.6]], ink: 'faint' });
+    labels.push(
+        { at: contacts[0], text: 'E1 apex', ink: 'signal', dx: -2, mark: false },
+        { at: contacts[N - 1], text: 'E12 base', ink: 'signal', dx: -2, mark: false }
+    );
 
     window.ASCII3D.define('fusion', {
-        alt: 'Schematic waterfall plot of binaural pitch fusion: twelve curves, one per cochlear-implant electrode from apex to base, each showing how often a tone in the hearing-aid ear fuses with that electrode into one sound. Each fused span is broad, and it moves to higher tones from apex to base.',
-        cols: 96, rows: 30,
-        camera: { yaw: 28, pitch: 32, fit: 0.84, offset: [2, 0] },
-        motion: { rock: 16, period: 14 },
-                parts: parts,
-        labels: [
-            { at: [X0 - 0.7, 0, 0], text: 'E1 apex', ink: 'signal', dx: -3, mark: false },
-            { at: [X0 - 0.7, 0, (N - 1) * DZ], text: 'E12 base', ink: 'signal', dx: -3, mark: false },
-            { at: [X1, 0, -0.6], text: 'tone, HA ear\nlow -> high', ink: 'faint', dx: 2, mark: false },
-            { at: [center(8) + WIDTH * 0.6, H * P(8, center(8) + WIDTH * 0.6), 8 * DZ], text: 'fused:\nthe fusion range', ink: 'science', dx: 4, dy: -2 }
-        ]
+        alt: 'Schematic of binaural pitch fusion in two bimodal cochlear-implant listeners. Each panel has twelve curves, one per electrode from apex to base, showing how often a tone in the hearing-aid ear fuses with that electrode into one sound. In the left listener each fused span is about an octave wide; in the right listener it is about three and a half octaves, so most tones fuse with any electrode.',
+        cols: 96, rows: 28,
+        outline: false,
+        camera: { yaw: 0, pitch: 12, fit: 0.86, persp: 4.5, offset: [3, 1] },
+        motion: { rock: 8, period: 16 },
+        parts: parts,
+        labels: labels
     });
 })();

@@ -130,7 +130,6 @@ system, not an append-only diary) and run the documentation pass in
 
 - Any claim about medical correctness in module, figure, or archive content
   (figures with invented shapes or data say "schematic" in the caption).
-- Replacing Fig. 1 with an ASCII 3D figure.
 - Adding a subspecialty (10th hue) or changing `OKSAT_SUBSPECIALTIES`.
 - Changing Leitner scheduling semantics (`LEITNER_INTERVALS`, box math).
 - Deleting or rewriting anything under `archive/` — it is kept content.
@@ -140,8 +139,8 @@ system, not an append-only diary) and run the documentation pass in
 - Changing `wiki/sync/policy.json` or anything else that decides what
   leaves the Obsidian vault (including widening the phase-1 `tierMatches`
   gate); making the wiki public.
-- Changing Fig. 1's device or measurements (`tools/gen-cochlea.py`) — they
-  are the owner's own implant.
+- Changing Fig. 1's device or measurements (the constants at the top of
+  `js/diagrams/cochlea.js`) — they are the owner's own cochlea and implant.
 - Merging to `master` (that is deploy).
 - Anything that would put a secret in the repo.
 

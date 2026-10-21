@@ -68,10 +68,8 @@ three pages that load it must FAIL. Smoke additionally loads
 - All sections are open; the topbar links (`#about`, `#tools`, `#work`,
   `#research`, `#beyond`) are plain anchors, and the one in view gets
   `aria-current` (scroll-spy in `js/onepager.js`).
-- No horizontal scroll at 390px wide; the cochlea figure (Fig. 1) is static
-  SVG and renders without JS, and without CSS it is still a line drawing
-  capped at its viewBox size (the generator emits fallback `fill`/`stroke`/
-  `width`/`height` attributes; any stylesheet rule outranks them).
+- No horizontal scroll at 390px wide; both figures are ASCII 3D and ship a
+  baked frame, so they render without JS.
 - Check phones and the phone's "desktop site" mode, which lays the page out
   at 980px (the ≥960px two-column grid), in both themes.
 - `#pgy-status` renders the current residency year. The HTML ships the
@@ -193,8 +191,6 @@ hostile issue list (no network) and checks that:
 - `--closes` emits only resolved issues;
 - the inbox never publishes.
 
-Fig. 1 has no test; regenerate it with `python3 tools/gen-cochlea.py` and
-look at it in both themes.
 
 ### ASCII 3D figures (`js/ascii3d.js`, `js/diagrams/`)
 `tools/check-data.mjs` §5 checks the following. Every scene renders a
