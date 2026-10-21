@@ -144,7 +144,6 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── stamp-assets.mjs    #   ?v=<hash> cache-busting on every css/ and js/ reference
 │   ├── lint-oksat.mjs      #   OKSAT module quality lint (concepts, orphans, alt text, plain text)
 │   ├── test-wiki-sync.mjs  #   vault sync + feedback loop on a synthetic vault
-│   ├── gen-cochlea.py      #   regenerates Fig. 1 in index.html (stdlib Python)
 │   ├── ascii3d.mjs         #   ASCII figures: terminal preview, bake no-JS frames, scaffold
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
