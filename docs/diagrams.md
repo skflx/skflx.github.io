@@ -1,6 +1,6 @@
 # Figures — ASCII 3D diagrams
 
-The site's figures, apart from Fig. 1, are **ASCII 3D**: real geometry
+The site's figures are **ASCII 3D**: real geometry
 rendered into a monospace character grid by a small software renderer. Each
 one turns slowly, can be dragged, and re-shades for night mode. Pages that
 parse their HTML also ship a pre-rendered frame, so a figure is there

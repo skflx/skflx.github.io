@@ -38,6 +38,7 @@ const wait = (page, fn, arg = null, timeout = 12000) => page.waitForFunction(fn,
 const PAGES = [
   { path: 'index.html', ready: async (p) => {
     await wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent));
+    await figureReady(p, 'cochlea');
     return figureReady(p, 'fusion', { themeFlip: true });
   } },
   { path: 'oksat.html', ready: async (p) => {

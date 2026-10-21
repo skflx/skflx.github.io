@@ -93,5 +93,6 @@ feature, update `docs/diagrams.md`. Then run the second pass in
   and flag the owner (`docs/decisions.md` §7).
 - Use non-ASCII glyphs, a remote script or font, or `innerHTML` in a scene.
 - Hand-edit a baked block or a `?v=` stamp.
-- Touch Fig. 1 (`tools/gen-cochlea.py`). It is the owner's implant, and
-  changing it is an owner decision.
+- Change Fig. 1's measurements or device (`js/diagrams/cochlea.js`). They
+  are the owner's own cochlea and implant, and changing them is an owner
+  decision.
