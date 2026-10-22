@@ -41,6 +41,7 @@ const PAGES = [
     await figureReady(p, 'cochlea');
     return figureReady(p, 'fusion', { themeFlip: true });
   } },
+  { path: 'Fusion.html', ready: (p) => wait(p, () => !!document.querySelector('.fusion-qr-svg')) },
   { path: 'oksat.html', ready: async (p) => {
     await wait(p, () => document.querySelectorAll('#modules .module-card').length > 0);
     return figureReady(p, 'leitner');

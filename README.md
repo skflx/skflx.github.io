@@ -97,6 +97,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/airway-*.js      #   app, engine, question bank
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
+├── Fusion.html              # second-CI research study flyer (static, QR links to itself)
 ├── pdf-chapter-splitter.html # PDF chapter splitter (client-side)
 │   └── js/pdf-chapter-splitter.js #   page logic (pdf-lib + JSZip in js/vendor/)
 ├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; draft)
