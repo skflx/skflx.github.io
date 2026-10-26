@@ -55,6 +55,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/grade-vs-policy.svg',
+                    alt: 'Grid of ICAR evidence grade A to D against policy from strong recommendation to against. Column A alone holds intranasal corticosteroids and immunotherapy as strong recommendations, cromolyn as a recommendation, probiotics, acupuncture and biologics for AR as options, and LTRA as first-line monotherapy and oral decongestants as against. Other columns place turbinate reduction, rush SCIT, oral H2 antihistamines, epicutaneous immunotherapy, breastfeeding, septoplasty, pet exposure, history and exam, honey and herbal remedies, and routine imaging.',
+                    label: 'Figure · grade is not policy',
+                    cap: 'Schematic; position within a cell is arbitrary. The red points are the lesson below.',
+                },
+                {
                     t: 'call',
                     k: 'trap',
                     label: 'Lesson',
@@ -107,12 +114,26 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/score-directions.svg',
+                    alt: 'Table of outcome scales with range and direction of improvement: nasal polyp score 0 to 8, lower better; nasal congestion 0 to 3, lower; SNOT-22 0 to 110, lower; Lund–Mackay 0 to 24, lower; UPSIT 0 to 40, higher; ACT 5 to 25, higher; ACQ-6 0 to 6, lower. Printed CTA values with the wrong sign are shown beside how they should read.',
+                    label: 'Figure · which way is better',
+                    cap: 'Read every result against its scale before comparing studies.',
+                },
+                {
                     t: 'call',
                     k: 'mech',
                     label: 'Applied: the ATAD meta-analysis',
                     blocks: [
                         { t: 'p', x: 'SNOT-22 improved by 10.27 points (95% CI 6.39–14.15) against an MCID of ~9. The point estimate crosses the MCID; the lower confidence limit does not. The honest reading is “benefit likely, clinically important benefit not established for every patient,” which matches EPOS\'s statement that the SNOT difference did not reach the MCID.' },
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/atad-snot22-mcid.svg',
+                    alt: 'Forest-style bar: SNOT-22 improvement with aspirin desensitization versus placebo, mean 10.27 points, 95% CI 6.39 to 14.15, against an MCID of 9 and no effect at 0. The interval excludes 0, the mean is above the MCID, and the lower bound is below it.',
+                    label: 'Figure · the ATAD effect against the MCID',
+                    cap: 'The callout above, drawn: significant, probably meaningful on average, not established for every patient.',
                 },
                 {
                     t: 'call',

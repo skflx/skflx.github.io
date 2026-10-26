@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 556" width="860" height="556" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Viral, post-viral and acute bacterial rhinosinusitis over time (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+  </defs>
+  <rect width="860" height="556" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">The calendar makes the diagnosis: day 5, day 10, week 12</text>
+
+  <!-- axes: day d -> x = 90 + 20 d (0..28), break, 12 weeks at 760 -->
+  <line x1="90" y1="330" x2="800" y2="330" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="90" y1="330" x2="90" y2="60" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#arr)"/>
+  <text x="74" y="200" font-size="13" fill="#444" text-anchor="middle" transform="rotate(-90 74 200)">symptom severity</text>
+  <path d="M676,336 l6,-12 M684,336 l6,-12" stroke="#1d1d1b" stroke-width="1.3"/>
+  <g font-size="12.5" fill="#444" text-anchor="middle">
+    <text x="90" y="348">0</text><text x="190" y="348">5</text><text x="290" y="348">10</text>
+    <text x="390" y="348">15</text><text x="490" y="348">20</text><text x="590" y="348">25</text>
+    <text x="760" y="348">12 weeks</text>
+  </g>
+  <text x="400" y="368" font-size="12.5" fill="#444" text-anchor="middle">days from onset</text>
+
+  <!-- landmarks -->
+  <g stroke="#1d1d1b" stroke-width="1.2" stroke-dasharray="4 4">
+    <line x1="190" y1="70" x2="190" y2="330"/>
+    <line x1="290" y1="70" x2="290" y2="330"/>
+    <line x1="760" y1="70" x2="760" y2="330"/>
+  </g>
+  <g font-size="12.5" font-weight="bold">
+    <text x="196" y="80">day 5</text>
+    <text x="296" y="80">day 10</text>
+    <text x="754" y="80" text-anchor="end">week 12</text>
+  </g>
+  <text x="754" y="98" text-anchor="end" font-size="12" fill="#444">beyond: chronic</text>
+
+  <!-- common cold -->
+  <path d="M90,328 C110,250 120,140 140,136 C170,130 200,220 230,280 C250,316 270,326 290,328" stroke="#1d1d1b" stroke-width="3" fill="none"/>
+  <!-- post-viral: persists beyond day 10 -->
+  <path d="M140,136 C170,132 200,200 240,228 C280,250 330,252 400,256 C480,262 560,280 640,300 C680,310 720,318 750,324" stroke="#2f5d8a" stroke-width="3" fill="none" stroke-dasharray="9 5"/>
+  <!-- double sickening -->
+  <path d="M140,136 C160,134 180,220 196,226 C214,230 226,150 250,132 C270,120 300,170 330,210" stroke="#b23a2e" stroke-width="3" fill="none"/>
+
+  <!-- curve labels -->
+  <text x="300" y="316" font-size="13" font-weight="bold">common cold</text>
+  <text x="300" y="300" font-size="12" fill="#444">gone by day 10</text>
+  <text x="420" y="240" font-size="13" font-weight="bold" fill="#2f5d8a">post-viral ARS</text>
+  <text x="420" y="224" font-size="12" fill="#444">still there after day 10, gone before 12 weeks</text>
+  <text x="306" y="138" font-size="13" font-weight="bold" fill="#b23a2e">double sickening</text>
+  <text x="306" y="122" font-size="12" fill="#444">better, then worse after day 5</text>
+
+  <!-- definitions -->
+  <rect x="20" y="390" width="400" height="136" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.1"/>
+  <g font-size="13">
+    <text x="32" y="412"><tspan font-weight="bold">Viral ARS</tspan> (common cold): &lt;10 days</text>
+    <text x="32" y="434"><tspan font-weight="bold" fill="#2f5d8a">Post-viral ARS</tspan>: worse after day 5 or</text>
+    <text x="32" y="452">persisting beyond day 10, still &lt;12 weeks</text>
+    <text x="32" y="474">Don't call it post-viral before day 10 unless</text>
+    <text x="32" y="492">it clearly worsens after day 5.</text>
+    <text x="32" y="514" font-size="12" fill="#444">Antibiotics: 1a(−) for colds and post-viral ARS.</text>
+  </g>
+
+  <rect x="440" y="390" width="400" height="136" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.4"/>
+  <text x="452" y="412" font-size="13" font-weight="bold" fill="#b23a2e">ABRS (a minority of post-viral): suspect with ≥3 of 5</text>
+  <g font-size="12.5">
+    <text x="452" y="432">1 discolored discharge, unilateral predominance</text>
+    <text x="452" y="450">2 severe local pain, unilateral predominance</text>
+    <text x="452" y="468">3 fever &gt;38 °C</text>
+    <text x="452" y="486">4 raised ESR or CRP</text>
+    <text x="452" y="504"><tspan font-weight="bold" fill="#b23a2e">5 double sickening</tspan></text>
+  </g>
+
+  <text x="20" y="548" font-size="12" fill="#444">Schematic; curve shapes illustrative. EPOS 2020 (as in 5.1–5.3).</text>
+</svg>

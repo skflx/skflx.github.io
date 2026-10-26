@@ -136,6 +136,13 @@ window.__OKSAT_CHAPTER = {
                     wide: 0,
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/skin-test-reading-holds.svg',
+                    alt: 'Panel A: a forearm with a 1 mm negative control, a 6 mm histamine control and a 5 mm allergen wheal; 5 minus 1 is 4 mm, at least 3 mm over the negative control, so positive (sensitization). A second forearm where the histamine control is flat is labelled uninterpretable, not negative. Panel B: hold times on a log scale: H2 blockers and nasal antihistamines 2 days, oral H1 antihistamines 2 to 7 days, benzodiazepines 7 days, tricyclic antidepressants 7 to 14 days, omalizumab 4 to 6 months. A box lists drugs that need not be stopped: systemic corticosteroids, leukotriene modifiers, SSRIs; topical skin steroids mean testing elsewhere.',
+                    label: 'Figure · reading a prick test, and how long to hold each drug',
+                    cap: 'Schematic; wheal sizes illustrative. The log scale shows why omalizumab is the outlier.',
+                },
+                {
                     t: 'call',
                     k: 'trap',
                     label: 'Trap',
@@ -329,6 +336,13 @@ window.__OKSAT_CHAPTER = {
                             '**eCRS ≥10 eosinophils/hpf (×400)**; further split 10–100 vs >100/hpf in ≥2 fields. Higher counts predict worse disease and recurrence.',
                         ],
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/lund-mackay.svg',
+                    alt: 'Panel A: for each side, five sinuses (maxillary, anterior ethmoid, posterior ethmoid, sphenoid, frontal) drawn as clear (0), partly opacified (1) or totally opacified (2), and the ostiomeatal complex scored only 0 (patent) or 2 (obstructed), giving 12 per side and 24 total. Panel B: a 0 to 24 bar with 2 or less marked excellent negative predictive value and 5 or more marked excellent positive predictive value, and a worked example totalling 8.',
+                    label: 'Figure · scoring Lund–Mackay',
+                    cap: 'Schematic. The OMC has no score of 1.',
                 },
                 { t: 'h', x: 'When to test for something systemic' },
                 {

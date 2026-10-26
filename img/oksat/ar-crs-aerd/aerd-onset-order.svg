@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 346" width="840" height="346" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Order of onset in AERD (schematic, not to scale)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+  </defs>
+  <rect width="840" height="346" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">The nose goes first, the drug reaction comes late</text>
+
+  <line x1="60" y1="140" x2="790" y2="140" stroke="#1d1d1b" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="796" y="164" font-size="12.5" fill="#444" text-anchor="end">time</text>
+
+  <g stroke-width="2">
+    <circle cx="90" cy="140" r="10" fill="#ffffff" stroke="#1d1d1b"/>
+    <circle cx="290" cy="140" r="10" fill="#ffffff" stroke="#1d1d1b"/>
+    <circle cx="520" cy="140" r="10" fill="#f6e4e1" stroke="#b23a2e"/>
+    <circle cx="710" cy="140" r="10" fill="#ffffff" stroke="#1d1d1b"/>
+  </g>
+  <!-- intervals -->
+  <path d="M100,118 C150,96 230,96 280,118" stroke="#444" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+  <text x="190" y="94" text-anchor="middle" font-size="13" font-weight="bold">≈2 years</text>
+  <path d="M300,118 C360,92 450,92 510,118" stroke="#444" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+  <text x="405" y="90" text-anchor="middle" font-size="13" font-weight="bold">≈4 years after that</text>
+
+  <g text-anchor="middle">
+    <text x="90" y="182" font-weight="bold">1 · Rhinitis</text>
+    <text x="90" y="200" font-size="12.5">congestion,</text>
+    <text x="90" y="216" font-size="12.5">rhinorrhea</text>
+    <text x="290" y="182" font-weight="bold">2 · Asthma</text>
+    <text x="290" y="200" font-size="12.5">usually adult-onset,</text>
+    <text x="290" y="216" font-size="12.5">eosinophilic</text>
+    <text x="520" y="182" font-weight="bold" fill="#b23a2e">3 · Aspirin / NSAID</text>
+    <text x="520" y="200" font-weight="bold" fill="#b23a2e">reactions</text>
+    <text x="520" y="218" font-size="12.5">NSAIDs tolerated before</text>
+    <text x="520" y="234" font-size="12.5">this do not exclude AERD</text>
+    <text x="710" y="182" font-weight="bold">4 · Hyposmia</text>
+    <text x="710" y="200" font-size="12.5">signals polyps;</text>
+    <text x="710" y="216" font-size="12.5">anosmia drives QOL loss</text>
+  </g>
+
+  <rect x="20" y="254" width="800" height="40" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1"/>
+  <text x="32" y="279" font-size="13">Ask about <tspan font-weight="bold">reactions, avoidance and alcohol</tspan> (provokes symptoms in ~75%): a patient who has avoided NSAIDs never finds out.</text>
+
+  <text x="20" y="318" font-size="12" fill="#444">Schematic, not to scale; order per LIO. Sources differ on where polyps and hyposmia fall (some place them before</text>
+  <text x="20" y="334" font-size="12" fill="#444">asthma); the NSAID reaction comes after asthma in both.</text>
+</svg>

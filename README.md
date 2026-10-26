@@ -164,7 +164,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── WIP.md                  # Current state of each system
 ├── docs/                   # Design system, decisions, security, verification
 │                           #   (index + update rules: docs/docs-map.md)
-├── img/oksat/              # Per-module images used in question stems & explanations
+├── img/oksat/              # Per-module and per-guide images (stems, explanations, guide figures)
 ├── images/                 # Cutout portrait, social card, favicon (see images/list.txt)
 └── documents/              # cv.pdf (upload pending)
 ```

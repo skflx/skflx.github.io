@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 520" width="860" height="520" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>How a type 2 polyp is built, and why smell can stay poor after polypectomy (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+    <marker id="tee" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M5,0 L5,10" stroke="#b23a2e" stroke-width="2.6"/></marker>
+    <pattern id="mesh" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <path d="M0,6 L12,6 M6,0 L6,12" stroke="#cdbfae" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+  <rect width="860" height="520" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">A · IL-13 shuts off fibrin clearance</text>
+  <text x="450" y="30" font-weight="bold">B · Smell loss has two parts</text>
+
+  <!-- cascade -->
+  <rect x="20" y="50" width="130" height="44" rx="4" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.5"/>
+  <text x="85" y="70" text-anchor="middle" font-weight="bold" fill="#b23a2e">IL-13</text>
+  <text x="85" y="86" text-anchor="middle" font-size="12" fill="#444">Th2, ILC2</text>
+  <path d="M150,72 L238,72" stroke="#b23a2e" stroke-width="2.6" fill="none" marker-end="url(#tee)"/>
+  <text x="194" y="64" text-anchor="middle" font-size="12" fill="#b23a2e">suppresses</text>
+  <rect x="244" y="50" width="160" height="44" rx="4" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.4"/>
+  <text x="324" y="70" text-anchor="middle" font-weight="bold">t-PA ↓</text>
+  <text x="324" y="86" text-anchor="middle" font-size="12" fill="#444">tissue plasminogen activator</text>
+
+  <text x="40" y="146" font-size="14">plasminogen</text>
+  <path d="M130,141 L250,141" stroke="#1d1d1b" stroke-width="1.4" stroke-dasharray="5 4" fill="none" marker-end="url(#arr)"/>
+  <text x="258" y="146" font-size="14" font-weight="bold">plasmin ↓</text>
+  <path d="M324,96 L190,134" stroke="#444" stroke-width="1" fill="none" stroke-dasharray="2 3"/>
+  <text x="168" y="130" font-size="12" fill="#444">t-PA</text>
+
+  <text x="40" y="200" font-size="14">fibrin</text>
+  <path d="M84,195 L250,195" stroke="#1d1d1b" stroke-width="1.4" stroke-dasharray="5 4" fill="none" marker-end="url(#arr)"/>
+  <text x="258" y="200" font-size="14" fill="#444">degradation products</text>
+  <path d="M290,152 L176,188" stroke="#444" stroke-width="1" fill="none" stroke-dasharray="2 3"/>
+  <text x="150" y="182" font-size="12" fill="#444">plasmin</text>
+  <path d="M160,186 l14,18 M174,186 l-14,18" stroke="#b23a2e" stroke-width="2.4"/>
+  <text x="40" y="232" font-size="13" font-weight="bold" fill="#b23a2e">Fibrin is not cleared: it deposits as a mesh</text>
+
+  <!-- polyp drawing -->
+  <path d="M40,262 L400,262" stroke="#1d1d1b" stroke-width="2"/>
+  <text x="44" y="256" font-size="12" fill="#444">mucosa (middle meatus)</text>
+  <path d="M190,262 C150,300 110,360 130,420 C150,470 270,470 290,420 C310,360 270,300 230,262 Z" fill="url(#mesh)" stroke="#1d1d1b" stroke-width="2"/>
+  <path d="M190,262 C150,300 110,360 130,420 C150,470 270,470 290,420 C310,360 270,300 230,262" fill="none" stroke="#1d1d1b" stroke-width="1.6"/>
+  <g fill="#b23a2e">
+    <circle cx="180" cy="340" r="4"/><circle cx="220" cy="372" r="4"/><circle cx="196" cy="410" r="4"/>
+    <circle cx="246" cy="328" r="4"/><circle cx="160" cy="392" r="4"/><circle cx="256" cy="420" r="4"/><circle cx="214" cy="304" r="4"/>
+  </g>
+  <g font-size="12.5">
+    <text x="308" y="330">fibrin mesh traps</text>
+    <text x="308" y="346">plasma and water:</text>
+    <text x="308" y="362" font-weight="bold">edematous stroma</text>
+    <text x="308" y="392"><tspan fill="#b23a2e" font-weight="bold">●</tspan> eosinophils</text>
+    <text x="308" y="408">(&gt;10/hpf predicts</text>
+    <text x="308" y="424">recurrence)</text>
+    <text x="308" y="452">epithelium: immature,</text>
+    <text x="308" y="468">leaky (IL-13)</text>
+  </g>
+  <text x="20" y="494" font-size="12.5" fill="#444">Biologics that suppress type 2 inflammation shrink polyps: the endotype drives the remodeling.</text>
+
+  <!-- B: two coronal minis -->
+  <line x1="430" y1="44" x2="430" y2="476" stroke="#cfcdc7" stroke-width="1.2"/>
+  <g font-size="13" font-weight="bold" text-anchor="middle">
+    <text x="545" y="60">Before ESS</text>
+    <text x="745" y="60">After complete polypectomy</text>
+  </g>
+
+  <!-- mini 1 at ox=470 -->
+  <g>
+    <path d="M490,80 L560,80 L580,170 L600,330 M490,80 L490,330" stroke="#1d1d1b" stroke-width="2" fill="none"/>
+    <path d="M576,118 C548,118 530,150 530,190 C530,214 548,220 556,204 C548,186 552,160 578,150 Z" stroke="#1d1d1b" stroke-width="2" fill="#f2f2ef"/>
+    <ellipse cx="510" cy="132" rx="19" ry="38" fill="url(#mesh)" stroke="#1d1d1b" stroke-width="1.6"/>
+    <ellipse cx="560" cy="262" rx="24" ry="44" fill="url(#mesh)" stroke="#1d1d1b" stroke-width="1.6"/>
+    <g fill="#b23a2e"><circle cx="500" cy="86" r="3.5"/><circle cx="514" cy="86" r="3.5"/><circle cx="528" cy="86" r="3.5"/><circle cx="542" cy="86" r="3.5"/><circle cx="496" cy="100" r="3.5"/><circle cx="496" cy="114" r="3.5"/></g>
+    <path d="M512,320 L512,184" stroke="#2f5d8a" stroke-width="2.4" fill="none" marker-end="url(#arr)"/>
+    <path d="M504,176 l16,-14 M520,176 l-16,-14" stroke="#b23a2e" stroke-width="2.4"/>
+  </g>
+  <!-- mini 2 at ox=670 -->
+  <g>
+    <path d="M690,80 L760,80 L780,170 L800,330 M690,80 L690,330" stroke="#1d1d1b" stroke-width="2" fill="none"/>
+    <path d="M776,118 C748,118 730,150 730,190 C730,214 748,220 756,204 C748,186 752,160 778,150 Z" stroke="#1d1d1b" stroke-width="2" fill="#f2f2ef"/>
+    <g fill="#b23a2e"><circle cx="700" cy="86" r="3.5"/><circle cx="714" cy="86" r="3.5"/><circle cx="728" cy="86" r="3.5"/><circle cx="742" cy="86" r="3.5"/><circle cx="696" cy="100" r="3.5"/><circle cx="696" cy="114" r="3.5"/></g>
+    <path d="M708,320 L708,98" stroke="#2f5d8a" stroke-width="2.4" fill="none" marker-end="url(#arr)"/>
+  </g>
+  <g font-size="12" fill="#444">
+    <text x="602" y="96">olfactory</text><text x="602" y="110">cleft</text>
+    <path d="M600,100 L532,104" stroke="#444" stroke-width="1"/>
+    <text x="602" y="196">middle</text><text x="602" y="210">turbinate</text>
+    <path d="M600,200 L552,196" stroke="#444" stroke-width="1" fill="none"/>
+    <text x="590" y="316">polyps</text>
+    <text x="470" y="348">septum</text>
+    <text x="512" y="348" fill="#2f5d8a">airflow</text>
+  </g>
+
+  <rect x="446" y="372" width="196" height="104" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.1"/>
+  <text x="456" y="392" font-size="13" font-weight="bold">1 · Mechanical</text>
+  <text x="456" y="410" font-size="12.5">polyps block odorant airflow</text>
+  <text x="456" y="426" font-size="12.5">to the cleft</text>
+  <text x="456" y="452" font-size="12.5" font-weight="bold">surgery fixes this</text>
+
+  <rect x="652" y="372" width="196" height="104" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.1"/>
+  <text x="662" y="392" font-size="13" font-weight="bold" fill="#b23a2e">2 · Inflammatory</text>
+  <text x="662" y="410" font-size="12.5"><tspan fill="#b23a2e" font-weight="bold">●</tspan> inflamed olfactory</text>
+  <text x="662" y="426" font-size="12.5">neuroepithelium persists</text>
+  <text x="662" y="452" font-size="12.5" font-weight="bold">needs ongoing anti-</text>
+  <text x="662" y="468" font-size="12.5" font-weight="bold">inflammatory treatment</text>
+
+  <text x="20" y="512" font-size="12" fill="#444">Schematic, not to scale; B is a coronal half-cavity. EPOS 1.5.3–1.5.4, 5.2; NEJM.</text>
+</svg>

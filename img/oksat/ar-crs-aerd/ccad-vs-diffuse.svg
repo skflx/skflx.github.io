@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 520" width="860" height="520" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Central compartment atopic disease versus diffuse CRSwNP, coronal (schematic)</title>
+  <defs>
+    <pattern id="cells" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M0,0 H16 V16" fill="none" stroke="#8a8a85" stroke-width="1"/>
+    </pattern>
+    <pattern id="mesh" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="10" height="10" fill="#f6e4e1"/><path d="M0,5 H10 M5,0 V10" stroke="#d9a39b" stroke-width="1"/>
+    </pattern>
+    <!-- one half (right side of patient drawn to the viewer's right), local origin at septum/skull base -->
+    <g id="half">
+      <rect x="44" y="0" width="54" height="108" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.4"/>
+      <rect x="44" y="0" width="54" height="108" fill="url(#cells)"/>
+      <circle cx="136" cy="52" r="36" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.4"/>
+      <path id="maxs" d="M62,122 L160,122 C168,122 172,130 172,140 L172,226 C172,240 164,246 154,246 L68,246 C62,246 62,240 62,234 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.4"/>
+      <path d="M44,108 L58,120 L58,272 L0,272" stroke="#1d1d1b" stroke-width="2" fill="none"/>
+    </g>
+    <g id="turbs">
+      <ellipse cx="24" cy="34" rx="9" ry="15" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.4"/>
+      <ellipse cx="28" cy="90" rx="12" ry="26" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.4"/>
+      <ellipse cx="36" cy="222" rx="14" ry="26" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.4"/>
+    </g>
+  </defs>
+  <rect width="860" height="520" fill="#ffffff"/>
+
+  <text x="215" y="34" text-anchor="middle" font-weight="bold">CCAD</text>
+  <text x="215" y="52" text-anchor="middle" font-size="12.5" fill="#444">central compartment: allergy drives it</text>
+  <text x="645" y="34" text-anchor="middle" font-weight="bold">Diffuse CRSwNP</text>
+  <text x="645" y="52" text-anchor="middle" font-size="12.5" fill="#444">polyps from the middle meatus, sinuses full</text>
+  <line x1="430" y1="20" x2="430" y2="350" stroke="#cfcdc7" stroke-width="1.2"/>
+
+  <!-- ===== CCAD panel, septum at x=215, skull base y=80 ===== -->
+  <g transform="translate(215,80)">
+    <use href="#half"/>
+    <use href="#half" transform="scale(-1,1)"/>
+    <!-- skull base -->
+    <path d="M-98,0 L98,0" stroke="#1d1d1b" stroke-width="2.4"/>
+    <!-- septum with thickened posterosuperior mucosa -->
+    <rect x="-3" y="0" width="6" height="272" fill="#1d1d1b"/>
+    <rect x="-10" y="4" width="20" height="100" rx="8" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+    <use href="#turbs"/>
+    <use href="#turbs" transform="scale(-1,1)"/>
+    <!-- polypoid change on superior and middle turbinates -->
+    <ellipse cx="24" cy="34" rx="12" ry="18" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+    <ellipse cx="28" cy="90" rx="16" ry="30" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+    <ellipse cx="-24" cy="34" rx="12" ry="18" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+    <ellipse cx="-28" cy="90" rx="16" ry="30" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+    <!-- central sinus disease: medial ethmoid cells only -->
+    <rect x="44" y="0" width="20" height="108" fill="#8a8a85" opacity="0.45"/>
+    <rect x="-64" y="0" width="20" height="108" fill="#8a8a85" opacity="0.45"/>
+  </g>
+
+  <!-- ===== Diffuse panel, septum at x=645 ===== -->
+  <g transform="translate(645,80)">
+    <use href="#half"/>
+    <use href="#half" transform="scale(-1,1)"/>
+    <path d="M-98,0 L98,0" stroke="#1d1d1b" stroke-width="2.4"/>
+    <rect x="-3" y="0" width="6" height="272" fill="#1d1d1b"/>
+    <use href="#turbs"/>
+    <use href="#turbs" transform="scale(-1,1)"/>
+    <!-- opacified sinuses -->
+    <rect x="44" y="0" width="54" height="108" fill="#8a8a85" opacity="0.6"/>
+    <rect x="-98" y="0" width="54" height="108" fill="#8a8a85" opacity="0.6"/>
+    <path d="M62,122 L160,122 C168,122 172,130 172,140 L172,226 C172,240 164,246 154,246 L68,246 C62,246 62,240 62,234 Z" fill="#8a8a85" opacity="0.6"/>
+    <path d="M62,122 L160,122 C168,122 172,130 172,140 L172,226 C172,240 164,246 154,246 L68,246 C62,246 62,240 62,234 Z" fill="#8a8a85" opacity="0.6" transform="scale(-1,1)"/>
+    <!-- polyps in middle meatus -->
+    <ellipse cx="46" cy="148" rx="11" ry="38" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+    <ellipse cx="-46" cy="148" rx="11" ry="38" fill="url(#mesh)" stroke="#b23a2e" stroke-width="1.6"/>
+  </g>
+
+  <!-- in-place labels -->
+  <g font-size="10.5" font-weight="bold" text-anchor="middle" fill="#1d1d1b">
+    <text x="239" y="118">ST</text><text x="243" y="174">MT</text><text x="251" y="306">IT</text>
+    <text x="669" y="118">ST</text><text x="673" y="174">MT</text><text x="681" y="306">IT</text>
+  </g>
+  <g font-size="12" fill="#444" text-anchor="middle">
+    <text x="351" y="136">orbit</text><text x="332" y="268">maxillary</text><text x="286" y="74">ethmoid</text>
+    <text x="781" y="136">orbit</text><text x="762" y="268">maxillary</text><text x="716" y="74">ethmoid</text>
+  </g>
+  <g font-size="12" font-weight="bold" fill="#b23a2e">
+    <text x="20" y="368">ST, MT, posterosuperior septum: polypoid</text>
+    <text x="450" y="368">polyps from the middle meatus (between MT and lateral wall)</text>
+  </g>
+  <!-- comparison boxes -->
+  <rect x="20" y="380" width="396" height="112" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.2"/>
+  <g font-size="12.5">
+    <text x="32" y="402" font-weight="bold" fill="#b23a2e">Recognize it</text>
+    <text x="32" y="420">polypoid change of MT, ST and posterosuperior septum;</text>
+    <text x="32" y="436">central sinus disease; inhalant allergy (HDM, molds,</text>
+    <text x="32" y="452">pollens), AR since childhood; allergy tests positive in</text>
+    <text x="32" y="468">~93% in one series</text>
+    <text x="32" y="486" font-weight="bold">→ skin test; treat the allergy; INCS; surgery if refractory</text>
+  </g>
+  <rect x="444" y="380" width="396" height="112" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.1"/>
+  <g font-size="12.5">
+    <text x="456" y="402" font-weight="bold">Contrast</text>
+    <text x="456" y="420">bilateral polyps in the middle meatus; pansinus</text>
+    <text x="456" y="436">opacification; allergy only weakly linked; asthma and</text>
+    <text x="456" y="452">N-ERD travel with it</text>
+    <text x="456" y="486" font-weight="bold">→ the type 2 CRSwNP pathway (6.3–6.5, Biologics)</text>
+  </g>
+
+  <text x="20" y="512" font-size="12" fill="#444">Schematic coronal view, not to scale. NEJM; ICAR (as in 6.1, 6.7). Grey = opacified sinus; pink mesh = polypoid mucosa.</text>
+</svg>

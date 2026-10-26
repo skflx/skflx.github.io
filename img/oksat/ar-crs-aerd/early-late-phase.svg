@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 520" width="840" height="520" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Early and late phase of the allergic nasal response (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+  </defs>
+  <rect width="840" height="520" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">One allergen exposure, two waves of symptoms</text>
+
+  <!-- phase bands -->
+  <rect x="110" y="56" width="220" height="264" fill="#f7efe4"/>
+  <rect x="483" y="56" width="205" height="264" fill="#e7edf3"/>
+
+  <!-- axes -->
+  <line x1="110" y1="320" x2="800" y2="320" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#arr)"/>
+  <line x1="110" y1="320" x2="110" y2="60" stroke="#1d1d1b" stroke-width="1.6" marker-end="url(#arr)"/>
+  <text x="96" y="190" font-size="13" fill="#444" text-anchor="middle" transform="rotate(-90 96 190)">nasal response</text>
+  <!-- axis break at 1 h -->
+  <path d="M324,326 l6,-12 M332,326 l6,-12" stroke="#1d1d1b" stroke-width="1.3"/>
+  <g font-size="12.5" fill="#444" text-anchor="middle">
+    <text x="110" y="338">0</text>
+    <text x="165" y="338">15 min</text>
+    <text x="220" y="338">30 min</text>
+    <text x="330" y="338">1 h</text>
+    <text x="381" y="338">2 h</text>
+    <text x="483" y="338">4 h</text>
+    <text x="586" y="338">6 h</text>
+    <text x="688" y="338">8 h</text>
+    <text x="790" y="338">10 h</text>
+  </g>
+  <g stroke="#1d1d1b" stroke-width="1">
+    <line x1="165" y1="320" x2="165" y2="325"/><line x1="220" y1="320" x2="220" y2="325"/>
+    <line x1="381" y1="320" x2="381" y2="325"/><line x1="483" y1="320" x2="483" y2="325"/>
+    <line x1="586" y1="320" x2="586" y2="325"/><line x1="688" y1="320" x2="688" y2="325"/>
+    <line x1="790" y1="320" x2="790" y2="325"/>
+  </g>
+  <text x="560" y="358" font-size="12" fill="#444" text-anchor="middle">time after exposure (first hour stretched)</text>
+
+  <!-- allergen exposure -->
+  <path d="M110,46 L110,60" stroke="#8a6d4b" stroke-width="2"/>
+  <text x="104" y="48" text-anchor="end" font-size="12.5" fill="#8a6d4b" font-weight="bold">allergen</text>
+
+  <!-- response curve -->
+  <path d="M110,318 C126,318 140,122 168,118 C198,114 226,232 286,290 C316,316 342,310 381,306 C430,300 456,210 534,198 C590,190 640,214 688,250 C730,282 760,300 790,306" stroke="#1d1d1b" stroke-width="3" fill="none"/>
+
+  <!-- labels -->
+  <text x="186" y="86" font-weight="bold">Early phase · minutes</text>
+  <text x="186" y="104" font-size="12.5">mast cell degranulation</text>
+  <text x="232" y="136" font-size="13" font-weight="bold">itch · sneeze</text>
+  <text x="232" y="153" font-size="13" font-weight="bold">watery rhinorrhea</text>
+  <text x="232" y="170" font-size="13" font-weight="bold">congestion</text>
+
+  <text x="496" y="86" font-weight="bold">Late phase · 4–8 h</text>
+  <text x="496" y="104" font-size="12.5">eosinophils, basophils, T cells</text>
+  <text x="496" y="120" font-size="12.5">recruited (adhesion molecules ↑)</text>
+  <text x="560" y="156" font-size="13" font-weight="bold">congestion · hyposmia</text>
+  <text x="560" y="173" font-size="13" font-weight="bold">more rhinorrhea</text>
+  <text x="716" y="206" font-size="12.5">hyperresponsive</text>
+  <text x="716" y="222" font-size="12.5">to nonspecific</text>
+  <text x="716" y="238" font-size="12.5">triggers</text>
+
+  <!-- drugs -->
+  <text x="20" y="392" font-weight="bold" font-size="14">Where the drugs act</text>
+  <!-- cromolyn -->
+  <rect x="62" y="404" width="48" height="16" fill="#b23a2e"/>
+  <text x="120" y="417" font-size="13"><tspan font-weight="bold">Cromolyn</tspan> stabilizes mast cells: works best <tspan font-weight="bold">before</tspan> exposure</text>
+  <!-- oral H1 -->
+  <rect x="110" y="432" width="220" height="16" fill="#b23a2e"/>
+  <text x="340" y="445" font-size="13"><tspan font-weight="bold">Oral H1 antihistamine</tspan>: sneeze, itch, rhinorrhea; little for congestion</text>
+  <!-- INCS -->
+  <rect x="110" y="460" width="373" height="16" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1"/>
+  <rect x="483" y="460" width="307" height="16" fill="#b23a2e"/>
+  <text x="120" y="473" font-size="13"><tspan font-weight="bold">INCS</tspan>: acts on the late phase:</text>
+  <text x="494" y="473" font-size="13" fill="#ffffff" font-weight="bold">best single agent for congestion</text>
+
+  <text x="20" y="502" font-size="12" fill="#444">Schematic; curve shape illustrative. ICAR V.A.1, VI. Priming: repeated low exposures lower the threshold, so symptoms stop tracking pollen counts.</text>
+</svg>
