@@ -9,6 +9,9 @@
 
    `subspecialty` keys into OKSAT_SUBSPECIALTIES below; the hub uses
    it to group module cards and color their accent bar.
+
+   OKSAT_GUIDES (below the modules) registers the Interactive learning
+   guides the same way: one entry per guide, one data file per chapter.
    ============================================================= */
 
 /* OHNS subspecialty ring — one hue per domain, carried through
@@ -111,7 +114,7 @@ window.OKSAT_MANIFEST = [
     title: 'Allergy and Allergy Testing',
     kicker: 'Rhinology / Allergy',
     subspecialty: 'rhinology',
-    count: 83,
+    count: 96,
     accent: '#6E4A6B',
     desc: 'The mediator cascade, skin and in vitro testing, pharmacotherapy and immunotherapy, biologics, and the OHNS crossovers — AFRS, AERD, angioedema, and food syndromes.',
     data: 'js/mcq-modules/allergy-testing.js',
@@ -175,6 +178,45 @@ window.OKSAT_MANIFEST = [
     accent: '#2F6E6A',
     desc: 'Longitudinal versus transverse and otic capsule-sparing versus -disrupting fractures, sequelae, facial nerve injury and decompression, CSF otorrhea, and cases.',
     data: 'js/mcq-modules/temporal-bone-trauma.js',
+  },
+  {
+    slug: 'crs-ars',
+    title: 'Rhinosinusitis: ARS & CRS',
+    kicker: 'Rhinology / Allergy',
+    subspecialty: 'rhinology',
+    count: 62,
+    accent: '#6E4A6B',
+    desc: 'EPOS definitions, acute rhinosinusitis and its orbital complications, CRS classification and work-up, medical therapy, ESS appropriateness and outcomes, fungal and secondary CRS, the EPOS biologic criteria, and three cases.',
+    data: 'js/mcq-modules/crs-ars.js',
+  },
+];
+
+/* Interactive learning: first-pass study guides (docs/authoring-oksat-guide.md).
+   One entry per guide; each guide is a series of chapters, one data file per
+   chapter in js/oksat-guides/<slug>/ ending with window.__OKSAT_CHAPTER = {...}.
+   `sections` (per chapter) must equal that file's sections.length —
+   tools/check-data.mjs enforces it, as it does `count` for the modules above. */
+window.OKSAT_GUIDES = [
+  {
+    slug: 'ar-crs-aerd',
+    title: 'Allergic Rhinitis, CRS & AERD',
+    kicker: 'Rhinology / Allergy',
+    subspecialty: 'rhinology',
+    accent: '#6E4A6B',
+    desc: 'One map from type 2 immunology to biologics: allergic rhinitis and its testing and treatment, acute and chronic rhinosinusitis, AERD, the biologics, and how to read the evidence. Retrieval prompts in every section; each section drills into the question modules.',
+    chapters: [
+      { id: 'start', short: 'Start here', data: 'js/oksat-guides/ar-crs-aerd/start.js' },
+      { id: 'science', k: 1, short: 'Type 2 immunology', min: 35, sections: 10, data: 'js/oksat-guides/ar-crs-aerd/science.js' },
+      { id: 'allergic-rhinitis', k: 2, short: 'Allergic rhinitis', min: 25, sections: 5, data: 'js/oksat-guides/ar-crs-aerd/allergic-rhinitis.js' },
+      { id: 'diagnostics', k: 3, short: 'Diagnostics', min: 35, sections: 5, data: 'js/oksat-guides/ar-crs-aerd/diagnostics.js' },
+      { id: 'ar-treatment', k: 4, short: 'AR treatment & AIT', min: 40, sections: 6, data: 'js/oksat-guides/ar-crs-aerd/ar-treatment.js' },
+      { id: 'ars', k: 5, short: 'Rhinosinusitis & ARS', min: 25, sections: 4, data: 'js/oksat-guides/ar-crs-aerd/ars.js' },
+      { id: 'crs', k: 6, short: 'Chronic rhinosinusitis', min: 50, sections: 8, data: 'js/oksat-guides/ar-crs-aerd/crs.js' },
+      { id: 'aerd', k: 7, short: 'AERD', min: 40, sections: 6, data: 'js/oksat-guides/ar-crs-aerd/aerd.js' },
+      { id: 'biologics', k: 8, short: 'Biologics', min: 40, sections: 5, data: 'js/oksat-guides/ar-crs-aerd/biologics.js' },
+      { id: 'comorbidities', k: 9, short: 'Comorbidities', min: 15, sections: 2, data: 'js/oksat-guides/ar-crs-aerd/comorbidities.js' },
+      { id: 'appraisal', k: 10, short: 'Evidence & controversies', min: 25, sections: 3, data: 'js/oksat-guides/ar-crs-aerd/appraisal.js' },
+    ],
   },
 ];
 

@@ -217,6 +217,12 @@ Do not rely on a walk that never left the landing page. The first walk of
 - verify with a script that every item's id, options, `correct`, stem, brief and detailed are
   byte-identical to `git show HEAD:<file>` after the edit.
 
+Concept keys and item ids are also what **interactive guides** link to
+(`docs/authoring-oksat-guide.md`): a guide's `drill` rows name a module and
+concept keys, and its `practice` blocks name item ids. `tools/check-data.mjs`
+fails if a guide points at a concept or id that no longer exists, so renaming
+either is a breaking change; the rule that ids are permanent already covers it.
+
 ## 7. Documentation pass (required, last)
 
 Per `CLAUDE.md` and `docs/docs-map.md`: `README.md` (tree + counts-free description),

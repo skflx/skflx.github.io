@@ -406,6 +406,14 @@ const ITEMS = [
 
 ---
 
+## Guides that link here
+
+An Interactive learning guide (`docs/authoring-oksat-guide.md`) drills into a
+module by **concept key** and answers some items in place by **item id**.
+`tools/check-data.mjs` fails when either stops resolving, so treat concept
+keys as stable as ids. Adding items to a studied module: new ids, appended in
+the item's section; never renumber, reorder options or change `correct`.
+
 ## Conventions & storage
 
 - Keep the manifest `count` in sync with `ITEMS.length`.

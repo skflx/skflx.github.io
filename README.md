@@ -51,7 +51,10 @@ and defaulting to `prefers-color-scheme`.
   study modules where every question opens on a recall gate — answer it from
   memory and self-grade, or show the choices and answer it as a locked
   first-attempt MCQ — all feeding one Leitner spaced-repetition schedule.
-  Progress is local to the browser; nothing is uploaded.
+  Progress is local to the browser; nothing is uploaded. Beside the modules,
+  **Interactive learning** holds first-pass study guides: short sections with
+  predict-then-reveal retrieval prompts, worked criteria checkers, and module
+  questions answered in place, each section linking into the question modules.
 - **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for
   otolaryngology.
 - **PDF Chapter Splitter** (`pdf-chapter-splitter.html`) — lossless split of a
@@ -86,12 +89,15 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── css/onepager.css    #   its layout (on css/site.css tokens)
 │   └── js/onepager.js      #   residency year, section scroll-spy
 │
-├── oksat.html              # OKSAT hub — module list, due-review banner, settings
-├── oksat-study.html        # OKSAT viewer (?m=<slug>[&c=<concept>])
+├── oksat.html              # OKSAT hub — guides, question modules, due-review banner, settings
+├── oksat-study.html        # OKSAT question viewer (?m=<slug>[&c=<concept>])
+├── oksat-learn.html        # OKSAT Interactive learning viewer (?g=<guide>[&c=<chapter>])
 │   ├── css/oksat.css       #   OKSAT design system (tokens; docs/design-principles.md)
-│   ├── js/oksat-*.js       #   engine, manifest, store, prefs, hub, viewer boot, concept graph
+│   ├── css/oksat-learn.css #   Interactive learning layout (tokens only)
+│   ├── js/oksat-*.js       #   engine, manifest, store, prefs, hub, viewer boots, concept graph, guide viewer
 │   ├── js/vendor/          #   React + htm, pinned and self-hosted
-│   └── js/mcq-modules/     #   question banks (one data file per module)
+│   ├── js/mcq-modules/     #   question banks (one data file per module)
+│   └── js/oksat-guides/    #   interactive guides (one folder per guide, one data file per chapter)
 │
 ├── airway-jeopardy.html    # Airway Rounds team quiz (no network needed)
 │   └── js/airway-*.js      #   app, engine, question bank
@@ -148,6 +154,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── ascii3d.mjs         #   ASCII figures: terminal preview, bake no-JS frames, scaffold
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
+│   ├── test-oksat-learn.mjs   # interactive learning viewer behavior
 │   ├── test-ssb.mjs        #   SSB: variant lab, pathway rules, picking, hash, tissue materials, CT, specimen, endoscope
 │   ├── ssb-fixture-ct.mjs  #   synthetic CT volume and dissection states the SSB tests route in (never written to ssb/)
 │   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
@@ -190,13 +197,15 @@ node tools/ascii3d.mjs render <id>   # preview in the terminal
 node tools/ascii3d.mjs bake
 ```
 
-Before pushing (CI runs the same five on every PR):
+Before pushing (CI runs these on every PR; the suites that need a browser
+run when a file they exercise changed):
 
 ```
 node tools/check-data.mjs
 node tools/test-wiki-sync.mjs
 node tools/smoke-pages.mjs
 node tools/test-oksat-engine.mjs
+node tools/test-oksat-learn.mjs
 node tools/test-ssb.mjs
 ```
 

@@ -6,7 +6,8 @@
 
    Loaded as a plain <script> BEFORE the engine. Progress and SRS
    keys (oksat:progress:*, oksat:srs:*) are owned by the engine;
-   oksat:typeface / sk_theme by oksat-prefs.js. All reads and writes
+   oksat:learn:* (Interactive learning) by js/oksat-learn.js via
+   getLearn/saveLearn here; oksat:typeface / sk_theme by oksat-prefs.js. All reads and writes
    here are guarded and never throw.
 
    ---- Identity ----
@@ -145,11 +146,29 @@
     return load('oksat:conf:' + slug + ':' + norm(who), { v: 1, entries: {} });
   }
 
+  /* ---- Interactive learning (js/oksat-learn.js) ----
+     One record per guide: { v, done:{sectionId:1}, checks:{'<section>:<id>':grade 0-3},
+     practice:{'<module>:<item>':{a|g, ok}}, ui:{mode, core, last} }. Separate from the
+     modules' own progress/SRS: a guide is the first pass, the module is the record. */
+  function learnKey(slug, who) { return 'oksat:learn:' + slug + ':' + norm(who); }
+  function getLearn(slug, who) {
+    var rec = load(learnKey(slug, who), null) || {};
+    return {
+      v: 1,
+      done: rec.done || {}, checks: rec.checks || {}, practice: rec.practice || {}, ui: rec.ui || {},
+    };
+  }
+  function saveLearn(slug, who, rec) {
+    rec.v = 1;
+    rec.updated = nowISO();
+    return save(learnKey(slug, who), rec);
+  }
+
   /* ---- wipe every local trace for one namespace ---- */
   function resetLocal(who) {
     var r = norm(who);
     var n = 0;
-    ['oksat:progress:', 'oksat:srs:', 'oksat:cmastery:', 'oksat:conf:', 'oksat:session:']
+    ['oksat:progress:', 'oksat:srs:', 'oksat:cmastery:', 'oksat:conf:', 'oksat:session:', 'oksat:learn:']
       .forEach(function (prefix) {
         keysWithPrefix(prefix).forEach(function (k) {
           /* every key in these families ends in ':<code>' */
@@ -165,6 +184,7 @@
     touchSession: touchSession, getSession: getSession,
     recordConceptResult: recordConceptResult, getConceptMastery: getConceptMastery,
     recordConfidence: recordConfidence, getConfidence: getConfidence,
+    getLearn: getLearn, saveLearn: saveLearn,
     SESSION_GAP_MS: SESSION_GAP_MS,
   };
 })();

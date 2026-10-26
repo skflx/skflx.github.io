@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/oksat.css?v=c0828ac9">
+  <link rel="stylesheet" href="css/oksat.css?v=1c485720">
   <link rel="stylesheet" href="css/ascii3d.css?v=50a20a22">
 
 </head>
@@ -41,7 +41,7 @@
     <div class="ok-wrap" style="padding-top:6rem;max-width:46rem">
       <div class="hub-kicker"><span>OKSAT · Otolaryngology</span><hr></div>
       <h1 class="hub-title">OHNS Knowledge<br><em>Self-Assessment</em></h1>
-      <p class="hub-subtitle">Modules mix locked-first-attempt questions with free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept.</p>
+      <p class="hub-subtitle">Start with an interactive guide for a first pass, then drill the question modules: locked-first-attempt questions and free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept.</p>
 
       <!-- What's due, if anything -->
       <div class="hub-review" id="review-banner" hidden>
@@ -52,6 +52,12 @@
         <a class="ok-btn ok-btn--sm ok-btn--primary" id="review-go" href="#">Start review &rarr;</a>
       </div>
 
+      <h2 class="hub-seg">Interactive learning</h2>
+      <p class="hub-seg-sub">First-pass study guides. Read a short section, commit to an answer before the reveal, work the checkers, and answer a few module questions in place. Each section links into the matching question module.</p>
+      <div class="hub-modules" id="guides"></div>
+
+      <h2 class="hub-seg">Question modules</h2>
+      <p class="hub-seg-sub">The practice record. Every question opens on a recall gate, locks on the first attempt, and returns on a spaced-repetition schedule.</p>
       <div class="hub-modules" id="modules"></div>
 
       <figure class="a3d hub-figure" data-a3d="leitner">
@@ -106,10 +112,10 @@
     </div>
   </div>
 
-  <script src="js/oksat-manifest.js?v=82ed8fe1"></script>
-  <script src="js/oksat-store.js?v=47c3e653"></script>
+  <script src="js/oksat-manifest.js?v=0c9bf51e"></script>
+  <script src="js/oksat-store.js?v=20d84b24"></script>
   <script src="js/oksat-prefs.js?v=c9c374f2"></script>
-  <script src="js/oksat-hub.js?v=98c0b5a4"></script>
+  <script src="js/oksat-hub.js?v=1ebfa02e"></script>
   <script src="js/ascii3d.js?v=5f5f9af0"></script>
   <script src="js/diagrams/leitner.js?v=80ace172"></script>
 </body>

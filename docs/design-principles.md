@@ -111,3 +111,23 @@ Progress is never framed as a score, streak, or badge; it is a record.
 Kickers are Small-caps-style labels ("Self-Assessment · Neurotology Module").
 Explanations teach mechanism → application → pearl. Buttons are verbs ("Begin", "Reveal answer", "Show the choices", "Review due").
 No exclamation marks, no gamification chrome.
+
+## 7. Interactive learning
+
+`oksat-learn.html` is the first-pass half of OKSAT and follows the same
+system (`css/oksat.css` tokens; `css/oksat-learn.css` adds only layout).
+
+- **Predict, then reveal.** A retrieval prompt offers a box to commit an
+  answer before the model answer; the typed text stays in the tab. Grades use
+  the engine's four tiers and are a record for the learner, never a score.
+- **Color means one thing.** Callouts carry the only color: pearl = vermilion
+  (act), mechanism = blue (science), trap = crimson (the pass/miss pair), hook
+  = neutral. The guide's subspecialty hue marks the section number, progress
+  bar and active chapter, never small text (it is too dim on the dark ground).
+- **A guide never grades the module.** Questions answered in place are
+  recorded in the guide's own record; the module keeps its locked first
+  attempt and its schedule.
+- **Square, hairline, mono for chrome**, as everywhere: no shadows, no pills
+  above headings, evidence and source chips in the UI face.
+- **Figures are reused**: an SVG from `img/oksat/` is loaded as an image on its
+  own white ground and labelled schematic; do not redraw one that exists.

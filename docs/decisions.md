@@ -12,7 +12,7 @@ change works), `docs/docs-map.md` (the documentation pass).
 |---|---|---|---|
 | A new tool/utility page | `css/site.css` (tokens, faces, topbar, buttons, footer) + a page `<style>` on its tokens | `js/theme-boot.js` in `<head>`, `js/site.js` at the end, page logic in `js/<page>.js` | `cpt-search.html` |
 | A page that must work fully offline | as above — `css/site.css` and the fonts are same-origin; **zero remote requests**, CSP with no remote origin | as above | `airway-jeopardy.html` |
-| An OKSAT page | `css/oksat.css` | `js/theme-boot.js` + the `js/oksat-*.js` stack; React/htm from `js/vendor/` | `oksat.html`, `oksat-study.html` |
+| An OKSAT page | `css/oksat.css` (the interactive-learning viewer adds `css/oksat-learn.css`, tokens only) | `js/theme-boot.js` + the `js/oksat-*.js` stack; React/htm from `js/vendor/` on the question viewer only | `oksat.html`, `oksat-study.html`, `oksat-learn.html` |
 | A page with an ES-module graph (3D) | `css/site.css` + `css/<page>.css` (its `--<page>-*` tokens; the WebGL scene reads them) | `js/theme-boot.js` in `<head>`, `js/site.js` at the end, and **one** `<script type="module" src="js/<page>/main.js">`; imports are relative, three.js only from `js/vendor/three-<version>/`; `tools/stamp-assets.mjs` stamps the whole graph | `ssb.html` |
 
 Every new page also gets: the CSP `<meta>` from its closest precedent,
@@ -67,6 +67,7 @@ resolving** — do not "simplify" it away without migrating the data first.
 | `oksat:progress:<slug>:<rev>` | `js/oksat-engine.js` | answers + firstCorrect |
 | `oksat:srs:<slug>:<rev>` | `js/oksat-engine.js` | Leitner boxes |
 | `oksat:cmastery:<slug>:<rev>`, `oksat:conf:<slug>:<rev>`, `oksat:session:<rev>` | `js/oksat-store.js` | mastery / calibration / analytics |
+| `oksat:learn:<guide>:<rev>` | `js/oksat-store.js` (`getLearn`/`saveLearn`), written by `js/oksat-learn.js` | Interactive learning: sections done, retrieval-prompt grades, inline module answers, reading mode. Never a module's own progress |
 | `ssb:prefs` | `js/ssb/state.js` | SSB depth (tier 1/2/3) as `{v:1, tier}`; written only on an explicit depth pick, never from a shared link |
 | `cpt-history`, `cpt-analytics` | `js/cpt-search.js` | recent searches + counts; predates the namespaces, kept so history survives |
 
@@ -100,6 +101,13 @@ Full schema and quality spec: `docs/authoring-oksat.md`. The rules that matter m
 
 Modules are authored by hand. There is no generator — the Gemini-backed
 Question Forge was retired in 2026-09.
+
+**Interactive learning guides** are the first-pass counterpart
+(`docs/authoring-oksat-guide.md`, `.claude/skills/oksat-guide/SKILL.md`): same
+subspecialty hues, same rule that `accent` is never invented, one entry in
+`OKSAT_GUIDES`, and the question modules a guide drills into are the source of
+truth for its questions. Add questions to a module (new ids, appended, never
+renumbered) rather than copying them into a guide.
 
 ## 5. Styling / theming
 
