@@ -95,6 +95,46 @@ written as Unicode (`IL-10⁺`, `αβγ₂`). `check-data` fails any string whos
 stars or `[[ ]]` do not close. Use bold for **terminology**, as in the
 modules; bullets are `ul` blocks, not text.
 
+### Terms (`js/oksat-terms.js`)
+
+Every specialty abbreviation a reader sees is defined once, in the shared
+lexicon `js/oksat-terms.js` (`TERMS`, keyed by the exact surface form), and
+the viewer marks **every** occurrence: hover or focus shows the full name, a tap
+or Enter pins it, a tap elsewhere or Escape closes it. Paragraphs, lists,
+tables, callout labels, card heads, captions, checker text, section and
+chapter titles, and module questions shown in place are all marked; links,
+buttons, summaries and source chips are not, since a tap there must keep its
+own job. One lexicon serves every guide, so a term is defined once for all
+topics.
+
+Rules, enforced by `check-data` over every string a reader sees (markup and
+source chips stripped; figure `alt` text is not scanned):
+
+- **Every acronym-shaped token resolves.** Two capitals (`CRS`), a capital
+  and a digit (`Th17`, `LTE4`), or lowercase into a capital (`eCRS`, `sIgE`)
+  must be a `TERMS` key or `PLAIN`, or the check fails naming the token.
+  Hyphenated words match their longest known run (`anti-IL-5Rα` → `IL-5Rα`,
+  `IgE-mediated` → `IgE`); a plural in lowercase `s` finds its singular.
+- **No idle entries.** A term no guide uses fails; delete it. The lexicon is
+  what the guides say, not a dictionary.
+- **Expand only what a non-otolaryngologist may not know.** `TERMS` holds
+  specialty vocabulary: rhinology, allergy and otology disease names and
+  procedures (CRSwNP, CCAD, EMLP), specialty scores and tests (SNOT-22, SPT),
+  sources and trials (EPOS, SINUS-52), and specialized immunology (ILC2,
+  FcεRI, TSLP, CD numbers). General medical knowledge goes in `PLAIN` and is
+  never marked: NSAID, PFT, RCT, COPD, CRP, COX-1, IgE, Th2, CT. So do roman
+  numerals, interleukins by number (`IL-13`), units, and a form whose meaning
+  depends on context (T2: MRI weighting or type 2). When unsure, ask whether
+  an internist would stop at it.
+- **The value is the full name**, then other names after a semicolon
+  (`'CD23': 'FcεRII; low-affinity IgE receptor'`). No claims, numbers or
+  mechanism: an expansion is a name, and the teaching stays in the text.
+- **A meaning collision across guides** (ESS: endoscopic sinus surgery vs
+  Epworth Sleepiness Scale) is the one case for a per-guide override; add the
+  mechanism with the first guide that needs it, not before.
+- **Never a spoiler**: a `check` prompt never asks what an abbreviation
+  stands for, since the popover would answer it.
+
 ### Retrieval prompts (`check`)
 
 The learner can type an answer first (optional, kept only in the tab and never
@@ -152,8 +192,11 @@ module questions yet has no `drill`.
   or scoring rule. Place it after the teaching it illustrates, and let the
   caption point at the prompt or callout it serves.
 - **Synonyms**: when a term has several names (CD number, eponym,
-  abbreviation), give both at first use, in figures too, and list it in the
-  guide's glossary table on its Start chapter.
+  abbreviation), give both at first use, in figures too, and add the term to
+  `js/oksat-terms.js` with its other names after the semicolon. A guide's
+  Start-chapter glossary table is for synonym sets worth reading as a list
+  (a CD number and its receptor), not a list of abbreviations: those are in
+  the popover.
 - **Link the two halves**: when a section's facts are not yet drillable, add
   the questions to a module (new items get new ids) rather than inlining them
   in the guide, then point at them.
@@ -163,7 +206,7 @@ module voice (`docs/design-principles.md` §6).
 
 ## Verification
 
-`node tools/check-data.mjs` (structure, markup, figures, references),
+`node tools/check-data.mjs` (structure, markup, figures, references, terms),
 `node tools/test-oksat-learn.mjs` (behavior), `node tools/smoke-pages.mjs`
 (the page boots), then open the chapter and read it, in both themes and at
 phone width. A green check proves structure, not that the page teaches.

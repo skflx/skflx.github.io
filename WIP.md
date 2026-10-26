@@ -91,7 +91,9 @@ Module families, and their status:
   per-section drill links. One guide so far, **AR · CRS · AERD** (`ar-crs-aerd`):
   ten chapters from type 2 immunology to critical appraisal, ported from the
   study atlas built in conversation (2026-10-26), plus a flashcard deck and a
-  pearl wall. Its question bank was folded into the modules: the AERD and
+  pearl wall. Every specialty abbreviation is marked and expands on hover, focus or tap
+  from one shared lexicon (`js/oksat-terms.js`, 2026-10), which `check-data`
+  holds complete and free of idle entries. Its question bank was folded into the modules: the AERD and
   biologics items already existed in `aerd-biologics`; thirteen new MCQs were
   added to `allergy-testing` (its first MCQs; items q84 to q96), and a new
   `crs-ars` module (ARS, CRS, fungal and secondary CRS, EPOS biologic criteria,
@@ -109,7 +111,8 @@ None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls
 discrepancies (hillock mapping, prominence thresholds) for owner review.
 
-**Next:** more guides (`/oksat-guide`), each built with its questions;
+**Next:** the plan for more guides and the sk.oto wiki link-up is in
+`docs/oksat-learn-roadmap.md`. More guides (`/oksat-guide`), each built with its questions;
 authoring is manual (`docs/authoring-oksat.md`). Laryngology and
 head-and-neck oncology have hues reserved in `OKSAT_SUBSPECIALTIES` but no
 modules. The AO CMF content is still to be folded into the facial-trauma modules.

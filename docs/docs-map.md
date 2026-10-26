@@ -16,6 +16,7 @@ no design judgment required.
 | `WIP.md` | Current state of each system (what it is / where it stands / what is next) | A significant chunk of work completes — rewrite the affected section to match reality |
 | `docs/authoring-oksat.md` | How to author an OKSAT module | Module schema or manifest entry shape changes |
 | `docs/authoring-oksat-guide.md` | How to author an OKSAT interactive guide: chapter and block schema, inline markup, checkers, inline module questions, drill rows | The guide schema, a block type, or `js/oksat-learn.js` rendering changes |
+| `docs/oksat-learn-roadmap.md` | Interactive learning plan: the reference/teaching/practice layers, guide content rules (enforced and proposed), next guides, sk.oto wiki integration phases | A guide ships, a rule is built, a phase or owner decision lands |
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
@@ -38,8 +39,8 @@ no design judgment required.
 | `images/list.txt` | Image inventory | An image is added/removed |
 | `fonts/LICENSE-*.txt` | Licenses of the self-hosted faces | A face is added or removed |
 
-One plan doc: `docs/ssb-roadmap.md`, a task board kept current, not a
-diary. `WIP.md` carries current state; the roadmap carries what is next
+Two plan docs: `docs/ssb-roadmap.md` and `docs/oksat-learn-roadmap.md`,
+boards kept current, not diaries. `WIP.md` carries current state; the roadmap carries what is next
 and who does it.
 
 ## The second-pass checklist
