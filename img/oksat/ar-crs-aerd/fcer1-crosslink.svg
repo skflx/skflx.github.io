@@ -6,6 +6,7 @@
   <rect width="860" height="520" fill="#ffffff"/>
 
   <text x="20" y="30" font-weight="bold">A · Allergen bridges two IgE–FcεRI complexes</text>
+  <text x="20" y="48" font-size="12" fill="#444">FcεRI = high-affinity IgE receptor; no CD number (α chain: FCER1A; β: MS4A2)</text>
   <text x="470" y="30" font-weight="bold">B · What the mast cell releases, and when</text>
 
   <!-- membrane -->
@@ -78,7 +79,7 @@
   <text x="140" y="300" text-anchor="end" font-size="12.5" font-weight="bold" fill="#b23a2e">ITAMs (red)</text>
   <text x="140" y="316" text-anchor="end" font-size="12.5" fill="#444">on β and γ</text>
   <path d="M290,312 L290,338" stroke="#1d1d1b" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
-  <text x="280" y="330" text-anchor="end" font-size="12.5" fill="#444">Src-family kinase</text>
+  <text x="280" y="330" text-anchor="end" font-size="12.5" fill="#444">Src-family kinase (Lyn)</text>
   <text x="280" y="345" text-anchor="end" font-size="12.5" fill="#444">phosphorylates ITAMs</text>
   <circle cx="270" cy="370" r="22" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.6"/>
   <text x="270" y="375" text-anchor="middle" font-weight="bold" font-size="14" fill="#b23a2e">Syk</text>
@@ -126,5 +127,5 @@
   <text x="482" y="457" font-size="12.5">FcεRI. Less allergen sensitivity, and skin-test wheals can</text>
   <text x="482" y="473" font-size="12.5">stay flat for months (hold 4–6 months before testing).</text>
 
-  <text x="20" y="500" font-size="12" fill="#444">Schematic, not to scale. ICAR VI.A. The low-affinity receptor, CD23 (FcεRII), on B cells, macrophages and epithelium is not drawn.</text>
+  <text x="20" y="500" font-size="12" fill="#444">Schematic, not to scale. ICAR VI.A. Low-affinity FcεRII = CD23 (on B cells, macrophages, epithelium) not drawn. Synonyms: guide glossary.</text>
 </svg>

@@ -13,7 +13,7 @@ window.__OKSAT_CHAPTER = {
     tldr: [
         'Three immune programs: **type 1** (IFN-γ; viruses), **type 2** (IL-4, IL-5, IL-13; parasites, tissue repair), **type 3** (IL-17, IL-22; extracellular bacteria, fungi). CRS is one or more of these switched on and never switched off.',
         'A leaky epithelium releases **alarmins** (TSLP, IL-33, IL-25) that start type 2 inflammation through dendritic cells and **ILC2s**.',
-        '**IL-4 → STAT6 → GATA-3** makes Th2 cells; IL-4/IL-13 plus **CD40L–CD40** switch B cells to IgE; IgE arms **FcεRI** on mast cells and basophils.',
+        '**IL-4 → STAT6 → GATA-3** makes Th2 cells; IL-4/IL-13 plus **CD40L (CD154)–CD40** switch B cells to IgE; IgE arms **FcεRI** on mast cells and basophils.',
         'Re-exposure cross-links IgE: **early phase** in minutes (histamine, tryptase, CysLTs), **late phase** at 4–8 h (eosinophils, Th2, congestion, hyposmia).',
         'Polyps form when IL-13 suppresses **t-PA** and a **fibrin mesh** builds up in the stroma.',
     ],
@@ -159,8 +159,8 @@ window.__OKSAT_CHAPTER = {
                     t: 'ol',
                     items: [
                         'Dendritic cells in the mucosa take up allergen, migrate to secondary lymphoid tissue, and present it on **MHC class II** to naive Th0 cells.',
-                        'Costimulation through **CD28 on the T cell with CD80/CD86** on the APC, in the presence of **IL-4**, drives Th2 differentiation: IL-4 → **STAT6** → master switch **GATA-3**.',
-                        'Th2 cells release IL-4, IL-5, IL-13. IL-4/IL-13 plus **CD40L (T cell) – CD40 (B cell)** trigger ε-germline transcription and **class switching to IgE**.',
+                        'Costimulation through **CD28 on the T cell with CD80/CD86 (B7-1/B7-2)** on the APC, in the presence of **IL-4**, drives Th2 differentiation: IL-4 → **STAT6** → master switch **GATA-3**.',
+                        'Th2 cells release IL-4, IL-5, IL-13. IL-4/IL-13 plus **CD40L (CD154; T cell) – CD40 (B cell)** trigger ε-germline transcription and **class switching to IgE**.',
                         'Plasma cells secrete allergen-specific IgE, which binds **FcεRI** on mast cells and basophils. Memory Th2 and memory B cells persist.',
                     ],
                 },
@@ -211,7 +211,7 @@ window.__OKSAT_CHAPTER = {
                     t: 'kv',
                     rows: [
                         [
-                            'FcεRI (high affinity)',
+                            'FcεRI (high affinity; no CD number)',
                             'Mast cells and basophils (degranulation, cytokines); also dendritic cells and macrophages (antigen uptake that promotes Th2). Structure **αβγ₂**: α binds the IgE Fc; β (four transmembrane domains) stabilizes and amplifies; disulfide-linked γ dimer triggers signaling.',
                         ],
                         [
@@ -220,7 +220,7 @@ window.__OKSAT_CHAPTER = {
                         ],
                         [
                             'Signal',
-                            'Allergen bridges ≥2 IgE–FcεRI complexes → **ITAMs on β and γ** are phosphorylated by Src-family kinases → **Syk** is recruited and activated → degranulation plus de novo synthesis.',
+                            'Allergen bridges ≥2 IgE–FcεRI complexes → **ITAMs on β and γ** are phosphorylated by Src-family kinases (Lyn) → **Syk** is recruited and activated → degranulation plus de novo synthesis.',
                         ],
                         [
                             'Transcription',

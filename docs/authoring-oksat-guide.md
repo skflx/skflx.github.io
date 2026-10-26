@@ -151,6 +151,9 @@ module questions yet has no `drill`.
   cannot: a mechanism or loop, a time course, a spatial relation, a threshold
   or scoring rule. Place it after the teaching it illustrates, and let the
   caption point at the prompt or callout it serves.
+- **Synonyms**: when a term has several names (CD number, eponym,
+  abbreviation), give both at first use, in figures too, and list it in the
+  guide's glossary table on its Start chapter.
 - **Link the two halves**: when a section's facts are not yet drillable, add
   the questions to a module (new items get new ids) rather than inlining them
   in the guide, then point at them.

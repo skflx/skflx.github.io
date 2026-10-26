@@ -19,7 +19,7 @@
   <ellipse cx="274" cy="196" rx="16" ry="12" fill="#cdbfae"/>
   <ellipse cx="306" cy="206" rx="16" ry="12" fill="#cdbfae"/>
   <rect x="226" y="148" width="12" height="22" rx="4" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.4" transform="rotate(-40 232 159)"/>
-  <text x="290" y="282" text-anchor="middle" font-size="13">eosinophil (IL-5Rα empty)</text>
+  <text x="290" y="282" text-anchor="middle" font-size="13">eosinophil (IL-5Rα, CD125, empty)</text>
   <path d="M146,124 L222,150" stroke="#1d1d1b" stroke-width="1.3" stroke-dasharray="5 4" fill="none"/>
   <text x="190" y="128" font-size="12.5" fill="#444">cannot reach receptor</text>
   <text x="205" y="308" text-anchor="middle" font-size="13.5">No IL-5 signal → less maturation,</text>
@@ -27,7 +27,7 @@
 
   <!-- RIGHT: receptor targeting + ADCC -->
   <text x="615" y="32" text-anchor="middle" font-weight="bold">Benralizumab</text>
-  <text x="615" y="52" text-anchor="middle" font-size="13.5" fill="#444">binds IL-5Rα on the eosinophil; afucosylated Fc</text>
+  <text x="615" y="52" text-anchor="middle" font-size="13.5" fill="#444">binds IL-5Rα (CD125) on the eosinophil; afucosylated Fc</text>
   <circle cx="540" cy="190" r="58" fill="#f7efe4" stroke="#1d1d1b" stroke-width="1.6"/>
   <ellipse cx="524" cy="186" rx="16" ry="12" fill="#cdbfae"/>
   <ellipse cx="556" cy="196" rx="16" ry="12" fill="#cdbfae"/>

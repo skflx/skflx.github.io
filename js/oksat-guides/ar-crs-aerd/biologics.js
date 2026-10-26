@@ -36,7 +36,7 @@ window.__OKSAT_CHAPTER = {
                     rows: [
                         [
                             '**Dupilumab**',
-                            'Fully human anti-**IL-4Rα**: blocks IL-4 and IL-13 signaling (shared receptor chain) → less IgE synthesis, eosinophil recruitment, mucus, barrier leak, M2 activation',
+                            'Fully human anti-**IL-4Rα** (CD124): blocks IL-4 and IL-13 signaling (shared receptor chain) → less IgE synthesis, eosinophil recruitment, mucus, barrier leak, M2 activation',
                             'FDA 2019 (first)',
                             'In AERD lowers nasal and urinary LTE4 and partly restores PGE2',
                         ],
@@ -60,7 +60,7 @@ window.__OKSAT_CHAPTER = {
                         ],
                         [
                             '**Benralizumab**',
-                            'Afucosylated anti-**IL-5Rα**: NK-cell ADCC → near-complete eosinophil depletion',
+                            'Afucosylated anti-**IL-5Rα** (CD125): NK-cell ADCC via FcγRIIIa (CD16) → near-complete eosinophil depletion',
                             'Asthma; FDA declined CRSwNP (complete response letter, 2022)',
                             'OSTRO improved polyp and blockage scores; AERD subgroup not reported',
                         ],
