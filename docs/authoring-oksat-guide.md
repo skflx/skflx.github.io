@@ -144,9 +144,16 @@ module questions yet has no `drill`.
 - **Sources**: name the source on the claim (`[[src|…]]`) and say where
   sources disagree under a `trap` labelled "Source conflict". Numbers come from
   a source, never from memory. Content is draft; the owner verifies.
-- **Figures**: reuse a figure from `img/oksat/` where it exists; a new one
-  follows `docs/authoring-oksat.md` (SVG drawn for the purpose, labelled
-  schematic, with alt text).
+- **Figures**: reuse a figure from `img/oksat/` where it exists and agrees
+  with the guide's text; a new one follows `docs/authoring-oksat.md` (SVG drawn
+  for the purpose, labelled schematic, with alt text) and lives in
+  `img/oksat/<guide slug>/`. Draw one only where a picture carries what prose
+  cannot: a mechanism or loop, a time course, a spatial relation, a threshold
+  or scoring rule. Place it after the teaching it illustrates, and let the
+  caption point at the prompt or callout it serves.
+- **Synonyms**: when a term has several names (CD number, eponym,
+  abbreviation), give both at first use, in figures too, and list it in the
+  guide's glossary table on its Start chapter.
 - **Link the two halves**: when a section's facts are not yet drillable, add
   the questions to a module (new items get new ids) rather than inlining them
   in the guide, then point at them.

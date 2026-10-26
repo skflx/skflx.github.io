@@ -55,6 +55,13 @@ window.__OKSAT_CHAPTER = {
                     wide: 0,
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/aria-classification.svg',
+                    alt: 'Panel A: a two-by-two grid of days per week with symptoms (under 4, over 4) against consecutive weeks (under 4, 4 or more). Only the cell with over 4 days per week and 4 or more weeks is persistent; the other three are intermittent. Three example patients: grass, 6 days a week for 8 weeks, seasonal and persistent; house dust mite, 2 days a week all year, perennial and intermittent; tree, daily for 2 weeks, seasonal and intermittent. Panel B: mild means none of four impairments; moderate to severe means at least one of sleep disturbance, impaired daily or sport activity, impaired school or work, or troublesome symptoms.',
+                    label: 'Figure · ARIA duration and severity',
+                    cap: 'Schematic. The example patients are the trap below: seasonal and intermittent are different axes.',
+                },
+                {
                     t: 'call',
                     k: 'trap',
                     label: 'Trap',

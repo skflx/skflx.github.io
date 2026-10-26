@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 470" width="840" height="470" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Evidence grade versus recommendation policy in ICAR (schematic)</title>
+  <rect width="840" height="470" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">Grade says how good the studies are; policy says what to do. Read both.</text>
+
+  <!-- grid: x grade A..D (columns), y policy rows -->
+  <!-- columns: A x=200-330, B 330-460, C 460-590, D 590-720 -->
+  <g font-size="13" font-weight="bold" text-anchor="middle">
+    <text x="275" y="64">A</text><text x="425" y="64">B</text><text x="575" y="64">C</text><text x="725" y="64">D</text>
+  </g>
+  <text x="500" y="48" text-anchor="middle" font-size="12.5" fill="#444">aggregate grade of evidence (quality and consistency)</text>
+  <g font-size="12.5" text-anchor="end">
+    <text x="190" y="98" font-weight="bold">Strong recommendation</text>
+    <text x="190" y="158" font-weight="bold">Recommendation</text>
+    <text x="190" y="218" font-weight="bold">Option</text>
+    <text x="190" y="278" font-weight="bold">No recommendation</text>
+    <text x="190" y="338" font-weight="bold">Against</text>
+    <text x="190" y="354" fill="#444">(strong or not)</text>
+  </g>
+  <g fill="none" stroke="#cfcdc7" stroke-width="1">
+    <rect x="200" y="72" width="600" height="300"/>
+    <line x1="350" y1="72" x2="350" y2="372"/><line x1="500" y1="72" x2="500" y2="372"/><line x1="650" y1="72" x2="650" y2="372"/>
+    <line x1="200" y1="132" x2="800" y2="132"/><line x1="200" y1="192" x2="800" y2="192"/><line x1="200" y1="252" x2="800" y2="252"/><line x1="200" y1="312" x2="800" y2="312"/>
+  </g>
+  <!-- highlight column A -->
+  <rect x="200" y="72" width="150" height="300" fill="#b23a2e" opacity="0.06"/>
+
+  <!-- points -->
+  <g font-size="12">
+    <circle cx="214" cy="94" r="5" fill="#1d1d1b"/><text x="224" y="98">INCS spray</text>
+    <circle cx="214" cy="114" r="5" fill="#1d1d1b"/><text x="224" y="118">SCIT, SLIT tablets</text>
+    <circle cx="214" cy="154" r="5" fill="#1d1d1b"/><text x="224" y="158">cromolyn (2nd line)</text>
+    <circle cx="214" cy="206" r="6" fill="#b23a2e"/><text x="224" y="210" fill="#b23a2e" font-weight="bold">probiotics</text>
+    <circle cx="214" cy="226" r="6" fill="#b23a2e"/><text x="224" y="230" fill="#b23a2e" font-weight="bold">acupuncture</text>
+    <circle cx="214" cy="246" r="5" fill="#1d1d1b"/><text x="224" y="250" font-size="11.5">biologics for AR</text>
+    <circle cx="214" cy="334" r="6" fill="#b23a2e"/><text x="224" y="330" fill="#b23a2e" font-weight="bold">LTRA as 1st-line</text>
+    <text x="224" y="345" fill="#b23a2e" font-weight="bold">monotherapy</text>
+    <circle cx="214" cy="358" r="5" fill="#1d1d1b"/><text x="224" y="362" font-size="11.5">oral decongestants</text>
+
+    <circle cx="364" cy="154" r="5" fill="#1d1d1b"/><text x="374" y="158">turbinate reduction</text>
+    <circle cx="364" cy="214" r="5" fill="#1d1d1b"/><text x="374" y="218">rush, cluster SCIT</text>
+    <circle cx="364" cy="274" r="5" fill="#1d1d1b"/><text x="374" y="278">oral H2 antihistamine</text>
+    <circle cx="364" cy="334" r="5" fill="#1d1d1b"/><text x="374" y="338">epicutaneous AIT</text>
+
+    <circle cx="514" cy="154" r="5" fill="#1d1d1b"/><text x="524" y="158">breastfeeding ≥4–6 mo</text>
+    <circle cx="514" cy="214" r="5" fill="#1d1d1b"/><text x="524" y="218">septoplasty</text>
+    <circle cx="514" cy="234" r="5" fill="#1d1d1b"/><text x="524" y="238">childhood pet exposure</text>
+
+    <circle cx="664" cy="154" r="5" fill="#1d1d1b"/><text x="674" y="158">history, exam</text>
+    <circle cx="664" cy="274" r="5" fill="#1d1d1b"/><text x="674" y="278">honey, herbal</text>
+    <circle cx="664" cy="334" r="5" fill="#1d1d1b"/><text x="674" y="338">routine imaging for AR</text>
+  </g>
+
+  <!-- explanation -->
+  <rect x="20" y="388" width="800" height="56" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.1"/>
+  <text x="32" y="410" font-size="13">Column A runs from <tspan font-weight="bold">strong recommendation</tspan> to <tspan font-weight="bold">against</tspan>. The policy also weighs size of benefit, harm and cost:</text>
+  <text x="32" y="430" font-size="13">heterogeneous strains and protocols leave probiotics and acupuncture as options; the boxed warning and cheaper INCS sink LTRAs.</text>
+
+  <text x="20" y="462" font-size="12" fill="#444">Schematic. ICAR-AR 2023 grades and policies as quoted in chapters 2–4; placement within a cell is arbitrary.</text>
+</svg>

@@ -36,6 +36,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/aerd-onset-order.svg',
+                    alt: 'Timeline: 1, rhinitis with congestion and rhinorrhea; 2, asthma about 2 years later, usually adult-onset and eosinophilic; 3, aspirin and NSAID reactions about 4 years after that, marked in red, noting that earlier NSAID tolerance does not exclude AERD; 4, hyposmia, which signals polyps. A box reminds to ask about reactions, avoidance and alcohol.',
+                    label: 'Figure · order of onset',
+                    cap: 'Schematic, not to scale; order per LIO. Sources differ on where polyps fall; the NSAID reaction comes last in both.',
+                },
+                {
                     t: 'call',
                     k: 'trap',
                     label: 'Trap',
@@ -104,6 +111,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/transcellular-ltc4.svg',
+                    alt: 'A neutrophil with 5-LO and FLAP makes LTA4 but has no LTC4 synthase; an adherent platelet has LTC4 synthase but no 5-LO. Joined by P-selectin, the pair converts LTA4 to LTC4, then LTD4 and LTE4, increased in AERD.',
+                    label: 'Figure · transcellular LTC4 synthesis',
+                    cap: 'Schematic. The Platelets entry above, drawn: why antiplatelet drugs were trialled in AERD.',
+                },
+                {
                     t: 'call',
                     k: 'pearl',
                     label: 'Board pearl',
@@ -159,6 +173,13 @@ window.__OKSAT_CHAPTER = {
                         { t: 'p', x: 'Leukotriene modifiers blunt the bronchial reaction during challenge. That makes challenges safer, but a reaction may then show up mainly as nasal or ocular symptoms; read upper-airway responses as positive.' },
                     ],
                 },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/challenge-reading.svg',
+                    alt: 'Decision tree: no reaction through 325 mg in a 1-day protocol (or 650 mg or more in a multi-day protocol) is negative. A reaction with an FEV1 fall of 20% or more is positive. A clear naso-ocular reaction without that fall is positive by the EAACI definition. Mild or nonspecific symptoms alone are not positive. A note records the discrepancy between definitions and the effect of leukotriene-modifier pretreatment.',
+                    label: 'Figure · reading an aspirin challenge',
+                    cap: 'Schematic. The naso-ocular branch is the trap above: on leukotriene modifiers the reaction may be mainly nasal or ocular.',
+                },
                 { t: 'check', id: 'c1', q: 'What FEV1 change defines a positive aspirin challenge?', a: 'A fall of more than 20%.' },
                 { t: 'check', id: 'c2', q: 'Three reasons to do the challenge as an inpatient?', a: 'β-blocker use, recent myocardial infarction, severe asthma.' },
                 {
@@ -188,6 +209,13 @@ window.__OKSAT_CHAPTER = {
                         'In a prospective AERD Draf III cohort (n = 31), 18 (58%) had polyp recurrence and 7 needed revision Draf III at a mean 45 months; AERD carried higher recurrence risk than non-AERD.',
                         'Coordinate with allergy: if already on aspirin, plan either stop-and-redesensitize after ESS or continue through surgery.',
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/draf-extent.svg',
+                    alt: 'Four coronal schematics of the frontal sinuses, ethmoid cells, middle turbinates, lamina papyracea and septum with the removed bone shaded red. Draf I clears the frontal recess and leaves the frontal ostium. Draf IIa opens the frontal floor from the lamina papyracea to the middle turbinate. Draf IIb opens it from the lamina papyracea to the nasal septum. Draf III opens both floors from lamina to lamina and removes the superior nasal septum and the intersinus septum. A note gives the AERD outcomes.',
+                    label: 'Figure · Draf I to III',
+                    cap: 'Schematic. Draf III as defined above; Draf I to IIb are standard definitions added for contrast.',
                 },
                 {
                     t: 'call',
@@ -244,6 +272,20 @@ window.__OKSAT_CHAPTER = {
                             '1a: better than placebo for QOL and nasal symptoms, but the SNOT difference did not reach the MCID. Use when you are confident about adherence. Nasal lysine-aspirin and platelet inhibitors: not advised.',
                         ],
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/challenge-timeline.svg',
+                    alt: 'Timeline of the Brigham 1-day protocol, aspirin 40.5, 81, 162.5 and 325 mg every 90 minutes with symptom scores, vital signs and spirometry before each dose. Row A: no reaction through 325 mg, negative. Row B: a reaction at 81 mg 30 to 60 minutes after the dose, treated, then the dose repeated and escalated to 325 mg, desensitized.',
+                    label: 'Figure · the 1-day challenge and desensitization',
+                    cap: 'Schematic. Challenge and desensitization are the same day; a reaction becomes the starting point for desensitizing.',
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/atad-timeline.svg',
+                    alt: 'Timeline from ESS at day 0, when urinary LTE4 falls and PGE2 rises, to desensitization 2 to 4 weeks later, then daily aspirin indefinitely. A gap of more than 48 hours off aspirin loses tolerance and requires supervised re-desensitization.',
+                    label: 'Figure · when to desensitize, and the 48-hour rule',
+                    cap: 'Schematic. Doses on the figure are one US regimen; trials range from 100 to 650 mg daily.',
                 },
                 {
                     t: 'call',

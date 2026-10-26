@@ -248,6 +248,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/ait-time-course.svg',
+                    alt: 'Schematic curves over 8 years: a short build-up, maintenance for 3 to 5 years, then stopping. Symptom and medication scores fall once maintenance starts and stay low after stopping. Allergen-specific IgG4 and regulatory T and B cells rise during maintenance and decline slowly after. Specific IgE rises briefly then falls. Boxes note early mast cell and basophil desensitization, that SCIT acts earlier with larger IgG4 rises than SLIT, and that adherence is poor (18% reached 3 years in one pharmacy database).',
+                    label: 'Figure · what immunotherapy changes, and when',
+                    cap: 'Schematic: directions from ICAR, curve heights illustrative. The adherence box is the trap behind every efficacy curve.',
+                },
+                {
                     t: 'kv',
                     rows: [
                         [

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 580" width="860" height="580" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Fungal rhinosinusitis: the host decides the disease (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+    <pattern id="bone" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#f2f2ef"/><path d="M0,4 H8" stroke="#8a8a85" stroke-width="1.4"/>
+    </pattern>
+    <g id="hy">
+      <path d="M0,0 l10,-6 l8,4 M10,-6 l4,-10 M18,-2 l9,-5" stroke="#1d1d1b" stroke-width="1.3" fill="none"/>
+    </g>
+  </defs>
+  <rect width="860" height="580" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">Same fungi, different hosts: where the hyphae sit relative to the mucosa is the diagnosis</text>
+  <line x1="40" y1="54" x2="820" y2="54" stroke="#1d1d1b" stroke-width="1.4" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <g font-size="12.5" fill="#444">
+    <text x="40" y="72">hypersensitive (atopic)</text>
+    <text x="430" y="72" text-anchor="middle">immunocompetent</text>
+    <text x="820" y="72" text-anchor="end">immunosuppressed</text>
+  </g>
+
+  <!-- column frames -->
+  <g fill="none" stroke="#cfcdc7" stroke-width="1.2">
+    <rect x="20" y="84" width="268" height="200"/>
+    <rect x="296" y="84" width="268" height="200"/>
+    <rect x="572" y="84" width="268" height="200" stroke="#b23a2e"/>
+  </g>
+  <g font-weight="bold" text-anchor="middle">
+    <text x="154" y="106">AFRS</text>
+    <text x="430" y="106">Fungal ball</text>
+    <text x="706" y="106" fill="#b23a2e">Invasive fungal</text>
+  </g>
+
+  <!-- shared layers: lumen 114-196, epithelium 196-202, submucosa 202-240, bone 240-262 -->
+  <!-- AFRS -->
+  <rect x="30" y="116" width="248" height="80" fill="#f7efe4"/>
+  <path d="M30,134 C90,128 180,140 278,132 M30,152 C100,146 170,158 278,150 M30,170 C90,164 200,176 278,168 M30,186 C110,182 190,190 278,184" stroke="#cdbfae" stroke-width="1.3" fill="none"/>
+  <use href="#hy" x="70" y="150"/><use href="#hy" x="190" y="170"/><use href="#hy" x="130" y="134"/>
+  <g fill="#b23a2e"><circle cx="58" cy="168" r="3.5"/><circle cx="110" cy="182" r="3.5"/><circle cx="160" cy="152" r="3.5"/><circle cx="236" cy="140" r="3.5"/><circle cx="250" cy="182" r="3.5"/><circle cx="98" cy="128" r="3.5"/></g>
+  <g fill="#2f5d8a"><path d="M212,152 l4,-6 l4,6 l-4,6 z"/><path d="M84,186 l4,-6 l4,6 l-4,6 z"/></g>
+  <rect x="30" y="196" width="248" height="6" fill="#1d1d1b"/>
+  <rect x="30" y="202" width="248" height="38" fill="#f6e4e1"/>
+  <rect x="30" y="240" width="248" height="22" fill="url(#bone)" stroke="#8a8a85"/>
+  <text x="154" y="226" text-anchor="middle" font-size="12">eosinophilic mucosa, polyps</text>
+
+  <!-- Fungal ball -->
+  <rect x="306" y="116" width="248" height="80" fill="#ffffff"/>
+  <ellipse cx="430" cy="160" rx="78" ry="32" fill="#8a8a85" stroke="#1d1d1b" stroke-width="1.4"/>
+  <use href="#hy" x="380" y="160"/>
+  <path d="M370,150 l14,-6 l10,8 l12,-6 M420,170 l16,-8 l12,6 M450,152 l14,4 l10,-8" stroke="#f2f2ef" stroke-width="1.3" fill="none"/>
+  <rect x="306" y="196" width="248" height="6" fill="#1d1d1b"/>
+  <rect x="306" y="202" width="248" height="38" fill="#f2f2ef"/>
+  <rect x="306" y="240" width="248" height="22" fill="url(#bone)" stroke="#8a8a85"/>
+  <rect x="306" y="236" width="248" height="8" fill="url(#bone)" stroke="none"/>
+  <text x="430" y="226" text-anchor="middle" font-size="12">mucosa intact; sinus wall thickens</text>
+
+  <!-- Invasive -->
+  <rect x="582" y="116" width="248" height="80" fill="#ffffff"/>
+  <rect x="582" y="196" width="100" height="6" fill="#1d1d1b"/>
+  <rect x="740" y="196" width="90" height="6" fill="#1d1d1b"/>
+  <rect x="682" y="196" width="58" height="66" fill="#3a3a38"/>
+  <rect x="582" y="202" width="100" height="38" fill="#f2f2ef"/>
+  <rect x="740" y="202" width="90" height="38" fill="#f2f2ef"/>
+  <rect x="582" y="240" width="100" height="22" fill="url(#bone)" stroke="#8a8a85"/>
+  <rect x="740" y="240" width="90" height="22" fill="url(#bone)" stroke="#8a8a85"/>
+  <path d="M640,170 l14,14 l6,18 l12,10 l10,16 M660,184 l-10,14 M672,212 l18,-4 M690,160 l0,30 l14,22 l6,24 M704,212 l14,-8" stroke="#b23a2e" stroke-width="1.6" fill="none"/>
+  <ellipse cx="790" cy="222" rx="24" ry="13" fill="#e7edf3" stroke="#2f5d8a" stroke-width="1.4"/>
+  <path d="M772,222 l22,0 M786,214 l10,14" stroke="#b23a2e" stroke-width="1.6"/>
+  <path d="M708,218 C730,212 750,218 772,222" stroke="#b23a2e" stroke-width="2" fill="none"/>
+  <text x="606" y="150" font-size="12" fill="#b23a2e" font-weight="bold">hyphae in tissue</text>
+  <text x="790" y="190" text-anchor="middle" font-size="11.5" fill="#2f5d8a">vessel</text>
+  <text x="711" y="276" text-anchor="middle" font-size="12" fill="#444">necrosis</text>
+
+  <!-- key -->
+  <g font-size="12" fill="#444">
+    <text x="20" y="302"><tspan fill="#b23a2e">●</tspan> eosinophils · <tspan fill="#2f5d8a">◆</tspan> Charcot–Leyden crystals · thin branching lines = hyphae · hatched = bone</text>
+  </g>
+
+  <!-- rows -->
+  <g font-size="12.5">
+    <text x="20" y="324" font-weight="bold" fill="#444">Host</text>
+    <text x="32" y="342">young, atopic, asthma;</text><text x="32" y="358">warm humid climates</text>
+    <text x="308" y="342">immunocompetent; often</text><text x="308" y="358">after dental work</text>
+    <text x="584" y="342">diabetes ~50%,</text><text x="584" y="358">hematologic malignancy ~40%</text>
+
+    <text x="20" y="386" font-weight="bold" fill="#444">Key finding</text>
+    <text x="32" y="404">eosinophilic mucin, no invasion;</text><text x="32" y="420">type I hypersensitivity to fungi</text>
+    <text x="308" y="404">non-invasive mass, usually</text><text x="308" y="420">maxillary</text>
+    <text x="584" y="404" fill="#b23a2e" font-weight="bold">hyphae within tissue;</text><text x="584" y="420">angioinvasion → thrombosis, infarct</text>
+
+    <text x="20" y="448" font-weight="bold" fill="#444">Imaging</text>
+    <text x="32" y="466">CT: hyperdense, expanded,</text><text x="32" y="482">eroded. MRI: T1 and T2 signal voids</text>
+    <text x="308" y="466">neo-osteogenesis of the</text><text x="308" y="482">sinus wall</text>
+    <text x="584" y="466">MRI loss of enhancement:</text><text x="584" y="482">86% vs CT 69% sensitivity</text>
+
+    <text x="20" y="510" font-weight="bold" fill="#444">Treat</text>
+    <text x="32" y="528">surgery + peri-op oral steroids;</text><text x="32" y="544">topical steroids; ± AIT</text>
+    <text x="308" y="528">removal through an adequate</text><text x="308" y="544">antrostomy</text>
+    <text x="584" y="528">antifungals + repeated debridement</text><text x="584" y="544">+ reduce immunosuppression</text>
+  </g>
+  <line x1="20" y1="370" x2="840" y2="370" stroke="#cfcdc7"/>
+  <line x1="20" y1="432" x2="840" y2="432" stroke="#cfcdc7"/>
+  <line x1="20" y1="494" x2="840" y2="494" stroke="#cfcdc7"/>
+  <text x="20" y="572" font-size="12" fill="#444">Schematic, not to scale. EPOS 1.8.6 (fungal rhinosinusitis), as in 6.6.</text>
+</svg>

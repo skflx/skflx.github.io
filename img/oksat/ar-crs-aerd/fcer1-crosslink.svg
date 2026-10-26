@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 520" width="860" height="520" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>FcεRI cross-linking, signalling and the mediators it releases (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+  </defs>
+  <rect width="860" height="520" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">A · Allergen bridges two IgE–FcεRI complexes</text>
+  <text x="20" y="48" font-size="12" fill="#444">FcεRI = high-affinity IgE receptor; no CD number (α chain: FCER1A; β: MS4A2)</text>
+  <text x="470" y="30" font-weight="bold">B · What the mast cell releases, and when</text>
+
+  <!-- membrane -->
+  <rect x="20" y="236" width="420" height="26" fill="#f2f2ef"/>
+  <line x1="20" y1="236" x2="440" y2="236" stroke="#1d1d1b" stroke-width="1.4"/>
+  <line x1="20" y1="262" x2="440" y2="262" stroke="#1d1d1b" stroke-width="1.4"/>
+  <text x="26" y="228" font-size="12" fill="#444">outside</text>
+  <text x="26" y="280" font-size="12" fill="#444">mast cell / basophil</text>
+
+  <!-- allergen -->
+  <ellipse cx="240" cy="72" rx="70" ry="20" fill="#8a6d4b"/>
+  <text x="240" y="77" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">allergen</text>
+
+  <!-- two receptors: c=240 and c=360 ; alpha at c-30 -->
+  <!-- receptor 1 (c=210) -->
+  <g stroke="#1d1d1b" stroke-width="1.6" fill="none">
+    <!-- IgE -->
+    <path d="M180,184 L180,132 M180,132 L164,94 M180,132 L198,88" stroke="#2f5d8a" stroke-width="5" stroke-linecap="round"/>
+    <!-- alpha Ig domains + stalk -->
+    <ellipse cx="180" cy="200" rx="13" ry="15" fill="#ffffff"/>
+    <ellipse cx="180" cy="224" rx="12" ry="11" fill="#ffffff"/>
+    <line x1="180" y1="235" x2="180" y2="276"/>
+    <!-- beta: 4 TM passes -->
+    <path d="M200,276 L200,232 Q205,224 210,232 L210,266 Q215,274 220,266 L220,232 Q225,224 230,232 L230,276"/>
+    <!-- gamma dimer -->
+    <line x1="246" y1="226" x2="246" y2="300"/>
+    <line x1="256" y1="226" x2="256" y2="300"/>
+    <line x1="246" y1="230" x2="256" y2="230" stroke-dasharray="2 2"/>
+  </g>
+  <!-- ITAMs r1 -->
+  <g fill="#b23a2e">
+    <rect x="226" y="282" width="9" height="16"/>
+    <rect x="242" y="288" width="8" height="16"/><rect x="253" y="288" width="8" height="16"/>
+  </g>
+
+  <!-- receptor 2 (c=330) -->
+  <g stroke="#1d1d1b" stroke-width="1.6" fill="none">
+    <path d="M300,184 L300,132 M300,132 L282,88 M300,132 L316,94" stroke="#2f5d8a" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="300" cy="200" rx="13" ry="15" fill="#ffffff"/>
+    <ellipse cx="300" cy="224" rx="12" ry="11" fill="#ffffff"/>
+    <line x1="300" y1="235" x2="300" y2="276"/>
+    <path d="M320,276 L320,232 Q325,224 330,232 L330,266 Q335,274 340,266 L340,232 Q345,224 350,232 L350,276"/>
+    <line x1="366" y1="226" x2="366" y2="300"/>
+    <line x1="376" y1="226" x2="376" y2="300"/>
+    <line x1="366" y1="230" x2="376" y2="230" stroke-dasharray="2 2"/>
+  </g>
+  <g fill="#b23a2e">
+    <rect x="346" y="282" width="9" height="16"/>
+    <rect x="362" y="288" width="8" height="16"/><rect x="373" y="288" width="8" height="16"/>
+  </g>
+
+  <!-- subunit labels -->
+  <g font-size="12.5">
+    <text x="20" y="118" font-weight="bold" fill="#2f5d8a">IgE</text>
+    <text x="20" y="134" fill="#444">Fc end bound to α</text>
+    <line x1="126" y1="122" x2="172" y2="140" stroke="#444" stroke-width="1"/>
+    <text x="20" y="186" font-weight="bold">α chain</text>
+    <text x="20" y="202" fill="#444">binds the IgE Fc</text>
+    <line x1="114" y1="196" x2="166" y2="204" stroke="#444" stroke-width="1"/>
+    <text x="390" y="200" font-weight="bold">β</text>
+    <text x="390" y="216" fill="#444">4 TM:</text>
+    <text x="390" y="232" fill="#444">amplifies</text>
+    <text x="390" y="306" font-weight="bold">γ₂</text>
+    <text x="390" y="322" fill="#444">S–S dimer:</text>
+    <text x="390" y="338" fill="#444">signals</text>
+  </g>
+  <text x="240" y="124" text-anchor="middle" font-size="12.5" fill="#444">cross-link</text>
+
+  <!-- signalling -->
+  <text x="140" y="300" text-anchor="end" font-size="12.5" font-weight="bold" fill="#b23a2e">ITAMs (red)</text>
+  <text x="140" y="316" text-anchor="end" font-size="12.5" fill="#444">on β and γ</text>
+  <path d="M290,312 L290,338" stroke="#1d1d1b" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+  <text x="280" y="330" text-anchor="end" font-size="12.5" fill="#444">Src-family kinase (Lyn)</text>
+  <text x="280" y="345" text-anchor="end" font-size="12.5" fill="#444">phosphorylates ITAMs</text>
+  <circle cx="270" cy="370" r="22" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.6"/>
+  <text x="270" y="375" text-anchor="middle" font-weight="bold" font-size="14" fill="#b23a2e">Syk</text>
+  <path d="M270,394 L270,420" stroke="#1d1d1b" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+  <text x="270" y="440" text-anchor="middle" font-size="13" font-weight="bold">degranulation + new synthesis</text>
+  <text x="270" y="456" text-anchor="middle" font-size="12.5" fill="#444">STAT5, NFAT, AP-1, NF-κB: ~260 genes up within 2 h</text>
+
+  <!-- B: mediators timeline -->
+  <g font-size="12.5" fill="#444">
+    <text x="470" y="54">seconds</text><text x="600" y="54">minutes</text><text x="758" y="54">hours</text>
+  </g>
+  <line x1="470" y1="62" x2="840" y2="62" stroke="#1d1d1b" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <rect x="470" y="76" width="370" height="96" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.2"/>
+  <rect x="470" y="76" width="120" height="96" fill="#f7efe4"/>
+  <text x="482" y="100" font-weight="bold" font-size="14">Preformed</text>
+  <text x="482" y="118" font-size="12.5" fill="#444">in granules</text>
+  <text x="602" y="100" font-weight="bold" font-size="14">histamine · tryptase</text>
+  <text x="602" y="120" font-size="12.5">itch, sneeze (H1 on sensory nerves),</text>
+  <text x="602" y="136" font-size="12.5">vascular leak, watery rhinorrhea</text>
+  <text x="602" y="158" font-size="12.5" fill="#2f5d8a">tryptase = lab marker of degranulation</text>
+
+  <rect x="470" y="182" width="370" height="96" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.2"/>
+  <rect x="470" y="182" width="120" height="96" fill="#f7efe4"/>
+  <text x="482" y="206" font-weight="bold" font-size="14">Newly formed</text>
+  <text x="482" y="224" font-size="12.5" fill="#444">membrane lipids</text>
+  <text x="602" y="206" font-weight="bold" font-size="14">CysLTs (LTC4/D4/E4)</text>
+  <text x="602" y="224" font-weight="bold" font-size="14">PGD2 · PAF</text>
+  <text x="602" y="244" font-size="12.5">congestion, mucus, eosinophil influx;</text>
+  <text x="602" y="260" font-size="12.5">bronchoconstriction</text>
+
+  <rect x="470" y="288" width="370" height="96" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.2"/>
+  <rect x="470" y="288" width="120" height="96" fill="#f7efe4"/>
+  <text x="482" y="312" font-weight="bold" font-size="14">Cytokines,</text>
+  <text x="482" y="330" font-weight="bold" font-size="14">chemokines</text>
+  <text x="602" y="312" font-weight="bold" font-size="14">IL-3, IL-4, IL-5, IL-13</text>
+  <text x="602" y="330" font-weight="bold" font-size="14">CCL5, GM-CSF</text>
+  <text x="602" y="350" font-size="12.5">recruit eosinophils, basophils, Th2 cells</text>
+  <text x="602" y="366" font-size="12.5" font-weight="bold">→ the late phase (1.5)</text>
+
+  <!-- omalizumab -->
+  <rect x="470" y="400" width="370" height="76" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.2"/>
+  <text x="482" y="422" font-weight="bold" font-size="14" fill="#b23a2e">Omalizumab acts upstream of all of this</text>
+  <text x="482" y="441" font-size="12.5">binds free IgE, so less reaches α; cells then downregulate</text>
+  <text x="482" y="457" font-size="12.5">FcεRI. Less allergen sensitivity, and skin-test wheals can</text>
+  <text x="482" y="473" font-size="12.5">stay flat for months (hold 4–6 months before testing).</text>
+
+  <text x="20" y="500" font-size="12" fill="#444">Schematic, not to scale. ICAR VI.A. Low-affinity FcεRII = CD23 (on B cells, macrophages, epithelium) not drawn. Synonyms: guide glossary.</text>
+</svg>

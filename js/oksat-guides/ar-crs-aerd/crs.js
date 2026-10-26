@@ -376,6 +376,13 @@ window.__OKSAT_CHAPTER = {
             blocks: [
                 { t: 'p', x: 'Fungi are in almost every nose. The host immune state, not the fungus, decides the disease: **hypersensitivity → AFRS**, **immunocompetent → fungal ball**, **immunosuppression → invasive**. [[src|EPOS 1.8.6]]' },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/fungal-spectrum.svg',
+                    alt: 'Three columns along an axis from hypersensitive to immunocompetent to immunosuppressed. AFRS: hyphae, eosinophils and Charcot–Leyden crystals in layered mucin above an intact epithelium. Fungal ball: a dense mass in the sinus lumen over intact mucosa with thickened sinus wall. Invasive fungal: hyphae crossing the epithelium into tissue and a vessel, with necrosis. Rows below give host, key finding, imaging and treatment for each.',
+                    label: 'Figure · fungal disease across host states',
+                    cap: 'Schematic. Where the hyphae sit relative to the mucosa is the diagnosis; the rows summarize the cards and table in this section.',
+                },
+                {
                     t: 'cards',
                     cols: 2,
                     items: [
@@ -499,6 +506,13 @@ window.__OKSAT_CHAPTER = {
                         ],
                     ],
                     wide: 1,
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/ccad-vs-diffuse.svg',
+                    alt: 'Two coronal schematics. CCAD: polypoid change of the superior and middle turbinates and the posterosuperior septum with only the medial ethmoid cells opacified and the maxillary sinuses clear. Diffuse CRSwNP: polyps from the middle meatus between the middle turbinate and lateral wall, with the ethmoid and maxillary sinuses opacified. Boxes below summarize recognition and management of CCAD and the contrast with diffuse type 2 CRSwNP.',
+                    label: 'Figure · CCAD versus diffuse CRSwNP',
+                    cap: 'Schematic coronal view. Central versus lateral is the pattern to recognize on endoscopy and CT.',
                 },
                 { t: 'check', id: 'c1', q: 'A 9-year-old has bilateral nasal polyps. First test?', a: 'Sweat chloride test for cystic fibrosis.' },
                 { t: 'check', id: 'c2', q: 'Severe polyps, adult-onset asthma, blood eosinophils 18%, and new mononeuritis. Diagnosis?', a: 'Eosinophilic granulomatosis with polyangiitis (EGPA).' },

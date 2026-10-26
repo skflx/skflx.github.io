@@ -97,6 +97,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/ars-time-course.svg',
+                    alt: 'Symptom severity over days with dashed lines at day 5, day 10 and week 12. The common cold peaks early and is gone by day 10. Post-viral ARS is still present after day 10 and resolves before 12 weeks. Double sickening improves and then worsens after day 5. Boxes give the definitions and the five ABRS criteria, of which 3 or more raise suspicion: discolored discharge, severe local pain, fever over 38 °C, raised ESR or CRP, and double sickening.',
+                    label: 'Figure · the calendar of acute rhinosinusitis',
+                    cap: 'Schematic; curve shapes illustrative. Use the checker below with the five criteria in view.',
+                },
+                {
                     t: 'tool',
                     id: 'abrs',
                     title: 'ABRS checker',
@@ -205,6 +212,13 @@ window.__OKSAT_CHAPTER = {
                         { n: '5', x: 'Cavernous sinus thrombosis' },
                     ],
                     cap: 'Proptosis and painful, limited eye movement mark the jump from stage 1 to stage 2.',
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/chandler-axial.svg',
+                    alt: 'Axial schematic of one orbit, anterior up and medial left, with the ethmoid cells medial to the lamina papyracea, the periorbita lining the walls, the medial and lateral recti, the optic nerve, the globe, the eyelids and the orbital septum. Stage 1, preseptal cellulitis, sits in the lid in front of the septum. Stage 2, orbital cellulitis, is diffuse in the orbital fat. Stage 3, subperiosteal abscess, is a collection between the lamina papyracea and the periorbita next to the ethmoid. Stage 4, orbital abscess, is a collection inside the periorbita. Stage 5, cavernous sinus thrombosis, lies behind the orbital apex, reached by the valveless superior ophthalmic vein, with the sphenoid nearby.',
+                    label: 'Figure · Chandler stages on an axial orbit',
+                    cap: 'Schematic, not to scale. The two boundaries, septum and periorbita, explain the stages; the critique below explains why 1 and 5 do not belong in an orbital sequence.',
                 },
                 {
                     t: 'kv',

@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 520" width="840" height="520" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Barrier breach and type 2 inflammation reinforce each other (schematic)</title>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d1d1b"/></marker>
+    <marker id="arrR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b23a2e"/></marker>
+  </defs>
+  <rect width="840" height="520" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">One loop: a leaky barrier lets allergen in, and the inflammation it starts makes the barrier leakier</text>
+
+  <!-- lumen + allergen -->
+  <text x="20" y="66" font-size="13" fill="#444">lumen</text>
+  <g fill="#8a6d4b">
+    <circle cx="262" cy="62" r="5"/><circle cx="282" cy="72" r="4"/><circle cx="246" cy="78" r="4"/>
+  </g>
+  <text x="80" y="66" font-size="13">Der p 1 (HDM protease),</text>
+  <text x="80" y="82" font-size="13">pollen peptidases</text>
+  <path d="M276,84 L298,118" stroke="#8a6d4b" stroke-width="1.6" fill="none" marker-end="url(#arr)"/>
+
+  <!-- epithelium: 10 cells -->
+  <g stroke="#1d1d1b" stroke-width="1.3" fill="#f7efe4">
+    <rect x="40" y="110" width="52" height="64"/><rect x="92" y="110" width="52" height="64"/>
+    <rect x="144" y="110" width="52" height="64"/><rect x="196" y="110" width="52" height="64"/>
+    <rect x="248" y="110" width="48" height="64"/><rect x="304" y="110" width="48" height="64"/>
+    <rect x="352" y="110" width="52" height="64"/><rect x="404" y="110" width="52" height="64"/>
+    <rect x="456" y="110" width="52" height="64"/><rect x="508" y="110" width="52" height="64"/>
+  </g>
+  <!-- cilia -->
+  <path d="M46,110 v-7 M54,110 v-7 M62,110 v-7 M70,110 v-7 M78,110 v-7 M86,110 v-7 M98,110 v-7 M106,110 v-7 M114,110 v-7 M122,110 v-7 M130,110 v-7 M138,110 v-7 M150,110 v-7 M158,110 v-7 M166,110 v-7 M174,110 v-7 M182,110 v-7 M190,110 v-7 M202,110 v-7 M210,110 v-7 M218,110 v-7 M226,110 v-7 M234,110 v-7 M242,110 v-7 M254,110 v-7 M262,110 v-7 M270,110 v-7 M278,110 v-7 M286,110 v-7 M310,110 v-7 M318,110 v-7 M326,110 v-7 M334,110 v-7 M342,110 v-7 M358,110 v-7 M366,110 v-7 M374,110 v-7 M382,110 v-7 M390,110 v-7 M398,110 v-7 M410,110 v-7 M418,110 v-7 M426,110 v-7 M434,110 v-7 M442,110 v-7 M450,110 v-7 M462,110 v-7 M470,110 v-7 M478,110 v-7 M486,110 v-7 M494,110 v-7 M502,110 v-7 M514,110 v-7 M522,110 v-7 M530,110 v-7 M538,110 v-7 M546,110 v-7 M554,110 v-7" stroke="#1d1d1b" stroke-width="1"/>
+  <!-- tight junctions (intact) -->
+  <g fill="#1d1d1b">
+    <rect x="89" y="112" width="6" height="9"/><rect x="141" y="112" width="6" height="9"/>
+    <rect x="193" y="112" width="6" height="9"/><rect x="245" y="112" width="6" height="9"/>
+    <rect x="349" y="112" width="6" height="9"/><rect x="401" y="112" width="6" height="9"/>
+    <rect x="453" y="112" width="6" height="9"/><rect x="505" y="112" width="6" height="9"/>
+  </g>
+  <!-- broken junction -->
+  <path d="M295,112 l10,10 M305,112 l-10,10" stroke="#b23a2e" stroke-width="2.2"/>
+  <g fill="#8a6d4b"><circle cx="300" cy="140" r="3.5"/><circle cx="300" cy="160" r="3.5"/><circle cx="302" cy="186" r="3.5"/></g>
+  <line x1="40" y1="176" x2="560" y2="176" stroke="#1d1d1b" stroke-width="2"/>
+  <text x="566" y="117" font-size="12.5" fill="#444">tight junctions</text>
+  <text x="566" y="132" font-size="12.5" fill="#444">(occludin, claudins, ZO-1)</text>
+  <text x="566" y="180" font-size="12.5" fill="#444">basement membrane</text>
+
+  <!-- step markers -->
+  <g font-size="12.5" font-weight="bold" text-anchor="middle" fill="#ffffff">
+    <circle cx="324" cy="96" r="10" fill="#b23a2e"/><text x="324" y="101">1</text>
+  </g>
+
+  <!-- alarmins -->
+  <g stroke="#1d1d1b" stroke-width="1.5" fill="none" marker-end="url(#arr)">
+    <path d="M118,178 L118,262"/>
+    <path d="M268,178 L268,262"/>
+    <path d="M430,178 L466,264"/>
+    <path d="M418,178 L342,270"/>
+  </g>
+  <rect x="80" y="200" width="76" height="24" rx="3" fill="#ffffff" stroke="#1d1d1b"/>
+  <text x="118" y="217" text-anchor="middle" font-weight="bold" font-size="14">TSLP</text>
+  <rect x="230" y="200" width="76" height="24" rx="3" fill="#ffffff" stroke="#1d1d1b"/>
+  <text x="268" y="217" text-anchor="middle" font-weight="bold" font-size="14">IL-33</text>
+  <rect x="392" y="200" width="76" height="24" rx="3" fill="#ffffff" stroke="#1d1d1b"/>
+  <text x="430" y="217" text-anchor="middle" font-weight="bold" font-size="14">IL-25</text>
+  <g font-size="12.5" font-weight="bold" text-anchor="middle" fill="#ffffff">
+    <circle cx="200" cy="212" r="10" fill="#b23a2e"/><text x="200" y="217">2</text>
+  </g>
+  <text x="200" y="244" text-anchor="middle" font-size="12.5" fill="#444">alarmins</text>
+  <text x="282" y="250" font-size="12" fill="#444">via ST2</text>
+
+  <!-- dendritic cell -->
+  <g stroke="#1d1d1b" stroke-width="1.5">
+    <path d="M118,296 L84,276 M118,296 L80,312 M118,296 L100,334 M118,296 L146,332 M118,296 L152,278" fill="none"/>
+    <circle cx="118" cy="296" r="24" fill="#e7edf3" stroke="#2f5d8a"/>
+  </g>
+  <text x="118" y="301" text-anchor="middle" font-size="13" font-weight="bold" fill="#2f5d8a">DC</text>
+  <text x="118" y="356" text-anchor="middle" font-size="12.5">dendritic cell</text>
+  <text x="118" y="372" text-anchor="middle" font-size="12.5">matures to a</text>
+  <text x="118" y="388" text-anchor="middle" font-size="12.5">Th2-promoting type</text>
+
+  <!-- ILC2 -->
+  <circle cx="300" cy="298" r="30" fill="#f7efe4" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="300" y="303" text-anchor="middle" font-weight="bold">ILC2</text>
+  <text x="300" y="350" text-anchor="middle" font-size="12.5">tissue-resident, no antigen</text>
+  <text x="300" y="366" text-anchor="middle" font-size="12.5">receptor: IL-5 and IL-13</text>
+  <text x="300" y="382" text-anchor="middle" font-size="12.5">within minutes</text>
+
+  <!-- Th2 -->
+  <circle cx="480" cy="298" r="28" fill="#f7efe4" stroke="#1d1d1b" stroke-width="1.6"/>
+  <text x="480" y="303" text-anchor="middle" font-weight="bold">Th2</text>
+  <text x="480" y="350" text-anchor="middle" font-size="12.5">IL-4, IL-5, IL-13</text>
+  <text x="480" y="366" text-anchor="middle" font-size="12.5">(slower, antigen-specific)</text>
+  <path d="M118,396 C150,430 450,430 480,378" stroke="#1d1d1b" stroke-width="1.4" fill="none" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <text x="300" y="440" text-anchor="middle" font-size="12" fill="#444">primes naive T cells toward Th2</text>
+
+  <!-- IL-13 feedback loop -->
+  <path d="M326,282 C380,250 372,190 314,150" stroke="#b23a2e" stroke-width="2.6" fill="none" marker-end="url(#arrR)"/>
+  <path d="M504,280 C560,200 520,160 318,146" stroke="#b23a2e" stroke-width="1.6" fill="none" stroke-dasharray="6 4" marker-end="url(#arrR)"/>
+  <g font-size="12.5" font-weight="bold" text-anchor="middle" fill="#ffffff">
+    <circle cx="346" cy="300" r="10" fill="#b23a2e"/><text x="346" y="305">3</text>
+    <circle cx="338" cy="134" r="10" fill="#b23a2e"/><text x="338" y="139">4</text>
+  </g>
+
+  <!-- right column -->
+  <rect x="610" y="200" width="212" height="128" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.2"/>
+  <text x="622" y="222" font-weight="bold" fill="#b23a2e" font-size="14">Open the junctions</text>
+  <g font-size="12.5">
+    <text x="622" y="242">• HDM, pollen proteases (cleave)</text>
+    <text x="622" y="260">• IL-4, IL-13 (occludin, ZO-1 ↓)</text>
+    <text x="622" y="278">• histamine, AR secretions</text>
+    <text x="622" y="296">• PM2.5 (ZO-1 ↓)</text>
+    <text x="622" y="314">• HMGB1 (angulin-1/LSR ↓)</text>
+  </g>
+  <rect x="610" y="342" width="212" height="86" fill="#e7edf3" stroke="#2f5d8a" stroke-width="1.2"/>
+  <text x="622" y="364" font-weight="bold" fill="#2f5d8a" font-size="14">Close them</text>
+  <g font-size="12.5">
+    <text x="622" y="384">• fluticasone (even without</text>
+    <text x="634" y="400">inflammatory cells)</text>
+    <text x="622" y="418">• butyrate: HDAC block</text>
+  </g>
+
+  <!-- loop key -->
+  <g font-size="12.5">
+    <text x="20" y="470"><tspan fill="#b23a2e" font-weight="bold">1</tspan> protease opens a junction · <tspan fill="#b23a2e" font-weight="bold">2</tspan> epithelium releases alarmins · <tspan fill="#b23a2e" font-weight="bold">3</tspan> ILC2s (then Th2 cells) make IL-13 ·</text>
+    <text x="20" y="488"><tspan fill="#b23a2e" font-weight="bold">4</tspan> IL-13 and IL-4 lower occludin and ZO-1, so the barrier leaks more and more allergen gets in: back to 1.</text>
+  </g>
+  <text x="20" y="510" font-size="12" fill="#444">Schematic. ICAR VI.B, VI.F–G. TSLP also acts on ILC2s, mast cells and basophils; IL-33 also degranulates mast cells (arrows omitted).</text>
+</svg>

@@ -95,7 +95,11 @@ Module families, and their status:
   biologics items already existed in `aerd-biologics`; thirteen new MCQs were
   added to `allergy-testing` (its first MCQs; items q84 to q96), and a new
   `crs-ars` module (ARS, CRS, fungal and secondary CRS, EPOS biologic criteria,
-  three cases) holds the rest. Reuses the vetted AERD module figures.
+  three cases) holds the rest. Figures: reuses the AERD module SVGs where they
+  agree with the guide text (not `natural-history.svg`, whose order conflicts
+  with 7.1), and draws its own schematics in `img/oksat/ar-crs-aerd/` for the
+  mechanisms, time courses, anatomy and scoring rules the text alone carries
+  poorly.
   Everything is draft: sources are EPOS 2020, the NEJM 2019 review, ICAR-AR
   2023 and the two AERD reviews, as summarized in the atlas; the primary
   papers were not re-read line by line. One known cross-source difference is

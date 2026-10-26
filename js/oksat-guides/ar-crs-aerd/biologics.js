@@ -36,7 +36,7 @@ window.__OKSAT_CHAPTER = {
                     rows: [
                         [
                             '**Dupilumab**',
-                            'Fully human anti-**IL-4Rα**: blocks IL-4 and IL-13 signaling (shared receptor chain) → less IgE synthesis, eosinophil recruitment, mucus, barrier leak, M2 activation',
+                            'Fully human anti-**IL-4Rα** (CD124): blocks IL-4 and IL-13 signaling (shared receptor chain) → less IgE synthesis, eosinophil recruitment, mucus, barrier leak, M2 activation',
                             'FDA 2019 (first)',
                             'In AERD lowers nasal and urinary LTE4 and partly restores PGE2',
                         ],
@@ -60,7 +60,7 @@ window.__OKSAT_CHAPTER = {
                         ],
                         [
                             '**Benralizumab**',
-                            'Afucosylated anti-**IL-5Rα**: NK-cell ADCC → near-complete eosinophil depletion',
+                            'Afucosylated anti-**IL-5Rα** (CD125): NK-cell ADCC via FcγRIIIa (CD16) → near-complete eosinophil depletion',
                             'Asthma; FDA declined CRSwNP (complete response letter, 2022)',
                             'OSTRO improved polyp and blockage scores; AERD subgroup not reported',
                         ],
@@ -78,6 +78,20 @@ window.__OKSAT_CHAPTER = {
                         ],
                     ],
                     wide: 1,
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/il4-receptors.svg',
+                    alt: 'Type I receptor: IL-4Rα with the common gamma chain, binds IL-4 only, on blood-derived cells. Type II receptor: IL-4Rα with IL-13Rα1, binds IL-4 or IL-13, on epithelium, smooth muscle, fibroblasts and myeloid cells. Dupilumab binds IL-4Rα, the chain shared by both, blocking IL-4 through both receptors and IL-13 through type II.',
+                    label: 'Figure · why one antibody blocks IL-4 and IL-13',
+                    cap: 'Schematic. Dupilumab neutralizes signalling; it does not deplete cells.',
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/il5-vs-il5ra.svg',
+                    alt: 'Left: mepolizumab and reslizumab bind IL-5, leaving the eosinophil receptor empty, so maturation, recruitment and survival fall. Right: benralizumab binds IL-5Rα on the eosinophil and, through its afucosylated Fc, engages FcγRIIIa on an NK cell, killing the eosinophil by ADCC. A shared message: either way the eosinophil goes and the rest of the cascade does not, so polyps and anosmia can persist.',
+                    label: 'Figure · anti-IL-5 versus anti-IL-5Rα',
+                    cap: 'Schematic. This is the pearl below: eosinophils at zero is not the same as disease controlled.',
                 },
                 {
                     t: 'call',
@@ -291,6 +305,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/aerd-biologics/persistence-bars.svg',
+                    alt: 'Panel A: still prescribed at study end in 74 AERD patients: dupilumab 98%, omalizumab 48.6%, anti-IL-5 or IL-5Rα 26.9%. Panel B: discontinuation about 40% for ATAD versus about 20% for biologics, with persistence about 60% versus 80%; twice the discontinuation is not twice the persistence.',
+                    label: 'Figure · who stays on what',
+                    cap: 'Schematic bars from the cited cohorts. Read it with the confounding critique in Evidence & controversies.',
+                },
+                {
                     t: 'call',
                     k: 'pearl',
                     label: 'Phenotype-based choice (CTA 2026 framework)',
@@ -377,6 +398,13 @@ window.__OKSAT_CHAPTER = {
                             'IL-33, TSLP, periostin, 15-HETE, 15-oxo-ETE. EPOS: no biomarker yet predicts response in CRS.',
                         ],
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/biomarker-map.svg',
+                    alt: 'Four rows. Blood eosinophils report the IL-5 arm and predict response to mepolizumab and benralizumab. FeNO reports IL-4 and IL-13 and may predict dupilumab or tezepelumab benefit. Total IgE with weight doses omalizumab but should not choose it. Urinary LTE4 reports cysteinyl leukotriene production and tracks AERD activity rather than choosing a drug. A note: on treatment the marker reports the drug, and EPOS found no biomarker that yet predicts response in CRS.',
+                    label: 'Figure · biomarker, arm, drug',
+                    cap: 'Schematic. Each test can only point to the drug aimed at the arm it reads.',
                 },
                 {
                     t: 'call',

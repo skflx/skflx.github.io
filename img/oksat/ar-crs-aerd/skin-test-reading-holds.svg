@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 560" width="860" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Reading a skin prick test, and how long to hold each drug first (schematic)</title>
+  <rect width="860" height="560" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">A · Read at about 20 minutes: largest wheal diameter, against the controls</text>
+
+  <!-- row 1: valid -->
+  <text x="20" y="62" font-size="13" font-weight="bold">Valid test</text>
+  <rect x="20" y="72" width="560" height="96" rx="40" fill="#f7efe4" stroke="#1d1d1b" stroke-width="1.2"/>
+  <!-- negative control -->
+  <circle cx="110" cy="120" r="5" fill="#f2d9c8" stroke="#1d1d1b" stroke-width="1"/>
+  <text x="110" y="192" text-anchor="middle" font-size="12.5">negative control</text>
+  <text x="110" y="208" text-anchor="middle" font-size="12.5" fill="#444">saline / glycerin: 1 mm</text>
+  <!-- histamine -->
+  <circle cx="250" cy="120" r="21" fill="#f2d9c8" stroke="#1d1d1b" stroke-width="1.2"/>
+  <text x="250" y="192" text-anchor="middle" font-size="12.5">histamine control</text>
+  <text x="250" y="208" text-anchor="middle" font-size="12.5" fill="#444">6 mm: skin can react</text>
+  <!-- allergen -->
+  <ellipse cx="410" cy="120" rx="18" ry="14" fill="#f2d9c8" stroke="#b23a2e" stroke-width="2"/>
+  <line x1="392" y1="148" x2="428" y2="148" stroke="#b23a2e" stroke-width="1.6"/>
+  <line x1="392" y1="143" x2="392" y2="153" stroke="#b23a2e" stroke-width="1.6"/>
+  <line x1="428" y1="143" x2="428" y2="153" stroke="#b23a2e" stroke-width="1.6"/>
+  <text x="410" y="192" text-anchor="middle" font-size="12.5">allergen</text>
+  <text x="410" y="208" text-anchor="middle" font-size="12.5" fill="#444">largest diameter 5 mm</text>
+  <text x="560" y="62" text-anchor="end" font-size="12" fill="#444">sites ≥2 cm apart</text>
+
+  <rect x="600" y="72" width="240" height="96" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.4"/>
+  <text x="612" y="96" font-size="13" font-weight="bold" fill="#b23a2e">5 − 1 = 4 mm</text>
+  <text x="612" y="116" font-size="13">≥3 mm over the negative</text>
+  <text x="612" y="134" font-size="13">control: <tspan font-weight="bold">positive</tspan></text>
+  <text x="612" y="156" font-size="12" fill="#444">sensitization, not yet clinical allergy</text>
+
+  <!-- row 2: flat histamine -->
+  <text x="20" y="246" font-size="13" font-weight="bold">Flat histamine control</text>
+  <rect x="20" y="256" width="560" height="70" rx="30" fill="#f7efe4" stroke="#1d1d1b" stroke-width="1.2"/>
+  <circle cx="110" cy="291" r="5" fill="#f2d9c8" stroke="#1d1d1b" stroke-width="1"/>
+  <circle cx="250" cy="291" r="5" fill="#f2d9c8" stroke="#1d1d1b" stroke-width="1"/>
+  <circle cx="410" cy="291" r="5" fill="#f2d9c8" stroke="#1d1d1b" stroke-width="1"/>
+  <g font-size="12" fill="#444" text-anchor="middle"><text x="110" y="318">neg</text><text x="250" y="318">histamine</text><text x="410" y="318">allergen</text></g>
+  <rect x="600" y="256" width="240" height="70" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.2"/>
+  <text x="612" y="280" font-size="13" font-weight="bold">uninterpretable,</text>
+  <text x="612" y="298" font-size="13" font-weight="bold">not negative</text>
+  <text x="612" y="316" font-size="12" fill="#444">look for a drug still on board</text>
+
+  <!-- B: holds -->
+  <line x1="20" y1="344" x2="840" y2="344" stroke="#cfcdc7" stroke-width="1.2"/>
+  <text x="20" y="372" font-weight="bold">B · Hold before testing (log scale, days)</text>
+
+  <!-- axis: log days: 1 d -> x 260, 180 d -> x 800. scale = 540/log10(180)=239.6 per decade -->
+  <g font-size="12" fill="#444" text-anchor="middle">
+    <text x="260" y="532">1</text><text x="332" y="532">2</text><text x="427" y="532">7</text>
+    <text x="499" y="532">14</text><text x="614" y="532">1 mo</text><text x="757" y="532">4 mo</text><text x="800" y="532">6 mo</text>
+  </g>
+  <line x1="260" y1="514" x2="820" y2="514" stroke="#1d1d1b" stroke-width="1.2"/>
+  <g stroke="#cfcdc7" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="332" y1="384" x2="332" y2="514"/><line x1="427" y1="384" x2="427" y2="514"/>
+    <line x1="499" y1="384" x2="499" y2="514"/><line x1="614" y1="384" x2="614" y2="514"/>
+  </g>
+
+  <g font-size="13" text-anchor="end">
+    <text x="250" y="398">H2 blocker (ranitidine)</text>
+    <text x="250" y="420">nasal antihistamine</text>
+    <text x="250" y="442" font-weight="bold">oral H1 antihistamine</text>
+    <text x="250" y="464">benzodiazepine</text>
+    <text x="250" y="486" font-weight="bold">tricyclic antidepressant</text>
+    <text x="250" y="508" font-weight="bold">omalizumab</text>
+  </g>
+  <g fill="#b23a2e">
+    <rect x="260" y="388" width="72" height="13"/>
+    <rect x="260" y="410" width="72" height="13"/>
+    <rect x="260" y="432" width="72" height="13"/><rect x="332" y="432" width="95" height="13" opacity="0.55"/>
+    <rect x="260" y="454" width="167" height="13"/>
+    <rect x="260" y="476" width="167" height="13"/><rect x="427" y="476" width="72" height="13" opacity="0.55"/>
+    <rect x="260" y="498" width="497" height="13"/><rect x="757" y="498" width="43" height="13" opacity="0.55"/>
+  </g>
+  <g font-size="12" fill="#444">
+    <text x="338" y="399">2 d</text><text x="338" y="421">2 d</text><text x="433" y="443">2–7 d</text>
+    <text x="433" y="465">7 d</text><text x="505" y="487">7–14 d</text>
+  </g>
+  <text x="560" y="507" font-size="12" fill="#ffffff" font-weight="bold">4–6 months</text>
+
+  <rect x="600" y="384" width="240" height="88" fill="#e7edf3" stroke="#2f5d8a" stroke-width="1.2"/>
+  <text x="612" y="404" font-size="13" font-weight="bold" fill="#2f5d8a">No need to stop</text>
+  <text x="612" y="422" font-size="12.5">systemic corticosteroids</text>
+  <text x="612" y="438" font-size="12.5">leukotriene modifiers · SSRIs</text>
+  <text x="612" y="458" font-size="12" fill="#444">topical skin steroid: test elsewhere</text>
+
+  <text x="20" y="552" font-size="12" fill="#444">Schematic. ICAR X (skin testing). Lighter segment = upper end of a quoted range. Wheal sizes illustrative.</text>
+</svg>

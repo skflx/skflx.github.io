@@ -13,7 +13,7 @@ window.__OKSAT_CHAPTER = {
     tldr: [
         'Three immune programs: **type 1** (IFN-γ; viruses), **type 2** (IL-4, IL-5, IL-13; parasites, tissue repair), **type 3** (IL-17, IL-22; extracellular bacteria, fungi). CRS is one or more of these switched on and never switched off.',
         'A leaky epithelium releases **alarmins** (TSLP, IL-33, IL-25) that start type 2 inflammation through dendritic cells and **ILC2s**.',
-        '**IL-4 → STAT6 → GATA-3** makes Th2 cells; IL-4/IL-13 plus **CD40L–CD40** switch B cells to IgE; IgE arms **FcεRI** on mast cells and basophils.',
+        '**IL-4 → STAT6 → GATA-3** makes Th2 cells; IL-4/IL-13 plus **CD40L (CD154)–CD40** switch B cells to IgE; IgE arms **FcεRI** on mast cells and basophils.',
         'Re-exposure cross-links IgE: **early phase** in minutes (histamine, tryptase, CysLTs), **late phase** at 4–8 h (eosinophils, Th2, congestion, hyposmia).',
         'Polyps form when IL-13 suppresses **t-PA** and a **fibrin mesh** builds up in the stroma.',
     ],
@@ -110,6 +110,13 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/barrier-alarmin-loop.svg',
+                    alt: 'Schematic of the nasal epithelium. A house dust mite protease opens a tight junction (step 1); the epithelium releases the alarmins TSLP, IL-33 and IL-25 (step 2); TSLP matures dendritic cells toward a Th2-promoting type, IL-33 acts on ILC2s through ST2, IL-25 on ILC2s and Th2 cells; ILC2s and Th2 cells make IL-13 (step 3), which loops back to lower occludin and ZO-1 and open the barrier further (step 4). Side boxes list what opens junctions (proteases, IL-4 and IL-13, histamine, PM2.5, HMGB1) and what closes them (fluticasone, butyrate).',
+                    label: 'Figure · the barrier–alarmin loop',
+                    cap: 'Schematic. The numbered loop is the mechanism note below drawn out; follow 1 to 4 and back to 1.',
+                },
+                {
                     t: 'call',
                     k: 'mech',
                     label: 'Mechanism',
@@ -152,8 +159,8 @@ window.__OKSAT_CHAPTER = {
                     t: 'ol',
                     items: [
                         'Dendritic cells in the mucosa take up allergen, migrate to secondary lymphoid tissue, and present it on **MHC class II** to naive Th0 cells.',
-                        'Costimulation through **CD28 on the T cell with CD80/CD86** on the APC, in the presence of **IL-4**, drives Th2 differentiation: IL-4 → **STAT6** → master switch **GATA-3**.',
-                        'Th2 cells release IL-4, IL-5, IL-13. IL-4/IL-13 plus **CD40L (T cell) – CD40 (B cell)** trigger ε-germline transcription and **class switching to IgE**.',
+                        'Costimulation through **CD28 on the T cell with CD80/CD86 (B7-1/B7-2)** on the APC, in the presence of **IL-4**, drives Th2 differentiation: IL-4 → **STAT6** → master switch **GATA-3**.',
+                        'Th2 cells release IL-4, IL-5, IL-13. IL-4/IL-13 plus **CD40L (CD154; T cell) – CD40 (B cell)** trigger ε-germline transcription and **class switching to IgE**.',
                         'Plasma cells secrete allergen-specific IgE, which binds **FcεRI** on mast cells and basophils. Memory Th2 and memory B cells persist.',
                     ],
                 },
@@ -204,7 +211,7 @@ window.__OKSAT_CHAPTER = {
                     t: 'kv',
                     rows: [
                         [
-                            'FcεRI (high affinity)',
+                            'FcεRI (high affinity; no CD number)',
                             'Mast cells and basophils (degranulation, cytokines); also dendritic cells and macrophages (antigen uptake that promotes Th2). Structure **αβγ₂**: α binds the IgE Fc; β (four transmembrane domains) stabilizes and amplifies; disulfide-linked γ dimer triggers signaling.',
                         ],
                         [
@@ -213,13 +220,20 @@ window.__OKSAT_CHAPTER = {
                         ],
                         [
                             'Signal',
-                            'Allergen bridges ≥2 IgE–FcεRI complexes → **ITAMs on β and γ** are phosphorylated by Src-family kinases → **Syk** is recruited and activated → degranulation plus de novo synthesis.',
+                            'Allergen bridges ≥2 IgE–FcεRI complexes → **ITAMs on β and γ** are phosphorylated by Src-family kinases (Lyn) → **Syk** is recruited and activated → degranulation plus de novo synthesis.',
                         ],
                         [
                             'Transcription',
                             'STAT5, NFAT, AP-1, NF-κB, EGR-2. Within 2 h, ~260 genes up, ~84 down.',
                         ],
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/fcer1-crosslink.svg',
+                    alt: 'Panel A: two FcεRI receptors in a mast cell membrane, each an alpha chain holding IgE by its Fc end, a four-pass beta chain and a disulfide-linked gamma dimer; ITAMs on beta and gamma are marked in red. An allergen bridges the two IgE molecules; a Src-family kinase phosphorylates the ITAMs, Syk is recruited, and the cell degranulates and starts new synthesis. Panel B: mediators by timing. Preformed histamine and tryptase in seconds to minutes; newly formed CysLTs, PGD2 and PAF in minutes; cytokines IL-3, IL-4, IL-5, IL-13, CCL5 and GM-CSF over hours, leading to the late phase. A red box notes that omalizumab binds free IgE upstream of all of this.',
+                    label: 'Figure · FcεRI cross-linking and what follows',
+                    cap: 'Schematic. Panel A answers which subunits carry ITAMs; panel B lays the mediator table on a time axis.',
                 },
                 {
                     t: 'call',
@@ -297,6 +311,13 @@ window.__OKSAT_CHAPTER = {
                         },
                     ],
                 },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/early-late-phase.svg',
+                    alt: 'Plot of nasal response against time after one allergen exposure: a sharp early peak at 15 to 30 minutes (mast cell degranulation; itch, sneeze, watery rhinorrhea, congestion) and a broader late peak at 4 to 8 hours (eosinophils, basophils and T cells recruited; congestion, hyposmia, more rhinorrhea, hyperresponsiveness). Bars below show cromolyn acting before exposure, oral H1 antihistamines on the early phase, and intranasal corticosteroids on the late phase, the best single agent for congestion.',
+                    label: 'Figure · early and late phase on one time axis',
+                    cap: 'Schematic; curve shape illustrative and the first hour stretched. Match each drug bar to the symptoms it sits under.',
+                },
                 { t: 'p', x: '**Priming.** Repeated low-level pollen exposure lowers the threshold for later reactions, and some patients have “minimal persistent inflammation” between exposures. Symptoms therefore do not line up neatly with allergen counts, and nonspecific triggers start provoking flares. [[src|ICAR V.A.1]]' },
                 {
                     t: 'call',
@@ -348,6 +369,13 @@ window.__OKSAT_CHAPTER = {
                     blocks: [
                         { t: 'p', x: 'ICAR writes that sympathetic nerves “respond to neurokinin Y.” The sympathetic co-transmitter is **neuropeptide Y**.' },
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/nasal-autonomic-pathway.svg',
+                    alt: 'Panel A: parasympathetic path from the superior salivatory nucleus through the nervus intermedius and greater superficial petrosal nerve, joined by the sympathetic deep petrosal nerve from the internal carotid plexus to form the vidian nerve, which reaches the pterygopalatine ganglion. From the ganglion one branch goes to the lacrimal gland and the posterior nasal nerves go to nasal glands and vessels. A red cut on the vidian nerve is labelled rhinorrhea down plus dry eye; a red cut on the posterior nasal nerves is labelled rhinorrhea down, tears spared. Panel B: three effector boxes. Glands (acetylcholine, VIP; blocked by ipratropium), venous sinusoids (constricted by norepinephrine and NPY, dilated by VIP, CGRP and substance P; mimicked by alpha-agonist decongestants), and sensory C and A-delta fibres (TRPV1, TRPA1; targeted by azelastine and capsaicin).',
+                    label: 'Figure · the autonomic supply of the nose',
+                    cap: 'Schematic. Panel A is the memory hook below as a wiring diagram; the cut sites explain the dry-eye difference.',
                 },
                 {
                     t: 'call',
@@ -425,6 +453,13 @@ window.__OKSAT_CHAPTER = {
                     blocks: [
                         { t: 'p', x: '**IL-13 suppresses tissue plasminogen activator (t-PA)**. Less plasmin means fibrin is not cleared, so a **fibrin mesh** deposits and forms the edematous stromal matrix of the polyp. Barrier damage in type 2 CRS is often severe, driven by IL-13-maintained immature epithelial differentiation, autoimmunity, and complement. Type 1 polyps also appear to have a fibrin matrix, and t-PA suppression may be shared.' },
                     ],
+                },
+                {
+                    t: 'figure',
+                    src: 'img/oksat/ar-crs-aerd/polyp-fibrin-smell.svg',
+                    alt: 'Panel A: IL-13 suppresses t-PA, so less plasminogen becomes plasmin and fibrin is not degraded; a polyp hanging from the middle meatus is drawn filled with a fibrin mesh and eosinophils, labelled edematous stroma, and its epithelium immature and leaky. Panel B: two coronal half-cavities. Before surgery, polyps in the olfactory cleft block airflow and the olfactory neuroepithelium is inflamed. After complete polypectomy, airflow reaches the cleft but the neuroepithelium is still inflamed. Boxes: mechanical part, fixed by surgery; inflammatory part, needs ongoing anti-inflammatory treatment.',
+                    label: 'Figure · how a polyp is built, and the two parts of smell loss',
+                    cap: 'Schematic, not to scale. Panel B is the answer to the second check below.',
                 },
                 {
                     t: 'ul',

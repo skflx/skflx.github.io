@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 440" width="860" height="440" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Draf frontal sinusotomy types, coronal (schematic)</title>
+  <defs>
+    <pattern id="cells" width="12" height="12" patternUnits="userSpaceOnUse">
+      <path d="M0,0 H12 V12" fill="none" stroke="#8a8a85" stroke-width="1"/>
+    </pattern>
+    <!-- base anatomy, local box 200 x 220 -->
+    <g id="base">
+      <!-- frontal sinuses -->
+      <path d="M22,92 C14,60 30,20 60,18 C80,16 92,30 96,46 L96,92 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+      <path d="M178,92 C186,60 170,20 140,18 C120,16 108,30 104,46 L104,92 Z" fill="#ffffff" stroke="#1d1d1b" stroke-width="1.6"/>
+      <rect x="96" y="40" width="8" height="52" fill="#cfcdc7"/>
+      <!-- frontal floor -->
+      <path d="M22,92 L96,92 M104,92 L178,92" stroke="#1d1d1b" stroke-width="3"/>
+      <!-- orbits -->
+      <path d="M26,96 C10,120 10,170 26,194" stroke="#1d1d1b" stroke-width="1.6" fill="none"/>
+      <path d="M174,96 C190,120 190,170 174,194" stroke="#1d1d1b" stroke-width="1.6" fill="none"/>
+      <!-- ethmoid cells -->
+      <rect x="28" y="100" width="40" height="80" fill="url(#cells)"/>
+      <rect x="132" y="100" width="40" height="80" fill="url(#cells)"/>
+      <!-- lamina papyracea -->
+      <path d="M28,96 L28,190 M172,96 L172,190" stroke="#2f5d8a" stroke-width="2.4"/>
+      <!-- middle turbinates -->
+      <path d="M72,96 L72,150" stroke="#1d1d1b" stroke-width="2"/>
+      <ellipse cx="74" cy="170" rx="8" ry="22" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.4"/>
+      <path d="M128,96 L128,150" stroke="#1d1d1b" stroke-width="2"/>
+      <ellipse cx="126" cy="170" rx="8" ry="22" fill="#f2f2ef" stroke="#1d1d1b" stroke-width="1.4"/>
+      <!-- septum -->
+      <rect x="97" y="96" width="6" height="110" fill="#1d1d1b"/>
+      <!-- natural frontal drainage -->
+      <path d="M52,92 L52,108" stroke="#1d1d1b" stroke-width="1" stroke-dasharray="2 2"/>
+      <path d="M148,92 L148,108" stroke="#1d1d1b" stroke-width="1" stroke-dasharray="2 2"/>
+    </g>
+  </defs>
+  <rect width="860" height="440" fill="#ffffff"/>
+
+  <text x="20" y="30" font-weight="bold">How much frontal floor comes out: the medial and lateral limits define the type</text>
+
+  <!-- panel I -->
+  <g transform="translate(10,50)">
+    <use href="#base"/>
+    <rect x="32" y="100" width="36" height="34" fill="#b23a2e" opacity="0.8"/>
+    <text x="100" y="236" text-anchor="middle" font-weight="bold">Draf I</text>
+    <text x="100" y="254" text-anchor="middle" font-size="12.5">frontal recess cleared;</text>
+    <text x="100" y="270" text-anchor="middle" font-size="12.5">frontal ostium untouched</text>
+  </g>
+  <!-- panel IIa -->
+  <g transform="translate(220,50)">
+    <use href="#base"/>
+    <rect x="28" y="86" width="44" height="12" fill="#b23a2e"/>
+    <rect x="32" y="98" width="36" height="36" fill="#b23a2e" opacity="0.8"/>
+    <text x="100" y="236" text-anchor="middle" font-weight="bold">Draf IIa</text>
+    <text x="100" y="254" text-anchor="middle" font-size="12.5">floor opened from lamina</text>
+    <text x="100" y="270" text-anchor="middle" font-size="12.5">papyracea to middle turbinate</text>
+  </g>
+  <!-- panel IIb -->
+  <g transform="translate(430,50)">
+    <use href="#base"/>
+    <rect x="28" y="86" width="69" height="12" fill="#b23a2e"/>
+    <rect x="32" y="98" width="65" height="36" fill="#b23a2e" opacity="0.8"/>
+    <text x="100" y="236" text-anchor="middle" font-weight="bold">Draf IIb</text>
+    <text x="100" y="254" text-anchor="middle" font-size="12.5">floor opened from lamina</text>
+    <text x="100" y="270" text-anchor="middle" font-size="12.5">papyracea to nasal septum</text>
+  </g>
+  <!-- panel III -->
+  <g transform="translate(640,50)">
+    <use href="#base"/>
+    <rect x="28" y="86" width="144" height="12" fill="#b23a2e"/>
+    <rect x="94" y="56" width="12" height="36" fill="#b23a2e"/>
+    <rect x="32" y="98" width="136" height="36" fill="#b23a2e" opacity="0.8"/>
+    <text x="100" y="236" text-anchor="middle" font-weight="bold" fill="#b23a2e">Draf III</text>
+    <text x="100" y="254" text-anchor="middle" font-size="12.5">both floors lamina to lamina</text>
+    <text x="100" y="270" text-anchor="middle" font-size="12.5">+ superior septum + intersinus</text>
+    <text x="100" y="286" text-anchor="middle" font-size="12.5">septum (modified Lothrop)</text>
+  </g>
+
+  <!-- key -->
+  <g font-size="12" fill="#444">
+    <text x="20" y="364"><tspan fill="#2f5d8a" font-weight="bold">━</tspan> lamina papyracea (lateral limit) · <tspan fill="#b23a2e" font-weight="bold">■</tspan> bone and mucosa removed · grid = ethmoid cells · one side shown for I–IIb</text>
+  </g>
+  <rect x="20" y="378" width="820" height="40" fill="#f6e4e1" stroke="#b23a2e" stroke-width="1.1"/>
+  <text x="32" y="403" font-size="13">AERD fails standard ESS more often; Draf III improved symptoms in 82%, yet 58% of one AERD Draf III cohort (n = 31) recurred.</text>
+
+  <text x="20" y="434" font-size="12" fill="#444">Schematic coronal view. Draf III as defined in 7.4 (LIO); the Draf I–IIb limits are standard surgical definitions added for contrast.</text>
+</svg>
