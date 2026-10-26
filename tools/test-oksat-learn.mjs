@@ -263,7 +263,7 @@ async function main() {
       return miss;
     });
     check(`9a (${tag}): every lexicon term in the chapter text is marked`, unmarked.length === 0 && (await page.$$eval('.lr-chapter .lr-term', (e) => e.length)) > 20, unmarked.slice(0, 5).join(', '));
-    const sel = '#rs-2 .lr-tool-opt .lr-term';
+    const sel = '#bi-3 .lr-tool-opt .lr-term';
     if (!vp.isMobile) {
       await page.hover('.lr-chapter .lr-term[data-term="ABRS"]');
       check('9b: hover shows the full name', /ABRS acute bacterial rhinosinusitis/.test(await tip() || ''), await tip());
@@ -281,11 +281,11 @@ async function main() {
       await page.tap('.lr-chapter .lr-p');
       check('9d (phone): a tap elsewhere closes it', (await tip()) === null);
     }
-    if (await page.$(sel)) {
-      const id = await page.$eval(sel, (e) => e.closest('label').querySelector('input').id);
-      await page.click(sel);
-      check(`9f (${tag}): a term inside a checker label opens the tip without ticking the box`, !(await page.$eval('#' + id, (e) => e.checked)) && (await tip()) !== null);
-    }
+    await page.goto(base + `/oksat-learn.html?g=${SLUG}&c=biologics`, { waitUntil: 'domcontentloaded' });
+    await chapterReady(page);
+    const id = await page.$eval(sel, (e) => e.closest('label').querySelector('input').id).catch(() => null);
+    if (id) await page.click(sel);
+    check(`9f (${tag}): a term inside a checker label opens the tip without ticking the box`, id && !(await page.$eval('#' + id, (e) => e.checked)) && (await tip()) !== null, `checker term ${id}`);
     check(`9g (${tag}): no console errors`, errors.length === 0, JSON.stringify(errors.slice(0, 2)));
     await context.close();
   }

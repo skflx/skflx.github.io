@@ -14,8 +14,8 @@ Current state lives in `WIP.md`; the guide spec is
 | **Practice** | Prove it later, on a schedule | OKSAT module (`oksat-study.html`) | item |
 
 Each fact has **one home** per layer, and the layers point at each other
-instead of repeating each other. The term lexicon (`js/oksat-terms.js`) is
-the first shared seam: today a name, later a link into Reference.
+instead of repeating each other. The term lexicon (`js/oksat-terms.js`) names
+specialty terms in place; links into Reference are a list per chapter (§4).
 
 The wiki trim follows from this: a vault note whose real job is teaching
 (long narrative, curriculum order, self-test blocks) moves into a guide, and
@@ -74,58 +74,106 @@ the guide drills on day one. Candidates, in a suggested order:
 ## 4. Wiki integration
 
 The wiki is not live (`wiki/README.md`): phase 1 publishes only the six maps
-of content. That makes this the right moment to decide its shape.
+of content. **Owner** is verifying the existing vault first; nothing below
+starts until that pass is done.
 
-### Phase A — trim the vault by role (vault-side, owner-run)
+### Decided (2026-10)
 
-Add one frontmatter key to every note in the six subspecialty folders:
+- **Terms expand; they never link.** A term in a guide shows its full name on
+  hover, focus or tap, and that is all. Tap has to mean "expand" because a
+  phone has no hover, and many wiki topics are not abbreviations (Lund–Mackay,
+  Draf III, aspirin desensitization), so a term-to-note link would miss most
+  of them.
+- **Only specialty vocabulary is expanded** (spec: *Terms*). General medical
+  abbreviations are recognized and left alone.
+- **Wiki links are a list at the end of the chapter.** *Related in sk.oto*
+  lists each published note the chapter's sections cite, with the section
+  numbers that cite it.
+- **The wiki is text.** Figures live in guides only (§5).
 
-| `role:` | Meaning | Fate |
+### Phase A: tag every vault note (after the verification pass)
+
+Two independent keys per note, set together in one read:
+
+| Key | Values | Who sets it |
 |---|---|---|
-| `map` | Map of content | Published (as now) |
-| `reference` | One entity: definition, classification, numbers, sources | Published; the wiki's core |
-| `teaching` | Narrative, curriculum order, self-test blocks | Becomes guide source; not published once a guide covers it |
-| `stub` / `duplicate` | Thin or repeated | Merged or dropped |
+| `role:` | `map` · `reference` · `teaching` · `stub` | Claude drafts, owner confirms |
+| `completeness:` | `1` · `2` · `3` (stars), plus `gap:` one line naming what is missing | Claude sets, owner adjusts |
 
-`wiki/sync/policy.json` then gates on `role` instead of `tier`
-(`gate.roleIn: ["map", "reference"]`): one key, fail-closed, so an
-unclassified note stays home. The classification is a vault pass that an
-agent can draft and the owner confirms, subspecialty by subspecialty.
+Completeness rubric. It measures coverage, not correctness: correctness stays
+`vetted`.
 
-**Owner:** agree the four roles; confirm "teaching notes stay home once a
-guide covers them".
+| ★ | Rubric |
+|---|---|
+| ★ | Outline or definition only; core sections missing, or numbers without sources |
+| ★★ | Usable: definition, presentation, work-up and management with sources; missing a classification, staging, numbers or edge cases (named in `gap:`) |
+| ★★★ | Complete for a board-level reader: every section present, every number sourced, classifications included, cross-linked; no TODOs |
 
-### Phase B — terms link to notes (this repo, small)
+To keep the tagging cheap, a script first measures each note mechanically
+(sections present, sources counted, unsourced numbers, TODO markers,
+length). The model reads only to judge role and completeness, one
+subspecialty per batch. The output is a table the owner confirms before
+anything is written back to the vault.
 
-- A lexicon entry may carry a note path:
-  `'CCAD': { x: 'central compartment atopic disease', wiki: 'Sinus/CCAD' }`.
-- The popover shows the full name and, when present, *Open in sk.oto →*.
-- `check-data` fails a `wiki` path that is not in the published set
-  (`wiki/content/.vault-sync.json`), so a link can never point at a note the
-  privacy gate held back. Needs the wiki live, Phase A done for that topic.
+The publish gate in `wiki/sync/policy.json` then moves from `tier` to
+`role` (`map`, `reference`). A note with no `role` stays home (fail-closed).
+`sync-vault.mjs` prints the stars under the title, and a `gap:` line on ★
+and ★★ notes. **Owner:** whether ★ notes are published at all, or held until
+they reach ★★.
 
-### Phase C — sections and notes point at each other
+The `teaching` notes are the source material for guides. Once a guide covers
+one, the note stays in the vault and leaves the wiki.
 
-- Guide section → wiki: a `ref: ['Sinus/CCAD', …]` row next to `drill`
-  ("Look it up"), validated the same way.
-- Wiki → guide: `sync-vault.mjs` appends *Learn this: OKSAT guide §6.7* to a
-  published note from a mapping this repo generates from the guides' `ref`
-  rows, so the backlink is never hand-maintained.
+### Phase B: strip figures at publish
 
-### Phase D — one lexicon (decide later)
+`sync-vault.mjs` drops image embeds (`![[…]]`, `![](…)`) and ```` ```dgmo ````
+fences behind one policy switch (`figures: "strip"`). It leaves a one-line
+marker only where the removal breaks the text ("see figure"). Stripping at
+publish rather than editing the vault keeps it reversible, and your Obsidian
+copy keeps its diagrams. With figures stripped, `wiki/dgmo/render-dgmo.mjs`
+and its tests have no job and are deleted in the same change. **Owner:**
+strip at publish (recommended), or also clean the vault.
 
-Whether the vault's abbreviations (note `aliases`) and `js/oksat-terms.js`
-should become one list, and which side is the source. Until then the lexicon
-is hand-authored here, and a later check can report disagreements between the
-two rather than overwrite either.
+### Phase C: chapters and notes point at each other
 
-**Owner:** direction of truth for terms (vault or this repo).
+- Guide → wiki: a section may carry `ref: ['Sinus/CCAD', …]`. The chapter
+  foot collects them as *Related in sk.oto*. `check-data` fails a path not in
+  the published set (`wiki/content/.vault-sync.json`), so a link can never
+  point at a note the privacy gate held back.
+- Wiki → guide: `sync-vault.mjs` appends *Learn this: OKSAT guide, AR · CRS ·
+  AERD §6.7* to a cited note. The mapping is generated from the `ref` rows,
+  never hand-kept.
 
-## 5. Order of work
+Needs the wiki live and Phase A done for that subspecialty.
 
-1. Terms in every guide — **done** (2026-10).
-2. Second guide (Owner picks, §3), with `lint-oksat-guide.mjs` built
-   alongside it (§2).
-3. Phase A on one subspecialty (Rhinology, since its guide exists), then the
-   rest.
-4. Wiki live (`wiki/README.md` Bootstrap), then Phase B, then C.
+### Later: one term list
+
+Whether the vault's abbreviations and `js/oksat-terms.js` merge, and which
+side is the source. Until then the lexicon is hand-authored here.
+
+## 5. Figures: where they go and how to keep them cheap
+
+Figures cost far more tokens than text, so each must earn its place.
+
+- **Guides only.** The wiki is text; a note that needs a picture links to the
+  guide section that has it.
+- **Only what prose cannot carry**: a mechanism or loop, a time course, a
+  spatial relation, a scoring rule. Never decoration, never a table drawn as
+  a picture.
+- **Proposed in the outline, approved before drawing.** The outline lists each
+  figure with one line of purpose; the owner strikes what is not needed.
+  Draw only after the chapter text is final, so nothing is redrawn because
+  the text moved.
+- **Reuse first**: `img/oksat/` already holds the module and guide figures.
+- **A budget**: roughly one figure per chapter, more only for a chapter built
+  around mechanisms. Adjust once the second guide shows what readers use.
+
+## 6. Order of work
+
+1. Terms in every guide, specialty vocabulary only — **done** (2026-10).
+2. **Owner:** verification pass of the vault (in progress).
+3. Phase A (role + completeness) on Rhinology first, since its guide exists,
+   then the other subspecialties; Phase B with it.
+4. Second guide (Owner picks, §3), built from ★★★ vetted notes, with
+   `lint-oksat-guide.mjs` built alongside it (§2).
+5. Wiki live (`wiki/README.md` Bootstrap), then Phase C.

@@ -97,9 +97,9 @@ modules; bullets are `ul` blocks, not text.
 
 ### Terms (`js/oksat-terms.js`)
 
-Every abbreviation a reader sees is defined once, in the shared lexicon
-`js/oksat-terms.js` (`TERMS`, keyed by the exact surface form), and the
-viewer marks **every** occurrence: hover or focus shows the full name, a tap
+Every specialty abbreviation a reader sees is defined once, in the shared
+lexicon `js/oksat-terms.js` (`TERMS`, keyed by the exact surface form), and
+the viewer marks **every** occurrence: hover or focus shows the full name, a tap
 or Enter pins it, a tap elsewhere or Escape closes it. Paragraphs, lists,
 tables, callout labels, card heads, captions, checker text, section and
 chapter titles, and module questions shown in place are all marked; links,
@@ -117,10 +117,15 @@ source chips stripped; figure `alt` text is not scanned):
   `IgE-mediated` → `IgE`); a plural in lowercase `s` finds its singular.
 - **No idle entries.** A term no guide uses fails; delete it. The lexicon is
   what the guides say, not a dictionary.
-- **`PLAIN` is short and deliberate**: forms every resident knows (CT, MRI,
-  FDA, IgE, Th2), roman numerals, interleukins by number (`IL-13`), units,
-  and a form whose meaning depends on context (T2: MRI weighting or type 2)
-  so a single expansion would mislead. Anything else gets a definition.
+- **Expand only what a non-otolaryngologist may not know.** `TERMS` holds
+  specialty vocabulary: rhinology, allergy and otology disease names and
+  procedures (CRSwNP, CCAD, EMLP), specialty scores and tests (SNOT-22, SPT),
+  sources and trials (EPOS, SINUS-52), and specialized immunology (ILC2,
+  FcεRI, TSLP, CD numbers). General medical knowledge goes in `PLAIN` and is
+  never marked: NSAID, PFT, RCT, COPD, CRP, COX-1, IgE, Th2, CT. So do roman
+  numerals, interleukins by number (`IL-13`), units, and a form whose meaning
+  depends on context (T2: MRI weighting or type 2). When unsure, ask whether
+  an internist would stop at it.
 - **The value is the full name**, then other names after a semicolon
   (`'CD23': 'FcεRII; low-affinity IgE receptor'`). No claims, numbers or
   mechanism: an expansion is a name, and the teaching stays in the text.

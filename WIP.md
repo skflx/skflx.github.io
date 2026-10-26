@@ -91,7 +91,7 @@ Module families, and their status:
   per-section drill links. One guide so far, **AR · CRS · AERD** (`ar-crs-aerd`):
   ten chapters from type 2 immunology to critical appraisal, ported from the
   study atlas built in conversation (2026-10-26), plus a flashcard deck and a
-  pearl wall. Every abbreviation is marked and expands on hover, focus or tap
+  pearl wall. Every specialty abbreviation is marked and expands on hover, focus or tap
   from one shared lexicon (`js/oksat-terms.js`, 2026-10), which `check-data`
   holds complete and free of idle entries. Its question bank was folded into the modules: the AERD and
   biologics items already existed in `aerd-biologics`; thirteen new MCQs were
