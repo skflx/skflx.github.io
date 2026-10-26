@@ -43,10 +43,21 @@ const PAGES = [
   } },
   { path: 'Fusion.html', ready: (p) => wait(p, () => !!document.querySelector('.fusion-qr-svg')) },
   { path: 'oksat.html', ready: async (p) => {
-    await wait(p, () => document.querySelectorAll('#modules .module-card').length > 0);
+    await wait(p, () => document.querySelectorAll('#modules .module-card').length > 0 && document.querySelectorAll('#guides .module-card').length > 0);
     return figureReady(p, 'leitner');
   } },
   { path: 'oksat-study.html?m=pediatrics', ready: oksatStudyReady },
+  /* Interactive learning: the chapter rail built and the start chapter rendered; a content chapter loads its
+     data file, its modules (each in its own frame) and draws sections. Behavior is tools/test-oksat-learn.mjs. */
+  { path: 'oksat-learn.html?g=ar-crs-aerd', ready: (p) => wait(p, () => document.querySelectorAll('.lr-nav').length === 13
+      && document.querySelectorAll('.lr-chapter .lr-card').length > 0) },
+  { path: 'oksat-learn.html?g=ar-crs-aerd&c=aerd', ready: (p) => wait(p, () => document.querySelectorAll('.lr-chapter .lr-sec').length === 6
+      && document.querySelectorAll('.lr-drill-link').length > 0) },
+  /* Regression, same class as ?m= below: ?g=, ?c= and the hash only select among known ids. */
+  { path: 'oksat-learn.html?g=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
+    ready: (p) => wait(p, () => !!document.querySelector('.ok-notice') && !document.getElementById('pwn') && !window.__pwned) },
+  { path: 'oksat-learn.html?g=ar-crs-aerd&c=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '#' + encodeURIComponent('<b>'),
+    ready: (p) => wait(p, () => document.querySelectorAll('.lr-nav').length === 13 && !document.getElementById('pwn') && !window.__pwned) },
   /* Regression: ?m= once reached innerHTML (reflected DOM XSS). It must
      render as text in the not-found notice, never as markup. */
   { path: 'oksat-study.html?m=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),

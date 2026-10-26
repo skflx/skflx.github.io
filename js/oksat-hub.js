@@ -1,8 +1,8 @@
 /* =============================================================
-   oksat-hub.js — oksat.html: module list grouped by subspecialty,
-   per-module completion meter, the one due-review banner, and the
-   settings modal (local reset). Reads progress only through
-   window.OKSATStore. External (not inline) so the page's CSP can
+   oksat-hub.js — oksat.html: the Interactive learning guides and the
+   question-module list, each grouped by subspecialty, per-card
+   completion meter, the one due-review banner, and the settings modal
+   (local reset). Reads progress only through window.OKSATStore. External (not inline) so the page's CSP can
    forbid inline script.
    ============================================================= */
 (function () {
@@ -57,6 +57,43 @@
       '<div class="module-arrow">' + (st.answered > 0 && st.answered < m.count ? 'Resume' : 'Launch') + ' &rarr;</div>';
     return a;
   }
+
+  /* ---- Interactive learning: one card per guide, progress = sections marked done ---- */
+  var guides = window.OKSAT_GUIDES || [];
+  function guideCard(g) {
+    var subInfo = subs[g.subspecialty];
+    var total = 0, mins = 0;
+    g.chapters.forEach(function (c) { total += c.sections || 0; mins += c.min || 0; });
+    var done = Object.keys(OKSATStore.getLearn(g.slug, reviewer).done).length;
+    var pct = total ? Math.round((done / total) * 100) : 0;
+    var chapters = g.chapters.filter(function (c) { return c.sections; }).length;
+    var a = document.createElement('a');
+    a.className = 'module-card';
+    a.href = 'oksat-learn.html?g=' + encodeURIComponent(g.slug);
+    a.innerHTML =
+      '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : g.accent) + '"></div>' +
+      '<div class="module-body">' +
+        '<div class="module-label">' + esc(g.kicker) + ' · ' + chapters + ' chapters · ~' + Math.round(mins / 60 * 10) / 10 + ' h</div>' +
+        '<div class="module-title">' + esc(g.title) + '</div>' +
+        '<p class="module-desc">' + esc(g.desc) + '</p>' +
+        (done > 0
+          ? '<div class="module-meter"><span class="bar"><span class="fill" style="width:' + pct + '%"></span></span>' +
+            '<span>' + done + ' / ' + total + ' sections</span></div>'
+          : '') +
+      '</div>' +
+      '<div class="module-arrow">' + (done > 0 && done < total ? 'Resume' : 'Open') + ' &rarr;</div>';
+    return a;
+  }
+  var gwrap = document.getElementById('guides');
+  Object.keys(subs).forEach(function (subKey) {
+    var gs = guides.filter(function (g) { return g.subspecialty === subKey; });
+    if (!gs.length) return;
+    var head = document.createElement('div');
+    head.className = 'hub-subhead';
+    head.innerHTML = '<span class="tick" style="background:' + hue(subs[subKey].hue) + '"></span>' + esc(subs[subKey].label);
+    gwrap.appendChild(head);
+    gs.forEach(function (g) { gwrap.appendChild(guideCard(g)); });
+  });
 
   /* ---- render, grouped by subspecialty in manifest order ---- */
   var wrap = document.getElementById('modules');

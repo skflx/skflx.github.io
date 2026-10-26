@@ -10,13 +10,14 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
+node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub)
 node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
 node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
 node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
 ```
 
 In CI (`.github/workflows/ci.yml`) `check-data`, `lint-oksat` and the page smoke test always
-run; the SSB, OKSAT-engine and wiki-sync suites run only when a file they exercise changed (a
+run; the SSB, OKSAT (engine and interactive learning) and wiki-sync suites run only when a file they exercise changed (a
 push to `master`, or a change to the workflow or the shared harness, runs everything). Changes
 to `tools/ssb-pipeline/` do not start the SSB suite unless they touch `dissection.json`, the
 one pipeline file it reads: the pipeline's outputs are committed under `ssb/`, which does.
@@ -84,6 +85,10 @@ three pages that load it must FAIL. Smoke additionally loads
 - Smoke assertion: `.hero-name` exists and `#pgy-status` reads `PGY-<n>`.
 
 ### OKSAT hub (`oksat.html`)
+- Every guide in `OKSAT_GUIDES` renders as a card under `#guides` (Interactive
+  learning), launching `oksat-learn.html?g=<slug>`; with a seeded
+  `oksat:learn:*` record the card shows `done / total sections` and reads
+  **Resume**.
 - Every module in `OKSAT_MANIFEST` renders as a card under `#modules`,
   grouped by subspecialty, each launching `oksat-study.html?m=<slug>`.
 - With seeded `oksat:progress:*` the card shows a completion meter and reads
@@ -126,6 +131,29 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 - The page mounts straight into the module — **no prompt of any kind**. The
   test seeds `oksat:reviewer` directly to pick a namespace.
 - Concept deep link `&c=<key>` pre-filters (manual).
+
+### Interactive learning (`oksat-learn.html?g=<slug>`)
+`tools/test-oksat-learn.mjs` pins, and `tools/check-data.mjs` (`OKSAT_GUIDES`)
+validates the data under it:
+- **Render**: a chapter draws its sections, the rail lists every chapter plus
+  flashcards and pearls, and no raw `**` or `[[ ]]` reaches the page.
+- **Predict-then-reveal**: the typed answer is echoed back and never stored;
+  keys 1 to 4 grade; the grade lands in `oksat:learn:<slug>:<rev>` as
+  `checks['<chapter>/<section>:<id>']`; Mark done and the grade survive a
+  reload.
+- **Modes**: Core only hides every "Go deeper" block; Step shows one section
+  (Next, the arrow keys, deep links); both persist.
+- **Checkers** evaluate their declared rules (ABRS, ESS, biologic eligibility
+  with its prerequisite, response grade).
+- **Inline module questions** load by reference, lock on the first answer, are
+  stored under `practice['<module>:<item>']`, and leave the module's own
+  progress and SRS untouched; drill links carry the module and concept with a
+  live count; two different modules can load into one page.
+- **Deck and pearls** load every chapter; a card grade writes the same record.
+- **Untrusted input**: `?g=`, `?c=` and the hash only match known ids; a
+  payload renders as text (smoke regression, same class as `?m=`).
+- Manual: read each new chapter in both themes and at phone width; a green run
+  proves structure, not that the page teaches.
 
 ### Airway Rounds (`airway-jeopardy.html`)
 - Boots with **zero external requests** (deliberately CDN-free — its CSP

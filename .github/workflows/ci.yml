@@ -45,7 +45,7 @@ jobs:
           # dissection rules, the materials vocabulary in authoring-ssb.md). The rest of tools/ssb-pipeline/
           # never runs here; its outputs are committed under ssb/, which this already matches.
           flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-content|ssb-fixture-ct)\.mjs|tools/ssb-pipeline/uw/dissection\.json|docs/authoring-ssb\.md'
-          flag oksat 'js/oksat-|js/mcq-modules/pediatrics|js/vendor/(react|htm)|css/oksat\.css|oksat(-study)?\.html|tools/test-oksat-engine'
+          flag oksat 'js/oksat-|js/mcq-modules/|js/vendor/(react|htm)|css/oksat(-learn)?\.css|oksat(-study|-learn)?\.html|tools/test-oksat-(engine|learn)'
           flag wiki  'wiki/|tools/test-wiki-sync'
           cat "$GITHUB_OUTPUT"
 
@@ -91,6 +91,10 @@ jobs:
       - name: OKSAT engine behavior tests
         if: needs.changes.outputs.oksat == 'true'
         run: node tools/test-oksat-engine.mjs
+
+      - name: OKSAT interactive learning behavior tests
+        if: needs.changes.outputs.oksat == 'true'
+        run: node tools/test-oksat-learn.mjs
 
   # The SSB suite is most of CI's time, so it runs as parallel shards. The
   # split lives in tools/test-ssb.mjs (SHARDS), which refuses a shard count

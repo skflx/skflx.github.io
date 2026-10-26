@@ -210,6 +210,106 @@ function checkOksat() {
 }
 
 /* ===========================================================
+   1b. OKSAT interactive guides <-> chapters <-> modules
+   (docs/authoring-oksat-guide.md.) Counts agree with the manifest, every
+   block is a known type with balanced inline markup, every figure exists
+   with alt text, and every module question or concept a guide points at
+   resolves, so a renamed concept or id fails here instead of in a browser.
+   =========================================================== */
+function checkGuides() {
+  console.log('\njs/oksat-manifest.js OKSAT_GUIDES <-> js/oksat-guides/*');
+  let man;
+  try { man = loadWindow(rel('js/oksat-manifest.js')); } catch (e) { fail('manifest load: ' + e.message); return; }
+  const guides = man.OKSAT_GUIDES || [];
+  const subs = man.OKSAT_SUBSPECIALTIES || {};
+  ok(Array.isArray(guides) && guides.length > 0, 'OKSAT_GUIDES is a non-empty array', 'OKSAT_GUIDES missing/empty');
+  const mods = {};
+  for (const m of man.OKSAT_MANIFEST) {
+    try { mods[m.slug] = loadWindow(rel(m.data)).__MCQ_MODULE; } catch (e) { /* reported by checkOksat */ }
+  }
+  const BLOCKS = new Set(['p', 'why', 'h', 'ul', 'ol', 'table', 'kv', 'call', 'deep', 'cards', 'steps', 'figure', 'tool', 'practice', 'check']);
+  const CALLS = new Set(['pearl', 'trap', 'mech', 'hook']);
+  /* **bold** and *italic* toggle, \* is a literal star, [[...]] is a chip: every string must close what it opens. */
+  const markup = (t) => {
+    const bare = t.replace(/\\\*/g, '').replace(/\[\[[^\]]+\]\]/g, '');
+    if (/\[\[|\]\]/.test(bare)) return 'unbalanced [[ ]]';
+    const stars = (bare.match(/\*/g) || []).length;
+    return stars % 2 ? 'odd number of * (unclosed bold or italic; escape a literal star as \\*)' : null;
+  };
+  const files = [];
+  for (const g of guides) {
+    const tag = g.slug;
+    ok(!!subs[g.subspecialty] && g.accent === subs[g.subspecialty].hue, `${tag}: subspecialty '${g.subspecialty}' and accent match OKSAT_SUBSPECIALTIES`,
+      `${tag}: subspecialty '${g.subspecialty}' unknown or accent ${g.accent} is not its hue`);
+    const secIds = new Set(), problems = [];
+    for (const c of g.chapters) {
+      files.push(path.basename(c.data));
+      if (!fs.existsSync(rel(c.data))) { problems.push(`${c.id}: data file missing`); continue; }
+      let ch;
+      try { ch = loadWindow(rel(c.data)).__OKSAT_CHAPTER; } catch (e) { problems.push(`${c.id}: load threw ${e.message}`); continue; }
+      if (!ch) { problems.push(`${c.id}: no __OKSAT_CHAPTER`); continue; }
+      if (ch.id !== c.id || c.id !== path.basename(c.data, '.js')) problems.push(`${c.id}: id/filename disagree`);
+      const n = (ch.sections || []).length;
+      if ((c.sections || 0) !== n) problems.push(`${c.id}: manifest sections ${c.sections || 0} !== ${n}`);
+      if (!ch.title || !ch.kicker) problems.push(`${c.id}: missing title or kicker`);
+      const strings = [];
+      const walk = (blocks, where) => (blocks || []).forEach((b, i) => {
+        const at = `${where}[${i}]`;
+        if (!BLOCKS.has(b.t)) { problems.push(`${at}: unknown block '${b.t}'`); return; }
+        for (const k of ['x', 'q', 'a', 'title', 'label']) if (typeof b[k] === 'string') strings.push([at + '.' + k, b[k]]);
+        (b.items || []).forEach((it) => { if (typeof it === 'string') strings.push([at, it]); else { if (it.x) strings.push([at, it.x]); if (it.h) strings.push([at, it.h]); } });
+        (b.head || []).forEach((h) => strings.push([at, h]));
+        (b.rows || []).forEach((r) => r.forEach((cell) => strings.push([at, typeof cell === 'string' ? cell : cell.x])));
+        if (b.t === 'call' && !CALLS.has(b.k)) problems.push(`${at}: call kind '${b.k}'`);
+        if (b.t === 'call' || b.t === 'deep') walk(b.blocks, at);
+        if (b.t === 'cards') b.items.forEach((it, j) => walk(it.blocks, `${at}.${j}`));
+        if (b.t === 'table' && b.rows.some((r) => !r.length)) problems.push(`${at}: empty table row`);
+        if (b.t === 'figure') {
+          if (!fs.existsSync(rel(b.src))) problems.push(`${at}: figure not found ${b.src}`);
+          if (!b.alt) problems.push(`${at}: figure without alt text`);
+        }
+        if (b.t === 'tool') {
+          if (!b.crit.length || !b.rules.length) problems.push(`${at}: tool needs crit and rules`);
+          if (b.rules[b.rules.length - 1].pre !== undefined || b.rules.every((r) => r.eq !== undefined)) problems.push(`${at}: last tool rule must be a catch-all`);
+        }
+        if (b.t === 'practice') for (const ref of b.refs) {
+          const [m, id] = ref.split(':');
+          if (!mods[m] || !mods[m].ITEMS.some((q) => q.id === id)) problems.push(`${at}: ${ref} does not resolve to a module item`);
+        }
+      });
+      const checkIds = new Set();
+      (ch.sections || []).forEach((s) => {
+        if (secIds.has(s.id)) problems.push(`${c.id}/${s.id}: duplicate section id in guide`);
+        secIds.add(s.id);
+        if (!/^[a-z0-9-]+$/.test(s.id)) problems.push(`${s.id}: section id must be kebab-case`);
+        walk(s.blocks, s.id);
+        (s.blocks || []).filter((b) => b.t === 'check').forEach((b) => {
+          if (!b.id || checkIds.has(s.id + ':' + b.id)) problems.push(`${s.id}: check id missing or duplicate (${b.id})`);
+          checkIds.add(s.id + ':' + b.id);
+        });
+        for (const d of s.drill || []) {
+          const mod = mods[d.m];
+          if (!mod) { problems.push(`${s.id}: drill module ${d.m} unknown`); continue; }
+          for (const k of d.c || []) {
+            if (!mod.CONCEPTS[k]) problems.push(`${s.id}: drill concept ${d.m}/${k} unknown`);
+            else if (!mod.ITEMS.some((q) => (q.concepts || []).includes(k))) problems.push(`${s.id}: drill concept ${d.m}/${k} has no items`);
+          }
+        }
+      });
+      walk(ch.intro, c.id + '.intro');
+      (ch.tldr || []).forEach((t) => strings.push([c.id + '.tldr', t]));
+      for (const [at, t] of strings) { const m = markup(t); if (m) problems.push(`${at}: ${m}: ${t.slice(0, 50)}`); }
+    }
+    ok(problems.length === 0, `${tag}: ${g.chapters.length} chapters, blocks, markup, figures and module references resolve`,
+      `${tag}: ${problems.length} problem(s):\n        ` + problems.slice(0, 12).join('\n        '));
+  }
+  const dir = rel('js/oksat-guides');
+  const onDisk = fs.existsSync(dir) ? fs.readdirSync(dir, { recursive: true }).filter((f) => String(f).endsWith('.js')).map((f) => path.basename(String(f))) : [];
+  const orphans = onDisk.filter((f) => !files.includes(f));
+  ok(orphans.length === 0, 'no orphan guide chapter files', `chapter files not in OKSAT_GUIDES: ${orphans.join(', ')}`);
+}
+
+/* ===========================================================
    2. Airway question bank
    =========================================================== */
 function checkAirway() {
@@ -628,6 +728,7 @@ function checkFigures() {
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkOksat();
+checkGuides();
 checkAirway();
 checkSecurity();
 checkStamps();

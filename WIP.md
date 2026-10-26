@@ -54,9 +54,11 @@ exists; then add a `Curriculum vitae` item to `.hero-links` in `index.html`.
 
 ---
 
-## OKSAT (`oksat.html`, `oksat-study.html`)
+## OKSAT (`oksat.html`, `oksat-study.html`, `oksat-learn.html`)
 
-**State:** A hub and a study viewer. Modules are hand-authored data files in
+**State:** A hub, a question viewer and, since 2026-10, an Interactive learning
+viewer. The hub has two named segments: **Interactive learning** (guides) and
+**Question modules**. Modules are hand-authored data files in
 `js/mcq-modules/`, each with one manifest entry; the shared engine renders all
 of them. Every question opens on a recall gate: reveal and self-grade, or show
 the choices and answer as a locked-first-attempt MCQ. The engine records which
@@ -84,11 +86,27 @@ Module families, and their status:
   (the eicosanoid pathway, because the Dominas figure is wrong about COX-1 and
   COX-2, plus mechanism, timeline and evidence diagrams on the harder items).
 
+- **Interactive learning** (`docs/authoring-oksat-guide.md`): first-pass guides
+  with predict-then-reveal prompts, checkers, inline module questions and
+  per-section drill links. One guide so far, **AR · CRS · AERD** (`ar-crs-aerd`):
+  ten chapters from type 2 immunology to critical appraisal, ported from the
+  study atlas built in conversation (2026-10-26), plus a flashcard deck and a
+  pearl wall. Its question bank was folded into the modules: the AERD and
+  biologics items already existed in `aerd-biologics`; thirteen new MCQs were
+  added to `allergy-testing` (its first MCQs; items q84 to q96), and a new
+  `crs-ars` module (ARS, CRS, fungal and secondary CRS, EPOS biologic criteria,
+  three cases) holds the rest. Reuses the vetted AERD module figures.
+  Everything is draft: sources are EPOS 2020, the NEJM 2019 review, ICAR-AR
+  2023 and the two AERD reviews, as summarized in the atlas; the primary
+  papers were not re-read line by line. One known cross-source difference is
+  flagged in `allergy-testing` q95 (NARES eosinophil cutoff).
+
 None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls
 discrepancies (hillock mapping, prominence thresholds) for owner review.
 
-**Next:** authoring is manual (`docs/authoring-oksat.md`). Laryngology and
+**Next:** more guides (`/oksat-guide`), each built with its questions;
+authoring is manual (`docs/authoring-oksat.md`). Laryngology and
 head-and-neck oncology have hues reserved in `OKSAT_SUBSPECIALTIES` but no
 modules. The AO CMF content is still to be folded into the facial-trauma modules.
 

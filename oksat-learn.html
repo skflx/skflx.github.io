@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-font="instrument">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>OKSAT Interactive Learning | skflx.MD</title>
+    <meta name="description" content="OKSAT interactive learning: first-pass study guides with predict-then-reveal recall, worked checkers, and section-by-section drills into the question modules.">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+
+    <!-- Theme + typeface before paint (shares sk_theme with the main site) -->
+    <script src="js/theme-boot.js?v=61b69b81"></script>
+
+    <!-- Optional typefaces for the "Aa" picker; only fetched when chosen -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/oksat.css?v=1c485720">
+    <link rel="stylesheet" href="css/oksat-learn.css?v=fb60e494">
+</head>
+<body>
+    <nav class="ok-topbar">
+        <a class="ok-back" href="oksat.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Self-Assessment
+        </a>
+        <div class="ok-topbar-actions">
+            <span id="font-picker"></span>
+            <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    <div id="root" class="lr-root"></div>
+
+    <script src="js/oksat-manifest.js?v=0c9bf51e"></script>
+    <script src="js/oksat-store.js?v=20d84b24"></script>
+    <script src="js/oksat-prefs.js?v=c9c374f2"></script>
+    <script src="js/oksat-learn.js?v=80ab634d"></script>
+</body>
+</html>

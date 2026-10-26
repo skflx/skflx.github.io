@@ -15,11 +15,13 @@ no design judgment required.
 | `CLAUDE.md` | Agent operating manual: hard rules, commands, architecture, conventions | A command, convention, subsystem boundary, or hard rule changes |
 | `WIP.md` | Current state of each system (what it is / where it stands / what is next) | A significant chunk of work completes — rewrite the affected section to match reality |
 | `docs/authoring-oksat.md` | How to author an OKSAT module | Module schema or manifest entry shape changes |
+| `docs/authoring-oksat-guide.md` | How to author an OKSAT interactive guide: chapter and block schema, inline markup, checkers, inline module questions, drill rows | The guide schema, a block type, or `js/oksat-learn.js` rendering changes |
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
 | `docs/verification.md` | Per-subsystem "how to prove it works" playbooks | A subsystem's verifiable behavior or the test tooling changes |
 | `docs/diagrams.md` | The ASCII 3D figure system: request template, workflow, scene schema, inks, rules | The engine gains or changes a feature, a part kind, an ink, or the bake/check contract |
 | `.claude/skills/ascii-diagram/SKILL.md` | The agent playbook for a figure request (`/ascii-diagram`) | The workflow or its verification steps change |
+| `.claude/skills/oksat-guide/SKILL.md` | The agent playbook for a new interactive guide and the questions that go with it (`/oksat-guide`) | The guide spec, `tools/test-oksat-learn.mjs` or the hand-off changes |
 | `.claude/skills/oksat-module/SKILL.md` | The agent playbook for a new OKSAT module: sources, figures, ladder, cases, verification (`/oksat-module`) | The module spec, the engine's input rules, or `tools/lint-oksat.mjs` change |
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
 | `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |

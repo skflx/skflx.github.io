@@ -1,14 +1,21 @@
 /* =================================================================
    Allergy and Allergy Testing
    OKSAT · Rhinology / Allergy Module
-   Free-response module: every item is type 'recall' — read the
-   prompt, commit to an answer, reveal, then self-grade.
+   Mostly free-response: items are type 'recall' (read the prompt, commit
+   to an answer, reveal, then self-grade). q84–q96 are MCQs added from the
+   AR · CRS · AERD interactive guide (ICAR-AR 2023, EPOS 2020): application
+   vignettes and facts the recall items did not cover. Draft: the owner verifies.
    ================================================================= */
 const meta = {
   id: 'allergy-testing',
   title: 'Allergy &\nAllergy Testing',
   subtitle: 'A self-test on the mediator cascade, skin and in vitro testing, pharmacotherapy and immunotherapy, and the OHNS allergy crossovers — AFRS, AERD, angioedema, and food syndromes.',
   kicker: 'Self-Test · Rhinology / Allergy',
+  sources: [
+    'Wise SK, et al. International Consensus Statement on Allergy and Rhinology: Allergic Rhinitis 2023. Int Forum Allergy Rhinol 2023 (ICAR-AR 2023): q84–q96 draw on its pathophysiology, testing, pharmacotherapy and immunotherapy sections.',
+    'Fokkens WJ, et al. European Position Paper on Rhinosinusitis and Nasal Polyps 2020. Rhinology 2020;58(Suppl 29): q85 (polyp fibrin).',
+    'Items q1–q83 were authored as free-response prompts; q84–q96 were added from the AR · CRS · AERD interactive guide. Nothing here is clinically verified; the owner verifies.',
+  ],
 };
 
 const DOMAINS = {
@@ -229,6 +236,39 @@ Late (4–12 h): congestion predominates, with an infiltrate of eosinophils, bas
     concepts: ['bradykinin-pathway'],
   },
 
+  {
+    id: 'q84', type: 'mcq', section: 'I. Immunology & Mediator Cascade',
+    stem: 'Which signaling sequence commits a naive CD4+ T cell to the Th2 lineage, and which contact signal then lets that Th2 cell switch a B cell to IgE?',
+    options: [
+      { id: 'a', text: 'IL-12 → STAT4 → T-bet; then CD28 on the T cell engaging CD80/CD86 on the B cell' },
+      { id: 'b', text: 'IL-4 → STAT6 → GATA-3; then CD40 ligand on the T cell engaging CD40 on the B cell, with IL-4 or IL-13' },
+      { id: 'c', text: 'IL-6 and TGF-β → STAT3 → RORγt; then OX40 ligand on the B cell engaging OX40 on the T cell' },
+      { id: 'd', text: 'IL-2 and TGF-β → STAT5 → FOXP3; then CTLA-4 on the T cell engaging CD80/CD86 on the B cell' },
+    ],
+    correct: 'b',
+    brief: 'IL-4 signals through STAT6 to induce GATA-3, the Th2 master switch. IgE class switching then needs IL-4 or IL-13 plus CD40 ligand–CD40 contact.',
+    detailed: `Mechanism: dendritic cells present allergen on MHC class II with CD28–CD80/CD86 costimulation. In the presence of IL-4, STAT6 induces GATA-3, and the Th2 cell makes IL-4, IL-5 and IL-13. IL-4 or IL-13 plus CD40 ligand–CD40 contact drives ε germline transcription and class switching to IgE in the B cell (ICAR-AR 2023, section VI).
+Application: each wrong option is another lineage. IL-12 → STAT4 → T-bet is Th1. IL-6 and TGF-β → STAT3 → RORγt is Th17. IL-2 and TGF-β → STAT5 → FOXP3 is the regulatory T cell that allergen immunotherapy expands (item q18).
+Pearl: 4-6-3. IL-4, STAT6, GATA-3.`,
+    concepts: ['ige-synthesis'],
+  },
+  {
+    id: 'q85', type: 'mcq', section: 'I. Immunology & Mediator Cascade',
+    stem: 'Fibrin deposition builds the edematous stroma of type 2 nasal polyps. Which IL-13 effect is held responsible?',
+    options: [
+      { id: 'a', text: 'Suppression of factor XIIIa, so fibrin is not cross-linked and leaks into the stroma' },
+      { id: 'b', text: 'Induction of MUC5AC, so goblet-cell mucin traps fibrinogen' },
+      { id: 'c', text: 'Downregulation of occludin, so plasma fibrinogen crosses the epithelium and clots' },
+      { id: 'd', text: 'Suppression of tissue plasminogen activator, so less plasmin is made and fibrin is not cleared' },
+    ],
+    correct: 'd',
+    brief: 'IL-13 suppresses tissue plasminogen activator (t-PA). Less plasmin means fibrin persists and forms the polyp matrix (EPOS 2020, section 5.2).',
+    detailed: `Mechanism: t-PA converts plasminogen to plasmin, which degrades fibrin. With t-PA suppressed, a fibrin mesh accumulates in the stroma and holds the edema fluid that makes a polyp.
+Application: the distractors are real IL-13 effects with a different consequence. IL-13 increases MUC5AC (goblet-cell mucus) and lowers occludin (barrier leak). Factor XIIIa, made by M2 macrophages, is increased in polyps and cross-links fibrin, so it adds to the matrix rather than being suppressed. Type 2 disease carries the most remodeling, and biologics that block type 2 signaling shrink polyps, which supports the endotype driving the remodeling.
+Caveat: type 1 polyps also seem to have a fibrin matrix, so t-PA suppression may be shared across endotypes (EPOS 2020).
+Pearl: IL-13 suppresses t-PA; the fibrin it fails to clear is the polyp.`,
+    concepts: ['crswnp-endotype'],
+  },
   // ═══════════ II. TESTING ═══════════
   {
     id: 'q21', type: 'recall', section: 'II. Testing',
@@ -385,6 +425,38 @@ Late (4–12 h): congestion predominates, with an infiltrate of eosinophils, bas
     concepts: ['local-anesthetic-allergy'],
   },
 
+  {
+    id: 'q86', type: 'mcq', section: 'II. Testing',
+    stem: 'At 20 minutes the skin prick readings are histamine 6 mm, saline 1 mm, cat 3 mm and house dust mite 5 mm. Which allergens are positive?',
+    options: [
+      { id: 'a', text: 'House dust mite only' },
+      { id: 'b', text: 'Both cat and house dust mite' },
+      { id: 'c', text: 'Cat only' },
+      { id: 'd', text: 'Neither: the test is invalid because the saline control reacted' },
+    ],
+    correct: 'a',
+    brief: 'Positive means a wheal at least 3 mm larger than the negative control. Mite is 5 − 1 = 4 mm (positive); cat is 3 − 1 = 2 mm (negative).',
+    detailed: `Mechanism: the criterion is relative, not absolute, because skin reactivity varies between people and between sites. Every wheal is read against the negative control (item q22).
+Application: the histamine control at 6 mm shows the skin can react, so the panel is interpretable. A negligible saline wheal (1 mm) is simply subtracted as background; a clearly reactive negative control suggests dermatographism and invalidates the panel (item q23). A flat histamine control would make the test uninterpretable, not negative.
+Pearl: subtract the negative control first, then apply 3 mm. A raw 3 mm wheal is not a positive test.`,
+    concepts: ['skin-prick-testing'],
+  },
+  {
+    id: 'q87', type: 'mcq', section: 'II. Testing',
+    stem: 'Which test most accurately confirms that a patient\'s sensitization is clinically relevant to the nose?',
+    options: [
+      { id: 'a', text: 'Total serum IgE' },
+      { id: 'b', text: 'Intradermal skin testing' },
+      { id: 'c', text: 'Nasal allergen challenge (provocation)' },
+      { id: 'd', text: 'Component-resolved diagnostics' },
+    ],
+    correct: 'c',
+    brief: 'ICAR-AR 2023: nasal allergen challenge is the most accurate confirmation of clinical allergy, with positive and negative predictive values above 90%, but it is mostly confined to specialist centers.',
+    detailed: `Mechanism: challenge reproduces the exposure at the target organ, so it tests the thing the other tests only infer. Skin and serum IgE show sensitization; they do not show that the allergen produces nasal symptoms (item q21).
+Application: use it when skin and in vitro results are equivocal, and for local allergic rhinitis and occupational rhinitis, where nasal provocation is a recommendation rather than an option (items q35 and q36). Total IgE is a poor discriminator, intradermal testing picks up low-level sensitivity but generally performs worse than prick testing (item q24), and component-resolved diagnostics refine risk and allergen choice for immunotherapy without proving nasal relevance.
+Pearl: sensitization is not allergy; the challenge is the test that closes that gap.`,
+    concepts: ['pretest-probability'],
+  },
   // ═══════════ III. TREATMENT AND IMMUNOTHERAPY ═══════════
   {
     id: 'q43', type: 'recall', section: 'III. Treatment & Immunotherapy',
@@ -517,6 +589,70 @@ Tezepelumab — anti-TSLP (approved for CRSwNP October 2025, 210 mg SC q4 weeks,
     concepts: ['anaphylaxis-management'],
   },
 
+  {
+    id: 'q88', type: 'mcq', section: 'III. Treatment & Immunotherapy',
+    stem: 'A patient with refractory allergic rhinitis asks for an intraturbinate corticosteroid injection. Which serious risk should you counsel about?',
+    options: [
+      { id: 'a', text: 'Septal perforation' },
+      { id: 'b', text: 'Vision loss' },
+      { id: 'c', text: 'Permanent anosmia' },
+      { id: 'd', text: 'Empty nose syndrome' },
+    ],
+    correct: 'b',
+    brief: 'ICAR-AR 2023 recommends against injectable corticosteroids for allergic rhinitis, and intraturbinate injection carries a small but serious risk of ocular complications including vision loss.',
+    detailed: `Mechanism: the proposed route is particulate depot steroid reaching branches of the ophthalmic circulation (a knowledge addition; the ICAR summary states the risk, not the mechanism).
+Application: injected steroids also carry systemic costs (HPA-axis suppression, growth, bone, glucose), and oral steroids are a strong recommendation against for routine use. The steroid route with evidence is the intranasal spray (grade A, strong recommendation).
+Pearl: the one rare exception to the oral steroid rule is obstruction so severe that sprays cannot reach the mucosa, after a risk discussion. The injection is not that exception.`,
+    concepts: ['pharmacotherapy'],
+  },
+  {
+    id: 'q89', type: 'mcq', section: 'III. Treatment & Immunotherapy',
+    stem: 'A pregnant patient with cat-allergic rhinitis visits a cat-owning relative tomorrow and wants prophylaxis. Which option fits ICAR-AR 2023?',
+    options: [
+      { id: 'a', text: 'Oral pseudoephedrine before the visit' },
+      { id: 'b', text: 'Start cat subcutaneous immunotherapy now' },
+      { id: 'c', text: 'Intramuscular triamcinolone' },
+      { id: 'd', text: 'Intranasal cromolyn shortly before exposure' },
+    ],
+    correct: 'd',
+    brief: 'Cromolyn is a second-line mast cell stabilizer that works best before exposure and is useful in pregnancy.',
+    detailed: `Mechanism: cromolyn blocks mast cell degranulation, so it prevents the early-phase release rather than reversing it. It is given before the exposure, not as a rescue (the calcium-influx step it acts on is item q7's final common pathway).
+Application: it has grade A evidence and a second-line recommendation: less effective than an intranasal corticosteroid or an intranasal antihistamine, usable from age 2. In pregnancy the alternatives fall away: oral decongestant combinations are not for pregnancy, starting immunotherapy in pregnancy is contraindicated, and injectable corticosteroids carry a recommendation against.
+Pearl: pre-exposure cromolyn is prophylaxis. Taken after symptoms start it does little.`,
+    concepts: ['pharmacotherapy'],
+  },
+  {
+    id: 'q90', type: 'mcq', section: 'III. Treatment & Immunotherapy',
+    stem: 'Which immunotherapy approach does ICAR-AR 2023 recommend against?',
+    options: [
+      { id: 'a', text: 'Epicutaneous immunotherapy' },
+      { id: 'b', text: 'Cluster subcutaneous immunotherapy with premedication' },
+      { id: 'c', text: 'Intralymphatic immunotherapy' },
+      { id: 'd', text: 'High-dose aqueous sublingual immunotherapy' },
+    ],
+    correct: 'a',
+    brief: 'Epicutaneous immunotherapy shows limited, variable benefit and systemic reactions in up to 14.6% (RR 4.65). Cluster SCIT and intralymphatic immunotherapy are options; aqueous SLIT is a recommendation.',
+    detailed: `Mechanism and evidence: the epicutaneous trials gave variable benefit with more systemic reactions than placebo, and three of the four studies came from one group, so the evidence is both small and narrow.
+Application: cluster SCIT reaches maintenance faster and has safety similar to conventional SCIT when premedicated (rush SCIT has more local and systemic reactions). Intralymphatic immunotherapy uses inguinal node injections, few injections and a small allergen dose, but long-term data are lacking. Aqueous SLIT is a recommendation, though dosing is not standardized and it may be less effective than tablets. Conventional SCIT and SLIT tablets are strong recommendations.
+Pearl: grade and policy are different questions (item q96). Here the policy is against because the risk-benefit is poor.`,
+    concepts: ['scit-vs-slit'],
+  },
+  {
+    id: 'q91', type: 'mcq', section: 'III. Treatment & Immunotherapy',
+    stem: 'A woman on maintenance subcutaneous immunotherapy for two years becomes pregnant. What is the best course?',
+    options: [
+      { id: 'a', text: 'Stop immunotherapy immediately' },
+      { id: 'b', text: 'Switch to rush immunotherapy to finish sooner' },
+      { id: 'c', text: 'Continue maintenance without escalating the dose' },
+      { id: 'd', text: 'Switch to SLIT tablets' },
+    ],
+    correct: 'c',
+    brief: 'Starting immunotherapy in pregnancy is contraindicated; continuing an established maintenance dose is acceptable.',
+    detailed: `Mechanism: the concern is a systemic reaction. Anaphylaxis threatens the mother and, through hypotension and hypoxia, the fetus. Risk is concentrated in build-up and dose escalation, which is why neither is done in pregnancy.
+Application: a stable maintenance dose has been tolerated for years, so continuing it is reasonable and stopping gives up the benefit. Rush schedules have more systemic reactions than conventional or cluster schedules. Switching to tablets is a new start of a different product, and the tablets have their own label and epinephrine requirements.
+Pearl: pregnancy blocks initiation and escalation, not an established maintenance schedule.`,
+    concepts: ['immunotherapy-indications'],
+  },
   // ═══════════ IV. OHNS CROSSOVERS ═══════════
   {
     id: 'q61', type: 'recall', section: 'IV. OHNS Crossovers',
@@ -647,6 +783,71 @@ HAE with normal C1-INH: normal level and function, mutations in factor XII, plas
     concepts: ['immunotherapy-extracts'],
   },
 
+  {
+    id: 'q92', type: 'mcq', section: 'IV. OHNS Crossovers',
+    stem: 'Profuse watery rhinorrhea begins within minutes of eating spicy food. Allergy testing is negative, and there is no itch, sneezing or congestion. Which pathway and drug fit best?',
+    options: [
+      { id: 'a', text: 'Sympathetic α-adrenergic tone failing; oxymetazoline' },
+      { id: 'b', text: 'Parasympathetic muscarinic secretion from submucosal glands; intranasal ipratropium' },
+      { id: 'c', text: 'Sensory TRPV1 afferents; a leukotriene receptor antagonist' },
+      { id: 'd', text: 'IgE-mediated histamine release; an oral second-generation antihistamine' },
+    ],
+    correct: 'b',
+    brief: 'Gustatory rhinitis is cholinergic glandular secretion. Intranasal ipratropium blocks the muscarinic receptor and treats rhinorrhea, and only rhinorrhea.',
+    detailed: `Mechanism: parasympathetic acetylcholine acts on muscarinic receptors on submucosal glands, with VIP adding secretion and vasodilation. Overactivity relative to sympathetic tone is the classic model of nonallergic (vasomotor) rhinitis.
+Application: ipratropium does nothing for congestion, which is vascular, or for sneezing, which is sensory and histaminergic. Decongestants shrink the venous sinusoids without stopping secretion and cause rebound with prolonged use. Capsaicin desensitizes TRPV1 and helps nonallergic and mixed rhinitis; leukotriene receptor antagonists and antihistamines do not address a cholinergic reflex.
+Pearl: alcohol that worsens nasal symptoms should make you think of CRSwNP or AERD before gustatory rhinitis.`,
+    concepts: ['nonallergic-rhinitis'],
+  },
+  {
+    id: 'q93', type: 'mcq', section: 'IV. OHNS Crossovers',
+    stem: 'A patient undergoes vidian neurectomy for refractory rhinorrhea. Which complication follows directly from the nerve\'s fiber content?',
+    options: [
+      { id: 'a', text: 'Facial weakness' },
+      { id: 'b', text: 'Hyperacusis' },
+      { id: 'c', text: 'Loss of taste on the anterior two-thirds of the tongue' },
+      { id: 'd', text: 'Dry eye' },
+    ],
+    correct: 'd',
+    brief: 'The nerve of the pterygoid canal carries preganglionic parasympathetic fibers to the pterygopalatine ganglion for both the nasal glands and the lacrimal gland, so cutting it reduces tearing.',
+    detailed: `Mechanism: the superior salivatory nucleus sends fibers through the nervus intermedius to the greater superficial petrosal nerve. That nerve joins the deep petrosal nerve (sympathetic) to form the vidian nerve, which reaches the pterygopalatine ganglion, where the parasympathetic fibers synapse before supplying the posterior nasal nerves and the lacrimal gland.
+Application: a neurectomy removes the secretomotor supply to the nose and the eye together. ICAR-AR 2023 lists dry eye, palatal or lip numbness and nasal dryness as the risks, with uncertain long-term durability. Facial motor fibers stay in the facial canal, hyperacusis follows loss of the nerve to stapedius, and anterior tongue taste is carried by the chorda tympani.
+Pearl: posterior nasal nerve cryoablation or radiofrequency targets the same secretomotor supply more distally; its listed risks are epistaxis and transient facial pain.`,
+    concepts: ['nonallergic-rhinitis'],
+  },
+  {
+    id: 'q94', type: 'mcq', section: 'IV. OHNS Crossovers',
+    stem: 'A grass-allergic patient has symptoms 5 days a week for 3 consecutive weeks each June and wakes at night. Classify the rhinitis by ARIA.',
+    options: [
+      { id: 'a', text: 'Intermittent, moderate–severe' },
+      { id: 'b', text: 'Persistent, mild' },
+      { id: 'c', text: 'Persistent, moderate–severe' },
+      { id: 'd', text: 'Intermittent, mild' },
+    ],
+    correct: 'a',
+    brief: 'Persistent needs more than 4 days a week and at least 4 consecutive weeks. Three weeks makes it intermittent, and sleep disturbance makes it moderate–severe.',
+    detailed: `Mechanism: ARIA uses two independent axes. Duration is intermittent (fewer than 4 days a week, or fewer than 4 consecutive weeks) or persistent (more than 4 days a week and at least 4 consecutive weeks). Severity is moderate–severe if any of four impairments is present: sleep disturbance, impaired daily, leisure or sport activity, impaired school or work, or troublesome symptoms; otherwise mild.
+Application: intermittent and seasonal are different axes. A patient symptomatic 6 days a week for 8 weeks each June has seasonal and persistent disease. House dust mite allergy can be intermittent.
+Pearl: persistent needs both fours; intermittent needs either one to fall short.`,
+    concepts: ['aria-classification'],
+  },
+  {
+    id: 'q95', type: 'mcq', section: 'IV. OHNS Crossovers',
+    stem: 'Perennial rhinitis, negative skin and serum IgE tests, marked hyposmia, and 30% eosinophils on a nasal smear. What is the most likely diagnosis?',
+    options: [
+      { id: 'a', text: 'Local allergic rhinitis' },
+      { id: 'b', text: 'Vasomotor rhinitis (nonallergic rhinopathy)' },
+      { id: 'c', text: 'NARES (nonallergic rhinitis with eosinophilia syndrome)' },
+      { id: 'd', text: 'Atrophic rhinitis' },
+    ],
+    correct: 'c',
+    brief: 'NARES looks like perennial allergic rhinitis with negative atopy testing, nasal eosinophilia and prominent smell loss.',
+    detailed: `Mechanism: raised nasal tryptase and eosinophil cationic protein, and degranulating mast cells on biopsy, point to a non-IgE eosinophilic process.
+Application: local allergic rhinitis is confirmed by allergen provocation, nasal sIgE or a basophil activation test, not by cytology alone (items q35 and q37). Vasomotor rhinitis has no smear eosinophilia and is triggered by temperature, odors and irritants. Atrophic rhinitis presents with crusting, fetor and a wide cavity that feels blocked.
+Discrepancy: the cutoff is not settled. Item q74 gives more than 20%; the ICAR-AR 2023 summary used in the interactive guide gives usual smear eosinophils of 10–20% with a diagnostic criterion of at least 25%. The keyed answer holds under every cutoff because 30% exceeds them all.
+Pearl: perennial allergic-type symptoms with negative tests narrow to NARES (eosinophilic smear) or local allergic rhinitis (provocation positive).`,
+    concepts: ['nonallergic-rhinitis'],
+  },
   // ═══════════ V. CONTESTED GROUND ═══════════
   {
     id: 'q79', type: 'recall', section: 'V. Contested Ground',
@@ -673,6 +874,22 @@ HAE with normal C1-INH: normal level and function, mutations in factor XII, plas
     concepts: ['controversies-and-traps'],
   },
 
+  {
+    id: 'q96', type: 'mcq', section: 'V. Contested Ground',
+    stem: 'ICAR-AR 2023 gives probiotics an aggregate evidence grade of A but only an "option" policy. What explains the gap?',
+    options: [
+      { id: 'a', text: 'The grade was assigned in error and the policy reflects the true evidence' },
+      { id: 'b', text: 'The grade reflects the quality and consistency of the studies; the policy also weighs size of benefit, harm and cost, and heterogeneous strains and doses leave the size of benefit unclear' },
+      { id: 'c', text: 'Probiotics were shown to cause harm, which caps the policy at option' },
+      { id: 'd', text: 'All of the trials enrolled children, which limits generalizability' },
+    ],
+    correct: 'b',
+    brief: 'Grade measures how good and how consistent the studies are. Policy folds in effect size, harm and cost, so a grade A topic can still be only an option.',
+    detailed: `Mechanism: ICAR assigns each topic an aggregate grade (A to D) from the Oxford levels of its studies, then a separate policy (strong recommendation, recommendation, option, no recommendation, recommendation against).
+Application: the pattern recurs. Acupuncture is grade A and an option. Leukotriene receptor antagonists are grade A for efficacy against placebo, but the policy is against first-line monotherapy because they are inferior to intranasal corticosteroids, no better than oral antihistamines, and carry an FDA boxed warning for neuropsychiatric events. Always read the policy, not the letter.
+Pearl: grade answers "how sure are we of the effect"; policy answers "what should I do".`,
+    concepts: ['controversies-and-traps'],
+  },
   // ═══════════ VI. NUMBERS TO HAVE COLD ═══════════
   {
     id: 'q81', type: 'recall', section: 'VI. Numbers to Have Cold',
