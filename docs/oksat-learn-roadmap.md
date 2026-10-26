@@ -93,36 +93,29 @@ starts until that pass is done.
 
 ### Phase A: tag every vault note (after the verification pass)
 
-Two independent keys per note, set together in one read:
+One key per note, `role:`, with two values that are also the publish gate:
 
-| Key | Values | Who sets it |
+| `role:` | Meaning | Published |
 |---|---|---|
-| `role:` | `map` · `reference` · `teaching` · `stub` | Claude drafts, owner confirms |
-| `completeness:` | `1` · `2` · `3` (stars), plus `gap:` one line naming what is missing | Claude sets, owner adjusts |
+| `map` | Map of content (the six subspecialty maps) | yes |
+| `reference` | One entity or topic: definition, classification, numbers, sources | yes |
 
-Completeness rubric. It measures coverage, not correctness: correctness stays
-`vetted`.
+A note with no `role` stays home (fail-closed). Claude drafts the tag in one
+read per note; the owner confirms the table before anything is written back
+to the vault. To keep that read cheap, a script first measures each note
+mechanically (sections present, sources counted, unsourced numbers, TODO
+markers, length), and the model reads one subspecialty per batch.
 
-| ★ | Rubric |
-|---|---|
-| ★ | Outline or definition only; core sections missing, or numbers without sources |
-| ★★ | Usable: definition, presentation, work-up and management with sources; missing a classification, staging, numbers or edge cases (named in `gap:`) |
-| ★★★ | Complete for a board-level reader: every section present, every number sourced, classifications included, cross-linked; no TODOs |
+No completeness rating. Every note is expected to be complete by the time
+the wiki goes live, so the wiki carries no quality stars; `vetted` remains the
+only quality signal, and it stays the owner's.
 
-To keep the tagging cheap, a script first measures each note mechanically
-(sections present, sources counted, unsourced numbers, TODO markers,
-length). The model reads only to judge role and completeness, one
-subspecialty per batch. The output is a table the owner confirms before
-anything is written back to the vault.
+The publish gate in `wiki/sync/policy.json` moves from `tier` to `role`
+(`gate.roleIn: ["map", "reference"]`).
 
-The publish gate in `wiki/sync/policy.json` then moves from `tier` to
-`role` (`map`, `reference`). A note with no `role` stays home (fail-closed).
-`sync-vault.mjs` prints the stars under the title, and a `gap:` line on ★
-and ★★ notes. **Owner:** whether ★ notes are published at all, or held until
-they reach ★★.
-
-The `teaching` notes are the source material for guides. Once a guide covers
-one, the note stays in the vault and leaves the wiki.
+Teaching-style notes (narrative, curriculum order, self-test blocks) are
+source material for guides. They carry no `role` and stay home; once a guide
+covers one, it stays in the vault only.
 
 ### Phase B: strip figures at publish
 
@@ -172,8 +165,8 @@ Figures cost far more tokens than text, so each must earn its place.
 
 1. Terms in every guide, specialty vocabulary only — **done** (2026-10).
 2. **Owner:** verification pass of the vault (in progress).
-3. Phase A (role + completeness) on Rhinology first, since its guide exists,
+3. Phase A (role) on Rhinology first, since its guide exists,
    then the other subspecialties; Phase B with it.
-4. Second guide (Owner picks, §3), built from ★★★ vetted notes, with
+4. Second guide (Owner picks, §3), built from vetted notes, with
    `lint-oksat-guide.mjs` built alongside it (§2).
 5. Wiki live (`wiki/README.md` Bootstrap), then Phase C.

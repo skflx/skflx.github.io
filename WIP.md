@@ -111,7 +111,8 @@ None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls
 discrepancies (hillock mapping, prominence thresholds) for owner review.
 
-**Next:** more guides (`/oksat-guide`), each built with its questions;
+**Next:** the plan for more guides and the sk.oto wiki link-up is in
+`docs/oksat-learn-roadmap.md`. More guides (`/oksat-guide`), each built with its questions;
 authoring is manual (`docs/authoring-oksat.md`). Laryngology and
 head-and-neck oncology have hues reserved in `OKSAT_SUBSPECIALTIES` but no
 modules. The AO CMF content is still to be folded into the facial-trauma modules.
