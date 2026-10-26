@@ -14,6 +14,7 @@
      - step / scroll, core-only, deep links, flashcards and the pearl wall
      - untrusted input (?g=, ?c=, the hash) is only ever matched against known ids
      - the hub shows the guide card and its progress
+     - lexicon terms (js/oksat-terms.js) are marked; hover, focus and tap show the full name
 
    Usage:  node tools/test-oksat-learn.mjs [--base <url>] [--headed]
    Exits nonzero on any failed case.
@@ -239,6 +240,53 @@ async function main() {
     check('8b: its meter counts sections marked done', /2 \/ 54 sections/.test(t) && /Resume/.test(t), t.slice(-80));
     check('8c: the question modules are still listed', (await page.$$eval('#modules .module-card', (e) => e.length)) >= 15);
     check('8d: no console errors', errors.length === 0, JSON.stringify(errors.slice(0, 2)));
+    await context.close();
+  }
+
+  /* ---- 9: terms: every lexicon abbreviation is marked; hover, tap and keys show its full name ---- */
+  for (const vp of [{ width: 1280, height: 900 }, { width: 390, height: 844, hasTouch: true, isMobile: true }]) {
+    const tag = vp.isMobile ? 'phone' : 'desktop';
+    const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, hasTouch: !!vp.hasTouch, isMobile: !!vp.isMobile });
+    await context.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
+    const page = await context.newPage();
+    const errors = collectErrors(page);
+    await page.goto(base + `/oksat-learn.html?g=${SLUG}&c=ars`, { waitUntil: 'domcontentloaded' });
+    await chapterReady(page);
+    const tip = () => page.$eval('#lr-tip', (e) => (e.hidden ? null : e.textContent));
+    const unmarked = await page.evaluate(() => {
+      const w = document.createTreeWalker(document.querySelector('.lr-chapter'), NodeFilter.SHOW_TEXT);
+      const miss = [];
+      for (let n; (n = w.nextNode());) {
+        if (n.parentElement.closest('.lr-term, .lr-src, .lr-ev, a, button, summary, .lr-meta, .lr-kicker, .lr-sn, .lr-dots')) continue;
+        window.OKSATTerms.scan(n.data).hits.forEach((x) => miss.push(x.key));
+      }
+      return miss;
+    });
+    check(`9a (${tag}): every lexicon term in the chapter text is marked`, unmarked.length === 0 && (await page.$$eval('.lr-chapter .lr-term', (e) => e.length)) > 20, unmarked.slice(0, 5).join(', '));
+    const sel = '#rs-2 .lr-tool-opt .lr-term';
+    if (!vp.isMobile) {
+      await page.hover('.lr-chapter .lr-term[data-term="ABRS"]');
+      check('9b: hover shows the full name', /ABRS acute bacterial rhinosinusitis/.test(await tip() || ''), await tip());
+      await page.mouse.move(5, 500);
+      check('9c: moving away hides it', (await tip()) === null);
+      await page.focus('.lr-chapter .lr-term[data-term="ARS"]');
+      check('9d: focus shows it; the term is described by the tip', /acute rhinosinusitis/.test(await tip() || '') && await page.$eval('.lr-chapter .lr-term[data-term="ARS"]', (e) => e.getAttribute('aria-describedby') === 'lr-tip'));
+      await page.keyboard.press('Escape');
+      check('9e: Escape closes it', (await tip()) === null);
+    } else {
+      await page.tap('.lr-chapter .lr-term[data-term="ABRS"]');
+      check('9b (phone): a tap pins the full name', /acute bacterial rhinosinusitis/.test(await tip() || ''), await tip());
+      const box = await page.$eval('#lr-tip', (e) => { const r = e.getBoundingClientRect(); return [r.left, r.right]; });
+      check('9c (phone): the tip stays inside the 16px gutters', box[0] >= 15 && box[1] <= 390 - 15, JSON.stringify(box));
+      await page.tap('.lr-chapter .lr-p');
+      check('9d (phone): a tap elsewhere closes it', (await tip()) === null);
+    }
+    if (await page.$(sel)) {
+      const id = await page.$eval(sel, (e) => e.closest('label').querySelector('input').id);
+      await page.click(sel);
+      check(`9f (${tag}): a term inside a checker label opens the tip without ticking the box`, !(await page.$eval('#' + id, (e) => e.checked)) && (await tip()) !== null);
+    }
+    check(`9g (${tag}): no console errors`, errors.length === 0, JSON.stringify(errors.slice(0, 2)));
     await context.close();
   }
 

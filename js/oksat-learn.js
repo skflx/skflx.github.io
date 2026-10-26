@@ -17,7 +17,9 @@
    in guide strings (**bold**, *italic*, [[A|pos|Strong rec]] evidence
    chip, [[src|EPOS 5.2]] source chip) is parsed by inline() into nodes;
    no string from a data file or the URL reaches innerHTML. ?g=, ?c= and
-   the hash only ever select among known ids.
+   the hash only ever select among known ids. Every abbreviation in the
+   lexicon (js/oksat-terms.js) is marked, and tapping, hovering or
+   focusing it shows its full name in one shared popover.
    ============================================================= */
 (function () {
     'use strict';
@@ -51,6 +53,8 @@
         return e;
     }
     function txt(tag, cls, s) { const e = h(tag, cls); e.textContent = s; return e; }
+    /* txt() with the lexicon's terms marked; for guide and module text, never for controls. */
+    function tx(tag, cls, s) { const e = h(tag, cls); e.appendChild(terms(s)); return e; }
     function btn(cls, label, onClick) {
         const b = h('button', cls);
         b.type = 'button';
@@ -66,6 +70,80 @@
         });
     }
 
+    /* ---------- terms: abbreviation → full name ---------- */
+    const TERMS = window.OKSATTerms || null;
+    function terms(text) {
+        const frag = document.createDocumentFragment();
+        const s = String(text == null ? '' : text);
+        let i = 0;
+        (TERMS ? TERMS.scan(s).hits : []).forEach((t) => {
+            if (t.i > i) frag.appendChild(document.createTextNode(s.slice(i, t.i)));
+            const a = txt('abbr', 'lr-term', s.slice(t.i, t.j));
+            a.dataset.term = t.key;
+            a.tabIndex = 0;
+            frag.appendChild(a);
+            i = t.j;
+        });
+        if (i < s.length) frag.appendChild(document.createTextNode(s.slice(i)));
+        return frag;
+    }
+
+    /* One popover for every term: hover or focus shows it, a tap or Enter pins it,
+       a tap elsewhere or Escape closes it. A tap on a term inside a checker label
+       does not tick the box. */
+    const tip = h('div', 'lr-tip');
+    tip.id = 'lr-tip';
+    tip.setAttribute('role', 'tooltip');
+    tip.hidden = true;
+    document.body.appendChild(tip);
+    let tipFor = null, pinned = false;
+    function placeTip() {
+        if (!tipFor) return;
+        const r = tipFor.getBoundingClientRect();
+        const vw = document.documentElement.clientWidth, vh = window.innerHeight;
+        const w = tip.offsetWidth, ht = tip.offsetHeight;
+        let top = r.bottom + 6;
+        if (top + ht > vh - 8 && r.top - 6 - ht > 8) top = r.top - 6 - ht;
+        tip.style.left = Math.max(16, Math.min(r.left + r.width / 2 - w / 2, vw - 16 - w)) + 'px';
+        tip.style.top = top + 'px';
+    }
+    function showTip(el, pin) {
+        const x = TERMS && TERMS.get(el.dataset.term);
+        if (!x) return;
+        if (tipFor && tipFor !== el) tipFor.removeAttribute('aria-describedby');
+        tipFor = el;
+        pinned = !!pin;
+        tip.replaceChildren(txt('b', '', el.dataset.term), document.createTextNode(' ' + x));
+        tip.hidden = false;
+        el.setAttribute('aria-describedby', 'lr-tip');
+        placeTip();
+    }
+    function hideTip() {
+        if (!tipFor) return;
+        tipFor.removeAttribute('aria-describedby');
+        tipFor = null;
+        pinned = false;
+        tip.hidden = true;
+    }
+    const termAt = (e) => (e.target && e.target.closest ? e.target.closest('.lr-term') : null);
+    document.addEventListener('mouseover', (e) => { const t = termAt(e); if (t && !pinned) showTip(t, false); });
+    document.addEventListener('mouseout', (e) => { const t = termAt(e); if (t && t === tipFor && !pinned && !t.contains(e.relatedTarget)) hideTip(); });
+    document.addEventListener('focusin', (e) => { const t = termAt(e); if (t && t !== tipFor) showTip(t, false); });
+    document.addEventListener('focusout', (e) => { if (termAt(e) === tipFor && !pinned) hideTip(); });
+    document.addEventListener('click', (e) => {
+        const t = termAt(e);
+        if (!t) { if (pinned) hideTip(); return; }
+        e.preventDefault();
+        if (t === tipFor && pinned) hideTip(); else showTip(t, true);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && tipFor) { hideTip(); return; }
+        const t = termAt(e);
+        if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); if (t === tipFor && pinned) hideTip(); else showTip(t, true); }
+    });
+    window.addEventListener('scroll', placeTip, { passive: true });
+    window.addEventListener('resize', placeTip);
+
     /* ---------- inline markup → nodes ---------- */
     function chip(body) {
         const parts = body.split('|');
@@ -79,7 +157,7 @@
         let bold = false, ital = false, i = 0, m;
         const run = (t) => {
             if (!t) return;
-            let n = document.createTextNode(t);
+            let n = terms(t);
             if (ital) { const e = document.createElement('em'); e.appendChild(n); n = e; }
             if (bold) { const e = document.createElement('strong'); e.appendChild(n); n = e; }
             frag.appendChild(n);
@@ -216,7 +294,7 @@
             });
             return dl;
         },
-        call: (b, ctx) => h('aside', 'lr-call lr-call--' + (b.k || 'hook'), [txt('span', 'lr-call-label', b.label), renderBlocks(b.blocks, ctx)]),
+        call: (b, ctx) => h('aside', 'lr-call lr-call--' + (b.k || 'hook'), [tx('span', 'lr-call-label', b.label), renderBlocks(b.blocks, ctx)]),
         deep: (b, ctx) => {
             const d = h('details', 'lr-deep lr-deep--go');
             d.appendChild(txt('summary', '', 'Go deeper: ' + b.title));
@@ -229,7 +307,7 @@
             const g = h('div', 'lr-cards lr-cards--' + (b.cols === 2 ? 2 : 1));
             b.items.forEach((it) => {
                 const c = h('div', 'lr-card' + (it.tone ? ' lr-card--' + it.tone : ''));
-                if (it.h) c.appendChild(txt('span', 'lr-card-h', it.h));
+                if (it.h) c.appendChild(tx('span', 'lr-card-h', it.h));
                 c.appendChild(renderBlocks(it.blocks, ctx));
                 g.appendChild(c);
             });
@@ -237,27 +315,27 @@
         },
         steps: (b) => {
             const wrap = h('div', 'lr-stepswrap');
-            if (b.label) wrap.appendChild(txt('span', 'lr-label', b.label));
+            if (b.label) wrap.appendChild(tx('span', 'lr-label', b.label));
             const ol = h('ol', 'lr-steps' + (b.rise ? ' lr-steps--rise' : ''));
             b.items.forEach((it, i) => {
                 const li = h('li', 'lr-step' + (it.side ? ' lr-step--side' : ''));
                 li.style.setProperty('--i', String(i));
-                li.appendChild(txt('span', 'lr-step-n', it.n));
+                li.appendChild(tx('span', 'lr-step-n', it.n));
                 const body = h('div', 'lr-step-x'); body.appendChild(inline(it.x));
                 li.appendChild(body);
                 ol.appendChild(li);
             });
             wrap.appendChild(ol);
-            if (b.cap) wrap.appendChild(txt('p', 'lr-cap', b.cap));
+            if (b.cap) wrap.appendChild(tx('p', 'lr-cap', b.cap));
             return wrap;
         },
         figure: (b) => {
             const f = h('figure', 'lr-figure');
-            if (b.label) f.appendChild(txt('span', 'lr-label', b.label));
+            if (b.label) f.appendChild(tx('span', 'lr-label', b.label));
             const img = h('img');
             img.src = b.src; img.alt = b.alt || ''; img.loading = 'lazy';
             f.appendChild(h('div', 'lr-figure-img', [img]));
-            if (b.cap) f.appendChild(txt('figcaption', 'lr-cap', b.cap));
+            if (b.cap) f.appendChild(tx('figcaption', 'lr-cap', b.cap));
             return f;
         },
         tool: toolBlock,
@@ -370,7 +448,7 @@
     /* ---------- worked checkers (ABRS, ESS, biologic criteria, response) ---------- */
     function toolBlock(b) {
         const box = h('div', 'lr-tool');
-        const head = h('div', 'lr-tool-head', [txt('strong', '', b.title), txt('span', 'lr-src', b.src)]);
+        const head = h('div', 'lr-tool-head', [tx('strong', '', b.title), txt('span', 'lr-src', b.src)]);
         box.appendChild(head);
         const opts = h('div', 'lr-tool-opts');
         const out = h('div', 'lr-tool-out');
@@ -401,11 +479,11 @@
                 return true;
             })[0];
             out.className = 'lr-tool-out' + (rule && rule.tone ? ' is-' + rule.tone : '');
-            out.textContent = rule ? rule.x.replace(/\{(k|n|miss)\}/g, (m0, v) => String(vars[v])) : '';
+            out.replaceChildren(terms(rule ? rule.x.replace(/\{(k|n|miss)\}/g, (m0, v) => String(vars[v])) : ''));
         }
         box.appendChild(opts);
         box.appendChild(out);
-        if (b.note) box.appendChild(txt('p', 'lr-why', b.note));
+        if (b.note) box.appendChild(tx('p', 'lr-why', b.note));
         run();
         return box;
     }
@@ -413,7 +491,7 @@
     /* ---------- module questions inline, by reference ---------- */
     function practiceBlock(b, ctx) {
         const box = h('div', 'lr-practice');
-        box.appendChild(txt('span', 'lr-label', b.title || 'Apply it'));
+        box.appendChild(tx('span', 'lr-label', b.title || 'Apply it'));
         const slots = b.refs.map((ref) => {
             const slot = h('div', 'lr-slot', [txt('p', 'lr-loading', 'Loading question…')]);
             box.appendChild(slot);
@@ -431,7 +509,7 @@
         return box;
     }
 
-    function plain(s) { return String(s == null ? '' : s).split('\n').filter(Boolean).map((l) => txt('p', 'lr-pl', l)); }
+    function plain(s) { return String(s == null ? '' : s).split('\n').filter(Boolean).map((l) => tx('p', 'lr-pl', l)); }
     function itemImage(src, alt) {
         if (!src) return null;
         const img = h('img');
@@ -446,7 +524,7 @@
     }
     function itemCard(m, item, ref, ctx) {
         const saved = rec.practice[ref];
-        const tag = txt('span', 'lr-label', m.entry.title + (item.section ? ' · ' + item.section : ''));
+        const tag = tx('span', 'lr-label', m.entry.title + (item.section ? ' · ' + item.section : ''));
         const wrap = h('div', 'lr-item', [tag]);
         if (item.type === 'recall') {
             const card = promptCard({
@@ -554,7 +632,7 @@
         const el = h('article', 'lr-sec');
         el.id = sec.id;
         el.dataset.sec = sec.id;
-        const head = h('header', 'lr-sec-head', [txt('span', 'lr-sn', sec.n), txt('h2', '', sec.title)]);
+        const head = h('header', 'lr-sec-head', [txt('span', 'lr-sn', sec.n), tx('h2', '', sec.title)]);
         el.appendChild(head);
         el.appendChild(renderBlocks(sec.blocks, ctx));
         const foot = h('footer', 'lr-secfoot');
@@ -629,8 +707,8 @@
         const art = h('div', 'lr-chapter');
         const head = h('header', 'lr-head');
         head.appendChild(txt('span', 'lr-kicker', ch.kicker));
-        head.appendChild(txt('h1', 'lr-title', ch.title));
-        if (ch.lede) head.appendChild(txt('p', 'lr-lede', ch.lede));
+        head.appendChild(tx('h1', 'lr-title', ch.title));
+        if (ch.lede) head.appendChild(tx('p', 'lr-lede', ch.lede));
         const meta = [];
         if (entry.min) meta.push('~' + entry.min + ' min');
         if (ch.src) meta.push(ch.src);

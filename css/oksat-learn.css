@@ -108,6 +108,20 @@
 .lr-ev s { text-decoration: none; padding: 0.22rem 0.4rem; color: var(--ok-text-muted); background: var(--ok-surface); }
 .lr-ev s.pos { color: var(--ok-correct); }
 .lr-ev s.neg { color: var(--ok-incorrect); }
+/* Lexicon terms (js/oksat-terms.js): a dotted rule, one shared popover. */
+.lr-term {
+  text-decoration: underline dotted var(--ok-text-faint); text-decoration-thickness: 1px; text-underline-offset: 0.2em;
+  cursor: help; border-radius: 2px;
+}
+.lr-term:hover, .lr-term[aria-describedby] { text-decoration-color: currentColor; }
+.lr-term:focus-visible { outline: 2px solid var(--ok-accent); outline-offset: 1px; }
+.lr-tip {
+  position: fixed; z-index: 70; max-width: min(20rem, calc(100vw - 32px)); padding: 0.45rem 0.6rem;
+  background: var(--ok-text); color: var(--ok-bg); border-radius: var(--ok-radius);
+  font-family: var(--ok-font-ui); font-size: 12.5px; line-height: 1.4; pointer-events: none;
+}
+.lr-tip b { font-weight: 700; }
+.lr-tip[hidden] { display: none; }
 .lr-src { display: inline-block; vertical-align: 1px; font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.04em; color: var(--ok-text-faint); border: 1px solid var(--ok-border); padding: 0.14rem 0.35rem; line-height: 1.1; white-space: nowrap; }
 
 /* tables, key-value */

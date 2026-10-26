@@ -53,12 +53,16 @@ predict first, then explain, then check.
    `correct`). If there is no module for the topic, build one with
    `/oksat-module` and register it. Concept keys are what the drill rows link
    to, so choose them with that in mind.
-6. **Wire**: `drill` rows (module and concept keys that exist and have items)
+6. **Terms**: run `node tools/check-data.mjs`; for each acronym it names, add
+   the full name to `js/oksat-terms.js` (or, rarely, to `PLAIN`, per the
+   spec's Terms rules). Never write a prompt that asks what an abbreviation
+   stands for.
+7. **Wire**: `drill` rows (module and concept keys that exist and have items)
    and `practice` refs (real item ids). `check-data` fails any that do not
    resolve.
-7. **Register** the guide in `OKSAT_GUIDES` (`js/oksat-manifest.js`), then
+8. **Register** the guide in `OKSAT_GUIDES` (`js/oksat-manifest.js`), then
    `node tools/stamp-assets.mjs`.
-8. **Verify** (all of it):
+9. **Verify** (all of it):
    ```bash
    node tools/check-data.mjs
    node tools/lint-oksat.mjs                # every module, including any you touched
@@ -69,7 +73,7 @@ predict first, then explain, then check.
    Then open the chapters and read them in both themes and at phone width
    (`tools/smoke-lib.mjs` gives a server and browser; screenshots are the
    only proof the page teaches rather than merely loads).
-9. **Docs pass** per `docs/docs-map.md`: `README.md`, `WIP.md`, `CLAUDE.md`,
+10. **Docs pass** per `docs/docs-map.md`: `README.md`, `WIP.md`, `CLAUDE.md`,
    `docs/verification.md`, and the owning spec. No counts that rot.
 
 ## 2. Converting an existing study guide

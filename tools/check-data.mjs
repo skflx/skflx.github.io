@@ -236,6 +236,22 @@ function checkGuides() {
     const stars = (bare.match(/\*/g) || []).length;
     return stars % 2 ? 'odd number of * (unclosed bold or italic; escape a literal star as \\*)' : null;
   };
+  /* Terms (js/oksat-terms.js): the viewer marks every lexicon term; here the same scanner
+     runs over every string a reader sees (markup and source chips stripped) and fails on
+     an acronym-shaped token the lexicon does not know, and on a lexicon entry no guide uses. */
+  let T = null;
+  try { T = loadWindow(rel('js/oksat-terms.js')).OKSATTerms; } catch (e) { fail('js/oksat-terms.js load: ' + e.message); }
+  const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'refs', 'tone', 'data']);
+  const used = new Set();
+  const termScan = (v, key, where, out) => {
+    if (typeof v === 'string') {
+      if (SKIP.has(key)) return;
+      const r = T.scan(v.replace(/\[\[[^\]]+\]\]/g, ' ').replace(/\\?\*/g, ''));
+      r.hits.forEach((x) => used.add(x.key));
+      r.unknown.forEach((u) => out.push(`${where}: '${u}' is not in js/oksat-terms.js`));
+    } else if (Array.isArray(v)) v.forEach((x) => termScan(x, key, where, out));
+    else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) termScan(x, k, where, out);
+  };
   const files = [];
   for (const g of guides) {
     const tag = g.slug;
@@ -299,9 +315,14 @@ function checkGuides() {
       walk(ch.intro, c.id + '.intro');
       (ch.tldr || []).forEach((t) => strings.push([c.id + '.tldr', t]));
       for (const [at, t] of strings) { const m = markup(t); if (m) problems.push(`${at}: ${m}: ${t.slice(0, 50)}`); }
+      if (T) termScan(ch, '', c.id, problems);
     }
     ok(problems.length === 0, `${tag}: ${g.chapters.length} chapters, blocks, markup, figures and module references resolve`,
       `${tag}: ${problems.length} problem(s):\n        ` + problems.slice(0, 12).join('\n        '));
+  }
+  if (T) {
+    const idle = T.keys().filter((k) => !used.has(k));
+    ok(idle.length === 0, `js/oksat-terms.js: ${T.keys().length} terms, every one used by a guide`, `terms no guide uses (delete them): ${idle.join(', ')}`);
   }
   const dir = rel('js/oksat-guides');
   const onDisk = fs.existsSync(dir) ? fs.readdirSync(dir, { recursive: true }).filter((f) => String(f).endsWith('.js')).map((f) => path.basename(String(f))) : [];

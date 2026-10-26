@@ -10,7 +10,7 @@ node tools/check-data.mjs                 # data + security invariants (deps-fre
 node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
-node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub)
+node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub, terms)
 node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
 node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
 node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
@@ -143,6 +143,11 @@ validates the data under it:
   reload.
 - **Modes**: Core only hides every "Go deeper" block; Step shows one section
   (Next, the arrow keys, deep links); both persist.
+- **Terms**: every lexicon abbreviation in a chapter's text is marked; hover
+  and focus show the full name and Escape closes it (desktop); a tap pins it
+  inside the 16 px gutters and a tap elsewhere closes it (phone); a term in a
+  checker label opens the popover without ticking the box. `check-data` fails
+  an unknown acronym-shaped token and an unused lexicon entry.
 - **Checkers** evaluate their declared rules (ABRS, ESS, biologic eligibility
   with its prerequisite, response grade).
 - **Inline module questions** load by reference, lock on the first answer, are

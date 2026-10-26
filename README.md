@@ -94,7 +94,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── oksat-learn.html        # OKSAT Interactive learning viewer (?g=<guide>[&c=<chapter>])
 │   ├── css/oksat.css       #   OKSAT design system (tokens; docs/design-principles.md)
 │   ├── css/oksat-learn.css #   Interactive learning layout (tokens only)
-│   ├── js/oksat-*.js       #   engine, manifest, store, prefs, hub, viewer boots, concept graph, guide viewer
+│   ├── js/oksat-*.js       #   engine, manifest, store, prefs, hub, viewer boots, concept graph, guide viewer, term lexicon
 │   ├── js/vendor/          #   React + htm, pinned and self-hosted
 │   ├── js/mcq-modules/     #   question banks (one data file per module)
 │   └── js/oksat-guides/    #   interactive guides (one folder per guide, one data file per chapter)
