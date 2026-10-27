@@ -66,8 +66,7 @@ three pages that load it must FAIL. Smoke additionally loads
 - Day/night toggle (`.site-theme-toggle`, `js/site.js`) flips
   `html[data-theme]` and persists `sk_theme`; `js/theme-boot.js` applies it
   before paint.
-- About is open; Tools, Work, Research and Off hours (`.block[data-fold]`)
-  load folded with no flash, and a tap anywhere on a head toggles it
+- All five sections (`.block[data-fold]`) load folded with no flash, and a tap anywhere on a head toggles it
   (`aria-expanded` follows). A topbar link (`#about`, `#tools`, `#work`,
   `#research`, `#beyond`) or a deep link (`index.html#research`) opens its
   section and lands on it; the one in view gets `aria-current` (scroll-spy in

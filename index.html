@@ -50,7 +50,7 @@
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="preload" href="fonts/archivo-latin-var.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/onepager.css?v=ad8a29e1">
+    <link rel="stylesheet" href="css/onepager.css?v=c5084e87">
     <link rel="stylesheet" href="css/ascii3d.css?v=50a20a22">
 </head>
 <body>
@@ -94,13 +94,13 @@
         </section>
 
         <!-- 01 ABOUT -->
-        <section class="block" id="about" aria-labelledby="about-h">
+        <section class="block" id="about" aria-labelledby="about-h" data-fold>
             <header class="block-head">
                 <span class="block-no">01</span>
-                <h2 id="about-h">About</h2>
+                <h2 id="about-h"><button type="button" class="block-toggle" aria-expanded="false" aria-controls="about-body">About<span class="block-fold" aria-hidden="true"></span></button></h2>
                 <span class="block-note">the short version</span>
             </header>
-            <div class="about">
+            <div class="about block-body" id="about-body">
                 <div class="prose">
                     <p class="prose-first">I started losing my hearing when I was 13. By the end of medical school, I received a cochlear implant. Today, as a resident training in otolaryngology and head and neck surgery, I have a rare vantage point: I know what the auditory system sounds like from both sides of the electrode.</p>
                     <p>That dual perspective drives much of what I do academically. My primary research focuses on bimodal cochlear implant users. Specifically, I'm investigating binaural pitch fusion to predict who will actually benefit from bilateral implantation before they even reach the operating room. Beyond otology and auditory neuroscience, I'm passionate about modernizing surgical education and exploring how emerging technologies can reshape our field.</p>
@@ -312,7 +312,7 @@
     </footer>
 
     <script src="js/site.js?v=dd67d957"></script>
-    <script src="js/onepager.js?v=afd9867e"></script>
+    <script src="js/onepager.js?v=0d4223cb"></script>
     <script src="js/ascii3d.js?v=5f5f9af0"></script>
     <script src="js/diagrams/cochlea.js?v=88966f2c"></script>
     <script src="js/diagrams/fusion.js?v=e6f53238"></script>

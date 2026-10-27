@@ -156,9 +156,9 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
 @media (scripting: enabled) {
   .block-fold { display: block; }
   .block[data-fold]:not(.is-open) > .block-body { display: none; }
-  /* closed sections stack as a compact index under About */
+  /* closed sections stack as a compact index under the hero */
   .block[data-fold]:not(.is-open) { padding-top: clamp(1.25rem, 3.5vw, 2rem); }
-  .block:not([data-fold]) + .block[data-fold]:not(.is-open) { padding-top: clamp(3.5rem, 9vw, 7.5rem); }
+  :not([data-fold]) + .block[data-fold]:not(.is-open) { padding-top: clamp(3.5rem, 9vw, 7.5rem); }
   .block[data-fold]:not(.is-open) .block-head { margin-bottom: 0; }
 }
 

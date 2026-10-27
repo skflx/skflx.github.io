@@ -45,9 +45,9 @@ semicircular canal planes.
 ## One-pager (`index.html`)
 
 **State:** An index: name beside a background-removed portrait, then five
-numbered sections. About is open; Tools, Clinical projects, Research and Off
-hours start folded (as of 2026-10-27, owner request) and open from their heads,
-or from any link or deep link into them; with no JavaScript all five are open.
+numbered sections, all five folded at load (as of 2026-10-27, owner request);
+each opens from its head, or from any link or deep link into it; with no
+JavaScript all five are open.
 Open sections keep sticky heads on desktop. Fig. 1 (the cochlea, fitted to
 the owner's own CT and implant) sits in About; Fig. 2 in Research. The residency year is computed in `js/onepager.js` and duplicated as
 a no-JS fallback in the HTML; change both or neither.
