@@ -2048,7 +2048,7 @@ variant is `geo: diorama` or `none` and every condition `geo: overlay` or
 Keros, sphenoid exposure) are pinned in `tools/test-ssb.mjs`.
 
 This section is the plan's starting point (2026-10-07). What has been
-built since is in each WP's status line (docs/ssb-roadmap.md §3) and in `WIP.md`.
+built since is in each WP's status line (docs/ssb-roadmap.md §3) and in `docs/wip.md`.
 
 ---
 

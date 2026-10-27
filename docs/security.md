@@ -44,8 +44,8 @@ vault. `tools/check-data.mjs` enforces the page rules below in CI.
    validated ids, `rel="noopener"`, and request nothing until clicked. The
    URL hash is untrusted: `js/ssb/state.js` matches it against the graph
    index and it never reaches markup. `OLSB.html` starts a same-origin
-   Web Worker from its own stamped `js/olsb-volume.js`, which imports the
-   stamped `js/olsb-mesh.js` URL the page passes it, both allowed by
+   Web Worker from its own stamped `js/olsb/volume.js`, which imports the
+   stamped `js/olsb/mesh.js` URL the page passes it, both allowed by
    `script-src 'self'`.) OKSAT pages may fetch optional Google Fonts
    (only when a non-default typeface is picked).
 
@@ -68,7 +68,7 @@ ever (`CLAUDE.md`).
 
 | # | Finding | Severity | Status |
 |---|---|---|---|
-| 1 | **Reflected DOM XSS** in `oksat-study.html`: `?m=` was concatenated into `root.innerHTML` in the not-found notice. A crafted link ran script on `skflx.github.io` (read/alter OKSAT progress, deface, phish under the site's name). Reproduced before the fix. | High | Fixed: notice built with `textContent` (`js/oksat-viewer.js`); regression test in `tools/smoke-pages.mjs`. |
+| 1 | **Reflected DOM XSS** in `oksat-study.html`: `?m=` was concatenated into `root.innerHTML` in the not-found notice. A crafted link ran script on `skflx.github.io` (read/alter OKSAT progress, deface, phish under the site's name). Reproduced before the fix. | High | Fixed: notice built with `textContent` (`js/oksat/viewer.js`); regression test in `tools/smoke-pages.mjs`. |
 | 2 | React/ReactDOM/htm loaded from unpkg as `react@18` / `htm@3` — floating versions, no SRI. A compromised or re-published package would run on the study page. | Medium | Fixed: vendored exact versions, hashes pinned in CI. |
 | 3 | No CSP on any page; inline scripts everywhere, so any injection would have run unhindered. | Medium | Fixed: CSP on all pages; inline scripts moved to files. |
 | 4 | Third-party CSS/fonts on the one-pager and CPT (Font Awesome from cdnjs, Google Fonts): an extra origin and an IP leak to Google on every visit. | Low | Fixed: Font Awesome removed; faces self-hosted in `fonts/`. |

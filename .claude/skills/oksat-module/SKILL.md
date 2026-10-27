@@ -1,6 +1,6 @@
 ---
 name: oksat-module
-description: Build a new OKSAT study module for skflx.github.io (js/mcq-modules/<slug>.js + manifest entry + figures) from the owner's sources: Drive PDFs and textbooks, vault notes, resident-review decks. Use when asked for a new OKSAT module, study module, question bank, or "a module on <topic>", or to extend or audit an existing one. The module is source-grounded, mixes free-response and MCQ, builds knowledge in a deliberate arc, and ends with synthesis cases.
+description: Build a new OKSAT study module for skflx.github.io (js/oksat/modules/<slug>.js + manifest entry + figures) from the owner's sources: Drive PDFs and textbooks, vault notes, resident-review decks. Use when asked for a new OKSAT module, study module, question bank, or "a module on <topic>", or to extend or audit an existing one. The module is source-grounded, mixes free-response and MCQ, builds knowledge in a deliberate arc, and ends with synthesis cases.
 ---
 
 # OKSAT module
@@ -83,7 +83,7 @@ classification panel, a surgical series). Never decoration.
 3. **Reject** figures with patient faces, clinic or stock-photo watermarks (look for faint
    overlays on rendered heads), labels that contradict the source text, or resolution too
    low to read (a 200 px diagram is not a teaching figure).
-4. **Copy to `img/oksat/<slug>/`, kebab-case names, content unmodified** (no crops, no annotation). Then compress so the module stays light, and look at the result:
+4. **Copy to `images/oksat/<slug>/`, kebab-case names, content unmodified** (no crops, no annotation). Then compress so the module stays light, and look at the result:
    - cap width at 1200 px (the viewer shows about 600 px; 1200 covers retina);
    - line art and text figures: 256-colour PNG (`Image.quantize`, no dither). Errors stay near zero;
    - photographs, shaded illustrations, gradients: JPEG quality 90 with `subsampling=0` (keeps thin labels crisp). A palette PNG posterizes them (grayscale anatomy bands badly);
@@ -158,7 +158,7 @@ Keep the arithmetic checkable: if a stem gives numbers, compute them before keyi
 
 ## 4. Write the file
 
-Template: `js/mcq-modules/facial-analysis.js` is the current reference; `facial-reanimation.js`
+Template: `js/oksat/modules/facial-analysis.js` is the current reference; `facial-reanimation.js`
 is the benchmark for cases and `otoplasty.js` for mixed MCQ + recall with images.
 Order inside the file: header comment (title, source, figure credits, discrepancy policy)
 → `meta` (with `id`, `sources`) → `DOMAINS` → `CONCEPTS` → items grouped by
@@ -177,7 +177,7 @@ Engine constraints that bite:
 
 ## 5. Register
 
-Append one entry to `js/oksat-manifest.js` (position: before the newest, grouping by
+Append one entry to `js/oksat/manifest.js` (position: before the newest, grouping by
 subspecialty is automatic): `slug`, `title`, `kicker`, `subspecialty`, `count` (=
 `ITEMS.length`), `accent` (that subspecialty's hue from `OKSAT_SUBSPECIALTIES`), `desc`
 (one line), `data`. Then `node tools/stamp-assets.mjs` (the manifest's own stamp changes in
@@ -226,7 +226,7 @@ either is a breaking change; the rule that ids are permanent already covers it.
 ## 7. Documentation pass (required, last)
 
 Per `CLAUDE.md` and `docs/docs-map.md`: `README.md` (tree + counts-free description),
-`WIP.md` (current state, not a diary), `CLAUDE.md` (OKSAT module list if it enumerates
+`docs/wip.md` (current state, not a diary), `CLAUDE.md` (OKSAT module list if it enumerates
 modules), `docs/authoring-oksat.md` (add the lesson here if it is general),
 `docs/verification.md` (new command). No item counts or sizes in prose that rots; point at
 the source file.

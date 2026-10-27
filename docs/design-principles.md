@@ -15,7 +15,7 @@ only tokens, never raw values, so a retheme is a one-block edit.
    paired with a faint tint, readable across a 100-question session in both
    themes. Neither is reused for decoration.
 3. **One hue per domain.** Each subspecialty owns a hue
-   (see `OKSAT_SUBSPECIALTIES` in `js/oksat-manifest.js`), carried through
+   (see `OKSAT_SUBSPECIALTIES` in `js/oksat/manifest.js`), carried through
    module accent bars, hub grouping ticks, and concept chips. Color always
    *means* something; it is never decoration.
 4. **Recall before recognition.** Every question opens on a recall gate: the
@@ -57,7 +57,7 @@ only tokens, never raw values, so a retheme is a one-block edit.
 | `--ok-incorrect` | `#B0243A` | `#FF7A8A` | miss |
 
 Subspecialty hues (module identity) are unchanged and live only in
-`OKSAT_SUBSPECIALTIES` (`js/oksat-manifest.js`); changing them is an owner
+`OKSAT_SUBSPECIALTIES` (`js/oksat/manifest.js`); changing them is an owner
 decision.
 
 ## 3. Typography — font themes
@@ -129,5 +129,5 @@ system (`css/oksat.css` tokens; `css/oksat-learn.css` adds only layout).
   attempt and its schedule.
 - **Square, hairline, mono for chrome**, as everywhere: no shadows, no pills
   above headings, evidence and source chips in the UI face.
-- **Figures are reused**: an SVG from `img/oksat/` is loaded as an image on its
+- **Figures are reused**: an SVG from `images/oksat/` is loaded as an image on its
   own white ground and labelled schematic; do not redraw one that exists.

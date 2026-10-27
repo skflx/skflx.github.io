@@ -2,7 +2,7 @@
 
 Plan for growing Interactive learning past its first guide and tying it to
 the `sk.oto` wiki. A board, not a diary: rewrite a section when it changes.
-Current state lives in `WIP.md`; the guide spec is
+Current state lives in `docs/wip.md`; the guide spec is
 `docs/authoring-oksat-guide.md`. Nothing below marked **Owner** is decided.
 
 ## 1. The three layers
@@ -14,7 +14,7 @@ Current state lives in `WIP.md`; the guide spec is
 | **Practice** | Prove it later, on a schedule | OKSAT module (`oksat-study.html`) | item |
 
 Each fact has **one home** per layer, and the layers point at each other
-instead of repeating each other. The term lexicon (`js/oksat-terms.js`) names
+instead of repeating each other. The term lexicon (`js/oksat/terms.js`) names
 specialty terms in place; links into Reference are a list per chapter (§4).
 
 The wiki trim follows from this: a vault note whose real job is teaching
@@ -66,7 +66,7 @@ the guide drills on day one. Candidates, in a suggested order:
 | Vestibular schwannoma | `vestibular-schwannoma` | Growth data, approach selection by size and hearing, NF2; a decision ladder |
 | Facial reanimation | `facial-reanimation` | Timing windows and nerve-donor logic; mechanism plus time course |
 | Temporal bone trauma | `temporal-bone-trauma` | Fracture classifications, facial-nerve decision rules, CSF leak work-up |
-| Facial fractures (mandible → midface → orbit/NOE) | the four trauma modules | One guide spanning four modules; AO CMF content still to fold in (`WIP.md`) |
+| Facial fractures (mandible → midface → orbit/NOE) | the four trauma modules | One guide spanning four modules; AO CMF content still to fold in (`docs/wip.md`) |
 | Pediatric hearing loss | `pediatrics` | Syndromic genetics and screening timelines |
 
 **Owner:** which topic next, and its sources (Drive PDFs, vault notes).
@@ -141,7 +141,7 @@ Needs the wiki live and Phase A done for that subspecialty.
 
 ### Later: one term list
 
-Whether the vault's abbreviations and `js/oksat-terms.js` merge, and which
+Whether the vault's abbreviations and `js/oksat/terms.js` merge, and which
 side is the source. Until then the lexicon is hand-authored here.
 
 ## 5. Figures: where they go and how to keep them cheap
@@ -157,7 +157,7 @@ Figures cost far more tokens than text, so each must earn its place.
   figure with one line of purpose; the owner strikes what is not needed.
   Draw only after the chapter text is final, so nothing is redrawn because
   the text moved.
-- **Reuse first**: `img/oksat/` already holds the module and guide figures.
+- **Reuse first**: `images/oksat/` already holds the module and guide figures.
 - **A budget**: roughly one figure per chapter, more only for a chapter built
   around mechanisms. Adjust once the second guide shows what readers use.
 

@@ -13,9 +13,9 @@ no design judgment required.
 |---|---|---|
 | `README.md` | Public-facing overview + grouped file tree | A page/tool is added, removed, or renamed; a system's one-line description changes |
 | `CLAUDE.md` | Agent operating manual: hard rules, commands, architecture, conventions | A command, convention, subsystem boundary, or hard rule changes |
-| `WIP.md` | Current state of each system (what it is / where it stands / what is next) | A significant chunk of work completes — rewrite the affected section to match reality |
+| `docs/wip.md` | Current state of each system (what it is / where it stands / what is next) | A significant chunk of work completes — rewrite the affected section to match reality |
 | `docs/authoring-oksat.md` | How to author an OKSAT module | Module schema or manifest entry shape changes |
-| `docs/authoring-oksat-guide.md` | How to author an OKSAT interactive guide: chapter and block schema, inline markup, checkers, inline module questions, drill rows | The guide schema, a block type, or `js/oksat-learn.js` rendering changes |
+| `docs/authoring-oksat-guide.md` | How to author an OKSAT interactive guide: chapter and block schema, inline markup, checkers, inline module questions, drill rows | The guide schema, a block type, or `js/oksat/learn.js` rendering changes |
 | `docs/oksat-learn-roadmap.md` | Interactive learning plan: the reference/teaching/practice layers, guide content rules (enforced and proposed), next guides, sk.oto wiki integration phases | A guide ships, a rule is built, a phase or owner decision lands |
 | `docs/design-principles.md` | OKSAT design system (tokens, color, keyboard, SRS principles) | A token, hue, or interaction principle changes in `css/oksat.css` / the engine |
 | `docs/decisions.md` | Decision tables for routine judgment calls (chrome, renames, keys, modules, escalation) | A convention or precedent changes |
@@ -40,7 +40,7 @@ no design judgment required.
 | `fonts/LICENSE-*.txt` | Licenses of the self-hosted faces | A face is added or removed |
 
 Two plan docs: `docs/ssb-roadmap.md` and `docs/oksat-learn-roadmap.md`,
-boards kept current, not diaries. `WIP.md` carries current state; the roadmap carries what is next
+boards kept current, not diaries. `docs/wip.md` carries current state; the roadmap carries what is next
 and who does it.
 
 ## The second-pass checklist
@@ -50,14 +50,14 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
 1. **Identify touched subsystems** from the diff (`git diff --stat master...HEAD`)
    and update the owning docs per the map above. If a shipped page was added,
    removed, or renamed, update the `README.md` file tree (keep it *grouped* —
-   use globs like `js/oksat-*.js`, don't enumerate every file).
+   use globs like `js/oksat/*.js`, don't enumerate every file).
 2. **Rot scan.** Docs must not contain facts that change with routine work.
    Run:
    ```bash
    grep -rnE '[0-9]{2,} (nodes|edges|items|questions|lines)|~[0-9]+' \
      README.md CLAUDE.md docs/*.md archive/README.md
    ```
-   Every hit must be either (a) inside `WIP.md` (allowed — it is dated),
+   Every hit must be either (a) inside `docs/wip.md` (allowed — it is dated),
    (b) explicitly dated in place
    ("as of 2026-07"), or (c) a stable design constant (rem sizes, ratios,
    Leitner intervals). Otherwise replace the number with a pointer to the
@@ -68,7 +68,7 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
    grep -ohE '`[a-zA-Z0-9_./-]+\.(html|js|mjs|css|json|md)`' README.md CLAUDE.md \
      | tr -d '`' | sort -u | while read -r p; do [ -e "$p" ] || echo "MISSING: $p"; done
    ```
-   Zero `MISSING` lines allowed. (Glob-style entries like `js/oksat-*.js`
+   Zero `MISSING` lines allowed. (Glob-style entries like `js/oksat/*.js`
    aren't matched by this scan — verify those by eye.)
 4. **Orphan check.** If a page or script was retired, confirm nothing still
    points at it — a same-origin 404 is a smoke failure, but a stale mention in
@@ -78,7 +78,7 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
      --include=*.md . | grep -v node_modules | grep -v '^./archive/'
    ```
    Also confirm the page is gone from `PAGES` in `tools/smoke-pages.mjs`.
-5. **WIP.md.** Update the affected system's section to describe the current
+5. **docs/wip.md.** Update the affected system's section to describe the current
    state. It is a status document, not a diary — if a section describes
    something that no longer exists, delete the section.
 6. **CLAUDE.md sanity.** If any command, convention, or boundary changed,

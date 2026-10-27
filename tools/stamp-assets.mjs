@@ -16,7 +16,7 @@
 
    Covers <link href> and <script src> pointing into css/ or js/ in
    every root *.html. Fonts, images and the module files that
-   js/oksat-viewer.js injects at runtime are not stamped.
+   js/oksat/viewer.js injects at runtime are not stamped.
 
    SSB's ES-module graph (js/ssb, docs/ssb.md section 7.2) needs more
    than the HTML pass: main.js?v=... imports ./scene.js, which the CDN

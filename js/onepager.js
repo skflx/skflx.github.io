@@ -2,9 +2,11 @@
    skflx.MD — one-pager behavior
    - Residency year: advances itself every July 1
    - Section nav: marks the section currently in view
+   - Folding sections: Tools, Work, Research and Off hours start
+     closed and open from their heads; a link or deep link to one
+     (#work, #research…) opens it first
    Theme toggle lives in js/site.js; the initial theme is applied
-   pre-paint by js/theme-boot.js. Hash deep-links (#about, #work…)
-   are plain anchors and need no script.
+   pre-paint by js/theme-boot.js.
    ============================================================= */
 (function () {
     /* Residency: started July 1, 2024; OHNS is a five-year program, so the
@@ -52,8 +54,60 @@
         });
     }
 
+    /* Folding: css/onepager.css hides a closed .block[data-fold]'s
+       .block-body pre-paint, keyed on the (scripting) media query. A
+       browser without that query shows every section open, so its head
+       buttons go back to plain text there. */
+    function setOpen(block, open) {
+        block.classList.toggle('is-open', open);
+        var b = block.querySelector('.block-toggle');
+        if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function openFor(hash) {
+        if (!hash || hash.charAt(0) !== '#' || hash.length < 2) return;
+        var el = null;
+        try { el = document.getElementById(decodeURIComponent(hash.slice(1))); } catch (e) { return; }
+        var block = el && el.closest ? el.closest('.block[data-fold]') : null;
+        if (block && !block.classList.contains('is-open')) setOpen(block, true);
+    }
+
+    function wireFolds() {
+        if (!(window.matchMedia && window.matchMedia('(scripting: enabled)').matches)) {
+            document.querySelectorAll('.block-toggle').forEach(function (b) {
+                b.replaceWith(document.createTextNode(b.textContent));
+            });
+            return;
+        }
+        document.querySelectorAll('.block[data-fold]').forEach(function (block) {
+            var b = block.querySelector('.block-toggle');
+            if (!b) return;
+            b.addEventListener('click', function () {
+                var open = !block.classList.contains('is-open');
+                setOpen(block, open);
+                /* closing from deep inside a long section: bring its head back */
+                if (!open && block.getBoundingClientRect().top < 0) block.scrollIntoView();
+            });
+        });
+        /* capture, so the section is open before the browser scrolls to it */
+        document.addEventListener('click', function (e) {
+            var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+            if (a) openFor(a.getAttribute('href'));
+        }, true);
+        window.addEventListener('hashchange', function () { openFor(location.hash); });
+        if (location.hash) {
+            openFor(location.hash);
+            var target = document.getElementById(location.hash.slice(1));
+            if (target) target.scrollIntoView();
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         updateResidencyYear();
+        try { wireFolds(); } catch (e) {
+            /* never leave content shut behind a dead button */
+            document.querySelectorAll('.block[data-fold]').forEach(function (b) { b.classList.add('is-open'); });
+        }
         try { watchSections(); } catch (e) { /* cosmetic only */ }
     });
 })();

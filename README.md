@@ -11,9 +11,10 @@ Northwest, plus a small set of self-contained clinical study tools.
 
 The site is one scrollable page (`index.html`), set like an index rather than
 a brochure: a large name beside a cutout portrait, then five numbered
-sections, all open —
-About, Tools, Clinical projects, Research, Off hours. On desktop the section
-heads stay pinned in a left column while the content scrolls; on phones it is
+sections — About, Tools, Clinical projects, Research, Off hours. About is
+open; the other four start folded into a compact index and open with a tap
+on their heads (a link to one, such as `#research`, opens it). On desktop an open section's
+head stays pinned in a left column while its content scrolls; on phones it is
 one column.
 
 The residency year in the header computes itself from the program start date
@@ -87,20 +88,21 @@ Grouped by system; per-file detail lives in each file's header comment.
 ```
 ├── index.html              # The one-pager
 │   ├── css/onepager.css    #   its layout (on css/site.css tokens)
-│   └── js/onepager.js      #   residency year, section scroll-spy
+│   └── js/onepager.js      #   residency year, folding sections, section scroll-spy
 │
 ├── oksat.html              # OKSAT hub — guides, question modules, due-review banner, settings
 ├── oksat-study.html        # OKSAT question viewer (?m=<slug>[&c=<concept>])
 ├── oksat-learn.html        # OKSAT Interactive learning viewer (?g=<guide>[&c=<chapter>])
 │   ├── css/oksat.css       #   OKSAT design system (tokens; docs/design-principles.md)
 │   ├── css/oksat-learn.css #   Interactive learning layout (tokens only)
-│   ├── js/oksat-*.js       #   engine, manifest, store, prefs, hub, viewer boots, concept graph, guide viewer, term lexicon
-│   ├── js/vendor/          #   React + htm, pinned and self-hosted
-│   ├── js/mcq-modules/     #   question banks (one data file per module)
-│   └── js/oksat-guides/    #   interactive guides (one folder per guide, one data file per chapter)
+│   ├── js/oksat/*.js       #   engine, manifest, store, prefs, hub, viewer boots, concept graph, guide viewer, term lexicon
+│   ├── js/oksat/modules/   #   question banks (one data file per module)
+│   ├── js/oksat/guides/    #   interactive guides (one folder per guide, one data file per chapter)
+│   ├── images/oksat/       #   per-module and per-guide images (stems, explanations, guide figures)
+│   └── js/vendor/          #   React + htm, pinned and self-hosted
 │
 ├── airway-jeopardy.html    # Airway Rounds team quiz (no network needed)
-│   └── js/airway-*.js      #   app, engine, question bank
+│   └── js/airway/*.js      #   app, engine, question bank
 ├── cpt-search.html         # CPT code search
 │   └── js/cpt-search.js    #   code table + search
 ├── Fusion.html              # second-CI research study flyer (static, QR links to itself)
@@ -108,10 +110,10 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── js/pdf-chapter-splitter.js #   page logic (pdf-lib + JSZip in js/vendor/)
 ├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; draft)
 │   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
-│   ├── js/olsb-volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)
-│   ├── js/olsb-mesh.js     #   the mesher: smooth surfaces (or blocks) from the labelled grids; runs in that worker
-│   ├── js/olsb-3d.js       #   ES module: lit scene, camera (orbit/fly/walk), picking, panels (three.js, vendored)
-│   └── js/olsb*.js         #   glossary, mm shape library, one file per 2D diagram, SVG renderer
+│   ├── js/olsb/volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)
+│   ├── js/olsb/mesh.js     #   the mesher: smooth surfaces (or blocks) from the labelled grids; runs in that worker
+│   ├── js/olsb/3d.js       #   ES module: lit scene, camera (orbit/fly/walk), picking, panels (three.js, vendored)
+│   └── js/olsb/*.js        #   glossary, mm shape library, one file per 2D diagram, main.js the SVG renderer
 │
 ├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens
@@ -161,12 +163,9 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
 │
 ├── CLAUDE.md               # Operating manual for coding agents
-├── WIP.md                  # Current state of each system
 ├── docs/                   # Design system, decisions, security, verification
-│                           #   (index + update rules: docs/docs-map.md)
-├── img/oksat/              # Per-module and per-guide images (stems, explanations, guide figures)
-├── images/                 # Cutout portrait, social card, favicon (see images/list.txt)
-└── documents/              # cv.pdf (upload pending)
+│   └── wip.md              #   current state of each system (index + update rules: docs/docs-map.md)
+└── images/                 # Cutout portrait, social card, favicon (see images/list.txt); images/oksat/ for OKSAT
 ```
 
 ## Local Development
@@ -179,7 +178,7 @@ python3 -m http.server 8000
 ```
 
 Serving matters — `file://` breaks pages that fetch. Deep links jump to
-the matching section, e.g. `index.html#research`.
+the matching section and open it if folded, e.g. `index.html#research`.
 
 After editing any file in `css/` or `js/`, refresh its cache-busting stamp
 (`?v=<hash>` on every reference, so a deploy never pairs new HTML with a

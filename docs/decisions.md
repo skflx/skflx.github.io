@@ -12,7 +12,7 @@ change works), `docs/docs-map.md` (the documentation pass).
 |---|---|---|---|
 | A new tool/utility page | `css/site.css` (tokens, faces, topbar, buttons, footer) + a page `<style>` on its tokens | `js/theme-boot.js` in `<head>`, `js/site.js` at the end, page logic in `js/<page>.js` | `cpt-search.html` |
 | A page that must work fully offline | as above — `css/site.css` and the fonts are same-origin; **zero remote requests**, CSP with no remote origin | as above | `airway-jeopardy.html` |
-| An OKSAT page | `css/oksat.css` (the interactive-learning viewer adds `css/oksat-learn.css`, tokens only) | `js/theme-boot.js` + the `js/oksat-*.js` stack; React/htm from `js/vendor/` on the question viewer only | `oksat.html`, `oksat-study.html`, `oksat-learn.html` |
+| An OKSAT page | `css/oksat.css` (the interactive-learning viewer adds `css/oksat-learn.css`, tokens only) | `js/theme-boot.js` + the `js/oksat/*.js` stack; React/htm from `js/vendor/` on the question viewer only | `oksat.html`, `oksat-study.html`, `oksat-learn.html` |
 | A page with an ES-module graph (3D) | `css/site.css` + `css/<page>.css` (its `--<page>-*` tokens; the WebGL scene reads them) | `js/theme-boot.js` in `<head>`, `js/site.js` at the end, and **one** `<script type="module" src="js/<page>/main.js">`; imports are relative, three.js only from `js/vendor/three-<version>/`; `tools/stamp-assets.mjs` stamps the whole graph | `ssb.html` |
 
 Every new page also gets: the CSP `<meta>` from its closest precedent,
@@ -20,6 +20,12 @@ Every new page also gets: the CSP `<meta>` from its closest precedent,
 (`node tools/stamp-assets.mjs`), an entry in `PAGES`
 (`tools/smoke-pages.mjs`), and **no inline script** — `tools/check-data.mjs`
 fails otherwise (`docs/security.md`).
+
+Where files go: the page at the root (its URL is public; `Fusion.html`'s is
+printed in a QR code, so pages do not move into folders), one script as
+`js/<page>.js`, several as `js/<page>/` with unprefixed names (precedent
+`js/oksat/`, `js/olsb/`, `js/airway/`, `js/ssb/`), images in
+`images/<page>/` (reorganised 2026-10-27; there is no `img/`).
 
 `css/main.css` is gone (2026-09 redesign); `cpt-search.html` moved onto
 `css/site.css`. Do not recreate a second token set — there is one palette,
@@ -45,7 +51,7 @@ cannot be corrected.
 ## 3. localStorage keys
 
 Namespaces: `sk_*` (site chrome), `oksat:*` (OKSAT), `ssb:*` (SSB). All new
-OKSAT persistence goes through `window.OKSATStore` (`js/oksat-store.js`) — do
+OKSAT persistence goes through `window.OKSATStore` (`js/oksat/store.js`) — do
 not add raw `localStorage` calls to OKSAT pages; SSB's goes through the
 guarded adapter in `js/ssb/state.js`. Every read and write is
 guarded; a storage failure degrades to a no-op, never an exception.
@@ -60,14 +66,14 @@ resolving** — do not "simplify" it away without migrating the data first.
 
 | Key / prefix | Owner file | Notes |
 |---|---|---|
-| `sk_theme` | `js/theme-boot.js` (read), `js/site.js`, `js/oksat-prefs.js` | day/night; `html[data-theme]` |
-| `oksat:reviewer` | `js/oksat-store.js` | storage namespace; read-only now |
-| `oksat:migrated` | `js/oksat-store.js` | one-time `mcq:*`→`oksat:*` marker |
-| `oksat:typeface` | `js/oksat-prefs.js`, `js/theme-boot.js` | `html[data-font]`; written only on an explicit pick |
-| `oksat:progress:<slug>:<rev>` | `js/oksat-engine.js` | answers + firstCorrect |
-| `oksat:srs:<slug>:<rev>` | `js/oksat-engine.js` | Leitner boxes |
-| `oksat:cmastery:<slug>:<rev>`, `oksat:conf:<slug>:<rev>`, `oksat:session:<rev>` | `js/oksat-store.js` | mastery / calibration / analytics |
-| `oksat:learn:<guide>:<rev>` | `js/oksat-store.js` (`getLearn`/`saveLearn`), written by `js/oksat-learn.js` | Interactive learning: sections done, retrieval-prompt grades, inline module answers, reading mode. Never a module's own progress |
+| `sk_theme` | `js/theme-boot.js` (read), `js/site.js`, `js/oksat/prefs.js` | day/night; `html[data-theme]` |
+| `oksat:reviewer` | `js/oksat/store.js` | storage namespace; read-only now |
+| `oksat:migrated` | `js/oksat/store.js` | one-time `mcq:*`→`oksat:*` marker |
+| `oksat:typeface` | `js/oksat/prefs.js`, `js/theme-boot.js` | `html[data-font]`; written only on an explicit pick |
+| `oksat:progress:<slug>:<rev>` | `js/oksat/engine.js` | answers + firstCorrect |
+| `oksat:srs:<slug>:<rev>` | `js/oksat/engine.js` | Leitner boxes |
+| `oksat:cmastery:<slug>:<rev>`, `oksat:conf:<slug>:<rev>`, `oksat:session:<rev>` | `js/oksat/store.js` | mastery / calibration / analytics |
+| `oksat:learn:<guide>:<rev>` | `js/oksat/store.js` (`getLearn`/`saveLearn`), written by `js/oksat/learn.js` | Interactive learning: sections done, retrieval-prompt grades, inline module answers, reading mode. Never a module's own progress |
 | `ssb:prefs` | `js/ssb/state.js` | SSB depth (tier 1/2/3) as `{v:1, tier}`; written only on an explicit depth pick, never from a shared link |
 | `cpt-history`, `cpt-analytics` | `js/cpt-search.js` | recent searches + counts; predates the namespaces, kept so history survives |
 
@@ -83,10 +89,10 @@ owner (§7).
 
 Full schema and quality spec: `docs/authoring-oksat.md`. The rules that matter most:
 
-1. Filename `js/mcq-modules/<slug>.js`, kebab-case; **`slug` must equal the
+1. Filename `js/oksat/modules/<slug>.js`, kebab-case; **`slug` must equal the
    filename** (checked by `tools/check-data.mjs`).
 2. File ends with exactly `window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };`.
-3. One manifest entry in `js/oksat-manifest.js` with **`count` === `ITEMS.length`**
+3. One manifest entry in `js/oksat/manifest.js` with **`count` === `ITEMS.length`**
    (checked) and `subspecialty` = one of the 9 keys in `OKSAT_SUBSPECIALTIES`.
 4. Accent hue comes **only** from that subspecialty's entry in
    `OKSAT_SUBSPECIALTIES` — never invent a hex. Adding a 10th subspecialty is
@@ -130,7 +136,7 @@ visitor-selectable theme.
 
 ## 6. When to log
 
-After completing a significant chunk, update `WIP.md` (current state per
+After completing a significant chunk, update `docs/wip.md` (current state per
 system, not an append-only diary) and run the documentation pass in
 `docs/docs-map.md`.
 

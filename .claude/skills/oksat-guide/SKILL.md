@@ -1,6 +1,6 @@
 ---
 name: oksat-guide
-description: Build or extend an OKSAT Interactive learning guide on skflx.github.io (js/oksat-guides/<slug>/<chapter>.js + manifest entry), the first-pass study guide with retrieval prompts that drills into the question modules. Use when asked for an interactive module, study guide, first-pass guide, or "teach me X" content for OKSAT, or to turn a study guide or artifact into OKSAT.
+description: Build or extend an OKSAT Interactive learning guide on skflx.github.io (js/oksat/guides/<slug>/<chapter>.js + manifest entry), the first-pass study guide with retrieval prompts that drills into the question modules. Use when asked for an interactive module, study guide, first-pass guide, or "teach me X" content for OKSAT, or to turn a study guide or artifact into OKSAT.
 ---
 
 # OKSAT interactive guide
@@ -54,13 +54,13 @@ predict first, then explain, then check.
    `/oksat-module` and register it. Concept keys are what the drill rows link
    to, so choose them with that in mind.
 6. **Terms**: run `node tools/check-data.mjs`; for each acronym it names, add
-   the full name to `js/oksat-terms.js` (or, rarely, to `PLAIN`, per the
+   the full name to `js/oksat/terms.js` (or, rarely, to `PLAIN`, per the
    spec's Terms rules). Never write a prompt that asks what an abbreviation
    stands for.
 7. **Wire**: `drill` rows (module and concept keys that exist and have items)
    and `practice` refs (real item ids). `check-data` fails any that do not
    resolve.
-8. **Register** the guide in `OKSAT_GUIDES` (`js/oksat-manifest.js`), then
+8. **Register** the guide in `OKSAT_GUIDES` (`js/oksat/manifest.js`), then
    `node tools/stamp-assets.mjs`.
 9. **Verify** (all of it):
    ```bash
@@ -73,7 +73,7 @@ predict first, then explain, then check.
    Then open the chapters and read them in both themes and at phone width
    (`tools/smoke-lib.mjs` gives a server and browser; screenshots are the
    only proof the page teaches rather than merely loads).
-10. **Docs pass** per `docs/docs-map.md`: `README.md`, `WIP.md`, `CLAUDE.md`,
+10. **Docs pass** per `docs/docs-map.md`: `README.md`, `docs/wip.md`, `CLAUDE.md`,
    `docs/verification.md`, and the owning spec. No counts that rot.
 
 ## 2. Converting an existing study guide
@@ -83,7 +83,7 @@ summary), convert it structurally rather than retyping: parse it into
 blocks, keep its wording, and then review the output as a reader. Map its
 custom widgets onto blocks (comparison panels to `cards`, ladders to `steps`,
 checkers to `tool`); do not add a block type for one chapter. Re-draw nothing
-that already exists as a figure in `img/oksat/`. Keep its source conflicts and
+that already exists as a figure in `images/oksat/`. Keep its source conflicts and
 currency warnings. Strip its decorative color: callouts carry the only color.
 
 ## 3. Hand-off

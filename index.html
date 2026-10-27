@@ -50,7 +50,7 @@
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="preload" href="fonts/archivo-latin-var.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/onepager.css?v=59a637e4">
+    <link rel="stylesheet" href="css/onepager.css?v=ad8a29e1">
     <link rel="stylesheet" href="css/ascii3d.css?v=50a20a22">
 </head>
 <body>
@@ -149,13 +149,13 @@
         </section>
 
         <!-- 02 TOOLS -->
-        <section class="block" id="tools" aria-labelledby="tools-h">
+        <section class="block" id="tools" aria-labelledby="tools-h" data-fold>
             <header class="block-head">
                 <span class="block-no">02</span>
-                <h2 id="tools-h">Tools</h2>
+                <h2 id="tools-h"><button type="button" class="block-toggle" aria-expanded="false" aria-controls="tools-body">Tools<span class="block-fold" aria-hidden="true"></span></button></h2>
                 <span class="block-note">built for residents</span>
             </header>
-            <ul class="rows">
+            <ul class="rows block-body" id="tools-body">
                 <li><a class="row" href="oksat.html">
                     <span class="row-key">OKSAT</span>
                     <span class="row-main">
@@ -192,13 +192,13 @@
         </section>
 
         <!-- 03 WORK -->
-        <section class="block" id="work" aria-labelledby="work-h">
+        <section class="block" id="work" aria-labelledby="work-h" data-fold>
             <header class="block-head">
                 <span class="block-no">03</span>
-                <h2 id="work-h">Clinical projects</h2>
+                <h2 id="work-h"><button type="button" class="block-toggle" aria-expanded="false" aria-controls="work-body">Clinical projects<span class="block-fold" aria-hidden="true"></span></button></h2>
                 <span class="block-note">what I build</span>
             </header>
-            <ol class="log">
+            <ol class="log block-body" id="work-body">
                 <li>
                     <span class="log-when">2025&ndash;now</span>
                     <div class="log-main">
@@ -232,13 +232,13 @@
         </section>
 
         <!-- 04 RESEARCH -->
-        <section class="block" id="research" aria-labelledby="research-h">
+        <section class="block" id="research" aria-labelledby="research-h" data-fold>
             <header class="block-head">
                 <span class="block-no">04</span>
-                <h2 id="research-h">Research</h2>
+                <h2 id="research-h"><button type="button" class="block-toggle" aria-expanded="false" aria-controls="research-body">Research<span class="block-fold" aria-hidden="true"></span></button></h2>
                 <span class="block-note">hearing science &amp; how surgeons learn</span>
             </header>
-            <div class="research">
+            <div class="research block-body" id="research-body">
                 <p class="research-lede">My research sits at two poles: auditory neuroscience, with personal stakes, and surgical education, with theoretical ones. My published work spans H&amp;N oncology and craniofacial trauma; my active work is in CI outcomes and how trainees learn to operate.</p>
                 <figure class="a3d research-figure" data-a3d="fusion">
 <!-- a3d:fusion --><div class="a3d-stage" role="img" aria-label="Schematic of binaural pitch fusion in two bimodal cochlear-implant listeners. Each panel has twelve curves, one per electrode from apex to base, showing how often a tone in the hearing-aid ear fuses with that electrode into one sound. In the left listener each fused span is about an octave wide; in the right listener it is about three and a half octaves, so most tones fuse with any electrode."><pre class="a3d-grid" aria-hidden="true" style="--a3d-cols:96">                         narrow fusion                           <span class="a3d-science">broad fusion</span>
@@ -283,13 +283,13 @@
         </section>
 
         <!-- 05 BEYOND -->
-        <section class="block" id="beyond" aria-labelledby="beyond-h">
+        <section class="block" id="beyond" aria-labelledby="beyond-h" data-fold>
             <header class="block-head">
                 <span class="block-no">05</span>
-                <h2 id="beyond-h">Off hours</h2>
+                <h2 id="beyond-h"><button type="button" class="block-toggle" aria-expanded="false" aria-controls="beyond-body">Off hours<span class="block-fold" aria-hidden="true"></span></button></h2>
                 <span class="block-note">the rest of me</span>
             </header>
-            <ul class="beyond">
+            <ul class="beyond block-body" id="beyond-body">
                 <li><h3><a href="https://www.instagram.com/skflx/" target="_blank" rel="noopener noreferrer">Art<span class="ext" aria-hidden="true">&#8599;</span></a></h3><p>Ink and graphite: anatomy, landscapes, the occasional portrait.</p></li>
                 <li><h3>Music</h3><p>Guitar and ukulele; performed at the Yale 4th-Year Show, April 2023.</p></li>
                 <li><h3>Outdoors</h3><p>Hiking the Pacific Northwest: trails, lakes, a camera.</p></li>
@@ -312,7 +312,7 @@
     </footer>
 
     <script src="js/site.js?v=dd67d957"></script>
-    <script src="js/onepager.js?v=f68900a4"></script>
+    <script src="js/onepager.js?v=afd9867e"></script>
     <script src="js/ascii3d.js?v=5f5f9af0"></script>
     <script src="js/diagrams/cochlea.js?v=88966f2c"></script>
     <script src="js/diagrams/fusion.js?v=e6f53238"></script>

@@ -6,7 +6,7 @@
    components consume only tokens, so retheming = editing one block.
    Per-domain chip colors come from module data and stay inline.
    Font themes are attribute switches on <html> (data-font) — see
-   docs/design-principles.md and js/oksat-prefs.js.
+   docs/design-principles.md and js/oksat/prefs.js.
    ============================================================= */
 
 /* ===== TYPEFACES (self-hosted, SIL OFL — fonts/LICENSE-*) ===== */
@@ -257,7 +257,7 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 
 /* =============================================================
    FONT THEMES — data-font on <html>, persisted as oksat:typeface
-   (js/oksat-prefs.js). Every component consumes only --ok-font-*;
+   (js/oksat/prefs.js). Every component consumes only --ok-font-*;
    switching is an attribute flip. `instrument` (the site's own
    Archivo + IBM Plex Mono, self-hosted) is the default; the others
    come from Google Fonts and are only fetched when chosen.

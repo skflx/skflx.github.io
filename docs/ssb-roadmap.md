@@ -2,7 +2,7 @@
 
 What is done, what is next, who does it, and what waits on the owner.
 Architecture: `docs/ssb.md`. How work is handed to a model and checked:
-`docs/delegation.md`. Current state in prose: `WIP.md`. Realistic anatomy's work packages are in §3a (moved 2026-10-11).
+`docs/delegation.md`. Current state in prose: `docs/wip.md`. Realistic anatomy's work packages are in §3a (moved 2026-10-11).
 
 Last updated 2026-10-11. Done work packages are one line each (§4). Their
 specs and the checkpoint narratives (CP-1 to CP-4a) are in git history: the
@@ -369,7 +369,7 @@ pattern, header of schematic proportions, `degrade()`),
 `frontal-recess.js` (voxelizing the drawn solids), `kit.js`;
 `tools/test-ssb.mjs` lab section; `js/ssb/materials.js` (kinds).
 Touch: new `js/ssb/dioramas/nasal-framework.js`, `js/ssb/dioramas/index.js`,
-`tools/test-ssb.mjs`; docs pass (`docs/ssb.md` §6 table, `WIP.md`).
+`tools/test-ssb.mjs`; docs pass (`docs/ssb.md` §6 table, `docs/wip.md`).
 Don't: invent a proportion, attachment or depth §6.2 does not give (stop
 instead); change `kit.js` (ST7b's); add tokens or materials (every kind
 exists after ST6 and ST7a); change graph content.

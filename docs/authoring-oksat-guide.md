@@ -5,15 +5,15 @@ topic section by section with retrieval practice built in; the **question
 modules** (`docs/authoring-oksat.md`) are the practice record that follows.
 Each section of a guide drills into the module that holds its questions, and a
 few of those questions are answered in place. Both halves are data files; the
-viewer is `js/oksat-learn.js` on `oksat-learn.html`, and you never touch it to
+viewer is `js/oksat/learn.js` on `oksat-learn.html`, and you never touch it to
 add content.
 
 | | Question module | Guide |
 |---|---|---|
 | Purpose | Practice record: locked first attempt, Leitner schedule | First pass: read, predict, reveal, apply |
 | Unit | Item (`q1`…) | Chapter → section → blocks |
-| Data | `js/mcq-modules/<slug>.js` | `js/oksat-guides/<slug>/<chapter>.js` |
-| Registry | `OKSAT_MANIFEST` | `OKSAT_GUIDES`, both in `js/oksat-manifest.js` |
+| Data | `js/oksat/modules/<slug>.js` | `js/oksat/guides/<slug>/<chapter>.js` |
+| Registry | `OKSAT_MANIFEST` | `OKSAT_GUIDES`, both in `js/oksat/manifest.js` |
 | Progress | `oksat:progress:` / `oksat:srs:` (engine) | `oksat:learn:<slug>:<rev>` (`OKSATStore.getLearn`) |
 
 A guide never writes a module's progress or schedule. An item answered inside
@@ -22,14 +22,14 @@ record stays honest.
 
 ## Add a guide
 
-1. Create `js/oksat-guides/<slug>/<chapter>.js` per chapter, kebab-case, each
+1. Create `js/oksat/guides/<slug>/<chapter>.js` per chapter, kebab-case, each
    ending with exactly one line: `window.__OKSAT_CHAPTER = { … };`.
-2. Append one entry to `OKSAT_GUIDES` in `js/oksat-manifest.js`:
+2. Append one entry to `OKSAT_GUIDES` in `js/oksat/manifest.js`:
    ```js
    { slug: 'ar-crs-aerd', title: '…', kicker: 'Rhinology / Allergy',
      subspecialty: 'rhinology', accent: '#6E4A6B', desc: 'One line for the hub card.',
      chapters: [
-       { id: 'start', short: 'Start here', data: 'js/oksat-guides/ar-crs-aerd/start.js' },
+       { id: 'start', short: 'Start here', data: 'js/oksat/guides/ar-crs-aerd/start.js' },
        { id: 'science', k: 1, short: 'Type 2 immunology', min: 35, sections: 10, data: '…/science.js' },
      ] }
    ```
@@ -78,7 +78,7 @@ permanent: progress is stored as `<chapter>/<section>`. Retrieval-prompt ids
 | `deep` | `title`, `blocks` | collapsible "Go deeper"; hidden by Core only |
 | `cards` | `cols: 1｜2`, `items: [{h, tone?, blocks}]` | comparison cards; `tone` `early`/`late` rules the top edge |
 | `steps` | `items: [{n, x, side?}]`, `rise?`, `label?`, `cap?` | ladder; `rise` indents each rung |
-| `figure` | `src`, `alt`, `label?`, `cap?` | an SVG or image from `img/oksat/` |
+| `figure` | `src`, `alt`, `label?`, `cap?` | an SVG or image from `images/oksat/` |
 | `tool` | `id`, `title`, `src`, `pre?`, `crit: [x…]`, `rules`, `note?` | checkbox checker (below) |
 | `check` | `id`, `q`, `a` | retrieval prompt (below) |
 | `practice` | `title?`, `refs: ['<module>:<item>'…]` | module questions answered in place |
@@ -95,10 +95,10 @@ written as Unicode (`IL-10⁺`, `αβγ₂`). `check-data` fails any string whos
 stars or `[[ ]]` do not close. Use bold for **terminology**, as in the
 modules; bullets are `ul` blocks, not text.
 
-### Terms (`js/oksat-terms.js`)
+### Terms (`js/oksat/terms.js`)
 
 Every specialty abbreviation a reader sees is defined once, in the shared
-lexicon `js/oksat-terms.js` (`TERMS`, keyed by the exact surface form), and
+lexicon `js/oksat/terms.js` (`TERMS`, keyed by the exact surface form), and
 the viewer marks **every** occurrence: hover or focus shows the full name, a tap
 or Enter pins it, a tap elsewhere or Escape closes it. Paragraphs, lists,
 tables, callout labels, card heads, captions, checker text, section and
@@ -184,16 +184,16 @@ module questions yet has no `drill`.
 - **Sources**: name the source on the claim (`[[src|…]]`) and say where
   sources disagree under a `trap` labelled "Source conflict". Numbers come from
   a source, never from memory. Content is draft; the owner verifies.
-- **Figures**: reuse a figure from `img/oksat/` where it exists and agrees
+- **Figures**: reuse a figure from `images/oksat/` where it exists and agrees
   with the guide's text; a new one follows `docs/authoring-oksat.md` (SVG drawn
   for the purpose, labelled schematic, with alt text) and lives in
-  `img/oksat/<guide slug>/`. Draw one only where a picture carries what prose
+  `images/oksat/<guide slug>/`. Draw one only where a picture carries what prose
   cannot: a mechanism or loop, a time course, a spatial relation, a threshold
   or scoring rule. Place it after the teaching it illustrates, and let the
   caption point at the prompt or callout it serves.
 - **Synonyms**: when a term has several names (CD number, eponym,
   abbreviation), give both at first use, in figures too, and add the term to
-  `js/oksat-terms.js` with its other names after the semicolon. A guide's
+  `js/oksat/terms.js` with its other names after the semicolon. A guide's
   Start-chapter glossary table is for synonym sets worth reading as a list
   (a CD number and its receptor), not a list of abbreviations: those are in
   the popover.
