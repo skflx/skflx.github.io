@@ -2,9 +2,9 @@
    skflx.MD — one-pager behavior
    - Residency year: advances itself every July 1
    - Section nav: marks the section currently in view
-   - Folding sections: Tools, Work, Research and Off hours start
-     closed and open from their heads; a link or deep link to one
-     (#work, #research…) opens it first
+   - Folding sections: all five (About, Tools, Work, Research, Off
+     hours) start closed and open from their heads; a link or deep
+     link to one (#about, #research…) opens it first
    Theme toggle lives in js/site.js; the initial theme is applied
    pre-paint by js/theme-boot.js.
    ============================================================= */

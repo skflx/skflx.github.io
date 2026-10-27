@@ -38,10 +38,12 @@ const wait = (page, fn, arg = null, timeout = 12000) => page.waitForFunction(fn,
 const PAGES = [
   { path: 'index.html', ready: async (p) => {
     await wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent));
-    await figureReady(p, 'cochlea');
-    /* Tools, Work, Research and Off hours start folded; a head tap opens one */
-    await wait(p, () => document.querySelectorAll('.block[data-fold]').length === 4
+    /* all five sections start folded; a head tap opens one */
+    await wait(p, () => document.querySelectorAll('.block[data-fold]').length === 5
       && [...document.querySelectorAll('.block[data-fold] > .block-body')].every((b) => getComputedStyle(b).display === 'none'));
+    await p.click('#about-h .block-toggle');
+    await wait(p, () => getComputedStyle(document.getElementById('about-body')).display !== 'none');
+    await figureReady(p, 'cochlea');
     await p.click('#research-h .block-toggle');
     await wait(p, () => document.querySelector('#research-h .block-toggle').getAttribute('aria-expanded') === 'true'
       && getComputedStyle(document.getElementById('research-body')).display !== 'none');

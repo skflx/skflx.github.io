@@ -11,9 +11,9 @@ Northwest, plus a small set of self-contained clinical study tools.
 
 The site is one scrollable page (`index.html`), set like an index rather than
 a brochure: a large name beside a cutout portrait, then five numbered
-sections — About, Tools, Clinical projects, Research, Off hours. About is
-open; the other four start folded into a compact index and open with a tap
-on their heads (a link to one, such as `#research`, opens it). On desktop an open section's
+sections — About, Tools, Clinical projects, Research, Off hours — that
+start folded into a compact index under the hero and open with a tap on
+their heads (a link to one, such as `#research`, opens it). On desktop an open section's
 head stays pinned in a left column while its content scrolls; on phones it is
 one column.
 
