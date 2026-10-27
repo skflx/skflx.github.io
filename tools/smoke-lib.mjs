@@ -63,8 +63,10 @@ export function chromiumExecutable() {
   try {
     const dir = fs.readdirSync(base).filter((d) => d.startsWith('chromium-') && !d.includes('headless')).sort().pop();
     if (dir) {
-      const exe = path.join(base, dir, 'chrome-linux', 'chrome');
-      if (fs.existsSync(exe)) return exe;
+      for (const sub of ['chrome-linux', 'chrome-linux64']) {
+        const exe = path.join(base, dir, sub, 'chrome');
+        if (fs.existsSync(exe)) return exe;
+      }
     }
   } catch (e) { /* fall through */ }
   return undefined;

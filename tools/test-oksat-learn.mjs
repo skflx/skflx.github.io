@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* =============================================================
    test-oksat-learn.mjs — behavior tests for the Interactive learning
-   viewer (oksat-learn.html + js/oksat-learn.js) and its hub segment.
+   viewer (oksat-learn.html + js/oksat/learn.js) and its hub segment.
 
    Drives the AR · CRS · AERD guide in headless Chromium. Pins:
      - storage: oksat:learn:<slug>:<reviewer> = { v:1, done:{'<chapter>/<section>':1},
@@ -14,7 +14,7 @@
      - step / scroll, core-only, deep links, flashcards and the pearl wall
      - untrusted input (?g=, ?c=, the hash) is only ever matched against known ids
      - the hub shows the guide card and its progress
-     - lexicon terms (js/oksat-terms.js) are marked; hover, focus and tap show the full name
+     - lexicon terms (js/oksat/terms.js) are marked; hover, focus and tap show the full name
 
    Usage:  node tools/test-oksat-learn.mjs [--base <url>] [--headed]
    Exits nonzero on any failed case.

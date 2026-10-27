@@ -83,7 +83,7 @@ at 390px and 1280px in both themes with Playwright (Chromium is at
 
 ## 5. Docs pass
 
-Add the figure to the page's section in `WIP.md`. If the engine gained a
+Add the figure to the page's section in `docs/wip.md`. If the engine gained a
 feature, update `docs/diagrams.md`. Then run the second pass in
 `docs/docs-map.md`.
 

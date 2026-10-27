@@ -1,11 +1,11 @@
 /* =============================================================
    leitner — ASCII 3D figure on the OKSAT hub (oksat.html).
    The five Leitner boxes and the moves between them, as the
-   engine actually schedules them (js/oksat-engine.js): a correct
+   engine actually schedules them (js/oksat/engine.js): a correct
    answer moves a card up one box, a cold recall two, a miss sends
    it back to box 1; each box has its own review interval.
 
-   INTERVALS must equal LEITNER_INTERVALS in js/oksat-engine.js;
+   INTERVALS must equal LEITNER_INTERVALS in js/oksat/engine.js;
    tools/check-data.mjs fails if they drift apart.
    Preview: node tools/ascii3d.mjs render leitner --inks
    Schema:  docs/diagrams.md

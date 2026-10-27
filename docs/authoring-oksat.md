@@ -2,7 +2,7 @@
 
 OKSAT — the OHNS Knowledge Self-Assessment Tool. Every study module is a single
 JavaScript data file plus one manifest entry. The shared engine
-(`js/oksat-engine.js`) renders it — you never touch the engine or write any UI.
+(`js/oksat/engine.js`) renders it — you never touch the engine or write any UI.
 
 This document is the **quality specification**, not a minimal-acceptance gate.
 The engine tolerates sparse data (a title + questions works), but every shipped
@@ -11,18 +11,18 @@ module must meet the full spec below. The ingestion system enforces it;
 
 ## Add a module in 3 steps
 
-1. **Create** `js/mcq-modules/<slug>.js` (kebab-case slug, e.g. `larynx-anatomy`).
+1. **Create** `js/oksat/modules/<slug>.js` (kebab-case slug, e.g. `larynx-anatomy`).
 2. **End the file** with exactly one registration line:
    ```js
    window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
    ```
-3. **Append one entry** to `js/oksat-manifest.js`:
+3. **Append one entry** to `js/oksat/manifest.js`:
    ```js
    { slug: 'larynx-anatomy', title: 'Laryngeal Anatomy', kicker: 'Laryngology',
      subspecialty: 'laryngology',   // keys into OKSAT_SUBSPECIALTIES (hue + hub grouping)
      count: 25, accent: '#4A6B7B',
      desc: 'One-line description shown on the hub card.',
-     data: 'js/mcq-modules/larynx-anatomy.js' },
+     data: 'js/oksat/modules/larynx-anatomy.js' },
    ```
 
 Open `oksat-study.html?m=larynx-anatomy` to view it; it also appears on the
@@ -92,7 +92,7 @@ context reads poorly once the choices are hidden).
 | `detailed` | **yes** | Longer explanation behind a "Read more" toggle — teaches mechanism → application → pearl. |
 | `concepts` | **yes** | Array of `CONCEPTS` keys. 1–3 tags per item; every item must have at least one. |
 | `section` | recommended (>30 items) | Small label above the question (e.g. `Embryology`). Adds visible grouping in the UI. |
-| `image` | optional | Path to an image shown below the stem (e.g. `'img/oksat/lip-recon/subunits.jpg'`). |
+| `image` | optional | Path to an image shown below the stem (e.g. `'images/oksat/lip-recon/subunits.jpg'`). |
 | `imageAlt` | with `image` | Alt text for the stem image. |
 | `explanationImage` | optional | Path to an image shown inside the detailed explanation. |
 | `explanationImageAlt` | with `explanationImage` | Alt text for the explanation image. |
@@ -124,13 +124,13 @@ A `type: 'recall'` card shows the `stem`, a **Reveal answer** button, then the
 
 `stem`, `answer`, `brief`, and `detailed` honor `\n` as a line break. Use it
 for short lists, bullet-point layouts, or text "tables" within a field (see
-`js/mcq-modules/dtc-risk-stratification.js` for multi-line recall answers).
+`js/oksat/modules/dtc-risk-stratification.js` for multi-line recall answers).
 Template literals (backtick strings) work well for multi-line `answer` fields.
 
 ### Images
 
 Items can include images in the stem and/or the detailed explanation. Store
-images under `img/oksat/<module-slug>/` (e.g. `img/oksat/lip-recon/`).
+images under `images/oksat/<module-slug>/` (e.g. `images/oksat/lip-recon/`).
 
 - `image` — shown below the stem, before the options. Use for diagrams the
   learner needs to answer the question (anatomy figures, surgical markings).
@@ -154,12 +154,12 @@ StatPearls figures (CC BY-NC-ND 4.0), so they are copied unmodified (no crops
 or annotations) and credited in the file header and `meta.sources`.
 
 A figure can be drawn for the module instead of copied, as an SVG in
-`img/oksat/<slug>/` (`aerd-biologics` does this where its source figure is
+`images/oksat/<slug>/` (`aerd-biologics` does this where its source figure is
 wrong). It is loaded as an `<img>`, so it cannot read the site's tokens or
 fonts: give it its own white background, system fonts, and the two signal
 colours as fixed hex values, and label it schematic.
 
-See `js/mcq-modules/lip-reconstruction.js` for the reference implementation.
+See `js/oksat/modules/lip-reconstruction.js` for the reference implementation.
 
 ---
 
@@ -190,7 +190,7 @@ questions sharing a clinical scenario and a `case-<name>` concept key.
 - Case-specific concept keys (e.g. `case-scc`, `case-ramsay`) let the chip
   filter isolate the case as a study unit.
 
-See `js/mcq-modules/facial-reanimation.js` for the benchmark implementation.
+See `js/oksat/modules/facial-reanimation.js` for the benchmark implementation.
 
 ### Sequential dependency (recall modules)
 
@@ -199,7 +199,7 @@ the learner builds up a framework question by question. This is a distinct
 pedagogical mode from independent MCQ items.
 **When using sequential dependency, item ordering matters — do not shuffle.**
 
-See `js/mcq-modules/dtc-risk-stratification.js` for the canonical example.
+See `js/oksat/modules/dtc-risk-stratification.js` for the canonical example.
 
 ---
 
@@ -268,18 +268,18 @@ window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
 
 ## Manifest entry
 
-Each module has one entry in `js/oksat-manifest.js`:
+Each module has one entry in `js/oksat/manifest.js`:
 
 | Field | Required | Notes |
 |---|---|---|
-| `slug` | **yes** | Must match the filename (`js/mcq-modules/<slug>.js`). Kebab-case. |
+| `slug` | **yes** | Must match the filename (`js/oksat/modules/<slug>.js`). Kebab-case. |
 | `title` | **yes** | Hub card title. |
 | `kicker` | **yes** | Hub card subtitle label. |
 | `subspecialty` | **yes** | Key into `OKSAT_SUBSPECIALTIES` — determines hub grouping and accent hue. |
 | `count` | **yes** | Must equal `ITEMS.length` — `tools/check-data.mjs` enforces this. |
 | `accent` | **yes** | Hex color for the hub card accent bar. Use the subspecialty's hue from `OKSAT_SUBSPECIALTIES`. |
 | `desc` | **yes** | One-line description shown on the hub card. |
-| `data` | **yes** | Path to the data file: `'js/mcq-modules/<slug>.js'`. |
+| `data` | **yes** | Path to the data file: `'js/oksat/modules/<slug>.js'`. |
 
 **Accent hue rule:** the accent comes from `OKSAT_SUBSPECIALTIES`, not
 invented. Adding a 10th subspecialty is an owner decision

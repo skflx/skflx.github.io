@@ -66,9 +66,13 @@ three pages that load it must FAIL. Smoke additionally loads
 - Day/night toggle (`.site-theme-toggle`, `js/site.js`) flips
   `html[data-theme]` and persists `sk_theme`; `js/theme-boot.js` applies it
   before paint.
-- All sections are open; the topbar links (`#about`, `#tools`, `#work`,
-  `#research`, `#beyond`) are plain anchors, and the one in view gets
-  `aria-current` (scroll-spy in `js/onepager.js`).
+- About is open; Tools, Work, Research and Off hours (`.block[data-fold]`)
+  load folded with no flash, and a tap anywhere on a head toggles it
+  (`aria-expanded` follows). A topbar link (`#about`, `#tools`, `#work`,
+  `#research`, `#beyond`) or a deep link (`index.html#research`) opens its
+  section and lands on it; the one in view gets `aria-current` (scroll-spy in
+  `js/onepager.js`). With JavaScript off every section is open. The smoke
+  test pins the folded start and a head tap.
 - No horizontal scroll at 390px wide; both figures are ASCII 3D and ship a
   baked frame, so they render without JS.
 - Check phones and the phone's "desktop site" mode, which lays the page out
@@ -127,7 +131,7 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   `c` opens choices + `1` selects, space reveals + `4` grades cold, `→`
   advances, `h` home.
 - **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*` (now by
-  `js/oksat-store.js`).
+  `js/oksat/store.js`).
 - The page mounts straight into the module — **no prompt of any kind**. The
   test seeds `oksat:reviewer` directly to pick a namespace.
 - Concept deep link `&c=<key>` pre-filters (manual).
@@ -238,14 +242,14 @@ non-blank frame. Every figure a page shows (`data-a3d` in its HTML or in
 its own scripts) loads `css/ascii3d.css`, then `js/ascii3d.js` before its
 scene file. No scene is orphaned. Every baked block equals a fresh render
 (`node tools/ascii3d.mjs bake --check`). The Leitner figure's `intervals`
-equal `LEITNER_INTERVALS` in `js/oksat-engine.js`. To prove the last check
+equal `LEITNER_INTERVALS` in `js/oksat/engine.js`. To prove the last check
 bites, change one interval in the engine: the check must FAIL.
 
 `tools/smoke-pages.mjs` (`figureReady`) checks that each figure mounts live
 with a drawn grid. On the one-pager, flipping `html[data-theme]` must flip
 the figure's `data-a3d-shade` (paper ↔ dark ground). On Airway, picking
 another mode (a full re-render) must bring the figure back live. To prove
-that bites, remove the `mountAll` call from `js/airway-app.js`: the Airway
+that bites, remove the `mountAll` call from `js/airway/app.js`: the Airway
 smoke must FAIL.
 
 Manual: `node tools/ascii3d.mjs render <id> --turn 4` for every side, then

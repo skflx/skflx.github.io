@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* =============================================================
-   test-oksat-engine.mjs — behavior tests for js/oksat-engine.js,
+   test-oksat-engine.mjs — behavior tests for js/oksat/engine.js,
    the highest-regression-risk code in the repo (5 modules depend on
    it; ItemView is closure-private by design — never export it).
 
@@ -8,7 +8,7 @@
    real browser + the page's CDN (React/htm) — same constraint as the
    smoke harness; in CI the CDN is reachable.
 
-   ---- Engine contract this pins (read js/oksat-engine.js to confirm) ----
+   ---- Engine contract this pins (read js/oksat/engine.js to confirm) ----
    Storage keys, namespace normalized lowercase-alnum and resolved by
    OKSATStore.reviewer() from localStorage 'oksat:reviewer' (default
    'guest' — there is no prompt):
@@ -165,7 +165,7 @@ async function main() {
 
   /* ---- Case 4: legacy mcq:* migration ---- */
   {
-    // seed a legacy key BEFORE any script runs; oksat-store.js should copy it to oksat:*
+    // seed a legacy key BEFORE any script runs; js/oksat/store.js should copy it to oksat:*
     const seed = `try{localStorage.setItem('mcq:legacyprobe','hello');}catch(e){}`;
     const { context, page } = await openStudy(browser, base, seed);
     const migrated = await page.evaluate(() => { try { return localStorage.getItem('oksat:legacyprobe'); } catch (e) { return null; } });

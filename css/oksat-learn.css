@@ -1,5 +1,5 @@
 /* =============================================================
-   OKSAT Interactive learning — oksat-learn.html (js/oksat-learn.js)
+   OKSAT Interactive learning — oksat-learn.html (js/oksat/learn.js)
    Loads after css/oksat.css and consumes only its --ok-* tokens, so
    light/dark and the font themes work with no extra rules. The one
    addition is --lr-hue: the guide's subspecialty hue, set by the
@@ -108,7 +108,7 @@
 .lr-ev s { text-decoration: none; padding: 0.22rem 0.4rem; color: var(--ok-text-muted); background: var(--ok-surface); }
 .lr-ev s.pos { color: var(--ok-correct); }
 .lr-ev s.neg { color: var(--ok-incorrect); }
-/* Lexicon terms (js/oksat-terms.js): a dotted rule, one shared popover. */
+/* Lexicon terms (js/oksat/terms.js): a dotted rule, one shared popover. */
 .lr-term {
   text-decoration: underline dotted var(--ok-text-faint); text-decoration-thickness: 1px; text-underline-offset: 0.2em;
   cursor: help; border-radius: 2px;

@@ -17,3 +17,7 @@ og-card.jpg
 
 The earlier garden portrait (me_card.jpg/.webp) was retired in the 2026-09
 redesign; it is in git history if ever wanted.
+
+oksat/<module or guide>/
+  - OKSAT item and guide figures (moved here from img/oksat/ in 2026-10);
+    each is cited by the module or guide data file that shows it

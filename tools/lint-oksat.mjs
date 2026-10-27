@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* =============================================================
-   lint-oksat.mjs — quality lint for OKSAT modules (js/mcq-modules/*).
+   lint-oksat.mjs — quality lint for OKSAT modules (js/oksat/modules/*).
 
    tools/check-data.mjs enforces the structural minimum (count, ids,
    correct option). This enforces the rest of docs/authoring-oksat.md's
@@ -30,7 +30,7 @@ const load = (rel) => {
   return w.window;
 };
 
-const manifest = load('js/oksat-manifest.js').OKSAT_MANIFEST;
+const manifest = load('js/oksat/manifest.js').OKSAT_MANIFEST;
 const want = process.argv.slice(2);
 let errors = 0;
 

@@ -59,8 +59,8 @@ function loadWindow(absPath) {
 function checkOlsb() {
   console.log('\nolsb: dioramas, glossary, relations, tours');
   const html = fs.readFileSync(rel('OLSB.html'), 'utf8');
-  const files = [...html.matchAll(/<script\b(?![^>]*type="module")[^>]*\bsrc="(js\/olsb-[a-z]+\.js)/g)].map((m) => m[1]);
-  ok(files[0] === 'js/olsb-glossary.js' && files.length > 1, 'OLSB.html loads the glossary first, then the dioramas',
+  const files = [...html.matchAll(/<script\b(?![^>]*type="module")[^>]*\bsrc="(js\/olsb\/(?!main\.)[a-z]+\.js)/g)].map((m) => m[1]);
+  ok(files[0] === 'js/olsb/glossary.js' && files.length > 1, 'OLSB.html loads the glossary first, then the dioramas',
     `OLSB.html script order: ${files.join(', ')}`);
   const win = {};
   for (const f of files) new Function('window', fs.readFileSync(rel(f), 'utf8') + '\n;return window;')(win);
@@ -102,14 +102,14 @@ function checkOlsb() {
   checkOlsbVolume(O);
 }
 
-/* The 3D model (js/olsb-volume.js): its labels are glossary entries, its tour resolves, every
+/* The 3D model (js/olsb/volume.js): its labels are glossary entries, its tour resolves, every
    structure it names is actually built, and its geometry agrees with every directional relation
    in the glossary between two structures it draws. A relation is tested over the columns both
    structures occupy along its axis (so a plate above a cavity counts where they overlap), or by
    centroid when they share none. */
 function checkOlsbVolume(O) {
   const V = O.volume;
-  if (!V) { fail('OLSB.volume missing (js/olsb-volume.js not loaded by OLSB.html)'); return; }
+  if (!V) { fail('OLSB.volume missing (js/olsb/volume.js not loaded by OLSB.html)'); return; }
   const G = O.glossary;
   const unknown = V.LABELS.filter((l) => l && !G[l.id]).map((l) => l.id);
   ok(unknown.length === 0, '3D model: every label is a glossary entry', `3D labels without a glossary entry: ${unknown.join(', ')}`);
@@ -157,9 +157,9 @@ function checkOlsbVolume(O) {
    1. OKSAT manifest <-> modules
    =========================================================== */
 function checkOksat() {
-  console.log('\njs/oksat-manifest.js <-> js/mcq-modules/*');
+  console.log('\njs/oksat/manifest.js <-> js/oksat/modules/*');
   let man;
-  try { man = loadWindow(rel('js/oksat-manifest.js')); }
+  try { man = loadWindow(rel('js/oksat/manifest.js')); }
   catch (e) { fail('manifest load: ' + e.message); return; }
 
   const manifest = man.OKSAT_MANIFEST;
@@ -203,8 +203,8 @@ function checkOksat() {
       `${tag}: ${bad.length} malformed items (e.g. ${bad.slice(0, 3).join(' ; ')})`);
   }
 
-  // orphan detection: every mcq-modules/*.js must be in the manifest
-  const onDisk = fs.readdirSync(rel('js/mcq-modules')).filter((f) => f.endsWith('.js'));
+  // orphan detection: every js/oksat/modules/*.js must be in the manifest
+  const onDisk = fs.readdirSync(rel('js/oksat/modules')).filter((f) => f.endsWith('.js'));
   const orphans = onDisk.filter((f) => !manifestFiles.has(f));
   ok(orphans.length === 0, 'no orphan module files', `module files not in manifest: ${orphans.join(', ')}`);
 }
@@ -217,9 +217,9 @@ function checkOksat() {
    resolves, so a renamed concept or id fails here instead of in a browser.
    =========================================================== */
 function checkGuides() {
-  console.log('\njs/oksat-manifest.js OKSAT_GUIDES <-> js/oksat-guides/*');
+  console.log('\njs/oksat/manifest.js OKSAT_GUIDES <-> js/oksat/guides/*');
   let man;
-  try { man = loadWindow(rel('js/oksat-manifest.js')); } catch (e) { fail('manifest load: ' + e.message); return; }
+  try { man = loadWindow(rel('js/oksat/manifest.js')); } catch (e) { fail('manifest load: ' + e.message); return; }
   const guides = man.OKSAT_GUIDES || [];
   const subs = man.OKSAT_SUBSPECIALTIES || {};
   ok(Array.isArray(guides) && guides.length > 0, 'OKSAT_GUIDES is a non-empty array', 'OKSAT_GUIDES missing/empty');
@@ -236,11 +236,11 @@ function checkGuides() {
     const stars = (bare.match(/\*/g) || []).length;
     return stars % 2 ? 'odd number of * (unclosed bold or italic; escape a literal star as \\*)' : null;
   };
-  /* Terms (js/oksat-terms.js): the viewer marks every lexicon term; here the same scanner
+  /* Terms (js/oksat/terms.js): the viewer marks every lexicon term; here the same scanner
      runs over every string a reader sees (markup and source chips stripped) and fails on
      an acronym-shaped token the lexicon does not know, and on a lexicon entry no guide uses. */
   let T = null;
-  try { T = loadWindow(rel('js/oksat-terms.js')).OKSATTerms; } catch (e) { fail('js/oksat-terms.js load: ' + e.message); }
+  try { T = loadWindow(rel('js/oksat/terms.js')).OKSATTerms; } catch (e) { fail('js/oksat/terms.js load: ' + e.message); }
   const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'refs', 'tone', 'data']);
   const used = new Set();
   const termScan = (v, key, where, out) => {
@@ -248,7 +248,7 @@ function checkGuides() {
       if (SKIP.has(key)) return;
       const r = T.scan(v.replace(/\[\[[^\]]+\]\]/g, ' ').replace(/\\?\*/g, ''));
       r.hits.forEach((x) => used.add(x.key));
-      r.unknown.forEach((u) => out.push(`${where}: '${u}' is not in js/oksat-terms.js`));
+      r.unknown.forEach((u) => out.push(`${where}: '${u}' is not in js/oksat/terms.js`));
     } else if (Array.isArray(v)) v.forEach((x) => termScan(x, key, where, out));
     else if (v && typeof v === 'object') for (const [k, x] of Object.entries(v)) termScan(x, k, where, out);
   };
@@ -322,9 +322,9 @@ function checkGuides() {
   }
   if (T) {
     const idle = T.keys().filter((k) => !used.has(k));
-    ok(idle.length === 0, `js/oksat-terms.js: ${T.keys().length} terms, every one used by a guide`, `terms no guide uses (delete them): ${idle.join(', ')}`);
+    ok(idle.length === 0, `js/oksat/terms.js: ${T.keys().length} terms, every one used by a guide`, `terms no guide uses (delete them): ${idle.join(', ')}`);
   }
-  const dir = rel('js/oksat-guides');
+  const dir = rel('js/oksat/guides');
   const onDisk = fs.existsSync(dir) ? fs.readdirSync(dir, { recursive: true }).filter((f) => String(f).endsWith('.js')).map((f) => path.basename(String(f))) : [];
   const orphans = onDisk.filter((f) => !files.includes(f));
   ok(orphans.length === 0, 'no orphan guide chapter files', `chapter files not in OKSAT_GUIDES: ${orphans.join(', ')}`);
@@ -334,9 +334,9 @@ function checkGuides() {
    2. Airway question bank
    =========================================================== */
 function checkAirway() {
-  console.log('\njs/airway-questions.js');
+  console.log('\njs/airway/questions.js');
   let w;
-  try { w = loadWindow(rel('js/airway-questions.js')); }
+  try { w = loadWindow(rel('js/airway/questions.js')); }
   catch (e) { fail('load: ' + e.message); return; }
   const data = w.AIRWAY_DATA;
   ok(data && Array.isArray(data.questions), 'AIRWAY_DATA.questions is an array', 'AIRWAY_DATA.questions missing');
@@ -706,7 +706,7 @@ function checkFigures() {
   }
 
   /* data-a3d ids a page shows: in its HTML, or in the page's own
-     scripts (Airway renders its markup from js/airway-app.js). */
+     scripts (Airway renders its markup from js/airway/app.js). */
   const used = new Set();
   const idsIn = (src) => [...src.matchAll(/data-a3d="([a-z0-9-]+)"/g)].map((m) => m[1]);
   for (const page of rootPages()) {
@@ -737,7 +737,7 @@ function checkFigures() {
 
   const leitner = A3D.get('leitner');
   if (leitner) {
-    const m = fs.readFileSync(rel('js/oksat-engine.js'), 'utf8').match(/LEITNER_INTERVALS\s*=\s*\{([^}]*)\}/);
+    const m = fs.readFileSync(rel('js/oksat/engine.js'), 'utf8').match(/LEITNER_INTERVALS\s*=\s*\{([^}]*)\}/);
     const engine = m ? m[1].split(',').map((kv) => Number(kv.split(':')[1])) : [];
     const shown = leitner.intervals || [];
     ok(engine.length > 0 && JSON.stringify(engine) === JSON.stringify(shown),

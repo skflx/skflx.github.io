@@ -246,4 +246,4 @@ To extend it, add a `kind` to `BUILD` in `js/ascii3d.js` that returns a
 grid mesh (`gridMesh`), a polyline or points. Everything downstream is
 shared. Not built yet: figures inside OKSAT question items. The engine
 takes `item.image` only, and a figure there would need a small component
-in `js/oksat-engine.js` that calls `ASCII3D.mount`.
+in `js/oksat/engine.js` that calls `ASCII3D.mount`.
