@@ -28,7 +28,7 @@ no design judgment required.
 | `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |
 | `docs/ssb-roadmap.md` | SSB task board: status, owner decisions/actions, waves, work packages, checkpoints, content backlog | A WP changes status (same PR), a wave closes (shrink done WPs), a decision lands |
 | `plans/*.md` | Implementation specs (decisions, contracts, data); status lives in each spec's parent GitHub issue; `plans/README.md` is the index | A spec is created, a contract or decision changes, a plan finishes |
-| `docs/delegation.md` | Who does what (owner / Opus / Gemini Flash / Sonnet ∥ Argon), WP format, executor and checkpoint protocols, launch prompts | The split or the protocol changes |
+| `docs/delegation.md` | Who does what (owner / Opus / Haiku / Sonnet ∥ Argon), WP format, executor and checkpoint protocols, launch prompts | The split or the protocol changes |
 | `docs/authoring-ssb.md` | SSB content schema and editorial rules | The schema or `tools/ssb-content.mjs` changes |
 | `docs/ssb-imagegen.md` | Image-generation and cross-model briefs | A brief or its acceptance check changes |
 | `docs/realistic-anatomy.md` | SSB realistic-anatomy sources (UW pages, Radiopaedia, NasalSeg), methodological limits, and owner decisions (RA-O1…RA-O9). The design is `docs/ssb.md` §14; its work packages are `docs/ssb-roadmap.md` §3a | A source, a limit, or a decision changes |

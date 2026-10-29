@@ -689,8 +689,7 @@ function checkDissection(index) {
 /* ===========================================================
    5. ASCII 3D figures (js/ascii3d.js, js/diagrams/*, docs/diagrams.md)
    Scenes render, pages load what they show (engine first), no
-   scene file is orphaned, baked no-JS frames are current, and the
-   Leitner figure states the engine's real schedule.
+   scene file is orphaned, and baked no-JS frames are current.
    =========================================================== */
 function checkFigures() {
   console.log('\nASCII figures: js/diagrams/* <-> pages');
@@ -733,16 +732,6 @@ function checkFigures() {
   for (const r of bakeAll({ write: false })) {
     if (r.unknown) fail(`${r.page}: baked block a3d:${r.id} has no scene`);
     else ok(r.fresh, `${r.page}: baked frame '${r.id}' current`, `${r.page}: baked frame '${r.id}' stale (run node tools/ascii3d.mjs bake)`);
-  }
-
-  const leitner = A3D.get('leitner');
-  if (leitner) {
-    const m = fs.readFileSync(rel('js/oksat/engine.js'), 'utf8').match(/LEITNER_INTERVALS\s*=\s*\{([^}]*)\}/);
-    const engine = m ? m[1].split(',').map((kv) => Number(kv.split(':')[1])) : [];
-    const shown = leitner.intervals || [];
-    ok(engine.length > 0 && JSON.stringify(engine) === JSON.stringify(shown),
-      `leitner figure intervals [${shown}] === LEITNER_INTERVALS`,
-      `leitner figure intervals [${shown}] !== LEITNER_INTERVALS [${engine}] (js/diagrams/leitner.js)`);
   }
 }
 

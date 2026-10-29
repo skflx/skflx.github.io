@@ -10,7 +10,7 @@ parent issue per plan, one sub-issue per WP) against a spec in `plans/`. Rules e
 |---|---|---|
 | **Owner** (human orchestrator) | Decides (`docs/decisions.md` §7), vets medical content (`review: verified`), merges to `master` (deploy), launches sessions with the prompts below | — |
 | **Opus** (orchestrator) | Specs, anatomy-critical geometry and data, medical content authoring and adversarial review, checkpoints (reviews a batch of delegated work against its acceptance), keeps the roadmap honest | Routine wiring it could spec instead |
-| **Gemini Flash** (executor) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
+| **Haiku** (executor; any other model the owner assigns to this role) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
 | **Sonnet ∥ Argon** (adversarial reviewers) | Review each wave's diff independently against its spec, as PR reviews that Opus adjudicates | Pushing fixes, merging |
 
 Why the split: a spec plus an acceptance test costs Opus far fewer tokens
@@ -41,7 +41,7 @@ half, the executor the mechanical half.
 ## 2. The WP format (an issue body; SSB WPs still in `docs/ssb-roadmap.md`)
 
 ```
-### <ID> — <title>                          [status] · Flash|Opus · depends: <IDs>
+### <ID> — <title>                          [status] · Haiku|Opus · depends: <IDs>
 Goal:       one sentence.
 Read:       files/sections, nothing else unless stuck.
 Touch:      files it may create or change.
@@ -54,7 +54,7 @@ Escalate:   the conditions under which it stops and reports instead.
 Status values: `todo`, `ready` (deps met, can start), `in progress`,
 `review` (PR open, waiting on a checkpoint), `done`, `blocked: <reason>`.
 
-## 3. Executor protocol (Gemini Flash)
+## 3. Executor protocol (Haiku)
 
 1. Read `AGENTS.md` (auto-loaded), then only the WP's **Read** list.
 2. Branch `claude/<wp-id>-<slug>` from current `master`.
@@ -93,7 +93,7 @@ A checkpoint (CP) in the roadmap names the WPs it reviews. Opus:
 
 Start each in a **new** session (fresh context is cheaper than a long one).
 
-Executor — pick Gemini Flash as the session model, then:
+Executor — pick Haiku as the session model, then:
 
 ```
 Execute issue #<n> (spec: plans/<spec>.md), following

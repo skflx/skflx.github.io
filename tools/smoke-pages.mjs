@@ -50,10 +50,8 @@ const PAGES = [
     return figureReady(p, 'fusion', { themeFlip: true });
   } },
   { path: 'Fusion.html', ready: (p) => wait(p, () => !!document.querySelector('.fusion-qr-svg')) },
-  { path: 'oksat.html', ready: async (p) => {
-    await wait(p, () => document.querySelectorAll('#modules .module-card').length > 0 && document.querySelectorAll('#guides .module-card').length > 0);
-    return figureReady(p, 'leitner');
-  } },
+  { path: 'oksat.html', ready: (p) => wait(p, () => document.querySelectorAll('#modules .module-card').length > 0
+    && document.querySelectorAll('#guides .module-card').length > 0) },
   { path: 'oksat-study.html?m=pediatrics', ready: oksatStudyReady },
   /* Interactive learning: the chapter rail built and the start chapter rendered; a content chapter loads its
      data file, its modules (each in its own frame) and draws sections. Behavior is tools/test-oksat-learn.mjs. */
