@@ -2,8 +2,8 @@
 
 The repo is worked by the owner and several models. This file says who does
 what, how a task is handed over, and how it comes back. Task lists that use
-it: `docs/ssb-roadmap.md` (SSB) and the plans in `plans/` (everything else,
-with checklists ticked in place). Rules every model follows are in
+it: `docs/ssb-roadmap.md` (SSB) and, for everything else, GitHub Issues (one
+parent issue per plan, one sub-issue per WP) against a spec in `plans/`. Rules every model follows are in
 `AGENTS.md`.
 
 | Party | Does | Never does |
@@ -11,7 +11,7 @@ with checklists ticked in place). Rules every model follows are in
 | **Owner** (human orchestrator) | Decides (`docs/decisions.md` §7), vets medical content (`review: verified`), merges to `master` (deploy), launches sessions with the prompts below | — |
 | **Opus** (orchestrator) | Specs, anatomy-critical geometry and data, medical content authoring and adversarial review, checkpoints (reviews a batch of delegated work against its acceptance), keeps the roadmap honest | Routine wiring it could spec instead |
 | **Gemini Flash** (executor) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
-| **Sonnet ∥ Argon** (adversarial reviewers) | Review each wave's diff independently against its plan; findings go to `plans/reviews/<date>-R<n>-<model>.md`, which Opus adjudicates | Pushing fixes, merging |
+| **Sonnet ∥ Argon** (adversarial reviewers) | Review each wave's diff independently against its spec, as PR reviews that Opus adjudicates | Pushing fixes, merging |
 
 Why the split: a spec plus an acceptance test costs Opus far fewer tokens
 than the implementation, and this repo's test suites (`docs/verification.md`)
@@ -38,7 +38,7 @@ A WP may go to the executor only when all of these hold:
 If one fails, the WP is Opus's, or it is split: Opus does the judgment
 half, the executor the mechanical half.
 
-## 2. The WP format (in `docs/ssb-roadmap.md`)
+## 2. The WP format (an issue body; SSB WPs still in `docs/ssb-roadmap.md`)
 
 ```
 ### <ID> — <title>                          [status] · Flash|Opus · depends: <IDs>
@@ -96,9 +96,9 @@ Start each in a **new** session (fresh context is cheaper than a long one).
 Executor — pick Gemini Flash as the session model, then:
 
 ```
-Execute work package <ID> in docs/ssb-roadmap.md, following
-docs/delegation.md §3. Open a PR when its Accept commands pass;
-do not merge.
+Execute issue #<n> (spec: plans/<spec>.md), following
+docs/delegation.md §3. Open or update the PR with `Closes #<n>`
+when its Acceptance commands pass; do not merge.
 ```
 
 Checkpoint — pick Opus, then:
@@ -146,13 +146,13 @@ lands in the orchestrator's context). So:
 ## 7. Adversarial review (Sonnet ∥ Argon)
 
 After each wave, two reviewers run in separate sessions on the same input:
-the wave's diff, its plan, and the plan's reviewer checklist. Each writes
-`plans/reviews/<date>-R<n>-<model>.md`, one finding per entry (severity
-`block`/`fix`/`nit`, `file:line`, a concrete failure scenario, reproduced
-yes/no). Reviewers do not rerun test suites: they read the diff and the
-output the WP reported. Opus merges both files into the plan's findings
-list, turns real ones into fix WPs and records why the rest were dismissed.
-The next wave starts only when no `block` finding is open.
+the wave's diff, its spec, and the spec's reviewer checklist. Each posts an
+independent PR review, one finding per comment (severity `block`/`fix`/`nit`,
+`file:line`, a concrete failure scenario, reproduced yes/no). Reviewers do
+not rerun test suites: they read the diff and the output the WP reported.
+Opus adjudicates: real findings become new `type:wp` sub-issues, dismissed
+ones get a one-line reason on their thread, and the wave's review issue
+closes when no `block` finding is open, which unlocks the next wave.
 
 Tests and CI are a bottleneck: a WP runs only the suites whose inputs it
 changed, pushes once, and the full suite runs once before the owner merges

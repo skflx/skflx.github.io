@@ -164,7 +164,7 @@ Grouped by system; per-file detail lives in each file's header comment.
 │
 ├── AGENTS.md               # Operating manual for every coding agent (canonical)
 ├── CLAUDE.md, .claude/CLAUDE.md, .gemini/, .agents/  # pointers to AGENTS.md
-├── plans/                  # implementation plans with checklists (index: plans/README.md)
+├── plans/                  # implementation specs; status in GitHub Issues (index: plans/README.md)
 ├── docs/                   # Design system, decisions, security, verification
 │   └── wip.md              #   current state of each system (index + update rules: docs/docs-map.md)
 └── images/                 # Cutout portrait, social card, favicon (see images/list.txt); images/oksat/ for OKSAT
