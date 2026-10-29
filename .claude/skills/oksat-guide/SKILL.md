@@ -73,7 +73,7 @@ predict first, then explain, then check.
    Then open the chapters and read them in both themes and at phone width
    (`tools/smoke-lib.mjs` gives a server and browser; screenshots are the
    only proof the page teaches rather than merely loads).
-10. **Docs pass** per `docs/docs-map.md`: `README.md`, `docs/wip.md`, `CLAUDE.md`,
+10. **Docs pass** per `docs/docs-map.md`: `README.md`, `docs/wip.md`, `AGENTS.md`,
    `docs/verification.md`, and the owning spec. No counts that rot.
 
 ## 2. Converting an existing study guide

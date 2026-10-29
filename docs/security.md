@@ -62,7 +62,7 @@ to a host with header control (e.g. Cloudflare in front) would close this.
 
 Everything committed is public — the whole repository is served, including
 `docs/`, `tools/`, `archive/` and `wiki/`. Nothing secret may be committed,
-ever (`CLAUDE.md`).
+ever (`AGENTS.md`).
 
 ## Audit, 2026-09-23
 

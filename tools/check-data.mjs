@@ -746,8 +746,19 @@ function checkFigures() {
   }
 }
 
+/* ---- agent instructions (AGENTS.md, cross-agent standard) ----
+   AGENTS.md is canonical; every model-specific entry file only points to it. */
+function checkAgents() {
+  ok(fs.existsSync(rel('AGENTS.md')), 'AGENTS.md exists', 'AGENTS.md missing (the canonical agent manual)');
+  for (const f of ['CLAUDE.md', '.claude/CLAUDE.md', '.gemini/GEMINI.md', '.gemini/settings.json', '.agents/AGENTS.md']) {
+    const src = fs.existsSync(rel(f)) ? fs.readFileSync(rel(f), 'utf8') : '';
+    ok(src.includes('AGENTS.md'), `${f} points to AGENTS.md`, `${f} missing or does not point to AGENTS.md`);
+  }
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
+checkAgents();
 checkOksat();
 checkGuides();
 checkAirway();

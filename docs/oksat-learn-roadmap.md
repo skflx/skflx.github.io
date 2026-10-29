@@ -42,7 +42,7 @@ not tuned to one. Each is mechanical; none judges medical content.
 | A number with a unit, %, or ratio in a `p`/`ul`/table cell sits in a block carrying a `[[src|…]]` chip | "Numbers come from a source, never from memory" |
 | Every section has a `drill` row or an explicit `nodrill: 'reason'` | Keeps the Teaching → Practice link from silently lapsing |
 | No `check` prompt asks what an abbreviation stands for | The popover would answer it |
-| A drawn figure's caption says *schematic* | Invented shapes are labelled (CLAUDE.md, Figures) |
+| A drawn figure's caption says *schematic* | Invented shapes are labelled (AGENTS.md, Figures) |
 | Start chapter names each source with year, and a *Currency check* call dated `YYYY-MM`; warn past 12 months | Rhinology biologics moved within a year of the sources |
 | No `!`, no congratulation, no markdown leakage (`#`, `- ` at line start) | Module voice (`docs/design-principles.md` §6) |
 | Chapter `review: 'draft' \| 'verified'`; only the owner sets `verified`; the viewer shows a Draft mark until then | Same rule as SSB content (`docs/decisions.md` §7) |

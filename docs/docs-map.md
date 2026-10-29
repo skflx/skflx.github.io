@@ -1,7 +1,7 @@
 # Documentation map + second-pass checklist
 
 This file makes documentation upkeep mechanical. After any significant change,
-`CLAUDE.md` requires a **documentation second pass**: a separate, final step
+`AGENTS.md` requires a **documentation second pass**: a separate, final step
 run *after* the code is done and verified. It is deliberately checklist-shaped
 so it can be handed to a smaller/cheaper model or agent than the one that did
 the main work — everything below is doable with grep, `ls`, and small edits;
@@ -12,7 +12,7 @@ no design judgment required.
 | File | Owns | Update when |
 |---|---|---|
 | `README.md` | Public-facing overview + grouped file tree | A page/tool is added, removed, or renamed; a system's one-line description changes |
-| `CLAUDE.md` | Agent operating manual: hard rules, commands, architecture, conventions | A command, convention, subsystem boundary, or hard rule changes |
+| `AGENTS.md` | Agent operating manual for every model (canonical; `CLAUDE.md`, `.claude/CLAUDE.md`, `.gemini/GEMINI.md`, `.agents/AGENTS.md` only point here): hard rules, commands, architecture, conventions | A command, convention, subsystem boundary, or hard rule changes |
 | `docs/wip.md` | Current state of each system (what it is / where it stands / what is next) | A significant chunk of work completes — rewrite the affected section to match reality |
 | `docs/authoring-oksat.md` | How to author an OKSAT module | Module schema or manifest entry shape changes |
 | `docs/authoring-oksat-guide.md` | How to author an OKSAT interactive guide: chapter and block schema, inline markup, checkers, inline module questions, drill rows | The guide schema, a block type, or `js/oksat/learn.js` rendering changes |
@@ -27,7 +27,8 @@ no design judgment required.
 | `docs/security.md` | Security model, per-page rules (CSP, no inline script), audit log | A page's policy, a third-party dependency, or the wiki boundary changes; after any audit |
 | `docs/ssb.md` | SSB architecture, conventions, phase plan, owner decisions | A design decision or phase changes |
 | `docs/ssb-roadmap.md` | SSB task board: status, owner decisions/actions, waves, work packages, checkpoints, content backlog | A WP changes status (same PR), a wave closes (shrink done WPs), a decision lands |
-| `docs/delegation.md` | Who does what (owner / Opus / Sonnet), WP format, executor and checkpoint protocols, launch prompts | The split or the protocol changes |
+| `plans/*.md` | Implementation plans and their checklists; `plans/README.md` is the index | A plan is created, a WP is ticked, a plan finishes |
+| `docs/delegation.md` | Who does what (owner / Opus / Gemini Flash / Sonnet ∥ Argon), WP format, executor and checkpoint protocols, launch prompts | The split or the protocol changes |
 | `docs/authoring-ssb.md` | SSB content schema and editorial rules | The schema or `tools/ssb-content.mjs` changes |
 | `docs/ssb-imagegen.md` | Image-generation and cross-model briefs | A brief or its acceptance check changes |
 | `docs/realistic-anatomy.md` | SSB realistic-anatomy sources (UW pages, Radiopaedia, NasalSeg), methodological limits, and owner decisions (RA-O1…RA-O9). The design is `docs/ssb.md` §14; its work packages are `docs/ssb-roadmap.md` §3a | A source, a limit, or a decision changes |
@@ -55,17 +56,17 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
    Run:
    ```bash
    grep -rnE '[0-9]{2,} (nodes|edges|items|questions|lines)|~[0-9]+' \
-     README.md CLAUDE.md docs/*.md archive/README.md
+     README.md AGENTS.md docs/*.md archive/README.md
    ```
    Every hit must be either (a) inside `docs/wip.md` (allowed — it is dated),
    (b) explicitly dated in place
    ("as of 2026-07"), or (c) a stable design constant (rem sizes, ratios,
    Leitner intervals). Otherwise replace the number with a pointer to the
    source file.
-3. **Path check.** Every backticked path in `README.md` and `CLAUDE.md` must
+3. **Path check.** Every backticked path in `README.md` and `AGENTS.md` must
    exist:
    ```bash
-   grep -ohE '`[a-zA-Z0-9_./-]+\.(html|js|mjs|css|json|md)`' README.md CLAUDE.md \
+   grep -ohE '`[a-zA-Z0-9_./-]+\.(html|js|mjs|css|json|md)`' README.md AGENTS.md \
      | tr -d '`' | sort -u | while read -r p; do [ -e "$p" ] || echo "MISSING: $p"; done
    ```
    Zero `MISSING` lines allowed. (Glob-style entries like `js/oksat/*.js`
@@ -81,8 +82,8 @@ Run these in order. Each step is pass/fail; fix failures before finishing.
 5. **docs/wip.md.** Update the affected system's section to describe the current
    state. It is a status document, not a diary — if a section describes
    something that no longer exists, delete the section.
-6. **CLAUDE.md sanity.** If any command, convention, or boundary changed,
-   CLAUDE.md must reflect it — this file is injected into every agent session
+6. **AGENTS.md sanity.** If any command, convention, or boundary changed,
+   AGENTS.md must reflect it — this file is injected into every agent session
    and stale rules cause confidently-wrong agents. Keep it dense; link out to
    docs rather than expanding it.
 
@@ -98,6 +99,6 @@ in docs once the file actually exists — the path check flags future files.
 - **Docs describing dead code are worse than no docs.** When a system is
   retired, its docs go with it in the same change. Git history is the record
   of why; a doc left behind reads as current and misleads.
-- **CLAUDE.md is paid-for context.** Every line is read by every agent on
+- **AGENTS.md is paid-for context.** Every line is read by every agent on
   every task. It states rules and points elsewhere for detail; it never
   duplicates a schema or a table another doc owns.
