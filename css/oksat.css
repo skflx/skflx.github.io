@@ -168,10 +168,6 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .hub-seg { font-family: var(--ok-font-display); font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin: 3rem 0 0.4rem; }
 .hub-seg:first-of-type { margin-top: 2rem; }
 .hub-seg-sub { font-size: 0.92rem; line-height: 1.55; color: var(--ok-text-muted); max-width: 36rem; }
-/* Leitner figure (js/diagrams/leitner.js), above the footnote */
-.hub-figure { margin: 3rem 0 2rem; padding-top: 1.25rem; border-top: 1px solid var(--ok-border); }
-.hub-figure figcaption { margin-top: 0.75rem; max-width: 36rem; font-size: 0.85rem; line-height: 1.5; color: var(--ok-text-muted); }
-.hub-figure-no { font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--ok-ochre); margin-right: 0.5rem; }
 .hub-dots { margin-top: 0; border-top: 1px solid var(--ok-border); padding-top: 1rem; font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.06em; color: var(--ok-text-faint); }
 
 /* ===== SHARED PRIMITIVES (viewer) ===== */
