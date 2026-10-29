@@ -1,21 +1,10 @@
-# Plan — Figures, eggs & the atlas (2026-10-28)
+# Spec — Figures, eggs & the atlas (2026-10-28)
 
-> **Execution scope approved so far: W0.1 + W0.2 only** (agent sync + this plan committed to the
-> repo). Everything after W0.2 waits for the owner's go.
->
-> This is the canonical copy. Every agent (Claude, Gemini, reviewers) reads and ticks this file. Branch:
-> `claude/website-figures-diagrams-9uxh0g`. Commits: **one short line, no trailers.**
+> **Status lives in GitHub Issues: parent #176**, one sub-issue per work package (WP), labelled
+> `wave:n` / `model:*` / `type:*`. This file is the spec: decisions, roles, contracts, anatomy
+> numbers. It changes only through PRs. Branch: `claude/website-figures-diagrams-9uxh0g`.
+> Commits: **one short line, no trailers.**
 
-## Status
-
-- [ ] Wave 0 — Opus: agent sync, plan in repo, fidelity review, data specs (W0.1, W0.2 done)
-- [ ] Wave 1 — Gemini Flash ×4 in parallel: eggs runtime, engine contracts, Leitner removal + SSB noindex, atlas generator
-- [ ] Review R1 — Sonnet ∥ Argon
-- [ ] Wave 2 — Flash ×3 ∥ Opus ×2: 3D renderer, eggs applied, atlas shell ∥ cochlea/binaural data, atlas anatomy
-- [ ] Review R2
-- [ ] Wave 3 — Flash ×3 in parallel: Figs 1–2 mounted, atlas baked, test suite + CI
-- [ ] Review R3
-- [ ] Wave 4 — Flash docs pass ∥ Opus checkpoint → owner sign-off
 
 ---
 
@@ -57,16 +46,16 @@ Two non-figure changes are part of the same plan:
 |---|---|---|
 | **Opus** (orchestrator) | This plan; Wave 0; all anatomy and medical data (scene constants, atlas control points, fidelity fixes); adjudicating reviews; ticking this file | Routine wiring it can spec |
 | **Gemini Flash** (coder) | Every WP marked **Flash**, to its Acceptance, inside its Touch list | Anatomy judgment, clinical claims, touching files outside Touch, changing contracts in §4 (escalate instead) |
-| **Sonnet ∥ Argon** (adversarial reviewers) | Independent review of each wave's diff against this plan | Pushing fixes |
+| **Sonnet ∥ Argon** (adversarial reviewers) | Independent review of each wave's diff against this spec | Pushing fixes |
 
 **WP rules (all models):**
 - Read `AGENTS.md`, then only the WP's **Read** list.
-- Edit only the **Touch** list. Anything else needed → stop and write `BLOCKED: <why>` under the WP in this file.
+- Edit only the **Touch** list. Anything else needed → stop, add the `blocked` label to the WP's issue, and comment why.
 - Before pushing:
   1. Run the WP's **Acceptance** commands.
   2. `node tools/stamp-assets.mjs` if any `css/` or `js/` file changed.
   3. `node tools/check-data.mjs`.
-- Then `git pull --rebase origin claude/website-figures-diagrams-9uxh0g`, push, and tick the WP's boxes here, in the same commit.
+- Then `git pull --rebase origin claude/website-figures-diagrams-9uxh0g`, push, and name `Closes #n` in the PR (or tick the issue's task list and close it).
 - Parallel WPs in one wave have **disjoint Touch lists**. That is what makes them safe to run at once.
 - **Stamp exemption:** `?v=` rewrites by `tools/stamp-assets.mjs` in any root `*.html` are allowed outside Touch. On a rebase conflict in a stamp, never hand-merge it: take either side, then rerun `stamp-assets` and `check-data`.
 
@@ -92,236 +81,48 @@ Two non-figure changes are part of the same plan:
 - Agents push **once per WP**, not per edit, so CI runs once per WP at most.
 
 **Review protocol (after each wave):**
-- Each reviewer gets the wave's diff (`git diff <wave-start-sha>..HEAD`), this plan, and the checklist in §7.
-- Each writes `plans/reviews/2026-10-28-R<n>-<sonnet|argon>.md`. One finding per entry:
+- Each reviewer gets the wave's diff (`git diff <wave-start-sha>..HEAD`), this spec, and the checklist in §7.
+- Each posts an independent PR review on the wave's PR. One finding per comment:
   - severity: `block` / `fix` / `nit`
   - `file:line`
   - a concrete failure scenario
   - "reproduced: yes/no"
-- Opus merges both files into a **Findings** list under the review heading here. Real ones become fix WPs (Flash). The reasons for dismissing a finding are recorded.
+- Opus adjudicates. Real findings become new `type:wp` sub-issues of #176 (Flash). A dismissed finding gets a one-line reason on its thread. The wave's review issue (R1–R3) closes when nothing `block` is open.
 - The next wave starts only when no `block` finding remains open.
 
 ---
 
-## 3. Waves
+## 3. Work packages (status: the linked issue)
 
-### Wave 0 — Opus (serial, this session after approval)
+| Wave | WP | Model | Issue |
+|---|---|---|---|
+| 0 | W0.1 Agent instruction sync | Opus | #177 |
+| 0 | W0.2 Plan into repo | Opus | #178 |
+| 0 | W0.3 ASCII fidelity review | Opus | #179 |
+| 0 | W0.4 Contracts + data specs + atlas stub | Opus | #180 |
+| 1 | 1A Egg runtime | Flash | #181 |
+| 1 | 1B ASCII3D engine contract | Flash | #182 |
+| 1 | 1C Delete Leitner + SSB noindex | Flash | #183 |
+| 1 | 1D Atlas generator tool | Flash | #184 |
+| 1 | R1 Review | Sonnet ∥ Argon | #185 |
+| 2 | 2A 3D figure renderer | Flash | #186 |
+| 2 | 2B Eggs applied + quiet link | Flash | #187 |
+| 2 | 2C Atlas page shell | Flash | #188 |
+| 2 | 2D Cochlea tonotopy + binaural data | Opus | #189 |
+| 2 | 2E Atlas anatomy | Opus | #190 |
+| 2 | R2 Review | Sonnet ∥ Argon | #191 |
+| 3 | 3A Mount Figs 1–2 | Flash | #192 |
+| 3 | 3B Atlas bake + check-data rules | Flash | #193 |
+| 3 | 3C Figure tests + leaner CI | Flash | #194 |
+| 3 | R3 Review | Sonnet ∥ Argon | #195 |
+| 4 | 4A Docs pass | Flash | #196 |
+| 4 | 4B Opus checkpoint | Opus | #197 |
 
-**W0.1 Agent instruction sync** — Touch: `AGENTS.md` (new), `CLAUDE.md`, `.claude/CLAUDE.md` (new), `.gemini/GEMINI.md` (new), `.gemini/settings.json` (new), `.agents/AGENTS.md` (new), `docs/docs-map.md`, `docs/delegation.md`, `README.md` (tree), `tools/check-data.mjs` (pointer invariant), `.claude/skills/*/SKILL.md` (`CLAUDE.md` → `AGENTS.md` refs).
-- [x] Move the current `CLAUDE.md` body into `AGENTS.md`, worded model-neutral ("coding agents", not "Claude Code"). Add sections:
-  - **Cross-Agent Instruction Synchronization & Implementation Planning Standard** (the owner's text, verbatim)
-  - **Models & roles** (§2 above)
-  - **Commits**: one short line, no `Co-Authored-By` or other trailers, no model names
-  - **Skills**: `.claude/skills/<name>/SKILL.md` are playbooks; a non-Claude agent reads the file directly
-- [x] `CLAUDE.md` = one line `@AGENTS.md` (Claude Code import), plus a one-sentence comment that it must not grow.
-- [x] `.claude/CLAUDE.md` = a pointer sentence only, **no** `@` import (Claude Code would load the canonical text twice).
-- [x] `.gemini/settings.json` = `{"context":{"fileName":["AGENTS.md"]}}` so Gemini CLI loads the canonical file. `.gemini/GEMINI.md` and `.agents/AGENTS.md` = a pointer sentence each.
-- [x] `check-data`: each pointer file exists and mentions `AGENTS.md`. `AGENTS.md` exists.
-- [x] `docs/docs-map.md`, `docs/delegation.md`: `CLAUDE.md` → `AGENTS.md`. Rewrite delegation roles to match §2: Opus, Gemini Flash, Sonnet ∥ Argon.
-- Acceptance: `node tools/check-data.mjs` passes. `grep -rn "CLAUDE\.md" docs .claude tools README.md` shows only the pointer description.
+Each issue body holds Goal, Model, Depends, Read, Touch, Steps (task list), Acceptance and
+Escalate. Steps cite the sections below rather than copying them.
 
-**W0.2 Plan into repo** — Touch: `plans/2026-10-28-figures-eggs-atlas.md`, `plans/README.md`, `plans/reviews/.gitkeep`.
-- [x] Copy this plan. `plans/README.md` = an index of plans with status.
-
-**W0.3 ASCII fidelity review** — Touch: `js/diagrams/cochlea.js`, `js/diagrams/fusion.js`, `js/diagrams/larynx.js` (comments/constants/labels only), plus the matching captions in `index.html` and `js/airway/app.js`.
-- [ ] Cochlea checks:
-  - SG extent (Stakhovskaya 2007, JARO 8:220): ~1.75 turns, label "~630 deg" vs `SG_END`.
-  - Caption "about 700°" vs computed `angles[0]`. Derive the label text from the constants rather than hard-coding it.
-  - The array sits on the lateral wall of scala tympani.
-  - The cochlear nerve leaves from the modiolar base.
-  - The lead exits through the round window.
-- [x] Fusion checks (owner-verified 2026-10-28; no further lookup):
-  - Reiss et al. 2014 JARO 15:235 reports 1–4 octave bimodal fusion ranges.
-  - The normal-hearing "< ~0.2 octave" claim comes from prior Reiss-lab work; the owner vouches. Wording stays as is.
-  - Electrode direction is apex = low.
-- [ ] Larynx checks:
-  - Cricoid is a signet ring (low arch in front, tall lamina behind).
-  - Tracheal rings are C-shaped and open posteriorly.
-  - CTM lies below the folds.
-  - Proportions are adult male; "schematic" is stated.
-- [ ] Record each finding with its fix in a **W0.3 log** under this WP. Rebake (`node tools/ascii3d.mjs bake`) and stamp.
-- Acceptance: `node tools/ascii3d.mjs render <id> --turn 4 --inks` reviewed for each scene. `check-data` passes.
-
-**W0.4 Data specs that Flash builds against** — Touch: this plan (§4–§5 filled in), `tools/atlas/anatomy.json` (stub: the group list and 1 shape per group, valid schema).
-- [ ] Pin the §4 contracts.
-- [ ] Write §5 numbers: Greenwood constants, angle→place map source, MED-EL default band edges, binaural model.
-- [ ] Commit the atlas stub so Wave 1 tooling has real input.
-
-### Wave 1 — Gemini Flash, 4 WPs in parallel (Touch lists disjoint by file)
-
-**1A Egg runtime** — Touch: `js/egg.js` (new, classic IIFE), `css/egg.css` (new). Read: §4.1, `js/onepager.js` (fold pattern), `css/ascii3d.css`, `js/ascii3d.js` (mount/refresh).
-- [ ] Implement contract §4.1 exactly:
-  - debounced `selectionchange`
-  - click/Enter/Space toggle
-  - Esc closes and returns focus to the trigger
-  - `aria-expanded`
-  - event delegation on `document`, so it also works on JS-rendered pages (Airway)
-- [ ] On open, call `ASCII3D.refresh(fig)` (from 1B) so the grid refits after leaving `display:none`.
-- [ ] Reveal animation: `clip-path` print-in over ~600 ms. None under `prefers-reduced-motion`.
-- [ ] Pre-paint hide only under `@media (scripting: enabled)`, so without JS every egg is simply visible (same pattern as the folds).
-- [ ] Hover: `cursor: zoom-in` only. `:focus-visible` gets a hairline outline. No other styling.
-- Acceptance: a scratch HTML page in the scratchpad (not committed) exercises all paths. `node tools/check-data.mjs` passes.
-
-**1B ASCII3D engine contract additions** — Touch: `js/ascii3d.js`, `tools/ascii3d.mjs` (if needed), `docs/diagrams.md` (schema rows only). Read: §4.2.
-- [ ] Export `api.compile(sceneOrId)` (existing `compile`).
-- [ ] Export `api.refresh(figEl)`: re-fit and repaint a mounted figure.
-- [ ] Part field `view: 'ascii' | '3d'` (default both). `compile` gets a second argument `{ view }`. The ASCII frame path passes `'ascii'`; `__compiled` is cached per view.
-- [ ] Part field `ramp(u, v) → 0..1` on grid-mesh kinds (`surface`, `tube`, `cylinder`). `gridMesh` stores `mesh.R` (Float32Array per vertex) when it is present. The ASCII path ignores it.
-- Acceptance:
-  - `node tools/ascii3d.mjs bake` produces **no diff** on existing pages (byte-identical frames).
-  - `node tools/check-data.mjs` passes.
-  - `node tools/smoke-pages.mjs` passes.
-
-**1C Delete Leitner + SSB noindex** — Touch: `js/diagrams/leitner.js` (delete), `oksat.html` (figure block + script tag), `css/oksat.css` (`.hub-figure*` rules), `tools/check-data.mjs` (Leitner block only), `tools/smoke-pages.mjs` (oksat `ready` only), `ssb.html` (robots meta only). Docs mentions are left to 4A (`docs/diagrams.md` belongs to 1B in this wave).
-- [ ] Also drop `css/ascii3d.css` and `js/ascii3d.js` from `oksat.html` if no other figure is left there.
-- [ ] Add `<meta name="robots" content="noindex">` to `ssb.html` (D8). The unlisted-page invariants come in 3B.
-- [ ] `grep -rn leitner js css tools *.html` is clean, except `LEITNER_INTERVALS` in the engine itself.
-- Acceptance: `check-data`, `smoke-pages`, and `test-oksat-engine` all pass.
-
-**1D Atlas generator tool** — Touch: `tools/atlas.mjs` (new), `docs/atlas.md` (new: schema + workflow). Read: §4.4, `tools/ascii3d.mjs` (bake-between-markers pattern).
-- [ ] `node tools/atlas.mjs bake`:
-  - reads `tools/atlas/anatomy.json`
-  - emits SVG per §4.4 between `<!-- atlas:svg -->` / `<!-- /atlas:svg -->` in `atlas.html` (if the file is missing, prints the SVG to stdout)
-  - Catmull-Rom → cubic Bézier, closed or open per shape
-  - coordinates rounded to 0.1
-  - deterministic output
-- [ ] `node tools/atlas.mjs check` → exit 1 if the bake is stale. Export `checkAtlas()` for check-data to import (3B wires it).
-- [ ] `node tools/atlas.mjs preview --out <png> [--theme dark] [--hover <group>]`: Playwright renders a temp page with the SVG and `css/atlas.css`, then screenshots it. This is Opus's authoring loop.
-- [ ] Validate the schema: unknown group, unknown tissue, or <3 points → error naming the shape id.
-- Acceptance: the bake of the W0.4 stub is deterministic (run twice, no diff). The preview writes a PNG.
-
-**R1 — Sonnet ∥ Argon review of Wave 0 + Wave 1.** Findings → here.
-
-### Wave 2 — Flash ×3 ∥ Opus ×2
-
-**2A 3D figure renderer (Flash)** — Touch: `js/fig3d/loader.js` (new), `js/fig3d/render.js` (new), `css/fig3d.css` (new), `tools/fig3d.mjs` (new: poster bake), `tools/stamp-assets.mjs` (generalize the SSB module-graph pass to also cover `js/fig3d/`). Read: §4.3, `js/ascii3d.js` (`compile`, `camera`, drag semantics), `js/olsb/3d.js` (three import + token materials), `js/ssb/materials.js`.
-- [ ] `loader.js` (module, tiny, stamped in HTML):
-  - per `[data-fig3d]`, an IntersectionObserver
-  - on first intersection (folded sections are `display:none`, so this means "section opened"), `import('./render.js?v=…')`
-  - if WebGL is unavailable or the import fails, keep the poster and log nothing
-- [ ] `render.js`:
-  - imports three from `../vendor/three-0.186.1/build/three.module.js`
-  - builds BufferGeometry from `ASCII3D.compile(id, {view:'3d'})`: meshes (quads → 2 tris; N as normals), lines → `Line2`-free thin tubes or `LineBasicMaterial`, points → small spheres
-  - colours per part ink from computed CSS tokens (`--ink`, `--ink-muted`, `--ink-faint`, `--signal`, `--signal-2`)
-  - `ghost` parts skipped
-  - `mesh.R` → vertex colours along a lightness ramp of `--signal-2` (§5.1)
-  - `MeshStandardMaterial({roughness:1, metalness:0})`, hemisphere + key directional light, transparent background
-  - camera from `scene.camera` yaw/pitch
-  - re-colour on `data-theme` flip
-- [ ] Interaction, copying the ASCII engine's semantics:
-  - drag yaws/pitches (`touch-action: pan-y`, no OrbitControls, no zoom)
-  - arrow keys when focused
-  - slow rock per `scene.motion` unless reduced-motion
-  - paused offscreen or when `document.hidden`
-- [ ] `scene.fig3d` hooks (§4.3): controls rendering (range/toggle), `highlight(state)`, `readout(state)` into an `aria-live="polite"` HUD, and pick-to-readout on `pickable` parts (raycast).
-- [ ] `tools/fig3d.mjs bake`: Playwright opens each page with a `data-fig3d`, opens its fold, waits for `data-fig3d-ready`, and screenshots the canvas → `images/figures/<id>-light.webp` and `-dark.webp`. `check` = posters exist for every id.
-- Acceptance:
-  - A scratch page with the `cochlea` scene renders, rotates and theme-flips.
-  - No console errors under `smoke-lib`.
-  - `stamp-assets` stamps `js/fig3d/*` imports.
-  - `check-data` passes.
-
-**2B Eggs applied + quiet link (Flash)** — Touch: `index.html`, `airway-jeopardy.html` (script/css tags), `js/airway/app.js` (hero markup), `css/site.css` (`.quiet` link rule only), `css/onepager.css` (egg figure spacing only), `tools/smoke-pages.mjs` (index/airway `ready` only). Read: §4.1, §4.5.
-- [ ] index.html:
-  - Fig. 1's ASCII `cochlea` becomes an egg figure after About ¶1. Trigger = "electrode" in ¶1.
-  - The `fusion` ASCII egg figure goes directly after Fig. 2's `<figure>`. Trigger = "one sound" in Fig. 2 caption. **Leave the existing Fig. 1/Fig. 2 slots** as empty `<figure data-fig3d>` placeholders, with their current captions, for 3A to fill. Do not add the loader yet.
-  - "binaural pitch fusion" in About ¶2 → `<a class="quiet" href="Fusion.html">`.
-- [ ] Airway:
-  - `<h1>` becomes `<span data-egg="larynx" …>Airway</span> Rounds`
-  - the larynx figure gets `class="a3d egg-figure" id="egg-larynx"`, caption kept
-  - load `css/egg.css` + `js/egg.js` (same-origin: the page stays self-contained)
-- [ ] `.quiet`: inherits colour. On `:hover`/`:focus-visible`, a dotted underline in `--ink-faint`.
-- [ ] Bake, then stamp.
-- [ ] smoke-pages: `figureReady(p, 'cochlea'|'fusion')` must target the hidden eggs. Open each egg in `ready` before checking it. Airway: the same for larynx.
-- Acceptance:
-  - `smoke-pages` passes. `check-data` passes.
-  - Manual: selecting "electrode" opens the egg.
-
-**2C Atlas page shell (Flash)** — Touch: `atlas.html` (new), `css/atlas.css` (new), `js/atlas.js` (new). (Its smoke entry is added by 3C.) Read: §4.4, `ssb.html` head (CSP/topbar pattern), `js/olsb/main.js` (`shade: dome|pit` gradients), `js/oksat/manifest.js` (`OKSAT_SUBSPECIALTIES`).
-- [ ] Page:
-  - standard topbar
-  - CSP `script-src 'self'`
-  - `noindex`
-  - `<title>Atlas | skflx.MD</title>`
-  - the `<!-- atlas:svg -->` markers
-  - loads `css/site.css`, `css/atlas.css`, `js/theme-boot.js`, `js/site.js`, `js/oksat/manifest.js`, `js/atlas.js`
-- [ ] Tissue tokens `--atlas-*` in `css/atlas.css`, derived from site tokens, light and dark. Cut bone uses a hatch `<pattern>`. Ghost layers use low opacity and are non-interactive.
-- [ ] `js/atlas.js`, implementing §4.4 behaviour:
-  - hover/focus a group → set `--hue` from `OKSAT_SUBSPECIALTIES[data-sub].hue` via `style.setProperty`, add `.is-lit`, dim the others
-  - tap on touch: first tap lights, second tap follows `href`
-  - Esc clears
-  - groups without a link toggle a pinned light
-- Acceptance:
-  - Against the W0.4 stub bake: hover lights, keyboard Tab reaches every interactive group, and the links resolve to `OLSB.html#m=3d` and `ssb.html`.
-  - `check-data` passes.
-  - A scratch Playwright run of `atlas.html` has no console errors.
-
-**2D Cochlea tonotopy + binaural scene data (Opus)** — Touch: `js/diagrams/cochlea.js`, `js/diagrams/fusion.js` (export the model), `js/diagrams/binaural.js` (new).
-- [ ] Cochlea, per §5.1 (all parts added with `view:'3d'`; the ASCII egg stays byte-stable):
-  - basilar-membrane band surface with `ramp`
-  - per-contact place frequency and assigned band (MED-EL default)
-  - `fig3d.pickable` contacts → readout
-- [ ] `fusion.js`: expose `model: { LISTENERS, center, half, P }` on the scene object (no frame change).
-- [ ] `binaural.js` per §5.2: two cochleae, all `view:'3d'`, with `fig3d.controls` + `highlight` + `readout`, reusing `ASCII3D.get('fusion').model`.
-
-**2E Atlas anatomy (Opus)** — Touch: `tools/atlas/anatomy.json`.
-- [ ] Author every shape for the §5.3 plane and groups, iterating with `node tools/atlas.mjs preview` (light + dark + each group hovered).
-- [ ] Proportions use adult textbook dimensions (mm, 1 unit = 1 mm). Sources go in `docs/atlas.md`.
-
-**R2 — Sonnet ∥ Argon.**
-
-### Wave 3 — Flash, 3 WPs in parallel
-
-**3A Mount Figs 1–2 in 3D** — Touch: `index.html` (the two fig3d placeholders + script/css tags), `css/onepager.css` (fig3d sizing only), `images/figures/*` (generated).
-- [ ] Fill `<figure data-fig3d="cochlea">` and `<figure data-fig3d="binaural">` per §4.3: a poster `<picture>` (light/dark), a controls slot (binaural), and the HUD.
-- [ ] Load: `js/ascii3d.js` → `js/diagrams/fusion.js` → `cochlea.js` → `binaural.js` → `<script type="module" src="js/fig3d/loader.js">`.
-- [ ] Captions (Opus supplies the text in §5.1/§5.2; Flash pastes it verbatim).
-- [ ] `node tools/fig3d.mjs bake`, then stamp.
-- Acceptance: the cochlea and binaural sections render in Chromium. The slider changes the readout. `smoke-pages` passes. `check-data` passes.
-
-**3B Atlas bake + check wiring** — Touch: `atlas.html` (bake output only), `tools/check-data.mjs` (import `checkAtlas` and fig3d/egg checks; new section appended), `docs/atlas.md`.
-- [ ] Bake the 2E anatomy.
-- [ ] check-data additions:
-  - **egg pairs:** every `data-egg="x"` has `#egg-x[data-a3d="x"].egg-figure` on the same page (Airway: in `js/airway/app.js`), and the reverse.
-  - **fig3d:** every `data-fig3d` id is a defined scene, has both posters, and its page loads the engine, the scene and the loader in order.
-  - **orphans:** the orphan-scene rule counts `data-fig3d` usage.
-  - **atlas:** the atlas bake is fresh.
-  - **unlisted pages:** `OLSB.html`, `ssb.html` and `atlas.html` carry `noindex`. No root `*.html` or `js/**` file links to `atlas.html`. `OLSB.html` and `ssb.html` are linked from no root page except `atlas.html`, and from no `js/**` file outside their own system.
-- Acceptance: `check-data` passes. Each new rule is shown failing once by a deliberate local break (then reverted).
-
-**3C Browser tests + CI (minimal, change-scoped; see Testing budget)** — Touch: `tools/test-figures.mjs` (new, with `--only eggs,fig3d,atlas`), `tools/smoke-pages.mjs` (add `atlas.html`, fig3d readiness, and an `--only <page>` flag), `.github/workflows/ci.yml` (one step, + a `figures` change flag), `docs/verification.md` (new section).
-- [ ] Eggs:
-  - a selection over "electrode" opens `#egg-cochlea`
-  - a tap toggles it
-  - Esc closes and refocuses the trigger
-  - `aria-expanded` is correct
-  - with JS disabled, every egg figure is visible
-  - Airway: the egg survives a re-render
-- [ ] Fig3d:
-  - the poster is visible before the fold opens
-  - a canvas appears after opening and `data-fig3d-ready` is set
-  - theme flip re-colours it
-  - binaural slider → the readout text changes
-  - with WebGL blocked (`--disable-webgl`), the poster remains and there are no console errors
-- [ ] Atlas:
-  - hover → `.is-lit` on the group only
-  - Tab order covers interactive groups
-  - linked groups have the right `href`
-  - no visible `<text>` in the SVG
-- [ ] Unlisted: no inbound links (a crawl of root pages).
-- Acceptance: `node tools/test-figures.mjs` passes locally. The CI YAML is valid.
-
-**R3 — Sonnet ∥ Argon.**
-
-### Wave 4
-
-**4A Docs pass (Flash)** per `docs/docs-map.md`: `README.md` tree, `docs/wip.md` (figures, atlas, eggs, current state), `AGENTS.md` architecture (Figures: eggs + fig3d; Atlas; OLSB/SSB reachable only via atlas), `docs/diagrams.md`, `docs/decisions.md` (localStorage: none added; new page conventions), `docs/security.md` (fig3d dynamic import is same-origin).
-**4B Opus checkpoint:** re-read the whole diff and run every suite (§6). Then hand the owner the vetting list:
-- tonotopy numbers
-- band assumption
-- binaural schematic
-- atlas anatomy (each group screenshot)
-- CN VII course
+### W0.3 fidelity log
+Posted as a comment on #179 when W0.3 runs.
 
 ---
 
@@ -468,20 +269,20 @@ Manual, on a phone-width viewport:
 
 ## 7. Reviewer checklist (R1–R3)
 
-- [ ] Every changed file is inside its WP's Touch list.
-- [ ] Contracts in §4 are followed exactly.
-- [ ] CSP: no inline `<script>`, no `on*=`, no remote origin. Airway still loads only same-origin files.
-- [ ] Nothing from a URL or data file reaches `innerHTML` unescaped.
-- [ ] `localStorage`/DOM access is guarded. Graceful degradation holds: no JS, no WebGL, reduced motion.
-- [ ] Asset stamps are fresh. Bakes are fresh. No hand-edited baked block or stamp.
-- [ ] ASCII frames of the egg scenes are unchanged by 1B (byte diff).
-- [ ] Unlisted invariants hold: no link to `atlas.html`; OLSB/SSB are reachable only from the atlas; all three are `noindex`.
-- [ ] Accessibility: triggers are focusable with `aria-expanded`; fig3d has alt text + `aria-live`; atlas groups are keyboard reachable.
-- [ ] No anatomy or clinical claim was introduced by a Flash WP.
-- [ ] Commits are one line with no trailers.
+- Every changed file is inside its WP's Touch list.
+- Contracts in §4 are followed exactly.
+- CSP: no inline `<script>`, no `on*=`, no remote origin. Airway still loads only same-origin files.
+- Nothing from a URL or data file reaches `innerHTML` unescaped.
+- `localStorage`/DOM access is guarded. Graceful degradation holds: no JS, no WebGL, reduced motion.
+- Asset stamps are fresh. Bakes are fresh. No hand-edited baked block or stamp.
+- ASCII frames of the egg scenes are unchanged by 1B (byte diff).
+- Unlisted invariants hold: no link to `atlas.html`; OLSB/SSB are reachable only from the atlas; all three are `noindex`.
+- Accessibility: triggers are focusable with `aria-expanded`; fig3d has alt text + `aria-live`; atlas groups are keyboard reachable.
+- No anatomy or clinical claim was introduced by a Flash WP.
+- Commits are one line with no trailers.
 
 ## 8. Owner checkpoints
 
-1. After W0.3: fidelity log (any caption wording change).
-2. After 2D/2E: posters + atlas previews (light/dark, each group lit).
-3. After Wave 4: full vetting list (4B). Merge to `master` = deploy; only the owner merges.
+- #198: after W0.3, the fidelity log (any caption wording change).
+- #199: after 2D/2E, posters + atlas previews (light/dark, each group lit).
+- #200: after Wave 4, the full vetting list (4B). Merge to `master` = deploy; only the owner merges.
