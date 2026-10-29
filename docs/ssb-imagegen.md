@@ -1,7 +1,7 @@
 # SSB — image-generation and cross-model briefs
 
 Ready-to-run briefs for work a different model does better or more
-independently than Claude. The repo holds no API keys (`CLAUDE.md`), so the
+independently than Claude. The repo holds no API keys (`AGENTS.md`), so the
 owner runs these in the Gemini app and drops the results where each brief
 says. Why these and nothing else: `docs/ssb.md` §11. The rule that governs
 all of them: **generated pixels never carry an anatomical claim.**

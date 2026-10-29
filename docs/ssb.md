@@ -1854,7 +1854,7 @@ generator is better than code:
    the draft graph's numeric claims catches errors correlated with Claude's
    own.
 
-The repo holds no API keys (`CLAUDE.md`), so these run in the Gemini app by
+The repo holds no API keys (`AGENTS.md`), so these run in the Gemini app by
 the owner from ready-to-paste briefs with acceptance checks:
 `docs/ssb-imagegen.md`. Procedural shaders come first (`js/ssb/materials.js`, §7.4); textures
 are a phase-8 refinement, not a dependency.

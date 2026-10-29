@@ -225,8 +225,8 @@ either is a breaking change; the rule that ids are permanent already covers it.
 
 ## 7. Documentation pass (required, last)
 
-Per `CLAUDE.md` and `docs/docs-map.md`: `README.md` (tree + counts-free description),
-`docs/wip.md` (current state, not a diary), `CLAUDE.md` (OKSAT module list if it enumerates
+Per `AGENTS.md` and `docs/docs-map.md`: `README.md` (tree + counts-free description),
+`docs/wip.md` (current state, not a diary), `AGENTS.md` (OKSAT module list if it enumerates
 modules), `docs/authoring-oksat.md` (add the lesson here if it is general),
 `docs/verification.md` (new command). No item counts or sizes in prose that rots; point at
 the source file.

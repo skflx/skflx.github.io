@@ -1,14 +1,17 @@
 # Delegation — how work is split between models and the owner
 
-The repo is worked by three parties. This file says who does what, how a
-task is handed over, and how it comes back. The SSB task list that uses it
-is `docs/ssb-roadmap.md`.
+The repo is worked by the owner and several models. This file says who does
+what, how a task is handed over, and how it comes back. Task lists that use
+it: `docs/ssb-roadmap.md` (SSB) and the plans in `plans/` (everything else,
+with checklists ticked in place). Rules every model follows are in
+`AGENTS.md`.
 
 | Party | Does | Never does |
 |---|---|---|
 | **Owner** (human orchestrator) | Decides (`docs/decisions.md` §7), vets medical content (`review: verified`), merges to `master` (deploy), launches sessions with the prompts below | — |
 | **Opus** (orchestrator) | Specs, anatomy-critical geometry and data, medical content authoring and adversarial review, checkpoints (reviews a batch of delegated work against its acceptance), keeps the roadmap honest | Routine wiring it could spec instead |
-| **Sonnet** (executor) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, citation checks, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
+| **Gemini Flash** (executor) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
+| **Sonnet ∥ Argon** (adversarial reviewers) | Review each wave's diff independently against its plan; findings go to `plans/reviews/<date>-R<n>-<model>.md`, which Opus adjudicates | Pushing fixes, merging |
 
 Why the split: a spec plus an acceptance test costs Opus far fewer tokens
 than the implementation, and this repo's test suites (`docs/verification.md`)
@@ -17,11 +20,11 @@ expensive model reads a diff at a checkpoint instead of writing it.
 
 ## 1. What makes a WP delegable
 
-A WP may go to Sonnet only when all of these hold:
+A WP may go to the executor only when all of these hold:
 
 1. **Its anatomy is already data.** Where a vessel runs, a diorama's
    proportions, which wall a flap is cut from — Opus writes these into a
-   data file or the WP spec first. Sonnet builds machinery that consumes
+   data file or the WP spec first. The executor builds machinery that consumes
    them.
 2. **Its acceptance is a command.** A test in `tools/test-*.mjs` (existing,
    or specified in the WP precisely enough to write), `check-data.mjs`, a
@@ -33,12 +36,12 @@ A WP may go to Sonnet only when all of these hold:
    `docs/ssb.md` §5.5, §7.4), not whole documents.
 
 If one fails, the WP is Opus's, or it is split: Opus does the judgment
-half, Sonnet the mechanical half.
+half, the executor the mechanical half.
 
 ## 2. The WP format (in `docs/ssb-roadmap.md`)
 
 ```
-### <ID> — <title>                          [status] · Sonnet|Opus · depends: <IDs>
+### <ID> — <title>                          [status] · Flash|Opus · depends: <IDs>
 Goal:       one sentence.
 Read:       files/sections, nothing else unless stuck.
 Touch:      files it may create or change.
@@ -51,9 +54,9 @@ Escalate:   the conditions under which it stops and reports instead.
 Status values: `todo`, `ready` (deps met, can start), `in progress`,
 `review` (PR open, waiting on a checkpoint), `done`, `blocked: <reason>`.
 
-## 3. Executor protocol (Sonnet)
+## 3. Executor protocol (Gemini Flash)
 
-1. Read `CLAUDE.md` (auto-loaded), then only the WP's **Read** list.
+1. Read `AGENTS.md` (auto-loaded), then only the WP's **Read** list.
 2. Branch `claude/<wp-id>-<slug>` from current `master`.
 3. Do the **Steps**. Stay inside **Touch**. If the work needs a file outside
    it, or a judgment the WP did not make, stop and report (step 6).
@@ -69,7 +72,7 @@ Status values: `todo`, `ready` (deps met, can start), `in progress`,
 
 Hard stops, whatever the WP says: a test would have to be skipped or
 weakened to pass; an anatomical position, proportion or medical claim is
-needed and not in data; a hard rule in `CLAUDE.md` would bend (CSP, no
+needed and not in data; a hard rule in `AGENTS.md` would bend (CSP, no
 inline script, no new dependency, ids never renamed, `verified` is the
 owner's); the diff passes ~800 changed lines outside generated files (split
 the WP instead).
@@ -90,7 +93,7 @@ A checkpoint (CP) in the roadmap names the WPs it reviews. Opus:
 
 Start each in a **new** session (fresh context is cheaper than a long one).
 
-Executor — pick Sonnet as the session model, then:
+Executor — pick Gemini Flash as the session model, then:
 
 ```
 Execute work package <ID> in docs/ssb-roadmap.md, following
@@ -122,7 +125,7 @@ for its whole history on each call, and an orchestrator that spawns
 subagents pays twice (each subagent re-reads the repo cold, then its report
 lands in the orchestrator's context). So:
 
-- **Lanes are separate Sonnet sessions launched by the owner**, not Opus
+- **Lanes are separate executor sessions launched by the owner**, not Opus
   subagents. Opus never sits in the loop while a WP is being built.
 - **One fresh session per WP** (or `/clear` between WPs in a lane): the
   WP's Read list is the context; a lane's history is not needed, the
@@ -138,4 +141,19 @@ lands in the orchestrator's context). So:
   module imports, `js/ssb/stamps.js`) are resolved by taking either side,
   then `node tools/stamp-assets.mjs` and `node tools/check-data.mjs`; never
   hand-pick hashes. Merges, stamp conflicts and docs passes are mechanical:
-  a Sonnet (or smaller) session at low effort is enough.
+  an executor session at low effort is enough.
+
+## 7. Adversarial review (Sonnet ∥ Argon)
+
+After each wave, two reviewers run in separate sessions on the same input:
+the wave's diff, its plan, and the plan's reviewer checklist. Each writes
+`plans/reviews/<date>-R<n>-<model>.md`, one finding per entry (severity
+`block`/`fix`/`nit`, `file:line`, a concrete failure scenario, reproduced
+yes/no). Reviewers do not rerun test suites: they read the diff and the
+output the WP reported. Opus merges both files into the plan's findings
+list, turns real ones into fix WPs and records why the rest were dismissed.
+The next wave starts only when no `block` finding is open.
+
+Tests and CI are a bottleneck: a WP runs only the suites whose inputs it
+changed, pushes once, and the full suite runs once before the owner merges
+(the active plan's testing budget lists which suite covers which paths).
