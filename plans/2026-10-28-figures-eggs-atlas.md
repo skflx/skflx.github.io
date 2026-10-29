@@ -45,7 +45,7 @@ Two non-figure changes are part of the same plan:
 | Model | Does | Never |
 |---|---|---|
 | **Opus** (orchestrator) | This plan; Wave 0; all anatomy and medical data (scene constants, atlas control points, fidelity fixes); adjudicating reviews; ticking this file | Routine wiring it can spec |
-| **Gemini Flash** (coder) | Every WP marked **Flash**, to its Acceptance, inside its Touch list | Anatomy judgment, clinical claims, touching files outside Touch, changing contracts in §4 (escalate instead) |
+| **Haiku** (executor; any other model the owner assigns to this role) | Every WP marked **Haiku**, to its Acceptance, inside its Touch list | Anatomy judgment, clinical claims, touching files outside Touch, changing contracts in §4 (escalate instead) |
 | **Sonnet ∥ Argon** (adversarial reviewers) | Independent review of each wave's diff against this spec | Pushing fixes |
 
 **WP rules (all models):**
@@ -87,7 +87,7 @@ Two non-figure changes are part of the same plan:
   - `file:line`
   - a concrete failure scenario
   - "reproduced: yes/no"
-- Opus adjudicates. Real findings become new `type:wp` sub-issues of #176 (Flash). A dismissed finding gets a one-line reason on its thread. The wave's review issue (R1–R3) closes when nothing `block` is open.
+- Opus adjudicates. Real findings become new `type:wp` sub-issues of #176 (Haiku). A dismissed finding gets a one-line reason on its thread. The wave's review issue (R1–R3) closes when nothing `block` is open.
 - The next wave starts only when no `block` finding remains open.
 
 ---
@@ -100,22 +100,22 @@ Two non-figure changes are part of the same plan:
 | 0 | W0.2 Plan into repo | Opus | #178 |
 | 0 | W0.3 ASCII fidelity review | Opus | #179 |
 | 0 | W0.4 Contracts + data specs + atlas stub | Opus | #180 |
-| 1 | 1A Egg runtime | Flash | #181 |
-| 1 | 1B ASCII3D engine contract | Flash | #182 |
-| 1 | 1C Delete Leitner + SSB noindex | Flash | #183 |
-| 1 | 1D Atlas generator tool | Flash | #184 |
+| 1 | 1A Egg runtime | Haiku | #181 |
+| 1 | 1B ASCII3D engine contract | Haiku | #182 |
+| 1 | 1C Delete Leitner + SSB noindex | Haiku | #183 |
+| 1 | 1D Atlas generator tool | Haiku | #184 |
 | 1 | R1 Review | Sonnet ∥ Argon | #185 |
-| 2 | 2A 3D figure renderer | Flash | #186 |
-| 2 | 2B Eggs applied + quiet link | Flash | #187 |
-| 2 | 2C Atlas page shell | Flash | #188 |
+| 2 | 2A 3D figure renderer | Haiku | #186 |
+| 2 | 2B Eggs applied + quiet link | Haiku | #187 |
+| 2 | 2C Atlas page shell | Haiku | #188 |
 | 2 | 2D Cochlea tonotopy + binaural data | Opus | #189 |
 | 2 | 2E Atlas anatomy | Opus | #190 |
 | 2 | R2 Review | Sonnet ∥ Argon | #191 |
-| 3 | 3A Mount Figs 1–2 | Flash | #192 |
-| 3 | 3B Atlas bake + check-data rules | Flash | #193 |
-| 3 | 3C Figure tests + leaner CI | Flash | #194 |
+| 3 | 3A Mount Figs 1–2 | Haiku | #192 |
+| 3 | 3B Atlas bake + check-data rules | Haiku | #193 |
+| 3 | 3C Figure tests + leaner CI | Haiku | #194 |
 | 3 | R3 Review | Sonnet ∥ Argon | #195 |
-| 4 | 4A Docs pass | Flash | #196 |
+| 4 | 4A Docs pass | Haiku | #196 |
 | 4 | 4B Opus checkpoint | Opus | #197 |
 
 Each issue body holds Goal, Model, Depends, Read, Touch, Steps (task list), Acceptance and
@@ -126,7 +126,7 @@ Posted as a comment on #179 when W0.3 runs.
 
 ---
 
-## 4. Contracts (pinned in W0.4; Flash never changes these)
+## 4. Contracts (pinned in W0.4; Haiku never changes these)
 
 ### 4.1 Egg markup and behaviour
 ```html
@@ -278,7 +278,7 @@ Manual, on a phone-width viewport:
 - ASCII frames of the egg scenes are unchanged by 1B (byte diff).
 - Unlisted invariants hold: no link to `atlas.html`; OLSB/SSB are reachable only from the atlas; all three are `noindex`.
 - Accessibility: triggers are focusable with `aria-expanded`; fig3d has alt text + `aria-live`; atlas groups are keyboard reachable.
-- No anatomy or clinical claim was introduced by a Flash WP.
+- No anatomy or clinical claim was introduced by a Haiku WP.
 - Commits are one line with no trailers.
 
 ## 8. Owner checkpoints
