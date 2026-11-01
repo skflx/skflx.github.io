@@ -183,8 +183,10 @@ The ASCII output of existing scenes must stay byte-identical.
   - one `<g class="at-group" data-group data-sub>` per group; a linked group is `<a class="at-group" href …>`
   - interactive groups get `tabindex="0"` (for `<g>`) and `aria-label`
   - no `<text>` and no `<title>` children (D6 — `aria-label` is for screen readers only, not visible)
-  - `<path class="at-shape at-<tissue>[ at-dashed]">`
-- **Behaviour:** see 2C.
+  - `<path class="at-shape at-<tissue>[ at-dashed]" data-shape="<id>" [data-shade="dome|pit"]>`
+  - paint order: groups by their lowest `z` (declaration order breaks ties), shapes by `z` inside a group
+  - `href` is a relative same-site URL only; a linked group must be interactive
+- **Behaviour:** see 2C. Lighting classes: `.is-lit` (with `--hue` set on it) on the active group, `.is-dim` on the others. Detail: `docs/atlas.md`.
 
 ### 4.5 Quiet link
 `a.quiet` = `color: inherit; text-decoration: none`. On `:hover` / `:focus-visible`: `text-decoration: underline dotted var(--ink-faint)`.
