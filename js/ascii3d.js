@@ -102,14 +102,25 @@
     /* ---------- meshing: everything solid is a (u, v) grid ---------- */
     /* fn(u, v) -> [x, y, z]; us/vs are sample arrays. wrapU/wrapV mark
        closed directions (the seam is shared, not duplicated). */
-    function gridMesh(fn, us, vs, wrapU, wrapV, part, inkFn, thick) {
+    function gridMesh(fn, us, vs, wrapU, wrapV, part, inkFn, thick, rampFn) {
         var nu = us.length, nv = vs.length, i, j;
+        if (rampFn === undefined) rampFn = part && part.ramp;
         var P = new Array(nu * nv), I = null;
         for (i = 0; i < nu; i++) for (j = 0; j < nv; j++) P[i * nv + j] = fn(us[i], vs[j]);
         /* inkAt: color a region of one surface by meaning (per vertex) */
         if (inkFn) {
             I = new Uint8Array(nu * nv);
             for (i = 0; i < nu; i++) for (j = 0; j < nv; j++) I[i * nv + j] = inkOf(inkFn(us[i], vs[j]));
+        }
+        /* ramp: a 0..1 value per vertex for the 3D renderer (a colour
+           ramp along the sheet); the ASCII raster never reads it */
+        var R = null;
+        if (typeof rampFn === 'function') {
+            R = new Float32Array(nu * nv);
+            for (i = 0; i < nu; i++) for (j = 0; j < nv; j++) {
+                var rv = +rampFn(us[i], vs[j]);
+                R[i * nv + j] = isFinite(rv) ? clamp(rv, 0, 1) : 0;
+            }
         }
         function at(ii, jj) {
             if (wrapU) ii = (ii + nu) % nu; else ii = clamp(ii, 0, nu - 1);
@@ -144,10 +155,17 @@
         if (thick > 0) {
             var solid = thicken(P, N, I, quads, nu, nv, wrapU, wrapV, thick / 2);
             P = solid.P; N = solid.N; I = solid.I; quads = solid.quads;
+            if (R) {
+                var R2 = new Float32Array(P.length);
+                for (i = 0; i < P.length; i++) R2[i] = R[solid.S[i]];
+                R = R2;
+            }
         }
         var pl = placer(part);
         for (i = 0; i < P.length; i++) { P[i] = pl.point(P[i]); N[i] = norm(pl.normal(N[i])); }
-        return { P: P, N: N, I: I, quads: quads, ink: inkOf(part.ink), part: 0 };
+        var mesh = { P: P, N: N, I: I, quads: quads, ink: inkOf(part.ink), part: 0 };
+        if (R) mesh.R = R;
+        return mesh;
     }
 
     /* A sheet as a closed thin solid: the grid pushed out and in along
@@ -158,7 +176,8 @@
        rim quad is wound to agree with them. `inkAt` rides along. */
     function thicken(P, N, I, quads, nu, nv, wrapU, wrapV, h) {
         var np = P.length, P2 = [], N2 = N.concat(N), I2 = I ? new Uint8Array(np * 2 + (nu + nv) * 4) : null;
-        var Q = [], i, j, k, q;
+        var Q = [], S = [], i, j, k, q;     /* S: source vertex of each output vertex */
+        for (k = 0; k < np; k++) { S[k] = k; S[np + k] = k; }
         for (k = 0; k < np; k++) P2[k] = add(P[k], scale(N[k], h));
         for (k = 0; k < np; k++) P2[np + k] = sub(P[k], scale(N[k], h));
         if (I2) { I2.set(I, 0); I2.set(I, np); }
@@ -175,6 +194,7 @@
                 out = norm(sub(out, scale(N[v], dot(out, N[v]))));
                 P2.push(P2[v], P2[np + v]);
                 N2.push(out, out);
+                S.push(v, v);
                 if (I2) { I2[base + 2 * t] = I[v]; I2[base + 2 * t + 1] = I[v]; }
             }
             for (t = 0; t + (closed ? 0 : 1) < m; t++) {
@@ -194,7 +214,7 @@
             rim(ai, bi, wrapU); rim(ci, di, wrapU);
         }
         if (I2) I2 = I2.subarray(0, P2.length);
-        return { P: P2, N: N2, I: I2, quads: Q };
+        return { P: P2, N: N2, I: I2, quads: Q, S: S };
     }
 
     /* A rotation-minimizing frame along a sampled curve (parallel
@@ -299,7 +319,8 @@
                 mesh: gridMesh(function (i, v) {
                     var r = rad(samples[i].t);
                     return add(pts[i], add(scale(fr.N[i], r * Math.cos(v)), scale(fr.B[i], r * Math.sin(v))));
-                }, idx, vs, false, true, p, p.inkAt && function (i) { return p.inkAt(samples[i].t); })
+                }, idx, vs, false, true, p, p.inkAt && function (i) { return p.inkAt(samples[i].t); }, undefined,
+                p.ramp && function (i, v) { return p.ramp(samples[i].t, v); })
             };
         },
         /* Axis-aligned box (before rotate): six faces, or open ones
@@ -342,10 +363,16 @@
     };
 
     /* ---------- compile: scene -> world-space geometry ---------- */
-    function compile(scene) {
-        if (scene.__compiled) return scene.__compiled;
+    /* view: 'ascii' (the raster) or '3d' (the three.js renderer). A part
+       with `view` set appears only in that one; without it, in both.
+       Meshes keep their scene part index either way. Cached per view. */
+    function compile(scene, view) {
+        view = view === '3d' ? '3d' : 'ascii';
+        var cache = scene.__compiled;
+        if (cache && cache[view]) return cache[view];
         var meshes = [], lines = [], points = [];
         (scene.parts || []).forEach(function (part, i) {
+            if (part.view && part.view !== view) return;
             var b = BUILD[part.kind];
             if (!b) throw new Error('ascii3d: part ' + i + ' has unknown kind "' + part.kind + '"');
             var out = b(part);
@@ -392,7 +419,10 @@
         lines.forEach(function (l) { all.push.apply(all, l.pts); });
         points.forEach(function (q) { all.push.apply(all, q.pts); });
         var compiled = { meshes: meshes, lines: lines, points: points, center: center, radius: radius, all: all, maxV: maxV, fits: {} };
-        try { Object.defineProperty(scene, '__compiled', { value: compiled }); } catch (e) { /* frozen scene: recompile each time */ }
+        if (!cache) {
+            try { Object.defineProperty(scene, '__compiled', { value: {} }); cache = scene.__compiled; } catch (e) { /* frozen scene: recompile each time */ }
+        }
+        if (cache) cache[view] = compiled;
         return compiled;
     }
 
@@ -584,7 +614,7 @@
         var d = defaults(scene);
         var W = opts.cols || d.cols, H = opts.rows || d.rows, NC = W * H;
         var view = { yaw: opts.yaw != null ? opts.yaw : d.yaw, pitch: opts.pitch != null ? opts.pitch : d.pitch };
-        var c = compile(scene);
+        var c = compile(scene, 'ascii');
         var cam = camera(scene, c, view, W, H);
         var mode = opts.mode === 'emit' ? 'emit' : 'absorb';
         var L = scene.light || {};
@@ -1104,6 +1134,13 @@
         },
         get: function (id) { return scenes[id] || null; },
         ids: function () { return Object.keys(scenes); },
+        /* sceneOrId -> { meshes, lines, points, center, radius, ... };
+           opts.view 'ascii' (default) or '3d' */
+        compile: function (sceneOrId, opts) {
+            var scene = typeof sceneOrId === 'string' ? scenes[sceneOrId] : sceneOrId;
+            if (!scene) throw new Error('ascii3d: no scene "' + sceneOrId + '"');
+            return compile(scene, opts && opts.view);
+        },
         frame: frame,
         toText: toText,
         toRuns: toRuns,
@@ -1325,8 +1362,19 @@
         }
     }
 
+    /* Refit and repaint a mounted figure (after it was hidden, resized
+       or revealed); mounts it if it is not live yet. */
+    function refresh(fig) {
+        if (!fig) return null;
+        try {
+            if (fig.__a3d) { fig.__a3d.refresh(); return fig.__a3d; }
+            return fig.hasAttribute && fig.hasAttribute('data-a3d') ? mount(fig) : null;
+        } catch (e) { console.error(e); return null; }
+    }
+
     api.mount = mount;
     api.mountAll = mountAll;
+    api.refresh = refresh;
     /* A scene defined after the page parsed (a late script) mounts its
        figures then; during parsing, DOMContentLoaded does it. */
     api.onDefine = function (id) {

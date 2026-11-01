@@ -139,6 +139,8 @@ Sampling counts only set smoothness.
 | `box` | `center`, `size: [w, h, d]`, `open: ['top', …]`, `n` | Blocks, trays, bars of a 3D chart |
 | `line` | `points: [[x,y,z], …]` or `path(t)` + `t`, `closed`, `glyph`, `dash: [on, off]`, `hidden: 'hide' \| 'dots'` | Axes, arcs, leaders in space, curves drawn over a surface |
 | `points` | `points`, `glyph` (default `o`) | Contacts, markers, arrowheads (`v`, `>`) |
+| *(any part)* | `view: 'ascii' \| '3d'` | Draw the part in only one renderer (default: both). Meshes keep their scene part index either way |
+| *(grid-mesh kinds)* | `ramp(u, v) → 0..1` (`ramp(t, v)` on a tube) | A per-vertex value (`mesh.R`) for the 3D renderer's colour ramp; the ASCII raster ignores it. Not the scene-level shading-glyph `ramp` string |
 
 `thick` (surface and heightfield) gives a sheet a body: the grid is pushed
 out and in along its normals by half of `thick` each (in the part's own

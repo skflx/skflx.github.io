@@ -89,6 +89,10 @@
     /* the array rides the lateral wall of scala tympani, low in the canal */
     function arrayAt(th) { return at(th, wallR(th) - 0.3 * canal(th), -0.35 * canal(th)); }
     var thTip = thAt(DEEPEST);
+    /* contact angles along the lateral-wall arc, the convention OTOPLAN's
+       CDL uses; the array's own centreline sits 0.3 canal widths inside
+       it, but measuring along that would put 28 mm past the modelled
+       2.6 turns, so the wall arc is the defensible estimate */
     var contacts = [], angles = [];
     for (var k = 0; k < NCH; k++) {
         var th = thAt(DEEPEST - k * PITCH);
@@ -129,7 +133,7 @@
         labels: [
             { at: above(contacts[0]), text: 'deepest contact\n~' + angles[0] + ' deg', ink: 'signal', dx: 6 },
             { at: arrayPath(0.02), text: 'FLEX28 via\nround window', ink: 'signal', dx: 4, dy: 2 },
-            { at: above(ganglion(SG_END)), text: 'spiral ganglion\nends ~630 deg', ink: 'ink', dx: 6, dy: 2 },
+            { at: above(ganglion(SG_END)), text: 'spiral ganglion\nends ~' + Math.round(SG_END * DEG) + ' deg', ink: 'ink', dx: 6, dy: 2 },
             { at: [0, -2.6, 0.4], text: 'cochlear nerve', ink: 'muted', dx: 6 }
         ]
     });

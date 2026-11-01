@@ -1,0 +1,27 @@
+{
+  "_stub": "W0.4 stub: one placeholder shape per group, schema-valid, NOT anatomy. Opus replaces every shape in 2E (#190); the owner vets the bake before it ships (D4).",
+  "viewBox": [0, 0, 1200, 1000],
+  "groups": {
+    "lsb":     { "sub": "otology",     "href": "OLSB.html#m=3d", "ariaLabel": "Temporal bone and lateral skull base", "interactive": true },
+    "cn7":     { "sub": "otology",     "href": null,             "ariaLabel": "Facial nerve, brainstem to face",       "interactive": true },
+    "asb":     { "sub": "rhinology",   "href": "ssb.html",       "ariaLabel": "Sinuses and anterior skull base",      "interactive": true },
+    "pharynx": { "sub": "pediatrics",  "href": null,             "ariaLabel": "Pharynx: adenoid, palate, tonsil",     "interactive": true },
+    "oral":    { "sub": "hn_onc",      "href": null,             "ariaLabel": "Oral cavity",                          "interactive": true },
+    "larynx":  { "sub": "laryngology", "href": null,             "ariaLabel": "Larynx and trachea",                   "interactive": true },
+    "thyroid": { "sub": "endocrine",   "href": null,             "ariaLabel": "Thyroid isthmus",                      "interactive": true },
+    "facial":  { "sub": "fprs",        "href": null,             "ariaLabel": "Facial skeleton",                      "interactive": true },
+    "context": { "sub": null,          "href": null,             "ariaLabel": "Context: brain, spine, skin",          "interactive": false }
+  },
+  "shapes": [
+    { "id": "stub-skin",    "group": "context", "tissue": "skin",       "points": [[150, 80], [900, 60], [1100, 500], [900, 960], [200, 960], [80, 500]], "closed": true, "tension": 0, "z": 0 },
+    { "id": "stub-brain",   "group": "context", "tissue": "brainghost", "points": [[300, 120], [800, 110], [880, 320], [320, 330]], "closed": true, "tension": 0, "z": 1 },
+    { "id": "stub-facial",  "group": "facial",  "tissue": "bone",       "points": [[160, 300], [300, 300], [300, 620], [170, 620]], "closed": true, "tension": 0, "z": 5 },
+    { "id": "stub-asb",     "group": "asb",     "tissue": "mucosa",     "points": [[320, 360], [520, 360], [520, 460], [320, 460]], "closed": true, "tension": 0, "z": 10 },
+    { "id": "stub-lsb",     "group": "lsb",     "tissue": "cutbone",    "points": [[720, 380], [860, 380], [860, 500], [720, 500]], "closed": true, "tension": 0, "z": 10, "shade": "dome" },
+    { "id": "stub-pharynx", "group": "pharynx", "tissue": "mucosa",     "points": [[560, 480], [640, 480], [640, 680], [560, 680]], "closed": true, "tension": 0, "z": 10 },
+    { "id": "stub-oral",    "group": "oral",    "tissue": "soft",       "points": [[320, 520], [520, 520], [520, 640], [320, 640]], "closed": true, "tension": 0, "z": 10 },
+    { "id": "stub-larynx",  "group": "larynx",  "tissue": "cartilage",  "points": [[560, 720], [660, 720], [660, 860], [560, 860]], "closed": true, "tension": 0, "z": 10 },
+    { "id": "stub-thyroid", "group": "thyroid", "tissue": "soft",       "points": [[480, 880], [560, 880], [560, 930], [480, 930]], "closed": true, "tension": 0, "z": 10 },
+    { "id": "stub-cn7",     "group": "cn7",     "tissue": "nerve",      "points": [[700, 420], [600, 560], [420, 620]], "closed": false, "tension": 0.5, "z": 20, "dashed": true }
+  ]
+}
