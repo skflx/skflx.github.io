@@ -211,6 +211,42 @@ The ASCII output of existing scenes must stay byte-identical.
 - **Bands:** MED-EL default allocation (edges verified in W0.4 against MED-EL fitting documentation, cited in the scene header). The caption states "default allocation, assumed, not my fitting".
 - **Principle shown:** apical contacts are assigned bands far below their place frequency, i.e. the place-pitch mismatch that bimodal listeners must reconcile. That leads into Fig. 2.
 
+#### 5.1a Numbers (W0.4 draft, 2026-11-01; owner vets at #198)
+
+The container that drafted this could not reach PMC or Springer. Values marked *recalled* are from
+memory and must be checked against the paper before 2D builds on them.
+
+| Item | Proposal | Source | Status |
+|---|---|---|---|
+| OC place map | `f = 165.4·(10^(2.1·x) − 0.88)`, x = fraction of OC length from the apex | Greenwood 1990, JASA 87:2592 | standard constants |
+| Angle → OC fraction | arc fraction along the scene's basilar-membrane band, round window (0) → helicotrema (`THMAX`) | scene geometry | method; same lateral-wall convention as the contact angles |
+| OC% ↔ SG% | `y = −5.7·10⁻⁵ x³ + 0.0014 x² + 1.43 x`, x = % OC length from base, y = % SG length from base (y(100) = 100) | Stakhovskaya et al. 2007, JARO 8:220 | *recalled*: verify the coefficients and the axis direction |
+| Angle → SG frequency | **open**, see the finding below | Stakhovskaya 2007 (angle-based SG data), or a later angle-based SG map | **escalated** |
+| OC-beside-SG threshold | show the OC value when \|log₂(f_OC / f_SG)\| > 0.5 octave | half the narrow-fusion range (§5.2), so a visible gap is one a listener could notice | proposal |
+| Past the ganglion | a contact at θ ≥ `SG_END` reads `ganglion: past its end (apical-most cells ≲ {f at SG 95%} Hz)` | follows from the map | method |
+| MED-EL default bands | apical and basal centre frequencies **149 Hz** and **7412 Hz** (FSP/FS4 default) | Landsberger et al. 2015, *Ear Hear* (insertion angles, default allocations and SG place pitch) | endpoints only; **the full 12-band table is escalated** |
+
+**Finding (blocks the SG map choice).** Computing SG% at each angle from the scene's own ganglion arc,
+then mapping it through the cubic, puts f_SG 0.3–0.9 octave *above* f_OC at the same angle,
+across the whole basal turn (E12 at 56°: OC ≈ 9.4 kHz, SG ≈ 11.2 kHz; E5 at 330°: 0.76 vs 1.39 kHz).
+In the basal turn the peripheral fibres run nearly radially, so the two maps should agree there and
+part only toward the apex. The gap is therefore an artifact: the scene's ganglion is a schematic
+spiral (`SG_FRAC` of the wall radius) whose arc fractions are not the real SG's. 2D must take
+f_SG(θ) from a published **angle-based** SG function, not from the scene's arc.
+The owner chooses the source; the candidates are Stakhovskaya 2007's angular data, or a later
+synchrotron or µCT angle map.
+
+**Escalated to the owner (#198):**
+1. The angle-based SG function and its source.
+2. The full MED-EL default band edges (FS4, 12 channels) from the fitting software or MED-EL
+   documentation. The endpoints above fix only the end centres. A log-spaced guess between 100 and
+   8500 Hz does not reproduce them (it gives about 120 and 7060 Hz), so the table cannot be
+   derived and must be copied.
+
+Contact angles for the FLEX28 at 28.0 mm on this model (lateral-wall arc, from the round window):
+E1–E12 = 702, 566, 469, 393, 330, 277, 229, 189, 153, 119, 86, 56°. The SG ends at 630°, so only
+E1 lies past it.
+
 ### 5.2 Fig. 2 — binaural fusion (`binaural.js`)
 - Two cochleae side by side, both schematic:
   - left: acoustic (hearing-aid) ear, with a BM ramp
@@ -223,6 +259,11 @@ The ASCII output of existing scenes must stay byte-identical.
   - right-side contacts with `P(L,e,tone) ≥ .5` light; the others dim
 - **readout:** `{tone} Hz fuses with E{a}–E{b} ({n} of 12)`.
 - Labelled **schematic, not patient data** (Reiss et al. 2014 range).
+- **Numbers (W0.4):**
+  - reuse `fusion.js` exactly: `LISTENERS` ranges 1.0 and 3.6 octaves, `center(e) = 0.9 + 0.27·e` octaves above 125 Hz, and `P(L, e, x) = 1 / (1 + ((x − center(e)) / half(L, e))⁴)` with x = log₂(tone / 125)
+  - move the shared constants into one place that both scenes read, so the egg and Fig. 2 cannot disagree
+  - left-ear place: Greenwood inverted, `x_apex = log₁₀(f / 165.4 + 0.88) / 2.1`, drawn on the schematic cochlea's BM arc fraction (apex = 0)
+  - no new clinical numbers: everything here is already in the vetted fusion scene
 
 ### 5.3 Atlas plane and groups
 - Midsagittal right half, medial view, face left, adult. Brain ghosted (cerebrum and corpus callosum outline only). Cerebellum and posterior-fossa contents removed. Brainstem shown only as a ghosted stump at the pontomedullary junction, so CN VII has an origin.
