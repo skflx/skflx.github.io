@@ -1,0 +1,38 @@
+/* =============================================================
+   fig3d.css — lit 3D figures (js/fig3d/). Loaded by any page with
+   a [data-fig3d] figure. The poster is the no-JS / no-WebGL /
+   not-yet-loaded picture; the canvas sits over it once live.
+   ============================================================= */
+.fig3d { margin: 0; }
+.fig3d-stage {
+  position: relative; width: 100%;
+  aspect-ratio: var(--fig3d-aspect, 1.6);
+}
+.fig3d-poster, .fig3d-poster img { display: block; width: 100%; height: 100%; }
+.fig3d-poster img { object-fit: contain; }
+
+.fig3d-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  display: block; touch-action: pan-y; cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+.fig3d-canvas:active { cursor: grabbing; }
+.fig3d-canvas:focus-visible { outline: 1px solid var(--signal, currentColor); outline-offset: 6px; }
+.fig3d[data-fig3d-ready] .fig3d-poster { visibility: hidden; }
+
+.fig3d-controls {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem;
+  margin-top: 0.6rem; font: 400 0.7rem/1.4 var(--font-mono, monospace); color: var(--ink-muted, inherit);
+}
+.fig3d-controls:empty { display: none; }
+.fig3d-controls label { display: inline-flex; align-items: center; gap: 0.5rem; }
+.fig3d-controls input[type="range"] { width: min(16rem, 60vw); accent-color: var(--signal-2, currentColor); }
+.fig3d-controls button[aria-pressed="true"] { color: var(--signal-2, inherit); text-decoration: underline; }
+.fig3d-controls button {
+  font: inherit; color: inherit; background: none; border: 1px solid var(--rule-strong, currentColor);
+  padding: 0.15rem 0.6rem; cursor: pointer;
+}
+.fig3d-hud {
+  min-height: 1.5em; margin: 0.35rem 0 0;
+  font: 400 0.68rem/1.5 var(--font-mono, monospace); letter-spacing: 0.04em; color: var(--ink-faint, inherit);
+}

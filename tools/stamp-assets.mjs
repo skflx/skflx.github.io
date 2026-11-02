@@ -29,7 +29,9 @@
         HTML. An import cycle is an error. Imports into
         js/vendor/three-<version>/ stay unstamped (the versioned directory
         is the cache key, and one URL per file keeps one module instance).
-   Import specifiers in js/ssb must be string literals; bare specifiers are
+   js/fig3d (the figure renderer, loaded lazily by its loader) gets the same
+   module-graph pass, without a stamps file.
+   Import specifiers in js/ssb and js/fig3d must be string literals; bare specifiers are
    errors (there is no import map — it would be an inline script).
 
    Usage:  node tools/stamp-assets.mjs           # rewrite stale stamps
@@ -69,6 +71,7 @@ export function stampHtml(html) {
 /* ---------------- SSB module graph (docs/ssb.md 7.2) ---------------- */
 
 const SSB_MODULE_DIR = 'js/ssb';
+const FIG3D_MODULE_DIR = 'js/fig3d';
 const SSB_STAMPS_FILE = 'js/ssb/stamps.js';
 const SSB_DATA_DIRS = ['ssb/content', 'ssb/geometry', 'ssb/models', 'ssb/ct', 'ssb/states', 'ssb/anatomy'];
 const SSB_VENDOR = /^js\/vendor\/three-[^/]+\//;
@@ -112,21 +115,29 @@ export const STAMPS = {${rows ? '\n' + rows : ''}};
    files are rewritten (nothing is written if there are errors). Never
    changes anything outside js/ssb. */
 export function stampSsb({ write = false } = {}) {
+  const a = stampGraph(SSB_MODULE_DIR, { write, stamps: true });
+  const b = stampGraph(FIG3D_MODULE_DIR, { write, stamps: false });
+  return { stale: [...a.stale, ...b.stale], errors: [...a.errors, ...b.errors] };
+}
+
+function stampGraph(moduleDir, { write, stamps }) {
   const stale = [];
   const errors = [];
-  const dirAbs = path.join(ROOT, SSB_MODULE_DIR);
+  const dirAbs = path.join(ROOT, moduleDir);
   if (!fs.existsSync(dirAbs)) return { stale, errors };
 
   /* Virtual file contents: what each module must contain. */
   const disk = {};
   const want = {};
-  for (const f of walk(SSB_MODULE_DIR).filter((x) => x.endsWith('.js'))) {
+  for (const f of walk(moduleDir).filter((x) => x.endsWith('.js'))) {
     disk[f] = fs.readFileSync(path.join(ROOT, f), 'utf8');
     want[f] = disk[f];
   }
-  const stampsSrc = ssbStampsSource();
-  if (disk[SSB_STAMPS_FILE] !== stampsSrc) stale.push(`${SSB_STAMPS_FILE} (data hashes changed)`);
-  want[SSB_STAMPS_FILE] = stampsSrc;
+  if (stamps) {
+    const stampsSrc = ssbStampsSource();
+    if (disk[SSB_STAMPS_FILE] !== stampsSrc) stale.push(`${SSB_STAMPS_FILE} (data hashes changed)`);
+    want[SSB_STAMPS_FILE] = stampsSrc;
+  }
 
   /* Dependency edges (only into js/ssb; vendor imports are validated, not stamped). */
   const deps = {};
@@ -138,7 +149,7 @@ export function stampSsb({ write = false } = {}) {
       return fs.existsSync(path.join(ROOT, target)) ? { vendor: target } : { error: `${from}: imports missing file ${target}` };
     }
     if (target in want) return { module: target, bare };
-    return { error: `${from}: import '${spec}' resolves to ${target}, which is neither a js/ssb module nor js/vendor/three-*/` };
+    return { error: `${from}: import '${spec}' resolves to ${target}, which is neither a module of its own folder nor js/vendor/three-*/` };
   };
   for (const f of Object.keys(want)) {
     deps[f] = [];
