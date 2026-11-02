@@ -53,3 +53,6 @@ __pycache__/
 
 # Python virtualenvs (offline pipelines)
 .venv/
+
+# Agent worktrees (harness-managed checkouts)
+.claude/worktrees/
