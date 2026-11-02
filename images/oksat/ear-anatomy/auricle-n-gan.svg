@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Great auricular nerve territory (schematic)</title>
+  <g fill="#7a5a3a" fill-opacity="0.38" stroke="#7a5a3a" stroke-width="1.5">
+    <path d="M 150 300 C 160 350 180 390 200 420 C 198 450 210 480 230 500 C 266 520 302 505 334 470 C 346 430 340 400 330 380 C 300 378 260 372 230 360 C 200 340 175 320 150 300 Z" transform="translate(20 0)"/>
+    <path d="M 460 205 C 500 190 560 200 600 240 L 702 230 C 700 310 670 370 620 420 C 610 470 590 510 550 505 C 515 500 500 470 500 430 C 490 380 470 300 460 205 Z"/>
+  </g>
+  <text x="250" y="530" text-anchor="middle" font-size="14" font-weight="bold" fill="#7a5a3a">Great auricular (C2–C3)</text>
+  <text x="600" y="470" text-anchor="middle" font-size="14" font-weight="bold" fill="#7a5a3a">Great auricular</text>
+</svg>

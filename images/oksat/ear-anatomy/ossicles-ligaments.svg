@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 560" width="660" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Right ossicular chain: ligaments and axis of rotation (schematic)</title>
+  <rect width="660" height="560" fill="#ffffff"/>
+  <line x1="40" y1="30" x2="620" y2="30" stroke="#8a7b5f" stroke-width="6" pointer-events="none"/>
+  <text x="330" y="22" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Tegmen</text>
+  <line x1="630" y1="40" x2="630" y2="300" stroke="#8a7b5f" stroke-width="6" pointer-events="none"/>
+  <line x1="40" y1="40" x2="40" y2="300" stroke="#8a7b5f" stroke-width="6" pointer-events="none"/>
+  <g fill="#ffffff" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 298 380 L 304 380 L 348 456 L 258 456 C 270 430 284 404 298 380 Z"/></g>
+  <g fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><ellipse cx="302" cy="468" rx="66" ry="12"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 306 366 L 314 366 L 358 458 L 350 460 Z"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 286 366 L 296 366 C 286 400 270 430 258 460 L 244 458 C 258 428 274 398 286 366 Z"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 288 344 L 312 344 L 310 366 L 290 366 Z"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 292 150 L 312 150 L 304 322 L 288 322 Z"/></g>
+  <g fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><ellipse cx="300" cy="332" rx="13" ry="9"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 268 108 L 196 112 L 196 122 L 268 140 Z"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><ellipse cx="302" cy="124" rx="42" ry="34"/></g>
+  <g fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 384 200 L 406 200 L 382 366 Q 372 380 362 366 Z"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 378 148 L 404 148 L 406 196 L 380 196 Z"/></g>
+  <g fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 404 160 L 474 152 L 474 160 L 405 174 Z"/></g>
+  <g fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><ellipse cx="390" cy="112" rx="34" ry="40"/></g>
+  <g fill="#8a7b5f" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 348 96 L 358 96 L 358 142 L 348 142 Z"/></g>
+  <g fill="#fbf7ee" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><circle cx="412" cy="200" r="11"/></g>
+  <g data-g="sml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 384 33 L 396 33 L 396 74 L 384 74 Z"/></g>
+  <g data-g="sil" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 296 33 L 308 33 L 308 92 L 296 92 Z"/></g>
+  <g data-g="aml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 472 150 L 627 140 L 627 154 L 472 162 Z"/></g>
+  <g data-g="lml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 404 176 L 500 226 L 494 236 L 400 188 Z"/></g>
+  <g data-g="pil" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 43 108 L 198 110 L 198 124 L 43 124 Z"/></g>
+  <g data-g="annlig" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1" fill-rule="evenodd"><path d="M 230 468 A 72 18 0 1 0 374 468 A 72 18 0 1 0 230 468 Z M 238 468 A 64 13 0 1 1 366 468 A 64 13 0 1 1 238 468 Z"/></g>
+  <line x1="630" y1="148" x2="40" y2="116" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="8 5" pointer-events="none"/>
+  <text x="560" y="196" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#2f5d8a" font-style="italic">axis of rotation</text>
+  <text x="520" y="248" text-anchor="start" font-size="12" font-weight="normal" fill="#555049" font-style="italic">to the notch of Rivinus</text>
+  <text x="560" y="130" text-anchor="middle" font-size="12" font-weight="normal" fill="#555049" font-style="italic">petrotympanic fissure</text>
+  <text x="110" y="100" text-anchor="middle" font-size="12" font-weight="normal" fill="#555049" font-style="italic">fossa incudis</text>
+  <g data-label="1"><line x1="396" y1="56" x2="430" y2="60" stroke="#555049" stroke-width="1"/><circle cx="396" cy="56" r="2.2" fill="#555049"/><text x="434" y="65" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Superior malleal ligament</text></g>
+  <g data-label="1"><line x1="296" y1="62" x2="70" y2="60" stroke="#555049" stroke-width="1"/><circle cx="296" cy="62" r="2.2" fill="#555049"/><text x="74" y="65" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Superior incudal ligament</text></g>
+  <g data-label="1"><line x1="560" y1="146" x2="560" y2="100" stroke="#555049" stroke-width="1"/><circle cx="560" cy="146" r="2.2" fill="#555049"/><text x="560" y="105" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Anterior malleal ligament</text></g>
+  <g data-label="1"><line x1="470" y1="220" x2="650" y2="285" stroke="#555049" stroke-width="1"/><circle cx="470" cy="220" r="2.2" fill="#555049"/><text x="646" y="290" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Lateral malleal ligament</text></g>
+  <g data-label="1"><line x1="120" y1="118" x2="70" y2="150" stroke="#555049" stroke-width="1"/><circle cx="120" cy="118" r="2.2" fill="#555049"/><text x="74" y="155" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Posterior incudal ligament</text></g>
+  <g data-label="1"><line x1="370" y1="474" x2="420" y2="510" stroke="#555049" stroke-width="1"/><circle cx="370" cy="474" r="2.2" fill="#555049"/><text x="424" y="515" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Annular ligament</text></g>
+  <text x="330" y="548" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right chain, lateral view, anterior to the right. Ligaments in red; dashed line = axis of rotation. Schematic.</text>
+</svg>

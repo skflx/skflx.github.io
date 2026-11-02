@@ -422,8 +422,8 @@ async function main() {
     check('10a: an unlisted guide and an unlisted module get no hub card', !hrefs.some((h) => h.includes(UNL_GUIDE) || h.includes(UNL_MOD)), JSON.stringify(hrefs));
     check('10b: listed guide and module still get their cards', hrefs.includes('oksat-learn.html?g=ar-crs-aerd') && hrefs.includes('oksat-study.html?m=crs-ars'), JSON.stringify(hrefs));
     const modCards = await hub.page.$$eval('#modules a.module-card', (a) => a.length);
-    const manifestLen = await hub.page.evaluate(() => window.OKSAT_MANIFEST.length);
-    check('10c: the module cards are exactly the listed modules', modCards === manifestLen - 1, `cards=${modCards} manifest=${manifestLen}`);
+    const listedLen = await hub.page.evaluate(() => window.OKSAT_MANIFEST.filter((m) => !m.unlisted).length);
+    check('10c: the module cards are exactly the listed modules', modCards === listedLen, `cards=${modCards} listed=${listedLen}`);
     const dueCount = await hub.page.textContent('#review-count');
     const dueWhere = await hub.page.textContent('#review-where');
     const crsTitle = await hub.page.evaluate(() => window.OKSAT_MANIFEST.find((m) => m.slug === 'crs-ars').title);
