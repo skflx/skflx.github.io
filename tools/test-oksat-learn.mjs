@@ -72,7 +72,10 @@ const FX_SVGS = {
   'evil.svg': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" onload="window.__pwned=1">'
     + '<script>window.__pwned=1</script><foreignObject width="10" height="10"><div xmlns="http://www.w3.org/1999/xhtml">x</div></foreignObject>'
     + '<g data-g="antrum" onclick="window.__pwned=1"><rect x="10" y="10" width="50" height="40" fill="#b9c4d8"/></g>'
-    + region('tegmen', 75, 10) + region('aditus', 140, 10) + '</svg>',
+    + region('tegmen', 75, 10) + region('aditus', 140, 10)
+    + '<style>.lr-chapter{letter-spacing:7px !important}</style>'
+    + '<set attributeName="href" to="javascript:window.__pwned=1"/><animate attributeName="href" to="javascript:window.__pwned=1"/>'
+    + '<animateTransform attributeName="transform" type="rotate" to="45"/></svg>',
   'base.svg': svgWrap('<rect x="5" y="5" width="190" height="110" fill="#eee"/>'),
   'l0.svg': svgWrap('<rect x="20" y="20" width="60" height="60" fill="#c33" opacity="0.6"/>'),
   'l1.svg': svgWrap('<rect x="120" y="20" width="60" height="60" fill="#36c" opacity="0.6"/>'),
@@ -102,6 +105,14 @@ const FX_SECTIONS = [
     { t: 'check', id: 'tc1', q: 'Predict the answer.', a: 'The answer.' },
     { t: 'neighbors', id: 'tn1', g: 'antrum' },
     { t: 'sequence', id: 'tq1', q: 'Order these.', items: ['A one', 'B two', 'C three'] },
+  ] },
+  { id: 'hs-s5', n: '9', title: 'Hotspot: two frames, graded by the lower', blocks: [hs('hs5', [
+    { src: 'images/oksat/fx-anat/hs1.svg', cap: 'Lower frame', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] },
+    { src: 'images/oksat/fx-anat/hs2.svg', cap: 'Higher frame', regions: [{ g: 'lscc' }, { g: 'mcfdura' }, { g: 'tegment' }] },
+  ])] },
+  { id: 'dg-s', n: '10', title: 'A degraded figure does not block Ready to mark done', blocks: [
+    { t: 'check', id: 'dc1', q: 'Predict the answer.', a: 'The answer.' },
+    hs('dg1', [{ src: 'images/oksat/fx-anat/absent.svg', cap: 'Gone', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] }]),
   ] },
 ];
 const FX_CHAPTER = { id: 'anat', kicker: 'Fixture', title: 'Anatomy blocks fixture', lede: 'Served by route interception.', sections: FX_SECTIONS };
@@ -460,6 +471,7 @@ async function main() {
     await page.click('#hs-s1 [data-g="tegmen"]');
     const inf = await dlRow(page, 'hs-s1', 'Inferior');
     check('10-T1d: a reverse relation shows (tegmen lies inferior to antrum, so tegmen lists antrum below)', !!inf && inf.buttons.includes(NAME('antrum')), JSON.stringify(inf));
+    check('10-T1e: the selected region carries aria-pressed=true and the others false', await page.evaluate(() => [...document.querySelectorAll('#hs-s1 [data-g]')].every((e) => e.getAttribute('aria-pressed') === (e.dataset.g === 'tegmen' ? 'true' : 'false'))));
 
     /* T6: keyboard — focus a region and press Enter */
     await page.focus('#hs-s1 [data-g="aditus"]');
@@ -490,13 +502,20 @@ async function main() {
 
     /* T4: the SVG sanitizer */
     await page.waitForSelector('#hs-s3 [data-g="antrum"]', { timeout: 12000 });
-    check('10-T4a: an SVG with script and onload does not run', (await page.evaluate(() => window.__pwned)) === undefined);
     const bad = await page.evaluate(() => {
       const root = document.querySelector('#hs-s3 .lr-hs-stage');
       const els = root ? [root, ...root.querySelectorAll('*')] : [];
       return els.filter((e) => e.localName.toLowerCase() === 'foreignobject' || e.localName.toLowerCase() === 'script' || [...e.attributes].some((a) => /^on/i.test(a.name))).length;
     });
+    check('10-T4a: an SVG with script and onload does not run, and the stage keeps the region but no script', (await page.evaluate(() => window.__pwned)) === undefined
+      && (await page.$$eval('#hs-s3 .lr-hs-stage [data-g="antrum"]', (e) => e.length)) === 1);
     check('10-T4b: no on* attribute, foreignObject or script reaches the DOM', bad === 0, String(bad));
+    const animated = await page.evaluate(() => {
+      const root = document.querySelector('#hs-s3 .lr-hs-stage');
+      return root ? root.querySelectorAll('style, set, animate, animateTransform').length : -1;
+    });
+    check('10-T4c: style and animation elements are removed from the stage', animated === 0, String(animated));
+    check('10-T4d: an SVG <style> does not restyle the page', await page.evaluate(() => getComputedStyle(document.querySelector('.lr-chapter')).letterSpacing !== '7px'));
 
     /* T7: layers, toggle and step */
     await page.waitForSelector('#lay-s .lr-layers-l', { state: 'attached', timeout: 10000 });
@@ -555,7 +574,39 @@ async function main() {
     await page.waitForTimeout(100);
     check('10-T10b: grading one makes it 1 of 3', /^1 of 3 prompts graded/.test(await page.textContent('#tl-s .lr-hint')), await page.textContent('#tl-s .lr-hint'));
 
-    /* The only errors allowed are the browser's own 404 lines for hs-s4's deliberately missing SVG (T5). */
+    /* T12: a two-frame find is graded by its lower frame, and a reload keeps that grade */
+    const F1 = ['antrum', 'tegmen', 'aditus'];
+    const F2 = ['lscc', 'mcfdura', 'tegment'];
+    const playRound = async (sel, right, ids) => {
+      for (let k = 0; k < 3; k++) {
+        const target = NAME_TO_G[(await page.textContent(`${sel} .lr-hs-prompt`)).replace(/^Tap: /, '')];
+        await page.click(`${sel} [data-g="${k < right ? target : ids.find((g) => g !== target)}"]`);
+      }
+    };
+    await page.click('#hs-s5 button[data-mode="find"]');
+    await playRound('#hs-s5', 0, F1);
+    await page.click('#hs-s5 button[aria-label="Next frame"]');
+    await playRound('#hs-s5', 3, F2);
+    rec = await ls(page, FX_KEY);
+    check('10-T12a: a two-frame find stores the lower frame grade (0), not the last frame (3)', gradeOf(rec, 'anat/hs-s5:hs5') === 0, JSON.stringify(rec && rec.checks));
+    await page.reload();
+    await chapterReady(page);
+    await page.waitForSelector('#hs-s5 .lr-hs-stage svg', { timeout: 12000 });
+    await page.click('#hs-s5 button[data-mode="find"]');
+    await page.click('#hs-s5 button[aria-label="Next frame"]');
+    await playRound('#hs-s5', 3, F2);
+    rec = await ls(page, FX_KEY);
+    check('10-T12b: after a reload, a perfect higher frame keeps the stored lower grade', gradeOf(rec, 'anat/hs-s5:hs5') === 0, JSON.stringify(rec && rec.checks));
+
+    /* T13: a figure that fails to load is not counted, so the section can reach Ready to mark done */
+    await page.waitForSelector('#dg-s .lr-figure img', { state: 'attached', timeout: 12000 });
+    check('10-T13a: a degraded hotspot leaves the count at 0 of 1', /^0 of 1 prompts graded$/.test(await page.textContent('#dg-s .lr-hint')), await page.textContent('#dg-s .lr-hint'));
+    await page.click('#dg-s .lr-q .lr-reveal');
+    await page.keyboard.press('3');
+    await page.waitForTimeout(100);
+    check('10-T13b: grading the one counted prompt reaches Ready to mark done', /^1 of 1 prompts graded\. Ready to mark done\.$/.test(await page.textContent('#dg-s .lr-hint')), await page.textContent('#dg-s .lr-hint'));
+
+    /* The only errors allowed are the browser's own 404 lines for the deliberately missing SVGs (T5, T13). */
     const other = errors.filter((e) => !/status of 404 \(Not Found\)$/.test(e.text));
     check('10-T-err: no console errors on the fixture guide beyond the deliberate missing.svg 404s', other.length === 0, JSON.stringify(other.slice(0, 3)));
     await context.close();
