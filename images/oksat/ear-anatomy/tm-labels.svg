@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 540" width="640" height="540" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Labels behind the right tympanic membrane (schematic)</title>
+  <line x1="336" y1="200" x2="420" y2="214" stroke="#555049" stroke-width="1"/><text x="424" y="219" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Long process of incus</text>
+  <text x="40" y="300" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Stapes, stapedius tendon</text>
+  <text x="118" y="186" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Facial nerve, tympanic</text>
+  <text x="160" y="232" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Chorda tympani</text>
+  <text x="345" y="160" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Tensor tendon, cochleariform</text>
+  <text x="220" y="344" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Promontory</text>
+  <text x="352" y="360" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Jacobson nerve</text>
+  <text x="358" y="92" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Prussak space</text>
+  <text x="150" y="430" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Round window niche</text>
+  <text x="388" y="262" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Eustachian tube</text>
+  <text x="400" y="410" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Carotid wall</text>
+  <text x="250" y="446" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Hypotympanum, jugular bulb</text>
+</svg>

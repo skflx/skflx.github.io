@@ -33,7 +33,7 @@ window.__OKSAT_CHAPTER = {
                     modes: ['explore', 'find'],
                     frames: [
                         { src: 'images/oksat/ear-anatomy/eac-coronal.svg', cap: 'Coronal section, seen from the front; lateral to the left. Schematic, not to scale.' },
-                        { src: 'images/oksat/ear-anatomy/eac-axial.svg', cap: 'Axial section, seen from above; lateral to the left, anterior up. Schematic, not to scale.' },
+                        { src: 'images/oksat/ear-anatomy/eac-axial.svg', cap: 'Axial section, seen from below as on CT; lateral to the left, anterior up. Schematic, not to scale.' },
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Where is the narrowest point of the canal?', a: 'The isthmus, just medial to the bony-cartilaginous junction.' },
@@ -57,7 +57,7 @@ window.__OKSAT_CHAPTER = {
                         ['Clinical', 'Furuncles; injection easy', 'Tears and bleeds easily; very pain-sensitive; injection raises a bleb'],
                     ],
                 },
-                { t: 'p', x: 'The bony canal is the only skin in the body lying directly on periosteum. Hair marks the cartilaginous canal. [[src|Handbook Ch. 3]] [[src|Glasscock Ch. 2]]' },
+                { t: 'p', x: 'Bony canal skin is among the thinnest in the body, with no subcutis, and lies directly on periosteum. Hair marks the cartilaginous canal. [[src|Handbook Ch. 3]] [[src|Glasscock Ch. 2]]' },
                 { t: 'p', x: 'Medial to the isthmus the **anterior bony overhang** bulges back, and behind it the **anterior tympanomeatal recess** forms the deep, acute angle between the anterior canal wall and the drum: the least visible point of the canal, where debris and grafts both go wrong. Keratin migrates from the centre of the drum outward and then laterally along the canal, which is why the canal cleans itself.' },
                 {
                     t: 'call',
@@ -67,7 +67,7 @@ window.__OKSAT_CHAPTER = {
                         { t: 'p', x: 'Over-aggressive anterior canalplasty can open the temporomandibular joint into the canal (Glasscock). Respect the overhang; remove it to see the anterior annulus, not more.' },
                     ],
                 },
-                { t: 'check', id: 'c1', q: 'Which part of the canal can host a furuncle, and why only there?', a: 'The cartilaginous canal: only it has hair follicles and glands.' },
+                { t: 'check', id: 'c1', q: 'Why does an injection under bony canal skin hurt more and raise a tight bleb?', a: 'The cartilaginous canal: only it has hair follicles and glands.' },
                 { t: 'check', id: 'c2', q: 'Where is the anterior tympanomeatal recess, and why does it matter?', a: 'The acute angle between the anterior bony canal wall and the drum, behind the anterior overhang; it hides debris and is where an anterior graft can blunt or lateralize.' },
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q17'] },
             ],
@@ -115,7 +115,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'trap',
                     label: 'Source conflict',
                     blocks: [
-                        { t: 'p', x: 'Timing of closure: Glasscock (after Anson) says late childhood; the plan draft said early childhood. Use late childhood, and remember that it persists into adulthood in a minority.' },
+                        { t: 'p', x: 'Timing of closure: many texts say by about age 5; Glasscock (after Anson) says late childhood. Either way it persists into adulthood in a minority.' },
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Necrotizing otitis externa reaches the parotid through which routes?', a: 'The fissures of Santorini (cartilaginous canal, to the superficial parotid) and a patent foramen of Huschke (bony canal, to the deep parotid and the TMJ), and along the bony-cartilaginous junction.' },

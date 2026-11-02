@@ -23,19 +23,19 @@
   <g data-g="sml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 384 33 L 396 33 L 396 74 L 384 74 Z"/></g>
   <g data-g="sil" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 296 33 L 308 33 L 308 92 L 296 92 Z"/></g>
   <g data-g="aml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 472 150 L 627 140 L 627 154 L 472 162 Z"/></g>
-  <g data-g="lml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 404 176 L 500 226 L 494 236 L 400 188 Z"/></g>
+  <g data-g="lml" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 404 166 L 446 126 L 456 134 L 406 180 Z"/></g>
   <g data-g="pil" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1"><path d="M 43 108 L 198 110 L 198 124 L 43 124 Z"/></g>
   <g data-g="annlig" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1" fill-rule="evenodd"><path d="M 230 468 A 72 18 0 1 0 374 468 A 72 18 0 1 0 230 468 Z M 238 468 A 64 13 0 1 1 366 468 A 64 13 0 1 1 238 468 Z"/></g>
   <line x1="630" y1="148" x2="40" y2="116" stroke="#2f5d8a" stroke-width="2" stroke-dasharray="8 5" pointer-events="none"/>
-  <text x="560" y="196" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#2f5d8a" font-style="italic">axis of rotation</text>
-  <text x="520" y="248" text-anchor="start" font-size="12" font-weight="normal" fill="#555049" font-style="italic">to the notch of Rivinus</text>
-  <text x="560" y="130" text-anchor="middle" font-size="12" font-weight="normal" fill="#555049" font-style="italic">petrotympanic fissure</text>
-  <text x="110" y="100" text-anchor="middle" font-size="12" font-weight="normal" fill="#555049" font-style="italic">fossa incudis</text>
+  <text x="520" y="258" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#2f5d8a" font-style="italic">axis of rotation</text>
+  <g data-label="1"><text x="462" y="124" text-anchor="start" font-size="12" font-weight="normal" fill="#555049" font-style="italic">to the notch of Rivinus</text></g>
+  <g data-label="1"><text x="560" y="180" text-anchor="middle" font-size="12" font-weight="normal" fill="#555049" font-style="italic">petrotympanic fissure</text></g>
+  <g data-label="1"><text x="110" y="100" text-anchor="middle" font-size="12" font-weight="normal" fill="#555049" font-style="italic">fossa incudis</text></g>
   <g data-label="1"><line x1="396" y1="56" x2="430" y2="60" stroke="#555049" stroke-width="1"/><circle cx="396" cy="56" r="2.2" fill="#555049"/><text x="434" y="65" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Superior malleal ligament</text></g>
   <g data-label="1"><line x1="296" y1="62" x2="70" y2="60" stroke="#555049" stroke-width="1"/><circle cx="296" cy="62" r="2.2" fill="#555049"/><text x="74" y="65" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Superior incudal ligament</text></g>
   <g data-label="1"><line x1="560" y1="146" x2="560" y2="100" stroke="#555049" stroke-width="1"/><circle cx="560" cy="146" r="2.2" fill="#555049"/><text x="560" y="105" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Anterior malleal ligament</text></g>
-  <g data-label="1"><line x1="470" y1="220" x2="650" y2="285" stroke="#555049" stroke-width="1"/><circle cx="470" cy="220" r="2.2" fill="#555049"/><text x="646" y="290" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Lateral malleal ligament</text></g>
+  <g data-label="1"><line x1="440" y1="146" x2="650" y2="285" stroke="#555049" stroke-width="1"/><circle cx="440" cy="146" r="2.2" fill="#555049"/><text x="646" y="290" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Lateral malleal ligament</text></g>
   <g data-label="1"><line x1="120" y1="118" x2="70" y2="150" stroke="#555049" stroke-width="1"/><circle cx="120" cy="118" r="2.2" fill="#555049"/><text x="74" y="155" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Posterior incudal ligament</text></g>
   <g data-label="1"><line x1="370" y1="474" x2="420" y2="510" stroke="#555049" stroke-width="1"/><circle cx="370" cy="474" r="2.2" fill="#555049"/><text x="424" y="515" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Annular ligament</text></g>
-  <text x="330" y="548" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right chain, lateral view, anterior to the right. Ligaments in red; dashed line = axis of rotation. Schematic.</text>
+  <text x="330" y="548" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right chain, lateral view, anterior right. Lateral malleal ligament runs outward to the notch. Schematic.</text>
 </svg>

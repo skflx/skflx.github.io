@@ -30,7 +30,7 @@ window.__OKSAT_CHAPTER = {
                     id: 'or-views-hs',
                     alt: 'Two tympanic membranes without side labels, each divided into four quadrants by the line of the manubrium and its perpendicular through the umbo.',
                     label: 'Which ear? Then find the quadrants',
-                    modes: ['find', 'explore'],
+                    modes: ['find'],
                     frames: [
                         { src: 'images/oksat/ear-anatomy/tm-quad-a.svg', cap: 'Frame A. Decide the side from the manubrium and the light reflex before you tap. Schematic.' },
                         { src: 'images/oksat/ear-anatomy/tm-quad-b.svg', cap: 'Frame B. Same task, other frame. Schematic.' },

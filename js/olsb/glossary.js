@@ -903,7 +903,7 @@
                     "lmf"
                 ],
                 "inf": [
-                    "annulus"
+                    "latproc"
                 ]
             }
         },
@@ -1391,13 +1391,22 @@
         },
         "eac-bony": {
             "name": "Bony canal",
-            "note": "The medial two thirds (about 16 mm). Skin about 0.2 mm thick directly on periosteum: no adnexa, no subcutis, easily torn. Squama above and behind, tympanic part in front, below and posteroinferiorly.",
+            "note": "The medial two thirds (about 16 mm). Thin skin directly on periosteum: no adnexa, no subcutis, easily torn. Squama above and behind, tympanic part in front, below and posteroinferiorly.",
             "rel": {
                 "med": [
                     "tm"
                 ],
                 "ant": [
                     "tmj"
+                ],
+                "post": [
+                    "mastoidcells"
+                ],
+                "sup": [
+                    "mcfdura"
+                ],
+                "inf": [
+                    "parotid"
                 ]
             }
         },
@@ -1463,7 +1472,7 @@
             "syn": [
                 "Handle of the malleus"
             ],
-            "note": "Embedded in the drum's middle layer, from the lateral process down and back to the umbo. Second-arch derivative.",
+            "note": "Runs within the drum from the lateral process down and back to the umbo; firmly bound only at those two points, joined between them by a mucosal fold. Second-arch derivative.",
             "origin": [
                 "arch2"
             ],
