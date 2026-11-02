@@ -695,7 +695,21 @@ SVG (all public domain unless noted):
 | `im-*` HRCT | none (Radiopaedia is CC BY-NC-SA: rejected) | D10 fallback: built line-drawing slices; owner may supply own de-identified normal CT |
 | `au-nerve` | none | SVG |
 
-The five *verify* rows await owner upload (the Drive connector returns base64, too costly to view).
+Owner, 2026-11-02: the open-license candidates are rejected (none fit), and the five *verify* rows are
+superseded by owner-supplied references. These are cadaveric endoscopic photos of a right ear: the
+OTOlivia "Endoscopic Tour of the Middle Ear" (Kalmanson, Yang, Mann) and CLARA frames. They are
+copyrighted: drawing references only, never committed. Mapping:
+
+| Reference (owner upload) | Shows | Sections |
+|---|---|---|
+| Endoscopic tour, ossicles intact | TM removed: malleus (neck, lateral process, manubrium, umbo), incus long and lenticular process, stapes, promontory, Jacobson nerve, RW niche, ponticulus, subiculum, finiculus, sinus tympani, posterior and subtympanic sinuses, Prussak space, ET | `cav-medial`, `sp-retro`, `tm-quad` |
+| Endoscopic tour, incus and malleus removed | Adds tympanic facial nerve, LSCC, cog, cochleariform process, tensor (cut), capitulum | `cav-medial`, `sp-attic` |
+| Anterior epitympanum and protympanum | Posterior epitympanum, cog, tensor fold, anterior epitympanic recess, supratubal recess over the ICA, tensor tympani, cochleariform process, ET | `sp-attic`, `sp-folds`, `cav-anterior` |
+| Retrotympanum | Chorda, facial nerve tympanic segment, second genu, mastoid segment, capitulum, stapedial tendon, ponticulus, subiculum, sinus tympani, facial recess, RW niche | `sp-retro`, `sp-sight`, `ma-fn`, `cav-posterior` |
+| Drum lifted, posterior mesotympanum | Long and lenticular process, stapes, stapedial tendon, promontory, Jacobson nerve, RW niche, chorda and facial nerve courses | `tm-quad`, `cav-medial`, `os-parts` |
+
+These are endoscopic views (anterior up, superior to the left in the tour frames). Each SVG drawn from
+them states its orientation in the caption.
 
 Candidate extraction sources in the same Drive folder: Myers – Mastoid Surgery.pdf, Vula –
 Mastoidectomy and epitympanectomy.pdf, Secrets Tympanomastoid.pdf, Tympanoplasty and OCR.pdf.

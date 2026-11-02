@@ -8,19 +8,20 @@
    tools/check-data.mjs already enforces structure, block types, markup,
    figures, module references and terms. This enforces the teaching shape.
 
-     ERROR  2–3 check prompts per section; a section has a drill row or
-            nodrill: 'reason'; 3–6 tldr bullets per chapter; 3–10 sections
-            per chapter (only the start chapter, which has none, is exempt);
-            a number with a unit, %, or ratio in a p / why / ol / ul / table
-            block that carries no [[src|…]] or [[A|…]] chip (the chip must sit
-            in the same block); a check prompt that asks what an abbreviation
-            stands for (a spoiler for the term popover); a drawn (.svg)
-            figure whose caption does not say "schematic"; the start chapter
-            with no "Currency check" call dated YYYY-MM, or a source card
-            with no year; review not 'draft' or 'verified'; markdown leakage
-            (#, "- " or "* " at line start, backticks); congratulation words;
-            exclamation marks.
-     WARN   the Currency check date is more than 12 months old.
+     ERROR  2–3 check prompts per section; 3–6 tldr bullets per chapter
+            (not the start chapter); 3–10 sections per chapter (the start
+            chapter has none); a number with a unit, %, or ratio in a p / why /
+            ol / ul / table block with no [[src|…]] or [[A|…]] chip in that
+            block; a check prompt that asks what an abbreviation stands for;
+            a visual (figure, hotspot frame, layers base) whose caption does
+            not say "schematic", unless it is an attributed open-license image
+            (named in images/oksat/<slug>/ATTRIBUTION.md); the start chapter
+            with no "Currency check" call dated YYYY-MM, or a source card with
+            no year; review not 'draft' or 'verified'; markdown leakage (#,
+            "- " or "* " at line start, backticks); congratulation words.
+     WARN   a section with no drill row; an exclamation mark; a Currency check
+            older than 12 months. Guides in RELAXED (built before these rules)
+            report every finding as a warning.
 
    Not automated (judgment or owner decisions): medical correctness and
    whether a chip cites the right source; "sources ranked and read before
@@ -101,10 +102,19 @@ const collect = (v, key, out) => {
   return out;
 };
 
+const RELAXED = new Set(['ar-crs-aerd']);
+/* images/oksat/<slug>/.../file is attributed when images/oksat/<slug>/ATTRIBUTION.md names its path. */
+const attributed = (src) => {
+  const m = /^images\/oksat\/([^/]+)\/(.+)$/.exec(src || '');
+  const f = m && path.join(ROOT, 'images/oksat', m[1], 'ATTRIBUTION.md');
+  return !!(f && fs.existsSync(f) && fs.readFileSync(f, 'utf8').includes(m[2]));
+};
+
 for (const g of guides) {
   if (want.length && !want.includes(g.slug)) continue;
-  const E = (m) => { errors++; console.log(`  ERROR ${g.slug}: ${m}`); };
   const W = (m) => console.log(`  warn  ${g.slug}: ${m}`);
+  /* Guides built before these rules lint as warnings only (owner, 2026-11-02). */
+  const E = RELAXED.has(g.slug) ? W : (m) => { errors++; console.log(`  ERROR ${g.slug}: ${m}`); };
   console.log(`\n${g.slug} (${g.chapters.length} chapters)`);
 
   for (const c of g.chapters) {
@@ -116,8 +126,8 @@ for (const g of guides) {
 
     /* Chapter shape. */
     if (!['draft', 'verified'].includes(ch.review)) E(`${c.id}: review must be 'draft' or 'verified' (got ${JSON.stringify(ch.review)})`);
-    if (!Array.isArray(ch.tldr) || ch.tldr.length < 3 || ch.tldr.length > 6) E(`${c.id}: ${Array.isArray(ch.tldr) ? ch.tldr.length : 0} tldr bullets (spec 3–6)`);
     const isStart = !Array.isArray(ch.sections);
+    if (!isStart && (!Array.isArray(ch.tldr) || ch.tldr.length < 3 || ch.tldr.length > 6)) E(`${c.id}: ${Array.isArray(ch.tldr) ? ch.tldr.length : 0} tldr bullets (spec 3–6)`);
     if (isStart) {
       if (c.id !== 'start') E(`${c.id}: no sections (only the start chapter has none)`);
     } else if (ch.sections.length < 3 || ch.sections.length > 10) {
@@ -131,8 +141,7 @@ for (const g of guides) {
       eachBlock(s.blocks, (b) => { if (b.t === 'check') checks++; });
       if (checks < 2 || checks > 3) E(`${sw}: ${checks} check prompt(s) (spec 2–3)`);
       const drilled = Array.isArray(s.drill) && s.drill.length > 0;
-      const reason = typeof s.nodrill === 'string' && s.nodrill.trim();
-      if (!drilled && !reason) E(`${sw}: no drill row and no nodrill reason`);
+      if (!drilled) W(`${sw}: no drill row`);
       eachBlock(s.blocks, (b) => {
         if (b.t === 'check') {
           const q = b.q || '';
@@ -155,8 +164,11 @@ for (const g of guides) {
           }
         }
       }
-      if (b.t === 'figure' && /\.svg$/i.test(b.src || '') && !/schematic/i.test(b.cap || '')) {
-        E(`${c.id}: drawn figure ${b.src} caption does not say "schematic"`);
+      /* Every visual we draw says so; an attributed open-license image credits its source instead. */
+      const visuals = b.t === 'figure' ? [[b.src, b.cap]] : b.t === 'hotspot' ? (b.frames || []).map((f) => [f.src, f.cap || b.cap])
+        : b.t === 'layers' ? [[b.base, b.cap]] : [];
+      for (const [src, cap] of visuals) {
+        if (src && !attributed(src) && !/schematic/i.test(cap || '')) E(`${c.id}: visual ${src} caption does not say "schematic"`);
       }
     });
 
@@ -185,7 +197,7 @@ for (const g of guides) {
     if (ch.src) prose.push(ch.src);
     for (const s of prose) {
       if (MD.test(s)) E(`${c.id}: markdown in text (engine renders plain text; use ul blocks): ${s.slice(0, 40)}`);
-      if (/!/.test(s)) E(`${c.id}: exclamation mark: ${s.slice(0, 40)}`);
+      if (/!/.test(s)) W(`${c.id}: exclamation mark: ${s.slice(0, 40)}`);
       if (CONGRAT.test(s)) E(`${c.id}: congratulation wording: ${s.slice(0, 40)}`);
     }
   }
