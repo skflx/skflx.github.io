@@ -340,6 +340,10 @@
         },
         tool: toolBlock,
         practice: practiceBlock,
+        hotspot: hotspotBlock,
+        layers: layersBlock,
+        neighbors: neighborsBlock,
+        sequence: sequenceBlock,
     };
 
     function list(tag, b) {
@@ -600,6 +604,544 @@
     }
 
     /* ============================================================
+       Anatomy blocks: hotspot, layers, neighbors, sequence
+       Contracts: plans/2026-11-02-ear-anatomy-guide.md section 4.2.
+       Glossary ids come from js/olsb/glossary.js, loaded once per page
+       through inject(); nothing from that file or from the guide reaches
+       innerHTML. Graded blocks store their grade at rec.checks, like check.
+       ============================================================ */
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const DIRS = ['sup', 'inf', 'ant', 'post', 'lat', 'med'];
+    const DIR_NAME = { sup: 'Superior', inf: 'Inferior', ant: 'Anterior', post: 'Posterior', lat: 'Lateral', med: 'Medial' };
+    const REV = { sup: 'inf', inf: 'sup', ant: 'post', post: 'ant', lat: 'med', med: 'lat' };
+    const SVG_BANNED = ['script', 'foreignobject', 'iframe', 'object', 'embed'];
+
+    /* Four tiers from a count of right answers: all = 3, at least 75% = 2, at least 50% = 1. */
+    function gradeFrom(right, n) {
+        if (n > 0 && right === n) return 3;
+        const r = n ? right / n : 0;
+        return r >= 0.75 ? 2 : r >= 0.5 ? 1 : 0;
+    }
+    function hashStr(s) {
+        let x = 2166136261 >>> 0;
+        for (let i = 0; i < s.length; i++) { x ^= s.charCodeAt(i); x = Math.imul(x, 16777619) >>> 0; }
+        return x;
+    }
+    /* Seeded shuffle (mulberry32). A result equal to the authored order is rotated by one. */
+    function orderFor(list, seed) {
+        let a = hashStr(seed) || 1;
+        const rnd = () => {
+            a = (a + 0x6D2B79F5) | 0;
+            let t = Math.imul(a ^ (a >>> 15), 1 | a);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+        const out = list.slice();
+        for (let i = out.length - 1; i > 0; i--) {
+            const j = Math.floor(rnd() * (i + 1));
+            const tmp = out[i]; out[i] = out[j]; out[j] = tmp;
+        }
+        if (out.length > 1 && out.every((x, i) => x === list[i])) out.push(out.shift());
+        return out;
+    }
+
+    /* Relations: each entry's rel plus every reverse, deduplicated. The same rule as
+       buildRelations in js/olsb/main.js, reimplemented here (no import from OLSB code). */
+    function relationsOf(G) {
+        const R = {};
+        const add = (a, d, b) => {
+            if (a === b || !G[a] || !G[b]) return;
+            const m = (R[a] = R[a] || {});
+            const list = (m[d] = m[d] || []);
+            if (list.indexOf(b) === -1) list.push(b);
+        };
+        Object.keys(G).forEach((a) => {
+            const r = G[a].rel || {};
+            Object.keys(r).forEach((d) => {
+                if (!REV[d]) return;
+                (r[d] || []).forEach((b) => { add(a, d, b); add(b, REV[d], a); });
+            });
+        });
+        return R;
+    }
+    const relOf = (R, id, d) => (R[id] && R[id][d]) || [];
+    const dirsWithRel = (R, id) => DIRS.filter((d) => relOf(R, id, d).length > 0);
+
+    let glossaryP = null;
+    function glossary() {
+        if (!glossaryP) {
+            glossaryP = enqueue('js/olsb/glossary.js', 'OLSB').then((o) => {
+                if (!o || !o.glossary) throw new Error('no glossary');
+                return { G: o.glossary, R: relationsOf(o.glossary) };
+            }).catch((e) => { glossaryP = null; throw e; });
+        }
+        return glossaryP;
+    }
+
+    /* SVG frames: fetched once per file, parsed with DOMParser, then scrubbed. */
+    const svgTextCache = {};
+    function svgText(src) {
+        if (!svgTextCache[src]) {
+            svgTextCache[src] = fetch(src).then((r) => {
+                if (!r.ok) throw new Error('could not load ' + src);
+                return r.text();
+            }).catch((e) => { delete svgTextCache[src]; throw e; });
+        }
+        return svgTextCache[src];
+    }
+    function scrubSvg(text) {
+        const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+        if (doc.getElementsByTagName('parsererror').length) return null;
+        const root = doc.documentElement;
+        if (!root || root.localName !== 'svg' || root.namespaceURI !== SVG_NS) return null;
+        const clean = (el) => {
+            Array.prototype.slice.call(el.attributes).forEach((a) => {
+                const isHref = a.localName === 'href' && a.value.trim().charAt(0) !== '#';
+                if (/^on/i.test(a.name) || isHref) el.removeAttribute(a.name);
+            });
+        };
+        clean(root);
+        Array.prototype.slice.call(root.querySelectorAll('*')).forEach((el) => {
+            if (el.namespaceURI !== SVG_NS || SVG_BANNED.indexOf(el.localName.toLowerCase()) !== -1) { el.remove(); return; }
+            clean(el);
+        });
+        return root;
+    }
+    function svgFrame(f, G) {
+        return svgText(f.src).then((text) => {
+            const root = scrubSvg(text);
+            if (!root) throw new Error('not an svg: ' + f.src);
+            const node = document.importNode(root, true);
+            const byG = {};
+            Array.prototype.forEach.call(node.querySelectorAll('[data-g]'), (el) => {
+                const g = el.getAttribute('data-g');
+                if (!byG[g]) byG[g] = el;
+            });
+            const ids = f.regions ? f.regions.map((r) => r.g) : Object.keys(byG);
+            const regions = ids.filter((g) => byG[g] && G[g]).map((g) => ({ g: g, el: byG[g] }));
+            return { node: node, regions: regions };
+        });
+    }
+    function rasterFrame(f, b, G, onError) {
+        const wrap = h('div', 'lr-hs-raster');
+        const img = h('img');
+        img.src = f.src; img.alt = b.alt || '';
+        img.addEventListener('error', onError);
+        const ov = document.createElementNS(SVG_NS, 'svg');
+        ov.setAttribute('viewBox', '0 0 100 100');
+        ov.setAttribute('preserveAspectRatio', 'none');
+        ov.setAttribute('class', 'lr-hs-ov');
+        const regions = (f.regions || []).filter((r) => G[r.g] && Array.isArray(r.poly) && r.poly.length >= 6).map((r) => {
+            const p = document.createElementNS(SVG_NS, 'polygon');
+            const pts = [];
+            for (let i = 0; i + 1 < r.poly.length; i += 2) pts.push(r.poly[i] + ',' + r.poly[i + 1]);
+            p.setAttribute('points', pts.join(' '));
+            p.setAttribute('data-g', r.g);
+            p.setAttribute('class', 'lr-hs-poly');
+            ov.appendChild(p);
+            return { g: r.g, el: p };
+        });
+        wrap.appendChild(img);
+        wrap.appendChild(ov);
+        return { node: wrap, regions: regions };
+    }
+    const isSvgSrc = (src) => /\.svg(\?|#|$)/i.test(String(src || ''));
+
+    /* hotspot: tap regions on a figure. Explore names and relates them; find is a shuffled round. */
+    function hotspotBlock(b, ctx) {
+        const box = h('div', 'lr-hs-wrap', [txt('p', 'lr-loading', 'Loading figure…')]);
+        const key = checkKey(ctx.ch, ctx.sec, b);
+        const modes = (b.modes && b.modes.length ? b.modes : ['explore']).filter((m) => m === 'explore' || m === 'find');
+        if (!b.frames || !b.frames.length) { box.replaceChildren(); return box; }
+        const degrade = () => box.replaceChildren(BLOCKS.figure({ src: b.frames[0].src, alt: b.alt, cap: b.frames[0].cap }));
+
+        glossary().then((gl) => {
+            const G = gl.G, R = gl.R;
+            return Promise.all(b.frames.map((f) => (isSvgSrc(f.src) ? svgFrame(f, G) : Promise.resolve(rasterFrame(f, b, G, degrade)))))
+                .then((frames) => { frames.forEach((m, i) => { m.cap = b.frames[i].cap; }); mount(G, R, frames); });
+        }).catch(degrade);
+
+        function mount(G, R, frames) {
+            const st = { frame: 0, mode: modes[0], sel: null, round: null, attempt: 0 };
+            const stage = h('div', 'lr-hs-stage');
+            const capEl = h('p', 'lr-cap');
+            const panel = h('div', 'lr-hs-panel');
+            panel.setAttribute('aria-live', 'polite');
+            const count = txt('span', 'lr-hs-count', '');
+            const prev = btn('ok-btn ok-btn--sm', '‹', () => go(-1));
+            const next = btn('ok-btn ok-btn--sm', '›', () => go(1));
+            prev.setAttribute('aria-label', 'Previous frame');
+            next.setAttribute('aria-label', 'Next frame');
+            const step = h('div', 'lr-hs-step', [prev, count, next]);
+            const modeBar = h('div', 'lr-seg');
+            modeBar.setAttribute('role', 'group');
+            modeBar.setAttribute('aria-label', 'Mode');
+            const modeBtns = modes.map((m) => {
+                const x = btn('lr-chipbtn', m === 'find' ? 'Find' : 'Explore', () => setMode(m));
+                x.dataset.mode = m;
+                modeBar.appendChild(x);
+                return x;
+            });
+
+            const cur = () => frames[st.frame];
+            const regionOf = (g) => cur().regions.filter((r) => r.g === g)[0] || null;
+            const STATE = ['is-selected', 'is-neighbor', 'is-hit', 'is-miss', 'is-target'];
+            function clearMarks() { frames.forEach((f) => f.regions.forEach((r) => STATE.forEach((c) => r.el.classList.remove(c)))); }
+
+            function paintRegions() {
+                const find = st.mode === 'find';
+                stage.classList.toggle('is-find', find);
+                cur().regions.forEach((r, i) => {
+                    r.el.setAttribute('tabindex', '0');
+                    r.el.setAttribute('role', 'button');
+                    r.el.setAttribute('aria-label', find ? 'Region ' + (i + 1) : G[r.g].name);
+                });
+                modeBtns.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.mode === st.mode)));
+            }
+            function paintMarks() {
+                cur().regions.forEach((r) => r.el.classList.remove('is-selected', 'is-neighbor'));
+                if (st.mode !== 'explore' || !st.sel || !regionOf(st.sel)) return;
+                regionOf(st.sel).el.classList.add('is-selected');
+                DIRS.forEach((d) => relOf(R, st.sel, d).forEach((id) => { const r = regionOf(id); if (r) r.el.classList.add('is-neighbor'); }));
+            }
+
+            function select(g) { st.sel = g; paintMarks(); paintPanel(); }
+            function startRound() {
+                st.sel = null;
+                clearMarks();
+                const regs = cur().regions;
+                st.round = regs.length < 3 ? null : {
+                    order: orderFor(regs.map((r) => r.g), key + '#' + st.attempt + '#' + st.frame),
+                    i: 0, score: 0, done: false, grade: null,
+                };
+                paintRegions();
+                paintPanel();
+            }
+            function tap(g) {
+                const rd = st.round;
+                if (!rd || rd.done) return;
+                const target = rd.order[rd.i];
+                const r = regionOf(g);
+                if (!r) return;
+                if (g === target) { r.el.classList.add('is-hit'); rd.score++; }
+                else {
+                    r.el.classList.add('is-miss');
+                    const t = regionOf(target);
+                    if (t) t.el.classList.add('is-target');
+                }
+                rd.i++;
+                if (rd.i >= rd.order.length) finish(rd);
+                else paintPanel();
+            }
+            function finish(rd) {
+                rd.done = true;
+                rd.grade = gradeFrom(rd.score, rd.order.length);
+                rec.checks[key] = rd.grade; persist(); refreshSection(ctx);
+                paintPanel();
+            }
+            function setMode(m) {
+                if (m === st.mode) return;
+                st.mode = m; st.sel = null;
+                if (m === 'find') startRound();
+                else { clearMarks(); st.round = null; paintRegions(); paintPanel(); }
+            }
+            function showFrame(i) {
+                st.frame = i; st.sel = null;
+                stage.replaceChildren(cur().node);
+                capEl.replaceChildren(terms(cur().cap || ''));
+                count.textContent = (i + 1) + ' / ' + frames.length;
+                prev.disabled = i === 0;
+                next.disabled = i === frames.length - 1;
+                if (st.mode === 'find') startRound();
+                else { st.round = null; paintRegions(); paintPanel(); }
+            }
+            function go(d) {
+                const i = Math.max(0, Math.min(frames.length - 1, st.frame + d));
+                if (i !== st.frame) showFrame(i);
+            }
+
+            function paintPanel() {
+                panel.replaceChildren();
+                if (st.mode === 'explore') return paintExplore();
+                return paintFind();
+            }
+            function paintExplore() {
+                if (!st.sel) { panel.appendChild(txt('p', 'lr-hs-hint', 'Tap or press Enter on a structure.')); return; }
+                const e = G[st.sel];
+                panel.appendChild(txt('p', 'lr-hs-name', e.name));
+                const syn = [].concat(e.syn || []).join(', ');
+                if (syn) panel.appendChild(txt('p', 'lr-hs-syn', 'Also: ' + syn));
+                if (e.note) panel.appendChild(txt('p', 'lr-hs-note', e.note));
+                const dl = h('dl', 'lr-kv lr-hs-nbs');
+                DIRS.forEach((d) => {
+                    const ids = relOf(R, st.sel, d).filter((id) => G[id]);
+                    if (!ids.length) return;
+                    dl.appendChild(txt('dt', '', DIR_NAME[d]));
+                    const dd = h('dd');
+                    ids.forEach((id, i) => {
+                        if (i) dd.appendChild(document.createTextNode(', '));
+                        if (regionOf(id)) {
+                            const nb = btn('lr-hs-nb is-neighbor', G[id].name, () => select(id));
+                            dd.appendChild(nb);
+                        } else dd.appendChild(txt('span', '', G[id].name));
+                    });
+                    dl.appendChild(dd);
+                });
+                panel.appendChild(dl);
+            }
+            function paintFind() {
+                const rd = st.round;
+                if (!rd) { panel.appendChild(txt('p', 'lr-hs-hint', 'Find needs at least three regions in this frame.')); return; }
+                if (!rd.done) {
+                    panel.appendChild(txt('p', 'lr-hs-prompt', 'Tap: ' + G[rd.order[rd.i]].name));
+                    panel.appendChild(txt('p', 'lr-hs-hint', 'Target ' + (rd.i + 1) + ' of ' + rd.order.length));
+                    return;
+                }
+                panel.appendChild(txt('p', 'lr-hs-score', rd.score + ' / ' + rd.order.length));
+                panel.appendChild(txt('p', 'lr-hs-hint', 'Graded: ' + GRADES[rd.grade].label));
+                panel.appendChild(btn('ok-btn ok-btn--sm', 'Again', () => { st.attempt++; startRound(); }));
+            }
+
+            /* Region handlers: bound once per element, on every frame. */
+            frames.forEach((f) => f.regions.forEach((r) => {
+                r.el.addEventListener('click', () => (st.mode === 'find' ? tap(r.g) : select(r.g)));
+                r.el.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Enter' && e.key !== ' ') return;
+                    e.preventDefault();
+                    if (st.mode === 'find') tap(r.g); else select(r.g);
+                });
+            }));
+            box.addEventListener('keydown', (e) => {
+                if (frames.length < 2 || (e.target.closest && e.target.closest('textarea, input'))) return;
+                if (e.key === 'ArrowRight') go(1);
+                else if (e.key === 'ArrowLeft') go(-1);
+            });
+
+            box.replaceChildren();
+            if (b.label) box.appendChild(tx('span', 'lr-label', b.label));
+            if (modes.length > 1) box.appendChild(modeBar);
+            box.appendChild(stage);
+            box.appendChild(capEl);
+            if (frames.length > 1) box.appendChild(step);
+            box.appendChild(panel);
+            showFrame(0);
+        }
+        return box;
+    }
+
+    /* layers: stacked images over one base, toggled or stepped. No SVG is inlined. */
+    function layersBlock(b) {
+        const box = h('div', 'lr-layers');
+        const stage = h('div', 'lr-layers-stage');
+        const base = h('img', 'lr-layers-base');
+        base.src = b.base; base.alt = b.alt || '';
+        stage.appendChild(base);
+        const layers = b.layers || [];
+        const imgs = layers.map((L) => {
+            const im = h('img', 'lr-layers-l');
+            im.src = L.src; im.alt = '';
+            im.hidden = true;
+            stage.appendChild(im);
+            return im;
+        });
+        const step = b.mode === 'step';
+        const cumulative = !!b.cumulative;
+        const on = (b.on || []).slice();
+        let i = 0;
+        const now = h('p', 'lr-cap lr-layers-now');
+        now.setAttribute('aria-live', 'polite');
+        const visible = (k) => (step ? (cumulative ? k <= i : k === i) : on.indexOf(layers[k].id) !== -1);
+        function paint() {
+            imgs.forEach((im, k) => { im.hidden = !visible(k); });
+            const names = layers.filter((L, k) => visible(k)).map((L) => L.label);
+            const text = step ? (layers[i] ? layers[i].label : '') : (names.length ? names.join(' · ') : 'Base only');
+            now.replaceChildren(terms(text));
+            chips.forEach((c, k) => c.setAttribute('aria-pressed', String(visible(k))));
+        }
+        const chips = [];
+        box.appendChild(stage);
+        if (step) {
+            const range = h('input');
+            range.type = 'range';
+            range.min = '0'; range.max = String(Math.max(0, layers.length - 1)); range.step = '1'; range.value = '0';
+            range.setAttribute('aria-label', 'Layer');
+            range.addEventListener('input', () => { i = Number(range.value) || 0; paint(); });
+            box.appendChild(h('div', 'lr-layers-ctl', [range]));
+        } else {
+            const row = h('div', 'lr-layers-ctl lr-row');
+            layers.forEach((L, k) => {
+                const c = btn('lr-chipbtn', L.label, () => {
+                    const at = on.indexOf(L.id);
+                    if (at === -1) on.push(L.id); else on.splice(at, 1);
+                    paint();
+                });
+                chips.push(c);
+                row.appendChild(c);
+            });
+            box.appendChild(row);
+        }
+        box.appendChild(now);
+        if (b.cap) box.appendChild(tx('p', 'lr-cap', b.cap));
+        paint();
+        return box;
+    }
+
+    /* neighbors: name the six directions from memory, then reveal the glossary. Graded. */
+    function neighborsBlock(b, ctx) {
+        const box = h('div', 'lr-nbwrap');
+        const key = checkKey(ctx.ch, ctx.sec, b);
+        glossary().then((gl) => {
+            const G = gl.G, R = gl.R;
+            if (!G[b.g]) throw new Error('unknown id ' + b.g);
+            const dirs = (b.dirs && b.dirs.length ? b.dirs : dirsWithRel(R, b.g)).filter((d) => REV[d]);
+            const card = h('div', 'lr-q lr-nb');
+            card.appendChild(txt('span', 'lr-label', b.label || 'Neighbours'));
+            card.appendChild(txt('p', 'lr-q-stem', G[b.g].name));
+            const areas = {};
+            dirs.forEach((d) => {
+                const row = h('div', 'lr-nb-row');
+                row.appendChild(txt('span', 'lr-label', DIR_NAME[d]));
+                const area = h('textarea', 'lr-q-input');
+                area.rows = 2;
+                area.setAttribute('aria-label', 'Your answer: ' + DIR_NAME[d] + ' (optional; stays in this tab)');
+                area.placeholder = 'Commit to an answer first (optional)…';
+                areas[d] = area;
+                row.appendChild(area);
+                card.appendChild(row);
+            });
+            const reveal = btn('ok-btn ok-btn--sm lr-reveal', 'Reveal');
+            const ans = h('div', 'lr-q-answer');
+            ans.hidden = true;
+            let shown = false, grades = null;
+            function show() {
+                if (shown) return;
+                shown = true;
+                ans.replaceChildren();
+                dirs.forEach((d) => {
+                    const names = relOf(R, b.g, d).filter((id) => G[id]).map((id) => G[id].name);
+                    const mine = areas[d].value.trim();
+                    const out = h('div', 'lr-nb-out', [txt('span', 'lr-label', DIR_NAME[d])]);
+                    if (mine) out.appendChild(h('div', 'lr-q-mine', [txt('p', '', mine)]));
+                    out.appendChild(txt('p', '', names.length ? names.join(', ') : 'none recorded'));
+                    ans.appendChild(out);
+                });
+                grades = gradeRow(rec.checks[key], (g) => { rec.checks[key] = g; persist(); refreshSection(ctx); card.classList.add('is-graded'); });
+                ans.appendChild(grades);
+                ans.hidden = false;
+                Object.keys(areas).forEach((d) => { areas[d].hidden = true; });
+                reveal.hidden = true;
+                card.classList.add('is-open');
+                grades.querySelector('button').focus({ preventScroll: true });
+            }
+            reveal.addEventListener('click', show);
+            card.addEventListener('keydown', (e) => {
+                if (!shown || e.target.tagName === 'TEXTAREA' || e.ctrlKey || e.metaKey || e.altKey) return;
+                const n = Number(e.key);
+                if (n >= 1 && n <= GRADES.length) { e.preventDefault(); grades.querySelectorAll('.lr-grade')[n - 1].click(); }
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.target.tagName === 'TEXTAREA' && e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); show(); }
+            });
+            card.appendChild(reveal);
+            card.appendChild(ans);
+            if (rec.checks[key] !== undefined) card.classList.add('is-graded');
+            box.appendChild(card);
+        }).catch(() => { box.hidden = true; });
+        return box;
+    }
+
+    /* sequence: put the items in order (Move up and down), then check. Graded. */
+    function sequenceBlock(b, ctx) {
+        const key = checkKey(ctx.ch, ctx.sec, b);
+        const items = b.items || [];
+        const stored = rec.checks[key];
+        let attempt = 0, order = orderFor(items, key + '#' + attempt), checked = false, pending = null;
+        const card = h('div', 'lr-q lr-seq');
+        const stem = lines(b.q);
+        if (stem[0]) stem[0].classList.add('lr-q-first');
+        stem.forEach((p) => card.appendChild(p));
+        const ol = h('ol', 'lr-seq-list');
+        const status = h('p', 'lr-seq-status');
+        status.setAttribute('aria-live', 'polite');
+        const check = btn('ok-btn ok-btn--sm lr-reveal', 'Check order');
+        const again = btn('ok-btn ok-btn--sm', 'Again');
+        again.hidden = true;
+        card.appendChild(ol);
+        card.appendChild(status);
+        card.appendChild(h('div', 'lr-row', [check, again]));
+
+        function move(i, d) {
+            const j = i + d;
+            if (checked || j < 0 || j >= order.length) return;
+            const t = order[i]; order[i] = order[j]; order[j] = t;
+            pending = { i: j, dir: d };
+            draw();
+        }
+        function draw() {
+            ol.replaceChildren();
+            let focusEl = null;
+            order.forEach((item, i) => {
+                const li = h('li', 'lr-seq-row');
+                li.appendChild(h('span', 'lr-seq-text', [inline(item)]));
+                if (checked) {
+                    const right = item === items[i];
+                    li.classList.add(right ? 'is-right' : 'is-wrong');
+                    if (!right) li.appendChild(h('span', 'lr-seq-should', [txt('span', '', 'Should be: '), inline(items[i])]));
+                } else {
+                    const up = btn('lr-seq-mv', '↑', () => move(i, -1));
+                    const dn = btn('lr-seq-mv', '↓', () => move(i, 1));
+                    up.setAttribute('aria-label', 'Move up: ' + item);
+                    dn.setAttribute('aria-label', 'Move down: ' + item);
+                    up.disabled = i === 0;
+                    dn.disabled = i === order.length - 1;
+                    li.appendChild(up);
+                    li.appendChild(dn);
+                    if (pending && pending.i === i) {
+                        const pref = pending.dir === -1 ? up : dn;
+                        const other = pending.dir === -1 ? dn : up;
+                        focusEl = pref.disabled ? other : pref;
+                    }
+                }
+                ol.appendChild(li);
+            });
+            pending = null;
+            if (focusEl && !focusEl.disabled) focusEl.focus({ preventScroll: true });
+        }
+        check.addEventListener('click', () => {
+            if (checked) return;
+            const right = order.filter((x, i) => x === items[i]).length;
+            const g = gradeFrom(right, items.length);
+            checked = true;
+            rec.checks[key] = g; persist(); refreshSection(ctx);
+            card.classList.add('is-graded');
+            check.disabled = true;
+            again.hidden = false;
+            status.textContent = right + ' of ' + items.length + ' in place. ' + GRADES[g].label + '.';
+            draw();
+        });
+        again.addEventListener('click', () => {
+            attempt++;
+            order = orderFor(items, key + '#' + attempt);
+            checked = false;
+            check.disabled = false;
+            again.hidden = true;
+            status.textContent = '';
+            draw();
+        });
+        if (stored !== undefined) {
+            card.classList.add('is-graded');
+            status.textContent = 'Last graded: ' + GRADES[stored].label + '.';
+        }
+        draw();
+        return card;
+    }
+
+    /* Graded blocks: check prompts plus the three graded anatomy blocks (hotspot only with find). */
+    function isGraded(b) {
+        return b.t === 'check' || b.t === 'neighbors' || b.t === 'sequence' || (b.t === 'hotspot' && (b.modes || []).indexOf('find') !== -1);
+    }
+
+    /* ============================================================
        Sections and chapters
        ============================================================ */
     function drillRow(sec) {
@@ -667,7 +1209,7 @@
         mark.textContent = done ? 'Section done' : 'Mark section done';
         mark.setAttribute('aria-pressed', String(done));
         mark.classList.toggle('is-done', done);
-        const checks = (ctx.sec.blocks || []).filter((b) => b.t === 'check');
+        const checks = (ctx.sec.blocks || []).filter(isGraded);
         const graded = checks.filter((b) => rec.checks[checkKey(ctx.ch, ctx.sec, b)] !== undefined).length;
         const hint = el.querySelector('.lr-hint');
         hint.textContent = checks.length ? graded + ' of ' + checks.length + ' prompts graded' + (graded === checks.length && !done ? '. Ready to mark done.' : '') : '';

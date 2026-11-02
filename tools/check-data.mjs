@@ -210,6 +210,245 @@ function checkOksat() {
 }
 
 /* ===========================================================
+   1c. Guide block validators (ear-anatomy plan §4.2.5, rules 1-8).
+   Pure functions over an injected env, so the self-test below runs
+   on in-memory fixtures and the real run runs on the repo:
+     env = { G, hasG(id), exists(path), text(path) -> string|null,
+             list(dir) -> relative file paths }
+   Each validator returns a list of problem strings.
+   =========================================================== */
+const DIRS6 = ['sup', 'inf', 'ant', 'post', 'lat', 'med'];
+const REVERSE_DIR = { sup: 'inf', inf: 'sup', ant: 'post', post: 'ant', med: 'lat', lat: 'med' };
+/* Slugs whose non-SVG files must all be listed in images/oksat/<slug>/ATTRIBUTION.md (rule 8). */
+const ATTRIBUTED = ['ear-anatomy'];
+/* Graded blocks share the check id key space (rule 1) and store a grade. */
+const GRADED_BLOCKS = new Set(['hotspot', 'neighbors', 'sequence']);
+const NEW_BLOCKS = new Set(['hotspot', 'layers', 'neighbors', 'sequence']);
+const hasOwn = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+
+/* Directions in which an id has at least one relation: its own rel plus every reverse
+   (the same deduplicated algorithm as buildRelations in js/olsb/main.js). */
+function relationDirs(G, id) {
+  const out = new Set();
+  const own = (hasOwn(G, id) && G[id].rel) || {};
+  for (const d of DIRS6) if ((own[d] || []).length) out.add(d);
+  for (const [other, e] of Object.entries(G)) {
+    if (other === id) continue;
+    for (const d of DIRS6) if ((((e && e.rel) || {})[d] || []).includes(id)) out.add(REVERSE_DIR[d]);
+  }
+  return out;
+}
+
+/* Rule 6: no script, foreignObject, on* attribute, or href that is not a fragment. */
+function svgSafety(svg) {
+  const p = [];
+  if (/<script/i.test(svg)) p.push('SVG contains <script');
+  if (/<foreignObject/i.test(svg)) p.push('SVG contains <foreignObject');
+  if (/\son[a-z]+\s*=/i.test(svg)) p.push('SVG contains an on* event attribute');
+  for (const m of svg.matchAll(/\bhref\s*=\s*["']([^"']*)["']/gi)) {
+    if (!m[1].startsWith('#')) p.push(`SVG href '${m[1].slice(0, 40)}' is not a fragment`);
+  }
+  return p;
+}
+
+const dataGIds = (svg) => [...svg.matchAll(/\bdata-g\s*=\s*["']([^"']*)["']/gi)].map((m) => m[1]);
+
+/* A figure-like image: exists, and if SVG, passes the safety rule. */
+function imageProblems(src, env, where) {
+  if (typeof src !== 'string' || !src) return [`${where}: missing image src`];
+  if (!env.exists(src)) return [`${where}: file not found ${src}`];
+  if (/\.svg$/i.test(src)) return svgSafety(env.text(src) || '').map((m) => `${where}: ${src}: ${m}`);
+  return [];
+}
+
+/* Rule 2: hotspot. */
+function hotspotProblems(b, env) {
+  const p = [];
+  if (!b.id) p.push('hotspot needs an id');
+  if (!b.alt) p.push('hotspot needs alt text');
+  const modes = b.modes || ['explore'];
+  if (!Array.isArray(modes) || modes.some((m) => m !== 'explore' && m !== 'find')) p.push("modes must be a subset of ['explore', 'find']");
+  if (!Array.isArray(b.frames) || b.frames.length < 1) { p.push('hotspot needs at least one frame'); return p; }
+  b.frames.forEach((f, i) => {
+    const w = `frame ${i + 1}`;
+    if (!f || typeof f.src !== 'string' || !f.src.startsWith('images/oksat/')) { p.push(`${w}: src must be under images/oksat/`); return; }
+    if (!env.exists(f.src)) { p.push(`${w}: file not found ${f.src}`); return; }
+    let regions;
+    if (/\.svg$/i.test(f.src)) {
+      const svg = env.text(f.src) || '';
+      svgSafety(svg).forEach((m) => p.push(`${w}: ${m}`));
+      const dataG = dataGIds(svg);
+      dataG.filter((g) => !env.hasG(g)).forEach((g) => p.push(`${w}: data-g '${g}' is not a glossary id`));
+      const listed = Array.isArray(f.regions) ? f.regions : null;
+      if (f.regions !== undefined && !listed) p.push(`${w}: regions must be a list`);
+      if (listed) listed.filter((r) => !r || !dataG.includes(r.g)).forEach((r) => p.push(`${w}: region '${r && r.g}' has no data-g in the file`));
+      regions = listed || dataG.map((g) => ({ g }));
+    } else if (/\.(png|jpe?g|webp)$/i.test(f.src)) {
+      regions = Array.isArray(f.regions) ? f.regions : [];
+      if (regions.length < 1) p.push(`${w}: raster frame needs at least one region`);
+      regions.forEach((r) => {
+        const poly = r && r.poly;
+        if (!Array.isArray(poly) || poly.length < 6 || poly.length % 2 || poly.some((v) => typeof v !== 'number' || v < 0 || v > 100)) {
+          p.push(`${w}: region '${r && r.g}' poly must be an even list of at least 6 numbers in 0..100`);
+        }
+      });
+    } else { p.push(`${w}: unsupported image type ${f.src}`); return; }
+    regions.filter((r) => !r || typeof r.g !== 'string' || !env.hasG(r.g)).forEach((r) => p.push(`${w}: region '${r && r.g}' is not a glossary id`));
+    if (modes.includes('find') && regions.length < 3) p.push(`${w}: find mode needs at least 3 regions (has ${regions.length})`);
+  });
+  return p;
+}
+
+/* Rule 3: layers. */
+function layersProblems(b, env) {
+  const p = [];
+  if (!b.id) p.push('layers needs an id');
+  if (!b.alt) p.push('layers needs alt text');
+  if (b.mode !== 'toggle' && b.mode !== 'step') p.push("mode must be 'toggle' or 'step'");
+  const layers = Array.isArray(b.layers) ? b.layers : [];
+  if (layers.length < 2) p.push(`layers needs at least 2 layers (has ${layers.length})`);
+  const ids = layers.map((l) => l && l.id);
+  if (new Set(ids).size !== ids.length) p.push('layer ids must be unique');
+  imageProblems(b.base, env, 'base').forEach((m) => p.push(m));
+  layers.forEach((l) => imageProblems(l && l.src, env, `layer '${l && l.id}'`).forEach((m) => p.push(m)));
+  (Array.isArray(b.on) ? b.on : []).filter((id) => !ids.includes(id)).forEach((id) => p.push(`on: '${id}' is not a layer id`));
+  return p;
+}
+
+/* Rule 4: neighbors. */
+function neighborsProblems(b, env) {
+  const p = [];
+  if (!b.id) p.push('neighbors needs an id');
+  if (!env.hasG(b.g)) return p.concat(`anchor g '${b.g}' is not a glossary id`);
+  if (b.dirs !== undefined && (!Array.isArray(b.dirs) || b.dirs.some((d) => !DIRS6.includes(d)))) p.push('dirs must be a subset of sup, inf, ant, post, lat, med');
+  const n = relationDirs(env.G, b.g).size;
+  if (n < 2) p.push(`anchor '${b.g}' has relations in ${n} direction(s); needs 2`);
+  return p;
+}
+
+/* Rule 5: sequence. */
+function sequenceProblems(b) {
+  const p = [];
+  if (!b.id) p.push('sequence needs an id');
+  if (typeof b.q !== 'string' || !b.q.trim()) p.push('sequence needs a question (q)');
+  const items = Array.isArray(b.items) ? b.items : [];
+  if (items.length < 3) p.push(`sequence needs at least 3 items (has ${items.length})`);
+  if (items.some((x) => typeof x !== 'string' || !x.trim())) p.push('sequence items must be non-empty strings');
+  if (new Set(items).size !== items.length) p.push('sequence items must be unique');
+  return p;
+}
+
+function blockProblems(b, env) {
+  if (b.t === 'hotspot') return hotspotProblems(b, env);
+  if (b.t === 'layers') return layersProblems(b, env);
+  if (b.t === 'neighbors') return neighborsProblems(b, env);
+  if (b.t === 'sequence') return sequenceProblems(b);
+  return [];
+}
+
+/* Rule 8: every non-SVG file under images/oksat/<slug>/ appears by relative path in ATTRIBUTION.md. */
+function attributionProblems(slug, files, text) {
+  const out = [];
+  for (const f of files) {
+    if (f === 'ATTRIBUTION.md' || /\.svg$/i.test(f)) continue;
+    const esc = f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (!new RegExp(`(^|[^\\w./-])${esc}($|[^\\w./-])`).test(text)) out.push(`${slug}/${f}: not listed in ATTRIBUTION.md`);
+  }
+  return out;
+}
+
+/* Rule 7: `unlisted`, when present on a guide or module entry, is a boolean. */
+function unlistedProblem(entry) {
+  return entry && entry.unlisted !== undefined && typeof entry.unlisted !== 'boolean'
+    ? `unlisted must be a boolean (got ${JSON.stringify(entry.unlisted)})` : null;
+}
+
+function liveGuideEnv(G) {
+  return {
+    G,
+    hasG: (id) => typeof id === 'string' && hasOwn(G, id),
+    exists: (p) => fs.existsSync(rel(p)),
+    text: (p) => (fs.existsSync(rel(p)) ? fs.readFileSync(rel(p), 'utf8') : null),
+    list: (dir) => {
+      const abs = rel(dir);
+      if (!fs.existsSync(abs)) return [];
+      return fs.readdirSync(abs, { recursive: true }).map(String).filter((f) => fs.statSync(path.join(abs, f)).isFile());
+    },
+  };
+}
+
+/* Rule 10: in-memory good and bad fixtures; nothing is written to the repo. */
+function checkBlockValidators() {
+  console.log('\nguide block validators: in-memory self-test (no fixture files written)');
+  const G = {
+    manubrium: { name: 'Malleus manubrium', rel: { sup: ['latproc'], inf: ['umbo'] } },
+    latproc: { name: 'Lateral process', rel: {} },
+    umbo: { name: 'Umbo', rel: {} },
+    cochlea: { name: 'Cochlea', rel: {} },
+    lone: { name: 'Lone', rel: { ant: ['manubrium'] } },
+  };
+  const SVG_OK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path data-g="manubrium" d="M0 0"/><circle data-g="umbo" cx="5" cy="5" r="2"/><rect data-g="latproc" width="4" height="4"/></svg>';
+  const DIR = 'images/oksat/ear-anatomy/';
+  const TM = DIR + 'tm-right.svg';
+  const TM_BAD_G = DIR + 'tm-bad-g.svg';
+  const TM_ONLOAD = DIR + 'tm-onload.svg';
+  const RASTER = DIR + 'ct/ax-3.png';
+  const RASTER_NOT_LISTED = DIR + 'ct/ax-9.png';
+  const BASE = DIR + 'auricle-base.svg';
+  const GAN = DIR + 'auricle-gan.svg';
+  const ATTR = DIR + 'ATTRIBUTION.md';
+  const files = {
+    [TM]: SVG_OK,
+    [TM_BAD_G]: SVG_OK.replace('data-g="umbo"', 'data-g="zzbogus"'),
+    [TM_ONLOAD]: SVG_OK.replace('<svg xmlns="http://www.w3.org/2000/svg"', '<svg xmlns="http://www.w3.org/2000/svg" onload="window.__pwned=1"'),
+    [BASE]: SVG_OK,
+    [GAN]: SVG_OK,
+    [RASTER]: '',
+    [RASTER_NOT_LISTED]: '',
+    [ATTR]: 'ct/ax-3.png | source | author | license',
+  };
+  const hasOwnFile = (p) => hasOwn(files, p);
+  const env = {
+    G,
+    hasG: (id) => typeof id === 'string' && hasOwn(G, id),
+    exists: hasOwnFile,
+    text: (p) => (hasOwnFile(p) ? files[p] : null),
+  };
+
+  const GOOD = [
+    ['hotspot, SVG, explore and find', { t: 'hotspot', id: 'tm-hs', alt: 'Right TM', modes: ['explore', 'find'], frames: [{ src: TM, cap: 'Right ear' }] }],
+    ['hotspot, raster with a poly', { t: 'hotspot', id: 'ax-hs', alt: 'Axial', frames: [{ src: RASTER, cap: 'Axial', regions: [{ g: 'cochlea', poly: [52, 40, 60, 38, 63, 47, 54, 50] }] }] }],
+    ['layers, toggle', { t: 'layers', id: 'au-ly', alt: 'Auricle', base: BASE, mode: 'toggle', layers: [{ id: 'gan', label: 'Great auricular', src: GAN }, { id: 'occ', label: 'Lesser occipital', src: GAN }], on: ['gan'] }],
+    ['neighbors, three directions', { t: 'neighbors', id: 'mz-nb', g: 'manubrium', dirs: ['sup', 'inf', 'post'], label: 'Neighbours' }],
+    ['sequence, three items', { t: 'sequence', id: 'os-seq', q: 'Order the arc.', items: ['a', 'b', 'c'] }],
+  ];
+  const BAD = [
+    ['hotspot region with unknown glossary id', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: RASTER, regions: [{ g: 'nosuchid', poly: [1, 1, 9, 1, 9, 9] }] }] }],
+    ['SVG data-g not in glossary', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_BAD_G }] }],
+    ['raster poly with 5 numbers', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: RASTER, regions: [{ g: 'cochlea', poly: [1, 1, 9, 1, 9] }] }] }],
+    ['find mode with 2 regions', { t: 'hotspot', id: 'x', alt: 'a', modes: ['explore', 'find'], frames: [{ src: RASTER, regions: [{ g: 'cochlea', poly: [1, 1, 9, 1, 9, 9] }, { g: 'umbo', poly: [1, 1, 9, 1, 9, 9] }] }] }],
+    ['layers with one layer', { t: 'layers', id: 'x', alt: 'a', base: BASE, mode: 'toggle', layers: [{ id: 'gan', label: 'Great auricular', src: GAN }] }],
+    ['neighbors anchor with one direction', { t: 'neighbors', id: 'x', g: 'lone' }],
+    ['sequence with duplicate items', { t: 'sequence', id: 'x', q: 'Order.', items: ['a', 'a', 'b'] }],
+    ['SVG containing onload=', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_ONLOAD }] }],
+  ];
+  const selfFail = [];
+  for (const [label, b] of GOOD) {
+    const r = blockProblems(b, env);
+    if (r.length) selfFail.push(`good '${label}' rejected: ${r.join('; ')}`);
+  }
+  for (const [label, b] of BAD) {
+    if (!blockProblems(b, env).length) selfFail.push(`bad '${label}' accepted`);
+  }
+  if (unlistedProblem({ unlisted: true }) || unlistedProblem({}) || unlistedProblem({ unlisted: false })) selfFail.push('good unlisted rejected');
+  if (!unlistedProblem({ unlisted: 'yes' })) selfFail.push("bad 'unlisted: yes' accepted");
+  if (attributionProblems('ear-anatomy', ['ct/ax-3.png', 'tm-right.svg', 'ATTRIBUTION.md'], files[ATTR]).length) selfFail.push('good attribution rejected');
+  if (!attributionProblems('ear-anatomy', [RASTER_NOT_LISTED.slice(DIR.length)], files[ATTR]).length) selfFail.push("bad 'raster absent from ATTRIBUTION.md' accepted");
+  ok(selfFail.length === 0, 'guide block validators reject the W0.3 bad fixtures',
+    'guide block validator self-test: ' + selfFail.join(' | '));
+}
+
+/* ===========================================================
    1b. OKSAT interactive guides <-> chapters <-> modules
    (docs/authoring-oksat-guide.md.) Counts agree with the manifest, every
    block is a known type with balanced inline markup, every figure exists
@@ -227,7 +466,11 @@ function checkGuides() {
   for (const m of man.OKSAT_MANIFEST) {
     try { mods[m.slug] = loadWindow(rel(m.data)).__MCQ_MODULE; } catch (e) { /* reported by checkOksat */ }
   }
-  const BLOCKS = new Set(['p', 'why', 'h', 'ul', 'ol', 'table', 'kv', 'call', 'deep', 'cards', 'steps', 'figure', 'tool', 'practice', 'check']);
+  const BLOCKS = new Set(['p', 'why', 'h', 'ul', 'ol', 'table', 'kv', 'call', 'deep', 'cards', 'steps', 'figure', 'tool', 'practice', 'check', ...NEW_BLOCKS]);
+  /* Anatomy glossary (rule 9): loaded once with loadWindow; a failed load makes every glossary id unknown. */
+  let G = {};
+  try { G = loadWindow(rel('js/olsb/glossary.js')).OLSB.glossary || {}; } catch (e) { fail('js/olsb/glossary.js load: ' + e.message); }
+  const liveEnv = liveGuideEnv(G);
   const CALLS = new Set(['pearl', 'trap', 'mech', 'hook']);
   /* **bold** and *italic* toggle, \* is a literal star, [[...]] is a chip: every string must close what it opens. */
   const markup = (t) => {
@@ -241,7 +484,7 @@ function checkGuides() {
      an acronym-shaped token the lexicon does not know, and on a lexicon entry no guide uses. */
   let T = null;
   try { T = loadWindow(rel('js/oksat/terms.js')).OKSATTerms; } catch (e) { fail('js/oksat/terms.js load: ' + e.message); }
-  const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'refs', 'tone', 'data']);
+  const SKIP = new Set(['t', 'id', 'src', 'k', 'alt', 'm', 'c', 'refs', 'tone', 'data', 'g', 'base', 'dirs', 'poly', 'modes', 'mode', 'on']);
   const used = new Set();
   const termScan = (v, key, where, out) => {
     if (typeof v === 'string') {
@@ -283,7 +526,14 @@ function checkGuides() {
         if (b.t === 'figure') {
           if (!fs.existsSync(rel(b.src))) problems.push(`${at}: figure not found ${b.src}`);
           if (!b.alt) problems.push(`${at}: figure without alt text`);
+          if (/\.svg$/i.test(b.src || '') && liveEnv.exists(b.src)) svgSafety(liveEnv.text(b.src) || '').forEach((m) => problems.push(`${at}: ${m}`));
         }
+        if (NEW_BLOCKS.has(b.t)) blockProblems(b, liveEnv).forEach((m) => problems.push(`${at}: ${m}`));
+        /* Captions and layer labels reach the reader, so they get the same markup and term checks. */
+        const extra = [];
+        if (b.t === 'hotspot') (b.frames || []).forEach((f) => extra.push(f && f.cap));
+        if (b.t === 'layers') { extra.push(b.cap); (b.layers || []).forEach((l) => extra.push(l && l.label)); }
+        extra.filter((v) => typeof v === 'string').forEach((v) => strings.push([at, v]));
         if (b.t === 'tool') {
           if (!b.crit.length || !b.rules.length) problems.push(`${at}: tool needs crit and rules`);
           if (b.rules[b.rules.length - 1].pre !== undefined || b.rules.every((r) => r.eq !== undefined)) problems.push(`${at}: last tool rule must be a catch-all`);
@@ -299,8 +549,8 @@ function checkGuides() {
         secIds.add(s.id);
         if (!/^[a-z0-9-]+$/.test(s.id)) problems.push(`${s.id}: section id must be kebab-case`);
         walk(s.blocks, s.id);
-        (s.blocks || []).filter((b) => b.t === 'check').forEach((b) => {
-          if (!b.id || checkIds.has(s.id + ':' + b.id)) problems.push(`${s.id}: check id missing or duplicate (${b.id})`);
+        (s.blocks || []).filter((b) => b.t === 'check' || GRADED_BLOCKS.has(b.t)).forEach((b) => {
+          if (!b.id || checkIds.has(s.id + ':' + b.id)) problems.push(`${s.id}: check/graded block id missing or duplicate (${b.id})`);
           checkIds.add(s.id + ':' + b.id);
         });
         for (const d of s.drill || []) {
@@ -328,6 +578,21 @@ function checkGuides() {
   const onDisk = fs.existsSync(dir) ? fs.readdirSync(dir, { recursive: true }).filter((f) => String(f).endsWith('.js')).map((f) => path.basename(String(f))) : [];
   const orphans = onDisk.filter((f) => !files.includes(f));
   ok(orphans.length === 0, 'no orphan guide chapter files', `chapter files not in OKSAT_GUIDES: ${orphans.join(', ')}`);
+
+  /* Rule 7: `unlisted` is a boolean wherever it is set (guides and module entries). */
+  const badUnlisted = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, unlistedProblem(e)]).filter(([, m]) => m);
+  ok(badUnlisted.length === 0, 'unlisted is a boolean on every guide and module entry where it is set',
+    `non-boolean unlisted: ${badUnlisted.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);
+
+  /* Rule 8: the figure attribution rule for every attributed slug. */
+  for (const slug of ATTRIBUTED) {
+    const base = `images/oksat/${slug}`;
+    const bad = attributionProblems(slug, liveEnv.list(base), liveEnv.text(`${base}/ATTRIBUTION.md`) || '');
+    ok(bad.length === 0, `${slug}: every non-SVG file under ${base}/ is listed in ATTRIBUTION.md`,
+      `${bad.length} unattributed file(s) under ${base}/: ${bad.join(' ; ')}`);
+  }
+
+  checkBlockValidators();
 }
 
 /* ===========================================================
