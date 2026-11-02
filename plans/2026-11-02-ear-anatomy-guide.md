@@ -680,6 +680,23 @@ arch-colour overlays (`os-dev`, `sy-dev`), folds and isthmus (`sp-folds`, `sp-is
 (`sp-sight`), ET sagittal/axial and adult/infant (`et-*`), petrous apex relations (`pa-bounds`),
 HRCT line drawings (`im-*`), otalgia map (`sy-sensory`).
 
+**W0.4 outcomes (interim, 2026-11-02).** Default for every Drive row: **SVG**. Open-license candidates
+found by text search, each still needing a visual check against its Drive figure before it replaces an
+SVG (all public domain unless noted):
+
+| Target | Candidate | Verdict so far |
+|---|---|---|
+| `au-topo` | Commons `Gray904.png` (lateral auricle, Gray 1918) | partial: likely lacks helical crus, Darwin tubercle, incisura terminalis |
+| `os-parts` | Commons `Illu_auditory_ossicles-en.svg` (US Gov, PD); `Gray916`–`Gray918.png` | partial: sub-part labels unconfirmed |
+| `os-joints` | Commons `Gray919.png` (chain with ligaments, frontal section) | partial: compare with the ligament lead figure |
+| `or-parts` | Commons `Gray137.png` (left temporal bone, outer surface) | partial: left side; sutures and petrous unconfirmed |
+| `tm-marks` | Commons `View-normal-tympanic-membrane.png` (CC BY-SA 3.0) | fails: umbo unlabelled, side unstated |
+| `cav-medial` | Sobotta 1909 plates via anatomytool.org | licence unchecked |
+| `im-*` HRCT | none (Radiopaedia is CC BY-NC-SA: rejected) | D10 fallback: built line-drawing slices; owner may supply own de-identified normal CT |
+| `au-nerve` | none | SVG |
+
+The five *verify* rows await owner upload (the Drive connector returns base64, too costly to view).
+
 Candidate extraction sources in the same Drive folder: Myers – Mastoid Surgery.pdf, Vula –
 Mastoidectomy and epitympanectomy.pdf, Secrets Tympanomastoid.pdf, Tympanoplasty and OCR.pdf.
 
