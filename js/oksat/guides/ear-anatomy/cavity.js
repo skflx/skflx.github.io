@@ -102,7 +102,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'neighbors', id: 'cav-medial-nb2', g: 'cochleariform', label: 'Neighbours of the cochleariform process' },
                 { t: 'check', id: 'c1', q: 'Which landmark marks the anterior end of the tympanic facial nerve, and why is it reliable?', a: 'The cochleariform process: the nerve runs immediately above it, and it persists when the ossicles are eroded.' },
                 { t: 'check', id: 'c2', q: 'Trace the lesser petrosal nerve from its source.', a: 'Jacobson nerve (IX) on the promontory → tympanic plexus → lesser petrosal nerve → middle fossa → otic ganglion → auriculotemporal nerve → parotid.' },
-                { t: 'check', id: 'c3', q: 'What normal finding mimics a round window defect?', a: 'A perforated mucosal veil in front of the true round window membrane.' },
+                { t: 'check', id: 'c3', q: 'What normal finding mimics a round window defect?', a: 'A mucosal veil in front of the true round window membrane, which is often perforated.' },
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q33', 'ear-anatomy:q35'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-medial'] }],
