@@ -13,9 +13,7 @@
 The one-pager and the OKSAT hub show ASCII 3D scenes as their main figures. The owner wants three changes:
 
 1. **ASCII becomes Easter eggs.** Each scene unfolds in place when the reader selects or taps one specific word.
-2. **Informative, lit 3D figures** take their place, each teaching a principle:
-   - tonotopy and frequency-to-place mismatch on the owner's own cochlea and FLEX28 array
-   - binaural pitch fusion
+2. ~~Informative, lit 3D figures take their place.~~ **Dropped 2026-11-02 (owner):** the three.js figures (2A) were built and removed. Fig. 1 is the original 2D cochlea SVG again; Fig. 2 is the ASCII fusion scene, visible. The numbers drafted for the 3D figures stay in §5 as a record.
 3. **A separate, unlisted atlas page.** A Rhoton-style skull-base hemisection with no labels, where related structures highlight together. It becomes the only way into the two 3D models (OLSB, SSB).
 
 Two non-figure changes are part of the same plan:
@@ -27,17 +25,17 @@ Two non-figure changes are part of the same plan:
 | # | Decision |
 |---|---|
 | D1 | Egg trigger = text **selection** overlapping the word, **or tap/click/Enter** on it. No visible mark. |
-| D2 | 3D figures are **lit matte** (three.js, token colours, no textures). |
-| D3 | Keep Fig. 1 (cochlea) and Fig. 2 (fusion), rebuilt in 3D. Each teaches a principle (§5). |
+| D2 | ~~3D figures are lit matte (three.js).~~ Dropped 2026-11-02: no three.js figures on the one-pager. |
+| D3 | Fig. 1 = the original 2D cochlea SVG (restored 2026-11-02). Fig. 2 = the ASCII fusion scene, visible. |
 | D4 | Atlas art = **hand-built SVG**: control points authored by Opus, baked by a tool, **manually vetted by the owner** before it ships. |
 | D5 | Atlas plane = midsagittal right half, medial view, face left. **Brain ghosted; posterior-fossa contents removed**, which exposes the posterior petrous face and the IAC porus. A cut-away window through the petrous bone. **CN VII drawn from brainstem to face.** |
 | D6 | **No visible labels** in the atlas. Related structures highlight together as groups. |
 | D7 | Atlas page `atlas.html`: unlisted (no inbound link), `noindex`. It links to OLSB (temporal-bone group) and SSB (sinonasal/ASB group) and is the **only** inbound path to either. Reaffirmed 2026-11-02: OKSAT guides do not link OLSB until the owner declares it complete (plan 2026-11-02 D6). |
 | D8 | OLSB and SSB both `noindex`; both keep their "Draft" notice (already present). |
 | D9 | **Delete** the Leitner staircase (scene, figure, CSS, check, test, docs). |
-| D10 | Eggs:<br>• `cochlea` → "electrode" (About ¶1, index.html)<br>• `fusion` → "one sound" (Fig. 2 caption)<br>• `larynx` → "Airway" in the Airway Rounds `<h1>` (airway-jeopardy). |
+| D10 | Eggs:<br>• `cochlea` → "electrode" (About ¶1, index.html)<br>• ~~`fusion` → "one sound"~~ dropped 2026-11-02: Fig. 2 stays visible, so it has no egg<br>• `larynx` → "Airway" in the Airway Rounds `<h1>` (airway-jeopardy). |
 | D11 | Quiet link: "binaural pitch fusion" in About ¶2 → `Fusion.html` (a personal reference, not recruitment). |
-| D12 | Fig. 1 processor bands = **MED-EL default allocation, captioned "assumed default, not my fitting"**. |
+| D12 | ~~Fig. 1 processor bands~~ parked with the 3D figures (§5.1). |
 | D13 | Instructions: canonical **`AGENTS.md`**. `CLAUDE.md`, `.claude/CLAUDE.md`, `.gemini/GEMINI.md` and `.agents/AGENTS.md` point to it. Plans live in `plans/`. |
 
 ## 2. Roles and protocol
@@ -66,7 +64,7 @@ Two non-figure changes are part of the same plan:
   |---|---|
   | any `css/`, `js/`, `*.html` | `check-data` (instant, deps-free) |
   | `js/ascii3d.js`, `js/diagrams/` | `ascii3d.mjs bake` + byte diff |
-  | `js/egg.js`, `js/fig3d/`, `atlas*`, `tools/atlas.mjs` | `test-figures --only <eggs\|fig3d\|atlas>` |
+  | `js/egg.js`, `atlas*`, `tools/atlas.mjs` | `test-figures --only <eggs\|atlas>` |
   | `js/oksat/` or `oksat*.html` | `test-oksat-engine` |
   | a page's markup | `smoke-pages --only <page>` |
 
@@ -105,13 +103,13 @@ Two non-figure changes are part of the same plan:
 | 1 | 1C Delete Leitner + SSB noindex | Haiku | #183 |
 | 1 | 1D Atlas generator tool | Haiku | #184 |
 | 1 | R1 Review | Sonnet ∥ Argon | #185 |
-| 2 | 2A 3D figure renderer | Haiku | #186 |
+| 2 | 2A 3D figure renderer (built, then removed 2026-11-02) | Haiku | #186 |
 | 2 | 2B Eggs applied + quiet link | Haiku | #187 |
 | 2 | 2C Atlas page shell | Haiku | #188 |
-| 2 | 2D Cochlea tonotopy + binaural data | Opus | #189 |
+| 2 | 2D Cochlea tonotopy + binaural data (parked) | Opus | #189 |
 | 2 | 2E Atlas anatomy | Opus | #190 |
 | 2 | R2 Review | Sonnet ∥ Argon | #191 |
-| 3 | 3A Mount Figs 1–2 | Haiku | #192 |
+| 3 | 3A Mount Figs 1–2 (dropped) | Haiku | #192 |
 | 3 | 3B Atlas bake + check-data rules | Haiku | #193 |
 | 3 | 3C Figure tests + leaner CI | Haiku | #194 |
 | 3 | R3 Review | Sonnet ∥ Argon | #195 |
@@ -148,26 +146,8 @@ Posted as a comment on #179 when W0.3 runs.
 
 The ASCII output of existing scenes must stay byte-identical.
 
-### 4.3 fig3d
-```html
-<figure class="fig3d about-figure" data-fig3d="cochlea">
-  <picture class="fig3d-poster"><source srcset="images/figures/cochlea-dark.webp" media="(prefers-color-scheme: dark)">
-    <img src="images/figures/cochlea-light.webp" alt="{scene.alt}" width="…" height="…"></picture>
-  <div class="fig3d-controls"></div><p class="fig3d-hud" aria-live="polite"></p>
-  <figcaption class="site-kicker"><span class="fig-no">Fig. 1</span> …</figcaption>
-</figure>
-```
-- The poster swap also follows `html[data-theme]`: CSS hides the wrong poster. `render.js` sets `data-fig3d-ready` on its figure when the canvas is live.
-- Scene hooks:
-  ```js
-  fig3d: {
-    controls: [{ key, type: 'range'|'toggle', min, max, log, value, options, label }],
-    highlight(state) → { [partIndex]: 'lit'|'dim' },
-    readout(state | pick) → string,
-    pickable: [partIndex]
-  }
-  ```
-  The renderer re-applies these on every control change.
+### 4.3 fig3d (removed 2026-11-02)
+The three.js figure renderer, its loader, poster tool and the `data-fig3d` contract were deleted. History: commit `c04914b`.
 
 ### 4.4 Atlas
 - **anatomy.json:**
@@ -194,6 +174,8 @@ The ASCII output of existing scenes must stay byte-identical.
 ---
 
 ## 5. Anatomy and data specs (Opus fills the numbers in W0.4 / 2D / 2E)
+
+> **Parked (2026-11-02):** §5.1–5.2 specified the 3D figures, which were removed. Kept as a record of the drafted numbers.
 
 ### 5.1 Fig. 1 — tonotopy and mismatch on the owner's cochlea
 - **Two place maps, because they differ:**
@@ -297,7 +279,7 @@ Opus may refine the group membership in 2E and must update this table if it does
 python3 -m http.server 8000                 # manual: index (open About/Research), airway, oksat, atlas.html, OLSB/SSB via atlas
 node tools/stamp-assets.mjs && node tools/check-data.mjs
 node tools/ascii3d.mjs bake && git diff --exit-code -- '*.html'   # bake fresh
-node tools/atlas.mjs check && node tools/fig3d.mjs check
+node tools/atlas.mjs check
 node tools/smoke-pages.mjs
 node tools/test-figures.mjs
 node tools/test-oksat-engine.mjs && node tools/test-oksat-learn.mjs   # Leitner removal regression
@@ -306,8 +288,7 @@ node tools/test-wiki-sync.mjs && node tools/lint-oksat.mjs
 
 Manual, on a phone-width viewport:
 - tap "electrode" → egg
-- long-press-select "one sound" → egg
-- Fig. 2 slider works with a thumb
+- long-press-select "Airway" (Airway Rounds heading) → egg
 - atlas: first tap lights a group, second tap follows the link
 
 ## 7. Reviewer checklist (R1–R3)
@@ -320,7 +301,7 @@ Manual, on a phone-width viewport:
 - Asset stamps are fresh. Bakes are fresh. No hand-edited baked block or stamp.
 - ASCII frames of the egg scenes are unchanged by 1B (byte diff).
 - Unlisted invariants hold: no link to `atlas.html`; OLSB/SSB are reachable only from the atlas; all three are `noindex`.
-- Accessibility: triggers are focusable with `aria-expanded`; fig3d has alt text + `aria-live`; atlas groups are keyboard reachable.
+- Accessibility: triggers are focusable with `aria-expanded`; atlas groups are keyboard reachable.
 - No anatomy or clinical claim was introduced by a Haiku WP.
 - Commits are one line with no trailers.
 

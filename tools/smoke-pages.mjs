@@ -48,7 +48,6 @@ const PAGES = [
     await p.click('#research-h .block-toggle');
     await wait(p, () => document.querySelector('#research-h .block-toggle').getAttribute('aria-expanded') === 'true'
       && getComputedStyle(document.getElementById('research-body')).display !== 'none');
-    await p.click('.egg[data-egg="fusion"]');
     return figureReady(p, 'fusion', { themeFlip: true });
   } },
   { path: 'Fusion.html', ready: (p) => wait(p, () => !!document.querySelector('.fusion-qr-svg')) },
