@@ -136,7 +136,9 @@ Not used while OLSB is unlisted. The table below is kept for Appendix A.
 ### 4.4 Glossary extension (`js/olsb/glossary.js`)
 
 - New optional fields per entry: `syn: [string]` (synonyms and eponyms), `supply: {n: [id], a: [id]}`
-  (nerve and arterial supply), `origin: 'arch1'｜'arch2'｜'cleft1'｜'pouch1'｜'otic'｜…`.
+  (nerve and arterial supply; ids in the glossary), `origin: [code]`, an array because many structures
+  have more than one source (malleus, stapes, TM). Codes: `arch1`, `arch2`, `arch4`, `cleft1`, `pouch1`,
+  `otic`, `mesenchyme` (W0.2).
 - Ids are never renamed. New ids follow the file's existing short lowercase style.
 - `rel` keeps its meaning ("X lies <dir> to this"); write each pair once.
 - New ids that OLSB does not draw are allowed; the geometry check covers drawn pairs only.
