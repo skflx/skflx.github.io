@@ -1118,7 +1118,10 @@
         },
         "helix": {
             "name": "Helix",
-            "note": "The curled outer rim, from the helical crus in the concha around to the lobule."
+            "note": "The curled outer rim, from the helical crus in the concha around to the lobule.",
+            "origin": [
+                "arch1"
+            ]
         },
         "helcrus": {
             "name": "Helical crus",
@@ -1126,6 +1129,9 @@
                 "Crus helicis"
             ],
             "note": "The start of the helix, crossing the concha and dividing it into the cymba above and the cavum below.",
+            "origin": [
+                "arch1"
+            ],
             "rel": {
                 "inf": [
                     "cavum"
@@ -1150,6 +1156,9 @@
         "antihelix": {
             "name": "Antihelix",
             "note": "The ridge inside the helix. It divides above into superior and inferior crura around the triangular fossa; its fold is missing in prominent ears.",
+            "origin": [
+                "arch2"
+            ],
             "rel": {
                 "post": [
                     "scapha"
@@ -1261,6 +1270,9 @@
         "lobule": {
             "name": "Lobule",
             "note": "Fat and fibrous tissue without cartilage.",
+            "origin": [
+                "arch2"
+            ],
             "supply": {
                 "n": [
                     "greataur-n"
@@ -1828,7 +1840,7 @@
         },
         "isth-ant": {
             "name": "Anterior tympanic isthmus",
-            "note": "The opening in the tympanic diaphragm between the tensor tendon in front and the stapes behind, medial to the incus body (Proctor; boundaries checked before the guide states them).",
+            "note": "The anterior of the two corridors between mesotympanum and epitympanum, split by the stapes. Anterior: the tensor tendon and its fold. Posterior: the stapes superstructure (anterior crus). Lateral: the malleus neck. Medial: the cochleariform process and medial wall. Clears the tubal orifice up into the anterior and superior attic.",
             "rel": {
                 "post": [
                     "isth-post"
@@ -1838,19 +1850,33 @@
                 ],
                 "inf": [
                     "mesotympanum"
+                ],
+                "lat": [
+                    "mneck"
+                ],
+                "med": [
+                    "cochleariform"
                 ]
             }
         },
         "isth-post": {
             "name": "Posterior tympanic isthmus",
-            "note": "Behind the anterior isthmus, between the stapes and pyramid and the short process with its posterior incudal ligament; often small or closed (Proctor; boundaries checked before the guide states them)."
+            "note": "The posterior corridor. Anterior: the posterior crus of the stapes. Posterior: the pyramidal process and posterior incudal ligament. Lateral: the short process of the incus. Medial: the bony facial canal and sinus tympani area. The ventilation path to the aditus, antrum and mastoid cells.",
+            "rel": {
+                "lat": [
+                    "incshort"
+                ],
+                "post": [
+                    "pil"
+                ]
+            }
         },
         "strecess": {
             "name": "Supratubal recess",
-            "note": "Above the tubal orifice in front of the tensor fold. Usage varies: some authors make it a synonym of the anterior epitympanic recess, others the protympanic space beneath the tensor fold. Owner to fix one usage.",
+            "note": "Above the tensor fold, in front of the cog: the anterior part of the epitympanum. Below the tensor fold lies the protympanum, leading down to the tube. Often used interchangeably with the anterior epitympanic recess.",
             "rel": {
                 "inf": [
-                    "et"
+                    "tensorfold"
                 ]
             }
         },
@@ -1886,7 +1912,7 @@
         },
         "finiculus": {
             "name": "Finiculus",
-            "note": "A bony ridge running from the anterior lip of the round window niche; bounds the subtympanic sinus anteriorly (draft: owner to confirm the definition used).",
+            "note": "A bony ridge running from the anterior lip of the round window niche; bounds the subtympanic sinus anteriorly.",
             "rel": {
                 "post": [
                     "rw"

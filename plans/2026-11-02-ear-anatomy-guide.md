@@ -479,7 +479,7 @@ line-drawing slices planned to replace or complement them.
 Citations pulled from PubMed in W4; each card states board answer, competing view, method weakness,
 and what to say on the exam vs in the OR. Source conflicts use a `trap` labelled *Source conflict*.
 
-- `ap-arches` **Ossicular arch origin** and **hillocks of His.** Board 3+3 and split-arch teaching vs
+- `ap-arches` **Ossicular arch origin** and **hillocks of His.** Owner, 2026-11-02: teach the board version everywhere (hillocks 1–3 arch 1: tragus, helical crus, helix; 4–6 arch 2: antihelix, antitragus, lobule); this card notes the newer evidence briefly, one short card, not a chapter. Board 3+3 and split-arch teaching vs
   lineage-tracing work (largely mouse) giving arch 1 and arch 2 different shares. Weakness: species
   extrapolation; human data infer origin from position, few embryos.
 - `ap-dehiscence` **Facial canal dehiscence prevalence.** Histologic temporal bone series report far
@@ -579,6 +579,9 @@ New ids to add (names indicative; Opus finalizes style and `rel`):
 - **Petrous apex**: petrous apex, ICA horizontal segment, Meckel cave, Dorello canal, petroclival
   fissure, apical cell tracts.
 
+Owner rulings, 2026-11-02: the **supratubal recess** is above the tensor fold (epitympanum); the
+protympanum is below it. The **finiculus** definition in the glossary stands.
+
 ## 8. Numbers to verify (before any chapter text uses them)
 
 Checked against Cummings Review (2017) Ch 2 and KJ Lee; where sources differ the guide shows the
@@ -601,7 +604,7 @@ range under a *Source conflict* trap. Every value lands in the text with a `[[sr
 | Ossicle weights | 23 / 27 / 3 mg | `os-parts` |
 | Lever ratio; total gain | about 1.3:1; about 27 dB | `os-joints`, `ap-numbers` |
 | Cog to geniculate relation | per source | `sp-attic` |
-| Isthmus boundaries | Proctor | `sp-isthmus` |
+| Isthmus boundaries | Owner, 2026-11-02: anterior isthmus = tensor tendon / anterior crus / malleus neck / cochleariform; posterior = posterior crus / pyramid + posterior incudal lig. / short process / facial canal + sinus tympani area (glossary `isth-ant`, `isth-post`) | `sp-isthmus` |
 | Sinus tympani depth classes | Marchioni A/B/C | `sp-retro` |
 | ET length, angle, infant values | 31–38 mm; 45° vs 10° | `et-seg`, `et-child` |
 | Antrum depth under Macewen triangle | 12–15 mm adult | `ma-surface` |
