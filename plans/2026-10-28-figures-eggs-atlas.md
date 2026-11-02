@@ -32,7 +32,7 @@ Two non-figure changes are part of the same plan:
 | D4 | Atlas art = **hand-built SVG**: control points authored by Opus, baked by a tool, **manually vetted by the owner** before it ships. |
 | D5 | Atlas plane = midsagittal right half, medial view, face left. **Brain ghosted; posterior-fossa contents removed**, which exposes the posterior petrous face and the IAC porus. A cut-away window through the petrous bone. **CN VII drawn from brainstem to face.** |
 | D6 | **No visible labels** in the atlas. Related structures highlight together as groups. |
-| D7 | Atlas page `atlas.html`: unlisted (no inbound link), `noindex`. It links to OLSB (temporal-bone group) and SSB (sinonasal/ASB group) and is the **only** inbound path to either. |
+| D7 | Atlas page `atlas.html`: unlisted (no inbound link), `noindex`. It links to OLSB (temporal-bone group) and SSB (sinonasal/ASB group) and is the **only** inbound path to either. Reaffirmed 2026-11-02: OKSAT guides do not link OLSB until the owner declares it complete (plan 2026-11-02 D6). |
 | D8 | OLSB and SSB both `noindex`; both keep their "Draft" notice (already present). |
 | D9 | **Delete** the Leitner staircase (scene, figure, CSS, check, test, docs). |
 | D10 | Eggs:<br>• `cochlea` → "electrode" (About ¶1, index.html)<br>• `fusion` → "one sound" (Fig. 2 caption)<br>• `larynx` → "Airway" in the Airway Rounds `<h1>` (airway-jeopardy). |

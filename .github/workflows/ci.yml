@@ -69,6 +69,9 @@ jobs:
       # Every OKSAT module against the quality spec; zero deps, instant.
       - name: Lint OKSAT modules
         run: node tools/lint-oksat.mjs
+      # OKSAT guides against the teaching-shape rules (roadmap §2); zero deps.
+      - name: Lint OKSAT guides
+        run: node tools/lint-oksat-guide.mjs
 
       # The wiki sync is the privacy boundary for the Obsidian vault;
       # zero deps, synthetic fixtures only.
