@@ -43,10 +43,12 @@ const PAGES = [
       && [...document.querySelectorAll('.block[data-fold] > .block-body')].every((b) => getComputedStyle(b).display === 'none'));
     await p.click('#about-h .block-toggle');
     await wait(p, () => getComputedStyle(document.getElementById('about-body')).display !== 'none');
+    await p.click('.egg[data-egg="cochlea"]');       /* eggs start hidden */
     await figureReady(p, 'cochlea');
     await p.click('#research-h .block-toggle');
     await wait(p, () => document.querySelector('#research-h .block-toggle').getAttribute('aria-expanded') === 'true'
       && getComputedStyle(document.getElementById('research-body')).display !== 'none');
+    await p.click('.egg[data-egg="fusion"]');
     return figureReady(p, 'fusion', { themeFlip: true });
   } },
   { path: 'Fusion.html', ready: (p) => wait(p, () => !!document.querySelector('.fusion-qr-svg')) },
@@ -91,9 +93,11 @@ const PAGES = [
       && window.__ssb.lab.builds > 0 && window.__ssb.frames > 0, 20000) },
   { path: 'airway-jeopardy.html', ready: async (p) => {
     await wait(p, () => !!window.AIRWAY_DATA && Array.isArray(window.AIRWAY_DATA.questions));
+    await p.click('.egg[data-egg="larynx"]');
     await figureReady(p, 'larynx');
     /* the app re-renders the whole screen on every change: the figure must come back */
     await p.click('[data-action="pick-mode"]:not(.active)');
+    await p.click('.egg[data-egg="larynx"]');
     return figureReady(p, 'larynx');
   } },
   { path: 'cpt-search.html', ready: (p) => wait(p, () => document.body.innerText.trim().length > 0) },

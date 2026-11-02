@@ -280,3 +280,7 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
   padding-top: 0.75rem; border-top: 1px solid var(--rule);
   text-transform: none; letter-spacing: 0.02em; font-weight: 400;
 }
+
+/* eggs: a revealed ASCII figure sits in the flow with a little air */
+.prose > .egg-figure { margin: 1.25rem 0 1.5rem; }
+.research-figure.egg-figure { margin-top: -1.5rem; }

@@ -49,9 +49,10 @@
 
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="preload" href="fonts/archivo-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="css/site.css?v=3efb923c">
-    <link rel="stylesheet" href="css/onepager.css?v=c5084e87">
+    <link rel="stylesheet" href="css/site.css?v=cb283dd6">
+    <link rel="stylesheet" href="css/onepager.css?v=3a4204aa">
     <link rel="stylesheet" href="css/ascii3d.css?v=50a20a22">
+    <link rel="stylesheet" href="css/egg.css?v=124d90f0">
 </head>
 <body>
     <a class="skip" href="#about">Skip to content</a>
@@ -102,11 +103,8 @@
             </header>
             <div class="about block-body" id="about-body">
                 <div class="prose">
-                    <p class="prose-first">I started losing my hearing when I was 13. By the end of medical school, I received a cochlear implant. Today, as a resident training in otolaryngology and head and neck surgery, I have a rare vantage point: I know what the auditory system sounds like from both sides of the electrode.</p>
-                    <p>That dual perspective drives much of what I do academically. My primary research focuses on bimodal cochlear implant users. Specifically, I'm investigating binaural pitch fusion to predict who will actually benefit from bilateral implantation before they even reach the operating room. Beyond otology and auditory neuroscience, I'm passionate about modernizing surgical education and exploring how emerging technologies can reshape our field.</p>
-                    <p>My path here wasn't exactly a straight line. I grew up moving between Kathmandu, Thailand, Michigan, and Oregon, trained in Nevada and New Haven, and eventually found my way back to the Pacific Northwest. When I'm not at the hospital, you can usually find me with ink on paper, a book in hand, picking heavy things off the floor, or frolicking through the forests and waterfalls of the PNW.</p>
-                </div>
-                <figure class="a3d about-figure" data-a3d="cochlea">
+                    <p class="prose-first">I started losing my hearing when I was 13. By the end of medical school, I received a cochlear implant. Today, as a resident training in otolaryngology and head and neck surgery, I have a rare vantage point: I know what the auditory system sounds like from both sides of the <span class="egg" data-egg="cochlea" role="button" tabindex="0" aria-expanded="false" aria-controls="egg-cochlea">electrode</span>.</p>
+                    <figure class="a3d about-figure egg-figure" id="egg-cochlea" data-a3d="cochlea">
 <!-- a3d:cochlea --><div class="a3d-stage" role="img" aria-label="The owner's cochlea, fitted to its CT measurements, with the FLEX28 implant along the outer wall of scala tympani. The spiral ganglion, the nerve cells the implant drives, lies in the central modiolus and ends at about 1.75 turns; the deepest contact sits past its end, near 702 degrees."><pre class="a3d-grid" aria-hidden="true" style="--a3d-cols:88">                                   <span class="a3d-faint">__</span>
                      <span class="a3d-faint">____---....._-...---____</span>
                 <span class="a3d-faint">___-.</span><span class="a3d-signal">-------;-;;</span><span class="a3d-faint">/________</span><span class="a3d-signal">----</span><span class="a3d-faint">.-___</span>
@@ -137,6 +135,12 @@
                                <span class="a3d-signal">-\_----++++============++++++***------------</span><span class="a3d-faint">\FLEX28 via</span>
                                       <span class="a3d-signal">--\__---------------__/--             </span><span class="a3d-faint">round window</span>
 </pre><div class="a3d-hud" aria-hidden="true"></div></div><!-- /a3d:cochlea -->
+                        <figcaption class="site-kicker">The same cochlea as an ASCII scene, drawn from its geometry. Schematic.</figcaption>
+                </figure>
+                    <p>That dual perspective drives much of what I do academically. My primary research focuses on bimodal cochlear implant users. Specifically, I'm investigating <a class="quiet" href="Fusion.html">binaural pitch fusion</a> to predict who will actually benefit from bilateral implantation before they even reach the operating room. Beyond otology and auditory neuroscience, I'm passionate about modernizing surgical education and exploring how emerging technologies can reshape our field.</p>
+                    <p>My path here wasn't exactly a straight line. I grew up moving between Kathmandu, Thailand, Michigan, and Oregon, trained in Nevada and New Haven, and eventually found my way back to the Pacific Northwest. When I'm not at the hospital, you can usually find me with ink on paper, a book in hand, picking heavy things off the floor, or frolicking through the forests and waterfalls of the PNW.</p>
+                </div>
+                <figure class="fig3d about-figure" data-fig3d="cochlea">
                     <figcaption class="site-kicker"><span class="fig-no">Fig. 1</span> My cochlea, fitted to its CT, with the MED-EL FLEX28 I hear through in red. The array lies on the outer wall of scala tympani; the spiral ganglion cells it stimulates sit inside the modiolus and end near 1.75 turns, so the deepest contact, about 700&deg; in for a full insertion, lies past them. Turn count, canal width and ganglion position are schematic.</figcaption>
                 </figure>
                 <dl class="facts">
@@ -240,7 +244,10 @@
             </header>
             <div class="research block-body" id="research-body">
                 <p class="research-lede">My research sits at two poles: auditory neuroscience, with personal stakes, and surgical education, with theoretical ones. My published work spans H&amp;N oncology and craniofacial trauma; my active work is in CI outcomes and how trainees learn to operate.</p>
-                <figure class="a3d research-figure" data-a3d="fusion">
+                <figure class="fig3d research-figure" data-fig3d="fusion">
+                    <figcaption class="site-kicker"><span class="fig-no">Fig. 2</span> Binaural pitch fusion in two bimodal listeners, drawn as a schematic, not from patient data. Each curve is one electrode of a twelve-channel array (apex in front): how often a tone in the hearing-aid ear is heard as <span class="egg" data-egg="fusion" role="button" tabindex="0" aria-expanded="false" aria-controls="egg-fusion">one sound</span> with that electrode. Blue is the fusion range. Normal-hearing listeners fuse tones less than about 0.2&nbsp;octave apart; bimodal implant users fuse across 1&ndash;4 octaves (Reiss et&nbsp;al., 2014). At the broad end, right, almost any tone merges with any electrode.</figcaption>
+                </figure>
+                <figure class="a3d research-figure egg-figure" id="egg-fusion" data-a3d="fusion">
 <!-- a3d:fusion --><div class="a3d-stage" role="img" aria-label="Schematic of binaural pitch fusion in two bimodal cochlear-implant listeners. Each panel has twelve curves, one per electrode from apex to base, showing how often a tone in the hearing-aid ear fuses with that electrode into one sound. In the left listener each fused span is about an octave wide; in the right listener it is about three and a half octaves, so most tones fuse with any electrode."><pre class="a3d-grid" aria-hidden="true" style="--a3d-cols:96">                         narrow fusion                           <span class="a3d-science">broad fusion</span>
                          ~1 octave                               <span class="a3d-science">~3.5 octaves</span>
                                       <span class="a3d-science">____                                ____________</span>
@@ -269,7 +276,7 @@
         <span class="a3d-faint">125 Hz                              4 kHz     125 Hz                              4 kHz</span>
 
 </pre><div class="a3d-hud" aria-hidden="true"></div></div><!-- /a3d:fusion -->
-                    <figcaption class="site-kicker"><span class="fig-no">Fig. 2</span> Binaural pitch fusion in two bimodal listeners, drawn as a schematic, not from patient data. Each curve is one electrode of a twelve-channel array (apex in front): how often a tone in the hearing-aid ear is heard as one sound with that electrode. Blue is the fusion range. Normal-hearing listeners fuse tones less than about 0.2&nbsp;octave apart; bimodal implant users fuse across 1&ndash;4 octaves (Reiss et&nbsp;al., 2014). At the broad end, right, almost any tone merges with any electrode.</figcaption>
+                    <figcaption class="site-kicker">The same fusion curves as an ASCII scene. Schematic, not patient data.</figcaption>
                 </figure>
                 <dl class="areas">
                     <div class="area area--active"><dt>Otology &amp; hearing sciences</dt><dd>Binaural pitch fusion as a pre-surgical predictor of bilateral CI candidacy; CI outcomes in bimodal users.</dd></div>
@@ -313,6 +320,7 @@
 
     <script src="js/site.js?v=dd67d957"></script>
     <script src="js/onepager.js?v=0d4223cb"></script>
+    <script src="js/egg.js?v=0e331897"></script>
     <script src="js/ascii3d.js?v=30681c94"></script>
     <script src="js/diagrams/cochlea.js?v=3bb5250b"></script>
     <script src="js/diagrams/fusion.js?v=e6f53238"></script>
