@@ -225,9 +225,9 @@
 
     body += '<div class="aw-hero">' +
       '<div class="aw-eyebrow"><span>ENT · H&amp;N Nursing</span></div>' +
-      '<h1 class="aw-h1">Airway Rounds</h1>' +
+      '<h1 class="aw-h1"><span class="egg" data-egg="larynx" role="button" tabindex="0" aria-expanded="false" aria-controls="egg-larynx">Airway</span> Rounds</h1>' +
       '<p class="aw-sub">Rounds · Jeopardy Board · Quick Quiz · Browse</p>' +
-      '<figure class="a3d" data-a3d="larynx">' +
+      '<figure class="a3d egg-figure" id="egg-larynx" data-a3d="larynx">' +
         '<figcaption>The cricothyroid membrane (red), the emergency surgical airway, lies below the vocal folds. ' +
         'The cricoid is the only complete ring; the tracheal rings are open behind. Schematic.</figcaption>' +
       '</figure>' +

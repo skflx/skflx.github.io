@@ -5,7 +5,7 @@
 
      <span class="egg" data-egg="cochlea" role="button" tabindex="0"
            aria-expanded="false" aria-controls="egg-cochlea">electrode</span>
-     <figure class="a3d egg-figure" id="egg-cochlea" data-a3d="cochlea">…</figure>
+     <figure class="a3d egg-figure" id="egg-cochlea" data-a3d=cochlea>…</figure>
 
    - Selecting text that overlaps the trigger opens it (150 ms after
      the selection settles); deselecting never closes it.

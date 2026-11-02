@@ -1,0 +1,81 @@
+/* =============================================================
+   atlas.css — atlas.html: the baked SVG (tools/atlas.mjs) on
+   --atlas-* tissue tokens. Contract: plans/2026-10-28-figures-
+   eggs-atlas.md section 4.4, docs/atlas.md. No visible text: groups
+   are told apart by light, not labels (D6). Lit = .is-lit with --hue
+   set by js/atlas.js from OKSAT_SUBSPECIALTIES; the rest .is-dim.
+   ============================================================= */
+:root, html[data-theme="light"] {
+  --atlas-bone: #E2DCCB;
+  --atlas-cutbone: #D5CEB9;
+  --atlas-soft: #DDBFB5;
+  --atlas-mucosa: #E8C9C0;
+  --atlas-cartilage: #C4D4D9;
+  --atlas-nerve: #C9A227;
+  --atlas-vessel: #B0243A;
+  --atlas-air: #F6F5F0;
+  --atlas-line: #4A4F57;
+  --atlas-ghost: #A9ADB5;
+  --atlas-hatch: #8B8573;
+}
+html[data-theme="dark"] {
+  --atlas-bone: #3C3B36;
+  --atlas-cutbone: #46443C;
+  --atlas-soft: #4E3A36;
+  --atlas-mucosa: #573F3A;
+  --atlas-cartilage: #34444A;
+  --atlas-nerve: #D9B13A;
+  --atlas-vessel: #FF7A8A;
+  --atlas-air: #16181B;
+  --atlas-line: #A6AAB2;
+  --atlas-ghost: #4A4E57;
+  --atlas-hatch: #8B8573;
+}
+
+.atlas-body { background: var(--bg); color: var(--ink); }
+.atlas { max-width: 76rem; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+.at-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.at-stage { width: 100%; }
+.at-svg { display: block; width: 100%; height: auto; max-height: calc(100vh - 6rem); }
+
+.at-hatch-bg { fill: var(--atlas-cutbone); }
+.at-hatch-line { stroke: var(--atlas-hatch); stroke-width: 1; }
+
+/* every shape: tissue fill, hairline outline that does not scale with the figure */
+.at-shape {
+  --f: var(--atlas-bone);
+  fill: var(--f); stroke: var(--atlas-line); stroke-width: 1.25;
+  vector-effect: non-scaling-stroke; stroke-linejoin: round;
+}
+.at-bone { --f: var(--atlas-bone); }
+.at-cutbone { fill: url(#at-hatch); }
+.at-soft { --f: var(--atlas-soft); }
+.at-mucosa { --f: var(--atlas-mucosa); }
+.at-cartilage { --f: var(--atlas-cartilage); }
+.at-air { --f: var(--atlas-air); }
+.at-nerve { fill: none; stroke: var(--atlas-nerve); stroke-width: 3; stroke-linecap: round; }
+.at-vessel { fill: none; stroke: var(--atlas-vessel); stroke-width: 3; stroke-linecap: round; }
+.at-brainghost { fill: none; stroke: var(--atlas-ghost); stroke-width: 1; }
+.at-skin { fill: none; stroke: var(--atlas-ghost); stroke-width: 1; }
+.at-dashed { stroke-dasharray: 7 6; }
+.at-shape[data-shade="dome"] { filter: url(#at-dome); }
+.at-shape[data-shade="pit"] { filter: url(#at-pit); }
+
+/* ghost layers and non-interactive groups never take the pointer */
+.at-group[aria-hidden="true"], .at-group[aria-hidden="true"] * { pointer-events: none; }
+.at-brainghost, .at-skin { pointer-events: none; }
+
+.at-group { cursor: default; outline: none; transition: opacity 160ms ease; }
+.at-group[tabindex], .at-group[href] { cursor: pointer; }
+.at-group:focus-visible .at-shape { stroke: var(--signal-2); }
+
+.at-group.is-dim { opacity: 0.3; }
+.at-group.is-lit .at-shape { stroke: var(--hue, var(--signal-2)); stroke-width: 3; }
+.at-group.is-lit .at-shape:not(.at-cutbone):not(.at-nerve):not(.at-vessel):not(.at-brainghost):not(.at-skin) {
+  fill: color-mix(in srgb, var(--hue, var(--signal-2)) 26%, var(--f));
+}
+.at-group.is-lit .at-nerve, .at-group.is-lit .at-vessel { stroke-width: 4.5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .at-group { transition: none; }
+}

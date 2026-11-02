@@ -220,3 +220,7 @@ html[data-theme="dark"] .site-theme-toggle svg { transform: rotate(180deg); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* quiet link: reads as prose until hovered or focused */
+a.quiet { color: inherit; text-decoration: none; }
+a.quiet:hover, a.quiet:focus-visible { text-decoration: underline dotted var(--ink-faint); text-underline-offset: 0.2em; }
