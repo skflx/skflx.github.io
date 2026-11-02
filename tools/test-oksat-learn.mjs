@@ -16,11 +16,15 @@
      - the hub shows the guide card and its progress
      - unlisted: true entries get no hub card and no hub count, yet still open at their own URL
      - lexicon terms (js/oksat/terms.js) are marked; hover, focus and tap show the full name
+     - anatomy blocks (hotspot, layers, neighbors, sequence) on a route-served fixture guide
+       (fx-anat); nothing is written into the repo (plans/2026-11-02-ear-anatomy-guide.md 4.2.6)
 
    Usage:  node tools/test-oksat-learn.mjs [--base <url>] [--headed]
    Exits nonzero on any failed case.
    ============================================================= */
-import { startServer, launchBrowser, collectErrors } from './smoke-lib.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
@@ -48,6 +52,95 @@ async function open(browser, base, url, seed) {
   return { context, page, errors };
 }
 const chapterReady = (page) => page.waitForFunction(() => document.querySelector('.lr-chapter .lr-sec, .lr-chapter .lr-card'), null, { timeout: 12000 });
+
+/* ---- fixture for section 10: a route-served guide; nothing is written into the repo ---- */
+const FX_SLUG = 'fx-anat';
+const FX_KEY = `oksat:learn:${FX_SLUG}:${REVIEWER}`;
+const GLOSS = (() => {
+  const win = {};
+  new Function('window', fs.readFileSync(path.join(ROOT, 'js/olsb/glossary.js'), 'utf8'))(win);
+  return win.OLSB.glossary;
+})();
+const NAME = (g) => GLOSS[g].name;
+const NAME_TO_G = Object.fromEntries(Object.keys(GLOSS).map((g) => [GLOSS[g].name, g]));
+const gradeFrom3 = (right) => (right === 3 ? 3 : right / 3 >= 0.75 ? 2 : right / 3 >= 0.5 ? 1 : 0);
+const svgWrap = (inner) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120">${inner}</svg>`;
+const region = (g, x, y) => `<g data-g="${g}"><rect x="${x}" y="${y}" width="50" height="40" fill="#b9c4d8" stroke="#333"/></g>`;
+const FX_SVGS = {
+  'hs1.svg': svgWrap(region('antrum', 10, 10) + region('tegmen', 75, 10) + region('aditus', 140, 10) + '<text data-label="lbl" x="10" y="110" font-size="10">labels</text>'),
+  'hs2.svg': svgWrap(region('lscc', 10, 10) + region('mcfdura', 75, 10) + region('tegment', 140, 10)),
+  'evil.svg': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" onload="window.__pwned=1">'
+    + '<script>window.__pwned=1</script><foreignObject width="10" height="10"><div xmlns="http://www.w3.org/1999/xhtml">x</div></foreignObject>'
+    + '<g data-g="antrum" onclick="window.__pwned=1"><rect x="10" y="10" width="50" height="40" fill="#b9c4d8"/></g>'
+    + region('tegmen', 75, 10) + region('aditus', 140, 10) + '</svg>',
+  'base.svg': svgWrap('<rect x="5" y="5" width="190" height="110" fill="#eee"/>'),
+  'l0.svg': svgWrap('<rect x="20" y="20" width="60" height="60" fill="#c33" opacity="0.6"/>'),
+  'l1.svg': svgWrap('<rect x="120" y="20" width="60" height="60" fill="#36c" opacity="0.6"/>'),
+};
+const SEQ_ITEMS = ['CN VIII', 'Ventral cochlear nucleus', 'Superior olivary complex (both sides)', 'Facial motor nucleus', 'Stapedius'];
+const LAYERS = [{ id: 'l0', label: 'Layer zero', src: 'images/oksat/fx-anat/l0.svg' }, { id: 'l1', label: 'Layer one', src: 'images/oksat/fx-anat/l1.svg' }];
+const hs = (id, frames, extra) => ({ t: 'hotspot', id, alt: 'Fixture ear figure', label: 'Fixture hotspot', modes: ['explore', 'find'], frames, ...extra });
+const FX_SECTIONS = [
+  { id: 'hs-s1', n: '1', title: 'Hotspot: explore and find', blocks: [hs('hs1', [{ src: 'images/oksat/fx-anat/hs1.svg', cap: 'Frame one', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] }])] },
+  { id: 'hs-s2', n: '2', title: 'Hotspot: two frames', blocks: [hs('hs2', [
+    { src: 'images/oksat/fx-anat/hs1.svg', cap: 'Frame one cap', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] },
+    { src: 'images/oksat/fx-anat/hs2.svg', cap: 'Frame two cap', regions: [{ g: 'lscc' }, { g: 'mcfdura' }, { g: 'tegment' }] },
+  ])] },
+  { id: 'hs-s3', n: '3', title: 'Hotspot: scrubbed SVG', blocks: [hs('hs3', [{ src: 'images/oksat/fx-anat/evil.svg', cap: 'Hostile', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] }])] },
+  { id: 'hs-s4', n: '4', title: 'Hotspot: degrade', blocks: [hs('hs4', [{ src: 'images/oksat/fx-anat/missing.svg', cap: 'Degrade cap', regions: [{ g: 'antrum' }, { g: 'tegmen' }, { g: 'aditus' }] }], { alt: 'Degrade fallback alt' })] },
+  { id: 'lay-s', n: '5', title: 'Layers', blocks: [
+    { t: 'layers', id: 'lay1', alt: 'Layers base', base: 'images/oksat/fx-anat/base.svg', mode: 'toggle', layers: LAYERS, on: [], cap: 'Toggle cap' },
+    { t: 'layers', id: 'lay2', alt: 'Layers base', base: 'images/oksat/fx-anat/base.svg', mode: 'step', cumulative: false, layers: LAYERS },
+    { t: 'layers', id: 'lay3', alt: 'Layers base', base: 'images/oksat/fx-anat/base.svg', mode: 'step', cumulative: true, layers: LAYERS },
+  ] },
+  { id: 'nb-s', n: '6', title: 'Neighbors', blocks: [{ t: 'neighbors', id: 'nb1', g: 'antrum', label: 'Neighbours of the antrum' }] },
+  { id: 'sq-s', n: '7', title: 'Sequence', blocks: [
+    { t: 'sequence', id: 'sq1', q: 'Order the stapedial reflex arc.', items: SEQ_ITEMS },
+    { t: 'sequence', id: 'sq2', q: 'Second arc, left as shuffled.', items: ['A one', 'B two', 'C three'] },
+  ] },
+  { id: 'tl-s', n: '8', title: 'Tally', blocks: [
+    { t: 'check', id: 'tc1', q: 'Predict the answer.', a: 'The answer.' },
+    { t: 'neighbors', id: 'tn1', g: 'antrum' },
+    { t: 'sequence', id: 'tq1', q: 'Order these.', items: ['A one', 'B two', 'C three'] },
+  ] },
+];
+const FX_CHAPTER = { id: 'anat', kicker: 'Fixture', title: 'Anatomy blocks fixture', lede: 'Served by route interception.', sections: FX_SECTIONS };
+const FX_GUIDE = {
+  slug: FX_SLUG, title: 'Fixture anatomy', kicker: 'Fixture', subspecialty: 'fundamentals', accent: '#2445B0', desc: 'Test fixture.',
+  chapters: [{ id: 'anat', short: 'Fixture', min: 5, sections: FX_SECTIONS.length, data: 'js/oksat/guides/fx-anat/anat.js' }],
+};
+
+async function openFx(browser, base, url) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await context.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
+  await context.route(/\/js\/oksat\/manifest\.js(\?.*)?$/, async (route) => {
+    const res = await route.fetch();
+    const body = (await res.text()) + `\nwindow.OKSAT_GUIDES.push(${JSON.stringify(FX_GUIDE)});`;
+    await route.fulfill({ status: 200, contentType: 'application/javascript', body });
+  });
+  await context.route(/\/js\/oksat\/guides\/fx-anat\/anat\.js(\?.*)?$/, (route) => route.fulfill({
+    status: 200, contentType: 'application/javascript', body: `window.__OKSAT_CHAPTER = ${JSON.stringify(FX_CHAPTER)};`,
+  }));
+  await context.route(/\/images\/oksat\/fx-anat\/[^/?]+(\?.*)?$/, (route) => {
+    const name = decodeURIComponent(new URL(route.request().url()).pathname.split('/').pop());
+    const svg = FX_SVGS[name];
+    if (!svg) return route.fulfill({ status: 404, contentType: 'text/plain', body: 'not found' });
+    return route.fulfill({ status: 200, contentType: 'image/svg+xml', body: svg });
+  });
+  const page = await context.newPage();
+  const errors = collectErrors(page);
+  await page.goto(base + '/' + url, { waitUntil: 'domcontentloaded' });
+  return { context, page, errors };
+}
+const dlRow = (page, sec, label) => page.evaluate(([s, l]) => {
+  const dl = document.querySelector(`#${s} .lr-hs-nbs`);
+  const dt = dl && [...dl.querySelectorAll('dt')].find((t) => t.textContent === l);
+  if (!dt) return null;
+  const dd = dt.nextElementSibling;
+  return { buttons: [...dd.querySelectorAll('button')].map((b) => b.textContent), text: dd.textContent };
+}, [sec, label]);
+const seqTexts = (page, i) => page.evaluate((n) => [...document.querySelectorAll('#sq-s .lr-seq')[n].querySelectorAll('.lr-seq-row .lr-seq-text')].map((e) => e.textContent), i);
+const gradeOf = (rec, k) => (rec && rec.checks ? rec.checks[k] : undefined);
 
 async function main() {
   let server = null;
@@ -349,6 +442,133 @@ async function main() {
     check('10h: the unlisted module still opens at its own URL', (await m.page.title()).startsWith('Unlisted probe module') && !(await m.page.$('.ok-notice')), await m.page.title());
     check('10i: no console errors on the unlisted module', m.errors.length === 0, JSON.stringify(m.errors.slice(0, 2)));
     await m.context.close();
+  }
+
+  /* ---- 10: anatomy blocks (hotspot, layers, neighbors, sequence) on the fixture guide ---- */
+  {
+    const { context, page, errors } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);
+    await chapterReady(page);
+    await page.waitForSelector('#hs-s1 .lr-hs-stage svg', { timeout: 12000 });
+
+    /* T1: explore names the region and lists its neighbours by direction, reverses included */
+    await page.click('#hs-s1 [data-g="antrum"]');
+    check('10-T1a: explore fills the panel with the glossary name', (await page.textContent('#hs-s1 .lr-hs-name')) === NAME('antrum'), await page.textContent('#hs-s1 .lr-hs-panel'));
+    const sup = await dlRow(page, 'hs-s1', 'Superior');
+    check('10-T1b: Superior lists the in-frame neighbour as a button', !!sup && sup.buttons.includes(NAME('tegmen')), JSON.stringify(sup));
+    const ant = await dlRow(page, 'hs-s1', 'Anterior');
+    check('10-T1c: Anterior lists aditus as a button', !!ant && ant.buttons.includes(NAME('aditus')), JSON.stringify(ant));
+    await page.click('#hs-s1 [data-g="tegmen"]');
+    const inf = await dlRow(page, 'hs-s1', 'Inferior');
+    check('10-T1d: a reverse relation shows (tegmen lies inferior to antrum, so tegmen lists antrum below)', !!inf && inf.buttons.includes(NAME('antrum')), JSON.stringify(inf));
+
+    /* T6: keyboard — focus a region and press Enter */
+    await page.focus('#hs-s1 [data-g="aditus"]');
+    await page.keyboard.press('Enter');
+    check('10-T6a: Enter on a focused region selects it and fills the panel', (await page.textContent('#hs-s1 .lr-hs-name')) === NAME('aditus'));
+    check('10-T6b: regions are in the tab order with role=button', await page.$eval('#hs-s1 [data-g="aditus"]', (e) => e.getAttribute('tabindex') === '0' && e.getAttribute('role') === 'button'));
+
+    /* T2: find — first target right, the other two wrong: 1 / 3, graded 0 */
+    await page.click('#hs-s1 button[data-mode="find"]');
+    for (let k = 0; k < 3; k++) {
+      const target = NAME_TO_G[(await page.textContent('#hs-s1 .lr-hs-prompt')).replace(/^Tap: /, '')];
+      const choice = k === 0 ? target : ['antrum', 'tegmen', 'aditus'].find((g) => g !== target);
+      await page.click(`#hs-s1 [data-g="${choice}"]`);
+    }
+    check('10-T2a: find ends with n / N', (await page.textContent('#hs-s1 .lr-hs-score')) === '1 / 3', await page.textContent('#hs-s1 .lr-hs-panel'));
+    let rec = await ls(page, FX_KEY);
+    check('10-T2b: the round stores its grade at the check key (0 for 1 of 3)', gradeOf(rec, 'anat/hs-s1:hs1') === 0, JSON.stringify(rec && rec.checks));
+    check('10-T2c: hits and misses are marked on the figure', await page.evaluate(() => document.querySelectorAll('#hs-s1 .is-hit').length === 1 && document.querySelectorAll('#hs-s1 .is-miss').length === 2));
+
+    /* T3: two frames; changing frame advances the stepper and restarts the find round */
+    await page.click('#hs-s2 button[data-mode="find"]');
+    const first = NAME_TO_G[(await page.textContent('#hs-s2 .lr-hs-prompt')).replace(/^Tap: /, '')];
+    await page.click(`#hs-s2 [data-g="${first}"]`);
+    await page.click('#hs-s2 button[aria-label="Next frame"]');
+    check('10-T3a: next frame shows its cap', (await page.textContent('#hs-s2 .lr-cap')).includes('Frame two cap'), await page.textContent('#hs-s2 .lr-cap'));
+    check('10-T3b: the stepper reads 2 / 2', (await page.textContent('#hs-s2 .lr-hs-count')) === '2 / 2');
+    check('10-T3c: the find round restarts on the new frame', (await page.textContent('#hs-s2 .lr-hs-hint')).includes('Target 1 of 3') && (await page.$$eval('#hs-s2 .is-hit, #hs-s2 .is-miss', (e) => e.length)) === 0);
+
+    /* T4: the SVG sanitizer */
+    await page.waitForSelector('#hs-s3 [data-g="antrum"]', { timeout: 12000 });
+    check('10-T4a: an SVG with script and onload does not run', (await page.evaluate(() => window.__pwned)) === undefined);
+    const bad = await page.evaluate(() => {
+      const root = document.querySelector('#hs-s3 .lr-hs-stage');
+      const els = root ? [root, ...root.querySelectorAll('*')] : [];
+      return els.filter((e) => e.localName.toLowerCase() === 'foreignobject' || e.localName.toLowerCase() === 'script' || [...e.attributes].some((a) => /^on/i.test(a.name))).length;
+    });
+    check('10-T4b: no on* attribute, foreignObject or script reaches the DOM', bad === 0, String(bad));
+
+    /* T7: layers, toggle and step */
+    await page.waitForSelector('#lay-s .lr-layers-l', { state: 'attached', timeout: 10000 });
+    const lay = (i) => page.locator('#lay-s .lr-layers').nth(i);
+    const hidden = (i) => page.evaluate((n) => [...document.querySelectorAll('#lay-s .lr-layers')[n].querySelectorAll('.lr-layers-l')].map((im) => im.hidden), i);
+    check('10-T7a: layers start with every toggled layer off', JSON.stringify(await hidden(0)) === '[true,true]', JSON.stringify(await hidden(0)));
+    await lay(0).locator('.lr-chipbtn', { hasText: 'Layer zero' }).click();
+    check('10-T7b: a chip shows its layer', JSON.stringify(await hidden(0)) === '[false,true]', JSON.stringify(await hidden(0)));
+    await lay(0).locator('.lr-chipbtn', { hasText: 'Layer zero' }).click();
+    check('10-T7c: the chip hides it again', JSON.stringify(await hidden(0)) === '[true,true]', JSON.stringify(await hidden(0)));
+    await lay(1).locator('input[type=range]').focus();
+    await page.keyboard.press('ArrowRight');
+    check('10-T7d: step at 1 shows layer 1 only', JSON.stringify(await hidden(1)) === '[true,false]', JSON.stringify(await hidden(1)));
+    await lay(2).locator('input[type=range]').focus();
+    await page.keyboard.press('ArrowRight');
+    check('10-T7e: step at 1 with cumulative shows layers 0 to 1', JSON.stringify(await hidden(2)) === '[false,false]', JSON.stringify(await hidden(2)));
+
+    /* T8: neighbors reveal and grade */
+    await page.waitForSelector('#nb-s .lr-nbwrap .lr-reveal', { timeout: 10000 });
+    await page.click('#nb-s .lr-nbwrap .lr-reveal');
+    const outs = await page.$$eval('#nb-s .lr-nb-out', (els) => els.map((e) => ({ dir: e.querySelector('.lr-label').textContent, names: e.querySelector(':scope > p:last-of-type').textContent })));
+    check('10-T8a: Superior reveals the tegmen name', outs.some((o) => o.dir === 'Superior' && o.names === NAME('tegmen')), JSON.stringify(outs));
+    check('10-T8b: Anterior reveals the aditus name', outs.some((o) => o.dir === 'Anterior' && o.names === NAME('aditus')), JSON.stringify(outs));
+    await page.keyboard.press('4');
+    await page.waitForTimeout(150);
+    rec = await ls(page, FX_KEY);
+    check('10-T8c: Knew it cold is stored as 3', gradeOf(rec, 'anat/nb-s:nb1') === 3, JSON.stringify(rec && rec.checks));
+
+    /* T9: sequence — the shuffle differs, the move buttons reach the order, check, then an unchanged block */
+    await page.waitForSelector('#sq-s .lr-seq', { timeout: 10000 });
+    const initial = await seqTexts(page, 0);
+    check('10-T9a: the shuffle differs from the authored order', JSON.stringify(initial) !== JSON.stringify(SEQ_ITEMS), JSON.stringify(initial));
+    const seq1 = page.locator('#sq-s .lr-seq').nth(0);
+    for (let pos = 0; pos < SEQ_ITEMS.length; pos++) {
+      const cur = await seqTexts(page, 0);
+      for (let k = cur.indexOf(SEQ_ITEMS[pos]); k > pos; k--) {
+        await seq1.getByRole('button', { name: 'Move up: ' + cur[k], exact: true }).click();
+        cur[k] = cur[k - 1]; cur[k - 1] = SEQ_ITEMS[pos];
+      }
+    }
+    check('10-T9b: the move buttons reach the authored order', JSON.stringify(await seqTexts(page, 0)) === JSON.stringify(SEQ_ITEMS));
+    await seq1.getByRole('button', { name: 'Check order' }).click();
+    await page.waitForTimeout(100);
+    rec = await ls(page, FX_KEY);
+    check('10-T9c: a correct order is stored as 3', gradeOf(rec, 'anat/sq-s:sq1') === 3, JSON.stringify(rec && rec.checks));
+    await page.locator('#sq-s .lr-seq').nth(1).getByRole('button', { name: 'Check order' }).click();
+    const right = await page.$$eval('#sq-s .lr-seq', (els) => els[1].querySelectorAll('.is-right').length);
+    const expect2 = gradeFrom3(right);
+    rec = await ls(page, FX_KEY);
+    check('10-T9d: an unchanged order is graded by the positions rule (below 3)', gradeOf(rec, 'anat/sq-s:sq2') === expect2 && expect2 < 3, `right=${right} stored=${gradeOf(rec, 'anat/sq-s:sq2')} expect=${expect2}`);
+
+    /* T10: the tally counts the check and the two graded blocks */
+    check('10-T10a: a section with a check, neighbors and sequence counts 3', /^0 of 3 prompts graded/.test(await page.textContent('#tl-s .lr-hint')), await page.textContent('#tl-s .lr-hint'));
+    await page.click('#tl-s .lr-q .lr-reveal');
+    await page.keyboard.press('2');
+    await page.waitForTimeout(100);
+    check('10-T10b: grading one makes it 1 of 3', /^1 of 3 prompts graded/.test(await page.textContent('#tl-s .lr-hint')), await page.textContent('#tl-s .lr-hint'));
+
+    /* The only errors allowed are the browser's own 404 lines for hs-s4's deliberately missing SVG (T5). */
+    const other = errors.filter((e) => !/status of 404 \(Not Found\)$/.test(e.text));
+    check('10-T-err: no console errors on the fixture guide beyond the deliberate missing.svg 404s', other.length === 0, JSON.stringify(other.slice(0, 3)));
+    await context.close();
+  }
+
+  /* T5: a missing SVG degrades to a plain figure with the block alt */
+  {
+    const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);
+    await chapterReady(page);
+    await page.waitForSelector('#hs-s4 .lr-figure img', { state: 'attached', timeout: 12000 });
+    check('10-T5a: a missing SVG renders as a plain figure with the block alt', (await page.$eval('#hs-s4 .lr-figure img', (e) => e.alt)) === 'Degrade fallback alt');
+    check('10-T5b: the degraded block has no interactive stage', (await page.$$eval('#hs-s4 .lr-hs-stage', (e) => e.length)) === 0);
+    await context.close();
   }
 
   await browser.close();
