@@ -11,7 +11,10 @@
 
   var today = new Date().toISOString().split('T')[0];
   var reviewer = OKSATStore.reviewer();
-  var manifest = window.OKSAT_MANIFEST || [];
+  /* `unlisted: true` keeps a module or guide reachable by its own URL but out of
+     the hub: no card, and nothing it holds reaches the hub's counts or banner. */
+  function listed(x) { return !!x && x.unlisted !== true; }
+  var manifest = (window.OKSAT_MANIFEST || []).filter(listed);
   var subs = window.OKSAT_SUBSPECIALTIES || {};
 
   /* ---- per-module local state (answered count + cards due today) ---- */
@@ -59,7 +62,7 @@
   }
 
   /* ---- Interactive learning: one card per guide, progress = sections marked done ---- */
-  var guides = window.OKSAT_GUIDES || [];
+  var guides = (window.OKSAT_GUIDES || []).filter(listed);
   function guideCard(g) {
     var subInfo = subs[g.subspecialty];
     var total = 0, mins = 0;

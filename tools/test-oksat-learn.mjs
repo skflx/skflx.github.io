@@ -14,6 +14,7 @@
      - step / scroll, core-only, deep links, flashcards and the pearl wall
      - untrusted input (?g=, ?c=, the hash) is only ever matched against known ids
      - the hub shows the guide card and its progress
+     - unlisted: true entries get no hub card and no hub count, yet still open at their own URL
      - lexicon terms (js/oksat/terms.js) are marked; hover, focus and tap show the full name
 
    Usage:  node tools/test-oksat-learn.mjs [--base <url>] [--headed]
@@ -288,6 +289,66 @@ async function main() {
     check(`9f (${tag}): a term inside a checker label opens the tip without ticking the box`, id && !(await page.$eval('#' + id, (e) => e.checked)) && (await tip()) !== null, `checker term ${id}`);
     check(`9g (${tag}): no console errors`, errors.length === 0, JSON.stringify(errors.slice(0, 2)));
     await context.close();
+  }
+
+  /* ---- 10: unlisted entries: no hub card or count, still reachable by URL ----
+     The real manifest is served with two synthetic entries appended by a route
+     (nothing is written into the repo). The probe guide reuses a real chapter file. */
+  {
+    const UNL_GUIDE = 'unlisted-probe-guide';
+    const UNL_MOD = 'unlisted-probe-module';
+    const probe = [
+      `window.OKSAT_GUIDES.push({ slug: '${UNL_GUIDE}', title: 'Unlisted probe guide', kicker: 'Probe', subspecialty: 'rhinology', accent: '#6E4A6B', desc: 'Probe.', unlisted: true,`,
+      `  chapters: [{ id: 'start', short: 'Start here', data: 'js/oksat/guides/ar-crs-aerd/start.js' },`,
+      `    { id: 'science', k: 1, short: 'Science', min: 5, sections: 10, data: 'js/oksat/guides/ar-crs-aerd/science.js' }] });`,
+      `window.OKSAT_MANIFEST.push({ slug: '${UNL_MOD}', title: 'Unlisted probe module', kicker: 'Probe', subspecialty: 'rhinology', count: 62, accent: '#6E4A6B', desc: 'Probe.', data: 'js/oksat/modules/crs-ars.js', unlisted: true });`,
+    ].join('\n');
+    const routed = async (url, seed) => {
+      const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+      await context.route((u) => u.pathname.endsWith('/js/oksat/manifest.js'), async (route) => {
+        const r = await route.fetch();
+        await route.fulfill({ response: r, body: (await r.text()) + '\n' + probe });
+      });
+      await context.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
+      if (seed) await context.addInitScript(seed);
+      const page = await context.newPage();
+      const errors = collectErrors(page);
+      await page.goto(base + '/' + url, { waitUntil: 'domcontentloaded' });
+      return { context, page, errors };
+    };
+    /* 3 due items on the unlisted module, 1 on the listed crs-ars: the banner must count only the 1 */
+    const seed = [
+      `try{localStorage.setItem('oksat:srs:${UNL_MOD}:${REVIEWER}',JSON.stringify({items:{p1:{nextReview:'2000-01-01'},p2:{nextReview:'2000-01-01'},p3:{nextReview:'2000-01-01'}}}));}catch(e){}`,
+      `try{localStorage.setItem('oksat:srs:crs-ars:${REVIEWER}',JSON.stringify({items:{c1:{nextReview:'2000-01-01'}}}));}catch(e){}`,
+    ].join('');
+
+    const hub = await routed('oksat.html', seed);
+    await hub.page.waitForSelector('#guides .module-card', { timeout: 8000 });
+    await hub.page.waitForSelector('#modules .module-card', { timeout: 8000 });
+    const hrefs = await hub.page.$$eval('#guides a.module-card, #modules a.module-card', (as) => as.map((a) => a.getAttribute('href')));
+    check('10a: an unlisted guide and an unlisted module get no hub card', !hrefs.some((h) => h.includes(UNL_GUIDE) || h.includes(UNL_MOD)), JSON.stringify(hrefs));
+    check('10b: listed guide and module still get their cards', hrefs.includes('oksat-learn.html?g=ar-crs-aerd') && hrefs.includes('oksat-study.html?m=crs-ars'), JSON.stringify(hrefs));
+    const modCards = await hub.page.$$eval('#modules a.module-card', (a) => a.length);
+    const manifestLen = await hub.page.evaluate(() => window.OKSAT_MANIFEST.length);
+    check('10c: the module cards are exactly the listed modules', modCards === manifestLen - 1, `cards=${modCards} manifest=${manifestLen}`);
+    const dueCount = await hub.page.textContent('#review-count');
+    const dueWhere = await hub.page.textContent('#review-where');
+    const crsTitle = await hub.page.evaluate(() => window.OKSAT_MANIFEST.find((m) => m.slug === 'crs-ars').title);
+    check('10d: the due-review banner counts only the listed module (1, not 4)', dueCount === '1' && dueWhere === 'in ' + crsTitle && !(await hub.page.$eval('#review-banner', (e) => e.hidden)), `count=${dueCount} where=${dueWhere}`);
+    check('10e: no console errors on the hub', hub.errors.length === 0, JSON.stringify(hub.errors.slice(0, 2)));
+    await hub.context.close();
+
+    const g = await routed(`oksat-learn.html?g=${UNL_GUIDE}&c=science`);
+    await chapterReady(g.page);
+    check('10f: the unlisted guide still boots at its own URL', (await g.page.$$eval('.lr-chapter .lr-sec', (e) => e.length)) === 10 && !(await g.page.$('.ok-notice')));
+    check('10g: no console errors on the unlisted guide', g.errors.length === 0, JSON.stringify(g.errors.slice(0, 2)));
+    await g.context.close();
+
+    const m = await routed(`oksat-study.html?m=${UNL_MOD}`);
+    await m.page.waitForTimeout(1500);
+    check('10h: the unlisted module still opens at its own URL', (await m.page.title()).startsWith('Unlisted probe module') && !(await m.page.$('.ok-notice')), await m.page.title());
+    check('10i: no console errors on the unlisted module', m.errors.length === 0, JSON.stringify(m.errors.slice(0, 2)));
+    await m.context.close();
   }
 
   await browser.close();
