@@ -3,7 +3,8 @@
   <rect width="640" height="540" fill="#ffffff"/>
   <ellipse cx="320" cy="285" rx="185" ry="200" fill="#f0cfc6" stroke="#8a7b5f" stroke-width="2"/>
   <ellipse cx="285" cy="330" rx="80" ry="64" fill="#e9b9ad" stroke="#8d7a6c"/>
-  <path d="M 275 268 C 268 300 290 330 278 392" fill="none" stroke="#d9a400" stroke-width="3"/>
+  <path d="M 330 392 C 340 360 322 330 340 296 C 346 284 344 274 350 266" fill="none" stroke="#d9a400" stroke-width="3"/>
+  <ellipse cx="322" cy="104" rx="30" ry="18" fill="none" stroke="#555049" stroke-width="1.5" stroke-dasharray="4 3"/>
   <ellipse cx="205" cy="395" rx="26" ry="19" fill="#6b5a4e"/>
   <path d="M 200 455 Q 320 500 440 450 L 430 472 Q 320 512 210 476 Z" fill="#2f5d8a" fill-opacity="0.55"/>
   <path d="M 252 110 L 268 110 L 266 236 Q 274 244 278 252 L 266 258 Q 258 248 250 242 Z" fill="#ddd0b4" stroke="#8a7b5f"/>
@@ -23,7 +24,9 @@
   <text x="118" y="186" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Facial nerve, tympanic</text>
   <text x="160" y="232" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Chorda tympani</text>
   <text x="345" y="160" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Tensor tendon, cochleariform</text>
-  <text x="300" y="372" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Promontory, Jacobson nerve</text>
+  <text x="220" y="344" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Promontory</text>
+  <text x="352" y="360" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Jacobson nerve</text>
+  <text x="358" y="92" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Prussak space</text>
   <text x="150" y="430" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Round window niche</text>
   <text x="388" y="262" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Eustachian tube</text>
   <text x="400" y="410" text-anchor="start" font-size="12.5" font-weight="normal" fill="#1d1d1b">Carotid wall</text>

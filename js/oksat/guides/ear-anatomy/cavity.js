@@ -86,9 +86,9 @@ window.__OKSAT_CHAPTER = {
                 {
                     t: 'hotspot',
                     id: 'cav-medial-hs',
-                    alt: 'Medial wall of the right tympanic cavity seen from lateral, with the promontory, Jacobson nerve, oval window and stapes, round window niche, facial nerve and second genu, lateral canal, cochleariform process, tensor, geniculate ganglion, greater petrosal nerve, pyramid, ponticulus, sinus tympani, subiculum, finiculus, styloid eminence, Eustachian tube, carotid wall and hypotympanum.',
+                    alt: 'Medial wall of the right tympanic cavity seen from lateral, with the promontory, Jacobson nerve, oval window and stapes, round window niche, facial nerve sloping down to the cochleariform process, second genu, lateral canal, cog, tensor, geniculate ganglion, greater petrosal nerve, pyramid, posterior sinus, ponticulus, sinus tympani, subiculum, subtympanic sinus, finiculus, styloid eminence, Eustachian tube, carotid wall and hypotympanum.',
                     modes: ['explore', 'find'],
-                    frames: [{ src: 'images/oksat/ear-anatomy/medial-wall.svg', cap: 'Right ear, medial wall from lateral, drum, malleus and incus removed; anterior to the right. Explore first, then Find. Schematic.' }],
+                    frames: [{ src: 'images/oksat/ear-anatomy/medial-wall.svg', cap: 'Right ear, medial wall from lateral, drum, malleus and incus removed; anterior to the right. Relations follow an endoscopic cadaver tour (Kalmanson, Yang, Mann). Explore first, then Find. Schematic.' }],
                 },
                 {
                     t: 'call',
