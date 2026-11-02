@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Right auricle, lateral and medial faces: base (schematic)</title>
+  <rect width="760" height="560" fill="#ffffff"/>
+  <g transform="translate(20 0)">
+    <path d="M 200 420 C 216 402 242 398 272 402 C 302 405 326 400 334 392 C 346 430 336 480 300 505 C 266 520 226 500 210 470 C 200 450 198 436 200 420 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 360 205 C 355 120 300 55 230 52 C 160 50 115 120 118 230 C 120 310 150 370 200 420 L 218 402 C 175 360 145 305 143 232 C 140 135 180 78 232 77 C 290 78 330 130 338 200 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 330 168 C 312 112 275 80 232 80 C 180 80 145 135 146 232 C 148 300 175 355 215 398 L 232 382 C 200 345 186 295 186 240 C 186 165 206 118 238 112 C 270 108 292 128 305 160 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 232 382 C 205 345 192 300 192 252 C 192 216 202 190 215 175 L 240 190 C 226 205 220 228 220 255 C 220 300 234 335 256 368 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 240 190 C 252 168 272 155 300 175 C 318 186 330 198 336 210 C 300 203 268 195 240 190 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 215 175 C 235 148 268 128 305 160 L 300 175 C 272 155 252 168 240 190 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 240 190 C 268 195 300 203 336 210 L 334 228 C 300 224 268 220 236 212 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 236 214 C 268 222 300 226 334 230 C 344 236 346 242 340 248 C 300 254 266 254 244 252 C 236 244 232 230 236 214 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 246 270 C 300 270 340 262 354 266 C 362 300 352 340 322 356 C 292 368 262 360 248 340 C 236 318 238 292 246 270 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 362 212 C 345 240 300 252 248 254 L 246 270 C 300 270 344 260 368 236 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 360 266 C 382 272 394 302 390 332 C 386 352 374 360 360 354 C 368 326 368 296 360 266 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <path d="M 256 368 C 276 372 302 376 324 372 C 328 386 320 398 302 400 C 280 400 264 392 256 368 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+    <ellipse cx="330" cy="318" rx="16" ry="20" fill="#5b4c40"/>
+  </g>
+  <path d="M 460 205 C 465 120 520 55 590 52 C 660 50 705 120 702 230 C 700 310 670 370 620 420 C 610 470 590 510 550 505 C 515 500 500 470 500 430 C 490 380 470 300 460 205 Z" fill="#f6e3d4" stroke="#8f6a52" stroke-width="1.1"/>
+  <ellipse cx="545" cy="300" rx="48" ry="58" fill="#efd3bf" stroke="#8f6a52" stroke-dasharray="4 3"/>
+  <path d="M 470 140 C 490 260 500 360 510 430" fill="none" stroke="#555049" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="220" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#1d1d1b">Lateral face</text>
+  <text x="590" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#1d1d1b">Medial (cranial) face</text>
+  <text x="545" y="305" text-anchor="middle" font-size="11.5" font-weight="normal" fill="#555049" font-style="italic">conchal</text>
+  <text x="545" y="319" text-anchor="middle" font-size="11.5" font-weight="normal" fill="#555049" font-style="italic">eminence</text>
+  <text x="455" y="470" text-anchor="end" font-size="11.5" font-weight="normal" fill="#555049" font-style="italic">sulcus</text>
+  <text x="380" y="548" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right auricle. Lateral face: anterior to the right. Medial face: viewed from behind, head side to the left. Schematic.</text>
+</svg>

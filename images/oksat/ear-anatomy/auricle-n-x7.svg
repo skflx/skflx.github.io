@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Arnold nerve and facial nerve territory (schematic)</title>
+  <g fill="#b8352a" fill-opacity="0.38" stroke="#b8352a" stroke-width="1.5">
+    <path d="M 236 214 C 268 222 334 230 352 250 C 362 300 352 340 322 356 C 292 368 262 360 248 340 C 232 300 230 250 236 214 Z" transform="translate(20 0)"/>
+    <path d="M 497 300 C 497 268 520 242 545 242 C 570 242 593 268 593 300 C 593 334 570 358 545 358 C 520 358 497 334 497 300 Z"/>
+  </g>
+  <text x="310" y="300" text-anchor="middle" font-size="14" font-weight="bold" fill="#b8352a">Arnold (X) + VII</text>
+  <text x="545" y="380" text-anchor="middle" font-size="14" font-weight="bold" fill="#b8352a">X + VII</text>
+</svg>

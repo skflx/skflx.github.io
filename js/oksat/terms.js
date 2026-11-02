@@ -30,6 +30,7 @@
         'EUFOREA': 'European Forum for Research and Education in Allergy and Airway Diseases',
         'ICAR': 'International Consensus statement on Allergy and Rhinology',
         'ICAR-AR': 'International Consensus statement on Allergy and Rhinology: Allergic Rhinitis',
+        'KJ': 'KJ Lee, Essential Otolaryngology (board review textbook)',
         'LIO': 'Laryngoscope Investigative Otolaryngology (journal)',
         'LoE': 'level of evidence',
         'RAND': 'RAND Corporation (RAND/UCLA appropriateness method)',
@@ -204,6 +205,7 @@
         'OSA', 'OTC', 'P450', 'PAF', 'PCR', 'PDE5', 'PEF', 'PFT', 'PKG', 'PM2', 'PND', 'PPI', 'PPV', 'PR3',
         'QOL', 'RCT', 'RF', 'RR', 'SABA', 'SES', 'sGC', 'SSRI', 't-PA', 'T1', 'T2', 'TCA', 'TGF-β', 'Th1',
         'Th17', 'Th2', 'Treg', 'UK', 'URI', 'URTI', 'US', 'VAS',
+        'C2', 'C3', 'CN', 'dB', 'TMJ', 'V3',
     ]);
     /* Roman numerals (Draf IIa, type III), interleukins and their chains by number. */
     const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4)$/;

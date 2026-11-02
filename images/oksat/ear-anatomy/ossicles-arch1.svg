@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 560" width="660" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Ossicular origin: First arch (Meckel) (schematic)</title>
+  <g fill="#2f5d8a" fill-opacity="0.45" stroke="#2f5d8a" stroke-width="1.5">
+    <ellipse cx="390" cy="112" rx="34" ry="40"/>
+    <path d="M 378 148 L 404 148 L 406 196 L 380 196 Z"/>
+    <ellipse cx="302" cy="124" rx="42" ry="34"/>
+    <path d="M 268 108 L 196 112 L 196 122 L 268 140 Z"/>
+  </g>
+  <text x="520" y="110" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#2f5d8a">First arch (Meckel)</text>
+</svg>

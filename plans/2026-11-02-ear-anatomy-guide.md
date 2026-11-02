@@ -646,32 +646,32 @@ labels; rows marked *verify* had no readable labels and need a visual check. The
 references only (D9): each row becomes an SVG in its content wave, unless W0.4 records an
 open-license image that shows the same view and teaching points. Netter-style plates carry a "Medico Plasma" mark.
 
-| Drive file | Drive id | Section(s) | Note |
-|---|---|---|---|
-| tympanum-medial-wall.png | 1TIGM6pa5PNDOvvqDklD4PcF47mUMBvkH | `cav-medial`, `sp-retro` | Lead |
-| tympanum-medial-view.png | 142QD3nlch8K7_sTCsqhdoW95Vz9T-awb | `cav-lateral` | Lateral wall from inside |
-| tympanum-anterior-view.png | 1l8TPo_HIG4rOHlnx8CDzuszgsQWA_W4A | `cav-anterior`, `sy-para` | Coronal from front; LPN, tympanic plexus |
-| tympanum-middle-ear-ligaments.png | 1ayaNW-HUvgQGQOsATHh6E_A2wJBcQyVI | `os-joints` | Lead |
-| tympanum-facial-nerve-and-chorda.png | 1wTjkU1twVByPcpWGjxiPymIP0_aqDhhl | `sy-fn`, `ma-fn` | Lead |
-| tympanum-lateral-no-drum.png | 1cNXnPBNrQ41FPw-zzEmpbppYU1dBcZ6Q | `os-supply`, `sy-arteries` | Is the arterial arcade; rename on import |
-| tympanic-membrane.png | 1BXl0F3prDOKMIoM1COPi7t0M_YBBvpMb | `or-views`, `tm-marks` | Lead |
-| tympanic-membrane-nerve-supply.jpg | 1Mu-UPhlz2MIuttRsm4oKq7hVIk3jBbbf | `tm-supply` | verify |
-| auricle-landmarks.png | 1CnsiGnHqmUzUBHqQbgxfjh5ERYDkp0iZ | `au-topo` | Textbook Fig 23-1 |
-| pinna-auricle-landmarks.jpg | 145eDjHs76RtT3zeZTU6NI9_fyjoxt7Q5 | `au-topo` | Gralapp; alternate |
-| auricular-cartilage-anatomy.png | 17up4LHGo0ShhC_0fcisjZ2--Gv6EFTog | `au-cart` | Fig 22-1 |
-| auricular-cartilage-framework.png | 14YjgsOD7O0BSbUmo7x8sUSCUTOKiZB_v | `au-cart` | verify |
-| auricle-arteria.png | 1KTIFbWb55Z-nSJ-tyh32DNnK_UJjD6JC | `au-vessel` | Fig 22-2 |
-| auricular-innervation.png | 16Kkju87cqfpDRCHt3GeJd_Vxyrd__b6P | `au-nerve` | Fig 22-3 |
-| temporal-bone-squamous-tympanic-mastoid-parts-labeled.png | 1LnaSnFbeaoaYOa6vQKIKvNdrWaybxiTE | `or-parts` | Latin labels; SVG in English. Same size as temporal-bone-landmarks.png (likely duplicate) |
-| temporal-bone-anatomical-parts-diagram.png | 1IUMhAptZQSmhh57uNpig4YjhN-zJUAT9 | `or-parts` | verify; a -dup copy exists |
-| middle-ear-ossicles-mastoid-anatomy.png | 19RUZYjrLM8DI0W5IBiMT4mFR-5UayaNH | `os-parts`, `ma-sequence` | Gralapp |
-| facial-nerve-intratemporal-branches.jpg | 1LQGbvYK1oJrMPVFo-Sgo2TP6iCBNu8D4 | `sy-fn` | Kenhub, watermarked; reference only |
-| facial-nerve-diagram-ao.png | 1GaqVJ_vLLNvcYSbkMUGGuDHj5_yWUbVb | `sy-fn` | verify |
-| facial-nerve-arterial-supply.png | 16yhACJ1ZEqwfzYoLL_W_ws4HlecWTt5W | `sy-fn` | |
-| mastoid-cortex-bone-cuts-cortical-mastoidectomy-steps.png | 1F74Roz002sAaC7lGaQ3rTb32610EBBUG | `ma-surface` | |
-| completed-intact-canal-wall-mastoidectomy-anatomy-diagram.png | 16cRv54NNiI4-l4xHcjCaSDJzArrd_PfO | `ma-sequence` | Cummings Fig 134.3; lead |
-| canal-wall-down-mastoidectomy-cavity-surgical-anatomy.png | 19XdG7k8r9ffcQs5xeRwQ1Y0RmL8aYwKg | `ma-peds` (deep) | verify |
-| cranial-nerve-7-facial-nerve-pathway-statpearls.png | 1Jr5_njutpZ5hvUa1ve4vM3hKY8uwrlIu | — | Screenshot; do not import |
+| Drive file | Drive id | Section(s) | Note | Outcome |
+|---|---|---|---|---|
+| tympanum-medial-wall.png | 1TIGM6pa5PNDOvvqDklD4PcF47mUMBvkH | `cav-medial`, `sp-retro` | Lead | SVG |
+| tympanum-medial-view.png | 142QD3nlch8K7_sTCsqhdoW95Vz9T-awb | `cav-lateral` | Lateral wall from inside | SVG |
+| tympanum-anterior-view.png | 1l8TPo_HIG4rOHlnx8CDzuszgsQWA_W4A | `cav-anterior`, `sy-para` | Coronal from front; LPN, tympanic plexus | SVG |
+| tympanum-middle-ear-ligaments.png | 1ayaNW-HUvgQGQOsATHh6E_A2wJBcQyVI | `os-joints` | Lead | SVG |
+| tympanum-facial-nerve-and-chorda.png | 1wTjkU1twVByPcpWGjxiPymIP0_aqDhhl | `sy-fn`, `ma-fn` | Lead | SVG |
+| tympanum-lateral-no-drum.png | 1cNXnPBNrQ41FPw-zzEmpbppYU1dBcZ6Q | `os-supply`, `sy-arteries` | Is the arterial arcade; rename on import | SVG |
+| tympanic-membrane.png | 1BXl0F3prDOKMIoM1COPi7t0M_YBBvpMb | `or-views`, `tm-marks` | Lead | SVG |
+| tympanic-membrane-nerve-supply.jpg | 1Mu-UPhlz2MIuttRsm4oKq7hVIk3jBbbf | `tm-supply` | verify | SVG |
+| auricle-landmarks.png | 1CnsiGnHqmUzUBHqQbgxfjh5ERYDkp0iZ | `au-topo` | Textbook Fig 23-1 | SVG |
+| pinna-auricle-landmarks.jpg | 145eDjHs76RtT3zeZTU6NI9_fyjoxt7Q5 | `au-topo` | Gralapp; alternate | SVG |
+| auricular-cartilage-anatomy.png | 17up4LHGo0ShhC_0fcisjZ2--Gv6EFTog | `au-cart` | Fig 22-1 | SVG |
+| auricular-cartilage-framework.png | 14YjgsOD7O0BSbUmo7x8sUSCUTOKiZB_v | `au-cart` | verify | SVG |
+| auricle-arteria.png | 1KTIFbWb55Z-nSJ-tyh32DNnK_UJjD6JC | `au-vessel` | Fig 22-2 | SVG |
+| auricular-innervation.png | 16Kkju87cqfpDRCHt3GeJd_Vxyrd__b6P | `au-nerve` | Fig 22-3 | SVG |
+| temporal-bone-squamous-tympanic-mastoid-parts-labeled.png | 1LnaSnFbeaoaYOa6vQKIKvNdrWaybxiTE | `or-parts` | Latin labels; SVG in English. Same size as temporal-bone-landmarks.png (likely duplicate) | SVG |
+| temporal-bone-anatomical-parts-diagram.png | 1IUMhAptZQSmhh57uNpig4YjhN-zJUAT9 | `or-parts` | verify; a -dup copy exists | SVG |
+| middle-ear-ossicles-mastoid-anatomy.png | 19RUZYjrLM8DI0W5IBiMT4mFR-5UayaNH | `os-parts`, `ma-sequence` | Gralapp | SVG |
+| facial-nerve-intratemporal-branches.jpg | 1LQGbvYK1oJrMPVFo-Sgo2TP6iCBNu8D4 | `sy-fn` | Kenhub, watermarked; reference only | SVG |
+| facial-nerve-diagram-ao.png | 1GaqVJ_vLLNvcYSbkMUGGuDHj5_yWUbVb | `sy-fn` | verify | SVG |
+| facial-nerve-arterial-supply.png | 16yhACJ1ZEqwfzYoLL_W_ws4HlecWTt5W | `sy-fn` | | SVG |
+| mastoid-cortex-bone-cuts-cortical-mastoidectomy-steps.png | 1F74Roz002sAaC7lGaQ3rTb32610EBBUG | `ma-surface` | | SVG |
+| completed-intact-canal-wall-mastoidectomy-anatomy-diagram.png | 16cRv54NNiI4-l4xHcjCaSDJzArrd_PfO | `ma-sequence` | Cummings Fig 134.3; lead | SVG |
+| canal-wall-down-mastoidectomy-cavity-surgical-anatomy.png | 19XdG7k8r9ffcQs5xeRwQ1Y0RmL8aYwKg | `ma-peds` (deep) | verify | SVG |
+| cranial-nerve-7-facial-nerve-pathway-statpearls.png | 1Jr5_njutpZ5hvUa1ve4vM3hKY8uwrlIu | — | Screenshot; do not import | not imported |
 
 **SVG-only figures (no Drive reference):** rotated TM frames (`or-views`), compartment map
 (`or-map`), auricle lymph basins (`au-vessel`), EAC coronal/axial sections and canal frames
@@ -710,6 +710,33 @@ copyrighted: drawing references only, never committed. Mapping:
 
 These are endoscopic views (anterior up, superior to the left in the tour frames). Each SVG drawn from
 them states its orientation in the caption.
+
+**W0.4 outcome (closed 2026-11-02).** Every Drive row is **SVG** (Outcome column above); no
+open-license image replaces one, and nothing was added under `images/`. HRCT (`im-*`) stays on the D10
+fallback: built line-drawing slices, or the owner's own de-identified normal CT.
+
+**W2 figure list (owner-approved 2026-11-02).** Purpose-drawn schematic SVGs of a right ear, in
+`images/oksat/ear-anatomy/`:
+
+| Section | Figure | Block |
+|---|---|---|
+| `or-views` | TM quadrants, an unlabelled right/left pair | `hotspot` find (call the side) |
+| `or-parts` | Lateral temporal bone: parts and sutures | `hotspot` explore |
+| `or-map` | Compartment map over the TM outline | `layers` toggle |
+| `au-topo` | Lateral auricle landmarks | `hotspot` explore + find |
+| `au-vessel`, `au-nerve` | One lateral + medial auricle base; artery, lymph and nerve overlays | `layers` toggle |
+| `eac-seg`, `eac-gaps` | Coronal and axial canal sections | `hotspot`, 2 frames |
+| `tm-marks` | Otoscopic landmarks | `hotspot` explore + find |
+| `tm-quad` | Opaque quadrants over the medial wall | `layers` toggle |
+| `cav-medial` | Endoscopic medial-wall map (lead) | `hotspot` explore + find |
+| `cav-box` | Unfolded six-wall box | `figure` |
+| `os-parts` | Chain, medial view, parts | `hotspot` explore |
+| `os-joints` | Chain with ligaments and the axis of rotation | `hotspot` find |
+| `os-dev` | Arch-origin overlays on the chain | `layers` toggle |
+
+Dropped from the §5 interact lines and taught as tables: `au-cart` cross-section, `tm-layers` peel,
+`cav-lateral`, `cav-anterior`, `os-supply` arcade. The EAC scrubber (`eac-seg`) is two section frames,
+not five canal positions. Any of these can return in a refinement pass.
 
 Candidate extraction sources in the same Drive folder: Myers – Mastoid Surgery.pdf, Vula –
 Mastoidectomy and epitympanectomy.pdf, Secrets Tympanomastoid.pdf, Tympanoplasty and OCR.pdf.
@@ -794,6 +821,18 @@ range under a *Source conflict* trap. Every value lands in the text with a `[[sr
 | Petrous apex pneumatization rate | minority | `pa-tracts` |
 | Labyrinthine canal diameter | 0.6–0.7 mm | `sy-fn` |
 | CN VII segment lengths | per Cummings Ch 2 | `sy-fn` |
+
+**W2 check (2026-11-02), chapters 1–6.** KJ Lee returned no text from Drive and is not cited; Cummings
+Review Ch. 2, Glasscock Ch. 1–3 and the Handbook Ch. 3 were read. Outcomes: canal about 2.5 cm, isthmus
+just medial to the junction (Glasscock); drum about 10 × 9 mm (Handbook), adult angle by age 4–5
+(Glasscock); area ratio 20:1, lever 1.3:1, theoretical 28 dB, actual about 20 dB (Cummings Review,
+Glasscock), with the effective-area figure (43 of 69 mm², footplate 3.2 mm²) as a *Source conflict*;
+footplate 2.7–2.9 × 1.2–1.5 mm (morphometry series, replacing 3 × 1.4); cavity widths 6 / 2 / 4 mm and
+15 mm height (Gray's, cited secondhand); facial nerve dehiscence 25–55%, geniculate 10–20% (Cummings
+Review); foramen of Huschke closes in late childhood (Glasscock, replacing "early childhood"). Dropped as
+unsourced: petrous axis 45°, drum thickness and 55° angle, bony canal skin 0.2 mm, ossicle weights,
+tympanomastoid-to-CN VII depth. Auricle proportions come from Baker Ch. 22 via the otoplasty module.
+`eac-rel` anchors its `neighbors` block on `eac-bony`, because `eac` has no `rel` in the glossary.
 
 ## 9. Question module (`js/oksat/modules/ear-anatomy.js`)
 

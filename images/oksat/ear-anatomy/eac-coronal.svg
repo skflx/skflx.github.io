@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" width="720" height="480" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Right external canal, coronal section (schematic)</title>
+  <rect width="720" height="480" fill="#ffffff"/>
+  <g data-g="mcfdura" fill="#c9d7e3" stroke="#7d93a8" stroke-width="1.2"><path d="M 330 40 L 700 40 L 700 92 L 330 104 Z"/></g>
+  <g data-g="parotid" fill="#e8d4a0" stroke="#a88a4f" stroke-width="1.2"><path d="M 70 330 C 140 330 230 334 330 340 L 330 440 L 70 440 Z"/></g>
+  <g data-g="eac-cart" fill="#ece4f2" stroke="#7d6a8f" stroke-width="1.2"><path d="M 110 160 L 330 170 L 330 186 L 110 182 Z M 110 268 L 330 266 L 330 282 L 110 290 Z"/></g>
+  <path d="M 330 104 L 700 92 L 700 160 L 610 158 C 590 158 560 160 540 168 L 330 186 Z" fill="#efe6d2" stroke="#8a7b5f"/>
+  <path d="M 330 266 L 520 262 C 560 266 600 280 640 300 L 700 300 L 700 340 L 330 340 Z" fill="#efe6d2" stroke="#8a7b5f"/>
+  <g data-g="eac-bony" fill="#fbf6ef" stroke="#8a7b5f" stroke-width="1.2"><path d="M 330 186 L 540 168 C 570 162 600 160 610 160 L 640 300 C 600 280 560 266 520 262 L 330 266 Z"/></g>
+  <g data-g="eac-isthmus" fill="#f1e6d3" stroke="#8d7a6c" stroke-width="1" stroke-dasharray="3 3"><path d="M 352 184 L 372 182 L 372 264 L 352 265 Z"/></g>
+  <path d="M 110 182 L 330 186 L 330 266 L 110 268 Z" fill="#fdf3ea" stroke="none" pointer-events="none"/>
+  <path d="M 110 182 L 330 186 M 110 268 L 330 266" stroke="#d9ab8a" stroke-width="5"/>
+  <g data-g="tm" fill="#c7bfb1" stroke="#8a7b5f" stroke-width="1.4"><path d="M 606 156 L 616 156 L 650 302 L 640 304 Z"/></g>
+  <g data-g="santorini" fill="#ffffff" stroke="#b8352a" stroke-width="1.4"><path d="M 170 268 L 178 268 L 178 290 L 170 290 Z M 230 267 L 238 267 L 238 288 L 230 288 Z"/></g>
+  <path d="M 20 120 C 70 130 100 150 110 160 L 110 290 C 100 310 70 330 20 340" fill="none" stroke="#8f6a52" stroke-width="2"/>
+  <g data-label="1"><line x1="400" y1="70" x2="40" y2="60" stroke="#555049" stroke-width="1"/><circle cx="400" cy="70" r="2.2" fill="#555049"/><text x="44" y="65" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Middle fossa dura</text></g>
+  <g data-label="1"><line x1="200" y1="175" x2="40" y2="105" stroke="#555049" stroke-width="1"/><circle cx="200" cy="175" r="2.2" fill="#555049"/><text x="44" y="110" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Cartilaginous canal (lateral third)</text></g>
+  <g data-label="1"><line x1="362" y1="190" x2="400" y2="145" stroke="#555049" stroke-width="1"/><circle cx="362" cy="190" r="2.2" fill="#555049"/><text x="396" y="150" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Isthmus</text></g>
+  <g data-label="1"><line x1="470" y1="215" x2="470" y2="215" stroke="#555049" stroke-width="1"/><circle cx="470" cy="215" r="2.2" fill="#555049"/><text x="474" y="220" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Bony canal (medial two thirds)</text></g>
+  <g data-label="1"><line x1="630" y1="270" x2="560" y2="400" stroke="#555049" stroke-width="1"/><circle cx="630" cy="270" r="2.2" fill="#555049"/><text x="564" y="405" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Tympanic membrane</text></g>
+  <g data-label="1"><line x1="175" y1="285" x2="40" y2="400" stroke="#555049" stroke-width="1"/><circle cx="175" cy="285" r="2.2" fill="#555049"/><text x="44" y="405" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Fissures of Santorini</text></g>
+  <g data-label="1"><line x1="150" y1="390" x2="40" y2="432" stroke="#555049" stroke-width="1"/><circle cx="150" cy="390" r="2.2" fill="#555049"/><text x="44" y="437" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Parotid</text></g>
+  <text x="360" y="474" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right canal, coronal section seen from the front. Lateral is to the left. Schematic, not to scale.</text>
+</svg>

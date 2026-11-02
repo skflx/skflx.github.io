@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 560" width="660" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Ossicular origin: Second arch (Reichert) (schematic)</title>
+  <g fill="#b8352a" fill-opacity="0.45" stroke="#b8352a" stroke-width="1.5">
+    <path d="M 384 200 L 406 200 L 382 366 Q 372 380 362 366 Z"/>
+    <circle cx="412" cy="200" r="11"/>
+    <path d="M 292 150 L 312 150 L 304 322 L 288 322 Z"/>
+    <ellipse cx="300" cy="332" rx="13" ry="9"/>
+    <path d="M 288 344 L 312 344 L 310 366 L 290 366 Z"/>
+    <path d="M 306 366 L 314 366 L 358 458 L 350 460 Z"/>
+    <path d="M 286 366 L 296 366 C 286 400 270 430 258 460 L 244 458 C 258 428 274 398 286 366 Z"/>
+  </g>
+  <text x="520" y="300" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#b8352a">Second arch (Reichert)</text>
+</svg>

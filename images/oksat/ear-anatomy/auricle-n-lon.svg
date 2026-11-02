@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Lesser occipital nerve territory (schematic)</title>
+  <g fill="#6e4a6b" fill-opacity="0.38" stroke="#6e4a6b" stroke-width="1.5">
+    <path d="M 250 54 C 160 50 115 120 118 230 L 150 300 C 160 240 180 160 262 150 Z" transform="translate(20 0)"/>
+    <path d="M 460 205 C 465 120 520 55 590 52 C 660 50 705 120 702 230 L 600 240 C 560 200 500 190 460 205 Z"/>
+  </g>
+  <text x="140" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e4a6b">Lesser occipital (C2)</text>
+  <text x="600" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#6e4a6b">Lesser occipital</text>
+</svg>

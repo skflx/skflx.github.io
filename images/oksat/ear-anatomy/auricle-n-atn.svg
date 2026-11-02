@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Auriculotemporal nerve territory (schematic)</title>
+  <g fill="#2f5d8a" fill-opacity="0.38" stroke="#2f5d8a" stroke-width="1.5">
+    <path d="M 360 205 C 355 120 300 55 250 54 L 262 150 C 300 170 330 200 338 230 L 368 236 C 372 220 366 210 360 205 Z" transform="translate(20 0)"/>
+    <path d="M 352 240 C 380 250 396 300 390 340 C 384 360 366 362 356 352 C 360 320 360 280 352 240 Z" transform="translate(20 0)"/>
+  </g>
+  <text x="400" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#2f5d8a">Auriculotemporal (V3)</text>
+</svg>

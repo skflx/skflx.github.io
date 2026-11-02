@@ -189,6 +189,17 @@ window.OKSAT_MANIFEST = [
     desc: 'EPOS definitions, acute rhinosinusitis and its orbital complications, CRS classification and work-up, medical therapy, ESS appropriateness and outcomes, fungal and secondary CRS, the EPOS biologic criteria, and three cases.',
     data: 'js/oksat/modules/crs-ars.js',
   },
+  {
+    slug: 'ear-anatomy',
+    title: 'Normal Ear Anatomy',
+    kicker: 'Otology Module',
+    subspecialty: 'otology',
+    count: 50,
+    accent: '#2F6E6A',
+    unlisted: true,
+    desc: 'Orientation and the temporal bone, auricle, canal, drum, the six walls of the tympanic cavity, and the ossicular chain, one concept per guide section.',
+    data: 'js/oksat/modules/ear-anatomy.js',
+  },
 ];
 
 /* Interactive learning: first-pass study guides (docs/authoring-oksat-guide.md).
@@ -216,6 +227,24 @@ window.OKSAT_GUIDES = [
       { id: 'biologics', k: 8, short: 'Biologics', min: 40, sections: 5, data: 'js/oksat/guides/ar-crs-aerd/biologics.js' },
       { id: 'comorbidities', k: 9, short: 'Comorbidities', min: 15, sections: 2, data: 'js/oksat/guides/ar-crs-aerd/comorbidities.js' },
       { id: 'appraisal', k: 10, short: 'Evidence & controversies', min: 25, sections: 3, data: 'js/oksat/guides/ar-crs-aerd/appraisal.js' },
+    ],
+  },
+  {
+    slug: 'ear-anatomy',
+    title: 'Normal Ear Anatomy: Outer and Middle Ear',
+    kicker: 'Otology / Neurotology',
+    subspecialty: 'otology',
+    accent: '#2F6E6A',
+    unlisted: true,
+    desc: 'Auricle to petrous apex as a relational map: walls, neighbours, nerves and vessels where you meet them, read the way a surgeon explores.',
+    chapters: [
+      { id: 'start', short: 'Start here', data: 'js/oksat/guides/ear-anatomy/start.js' },
+      { id: 'orientation', k: 1, short: 'Orientation', min: 20, sections: 3, data: 'js/oksat/guides/ear-anatomy/orientation.js' },
+      { id: 'auricle', k: 2, short: 'Auricle', min: 30, sections: 6, data: 'js/oksat/guides/ear-anatomy/auricle.js' },
+      { id: 'eac', k: 3, short: 'External canal', min: 30, sections: 6, data: 'js/oksat/guides/ear-anatomy/eac.js' },
+      { id: 'tm', k: 4, short: 'Tympanic membrane', min: 30, sections: 6, data: 'js/oksat/guides/ear-anatomy/tm.js' },
+      { id: 'cavity', k: 5, short: 'Tympanic cavity', min: 40, sections: 6, data: 'js/oksat/guides/ear-anatomy/cavity.js' },
+      { id: 'ossicles', k: 6, short: 'Ossicular chain', min: 35, sections: 6, data: 'js/oksat/guides/ear-anatomy/ossicles.js' },
     ],
   },
 ];

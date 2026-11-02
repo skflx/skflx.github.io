@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 560" width="760" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>The six walls of the tympanic cavity, unfolded (schematic)</title>
+  <rect width="760" height="560" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d1d1b">The tympanic cavity as an opened box</text>
+  <rect x="270" y="50" width="220" height="120" fill="#c9d7e3" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="282" y="74" text-anchor="start" font-size="14.5" font-weight="bold" fill="#1d1d1b">Roof (tegmen tympani)</text>
+  <text x="282" y="98" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Thin plate under middle</text>
+  <text x="282" y="119" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">fossa dura</text>
+  <text x="282" y="140" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Petrosquamous suture</text>
+  <rect x="40" y="180" width="220" height="200" fill="#f3ecd9" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="52" y="204" text-anchor="start" font-size="14.5" font-weight="bold" fill="#1d1d1b">Posterior wall</text>
+  <text x="52" y="228" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Aditus to the antrum</text>
+  <text x="52" y="249" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Fossa incudis</text>
+  <text x="52" y="270" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Pyramidal eminence</text>
+  <text x="52" y="291" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Chordal eminence</text>
+  <text x="52" y="312" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Facial recess, sinus tympani</text>
+  <text x="52" y="333" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Beyond: mastoid, facial nerve</text>
+  <rect x="270" y="180" width="220" height="200" fill="#f0cfc6" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="282" y="204" text-anchor="start" font-size="14.5" font-weight="bold" fill="#1d1d1b">Medial wall</text>
+  <text x="282" y="228" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Promontory, Jacobson nerve</text>
+  <text x="282" y="249" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Oval window, stapes</text>
+  <text x="282" y="270" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Round window niche</text>
+  <text x="282" y="291" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Facial nerve above the oval</text>
+  <text x="282" y="312" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">window; lateral canal above</text>
+  <text x="282" y="333" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Cochleariform process</text>
+  <rect x="500" y="180" width="220" height="200" fill="#f2d6d1" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="512" y="204" text-anchor="start" font-size="14.5" font-weight="bold" fill="#1d1d1b">Anterior wall</text>
+  <text x="512" y="228" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Tensor semicanal (top)</text>
+  <text x="512" y="249" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Eustachian tube orifice</text>
+  <text x="512" y="270" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Carotid wall, caroticotympanic</text>
+  <text x="512" y="291" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">canaliculi (bottom)</text>
+  <text x="512" y="312" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Supratubal recess above</text>
+  <text x="512" y="333" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Beyond: internal carotid</text>
+  <rect x="270" y="390" width="220" height="110" fill="#cfd9e6" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="282" y="414" text-anchor="start" font-size="14.5" font-weight="bold" fill="#1d1d1b">Floor</text>
+  <text x="282" y="438" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Plate over the jugular bulb</text>
+  <text x="282" y="459" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Inferior tympanic canaliculus</text>
+  <text x="282" y="480" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Hypotympanic cells</text>
+  <rect x="500" y="390" width="220" height="110" fill="#d8d2c6" stroke="#8a7b5f" stroke-width="1.5"/>
+  <text x="512" y="414" text-anchor="start" font-size="14.5" font-weight="bold" fill="#1d1d1b">Lateral wall (shown apart)</text>
+  <text x="512" y="438" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Tympanic membrane, scutum</text>
+  <text x="512" y="459" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">Iter chordae posterius,</text>
+  <text x="512" y="480" text-anchor="start" font-size="13" font-weight="normal" fill="#1d1d1b">canal of Huguier</text>
+  <text x="380" y="530" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Medial wall in the centre, each neighbour hinged on its shared edge; the lateral wall is shown apart. Schematic.</text>
+</svg>
