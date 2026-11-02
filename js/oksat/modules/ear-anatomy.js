@@ -258,7 +258,7 @@ const ITEMS = [
         { id: 'd', text: 'Tragus' },
     ],
     correct: 'd',
-    brief: 'Hillocks 1–3 (first arch): tragus, helical crus, helix. Hillocks 4–6 (second arch): antihelical crus, antihelix, antitragus and lobule.',
+    brief: 'Hillocks 1–3 (first arch): tragus, helical crus, helix. Hillocks 4–6 (second arch): antihelix, antitragus and lobule.',
     detailed: 'The Handbook\'s table: 1 tragus, 2 crus of helix, 3 helix (arch 1); 4 crus of antihelix, 5 antihelix, 6 antitragus and lobule (arch 2), with a note that the contributions of 4 to 6 remain controversial. Glasscock adds that some studies give the second arch most of the auricle and others a balanced share.\nApplication: first-arch defects travel with the tragus and with first-arch syndromes.\nDiscrepancy: the 4–6 assignments differ between sources; commit to 1–3.',
     concepts: ['au-dev'],
 },
@@ -343,7 +343,7 @@ const ITEMS = [
     ],
     correct: 'a',
     brief: 'Santorini fissures in the anterior cartilaginous canal lead to the superficial parotid; a patent foramen of Huschke in the anteroinferior bony wall leads to the deep parotid and the TMJ.',
-    detailed: 'Cummings Review: Santorini fissures allow spread to the superficial parotid; the foramen of Huschke, an anteroinferior bony defect that usually obliterates during development, allows spread to the deep lobe and the TMJ. Glasscock: the foramen forms around age 1 as opposing spurs of the growing tympanic ring fuse, and closes in late childhood.\nDiscrepancy: the plan draft said early childhood; Glasscock (after Anson) says late childhood.',
+    detailed: 'Cummings Review: Santorini fissures allow spread to the superficial parotid; the foramen of Huschke, an anteroinferior bony defect that usually obliterates during development, allows spread to the deep lobe and the TMJ. Glasscock: the foramen forms around age 1 as opposing spurs of the growing tympanic ring fuse, and closes in late childhood.\nDiscrepancy: sources differ on the timing of closure. Glasscock (after Anson) says late childhood; common teaching gives about age 5.',
     concepts: ['eac-gaps'],
 },
 {
@@ -557,7 +557,7 @@ const ITEMS = [
     stem: 'A round window that looks as if it has a defect at exploration most often shows which normal finding?',
     options: [
         { id: 'a', text: 'A dehiscent jugular bulb behind it' },
-        { id: 'b', text: 'A perforated mucosal veil in front of the true membrane' },
+        { id: 'b', text: 'A mucosal veil in front of the true membrane, often perforated' },
         { id: 'c', text: 'A persistent stapedial artery' },
         { id: 'd', text: 'The finiculus' },
     ],
@@ -619,7 +619,7 @@ const ITEMS = [
     ],
     correct: 'b',
     brief: 'The supratubal recess lies above the tensor fold, bounded behind by the cog and cochleariform process; the geniculate ganglion sits in its medial wall.',
-    detailed: 'Cummings Review: the medial wall of the supratubal recess houses the geniculate ganglion, which may be dehiscent from cholesteatoma; its posterior boundary is the cochleariform process below and the cog above. Owner ruling in the plan: the recess is part of the epitympanum, above the tensor fold.',
+    detailed: 'Cummings Review: the medial wall of the supratubal recess houses the geniculate ganglion, which may be dehiscent from cholesteatoma; its posterior boundary is the cochleariform process below and the cog above. The recess is part of the epitympanum, above the tensor fold.',
     concepts: ['cav-anterior'],
 },
 {
@@ -645,7 +645,7 @@ const ITEMS = [
 • Incus: body, short process, long process, lenticular process
 • Stapes: head (capitulum), neck, anterior and posterior crura, footplate; the obturator foramen between the crura`,
     brief: 'Malleus five parts, incus four, stapes five.',
-    detailed: 'Glasscock: the incus is the largest ossicle, the stapes the smallest and most medial. The anterior crus is thinner and straighter than the posterior.\nApplication: the lenticular process articulates with the stapes head; the long process is the segment that erodes in chronic otitis media.',
+    detailed: 'By length, the malleus is the longest ossicle and the stapes the smallest; the stapes is also the most medial. Glasscock: the anterior crus is thinner and straighter than the posterior.\nApplication: the lenticular process articulates with the stapes head; the long process is the segment that erodes in chronic otitis media.',
     concepts: ['os-parts'],
 },
 {
@@ -768,7 +768,7 @@ const ITEMS = [
 • Posterior incudal: short process to the fossa incudis
 • Annular (stapediovestibular): footplate to the oval window margin`,
     brief: 'Two to the roof, one forward, one lateral, one back, one round the footplate.',
-    detailed: 'Glasscock: the head and neck of the malleus, the lateral malleal ligament and the anterior and posterior malleal folds bound Prussak space medially, anterosuperiorly and inferiorly.',
+    detailed: 'Prussak space: lateral boundary the pars flaccida; medial boundary the malleus neck; roof the lateral malleal ligament; floor the lateral process of the malleus. Glasscock also names the anterior and posterior malleal folds as bounding it.',
     concepts: ['os-joints'],
 },
 ];

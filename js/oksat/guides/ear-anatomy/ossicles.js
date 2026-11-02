@@ -12,7 +12,7 @@ window.__OKSAT_CHAPTER = {
     lede: 'Three bones slung on six ligaments, rocking about one axis, tuned by two muscles from two different arches, and fed so thinly at one point that chronic otitis eats it first.',
     src: 'Glasscock Ch. 2–3 · Handbook Ch. 3 · Cummings Review Ch. 2',
     tldr: [
-        'Malleus: head, neck, lateral and anterior processes, manubrium. Incus: body, short, long and lenticular processes (the largest ossicle). Stapes: head, neck, two crura, footplate (about 2.7–2.9 × 1.2–1.5 mm).',
+        'Malleus: head, neck, lateral and anterior processes, manubrium. Incus: body, short, long and lenticular processes. Stapes: head, neck, two crura, footplate (about 2.7–2.9 × 1.2–1.5 mm).',
         '**Axis of rotation**: anterior malleal ligament to posterior incudal ligament. Lever about 1.3:1.',
         '**Tensor tympani**: around the cochleariform process to the malleus, V3, first arch. **Stapedius**: out of the pyramid to the posterior stapes, VII, second arch.',
         'Stapedial reflex: VIII → cochlear nucleus → superior olivary complex (both sides) → facial motor nuclei → stapedius.',
@@ -24,7 +24,7 @@ window.__OKSAT_CHAPTER = {
             n: '6.1',
             title: 'Parts',
             blocks: [
-                { t: 'p', x: 'The **malleus**, most lateral, has a head, neck, **lateral process** (with a cartilaginous cap fused to the drum), **anterior process** and **manubrium**. The **incus**, the largest ossicle, has a **body** that articulates with the malleus head in the attic, a **short process** anchored in the fossa incudis, a **long process** running down behind and parallel to the manubrium, and the **lenticular process** at its tip. The **stapes**, smallest and most medial, has a **head (capitulum)**, neck, **anterior** and **posterior crura** around the **obturator foramen**, and a **footplate** in the oval window. [[src|Glasscock Ch. 2]] [[src|Handbook Ch. 3]]' },
+                { t: 'p', x: 'The **malleus**, most lateral, has a head, neck, **lateral process** (with a cartilaginous cap fused to the drum), **anterior process** and **manubrium**. The **incus** has a **body** that articulates with the malleus head in the attic, a **short process** anchored in the fossa incudis, a **long process** running down behind and parallel to the manubrium, and the **lenticular process** at its tip. The **stapes**, smallest and most medial, has a **head (capitulum)**, neck, **anterior** and **posterior crura** around the **obturator foramen**, and a **footplate** in the oval window. [[src|Glasscock Ch. 2]] [[src|Handbook Ch. 3]]' },
                 {
                     t: 'hotspot',
                     id: 'os-parts-hs',
@@ -40,7 +40,7 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Name the four parts of the incus and what each touches.', a: 'Body: malleus head (incudomallear joint). Short process: fossa incudis (posterior incudal ligament). Long process: runs down behind the manubrium. Lenticular process: stapes head (incudostapedial joint).' },
-                { t: 'check', id: 'c2', q: 'Which ossicle is the largest, which the smallest?', a: 'Incus largest; stapes smallest.' },
+                { t: 'check', id: 'c2', q: 'Which ossicle is the longest, which the smallest?', a: 'Malleus longest; stapes smallest.' },
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q41', 'ear-anatomy:q42'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-parts'] }],

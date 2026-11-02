@@ -614,7 +614,8 @@
     const DIRS = ['sup', 'inf', 'ant', 'post', 'lat', 'med'];
     const DIR_NAME = { sup: 'Superior', inf: 'Inferior', ant: 'Anterior', post: 'Posterior', lat: 'Lateral', med: 'Medial' };
     const REV = { sup: 'inf', inf: 'sup', ant: 'post', post: 'ant', lat: 'med', med: 'lat' };
-    const SVG_BANNED = ['script', 'foreignobject', 'iframe', 'object', 'embed'];
+    /* Animation elements can retarget href to a javascript: URL, and <style> restyles the whole page. */
+    const SVG_BANNED = ['script', 'foreignobject', 'iframe', 'object', 'embed', 'style', 'set', 'animate', 'animatetransform', 'animatemotion'];
 
     /* Four tiers from a count of right answers: all = 3, at least 75% = 2, at least 50% = 1. */
     function gradeFrom(right, n) {
@@ -747,13 +748,20 @@
     }
     const isSvgSrc = (src) => /\.svg(\?|#|$)/i.test(String(src || ''));
 
+    /* Blocks whose graded anatomy failed to load (hotspot degrade, neighbors catch): not counted as prompts. */
+    const ungradable = new Set();
+
     /* hotspot: tap regions on a figure. Explore names and relates them; find is a shuffled round. */
     function hotspotBlock(b, ctx) {
         const box = h('div', 'lr-hs-wrap', [txt('p', 'lr-loading', 'Loading figure…')]);
         const key = checkKey(ctx.ch, ctx.sec, b);
         const modes = (b.modes && b.modes.length ? b.modes : ['explore']).filter((m) => m === 'explore' || m === 'find');
         if (!b.frames || !b.frames.length) { box.replaceChildren(); return box; }
-        const degrade = () => box.replaceChildren(BLOCKS.figure({ src: b.frames[0].src, alt: b.alt, cap: b.frames[0].cap }));
+        const degrade = () => {
+            ungradable.add(key);
+            box.replaceChildren(BLOCKS.figure({ src: b.frames[0].src, alt: b.alt, cap: b.frames[0].cap }));
+            refreshSection(ctx);
+        };
 
         glossary().then((gl) => {
             const G = gl.G, R = gl.R;
@@ -797,10 +805,16 @@
                     r.el.setAttribute('aria-label', find ? 'Region ' + (i + 1) : G[r.g].name);
                 });
                 modeBtns.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.mode === st.mode)));
+                paintMarks();
             }
             function paintMarks() {
-                cur().regions.forEach((r) => r.el.classList.remove('is-selected', 'is-neighbor'));
-                if (st.mode !== 'explore' || !st.sel || !regionOf(st.sel)) return;
+                const explore = st.mode === 'explore';
+                cur().regions.forEach((r) => {
+                    r.el.classList.remove('is-selected', 'is-neighbor');
+                    if (explore) r.el.setAttribute('aria-pressed', String(r.g === st.sel));
+                    else r.el.removeAttribute('aria-pressed');
+                });
+                if (!explore || !st.sel || !regionOf(st.sel)) return;
                 regionOf(st.sel).el.classList.add('is-selected');
                 DIRS.forEach((d) => relOf(R, st.sel, d).forEach((id) => { const r = regionOf(id); if (r) r.el.classList.add('is-neighbor'); }));
             }
@@ -833,10 +847,15 @@
                 if (rd.i >= rd.order.length) finish(rd);
                 else paintPanel();
             }
+            /* One grade per frame, stored at <key>#f<i>. The block's grade is the lowest frame graded so far
+               (stored frames count after a reload too), so a strong later frame cannot overwrite a weak one. */
             function finish(rd) {
                 rd.done = true;
                 rd.grade = gradeFrom(rd.score, rd.order.length);
-                rec.checks[key] = rd.grade; persist(); refreshSection(ctx);
+                rec.checks[key + '#f' + st.frame] = rd.grade;
+                const graded = frames.map((f, i) => rec.checks[key + '#f' + i]).filter((g) => g !== undefined);
+                rec.checks[key] = Math.min.apply(null, graded);
+                persist(); refreshSection(ctx);
                 paintPanel();
             }
             function setMode(m) {
@@ -1046,7 +1065,7 @@
             card.appendChild(ans);
             if (rec.checks[key] !== undefined) card.classList.add('is-graded');
             box.appendChild(card);
-        }).catch(() => { box.hidden = true; });
+        }).catch(() => { ungradable.add(checkKey(ctx.ch, ctx.sec, b)); box.hidden = true; refreshSection(ctx); });
         return box;
     }
 
@@ -1209,7 +1228,7 @@
         mark.textContent = done ? 'Section done' : 'Mark section done';
         mark.setAttribute('aria-pressed', String(done));
         mark.classList.toggle('is-done', done);
-        const checks = (ctx.sec.blocks || []).filter(isGraded);
+        const checks = (ctx.sec.blocks || []).filter(isGraded).filter((b) => !ungradable.has(checkKey(ctx.ch, ctx.sec, b)));
         const graded = checks.filter((b) => rec.checks[checkKey(ctx.ch, ctx.sec, b)] !== undefined).length;
         const hint = el.querySelector('.lr-hint');
         hint.textContent = checks.length ? graded + ' of ' + checks.length + ' prompts graded' + (graded === checks.length && !done ? '. Ready to mark done.' : '') : '';

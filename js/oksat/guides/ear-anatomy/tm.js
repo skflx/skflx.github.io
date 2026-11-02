@@ -31,7 +31,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'trap',
                     label: 'Source conflict',
                     blocks: [
-                        { t: 'p', x: 'The ratio depends on which drum area you count. Glasscock and Cummings Review use 20:1; computed from the freely vibrating area (about 43 of 69 mm²) against a 3.2 mm² footplate it is nearer 13:1. Cummings Review gives the actual gain as about 20 dB. [[src|Britannica, ear]] [[src|Cummings Review Ch. 2]]' },
+                        { t: 'p', x: 'The ratio depends on which drum area you count. Glasscock and Cummings Review use 20:1; computed from the freely vibrating area (about 43 of 69 mm²) against a 3.2 mm² footplate it is nearer 13:1. Cummings Review gives the actual gain as about 20 dB. [[src|Cummings Review Ch. 2]]' },
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Why does a neonatal drum look foreshortened?', a: 'It lies nearly horizontal; the tympanic ring has not yet grown laterally to tilt it to the adult angle (reached by about age 4–5).' },
@@ -120,7 +120,7 @@ window.__OKSAT_CHAPTER = {
                         ['Anterosuperior', 'Tensor tendon, cochleariform process; chorda leaving anteriorly', 'Malleus neck; geniculate ganglion further anterosuperior'],
                         ['Anteroinferior', 'Protympanum, Eustachian tube orifice; carotid wall beyond', 'Myringotomy and tube site'],
                         ['Posterosuperior', 'Incus long process, incudostapedial joint, stapes, stapedius tendon, chorda; tympanic facial nerve above', 'Avoid instruments here'],
-                        ['Posteroinferior', 'Round window niche, sinus tympani region, hypotympanum; jugular bulb if high', 'A blue mass here is a bulb until proven otherwise'],
+                        ['Posteroinferior', 'Round window niche, sinus tympani region, hypotympanum; jugular bulb if high', 'A blue mass here is a vascular mass: image before biopsy'],
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Name what lies behind the posterosuperior quadrant.', a: 'Incus long process, incudostapedial joint, stapes and stapedius tendon, chorda tympani; tympanic facial nerve above the oval window.' },

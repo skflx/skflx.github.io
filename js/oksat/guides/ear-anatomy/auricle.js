@@ -133,7 +133,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'pearl',
                     label: 'Pearl',
                     blocks: [
-                        { t: 'p', x: 'The posterior auricular artery is the dominant supply; a postauricular incision near the sulcus is safe because the perforators cross the cartilage, not the sulcus skin.' },
+                        { t: 'p', x: 'The posterior auricular artery is the dominant supply.' },
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Which branch of the posterior auricular artery matters to otologists, and where does it go?', a: 'The stylomastoid artery: it enters the stylomastoid foramen and fallopian canal to supply the mastoid facial nerve.' },
@@ -199,9 +199,9 @@ window.__OKSAT_CHAPTER = {
                         ['1', 'First', 'Tragus'],
                         ['2', 'First', 'Helical crus'],
                         ['3', 'First', 'Helix'],
-                        ['4', 'Second', 'Crus of the antihelix'],
-                        ['5', 'Second', 'Antihelix'],
-                        ['6', 'Second', 'Antitragus and lobule'],
+                        ['4', 'Second', 'Antihelix'],
+                        ['5', 'Second', 'Antitragus'],
+                        ['6', 'Second', 'Lobule'],
                     ],
                 },
                 {

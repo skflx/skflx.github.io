@@ -57,7 +57,7 @@ window.__OKSAT_CHAPTER = {
                         ['Clinical', 'Furuncles; injection easy', 'Tears and bleeds easily; very pain-sensitive; injection raises a bleb'],
                     ],
                 },
-                { t: 'p', x: 'The bony canal is the only skin in the body lying directly on periosteum. Hair marks the cartilaginous canal. [[src|Handbook Ch. 3]] [[src|Glasscock Ch. 2]]' },
+                { t: 'p', x: 'The bony canal\'s skin is among the thinnest in the body, has no subcutis, and is adherent to periosteum. Hair marks the cartilaginous canal. [[src|Handbook Ch. 3]] [[src|Glasscock Ch. 2]]' },
                 { t: 'p', x: 'Medial to the isthmus the **anterior bony overhang** bulges back, and behind it the **anterior tympanomeatal recess** forms the deep, acute angle between the anterior canal wall and the drum: the least visible point of the canal, where debris and grafts both go wrong. Keratin migrates from the centre of the drum outward and then laterally along the canal, which is why the canal cleans itself.' },
                 {
                     t: 'call',
@@ -115,7 +115,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'trap',
                     label: 'Source conflict',
                     blocks: [
-                        { t: 'p', x: 'Timing of closure: Glasscock (after Anson) says late childhood; the plan draft said early childhood. Use late childhood, and remember that it persists into adulthood in a minority.' },
+                        { t: 'p', x: 'Discrepancy: sources differ on the timing of closure. Glasscock (after Anson) says late childhood; common teaching gives about age 5. It persists into adulthood in a minority.' },
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Necrotizing otitis externa reaches the parotid through which routes?', a: 'The fissures of Santorini (cartilaginous canal, to the superficial parotid) and a patent foramen of Huschke (bony canal, to the deep parotid and the TMJ), and along the bony-cartilaginous junction.' },

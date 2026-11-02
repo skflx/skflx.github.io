@@ -903,7 +903,7 @@
                     "lmf"
                 ],
                 "inf": [
-                    "annulus"
+                    "latproc"
                 ]
             }
         },
@@ -1391,7 +1391,7 @@
         },
         "eac-bony": {
             "name": "Bony canal",
-            "note": "The medial two thirds (about 16 mm). Skin about 0.2 mm thick directly on periosteum: no adnexa, no subcutis, easily torn. Squama above and behind, tympanic part in front, below and posteroinferiorly.",
+            "note": "The medial two thirds (about 16 mm). Skin directly on periosteum: no adnexa, no subcutis, easily torn. Squama above and behind, tympanic part in front, below and posteroinferiorly.",
             "rel": {
                 "med": [
                     "tm"
@@ -1463,7 +1463,7 @@
             "syn": [
                 "Handle of the malleus"
             ],
-            "note": "Embedded in the drum's middle layer, from the lateral process down and back to the umbo. Second-arch derivative.",
+            "note": "Attached to the drum at two points only: the lateral process and the umbo. A mucosal fold, the plica mallearis, lies between them. Second-arch derivative.",
             "origin": [
                 "arch2"
             ],

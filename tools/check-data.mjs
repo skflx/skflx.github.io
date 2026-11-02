@@ -245,6 +245,9 @@ function svgSafety(svg) {
   if (/<script/i.test(svg)) p.push('SVG contains <script');
   if (/<foreignObject/i.test(svg)) p.push('SVG contains <foreignObject');
   if (/\son[a-z]+\s*=/i.test(svg)) p.push('SVG contains an on* event attribute');
+  for (const t of ['style', 'set', 'animate', 'animateTransform', 'animateMotion']) {
+    if (new RegExp(`<${t}\\b`, 'i').test(svg)) p.push(`SVG contains <${t}`);
+  }
   for (const m of svg.matchAll(/\bhref\s*=\s*["']([^"']*)["']/gi)) {
     if (!m[1].startsWith('#')) p.push(`SVG href '${m[1].slice(0, 40)}' is not a fragment`);
   }
@@ -321,8 +324,11 @@ function neighborsProblems(b, env) {
   if (!b.id) p.push('neighbors needs an id');
   if (!env.hasG(b.g)) return p.concat(`anchor g '${b.g}' is not a glossary id`);
   if (b.dirs !== undefined && (!Array.isArray(b.dirs) || b.dirs.some((d) => !DIRS6.includes(d)))) p.push('dirs must be a subset of sup, inf, ant, post, lat, med');
-  const n = relationDirs(env.G, b.g).size;
-  if (n < 2) p.push(`anchor '${b.g}' has relations in ${n} direction(s); needs 2`);
+  const own = relationDirs(env.G, b.g);
+  if (own.size < 2) p.push(`anchor '${b.g}' has relations in ${own.size} direction(s); needs 2`);
+  if (Array.isArray(b.dirs) && b.dirs.length && !b.dirs.some((d) => own.has(d))) {
+    p.push(`dirs ${b.dirs.join(', ')} do not overlap the anchor's relations (${[...own].join(', ') || 'none'})`);
+  }
   return p;
 }
 
@@ -392,6 +398,8 @@ function checkBlockValidators() {
   const TM = DIR + 'tm-right.svg';
   const TM_BAD_G = DIR + 'tm-bad-g.svg';
   const TM_ONLOAD = DIR + 'tm-onload.svg';
+  const TM_STYLE = DIR + 'tm-style.svg';
+  const TM_ANIMATE = DIR + 'tm-animate.svg';
   const RASTER = DIR + 'ct/ax-3.png';
   const RASTER_NOT_LISTED = DIR + 'ct/ax-9.png';
   const BASE = DIR + 'auricle-base.svg';
@@ -401,6 +409,8 @@ function checkBlockValidators() {
     [TM]: SVG_OK,
     [TM_BAD_G]: SVG_OK.replace('data-g="umbo"', 'data-g="zzbogus"'),
     [TM_ONLOAD]: SVG_OK.replace('<svg xmlns="http://www.w3.org/2000/svg"', '<svg xmlns="http://www.w3.org/2000/svg" onload="window.__pwned=1"'),
+    [TM_STYLE]: SVG_OK.replace('</svg>', '<style>body{display:none}</style></svg>'),
+    [TM_ANIMATE]: SVG_OK.replace('</svg>', '<set attributeName="href" to="javascript:window.__pwned=1"/></svg>'),
     [BASE]: SVG_OK,
     [GAN]: SVG_OK,
     [RASTER]: '',
@@ -422,23 +432,28 @@ function checkBlockValidators() {
     ['neighbors, three directions', { t: 'neighbors', id: 'mz-nb', g: 'manubrium', dirs: ['sup', 'inf', 'post'], label: 'Neighbours' }],
     ['sequence, three items', { t: 'sequence', id: 'os-seq', q: 'Order the arc.', items: ['a', 'b', 'c'] }],
   ];
+  /* Each bad fixture names the message its rule must emit, so a rule that fires for the wrong reason still fails. */
   const BAD = [
-    ['hotspot region with unknown glossary id', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: RASTER, regions: [{ g: 'nosuchid', poly: [1, 1, 9, 1, 9, 9] }] }] }],
-    ['SVG data-g not in glossary', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_BAD_G }] }],
-    ['raster poly with 5 numbers', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: RASTER, regions: [{ g: 'cochlea', poly: [1, 1, 9, 1, 9] }] }] }],
-    ['find mode with 2 regions', { t: 'hotspot', id: 'x', alt: 'a', modes: ['explore', 'find'], frames: [{ src: RASTER, regions: [{ g: 'cochlea', poly: [1, 1, 9, 1, 9, 9] }, { g: 'umbo', poly: [1, 1, 9, 1, 9, 9] }] }] }],
-    ['layers with one layer', { t: 'layers', id: 'x', alt: 'a', base: BASE, mode: 'toggle', layers: [{ id: 'gan', label: 'Great auricular', src: GAN }] }],
-    ['neighbors anchor with one direction', { t: 'neighbors', id: 'x', g: 'lone' }],
-    ['sequence with duplicate items', { t: 'sequence', id: 'x', q: 'Order.', items: ['a', 'a', 'b'] }],
-    ['SVG containing onload=', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_ONLOAD }] }],
+    ['hotspot region with unknown glossary id', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: RASTER, regions: [{ g: 'nosuchid', poly: [1, 1, 9, 1, 9, 9] }] }] }, "region 'nosuchid' is not a glossary id"],
+    ['SVG data-g not in glossary', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_BAD_G }] }, "data-g 'zzbogus' is not a glossary id"],
+    ['raster poly with 5 numbers', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: RASTER, regions: [{ g: 'cochlea', poly: [1, 1, 9, 1, 9] }] }] }, 'poly must be an even list'],
+    ['find mode with 2 regions', { t: 'hotspot', id: 'x', alt: 'a', modes: ['explore', 'find'], frames: [{ src: RASTER, regions: [{ g: 'cochlea', poly: [1, 1, 9, 1, 9, 9] }, { g: 'umbo', poly: [1, 1, 9, 1, 9, 9] }] }] }, 'find mode needs at least 3 regions'],
+    ['layers with one layer', { t: 'layers', id: 'x', alt: 'a', base: BASE, mode: 'toggle', layers: [{ id: 'gan', label: 'Great auricular', src: GAN }] }, 'layers needs at least 2 layers'],
+    ['neighbors anchor with one direction', { t: 'neighbors', id: 'x', g: 'lone' }, 'has relations in 1 direction(s)'],
+    ['neighbors dirs that the anchor has no relation in', { t: 'neighbors', id: 'x', g: 'manubrium', dirs: ['ant', 'lat'] }, 'do not overlap'],
+    ['sequence with duplicate items', { t: 'sequence', id: 'x', q: 'Order.', items: ['a', 'a', 'b'] }, 'must be unique'],
+    ['SVG containing onload=', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_ONLOAD }] }, 'on* event attribute'],
+    ['SVG containing a style element', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_STYLE }] }, 'SVG contains <style'],
+    ['SVG containing a set element that retargets href', { t: 'hotspot', id: 'x', alt: 'a', frames: [{ src: TM_ANIMATE }] }, 'SVG contains <set'],
   ];
   const selfFail = [];
   for (const [label, b] of GOOD) {
     const r = blockProblems(b, env);
     if (r.length) selfFail.push(`good '${label}' rejected: ${r.join('; ')}`);
   }
-  for (const [label, b] of BAD) {
-    if (!blockProblems(b, env).length) selfFail.push(`bad '${label}' accepted`);
+  for (const [label, b, needle] of BAD) {
+    const r = blockProblems(b, env);
+    if (!r.some((m) => m.includes(needle))) selfFail.push(`bad '${label}' not rejected for '${needle}' (got: ${r.join('; ') || 'nothing'})`);
   }
   if (unlistedProblem({ unlisted: true }) || unlistedProblem({}) || unlistedProblem({ unlisted: false })) selfFail.push('good unlisted rejected');
   if (!unlistedProblem({ unlisted: 'yes' })) selfFail.push("bad 'unlisted: yes' accepted");
