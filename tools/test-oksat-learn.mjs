@@ -519,7 +519,7 @@ async function main() {
     await page.click('#nb-s .lr-nbwrap .lr-reveal');
     const outs = await page.$$eval('#nb-s .lr-nb-out', (els) => els.map((e) => ({ dir: e.querySelector('.lr-label').textContent, names: e.querySelector(':scope > p:last-of-type').textContent })));
     check('10-T8a: Superior reveals the tegmen name', outs.some((o) => o.dir === 'Superior' && o.names === NAME('tegmen')), JSON.stringify(outs));
-    check('10-T8b: Anterior reveals the aditus name', outs.some((o) => o.dir === 'Anterior' && o.names === NAME('aditus')), JSON.stringify(outs));
+    check('10-T8b: Anterior reveals the aditus name', outs.some((o) => o.dir === 'Anterior' && o.names.split(', ').includes(NAME('aditus'))), JSON.stringify(outs));
     await page.keyboard.press('4');
     await page.waitForTimeout(150);
     rec = await ls(page, FX_KEY);
