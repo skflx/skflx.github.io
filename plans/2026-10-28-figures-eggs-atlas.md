@@ -13,7 +13,7 @@
 The one-pager and the OKSAT hub show ASCII 3D scenes as their main figures. The owner wants three changes:
 
 1. **ASCII becomes Easter eggs.** Each scene unfolds in place when the reader selects or taps one specific word.
-2. ~~Informative, lit 3D figures take their place.~~ **Dropped 2026-11-02 (owner):** the three.js figures (2A) were built and removed. Fig. 1 is the original 2D cochlea SVG again; Fig. 2 is the ASCII fusion scene, visible. The numbers drafted for the 3D figures stay in §5 as a record.
+2. ~~Informative, lit 3D figures take their place.~~ **Dropped 2026-11-02 (owner):** the three.js figures (2A) were built and removed. Fig. 1 is the original 2D cochlea SVG again; Fig. 2 is the ASCII fusion scene, shown only as an egg. The numbers drafted for the 3D figures stay in §5 as a record.
 3. **A separate, unlisted atlas page.** A Rhoton-style skull-base hemisection with no labels, where related structures highlight together. It becomes the only way into the two 3D models (OLSB, SSB).
 
 Two non-figure changes are part of the same plan:
@@ -26,14 +26,14 @@ Two non-figure changes are part of the same plan:
 |---|---|
 | D1 | Egg trigger = text **selection** overlapping the word, **or tap/click/Enter** on it. No visible mark. |
 | D2 | ~~3D figures are lit matte (three.js).~~ Dropped 2026-11-02: no three.js figures on the one-pager. |
-| D3 | Fig. 1 = the original 2D cochlea SVG (restored 2026-11-02). Fig. 2 = the ASCII fusion scene, visible. |
+| D3 | Fig. 1 = the original 2D cochlea SVG (restored 2026-11-02). Fig. 2 = the ASCII fusion scene, shown only as the `fusion` egg. |
 | D4 | Atlas art = **hand-built SVG**: control points authored by Opus, baked by a tool, **manually vetted by the owner** before it ships. |
 | D5 | Atlas plane = midsagittal right half, medial view, face left. **Brain ghosted; posterior-fossa contents removed**, which exposes the posterior petrous face and the IAC porus. A cut-away window through the petrous bone. **CN VII drawn from brainstem to face.** |
 | D6 | **No visible labels** in the atlas. Related structures highlight together as groups. |
 | D7 | Atlas page `atlas.html`: unlisted (no inbound link), `noindex`. It links to OLSB (temporal-bone group) and SSB (sinonasal/ASB group) and is the **only** inbound path to either. Reaffirmed 2026-11-02: OKSAT guides do not link OLSB until the owner declares it complete (plan 2026-11-02 D6). |
 | D8 | OLSB and SSB both `noindex`; both keep their "Draft" notice (already present). |
 | D9 | **Delete** the Leitner staircase (scene, figure, CSS, check, test, docs). |
-| D10 | Eggs:<br>• `cochlea` → "electrode" (About ¶1, index.html)<br>• ~~`fusion` → "one sound"~~ dropped 2026-11-02: Fig. 2 stays visible, so it has no egg<br>• `larynx` → "Airway" in the Airway Rounds `<h1>` (airway-jeopardy). |
+| D10 | Eggs:<br>• `cochlea` → "electrode" (About ¶1, index.html)<br>• `fusion` → "Binaural pitch fusion" in the Research section's Otology area (changed 2026-11-02; Fig. 2 is egg-only, with its full caption)<br>• `larynx` → "Airway" in the Airway Rounds `<h1>` (airway-jeopardy). |
 | D11 | Quiet link: "binaural pitch fusion" in About ¶2 → `Fusion.html` (a personal reference, not recruitment). |
 | D12 | ~~Fig. 1 processor bands~~ parked with the 3D figures (§5.1). |
 | D13 | Instructions: canonical **`AGENTS.md`**. `CLAUDE.md`, `.claude/CLAUDE.md`, `.gemini/GEMINI.md` and `.agents/AGENTS.md` point to it. Plans live in `plans/`. |
