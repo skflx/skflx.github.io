@@ -8,3 +8,4 @@ Status never lives here: each spec has a parent GitHub issue with one sub-issue 
 | Spec | Parent issue |
 |---|---|
 | [2026-10-28-figures-eggs-atlas](2026-10-28-figures-eggs-atlas.md): ASCII figures as eggs, lit 3D Figs 1–2, unlisted atlas | #176 |
+| [2026-11-02-ear-anatomy-guide](2026-11-02-ear-anatomy-guide.md): normal outer and middle ear, OKSAT guide + question module, unlisted | #206 |
