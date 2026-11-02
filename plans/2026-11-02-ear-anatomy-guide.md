@@ -95,30 +95,180 @@ written in parallel sessions.
   desc: '…', data: 'js/oksat/modules/ear-anatomy.js' }
 ```
 
-- `unlisted: true` hides the entry from the hub; its URL still works. W0 confirms `check-data`
-  allows the same slug in both registries; if not, the module becomes `ear-anatomy-qs`.
+- `unlisted: true` hides the entry from the hub; its URL still works. Confirmed in W0.3: `check-data`
+  has no cross-registry slug rule (a module slug must equal its filename; a guide slug is free), so
+  both registries use `ear-anatomy`.
 - Module concepts = one key per guide section that has items (§5 section ids reused as concept keys
   where practical), so `drill` rows resolve one to one.
 
-### 4.2 New guide block types
+### 4.2 New guide block types (pinned in W0.3, 2026-11-02)
 
-All render from data through DOM nodes (never `innerHTML`), store only in the guide's own record
-(`oksat:learn:ear-anatomy:<code>`), and degrade to a plain `figure` or list without JS support.
-Structure ids are glossary ids (§4.4); `check-data` fails an id the glossary lacks.
+Four types: `hotspot`, `layers`, `neighbors`, `sequence`. These are general anatomy primitives, used
+across every chapter here and by any later anatomy guide, so they satisfy the skill rule against
+adding a block type for one chapter. They go into `docs/authoring-oksat-guide.md` in W7. Existing
+types (`p`, `table`, `call`, `deep`, `cards`, `steps`, `figure`, `tool`, `check`, `practice`, `drill`)
+are used unchanged.
 
-| `t` | Fields | Behaviour |
+**4.2.0 Rules common to all four**
+
+- **Ids and storage.** `hotspot` (when find mode is offered), `neighbors` and `sequence` are *graded*
+  blocks. Each has an `id`, unique within its section across `check` and graded blocks (one key
+  space). A grade is an integer 0–3 on the existing four tiers (`GRADES` in `js/oksat/learn.js`). It
+  is stored at `rec.checks[checkKey(ch, sec, b)]`, the same map `check` uses, so `js/oksat/store.js`
+  is not changed. Each completed attempt overwrites the stored grade, as a re-graded `check` does.
+  `layers`, and `hotspot` in explore mode, store nothing.
+- **Section tally.** Graded blocks count in the section's graded/total tally beside `check` prompts.
+  They are not added to the flashcard deck.
+- **Glossary.** Only when a rendered chapter contains `hotspot` or `neighbors` does the viewer load
+  `js/olsb/glossary.js`, through the existing `inject(src, 'OLSB')` path, once per page, and keep
+  `OLSB.glossary`. Relations = each entry's `rel` plus every reverse, deduplicated: the same
+  algorithm as `buildRelations` in `js/olsb/main.js`, reimplemented in `learn.js` (no import from
+  OLSB code). Glossary text (`name`, `syn`, `note`) reaches the DOM as `textContent` only, with no
+  inline markup and no term marking.
+- **No `innerHTML`.** Every node is built with the existing DOM helpers. Strings from the chapter go
+  through `inline()` (`q`, `cap`, `label`, `items`), as other blocks' strings do.
+- **Degrade rule.** If the glossary or an SVG fails to load, a `hotspot` renders as a plain `figure`
+  (first frame's `src`, block `alt`, first frame's `cap`) and a `neighbors` renders nothing. No throw,
+  no console error beyond the browser's own failed-request line.
+- **Shuffles** (find order, sequence order) are seeded by a string hash of the block's `checkKey`
+  plus an attempt counter, so they are stable for a given attempt and testable. A shuffle that
+  equals the authored order is rotated by one.
+
+**4.2.1 `hotspot`** — tap regions on a figure
+
+```js
+{ t: 'hotspot', id: 'tm-marks-hs', alt: 'Right tympanic membrane, otoscopic view', label: 'Find it',
+  modes: ['explore', 'find'],            // default ['explore']; order = tab order, first is initial
+  frames: [
+    { src: 'images/oksat/ear-anatomy/tm-right.svg', cap: 'Right ear',
+      regions: [{ g: 'umbo' }, { g: 'latproc' }] },        // SVG: regions optional (see below)
+    { src: 'images/oksat/ear-anatomy/ct/ax-3.png', cap: 'Axial, oval window level',
+      regions: [{ g: 'cochlea', poly: [52,40, 60,38, 63,47, 54,50] }] },   // raster: poly required
+  ] }
+```
+
+- **SVG frames** (`.svg` under `images/oksat/`). The viewer `fetch`es the file and parses it with
+  `DOMParser` (`image/svg+xml`). It rejects the file on a `parsererror` and falls back (degrade rule).
+  It then sanitizes and imports the tree: it removes `script`, `foreignObject`, `iframe`, `object`,
+  `embed`, `use` with a non-`#` href, and every element outside the SVG namespace; it removes every
+  attribute whose name starts with `on`, and every `href`/`xlink:href` that does not start with `#`.
+  A region is any element carrying `data-g="<glossary id>"`. If `regions` is given, only those ids
+  are interactive; if omitted, every `data-g` element is. Visible labels and leader lines carry
+  `data-label` and are hidden in find mode.
+- **Raster frames** (`.png`, `.jpg`, `.webp`). The image sits under an overlaid `<svg viewBox="0 0 100
+  100" preserveAspectRatio="none">`. Each region's `poly` is a flat list of x,y pairs in percent of
+  the image (at least 3 points) and draws a transparent polygon.
+- **Region a11y.** `tabindex="0"`, `role="button"`, Enter/Space activate. `aria-label` = the glossary
+  name in explore mode, `Region <n>` in find mode. Classes: `is-selected`, `is-neighbor`, `is-hit`,
+  `is-miss`, `is-target` (reveal).
+- **Explore.** Activating a region selects it and fills a panel (`aria-live="polite"`) beside or
+  below the figure: name, synonyms ("Also: …"), note, then neighbours by direction in the order
+  sup, inf, ant, post, lat, med, with the labels Superior, Inferior, Anterior, Posterior, Lateral,
+  Medial. A neighbour that is a region in the current frame is a button that selects it and gets
+  `is-neighbor`; other neighbours are plain text.
+- **Find.** A round covers every region in the current frame, in shuffled order. The prompt reads
+  "Tap: <name>". The first tap on each target scores it: correct gets `is-hit`; wrong gets `is-miss`
+  and the target is revealed with `is-target`. The round then advances. On completion it shows
+  "n / N" and the grade (all correct = 3, ≥ 75% = 2, ≥ 50% = 1, otherwise 0), stores it, and offers
+  "Again" (new attempt, new shuffle). Find needs at least 3 regions in the frame.
+- **Frames.** With more than one frame, a stepper shows "‹ n / N ›" and the frame's `cap`; ←/→ work
+  while focus is inside the block. Changing frames resets selection and any find round in progress.
+
+**4.2.2 `layers`** — stacked overlays
+
+```js
+{ t: 'layers', id: 'au-nerve-ly', alt: 'Sensory territories of the auricle, lateral face',
+  base: 'images/oksat/ear-anatomy/auricle-base.svg', mode: 'toggle',   // 'toggle' | 'step'
+  layers: [{ id: 'gan', label: 'Great auricular (C2-C3)', src: '…/auricle-gan.svg' }, …],
+  on: ['gan'], cumulative: false, cap: '…' }
+```
+
+- Every image has the same intrinsic size. They render as `<img>` elements stacked in one box, so
+  no SVG is inlined: base first, then layers in order. `alt` goes on the base; layer images get
+  `alt=""`, and the current state's `label`s are read out through an `aria-live` caption.
+- **toggle.** One chip per layer (`aria-pressed`) shows or hides that layer. `on` lists the layers
+  visible at first (default none).
+- **step.** A range input from 0 to N-1 with the current layer's `label`. State *i* shows layer *i*
+  only, or layers 0..*i* when `cumulative: true`. ←/→ on the range work natively.
+- At least 2 layers; ids unique within the block.
+
+**4.2.3 `neighbors`** — fill six directions, then reveal from the glossary
+
+```js
+{ t: 'neighbors', id: 'eac-nb', g: 'eac', dirs: ['ant', 'post', 'sup', 'inf', 'med'], label: '…' }
+```
+
+- `dirs` defaults to the directions in which `g` has at least one relation (rel plus reverses). A
+  listed direction with no relations is shown and revealed as "none recorded".
+- Before reveal: the anchor's glossary name, plus one optional textarea per direction (the same
+  pattern as `promptCard`). "Reveal" lists each direction's glossary names, then shows the
+  `gradeRow`. Keys 1–4 grade, as in `check`.
+- Requires at least 2 directions with relations.
+
+**4.2.4 `sequence`** — put items in order
+
+```js
+{ t: 'sequence', id: 'os-reflex-seq', q: 'Order the stapedial reflex arc.',
+  items: ['CN VIII', 'Ventral cochlear nucleus', 'Superior olivary complex (both sides)', 'Facial motor nucleus', 'Stapedius'] }
+```
+
+- `items` are authored in the correct order: at least 3 strings, unique. They render shuffled as an
+  `<ol>`. Each row has "Move up" and "Move down" buttons (`aria-label`s include the item text), and
+  focus follows the moved row. Pointer drag is optional, not required.
+- "Check order" scores the order submitted. Each row is marked `is-right` or `is-wrong` by position,
+  and the correct order is shown beside it. Grade: all positions correct = 3, ≥ 75% = 2, ≥ 50% = 1,
+  otherwise 0. The grade is stored, then "Again" reshuffles.
+
+**4.2.5 `check-data` rules (W1.2)**
+
+1. `BLOCKS` gains the four types. The `check` id-uniqueness set also covers graded blocks.
+2. `hotspot`: `id`, `alt`, `frames` ≥ 1. Every `src` exists under `images/oksat/`. SVG frames: every
+   `data-g` value in the file is a glossary id, and every listed region `g` occurs as a `data-g` in
+   the file (regex over the file text). Raster frames: `regions` ≥ 1, each `poly` an even-length
+   number list ≥ 6 with values in 0..100. `modes` ⊆ {explore, find}. With find, each frame has ≥ 3
+   regions.
+3. `layers`: `id`, `alt`, `base` and every `src` exist; `mode` ∈ {toggle, step}; ≥ 2 layers with
+   unique ids; `on` ids exist.
+4. `neighbors`: `g` is a glossary id; `dirs` ⊆ the six; ≥ 2 directions with relations (rel plus
+   reverses).
+5. `sequence`: `q` and ≥ 3 unique `items`. Markup and terms are scanned on `q`, `items`, `cap`,
+   `label` and layer `label`s. Add `g`, `base`, `dirs`, `poly`, `modes`, `mode`, `on` to the term
+   scanner's `SKIP` keys.
+6. **SVG safety.** Every SVG referenced by any guide block (`figure` included) contains no `<script`,
+   no `on…=` attribute, no `<foreignObject`, and no `href` that does not start with `#`. The
+   viewer's sanitizer is a second line of defence, not the first.
+7. `unlisted`: when present on a guide or a module entry, it is a boolean.
+8. **Attribution** (§4.5). For each slug in `ATTRIBUTED = ['ear-anatomy']`, every non-SVG file under
+   `images/oksat/<slug>/` (recursive, excluding `ATTRIBUTION.md`) appears by relative path in
+   `images/oksat/<slug>/ATTRIBUTION.md`.
+9. **Glossary** loads with the existing `loadWindow` (`window.OLSB.glossary`).
+10. **Fixtures without files.** The validators are functions. A self-test runs synthetic good and bad
+    blocks through them, with an injected file-exists/file-text lookup, and reports one PASS line
+    ("guide block validators reject the W0.3 bad fixtures"). Bad fixtures, at least one each: unknown
+    glossary id in a hotspot region; SVG `data-g` not in the glossary; raster poly with 5 numbers;
+    find mode with 2 regions; layers with 1 layer; neighbors anchor with < 2 directions; sequence
+    with duplicate items; SVG text containing `onload=`; `unlisted: 'yes'`; a raster absent from
+    `ATTRIBUTION.md`. Good fixtures: one valid block of each type.
+
+**4.2.6 Viewer tests (W1.1, in `tools/test-oksat-learn.mjs`)**
+
+The fixture guide `fx-anat` (one chapter, one section per case) is served by Playwright route
+interception, with the manifest extended in-route and SVGs served from strings. No fixture file is
+written into the repo. The real `js/olsb/glossary.js` is used, so expected names come from it at test
+time.
+
+| # | Case | Expect |
 |---|---|---|
-| `hotspot` | `id`, `alt`, `frames: [{src, cap?, regions: [{g, shape}]}]`, `modes?: ['explore','find']`, `label?` | **Explore**: tap a region → glossary name, synonyms, note, and its neighbours with direction. **Find**: prompt names a structure, learner taps; first tap scored, then revealed. More than one frame adds a stepper (CT stacks, drill-down states, canal positions). `shape` = SVG element id inside an SVG `src` (`data-g` attribute), or a polygon in % of image size for raster `src`. |
-| `layers` | `id`, `alt`, `base`, `layers: [{id, label, src}]`, `mode: 'toggle'｜'step'`, `cap?` | **Toggle**: overlays on one base (topography / cartilage / arteries / nerves / lymph). **Step**: ordered states with a slider (TM layers peeled, ET adult → infant, isthmus open → blocked, mastoid depth). |
-| `neighbors` | `id`, `g` (anchor), `dirs?` (default all six) | Learner fills sup/inf/ant/post/med/lat, then reveals the answer computed from glossary `rel` plus reverses; self-grades on the four tiers. The glossary is the answer key, so the text lives once. |
-| `sequence` | `id`, `q`, `items: [x…]` (authored in correct order) | Shown shuffled; learner drags or keys into order; first order scored, then revealed. CN VII segments, landmark sequence to the facial recess. |
-
-Existing types (`p`, `table`, `call`, `deep`, `cards`, `steps`, `figure`, `tool`, `check`,
-`practice`, `drill`) are used unchanged.
-
-These four are general anatomy primitives, used across every chapter here and by any later anatomy
-guide, so they satisfy the skill rule against adding a block type for one chapter. They are documented
-in `docs/authoring-oksat-guide.md` (W7).
+| T1 | hotspot explore, SVG with `data-g` `umbo`, `manubrium`, `latproc` | Click `manubrium` → panel name = glossary name; Superior lists `latproc` as a button; Inferior lists `umbo` (a reverse relation) |
+| T2 | hotspot find, same SVG | First target answered right, the other two wrong → "1 / 3"; `rec.checks['<ch>/<sec>:<id>'] === 0` |
+| T3 | hotspot, 2 frames | → advances to frame 2 and shows its `cap`; the find round resets |
+| T4 | SVG sanitizer | Served SVG holding `<script>window.__pwned=1</script>`, `onload="window.__pwned=1"` and `<foreignObject>` → `window.__pwned` undefined; no `on*` attribute or `foreignObject` in the DOM |
+| T5 | hotspot degrade | SVG route returns 404 → a plain `.lr-figure img` with the block `alt` |
+| T6 | keyboard | Tab to a region, press Enter → it is selected and the panel is filled |
+| T7 | layers toggle and step | A chip hides and shows its layer; step range at 1 shows layer 1 only, and layers 0–1 with `cumulative` |
+| T8 | neighbors on `manubrium` | Reveal shows Superior: lateral process name and Inferior: umbo name; grade "Knew it cold" → stored 3 |
+| T9 | sequence | Initial DOM order ≠ authored; reorder with Move buttons → "Check order" → stored 3; a second block checked unchanged from its shuffle gives a grade < 3 that matches the positions rule |
+| T10 | tally | A section with 1 check + 1 neighbors + 1 sequence shows a total of 3; grading one makes it 1 / 3 |
 
 ### 4.3 OLSB deep links — parked (D6; see Appendix A)
 
