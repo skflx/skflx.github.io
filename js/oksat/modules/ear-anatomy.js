@@ -39,6 +39,8 @@ const meta = {
         'Maniu A, et al. Anatomical variants of tympanic compartments and their aeration pathways. Clujul Med 2013;86:352-6; Monsanto RC, et al. Epitympanum volume and tympanic isthmus area in temporal bones with retraction pockets. Laryngoscope 2016;126:E369-74',
         'Li H, et al. Aeration of the human Prussak space: a synchrotron imaging study. Otol Neurotol 2021;42:e894-904; Rubini A, et al. The endoscopic relationship of the stapedius muscle to the facial nerve. Otol Neurotol 2020;41:e64-9',
         'Wojciechowski T, Skadorwa T. Radiologic anatomy of the pediatric sinus tympani. Auris Nasus Larynx 2021;49:606-12; Wojciechowski T, et al. Posterior-inferior recess of the sinus tympani. Eur Arch Otorhinolaryngol 2025;282:6139-47',
+        'Facial nerve and canal: Ishita, Bhagat S, et al. Indian J Otolaryngol Head Neck Surg 2021;74(Suppl 3):4183-4188; Kumar P, Motwani G, Jaitly S. Indian J Otolaryngol Head Neck Surg 2022;75(Suppl 1):93-96; Mathur A, et al. Indian J Otolaryngol Head Neck Surg 2024;76(6):5098-5103; Asghar A, et al. Surg Radiol Anat 2024;46(9):1501-1516; Minakata T, et al. Auris Nasus Larynx 2025;52(2):132-136; Ocak M, et al. Head Face Med 2025;21(1):33; Chrysanthou I, et al. J Craniofac Surg 2025;37(3-4):736-739',
+        'Arch origin and middle ear mechanics: Veugen CCAFM, Dikkers FG, de Bakker BS. The developmental origin of the auricula revisited. Laryngoscope 2020;130(10):2467-2474; Sienknecht UJ. Developmental origin and fate of middle ear structures. Hear Res 2013;301:19-26; Goode RL, Killion M, Nakamura K, Nishihara S. New knowledge about the function of the human middle ear: development of an improved analog model. Am J Otol 1994;15(2):145-154',
     ],
 };
 
@@ -1528,10 +1530,452 @@ const ITEMS = [
 //
 //
 // ════════ SYNTHESIS (W4: ids q121–q145) ════════
+{
+    id: 'q121', section: 'Systems Synthesis',
+    stem: 'A patient has a unilateral facial palsy. Tearing is normal, the stapedial reflex is absent on that side, and taste on the anterior two thirds of the tongue is reduced. Where is the lesion?',
+    options: [
+        { id: 'a', text: 'Meatal or labyrinthine segment, before the geniculate ganglion' },
+        { id: 'b', text: 'Tympanic segment, beyond the geniculate ganglion' },
+        { id: 'c', text: 'Mastoid segment, below the origin of the nerve to stapedius' },
+        { id: 'd', text: 'At the stylomastoid foramen, outside the temporal bone' },
+    ],
+    correct: 'b',
+    brief: 'Tears spared puts it beyond the geniculate ganglion; reflex lost puts it before the nerve to stapedius.',
+    detailed: 'The greater petrosal nerve leaves at the geniculate ganglion, so normal tearing places the lesion beyond it. The nerve to stapedius arises near the pyramidal eminence, so a lost reflex places the lesion before it. The chorda leaves about 4 mm above the stylomastoid foramen, so reduced taste fits any lesion above that point. The tympanic segment or second genu satisfies all three.\nApplication: the tear, taste, salivary and reflex tests are listed by Cummings Review as historical topodiagnostic tests; the reasoning still describes the anatomy.\nCaveat: lesion localization by branch loss is a teaching framework and partial lesions blur it.',
+    concepts: ['sy-fn'],
+},
+{
+    id: 'q122', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Name the intratemporal segments of the facial nerve in order and give one landmark for each.',
+    answer: `• Meatal: in the internal auditory canal, anterosuperior at the fundus
+• Labyrinthine: fundus to geniculate ganglion, narrowest part of the canal
+• Geniculate ganglion (first genu): greater petrosal nerve leaves
+• Tympanic: above the cochleariform process and oval window
+• Second genu: below the lateral canal, medial to the short process of the incus
+• Mastoid: behind the pyramid, nerve to stapedius and chorda leave
+• Stylomastoid foramen: anterior end of the digastric ridge`,
+    brief: 'Meatal, labyrinthine, geniculate, tympanic, second genu, mastoid, foramen.',
+    detailed: 'Cummings Review lists the segments from the cisternal portion to the stylomastoid foramen; Glasscock divides the course into five segments and names the three intratemporal branches.\nDiscrepancy: segment lengths differ (labyrinthine 3–5 mm in Cummings Review, about 4 mm in Glasscock; mastoid 12–15 mm and about 20 mm). Learn the landmarks, not the lengths.',
+    concepts: ['sy-fn'],
+},
+{
+    id: 'q123', section: 'Systems Synthesis',
+    stem: 'Which segment of the intratemporal facial nerve is shortest, and why is it the one most threatened by swelling?',
+    options: [
+        { id: 'a', text: 'Tympanic segment, because the bone over the oval window is often missing' },
+        { id: 'b', text: 'Labyrinthine segment, wholly in bone at the narrowest part of the canal' },
+        { id: 'c', text: 'Mastoid segment, because the chorda and the nerve to stapedius leave it' },
+        { id: 'd', text: 'Meatal segment, because the nervus intermedius joins the nerve in the canal' },
+    ],
+    correct: 'b',
+    brief: 'The labyrinthine segment is the shortest and sits in the narrowest part of the canal, enclosed in bone.',
+    detailed: 'Glasscock calls the labyrinthine segment the shortest, about 4 mm. Cummings Review gives 3–5 mm, the narrowest portion, completely enclosed in bone and therefore most susceptible to compression from oedema. The Handbook calls the meatal foramen the bottleneck in Bell palsy.\nApplication: the same stretch is the one at risk in temporal bone fracture.',
+    concepts: ['sy-fn'],
+},
+{
+    id: 'q124', section: 'Systems Synthesis',
+    stem: 'Which two arterial territories meet at the vulnerable stretch from the labyrinthine segment to the geniculate ganglion?',
+    options: [
+        { id: 'a', text: 'Stylomastoid artery from below and superficial petrosal artery from above' },
+        { id: 'b', text: 'Labyrinthine artery from the posterior circulation and superficial petrosal artery from the middle meningeal artery' },
+        { id: 'c', text: 'Anterior tympanic artery from in front and posterior tympanic artery from behind' },
+        { id: 'd', text: 'Inferior tympanic artery from the jugular fossa and caroticotympanic artery from the carotid wall' },
+    ],
+    correct: 'b',
+    brief: 'The labyrinthine artery (posterior circulation) and the superficial petrosal artery (external carotid system) meet there.',
+    detailed: 'Glasscock: the labyrinthine artery supplies the intracanalicular segment, the superficial petrosal artery the geniculate ganglion and the upper mastoid segment, and the intrinsic network is poorest at the labyrinthine segment. Cummings Review calls the geniculate region a watershed between external carotid branches and the posterior circulation.\nApplication: poor collateral supply adds ischaemia to compression in the narrow canal.',
+    concepts: ['sy-fn'],
+},
+{
+    id: 'q125', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Compare a complete lesion at the geniculate ganglion with one at the stylomastoid foramen: what is lost in each?',
+    answer: `• Geniculate ganglion or proximal: tearing, stapedial reflex, taste and salivation (chorda), facial motor function
+• Stylomastoid foramen: facial motor function only
+• Between the two, each branch that has already left is spared (tearing past the ganglion, reflex past the nerve to stapedius, taste past the chorda)`,
+    brief: 'Proximal lesions lose everything downstream; a distal lesion loses motor function only.',
+    detailed: 'The greater petrosal nerve leaves at the ganglion, the nerve to stapedius near the pyramid, and the chorda about 4 mm above the foramen (Glasscock). Lesions proximal to the ganglion in the internal auditory canal may also affect hearing and balance because VIII runs alongside.\nApplication: use it to place a lesion on the bedside findings.',
+    concepts: ['sy-fn'],
+},
+{
+    id: 'q126', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Trace the three parasympathetic routes through the ear from nerve to gland.',
+    answer: `• Greater petrosal nerve: geniculate ganglion → facial hiatus → vidian nerve → pterygopalatine ganglion → lacrimal gland and nasal mucosa
+• Jacobson nerve (IX) → tympanic plexus → lesser petrosal nerve → otic ganglion → auriculotemporal nerve → parotid
+• Chorda tympani: mastoid facial nerve → middle ear → petrotympanic fissure → lingual nerve → submandibular ganglion → submandibular and sublingual glands`,
+    brief: 'Greater petrosal to the tears, Jacobson to the parotid, chorda to the submandibular and sublingual glands.',
+    detailed: 'Cummings Review gives the facial nerve targets (lacrimal gland, nasal mucosa, submandibular and sublingual glands); Glasscock gives Jacobson nerve, the tympanic plexus and the lesser petrosal nerve.\nCaveat: foramen lacerum, vidian nerve, foramen ovale and the three ganglia are standard anatomy that the ranked sources do not state.',
+    concepts: ['sy-para'],
+},
+{
+    id: 'q127', section: 'Systems Synthesis',
+    stem: 'Which sequence carries the secretomotor supply to the lacrimal gland?',
+    options: [
+        { id: 'a', text: 'Chorda tympani, lingual nerve, submandibular ganglion' },
+        { id: 'b', text: 'Greater petrosal nerve, vidian nerve, pterygopalatine ganglion' },
+        { id: 'c', text: 'Lesser petrosal nerve, otic ganglion, auriculotemporal nerve' },
+        { id: 'd', text: 'Jacobson nerve, tympanic plexus, caroticotympanic nerves' },
+    ],
+    correct: 'b',
+    brief: 'The greater petrosal nerve relays in the pterygopalatine ganglion to the lacrimal gland and the nose.',
+    detailed: 'Cummings Review: general visceral efferent fibres from the superior salivatory nucleus run in the nervus intermedius to the geniculate ganglion and on to the lacrimal gland, the nasal mucosa and the submandibular and sublingual glands. The other options are the submandibular, parotid and sympathetic-joined tympanic routes.\nApplication: a cold, dry eye with a facial palsy puts the lesion at or before the geniculate ganglion.',
+    concepts: ['sy-para', 'sy-fn'],
+},
+{
+    id: 'q128', section: 'Systems Synthesis',
+    stem: 'After a mastoid operation a patient has a metallic taste on one side of the tongue and dry mouth on that side, but normal tearing. Which nerve was injured?',
+    options: [
+        { id: 'a', text: 'Greater petrosal nerve' },
+        { id: 'b', text: 'Jacobson nerve' },
+        { id: 'c', text: 'Chorda tympani' },
+        { id: 'd', text: 'Nerve to stapedius' },
+    ],
+    correct: 'c',
+    brief: 'The chorda carries taste from the anterior two thirds of the tongue and secretomotor fibres to the submandibular and sublingual glands.',
+    detailed: 'Glasscock: the chorda is the sensory bundle of the facial nerve; it separates about 4 mm above the stylomastoid foramen, ascends in its own canal and enters the middle ear at the iter chordae posterius. Cummings Review places taste from the anterior two thirds of the tongue in the facial nerve.\nApplication: the chorda is met first under the posterosuperior annulus and again in the facial recess.',
+    concepts: ['sy-para'],
+},
+{
+    id: 'q129', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Through which opening does each of the greater petrosal nerve, the lesser petrosal nerve and the chorda tympani leave the temporal bone or middle ear?',
+    answer: `• Greater petrosal nerve: facial hiatus on the middle fossa floor
+• Lesser petrosal nerve: superior tympanic canaliculus, lateral to and parallel with the greater petrosal nerve
+• Chorda tympani: canal of Huguier and the petrotympanic fissure`,
+    brief: 'Facial hiatus; superior tympanic canaliculus; canal of Huguier.',
+    detailed: 'Glasscock: the greater petrosal nerve emerges through the facial hiatus; the lesser petrosal nerve, accompanied by the superior tympanic artery, occupies the superior tympanic canaliculus, lateral to the greater petrosal nerve; the chorda exits by the iter chordae anterius (canal of Huguier) and the petrotympanic fissure.',
+    concepts: ['sy-para'],
+},
+{
+    id: 'q130', section: 'Systems Synthesis',
+    stem: 'An adult has otalgia, a normal ear examination and a firm tonsillar mass. Which nerve carries the pain to the ear?',
+    options: [
+        { id: 'a', text: 'Glossopharyngeal nerve, by Jacobson nerve' },
+        { id: 'b', text: 'Mandibular nerve, by the auriculotemporal nerve' },
+        { id: 'c', text: 'Facial nerve, by its sensory auricular branch' },
+        { id: 'd', text: 'Great auricular nerve, from C2 and C3' },
+    ],
+    correct: 'a',
+    brief: 'The tonsil is supplied by IX, and Jacobson nerve carries the pharyngeal pain to the tympanic plexus.',
+    detailed: 'Glasscock: Jacobson nerve mediates otalgia referred from the pharynx; the Handbook lists referred pain from head and neck malignancy among the differential diagnosis of ear pain.\nApplication: a normal ear with otalgia needs the pharynx examined.',
+    concepts: ['sy-sensory'],
+},
+{
+    id: 'q131', section: 'Systems Synthesis',
+    stem: 'A patient with ear pain, normal otoscopy and a clicking jaw also has a carious molar. Which shared nerve explains both sources?',
+    options: [
+        { id: 'a', text: 'The mandibular division of the trigeminal nerve' },
+        { id: 'b', text: 'The glossopharyngeal nerve' },
+        { id: 'c', text: 'The vagus nerve by Arnold nerve' },
+        { id: 'd', text: 'The facial nerve by its sensory branch' },
+    ],
+    correct: 'a',
+    brief: 'V3 supplies the molar teeth, the temporomandibular joint and the front of the ear canal.',
+    detailed: 'Glasscock: temporomandibular dysfunction and molar disease may present as referred otalgia, owing to the proximity of the canal and the shared innervation by the mandibular division of V. The Handbook calls temporomandibular joint disease a common cause of referred otalgia in adults.\nApplication: examine the joint and the teeth before treating the ear.',
+    concepts: ['sy-sensory'],
+},
+{
+    id: 'q132', type: 'recall', section: 'Systems Synthesis',
+    stem: 'List the five nerve routes that can refer pain to the ear and one source for each.',
+    answer: `• V3: temporomandibular joint, molar teeth
+• VII: the geniculate region and posterior canal (zoster oticus)
+• IX (Jacobson): pharynx, tonsil, tongue base
+• X (Arnold): larynx and hypopharynx (standard teaching)
+• C2–C3: the cervical spine (standard teaching)`,
+    brief: 'V3, VII, IX, X and C2–C3.',
+    detailed: 'Glasscock names the V3 sources and Jacobson nerve for the pharynx; the Handbook names zoster oticus as severe otalgia with vesicles.\nCaveat: the vagal sources and the cervical source are standard teaching, not stated in the ranked sources.',
+    concepts: ['sy-sensory'],
+},
+{
+    id: 'q133', section: 'Systems Synthesis',
+    stem: 'A vascular mass sits on the promontory. Which artery, entering with Jacobson nerve, is an important feeder of such tumours?',
+    options: [
+        { id: 'a', text: 'Inferior tympanic artery' },
+        { id: 'b', text: 'Superior tympanic artery' },
+        { id: 'c', text: 'Anterior tympanic artery' },
+        { id: 'd', text: 'Stylomastoid artery' },
+    ],
+    correct: 'a',
+    brief: 'The inferior tympanic artery, from the ascending pharyngeal artery, enters the inferior tympanic canaliculus with Jacobson nerve.',
+    detailed: 'Glasscock: the inferior tympanic artery is a branch of the ascending pharyngeal artery, traverses the inferior tympanic canaliculus with Jacobson nerve, and is an important arterial feeder of tympanic paragangliomas.\nApplication: the aperture names the artery, and the companion names the nerve that pain or tumour will follow.',
+    concepts: ['sy-arteries'],
+},
+{
+    id: 'q134', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Give the artery that passes each of these openings: facial hiatus, stylomastoid foramen, inferior tympanic canaliculus, petrotympanic fissure.',
+    answer: `• Facial hiatus: superficial petrosal artery (with the greater petrosal nerve)
+• Stylomastoid foramen: stylomastoid artery (with the facial nerve)
+• Inferior tympanic canaliculus: inferior tympanic artery (with Jacobson nerve)
+• Petrotympanic fissure: anterior tympanic artery (with the anterior malleal ligament and the chorda)`,
+    brief: 'Each opening carries a named artery and a companion.',
+    detailed: 'Glasscock gives the stylomastoid, inferior tympanic and superficial petrosal arteries with their companions; the cavity chapter gives the anterior tympanic artery at the petrotympanic fissure.\nCaveat: the parents of the anterior and posterior tympanic arteries are not stated in the ranked sources and are given as standard anatomy.',
+    concepts: ['sy-arteries'],
+},
+{
+    id: 'q135', section: 'Systems Synthesis',
+    stem: 'Which adult artery is the distal remnant of the embryonic stapedial artery?',
+    options: [
+        { id: 'a', text: 'Caroticotympanic artery' },
+        { id: 'b', text: 'Superior tympanic branch of the middle meningeal artery' },
+        { id: 'c', text: 'Stylomastoid artery' },
+        { id: 'd', text: 'Inferior tympanic artery' },
+    ],
+    correct: 'b',
+    brief: 'As the stapedial artery withers proximal to the stapes, its distal stem becomes the superior tympanic branch of the middle meningeal artery.',
+    detailed: 'Glasscock (Ch. 1): the stem of the maxillomandibular division becomes the middle meningeal artery; the distal stapedial stem becomes its superior tympanic branch; the hyoid artery is partly retained as the caroticotympanic branch of the internal carotid artery.\nApplication: if the stapedial artery persists, it runs through the obturator foramen and is not divided.',
+    concepts: ['sy-arteries', 'sy-dev'],
+},
+{
+    id: 'q136', section: 'Systems Synthesis',
+    stem: 'Which artery supplies the inferior mastoid segment of the facial nerve, and from which artery does it arise?',
+    options: [
+        { id: 'a', text: 'Superficial petrosal artery, from the middle meningeal' },
+        { id: 'b', text: 'Labyrinthine artery, from the anterior inferior cerebellar artery' },
+        { id: 'c', text: 'Stylomastoid artery, from the posterior auricular artery' },
+        { id: 'd', text: 'Deep auricular artery, from the maxillary artery' },
+    ],
+    correct: 'c',
+    brief: 'The stylomastoid artery, a branch of the posterior auricular artery, enters the foramen with the nerve.',
+    detailed: 'Glasscock: the posterior auricular artery gives a stylomastoid branch that enters the fallopian canal to supply the inferior segment of the facial nerve; the superficial petrosal artery supplies the geniculate ganglion and the superior mastoid segment.\nApplication: the two arteries meet along the mastoid segment, as the figure shows.',
+    concepts: ['sy-arteries', 'sy-fn'],
+},
+{
+    id: 'q137', section: 'Systems Synthesis',
+    stem: 'The tensor tympani and the stapedius are both middle ear muscles. Which pairing of nerve and arch is correct?',
+    options: [
+        { id: 'a', text: 'Tensor V3 and first arch; stapedius VII and second arch' },
+        { id: 'b', text: 'Tensor VII and second arch; stapedius V3 and first arch' },
+        { id: 'c', text: 'Tensor V3 and first arch; stapedius IX and third arch' },
+        { id: 'd', text: 'Both V3 and first arch, as both lie on the malleus' },
+    ],
+    correct: 'a',
+    brief: 'Tensor: V3, first arch. Stapedius: VII, second arch.',
+    detailed: 'Glasscock and Cummings Review: the tensor tympani is a first-arch muscle supplied by V3; the stapedius is a second-arch muscle supplied by the facial nerve. Each muscle keeps the nerve of its own arch.\nApplication: the stapedius also explains why a lesion above the nerve to stapedius loses the acoustic reflex.',
+    concepts: ['sy-dev'],
+},
+{
+    id: 'q138', section: 'Systems Synthesis',
+    stem: 'A child has a stenotic ear canal and malformed ossicles, but the cochlea and vestibule are normal on imaging. Which developmental fact explains the normal inner ear?',
+    options: [
+        { id: 'a', text: 'The otic capsule has a separate origin from the arches and the canal' },
+        { id: 'b', text: 'The first pouch builds the inner ear as well as the tube' },
+        { id: 'c', text: 'The second arch cartilage forms the bony labyrinth' },
+        { id: 'd', text: 'The meatal plug forms the cochlea in late gestation' },
+    ],
+    correct: 'a',
+    brief: 'The otic capsule develops separately from the arches and the canal, so atresia and ossicular anomalies can occur with a normal inner ear.',
+    detailed: 'Glasscock and the Handbook: the canal forms from the first cleft and a meatal plug, the ossicles from arch cartilages, and the footplate and inner ear from the otic capsule. A meatal plug that fails to canalize gives atresia, often with a normal inner ear.\nApplication: image the inner ear before any middle ear surgery in a child with atresia.',
+    concepts: ['sy-dev'],
+},
+{
+    id: 'q139', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Why is the facial nerve exposed under a standard postauricular incision in a newborn, and what changes later?',
+    answer: `• No mastoid process at birth; the tympanic bone is a flat ring with the stylomastoid foramen exposed
+• The nerve leaves the foramen onto the lateral surface of the skull
+• The mastoid process grows laterally and inferiorly after the first year and carries the foramen deeper`,
+    brief: 'No mastoid process, so the nerve leaves the foramen on the lateral skull.',
+    detailed: 'Glasscock: in the absence of a mastoid process the facial nerve exits the stylomastoid foramen on the lateral aspect of the skull and is vulnerable to a standard postauricular incision.\nApplication: use a modified incision in infants.',
+    concepts: ['sy-dev'],
+},
+{
+    id: 'q140', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Explain the notch of Rivinus and the foramen of Huschke from development.',
+    answer: `• Notch of Rivinus: the tympanic ring does not fuse at the top, so the superior sulcus is open; no annulus there, hence the pars flaccida
+• Foramen of Huschke: spurs of the ring fuse and leave a channel in the anteroinferior bony wall, which normally closes later in childhood`,
+    brief: 'Gaps in the tympanic ring: one at the top, one anteroinferiorly.',
+    detailed: 'Glasscock: the ring ossifies from four centres, and fuses except superiorly, where the gap remains as the notch; the foramen of Huschke closes in late childhood.\nDiscrepancy: many texts give about age 5 for the closure; Glasscock says late childhood.',
+    concepts: ['sy-dev'],
+},
+{
+    id: 'q141', section: 'Systems Synthesis',
+    stem: 'On a coronal slice through the oval window, which structure lies immediately above the tympanic facial nerve?',
+    options: [
+        { id: 'a', text: 'The lateral semicircular canal prominence' },
+        { id: 'b', text: 'The cochleariform process' },
+        { id: 'c', text: 'The jugular bulb' },
+        { id: 'd', text: 'The round window niche' },
+    ],
+    correct: 'a',
+    brief: 'The lateral canal sits above the tympanic nerve; the oval window sits below it.',
+    detailed: 'Cummings Review and Glasscock: the tympanic segment passes above the oval window and below the lateral semicircular canal, which bulges into the medial wall of the attic and aditus.\nApplication: the nerve is the structure between two landmarks you can see, the canal above and the window below.',
+    concepts: ['sy-gauntlet'],
+},
+{
+    id: 'q142', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Go posterior to anterior at the level of the mesotympanum and name seven structures in order.',
+    answer: `• Retrofacial air cells
+• Mastoid facial nerve
+• Pyramidal eminence
+• Oval window and stapes
+• Cochleariform process and tensor semicanal
+• Eustachian tube orifice
+• Internal carotid artery`,
+    brief: 'Cells, nerve, pyramid, oval window, tensor, tube, carotid.',
+    detailed: 'Glasscock: the pyramid lies in front of the facial nerve and behind the oval window; the anterior wall runs tensor semicanal, tube orifice, carotid wall. The retrofacial cells lie behind the nerve.\nApplication: this is the order of a transcanal view across the cavity and the order of a tilted axial CT slice.',
+    concepts: ['sy-gauntlet'],
+},
+{
+    id: 'q143', section: 'Systems Synthesis',
+    stem: 'Working from the mastoid cortex toward the round window niche, which landmark tells you where the second genu and the facial recess lie?',
+    options: [
+        { id: 'a', text: 'The short process of the incus, which points to the second genu' },
+        { id: 'b', text: 'The digastric ridge, which marks the facial recess' },
+        { id: 'c', text: 'The tegmen, which overlies the facial recess' },
+        { id: 'd', text: 'The sigmoid sinus, which lies in front of the recess' },
+    ],
+    correct: 'a',
+    brief: 'The short process points to the second genu; the facial recess lies below it.',
+    detailed: 'Myers and Vula: the short process of the incus points to the second genu in the same plane as the nerve; the facial recess lies below the fossa incudis, medial to the chorda and lateral to the facial nerve.\nApplication: identify the short process before the posterior tympanotomy.',
+    concepts: ['sy-gauntlet'],
+},
+{
+    id: 'q144', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Blind draw: sketch the intratemporal facial nerve from memory and score it against a key.',
+    answer: `• Meatal, labyrinthine, geniculate ganglion with the greater petrosal nerve
+• Tympanic segment above the oval window, second genu below the lateral canal
+• Mastoid segment with the nerve to stapedius and the chorda, stylomastoid foramen
+• Labyrinthine, superficial petrosal and stylomastoid arteries along it`,
+    brief: 'Seven stations, three branches, three arteries.',
+    detailed: 'Score one point per station, branch and artery; below the full list, redraw the missed parts and retry after a day.',
+    concepts: ['sy-gauntlet', 'sy-fn'],
+},
+{
+    id: 'q145', type: 'recall', section: 'Systems Synthesis',
+    stem: 'Blind draw: sketch the medial wall of the tympanic cavity and score it against a key.',
+    answer: `• Promontory with Jacobson nerve; oval window posterosuperior; round window posteroinferior
+• Tympanic facial nerve above the oval window, lateral canal above and behind it
+• Cochleariform process anteriorly, with the geniculate ganglion anterosuperior
+• Pyramidal eminence and ponticulus behind; subiculum behind the round window niche; sinus tympani between them`,
+    brief: 'Windows, nerve, canal, process, pyramid, sinus.',
+    detailed: 'Glasscock and Cummings Review give the medial wall as described in the cavity chapter. Score one point per feature in the key and redraw the missed ones.',
+    concepts: ['sy-gauntlet'],
+},
 // (synthesis items go above this line)
 //
 //
 // ════════ APPRAISAL (W4: ids q146–q155) ════════
+{
+    id: 'q146', section: 'Evidence and Controversies',
+    stem: 'On a written examination, which answer to "origin of the helix, antihelix and tragus" earns the mark?',
+    options: [
+        { id: 'a', text: 'Helix and tragus from first-arch hillocks; antihelix from a second-arch hillock' },
+        { id: 'b', text: 'All three from first-arch hillocks, as the first arch builds the auricle' },
+        { id: 'c', text: 'Helix from the second arch; tragus and antihelix from the first arch' },
+        { id: 'd', text: 'All three from the second arch, on the strength of the nerve supply' },
+    ],
+    correct: 'a',
+    brief: 'Board teaching: hillocks 1–3 first arch (tragus, helical crus, helix), 4–6 second arch (antihelix, antitragus, lobule).',
+    detailed: 'The Handbook and Glasscock give the six hillocks as three on each arch; the Handbook notes that 4–6 remain controversial. A study of 22 human embryos argued from nerve supply that almost the whole auricle is second arch (Laryngoscope 2020), but it is a competing view, not the examination answer.\nApplication: commit to the board version on the exam and note the dispute on 4–6.\nDiscrepancy: the Handbook table lists the 4–6 derivatives differently from the board version.',
+    concepts: ['ap-arches'],
+},
+{
+    id: 'q147', type: 'recall', section: 'Evidence and Controversies',
+    stem: 'State the board answer for the hillocks of His, the competing finding, and two weaknesses of the evidence behind it.',
+    answer: `• Board: hillocks 1–3 first arch, 4–6 second arch
+• Competing: 22 human embryos, hillocks absent at most stages, auricle innervated almost entirely by the facial nerve, so almost wholly second arch except tragus and anterior canal
+• Weaknesses: lineage inferred from nerve supply; one collection of 22 fixed specimens, all from the first two months`,
+    brief: 'Board 3 + 3; the embryo study argues mostly second arch from nerve supply.',
+    detailed: 'Veugen and colleagues (Laryngoscope 2020) examined Carnegie collection embryos at stages 13 to 23 with three-dimensional reconstruction. A review of mouse and chick work (Hear Res 2013) adds that cells of different origin combine in the middle ear.\nApplication: arch labels are a teaching framework; they do not change how an anomaly is managed.',
+    concepts: ['ap-arches'],
+},
+{
+    id: 'q148', section: 'Evidence and Controversies',
+    stem: 'A mouse lineage-tracing study gives the ossicles a mixed origin. What is the main limit on using it to rewrite the human ossicle table?',
+    options: [
+        { id: 'a', text: 'Mouse and chick are different species, so the human split is inferred, not observed' },
+        { id: 'b', text: 'Lineage tracing cannot label neural crest cells at all' },
+        { id: 'c', text: 'The mouse has no middle ear, so no ossicle is formed' },
+        { id: 'd', text: 'Ossicle origin has never been disputed in any species' },
+    ],
+    correct: 'a',
+    brief: 'Species extrapolation: the human ossicle origin is inferred from mouse and chick.',
+    detailed: 'Sienknecht (Hear Res 2013), a review, describes cells of different provenance meeting in the developing middle ear, from work in mouse and chick. The board table (Handbook, Glasscock) is built on human cartilage anatomy and is not overturned by an animal study.\nApplication: say that the board split is the teaching version and that animal lineage work suggests a mixed origin.',
+    concepts: ['ap-arches'],
+},
+{
+    id: 'q149', section: 'Evidence and Controversies',
+    stem: 'A series reports facial canal dehiscence in 1 of 30 otosclerosis controls but 15 of 30 cholesteatoma ears, both found at surgery. What does the gap tell you?',
+    options: [
+        { id: 'a', text: 'The samples differ in disease: erosion by cholesteatoma, not a flaw in the method' },
+        { id: 'b', text: 'Surgery always underestimates dehiscence compared with imaging' },
+        { id: 'c', text: 'The board range of 25–55% is disproved by the control group' },
+        { id: 'd', text: 'Cholesteatoma ears are normal ears studied in more detail' },
+    ],
+    correct: 'a',
+    brief: 'Diseased ears erode the canal; the two groups are different populations.',
+    detailed: 'In the series, dehiscence was found in 50% of cholesteatoma ears and 3.3% of controls (Indian J Otolaryngol Head Neck Surg 2022). A pooled estimate in healthy temporal bones was 29% (Surg Radiol Anat 2024), so the two figures are measuring different things.\nApplication: when you quote a prevalence, name the population and the method.\nCaveat: both studies are small.',
+    concepts: ['ap-dehiscence'],
+},
+{
+    id: 'q150', type: 'recall', section: 'Evidence and Controversies',
+    stem: 'List four reasons that facial canal dehiscence rates differ between studies.',
+    answer: `• Definition: microscopic gap, bare nerve at surgery, thin bone on CT
+• Selection: donated bones, diseased ears, ears chosen for palsy
+• Detection: the surgeon sees only the exposed area; low-resolution CT overcalls thin bone (cone-beam CT found 25 of 36 bones against 10 on micro-CT)
+• Size and unit: samples of 30 to 142, ears against patients`,
+    brief: 'Definition, selection, detection and sample size.',
+    detailed: 'Ocak and colleagues (Head Face Med 2025) scanned the same 36 bones with both techniques. The pooled healthy-bone figure was 29% (Surg Radiol Anat 2024) and the Bell palsy decompression series gave 35.2% (Auris Nasus Larynx 2025).\nApplication: the 25–55% board range is an envelope across these methods.',
+    concepts: ['ap-dehiscence'],
+},
+{
+    id: 'q151', section: 'Evidence and Controversies',
+    stem: 'You start a tympanotomy in a revision cholesteatoma ear. What assumption about the tympanic facial nerve does the evidence support?',
+    options: [
+        { id: 'a', text: 'Assume bare nerve until you have seen bone' },
+        { id: 'b', text: 'Assume intact bone, as dehiscence is rare in surgery' },
+        { id: 'c', text: 'Rely on the CT report, since CT is reliable for thin bone' },
+        { id: 'd', text: 'Assume the nerve is bare only above the cochleariform process' },
+    ],
+    correct: 'a',
+    brief: 'Dehiscence is common over the oval window, more so in diseased ears, and imaging overcalls it.',
+    detailed: 'Cummings Review gives 25–55% of bones dehiscent over the oval window. Surgical series in cholesteatoma and chronic ears report about 50% (Indian J Otolaryngol Head Neck Surg 2022 and 2024), and CT is poor at the thin bone (Head Face Med 2025).\nApplication: the exam answer is the range; the operating room answer is to protect the nerve whatever the report says.',
+    concepts: ['ap-dehiscence'],
+},
+{
+    id: 'q152', section: 'Evidence and Controversies',
+    stem: 'Which set matches the board middle ear transformer figures?',
+    options: [
+        { id: 'a', text: 'Area 20:1, lever 1.3:1, theoretical gain about 28 dB' },
+        { id: 'b', text: 'Area 13:1, lever 2:1, theoretical gain about 20 dB' },
+        { id: 'c', text: 'Area 20:1, lever 1.3:1, measured gain about 28 dB' },
+        { id: 'd', text: 'Area 55:1, lever 1:1, theoretical gain about 35 dB' },
+    ],
+    correct: 'a',
+    brief: 'Area 20:1 (about 26 dB), lever 1.3:1 (about 2 dB), theoretical about 28 dB; measured about 20 dB.',
+    detailed: 'Glasscock and Cummings Review give 20:1 and 1.3:1. Counting the effective vibrating area (43 of 69 mm²) against a footplate of 3.2 mm² gives nearer 13:1, and Cummings Review gives the actual gain as about 20 dB.\nDiscrepancy: the sources differ in which drum area they count.',
+    concepts: ['ap-numbers'],
+},
+{
+    id: 'q153', type: 'recall', section: 'Evidence and Controversies',
+    stem: 'Give two reasons the measured middle ear gain is below the idealized 28 dB.',
+    answer: `• The effective vibrating area is smaller than the anatomic drum, so the area ratio is nearer 13:1 than 20:1
+• Gain is frequency dependent: in human temporal bones the pressure gain falls above 1000 Hz and the effective lever changes, so a single ratio overstates it`,
+    brief: 'Smaller effective area and frequency dependence.',
+    detailed: 'Cummings Review: 43 of 69 mm² effective against 3.2 mm², and actual gain about 20 dB. Goode and colleagues (Am J Otol 1994) used laser Doppler measurements in human temporal bones and concluded that a simple transformer analogy is only partly correct.\nCaveat: the temporal bone work is post-mortem.',
+    concepts: ['ap-numbers'],
+},
+{
+    id: 'q154', section: 'Evidence and Controversies',
+    stem: 'Two articles name the same posterior tympanic spaces differently, one using Proctor terms and one Marchioni terms. How should you treat the difference?',
+    options: [
+        { id: 'a', text: 'As vocabulary: map one set of names onto the other, and treat the sinus tympani depth classes as the data' },
+        { id: 'b', text: 'As two competing measurements, so one set of names must be wrong' },
+        { id: 'c', text: 'As proof that the posterior tympanum cannot be described reliably' },
+        { id: 'd', text: 'As a reason to drop the sinus tympani depth classes altogether' },
+    ],
+    correct: 'a',
+    brief: 'Naming is vocabulary; a measured depth class is a finding.',
+    detailed: 'This guide uses the vault and KJ Lee terms, with Proctor and Marchioni synonyms beside them; the Marchioni classes A, B and C grade the depth of the sinus tympani on tilted axial CT.\nApplication: when two names collide, find which structure each refers to before comparing numbers.\nCaveat: the overlap of the two schemes is stated here as vocabulary and has not been checked term by term.',
+    concepts: ['ap-numbers'],
+},
+{
+    id: 'q155', type: 'recall', section: 'Evidence and Controversies',
+    stem: 'State the effective-area conflict behind the transformer ratio and what to say on an exam.',
+    answer: `• Glasscock and Cummings Review: area ratio about 20:1
+• Effective vibrating area 43 of 69 mm² against a footplate of 3.2 mm² gives nearer 13:1
+• Exam: give 20:1, lever 1.3:1, theoretical 28 dB, actual about 20 dB, and name the area counted`,
+    brief: 'The ratio depends on which drum area is counted: about 20:1 or nearer 13:1.',
+    detailed: 'Cummings Review gives the effective area figures; neither source explains the difference between its values.\nApplication: a quoted ratio is only as good as the area it uses.',
+    concepts: ['ap-numbers'],
+},
 // (appraisal items go above this line)
 ];
 
