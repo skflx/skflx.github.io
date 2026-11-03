@@ -33,6 +33,8 @@ const meta = {
         'Roby BB, Yoon PJ. Tympanomastoidectomy and ossicular chain reconstruction. In: ENT Secrets — Ch. 39',
         'Baker SR. Local Flaps in Facial Reconstruction, 3e, Ch. 22 — auricle proportions, as cited in the otoplasty module',
         'Stapes footplate morphometry: Folia Morphologica 2024;83(2) (length 2.93, width 1.46 mm); micro-CT of Thiel-embalmed temporal bones, J Otolaryngol Head Neck Surg 2021 (length 2.71, width 1.23 mm)',
+        'Eustachian tube: Ishijima K et al., Ann Otol Rhinol Laryngol 2000;109(6):542-548 and 2002;111(6):530-536; Magro I et al., Otolaryngol Head Neck Surg 2021;165(6):862-867; Doyle WJ, Swarts JD, Int J Pediatr Otorhinolaryngol 2010;74(9):986-990; Leuwer R, Otolaryngol Clin North Am 2016;49(5):1097-1106; Lin C et al., Acta Otolaryngol 2016;136(11):1130-1136',
+        'Petrous apex corridors and lesions: Comert E, Comert A, Eur Arch Otorhinolaryngol 2021;279(1):159-168; Porto E et al., World Neurosurg 2022;169; Kosec A et al., ORL 2023;85(3):172-176',
     ],
 };
 
@@ -1040,6 +1042,255 @@ const ITEMS = [
 //
 //
 // ════════ EUSTACHIAN TUBE AND PETROUS APEX (W3: ids q87–q110) ════════
+{
+    id: 'q87', section: 'Eustachian Tube',
+    stem: 'A probe is passed from the tympanic orifice of the Eustachian tube toward the nasopharynx. Which description fits the first segment it enters?',
+    options: [
+        { id: 'a', text: 'Cartilaginous, two thirds of the length, columnar lining' },
+        { id: 'b', text: 'Bony, a third of the length, ciliated cuboidal lining' },
+        { id: 'c', text: 'Bony, about two thirds of the length, columnar lining' },
+        { id: 'd', text: 'Cartilaginous, one third of the length, cuboidal lining' },
+    ],
+    correct: 'b',
+    brief: 'The tube opens from the protympanum as its bony lateral third; the medial two thirds are cartilaginous.',
+    detailed: 'The Handbook: the lateral third is bony, sits at the anterior mesotympanum (protympanum) and is lined by ciliated cuboidal epithelium; the medial two thirds are cartilaginous, end at the torus tubarius and are lined by pseudostratified columnar epithelium. Glasscock and Cummings Review agree on the two-thirds cartilaginous split.\nApplication: the isthmus, the narrow point, lies at the junction.\nDiscrepancy: a 3D reconstruction series (Ann Otol Rhinol Laryngol 2000) gave a cartilaginous-plus-junctional to bony ratio of 4:1 in adults, a bony fifth rather than a third.',
+    concepts: ['et-seg'],
+},
+{
+    id: 'q88', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Give the Eustachian tube\'s length at birth and in the adult, its two parts, and the lining of each.',
+    answer: `• Length: about 18 mm at birth, about 35 mm in adults
+• Lateral third: bony, opens from the protympanum, ciliated cuboidal epithelium
+• Medial two thirds: cartilaginous, ends at the torus tubarius, pseudostratified columnar epithelium
+• The narrow point (isthmus) lies at the bony-cartilaginous junction`,
+    brief: 'About 18 mm to 35 mm; bony lateral third, cartilaginous medial two thirds.',
+    detailed: 'Handbook: about 18 mm at birth and 35 mm in adulthood. Glasscock: approximately 35 mm from the anterior tympanic cavity to the posterior nasopharynx; the tympanic orifice is a few millimetres above the floor.\nDiscrepancy: a 3D reconstruction of 11 temporal bones found an adult lumen path length of 37.0 ± 4.2 mm and 21.2 mm at 3 months.',
+    concepts: ['et-seg'],
+},
+{
+    id: 'q89', section: 'Eustachian Tube',
+    stem: 'After rapid weight loss a patient develops a patulous Eustachian tube. Which structure has most likely atrophied?',
+    options: [
+        { id: 'a', text: 'The tensor veli palatini muscle' },
+        { id: 'b', text: 'The cartilage of the medial lamina' },
+        { id: 'c', text: 'The Ostmann fat pad' },
+        { id: 'd', text: 'The levator veli palatini muscle' },
+    ],
+    correct: 'c',
+    brief: 'The Ostmann fat pad is metabolically sensitive adipose against the lateral wall; it helps hold the tube closed at rest.',
+    detailed: 'Cummings Review: the Ostmann fat pad is metabolically sensitive adipose in the lateral wall of the tube; rapid weight loss can atrophy it and cause patulous Eustachian tube syndrome. Glasscock: the lateral fat pad abuts the fibrocartilaginous tube and aids resting closure.\nApplication: when you see a patient with a sudden change after weight loss, ask about it before blaming the muscles.\nDiscrepancy: a 2016 anatomical review describes a medial fat pad between the suspensory ligaments.',
+    concepts: ['et-cart'],
+},
+{
+    id: 'q90', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Describe the walls and lumen of the cartilaginous Eustachian tube, and the fat pad beside it.',
+    answer: `• Cartilage forms the craniomedial wall, with a medial and a lateral lamina
+• A membranous wall completes it on the inferolateral side
+• The lumen has two compartments: Rüdinger safety canal and the auxiliary gap
+• The Ostmann fat pad abuts the lateral aspect and aids resting closure`,
+    brief: 'Cartilage above and medial, membrane below and lateral; two lumen compartments; fat pad against the lateral wall.',
+    detailed: 'Leuwer (2016): the tube is surrounded by a cartilaginous wall on the craniomedial side and a membranous wall on the inferolateral side, and its lumen has two compartments, the Rüdinger safety canal and the auxiliary gap. Ishijima (2002) names the medial and lateral laminae of the cartilage. Glasscock: the lateral fat pad aids resting closure.',
+    concepts: ['et-cart'],
+},
+{
+    id: 'q91', section: 'Eustachian Tube',
+    stem: 'A tumour at the foramen ovale injures the mandibular nerve. Which pair of muscles is weakened?',
+    options: [
+        { id: 'a', text: 'Tensor tympani and tensor veli palatini' },
+        { id: 'b', text: 'Tensor tympani and stapedius' },
+        { id: 'c', text: 'Stapedius and levator veli palatini' },
+        { id: 'd', text: 'Tensor veli palatini and salpingopharyngeus' },
+    ],
+    correct: 'a',
+    brief: 'V3 supplies both tensors, tensor tympani and tensor veli palatini; both are first-arch muscles.',
+    detailed: 'Glasscock and Handbook: the tensor veli palatini, innervated by the trigeminal nerve, is the primary dilator of the tube; the Handbook notes the tensor tympani is V3 and the stapedius is CN VII. The levator veli palatini and salpingopharyngeus are supplied by the pharyngeal plexus.\nApplication: V3 loss therefore touches both the malleus muscle and the tubal dilator.',
+    concepts: ['et-muscle'],
+},
+{
+    id: 'q92', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Name the three tubal muscles, each one\'s nerve, and its role in opening the tube.',
+    answer: `• Tensor veli palatini: V3, primary dilator, lateral to the cartilage
+• Levator veli palatini: pharyngeal plexus (X), strongest and longest-acting on paratubal recording, rotates the medial lamina
+• Salpingopharyngeus: pharyngeal plexus (X), weakest, inactive in some ears`,
+    brief: 'Tensor dilates, levator contributes most on EMG, salpingopharyngeus least.',
+    detailed: 'Glasscock, Cummings Review and Handbook agree the tensor veli palatini is the primary dilator. A paratubal EMG and sonotubometry study in 17 healthy volunteers (Acta Otolaryngol 2016) found the levator the most powerful and long-lasting and the salpingopharyngeus the weakest, in some ears inactive. A 3D reconstruction (Ann Otol Rhinol Laryngol 2002) places the levator inferolateral to the medial lamina.',
+    concepts: ['et-muscle'],
+},
+{
+    id: 'q93', section: 'Eustachian Tube',
+    stem: 'A 9-month-old has recurrent acute otitis media. Which feature of the infant tube best explains the susceptibility?',
+    options: [
+        { id: 'a', text: 'A long, steeply sloped tube' },
+        { id: 'b', text: 'A larger tensor veli palatini than adults have' },
+        { id: 'c', text: 'A short, nearly horizontal tube' },
+        { id: 'd', text: 'A bony segment forming most of its length' },
+    ],
+    correct: 'c',
+    brief: 'Infant tubes are short and horizontal; bacteria reach the middle ear easily and the tube opens less efficiently.',
+    detailed: 'Handbook: infants are at higher risk of acute otitis media because the auditory tubes are short and horizontal, and feeding often occurs reclined; as children grow the tubes lengthen and become more vertical, and the incidence declines. A skull study of 3–4-year-olds found a shorter tube, smaller tensor vectors and a smaller tensor surface area than in adults.\nDiscrepancy: the same skull study found no difference in the angle of descent from the cranial base.',
+    concepts: ['et-child'],
+},
+{
+    id: 'q94', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Compare the infant and adult Eustachian tube: length, shape, and when the adult form is reached.',
+    answer: `• Length: about 18 mm at birth, about 35 mm in adults (Handbook)
+• Shape: short and horizontal in infants; longer and more vertical with growth
+• Adults: the cartilaginous part is angled inferiorly and laterally from the bony part
+• More than half the growth occurs by 8 years; adult morphology is reached in early adolescence`,
+    brief: 'About half the adult length, flatter; adult form by early adolescence.',
+    detailed: 'Handbook: 18 mm at birth, 35 mm in adults; infants short and horizontal. A 3D reconstruction series: 21.2 mm at 3 months; in children both parts align with the line joining the orifices, in adults the cartilaginous part angles inferiorly and laterally. A CT series: more than half of growth by 8 years, adult morphology by early adolescence.\nDiscrepancy: the CT series gave horizontal angles of 17°, 21° and 23° (under 4, 5–7 and 8–18 years); a skull study found no difference in the descent angle from the cranial base at 3–4 years.',
+    concepts: ['et-child'],
+},
+{
+    id: 'q95', section: 'Eustachian Tube',
+    stem: 'Gentle dissection is advised in the medial wall of the Eustachian tube during cholesteatoma surgery. Which vessel is at risk, and why?',
+    options: [
+        { id: 'a', text: 'Jugular bulb; thin roof over the vein' },
+        { id: 'b', text: 'Middle meningeal artery; thin squamous bone' },
+        { id: 'c', text: 'Sigmoid sinus; thin posterior fossa plate' },
+        { id: 'd', text: 'Internal carotid artery; thin bony shell' },
+    ],
+    correct: 'd',
+    brief: 'The petrous carotid runs medial to the bony tube in a shell often under 0.5 mm thick, dehiscent in 6%.',
+    detailed: 'Glasscock: after its knee the artery runs medial to the Eustachian tube and inferomedial to the tensor semicanal; the bony shell is often less than 0.5 mm thick and can be dehiscent in 6% of cases, so surgery for chronic otitis media or cholesteatoma mandates gentle dissection in the medial wall of the tube.\nApplication: an aberrant carotid runs lateral and posterior to the vestibular line and presents as a retrotympanic mass.',
+    concepts: ['et-rel'],
+},
+{
+    id: 'q96', section: 'Eustachian Tube',
+    stem: 'A 52-year-old has had a unilateral middle ear effusion for three months. Which site should be examined first?',
+    options: [
+        { id: 'a', text: 'Oropharynx and tonsillar fossae' },
+        { id: 'b', text: 'Nasopharynx and torus tubarius' },
+        { id: 'c', text: 'Hypopharynx and piriform sinuses' },
+        { id: 'd', text: 'Larynx and vocal fold mobility' },
+    ],
+    correct: 'b',
+    brief: 'The tube ends at the torus tubarius in the nasopharynx; a mass there blocks it.',
+    detailed: 'Handbook: in adults with persistent unilateral middle ear effusion, a nasopharyngeal mass causing auditory tube obstruction must be ruled out before attributing the cause to an upper respiratory infection, allergy or recent flight. The cartilaginous tube terminates at the torus tubarius of the nasopharynx.\nApplication: the nasopharynx is examined with an endoscope.',
+    concepts: ['et-rel'],
+},
+{
+    id: 'q97', type: 'recall', section: 'Eustachian Tube',
+    stem: 'State where the internal carotid artery, the tensor semicanal and V3 lie relative to the Eustachian tube.',
+    answer: `• Internal carotid artery: medial to the bony tube, after its knee (and inferomedial to the tensor semicanal)
+• Tensor semicanal: above the bony tube
+• V3 and the foramen ovale: lateral to the cartilaginous tube
+• Ostmann fat pad: against the lateral wall of the cartilaginous tube`,
+    brief: 'Carotid medial, tensor above, V3 lateral to the cartilaginous part.',
+    detailed: 'Glasscock: the artery bends to run medial to the tube and inferomedial to the tensor semicanal; the tympanic orifice lies below the bulge of the tensor semicanal. Glasscock: the lateral fat pad abuts the fibrocartilaginous tube. The V3 relation is the guide glossary\'s statement.\nApplication: the tube sits in a corridor between the carotid and the infratemporal fossa.',
+    concepts: ['et-rel'],
+},
+{
+    id: 'q98', section: 'Petrous Apex',
+    stem: 'A mass expanding at the very tip of the petrous apex stretches a cranial nerve in a canal beneath a ligament. Which nerve is it?',
+    options: [
+        { id: 'a', text: 'Facial nerve, labyrinthine segment' },
+        { id: 'b', text: 'Vestibulocochlear nerve' },
+        { id: 'c', text: 'Abducens nerve' },
+        { id: 'd', text: 'Glossopharyngeal nerve' },
+    ],
+    correct: 'c',
+    brief: 'The abducens nerve runs in Dorello canal under the petroclinoid (Gruber) ligament at the apex tip.',
+    detailed: 'Glasscock: the abducens nerve runs in Dorello canal beneath the posterior petroclinoid (Gruber) ligament; apicitis can manifest with abducens palsy. The trigeminal ganglion in Meckel cave lies anterolateral to the apex.\nApplication: isolated horizontal diplopia can be the first sign of an apical mass.',
+    concepts: ['pa-bounds'],
+},
+{
+    id: 'q99', type: 'recall', section: 'Petrous Apex',
+    stem: 'List the structures that lie lateral, posterior, anterior and medial to the petrous apex.',
+    answer: `• Lateral: cochlea
+• Posterior: internal auditory canal
+• Anterior: horizontal petrous carotid (also below), and Meckel cave (trigeminal ganglion)
+• Medial: Dorello canal (abducens) and the petroclival fissure`,
+    brief: 'Cochlea lateral, IAC behind, carotid and Meckel cave in front, Dorello canal and petroclival fissure medial.',
+    detailed: 'Glasscock: the apex points anteromedially, marked by the transition of the intrapetrous to the intracranial carotid, the orifice of the bony tube and, anterolaterally, the trigeminal ganglion in Meckel cave; Dorello canal lies beneath the petroclinoid ligament. The other relations follow the guide glossary.\nApplication: use the six-direction habit on a CT before choosing a corridor.',
+    concepts: ['pa-bounds'],
+},
+{
+    id: 'q100', section: 'Petrous Apex',
+    stem: 'A lesion lies on the middle fossa face, anterolateral to the apex, and compresses a ganglion. Which structure is involved?',
+    options: [
+        { id: 'a', text: 'Geniculate ganglion at the first genu' },
+        { id: 'b', text: 'Trigeminal ganglion in Meckel cave' },
+        { id: 'c', text: 'Spiral ganglion within the cochlea' },
+        { id: 'd', text: 'Otic ganglion below the foramen ovale' },
+    ],
+    correct: 'b',
+    brief: 'The trigeminal (gasserian) ganglion occupies Meckel cave on the middle fossa face, anterolateral to the apex.',
+    detailed: 'Glasscock: the gasserian ganglion of the trigeminal nerve occupies Meckel cave on the middle cranial fossa face of the temporal bone, anterolateral to the petrous apex. The geniculate ganglion lies at the first genu, anterior to the cochleariform process.\nApplication: apical pathology can therefore cause trigeminal pain.',
+    concepts: ['pa-bounds'],
+},
+{
+    id: 'q101', section: 'Petrous Apex',
+    stem: 'A cerebrospinal fluid leak persists after translabyrinthine schwannoma resection despite apparently adequate tympanomastoid obliteration. Which air cell tract is implicated?',
+    options: [
+        { id: 'a', text: 'Subarcuate' },
+        { id: 'b', text: 'Sinodural' },
+        { id: 'c', text: 'Retrofacial' },
+        { id: 'd', text: 'Peritubal' },
+    ],
+    correct: 'd',
+    brief: 'Peritubal cells that open into the tube in front of its tympanic orifice can carry the leak.',
+    detailed: 'Glasscock: persisting leakage after translabyrinthine resection, despite apparently adequate tympanomastoid obliteration, has been linked to peritubal cells that open directly into the Eustachian tube anterior to its tympanic orifice. The peritubal tract surrounds the tube.\nApplication: the fluid reaches the nose through the tube.',
+    concepts: ['pa-tracts'],
+},
+{
+    id: 'q102', type: 'recall', section: 'Petrous Apex',
+    stem: 'How often is the anterior petrous apex pneumatized, what is it usually instead, and which tracts lead to it?',
+    answer: `• About 10–15% pneumatized (Glasscock); Cummings Review gives 10% anterior and 30% posterior
+• Most often diploic; sclerotic in a small percentage
+• Tracts: subarcuate, sinodural (posterior); peritubal, retrofacial, infralabyrinthine, infracochlear, glenoid fossa (anterior)`,
+    brief: 'A minority of apices hold air; most are diploic.',
+    detailed: 'Glasscock: five regions of pneumatization; the apical and peritubal areas make up the apex region; the subarcuate tract passes through the arch of the superior canal, the perilabyrinthine tracts run above and below the labyrinth, and the peritubal tract surrounds the tube.\nDiscrepancy: Glasscock 10–15% anterior; Cummings Review 10% anterior and 30% posterior.',
+    concepts: ['pa-tracts'],
+},
+{
+    id: 'q103', section: 'Petrous Apex',
+    stem: 'A jugular bulb lies under 3 mm from the cochlea in the tympanic cavity. Which corridors to the petrous apex does it make unsafe?',
+    options: [
+        { id: 'a', text: 'The middle fossa corridor only' },
+        { id: 'b', text: 'Middle fossa and infracochlear' },
+        { id: 'c', text: 'The two inferior corridors' },
+        { id: 'd', text: 'None, as the bulb lies lower' },
+    ],
+    correct: 'c',
+    brief: 'The bulb sits where the infracochlear and infralabyrinthine corridors pass; the middle fossa route comes from above.',
+    detailed: 'A cadaveric study of the transcanal infracochlear approach found that a tympanic cavity jugular bulb closer than 3 mm to the cochlea was the only instance that restricted it. In one case a high-riding jugular bulb ruled out the infracochlear infralabyrinthine approach and a middle fossa approach was judged to risk recurrence.\nApplication: look at the bulb on CT before choosing a corridor.',
+    concepts: ['pa-corridors'],
+},
+{
+    id: 'q104', type: 'recall', section: 'Petrous Apex',
+    stem: 'Name the three corridors to the petrous apex and the landmark or structure that limits each (no technique).',
+    answer: `• Infracochlear: below the cochlea; jugular bulb under 3 mm from the cochlea restricts it
+• Infralabyrinthine: below the labyrinth, above the jugular bulb
+• Middle fossa: from above through the middle cranial fossa floor; Meckel cave anterolateral to the apex on that surface`,
+    brief: 'Below the cochlea, below the labyrinth, from above.',
+    detailed: 'The infracochlear and bulb limit come from a cadaver series (Eur Arch Otorhinolaryngol 2021); the infralabyrinthine tract runs below the labyrinth above the bulb; Glasscock places Meckel cave on the middle fossa face.\nApplication: this card names corridors only and does not teach technique.',
+    concepts: ['pa-corridors'],
+},
+{
+    id: 'q105', section: 'Petrous Apex',
+    stem: 'A child with a draining ear and retro-orbital pain develops diplopia on looking toward the affected side. Which pairing of structures explains the triad?',
+    options: [
+        { id: 'a', text: 'Geniculate ganglion with the labyrinthine facial nerve in its canal' },
+        { id: 'b', text: 'Trigeminal ganglion in Meckel cave and abducens in Dorello canal' },
+        { id: 'c', text: 'Cochlear and vestibular nerves in the internal auditory canal' },
+        { id: 'd', text: 'Jugular bulb with the glossopharyngeal nerve in its foramen' },
+    ],
+    correct: 'b',
+    brief: 'Gradenigo triad: otorrhoea, retro-orbital pain (Meckel cave), abducens palsy (Dorello canal).',
+    detailed: 'Glasscock: petrous apicitis, with dural and venous inflammation, can manifest with purulent otorrhoea, retro-orbital pain and abducens palsy. Cummings Review lists the same triad under Gradenigo syndrome.\nApplication: the apex is the site where the ear disease meets two cranial nerves that the middle ear alone does not touch.',
+    concepts: ['pa-clinical', 'pa-bounds'],
+},
+{
+    id: 'q106', type: 'recall', section: 'Petrous Apex',
+    stem: 'State the Gradenigo triad and the anatomic reason for each element.',
+    answer: `• Draining ear: middle ear and cell-tract disease reaching the apex
+• Retro-orbital pain: trigeminal ganglion in Meckel cave
+• Ipsilateral abducens palsy: abducens nerve in Dorello canal`,
+    brief: 'Otorrhoea, retro-orbital pain, abducens palsy; Meckel cave and Dorello canal.',
+    detailed: 'Cummings Review: Gradenigo syndrome is draining ear, retro-orbital pain and ipsilateral abducens palsy. Glasscock: Meckel cave holds the trigeminal ganglion and the abducens runs in Dorello canal beneath Gruber ligament.\nApplication: a 3.5 cm apical cholesterol granuloma compressed the abducens and caused diplopia without any infection (ORL 2023).',
+    concepts: ['pa-clinical'],
+},
 // (et and petrous-apex items go above this line)
 ];
 
