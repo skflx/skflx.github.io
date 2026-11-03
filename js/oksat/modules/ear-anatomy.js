@@ -53,6 +53,9 @@ const DOMAINS = {
     et:          { label: 'Eustachian Tube',             color: '#3F7A8C', hex: 'rgba(63,122,140,0.14)' },
     mastoid:     { label: 'Mastoid',                     color: '#8A6A2F', hex: 'rgba(138,106,47,0.14)' },
     petapex:     { label: 'Petrous Apex',                color: '#6B4E3D', hex: 'rgba(107,78,61,0.14)' },
+    imaging:     { label: 'Normal HRCT',                 color: '#4F5B66', hex: 'rgba(79,91,102,0.14)' },
+    synthesis:   { label: 'Systems Synthesis',           color: '#7A3F4F', hex: 'rgba(122,63,79,0.14)' },
+    appraisal:   { label: 'Evidence and Controversies',  color: '#5E6B3A', hex: 'rgba(94,107,58,0.14)' },
 };
 
 const CONCEPTS = {
@@ -122,6 +125,21 @@ const CONCEPTS = {
     'pa-tracts':      { label: 'Apical Cell Tracts',          domain: 'petapex' },
     'pa-corridors':   { label: 'Apex Corridors',              domain: 'petapex' },
     'pa-clinical':    { label: 'Apex Relations in Disease',   domain: 'petapex' },
+    // imaging
+    'im-axial':       { label: 'Axial HRCT',                  domain: 'imaging' },
+    'im-coronal':     { label: 'Coronal HRCT',                domain: 'imaging' },
+    'im-read':        { label: 'Reading Checklist',           domain: 'imaging' },
+    // synthesis
+    'sy-fn':          { label: 'Intratemporal Facial Nerve',  domain: 'synthesis' },
+    'sy-para':        { label: 'Parasympathetic Routes',      domain: 'synthesis' },
+    'sy-sensory':     { label: 'Referred Otalgia',            domain: 'synthesis' },
+    'sy-arteries':    { label: 'Arterial Companions',         domain: 'synthesis' },
+    'sy-dev':         { label: 'Embryology Table',            domain: 'synthesis' },
+    'sy-gauntlet':    { label: 'Relationship Gauntlet',       domain: 'synthesis' },
+    // appraisal
+    'ap-arches':      { label: 'Arch Origin Controversy',     domain: 'appraisal' },
+    'ap-dehiscence':  { label: 'Dehiscence Prevalence',       domain: 'appraisal' },
+    'ap-numbers':     { label: 'Transformer Numbers',         domain: 'appraisal' },
 };
 
 const ITEMS = [
@@ -1504,6 +1522,17 @@ const ITEMS = [
     concepts: ['pa-clinical'],
 },
 // (et and petrous-apex items go above this line)
+
+// ════════ IMAGING (W4: ids q107–q120) ════════
+// (imaging items go above this line)
+//
+//
+// ════════ SYNTHESIS (W4: ids q121–q145) ════════
+// (synthesis items go above this line)
+//
+//
+// ════════ APPRAISAL (W4: ids q146–q155) ════════
+// (appraisal items go above this line)
 ];
 
 window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
