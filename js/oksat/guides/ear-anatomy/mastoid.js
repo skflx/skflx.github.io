@@ -93,7 +93,7 @@ window.__OKSAT_CHAPTER = {
             n: '9.3',
             title: 'Pneumatization',
             blocks: [
-                { t: 'p', x: 'Pneumatization is evident from about 33 weeks and spreads along **tracts**; heredity, environment, nutrition, infection and Eustachian tube function all shape it, and the mastoid goes on growing for up to 19 years after birth. Glasscock recognizes five regions (middle ear, mastoid, perilabyrinthine, petrous apex, accessory) and five tracts. [[src|Glasscock Ch. 1–2]]' },
+                { t: 'p', x: 'Beyond the antrum, mastoid cell pneumatization is evident from about 33 weeks and spreads along **tracts**; heredity, environment, nutrition, infection and Eustachian tube function all shape it, and the mastoid goes on growing for up to 19 years after birth. Glasscock recognizes five regions (middle ear, mastoid, perilabyrinthine, petrous apex, accessory) and five tracts. [[src|Glasscock Ch. 1–2]]' },
                 {
                     t: 'table',
                     head: ['Tract', 'Course'],
@@ -208,7 +208,7 @@ window.__OKSAT_CHAPTER = {
                         { t: 'p', x: 'Length of the mastoid segment: Glasscock gives about 20 mm from the second genu to the stylomastoid foramen; Cummings Review gives 12–15 mm. Use the landmarks, not a remembered length. [[src|Glasscock Ch. 2]] [[src|Cummings Review Ch. 2]]' },
                     ],
                 },
-                { t: 'p', x: 'The **chorda tympani**, the sensory part of the nerve, usually separates about 4 mm proximal to the stylomastoid foramen; it may leave as high as the lateral canal, or rarely outside the temporal bone, and Vula warns of an early takeoff near the foramen. It ascends in a canal lateral and anterior to the nerve to enter the middle ear at the iter chordae posterius. The nerve to the stapedius leaves near the pyramidal eminence. The **stylomastoid artery** supplies the inferior mastoid segment; the superficial petrosal artery supplies its upper part. [[src|Glasscock Ch. 2]] [[src|Vula: Mastoidectomy]]' },
+                { t: 'p', x: 'The **chorda tympani**, the sensory part of the nerve, usually separates about 4 mm proximal to the stylomastoid foramen; it may leave as high as the lateral canal, or rarely outside the temporal bone, and Vula warns of an early takeoff near the foramen. It ascends in a canal lateral and anterior to the nerve to enter the middle ear at the iter chordae posterius. The nerve to the stapedius leaves near the pyramidal eminence. The **stylomastoid artery** enters the foramen with the nerve and supplies the mastoid segment; the **superficial petrosal artery** (middle meningeal) supplies the geniculate region above. [[src|Glasscock Ch. 2]] [[src|Vula: Mastoidectomy]]' },
                 { t: 'p', x: '**Arnold nerve** (auricular branch of the vagus) reaches the facial nerve by way of the mastoid canaliculus over the dome of the jugular bulb and enters the facial canal; a sensory branch is often met just above the stylomastoid foramen, supplying the posterior canal wall and part of the drum. [[src|Glasscock Ch. 2]] [[src|Vula: Mastoidectomy]]' },
                 {
                     t: 'call',

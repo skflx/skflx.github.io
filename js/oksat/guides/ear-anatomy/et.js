@@ -15,7 +15,7 @@ window.__OKSAT_CHAPTER = {
         'Adult tube about **35 mm** (Glasscock, Handbook); about 18 mm at birth. Lateral third **bony** (protympanum), medial two thirds **cartilaginous**, ending at the **torus tubarius**; the **isthmus** is the narrow point at the junction.',
         'Closed at rest. **Ostmann fat pad** against the lateral wall helps keep it shut; rapid weight loss can shrink it and leave the tube patulous.',
         'Opened by **tensor veli palatini** (V3, primary dilator), with levator veli palatini and salpingopharyngeus (pharyngeal plexus, X).',
-        'The infant tube is shorter and flatter; it lengthens and steepens with growth, which is why otitis media is a childhood disease.',
+        'The infant tube is shorter and flatter; it lengthens and steepens with growth, one reason otitis media peaks in childhood.',
         'The **internal carotid artery** runs medial to the bony tube in a bony shell often under 0.5 mm thick. A unilateral effusion in an adult sends you to the **nasopharynx**.',
     ],
     sections: [
