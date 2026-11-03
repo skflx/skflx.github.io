@@ -878,7 +878,7 @@ const ITEMS = [
 },
 {
     id: 'q56', section: 'Middle Ear Spaces',
-    stem: 'In a micro-dissection series of 98 adult and 15 newborn temporal bones, which two folds were constantly present besides the malleal ligament folds?',
+    stem: 'Besides the malleal ligament folds, which two folds of the tympanic diaphragm are constant?',
     options: [
         { id: 'a', text: 'Anterior malleal and stapedial folds' },
         { id: 'b', text: 'Lateral incudal and posterior incudal folds' },
@@ -917,7 +917,7 @@ const ITEMS = [
 },
 {
     id: 'q59', section: 'Middle Ear Spaces',
-    stem: 'In Marchioni\'s case-control study of attic retraction pockets and cholesteatoma, which pair of endoscopic findings was far commoner than in controls?',
+    stem: 'An attic retraction pocket forms in an ear whose Eustachian tube works. Which pair of endoscopic findings explains it (selective epitympanic dysventilation)?',
     options: [
         { id: 'a', text: 'Blocked isthmus with a complete tensor fold' },
         { id: 'b', text: 'Open isthmus with an absent tensor fold' },
@@ -995,7 +995,7 @@ const ITEMS = [
 },
 {
     id: 'q65', section: 'Middle Ear Spaces',
-    stem: 'In a cadaveric endoscopic series, what gave a 0 degree endoscope exposure of the whole retrotympanum in every ear?',
+    stem: 'A deep sinus tympani hides behind the pyramid. Which bone removal lets a 0 degree endoscope see the whole retrotympanum?',
     options: [
         { id: 'a', text: 'Widening the facial recess toward the mastoid tip' },
         { id: 'b', text: 'Taking down the incus buttress and the incus' },

@@ -227,7 +227,7 @@ window.__OKSAT_CHAPTER = {
                     head: ['Term used here', 'Also called', 'Where'],
                     rows: [
                         ['Sinus tympani', 'Tympanic sinus; infrapyramidal recess', 'Between ponticulus and subiculum, medial to the facial nerve and pyramid; the posterior semicircular canal lies medial to it'],
-                        ['Posterior tympanic sinus', 'Fossula of the vestibular fenestra (older term)', 'Above the ponticulus, below the oval window niche'],
+                        ['Posterior tympanic sinus', 'Fossula of the vestibular fenestra (older term)', 'Above the ponticulus, behind the oval window niche'],
                         ['Subtympanic sinus', 'Sinus subtympanicus; antechamber of the fossula of the cochlear fenestra', 'Below the subiculum, above the hypotympanum'],
                         ['Facial recess', 'Facial sinus', 'Lateral to the vertical facial nerve, medial to the chorda; incus buttress above'],
                     ],
