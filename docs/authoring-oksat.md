@@ -45,7 +45,7 @@ works: `oksat-study.html?m=larynx-anatomy&c=<concept-key>`.
 
 ### `DOMAINS` (object, required)
 
-`key → { label, color, hex }`. **5–8 domains per module.**
+`key → { label, color, hex }`. **5–8 domains per module** (a guide's companion module, same slug, may have up to one per numbered chapter).
 
 - `color` — a solid hue (chip text + accent bar), e.g. `'#2C5454'`.
 - `hex` — a translucent fill (chip background), e.g. `'rgba(44,84,84,0.14)'`.
@@ -55,7 +55,7 @@ the top-level topical grouping; every concept belongs to exactly one domain.
 
 ### `CONCEPTS` (object, required)
 
-`key → { label, domain }`. **20–50 concepts per module; 1–3 concept tags per item.**
+`key → { label, domain }`. **20–50 concepts per module** (a guide's companion module may have up to one per guide section); **1–3 concept tags per item.**
 
 - `domain` — must be a key in `DOMAINS`.
 - Concept keys are `kebab-case`.
@@ -292,8 +292,8 @@ invented. Adding a 10th subspecialty is an owner decision
 Before a module ships:
 
 - [ ] `meta` has `title`, `subtitle`, `kicker`, `id`
-- [ ] `DOMAINS` defined, 5–8 entries, each with `label`, `color`, `hex`
-- [ ] `CONCEPTS` defined, 20–50 entries, each with `label` and valid `domain`
+- [ ] `DOMAINS` defined, 5–8 entries (guide companion: up to one per numbered chapter), each with `label`, `color`, `hex`
+- [ ] `CONCEPTS` defined, 20–50 entries (guide companion: up to one per guide section), each with `label` and valid `domain`
 - [ ] Every item has `brief`, `concepts` (1–3 tags), and either `detailed` (MCQ) or `answer` (recall)
 - [ ] No orphan concepts (every concept is tagged by at least one item)
 - [ ] No untagged items (every item has at least one concept)

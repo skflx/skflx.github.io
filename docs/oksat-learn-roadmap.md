@@ -168,5 +168,5 @@ Figures cost far more tokens than text, so each must earn its place.
 3. Phase A (role) on Rhinology first, since its guide exists,
    then the other subspecialties; Phase B with it.
 4. Second guide (Owner picks, §3), built from vetted notes, with
-   `lint-oksat-guide.mjs` built alongside it (§2).
+   `lint-oksat-guide.mjs` built alongside it (§2). **Done**: `ear-anatomy`, built unlisted; listing is the owner's call.
 5. Wiki live (`wiki/README.md` Bootstrap), then Phase C.
