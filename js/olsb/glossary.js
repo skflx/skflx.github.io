@@ -2232,12 +2232,7 @@
         },
         "dorello": {
             "name": "Dorello's canal",
-            "note": "Under the petrosphenoidal (Gruber's) ligament at the apex tip; carries the abducens nerve. Apex inflammation: abducens palsy with trigeminal pain and otorrhoea (Gradenigo).",
-            "rel": {
-                "med": [
-                    "cn6"
-                ]
-            }
+            "note": "Under the petrosphenoidal (Gruber's) ligament at the apex tip; carries the abducens nerve. Apex inflammation: abducens palsy with trigeminal pain and otorrhoea (Gradenigo)."
         },
         "cn6": {
             "name": "Abducens nerve",

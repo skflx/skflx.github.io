@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Medial incudal fold (schematic)</title>
+  <g transform="translate(190 20) scale(0.8)">
+    <path d="M 330 440 L 334 452 L 580 424 L 580 412 Z" fill="#c97b6b" fill-opacity="0.6" stroke="#8c4b3e" stroke-width="1.6"/>
+  </g>
+  <g data-label="1"><line x1="558" y1="369" x2="480" y2="520" stroke="#555049" stroke-width="1"/><circle cx="558" cy="369" r="2.2" fill="#555049"/><text x="480" y="525" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Medial incudal fold</text></g>
+</svg>

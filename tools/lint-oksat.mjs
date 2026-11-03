@@ -6,7 +6,8 @@
    correct option). This enforces the rest of docs/authoring-oksat.md's
    quality spec and the authoring lessons in .claude/skills/oksat-module:
 
-     ERROR  domains 5–8; concepts 20–50; 1–3 concepts per item; unknown or
+     ERROR  domains 5–8; concepts 20–50 (a guide's companion module: up to
+            its chapters and sections); 1–3 concepts per item; unknown or
             orphan concepts; duplicate ids; missing brief/detailed/answer;
             image or explanationImage that does not exist or lacks alt text;
             markdown (**bold**, #, backtick) in learner-facing text — the
@@ -30,7 +31,7 @@ const load = (rel) => {
   return w.window;
 };
 
-const manifest = load('js/oksat/manifest.js').OKSAT_MANIFEST;
+const { OKSAT_MANIFEST: manifest, OKSAT_GUIDES: guides = [] } = load('js/oksat/manifest.js');
 const want = process.argv.slice(2);
 let errors = 0;
 
@@ -41,10 +42,14 @@ for (const entry of manifest) {
   const W = (m) => console.log(`  warn  ${entry.slug}: ${m}`);
   console.log(`\n${entry.slug} (${ITEMS.length} items)`);
 
+  // A guide's companion module (same slug) keys one concept per guide section, so its caps follow the guide.
+  const guide = guides.find((g) => g.slug === entry.slug);
+  const maxD = guide ? Math.max(8, guide.chapters.filter((c) => c.k).length) : 8;
+  const maxC = guide ? Math.max(50, guide.chapters.reduce((n, c) => n + (c.sections || 0), 0)) : 50;
   const nd = Object.keys(DOMAINS).length;
-  if (nd < 5 || nd > 8) E(`${nd} domains (spec 5–8)`);
+  if (nd < 5 || nd > maxD) E(`${nd} domains (spec 5–${maxD})`);
   const nc = Object.keys(CONCEPTS).length;
-  if (nc < 20 || nc > 50) E(`${nc} concepts (spec 20–50)`);
+  if (nc < 20 || nc > maxC) E(`${nc} concepts (spec 20–${maxC})`);
   for (const [k, c] of Object.entries(CONCEPTS)) if (!DOMAINS[c.domain]) E(`concept ${k}: unknown domain ${c.domain}`);
 
   const used = new Set(), ids = new Set();

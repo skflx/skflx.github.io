@@ -28,8 +28,17 @@ const meta = {
         'Lin HW, Roberts DS, Harris JP. Cummings Review of Otolaryngology. Elsevier, 2017 — Ch. 2, temporal bone, EAC, eardrum, middle ear, facial nerve, middle ear mechanics',
         'Glasscock ME, Gulya AJ, eds. Glasscock-Shambaugh Surgery of the Ear, 5e. BC Decker, 2003 — Ch. 1 (developmental anatomy), Ch. 2 (anatomy of the ear and temporal bone, Gulya), Ch. 3 (auditory physiology)',
         'Goldenberg D, Goldstein BJ. Handbook of Otolaryngology–Head and Neck Surgery, 2e. Thieme, 2018 — Ch. 3, embryology and anatomy of the ear',
+        'MacDonald CB, Wood JW. Mastoid surgery. In: Myers EN, Snyderman CH, eds. Operative Otolaryngology: Head and Neck Surgery, 3e. Elsevier, 2017 — Ch. 134',
+        'Harris T, Linder T. Mastoidectomy and epitympanectomy. Open Access Atlas of Otolaryngology, Head and Neck Operative Surgery (Vula, University of Cape Town)',
+        'Roby BB, Yoon PJ. Tympanomastoidectomy and ossicular chain reconstruction. In: ENT Secrets — Ch. 39',
         'Baker SR. Local Flaps in Facial Reconstruction, 3e, Ch. 22 — auricle proportions, as cited in the otoplasty module',
         'Stapes footplate morphometry: Folia Morphologica 2024;83(2) (length 2.93, width 1.46 mm); micro-CT of Thiel-embalmed temporal bones, J Otolaryngol Head Neck Surg 2021 (length 2.71, width 1.23 mm)',
+        'Eustachian tube: Ishijima K et al., Ann Otol Rhinol Laryngol 2000;109(6):542-548 and 2002;111(6):530-536; Magro I et al., Otolaryngol Head Neck Surg 2021;165(6):862-867; Doyle WJ, Swarts JD, Int J Pediatr Otorhinolaryngol 2010;74(9):986-990; Leuwer R, Otolaryngol Clin North Am 2016;49(5):1097-1106; Lin C et al., Acta Otolaryngol 2016;136(11):1130-1136',
+        'Petrous apex corridors and lesions: Comert E, Comert A, Eur Arch Otorhinolaryngol 2021;279(1):159-168; Porto E et al., World Neurosurg 2022;169; Kosec A et al., ORL 2023;85(3):172-176',
+        'Marchioni D, et al. Selective epitympanic dysventilation syndrome. Laryngoscope 2010;120:1028-33; Prevalence of ventilation blockages in patients affected by attic pathology. Laryngoscope 2013;123:2845-53',
+        'Maniu A, et al. Anatomical variants of tympanic compartments and their aeration pathways. Clujul Med 2013;86:352-6; Monsanto RC, et al. Epitympanum volume and tympanic isthmus area in temporal bones with retraction pockets. Laryngoscope 2016;126:E369-74',
+        'Li H, et al. Aeration of the human Prussak space: a synchrotron imaging study. Otol Neurotol 2021;42:e894-904; Rubini A, et al. The endoscopic relationship of the stapedius muscle to the facial nerve. Otol Neurotol 2020;41:e64-9',
+        'Wojciechowski T, Skadorwa T. Radiologic anatomy of the pediatric sinus tympani. Auris Nasus Larynx 2021;49:606-12; Wojciechowski T, et al. Posterior-inferior recess of the sinus tympani. Eur Arch Otorhinolaryngol 2025;282:6139-47',
     ],
 };
 
@@ -40,6 +49,10 @@ const DOMAINS = {
     tm:          { label: 'Tympanic Membrane',           color: '#6E4A6B', hex: 'rgba(110,74,107,0.14)' },
     cavity:      { label: 'Tympanic Cavity',             color: '#4E6B4A', hex: 'rgba(78,107,74,0.14)' },
     ossicles:    { label: 'Ossicular Chain',             color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
+    spaces:      { label: 'Middle Ear Spaces',           color: '#5B5F8A', hex: 'rgba(91,95,138,0.14)' },
+    et:          { label: 'Eustachian Tube',             color: '#3F7A8C', hex: 'rgba(63,122,140,0.14)' },
+    mastoid:     { label: 'Mastoid',                     color: '#8A6A2F', hex: 'rgba(138,106,47,0.14)' },
+    petapex:     { label: 'Petrous Apex',                color: '#6B4E3D', hex: 'rgba(107,78,61,0.14)' },
 };
 
 const CONCEPTS = {
@@ -82,6 +95,33 @@ const CONCEPTS = {
     'os-stapedius':   { label: 'Stapedius and the Reflex',    domain: 'ossicles' },
     'os-supply':      { label: 'Ossicular Blood Supply',      domain: 'ossicles' },
     'os-dev':         { label: 'Ossicular Embryology',        domain: 'ossicles' },
+    // spaces
+    'sp-attic':       { label: 'Attic Boundaries',            domain: 'spaces' },
+    'sp-prussak':     { label: 'Prussak Space and Pouches',   domain: 'spaces' },
+    'sp-folds':       { label: 'Folds and the Diaphragm',     domain: 'spaces' },
+    'sp-isthmus':     { label: 'Isthmus and Ventilation',     domain: 'spaces' },
+    'sp-retro':       { label: 'Retrotympanum',               domain: 'spaces' },
+    'sp-sight':       { label: 'Lines of Sight',              domain: 'spaces' },
+    // ET
+    'et-seg':         { label: 'Tube Segments',               domain: 'et' },
+    'et-cart':        { label: 'Tubal Cartilage',             domain: 'et' },
+    'et-muscle':      { label: 'Tubal Muscles',               domain: 'et' },
+    'et-child':       { label: 'Adult vs Infant Tube',        domain: 'et' },
+    'et-rel':         { label: 'Orifice and Relations',       domain: 'et' },
+    // mastoid
+    'ma-surface':     { label: 'Mastoid Surface',             domain: 'mastoid' },
+    'ma-antrum':      { label: 'Antrum and Koerner Septum',   domain: 'mastoid' },
+    'ma-pneum':       { label: 'Pneumatization',              domain: 'mastoid' },
+    'ma-sequence':    { label: 'Landmark Sequence',           domain: 'mastoid' },
+    'ma-fn':          { label: 'Mastoid Facial Nerve',        domain: 'mastoid' },
+    'ma-recess':      { label: 'Facial Recess',               domain: 'mastoid' },
+    'ma-lines':       { label: 'Triangles and Lines',         domain: 'mastoid' },
+    'ma-peds':        { label: 'Pediatric Mastoid',           domain: 'mastoid' },
+    // petrous apex
+    'pa-bounds':      { label: 'Apex Boundaries',             domain: 'petapex' },
+    'pa-tracts':      { label: 'Apical Cell Tracts',          domain: 'petapex' },
+    'pa-corridors':   { label: 'Apex Corridors',              domain: 'petapex' },
+    'pa-clinical':    { label: 'Apex Relations in Disease',   domain: 'petapex' },
 };
 
 const ITEMS = [
@@ -771,6 +811,699 @@ const ITEMS = [
     detailed: 'Glasscock: Prussak space lies between the pars flaccida laterally and the malleus neck medially, under the lateral malleal ligament and fold above, with the lateral process of the malleus as its floor.',
     concepts: ['os-joints'],
 },
+
+// ════════ SPACES (W3: ids q51–q66) ════════
+{
+    id: 'q51', section: 'Middle Ear Spaces',
+    stem: 'A coronal CT shows a retraction pocket in the pars flaccida. Which finding of the lateral attic wall most strongly suggests cholesteatoma?',
+    options: [
+        { id: 'a', text: 'A sharp, intact scutum with a clear spur' },
+        { id: 'b', text: 'Blunting or erosion of the scutum' },
+        { id: 'c', text: 'A thickened, sclerotic tegmen tympani' },
+        { id: 'd', text: 'Air cells within the cog and tegmen' },
+    ],
+    correct: 'b',
+    brief: 'The scutum is the lateral wall of the attic; a pocket that blunts or erodes it is eating its own wall.',
+    detailed: 'The Vula atlas lists the CT findings highly suggestive of cholesteatoma: an expansile soft tissue mass, retraction of the drum, erosion of the scutum, erosion of the ossicles, sharp erosion of bone, extension medial to the otic capsule and erosion of the tegmen. CT cannot establish the diagnosis alone; cholesteatoma remains a clinical diagnosis from otoscopy.\nApplication: an atticotomy removes the scutum, which is why a blunted spur on the scan predicts how much bone you will take.',
+    concepts: ['sp-attic'],
+},
+{
+    id: 'q52', section: 'Middle Ear Spaces',
+    stem: 'During an epitympanectomy the cog and the cochleariform process are drilled away. Which structures come into view?',
+    options: [
+        { id: 'a', text: 'Geniculate ganglion and greater superficial petrosal nerve' },
+        { id: 'b', text: 'Stapes footplate, oval window and annular ligament in the niche' },
+        { id: 'c', text: 'Round window niche, subiculum and the sinus tympani behind them' },
+        { id: 'd', text: 'Jugular bulb, carotid canal and the tubal orifice below' },
+    ],
+    correct: 'a',
+    brief: 'The cog points at the facial nerve; behind it lie the geniculate ganglion and the start of the greater petrosal nerve.',
+    detailed: 'The Vula atlas: the cog extends from the tegmen tympani and points to the facial nerve; with the cog and cochleariform process removed, the tympanic and labyrinthine segments, the geniculate ganglion and the greater superficial petrosal nerve are seen, with the tensor tendon cut. Cummings Review puts the geniculate ganglion in the medial wall of the supratubal recess.\nApplication: the tympanic segment runs immediately above the cochleariform process (Glasscock), so drilling that process away with the cog is drilling beside the nerve.',
+    concepts: ['sp-attic'],
+},
+{
+    id: 'q53', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'A scan shows a bony defect of the tegmen tympani. What do you suspect, and what is the next step?',
+    answer: `• Suspect an encephalocele, or cholesteatoma extending into the middle cranial fossa
+• Image further with MRI
+• Reason: the roof of the attic is the floor of the middle fossa, so dura and temporal lobe lie directly above it`,
+    brief: 'A hole in the roof of the attic opens the middle fossa: encephalocele or intracranial extension until MRI says otherwise.',
+    detailed: 'The Vula atlas: a bony defect of the tegmen tympani or the anterior wall of the epitympanum should raise the suspicion of an encephalocele or of cholesteatoma extending into the middle cranial fossa, and needs MRI. Glasscock: the tegmen is also part of the floor of the middle cranial fossa.\nApplication: during surgery, Myers advises repairing bony defects larger than 1 cm, or any dural injury, to prevent CSF leak or encephalocele.',
+    concepts: ['sp-attic'],
+},
+{
+    id: 'q54', section: 'Middle Ear Spaces',
+    stem: 'Otoscopy of a right ear shows a keratin-filled pocket in the pars flaccida. Which space is it in, and what forms that space\'s medial wall?',
+    options: [
+        { id: 'a', text: 'Prussak space; medial wall is the manubrium' },
+        { id: 'b', text: 'Posterior pouch of von Tröltsch; medial wall is the incus' },
+        { id: 'c', text: 'Prussak space; medial wall is the neck of the malleus' },
+        { id: 'd', text: 'Anterior epitympanic recess; medial wall is the cog' },
+    ],
+    correct: 'c',
+    brief: 'The pars flaccida is the lateral wall of Prussak space; the neck of the malleus is its medial wall.',
+    detailed: 'The Handbook: Prussak space is at the level of the pars flaccida, bounded laterally by the drum and medially by the neck of the malleus, and is a frequent site of retraction and cholesteatoma. In this guide the lateral malleal fold is the roof and the lateral process the floor.\nDiscrepancy: Glasscock words the limits differently, naming the malleus head and neck medially and the lateral malleal ligament with the anterior and posterior malleal folds as the other limits.',
+    concepts: ['sp-prussak'],
+},
+{
+    id: 'q55', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'Where does Prussak space drain, and how well does the evidence support the textbook route into the attic?',
+    answer: `• It drains into the mesotympanum, most often through the posterior pouch of von Tröltsch (seven of nine temporal bones in a synchrotron study)
+• It was always aerated into the mesotympanum
+• Older descriptions of upper routes to the epitympanic spaces could not be substantiated
+• The spread of disease into the posterior epitympanum, aditus and antrum is a separate question from the aeration of the space`,
+    brief: 'Prussak space vents down and back into the mesotympanum, not up into the attic.',
+    detailed: 'Otology and Neurotology 2021 (synchrotron imaging, nine temporal bones): drainage through the posterior pouch of von Tröltsch in seven, directly posteroinferiorly in one, anteriorly in one; the posterior routes depended on the posterior malleal fold.\nDiscrepancy: the classic teaching sends attic disease from Prussak space back through the posterior epitympanum, aditus and antrum (Cummings Review gives that anatomy); the imaging study suggests the space is relatively independent of attic ventilation.',
+    concepts: ['sp-prussak'],
+},
+{
+    id: 'q56', section: 'Middle Ear Spaces',
+    stem: 'Besides the malleal ligament folds, which two folds of the tympanic diaphragm are constant?',
+    options: [
+        { id: 'a', text: 'Anterior malleal and stapedial folds' },
+        { id: 'b', text: 'Lateral incudal and posterior incudal folds' },
+        { id: 'c', text: 'Medial incudal and lateral malleal folds' },
+        { id: 'd', text: 'Tensor fold and incudomalleal fold' },
+    ],
+    correct: 'd',
+    brief: 'The epitympanic diaphragm was ossicles, malleal ligament folds, the tensor fold and the incudomalleal fold, present from birth.',
+    detailed: 'Clujul Medical 2013: folds were present in all newborn temporal bones and in all adult ones, with variations such as membrane defects. The diaphragm consisted, besides the malleal ligament folds and the ossicles, of only the tensor tympani fold and the incudomalleal fold.\nApplication: when the tensor fold is complete, the only way into the anterior epitympanic space is through the isthmus; when it is absent, the tube has an extra route to the attic.',
+    concepts: ['sp-folds'],
+},
+{
+    id: 'q57', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'Name the fold from its description: (a) encloses the anterior malleal ligament and the anterior tympanic artery; (b) roof of Prussak space; (c) runs from the tensor tendon and cochleariform process to the anterior wall; (d) fills the obturator foramen.',
+    answer: `• (a) Anterior malleal fold
+• (b) Lateral malleal fold
+• (c) Tensor fold
+• (d) Stapedial fold`,
+    brief: 'Match each fold to what it carries or covers: ligament and artery, Prussak roof, tendon to wall, stapes.',
+    detailed: 'The anterior malleal fold runs from the lateral process forward to the anterior tympanic spine and bounds the anterior pouch; the lateral malleal fold runs from the malleus neck to the notch of Rivinus; the tensor fold floors the supratubal recess; the stapedial fold is the mucosa over the stapes and its tendon.\nApplication: each fold is named for what it joins, so a description of its ends gives its name.',
+    concepts: ['sp-folds'],
+},
+{
+    id: 'q58', section: 'Middle Ear Spaces',
+    stem: 'Which fold runs from the short process of the incus medially and helps to bound the posterior isthmus?',
+    options: [
+        { id: 'a', text: 'Lateral incudal fold' },
+        { id: 'b', text: 'Medial incudal fold' },
+        { id: 'c', text: 'Posterior incudal fold' },
+        { id: 'd', text: 'Superior incudal fold' },
+    ],
+    correct: 'b',
+    brief: 'Medial incudal fold: short process inward, on the posterior isthmus.',
+    detailed: 'The lateral incudal fold goes from the incus to the lateral attic wall, the posterior incudal fold surrounds the ligament at the fossa incudis, and the superior incudal fold runs up to the tegmen around the superior incudal ligament.\nApplication: the short process is the lateral boundary of the posterior isthmus, so disease on its medial side narrows that gap first.',
+    concepts: ['sp-folds'],
+},
+{
+    id: 'q59', section: 'Middle Ear Spaces',
+    stem: 'An attic retraction pocket forms in an ear whose Eustachian tube works. Which pair of endoscopic findings explains it (selective epitympanic dysventilation)?',
+    options: [
+        { id: 'a', text: 'Blocked isthmus with a complete tensor fold' },
+        { id: 'b', text: 'Open isthmus with an absent tensor fold' },
+        { id: 'c', text: 'Tubal obstruction with a blocked aditus' },
+        { id: 'd', text: 'Blocked aditus with a complete stapedial fold' },
+    ],
+    correct: 'a',
+    brief: 'A blocked isthmus and a complete tensor fold together cut the attic off from the tube.',
+    detailed: 'Laryngoscope 2013: the isthmus was blocked in 98 of 102 ears with attic cholesteatoma or severe pars flaccida retraction, against 3 of 50 controls; a complete tensor fold was found in 99 of 102, against 9 of 46 controls. The earlier 2010 series (eight patients with normal tubal function) named the combination selective epitympanic dysventilation.\nApplication: a normal tympanogram does not clear the attic; its pressure depends on the isthmus.',
+    concepts: ['sp-isthmus'],
+},
+{
+    id: 'q60', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'Give the four boundaries of the anterior tympanic isthmus.',
+    answer: `• Anterior: the tensor tendon and its fold
+• Posterior: the anterior crus of the stapes
+• Lateral: the neck of the malleus
+• Medial: the cochleariform process and the medial wall`,
+    brief: 'Tendon in front, anterior crus behind, malleus neck outside, cochleariform process inside.',
+    detailed: 'Cummings Review calls the anterior gap the isthmus tympani anticus and the posterior one the isthmus tympani oticus. The anterior isthmus clears the tubal side up into the anterior and superior attic; the posterior one is the path to the aditus, antrum and mastoid cells.\nApplication: the stapes divides the two gaps, so a stapes superstructure is a landmark on both.',
+    concepts: ['sp-isthmus'],
+},
+{
+    id: 'q61', section: 'Middle Ear Spaces',
+    stem: 'A surgeon removes a complete tensor fold in an ear with attic cholesteatoma. What does this change?',
+    options: [
+        { id: 'a', text: 'It frees the malleus head for removal from the attic' },
+        { id: 'b', text: 'It uncovers the geniculate ganglion for decompression' },
+        { id: 'c', text: 'It gives the anterior attic a second route to the tube' },
+        { id: 'd', text: 'It widens the posterior isthmus behind the stapes' },
+    ],
+    correct: 'c',
+    brief: 'With the fold gone the anterior attic no longer depends on the isthmus alone.',
+    detailed: 'Clujul Medical 2013: when the tensor fold is complete the only ventilation pathway to the anterior epitympanic space is through the isthmus, whereas its absence creates an efficient additional route from the tube to the epitympanum; the authors argue that surgery should restore attic and mastoid ventilation by removing the fold and restoring the isthmus.\nSupport: Laryngoscope 2010 reasoned that an open isthmus or an incomplete tensor fold may be necessary for ventilation of the attic.',
+    concepts: ['sp-isthmus'],
+},
+{
+    id: 'q62', section: 'Middle Ear Spaces',
+    stem: 'CT shows a sinus tympani that is large and deep and extends posteromedially. Which Marchioni class is this, and what follows for the approach?',
+    options: [
+        { id: 'a', text: 'Class A, shallow: a transcanal view is enough' },
+        { id: 'b', text: 'Class B, deep to the nerve: a 0 degree scope will do' },
+        { id: 'c', text: 'Class B, with a retrofacial extension to be drilled' },
+        { id: 'd', text: 'Class C: transmeatal alone is unlikely to be enough' },
+    ],
+    correct: 'd',
+    brief: 'Class C is large and deep with posteromedial extension; plan a transmastoid retrofacial route.',
+    detailed: 'Marchioni classes: A shallow; B deep but not past the posterior limit of the mastoid facial nerve; C large and deep with posteromedial extension. Eur Arch Otorhinolaryngol 2025: when type C is found, give up a purely transmeatal approach because the bottom of the sinus is hard to see; clear it by the transmastoid retrofacial route and then check the entrance transmeatally with an endoscope.\nFrequency: in 300 temporal bones from children under five, B 59.3%, C 34.3%, A 6.3%.',
+    concepts: ['sp-retro'],
+},
+{
+    id: 'q63', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'After a transcanal clearance of cholesteatoma from the attic and mesotympanum, where is residual disease most likely to hide, and why?',
+    answer: `• In the sinus tympani, the medial retrotympanum
+• It lies behind the pyramid and medial to the vertical facial nerve, under the overhang of the posterior canal wall
+• A straight microscope view and the facial recess both miss it
+• Inspect it with an angled endoscope`,
+    brief: 'The sinus tympani: behind the pyramid, medial to the nerve, out of every straight line of sight.',
+    detailed: 'Glasscock: the sinus tympani evades direct surgical visualization, which is worrisome in cholesteatoma surgery because it can harbor the nidus of recurrence; endoscopes appropriate for otologic surgery have improved inspection. Cummings Review: cholesteatoma may hide there, and its posterior extension varies.\nApplication: this is why the end-of-case inspection asks about the sinus tympani by name.',
+    concepts: ['sp-retro'],
+},
+{
+    id: 'q64', section: 'Middle Ear Spaces',
+    stem: 'Which pair bounds the sinus tympani laterally and medially?',
+    options: [
+        { id: 'a', text: 'The chorda tympani; the basal turn of the cochlea' },
+        { id: 'b', text: 'The mastoid facial nerve; the posterior semicircular canal' },
+        { id: 'c', text: 'The incus buttress; the vestibule' },
+        { id: 'd', text: 'The stapedius tendon; the cochlear aqueduct' },
+    ],
+    correct: 'b',
+    brief: 'The mastoid facial nerve lies lateral and the posterior semicircular canal medial.',
+    detailed: 'Glasscock: the sinus tympani is bounded by the ponticulus superiorly, the subiculum inferiorly, the mastoid segment of the facial nerve laterally and the posterior semicircular canal medially, and its posterior extension varies from shallow to deep. Cummings Review adds that it lies medial to the descending facial nerve.\nApplication: depth is judged against the nerve, which is why the Marchioni classes use the posterior limit of the nerve as the dividing line.',
+    concepts: ['sp-retro'],
+},
+{
+    id: 'q65', section: 'Middle Ear Spaces',
+    stem: 'A deep sinus tympani hides behind the pyramid. Which bone removal lets a 0 degree endoscope see the whole retrotympanum?',
+    options: [
+        { id: 'a', text: 'Widening the facial recess toward the mastoid tip' },
+        { id: 'b', text: 'Taking down the incus buttress and the incus' },
+        { id: 'c', text: 'Removing the pyramidal eminence and stapedial crest' },
+        { id: 'd', text: 'Elevating the annulus anteriorly to the tube' },
+    ],
+    correct: 'c',
+    brief: 'Taking off the pyramidal eminence and the stapedial bony crest opened the sinus tympani and subpyramidal space.',
+    detailed: 'Otology and Neurotology 2020 (11 cadaver ears): the stapedius muscle lay medial and anterior to the mastoid facial nerve with the second genu above; in every ear, whatever the shape of the sinus tympani, removing the pyramidal eminence and stapedial bony crest next to the nerve allowed a 0 degree endoscope to expose the whole retrotympanum.\nApplication: the pyramid is the screen between the canal and the sinus, so it is the first thing to remove when a view is needed.',
+    concepts: ['sp-sight'],
+},
+{
+    id: 'q66', section: 'Middle Ear Spaces',
+    stem: 'Cholesteatoma involves the sinus tympani area and cannot be reached transcanally or through the facial recess. Which operation does that favour?',
+    options: [
+        { id: 'a', text: 'A canal wall down mastoidectomy' },
+        { id: 'b', text: 'A canal wall up mastoidectomy with a posterior tympanotomy' },
+        { id: 'c', text: 'A tympanoplasty alone through the canal' },
+        { id: 'd', text: 'An atticotomy with ossiculoplasty' },
+    ],
+    correct: 'a',
+    brief: 'When neither the canal nor the facial recess reaches the disease, take the canal wall down.',
+    detailed: 'ENT Secrets lists cholesteatoma involving the sinus tympani area, not accessible transcanal or through the facial recess, among the indications for a canal wall down mastoidectomy, with semicircular canal fistula and a contracted sclerotic mastoid. The Vula atlas notes that a closed operation limits the view into the anterior epitympanum and the sinus tympani when pneumatisation is poor.\nApplication: if the disease sits where no line of sight reaches, the wall comes down.',
+    concepts: ['sp-sight'],
+},
+// (spaces items go above this line)
+//
+//
+// ════════ MASTOID (W3: ids q67–q86) ════════
+{
+    id: 'q67', section: 'Mastoid',
+    stem: 'You begin the cortical cut within the temporal line, the posterosuperior canal margin and a tangent to the posterior canal margin. Which structure lies deep to this triangle?',
+    options: [
+        { id: 'a', text: 'The mastoid antrum' },
+        { id: 'b', text: 'The sigmoid sinus, behind the posterior mastoid surface' },
+        { id: 'c', text: 'The digastric ridge, near the mastoid tip' },
+        { id: 'd', text: 'The jugular bulb, under the hypotympanum' },
+    ],
+    correct: 'a',
+    brief: 'Macewen triangle overlies the antrum, so drilling begins there.',
+    detailed: 'Glasscock: the fossa mastoidea (Macewen triangle) is bounded by the linea temporalis, the posterosuperior margin of the canal and a tangent to its posterior margin, and it lies over the antrum, so mastoid drilling ordinarily commences there. Myers: keep the deepest part of the cavity over the antrum so that it is entered before the plane of the facial nerve.\nApplication: the sigmoid sinus is posterior, the digastric ridge inferior and the bulb deep to the floor; none is under the triangle.',
+    concepts: ['ma-surface'],
+},
+{
+    id: 'q68', type: 'recall', section: 'Mastoid',
+    stem: 'Name the surface landmarks of the lateral mastoid and what each marks.',
+    answer: `• Temporal line: backward continuation of the zygomatic root; about the floor of the middle fossa (±5 mm), the upper limit of the cut
+• Spine of Henle: posterosuperior rim of the canal, the anterior border of Macewen triangle
+• Macewen triangle (cribriform area): lies over the antrum
+• Mastoid tip: sternocleidomastoid attachment; the digastric groove is medial and superior to it, and its anterior border is the stylomastoid foramen
+• Mastoid foramen: posterior, emissary vein and one or two mastoid arteries`,
+    brief: 'Line, spine, triangle, tip with its groove, and the emissary foramen.',
+    detailed: 'Cummings Review: the temporal line approximates the floor of the middle fossa to within about 5 mm; the sigmoid sinus is typically anterior to the emissary vein. Glasscock: the linea temporalis is an avascular plane, so it carries the top of the T-shaped musculoperiosteal incision.\nApplication: the landmarks that you can palpate and see define where the deep landmarks lie.',
+    concepts: ['ma-surface'],
+},
+{
+    id: 'q69', section: 'Mastoid',
+    stem: 'In a completed canal wall up mastoidectomy, which structure forms the medial wall of the antrum?',
+    options: [
+        { id: 'a', text: 'The tegmen mastoideum, under the middle fossa dura' },
+        { id: 'b', text: 'The sigmoid plate, over the sigmoid sinus' },
+        { id: 'c', text: 'The lateral semicircular canal, in the otic capsule' },
+        { id: 'd', text: 'The facial ridge, over the vertical nerve' },
+    ],
+    correct: 'c',
+    brief: 'The lateral semicircular canal is the medial landmark; the tegmen is the roof.',
+    detailed: 'ENT Secrets: the deep (medial) border of the cavity is the lateral semicircular canal and the incus, found in the aditus; the tegmen is the superior border, the sigmoid sinus the posterior border and the posterior canal wall the anterior border.\nApplication: the canal is the landmark that locates the second genu of the facial nerve just below and medial to it.',
+    concepts: ['ma-antrum'],
+},
+{
+    id: 'q70', type: 'recall', section: 'Mastoid',
+    stem: 'What is Körner septum, where does it lie and what do you do with it?',
+    answer: `• The petrosquamous lamina: bone separating the squamous (lateral) from the petrous (medial) part of the mastoid
+• It lies in the path from the cortex to the antrum
+• Remove it, with the tegmen above and the canal wall in front as limits, to enter the antrum`,
+    brief: 'Petrosquamous lamina in front of the antrum; take it down to enter.',
+    detailed: 'Glasscock: the mastoid has a squamous part laterally and a petrous part medially, separated by Körner septum. Myers: with the tegmen as the superior landmark and the canal as the anterior landmark, the septum is removed and the antrum entered; the burr is then downsized toward the zygomatic root until the lateral canal and incus appear.\nApplication: a cavity that stops at the septum has not reached the antrum, so the canal and incus are not found.',
+    concepts: ['ma-antrum'],
+},
+{
+    id: 'q71', section: 'Mastoid',
+    stem: 'Which air cell tract runs parallel to the posterosuperior tract and inferior to it?',
+    options: [
+        { id: 'a', text: 'Subarcuate tract' },
+        { id: 'b', text: 'Posteromedial tract' },
+        { id: 'c', text: 'Peritubal tract' },
+        { id: 'd', text: 'Perilabyrinthine tract' },
+    ],
+    correct: 'b',
+    brief: 'Posteromedial: parallel to and below the posterosuperior tract.',
+    detailed: 'Glasscock: the posterosuperior tract runs at the juncture of the posterior and middle fossa surfaces of the petrous bone; the posteromedial tract parallels it and runs inferior to it; the subarcuate tract passes through the arch of the superior canal; the perilabyrinthine tracts lie above and below the labyrinth and the peritubal tract surrounds the Eustachian tube.\nApplication: each tract is a route that disease, or a thorough surgeon, can follow.',
+    concepts: ['ma-pneum'],
+},
+{
+    id: 'q72', type: 'recall', section: 'Mastoid',
+    stem: 'A CT shows a poorly pneumatized mastoid with opacified cells. What does pneumatization tell you, what does ventilation tell you, and which cavity do they favour?',
+    answer: `• Pneumatization (well pneumatized, reduced or sclerotic): how the Eustachian tube functioned in roughly the first 4 years
+• Ventilation (aerated or opacified middle ear and cells): how it functions now
+• Poor pneumatization, or poor ventilation of impaired tracts: favours an open cavity`,
+    brief: 'Pneumatization is the childhood record; ventilation is the present state.',
+    detailed: 'Vula (Harris and Linder): the CT checklist assesses pneumatization first and ventilation second, and poor ventilation of already impaired cell tracts favours an open cavity procedure. Glasscock lists heredity, environment, nutrition, infection and Eustachian tube function as influences on pneumatization.\nApplication: sclerotic bone is a scar of early disease, and it also limits exposure, which is why the wall is often taken down.',
+    concepts: ['ma-pneum'],
+},
+{
+    id: 'q73', type: 'recall', section: 'Mastoid',
+    stem: 'State the order in which landmarks appear in a canal wall up mastoidectomy.',
+    answer: `1. Cortex removed within the temporal line, canal wall and sigmoid line
+2. Tegmen and sigmoid plate, with the sinodural angle between them
+3. Posterior canal wall thinned from behind
+4. Antrum opened (Körner septum taken down)
+5. Lateral semicircular canal
+6. Short process of the incus, seen through the aditus
+7. Digastric ridge`,
+    brief: 'Cortex, tegmen and sinus, canal wall, antrum, lateral canal, incus, digastric ridge.',
+    detailed: 'Myers (Fig. 134.3): the aditus, the short process of the incus, the horizontal canal and the digastric ridge are all visible in a completed intact canal wall mastoidectomy. Vula gives the order tegmen, lateral canal, incus, then the sinodural plate and sigmoid, then the facial nerve and digastric ridge.\nDiscrepancy: Vula meets the sigmoid after the antrum; Myers shows both limits early. Skeletonizing both limits first is a common practice, and both orders reach the same landmarks.',
+    concepts: ['ma-sequence'],
+},
+{
+    id: 'q74', section: 'Mastoid',
+    stem: 'While skeletonizing the cavity you see a pink hue with small veins superiorly and a blue hue posteriorly. What are they?',
+    options: [
+        { id: 'a', text: 'Facial nerve above, jugular bulb behind' },
+        { id: 'b', text: 'Sigmoid sinus above, tegmen behind' },
+        { id: 'c', text: 'Lateral canal above, posterior canal behind' },
+        { id: 'd', text: 'Tegmen above, sigmoid sinus behind' },
+    ],
+    correct: 'd',
+    brief: 'Pink superior bone is the tegmen; blue posterior bone is the sigmoid sinus.',
+    detailed: 'Myers: the tegmen appears as a pink colour change in the bone superiorly, often with small veins close to the dura; the sigmoid sinus is indicated by a blue change posteriorly. Vula adds that the dural plates are also recognized by the change in the pitch of the burr, and that you should leave a thin shell over the sinus rather than expose it.\nApplication: stop and skeletonize at the colour change, then follow the dural plate anteromedially.',
+    concepts: ['ma-sequence'],
+},
+{
+    id: 'q75', section: 'Mastoid',
+    stem: 'Once the lateral semicircular canal is exposed, why does the drilling direction change to medial-to-lateral?',
+    options: [
+        { id: 'a', text: 'To avoid touching the ossicles, which would cause sensorineural loss' },
+        { id: 'b', text: 'To keep the burr away from the sigmoid sinus lying just behind the canal' },
+        { id: 'c', text: 'To follow the facial nerve toward the stylomastoid foramen' },
+        { id: 'd', text: 'To open the facial recess before the aditus' },
+    ],
+    correct: 'a',
+    brief: 'The incus is next; a burr moving medial to lateral does not push toward it.',
+    detailed: 'Vula: after the lateral canal is seen the direction of drilling must change to a medial-to-lateral action to avoid touching the ossicles, which would induce sensorineural hearing loss; the body and short process of the incus are the next landmarks, often first seen by their refraction in the irrigation fluid. Myers: touching the incus with the drill can cause the same loss.\nApplication: separate the incudostapedial joint first if the chain is at risk.',
+    concepts: ['ma-sequence'],
+},
+{
+    id: 'q76', section: 'Mastoid',
+    stem: 'Where is the second genu of the facial nerve in a mastoidectomy?',
+    options: [
+        { id: 'a', text: 'Superior to the lateral semicircular canal, lateral to the incus body' },
+        { id: 'b', text: 'Posterior to the posterior canal, against the sigmoid plate' },
+        { id: 'c', text: 'Just inferior and medial to the lateral canal, medial to the short process' },
+        { id: 'd', text: 'At the digastric ridge, where the nerve leaves the skull' },
+    ],
+    correct: 'c',
+    brief: 'Below and medial to the lateral canal, medial to the short process of the incus.',
+    detailed: 'Myers: the short process of the incus points to the second genu, in the same plane as the nerve, and the genu lies just inferior and medial to the horizontal canal; Myers also places it at the posterior edge of the oval window. The second genu is the segment most often damaged in mastoid surgery. Vula: the nerve runs anteroinferiorly from the lateral canal.\nApplication: the nerve emerges at the digastric ridge only at the stylomastoid foramen, well below the genu.',
+    concepts: ['ma-fn'],
+},
+{
+    id: 'q77', type: 'recall', section: 'Mastoid',
+    stem: 'Where does the chorda tympani leave the facial nerve, and how can this vary?',
+    answer: `• Usually about 4 mm proximal to the stylomastoid foramen
+• It may not separate until the level of the lateral semicircular canal
+• Rarely it leaves outside the temporal bone and re-enters by its own canal
+• It then ascends lateral and anterior to the nerve to the iter chordae posterius`,
+    brief: 'About 4 mm above the foramen, with a range up to the lateral canal level.',
+    detailed: 'Glasscock: the chorda, the sensory bundle making up some 10% of the cross-sectional area of the nerve, usually separates about 4 mm proximal to the stylomastoid foramen; alternatively not until the lateral canal level; rarely extratemporally. Vula warns to watch for an early takeoff close to the foramen.\nApplication: when you skeletonize the nerve near the foramen, the chorda is at risk; stretching or cutting it causes dysgeusia.',
+    concepts: ['ma-fn'],
+},
+{
+    id: 'q78', type: 'recall', section: 'Mastoid',
+    stem: 'How long is the mastoid segment of the facial nerve? Do the sources agree?',
+    answer: `• Glasscock: about 20 mm, from the second genu (at the lateral canal) to the stylomastoid foramen
+• Cummings Review: 12–15 mm
+• They do not agree; the landmarks, not the length, find the nerve`,
+    brief: 'About 20 mm (Glasscock) versus 12–15 mm (Cummings Review).',
+    detailed: 'Glasscock describes the mastoid segment as spanning 20 mm from the second genu to the stylomastoid foramen; the Cummings Review outline gives 12–15 mm for the descending segment.\nDiscrepancy: the two sources give different values and neither explains the gap; neither is a number to rely on in the operating room.\nApplication: use the lateral canal, the short process, the posterior canal wall and the digastric ridge.',
+    concepts: ['ma-fn'],
+},
+{
+    id: 'q79', type: 'recall', section: 'Mastoid',
+    stem: 'Give the borders of the facial recess and what you see when it is opened.',
+    answer: `• Medial and posterior: the vertical facial nerve
+• Lateral and anterior: the chorda tympani
+• Superior: the incus buttress
+• Opened: the stapes superstructure, incudostapedial joint, round window niche and promontory`,
+    brief: 'Nerve behind, chorda in front, buttress above.',
+    detailed: 'Glasscock: the recess is a triangular area inferior to the incudal fossa, lateral to the vertical nerve and medial to the chorda. ENT Secrets lists the borders as the chorda anteriorly, the nerve posteriorly and the buttress superiorly. Myers: once opened it shows the incudostapedial joint, round window niche and promontory; Vula: the stapes superstructure.\nApplication: the same corridor carries the cochlear implant electrode to the round window.',
+    concepts: ['ma-recess'],
+},
+{
+    id: 'q80', section: 'Mastoid',
+    stem: 'Where is the safest point of entry into the facial recess?',
+    options: [
+        { id: 'a', text: 'Its inferior aspect, near the origin of the chorda' },
+        { id: 'b', text: 'Its superior aspect, just below the incus buttress' },
+        { id: 'c', text: 'Its medial aspect, over the vertical facial nerve' },
+        { id: 'd', text: 'Its lateral aspect, through the chorda tympani' },
+    ],
+    correct: 'b',
+    brief: 'Superiorly, just below the buttress, where the recess is widest.',
+    detailed: 'Myers: remove bone just inferior to the incus buttress, drilling parallel to the nerve after thinning the posterior canal wall; the superior aspect is the safest entry because it is the widest. Bone can then be removed medial to the chorda to enlarge the view.\nApplication: the buttress also protects the incus, since drill contact there transmits energy to the inner ear.',
+    concepts: ['ma-recess'],
+},
+{
+    id: 'q81', section: 'Mastoid',
+    stem: 'Which three structures bound Trautmann triangle?',
+    options: [
+        { id: 'a', text: 'Temporal line, spine of Henle and the posterior canal margin' },
+        { id: 'b', text: 'Tegmen, sigmoid plate and the digastric ridge near the tip' },
+        { id: 'c', text: 'Facial nerve, chorda tympani and incus buttress' },
+        { id: 'd', text: 'Bony labyrinth, sigmoid sinus and superior petrosal sinus' },
+    ],
+    correct: 'd',
+    brief: 'Labyrinth, sigmoid sinus and superior petrosal sinus.',
+    detailed: 'Glasscock: the triangle is bounded by the bony labyrinth, the sigmoid sinus and the superior petrosal sinus. The plate of posterior fossa dura lies between them.\nApplication: option a is Macewen triangle (with the temporal line); option c is the facial recess.',
+    concepts: ['ma-lines'],
+},
+{
+    id: 'q82', type: 'recall', section: 'Mastoid',
+    stem: 'How is Donaldson line drawn, and which structure lies below it?',
+    answer: `• Extend the plane of the lateral semicircular canal posteriorly
+• It bisects the posterior semicircular canal and meets the posterior fossa dura
+• The endolymphatic sac lies inferior to it (position variable)`,
+    brief: 'Lateral canal plane run backward; the sac is below it.',
+    detailed: 'Glasscock: Donaldson line, a landmark in endolymphatic sac surgery, is derived by extending the plane of the lateral canal so that it bisects the posterior canal and contacts the posterior fossa dura; the sac lies inferior to it. The sac lies anterior and medial to the sigmoid sinus and about 10 mm inferior and lateral to the porus of the internal auditory canal.\nApplication: the lateral canal is the one landmark you can find in every mastoid; the line extends it to the sac.',
+    concepts: ['ma-lines'],
+},
+{
+    id: 'q83', section: 'Mastoid',
+    stem: 'Why is the facial nerve at risk from a standard postauricular incision in a newborn?',
+    options: [
+        { id: 'a', text: 'It runs in an open groove lateral to the temporal line' },
+        { id: 'b', text: 'The chorda tympani crosses the incision site in infants' },
+        { id: 'c', text: 'No mastoid process exists, so the nerve exits onto the lateral skull' },
+        { id: 'd', text: 'The stylomastoid foramen is covered only by the mastoid tip' },
+    ],
+    correct: 'c',
+    brief: 'Without a mastoid process the nerve leaves the foramen on the lateral skull surface.',
+    detailed: 'Glasscock: in the neonate the mastoid process is essentially nonexistent and the tympanic bone a flat ring with the stylomastoid foramen exposed; the nerve, in the absence of a mastoid process, emerges on the lateral aspect of the skull and is vulnerable to a standard postauricular incision. Myers places the inferior limb of the incision farther posteriorly in children.\nApplication: the process and the tip develop after the first year.',
+    concepts: ['ma-peds'],
+},
+{
+    id: 'q84', type: 'recall', section: 'Mastoid',
+    stem: 'What is already adult-like in the mastoid at birth, and what develops afterward?',
+    answer: `• At birth: the antrum approximates its adult size
+• Absent at birth: the mastoid process and tip; the tympanic bone is a flat ring
+• After the first year: the process grows laterally and inferiorly, its tip from the petrous part
+• The mastoid continues to grow for up to 19 years`,
+    brief: 'Antrum at birth; process and tip after the first year.',
+    detailed: 'Glasscock: pneumatization reaches the antrum by about 21 weeks and the antrum approximates the adult at birth, while the mastoid goes on growing for up to 19 years; after the first year the process develops laterally and inferiorly, its tip deriving from the petrous part.\nApplication: the nerve is lateral at birth and takes its deep, adult position as the tip grows.',
+    concepts: ['ma-peds'],
+},
+// (mastoid items go above this line)
+//
+//
+// ════════ EUSTACHIAN TUBE AND PETROUS APEX (W3: ids q87–q110) ════════
+{
+    id: 'q87', section: 'Eustachian Tube',
+    stem: 'A probe is passed from the tympanic orifice of the Eustachian tube toward the nasopharynx. Which description fits the first segment it enters?',
+    options: [
+        { id: 'a', text: 'Cartilaginous, two thirds of the length, columnar lining' },
+        { id: 'b', text: 'Bony, a third of the length, ciliated cuboidal lining' },
+        { id: 'c', text: 'Bony, about two thirds of the length, columnar lining' },
+        { id: 'd', text: 'Cartilaginous, one third of the length, cuboidal lining' },
+    ],
+    correct: 'b',
+    brief: 'The tube opens from the protympanum as its bony lateral third; the medial two thirds are cartilaginous.',
+    detailed: 'The Handbook: the lateral third is bony, sits at the anterior mesotympanum (protympanum) and is lined by ciliated cuboidal epithelium; the medial two thirds are cartilaginous, end at the torus tubarius and are lined by pseudostratified columnar epithelium. Glasscock and Cummings Review agree on the two-thirds cartilaginous split.\nApplication: the isthmus, the narrow point, lies at the junction.\nDiscrepancy: a 3D reconstruction series (Ann Otol Rhinol Laryngol 2000) gave a cartilaginous-plus-junctional to bony ratio of 4:1 in adults, a bony fifth rather than a third.',
+    concepts: ['et-seg'],
+},
+{
+    id: 'q88', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Give the Eustachian tube\'s length at birth and in the adult, its two parts, and the lining of each.',
+    answer: `• Length: about 18 mm at birth, about 35 mm in adults
+• Lateral third: bony, opens from the protympanum, ciliated cuboidal epithelium
+• Medial two thirds: cartilaginous, ends at the torus tubarius, pseudostratified columnar epithelium
+• The narrow point (isthmus) lies at the bony-cartilaginous junction`,
+    brief: 'About 18 mm to 35 mm; bony lateral third, cartilaginous medial two thirds.',
+    detailed: 'Handbook: about 18 mm at birth and 35 mm in adulthood. Glasscock: approximately 35 mm from the anterior tympanic cavity to the posterior nasopharynx; the tympanic orifice is a few millimetres above the floor.\nDiscrepancy: a 3D reconstruction of 11 temporal bones found an adult lumen path length of 37.0 ± 4.2 mm and 21.2 mm at 3 months.',
+    concepts: ['et-seg'],
+},
+{
+    id: 'q89', section: 'Eustachian Tube',
+    stem: 'After rapid weight loss a patient develops a patulous Eustachian tube. Which structure has most likely atrophied?',
+    options: [
+        { id: 'a', text: 'The tensor veli palatini muscle' },
+        { id: 'b', text: 'The cartilage of the medial lamina' },
+        { id: 'c', text: 'The Ostmann fat pad' },
+        { id: 'd', text: 'The levator veli palatini muscle' },
+    ],
+    correct: 'c',
+    brief: 'The Ostmann fat pad is metabolically sensitive adipose against the lateral wall; it helps hold the tube closed at rest.',
+    detailed: 'Cummings Review: the Ostmann fat pad is metabolically sensitive adipose in the lateral wall of the tube; rapid weight loss can atrophy it and cause patulous Eustachian tube syndrome. Glasscock: the lateral fat pad abuts the fibrocartilaginous tube and aids resting closure.\nApplication: when you see a patient with a sudden change after weight loss, ask about it before blaming the muscles.\nDiscrepancy: a 2016 anatomical review describes a medial fat pad between the suspensory ligaments.',
+    concepts: ['et-cart'],
+},
+{
+    id: 'q90', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Describe the walls and lumen of the cartilaginous Eustachian tube, and the fat pad beside it.',
+    answer: `• Cartilage forms the craniomedial wall, with a medial and a lateral lamina
+• A membranous wall completes it on the inferolateral side
+• The lumen has two compartments: Rüdinger safety canal and the auxiliary gap
+• The Ostmann fat pad abuts the lateral aspect and aids resting closure`,
+    brief: 'Cartilage above and medial, membrane below and lateral; two lumen compartments; fat pad against the lateral wall.',
+    detailed: 'Leuwer (2016): the tube is surrounded by a cartilaginous wall on the craniomedial side and a membranous wall on the inferolateral side, and its lumen has two compartments, the Rüdinger safety canal and the auxiliary gap. Ishijima (2002) names the medial and lateral laminae of the cartilage. Glasscock: the lateral fat pad aids resting closure.',
+    concepts: ['et-cart'],
+},
+{
+    id: 'q91', section: 'Eustachian Tube',
+    stem: 'A tumour at the foramen ovale injures the mandibular nerve. Which pair of muscles is weakened?',
+    options: [
+        { id: 'a', text: 'Tensor tympani and tensor veli palatini' },
+        { id: 'b', text: 'Tensor tympani and stapedius' },
+        { id: 'c', text: 'Stapedius and levator veli palatini' },
+        { id: 'd', text: 'Tensor veli palatini and salpingopharyngeus' },
+    ],
+    correct: 'a',
+    brief: 'V3 supplies both tensors, tensor tympani and tensor veli palatini; both are first-arch muscles.',
+    detailed: 'Glasscock and Handbook: the tensor veli palatini, innervated by the trigeminal nerve, is the primary dilator of the tube; the Handbook notes the tensor tympani is V3 and the stapedius is CN VII. The levator veli palatini and salpingopharyngeus are supplied by the pharyngeal plexus.\nApplication: V3 loss therefore touches both the malleus muscle and the tubal dilator.',
+    concepts: ['et-muscle'],
+},
+{
+    id: 'q92', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Name the three tubal muscles, each one\'s nerve, and its role in opening the tube.',
+    answer: `• Tensor veli palatini: V3, primary dilator, lateral to the cartilage
+• Levator veli palatini: pharyngeal plexus (X), strongest and longest-acting on paratubal recording, rotates the medial lamina
+• Salpingopharyngeus: pharyngeal plexus (X), weakest, inactive in some ears`,
+    brief: 'Tensor dilates, levator contributes most on EMG, salpingopharyngeus least.',
+    detailed: 'Glasscock, Cummings Review and Handbook agree the tensor veli palatini is the primary dilator. A paratubal EMG and sonotubometry study in 17 healthy volunteers (Acta Otolaryngol 2016) found the levator the most powerful and long-lasting and the salpingopharyngeus the weakest, in some ears inactive. A 3D reconstruction (Ann Otol Rhinol Laryngol 2002) places the levator inferolateral to the medial lamina.',
+    concepts: ['et-muscle'],
+},
+{
+    id: 'q93', section: 'Eustachian Tube',
+    stem: 'A 9-month-old has recurrent acute otitis media. Which feature of the infant tube best explains the susceptibility?',
+    options: [
+        { id: 'a', text: 'A long, steeply sloped tube' },
+        { id: 'b', text: 'A larger tensor veli palatini than adults have' },
+        { id: 'c', text: 'A short, nearly horizontal tube' },
+        { id: 'd', text: 'A bony segment forming most of its length' },
+    ],
+    correct: 'c',
+    brief: 'Infant tubes are short and horizontal; bacteria reach the middle ear easily and the tube opens less efficiently.',
+    detailed: 'Handbook: infants are at higher risk of acute otitis media because the auditory tubes are short and horizontal, and feeding often occurs reclined; as children grow the tubes lengthen and become more vertical, and the incidence declines. A skull study of 3–4-year-olds found a shorter tube, smaller tensor vectors and a smaller tensor surface area than in adults.\nDiscrepancy: the same skull study found no difference in the angle of descent from the cranial base.',
+    concepts: ['et-child'],
+},
+{
+    id: 'q94', type: 'recall', section: 'Eustachian Tube',
+    stem: 'Compare the infant and adult Eustachian tube: length, shape, and when the adult form is reached.',
+    answer: `• Length: about 18 mm at birth, about 35 mm in adults (Handbook)
+• Shape: short and horizontal in infants; longer and more vertical with growth
+• Adults: the cartilaginous part is angled inferiorly and laterally from the bony part
+• More than half the growth occurs by 8 years; adult morphology is reached in early adolescence`,
+    brief: 'About half the adult length, flatter; adult form by early adolescence.',
+    detailed: 'Handbook: 18 mm at birth, 35 mm in adults; infants short and horizontal. A 3D reconstruction series: 21.2 mm at 3 months; in children both parts align with the line joining the orifices, in adults the cartilaginous part angles inferiorly and laterally. A CT series: more than half of growth by 8 years, adult morphology by early adolescence.\nDiscrepancy: the CT series gave horizontal angles of 17°, 21° and 23° (under 4, 5–7 and 8–18 years); a skull study found no difference in the descent angle from the cranial base at 3–4 years.',
+    concepts: ['et-child'],
+},
+{
+    id: 'q95', section: 'Eustachian Tube',
+    stem: 'Gentle dissection is advised in the medial wall of the Eustachian tube during cholesteatoma surgery. Which vessel is at risk, and why?',
+    options: [
+        { id: 'a', text: 'Jugular bulb; thin roof over the vein' },
+        { id: 'b', text: 'Middle meningeal artery; thin squamous bone' },
+        { id: 'c', text: 'Sigmoid sinus; thin posterior fossa plate' },
+        { id: 'd', text: 'Internal carotid artery; thin bony shell' },
+    ],
+    correct: 'd',
+    brief: 'The petrous carotid runs medial to the bony tube in a shell often under 0.5 mm thick, dehiscent in 6%.',
+    detailed: 'Glasscock: after its knee the artery runs medial to the Eustachian tube and inferomedial to the tensor semicanal; the bony shell is often less than 0.5 mm thick and can be dehiscent in 6% of cases, so surgery for chronic otitis media or cholesteatoma mandates gentle dissection in the medial wall of the tube.\nApplication: an aberrant carotid runs lateral and posterior to the vestibular line and presents as a retrotympanic mass.',
+    concepts: ['et-rel'],
+},
+{
+    id: 'q96', section: 'Eustachian Tube',
+    stem: 'A 52-year-old has had a unilateral middle ear effusion for three months. Which site should be examined first?',
+    options: [
+        { id: 'a', text: 'Oropharynx and tonsillar fossae' },
+        { id: 'b', text: 'Nasopharynx and torus tubarius' },
+        { id: 'c', text: 'Hypopharynx and piriform sinuses' },
+        { id: 'd', text: 'Larynx and vocal fold mobility' },
+    ],
+    correct: 'b',
+    brief: 'The tube ends at the torus tubarius in the nasopharynx; a mass there blocks it.',
+    detailed: 'Handbook: in adults with persistent unilateral middle ear effusion, a nasopharyngeal mass causing auditory tube obstruction must be ruled out before attributing the cause to an upper respiratory infection, allergy or recent flight. The cartilaginous tube terminates at the torus tubarius of the nasopharynx.\nApplication: the nasopharynx is examined with an endoscope.',
+    concepts: ['et-rel'],
+},
+{
+    id: 'q97', type: 'recall', section: 'Eustachian Tube',
+    stem: 'State where the internal carotid artery, the tensor semicanal and V3 lie relative to the Eustachian tube.',
+    answer: `• Internal carotid artery: medial to the bony tube, after its knee (and inferomedial to the tensor semicanal)
+• Tensor semicanal: above the bony tube
+• V3 and the foramen ovale: lateral to the cartilaginous tube
+• Ostmann fat pad: against the lateral wall of the cartilaginous tube`,
+    brief: 'Carotid medial, tensor above, V3 lateral to the cartilaginous part.',
+    detailed: 'Glasscock: the artery bends to run medial to the tube and inferomedial to the tensor semicanal; the tympanic orifice lies below the bulge of the tensor semicanal. Glasscock: the lateral fat pad abuts the fibrocartilaginous tube. The V3 relation is the guide glossary\'s statement.\nApplication: the tube sits in a corridor between the carotid and the infratemporal fossa.',
+    concepts: ['et-rel'],
+},
+{
+    id: 'q98', section: 'Petrous Apex',
+    stem: 'A mass expanding at the very tip of the petrous apex stretches a cranial nerve in a canal beneath a ligament. Which nerve is it?',
+    options: [
+        { id: 'a', text: 'Facial nerve, labyrinthine segment' },
+        { id: 'b', text: 'Vestibulocochlear nerve' },
+        { id: 'c', text: 'Abducens nerve' },
+        { id: 'd', text: 'Glossopharyngeal nerve' },
+    ],
+    correct: 'c',
+    brief: 'The abducens nerve runs in Dorello canal under the petroclinoid (Gruber) ligament at the apex tip.',
+    detailed: 'Glasscock: the abducens nerve runs in Dorello canal beneath the posterior petroclinoid (Gruber) ligament; apicitis can manifest with abducens palsy. The trigeminal ganglion in Meckel cave lies anterolateral to the apex.\nApplication: isolated horizontal diplopia can be the first sign of an apical mass.',
+    concepts: ['pa-bounds'],
+},
+{
+    id: 'q99', type: 'recall', section: 'Petrous Apex',
+    stem: 'List the structures that lie lateral, posterior, anterior and medial to the petrous apex.',
+    answer: `• Lateral: cochlea
+• Posterior: internal auditory canal
+• Anterior: horizontal petrous carotid (also below), and Meckel cave (trigeminal ganglion)
+• Medial: Dorello canal (abducens) and the petroclival fissure`,
+    brief: 'Cochlea lateral, IAC behind, carotid and Meckel cave in front, Dorello canal and petroclival fissure medial.',
+    detailed: 'Glasscock: the apex points anteromedially, marked by the transition of the intrapetrous to the intracranial carotid, the orifice of the bony tube and, anterolaterally, the trigeminal ganglion in Meckel cave; Dorello canal lies beneath the petroclinoid ligament. The other relations follow the guide glossary.\nApplication: use the six-direction habit on a CT before choosing a corridor.',
+    concepts: ['pa-bounds'],
+},
+{
+    id: 'q100', section: 'Petrous Apex',
+    stem: 'A lesion lies on the middle fossa face, anterolateral to the apex, and compresses a ganglion. Which structure is involved?',
+    options: [
+        { id: 'a', text: 'Geniculate ganglion at the first genu' },
+        { id: 'b', text: 'Trigeminal ganglion in Meckel cave' },
+        { id: 'c', text: 'Spiral ganglion within the cochlea' },
+        { id: 'd', text: 'Otic ganglion below the foramen ovale' },
+    ],
+    correct: 'b',
+    brief: 'The trigeminal (gasserian) ganglion occupies Meckel cave on the middle fossa face, anterolateral to the apex.',
+    detailed: 'Glasscock: the gasserian ganglion of the trigeminal nerve occupies Meckel cave on the middle cranial fossa face of the temporal bone, anterolateral to the petrous apex. The geniculate ganglion lies at the first genu, anterior to the cochleariform process.\nApplication: apical pathology can therefore cause trigeminal pain.',
+    concepts: ['pa-bounds'],
+},
+{
+    id: 'q101', section: 'Petrous Apex',
+    stem: 'A cerebrospinal fluid leak persists after translabyrinthine schwannoma resection despite apparently adequate tympanomastoid obliteration. Which air cell tract is implicated?',
+    options: [
+        { id: 'a', text: 'Subarcuate' },
+        { id: 'b', text: 'Sinodural' },
+        { id: 'c', text: 'Retrofacial' },
+        { id: 'd', text: 'Peritubal' },
+    ],
+    correct: 'd',
+    brief: 'Peritubal cells that open into the tube in front of its tympanic orifice can carry the leak.',
+    detailed: 'Glasscock: persisting leakage after translabyrinthine resection, despite apparently adequate tympanomastoid obliteration, has been linked to peritubal cells that open directly into the Eustachian tube anterior to its tympanic orifice. The peritubal tract surrounds the tube.\nApplication: the fluid reaches the nose through the tube.',
+    concepts: ['pa-tracts'],
+},
+{
+    id: 'q102', type: 'recall', section: 'Petrous Apex',
+    stem: 'How often is the anterior petrous apex pneumatized, what is it usually instead, and which tracts lead to it?',
+    answer: `• About 10–15% pneumatized (Glasscock); Cummings Review gives 10% anterior and 30% posterior
+• Most often diploic; sclerotic in a small percentage
+• Tracts: subarcuate, sinodural (posterior); peritubal, retrofacial, infralabyrinthine, infracochlear, glenoid fossa (anterior)`,
+    brief: 'A minority of apices hold air; most are diploic.',
+    detailed: 'Glasscock: five regions of pneumatization; the apical and peritubal areas make up the apex region; the subarcuate tract passes through the arch of the superior canal, the perilabyrinthine tracts run above and below the labyrinth, and the peritubal tract surrounds the tube.\nDiscrepancy: Glasscock 10–15% anterior; Cummings Review 10% anterior and 30% posterior.',
+    concepts: ['pa-tracts'],
+},
+{
+    id: 'q103', section: 'Petrous Apex',
+    stem: 'A jugular bulb lies under 3 mm from the cochlea in the tympanic cavity. Which corridors to the petrous apex does it make unsafe?',
+    options: [
+        { id: 'a', text: 'The middle fossa corridor only' },
+        { id: 'b', text: 'Middle fossa and infracochlear' },
+        { id: 'c', text: 'The two inferior corridors' },
+        { id: 'd', text: 'None, as the bulb lies lower' },
+    ],
+    correct: 'c',
+    brief: 'The bulb sits where the infracochlear and infralabyrinthine corridors pass; the middle fossa route comes from above.',
+    detailed: 'A cadaveric study of the transcanal infracochlear approach found that a tympanic cavity jugular bulb closer than 3 mm to the cochlea was the only instance that restricted it. In one case a high-riding jugular bulb ruled out the infracochlear infralabyrinthine approach and a middle fossa approach was judged to risk recurrence.\nApplication: look at the bulb on CT before choosing a corridor.',
+    concepts: ['pa-corridors'],
+},
+{
+    id: 'q104', type: 'recall', section: 'Petrous Apex',
+    stem: 'Name the three corridors to the petrous apex and the landmark or structure that limits each (no technique).',
+    answer: `• Infracochlear: below the cochlea; jugular bulb under 3 mm from the cochlea restricts it
+• Infralabyrinthine: below the labyrinth, above the jugular bulb
+• Middle fossa: from above through the middle cranial fossa floor; Meckel cave anterolateral to the apex on that surface`,
+    brief: 'Below the cochlea, below the labyrinth, from above.',
+    detailed: 'The infracochlear and bulb limit come from a cadaver series (Eur Arch Otorhinolaryngol 2021); the infralabyrinthine tract runs below the labyrinth above the bulb; Glasscock places Meckel cave on the middle fossa face.\nApplication: this card names corridors only and does not teach technique.',
+    concepts: ['pa-corridors'],
+},
+{
+    id: 'q105', section: 'Petrous Apex',
+    stem: 'A child with a draining ear and retro-orbital pain develops diplopia on looking toward the affected side. Which pairing of structures explains the triad?',
+    options: [
+        { id: 'a', text: 'Geniculate ganglion with the labyrinthine facial nerve in its canal' },
+        { id: 'b', text: 'Trigeminal ganglion in Meckel cave and abducens in Dorello canal' },
+        { id: 'c', text: 'Cochlear and vestibular nerves in the internal auditory canal' },
+        { id: 'd', text: 'Jugular bulb with the glossopharyngeal nerve in its foramen' },
+    ],
+    correct: 'b',
+    brief: 'Gradenigo triad: otorrhoea, retro-orbital pain (Meckel cave), abducens palsy (Dorello canal).',
+    detailed: 'Glasscock: petrous apicitis, with dural and venous inflammation, can manifest with purulent otorrhoea, retro-orbital pain and abducens palsy. Cummings Review lists the same triad under Gradenigo syndrome.\nApplication: the apex is the site where the ear disease meets two cranial nerves that the middle ear alone does not touch.',
+    concepts: ['pa-clinical', 'pa-bounds'],
+},
+{
+    id: 'q106', type: 'recall', section: 'Petrous Apex',
+    stem: 'State the Gradenigo triad and the anatomic reason for each element.',
+    answer: `• Draining ear: middle ear and cell-tract disease reaching the apex
+• Retro-orbital pain: trigeminal ganglion in Meckel cave
+• Ipsilateral abducens palsy: abducens nerve in Dorello canal`,
+    brief: 'Otorrhoea, retro-orbital pain, abducens palsy; Meckel cave and Dorello canal.',
+    detailed: 'Cummings Review: Gradenigo syndrome is draining ear, retro-orbital pain and ipsilateral abducens palsy. Glasscock: Meckel cave holds the trigeminal ganglion and the abducens runs in Dorello canal beneath Gruber ligament.\nApplication: a 3.5 cm apical cholesterol granuloma compressed the abducens and caused diplopia without any infection (ORL 2023).',
+    concepts: ['pa-clinical'],
+},
+// (et and petrous-apex items go above this line)
 ];
 
 window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
