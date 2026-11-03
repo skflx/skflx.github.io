@@ -28,6 +28,9 @@ const meta = {
         'Lin HW, Roberts DS, Harris JP. Cummings Review of Otolaryngology. Elsevier, 2017 — Ch. 2, temporal bone, EAC, eardrum, middle ear, facial nerve, middle ear mechanics',
         'Glasscock ME, Gulya AJ, eds. Glasscock-Shambaugh Surgery of the Ear, 5e. BC Decker, 2003 — Ch. 1 (developmental anatomy), Ch. 2 (anatomy of the ear and temporal bone, Gulya), Ch. 3 (auditory physiology)',
         'Goldenberg D, Goldstein BJ. Handbook of Otolaryngology–Head and Neck Surgery, 2e. Thieme, 2018 — Ch. 3, embryology and anatomy of the ear',
+        'MacDonald CB, Wood JW. Mastoid surgery. In: Myers EN, Snyderman CH, eds. Operative Otolaryngology: Head and Neck Surgery, 3e. Elsevier, 2017 — Ch. 134',
+        'Harris T, Linder T. Mastoidectomy and epitympanectomy. Open Access Atlas of Otolaryngology, Head and Neck Operative Surgery (Vula, University of Cape Town)',
+        'Roby BB, Yoon PJ. Tympanomastoidectomy and ossicular chain reconstruction. In: ENT Secrets — Ch. 39',
         'Baker SR. Local Flaps in Facial Reconstruction, 3e, Ch. 22 — auricle proportions, as cited in the otoplasty module',
         'Stapes footplate morphometry: Folia Morphologica 2024;83(2) (length 2.93, width 1.46 mm); micro-CT of Thiel-embalmed temporal bones, J Otolaryngol Head Neck Surg 2021 (length 2.71, width 1.23 mm)',
     ],
@@ -808,6 +811,231 @@ const ITEMS = [
 //
 //
 // ════════ MASTOID (W3: ids q67–q86) ════════
+{
+    id: 'q67', section: 'Mastoid',
+    stem: 'You begin the cortical cut within the temporal line, the posterosuperior canal margin and a tangent to the posterior canal margin. Which structure lies deep to this triangle?',
+    options: [
+        { id: 'a', text: 'The mastoid antrum' },
+        { id: 'b', text: 'The sigmoid sinus, behind the posterior mastoid surface' },
+        { id: 'c', text: 'The digastric ridge, near the mastoid tip' },
+        { id: 'd', text: 'The jugular bulb, under the hypotympanum' },
+    ],
+    correct: 'a',
+    brief: 'Macewen triangle overlies the antrum, so drilling begins there.',
+    detailed: 'Glasscock: the fossa mastoidea (Macewen triangle) is bounded by the linea temporalis, the posterosuperior margin of the canal and a tangent to its posterior margin, and it lies over the antrum, so mastoid drilling ordinarily commences there. Myers: keep the deepest part of the cavity over the antrum so that it is entered before the plane of the facial nerve.\nApplication: the sigmoid sinus is posterior, the digastric ridge inferior and the bulb deep to the floor; none is under the triangle.',
+    concepts: ['ma-surface'],
+},
+{
+    id: 'q68', type: 'recall', section: 'Mastoid',
+    stem: 'Name the surface landmarks of the lateral mastoid and what each marks.',
+    answer: `• Temporal line: backward continuation of the zygomatic root; about the floor of the middle fossa (±5 mm), the upper limit of the cut
+• Spine of Henle: posterosuperior rim of the canal, the anterior border of Macewen triangle
+• Macewen triangle (cribriform area): lies over the antrum
+• Mastoid tip: sternocleidomastoid attachment; the digastric groove is medial and superior to it, and its anterior border is the stylomastoid foramen
+• Mastoid foramen: posterior, emissary vein and one or two mastoid arteries`,
+    brief: 'Line, spine, triangle, tip with its groove, and the emissary foramen.',
+    detailed: 'Cummings Review: the temporal line approximates the floor of the middle fossa to within about 5 mm; the sigmoid sinus is typically anterior to the emissary vein. Glasscock: the linea temporalis is an avascular plane, so it carries the top of the T-shaped musculoperiosteal incision.\nApplication: the landmarks that you can palpate and see define where the deep landmarks lie.',
+    concepts: ['ma-surface'],
+},
+{
+    id: 'q69', section: 'Mastoid',
+    stem: 'In a completed canal wall up mastoidectomy, which structure forms the medial wall of the antrum?',
+    options: [
+        { id: 'a', text: 'The tegmen mastoideum, under the middle fossa dura' },
+        { id: 'b', text: 'The sigmoid plate, over the sigmoid sinus' },
+        { id: 'c', text: 'The lateral semicircular canal, in the otic capsule' },
+        { id: 'd', text: 'The facial ridge, over the vertical nerve' },
+    ],
+    correct: 'c',
+    brief: 'The lateral semicircular canal is the medial landmark; the tegmen is the roof.',
+    detailed: 'ENT Secrets: the deep (medial) border of the cavity is the lateral semicircular canal and the incus, found in the aditus; the tegmen is the superior border, the sigmoid sinus the posterior border and the posterior canal wall the anterior border.\nApplication: the canal is the landmark that locates the second genu of the facial nerve just below and medial to it.',
+    concepts: ['ma-antrum'],
+},
+{
+    id: 'q70', type: 'recall', section: 'Mastoid',
+    stem: 'What is Körner septum, where does it lie and what do you do with it?',
+    answer: `• The petrosquamous lamina: bone separating the squamous (lateral) from the petrous (medial) part of the mastoid
+• It lies in the path from the cortex to the antrum
+• Remove it, with the tegmen above and the canal wall in front as limits, to enter the antrum`,
+    brief: 'Petrosquamous lamina in front of the antrum; take it down to enter.',
+    detailed: 'Glasscock: the mastoid has a squamous part laterally and a petrous part medially, separated by Körner septum. Myers: with the tegmen as the superior landmark and the canal as the anterior landmark, the septum is removed and the antrum entered; the burr is then downsized toward the zygomatic root until the lateral canal and incus appear.\nApplication: a cavity that stops at the septum has not reached the antrum, so the canal and incus are not found.',
+    concepts: ['ma-antrum'],
+},
+{
+    id: 'q71', section: 'Mastoid',
+    stem: 'Which air cell tract runs parallel to the posterosuperior tract and inferior to it?',
+    options: [
+        { id: 'a', text: 'Subarcuate tract' },
+        { id: 'b', text: 'Posteromedial tract' },
+        { id: 'c', text: 'Peritubal tract' },
+        { id: 'd', text: 'Perilabyrinthine tract' },
+    ],
+    correct: 'b',
+    brief: 'Posteromedial: parallel to and below the posterosuperior tract.',
+    detailed: 'Glasscock: the posterosuperior tract runs at the juncture of the posterior and middle fossa surfaces of the petrous bone; the posteromedial tract parallels it and runs inferior to it; the subarcuate tract passes through the arch of the superior canal; the perilabyrinthine tracts lie above and below the labyrinth and the peritubal tract surrounds the Eustachian tube.\nApplication: each tract is a route that disease, or a thorough surgeon, can follow.',
+    concepts: ['ma-pneum'],
+},
+{
+    id: 'q72', type: 'recall', section: 'Mastoid',
+    stem: 'A CT shows a poorly pneumatized mastoid with opacified cells. What does pneumatization tell you, what does ventilation tell you, and which cavity do they favour?',
+    answer: `• Pneumatization (well pneumatized, reduced or sclerotic): how the Eustachian tube functioned in roughly the first 4 years
+• Ventilation (aerated or opacified middle ear and cells): how it functions now
+• Poor pneumatization, or poor ventilation of impaired tracts: favours an open cavity`,
+    brief: 'Pneumatization is the childhood record; ventilation is the present state.',
+    detailed: 'Vula (Harris and Linder): the CT checklist assesses pneumatization first and ventilation second, and poor ventilation of already impaired cell tracts favours an open cavity procedure. Glasscock lists heredity, environment, nutrition, infection and Eustachian tube function as influences on pneumatization.\nApplication: sclerotic bone is a scar of early disease, and it also limits exposure, which is why the wall is often taken down.',
+    concepts: ['ma-pneum'],
+},
+{
+    id: 'q73', type: 'recall', section: 'Mastoid',
+    stem: 'State the order in which landmarks appear in a canal wall up mastoidectomy.',
+    answer: `1. Cortex removed within the temporal line, canal wall and sigmoid line
+2. Tegmen and sigmoid plate, with the sinodural angle between them
+3. Posterior canal wall thinned from behind
+4. Antrum opened (Körner septum taken down)
+5. Lateral semicircular canal
+6. Short process of the incus, seen through the aditus
+7. Digastric ridge`,
+    brief: 'Cortex, tegmen and sinus, canal wall, antrum, lateral canal, incus, digastric ridge.',
+    detailed: 'Myers (Fig. 134.3): the aditus, the short process of the incus, the horizontal canal and the digastric ridge are all visible in a completed intact canal wall mastoidectomy. Vula gives the order tegmen, lateral canal, incus, then the sinodural plate and sigmoid, then the facial nerve and digastric ridge.\nDiscrepancy: Vula meets the sigmoid after the antrum; Myers shows both limits early. Skeletonizing both limits first is a common practice, and both orders reach the same landmarks.',
+    concepts: ['ma-sequence'],
+},
+{
+    id: 'q74', section: 'Mastoid',
+    stem: 'While skeletonizing the cavity you see a pink hue with small veins superiorly and a blue hue posteriorly. What are they?',
+    options: [
+        { id: 'a', text: 'Facial nerve above, jugular bulb behind' },
+        { id: 'b', text: 'Sigmoid sinus above, tegmen behind' },
+        { id: 'c', text: 'Lateral canal above, posterior canal behind' },
+        { id: 'd', text: 'Tegmen above, sigmoid sinus behind' },
+    ],
+    correct: 'd',
+    brief: 'Pink superior bone is the tegmen; blue posterior bone is the sigmoid sinus.',
+    detailed: 'Myers: the tegmen appears as a pink colour change in the bone superiorly, often with small veins close to the dura; the sigmoid sinus is indicated by a blue change posteriorly. Vula adds that the dural plates are also recognized by the change in the pitch of the burr, and that you should leave a thin shell over the sinus rather than expose it.\nApplication: stop and skeletonize at the colour change, then follow the dural plate anteromedially.',
+    concepts: ['ma-sequence'],
+},
+{
+    id: 'q75', section: 'Mastoid',
+    stem: 'Once the lateral semicircular canal is exposed, why does the drilling direction change to medial-to-lateral?',
+    options: [
+        { id: 'a', text: 'To avoid touching the ossicles, which would cause sensorineural loss' },
+        { id: 'b', text: 'To keep the burr away from the sigmoid sinus lying just behind the canal' },
+        { id: 'c', text: 'To follow the facial nerve toward the stylomastoid foramen' },
+        { id: 'd', text: 'To open the facial recess before the aditus' },
+    ],
+    correct: 'a',
+    brief: 'The incus is next; a burr moving medial to lateral does not push toward it.',
+    detailed: 'Vula: after the lateral canal is seen the direction of drilling must change to a medial-to-lateral action to avoid touching the ossicles, which would induce sensorineural hearing loss; the body and short process of the incus are the next landmarks, often first seen by their refraction in the irrigation fluid. Myers: touching the incus with the drill can cause the same loss.\nApplication: separate the incudostapedial joint first if the chain is at risk.',
+    concepts: ['ma-sequence'],
+},
+{
+    id: 'q76', section: 'Mastoid',
+    stem: 'Where is the second genu of the facial nerve in a mastoidectomy?',
+    options: [
+        { id: 'a', text: 'Superior to the lateral semicircular canal, lateral to the incus body' },
+        { id: 'b', text: 'Posterior to the posterior canal, against the sigmoid plate' },
+        { id: 'c', text: 'Just inferior and medial to the lateral canal, medial to the short process' },
+        { id: 'd', text: 'At the digastric ridge, where the nerve leaves the skull' },
+    ],
+    correct: 'c',
+    brief: 'Below and medial to the lateral canal, medial to the short process of the incus.',
+    detailed: 'Myers: the short process of the incus points to the second genu, in the same plane as the nerve, and the genu lies just inferior and medial to the horizontal canal; Myers also places it at the posterior edge of the oval window. The second genu is the segment most often damaged in mastoid surgery. Vula: the nerve runs anteroinferiorly from the lateral canal.\nApplication: the nerve emerges at the digastric ridge only at the stylomastoid foramen, well below the genu.',
+    concepts: ['ma-fn'],
+},
+{
+    id: 'q77', type: 'recall', section: 'Mastoid',
+    stem: 'Where does the chorda tympani leave the facial nerve, and how can this vary?',
+    answer: `• Usually about 4 mm proximal to the stylomastoid foramen
+• It may not separate until the level of the lateral semicircular canal
+• Rarely it leaves outside the temporal bone and re-enters by its own canal
+• It then ascends lateral and anterior to the nerve to the iter chordae posterius`,
+    brief: 'About 4 mm above the foramen, with a range up to the lateral canal level.',
+    detailed: 'Glasscock: the chorda, the sensory bundle making up some 10% of the cross-sectional area of the nerve, usually separates about 4 mm proximal to the stylomastoid foramen; alternatively not until the lateral canal level; rarely extratemporally. Vula warns to watch for an early takeoff close to the foramen.\nApplication: when you skeletonize the nerve near the foramen, the chorda is at risk; stretching or cutting it causes dysgeusia.',
+    concepts: ['ma-fn'],
+},
+{
+    id: 'q78', type: 'recall', section: 'Mastoid',
+    stem: 'How long is the mastoid segment of the facial nerve? Do the sources agree?',
+    answer: `• Glasscock: about 20 mm, from the second genu (at the lateral canal) to the stylomastoid foramen
+• Cummings Review: 12–15 mm
+• They do not agree; the landmarks, not the length, find the nerve`,
+    brief: 'About 20 mm (Glasscock) versus 12–15 mm (Cummings Review).',
+    detailed: 'Glasscock describes the mastoid segment as spanning 20 mm from the second genu to the stylomastoid foramen; the Cummings Review outline gives 12–15 mm for the descending segment.\nDiscrepancy: the two sources give different values and neither explains the gap; neither is a number to rely on in the operating room.\nApplication: use the lateral canal, the short process, the posterior canal wall and the digastric ridge.',
+    concepts: ['ma-fn'],
+},
+{
+    id: 'q79', type: 'recall', section: 'Mastoid',
+    stem: 'Give the borders of the facial recess and what you see when it is opened.',
+    answer: `• Medial and posterior: the vertical facial nerve
+• Lateral and anterior: the chorda tympani
+• Superior: the incus buttress
+• Opened: the stapes superstructure, incudostapedial joint, round window niche and promontory`,
+    brief: 'Nerve behind, chorda in front, buttress above.',
+    detailed: 'Glasscock: the recess is a triangular area inferior to the incudal fossa, lateral to the vertical nerve and medial to the chorda. ENT Secrets lists the borders as the chorda anteriorly, the nerve posteriorly and the buttress superiorly. Myers: once opened it shows the incudostapedial joint, round window niche and promontory; Vula: the stapes superstructure.\nApplication: the same corridor carries the cochlear implant electrode to the round window.',
+    concepts: ['ma-recess'],
+},
+{
+    id: 'q80', section: 'Mastoid',
+    stem: 'Where is the safest point of entry into the facial recess?',
+    options: [
+        { id: 'a', text: 'Its inferior aspect, near the origin of the chorda' },
+        { id: 'b', text: 'Its superior aspect, just below the incus buttress' },
+        { id: 'c', text: 'Its medial aspect, over the vertical facial nerve' },
+        { id: 'd', text: 'Its lateral aspect, through the chorda tympani' },
+    ],
+    correct: 'b',
+    brief: 'Superiorly, just below the buttress, where the recess is widest.',
+    detailed: 'Myers: remove bone just inferior to the incus buttress, drilling parallel to the nerve after thinning the posterior canal wall; the superior aspect is the safest entry because it is the widest. Bone can then be removed medial to the chorda to enlarge the view.\nApplication: the buttress also protects the incus, since drill contact there transmits energy to the inner ear.',
+    concepts: ['ma-recess'],
+},
+{
+    id: 'q81', section: 'Mastoid',
+    stem: 'Which three structures bound Trautmann triangle?',
+    options: [
+        { id: 'a', text: 'Temporal line, spine of Henle and the posterior canal margin' },
+        { id: 'b', text: 'Tegmen, sigmoid plate and the digastric ridge near the tip' },
+        { id: 'c', text: 'Facial nerve, chorda tympani and incus buttress' },
+        { id: 'd', text: 'Bony labyrinth, sigmoid sinus and superior petrosal sinus' },
+    ],
+    correct: 'd',
+    brief: 'Labyrinth, sigmoid sinus and superior petrosal sinus.',
+    detailed: 'Glasscock: the triangle is bounded by the bony labyrinth, the sigmoid sinus and the superior petrosal sinus. The plate of posterior fossa dura lies between them.\nApplication: option a is Macewen triangle (with the temporal line); option c is the facial recess.',
+    concepts: ['ma-lines'],
+},
+{
+    id: 'q82', type: 'recall', section: 'Mastoid',
+    stem: 'How is Donaldson line drawn, and which structure lies below it?',
+    answer: `• Extend the plane of the lateral semicircular canal posteriorly
+• It bisects the posterior semicircular canal and meets the posterior fossa dura
+• The endolymphatic sac lies inferior to it (position variable)`,
+    brief: 'Lateral canal plane run backward; the sac is below it.',
+    detailed: 'Glasscock: Donaldson line, a landmark in endolymphatic sac surgery, is derived by extending the plane of the lateral canal so that it bisects the posterior canal and contacts the posterior fossa dura; the sac lies inferior to it. The sac lies anterior and medial to the sigmoid sinus and about 10 mm inferior and lateral to the porus of the internal auditory canal.\nApplication: the lateral canal is the one landmark you can find in every mastoid; the line extends it to the sac.',
+    concepts: ['ma-lines'],
+},
+{
+    id: 'q83', section: 'Mastoid',
+    stem: 'Why is the facial nerve at risk from a standard postauricular incision in a newborn?',
+    options: [
+        { id: 'a', text: 'It runs in an open groove lateral to the temporal line' },
+        { id: 'b', text: 'The chorda tympani crosses the incision site in infants' },
+        { id: 'c', text: 'No mastoid process exists, so the nerve exits onto the lateral skull' },
+        { id: 'd', text: 'The stylomastoid foramen is covered only by the mastoid tip' },
+    ],
+    correct: 'c',
+    brief: 'Without a mastoid process the nerve leaves the foramen on the lateral skull surface.',
+    detailed: 'Glasscock: in the neonate the mastoid process is essentially nonexistent and the tympanic bone a flat ring with the stylomastoid foramen exposed; the nerve, in the absence of a mastoid process, emerges on the lateral aspect of the skull and is vulnerable to a standard postauricular incision. Myers places the inferior limb of the incision farther posteriorly in children.\nApplication: the process and the tip develop after the first year.',
+    concepts: ['ma-peds'],
+},
+{
+    id: 'q84', type: 'recall', section: 'Mastoid',
+    stem: 'What is already adult-like in the mastoid at birth, and what develops afterward?',
+    answer: `• At birth: the antrum approximates its adult size
+• Absent at birth: the mastoid process and tip; the tympanic bone is a flat ring
+• After the first year: the process grows laterally and inferiorly, its tip from the petrous part
+• The mastoid continues to grow for up to 19 years`,
+    brief: 'Antrum at birth; process and tip after the first year.',
+    detailed: 'Glasscock: pneumatization reaches the antrum by about 21 weeks and the antrum approximates the adult at birth, while the mastoid goes on growing for up to 19 years; after the first year the process develops laterally and inferiorly, its tip deriving from the petrous part.\nApplication: the nerve is lateral at birth and takes its deep, adult position as the tip grows.',
+    concepts: ['ma-peds'],
+},
 // (mastoid items go above this line)
 //
 //
