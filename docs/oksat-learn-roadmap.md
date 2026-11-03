@@ -31,9 +31,9 @@ the wiki keeps what you look up.
 - **Terms**: every acronym-shaped token is in the lexicon (or `PLAIN`), and
   no lexicon entry is idle (spec: *Terms*).
 
-### Proposed: `tools/lint-oksat-guide.mjs` (the guide twin of `lint-oksat.mjs`)
+### Built: `tools/lint-oksat-guide.mjs` (the guide twin of `lint-oksat.mjs`)
 
-Build when the second guide starts, so the rules are tested on two guides,
+Built with the second guide (`ear-anatomy`), so the rules are tested on two guides,
 not tuned to one. Each is mechanical; none judges medical content.
 
 | Rule | Why |

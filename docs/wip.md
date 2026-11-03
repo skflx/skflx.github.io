@@ -91,7 +91,13 @@ Module families, and their status:
 
 - **Interactive learning** (`docs/authoring-oksat-guide.md`): first-pass guides
   with predict-then-reveal prompts, checkers, inline module questions and
-  per-section drill links. One guide so far, **AR · CRS · AERD** (`ar-crs-aerd`):
+  per-section drill links. Anatomy blocks (`hotspot`, `layers`, `neighbors`,
+  `sequence`) are in place. **Normal Ear Anatomy** (`ear-anatomy`, spec
+  `plans/2026-11-02-ear-anatomy-guide.md`) is shipped **unlisted**: chapters
+  start to ossicles are live with its module (`ear-anatomy`); the remaining
+  chapters are pending, and the owner decides listing. Its figures are
+  schematic SVGs; it has no raster figures yet, so no `ATTRIBUTION.md`.
+  The guide's lint is `tools/lint-oksat-guide.mjs`. One guide listed so far, **AR · CRS · AERD** (`ar-crs-aerd`):
   ten chapters from type 2 immunology to critical appraisal, ported from the
   study atlas built in conversation (2026-10-26), plus a flashcard deck and a
   pearl wall. Every specialty abbreviation is marked and expands on hover, focus or tap

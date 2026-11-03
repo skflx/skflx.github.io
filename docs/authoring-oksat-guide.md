@@ -82,6 +82,50 @@ permanent: progress is stored as `<chapter>/<section>`. Retrieval-prompt ids
 | `tool` | `id`, `title`, `src`, `pre?`, `crit: [x…]`, `rules`, `note?` | checkbox checker (below) |
 | `check` | `id`, `q`, `a` | retrieval prompt (below) |
 | `practice` | `title?`, `refs: ['<module>:<item>'…]` | module questions answered in place |
+| `hotspot` | `id`, `alt`, `label?`, `modes?` (`explore`, `find`), `frames: [{src, cap?, regions: [{g, poly?}]}]` | tap regions on a figure (below); graded in find mode |
+| `layers` | `id`, `alt`, `base`, `layers: [{id, label, src}]`, `mode` (`toggle`\|`step`), `on?`, `cumulative?`, `cap?` | stacked overlay images (below); stores nothing |
+| `neighbors` | `id`, `g`, `dirs?`, `label?` | fill the neighbours of a glossary anchor, then reveal (below); graded |
+| `sequence` | `id`, `q`, `items: [x…]` (authored in correct order) | put shuffled items in order (below); graded |
+
+### Anatomy blocks
+
+Graded blocks (`hotspot` in find mode, `neighbors`, `sequence`) need a unique
+`id` within the section, shared with `check` ids. Each stores an integer grade
+0–3 at `rec.checks[checkKey(…)]`, overwritten on every re-grade. `hotspot` in
+explore mode and `layers` store nothing. Graded blocks count in the section
+tally but not in the flashcard deck.
+
+- **`hotspot`**: SVG frames (`.svg`) are fetched, sanitized and inlined; every
+  region is an element with `data-g="<glossary id>"`. Labels and leader lines
+  sit in `<g data-label="1">` and are hidden in find mode. Raster frames
+  (`.png`, `.jpg`, `.webp`) take `regions: [{g, poly}]`, where `poly` is a flat
+  list of ≥ 3 x,y pairs in 0–100 percent. Find mode needs ≥ 3 regions per frame.
+  `g` must be a glossary id (`js/olsb/glossary.js`); `check-data` fails an
+  unknown id.
+- **`layers`**: one `base` image plus ≥ 2 overlay images of identical size, each
+  with a unique `id` and a `label` read out in an `aria-live` caption.
+- **`neighbors`**: `dirs` ⊆ `sup, inf, ant, post, lat, med`; defaults to every
+  direction the anchor has a relation in (`rel` plus reverses). Needs ≥ 2
+  directions with relations. Reveal lists the glossary names per direction.
+- **`sequence`**: ≥ 3 unique items. Shuffled on render; "Check order" marks each
+  row by position.
+- **Degrade rule**: if the glossary or an SVG fails to load, `hotspot` renders
+  as a plain `figure` (first frame) and `neighbors` renders nothing.
+
+### Unlisted guides and modules
+
+`unlisted: true` on a guide (`OKSAT_GUIDES`) or module (`OKSAT_MANIFEST`) entry
+hides it from the hub; its URL still works. It must be a boolean. Used for
+ear-anatomy while the owner decides listing.
+
+### Figure attribution
+
+Purpose-drawn figures are captioned as schematic. Each open-license raster
+(and any open-license CT image) under `images/oksat/<slug>/` needs an entry in
+`images/oksat/<slug>/ATTRIBUTION.md` (file, source URL, author, license), and its
+caption credits the source. Copyrighted figures (textbook, Netter-style, Kenhub,
+Gralapp) are never committed, not even unlisted. `check-data` enforces the
+`ATTRIBUTION.md` rule for each slug in `ATTRIBUTED`.
 
 Consecutive `check` blocks group under one "Check yourself" label.
 

@@ -12,6 +12,7 @@ node tools/smoke-pages.mjs                # every page boots, zero real console 
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
 node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub, terms)
 node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
+node tools/lint-oksat-guide.mjs [slug ...] # OKSAT interactive guides against the teaching-shape spec (no slug: every guide)
 node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
 node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
 ```
