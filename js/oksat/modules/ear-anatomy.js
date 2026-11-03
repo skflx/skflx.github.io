@@ -25,6 +25,7 @@ const meta = {
     kicker: 'Self-Assessment · Otology Module',
     id: 'ear-anatomy',
     sources: [
+        'Interactive Web-based CT Temporal Bone Module, University of Washington Department of Radiology (normal right temporal bone, axial and coronal slices), used with permission',
         'Lin HW, Roberts DS, Harris JP. Cummings Review of Otolaryngology. Elsevier, 2017 — Ch. 2, temporal bone, EAC, eardrum, middle ear, facial nerve, middle ear mechanics',
         'Glasscock ME, Gulya AJ, eds. Glasscock-Shambaugh Surgery of the Ear, 5e. BC Decker, 2003 — Ch. 1 (developmental anatomy), Ch. 2 (anatomy of the ear and temporal bone, Gulya), Ch. 3 (auditory physiology)',
         'Goldenberg D, Goldstein BJ. Handbook of Otolaryngology–Head and Neck Surgery, 2e. Thieme, 2018 — Ch. 3, embryology and anatomy of the ear',
@@ -1524,6 +1525,111 @@ const ITEMS = [
 // (et and petrous-apex items go above this line)
 
 // ════════ IMAGING (W4: ids q107–q120) ════════
+{
+    id: 'q107', section: 'Normal HRCT',
+    stem: 'A temporal bone CT is displayed in the standard radiological way, axial plane, right ear. Which way do lateral and anterior point on the screen?',
+    options: [
+        { id: 'a', text: 'Lateral to the viewer\'s right, anterior up' },
+        { id: 'b', text: 'Lateral to the viewer\'s left, anterior up' },
+        { id: 'c', text: 'Lateral to the viewer\'s left, anterior down' },
+        { id: 'd', text: 'Lateral to the viewer\'s right, anterior down' },
+    ],
+    correct: 'b',
+    brief: 'Patient\'s right is on the viewer\'s left, so lateral is left; anterior is up.',
+    detailed: 'Radiological display puts the patient\'s right on the viewer\'s left, so a right ear has its external canal and mastoid on the left of the image. In axial slices anterior is up.\nApplication: before naming any structure, find the external canal and the mastoid to fix lateral and posterior.',
+    concepts: ['im-axial'],
+},
+{
+    id: 'q108', type: 'recall', section: 'Normal HRCT',
+    stem: 'Walking down an axial CT of one temporal bone, name the landmark group you expect at the epitympanic level, the oval window level and the jugular foramen level.',
+    answer: `• Epitympanum: malleus head and incus short process, aditus and antrum, lateral canal, vestibule, internal auditory canal, geniculate ganglion
+• Oval window: malleus, incus long process, stapes, cochlea; behind them facial recess, pyramidal eminence, sinus tympani
+• Jugular foramen: external canal, tympanic membrane, jugular bulb, mastoid facial nerve, petrous carotid`,
+    brief: 'Attic and labyrinth; ossicles and posterior row; canal, drum and bulb.',
+    detailed: 'Levels follow the University of Washington temporal bone CT module, a right temporal bone in axial slices; the posterior row and the bulb are named in the earlier chapters on the spaces and the cavity floor (Glasscock Ch. 2).\nApplication: a reader who loses their place can re-anchor on the jugular bulb (low) or the arch of the superior canal (high).',
+    concepts: ['im-axial'],
+},
+{
+    id: 'q109', section: 'Normal HRCT',
+    stem: 'On an axial slice through the oval window, which sequence runs from lateral to medial in the posterior row of spaces?',
+    options: [
+        { id: 'a', text: 'Sinus tympani, pyramidal eminence, facial recess' },
+        { id: 'b', text: 'Pyramidal eminence, sinus tympani, facial recess' },
+        { id: 'c', text: 'Facial recess, pyramidal eminence, sinus tympani' },
+        { id: 'd', text: 'Facial recess, sinus tympani, pyramidal eminence' },
+    ],
+    correct: 'c',
+    brief: 'Facial recess lateral, pyramid in the middle, sinus tympani medial.',
+    detailed: 'The facial recess lies lateral to the vertical facial nerve and the sinus tympani medial to it, with the pyramidal eminence between them (spaces chapter; Glasscock Ch. 2). On the University of Washington axial slice at the oval window the three appear in that order from the canal toward the labyrinth.\nApplication: a deep sinus tympani on this slice is the cue to grade it A, B or C.',
+    concepts: ['im-axial'],
+},
+{
+    id: 'q110', section: 'Normal HRCT',
+    stem: 'On a coronal CT through the malleus, which small air pocket lies beneath the tip of the scutum, lateral to the malleus?',
+    options: [
+        { id: 'a', text: 'Prussak space' },
+        { id: 'b', text: 'Sinus tympani' },
+        { id: 'c', text: 'Facial recess' },
+        { id: 'd', text: 'Supratubal recess' },
+    ],
+    correct: 'a',
+    brief: 'Prussak space: under the scutum tip, lateral to the malleus.',
+    detailed: 'Prussak space is bounded laterally by the pars flaccida and the scutum, and medially by the malleus neck (Glasscock Ch. 2). The other three lie posteriorly or anteriorly and do not appear on this slice.\nApplication: a blunt scutum above an opacified Prussak space is the picture to look for in attic disease.',
+    concepts: ['im-coronal'],
+},
+{
+    id: 'q111', type: 'recall', section: 'Normal HRCT',
+    stem: 'List what you can name on a coronal CT through the oval window.',
+    answer: `• Stapes in the oval window, with the incus lateral to it
+• Tympanic facial nerve, just beneath the lateral semicircular canal
+• Lateral and superior semicircular canals above
+• Cochlea medial and below
+• Hypotympanum and the jugular bulb region below`,
+    brief: 'Stapes and incus, facial nerve under the lateral canal, canals above, cochlea medial.',
+    detailed: 'Labelled on the University of Washington coronal slice through the oval window: incus, stapes, oval window, lateral and superior semicircular canals, arcuate eminence, tympanic facial nerve, cochlea.\nApplication: the nerve under the lateral canal is the landmark that keeps a drill off the facial nerve.',
+    concepts: ['im-coronal'],
+},
+{
+    id: 'q112', section: 'Normal HRCT',
+    stem: 'On a coronal CT at the level of the oval window, which structure sits directly above the tympanic segment of the facial nerve?',
+    options: [
+        { id: 'a', text: 'Cochlear basal turn' },
+        { id: 'b', text: 'Jugular bulb' },
+        { id: 'c', text: 'Incus long process' },
+        { id: 'd', text: 'Lateral semicircular canal' },
+    ],
+    correct: 'd',
+    brief: 'The tympanic nerve runs just under the lateral semicircular canal.',
+    detailed: 'In the horizontal portion of its course the facial nerve lies between the oval window below and the lateral semicircular canal above; on the coronal slice the canal is seen just over the nerve (University of Washington module; Glasscock Ch. 2).\nApplication: this is why the lateral canal is the safe surgical landmark for the nerve.',
+    concepts: ['im-coronal'],
+},
+{
+    id: 'q113', section: 'Normal HRCT',
+    stem: 'By the commoner textbook definition, a high-riding jugular bulb is one that extends',
+    options: [
+        { id: 'a', text: 'to the inferior margin of the round window niche' },
+        { id: 'b', text: 'to or above the inferior tympanic annulus' },
+        { id: 'c', text: 'above the lateral semicircular canal' },
+        { id: 'd', text: 'into the vestibule through the oval window' },
+    ],
+    correct: 'b',
+    brief: 'To or above the level of the inferior tympanic annulus.',
+    detailed: 'Glasscock: a high-riding jugular bulb extends to or above the level of the inferior tympanic annulus, reported in 3.5 to 5% of temporal bones, with a bony covering only 0.1 to 0.3 mm thick.\nDiscrepancy: an alternate definition counts a bulb within 2 mm or less of the inferior aspect of the internal auditory canal; by that definition about two-thirds of bones from people older than 6 years qualified.',
+    concepts: ['im-read'],
+},
+{
+    id: 'q114', type: 'recall', section: 'Normal HRCT',
+    stem: 'List six checks on a normal temporal bone CT and where you make each.',
+    answer: `• Scutum sharp: coronal slice through the malleus
+• Tegmen intact: same coronal slice
+• Ossicles aligned: axial epitympanic and oval window slices
+• Sinus tympani depth: axial oval window slice
+• Jugular bulb height: coronal at the round window niche
+• Carotid plate present: anterior coronal slice`,
+    brief: 'Scutum, tegmen, ossicles, sinus tympani, bulb, carotid plate.',
+    detailed: 'Checklist assembled from the slices used in this chapter; the tegmen and bulb relations are in Glasscock Ch. 2, and the sinus tympani grading is the Marchioni scheme taught in the spaces chapter.\nApplication: name the definition of a high bulb that you use in the report.',
+    concepts: ['im-read'],
+},
 // (imaging items go above this line)
 //
 //
