@@ -197,7 +197,7 @@ window.OKSAT_MANIFEST = [
     count: 147,
     accent: '#2F6E6A',
     unlisted: true,
-    desc: 'Orientation and the temporal bone, auricle, canal, drum, the six walls of the tympanic cavity, and the ossicular chain, one concept per guide section.',
+    desc: 'Auricle to petrous apex: canal, drum, tympanic cavity, ossicles, spaces and ventilation, Eustachian tube, mastoid, normal HRCT, the systems gathered, and the evidence behind the numbers; one concept per guide section.',
     data: 'js/oksat/modules/ear-anatomy.js',
   },
 ];

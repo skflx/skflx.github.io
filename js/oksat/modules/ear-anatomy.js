@@ -5,8 +5,7 @@
 /* Companion question module of the Interactive learning guide
    `ear-anatomy` (plan plans/2026-11-02-ear-anatomy-guide.md). Concept
    keys are the guide's section ids, so every drill row resolves one to
-   one. Wave 2 (R1) covers orientation, auricle, EAC, TM, tympanic cavity
-   and ossicles; later waves append items (new ids, never renumbered).
+   one. Items are appended by wave (new ids, never renumbered).
 
    Sources, ranked: Cummings Review of Otolaryngology (2017) Ch. 2;
    Glasscock-Shambaugh Surgery of the Ear 5e (2003) Ch. 1-3 (Gulya;
@@ -21,7 +20,7 @@
 const meta = {
     title: 'Normal Ear\nAnatomy',
     subtitle:
-        'Auricle to ossicles as a relational map: orientation and the temporal bone, the auricle and its supply, the canal, the drum, the six walls of the tympanic cavity, and the ossicular chain. Each concept matches a section of the Interactive learning guide.',
+        'Auricle to petrous apex as a relational map: the temporal bone, auricle, canal, drum, tympanic cavity, ossicles, middle ear spaces, Eustachian tube, mastoid and petrous apex, normal HRCT, the systems gathered, and the evidence behind the numbers. Each concept matches a section of the Interactive learning guide.',
     kicker: 'Self-Assessment · Otology Module',
     id: 'ear-anatomy',
     sources: [
