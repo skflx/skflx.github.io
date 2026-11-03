@@ -6,16 +6,14 @@ the level above which a voxel counts as bone wall (cancellous bone and thin wall
 Status of a sweep point (the SSB meaning, tools/ssb-pipeline/uw/sweeps.py):
   detected  found in this CT: the path point lies in a lumen (not bone) and is enclosed by bone (kind
             'enclosed'), or lies in air (kind 'air'), or in soft tissue bounded by bone (kind 'soft')
-  labelled  a UW arrow tip (an expert's point on these images), possibly snapped to the nearest lumen
-            voxel within SNAP mm (the snap distance is recorded)
-  inferred  neither: placed by a stated rule between detected / labelled points (straight interpolation)
+  labelled  a curve point within tip_r of a UW arrow tip (an expert's point on these images)
+  inferred  neither: a point on the curve fitted through the tips (fit_curve), re-centred on the lumen
+            within `search` mm where one is found
 """
 import numpy as np
 from scipy import ndimage as ndi
-from skimage.graph import route_through_array
 
 BONE = 185.0
-SNAP = 0.8
 
 
 class Vol:
@@ -59,52 +57,6 @@ def enclosure(V, p, t, R=2.5):
     P = p + dirs[:, None, :] * rad[None, :, None]
     vals = V.samp(P.reshape(-1, 3)).reshape(len(ANG), len(rad))
     return float((vals >= BONE).any(axis=1).mean())
-
-
-def snap(V, p, r=SNAP, kind='enclosed'):
-    """Nearest lumen voxel to a tip: the lowest smoothed level within r mm among points still enclosed by bone
-    (kind 'enclosed') or simply the lowest (kind 'soft' / 'air'). Returns (point, moved mm)."""
-    g = np.arange(-r, r + 1e-6, V.h)
-    X, Y, Z = np.meshgrid(g, g, g, indexing='ij')
-    off = np.stack([X.ravel(), Y.ravel(), Z.ravel()], 1)
-    off = off[np.linalg.norm(off, axis=1) <= r]
-    P = p + off
-    lv = V.samp(P)
-    d = np.linalg.norm(off, axis=1)
-    score = lv + 30.0 * d                       # a pull toward the tip: stay near it unless the lumen is clearly elsewhere
-    if kind == 'enclosed':
-        score = score + 60.0 * (V.samp(P, V.dbone) > 1.6)   # not inside a lumen wider than the canal: prefer thin, bone-adjacent
-    b = int(np.argmin(score))
-    return P[b], float(d[b])
-
-
-def cost_path(V, a, b, rc=2.2, kind='enclosed'):
-    """Minimal-cost path a -> b through the volume, confined to a tube of radius rc mm round the segment.
-    Cost 1 in lumen, up to 26 in bone ('enclosed' / 'soft': soft tissue is lumen; 'air': soft tissue also costs)."""
-    a = np.asarray(a, float); b = np.asarray(b, float)
-    pad = rc + 0.9
-    lo = np.minimum(a, b) - pad; hi = np.maximum(a, b) + pad
-    ilo = np.floor(V.idx(lo)[:, 0]).astype(int).clip(0); ihi = np.ceil(V.idx(hi)[:, 0]).astype(int)
-    ihi = np.minimum(ihi, np.array(V.shape) - 1)
-    sl = tuple(slice(int(ilo[k]), int(ihi[k]) + 1) for k in range(3))
-    sub = V.Vs[sl]
-    kk, jj, ii = np.meshgrid(*[np.arange(sl[k].start, sl[k].stop) for k in range(3)], indexing='ij')
-    P = np.stack([ii * V.h + V.o[0], jj * V.h + V.o[1], kk * V.h + V.o[2]], -1)
-    ab = b - a
-    L2 = float(ab @ ab) or 1.0
-    tt = np.clip(((P - a) @ ab) / L2, 0, 1)
-    dist = np.linalg.norm(P - (a + tt[..., None] * ab), axis=-1)
-    if kind == 'air':
-        pen = np.clip((sub - 20.0) / 60.0, 0, 1) * 25.0
-    else:
-        pen = 1.0 / (1.0 + np.exp(-(sub - 150.0) / 10.0)) * 25.0
-    cost = 1.0 + pen
-    cost[dist > rc] = 1e4
-    s0 = tuple(np.round(V.idx(a)[:, 0]).astype(int) - ilo); s1 = tuple(np.round(V.idx(b)[:, 0]).astype(int) - ilo)
-    path, _ = route_through_array(cost, s0, s1, fully_connected=True, geometric=True)
-    path = np.array(path)
-    return np.stack([(path[:, 2] + sl[2].start) * V.h + V.o[0], (path[:, 1] + sl[1].start) * V.h + V.o[1],
-                     (path[:, 0] + sl[0].start) * V.h + V.o[2]], 1)
 
 
 def resample(P, step=0.4):
@@ -246,54 +198,6 @@ def fit_curve(V, tips, a, b, kind='enclosed', deg=2, fix_a=True, fix_b=True, ste
         fs = {0: 'inferred', len(P) - 1: 'inferred'}
     st, lev, enc = classify(V, P, kind, tips, tip_r, fs)
     return {'pts': P, 'status': st, 'lumen_level': lev, 'enclosure': enc}
-
-
-def trace(V, anchors, kind='enclosed', rc=2.2, step=0.4, snap_anchors=True, mode='spline'):
-    """anchors: ordered list of dicts {p, src, tip, fixed}. Anchors that are UW tips (tip=True) are snapped to
-    the nearest lumen voxel within SNAP mm (unless fixed) and are `labelled`; rule anchors (tip=False) are
-    `inferred`. mode 'spline' (default): a smoothing curve through the anchors (the CT is too blurred and the
-    slices too thick for a free path to beat the tips), then re-centred on the lumen within 0.6 mm and
-    classified point by point. mode 'path': minimal-cost path between anchors (used where the lumen is wide)."""
-    anc = []
-    for a in anchors:
-        p = np.asarray(a['p'], float)
-        mv = 0.0
-        if a.get('tip', True) and snap_anchors and not a.get('fixed'):
-            p, mv = snap(V, p, kind=kind)
-        anc.append({'p': p, 'tip': a.get('tip', True), 'src': a.get('src', ''), 'snap_mm': round(mv, 2)})
-    pts = []; kindp = []
-    for i, a in enumerate(anc):
-        if i == 0:
-            pts.append(a['p']); kindp.append(i); continue
-        if mode == 'path':
-            seg = resample(cost_path(V, anc[i - 1]['p'], a['p'], rc=rc, kind=kind), step)
-        else:
-            seg = resample(np.array([anc[i - 1]['p'], a['p']]), step)
-        for q in seg[1:-1]:
-            pts.append(q); kindp.append(-1)
-        pts.append(a['p']); kindp.append(i)
-    P = np.array(pts)
-    isanc = np.array([k >= 0 for k in kindp])
-    # smooth the polyline (anchors stay: they are re-imposed after smoothing)
-    Ps = smooth(smooth(P, 7), 7)
-    Ps[isanc] = P[isanc]
-    Ps = smooth(Ps, 3); Ps[isanc] = P[isanc]
-    if mode == 'spline':
-        R = recenter(V, Ps, kind)
-        R[isanc] = Ps[isanc]
-        Ps = R
-    P = Ps
-    st = []
-    lev = np.zeros(len(P)); enc = np.zeros(len(P))
-    for i in range(len(P)):
-        t = tangent(P, i)
-        ok, lv, e = is_lumen(V, P[i], t, kind)
-        lev[i] = lv; enc[i] = e if e is not None else -1
-        if kindp[i] >= 0:
-            st.append('labelled' if anc[kindp[i]]['tip'] else 'inferred')
-        else:
-            st.append('detected' if ok else 'inferred')
-    return {'pts': P, 'status': st, 'lumen_level': lev, 'enclosure': enc, 'anchors': anc}
 
 
 def radius_of(V, P, default, lo, hi, status):

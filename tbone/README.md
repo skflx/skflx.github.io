@@ -52,7 +52,7 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
   same display window (`registration.json`, `specimen_identity`).
 - **Scale is inferred, not measured** (the capture carries no spacing): in-plane 0.1758 mm/px (a 90 mm field of
   view over 512 px) +-10 %; the axial slice step 0.263 mm follows from it (registration fixes the ratio, 1.60
-  px). The checks against textbook lengths are weak and disagree by up to 40 %; method and values in
+  px). The checks against textbook lengths are weak and disagree by up to 40 %, and they are not independent: the 90 mm field was chosen after they pointed below the first 100 mm guess. A measured scale needs a known length in the images (none is published); method and values in
   `registration.json` (`frame`) and the docstring of `tools/tbone-pipeline/scale.py`. Every length in this
   folder scales with that number.
 - **Origin** (centre of the oval window) is the median of UW's oval-window tips of the four stacks mapped into
