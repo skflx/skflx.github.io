@@ -40,6 +40,10 @@ const DOMAINS = {
     tm:          { label: 'Tympanic Membrane',           color: '#6E4A6B', hex: 'rgba(110,74,107,0.14)' },
     cavity:      { label: 'Tympanic Cavity',             color: '#4E6B4A', hex: 'rgba(78,107,74,0.14)' },
     ossicles:    { label: 'Ossicular Chain',             color: '#A0635E', hex: 'rgba(160,99,94,0.14)' },
+    spaces:      { label: 'Middle Ear Spaces',           color: '#5B5F8A', hex: 'rgba(91,95,138,0.14)' },
+    et:          { label: 'Eustachian Tube',             color: '#3F7A8C', hex: 'rgba(63,122,140,0.14)' },
+    mastoid:     { label: 'Mastoid',                     color: '#8A6A2F', hex: 'rgba(138,106,47,0.14)' },
+    petapex:     { label: 'Petrous Apex',                color: '#6B4E3D', hex: 'rgba(107,78,61,0.14)' },
 };
 
 const CONCEPTS = {
@@ -82,6 +86,33 @@ const CONCEPTS = {
     'os-stapedius':   { label: 'Stapedius and the Reflex',    domain: 'ossicles' },
     'os-supply':      { label: 'Ossicular Blood Supply',      domain: 'ossicles' },
     'os-dev':         { label: 'Ossicular Embryology',        domain: 'ossicles' },
+    // spaces
+    'sp-attic':       { label: 'Attic Boundaries',            domain: 'spaces' },
+    'sp-prussak':     { label: 'Prussak Space and Pouches',   domain: 'spaces' },
+    'sp-folds':       { label: 'Folds and the Diaphragm',     domain: 'spaces' },
+    'sp-isthmus':     { label: 'Isthmus and Ventilation',     domain: 'spaces' },
+    'sp-retro':       { label: 'Retrotympanum',               domain: 'spaces' },
+    'sp-sight':       { label: 'Lines of Sight',              domain: 'spaces' },
+    // ET
+    'et-seg':         { label: 'Tube Segments',               domain: 'et' },
+    'et-cart':        { label: 'Tubal Cartilage',             domain: 'et' },
+    'et-muscle':      { label: 'Tubal Muscles',               domain: 'et' },
+    'et-child':       { label: 'Adult vs Infant Tube',        domain: 'et' },
+    'et-rel':         { label: 'Orifice and Relations',       domain: 'et' },
+    // mastoid
+    'ma-surface':     { label: 'Mastoid Surface',             domain: 'mastoid' },
+    'ma-antrum':      { label: 'Antrum and Koerner Septum',   domain: 'mastoid' },
+    'ma-pneum':       { label: 'Pneumatization',              domain: 'mastoid' },
+    'ma-sequence':    { label: 'Landmark Sequence',           domain: 'mastoid' },
+    'ma-fn':          { label: 'Mastoid Facial Nerve',        domain: 'mastoid' },
+    'ma-recess':      { label: 'Facial Recess',               domain: 'mastoid' },
+    'ma-lines':       { label: 'Triangles and Lines',         domain: 'mastoid' },
+    'ma-peds':        { label: 'Pediatric Mastoid',           domain: 'mastoid' },
+    // petrous apex
+    'pa-bounds':      { label: 'Apex Boundaries',             domain: 'petapex' },
+    'pa-tracts':      { label: 'Apical Cell Tracts',          domain: 'petapex' },
+    'pa-corridors':   { label: 'Apex Corridors',              domain: 'petapex' },
+    'pa-clinical':    { label: 'Apex Relations in Disease',   domain: 'petapex' },
 };
 
 const ITEMS = [
@@ -771,6 +802,17 @@ const ITEMS = [
     detailed: 'Glasscock: Prussak space lies between the pars flaccida laterally and the malleus neck medially, under the lateral malleal ligament and fold above, with the lateral process of the malleus as its floor.',
     concepts: ['os-joints'],
 },
+
+// ════════ SPACES (W3: ids q51–q66) ════════
+// (spaces items go above this line)
+//
+//
+// ════════ MASTOID (W3: ids q67–q86) ════════
+// (mastoid items go above this line)
+//
+//
+// ════════ EUSTACHIAN TUBE AND PETROUS APEX (W3: ids q87–q110) ════════
+// (et and petrous-apex items go above this line)
 ];
 
 window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
