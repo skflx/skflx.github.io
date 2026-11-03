@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 560" width="820" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Right ear, coronal section through the attic (schematic)</title>
+  <rect width="820" height="560" fill="#ffffff"/>
+  <rect x="20" y="72" width="780" height="448" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.5"/>
+  <g data-g="mcfdura" fill="#c9d7e3" stroke="#7d93a8" stroke-width="1.2"><path d="M 20 36 L 800 36 L 800 72 L 20 72 Z"/></g>
+  <g data-g="tegment" fill="#ddd0b4" stroke="#8a7b5f" stroke-width="1.2"><path d="M 272 72 L 800 72 L 800 110 L 272 120 Z"/></g>
+  <path d="M 20 240 L 180 240 L 262 234 L 280 226 L 362 468 L 20 468 Z" fill="#fdf8f1" stroke="none"/>
+  <path d="M 272 120 L 740 112 L 740 468 L 362 468 L 280 226 L 272 200 Z" fill="#fdf8f1" stroke="none"/>
+  <path d="M 740 300 C 700 310 672 350 672 395 C 672 440 700 465 740 468 Z" fill="#efc8bc" stroke="#8d7a6c" stroke-width="1.2"/>
+  <g data-g="scutum" fill="#d9ccaa" stroke="none"><path d="M 226 134 L 272 120 L 272 200 L 280 226 L 262 232 L 196 238 L 210 186 Z"/></g>
+  <path d="M 272 120 L 272 200 L 280 226 L 262 232 L 180 238 L 20 240" fill="none" stroke="#8a7b5f" stroke-width="1.8" pointer-events="none"/>
+  <path d="M 272 120 L 740 112 M 740 112 L 740 300 M 672 395 C 672 440 700 465 740 468 L 362 468 L 280 226" fill="none" stroke="#8a7b5f" stroke-width="1.8" pointer-events="none"/>
+  <path d="M 20 468 L 362 468" fill="none" stroke="#8a7b5f" stroke-width="1.8" pointer-events="none"/>
+  <g data-g="epitympanum" fill="#fdf8f1" fill-opacity="0.001" stroke="none"><path d="M 274 122 L 738 114 L 738 250 L 386 246 L 354 226 L 280 226 L 274 200 Z"/></g>
+  <g data-g="lscc" fill="#e9dfc6" stroke="#8a7b5f" stroke-width="1.4"><circle cx="690" cy="170" r="46"/><circle cx="690" cy="198" r="9" fill="#ffffff" stroke="#b7a98a" stroke-width="1" stroke-dasharray="3 2"/></g>
+  <g data-g="fn-tymp" fill="#d9a400" stroke="#9b7600" stroke-width="1.2"><ellipse cx="696" cy="236" rx="38" ry="13"/></g>
+  <g data-g="tm" fill="#c7bfb1" stroke="#8a7b5f" stroke-width="1"><path d="M 298 302 L 312 298 L 372 466 L 356 470 Z"/></g>
+  <g data-g="flaccida" fill="#e0a88f" stroke="#a8745c" stroke-width="1"><path d="M 276 226 L 286 222 L 312 298 L 298 302 Z"/></g>
+  <path d="M 346 296 L 366 296 L 394 452 L 382 456 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.2"/>
+  <g data-g="prussak" fill="#dfe6f2" stroke="#6f86a8" stroke-width="1.2" stroke-dasharray="4 3"><path d="M 292 246 L 353 246 L 353 291 L 312 292 Z"/></g>
+  <g data-g="mhead" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"><ellipse cx="386" cy="182" rx="38" ry="40"/></g>
+  <g data-g="mneck" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"><path d="M 353 214 L 392 218 L 380 300 L 352 298 Z"/></g>
+  <g data-g="latproc" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"><ellipse cx="331" cy="296" rx="22" ry="9"/></g>
+  <g data-g="supmf" fill="#c97b6b" fill-opacity="0.65" stroke="#8c4b3e" stroke-width="1.2"><path d="M 376 144 L 398 144 L 406 114 L 372 114 Z"/></g>
+  <g data-g="lmf" fill="#c97b6b" fill-opacity="0.65" stroke="#8c4b3e" stroke-width="1.2"><path d="M 276 228 L 354 226 L 354 246 L 290 246 Z"/></g>
+  <g data-g="diaphragm" fill="#c97b6b" fill-opacity="0.55" stroke="#8c4b3e" stroke-width="1.2" stroke-dasharray="5 3"><path d="M 378 248 L 740 254 L 740 270 L 378 264 Z"/></g>
+  <g data-label="1"><text x="410" y="59" text-anchor="middle" font-size="13" fill="#1d3a55">Middle fossa dura</text></g>
+  <g data-label="1"><line x1="600" y1="92" x2="790" y2="96" stroke="#555049" stroke-width="1"/><circle cx="600" cy="92" r="2.2" fill="#555049"/><text x="786" y="101" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Tegmen tympani</text></g>
+  <g data-label="1"><line x1="222" y1="176" x2="24" y2="170" stroke="#555049" stroke-width="1"/><circle cx="222" cy="176" r="2.2" fill="#555049"/><text x="28" y="175" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Scutum</text></g>
+  <g data-label="1"><line x1="270" y1="233" x2="24" y2="206" stroke="#555049" stroke-width="1"/><circle cx="270" cy="233" r="2.2" fill="#555049"/><text x="28" y="211" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Lateral malleal fold</text></g>
+  <g data-label="1"><line x1="293" y1="262" x2="24" y2="276" stroke="#555049" stroke-width="1"/><circle cx="293" cy="262" r="2.2" fill="#555049"/><text x="28" y="281" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Pars flaccida</text></g>
+  <g data-label="1"><line x1="318" y1="270" x2="24" y2="330" stroke="#555049" stroke-width="1"/><circle cx="318" cy="270" r="2.2" fill="#555049"/><text x="28" y="335" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Prussak space</text></g>
+  <g data-label="1"><line x1="322" y1="297" x2="24" y2="384" stroke="#555049" stroke-width="1"/><circle cx="322" cy="297" r="2.2" fill="#555049"/><text x="28" y="389" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Lateral process</text></g>
+  <g data-label="1"><line x1="344" y1="410" x2="24" y2="430" stroke="#555049" stroke-width="1"/><circle cx="344" cy="410" r="2.2" fill="#555049"/><text x="28" y="435" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Pars tensa</text></g>
+  <g data-label="1"><text x="545" y="142" text-anchor="middle" font-size="14" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Epitympanum (attic)</text></g>
+  <g data-label="1"><line x1="404" y1="130" x2="470" y2="170" stroke="#555049" stroke-width="1"/><circle cx="404" cy="130" r="2.2" fill="#555049"/><text x="474" y="175" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Superior malleal fold</text></g>
+  <g data-label="1"><line x1="422" y1="190" x2="482" y2="198" stroke="#555049" stroke-width="1"/><circle cx="422" cy="190" r="2.2" fill="#555049"/><text x="486" y="203" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Malleus head</text></g>
+  <g data-label="1"><line x1="668" y1="238" x2="644" y2="224" stroke="#555049" stroke-width="1"/><circle cx="668" cy="238" r="2.2" fill="#555049"/><text x="640" y="229" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Facial nerve, tympanic segment</text></g>
+  <g data-label="1"><text x="690" y="144" text-anchor="middle" font-size="12" fill="#1d1d1b">Lateral</text><text x="690" y="158" text-anchor="middle" font-size="12" fill="#1d1d1b">semicircular</text><text x="690" y="172" text-anchor="middle" font-size="12" fill="#1d1d1b">canal</text></g>
+  <g data-label="1"><line x1="560" y1="262" x2="560" y2="296" stroke="#555049" stroke-width="1"/><circle cx="560" cy="262" r="2.2" fill="#555049"/><text x="564" y="301" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Tympanic diaphragm</text></g>
+  <g data-label="1"><line x1="368" y1="282" x2="470" y2="322" stroke="#555049" stroke-width="1"/><circle cx="368" cy="282" r="2.2" fill="#555049"/><text x="474" y="327" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Neck of malleus</text></g>
+  <g data-label="1"><text x="530" y="372" text-anchor="middle" font-size="14" fill="#1d1d1b">Mesotympanum</text></g>
+  <g data-label="1"><line x1="700" y1="410" x2="560" y2="430" stroke="#555049" stroke-width="1"/><circle cx="700" cy="410" r="2.2" fill="#555049"/><text x="556" y="435" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Promontory</text></g>
+  <text x="410" y="546" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right ear, coronal section seen from the front; lateral is to the left. Composite plane through the malleus neck. Schematic, not to scale.</text>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Isthmus blocked, tensor fold incomplete (schematic)</title>
+  <g transform="translate(190 20) scale(0.8)">
+    <path d="M 290 176 L 470 174 L 470 76 L 330 76 Z" fill="#c97b6b" fill-opacity="0.45" stroke="#8c4b3e" stroke-width="1.6"/>
+    <path d="M 572 173 L 645 172 L 645 76 L 572 76 Z" fill="#c97b6b" fill-opacity="0.45" stroke="#8c4b3e" stroke-width="1.6"/>
+    <path d="M 470 174 L 572 173" stroke="#2f8f83" stroke-width="5" stroke-dasharray="3 5"/>
+    <path d="M 296 198 L 632 192 L 634 262 L 452 290 L 300 252 Z" fill="#b8352a" fill-opacity="0.45" stroke="#7a2018" stroke-width="1.6"/>
+    <path d="M 330 356 L 446 316 L 634 340 L 634 404 L 580 414 L 332 444 Z" fill="#b8352a" fill-opacity="0.45" stroke="#7a2018" stroke-width="1.6"/>
+    <path d="M 336 212 L 364 240 M 364 212 L 336 240" stroke="#7a2018" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 366 358 L 394 386 M 394 358 L 366 386" stroke="#7a2018" stroke-width="5" stroke-linecap="round"/>
+  </g>
+  <g data-label="1"><text x="24" y="26" font-size="14" font-weight="bold" fill="#1d1d1b">Isthmus blocked, tensor fold incomplete</text></g>
+  <g data-label="1"><text x="590" y="217" text-anchor="middle" font-size="12.5" fill="#14302c" stroke="#ffffff" stroke-width="3" paint-order="stroke">Anterior isthmus</text></g>
+  <g data-label="1"><text x="590" y="327" text-anchor="middle" font-size="12.5" fill="#14302c" stroke="#ffffff" stroke-width="3" paint-order="stroke">Posterior isthmus</text></g>
+  <g data-label="1"><text x="574" y="108" text-anchor="middle" font-size="12.5" fill="#5a2a21" stroke="#ffffff" stroke-width="3" paint-order="stroke">Tensor fold incomplete</text></g>
+  <g data-label="1"><text x="607" y="148" text-anchor="middle" font-size="12" fill="#14302c" stroke="#ffffff" stroke-width="3" paint-order="stroke">gap</text></g>
+  <g data-label="1"><text x="24" y="478" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">The gap in the fold is the</text><text x="24" y="494" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">attic's remaining route</text></g>
+</svg>

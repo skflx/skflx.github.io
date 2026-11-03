@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Stapedial fold (schematic)</title>
+  <g transform="translate(190 20) scale(0.8)">
+    <path d="M 452 292 L 648 266 L 648 336 L 452 312 Z" fill="#c97b6b" fill-opacity="0.6" stroke="#8c4b3e" stroke-width="1.6"/>
+  </g>
+  <g data-label="1"><text x="635" y="263" text-anchor="middle" font-size="12.5" fill="#5a2a21" stroke="#ffffff" stroke-width="3" paint-order="stroke">Stapedial fold</text></g>
+</svg>

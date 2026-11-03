@@ -194,7 +194,7 @@ window.OKSAT_MANIFEST = [
     title: 'Normal Ear Anatomy',
     kicker: 'Otology Module',
     subspecialty: 'otology',
-    count: 50,
+    count: 66,
     accent: '#2F6E6A',
     unlisted: true,
     desc: 'Orientation and the temporal bone, auricle, canal, drum, the six walls of the tympanic cavity, and the ossicular chain, one concept per guide section.',
@@ -245,6 +245,7 @@ window.OKSAT_GUIDES = [
       { id: 'tm', k: 4, short: 'Tympanic membrane', min: 30, sections: 6, data: 'js/oksat/guides/ear-anatomy/tm.js' },
       { id: 'cavity', k: 5, short: 'Tympanic cavity', min: 40, sections: 6, data: 'js/oksat/guides/ear-anatomy/cavity.js' },
       { id: 'ossicles', k: 6, short: 'Ossicular chain', min: 35, sections: 6, data: 'js/oksat/guides/ear-anatomy/ossicles.js' },
+      { id: 'spaces', k: 7, short: 'Spaces and folds', min: 40, sections: 6, data: 'js/oksat/guides/ear-anatomy/spaces.js' },
     ],
   },
 ];

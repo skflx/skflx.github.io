@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Anterior malleal fold (schematic)</title>
+  <g transform="translate(190 20) scale(0.8)">
+    <path d="M 224 166 L 240 164 L 186 82 L 168 88 Z" fill="#c97b6b" fill-opacity="0.6" stroke="#8c4b3e" stroke-width="1.6"/>
+  </g>
+  <g data-label="1"><line x1="310" y1="86" x2="24" y2="86" stroke="#555049" stroke-width="1"/><circle cx="310" cy="86" r="2.2" fill="#555049"/><text x="28" y="91" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Anterior malleal fold</text></g>
+</svg>

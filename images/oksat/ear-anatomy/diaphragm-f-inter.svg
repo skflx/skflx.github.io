@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Interossicular fold (schematic)</title>
+  <g transform="translate(190 20) scale(0.8)">
+    <path d="M 212 214 L 254 226 L 264 274 L 228 286 L 190 262 L 198 232 Z" fill="#c97b6b" fill-opacity="0.6" stroke="#8c4b3e" stroke-width="1.6"/>
+  </g>
+  <g data-label="1"><line x1="353" y1="225" x2="24" y2="252" stroke="#555049" stroke-width="1"/><circle cx="353" cy="225" r="2.2" fill="#555049"/><text x="28" y="257" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Interossicular fold</text></g>
+</svg>
