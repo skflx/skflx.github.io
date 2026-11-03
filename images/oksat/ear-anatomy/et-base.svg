@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Eustachian tube, adult and infant: base (schematic)</title>
+  <rect width="640" height="400" fill="#ffffff"/>
+  <line x1="40" y1="150" x2="610" y2="150" stroke="#2f5d8a" stroke-width="1.6" stroke-dasharray="8 5" pointer-events="none"/>
+  <text x="610" y="140" text-anchor="end" font-size="12.5" font-weight="normal" fill="#2f5d8a" font-style="italic">horizontal plane through the tympanic orifice</text>
+  <text x="24" y="28" text-anchor="start" font-size="12.5" font-weight="normal" fill="#555049">Superior is up</text>
+  <text x="616" y="28" text-anchor="end" font-size="12.5" font-weight="normal" fill="#555049">Anterior is right</text>
+  <g fill="#f8f4ec" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><ellipse cx="92" cy="150" rx="42" ry="54"/></g>
+  <text x="92" y="154" text-anchor="middle" font-size="13" font-weight="normal" fill="#555049">Middle ear</text>
+  <text x="320" y="388" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right ear, lateral view as a sagittal projection, anterior to the right. Schematic, not to scale.</text>
+</svg>

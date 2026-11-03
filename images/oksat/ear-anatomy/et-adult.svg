@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" width="640" height="400" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Eustachian tube, adult (schematic)</title>
+  <text x="320" y="56" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d1d1b">Adult: longer, steeper</text>
+  <g fill="#f3ede0" stroke="#8a7b5f" stroke-width="1.4" pointer-events="none"><path d="M 505 235 Q 505 215 540 212 L 600 212 Q 630 212 630 240 L 630 330 Q 630 350 600 350 L 540 350 Q 505 350 505 330 Z"/></g>
+  <text x="572" y="338" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Nasopharynx</text>
+  <line x1="134" y1="151" x2="260" y2="197" stroke="#b9ab8a" stroke-width="20" pointer-events="none"/>
+  <line x1="260" y1="197" x2="514" y2="290" stroke="#3F7A8C" stroke-width="20" pointer-events="none"/>
+  <line x1="254" y1="182" x2="266" y2="212" stroke="#b8352a" stroke-width="3" pointer-events="none"/>
+  <g fill="#3F7A8C" stroke="#2c5a68" stroke-width="1.2" pointer-events="none"><ellipse cx="516" cy="290" rx="9" ry="22"/></g>
+  <g data-label="1"><line x1="190" y1="174" x2="150" y2="236" stroke="#555049" stroke-width="1"/><circle cx="190" cy="174" r="2.2" fill="#555049"/><text x="150" y="254" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Bony (lateral third)</text></g>
+  <g data-label="1"><line x1="390" y1="244" x2="340" y2="312" stroke="#555049" stroke-width="1"/><circle cx="390" cy="244" r="2.2" fill="#555049"/><text x="340" y="330" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Cartilaginous (medial two thirds)</text></g>
+  <g data-label="1"><line x1="260" y1="188" x2="330" y2="112" stroke="#555049" stroke-width="1"/><circle cx="260" cy="188" r="2.2" fill="#555049"/><text x="330" y="106" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Isthmus</text></g>
+  <g data-label="1"><line x1="516" y1="272" x2="560" y2="196" stroke="#555049" stroke-width="1"/><circle cx="516" cy="272" r="2.2" fill="#555049"/><text x="560" y="190" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Torus tubarius</text></g>
+</svg>
