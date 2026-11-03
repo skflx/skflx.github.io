@@ -35,6 +35,10 @@ const meta = {
         'Stapes footplate morphometry: Folia Morphologica 2024;83(2) (length 2.93, width 1.46 mm); micro-CT of Thiel-embalmed temporal bones, J Otolaryngol Head Neck Surg 2021 (length 2.71, width 1.23 mm)',
         'Eustachian tube: Ishijima K et al., Ann Otol Rhinol Laryngol 2000;109(6):542-548 and 2002;111(6):530-536; Magro I et al., Otolaryngol Head Neck Surg 2021;165(6):862-867; Doyle WJ, Swarts JD, Int J Pediatr Otorhinolaryngol 2010;74(9):986-990; Leuwer R, Otolaryngol Clin North Am 2016;49(5):1097-1106; Lin C et al., Acta Otolaryngol 2016;136(11):1130-1136',
         'Petrous apex corridors and lesions: Comert E, Comert A, Eur Arch Otorhinolaryngol 2021;279(1):159-168; Porto E et al., World Neurosurg 2022;169; Kosec A et al., ORL 2023;85(3):172-176',
+        'Marchioni D, et al. Selective epitympanic dysventilation syndrome. Laryngoscope 2010;120:1028-33; Prevalence of ventilation blockages in patients affected by attic pathology. Laryngoscope 2013;123:2845-53',
+        'Maniu A, et al. Anatomical variants of tympanic compartments and their aeration pathways. Clujul Med 2013;86:352-6; Monsanto RC, et al. Epitympanum volume and tympanic isthmus area in temporal bones with retraction pockets. Laryngoscope 2016;126:E369-74',
+        'Li H, et al. Aeration of the human Prussak space: a synchrotron imaging study. Otol Neurotol 2021;42:e894-904; Rubini A, et al. The endoscopic relationship of the stapedius muscle to the facial nerve. Otol Neurotol 2020;41:e64-9',
+        'Wojciechowski T, Skadorwa T. Radiologic anatomy of the pediatric sinus tympani. Auris Nasus Larynx 2021;49:606-12; Wojciechowski T, et al. Posterior-inferior recess of the sinus tympani. Eur Arch Otorhinolaryngol 2025;282:6139-47',
     ],
 };
 
@@ -809,6 +813,214 @@ const ITEMS = [
 },
 
 // ════════ SPACES (W3: ids q51–q66) ════════
+{
+    id: 'q51', section: 'Middle Ear Spaces',
+    stem: 'A coronal CT shows a retraction pocket in the pars flaccida. Which finding of the lateral attic wall most strongly suggests cholesteatoma?',
+    options: [
+        { id: 'a', text: 'A sharp, intact scutum with a clear spur' },
+        { id: 'b', text: 'Blunting or erosion of the scutum' },
+        { id: 'c', text: 'A thickened, sclerotic tegmen tympani' },
+        { id: 'd', text: 'Air cells within the cog and tegmen' },
+    ],
+    correct: 'b',
+    brief: 'The scutum is the lateral wall of the attic; a pocket that blunts or erodes it is eating its own wall.',
+    detailed: 'The Vula atlas lists the CT findings highly suggestive of cholesteatoma: an expansile soft tissue mass, retraction of the drum, erosion of the scutum, erosion of the ossicles, sharp erosion of bone, extension medial to the otic capsule and erosion of the tegmen. CT cannot establish the diagnosis alone; cholesteatoma remains a clinical diagnosis from otoscopy.\nApplication: an atticotomy removes the scutum, which is why a blunted spur on the scan predicts how much bone you will take.',
+    concepts: ['sp-attic'],
+},
+{
+    id: 'q52', section: 'Middle Ear Spaces',
+    stem: 'During an epitympanectomy the cog and the cochleariform process are drilled away. Which structures come into view?',
+    options: [
+        { id: 'a', text: 'Geniculate ganglion and greater superficial petrosal nerve' },
+        { id: 'b', text: 'Stapes footplate, oval window and annular ligament in the niche' },
+        { id: 'c', text: 'Round window niche, subiculum and the sinus tympani behind them' },
+        { id: 'd', text: 'Jugular bulb, carotid canal and the tubal orifice below' },
+    ],
+    correct: 'a',
+    brief: 'The cog points at the facial nerve; behind it lie the geniculate ganglion and the start of the greater petrosal nerve.',
+    detailed: 'The Vula atlas: the cog extends from the tegmen tympani and points to the facial nerve; with the cog and cochleariform process removed, the tympanic and labyrinthine segments, the geniculate ganglion and the greater superficial petrosal nerve are seen, with the tensor tendon cut. Cummings Review puts the geniculate ganglion in the medial wall of the supratubal recess.\nApplication: the tympanic segment runs immediately above the cochleariform process (Glasscock), so drilling that process away with the cog is drilling beside the nerve.',
+    concepts: ['sp-attic'],
+},
+{
+    id: 'q53', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'A scan shows a bony defect of the tegmen tympani. What do you suspect, and what is the next step?',
+    answer: `• Suspect an encephalocele, or cholesteatoma extending into the middle cranial fossa
+• Image further with MRI
+• Reason: the roof of the attic is the floor of the middle fossa, so dura and temporal lobe lie directly above it`,
+    brief: 'A hole in the roof of the attic opens the middle fossa: encephalocele or intracranial extension until MRI says otherwise.',
+    detailed: 'The Vula atlas: a bony defect of the tegmen tympani or the anterior wall of the epitympanum should raise the suspicion of an encephalocele or of cholesteatoma extending into the middle cranial fossa, and needs MRI. Glasscock: the tegmen is also part of the floor of the middle cranial fossa.\nApplication: during surgery, Myers advises repairing bony defects larger than 1 cm, or any dural injury, to prevent CSF leak or encephalocele.',
+    concepts: ['sp-attic'],
+},
+{
+    id: 'q54', section: 'Middle Ear Spaces',
+    stem: 'Otoscopy of a right ear shows a keratin-filled pocket in the pars flaccida. Which space is it in, and what forms that space\'s medial wall?',
+    options: [
+        { id: 'a', text: 'Prussak space; medial wall is the manubrium' },
+        { id: 'b', text: 'Posterior pouch of von Tröltsch; medial wall is the incus' },
+        { id: 'c', text: 'Prussak space; medial wall is the neck of the malleus' },
+        { id: 'd', text: 'Anterior epitympanic recess; medial wall is the cog' },
+    ],
+    correct: 'c',
+    brief: 'The pars flaccida is the lateral wall of Prussak space; the neck of the malleus is its medial wall.',
+    detailed: 'The Handbook: Prussak space is at the level of the pars flaccida, bounded laterally by the drum and medially by the neck of the malleus, and is a frequent site of retraction and cholesteatoma. In this guide the lateral malleal fold is the roof and the lateral process the floor.\nDiscrepancy: Glasscock words the limits differently, naming the malleus head and neck medially and the lateral malleal ligament with the anterior and posterior malleal folds as the other limits.',
+    concepts: ['sp-prussak'],
+},
+{
+    id: 'q55', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'Where does Prussak space drain, and how well does the evidence support the textbook route into the attic?',
+    answer: `• It drains into the mesotympanum, most often through the posterior pouch of von Tröltsch (seven of nine temporal bones in a synchrotron study)
+• It was always aerated into the mesotympanum
+• Older descriptions of upper routes to the epitympanic spaces could not be substantiated
+• The spread of disease into the posterior epitympanum, aditus and antrum is a separate question from the aeration of the space`,
+    brief: 'Prussak space vents down and back into the mesotympanum, not up into the attic.',
+    detailed: 'Otology and Neurotology 2021 (synchrotron imaging, nine temporal bones): drainage through the posterior pouch of von Tröltsch in seven, directly posteroinferiorly in one, anteriorly in one; the posterior routes depended on the posterior malleal fold.\nDiscrepancy: the classic teaching sends attic disease from Prussak space back through the posterior epitympanum, aditus and antrum (Cummings Review gives that anatomy); the imaging study suggests the space is relatively independent of attic ventilation.',
+    concepts: ['sp-prussak'],
+},
+{
+    id: 'q56', section: 'Middle Ear Spaces',
+    stem: 'In a micro-dissection series of 98 adult and 15 newborn temporal bones, which two folds were constantly present besides the malleal ligament folds?',
+    options: [
+        { id: 'a', text: 'Anterior malleal and stapedial folds' },
+        { id: 'b', text: 'Lateral incudal and posterior incudal folds' },
+        { id: 'c', text: 'Medial incudal and lateral malleal folds' },
+        { id: 'd', text: 'Tensor fold and incudomalleal fold' },
+    ],
+    correct: 'd',
+    brief: 'The epitympanic diaphragm was ossicles, malleal ligament folds, the tensor fold and the incudomalleal fold, present from birth.',
+    detailed: 'Clujul Medical 2013: folds were present in all newborn temporal bones and in all adult ones, with variations such as membrane defects. The diaphragm consisted, besides the malleal ligament folds and the ossicles, of only the tensor tympani fold and the incudomalleal fold.\nApplication: when the tensor fold is complete, the only way into the anterior epitympanic space is through the isthmus; when it is absent, the tube has an extra route to the attic.',
+    concepts: ['sp-folds'],
+},
+{
+    id: 'q57', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'Name the fold from its description: (a) encloses the anterior malleal ligament and the anterior tympanic artery; (b) roof of Prussak space; (c) runs from the tensor tendon and cochleariform process to the anterior wall; (d) fills the obturator foramen.',
+    answer: `• (a) Anterior malleal fold
+• (b) Lateral malleal fold
+• (c) Tensor fold
+• (d) Stapedial fold`,
+    brief: 'Match each fold to what it carries or covers: ligament and artery, Prussak roof, tendon to wall, stapes.',
+    detailed: 'The anterior malleal fold runs from the lateral process forward to the anterior tympanic spine and bounds the anterior pouch; the lateral malleal fold runs from the malleus neck to the notch of Rivinus; the tensor fold floors the supratubal recess; the stapedial fold is the mucosa over the stapes and its tendon.\nApplication: each fold is named for what it joins, so a description of its ends gives its name.',
+    concepts: ['sp-folds'],
+},
+{
+    id: 'q58', section: 'Middle Ear Spaces',
+    stem: 'Which fold runs from the short process of the incus medially and helps to bound the posterior isthmus?',
+    options: [
+        { id: 'a', text: 'Lateral incudal fold' },
+        { id: 'b', text: 'Medial incudal fold' },
+        { id: 'c', text: 'Posterior incudal fold' },
+        { id: 'd', text: 'Superior incudal fold' },
+    ],
+    correct: 'b',
+    brief: 'Medial incudal fold: short process inward, on the posterior isthmus.',
+    detailed: 'The lateral incudal fold goes from the incus to the lateral attic wall, the posterior incudal fold surrounds the ligament at the fossa incudis, and the superior incudal fold runs up to the tegmen around the superior incudal ligament.\nApplication: the short process is the lateral boundary of the posterior isthmus, so disease on its medial side narrows that gap first.',
+    concepts: ['sp-folds'],
+},
+{
+    id: 'q59', section: 'Middle Ear Spaces',
+    stem: 'In Marchioni\'s case-control study of attic retraction pockets and cholesteatoma, which pair of endoscopic findings was far commoner than in controls?',
+    options: [
+        { id: 'a', text: 'Blocked isthmus with a complete tensor fold' },
+        { id: 'b', text: 'Open isthmus with an absent tensor fold' },
+        { id: 'c', text: 'Tubal obstruction with a blocked aditus' },
+        { id: 'd', text: 'Blocked aditus with a complete stapedial fold' },
+    ],
+    correct: 'a',
+    brief: 'A blocked isthmus and a complete tensor fold together cut the attic off from the tube.',
+    detailed: 'Laryngoscope 2013: the isthmus was blocked in 98 of 102 ears with attic cholesteatoma or severe pars flaccida retraction, against 3 of 50 controls; a complete tensor fold was found in 99 of 102, against 9 of 46 controls. The earlier 2010 series (eight patients with normal tubal function) named the combination selective epitympanic dysventilation.\nApplication: a normal tympanogram does not clear the attic; its pressure depends on the isthmus.',
+    concepts: ['sp-isthmus'],
+},
+{
+    id: 'q60', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'Give the four boundaries of the anterior tympanic isthmus.',
+    answer: `• Anterior: the tensor tendon and its fold
+• Posterior: the anterior crus of the stapes
+• Lateral: the neck of the malleus
+• Medial: the cochleariform process and the medial wall`,
+    brief: 'Tendon in front, anterior crus behind, malleus neck outside, cochleariform process inside.',
+    detailed: 'Cummings Review calls the anterior gap the isthmus tympani anticus and the posterior one the isthmus tympani oticus. The anterior isthmus clears the tubal side up into the anterior and superior attic; the posterior one is the path to the aditus, antrum and mastoid cells.\nApplication: the stapes divides the two gaps, so a stapes superstructure is a landmark on both.',
+    concepts: ['sp-isthmus'],
+},
+{
+    id: 'q61', section: 'Middle Ear Spaces',
+    stem: 'A surgeon removes a complete tensor fold in an ear with attic cholesteatoma. What does this change?',
+    options: [
+        { id: 'a', text: 'It frees the malleus head for removal from the attic' },
+        { id: 'b', text: 'It uncovers the geniculate ganglion for decompression' },
+        { id: 'c', text: 'It gives the anterior attic a second route to the tube' },
+        { id: 'd', text: 'It widens the posterior isthmus behind the stapes' },
+    ],
+    correct: 'c',
+    brief: 'With the fold gone the anterior attic no longer depends on the isthmus alone.',
+    detailed: 'Clujul Medical 2013: when the tensor fold is complete the only ventilation pathway to the anterior epitympanic space is through the isthmus, whereas its absence creates an efficient additional route from the tube to the epitympanum; the authors argue that surgery should restore attic and mastoid ventilation by removing the fold and restoring the isthmus.\nSupport: Laryngoscope 2010 reasoned that an open isthmus or an incomplete tensor fold may be necessary for ventilation of the attic.',
+    concepts: ['sp-isthmus'],
+},
+{
+    id: 'q62', section: 'Middle Ear Spaces',
+    stem: 'CT shows a sinus tympani that is large and deep and extends posteromedially. Which Marchioni class is this, and what follows for the approach?',
+    options: [
+        { id: 'a', text: 'Class A, shallow: a transcanal view is enough' },
+        { id: 'b', text: 'Class B, deep to the nerve: a 0 degree scope will do' },
+        { id: 'c', text: 'Class B, with a retrofacial extension to be drilled' },
+        { id: 'd', text: 'Class C: transmeatal alone is unlikely to be enough' },
+    ],
+    correct: 'd',
+    brief: 'Class C is large and deep with posteromedial extension; plan a transmastoid retrofacial route.',
+    detailed: 'Marchioni classes: A shallow; B deep but not past the posterior limit of the mastoid facial nerve; C large and deep with posteromedial extension. Eur Arch Otorhinolaryngol 2025: when type C is found, give up a purely transmeatal approach because the bottom of the sinus is hard to see; clear it by the transmastoid retrofacial route and then check the entrance transmeatally with an endoscope.\nFrequency: in 300 temporal bones from children under five, B 59.3%, C 34.3%, A 6.3%.',
+    concepts: ['sp-retro'],
+},
+{
+    id: 'q63', type: 'recall', section: 'Middle Ear Spaces',
+    stem: 'After a transcanal clearance of cholesteatoma from the attic and mesotympanum, where is residual disease most likely to hide, and why?',
+    answer: `• In the sinus tympani, the medial retrotympanum
+• It lies behind the pyramid and medial to the vertical facial nerve, under the overhang of the posterior canal wall
+• A straight microscope view and the facial recess both miss it
+• Inspect it with an angled endoscope`,
+    brief: 'The sinus tympani: behind the pyramid, medial to the nerve, out of every straight line of sight.',
+    detailed: 'Glasscock: the sinus tympani evades direct surgical visualization, which is worrisome in cholesteatoma surgery because it can harbor the nidus of recurrence; endoscopes appropriate for otologic surgery have improved inspection. Cummings Review: cholesteatoma may hide there, and its posterior extension varies.\nApplication: this is why the end-of-case inspection asks about the sinus tympani by name.',
+    concepts: ['sp-retro'],
+},
+{
+    id: 'q64', section: 'Middle Ear Spaces',
+    stem: 'Which pair bounds the sinus tympani laterally and medially?',
+    options: [
+        { id: 'a', text: 'The chorda tympani; the basal turn of the cochlea' },
+        { id: 'b', text: 'The mastoid facial nerve; the posterior semicircular canal' },
+        { id: 'c', text: 'The incus buttress; the vestibule' },
+        { id: 'd', text: 'The stapedius tendon; the cochlear aqueduct' },
+    ],
+    correct: 'b',
+    brief: 'The mastoid facial nerve lies lateral and the posterior semicircular canal medial.',
+    detailed: 'Glasscock: the sinus tympani is bounded by the ponticulus superiorly, the subiculum inferiorly, the mastoid segment of the facial nerve laterally and the posterior semicircular canal medially, and its posterior extension varies from shallow to deep. Cummings Review adds that it lies medial to the descending facial nerve.\nApplication: depth is judged against the nerve, which is why the Marchioni classes use the posterior limit of the nerve as the dividing line.',
+    concepts: ['sp-retro'],
+},
+{
+    id: 'q65', section: 'Middle Ear Spaces',
+    stem: 'In a cadaveric endoscopic series, what gave a 0 degree endoscope exposure of the whole retrotympanum in every ear?',
+    options: [
+        { id: 'a', text: 'Widening the facial recess toward the mastoid tip' },
+        { id: 'b', text: 'Taking down the incus buttress and the incus' },
+        { id: 'c', text: 'Removing the pyramidal eminence and stapedial crest' },
+        { id: 'd', text: 'Elevating the annulus anteriorly to the tube' },
+    ],
+    correct: 'c',
+    brief: 'Taking off the pyramidal eminence and the stapedial bony crest opened the sinus tympani and subpyramidal space.',
+    detailed: 'Otology and Neurotology 2020 (11 cadaver ears): the stapedius muscle lay medial and anterior to the mastoid facial nerve with the second genu above; in every ear, whatever the shape of the sinus tympani, removing the pyramidal eminence and stapedial bony crest next to the nerve allowed a 0 degree endoscope to expose the whole retrotympanum.\nApplication: the pyramid is the screen between the canal and the sinus, so it is the first thing to remove when a view is needed.',
+    concepts: ['sp-sight'],
+},
+{
+    id: 'q66', section: 'Middle Ear Spaces',
+    stem: 'Cholesteatoma involves the sinus tympani area and cannot be reached transcanally or through the facial recess. Which operation does that favour?',
+    options: [
+        { id: 'a', text: 'A canal wall down mastoidectomy' },
+        { id: 'b', text: 'A canal wall up mastoidectomy with a posterior tympanotomy' },
+        { id: 'c', text: 'A tympanoplasty alone through the canal' },
+        { id: 'd', text: 'An atticotomy with ossiculoplasty' },
+    ],
+    correct: 'a',
+    brief: 'When neither the canal nor the facial recess reaches the disease, take the canal wall down.',
+    detailed: 'ENT Secrets lists cholesteatoma involving the sinus tympani area, not accessible transcanal or through the facial recess, among the indications for a canal wall down mastoidectomy, with semicircular canal fistula and a contracted sclerotic mastoid. The Vula atlas notes that a closed operation limits the view into the anterior epitympanum and the sinus tympani when pneumatisation is poor.\nApplication: if the disease sits where no line of sight reaches, the wall comes down.',
+    concepts: ['sp-sight'],
+},
 // (spaces items go above this line)
 //
 //

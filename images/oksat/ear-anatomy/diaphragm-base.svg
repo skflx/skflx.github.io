@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Tympanic diaphragm, axial map of the right ear (schematic)</title>
+  <rect width="780" height="560" fill="#ffffff"/>
+  <g transform="translate(190 20) scale(0.8)">
+    <path d="M 110 100 L 170 66 L 520 60 L 660 70 L 680 110 L 682 420 L 660 470 L 560 505 L 470 520 L 330 520 L 250 500 L 150 440 L 112 360 Z" fill="#fdf8f1" stroke="none"/>
+    <ellipse cx="652" cy="470" rx="40" ry="34" fill="#e4e1da" stroke="#8d8a80" stroke-width="1" stroke-dasharray="4 3"/>
+    <path d="M 268 192 L 650 184 L 650 196 L 268 204 Z" fill="#c97b6b" stroke="#8c4b3e" stroke-width="1.2"/>
+    <ellipse cx="660" cy="190" rx="16" ry="14" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+    <circle cx="240" cy="190" r="32" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"/>
+    <ellipse cx="262" cy="300" rx="38" ry="30" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"/>
+    <path d="M 244 222 L 260 270" stroke="#8a7b5f" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 286 322 L 318 318 L 312 452 L 300 452 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"/>
+    <ellipse cx="306" cy="464" rx="22" ry="17" fill="#ffffff" stroke="#8a7b5f" stroke-width="1.2" stroke-dasharray="4 3"/>
+    <path d="M 298 304 L 417 300" stroke="#8a7b5f" stroke-width="3" stroke-dasharray="6 4" fill="none"/>
+    <path d="M 440 291 L 650 262 L 650 270 L 442 300 Z M 440 309 L 650 332 L 650 340 L 442 317 Z" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.2"/>
+    <circle cx="430" cy="300" r="14" fill="#f7f1e3" stroke="#8a7b5f" stroke-width="1.4"/>
+    <rect x="650" y="262" width="12" height="78" rx="3" fill="#f0cfc6" stroke="#8a7b5f" stroke-width="1.2"/>
+    <ellipse cx="628" cy="428" rx="24" ry="28" fill="#efe6d2" stroke="#8a7b5f" stroke-width="1.4"/>
+    <path d="M 612 408 L 446 314" stroke="#c97b6b" stroke-width="3" stroke-dasharray="5 3" fill="none"/>
+    <path d="M 330 520 L 470 520" stroke="#8a7b5f" stroke-width="2.4" stroke-dasharray="6 5"/>
+    <path d="M 330 520 L 250 500 L 150 440 L 112 360 L 110 100 L 170 66 L 520 60 L 660 70 L 680 110 L 682 420 L 660 470 L 560 505 L 470 520" fill="none" stroke="#8a7b5f" stroke-width="2.4"/>
+  </g>
+  <g data-label="1"><text x="382" y="140" text-anchor="middle" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Malleus head</text></g>
+  <g data-label="1"><text x="382" y="302" text-anchor="middle" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Incus body</text></g>
+  <g data-label="1"><text x="417" y="343" text-anchor="end" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Short process</text></g>
+  <g data-label="1"><text x="435" y="418" text-anchor="middle" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Fossa incudis</text></g>
+  <g data-label="1"><text x="555" y="244" text-anchor="start" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Stapes</text></g>
+  <g data-label="1"><text x="488" y="287" text-anchor="middle" font-size="11.5" fill="#555049" stroke="#ffffff" stroke-width="3" paint-order="stroke">Long process (below plane)</text></g>
+  <g data-label="1"><text x="606" y="194" text-anchor="middle" font-size="12.5" fill="#5a2a21" stroke="#ffffff" stroke-width="3" paint-order="stroke">Tensor tendon</text></g>
+  <g data-label="1"><line x1="724" y1="167" x2="760" y2="34" stroke="#555049" stroke-width="1"/><circle cx="724" cy="167" r="2.2" fill="#555049"/><text x="756" y="39" text-anchor="end" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Cochleariform process</text></g>
+  <g data-label="1"><line x1="702" y1="382" x2="640" y2="520" stroke="#555049" stroke-width="1"/><circle cx="702" cy="382" r="2.2" fill="#555049"/><text x="640" y="525" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Pyramidal eminence</text></g>
+  <g data-label="1"><text x="718" y="447" text-anchor="middle" font-size="11" fill="#555049" stroke="#ffffff" stroke-width="3" paint-order="stroke">Facial canal and</text></g>
+  <g data-label="1"><text x="718" y="458" text-anchor="middle" font-size="11" fill="#555049" stroke="#ffffff" stroke-width="3" paint-order="stroke">sinus tympani area</text></g>
+  <g data-label="1"><text x="510" y="425" text-anchor="middle" font-size="12.5" fill="#1d1d1b" stroke="#ffffff" stroke-width="3" paint-order="stroke">Aditus to antrum</text></g>
+  <g data-label="1"><line x1="280" y1="340" x2="24" y2="400" stroke="#555049" stroke-width="1"/><circle cx="280" cy="340" r="2.2" fill="#555049"/><text x="28" y="405" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Lateral attic wall</text></g>
+  <g data-label="1"><text x="28" y="423" text-anchor="start" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">(scutum)</text></g>
+  <g data-label="1"><text x="550" y="60" text-anchor="middle" font-size="12.5" fill="#555049" stroke="#ffffff" stroke-width="3" paint-order="stroke">Anterior</text></g>
+  <text x="390" y="554" text-anchor="middle" font-size="12.5" font-weight="normal" fill="#555049">Right ear, tympanic diaphragm laid flat on the axial plane, seen from below as on CT; anterior is up, lateral is to the left. Schematic.</text>
+</svg>

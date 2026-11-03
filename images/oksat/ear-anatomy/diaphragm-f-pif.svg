@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 560" width="780" height="560" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#1d1d1b">
+  <title>Posterior incudal fold (schematic)</title>
+  <g transform="translate(190 20) scale(0.8)">
+    <ellipse cx="306" cy="464" rx="36" ry="30" fill="#c97b6b" fill-opacity="0.6" stroke="#8c4b3e" stroke-width="1.6"/>
+  </g>
+  <g data-label="1"><line x1="438" y1="396" x2="300" y2="508" stroke="#555049" stroke-width="1"/><circle cx="438" cy="396" r="2.2" fill="#555049"/><text x="300" y="513" text-anchor="middle" font-size="14" font-weight="normal" fill="#1d1d1b" stroke="#ffffff" stroke-width="3.5" paint-order="stroke">Posterior incudal fold</text></g>
+</svg>
