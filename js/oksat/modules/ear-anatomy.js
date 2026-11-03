@@ -119,7 +119,7 @@ const ITEMS = [
     options: [
         { id: 'a', text: 'Arnold nerve, stylomastoid artery, posterior auricular vein' },
         { id: 'b', text: 'Lesser petrosal nerve, superior tympanic artery, tensor tendon' },
-        { id: 'c', text: 'Chorda tympani, anterior malleal ligament with the anterior process, anterior tympanic artery' },
+        { id: 'c', text: 'Chorda tympani, anterior malleal ligament, anterior tympanic artery' },
         { id: 'd', text: 'Jacobson nerve, inferior tympanic artery, caroticotympanic nerves' },
     ],
     correct: 'c',
@@ -157,12 +157,12 @@ const ITEMS = [
 // ════════ AURICLE ════════
 {
     id: 'q6', section: 'Auricle',
-    stem: 'An endaural incision is placed between the tragus and the helical crus. Which property of that site makes it the classic access point?',
+    stem: 'Why is the endaural incision the classic access point to the canal?',
     options: [
-        { id: 'a', text: 'It is the incisura terminalis, a gap in the cartilage between the auricle and the canal' },
+        { id: 'a', text: 'It crosses the incisura terminalis, a gap without cartilage' },
         { id: 'b', text: 'It overlies the tympanosquamous suture, which is avascular' },
         { id: 'c', text: 'It lies in the great auricular territory, so a single block anesthetizes it' },
-        { id: 'd', text: 'It is where the bony canal begins' },
+        { id: 'd', text: 'It lies directly over the start of the bony canal' },
     ],
     correct: 'a',
     brief: 'The incisura terminalis is cartilage-free, so an incision there avoids cutting cartilage and the risk of perichondritis.',
@@ -189,7 +189,7 @@ const ITEMS = [
         { id: 'a', text: 'The cartilage has its own end arteries, which the hematoma compresses' },
         { id: 'b', text: 'Hyaline cartilage calcifies under pressure' },
         { id: 'c', text: 'The lobule cartilage is thin and necroses first' },
-        { id: 'd', text: 'The cartilage is avascular and fed by the perichondrium, which the hematoma lifts off it' },
+        { id: 'd', text: 'The cartilage is avascular and the hematoma lifts off its perichondrium' },
     ],
     correct: 'd',
     brief: 'The blood separates perichondrium from cartilage; the cartilage loses its nutrition, then necroses and is replaced by fibrous tissue (cauliflower ear).',
@@ -200,10 +200,10 @@ const ITEMS = [
     id: 'q9', section: 'Auricle',
     stem: 'Which nerve supplies the posterior auricular muscle?',
     options: [
-        { id: 'a', text: 'Great auricular nerve' },
-        { id: 'b', text: 'Posterior auricular branch of the facial nerve' },
-        { id: 'c', text: 'Auriculotemporal nerve' },
-        { id: 'd', text: 'Lesser occipital nerve' },
+        { id: 'a', text: 'Great auricular nerve (C2–C3)' },
+        { id: 'b', text: 'Facial nerve, posterior auricular branch' },
+        { id: 'c', text: 'Auriculotemporal branch of V3' },
+        { id: 'd', text: 'Lesser occipital nerve (C2)' },
     ],
     correct: 'b',
     brief: 'The extrinsic auricular muscles are facial nerve muscles (second arch): anterior and superior from the temporal branch, posterior from the posterior auricular branch.',
@@ -217,7 +217,7 @@ const ITEMS = [
 • Veins: with the arteries, to the external jugular or facial veins, then the internal jugular
 • Lymph: anterior surface and tragus to preauricular (parotid) nodes; posterior and superior auricle to retroauricular (mastoid) nodes; lobule and concha to infra-auricular and upper cervical nodes`,
     brief: 'Two arteries, three nodal basins.',
-    detailed: 'Cummings Review and Glasscock give the superficial temporal artery anteriorly and the posterior auricular artery posteriorly. Glasscock adds that the posterior auricular artery gives the stylomastoid branch, which enters the fallopian canal to supply the facial nerve.\nApplication: a lateral helical lesion drains to the parotid nodes; a lobule lesion to the upper neck.\nCaveat: the lymphatic map is standard teaching, not stated in the ranked sources.',
+    detailed: 'Cummings Review and Glasscock give the superficial temporal artery anteriorly and the posterior auricular artery posteriorly. Glasscock adds that the posterior auricular artery gives the stylomastoid branch, which enters the fallopian canal to supply the facial nerve.\nApplication: a tragal or preauricular lesion drains to the parotid nodes; a superior helical lesion to the mastoid nodes; a lobule lesion to the upper neck.\nCaveat: the lymphatic map is standard teaching, not stated in the ranked sources.',
     concepts: ['au-vessel'],
 },
 {
@@ -258,8 +258,8 @@ const ITEMS = [
         { id: 'd', text: 'Tragus' },
     ],
     correct: 'd',
-    brief: 'Hillocks 1–3 (first arch): tragus, helical crus, helix. Hillocks 4–6 (second arch): antihelix, antitragus and lobule.',
-    detailed: 'The Handbook\'s table: 1 tragus, 2 crus of helix, 3 helix (arch 1); 4 crus of antihelix, 5 antihelix, 6 antitragus and lobule (arch 2), with a note that the contributions of 4 to 6 remain controversial. Glasscock adds that some studies give the second arch most of the auricle and others a balanced share.\nApplication: first-arch defects travel with the tragus and with first-arch syndromes.\nDiscrepancy: the 4–6 assignments differ between sources; commit to 1–3.',
+    brief: 'Hillocks 1–3 (first arch): tragus, helical crus, helix. Hillocks 4–6 (second arch): antihelix, antitragus, lobule.',
+    detailed: 'Board version: 1 tragus, 2 crus of helix, 3 helix (arch 1); 4 antihelix, 5 antitragus, 6 lobule (arch 2). The Handbook\'s table instead gives 4 crus of antihelix, 5 antihelix, 6 antitragus and lobule, and notes that the contributions of 4 to 6 remain controversial. Glasscock adds that some studies give the second arch most of the auricle and others a balanced share.\nApplication: first-arch defects travel with the tragus and with first-arch syndromes.\nDiscrepancy: the 4–6 assignments differ between sources; commit to 1–3.',
     concepts: ['au-dev'],
 },
 {
@@ -271,17 +271,17 @@ const ITEMS = [
 • Auriculocephalic angle 20–30°
 • About 85% of adult size by age 5`,
     brief: 'Numbers frame the examination; asymmetry matters more than an absolute value.',
-    detailed: 'Proportions follow Baker, Local Flaps 3e Ch. 22, as cited by the otoplasty module; the 85% by age 5 is from the Handbook.\nDiscrepancy: the plan draft gave a 15–20° axis tilt and 15–20 mm helix to scalp; the otoplasty sources give about 15° and graded distances of 10–12, 16–18 and about 20 mm from top to bottom.',
+    detailed: 'Proportions follow Baker, Local Flaps 3e Ch. 22, as cited by the otoplasty module; the 85% by age 5 is from the Handbook.\nDiscrepancy: many otoplasty texts give about 85% of adult size by age 3 and near-adult width by 5–6. Axis tilt is quoted as 15–20° in some texts and about 15° in the otoplasty sources, which grade helix-to-scalp distance as 10–12, 16–18 and about 20 mm from top to bottom.',
     concepts: ['au-dev'],
 },
 
 // ════════ EAC ════════
 {
     id: 'q15', section: 'External Auditory Canal',
-    stem: 'Where is the narrowest part of the adult external auditory canal?',
+    stem: 'Wax pushed in with a cotton bud usually impacts where?',
     options: [
-        { id: 'a', text: 'At the conchal opening' },
-        { id: 'b', text: 'Just medial to the bony-cartilaginous junction (the isthmus)' },
+        { id: 'a', text: 'At the conchal opening of the cartilaginous canal' },
+        { id: 'b', text: 'The isthmus, near the bony-cartilaginous junction' },
         { id: 'c', text: 'At the anterior tympanomeatal recess' },
         { id: 'd', text: 'At the notch of Rivinus' },
     ],
@@ -315,7 +315,7 @@ const ITEMS = [
     ],
     correct: 'c',
     brief: 'A furuncle is a follicular infection; hair follicles, sebaceous and cerumen glands exist only in the cartilaginous canal.',
-    detailed: 'The Handbook: cartilaginous canal skin is thick with hair follicles and sebaceous and ceruminous glands; bony canal skin is thin, has no adnexa or subcutis, and is the only skin in the body lying directly on periosteum. Glasscock: the absence of hair distinguishes the bony canal.\nApplication: bony canal skin tears easily and is very pain-sensitive, which is why injection there raises a bleb and must be gentle.',
+    detailed: 'The Handbook: cartilaginous canal skin is thick with hair follicles and sebaceous and ceruminous glands; bony canal skin is thin, has no adnexa or subcutis, and lies directly on periosteum, among the thinnest skin in the body. Glasscock: the absence of hair distinguishes the bony canal.\nApplication: bony canal skin tears easily and is very pain-sensitive, which is why injection there raises a bleb and must be gentle.',
     concepts: ['eac-skin'],
 },
 {
@@ -334,16 +334,16 @@ const ITEMS = [
 },
 {
     id: 'q19', section: 'External Auditory Canal',
-    stem: 'Necrotizing otitis externa spreads from the canal to the parotid and the temporomandibular joint through which natural openings?',
+    stem: 'A diabetic with necrotizing otitis externa develops parotid swelling and trismus. Which natural openings carried the infection there?',
     options: [
-        { id: 'a', text: 'Fissures of Santorini (cartilaginous canal) and a patent foramen of Huschke (bony canal)' },
+        { id: 'a', text: 'Fissures of Santorini and foramen of Huschke' },
         { id: 'b', text: 'Petrotympanic fissure and canal of Huguier' },
         { id: 'c', text: 'Mastoid canaliculus and inferior tympanic canaliculus' },
         { id: 'd', text: 'Notch of Rivinus and the iter chordae posterius' },
     ],
     correct: 'a',
     brief: 'Santorini fissures in the anterior cartilaginous canal lead to the superficial parotid; a patent foramen of Huschke in the anteroinferior bony wall leads to the deep parotid and the TMJ.',
-    detailed: 'Cummings Review: Santorini fissures allow spread to the superficial parotid; the foramen of Huschke, an anteroinferior bony defect that usually obliterates during development, allows spread to the deep lobe and the TMJ. Glasscock: the foramen forms around age 1 as opposing spurs of the growing tympanic ring fuse, and closes in late childhood.\nDiscrepancy: sources differ on the timing of closure. Glasscock (after Anson) says late childhood; common teaching gives about age 5.',
+    detailed: 'Cummings Review: Santorini fissures allow spread to the superficial parotid; the foramen of Huschke, an anteroinferior bony defect that usually obliterates during development, allows spread to the deep lobe and the TMJ. Glasscock: the foramen forms around age 1 as opposing spurs of the growing tympanic ring fuse, and closes in late childhood.\nDiscrepancy: many texts say the foramen closes by about age 5; Glasscock (after Anson) says late childhood. Either way it persists into adulthood in a minority.',
     concepts: ['eac-gaps'],
 },
 {
@@ -361,11 +361,11 @@ const ITEMS = [
 },
 {
     id: 'q21', section: 'External Auditory Canal',
-    stem: 'A patient with a cerebellopontine angle tumor has numbness of the posterior canal wall. What is this sign and which nerve does it test?',
+    stem: 'A patient with asymmetric hearing loss has reduced sensation of the posterior canal wall on cotton-tip testing. What is the sign, and which nerve does it test?',
     options: [
-        { id: 'a', text: 'Arnold reflex; the vagus' },
+        { id: 'a', text: 'Arnold reflex; the auricular branch of the vagus' },
         { id: 'b', text: 'Hennebert sign; the vestibular nerve' },
-        { id: 'c', text: 'Hitselberger sign; sensory fibres of the facial nerve' },
+        { id: 'c', text: 'Hitselberger sign; facial nerve sensory fibres' },
         { id: 'd', text: 'Tullio phenomenon; the stapedius' },
     ],
     correct: 'c',
@@ -377,10 +377,10 @@ const ITEMS = [
 // ════════ TYMPANIC MEMBRANE ════════
 {
     id: 'q22', section: 'Tympanic Membrane',
-    stem: 'Why is the neonatal drum hard to see in full on otoscopy?',
+    stem: 'In a 3-month-old, only part of the drum comes into view however the speculum is angled. Why?',
     options: [
-        { id: 'a', text: 'It is thicker than the adult drum' },
-        { id: 'b', text: 'It lies nearly horizontal and reaches adult angulation only by age 4 or 5' },
+        { id: 'a', text: 'It is much thicker and more opaque than in adults' },
+        { id: 'b', text: 'It lies nearly horizontal until about age 4–5' },
         { id: 'c', text: 'It has no pars flaccida yet' },
         { id: 'd', text: 'The bony canal is longer in neonates' },
     ],
@@ -405,12 +405,12 @@ const ITEMS = [
 },
 {
     id: 'q24', section: 'Tympanic Membrane',
-    stem: 'Which layer of the drum is absent or disorganized in the pars flaccida?',
+    stem: 'A retraction pocket forms in the pars flaccida while the pars tensa stays flat. Which layer, missing from the flaccida, explains why it yields first?',
     options: [
         { id: 'a', text: 'Squamous epithelium' },
-        { id: 'b', text: 'Mucosa' },
-        { id: 'c', text: 'Fibrous middle layer (lamina propria)' },
-        { id: 'd', text: 'Perichondrium' },
+        { id: 'b', text: 'Mucosal (inner) layer' },
+        { id: 'c', text: 'Fibrous lamina propria' },
+        { id: 'd', text: 'Perichondrial layer' },
     ],
     correct: 'c',
     brief: 'The pars flaccida has no organized fibrous layer and no annulus, so it retracts under negative pressure.',
@@ -419,7 +419,7 @@ const ITEMS = [
 },
 {
     id: 'q25', section: 'Tympanic Membrane',
-    stem: 'At which two points is the drum firmly attached to the malleus?',
+    stem: 'Elevating a drum in tympanoplasty, where will it resist being lifted off the malleus?',
     options: [
         { id: 'a', text: 'Lateral process and umbo' },
         { id: 'b', text: 'Head and neck' },
@@ -445,10 +445,10 @@ const ITEMS = [
 },
 {
     id: 'q27', section: 'Tympanic Membrane',
-    stem: 'A myringotomy is placed in the anteroinferior quadrant rather than the posterosuperior. What lies behind the posterosuperior quadrant that the anteroinferior site avoids?',
+    stem: 'A myringotomy blade slips into the posterosuperior quadrant. Which structures are in its path?',
     options: [
         { id: 'a', text: 'The Eustachian tube orifice and the carotid canal' },
-        { id: 'b', text: 'The incus long process, incudostapedial joint, stapes and chorda tympani' },
+        { id: 'b', text: 'Incus long process, stapes and chorda tympani' },
         { id: 'c', text: 'The round window and jugular bulb' },
         { id: 'd', text: 'The tensor tendon and cochleariform process' },
     ],
@@ -487,10 +487,10 @@ const ITEMS = [
     id: 'q30', section: 'Tympanic Cavity',
     stem: 'Where is the tympanic cavity narrowest from lateral to medial?',
     options: [
-        { id: 'a', text: 'In the attic' },
+        { id: 'a', text: 'In the attic, above the malleus head' },
         { id: 'b', text: 'In the hypotympanum' },
         { id: 'c', text: 'Between the umbo and the promontory' },
-        { id: 'd', text: 'At the aditus' },
+        { id: 'd', text: 'At the aditus ad antrum' },
     ],
     correct: 'c',
     brief: 'About 2 mm between umbo and promontory, against about 6 mm in the attic and 4 mm in the hypotympanum.',
@@ -514,10 +514,10 @@ const ITEMS = [
     id: 'q32', section: 'Tympanic Cavity',
     stem: 'Where does the chorda tympani leave the tympanic cavity?',
     options: [
-        { id: 'a', text: 'Through the canal of Huguier, beside the petrotympanic fissure' },
-        { id: 'b', text: 'Through the iter chordae posterius' },
-        { id: 'c', text: 'Through the facial hiatus' },
-        { id: 'd', text: 'Through the stylomastoid foramen' },
+        { id: 'a', text: 'Canal of Huguier' },
+        { id: 'b', text: 'Iter chordae posterius' },
+        { id: 'c', text: 'Facial hiatus' },
+        { id: 'd', text: 'Stylomastoid foramen' },
     ],
     correct: 'a',
     brief: 'In through the iter chordae posterius (posterior wall, chordal eminence); out through the canal of Huguier (anterior, at the petrotympanic fissure).',
@@ -531,7 +531,7 @@ const ITEMS = [
         { id: 'a', text: 'Pyramidal eminence' },
         { id: 'b', text: 'Ponticulus' },
         { id: 'c', text: 'Cochleariform process' },
-        { id: 'd', text: 'Subiculum' },
+        { id: 'd', text: 'Subiculum promontorii' },
     ],
     correct: 'c',
     brief: 'The tensor tendon turns 90° at the cochleariform process; the tympanic facial nerve runs immediately superior to it, with the geniculate ganglion just anterosuperior.',
@@ -554,10 +554,10 @@ const ITEMS = [
 },
 {
     id: 'q35', section: 'Tympanic Cavity',
-    stem: 'A round window that looks as if it has a defect at exploration most often shows which normal finding?',
+    stem: 'At exploration for a suspected perilymph fistula the round window seems to have a hole. What is the usual explanation?',
     options: [
         { id: 'a', text: 'A dehiscent jugular bulb behind it' },
-        { id: 'b', text: 'A mucosal veil in front of the true membrane, often perforated' },
+        { id: 'b', text: 'A perforated mucosal veil' },
         { id: 'c', text: 'A persistent stapedial artery' },
         { id: 'd', text: 'The finiculus' },
     ],
@@ -568,12 +568,12 @@ const ITEMS = [
 },
 {
     id: 'q36', section: 'Tympanic Cavity',
-    stem: 'Which nerve enters the middle ear through the inferior tympanic canaliculus, and what does it become?',
+    stem: 'Secretomotor fibres for the parotid enter the middle ear through the inferior tympanic canaliculus. As which nerve, and what do they become?',
     options: [
         { id: 'a', text: 'Arnold nerve; the auricular branch of the vagus' },
         { id: 'b', text: 'Chorda tympani; the lingual nerve' },
         { id: 'c', text: 'Nerve to stapedius; the pyramidal branch' },
-        { id: 'd', text: 'Jacobson nerve (IX); the tympanic plexus, then the lesser petrosal nerve to the otic ganglion' },
+        { id: 'd', text: 'Jacobson nerve (IX); the lesser petrosal nerve' },
     ],
     correct: 'd',
     brief: 'Jacobson nerve and the inferior tympanic artery pass the canaliculus in the crest between carotid and jugular; on the promontory the plexus gives the lesser petrosal nerve.',
@@ -584,21 +584,21 @@ const ITEMS = [
     id: 'q37', section: 'Tympanic Cavity',
     stem: 'Why is the hypotympanic floor prone to leaving the jugular bulb bare in the middle ear?',
     options: [
-        { id: 'a', text: 'It is formed from three bone types (tympanic, otic capsule, petrosal ledge) late in fetal life' },
-        { id: 'b', text: 'It is the thinnest part of the otic capsule' },
-        { id: 'c', text: 'It is resorbed by the stapedius muscle' },
+        { id: 'a', text: 'It fuses from three bone sources late in fetal life' },
+        { id: 'b', text: 'It is the thinnest part of the otic capsule at birth' },
+        { id: 'c', text: 'It is resorbed by pressure from the stapedius muscle' },
         { id: 'd', text: 'It forms from the first pharyngeal pouch' },
     ],
     correct: 'a',
     brief: 'The hypotympanum develops between 22 and 32 weeks from tympanic bone, canalicular otic capsule and a petrosal ledge; the seams can fail.',
-    detailed: 'Glasscock describes the floor as a tripartite bony amalgam and says this variegated origin predisposes it to anomalous development, such as a bare jugular bulb.\nApplication: a blue mass behind the posteroinferior quadrant is a jugular bulb until proven otherwise; do not biopsy it.\nCaveat: definitions of a high bulb vary between sources.',
+    detailed: 'Glasscock describes the floor as a tripartite bony amalgam and says this variegated origin predisposes it to anomalous development, such as a bare jugular bulb.\nApplication: a vascular mass behind the posteroinferior quadrant may be a high bulb or a paraganglioma; image it before any biopsy.\nCaveat: definitions of a high bulb vary between sources.',
     concepts: ['cav-roof-floor'],
 },
 {
     id: 'q38', section: 'Tympanic Cavity',
     stem: 'On the anterior wall of the tympanic cavity, what lies immediately below the bulge of the tensor tympani semicanal?',
     options: [
-        { id: 'a', text: 'The tympanic orifice of the Eustachian tube' },
+        { id: 'a', text: 'Eustachian tube orifice' },
         { id: 'b', text: 'The cochleariform process' },
         { id: 'c', text: 'The pyramidal eminence' },
         { id: 'd', text: 'The aditus' },
@@ -613,13 +613,13 @@ const ITEMS = [
     stem: 'During dissection in the supratubal recess, which structure on its medial wall is at risk?',
     options: [
         { id: 'a', text: 'The jugular bulb' },
-        { id: 'b', text: 'The geniculate ganglion of the facial nerve' },
+        { id: 'b', text: 'The geniculate ganglion' },
         { id: 'c', text: 'The round window membrane' },
         { id: 'd', text: 'The endolymphatic sac' },
     ],
     correct: 'b',
     brief: 'The supratubal recess lies above the tensor fold, bounded behind by the cog and cochleariform process; the geniculate ganglion sits in its medial wall.',
-    detailed: 'Cummings Review: the medial wall of the supratubal recess houses the geniculate ganglion, which may be dehiscent from cholesteatoma; its posterior boundary is the cochleariform process below and the cog above. The recess is part of the epitympanum, above the tensor fold.',
+    detailed: 'Cummings Review: the medial wall of the supratubal recess houses the geniculate ganglion, which may be dehiscent from cholesteatoma; its posterior boundary is the cochleariform process below and the cog above. The guide treats the recess as part of the epitympanum, above the tensor fold.',
     concepts: ['cav-anterior'],
 },
 {
@@ -645,7 +645,7 @@ const ITEMS = [
 • Incus: body, short process, long process, lenticular process
 • Stapes: head (capitulum), neck, anterior and posterior crura, footplate; the obturator foramen between the crura`,
     brief: 'Malleus five parts, incus four, stapes five.',
-    detailed: 'By length, the malleus is the longest ossicle and the stapes the smallest; the stapes is also the most medial. Glasscock: the anterior crus is thinner and straighter than the posterior.\nApplication: the lenticular process articulates with the stapes head; the long process is the segment that erodes in chronic otitis media.',
+    detailed: 'Glasscock calls the incus the largest ossicle; by length the malleus is longer, so the claim depends on the measure. The stapes is the smallest and most medial. The anterior crus is thinner and straighter than the posterior.\nApplication: the lenticular process articulates with the stapes head; the long process is the segment that erodes in chronic otitis media.',
     concepts: ['os-parts'],
 },
 {
@@ -653,13 +653,13 @@ const ITEMS = [
     stem: 'About how large is the adult stapes footplate?',
     options: [
         { id: 'a', text: 'About 1 × 0.5 mm' },
-        { id: 'b', text: 'About 2.7–2.9 mm long and 1.2–1.5 mm wide' },
+        { id: 'b', text: 'About 2.8 × 1.3 mm' },
         { id: 'c', text: 'About 5 × 3 mm' },
         { id: 'd', text: 'About 9 × 8 mm' },
     ],
     correct: 'b',
     brief: 'Roughly 3 × 1.4 mm; series give means of 2.7–2.9 mm by 1.2–1.5 mm.',
-    detailed: 'Morphometry: Folia Morphologica 2024 gives 2.93 × 1.46 mm; a micro-CT series 2.71 × 1.23 mm; a cadaveric series of 60 stapes 2.78 × 1.34 mm. Method (dry bone, micro-CT, CT) changes the numbers.\nApplication: the footplate is a long, narrow oval, with its long axis anteroposterior.\nDiscrepancy: the plan draft gave 3 × 1.4 mm, at the high end of measured length.',
+    detailed: 'Morphometry: Folia Morphologica 2024 gives 2.93 × 1.46 mm; a micro-CT series 2.71 × 1.23 mm; a cadaveric series of 60 stapes 2.78 × 1.34 mm. Method (dry bone, micro-CT, CT) changes the numbers.\nApplication: the footplate is a long, narrow oval, with its long axis anteroposterior.\nDiscrepancy: older texts give 3 × 1.4 mm, at the high end of measured length.',
     concepts: ['os-parts'],
 },
 {
@@ -678,12 +678,12 @@ const ITEMS = [
 },
 {
     id: 'q44', section: 'Ossicular Chain',
-    stem: 'When dissecting disease off the stapes superstructure, in which direction should instruments move, and why?',
+    stem: 'When dissecting disease off the stapes superstructure, in which direction should instruments move?',
     options: [
         { id: 'a', text: 'Anterior to posterior, against the tensor tendon' },
         { id: 'b', text: 'Superior to inferior, along the facial nerve' },
         { id: 'c', text: 'Lateral to medial, toward the vestibule' },
-        { id: 'd', text: 'Posterior to anterior, parallel to the stapedius tendon, so the tendon resists displacement' },
+        { id: 'd', text: 'Posterior to anterior, along the stapedius tendon' },
     ],
     correct: 'd',
     brief: 'Dissect parallel to the stapedius tendon, posterior to anterior; the tendon then holds the stapes against the pull.',
@@ -732,11 +732,11 @@ const ITEMS = [
 },
 {
     id: 'q48', section: 'Ossicular Chain',
-    stem: 'Which ossicular segment is most prone to erosion in chronic otitis media, and why?',
+    stem: 'Revision surgery after years of chronic otitis media most often finds which ossicular segment gone, and why?',
     options: [
         { id: 'a', text: 'Malleus head, because it sits in the attic' },
         { id: 'b', text: 'Stapes footplate, because it is thinnest' },
-        { id: 'c', text: 'Incus long and lenticular process, because its blood supply is a single mucosal source without collaterals' },
+        { id: 'c', text: 'Incus long process: a single mucosal blood supply' },
         { id: 'd', text: 'Manubrium, because it is covered only by drum' },
     ],
     correct: 'c',
@@ -768,7 +768,7 @@ const ITEMS = [
 • Posterior incudal: short process to the fossa incudis
 • Annular (stapediovestibular): footplate to the oval window margin`,
     brief: 'Two to the roof, one forward, one lateral, one back, one round the footplate.',
-    detailed: 'Prussak space: lateral boundary the pars flaccida; medial boundary the malleus neck; roof the lateral malleal ligament; floor the lateral process of the malleus. Glasscock also names the anterior and posterior malleal folds as bounding it.',
+    detailed: 'Glasscock: Prussak space lies between the pars flaccida laterally and the malleus neck medially, under the lateral malleal ligament and fold above, with the lateral process of the malleus as its floor.',
     concepts: ['os-joints'],
 },
 ];

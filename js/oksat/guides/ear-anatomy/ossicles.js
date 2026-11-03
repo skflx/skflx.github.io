@@ -12,7 +12,7 @@ window.__OKSAT_CHAPTER = {
     lede: 'Three bones slung on six ligaments, rocking about one axis, tuned by two muscles from two different arches, and fed so thinly at one point that chronic otitis eats it first.',
     src: 'Glasscock Ch. 2–3 · Handbook Ch. 3 · Cummings Review Ch. 2',
     tldr: [
-        'Malleus: head, neck, lateral and anterior processes, manubrium. Incus: body, short, long and lenticular processes. Stapes: head, neck, two crura, footplate (about 2.7–2.9 × 1.2–1.5 mm).',
+        'Malleus: head, neck, lateral and anterior processes, manubrium. Incus: body, short, long and lenticular processes (Glasscock: the largest; the malleus is longer). Stapes: head, neck, two crura, footplate (about 2.7–2.9 × 1.2–1.5 mm).',
         '**Axis of rotation**: anterior malleal ligament to posterior incudal ligament. Lever about 1.3:1.',
         '**Tensor tympani**: around the cochleariform process to the malleus, V3, first arch. **Stapedius**: out of the pyramid to the posterior stapes, VII, second arch.',
         'Stapedial reflex: VIII → cochlear nucleus → superior olivary complex (both sides) → facial motor nuclei → stapedius.',
@@ -24,7 +24,7 @@ window.__OKSAT_CHAPTER = {
             n: '6.1',
             title: 'Parts',
             blocks: [
-                { t: 'p', x: 'The **malleus**, most lateral, has a head, neck, **lateral process** (with a cartilaginous cap fused to the drum), **anterior process** and **manubrium**. The **incus** has a **body** that articulates with the malleus head in the attic, a **short process** anchored in the fossa incudis, a **long process** running down behind and parallel to the manubrium, and the **lenticular process** at its tip. The **stapes**, smallest and most medial, has a **head (capitulum)**, neck, **anterior** and **posterior crura** around the **obturator foramen**, and a **footplate** in the oval window. [[src|Glasscock Ch. 2]] [[src|Handbook Ch. 3]]' },
+                { t: 'p', x: 'The **malleus**, most lateral, has a head, neck, **lateral process** (with a cartilaginous cap fused to the drum), **anterior process** and **manubrium**. The **incus**, which Glasscock calls the largest ossicle (the malleus is longer), has a **body** that articulates with the malleus head in the attic, a **short process** anchored in the fossa incudis, a **long process** running down behind and parallel to the manubrium, and the **lenticular process** at its tip. The **stapes**, smallest and most medial, has a **head (capitulum)**, neck, **anterior** and **posterior crura** around the **obturator foramen**, and a **footplate** in the oval window. [[src|Glasscock Ch. 2]] [[src|Handbook Ch. 3]]' },
                 {
                     t: 'hotspot',
                     id: 'os-parts-hs',
@@ -40,7 +40,7 @@ window.__OKSAT_CHAPTER = {
                     ],
                 },
                 { t: 'check', id: 'c1', q: 'Name the four parts of the incus and what each touches.', a: 'Body: malleus head (incudomallear joint). Short process: fossa incudis (posterior incudal ligament). Long process: runs down behind the manubrium. Lenticular process: stapes head (incudostapedial joint).' },
-                { t: 'check', id: 'c2', q: 'Which ossicle is the longest, which the smallest?', a: 'Malleus longest; stapes smallest.' },
+                { t: 'check', id: 'c2', q: 'Which ossicle is the smallest and most medial, and which of its crura is thinner and straighter?', a: 'The stapes; the anterior crus.' },
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q41', 'ear-anatomy:q42'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-parts'] }],
@@ -68,7 +68,7 @@ window.__OKSAT_CHAPTER = {
                         { t: 'p', x: 'Dissect disease off the stapes **posterior to anterior, parallel to the stapedius tendon**, so the tendon resists displacement. The ligaments are easily overcome by an instrument pulling the wrong way. [[src|Glasscock Ch. 2]]' },
                     ],
                 },
-                { t: 'check', id: 'c1', q: 'Which two ligaments define the axis of rotation?', a: 'The anterior malleal ligament and the posterior incudal ligament.' },
+                { t: 'check', id: 'c1', q: 'Predict: why does a fixed anterior malleal ligament stiffen the whole chain?', a: 'It anchors one end of the axis of rotation (anterior malleal to posterior incudal ligament), about which the chain rocks.' },
                 { t: 'check', id: 'c2', q: 'Which ligament forms the roof of Prussak space?', a: 'The lateral malleal ligament, from the malleus neck to the notch of Rivinus.' },
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q43', 'ear-anatomy:q44'] },
             ],
@@ -157,7 +157,7 @@ window.__OKSAT_CHAPTER = {
             n: '6.6',
             title: 'Embryology',
             blocks: [
-                { t: 'p', x: 'Board version: **Meckel cartilage** (first arch) forms the head and neck of the malleus and the body and short process of the incus; **Reichert cartilage** (second arch) forms the manubrium, the long process of the incus and the stapes superstructure; the **footplate** comes from the **otic capsule**. The cartilaginous ossicles reach adult size and shape by about 16 weeks, then ossify; the manubrium never fully ossifies. [[src|Handbook Ch. 3]]' },
+                { t: 'p', x: 'Board version: **Meckel cartilage** (first arch) forms the head and neck of the malleus and the body and short process of the incus; **Reichert cartilage** (second arch) forms the manubrium, the long process of the incus and the stapes superstructure; the **footplate** comes from the **otic capsule** (some sources give its tympanic surface to the second arch). The cartilaginous ossicles reach adult size and shape by about 16 weeks, then ossify; the manubrium never fully ossifies. [[src|Handbook Ch. 3]]' },
                 {
                     t: 'layers',
                     id: 'os-dev-ly',
@@ -179,7 +179,7 @@ window.__OKSAT_CHAPTER = {
                         { t: 'p', x: '**What you see through the drum is second arch; what hides in the attic is first arch.** The muscles follow: tensor (first arch, V3) on the malleus, stapedius (second arch, VII) on the stapes.' },
                     ],
                 },
-                { t: 'check', id: 'c1', q: 'Name the second-arch parts of the chain.', a: 'Manubrium of the malleus, long process of the incus, stapes superstructure.' },
+                { t: 'check', id: 'c1', q: 'Which ossicular parts can you see through a normal drum, and from which arch do they come?', a: 'The manubrium and the incus long process (sometimes the stapes): second arch.' },
                 { t: 'check', id: 'c2', q: 'Where does the footplate come from, and why does that matter for a first- or second-arch malformation?', a: 'The otic capsule; an arch malformation can leave a normal footplate and inner ear.' },
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q49'] },
             ],
