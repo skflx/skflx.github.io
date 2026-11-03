@@ -12,11 +12,12 @@ node tools/smoke-pages.mjs                # every page boots, zero real console 
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
 node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub, terms)
 node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
+node tools/lint-oksat-guide.mjs [slug ...] # OKSAT interactive guides against the teaching-shape spec (no slug: every guide)
 node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
 node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
 ```
 
-In CI (`.github/workflows/ci.yml`) `check-data`, `lint-oksat` and the page smoke test always
+In CI (`.github/workflows/ci.yml`) `check-data`, `lint-oksat`, `lint-oksat-guide` and the page smoke test always
 run; the SSB, OKSAT (engine and interactive learning) and wiki-sync suites run only when a file they exercise changed (a
 push to `master`, or a change to the workflow or the shared harness, runs everything). Changes
 to `tools/ssb-pipeline/` do not start the SSB suite unless they touch `dissection.json`, the
