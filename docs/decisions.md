@@ -67,6 +67,7 @@ resolving** — do not "simplify" it away without migrating the data first.
 | Key / prefix | Owner file | Notes |
 |---|---|---|
 | `sk_theme` | `js/theme-boot.js` (read), `js/site.js`, `js/oksat/prefs.js` | day/night; `html[data-theme]` |
+| `sk_airway_game` | `js/airway/app.js` | the one unfinished Airway Rounds / Jeopardy / Quick Quiz game (teams, scores, consumed questions, round or mode), kept 24 h; written after each update, cleared on game end, End game or Start fresh; offered (never auto-resumed) on boot |
 | `oksat:reviewer` | `js/oksat/store.js` | storage namespace; read-only now |
 | `oksat:migrated` | `js/oksat/store.js` | one-time `mcq:*`→`oksat:*` marker |
 | `oksat:typeface` | `js/oksat/prefs.js`, `js/theme-boot.js` | `html[data-font]`; written only on an explicit pick |

@@ -134,6 +134,9 @@ modules. The AO CMF content is still to be folded into the facial-trauma modules
 board, quick quiz and browse modes. No external requests by design, enforced by
 its CSP, so it runs on bad conference-room wifi or none.
 
+An unfinished game survives a reload (`sk_airway_game`, 24 h): the setup screen
+offers Resume or Start fresh. Single tab only; no sync across open tabs.
+
 **Next:** nothing planned. Keep it CDN-free; that constraint is the feature.
 
 ---

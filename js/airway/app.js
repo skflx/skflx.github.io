@@ -107,6 +107,7 @@
     rounds: null,
     board: null,
     quiz: null,
+    resume: null,   // unfinished game found at boot, awaiting Resume / Start fresh
     browse: { search: '', topic: 'all', difficulty: 'all', sort: 'topic', expandedId: null },
   };
 
@@ -114,6 +115,157 @@
     return QUESTIONS.filter(function (q) {
       return filters.topics.has(q.topic) && filters.difficulties.has(q.difficulty);
     });
+  }
+
+  // ─── SAVED GAME (sk_airway_game) ─────────────────────────────────
+  // One unfinished game survives a reload. Written after every update
+  // while a live game is on screen; cleared when a game ends, the player
+  // ends it, or starts fresh. Questions are stored by id and re-linked to
+  // the bank on load. Every storage call is guarded: a failure only means
+  // the game is not saved, never that the live game stops.
+
+  var SAVE_KEY = 'sk_airway_game';
+  var SAVE_MAX_AGE = 24 * 60 * 60 * 1000;
+  var LIVE = { rounds: true, board: true, quiz: true };
+  var LIVE_LABEL = { rounds: 'Rounds', board: 'Jeopardy Board', quiz: 'Quick Quiz' };
+  var BANK = {};
+  QUESTIONS.forEach(function (q) { BANK[q.id] = q; });
+
+  function storeRead() {
+    try { return window.localStorage.getItem(SAVE_KEY); } catch (e) { return null; }
+  }
+  function storeWrite(value) {
+    try {
+      if (value == null) window.localStorage.removeItem(SAVE_KEY);
+      else window.localStorage.setItem(SAVE_KEY, value);
+    } catch (e) { /* no-op: private browsing / quota / blocked storage */ }
+  }
+
+  function qId(q) { return q ? q.id : null; }
+
+  // The live game, with questions reduced to ids. Null if there is none.
+  function captureGame(screen) {
+    if (screen === 'rounds' && S.rounds) {
+      var r = S.rounds;
+      return { teams: r.teams, pool: r.pool.map(qId), queueIdx: r.queueIdx, qPhase: r.qPhase,
+        activeTeamId: r.activeTeamId, wrongTeamIds: r.wrongTeamIds, revealed: r.revealed };
+    }
+    if (screen === 'board' && S.board) {
+      var b = S.board;
+      return {
+        teams: b.teams,
+        controlIndex: b.controlIndex,
+        columns: b.columns.map(function (col) {
+          return { topic: col.topic, cells: col.cells.map(function (c) {
+            return { id: c.id, topic: c.topic, value: c.value, difficulty: c.difficulty, question: qId(c.question), done: c.done };
+          }) };
+        }),
+        modal: b.modal ? Object.assign({}, b.modal, { cell: null }) : null,
+      };
+    }
+    if (screen === 'quiz' && S.quiz) {
+      var qz = S.quiz;
+      return { pool: qz.pool.map(qId), idx: qz.idx, choices: qz.choices, answered: qz.answered,
+        selectedIdx: qz.selectedIdx, records: qz.records.map(function (rec) { return { question: qId(rec.question), correct: rec.correct }; }) };
+    }
+    return null;
+  }
+
+  // Inverse of captureGame. Throws on any id the bank no longer has, so a
+  // stale or damaged save is discarded instead of half-restored.
+  function rebuildGame(screen, g) {
+    function pick(id) {
+      if (!Object.prototype.hasOwnProperty.call(BANK, id)) throw new Error('unknown question ' + id);
+      return BANK[id];
+    }
+    function pickOrNull(id) { return id == null ? null : pick(id); }
+    if (screen === 'rounds') {
+      var pool = g.pool.map(pick);
+      if (!pool[g.queueIdx]) throw new Error('round out of range');
+      return { rounds: Object.assign({}, g, { pool: pool, activeQ: pool[g.queueIdx] }) };
+    }
+    if (screen === 'board') {
+      var columns = g.columns.map(function (col) {
+        return { topic: col.topic, cells: col.cells.map(function (c) {
+          return Object.assign({}, c, { question: pickOrNull(c.question) });
+        }) };
+      });
+      var modal = g.modal ? Object.assign({}, g.modal, { cell: columns[g.modal.colIdx].cells[g.modal.cellIdx] }) : null;
+      return { board: Object.assign({}, g, { columns: columns, modal: modal }) };
+    }
+    return { quiz: Object.assign({}, g, {
+      pool: g.pool.map(pick),
+      records: g.records.map(function (rec) { return { question: pick(rec.question), correct: rec.correct }; }),
+    }) };
+  }
+
+  // The saved game if there is a usable one under 24 h old, else null.
+  // Unusable or expired saves are removed here so they never linger.
+  function readSaved() {
+    var raw = storeRead();
+    if (raw == null) return null;
+    try {
+      var s = JSON.parse(raw);
+      var age = Date.now() - s.savedAt;
+      if (s.v !== 1 || !LIVE[s.screen] || !(age >= 0 && age < SAVE_MAX_AGE)) throw new Error('expired or unknown');
+      return { screen: s.screen, mode: s.mode, savedAt: s.savedAt, built: rebuildGame(s.screen, s.game) };
+    } catch (e) {
+      storeWrite(null);
+      return null;
+    }
+  }
+
+  // Called from update(): a live game is written; a finished game clears
+  // the save. Setup and browse leave it alone, so Menu does not lose it.
+  function persist() {
+    if (LIVE[S.screen]) {
+      var game = captureGame(S.screen);
+      if (!game) return;
+      S.resume = null;
+      var json = null;
+      try { json = JSON.stringify({ v: 1, savedAt: Date.now(), screen: S.screen, mode: S.mode, game: game }); }
+      catch (e) { return; }
+      storeWrite(json);
+    } else if (S.screen !== 'setup' && S.screen !== 'browse') {
+      S.resume = null;
+      storeWrite(null);
+    }
+  }
+
+  function resumeSaved() {
+    var s = S.resume;
+    if (!s) return;
+    Object.keys(s.built).forEach(function (k) { S[k] = s.built[k]; });
+    S.screen = s.screen;
+    if (screens[s.mode]) S.mode = s.mode;
+    S.resume = null;
+    update();
+  }
+
+  function discardSaved() {
+    S.resume = null;
+    storeWrite(null);
+    update();
+  }
+
+  function resumeBanner() {
+    var s = S.resume;
+    if (!s) return '';
+    var detail;
+    if (s.screen === 'quiz') {
+      var recs = s.built.quiz.records;
+      detail = recs.filter(function (r) { return r.correct; }).length + ' / ' + recs.length + ' correct';
+    } else {
+      var teams = s.built[s.screen].teams;
+      detail = teams.map(function (t) { return esc(t.name) + ' ' + t.score; }).join(' · ');
+    }
+    return '<div class="aw-resume" role="status">' +
+      '<p class="aw-resume-text"><strong>Unfinished game</strong> · ' + esc(LIVE_LABEL[s.screen]) + ' · ' + detail +
+      ' · saved ' + esc(new Date(s.savedAt).toLocaleString()) + '</p>' +
+      '<div class="aw-resume-actions">' +
+      '<button type="button" class="aw-btn aw-btn-primary" data-action="resume-game">Resume</button>' +
+      '<button type="button" class="aw-btn aw-btn-ghost" data-action="resume-discard">Start fresh</button>' +
+      '</div></div>';
   }
 
   // ─── Render dispatch + focus-preserving update ───────────────────
@@ -138,6 +290,7 @@
   }
 
   function update() {
+    persist();
     var active = document.activeElement;
     var id = active && active.id;
     var start = active && typeof active.selectionStart === 'number' ? active.selectionStart : null;
@@ -221,7 +374,7 @@
 
   function renderSetup() {
     var poolSize = poolFor(S.filters).length;
-    var body = '';
+    var body = resumeBanner();
 
     body += '<div class="aw-hero">' +
       '<div class="aw-eyebrow"><span>ENT · H&amp;N Nursing</span></div>' +
@@ -721,7 +874,7 @@
     if (!qz) return '<div class="aw-wrap">No active quiz.</div>';
     var q = qz.pool[qz.idx];
 
-    var html = topline('<span>Q ' + (qz.idx + 1) + ' / ' + qz.pool.length + '</span>');
+    var html = topline('<span>Q ' + (qz.idx + 1) + ' / ' + qz.pool.length + '</span><button type="button" class="aw-end-now" data-action="q-end-now">End game</button>');
     html += '<div class="aw-game-body">';
     html += '<div class="aw-quiz-topline"><span>' + topicBadge(q.topic) + ' ' + diffBadge(q.difficulty) + '</span><span class="aw-quiz-score">' + qz.records.filter(function (r) { return r.correct; }).length + ' / ' + qz.records.length + ' correct</span></div>';
 
@@ -755,6 +908,12 @@
     if (!qz) return;
     var q = qz.pool[qz.idx];
 
+    if (name === 'q-end-now') {
+      // Abandoned, not completed: no history entry, straight back to the menu.
+      S.quiz = null; S.screen = 'setup'; S.resume = null;
+      storeWrite(null);
+      update(); return;
+    }
     if (name === 'q-choice' && !qz.answered) {
       var idx = +el.dataset.idx;
       qz.answered = true;
@@ -920,6 +1079,8 @@
     if (name === 'start-quiz') { startQuiz(); return; }
     if (name === 'start-browse') { S.screen = 'browse'; update(); return; }
     if (name === 'go-setup') { S.screen = 'setup'; update(); return; }
+    if (name === 'resume-game') { resumeSaved(); return; }
+    if (name === 'resume-discard') { discardSaved(); return; }
 
     if (name === 'r-play-again') { startRounds(); return; }
     if (name === 'b-play-again') { startBoard(); return; }
@@ -964,5 +1125,7 @@
 
   // ─── INIT ─────────────────────────────────────────────────────────
 
+  // Never resumed silently: an unfinished game is offered on the setup screen.
+  S.resume = readSaved();
   render();
 })();
