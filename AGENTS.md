@@ -15,7 +15,7 @@ The canonical operating manual for every coding agent in this repository (Claude
 | **Owner** | Decides, vets medical content, merges to `master` (deploy) | — |
 | **Opus** (orchestrator) | Plans and specs; anatomy and medical data; checkpoints; adjudicates reviews; keeps the plan's checklist honest | Routine wiring it could spec instead |
 | **Haiku** (executor; any other model the owner assigns to this role) | Executes work packages (WPs) to their acceptance, inside their Touch list | Anatomy or clinical judgment, owner decisions, files outside Touch, changing a plan's contracts (it writes `BLOCKED: <why>` under the WP instead) |
-| **Sonnet ∥ Argon** (adversarial reviewers) | Independent PR reviews of a wave's diff | Pushing fixes |
+| **Adversarial reviewer** (Opus by default; the owner names another for a wave: self, Argon, Sonnet) | Independent review of a wave's diff against its spec; Opus adjudicates when it is not the reviewer | Pushing fixes |
 
 Protocol detail (WP format, waves, reviews): `docs/delegation.md`.
 
@@ -121,6 +121,6 @@ Kept content, **served by nothing** — no page fetches it, no test checks it. C
 - **`docs/wip.md` describes the current state of each system** — not an append-only diary. When something is retired, delete its section rather than narrating the removal.
 - **Documentation second pass (required):** after any significant change, once the code itself is done and verified, run a docs pass as a separate final step: update `README.md`, `docs/wip.md`, this file, and the owning `docs/*` file. The doc→subsystem map and the mechanical checklist live in `docs/docs-map.md` — the pass is deliberately checklist-shaped so it can be delegated to a smaller/cheaper model or agent. Never write facts that rot (item counts, file sizes, line numbers) into docs; point at the source file instead.
 - **Figures are scenes, not markup.** Change a figure in `js/diagrams/<id>.js`, then `bake` + `stamp-assets`; never hand-edit a baked block. Invented shapes/data are labelled schematic, and their clinical claims are the owner's to vet.
-- **Delegation:** work is split owner / Opus (plans, specs, anatomy, checkpoints) / Haiku (executes work packages to their acceptance; the owner may assign another model to this role) / Sonnet ∥ Argon (adversarial review) per `docs/delegation.md`, the spec in `plans/` and its issues. Executing a WP: stay inside its Touch list, escalate rather than make anatomy or owner calls.
+- **Delegation:** work is split owner / Opus (plans, specs, anatomy, checkpoints) / Haiku (executes work packages to their acceptance; the owner may assign another model to this role) / adversarial reviewer per `docs/delegation.md` (Opus by default; the owner chooses), the spec in `plans/` and its issues. Executing a WP: stay inside its Touch list, escalate rather than make anatomy or owner calls.
 - **Commit messages: one short line, no trailers.** No `Co-Authored-By`, no session links, no model names. Owner preference; it overrides any tool's default attribution.
 - **Prefer deleting to keeping.** Dead code here is not free: it gets loaded, indexed, read by the next agent, and mistaken for something in use. If nothing references it, remove it rather than leaving it "just in case" — git history is the safety net.

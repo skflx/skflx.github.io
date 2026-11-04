@@ -11,7 +11,7 @@ parent issue per plan, one sub-issue per WP) against a spec in `plans/`. Rules e
 | **Owner** (human orchestrator) | Decides (`docs/decisions.md` §7), vets medical content (`review: verified`), merges to `master` (deploy), launches sessions with the prompts below | — |
 | **Opus** (orchestrator) | Specs, anatomy-critical geometry and data, medical content authoring and adversarial review, checkpoints (reviews a batch of delegated work against its acceptance), keeps the roadmap honest | Routine wiring it could spec instead |
 | **Haiku** (executor; any other model the owner assigns to this role) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
-| **Sonnet ∥ Argon** (adversarial reviewers) | Review each wave's diff independently against its spec, as PR reviews that Opus adjudicates | Pushing fixes, merging |
+| **Adversarial reviewer** (Opus by default; the owner names another per wave: self, Argon, Sonnet) | Review each wave's diff against its spec, as PR reviews; Opus adjudicates when it is not the reviewer | Pushing fixes, merging |
 
 Why the split: a spec plus an acceptance test costs Opus far fewer tokens
 than the implementation, and this repo's test suites (`docs/verification.md`)
@@ -143,16 +143,18 @@ lands in the orchestrator's context). So:
   hand-pick hashes. Merges, stamp conflicts and docs passes are mechanical:
   an executor session at low effort is enough.
 
-## 7. Adversarial review (Sonnet ∥ Argon)
+## 7. Adversarial review
 
-After each wave, two reviewers run in separate sessions on the same input:
-the wave's diff, its spec, and the spec's reviewer checklist. Each posts an
-independent PR review, one finding per comment (severity `block`/`fix`/`nit`,
-`file:line`, a concrete failure scenario, reproduced yes/no). Reviewers do
+After each wave, the reviewer the owner names for that wave (default Opus; the
+owner may name self, Argon or Sonnet) reads the wave's diff, its spec, and the
+spec's reviewer checklist. The reviewer posts a PR review, one finding per
+comment (severity `block`/`fix`/`nit`, `file:line`, a concrete failure
+scenario, reproduced yes/no). The owner may name two reviewers for a wave. Reviewers do
 not rerun test suites: they read the diff and the output the WP reported.
-Opus adjudicates: real findings become new `type:wp` sub-issues, dismissed
-ones get a one-line reason on their thread, and the wave's review issue
-closes when no `block` finding is open, which unlocks the next wave.
+When the reviewer is not Opus, Opus adjudicates: real findings become new
+`type:wp` sub-issues, dismissed ones get a one-line reason on their thread, and
+the wave's review issue closes when no `block` finding is open, which unlocks
+the next wave.
 
 Tests and CI are a bottleneck: a WP runs only the suites whose inputs it
 changed, pushes once, and the full suite runs once before the owner merges
