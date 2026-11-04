@@ -363,6 +363,12 @@ function attributionProblems(slug, files, text) {
   return out;
 }
 
+/* Rule 7b: `draft`, when present, is a boolean. */
+function draftProblem(entry) {
+  return entry && entry.draft !== undefined && typeof entry.draft !== 'boolean'
+    ? `draft must be a boolean (got ${JSON.stringify(entry.draft)})` : null;
+}
+
 /* Rule 7: `unlisted`, when present on a guide or module entry, is a boolean. */
 function unlistedProblem(entry) {
   return entry && entry.unlisted !== undefined && typeof entry.unlisted !== 'boolean'
@@ -457,6 +463,8 @@ function checkBlockValidators() {
   }
   if (unlistedProblem({ unlisted: true }) || unlistedProblem({}) || unlistedProblem({ unlisted: false })) selfFail.push('good unlisted rejected');
   if (!unlistedProblem({ unlisted: 'yes' })) selfFail.push("bad 'unlisted: yes' accepted");
+  if (draftProblem({ draft: true }) || draftProblem({})) selfFail.push('good draft rejected');
+  if (!draftProblem({ draft: 'yes' })) selfFail.push("bad 'draft: yes' accepted");
   if (attributionProblems('ear-anatomy', ['ct/ax-3.png', 'tm-right.svg', 'ATTRIBUTION.md'], files[ATTR]).length) selfFail.push('good attribution rejected');
   if (!attributionProblems('ear-anatomy', [RASTER_NOT_LISTED.slice(DIR.length)], files[ATTR]).length) selfFail.push("bad 'raster absent from ATTRIBUTION.md' accepted");
   ok(selfFail.length === 0, 'guide block validators reject the W0.3 bad fixtures',
@@ -598,6 +606,9 @@ function checkGuides() {
   const badUnlisted = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, unlistedProblem(e)]).filter(([, m]) => m);
   ok(badUnlisted.length === 0, 'unlisted is a boolean on every guide and module entry where it is set',
     `non-boolean unlisted: ${badUnlisted.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);
+  const badDraft = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, draftProblem(e)]).filter(([, m]) => m);
+  ok(badDraft.length === 0, 'draft is a boolean on every guide and module entry where it is set',
+    `non-boolean draft: ${badDraft.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);
 
   /* Rule 8: the figure attribution rule for every attributed slug. */
   for (const slug of ATTRIBUTED) {

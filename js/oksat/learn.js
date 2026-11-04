@@ -1285,6 +1285,7 @@
             head.appendChild(dots);
         }
         art.appendChild(head);
+        if (entry.id === 'start' && guide.draft === true) art.appendChild(txt('p', 'ok-draft-note', 'Draft: this guide is still being built and checked. Content may change and is not yet verified by the owner; not a clinical reference.'));
         if (entry.id === 'start') art.appendChild(howTo());
         if (ch.intro) art.appendChild(renderBlocks(ch.intro, { ch: entry, sec: { id: 'intro', blocks: [] } }));
         if (ch.tldr && ch.tldr.length) {

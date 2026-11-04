@@ -9,6 +9,8 @@
   OKSATPrefs.mountThemeToggle(document.getElementById('theme-toggle'));
   OKSATPrefs.mountFontPicker(document.getElementById('font-picker'));
 
+  /* `draft: true` lists the entry with a visible Draft badge (docs/decisions.md section 9). */
+  function draftTag(x) { return x.draft === true ? ' <span class="module-draft">Draft: in progress</span>' : ''; }
   var today = new Date().toISOString().split('T')[0];
   var reviewer = OKSATStore.reviewer();
   /* `unlisted: true` keeps a module or guide reachable by its own URL but out of
@@ -48,7 +50,7 @@
     a.innerHTML =
       '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : m.accent) + '"></div>' +
       '<div class="module-body">' +
-        '<div class="module-label">' + esc(m.kicker) + ' · ' + esc(m.count) + ' questions</div>' +
+        '<div class="module-label">' + esc(m.kicker) + ' · ' + esc(m.count) + ' questions' + draftTag(m) + '</div>' +
         '<div class="module-title">' + esc(m.title) + '</div>' +
         '<p class="module-desc">' + esc(m.desc) + '</p>' +
         (st.due > 0 ? '<div class="module-due">' + st.due + ' due for review</div>' : '') +
@@ -76,7 +78,7 @@
     a.innerHTML =
       '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : g.accent) + '"></div>' +
       '<div class="module-body">' +
-        '<div class="module-label">' + esc(g.kicker) + ' · ' + chapters + ' chapters · ~' + Math.round(mins / 60 * 10) / 10 + ' h</div>' +
+        '<div class="module-label">' + esc(g.kicker) + ' · ' + chapters + ' chapters · ~' + Math.round(mins / 60 * 10) / 10 + ' h' + draftTag(g) + '</div>' +
         '<div class="module-title">' + esc(g.title) + '</div>' +
         '<p class="module-desc">' + esc(g.desc) + '</p>' +
         (done > 0
