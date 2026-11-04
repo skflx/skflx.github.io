@@ -55,6 +55,22 @@
     }
 
     .aw-section { margin-bottom: 1.5rem; }
+    .aw-resume {
+      max-width: 640px; margin: 1.25rem auto 0; padding: 0.85rem 1rem; box-sizing: border-box;
+      border: 1px solid var(--aw-accent-line); background: var(--aw-accent-soft); border-radius: 6px;
+    }
+    .aw-resume-text { margin: 0; font-size: 0.85rem; color: var(--aw-muted); overflow-wrap: anywhere; }
+    .aw-resume-text strong { color: var(--aw-strong); }
+    .aw-resume-list { list-style: none; margin: 0.6rem 0 0; padding: 0; }
+    .aw-resume-row {
+      display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; align-items: center; justify-content: space-between;
+      padding: 0.35rem 0; border-top: 1px solid var(--aw-accent-line);
+    }
+    .aw-resume-row .aw-resume-text { flex: 1 1 14rem; min-width: 0; }
+    .aw-resume-mark { color: var(--aw-strong); font-weight: 700; }
+    .aw-resume-row.is-this-tab .aw-resume-text { color: var(--aw-strong); }
+    .aw-resume-actions { display: flex; justify-content: flex-end; margin-top: 0.4rem; }
+    .aw-resume .aw-btn { min-width: 44px; min-height: 44px; }
     .aw-label {
       font-size: 0.68rem; font-weight: 700; color: var(--aw-faint);
       letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 0.55rem;
@@ -330,7 +346,7 @@
   <script src="js/diagrams/larynx.js?v=43a3fa22"></script>
   <script src="js/airway/questions.js?v=8df5bace"></script>
   <script src="js/airway/engine.js?v=d1dc8f79"></script>
-  <script src="js/airway/app.js?v=cf26de37"></script>
+  <script src="js/airway/app.js?v=57f6d1d2"></script>
 
   <script src="js/site.js?v=dd67d957"></script>
 </body>
