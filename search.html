@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Search | skflx.MD</title>
+    <meta name="description" content="One search box over the OKSAT question modules and the CPT code table.">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <script src="js/theme-boot.js?v=61b69b81"></script>
+    <link rel="stylesheet" href="css/site.css?v=cb283dd6">
+
+    <style>
+        /* ── Search — page layout on css/site.css tokens ── */
+        .srch { max-width: 52rem; margin: 0 auto; padding: clamp(2rem, 6vw, 4rem) var(--gutter) 4rem; }
+        .srch-head { margin-bottom: 1.75rem; }
+        .srch-head h1 {
+            margin: 0.5rem 0 0.6rem; font-size: var(--step-3); font-weight: 740; font-stretch: 118%;
+            letter-spacing: -0.035em; line-height: 0.95;
+        }
+        .srch-head p { margin: 0; color: var(--ink-muted); max-width: 36rem; }
+
+        /* Search field: one heavy rule, no box (as cpt-search.html) */
+        .srch-row { margin-bottom: 1rem; }
+        .srch-row label { display: block; margin-bottom: 0.4rem; }
+        #srch-input {
+            width: 100%; padding: 0.7rem 0; box-sizing: border-box;
+            font: 500 clamp(1.15rem, 1rem + 1vw, 1.5rem)/1.2 var(--font-sans); color: var(--ink);
+            background: transparent; border: 0; border-bottom: 2px solid var(--ink); border-radius: 0;
+            outline: none; -webkit-appearance: none; appearance: none;
+        }
+        #srch-input:focus { border-bottom-color: var(--signal); }
+        #srch-input::placeholder { color: var(--ink-faint); font-weight: 400; }
+
+        .srch-status { margin: 0.75rem 0 0.25rem; min-height: 1em; }
+        .srch-error {
+            margin: 0.5rem 0; padding: 0.4rem 0.7rem; border-left: 3px solid var(--signal);
+            color: var(--ink-muted); font-size: 0.92rem;
+        }
+
+        .srch-group { margin-top: 1.5rem; }
+        .srch-group h2 { margin: 0 0 0.25rem; }
+        .srch-group ol { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+        .srch-group li { border-top: 1px solid var(--rule); }
+        .srch-more { margin: 0.5rem 0 0; color: var(--ink-faint); font-size: 0.9rem; }
+
+        .srch-hit {
+            display: grid; gap: 0.2rem; padding: 0.8rem 0; color: var(--ink); text-decoration: none;
+        }
+        .srch-hit:hover .srch-text, .srch-hit:focus-visible .srch-text { color: var(--signal); }
+        .srch-hit:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+        .srch-label, .srch-field { font: 500 0.72rem/1.3 var(--font-mono); letter-spacing: 0.02em; color: var(--ink-faint); }
+        .srch-field { text-transform: uppercase; letter-spacing: 0.06em; }
+        .srch-text {
+            line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-topbar">
+        <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
+        <span class="site-topbar-title">Search</span>
+        <div class="site-topbar-actions">
+            <a class="site-navlink" href="index.html#tools">Tools</a>
+            <button class="site-theme-toggle" type="button" aria-label="Night mode" aria-pressed="false">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="srch">
+        <div class="srch-head">
+            <p class="site-kicker">Tool &middot; Study</p>
+            <h1>Search</h1>
+            <p>One box over the OKSAT question modules and the CPT code table. Matches are case-insensitive substrings; an OKSAT hit opens its module (at the concept, when it has one), a CPT hit opens its row in the CPT lookup.</p>
+        </div>
+
+        <div class="srch-row">
+            <label class="site-kicker" for="srch-input">Search</label>
+            <input id="srch-input" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search"
+                placeholder="thyroid, Eustachian, 31540…" aria-describedby="srch-status">
+        </div>
+
+        <div id="srch-status" class="srch-status site-kicker" aria-live="polite">Loading the index…</div>
+        <div id="srch-errors"></div>
+        <div id="srch-results"></div>
+    </main>
+
+    <footer class="site-footer">
+        <a href="index.html">skflx.MD</a>
+        <span>Study aid; the index is built in this browser on each load.</span>
+        <span class="push">Nothing you type is sent anywhere.</span>
+    </footer>
+
+    <script src="js/cpt-data.js?v=74c39433"></script>
+    <script src="js/oksat/manifest.js?v=50267184"></script>
+    <script src="js/site.js?v=dd67d957"></script>
+    <script src="js/search.js?v=7edaa47d"></script>
+</body>
+</html>

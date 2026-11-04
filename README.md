@@ -58,6 +58,8 @@ and defaulting to `prefers-color-scheme`.
   questions answered in place, each section linking into the question modules.
 - **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for
   otolaryngology.
+- **Search** (`search.html`) — one box over the OKSAT question modules and the
+  CPT table; results link into the module (at its concept) or the CPT lookup.
 - **PDF Chapter Splitter** (`pdf-chapter-splitter.html`) — lossless split of a
   PDF into chapters by its outline or custom boundaries, single files or ZIP;
   runs entirely in the browser.
@@ -104,7 +106,10 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── airway-jeopardy.html    # Airway Rounds team quiz (no network needed)
 │   └── js/airway/*.js      #   app, engine, question bank
 ├── cpt-search.html         # CPT code search
+│   ├── js/cpt-data.js      #   code table (window.CPT_DB)
 │   └── js/cpt-search.js    #   code table + search
+├── search.html             # search over OKSAT modules and the CPT table
+│   └── js/search.js        #   in-memory index, matching, keyboard results
 ├── Fusion.html              # second-CI research study flyer (static, QR links to itself)
 ├── pdf-chapter-splitter.html # PDF chapter splitter (client-side)
 │   └── js/pdf-chapter-splitter.js #   page logic (pdf-lib + JSZip in js/vendor/)
