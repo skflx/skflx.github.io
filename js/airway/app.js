@@ -117,28 +117,59 @@
     });
   }
 
-  // ─── SAVED GAME (sk_airway_game) ─────────────────────────────────
-  // One unfinished game survives a reload. Written after every update
-  // while a live game is on screen; cleared when a game ends, the player
-  // ends it, or starts fresh. Questions are stored by id and re-linked to
-  // the bank on load. Every storage call is guarded: a failure only means
-  // the game is not saved, never that the live game stops.
+  // ─── SAVED GAMES (sk_airway_games) ───────────────────────────────
+  // Each tab keeps at most one unfinished game, under its own tab id
+  // (sk_airway_tab in sessionStorage, so it is per tab). The map holds up
+  // to MAX_SAVES entries; the oldest by savedAt is dropped first. A live
+  // game is saved after every update, and only that tab's entry is
+  // removed when its game ends, on End game or on Start fresh. The list is
+  // read once at boot and never resumed silently. Every storage call is
+  // guarded: a failure only means nothing is saved, never that play stops.
 
-  var SAVE_KEY = 'sk_airway_game';
+  var SAVES_KEY = 'sk_airway_games';
+  var LEGACY_KEY = 'sk_airway_game';   // single-slot save from before tab ids; migrated at boot
+  var LEGACY_ID = '_legacy';           // its entry id in the map (never a tab id: those are 6 chars)
+  var TAB_KEY = 'sk_airway_tab';
+  var MAX_SAVES = 5;
   var SAVE_MAX_AGE = 24 * 60 * 60 * 1000;
   var LIVE = { rounds: true, board: true, quiz: true };
   var LIVE_LABEL = { rounds: 'Rounds', board: 'Jeopardy Board', quiz: 'Quick Quiz' };
   var BANK = {};
   QUESTIONS.forEach(function (q) { BANK[q.id] = q; });
 
-  function storeRead() {
-    try { return window.localStorage.getItem(SAVE_KEY); } catch (e) { return null; }
+  function randomTabId() {
+    var chars = 'abcdefghjkmnpqrstuvwxyz23456789', out = '';
+    for (var i = 0; i < 6; i++) out += chars.charAt(Math.floor(Math.random() * chars.length));
+    return out;
   }
-  function storeWrite(value) {
+  // This tab's id, made once and kept in sessionStorage. If that is blocked,
+  // a new id per page load still keeps this page's saves apart from others.
+  var TAB = (function () {
     try {
-      if (value == null) window.localStorage.removeItem(SAVE_KEY);
-      else window.localStorage.setItem(SAVE_KEY, value);
-    } catch (e) { /* no-op: private browsing / quota / blocked storage */ }
+      var id = window.sessionStorage.getItem(TAB_KEY);
+      if (!/^[a-z0-9]{6}$/.test(id || '')) {
+        id = randomTabId();
+        window.sessionStorage.setItem(TAB_KEY, id);
+      }
+      return id;
+    } catch (e) { return randomTabId(); }
+  })();
+
+  function savesRead() {
+    try {
+      var o = JSON.parse(window.localStorage.getItem(SAVES_KEY));
+      return o && typeof o === 'object' && !Array.isArray(o) ? o : {};
+    } catch (e) { return {}; }
+  }
+  function savesWrite(map) {
+    try { window.localStorage.setItem(SAVES_KEY, JSON.stringify(map)); }
+    catch (e) { /* no-op: private browsing / quota / blocked storage */ }
+  }
+  // Keep the MAX_SAVES newest entries by savedAt.
+  function capSaves(map) {
+    Object.keys(map).sort(function (a, b) { return map[b].savedAt - map[a].savedAt; })
+      .slice(MAX_SAVES).forEach(function (id) { delete map[id]; });
+    return map;
   }
 
   function qId(q) { return q ? q.id : null; }
@@ -199,73 +230,144 @@
     }) };
   }
 
-  // The saved game if there is a usable one under 24 h old, else null.
-  // Unusable or expired saves are removed here so they never linger.
-  function readSaved() {
-    var raw = storeRead();
-    if (raw == null) return null;
-    try {
-      var s = JSON.parse(raw);
-      var age = Date.now() - s.savedAt;
-      if (s.v !== 1 || !LIVE[s.screen] || !(age >= 0 && age < SAVE_MAX_AGE)) throw new Error('expired or unknown');
-      return { screen: s.screen, mode: s.mode, savedAt: s.savedAt, built: rebuildGame(s.screen, s.game) };
-    } catch (e) {
-      storeWrite(null);
-      return null;
+  // What a save is called in the list: mode, position, teams or tally.
+  function labelFor(screen, g) {
+    if (screen === 'quiz') {
+      var right = g.records.filter(function (rec) { return rec.correct; }).length;
+      return 'Quick Quiz, question ' + (g.idx + 1) + ' of ' + g.pool.length + ', ' + right + ' correct';
     }
+    var names = g.teams.map(function (t) { return t.name; }).join(' · ');
+    if (screen === 'rounds') return 'Rounds, round ' + (g.queueIdx + 1) + ', teams ' + names;
+    return 'Jeopardy Board, teams ' + names;
   }
 
-  // Called from update(): a live game is written; a finished game clears
-  // the save. Setup and browse leave it alone, so Menu does not lose it.
+  // Usable entries under 24 h old, newest first. Damaged ones are not offered.
+  function readList(map) {
+    var now = Date.now(), out = [];
+    Object.keys(map).forEach(function (id) {
+      try {
+        var e = map[id], st = e.state, age = now - e.savedAt;
+        if (!(age >= 0 && age < SAVE_MAX_AGE)) return;
+        if (st.v !== 1 || !LIVE[st.screen]) throw new Error('unknown save');
+        out.push({ tabId: id, savedAt: e.savedAt, label: String(e.label || ''),
+          screen: st.screen, mode: st.mode, built: rebuildGame(st.screen, st.game) });
+      } catch (x) { /* damaged: not offered */ }
+    });
+    return out.sort(function (a, b) { return b.savedAt - a.savedAt; });
+  }
+
+  // Boot: take over the single-slot save from before tab ids, drop expired
+  // entries, and list the rest. Writes only when something changed.
+  function loadSaves() {
+    var map = savesRead(), changed = false, legacy = null;
+    try { legacy = window.localStorage.getItem(LEGACY_KEY); } catch (e) { legacy = null; }
+    if (legacy != null) {
+      changed = true;
+      try {
+        var old = JSON.parse(legacy);
+        if (old && old.v === 1 && typeof old.savedAt === 'number' && LIVE[old.screen]) {
+          map[LEGACY_ID] = { savedAt: old.savedAt, label: labelFor(old.screen, old.game),
+            state: { v: 1, screen: old.screen, mode: old.mode, game: old.game } };
+        }
+      } catch (e) { /* unreadable: dropped */ }
+      try { window.localStorage.removeItem(LEGACY_KEY); } catch (e) { /* no-op */ }
+    }
+    var now = Date.now();
+    Object.keys(map).forEach(function (id) {
+      var e = map[id], age = e ? now - e.savedAt : NaN;
+      if (!(age >= 0 && age < SAVE_MAX_AGE)) { delete map[id]; changed = true; }
+    });
+    if (changed) savesWrite(map);
+    return readList(map);
+  }
+
+  function listOthers() {
+    return (S.resume || []).filter(function (e) { return e.tabId !== TAB; });
+  }
+
+  // Remove only this tab's save (finished game, End game, Start fresh).
+  function clearOwn() {
+    S.resume = listOthers();
+    var map = savesRead();
+    if (Object.prototype.hasOwnProperty.call(map, TAB)) { delete map[TAB]; savesWrite(map); }
+  }
+
+  // Called from update(). A live game is saved under this tab; a finished
+  // game removes this tab's save. Setup and browse leave saves alone, so
+  // Menu does not lose them.
   function persist() {
     if (LIVE[S.screen]) {
       var game = captureGame(S.screen);
       if (!game) return;
-      S.resume = null;
-      var json = null;
-      try { json = JSON.stringify({ v: 1, savedAt: Date.now(), screen: S.screen, mode: S.mode, game: game }); }
-      catch (e) { return; }
-      storeWrite(json);
+      S.resume = listOthers();
+      var map = savesRead();
+      map[TAB] = { savedAt: Date.now(), label: labelFor(S.screen, game),
+        state: { v: 1, screen: S.screen, mode: S.mode, game: game } };
+      savesWrite(capSaves(map));
     } else if (S.screen !== 'setup' && S.screen !== 'browse') {
-      S.resume = null;
-      storeWrite(null);
+      clearOwn();
     }
   }
 
-  function resumeSaved() {
-    var s = S.resume;
+  function resumeSaved(id) {
+    var s = (S.resume || []).filter(function (e) { return e.tabId === id; })[0];
     if (!s) return;
     Object.keys(s.built).forEach(function (k) { S[k] = s.built[k]; });
     S.screen = s.screen;
     if (screens[s.mode]) S.mode = s.mode;
-    S.resume = null;
     update();
   }
 
   function discardSaved() {
-    S.resume = null;
-    storeWrite(null);
+    clearOwn();
     update();
   }
 
-  function resumeBanner() {
-    var s = S.resume;
-    if (!s) return '';
-    var detail;
-    if (s.screen === 'quiz') {
-      var recs = s.built.quiz.records;
-      detail = recs.filter(function (r) { return r.correct; }).length + ' / ' + recs.length + ' correct';
-    } else {
-      var teams = s.built[s.screen].teams;
-      detail = teams.map(function (t) { return esc(t.name) + ' ' + t.score; }).join(' · ');
-    }
-    return '<div class="aw-resume" role="status">' +
-      '<p class="aw-resume-text"><strong>Unfinished game</strong> · ' + esc(LIVE_LABEL[s.screen]) + ' · ' + detail +
-      ' · saved ' + esc(new Date(s.savedAt).toLocaleString()) + '</p>' +
-      '<div class="aw-resume-actions">' +
-      '<button type="button" class="aw-btn aw-btn-primary" data-action="resume-game">Resume</button>' +
-      '<button type="button" class="aw-btn aw-btn-ghost" data-action="resume-discard">Start fresh</button>' +
-      '</div></div>';
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function hhmm(ms) {
+    var d = new Date(ms), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+  function button(cls, text, action, id) {
+    var b = el('button', cls, text);
+    b.type = 'button';
+    b.setAttribute('data-action', action);
+    if (id) b.setAttribute('data-id', id);
+    return b;
+  }
+
+  // The setup banner, built with textContent only: labels carry team names.
+  function mountResume(slot) {
+    var list = S.resume || [];
+    if (!slot || !list.length) return;
+    var box = el('div', 'aw-resume');
+    box.setAttribute('role', 'region');
+    box.setAttribute('aria-label', 'Unfinished games');
+    var head = el('p', 'aw-resume-text');
+    head.appendChild(el('strong', null, 'Unfinished games'));
+    head.appendChild(document.createTextNode(' · resume one, or start this tab fresh.'));
+    box.appendChild(head);
+    var ul = el('ul', 'aw-resume-list');
+    list.forEach(function (s) {
+      var mine = s.tabId === TAB;
+      var li = el('li', 'aw-resume-row' + (mine ? ' is-this-tab' : ''));
+      var name = s.tabId === LEGACY_ID ? 'Earlier game' : 'Tab ' + s.tabId;
+      var text = el('p', 'aw-resume-text', name + ' · saved ' + hhmm(s.savedAt) + ' · ' + s.label);
+      if (mine) text.appendChild(el('span', 'aw-resume-mark', ' · this tab'));
+      li.appendChild(text);
+      li.appendChild(button('aw-btn aw-btn-primary', 'Resume', 'resume-game', s.tabId));
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+    var actions = el('div', 'aw-resume-actions');
+    actions.appendChild(button('aw-btn aw-btn-ghost', 'Start fresh', 'resume-discard'));
+    box.appendChild(actions);
+    slot.appendChild(box);
   }
 
   // ─── Render dispatch + focus-preserving update ───────────────────
@@ -283,6 +385,7 @@
 
   function render() {
     root.innerHTML = '<div class="aw">' + screens[S.screen]() + '</div>';
+    if (S.screen === 'setup') mountResume(root.querySelector('.aw-resume-slot'));
     // The setup hero's larynx figure (js/diagrams/larynx.js); the engine
     // keeps its angle across re-renders. Decorative to the game: a failure
     // here must never stop the quiz.
@@ -374,7 +477,7 @@
 
   function renderSetup() {
     var poolSize = poolFor(S.filters).length;
-    var body = resumeBanner();
+    var body = '<div class="aw-resume-slot"></div>';
 
     body += '<div class="aw-hero">' +
       '<div class="aw-eyebrow"><span>ENT · H&amp;N Nursing</span></div>' +
@@ -910,8 +1013,8 @@
 
     if (name === 'q-end-now') {
       // Abandoned, not completed: no history entry, straight back to the menu.
-      S.quiz = null; S.screen = 'setup'; S.resume = null;
-      storeWrite(null);
+      S.quiz = null; S.screen = 'setup';
+      clearOwn();
       update(); return;
     }
     if (name === 'q-choice' && !qz.answered) {
@@ -1079,7 +1182,7 @@
     if (name === 'start-quiz') { startQuiz(); return; }
     if (name === 'start-browse') { S.screen = 'browse'; update(); return; }
     if (name === 'go-setup') { S.screen = 'setup'; update(); return; }
-    if (name === 'resume-game') { resumeSaved(); return; }
+    if (name === 'resume-game') { resumeSaved(el.dataset.id); return; }
     if (name === 'resume-discard') { discardSaved(); return; }
 
     if (name === 'r-play-again') { startRounds(); return; }
@@ -1126,6 +1229,6 @@
   // ─── INIT ─────────────────────────────────────────────────────────
 
   // Never resumed silently: an unfinished game is offered on the setup screen.
-  S.resume = readSaved();
+  S.resume = loadSaves();
   render();
 })();
