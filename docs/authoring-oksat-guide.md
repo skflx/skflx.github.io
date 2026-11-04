@@ -115,8 +115,15 @@ tally but not in the flashcard deck.
 ### Unlisted guides and modules
 
 `unlisted: true` on a guide (`OKSAT_GUIDES`) or module (`OKSAT_MANIFEST`) entry
-hides it from the hub; its URL still works. It must be a boolean. Used for
-ear-anatomy while the owner decides listing.
+hides it from the hub; its URL still works. It must be a boolean.
+
+### Draft notice (standard for anything listed before it is done)
+
+`draft: true` on the same entries lists the guide or module on the hub with a
+**Draft: in progress** badge, a notice on the guide's *Start here* chapter or
+above the module, and no other change. Every entry is listed `draft: true`
+from the day it is first built; the owner removes the flag when it is done
+(`docs/decisions.md` section 9). It must be a boolean.
 
 ### Figure attribution
 

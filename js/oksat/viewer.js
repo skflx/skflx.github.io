@@ -40,6 +40,12 @@
         var mod = window.__MCQ_MODULE;
         try { delete window.__MCQ_MODULE; } catch (e) { window.__MCQ_MODULE = undefined; }
         if (!mod) { notice('Module failed to load', 'The data for “' + entry.title + '” did not register correctly.'); return; }
+        if (entry.draft === true && root.parentNode) {
+            var d = document.createElement('p');
+            d.className = 'ok-draft-note';
+            d.textContent = 'Draft: this module is still being built and checked. Questions may change and are not yet verified by the owner; not a clinical reference.';
+            root.parentNode.insertBefore(d, root);
+        }
         window.mountOKSAT(root, mod, entry, OKSATStore.reviewer());
     };
     s.onerror = function () { notice('Module failed to load', 'Could not fetch the data file for “' + entry.title + '”.'); };

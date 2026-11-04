@@ -43,7 +43,7 @@
         },
         "antrum": {
             "name": "Mastoid antrum",
-            "note": "The largest constant air cell; lies about 12-15 mm deep to Macewen's triangle in the adult, at the level of the tegmen. Connects to the epitympanum through the aditus ad antrum.",
+            "note": "The largest constant air cell, at the level of the tegmen. Depth below Macewen's triangle depends on age and pneumatization: 2-4 mm in the newborn (thin cortex), about 10 mm at 3 years, 12-15 mm in the adult norm, up to 25 mm in a hyperpneumatized adult. Connects to the epitympanum through the aditus ad antrum.",
             "origin": [
                 "pouch1"
             ],
@@ -552,7 +552,7 @@
         },
         "macewen": {
             "name": "Macewen's (suprameatal) triangle",
-            "note": "Between the temporal line, the posterosuperior canal rim and a vertical tangent to the posterior canal wall. Surface marking of the antrum, about 12-15 mm deep in the adult (cribriform area)."
+            "note": "Between the temporal line, the posterosuperior canal rim and a vertical tangent to the posterior canal wall. Surface marking of the antrum (cribriform area); the antrum lies 12-15 mm deep in the typical adult, 2-4 mm in the newborn, about 10 mm at 3 years, up to 25 mm in a hyperpneumatized adult."
         },
         "henle": {
             "name": "Spine of Henle",

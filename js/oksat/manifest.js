@@ -196,7 +196,7 @@ window.OKSAT_MANIFEST = [
     subspecialty: 'otology',
     count: 147,
     accent: '#2F6E6A',
-    unlisted: true,
+    draft: true,
     desc: 'Auricle to petrous apex: canal, drum, tympanic cavity, ossicles, spaces and ventilation, Eustachian tube, mastoid, normal HRCT, the systems gathered, and the evidence behind the numbers; one concept per guide section.',
     data: 'js/oksat/modules/ear-anatomy.js',
   },
@@ -235,7 +235,7 @@ window.OKSAT_GUIDES = [
     kicker: 'Otology / Neurotology',
     subspecialty: 'otology',
     accent: '#2F6E6A',
-    unlisted: true,
+    draft: true,
     desc: 'Auricle to petrous apex as a relational map: walls, neighbours, nerves and vessels where you meet them, read the way a surgeon explores.',
     chapters: [
       { id: 'start', short: 'Start here', data: 'js/oksat/guides/ear-anatomy/start.js' },

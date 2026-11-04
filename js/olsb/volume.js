@@ -806,7 +806,7 @@
         steps: [
             { title: 'The block', view: 'surgeon', state: 'intact', layers: ['bone', 'canal'], focus: ['macewen', 'henle', 'templine', 'zygroot', 'cortex'],
               act: 'A right temporal bone cut as a block, seen as the surgeon sees it: anterior to the right, superior up. Macewen\'s triangle sits behind and above the meatus, under the temporal line.',
-              hazard: 'The antrum lies 12-15 mm deep to Macewen\'s triangle: the triangle is where the cortical mastoidectomy starts.' },
+              hazard: 'The antrum lies 12-15 mm deep to Macewen\'s triangle in the typical adult (2-4 mm in the newborn, about 10 mm at 3 years, up to 25 mm if hyperpneumatized): the triangle is where the cortical mastoidectomy starts.' },
             { title: 'Through the bone', view: 'surgeon', state: 'intact', layers: ['ossicles', 'nerves', 'inner', 'vessels'], focus: ['fn', 'sigmoid', 'lscc', 'ica', 'jb', 'cochlea'],
               act: 'Bone hidden: the facial nerve runs from the IAC through the temporal bone to the stylomastoid foramen; the sigmoid sinus curves down behind, the carotid rises in front.',
               hazard: 'Every mastoid operation is a corridor between these: dura above, sigmoid behind, nerve and labyrinth deep.' },

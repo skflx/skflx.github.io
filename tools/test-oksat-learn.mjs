@@ -340,7 +340,9 @@ async function main() {
     const seed = `try{localStorage.setItem('${KEY}',JSON.stringify({v:1,done:{'science/sci-1':1,'science/sci-2':1}}));}catch(e){}`;
     const { context, page, errors } = await open(browser, base, 'oksat.html', seed);
     await page.waitForSelector('#guides .module-card', { timeout: 8000 });
-    const t = await page.$eval('#guides .module-card', (e) => e.textContent);
+    const t = await page.$eval('#guides .module-card[href*="ar-crs-aerd"]', (e) => e.textContent);
+    const dr = await page.$$eval('#guides .module-draft', (e) => e.map((x) => x.textContent));
+    check('8-draft: the draft guide and module cards carry a Draft badge, the finished guide none', dr.length >= 1 && !/Draft/.test(t), JSON.stringify(dr));
     check('8a: the hub lists the guide under Interactive learning', /Allergic Rhinitis, CRS & AERD/.test(t) && /10 chapters/.test(t), t.slice(0, 120));
     check('8b: its meter counts sections marked done', /2 \/ 54 sections/.test(t) && /Resume/.test(t), t.slice(-80));
     check('8c: the question modules are still listed', (await page.$$eval('#modules .module-card', (e) => e.length)) >= 15);

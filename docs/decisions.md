@@ -176,3 +176,7 @@ file each in `js/diagrams/`.
 | A figure no page shows any more? | Delete the scene file (`check-data.mjs` fails on orphans). |
 | A figure on a page rendered by JavaScript? | Emit the empty `<figure data-a3d>` and call `ASCII3D.mountAll(root)` after each render (Airway). There is no baked frame. |
 
+
+## 9. Listing unfinished work (owner, 2026-11-04)
+
+Unfinished work is listed, not hidden, so the owner can follow along: set `draft: true` on the OKSAT guide or module entry (hub badge plus a notice on its entry page), or put a visible "Draft" notice on the entry page of any other new page or tool. `unlisted` is for pages the owner wants unreachable (OLSB, atlas), not for work in progress. Removing `draft` is the owner's call when it is done.
