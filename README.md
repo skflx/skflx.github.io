@@ -144,6 +144,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── github/             #   deploy workflow + correction issue form for the wiki repo
 │   └── dgmo/               #   DGMO diagrams → inline SVG at wiki build time
 │
+├── tbone/                  # Normal temporal bone reference volume + traced centrelines (internal, generated; see its README)
+│
 ├── archive/                # Kept content, served by nothing (see its README)
 │   ├── kag-graph.json      #   OHNS knowledge graph from the retired atlas viewers
 │   └── kag-graph-flat.txt  #   the same data as readable text
@@ -161,7 +163,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── test-ssb.mjs        #   SSB: variant lab, pathway rules, picking, hash, tissue materials, CT, specimen, endoscope
 │   ├── ssb-fixture-ct.mjs  #   synthetic CT volume and dissection states the SSB tests route in (never written to ssb/)
 │   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
-│   └── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
+│   ├── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
+│   └── tbone-pipeline/     #   offline temporal-bone pipeline (Python; reuses ssb-pipeline helpers; output in tbone/)
 │
 ├── AGENTS.md               # Operating manual for every coding agent (canonical)
 ├── CLAUDE.md, .claude/CLAUDE.md, .gemini/, .agents/  # pointers to AGENTS.md

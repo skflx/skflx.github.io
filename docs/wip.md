@@ -272,6 +272,20 @@ automate the sync (needs a secret). Going public is an owner escalation
 
 ---
 
+## Temporal bone reference volume (`tbone/`)
+
+**State:** Internal reference data, loaded by no page, test or CI job: a 0.3 mm display volume of the UW
+normal temporal bone CT in OLSB's frame, every UW label as a 3D point, and traced centrelines (facial nerve by
+segment, IAC, ICA, venous, aqueducts, EAC, ET, canals, basal turn) with per-point detected / labelled /
+inferred. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` helpers); method, scale (inferred,
++-10 %), limits and regeneration in `tbone/README.md`; provenance `tbone/LICENSE-data.md`. Spec
+`plans/2026-11-03-uw-temporal-bone-volume.md`. Draft until the owner verifies the anatomy.
+
+**Next:** review the sweeps against the labelled slices; settle the scale (owner or a measured
+reference); register OLSB to it (#225).
+
+---
+
 ## Archive (`archive/`)
 
 **State:** The OHNS knowledge graph from the retired atlas viewers, as JSON and a

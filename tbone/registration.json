@@ -1,0 +1,447 @@
+{
+ "stacks": {
+  "axial": {
+   "slices": 61,
+   "size_wh": [
+    512,
+    512
+   ],
+   "soft_tissue_mode": 110,
+   "max_level": 255,
+   "content_rows": [
+    0,
+    512
+   ],
+   "scout": {
+    "file": "axial/R-sagittal.jpg",
+    "band_axis": "rows",
+    "step_px_mean": 2.15,
+    "step_px_sd": 0.229,
+    "monotonic": true,
+    "note": "hover-map bands: slice order, not measured positions"
+   },
+   "fov_circle": {
+    "cx": 255.5,
+    "cy": 255.5,
+    "r": 255.85,
+    "fit_residual_px": 0.252
+   },
+   "adjacent_slice_shift_px": {
+    "median": 0.25,
+    "max": 0.354
+   }
+  },
+  "coronal": {
+   "slices": 21,
+   "size_wh": [
+    512,
+    512
+   ],
+   "soft_tissue_mode": 110,
+   "max_level": 255,
+   "content_rows": [
+    120,
+    437
+   ],
+   "scout": {
+    "file": "coronal/Superior-axial.jpg",
+    "band_axis": "rows",
+    "step_px_mean": 8.2,
+    "step_px_sd": 0.245,
+    "monotonic": true,
+    "note": "hover-map bands: slice order, not measured positions"
+   }
+  },
+  "parallel": {
+   "slices": 23,
+   "size_wh": [
+    512,
+    512
+   ],
+   "soft_tissue_mode": 111,
+   "max_level": 255,
+   "content_rows": [
+    154,
+    470
+   ],
+   "scout": {
+    "file": "parallel/Superior-axial.jpg",
+    "band_axis": "rows",
+    "step_px_mean": 5.273,
+    "step_px_sd": 0.249,
+    "monotonic": true,
+    "note": "hover-map bands: slice order, not measured positions"
+   }
+  },
+  "perpendicular": {
+   "slices": 17,
+   "size_wh": [
+    512,
+    512
+   ],
+   "soft_tissue_mode": 111,
+   "max_level": 255,
+   "content_rows": [
+    154,
+    470
+   ],
+   "scout": {
+    "file": "perpendicular/Superior-axial.jpg",
+    "band_axis": "columns",
+    "step_px_mean": 16.688,
+    "step_px_sd": 0.242,
+    "monotonic": true,
+    "note": "hover-map bands: slice order, not measured positions"
+   }
+  }
+ },
+ "registration": {
+  "coronal": {
+   "rows": [
+    120,
+    437
+   ],
+   "params": {
+    "ox": -0.71577,
+    "oy": 337.92742,
+    "oz": -201.16213,
+    "rx_deg": 89.70983,
+    "ry_deg": 0.38586,
+    "rz_deg": 0.45282,
+    "s": 1.00007,
+    "wx": 0.06732,
+    "wy": -6.39119,
+    "wz": 0.00124,
+    "dz": 1.60291
+   },
+   "edge_ncc_mean": 0.9767,
+   "edge_ncc_per_slice": [
+    0.994,
+    0.993,
+    0.989,
+    0.976,
+    0.963,
+    0.968,
+    0.963,
+    0.971,
+    0.978,
+    0.973,
+    0.974,
+    0.98,
+    0.973,
+    0.969,
+    0.973,
+    0.978,
+    0.975,
+    0.977,
+    0.981,
+    0.981,
+    0.974
+   ],
+   "slice_step_axial_px": 6.392,
+   "init_landmark_names": [
+    "cochlear-aqueduct",
+    "geniculate-ganglion",
+    "incus",
+    "lscc",
+    "malleus",
+    "oval-window",
+    "pscc",
+    "pyramidal-eminence",
+    "round-window",
+    "sscc",
+    "stapes",
+    "vestibule"
+   ],
+   "init_landmark_median_residual_px": 0.0,
+   "tip_residuals": {
+    "n": 43,
+    "median_axial_px": 13.33,
+    "p90_axial_px": 50.87,
+    "by_name_median_px": {
+     "cochlear-aqueduct": 56.0,
+     "fn-tympanic": 15.5,
+     "geniculate-ganglion": 11.8,
+     "incus": 16.6,
+     "lscc": 11.5,
+     "malleus": 15.7,
+     "oval-window": 11.9,
+     "promontory": 16.6,
+     "pscc": 8.5,
+     "pyramidal-eminence": 71.9,
+     "round-window": 11.8,
+     "sscc": 9.1,
+     "stapes": 20.2,
+     "tensor-tympani": 13.8,
+     "tympanic-membrane": 10.1,
+     "vestibule": 11.3
+    }
+   }
+  },
+  "parallel": {
+   "rows": [
+    154,
+    470
+   ],
+   "params": {
+    "ox": -11.50333,
+    "oy": 142.39204,
+    "oz": -234.38648,
+    "rx_deg": 85.21124,
+    "ry_deg": 35.5992,
+    "rz_deg": 35.36655,
+    "s": 0.9987,
+    "wx": 4.57384,
+    "wy": -4.47677,
+    "wz": -0.00331,
+    "dz": 1.59795
+   },
+   "edge_ncc_mean": 0.9818,
+   "edge_ncc_per_slice": [
+    0.985,
+    0.975,
+    0.979,
+    0.979,
+    0.981,
+    0.97,
+    0.976,
+    0.978,
+    0.974,
+    0.979,
+    0.98,
+    0.982,
+    0.978,
+    0.988,
+    0.98,
+    0.985,
+    0.986,
+    0.988,
+    0.987,
+    0.988,
+    0.989,
+    0.988,
+    0.985
+   ],
+   "slice_step_axial_px": 6.4,
+   "init_landmark_names": [
+    "apical-turn",
+    "basal-turn",
+    "cochlear-aqueduct",
+    "fn-labyrinthine",
+    "geniculate-ganglion",
+    "incus",
+    "lscc",
+    "malleus",
+    "oval-window",
+    "pscc",
+    "round-window",
+    "sscc",
+    "vestibular-aqueduct",
+    "vestibule"
+   ],
+   "init_landmark_median_residual_px": 0.0,
+   "tip_residuals": {
+    "n": 36,
+    "median_axial_px": 11.73,
+    "p90_axial_px": 23.9,
+    "by_name_median_px": {
+     "apical-turn": 13.4,
+     "basal-turn": 8.4,
+     "cochlear-aqueduct": 18.2,
+     "fn-labyrinthine": 7.2,
+     "fn-tympanic": 17.6,
+     "geniculate-ganglion": 9.7,
+     "incus": 14.3,
+     "lscc": 23.5,
+     "malleus": 11.1,
+     "oval-window": 17.2,
+     "pscc": 11.4,
+     "round-window": 20.8,
+     "sscc": 5.8,
+     "tensor-tympani": 11.8,
+     "vestibular-aqueduct": 11.8,
+     "vestibule": 10.6
+    }
+   }
+  },
+  "perpendicular": {
+   "rows": [
+    154,
+    470
+   ],
+   "params": {
+    "ox": -7.19405,
+    "oy": 366.7495,
+    "oz": -234.74369,
+    "rx_deg": 86.11821,
+    "ry_deg": -30.35107,
+    "rz_deg": -30.40199,
+    "s": 1.00019,
+    "wx": 3.99983,
+    "wy": 4.96889,
+    "wz": -0.00285,
+    "dz": 1.60011
+   },
+   "edge_ncc_mean": 0.965,
+   "edge_ncc_per_slice": [
+    0.978,
+    0.976,
+    0.963,
+    0.944,
+    0.961,
+    0.963,
+    0.962,
+    0.974,
+    0.979,
+    0.979,
+    0.962,
+    0.96,
+    0.963,
+    0.954,
+    0.963,
+    0.971,
+    0.971
+   ],
+   "slice_step_axial_px": 6.379,
+   "init_landmark_names": [
+    "incus",
+    "lscc",
+    "malleus",
+    "oval-window",
+    "pscc",
+    "round-window",
+    "sscc",
+    "vestibule"
+   ],
+   "init_landmark_median_residual_px": 0.0,
+   "tip_residuals": {
+    "n": 20,
+    "median_axial_px": 14.19,
+    "p90_axial_px": 23.77,
+    "by_name_median_px": {
+     "incus": 23.7,
+     "lscc": 15.8,
+     "malleus": 16.1,
+     "oval-window": 18.2,
+     "pscc": 10.4,
+     "round-window": 15.3,
+     "sscc": 5.2,
+     "tensor-tympani": 16.3,
+     "vestibule": 10.3
+    }
+   }
+  }
+ },
+ "frame": {
+  "s_mm_per_px": 0.17578125,
+  "s_relative_uncertainty": 0.1,
+  "s_method": "prior: circular axial FOV filling 512 px, nominal temporal-bone FOV 100 mm; cross-checked against anatomy of known size (scale.py report); NOT a measurement of pixel spacing",
+  "dz_px_axial_fits": [
+   1.6029,
+   1.5979,
+   1.6001
+  ],
+  "dz_px": 1.6003,
+  "dz_mm": 0.2813,
+  "dz_method": "slice step in axial pixels fitted by registering the coronal, parallel and perpendicular stacks (agree within ~1 %), times s",
+  "origin_px": [
+   230.16,
+   245.577,
+   42.677
+  ],
+  "origin_info": {
+   "n_tips": 7,
+   "n_kept": 7,
+   "per_plane_axial_xyn": {
+    "axial": [
+     [
+      216.0,
+      254.0,
+      36.0
+     ],
+     [
+      234.0,
+      250.0,
+      38.0
+     ]
+    ],
+    "coronal": [
+     [
+      231.1,
+      245.6,
+      43.1
+     ],
+     [
+      230.2,
+      239.2,
+      43.1
+     ]
+    ],
+    "parallel": [
+     [
+      225.9,
+      252.3,
+      42.7
+     ],
+     [
+      219.3,
+      236.5,
+      45.2
+     ]
+    ],
+    "perpendicular": [
+     [
+      232.3,
+      232.1,
+      36.4
+     ]
+    ]
+   },
+   "spread_px_sd": [
+    6.39,
+    7.83,
+    3.44
+   ]
+  },
+  "origin_method": "median of the UW oval-window tips of all four stacks mapped into axial voxel space (px x, px y, fractional 0-based slice n)",
+  "cross_checks": [
+   {
+    "name": "IAC length (porus to fundus)",
+    "measured_mm_at_provisional_s": 9.36,
+    "expected_mm": 9.0,
+    "implied_s": 0.169
+   },
+   {
+    "name": "FN labyrinthine segment length",
+    "measured_mm_at_provisional_s": 6.52,
+    "expected_mm": 4.0,
+    "implied_s": 0.108
+   },
+   {
+    "name": "FN tympanic segment length",
+    "measured_mm_at_provisional_s": 14.57,
+    "expected_mm": 10.0,
+    "implied_s": 0.121
+   },
+   {
+    "name": "FN mastoid segment length",
+    "measured_mm_at_provisional_s": 11.78,
+    "expected_mm": 12.5,
+    "implied_s": 0.186
+   },
+   {
+    "name": "cochlear basal-turn diameter A",
+    "measured_mm_at_provisional_s": 9.84,
+    "expected_mm": 9.0,
+    "implied_s": 0.161
+   }
+  ],
+  "cross_check_median_s": 0.1608,
+  "cross_check_spread_s": 0.0381
+ },
+ "specimen_identity": {
+  "verdict": "one specimen, one acquisition: the coronal, parallel and perpendicular stacks are reformats of the axial stack",
+  "evidence": "a rigid fit (square pixels, free slice step) of each stack into the axial volume reaches an edge-NCC of 0.97-0.98 on every slice (per-slice values per plane); pixel size equals the axial one (s = 1.00 within 1 %); the fitted axial slice step agrees across the three stacks within 1 %; reformat spacing is 6.4 axial px in all three",
+  "caveat": "tips marking the same structure in two stacks differ by a median 11-14 axial px (2-2.5 mm): arrows land on different parts of extended structures, so this is a label statistic, not a registration error"
+ }
+}
