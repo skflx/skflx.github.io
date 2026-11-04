@@ -102,9 +102,9 @@ classification panel, a surgical series). Never decoration.
 
 ### Structure
 
-- **Domains 5–8**, each a topical section **and** a step on the ladder; one hue pair
+- **Domains 5–8** (a guide's companion module: up to one per numbered chapter), each a topical section **and** a step on the ladder; one hue pair
   each (`color` solid, `hex` rgba 0.13–0.14). Reuse the palette from existing modules.
-- **Concepts 20–50**, kebab-case, each in exactly one domain, each tagged by ≥ 1 item.
+- **Concepts 20–50** (a guide's companion module: up to one per guide section), kebab-case, each in exactly one domain, each tagged by ≥ 1 item.
   1–3 tags per item. Case keys are `case-<name>`.
 - **Section label** on every item (shown above the stem; required over 30 items).
 - Size: 40–65 items. Quality, not count; never pad to reach a number.

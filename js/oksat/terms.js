@@ -30,6 +30,8 @@
         'EUFOREA': 'European Forum for Research and Education in Allergy and Airway Diseases',
         'ICAR': 'International Consensus statement on Allergy and Rhinology',
         'ICAR-AR': 'International Consensus statement on Allergy and Rhinology: Allergic Rhinitis',
+        'HRCT': 'high-resolution computed tomography',
+        'UW': 'University of Washington (Department of Radiology temporal bone CT module)',
         'KJ': 'KJ Lee, Essential Otolaryngology (board review textbook)',
         'LIO': 'Laryngoscope Investigative Otolaryngology (journal)',
         'LoE': 'level of evidence',

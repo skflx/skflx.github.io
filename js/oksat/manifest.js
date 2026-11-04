@@ -194,10 +194,10 @@ window.OKSAT_MANIFEST = [
     title: 'Normal Ear Anatomy',
     kicker: 'Otology Module',
     subspecialty: 'otology',
-    count: 104,
+    count: 147,
     accent: '#2F6E6A',
     unlisted: true,
-    desc: 'Orientation and the temporal bone, auricle, canal, drum, the six walls of the tympanic cavity, and the ossicular chain, one concept per guide section.',
+    desc: 'Auricle to petrous apex: canal, drum, tympanic cavity, ossicles, spaces and ventilation, Eustachian tube, mastoid, normal HRCT, the systems gathered, and the evidence behind the numbers; one concept per guide section.',
     data: 'js/oksat/modules/ear-anatomy.js',
   },
 ];
@@ -249,6 +249,9 @@ window.OKSAT_GUIDES = [
       { id: 'et', k: 8, short: 'Eustachian tube', min: 30, sections: 5, data: 'js/oksat/guides/ear-anatomy/et.js' },
       { id: 'mastoid', k: 9, short: 'Mastoid', min: 40, sections: 8, data: 'js/oksat/guides/ear-anatomy/mastoid.js' },
       { id: 'petrous-apex', k: 10, short: 'Petrous apex', min: 25, sections: 4, data: 'js/oksat/guides/ear-anatomy/petrous-apex.js' },
+      { id: 'imaging', k: 11, short: 'Normal HRCT', min: 25, sections: 3, data: 'js/oksat/guides/ear-anatomy/imaging.js' },
+      { id: 'synthesis', k: 12, short: 'Systems synthesis', min: 45, sections: 6, data: 'js/oksat/guides/ear-anatomy/synthesis.js' },
+      { id: 'appraisal', k: 13, short: 'Evidence & controversies', min: 25, sections: 3, data: 'js/oksat/guides/ear-anatomy/appraisal.js' },
     ],
   },
 ];

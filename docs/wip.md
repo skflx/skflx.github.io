@@ -93,10 +93,10 @@ Module families, and their status:
   with predict-then-reveal prompts, checkers, inline module questions and
   per-section drill links. Anatomy blocks (`hotspot`, `layers`, `neighbors`,
   `sequence`) are in place. **Normal Ear Anatomy** (`ear-anatomy`, spec
-  `plans/2026-11-02-ear-anatomy-guide.md`) is shipped **unlisted**: chapters
-  start to ossicles are live with its module (`ear-anatomy`); the remaining
-  chapters are pending, and the owner decides listing. Its figures are
-  schematic SVGs; it has no raster figures yet, so no `ATTRIBUTION.md`.
+  `plans/2026-11-02-ear-anatomy-guide.md`) is shipped **unlisted**: all its
+  chapters are live with its companion module (`ear-anatomy`), and the owner
+  decides listing. Its figures are schematic SVGs plus CT slices under
+  `images/oksat/ear-anatomy/ct/`, credited in that folder's `ATTRIBUTION.md`.
   The guide's lint is `tools/lint-oksat-guide.mjs`. One guide listed so far, **AR · CRS · AERD** (`ar-crs-aerd`):
   ten chapters from type 2 immunology to critical appraisal, ported from the
   study atlas built in conversation (2026-10-26), plus a flashcard deck and a
