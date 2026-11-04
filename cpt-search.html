@@ -72,6 +72,11 @@
             font: 500 0.68rem/1.2 var(--font-mono); letter-spacing: 0.04em;
             color: var(--ink-muted); border: 1px solid var(--rule-strong); border-radius: var(--radius);
         }
+        .result-card.is-hit { animation: cpt-hit 2.4s ease-out; }
+        @keyframes cpt-hit {
+            from { background: var(--wash); box-shadow: inset 3px 0 0 var(--signal); }
+            to   { background: transparent; box-shadow: inset 3px 0 0 transparent; }
+        }
         .card-desc { margin: 0 0 0.4rem; line-height: 1.45; }
         .card-tags { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; }
         .tag { font: 400 0.75rem/1.3 var(--font-mono); color: var(--ink-faint); }
@@ -161,7 +166,7 @@
     </footer>
 
     <script src="js/cpt-data.js?v=74c39433"></script>
-    <script src="js/cpt-search.js?v=8b2705e7"></script>
+    <script src="js/cpt-search.js?v=58fbcf1d"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>

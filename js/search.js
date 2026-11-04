@@ -44,11 +44,11 @@
             notice('The CPT table did not load, so CPT codes are not searched.');
             return [];
         }
-        return window.CPT_DB.map(function (r) {
+        return window.CPT_DB.map(function (r, i) {
             return {
                 group: 'cpt',
                 label: 'CPT ' + String(r.code || ''),
-                href: 'cpt-search.html',
+                href: 'cpt-search.html#cpt-' + i,   /* cpt-search.js gives each row id cpt-<index> */
                 fields: [
                     { name: 'code', text: String(r.code || '') },
                     { name: 'procedure', text: String(r.desc || '') },
@@ -67,6 +67,11 @@
 
     function oksatEntries(entry, mod) {
         var out = [];
+        var meta = mod.meta || {};
+        /* the module itself: its title (line breaks folded) and its kicker when it is short */
+        var mfields = [{ name: 'module', text: String(meta.title || entry.title).replace(/\s+/g, ' ') }];
+        if (meta.kicker && String(meta.kicker).length <= 60) mfields.push({ name: 'kicker', text: String(meta.kicker) });
+        out.push({ group: 'oksat', label: String(entry.title), href: studyHref(entry.slug), fields: mfields });
         var concepts = mod.CONCEPTS || {};
         Object.keys(concepts).forEach(function (id) {
             var c = concepts[id];

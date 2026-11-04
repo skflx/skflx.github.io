@@ -118,7 +118,7 @@
         }
 
         var scored = DB
-            .map(function(item) { return Object.assign({}, item, { _s: score(term, item) }); })
+            .map(function(item, i) { return Object.assign({}, item, { _s: score(term, item), _i: i }); })
             .filter(function(item) { return item._s > 0; })
             .sort(function(a,b) { return b._s - a._s; })
             .slice(0, 20);
@@ -141,7 +141,7 @@
 
         resultsEl.innerHTML = scored.map(function(item) {
             var isCopied = copied === item.code;
-            return '<div class="result-card" data-code="'+esc(item.code)+'" data-desc="'+esc(item.desc)+'">'
+            return '<div class="result-card" id="cpt-'+item._i+'" data-code="'+esc(item.code)+'" data-desc="'+esc(item.desc)+'">'
                  + '<div class="card-left">'
                  + '<div class="card-code">'+esc(item.code)+'</div>'
                  + '<span class="ki-badge">'+esc(item.ki)+'</span>'
@@ -263,6 +263,24 @@
         input.focus();
     });
 
+    /* ── Deep link: cpt-search.html#cpt-<n> (from site search) ──
+       Shows the row's code as the query so the row is drawn, then brings
+       it into view with a brief highlight. */
+    function openHashRow() {
+        var m = /^#cpt-(\d+)$/.exec(location.hash || '');
+        if (!m || !DB[m[1]]) return;
+        var code = DB[m[1]].code;
+        input.value = code;
+        clearBtn.style.display = '';
+        stateEl.style.display = 'none';
+        renderResults(code);
+        var row = document.getElementById('cpt-' + m[1]);
+        if (!row) return;
+        row.scrollIntoView({ block: 'center' });
+        row.classList.add('is-hit');
+    }
+
     /* ── Init ─────────────────────────────────────── */
     input.focus();
+    openHashRow();
 }());
