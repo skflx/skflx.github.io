@@ -64,15 +64,14 @@ Two non-figure changes are part of the same plan:
   |---|---|
   | any `css/`, `js/`, `*.html` | `check-data` (instant, deps-free) |
   | `js/ascii3d.js`, `js/diagrams/` | `ascii3d.mjs bake` + byte diff |
-  | `js/egg.js`, `atlas*`, `tools/atlas.mjs` | `test-figures --only <eggs\|atlas>` |
+  | `js/egg.js`, `atlas*`, `tools/atlas.mjs` | `atlas.mjs check`; eggs by hand (§6 manual list) |
   | `js/oksat/` or `oksat*.html` | `test-oksat-engine` |
   | a page's markup | `smoke-pages --only <page>` |
 
 - Reviewers do not rerun suites. They read the diff and the WP's reported output.
 - The full suite runs **once**, at 4B, before the owner merges.
 - **CI changes (3C):**
-  - `test-figures` sits behind a `figures` change flag, never always-on.
-  - `smoke-pages` and `test-figures` gain `--only` so CI runs just the changed pages.
+  - `smoke-pages` gains `--only` so CI runs just the changed pages. (`test-figures` dropped 2026-11-08: see #176.)
   - `paths-ignore` for `plans/**`, `docs/**`, `*.md`.
   - `concurrency` with `cancel-in-progress`, so a newer push cancels the running job.
   - The always-on steps stay `check-data` and `lint-oksat` (both instant).
@@ -267,7 +266,8 @@ E1 lies past it.
 | `larynx` | hyoid, epiglottis, thyroid/cricoid cartilages, vocal folds, trachea | laryngology | — |
 | `thyroid` | thyroid isthmus | endocrine | — |
 | `facial` | frontal bone, nasal bones, maxilla, mandible | fprs | — |
-| context (non-interactive) | ghost brain, brainstem stump, C1–C7, cord, esophagus, skin/scalp | — | — |
+| context (non-interactive) | ghost brain, C1–C7, cord, esophagus, skin/scalp | — | — |
+| `stump` (non-interactive, added in 2E) | ghosted brainstem stump drawn over the petrous face, so CN VII has a visible origin | — | — |
 
 Opus may refine the group membership in 2E and must update this table if it does.
 
@@ -281,7 +281,6 @@ node tools/stamp-assets.mjs && node tools/check-data.mjs
 node tools/ascii3d.mjs bake && git diff --exit-code -- '*.html'   # bake fresh
 node tools/atlas.mjs check
 node tools/smoke-pages.mjs
-node tools/test-figures.mjs
 node tools/test-oksat-engine.mjs && node tools/test-oksat-learn.mjs   # Leitner removal regression
 node tools/test-wiki-sync.mjs && node tools/lint-oksat.mjs
 ```
