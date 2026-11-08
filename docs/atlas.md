@@ -12,6 +12,10 @@ visible labels. Related structures light together as groups.
 | `tools/atlas.mjs` | `bake` (SVG into `atlas.html`), `check` (schema + stale bake; `checkAtlas()` for `check-data`), `preview` (PNG via Playwright). |
 | `atlas.html` | The page; the SVG sits between `<!-- atlas:svg -->` and `<!-- /atlas:svg -->`. Never hand-edit the block. |
 
+## Checks
+
+`tools/check-data.mjs` (section "atlas and unlisted pages") fails on: a stale bake or invalid data (`checkAtlas()`); a missing `noindex` robots meta on `atlas.html`, `OLSB.html` or `ssb.html`; any link or navigation target to `atlas.html` from a root page or a `js/` file other than `js/atlas.js`; any link to `OLSB.html` or `ssb.html` outside `atlas.html`.
+
 ## Schema (`anatomy.json`)
 
 ```
