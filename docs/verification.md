@@ -241,9 +241,7 @@ hostile issue list (no network) and checks that:
 non-blank frame. Every figure a page shows (`data-a3d` in its HTML or in
 its own scripts) loads `css/ascii3d.css`, then `js/ascii3d.js` before its
 scene file. No scene is orphaned. Every baked block equals a fresh render
-(`node tools/ascii3d.mjs bake --check`). The Leitner figure's `intervals`
-equal `LEITNER_INTERVALS` in `js/oksat/engine.js`. To prove the last check
-bites, change one interval in the engine: the check must FAIL.
+(`node tools/ascii3d.mjs bake --check`).
 
 `tools/smoke-pages.mjs` (`figureReady`) checks that each figure mounts live
 with a drawn grid. On the one-pager, flipping `html[data-theme]` must flip
