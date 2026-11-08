@@ -35,8 +35,8 @@ declared in `css/site.css` and mirrored as `--ok-*` in `css/oksat.css`.
 
 **Delete it.** This is a personal site, not an indexed publication — dead
 URLs cost nothing and redirect stubs accumulate into clutter. Owner decision,
-2026-09: the nine stubs that existed (`mcq*.html`, `occ*.html`, `kag.html`,
-`atlas.html`) were removed outright rather than repointed.
+2026-09: the stubs that existed (`mcq*.html`, `occ*.html`, `kag.html`, and an
+earlier `atlas.html`) were removed outright rather than repointed.
 
 Remove the page from `PAGES` in `tools/smoke-pages.mjs` and from the
 `README.md` file tree in the same change, and grep for inbound links:
