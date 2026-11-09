@@ -214,6 +214,13 @@ links (`#m=3d&st=&L=&cut=&cam=` or `&s=<step>`). `tools/check-data.mjs`
 checks every label against the glossary and the geometry against every
 glossary relation between two drawn structures.
 
+**Real CT** (`js/olsb/ct.js`, third mode pill; hash `#m=ct[&pl=ax|cor|sag][&at=<mm>]`): axial, coronal and sagittal
+slices of `tbone/` on a canvas, via `loadVolume({root: 'tbone'})` of `js/ssb/volume.js`, fetched only on entering the
+view. `landmarks.json` points and `sweeps.json` centrelines are drawn over it, coded detected (solid) / labelled
+(solid with dots) / inferred (dashed), named from the glossary (a sweep without a glossary entry shows its own name);
+a click or the list selects one. The attribution line and the limits are always shown. The smoke test routes a
+synthetic volume (`tools/smoke-pages.mjs`, `setup` hook).
+
 **2D diagrams**, layered inline SVG drawn by `js/olsb/main.js`:
 
 - **Surgical lateral** (`js/olsb/lateral.js`): the surgeon's projection in
@@ -296,7 +303,7 @@ automate the sync (needs a secret). Going public is an owner escalation
 
 ## Temporal bone reference volume (`tbone/`)
 
-**State:** Internal reference data, loaded by no page, test or CI job: a 0.3 mm display volume of the UW
+**State:** Reference data, loaded only by OLSB's Real CT view (on entering it; no test or CI job loads the real files): a 0.3 mm display volume of the UW
 normal temporal bone CT in OLSB's frame, every UW label as a 3D point, and traced centrelines (facial nerve by
 segment, IAC, ICA, venous, aqueducts, EAC, ET, canals, basal turn) with per-point detected / labelled /
 inferred. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` helpers); method, scale (inferred,
@@ -304,7 +311,7 @@ inferred. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` help
 `plans/2026-11-03-uw-temporal-bone-volume.md`. Draft until the owner verifies the anatomy.
 
 **Next:** review the sweeps against the labelled slices; settle the scale (owner or a measured
-reference); register OLSB to it (#244 and its follow-on).
+reference); check OLSB's model against it (the plan's E3).
 
 ---
 

@@ -396,3 +396,13 @@ html[data-theme="dark"] {
 @media (max-width: 600px) {
   .olsb-orient { position: static; padding: 0.3rem 0.6rem 0.45rem; border-top: 1px solid var(--rule); }
 }
+
+/* ===== REAL CT ===== */
+.olsb-ct-stage { background: var(--olsb-stage3d); overflow: hidden; }
+#olsb-ct-canvas { display: block; width: 100%; height: auto; cursor: crosshair; touch-action: manipulation; }
+#olsb-ct-canvas:focus-visible { outline: 2px solid var(--signal-2); outline-offset: -2px; }
+.olsb-ct-stage .olsb-orient { color: #B9B6AE; background: rgba(0, 0, 0, 0.45); padding: 0.15rem 0.4rem; border-radius: 2px; }
+#olsb-ct-slider { flex: 1 1 10rem; min-width: 0; }
+.olsb-ct-legend { margin: 0; }
+#olsb-ct-list { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0 1rem; }
+.olsb-ct-limits { margin: 1rem 0 0; max-width: 60rem; }

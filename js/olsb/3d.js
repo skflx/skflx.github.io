@@ -72,12 +72,14 @@ function setMode(m, write) {
     main.setAttribute('data-mode', m);
     document.querySelectorAll('#olsb-mode [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)));
     $('olsb3d').hidden = m !== '3d';
-    $('olsb2d').hidden = m === '3d';
+    $('olsb2d').hidden = m !== '2d';
+    $('olsb-ct').hidden = m !== 'ct';
+    document.dispatchEvent(new CustomEvent('olsb:mode', { detail: m }));
     if (m === '3d') {
         if (!built) boot3d();
         else { resize(); needs = true; }
         if (write) writeHash();
-    } else if (write) {
+    } else if (m === '2d' && write) {
         try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* no-op */ }
     }
 }
@@ -970,6 +972,6 @@ function init() {
     document.querySelectorAll('#olsb-mode [data-mode]').forEach((b) => b.addEventListener('click', () => setMode(b.getAttribute('data-mode'), true)));
     $('olsb-mode').hidden = false;
     const h = readHash();
-    setMode(h.m === '3d' || (!h.d && !h.p) ? '3d' : '2d', false);
+    setMode(h.m === 'ct' ? 'ct' : h.m === '3d' || (!h.d && !h.p) ? '3d' : '2d', false);
 }
 init();

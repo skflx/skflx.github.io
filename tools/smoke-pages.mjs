@@ -19,7 +19,38 @@
 
    Prints PASS/FAIL per page; exits nonzero if any page failed.
    ============================================================= */
+import zlib from 'zlib';
 import { startServer, launchBrowser, collectErrors } from './smoke-lib.mjs';
+
+/* A synthetic temporal-bone volume for OLSB's Real CT view, routed over tbone/** (nothing is written into the repo):
+   40^3 voxels of 0.5 mm, frame origin -10 mm, a soft sphere in a bone shell in air, one landmark and one sweep. */
+function tboneRoutes(requests) {
+  const N = 40;
+  const ct = Buffer.alloc(N * N * N);
+  for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const r = Math.hypot(i - 19.5, j - 19.5, k - 19.5);
+    ct[(k * N + j) * N + i] = r < 12 ? 110 : r < 16 ? 220 : 43;
+  }
+  const header = { version: 1, dtype: 'uint8', dims: [N, N, N], spacing: [0.5, 0.5, 0.5],
+    affine: [[0.5, 0, 0, -10], [0, 0.5, 0, -10], [0, 0, 0.5, -10], [0, 0, 0, 1]],
+    values: { kind: 'display' }, windows: { bone: { center: 128, width: 255 } }, specimen: 'synthetic' };
+  const landmarks = { landmarks: [{ name: 'lscc', g: 'lscc', point_mm: [2, 1, 0] }, { name: 'nowhere', g: null, point_mm: [-3, -2, 0.2] }] };
+  const sweeps = { status_meaning: { detected: 'd', labelled: 'l', inferred: 'i' }, sweeps: { 'facial-nerve': { family: 'facial-nerve', segments: [
+    { name: 'labyrinthine', pts: [[-4, -4, 0], [-3, -3, 0], [-2, -2, 0], [-1, -1, 0]], radius: [0.5, 0.5, 0.5, 0.5], status: ['inferred', 'detected', 'labelled', 'detected'] }] } } };
+  const files = { 'ct/ct.json': JSON.stringify(header), 'ct/ct.u8.gz': zlib.gzipSync(ct),
+    'geometry/landmarks.json': JSON.stringify(landmarks), 'geometry/sweeps.json': JSON.stringify(sweeps) };
+  return async (page) => {
+    await page.route('**/tbone/**', (route) => {
+      const u = new URL(route.request().url());
+      requests.push(u.pathname);
+      const body = files[u.pathname.replace(/^.*\/tbone\//, '')];
+      return body ? route.fulfill({ status: 200, body, contentType: u.pathname.endsWith('.json') ? 'application/json' : 'application/octet-stream' })
+        : route.fulfill({ status: 404, body: '' });
+    });
+  };
+}
+const tboneRequests = [];
+const tboneSetup = tboneRoutes(tboneRequests);
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
@@ -136,6 +167,33 @@ const PAGES = [
     return wait(p, () => !document.getElementById('olsb3d-info').hidden
       && document.getElementById('olsb3d-info-name').textContent.length > 2);
   } },
+  /* OLSB Real CT: no tbone/ request until the view opens; then a slice draws and clicking a landmark selects its glossary id. */
+  { path: 'OLSB.html#d=axial&p=posterior&s=1', setup: tboneSetup, ready: async (p) => {
+    await wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready');
+    await p.waitForTimeout(500);
+    if (tboneRequests.length) throw new Error('tbone/ requested before the Real CT view opened: ' + tboneRequests[0]);
+    await p.click('#olsb-mode [data-mode="ct"]');
+    await wait(p, () => document.documentElement.getAttribute('data-olsb-ct') === 'ready'
+      && Number(document.getElementById('olsb-ct-canvas').getAttribute('data-drawn')) > 1000);
+    /* axial at z = 0: landmark lscc at x = 2, y = 1 -> pixel ((9.5 - 2) / 0.5, (9.5 - 1) / 0.5), centre at +0.5 */
+    await p.locator('#olsb-ct-canvas').scrollIntoViewIfNeeded();
+    const c = await p.evaluate(() => { const cv = document.getElementById('olsb-ct-canvas'); const r = cv.getBoundingClientRect();
+      const k = Number(cv.getAttribute('data-k')); const f = r.width / cv.width;
+      return { x: r.left + ((9.5 - 2) / 0.5 + 0.5) * k * f, y: r.top + ((9.5 - 1) / 0.5 + 0.5) * k * f }; });
+    await p.mouse.click(c.x, c.y);
+    await wait(p, () => document.getElementById('olsb-ct-info').getAttribute('data-id') === 'lscc'
+      && /semicircular/i.test(document.getElementById('olsb-ct-info-name').textContent));
+    if (!/m=ct/.test(await p.evaluate(() => location.hash))) throw new Error('hash not written');
+    return true;
+  } },
+  /* The hash selects plane and position (and untrusted junk falls back). */
+  { path: 'OLSB.html#m=ct&pl=cor&at=1.5', setup: tboneSetup, ready: (p) => wait(p, () => {
+    const c = document.getElementById('olsb-ct-canvas');
+    return document.documentElement.getAttribute('data-olsb-ct') === 'ready' && c.getAttribute('data-plane') === 'coronal' && c.getAttribute('data-at') === '1.50';
+  }) },
+  { path: 'OLSB.html#m=ct&pl=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&at=NaN', setup: tboneSetup, ready: (p) => wait(p, () =>
+    document.documentElement.getAttribute('data-olsb-ct') === 'ready' && document.getElementById('olsb-ct-canvas').getAttribute('data-plane') === 'axial'
+      && !document.getElementById('pwn') && !window.__pwned) },
   { path: 'OLSB.html#m=3d&st=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&cam=' + encodeURIComponent('<b>'),
     ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
       && !document.getElementById('pwn') && !window.__pwned, 40000) },
@@ -194,6 +252,7 @@ async function main() {
     let verdict = 'PASS';
     let reason = '';
     try {
+      if (spec.setup) await spec.setup(page);
       await page.goto(base + '/' + spec.path, { waitUntil: 'domcontentloaded', timeout: 15000 });
       await spec.ready(page);
       // settle so late-boot errors surface

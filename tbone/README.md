@@ -1,8 +1,8 @@
 # tbone — normal temporal bone reference volume (internal)
 
 A 3D reconstruction of the normal temporal bone CT in the UW *Interactive Web-based CT Temporal Bone
-Module*, in OLSB's frame, with the facial nerve and other surgical structures traced. **Internal reference
-data: no page, test or CI job loads it** (plan `plans/2026-11-03-uw-temporal-bone-volume.md`, parent issue #225).
+Module*, in OLSB's frame, with the facial nerve and other surgical structures traced. **Reference
+data: only OLSB's Real CT view (`js/olsb/ct.js`) loads it, on entering the view; no test or CI job loads these files** (plan `plans/2026-11-03-uw-temporal-bone-volume.md`, parent issue #225).
 Provenance and permission: `LICENSE-data.md`. Everything here is generated: never hand-edit it; rerun the pipeline.
 
 **Frame** (`js/olsb/volume.js`): millimetres, a **right** ear, x lateral, y anterior, z superior, origin at the
