@@ -103,8 +103,9 @@ Jacobson A, Jacobson RL (eds). *Radiographic Cephalometry*, 2nd ed. Quintessence
 - The labyrinthine segment of CN VII is lifted about 0.9 mm so the geniculate genu reads; exactly
   projected, it lies on the tympanic segment.
 - CN VII is solid from the root exit zone to the stylomastoid foramen (the lower mastoid segment
-  runs below the window, inside bone) and dashed beyond; the branches are drawn in projection, so
-  the temporal branch crosses the cranial outline.
+  runs below the window, inside bone) and dashed beyond; all five branches are drawn in projection,
+  so they cross midline structures (nasal cavity, maxilla, tongue) and the temporal branch crosses
+  the cranial outline.
 - The brainstem stump is its own non-interactive group, `stump`, painted after `lsb`: it lies
   medial to the petrous face, and in the single `context` group the face would hide it and the
   nerve would have no visible origin.

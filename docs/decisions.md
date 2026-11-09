@@ -179,4 +179,4 @@ file each in `js/diagrams/`.
 
 ## 9. Listing unfinished work (owner, 2026-11-04)
 
-Unfinished work is listed, not hidden, so the owner can follow along: set `draft: true` on the OKSAT guide or module entry (hub badge plus a notice on its entry page), or put a visible "Draft" notice on the entry page of any other new page or tool. `unlisted` is for pages the owner wants unreachable (OLSB, atlas), not for work in progress. Removing `draft` is the owner's call when it is done.
+Unfinished work is listed, not hidden, so the owner can follow along: set `draft: true` on the OKSAT guide or module entry (hub badge plus a notice on its entry page), or put a visible "Draft" notice on the entry page of any other new page or tool. `unlisted` is for pages the owner wants unreachable (OLSB, SSB, atlas), not for work in progress. Removing `draft` is the owner's call when it is done.
