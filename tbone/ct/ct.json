@@ -1,4 +1,5 @@
 {
+ "version": 1,
  "source_map": "ct/source.u8.gz, same grid: 0 = no data, 1 = axial stack, 2 = reformatted coronal / parallel / perpendicular stacks (mean of those covering the voxel; slice step 1.1 mm, so coarser across their slice direction)",
  "dims": [
   214,
@@ -6,15 +7,51 @@
   167
  ],
  "dims_order": "x fastest; array index [k][j][i] = z, y, x",
- "spacing_mm": 0.3,
- "origin_mm": [
-  -34.0,
-  -28.0,
-  -26.0
+ "spacing": [
+  0.3,
+  0.3,
+  0.3
  ],
- "origin_note": "frame position (mm) of voxel [0,0,0]; voxel i,j,k is at origin + (i,j,k) * spacing_mm",
+ "affine": [
+  [
+   0.3,
+   0,
+   0,
+   -34.0
+  ],
+  [
+   0,
+   0.3,
+   0,
+   -28.0
+  ],
+  [
+   0,
+   0,
+   0.3,
+   -26.0
+  ],
+  [
+   0,
+   0,
+   0,
+   1
+  ]
+ ],
+ "affineNote": "voxel (i,j,k,1) -> frame mm (x lateral, y anterior, z superior; origin = centre of the oval window; a right ear), row-major; the box origin is the frame position of voxel [0,0,0]",
  "frame": "OLSB (js/olsb/volume.js): mm, a right ear, x lateral, y anterior, z superior; (0,0,0) = centre of the oval window",
- "dtype": "uint8 display levels of the capture (air = the window floor, about 43; soft tissue about 110; dense bone 200-255); not HU. Voxels with no data are 0 (see source_map)",
+ "dtype": "uint8",
+ "values": {
+  "kind": "display",
+  "note": "8-bit display levels of the bone-window capture (air = the window floor, about 43; soft tissue about 110; dense bone 200-255); not HU. Voxels with no data are 0 (see source_map)"
+ },
+ "windows": {
+  "bone": {
+   "center": 128,
+   "width": 255
+  }
+ },
+ "specimen": "uw-temporalbone-normal-axial",
  "resampling": "trilinear from the axial stack; in-plane pixel and slice step from the scale; where the axial stack does not reach (it is about 16 mm tall) from the three reformatted stacks (source = 2); outside everything 0",
  "source": {
   "atlas": "UW Interactive CT Temporal Bone atlas, normal, axial plane",

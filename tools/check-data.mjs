@@ -1079,6 +1079,16 @@ function checkAtlasAndUnlisted() {
   ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html links to OLSB and ssb', linkProblems.join('; '));
 }
 
+/* tbone/ct/ct.json (the temporal-bone CT, WP E1) must parse as SSB's ct.json v1 header: js/ssb/volume.js
+   parseHeader is the reader, imported here (it is an ES module; Node reads it by syntax detection). */
+async function checkTboneHeader() {
+  console.log('\ntbone: CT header reads as SSB ct.json v1');
+  const { parseHeader } = await import(new URL('../js/ssb/volume.js', import.meta.url).href);
+  let err = null;
+  try { parseHeader(JSON.parse(fs.readFileSync(rel('tbone/ct/ct.json'), 'utf8')), 'tbone'); } catch (e) { err = e.message; }
+  ok(err === null, 'tbone: ct.json passes js/ssb/volume.js parseHeader', 'tbone: ' + err);
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkAgents();
@@ -1091,5 +1101,6 @@ checkSsb();
 checkFigures();
 checkOlsb();
 checkAtlasAndUnlisted();
+await checkTboneHeader();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

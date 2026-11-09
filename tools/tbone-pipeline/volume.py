@@ -109,15 +109,21 @@ def build():
         f.write(u8.tobytes())     # C order: [z][y][x], x fastest
     with gzip.GzipFile(os.path.join(C.OUT, 'ct', 'source.u8.gz'), 'wb', 9, mtime=0) as f:
         f.write(src.tobytes())
+    ox0, oy0, oz0 = BOX['x'][0], BOX['y'][0], BOX['z'][0]
     meta = {
+        'version': 1,   # SSB's ct.json header (js/ssb/volume.js parseHeader), so the viewer reads this volume unchanged
         'source_map': 'ct/source.u8.gz, same grid: 0 = no data, 1 = axial stack, 2 = reformatted coronal / parallel / perpendicular stacks (mean of those covering the voxel; slice step 1.1 mm, so coarser across their slice direction)',
         'dims': [int(u8.shape[2]), int(u8.shape[1]), int(u8.shape[0])],
         'dims_order': 'x fastest; array index [k][j][i] = z, y, x',
-        'spacing_mm': VOX,
-        'origin_mm': [BOX['x'][0], BOX['y'][0], BOX['z'][0]],
-        'origin_note': 'frame position (mm) of voxel [0,0,0]; voxel i,j,k is at origin + (i,j,k) * spacing_mm',
+        'spacing': [VOX, VOX, VOX],
+        'affine': [[VOX, 0, 0, ox0], [0, VOX, 0, oy0], [0, 0, VOX, oz0], [0, 0, 0, 1]],
+        'affineNote': 'voxel (i,j,k,1) -> frame mm (x lateral, y anterior, z superior; origin = centre of the oval window; a right ear), row-major; the box origin is the frame position of voxel [0,0,0]',
         'frame': 'OLSB (js/olsb/volume.js): mm, a right ear, x lateral, y anterior, z superior; (0,0,0) = centre of the oval window',
-        'dtype': 'uint8 display levels of the capture (air = the window floor, about 43; soft tissue about 110; dense bone 200-255); not HU. Voxels with no data are 0 (see source_map)',
+        'dtype': 'uint8',
+        'values': {'kind': 'display', 'note': '8-bit display levels of the bone-window capture (air = the window floor, about 43; soft tissue about 110; dense bone 200-255); not HU. Voxels with no data are 0 (see source_map)'},
+        # the bone window of SSB's CT volume from the same UW atlas family (ssb/ct/ct.json); a display convention, not a measurement
+        'windows': {'bone': {'center': 128, 'width': 255}},
+        'specimen': 'uw-temporalbone-normal-axial',
         'resampling': 'trilinear from the axial stack; in-plane pixel and slice step from the scale; where the axial stack does not reach (it is about 16 mm tall) from the three reformatted stacks (source = 2); outside everything 0',
         'source': {'atlas': 'UW Interactive CT Temporal Bone atlas, normal, axial plane', 'slices': int(N), 'slice_size': [int(W), int(H)]},
         'scale': fr,

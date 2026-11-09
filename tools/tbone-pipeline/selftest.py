@@ -32,7 +32,11 @@ def main():
     raw = gzip.open(os.path.join(OUT, 'ct', 'ct.u8.gz')).read()
     assert len(raw) == nx * ny * nz, 'ct.u8.gz size disagrees with dims'
     V = np.frombuffer(raw, np.uint8).reshape(nz, ny, nx).astype(np.float32)
-    h = meta['spacing_mm']; o = np.array(meta['origin_mm'])
+    # SSB's ct.json v1 header (js/ssb/volume.js parseHeader): the affine is a 0.3 mm scale plus the box origin
+    assert meta['version'] == 1 and meta['dtype'] == 'uint8' and meta['values']['kind'] == 'display', 'header keys'
+    A = np.array(meta['affine'], float)
+    h = meta['spacing'][0]; o = A[:3, 3]
+    assert list(meta['spacing']) == [h, h, h] and np.allclose(A[:3, :3], np.diag([h, h, h])), 'affine is not a scale plus origin'
     assert abs(h - 0.3) < 1e-9 and meta['frame'].startswith('OLSB')
     assert (o < 0).all() or o[2] < 0, 'origin box'
     ext = o + np.array([nx, ny, nz]) * h
