@@ -120,6 +120,7 @@ function checkOlsbVolume(O) {
   for (let i = 0; i < lab.length; i++) if (lab[i]) (byId[V.LABELS[lab[i]].id] ||= []).push(i);
   const empty = V.LABELS.filter((l) => l && !l.drilled && !byId[l.id]).map((l) => l.id);
   ok(empty.length === 0, '3D model: every label is built', `3D labels with no voxels: ${[...new Set(empty)].join(', ')}`);
+  reportOlsbResiduals(V, vol);
   const problems = [];
   const states = new Set(V.STATES.map((x) => x.id)), views = new Set(V.VIEWS.map((x) => x.id)), layers = new Set(V.LAYERS.map((x) => x.id));
   for (const t of V.TOURS) for (const sp of t.steps) {
@@ -1077,6 +1078,43 @@ function checkAtlasAndUnlisted() {
     }
   }
   ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html links to OLSB and ssb', linkProblems.join('; '));
+}
+
+/* Report-only truth check (WP E3, #250): for each glossary id with both an OLSB anchor (the centroid of
+   its label, mm, from volume.build().anchors) and tbone landmark tips (tbone/geometry/landmarks.json,
+   grouped by `g`), the distance from the anchor to the componentwise median of those tips. One
+   specimen with an inferred scale (+-10 %): this is a residual table for review, not a gate, and it
+   never fails the run. Sorted largest first. */
+function reportOlsbResiduals(V, vol) {
+  console.log('\nolsb truth residuals (report only; one specimen, inferred scale +-10 %; nothing fails here)');
+  let L;
+  try { L = JSON.parse(fs.readFileSync(rel('tbone/geometry/landmarks.json'), 'utf8')); } catch (e) { console.log('  skipped: ' + e.message); return; }
+  const tips = {};
+  for (const r of L.landmarks) if (r.g && Array.isArray(r.point_mm)) (tips[r.g] ||= []).push(r.point_mm);
+  const median = (xs) => { const s = [...xs].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+  /* glossary id -> the label code with the most voxels (a glossary id may be drawn by several labels) */
+  const codeOf = {};
+  for (const code of Object.keys(vol.anchors)) {
+    const id = V.LABELS[code].id;
+    if (!codeOf[id] || vol.anchors[code].n > vol.anchors[codeOf[id]].n) codeOf[id] = code;
+  }
+  const rows = [];
+  for (const [id, code] of Object.entries(codeOf)) {
+    if (!tips[id]) continue;
+    const a = vol.anchors[code].centroid;
+    const m = [0, 1, 2].map((k) => median(tips[id].map((p) => p[k])));
+    rows.push({ id, a, m, n: tips[id].length, d: Math.hypot(a[0] - m[0], a[1] - m[1], a[2] - m[2]) });
+  }
+  rows.sort((x, y) => y.d - x.d);
+  const v3 = (p) => p.map((x) => x.toFixed(2).padStart(7)).join(' ');
+  console.log(`  ${'id'.padEnd(22)} ${'anchor x y z (mm)'.padEnd(23)} ${'median x y z (mm)'.padEnd(23)} ${'tips'.padStart(4)} ${'dist'.padStart(7)}`);
+  for (const r of rows) console.log(`  ${r.id.padEnd(22)} ${v3(r.a)}   ${v3(r.m)}  ${String(r.n).padStart(4)} ${r.d.toFixed(2).padStart(6)} mm`);
+  const over = rows.filter((r) => r.d > 3).length;
+  console.log(`  compared ${rows.length} ids; ${over} above 3 mm`);
+  const noAnchor = Object.keys(tips).filter((id) => !codeOf[id]);
+  const noTips = Object.keys(codeOf).filter((id) => !tips[id]);
+  if (noAnchor.length) console.log(`  tbone ids with no OLSB anchor: ${noAnchor.join(', ')}`);
+  if (noTips.length) console.log(`  OLSB ids with no tbone landmark: ${noTips.join(', ')}`);
 }
 
 /* tbone/ct/ct.json (the temporal-bone CT, WP E1) must parse as SSB's ct.json v1 header: js/ssb/volume.js
