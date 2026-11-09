@@ -16,8 +16,9 @@ acquisition (`tbone/registration.json`, `specimen_identity`). The atlas carries 
 public CT images in a public, non-commercial 3D educational model, on condition that the work credits the
 atlas) covers this module too (owner, 2026-11-03; plan `plans/2026-11-03-uw-temporal-bone-volume.md`, T1). The
 email stays with the owner and is not committed. Any UW image committed to the repo would need its own row
-here; none is: the raw downloads live in `tools/tbone-pipeline/incoming/` (ignored by version control) and
-no derivative image is stored.
+here; none is under `tbone/`: the raw downloads live in `tools/tbone-pipeline/incoming/` (ignored by version
+control) and no derivative image is stored here. The ten cropped slices the ear-anatomy guide shows are in
+`images/oksat/ear-anatomy/ct/`, each with its row in `images/oksat/ear-anatomy/ATTRIBUTION.md`.
 
 **Attribution** (show wherever the specimen is displayed): *Temporal bone CT derived from the Interactive CT
 Temporal Bone Atlas, University of Washington Department of Radiology (uwmsk.org/temporalbone), used with the

@@ -7,9 +7,10 @@ Status never lives here: each spec has a parent GitHub issue with one sub-issue 
 
 | Spec | Parent issue |
 |---|---|
-| [2026-10-28-figures-eggs-atlas](2026-10-28-figures-eggs-atlas.md): ASCII figures as eggs, lit 3D Figs 1–2, unlisted atlas | #176 |
-| [2026-11-02-ear-anatomy-guide](2026-11-02-ear-anatomy-guide.md): normal outer and middle ear, OKSAT guide + question module, unlisted | #206 |
-| [2026-11-03-uw-temporal-bone-volume](2026-11-03-uw-temporal-bone-volume.md): internal 3D reference volume from the UW temporal bone atlas | #225 |
-| [2026-11-04-skoto-links](2026-11-04-skoto-links.md): link OKSAT modules and guides to sk.oto maps, gated by `live` | none yet |
+| [2026-10-28-figures-eggs-atlas](2026-10-28-figures-eggs-atlas.md): ASCII figures as eggs, unlisted atlas (lit 3D Figs 1–2 dropped) | #176 (closed) |
+| [2026-11-02-ear-anatomy-guide](2026-11-02-ear-anatomy-guide.md): normal outer and middle ear, OKSAT guide + question module, listed as Draft | #206 (closed; #237 removes Draft) |
+| [2026-11-03-uw-temporal-bone-volume](2026-11-03-uw-temporal-bone-volume.md): internal 3D reference volume from the UW temporal bone atlas | #225 (closed; follow-on #244) |
+| [2026-11-04-skoto-links](2026-11-04-skoto-links.md): link OKSAT modules and guides to sk.oto maps, gated by `live` | #174 |
 | [2026-11-04-skoto-publish](2026-11-04-skoto-publish.md): publish sk.oto with every figure stripped, three locks | #243 |
 | [2026-11-04-tbone-sources](2026-11-04-tbone-sources.md): real-DICOM temporal bone sources beyond the UW atlas | #244 |
+| [2026-11-09-ear-truth-concordance](2026-11-09-ear-truth-concordance.md): OLSB shows and is checked against the real temporal bone CT; one volume contract with SSB | #247 |
