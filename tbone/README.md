@@ -13,7 +13,7 @@ floor, about 43; soft tissue about 110; dense bone 200-255), **not HU**.
 
 | File | What |
 |---|---|
-| `ct/ct.u8.gz`, `ct/ct.json` | display volume, 0.3 mm isotropic, 214 x 174 x 167 voxels, `[z][y][x]` (x fastest); `ct.json` has the box origin, scale method and uncertainty, coverage |
+| `ct/ct.u8.gz`, `ct/ct.json` | display volume, 0.3 mm isotropic, 214 x 174 x 167 voxels, `[z][y][x]` (x fastest). `ct.json` is SSB's ct.json v1 header (`version`, `dims`, `spacing`, 4x4 `affine` at the box origin, `dtype`, `values`, `windows`, `specimen`; read by `js/ssb/volume.js` `parseHeader`) plus extra keys: scale method and uncertainty, coverage, source map, frame |
 | `ct/source.u8.gz` | same grid: 0 no data, 1 axial stack, 2 reformatted stacks only (see Limits) |
 | `geometry/landmarks.json` | every UW label tip as a 3D point (mm) with plane, slice run, canonical name, `js/olsb/glossary.js` id (`g`, else null), tip-finder; `summary` per name |
 | `geometry/sweeps.json` | centrelines with radius, per-point `status` (detected / labelled / inferred) and `src` (a = axial coverage, r = reformats only): facial nerve by segment, IAC, GSPN start, petrous ICA, sigmoid sinus, jugular bulb, cochlear and vestibular aqueducts, EAC, bony Eustachian tube, the three canals, basal turn; `fn_sanity_mm` |

@@ -1,0 +1,572 @@
+
+<html>
+	<head>
+		<title>Interactive Atlas:  Axial</title>
+		
+		<link rel="stylesheet" href="../../../atlas.css" type="text/css" />
+<!-- 
+		<style type="text/css">
+			body {
+				background-color: #000;
+				color: #fff;
+			}
+
+			#img_frame {
+				text-align: center;
+				vertical-align: top;
+			}
+			
+			#img_frame img {
+				display: inline;
+				margin:0;
+				padding:0;
+				text-decoration: none;
+				border: none;
+			}
+			
+			#navigation a {
+				font:14px Arial, Helvetica, sans-serif;
+				color: #000000;
+				text-decoration: none;
+				letter-spacing:.1em;
+				line-height:20px;
+				display:block;
+				padding: 0px 10px;
+				border-right:1px solid #FF6600;
+			}
+	
+			#navigation a:hover {
+				color:#ffffff;
+				background: #FF6600;
+			}
+
+
+			.logo {
+				font:24px Times New Roman, Times, serif;
+				color: #FFBA00;
+				letter-spacing:.3em;
+				line-height:26px;
+			}
+	
+			.tagline {
+				font: 11px Arial, Helvetica, sans-serif;
+				color: #D3DCE6;
+				line-height:16px;
+			}
+			.taglineLarge {
+				font: 14px Arial, Helvetica, sans-serif;
+				color: #D3DCE6;
+				line-height:16px;
+			}
+	
+			.pageName {
+				font:24px Arial, Helvetica, sans-serif;
+				color: #FF6600;
+				letter-spacing:.2em;
+				line-height:32px;
+			}
+	
+			.navText {
+				font:18px Arial, Helvetica, sans-serif;
+				color: #000000;
+				letter-spacing:.1em;
+				line-height:120px;
+			}
+
+
+	
+		</style>
+ -->
+ 
+ 
+		<script type="text/javascript" language="javascript">
+		<!--
+			var myImages = new Array();
+			var img0 = new Image();
+			img0.src = "blank.jpg";
+			myImages[0] = img0;
+			var img1 = new Image();
+			img1.src = "img01.jpg";
+			myImages[1] = img1;
+			var img2 = new Image();
+			img2.src = "img02.jpg";
+			myImages[2] = img2;
+			var img3 = new Image();
+			img3.src = "img03.jpg";
+			myImages[3] = img3;
+			var img4 = new Image();
+			img4.src = "img04.jpg";
+			myImages[4] = img4;
+			var img5 = new Image();
+			img5.src = "img05.jpg";
+			myImages[5] = img5;
+			var img6 = new Image();
+			img6.src = "img06.jpg";
+			myImages[6] = img6;
+			var img7 = new Image();
+			img7.src = "img07.jpg";
+			myImages[7] = img7;
+			var img8 = new Image();
+			img8.src = "img08.jpg";
+			myImages[8] = img8;
+			var img9 = new Image();
+			img9.src = "img09.jpg";
+			myImages[9] = img9;
+			var img10 = new Image();
+			img10.src = "img10.jpg";
+			myImages[10] = img10;
+			var img11 = new Image();
+			img11.src = "img11.jpg";
+			myImages[11] = img11;
+			var img12 = new Image();
+			img12.src = "img12.jpg";
+			myImages[12] = img12;
+			var img13 = new Image();
+			img13.src = "img13.jpg";
+			myImages[13] = img13;
+			var img14 = new Image();
+			img14.src = "img14.jpg";
+			myImages[14] = img14;
+			var img15 = new Image();
+			img15.src = "img15.jpg";
+			myImages[15] = img15;
+			var img16 = new Image();
+			img16.src = "img16.jpg";
+			myImages[16] = img16;
+			var img17 = new Image();
+			img17.src = "img17.jpg";
+			myImages[17] = img17;
+			var img18 = new Image();
+			img18.src = "img18.jpg";
+			myImages[18] = img18;
+			var img19 = new Image();
+			img19.src = "img19.jpg";
+			myImages[19] = img19;
+			var img20 = new Image();
+			img20.src = "img20.jpg";
+			myImages[20] = img20;
+			var img21 = new Image();
+			img21.src = "img21.jpg";
+			myImages[21] = img21;
+			var img22 = new Image();
+			img22.src = "img22.jpg";
+			myImages[22] = img22;
+			var img23 = new Image();
+			img23.src = "img23.jpg";
+			myImages[23] = img23;
+			var img24 = new Image();
+			img24.src = "img24.jpg";
+			myImages[24] = img24;
+			var img25 = new Image();
+			img25.src = "img25.jpg";
+			myImages[25] = img25;
+			var img26 = new Image();
+			img26.src = "img26.jpg";
+			myImages[26] = img26;
+			var img27 = new Image();
+			img27.src = "img27.jpg";
+			myImages[27] = img27;
+			var img28 = new Image();
+			img28.src = "img28.jpg";
+			myImages[28] = img28;
+			var img29 = new Image();
+			img29.src = "img29.jpg";
+			myImages[29] = img29;
+			var img30 = new Image();
+			img30.src = "img30.jpg";
+			myImages[30] = img30;
+			var img31 = new Image();
+			img31.src = "img31.jpg";
+			myImages[31] = img31;
+			var img32 = new Image();
+			img32.src = "img32.jpg";
+			myImages[32] = img32;
+			var img33 = new Image();
+			img33.src = "img33.jpg";
+			myImages[33] = img33;
+			var img34 = new Image();
+			img34.src = "img34.jpg";
+			myImages[34] = img34;
+			var img35 = new Image();
+			img35.src = "img35.jpg";
+			myImages[35] = img35;
+			var img36 = new Image();
+			img36.src = "img36.jpg";
+			myImages[36] = img36;
+			var img37 = new Image();
+			img37.src = "img37.jpg";
+			myImages[37] = img37;
+			var img38 = new Image();
+			img38.src = "img38.jpg";
+			myImages[38] = img38;
+			var img39 = new Image();
+			img39.src = "img39.jpg";
+			myImages[39] = img39;
+			var img40 = new Image();
+			img40.src = "img40.jpg";
+			myImages[40] = img40;
+			var img41 = new Image();
+			img41.src = "img41.jpg";
+			myImages[41] = img41;
+			var img42 = new Image();
+			img42.src = "img42.jpg";
+			myImages[42] = img42;
+			var img43 = new Image();
+			img43.src = "img43.jpg";
+			myImages[43] = img43;
+			var img44 = new Image();
+			img44.src = "img44.jpg";
+			myImages[44] = img44;
+			var img45 = new Image();
+			img45.src = "img45.jpg";
+			myImages[45] = img45;
+			var img46 = new Image();
+			img46.src = "img46.jpg";
+			myImages[46] = img46;
+			var img47 = new Image();
+			img47.src = "img47.jpg";
+			myImages[47] = img47;
+			var img48 = new Image();
+			img48.src = "img48.jpg";
+			myImages[48] = img48;
+			var img49 = new Image();
+			img49.src = "img49.jpg";
+			myImages[49] = img49;
+			var img50 = new Image();
+			img50.src = "img50.jpg";
+			myImages[50] = img50;
+			var img51 = new Image();
+			img51.src = "img51.jpg";
+			myImages[51] = img51;
+			var img52 = new Image();
+			img52.src = "img52.jpg";
+			myImages[52] = img52;
+			var img53 = new Image();
+			img53.src = "img53.jpg";
+			myImages[53] = img53;
+			var img54 = new Image();
+			img54.src = "img54.jpg";
+			myImages[54] = img54;
+			var img55 = new Image();
+			img55.src = "img55.jpg";
+			myImages[55] = img55;
+			var img56 = new Image();
+			img56.src = "img56.jpg";
+			myImages[56] = img56;
+			var img57 = new Image();
+			img57.src = "img57.jpg";
+			myImages[57] = img57;
+			var img58 = new Image();
+			img58.src = "img58.jpg";
+			myImages[58] = img58;
+			var img59 = new Image();
+			img59.src = "img59.jpg";
+			myImages[59] = img59;
+			var img60 = new Image();
+			img60.src = "img60.jpg";
+			myImages[60] = img60;
+			var img61 = new Image();
+			img61.src = "img61.jpg";
+			myImages[61] = img61;
+
+
+
+			
+		var myImagesLab = new Array();
+		
+			var img0lab = new Image();
+			img0lab.src = "blank.jpg";
+			myImagesLab[0] = img0lab;
+			
+			var img1lab = new Image();
+			img1lab.src = "img01lab.jpg";
+			myImagesLab[1] = img1lab;
+			
+			var img2lab = new Image();
+			img2lab.src = "img02lab.jpg";
+			myImagesLab[2] = img2lab;
+			var img3lab = new Image();
+			img3lab.src = "img03lab.jpg";
+			myImagesLab[3] = img3lab;
+			var img4lab = new Image();
+			img4lab.src = "img04lab.jpg";
+			myImagesLab[4] = img4lab;
+			var img5lab = new Image();
+			img5lab.src = "img05lab.jpg";
+			myImagesLab[5] = img5lab;
+			var img6lab = new Image();
+			img6lab.src = "img06lab.jpg";
+			myImagesLab[6] = img6lab;
+			var img7lab = new Image();
+			img7lab.src = "img07lab.jpg";
+			myImagesLab[7] = img7lab;
+			var img8lab = new Image();
+			img8lab.src = "img08lab.jpg";
+			myImagesLab[8] = img8lab;
+			var img9lab = new Image();
+			img9lab.src = "img09lab.jpg";
+			myImagesLab[9] = img9lab;
+			var img10lab = new Image();
+			img10lab.src = "img10lab.jpg";
+			myImagesLab[10] = img10lab;
+			var img11lab = new Image();
+			img11lab.src = "img11lab.jpg";
+			myImagesLab[11] = img11lab;
+			var img12lab = new Image();
+			img12lab.src = "img12lab.jpg";
+			myImagesLab[12] = img12lab;
+			var img13lab = new Image();
+			img13lab.src = "img13lab.jpg";
+			myImagesLab[13] = img13lab;
+			var img14lab = new Image();
+			img14lab.src = "img14lab.jpg";
+			myImagesLab[14] = img14lab;
+			var img15lab = new Image();
+			img15lab.src = "img15lab.jpg";
+			myImagesLab[15] = img15lab;
+			var img16lab = new Image();
+			img16lab.src = "img16lab.jpg";
+			myImagesLab[16] = img16lab;
+			var img17lab = new Image();
+			img17lab.src = "img17lab.jpg";
+			myImagesLab[17] = img17lab;
+			var img18lab = new Image();
+			img18lab.src = "img18lab.jpg";
+			myImagesLab[18] = img18lab;
+			var img19lab = new Image();
+			img19lab.src = "img19lab.jpg";
+			myImagesLab[19] = img19lab;
+			var img20lab = new Image();
+			img20lab.src = "img20lab.jpg";
+			myImagesLab[20] = img20lab;
+			var img21lab = new Image();
+			img21lab.src = "img21lab.jpg";
+			myImagesLab[21] = img21lab;
+			var img22lab = new Image();
+			img22lab.src = "img22lab.jpg";
+			myImagesLab[22] = img22lab;
+			var img23lab = new Image();
+			img23lab.src = "img23lab.jpg";
+			myImagesLab[23] = img23lab;
+			var img24lab = new Image();
+			img24lab.src = "img24lab.jpg";
+			myImagesLab[24] = img24lab;
+			var img25lab = new Image();
+			img25lab.src = "img25lab.jpg";
+			myImagesLab[25] = img25lab;
+			var img26lab = new Image();
+			img26lab.src = "img26lab.jpg";
+			myImagesLab[26] = img26lab;
+			var img27lab = new Image();
+			img27lab.src = "img27lab.jpg";
+			myImagesLab[27] = img27lab;
+			var img28lab = new Image();
+			img28lab.src = "img28lab.jpg";
+			myImagesLab[28] = img28lab;
+			var img29lab = new Image();
+			img29lab.src = "img29lab.jpg";
+			myImagesLab[29] = img29lab;
+			var img30lab = new Image();
+			img30lab.src = "img30lab.jpg";
+			myImagesLab[30] = img30lab;
+			var img31lab = new Image();
+			img31lab.src = "img31lab.jpg";
+			myImagesLab[31] = img31lab;
+			var img32lab = new Image();
+			img32lab.src = "img32lab.jpg";
+			myImagesLab[32] = img32lab;
+			var img33lab = new Image();
+			img33lab.src = "img33lab.jpg";
+			myImagesLab[33] = img33lab;
+			var img34lab = new Image();
+			img34lab.src = "img34lab.jpg";
+			myImagesLab[34] = img34lab;
+			var img35lab = new Image();
+			img35lab.src = "img35lab.jpg";
+			myImagesLab[35] = img35lab;
+			var img36lab = new Image();
+			img36lab.src = "img36lab.jpg";
+			myImagesLab[36] = img36lab;
+			var img37lab = new Image();
+			img37lab.src = "img37lab.jpg";
+			myImagesLab[37] = img37lab;
+			var img38lab = new Image();
+			img38lab.src = "img38lab.jpg";
+			myImagesLab[38] = img38lab;
+			var img39lab = new Image();
+			img39lab.src = "img39lab.jpg";
+			myImagesLab[39] = img39lab;
+			var img40lab = new Image();
+			img40lab.src = "img40lab.jpg";
+			myImagesLab[40] = img40lab;
+			var img41lab = new Image();
+			img41lab.src = "img41lab.jpg";
+			myImagesLab[41] = img41lab;
+			var img42lab = new Image();
+			img42lab.src = "img42lab.jpg";
+			myImagesLab[42] = img42lab;
+			var img43lab = new Image();
+			img43lab.src = "img43lab.jpg";
+			myImagesLab[43] = img43lab;
+			var img44lab = new Image();
+			img44lab.src = "img44lab.jpg";
+			myImagesLab[44] = img44lab;
+			var img45lab = new Image();
+			img45lab.src = "img45lab.jpg";
+			myImagesLab[45] = img45lab;
+			var img46lab = new Image();
+			img46lab.src = "img46lab.jpg";
+			myImagesLab[46] = img46lab;
+			var img47lab = new Image();
+			img47lab.src = "img47lab.jpg";
+			myImagesLab[47] = img47lab;
+			var img48lab = new Image();
+			img48lab.src = "img48lab.jpg";
+			myImagesLab[48] = img48lab;
+			var img49lab = new Image();
+			img49lab.src = "img49lab.jpg";
+			myImagesLab[49] = img49lab;
+			var img50lab = new Image();
+			img50lab.src = "img50lab.jpg";
+			myImagesLab[50] = img50lab;
+			var img51lab = new Image();
+			img51lab.src = "img51lab.jpg";
+			myImagesLab[51] = img51lab;
+			var img52lab = new Image();
+			img52lab.src = "img52lab.jpg";
+			myImagesLab[52] = img52lab;
+			var img53lab = new Image();
+			img53lab.src = "img53lab.jpg";
+			myImagesLab[53] = img53lab;
+			var img54lab = new Image();
+			img54lab.src = "img54lab.jpg";
+			myImagesLab[54] = img54lab;
+			var img55lab = new Image();
+			img55lab.src = "img55lab.jpg";
+			myImagesLab[55] = img55lab;
+			var img56lab = new Image();
+			img56lab.src = "img56lab.jpg";
+			myImagesLab[56] = img56lab;
+			var img57lab = new Image();
+			img57lab.src = "img57lab.jpg";
+			myImagesLab[57] = img57lab;
+			var img58lab = new Image();
+			img58lab.src = "img58lab.jpg";
+			myImagesLab[58] = img58lab;
+			var img59lab = new Image();
+			img59lab.src = "img59lab.jpg";
+			myImagesLab[59] = img59lab;
+			var img60lab = new Image();
+			img60lab.src = "img60lab.jpg";
+			myImagesLab[60] = img60lab;
+			var img61lab = new Image();
+			img61lab.src = "img61lab.jpg";
+			myImagesLab[61] = img61lab;
+
+						
+			
+			var showImg = function(img_index) {
+				if (document.images)
+					document.images.x_section.src = myImages[img_index].src;
+				}
+					
+			var showImgLab = function(img_index) {
+						if (document.images)
+							document.images.x_section.src = myImagesLab[img_index].src;
+				}
+		-->
+		</script>
+	</head>
+	<body>
+
+
+<center>	<div class="logo">Interactive Temporal Bone Atlas |<span class="tagline">  University of Washington</span></div>
+	
+	<p class="pageName">Normal Temporal Bone: Axial Plane</p>
+	
+	<table border="0" cellpadding="0" cellspacing="0" id="navigation" bgcolor="#FFBA00">
+        <tr>
+          <td class="navText" align="center" nowrap="nowrap"><a href="../../../index.html">Home</a></td>
+          <td class="navText" align="center" nowrap="nowrap"><a href="../axial/axial.html">Axial</a></td>
+          <td class="navText" align="center" nowrap="nowrap"><a href="../coronal/coronal.html">Coronal</a></td>
+          <td class="navText" align="center" nowrap="nowrap"><a href="../parallel/parallel.html">Parallel</a></td>
+          <td class="navText" align="center" nowrap="nowrap"><a href="../perpendicular/perpendicular.html">Perpendicular</a></td>
+           </tr>
+      </table>
+      
+      
+      
+      
+		<p class="taglineLarge">(scroll over temporal bone to see CT images)</p>
+		<p class="taglineLarge">(click to see labeled normal structures)</p>
+		
+		</center>		
+		
+		<div id="img_frame" class="img_frame">
+			<img src="R-sagittal.jpg" id="ref_img" class="ref_img" width="642" height="417" usemap="#dyn.map" />
+			<img src="blank.jpg" id="x_section" class="x_section" width="512" height="512" />
+		</div>
+		<map name="dyn.map">
+<area shape="rect" onmouseover="showImg(1)" onmouseout="showImg(0)" onClick="showImgLab(1)" alt="Slice 1" coords="0,96,642,98">
+<area shape="rect" onmouseover="showImg(2)" onmouseout="showImg(0)" onClick="showImgLab(2)" alt="Slice 2" coords="0,98,642,100">
+<area shape="rect" onmouseover="showImg(3)" onmouseout="showImg(0)" onClick="showImgLab(3)" alt="Slice 3" coords="0,100,642,102">
+<area shape="rect" onmouseover="showImg(4)" onmouseout="showImg(0)" onClick="showImgLab(4)" alt="Slice 4" coords="0,102,642,105">
+<area shape="rect" onmouseover="showImg(5)" onmouseout="showImg(0)" onClick="showImgLab(5)" alt="Slice 5" coords="0,105,642,107">
+<area shape="rect" onmouseover="showImg(6)" onmouseout="showImg(0)" onClick="showImgLab(6)" alt="Slice 6" coords="0,107,642,109">
+<area shape="rect" onmouseover="showImg(7)" onmouseout="showImg(0)" onClick="showImgLab(7)" alt="Slice 7" coords="0,109,642,111">
+<area shape="rect" onmouseover="showImg(8)" onmouseout="showImg(0)" onClick="showImgLab(8)" alt="Slice 8" coords="0,111,642,113">
+<area shape="rect" onmouseover="showImg(9)" onmouseout="showImg(0)" onClick="showImgLab(9)" alt="Slice 9" coords="0,113,642,115">
+<area shape="rect" onmouseover="showImg(10)" onmouseout="showImg(0)" onClick="showImgLab(10)" alt="Slice 10" coords="0,115,642,117">
+<area shape="rect" onmouseover="showImg(11)" onmouseout="showImg(0)" onClick="showImgLab(11)" alt="Slice 11" coords="0,117,642,120">
+<area shape="rect" onmouseover="showImg(12)" onmouseout="showImg(0)" onClick="showImgLab(12)" alt="Slice 12" coords="0,120,642,122">
+<area shape="rect" onmouseover="showImg(13)" onmouseout="showImg(0)" onClick="showImgLab(13)" alt="Slice 13" coords="0,122,642,124">
+<area shape="rect" onmouseover="showImg(14)" onmouseout="showImg(0)" onClick="showImgLab(14)" alt="Slice 14" coords="0,124,642,126">
+<area shape="rect" onmouseover="showImg(15)" onmouseout="showImg(0)" onClick="showImgLab(15)" alt="Slice 15" coords="0,126,642,128">
+<area shape="rect" onmouseover="showImg(16)" onmouseout="showImg(0)" onClick="showImgLab(16)" alt="Slice 16" coords="0,128,642,130">
+<area shape="rect" onmouseover="showImg(17)" onmouseout="showImg(0)" onClick="showImgLab(17)" alt="Slice 17" coords="0,130,642,133">
+<area shape="rect" onmouseover="showImg(18)" onmouseout="showImg(0)" onClick="showImgLab(18)" alt="Slice 18" coords="0,133,642,135">
+<area shape="rect" onmouseover="showImg(19)" onmouseout="showImg(0)" onClick="showImgLab(19)" alt="Slice 19" coords="0,135,642,137">
+<area shape="rect" onmouseover="showImg(20)" onmouseout="showImg(0)" onClick="showImgLab(20)" alt="Slice 20" coords="0,137,642,139">
+<area shape="rect" onmouseover="showImg(21)" onmouseout="showImg(0)" onClick="showImgLab(21)" alt="Slice 21" coords="0,139,642,141">
+<area shape="rect" onmouseover="showImg(22)" onmouseout="showImg(0)" onClick="showImgLab(22)" alt="Slice 22" coords="0,141,642,143">
+<area shape="rect" onmouseover="showImg(23)" onmouseout="showImg(0)" onClick="showImgLab(23)" alt="Slice 23" coords="0,143,642,145">
+<area shape="rect" onmouseover="showImg(24)" onmouseout="showImg(0)" onClick="showImgLab(24)" alt="Slice 24" coords="0,145,642,148">
+<area shape="rect" onmouseover="showImg(25)" onmouseout="showImg(0)" onClick="showImgLab(25)" alt="Slice 25" coords="0,148,642,150">
+<area shape="rect" onmouseover="showImg(26)" onmouseout="showImg(0)" onClick="showImgLab(26)" alt="Slice 26" coords="0,150,642,152">
+<area shape="rect" onmouseover="showImg(27)" onmouseout="showImg(0)" onClick="showImgLab(27)" alt="Slice 27" coords="0,152,642,154">
+<area shape="rect" onmouseover="showImg(28)" onmouseout="showImg(0)" onClick="showImgLab(28)" alt="Slice 28" coords="0,154,642,156">
+<area shape="rect" onmouseover="showImg(29)" onmouseout="showImg(0)" onClick="showImgLab(29)" alt="Slice 29" coords="0,156,642,158">
+<area shape="rect" onmouseover="showImg(30)" onmouseout="showImg(0)" onClick="showImgLab(30)" alt="Slice 30" coords="0,158,642,160">
+<area shape="rect" onmouseover="showImg(31)" onmouseout="showImg(0)" onClick="showImgLab(31)" alt="Slice 31" coords="0,160,642,163">
+<area shape="rect" onmouseover="showImg(32)" onmouseout="showImg(0)" onClick="showImgLab(32)" alt="Slice 32" coords="0,163,642,165">
+<area shape="rect" onmouseover="showImg(33)" onmouseout="showImg(0)" onClick="showImgLab(33)" alt="Slice 33" coords="0,165,642,167">
+<area shape="rect" onmouseover="showImg(34)" onmouseout="showImg(0)" onClick="showImgLab(34)" alt="Slice 34" coords="0,167,642,169">
+<area shape="rect" onmouseover="showImg(35)" onmouseout="showImg(0)" onClick="showImgLab(35)" alt="Slice 35" coords="0,169,642,171">
+<area shape="rect" onmouseover="showImg(36)" onmouseout="showImg(0)" onClick="showImgLab(36)" alt="Slice 36" coords="0,171,642,173">
+<area shape="rect" onmouseover="showImg(37)" onmouseout="showImg(0)" onClick="showImgLab(37)" alt="Slice 37" coords="0,173,642,175">
+<area shape="rect" onmouseover="showImg(38)" onmouseout="showImg(0)" onClick="showImgLab(38)" alt="Slice 38" coords="0,175,642,178">
+<area shape="rect" onmouseover="showImg(39)" onmouseout="showImg(0)" onClick="showImgLab(39)" alt="Slice 39" coords="0,178,642,180">
+<area shape="rect" onmouseover="showImg(40)" onmouseout="showImg(0)" onClick="showImgLab(40)" alt="Slice 40" coords="0,180,642,182">
+<area shape="rect" onmouseover="showImg(41)" onmouseout="showImg(0)" onClick="showImgLab(41)" alt="Slice 41" coords="0,182,642,184">
+<area shape="rect" onmouseover="showImg(42)" onmouseout="showImg(0)" onClick="showImgLab(42)" alt="Slice 42" coords="0,184,642,186">
+<area shape="rect" onmouseover="showImg(43)" onmouseout="showImg(0)" onClick="showImgLab(43)" alt="Slice 43" coords="0,186,642,188">
+<area shape="rect" onmouseover="showImg(44)" onmouseout="showImg(0)" onClick="showImgLab(44)" alt="Slice 44" coords="0,188,642,190">
+<area shape="rect" onmouseover="showImg(45)" onmouseout="showImg(0)" onClick="showImgLab(45)" alt="Slice 45" coords="0,190,642,193">
+<area shape="rect" onmouseover="showImg(46)" onmouseout="showImg(0)" onClick="showImgLab(46)" alt="Slice 46" coords="0,193,642,195">
+<area shape="rect" onmouseover="showImg(47)" onmouseout="showImg(0)" onClick="showImgLab(47)" alt="Slice 47" coords="0,195,642,197">
+<area shape="rect" onmouseover="showImg(48)" onmouseout="showImg(0)" onClick="showImgLab(48)" alt="Slice 48" coords="0,197,642,199">
+<area shape="rect" onmouseover="showImg(49)" onmouseout="showImg(0)" onClick="showImgLab(49)" alt="Slice 49" coords="0,199,642,201">
+<area shape="rect" onmouseover="showImg(50)" onmouseout="showImg(0)" onClick="showImgLab(50)" alt="Slice 50" coords="0,201,642,203">
+<area shape="rect" onmouseover="showImg(51)" onmouseout="showImg(0)" onClick="showImgLab(51)" alt="Slice 51" coords="0,203,642,206">
+<area shape="rect" onmouseover="showImg(52)" onmouseout="showImg(0)" onClick="showImgLab(52)" alt="Slice 52" coords="0,206,642,208">
+<area shape="rect" onmouseover="showImg(53)" onmouseout="showImg(0)" onClick="showImgLab(53)" alt="Slice 53" coords="0,208,642,210">
+<area shape="rect" onmouseover="showImg(54)" onmouseout="showImg(0)" onClick="showImgLab(54)" alt="Slice 54" coords="0,210,642,212">
+<area shape="rect" onmouseover="showImg(55)" onmouseout="showImg(0)" onClick="showImgLab(55)" alt="Slice 55" coords="0,212,642,214">
+<area shape="rect" onmouseover="showImg(56)" onmouseout="showImg(0)" onClick="showImgLab(56)" alt="Slice 56" coords="0,214,642,216">
+<area shape="rect" onmouseover="showImg(57)" onmouseout="showImg(0)" onClick="showImgLab(57)" alt="Slice 57" coords="0,216,642,218">
+<area shape="rect" onmouseover="showImg(58)" onmouseout="showImg(0)" onClick="showImgLab(58)" alt="Slice 58" coords="0,218,642,221">
+<area shape="rect" onmouseover="showImg(59)" onmouseout="showImg(0)" onClick="showImgLab(59)" alt="Slice 59" coords="0,221,642,223">
+<area shape="rect" onmouseover="showImg(60)" onmouseout="showImg(0)" onClick="showImgLab(60)" alt="Slice 60" coords="0,223,642,225">
+<area shape="rect" onmouseover="showImg(61)" onmouseout="showImg(0)" onClick="showImgLab(61)" alt="Slice 61" coords="0,225,642,227">
+</map>	</body>
+</html>
