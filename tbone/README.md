@@ -36,6 +36,7 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 .venv/bin/python -I $P/scale.py            # frame: scale, slice step, oval-window origin
 .venv/bin/python -I $P/volume.py build     # ct/
 .venv/bin/python -I $P/landmarks.py        # geometry/landmarks.json
+.venv/bin/python -I $P/slices.py --apply   # ear-anatomy guide: ct/ crops (images/oksat/ear-anatomy/ct) + hotspot polys in imaging.js
 .venv/bin/python -I $P/sweeps.py           # geometry/sweeps.json (+ work/dims.json)
 .venv/bin/python -I $P/scale.py report     # anatomy cross-checks of the scale
 .venv/bin/python -I $P/export.py           # registration.json
