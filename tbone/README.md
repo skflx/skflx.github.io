@@ -27,7 +27,7 @@ this resolution and not labelled by UW).
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r tools/ssb-pipeline/requirements.txt
 P=tools/tbone-pipeline
-.venv/bin/python -I $P/fetch.py            # UW site -> $P/incoming/ (ignored by version control; never commit)
+.venv/bin/python -I $P/fetch.py            # UW site -> $P/incoming/ (git-ignored; tracked in git temporarily, see LICENSE-data.md)
 .venv/bin/python -I $P/extract.py          # labels, OCR, arrowheads -> $P/work/slices-<plane>.json   (slow: ~10 min)
 .venv/bin/python -I $P/volume.py check     # stack checks
 for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $p; done   # slow; run in parallel
