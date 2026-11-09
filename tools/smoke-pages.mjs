@@ -105,6 +105,12 @@ const PAGES = [
   { path: 'search.html', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-search') === 'ready') },
   /* PDF chapter splitter: both vendored libraries loaded and the page logic ran (it wires the theme toggle). */
   { path: 'pdf-chapter-splitter.html', ready: (p) => wait(p, () => !!window.PDFLib && !!window.JSZip && !!document.querySelector('.tool-title')) },
+  /* Atlas (unlisted): the head map drew; focusing a group lights it. */
+  { path: 'atlas.html', ready: async (p) => {
+    await wait(p, () => document.querySelectorAll('.at-svg .at-group').length > 0);
+    await p.focus('.at-group[data-group="cn7"]');
+    return wait(p, () => document.querySelector('.at-group[data-group="cn7"]').classList.contains('is-lit'));
+  } },
   /* OLSB: the layered SVG drew and a hash step resolved (unlisted page). */
   { path: 'OLSB.html#p=mastoidectomy&s=6', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready'
       && document.querySelectorAll('#olsb-svg .s').length > 20

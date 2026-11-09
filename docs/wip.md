@@ -4,7 +4,7 @@ One section per living system: what it is, where it stands, what is next.
 A status document, not a changelog. When something is retired, its section
 goes. Detail lives in the owning doc (`docs/docs-map.md` maps each one).
 
-Last reviewed: 2026-10-27.
+Last reviewed: 2026-11-08.
 
 ---
 
@@ -20,21 +20,25 @@ mirrors it as `--ok-*` tokens; Airway's dark stage uses its night palette.
 
 ## Figures: ASCII 3D (`js/ascii3d.js`, `js/diagrams/`)
 
-**State:** A software renderer draws every figure into a
-monospace grid (z-buffered, Blinn-Phong shading mapped to glyphs, contour
-glyphs at silhouettes and part edges). Figures turn, take drag and arrow keys,
+**State:** A software renderer draws every figure into a monospace grid
+(z-buffered, Blinn-Phong shading mapped to glyphs, contour glyphs at
+silhouettes and part edges). Figures turn, take drag and arrow keys,
 re-shade on a theme flip, and stop off-screen or under reduced motion. The same
-core runs in Node (`tools/ascii3d.mjs`), which bakes the no-JS frames.
+core runs in Node (`tools/ascii3d.mjs`), which bakes the no-JS frames. Three
+scenes ship, each an egg (`js/egg.js`): a word in the text unfolds its figure
+in place.
 
-- **Fig. 1** (one-pager, About): the owner's cochlea, fitted to their CT (A, B,
-  H, lateral-wall CDL), with the FLEX28 on the lateral wall and the spiral
-  ganglion ending near 1.75 turns. Turn count, canal width, ganglion radius
-  and the full-insertion contact angles are assumed; owner to vet.
-- **Fig. 2** (one-pager, Research): binaural pitch fusion in two bimodal
-  listeners, narrow vs broad. Widths follow the published 1-4 octave range;
-  the curves are schematic. Owner to vet the depiction and caption.
-- **Leitner staircase** (OKSAT hub): its intervals are checked against the engine.
-- **Larynx** (Airway setup screen): schematic adult-male proportions; owner to vet.
+- **Cochlea** (About, from "electrode"; `js/diagrams/cochlea.js`): the owner's
+  cochlea, fitted to their CT (A, B, H, lateral-wall CDL), with the FLEX28 on
+  the lateral wall and the spiral ganglion ending near 1.75 turns. Turn count,
+  canal width, ganglion radius and the full-insertion contact angles are
+  assumed; owner to vet. The static 2D cochlea SVG in About shows without a reveal.
+- **Fusion** (Research, from "Binaural pitch fusion"; `js/diagrams/fusion.js`):
+  binaural pitch fusion in two bimodal listeners, narrow vs broad. Widths follow
+  the published 1-4 octave range; the curves are schematic. Owner to vet the
+  depiction and caption.
+- **Larynx** (Airway Rounds, from the "Airway" heading; `js/diagrams/larynx.js`):
+  schematic adult-male proportions; owner to vet.
 
 **Next:** figures inside OKSAT items (needs a hook in `js/oksat/engine.js`);
 candidates the prose already asks for: facial nerve course, IAC nerve quadrants,
@@ -48,8 +52,8 @@ semicircular canal planes.
 numbered sections, all five folded at load (as of 2026-10-27, owner request);
 each opens from its head, or from any link or deep link into it; with no
 JavaScript all five are open.
-Open sections keep sticky heads on desktop. Fig. 1 (the cochlea, fitted to
-the owner's own CT and implant) sits in About; Fig. 2 in Research. The residency year is computed in `js/onepager.js` and duplicated as
+Open sections keep sticky heads on desktop. The ASCII cochlea (fitted to
+the owner's own CT and implant) opens from a word in About; the fusion figure opens from a word in Research. The residency year is computed in `js/onepager.js` and duplicated as
 a no-JS fallback in the HTML; change both or neither.
 
 **Next (owner):** add the CV. The hero link is removed until `documents/cv.pdf`
@@ -161,9 +165,22 @@ It reads a PDF in memory and writes nothing to storage except the theme.
 
 ---
 
+## Atlas (`atlas.html`)
+
+**State:** Unlisted (`noindex`; no other page links to it). A midsagittal
+right hemisection drawn as hand-authored SVG with no visible labels; hover or
+focus lights a group. It is the only page that links to OLSB and `ssb.html`.
+Source `tools/atlas/anatomy.json`, baked by `tools/atlas.mjs`; `check-data`
+enforces the bake and the link rules. Values are draft until the owner vets
+them.
+
+**Next:** owner vetting of the control points and sources (`docs/atlas.md`).
+
+---
+
 ## OLSB — middle ear & mastoid (`OLSB.html`)
 
-**State:** Unlisted (nothing links to it; `noindex`). Two modes behind
+**State:** Unlisted (`noindex`; only `atlas.html` links to it). Two modes behind
 one switch: a 3D model (the default) and four 2D diagrams (the fallback
 without WebGL, and every `#d=`/`#p=` link).
 
@@ -246,7 +263,7 @@ tegmen or superior canal).
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State:** Graph mode and these stages work: Specimen, Endoscope (including
+**State:** Unlisted (`noindex`; only `atlas.html` links to it). Graph mode and these stages work: Specimen, Endoscope (including
 station flights), CT, the variant lab (sphenoid diorama done; `lateral-wall`
 later), and Procedure mode (dissection states, the player, per-state stations,
 the decongested · as scanned · congested toggle, the flap overlay, the population

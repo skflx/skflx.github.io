@@ -17,6 +17,7 @@
   --atlas-line: #4A4F57;
   --atlas-ghost: #A9ADB5;
   --atlas-hatch: #8B8573;
+  --atlas-lit-lift: 0%;
 }
 html[data-theme="dark"] {
   --atlas-bone: #3C3B36;
@@ -30,6 +31,7 @@ html[data-theme="dark"] {
   --atlas-line: #A6AAB2;
   --atlas-ghost: #4A4E57;
   --atlas-hatch: #8B8573;
+  --atlas-lit-lift: 45%;   /* subspecialty hues are dark-on-paper; lift them toward --ink on the dark ground */
 }
 
 .atlas-body { background: var(--bg); color: var(--ink); }
@@ -70,9 +72,10 @@ html[data-theme="dark"] {
 .at-group:focus-visible .at-shape { stroke: var(--signal-2); }
 
 .at-group.is-dim { opacity: 0.3; }
-.at-group.is-lit .at-shape { stroke: var(--hue, var(--signal-2)); stroke-width: 3; }
+.at-group.is-lit { --lit: color-mix(in srgb, var(--hue, var(--signal-2)), var(--ink) var(--atlas-lit-lift)); }
+.at-group.is-lit .at-shape { stroke: var(--lit); stroke-width: 3; }
 .at-group.is-lit .at-shape:not(.at-cutbone):not(.at-nerve):not(.at-vessel):not(.at-brainghost):not(.at-skin) {
-  fill: color-mix(in srgb, var(--hue, var(--signal-2)) 26%, var(--f));
+  fill: color-mix(in srgb, var(--lit) 26%, var(--f));
 }
 .at-group.is-lit .at-nerve, .at-group.is-lit .at-vessel { stroke-width: 4.5; }
 

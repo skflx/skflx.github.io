@@ -31,6 +31,7 @@ import { fileURLToPath } from 'url';
 import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
 import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
 import { loadEngine, bakeAll } from './ascii3d.mjs';
+import { checkAtlas } from './atlas.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => path.join(ROOT, p);
@@ -1036,6 +1037,48 @@ function checkAgents() {
   }
 }
 
+/* ---- atlas and unlisted pages (docs/atlas.md, plans/2026-10-28-figures-eggs-atlas.md) ----
+   atlas.html, OLSB.html and ssb.html are unlisted: noindex, and only atlas.html links to
+   them. Nothing else links to atlas.html. A js/ file may name a page only as a quoted
+   navigation target; js/atlas.js (the atlas's own script) is exempt. */
+const UNLISTED = ['atlas.html', 'OLSB.html', 'ssb.html'];
+function checkAtlasAndUnlisted() {
+  const r = checkAtlas();
+  ok(r.ok, 'atlas: bake is fresh and the data validates', 'atlas: ' + r.errors.join('; '));
+
+  for (const page of UNLISTED) {
+    const html = fs.existsSync(rel(page)) ? fs.readFileSync(rel(page), 'utf8') : '';
+    ok(/<meta\s+name="robots"\s+content="[^"]*noindex/i.test(html), `${page}: noindex`, `${page}: missing <meta name="robots" content="noindex">`);
+  }
+
+  /* Basename of a link target: "OLSB.html#m=3d" -> "OLSB.html". */
+  const target = (v) => v.split(/[?#]/)[0].replace(/^\.\//, '').split('/').pop();
+  const attrRe = /\b(?:href|src)\s*=\s*["']([^"']*)["']/gi;
+  let linkProblems = [];
+  for (const page of rootPages()) {
+    const html = fs.readFileSync(rel(page), 'utf8');
+    for (const m of html.matchAll(attrRe)) {
+      const t = target(m[1]);
+      if (t === 'atlas.html' && page !== 'atlas.html') linkProblems.push(`${page} links to atlas.html`);
+      if ((t === 'OLSB.html' || t === 'ssb.html') && page !== 'atlas.html' && t !== page) linkProblems.push(`${page} links to ${t} (only atlas.html may)`);
+    }
+  }
+  const jsFiles = [];
+  const walk = (dir) => { for (const f of fs.readdirSync(dir, { withFileTypes: true })) { const p = path.join(dir, f.name); if (f.isDirectory()) walk(p); else if (f.name.endsWith('.js')) jsFiles.push(p); } };
+  walk(rel('js'));
+  for (const abs of jsFiles) {
+    const file = path.relative(ROOT, abs).split(path.sep).join('/');
+    if (file === 'js/atlas.js') continue;
+    const src = fs.readFileSync(abs, 'utf8');
+    if (/['"`](?:\.\/)?atlas\.html/.test(src)) linkProblems.push(`${file} navigates to atlas.html`);
+    /* A system's own scripts may name its own page (js/olsb/ -> OLSB.html, js/ssb/ -> ssb.html). */
+    for (const [pg, own] of [['OLSB', 'js/olsb/'], ['ssb', 'js/ssb/']]) {
+      if (!file.startsWith(own) && new RegExp('[\'"`](?:\\./)?' + pg + '\\.html').test(src)) linkProblems.push(`${file} navigates to ${pg}.html (only atlas.html may)`);
+    }
+  }
+  ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html links to OLSB and ssb', linkProblems.join('; '));
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkAgents();
@@ -1047,5 +1090,6 @@ checkStamps();
 checkSsb();
 checkFigures();
 checkOlsb();
+checkAtlasAndUnlisted();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

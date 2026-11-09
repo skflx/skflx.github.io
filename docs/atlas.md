@@ -12,6 +12,10 @@ visible labels. Related structures light together as groups.
 | `tools/atlas.mjs` | `bake` (SVG into `atlas.html`), `check` (schema + stale bake; `checkAtlas()` for `check-data`), `preview` (PNG via Playwright). |
 | `atlas.html` | The page; the SVG sits between `<!-- atlas:svg -->` and `<!-- /atlas:svg -->`. Never hand-edit the block. |
 
+## Checks
+
+`tools/check-data.mjs` (section "atlas and unlisted pages") fails on: a stale bake or invalid data (`checkAtlas()`); a missing `noindex` robots meta on `atlas.html`, `OLSB.html` or `ssb.html`; any link or navigation target to `atlas.html` from a root page or a `js/` file other than `js/atlas.js`; any link to `OLSB.html` or `ssb.html` outside `atlas.html`.
+
 ## Schema (`anatomy.json`)
 
 ```
@@ -56,3 +60,52 @@ node tools/atlas.mjs check
 ```
 
 `preview` uses `css/atlas.css` when it exists and a minimal fallback style before then.
+
+## Sources
+
+Opus drew the control points in 2E (#190). Every number below is a draft for the owner to vet at
+#199 (D4). None was re-checked against the printed source in that session; the citations name the
+works the values come from, not page-level verification.
+
+**Frame.** `anatomy.json` `_frame`: mm from the centre of the sella, `a` anterior, `s` superior,
+Frankfort horizontal at `s = -20`; `px = 340 - 3.2a`, `py = 404 - 3.2s` (3.2 px per mm). The
+temporal bone is taken from the OLSB model (`js/olsb/volume.js`, oval window origin, `y`
+anterior, `z` superior) projected onto the sagittal plane, with the oval window at `(-23, -24)`,
+so the atlas and OLSB cannot disagree on the ear.
+
+| Landmark | Value (a, s mm) | Basis |
+|---|---|---|
+| Nasion | (69.5, 8.5) | S–N 70 mm, S–N 7° to FH (cephalometric norms) |
+| Basion | (-24.5, -37.7) | S–Ba 45 mm, N–S–Ba 130° |
+| ANS / PNS | (72, -44) / (21, -46) | N–ANS 53 mm; palate 51 mm, parallel to FH |
+| Menton | (55, -114.5) | N–Me 123 mm (anterior face height) |
+| Porion | (-23, -20) | top of the EAC, on FH; the EAC and IAC superimpose (OLSB) |
+| Skull | glabella–opisthocranion 188 mm; vertex 131 mm above FH | adult male head norms |
+| Cervical spine | C2–C7 bodies 14 mm, discs 5 mm; hyoid at C3–C4; cricoid at C6 | textbook levels |
+| Larynx | anterior commissure mid-thyroid (s -136); glottis 20 mm; trachea 18 mm AP; isthmus on rings 2–4 | textbook dimensions |
+| Ear | cochlea, vestibule, canals, ossicles, TM, EAC, sigmoid, jugular bulb, CN VII segments | OLSB coordinates, as drawn there |
+
+Works: Standring S (ed). *Gray's Anatomy*, 42nd ed. Elsevier, 2020 (head and neck chapters).
+Rhoton AL Jr. *Cranial Anatomy and Surgical Approaches*. Lippincott Williams & Wilkins, 2003
+(posterior fossa, temporal bone, anterior and middle cranial base: the hemisection convention).
+Jacobson A, Jacobson RL (eds). *Radiographic Cephalometry*, 2nd ed. Quintessence, 2006
+(S–N, N–S–Ba, face heights). The OLSB model's own sources are in `js/olsb/volume.js`.
+
+**Schematic choices the owner must vet.**
+- The petrous window (radius 8.4 mm floor, hatched rim to 9.6 mm) is centred on the labyrinth.
+  In a true sagittal projection the IAC, vestibule, TM and EAC superimpose, so the porus sits
+  inside the window and hides most of the stapes. Window contents are clipped to the floor
+  when authored, so the cochlear apex and outer mastoid cells are cut.
+- The window paints over the posterior edge of the clivus: a cut-away, not an occlusion error.
+- The cochlea is drawn side-on (three stacked turns), because OLSB's modiolar axis lies only
+  about 31° out of the sagittal plane.
+- The lateral canal is widened to a narrow loop; projected exactly, it is a line.
+- The labyrinthine segment of CN VII is lifted about 0.9 mm so the geniculate genu reads; exactly
+  projected, it lies on the tympanic segment.
+- CN VII is solid from the root exit zone to the stylomastoid foramen (the lower mastoid segment
+  runs below the window, inside bone) and dashed beyond; all five branches are drawn in projection,
+  so they cross midline structures (nasal cavity, maxilla, tongue) and the temporal branch crosses
+  the cranial outline.
+- The brainstem stump is its own non-interactive group, `stump`, painted after `lsb`: it lies
+  medial to the petrous face, and in the single `context` group the face would hide it and the
+  nerve would have no visible origin.

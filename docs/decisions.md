@@ -35,8 +35,8 @@ declared in `css/site.css` and mirrored as `--ok-*` in `css/oksat.css`.
 
 **Delete it.** This is a personal site, not an indexed publication — dead
 URLs cost nothing and redirect stubs accumulate into clutter. Owner decision,
-2026-09: the nine stubs that existed (`mcq*.html`, `occ*.html`, `kag.html`,
-`atlas.html`) were removed outright rather than repointed.
+2026-09: the stubs that existed (`mcq*.html`, `occ*.html`, `kag.html`, and an
+earlier `atlas.html`) were removed outright rather than repointed.
 
 Remove the page from `PAGES` in `tools/smoke-pages.mjs` and from the
 `README.md` file tree in the same change, and grep for inbound links:
@@ -179,4 +179,4 @@ file each in `js/diagrams/`.
 
 ## 9. Listing unfinished work (owner, 2026-11-04)
 
-Unfinished work is listed, not hidden, so the owner can follow along: set `draft: true` on the OKSAT guide or module entry (hub badge plus a notice on its entry page), or put a visible "Draft" notice on the entry page of any other new page or tool. `unlisted` is for pages the owner wants unreachable (OLSB, atlas), not for work in progress. Removing `draft` is the owner's call when it is done.
+Unfinished work is listed, not hidden, so the owner can follow along: set `draft: true` on the OKSAT guide or module entry (hub badge plus a notice on its entry page), or put a visible "Draft" notice on the entry page of any other new page or tool. `unlisted` is for pages the owner wants unreachable (OLSB, SSB, atlas), not for work in progress. Removing `draft` is the owner's call when it is done.

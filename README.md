@@ -33,15 +33,16 @@ One system across every page, declared as tokens in `css/site.css`:
 - **Portrait on a plate** — a background-removed headshot standing on a
   tinted plate, head breaking its top edge (the plate keeps the dark suit
   legible in night mode).
-- **ASCII 3D figures** — every figure is geometry rendered live into
-  a character grid by the site's own renderer (`js/ascii3d.js`): Fig. 1
-  (About, the owner's cochlea fitted to their CT, with their FLEX28 array
-  and the spiral ganglion it drives), Fig. 2 (Research, binaural pitch
-  fusion in a narrow- and a broad-fusion listener), the Leitner
-  staircase on the OKSAT hub, and a turning larynx on Airway Rounds. They
-  turn, drag, re-shade for night mode, stand still under reduced motion,
-  and ship a pre-rendered frame for readers without JavaScript. How to
-  make one: `docs/diagrams.md`.
+- **ASCII 3D figures** — geometry rendered live into a character grid by
+  the site's own renderer (`js/ascii3d.js`): the owner's cochlea fitted to
+  their CT, with their FLEX28 array and the spiral ganglion it drives
+  (About); binaural pitch fusion in a narrow- and a broad-fusion listener
+  (Research); and a turning larynx (Airway Rounds). Each one is an
+  easter egg: select or tap its word in the text ("electrode", "Binaural
+  pitch fusion", the "Airway" heading) and it unfolds in place. They turn,
+  drag, re-shade for night mode, stand still under reduced motion, and
+  ship a pre-rendered frame for readers without JavaScript. How to make
+  one: `docs/diagrams.md`.
 
 A **day / night** toggle flips `html[data-theme]`, persisted as `sk_theme`
 and defaulting to `prefers-color-scheme`.
@@ -113,14 +114,17 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── Fusion.html              # second-CI research study flyer (static, QR links to itself)
 ├── pdf-chapter-splitter.html # PDF chapter splitter (client-side)
 │   └── js/pdf-chapter-splitter.js #   page logic (pdf-lib + JSZip in js/vendor/)
-├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; draft)
+├── atlas.html              # Skull-base atlas — unlisted hemisection; hover a group to light it (docs/atlas.md)
+│   ├── css/atlas.css       #   its layout and tissue tokens
+│   └── js/atlas.js         #   group lighting (hover, focus)
+├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; reached from atlas.html; draft)
 │   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
 │   ├── js/olsb/volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)
 │   ├── js/olsb/mesh.js     #   the mesher: smooth surfaces (or blocks) from the labelled grids; runs in that worker
 │   ├── js/olsb/3d.js       #   ES module: lit scene, camera (orbit/fly/walk), picking, panels (three.js, vendored)
 │   └── js/olsb/*.js        #   glossary, mm shape library, one file per 2D diagram, main.js the SVG renderer
 │
-├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; docs/ssb.md)
+├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; unlisted, reached from atlas.html; docs/ssb.md)
 │   ├── css/ssb.css         #   its layout and --ssb-* tokens
 │   ├── js/ssb/             #   ES modules (graph, state, scene, materials, specimen, endoscope, procedure player, volume, CT, lab, UI); stamps.js is generated
 │   ├── js/ssb/dioramas/    #   parametric dioramas for the variant lab
@@ -136,6 +140,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 ├── js/ascii3d.js           # ASCII 3D figure engine (shared by every figure)
 │   ├── js/diagrams/        #   one scene per figure
 │   └── css/ascii3d.css     #   grid sizing + ink -> token mapping
+├── js/egg.js               # figure eggs: a word in the text unfolds its figure in place
+├── css/egg.css             #   the reveal's styles
 │
 ├── css/site.css            # The design system: tokens, faces, shared chrome
 ├── js/site.js              # Day/night toggle
@@ -162,6 +168,8 @@ Grouped by system; per-file detail lives in each file's header comment.
 │   ├── lint-oksat-guide.mjs #  OKSAT interactive guide teaching-shape lint (checks per section, captions, sources)
 │   ├── test-wiki-sync.mjs  #   vault sync + feedback loop on a synthetic vault
 │   ├── ascii3d.mjs         #   ASCII figures: terminal preview, bake no-JS frames, scaffold
+│   ├── atlas.mjs           #   atlas: bake and check the SVG in atlas.html, PNG preview
+│   ├── atlas/              #   the atlas source (anatomy.json: groups and control points)
 │   ├── smoke-pages.mjs     #   every page boots with no real console errors
 │   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
 │   ├── test-oksat-learn.mjs   # interactive learning viewer behavior

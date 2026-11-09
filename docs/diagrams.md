@@ -12,6 +12,7 @@ Plex Mono, hairline rules, and color only where it means something.
 | `js/ascii3d.js` | The engine. A DOM-free core (mesh, camera, raster, shade, contours, lines, labels) plus the browser layer (mount, motion, drag, keys, theme, resize) |
 | `js/diagrams/<id>.js` | One scene per figure, `ASCII3D.define(id, {...})`: data and small geometry functions only |
 | `css/ascii3d.css` | Grid sizing and ink → token mapping, for both token sets (site and `--ok-*`) |
+| `js/egg.js`, `css/egg.css` | The egg reveal: a word in the text unfolds its figure in place (see Eggs) |
 | `tools/ascii3d.mjs` | Terminal preview, ink map, bake/check of the no-JS frames, scaffolding |
 | `.claude/skills/ascii-diagram/` | The agent playbook for a new figure request (`/ascii-diagram`) |
 
@@ -77,6 +78,27 @@ node tools/stamp-assets.mjs                      # then re-stamp (scene/engine h
 5. **Verify.** Run `node tools/check-data.mjs` and `node tools/smoke-pages.mjs`
    (details in `docs/verification.md`), then look at the page at 390px and
    1280px in both themes.
+
+## Eggs
+
+The figures in use are revealed from a word in the text (an *egg*), so they
+stay out of the reading flow. Markup:
+
+```html
+<span class="egg" data-egg="<id>" role="button" tabindex="0"
+      aria-expanded="false" aria-controls="egg-<id>">word</span>
+<figure class="a3d egg-figure" id="egg-<id>" data-a3d="<id>">
+<!-- a3d:<id> --><!-- /a3d:<id> -->
+    <figcaption>…</figcaption>
+</figure>
+```
+
+`js/egg.js` delegates on `document`, so triggers rendered later by a script
+(Airway) work too. Selecting text that overlaps the word opens the figure
+after a short pause; click, Enter or Space toggles it; Esc closes it.
+`css/egg.css` hides the figure only under `(scripting: enabled)`, so without
+JavaScript it is visible. `tools/smoke-pages.mjs` clicks the eggs in use;
+`tools/check-data.mjs` does not check egg markup.
 
 ## Scene schema
 
