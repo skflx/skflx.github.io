@@ -74,4 +74,4 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 
 ## Size
 
-About 3.4 MB in all (`ct.u8.gz` 3.2 MB), no UW image or derivative image is stored.
+About 3.4 MB in all (`ct.u8.gz` 3.2 MB), no UW image or derivative image is stored in this folder (the ear-anatomy guide's ten cropped slices are in `images/oksat/ear-anatomy/ct/`, credited in `images/oksat/ear-anatomy/ATTRIBUTION.md`).

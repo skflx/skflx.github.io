@@ -97,9 +97,9 @@ Module families, and their status:
   with predict-then-reveal prompts, checkers, inline module questions and
   per-section drill links. Anatomy blocks (`hotspot`, `layers`, `neighbors`,
   `sequence`) are in place. **Normal Ear Anatomy** (`ear-anatomy`, spec
-  `plans/2026-11-02-ear-anatomy-guide.md`) is shipped **unlisted**: all its
+  `plans/2026-11-02-ear-anatomy-guide.md`) is listed as **Draft**: all its
   chapters are live with its companion module (`ear-anatomy`), and the owner
-  decides listing. Its figures are schematic SVGs plus CT slices under
+  removes the Draft notice (#237). Its figures are schematic SVGs plus CT slices under
   `images/oksat/ear-anatomy/ct/`, credited in that folder's `ATTRIBUTION.md`.
   The guide's lint is `tools/lint-oksat-guide.mjs`. One guide listed so far, **AR · CRS · AERD** (`ar-crs-aerd`):
   ten chapters from type 2 immunology to critical appraisal, ported from the
@@ -304,7 +304,7 @@ inferred. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` help
 `plans/2026-11-03-uw-temporal-bone-volume.md`. Draft until the owner verifies the anatomy.
 
 **Next:** review the sweeps against the labelled slices; settle the scale (owner or a measured
-reference); register OLSB to it (#225).
+reference); register OLSB to it (#244 and its follow-on).
 
 ---
 
