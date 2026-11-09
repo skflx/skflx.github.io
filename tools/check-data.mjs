@@ -1060,7 +1060,7 @@ function checkAtlasAndUnlisted() {
     for (const m of html.matchAll(attrRe)) {
       const t = target(m[1]);
       if (t === 'atlas.html' && page !== 'atlas.html') linkProblems.push(`${page} links to atlas.html`);
-      if ((t === 'OLSB.html' || t === 'ssb.html') && page !== 'atlas.html') linkProblems.push(`${page} links to ${t} (only atlas.html may)`);
+      if ((t === 'OLSB.html' || t === 'ssb.html') && page !== 'atlas.html' && t !== page) linkProblems.push(`${page} links to ${t} (only atlas.html may)`);
     }
   }
   const jsFiles = [];
@@ -1071,7 +1071,10 @@ function checkAtlasAndUnlisted() {
     if (file === 'js/atlas.js') continue;
     const src = fs.readFileSync(abs, 'utf8');
     if (/['"`](?:\.\/)?atlas\.html/.test(src)) linkProblems.push(`${file} navigates to atlas.html`);
-    if (/['"`](?:\.\/)?(?:OLSB|ssb)\.html/.test(src)) linkProblems.push(`${file} navigates to OLSB.html or ssb.html (only atlas.html may)`);
+    /* A system's own scripts may name its own page (js/olsb/ -> OLSB.html, js/ssb/ -> ssb.html). */
+    for (const [pg, own] of [['OLSB', 'js/olsb/'], ['ssb', 'js/ssb/']]) {
+      if (!file.startsWith(own) && new RegExp('[\'"`](?:\\./)?' + pg + '\\.html').test(src)) linkProblems.push(`${file} navigates to ${pg}.html (only atlas.html may)`);
+    }
   }
   ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html links to OLSB and ssb', linkProblems.join('; '));
 }
