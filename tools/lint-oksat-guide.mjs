@@ -21,7 +21,7 @@
             "- " or "* " at line start, backticks); congratulation words.
      WARN   a section with no drill row; an exclamation mark; a Currency check
             older than 12 months. Guides in RELAXED (built before these rules)
-            report every finding as a warning.
+            report every finding but the review field as a warning.
 
    Not automated (judgment or owner decisions): medical correctness and
    whether a chip cites the right source; "sources ranked and read before
@@ -113,8 +113,9 @@ const attributed = (src) => {
 for (const g of guides) {
   if (want.length && !want.includes(g.slug)) continue;
   const W = (m) => console.log(`  warn  ${g.slug}: ${m}`);
-  /* Guides built before these rules lint as warnings only (owner, 2026-11-02). */
-  const E = RELAXED.has(g.slug) ? W : (m) => { errors++; console.log(`  ERROR ${g.slug}: ${m}`); };
+  /* Guides built before these rules lint as warnings only (owner, 2026-11-02); the review field fails for all. */
+  const Estrict = (m) => { errors++; console.log(`  ERROR ${g.slug}: ${m}`); };
+  const E = RELAXED.has(g.slug) ? W : Estrict;
   console.log(`\n${g.slug} (${g.chapters.length} chapters)`);
 
   for (const c of g.chapters) {
@@ -125,7 +126,7 @@ for (const g of guides) {
     if (!ch) { E(`${c.id}: no __OKSAT_CHAPTER`); continue; }
 
     /* Chapter shape. */
-    if (!['draft', 'verified'].includes(ch.review)) E(`${c.id}: review must be 'draft' or 'verified' (got ${JSON.stringify(ch.review)})`);
+    if (!['draft', 'verified'].includes(ch.review)) Estrict(`${c.id}: review must be 'draft' or 'verified' (got ${JSON.stringify(ch.review)})`);
     const isStart = !Array.isArray(ch.sections);
     if (!isStart && (!Array.isArray(ch.tldr) || ch.tldr.length < 3 || ch.tldr.length > 6)) E(`${c.id}: ${Array.isArray(ch.tldr) ? ch.tldr.length : 0} tldr bullets (spec 3–6)`);
     if (isStart) {

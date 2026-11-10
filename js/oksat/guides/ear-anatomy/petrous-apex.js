@@ -39,7 +39,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q98', 'ear-anatomy:q100'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-bounds'] }],
-            ref: [],
         },
         {
             id: 'pa-tracts',
@@ -76,7 +75,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q101'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-tracts'] }],
-            ref: [],
         },
         {
             id: 'pa-corridors',
@@ -99,7 +97,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q103'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-corridors'] }],
-            ref: [],
         },
         {
             id: 'pa-clinical',
@@ -128,7 +125,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q105'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['pa-clinical'] }],
-            ref: [],
         },
     ],
 };

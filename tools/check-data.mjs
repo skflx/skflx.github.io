@@ -607,6 +607,21 @@ function checkGuides() {
   const badUnlisted = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, unlistedProblem(e)]).filter(([, m]) => m);
   ok(badUnlisted.length === 0, 'unlisted is a boolean on every guide and module entry where it is set',
     `non-boolean unlisted: ${badUnlisted.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);
+  /* sk.oto links (plans/2026-11-04-skoto-links.md): plain string rules, no network. */
+  const sk = man.OKSAT_SKOTO;
+  const usedSubs = new Set([...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => e.subspecialty));
+  const skProblems = [];
+  if (!sk || typeof sk !== 'object') skProblems.push('OKSAT_SKOTO missing');
+  else {
+    if (typeof sk.live !== 'boolean') skProblems.push(`live must be a boolean (got ${JSON.stringify(sk.live)})`);
+    if (sk.base !== 'https://skflx.github.io/ohns-wiki-skflx/') skProblems.push(`base is ${JSON.stringify(sk.base)}`);
+    for (const [key, v] of Object.entries(sk.maps || {})) {
+      if (!subs[key]) skProblems.push(`${key}: not a key of OKSAT_SUBSPECIALTIES`);
+      if (!usedSubs.has(key)) skProblems.push(`${key}: no module or guide uses it`);
+      if (typeof v !== 'string' || !v || v.includes('..') || /^[a-z][a-z0-9+.-]*:/i.test(v) || /\s/.test(v)) skProblems.push(`${key}: bad map path ${JSON.stringify(v)}`);
+    }
+  }
+  ok(skProblems.length === 0, 'OKSAT_SKOTO: fixed base, boolean live, every map key a used subspecialty, every path a plain relative string', skProblems.join('; '));
   const badDraft = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, draftProblem(e)]).filter(([, m]) => m);
   ok(badDraft.length === 0, 'draft is a boolean on every guide and module entry where it is set',
     `non-boolean draft: ${badDraft.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);

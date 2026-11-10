@@ -288,7 +288,6 @@ window.__OKSAT_CHAPTER = {
                     c: ['im-axial'],
                 },
             ],
-            ref: [],
         },
         {
             id: 'im-coronal',
@@ -527,7 +526,6 @@ window.__OKSAT_CHAPTER = {
                     c: ['im-coronal'],
                 },
             ],
-            ref: [],
         },
         {
             id: 'im-read',
@@ -620,7 +618,6 @@ window.__OKSAT_CHAPTER = {
                     c: ['im-read'],
                 },
             ],
-            ref: [],
         },
     ],
 };

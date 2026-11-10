@@ -438,9 +438,9 @@ async function main() {
     const listedLen = await hub.page.evaluate(() => window.OKSAT_MANIFEST.filter((m) => !m.unlisted).length);
     check('10c: the module cards are exactly the listed modules', modCards === listedLen, `cards=${modCards} listed=${listedLen}`);
     const dueCount = await hub.page.textContent('#review-count');
-    const dueWhere = await hub.page.textContent('#review-where');
+    const dueWhere = await hub.page.textContent('#review-list');
     const crsTitle = await hub.page.evaluate(() => window.OKSAT_MANIFEST.find((m) => m.slug === 'crs-ars').title);
-    check('10d: the due-review banner counts only the listed module (1, not 4)', dueCount === '1' && dueWhere === 'in ' + crsTitle && !(await hub.page.$eval('#review-banner', (e) => e.hidden)), `count=${dueCount} where=${dueWhere}`);
+    check('10d: the due-review banner counts only the listed module (1, not 4)', dueCount === '1' && dueWhere === crsTitle + ' · 1' && !(await hub.page.$eval('#review-banner', (e) => e.hidden)), `count=${dueCount} where=${dueWhere}`);
     check('10e: no console errors on the hub', hub.errors.length === 0, JSON.stringify(hub.errors.slice(0, 2)));
     await hub.context.close();
 
@@ -455,6 +455,38 @@ async function main() {
     check('10h: the unlisted module still opens at its own URL', (await m.page.title()).startsWith('Unlisted probe module') && !(await m.page.$('.ok-notice')), await m.page.title());
     check('10i: no console errors on the unlisted module', m.errors.length === 0, JSON.stringify(m.errors.slice(0, 2)));
     await m.context.close();
+  }
+
+  /* ---- 11: sk.oto map link (plans/2026-11-04-skoto-links.md): present where the subspecialty has a map, absent where not, hidden when live is false ---- */
+  {
+    const skLink = async (url, live) => {
+      const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+      await context.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
+      if (live === false) {
+        await context.route((u) => u.pathname.endsWith('/js/oksat/manifest.js'), async (route) => {
+          const r = await route.fetch();
+          await route.fulfill({ response: r, body: (await r.text()) + '\nwindow.OKSAT_SKOTO.live = false;' });
+        });
+      }
+      const page = await context.newPage();
+      const errors = collectErrors(page);
+      await page.goto(base + '/' + url, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(1500);
+      const links = await page.$$eval('a[href*="ohns-wiki-skflx"]', (as) => as.map((a) => ({ href: a.href, text: a.textContent, rel: a.rel, target: a.target })));
+      const want = await page.evaluate(() => { const s = window.OKSAT_SKOTO; return { base: s.base, rhinology: s.maps.rhinology, otology: s.maps.otology }; });
+      await context.close();
+      return { links, want, errors };
+    };
+    const g = await skLink('oksat-learn.html?g=ar-crs-aerd&c=start');
+    check('11a: a guide with a mapped subspecialty shows one sk.oto link with the exact href', g.links.length === 1 && g.links[0].href === g.want.base + g.want.rhinology && g.links[0].text === 'Read the map in sk.oto' && g.links[0].target === '_blank' && /noopener/.test(g.links[0].rel), JSON.stringify(g.links));
+    const m = await skLink('oksat-study.html?m=vestibular-schwannoma');
+    check('11b: a module with a mapped subspecialty shows one sk.oto link with the exact href', m.links.length === 1 && m.links[0].href === m.want.base + m.want.otology && m.links[0].text === 'Read the map in sk.oto' && /noopener/.test(m.links[0].rel), JSON.stringify(m.links));
+    const n = await skLink('oksat-study.html?m=dtc-risk-stratification');
+    check('11c: a module whose subspecialty has no map shows no sk.oto link', n.links.length === 0, JSON.stringify(n.links));
+    const off1 = await skLink('oksat-learn.html?g=ar-crs-aerd&c=start', false);
+    const off2 = await skLink('oksat-study.html?m=vestibular-schwannoma', false);
+    check('11d: with live false nothing renders on either viewer', off1.links.length === 0 && off2.links.length === 0, JSON.stringify([off1.links, off2.links]));
+    check('11e: no console errors', [g, m, n, off1, off2].every((r) => r.errors.length === 0), JSON.stringify([g, m, n].map((r) => r.errors.slice(0, 1))));
   }
 
   /* ---- 10: anatomy blocks (hotspot, layers, neighbors, sequence) on the fixture guide ---- */
