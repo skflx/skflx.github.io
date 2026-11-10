@@ -95,6 +95,6 @@ export const STAMPS = {
     "tbone/ct/ct.json": "bced9657",
     "tbone/ct/ct.u8.gz": "59e99d6e",
     "tbone/ct/source.u8.gz": "ecb134bc",
-    "tbone/geometry/landmarks.json": "41270ff9",
+    "tbone/geometry/landmarks.json": "2b9d3f24",
     "tbone/geometry/sweeps.json": "e53e6188",
 };

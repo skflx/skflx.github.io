@@ -19,7 +19,7 @@
    textContent or setAttribute; the hash only selects among known values.
    One specimen, a screen capture: gross position and topology only.
    ============================================================= */
-import { loadVolume, stamped, PLANES } from '../ssb/volume.js?v=4807787a';
+import { loadVolume, stamped, PLANES } from '../ssb/volume.js?v=4876134d';
 
 const $ = (id) => document.getElementById(id);
 const SVGNS = 'http://www.w3.org/2000/svg';

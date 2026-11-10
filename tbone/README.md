@@ -36,6 +36,7 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 .venv/bin/python -I $P/scale.py            # frame: scale, slice step, oval-window origin
 .venv/bin/python -I $P/volume.py build     # ct/
 .venv/bin/python -I $P/landmarks.py        # geometry/landmarks.json
+.venv/bin/python -I $P/relabel.py          # after editing vocab.py: reapply it to landmarks.json without re-registering (--check lists what would change)
 .venv/bin/python -I $P/sweeps.py           # geometry/sweeps.json (+ work/dims.json)
 .venv/bin/python -I $P/scale.py report     # anatomy cross-checks of the scale
 .venv/bin/python -I $P/export.py           # registration.json
@@ -70,6 +71,7 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
   the EAC; soft tissue bounded by bone for the IAC and veins); otherwise `inferred`. Most of the facial nerve
   is inferred: the nerve inside the IAC is not distinguishable from CSF, the second genu and GSPN have no
   label. `sweeps.json` carries counts per segment. The canals and the basal turn are fitted arcs / a spiral.
+- **Registration limit, coronal.** The coronal stack was registered while UW's "arcuate eminence" label was mis-read as the pyramidal eminence, so its registration used one wrong correspondence among its compact structures. The labels are corrected (`relabel.py`); the registration is not, and is to be redone with the DICOM sources (issue #244). `registration.json` still lists the old pyramidal-eminence residual for that reason.
 - **Draft.** Anatomy is draft until the owner verifies it (`docs/decisions.md` section 7).
 
 ## Size
