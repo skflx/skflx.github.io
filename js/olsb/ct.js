@@ -18,7 +18,7 @@ const PL = { ax: 'axial', cor: 'coronal', sag: 'sagittal' };
 const PL_KEY = { axial: 'ax', coronal: 'cor', sagittal: 'sag' };
 const LANDMARK_TOL = 0.6;     /* mm from the slice plane */
 const SWEEP_TOL = 0.75;
-const HIT_PX = 9;             /* canvas px */
+const HIT_CSS_PX = 8;         /* click radius, CSS px (converted to canvas px per click) */
 const LIST_MAX = 80;
 
 /* sweep family -> glossary id (only where one exists); facial nerve segments by name */
@@ -41,9 +41,15 @@ let canvas, ctx, buf, bufCtx;
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const human = (s) => String(s).replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase());
-const tone = (name, fb) => {
-    try { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fb; } catch (e) { return fb; }
+/* a colour token from css/olsb.css or css/site.css; 'transparent' if the token is missing (the page then still draws) */
+const tone = (name) => {
+    try { return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || 'transparent'; } catch (e) { return 'transparent'; }
 };
+/* every canvas colour, read once per draw from the --olsb-ct-* tokens (both themes) */
+const palette = () => ({
+    ground: tone('--olsb-stage3d'), accent: tone('--signal'), halo: tone('--olsb-ct-halo'), ring: tone('--olsb-ct-ring'),
+    dotEdge: tone('--olsb-ct-dot-edge'), letter: tone('--olsb-ct-letter'), letterEdge: tone('--olsb-ct-letter-edge'),
+});
 
 function el(tag, cls, text) {
     const n = document.createElement(tag);
@@ -83,7 +89,9 @@ function windowed(v, lo, w) {
 }
 
 function draw() {
-    if (!ready) return;
+    const root = $('olsb-ct');
+    if (!ready || !root || root.hidden) return;
+    const C = palette();
     const s = vol.slice(plane, at, { labels: false });
     const g = s.geom;
     const { width: w, height: h } = g;
@@ -93,8 +101,7 @@ function draw() {
     const img = bufCtx.createImageData(w, h);
     const win = vol.windows.bone || { center: 128, width: 255 };
     const lo = win.center - win.width / 2;
-    const ground = tone('--olsb-stage3d', '#1E1F22');
-    bufCtx.fillStyle = ground; bufCtx.fillRect(0, 0, w, h);
+    bufCtx.fillStyle = C.ground; bufCtx.fillRect(0, 0, w, h);
     const bg = bufCtx.getImageData(0, 0, 1, 1).data;
     let lit = 0;
     for (let n = 0; n < w * h; n++) {
@@ -116,27 +123,43 @@ function draw() {
     const nrm = PLANES[plane].normal;
     hits = [];
     onSlice = [];
-    const accent = tone('--signal', '#c00');
-    const halo = (draw1) => { ctx.save(); ctx.lineWidth = 4.5; ctx.strokeStyle = 'rgba(0,0,0,0.65)'; draw1(); ctx.restore(); };
+    const accent = C.accent;
+    const halo = (draw1) => { ctx.save(); ctx.lineWidth = 4.5; ctx.strokeStyle = C.halo; draw1(); ctx.restore(); };
 
     if (show.sweeps) {
         for (const fam of sweeps) {
-            const color = tone(SWEEP_TONE[fam.family] || '--olsb-cast', '#7FB7C9');
+            const color = tone(SWEEP_TONE[fam.family] || '--olsb-cast');
             for (const seg of fam.segments) {
                 const id = sweepGlossary(fam.family, seg.name);
                 const name = id ? (fam.segments.length > 1 && id === SWEEP_G[fam.family] ? `${G[id].name}: ${seg.name.replace(/-/g, ' ')}` : G[id].name)
                     : (fam.segments.length > 1 ? `${human(fam.family)}: ${seg.name.replace(/-/g, ' ')}` : human(fam.family));
                 const key = 's:' + fam.family + ':' + seg.name;
-                const near = seg.pts.map((p) => Math.abs(p[nrm] - at) <= SWEEP_TOL);
-                let any = false;
+                const dist = seg.pts.map((p) => p[nrm] - at);
+                const near = dist.map((v) => Math.abs(v) <= SWEEP_TOL);
+                let any = false, firstStatus = null;
                 for (let n = 0; n < seg.pts.length; n++) {
                     if (!near[n]) continue;
                     any = true;
+                    if (firstStatus === null) firstStatus = seg.status[n];
                     const c = toCanvas(seg.pts[n]);
                     hits.push({ x: c[0], y: c[1], key, kind: 'sweep', id, name, status: seg.status[n], mm: seg.pts[n] });
                 }
+                /* a centreline that crosses the plane between two points outside the band (no segment is drawn there)
+                   gets a dot at the interpolated crossing, so a steep run is not lost */
+                const dots = [];
+                for (let n = 1; n < seg.pts.length; n++) {
+                    if ((near[n] && near[n - 1]) || !(dist[n - 1] * dist[n] < 0)) continue;
+                    const t = dist[n - 1] / (dist[n - 1] - dist[n]);
+                    const p = seg.pts[n - 1].map((v, j) => v + (seg.pts[n][j] - v) * t);
+                    const status = seg.status[t < 0.5 ? n - 1 : n];
+                    const c = toCanvas(p);
+                    dots.push({ c, status });
+                    any = true;
+                    if (firstStatus === null) firstStatus = status;
+                    hits.push({ x: c[0], y: c[1], key, kind: 'sweep', id, name, status, mm: p });
+                }
                 if (!any) continue;
-                onSlice.push({ key, kind: 'sweep', id, name, status: seg.status.find((_, n) => near[n]) });
+                onSlice.push({ key, kind: 'sweep', id, name, status: firstStatus });
                 const isSel = sel === key;
                 const stroke = (a, b, status) => {
                     ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
@@ -158,7 +181,12 @@ function draw() {
                     const c = toCanvas(seg.pts[n]);
                     ctx.beginPath(); ctx.arc(c[0], c[1], 3.4, 0, 6.2832);
                     ctx.fillStyle = isSel ? accent : color; ctx.fill();
-                    ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(0,0,0,0.8)'; ctx.stroke();
+                    ctx.lineWidth = 1.2; ctx.strokeStyle = C.dotEdge; ctx.stroke();
+                }
+                for (const d of dots) {
+                    ctx.beginPath(); ctx.arc(d.c[0], d.c[1], 2.8, 0, 6.2832);
+                    ctx.fillStyle = isSel ? accent : color; ctx.fill();
+                    ctx.lineWidth = 1; ctx.strokeStyle = C.dotEdge; ctx.stroke();
                 }
             }
         }
@@ -172,14 +200,14 @@ function draw() {
             if (!onSlice.some((o) => o.key === it.key)) onSlice.push({ key: it.key, kind: 'landmark', id: it.id, name: it.name, status: 'labelled' });
             const isSel = sel === it.key;
             ctx.beginPath(); ctx.arc(c[0], c[1], isSel ? 7 : 5, 0, 6.2832);
-            ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,0.65)'; ctx.stroke();
-            ctx.lineWidth = 2; ctx.strokeStyle = isSel ? accent : '#fff'; ctx.stroke();
+            ctx.lineWidth = 4; ctx.strokeStyle = C.halo; ctx.stroke();
+            ctx.lineWidth = 2; ctx.strokeStyle = isSel ? accent : C.ring; ctx.stroke();
         }
     }
     /* orientation letters */
     const letters = PLANES[plane].letters;
     ctx.font = `600 ${Math.round(k * 5)}px ui-monospace, monospace`;
-    ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 3;
+    ctx.fillStyle = C.letter; ctx.strokeStyle = C.letterEdge; ctx.lineWidth = 3;
     const put = (t, x, y, ax, ay) => { ctx.textAlign = ax; ctx.textBaseline = ay; ctx.strokeText(t, x, y); ctx.fillText(t, x, y); };
     put(letters.left, 6, canvas.height / 2, 'left', 'middle');
     put(letters.right, canvas.width - 6, canvas.height / 2, 'right', 'middle');
@@ -193,7 +221,9 @@ function draw() {
 /* ---------- panels ---------- */
 function renderPos() {
     const P = PLANES[plane];
-    $('olsb-ct-pos').textContent = `${P.title} · ${['x', 'y', 'z'][P.normal]} = ${at >= 0 ? '+' : ''}${at.toFixed(1)} mm from the centre of the oval window`;
+    const text = `${P.title} · ${['x', 'y', 'z'][P.normal]} = ${at >= 0 ? '+' : ''}${at.toFixed(1)} mm from the centre of the oval window`;
+    $('olsb-ct-pos').textContent = text;
+    $('olsb-ct-slider').setAttribute('aria-valuetext', text);
     $('olsb-ct-slider').value = String(Math.round((at - vol.bounds.min[P.normal]) / vol.axisStep[P.normal]));
     document.querySelectorAll('#olsb-ct-planes [data-pl]').forEach((b) => b.setAttribute('aria-pressed', String(b.getAttribute('data-pl') === PL_KEY[plane])));
 }
@@ -259,7 +289,8 @@ function onCanvasClick(e) {
     const r = canvas.getBoundingClientRect();
     const x = ((e.clientX - r.left) / r.width) * canvas.width;
     const y = ((e.clientY - r.top) / r.height) * canvas.height;
-    let best = null, bd = HIT_PX * k / 3;
+    const scale = canvas.width / r.width;   /* canvas px per CSS px */
+    let best = null, bd = HIT_CSS_PX * scale;
     for (const h of hits) {
         const d = Math.hypot(h.x - x, h.y - y);
         if (d <= bd) { bd = d; best = h; }
@@ -274,6 +305,7 @@ function wire() {
     buf = document.createElement('canvas');
     bufCtx = buf.getContext('2d');
     canvas.addEventListener('click', onCanvasClick);
+    $('olsb-ct-pos').setAttribute('aria-live', 'polite');
     canvas.addEventListener('keydown', (e) => {
         const n = PLANES[plane].normal;
         const d = { ArrowUp: 1, ArrowRight: 1, PageUp: 10, ArrowDown: -1, ArrowLeft: -1, PageDown: -10 }[e.key];
@@ -327,7 +359,7 @@ function load() {
         }));
         wire();
         const h = readHash();
-        plane = PL[h.pl] || 'axial';
+        plane = Object.prototype.hasOwnProperty.call(PL, h.pl) ? PL[h.pl] : 'axial';
         at = h.at != null && Number.isFinite(parseFloat(h.at)) ? parseFloat(h.at) : 0;
         const n = PLANES[plane].normal;
         at = clamp(at, vol.bounds.min[n], vol.bounds.max[n]);

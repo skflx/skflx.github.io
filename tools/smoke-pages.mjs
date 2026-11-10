@@ -194,6 +194,15 @@ const PAGES = [
   { path: 'OLSB.html#m=ct&pl=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&at=NaN', setup: tboneSetup, ready: (p) => wait(p, () =>
     document.documentElement.getAttribute('data-olsb-ct') === 'ready' && document.getElementById('olsb-ct-canvas').getAttribute('data-plane') === 'axial'
       && !document.getElementById('pwn') && !window.__pwned) },
+  /* Unreadable tbone/ data: a plain message in the CT status line, and the Diagrams mode stays usable. */
+  { path: 'OLSB.html#m=ct', setup: (p) => p.route('**/tbone/**', (r) => r.fulfill({ contentType: 'application/json', body: '{broken' })), ready: async (p) => {
+    await wait(p, () => !document.getElementById('olsb-ct-status').hidden && /could not be loaded/.test(document.getElementById('olsb-ct-status').textContent));
+    await p.click('#olsb-mode [data-mode="2d"]');
+    return wait(p, () => !document.getElementById('olsb2d').hidden);
+  } },
+  /* A plane in the hash that names an Object.prototype key (constructor) falls back to the axial plane, without error. */
+  { path: 'OLSB.html#m=ct&pl=constructor', setup: tboneSetup, ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb-ct') === 'ready'
+    && document.getElementById('olsb-ct-canvas').getAttribute('data-plane') === 'axial') },
   { path: 'OLSB.html#m=3d&st=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&cam=' + encodeURIComponent('<b>'),
     ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
       && !document.getElementById('pwn') && !window.__pwned, 40000) },

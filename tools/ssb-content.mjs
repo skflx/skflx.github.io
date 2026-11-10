@@ -236,10 +236,11 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const drafts = [...index].filter(([, h]) => h.type !== 'sources' && h.entity.review === 'draft');
     const ready = drafts.filter(([, h]) => (h.entity.src || []).length
       && h.entity.src.every((s) => index.get(s) && index.get(s).entity.verified === true))
-      .sort(([a, x], [b, y]) => x.entity.tier - y.entity.tier || (a < b ? -1 : a > b ? 1 : 0));
+      .sort(([a, x], [b, y]) => (x.entity.tier ?? 9) - (y.entity.tier ?? 9) || (a < b ? -1 : a > b ? 1 : 0));
     for (const [id, { type, entity: e }] of ready) console.log(`${id}\t${type}\ttier ${e.tier}\t${e.name || e.id}\t${e.src.length} src`);
+    for (const e of errors) console.log('  FAIL  ' + e);
     console.log(`${ready.length} ready of ${drafts.length} draft`);
-    process.exit(0);
+    process.exit(errors.length ? 1 : 0);
   }
   for (const w of warnings) console.log('  WARN  ' + w);
   for (const e of errors) console.log('  FAIL  ' + e);

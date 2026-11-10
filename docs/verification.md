@@ -217,11 +217,12 @@ validates the data under it:
   so wait for `data-meshing` to leave `busy` (`data-remesh-ms` is the time
   it took). Check both Smooth (default) and Blocks: thin structures (chorda,
   stapes crura, GSPN) are where smoothing loses most.
-- Real CT mode (`#m=ct`), in `smoke-pages` on a synthetic volume routed by Playwright (nothing under `tbone/` is read):
-  no `tbone/` request before the mode is entered; a slice draws with its landmark rings and sweep lines; selecting a
-  landmark fills the info card; `#m=ct&p=sa&i=15` sets the plane and index; a bad hash (`p=zz&i=999`) falls back to
-  axial slice 10 of 20; unreadable data shows a message and the other modes stay usable; the attribution line is
-  shown.- Truth check: `OLSB_TRUTH=1 node tools/check-data.mjs` prints the residual per structure against the UW landmarks
+- Real CT mode (`#m=ct[&pl=ax|cor|sag][&at=<mm>]`), in `smoke-pages` on a synthetic volume routed by Playwright (nothing
+  under `tbone/` is read): no `tbone/` request before the mode is entered; a slice draws; a real click on a landmark
+  selects its glossary id and fills the info card; `#m=ct&pl=cor&at=1.5` sets the plane and position; junk in `pl` or
+  `at` falls back to the axial plane without error (`pl=constructor` included); unreadable `tbone/` data shows the
+  status message and the Diagrams mode stays usable.
+- Truth check: `OLSB_TRUTH=1 node tools/check-data.mjs` prints the residual per structure against the UW landmarks
   (`tbone/geometry/landmarks.json`). It is report-only: no threshold fails yet, and it proves nothing finer than the
   about 3 mm noise floor.
 

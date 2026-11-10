@@ -646,6 +646,34 @@ async function main() {
     await context.close();
   }
 
+  /* T14: real ear-anatomy imaging chapter. ax-18 lists ssc twice: Find asks it once, either region counts, and a miss marks every region of the answer */
+  {
+    const { context, page, errors } = await open(browser, base, 'oksat-learn.html?g=ear-anatomy&c=imaging');
+    await chapterReady(page);
+    const sel = '#im-axial';
+    await page.waitForSelector(`${sel} .lr-hs-stage .lr-hs-poly`, { timeout: 12000 });
+    await page.click(`${sel} button[data-mode="find"]`);
+    const n = Number((await page.textContent(`${sel} .lr-hs-hint`)).match(/of (\d+)/)[1]);
+    const asked = [];
+    for (let k = 0; k < n; k++) {
+      const target = NAME_TO_G[(await page.textContent(`${sel} .lr-hs-prompt`)).replace(/^Tap: /, '')];
+      asked.push(target);
+      const polys = page.locator(`${sel} .lr-hs-poly[data-g="${target}"]`);
+      await polys.last().click();
+    }
+    check('10-T14a: Find asks each structure once (ssc has two regions on ax-18)', asked.length === n && new Set(asked).size === n && asked.filter((g) => g === 'ssc').length === 1, JSON.stringify(asked));
+    check('10-T14b: clicking the second ssc region counts as a hit and marks both ssc regions', (await page.textContent(`${sel} .lr-hs-score`)) === `${n} / ${n}` && (await page.$$eval(`${sel} .is-hit`, (e) => e.length)) === 5, await page.textContent(`${sel} .lr-hs-panel`));
+    await page.locator(`${sel} .lr-hs-panel`).getByRole('button', { name: 'Again', exact: true }).click();
+    const t1 = NAME_TO_G[(await page.textContent(`${sel} .lr-hs-prompt`)).replace(/^Tap: /, '')];
+    const other = await page.locator(`${sel} .lr-hs-poly`).evaluateAll((els, t) => els.find((e) => e.dataset.g !== t).dataset.g, t1);
+    await page.locator(`${sel} .lr-hs-poly[data-g="${other}"]`).last().click();
+    const misses = await page.$$eval(`${sel} .is-miss`, (e) => e.length);
+    const targets = await page.$$eval(`${sel} .is-target`, (e) => e.length);
+    check('10-T14c: a miss on one region marks every region of the answer', misses === (other === 'ssc' ? 2 : 1) && targets === (t1 === 'ssc' ? 2 : 1), `misses=${misses} targets=${targets} t1=${t1} other=${other}`);
+    check('10-T14d: no console errors on the imaging chapter', errors.length === 0, JSON.stringify(errors.slice(0, 2)));
+    await context.close();
+  }
+
   /* T5: a missing SVG degrades to a plain figure with the block alt */
   {
     const { context, page } = await openFx(browser, base, `oksat-learn.html?g=${FX_SLUG}&c=anat`);

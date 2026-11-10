@@ -164,7 +164,15 @@ function checkOlsbVolume(O) {
    Never fails on a residual; OLSB_TRUTH=1 prints the full table. */
 function checkOlsbTruth(V, vol, byId) {
   console.log('\nolsb truth (tbone landmarks)');
-  const lm = JSON.parse(fs.readFileSync(rel('tbone/geometry/landmarks.json'), 'utf8'));
+  let lm;
+  try {
+    lm = JSON.parse(fs.readFileSync(rel('tbone/geometry/landmarks.json'), 'utf8'));
+    if (!Array.isArray(lm.landmarks)) throw new Error('no landmarks array');
+  } catch (e) {
+    const msg = `olsb truth: cannot read tbone/geometry/landmarks.json (${e.code || e.message})`;
+    ok(false, msg, msg);
+    return;
+  }
   const med = (a) => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
   const { nx, ny } = vol, zero = vol.vox * Math.sqrt(3) / 2;
   const tb = {};
@@ -194,6 +202,7 @@ function checkOlsbTruth(V, vol, byId) {
     for (const r of rows) console.log(`  ${r.id} | ${r.n} | ${r.inside} | ${r.med.toFixed(1)} | ${r.max.toFixed(1)} | ${r.vec ? r.vec.map(f).join(' ') : '-'}`);
   }
   ok(rows.length > 0, `olsb truth (report-only): ${summary}; one specimen, inferred scale +-10 %, noise floor about 3 mm: catches gross errors, proves nothing finer`, 'olsb truth: no glossary id is both drawn and in tbone landmarks');
+  console.log('  (per-id table: OLSB_TRUTH=1 node tools/check-data.mjs)');
 }
 
 /* ===========================================================

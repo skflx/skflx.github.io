@@ -300,6 +300,8 @@
 .lr-hs-raster img { display: block; width: 100%; height: auto; }
 .lr-hs-ov { position: absolute; inset: 0; width: 100%; height: 100%; }
 .lr-hs-poly { fill: transparent; stroke: transparent; cursor: pointer; }
+/* Invisible hit padding: 2.5% of the image width each side (viewBox is 100 units wide). */
+.lr-hs-hit { fill: transparent; stroke: transparent; stroke-width: 5; stroke-linejoin: round; pointer-events: all; cursor: pointer; }
 .lr-hs-poly:hover { fill: var(--lr-hue); fill-opacity: 0.12; }
 .lr-hs-poly.is-selected { fill: var(--lr-hue); fill-opacity: 0.3; stroke: var(--lr-hue); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
 .lr-hs-poly.is-neighbor { fill: var(--lr-hue); fill-opacity: 0.14; stroke: var(--lr-hue); stroke-width: 1; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }

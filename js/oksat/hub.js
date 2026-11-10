@@ -242,7 +242,7 @@
       if (!keys.length || !keys.every(function (k) { return k.indexOf('oksat:') === 0 && typeof data[k] === 'string'; })) {
         throw new Error('bad shape');
       }
-      if (!confirm('Replace local progress with ' + keys.length + ' records from this file?')) return;
+      if (!confirm('Merge ' + keys.length + ' records from this file into local progress? Records with the same key will be overwritten; other local records are kept.')) { say('Import cancelled.'); return; }
       var n = 0;
       keys.forEach(function (k) { if (OKSATStore.setRaw(k, data[k])) n++; });
       say(n + ' records imported. Reloading…');

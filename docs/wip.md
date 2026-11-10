@@ -222,10 +222,12 @@ glossary relation between two drawn structures.
 
 **Real CT** (`js/olsb/ct.js`, plan `plans/2026-11-09-ear-truth-concordance.md` E2): axial, coronal and sagittal slices of
 the UW volume in `tbone/`, read with the generic functions of `js/ssb/volume.js`; nothing is fetched until the mode is
-entered. Landmark tips within 1 mm of the slice (`BAND_MM`) are drawn as rings, dashed where `how` is shaft-end; sweep
-points by `status` (detected filled, labelled ring, inferred dashed). A selection fills the mode's own info card with
-the glossary name, note and forward relations. The attribution and caveat lines are shown beside the image. One
-specimen, positions good to a few millimetres.
+entered. The view's state is the hash `#m=ct[&pl=ax|cor|sag][&at=<mm>]`: an unknown `pl` falls back to axial, and `at`
+is clamped to the volume. Landmark tips near the slice (`LANDMARK_TOL`) are drawn as rings; sweep points by `status`
+(detected filled, labelled ring, inferred dashed), and a centreline that crosses the slice between two points outside
+its band gets a dot at the crossing. A real click on a ring or a line selects it and fills the mode's own info card
+(name, note, status, position). The readout is a polite live region and the slider's `aria-valuetext` matches it. The
+attribution and caveat line sits under the view. One specimen, positions good to a few millimetres.
 
 **Truth check** (`tools/check-data.mjs`, plan E3, first half): compares each drawn structure's glossary id with the
 UW landmark tips of that id, as the distance to the nearest voxel. Report-only: `OLSB_TRUTH=1` prints the table; no
