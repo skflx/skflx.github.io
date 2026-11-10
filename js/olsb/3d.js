@@ -67,31 +67,19 @@ const finerBox = (n) => { const f = ORDER[ORDER.indexOf(n) + 1]; return f && on(
 const fineOn = () => on('fine');
 
 /* ---------- mode switch ---------- */
-/* The real-CT mode (js/olsb/ct.js) is imported on first entry; its stamped URL comes from the modulepreload link. */
-function enterCT() {
-    const link = document.querySelector('link[rel="modulepreload"][href*="js/olsb/ct.js"]');
-    import(link ? link.href : './ct.js').then((m) => m.mountCT()).catch(() => {
-        const s = $('olsbct-status');
-        s.hidden = false;
-        s.textContent = 'The CT slice view could not be loaded. The other modes still work.';
-    });
-}
-
 function setMode(m, write) {
     const main = document.querySelector('main.olsb');
     main.setAttribute('data-mode', m);
     document.querySelectorAll('#olsb-mode [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.getAttribute('data-mode') === m)));
     $('olsb3d').hidden = m !== '3d';
     $('olsb2d').hidden = m !== '2d';
-    $('olsbct').hidden = m !== 'ct';
-    if (m === 'ct') {
-        if (write) { try { history.replaceState(null, '', '#m=ct'); } catch (e) { /* no-op */ } }
-        enterCT();
-    } else if (m === '3d') {
+    $('olsb-ct').hidden = m !== 'ct';
+    document.dispatchEvent(new CustomEvent('olsb:mode', { detail: m }));
+    if (m === '3d') {
         if (!built) boot3d();
         else { resize(); needs = true; }
         if (write) writeHash();
-    } else if (write) {
+    } else if (m === '2d' && write) {
         try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* no-op */ }
     }
 }

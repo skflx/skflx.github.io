@@ -40,13 +40,13 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=d7270e66';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=2535a6db';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=34e04a58';
-import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=4876134d';
+import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=b0877fd4';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
 import { CT_PLANES } from './state.js?v=893232f8';
-import { REGION_LABEL } from './graph.js?v=1e4bdc74';
+import { REGION_LABEL } from './graph.js?v=7e5865a2';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
 /* A base other than the standard head is its own data (docs/ssb.md 5.11); the note says which head is on show. */

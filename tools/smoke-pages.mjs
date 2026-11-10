@@ -19,7 +19,38 @@
 
    Prints PASS/FAIL per page; exits nonzero if any page failed.
    ============================================================= */
+import zlib from 'zlib';
 import { startServer, launchBrowser, collectErrors } from './smoke-lib.mjs';
+
+/* A synthetic temporal-bone volume for OLSB's Real CT view, routed over tbone/** (nothing is written into the repo):
+   40^3 voxels of 0.5 mm, frame origin -10 mm, a soft sphere in a bone shell in air, one landmark and one sweep. */
+function tboneRoutes(requests) {
+  const N = 40;
+  const ct = Buffer.alloc(N * N * N);
+  for (let k = 0; k < N; k++) for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+    const r = Math.hypot(i - 19.5, j - 19.5, k - 19.5);
+    ct[(k * N + j) * N + i] = r < 12 ? 110 : r < 16 ? 220 : 43;
+  }
+  const header = { version: 1, dtype: 'uint8', dims: [N, N, N], spacing: [0.5, 0.5, 0.5],
+    affine: [[0.5, 0, 0, -10], [0, 0.5, 0, -10], [0, 0, 0.5, -10], [0, 0, 0, 1]],
+    values: { kind: 'display' }, windows: { bone: { center: 128, width: 255 } }, specimen: 'synthetic' };
+  const landmarks = { landmarks: [{ name: 'lscc', g: 'lscc', point_mm: [2, 1, 0] }, { name: 'nowhere', g: null, point_mm: [-3, -2, 0.2] }] };
+  const sweeps = { status_meaning: { detected: 'd', labelled: 'l', inferred: 'i' }, sweeps: { 'facial-nerve': { family: 'facial-nerve', segments: [
+    { name: 'labyrinthine', pts: [[-4, -4, 0], [-3, -3, 0], [-2, -2, 0], [-1, -1, 0]], radius: [0.5, 0.5, 0.5, 0.5], status: ['inferred', 'detected', 'labelled', 'detected'] }] } } };
+  const files = { 'ct/ct.json': JSON.stringify(header), 'ct/ct.u8.gz': zlib.gzipSync(ct),
+    'geometry/landmarks.json': JSON.stringify(landmarks), 'geometry/sweeps.json': JSON.stringify(sweeps) };
+  return async (page) => {
+    await page.route('**/tbone/**', (route) => {
+      const u = new URL(route.request().url());
+      requests.push(u.pathname);
+      const body = files[u.pathname.replace(/^.*\/tbone\//, '')];
+      return body ? route.fulfill({ status: 200, body, contentType: u.pathname.endsWith('.json') ? 'application/json' : 'application/octet-stream' })
+        : route.fulfill({ status: 404, body: '' });
+    });
+  };
+}
+const tboneRequests = [];
+const tboneSetup = tboneRoutes(tboneRequests);
 
 const args = process.argv.slice(2);
 const opt = (n, d) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : d; };
@@ -34,40 +65,6 @@ const OFFLINE = args.includes('--offline');
 /* Each page: path + an async readiness check(page) that resolves truthy
    when the page has rendered its core content. Checks poll internally. */
 const wait = (page, fn, arg = null, timeout = 12000) => page.waitForFunction(fn, arg, { timeout }).then(() => true);
-
-
-/* OLSB real-CT mode, on a SYNTHETIC volume routed by Playwright (nothing under tbone/ is read or written): a 32 x 24 x 20
-   grid at 1 mm, one landmark on the middle axial slice (glossary id mastoidcells), one unmapped, one centreline. */
-function syntheticTbone(page) {
-  page.tbone = [];
-  const dims = [32, 24, 20];
-  const header = { version: 1, dims, spacing: [1, 1, 1], dtype: 'uint8', values: { kind: 'display', note: 'synthetic' },
-    affine: [[1, 0, 0, -16], [0, 1, 0, -12], [0, 0, 1, -10], [0, 0, 0, 1]], windows: { bone: { center: 128, width: 255 } }, specimen: 'synthetic' };
-  const data = Buffer.alloc(dims[0] * dims[1] * dims[2]);
-  for (let n = 0; n < data.length; n++) data[n] = (n * 37 + (n >> 5) * 11) & 255;
-  const landmarks = { landmarks: [
-    { id: 'a', name: 'mastoid-cells', g: 'mastoidcells', how: 'head', plane: 'axial', point_mm: [0, 0, -1] },
-    { id: 'b', name: 'unmapped-thing', g: null, how: 'shaft-end', plane: 'axial', point_mm: [4, 3, -1] },
-    { id: 'c', name: 'far-away', g: 'mastoidcells', how: 'head', plane: 'axial', point_mm: [0, 0, 8] } ] };
-  const pts = [-6, -3, 0, 3, 6].map((x) => [x, 2, -1]);
-  const sweeps = { sweeps: { s: { segments: [{ name: 's', pts, status: ['detected', 'detected', 'labelled', 'inferred', 'inferred'] }] } } };
-  page.on('request', (r) => { if (/\/tbone\//.test(r.url())) page.tbone.push(r.url()); });
-  return page.route('**/tbone/**', (route) => {
-    const u = route.request().url();
-    if (/ct\.json/.test(u)) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(header) });
-    if (/ct\.u8\.gz/.test(u)) return route.fulfill({ contentType: 'application/octet-stream', body: data });
-    if (/landmarks\.json/.test(u)) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(landmarks) });
-    if (/sweeps\.json/.test(u)) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(sweeps) });
-    return route.fulfill({ status: 404, body: 'no' });
-  });
-}
-const ctReady = (p) => wait(p, () => document.getElementById('olsbct').getAttribute('data-ct') === 'ready');
-const ctDrew = (p) => p.evaluate(() => {
-  const c = document.getElementById('olsbct-canvas');
-  const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-  for (let n = 4; n < d.length; n += 4) if (d[n] !== d[0]) return true;
-  return false;
-});
 
 const PAGES = [
   { path: 'index.html', ready: async (p) => {
@@ -157,42 +154,6 @@ const PAGES = [
     return wait(p, () => document.querySelectorAll('#olsb-info-rel .olsb-chip').length > 2
       && document.querySelectorAll('#olsb-svg .s.is-rel').length > 0);
   } },
-  /* OLSB real-CT mode (synthetic volume): nothing from tbone/ is fetched until the mode is entered; then a slice draws
-     and a landmark click selects its glossary id. */
-  { path: 'OLSB.html#d=axial&p=posterior&s=2', setup: syntheticTbone, ready: async (p) => {
-    await wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready');
-    await p.waitForTimeout(500);
-    if (p.tbone.length) throw new Error('tbone/ was requested before the CT mode was entered: ' + p.tbone[0]);
-    await p.click('#olsb-mode [data-mode="ct"]');
-    await ctReady(p);
-    if (!(await ctDrew(p))) throw new Error('the CT canvas is one flat colour');
-    await wait(p, () => document.querySelectorAll('#olsbct-marks button[data-g="mastoidcells"]').length === 1
-      && document.querySelectorAll('#olsbct-marks .ct-lm').length === 2 && document.querySelectorAll('#olsbct-lines polyline').length > 0);
-    await p.focus('#olsbct-marks button[data-g="mastoidcells"]');
-    await wait(p, () => !document.getElementById('olsbct-tip').hidden && document.getElementById('olsbct-tip').textContent.length > 2);
-    await p.keyboard.press('Enter');
-    await wait(p, () => !document.getElementById('olsbct-info').hidden
-      && document.getElementById('olsbct-info-name').textContent === window.OLSB.glossary.mastoidcells.name);
-    await p.keyboard.press('ArrowUp');          /* one slice up: the landmark (1 mm away) is still in the band, the far one is not */
-    await wait(p, () => /slice 11 of 20/.test(document.getElementById('olsbct-readout').textContent));
-    await p.click('#olsbct-planes [data-plane="sa"]');
-    await wait(p, () => document.querySelector('#olsbct-planes [data-plane="sa"]').getAttribute('aria-pressed') === 'true'
-      && /Sagittal slice 16 of 32/.test(document.getElementById('olsbct-readout').textContent)
-      && /^#m=ct&p=sa&i=15$/.test(location.hash));
-    if (!(await p.evaluate(() => /Temporal bone CT derived from the Interactive CT Temporal Bone Atlas/.test(document.getElementById('olsbct-attribution').textContent)))) throw new Error('attribution line missing');
-    return true;
-  } },
-  /* A bad plane or slice in the hash falls back to the middle axial slice. */
-  { path: 'OLSB.html#m=ct&p=zz&i=999', setup: syntheticTbone, ready: async (p) => {
-    await ctReady(p);
-    return wait(p, () => /Axial slice 10 of 20/.test(document.getElementById('olsbct-readout').textContent) && document.getElementById('olsb3d').hidden);
-  } },
-  /* Unreadable tbone/ data: a plain message, and the other modes stay usable. */
-  { path: 'OLSB.html#m=ct', setup: (p) => p.route('**/tbone/**', (r) => r.fulfill({ contentType: 'application/json', body: '{broken' })), ready: async (p) => {
-    await wait(p, () => !document.getElementById('olsbct-status').hidden && /could not be loaded/.test(document.getElementById('olsbct-status').textContent));
-    await p.click('#olsb-mode [data-mode="2d"]');
-    return wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready' && !document.getElementById('olsb2d').hidden);
-  } },
   /* OLSB 3D model: the voxel volume built (in its worker), meshed, and a tour step resolved;
      a click on the model selects a structure and lists its neighbours. */
   { path: 'OLSB.html#m=3d&s=1', ready: async (p) => {
@@ -206,6 +167,33 @@ const PAGES = [
     return wait(p, () => !document.getElementById('olsb3d-info').hidden
       && document.getElementById('olsb3d-info-name').textContent.length > 2);
   } },
+  /* OLSB Real CT: no tbone/ request until the view opens; then a slice draws and clicking a landmark selects its glossary id. */
+  { path: 'OLSB.html#d=axial&p=posterior&s=1', setup: tboneSetup, ready: async (p) => {
+    await wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready');
+    await p.waitForTimeout(500);
+    if (tboneRequests.length) throw new Error('tbone/ requested before the Real CT view opened: ' + tboneRequests[0]);
+    await p.click('#olsb-mode [data-mode="ct"]');
+    await wait(p, () => document.documentElement.getAttribute('data-olsb-ct') === 'ready'
+      && Number(document.getElementById('olsb-ct-canvas').getAttribute('data-drawn')) > 1000);
+    /* axial at z = 0: landmark lscc at x = 2, y = 1 -> pixel ((9.5 - 2) / 0.5, (9.5 - 1) / 0.5), centre at +0.5 */
+    await p.locator('#olsb-ct-canvas').scrollIntoViewIfNeeded();
+    const c = await p.evaluate(() => { const cv = document.getElementById('olsb-ct-canvas'); const r = cv.getBoundingClientRect();
+      const k = Number(cv.getAttribute('data-k')); const f = r.width / cv.width;
+      return { x: r.left + ((9.5 - 2) / 0.5 + 0.5) * k * f, y: r.top + ((9.5 - 1) / 0.5 + 0.5) * k * f }; });
+    await p.mouse.click(c.x, c.y);
+    await wait(p, () => document.getElementById('olsb-ct-info').getAttribute('data-id') === 'lscc'
+      && /semicircular/i.test(document.getElementById('olsb-ct-info-name').textContent));
+    if (!/m=ct/.test(await p.evaluate(() => location.hash))) throw new Error('hash not written');
+    return true;
+  } },
+  /* The hash selects plane and position (and untrusted junk falls back). */
+  { path: 'OLSB.html#m=ct&pl=cor&at=1.5', setup: tboneSetup, ready: (p) => wait(p, () => {
+    const c = document.getElementById('olsb-ct-canvas');
+    return document.documentElement.getAttribute('data-olsb-ct') === 'ready' && c.getAttribute('data-plane') === 'coronal' && c.getAttribute('data-at') === '1.50';
+  }) },
+  { path: 'OLSB.html#m=ct&pl=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&at=NaN', setup: tboneSetup, ready: (p) => wait(p, () =>
+    document.documentElement.getAttribute('data-olsb-ct') === 'ready' && document.getElementById('olsb-ct-canvas').getAttribute('data-plane') === 'axial'
+      && !document.getElementById('pwn') && !window.__pwned) },
   { path: 'OLSB.html#m=3d&st=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&cam=' + encodeURIComponent('<b>'),
     ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
       && !document.getElementById('pwn') && !window.__pwned, 40000) },
