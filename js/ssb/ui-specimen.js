@@ -470,7 +470,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
 
 /* The Anatomy pills in the toolbar (ssb.html #ssb-anatomy): Symmetric (the standardized head), Normal asymmetry (the head
    as scanned), Variants and Pathology. A pill is enabled only for what ssb/anatomy/index.json lists, so with no index
-   (today) they stay disabled; Variants and Pathology open their pickers in WP RA5, which waits for the first entries, so
+   (today) Variants and Pathology stay hidden, Normal asymmetry disabled, until the index lists entries of that kind; Variants and Pathology open their pickers in WP RA5, which waits for the first entries, so
    until then they only show the state. Everything is read from the store; nothing here touches markup beyond the pills. */
 export function mountAnatomyPills(store) {
     const group = document.getElementById('ssb-anatomy');
@@ -486,6 +486,8 @@ export function mountAnatomyPills(store) {
         scanned.disabled = !reg || !reg.bases.has('scanned');
         variants.disabled = !reg || reg.variants.size === 0;
         pathology.disabled = !reg || reg.conditions.size === 0;
+        variants.hidden = variants.disabled;
+        pathology.hidden = pathology.disabled;
         press(standard, plain || (a.base === 'standard' && !a.variants.length && !a.conditions.length));
         press(scanned, !plain && a.base === 'scanned' && !a.variants.length && !a.conditions.length);
         press(variants, !plain && a.variants.length > 0);
