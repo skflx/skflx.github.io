@@ -169,11 +169,17 @@ validates the data under it:
   names no remote origin, so a regression is also a console error);
   `AIRWAY_DATA` loads. Smoke assertion: `window.AIRWAY_DATA.questions` is an
   array.
+- `node tools/test-airway-resume.mjs` (not run by CI): saved games per tab,
+  resume restores the exact state, Start fresh and End game clear only that
+  tab's save, the pre-tab save migrates, and the game plays with storage throwing.
 
 ### CPT search (`cpt-search.html`)
 - Boots with zero console errors; typing filters; clicking a result copies
   its code and flips the button to **Copied**; a query like
   `<img src=x onerror=…>` renders as text (results go through `esc()`).
+- `node tools/test-search.mjs` (not run by CI; covers `search.html` too): a
+  module-title query links to `?m=<slug>`, a CPT hit lands on its row in the
+  viewport, on desktop and phone.
 
 ### PDF chapter splitter (`pdf-chapter-splitter.html`)
 - Boots with zero console errors, with `PDFLib` and `JSZip` defined (smoke).

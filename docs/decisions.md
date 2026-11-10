@@ -4,7 +4,7 @@ Consult this before asking the owner a "how do I…" question. Every rule
 below is drawn from existing precedent in the repo (cited inline). Where the
 precedent genuinely runs out, the rule says **ASK THE OWNER** — the
 escalation is codified too. Companion: `docs/verification.md` (how to prove a
-change works), `docs/docs-map.md` (the documentation pass).
+change works), `AGENTS.md` (Documentation second pass).
 
 ## 1. Which chrome does a new page use?
 
@@ -38,8 +38,8 @@ URLs cost nothing and redirect stubs accumulate into clutter. Owner decision,
 2026-09: the stubs that existed (`mcq*.html`, `occ*.html`, `kag.html`, and an
 earlier `atlas.html`) were removed outright rather than repointed.
 
-Remove the page from `PAGES` in `tools/smoke-pages.mjs` and from the
-`README.md` file tree in the same change, and grep for inbound links:
+Remove the page from `PAGES` in `tools/smoke-pages.mjs` in the same change,
+and grep for inbound links:
 
 ```bash
 grep -rn "<retired-page>" --include=*.html --include=*.js --include=*.md .
@@ -140,7 +140,7 @@ visitor-selectable theme.
 
 After completing a significant chunk, update `docs/wip.md` (current state per
 system, not an append-only diary) and run the documentation pass in
-`docs/docs-map.md`.
+`AGENTS.md` (Documentation second pass).
 
 ## 7. Escalate to the owner — do NOT decide these yourself
 

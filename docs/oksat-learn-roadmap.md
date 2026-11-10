@@ -9,7 +9,7 @@ Current state lives in `docs/wip.md`; the guide spec is
 
 | Layer | Job | Home | Unit |
 |---|---|---|---|
-| **Reference** | Look a fact up; see how it connects | `sk.oto` vault → wiki (`skflx.github.io/ent-wiki/`) | note |
+| **Reference** | Look a fact up; see how it connects | `sk.oto` vault → wiki (`skflx.github.io/ohns-wiki-skflx/`) | note |
 | **Teaching** | Learn a hard topic the first time, with retrieval built in | OKSAT guide (`oksat-learn.html`) | chapter → section |
 | **Practice** | Prove it later, on a schedule | OKSAT module (`oksat-study.html`) | item |
 
@@ -73,8 +73,8 @@ the guide drills on day one. Candidates, in a suggested order:
 
 ## 4. Wiki integration
 
-The wiki is not live (`wiki/README.md`): phase 1 publishes only the six maps
-of content. **Owner** is verifying the existing vault first; nothing below
+The wiki is live at `skflx.github.io/ohns-wiki-skflx/` (since 2026-11-10;
+`wiki/README.md`), and phase 1 publishes only the six maps of content. **Owner** is verifying the existing vault first; nothing below
 starts until that pass is done.
 
 ### Decided (2026-10)
@@ -169,4 +169,4 @@ Figures cost far more tokens than text, so each must earn its place.
    then the other subspecialties; Phase B with it.
 4. Second guide (Owner picks, §3), built from vetted notes, with
    `lint-oksat-guide.mjs` built alongside it (§2). **Done**: `ear-anatomy`, built unlisted; listing is the owner's call.
-5. Wiki live (`wiki/README.md` Bootstrap), then Phase C.
+5. Wiki live (done 2026-11-10, `wiki/README.md`), then Phase C.

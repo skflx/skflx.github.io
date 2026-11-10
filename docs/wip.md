@@ -2,9 +2,9 @@
 
 One section per living system: what it is, where it stands, what is next.
 A status document, not a changelog. When something is retired, its section
-goes. Detail lives in the owning doc (`docs/docs-map.md` maps each one).
+goes. Detail lives in the owning doc, which `AGENTS.md` (Documentation second pass) names for each one.
 
-Last reviewed: 2026-11-08.
+Last reviewed: 2026-11-10.
 
 ---
 
@@ -280,17 +280,17 @@ actions, §3 open work packages). Realistic anatomy's next step is RS2c
 
 ## Wiki scaffold (`wiki/`)
 
-**State:** Not live; nothing is built or served from this repo. Quartz config,
+**State:** Live since 2026-11-10 at `skflx.github.io/ohns-wiki-skflx/`, built from its own repo; nothing is built or served from this repo. Quartz config,
 styles, landing page, an inert deploy workflow, and `wiki/sync/sync-vault.mjs`,
 the fail-closed sync from the owner's vault (six subspecialty folders; Personal
 Notes, drafts, source texts and governance files never leave). Reader corrections
 round-trip through public issues (`wiki/feedback/`). DGMO diagrams render at build
 time (`wiki/dgmo/`).
 
-**Next:** create `skflx/ent-wiki` and go live (`wiki/README.md` §Bootstrap); widen
-the phase-1 gate beyond the maps of content as notes are vetted; decide whether to
-automate the sync (needs a secret). Going public is an owner escalation
-(`docs/decisions.md` §7).
+**Next:** widen the phase-1 gate beyond the maps of content as notes are vetted; decide
+whether to automate the sync (needs a secret); link the wiki from the site when the owner
+decides (the sk.oto link stays closed until then). Changing what is published is an owner
+escalation (`docs/decisions.md` §7).
 
 ---
 
