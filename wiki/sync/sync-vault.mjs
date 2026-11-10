@@ -28,8 +28,8 @@
    Pure Node, zero dependencies. Dry run by default.
 
    Usage:
-     node wiki/sync/sync-vault.mjs --vault ~/sk.oto --out ../ent-wiki/content          # dry run
-     node wiki/sync/sync-vault.mjs --vault ~/sk.oto --out ../ent-wiki/content --write  # do it
+     node wiki/sync/sync-vault.mjs --vault ~/sk.oto --out ../ohns-wiki-skflx/content          # dry run
+     node wiki/sync/sync-vault.mjs --vault ~/sk.oto --out ../ohns-wiki-skflx/content --write  # do it
      options: --policy <file>  --report <file.json>  --quiet
    Exit code: 0 ok, 1 bad usage/refusal, 2 notes were held for review.
    ============================================================= */

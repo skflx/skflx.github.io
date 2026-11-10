@@ -300,12 +300,12 @@ actions, §3 open work packages). Realistic anatomy's next step is RS2c
 
 ## Wiki scaffold (`wiki/`)
 
-**State:** Live since 2026-11-10 at `skflx.github.io/ohns-wiki-skflx/`, built from its own repo; nothing is built or served from this repo. Quartz config,
-styles, landing page, an inert deploy workflow, and `wiki/sync/sync-vault.mjs`,
+**State:** Live since 2026-11-10 at `skflx.github.io/ohns-wiki-skflx/`, built from its own repo; nothing is built or served from this repo. The Quartz config,
+styles and deploy workflow live in that repo (`skflx/ohns-wiki-skflx`); here are `wiki/sync/sync-vault.mjs`,
 the fail-closed sync from the owner's vault (six subspecialty folders; Personal
 Notes, drafts, source texts and governance files never leave). Reader corrections
-round-trip through public issues (`wiki/feedback/`). DGMO diagrams render at build
-time (`wiki/dgmo/`).
+round-trip through public issues (`wiki/feedback/`). The DGMO renderer (`wiki/dgmo/`) and the
+correction issue form (`wiki/github/`) are not yet installed in the wiki repo.
 
 **Next:** widen the phase-1 gate beyond the maps of content as notes are vetted; decide
 whether to automate the sync (needs a secret). The OKSAT pages already link the live maps.
