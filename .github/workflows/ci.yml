@@ -72,6 +72,9 @@ jobs:
       # OKSAT guides against the teaching-shape rules (roadmap §2); zero deps.
       - name: Lint OKSAT guides
         run: node tools/lint-oksat-guide.mjs
+      # House skills: structure, evals schema, registration; zero deps.
+      - name: Lint skills
+        run: node tools/lint-skills.mjs --self-test && node tools/lint-skills.mjs
 
       # The wiki sync is the privacy boundary for the Obsidian vault;
       # zero deps, synthetic fixtures only.

@@ -15,3 +15,4 @@ Status never lives here: each spec has a parent GitHub issue with one sub-issue 
 | [2026-11-04-tbone-sources](2026-11-04-tbone-sources.md): real-DICOM temporal bone sources beyond the UW atlas | #244 |
 | [2026-11-09-ear-truth-concordance](2026-11-09-ear-truth-concordance.md): OLSB shows and is checked against the real temporal bone CT; one volume contract with SSB | #247 |
 | [2026-11-10-ssb-nasal-framework](2026-11-10-ssb-nasal-framework.md): SSB `nasal-framework` diorama spec (ST7), moved from `docs/ssb.md` §6.2; not built | docs/ssb-roadmap.md ST7a (no issue) |
+| [2026-11-10-skillsmith](2026-11-10-skillsmith.md): a skill that writes, audits and prunes skills against evals; lint in CI | #263 |

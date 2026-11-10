@@ -21,7 +21,7 @@ Protocol detail (WP format, waves, reviews): `docs/delegation.md`.
 
 ## Skills
 
-`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads that file and follows it as written.
+`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`, `skillsmith`). Claude invokes them as skills; any other agent reads that file and follows it as written. Each house skill has an `evals.json` beside its `SKILL.md`, and `skillsmith` (`/skillsmith`) is how a skill is written, audited or pruned; spec `plans/2026-11-10-skillsmith.md`.
 
 ## What this is
 
@@ -46,6 +46,8 @@ node tools/test-search.mjs       # search.html and the CPT deep link, desktop an
 node tools/test-airway-resume.mjs # Airway Rounds saved games: per-tab saves, resume, zero external requests
 node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
 node tools/lint-oksat-guide.mjs [slug]  # OKSAT guide teaching-shape lint (no slug: every guide; CI runs it)
+node tools/lint-skills.mjs        # skill structure + evals.json schema (deps-free; CI runs it with --self-test)
+node tools/lint-skills.mjs --due  # report only: skills never audited, stale, behind the model roster, or citing changed files
 node tools/test-ssb.mjs          # SSB: every section (variant lab, CT, specimen, endoscope, procedure…); --only a,b for some; CI runs it as --shard i/4
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 node tools/ssb-content.mjs --queue # SSB owner review queue: draft nodes whose cited sources are all verified
