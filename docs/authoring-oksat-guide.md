@@ -100,8 +100,6 @@ tally but not in the flashcard deck.
   sit in `<g data-label="1">` and are hidden in find mode. Raster frames
   (`.png`, `.jpg`, `.webp`) take `regions: [{g, poly}]`, where `poly` is a flat
   list of ≥ 3 x,y pairs in 0–100 percent. Find mode needs ≥ 3 regions per frame.
-  The ear-anatomy CT frames are generated, not authored: `tools/tbone-pipeline/slices.py` writes their regions
-  from UW's label tips (one pointer region per tip, not a segmentation), so change them by rerunning it.
   `g` must be a glossary id (`js/olsb/glossary.js`); `check-data` fails an
   unknown id.
 - **`layers`**: one `base` image plus ≥ 2 overlay images of identical size, each

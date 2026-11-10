@@ -45,6 +45,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q30', 'ear-anatomy:q31'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-box'] }],
+            ref: [],
         },
         {
             id: 'cav-lateral',
@@ -73,6 +74,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q32'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-lateral'] }],
+            ref: [],
         },
         {
             id: 'cav-medial',
@@ -104,6 +106,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q33', 'ear-anatomy:q35'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-medial'] }],
+            ref: [],
         },
         {
             id: 'cav-roof-floor',
@@ -132,6 +135,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q36', 'ear-anatomy:q37'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-roof-floor'] }],
+            ref: [],
         },
         {
             id: 'cav-anterior',
@@ -152,6 +156,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q38', 'ear-anatomy:q39'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-anterior'] }],
+            ref: [],
         },
         {
             id: 'cav-posterior',
@@ -173,6 +178,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q34', 'ear-anatomy:q40'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['cav-posterior'] }],
+            ref: [],
         },
     ],
 };

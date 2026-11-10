@@ -6,7 +6,6 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'biologics',
-    review: 'draft',
     title: 'Biologics for CRSwNP and AERD',
     kicker: '8 · Biologics',
     lede: 'Five targets, six-plus drugs, one EPOS checklist. In AERD the comparative data are observational, so learn both the results and why they might mislead.',

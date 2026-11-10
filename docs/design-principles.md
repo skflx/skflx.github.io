@@ -101,11 +101,8 @@ and nothing else:
 - **Launch vs Resume** on the card's action, so a half-finished module is
   distinguishable at a glance.
 - **One review banner** above the list: total cards due across all modules,
-  with a link to every module that has due items, most due first. Absent
-  entirely when nothing is due — an empty state is noise.
-- **Weak concepts** (shown only when there are any): the lowest-accuracy
-  concepts tried at least three times with a miss, each linking to its concept
-  in the viewer.
+  linking into the module holding the most. Absent entirely when nothing is
+  due — an empty state is noise.
 
 Progress is never framed as a score, streak, or badge; it is a record.
 

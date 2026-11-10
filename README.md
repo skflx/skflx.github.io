@@ -49,14 +49,28 @@ and defaulting to `prefers-color-scheme`.
 
 ## The tools
 
-- **OKSAT** (`oksat.html`) — OHNS self-assessment study modules with a recall gate and one Leitner spaced-repetition schedule, plus interactive first-pass guides (`oksat-learn.html`).
-- **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for otolaryngology.
-- **Search** (`search.html`) — one box over the OKSAT question modules and the CPT table.
-- **PDF Chapter Splitter** (`pdf-chapter-splitter.html`) — lossless split of a PDF into chapters, entirely in the browser.
-- **Airway Rounds** (`airway-jeopardy.html`) — team ENT/H&N airway quiz; self-contained, so it works with no network.
-- **sk.oto** — the Obsidian knowledge graph as a Quartz 5 wiki, live at `skflx.github.io/ohns-wiki-skflx/` (as of 2026-11-10).
+- **OKSAT** (`oksat.html`) — OHNS Knowledge Self-Assessment. Hand-authored
+  study modules where every question opens on a recall gate — answer it from
+  memory and self-grade, or show the choices and answer it as a locked
+  first-attempt MCQ — all feeding one Leitner spaced-repetition schedule.
+  Progress is local to the browser; nothing is uploaded. Beside the modules,
+  **Interactive learning** holds first-pass study guides: short sections with
+  predict-then-reveal retrieval prompts, worked criteria checkers, and module
+  questions answered in place, each section linking into the question modules.
+- **CPT Code Search** (`cpt-search.html`) — fast surgical CPT lookup built for
+  otolaryngology.
+- **Search** (`search.html`) — one box over the OKSAT question modules and the
+  CPT table; results link into the module (at its concept) or the CPT lookup.
+- **PDF Chapter Splitter** (`pdf-chapter-splitter.html`) — lossless split of a
+  PDF into chapters by its outline or custom boundaries, single files or ZIP;
+  runs entirely in the browser.
+- **Airway Rounds** (`airway-jeopardy.html`) — team-based ENT/H&N airway quiz
+  (Rounds, Jeopardy board, quick quiz, browse). Makes no third-party request
+  (its CSP enforces that), so it works on conference-room wifi or none at all.
 
-Current state of each system: `docs/wip.md`. Agent manual and architecture: `AGENTS.md`.
+Coming: **sk.oto**, the Obsidian knowledge graph as a Quartz 5 wiki. The six
+subspecialty maps of content are synced and render in Quartz; the wiki repo
+itself is not live yet (`wiki/README.md`).
 
 ## Tech Stack
 
@@ -70,6 +84,109 @@ Current state of each system: `docs/wip.md`. Agent manual and architecture: `AGE
 The only npm package is dev-only test tooling (`playwright`). Nothing shipped
 touches `node_modules`.
 
+## File Structure
+
+Grouped by system; per-file detail lives in each file's header comment.
+
+```
+├── index.html              # The one-pager
+│   ├── css/onepager.css    #   its layout (on css/site.css tokens)
+│   └── js/onepager.js      #   residency year, folding sections, section scroll-spy
+│
+├── oksat.html              # OKSAT hub — guides, question modules, due-review banner, settings
+├── oksat-study.html        # OKSAT question viewer (?m=<slug>[&c=<concept>])
+├── oksat-learn.html        # OKSAT Interactive learning viewer (?g=<guide>[&c=<chapter>])
+│   ├── css/oksat.css       #   OKSAT design system (tokens; docs/design-principles.md)
+│   ├── css/oksat-learn.css #   Interactive learning layout (tokens only)
+│   ├── js/oksat/*.js       #   engine, manifest, store, prefs, hub, viewer boots, concept graph, guide viewer, term lexicon
+│   ├── js/oksat/modules/   #   question banks (one data file per module)
+│   ├── js/oksat/guides/    #   interactive guides (one folder per guide, one data file per chapter)
+│   ├── images/oksat/       #   per-module and per-guide images (stems, explanations, guide figures)
+│   └── js/vendor/          #   React + htm, pinned and self-hosted
+│
+├── airway-jeopardy.html    # Airway Rounds team quiz (no network needed)
+│   └── js/airway/*.js      #   app, engine, question bank
+├── cpt-search.html         # CPT code search
+│   ├── js/cpt-data.js      #   code table (window.CPT_DB)
+│   └── js/cpt-search.js    #   code table + search
+├── search.html             # search over OKSAT modules and the CPT table
+│   └── js/search.js        #   in-memory index, matching, keyboard results
+├── Fusion.html              # second-CI research study flyer (static, QR links to itself)
+├── pdf-chapter-splitter.html # PDF chapter splitter (client-side)
+│   └── js/pdf-chapter-splitter.js #   page logic (pdf-lib + JSZip in js/vendor/)
+├── atlas.html              # Skull-base atlas — unlisted hemisection; hover a group to light it (docs/atlas.md)
+│   ├── css/atlas.css       #   its layout and tissue tokens
+│   └── js/atlas.js         #   group lighting (hover, focus)
+├── OLSB.html               # OLSB — a walk-through voxel temporal bone + layered middle ear/mastoid diagrams (unlisted; reached from atlas.html; draft)
+│   ├── css/olsb.css        #   its layout and --olsb-* tissue tokens
+│   ├── js/olsb/volume.js   #   the 3D model: labelled voxel volume in mm, drill states, tour (also runs as its Web Worker)
+│   ├── js/olsb/mesh.js     #   the mesher: smooth surfaces (or blocks) from the labelled grids; runs in that worker
+│   ├── js/olsb/3d.js       #   ES module: lit scene, camera (orbit/fly/walk), picking, panels (three.js, vendored)
+│   └── js/olsb/*.js        #   glossary, mm shape library, one file per 2D diagram, main.js the SVG renderer
+│
+├── ssb.html                # SSB — Sinus & Skull Base 3D atlas (graph mode, specimen, endoscope, CT, variant lab; unlisted, reached from atlas.html; docs/ssb.md)
+│   ├── css/ssb.css         #   its layout and --ssb-* tokens
+│   ├── js/ssb/             #   ES modules (graph, state, scene, materials, specimen, endoscope, procedure player, volume, CT, lab, UI); stamps.js is generated
+│   ├── js/ssb/dioramas/    #   parametric dioramas for the variant lab
+│   └── js/vendor/three-0.186.1/  # three.js, pinned and self-hosted
+├── ssb/                    # SSB data (knowledge graph, references, reference specimen)
+│   ├── content/            #   knowledge graph, draft (schema: docs/authoring-ssb.md)
+│   ├── reference/          #   external atlases crosswalked to the graph (text only)
+│   ├── ct/                 #   specimen CT, label and distance-field volumes (pipeline output)
+│   ├── states/             #   dissection and mucosal states: index.json + one patch per state (pipeline output, mucosa.py, dissect.py)
+│   ├── geometry/           #   label table, landmarks, vessel/nerve sweeps (pipeline output, keyed by graph ids)
+│   ├── models/             #   specimen meshes, gzipped glTF packs (pipeline output)
+│   └── LICENSE-data.md     #   provenance and permission of the specimen data
+├── js/ascii3d.js           # ASCII 3D figure engine (shared by every figure)
+│   ├── js/diagrams/        #   one scene per figure
+│   └── css/ascii3d.css     #   grid sizing + ink -> token mapping
+├── js/egg.js               # figure eggs: a word in the text unfolds its figure in place
+├── css/egg.css             #   the reveal's styles
+│
+├── css/site.css            # The design system: tokens, faces, shared chrome
+├── js/site.js              # Day/night toggle
+├── js/theme-boot.js        # Pre-paint theme (every page, in <head>)
+├── fonts/                  # Self-hosted Archivo + IBM Plex Mono (+ licenses)
+│
+├── wiki/                   # Quartz 5 wiki kit for the sk.oto vault (not served here; see wiki/README.md)
+│   ├── content/            #   the published set: landing page + sync output (six MOCs for now)
+│   ├── sync/               #   vault → wiki sync, the privacy boundary
+│   ├── feedback/           #   reader corrections: GitHub issues → vault inbox
+│   ├── github/             #   deploy workflow + correction issue form for the wiki repo
+│   └── dgmo/               #   DGMO diagrams → inline SVG at wiki build time
+│
+├── tbone/                  # Normal temporal bone reference volume + traced centrelines (internal, generated; see its README)
+│
+├── archive/                # Kept content, served by nothing (see its README)
+│   ├── kag-graph.json      #   OHNS knowledge graph from the retired atlas viewers
+│   └── kag-graph-flat.txt  #   the same data as readable text
+│
+├── tools/                  # Dev-only verification (Node; never shipped)
+│   ├── check-data.mjs      #   data + security invariants + asset stamps, zero deps
+│   ├── stamp-assets.mjs    #   ?v=<hash> cache-busting on every css/ and js/ reference
+│   ├── lint-oksat.mjs      #   OKSAT module quality lint (concepts, orphans, alt text, plain text)
+│   ├── lint-oksat-guide.mjs #  OKSAT interactive guide teaching-shape lint (checks per section, captions, sources)
+│   ├── test-wiki-sync.mjs  #   vault sync + feedback loop on a synthetic vault
+│   ├── ascii3d.mjs         #   ASCII figures: terminal preview, bake no-JS frames, scaffold
+│   ├── atlas.mjs           #   atlas: bake and check the SVG in atlas.html, PNG preview
+│   ├── atlas/              #   the atlas source (anatomy.json: groups and control points)
+│   ├── smoke-pages.mjs     #   every page boots with no real console errors
+│   ├── test-oksat-engine.mjs  # engine behavior: answer lock, SRS, keyboard
+│   ├── test-oksat-learn.mjs   # interactive learning viewer behavior
+│   ├── test-ssb.mjs        #   SSB: variant lab, pathway rules, picking, hash, tissue materials, CT, specimen, endoscope
+│   ├── ssb-fixture-ct.mjs  #   synthetic CT volume and dissection states the SSB tests route in (never written to ssb/)
+│   ├── ssb-content.mjs     #   SSB knowledge-graph validator (run by check-data)
+│   ├── ssb-pipeline/       #   offline SSB data pipelines (Python; outputs committed, inputs gitignored)
+│   └── tbone-pipeline/     #   offline temporal-bone pipeline (Python; reuses ssb-pipeline helpers; output in tbone/)
+│
+├── AGENTS.md               # Operating manual for every coding agent (canonical)
+├── CLAUDE.md, .claude/CLAUDE.md, .gemini/, .agents/  # pointers to AGENTS.md
+├── plans/                  # implementation specs; status in GitHub Issues (index: plans/README.md)
+├── docs/                   # Design system, decisions, security, verification
+│   └── wip.md              #   current state of each system (index + update rules: docs/docs-map.md)
+└── images/                 # Cutout portrait, social card, favicon (see images/list.txt); images/oksat/ for OKSAT
+```
+
 ## Local Development
 
 No build step. Serve the folder and open `index.html`:
@@ -82,8 +199,35 @@ python3 -m http.server 8000
 Serving matters — `file://` breaks pages that fetch. Deep links jump to
 the matching section and open it if folded, e.g. `index.html#research`.
 
-Verification, asset stamping and figure baking are listed under
-**Commands** in `AGENTS.md`.
+After editing any file in `css/` or `js/`, refresh its cache-busting stamp
+(`?v=<hash>` on every reference, so a deploy never pairs new HTML with a
+cached old stylesheet):
+
+```
+node tools/stamp-assets.mjs
+```
+
+After editing a figure (`js/diagrams/*.js` or the engine), re-bake the
+frames pages ship without JavaScript, then stamp:
+
+```
+node tools/ascii3d.mjs render <id>   # preview in the terminal
+node tools/ascii3d.mjs bake
+```
+
+Before pushing (CI runs these on every PR; the suites that need a browser
+run when a file they exercise changed):
+
+```
+node tools/check-data.mjs
+node tools/test-wiki-sync.mjs
+node tools/smoke-pages.mjs
+node tools/test-oksat-engine.mjs
+node tools/test-oksat-learn.mjs
+node tools/test-ssb.mjs
+```
+
+Deploy = merge to `master`; GitHub Pages serves the repo root directly.
 
 ## Browser Support
 

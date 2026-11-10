@@ -11,8 +11,6 @@
      node tools/ssb-content.mjs --allow-dangling x.json
                         # refs to ids outside the given files are
                         # reported as warnings (drafting one region)
-     node tools/ssb-content.mjs --queue            # owner review queue: draft nodes
-                        # whose every cited source is verified, by tier then id
    ============================================================= */
 import fs from 'fs';
 import path from 'path';
@@ -232,15 +230,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const given = args.filter((a) => !a.startsWith('--'));
   const files = given.length ? given.map((f) => path.resolve(f)) : contentFiles();
   const { errors, warnings, index } = validate(files, { allowDangling });
-  if (args.includes('--queue')) {
-    const drafts = [...index].filter(([, h]) => h.type !== 'sources' && h.entity.review === 'draft');
-    const ready = drafts.filter(([, h]) => (h.entity.src || []).length
-      && h.entity.src.every((s) => index.get(s) && index.get(s).entity.verified === true))
-      .sort(([a, x], [b, y]) => x.entity.tier - y.entity.tier || (a < b ? -1 : a > b ? 1 : 0));
-    for (const [id, { type, entity: e }] of ready) console.log(`${id}\t${type}\ttier ${e.tier}\t${e.name || e.id}\t${e.src.length} src`);
-    console.log(`${ready.length} ready of ${drafts.length} draft`);
-    process.exit(0);
-  }
   for (const w of warnings) console.log('  WARN  ' + w);
   for (const e of errors) console.log('  FAIL  ' + e);
   const counts = {};

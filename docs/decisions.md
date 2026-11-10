@@ -4,7 +4,7 @@ Consult this before asking the owner a "how do I…" question. Every rule
 below is drawn from existing precedent in the repo (cited inline). Where the
 precedent genuinely runs out, the rule says **ASK THE OWNER** — the
 escalation is codified too. Companion: `docs/verification.md` (how to prove a
-change works), `AGENTS.md` (Documentation second pass).
+change works), `docs/docs-map.md` (the documentation pass).
 
 ## 1. Which chrome does a new page use?
 
@@ -38,8 +38,8 @@ URLs cost nothing and redirect stubs accumulate into clutter. Owner decision,
 2026-09: the stubs that existed (`mcq*.html`, `occ*.html`, `kag.html`, and an
 earlier `atlas.html`) were removed outright rather than repointed.
 
-Remove the page from `PAGES` in `tools/smoke-pages.mjs` in the same change,
-and grep for inbound links:
+Remove the page from `PAGES` in `tools/smoke-pages.mjs` and from the
+`README.md` file tree in the same change, and grep for inbound links:
 
 ```bash
 grep -rn "<retired-page>" --include=*.html --include=*.js --include=*.md .
@@ -54,10 +54,7 @@ Namespaces: `sk_*` (site chrome), `oksat:*` (OKSAT), `ssb:*` (SSB). All new
 OKSAT persistence goes through `window.OKSATStore` (`js/oksat/store.js`) — do
 not add raw `localStorage` calls to OKSAT pages; SSB's goes through the
 guarded adapter in `js/ssb/state.js`. Every read and write is
-guarded; a storage failure degrades to a no-op, never an exception. The hub
-asks the browser once to make its storage persistent (`navigator.storage.persist`,
-feature-detected) and offers Export and Import of every `oksat:*` key as one
-JSON file, validated before anything is written.
+guarded; a storage failure degrades to a no-op, never an exception.
 
 OKSAT keys carry a trailing `:<code>` namespace. There is one user and no
 prompt: `OKSATStore.reviewer()` resolves the code from `oksat:reviewer` if a
@@ -77,17 +74,14 @@ resolving** — do not "simplify" it away without migrating the data first.
 | `oksat:typeface` | `js/oksat/prefs.js`, `js/theme-boot.js` | `html[data-font]`; written only on an explicit pick |
 | `oksat:progress:<slug>:<rev>` | `js/oksat/engine.js` | answers + firstCorrect |
 | `oksat:srs:<slug>:<rev>` | `js/oksat/engine.js` | Leitner boxes |
-| `oksat:cmastery:<slug>:<rev>` | `js/oksat/store.js` (written by the engine) | concept mastery; read by the hub's Weak concepts list |
+| `oksat:cmastery:<slug>:<rev>`, `oksat:conf:<slug>:<rev>`, `oksat:session:<rev>` | `js/oksat/store.js` | mastery / calibration / analytics |
 | `oksat:learn:<guide>:<rev>` | `js/oksat/store.js` (`getLearn`/`saveLearn`), written by `js/oksat/learn.js` | Interactive learning: sections done, retrieval-prompt grades, inline module answers, reading mode. Never a module's own progress |
 | `ssb:prefs` | `js/ssb/state.js` | SSB depth (tier 1/2/3) as `{v:1, tier}`; written only on an explicit depth pick, never from a shared link |
 | `cpt-history`, `cpt-analytics` | `js/cpt-search.js` | recent searches + counts; predates the namespaces, kept so history survives |
 
 Retired, no longer read: `sk_style` (one-pager style switch, removed in the
-2026-09 redesign), `oksat:font` (replaced by `oksat:typeface`, which is
-not written by default so a future default change reaches everyone), and
-`oksat:conf:<slug>:<rev>` and `oksat:session:<rev>` (the confidence prompt and
-session analytics, removed 2026-11; `OKSATStore.resetLocal` still clears them if an
-old browser holds them).
+2026-09 redesign) and `oksat:font` (replaced by `oksat:typeface`, which is
+not written by default so a future default change reaches everyone).
 
 No credential keys remain. The Gemini and Anthropic key managers were deleted
 with the tools that used them; **do not reintroduce a key field** without the
@@ -146,7 +140,7 @@ visitor-selectable theme.
 
 After completing a significant chunk, update `docs/wip.md` (current state per
 system, not an append-only diary) and run the documentation pass in
-`AGENTS.md` (Documentation second pass).
+`docs/docs-map.md`.
 
 ## 7. Escalate to the owner — do NOT decide these yourself
 

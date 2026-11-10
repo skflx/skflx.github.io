@@ -1,8 +1,8 @@
 /* =============================================================
    OKSAT storage adapter — window.OKSATStore
    (OHNS Knowledge Self-Assessment Tool.)
-   One fail-safe localStorage layer: identity resolution and concept
-   mastery (read by the hub's weak-concepts list).
+   One fail-safe localStorage layer: identity resolution, session
+   counting, concept mastery, and confidence calibration.
 
    Loaded as a plain <script> BEFORE the engine. Progress and SRS
    keys (oksat:progress:*, oksat:srs:*) are owned by the engine;
@@ -21,6 +21,8 @@
 (function () {
   'use strict';
 
+  var SESSION_GAP_MS = 30 * 60 * 1000; // >30 min idle starts a new session
+
   /* ---- primitives ---- */
   function load(key, fallback) {
     try {
@@ -30,11 +32,6 @@
   }
   function save(key, value) {
     try { localStorage.setItem(key, JSON.stringify(value)); return true; }
-    catch (e) { return false; }
-  }
-  /* Raw string write, for restoring an exported backup byte for byte. */
-  function setRaw(key, str) {
-    try { localStorage.setItem(key, str); return true; }
     catch (e) { return false; }
   }
   function remove(key) {
@@ -82,6 +79,23 @@
   var nowISO = function () { return new Date().toISOString(); };
   var clampBox = function (b) { return Math.max(1, Math.min(5, b | 0 || 1)); };
 
+  /* ---- session counter (analytics only — never scheduling) ---- */
+  function touchSession(who) {
+    var r = norm(who);
+    var key = 'oksat:session:' + r;
+    var rec = load(key, null) || { v: 1, n: 0, last: 0 };
+    var now = Date.now();
+    if (!rec.n || (now - (rec.last || 0)) > SESSION_GAP_MS) rec.n = (rec.n || 0) + 1;
+    rec.last = now;
+    rec.v = 1;
+    rec.updated = nowISO();
+    save(key, rec);
+    return rec.n;
+  }
+  function getSession(who) {
+    return load('oksat:session:' + norm(who), { v: 1, n: 0, last: 0 });
+  }
+
   /* ---- concept mastery (derived layer; item SRS is untouched) ---- */
   function cmasteryKey(slug, who) {
     return 'oksat:cmastery:' + slug + ':' + norm(who);
@@ -111,6 +125,27 @@
     return load(cmasteryKey(slug, who), { v: 1, concepts: {} });
   }
 
+  /* ---- confidence calibration (MCQ only; skip writes nothing) ---- */
+  function recordConfidence(slug, who, qId, tier, correct, conceptKeys, sessionN) {
+    if (!slug || !qId || !tier) return;
+    var key = 'oksat:conf:' + slug + ':' + norm(who);
+    var rec = load(key, null) || { v: 1, entries: {} };
+    if (!rec.entries) rec.entries = {};
+    rec.entries[qId] = {
+      c: tier,                                   // 'hi' | 'md' | 'lo'
+      ok: !!correct,
+      concepts: Array.isArray(conceptKeys) ? conceptKeys : [],
+      s: sessionN || 0,
+      t: today(),
+    };
+    rec.v = 1;
+    rec.updated = nowISO();
+    save(key, rec);
+  }
+  function getConfidence(slug, who) {
+    return load('oksat:conf:' + slug + ':' + norm(who), { v: 1, entries: {} });
+  }
+
   /* ---- Interactive learning (js/oksat/learn.js) ----
      One record per guide: { v, done:{sectionId:1}, checks:{'<section>:<id>':grade 0-3},
      practice:{'<module>:<item>':{a|g, ok}}, ui:{mode, core, last} }. Separate from the
@@ -133,7 +168,6 @@
   function resetLocal(who) {
     var r = norm(who);
     var n = 0;
-    /* conf/session: retired families, still cleared if an old browser holds them */
     ['oksat:progress:', 'oksat:srs:', 'oksat:cmastery:', 'oksat:conf:', 'oksat:session:', 'oksat:learn:']
       .forEach(function (prefix) {
         keysWithPrefix(prefix).forEach(function (k) {
@@ -145,9 +179,12 @@
   }
 
   window.OKSATStore = {
-    load: load, save: save, setRaw: setRaw, remove: remove, keysWithPrefix: keysWithPrefix, norm: norm,
+    load: load, save: save, remove: remove, keysWithPrefix: keysWithPrefix, norm: norm,
     reviewer: reviewer, resetLocal: resetLocal,
+    touchSession: touchSession, getSession: getSession,
     recordConceptResult: recordConceptResult, getConceptMastery: getConceptMastery,
+    recordConfidence: recordConfidence, getConfidence: getConfidence,
     getLearn: getLearn, saveLearn: saveLearn,
+    SESSION_GAP_MS: SESSION_GAP_MS,
   };
 })();

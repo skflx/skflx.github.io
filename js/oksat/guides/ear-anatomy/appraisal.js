@@ -40,6 +40,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q146', 'ear-anatomy:q148'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ap-arches'] }],
+            ref: [],
         },
         {
             id: 'ap-dehiscence',
@@ -76,6 +77,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q149', 'ear-anatomy:q151'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ap-dehiscence'] }],
+            ref: [],
         },
         {
             id: 'ap-numbers',
@@ -117,6 +119,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q152', 'ear-anatomy:q154'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ap-numbers'] }],
+            ref: [],
         },
     ],
 };

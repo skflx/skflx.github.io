@@ -92,9 +92,4 @@ export const STAMPS = {
     "ssb/anatomy/scanned/models/soft.glb.gz": "604e936e",
     "ssb/anatomy/scanned/models/sphenoid-sellar.glb.gz": "a8fc1fc8",
     "ssb/anatomy/scanned/models/walls.glb.gz": "f1d8452a",
-    "tbone/ct/ct.json": "bced9657",
-    "tbone/ct/ct.u8.gz": "59e99d6e",
-    "tbone/ct/source.u8.gz": "ecb134bc",
-    "tbone/geometry/landmarks.json": "2b9d3f24",
-    "tbone/geometry/sweeps.json": "e53e6188",
 };

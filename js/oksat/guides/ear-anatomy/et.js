@@ -45,6 +45,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q87'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-seg'] }],
+            ref: [],
         },
         {
             id: 'et-cart',
@@ -75,6 +76,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q89'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-cart'] }],
+            ref: [],
         },
         {
             id: 'et-muscle',
@@ -105,6 +107,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q91'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-muscle'] }],
+            ref: [],
         },
         {
             id: 'et-child',
@@ -153,6 +156,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q93'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-child'] }],
+            ref: [],
         },
         {
             id: 'et-rel',
@@ -183,6 +187,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q95', 'ear-anatomy:q96'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['et-rel'] }],
+            ref: [],
         },
     ],
 };

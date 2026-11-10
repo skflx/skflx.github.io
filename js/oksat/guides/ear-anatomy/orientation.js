@@ -49,6 +49,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q1'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['or-views'] }],
+            ref: [],
         },
         {
             id: 'or-parts',
@@ -94,6 +95,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q3'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['or-parts'] }],
+            ref: [],
         },
         {
             id: 'or-map',
@@ -130,6 +132,7 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q4'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['or-map'] }],
+            ref: [],
         },
     ],
 };

@@ -1590,17 +1590,6 @@
     document.title = guide.title + ' · Interactive learning · OKSAT | skflx.MD';
     const hue = (SUBS[guide.subspecialty] || {}).hue || guide.accent;
     if (/^#[0-9a-fA-F]{3,8}$/.test(hue || '')) root.style.setProperty('--lr-hue', hue);
-    const sk = window.OKSAT_SKOTO, bar = document.querySelector('.ok-topbar-actions');
-    if (sk && sk.live === true && sk.maps && sk.maps[guide.subspecialty] && bar) {
-        const a = document.createElement('a');
-        a.className = 'ok-back';
-        a.textContent = 'Read the map in sk.oto';
-        a.href = sk.base + sk.maps[guide.subspecialty];
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.style.marginRight = '0.5rem';
-        bar.insertBefore(a, bar.firstChild);
-    }
     rec = OKSATStore.getLearn(guide.slug, reviewer);
     mount();
     const first = routeFromLocation();

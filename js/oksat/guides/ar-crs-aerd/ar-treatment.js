@@ -6,7 +6,6 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'ar-treatment',
-    review: 'draft',
     title: 'Treating allergic rhinitis, including immunotherapy',
     kicker: '4 · Management',
     lede: 'Read each drug as two facts: the grade (how good the evidence is) and the policy (what ICAR tells you to do). They often disagree.',

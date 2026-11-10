@@ -152,48 +152,6 @@ function checkOlsbVolume(O) {
     if (!(d > 0)) wrong.push(`${o} is not ${dir} to ${id} (${d.toFixed(1)} mm)`);
   }
   ok(wrong.length === 0 && tested > 40, `3D model agrees with the glossary's relations (${tested} tested)`, `3D model vs glossary: ${wrong.slice(0, 5).join('; ')}`);
-  checkOlsbTruth(V, vol, byId);
-}
-
-/* "olsb truth (tbone landmarks)" (plan 2026-11-09-ear-truth-concordance, WP E3, report-only). For each UW label tip in
-   tbone/geometry/landmarks.json whose glossary id OLSB draws: the distance from the tip to the NEAREST voxel centre
-   labelled with that id in the same coarse volume built above (0 inside the structure; below half a voxel diagonal
-   counts as 0). A tip marks a place on a structure, so this measures placement, not extent. Both data sets are in the
-   OLSB frame (tbone/ct/ct.json "frame"; mm, right ear, x lateral, y anterior, z superior, origin = oval-window
-   centre), so no transform. Vector = landmark -> nearest voxel (where the OLSB structure lies relative to the tip).
-   Never fails on a residual; OLSB_TRUTH=1 prints the full table. */
-function checkOlsbTruth(V, vol, byId) {
-  console.log('\nolsb truth (tbone landmarks)');
-  const lm = JSON.parse(fs.readFileSync(rel('tbone/geometry/landmarks.json'), 'utf8'));
-  const med = (a) => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
-  const { nx, ny } = vol, zero = vol.vox * Math.sqrt(3) / 2;
-  const tb = {};
-  for (const l of lm.landmarks) if (l.g && byId[l.g]) (tb[l.g] ||= []).push(l);
-  const rows = [];
-  for (const id of Object.keys(tb)) {
-    const pts = byId[id].map((i) => vol.p(i % nx, ((i / nx) | 0) % ny, (i / (nx * ny)) | 0));
-    const res = tb[id].map((l) => {
-      let bd = Infinity, bv = null;
-      for (const q of pts) {
-        const v = [q[0] - l.point_mm[0], q[1] - l.point_mm[1], q[2] - l.point_mm[2]], d = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
-        if (d < bd) { bd = d; bv = v; }
-      }
-      bd = Math.sqrt(bd);
-      return bd < zero ? { d: 0, v: null } : { d: bd, v: bv };
-    });
-    const nz = res.filter((r) => r.v);
-    rows.push({ id, n: res.length, inside: res.length - nz.length, med: med(res.map((r) => r.d)), max: Math.max(...res.map((r) => r.d)),
-      vec: nz.length ? [0, 1, 2].map((k) => med(nz.map((r) => r.v[k]))) : null });
-  }
-  rows.sort((a, b) => b.med - a.med || b.max - a.max);
-  const f = (x) => (x >= 0 ? '+' : '') + x.toFixed(1);
-  const meds = rows.map((r) => r.med), zeros = rows.filter((r) => r.med === 0).length;
-  const summary = rows.length ? `${rows.length} ids compared, ${zeros} with median d 0, median of per-id medians ${med(meds).toFixed(1)} mm, worst ${rows[0].id} (median ${rows[0].med.toFixed(1)} mm)` : 'no ids in common';
-  if (process.env.OLSB_TRUTH === '1') {
-    console.log('  id | n | n inside | median d | max d | median vector landmark->OLSB structure, non-zero only (dx dy dz mm)');
-    for (const r of rows) console.log(`  ${r.id} | ${r.n} | ${r.inside} | ${r.med.toFixed(1)} | ${r.max.toFixed(1)} | ${r.vec ? r.vec.map(f).join(' ') : '-'}`);
-  }
-  ok(rows.length > 0, `olsb truth (report-only): ${summary}; one specimen, inferred scale +-10 %, noise floor about 3 mm: catches gross errors, proves nothing finer`, 'olsb truth: no glossary id is both drawn and in tbone landmarks');
 }
 
 /* ===========================================================
@@ -649,21 +607,6 @@ function checkGuides() {
   const badUnlisted = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, unlistedProblem(e)]).filter(([, m]) => m);
   ok(badUnlisted.length === 0, 'unlisted is a boolean on every guide and module entry where it is set',
     `non-boolean unlisted: ${badUnlisted.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);
-  /* sk.oto links (plans/2026-11-04-skoto-links.md): plain string rules, no network. */
-  const sk = man.OKSAT_SKOTO;
-  const usedSubs = new Set([...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => e.subspecialty));
-  const skProblems = [];
-  if (!sk || typeof sk !== 'object') skProblems.push('OKSAT_SKOTO missing');
-  else {
-    if (typeof sk.live !== 'boolean') skProblems.push(`live must be a boolean (got ${JSON.stringify(sk.live)})`);
-    if (sk.base !== 'https://skflx.github.io/ohns-wiki-skflx/') skProblems.push(`base is ${JSON.stringify(sk.base)}`);
-    for (const [key, v] of Object.entries(sk.maps || {})) {
-      if (!subs[key]) skProblems.push(`${key}: not a key of OKSAT_SUBSPECIALTIES`);
-      if (!usedSubs.has(key)) skProblems.push(`${key}: no module or guide uses it`);
-      if (typeof v !== 'string' || !v || v.includes('..') || /^[a-z][a-z0-9+.-]*:/i.test(v) || /\s/.test(v)) skProblems.push(`${key}: bad map path ${JSON.stringify(v)}`);
-    }
-  }
-  ok(skProblems.length === 0, 'OKSAT_SKOTO: fixed base, boolean live, every map key a used subspecialty, every path a plain relative string', skProblems.join('; '));
   const badDraft = [...guides, ...(man.OKSAT_MANIFEST || [])].map((e) => [e.slug || e.id, draftProblem(e)]).filter(([, m]) => m);
   ok(badDraft.length === 0, 'draft is a boolean on every guide and module entry where it is set',
     `non-boolean draft: ${badDraft.map(([s, m]) => `${s} (${m})`).join(' ; ')}`);
