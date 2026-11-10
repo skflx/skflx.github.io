@@ -16,9 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES, loadAnatomyIndex } from './volume.js?v=4876134d';
+import { PLANES, loadAnatomyIndex } from './volume.js?v=2a1b9fd8';
 import { CT_PLANES, anatomyIsDefault } from './state.js?v=893232f8';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=b4ebfb35';
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=73a8bf43';
 import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -470,7 +470,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
 
 /* The Anatomy pills in the toolbar (ssb.html #ssb-anatomy): Symmetric (the standardized head), Normal asymmetry (the head
    as scanned), Variants and Pathology. A pill is enabled only for what ssb/anatomy/index.json lists, so with no index
-   (today) Variants and Pathology stay hidden, Normal asymmetry disabled, until the index lists entries of that kind; Variants and Pathology open their pickers in WP RA5, which waits for the first entries, so
+   (today) they stay disabled; Variants and Pathology open their pickers in WP RA5, which waits for the first entries, so
    until then they only show the state. Everything is read from the store; nothing here touches markup beyond the pills. */
 export function mountAnatomyPills(store) {
     const group = document.getElementById('ssb-anatomy');
@@ -486,8 +486,6 @@ export function mountAnatomyPills(store) {
         scanned.disabled = !reg || !reg.bases.has('scanned');
         variants.disabled = !reg || reg.variants.size === 0;
         pathology.disabled = !reg || reg.conditions.size === 0;
-        variants.hidden = variants.disabled;
-        pathology.hidden = pathology.disabled;
         press(standard, plain || (a.base === 'standard' && !a.variants.length && !a.conditions.length));
         press(scanned, !plain && a.base === 'scanned' && !a.variants.length && !a.conditions.length);
         press(variants, !plain && a.variants.length > 0);

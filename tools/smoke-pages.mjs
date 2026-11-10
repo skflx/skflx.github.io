@@ -35,40 +35,6 @@ const OFFLINE = args.includes('--offline');
    when the page has rendered its core content. Checks poll internally. */
 const wait = (page, fn, arg = null, timeout = 12000) => page.waitForFunction(fn, arg, { timeout }).then(() => true);
 
-
-/* OLSB real-CT mode, on a SYNTHETIC volume routed by Playwright (nothing under tbone/ is read or written): a 32 x 24 x 20
-   grid at 1 mm, one landmark on the middle axial slice (glossary id mastoidcells), one unmapped, one centreline. */
-function syntheticTbone(page) {
-  page.tbone = [];
-  const dims = [32, 24, 20];
-  const header = { version: 1, dims, spacing: [1, 1, 1], dtype: 'uint8', values: { kind: 'display', note: 'synthetic' },
-    affine: [[1, 0, 0, -16], [0, 1, 0, -12], [0, 0, 1, -10], [0, 0, 0, 1]], windows: { bone: { center: 128, width: 255 } }, specimen: 'synthetic' };
-  const data = Buffer.alloc(dims[0] * dims[1] * dims[2]);
-  for (let n = 0; n < data.length; n++) data[n] = (n * 37 + (n >> 5) * 11) & 255;
-  const landmarks = { landmarks: [
-    { id: 'a', name: 'mastoid-cells', g: 'mastoidcells', how: 'head', plane: 'axial', point_mm: [0, 0, -1] },
-    { id: 'b', name: 'unmapped-thing', g: null, how: 'shaft-end', plane: 'axial', point_mm: [4, 3, -1] },
-    { id: 'c', name: 'far-away', g: 'mastoidcells', how: 'head', plane: 'axial', point_mm: [0, 0, 8] } ] };
-  const pts = [-6, -3, 0, 3, 6].map((x) => [x, 2, -1]);
-  const sweeps = { sweeps: { s: { segments: [{ name: 's', pts, status: ['detected', 'detected', 'labelled', 'inferred', 'inferred'] }] } } };
-  page.on('request', (r) => { if (/\/tbone\//.test(r.url())) page.tbone.push(r.url()); });
-  return page.route('**/tbone/**', (route) => {
-    const u = route.request().url();
-    if (/ct\.json/.test(u)) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(header) });
-    if (/ct\.u8\.gz/.test(u)) return route.fulfill({ contentType: 'application/octet-stream', body: data });
-    if (/landmarks\.json/.test(u)) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(landmarks) });
-    if (/sweeps\.json/.test(u)) return route.fulfill({ contentType: 'application/json', body: JSON.stringify(sweeps) });
-    return route.fulfill({ status: 404, body: 'no' });
-  });
-}
-const ctReady = (p) => wait(p, () => document.getElementById('olsbct').getAttribute('data-ct') === 'ready');
-const ctDrew = (p) => p.evaluate(() => {
-  const c = document.getElementById('olsbct-canvas');
-  const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
-  for (let n = 4; n < d.length; n += 4) if (d[n] !== d[0]) return true;
-  return false;
-});
-
 const PAGES = [
   { path: 'index.html', ready: async (p) => {
     await wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent));
@@ -157,42 +123,6 @@ const PAGES = [
     return wait(p, () => document.querySelectorAll('#olsb-info-rel .olsb-chip').length > 2
       && document.querySelectorAll('#olsb-svg .s.is-rel').length > 0);
   } },
-  /* OLSB real-CT mode (synthetic volume): nothing from tbone/ is fetched until the mode is entered; then a slice draws
-     and a landmark click selects its glossary id. */
-  { path: 'OLSB.html#d=axial&p=posterior&s=2', setup: syntheticTbone, ready: async (p) => {
-    await wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready');
-    await p.waitForTimeout(500);
-    if (p.tbone.length) throw new Error('tbone/ was requested before the CT mode was entered: ' + p.tbone[0]);
-    await p.click('#olsb-mode [data-mode="ct"]');
-    await ctReady(p);
-    if (!(await ctDrew(p))) throw new Error('the CT canvas is one flat colour');
-    await wait(p, () => document.querySelectorAll('#olsbct-marks button[data-g="mastoidcells"]').length === 1
-      && document.querySelectorAll('#olsbct-marks .ct-lm').length === 2 && document.querySelectorAll('#olsbct-lines polyline').length > 0);
-    await p.focus('#olsbct-marks button[data-g="mastoidcells"]');
-    await wait(p, () => !document.getElementById('olsbct-tip').hidden && document.getElementById('olsbct-tip').textContent.length > 2);
-    await p.keyboard.press('Enter');
-    await wait(p, () => !document.getElementById('olsbct-info').hidden
-      && document.getElementById('olsbct-info-name').textContent === window.OLSB.glossary.mastoidcells.name);
-    await p.keyboard.press('ArrowUp');          /* one slice up: the landmark (1 mm away) is still in the band, the far one is not */
-    await wait(p, () => /slice 11 of 20/.test(document.getElementById('olsbct-readout').textContent));
-    await p.click('#olsbct-planes [data-plane="sa"]');
-    await wait(p, () => document.querySelector('#olsbct-planes [data-plane="sa"]').getAttribute('aria-pressed') === 'true'
-      && /Sagittal slice 16 of 32/.test(document.getElementById('olsbct-readout').textContent)
-      && /^#m=ct&p=sa&i=15$/.test(location.hash));
-    if (!(await p.evaluate(() => /Temporal bone CT derived from the Interactive CT Temporal Bone Atlas/.test(document.getElementById('olsbct-attribution').textContent)))) throw new Error('attribution line missing');
-    return true;
-  } },
-  /* A bad plane or slice in the hash falls back to the middle axial slice. */
-  { path: 'OLSB.html#m=ct&p=zz&i=999', setup: syntheticTbone, ready: async (p) => {
-    await ctReady(p);
-    return wait(p, () => /Axial slice 10 of 20/.test(document.getElementById('olsbct-readout').textContent) && document.getElementById('olsb3d').hidden);
-  } },
-  /* Unreadable tbone/ data: a plain message, and the other modes stay usable. */
-  { path: 'OLSB.html#m=ct', setup: (p) => p.route('**/tbone/**', (r) => r.fulfill({ contentType: 'application/json', body: '{broken' })), ready: async (p) => {
-    await wait(p, () => !document.getElementById('olsbct-status').hidden && /could not be loaded/.test(document.getElementById('olsbct-status').textContent));
-    await p.click('#olsb-mode [data-mode="2d"]');
-    return wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready' && !document.getElementById('olsb2d').hidden);
-  } },
   /* OLSB 3D model: the voxel volume built (in its worker), meshed, and a tour step resolved;
      a click on the model selects a structure and lists its neighbours. */
   { path: 'OLSB.html#m=3d&s=1', ready: async (p) => {
@@ -264,7 +194,6 @@ async function main() {
     let verdict = 'PASS';
     let reason = '';
     try {
-      if (spec.setup) await spec.setup(page);
       await page.goto(base + '/' + spec.path, { waitUntil: 'domcontentloaded', timeout: 15000 });
       await spec.ready(page);
       // settle so late-boot errors surface

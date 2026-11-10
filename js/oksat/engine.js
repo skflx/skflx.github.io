@@ -70,10 +70,23 @@
       React.createElement(React.Fragment, { key: i }, i ? React.createElement('br') : null, ln));
   };
 
-  /* Storage: the one adapter (js/oksat/store.js, loaded before this file;
-     viewer.js already needs it to resolve the reviewer). */
-  const load = OKSATStore.load;
-  const save = OKSATStore.save;
+  /* Reviewer code → storage namespace. Normalized so "Kafle ", "kafle",
+     "KAFLE" collapse to one bucket; empty falls back to "guest". */
+  const normCode = (c) => String(c || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'guest';
+
+  /* ---- Storage (namespaced, fail-safe) ----
+     Delegates to window.OKSATStore when present (single adapter, Phase 0);
+     falls back to the original inline body so a missing/misordered store
+     script leaves behavior byte-identical to before. */
+  const load = (key, fallback) => {
+    if (window.OKSATStore) return window.OKSATStore.load(key, fallback);
+    try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+    catch (e) { return fallback; }
+  };
+  const save = (key, value) => {
+    if (window.OKSATStore) { window.OKSATStore.save(key, value); return; }
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+  };
 
   /* =========================================================
      STUDY VIEWER
@@ -83,7 +96,7 @@
     const DOMAINS = module.DOMAINS || {};
     const CONCEPTS = module.CONCEPTS || {};
     const slug = (entry && entry.slug) || meta.id || 'module';
-    const reviewer = OKSATStore.norm(code);
+    const reviewer = normCode(code);
     const hasTaxonomy = Object.keys(DOMAINS).length > 0 && Object.keys(CONCEPTS).length > 0;
 
     // Normalize once: guarantee concepts[] and options[] on every item.
@@ -128,7 +141,10 @@
     const [revealed, setRevealed] = useState(false);   // recall path: answer shown, no choices
     const [choicesShown, setChoicesShown] = useState(false); // MCQ path: options revealed
     const [domainFilter, setDomainFilter] = useState(null);
+    const [confPending, setConfPending] = useState(false); // confidence prompt open (mcq only)
+    const [confItem, setConfItem] = useState(null);         // item id the prompt belongs to
     const cardRef = useRef(null);
+    const sessionRef = useRef(0);                            // latest session number for calibration
 
     // Persist progress + SRS. `modes` records how each item was settled —
     // 'recall' (answered from memory, choices never shown) or 'mcq' (picked
@@ -183,16 +199,22 @@
         box = Math.max(1, Math.min(box, 5));
         return { ...prev, items: { ...prev.items, [qId]: { box, nextReview: addDays(today(), LEITNER_INTERVALS[box]) } } };
       });
-      // Derived concept-mastery layer (read by the hub's weak-concepts list).
+      // Derived concept-mastery layer + analytics session tick (Phase 1).
       // Item-level SRS above is the scheduler; this is purely analytic.
-      const it = ITEMS.find((q) => q.id === qId);
-      if (it && it.concepts.length) OKSATStore.recordConceptResult(slug, reviewer, it.concepts, correct);
+      if (window.OKSATStore) {
+        const it = ITEMS.find((q) => q.id === qId);
+        const s = OKSATStore.touchSession(reviewer);
+        if (it && it.concepts.length) OKSATStore.recordConceptResult(slug, reviewer, it.concepts, correct);
+        if (it && window.OKSATGraph && correct) { try { OKSATGraph.propagate(slug, it.concepts, reviewer); } catch (e) {} }
+        sessionRef.current = s;
+      }
     };
 
     // MCQ path: the learner opened the choices and picked one.
     const handleSelect = (optionId) => {
       const wasCorrect = optionId === currentItem.correct;
       recordAnswer(currentId, optionId, wasCorrect, undefined, 'mcq');
+      if (currentItem.type !== 'recall') { setConfItem(currentId); setConfPending(true); }
     };
     // Recall path: answered from memory, then self-graded (both recall-type
     // items and MCQ items settled without ever opening the choices).
@@ -201,10 +223,23 @@
 
     const goToItem = (qId) => {
       setCurrentId(qId); setShowDetailed(false); setRevealed(false); setChoicesShown(false); setView('item');
+      setConfPending(false); setConfItem(null);
       setTimeout(() => cardRef.current?.scrollTo?.(0, 0), 50);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    // Confidence calibration (Phase 1): record the tier, then dismiss. Skip
+    // (or 3s auto-skip) dismisses without writing anything.
+    const dismissConf = () => { setConfPending(false); setConfItem(null); };
+    const handleConfidence = (tier) => {
+      const qId = confItem;
+      if (qId && window.OKSATStore) {
+        const it = ITEMS.find((q) => q.id === qId);
+        const att = shownAttempt(qId);
+        OKSATStore.recordConfidence(slug, reviewer, qId, tier, !!(att && att.correct), it ? it.concepts : [], sessionRef.current);
+      }
+      dismissConf();
+    };
     const handleNext = () => {
       if (!filteredItems.length) return;
       const idx = filteredItems.findIndex((q) => q.id === currentId);
@@ -271,6 +306,15 @@
       const answered = !!shownAttempt(currentId);
       const isRecall = currentItem.type === 'recall';
       const key = e.key;
+
+      // Confidence prompt (mcq, post-answer) intercepts 1/2/3; space/enter/→
+      // dismiss it (skip) and fall through to normal advance.
+      if (confPending) {
+        if (key === '1') { e.preventDefault(); handleConfidence('hi'); return; }
+        if (key === '2') { e.preventDefault(); handleConfidence('md'); return; }
+        if (key === '3') { e.preventDefault(); handleConfidence('lo'); return; }
+        if (key === ' ' || key === 'Enter' || key === 'ArrowRight') dismissConf();
+      }
 
       if (key === 'ArrowLeft') { e.preventDefault(); handlePrev(); return; }
       if (key === 'ArrowRight') { e.preventDefault(); handleNext(); return; }
@@ -342,8 +386,36 @@
                 reviewMode=${reviewMode} exitReview=${() => setReviewMode(false)}
                 filteredItems=${filteredItems}
                 relatedItems=${relatedItems} onConceptClick=${handleConceptClick} onRelatedClick=${goToItem}
-                answeredSet=${Object.keys(answers)} firstCorrect=${firstCorrect} />`}
+                answeredSet=${Object.keys(answers)} firstCorrect=${firstCorrect}
+                confPending=${confPending && confItem === currentId} onConfidence=${handleConfidence} onConfSkip=${dismissConf} />`}
         </div>
+      </div>`;
+  }
+
+  /* =========================================================
+     CONFIDENCE PROMPT (mcq, post-answer; skippable; 3s auto-skip)
+     Captures metacognition for calibration analytics. One extra tap;
+     never blocks the flow.
+     ========================================================= */
+  const CONF_TIERS = [
+    { id: 'hi', label: 'Confident', color: 'correct' },
+    { id: 'md', label: 'Unsure', color: 'ochre' },
+    { id: 'lo', label: 'Guessing', color: 'incorrect' },
+  ];
+  function ConfidencePrompt({ onPick, onSkip }) {
+    useEffect(() => {
+      const t = setTimeout(() => { onSkip(); }, 3000);
+      return () => clearTimeout(t);
+    }, []);
+    return html`
+      <div className="ok-confrow fade-up" role="group" aria-label="How confident were you?">
+        <span className="ui-font ok-confrow__label">How sure?</span>
+        ${CONF_TIERS.map((t, i) => html`
+          <button key=${t.id} type="button" className="ok-confrow__pill" onClick=${() => onPick(t.id)}
+                  style=${{ borderColor: C[t.color], color: C[t.color] }}>
+            <span className="ok-confrow__num">${i + 1}</span>${t.label}
+          </button>`)}
+        <button type="button" className="ok-confrow__skip ui-font" onClick=${onSkip}>skip</button>
       </div>`;
   }
 
@@ -483,7 +555,7 @@
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect }) {
+  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect, confPending, onConfidence, onConfSkip }) {
     // Jump slider: the index being previewed while dragging (null = idle).
     // The jump commits on release so the page does not scroll mid-drag.
     const [scrub, setScrub] = useState(null);
@@ -616,6 +688,7 @@
 
         ${answered ? html`
           <div className="fade-up" aria-live="polite" style=${{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+            ${confPending ? html`<${ConfidencePrompt} onPick=${onConfidence} onSkip=${onConfSkip} />` : null}
             <div style=${{ padding: '1.25rem', borderRadius: '14px', backgroundColor: passLike ? C.correctBg : C.incorrectBg, border: '1px solid ' + (passLike ? C.correct : C.incorrect) }}>
               <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 ${recallGrade

@@ -50,15 +50,3 @@ shared as one component by both pages; moving `js/ssb/volume.js` to a shared fol
   errors and proves nothing finer. State this in the view (E2) and the check's message (E3).
 - **Circularity in E4.** Regions come from UW's own labels, so they agree with UW by construction; that is
   provenance, not validation.
-
-## 5. Outcome (2026-11-10)
-
-- **E1:** done earlier: `tbone/ct/ct.json` is in the SSB v1 header.
-- **E2:** built: OLSB's Real CT mode (`js/olsb/ct.js`), loaded lazily, with landmarks and sweeps over the slices.
-- **E3:** first half built, report-only: the distance from each drawn structure's anchor to the nearest voxel of the
-  landmark's glossary id (not centroids). No anchor was moved and no threshold fails yet. Pending the owner's review
-  of the result and the DICOM sources (#244).
-- **E4:** built. Regions are generated only where the pipeline has a named tip, so some former hand-drawn regions are
-  gone. Vocabulary correction: UW's "arcuate eminence" had been mapped to the pyramidal eminence; bare ambiguous
-  fragments "eminence" and "niche" now get no id. Applied by `tools/tbone-pipeline/relabel.py` without
-  re-registering; the coronal registration limit is stated in `tbone/README.md`.

@@ -3,8 +3,7 @@
 How to write content for **SSB (Sinus & Skull Base 3D)**. Architecture,
 rendering and the phase plan live in `docs/ssb.md`; this file owns the data
 shape and the editorial rules. `tools/ssb-content.mjs` enforces the shape
-(run by `tools/check-data.mjs` in CI). `node tools/ssb-content.mjs --queue` lists the
-draft nodes whose cited sources are all verified, the owner's review queue, by tier then id.
+(run by `tools/check-data.mjs` in CI).
 
 ## 1. The model in one paragraph
 

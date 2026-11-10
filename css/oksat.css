@@ -101,6 +101,7 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 ::selection { background: var(--ok-accent); color: var(--ok-bg); }
 
 .display-font { font-family: var(--ok-font-display); }
+.body-font { font-family: var(--ok-font-body); }
 .ui-font { font-family: var(--ok-font-ui); }
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -203,11 +204,38 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-dotrow { margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; max-width: 28rem; margin-left: auto; margin-right: auto; }
 .ok-dot { height: 5px; border-radius: 999px; transition: all 0.2s; }
 
+/* ===== CONFIDENCE PROMPT (mcq, post-answer; Phase 1) ===== */
+.ok-confrow { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.ok-confrow__label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ok-text-faint); margin-right: 0.15rem; }
+.ok-confrow__pill {
+  font-family: var(--ok-font-display); font-weight: 600; font-size: 0.8rem;
+  padding: 0.3rem 0.7rem; border-radius: 999px; background: none;
+  border: 1px solid currentColor; display: inline-flex; align-items: center; gap: 0.35rem;
+  cursor: pointer; transition: all 0.15s;
+}
+.ok-confrow__pill:hover { opacity: 0.75; }
+.ok-confrow__pill:active { transform: scale(0.95); }
+.ok-confrow__num { font-size: 0.65rem; opacity: 0.55; }
+.ok-confrow__skip { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ok-text-faint); background: none; border: none; cursor: pointer; padding: 0.3rem 0.4rem; }
+.ok-confrow__skip:hover { color: var(--ok-text-muted); }
+
 /* ===== NOTICE (module not found / load error) ===== */
 .ok-notice { max-width: 30rem; margin: 6rem auto; padding: 0 1.5rem; text-align: center; }
 .ok-notice h1 { font-family: var(--ok-font-display); font-weight: 400; font-size: 1.6rem; margin-bottom: 0.75rem; }
 .ok-notice p { color: var(--ok-text-muted); margin-bottom: 1.5rem; }
 .ok-notice a { color: var(--ok-accent); }
+
+/* ===== LOADING SKELETON (adaptive generation; Phase 4) ===== */
+.ok-skel { border-radius: 6px; background: var(--ok-border-soft); position: relative; overflow: hidden; }
+.ok-skel--line { height: 0.9rem; margin: 0.5rem 0; }
+.ok-skel--stem { height: 1.4rem; width: 85%; margin-bottom: 1.25rem; }
+.ok-skel--opt { height: 2.6rem; border-radius: 10px; margin: 0.5rem 0; }
+.ok-skel::after {
+  content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+  animation: okShimmer 1.4s infinite;
+}
+@keyframes okShimmer { 100% { transform: translateX(100%); } }
 
 .hub-subhead {
   font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.1em;
@@ -322,8 +350,6 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .hub-review .rv-text { font-size: 0.95rem; line-height: 1.45; }
 .hub-review .rv-count { font-family: var(--ok-font-ui); font-weight: 500; color: var(--ok-ochre); }
 .hub-review .rv-sub { display: block; font-size: 0.8rem; color: var(--ok-text-faint); margin-top: 0.15rem; }
-.hub-review .rv-link { display: inline-block; margin: 0.25rem 1rem 0 0; color: var(--ok-accent); text-decoration: none; }
-.hub-review .rv-link:hover { text-decoration: underline; }
 /* Per-module completion meter on each card. */
 .module-meter {
   display: flex; align-items: center; gap: 0.6rem; margin-top: 0.6rem;

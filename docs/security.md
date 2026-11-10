@@ -38,9 +38,7 @@ vault. `tools/check-data.mjs` enforces the page rules below in CI.
 6. **Self-contained pages make no remote request at all** —
    `index.html`, `cpt-search.html`, `airway-jeopardy.html`, `ssb.html`,
    `OLSB.html`.
-   Their CSPs name no remote origin. `OLSB.html`'s Real CT mode fetches
-   same-origin `tbone/` files, only once the mode is entered; its CSP is
-   unchanged. (`ssb.html` reads its content with
+   Their CSPs name no remote origin. (`ssb.html` reads its content with
    same-origin `fetch`, covered by `default-src 'self'`; its citation links
    to DOI/PubMed are plain navigations built in `js/ssb/ui-panel.js` from
    validated ids, `rel="noopener"`, and request nothing until clicked. The

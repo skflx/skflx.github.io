@@ -6,7 +6,6 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'start',
-    review: 'draft',
     title: 'Allergic rhinitis, chronic rhinosinusitis, and AERD in one map',
     kicker: 'Start here',
     lede: 'Built from ICAR-Allergic Rhinitis 2023, EPOS 2020, the 2019 NEJM CRSwNP review, the 2020 LIO AERD review, and the 2026 AERD biologics review. Every chapter opens with a 30-second version, then breaks into short sections you can tick off.',

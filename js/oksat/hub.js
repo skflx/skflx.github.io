@@ -131,50 +131,18 @@
       wrap.appendChild(moduleCard(m, st));
     });
 
-  /* ---- review banner: every module with due items, most due first ---- */
+  /* ---- review banner: jump straight to the module with the most due ---- */
   if (totalDue > 0) {
     dueModules.sort(function (a, b) { return b.due - a.due; });
+    var top = dueModules[0];
     document.getElementById('review-count').textContent = String(totalDue);
     document.getElementById('review-word').textContent = totalDue === 1 ? 'question' : 'questions';
-    var rvList = document.getElementById('review-list');
-    dueModules.forEach(function (d) {
-      var a = document.createElement('a');
-      a.className = 'rv-link';
-      a.href = 'oksat-study.html?m=' + encodeURIComponent(d.slug);
-      a.textContent = d.title + ' · ' + d.due;
-      rvList.appendChild(a);
-    });
+    document.getElementById('review-where').textContent = dueModules.length === 1
+      ? 'in ' + top.title
+      : 'across ' + dueModules.length + ' modules — most in ' + top.title;
+    document.getElementById('review-go').href = 'oksat-study.html?m=' + encodeURIComponent(top.slug);
     document.getElementById('review-banner').hidden = false;
   }
-
-  /* ---- weak concepts: lowest accuracy among concepts tried 3+ times and missed at
-     least once. Read from stored mastery only (no module file is loaded here), so
-     the concept shows by its id. ---- */
-  var weak = [];
-  manifest.forEach(function (m) {
-    var cs = OKSATStore.getConceptMastery(m.slug, reviewer).concepts || {};
-    Object.keys(cs).forEach(function (id) {
-      var c = cs[id] || {};
-      if ((c.seen || 0) >= 3 && (c.lapses || 0) > 0) {
-        weak.push({ slug: m.slug, title: m.title, id: id, acc: (c.correct || 0) / c.seen, box: c.box || 1 });
-      }
-    });
-  });
-  weak.sort(function (a, b) { return a.acc - b.acc || a.box - b.box; });
-  if (weak.length) {
-    var weakList = document.getElementById('weak-list');
-    weak.slice(0, 8).forEach(function (w) {
-      var a = document.createElement('a');
-      a.className = 'rv-link';
-      a.href = 'oksat-study.html?m=' + encodeURIComponent(w.slug) + '&c=' + encodeURIComponent(w.id);
-      a.textContent = w.title + ' · ' + w.id;
-      weakList.appendChild(a);
-    });
-    document.getElementById('weak').hidden = false;
-  }
-
-  /* Ask the browser not to evict this site's storage; the answer does not matter. */
-  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {}); } catch (e) {}
 
   /* ---- settings modal ---- */
   var overlay = document.getElementById('settings-overlay');
@@ -208,47 +176,5 @@
     var n = OKSATStore.resetLocal(reviewer);
     resetStatus.textContent = n + ' local record' + (n === 1 ? '' : 's') + ' cleared. Reloading…';
     setTimeout(function () { location.reload(); }, 900);
-  });
-
-  /* ---- backup: every oksat:* key as one JSON file ---- */
-  var backupStatus = document.getElementById('backup-status');
-  function say(msg, bad) {
-    backupStatus.textContent = msg;
-    backupStatus.className = 'ok-status ' + (bad ? 'bad' : 'good');
-  }
-  document.getElementById('export-progress').addEventListener('click', function () {
-    var out = {};
-    OKSATStore.keysWithPrefix('oksat:').forEach(function (k) {
-      try { out[k] = localStorage.getItem(k); } catch (e) {}
-    });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(out)], { type: 'application/json' }));
-    a.download = 'oksat-progress-' + today + '.json';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-    say(Object.keys(out).length + ' records exported.');
-  });
-  var importFile = document.getElementById('import-file');
-  document.getElementById('import-progress').addEventListener('click', function () { importFile.click(); });
-  importFile.addEventListener('change', function () {
-    var f = importFile.files && importFile.files[0];
-    importFile.value = '';
-    if (!f) return;
-    f.text().then(function (text) {
-      var data = JSON.parse(text);
-      var keys = data && typeof data === 'object' && !Array.isArray(data) ? Object.keys(data) : [];
-      if (!keys.length || !keys.every(function (k) { return k.indexOf('oksat:') === 0 && typeof data[k] === 'string'; })) {
-        throw new Error('bad shape');
-      }
-      if (!confirm('Replace local progress with ' + keys.length + ' records from this file?')) return;
-      var n = 0;
-      keys.forEach(function (k) { if (OKSATStore.setRaw(k, data[k])) n++; });
-      say(n + ' records imported. Reloading…');
-      setTimeout(function () { location.reload(); }, 900);
-    }).catch(function () {
-      say('Not an OKSAT progress file. Nothing was changed.', true);
-    });
   });
 })();

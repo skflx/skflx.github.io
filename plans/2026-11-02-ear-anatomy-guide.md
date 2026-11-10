@@ -70,7 +70,7 @@ block types, validation, hub flag, lint. Sonnet ∥ Argon review each wave. Owne
 | W3 | R2 content: `spaces`, `et`, `mastoid`, `petrous-apex` + items + SVGs | Opus | W2 | same | same |
 | W4 | R3 content: `imaging` (CT vendored), `synthesis`, `appraisal` (PubMed pull) + items + SVGs | Opus | W3 | same + `images/oksat/ear-anatomy/ct/` | same |
 | W6 | Listing decision (remove `unlisted`) | Owner | W4 | `js/oksat/manifest.js` | — |
-| W7 | Docs pass per `AGENTS.md` (Documentation second pass) after each wave: new block types into `docs/authoring-oksat-guide.md`; `README.md`, `docs/wip.md`, `AGENTS.md`, `docs/verification.md`, `docs/oksat-learn-roadmap.md` | Haiku | each wave | docs only | `check-data` |
+| W7 | Docs pass per `docs/docs-map.md` after each wave: new block types into `docs/authoring-oksat-guide.md`; `README.md`, `docs/wip.md`, `AGENTS.md`, `docs/verification.md`, `docs/oksat-learn-roadmap.md` | Haiku | each wave | docs only | `check-data` |
 | R1–R3 | Adversarial review per content wave | Sonnet ∥ Argon | each wave | — | PR reviews adjudicated by Opus |
 
 SVGs are drawn inside each content wave (no separate SVG wave). Concurrency: W0.2, W0.3, W0.4, W1.3

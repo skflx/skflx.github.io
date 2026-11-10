@@ -46,7 +46,7 @@ Output re-scan (P3): after all transforms, a regex for any of the above forms in
 | S3 | **Second and third lock.** Output re-scan in the sync (exit 2) and the same scan in `wiki/github/deploy.yml` before `quartz build`. | Haiku | S2 | A fixture with a figure form S2 deliberately misses (injected after the transform) makes the sync exit 2 and the deploy scan step fail; clean fixtures pass. |
 | S4 | **Report.** `--write` prints per note: figures removed, captions removed, prose mentions left, skipped notes with reason; a total. | Haiku | S2 | Report test on the synthetic vault. |
 | S5 | **Landing Draft notice** (P6) in `wiki/content/index.md` (hand-authored; the one non-synced file). | Haiku | none | `node tools/test-wiki-sync.mjs` and `node tools/check-data.mjs` pass; `rg -i "draft" wiki/content/index.md` hits. |
-| S6 | **Docs pass:** `wiki/README.md` table row for the figure rule, `docs/security.md`, `docs/wip.md`, `AGENTS.md` wiki paragraph. | Haiku | S2–S4 | `AGENTS.md` (Documentation second pass) checklist done. |
+| S6 | **Docs pass:** `wiki/README.md` table row for the figure rule, `docs/security.md`, `docs/wip.md`, `AGENTS.md` wiki paragraph. | Haiku | S2–S4 | `docs/docs-map.md` checklist done. |
 | S7 | **Gate widening plan** (owner decision D1 below), only after S1 shows what is behind the six maps. | Opus | S1 | A short addendum to this spec, not code. |
 
 Review: adversarial reviewer reads the S2–S3 diff against §2 with the nastiest vault note the owner can describe in words (no content).

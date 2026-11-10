@@ -14,11 +14,10 @@ import re
 RULES = [
     (r'bulb', 'jugular-bulb', 'jb'),
     (r'^laby', 'fn-labyrinthine', 'fn-lab'),
+    (r'^niche$', 'round-window', 'rw'),
     (r'^oid segment|^e\.lbes', 'fn-mastoid', 'fn'),
     (r'^recess$|facial recess', 'facial-recess', 'recess'),
-    # not 'eminence$': UW's coronal 'arcuate eminence' is another structure (the 'arcuate' rule below), and a
-    # bare 'eminence' OCR fragment is ambiguous, so it matches nothing
-    (r'pyramidal|pyramdidal|arndical', 'pyramidal-eminence', 'pyramid'),
+    (r'eminence$|pyramidal|pyramdidal|arndical', 'pyramidal-eminence', 'pyramid'),
     (r'tympani sinus', 'sinus-tympani', 'sinustymp'),
     (r'sapex', 'petrous-apex', None),
     (r'sica$|petrous s?ica', 'petrous-ica', 'ica'),

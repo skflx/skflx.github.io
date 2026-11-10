@@ -6,7 +6,6 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'crs',
-    review: 'draft',
     title: 'Chronic rhinosinusitis: classification to surgery',
     kicker: '6 · Rhinosinusitis',
     lede: 'EPOS 2020 stopped organizing CRS by polyps and started organizing it by anatomy (localized vs diffuse) and endotype (type 2 vs not). The NEJM review supplies the clinic-level CRSwNP detail.',

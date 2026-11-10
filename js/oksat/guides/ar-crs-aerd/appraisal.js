@@ -6,7 +6,6 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'appraisal',
-    review: 'draft',
     title: 'Reading these sources skeptically',
     kicker: '10 · Critical appraisal',
     lede: 'How the grading systems work, where each source is weak, and four questions that are still open in practice.',

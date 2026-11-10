@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/oksat.css?v=587859ed">
+  <link rel="stylesheet" href="css/oksat.css?v=5d4479bc">
 
 </head>
 <body>
@@ -40,22 +40,15 @@
     <div class="ok-wrap" style="padding-top:6rem;max-width:46rem">
       <div class="hub-kicker"><span>OKSAT · Otolaryngology</span><hr></div>
       <h1 class="hub-title">OHNS Knowledge<br><em>Self-Assessment</em></h1>
-      <p class="hub-subtitle">Start with an interactive guide for a first pass, then drill the question modules: locked-first-attempt questions and free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept. <a href="search.html">Search</a> the questions and CPT codes.</p>
+      <p class="hub-subtitle">Start with an interactive guide for a first pass, then drill the question modules: locked-first-attempt questions and free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept.</p>
 
       <!-- What's due, if anything -->
       <div class="hub-review" id="review-banner" hidden>
         <div class="rv-text">
           <span class="rv-count" id="review-count"></span> <span id="review-word">questions</span> due for review
-          <span class="rv-sub" id="review-list"></span>
+          <span class="rv-sub" id="review-where"></span>
         </div>
-      </div>
-
-      <!-- Lowest-accuracy concepts, from stored mastery -->
-      <div class="hub-review" id="weak" hidden>
-        <div class="rv-text">
-          Weak concepts
-          <span class="rv-sub" id="weak-list"></span>
-        </div>
+        <a class="ok-btn ok-btn--sm ok-btn--primary" id="review-go" href="#">Start review &rarr;</a>
       </div>
 
       <h2 class="hub-seg">Interactive learning</h2>
@@ -88,20 +81,13 @@
           <button type="button" class="ok-btn ok-btn--sm" id="reset-local" style="border-color:var(--ok-incorrect);color:var(--ok-incorrect)">Reset…</button>
         </div>
         <div class="ok-status" id="reset-status"></div>
-        <div class="ok-field">
-          <span class="ok-note" style="flex:1">Back up progress to a file, or restore it from one.</span>
-          <button type="button" class="ok-btn ok-btn--sm" id="export-progress">Export progress</button>
-          <button type="button" class="ok-btn ok-btn--sm" id="import-progress">Import progress</button>
-          <input type="file" id="import-file" accept="application/json,.json" hidden>
-        </div>
-        <div class="ok-status" id="backup-status"></div>
       </div>
     </div>
   </div>
 
-  <script src="js/oksat/manifest.js?v=32b94444"></script>
-  <script src="js/oksat/store.js?v=546e210f"></script>
+  <script src="js/oksat/manifest.js?v=47d94301"></script>
+  <script src="js/oksat/store.js?v=c5df0d09"></script>
   <script src="js/oksat/prefs.js?v=c9c374f2"></script>
-  <script src="js/oksat/hub.js?v=c19c7c48"></script>
+  <script src="js/oksat/hub.js?v=4a609074"></script>
 </body>
 </html>

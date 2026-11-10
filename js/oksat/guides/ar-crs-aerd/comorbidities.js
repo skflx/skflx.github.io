@@ -6,7 +6,6 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'comorbidities',
-    review: 'draft',
     title: 'What travels with allergic rhinitis',
     kicker: '9 · Associated conditions',
     lede: 'The high-yield associations: asthma, pollen–food syndrome, eye, ear, sleep, and the conditions that change treatment choice.',
