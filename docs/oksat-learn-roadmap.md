@@ -129,7 +129,7 @@ strip at publish (recommended), or also clean the vault.
 
 ### Phase C: chapters and notes point at each other
 
-- Guide → wiki: a section may carry `ref: ['Sinus/CCAD', …]`. The chapter
+- Guide → wiki: a section may carry `ref: ['Sinus/CCAD', …]` (no chapter carries it yet and no code reads it; add it with its renderer). The chapter
   foot collects them as *Related in sk.oto*. `check-data` fails a path not in
   the published set (`wiki/content/.vault-sync.json`), so a link can never
   point at a note the privacy gate held back.

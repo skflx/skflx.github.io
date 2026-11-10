@@ -73,7 +73,10 @@ path settled each item. Leitner boxes resurface misses: a due item reopens
 fresh, answers hidden, and each review moves its box. A jump slider and a
 "Next unanswered" button (`u`) move through a module; Continue resumes at the
 first unanswered question. Progress stays in the
-browser; nothing is uploaded.
+browser; nothing is uploaded. The hub lists every module with due items, most
+due first, and a Weak concepts list (concepts missed after three or more tries).
+Settings exports and imports all local progress as one JSON file. Each module
+and guide links to its sk.oto map (`OKSAT_SKOTO`, `live: true`).
 
 Module families, and their status:
 
@@ -124,7 +127,7 @@ None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls
 discrepancies (hillock mapping, prominence thresholds) for owner review.
 
-**Next:** the plan for more guides and the sk.oto wiki link-up is in
+**Next:** the plan for more guides and guide-to-wiki references (Phase C) is in
 `docs/oksat-learn-roadmap.md`. More guides (`/oksat-guide`), each built with its questions;
 authoring is manual (`docs/authoring-oksat.md`). Laryngology and
 head-and-neck oncology have hues reserved in `OKSAT_SUBSPECIALTIES` but no
@@ -269,7 +272,7 @@ later), and Procedure mode (dissection states, the player, per-state stations,
 the decongested · as scanned · congested toggle, the flap overlay, the population
 panel). The reference specimen is the UW head, standardized: right half mirrored,
 septum centred. Normal asymmetry (the `scanned` base) is live; variants and
-pathology wait. The external nose is the specimen's own. All content is `draft`;
+pathology wait; their Anatomy pills stay hidden until `ssb/anatomy/index.json` lists an entry. The external nose is the specimen's own. All content is `draft`;
 only the owner sets `verified`.
 
 **Next:** the board is `docs/ssb-roadmap.md` (§1 status, §2 owner decisions and
@@ -288,9 +291,8 @@ round-trip through public issues (`wiki/feedback/`). DGMO diagrams render at bui
 time (`wiki/dgmo/`).
 
 **Next:** widen the phase-1 gate beyond the maps of content as notes are vetted; decide
-whether to automate the sync (needs a secret); link the wiki from the site when the owner
-decides (the sk.oto link stays closed until then). Changing what is published is an owner
-escalation (`docs/decisions.md` §7).
+whether to automate the sync (needs a secret). The OKSAT pages already link the live maps.
+Changing what is published is an owner escalation (`docs/decisions.md` §7).
 
 ---
 
@@ -323,8 +325,9 @@ content to work; neither is scheduled.
 
 **State:** Node suites and browser suites are listed under Commands in
 `AGENTS.md`; what each one proves is in `docs/verification.md`. CI runs the
-fast tier (`check-data`, `lint-oksat`, the page smoke test) on every PR and a
-subsystem's suite when its files change; the SSB suite runs as four parallel
+fast tier (`check-data`, `lint-oksat`, the page smoke test, the search and
+Airway saved-game suites) on every PR, the OKSAT and wiki suites when their
+files change; the SSB suite runs as four parallel
 shards (`SHARDS` in `tools/test-ssb.mjs`). Security: `docs/security.md` (audit
 2026-09-23).
 

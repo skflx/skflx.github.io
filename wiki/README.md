@@ -1,6 +1,6 @@
 # wiki/ — sk.oto on the web (Quartz 5)
 
-**Status: live** at `skflx.github.io/ohns-wiki-skflx/` (as of 2026-11-10), built from its own repo. Nothing here is built or served from this repo, and this repo does not link to the wiki yet.
+**Status: live** at `skflx.github.io/ohns-wiki-skflx/` (as of 2026-11-10), built from its own repo. Nothing here is built or served from this repo; this repo links to the live maps from the OKSAT modules and guides (`OKSAT_SKOTO` in `js/oksat/manifest.js`).
 Phase 1 content is ready: the six subspecialty maps of content, synced into
 `content/`, render in Quartz. This folder is the kit for publishing the `sk.oto` Obsidian vault as a browsable,
 searchable, graph-linked wiki with [Quartz 5](https://quartz.jzhao.xyz/),
@@ -160,7 +160,7 @@ git commit -am "Corrections from reader reports" -m "$(node ~/skflx.github.io/wi
    http://localhost:8080 and look. (Re-running the sync restores the plain
    fences; the deploy renders them itself.)
 6. Commit, push to `v5`; Settings → Pages → Source: *GitHub Actions*.
-7. Then, in this repo: add the wiki to the Tools index on `index.html`.
+7. Then, in this repo: point `OKSAT_SKOTO` in `js/oksat/manifest.js` at the published maps.
 
 Verified 2026-09-23, phase 1: the six real maps of content, synced with
 the committed policy, build on Quartz v5.0.0; all six DGMO pyramids render

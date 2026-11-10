@@ -196,8 +196,7 @@ Then **drive the real page** and look. A green lint proves structure, not that t
 learner sees what you intended. Playwright is a devDependency (`npm install` first;
 `node_modules` is gitignored); use `tools/smoke-lib.mjs` (`startServer()` → `.origin`,
 `launchBrowser()`). Click **Begin**, then per item: MCQ `c` → `1` → `d` (opens "Read more");
-recall `space` → `3` → `d`; `ArrowRight` next. (`h` is **home**, not "help", and a confidence
-prompt follows each MCQ answer; `1/2/3` answer it.) Assert no image has
+recall `space` → `3` → `d`; `ArrowRight` next. (`h` is **home**, not "help".) Assert no image has
 `naturalWidth === 0`, screenshot a recall item, an item with a stem image, and an item with
 an explanation image, and read the screenshots.
 
