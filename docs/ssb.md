@@ -1275,7 +1275,7 @@ defeats that: `main.js?v=…` imports `./scene.js`, which the CDN caches on
 its own clock — the exact new-HTML/old-asset pairing the stamps exist to
 prevent. So (phase 1) `tools/stamp-assets.mjs` gains:
 
-1. Regenerate `js/ssb/stamps.js` from the hashes of `ssb/**` data files.
+1. Regenerate `js/ssb/stamps.js` from the hashes of `ssb/**` data files and of `tbone/ct` and `tbone/geometry` (OLSB's Real CT mode reads them through `js/ssb/volume.js`; `js/olsb/ct.js` is stamped as an extra importer of `js/ssb`).
 2. Topologically sort `js/ssb/**` by relative imports (static and dynamic)
    and rewrite each specifier to `./x.js?v=<hash>` leaves-first, so a
    changed leaf re-stamps every importer up to the HTML. An import cycle is
