@@ -9,8 +9,8 @@ parent issue per plan, one sub-issue per WP) against a spec in `plans/`. Rules e
 | Party | Does | Never does |
 |---|---|---|
 | **Owner** (human orchestrator) | Decides (`docs/decisions.md` §7), vets medical content (`review: verified`), merges to `master` (deploy), launches sessions with the prompts below | — |
-| **Opus** (orchestrator) | Specs, anatomy-critical geometry and data, medical content authoring and adversarial review, checkpoints (reviews a batch of delegated work against its acceptance), keeps the roadmap honest | Routine wiring it could spec instead |
-| **Haiku** (executor; any other model the owner assigns to this role) | Executes a work package (WP) to its acceptance: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy judgment, medical claims, owner decisions, scope changes, merging |
+| **Opus** (orchestrator) | Plans and specs; anatomy and medical data; checkpoints (reviews a batch of delegated work against its acceptance); adjudicates reviews; keeps the roadmap honest | Routine wiring it could spec instead |
+| **Haiku** (executor; any other model the owner assigns to this role) | Executes a work package (WP) to its acceptance, inside its Touch list: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy or clinical judgment, owner decisions, files outside Touch, changing a plan's contracts, merging |
 | **Adversarial reviewer** (Opus by default; the owner names another per wave: self, Argon, Sonnet) | Review each wave's diff against its spec, as PR reviews; Opus adjudicates when it is not the reviewer | Pushing fixes, merging |
 
 Why the split: a spec plus an acceptance test costs Opus far fewer tokens
@@ -59,16 +59,18 @@ Status values: `todo`, `ready` (deps met, can start), `in progress`,
 1. Read `AGENTS.md` (auto-loaded), then only the WP's **Read** list.
 2. Branch `claude/<wp-id>-<slug>` from current `master`.
 3. Do the **Steps**. Stay inside **Touch**. If the work needs a file outside
-   it, or a judgment the WP did not make, stop and report (step 6).
+   it, or a judgment the WP did not make, stop and write `BLOCKED: <why>`
+   under the WP (step 6).
 4. Run every **Accept** command plus the standard set
    (`docs/verification.md`): `node tools/stamp-assets.mjs` if `css/`/`js/`
    changed, `node tools/check-data.mjs`, and the browser suite of the
    subsystem touched. Paste the tail of each output into the PR body.
-5. Docs pass (`docs/docs-map.md` checklist) for what changed, and set the
+5. Docs pass (`AGENTS.md` Documentation second pass) for what changed, and set the
    WP's status to `review` in `docs/ssb-roadmap.md` in the same PR, with a
    one-line result.
-6. Open a PR (never merge). If stopped early, the PR or the report says
-   exactly which **Escalate** condition fired and what the options are.
+6. Open a PR (never merge) when the WP is done. If stopped early, write
+   `BLOCKED: <why>` under the WP, naming the **Escalate** condition that fired
+   and the options; open a PR only if there is work to review.
 
 Hard stops, whatever the WP says: a test would have to be skipped or
 weakened to pass; an anatomical position, proportion or medical claim is

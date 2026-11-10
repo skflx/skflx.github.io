@@ -37,7 +37,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q6'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-topo'] }],
-            ref: [],
         },
         {
             id: 'au-cart',
@@ -75,7 +74,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q8'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-cart'] }],
-            ref: [],
         },
         {
             id: 'au-muscle',
@@ -96,7 +94,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q9'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-muscle'] }],
-            ref: [],
         },
         {
             id: 'au-vessel',
@@ -141,7 +138,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q10'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-vessel'] }],
-            ref: [],
         },
         {
             id: 'au-nerve',
@@ -184,7 +180,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q11', 'ear-anatomy:q12'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-nerve'] }],
-            ref: [],
         },
         {
             id: 'au-dev',
@@ -224,7 +219,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q13', 'ear-anatomy:q14'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['au-dev'] }],
-            ref: [],
         },
     ],
 };

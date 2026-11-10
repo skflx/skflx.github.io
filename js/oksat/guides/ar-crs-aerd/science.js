@@ -6,6 +6,7 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'science',
+    review: 'draft',
     title: 'Type 2 immunology of the nose',
     kicker: '1 · Basic science',
     lede: 'One cascade explains allergic rhinitis, type 2 CRSwNP, and most of AERD. Learn it once, then hang every drug and every test on it.',

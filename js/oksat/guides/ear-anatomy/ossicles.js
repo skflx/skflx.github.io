@@ -44,7 +44,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q41', 'ear-anatomy:q42'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-parts'] }],
-            ref: [],
         },
         {
             id: 'os-joints',
@@ -73,7 +72,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q43', 'ear-anatomy:q44'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-joints'] }],
-            ref: [],
         },
         {
             id: 'os-tensor',
@@ -94,7 +92,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q45'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-tensor'] }],
-            ref: [],
         },
         {
             id: 'os-stapedius',
@@ -129,7 +126,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q47'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-stapedius'] }],
-            ref: [],
         },
         {
             id: 'os-supply',
@@ -150,7 +146,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q48'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-supply'] }],
-            ref: [],
         },
         {
             id: 'os-dev',
@@ -184,7 +179,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q49'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['os-dev'] }],
-            ref: [],
         },
     ],
 };

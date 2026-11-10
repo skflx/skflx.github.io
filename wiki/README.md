@@ -1,6 +1,6 @@
 # wiki/ — sk.oto on the web (Quartz 5)
 
-**Status: not live. Nothing here is built, served, or linked from the site.**
+**Status: live** at `skflx.github.io/ohns-wiki-skflx/` (as of 2026-11-10), built from its own repo. Nothing here is built or served from this repo; this repo links to the live maps from the OKSAT modules and guides (`OKSAT_SKOTO` in `js/oksat/manifest.js`).
 Phase 1 content is ready: the six subspecialty maps of content, synced into
 `content/`, render in Quartz. This folder is the kit for publishing the `sk.oto` Obsidian vault as a browsable,
 searchable, graph-linked wiki with [Quartz 5](https://quartz.jzhao.xyz/),
@@ -9,8 +9,8 @@ and the privacy boundary that decides what may leave the vault.
 ## Shape
 
 ```
-sk.oto vault (Drive / local)                    skflx/ent-wiki (new repo, Quartz 5)
-┌──────────────────────────┐   sync-vault.mjs   ┌────────────────────────────┐   Actions    skflx.github.io/ent-wiki/
+sk.oto vault (Drive / local)                    skflx/ent-wiki (Quartz 5)
+┌──────────────────────────┐   sync-vault.mjs   ┌────────────────────────────┐   Actions    skflx.github.io/ohns-wiki-skflx/
 │ Otology/ Sinus/ … MOC.md │ ─────────────────▶ │ content/   (published set) │ ──────────▶  (GitHub Pages project page)
 │ data_sources/ _drafts/   │   allowlist,       │ quartz.config.yaml         │   deploy.yml
 │ .agents/ AGENTS.md …     │   strip, gate      │ quartz/styles/custom.scss  │
@@ -19,9 +19,9 @@ sk.oto vault (Drive / local)                    skflx/ent-wiki (new repo, Quartz
 
 **Why a separate repo.** Quartz is a Node build; this repo has no build step
 by rule and GitHub Pages serves it as-is. A second repo deploys through
-Actions to `skflx.github.io/ent-wiki/` (a project page under the same
+Actions to `skflx.github.io/ohns-wiki-skflx/` (a project page under the same
 domain) without changing how the main site deploys. The files here are
-copied into that repo when it is created.
+copied into that repo.
 
 ## What is in this folder
 
@@ -139,7 +139,7 @@ git commit -am "Corrections from reader reports" -m "$(node ~/skflx.github.io/wi
   scheduled Action that writes into the vault's Drive) would need a
   credential — owner decision.
 
-## Bootstrap (when you decide to go live)
+## Bootstrap (how the wiki repo is set up)
 
 1. Create `skflx/ent-wiki` from the Quartz template (github.com/jackyzha0/quartz →
    *Use this template*), clone it, `npm ci` (Node ≥ 22).
@@ -160,7 +160,7 @@ git commit -am "Corrections from reader reports" -m "$(node ~/skflx.github.io/wi
    http://localhost:8080 and look. (Re-running the sync restores the plain
    fences; the deploy renders them itself.)
 6. Commit, push to `v5`; Settings → Pages → Source: *GitHub Actions*.
-7. Then, in this repo: add the wiki to the Tools index on `index.html`.
+7. Then, in this repo: point `OKSAT_SKOTO` in `js/oksat/manifest.js` at the published maps.
 
 Verified 2026-09-23, phase 1: the six real maps of content, synced with
 the committed policy, build on Quartz v5.0.0; all six DGMO pyramids render

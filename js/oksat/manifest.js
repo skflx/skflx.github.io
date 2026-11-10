@@ -28,6 +28,19 @@ window.OKSAT_SUBSPECIALTIES = {
   fundamentals: { label: 'Fundamentals / Anatomy',            hue: '#55606A' },
 };
 
+/* Subspecialty -> the sk.oto wiki's published map of content (spec plans/2026-11-04-skoto-links.md).
+   base + maps[key] is the exact URL, verified HTTP 200 on 2026-11-10. `live: false` hides every link. */
+window.OKSAT_SKOTO = {
+  live: true,
+  base: 'https://skflx.github.io/ohns-wiki-skflx/',
+  maps: {
+    otology:    'otology/the-otology-and-lateral-skull-base-knowledge-graph-provides-a-structured-mastery-curriculum',
+    rhinology:  'sinus/the-rhinology-and-skull-base-knowledge-graph-provides-a-structured-mastery-curriculum',
+    fprs:       'fprs/the-fprs-knowledge-graph-provides-a-structured-mastery-curriculum',
+    pediatrics: 'pediatrics/the-pediatric-otolaryngology-and-sleep-surgery-knowledge-graph-provides-a-structured-mastery-curriculum',
+  },
+};
+
 window.OKSAT_MANIFEST = [
   {
     slug: 'pediatrics',
@@ -255,6 +268,3 @@ window.OKSAT_GUIDES = [
     ],
   },
 ];
-
-/* Back-compat alias (older cached pages). */
-window.MCQ_MANIFEST = window.OKSAT_MANIFEST;

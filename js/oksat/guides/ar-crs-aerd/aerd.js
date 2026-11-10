@@ -6,6 +6,7 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'aerd',
+    review: 'draft',
     title: 'Aspirin-exacerbated respiratory disease',
     kicker: '7 · AERD / N-ERD',
     lede: 'Asthma, CRSwNP, and respiratory reactions to COX-1 inhibitors. A lipid-mediator disease sitting on top of type 2 inflammation, with the fastest polyp regrowth you will see.',

@@ -10,7 +10,7 @@
    section is a <details>: closed until asked for, opened by selecting one
    of the structures it covers.
    ============================================================= */
-import { loadPopulation, FIVE } from './population.js?v=18cd8c31';
+import { loadPopulation, FIVE } from './population.js?v=93580130';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const MINUS = '−';

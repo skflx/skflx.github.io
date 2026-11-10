@@ -11,7 +11,8 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=cb283dd6">
-    <link rel="stylesheet" href="css/olsb.css?v=6de59063">
+    <link rel="stylesheet" href="css/olsb.css?v=78dd07f2">
+    <link rel="modulepreload" href="js/olsb/ct.js?v=ae3a0f93">
 </head>
 <body>
     <header class="site-topbar">
@@ -37,6 +38,7 @@
         <div class="olsb-procs olsb-mode" id="olsb-mode" role="group" aria-label="Mode" hidden>
             <button class="site-pill" type="button" data-mode="3d" aria-pressed="false">3D model</button>
             <button class="site-pill" type="button" data-mode="2d" aria-pressed="false">Diagrams</button>
+            <button class="site-pill" type="button" data-mode="ct" aria-pressed="false">Real CT</button>
         </div>
 
         <div class="olsb3d" id="olsb3d" hidden>
@@ -102,6 +104,61 @@
                         <div class="olsb-info-sec" id="olsb3d-info-rel-wrap">
                             <p class="site-kicker">Neighbours &middot; where they lie relative to it</p>
                             <div id="olsb3d-info-rel"></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <div class="olsbct" id="olsbct" hidden>
+            <div class="olsb-grid">
+                <section class="olsb-stagecol" aria-label="CT slice">
+                    <div class="olsb-stage olsbct-stage">
+                        <div class="olsbct-frame" id="olsbct-frame">
+                            <canvas id="olsbct-canvas" role="img" aria-label="Bone-window CT slice of a right temporal bone"></canvas>
+                            <svg class="olsbct-lines" id="olsbct-lines" viewBox="0 0 1 1" preserveAspectRatio="none" aria-hidden="true"></svg>
+                            <div class="olsbct-marks" id="olsbct-marks"></div>
+                            <span class="olsbct-tip" id="olsbct-tip" hidden></span>
+                            <span class="olsbct-ori olsbct-ori-left" id="olsbct-ori-left" aria-hidden="true"></span>
+                            <span class="olsbct-ori olsbct-ori-right" id="olsbct-ori-right" aria-hidden="true"></span>
+                            <span class="olsbct-ori olsbct-ori-top" id="olsbct-ori-top" aria-hidden="true"></span>
+                            <span class="olsbct-ori olsbct-ori-bottom" id="olsbct-ori-bottom" aria-hidden="true"></span>
+                        </div>
+                        <p class="olsb3d-status" id="olsbct-status" hidden></p>
+                    </div>
+                </section>
+                <section class="olsb-controls" id="olsbct-controls" aria-label="CT controls" hidden>
+                    <div class="olsb-row" id="olsbct-planes" role="group" aria-label="Plane">
+                        <span class="site-kicker">Plane</span>
+                        <button class="site-pill" type="button" data-plane="ax" aria-pressed="true">Axial</button>
+                        <button class="site-pill" type="button" data-plane="co" aria-pressed="false">Coronal</button>
+                        <button class="site-pill" type="button" data-plane="sa" aria-pressed="false">Sagittal</button>
+                    </div>
+                    <div class="olsb-row" role="group" aria-label="Slice">
+                        <span class="site-kicker">Slice</span>
+                        <input type="range" id="olsbct-slice" min="0" max="1" value="0" aria-label="Slice (Up and Down arrows step one, Page Up and Page Down ten)">
+                    </div>
+                    <p class="olsb-sub" id="olsbct-readout" aria-live="off"></p>
+                    <ul class="olsbct-legend" aria-label="Legend">
+                        <li><span class="ct-key ct-key-ring"></span> Ring, dotted line: labelled, a UW label tip (or a centreline point within 1 mm of one)</li>
+                        <li><span class="ct-key ct-key-dot"></span> Filled dot, solid line: detected, a centreline point where this CT shows the lumen</li>
+                        <li><span class="ct-key ct-key-dash"></span> Dashed ring or line: inferred, a centreline point placed by rule, or a label tip found only from its arrow's shaft</li>
+                    </ul>
+                </section>
+                <aside class="olsb-side" aria-label="CT notes">
+                    <p class="site-kicker">Real CT &middot; one specimen</p>
+                    <p class="olsb-sub" id="olsbct-attribution">Temporal bone CT derived from the Interactive CT Temporal Bone Atlas, University of Washington Department of Radiology (uwmsk.org/temporalbone), used with the authors' permission.</p>
+                    <p class="olsb-sub" id="olsbct-caveat">One specimen, from a screen capture of a bone-window display; its scale is inferred (about &plusmn;10&nbsp;%) and positions are good to a few millimetres. It shows gross position and topology, not fine measurement.</p>
+                    <div class="olsb-card olsb-info" id="olsbct-info" hidden>
+                        <div class="olsb-info-head">
+                            <p class="site-kicker">Real CT</p>
+                            <button class="site-btn site-btn-sm" type="button" id="olsbct-info-close">Close</button>
+                        </div>
+                        <h2 id="olsbct-info-name"></h2>
+                        <p class="note" id="olsbct-info-note"></p>
+                        <div class="olsb-info-sec" id="olsbct-info-rel-wrap">
+                            <p class="site-kicker">Neighbours &middot; where they lie relative to it</p>
+                            <div id="olsbct-info-rel"></div>
                         </div>
                     </div>
                 </aside>
@@ -207,7 +264,7 @@
     <script src="js/olsb/volume.js?v=114a26eb"></script>
     <script src="js/olsb/mesh.js?v=6932ba1c"></script>
     <script src="js/olsb/main.js?v=36e07b86"></script>
-    <script type="module" src="js/olsb/3d.js?v=7e2c0352"></script>
+    <script type="module" src="js/olsb/3d.js?v=b7ecfa01"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>

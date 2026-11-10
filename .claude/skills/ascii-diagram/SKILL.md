@@ -85,7 +85,7 @@ at 390px and 1280px in both themes with Playwright (Chromium is at
 
 Add the figure to the page's section in `docs/wip.md`. If the engine gained a
 feature, update `docs/diagrams.md`. Then run the second pass in
-`docs/docs-map.md`.
+`AGENTS.md` (Documentation second pass).
 
 ## Never
 
