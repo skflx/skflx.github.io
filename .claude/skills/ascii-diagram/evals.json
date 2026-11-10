@@ -10,7 +10,7 @@
     { "prompt": "The OLSB lateral SVG schematic has the chorda tympani overlapping the facial nerve. Fix the layering.", "expect": false },
     { "prompt": "Write me a 12-question OKSAT module on the inner ear.", "expect": false },
     { "prompt": "Build a first-pass teaching guide on tympanoplasty with retrieval prompts.", "expect": false },
-    { "prompt": "Make a bar chart of my case log by quarter for a talk.", "expect": false }
+    { "prompt": "Make the larynx egg word on the Airway Rounds heading reachable by keyboard; leave the figure itself alone.", "expect": false }
   ],
   "tasks": [
     { "id": "larynx-ink-change", "split": "dev",
@@ -23,7 +23,7 @@
       "origin": "seed" },
     { "id": "fusion-bake-fresh", "split": "holdout",
       "prompt": "Rename a label string in the fusion figure scene, bake, stamp, and make sure no baked block is stale.",
-      "checks": ["node tools/ascii3d.mjs render fusion --inks", "node tools/check-data.mjs", "judge: no baked block between a3d markers was edited by hand; it matches the output of the bake tool"],
+      "checks": ["node tools/ascii3d.mjs render fusion --inks", "node tools/check-data.mjs", "judge: the diff modifies js/diagrams/fusion.js and changes no number in it"],
       "origin": "seed" },
     { "id": "new-scene-process", "split": "holdout",
       "prompt": "Create a new minimal figure of a simple tube named test-tube-fig as a scene file, and place it as an egg on the Research section. Follow the site's skill, mark it schematic.",

@@ -10,12 +10,12 @@
     { "prompt": "Add a chapter to the ear-anatomy interactive guide on the facial nerve.", "expect": false },
     { "prompt": "Make an ASCII 3D figure of the hyoid for the page.", "expect": false },
     { "prompt": "Change the Leitner box intervals in the OKSAT engine.", "expect": false },
-    { "prompt": "Search the CPT table for codes related to septoplasty.", "expect": false }
+    { "prompt": "Make the due-review banner on the OKSAT hub show how many items are due in each module.", "expect": false }
   ],
   "tasks": [
     { "id": "module-lint-extend", "split": "dev",
       "prompt": "Add one new item to the otoplasty module following the authoring schema, citing an existing source already used in that module. Do not touch other modules.",
-      "checks": ["node tools/lint-oksat.mjs otoplasty", "node tools/check-data.mjs", "judge: the diff touches no file under js/oksat/engine.js"],
+      "checks": ["node tools/lint-oksat.mjs otoplasty", "node tools/check-data.mjs", "judge: the diff does not modify js/oksat/engine.js"],
       "origin": "seed" },
     { "id": "module-manifest-intact", "split": "dev",
       "prompt": "Add a new concept to the ta-tubes module and use it on one existing item; keep ids stable and do not rename anything.",

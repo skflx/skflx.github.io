@@ -21,7 +21,7 @@ Rules that follow:
 - Evals are stochastic and n is tiny. Accept on all-or-nothing k=3 runs; never report percentages.
 - Cheapest check first: lint (free), then trigger evals, then task evals only for due or changed skills.
 
-Roles and models: `.claude/skills/skillsmith/roster.json`. Dispatch details: `.claude/skills/skillsmith/reference/tiers.md`.
+Roles (planner, orchestrator, executor, scout) map to models in `.claude/skills/skillsmith/roster.json`; dispatch every eval run and skill edit with the templates in `reference/tiers.md`. The agent that edits a `SKILL.md` sees `dev` cases only.
 
 ## Anatomy of a good skill
 
@@ -38,37 +38,37 @@ Roles and models: `.claude/skills/skillsmith/roster.json`. Dispatch details: `.c
 ### 1. `/skillsmith new <name>`
 
 1. Evidence: find three real requests or failures (git log, PRs, issues, the owner's words). Fewer: stop and say so.
-2. Write `.claude/skills/<name>/evals.json` (schema in `reference/evals.md`): triggers with near-miss negatives, tasks with at least one `holdout`.
-3. Baseline the `dev` tasks with no skill at the executor tier.
-4. Write the minimal `SKILL.md`: what failed in the baseline, plus constraints and knowledge. Nothing else.
-5. Rerun the tasks; apply the accept rule.
-6. Register the name in the `## Skills` section of `AGENTS.md`, then run `node tools/lint-skills.mjs`.
+2. Planner writes `.claude/skills/<name>/evals.json` (schema in `reference/evals.md`): triggers with near-miss negatives, tasks with at least one `holdout`, `reviewed: null`.
+3. Baseline every task (k=3) with no skill at the executor tier.
+4. Executor writes the minimal `SKILL.md`: what failed in the baseline, plus constraints and knowledge. Nothing else.
+5. Rerun the tasks with the skill; apply the accept rule.
+6. Register the name in the `## Skills` section of `AGENTS.md`; `node tools/lint-skills.mjs` exits 0; stamp `reviewed` (as in audit step 6).
 
 ### 2. `/skillsmith audit [<name>|--due]`
 
 1. Run `node tools/lint-skills.mjs`. Fix findings first; stop here if any remain.
 2. No name: audit the skills `node tools/lint-skills.mjs --due` lists.
 3. Run the trigger evals (one scout call, all skills). Fix a miss in the description, never the body.
-4. Run the task evals for the skill (k=3 per case). Print the scorecard.
-5. Edit only for failing cases, dev cases shown to the editor, holdouts never. Rerun; apply the accept rule.
-6. Record the cheapest passing alias as `floor` and stamp `reviewed` in `evals.json`. Only an audit that ran the task evals may stamp.
+4. Run the task evals per skill (k=3 per case) at its `reviewed.floor`, else the roster `executor`. Print the scorecard.
+5. For each case at 1/3 or below, the executor edits the skill for that case only; rerun all cases; apply the accept rule. Never edit for a case at 3/3.
+6. If every case ends 3/3 (bad cases excepted and reported), stamp `reviewed` = `{ "date": <today>, "model": <roster planner>, "floor": <tier that ran> }`. Otherwise do not stamp; report the failing cases. Only an audit that ran the task evals stamps.
 
 ### 3. `/skillsmith upgrade`
 
 1. Edit `roster.json` to the new aliases; keep `order` cheapest first.
-2. Per skill: baseline with no skill on the new executor.
-3. Delete scaffold that no failing case needs; rerun to confirm.
-4. Tier descent: run the skill one tier cheaper; record `floor` when it still passes.
-5. Stamp `reviewed.model` with the new planner.
+2. Per skill: baseline every case with no skill on the new executor.
+3. Delete each scaffold step whose case passed 3/3 in that baseline. Knowledge and constraints stay. Rerun with the skill; no case may drop from 3/3.
+4. Tier descent: rerun at the next cheaper alias in `order` until a case drops; `floor` is the cheapest tier where every case was 3/3.
+5. Stamp `reviewed` as in audit step 6, with that `floor`.
 
 ### 4. `/skillsmith retro`
 
 Use after the owner, a reviewer or CI corrected a skill-guided task.
 
-1. Write the incident as a task case with `origin: incident: <one line>`.
-2. Confirm it fails (k=3). If it passes, the skill was not the cause; stop.
-3. Make the smallest edit that passes it; apply the accept rule.
-4. If the cause was a missing repo-wide rule, propose the `AGENTS.md` line to the owner instead of growing the skill.
+1. If the cause was a missing repo-wide rule, propose the `AGENTS.md` line to the owner instead of growing the skill; stop.
+2. Write the incident as a `dev` task case with `origin: incident: <one line>`.
+3. Confirm it fails (k=3, at most 1/3). If it does not reproduce, rewrite the case or stop and report.
+4. Make the smallest edit that passes it; apply the accept rule; stamp only as in audit step 6.
 
 ## Accept rule
 

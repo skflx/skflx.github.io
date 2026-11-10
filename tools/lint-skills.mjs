@@ -52,6 +52,9 @@ export function parseFrontmatter(text) {
             val = block && block[1] === '|' ? parts.join('\n').trim() : parts.filter(Boolean).join(' ');
         } else if (/^(["']).*\1$/.test(val)) {
             val = val.slice(1, -1);
+        } else {
+            // Plain multi-line scalar: indented continuation lines fold into the value.
+            while (i + 1 < lines.length && /^\s+\S/.test(lines[i + 1])) val += ' ' + lines[++i].trim();
         }
         fm[key] = val;
     }
@@ -78,7 +81,7 @@ export function ruleFrontmatter(text, folder) {
     if (!description) errors.push('description is empty');
     else {
         if (description.length > 1024) errors.push(`description is ${description.length} characters (max 1024)`);
-        if (!/use (when|on)/i.test(description)) errors.push('description lacks a "Use when" clause');
+        if (!/\buse (when|on)\b/i.test(description)) errors.push('description lacks a "Use when" clause');
     }
     return { errors, warns };
 }
@@ -106,7 +109,8 @@ export function ruleEvals(data, order) {
         const r = data.reviewed;
         if (!r || typeof r !== 'object') e.push('reviewed is neither null nor an object');
         else {
-            if (typeof r.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(r.date) || isNaN(Date.parse(r.date))) {
+            const d = typeof r.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(r.date) ? new Date(r.date) : null;
+            if (!d || isNaN(d) || d.toISOString().slice(0, 10) !== r.date) {
                 e.push('reviewed.date is not YYYY-MM-DD');
             }
             if (!known(r.model)) e.push(`reviewed.model "${r.model}" is not in roster order`);
@@ -139,6 +143,8 @@ export function ruleEvals(data, order) {
             if (typeof t.prompt !== 'string' || !t.prompt.trim()) e.push(`${at}.prompt is empty`);
             if (!Array.isArray(t.checks) || !t.checks.length || t.checks.some((c) => typeof c !== 'string' || !c.trim())) {
                 e.push(`${at}.checks must be a non-empty array of strings`);
+            } else if (t.checks.some((c) => /^judge\b/i.test(c) && !/^judge: \S/.test(c))) {
+                e.push(`${at}.checks has a judge check not of the form "judge: <statement>"`);
             }
             if (typeof t.origin !== 'string' || !(t.origin === 'seed' || /^incident: \S/.test(t.origin))) {
                 e.push(`${at}.origin is neither "seed" nor "incident: <line>"`);
@@ -202,6 +208,8 @@ function selfTest() {
         ['empty description', bad(ruleFrontmatter('---\nname: good\ndescription:\n---\nB', 'good')), true],
         ['description too long', bad(ruleFrontmatter(goodFm('good', 'Use when ' + 'x'.repeat(1030)), 'good')), true],
         ['no Use when', bad(ruleFrontmatter(goodFm('good', 'Does a thing.'), 'good')), true],
+        ['"because one" is not Use on', bad(ruleFrontmatter(goodFm('good', 'Fails because one thing.'), 'good')), true],
+        ['plain multi-line description', bad(ruleFrontmatter('---\nname: good\ndescription: Does a thing\n  across lines. Use when asked.\n---\nB', 'good')), false],
         ['length ok', ruleLength(goodFm('good') + 'l\n'.repeat(100)), false],
         ['length over', ruleLength(goodFm('good') + 'l\n'.repeat(301)), true],
         ['paths ok', rulePaths('see `tools/lint-skills.mjs` and `a/b` and `x`', top, has), false],
@@ -214,6 +222,8 @@ function selfTest() {
         ['evals duplicate id', ruleEvals({ ...goodEvals(), tasks: [task('a', 'dev'), task('a', 'holdout')] }, order), true],
         ['evals empty checks', ruleEvals({ ...goodEvals(), tasks: [{ ...task('a', 'dev'), checks: [] }, task('b', 'holdout')] }, order), true],
         ['evals unparsed', ruleEvals(null, order), true],
+        ['evals bad judge', ruleEvals({ ...goodEvals(), tasks: [{ ...task('a', 'dev'), checks: ['judge:'] }, task('b', 'holdout')] }, order), true],
+        ['evals impossible date', ruleEvals({ ...goodEvals(), reviewed: { date: '2026-02-30', model: 'fable', floor: 'sonnet' } }, order), true],
         ['registered ok', ruleRegistered('good', sec), false],
         ['registered missing', ruleRegistered('absent', sec), true],
         ['roster ok', ruleRoster(goodRoster()), false],
@@ -260,6 +270,7 @@ function main(argv) {
     const house = folders.filter((f) => !thirdParty.has(f));
     const topLevel = new Set(fs.readdirSync(ROOT));
     const exists = (p) => fs.existsSync(path.join(ROOT, p));
+    const isFile = (p) => { try { return fs.statSync(path.join(ROOT, p)).isFile(); } catch { return false; } };
 
     const rosterRes = readJson('.claude/skills/skillsmith/roster.json');
     const roster = rosterRes.data;
@@ -276,7 +287,8 @@ function main(argv) {
             const ev = readJson(`.claude/skills/${s}/evals.json`).data;
             const reviewed = ev && ev.reviewed !== undefined ? ev.reviewed : null;
             const skillText = read(`.claude/skills/${s}/SKILL.md`) || '';
-            const cited = pathTokens(skillText).filter((t) => topLevel.has(t.split('/')[0]) && exists(t));
+            // Drift is tracked on cited files only: a cited directory (`tools/`) changes with every commit under it.
+            const cited = pathTokens(skillText).filter((t) => topLevel.has(t.split('/')[0]) && isFile(t));
             const why = dueReasons(reviewed, roster && roster.planner, today, cited, commitDate);
             if (why.length) { any = true; console.log(`${s}: ${why.join(', ')}`); }
         }

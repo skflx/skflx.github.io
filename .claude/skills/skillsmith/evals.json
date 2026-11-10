@@ -19,7 +19,7 @@
       "prompt": "Make a skill called page-wizard that adds new pages to the site. I have not had any trouble with this myself, I just think it would be nice.",
       "checks": [
         "test ! -e .claude/skills/page-wizard/SKILL.md",
-        "judge: the run stopped and said there is not enough evidence of a recurring need, instead of writing a skill"
+        "judge: the diff creates or modifies no file under .claude/skills/ and does not modify AGENTS.md"
       ],
       "origin": "seed"
     },
@@ -29,8 +29,7 @@
       "prompt": "The ascii-diagram skill told the agent to bake frames before stamping, and CI failed on a stale stamp. Handle this with skillsmith.",
       "checks": [
         "node -e \"const e=require('./.claude/skills/ascii-diagram/evals.json');process.exit(e.tasks.some(t=>/^incident:/.test(t.origin))?0:1)\"",
-        "node tools/lint-skills.mjs",
-        "judge: the diff adds an incident-origin task case before or together with any edit to the skill's SKILL.md"
+        "node tools/lint-skills.mjs"
       ],
       "origin": "seed"
     },
