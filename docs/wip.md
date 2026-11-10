@@ -322,7 +322,8 @@ segment, IAC, ICA, venous, aqueducts, EAC, ET, canals, basal turn) with per-poin
 inferred. Labels are reapplied by `relabel.py` after `vocab.py` edits, without re-registering; the guide's CT crops and
 regions come from `slices.py`. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` helpers); method, scale (inferred,
 +-10 %), limits and regeneration in `tbone/README.md`; provenance `tbone/LICENSE-data.md`. Spec
-`plans/2026-11-03-uw-temporal-bone-volume.md`. Draft until the owner verifies the anatomy.
+`plans/2026-11-03-uw-temporal-bone-volume.md`. The raw UW downloads are git-ignored, never committed, and
+regenerated with `fetch.py`. Draft until the owner verifies the anatomy.
 
 **Next:** review the sweeps against the labelled slices; settle the scale (owner or a measured
 reference); register OLSB to it (#244 and its follow-on).
