@@ -41,7 +41,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q15', 'ear-anatomy:q16'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-seg'] }],
-            ref: [],
         },
         {
             id: 'eac-skin',
@@ -72,7 +71,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q17'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-skin'] }],
-            ref: [],
         },
         {
             id: 'eac-walls',
@@ -94,7 +92,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q18'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-walls'] }],
-            ref: [],
         },
         {
             id: 'eac-gaps',
@@ -123,7 +120,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q19'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-gaps'] }],
-            ref: [],
         },
         {
             id: 'eac-rel',
@@ -148,7 +144,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q20'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-rel'] }],
-            ref: [],
         },
         {
             id: 'eac-nerve',
@@ -169,7 +164,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q21'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['eac-nerve'] }],
-            ref: [],
         },
     ],
 };

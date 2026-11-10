@@ -6,6 +6,7 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'allergic-rhinitis',
+    review: 'draft',
     title: 'Allergic rhinitis: definition, classification, mimics',
     kicker: '2 · Clinical entity',
     lede: 'The diagnosis is clinical, the classification is about time and impact, and the differential is long. Most errors come from treating sensitization as disease.',

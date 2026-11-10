@@ -70,7 +70,9 @@ export function stampHtml(html) {
 
 const SSB_MODULE_DIR = 'js/ssb';
 const SSB_STAMPS_FILE = 'js/ssb/stamps.js';
-const SSB_DATA_DIRS = ['ssb/content', 'ssb/geometry', 'ssb/models', 'ssb/ct', 'ssb/states', 'ssb/anatomy'];
+const SSB_DATA_DIRS = ['ssb/content', 'ssb/geometry', 'ssb/models', 'ssb/ct', 'ssb/states', 'ssb/anatomy', 'tbone/ct', 'tbone/geometry'];
+/* Non-js/ssb modules that import js/ssb (stamped the same way, so their specifiers into js/ssb never go stale). */
+const SSB_EXTRA_MODULES = ['js/olsb/ct.js'];
 const SSB_VENDOR = /^js\/vendor\/three-[^/]+\//;
 
 /* Every import/export-from/dynamic-import with a string-literal specifier.
@@ -120,7 +122,7 @@ export function stampSsb({ write = false } = {}) {
   /* Virtual file contents: what each module must contain. */
   const disk = {};
   const want = {};
-  for (const f of walk(SSB_MODULE_DIR).filter((x) => x.endsWith('.js'))) {
+  for (const f of [...walk(SSB_MODULE_DIR).filter((x) => x.endsWith('.js')), ...SSB_EXTRA_MODULES]) {
     disk[f] = fs.readFileSync(path.join(ROOT, f), 'utf8');
     want[f] = disk[f];
   }

@@ -85,7 +85,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q121', 'ear-anatomy:q124'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sy-fn'] }],
-            ref: [],
         },
         {
             id: 'sy-para',
@@ -135,7 +134,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q127', 'ear-anatomy:q128'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sy-para'] }],
-            ref: [],
         },
         {
             id: 'sy-sensory',
@@ -169,7 +167,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q130', 'ear-anatomy:q131'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sy-sensory'] }],
-            ref: [],
         },
         {
             id: 'sy-arteries',
@@ -207,7 +204,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q133', 'ear-anatomy:q135'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sy-arteries'] }],
-            ref: [],
         },
         {
             id: 'sy-dev',
@@ -244,7 +240,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q137', 'ear-anatomy:q138'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sy-dev'] }],
-            ref: [],
         },
         {
             id: 'sy-gauntlet',
@@ -282,7 +277,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q141', 'ear-anatomy:q143'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['sy-gauntlet'] }],
-            ref: [],
         },
     ],
 };

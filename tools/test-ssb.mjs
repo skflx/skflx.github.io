@@ -4,78 +4,12 @@
    (phase 2), CT mode (phase 5) and the Specimen stage.
 
    Drives ssb.html in headless Chromium (software WebGL, smoke-lib.mjs) and
-   reads the scene back through the read-only test window window.__ssb.lab
-   (js/ssb/mode-lab.js): part names, graph ids, hazards, RAS bounding boxes,
-   the computed frontal pathway, and a pixel where a click picks a part.
-
-   Pins:
-   - each diorama loads; every part is named <graph id>.<side> and its id,
-     and every hazard id it carries, resolve in the knowledge graph;
-   - presets agree with the graph's own classification criteria, and the
-     preset buttons carry the graph's class labels;
-   - ethmoid roof: Keros I -> III raises the lateral lamella by exactly the
-     preset difference (per side); asymmetry lowers the left roof; the AEA
-     drop follows its parameter; a supraorbital cell pushes the AEA down by
-     the graph's mean drop (m.aea-mesentery-drop);
-   - frontal recess: every IFAC rule the graph states, reproduced by the
-     computed pathway under all three modelled uncinate attachments —
-     anterior cells push it posteriorly, suprabullar cells anteriorly, a
-     frontal septal cell laterally, the supraorbital cell lies posterolateral
-     to it, and the uncinate attachment decides medial (middle meatus) vs
-     lateral (infundibulum) drainage; and the same through the UI checkboxes;
-   - clicking a part selects its graph entity (panel + URL follow);
-   - a hostile #lab= is whitelisted and clamped, never markup;
-   - each diorama opens on its lesson's view (ethmoid roof coronal, frontal
-     recess sagittal) and the view buttons cut between the standard views;
-   - on desktop the docked controls never cover the canvas and collapse to
-     a rail; phones get the controls in the bottom sheet;
-   - reduced motion stops the particles;
-   - the tissue-material library (js/ssb/materials.js, docs/ssb.md 7.4): every
-     graph `kind` (and the docs' vocabulary) has a material kind, every colour
-     token exists for both themes, no shader animates; every kind compiles and
-     draws without a WebGL error, hatched and not, at q=full and q=lite; the
-     hash `q` key picks the quality (also at runtime) and a hostile value is
-     ignored; programs are shared per kind (a selection adds materials, not
-     programs); hazard hatching is visible on the real lab under both
-     qualities; picking works under full; reduced motion adds no animation
-     under full;
-   - CT mode (docs/ssb.md 3, 5.6), on the synthetic volume of
-     tools/ssb-fixture-ct.mjs, served by routing the page's ssb/ct/* and
-     ssb/geometry/labels.json requests to it (nothing is written into ssb/):
-     volume.js in plain Node (affine round trip, exact trilinear, slices agree
-     with sample()/labelAt(), radiological orientation, oblique planes, gzip by
-     magic bytes, loader errors, path whitelist) and the #ct= codec; in the
-     page, the three views render non-blank, the crosshair is drawn at the same
-     RAS point in all three and a click moves it within one voxel, label lookup
-     returns the fixture's ids, hover names the structure with ≈HU, a click
-     selects the entity, keys/wheel/windowing/outline toggle/colour key work,
-     outline colours are the materials' tokens (and follow the theme), hostile
-     #ct= values are clamped or ignored, a missing volume shows a message, CT
-     works with WebGL blocked, and phones show one plane at a time;
-   - the Specimen stage (docs/ssb.md 3, 5.3, 7), on the real packs, landmarks
-     and CT header: the packs in plain Node (glTF, every node a graph id, inside
-     the CT volume ± 5 mm, patient right is +x, the landmarks lie on their own
-     side's meshes, an independent ray cast for the pick), the `#at=` cursor
-     codec and the store's one shared cursor; in the page, the loader places
-     every mesh exactly where the raw data says, the camera views agree with
-     the landmarks (the viewer's left is the patient's right in an anterior
-     view), layers (bone solid / X-ray / hidden, regions, landmarks and their
-     tier-filtered labels), click-through picking, the cursor reaching CT and
-     coming back, selection from the tree (highlight, partner, framing, no
-     geometry), the section plane (pixels above the plane are gone), the lab
-     and CT coming and going without leaks, bad and new packs (a truncated
-     gzip is a message in place; a pack that appears loads; bad nodes are
-     skipped with a console.warn), no WebGL, q=lite and phones;
-   - the Endoscope stage (docs/ssb.md 3, js/ssb/scope.js): the scope's math in
-     plain Node (lens 0 looks down the shaft, a 30 degree lens at roll 0 looks up,
-     unit vectors, an upright horizon, the tip at depth 0 is the fulcrum, yaw
-     swings toward the scope's own side) and the `#scope=` codec (round trip,
-     hostile values clamped or ignored, the store's stage exclusivity); in the
-     page, the stage renders non-blank inside a circular field of view, the
-     camera is exactly the pose's tip and view, keys, drag and wheel change the
-     pose, the light-post indicator moves with roll, the lights are the scope's,
-     reduced motion adds no transition, leaving puts the specimen back;
-   - zero real console errors throughout.
+   reads the scene back through the read-only test windows (window.__ssb.lab,
+   .ct, .specimen). One section per system, listed under Usage; each check's
+   name says what it pins. CT and Specimen run on the synthetic volume of
+   tools/ssb-fixture-ct.mjs, served by routing the page's ssb/ requests to it
+   (nothing is written into ssb/); the Specimen packs, landmarks and CT header
+   are the real ones. Zero real console errors throughout.
 
    Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only <section>[,...] | --shard i/N] [--int16]
            sections: dioramas lab ct specimen scope procedure mucosa population flap anatomy scanned
@@ -4994,7 +4928,7 @@ async function openAnat(browser, base, hash, { index = 'fixture', patches = null
   if (wait === 'ct') await page.waitForFunction(() => window.__ssb.ct && !['idle', 'loading'].includes(window.__ssb.ct.status), null, { timeout: 20000 });
   return { context, page, errors, asked };
 }
-const anatPills = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-anatomy button[data-anat]')].map((b) => ({ k: b.dataset.anat, disabled: b.disabled, pressed: b.getAttribute('aria-pressed'), text: b.textContent })));
+const anatPills = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-anatomy button[data-anat]')].map((b) => ({ k: b.dataset.anat, disabled: b.disabled, pressed: b.getAttribute('aria-pressed'), text: b.textContent, hidden: b.hidden })));
 const waitAnat = (page, status) => page.waitForFunction((s) => window.__ssb.specimen && window.__ssb.specimen.anatomy.status === s, status, { timeout: 30000 });
 
 async function anatomyTests(browser, base) {
@@ -5004,8 +4938,8 @@ async function anatomyTests(browser, base) {
     await page.waitForFunction(() => window.__ssb.hash !== null && !/anat|v=/.test(window.__ssb.hash), null, { timeout: 10000 });
     const pills = await anatPills(page);
     const byKey = Object.fromEntries(pills.map((p) => [p.k, p]));
-    check('anatomy page (no index): the four pills read Symmetric · Normal asymmetry · Variants · Pathology; only Symmetric is enabled and pressed',
-      pills.map((p) => p.text).join(' · ') === 'Symmetric · Normal asymmetry · Variants · Pathology' && !byKey.standard.disabled && byKey.standard.pressed === 'true' && ['scanned', 'variants', 'pathology'].every((k) => byKey[k].disabled && byKey[k].pressed === 'false'), JSON.stringify(pills));
+    check('anatomy page (no index): Symmetric and Normal asymmetry show, Variants and Pathology are hidden (nothing to list); only Symmetric is enabled and pressed',
+      pills.filter((p) => !p.hidden).map((p) => p.text).join(' · ') === 'Symmetric · Normal asymmetry' && byKey.variants.hidden && byKey.pathology.hidden && !byKey.standard.disabled && byKey.standard.pressed === 'true' && ['scanned', 'variants', 'pathology'].every((k) => byKey[k].disabled && byKey[k].pressed === 'false'), JSON.stringify(pills));
     check('anatomy page (no index): the page asks for nothing under ssb/anatomy/ (no 404), a hostile anatomy link is dropped and the hash rewritten without it, zero console errors',
       asked.length === 0 && errors.length === 0 && (await page.evaluate(() => location.hash)) === '#s=s.maxillary-sinus&tier=1' && (await page.evaluate(() => window.__ssb.hash)) === '#s=s.maxillary-sinus&tier=1', JSON.stringify({ asked, errors, hash: await page.evaluate(() => location.hash) }));
     check('anatomy page (no index): the specimen is the standard head and says so (the "symmetric by construction" note is shown, the anatomy hook idle)',
@@ -5027,7 +4961,7 @@ async function anatomyTests(browser, base) {
     await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 30000 });
     const pills = Object.fromEntries((await anatPills(page)).map((p) => [p.k, p]));
     check('anatomy page: with an index the pills enable for what it lists (Normal asymmetry, Variants, Pathology) and Variants is the pressed one',
-      ['standard', 'scanned', 'variants', 'pathology'].every((k) => !pills[k].disabled) && pills.variants.pressed === 'true' && pills.standard.pressed === 'false' && pills.scanned.pressed === 'false', JSON.stringify(pills));
+      ['standard', 'scanned', 'variants', 'pathology'].every((k) => !pills[k].disabled && !pills[k].hidden) && pills.variants.pressed === 'true' && pills.standard.pressed === 'false' && pills.scanned.pressed === 'false', JSON.stringify(pills));
     check('anatomy page: the canonical hash has the preset the link left out; the stage kicker says "edited"',
       (await page.evaluate(() => location.hash)) === `#ct=ax&anat=scanned&v=v.concha-bullosa.R:typical` && (await page.evaluate(() => document.getElementById('ssb-anatomy').dataset.edited)) === 'true');
     check('anatomy page: the CT is the scanned base from ssb/anatomy/scanned/ with the patch fetched from patches/scanned/; the standard ssb/ct/ct.json is not what the stage loaded',

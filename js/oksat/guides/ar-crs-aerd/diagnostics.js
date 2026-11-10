@@ -6,6 +6,7 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'diagnostics',
+    review: 'draft',
     title: 'Testing for allergy and sinus disease',
     kicker: '3 · Diagnostics',
     lede: 'History makes the AR diagnosis; tests confirm it before immunotherapy or targeted avoidance. For CRS, endoscopy or CT is part of the definition.',

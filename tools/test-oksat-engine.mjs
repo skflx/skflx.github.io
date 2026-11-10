@@ -253,6 +253,89 @@ async function main() {
     await context.close();
   }
 
+  /* ---- Case 8: hub due banner lists every module with due items ---- */
+  const hubSeed = (extra) => `try{localStorage.setItem('oksat:reviewer','${REVIEWER}');` +
+    `localStorage.setItem('${SRS}',JSON.stringify({items:{a:{nextReview:'2020-01-01'},b:{nextReview:'2020-01-01'}}}));` +
+    `localStorage.setItem('oksat:srs:ta-tubes:${REVIEWER}',JSON.stringify({items:{c:{nextReview:'2020-01-01'}}}));${extra || ''}}catch(e){}`;
+  {
+    const context = await browser.newContext();
+    await context.addInitScript(hubSeed());
+    const page = await context.newPage();
+    await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#review-list a', { timeout: 8000 });
+    const links = await page.$$eval('#review-list a', (as) => as.map((a) => [a.textContent, a.getAttribute('href')]));
+    check('8a: banner links every module with due items, most due first',
+      links.length === 2 && /· 2$/.test(links[0][0]) && links[0][1] === `oksat-study.html?m=${SLUG}` && /· 1$/.test(links[1][0]) && links[1][1] === 'oksat-study.html?m=ta-tubes',
+      JSON.stringify(links));
+    await context.close();
+  }
+
+  /* ---- Case 9: weak-concepts list (3+ attempts, at least one miss, lowest accuracy first) ---- */
+  {
+    const cm = (c) => `localStorage.setItem('oksat:cmastery:${SLUG}:${REVIEWER}',JSON.stringify({v:1,concepts:${JSON.stringify(c)}}));`;
+    const seed = hubSeed(cm({
+      shaky: { box: 1, seen: 4, correct: 1, lapses: 3 },
+      mid: { box: 2, seen: 3, correct: 2, lapses: 1 },
+      solid: { box: 5, seen: 5, correct: 5, lapses: 0 },
+      few: { box: 1, seen: 2, correct: 0, lapses: 2 },
+    }));
+    const context = await browser.newContext();
+    await context.addInitScript(seed);
+    const page = await context.newPage();
+    await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#weak-list a', { timeout: 8000 });
+    const links = await page.$$eval('#weak-list a', (as) => as.map((a) => [a.textContent, a.getAttribute('href')]));
+    check('9a: weak list shows only 3+ attempt, missed concepts, worst first',
+      links.length === 2 && /· shaky$/.test(links[0][0]) && /· mid$/.test(links[1][0]) &&
+      links[0][1] === `oksat-study.html?m=${SLUG}&c=shaky`, JSON.stringify(links));
+    await context.close();
+    const ctx2 = await browser.newContext();
+    await ctx2.addInitScript(`try{localStorage.setItem('oksat:reviewer','${REVIEWER}');}catch(e){}`);
+    const p2 = await ctx2.newPage();
+    await p2.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
+    await p2.waitForSelector('#modules .module-card', { timeout: 8000 });
+    check('9b: weak list hidden with no data', await p2.$eval('#weak', (e) => e.hidden), 'visible without data');
+    await ctx2.close();
+  }
+
+  /* ---- Case 10: export / clear / import round trip; malformed import writes nothing ---- */
+  {
+    const prog = JSON.stringify({ v: 1, answers: { q1: 'a' }, firstCorrect: { q1: false }, modes: { q1: 'mcq' } });
+    const context = await browser.newContext({ acceptDownloads: true });
+    await context.addInitScript(`try{if(!sessionStorage.getItem('seeded')){localStorage.setItem('oksat:reviewer','${REVIEWER}');localStorage.setItem('${PROGRESS}',${JSON.stringify(prog)});sessionStorage.setItem('seeded','1');}}catch(e){}`);
+    const page = await context.newPage();
+    page.on('dialog', (d) => d.accept());
+    await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#modules .module-card', { timeout: 8000 });
+    await page.click('#settings-btn');
+    const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#export-progress')]);
+    const fs = await import('node:fs');
+    const path = await dl.path();
+    const exported = JSON.parse(fs.readFileSync(path, 'utf8'));
+    check('10a: export holds the progress record', exported[PROGRESS] === prog, JSON.stringify(Object.keys(exported)));
+    await page.evaluate(() => localStorage.clear());
+    await page.setInputFiles('#import-file', path);
+    await page.waitForFunction((k) => localStorage.getItem(k), PROGRESS, { timeout: 5000 }).catch(() => {});
+    check('10b: import restores the progress', await page.evaluate((k) => localStorage.getItem(k), PROGRESS) === prog, 'progress not restored');
+    await page.waitForTimeout(1800); // the import reloads the hub
+    await page.waitForSelector('#modules .module-card', { timeout: 8000 });
+    await page.evaluate(() => localStorage.clear());
+    await page.click('#settings-btn');
+    const bad = [{ 'sk_theme': 'x' }, { 'oksat:x': 5 }, [1], 'nope'];
+    for (const [i, b] of bad.entries()) {
+      const f = `${path}.bad${i}.json`;
+      fs.writeFileSync(f, JSON.stringify(b));
+      await page.setInputFiles('#import-file', f);
+      await page.waitForFunction(() => /Not an OKSAT/.test(document.querySelector('#backup-status').textContent), null, { timeout: 5000 }).catch(() => {});
+      const st = await page.textContent('#backup-status');
+      check(`10c${i}: malformed import rejected`, /Not an OKSAT/.test(st), st);
+      await page.evaluate(() => { document.querySelector('#backup-status').textContent = ''; });
+      fs.unlinkSync(f);
+    }
+    check('10d: malformed imports wrote nothing', await page.evaluate(() => localStorage.length) === 0, 'storage was written');
+    await context.close();
+  }
+
   await browser.close();
   if (server) await server.close();
 

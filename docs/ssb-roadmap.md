@@ -2,9 +2,9 @@
 
 What is done, what is next, who does it, and what waits on the owner.
 Architecture: `docs/ssb.md`. How work is handed to a model and checked:
-`docs/delegation.md`. Current state in prose: `docs/wip.md`. Realistic anatomy's work packages are in §3a (moved 2026-10-11).
+`docs/delegation.md`. Current state in prose: `docs/wip.md`. Realistic anatomy's work packages are in §3a.
 
-Last updated 2026-10-11. Done work packages are one line each (§4). Their
+Last updated 2026-11-10. Done work packages are one line each (§4). Their
 specs and the checkpoint narratives (CP-1 to CP-4a) are in git history: the
 last full version is commit `34af192`. Update the board in the same PR as the
 work it records.
@@ -22,7 +22,7 @@ work it records.
 | 6 Procedure mode | P1–P4 done with P1b, P2, P3, DC1, POP2a/b, L1, ST4d, ST5 | NSF overlay in procedure mode (harvest, rotation, inset); Draf III, transpterygoid and transplanum states (no WP yet); owner review of the states |
 | 7 Self-test | not started | T1 (deferred) |
 | 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
-| 3c External nose and rhinoplasty framework (`docs/ssb.md` §6.2) | specced (ST7); deferred behind O7 | ST7b (ready) → ST7a → ST7c; ST7d; ST7e (O14 decided) |
+| 3c External nose and rhinoplasty framework (`plans/2026-11-10-ssb-nasal-framework.md`) | specced (ST7); deferred behind O7 | ST7b (ready) → ST7a → ST7c; ST7d; ST7e (O14 decided) |
 | Realistic anatomy (design `docs/ssb.md` §14; sources `docs/realistic-anatomy.md`) | in progress (§3) | RS2c (critical path), then RP2 (owner fetch), RP3 (specced, waits on RP2), POP3, RA0d; then RS3–RS6, OP1, VB1/PB1, RA5 |
 | ∞ Content | all `draft` | owner review (tier 1 first); backlog §6 |
 
@@ -89,7 +89,7 @@ Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
 
 **Deferred behind O7** (clear FESS and sellar/clival anatomy first): T1, ST7 (below), NSF in procedure mode (harvest, rotation, inset; no WP spec yet), the Draf III, transpterygoid and transplanum states (no WP spec yet), more pathology content.
 
-**ST7 track** (`docs/ssb.md` §6.2; WPs in §5) — **deferred behind O7** (FESS and sellar/clival anatomy first); when it resumes: lane A runs ST7b
+**ST7 track** (`plans/2026-11-10-ssb-nasal-framework.md`; WPs in §5) — **deferred behind O7** (FESS and sellar/clival anatomy first); when it resumes: lane A runs ST7b
 (kit only, no shared files with the other lanes except
 `tools/test-ssb.mjs`), then ST7a once ST6 is merged (it maps the graph's
 new `skin` kind onto ST6's material), then ST7c; C1 batches and ST7a both
@@ -99,9 +99,9 @@ reviews ST7b and ST7c, writes ST7e's final spec and plans the
 rhinoplasty model (R0).
 
 
-### ST7 — Nasal framework: anatomy for a rhinoplasty model        [specced 2026-10-07] · Opus spec → Sonnet build · spec: `docs/ssb.md` §6.2
+### ST7 — Nasal framework: anatomy for a rhinoplasty model        [specced 2026-10-07] · Opus spec → Sonnet build · spec: `plans/2026-11-10-ssb-nasal-framework.md`
 Owner decision O2 (2026-10-02): the atlas covers the whole nasal framework.
-The spec (`docs/ssb.md` §6.2) builds it as the `nasal-framework` diorama —
+The spec (`plans/2026-11-10-ssb-nasal-framework.md`) builds it as the `nasal-framework` diorama —
 framework, envelope in layers, vessels and nerves by layer, three computed
 rules (tripod, dissection plane, thick skin) — shaped as the substrate of a
 later rhinoplasty model, then fits it under the specimen's skin. Five WPs
@@ -111,7 +111,7 @@ and two checkpoints:
 |---|---|---|---|---|
 | ST7a | Graph content for the framework, envelope, vessels, nerves; vocabulary | Sonnet drafts → Opus review (CP-ST7a) | ST6 merged (the `skin` material kind) | A |
 | ST7b | `kit.js`: `strip` solid, exact distance transform, marching cubes | Sonnet | — | A (first) |
-| ST7c | The diorama, to §6.2, rules 0–13 | Sonnet | ST7a, ST7b merged | A |
+| ST7c | The diorama, to the nasal-framework spec, rules 0–13 | Sonnet | ST7a, ST7b merged | A |
 | ST7d | The specimen's bony nose (nasal bone / frontal process labels, rhinion, sellion, piriform rim) and ST6's skin landmarks written | Sonnet | ST6 merged | B (after ST5) |
 | ST7e | Fit on the specimen | Sonnet (spec finalized by Opus at CP-ST7c) | ST7c, ST7d; O14 = (b) or (c) | A |
 
@@ -119,10 +119,10 @@ Population and class defaults follow O8 (decided 2026-10-08: mixed and labelled,
 spec's defaults stand until the owner says otherwise.
 
 ### ST7a — Nasal framework content        [todo: branch after ST6 merges] · Sonnet drafts → Opus review (CP-ST7a) · depends: ST6 merged
-Goal: every id `docs/ssb.md` §6.2 names exists in the graph, sourced from
+Goal: every id `plans/2026-11-10-ssb-nasal-framework.md` names exists in the graph, sourced from
 the PubMed records below, so the diorama (ST7c) builds on ids and cited
 numbers only.
-Read: `docs/authoring-ssb.md` (all); `docs/ssb.md` §6.2; this WP; the
+Read: `docs/authoring-ssb.md` (all); `plans/2026-11-10-ssb-nasal-framework.md`; this WP; the
 abstracts of the sources below (PubMed E-utilities `efetch`, as ST0 did);
 `ssb/content/nasal-maxillary-ppf.json` only to find the existing nose ids
 and the house style.
@@ -166,7 +166,7 @@ what each must say comes from the sources listed with it):
   Saban 2008 for what it is), `s.scroll-ligament` [2] (longitudinal and
   vertical parts; Ku 2025's inferior nasal retaining ligament in `syn`),
   `s.pyriform-ligament` [2] (Rohrich 2008). Each with `attaches-to` edges
-  naming the parts its source names — rule 12 of §6.2 tests them; where
+  naming the parts its source names — rule 12 of the nasal-framework spec tests them; where
   the abstract does not say where an end attaches, write no edge and list
   it under "check hardest".
 - **Envelope** — `s.nasal-soft-tissue-envelope` [1] (kind region; syn STE,
@@ -198,7 +198,7 @@ what each must say comes from the sources listed with it):
   9, unilateral 68, absent 23 % of 31 specimens; Tansatit 2016's 31.1 % of
   45 is a different quantity — note it), `v.supratip-arterial-anastomosis`
   (64.4 % of 45; Tansatit 2016), `v.nasal-sesamoid-cartilage` (the four
-  sources of §6.2's disagreement list, each as its own `prev` entry with
+  sources of the nasal-framework spec's disagreement list, each as its own `prev` entry with
   method and denominator).
 - **Measurements** (one value each; `from`/`to` where a landmark pair
   defines it) — `m.ste-thickness-nasion` 4.13 ± 0.72, `-rhinion`
@@ -298,7 +298,7 @@ store PMID and DOI from the record; abstract-only reading, say so in
 | `src.fitzgerald-1992-nasolabial` | Fitzgerald, Nanda, Currier. Am J Orthod Dentofacial Orthop 1992;102(4):328 | 1456217 | 10.1016/0889-5406(92)70048-F | cohort | nasolabial angle and the nose's lower border to FH |
 
 *Check hardest* (the PR lists these first, with what each entity says):
-the disagreements of `docs/ssb.md` §6.2 (each must be stated in the
+the disagreements of `plans/2026-11-10-ssb-nasal-framework.md` (each must be stated in the
 entity, not resolved by picking one); every `attaches-to` edge's source
 sentence; the two textbook-only claims the spec relied on and that need a
 PubMed source or are dropped (the levator labii superioris alaeque nasi
@@ -315,9 +315,9 @@ the spec changes, not the number); an entity would duplicate an existing
 one; a source's record differs from this table.
 
 ### ST7b — Kit: strip, distance transform, iso-surface        [ready] · Sonnet · depends: —
-Goal: the three DOM-free primitives §6.2 needs, each with one inside test
+Goal: the three DOM-free primitives the nasal-framework spec needs, each with one inside test
 and one mesh builder (`docs/ssb.md` §6), tested in Node.
-Read: `docs/ssb.md` §6 and §6.2 (the envelope paragraph); `js/ssb/dioramas/kit.js`;
+Read: `docs/ssb.md` §6 and the nasal-framework spec (the envelope paragraph); `js/ssb/dioramas/kit.js`;
 `tools/test-ssb.mjs` (how the lab section runs kit in Node).
 Touch: `js/ssb/dioramas/kit.js`; `tools/test-ssb.mjs` (a `kit`
 section, `--only kit`); `docs/ssb.md` §6 (the primitive list); docs pass.
@@ -357,20 +357,20 @@ two triangles), every vertex's trilinear value is within 1e-3 of the
 level, and `isoInside` agrees with ray parity on ≥ 99.5 % of random
 points; timing printed: edt and iso on a 1.2 M-voxel grid.
 Escalate: edt on 1.2 M voxels takes > 300 ms or iso > 200 ms in Node on
-the CI runner (report both; §6.2's budget then needs the 1.0 mm grid by
+the CI runner (report both; the nasal-framework spec's budget then needs the 1.0 mm grid by
 default).
 
 ### ST7c — The `nasal-framework` diorama        [todo] · Sonnet · depends: ST7a, ST7b merged
-Goal: `js/ssb/dioramas/nasal-framework.js` to `docs/ssb.md` §6.2 as it
+Goal: `js/ssb/dioramas/nasal-framework.js` to `plans/2026-11-10-ssb-nasal-framework.md` as it
 stands, with rules 0–13 pinned.
 Read: `docs/ssb.md` §6, §6.1 (the pattern of rules computed from solids,
-and the degrade table), §6.2; `js/ssb/dioramas/sphenoid.js` (module
+and the degrade table), the nasal-framework spec; `js/ssb/dioramas/sphenoid.js` (module
 pattern, header of schematic proportions, `degrade()`),
 `frontal-recess.js` (voxelizing the drawn solids), `kit.js`;
 `tools/test-ssb.mjs` lab section; `js/ssb/materials.js` (kinds).
 Touch: new `js/ssb/dioramas/nasal-framework.js`, `js/ssb/dioramas/index.js`,
 `tools/test-ssb.mjs`; docs pass (`docs/ssb.md` §6 table, `docs/wip.md`).
-Don't: invent a proportion, attachment or depth §6.2 does not give (stop
+Don't: invent a proportion, attachment or depth the nasal-framework spec does not give (stop
 instead); change `kit.js` (ST7b's); add tokens or materials (every kind
 exists after ST6 and ST7a); change graph content.
 Steps: anchors and construction order; parts; envelope field and layers;
@@ -386,7 +386,7 @@ nerve exit), build time, part and triangle counts, and screenshots of the
 five views at the default, at `ste_scale` 0.6 and 1.6, and with each plane.
 Escalate: rule 3's dip is not monotone (send the A(x) profiles — it
 should be, by construction); rule 10's sets need a depth or radius other
-than §6.2's to hold (send the clearances, do not tune); the tripod has no solution within
+than the nasal-framework spec's to hold (send the clearances, do not tune); the tripod has no solution within
 ±5 mm at the default (send the leg lengths); the domes' construction
 (rule 7) puts the ASA where the septal outline fails rule 9; a muscle or
 ligament end has no `attaches-to` edge to land on; a budget breaks.
@@ -394,8 +394,8 @@ ligament end has no `attaches-to` edge to land on; a budget breaks.
 ### ST7d — The specimen's bony nose and skin landmarks        [todo] · Sonnet · depends: ST6 merged · lane B after ST5
 Goal: the specimen's own nasal bones, frontal processes, rhinion, sellion
 and piriform rim, and ST6's measured skin points, as data — the anchors
-ST7e fits to, and the n = 1 values beside §6.2's population numbers.
-Read: `docs/ssb.md` §5.1–§5.3, §6.2 (anchors, fit); the docstrings of
+ST7e fits to, and the n = 1 values beside the nasal-framework spec's population numbers.
+Read: `docs/ssb.md` §5.1–§5.3, the nasal-framework spec (anchors, fit); the docstrings of
 `tools/ssb-pipeline/uw/walls.py` (compartments, walls), `nose.py`
 (ST6's region and groove rules), `normalize.py`, `meshes.py`.
 Touch: new `tools/ssb-pipeline/uw/nosebone.py` (or a `nose.py`
@@ -433,14 +433,14 @@ triangles against §5.4; `check-data.mjs`; `test-ssb.mjs` (full) with new
 checks — the rhinion is nasal-bone voxels' caudal end, the sellion lies
 at R = 0, every rim point is bone adjacent to air, the volume is still
 mirror-symmetric; `smoke-pages.mjs`. In the PR, a table: each landmark
-against the diorama's default anchor (§6.2) and the two envelope values
+against the diorama's default anchor (the nasal-framework spec) and the two envelope values
 against `m.ste-thickness-nasion` / `-rhinion`.
 Escalate: the suture is not visible (step 1); the nasal bones fall below
 BT over more than a third of their dorsal length (thin caudal bone — say
 where); the rim is ambiguous on more than a fifth of the levels; a budget
 breaks.
 
-### ST7e — Fit on the specimen        [todo: spec sketch in `docs/ssb.md` §6.2, finalized at CP-ST7c] · Sonnet · depends: ST7c, ST7d; O14 = (b) or (c)
+### ST7e — Fit on the specimen        [todo: spec sketch in `plans/2026-11-10-ssb-nasal-framework.md`, finalized at CP-ST7c] · Sonnet · depends: ST7c, ST7d; O14 = (b) or (c)
 Not executable until Opus rewrites it at CP-ST7c with the numbers ST7c
 and ST7d print (where the default framework lands under the real skin;
 whether the specimen's envelope leaves room for the default domes).
@@ -451,10 +451,10 @@ owner review of tier 1 as usual.
 
 **CP-ST7c (Opus)** — ST7b and ST7c: the five views against anatomy
 (proportions, the alar ring, the scroll, the envelope's layers on a
-section), the rules' numbers against §6.2, the plane sets, schematic
+section), the rules' numbers against the nasal-framework spec, the plane sets, schematic
 proportions labelled; then ST7e's final spec from ST7c's and ST7d's
 printed numbers, and the first rhinoplasty-model WPs (R0: which
-manoeuvres, in what order, as `p.*` steps that set §6.2's parameters).
+manoeuvres, in what order, as `p.*` steps that set the nasal-framework spec's parameters).
 
 
 ### T1 — Self-test        [later] · Sonnet · depends: P2
@@ -488,12 +488,7 @@ Escalate: runtime > 2 s on the repo.
 
 ### Wave RA-1 — inventories and the state machinery (parallel)
 
-```
-### POP0 — NasalSeg population statistics     [done 2026-10-07] · Opus
-tools/ssb-pipeline/nasalseg/stats.py (+ review.json) → ssb/anatomy/population/nasalseg.json;
-findings in docs/realistic-anatomy.md §4.4 (107 distinct scans of 130 ids; asymmetry distributions; head A's cavity outlier).
-Follow-up for RS: explain head A's left-cavity volume (docs/realistic-anatomy.md §4.4) before RA3b.
-```
+POP0 — NasalSeg population statistics — done
 
 ### Wave RA-2 — resegmentation and alignment
 

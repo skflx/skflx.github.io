@@ -91,6 +91,12 @@ jobs:
       - name: Smoke-test every page
         run: node tools/smoke-pages.mjs
 
+      - name: Search page behavior tests
+        run: node tools/test-search.mjs
+
+      - name: Airway Rounds saved-game tests
+        run: node tools/test-airway-resume.mjs
+
       - name: OKSAT engine behavior tests
         if: needs.changes.outputs.oksat == 'true'
         run: node tools/test-oksat-engine.mjs
