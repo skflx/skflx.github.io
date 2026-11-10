@@ -127,8 +127,6 @@
   // guarded: a failure only means nothing is saved, never that play stops.
 
   var SAVES_KEY = 'sk_airway_games';
-  var LEGACY_KEY = 'sk_airway_game';   // single-slot save from before tab ids; migrated at boot
-  var LEGACY_ID = '_legacy';           // its entry id in the map (never a tab id: those are 6 chars)
   var TAB_KEY = 'sk_airway_tab';
   var MAX_SAVES = 5;
   var SAVE_MAX_AGE = 24 * 60 * 60 * 1000;
@@ -256,22 +254,10 @@
     return out.sort(function (a, b) { return b.savedAt - a.savedAt; });
   }
 
-  // Boot: take over the single-slot save from before tab ids, drop expired
-  // entries, and list the rest. Writes only when something changed.
+  // Boot: drop expired entries, and list the rest. Writes only when
+  // something was dropped.
   function loadSaves() {
-    var map = savesRead(), changed = false, legacy = null;
-    try { legacy = window.localStorage.getItem(LEGACY_KEY); } catch (e) { legacy = null; }
-    if (legacy != null) {
-      changed = true;
-      try {
-        var old = JSON.parse(legacy);
-        if (old && old.v === 1 && typeof old.savedAt === 'number' && LIVE[old.screen]) {
-          map[LEGACY_ID] = { savedAt: old.savedAt, label: labelFor(old.screen, old.game),
-            state: { v: 1, screen: old.screen, mode: old.mode, game: old.game } };
-        }
-      } catch (e) { /* unreadable: dropped */ }
-      try { window.localStorage.removeItem(LEGACY_KEY); } catch (e) { /* no-op */ }
-    }
+    var map = savesRead(), changed = false;
     var now = Date.now();
     Object.keys(map).forEach(function (id) {
       var e = map[id], age = e ? now - e.savedAt : NaN;
@@ -356,8 +342,7 @@
     list.forEach(function (s) {
       var mine = s.tabId === TAB;
       var li = el('li', 'aw-resume-row' + (mine ? ' is-this-tab' : ''));
-      var name = s.tabId === LEGACY_ID ? 'Earlier game' : 'Tab ' + s.tabId;
-      var text = el('p', 'aw-resume-text', name + ' · saved ' + hhmm(s.savedAt) + ' · ' + s.label);
+      var text = el('p', 'aw-resume-text', 'Tab ' + s.tabId + ' · saved ' + hhmm(s.savedAt) + ' · ' + s.label);
       if (mine) text.appendChild(el('span', 'aw-resume-mark', ' · this tab'));
       li.appendChild(text);
       li.appendChild(button('aw-btn aw-btn-primary', 'Resume', 'resume-game', s.tabId));

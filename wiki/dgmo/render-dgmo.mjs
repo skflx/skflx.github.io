@@ -9,7 +9,7 @@
    `quartz build`, using the same @diagrammo/dgmo library the plugin
    uses. Output is static SVG — no client script, no CDN, no layout
    shift — rendered twice (light and dark) with a palette taken from
-   the site's tokens; custom.scss shows the one matching the theme.
+   the site's tokens; the wiki repo's stylesheet shows the one matching the theme.
    The source stays one click away under the diagram.
 
    A fence that fails to render is left as a code block and reported;
@@ -66,7 +66,7 @@ export function recenterTitle(svg) {
 }
 
 /* A diagram laid out this wide (pyramids come out at 1200) shrinks to
-   unreadable text on a phone; custom.scss gives .dgmo-wide a minimum
+   unreadable text on a phone; the wiki repo's stylesheet gives .dgmo-wide a minimum
    width there and lets the figure scroll instead. */
 const WIDE = 900;
 export function viewBoxWidth(svg) {

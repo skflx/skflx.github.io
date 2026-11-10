@@ -15,12 +15,10 @@ acquisition (`tbone/registration.json`, `specimen_identity`). The atlas carries 
 **Permission.** The written permission of 2026-10-07 recorded in `ssb/LICENSE-data.md` (use of the atlas's
 public CT images in a public, non-commercial 3D educational model, on condition that the work credits the
 atlas) covers this module too (owner, 2026-11-03; plan `plans/2026-11-03-uw-temporal-bone-volume.md`, T1). The
-email stays with the owner and is not committed. The raw downloads (the unlabelled and labelled 512 × 512 JPEGs
-of all four planes, the scouts and `manifest.json`) live in `tools/tbone-pipeline/incoming/uw-temporalbone/`.
-They are tracked in git on a temporary basis (owner, 2026-11-09, until the ear-truth work is finished; then
-removed from the index, and the `.gitignore` rule that keeps them out stays). Same permission and attribution as
-above. The ten cropped slices the ear-anatomy guide shows are in `images/oksat/ear-anatomy/ct/`, each with its
-row in `images/oksat/ear-anatomy/ATTRIBUTION.md`.
+email stays with the owner and is not committed. Any UW image committed to the repo would need its own row
+here; none is under `tbone/`: the raw downloads live in `tools/tbone-pipeline/incoming/`, are git-ignored and
+never committed, and are regenerated with `fetch.py`; no derivative image is stored here. The ten cropped slices the ear-anatomy guide shows are in
+`images/oksat/ear-anatomy/ct/`, each with its row in `images/oksat/ear-anatomy/ATTRIBUTION.md`.
 
 **Attribution** (show wherever the specimen is displayed): *Temporal bone CT derived from the Interactive CT
 Temporal Bone Atlas, University of Washington Department of Radiology (uwmsk.org/temporalbone), used with the

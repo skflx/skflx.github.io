@@ -1,50 +1,41 @@
-# wiki/ — sk.oto on the web (Quartz 5)
+# wiki/ — the sk.oto vault's privacy boundary and tools
 
-**Status: live** at `skflx.github.io/ohns-wiki-skflx/` (as of 2026-11-10), built from its own repo. Nothing here is built or served from this repo; this repo links to the live maps from the OKSAT modules and guides (`OKSAT_SKOTO` in `js/oksat/manifest.js`).
-Phase 1 content is ready: the six subspecialty maps of content, synced into
-`content/`, render in Quartz. This folder is the kit for publishing the `sk.oto` Obsidian vault as a browsable,
-searchable, graph-linked wiki with [Quartz 5](https://quartz.jzhao.xyz/),
-and the privacy boundary that decides what may leave the vault.
-
-## Shape
-
-```
-sk.oto vault (Drive / local)                    skflx/ent-wiki (Quartz 5)
-┌──────────────────────────┐   sync-vault.mjs   ┌────────────────────────────┐   Actions    skflx.github.io/ohns-wiki-skflx/
-│ Otology/ Sinus/ … MOC.md │ ─────────────────▶ │ content/   (published set) │ ──────────▶  (GitHub Pages project page)
-│ data_sources/ _drafts/   │   allowlist,       │ quartz.config.yaml         │   deploy.yml
-│ .agents/ AGENTS.md …     │   strip, gate      │ quartz/styles/custom.scss  │
-└──────────────────────────┘                    └────────────────────────────┘
-```
-
-**Why a separate repo.** Quartz is a Node build; this repo has no build step
-by rule and GitHub Pages serves it as-is. A second repo deploys through
-Actions to `skflx.github.io/ohns-wiki-skflx/` (a project page under the same
-domain) without changing how the main site deploys. The files here are
-copied into that repo.
+**Status: live.** The `sk.oto` wiki (Quartz 5) is built and deployed from its own
+repository, `skflx/ohns-wiki-skflx`, at `skflx.github.io/ohns-wiki-skflx/`. The
+Quartz config, stylesheet, landing page and deploy workflow live in that repository,
+not here. Nothing in `wiki/` is built or served from this repo.
 
 ## What is in this folder
 
-| File | Goes to (in `skflx/ent-wiki`) | Role |
-|---|---|---|
-| `sync/sync-vault.mjs` | stays here, run locally | vault → `content/`, fail-closed (below) |
-| `sync/policy.json` | stays here | what may be published — edit this, not the script |
-| `feedback/pull-feedback.mjs` | stays here, run locally | reader-correction issues → vault `_inbox/` (below) |
-| `github/ISSUE_TEMPLATE/*.yml` | `.github/ISSUE_TEMPLATE/` | the correction form every note links to; blank issues off |
-| `dgmo/render-dgmo.mjs` | `scripts/render-dgmo.mjs` | ```` ```dgmo ```` fences → inline SVG, run by the deploy before `quartz build` |
-| `quartz.config.yaml` | repo root | Quartz 5 `obsidian` template, retuned (`# sk:` marks every change) |
-| `quartz/styles/custom.scss` | `quartz/styles/custom.scss` | self-hosted faces + the main site's typographic restraint |
-| `content/index.md` | `content/index.md` | landing page (links the six maps) |
-| `content/<Subspecialty>/…` | `content/` | **sync-vault output** — phase 1: the six maps of content. Regenerate, never hand-edit (`content/.vault-sync.json` lists what the script owns) |
-| `github/deploy.yml` | `.github/workflows/deploy.yml` | build + Pages deploy, with a last-chance privacy check |
+| Path | Role |
+|---|---|
+| `sync/sync-vault.mjs`, `sync/policy.json` | vault → `content/`, fail-closed (below). The policy is the place to edit what may be published, not the script |
+| `content/` | sync output: the landing page and the published notes. Regenerate it with the script, never hand-edit it (`content/.vault-sync.json` lists what the script owns) |
+| `dgmo/render-dgmo.mjs` | ```` ```dgmo ```` fences → inline SVG. Not yet installed in the wiki repository |
+| `feedback/pull-feedback.mjs` | reader-correction issues → vault `_inbox/` (below), run locally |
+| `github/ISSUE_TEMPLATE/` | the correction form every note links to. Not yet installed in the wiki repository |
 
-`tools/test-wiki-sync.mjs` (repo root) tests the sync and the feedback
-tool against a synthetic vault, and the DGMO fence transform with a stub
-renderer, in CI. The only real vault content in this repo is sync output in
-`content/`; test fixtures are synthetic. The repo root carries `.nojekyll`
-so GitHub Pages serves these Markdown files raw instead of rendering them
-as half-working pages.
+`tools/test-wiki-sync.mjs` (repo root) tests the sync and the feedback tool against a
+synthetic vault, and the DGMO fence transform with a stub renderer, in CI. The only real
+vault content in this repo is sync output in `content/`; test fixtures are synthetic.
+The repo root carries `.nojekyll` so GitHub Pages serves these Markdown files raw.
 
+To install the correction form in the wiki repository: copy `github/ISSUE_TEMPLATE/` to its
+`.github/ISSUE_TEMPLATE/` and create the `wiki-feedback` label there (issue forms only apply
+labels that exist).
+
+**The last lock is in the wiki repository, not here.** Its deploy workflow fails the build if any
+note under `content/` still has a `## Personal Notes` section. Keep that step; it is the only
+check that runs on what is actually published.
+
+## Running the sync
+
+`sync-vault.mjs` is dry-run by default and only writes with `--write`. Dry run first, and read the report:
+
+```bash
+node ~/skflx.github.io/wiki/sync/sync-vault.mjs --vault ~/sk.oto --out content --report /tmp/sync.json
+node ~/skflx.github.io/wiki/sync/sync-vault.mjs --vault ~/sk.oto --out content --write
+```
 ## Diagrams (DGMO)
 
 The vault's flowcharts are [DGMO](https://github.com/diagrammo/dgmo) fences,
@@ -53,8 +44,8 @@ plugin. Quartz cannot read them, so `render-dgmo.mjs` pre-renders each fence
 with the same `@diagrammo/dgmo` library the plugin uses:
 
 - static SVG, **twice** (light and dark), on a DGMO palette built from the
-  site tokens (`SKFLX_PALETTE`); `custom.scss` shows the one matching Quartz's
-  `saved-theme`. No client script, no CDN.
+  site tokens (`SKFLX_PALETTE`); the wiki's stylesheet shows the one matching
+  Quartz's `saved-theme`. No client script, no CDN.
 - the source stays under the diagram in a collapsed *Diagram source*.
 - a fence that fails to parse stays a code block and is listed; it never
   fails the build.
@@ -105,7 +96,7 @@ one source for Drive and for the web, so a fix made there reaches both.
 
 ```
 reader ──▶ "Suggest a correction" link (end of every note, added by sync-vault)
-       ──▶ public issue on skflx/ent-wiki, label wiki-feedback, `note` prefilled
+       ──▶ public issue on skflx/ohns-wiki-skflx, label wiki-feedback, `note` prefilled
        ──▶ pull-feedback.mjs ──▶ <vault>/_inbox/wiki-feedback/issue-<n>.md
        ──▶ you (or /tend) fix the note in the vault, set `resolution:` in the item
        ──▶ your vault sync (sync_vault.py) ──▶ Drive has the fix
@@ -138,67 +129,3 @@ git commit -am "Corrections from reader reports" -m "$(node ~/skflx.github.io/wi
 - The pull is manual, like the sync. Automating it (for example a
   scheduled Action that writes into the vault's Drive) would need a
   credential — owner decision.
-
-## Bootstrap (how the wiki repo is set up)
-
-1. Create `skflx/ent-wiki` from the Quartz template (github.com/jackyzha0/quartz →
-   *Use this template*), clone it, `npm ci` (Node ≥ 22).
-2. Copy in: `quartz.config.yaml`, `quartz/styles/custom.scss`,
-   `content/` (landing page + the synced maps), `github/deploy.yml` →
-   `.github/workflows/deploy.yml`, `github/ISSUE_TEMPLATE/` →
-   `.github/ISSUE_TEMPLATE/`; and `skflx.github.io/fonts/*.woff2` →
-   `quartz/static/fonts/`. Create the `wiki-feedback` label (issue forms
-   only apply labels that exist).
-3. `npx quartz plugin install --from-config`, then
-   `npm i -D @diagrammo/dgmo` and copy `dgmo/render-dgmo.mjs` → `scripts/`.
-4. Sync (dry run first, read the report):
-   ```bash
-   node ~/skflx.github.io/wiki/sync/sync-vault.mjs --vault ~/sk.oto --out content --report /tmp/sync.json
-   node ~/skflx.github.io/wiki/sync/sync-vault.mjs --vault ~/sk.oto --out content --write
-   ```
-5. `node scripts/render-dgmo.mjs content && npx quartz build --serve` →
-   http://localhost:8080 and look. (Re-running the sync restores the plain
-   fences; the deploy renders them itself.)
-6. Commit, push to `v5`; Settings → Pages → Source: *GitHub Actions*.
-7. Then, in this repo: point `OKSAT_SKOTO` in `js/oksat/manifest.js` at the published maps.
-
-Verified 2026-09-23, phase 1: the six real maps of content, synced with
-the committed policy, build on Quartz v5.0.0; all six DGMO pyramids render
-in both themes (and scroll sideways at readable size on phones); each page
-ends with the correction link; no personal text in the output.
-
-Verified 2026-09-23: this config builds cleanly on Quartz v5.0.0 against a
-synthetic vault in the vault's exact note format (callouts, `dgmo` fences,
-KaTeX, aliased and table-escaped wikilinks); output contained no personal
-text and no Google Fonts request; DGMO flowcharts rendered in both themes
-with `@diagrammo/dgmo` 0.86.0.
-
-## Decisions for the owner before anything is public
-
-- **Who can read it — open, brainstorm pending.** A GitHub Pages site is
-  public. Most notes are `vetted: ""` and AI-assisted; they would publish
-  under your name with only the "Unvetted" banner between them and a reader.
-  Options on the table:
-  - *Vetted only* — flip `requireVetted: true` in `policy.json`. Safest,
-    but the site grows only as fast as vetting does.
-  - *Password* — Quartz's `encrypted-pages` encrypts each page at build
-    time; the password is a CI secret, not in the repo. **But** a password
-    only protects anything if the Markdown in `content/` is not itself in a
-    public repo. It works if the wiki repo is private (Pages from a private
-    repo needs a paid plan), or if a private repo holds `content/` and a
-    public one only receives the built, encrypted site. Otherwise the
-    plaintext is one click away on GitHub.
-  - *Reader feedback* — **chosen (2026-09)**, see *Reader corrections*
-    above. Issues are public; you accepted that.
-- **Sync trigger.** Manual (above) is the scaffold. Automating it from the
-  vault's own git repo would need a cross-repo token — a secret, which this
-  project does not hold without your say-so.
-- **`sources:` citations** publish as note properties. They cite chapters,
-  not text, so they carry no copyrighted material; the source texts
-  themselves never leave (`data_sources/` is not allowlisted).
-- **Third-party requests** in Quartz output: KaTeX CSS from jsDelivr, a
-  cdnjs preconnect, and d3 + pixi.js from jsDelivr for the Graph view
-  (without them the graph panel shows "could not load"; the page is
-  otherwise fine). Fonts are local. Unlike the main site, the wiki has no
-  CSP (Quartz inlines scripts); it holds no user data, so the exposure is
-  small, but it is not zero.

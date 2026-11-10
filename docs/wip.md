@@ -300,12 +300,12 @@ actions, §3 open work packages). Realistic anatomy's next step is RS2c
 
 ## Wiki scaffold (`wiki/`)
 
-**State:** Live since 2026-11-10 at `skflx.github.io/ohns-wiki-skflx/`, built from its own repo; nothing is built or served from this repo. Quartz config,
-styles, landing page, an inert deploy workflow, and `wiki/sync/sync-vault.mjs`,
+**State:** Live since 2026-11-10 at `skflx.github.io/ohns-wiki-skflx/`, built from its own repo; nothing is built or served from this repo. The Quartz config,
+styles and deploy workflow live in that repo (`skflx/ohns-wiki-skflx`); here are `wiki/sync/sync-vault.mjs`,
 the fail-closed sync from the owner's vault (six subspecialty folders; Personal
 Notes, drafts, source texts and governance files never leave). Reader corrections
-round-trip through public issues (`wiki/feedback/`). DGMO diagrams render at build
-time (`wiki/dgmo/`).
+round-trip through public issues (`wiki/feedback/`). The DGMO renderer (`wiki/dgmo/`) and the
+correction issue form (`wiki/github/`) are not yet installed in the wiki repo.
 
 **Next:** widen the phase-1 gate beyond the maps of content as notes are vetted; decide
 whether to automate the sync (needs a secret). The OKSAT pages already link the live maps.
@@ -322,7 +322,8 @@ segment, IAC, ICA, venous, aqueducts, EAC, ET, canals, basal turn) with per-poin
 inferred. Labels are reapplied by `relabel.py` after `vocab.py` edits, without re-registering; the guide's CT crops and
 regions come from `slices.py`. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` helpers); method, scale (inferred,
 +-10 %), limits and regeneration in `tbone/README.md`; provenance `tbone/LICENSE-data.md`. Spec
-`plans/2026-11-03-uw-temporal-bone-volume.md`. Draft until the owner verifies the anatomy.
+`plans/2026-11-03-uw-temporal-bone-volume.md`. The raw UW downloads are git-ignored, never committed, and
+regenerated with `fetch.py`. Draft until the owner verifies the anatomy.
 
 **Next:** review the sweeps against the labelled slices; settle the scale (owner or a measured
 reference); register OLSB to it (#244 and its follow-on).

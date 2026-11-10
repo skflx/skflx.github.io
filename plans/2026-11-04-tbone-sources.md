@@ -24,7 +24,7 @@ Rejected: any model-generated or "enhanced" image as an anatomical source (`AGEN
 | # | Decision |
 |---|---|
 | B-1 | **Licence first.** No file is downloaded into the repo until its licence permits redistribution of a *derived* volume and the attribution line is recorded in `tbone/LICENSE-data.md` (credit the data set and institution; never name individual authors if the source asks otherwise, as for UW). |
-| B-2 | **Derived data only, never raw.** Raw DICOM/NIfTI stays in `tools/tbone-pipeline/incoming/<source>/` (git-ignored). Only the OLSB-frame crop, landmarks and sweeps are committed, as UW's are. |
+| B-2 | **Derived data only, never raw.** Raw DICOM/NIfTI stays in `tools/tbone-pipeline/incoming/<source>/` (git-ignored; never committed). Only the OLSB-frame crop, landmarks and sweeps are committed, as UW's are. |
 | B-3 | **Same frame as UW**: mm, right ear, x lateral, y anterior, z superior, origin at the centre of the oval window, so OLSB and every specimen register to each other. A left bone is mirrored and `mirrored: true` is recorded. |
 | B-4 | **Real spacing replaces inferred scale.** DICOM `PixelSpacing`/`SliceThickness`/`ImagePositionPatient` are read, not guessed; HU is kept (stored as int16 gz, then windowed for display). |
 | B-5 | **One folder per specimen**: `tbone/<source-id>-<n>/` with the UW file layout. The existing UW files stay where they are (moving them is out of scope). Each has its own README row and provenance. |

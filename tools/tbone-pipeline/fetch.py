@@ -3,7 +3,7 @@ every slice (unlabeled imgNN.jpg + labeled imgNNlab.jpg), the scout image and th
 slice->scout map (the <plane>.html image-map `coords`). Polite: sequential, small delay.
 Resumable: files already present are kept, so a seeded incoming/ is not re-fetched.
 
-Output: tools/tbone-pipeline/incoming/uw-temporalbone/ (git-ignored; tracked in git temporarily, owner 2026-11-09, see tbone/LICENSE-data.md)
+Output: tools/tbone-pipeline/incoming/uw-temporalbone/ (git-ignored; never committed; regenerate with this script)
   <plane>/<plane>.html, <plane>/<scout>.jpg, <plane>/imgNN.jpg, imgNNlab.jpg ; manifest.json
 """
 import json, os, re, time, urllib.request

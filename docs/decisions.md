@@ -70,7 +70,7 @@ resolving** — do not "simplify" it away without migrating the data first.
 | Key / prefix | Owner file | Notes |
 |---|---|---|
 | `sk_theme` | `js/theme-boot.js` (read), `js/site.js`, `js/oksat/prefs.js` | day/night; `html[data-theme]` |
-| `sk_airway_games` | `js/airway/app.js` | unfinished Airway Rounds / Jeopardy / Quick Quiz games, one entry per tab keyed by `sk_airway_tab` (sessionStorage id); at most 5, kept 24 h; written after each update, only this tab's entry cleared on game end, End game or Start fresh; listed (never auto-resumed) on boot. Replaces the single-slot `sk_airway_game`, which is migrated then removed |
+| `sk_airway_games` | `js/airway/app.js` | unfinished Airway Rounds / Jeopardy / Quick Quiz games, one entry per tab keyed by `sk_airway_tab` (sessionStorage id); at most 5, kept 24 h; written after each update, only this tab's entry cleared on game end, End game or Start fresh; listed (never auto-resumed) on boot. |
 | `sk_airway_tab` | `js/airway/app.js` | sessionStorage: this tab's 6-char id |
 | `oksat:reviewer` | `js/oksat/store.js` | storage namespace; read-only now |
 | `oksat:migrated` | `js/oksat/store.js` | one-time `mcq:*`→`oksat:*` marker |

@@ -1,4 +1,4 @@
-# Goes to skflx/ent-wiki as .github/ISSUE_TEMPLATE/correction.yml.
+# Goes to skflx/ohns-wiki-skflx as .github/ISSUE_TEMPLATE/correction.yml.
 # Every published note links here with ?template=correction.yml&note=<vault path>
 # (wiki/sync/policy.json → feedback). wiki/feedback/pull-feedback.mjs reads
 # these issues back into the vault by the `wiki-feedback` label and the

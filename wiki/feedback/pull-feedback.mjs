@@ -3,7 +3,7 @@
    pull-feedback.mjs — the return leg of the wiki's reader-feedback
    loop (see wiki/README.md §Reader corrections).
 
-     reader ─▶ "Suggest a correction" ─▶ public issue on skflx/ent-wiki
+     reader ─▶ "Suggest a correction" ─▶ public issue on skflx/ohns-wiki-skflx
             ─▶ this script ─▶ <vault>/_inbox/wiki-feedback/issue-<n>.md
             ─▶ owner fixes the note in the vault (Drive gets it via the
                vault's own sync) ─▶ sync-vault.mjs ─▶ wiki commit with

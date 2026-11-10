@@ -9,9 +9,8 @@
    and never resumes one silently; Resume restores teams, scores, the
    question position and the quiz tally exactly and touches no other
    entry; Start fresh and End game clear only this tab's entry; the
-   map keeps at most 5 saves; the pre-tab single-slot save is migrated;
-   with storage throwing, the game still plays. Also checks zero
-   external requests.
+   map keeps at most 5 saves; with storage throwing, the game still
+   plays. Also checks zero external requests.
 
    Runs the whole suite at two sizes: desktop 1280x800, and phone
    390x844 (isMobile, deviceScaleFactor 2), where the banner and game
@@ -31,7 +30,6 @@ const args = process.argv.slice(2);
 const HEADED = args.includes('--headed');
 const SHOT = (args.find((a) => a.startsWith('--shot=')) || '').slice('--shot='.length) || null;
 const SAVES = 'sk_airway_games';
-const LEGACY = 'sk_airway_game';
 const TABKEY = 'sk_airway_tab';
 const PAGE = '/airway-jeopardy.html';
 
@@ -298,25 +296,7 @@ async function runSize(browser, origin, size) {
   T('cap: this tab\'s save is kept and the oldest (zz04aa) is dropped', !!capped && !!capped[capId] && !('zz04aa' in capped), JSON.stringify(capped && Object.keys(capped)));
   await a.context.close();
 
-  /* 8. The single-slot save from before tab ids is migrated, then resumable. */
-  a = await (async () => { const context = await browser.newContext(size.ctx); return { context, ...(await openPage(context, origin)) }; })();
-  await playRounds(a.page);
-  const legacyBefore = await snapshot(a.page);
-  const legacySrc = await own(a.page);
-  await a.page.evaluate(([k, lk, v]) => { localStorage.removeItem(k); localStorage.setItem(lk, v); },
-    [SAVES, LEGACY, JSON.stringify({ v: 1, savedAt: Date.now(), screen: 'rounds', mode: 'rounds', game: legacySrc.state.game })]);
-  await reloadPage(a.page);
-  const legacyRaw = await getRaw(a.page, LEGACY);
-  const legacyRows = await bannerRows(a.page);
-  T('migrate: the old single-slot key is removed', legacyRaw === null, String(legacyRaw).slice(0, 60));
-  T('migrate: the old save is listed as an earlier game', legacyRows.length === 1 && legacyRows[0].text.includes('Earlier game'), JSON.stringify(legacyRows));
-  await a.page.click('[data-action="resume-game"][data-id="_legacy"]');
-  await a.page.waitForSelector('[data-action="r-buzz"]');
-  const legacyAfter = await snapshot(a.page);
-  T('migrate: resuming the old save restores its scores and position', JSON.stringify(legacyAfter) === JSON.stringify(legacyBefore), JSON.stringify({ legacyBefore, legacyAfter }));
-  await a.context.close();
-
-  /* 9. Storage that throws: the game still plays, nothing breaks. */
+  /* 8. Storage that throws: the game still plays, nothing breaks. */
   const throwingLocal = `(function(){ var T=function(){ throw new Error('blocked'); };
     try { Object.defineProperty(window,'localStorage',{get:T,configurable:true}); } catch(e){} })();`;
   a = await (async () => { const context = await browser.newContext(size.ctx); await context.addInitScript(throwingLocal); return { context, ...(await openPage(context, origin)) }; })();

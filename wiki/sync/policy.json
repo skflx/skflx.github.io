@@ -27,7 +27,7 @@
 
   "feedback": {
     "$comment": "Appended to every published note: a link to the correction issue form in the wiki repo (wiki/github/ISSUE_TEMPLATE/correction.yml). 'field' is the form input the vault path prefills; pull-feedback.mjs reads it back.",
-    "issueUrl": "https://github.com/skflx/ent-wiki/issues/new?template=correction.yml",
+    "issueUrl": "https://github.com/skflx/ohns-wiki-skflx/issues/new?template=correction.yml",
     "field": "note",
     "titlePrefix": "Correction: ",
     "text": "*Spot an error? [Suggest a correction]({url}) — opens a public GitHub issue.*"
