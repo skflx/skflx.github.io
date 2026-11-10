@@ -167,6 +167,11 @@ const PAGES = [
     return wait(p, () => !document.getElementById('olsb3d-info').hidden
       && document.getElementById('olsb3d-info-name').textContent.length > 2);
   } },
+  /* Guide deep link: a selected structure (#m=3d&sel=<id>) shows in the info panel; a hostile sel is ignored. */
+  { path: 'OLSB.html#m=3d&sel=lscc', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
+    && !document.getElementById('olsb3d-info').hidden, null, 40000) },
+  { path: 'OLSB.html#m=3d&sel=' + encodeURIComponent('<img src=x onerror=window.__pwned=1>'), ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb3d') === 'ready'
+    && !window.__pwned && !document.querySelector('#olsb3d-info img'), null, 40000) },
   /* OLSB Real CT: no tbone/ request until the view opens; then a slice draws and clicking a landmark selects its glossary id. */
   { path: 'OLSB.html#d=axial&p=posterior&s=1', setup: tboneSetup, ready: async (p) => {
     await wait(p, () => document.documentElement.getAttribute('data-olsb') === 'ready');

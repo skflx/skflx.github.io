@@ -186,7 +186,7 @@ them.
 
 ## OLSB — middle ear & mastoid (`OLSB.html`)
 
-**State:** Unlisted (`noindex`; only `atlas.html` links to it). Three modes behind
+**State:** Unlisted (`noindex`; `atlas.html` and the ear-anatomy guide's hotspot block link to it, the latter as `#m=3d&sel=<id>` to select and fly to a structure). Three modes behind
 one switch: a 3D model (the default), four 2D diagrams (the fallback
 without WebGL, and every `#d=`/`#p=` link) and Real CT (below).
 

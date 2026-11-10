@@ -915,6 +915,14 @@
                     dl.appendChild(dd);
                 });
                 panel.appendChild(dl);
+                /* Only a plain glossary id reaches the href; OLSB selects it, nothing is rendered from it. */
+                if (/^[a-z0-9_-]+$/i.test(st.sel)) {
+                    const three = document.createElement('a');
+                    three.className = 'lr-hs-3d';
+                    three.textContent = 'Open in 3D model';
+                    three.href = 'OLSB.html#m=3d&sel=' + encodeURIComponent(st.sel);
+                    panel.appendChild(three);
+                }
             }
             function paintFind() {
                 const rd = st.round;
