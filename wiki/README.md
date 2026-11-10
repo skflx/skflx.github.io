@@ -20,6 +20,14 @@ synthetic vault, and the DGMO fence transform with a stub renderer, in CI. The o
 vault content in this repo is sync output in `content/`; test fixtures are synthetic.
 The repo root carries `.nojekyll` so GitHub Pages serves these Markdown files raw.
 
+To install the correction form in the wiki repository: copy `github/ISSUE_TEMPLATE/` to its
+`.github/ISSUE_TEMPLATE/` and create the `wiki-feedback` label there (issue forms only apply
+labels that exist).
+
+**The last lock is in the wiki repository, not here.** Its deploy workflow fails the build if any
+note under `content/` still has a `## Personal Notes` section. Keep that step; it is the only
+check that runs on what is actually published.
+
 ## Running the sync
 
 `sync-vault.mjs` is dry-run by default and only writes with `--write`. Dry run first, and read the report:
