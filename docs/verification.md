@@ -179,7 +179,7 @@ validates the data under it:
   array.
 - `node tools/test-airway-resume.mjs`: saved games per tab,
   resume restores the exact state, Start fresh and End game clear only that
-  tab's save, the pre-tab save migrates, and the game plays with storage throwing.
+  tab's save, and the game plays with storage throwing.
 
 ### CPT search (`cpt-search.html`)
 - Boots with zero console errors; typing filters; clicking a result copies
