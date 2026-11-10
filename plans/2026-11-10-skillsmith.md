@@ -93,12 +93,12 @@ Default run, exit 1 on any failure, one line per finding (`<skill>: <rule>: <det
 | `registered` | The skill's name appears backticked in the `## Skills` section of `AGENTS.md` |
 | `roster` | `roster.json` has the four roles and `order` contains every role's alias |
 
-Third-party folders: `frontmatter` only (without the `Use when` clause requirement relaxed: apply
-it as written; if upstream fails it, report as a warning, exit unaffected).
+Third-party folders: `frontmatter` only; a missing `Use when` clause there is a warning that leaves
+the exit code alone, any other frontmatter fault is an error.
 
 `--due` (report only, always exit 0): one line per house skill with its reasons, from
 `never audited` / `stale` (`reviewed.date` over 120 days old) / `model` (`reviewed.model` is not the
-roster planner) / `drift: <path>` (a repo path cited in `SKILL.md` has a commit dated after
+roster planner) / `drift: <path>` (a repo file cited in `SKILL.md`, never a directory, has a commit dated after
 `reviewed.date`; `git log -1 --format=%cs -- <path>`; skip silently if git is unavailable). A skill
 with no reason prints nothing; if none is due print `no skill is due`.
 
