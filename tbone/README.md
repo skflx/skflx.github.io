@@ -24,7 +24,7 @@ this resolution and not labelled by UW).
 
 ## Regenerate
 
-`extract.py` and the other pipeline scripts need the raw slices, so run `fetch.py` first.
+`extract.py`, `slices.py` and the other pipeline scripts need the raw slices, so run `fetch.py` first.
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r tools/ssb-pipeline/requirements.txt
