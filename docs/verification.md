@@ -99,9 +99,14 @@ three pages that load it must FAIL. Smoke additionally loads
   **Resume**; with none it reads **Launch**.
 - With a `oksat:srs:*` item whose `nextReview` is today or earlier, the
   `#review-banner` unhides, `#review-count` totals due across all modules,
-  and `#review-go` links to the module holding the most.
-- Settings holds only the local-data reset, which arms on first click and
-  fires on second. No API key, sync, or reviewer UI may reappear.
+  and `#review-list` links every module with due items, most due first
+  (`tools/test-oksat-engine.mjs` case 8).
+- **Weak concepts** (`tools/test-oksat-engine.mjs` case 9): `#weak` lists only
+  concepts with 3+ attempts and a miss, worst first, and stays hidden with none.
+- Settings holds the local-data reset (arms on first click, fires on second)
+  and **Export / Import progress** (`tools/test-oksat-engine.mjs` case 10: the
+  round trip restores every `oksat:*` key; a malformed import writes nothing).
+  No API key, sync, or reviewer UI may reappear.
 - Smoke assertion: `#modules .module-card` count > 0.
 
 ### OKSAT study engine (`oksat-study.html?m=pediatrics`)
@@ -161,6 +166,9 @@ validates the data under it:
 - **Deck and pearls** load every chapter; a card grade writes the same record.
 - **Untrusted input**: `?g=`, `?c=` and the hash only match known ids; a
   payload renders as text (smoke regression, same class as `?m=`).
+- **sk.oto link** (section 11): one "Read the map in sk.oto" link with the exact
+  `OKSAT_SKOTO` URL where the subspecialty has a map, none where it has none,
+  and none when `live` is false.
 - Manual: read each new chapter in both themes and at phone width; a green run
   proves structure, not that the page teaches.
 
@@ -169,11 +177,17 @@ validates the data under it:
   names no remote origin, so a regression is also a console error);
   `AIRWAY_DATA` loads. Smoke assertion: `window.AIRWAY_DATA.questions` is an
   array.
+- `node tools/test-airway-resume.mjs`: saved games per tab,
+  resume restores the exact state, Start fresh and End game clear only that
+  tab's save, the pre-tab save migrates, and the game plays with storage throwing.
 
 ### CPT search (`cpt-search.html`)
 - Boots with zero console errors; typing filters; clicking a result copies
   its code and flips the button to **Copied**; a query like
   `<img src=x onerror=…>` renders as text (results go through `esc()`).
+- `node tools/test-search.mjs` (covers `search.html` too): a
+  module-title query links to `?m=<slug>`, a CPT hit lands on its row in the
+  viewport, on desktop and phone.
 
 ### PDF chapter splitter (`pdf-chapter-splitter.html`)
 - Boots with zero console errors, with `PDFLib` and `JSZip` defined (smoke).
@@ -203,6 +217,14 @@ validates the data under it:
   so wait for `data-meshing` to leave `busy` (`data-remesh-ms` is the time
   it took). Check both Smooth (default) and Blocks: thin structures (chorda,
   stapes crura, GSPN) are where smoothing loses most.
+- Real CT mode (`#m=ct[&pl=ax|cor|sag][&at=<mm>]`), in `smoke-pages` on a synthetic volume routed by Playwright (nothing
+  under `tbone/` is read): no `tbone/` request before the mode is entered; a slice draws; a real click on a landmark
+  selects its glossary id and fills the info card; `#m=ct&pl=cor&at=1.5` sets the plane and position; junk in `pl` or
+  `at` falls back to the axial plane without error (`pl=constructor` included); unreadable `tbone/` data shows the
+  status message and the Diagrams mode stays usable.
+- Truth check: `OLSB_TRUTH=1 node tools/check-data.mjs` prints the residual per structure against the UW landmarks
+  (`tbone/geometry/landmarks.json`). It is report-only: no threshold fails yet, and it proves nothing finer than the
+  about 3 mm noise floor.
 
 ### Wiki sync (`wiki/sync/sync-vault.mjs`)
 `tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and
@@ -270,7 +292,8 @@ edit the flat file directly.
 
 ### SSB knowledge graph (`ssb/content/`)
 
-`node tools/ssb-content.mjs` (also run by `tools/check-data.mjs`). Checks:
+`node tools/ssb-content.mjs` (also run by `tools/check-data.mjs`); `--queue` prints the owner's review queue
+(draft nodes whose cited sources are all verified; not a check). Checks:
 required fields per entity type and the controlled vocabularies
 (`docs/authoring-ssb.md` §5–§6); id format and global uniqueness; every
 reference resolves — structured refs *and* inline `[[id]]` in text — with
@@ -476,9 +499,9 @@ check (`--shots` writes `spec-*.png`).
 (nothing is written into `ssb/`) and pins, in Node, that a patch changes exactly its box in the CT and the labels and
 nothing else, the base staying byte-identical; the refusals (box outside, bad dimensions, unknown label, wrong base or
 entry, short or long body, version 2, node names that are markup); the loader's URLs; and the hash whitelist and
-canonicalisation (unknown id, preset, side, base, incompatible pair, markup, all-or-nothing); then in the page the
-disabled pills with no index (and no request), the pills with one, CT showing the patch's box, and the override node
-hiding the base node and giving it back on clear.
+canonicalisation (unknown id, preset, side, base, incompatible pair, markup, all-or-nothing); then in the page with no
+index Variants and Pathology are hidden and Normal asymmetry disabled (no request), with one the pills show, CT shows
+the patch's box, and the override node hides the base node and gives it back on clear.
 
 **Flap overlay** (`js/ssb/flap.js`, `docs/ssb.md` §5.7; `node tools/test-ssb.mjs --only flap`) pins, in Node
 on the committed charts, landmarks and soft pack, the posterior septal artery's first points inside the

@@ -733,15 +733,21 @@
         ov.setAttribute('preserveAspectRatio', 'none');
         ov.setAttribute('class', 'lr-hs-ov');
         const regions = (f.regions || []).filter((r) => G[r.g] && Array.isArray(r.poly) && r.poly.length >= 6).map((r) => {
-            const p = document.createElementNS(SVG_NS, 'polygon');
             const pts = [];
             for (let i = 0; i + 1 < r.poly.length; i += 2) pts.push(r.poly[i] + ',' + r.poly[i + 1]);
+            const hit = document.createElementNS(SVG_NS, 'polygon');
+            hit.setAttribute('points', pts.join(' '));
+            hit.setAttribute('class', 'lr-hs-hit');
+            hit.setAttribute('aria-hidden', 'true');
+            const p = document.createElementNS(SVG_NS, 'polygon');
             p.setAttribute('points', pts.join(' '));
             p.setAttribute('data-g', r.g);
             p.setAttribute('class', 'lr-hs-poly');
-            ov.appendChild(p);
-            return { g: r.g, el: p };
+            return { g: r.g, el: p, hit: hit };
         });
+        /* Hit padding goes under every visible outline, so it never covers a shape's own hover or state. */
+        regions.forEach((r) => ov.appendChild(r.hit));
+        regions.forEach((r) => ov.appendChild(r.el));
         wrap.appendChild(img);
         wrap.appendChild(ov);
         return { node: wrap, regions: regions };
@@ -793,6 +799,7 @@
 
             const cur = () => frames[st.frame];
             const regionOf = (g) => cur().regions.filter((r) => r.g === g)[0] || null;
+            const regionsOf = (g) => cur().regions.filter((r) => r.g === g);
             const STATE = ['is-selected', 'is-neighbor', 'is-hit', 'is-miss', 'is-target'];
             function clearMarks() { frames.forEach((f) => f.regions.forEach((r) => STATE.forEach((c) => r.el.classList.remove(c)))); }
 
@@ -823,9 +830,11 @@
             function startRound() {
                 st.sel = null;
                 clearMarks();
-                const regs = cur().regions;
-                st.round = regs.length < 3 ? null : {
-                    order: orderFor(regs.map((r) => r.g), key + '#' + st.attempt + '#' + st.frame),
+                /* One question per distinct structure: a g with two regions is asked once. */
+                const ids = [];
+                cur().regions.forEach((r) => { if (ids.indexOf(r.g) === -1) ids.push(r.g); });
+                st.round = ids.length < 3 ? null : {
+                    order: orderFor(ids, key + '#' + st.attempt + '#' + st.frame),
                     i: 0, score: 0, done: false, grade: null,
                 };
                 paintRegions();
@@ -835,13 +844,12 @@
                 const rd = st.round;
                 if (!rd || rd.done) return;
                 const target = rd.order[rd.i];
-                const r = regionOf(g);
-                if (!r) return;
-                if (g === target) { r.el.classList.add('is-hit'); rd.score++; }
+                const hits = regionsOf(g);
+                if (!hits.length) return;
+                if (g === target) { hits.forEach((r) => r.el.classList.add('is-hit')); rd.score++; }
                 else {
-                    r.el.classList.add('is-miss');
-                    const t = regionOf(target);
-                    if (t) t.el.classList.add('is-target');
+                    hits.forEach((r) => r.el.classList.add('is-miss'));
+                    regionsOf(target).forEach((t) => t.el.classList.add('is-target'));
                 }
                 rd.i++;
                 if (rd.i >= rd.order.length) finish(rd);
@@ -923,7 +931,9 @@
 
             /* Region handlers: bound once per element, on every frame. */
             frames.forEach((f) => f.regions.forEach((r) => {
-                r.el.addEventListener('click', () => (st.mode === 'find' ? tap(r.g) : select(r.g)));
+                const onClick = () => (st.mode === 'find' ? tap(r.g) : select(r.g));
+                r.el.addEventListener('click', onClick);
+                if (r.hit) r.hit.addEventListener('click', onClick);
                 r.el.addEventListener('keydown', (e) => {
                     if (e.key !== 'Enter' && e.key !== ' ') return;
                     e.preventDefault();
@@ -1590,6 +1600,17 @@
     document.title = guide.title + ' · Interactive learning · OKSAT | skflx.MD';
     const hue = (SUBS[guide.subspecialty] || {}).hue || guide.accent;
     if (/^#[0-9a-fA-F]{3,8}$/.test(hue || '')) root.style.setProperty('--lr-hue', hue);
+    const sk = window.OKSAT_SKOTO, bar = document.querySelector('.ok-topbar-actions');
+    if (sk && sk.live === true && sk.maps && sk.maps[guide.subspecialty] && bar) {
+        const a = document.createElement('a');
+        a.className = 'ok-back';
+        a.textContent = 'Read the map in sk.oto';
+        a.href = sk.base + sk.maps[guide.subspecialty];
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.style.marginRight = '0.5rem';
+        bar.insertBefore(a, bar.firstChild);
+    }
     rec = OKSATStore.getLearn(guide.slug, reviewer);
     mount();
     const first = routeFromLocation();

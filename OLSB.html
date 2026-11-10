@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=cb283dd6">
-    <link rel="stylesheet" href="css/olsb.css?v=6de59063">
+    <link rel="stylesheet" href="css/olsb.css?v=ebc28268">
 </head>
 <body>
     <header class="site-topbar">
@@ -37,6 +37,7 @@
         <div class="olsb-procs olsb-mode" id="olsb-mode" role="group" aria-label="Mode" hidden>
             <button class="site-pill" type="button" data-mode="3d" aria-pressed="false">3D model</button>
             <button class="site-pill" type="button" data-mode="2d" aria-pressed="false">Diagrams</button>
+            <button class="site-pill" type="button" data-mode="ct" aria-pressed="false">Real CT</button>
         </div>
 
         <div class="olsb3d" id="olsb3d" hidden>
@@ -106,6 +107,51 @@
                     </div>
                 </aside>
             </div>
+        </div>
+
+        <div class="olsb-ct" id="olsb-ct" hidden>
+            <div class="olsb-grid">
+                <section class="olsb-stagecol" aria-label="Real CT">
+                    <div class="olsb-stage olsb-ct-stage">
+                        <canvas id="olsb-ct-canvas" tabindex="0" aria-label="Slice of the reference temporal bone CT; arrow keys or Page Up and Page Down move the slice"></canvas>
+                        <p class="olsb3d-status" id="olsb-ct-status" role="status" hidden></p>
+                        <p class="olsb-orient" id="olsb-ct-pos"></p>
+                    </div>
+                </section>
+                <section class="olsb-controls" aria-label="CT controls">
+                    <div class="olsb-row" id="olsb-ct-planes" role="group" aria-label="Plane">
+                        <span class="site-kicker">Plane</span>
+                        <button class="site-pill" type="button" data-pl="ax" aria-pressed="true">Axial</button>
+                        <button class="site-pill" type="button" data-pl="cor" aria-pressed="false">Coronal</button>
+                        <button class="site-pill" type="button" data-pl="sag" aria-pressed="false">Sagittal</button>
+                    </div>
+                    <div class="olsb-row" role="group" aria-label="Slice position">
+                        <span class="site-kicker">Slice</span>
+                        <input type="range" id="olsb-ct-slider" min="0" max="1" value="0" aria-label="Slice position">
+                    </div>
+                    <div class="olsb-row" id="olsb-ct-show" role="group" aria-label="Overlay">
+                        <span class="site-kicker">Show</span>
+                        <button class="site-pill" type="button" data-show="marks" aria-pressed="true">Landmarks</button>
+                        <button class="site-pill" type="button" data-show="sweeps" aria-pressed="true">Centrelines</button>
+                    </div>
+                    <p class="olsb-sub olsb-ct-legend">Ring: a landmark placed from a UW label. Line: a traced centreline, <strong>solid</strong> where the CT shows the lumen (detected), <strong>solid with dots</strong> at a UW arrow tip (labelled), <strong>dashed</strong> where it is placed by rule (inferred).</p>
+                </section>
+                <aside class="olsb-side" aria-label="On this slice">
+                    <p class="site-kicker" id="olsb-ct-count"></p>
+                    <div id="olsb-ct-list"></div>
+                    <div class="olsb-card olsb-info" id="olsb-ct-info" hidden>
+                        <div class="olsb-info-head">
+                            <p class="site-kicker" id="olsb-ct-info-kind"></p>
+                            <button class="site-btn site-btn-sm" type="button" id="olsb-ct-info-close">Close</button>
+                        </div>
+                        <h2 id="olsb-ct-info-name"></h2>
+                        <p class="note" id="olsb-ct-info-note"></p>
+                        <p class="olsb-sub" id="olsb-ct-info-status"></p>
+                        <p class="olsb-sub" id="olsb-ct-info-mm"></p>
+                    </div>
+                </aside>
+            </div>
+            <p class="olsb-sub olsb-ct-limits"><em>Temporal bone CT derived from the Interactive CT Temporal Bone Atlas, University of Washington Department of Radiology (uwmsk.org/temporalbone), used with the authors' permission.</em> One specimen, a normal right ear; the scale is inferred (&plusmn;10 %), values are display levels, not HU, and detail finer than about 0.7 mm is not there. Draft: not a clinical reference.</p>
         </div>
 
         <div id="olsb2d">
@@ -207,7 +253,8 @@
     <script src="js/olsb/volume.js?v=114a26eb"></script>
     <script src="js/olsb/mesh.js?v=6932ba1c"></script>
     <script src="js/olsb/main.js?v=36e07b86"></script>
-    <script type="module" src="js/olsb/3d.js?v=7e2c0352"></script>
+    <script type="module" src="js/olsb/3d.js?v=def3ca78"></script>
+    <script type="module" src="js/olsb/ct.js?v=a89490d1"></script>
     <script src="js/site.js?v=dd67d957"></script>
 </body>
 </html>

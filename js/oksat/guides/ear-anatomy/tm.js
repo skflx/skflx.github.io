@@ -39,7 +39,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q22', 'ear-anatomy:q23'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-geo'] }],
-            ref: [],
         },
         {
             id: 'tm-layers',
@@ -70,7 +69,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q24', 'ear-anatomy:q25'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-layers'] }],
-            ref: [],
         },
         {
             id: 'tm-marks',
@@ -90,7 +88,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q26'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-marks'] }],
-            ref: [],
         },
         {
             id: 'tm-quad',
@@ -129,7 +126,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q27'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-quad'] }],
-            ref: [],
         },
         {
             id: 'tm-supply',
@@ -150,7 +146,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q28'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-supply'] }],
-            ref: [],
         },
         {
             id: 'tm-dev',
@@ -171,7 +166,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q29'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['tm-dev'] }],
-            ref: [],
         },
     ],
 };

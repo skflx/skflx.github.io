@@ -6,6 +6,7 @@
 
 window.__OKSAT_CHAPTER = {
     id: 'ars',
+    review: 'draft',
     title: 'Definitions and acute rhinosinusitis',
     kicker: '5 · Rhinosinusitis',
     lede: 'EPOS definitions are symptom plus objective-evidence rules. For ARS, most patients need symptom care and very few need antibiotics; complications need speed.',

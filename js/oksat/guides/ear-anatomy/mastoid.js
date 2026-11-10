@@ -58,7 +58,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q67', 'ear-anatomy:q68'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-surface'] }],
-            ref: [],
         },
         {
             id: 'ma-antrum',
@@ -86,7 +85,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q69', 'ear-anatomy:q70'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-antrum'] }],
-            ref: [],
         },
         {
             id: 'ma-pneum',
@@ -119,7 +117,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q71', 'ear-anatomy:q72'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-pneum'] }],
-            ref: [],
         },
         {
             id: 'ma-sequence',
@@ -162,7 +159,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q73', 'ear-anatomy:q74'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-sequence'] }],
-            ref: [],
         },
         {
             id: 'ma-fn',
@@ -223,7 +219,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q76', 'ear-anatomy:q77'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-fn'] }],
-            ref: [],
         },
         {
             id: 'ma-recess',
@@ -252,7 +247,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q79', 'ear-anatomy:q80'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-recess'] }],
-            ref: [],
         },
         {
             id: 'ma-lines',
@@ -275,7 +269,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q81', 'ear-anatomy:q82'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-lines'] }],
-            ref: [],
         },
         {
             id: 'ma-peds',
@@ -311,7 +304,6 @@ window.__OKSAT_CHAPTER = {
                 { t: 'practice', title: 'Apply it', refs: ['ear-anatomy:q83', 'ear-anatomy:q84'] },
             ],
             drill: [{ m: 'ear-anatomy', c: ['ma-peds'] }],
-            ref: [],
         },
     ],
 };
