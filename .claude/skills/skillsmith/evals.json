@@ -1,0 +1,48 @@
+{
+  "reviewed": null,
+  "triggers": [
+    { "prompt": "Make a new skill for adding pages to the site, we keep getting it wrong.", "expect": true },
+    { "prompt": "Audit the oksat-module skill, I think it has gotten bloated.", "expect": true },
+    { "prompt": "A new model came out, check which of our skills we can shorten now.", "expect": true },
+    { "prompt": "The ascii-diagram skill led the agent astray on the last figure; fix the skill so it does not happen again.", "expect": true },
+    { "prompt": "Which skills are due for review?", "expect": true },
+    { "prompt": "Add a rule to AGENTS.md that every new page needs a noindex tag.", "expect": false },
+    { "prompt": "Update the ponytail skill from upstream.", "expect": false },
+    { "prompt": "Build a new OKSAT module on facial nerve anatomy.", "expect": false },
+    { "prompt": "Write a SessionStart hook that installs dependencies.", "expect": false },
+    { "prompt": "Make an ASCII 3D figure of the larynx for the airway page.", "expect": false }
+  ],
+  "tasks": [
+    {
+      "id": "new-skill-needs-evidence",
+      "split": "dev",
+      "prompt": "Make a skill called page-wizard that adds new pages to the site. I have not had any trouble with this myself, I just think it would be nice.",
+      "checks": [
+        "test ! -e .claude/skills/page-wizard/SKILL.md",
+        "judge: the run stopped and said there is not enough evidence of a recurring need, instead of writing a skill"
+      ],
+      "origin": "seed"
+    },
+    {
+      "id": "retro-writes-case-first",
+      "split": "dev",
+      "prompt": "The ascii-diagram skill told the agent to bake frames before stamping, and CI failed on a stale stamp. Handle this with skillsmith.",
+      "checks": [
+        "node -e \"const e=require('./.claude/skills/ascii-diagram/evals.json');process.exit(e.tasks.some(t=>/^incident:/.test(t.origin))?0:1)\"",
+        "node tools/lint-skills.mjs",
+        "judge: the diff adds an incident-origin task case before or together with any edit to the skill's SKILL.md"
+      ],
+      "origin": "seed"
+    },
+    {
+      "id": "audit-fixes-description-for-trigger-miss",
+      "split": "holdout",
+      "prompt": "Run /skillsmith audit on a skill whose trigger eval for the prompt 'tidy up our skills folder' picked none. Fix it.",
+      "checks": [
+        "node tools/lint-skills.mjs",
+        "judge: the only edited part of any SKILL.md is its frontmatter description, not the body"
+      ],
+      "origin": "seed"
+    }
+  ]
+}
