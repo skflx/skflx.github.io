@@ -1106,8 +1106,10 @@ function checkAgents() {
 /* ---- atlas and unlisted pages (docs/atlas.md, plans/2026-10-28-figures-eggs-atlas.md) ----
    atlas.html, OLSB.html and ssb.html are unlisted: noindex, and only atlas.html links to
    them. Nothing else links to atlas.html. A js/ file may name a page only as a quoted
-   navigation target; js/atlas.js (the atlas's own script) is exempt. */
+   navigation target; js/atlas.js (the atlas's own script) is exempt. The guide viewer's hotspot
+   block is the one other OLSB linker ("Open in 3D model", OLSB.html#m=3d&sel=<id>): OLSB_LINKERS. */
 const UNLISTED = ['atlas.html', 'OLSB.html', 'ssb.html'];
+const OLSB_LINKERS = new Set(['js/oksat/learn.js']);
 function checkAtlasAndUnlisted() {
   const r = checkAtlas();
   ok(r.ok, 'atlas: bake is fresh and the data validates', 'atlas: ' + r.errors.join('; '));
@@ -1139,10 +1141,11 @@ function checkAtlasAndUnlisted() {
     if (/['"`](?:\.\/)?atlas\.html/.test(src)) linkProblems.push(`${file} navigates to atlas.html`);
     /* A system's own scripts may name its own page (js/olsb/ -> OLSB.html, js/ssb/ -> ssb.html). */
     for (const [pg, own] of [['OLSB', 'js/olsb/'], ['ssb', 'js/ssb/']]) {
+      if (pg === 'OLSB' && OLSB_LINKERS.has(file)) continue;
       if (!file.startsWith(own) && new RegExp('[\'"`](?:\\./)?' + pg + '\\.html').test(src)) linkProblems.push(`${file} navigates to ${pg}.html (only atlas.html may)`);
     }
   }
-  ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html links to OLSB and ssb', linkProblems.join('; '));
+  ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html (and the guide hotspot block, OLSB_LINKERS) links to OLSB; only atlas.html links to ssb', linkProblems.join('; '));
 }
 
 /* tbone/ct/ct.json (the temporal-bone CT, WP E1) must parse as SSB's ct.json v1 header: js/ssb/volume.js

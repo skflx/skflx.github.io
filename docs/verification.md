@@ -144,6 +144,7 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
 ### Interactive learning (`oksat-learn.html?g=<slug>`)
 `tools/test-oksat-learn.mjs` pins, and `tools/check-data.mjs` (`OKSAT_GUIDES`)
 validates the data under it:
+- **Hotspot to 3D**: in Explore a selected structure gets an "Open in 3D model" link (`a.lr-hs-3d`, `OLSB.html#m=3d&sel=<id>`); Find shows none (`tools/test-oksat-learn.mjs` T14e/f).
 - **Render**: a chapter draws its sections, the rail lists every chapter plus
   flashcards and pearls, and no raw `**` or `[[ ]]` reaches the page.
 - **Predict-then-reveal**: the typed answer is echoed back and never stored;
@@ -202,6 +203,7 @@ validates the data under it:
   `rel` target exists, and every step's `focus`/`layers`/`view` resolve.
   Look at every tour step at 390px and 1280px in both themes after a
   geometry change: label placement is hand-tuned per structure (`at`, `lab`).
+- The guide deep link: `#m=3d&sel=lscc` selects the structure and shows the info panel; a hostile `sel` is ignored (`tools/smoke-pages.mjs`).
 - The 3D model: `#m=3d&s=1` builds the volume (in its worker), meshes it
   (`#olsb3d-stage[data-faces]`), and a click on it selects a structure; a
   payload in `#m=3d&st=…&cam=…` selects nothing. `tools/check-data.mjs`

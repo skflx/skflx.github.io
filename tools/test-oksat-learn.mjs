@@ -670,6 +670,14 @@ async function main() {
     const misses = await page.$$eval(`${sel} .is-miss`, (e) => e.length);
     const targets = await page.$$eval(`${sel} .is-target`, (e) => e.length);
     check('10-T14c: a miss on one region marks every region of the answer', misses === (other === 'ssc' ? 2 : 1) && targets === (t1 === 'ssc' ? 2 : 1), `misses=${misses} targets=${targets} t1=${t1} other=${other}`);
+    /* T14e: Explore names the 3D link for the selected structure; Find never shows it */
+    await page.click(`${sel} button[data-mode="explore"]`);
+    const g3 = await page.locator(`${sel} .lr-hs-poly`).first().evaluate((e) => e.dataset.g);
+    await page.locator(`${sel} .lr-hs-poly[data-g="${g3}"]`).first().click();
+    const href3 = await page.getAttribute(`${sel} a.lr-hs-3d`, 'href').catch(() => null);
+    check('10-T14e: exploring a structure adds Open in 3D model linking to its glossary id', href3 !== null && href3.endsWith(`OLSB.html#m=3d&sel=${encodeURIComponent(g3)}`), `g=${g3} href=${href3}`);
+    await page.click(`${sel} button[data-mode="find"]`);
+    check('10-T14f: Find mode has no Open in 3D model link', (await page.$$eval(`${sel} a.lr-hs-3d`, (e) => e.length)) === 0);
     check('10-T14d: no console errors on the imaging chapter', errors.length === 0, JSON.stringify(errors.slice(0, 2)));
     await context.close();
   }

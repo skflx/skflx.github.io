@@ -818,7 +818,7 @@ function readHash() {
         const m = new RegExp('(?:^|&)' + k + '=([^&]*)').exec(h);
         try { return m ? decodeURIComponent(m[1]) : null; } catch (e) { return null; }
     };
-    return { m: get('m'), d: get('d'), p: get('p'), st: get('st'), s: get('s'), L: get('L'), cut: get('cut'), cam: get('cam') };
+    return { m: get('m'), d: get('d'), p: get('p'), st: get('st'), s: get('s'), L: get('L'), cut: get('cut'), cam: get('cam'), sel: get('sel') };
 }
 function applyHash() {
     const h = readHash();
@@ -834,6 +834,8 @@ function applyHash() {
     if (h.L != null || h.cam) st.moved = true;
     setState(h.st || 'intact');
     renderStep();
+    /* #m=3d&sel=<glossary id> (from the guide viewer): select and fly to it when the model can show it. */
+    if (typeof h.sel === 'string' && /^[a-z0-9_-]{1,40}$/i.test(h.sel) && inModel(h.sel)) { select(h.sel); flyToId(h.sel); }
 }
 
 /* ---------- loop ---------- */

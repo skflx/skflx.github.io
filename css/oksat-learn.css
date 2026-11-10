@@ -320,6 +320,9 @@
 .lr-hs-nbs dd { font-size: 0.95rem; }
 .lr-hs-nb { font: inherit; font-size: 0.92rem; color: var(--ok-accent); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
 .lr-hs-nb:focus-visible { outline: 2px solid var(--ok-accent); outline-offset: 2px; }
+.lr-hs-3d { display: inline-block; justify-self: start; margin-top: 0.4rem; font-family: var(--ok-font-ui); font-size: 11.5px; color: var(--ok-accent); text-decoration: none; }
+.lr-hs-3d:hover { text-decoration: underline; }
+.lr-hs-3d:focus-visible { outline: 2px solid var(--ok-accent); outline-offset: 2px; }
 
 .lr-layers-stage { border: 1px solid var(--ok-border); }
 .lr-layers-base { display: block; width: 100%; height: auto; }
