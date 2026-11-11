@@ -1,326 +1,182 @@
 # Authoring an OKSAT study module
 
-OKSAT — the OHNS Knowledge Self-Assessment Tool. Every study module is a single
-JavaScript data file plus one manifest entry. The shared engine
-(`js/oksat/engine.js`) renders it — you never touch the engine or write any UI.
+A module is one JavaScript data file plus one manifest entry. The engine
+(`js/oksat/engine.js`) renders it; never touch the engine or write UI.
 
-This document is the **quality specification**, not a minimal-acceptance gate.
-The engine tolerates sparse data (a title + questions works), but every shipped
-module must meet the full spec below. The ingestion system enforces it;
-`tools/check-data.mjs` enforces the structural subset.
+This is the **quality specification**. The engine tolerates sparse data, but
+every shipped module meets the full spec. `tools/check-data.mjs` enforces the
+structural subset; `tools/lint-oksat.mjs <slug>` enforces the rest and must
+come back clean. The agent recipe (sources, figures, arc, cases) is
+`.claude/skills/oksat-module/SKILL.md`.
 
-## Add a module in 3 steps
+## Add a module
 
-1. **Create** `js/oksat/modules/<slug>.js` (kebab-case slug, e.g. `larynx-anatomy`).
-2. **End the file** with exactly one registration line:
+1. **Create** `js/oksat/modules/<slug>.js` (kebab-case; `slug` = filename).
+2. **End the file** with exactly one line:
    ```js
    window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
    ```
-3. **Append one entry** to `js/oksat/manifest.js`:
-   ```js
-   { slug: 'larynx-anatomy', title: 'Laryngeal Anatomy', kicker: 'Laryngology',
-     subspecialty: 'laryngology',   // keys into OKSAT_SUBSPECIALTIES (hue + hub grouping)
-     count: 25, accent: '#4A6B7B',
-     desc: 'One-line description shown on the hub card.',
-     data: 'js/oksat/modules/larynx-anatomy.js' },
-   ```
+3. **Append one entry** to `js/oksat/manifest.js` (fields below).
 
-Open `oksat-study.html?m=larynx-anatomy` to view it; it also appears on the
-hub (`oksat.html`), grouped under its subspecialty. A concept deep link also
-works: `oksat-study.html?m=larynx-anatomy&c=<concept-key>`.
+Preview: `python3 -m http.server`, then `oksat-study.html?m=<slug>`. A concept
+deep link adds `&c=<concept-key>`.
 
----
+## Schema
 
-## Schema reference
-
-### `meta` (object, required)
+### `meta` (required)
 
 | Field | Required | Notes |
 |---|---|---|
-| `title` | **yes** | Module heading. A `\n` splits it across two lines; the second line renders italic. |
-| `subtitle` | **yes** | One or two sentences under the title — describes the module's scope and arc. |
-| `kicker` | **yes** | Small all-caps label above the title (e.g. `Self-Assessment · Otology`). |
-| `id` | **yes** | Falls back to the manifest slug for storage keys; set it explicitly to match the slug. |
-| `sources` | recommended | Array of strings — provenance citations for the module's content (e.g. `['AAO-HNSF Otolaryngology Core Curriculum']`). Rendered below the subtitle when present. |
+| `title` | yes | Heading. A `\n` splits it; the second line renders italic. |
+| `subtitle` | yes | One or two sentences: scope and arc. |
+| `kicker` | yes | Small label above the title, e.g. `Self-Assessment · Otology`. |
+| `id` | yes | Set explicitly to the slug (storage key). |
+| `sources` | recommended | Array of citation strings, rendered under the subtitle. |
 
-### `DOMAINS` (object, required)
+### `DOMAINS` (required)
 
-`key → { label, color, hex }`. **5–8 domains per module** (a guide's companion module, same slug, may have up to one per numbered chapter).
+`key → { label, color, hex }`, 5–8 per module (a guide's companion module may
+have up to one per numbered chapter). `color` is the solid hue; `hex` the
+translucent chip fill, e.g. `'rgba(44,84,84,0.14)'`. Every concept belongs to
+exactly one domain.
 
-- `color` — a solid hue (chip text + accent bar), e.g. `'#2C5454'`.
-- `hex` — a translucent fill (chip background), e.g. `'rgba(44,84,84,0.14)'`.
+### `CONCEPTS` (required)
 
-Pair each domain's `color` with a matching translucent `hex`. Domains provide
-the top-level topical grouping; every concept belongs to exactly one domain.
+`key → { label, domain }`, 20–50 per module (a guide's companion may have up
+to one per guide section). Keys are kebab-case; `domain` must be a `DOMAINS`
+key. Concepts drive the chip filter, the domain tree and "Explore Related".
+Multi-question case sequences share a `case-<name>` concept so the filter
+isolates the case as a study unit.
 
-### `CONCEPTS` (object, required)
+### `ITEMS` (required)
 
-`key → { label, domain }`. **20–50 concepts per module** (a guide's companion module may have up to one per guide section); **1–3 concept tags per item.**
+Every item opens on a **recall gate**: the stem shows first, and the learner
+either answers from memory and self-grades (**Reveal answer**), or picks **Show
+the choices** and answers as a locked-first-attempt MCQ. The engine records the
+path, so a cold recall and a correct MCQ stay distinct. Authoring is unchanged:
+write every MCQ stem so it is answerable from memory.
 
-- `domain` — must be a key in `DOMAINS`.
-- Concept keys are `kebab-case`.
+**Changing an item `id` resets its study history.** Ids are permanent once a
+module has been studied; new items get new ids, appended, never renumbered.
+On a studied item, do not reorder options or change `correct`.
 
-Concepts power the chip filter, the domain tree, and the "Explore Related"
-suggestions (related questions are found by shared concept tags). An item with
-no concept tags is a dead node — it won't appear in any concept-filtered view.
-
-**Case-specific concept keys:** multi-question case sequences (§ Case scenarios
-below) should share a concept key prefixed `case-` (e.g. `case-acoustic`,
-`case-scc`). This lets the chip filter isolate the entire case as a study unit.
-
-### `ITEMS` (array, required)
-
-Every MCQ item opens on a **recall gate**: the stem shows first, and the
-learner chooses **Reveal answer** (answer from memory, then self-grade on the
-same four-point scale as recall items) or **Show the choices** (answer it as a
-locked-first-attempt MCQ). The engine records which path settled the item, so
-"knew it cold" and "got it with the choices" stay distinguishable. Authoring is
-unchanged — the gate is engine behavior, not a data field. Author every MCQ so
-its stem is answerable from memory (a bare "Which of the following…" with no
-context reads poorly once the choices are hidden).
-
-#### MCQ items (`type: 'mcq'` — default)
+#### MCQ (`type: 'mcq'`, the default)
 
 | Field | Required | Notes |
 |---|---|---|
-| `id` | **yes** | Unique within the module, conventionally `q1`, `q2`, … Used by progress dots + related list. **Changing an id resets its study history.** |
-| `type` | omit or `'mcq'` | Defaults to `'mcq'`. |
-| `stem` | **yes** | The question text. |
-| `options` | **yes** | `[{ id: 'a', text: '…' }, …]` — typically 4 options (a–d). |
-| `correct` | **yes** | The `id` of the correct option. |
-| `brief` | **yes** | 1–2 sentence explanation shown immediately after answering — the takeaway. |
-| `detailed` | **yes** | Longer explanation behind a "Read more" toggle — teaches mechanism → application → pearl. |
-| `concepts` | **yes** | Array of `CONCEPTS` keys. 1–3 tags per item; every item must have at least one. |
-| `section` | recommended (>30 items) | Small label above the question (e.g. `Embryology`). Adds visible grouping in the UI. |
-| `image` | optional | Path to an image shown below the stem (e.g. `'images/oksat/lip-recon/subunits.jpg'`). |
-| `imageAlt` | with `image` | Alt text for the stem image. |
-| `explanationImage` | optional | Path to an image shown inside the detailed explanation. |
-| `explanationImageAlt` | with `explanationImage` | Alt text for the explanation image. |
+| `id` | yes | Unique in the module, conventionally `q1`, `q2`, … |
+| `stem` | yes | Question text. |
+| `options` | yes | `[{ id: 'a', text }, …]`, typically 4. |
+| `correct` | yes | Id of the correct option. |
+| `brief` | yes | 1–2 sentences: the takeaway, shown right after answering. |
+| `detailed` | yes | Behind "Read more": mechanism → application → pearl. |
+| `concepts` | yes | 1–3 `CONCEPTS` keys; never empty. |
+| `section` | recommended (>30 items) | Small label above the question. |
+| `image`, `imageAlt` | optional | Shown under the stem. Alt required with it. |
+| `explanationImage`, `explanationImageAlt` | optional | Shown inside the explanation. |
 
-#### Recall items (`type: 'recall'`)
+#### Recall (`type: 'recall'`)
 
 | Field | Required | Notes |
 |---|---|---|
-| `id` | **yes** | Same rules as MCQ. |
-| `type` | **yes** | Must be `'recall'`. |
-| `stem` | **yes** | The question / prompt text. |
-| `answer` | **yes** | The text revealed on "Reveal answer." Supports `\n` for line breaks and bullet lists. |
-| `brief` | **yes** | Short explanation — the "so what" after self-grading. |
-| `detailed` | recommended | Longer explanation when the answer needs elaboration. May be omitted if `answer` is already comprehensive. |
-| `concepts` | **yes** | Same rules as MCQ. |
-| `section` | **yes** (recall modules) | Recall modules rely on `section` for visual grouping since they lack the domain-chip interplay MCQ modules get from options. |
+| `id`, `type`, `stem`, `concepts` | yes | As MCQ; `type` must be `'recall'`. |
+| `answer` | yes | Revealed on "Reveal answer". `\n` and `• ` lists allowed. |
+| `brief` | yes | The "so what" after self-grading. |
+| `detailed` | recommended | Omit only if `answer` is already complete. |
+| `section` | yes | Recall modules group by section; they have no option chips. |
 
-A `type: 'recall'` card shows the `stem`, a **Reveal answer** button, then the
-`answer` text. The learner self-grades on a four-point scale:
+Self-grade (keys 1–4):
 
-| Grade (keys 1–4) | Counts as correct? | Leitner move |
+| Grade | Correct? | Leitner move |
 |---|---|---|
 | Didn't know | no | reset to box 1 |
 | Guessed | no | reset to box 1 |
 | Got it partially | yes | +1 box |
 | Knew it cold | yes | +2 boxes |
 
-### Text formatting
+### Text and images
 
-`stem`, `answer`, `brief`, and `detailed` honor `\n` as a line break. Use it
-for short lists, bullet-point layouts, or text "tables" within a field (see
-`js/oksat/modules/dtc-risk-stratification.js` for multi-line recall answers).
-Template literals (backtick strings) work well for multi-line `answer` fields.
+`stem`, `answer`, `brief` and `detailed` honour `\n`. The engine renders plain
+text only: `**bold**`, `#` and backticks show literally; use `\n` and `• `.
+`lint-oksat` flags markdown.
 
-### Images
+Images live in `images/oksat/<slug>/`, as paths from the repo root. A labelled
+figure (classification panel, staging table) goes in `explanationImage`, not
+`image`: in the stem it reveals the answer before the gate. Third-party figures
+keep their licence: copy unmodified, credit in the file header and
+`meta.sources`. A drawn SVG loads as `<img>`, so it cannot use site tokens or
+fonts: give it a white background, system fonts, the two signal colours as hex,
+and label it schematic.
 
-Items can include images in the stem and/or the detailed explanation. Store
-images under `images/oksat/<module-slug>/` (e.g. `images/oksat/lip-recon/`).
+### Sequence and arc
 
-- `image` — shown below the stem, before the options. Use for diagrams the
-  learner needs to answer the question (anatomy figures, surgical markings).
-- `explanationImage` — shown inside the detailed explanation toggle. Use for
-  clinical photo series, step-by-step illustrations, or diagrams that teach
-  rather than test.
+Order items as a deliberate arc, adapted to the topic:
 
-Both are optional strings (relative paths from the repo root). When absent,
-nothing renders — the engine handles this gracefully. Always provide an
-`imageAlt` / `explanationImageAlt` alongside.
+1. Foundations (anatomy, embryology, physiology, definitions)
+2. Pathophysiology and classification
+3. Workup and diagnosis
+4. Management and complications
+5. Integrating cases, last: 3–4 questions sharing a scenario and a
+   `case-<name>` concept, each building on the last.
 
-The engine renders plain text only: `**bold**`, `#` headings, and backticks show
-literally. Use `\n` for line breaks and `• ` for bullets. `tools/lint-oksat.mjs`
-flags markdown. The agent recipe for a whole module (sources, figures, ladder,
-cases) is `.claude/skills/oksat-module/SKILL.md`.
+Recall modules may use **sequential dependency**, where each answer feeds the
+next. Do not shuffle those; order matters.
 
-A labeled figure (a classification panel, a staging table) belongs in
-`explanationImage`, not `image` — in the stem it shows the answer before the
-recall gate. Third-party figures keep their license terms: `otoplasty` reuses
-StatPearls figures (CC BY-NC-ND 4.0), so they are copied unmodified (no crops
-or annotations) and credited in the file header and `meta.sources`.
+### Explanation voice
 
-A figure can be drawn for the module instead of copied, as an SVG in
-`images/oksat/<slug>/` (`aerd-biologics` does this where its source figure is
-wrong). It is loaded as an `<img>`, so it cannot read the site's tokens or
-fonts: give it its own white background, system fonts, and the two signal
-colours as fixed hex values, and label it schematic.
+Teach mechanism → application → pearl. `brief` is the takeaway; `detailed`
+gives the mechanism, when it matters, and the pearl (for cases, the decision
+path). No gamification, exclamation marks or congratulation. Source:
+`docs/design-principles.md` §6.
 
-See `js/oksat/modules/lip-reconstruction.js` for the reference implementation.
+## File conventions
 
----
-
-## Module structure
-
-### Progression arc
-
-Items should follow a deliberate pedagogical arc within the module:
-
-1. **Foundational knowledge** — anatomy, embryology, physiology, definitions
-2. **Pathophysiology & classification** — disease mechanisms, staging systems
-3. **Workup & diagnosis** — imaging, labs, electrodiagnostics, exam findings
-4. **Management & treatment** — medical therapy, surgical approaches, complications
-5. **Integrating case scenarios** — multi-question sequences at the end
-
-Not every module follows every tier — the arc adapts to the topic. A
-procedural module (like `ta-tubes`) may emphasize tiers 3–5; a risk-strat
-module (like `dtc-risk-stratification`) may be mostly tier 2.
-
-### Case scenarios
-
-Place multi-question clinical cases at the end of the module. A case is 3–4
-questions sharing a clinical scenario and a `case-<name>` concept key.
-
-- The first question sets the scene (history, exam, imaging).
-- Subsequent questions build on prior answers — diagnosis, management,
-  complications.
-- Case-specific concept keys (e.g. `case-scc`, `case-ramsay`) let the chip
-  filter isolate the case as a study unit.
-
-See `js/oksat/modules/facial-reanimation.js` for the benchmark implementation.
-
-### Sequential dependency (recall modules)
-
-In recall-only modules, items can be designed so each answer feeds the next —
-the learner builds up a framework question by question. This is a distinct
-pedagogical mode from independent MCQ items.
-**When using sequential dependency, item ordering matters — do not shuffle.**
-
-See `js/oksat/modules/dtc-risk-stratification.js` for the canonical example.
-
----
-
-## Explanation voice
-
-From `docs/design-principles.md` §6 — explanations teach
-**mechanism → application → pearl**:
-
-- **`brief`** — the takeaway in 1–2 sentences. Answer the "so what."
-- **`detailed`** — the teaching explanation. Start with mechanism (why the
-  answer is correct), move to clinical application (when it matters), end with
-  a pearl (the thing to remember). For case questions, walk the decision
-  algorithm.
-
-Never gamification language, exclamation marks, or congratulatory phrasing.
-The voice is that of a teaching attending, not a quiz app.
-
----
-
-## Data file conventions
-
-### File header
-
-Start the file with a comment block identifying the module:
-
-```js
-/* =================================================================
-   <Module Title>
-   OKSAT · <Subspecialty> Module
-   ================================================================= */
-```
-
-If the content derives from a specific source, note it in the header (this
-complements `meta.sources`, which is rendered in the UI):
-
-```js
-/* Source: AAO-HNSF Otolaryngology Core Curriculum — adapted. */
-```
-
-### Section dividers
-
-For modules with >20 items, group items by domain using comment dividers:
-
-```js
-// ─────────────── FOUNDATIONS ───────────────
-```
-
-or
-
-```js
-// ════════════════ ANATOMY ════════════════
-```
-
-This is an authoring convention for file navigability — not parsed by the
-engine.
-
-### Registration line
-
-The file must end with exactly one registration line:
-
-```js
-window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
-```
-
----
+- Header comment naming the module, subspecialty and any source
+  (`/* Source: … — adapted. */`).
+- Modules over 20 items: comment dividers by domain (authoring only).
+- Last line: the registration line above.
 
 ## Manifest entry
 
-Each module has one entry in `js/oksat/manifest.js`:
+| Field | Notes |
+|---|---|
+| `slug` | equals the filename |
+| `title`, `kicker`, `desc` | hub card: title, label, one line |
+| `subspecialty` | key into `OKSAT_SUBSPECIALTIES` (grouping and hue) |
+| `count` | equals `ITEMS.length`; the hub meter depends on it |
+| `accent` | the subspecialty's hue from `OKSAT_SUBSPECIALTIES`, never invented (a new subspecialty is an owner decision, `docs/decisions.md` §7) |
+| `data` | `'js/oksat/modules/<slug>.js'` |
 
-| Field | Required | Notes |
-|---|---|---|
-| `slug` | **yes** | Must match the filename (`js/oksat/modules/<slug>.js`). Kebab-case. |
-| `title` | **yes** | Hub card title. |
-| `kicker` | **yes** | Hub card subtitle label. |
-| `subspecialty` | **yes** | Key into `OKSAT_SUBSPECIALTIES` — determines hub grouping and accent hue. |
-| `count` | **yes** | Must equal `ITEMS.length` — `tools/check-data.mjs` enforces this. |
-| `accent` | **yes** | Hex color for the hub card accent bar. Use the subspecialty's hue from `OKSAT_SUBSPECIALTIES`. |
-| `desc` | **yes** | One-line description shown on the hub card. |
-| `data` | **yes** | Path to the data file: `'js/oksat/modules/<slug>.js'`. |
+Unfinished modules set `draft: true` (`docs/decisions.md` §9).
 
-**Accent hue rule:** the accent comes from `OKSAT_SUBSPECIALTIES`, not
-invented. Adding a 10th subspecialty is an owner decision
-(`docs/decisions.md` §7).
+## Guides that link here
 
----
+An Interactive learning guide (`docs/authoring-oksat-guide.md`) drills into a
+module by concept key and answers items in place by item id.
+`tools/check-data.mjs` fails when either stops resolving, so treat concept keys
+as stable as ids.
+
+## Storage
+
+Progress and SRS live under `oksat:progress:<slug>:<code>` and
+`oksat:srs:<slug>:<code>`, with `<code>` resolved by `OKSATStore.reviewer()`.
+Keys and migration: `docs/decisions.md` §3. Nothing is uploaded.
 
 ## Quality checklist
 
-Before a module ships:
-
 - [ ] `meta` has `title`, `subtitle`, `kicker`, `id`
-- [ ] `DOMAINS` defined, 5–8 entries (guide companion: up to one per numbered chapter), each with `label`, `color`, `hex`
-- [ ] `CONCEPTS` defined, 20–50 entries (guide companion: up to one per guide section), each with `label` and valid `domain`
-- [ ] Every item has `brief`, `concepts` (1–3 tags), and either `detailed` (MCQ) or `answer` (recall)
-- [ ] No orphan concepts (every concept is tagged by at least one item)
-- [ ] No untagged items (every item has at least one concept)
-- [ ] Case scenarios at the end with `case-<name>` concept keys (if applicable)
-- [ ] `section` field on items in modules with >30 items or recall items
-- [ ] Progression arc: foundations → pathology → workup → management → cases
-- [ ] Manifest entry with correct `count`, valid `subspecialty`, accent from `OKSAT_SUBSPECIALTIES`
-- [ ] `tools/check-data.mjs` passes
-- [ ] Preview: `oksat-study.html?m=<slug>` renders correctly
+- [ ] `DOMAINS`: 5–8 entries, each with `label`, `color`, `hex`
+- [ ] `CONCEPTS`: 20–50 entries, each with `label` and a valid `domain`
+- [ ] Every item has `brief`, 1–3 `concepts`, and `detailed` (MCQ) or `answer` (recall)
+- [ ] No orphan concepts; no untagged items
+- [ ] Cases last, with `case-<name>` concepts (if any)
+- [ ] `section` on items in modules over 30 items, and on all recall items
+- [ ] Arc: foundations → pathology → workup → management → cases
+- [ ] Manifest: correct `count`, valid `subspecialty`, accent from `OKSAT_SUBSPECIALTIES`
+- [ ] `node tools/check-data.mjs` and `node tools/lint-oksat.mjs <slug>` pass
+- [ ] `oksat-study.html?m=<slug>` renders
 
----
-
-## Dropped fields
-
-The following fields were in earlier schema versions but are **not used by any
-shipped module** and are excluded from the quality spec. The engine may still
-accept them, but the ingestion system does not produce them:
-
-| Field | Reason dropped |
-|---|---|
-| `difficulty` | Static difficulty labels are redundant with Leitner SRS — the learner's performance *is* the difficulty signal. |
-| `reference` (per-item) | Replaced by `meta.sources` (module-level attribution). Per-item citations were never authored. |
-| `distractorNotes` | Never authored across 182 MCQ items. If distractor analysis becomes valuable, the ingestion system can generate it as a separate layer. |
-
----
-
-## Minimal template (MCQ with taxonomy)
+## Minimal template
 
 ```js
 const meta = {
@@ -332,12 +188,10 @@ const meta = {
 
 const DOMAINS = {
     framework: { label: 'Framework', color: '#2C5454', hex: 'rgba(44,84,84,0.14)' },
-    muscles:   { label: 'Musculature', color: '#6E4A6B', hex: 'rgba(110,74,107,0.14)' },
 };
 
 const CONCEPTS = {
-    'cartilages':  { label: 'Cartilages', domain: 'framework' },
-    'intrinsic':   { label: 'Intrinsic muscles', domain: 'muscles' },
+    'cartilages': { label: 'Cartilages', domain: 'framework' },
 };
 
 const ITEMS = [
@@ -352,80 +206,10 @@ const ITEMS = [
         ],
         correct: 'b',
         brief: 'The cricoid is the only complete cartilaginous ring in the airway.',
-        detailed: 'The cricoid forms a signet-ring shape — narrow anteriorly, broad posteriorly (the lamina). It articulates with both arytenoids superiorly and the thyroid cartilage at the cricothyroid joints. Its completeness makes it the structural foundation of the laryngeal skeleton and the narrowest fixed point of the pediatric airway.',
+        detailed: 'Mechanism, application and pearl, in prose.',
         concepts: ['cartilages'],
     },
 ];
 
 window.__MCQ_MODULE = { meta, DOMAINS, CONCEPTS, ITEMS };
 ```
-
-## Full-featured item (case scenario with multi-question sequence)
-
-```js
-// Case-specific concept for chip-filter isolation
-const CONCEPTS = {
-    // ... other concepts ...
-    'case-bell': { label: 'Case: Bell palsy', domain: 'cases' },
-};
-
-const ITEMS = [
-    // ... earlier items ...
-
-    // ─────────────── CASES ───────────────
-    {
-        id: 'q38', type: 'mcq', section: 'Cases',
-        stem: 'A 45-year-old presents with acute-onset right facial paralysis, hyperacusis, and dysgeusia. Exam shows complete paralysis (HB VI). No vesicles. What is the most likely diagnosis?',
-        options: [
-            { id: 'a', text: 'Ramsay Hunt syndrome' },
-            { id: 'b', text: 'Bell palsy' },
-            { id: 'c', text: 'Acoustic neuroma' },
-            { id: 'd', text: 'Cholesteatoma' },
-        ],
-        correct: 'b',
-        brief: 'Acute complete facial paralysis with hyperacusis and dysgeusia, without vesicles, is the classic Bell palsy presentation.',
-        detailed: 'Bell palsy is an acute idiopathic facial neuropathy — the most common cause of unilateral facial paralysis. The combination of hyperacusis (stapedius involvement) and dysgeusia (chorda tympani) localizes the lesion to the fallopian canal. Absence of vesicles distinguishes it from Ramsay Hunt (VZV reactivation in the geniculate ganglion). Onset is rapid (hours to 2 days); most recover, but complete paralysis carries a worse prognosis than incomplete.',
-        concepts: ['case-bell', 'bell-palsy', 'facial-nerve'],
-    },
-    {
-        id: 'q39', type: 'mcq', section: 'Cases',
-        stem: '(Same patient.) At 2 weeks, ENoG shows >90% degeneration on the affected side. What is the next step?',
-        options: [
-            { id: 'a', text: 'Continue observation' },
-            { id: 'b', text: 'Transmastoid facial nerve decompression' },
-            { id: 'c', text: 'Hypoglossal–facial nerve transfer' },
-            { id: 'd', text: 'Cross-face nerve graft' },
-        ],
-        correct: 'b',
-        brief: 'ENoG >90% degeneration within 2 weeks of onset is the threshold for surgical decompression in Bell palsy.',
-        detailed: 'The Gantz criteria: ENoG ≥90% degeneration within 14 days AND no voluntary EMG motor unit potentials → transmastoid decompression of the meatal foramen and labyrinthine segment (the narrowest portion). This must happen within 2 weeks of onset — beyond that, Wallerian degeneration is complete and decompression loses its window. The evidence base is a single RCT (Gantz, 1999) showing improved outcomes vs. observation in this subgroup.',
-        concepts: ['case-bell', 'electrodiagnostics', 'decompression'],
-    },
-];
-```
-
----
-
-## Guides that link here
-
-An Interactive learning guide (`docs/authoring-oksat-guide.md`) drills into a
-module by **concept key** and answers some items in place by **item id**.
-`tools/check-data.mjs` fails when either stops resolving, so treat concept
-keys as stable as ids. Adding items to a studied module: new ids, appended in
-the item's section; never renumber, reorder options or change `correct`.
-
-## Conventions & storage
-
-- Keep the manifest `count` in sync with `ITEMS.length`.
-- Pair each domain's `color` (solid) with a matching translucent `hex`.
-- Progress and spaced-repetition state live in `localStorage` under
-  `oksat:progress:<slug>:<code>` and `oksat:srs:<slug>:<code>`, where `<code>`
-  is resolved silently by `OKSATStore.reviewer()` (legacy `mcq:*` keys are
-  migrated automatically). Nothing is uploaded and there is no prompt.
-  **Changing a question's `id` resets its history** — treat ids as permanent
-  once a module has been studied.
-- The hub reads both keys to draw each card's completion meter and the
-  due-for-review banner, so a module whose `count` is wrong will show a
-  misleading meter. `tools/check-data.mjs` catches that.
-- Preview locally with no build step: `python3 -m http.server` then open
-  `http://localhost:8000/oksat-study.html?m=<slug>`.

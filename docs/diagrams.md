@@ -1,44 +1,31 @@
-# Figures — ASCII 3D diagrams
+# Figures: ASCII 3D diagrams
 
-The site's figures are **ASCII 3D**: real geometry
-rendered into a monospace character grid by a small software renderer. Each
-one turns slowly, can be dragged, and re-shades for night mode. Pages that
-parse their HTML also ship a pre-rendered frame, so a figure is there
-without JavaScript. The look comes from the rest of the site: ink on paper,
-Plex Mono, hairline rules, and color only where it means something.
+Site figures are **ASCII 3D**: real geometry rendered into a monospace character grid by a small
+software renderer. Each turns slowly, can be dragged, and re-shades for night mode. Pages that parse
+their HTML also ship a pre-rendered frame, so a figure shows without JavaScript.
 
 | Piece | Role |
 |---|---|
-| `js/ascii3d.js` | The engine. A DOM-free core (mesh, camera, raster, shade, contours, lines, labels) plus the browser layer (mount, motion, drag, keys, theme, resize) |
-| `js/diagrams/<id>.js` | One scene per figure, `ASCII3D.define(id, {...})`: data and small geometry functions only |
+| `js/ascii3d.js` | The engine: a DOM-free core (mesh, camera, raster, shade, contours, lines, labels) and the browser layer (mount, motion, drag, keys, theme, resize) |
+| `js/diagrams/<id>.js` | One scene per figure, `ASCII3D.define(id, {...})`: data and geometry functions only |
 | `css/ascii3d.css` | Grid sizing and ink → token mapping, for both token sets (site and `--ok-*`) |
-| `js/egg.js`, `css/egg.css` | The egg reveal: a word in the text unfolds its figure in place (see Eggs) |
-| `tools/ascii3d.mjs` | Terminal preview, ink map, bake/check of the no-JS frames, scaffolding |
-| `.claude/skills/ascii-diagram/` | The agent playbook for a new figure request (`/ascii-diagram`) |
+| `js/egg.js`, `css/egg.css` | The egg reveal (see Eggs) |
+| `tools/ascii3d.mjs` | Terminal preview, ink map, bake and check of the no-JS frames, scaffolding |
+| `.claude/skills/ascii-diagram/SKILL.md` | The playbook for a new figure request (`/ascii-diagram`) |
 
-The figures in use are the scene files themselves (`node tools/ascii3d.mjs list`).
-Each file's header says where the figure is used, what it shows, and what
-in it is schematic.
+`node tools/ascii3d.mjs list` lists the scenes. Each file's header says where its figure is used,
+what it shows, and what is schematic.
 
 ## Asking for a figure
 
-A request needs five things. With these the job is mechanical; without
-them the agent has to ask.
+A request needs five things; without them the agent has to ask.
 
-1. **Subject.** What is drawn, e.g. "the facial nerve through the temporal bone".
-2. **Place.** The page and section, e.g. "OKSAT facial-reanimation hub card"
-   or "one-pager, Research".
-3. **The one claim.** The single thing a reader should understand after
-   looking, e.g. "the labyrinthine segment is the narrowest and takes the
-   first genu". A figure makes one point; labels only support it.
-4. **Emphasis.** What gets signal red (act, emphasis) and what gets blue
-   (science, measurement). Everything else stays ink.
-5. **Motion.** A full `spin` (objects: anatomy, devices) or a gentle `rock`
-   (plots, diagrams with a reading direction), or still.
-
-Example: *"/ascii-diagram — the ossicular chain for the one-pager's About
-section. Claim: the lever from the malleus to the stapes footplate. Stapes
-footplate red. Spin."*
+1. **Subject**: what is drawn.
+2. **Place**: the page and section.
+3. **The one claim**: the single thing a reader should understand. Labels only support it.
+4. **Emphasis**: what gets `signal` (act, emphasis) and `science` (measurement). The rest stays ink.
+5. **Motion**: `spin` (objects: anatomy, devices), `rock` (plots and diagrams with a reading
+   direction), or still.
 
 ## Workflow
 
@@ -49,40 +36,32 @@ node tools/ascii3d.mjs render <id> --turn 4      # four angles around a spin
 node tools/ascii3d.mjs render <id> --dark        # shaded for a dark ground
 node tools/ascii3d.mjs render <id> --cols 72 --rows 24 --fit 0.9   # try a size
 node tools/ascii3d.mjs bake                      # refresh baked frames in root pages
-node tools/stamp-assets.mjs                      # then re-stamp (scene/engine hashes)
+node tools/stamp-assets.mjs                      # then re-stamp
 ```
 
-1. **Model it** in `js/diagrams/<id>.js` from the scaffold or the nearest
-   existing scene. Work in any units; the camera frames the geometry itself.
-2. **Iterate in the terminal.** `render` prints exactly the frame the page
-   draws, and `--inks` prints a second grid with the ink of every cell
-   (`i` ink, `m` muted, `f` faint, `s` signal, `b` science, `g` ok,
-   `r` bad). An agent can judge a figure from this text alone. Check
-   several angles (`--turn`) and both grounds (`--dark`).
-3. **Place it.** In a parsed page, put a figure with bake markers where it
-   belongs:
+1. **Model** it in `js/diagrams/<id>.js` from the scaffold or the nearest scene. Work in any units;
+   the camera frames the geometry.
+2. **Iterate in the terminal.** `render` prints the frame the page draws. `--inks` prints a second
+   grid of ink per cell: `i` ink, `m` muted, `f` faint, `s` signal, `b` science, `g` ok, `r` bad.
+   Check several angles and both grounds.
+3. **Place** it in a parsed page:
    ```html
    <figure class="a3d my-figure" data-a3d="<id>">
    <!-- a3d:<id> --><!-- /a3d:<id> -->
        <figcaption>…</figcaption>
    </figure>
    ```
-   The page loads `css/ascii3d.css`, then at the end of `<body>`
-   `js/ascii3d.js` **before** `js/diagrams/<id>.js`. In a page that renders
-   its markup from JavaScript (Airway), emit `<figure class="a3d"
-   data-a3d="<id>"></figure>` and call `ASCII3D.mountAll(root)` after each
-   render. The engine keeps the figure's angle across re-renders.
-4. **Bake and stamp** (commands above). The bake writes the stage, the
-   `aria-label` (from the scene's `alt`) and the first frame, shaded for
-   paper, between the markers. Never hand-edit a baked block.
-5. **Verify.** Run `node tools/check-data.mjs` and `node tools/smoke-pages.mjs`
-   (details in `docs/verification.md`), then look at the page at 390px and
-   1280px in both themes.
+   The page loads `css/ascii3d.css`, and at the end of `<body>` loads `js/ascii3d.js` **before**
+   `js/diagrams/<id>.js`. A page that renders markup from JavaScript emits `<figure class="a3d"
+   data-a3d="<id>"></figure>` and calls `ASCII3D.mountAll(root)` after each render; no baked frame.
+4. **Bake and stamp.** The bake writes the stage, the `aria-label` (from the scene's `alt`) and the
+   first frame, shaded for paper, between the markers. Never hand-edit a baked block.
+5. **Verify**: `node tools/check-data.mjs`, `node tools/smoke-pages.mjs` (`docs/verification.md`),
+   then the page at 390px and 1280px in both themes.
 
 ## Eggs
 
-The figures in use are revealed from a word in the text (an *egg*), so they
-stay out of the reading flow. Markup:
+A figure can be revealed from a word in the text (an *egg*), so it stays out of the reading flow:
 
 ```html
 <span class="egg" data-egg="<id>" role="button" tabindex="0"
@@ -93,12 +72,9 @@ stay out of the reading flow. Markup:
 </figure>
 ```
 
-`js/egg.js` delegates on `document`, so triggers rendered later by a script
-(Airway) work too. Selecting text that overlaps the word opens the figure
-after a short pause; click, Enter or Space toggles it; Esc closes it.
-`css/egg.css` hides the figure only under `(scripting: enabled)`, so without
-JavaScript it is visible. `tools/smoke-pages.mjs` clicks the eggs in use;
-`tools/check-data.mjs` does not check egg markup.
+`js/egg.js` delegates on `document`, so eggs rendered by a script work too. Click, Enter or Space
+toggles; Esc closes. `css/egg.css` hides the figure only under `(scripting: enabled)`.
+`tools/smoke-pages.mjs` clicks the eggs in use; `check-data` does not check egg markup.
 
 ## Scene schema
 
@@ -106,87 +82,72 @@ JavaScript it is visible. `tools/smoke-pages.mjs` clicks the eggs in use;
 ASCII3D.define('id', {
     alt: 'What a screen reader hears: the subject and the one claim.',
     cols: 96, rows: 30,              // full-size grid; narrow columns get fewer cells
-    minFont: 8,                      // px floor before the grid gives up cells (default 8)
+    minFont: 8,                      // px floor before the grid gives up cells
     camera: { yaw: 30, pitch: 20,    // degrees; pitch > 0 looks down
               fit: 0.85,             // how much of the grid the geometry fills
               persp: 3.2,            // camera distance in scene radii; larger = flatter
-              frame: 'view',         // 'view' (tight, centered) | 'sphere' | 'turntable' (both spin-safe)
-              offset: [0, 0],        // nudge the image, in cells
-              target: [x, y, z] },   // orbit center (default: the geometry's center)
-    motion: { spin: 18 },            // deg/s turntable, or { rock: 14, period: 12 } sway
+              frame: 'view',         // 'view' | 'sphere' | 'turntable'
+              offset: [0, 0],        // nudge, in cells
+              target: [x, y, z] },   // orbit centre (default: geometry centre)
+    motion: { spin: 18 },            // deg/s, or { rock: 14, period: 12 }
     light: { dir: [-0.5, 0.6, -0.62], ambient: 0.14, diffuse: 0.78, spec: 0.35, shininess: 18 },
     fog: 0.4,                        // depth cue: far cells thin out
     outline: true,                   // contour glyphs on silhouettes, depth jumps, part edges
-    edgeDepth: 0.18,                 // depth jump (in scene radii) that counts as an edge
-    ss: [2, 4],                      // samples per cell, across x down (1 = one per cell); a cell's
-                                     // edge glyph follows the boundary through its samples
-    cover: [0.5, 0.3],               // share of a cell's samples that draws it / draws a thin feature
+    edgeDepth: 0.18,                 // depth jump (scene radii) that counts as an edge
+    ss: [2, 4],                      // samples per cell, across x down
+    cover: [0.5, 0.3],               // share of a cell's samples that draws it / a thin feature
     idEdges: true,                   // contour where two parts meet at different depths
-    idDepth: 0.045,                  // that depth gap in scene radii (default edgeDepth * 0.25)
-    crease: 40,                      // degrees: a normal break this sharp within a part draws a
-                                     // contour (off by default; for faceted or folded surfaces)
+    idDepth: 0.045,                  // that depth gap (default edgeDepth * 0.25)
+    crease: 40,                      // degrees: normal break within a part that draws a contour
     ramp: '.:;=+*#@',                // shading glyphs, least ink -> most ink
-    readout: true,                   // live HUD: "drag to turn" + angle (false hides it)
-    interactive: true,               // drag / keys (false: display only)
+    readout: true,                   // live HUD ("drag to turn" + angle)
+    interactive: true,               // drag and keys (false: display only)
     parts: [ … ],
     labels: [ … ]
 });
 ```
 
-Framing defaults to `'sphere'` when the scene spins and to `'view'`
-otherwise. `'turntable'` is the opt-in spin-safe fit for tall or wide
-objects: it bounds the geometry by a vertical cylinder about the orbit
-target (its widest reach and its height) rather than a sphere, and fits
-that at the scene's pitch and perspective. For a tall, narrow figure it
-is much tighter than `'sphere'` yet still clears the grid at every yaw;
-dragging to a steeper pitch than the scene's own can clip it. Light is
-in view space, pointing toward the light, so the key light stays put as
-the object turns.
+`frame: 'sphere'` is the default when the scene spins, `'view'` otherwise. `'turntable'` bounds the
+geometry by a vertical cylinder about the orbit target: tighter for tall, narrow objects, and still
+clear of the grid at every yaw. Light is in view space, so the key light stays put as the object turns.
 
 ### Parts
 
-Every part takes `ink` (below) and optional placement: `scale` (uniform),
-`rotate: [x, y, z]` in degrees, then `at: [x, y, z]`. Solids are meshed
-as (u, v) grids and rasterized as triangles, so they never show holes.
-Sampling counts only set smoothness.
+Every part takes `ink` and optional placement: `scale` (uniform), `rotate: [x, y, z]` in degrees,
+then `at: [x, y, z]`. Solids are meshed as (u, v) grids, so they never show holes.
 
 | `kind` | Parameters | Use it for |
 |---|---|---|
-| `surface` | `fn(u, v) → [x,y,z]`, `u`/`v: [a, b, n]`, `wrapU`/`wrapV`, `inkAt(u, v)`, `thick` | Anything parametric: laminae, membranes, leaves, bands |
-| `heightfield` | `fn(x, z) → y`, `x`/`z: [a, b, n]`, `inkAt(x, z)`, `thick` | Surfaces over a plane: response surfaces, terrain |
-| `tube` | `path(t) → [x,y,z]`, `t: [a, b, n]`, `radius` (number or `fn(t)`), `sides`, `inkAt(t)` | Ducts, nerves, vessels, electrode arrays. Frames are parallel-transported, so tubes never twist |
-| `torus` | `R`, `r` or `section: [w, h]`, `center`, `arc: [deg0, deg1]` (a C-shaped ring), `n`, `sides` | Rings, loops, canals |
-| `sphere` | `center`, `radius` or `radii: [a, b, c]`, `n` | Balls, ellipsoids |
-| `cylinder` | `from`, `to`, `radius`, `radius2` (a cone), `caps`, `sides`, `n` | Rods, horns, shafts |
-| `box` | `center`, `size: [w, h, d]`, `open: ['top', …]`, `n` | Blocks, trays, bars of a 3D chart |
-| `line` | `points: [[x,y,z], …]` or `path(t)` + `t`, `closed`, `glyph`, `dash: [on, off]`, `hidden: 'hide' \| 'dots'` | Axes, arcs, leaders in space, curves drawn over a surface |
-| `points` | `points`, `glyph` (default `o`) | Contacts, markers, arrowheads (`v`, `>`) |
-| *(any part)* | `view: 'ascii' \| '3d'` | Draw the part in only one renderer (default: both). Meshes keep their scene part index either way |
-| *(grid-mesh kinds)* | `ramp(u, v) → 0..1` (`ramp(t, v)` on a tube) | A per-vertex value (`mesh.R`) for the 3D renderer's colour ramp; the ASCII raster ignores it. Not the scene-level shading-glyph `ramp` string |
+| `surface` | `fn(u, v)`, `u`/`v: [a, b, n]`, `wrapU`/`wrapV`, `inkAt(u, v)`, `thick` | parametric sheets: laminae, membranes, bands |
+| `heightfield` | `fn(x, z) → y`, `x`/`z: [a, b, n]`, `inkAt(x, z)`, `thick` | surfaces over a plane: response surfaces, terrain |
+| `tube` | `path(t)`, `t: [a, b, n]`, `radius` (number or `fn(t)`), `sides`, `inkAt(t)` | ducts, nerves, vessels, electrode arrays (parallel-transported frames, no twist) |
+| `torus` | `R`, `r` or `section: [w, h]`, `center`, `arc: [deg0, deg1]`, `n`, `sides` | rings, loops, canals |
+| `sphere` | `center`, `radius` or `radii: [a, b, c]`, `n` | balls, ellipsoids |
+| `cylinder` | `from`, `to`, `radius`, `radius2` (cone), `caps`, `sides`, `n` | rods, horns, shafts |
+| `box` | `center`, `size: [w, h, d]`, `open: ['top', …]`, `n` | blocks, trays, bars |
+| `line` | `points` or `path(t)` + `t`, `closed`, `glyph`, `dash: [on, off]`, `hidden: 'hide' \| 'dots'` | axes, arcs, leaders, curves over a surface |
+| `points` | `points`, `glyph` (default `o`) | contacts, markers, arrowheads (`v`, `>`) |
 
-`thick` (surface and heightfield) gives a sheet a body: the grid is pushed
-out and in along its normals by half of `thick` each (in the part's own
-units, before `scale`) and closed with a rim along every edge that is not
-wrapped, so a thin plate seen edge-on or from behind still has an edge and
-a back. `inkAt` colors both faces and the rim alike.
+Any part takes `view: 'ascii' | '3d'` to draw in one renderer only. Grid-mesh kinds take `ramp(u, v)`
+(or `ramp(t, v)` on a tube) as a per-vertex value for the 3D colour ramp; the ASCII raster ignores it.
+This is not the scene-level `ramp` string.
 
-Lines choose glyphs from where they cross each cell: shallow runs give
-`_` or `-`, diagonals `/` or `\` (one per row), steep runs `|`. The
-shading ramp never uses those glyphs, so they always read as contours.
+`thick` (surface, heightfield) gives a sheet a body: the grid is pushed out and in along its normals
+by half of `thick` each, and closed with a rim along each unwrapped edge, so a thin plate seen
+edge-on still has an edge and a back. `inkAt` colours both faces and the rim.
 
 ### Labels
 
 ```js
 { at: [x, y, z], text: 'cricoid:\nthe one ring', ink: 'signal',
-  dx: 4, dy: -2,        // leader direction/length in cells; omit dx to point away from center
-  align: 'center',      // set text on the anchor column, no leader (axis/box labels)
+  dx: 4, dy: -2,        // leader direction and length in cells; omit dx to point away from centre
+  align: 'center',      // text on the anchor column, no leader (axis and box labels)
   mark: '+',            // anchor glyph; false for none
-  clear: true,          // stretch the leader until the text is off the drawing (default)
+  clear: true,          // stretch the leader until the text is off the drawing
   hideOccluded: false } // default: a label whose anchor is hidden dims to faint
 ```
 
-Labels never overwrite each other: a crowded row is nudged up or down.
-Keep each line of text to about 20 characters.
+Labels never overwrite each other; a crowded row is nudged. Keep each line to about 20 characters.
 
 ### Inks: meaning first, then the token
 
@@ -196,77 +157,46 @@ Keep each line of text to about 20 characters.
 | `muted` | supporting structure | `--ink-muted` | `--ok-text-muted` |
 | `faint` | axes, context, floor, hidden anchors | `--ink-faint` | `--ok-text-faint` |
 | `signal` | act / emphasis: the device, the site where you act | `--signal` | `--ok-ochre` |
-| `science` | measurement, the scientific quantity | `--signal-2` | `--ok-accent` |
-| `ok` / `bad` | an outcome: correct / miss | `--ok` / `--bad` | `--ok-correct` / `--ok-incorrect` |
+| `science` | measurement | `--signal-2` | `--ok-accent` |
+| `ok` / `bad` | outcome: correct / miss | `--ok` / `--bad` | `--ok-correct` / `--ok-incorrect` |
 | `ghost` | occludes, draws nothing (hidden-line fill) | — | — |
 
-A page with its own ground remaps the `--a3d-*` variables in its scope.
-Airway's stage does this per theme in its page `<style>`. Shading follows the
-ground actually under the figure: dark text means paper, so denser glyphs
-mark shadow; light text means a dark stage, so denser glyphs mark light.
+A page with its own ground remaps the `--a3d-*` variables in its scope (Airway does, per theme).
+Shading follows the ground under the figure: dark text means paper, so denser glyphs mark shadow;
+light text means a dark stage, so denser glyphs mark light.
 
 ## Rules
 
-- **One claim per figure.** If a figure needs a paragraph to explain
-  which part matters, the emphasis ink is on the wrong part.
-- **Color is meaning** (`docs/decisions.md` §5). Most of a figure is `ink`.
-  At most one thing is `signal`.
-- **Schematic is said out loud.** Invented shapes or data are called
-  schematic in the scene header and in the caption. Any anatomical or
-  scientific claim is the owner's to vet (`docs/decisions.md` §7).
-- **Printable ASCII only** (space to `~`). The self-hosted Plex Mono is
-  a latin subset, so anything else falls back to another face and breaks
-  the grid.
-- **Same-origin, no network.** Scenes are code in `js/diagrams/`, loaded
-  under each page's `script-src 'self'`. Airway stays self-contained.
-- **Size for the column.** Set `cols` for the widest column the figure gets
-  (text in the grid caps at `--a3d-max`). Narrower columns get fewer cells
-  automatically, down to `minFont`.
-- **Motion is optional.** `prefers-reduced-motion` gets a still figure
-  (dragging still works), and figures stop animating off-screen and in
-  background tabs.
-- **Delete what no page shows.** `tools/check-data.mjs` fails on an orphan
-  scene.
+- **One claim per figure.** If a paragraph is needed to say which part matters, the emphasis is on
+  the wrong part.
+- **Colour is meaning** (`docs/decisions.md` §5). Most of a figure is `ink`; at most one thing is `signal`.
+- **Schematic is said out loud** in the scene header and the caption. Any anatomical or scientific
+  claim is the owner's to vet (`docs/decisions.md` §7).
+- **Printable ASCII only** (space to `~`): the self-hosted Plex Mono is a latin subset, so anything
+  else breaks the grid.
+- **Same-origin, no network.** Scenes are code in `js/diagrams/`, loaded under `script-src 'self'`.
+  Airway stays self-contained.
+- **Size for the column.** Set `cols` for the widest column the figure gets (`--a3d-max` caps it).
+  Narrower columns get fewer cells, down to `minFont`.
+- **Motion is optional.** `prefers-reduced-motion` gets a still figure (dragging still works);
+  figures stop animating off-screen.
+- **Delete what no page shows.** `tools/check-data.mjs` fails on an orphan scene.
 
-## How it works
+## How it renders
 
-Per frame: an orbit camera (yaw about the world's vertical, then pitch)
-feeds a perspective projection into cells whose aspect is `CELL_ASPECT`
-(`js/ascii3d.js`, matched by `line-height` in `css/ascii3d.css`). Triangles
-are z-buffered on a finer grid of samples, `ss` per cell, keeping each
-sample's depth, part, ink and normal. Two-sided Blinn-Phong shading runs
-only for the samples a cell keeps.
+Per frame, an orbit camera feeds a perspective projection into cells of aspect `CELL_ASPECT`
+(`js/ascii3d.js`, matched by `line-height` in `css/ascii3d.css`). Triangles are z-buffered on
+`ss` samples per cell. Each cell takes its front from the nearest samples it covers; samples within
+`edgeDepth` (same part) or `idDepth` (other part) count as inside. Luminance picks a ramp glyph, and
+fog thins distant cells. A cell short of the `cover` share draws only as a thin feature.
 
-Samples then resolve to cells. A cell's front is the nearest thing its
-samples cover (a sliver thinner than the thin `cover` share is looked
-past, so a far surface behind it still shows). Samples within `edgeDepth`
-of that front on the same part, or within `idDepth` on another, are
-inside; the rest (empty, much deeper, or another part at a different
-depth) are outside. The inside samples give the cell's luminance, depth,
-and majority ink and part. Luminance picks a ramp glyph, and fog thins
-distant cells. A cell short of the full `cover` share draws only as a
-thin feature, when no full cell stands beside it that is not much
-farther; otherwise it is the fringe of a bigger shape and would only
-thicken its outline.
+Contours come from the inside/outside mask of the cell, in physical units: the boundary's angle picks
+`_` or `-` (near horizontal), `/` or `\` (diagonal), or `|` (near vertical). `crease` adds contours
+between neighbours of one part whose normals part by more than that angle. The shading ramp never
+uses `- | / \ _`, so those always read as contours.
 
-**Contours follow the edge.** When the boundary passes through a cell, its
-glyph comes from the inside/outside mask, measured in physical units (a
-cell is `CELL_ASPECT` tall): the boundary's angle and where it runs in the
-cell. Near-horizontal gives `_` when the edge runs low in the cell and `-`
-otherwise, about 45 degrees gives `/` or `\`, near-vertical gives `|`. A
-boundary that falls exactly on a cell border leaves no partial mask, so
-the four-neighbour test still marks it: a surface cell beside empty
-space, in front of a depth jump, or in front of another part by more than
-`idDepth`. `crease` adds a contour between neighbors of one part whose
-normals part by more than that angle. The shading ramp never uses
-`- | / \ _`, so they always read as contours. `ss: [1, 1]` with
-`idEdges: false` is the plain one-sample-per-cell look.
+Lines and points are depth-tested with a small bias, so a curve on a surface still shows. Labels come
+last. The DOM gets one `<span>` per ink run, built with `textContent`.
 
-Lines and points are depth-tested with a small bias, so a curve drawn on a
-surface still shows. Labels come last. The DOM gets one `<span>` per ink
-run, built with `textContent`.
-
-To extend it, add a `kind` to `BUILD` in `js/ascii3d.js` that returns a
-grid mesh (`gridMesh`), a polyline or points. Everything downstream is
-shared. Figures inside OKSAT items (the engine takes `item.image` only) are
-on the roadmap in `docs/wip.md`.
+To extend: add a `kind` to `BUILD` in `js/ascii3d.js` that returns a grid mesh (`gridMesh`), a
+polyline or points. Everything downstream is shared.
