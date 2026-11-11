@@ -47,6 +47,8 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 .venv/bin/python -I $P/contactsheet.py DIR --only facial-nerve --tag fn   # review sheets (not committed)
 ```
 
+The OpenEar ingest is planned, not written: a reader for NRRD volumes (it keeps only the geometry header fields and resamples isotropic, writing under the git-ignored incoming folder only) and a fetcher that range-extracts only the needed members of an OpenEar archive into incoming/openear/<specimen>/. It is work package B3 of `plans/2026-11-04-tbone-sources.md`. Until it lands, nothing from OpenEar is in this folder.
+
 ## How it was made, and what it can and cannot say
 
 - **Inputs.** All four normal planes at the best resolution served (512 x 512): axial 61, coronal 21, parallel

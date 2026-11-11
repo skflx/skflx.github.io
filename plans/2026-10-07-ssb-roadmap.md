@@ -415,6 +415,7 @@ manoeuvres, in what order, as `p.*` steps that set the nasal-framework spec's pa
 ### T1 — Self-test
 Find it / name it / CT localize, Leitner reused unchanged, storage key registered per `docs/decisions.md` §3. After O7's corridors work.
 
+**Self-test.** Items generated from the graph, filtered by tier: *find it* (name → click), *name it* (highlight → recall, self-graded), *CT localize* (crosshair → name; the label volume grades it), *classify* (a diorama or CT state → Keros/Gera/IFAC/pneumatization type), *what's at risk* (station → hazards), *next step* (procedure step → next action and what to confirm first). Leitner scheduling like OKSAT's, in SSB's own storage. Conditions add *pattern → diagnosis* and *diagnosis → what it changes about the operation* items.
 
 ## 3. Realistic anatomy
 

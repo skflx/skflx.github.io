@@ -39,3 +39,15 @@ were detected, labelled by UW or inferred. Content is `draft`; only the owner ve
 | `tbone/registration.json` | numbers only: stack checks, registration of the three reformatted stacks to the axial stack, scale and frame, specimen identity | `tools/tbone-pipeline/register.py`, `scale.py`, `volume.py`, `export.py` |
 
 Regeneration and limits: `tbone/README.md`.
+
+## OpenEar library (planned second source, not committed)
+
+**Source.** OpenEar library, Zenodo record 1473724 (https://zenodo.org/records/1473724): human temporal bone
+CBCT, eight specimens. Licence **CC BY 4.0**, read from the record metadata on 2026-11-09 and from the paper's
+Data Records.
+
+**Attribution** (show wherever an OpenEar-derived volume is displayed): Temporal bone CT derived from the OpenEar library (Sieber et al., Sci Data 2019, doi:10.1038/sdata.2018.297; data doi:10.5281/zenodo.1473724), CC BY 4.0; resampled and cropped.
+
+Naming the authors is required by CC BY and was confirmed by the owner (2026-11-11). The rule against naming authors applies to the UW atlas only.
+
+**Handling.** Raw OpenEar files are never committed: they live in the git-ignored `tools/tbone-pipeline/incoming/openear/`. No derived OpenEar file is committed yet.
