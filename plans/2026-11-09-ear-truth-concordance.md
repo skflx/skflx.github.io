@@ -33,7 +33,7 @@ topology and gross position, not OLSB's 0.1 mm detail. Finer truth waits for DIC
 |---|---|---|---|---|---|
 | E1 | `tbone/ct/ct.json` in the SSB v1 header (keep the scale, coverage and source notes as extra keys) | Haiku | none | `tools/tbone-pipeline/volume.py`, `selftest.py`, `tbone/ct/ct.json` (regenerated; needs `fetch.py`, so network to uwmsk.org), `tools/check-data.mjs` | a `check-data` rule runs `parseHeader(meta, 'tbone')` and passes; dims x spacing reproduce the old box; `selftest.py` passes |
 | E2 | OLSB real-CT slice view: axial, coronal, sagittal slices of `tbone` with landmarks and sweeps drawn over them, coded detected / labelled / inferred, glossary names, attribution line | Opus specs the UI contract in the issue, Haiku builds | E1 | `js/olsb/ct.js` (new ES module importing `../ssb/volume.js`), `OLSB.html`, `css/olsb.css`, `js/olsb/main.js` or `3d.js` (mode switch only), `tools/stamp-assets.mjs` (stamp `tbone/`), `tools/smoke-pages.mjs` | smoke test opens the view against a synthetic volume routed by Playwright (no fixture in `tbone/`), a slice draws, a landmark click selects its glossary id; volume fetched only on entering the view; CSP unchanged |
-| E3 | Truth check: `check-data` compares each OLSB anchor to the median `tbone` landmark of the same glossary id | Opus | E1 | `tools/check-data.mjs`, `js/olsb/volume.js` (constants only) | residual table printed per id; first run report-only; Opus moves the outliers it can justify, then the rule fails above 3 mm (the data's noise floor) with a listed, reasoned exception per id it leaves; glossary `rel` checks still pass |
+| E3 | Truth check: `check-data` compares each OLSB anchor to the median `tbone` landmark of the same glossary id | Opus | E1 | `tools/check-data.mjs`, `js/olsb/volume.js` (constants only) | residual table printed per id; first run report-only; Opus moves the outliers it can justify, then the rule fails above a per-structure limit (see Status) with a listed, reasoned exception per id it leaves; glossary `rel` checks still pass |
 | E4 | Guide slices from the pipeline: a script writes the ten crops and each slice's hotspot `poly` regions from `landmarks.json` tips | Haiku, Opus reviews every region | none | `tools/tbone-pipeline/slices.py` (new), `images/oksat/ear-anatomy/ct/`, `js/oksat/guides/ear-anatomy/imaging.js`, `images/oksat/ear-anatomy/ATTRIBUTION.md` | rerun reproduces the committed crops byte for byte; every region's `g` is a glossary id; `lint-oksat-guide` and `test-oksat-learn` pass. Escalate: a tip that does not sit on its structure |
 | E5 | Docs pass: `docs/ssb.md` stale sections (status header, file list, pack list, decisions duplicated in the roadmap), `docs/ssb-roadmap.md` stale statuses, `README.md` test list, `docs/wip.md`, `docs/verification.md` (`test-search`, `test-airway-resume`) | Haiku | E1-E4 | those files | no doc names a file that `ls` does not find; `check-data` passes. Escalate: executor name (Sonnet in the roadmap, Haiku in `AGENTS.md`) |
 
@@ -55,9 +55,14 @@ shared as one component by both pages; moving `js/ssb/volume.js` to a shared fol
 
 - **E1:** done earlier: `tbone/ct/ct.json` is in the SSB v1 header.
 - **E2:** built: OLSB's Real CT mode (`js/olsb/ct.js`), loaded lazily, with landmarks and sweeps over the slices.
-- **E3:** first half built, report-only: the distance from each drawn structure's anchor to the nearest voxel of the
-  landmark's glossary id (not centroids). No anchor was moved and no threshold fails yet. Pending the owner's review
-  of the result and the DICOM sources (#244).
+- **E3:** enforcing (owner, 2026-11-11: per-structure tolerance, an MVP gate). The distance from each landmark tip to
+  the nearest voxel of its glossary id (not centroids), median per id, must be at most the class base (compact
+  middle-ear parts and the labyrinth 2.5 mm, extended regions 3.5 mm) plus 10 % of the landmark's distance from the
+  oval-window origin (the inferred scale). Classes and the reasoned exceptions are `TRUTH_CLASS` and `TRUTH_EXCEPT`
+  in `tools/check-data.mjs`; an exception fails once it is back inside its limit. No anchor was moved: every
+  exception is the owner's to vet (#250). The exceptions are mostly a pattern (mastoid group medial, carotid and
+  Eustachian tube lateral), which a systematic offset could also explain, so a second specimen (#244) should come
+  before moving anchors.
 - **E4:** built. Regions are generated only where the pipeline has a named tip, so some former hand-drawn regions are
   gone. Vocabulary correction: UW's "arcuate eminence" had been mapped to the pyramidal eminence; bare ambiguous
   fragments "eminence" and "niche" now get no id. Applied by `tools/tbone-pipeline/relabel.py` without
