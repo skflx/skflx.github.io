@@ -12,7 +12,7 @@
    are the real ones. Zero real console errors throughout.
 
    Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only <section>[,...] | --shard i/N] [--int16]
-           sections: dioramas lab ct specimen scope procedure mucosa population flap anatomy scanned
+           sections: kit dioramas lab ct specimen scope procedure mucosa population flap anatomy scanned
            (SECTIONS, near the end); --shard is CI's split (SHARDS), each section in exactly one.
            --shots writes desktop + phone screenshots of each diorama, of
            CT mode (ct-*.png) and of the Specimen stage (spec-*.png).
@@ -5824,7 +5824,285 @@ let scopeWindow = null;
 const scopeWin = () => scopeWindow || (scopeWindow = scopeUnitTests());
 
 /* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
+/* ---- kit (ST7b): the strip solid, the exact distance transform and the iso-surface. Node only: no page. ---- */
+function kitTests() {
+  const seeded = (seed) => {
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+  /* kit only calls these: a stub keeps the test free of the three.js module (and its Node warning) */
+  const THREE = {
+    BufferGeometry: class {
+      setAttribute(n, a) { (this.attributes ||= {})[n] = a; return this; }
+      getAttribute(n) { return this.attributes[n]; }
+      setIndex(a) { this.index = { array: Uint32Array.from(a) }; return this; }
+    },
+    Float32BufferAttribute: class { constructor(a, itemSize) { this.array = Float32Array.from(a); this.itemSize = itemSize; } },
+  };
+  /* the mesh as a flat list of triangle corners (9 numbers each), indexed or not */
+  const triangles = (g) => {
+    const p = g.getAttribute('position').array;
+    if (!g.index) return Float64Array.from(p);
+    const idx = g.index.array;
+    const out = new Float64Array(idx.length * 3);
+    for (let i = 0; i < idx.length; i++) out.set([p[3 * idx[i]], p[3 * idx[i] + 1], p[3 * idx[i] + 2]], 3 * i);
+    return out;
+  };
+  /* parity: a fixed oblique ray crosses the closed mesh an odd number of times inside */
+  const DIR = (() => { const d = [0.2734, 0.6511, 0.7071]; const l = Math.hypot(...d); return d.map((v) => v / l); })();
+  const rayInside = (T, x, y, z) => {
+    let hits = 0;
+    for (let i = 0; i < T.length; i += 9) {
+      const e1x = T[i + 3] - T[i]; const e1y = T[i + 4] - T[i + 1]; const e1z = T[i + 5] - T[i + 2];
+      const e2x = T[i + 6] - T[i]; const e2y = T[i + 7] - T[i + 1]; const e2z = T[i + 8] - T[i + 2];
+      const px = DIR[1] * e2z - DIR[2] * e2y; const py = DIR[2] * e2x - DIR[0] * e2z; const pz = DIR[0] * e2y - DIR[1] * e2x;
+      const det = e1x * px + e1y * py + e1z * pz;
+      if (Math.abs(det) < 1e-14) continue;
+      const inv = 1 / det;
+      const sx = x - T[i]; const sy = y - T[i + 1]; const sz = z - T[i + 2];
+      const u = (sx * px + sy * py + sz * pz) * inv;
+      if (u < 0 || u > 1) continue;
+      const qx = sy * e1z - sz * e1y; const qy = sz * e1x - sx * e1z; const qz = sx * e1y - sy * e1x;
+      const v = (DIR[0] * qx + DIR[1] * qy + DIR[2] * qz) * inv;
+      if (v < 0 || u + v > 1) continue;
+      const t = (e2x * qx + e2y * qy + e2z * qz) * inv;
+      if (t > 1e-9) hits++;
+    }
+    return (hits & 1) === 1;
+  };
+  /* distance from a point to the nearest triangle of the mesh (Ericson's closest point on a triangle) */
+  const sub3 = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const closestOnTri = (p, a, b, c) => {
+    const ab = sub3(b, a); const ac = sub3(c, a); const ap = sub3(p, a);
+    const d1 = dot3(ab, ap); const d2 = dot3(ac, ap);
+    if (d1 <= 0 && d2 <= 0) return a;
+    const bp = sub3(p, b); const d3 = dot3(ab, bp); const d4 = dot3(ac, bp);
+    if (d3 >= 0 && d4 <= d3) return b;
+    const vc = d1 * d4 - d3 * d2;
+    if (vc <= 0 && d1 >= 0 && d3 <= 0) { const v = d1 / (d1 - d3); return [0, 1, 2].map((i) => a[i] + v * ab[i]); }
+    const cp = sub3(p, c); const d5 = dot3(ab, cp); const d6 = dot3(ac, cp);
+    if (d6 >= 0 && d5 <= d6) return c;
+    const vb = d5 * d2 - d1 * d6;
+    if (vb <= 0 && d2 >= 0 && d6 <= 0) { const w = d2 / (d2 - d6); return [0, 1, 2].map((i) => a[i] + w * ac[i]); }
+    const va = d3 * d6 - d5 * d4;
+    if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) { const w = (d4 - d3) / ((d4 - d3) + (d5 - d6)); return [0, 1, 2].map((i) => b[i] + w * (c[i] - b[i])); }
+    const den = 1 / (va + vb + vc);
+    const v = vb * den; const w = vc * den;
+    return [0, 1, 2].map((i) => a[i] + ab[i] * v + ac[i] * w);
+  };
+  const surfaceDistance = (T, p) => {
+    let best = Infinity;
+    for (let i = 0; i < T.length; i += 9) {
+      const a = [T[i], T[i + 1], T[i + 2]]; const b = [T[i + 3], T[i + 4], T[i + 5]]; const c = [T[i + 6], T[i + 7], T[i + 8]];
+      const q = closestOnTri(p, a, b, c);
+      best = Math.min(best, Math.hypot(...sub3(p, q)));
+    }
+    return best;
+  };
+  const randomBox = (rng, lo, hi, n) => {
+    const pts = [];
+    for (let i = 0; i < n; i++) pts.push([0, 1, 2].map((k) => lo[k] + rng() * (hi[k] - lo[k])));
+    return pts;
+  };
+  /* parity agreement of a solid's inside() with its mesh, and the largest distance of any disagreement from the surface */
+  const stripAgreement = (name, solid, seed) => {
+    const g = kit.geometry(THREE, solid);
+    const T = triangles(g);
+    const b = kit.bounds(solid);
+    const rng = seeded(seed);
+    const pts = randomBox(rng, b.min.map((v) => v - 1), b.max.map((v) => v + 1), 20000);
+    let agree = 0;
+    const bad = [];
+    for (const p of pts) {
+      const a = kit.inside(solid, p[0], p[1], p[2]);
+      const m = rayInside(T, p[0], p[1], p[2]);
+      if (a === m) agree++; else bad.push(p);
+    }
+    const worst = bad.reduce((w, p) => Math.max(w, surfaceDistance(T, p)), 0);
+    const frac = agree / pts.length;
+    check(`kit.strip ${name}: inside() agrees with ray parity on >= 99.5 % of 20 000 points (${(frac * 100).toFixed(2)} %)`, frac >= 0.995, `${bad.length} disagreements`);
+    check(`kit.strip ${name}: every disagreement lies within 0.1 mm of the mesh (worst ${worst.toFixed(4)} mm)`, worst <= 0.1, `worst ${worst}`);
+  };
+  /* centreline builders (mm): a straight run, an arc and a line, sampled densely */
+  const line = (a, b, n) => Array.from({ length: n + 1 }, (_, i) => vsub(a, b, i / n));
+  const vsub = (a, b, f) => [0, 1, 2].map((k) => a[k] + (b[k] - a[k]) * f);
+  const arc = (c, R, a0, a1, n) => Array.from({ length: n + 1 }, (_, i) => { const a = a0 + (a1 - a0) * (i / n); return [c[0] + R * Math.cos(a), c[1] + R * Math.sin(a), c[2]]; });
+  const joined = (...parts) => parts.flatMap((p, i) => (i ? p.slice(1) : p));
+
+  /* strip: the three bends the Accept names, all bending about the width axis z */
+  const straight = { kind: 'strip', pts: line([0, 0, 0], [20, 0, 0], 40), wdir: [0, 1, 0], w: [-2, 2], t: 1.5 };
+  stripAgreement('straight', straight, 11);
+  const bend90 = { kind: 'strip', pts: joined(line([-8, 0, 0], [0, 0, 0], 16), arc([0, 6, 0], 6, -Math.PI / 2, 0, 60), line([6, 6, 0], [6, 14, 0], 16)), wdir: [0, 0, 1], w: [-2, 2], t: 1.5 };
+  stripAgreement('90 degree bend', bend90, 12);
+  const hairpin = { kind: 'strip', pts: joined(line([-8, 0, 0], [0, 0, 0], 16), arc([0, 3, 0], 3, -Math.PI / 2, Math.PI / 2, 60), line([0, 6, 0], [-8, 6, 0], 16)), wdir: [0, 0, 1], w: [-2, 2], t: 1.5 };
+  stripAgreement('180 degree hairpin', hairpin, 13);
+
+  /* the in-plane bend: a radius of 1.5 mm with a width of 1 mm to each side (|κ_w| · w = 0.67) throws, a radius of 3 does not */
+  const inPlane = (R) => {
+    const c = [0, R, 0];
+    const pts = arc(c, R, -Math.PI / 2, Math.PI / 2, 60);
+    const wdir = pts.map((p) => [(p[0] - c[0]) / R, (p[1] - c[1]) / R, 0]);
+    return { kind: 'strip', pts, wdir, w: [-1, 1], t: 0.5 };
+  };
+  let threwAt = null;
+  try { kit.inside(inPlane(1.5), 0, 0.5, 0); } catch (e) { threwAt = e.message; }
+  check('kit.strip: a strip bent in its own plane past the limit throws, naming the point', threwAt !== null && /point \d+/.test(threwAt), String(threwAt));
+  let calm = true;
+  try { kit.inside(inPlane(3), 0, 1.5, 0); } catch (e) { calm = false; }
+  check('kit.strip: the same bend under the limit (radius 3 mm) does not throw', calm);
+  let rejects = true;
+  try { kit.inside({ kind: 'strip', pts: [[0, 0, 0]], wdir: [0, 1, 0], w: [-1, 1], t: 1 }, 0, 0, 0); } catch (e) { rejects = /two points/.test(e.message); }
+  check('kit.strip: needs at least two points', rejects);
+
+  /* edt: exact against brute force, steps 0.5 and 1.0, random 24^3 masks and a single voxel */
+  const NX = 24;
+  const brute = (mask, step) => {
+    const out = new Float64Array(NX * NX * NX);
+    const set = [];
+    for (let i = 0; i < mask.length; i++) if (mask[i]) set.push(i);
+    for (let z = 0; z < NX; z++) for (let y = 0; y < NX; y++) for (let x = 0; x < NX; x++) {
+      let best = Infinity;
+      for (const s of set) {
+        const sx = s % NX; const sy = Math.floor(s / NX) % NX; const sz = Math.floor(s / (NX * NX));
+        best = Math.min(best, (x - sx) ** 2 + (y - sy) ** 2 + (z - sz) ** 2);
+      }
+      out[(z * NX + y) * NX + x] = Math.sqrt(best) * step;
+    }
+    return out;
+  };
+  const edtCheck = (name, mask, step) => {
+    const got = kit.edt(mask, NX, NX, NX, step);
+    const want = brute(mask, step);
+    let worst = 0;
+    for (let i = 0; i < got.length; i++) worst = Math.max(worst, Math.abs(got[i] - want[i]));
+    check(`kit.edt ${name} (step ${step}): equals brute force to 1e-4 mm (worst ${worst.toExponential(2)})`, worst <= 1e-4, `worst ${worst}`);
+  };
+  for (const step of [0.5, 1.0]) {
+    for (const seed of [21, 22, 23]) {
+      const rng = seeded(seed);
+      const mask = new Uint8Array(NX ** 3);
+      for (let i = 0; i < mask.length; i++) mask[i] = rng() < 0.03 ? 1 : 0;
+      edtCheck(`random mask ${seed}`, mask, step);
+    }
+    const one = new Uint8Array(NX ** 3);
+    one[(11 * NX + 7) * NX + 5] = 1;
+    edtCheck('single voxel', one, step);
+  }
+
+  /* iso: a sphere r = 10 mm at 0.5 mm (x, y, z from -12 to 12): volume, closed mesh, vertices on the level, isoInside */
+  const sphereField = (n, step, o, r) => {
+    const f = new Float32Array(n ** 3);
+    for (let z = 0; z < n; z++) for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
+      const px = o + x * step; const py = o + y * step; const pz = o + z * step;
+      f[(z * n + y) * n + x] = Math.hypot(px, py, pz) - r;
+    }
+    return f;
+  };
+  const N = 49; const STEP = 0.5; const O = [-12, -12, -12];
+  const field = sphereField(N, STEP, -12, 10);
+  const g = kit.isoGeometry(THREE, field, N, N, N, O, STEP, 0);
+  const pos = g.getAttribute('position').array;
+  const idx = g.index.array;
+  let vol = 0;
+  for (let i = 0; i < idx.length; i += 3) {
+    const a = [pos[3 * idx[i]], pos[3 * idx[i] + 1], pos[3 * idx[i] + 2]];
+    const b = [pos[3 * idx[i + 1]], pos[3 * idx[i + 1] + 1], pos[3 * idx[i + 1] + 2]];
+    const c = [pos[3 * idx[i + 2]], pos[3 * idx[i + 2] + 1], pos[3 * idx[i + 2] + 2]];
+    vol += dot3(a, [b[1] * c[2] - b[2] * c[1], b[2] * c[0] - b[0] * c[2], b[0] * c[1] - b[1] * c[0]]) / 6;
+  }
+  const trueVol = 4 / 3 * Math.PI * 1000;
+  check(`kit.iso sphere r = 10 mm at 0.5 mm: enclosed volume within 1 % of 4/3 pi r^3 (${vol.toFixed(1)} vs ${trueVol.toFixed(1)})`, Math.abs(Math.abs(vol) - trueVol) / trueVol <= 0.01 && vol > 0, `${vol}`);
+  const edges = new Map();
+  for (let i = 0; i < idx.length; i += 3) {
+    for (let k = 0; k < 3; k++) {
+      const a = idx[i + k]; const b = idx[i + ((k + 1) % 3)];
+      const key = a < b ? a * 1e7 + b : b * 1e7 + a;
+      edges.set(key, (edges.get(key) || 0) + 1);
+    }
+  }
+  const notTwo = [...edges.values()].filter((c) => c !== 2).length;
+  check('kit.iso sphere: the mesh is closed (every edge in exactly two triangles)', notTwo === 0, `${notTwo} edges not in two triangles`);
+  const trilinear = (x, y, z) => {
+    const gx = (x - O[0]) / STEP; const gy = (y - O[1]) / STEP; const gz = (z - O[2]) / STEP;
+    const i0 = Math.min(N - 2, Math.floor(gx)); const j0 = Math.min(N - 2, Math.floor(gy)); const k0 = Math.min(N - 2, Math.floor(gz));
+    const fx = gx - i0; const fy = gy - j0; const fz = gz - k0;
+    let v = 0;
+    for (let c = 0; c < 8; c++) {
+      const ox = c & 1; const oy = (c >> 1) & 1; const oz = (c >> 2) & 1;
+      v += (ox ? fx : 1 - fx) * (oy ? fy : 1 - fy) * (oz ? fz : 1 - fz) * field[((k0 + oz) * N + (j0 + oy)) * N + (i0 + ox)];
+    }
+    return v;
+  };
+  let onLevel = 0;
+  for (let i = 0; i < pos.length; i += 3) onLevel = Math.max(onLevel, Math.abs(trilinear(pos[i], pos[i + 1], pos[i + 2])));
+  check(`kit.iso sphere: every vertex's trilinear value is within 1e-3 of the level (worst ${onLevel.toExponential(2)})`, onLevel <= 1e-3, `${onLevel}`);
+  const isoIn = kit.isoInside(field, N, N, N, O, STEP, 0);
+  const rng2 = seeded(31);
+  const isoPts = randomBox(rng2, [-12, -12, -12], [12, 12, 12], 20000);
+  const T = triangles(g);
+  let isoAgree = 0;
+  for (const p of isoPts) if (isoIn(p[0], p[1], p[2]) === rayInside(T, p[0], p[1], p[2])) isoAgree++;
+  check(`kit.isoInside: agrees with ray parity on the mesh on >= 99.5 % of 20 000 points (${(isoAgree / isoPts.length * 100).toFixed(2)} %)`, isoAgree / isoPts.length >= 0.995);
+  check('kit.isoInside: outside the grid is false', isoIn(20, 0, 0) === false && isoIn(0, -13, 0) === false);
+
+  /* the table: for each of the 256 cases, the edges its row names are exactly the sign changes of the case */
+  let tableOk = true;
+  for (let m = 0; m < 256 && tableOk; m++) {
+    const crossing = [];
+    for (let e = 0; e < 12; e++) {
+      const [a, b] = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]][e];
+      if (((m >> a) & 1) !== ((m >> b) & 1)) crossing.push(e);
+    }
+    const row = kit.MC_TRI[m];
+    const used = [...new Set(row.filter((v) => v >= 0))].sort((p, q) => p - q);
+    if (used.join() !== crossing.join()) tableOk = false;
+  }
+  check('kit: the triangle table names, for each of the 256 cases, exactly the crossed edges', tableOk);
+
+  /* a random field closes too: every case is exercised, not only the sphere's */
+  const NR = 16;
+  const rngN = seeded(41);
+  const noise = new Float32Array(NR ** 3);
+  for (let z = 0; z < NR; z++) for (let y = 0; y < NR; y++) for (let x = 0; x < NR; x++) {
+    const edge = x === 0 || y === 0 || z === 0 || x === NR - 1 || y === NR - 1 || z === NR - 1;
+    noise[(z * NR + y) * NR + x] = edge ? 1 : rngN() * 2 - 1;
+  }
+  const gN = kit.isoGeometry(THREE, noise, NR, NR, NR, [0, 0, 0], 1, 0);
+  const nidx = gN.index.array;
+  const nedges = new Map();
+  for (let i = 0; i < nidx.length; i += 3) for (let k = 0; k < 3; k++) {
+    const a = nidx[i + k]; const b = nidx[i + ((k + 1) % 3)];
+    const key = a < b ? a * 1e7 + b : b * 1e7 + a;
+    nedges.set(key, (nedges.get(key) || 0) + 1);
+  }
+  check('kit.iso random field (every case): the mesh is closed', [...nedges.values()].every((c) => c === 2), `${[...nedges.values()].filter((c) => c !== 2).length} open edges`);
+
+  /* timings on a 1.2 M-voxel grid (107^3): the Accept's budget, printed, not asserted */
+  const BIG = 107;
+  const rngB = seeded(51);
+  const bigMask = new Uint8Array(BIG ** 3);
+  for (let i = 0; i < bigMask.length; i++) bigMask[i] = rngB() < 0.02 ? 1 : 0;
+  let t0 = Date.now();
+  kit.edt(bigMask, BIG, BIG, BIG, 0.5);
+  const tEdt = Date.now() - t0;
+  const bigField = sphereField(BIG, 0.5, -26.75, 10);
+  t0 = Date.now();
+  const gB = kit.isoGeometry(THREE, bigField, BIG, BIG, BIG, [-26.75, -26.75, -26.75], 0.5, 0);
+  const tIso = Date.now() - t0;
+  console.log(`  timing  edt on ${BIG}^3 = ${(BIG ** 3 / 1e6).toFixed(2)} M voxels: ${tEdt} ms (budget 300 ms)${tEdt > 300 ? '  ESCALATE' : ''}`);
+  console.log(`  timing  iso on ${BIG}^3 = ${(BIG ** 3 / 1e6).toFixed(2)} M voxels: ${tIso} ms, ${gB.index.array.length / 3} triangles (budget 200 ms)${tIso > 200 ? '  ESCALATE' : ''}`);
+  check('kit: the 1.2 M-voxel timing grids build', gB.index.array.length > 0);
+}
+
 const SECTIONS = {
+  kit: () => kitTests(),
   dioramas: async (browser, base) => { await dioramaTests(browser, base); await labShots(browser, base); },
   lab: async (browser, base) => { sphenoidRuleTests(); await sphenoidPageTests(browser, base); },
   ct: async (browser, base) => { await ctUnitTests(); await ctTests(browser, base); await ctShots(browser, base); },
@@ -5841,7 +6119,7 @@ const SECTIONS = {
 /* CI runs one shard per job (`--shard i/N`), balanced on measured section times. Every section is in exactly
    one shard, checked here, so a new section cannot be left out of CI: put it in the lightest shard. */
 const SHARDS = [
-  ['scope'],
+  ['scope', 'kit'],
   ['procedure', 'flap', 'population'],
   ['specimen', 'scanned'],
   ['dioramas', 'lab', 'ct', 'mucosa', 'anatomy'],
@@ -5875,13 +6153,15 @@ function pickSections() {
 }
 
 const timings = [];
+const NODE_ONLY = new Set(['kit']);
 
 async function main() {
   const picked = pickSections();
   let server = null;
   let base = BASE;
-  if (!base) { server = await startServer(); base = server.origin; }
-  const browser = await launchBrowser({ headed: HEADED });
+  /* Node-only sections (NODE_ONLY) run without a browser, so they need no Chromium */
+  const browser = picked.some((n) => !NODE_ONLY.has(n)) ? await launchBrowser({ headed: HEADED }) : null;
+  if (browser && !base) { server = await startServer(); base = server.origin; }
 
   console.log('=== SSB behavior tests ===');
   for (const name of picked) {
@@ -5899,7 +6179,7 @@ async function finish(browser, server) {
   const errs = allErrors.flat();
   check('zero real console errors across every page', errs.length === 0, errs.slice(0, 3).map((e) => `${e.type}: ${e.text}`).join(' | '));
 
-  await browser.close();
+  if (browser) await browser.close();
   if (server) await server.close();
 
   const failed = results.filter((r) => !r.ok);
