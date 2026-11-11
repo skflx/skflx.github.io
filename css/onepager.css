@@ -52,6 +52,30 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
   font-size: max(0.8rem, 0.13em); letter-spacing: 0.04em;
   margin-left: 0.5em; color: var(--signal);
 }
+.hero-name .hn-md.egg {
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 2px;
+  text-decoration: underline dotted transparent;
+  text-underline-offset: 0.28em;
+  transition: opacity 0.18s ease, text-decoration-color 0.18s ease, transform 0.18s ease;
+}
+.hero-name .hn-md.egg:hover {
+  text-decoration-color: var(--signal);
+  opacity: 0.85;
+}
+.hero-name .hn-md.egg:active {
+  transform: translateY(1px);
+}
+.hero-name .hn-md.egg:focus-visible {
+  outline: 1.5px solid var(--signal);
+  outline-offset: 3px;
+}
+.hero-name .hn-md.egg[aria-expanded="true"] {
+  text-decoration-color: var(--signal);
+}
 @keyframes rise { from { opacity: 0; transform: translateY(0.18em); } to { opacity: 1; transform: none; } }
 
 .hero-lede {
@@ -199,6 +223,29 @@ a:hover .ext { color: var(--signal); transform: translate(2px, -2px); }
 .cutout img { display: block; width: 100%; height: auto; }
 .hero-figure.cutout { max-width: 22rem; }
 @media (min-width: 960px) { .hero-figure.cutout { max-width: none; } }
+
+/* Egg reveal for hero portrait cutout: smooth decelerating glide */
+.cutout.egg-figure.is-open {
+  animation: cutout-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: center bottom;
+}
+@keyframes cutout-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cutout.egg-figure.is-open {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* ----- 01 About ----- */
 .about { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
