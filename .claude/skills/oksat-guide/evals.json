@@ -1,0 +1,33 @@
+{
+  "reviewed": null,
+  "triggers": [
+    { "prompt": "Teach me the anatomy of the facial recess as an interactive OKSAT guide.", "expect": true },
+    { "prompt": "I want a first-pass study guide on hearing loss work-up, with predict-then-reveal prompts, that drills into the question modules.", "expect": true },
+    { "prompt": "Turn this study guide artifact on thyroid nodules into an OKSAT interactive guide.", "expect": true },
+    { "prompt": "Add a chapter on the nasal valve to the rhinology guide.", "expect": true },
+    { "prompt": "Can you build a 'teach me' walkthrough for sudden hearing loss in OKSAT before I hit the questions?", "expect": true },
+    { "prompt": "Write me a new OKSAT question bank on pediatric airway from my Drive PDFs.", "expect": false },
+    { "prompt": "Audit the vestibular-schwannoma module for weak distractors.", "expect": false },
+    { "prompt": "Make a rotating ASCII 3D figure of the incus for the guide.", "expect": false },
+    { "prompt": "Fix the keyboard shortcut for the recall gate in the question viewer.", "expect": false },
+    { "prompt": "Make the term popover in the guide viewer close on Escape.", "expect": false }
+  ],
+  "tasks": [
+    { "id": "guide-lint-existing", "split": "dev",
+      "prompt": "Add one new text block with a check prompt to a section of the ear-anatomy guide's start chapter, following the guide spec. Do not alter other chapters.",
+      "checks": ["node tools/lint-oksat-guide.mjs ear-anatomy", "node tools/check-data.mjs", "judge: the diff does not modify js/oksat/engine.js or js/oksat/learn.js"],
+      "origin": "seed" },
+    { "id": "guide-term-lexicon", "split": "dev",
+      "prompt": "In the ar-crs-aerd guide, add a sentence using a specialty abbreviation that is already in the shared lexicon, written with the guide markup.",
+      "checks": ["node tools/lint-oksat-guide.mjs ar-crs-aerd", "node tools/check-data.mjs"],
+      "origin": "seed" },
+    { "id": "guide-learn-tests", "split": "holdout",
+      "prompt": "Add a drill link from a section of the ear-anatomy guide to an existing concept in the ear-anatomy module, and confirm the viewer still works.",
+      "checks": ["node tools/check-data.mjs", "node tools/lint-oksat-guide.mjs ear-anatomy", "node tools/test-oksat-learn.mjs"],
+      "origin": "seed" },
+    { "id": "guide-no-module-writes", "split": "holdout",
+      "prompt": "Add a practice block to a chapter of the ear-anatomy guide that references an existing module item by id.",
+      "checks": ["node tools/check-data.mjs", "judge: no file under js/oksat/modules/ was modified", "judge: the new text uses the inline guide markup and no HTML"],
+      "origin": "seed" }
+  ]
+}

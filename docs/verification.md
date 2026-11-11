@@ -14,6 +14,7 @@ node tools/test-search.mjs               # search.html and the CPT deep link
 node tools/test-airway-resume.mjs         # Airway Rounds saved games and resume
 node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
 node tools/lint-oksat-guide.mjs [slug ...] # OKSAT interactive guides against the teaching-shape spec (no slug: every guide)
+node tools/lint-skills.mjs                 # house skills: structure, evals.json schema, registration (run after any change under .claude/skills/)
 node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
 node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
 ```
