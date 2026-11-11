@@ -130,7 +130,10 @@ the owner vets them. Source `tools/atlas/anatomy.json`, baked by `tools/atlas.mj
 
 **State:** unlisted (`noindex`). Three modes: the 3D model (default), four 2D
 diagrams (the fallback without WebGL and every `#d=`/`#p=` link), and Real CT. The
-3D geometry is placed from textbook dimensions, not traced from a scan. Anatomy,
+3D geometry is placed from textbook dimensions, then fitted to the UW landmark medians
+(`tbone/geometry/landmarks.json`; one specimen, scale +-10 %): skull surface, mastoid group,
+ICA, ET and superior canal moved; only `incus` and `annulus` remain in `TRUTH_EXCEPT`
+(`tools/check-data.mjs`) as probable tip artefacts. Anatomy,
 notes and relations are draft (owner, `docs/decisions.md` §7). Architecture: `AGENTS.md`.
 
 **Next:** owner review of the anatomy, notes and relations, 3D geometry first.
