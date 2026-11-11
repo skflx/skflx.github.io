@@ -3,8 +3,7 @@
 A static personal site with no accounts, no server, and no secrets. What
 there is to protect: visitors (script injection on this origin), the
 owner's reputation (defacement, a hijacked dependency), the browser-local
-OKSAT progress, and — once the wiki exists — what leaves the Obsidian
-vault. `tools/check-data.mjs` enforces the page rules below in CI.
+OKSAT progress. `tools/check-data.mjs` enforces the page rules below in CI.
 
 ## Rules for every page
 

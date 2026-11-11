@@ -54,7 +54,7 @@ and defaulting to `prefers-color-scheme`.
 - **Search** (`search.html`) — one box over the OKSAT question modules and the CPT table.
 - **PDF Chapter Splitter** (`pdf-chapter-splitter.html`) — lossless split of a PDF into chapters, entirely in the browser.
 - **Airway Rounds** (`airway-jeopardy.html`) — team ENT/H&N airway quiz; self-contained, so it works with no network.
-- **sk.oto** — the Obsidian knowledge graph as a Quartz 5 wiki, live at `skflx.github.io/ohns-wiki-skflx/` (as of 2026-11-10).
+- **sk.oto** — the Obsidian knowledge graph as a Quartz 5 wiki, published from the vault by its own repo (`skflx/ohns-wiki-skflx`), live at `skflx.github.io/ohns-wiki-skflx/`.
 
 Current state of each system: `docs/wip.md`. Agent manual and architecture: `AGENTS.md`.
 

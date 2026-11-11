@@ -132,7 +132,7 @@ None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls
 discrepancies (hillock mapping, prominence thresholds) for owner review.
 
-**Next:** the plan for more guides and guide-to-wiki references (Phase C) is in
+**Next:** the plan for more guides and guide-to-wiki references is in
 `docs/oksat-learn-roadmap.md`. More guides (`/oksat-guide`), each built with its questions;
 authoring is manual (`docs/authoring-oksat.md`). Laryngology and
 head-and-neck oncology have hues reserved in `OKSAT_SUBSPECIALTIES` but no
@@ -332,7 +332,7 @@ content to work; neither is scheduled.
 **State:** Node suites and browser suites are listed under Commands in
 `AGENTS.md`; what each one proves is in `docs/verification.md`. CI runs the
 fast tier (`check-data`, `lint-oksat`, the page smoke test, the search and
-Airway saved-game suites) on every PR, the OKSAT and wiki suites when their
+Airway saved-game suites) on every PR, the OKSAT suites when their
 files change; the SSB suite runs as four parallel
 shards (`SHARDS` in `tools/test-ssb.mjs`). Security: `docs/security.md` (audit
 2026-09-23).
