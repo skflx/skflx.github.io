@@ -309,7 +309,7 @@ inferred. Labels are reapplied by `relabel.py` after `vocab.py` edits, without r
 regions come from `slices.py`. Pipeline `tools/tbone-pipeline/` (reuses `tools/ssb-pipeline/uw/` helpers); method, scale (inferred,
 +-10 %), limits and regeneration in `tbone/README.md`; provenance `tbone/LICENSE-data.md`. Spec
 `plans/2026-11-03-uw-temporal-bone-volume.md`. The raw UW downloads are git-ignored, never committed, and
-regenerated with `fetch.py`. Draft until the owner verifies the anatomy.
+regenerated with `fetch.py`. Draft until the owner verifies the anatomy. A second source, OpenEar (CC BY 4.0, issue #244, plan `plans/2026-11-04-tbone-sources.md`), has its licence checked and specimen ZETA chosen; `tools/tbone-pipeline/fetch_openear.py` and `ingest.py` exist, ZETA is fetched and ingested locally only (git-ignored `incoming/`), and nothing from OpenEar is committed. Frame placement (B4) is next.
 
 **Next:** review the sweeps against the labelled slices; settle the scale (owner or a measured
 reference); register OLSB to it (#244 and its follow-on).

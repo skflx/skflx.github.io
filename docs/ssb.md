@@ -19,7 +19,7 @@ data, ever.
 
 1. **One graph, many views.** Every fact is a typed node in a knowledge graph
    (`docs/authoring-ssb.md`) with edges and sources. The 3D scene, panels, CT
-   overlay, procedures and self-test are renderings of that graph; geometry
+   overlay and procedures are renderings of that graph; geometry
    is keyed by the same ids. A fact is written once and cannot disagree with
    itself across views.
 2. **Label the kind of truth.** Four kinds, never blurred:
@@ -46,8 +46,7 @@ data, ever.
    position is one keystroke from the CT slices through it, and every CT
    voxel knows which structure it belongs to.
 6. **Recall before reveal.** Panels and procedure steps can open as prompts
-   with the answer collapsed, the same recall-gate idea as OKSAT. The
-   self-test is generated from the graph, so it grows with the content.
+   with the answer collapsed, the same recall-gate idea as OKSAT.
 7. **The repo's rules do not bend.** No build step, same-origin everything,
    `script-src 'self'`, stamped assets, guarded storage, escaped text. Where
    3D needs something new (a vendored library, an ES-module import graph),
@@ -68,8 +67,7 @@ sinonasal and skull base tumors) names the structures it involves, its
 imaging discriminators and mimics, its staging systems, and what it changes
 at the table. In the scene a condition is an overlay on the specimen (a
 lesion volume, an opacified cell, an effaced fat plane); in CT mode, its
-findings; in self-test, *pattern → diagnosis* and *diagnosis → what it
-changes about the operation*.
+findings.
 
 **The external nose** (O2) is in scope to the full rhinoplasty framework:
 tier 1 names the bones, cartilages, envelope and its subunits; tier 2 adds
@@ -196,15 +194,10 @@ never reloads.
   presets and sliders: drag olfactory fossa depth from Keros I to III and
   watch the lateral lamella lengthen and the AEA drop into a mesentery;
   toggle IFAC cells and watch the frontal drainage pathway reroute (§6).
-- **Self-test.** Items generated from the graph, filtered by tier: *find it*
-  (name → click), *name it* (highlight → recall, self-graded), *CT localize*
-  (crosshair → name; the label volume grades it), *classify* (a diorama or
-  CT state → Keros/Gera/IFAC/pneumatization type), *what's at risk* (station
-  → hazards), *next step* (procedure step → next action and what to confirm
-  first). Leitner scheduling like OKSAT's, in SSB's own storage.
+- **Self-test.** Planned, not built: `plans/2026-10-07-ssb-roadmap.md` T1 (issue #294).
 
 **Depth (tier) and truth badges are always visible.** Tier filters labels,
-panel sections, hazards and self-test items; it never hides geometry needed
+panel sections and hazards; it never hides geometry needed
 for orientation.
 
 ## 4. Coordinate frame and units
@@ -1702,7 +1695,7 @@ of combined edits). v1: one variant per side per region + one condition.
 One Python module, `tools/ssb-pipeline/anatomy/ops.py` (planned, OP1), each operator a pure
 function `(ct, labels, landmarks, params) → patch` with stated invariants,
 mirroring the diorama contract (`PARAMS` with ranges and `from` graph ids,
-`PRESETS`, self-test):
+`PRESETS`):
 
 | Operator | Does | Used for |
 |---|---|---|

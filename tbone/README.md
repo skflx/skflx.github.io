@@ -47,6 +47,8 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 .venv/bin/python -I $P/contactsheet.py DIR --only facial-nerve --tag fn   # review sheets (not committed)
 ```
 
+The OpenEar tools exist: `tools/tbone-pipeline/fetch_openear.py` range-extracts only the needed members of one OpenEar archive into the git-ignored `tools/tbone-pipeline/incoming/openear/<specimen>/`, and `tools/tbone-pipeline/ingest.py` reads an NRRD volume (only its geometry header fields are kept) and resamples it to an isotropic grid under `incoming/` only. ZETA is fetched and ingested locally only; nothing from OpenEar is committed to this folder. Placing it in OLSB's frame (WP B4 of `plans/2026-11-04-tbone-sources.md`) is next; status is issue #244.
+
 ## How it was made, and what it can and cannot say
 
 - **Inputs.** All four normal planes at the best resolution served (512 x 512): axial 61, coronal 21, parallel
