@@ -63,8 +63,7 @@ node tools/atlas.mjs check
 
 ## Sources
 
-Opus drew the control points in 2E (#190). Every number below is a draft for the owner to vet at
-#199 (D4). None was re-checked against the printed source in that session; the citations name the
+Opus drew the control points in 2E (#190). Every number below is a draft for the owner to vet. None was re-checked against the printed source in that session; the citations name the
 works the values come from, not page-level verification.
 
 **Frame.** `anatomy.json` `_frame`: mm from the centre of the sella, `a` anterior, `s` superior,

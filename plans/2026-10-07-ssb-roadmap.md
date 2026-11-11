@@ -1,57 +1,37 @@
-# SSB roadmap — task board
+# SSB roadmap — spec
 
-What is done, what is next, who does it, and what waits on the owner.
-Architecture: `docs/ssb.md`. How work is handed to a model and checked:
-`docs/delegation.md`. Current state in prose: `docs/wip.md`. Realistic anatomy's work packages are in §3a.
+> Status: GitHub issue #266 (parent; one sub-issue per open work package). This file holds decisions, WP specs and
+> data only; status never lives here (`AGENTS.md`). Architecture: `docs/ssb.md`. Handoff protocol: `docs/delegation.md`.
+> Current state in prose: `docs/wip.md`. Done work is in git history (last board version: commit `34af192`, and the commit that moved this file).
 
-Last updated 2026-11-10. Done work packages are one line each (§4). Their
-specs and the checkpoint narratives (CP-1 to CP-4a) are in git history: the
-last full version is commit `34af192`. Update the board in the same PR as the
-work it records.
-
-## 1. Status board
-
-| Phase (`docs/ssb.md` §12) | State | Remaining |
-|---|---|---|
-| 0 Architecture, schema, validator, draft graph | done | — |
-| 1 Walking skeleton, graph mode | done | — |
-| 2 Variant lab | 3 of 4 dioramas | `lateral-wall` (later) |
-| 3 Reference specimen | done | hand segmentation (owner, optional) |
-| 4 Endoscope | rig, exposure, collision and HUD, CT along the scope, septum rule, station poses and flights done | 8 uncovered stations, all outside O7's corridors or intradural |
-| 5 CT mode | done | — |
-| 6 Procedure mode | P1–P4 done with P1b, P2, P3, DC1, POP2a/b, L1, ST4d, ST5 | NSF overlay in procedure mode (harvest, rotation, inset); Draf III, transpterygoid and transplanum states (no WP yet); owner review of the states |
-| 7 Self-test | not started | T1 (deferred) |
-| 8 Offline cache, performance | not started | image textures only if procedural materials fall short (`docs/ssb.md` §11) |
-| 3c External nose and rhinoplasty framework (`plans/2026-11-10-ssb-nasal-framework.md`) | specced (ST7); deferred behind O7 | ST7b (ready) → ST7a → ST7c; ST7d; ST7e (O14 decided) |
-| Realistic anatomy (design `docs/ssb.md` §14; sources `docs/realistic-anatomy.md`) | in progress (§3) | RS2c (critical path), then RP2 (owner fetch), RP3 (specced, waits on RP2), POP3, RA0d; then RS3–RS6, OP1, VB1/PB1, RA5 |
-| ∞ Content | all `draft` | owner review (tier 1 first); backlog §6 |
-
-## 2. Owner — decisions and actions
+## 1. Owner decisions
 
 ### Decided
 
 Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
 
-- **O1** External nose: specimen skin for naris and ala, cartilage as an overlay.
-- **O2** Entry anatomy now; the full nasal framework later (ST7).
-- **O3** Sonnet drafts content and checks citations, Opus reviews; Opus authors anything that places geometry.
-- **O4** Model the 4 mm telescope; 2.7 mm selectable.
-- **O5** The NSF superior incision starts at the floor of the sphenoid ostium, for every design.
-- **O6** Normal before variant: right half mirrored, septum centred; anomalies carried by the left.
-- **O7** Content priority: clear FESS anatomy and EEA-to-sellar/clival anatomy first; other content waits. Problems in existing entities are flagged, not fixed.
-- **O8** Framework defaults mixed by population, each labelled; modal variant classes.
-- **O9** A population reference beside the head (percentiles, median profile, mean-shape ghost); a deformed head only later.
-- **O10** Posterior septectomy 15 mm, from the choanal arch up. Inferior limit still to confirm (below).
-- **O11** FESS on both sides at once; one dissected side beside an intact one later.
-- **O12** SEG1 (NasalSeg-trained voxel check): not now.
-- **O13** Mucosa toggle: decongested · as scanned · congested. Inflammatory edema is a condition.
+- **Vendor three.js** (2026-09-30): approved, same-origin and pinned.
+- **Reference specimen from the UW atlas** (2026-09-30). UW written permission to publish derived geometry and volumes: 2026-10-07 (`ssb/LICENSE-data.md`).
+- **O1** (2026-10-02) External nose: specimen skin for naris and ala, cartilage as an overlay.
+- **O2** (2026-10-02) Entry anatomy now; the full nasal framework later (ST7).
+- **O3** (2026-10-02) Sonnet drafts content and checks citations, Opus reviews; Opus authors anything that places geometry.
+- **O4** (2026-10-03) Model the 4 mm telescope; 2.7 mm selectable.
+- **O5** (2026-10-03) The NSF superior incision starts at the floor of the sphenoid ostium, for every design.
+- **O6** (2026-10-03) Normal before variant: right half mirrored, septum centred; anomalies carried by the left.
+- **O7** (2026-10-07) Content priority: clear FESS anatomy and EEA-to-sellar/clival anatomy first; other content waits. Problems in existing entities are flagged, not fixed.
+- **O8** (2026-10-08) Framework defaults mixed by population, each labelled; modal variant classes.
+- **O9** (2026-10-08) A population reference beside the head (percentiles, median profile, mean-shape ghost); a deformed head only later.
+- **O10** (2026-10-08) Posterior septectomy 15 mm, from the choanal arch up. Inferior limit still to confirm (below).
+- **O11** (2026-10-08) FESS on both sides at once; one dissected side beside an intact one later (needs per-side lining packs).
+- **O12** (2026-10-08) SEG1 (NasalSeg-trained voxel check): not now.
+- **O13** (2026-10-08) Mucosa toggle: decongested · as scanned · congested. Inflammatory edema is a condition.
 - **O14** Where the nasal framework is drawn: **both, lab first** (variant lab, then fitted under the specimen's skin and nasal bones). Decided 2026-10-11, as recommended. Unblocks the fit, ST7e, after ST7c and ST7d.
 - **RA-O8** (realistic anatomy): batch 3 is planned only after batches 1–2 are verified. Decided 2026-10-11, as recommended.
 
 ### Open
 
 - **RA-O7** Author names remain in git history before 2026-10-07. Recommended: leave history; rewrite only if the authors ask. (`docs/realistic-anatomy.md` §13.)
-- **RP3, serve case material?** Whether any Radiopaedia volume or image is ever served. RP3 commits none. (`docs/ssb-roadmap.md` §3a, RP3 Owner line.)
+- **RP3, serve case material?** Whether any Radiopaedia volume or image is ever served. RP3 commits none. (WP RP3, Owner line, below.)
 - **RP3, pool into the population file?** Whether Radiopaedia entries may go into `ssb/anatomy/population.json`. Its share-alike licence (CC BY-NC-SA 3.0) would then cover that file.
 - **Carried from `docs/ssb.md` §13:**
   - Strict CSP. Recommended: keep it; gzip first, then Draco's JS decoder. `'wasm-unsafe-eval'` only if the budgets fail.
@@ -70,36 +50,11 @@ Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
   - Back-links not yet added: ICA and Meckel's cave to the parasellar ligaments and carotid cave; gyrus rectus to the olfactory sulcus; the cellulitis conditions to `s.orbital-septum`; `dz.subperiosteal-orbital-abscess` to `m.spoa-drainage-volume-threshold`.
   - Detail: skflx/skflx.github.io#117.
 
-### Owner actions
+## 2. Work package specs
 
-- **P1 checks** on the dissected states (review links in §5):
-  - The uncinectomy opens the infundibular trough; the natural ostium appears with the antrostomy (`docs/ssb.md` §5.8).
-  - Antrostomy window: 18.5 × 9 mm on the prototype; 19 × 9.5 mm pinned at CP-3.
-  - Sellar opening's lateral limit: the ICA tube (29 % inferred), plus 1 mm.
-  - Confirm the choanal-arch inferior limit of the posterior septectomy (O10).
-- **Flap and asymmetry views:** `ssb.html#tier=3&flap=full.R` (flap overlay) and `ssb.html#anat=scanned` (asymmetry note).
-- **ST6 items:** the valve plane at A −10 (glance at it on CT); whether the superior labial branch is drawn into the columella (it stays truncated at the valve plane until you say).
-- **AEA–PEA spacing:** 21 mm in this specimen against 12 mm in the population; the PEA is inferred.
-- **Tier-1 FESS anatomy and the two dioramas' schematic proportions:** flip `review` to `verified` only where right. Nothing is `verified` yet. In this repo, `verified` on a source means exists-as-cited, not supports-the-claim.
-- **Figure depictions and captions** (Fig. 2 and the Larynx): schematic; check against the owner's sources (`docs/decisions.md` §7).
-- **Radiopaedia (RP2):** veto any pick in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`), then open each in your browser, save its stack to `tools/ssb-pipeline/incoming/radiopaedia/<rID>/` (gitignored; `docs/realistic-anatomy.md` §4.3), and fill the "owner reads" fields.
-- **Optional:** full texts of Daniel & Palhazi 2018, Daniel 2014, Çavuş Özkan 2020 and Letourneau & Daniel 1988, and a sourced cephalic-malposition threshold (ST7 sources); hand segmentation in 3D Slicer, or a contrast CT.
+Open work only. Each WP is an issue; its body points at the WP by id here.
 
-## 3. Open work packages
-
-**Deferred behind O7** (clear FESS and sellar/clival anatomy first): T1, ST7 (below), NSF in procedure mode (harvest, rotation, inset; no WP spec yet), the Draf III, transpterygoid and transplanum states (no WP spec yet), more pathology content.
-
-**ST7 track** (`plans/2026-11-10-ssb-nasal-framework.md`; WPs in §5) — **deferred behind O7** (FESS and sellar/clival anatomy first); when it resumes: lane A runs ST7b
-(kit only, no shared files with the other lanes except
-`tools/test-ssb.mjs`), then ST7a once ST6 is merged (it maps the graph's
-new `skin` kind onto ST6's material), then ST7c; C1 batches and ST7a both
-append to `sources.json`, so whichever merges second keeps both sides.
-Lane B adds ST7d after ST5. CP-ST7a reviews ST7a's content; CP-ST7c
-reviews ST7b and ST7c, writes ST7e's final spec and plans the
-rhinoplasty model (R0).
-
-
-### ST7 — Nasal framework: anatomy for a rhinoplasty model        [specced 2026-10-07] · Opus spec → Sonnet build · spec: `plans/2026-11-10-ssb-nasal-framework.md`
+### ST7 — Nasal framework: anatomy for a rhinoplasty model
 Owner decision O2 (2026-10-02): the atlas covers the whole nasal framework.
 The spec (`plans/2026-11-10-ssb-nasal-framework.md`) builds it as the `nasal-framework` diorama —
 framework, envelope in layers, vessels and nerves by layer, three computed
@@ -107,18 +62,18 @@ rules (tripod, dissection plane, thick skin) — shaped as the substrate of a
 later rhinoplasty model, then fits it under the specimen's skin. Five WPs
 and two checkpoints:
 
-| WP | What | Who | Depends | Lane |
-|---|---|---|---|---|
-| ST7a | Graph content for the framework, envelope, vessels, nerves; vocabulary | Sonnet drafts → Opus review (CP-ST7a) | ST6 merged (the `skin` material kind) | A |
-| ST7b | `kit.js`: `strip` solid, exact distance transform, marching cubes | Sonnet | — | A (first) |
-| ST7c | The diorama, to the nasal-framework spec, rules 0–13 | Sonnet | ST7a, ST7b merged | A |
-| ST7d | The specimen's bony nose (nasal bone / frontal process labels, rhinion, sellion, piriform rim) and ST6's skin landmarks written | Sonnet | ST6 merged | B (after ST5) |
-| ST7e | Fit on the specimen | Sonnet (spec finalized by Opus at CP-ST7c) | ST7c, ST7d; O14 = (b) or (c) | A |
+| WP | What |
+|---|---|
+| ST7a | Graph content for the framework, envelope, vessels, nerves; vocabulary |
+| ST7b | `kit.js`: `strip` solid, exact distance transform, marching cubes |
+| ST7c | The diorama, to the nasal-framework spec, rules 0–13 |
+| ST7d | The specimen's bony nose (nasal bone / frontal process labels, rhinion, sellion, piriform rim) and ST6's skin landmarks written |
+| ST7e | Fit on the specimen (spec finalized by Opus at CP-ST7c; needs O14 = (b) or (c)) |
 
 Population and class defaults follow O8 (decided 2026-10-08: mixed and labelled, modal classes): the
 spec's defaults stand until the owner says otherwise.
 
-### ST7a — Nasal framework content        [todo: branch after ST6 merges] · Sonnet drafts → Opus review (CP-ST7a) · depends: ST6 merged
+### ST7a — Nasal framework content
 Goal: every id `plans/2026-11-10-ssb-nasal-framework.md` names exists in the graph, sourced from
 the PubMed records below, so the diorama (ST7c) builds on ids and cited
 numbers only.
@@ -314,7 +269,7 @@ Escalate: an abstract does not support a number the spec uses (say which;
 the spec changes, not the number); an entity would duplicate an existing
 one; a source's record differs from this table.
 
-### ST7b — Kit: strip, distance transform, iso-surface        [ready] · Sonnet · depends: —
+### ST7b — Kit: strip, distance transform, iso-surface
 Goal: the three DOM-free primitives the nasal-framework spec needs, each with one inside test
 and one mesh builder (`docs/ssb.md` §6), tested in Node.
 Read: `docs/ssb.md` §6 and the nasal-framework spec (the envelope paragraph); `js/ssb/dioramas/kit.js`;
@@ -360,7 +315,7 @@ Escalate: edt on 1.2 M voxels takes > 300 ms or iso > 200 ms in Node on
 the CI runner (report both; the nasal-framework spec's budget then needs the 1.0 mm grid by
 default).
 
-### ST7c — The `nasal-framework` diorama        [todo] · Sonnet · depends: ST7a, ST7b merged
+### ST7c — The `nasal-framework` diorama
 Goal: `js/ssb/dioramas/nasal-framework.js` to `plans/2026-11-10-ssb-nasal-framework.md` as it
 stands, with rules 0–13 pinned.
 Read: `docs/ssb.md` §6, §6.1 (the pattern of rules computed from solids,
@@ -391,7 +346,7 @@ than the nasal-framework spec's to hold (send the clearances, do not tune); the 
 (rule 7) puts the ASA where the septal outline fails rule 9; a muscle or
 ligament end has no `attaches-to` edge to land on; a budget breaks.
 
-### ST7d — The specimen's bony nose and skin landmarks        [todo] · Sonnet · depends: ST6 merged · lane B after ST5
+### ST7d — The specimen's bony nose and skin landmarks
 Goal: the specimen's own nasal bones, frontal processes, rhinion, sellion
 and piriform rim, and ST6's measured skin points, as data — the anchors
 ST7e fits to, and the n = 1 values beside the nasal-framework spec's population numbers.
@@ -440,7 +395,7 @@ BT over more than a third of their dorsal length (thin caudal bone — say
 where); the rim is ambiguous on more than a fifth of the levels; a budget
 breaks.
 
-### ST7e — Fit on the specimen        [todo: spec sketch in `plans/2026-11-10-ssb-nasal-framework.md`, finalized at CP-ST7c] · Sonnet · depends: ST7c, ST7d; O14 = (b) or (c)
+### ST7e — Fit on the specimen
 Not executable until Opus rewrites it at CP-ST7c with the numbers ST7c
 and ST7d print (where the default framework lands under the real skin;
 whether the specimen's envelope leaves room for the default domes).
@@ -457,23 +412,29 @@ printed numbers, and the first rhinoplasty-model WPs (R0: which
 manoeuvres, in what order, as `p.*` steps that set the nasal-framework spec's parameters).
 
 
-### T1 — Self-test        [later] · Sonnet · depends: P2
+### T1 — Self-test
 Find it / name it / CT localize, Leitner reused unchanged, storage key registered per `docs/decisions.md` §3. After O7's corridors work.
 
 
-## 3a. Realistic anatomy (moved from the plan, 2026-10-11)
+## 3. Realistic anatomy
 
-Design: `docs/ssb.md` §14. Sources and limits: `docs/realistic-anatomy.md` §4–§5. Done items are in §4 below.
+Design: `docs/ssb.md` §14. Sources and limits: `docs/realistic-anatomy.md` §4–§5.
+
+Rules that still apply:
+
+- Critical path: resegmentation (RS) → OP1 → VB1/PB1. The `scanned` state (RA3b) is already shipped, so the owner sees *Normal asymmetry* before any edit exists.
+- Re-export discipline: bases and patches are regenerated at checkpoints only (R6.6), deterministically (gzip mtime 0), never hand-edited.
+- Threshold re-checks: tests tuned on the old labels (E5 poses, the septum rule) are re-checked at CP-RA2, not moved silently.
 
 
 Format: `docs/delegation.md` §2. Lanes: **P** pipeline/data, **V** viewer,
 **C** content, **O** owner. Every Sonnet WP's anatomy is already data
 (written by Opus in the WP or an earlier Opus WP).
 
-### Wave RA-0 — scoping, credit (now)
+### Wave RA-0 — scoping, credit
 
 ```
-### RA0d — Name guard in check-data          [todo] · Sonnet · depends: —
+### RA0d — Name guard in check-data
 Goal:     check-data fails if an atlas author's name or e-mail local part appears in any
           tracked text file, without the names being in the repo.
 Touch:    tools/check-data.mjs; docs/security.md (rule line).
@@ -488,12 +449,11 @@ Escalate: runtime > 2 s on the repo.
 
 ### Wave RA-1 — inventories and the state machinery (parallel)
 
-POP0 — NasalSeg population statistics — done
 
 ### Wave RA-2 — resegmentation and alignment
 
 ```
-### RS1–RS6 — Resegment head A                [RS1, RS2a done; RS2b stopped → RS2c; RS3–RS6 specified as each predecessor lands] · Opus + Sonnet
+### RS1–RS6 — Resegment head A
 RS1 native-grid working volume · RS2 lamella sheets and identity (R7.2.2) · RS3 ethmoid cell
 instances + shared rule set (R7.2.3) · RS4 openings and channels (R7.2.4, with the consumer list)
 · RS5 canals as labels, sweeps from detected centrelines (R7.2.5) · RS6 added bone units and
@@ -508,11 +468,11 @@ Accept (whole RS): score.py held-out identity ≥ 95 % overall and ≥ 90 % per 
           at CP-RA2).
 Escalate: any cell the rules cannot classify that an expert would name; any wall the boundary
           review marks missing that the sheet filter cannot recover (→ owner: hand correction
-          in 3D Slicer is the documented fallback, docs/ssb-roadmap.md §2).
+          in 3D Slicer is the documented fallback, owner action in the SSB review issue).
 ```
 
 ```
-### RS2 — Lamella sheets and their identity      [RS2a review 2026-10-09 (#158); the ethmoid lamellae are RS2b] · Sonnet (filter, plumbing) + Opus (rules review) · depends: RS1
+### RS2 — Lamella sheets and their identity
 Goal:     the uncinate process, basal lamella, bullar lamella and the superior turbinate's
           ground lamella (s.ethmoid-ground-lamellae) as labelled sheets on the native grid,
           found by a sheetness filter
@@ -522,7 +482,7 @@ Read:     R7.2.2; FG1's figures.json entries Axial.ethmoid2, Cor.basallamella,
           rules attach to); the graph entries of the four lamellae and their `partOf`/`attachesTo`
           edges.
 Touch:    reseg.py (`sheets` stage); tools/ssb-pipeline/uw/rs/sheets.json (new: the rules);
-          declared.json status; README; this WP's status line.
+          declared.json status; README.
 Don't:    tune a rule to the held-out tips; draw or paint a sheet; change served files.
 Steps:    1. Sheetness: multiscale Hessian on the working volume's bone (sigma 0.35, 0.5,
              0.75 mm; bright plates: one large negative eigenvalue, two small), hysteresis
@@ -593,7 +553,7 @@ Ruling 2: (Opus, 2026-10-09, on #158) RS2 is split. RS2a = the filter, the sphen
 ```
 
 ```
-### RS2c — Ethmoid lamellae from control points (RA-O9, option C)   [todo] · Opus (points) + Sonnet (fit, plumbing) · depends: RS2a; the UW crawl in incoming/ (fetch.py)
+### RS2c — Ethmoid lamellae from control points (RA-O9, option C)
 Goal:     the middle turbinate's vertical lamella (s.middle-turbinate), the basal lamella
           (s.basal-lamella, with its -vertical and -horizontal parts) and the uncinate
           (s.uncinate-process), per side, as sheets fitted through control points Opus places
@@ -604,7 +564,7 @@ Read:     RA-O9 (docs/realistic-anatomy.md §13); RS2's and RS2b's WP text and r
           split (what is held out, so as not to open it).
 Touch:    tools/ssb-pipeline/uw/rs/lamellae.json (new, committed: the control points, an
           input placed by eye, not pipeline output), reseg.py (read, fit, rasterize, use as
-          the partition), rs/declared.json status, the RS README, this WP's status line.
+          the partition), rs/declared.json status, the RS README.
 Don't:    open split.json or any held-out tip while placing points (step 1); move a point
           after seeing a score, unless the move is argued from anatomy and disclosed (RS2's
           rule); change served files (nothing under ssb/ changes until RS6).
@@ -639,7 +599,7 @@ Owner:    verifies the sheets on the review slices at CP-RA2 (R12.3).
 ```
 
 ```
-### POP3 — NasalSeg relations                  [todo] · Sonnet · depends: POP0, POP1 (done); the NasalSeg archive in the drop zone (stats.py docstring)
+### POP3 — NasalSeg relations
 Goal:     relationship measurements between the structures NasalSeg labels (and the bone its
           CT shows), on the clear subjects, as numbers in nasalseg.json under a new key
           `relations`; head A (as scanned) placed in each.
@@ -677,7 +637,7 @@ Then:     new m.* ids for the measures that hold (a content WP, Opus reviews; so
 ```
 
 ```
-### FG2 — Figure poses in head A's frame      [todo] · Sonnet (search) + Opus (landmarks, review) · depends: FG1, RS6
+### FG2 — Figure poses in head A's frame
 Goal:     a plane pose and TPS for every N and V figure (P figures where bone-window), written
           to ssb/anatomy/sources.json; observations to observations.json.
 Steps:    constrained plane search (tilt ≤ 20°, scale 0.25–0.6 mm/px) on air-mask Dice of large
@@ -689,7 +649,7 @@ Accept:   N figures: median landmark residual after TPS ≤ 3 mm, none > 6 mm; e
 ```
 
 ```
-### RA4 — Exemplars layer in CT mode          [todo] · Sonnet · depends: FG2, RA3a
+### RA4 — Exemplars layer in CT mode
 Goal:     R6.1's overlay: observations near the slice as markers; nearby exemplars listed with
           caption, credit and the figure itself (RA-O1), served from ssb/reference/uw-sinusanatomy2/figures/.
 Accept:   test-ssb --only ct: markers project to within 0.5 px of their RAS position; the list
@@ -702,7 +662,7 @@ looks at the uncinate, basal lamella and frontal cells); figure poses.
 ### Wave RA-3 — variants batch 1, pathology batch 1
 
 ```
-### OP1 — Edit operators and texture         [todo] · Opus (invariants, specs) → Sonnet (code) · depends: RS (all)
+### OP1 — Edit operators and texture
 Goal:     ops.py (R6.5) with self-tests; PSF and noise measured on head A and printed.
 Accept:   each operator's invariants tested on synthetic volumes; texture metrics of edited
           voxels within ± 15 % of head A's (edge width, σ per tissue); blinded crop test at
@@ -710,7 +670,7 @@ Accept:   each operator's invariants tested on synthetic volumes; texture metric
 ```
 
 ```
-### VB1 — Variants batch 1                    [todo] · Opus (parameters from exemplars; rules) → Sonnet (builds, tests) · depends: OP1, FG2, C-RA
+### VB1 — Variants batch 1
 Goal:     R8.1 as patches on standard and scanned, three presets each, with override packs,
           index.json entries, compat pairs.
 Accept:   each row's acceptance rule pinned in test-ssb (--only variants); every patch's header
@@ -718,14 +678,14 @@ Accept:   each row's acceptance rule pinned in test-ssb (--only variants); every
 ```
 
 ```
-### PB1 — Pathology batch 1                   [todo] · Opus (patterns, HU targets) → Sonnet · depends: OP1, RS4
+### PB1 — Pathology batch 1
 Goal:     R9.1 as patches; Lund–Mackay and pattern presets; the drainage-follows-anatomy rule.
 Accept:   test-ssb --only pathology: each pattern opacifies exactly the sinuses its drainage
           reaches, on standard, on scanned, and over each batch-1 variant that changes drainage.
 ```
 
 ```
-### RA5 — Variant and pathology pickers        [todo] · Sonnet · depends: RA3a, VB1/PB1 (first entries)
+### RA5 — Variant and pathology pickers
 Goal:     the pickers of R6.4, panels (prevalence with unit, exemplars, stations affected),
           truth badges per R2.2.
 Accept:   test-ssb: every index.json entry reachable from the picker and the URL; the badge text
@@ -744,11 +704,10 @@ RP3  stack → volume, pose, observations, population entries · Sonnet + Opus r
 RB1  head B: coronal stack → volume (spacing estimation), labels from its tips, scanned-b base · Opus + Sonnet
 VB2  variants batch 2 (R8.2) · Opus → Sonnet
 PB2  pathology batch 2 (R9.2) · Opus → Sonnet
-(POP1 here was the asymmetry panel: built as POP2a/POP2b on docs/ssb-roadmap.md's board.)
 ```
 
 ```
-### RP3 — Radiopaedia stacks → volume, pose, observations, population entries   [todo: specced 2026-10-11, waits on RP2] · Sonnet (intake, fits, files) + Opus (points, review) · depends: RP2; for step 5 also RS6 (RA landmark set) and FG2 (pose fields)
+### RP3 — Radiopaedia stacks → volume, pose, observations, population entries
 Goal:     each picked case RP2 delivers with grade A or B and a CC BY-NC-SA 3.0 licence line becomes
           numbers in its own ssb/exemplars/rp-<rID>/: volume header and spacing, pose in head A's
           frame, observations (R6.1) and, for a normal case, population entries. No pixel is committed.
@@ -758,7 +717,7 @@ Read:     docs/realistic-anatomy.md §4.2, §4.3, §4.4, §5 items 2, 5, 6, 10; 
 Touch:    tools/ssb-pipeline/radiopaedia/rp.py (new: a subcommand per step, `all`, `selftest`);
           ssb/exemplars/rp-<rID>/ (new: LICENSE.md, volume.json, points.json, pose.json,
           observations.json, population.json); tools/check-data.mjs (step 8's check); a
-          radiopaedia/ section in tools/ssb-pipeline/README.md; this status line.
+          radiopaedia/ section in tools/ssb-pipeline/README.md.
 Don't:    fetch from radiopaedia.org (RA-O5: inputs are the owner's saves in tools/ssb-pipeline/
           incoming/radiopaedia/<rID>/); change ssb/anatomy/**, ssb/{ct,geometry,models,states,content},
           cases.json, ssb/LICENSE-data.md, js/**, stamp-assets.mjs, or the uw/, nasalseg/, intake/
@@ -827,110 +786,7 @@ T-RA  self-test items from states: "name the variant", "which sinuses does this 
 SX0  synthetic soft-tissue channel design (R9.3) · Opus; SX1 build · Sonnet
 ```
 
----
-
-### Execution
-
-**Order.** Critical path first; each lane is one Sonnet session (`docs/delegation.md`).
-
-1. **RS2c** (Opus places control points after the crawl) → **RS3** (specify on the fitted basal lamella) → **RS4–RS6** → **OP1** → **VB1** ∥ **PB1** → **RA5**.
-2. Beside it: **RP2** (owner fetch), **POP3**, **RA0d** (small), **FG2** (after RS6), **RA4** (after FG2).
-3. Then **RA-4** (RP2 → RP3, RB1, VB2, PB2 → CP-RA4) and **RA-5** (integration).
-
-**Rules that still apply.**
-
-- Critical path: resegmentation (RS) → OP1 → VB1/PB1. The `scanned` state (RA3b) is already shipped, so the owner sees *Normal asymmetry* before any edit exists.
-- Re-export discipline: bases and patches are regenerated at checkpoints only (R6.6), deterministically (gzip mtime 0), never hand-edited.
-- Threshold re-checks: tests tuned on the old labels (E5 poses, the septum rule) are re-checked at CP-RA2, not moved silently.
-- Docs: done 2026-10-11. The design moved to `docs/ssb.md` §14; the work packages to §3a.
-
-### Handoff (2026-10-11)
-
-Nothing is running and no PR is open. The RS2b branch `claude/RS2b-ethmoid-lamellae` stays unmerged as the record of v2 and v3.
-
-Next, in order:
-
-1. **RS2c** (critical path): run `fetch.py` for the crawl first (do not open the split), place the control points, then delegate the fit and plumbing. Then specify **RS3** on the fitted basal lamella.
-2. **RP2** (beside it): the owner's checklist per picked case was given 2026-10-11. The picks in `ssb/reference/radiopaedia/cases.json` (`_meta.pick`) are vetoable. RP3 is specced (§3a); it waits on RP2's records.
-3. **POP3** (beside it, Sonnet): NasalSeg relations; fixes `stats.py` dropping `meanShape`.
-4. **RA0d** (any time, small): the name guard.
-5. **Content before RS5**: graph ids for the posterior ethmoidal canal and the nasolacrimal canal.
-
-Open follow-ups (not blocking):
-
-- POP0's follow-up, "explain head A's left-cavity volume (docs/realistic-anatomy.md §4.4) before RA3b": no record that it closed, and RA3b has merged. Confirm or close.
-- `ssb/reference/specimen-relations.json` is stale against `relate3d.py`: rerun.
-- The 25.1 cm² flap maximum needs a measurement node with its source before the readout shows it.
-- E6's flight test samples on a timer and fails on one slow frame.
-
-Waiting on the owner: review of `ssb.html#anat=scanned` and its asymmetry note; CP-3 and the flap (`docs/ssb-roadmap.md` §2 and §5); RA-O7; RP2's browser fetch.
-
----
-
-## 4. Done work packages
-
-One line each. Specs and checkpoint reviews: git history (commit 34af192).
-
-- **H1** — Graph entities the geometry already needs — done: CP-1
-- **ST1** — Mucosa layer on the specimen — done: CP-1
-- **ST2** — Septal mucosa surfaces (stage D, from the committed volume) — done: CP-1
-- **ST4a** — Surface-snapped sweeps (pipeline machinery) — done: CP-1
-- **ST6-0** — Is the nose in the source images? — done: CP-1
-- **E1** — Provisional endoscope fulcrum — done: CP-1; superseded by E1b
-- **E2** — Scope rig — done: CP-1
-- **E1b** — Nostril fulcrum from the unmasked stack — done: merged #98, CP-2a
-- **E2b** — Scope exposure — done: CP-2a
-- **E3** — Collision and proximity HUD — done: CP-2a; lazy shared volume added by Opus
-- **E4** — CT along the scope — done: CP-2b
-- **E3b** — The septum blocks the shaft — done: CP-2c
-- **E5** — Station poses — done: Opus, 2026-10-07
-- **E6** — Station flights — done: merged #115, owner 2026-10-07; no Opus checkpoint
-- **ST0d** — Content corrections — done: merged #97, CP-2a
-- **ST2b** — Nasal floor chart and incisive canal — done (partial): canal + right margin; floor → ST2c, left → N1
-- **ST1b** — Open airway lining — done: CP-2c
-- **ST1c** — Load the lining pack lazily — done: reviewed by Opus 2026-10-07
-- **N1** — Standard specimen: right half mirrored, septum centred — done: CP-2b
-- **ST2c** — Nasal floor mucosa from the airway lining — done: CP-2c
-- **ST0** — Soft-tissue content — done: verified 2026-10-03, corrections in ST0d
-- **ST3** — Flap construction spec — done: first pass; revision ST3r
-- **ST4b** — Vessel waypoints — done: verified 2026-10-03, corrections in ST4d
-- **ST4c** — Regenerate vessels — done
-- **ST4d** — Waypoint corrections — done: #136, merged in #138
-- **ST3r** — Flap contract revision — done 2026-10-03
-- **ST5** — Soft-tissue panel and NSF overlay — done: #139
-- **ST6** — External nose: unmask, centre, vestibule and valve — done: merged #116, owner 2026-10-07; checkpoint items closed at CP-ST6 (git history)
-- **D1** — Sphenoid diorama spec — done: amended 2026-10-03
-- **D2** — Sphenoid diorama build — done: CP-2a; follow-up D2a
-- **D2a** — Presellar in rule 9 — done: CP-2b
-- **C1** — Content backlog, drafted by Sonnet, reviewed by Opus (O3) — done
-- **P1** — Dissection contract and data (FESS, sellar/clival EEA) — done: Opus, 2026-10-08, this PR
-- **P1b** — Dissection states (the pipeline) — done: #123, merged in #125
-- **P2** — Procedure player — done: #124, merged in #125
-- **P3** — Station poses per state, and the 2.7 mm shaft — done: #127
-- **DC1** — Mucosal state: decongested and congested — done: #129
-- **POP1** — NasalSeg cross-section profiles — done: #126
-- **SEG1** — A voxel-level check of head A's labels with a NasalSeg-trained model — declined for now: O12, 2026-10-08
-- **IN1** — 16-bit heads: the volume format and an intake path — done: #130
-- **P4** — The player's views: a step lands on what it opened — done: #132
-- **L1** — Lining fins in the base and mucosal packs — done: #137, merged in #138
-- **POP2a** — The population panel (O9, the reference beside the head) — done: #135, merged in #138
-- **POP2b** — The population maxillary sinus (O9; re-scoped at CP-POP2b) — done: #141
-
-Realistic anatomy (moved 2026-10-11):
-
-- **RA0a** — This plan — done 2026-10-07
-- **RA0b** — Credit without names; permission recorded — done 2026-10-07
-- **RA0c** — UW credit on the page — done 2026-10-09, #143
-- **RS0** — Ground-truth split and scorer — done 2026-10-09, #142
-- **RA3a** — Anatomy state, patch format, loader — done 2026-10-09, #147
-- **RA3b** — The scanned base — done 2026-10-09, #152
-- **C-RA** — Graph additions — done 2026-10-09, #146
-- **RS1** — Native-grid working volume and the honest baseline — done 2026-10-09, #156; its Escalate (the left lateral sphenoid recess) is ruled in RS2
-- **RS2b** — Ethmoid lamellae — stopped 2026-10-09: v2 and v3 name no middle turbinate; RA-O9 (owner)
-- **FG1** — UW figure inventory (figures.json) — done 2026-10-09, #151; CP-RA1
-- **RP1** — Radiopaedia shortlist (cases.json) — done 2026-10-09, #149; pick at CP-RA1
-
-## 5. Owner review links (CP-3, dissected states)
+## 4. Owner review links (dissected states)
 
 Each link opens a corridor position at the view posed for its state (as at CP-3; a step link lands on the step's view):
 
@@ -960,7 +816,7 @@ Each link opens a corridor position at the view posed for its state (as at CP-3;
   - EEA transclival-approach-2 · `t.sella-open-30.M`: `https://skflx.github.io/ssb.html#p=p.transclival-approach&step=2&cor=eea-sellar-clival&scope=R,74,-2,20,60,30`
   - EEA transclival-approach-2 · `t.sphenoid-face-0.M`: `https://skflx.github.io/ssb.html#p=p.transclival-approach&step=2&cor=eea-sellar-clival&scope=R,62,-2,24,0,0`
 
-## 6. Content backlog
+## 5. Content backlog
 
 Gaps found by the atlas integration (as of 2026-09-28):
 

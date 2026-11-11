@@ -160,7 +160,7 @@ Station poses (P3; needs only the committed `ssb/`, after `dissect.py`):
     python3 tools/ssb-pipeline/uw/stations.py write    # rewrite `byState` and the two 2.7 mm poses in ssb/geometry/stations.json
 
 Ports `js/ssb/scope.js` (shaft direction, `frameOf`, `shaftClearance`) onto each state's volume (the base with its patch applied) and
-solves P3's table in `docs/ssb-roadmap.md`: the prototype pose first; if it is not free, tip-in-air and in view, a grid over depth, yaw and
+solves P3's table in `plans/2026-10-07-ssb-roadmap.md`: the prototype pose first; if it is not free, tip-in-air and in view, a grid over depth, yaw and
 pitch (2 units, then 0.5) with roll in 15 degree steps, ranked by the share of 161 rays that hit a wanted label or pass through a wanted
 air space, then by less mucosal contact. Left is the mirrored right pose and is verified on the left. Needs numpy, scipy and the
 `meshes.py` imports. A station that cannot be posed is reported, never forced. `solve` takes about a minute.

@@ -73,9 +73,7 @@ the guide drills on day one. Candidates, in a suggested order:
 
 ## 4. Wiki integration
 
-The wiki is live at `skflx.github.io/ohns-wiki-skflx/` (since 2026-11-10;
-`wiki/README.md`), and phase 1 publishes only the six maps of content. **Owner** is verifying the existing vault first; nothing below
-starts until that pass is done.
+The wiki (`skflx.github.io/ohns-wiki-skflx/`) is published from the owner's vault by its own sync in the repo `skflx/ohns-wiki-skflx`; this repo holds none of it. What the wiki publishes is decided there. **Owner** is verifying the existing vault first; nothing below starts until that pass is done.
 
 ### Decided (2026-10)
 
@@ -91,53 +89,14 @@ starts until that pass is done.
   numbers that cite it.
 - **The wiki is text.** Figures live in guides only (§5).
 
-### Phase A: tag every vault note (after the verification pass)
-
-One key per note, `role:`, with two values that are also the publish gate:
-
-| `role:` | Meaning | Published |
-|---|---|---|
-| `map` | Map of content (the six subspecialty maps) | yes |
-| `reference` | One entity or topic: definition, classification, numbers, sources | yes |
-
-A note with no `role` stays home (fail-closed). Claude drafts the tag in one
-read per note; the owner confirms the table before anything is written back
-to the vault. To keep that read cheap, a script first measures each note
-mechanically (sections present, sources counted, unsourced numbers, TODO
-markers, length), and the model reads one subspecialty per batch.
-
-No completeness rating. Every note is expected to be complete by the time
-the wiki goes live, so the wiki carries no quality stars; `vetted` remains the
-only quality signal, and it stays the owner's.
-
-The publish gate in `wiki/sync/policy.json` moves from `tier` to `role`
-(`gate.roleIn: ["map", "reference"]`).
-
-Teaching-style notes (narrative, curriculum order, self-test blocks) are
-source material for guides. They carry no `role` and stay home; once a guide
-covers one, it stays in the vault only.
-
-### Phase B: strip figures at publish
-
-`sync-vault.mjs` drops image embeds (`![[…]]`, `![](…)`) and ```` ```dgmo ````
-fences behind one policy switch (`figures: "strip"`). It leaves a one-line
-marker only where the removal breaks the text ("see figure"). Stripping at
-publish rather than editing the vault keeps it reversible, and your Obsidian
-copy keeps its diagrams. With figures stripped, `wiki/dgmo/render-dgmo.mjs`
-and its tests have no job and are deleted in the same change. **Owner:**
-strip at publish (recommended), or also clean the vault.
-
-### Phase C: chapters and notes point at each other
+### Chapters and notes point at each other
 
 - Guide → wiki: a section may carry `ref: ['Sinus/CCAD', …]` (no chapter carries it yet and no code reads it; add it with its renderer). The chapter
-  foot collects them as *Related in sk.oto*. `check-data` fails a path not in
-  the published set (`wiki/content/.vault-sync.json`), so a link can never
-  point at a note the privacy gate held back.
-- Wiki → guide: `sync-vault.mjs` appends *Learn this: OKSAT guide, AR · CRS ·
-  AERD §6.7* to a cited note. The mapping is generated from the `ref` rows,
-  never hand-kept.
+  foot collects them as *Related in sk.oto*. The check against the published note list needs that list from the wiki repo; decide its source when this starts.
+- Wiki → guide: the wiki's sync would append *Learn this: OKSAT guide, AR · CRS ·
+  AERD §6.7* to a cited note, generated from the `ref` rows, never hand-kept.
 
-Needs the wiki live and Phase A done for that subspecialty.
+Needs the verification pass done.
 
 ### Later: one term list
 
@@ -165,8 +124,6 @@ Figures cost far more tokens than text, so each must earn its place.
 
 1. Terms in every guide, specialty vocabulary only — **done** (2026-10).
 2. **Owner:** verification pass of the vault (in progress).
-3. Phase A (role) on Rhinology first, since its guide exists,
-   then the other subspecialties; Phase B with it.
-4. Second guide (Owner picks, §3), built from vetted notes, with
+3. Second guide (Owner picks, §3), built from vetted notes, with
    `lint-oksat-guide.mjs` built alongside it (§2). **Done**: `ear-anatomy`, built unlisted; listing is the owner's call.
-5. Wiki live (done 2026-11-10, `wiki/README.md`), then Phase C.
+4. Wiki live (done 2026-11-10), then the cross-links above.

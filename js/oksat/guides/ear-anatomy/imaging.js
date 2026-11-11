@@ -13,8 +13,8 @@ window.__OKSAT_CHAPTER = {
     src: 'Glasscock Ch. 2 · UW Temporal Bone Module (University of Washington Radiology), used with permission',
     tldr: [
         'Display: the patient\'s right on the viewer\'s left. **Lateral is left**; anterior is up on axial, superior is up on coronal.',
-        'Axial from the top: arch of the superior canal, epitympanum with the **ice cream cone**, oval window level with the posterior row (facial recess, pyramidal eminence, sinus tympani), round window level, jugular foramen level.',
-        'Coronal from the front: geniculate and cochlea, malleus under the **scutum**, oval window with the tympanic facial nerve under the lateral canal, round window niche and internal auditory canal, mastoid facial nerve and jugular foramen.',
+        'Axial from the top: arch of the superior canal, epitympanum with the **ice cream cone**, oval window level with the posterior row (facial recess, pyramidal eminence, sinus tympani), round window level, then a low slice through the tympanic membrane and the petrous carotid.',
+        'Coronal from the front: geniculate and cochlea, malleus under the **scutum**, oval window with the tympanic facial nerve under the lateral canal, round window niche and internal auditory canal, then the mastoid facial nerve.',
         'Reader checklist: scutum sharp, tegmen intact, ossicles aligned, sinus tympani depth, jugular bulb height, carotid plate present.',
     ],
     sections: [
@@ -49,14 +49,14 @@ window.__OKSAT_CHAPTER = {
                         ],
                         [
                             'Hypotympanum',
-                            'External canal, tympanic membrane, jugular bulb, mastoid facial nerve, petrous carotid, temporomandibular joint',
+                            'Tympanic membrane, mastoid facial nerve, petrous carotid, mastoid air cells',
                         ],
                     ],
                 },
                 {
                     t: 'hotspot',
                     id: 'im-axial-hs',
-                    alt: 'Five axial CT slices of a right temporal bone from the superior semicircular canal down to the jugular foramen, with tappable ear structures on each.',
+                    alt: 'Five axial CT slices of a right temporal bone from the superior semicircular canal down to the tympanic membrane level, with tappable ear structures on each.',
                     label: 'Find it',
                     modes: ['explore', 'find'],
                     frames: [
@@ -190,7 +190,7 @@ window.__OKSAT_CHAPTER = {
                         },
                         {
                             src: 'images/oksat/ear-anatomy/ct/ax-56.jpg',
-                            cap: 'Right ear, axial, jugular foramen and external canal (slice 56 of 61). Lateral is left, anterior is up. UW Temporal Bone Module (University of Washington Radiology), used with permission.',
+                            cap: 'Right ear, axial, tympanic membrane and petrous carotid (slice 56 of 61). Lateral is left, anterior is up. UW Temporal Bone Module (University of Washington Radiology), used with permission.',
                             regions: [
                                 {
                                     g: 'ica',
@@ -249,8 +249,8 @@ window.__OKSAT_CHAPTER = {
                 {
                     t: 'check',
                     id: 'c3',
-                    q: 'Which slice shows the jugular bulb and the external canal together, and which shows the arch of the superior canal?',
-                    a: 'The low slice (jugular foramen level) shows the bulb and the canal; the top slice shows the arch of the superior semicircular canal.',
+                    q: 'Which slice shows the tympanic membrane and the petrous carotid together, and which shows the arch of the superior canal?',
+                    a: 'The low slice: the tympanic membrane laterally, the carotid anteromedially. The top slice shows the arch of the superior semicircular canal.',
                 },
                 {
                     t: 'practice',
@@ -272,7 +272,7 @@ window.__OKSAT_CHAPTER = {
             blocks: [
                 {
                     t: 'p',
-                    x: 'In coronal slices **lateral is still left** and **superior is up**. Start anterior and move back: the cochlea and geniculate region first, then the malleus under the scutum, then the oval window, then the round window niche and the internal auditory canal, then the mastoid segment of the facial nerve and the jugular foramen.',
+                    x: 'In coronal slices **lateral is still left** and **superior is up**. Start anterior and move back: the cochlea and geniculate region first, then the malleus under the scutum, then the oval window, then the round window niche and the internal auditory canal, then the mastoid segment of the facial nerve.',
                 },
                 {
                     t: 'table',
@@ -292,11 +292,11 @@ window.__OKSAT_CHAPTER = {
                         ],
                         [
                             'Round window',
-                            'Round window niche, lateral and superior canals, vestibule, internal auditory canal, tympanic facial nerve, jugular foramen',
+                            'Round window niche, lateral and superior canals, vestibule, internal auditory canal, tympanic facial nerve',
                         ],
                         [
                             'Posterior',
-                            'Posterior semicircular canal, mastoid segment of the facial nerve, jugular foramen, mastoid air cells',
+                            'Posterior semicircular canal, mastoid segment of the facial nerve, mastoid air cells',
                         ],
                     ],
                 },
@@ -442,7 +442,7 @@ window.__OKSAT_CHAPTER = {
                     frames: [
                         {
                             src: 'images/oksat/ear-anatomy/ct/co-10.jpg',
-                            cap: 'Right ear, coronal, posterior, mastoid segment and jugular foramen (slice 10 of 21). Lateral is left, superior is up. UW Temporal Bone Module (University of Washington Radiology), used with permission.',
+                            cap: 'Right ear, coronal, posterior, mastoid segment of the facial nerve (slice 10 of 21). Lateral is left, superior is up. UW Temporal Bone Module (University of Washington Radiology), used with permission.',
                             regions: [
                                 {
                                     g: 'fn',

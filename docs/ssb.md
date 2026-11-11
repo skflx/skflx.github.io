@@ -1,14 +1,6 @@
 # SSB — Sinus & Skull Base 3D: architecture and conventions
 
-**Status (2026-11-10): phases 0, 1, 3 and 5 done; 2 has three of four dioramas;
-4 (endoscope) and 6 (procedure) built, with items open.** `ssb.html` runs graph mode
-over the draft knowledge graph (`ssb/content/`, schema `docs/authoring-ssb.md`,
-validator `tools/ssb-content.mjs`) and four stages, the `data-stage` buttons in the
-page: the reference specimen reconstructed from the UW atlas (Specimen, §5.1), the
-variant lab (Lab, §6), CT (§3, §5.6; no WebGL needed) and the endoscope on the
-specimen (Scope, §3; the procedure player runs there). **What is done and what is
-next, task by task, with who does it: `docs/ssb-roadmap.md`.** This file is the
-design; the roadmap is the board.
+Status, work packages and order: GitHub issue #266 (SSB parent) and its sub-issues; their specs and the decision record are `plans/2026-10-07-ssb-roadmap.md`. This file is the design; the issues are the board. `ssb.html` runs graph mode over the draft knowledge graph (`ssb/content/`, schema `docs/authoring-ssb.md`, validator `tools/ssb-content.mjs`) and four stages (the `data-stage` buttons): Specimen (§5.1), the variant lab (Lab, §6), CT (§3, §5.6; no WebGL needed) and the endoscope on the specimen (Scope, §3; the procedure player runs there).
 
 ## 0. What it is
 
@@ -319,8 +311,7 @@ work, `@gltf-transform/cli` as a dev dependency for glTF packaging:
 1. Resample CT and label map into the RAS frame (§4); crop; deface.
 2. Labels → per-structure surfaces (marching cubes, windowed-sinc smoothing,
    decimation to a per-kind triangle budget).
-3. Pack by region (`core`, `ethmoid-frontal`, `sphenoid-sellar`, `ppf-itf`,
-   `acf-brain`) → weld → `KHR_mesh_quantization` → `.glb` → gzip →
+3. Pack by region (the list is `packs` in `ssb/models/packs.json`) → weld → `KHR_mesh_quantization` → `.glb` → gzip →
    `ssb/models/<pack>.glb.gz`, plus `ssb/models/packs.json` (pack → node ids,
    triangle counts).
 4. CT → 8-bit **LUT-encoded HU** (piecewise-linear: air, soft tissue and
@@ -1212,7 +1203,7 @@ grid at 0.5 mm, as the frontal-recess rules are; none written in):
 
 ### 6.2 The `nasal-framework` diorama (ST7 spec)
 
-The `nasal-framework` diorama spec (ST7) is in `plans/2026-11-10-ssb-nasal-framework.md`; it is not built (status: `docs/ssb-roadmap.md` ST7a).
+The `nasal-framework` diorama spec (ST7) is in `plans/2026-11-10-ssb-nasal-framework.md`; it is not built (status: GitHub issue #267).
 
 ## 7. Runtime architecture
 
@@ -1451,10 +1442,7 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 
 ## 10. Storage
 
-Namespace `ssb:*`, through one guarded adapter in `js/ssb/state.js`:
-`ssb:prefs` (tier, layers, scope angle, units), `ssb:srs` (self-test
-Leitner boxes), `ssb:seen`. Registered in `docs/decisions.md` §3 when the
-code that writes them lands.
+Namespace `ssb:*`, through one guarded adapter in `js/ssb/state.js`; the keys written are registered in `docs/decisions.md` §3. Register any new key there when the code that writes it lands.
 
 ## 11. Image generation (Gemini and others)
 
@@ -1481,60 +1469,22 @@ are a phase-8 refinement, not a dependency.
 
 ## 12. Build plan
 
-Each phase ends green on `tools/check-data.mjs` and the smoke suite, and
-leaves the page useful. Model tier = who does the work best per token
-(`docs/delegation.md`). This table is the plan's shape; **status, work
-packages, checkpoints and order live in `docs/ssb-roadmap.md`.**
-
-| Phase | Deliverable | Who |
-|---|---|---|
-| 0 | Architecture, schema, validator, draft graph, image briefs | Opus authors per region; Sonnet research and citation checks; Opus adversarial review |
-| 1 | Walking skeleton: vendored three.js, `ssb.html`, module stamping, graph mode, smoke entry | Sonnet |
-| 2 | Dioramas `ethmoid-roof`, `frontal-recess`, `sphenoid`, `lateral-wall`; variant lab; picking → panels | Opus (parameters, proportions, rules as a spec), Sonnet (build to the spec) |
-| 3 | Reference specimen: pipeline, packs, Specimen stage, geometry ↔ graph checks | Owner (dataset, decisions); Opus (reconstruction, anatomy-critical), Sonnet (viewer) |
-| 3b | Soft tissue (§5.7): mucosa, septal surfaces and charts, waypoint vessels, flap overlays, external nose | Opus (content, waypoints, flap spec), Sonnet (pipeline stage D, viewer, tests) |
-| 4 | Endoscope mode: fulcrum optics, collision, proximity HUD, stations | Opus (math spec, station poses), Sonnet (rig, UI, tests) |
-| 5 | CT mode: triplanar, label overlay, crosshair sync, oblique slice down the scope | Sonnet |
-| 6 | Procedure mode: `removes` states, hazards in scene, station poses | Opus (content), Sonnet (wiring) |
-| 7 | Self-test from the graph, Leitner storage | Sonnet |
-| 8 | Offline caching, performance; image textures only where procedural materials fall short (§11) | Sonnet |
-| ∞ | Content verification: citations checked, owner review | Sonnet, owner |
+Work is tracked as phases, waves and work packages in GitHub issue #266 and its sub-issues (specs: `plans/2026-10-07-ssb-roadmap.md`). Every change ends green on `tools/check-data.mjs` and the relevant suites (`docs/verification.md`); who does what is `docs/delegation.md`.
 
 ## 13. Owner decisions
 
-The board is `docs/ssb-roadmap.md` §2: one line per decision, plus the owner's
-open actions. This section keeps the options and rationale that shape the code,
-and the decisions still open.
+The decision record (decided and open, one line each) is `plans/2026-10-07-ssb-roadmap.md` §1; the owner's open actions are GitHub issues under #266. Rationale that the one-line record omits:
 
-### Decided
-
-- **Vendor three.js** (2026-09-30): approved, same-origin and pinned (`js/vendor/README.md`).
-- **Reference specimen from the UW atlas** (2026-09-30): the axial stack treated as a CT volume, registered to UW's reformats, scaled from the globe, segmented from the labelled arrow tips; bone window only, with vessels and nerves as sweeps.
-- **UW permission** covers publishing 3D geometry and volumes derived from its images (owner-confirmed; written permission 2026-10-07, `ssb/LICENSE-data.md`).
-- **O1, external nose: specimen skin for naris and ala, cartilage as a schematic overlay** (2026-10-02).
-- **O2, nose scope: entry anatomy now;** the full framework is ST7 (2026-10-02).
-- **O3, content split: Sonnet drafts, Opus reviews adversarially; Opus authors geometry** (2026-10-02).
-- **O4, scope diameter: the 4 mm telescope is modelled, 2.7 mm selectable** (2026-10-03). The 3 mm and 4 mm checks showed that only the measured nostril, not a provisional fulcrum, gives a collision-free path to the sphenoid ostium.
-- **O5, NSF superior incision starts at the floor of the sphenoid ostium, for every design** (2026-10-03). This follows the owner's reading over ch. 31's superior-aspect start. The margin below the septal top keeps one default (15) where the incision rises forward (designs B and C).
-- **O6, normal before variant: right half mirrored, septum centred** (2026-10-03). Septal deviation and ostium heights come later as variants.
-- **O7, content priority: clear FESS and EEA-to-sellar/clival anatomy first** (2026-10-07). C1 problems are flagged, not fixed.
-- **O8, framework defaults: mixed populations, each labelled; modal variant classes** (2026-10-08).
-- **O9, population reference beside the head** (2026-10-08): percentiles, a median profile and a mean-shape ghost of the five NasalSeg structures. A deformed head only after that.
-- **O10, posterior septectomy: 15 mm from the choanal arch up** (2026-10-08). The inferior limit is still to be confirmed.
-- **O11, FESS on both sides at once** (2026-10-08). One dissected side beside an intact one needs per-side lining packs, later.
-- **O12, NasalSeg-trained voxel check (SEG1): not now** (2026-10-08). It adds a deep-learning stack to the pipeline, and the ethmoid and uncinate, which it cannot see, are the approximate structures.
-- **O13, mucosa toggle: decongested · as scanned · congested** (2026-10-08). The congested end is physiological (turbinates and septal swell body, from NasalSeg). Rhinosinusitis edema is a condition, in the pathology layer.
-- **O14, nasal framework drawn: both, lab first** (2026-10-11, as recommended): the variant lab, then fitted under the specimen's skin and on its nasal bones (ST7e).
-
-### Open
-
-- **Strict CSP.** Recommended: keep it. Gzip first, then Draco's JS decoder. `'wasm-unsafe-eval'` for meshopt only if both fail the budgets.
-- **Publish while `draft`.** Recommended: yes, with visible unverified markers, and owner review of tier 1 first.
-- **Name and URL** (`SSB`, `ssb.html`). Working title.
+- **Vendor three.js:** same-origin and pinned (`js/vendor/README.md`).
+- **Reference specimen from the UW atlas:** the axial stack treated as a CT volume, registered to UW's reformats, scaled from the globe, segmented from the labelled arrow tips; bone window only, with vessels and nerves as sweeps. Written permission to publish derived geometry and volumes: `ssb/LICENSE-data.md`.
+- **O4, scope diameter:** the 3 mm and 4 mm checks showed that only the measured nostril, not a provisional fulcrum, gives a collision-free path to the sphenoid ostium.
+- **O5, NSF superior incision:** follows the owner's reading over ch. 31's superior-aspect start; the margin below the septal top keeps one default (15) where the incision rises forward (designs B and C).
+- **O12, SEG1 not now:** it adds a deep-learning stack to the pipeline, and the ethmoid and uncinate, which it cannot see, are the approximate structures.
+- **O13, mucosa toggle:** the congested end is physiological (turbinates and septal swell body, from NasalSeg); rhinosinusitis edema is a condition, in the pathology layer.
 
 ## 14. Realistic anatomy
 
-Moved from `docs/realistic-anatomy.md` on 2026-10-11, as that plan asked once accepted. Sources, limits and owner decisions stay there (its §4, §5, §13). Its work packages and handoff are in `docs/ssb-roadmap.md` §3a–§4. Sections here are numbered `R…` so they do not collide with §1–§13 above; the plan's own `§` references were rewritten to match.
+Moved from `docs/realistic-anatomy.md` on 2026-10-11, as that plan asked once accepted. Sources, limits and owner decisions stay there (its §4, §5, §13). Its work packages and handoff are in `plans/2026-10-07-ssb-roadmap.md` §3 and GitHub issue #266. Sections here are numbered `R…` so they do not collide with §1–§13 above; the plan's own `§` references were rewritten to match.
 
 ### R1. Goal, and what "realistic" means here
 
@@ -1629,7 +1579,7 @@ ships (WP RA3a's docs pass).
 
 ### R3. What exists now (2026-10-07)
 
-Current state: `docs/wip.md` and `docs/ssb-roadmap.md`.
+Current state: `docs/wip.md` and GitHub issue #266.
 ---
 
 ### R6. Architecture
@@ -2060,4 +2010,4 @@ URL with one id removed from `index.json` must drop cleanly.
 | Radiopaedia access or licence friction | batch 2 thin | small owner-curated list; numbers only; UW and head B cover batch 1 |
 | Repo growth from bases | slow clones | re-export at checkpoints; patches small; a third base only with an owner decision |
 | Two bases double every downstream test | CI time | tests parameterized by base; the slow ones run on `standard` in CI and on all bases at checkpoints |
-| Merge churn with lane B | rework | resegmentation scheduled after ST5 or folded into its checkpoint (docs/ssb-roadmap.md §3) |
+| Merge churn with lane B | rework | resegmentation scheduled after ST5 or folded into its checkpoint (`plans/2026-10-07-ssb-roadmap.md` §3) |

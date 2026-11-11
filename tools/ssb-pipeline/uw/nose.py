@@ -1,4 +1,4 @@
-"""The external nose from the UNMASKED axial stack (E1b, ST6; ssb-roadmap.md).
+"""The external nose from the UNMASKED axial stack (E1b, ST6; plans/2026-10-07-ssb-roadmap.md).
 
     .venv/bin/python tools/ssb-pipeline/uw/nose.py [--write]     # E1b: the nostril fulcrum lm.naris
     .venv/bin/python tools/ssb-pipeline/uw/nose.py unmask         # ST6 step 1: the region to unmask

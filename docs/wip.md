@@ -132,7 +132,7 @@ None of the newer modules is web-verified or clinically verified, except where
 its explanations say so. Otoplasty's explanations flag vault-versus-StatPearls
 discrepancies (hillock mapping, prominence thresholds) for owner review.
 
-**Next:** the plan for more guides and guide-to-wiki references (Phase C) is in
+**Next:** the plan for more guides and guide-to-wiki references is in
 `docs/oksat-learn-roadmap.md`. More guides (`/oksat-guide`), each built with its questions;
 authoring is manual (`docs/authoring-oksat.md`). Laryngology and
 head-and-neck oncology have hues reserved in `OKSAT_SUBSPECIALTIES` but no
@@ -231,10 +231,10 @@ its band gets a dot at the crossing. A real click on a ring or a line selects it
 (name, note, status, position). The readout is a polite live region and the slider's `aria-valuetext` matches it. The
 attribution and caveat line sits under the view. One specimen, positions good to a few millimetres.
 
-**Truth check** (`tools/check-data.mjs`, plan E3, first half): compares each drawn structure's glossary id with the
-UW landmark tips of that id, as the distance to the nearest voxel. Report-only: `OLSB_TRUTH=1` prints the table; no
-threshold fails yet, and no anchor has been moved. The owner's review of the result and the DICOM sources (#244) are
-pending.
+**Truth check** (`tools/check-data.mjs`, plan E3): compares each drawn structure's glossary id with the UW landmark
+tips of that id, as the distance to the nearest voxel, against a per-structure tolerance; it is enforcing, and the
+rule, classes and owner-vetted exceptions are in the comment above `TRUTH_CLASS`. No anchor has been moved. The owner's
+vetting of the exceptions (#250) and the DICOM sources (#244) are pending.
 
 **2D diagrams**, layered inline SVG drawn by `js/olsb/main.js`:
 
@@ -294,31 +294,15 @@ septum centred. Normal asymmetry (the `scanned` base) is live; variants and
 pathology wait; their Anatomy pills stay hidden until `ssb/anatomy/index.json` lists an entry. The external nose is the specimen's own. All content is `draft`;
 only the owner sets `verified`.
 
-**Next:** the board is `docs/ssb-roadmap.md` (§1 status, §2 owner decisions and
-actions, §3 open work packages). Realistic anatomy's next step is RS2c
-(`docs/ssb-roadmap.md` §3a; design `docs/ssb.md` §14).
-
----
-
-## Wiki scaffold (`wiki/`)
-
-**State:** Live since 2026-11-10 at `skflx.github.io/ohns-wiki-skflx/`, built from its own repo; nothing is built or served from this repo. The Quartz config,
-styles and deploy workflow live in that repo (`skflx/ohns-wiki-skflx`); here are `wiki/sync/sync-vault.mjs`,
-the fail-closed sync from the owner's vault (six subspecialty folders; Personal
-Notes, drafts, source texts and governance files never leave). Reader corrections
-round-trip through public issues (`wiki/feedback/`). The DGMO renderer (`wiki/dgmo/`) and the
-correction issue form (`wiki/github/`) are not yet installed in the wiki repo.
-
-**Next:** widen the phase-1 gate beyond the maps of content as notes are vetted; decide
-whether to automate the sync (needs a secret). The OKSAT pages already link the live maps.
-Changing what is published is an owner escalation (`docs/decisions.md` §7).
+**Next:** status is GitHub issue #266 and its sub-issues; the spec (owner decisions, work packages) is
+`plans/2026-10-07-ssb-roadmap.md`. Realistic anatomy's design is `docs/ssb.md` §14.
 
 ---
 
 ## Temporal bone reference volume (`tbone/`)
 
 **State:** Internal reference data, loaded by OLSB's Real CT mode only (lazily), by `smoke-pages` on a synthetic
-volume, and by the report-only truth check in `check-data`: a 0.3 mm display volume of the UW
+volume, and by the truth check in `check-data`: a 0.3 mm display volume of the UW
 normal temporal bone CT in OLSB's frame, every UW label as a 3D point, and traced centrelines (facial nerve by
 segment, IAC, ICA, venous, aqueducts, EAC, ET, canals, basal turn) with per-point detected / labelled /
 inferred. Labels are reapplied by `relabel.py` after `vocab.py` edits, without re-registering; the guide's CT crops and
@@ -348,7 +332,7 @@ content to work; neither is scheduled.
 **State:** Node suites and browser suites are listed under Commands in
 `AGENTS.md`; what each one proves is in `docs/verification.md`. CI runs the
 fast tier (`check-data`, `lint-oksat`, the page smoke test, the search and
-Airway saved-game suites) on every PR, the OKSAT and wiki suites when their
+Airway saved-game suites) on every PR, the OKSAT suites when their
 files change; the SSB suite runs as four parallel
 shards (`SHARDS` in `tools/test-ssb.mjs`). Security: `docs/security.md` (audit
 2026-09-23).
