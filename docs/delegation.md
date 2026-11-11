@@ -130,3 +130,7 @@ closes when no `block` finding is open, which unlocks the next wave.
 
 A WP runs only the suites whose inputs it changed; the full suite runs once before the owner merges
 (`docs/verification.md`).
+
+## 8. Owner-review items
+
+Every work package or review item that needs human verification adds or updates its entry in `js/review-items.js` (the list `review.html` renders), with a deep link and one "look" sentence, as part of its acceptance. `node tools/check-data.mjs` fails on a malformed entry or a dead link.
