@@ -2,8 +2,9 @@
 
 A 3D reconstruction of the normal temporal bone CT in the UW *Interactive Web-based CT Temporal Bone
 Module*, in OLSB's frame, with the facial nerve and other surgical structures traced. **Internal reference
-data, loaded only by OLSB's Real CT mode** (`js/olsb/ct.js`, lazily; `tools/smoke-pages.mjs` tests that mode on a synthetic volume, and `tools/check-data.mjs` reads it in a report-only truth check) (plan `plans/2026-11-03-uw-temporal-bone-volume.md`, parent issue #225).
-Provenance and permission: `LICENSE-data.md`. Everything here is generated: never hand-edit it; rerun the pipeline.
+data, loaded only by OLSB's Real CT mode** (`js/olsb/ct.js`, lazily) and by the truth check in `tools/check-data.mjs`.
+Plan: `plans/2026-11-03-uw-temporal-bone-volume.md`. Provenance and permission: `LICENSE-data.md`.
+Everything here is generated: never hand-edit it; rerun the pipeline.
 
 **Frame** (`js/olsb/volume.js`): millimetres, a **right** ear, x lateral, y anterior, z superior, origin at the
 centre of the oval window. Values are 8-bit display levels of a bone-window screen capture (air = the window
@@ -19,8 +20,7 @@ floor, about 43; soft tissue about 110; dense bone 200-255), **not HU**.
 | `geometry/sweeps.json` | centrelines with radius, per-point `status` (detected / labelled / inferred) and `src` (a = axial coverage, r = reformats only): facial nerve by segment, IAC, GSPN start, petrous ICA, sigmoid sinus, jugular bulb, cochlear and vestibular aqueducts, EAC, bony Eustachian tube, the three canals, basal turn; `fn_sanity_mm` |
 | `registration.json` | stack checks, per-plane registration (parameters, per-slice NCC, tip residuals), scale and frame, specimen identity |
 
-Not produced: `labels.json` / `labels.u16.gz` (spec: optional, WP T3); no chorda tympani sweep (not visible at
-this resolution and not labelled by UW).
+Not produced: `labels.json` / `labels.u16.gz`; no chorda tympani sweep (not visible at this resolution and not labelled by UW).
 
 ## Regenerate
 
@@ -47,7 +47,10 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 .venv/bin/python -I $P/contactsheet.py DIR --only facial-nerve --tag fn   # review sheets (not committed)
 ```
 
-The OpenEar tools exist: `tools/tbone-pipeline/fetch_openear.py` range-extracts only the needed members of one OpenEar archive into the git-ignored `tools/tbone-pipeline/incoming/openear/<specimen>/`, and `tools/tbone-pipeline/ingest.py` reads an NRRD volume (only its geometry header fields are kept) and resamples it to an isotropic grid under `incoming/` only. ZETA is fetched and ingested locally only; nothing from OpenEar is committed to this folder. `tools/tbone-pipeline/frame.py` computes that placement. Its origin is the stapes footplate, and its rotation is fitted to the structures OLSB shares with the segmentation. The result goes to `frame.json` under `incoming/` only (WP B4, issue #301). It is not vetted by the owner yet; status is issue #244.
+OpenEar sources: `tools/tbone-pipeline/fetch_openear.py` and `ingest.py` fetch and resample one OpenEar specimen
+into the git-ignored `tools/tbone-pipeline/incoming/` only. Nothing from OpenEar is committed to this folder.
+`tools/tbone-pipeline/frame.py` computes the placement of that volume (origin at the stapes footplate, rotation
+fitted to the structures OLSB shares with the segmentation); its output stays under `incoming/`. Status: issue #244.
 
 ## How it was made, and what it can and cannot say
 
@@ -58,7 +61,7 @@ The OpenEar tools exist: `tools/tbone-pipeline/fetch_openear.py` range-extracts 
   same display window (`registration.json`, `specimen_identity`).
 - **Scale is inferred, not measured** (the capture carries no spacing): in-plane 0.1758 mm/px (a 90 mm field of
   view over 512 px) +-10 %; the axial slice step 0.263 mm follows from it (registration fixes the ratio, 1.60
-  px). The checks against textbook lengths are weak and disagree by up to 40 %, and they are not independent: the 90 mm field was chosen after they pointed below the first 100 mm guess. A measured scale needs a known length in the images (none is published); method and values in
+  px). Checks against textbook lengths are weak (they disagree by up to 40 %). A measured scale needs a known length in the images (none is published); method and values in
   `registration.json` (`frame`) and the docstring of `tools/tbone-pipeline/scale.py`. Every length in this
   folder scales with that number.
 - **Origin** (centre of the oval window) is the median of UW's oval-window tips of the four stacks mapped into
@@ -76,7 +79,7 @@ The OpenEar tools exist: `tools/tbone-pipeline/fetch_openear.py` range-extracts 
   the EAC; soft tissue bounded by bone for the IAC and veins); otherwise `inferred`. Most of the facial nerve
   is inferred: the nerve inside the IAC is not distinguishable from CSF, the second genu and GSPN have no
   label. `sweeps.json` carries counts per segment. The canals and the basal turn are fitted arcs / a spiral.
-- **Registration limit, coronal.** The coronal stack was registered while UW's "arcuate eminence" label was mis-read as the pyramidal eminence, so its registration used one wrong correspondence among its compact structures. The labels are corrected (`relabel.py`); the registration is not, and is to be redone with the DICOM sources (issue #244). `registration.json` still lists the old pyramidal-eminence residual for that reason.
+- **Registration limit, coronal.** Its registration used one wrong correspondence (a mis-read label; the labels are corrected by `relabel.py`, the registration is not). To be redone with the DICOM sources (issue #244); `registration.json` still shows the old residual.
 - **Draft.** Anatomy is draft until the owner verifies it (`docs/decisions.md` section 7).
 
 ## Size

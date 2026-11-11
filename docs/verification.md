@@ -1,257 +1,223 @@
 # Verification — how to prove a change works
 
-Per subsystem: the exact probes that show a change is good. Most are
-automated (`tools/*.mjs`, run in CI by `.github/workflows/ci.yml`); this doc
-is the spec they implement and the manual playbook for anything not yet
-covered. Run the automated suite locally before pushing:
+Per subsystem: the probes that show a change is good. Most are automated
+(`tools/*.mjs`, run in CI by `.github/workflows/ci.yml`); this doc names what
+each one pins and the manual checks that remain. Run the automated suite
+locally before pushing:
 
 ```bash
-node tools/check-data.mjs                 # data + security invariants (deps-free, instant)
-node tools/smoke-pages.mjs                # every page boots, zero real console errors
-node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
-node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub, terms)
-node tools/test-search.mjs               # search.html and the CPT deep link
-node tools/test-airway-resume.mjs         # Airway Rounds saved games and resume
-node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
-node tools/lint-oksat-guide.mjs [slug ...] # OKSAT interactive guides against the teaching-shape spec (no slug: every guide)
-node tools/lint-skills.mjs                 # house skills: structure, evals.json schema, registration (run after any change under .claude/skills/)
-node tools/test-ssb.mjs                   # SSB: every section (variant lab, CT, specimen, endoscope, procedure, ...)
-node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the error message, or SECTIONS in the file)
+node tools/check-data.mjs                  # data + security invariants (deps-free, instant)
+node tools/smoke-pages.mjs                 # every page boots, zero real console errors
+node tools/test-oksat-engine.mjs           # OKSAT engine (answer lock, SRS, keyboard)
+node tools/test-oksat-learn.mjs            # Interactive learning viewer
+node tools/test-search.mjs                 # search.html and the CPT deep link
+node tools/test-airway-resume.mjs          # Airway Rounds saved games
+node tools/lint-oksat.mjs [slug ...]       # OKSAT modules vs the quality spec (no slug: all)
+node tools/lint-oksat-guide.mjs [slug ...] # OKSAT guides vs the teaching-shape spec (no slug: all)
+node tools/lint-skills.mjs                 # house skills: structure, evals.json, registration
+node tools/test-ssb.mjs [--only a,b]       # SSB sections (names: SECTIONS in the file)
 ```
 
-In CI (`.github/workflows/ci.yml`) `check-data`, `lint-oksat`, `lint-oksat-guide` and the page smoke test always
-run; the SSB, OKSAT (engine and interactive learning) suites run only when a file they exercise changed (a
-push to `master`, or a change to the workflow or the shared harness, runs everything). Changes
-to `tools/ssb-pipeline/` do not start the SSB suite unless they touch `dissection.json`, the
-one pipeline file it reads: the pipeline's outputs are committed under `ssb/`, which does.
-Locally, run whichever suite your change touches.
+CI always runs `check-data`, `lint-oksat`, `lint-oksat-guide` and the page
+smoke test. The OKSAT engine and learning suites run when their files change;
+the SSB suite runs as four parallel jobs (`node tools/test-ssb.mjs --shard i/4`).
+`SHARDS` in `tools/test-ssb.mjs` holds the split and refuses a section that is
+in no shard or two; a new section goes in the lightest shard, and the workflow
+matrix and the `/4` change with it. A push to `master`, or a change to the
+workflow or the shared harness, runs everything. Changes under
+`tools/ssb-pipeline/` start the SSB suite only if they touch `dissection.json`.
 
-The SSB suite runs in CI as four parallel jobs, `node tools/test-ssb.mjs --shard i/4`. The
-split is `SHARDS` in `tools/test-ssb.mjs`, balanced on measured section times; the file refuses
-to run if a section is in no shard or two, and the workflow's matrix and the `/4` must change
-with it. A new section goes in the lightest shard. Each check prints as it runs and the
-summary gives each section's time and check count, so a slow or hung section shows in the log.
-Wall-clock checks (a flight sampled mid-way, frames counted over a second) are the ones a
-loaded machine can break: running shards side by side on one box is not what CI does.
-
-The browser suites need a real Chromium and nothing else: every page script
-is same-origin (React/htm are vendored in `js/vendor/`), so they run in a
-network-restricted sandbox too. The only remote requests left are optional
-Google Fonts on the OKSAT pages, which the console allowlist tolerates.
+The browser suites need only a real Chromium: every page script is
+same-origin (React/htm are vendored), so they run without network. The only
+remote requests left are optional Google Fonts on OKSAT pages, which the
+console allowlist tolerates. Wall-clock checks (a flight sampled mid-way,
+frames counted over a second) can fail on a loaded machine; do not run shards
+side by side on one box.
 
 ## "Real" console error
 
 Anything logged as `console.error` / `pageerror`, or a **same-origin**
-`requestfailed`, that is **not** matched by `tools/console-allowlist.json`.
-The allowlist holds only known-benign third-party noise (font/CDN network
-resets). A first-party error is never allowlisted — a same-origin 404 is how
-this harness catches a script tag left pointing at a deleted file. The static
-test server answers `/favicon.ico` with 204 (pages link `images/favicon.svg`;
-browsers still probe the root path). A CSP violation logs a console error,
-so the smoke suite also proves each page runs under its own policy.
+`requestfailed`, that `tools/console-allowlist.json` does not match. The
+allowlist holds only known third-party noise (font and CDN resets). A
+first-party error is never allowlisted: a same-origin 404 is how the harness
+catches a script tag left pointing at a deleted file. A CSP violation logs a
+console error, so smoke also proves each page runs under its own policy.
 
 ## Playbooks by subsystem
 
 ### Security invariants (all pages)
 `tools/check-data.mjs` §3 (spec: `docs/security.md`): vendored files match
 their pinned SHA-384; every root `*.html` has a CSP whose `script-src` has no
-`'unsafe-inline'`/`'unsafe-eval'`/remote origin, no inline executable
-`<script>`, no `on*=` handlers or `javascript:` URLs, `rel="noopener"` on
-every `target="_blank"`, and — for the self-contained pages — no remote
-`<link>`/`<script>`/`<img>` at all. §4 checks every root page's `css/` and
-`js/` references carry `?v=` equal to the first 8 hex of that file's
-SHA-256 (fix with `node tools/stamp-assets.mjs`; spec in its header). To
-prove the check bites, append a comment to `css/site.css` and rerun: the
-three pages that load it must FAIL. Smoke additionally loads
-`oksat-study.html?m=<img onerror…>` and asserts the payload renders as text.
+`'unsafe-inline'`, `'unsafe-eval'` or remote origin; no inline executable
+`<script>`, no `on*=` handler, no `javascript:` URL; `rel="noopener"` on every
+`target="_blank"`; the self-contained pages have no remote `<link>`, `<script>`
+or `<img>`. §4 requires every `css/` and `js/` reference to carry `?v=` equal
+to the first 8 hex of the file's SHA-256 (fix with `node tools/stamp-assets.mjs`).
+To prove the check bites, append a comment to `css/site.css` and rerun: the
+pages that load it must FAIL. Smoke also loads `oksat-study.html?m=<img onerror…>`
+and asserts the payload renders as text.
 
 ### One-pager (`index.html`)
-- Day/night toggle (`.site-theme-toggle`, `js/site.js`) flips
-  `html[data-theme]` and persists `sk_theme`; `js/theme-boot.js` applies it
-  before paint.
-- All five sections (`.block[data-fold]`) load folded with no flash, and a tap anywhere on a head toggles it
-  (`aria-expanded` follows). A topbar link (`#about`, `#tools`, `#work`,
-  `#research`, `#beyond`) or a deep link (`index.html#research`) opens its
-  section and lands on it; the one in view gets `aria-current` (scroll-spy in
-  `js/onepager.js`). With JavaScript off every section is open. The smoke
-  test pins the folded start and a head tap.
-- No horizontal scroll at 390px wide; both figures are ASCII 3D and ship a
-  baked frame, so they render without JS.
-- Check phones and the phone's "desktop site" mode, which lays the page out
-  at 980px (the ≥960px two-column grid), in both themes.
-- `#pgy-status` renders the current residency year. The HTML ships the
-  current value as a no-JS fallback, so **both** must be updated together if
-  either is ever edited by hand. Check the rollover directly rather than
-  waiting for July:
+- Day/night toggle (`.site-theme-toggle`, `js/site.js`) flips `html[data-theme]`
+  and persists `sk_theme`; `js/theme-boot.js` applies it before paint.
+- All five sections (`.block[data-fold]`) load folded, with no flash; a tap on a
+  head toggles it (`aria-expanded` follows). A topbar or deep link
+  (`index.html#research`) opens its section; the one in view gets
+  `aria-current` (scroll-spy in `js/onepager.js`). With JavaScript off, every
+  section is open. Smoke pins the folded start and a head tap.
+- No horizontal scroll at 390px. Both figures are ASCII 3D and ship a baked
+  frame, so they render without JS.
+- The hero portrait is an egg (`#hero-portrait`): it opens from the "MD" word
+  (`docs/decisions.md` §10).
+- Check phones and the phone "desktop site" mode (980px, the ≥960px two-column
+  grid), in both themes.
+- `#pgy-status` renders the residency year. The HTML ships the current value as
+  a no-JS fallback, so **both** must change together. To check the July 1
+  rollover without waiting:
   ```bash
   node -e "const f=(d)=>{const n=new Date(d);const y=n.getFullYear()-(n.getMonth()<6?1:0);
   return Math.max(1,Math.min(5,y-2024+1))};
   ['2026-06-30','2026-07-01','2029-07-01'].forEach(d=>console.log(d,'PGY-'+f(d)))"
   ```
-- Smoke assertion: `.hero-name` exists and `#pgy-status` reads `PGY-<n>`.
+- Smoke: `.hero-name` exists and `#pgy-status` reads `PGY-<n>`.
 
 ### OKSAT hub (`oksat.html`)
-- Every guide in `OKSAT_GUIDES` renders as a card under `#guides` (Interactive
-  learning), launching `oksat-learn.html?g=<slug>`; with a seeded
-  `oksat:learn:*` record the card shows `done / total sections` and reads
-  **Resume**.
-- Every module in `OKSAT_MANIFEST` renders as a card under `#modules`,
-  grouped by subspecialty, each launching `oksat-study.html?m=<slug>`.
-- With seeded `oksat:progress:*` the card shows a completion meter and reads
-  **Resume**; with none it reads **Launch**.
-- With a `oksat:srs:*` item whose `nextReview` is today or earlier, the
-  `#review-banner` unhides, `#review-count` totals due across all modules,
-  and `#review-list` links every module with due items, most due first
-  (`tools/test-oksat-engine.mjs` case 8).
-- **Weak concepts** (`tools/test-oksat-engine.mjs` case 9): `#weak` lists only
-  concepts with 3+ attempts and a miss, worst first, and stays hidden with none.
-- Settings holds the local-data reset (arms on first click, fires on second)
-  and **Export / Import progress** (`tools/test-oksat-engine.mjs` case 10: the
-  round trip restores every `oksat:*` key; a malformed import writes nothing).
-  No API key, sync, or reviewer UI may reappear.
-- Smoke assertion: `#modules .module-card` count > 0.
+- Every guide in `OKSAT_GUIDES` is a card under `#guides`, launching
+  `oksat-learn.html?g=<slug>`; with a seeded `oksat:learn:*` record it shows
+  `done / total sections` and reads **Resume**.
+- Every module in `OKSAT_MANIFEST` is a card under `#modules`, grouped by
+  subspecialty, launching `oksat-study.html?m=<slug>`. With seeded
+  `oksat:progress:*` it shows a meter and reads **Resume**; otherwise **Launch**.
+- A due `oksat:srs:*` item unhides `#review-banner`; `#review-count` totals due
+  items; `#review-list` links each module with due items, most due first
+  (`test-oksat-engine.mjs` case 8).
+- `#weak` lists concepts with 3+ attempts and a miss, worst first, hidden when
+  none (case 9).
+- Settings: the local-data reset (arms on first click, fires on second) and
+  Export / Import progress (case 10: the round trip restores every `oksat:*`
+  key; a malformed import writes nothing). No API key, sync or reviewer UI may
+  reappear.
+- Smoke: `#modules .module-card` count > 0.
 
 ### OKSAT study engine (`oksat-study.html?m=pediatrics`)
 The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
-- **Recall gate**: every MCQ opens on the stem alone — options hidden until
-  **Show the choices** (or `c`) opens them. **Reveal answer** (or space) shows
-  the answer for a memory attempt, then a four-point self-grade; the engine
-  tags each item `mode` `'recall'` or `'mcq'` in `oksat:progress:<slug>:<rev>`.
-- **First-attempt lock**: on the MCQ path, the first selection records in
-  `oksat:progress:<slug>:<rev>` and disables the options; a later click does
-  not change it; it survives reload. (Answers lock on first attempt — no
-  re-answering to game the score.)
-- **SRS write**: `oksat:srs:<slug>:<rev>` gains an item with Leitner `box`
-  1–5 and a `nextReview` date. A cold recall jumps two boxes; a correct MCQ,
-  one; a miss resets to box 1.
-- **Navigation**: **Continue** opens the first unanswered (or due) item; `u` and
+- **Recall gate**: each MCQ opens on the stem alone. **Show the choices** (`c`)
+  opens the options; **Reveal answer** (space) shows the answer for a memory
+  attempt, then a four-point self-grade. The engine tags each item `mode`
+  `'recall'` or `'mcq'` in `oksat:progress:<slug>:<rev>`.
+- **First-attempt lock**: on the MCQ path the first selection records and
+  disables the options; a later click changes nothing; it survives reload.
+- **SRS write**: `oksat:srs:<slug>:<rev>` holds Leitner `box` 1–5 and
+  `nextReview`. A cold recall jumps two boxes; a correct MCQ, one; a miss
+  resets to box 1.
+- **Navigation**: **Continue** opens the first unanswered or due item; `u` and
   **Next unanswered** skip answered items, wrapping; the jump slider
-  (`input.ok-jump-range`) previews while dragged and jumps only on release.
-- **Review attempt**: an answered item whose `nextReview` has passed opens at
-  the gate with its old answer hidden and its options enabled; answering it
-  moves `box` and `nextReview` but leaves `answers`/`firstCorrect` alone, and
-  a second click in the same review changes nothing.
-- **Keyboard**: at the gate space/enter reveals and `c` opens the choices;
-  then `1`–`4` self-grade a revealed answer, or `1`–`9`/`a`–`d` select an
-  option once the choices are open; `←`/`→` navigate, space/enter advance,
-  `u` next unanswered, `r` random, `h`/esc home (`docs/design-principles.md` §1.6). Automated:
-  `c` opens choices + `1` selects, space reveals + `4` grades cold, `→`
-  advances, `h` home.
-- **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*` (now by
-  `js/oksat/store.js`).
-- The page mounts straight into the module — **no prompt of any kind**. The
-  test seeds `oksat:reviewer` directly to pick a namespace.
-- Concept deep link `&c=<key>` pre-filters (manual).
+  (`input.ok-jump-range`) previews while dragged and jumps on release.
+- **Review attempt**: a due answered item opens at the gate with its old answer
+  hidden and options enabled; answering moves `box` and `nextReview` but not
+  `answers` or `firstCorrect`; a second click in the same review changes nothing.
+- **Keyboard**: at the gate, space/enter reveals and `c` opens choices. Then `1`–`4`
+  grade a revealed answer, `1`–`9` or `a`–`d` select an option, `←`/`→`
+  navigate, space/enter advance, `u` next unanswered, `r` random, `h`/esc home
+  (`docs/design-principles.md`).
+- **Legacy migration**: a seeded `mcq:*` key is copied to `oksat:*` by `js/oksat/store.js`.
+- The page mounts straight into the module with **no prompt**; the test seeds
+  `oksat:reviewer` to pick a namespace. Concept deep link `&c=<key>` pre-filters (manual).
 
 ### Interactive learning (`oksat-learn.html?g=<slug>`)
-`tools/test-oksat-learn.mjs` pins, and `tools/check-data.mjs` (`OKSAT_GUIDES`)
-validates the data under it:
-- **Hotspot to 3D**: in Explore a selected structure gets an "Open in 3D model" link (`a.lr-hs-3d`, `OLSB.html#m=3d&sel=<id>`); Find shows none (`tools/test-oksat-learn.mjs` T14e/f).
-- **Render**: a chapter draws its sections, the rail lists every chapter plus
-  flashcards and pearls, and no raw `**` or `[[ ]]` reaches the page.
-- **Predict-then-reveal**: the typed answer is echoed back and never stored;
-  keys 1 to 4 grade; the grade lands in `oksat:learn:<slug>:<rev>` as
-  `checks['<chapter>/<section>:<id>']`; Mark done and the grade survive a
-  reload.
-- **Modes**: Core only hides every "Go deeper" block; Step shows one section
-  (Next, the arrow keys, deep links); both persist.
-- **Terms**: every lexicon abbreviation in a chapter's text is marked; hover
-  and focus show the full name and Escape closes it (desktop); a tap pins it
-  inside the 16 px gutters and a tap elsewhere closes it (phone); a term in a
-  checker label opens the popover without ticking the box. `check-data` fails
-  an unknown acronym-shaped token and an unused lexicon entry.
+`tools/test-oksat-learn.mjs` pins, and `check-data` (`OKSAT_GUIDES`) validates the data beneath:
+- **Hotspot to 3D**: in Explore a selected structure gets "Open in 3D model"
+  (`a.lr-hs-3d`, `OLSB.html#m=3d&sel=<id>`); Find shows none.
+- **Render**: a chapter draws its sections; the rail lists chapters, flashcards
+  and pearls; no raw `**` or `[[ ]]` reaches the page.
+- **Predict-then-reveal**: the typed answer is echoed and never stored; keys 1–4
+  grade; the grade lands in `oksat:learn:<slug>:<rev>` as
+  `checks['<chapter>/<section>:<id>']`; Mark done and the grade survive reload.
+- **Modes**: Core hides every "Go deeper" block; Step shows one section (Next,
+  arrow keys, deep links); both persist.
+- **Terms**: each lexicon abbreviation is marked; hover or focus shows the full
+  name, Escape closes it (desktop); a tap pins it inside the 16 px gutters and a
+  tap elsewhere closes it (phone); a term in a checker label opens the popover
+  without ticking the box.
 - **Checkers** evaluate their declared rules (ABRS, ESS, biologic eligibility
   with its prerequisite, response grade).
-- **Inline module questions** load by reference, lock on the first answer, are
-  stored under `practice['<module>:<item>']`, and leave the module's own
-  progress and SRS untouched; drill links carry the module and concept with a
-  live count; two different modules can load into one page.
+- **Inline module questions** load by reference, lock on first answer, store
+  under `practice['<module>:<item>']`, and leave the module's own progress and
+  SRS untouched. Two modules can load into one page.
 - **Deck and pearls** load every chapter; a card grade writes the same record.
-- **Untrusted input**: `?g=`, `?c=` and the hash only match known ids; a
-  payload renders as text (smoke regression, same class as `?m=`).
-- **sk.oto link** (section 11): one "Read the map in sk.oto" link with the exact
-  `OKSAT_SKOTO` URL where the subspecialty has a map, none where it has none,
-  and none when `live` is false.
-- Manual: read each new chapter in both themes and at phone width; a green run
+- **Untrusted input**: `?g=`, `?c=` and the hash match only known ids; a payload renders as text.
+- **sk.oto link**: one "Read the map in sk.oto" link with the exact `OKSAT_SKOTO`
+  URL where the subspecialty has a map; none where it has none, or when `live` is false.
+- Manual: read each new chapter in both themes and at phone width. A green run
   proves structure, not that the page teaches.
 
 ### Airway Rounds (`airway-jeopardy.html`)
-- Boots with **zero external requests** (deliberately CDN-free — its CSP
-  names no remote origin, so a regression is also a console error);
-  `AIRWAY_DATA` loads. Smoke assertion: `window.AIRWAY_DATA.questions` is an
-  array.
-- `node tools/test-airway-resume.mjs`: saved games per tab,
-  resume restores the exact state, Start fresh and End game clear only that
-  tab's save, and the game plays with storage throwing.
+- Boots with **zero external requests** (its CSP names no remote origin, so a
+  regression is also a console error); `AIRWAY_DATA` loads. Smoke:
+  `window.AIRWAY_DATA.questions` is an array.
+- `test-airway-resume.mjs`: saved games per tab; resume restores the exact
+  state; Start fresh and End game clear only that tab's save; the game plays
+  with storage throwing.
 
 ### CPT search (`cpt-search.html`)
-- Boots with zero console errors; typing filters; clicking a result copies
-  its code and flips the button to **Copied**; a query like
-  `<img src=x onerror=…>` renders as text (results go through `esc()`).
-- `node tools/test-search.mjs` (covers `search.html` too): a
-  module-title query links to `?m=<slug>`, a CPT hit lands on its row in the
-  viewport, on desktop and phone.
+- Zero console errors; typing filters; clicking a result copies its code and
+  flips the button to **Copied**; `<img src=x onerror=…>` renders as text.
+- `test-search.mjs` (covers `search.html`): a module-title query links to
+  `?m=<slug>`; a CPT hit lands on its row, on desktop and phone.
 
 ### PDF chapter splitter (`pdf-chapter-splitter.html`)
-- Boots with zero console errors, with `PDFLib` and `JSZip` defined (smoke).
+- Zero console errors, with `PDFLib` and `JSZip` defined (smoke).
 
 ### OLSB (`OLSB.html`)
 - Boots with zero console errors and draws the layered SVG
-  (`html[data-olsb="ready"]`); `#p=mastoidectomy&s=6` opens the facial
-  recess step; `#d=axial&p=posterior&s=2` opens a cut-plane tour and tapping
-  the sinus tympani lists and lights its neighbours; a payload in `#p=`
-  selects nothing and never becomes markup. `tools/check-data.mjs` checks
-  that every drawn structure has a glossary entry and a label anchor, every
-  `rel` target exists, and every step's `focus`/`layers`/`view` resolve.
-  Look at every tour step at 390px and 1280px in both themes after a
-  geometry change: label placement is hand-tuned per structure (`at`, `lab`).
-- The guide deep link: `#m=3d&sel=lscc` selects the structure and shows the info panel; a hostile `sel` is ignored (`tools/smoke-pages.mjs`).
-- The 3D model: `#m=3d&s=1` builds the volume (in its worker), meshes it
-  (`#olsb3d-stage[data-faces]`), and a click on it selects a structure; a
-  payload in `#m=3d&st=…&cam=…` selects nothing. `tools/check-data.mjs`
-  builds the coarse volume in Node: every label is a glossary entry and is
-  built, every tour step's state/view/layers/focus resolve, every drill
-  state carves, and every glossary relation between two drawn structures
-  holds in the geometry (compared over the columns both occupy along the
-  relation's axis). After moving anatomy, also look: isolate the ossicles,
-  nerves and inner ear (`#m=3d&L=ossicles.nerves.inner.muscles&cam=…`)
-  from lateral, above, front and medial, and step the guided flight with
-  the fine grid loaded (`#olsb3d-stage[data-fine="ready"]`) and, for the close
-  views, the detail cube (`data-micro="ready"`); meshing runs in the worker,
-  so wait for `data-meshing` to leave `busy` (`data-remesh-ms` is the time
-  it took). Check both Smooth (default) and Blocks: thin structures (chorda,
-  stapes crura, GSPN) are where smoothing loses most.
-- Real CT mode (`#m=ct[&pl=ax|cor|sag][&at=<mm>]`), in `smoke-pages` on a synthetic volume routed by Playwright (nothing
-  under `tbone/` is read): no `tbone/` request before the mode is entered; a slice draws; a real click on a landmark
-  selects its glossary id and fills the info card; `#m=ct&pl=cor&at=1.5` sets the plane and position; junk in `pl` or
-  `at` falls back to the axial plane without error (`pl=constructor` included); unreadable `tbone/` data shows the
-  status message and the Diagrams mode stays usable.
-- Truth check (`olsb truth` in `tools/check-data.mjs`, every run): OLSB's structures are compared with the UW landmarks
-  (`tbone/geometry/landmarks.json`), each against its own tolerance; owner-vetted exceptions are listed above
-  `TRUTH_CLASS`. `OLSB_TRUTH=1` also prints the residual per structure. It proves nothing finer than the about 3 mm
-  noise floor.
+  (`html[data-olsb="ready"]`). `#p=mastoidectomy&s=6` opens the facial-recess
+  step; `#d=axial&p=posterior&s=2` opens a cut-plane tour; tapping the sinus
+  tympani lights its neighbours; a payload in `#p=` selects nothing and never
+  becomes markup.
+- `check-data` checks every drawn structure has a glossary entry and label
+  anchor, every `rel` target exists, every step's `focus`/`layers`/`view` resolves.
+  After a geometry change, look at every tour step at 390px and 1280px in both
+  themes: label placement is hand-tuned (`at`, `lab`).
+- Guide deep link `#m=3d&sel=lscc` selects the structure; a hostile `sel` is ignored (smoke).
+- **3D model**: `#m=3d&s=1` builds the volume in its worker and meshes it
+  (`#olsb3d-stage[data-faces]`); a click selects a structure; a payload in
+  `#m=3d&st=…&cam=…` selects nothing. `check-data` builds the coarse volume in
+  Node: every label is a glossary entry and is built; every tour step, state and
+  drill resolves and carves; every glossary relation between two drawn
+  structures holds in the geometry.
+- After moving anatomy, also look: isolate the ossicles, nerves and inner ear
+  (`#m=3d&L=ossicles.nerves.inner.muscles&cam=…`) from lateral, above, front and
+  medial; step the guided flight with the fine grid (`data-fine="ready"`) and the
+  detail cube (`data-micro="ready"`); wait for `data-meshing` to leave `busy`
+  (`data-remesh-ms` is the time taken). Check both Smooth and Blocks: thin
+  structures (chorda, stapes crura, GSPN) are where smoothing loses most.
+- **Real CT** (`#m=ct[&pl=ax|cor|sag][&at=<mm>]`): smoke runs it on a synthetic
+  volume routed by Playwright (nothing under `tbone/` is read). Checks: no
+  `tbone/` request before the mode is entered; a slice draws; a click on a
+  landmark selects its glossary id and fills the info card; junk in `pl` or `at`
+  falls back to axial without error (`pl=constructor` included); unreadable
+  `tbone/` data shows the status message and Diagrams stays usable.
+- **Truth check** (`olsb truth` in `check-data`, every run): OLSB structures are
+  compared with the UW landmarks (`tbone/geometry/landmarks.json`), each against
+  its tolerance; owner-vetted exceptions are above `TRUTH_CLASS`. `OLSB_TRUTH=1`
+  prints the residual per structure. It proves nothing finer than the ~3 mm noise floor.
 
 ### ASCII 3D figures (`js/ascii3d.js`, `js/diagrams/`)
-`tools/check-data.mjs` §5 checks the following. Every scene renders a
-non-blank frame. Every figure a page shows (`data-a3d` in its HTML or in
-its own scripts) loads `css/ascii3d.css`, then `js/ascii3d.js` before its
-scene file. No scene is orphaned. Every baked block equals a fresh render
+`check-data` §5 checks that every scene renders a non-blank frame, every page
+showing a figure loads `css/ascii3d.css` then `js/ascii3d.js` before its scene,
+no scene is orphaned, and every baked block equals a fresh render
 (`node tools/ascii3d.mjs bake --check`).
 
-`tools/smoke-pages.mjs` (`figureReady`) checks that each figure mounts live
-with a drawn grid. On the one-pager, flipping `html[data-theme]` must flip
-the figure's `data-a3d-shade` (paper ↔ dark ground). On Airway, picking
-another mode (a full re-render) must bring the figure back live. To prove
-that bites, remove the `mountAll` call from `js/airway/app.js`: the Airway
-smoke must FAIL.
+`smoke-pages` (`figureReady`) checks each figure mounts live with a drawn grid.
+On the one-pager, flipping `html[data-theme]` flips `data-a3d-shade`. On
+Airway, picking another mode must bring the figure back live. To prove that
+bites, remove the `mountAll` call from `js/airway/app.js`: the Airway smoke must FAIL.
 
-Manual: `node tools/ascii3d.mjs render <id> --turn 4` for every side, then
-the page at 390px and 1280px in both themes. Load it once with JavaScript
-off to see the baked frame.
+Manual: `node tools/ascii3d.mjs render <id> --turn 4` for every side, then the
+page at 390px and 1280px in both themes. Load once with JavaScript off to see the baked frame.
 
 ### Archive (`archive/`)
-Not served, not smoke-tested, not checked by `tools/check-data.mjs`. The one
-invariant worth asserting after touching it:
+Not served, not smoke-tested, not checked by `check-data`. After touching it:
 
 ```bash
 node -e "const g=require('./archive/kag-graph.json');
@@ -260,247 +226,92 @@ console.log('nodes',g.nodes.length,'edges',g.edges.length,
 'dangling',g.edges.filter(e=>!ids.has(e.source)||!ids.has(e.target)).length)"
 ```
 
-If `kag-graph.json` changes, regenerate `kag-graph-flat.txt` from it — never
-edit the flat file directly.
+If `kag-graph.json` changes, regenerate `kag-graph-flat.txt` from it; never edit the flat file.
 
-### SSB knowledge graph (`ssb/content/`)
+### SSB (`ssb.html`, `ssb/`)
+Read `docs/ssb.md` first. Each section runs with `node tools/test-ssb.mjs --only <section>`;
+the test names what it pins, and the human checks are listed here.
 
-`node tools/ssb-content.mjs` (also run by `tools/check-data.mjs`); `--queue` prints the owner's review queue
-(draft nodes whose cited sources are all verified; not a check). Checks:
-required fields per entity type and the controlled vocabularies
-(`docs/authoring-ssb.md` §5–§6); id format and global uniqueness; every
-reference resolves — structured refs *and* inline `[[id]]` in text — with
-the right target type; no HTML in text; and the review gate (an entity marked
-`verified` must cite sources that are all `verified: true`). Drafting one
-region file alone: `node tools/ssb-content.mjs --allow-dangling <file>`
-turns unresolved refs into warnings.
-
-What it cannot check: medical correctness and whether a source supports the
-claim that cites it. That stays with the owner, who alone flips `review` to
-`verified`.
-
-### SSB dissection states (`ssb/states/`, `tools/ssb-pipeline/uw/dissect.py`)
-
-Offline pipeline (needs `pip install scipy scikit-image fast-simplification`, no crawl): `python3 tools/ssb-pipeline/uw/dissect.py`
-prints the unit table (voxels against `dissection.json`'s `measured`, within 5 %), per state the carved voxels, guard minima per field
-and side, patch and lining bytes, the post-mirror guard count and the antrostomy window's extent; a rerun is byte-identical (hash
-`ssb/states/*` and `ssb/models/lining-*`). In CI, `node tools/check-data.mjs` checks the `dissection.json` <-> graph rule (a scratch
-edit that unmaps a step with `removes` fails it), every label a patch writes against `labels.json`, and the budgets. The viewer does not
-read the states until P2.
-
-### SSB page and variant lab (`ssb.html`)
-
-Smoke boots `ssb.html` (graph mode + a WebGL frame; headless Chromium runs
-software WebGL, flags in `tools/smoke-lib.mjs`), the hostile `#s=` payload,
-and `#lab=frontal-recess` (a diorama builds). `tools/test-ssb.mjs` drives the
-lab and reads the scene back through the read-only `window.__ssb.lab` hook
-(part names, graph ids, hazards, RAS bounding boxes, the computed pathway,
-a pixel where a click picks a given part). It pins:
-
-- each diorama loads on its lesson's view (ethmoid roof coronal, frontal
-  recess sagittal); every part is named `<graph id>.<side>` and its id and
-  hazard ids resolve in the graph; the *schematic — idealized* badge shows;
-- presets satisfy the graph's own criterion text (`c.keros`, `c.gera`) and
-  preset codes are classes in the graph (`c.ifac`,
-  `c.uncinate-superior-attachment`); buttons carry the class labels;
-- ethmoid roof: Keros I→III raises each lateral lamella by exactly the
-  preset difference, and the lamella meets the fovea; asymmetry shortens
-  the left lamella; the AEA canal drops exactly as its parameter; a
-  supraorbital cell drops it by `m.aea-mesentery-drop`'s mean;
-- frontal recess, under uncinate attachments 1, 5 and 6: each anterior cell
-  alone moves the computed pathway posteriorly and each suprabullar cell
-  anteriorly (≥ 0.5 mm, mean over the recess and ostium), the frontal septal
-  cell laterally at the ostium, the pathway runs anterior and medial to the
-  supraorbital cell, and it drains medial to the uncinate into the middle
-  meatus (1) or lateral into the infundibulum (5, 6); the same toggles
-  through the UI checkboxes move it posterior vs anterior;
-- clicking a part selects its entity (panel and URL follow); view buttons
-  cut the camera without rebuilding; the desktop dock never covers the
-  canvas and collapses to a rail; phones get the controls in the sheet with
-  no horizontal scroll;
-- a hostile `#lab=` is clamped, snapped or dropped, rewritten canonically,
-  and never becomes markup; an unknown diorama leaves the specimen stage;
-- reduced motion stops the particle animation and continuous rendering;
-- the tissue-material library (`js/ssb/materials.js`, `docs/ssb.md` §7.4):
-  its kind table matches the vocabulary in `docs/authoring-ssb.md` and every
-  graph kind in use; every colour token it reads exists for both themes in
-  `css/ssb.css`; nothing animates. Through `window.__ssb.materials` (read-only:
-  quality, program and material counts, `probe(kind, hatched)` draws a
-  sphere into a small target and returns the GL error and pixels), every
-  kind, plain and hatched, compiles and draws without a WebGL error at
-  `#q=full` and at `#q=lite`; programs are shared per kind (a selection adds
-  materials, not programs); the `q` hash key picks the quality, switches it
-  at runtime and rewrites the hash canonically, and a hostile `q` is ignored;
-  the real lab renders non-blank under both, the hatched lateral lamella
-  still shows dark stripes, picking still works, and reduced motion adds no
-  animation. Software WebGL picks `lite` on its own, so the default runs
-  exercise it and `q=full` is always explicit.
-
-**CT mode** (`js/ssb/volume.js`, `mode-ct.js`, `ui-ct.js`; `docs/ssb.md` §3,
-§5.6) is tested on a synthetic volume, never on the real one:
-`tools/ssb-fixture-ct.mjs` builds a small anisotropic, axis-flipped phantom
-in exactly the `ssb/ct/` format (a large right and a smaller left maxillary
-sinus, an agger nasi cell, a midline cavity, a label id that is not in the
-graph, a label index the table does not name), and `test-ssb.mjs` answers the
-page's `ssb/ct/*` and `ssb/geometry/labels.json` requests from it with
-Playwright routing (nothing is written into `ssb/`, and the suite passes
-whether or not the real volume is in the tree; "no volume" is a routed 404).
-`node tools/ssb-fixture-ct.mjs [dir]` writes the same files to a directory
-for a manual look. `node tools/test-ssb.mjs --only ct` runs just this
-section; add `--int16` (with `--only ct` or `--only scope`) to serve the page the same phantom as a 16-bit HU head
-(`buildFixture({ dtype: 'int16' })`, WP IN1) and expect the same results. The plain-Node part also pins the int16 volume
-(header, array type, loader, sampling through the fixture's mapping) and that `shaftClearance` with the header's `levels`
-gives the u8 head's answer on 150 poses. The intake script has its own self-test (needs numpy and scipy, not run in CI):
-`.venv/bin/python -I tools/ssb-pipeline/intake/intake.py selftest` round-trips a synthetic NIfTI and NRRD into the frame
-within 0.5 voxel. It pins, in plain Node: the affine round trip (also rotated and
-sheared), exact trilinear sampling on a linear field, slices equal to
-`sample()`/`labelAt()` pixel for pixel, the radiological orientation, oblique
-planes, gzip by magic bytes (raw bytes pass through, damage is refused), the
-loader's errors and name whitelist, and the `#ct=` codec (plane whitelist,
-crosshair clamping, stage exclusivity). In the page, through the read-only
-`window.__ssb.ct` hook and real pixels: each view renders non-blank; the
-drawn crosshair sits where first principles put it in all three views, and a
-click in one moves it in the others within a voxel; the larger right sinus
-is on the image left; label lookup returns the fixture's ids, hover shows the
-graph name and ≈ HU, a click selects the entity in the panel; keys, wheel,
-window presets/sliders/right-drag, the outline toggle and the colour key work;
-outline colours equal the materials' tokens and follow the theme; hostile
-`#ct=` values are clamped or ignored and never become markup; a missing
-volume shows a message naming `ssb/ct/ct.json` and the rest of the page
-still works; with `getContext('webgl*')` blocked the stage still loads,
-draws and selects (CT is the no-WebGL fallback); a server that sends
-`Content-Encoding: gzip` loads the same; phones show one plane at a time.
-Judging how the images *look* (window presets on the real head, outline
-contrast) stays a human check: `--shots` writes `ct-*.png`.
-
-**Procedure player** (`js/ssb/mode-procedure.js`, `ui-procedure.js`, `volume.js` patches;
-`docs/ssb.md` §5.8; `node tools/test-ssb.mjs --only procedure`) pins, in Node, `parsePatch` /
-`applyPatch` on a fixture patch (round trip; refusals of a wrong base, a box outside `dims`, an
-unknown label, a short or long body, version 2; exactly the box's voxels change and the base is
-byte-identical), the `#p=` codec and store (clamped step, hostile values dropped, exclusivity)
-and the index lookup; in the page, on a fixture index routed over a synthetic CT (a hole through
-the septum plate; the 2.7 mm telescope passes it): a pose through the hole is free at step 1 and
-clamps at step 0, the tip's label is the patch's, CT still samples the base and outlines the
-carved voxels, Next / Previous / `[` `]` rewrite the hash, the `think` is hidden until
-revealed, risk hazards hatch, a station is flown to (a cut under reduced motion), corridors, a
-damaged patch, no index (Play disabled, no request, zero console errors) and hostile hashes.
-The real-data section runs once `ssb/states/index.json` exists.
-
-**Mucosal state** (`tools/ssb-pipeline/uw/mucosa.py`, `js/ssb/mode-procedure.js`,
-`ui-specimen.js`; `docs/ssb.md` §5.9; `node tools/test-ssb.mjs --only mucosa`) pins, from the
-committed patches read as a page reads them: the decongested patch changes only erectile soft
-tissue (turbinates, septum half) to the side's nasal-cavity air between the choana and the valve,
-0 bone voxels, the midplane untouched, mirror-symmetric, and raises the mean cross-section over
-the measured span by 1.35-1.45 (computed from the arrays, not read from the record), the
-superior third least; the congested patch grows only turbinate tissue into that air and lands
-within 0.04 of POP1's median (read from `nasalseg.json`), its largest loss in the middle third
-along A; a pose whose tip is in inferior-turbinate tissue as scanned is in air decongested;
-every intact station is still free with its tip in air decongested (the congested failures are
-printed, not an error); in the page, `#mu=` loads the patch and lining pack (the base lining
-hides, the erectile remnants show), the pills swap states and the hash follows, a procedure
-plays decongested and greys the toggle, and hostile `mu` values are ignored. Judging how the
-decongested lining looks (turbinates, the middle meatus) stays a human check.
-
-**Population sinus** (`tools/ssb-pipeline/nasalseg/meanshape.py`, `js/ssb/ui-population.js`,
-`geo-specimen.js`, `mode-specimen.js`; `docs/ssb.md` §5.10; `node tools/test-ssb.mjs --only population`)
-pins: the pack is at most 300 kB, flagged `population` (never loaded at boot) and its nodes are the maxillary
-sinus's graph id plus a side and `@nasalseg-majority`; the `meanShape` key's volumes sit within 15 % of the
-medians beside them and its alignment RMS 95th percentile within 6 mm; in the page, the toggle is off and the
-pack deferred at boot, the caption's numbers equal the file's, on loads two ghost nodes (unlit, translucent,
-not depth-writing) whose boxes lie beside the specimen's own sinus on the same side, the selection never
-highlights a ghost, off gives the pack back and a second ask loads it again, and a file without `meanShape`
-keeps the section with no toggle. Re-running `meanshape.py` must reproduce the pack, the manifest entry and the JSON
-byte for byte. Judging how the ghost reads beside the sinus stays a human check.
-
-**Endoscope stage** (`js/ssb/scope.js`, `mode-endoscope.js`, `ui-endoscope.js`;
-`docs/ssb.md` §3; `node tools/test-ssb.mjs --only scope`) pins, in plain Node,
-the scope's geometry (straight posterior at yaw 0 / pitch 0, yaw toward the
-scope's own side, unit vectors, lens 0 = shaft, lens 30 at roll 0 looks up as
-`sin(pitch + 30°)`, an image up that is orthonormal to the view and continuous through the zenith (no flip as a 70° view passes the vertical), tip = fulcrum at depth 0, the light
-post opposite the lens offset) and the `#scope=` codec and store (round trip,
-hostile values clamped or ignored, stage exclusivity); in the page, the camera
-is exactly the pose's tip and view, keys / drag / wheel / sliders change the
-pose with the right signs, the indicator moves with roll, the lights and
-layers are the scope's and come back on leaving (orbit view included), a
-pasted link opens the stage, a phone fits, WebGL blocked disables the pill.
-Collision and the HUD are pinned too: on the synthetic fixture (a bony septum,
-a sphere's analytic distance) a pose through a wall clamps to the last free
-0.5 mm sample, a pose in air is untouched, the ring makes a thicker shaft
-clamp earlier, and a read distance field matches the analytic distance within
-a voxel; the midline rule (E3b: the shaft stays on its own side of R = 0
-except behind and below `lm.choanal-arch.M`) is tested in air on the fixture
-and, on the real specimen, from both nostrils aimed across the septum; on the
-real specimen the searches (a 1° yaw/pitch grid) are re-run
-and the poses they find are pinned — right sphenoid ostium, both frontal
-ostia from a 70° lens, and no 0° pose reaching a frontal ostium (the left
-poses are the right ones mirrored: the standard specimen is symmetric, and
-`yaw` is side-relative, so a mirrored pose has the same yaw). A change to
-the pipeline's CT, landmarks or distance fields moves those pins on purpose.
-How the image *looks* (spot intensity, cone, the lining from inside) is a
-human check: take a screenshot of `#scope=R,45,6,4,0,0`.
-Station flights (E6) are pinned in Node on the real specimen — every station in `ssb/geometry/stations.json` is a pose `clampPose` leaves unchanged, free under `shaftClearance` (4 mm, E3b, `lm.choanal-arch.M`), with its tip in an air label and its target within 35° of the view; every `.L` is its `.R` mirrored; every graph `t.*` is stored, uncovered or an overview — and in the codec (`parseStationLink` refuses hostile shapes, `parseStations` skips malformed entries, `resolveStation`, `flightPose`, the store's pending `station`). In the page: the list at each tier and nostril, a flight that passes through intermediate poses and ends at the stored pose and URL, roll the short way and the lens at the end, cancel by a key, a cut under reduced motion, deep links (`#scope=t.…`), hostile or unknown links ignored, and a blocked or malformed `stations.json` hiding the list. A station that fails a Node check is reported to Opus, never edited. Poses per dissected state (P3) are held to the same rule in Node on each state's own volume (`stationStateTests`: the patch applied, the entry's shaft, the tip in an airway label of that state, the target in the half field, `.L` the mirror of `.R`, every `byState` key a state of `ssb/states/index.json`); `python3 tools/ssb-pipeline/uw/stations.py check` re-tests the committed file against its own port of `scope.js`. In the page, flying to (or opening the link of) a `shaft: "2.7"` station switches the telescope and the controls say why.
-CT along the scope is pinned in the page: after a pose change the shared cursor equals the tip within a voxel, the inset's centre pixel is the volume sampled at the tip, a back-to-back drag measures the exposure at most twice and the settled pose once more, and with the CT request blocked the inset stays hidden.
-
-**Specimen stage** (`js/ssb/geo-specimen.js`, `mode-specimen.js`,
-`ui-specimen.js`; `docs/ssb.md` §3 Explore) runs on the real committed packs
-(`node tools/test-ssb.mjs --only specimen`). It pins: every pack is a
-quantized glTF whose nodes are exactly what `ssb/models/packs.json` lists,
-each named `<graph id>.<side>` with the id in the graph; every mesh lies in
-the CT volume's bounds, so the 3D cursor and CT share one frame; the loader
-places each mesh where an independent read of the raw data puts it in RAS;
-laterality three ways — data (`.R` centroids and landmarks at +R), scene
-(`rasToScene`, the nasal spine at the origin) and screen (anterior view: the
-patient's right on the viewer's left; lateral and superior views likewise),
-plus each sided landmark nearer its own side's mesh; budgets (triangles,
-draw calls) and the on-demand loop; bone X-ray / solid / hidden and region
-layers; tier-filtered, non-overlapping landmark labels; picking keeps every
-hit through the bone and a second click steps to the next; a click sets the
-shared cursor (`state.cursor`, `#at=`) within 1 mm of an independent ray
-cast and CT lands there; selection frames without turning the camera (a cut
-under reduced motion), and an entity with no surface leaves the camera alone
-and says so; the section plane clips on the cursor, follows the slider and
-the URL, and caps solid bone. The standard specimen is pinned too
-(`standardSpecimenTests`): the CT and the label volume are mirror-symmetric
-about R = 0 outside the midline plates, no `.R` air touches `.L` air, paired
-landmarks and sweeps mirror within 0.01 mm, `.M` landmarks sit at R = 0, and
-the right septal surface lies at half the as-scanned thickness, the nose is in (the vestibule labels, `lm.naris` in its air, the valve landmark in air and in front of the cavity's end, the septal chart ending at the valve plane, the `nose` pack and its `skin` kind, the Nose layer; ST6) (read with
-`git show` at the commit `ct.json` names; CI checks out full history). The open lining (ST1b) is pinned in `liningTests` (the pack is listed and within budget, one node per air label, no triangle on an air|air interface, every clear ray through the right ostium first hits the sinus with the lining where the shells stop it, a free pose looks through the choana past A −50) and in the scope and mucosa page checks (lining drawn and shells hidden from inside, not drawn from outside, picks report graph ids). The floor mucosa (ST2c) is pinned on its charts: both sides in the soft pack, at least 2 cm², the chart inside the floor's box, the junction within 1 mm of the septal chart's `bottom(a)` from A −47 forward, left = right. Judging how the specimen *looks* stays a human
-check (`--shots` writes `spec-*.png`).
-
-**Anatomy state** (`state.js`, `volume.js`, `geo-specimen.js`, `mode-specimen.js`, `mode-ct.js`, `ui-specimen.js`;
-`docs/ssb.md` §5.11; `node tools/test-ssb.mjs --only anatomy`) builds its own patches, index and override pack inside the test
-(nothing is written into `ssb/`) and pins, in Node, that a patch changes exactly its box in the CT and the labels and
-nothing else, the base staying byte-identical; the refusals (box outside, bad dimensions, unknown label, wrong base or
-entry, short or long body, version 2, node names that are markup); the loader's URLs; and the hash whitelist and
-canonicalisation (unknown id, preset, side, base, incompatible pair, markup, all-or-nothing); then in the page with no
-index Variants and Pathology are hidden and Normal asymmetry disabled (no request), with one the pills show, CT shows
-the patch's box, and the override node hides the base node and gives it back on clear.
-
-**Flap overlay** (`js/ssb/flap.js`, `docs/ssb.md` §5.7; `node tools/test-ssb.mjs --only flap`) pins, in Node
-on the committed charts, landmarks and soft pack, the posterior septal artery's first points inside the
-pedicle, the superior incision's rule over a parameter grid, the area readout against an independent
-point-in-polygon and Heron sum (2 %), the short < full < extended ladder and rescue's zero area, sides
-and determinism, and the `#flap=` codec on hostile input; then in the page the controls, the readout
-against the Node areas, the hash, tier gating and the phone width. It prints each design's area per side.
-
-The reconstruction itself (`tools/ssb-pipeline/uw/`) is offline and never
-runs in CI: its proof is the overlay PNGs each stage writes and
-`ssb/reference/specimen-relations.json` (the graph's spatial claims tested
-against the 3D geometry); `tools/check-data.mjs` pins only that every name
-in the specimen data — packs, label table, landmarks, sweeps — is a graph id.
-The figure inventory (`ssb/reference/uw-sinusanatomy2/figures.json`, `uw/figures.py`) is the same kind of
-offline output: `check-data` pins its schema (plane, window, a graph id or a null with a reason, coordinates
-inside the image, no image file in that folder); how well its tips match the pictures is judged on the
-`figures.py overlay` check images and at a checkpoint, not in CI.
-
-`node tools/test-ssb.mjs --shots <dir>` also writes desktop and phone
-screenshots of each diorama, CT mode and the specimen for a visual check. Judging how a material
-*looks* (pattern scale, sheen under the endoscope's spotlight) stays a human
-check: render it in a scratch page that imports `materials.js` with a
-spotlight and both themes, and compare `full` with `lite`.
+- **Knowledge graph** (`node tools/ssb-content.mjs`, also run by `check-data`;
+  `--queue` prints the owner's review queue, not a check): required fields and
+  controlled vocabularies (`docs/authoring-ssb.md` §5–§6); id format and global
+  uniqueness; every reference resolves, structured and inline `[[id]]`; no HTML
+  in text; a `verified` entity must cite only `verified` sources. Drafting one
+  region file: `--allow-dangling <file>` turns unresolved refs into warnings.
+  It cannot check medical correctness or whether a source supports its claim.
+- **Dissection states** (offline; needs `pip install scipy scikit-image
+  fast-simplification`): `python3 tools/ssb-pipeline/uw/dissect.py` prints the
+  unit table (voxels against `dissection.json`'s `measured`, within 5 %) and carve,
+  guard and budget figures; a rerun is byte-identical. `check-data` checks the
+  `dissection.json` ↔ graph rule and each label against `labels.json`.
+- **Page and variant lab** (`--only lab`): `ssb.html` boots in graph mode with a
+  WebGL frame (software WebGL; flags in `tools/smoke-lib.mjs`); `#lab=frontal-recess`
+  builds; a hostile `#lab=` is clamped, snapped or dropped. Through the read-only
+  `window.__ssb.lab` hook the suite reads part names, hazards, bounding boxes and
+  the computed pathway. Each diorama loads on its lesson's view; presets satisfy
+  the graph's criteria; the ethmoid roof, frontal recess (uncinate attachments 1, 5,
+  6) and sphenoid geometry match their pinned rules (`docs/ssb.md` §5.7–§6.1);
+  clicking a part selects its entity; the dock never covers the canvas; phones
+  have no horizontal scroll; reduced motion stops particles and continuous rendering.
+- **Materials** (`js/ssb/materials.js`): every kind in the vocabulary of
+  `docs/authoring-ssb.md` compiles and draws without WebGL error at `#q=full` and
+  `#q=lite`; programs are shared per kind; a hostile `q` is ignored; every colour
+  token exists for both themes in `css/ssb.css`.
+- **CT mode** (`js/ssb/volume.js`, `mode-ct.js`, `ui-ct.js`; `docs/ssb.md` §3, §5.6)
+  runs on a synthetic phantom, never the real volume: `tools/ssb-fixture-ct.mjs`
+  builds it in the `ssb/ct/` format and Playwright routes the page's requests to
+  it. Nothing is written into `ssb/`; the suite passes with or without the real
+  volume. `--only ct` runs it; add `--int16` (with `ct` or `scope`) to serve the
+  same phantom as a 16-bit HU head. `node tools/ssb-fixture-ct.mjs [dir]` writes
+  the files for a manual look. The intake self-test (numpy and scipy, not in CI):
+  `.venv/bin/python -I tools/ssb-pipeline/intake/intake.py selftest`.
+  Without WebGL the stage still loads, draws and selects.
+- **Procedure player** (`--only procedure`): `parsePatch`/`applyPatch` round-trip
+  and refusals; exactly the box's voxels change; the `#p=` codec and store reject
+  hostile input; on a fixture index, a hole through the septum plate is free at
+  step 1 and clamps at step 0. The real-data section runs once `ssb/states/index.json` exists.
+- **Mucosal state** (`--only mucosa`, `docs/ssb.md` §5.9): the decongested patch
+  changes only erectile tissue, adds no bone voxels, keeps the midplane, and raises
+  the measured cross-section by 1.35–1.45; the congested patch stays within 0.04
+  of POP1's median. Human check: how the lining looks.
+- **Population** (`--only population`, `docs/ssb.md` §5.10): the pack is at most
+  300 kB, flagged `population` and never loaded at boot; its numbers match its
+  file; off gives the pack back. Re-running `meanshape.py` reproduces the pack
+  byte for byte. Human check: how the ghost reads beside the sinus.
+- **Endoscope** (`js/ssb/scope.js`, `--only scope`, `docs/ssb.md` §3): scope
+  geometry (lens angle, orthonormal image-up through the zenith, tip at depth 0);
+  the `#scope=` codec; the camera equals the pose; keys, drag and wheel move the
+  pose with the right signs; collision clamps to the last free 0.5 mm sample; the
+  midline rule (E3b) holds in air and on the real specimen; the searches on the
+  real specimen (a 1° grid) return the pinned poses. Station flights (E6) are
+  checked in Node on every station in `ssb/geometry/stations.json`: free, tip in
+  air, target within 35° of the view, `.L` the mirror of `.R`. A station that
+  fails is reported to the orchestrator, never edited. `python3 tools/ssb-pipeline/uw/stations.py check`
+  re-tests the file. Human check: a screenshot of `#scope=R,45,6,4,0,0`.
+- **Specimen** (`--only specimen`, `docs/ssb.md` §3 Explore): every pack is a
+  quantized glTF whose nodes match `ssb/models/packs.json`, named `<graph id>.<side>`;
+  every mesh lies in the CT bounds; laterality holds three ways (data, scene,
+  screen); picking and the shared cursor agree with an independent ray cast within
+  1 mm; the section plane clips on the cursor. The standard specimen is
+  mirror-symmetric about R = 0 (`standardSpecimenTests`, read with `git show` at
+  the commit `ct.json` names). The open lining (`liningTests`) and the floor mucosa
+  are pinned on their charts. Human check: `--shots` writes `spec-*.png`.
+- **Anatomy states** (`--only anatomy`, `docs/ssb.md` §5.11): the suite builds its
+  own patches and index inside the test; a patch changes exactly its box; refusals
+  and the hash whitelist hold; with no index, Variants and Pathology are hidden.
+- **Flap overlay** (`--only flap`, `docs/ssb.md` §5.7): areas against an
+  independent point-in-polygon and Heron sum (2 %); the short < full < extended
+  ladder; the `#flap=` codec on hostile input. The suite prints each design's area per side.
+- **Reconstruction** (`tools/ssb-pipeline/uw/`) is offline and never runs in CI.
+  Its proof is the overlay PNGs each stage writes and
+  `ssb/reference/specimen-relations.json`. `check-data` pins only that every name in
+  the specimen data is a graph id; the figure inventory (`uw/figures.py`) is judged
+  on the overlay check images at a checkpoint.
+- `node tools/test-ssb.mjs --shots <dir>` writes desktop and phone screenshots for a
+  visual check. How a material looks is a human check: compare `full` with `lite` in a scratch page.
 
 ## Adding a new page to the harness
 
-Append an entry to `PAGES` in `tools/smoke-pages.mjs` with a `ready(page)`
-that resolves when the page's core content exists (poll via
-`page.waitForFunction`, don't sleep).
+Append an entry to `PAGES` in `tools/smoke-pages.mjs` with a `ready(page)` that
+resolves when the page's core content exists (poll via `page.waitForFunction`,
+never sleep).

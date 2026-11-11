@@ -268,6 +268,5 @@ run, built with `textContent`.
 
 To extend it, add a `kind` to `BUILD` in `js/ascii3d.js` that returns a
 grid mesh (`gridMesh`), a polyline or points. Everything downstream is
-shared. Not built yet: figures inside OKSAT question items. The engine
-takes `item.image` only, and a figure there would need a small component
-in `js/oksat/engine.js` that calls `ASCII3D.mount`.
+shared. Figures inside OKSAT items (the engine takes `item.image` only) are
+on the roadmap in `docs/wip.md`.

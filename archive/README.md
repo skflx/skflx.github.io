@@ -6,10 +6,8 @@ so the data survives; deleting the tools that read it should not delete it.
 
 ## `kag-graph.json` — OHNS knowledge graph
 
-The database behind the retired Knowledge Atlas Graph and Structural Atlas
-viewers. Schema v2, hand-authored plus subagent expansion. Counts, sources,
-and vetting status are recorded in the file's own top-level fields — read them
-there rather than trusting a number written here.
+The database behind the retired atlas viewers. Schema v2. Counts, sources and
+vetting status are in the file's own top-level fields; read them there.
 
 Node shape:
 

@@ -176,7 +176,7 @@ never reloads.
   building-block exercise: scroll the three planes, identify each frontal
   recess cell, and toggle its 3D block to check. The crosshair is the
   Specimen stage's 3D cursor (`state.cursor`), which the Endoscope stage moves
-  to its tip. *Not built yet:* the 3D block toggle.
+  to its tip.
 - **Procedure.** A procedure from the graph played as steps. Each step sets
   the station (camera pose), applies the cumulative dissection state (units
   the step `removes` disappear), highlights what comes into view, hatches
@@ -194,7 +194,7 @@ never reloads.
   presets and sliders: drag olfactory fossa depth from Keros I to III and
   watch the lateral lamella lengthen and the AEA drop into a mesentery;
   toggle IFAC cells and watch the frontal drainage pathway reroute (§6).
-- **Self-test.** Planned, not built: `plans/2026-10-07-ssb-roadmap.md` T1 (issue #294).
+- **Self-test.** Planned: `plans/2026-10-07-ssb-roadmap.md` T1 (issue #294).
 
 **Depth (tier) and truth badges are always visible.** Tier filters labels,
 panel sections and hazards; it never hides geometry needed
@@ -284,7 +284,7 @@ stack, so `normalize.py` needs the crawl (`fetch.py`) from ST6 on.
 
 ### 5.2 Segmentation — the graph writes the label table
 
-`tools/ssb-labels.mjs` (phase 3, not built) emits a 3D Slicer color table from every
+`tools/ssb-labels.mjs` (planned) emits a 3D Slicer color table from every
 `geo: "specimen"` structure × side, with stable indices recorded in
 `ssb/geometry/labels.json` (append-only; an index is never reused). Coarse
 structures come from automatic segmentation where licensed; resection units
@@ -650,7 +650,7 @@ which. The uncinate is fused into the maxillary medial wall unit here, so
 the uncinectomy opens the infundibular trough and the hiatus and leaves
 the wall; the natural ostium appears with the antrostomy.
 
-**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`; done).**
+**Pipeline outputs (WP P1b, `tools/ssb-pipeline/uw/dissect.py`).**
 - `ssb/states/index.json`: `version`, `base` (the first 10 hex of the SHA-256
   of the base CT display and labels), `ctFill`, `states`, `procedures`,
   `corridors`, and the unit voxel counts against `measured`. Per state key
@@ -696,7 +696,7 @@ the wall; the natural ostium appears with the antrostomy.
   the working air is the cumulative state, so a later unit sees the earlier
   carves.
 
-**Runtime (WP P2, built).** `volume.js` has a pure `parsePatch(bytes, volume)`
+**Runtime.** `volume.js` has a pure `parsePatch(bytes, volume)`
 (refuses with a `VolumeError` a wrong `base`, a box outside `dims`, a label
 the table does not name, a body that is not the boxes' size, version 2) and
 `applyPatch(volume, patch)`, a derived volume with the same API plus
@@ -987,7 +987,7 @@ mucosal state → dissection.
   hypoplasia, marked cavity asymmetry) are real 16-bit CTs: exemplars that
   calibrate the variant layer, and bases of their own once resegmented
   (their five labels do not include the ethmoid that FESS units need).
-- **16-bit intake (WP IN1, built).** `ct.json` takes `dtype: "int16"` with
+- **16-bit intake.** `ct.json` takes `dtype: "int16"` with
   `values.kind: "HU"` (windows in HU, no LUT; the data file is `ct.i16.gz`,
   little-endian) and optional per-head `levels: {air, bone}` in the file's own
   values. `volume.js` reads both dtypes (`vol.range`, `vol.levels`; `toHU` is
@@ -1201,7 +1201,7 @@ grid at 0.5 mm, as the frontal-recess rules are; none written in):
 
 ### 6.2 The `nasal-framework` diorama (ST7 spec)
 
-The `nasal-framework` diorama spec (ST7) is in `plans/2026-11-10-ssb-nasal-framework.md`; it is not built (status: GitHub issue #267).
+The `nasal-framework` diorama spec (ST7) is in `plans/2026-11-10-ssb-nasal-framework.md`; status: GitHub issue #267.
 
 ## 7. Runtime architecture
 
@@ -1262,7 +1262,7 @@ loader), so a failure there leaves graph mode and CT alone.
 Stamps today cover `<link>`/`<script>` in root HTML only. A module graph
 defeats that: `main.js?v=…` imports `./scene.js`, which the CDN caches on
 its own clock — the exact new-HTML/old-asset pairing the stamps exist to
-prevent. So (phase 1) `tools/stamp-assets.mjs` gains:
+prevent. So `tools/stamp-assets.mjs` gains:
 
 1. Regenerate `js/ssb/stamps.js` from the hashes of `ssb/**` data files and of `tbone/ct` and `tbone/geometry` (OLSB's Real CT mode reads them through `js/ssb/volume.js`; `js/olsb/ct.js` is stamped as an extra importer of `js/ssb`).
 2. Topologically sort `js/ssb/**` by relative imports (static and dynamic)
@@ -1308,18 +1308,18 @@ rewritten canonical (every preset explicit, written after the stage and before `
 until it arrives the link's anatomy is `pending` (shape-checked, written back unchanged) and every consumer treats it as the
 standard head. `v` or `dz` without `anat` takes the index's default base (`scanned` when listed).
 
-The procedure hash (WP P2, built) is `#p=<p-id>&step=<n>[&cor=<corridor>]`
+The procedure hash is `#p=<p-id>&step=<n>[&cor=<corridor>]`
 (the pose follows as `scope=`): the store keeps only a well-formed `p-id` in
 the graph and clamps `step` to 0..99; the player, once the index has loaded,
 drops a procedure the index does not list and clamps `step` to its steps, and `cor` (a corridor key there that lists the
 procedure) makes the state accumulate the corridor's earlier procedures
 instead of the procedure's own `entry`. It implies the scope stage on the
-decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9, WP DC1, built;
+decongested mucosa. The mucosa key `mu=dec|scan|cong` (§5.9;
 `state.mu`, default `scan`, not written when `scan`) is ignored while a
 procedure plays and not written to the hash then; an unknown value (any other
 case or text) is dropped.
 
-The flap overlay key (§5.7, WP ST5, built) is `flap=<short|full|extended|rescue>[.<R|L>]`
+The flap overlay key (§5.7) is `flap=<short|full|extended|rescue>[.<R|L>]`
 with `top`, `ant`, `fw`, `win` for its sliders (`state.flap`; the side defaults to
 `R`; values are clamped and snapped to the step, parameters at their default are
 not written). It is an overlay on the specimen, not a stage: a lab or CT link
@@ -1428,13 +1428,13 @@ form-action 'none'` (fetches of `ssb/**` are same-origin under
 
 | What | How | When |
 |---|---|---|
-| Graph schema, ids, refs, vocabularies, review gate | `tools/ssb-content.mjs` via `tools/check-data.mjs` | now, CI |
-| Geometry ↔ graph | every pack node, sweep and landmark resolves to a graph id; every `geo: specimen` structure has geometry or is listed pending | phase 3, CI |
-| **Spatial claims ↔ geometry** | each spatial `rel` (`medial-to` …) checked against landmark/centroid coordinates; a failure means the prose or the mesh is wrong | phase 3, CI |
-| Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | phase 3, report |
-| Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | phase 1, CI |
-| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Now (phase 2): each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet; the material library (graph kinds ↔ material kinds, tokens for both themes, every kind compiles and draws hatched or not at `q=full` and `q=lite`, hostile `q` ignored, programs shared, hatch visible, no animation). Later: tier filter; endoscope shaft blocked by tissue; storage failure is a no-op | phases 2–7, CI |
-| CT mode | `tools/test-ssb.mjs`, through the read-only `window.__ssb.ct` hook, on the synthetic volume of `tools/ssb-fixture-ct.mjs` (the page's `ssb/ct/*` requests are routed to it, so the suite never depends on the real volume): `volume.js` in plain Node (affine round trip, exact trilinear, slices agree with `sample`/`labelAt`, radiological orientation, oblique planes, gzip by magic bytes, loader errors, name whitelist) and the `#ct=` codec; in the page, the three views render non-blank, the crosshair is drawn at the same RAS point in all three and a click moves it within a voxel, label lookup returns the fixture's ids, hover gives name and ≈HU, a click selects the entity, keys/wheel/window/outlines/colour key, outline colours are the materials' tokens and follow the theme, hostile `#ct=` is clamped or ignored, a missing volume shows a message, CT runs with WebGL blocked, phones show one plane | phase 5, CI |
+| Graph schema, ids, refs, vocabularies, review gate | `tools/ssb-content.mjs` via `tools/check-data.mjs` | CI |
+| Geometry ↔ graph | every pack node, sweep and landmark resolves to a graph id; every `geo: specimen` structure has geometry or is listed pending | CI |
+| **Spatial claims ↔ geometry** | each spatial `rel` (`medial-to` …) checked against landmark/centroid coordinates; a failure means the prose or the mesh is wrong | CI |
+| Measurements ↔ specimen | model value from `from`/`to` landmarks compared with the population range; outliers reported, not failed (n = 1 differs) | report |
+| Page boots, renders non-blank, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html`; Chromium needs `--use-angle=swiftshader --enable-unsafe-swiftshader` for WebGL headless | CI |
+| Behavior | `tools/test-ssb.mjs`, through the read-only `window.__ssb.lab` hook. Each diorama loads on its lesson's view; parts resolve to graph ids and hazards; presets satisfy the graph's criteria; Keros I→III raises the lateral lamella by the preset difference; the AEA drop and supraorbital-cell rule follow the graph; the computed frontal pathway reproduces every IFAC rule under each uncinate attachment; clicking a part selects its entity; a hostile `#lab=` is clamped; reduced motion stops the particles; the dock never covers the canvas; phones get the sheet; the material library (graph kinds ↔ material kinds, tokens for both themes, every kind compiles and draws hatched or not at `q=full` and `q=lite`, hostile `q` ignored, programs shared, hatch visible, no animation). Later: tier filter; endoscope shaft blocked by tissue; storage failure is a no-op | CI |
+| CT mode | `tools/test-ssb.mjs`, through the read-only `window.__ssb.ct` hook, on the synthetic volume of `tools/ssb-fixture-ct.mjs` (the page's `ssb/ct/*` requests are routed to it, so the suite never depends on the real volume): `volume.js` in plain Node (affine round trip, exact trilinear, slices agree with `sample`/`labelAt`, radiological orientation, oblique planes, gzip by magic bytes, loader errors, name whitelist) and the `#ct=` codec; in the page, the three views render non-blank, the crosshair is drawn at the same RAS point in all three and a click moves it within a voxel, label lookup returns the fixture's ids, hover gives name and ≈HU, a click selects the entity, keys/wheel/window/outlines/colour key, outline colours are the materials' tokens and follow the theme, hostile `#ct=` is clamped or ignored, a missing volume shows a message, CT runs with WebGL blocked, phones show one plane | CI |
 | Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match; it also corrects the study-design `type`. **`verified` means the work exists as cited — not that it supports the claim**; claim support is the reviewer's and owner's job. Match against the PubMed record itself (NCBI E-utilities), never a search snippet: in phase 0 a search-listing check added a nonexistent co-author and a wrong PMID, both caught by the E-utilities re-check. Sources PubMed does not index (monographs, unindexed journal years) are confirmed by hand. | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 
@@ -1564,18 +1564,18 @@ ships (WP RA3a's docs pass).
 
 | Consumer | standard | scanned | variant / pathology |
 |---|---|---|---|
-| CT volume, labels | as now | own volume | base + patches (R6.2) |
-| Specimen packs | as now | own packs | base packs with node overrides |
-| Distance fields (scope HUD) | as now | own | patched where the edit changes them (dehiscence, Onodi) |
-| Landmarks, sweeps, charts | as now | own, per side (no mirror) | patch overrides by key |
-| Endoscope stations (E5, E6 in PR #115) | posed | re-validated; invalid poses say so | re-validated per patch |
-| Flap overlay (ST5), septal charts | as now | recomputed per side | septal deviation recomputes the chart |
+| CT volume, labels | unchanged | own volume | base + patches (R6.2) |
+| Specimen packs | unchanged | own packs | base packs with node overrides |
+| Distance fields (scope HUD) | unchanged | own | patched where the edit changes them (dehiscence, Onodi) |
+| Landmarks, sweeps, charts | unchanged | own, per side (no mirror) | patch overrides by key |
+| Endoscope stations (E5, E6) | posed | re-validated; invalid poses say so | re-validated per patch |
+| Flap overlay (ST5), septal charts | unchanged | recomputed per side | septal deviation recomputes the chart |
 | Variant lab | unchanged | unchanged | a lab diorama can link to "see it on the specimen" |
-| Graph panels | as now | + asymmetry measurements | + the entity's panel, prevalence, exemplar list |
+| Graph panels | unchanged | + asymmetry measurements | + the entity's panel, prevalence, exemplar list |
 
 ---
 
-### R3. What exists now (2026-10-07)
+### R3. Current state
 
 Current state: `docs/wip.md` and GitHub issue #266.
 ---
@@ -1680,7 +1680,7 @@ of combined edits). v1: one variant per side per region + one condition.
 - **State**: `state.anatomy = {base, variants, conditions}` in the one
   store, orthogonal to the stage (specimen, lab, CT, scope). Changing it
   reloads volume/packs through the existing lazy loaders and re-validates
-  the scope pose (a pose that becomes blocked is clamped as now and the HUD
+  the scope pose (a pose that becomes blocked is clamped and the HUD
   says why).
 - **URL** (whitelist, `docs/ssb.md` §7.3 rules):
   `#anat=standard|scanned|scanned-b` + `&v=<v-id>.<R|L>[:<preset>]` +
@@ -1768,7 +1768,7 @@ a Haller cell (no uncinate, no infundibulum) or to classify frontal cells
   the IFAC drainage rules pinned for the diorama are re-run on the
   specimen's own cells and must hold.
 
-**Baseline (RS0, 2026-10-09; Opus reading).** Run
+**Baseline.** Run
 `python3 -I tools/ssb-pipeline/uw/score.py` for the numbers; they are not copied here. What
 they mean for RS:
 
