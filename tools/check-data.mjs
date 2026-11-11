@@ -272,7 +272,7 @@ function checkOksat() {
 const DIRS6 = ['sup', 'inf', 'ant', 'post', 'lat', 'med'];
 const REVERSE_DIR = { sup: 'inf', inf: 'sup', ant: 'post', post: 'ant', med: 'lat', lat: 'med' };
 /* Slugs whose non-SVG files must all be listed in images/oksat/<slug>/ATTRIBUTION.md (rule 8). */
-const ATTRIBUTED = ['ear-anatomy'];
+const ATTRIBUTED = ['ear-anatomy', 'jc-whisking-auditory-cortex'];
 /* Graded blocks share the check id key space (rule 1) and store a grade. */
 const GRADED_BLOCKS = new Set(['hotspot', 'neighbors', 'sequence']);
 const NEW_BLOCKS = new Set(['hotspot', 'layers', 'neighbors', 'sequence']);
