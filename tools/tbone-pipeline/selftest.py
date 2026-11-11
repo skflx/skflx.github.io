@@ -16,6 +16,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import ingest as I  # noqa: E402
+import frame as F  # noqa: E402
 OUT = os.path.join(HERE, '..', '..', 'tbone')
 
 AIR = {'epitympanum', 'hypotympanum', 'aditus', 'mastoid-antrum', 'eac', 'eustachian-tube-entrance', 'facial-recess',
@@ -201,6 +202,22 @@ def _test_segments_shared_layer(tmp):
     print('  read_segments 4D shared layer: masks split by LabelValue')
 
 
+def _test_measurement_frame(tmp):
+    arr = np.zeros((4, 4, 4), 'int16')
+    ok = os.path.join(tmp, 'mf-identity.nrrd')
+    _write_nrrd(ok, arr, 'int16', extra=['measurement frame: (1,0,0) (0,1,0) (0,0,1)'])
+    I.geometry(I.read_nrrd(ok)[1])
+    bad = os.path.join(tmp, 'mf-rotated.nrrd')
+    _write_nrrd(bad, arr, 'int16', extra=['measurement frame: (0,1,0) (-1,0,0) (0,0,1)'])
+    try:
+        I.geometry(I.read_nrrd(bad)[1])
+    except ValueError as e:
+        assert 'measurement frame' in str(e), f'wrong refusal: {e}'
+    else:
+        raise AssertionError('accepted a non-identity measurement frame')
+    print('  measurement frame: identity accepted, rotated frame refused')
+
+
 def _test_space(tmp):
     arr = np.zeros((4, 4, 4), 'int16')
     for value, want in [('RAS', 'right-anterior-superior'), ('lps', 'left-posterior-superior'),
@@ -234,6 +251,83 @@ def ingest_tests():
         _test_segments_4d_defaults(tmp)
         _test_segments_shared_layer(tmp)
         _test_space(tmp)
+        _test_measurement_frame(tmp)
+
+
+def _test_kabsch(tmp):
+    from scipy.spatial.transform import Rotation
+    ref = np.array([[0, 0, 0], [10, 0, 0], [0, 8, 0], [0, 0, 6], [3, 4, 5]], float)     # non-coplanar
+    r_true = Rotation.from_rotvec([0.3, -0.5, 0.8]).as_matrix()
+    t = np.array([5, -3, 12.0])
+    src = ref @ r_true.T + t                                  # src = R_true ref + t
+    r, rms = F.kabsch(src, ref)
+    assert np.abs(r - r_true.T).max() < 1e-6, 'recovered rotation differs'
+    assert rms < 1e-9, 'proper fit residual'
+    got = (src - src.mean(0)) @ r.T + ref.mean(0)
+    assert np.abs(got - ref).max() < 1e-6, 'transformed points miss the reference'
+    mirror = ref * np.array([-1.0, 1.0, 1.0])                 # mirrored source: no proper rotation can match it
+    _, rms_p = F.kabsch(mirror, ref)
+    _, rms_r = F.kabsch(mirror, ref, reflect=True)
+    assert rms_r < 1e-6 and rms_p > 0.5, f'mirror: proper {rms_p} reflected {rms_r}'
+    print(f'  kabsch: recovered R to {np.abs(r - r_true.T).max():.1e}; mirror proper rms {rms_p:.2f}, reflected {rms_r:.1e}')
+
+
+def _test_footplate(tmp):
+    pts = np.array([(x, y, z) for x in np.linspace(0, 4, 41) for y in (-0.2, 0, 0.2) for z in (-0.2, 0, 0.2)])
+    o, info = F.footplate_origin(pts, np.array([10.0, 0, 0]))     # incus beyond the x = 4 end
+    assert o[0] < 0.5 and info['footplate_end'] == 'low', f'far end (x=0) not picked: {o}'
+    o2, _ = F.footplate_origin(pts, np.array([-10.0, 0, 0]))     # incus beyond the x = 0 end
+    assert o2[0] > 3.5, f'far end (x=4) not picked: {o2}'
+    print(f'  footplate: origin {np.round(o, 3).tolist()} with incus at +x, {np.round(o2, 3).tolist()} at -x')
+
+
+def _test_lps_to_ras(tmp):
+    arr = np.zeros((5, 5, 5), 'int16')
+    path = os.path.join(tmp, 'lps.nrrd')
+    _write_nrrd(path, arr, 'int16', dirs='(0.5,0,0) (0,0.5,0) (0,0,0.5)', origin='(10,20,30)')
+    geo = I.geometry(I.read_nrrd(path)[1])
+    got = F.grid_to_ras(geo, [[2, 4, 6]])[0]
+    assert np.allclose(got, [-11, -22, 33]), f'LPS to RAS gave {got}'
+    assert np.allclose(F.ras_to_grid(geo, [got])[0], [2, 4, 6]), 'inverse'
+    las = os.path.join(tmp, 'las.nrrd')
+    _write_nrrd(las, arr, 'int16', dirs='(0.5,0,0) (0,0.5,0) (0,0,0.5)', extra=['space: left-anterior-superior'])
+    try:
+        F.grid_to_ras(I.geometry(I.read_nrrd(las)[1]), [[0, 0, 0]])
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('LAS accepted')
+    print(f'  LPS to RAS: index (2,4,6) -> {got.tolist()} mm; LAS refused')
+
+
+def _test_conditioning(tmp):
+    from scipy.spatial.transform import Rotation
+    rng = np.random.default_rng(3)
+    r_true = Rotation.from_rotvec([0.3, -0.5, 0.8]).as_matrix()
+    # nearly collinear: four points on a line with 0.02 mm off-axis; 0.05 mm noise on one target point
+    line = np.array([[0, 0, 0], [10, 0, 0], [20, 0.02, 0], [30, 0, 0.02]], float)
+    tgt = line @ r_true.T
+    tgt[2] += rng.normal(0, 0.05, 3)
+    r, _, _ = F._kabsch(line, tgt)
+    worst = max(F.loo_angles(line, tgt, r))
+    assert worst > 10, f'collinear set: leave-one-out max {worst:.2f} deg, expected > 10'
+    # well spread: eight non-coplanar points, the same noise
+    spread = np.array([[0, 0, 0], [10, 0, 0], [0, 8, 0], [0, 0, 6], [3, 4, 5], [-7, 2, -3], [5, -6, 4], [-2, -5, -6]], float)
+    tgt = spread @ r_true.T
+    tgt[2] += rng.normal(0, 0.05, 3)
+    r, _, _ = F._kabsch(spread, tgt)
+    well = max(F.loo_angles(spread, tgt, r))
+    assert well < 1, f'spread set: leave-one-out max {well:.3f} deg, expected < 1'
+    print(f'  conditioning: leave-one-out max {worst:.1f} deg (collinear 4) vs {well:.3f} deg (spread 8)')
+
+
+def frame_tests():
+    print('frame (WP B4):')
+    with tempfile.TemporaryDirectory() as tmp:
+        _test_kabsch(tmp)
+        _test_footplate(tmp)
+        _test_lps_to_ras(tmp)
+        _test_conditioning(tmp)
 
 
 def main():
@@ -287,6 +381,7 @@ def main():
     for c, (a, n) in stats.items():
         assert n > 0 and a / n >= FLOOR[c], f'{c} landmarks do not land on {c}'
     ingest_tests()
+    frame_tests()
     print('selftest OK')
 
 

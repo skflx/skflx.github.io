@@ -109,7 +109,7 @@ Rules that bite:
 - **Pinned rules.** The sphenoid diorama's exposures are measured on its solids, the frontal-recess drainage pathway is computed (never drawn), and the IFAC rules are pinned by tests. Before tuning a diorama, a flap or a dissection state, rerun its section (`docs/ssb.md` §5.7–§6.1).
 - **Dioramas** (`js/ssb/dioramas/`) export `PARAMS`, `PRESETS`, `VIEWS` and `build(THREE, params)` in RAS mm, and import no three.js (`docs/ssb.md` §6).
 - **Page code** is ES modules in `js/ssb/`, on three.js vendored in `js/vendor/three-0.186.1/`. Materials are procedural from `--ssb-*` tokens (`js/ssb/materials.js`), never textures. After any change under `js/ssb/` or `ssb/`, run `node tools/stamp-assets.mjs` (it also regenerates `js/ssb/stamps.js`).
-- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`dioramas`, `lab`, `ct`, `specimen`, `scope`, `procedure`, `mucosa`, `population`, `flap`, `anatomy`, `scanned`). CI runs it as `--shard i/4`, split by `SHARDS` in the file: a new section goes in one shard.
+- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`kit`, `dioramas`, `lab`, `ct`, `specimen`, `scope`, `procedure`, `mucosa`, `population`, `flap`, `anatomy`, `scanned`). CI runs it as `--shard i/4`, split by `SHARDS` in the file: a new section goes in one shard.
 - **Image generation** runs outside the repo (`docs/ssb-imagegen.md`); generated pixels never carry an anatomical claim.
 
 ### sk.oto wiki
