@@ -63,7 +63,7 @@ login and no state-changing actions, framing has little to hijack. Moving
 to a host with header control (e.g. Cloudflare in front) would close this.
 
 Everything committed is public — the whole repository is served, including
-`docs/`, `tools/`, `archive/` and `wiki/`. Nothing secret may be committed,
+`docs/`, `tools/` and `archive/`. Nothing secret may be committed,
 ever (`AGENTS.md`).
 
 ## Audit, 2026-09-23
@@ -81,30 +81,4 @@ ever (`AGENTS.md`).
 | — | Checked, clean: git history has no API keys or private keys; image EXIF/XMP carries no GPS or device data; CPT and Airway escape all data before `innerHTML`; no `eval`/`new Function` in shipped code. | — | — |
 
 Residual: optional Google Fonts on OKSAT pages; header-only protections
-(above); and the wiki, below.
-
-## The wiki boundary
-
-`wiki/sync/sync-vault.mjs` is the only path from the vault to anything
-public. It is fail-closed by design — folder allowlist, Personal Notes
-stripped, PHI/credential tripwire, gate on `status` — and is tested on a
-synthetic vault by `tools/test-wiki-sync.mjs`. Changing
-`wiki/sync/policy.json` changes what can be published: owner decision.
-See `wiki/README.md` for the open questions (public vs. gated, unvetted
-content).
-
-Reader feedback flows the other way. Corrections arrive as public GitHub
-issues, and `wiki/feedback/pull-feedback.mjs` copies them into the vault's
-`_inbox/wiki-feedback/`, which is never published. Their text was written
-by strangers, so the tool handles it as untrusted data:
-
-- Reader text is written only inside a code fence it cannot close, under a
-  callout saying it is untrusted. An agent triaging the inbox therefore
-  reads it as a report, not as instructions.
-- The `note` field is kept only if it names a real vault file. Path
-  traversal and frontmatter injection are dropped.
-- Frontmatter values are single-line and JSON-quoted.
-- Reports that trip the PHI patterns are flagged, so the owner can scrub
-  the public issue.
-
-The tool reads the public API and needs no token.
+(above).
