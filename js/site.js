@@ -56,6 +56,8 @@
                 searchInput.focus();
                 searchInput.select();
             } else {
+                var path = window.location.pathname;
+                if (/airway-jeopardy|oksat-study|oksat-learn|ssb|atlas|OLSB|pdf-chapter/.test(path)) return;
                 window.location.href = 'search.html';
             }
         }

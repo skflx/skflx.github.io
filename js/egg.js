@@ -74,6 +74,7 @@
             for (var r = 0; r < sel.rangeCount; r++) {
                 var range = sel.getRangeAt(r);
                 for (var i = 0; i < list.length; i++) {
+                    if (list[i].getAttribute('data-egg') === 'portrait') continue;
                     if (out.indexOf(list[i]) === -1 && range.intersectsNode(list[i])) out.push(list[i]);
                 }
             }
