@@ -14,11 +14,6 @@ orchestrate, Sonnet or Haiku/Flash execute, and review is named per wave.
 | **Executor** (generally Sonnet or Haiku/Flash) | Executes a work package (WP) to its acceptance, inside its Touch list: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy or clinical judgment, owner decisions, files outside Touch, changing a plan's contracts, merging |
 | **Adversarial reviewer** (named per wave by the owner) | Review each wave's diff against its spec, as PR reviews; the orchestrator adjudicates when it is not the reviewer | Pushing fixes, merging |
 
-Why the split: a spec plus an acceptance test costs the orchestrator far fewer tokens
-than the implementation, and this repo's test suites (`docs/verification.md`)
-make "done" checkable by a model that did not design the work. The
-expensive model reads a diff at a checkpoint instead of writing it.
-
 ## 1. What makes a WP delegable
 
 A WP may go to the executor only when all of these hold:
@@ -123,10 +118,7 @@ sessions.
 
 ## 6. Running lanes in parallel, cheaply
 
-What costs tokens is context, re-sent every turn: a long session pays
-for its whole history on each call, and an orchestrator that spawns
-subagents pays twice (each subagent re-reads the repo cold, then its report
-lands in the orchestrator's context). So:
+Context is re-sent every turn, so keep sessions short:
 
 - **Lanes are separate executor sessions launched by the owner**, not orchestrator
   subagents. The orchestrator never sits in the loop while a WP is being built.
@@ -158,6 +150,5 @@ When the reviewer is not the orchestrator, the orchestrator adjudicates: real fi
 the wave's review issue closes when no `block` finding is open, which unlocks
 the next wave.
 
-Tests and CI are a bottleneck: a WP runs only the suites whose inputs it
-changed, pushes once, and the full suite runs once before the owner merges
-(the active plan's testing budget lists which suite covers which paths).
+A WP runs only the suites whose inputs it changed, and the full suite runs once
+before the owner merges (`docs/verification.md`).

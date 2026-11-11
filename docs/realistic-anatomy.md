@@ -1,6 +1,6 @@
 # Realistic anatomy — sources, limits and decisions
 
-**Status (2026-10-11).** The plan's design moved to `docs/ssb.md` §14, and its work packages and handoff to `plans/2026-10-07-ssb-roadmap.md` §3 and GitHub issue #266 (owner's call, 2026-10-11). This file keeps what the design rests on: the sources (§4), the methodological limits (§5) and the owner decisions (§13).
+The design is `docs/ssb.md` §14; work packages are in `plans/2026-10-07-ssb-roadmap.md` §3 and GitHub issue #266. This file keeps what the design rests on: the sources (§4), the methodological limits (§5) and the owner decisions (§13).
 
 Read first: `docs/ssb.md` §14 (the design), `ssb/reference/uw-sinusanatomy2/README.md` (what the atlas is, its two heads, the arrow-tip method), `docs/delegation.md` §2.
 
