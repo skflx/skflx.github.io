@@ -7,9 +7,9 @@
    registry is loaded with graph mode and state.js whitelists `#lab=` against
    it even where WebGL is missing.
    ============================================================= */
-import * as ethmoidRoof from './ethmoid-roof.js?v=8beb280c';
-import * as frontalRecess from './frontal-recess.js?v=6ffe115c';
-import * as sphenoid from './sphenoid.js?v=57b6e2f1';
+import * as ethmoidRoof from './ethmoid-roof.js?v=19345628';
+import * as frontalRecess from './frontal-recess.js?v=1cee78dd';
+import * as sphenoid from './sphenoid.js?v=225582f0';
 
 export const DIORAMAS = Object.freeze({
     'ethmoid-roof': ethmoidRoof,

@@ -1,0 +1,33 @@
+{
+  "reviewed": null,
+  "triggers": [
+    { "prompt": "Build me a new OKSAT module on tracheostomy complications from my Drive PDFs.", "expect": true },
+    { "prompt": "I need a question bank on cochlear implant candidacy, mixed recall and MCQ, grounded in the Cummings chapter.", "expect": true },
+    { "prompt": "Make a study module out of my vault notes on salivary gland tumors.", "expect": true },
+    { "prompt": "Audit the otoplasty module: are the items still tied to the sources?", "expect": true },
+    { "prompt": "Extend the pediatrics module with a few more cases on stridor.", "expect": true },
+    { "prompt": "Write a first-pass teaching guide on thyroidectomy with retrieval prompts.", "expect": false },
+    { "prompt": "Add a chapter to the ear-anatomy interactive guide on the facial nerve.", "expect": false },
+    { "prompt": "Make an ASCII 3D figure of the hyoid for the page.", "expect": false },
+    { "prompt": "Change the Leitner box intervals in the OKSAT engine.", "expect": false },
+    { "prompt": "Make the due-review banner on the OKSAT hub show how many items are due in each module.", "expect": false }
+  ],
+  "tasks": [
+    { "id": "module-lint-extend", "split": "dev",
+      "prompt": "Add one new item to the otoplasty module following the authoring schema, citing an existing source already used in that module. Do not touch other modules.",
+      "checks": ["node tools/lint-oksat.mjs otoplasty", "node tools/check-data.mjs", "judge: the diff does not modify js/oksat/engine.js"],
+      "origin": "seed" },
+    { "id": "module-manifest-intact", "split": "dev",
+      "prompt": "Add a new concept to the ta-tubes module and use it on one existing item; keep ids stable and do not rename anything.",
+      "checks": ["node tools/lint-oksat.mjs ta-tubes", "node tools/check-data.mjs", "node tools/test-oksat-engine.mjs"],
+      "origin": "seed" },
+    { "id": "module-guide-refs-hold", "split": "holdout",
+      "prompt": "Add an item to the ear-anatomy module and confirm that guides which reference that module's items and concepts still resolve.",
+      "checks": ["node tools/lint-oksat.mjs ear-anatomy", "node tools/lint-oksat-guide.mjs ear-anatomy", "node tools/check-data.mjs"],
+      "origin": "seed" },
+    { "id": "module-plain-text-only", "split": "holdout",
+      "prompt": "Add a multi-part explanation to an item in the facial-reanimation module using the engine's supported line-break and bullet conventions.",
+      "checks": ["node tools/lint-oksat.mjs facial-reanimation", "judge: the new text uses only plain text with newlines and bullet characters, no markdown or HTML"],
+      "origin": "seed" }
+  ]
+}

@@ -110,7 +110,7 @@ def read_nrrd(path):
     if len(data) != count * dt.itemsize:
         raise ValueError('NRRD data length disagrees with sizes and type')
     arr = np.frombuffer(data, dtype=dt, count=count).reshape(sizes, order='F')
-    return arr.astype(dt.newbyteorder('=')), header
+    return arr.astype(dt.newbyteorder('='), copy=False), header
 
 
 def _spatial(header):
@@ -123,7 +123,11 @@ def _spatial(header):
 
 def geometry(header):
     """The header allowlist (B-6): spatial dims, spacing_mm, unit direction rows (one per spatial axis, as NRRD
-    lists them), origin, space (closed vocabulary) and dtype. Spacing is read from space directions, never inferred."""
+    lists them), origin, space (closed vocabulary) and dtype. Spacing is read from space directions, never inferred.
+    A measurement frame other than the identity is refused, since it would silently change the axes."""
+    mf = header.get('measurement frame')
+    if mf is not None and [None if v is None else v.tolist() for v in _vectors(mf)] != [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]:
+        raise ValueError('NRRD measurement frame is not identity; not supported')
     sizes, dirs = _spatial(header)
     axes = [i for i, d in enumerate(dirs) if d is not None]
     origin = _vectors(_field(header, 'space origin'))[0]
@@ -146,12 +150,13 @@ def geometry(header):
     }
 
 
-def read_segments(path):
+def read_segments(path, loaded=None):
     """{segment name: boolean 3D mask} for a Slicer .seg.nrrd. A 4D file has a layer axis (space direction `none`).
     4D: layer = Segment<N>_Layer, default N (old Slicer); mask = layer == Segment<N>_LabelValue, default 1.
     3D labelmap: mask = data == Segment<N>_LabelValue (required).
+    `loaded` is an optional (array, header) pair from read_nrrd(path), so the file is read once.
     Names are returned for local measurement only."""
-    arr, header = read_nrrd(path)
+    arr, header = loaded or read_nrrd(path)
     _, dirs = _spatial(header)
     layer_axes = [i for i, d in enumerate(dirs) if d is None]
     if len(layer_axes) > 1:

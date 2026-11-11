@@ -1038,7 +1038,12 @@ material of that kind (§7.4) — a diorama never names a colour. Geometry primi
 literally), profile extrusions (prisms) for plates and the skull base, cylinders (`cyl`, with an implicit test) for canals and nerves, tubes
 for vessels and pathways — each kind has one implicit `inside()` test and
 one mesh builder, so anything computed over a diorama sees exactly what is
-drawn. A diorama may be placed in context by a similarity transform onto
+drawn. Three more primitives (ST7b, `kit.js`), DOM-free and tested in Node (`node tools/test-ssb.mjs --only kit`):
+- `strip` `{ pts, wdir, w, t, seg? }`: a thickened polyline (a ribbon, a cartilage plate); the section is a rectangle across the tangent, the implicit test is the nearest-point frame, and it throws past an in-plane curvature of 0.5 / max width. Corner tolerance (up to about 0.3 mm): see the `kit.js` header.
+- `edt(mask, nx, ny, nz, step)`: the exact separable Euclidean distance transform, in mm, of a voxel mask (Felzenszwalb–Huttenlocher).
+- `isoGeometry` and `isoInside(field, nx, ny, nz, origin, step, level)`: marching cubes over a grid field, with its trilinear inside test (a grid helper, not a solid kind).
+
+A diorama may be placed in context by a similarity transform onto
 specimen landmarks, but defaults to standalone with a *schematic —
 idealized* badge. Fixed proportions the graph does not give are stated as
 schematic in each module's header.

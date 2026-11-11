@@ -21,7 +21,7 @@ The owner decides the roster for each wave. Protocol detail (WP format, waves, r
 
 ## Skills
 
-`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads that file and follows it as written.
+`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`, `skillsmith`). Claude invokes them as skills; any other agent reads that file and follows it as written. Each house skill has an `evals.json` beside its `SKILL.md`, and `skillsmith` (`/skillsmith`) is how a skill is written, audited or pruned; spec `plans/2026-11-10-skillsmith.md`.
 
 ## What this is
 
@@ -45,6 +45,8 @@ node tools/test-search.mjs       # search.html and the CPT deep link, desktop an
 node tools/test-airway-resume.mjs # Airway Rounds saved games: per-tab saves, resume, zero external requests
 node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
 node tools/lint-oksat-guide.mjs [slug]  # OKSAT guide teaching-shape lint (no slug: every guide; CI runs it)
+node tools/lint-skills.mjs        # skill structure + evals.json schema (deps-free; CI runs it with --self-test)
+node tools/lint-skills.mjs --due  # report only: skills never audited, stale, behind the model roster, or citing changed files
 node tools/test-ssb.mjs          # SSB: every section (variant lab, CT, specimen, endoscope, procedure…); --only a,b for some; CI runs it as --shard i/4
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 node tools/ssb-content.mjs --queue # SSB owner review queue: draft nodes whose cited sources are all verified
@@ -107,7 +109,7 @@ Rules that bite:
 - **Pinned rules.** The sphenoid diorama's exposures are measured on its solids, the frontal-recess drainage pathway is computed (never drawn), and the IFAC rules are pinned by tests. Before tuning a diorama, a flap or a dissection state, rerun its section (`docs/ssb.md` §5.7–§6.1).
 - **Dioramas** (`js/ssb/dioramas/`) export `PARAMS`, `PRESETS`, `VIEWS` and `build(THREE, params)` in RAS mm, and import no three.js (`docs/ssb.md` §6).
 - **Page code** is ES modules in `js/ssb/`, on three.js vendored in `js/vendor/three-0.186.1/`. Materials are procedural from `--ssb-*` tokens (`js/ssb/materials.js`), never textures. After any change under `js/ssb/` or `ssb/`, run `node tools/stamp-assets.mjs` (it also regenerates `js/ssb/stamps.js`).
-- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`dioramas`, `lab`, `ct`, `specimen`, `scope`, `procedure`, `mucosa`, `population`, `flap`, `anatomy`, `scanned`). CI runs it as `--shard i/4`, split by `SHARDS` in the file: a new section goes in one shard.
+- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`kit`, `dioramas`, `lab`, `ct`, `specimen`, `scope`, `procedure`, `mucosa`, `population`, `flap`, `anatomy`, `scanned`). CI runs it as `--shard i/4`, split by `SHARDS` in the file: a new section goes in one shard.
 - **Image generation** runs outside the repo (`docs/ssb-imagegen.md`); generated pixels never carry an anatomical claim.
 
 ### sk.oto wiki

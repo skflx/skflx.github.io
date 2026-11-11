@@ -16,3 +16,4 @@ Status never lives here: each spec has a parent GitHub issue with one sub-issue 
 | [2026-11-10-ssb-nasal-framework](2026-11-10-ssb-nasal-framework.md): SSB `nasal-framework` diorama spec (ST7), moved from `docs/ssb.md` §6.2; not built | #267 (under #266) |
 | [2026-11-10-jc-whisking-auditory-cortex](2026-11-10-jc-whisking-auditory-cortex.md): journal-club OKSAT guide on Zimmer-Harwood et al. 2026 (auditory cortex, spontaneous vs sound-evoked movements), listed as Draft | none (built in one session; the PR is the record) |
 | [2026-10-07-ssb-roadmap](2026-10-07-ssb-roadmap.md): SSB (sinus and skull base 3D) decisions, work package specs, owner review links, content backlog | #266 |
+| [2026-11-10-skillsmith](2026-11-10-skillsmith.md): a skill that writes, audits and prunes skills against evals; lint in CI | #263 |

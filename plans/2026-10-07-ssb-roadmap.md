@@ -280,7 +280,7 @@ Don't: change an existing primitive's output (the three dioramas' tests
 pass unchanged); add a dependency or vendored library (the marching-cubes
 tables are data written in the file); import three.js (it is passed in).
 Steps:
-1. `strip` solid: `{ type: 'strip', pts, wdir, w, t }` — centreline
+1. `strip` solid: `{ kind: 'strip', pts, wdir, w, t }` — centreline
    points (≥ 2), a unit width direction per point (re-orthogonalized to the
    tangent), per-point width offsets `[lo, hi]` along it, thickness `t`
    (mm, or per point). `inside()`: the nearest point on the polyline

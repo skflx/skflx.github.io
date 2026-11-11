@@ -1,0 +1,7 @@
+{
+  "planner": "fable",
+  "orchestrator": "opus",
+  "executor": "sonnet",
+  "scout": "haiku",
+  "order": ["haiku", "sonnet", "opus", "fable"]
+}
