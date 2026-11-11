@@ -52,7 +52,7 @@ only tokens, never raw values, so a retheme is a one-block edit.
 | `--ok-surface` | `#FAFAF7` | `#16181B` | cards, modal |
 | `--ok-text` | `#121418` | `#ECEBE6` | primary text; primary buttons |
 | `--ok-accent` | `#2445B0` | `#8EA7FF` | actions, focus, progress (audiogram blue) |
-| `--ok-ochre` | `#B8371A` | `#FF6B42` | kickers, review-due (audiogram red; historical token name) |
+| `--ok-ochre` | `#941B1B` | `#E02A38` | kickers, review-due (audiogram red; historical token name) |
 | `--ok-correct` | `#1F7A52` | `#5FD3A0` | pass |
 | `--ok-incorrect` | `#B0243A` | `#FF7A8A` | miss |
 

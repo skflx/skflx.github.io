@@ -44,10 +44,11 @@
 
     /* ---------- global search hotkey (Cmd-K / Ctrl-K) ---------- */
     window.addEventListener('keydown', function (e) {
+        if (e.defaultPrevented || e.shiftKey || e.altKey) return;
         if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
             var active = document.activeElement;
             var searchInput = document.getElementById('srch-input');
-            if (active && active !== searchInput && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) {
+            if (active && active !== searchInput && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) {
                 return;
             }
             e.preventDefault();
