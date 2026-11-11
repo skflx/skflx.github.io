@@ -21,7 +21,7 @@ The owner decides the roster for each wave. Protocol: `docs/delegation.md`.
 
 ## Skills
 
-`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads the file and follows it as written.
+`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`, `skillsmith`). Claude invokes them as skills; any other agent reads the file and follows it as written. `/skillsmith` writes, audits and prunes skills against each skill's `evals.json`; spec `plans/2026-11-10-skillsmith.md`.
 
 ## What this is
 
