@@ -20,7 +20,7 @@ window.__OKSAT_CHAPTER = {
                 {
                     h: 'Zimmer-Harwood et al. 2026',
                     blocks: [
-                        { t: 'p', x: '**Zimmer-Harwood P, Picard S, King AJ, Dahmen JC. Auditory Cortex Distinguishes between Spontaneous and Sound-Evoked Movements. J Neurosci. 2026;46(26):e1874252026.** DOI 10.1523/JNEUROSCI.1874-25.2026. Open access under CC BY 4.0. The only source for this guide.' },
+                        { t: 'p', x: '**Paul Zimmer-Harwood, Samuel Picard, Andrew J. King and Johannes C. Dahmen. Auditory Cortex Distinguishes between Spontaneous and Sound-Evoked Movements. J Neurosci. 2026;46(26):e1874252026.** DOI 10.1523/JNEUROSCI.1874-25.2026. Open access under CC BY 4.0. The only source for this guide.' },
                     ],
                 },
             ],

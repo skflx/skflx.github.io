@@ -224,7 +224,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'trap',
                     label: 'Appraisal',
                     blocks: [
-                        { t: 'p', x: 'Tones played every 1.5 s, so a "spontaneous" event still happens among tones. The definition guarantees only that no whisk-triggering tone came in the second before it. The label means "not followed a whisk-triggering tone", not "occurred in silence".' },
+                        { t: 'p', x: 'Tones played every 1.5 s, so a "spontaneous" event still happens among tones. The definition guarantees only that no whisk-triggering tone came in the second before it. The label means "did not follow a whisk-triggering tone", not "occurred in silence".' },
                     ],
                 },
                 { t: 'check', id: 'c2', q: 'State the rule that makes a whisking event sound-triggered.', a: 'It occurred within 1 s of the onset of an 80 dB SPL tone whose frequency reliably triggers whisking (p < 0.001, "above-threshold trials").' },

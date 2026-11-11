@@ -99,7 +99,7 @@ window.__OKSAT_CHAPTER = {
                     k: 'pearl',
                     label: 'Conclusion',
                     blocks: [
-                        { t: 'p', x: 'About 6% of layer 2/3 excitatory auditory cortex neurons are modulated around spontaneous whisks, so the effect is real but concerns a subset.' },
+                        { t: 'p', x: 'About 6% of layer 2/3 excitatory auditory cortex neurons are modulated around spontaneous whisks, so the effect is real but concerns a subset. [[src|Zimmer-Harwood 2026]]' },
                     ],
                 },
                 {

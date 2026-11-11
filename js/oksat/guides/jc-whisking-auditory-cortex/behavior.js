@@ -86,7 +86,7 @@ window.__OKSAT_CHAPTER = {
                         'Mark every occurrence of an event, for example the moment a run starts or a whisk peaks.',
                         'Cut out the signal in a window around each occurrence and line the windows up so that the event sits at time 0.',
                         'Average across occurrences. What is consistent from event to event survives; what is random cancels out.',
-                        'The shaded band is the 95% confidence interval of that average: the range in which the true average probably lies. A narrow band means the events agreed; a wide band means they varied.',
+                        'The shaded band is the 95% confidence interval of that average: the range in which the true average probably lies. A narrow band means the events agreed; a wide band means they varied. [[src|Zimmer-Harwood 2026]]',
                     ],
                 },
                 { t: 'h', x: 'How to read it' },
