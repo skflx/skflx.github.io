@@ -127,15 +127,15 @@ claims" (claim | where shown), one row per conclusion C1 to C6 below.
 - `f1-setup` Fig. 1A–E (`fig1-ae.webp`): whiskers move together (median Pearson r 0.96 ± 0.05 IQR),
   so one whisker suffices; locomotion comes with vigorous whisking and pupil dilation; brief
   whisking bouts (dots under 1E) occur without locomotion.
-- `f1-timing` Fig. 1F–H (`fig1-fh.webp`): around running, whisking leads locomotion by a median
-  470 ± 619 ms and pupil dilation by 265 ± 700 ms; whisking outlasts running by 625 ± 1,340 ms and
+- `f1-timing` Fig. 1F–H (`fig1-fh.webp`): around running, whisking begins a median 470 ± 619 ms
+  and pupil dilation 265 ± 700 ms before locomotion; whisking outlasts running by 625 ± 1,340 ms and
   the pupil keeps constricting for 1,950 ± 1,665 ms. Around a whisking event (n = 743): whisk and a
   small back-and-forth wheel deflection coincide (a whole-body **twitch**), pupil peaks 540 ± 225 ms
   later; pupil dilation with a twitch is 5.3 ± 5.8% vs 26.8 ± 16.2% with locomotion; a small
   pre-twitch pupil constriction and whisking dip (1H, segment a vs b). Predict-first `check` on which
   of the three signals peaks last and why (pupil is a slow smooth-muscle readout).
 - `f1-scaling` Fig. 1I–J (`fig1-ij.webp`): events ordered by size; bigger whisk, bigger body movement
-  and bigger dilation (pupil R = 0.25; body-movement correlation reported in Fig. S2A). Conclusion:
+  and bigger dilation (body movement R = 0.39, pupil R = 0.25; plots in Fig. S2, not reproduced). Conclusion:
   three outward signs of one brain-state change. **Appraisal**: R = 0.25 is about 6% of variance; a
   shared cause is the authors' reading, and the neuromodulatory link is borrowed from Collins et al.
   2023, not measured here.
