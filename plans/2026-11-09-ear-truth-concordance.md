@@ -56,8 +56,8 @@ shared as one component by both pages; moving `js/ssb/volume.js` to a shared fol
 - **E1:** done earlier: `tbone/ct/ct.json` is in the SSB v1 header.
 - **E2:** built: OLSB's Real CT mode (`js/olsb/ct.js`), loaded lazily, with landmarks and sweeps over the slices.
 - **E3:** enforcing (owner, 2026-11-11: per-structure tolerance, an MVP gate). The distance from each landmark tip to
-  the nearest voxel of its glossary id (not centroids), median per id, must be at most the class base (compact
-  middle-ear parts and the labyrinth 2.5 mm, extended regions 3.5 mm) plus 10 % of the landmark's distance from the
+  the nearest voxel of its glossary id (not centroids), median per id, must be at most its class base (`TRUTH_BASE`)
+  plus 10 % of the landmark's distance from the
   oval-window origin (the inferred scale). Classes and the reasoned exceptions are `TRUTH_CLASS` and `TRUTH_EXCEPT`
   in `tools/check-data.mjs`; an exception fails once it is back inside its limit. No anchor was moved: every
   exception is the owner's to vet (#250). The exceptions are mostly a pattern (mastoid group medial, carotid and

@@ -56,7 +56,7 @@ window.__OKSAT_CHAPTER = {
                 {
                     t: 'hotspot',
                     id: 'im-axial-hs',
-                    alt: 'Five axial CT slices of a right temporal bone from the superior semicircular canal down to the hypotympanum, with tappable ear structures on each.',
+                    alt: 'Five axial CT slices of a right temporal bone from the superior semicircular canal down to the tympanic membrane level, with tappable ear structures on each.',
                     label: 'Find it',
                     modes: ['explore', 'find'],
                     frames: [

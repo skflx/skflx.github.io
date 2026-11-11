@@ -10,19 +10,21 @@
 
 Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
 
-- **O1** External nose: specimen skin for naris and ala, cartilage as an overlay.
-- **O2** Entry anatomy now; the full nasal framework later (ST7).
-- **O3** Sonnet drafts content and checks citations, Opus reviews; Opus authors anything that places geometry.
-- **O4** Model the 4 mm telescope; 2.7 mm selectable.
-- **O5** The NSF superior incision starts at the floor of the sphenoid ostium, for every design.
-- **O6** Normal before variant: right half mirrored, septum centred; anomalies carried by the left.
-- **O7** Content priority: clear FESS anatomy and EEA-to-sellar/clival anatomy first; other content waits. Problems in existing entities are flagged, not fixed.
-- **O8** Framework defaults mixed by population, each labelled; modal variant classes.
-- **O9** A population reference beside the head (percentiles, median profile, mean-shape ghost); a deformed head only later.
-- **O10** Posterior septectomy 15 mm, from the choanal arch up. Inferior limit still to confirm (below).
-- **O11** FESS on both sides at once; one dissected side beside an intact one later.
-- **O12** SEG1 (NasalSeg-trained voxel check): not now.
-- **O13** Mucosa toggle: decongested · as scanned · congested. Inflammatory edema is a condition.
+- **Vendor three.js** (2026-09-30): approved, same-origin and pinned.
+- **Reference specimen from the UW atlas** (2026-09-30). UW written permission to publish derived geometry and volumes: 2026-10-07 (`ssb/LICENSE-data.md`).
+- **O1** (2026-10-02) External nose: specimen skin for naris and ala, cartilage as an overlay.
+- **O2** (2026-10-02) Entry anatomy now; the full nasal framework later (ST7).
+- **O3** (2026-10-02) Sonnet drafts content and checks citations, Opus reviews; Opus authors anything that places geometry.
+- **O4** (2026-10-03) Model the 4 mm telescope; 2.7 mm selectable.
+- **O5** (2026-10-03) The NSF superior incision starts at the floor of the sphenoid ostium, for every design.
+- **O6** (2026-10-03) Normal before variant: right half mirrored, septum centred; anomalies carried by the left.
+- **O7** (2026-10-07) Content priority: clear FESS anatomy and EEA-to-sellar/clival anatomy first; other content waits. Problems in existing entities are flagged, not fixed.
+- **O8** (2026-10-08) Framework defaults mixed by population, each labelled; modal variant classes.
+- **O9** (2026-10-08) A population reference beside the head (percentiles, median profile, mean-shape ghost); a deformed head only later.
+- **O10** (2026-10-08) Posterior septectomy 15 mm, from the choanal arch up. Inferior limit still to confirm (below).
+- **O11** (2026-10-08) FESS on both sides at once; one dissected side beside an intact one later (needs per-side lining packs).
+- **O12** (2026-10-08) SEG1 (NasalSeg-trained voxel check): not now.
+- **O13** (2026-10-08) Mucosa toggle: decongested · as scanned · congested. Inflammatory edema is a condition.
 - **O14** Where the nasal framework is drawn: **both, lab first** (variant lab, then fitted under the specimen's skin and nasal bones). Decided 2026-10-11, as recommended. Unblocks the fit, ST7e, after ST7c and ST7d.
 - **RA-O8** (realistic anatomy): batch 3 is planned only after batches 1–2 are verified. Decided 2026-10-11, as recommended.
 
@@ -417,6 +419,12 @@ Find it / name it / CT localize, Leitner reused unchanged, storage key registere
 ## 3. Realistic anatomy
 
 Design: `docs/ssb.md` §14. Sources and limits: `docs/realistic-anatomy.md` §4–§5.
+
+Rules that still apply:
+
+- Critical path: resegmentation (RS) → OP1 → VB1/PB1. The `scanned` state (RA3b) is already shipped, so the owner sees *Normal asymmetry* before any edit exists.
+- Re-export discipline: bases and patches are regenerated at checkpoints only (R6.6), deterministically (gzip mtime 0), never hand-edited.
+- Threshold re-checks: tests tuned on the old labels (E5 poses, the septum rule) are re-checked at CP-RA2, not moved silently.
 
 
 Format: `docs/delegation.md` §2. Lanes: **P** pipeline/data, **V** viewer,
