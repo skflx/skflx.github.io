@@ -6,7 +6,11 @@
    from OLSB.glossary and reach the DOM as textContent. Nothing in tbone/ is requested until the view is entered.
 
    Generic functions of js/ssb/volume.js only (loadVolume, PLANES, slice and RAS maths); nothing is changed there.
-   The hash (#m=ct[&pl=ax|cor|sag][&at=<mm>]) only ever selects data.
+   The hash (#m=ct[&pl=ax|cor|sag][&at=<mm>][&ov=1[&ovo=0-100]]) only ever selects data.
+
+   The 'Model outline' toggle (key M) draws the outline of OLSB's procedural volume (js/olsb/volume.js, same frame)
+   over the slice. The model is built only when first turned on: in a short-lived worker from the volume.js script,
+   else on this thread. A failed build turns the toggle back off without a message.
    ============================================================= */
 import { loadVolume, stamped, PLANES } from '../ssb/volume.js?v=b0877fd4';
 
@@ -20,6 +24,7 @@ const LANDMARK_TOL = 0.6;     /* mm from the slice plane */
 const SWEEP_TOL = 0.75;
 const HIT_CSS_PX = 8;         /* click radius, CSS px (converted to canvas px per click) */
 const LIST_MAX = 80;
+const OV_DEFAULT = 60;        /* model outline opacity, percent */
 
 /* sweep family -> glossary id (only where one exists); facial nerve segments by name */
 const SWEEP_G = {
@@ -38,6 +43,8 @@ let plane = 'axial', at = 0, k = 3, sel = null;
 let show = { marks: true, sweeps: true };
 let hits = [], onSlice = [];
 let canvas, ctx, buf, bufCtx;
+let ov = false, ovo = OV_DEFAULT, model = null, modelBuild = null;
+let ovCanvas = null, ovCtx = null, ovProbe = null, ovBtn = null, ovWrap = null, ovSlider = null;
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const human = (s) => String(s).replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase());
@@ -66,10 +73,16 @@ function readHash() {
         const m = new RegExp('(?:^|&)' + key + '=([^&]*)').exec(h);
         try { return m ? decodeURIComponent(m[1]) : null; } catch (e) { return null; }
     };
-    return { m: get('m'), pl: get('pl'), at: get('at') };
+    return { m: get('m'), pl: get('pl'), at: get('at'), ov: get('ov'), ovo: get('ovo') };
 }
 function writeHash() {
-    try { history.replaceState(null, '', `#m=ct&pl=${PL_KEY[plane]}&at=${at.toFixed(1)}`); } catch (e) { /* no-op */ }
+    let h = `#m=ct&pl=${PL_KEY[plane]}&at=${at.toFixed(1)}`;
+    if (ov) h += `&ov=1&ovo=${ovo}`;
+    try { history.replaceState(null, '', h); } catch (e) { /* no-op */ }
+}
+function parseOvo(v) {
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? clamp(Math.round(n), 0, 100) : OV_DEFAULT;
 }
 
 /* ---------- names ---------- */
@@ -81,6 +94,119 @@ function sweepGlossary(family, seg) {
     if (family === 'facial-nerve' && FN_SEG_G[seg] && G[FN_SEG_G[seg]]) return FN_SEG_G[seg];
     const g = SWEEP_G[family];
     return g && G[g] ? g : null;
+}
+
+/* ---------- model outline ---------- */
+/* The coarse level of OLSB's volume (0.3 mm, the whole specimen) as { lab, nx, ny, nz, vox, o, labels }. */
+function buildInWorker(V) {
+    return new Promise((resolve, reject) => {
+        const tag = document.querySelector('script[src*="js/olsb/volume.js"]');
+        if (!tag || typeof Worker !== 'function') { reject(new Error('no worker')); return; }
+        const w = new Worker(tag.src);
+        const finish = (fn, v) => { try { w.terminate(); } catch (e) { /* no-op */ } fn(v); };
+        w.onmessage = (e) => {
+            const m = e.data || {};
+            if (m.error) finish(reject, new Error(m.error));
+            else if (m.lab) finish(resolve, m);
+        };
+        w.onerror = (e) => { try { e.preventDefault(); } catch (x) { /* no-op */ } finish(reject, new Error('worker failed')); };
+        w.postMessage({ id: 1, type: 'build', level: 'coarse' });
+    });
+}
+function buildHere(V) {
+    /* a short wait first, so the progress line paints before the build blocks the thread */
+    return new Promise((resolve) => setTimeout(() => resolve(V.build(V.LEVELS.coarse)), 30));
+}
+function ensureModel() {
+    if (model) return Promise.resolve(model);
+    if (modelBuild) return modelBuild;
+    const V = O.volume;
+    if (!V || typeof V.build !== 'function' || !V.LEVELS || !V.LEVELS.coarse || !Array.isArray(V.LABELS)) return Promise.reject(new Error('no model'));
+    status('Building the model outline…');
+    modelBuild = buildInWorker(V).catch(() => buildHere(V)).then((m) => {
+        if (!m || !m.lab || m.lab.length !== m.nx * m.ny * m.nz) throw new Error('bad model');
+        model = { lab: m.lab, nx: m.nx, ny: m.ny, nz: m.nz, vox: m.vox, o: m.o, labels: V.LABELS };
+        return model;
+    }).finally(() => { modelBuild = null; status(null); });
+    return modelBuild;
+}
+/* one colour token as RGB bytes, read through a 1 x 1 canvas (any CSS colour format); grey if the token is missing */
+function toneBytes(name) {
+    const c = tone('--olsb-' + name);
+    if (!ovProbe || c === 'transparent') return [128, 128, 128];
+    ovProbe.fillStyle = '#808080';
+    try { ovProbe.fillStyle = c; } catch (e) { /* keep grey */ }
+    ovProbe.clearRect(0, 0, 1, 1);
+    ovProbe.fillRect(0, 0, 1, 1);
+    const d = ovProbe.getImageData(0, 0, 1, 1).data;
+    return [d[0], d[1], d[2]];
+}
+/* The outline: a 1 px line where the model's label changes between a voxel and its right or lower neighbour
+   (sampled at canvas resolution), in the tissue colour of the labelled side. Empty space is not drawn. */
+function drawOverlay(g, kk) {
+    const M = model;
+    if (!M || !ovCanvas) return;
+    const W = canvas.width, H = canvas.height;
+    ovCanvas.width = W; ovCanvas.height = H;
+    const lbl = new Uint8Array(W * H);
+    const { origin, u, v, step } = g;
+    const vx = M.vox, o = M.o;
+    for (let cy = 0; cy < H; cy++) {
+        const gy = (cy + 0.5) / kk - 0.5;
+        for (let cx = 0; cx < W; cx++) {
+            const gx = (cx + 0.5) / kk - 0.5;
+            const i = Math.floor((origin[0] + (u[0] * gx + v[0] * gy) * step - o[0]) / vx);
+            const j = Math.floor((origin[1] + (u[1] * gx + v[1] * gy) * step - o[1]) / vx);
+            const q = Math.floor((origin[2] + (u[2] * gx + v[2] * gy) * step - o[2]) / vx);
+            if (i < 0 || j < 0 || q < 0 || i >= M.nx || j >= M.ny || q >= M.nz) continue;
+            lbl[cy * W + cx] = M.lab[i + M.nx * (j + M.ny * q)];
+        }
+    }
+    const img = ovCtx.createImageData(W, H);
+    const d = img.data, colours = new Map();
+    const colourOf = (code) => {
+        let c = colours.get(code);
+        if (!c) {
+            const L = M.labels[code];
+            c = toneBytes(L ? L.tone : 'bone');
+            colours.set(code, c);
+        }
+        return c;
+    };
+    let n = 0;
+    for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+            const p = y * W + x, a = lbl[p];
+            const r = x + 1 < W ? lbl[p + 1] : a, dn = y + 1 < H ? lbl[p + W] : a;
+            let code = 0;
+            if (r !== a) code = a || r;
+            else if (dn !== a) code = a || dn;
+            if (!code) continue;
+            const c = colourOf(code);
+            d[p * 4] = c[0]; d[p * 4 + 1] = c[1]; d[p * 4 + 2] = c[2]; d[p * 4 + 3] = 255;
+            n++;
+        }
+    }
+    ovCtx.putImageData(img, 0, 0);
+    ovCanvas.setAttribute('data-outline', String(n));
+}
+function syncOv() {
+    if (ovBtn) ovBtn.setAttribute('aria-pressed', String(ov));
+    if (ovWrap) ovWrap.hidden = !ov;
+    if (ovCanvas) { ovCanvas.hidden = !ov; ovCanvas.style.opacity = String(ovo / 100); }
+    if (ovSlider) ovSlider.value = String(ovo);
+}
+function setOv(on, write) {
+    ov = !!on;
+    syncOv();
+    if (ov) {
+        ensureModel().then(() => { if (ov) draw(); }, () => {
+            /* degrade silently: the toggle goes back to off and the page carries on */
+            ov = false; syncOv(); draw(); writeHash();
+        });
+    }
+    draw();
+    if (write) writeHash();
 }
 
 /* ---------- drawing ---------- */
@@ -118,6 +244,7 @@ function draw() {
     canvas.setAttribute('data-plane', plane);
     canvas.setAttribute('data-at', at.toFixed(2));
     canvas.setAttribute('data-k', String(k));
+    if (ov) drawOverlay(g, k);
 
     const toCanvas = (p) => { const q = vol.rasToPixel(g, p); return [(q[0] + 0.5) * k, (q[1] + 0.5) * k]; };
     const nrm = PLANES[plane].normal;
@@ -305,6 +432,28 @@ function wire() {
     buf = document.createElement('canvas');
     bufCtx = buf.getContext('2d');
     canvas.addEventListener('click', onCanvasClick);
+    ovCanvas = $('olsb-ct-overlay');
+    ovCtx = ovCanvas.getContext('2d');
+    ovProbe = document.createElement('canvas').getContext('2d');
+    ovBtn = $('olsb-ct-ov');
+    ovWrap = $('olsb-ct-ovo-wrap');
+    ovSlider = $('olsb-ct-ovo');
+    ovBtn.addEventListener('click', () => setOv(!ov, true));
+    ovSlider.addEventListener('input', (e) => {
+        ovo = parseOvo(e.target.value);
+        syncOv();
+        if (ov) writeHash();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'm' && e.key !== 'M') return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        const t = e.target;
+        if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+        const root = $('olsb-ct');
+        if (!ready || !root || root.hidden) return;
+        e.preventDefault();
+        setOv(!ov, true);
+    });
     $('olsb-ct-pos').setAttribute('aria-live', 'polite');
     canvas.addEventListener('keydown', (e) => {
         const n = PLANES[plane].normal;
@@ -366,8 +515,12 @@ function load() {
         configureSlider();
         ready = true;
         status(null);
+        ovo = parseOvo(h.ovo);
+        ov = h.ov === '1';
+        syncOv();
         draw();
         document.documentElement.setAttribute('data-olsb-ct', 'ready');
+        if (ov) setOv(true, false);
     }).catch((e) => {
         loading = null;
         status('The CT could not be loaded: ' + (e && e.message ? e.message : 'unknown error'));

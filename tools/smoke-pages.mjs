@@ -189,6 +189,15 @@ const PAGES = [
     await wait(p, () => document.getElementById('olsb-ct-info').getAttribute('data-id') === 'lscc'
       && /semicircular/i.test(document.getElementById('olsb-ct-info-name').textContent));
     if (!/m=ct/.test(await p.evaluate(() => location.hash))) throw new Error('hash not written');
+    /* the model outline: built on the first toggle, drawn, carried in the hash, off again with M; the overlay never takes the click */
+    await p.click('#olsb-ct-ov');
+    await wait(p, () => { const o = document.getElementById('olsb-ct-overlay'); return !o.hidden && Number(o.getAttribute('data-outline')) > 0; }, null, 40000);
+    if (!/ov=1/.test(await p.evaluate(() => location.hash))) throw new Error('ov not written to the hash');
+    if (!(await p.evaluate(() => { const c = document.getElementById('olsb-ct-canvas'); c.scrollIntoView({ block: 'center' });
+      const r = c.getBoundingClientRect(); return document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2) === c
+        && getComputedStyle(document.getElementById('olsb-ct-overlay')).pointerEvents === 'none'; }))) throw new Error('overlay takes pointer events');
+    await p.keyboard.press('m');
+    await wait(p, () => document.getElementById('olsb-ct-overlay').hidden && !/ov=1/.test(location.hash));
     return true;
   } },
   /* The hash selects plane and position (and untrusted junk falls back). */
@@ -206,6 +215,17 @@ const PAGES = [
     return wait(p, () => !document.getElementById('olsb2d').hidden);
   } },
   /* A plane in the hash that names an Object.prototype key (constructor) falls back to the axial plane, without error. */
+  /* &ov=1 turns the model outline on at load (opacity from &ovo, clamped); junk in &ov stays off, junk &ovo falls back to 60. */
+  { path: 'OLSB.html#m=ct&ov=1&ovo=40', setup: tboneSetup, ready: (p) => wait(p, () => {
+    const o = document.getElementById('olsb-ct-overlay');
+    return document.documentElement.getAttribute('data-olsb-ct') === 'ready' && !o.hidden && Number(o.getAttribute('data-outline')) > 0
+      && o.style.opacity === '0.4' && document.getElementById('olsb-ct-ov').getAttribute('aria-pressed') === 'true';
+  }, null, 40000) },
+  { path: 'OLSB.html#m=ct&ov=1&ovo=999', setup: tboneSetup, ready: (p) => wait(p, () =>
+    document.documentElement.getAttribute('data-olsb-ct') === 'ready' && document.getElementById('olsb-ct-overlay').style.opacity === '1', null, 40000) },
+  { path: 'OLSB.html#m=ct&ov=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&ovo=abc', setup: tboneSetup, ready: (p) => wait(p, () =>
+    document.documentElement.getAttribute('data-olsb-ct') === 'ready' && document.getElementById('olsb-ct-overlay').hidden
+      && document.getElementById('olsb-ct-ovo').value === '60' && !document.getElementById('pwn') && !window.__pwned) },
   { path: 'OLSB.html#m=ct&pl=constructor', setup: tboneSetup, ready: (p) => wait(p, () => document.documentElement.getAttribute('data-olsb-ct') === 'ready'
     && document.getElementById('olsb-ct-canvas').getAttribute('data-plane') === 'axial') },
   { path: 'OLSB.html#m=3d&st=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>') + '&cam=' + encodeURIComponent('<b>'),

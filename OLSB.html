@@ -11,7 +11,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=bd8b47c3">
-    <link rel="stylesheet" href="css/olsb.css?v=ebc28268">
+    <link rel="stylesheet" href="css/olsb.css?v=6e559b87">
 </head>
 <body data-no-hotkey>
     <header class="site-topbar">
@@ -113,7 +113,10 @@
             <div class="olsb-grid">
                 <section class="olsb-stagecol" aria-label="Real CT">
                     <div class="olsb-stage olsb-ct-stage">
-                        <canvas id="olsb-ct-canvas" tabindex="0" aria-label="Slice of the reference temporal bone CT; arrow keys or Page Up and Page Down move the slice"></canvas>
+                        <div class="olsb-ct-view">
+                            <canvas id="olsb-ct-canvas" tabindex="0" aria-label="Slice of the reference temporal bone CT; arrow keys or Page Up and Page Down move the slice"></canvas>
+                            <canvas id="olsb-ct-overlay" class="olsb-ct-overlay" aria-hidden="true" hidden></canvas>
+                        </div>
                         <p class="olsb3d-status" id="olsb-ct-status" role="status" hidden></p>
                         <p class="olsb-orient" id="olsb-ct-pos"></p>
                     </div>
@@ -133,8 +136,10 @@
                         <span class="site-kicker">Show</span>
                         <button class="site-pill" type="button" data-show="marks" aria-pressed="true">Landmarks</button>
                         <button class="site-pill" type="button" data-show="sweeps" aria-pressed="true">Centrelines</button>
+                        <button class="site-pill" type="button" id="olsb-ct-ov" aria-pressed="false" title="Outline OLSB's 3D model on this slice (M)">Model outline</button>
+                        <label class="olsb-ct-ovo" id="olsb-ct-ovo-wrap" hidden><span>Opacity</span><input type="range" id="olsb-ct-ovo" min="0" max="100" step="1" value="60" aria-label="Model outline opacity"></label>
                     </div>
-                    <p class="olsb-sub olsb-ct-legend">Ring: a landmark placed from a UW label. Line: a traced centreline, <strong>solid</strong> where the CT shows the lumen (detected), <strong>solid with dots</strong> at a UW arrow tip (labelled), <strong>dashed</strong> where it is placed by rule (inferred).</p>
+                    <p class="olsb-sub olsb-ct-legend">Ring: a landmark placed from a UW label. Line: a traced centreline, <strong>solid</strong> where the CT shows the lumen (detected), <strong>solid with dots</strong> at a UW arrow tip (labelled), <strong>dashed</strong> where it is placed by rule (inferred). Model outline (M): the edges of OLSB's 3D model in its tissue colours, to compare with the CT.</p>
                 </section>
                 <aside class="olsb-side" aria-label="On this slice">
                     <p class="site-kicker" id="olsb-ct-count"></p>
@@ -254,7 +259,7 @@
     <script src="js/olsb/mesh.js?v=6932ba1c"></script>
     <script src="js/olsb/main.js?v=36e07b86"></script>
     <script type="module" src="js/olsb/3d.js?v=fe41e500"></script>
-    <script type="module" src="js/olsb/ct.js?v=a89490d1"></script>
+    <script type="module" src="js/olsb/ct.js?v=cdf21e3e"></script>
     <script src="js/site.js?v=8733326e"></script>
 </body>
 </html>
