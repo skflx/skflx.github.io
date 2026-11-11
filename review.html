@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Owner review | skflx.MD</title>
+    <meta name="description" content="Unlisted owner review list: every view to check, with ticks and a copyable report. Draft.">
+    <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+    <script src="js/theme-boot.js?v=61b69b81"></script>
+    <link rel="stylesheet" href="css/site.css?v=bd8b47c3">
+
+    <style>
+        /* ── Owner review — page layout on css/site.css tokens ── */
+        .rv { max-width: 52rem; margin: 0 auto; padding: clamp(1.5rem, 5vw, 3rem) var(--gutter) 4rem; }
+        .rv[hidden], .rv-group[hidden] { display: none; }
+        .rv-head { margin-bottom: 1.25rem; }
+        .rv-head h1 {
+            margin: 0.5rem 0 0.5rem; font-size: var(--step-3); font-weight: 740; font-stretch: 118%;
+            letter-spacing: -0.035em; line-height: 0.95;
+        }
+        .rv-head p { margin: 0; color: var(--ink-muted); max-width: 40rem; }
+        .rv-draft {
+            font: 600 0.72rem/1.4 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase;
+            color: var(--signal); border-left: 3px solid var(--signal); padding: 0.2rem 0 0.2rem 0.6rem;
+            margin-bottom: 0.75rem !important;
+        }
+        .rv-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; padding: 0.75rem 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); margin-top: 1.25rem; }
+        .rv-bar label { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-muted); }
+        #rv-filter {
+            font: 500 0.95rem/1.2 var(--font-sans); color: var(--ink); background: var(--bg);
+            border: 1px solid var(--rule-strong); border-radius: 0; padding: 0.4rem 0.5rem; min-height: 40px;
+        }
+        #rv-count { font: 500 0.8rem/1.2 var(--font-mono); color: var(--ink-muted); }
+        .rv-btn {
+            margin-left: auto; min-height: 40px; padding: 0.4rem 0.9rem; cursor: pointer;
+            font: 600 0.8rem/1 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase;
+            color: var(--bg); background: var(--ink); border: 1px solid var(--ink); border-radius: 0;
+        }
+        .rv-btn:focus-visible, #rv-filter:focus-visible, .rv-links a:focus-visible, .rv-check input:focus-visible {
+            outline: 2px solid var(--signal); outline-offset: 2px;
+        }
+        .rv-keys { margin: 0.6rem 0 0 !important; font: 400 0.8rem/1.4 var(--font-mono); color: var(--ink-faint); }
+        .rv-status { min-height: 1.4em; margin: 0.4rem 0 0 !important; font: 500 0.85rem/1.4 var(--font-sans); color: var(--ink); }
+        .rv-report {
+            width: 100%; min-height: 12rem; margin: 0.5rem 0; padding: 0.6rem; box-sizing: border-box;
+            font: 400 0.8rem/1.5 var(--font-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--rule-strong); border-radius: 0;
+        }
+        .rv-report[hidden] { display: none; }
+
+        .rv-group { margin-top: 1.75rem; }
+        .rv-group-title {
+            margin: 0 0 0.25rem; font: 600 0.78rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+            padding-bottom: 0.35rem; border-bottom: 1px solid var(--rule-strong);
+        }
+        .rv-items { list-style: none; margin: 0; padding: 0; }
+        .rv-item { display: flex; gap: 0.75rem; padding: 0.85rem 0; border-bottom: 1px solid var(--rule); }
+        .rv-check { display: flex; flex-shrink: 0; padding-top: 0.2rem; cursor: pointer; }
+        .rv-check input { width: 22px; height: 22px; margin: 0; accent-color: var(--ink); cursor: pointer; }
+        .rv-body { min-width: 0; flex: 1; }
+        .rv-title { margin: 0 0 0.3rem; line-height: 1.3; }
+        .rv-name { font: 600 1rem/1.3 var(--font-sans); color: var(--ink); }
+        .rv-issue { margin-left: 0.5rem; font: 500 0.72rem/1 var(--font-mono); color: var(--ink-muted); white-space: nowrap; }
+        .rv-look { margin: 0 0 0.45rem; font-size: 0.92rem; line-height: 1.5; color: var(--ink-muted); }
+        .rv-item.is-done .rv-name { color: var(--ink-faint); text-decoration: line-through; text-decoration-thickness: 1px; }
+        .rv-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; }
+        .rv-links a {
+            font: 500 0.82rem/1.4 var(--font-mono); color: var(--ink); text-decoration: underline;
+            text-decoration-color: var(--signal-2); text-underline-offset: 3px; text-decoration-thickness: 2px;
+            padding: 0.3rem 0; min-height: 32px; display: inline-block;
+        }
+        .rv-note { margin: 0.4rem 0 0; font-size: 0.82rem; line-height: 1.45; color: var(--ink-faint); }
+        .rv-empty, .rv-nojs { color: var(--ink-muted); }
+
+        @media (min-width: 640px) {
+            .rv-item { gap: 1rem; }
+        }
+    </style>
+</head>
+<body data-no-hotkey>
+    <header class="site-topbar">
+        <a class="site-wordmark" href="index.html">skflx<span class="wm-md">.MD</span></a>
+        <span class="site-topbar-title">Owner review</span>
+        <div class="site-topbar-actions">
+            <button class="site-theme-toggle" type="button" aria-label="Night mode" aria-pressed="false">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="rv" id="rv">
+        <header class="rv-head">
+            <p class="rv-draft">Draft · unlisted · owner review, not for the site</p>
+            <h1>Owner review</h1>
+            <p>Every view to check, in one list. Tick an item once it is verified; ticks stay in this browser. Copy the report into the GitHub issue when you are done.</p>
+        </header>
+
+        <div class="rv-bar">
+            <label for="rv-filter">Group</label>
+            <select id="rv-filter"></select>
+            <span id="rv-count" aria-live="polite"></span>
+            <button id="rv-copy" class="rv-btn" type="button">Copy report</button>
+        </div>
+        <p class="rv-keys">Keys: j and k move between items · space ticks · o opens the first link in a new tab</p>
+        <p id="rv-status" class="rv-status" role="status"></p>
+        <textarea id="rv-report" class="rv-report" hidden readonly rows="12" aria-label="Review report"></textarea>
+
+        <div id="rv-list"></div>
+        <noscript><p class="rv-nojs">The review list needs JavaScript.</p></noscript>
+    </main>
+
+    <footer class="site-footer">
+        <a href="index.html">skflx.MD</a>
+        <span>Working list for the owner. Nothing here is verified by the page itself.</span>
+    </footer>
+
+    <script src="js/review-items.js?v=6ba0f78d"></script>
+    <script src="js/review.js?v=35d68a4b"></script>
+    <script src="js/site.js?v=8733326e"></script>
+</body>
+</html>

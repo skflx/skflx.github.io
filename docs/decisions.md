@@ -62,6 +62,7 @@ Key registry (`<rev>` = namespace code, `<slug>` = module, `<guide>` = guide slu
 | `oksat:learn:<guide>:<rev>` | `js/oksat/store.js` (`getLearn`/`saveLearn`), written by `js/oksat/learn.js` | guide record: sections done, grades, inline module answers, reading mode. Never a module's own progress |
 | `ssb:prefs` | `js/ssb/state.js` | SSB depth tier as `{v:1, tier}`; written only on an explicit pick, never from a shared link |
 | `cpt-history`, `cpt-analytics` | `js/cpt-search.js` | recent searches and counts; predate the namespaces |
+| `sk_review:<id>` | `js/review.js` | owner review: one tick per item in `js/review-items.js`; `1` when ticked, removed when not |
 
 Legacy keys no longer read are cleared by `OKSATStore.resetLocal`; do not write them.
 

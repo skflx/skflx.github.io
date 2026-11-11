@@ -136,6 +136,8 @@ const PAGES = [
   { path: 'search.html', ready: (p) => wait(p, () => document.documentElement.getAttribute('data-search') === 'ready') },
   /* PDF chapter splitter: both vendored libraries loaded and the page logic ran (it wires the theme toggle). */
   { path: 'pdf-chapter-splitter.html', ready: (p) => wait(p, () => !!window.PDFLib && !!window.JSZip && !!document.querySelector('.tool-title')) },
+  /* Owner review (unlisted): the item list rendered from js/review-items.js. */
+  { path: 'review.html', ready: (p) => wait(p, () => document.querySelectorAll('.rv-item').length > 0) },
   /* Atlas (unlisted): the head map drew; focusing a group lights it. */
   { path: 'atlas.html', ready: async (p) => {
     await wait(p, () => document.querySelectorAll('.at-svg .at-group').length > 0);

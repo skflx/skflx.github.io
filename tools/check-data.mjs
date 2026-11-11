@@ -1148,8 +1148,10 @@ function checkAgents() {
    them. Nothing else links to atlas.html. A js/ file may name a page only as a quoted
    navigation target; js/atlas.js (the atlas's own script) is exempt. The guide viewer's hotspot
    block is the one other OLSB linker ("Open in 3D model", OLSB.html#m=3d&sel=<id>): OLSB_LINKERS. */
-const UNLISTED = ['atlas.html', 'OLSB.html', 'ssb.html'];
+const UNLISTED = ['atlas.html', 'OLSB.html', 'ssb.html', 'review.html'];
 const OLSB_LINKERS = new Set(['js/oksat/learn.js']);
+/* The owner review list links into ssb and OLSB by design (review-items.js), like atlas.html does. */
+const REVIEW_LINKERS = new Set(['js/review.js', 'js/review-items.js']);
 function checkAtlasAndUnlisted() {
   const r = checkAtlas();
   ok(r.ok, 'atlas: bake is fresh and the data validates', 'atlas: ' + r.errors.join('; '));
@@ -1168,7 +1170,7 @@ function checkAtlasAndUnlisted() {
     for (const m of html.matchAll(attrRe)) {
       const t = target(m[1]);
       if (t === 'atlas.html' && page !== 'atlas.html') linkProblems.push(`${page} links to atlas.html`);
-      if ((t === 'OLSB.html' || t === 'ssb.html') && page !== 'atlas.html' && t !== page) linkProblems.push(`${page} links to ${t} (only atlas.html may)`);
+      if ((t === 'OLSB.html' || t === 'ssb.html') && page !== 'atlas.html' && page !== 'review.html' && t !== page) linkProblems.push(`${page} links to ${t} (only atlas.html may)`);
     }
   }
   const jsFiles = [];
@@ -1182,10 +1184,10 @@ function checkAtlasAndUnlisted() {
     /* A system's own scripts may name its own page (js/olsb/ -> OLSB.html, js/ssb/ -> ssb.html). */
     for (const [pg, own] of [['OLSB', 'js/olsb/'], ['ssb', 'js/ssb/']]) {
       if (pg === 'OLSB' && OLSB_LINKERS.has(file)) continue;
-      if (!file.startsWith(own) && new RegExp('[\'"`](?:\\./)?' + pg + '\\.html').test(src)) linkProblems.push(`${file} navigates to ${pg}.html (only atlas.html may)`);
+      if (!file.startsWith(own) && !REVIEW_LINKERS.has(file) && new RegExp('[\'"`](?:\\./)?' + pg + '\\.html').test(src)) linkProblems.push(`${file} navigates to ${pg}.html (only atlas.html may)`);
     }
   }
-  ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html (and the guide hotspot block, OLSB_LINKERS) links to OLSB; only atlas.html links to ssb', linkProblems.join('; '));
+  ok(linkProblems.length === 0, 'unlisted pages: nothing links to atlas.html; only atlas.html (and the guide hotspot block, OLSB_LINKERS; review.html and its review list, REVIEW_LINKERS) links to OLSB or ssb', linkProblems.join('; '));
 }
 
 /* tbone/ct/ct.json (the temporal-bone CT, WP E1) must parse as SSB's ct.json v1 header: js/ssb/volume.js
@@ -1196,6 +1198,38 @@ async function checkTboneHeader() {
   let err = null;
   try { parseHeader(JSON.parse(fs.readFileSync(rel('tbone/ct/ct.json'), 'utf8')), 'tbone'); } catch (e) { err = e.message; }
   ok(err === null, 'tbone: ct.json passes js/ssb/volume.js parseHeader', 'tbone: ' + err);
+}
+
+/* review.html: js/review-items.js (window.__REVIEW_ITEMS) is the owner's review list. Every item has
+   id/group/title/look; ids are unique; every href is a root .html page (relative, no scheme) with a
+   non-empty hash when it has one; issue, when set, is "#<n>". */
+function checkReviewItems() {
+  console.log('\nreview: owner-review items');
+  let items;
+  try { items = loadWindow(rel('js/review-items.js')).__REVIEW_ITEMS; } catch (e) { fail('review-items.js load: ' + e.message); return; }
+  if (!Array.isArray(items) || items.length === 0) { fail('review-items.js: window.__REVIEW_ITEMS must be a non-empty array'); return; }
+  const problems = [];
+  const seen = new Set();
+  const HREF = /^([A-Za-z0-9_-]+\.html)(#.*)?$/;
+  items.forEach((it, i) => {
+    const tag = (it && typeof it.id === 'string' && it.id) || `item ${i}`;
+    if (!it || typeof it !== 'object') { problems.push(`${tag}: not an object`); return; }
+    for (const k of ['id', 'group', 'title', 'look']) {
+      if (typeof it[k] !== 'string' || !it[k].trim()) problems.push(`${tag}: ${k} missing`);
+    }
+    if (seen.has(it.id)) problems.push(`${tag}: duplicate id`);
+    seen.add(it.id);
+    if (it.issue != null && !/^#\d+$/.test(it.issue)) problems.push(`${tag}: issue must be "#<n>" (got ${JSON.stringify(it.issue)})`);
+    if (it.links !== undefined && !Array.isArray(it.links)) { problems.push(`${tag}: links must be an array`); return; }
+    for (const l of it.links || []) {
+      if (!l || typeof l.label !== 'string' || !l.label.trim() || typeof l.href !== 'string') { problems.push(`${tag}: a link needs label and href`); continue; }
+      const m = HREF.exec(l.href);
+      if (!m) { problems.push(`${tag}: href "${l.href}" is not a relative root .html link`); continue; }
+      if (l.href.includes('#') && m[2] === '#') problems.push(`${tag}: href "${l.href}" has an empty hash`);
+      if (!fs.existsSync(rel(m[1]))) problems.push(`${tag}: href "${l.href}" names a missing page`);
+    }
+  });
+  ok(problems.length === 0, `review-items: ${items.length} items, ids unique, every href resolves`, 'review-items: ' + problems.join('; '));
 }
 
 /* ---- run ---- */
@@ -1210,6 +1244,7 @@ checkSsb();
 checkFigures();
 checkOlsb();
 checkAtlasAndUnlisted();
+checkReviewItems();
 await checkTboneHeader();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);
