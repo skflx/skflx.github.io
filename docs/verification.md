@@ -7,10 +7,11 @@ covered. Run the automated suite locally before pushing:
 
 ```bash
 node tools/check-data.mjs                 # data + security invariants (deps-free, instant)
-node tools/test-wiki-sync.mjs             # vault → wiki privacy boundary (deps-free)
 node tools/smoke-pages.mjs                # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs          # engine behavior (answer lock, SRS, keyboard)
 node tools/test-oksat-learn.mjs           # Interactive learning viewer (prompts, checkers, inline questions, modes, deck, hub, terms)
+node tools/test-search.mjs               # search.html and the CPT deep link
+node tools/test-airway-resume.mjs         # Airway Rounds saved games and resume
 node tools/lint-oksat.mjs [slug ...]      # OKSAT modules against the quality spec (no slug: every module)
 node tools/lint-oksat-guide.mjs [slug ...] # OKSAT interactive guides against the teaching-shape spec (no slug: every guide)
 node tools/lint-skills.mjs                 # house skills: structure, evals.json schema, registration (run after any change under .claude/skills/)
@@ -19,7 +20,7 @@ node tools/test-ssb.mjs --only ct,flap    # just those sections (names: the erro
 ```
 
 In CI (`.github/workflows/ci.yml`) `check-data`, `lint-oksat`, `lint-oksat-guide` and the page smoke test always
-run; the SSB, OKSAT (engine and interactive learning) and wiki-sync suites run only when a file they exercise changed (a
+run; the SSB, OKSAT (engine and interactive learning) suites run only when a file they exercise changed (a
 push to `master`, or a change to the workflow or the shared harness, runs everything). Changes
 to `tools/ssb-pipeline/` do not start the SSB suite unless they touch `dissection.json`, the
 one pipeline file it reads: the pipeline's outputs are committed under `ssb/`, which does.
@@ -225,41 +226,10 @@ validates the data under it:
   selects its glossary id and fills the info card; `#m=ct&pl=cor&at=1.5` sets the plane and position; junk in `pl` or
   `at` falls back to the axial plane without error (`pl=constructor` included); unreadable `tbone/` data shows the
   status message and the Diagrams mode stays usable.
-- Truth check: `OLSB_TRUTH=1 node tools/check-data.mjs` prints the residual per structure against the UW landmarks
-  (`tbone/geometry/landmarks.json`). It is report-only: no threshold fails yet, and it proves nothing finer than the
-  about 3 mm noise floor.
-
-### Wiki sync (`wiki/sync/sync-vault.mjs`)
-`tools/test-wiki-sync.mjs` builds a synthetic vault in a temp dir and
-asserts: dry run writes nothing; only allowlisted folders + `MOC.md` leave;
-`data_sources/`, `_drafts/`, `_*`, dotfiles, governance docs, non-Markdown
-files and symlinks never do; `## Personal Notes` is cut (fence-aware) and
-`personal_status` dropped; stub/draft notes are gated; the PHI tripwire
-holds a note (exit 2); links to unpublished notes are unlinked; unvetted
-notes are tagged and bannered; it deletes only files it wrote and refuses
-foreign folders and outputs inside the vault. The same suite checks
-`wiki/dgmo/render-dgmo.mjs`'s fence transform with a stub renderer: good
-fences become one-line light+dark figures, failed ones stay code, other
-fences and prose are untouched, the source is escaped, and the chart title
-is re-centered. A real Quartz/DGMO build is not part of CI (no build step
-here); `wiki/README.md` records the last manual build check.
-
-The suite also pins the phase-1 policy: only `tier: Master Map of Content`
-notes publish, the root `MOC.md` does not, and every note ends with a
-prefilled correction link whose URL survives parentheses.
-
-It runs `wiki/feedback/pull-feedback.mjs` against a saved, deliberately
-hostile issue list (no network) and checks that:
-
-- a dry run writes nothing, and PRs and unlabelled issues are skipped;
-- reader text containing its own fences, headings and "instructions" stays
-  inside its fence;
-- a `note` path-traversal or frontmatter-injection attempt is dropped;
-- PHI trips the flag;
-- an owner's resolution is never overwritten;
-- `--closes` emits only resolved issues;
-- the inbox never publishes.
-
+- Truth check (`olsb truth` in `tools/check-data.mjs`, every run): OLSB's structures are compared with the UW landmarks
+  (`tbone/geometry/landmarks.json`), each against its own tolerance; owner-vetted exceptions are listed above
+  `TRUTH_CLASS`. `OLSB_TRUTH=1` also prints the residual per structure. It proves nothing finer than the about 3 mm
+  noise floor.
 
 ### ASCII 3D figures (`js/ascii3d.js`, `js/diagrams/`)
 `tools/check-data.mjs` §5 checks the following. Every scene renders a

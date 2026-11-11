@@ -8,9 +8,9 @@
  },
  "specimen": "uw-axial-sagittal",
  "counts": {
-  "no-geometry": 440,
-  "agree": 88,
-  "mixed": 4,
+  "no-geometry": 449,
+  "agree": 92,
+  "mixed": 2,
   "untestable": 2
  },
  "tests": [
@@ -23,6 +23,17 @@
    "status": "agree",
    "sides": {
     "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 27,
+     "cells_agree": 27,
+     "median_delta_mm": 4.0,
+     "fraction_agree": 1.0
+    },
+    "L": {
      "status": "agree",
      "kinds": [
       "label",
@@ -53,6 +64,17 @@
      "cells_agree": 29,
      "median_delta_mm": 1.5,
      "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 29,
+     "cells_agree": 29,
+     "median_delta_mm": 1.5,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -72,6 +94,17 @@
      ],
      "cells_voting": 21,
      "cells_agree": 21,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 19,
+     "cells_agree": 19,
      "median_delta_mm": 4.5,
      "fraction_agree": 1.0
     }
@@ -95,6 +128,17 @@
      "cells_agree": 11,
      "median_delta_mm": 8.5,
      "fraction_agree": 0.92
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 9,
+     "cells_agree": 9,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -116,6 +160,17 @@
      "cells_agree": 21,
      "median_delta_mm": 4.5,
      "fraction_agree": 1.0
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 19,
+     "cells_agree": 19,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -133,9 +188,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 35,
-     "cells_agree": 35,
-     "median_delta_mm": 8.5,
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 8.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -144,9 +199,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 50,
-     "cells_agree": 50,
-     "median_delta_mm": 7.5,
+     "cells_voting": 34,
+     "cells_agree": 34,
+     "median_delta_mm": 8.0,
      "fraction_agree": 1.0
     }
    }
@@ -165,8 +220,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 20,
-     "cells_agree": 20,
+     "cells_voting": 21,
+     "cells_agree": 21,
      "median_delta_mm": 3.0,
      "fraction_agree": 1.0
     },
@@ -176,9 +231,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 43,
-     "cells_agree": 43,
-     "median_delta_mm": 5.5,
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 3.0,
      "fraction_agree": 1.0
     }
    }
@@ -199,7 +254,7 @@
      ],
      "cells_voting": 21,
      "cells_agree": 21,
-     "median_delta_mm": 3.5,
+     "median_delta_mm": 4.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -208,9 +263,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 35,
-     "cells_agree": 35,
-     "median_delta_mm": 10.0,
+     "cells_voting": 18,
+     "cells_agree": 18,
+     "median_delta_mm": 3.5,
      "fraction_agree": 1.0
     }
    }
@@ -240,9 +295,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 64,
-     "cells_agree": 64,
-     "median_delta_mm": 3.5,
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     }
    }
@@ -272,9 +327,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 39,
-     "cells_agree": 39,
-     "median_delta_mm": 2.5,
+     "cells_voting": 16,
+     "cells_agree": 16,
+     "median_delta_mm": 0.5,
      "fraction_agree": 1.0
     }
    }
@@ -304,9 +359,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 71,
-     "cells_agree": 71,
-     "median_delta_mm": 17.5,
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 18.5,
      "fraction_agree": 1.0
     }
    }
@@ -327,7 +382,7 @@
      ],
      "cells_voting": 36,
      "cells_agree": 36,
-     "median_delta_mm": 11.5,
+     "median_delta_mm": 11.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -336,9 +391,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 47,
-     "cells_agree": 47,
-     "median_delta_mm": 13.0,
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 11.0,
      "fraction_agree": 1.0
     }
    }
@@ -359,7 +414,7 @@
      ],
      "cells_voting": 1,
      "cells_agree": 1,
-     "median_delta_mm": 19.0,
+     "median_delta_mm": 19.5,
      "basis": "whole sets (no overlap in projection)"
     },
     "L": {
@@ -368,10 +423,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 5,
-     "cells_agree": 5,
-     "median_delta_mm": 22.0,
-     "fraction_agree": 1.0
+     "cells_voting": 2,
+     "cells_agree": 2,
+     "median_delta_mm": 19.5,
+     "basis": "whole sets (no overlap in projection)"
     }
    }
   },
@@ -389,9 +444,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 35,
-     "cells_agree": 35,
-     "median_delta_mm": 8.5,
+     "cells_voting": 36,
+     "cells_agree": 36,
+     "median_delta_mm": 8.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -400,9 +455,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 50,
-     "cells_agree": 50,
-     "median_delta_mm": 7.5,
+     "cells_voting": 34,
+     "cells_agree": 34,
+     "median_delta_mm": 8.0,
      "fraction_agree": 1.0
     }
    }
@@ -432,9 +487,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 36,
-     "cells_agree": 36,
-     "median_delta_mm": 17.0,
+     "cells_voting": 52,
+     "cells_agree": 52,
+     "median_delta_mm": 18.5,
      "fraction_agree": 1.0
     }
    }
@@ -464,9 +519,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 65,
-     "cells_agree": 65,
-     "median_delta_mm": 16.0,
+     "cells_voting": 68,
+     "cells_agree": 68,
+     "median_delta_mm": 17.0,
      "fraction_agree": 1.0
     }
    }
@@ -487,7 +542,7 @@
      ],
      "cells_voting": 41,
      "cells_agree": 41,
-     "median_delta_mm": 9.5,
+     "median_delta_mm": 10.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -496,9 +551,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 38,
-     "cells_agree": 38,
-     "median_delta_mm": 14.5,
+     "cells_voting": 41,
+     "cells_agree": 41,
+     "median_delta_mm": 9.5,
      "fraction_agree": 1.0
     }
    }
@@ -519,7 +574,7 @@
      ],
      "cells_voting": 21,
      "cells_agree": 21,
-     "median_delta_mm": 3.5,
+     "median_delta_mm": 4.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -528,9 +583,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 35,
-     "cells_agree": 35,
-     "median_delta_mm": 10.0,
+     "cells_voting": 18,
+     "cells_agree": 18,
+     "median_delta_mm": 3.5,
      "fraction_agree": 1.0
     }
    }
@@ -551,7 +606,7 @@
      ],
      "cells_voting": 41,
      "cells_agree": 41,
-     "median_delta_mm": 9.5,
+     "median_delta_mm": 10.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -560,9 +615,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 38,
-     "cells_agree": 38,
-     "median_delta_mm": 14.5,
+     "cells_voting": 41,
+     "cells_agree": 41,
+     "median_delta_mm": 9.5,
      "fraction_agree": 1.0
     }
    }
@@ -581,10 +636,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 22,
+     "cells_voting": 24,
      "cells_agree": 11,
-     "median_delta_mm": 2.5,
-     "fraction_agree": 0.5
+     "median_delta_mm": 2.0,
+     "fraction_agree": 0.46
     },
     "L": {
      "status": "mixed",
@@ -592,10 +647,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 34,
-     "cells_agree": 12,
-     "median_delta_mm": 1.0,
-     "fraction_agree": 0.35
+     "cells_voting": 17,
+     "cells_agree": 11,
+     "median_delta_mm": 2.5,
+     "fraction_agree": 0.65
     }
    }
   },
@@ -613,9 +668,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 10,
-     "cells_agree": 10,
-     "median_delta_mm": 5.5,
+     "cells_voting": 9,
+     "cells_agree": 9,
+     "median_delta_mm": 4.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -624,9 +679,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 18,
-     "cells_agree": 18,
-     "median_delta_mm": 4.5,
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     }
    }
@@ -645,10 +700,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 22,
+     "cells_voting": 24,
      "cells_agree": 11,
-     "median_delta_mm": 2.5,
-     "fraction_agree": 0.5
+     "median_delta_mm": 2.0,
+     "fraction_agree": 0.46
     },
     "L": {
      "status": "mixed",
@@ -656,10 +711,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 34,
-     "cells_agree": 12,
-     "median_delta_mm": 1.0,
-     "fraction_agree": 0.35
+     "cells_voting": 17,
+     "cells_agree": 11,
+     "median_delta_mm": 2.5,
+     "fraction_agree": 0.65
     }
    }
   },
@@ -669,17 +724,17 @@
    "to": "s.crista-galli",
    "note": null,
    "file": "ethmoid-frontal-orbit.json",
-   "status": "mixed",
+   "status": "agree",
    "sides": {
     "R": {
-     "status": "contradict",
+     "status": "agree",
      "kinds": [
       "label",
       "landmark"
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": -0.9,
+     "median_delta_mm": 1.0,
      "basis": "whole sets (no overlap in projection)"
     },
     "L": {
@@ -690,7 +745,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 0.6,
+     "median_delta_mm": 1.0,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -709,9 +764,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 10,
-     "cells_agree": 10,
-     "median_delta_mm": 5.5,
+     "cells_voting": 9,
+     "cells_agree": 9,
+     "median_delta_mm": 4.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -720,9 +775,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 18,
-     "cells_agree": 18,
-     "median_delta_mm": 4.5,
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     }
    }
@@ -733,17 +788,17 @@
    "to": "s.cribriform-plate",
    "note": null,
    "file": "ethmoid-frontal-orbit.json",
-   "status": "mixed",
+   "status": "agree",
    "sides": {
     "R": {
-     "status": "contradict",
+     "status": "agree",
      "kinds": [
       "landmark",
       "label"
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": -0.9,
+     "median_delta_mm": 1.0,
      "basis": "whole sets (no overlap in projection)"
     },
     "L": {
@@ -754,7 +809,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 0.6,
+     "median_delta_mm": 1.0,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -775,7 +830,7 @@
      ],
      "cells_voting": 1,
      "cells_agree": 1,
-     "median_delta_mm": 26.9,
+     "median_delta_mm": 28.4,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -801,15 +856,15 @@
      "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.R"
     },
     "L": {
-     "status": "mixed",
+     "status": "agree",
      "kinds": [
       "sweep",
       "label"
      ],
-     "cells_voting": 5,
-     "cells_agree": 2,
-     "median_delta_mm": 3.2,
-     "fraction_agree": 0.4,
+     "cells_voting": 4,
+     "cells_agree": 3,
+     "median_delta_mm": 1.8,
+     "fraction_agree": 0.75,
      "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.L"
     }
    }
@@ -840,9 +895,9 @@
       "sweep",
       "sweep"
      ],
-     "cells_voting": 0,
-     "cells_agree": 0,
-     "median_delta_mm": 21.2,
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 20.8,
      "basis": "whole sets (no overlap in projection)",
      "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.L, s.posterior-ethmoidal-artery.L"
     }
@@ -874,9 +929,9 @@
       "sweep",
       "sweep"
      ],
-     "cells_voting": 0,
-     "cells_agree": 0,
-     "median_delta_mm": 21.2,
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 20.8,
      "basis": "whole sets (no overlap in projection)",
      "weak": "mostly inferred sweep: s.posterior-ethmoidal-artery.L, s.anterior-ethmoidal-artery.L"
     }
@@ -898,7 +953,7 @@
      ],
      "cells_voting": 22,
      "cells_agree": 22,
-     "median_delta_mm": 13.5,
+     "median_delta_mm": 14.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -907,9 +962,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 13,
-     "cells_agree": 13,
-     "median_delta_mm": 12.0,
+     "cells_voting": 23,
+     "cells_agree": 23,
+     "median_delta_mm": 14.0,
      "fraction_agree": 1.0
     }
    }
@@ -930,7 +985,7 @@
      ],
      "cells_voting": 19,
      "cells_agree": 19,
-     "median_delta_mm": 17.0,
+     "median_delta_mm": 17.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -939,9 +994,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 13,
-     "cells_agree": 13,
-     "median_delta_mm": 18.0,
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 17.5,
      "fraction_agree": 1.0
     }
    }
@@ -960,9 +1015,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 143,
-     "cells_agree": 143,
-     "median_delta_mm": 5.5,
+     "cells_voting": 121,
+     "cells_agree": 121,
+     "median_delta_mm": 6.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -971,9 +1026,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 80,
-     "cells_agree": 80,
-     "median_delta_mm": 5.5,
+     "cells_voting": 119,
+     "cells_agree": 119,
+     "median_delta_mm": 6.0,
      "fraction_agree": 1.0
     }
    }
@@ -992,9 +1047,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 143,
-     "cells_agree": 143,
-     "median_delta_mm": 5.5,
+     "cells_voting": 121,
+     "cells_agree": 121,
+     "median_delta_mm": 6.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -1003,9 +1058,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 80,
-     "cells_agree": 80,
-     "median_delta_mm": 5.5,
+     "cells_voting": 119,
+     "cells_agree": 119,
+     "median_delta_mm": 6.0,
      "fraction_agree": 1.0
     }
    }
@@ -1035,9 +1090,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 16,
-     "cells_agree": 16,
-     "median_delta_mm": 15.0,
+     "cells_voting": 23,
+     "cells_agree": 23,
+     "median_delta_mm": 13.0,
      "fraction_agree": 1.0
     }
    }
@@ -1067,9 +1122,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 3,
-     "cells_agree": 3,
-     "median_delta_mm": 3.5,
+     "cells_voting": 12,
+     "cells_agree": 12,
+     "median_delta_mm": 2.0,
      "fraction_agree": 1.0
     }
    }
@@ -1092,6 +1147,17 @@
      "cells_agree": 11,
      "median_delta_mm": 8.5,
      "fraction_agree": 0.92
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "label"
+     ],
+     "cells_voting": 9,
+     "cells_agree": 9,
+     "median_delta_mm": 8.5,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -1120,9 +1186,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 3,
-     "cells_agree": 3,
-     "median_delta_mm": 1.5,
+     "cells_voting": 15,
+     "cells_agree": 15,
+     "median_delta_mm": 0.0,
      "fraction_agree": 1.0
     }
    }
@@ -1141,8 +1207,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 61,
-     "cells_agree": 61,
+     "cells_voting": 59,
+     "cells_agree": 59,
      "median_delta_mm": 5.5,
      "fraction_agree": 1.0
     },
@@ -1152,9 +1218,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 41,
-     "cells_agree": 41,
-     "median_delta_mm": 4.5,
+     "cells_voting": 59,
+     "cells_agree": 59,
+     "median_delta_mm": 5.5,
      "fraction_agree": 1.0
     }
    }
@@ -1180,15 +1246,15 @@
      "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.R"
     },
     "L": {
-     "status": "mixed",
+     "status": "agree",
      "kinds": [
       "label",
       "sweep"
      ],
-     "cells_voting": 5,
-     "cells_agree": 2,
-     "median_delta_mm": 3.2,
-     "fraction_agree": 0.4,
+     "cells_voting": 4,
+     "cells_agree": 3,
+     "median_delta_mm": 1.8,
+     "fraction_agree": 0.75,
      "weak": "mostly inferred sweep: s.anterior-ethmoidal-artery.L"
     }
    }
@@ -1218,9 +1284,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 3,
-     "cells_agree": 3,
-     "median_delta_mm": 3.5,
+     "cells_voting": 12,
+     "cells_agree": 12,
+     "median_delta_mm": 2.0,
      "fraction_agree": 1.0
     }
    }
@@ -1252,7 +1318,7 @@
      ],
      "cells_voting": 4,
      "cells_agree": 4,
-     "median_delta_mm": 15.5,
+     "median_delta_mm": 15.0,
      "fraction_agree": 1.0
     }
    }
@@ -1282,9 +1348,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 8,
-     "cells_agree": 8,
-     "median_delta_mm": 21.0,
+     "cells_voting": 21,
+     "cells_agree": 21,
+     "median_delta_mm": 19.0,
      "fraction_agree": 1.0
     }
    }
@@ -1305,7 +1371,7 @@
      ],
      "cells_voting": 15,
      "cells_agree": 15,
-     "median_delta_mm": 21.0,
+     "median_delta_mm": 21.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -1314,10 +1380,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 2,
-     "cells_agree": 2,
+     "cells_voting": 16,
+     "cells_agree": 16,
      "median_delta_mm": 21.5,
-     "basis": "whole sets (no overlap in projection)"
+     "fraction_agree": 1.0
     }
    }
   },
@@ -1335,8 +1401,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 195,
-     "cells_agree": 195,
+     "cells_voting": 192,
+     "cells_agree": 192,
      "median_delta_mm": 27.5,
      "fraction_agree": 1.0
     },
@@ -1346,9 +1412,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 196,
-     "cells_agree": 196,
-     "median_delta_mm": 28.5,
+     "cells_voting": 193,
+     "cells_agree": 193,
+     "median_delta_mm": 27.5,
      "fraction_agree": 1.0
     }
    }
@@ -1367,8 +1433,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 162,
-     "cells_agree": 162,
+     "cells_voting": 161,
+     "cells_agree": 161,
      "median_delta_mm": 12.0,
      "fraction_agree": 1.0
     },
@@ -1380,7 +1446,7 @@
      ],
      "cells_voting": 161,
      "cells_agree": 161,
-     "median_delta_mm": 12.5,
+     "median_delta_mm": 12.0,
      "fraction_agree": 1.0
     }
    }
@@ -1410,9 +1476,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 164,
-     "cells_agree": 164,
-     "median_delta_mm": 16.0,
+     "cells_voting": 165,
+     "cells_agree": 165,
+     "median_delta_mm": 15.5,
      "fraction_agree": 1.0
     }
    }
@@ -1431,10 +1497,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 370,
-     "cells_agree": 356,
+     "cells_voting": 366,
+     "cells_agree": 366,
      "median_delta_mm": 4.5,
-     "fraction_agree": 0.96
+     "fraction_agree": 1.0
     },
     "L": {
      "status": "agree",
@@ -1442,10 +1508,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 364,
-     "cells_agree": 342,
-     "median_delta_mm": 3.0,
-     "fraction_agree": 0.94
+     "cells_voting": 365,
+     "cells_agree": 365,
+     "median_delta_mm": 4.5,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -1463,8 +1529,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 246,
-     "cells_agree": 246,
+     "cells_voting": 245,
+     "cells_agree": 245,
      "median_delta_mm": 18.0,
      "fraction_agree": 1.0
     },
@@ -1474,9 +1540,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 247,
-     "cells_agree": 247,
-     "median_delta_mm": 20.0,
+     "cells_voting": 244,
+     "cells_agree": 244,
+     "median_delta_mm": 18.0,
      "fraction_agree": 1.0
     }
    }
@@ -1495,9 +1561,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 65,
-     "cells_agree": 65,
-     "median_delta_mm": 28.5,
+     "cells_voting": 64,
+     "cells_agree": 64,
+     "median_delta_mm": 29.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -1506,10 +1572,74 @@
       "label",
       "label"
      ],
-     "cells_voting": 54,
-     "cells_agree": 54,
-     "median_delta_mm": 31.5,
+     "cells_voting": 63,
+     "cells_agree": 63,
+     "median_delta_mm": 29.5,
      "fraction_agree": 1.0
+    }
+   }
+  },
+  {
+   "id": "s.nasal-vestibule",
+   "r": "anterior-to",
+   "to": "s.internal-nasal-valve",
+   "note": null,
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "landmark"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 8.0,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "label",
+      "landmark"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 8.0,
+     "basis": "whole sets (no overlap in projection)"
+    }
+   }
+  },
+  {
+   "id": "s.internal-nasal-valve",
+   "r": "anterior-to",
+   "to": "s.inferior-turbinate",
+   "note": "the valve area includes the IT head",
+   "file": "nasal-maxillary-ppf.json",
+   "status": "agree",
+   "sides": {
+    "R": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 0,
+     "cells_agree": 0,
+     "median_delta_mm": 25.5,
+     "basis": "whole sets (no overlap in projection)"
+    },
+    "L": {
+     "status": "agree",
+     "kinds": [
+      "landmark",
+      "label"
+     ],
+     "cells_voting": 1,
+     "cells_agree": 1,
+     "median_delta_mm": 25.5,
+     "basis": "whole sets (no overlap in projection)"
     }
    }
   },
@@ -1538,9 +1668,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 64,
-     "cells_agree": 64,
-     "median_delta_mm": 12.5,
+     "cells_voting": 76,
+     "cells_agree": 76,
+     "median_delta_mm": 10.0,
      "fraction_agree": 1.0
     }
    }
@@ -1559,8 +1689,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 134,
-     "cells_agree": 134,
+     "cells_voting": 136,
+     "cells_agree": 136,
      "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     },
@@ -1570,8 +1700,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 169,
-     "cells_agree": 169,
+     "cells_voting": 136,
+     "cells_agree": 136,
      "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     }
@@ -1591,8 +1721,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 144,
-     "cells_agree": 144,
+     "cells_voting": 150,
+     "cells_agree": 150,
      "median_delta_mm": 7.0,
      "fraction_agree": 1.0
     },
@@ -1602,9 +1732,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 186,
-     "cells_agree": 186,
-     "median_delta_mm": 6.0,
+     "cells_voting": 150,
+     "cells_agree": 150,
+     "median_delta_mm": 7.0,
      "fraction_agree": 1.0
     }
    }
@@ -1634,9 +1764,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 101,
-     "cells_agree": 101,
-     "median_delta_mm": 15.5,
+     "cells_voting": 66,
+     "cells_agree": 66,
+     "median_delta_mm": 17.5,
      "fraction_agree": 1.0
     }
    }
@@ -1655,8 +1785,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 144,
-     "cells_agree": 144,
+     "cells_voting": 150,
+     "cells_agree": 150,
      "median_delta_mm": 7.0,
      "fraction_agree": 1.0
     },
@@ -1666,9 +1796,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 186,
-     "cells_agree": 186,
-     "median_delta_mm": 6.0,
+     "cells_voting": 150,
+     "cells_agree": 150,
+     "median_delta_mm": 7.0,
      "fraction_agree": 1.0
     }
    }
@@ -1698,9 +1828,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 163,
-     "cells_agree": 163,
-     "median_delta_mm": 17.0,
+     "cells_voting": 114,
+     "cells_agree": 114,
+     "median_delta_mm": 15.5,
      "fraction_agree": 1.0
     }
    }
@@ -1730,9 +1860,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 101,
-     "cells_agree": 101,
-     "median_delta_mm": 15.5,
+     "cells_voting": 66,
+     "cells_agree": 66,
+     "median_delta_mm": 17.5,
      "fraction_agree": 1.0
     }
    }
@@ -1751,8 +1881,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 134,
-     "cells_agree": 134,
+     "cells_voting": 136,
+     "cells_agree": 136,
      "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     },
@@ -1762,8 +1892,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 169,
-     "cells_agree": 169,
+     "cells_voting": 136,
+     "cells_agree": 136,
      "median_delta_mm": 5.0,
      "fraction_agree": 1.0
     }
@@ -1783,8 +1913,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 246,
-     "cells_agree": 246,
+     "cells_voting": 245,
+     "cells_agree": 245,
      "median_delta_mm": 18.0,
      "fraction_agree": 1.0
     },
@@ -1794,9 +1924,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 247,
-     "cells_agree": 247,
-     "median_delta_mm": 20.0,
+     "cells_voting": 244,
+     "cells_agree": 244,
+     "median_delta_mm": 18.0,
      "fraction_agree": 1.0
     }
    }
@@ -1815,8 +1945,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 195,
-     "cells_agree": 195,
+     "cells_voting": 192,
+     "cells_agree": 192,
      "median_delta_mm": 27.5,
      "fraction_agree": 1.0
     },
@@ -1826,9 +1956,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 196,
-     "cells_agree": 196,
-     "median_delta_mm": 28.5,
+     "cells_voting": 193,
+     "cells_agree": 193,
+     "median_delta_mm": 27.5,
      "fraction_agree": 1.0
     }
    }
@@ -1858,9 +1988,9 @@
       "label",
       "sweep"
      ],
-     "cells_voting": 6,
-     "cells_agree": 6,
-     "median_delta_mm": 11.8,
+     "cells_voting": 7,
+     "cells_agree": 7,
+     "median_delta_mm": 11.3,
      "fraction_agree": 1.0
     }
    }
@@ -1879,8 +2009,8 @@
       "label",
       "label"
      ],
-     "cells_voting": 179,
-     "cells_agree": 174,
+     "cells_voting": 180,
+     "cells_agree": 175,
      "median_delta_mm": 10.0,
      "fraction_agree": 0.97
     },
@@ -1890,10 +2020,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 203,
-     "cells_agree": 198,
-     "median_delta_mm": 9.0,
-     "fraction_agree": 0.98
+     "cells_voting": 176,
+     "cells_agree": 169,
+     "median_delta_mm": 10.0,
+     "fraction_agree": 0.96
     }
    }
   },
@@ -1922,9 +2052,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 230,
-     "cells_agree": 229,
-     "median_delta_mm": 10.5,
+     "cells_voting": 224,
+     "cells_agree": 224,
+     "median_delta_mm": 10.0,
      "fraction_agree": 1.0
     }
    }
@@ -1954,10 +2084,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 12,
-     "cells_agree": 11,
-     "median_delta_mm": 3.5,
-     "fraction_agree": 0.92
+     "cells_voting": 19,
+     "cells_agree": 16,
+     "median_delta_mm": 4.0,
+     "fraction_agree": 0.84
     }
    }
   },
@@ -1989,7 +2119,7 @@
      ],
      "cells_voting": 13,
      "cells_agree": 13,
-     "median_delta_mm": 12.4,
+     "median_delta_mm": 11.4,
      "fraction_agree": 1.0,
      "weak": "mostly inferred sweep: s.infraorbital-nerve.L"
     }
@@ -2057,7 +2187,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 9.3,
+     "median_delta_mm": 7.0,
      "basis": "whole sets (no overlap in projection)",
      "weak": "mostly inferred sweep: s.maxillary-nerve.L, s.vidian-nerve.L"
     }
@@ -2091,7 +2221,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 8.1,
+     "median_delta_mm": 5.5,
      "basis": "whole sets (no overlap in projection)",
      "weak": "mostly inferred sweep: s.maxillary-nerve.L, s.vidian-nerve.L"
     }
@@ -2125,7 +2255,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 9.3,
+     "median_delta_mm": 7.0,
      "basis": "whole sets (no overlap in projection)",
      "weak": "mostly inferred sweep: s.vidian-nerve.L, s.maxillary-nerve.L"
     }
@@ -2145,9 +2275,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 141,
-     "cells_agree": 141,
-     "median_delta_mm": 26.5,
+     "cells_voting": 82,
+     "cells_agree": 82,
+     "median_delta_mm": 25.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2156,9 +2286,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 30,
-     "cells_agree": 30,
-     "median_delta_mm": 23.0,
+     "cells_voting": 77,
+     "cells_agree": 77,
+     "median_delta_mm": 25.5,
      "fraction_agree": 1.0
     }
    }
@@ -2188,9 +2318,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 36,
-     "cells_agree": 36,
-     "median_delta_mm": 17.0,
+     "cells_voting": 52,
+     "cells_agree": 52,
+     "median_delta_mm": 18.5,
      "fraction_agree": 1.0
     }
    }
@@ -2209,9 +2339,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 89,
-     "cells_agree": 89,
-     "median_delta_mm": 8.5,
+     "cells_voting": 46,
+     "cells_agree": 46,
+     "median_delta_mm": 9.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2220,9 +2350,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 7,
-     "cells_agree": 7,
-     "median_delta_mm": 12.0,
+     "cells_voting": 46,
+     "cells_agree": 46,
+     "median_delta_mm": 9.0,
      "fraction_agree": 1.0
     }
    }
@@ -2241,9 +2371,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 61,
-     "cells_agree": 61,
-     "median_delta_mm": 13.5,
+     "cells_voting": 33,
+     "cells_agree": 33,
+     "median_delta_mm": 14.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2252,9 +2382,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 15,
-     "cells_agree": 15,
-     "median_delta_mm": 17.0,
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 14.0,
      "fraction_agree": 1.0
     }
    }
@@ -2273,9 +2403,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 141,
-     "cells_agree": 141,
-     "median_delta_mm": 26.5,
+     "cells_voting": 82,
+     "cells_agree": 82,
+     "median_delta_mm": 25.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2284,9 +2414,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 30,
-     "cells_agree": 30,
-     "median_delta_mm": 23.0,
+     "cells_voting": 77,
+     "cells_agree": 77,
+     "median_delta_mm": 25.5,
      "fraction_agree": 1.0
     }
    }
@@ -2307,19 +2437,19 @@
      ],
      "cells_voting": 14,
      "cells_agree": 14,
-     "median_delta_mm": 14.3,
+     "median_delta_mm": 13.3,
      "fraction_agree": 1.0
     },
     "L": {
-     "status": "untestable",
+     "status": "agree",
      "kinds": [
       "label",
       "sweep"
      ],
-     "cells_voting": 1,
-     "cells_agree": 1,
-     "median_delta_mm": 4.6,
-     "basis": "whole sets (no overlap in projection)"
+     "cells_voting": 14,
+     "cells_agree": 14,
+     "median_delta_mm": 13.3,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -2337,10 +2467,10 @@
       "label",
       "label"
      ],
-     "cells_voting": 52,
-     "cells_agree": 51,
-     "median_delta_mm": 7.0,
-     "fraction_agree": 0.98
+     "cells_voting": 53,
+     "cells_agree": 53,
+     "median_delta_mm": 7.5,
+     "fraction_agree": 1.0
     },
     "L": {
      "status": "agree",
@@ -2348,9 +2478,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 52,
-     "cells_agree": 52,
-     "median_delta_mm": 9.5,
+     "cells_voting": 53,
+     "cells_agree": 53,
+     "median_delta_mm": 7.5,
      "fraction_agree": 1.0
     }
    }
@@ -2371,7 +2501,7 @@
      ],
      "cells_voting": 75,
      "cells_agree": 75,
-     "median_delta_mm": 16.0,
+     "median_delta_mm": 15.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2380,9 +2510,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 65,
-     "cells_agree": 65,
-     "median_delta_mm": 16.0,
+     "cells_voting": 70,
+     "cells_agree": 70,
+     "median_delta_mm": 15.0,
      "fraction_agree": 1.0
     }
    }
@@ -2422,9 +2552,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 61,
-     "cells_agree": 61,
-     "median_delta_mm": 13.5,
+     "cells_voting": 33,
+     "cells_agree": 33,
+     "median_delta_mm": 14.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2433,9 +2563,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 15,
-     "cells_agree": 15,
-     "median_delta_mm": 17.0,
+     "cells_voting": 35,
+     "cells_agree": 35,
+     "median_delta_mm": 14.0,
      "fraction_agree": 1.0
     }
    }
@@ -2454,9 +2584,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 8,
-     "cells_agree": 8,
-     "median_delta_mm": 18.0,
+     "cells_voting": 5,
+     "cells_agree": 5,
+     "median_delta_mm": 20.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2465,9 +2595,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 6,
-     "cells_agree": 6,
-     "median_delta_mm": 15.0,
+     "cells_voting": 5,
+     "cells_agree": 5,
+     "median_delta_mm": 19.5,
      "fraction_agree": 1.0
     }
    }
@@ -2486,9 +2616,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 89,
-     "cells_agree": 89,
-     "median_delta_mm": 8.5,
+     "cells_voting": 46,
+     "cells_agree": 46,
+     "median_delta_mm": 9.0,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2497,9 +2627,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 7,
-     "cells_agree": 7,
-     "median_delta_mm": 12.0,
+     "cells_voting": 46,
+     "cells_agree": 46,
+     "median_delta_mm": 9.0,
      "fraction_agree": 1.0
     }
    }
@@ -2541,7 +2671,7 @@
      ],
      "cells_voting": 1,
      "cells_agree": 1,
-     "median_delta_mm": 11.3,
+     "median_delta_mm": 13.8,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2562,7 +2692,7 @@
      ],
      "cells_voting": 8,
      "cells_agree": 8,
-     "median_delta_mm": 14.8,
+     "median_delta_mm": 13.8,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2571,9 +2701,9 @@
       "sweep",
       "label"
      ],
-     "cells_voting": 10,
-     "cells_agree": 10,
-     "median_delta_mm": 15.1,
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 13.8,
      "fraction_agree": 1.0
     }
    }
@@ -2605,7 +2735,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 19.4,
+     "median_delta_mm": 19.1,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2658,7 +2788,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 19.4,
+     "median_delta_mm": 19.1,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2677,21 +2807,21 @@
       "sweep",
       "label"
      ],
-     "cells_voting": 6,
-     "cells_agree": 6,
-     "median_delta_mm": 14.3,
+     "cells_voting": 5,
+     "cells_agree": 5,
+     "median_delta_mm": 13.3,
      "fraction_agree": 1.0
     },
     "L": {
-     "status": "untestable",
+     "status": "agree",
      "kinds": [
       "sweep",
       "label"
      ],
-     "cells_voting": 0,
-     "cells_agree": 0,
-     "median_delta_mm": 4.9,
-     "basis": "whole sets (no overlap in projection)"
+     "cells_voting": 5,
+     "cells_agree": 5,
+     "median_delta_mm": 13.3,
+     "fraction_agree": 1.0
     }
    }
   },
@@ -2709,9 +2839,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 55,
-     "cells_agree": 55,
-     "median_delta_mm": 14.0,
+     "cells_voting": 41,
+     "cells_agree": 41,
+     "median_delta_mm": 15.5,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2720,9 +2850,9 @@
       "label",
       "label"
      ],
-     "cells_voting": 10,
-     "cells_agree": 10,
-     "median_delta_mm": 18.0,
+     "cells_voting": 40,
+     "cells_agree": 40,
+     "median_delta_mm": 15.5,
      "fraction_agree": 1.0
     }
    }
@@ -2743,7 +2873,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 15.5,
+     "median_delta_mm": 17.5,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2764,7 +2894,7 @@
      ],
      "cells_voting": 8,
      "cells_agree": 8,
-     "median_delta_mm": 14.8,
+     "median_delta_mm": 13.8,
      "fraction_agree": 1.0
     },
     "L": {
@@ -2773,9 +2903,9 @@
       "label",
       "sweep"
      ],
-     "cells_voting": 10,
-     "cells_agree": 10,
-     "median_delta_mm": 15.1,
+     "cells_voting": 8,
+     "cells_agree": 8,
+     "median_delta_mm": 13.8,
      "fraction_agree": 1.0
     }
    }
@@ -2796,7 +2926,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 21.1,
+     "median_delta_mm": 20.1,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2817,7 +2947,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 21.8,
+     "median_delta_mm": 20.8,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2838,7 +2968,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 21.1,
+     "median_delta_mm": 20.1,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -2859,7 +2989,7 @@
      ],
      "cells_voting": 0,
      "cells_agree": 0,
-     "median_delta_mm": 26.3,
+     "median_delta_mm": 26.8,
      "basis": "whole sets (no overlap in projection)"
     }
    }
@@ -3672,28 +3802,64 @@
    ]
   },
   {
+   "id": "s.orbital-septum",
+   "r": "anterior-to",
+   "to": "s.orbital-fat",
+   "missing": [
+    "s.orbital-septum",
+    "s.orbital-fat"
+   ]
+  },
+  {
+   "id": "s.orbital-septum",
+   "r": "posterior-to",
+   "to": "s.medial-canthal-tendon",
+   "missing": [
+    "s.orbital-septum",
+    "s.medial-canthal-tendon"
+   ]
+  },
+  {
+   "id": "s.superior-ophthalmic-vein",
+   "r": "superior-to",
+   "to": "s.optic-nerve",
+   "missing": [
+    "s.superior-ophthalmic-vein"
+   ]
+  },
+  {
+   "id": "s.orbital-gyri",
+   "r": "lateral-to",
+   "to": "s.gyrus-rectus",
+   "missing": [
+    "s.orbital-gyri",
+    "s.gyrus-rectus"
+   ]
+  },
+  {
+   "id": "s.orbital-gyri",
+   "r": "lateral-to",
+   "to": "s.olfactory-sulcus",
+   "missing": [
+    "s.orbital-gyri",
+    "s.olfactory-sulcus"
+   ]
+  },
+  {
+   "id": "s.olfactory-sulcus",
+   "r": "lateral-to",
+   "to": "s.gyrus-rectus",
+   "missing": [
+    "s.olfactory-sulcus",
+    "s.gyrus-rectus"
+   ]
+  },
+  {
    "id": "s.nasal-cavity",
    "r": "inferior-to",
    "to": "s.anterior-cranial-fossa-dura",
    "missing": [
     "s.anterior-cranial-fossa-dura"
-   ]
-  },
-  {
-   "id": "s.nasal-vestibule",
-   "r": "anterior-to",
-   "to": "s.internal-nasal-valve",
-   "missing": [
-    "s.nasal-vestibule",
-    "s.internal-nasal-valve"
-   ]
-  },
-  {
-   "id": "s.internal-nasal-valve",
-   "r": "anterior-to",
-   "to": "s.inferior-turbinate",
-   "missing": [
-    "s.internal-nasal-valve"
    ]
   },
   {
@@ -4968,8 +5134,7 @@
    "r": "anterior-to",
    "to": "s.nasal-vestibule",
    "missing": [
-    "s.external-nose",
-    "s.nasal-vestibule"
+    "s.external-nose"
    ]
   },
   {
@@ -4977,8 +5142,16 @@
    "r": "anterior-to",
    "to": "s.internal-nasal-valve",
    "missing": [
-    "s.external-nasal-valve",
-    "s.internal-nasal-valve"
+    "s.external-nasal-valve"
+   ]
+  },
+  {
+   "id": "s.prestyloid-compartment",
+   "r": "anterior-to",
+   "to": "s.poststyloid-compartment",
+   "missing": [
+    "s.prestyloid-compartment",
+    "s.poststyloid-compartment"
    ]
   },
   {
@@ -6602,6 +6775,40 @@
    "missing": [
     "s.pharyngobasilar-fascia",
     "s.longus-capitis"
+   ]
+  },
+  {
+   "id": "s.petrolingual-ligament",
+   "r": "inferior-to",
+   "to": "s.meckels-cave",
+   "missing": [
+    "s.petrolingual-ligament",
+    "s.meckels-cave"
+   ]
+  },
+  {
+   "id": "s.glossopharyngeal-nerve",
+   "r": "posterior-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.glossopharyngeal-nerve"
+   ]
+  },
+  {
+   "id": "s.vagus-nerve",
+   "r": "posterior-to",
+   "to": "s.internal-carotid-artery",
+   "missing": [
+    "s.vagus-nerve"
+   ]
+  },
+  {
+   "id": "s.accessory-nerve",
+   "r": "lateral-to",
+   "to": "s.vagus-nerve",
+   "missing": [
+    "s.accessory-nerve",
+    "s.vagus-nerve"
    ]
   }
  ]

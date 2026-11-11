@@ -1,5 +1,5 @@
 # Spec: SSB nasal-framework diorama (moved from docs/ssb.md §6.2, 2026-11-10)
-> Not built. Status: docs/ssb-roadmap.md (ST7a). SSB has no GitHub issues (AGENTS.md exemption).
+> Not built. Status: GitHub issue #267 (ST7 macro; sub-issues ST7a-ST7e, under the SSB parent #266). Work package specs: `plans/2026-10-07-ssb-roadmap.md`.
 *Spec by Opus, 2026-10-07. Every number below is from a PubMed record
 read for this spec (abstracts only; the source set, its PMIDs and what each
 supports are in roadmap WP ST7a), or it is marked schematic. Owner

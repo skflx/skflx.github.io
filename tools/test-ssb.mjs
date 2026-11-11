@@ -1142,12 +1142,23 @@ async function specimenUnitTests() {
 const RAW = { 'content-type': 'application/octet-stream' };
 
 /* routes: { '<file name under ssb/models/ or ssb/geometry/>': (route) => … }. */
-async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true, abort = null } = {}) {
+async function openSpecimen(browser, base, hash = '', { viewport = { width: 1280, height: 800 }, reducedMotion = 'no-preference', webgl = true, routes = null, wait = 'settled', track = true, abort = null, frameClock = false } = {}) {
   const context = await browser.newContext({ viewport, reducedMotion, deviceScaleFactor: viewport.width < 600 ? 2 : 1 });
   if (!webgl) {
     await context.addInitScript(() => {
       const real = HTMLCanvasElement.prototype.getContext;
       HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return typeof type === 'string' && /webgl/i.test(type) ? null : real.call(this, type, ...rest); };
+    });
+  }
+  if (frameClock) {
+    /* the page's time is its frame count: performance.now advances 1000/60 ms per animation frame, and window.__onFrame(n) runs after each one.
+       A station flight (600 ms of page time) then lasts the same 36 frames on any machine, however slow one frame is. */
+    await context.addInitScript(() => {
+      const realRaf = window.requestAnimationFrame.bind(window);
+      const STEP = 1000 / 60;
+      let frames = 0;
+      performance.now = () => frames * STEP;
+      window.requestAnimationFrame = (cb) => realRaf(() => { frames += 1; cb(frames * STEP); if (window.__onFrame) window.__onFrame(frames); });
     });
   }
   if (abort) await context.route(abort, (route) => route.abort());
@@ -2877,7 +2888,7 @@ async function scopeTests(browser, base) {
   const samePoseObj = (x, y) => !!x && !!y && ['side', 'depth', 'yaw', 'pitch', 'roll', 'lens'].every((f) => x[f] === y[f]);
   const stList = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-scope-controls .ssb-scope-station')].map((b) => ({ key: b.dataset.station, text: b.querySelector('.ssb-scope-station-name').textContent, lens: b.querySelector('.ssb-scope-station-lens').textContent, pressed: b.getAttribute('aria-pressed') })));
   {
-    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,0');
+    const { context, page } = await openSpecimen(browser, base, '#scope=R,40,0,0,0,0', { frameClock: true });
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.stationsState === 'ready', null, { timeout: 30000 });
     await nextFrames(page, 3);
     const l1 = await stList(page);
@@ -2895,9 +2906,8 @@ async function scopeTests(browser, base) {
     await page.click('#ssb-scope-controls button[data-side="R"]');
 
     /* a flight: t.ser-0.R from R,40,0,0,0,0 */
-    await page.evaluate(() => { window.__flight = []; window.__flightTimer = setInterval(() => { const sc = window.__ssb.scope; window.__flight.push({ flying: sc.flying, pose: sc.pose }); }, 25); });
-    await page.click('#ssb-scope-controls [data-station="t.ser-0.R"]');
-    const during = await page.evaluate(() => window.__ssb.scope.flying);
+    await page.evaluate(() => { window.__flight = []; window.__onFrame = () => { const sc = window.__ssb.scope; window.__flight.push({ flying: sc.flying, pose: sc.pose }); }; });
+    const during = await page.evaluate(() => { document.querySelector('#ssb-scope-controls [data-station="t.ser-0.R"]').click(); return window.__ssb.scope.flying; });   /* the click and the read in one task: no frame passes between */
     await page.waitForFunction(() => !window.__ssb.scope.flying, null, { timeout: 10000 });
     await page.waitForFunction((h) => location.hash.endsWith(h), `scope=${SC.formatScope(ST['t.ser-0.R'].pose)}`, { timeout: 3000 }).catch(() => {});
     const end1 = await page.evaluate(() => ({ pose: window.__ssb.scope.pose, hash: location.hash, tip: window.__ssb.scope.tip, flight: window.__flight.slice() }));
@@ -2932,10 +2942,10 @@ async function scopeTests(browser, base) {
       return { flyingNow, stopped: { flying: window.__ssb.scope.flying, pose: window.__ssb.scope.pose } };
     });
     const { flyingNow, stopped } = cancel;
-    await page.waitForTimeout(900);
+    await nextFrames(page, 40);      /* 40 frames: longer than the whole flight, so a flight that was not cancelled would have arrived */
     const later = await page.evaluate(() => window.__ssb.scope.pose);
     check('stations (E6): a key press during a flight cancels it — the flight stops where it is and the pose does not go on to the station', flyingNow === true && stopped.flying === false && samePoseObj(stopped.pose, later) && !samePoseObj(later, ST['t.first-pass-floor.R'].pose), JSON.stringify([flyingNow, stopped, later]));
-    await page.evaluate(() => clearInterval(window.__flightTimer));
+    await page.evaluate(() => { window.__onFrame = null; });
     await page.evaluate(() => { location.hash = '#scope=L,30,0,0,0,0'; });
     await page.waitForFunction(() => window.__ssb.scope.pose && window.__ssb.scope.pose.side === 'L', null, { timeout: 5000 });
     await page.click('#ssb-scope-controls [data-station="t.nsf-pedicle.M"]');

@@ -1,23 +1,20 @@
 # Spec: link OKSAT modules and guides to sk.oto (2026-11-04, amended 2026-11-10)
 
-> **Amended 2026-11-10 (owner):** the wiki is live at `https://skflx.github.io/ohns-wiki-skflx/`. Map URLs below are the ones the live site serves (HTTP 200 checked), stored ready to append to `base`; there is no slug function; `live` ships `true`; the check against `.vault-sync.json` is dropped (live paths are lowercase slugs, not the vault file names). Sections 0 and 4 describe the pre-launch state and are kept as history.
+> **Amended 2026-11-10 (owner):** the wiki is live at `https://skflx.github.io/ohns-wiki-skflx/`. Map URLs below are the ones the live site serves (HTTP 200 checked), stored ready to append to `base`; there is no slug function; `live` ships `true`; the check against `.vault-sync.json` is dropped (live paths are lowercase slugs, not the vault file names). Section 4 describes the pre-launch state and is kept as history.
 >
 > Ponytail spec. Supersedes `plans/2026-11-04-wiki-links.md` (branch `claude/issue-174-spec`). Status lives in GitHub Issues. Commits: one short line, no trailers.
 
 ## 0. Context (facts, read from the repo on 2026-11-04)
 
 - The knowledge graph is retired for good (owner, 2026-11-04). `archive/` keeps it; nothing serves it. This spec does not revive it.
-- **sk.oto is the Obsidian vault** (outside this repo). Its web form is a Quartz 5 wiki in a separate repo, `skflx/ent-wiki`, meant for `skflx.github.io/ent-wiki/`. **It is not live**: `wiki/README.md` says "not live, nothing here is built, served, or linked", the Bootstrap steps are undone, and `https://skflx.github.io/ent-wiki/` returned HTTP 404 when checked today. There is no URL to link to yet.
-- `wiki/content/` is a **subset**, not the vault: `index.md` plus six maps of content, listed in `wiki/content/.vault-sync.json`, one per folder (the file names are the long titles, "The ... Knowledge Graph provides a structured mastery curriculum.md"):
-  `Otology/`, `Sinus/`, `Laryngology/`, `Head_and_Neck/`, `FPRS/`, `Pediatrics/`. Every map has `vetted: ""` and the `#unvetted` banner. No other vault note is public.
-- **The gate that blocks everything else**: `wiki/sync/policy.json` has `gate.tierMatches: "^Master Map of Content"` (phase 1), `includeRootFiles: []`, `statusIn: ["complete"]`. `sync-vault.mjs` (line ~230) skips any note whose `tier` does not match, and nothing outside the six folders is on the allowlist. `docs/oksat-learn-roadmap.md` Phase A proposes moving the gate to a `role` tag (`map`, `reference`); `sync-vault.mjs` has no `roleIn` yet, so that is not built. Opening the gate is the owner's call (`docs/decisions.md` §7).
+- **sk.oto is the Obsidian vault** (outside this repo). Its web form is a Quartz wiki in the separate repo `skflx/ohns-wiki-skflx`, published from the vault by that repo's own sync; this repo holds none of it (the former `wiki/` scaffold was retired 2026-11-11). Only maps of content are published, one per subspecialty folder.
 - OKSAT keys: `OKSAT_MANIFEST` modules (17 files) and `OKSAT_GUIDES` (`ar-crs-aerd`, `ear-anatomy`, the latter `unlisted`) both carry `subspecialty`, a key of `OKSAT_SUBSPECIALTIES` (`js/oksat/manifest.js`). The empty `ref: []` section slots the chapters once carried were deleted 2026-11-10 (nothing read them).
 
 ## 1. Owner decisions (what this spec chooses; veto any)
 
 1. **Mapping lives in one place**: a six-line table `OKSAT_SKOTO` in `js/oksat/manifest.js`, keyed by the `subspecialty` every module and guide already has. No per-entry field.
 2. **Module-level only**: one link per guide or module, to its subspecialty's published map of content. No section or concept links in v1.
-3. **Links are checked by plain string rules in `check-data`** against `.vault-sync.json`; no network.
+3. **Links are checked by plain string rules in `check-data`**; no network.
 4. **A single constant `OKSAT_SKOTO.live` (default `false`) gates all visible change.** The owner flips it after the wiki deploys.
 5. **No vault text enters this repo.** Link label and target are constants and published file paths; the viewer never reads wiki content.
 
@@ -47,14 +44,13 @@ Why subspecialty-keyed and module-level is enough: the public set is six maps, o
 ## 3. Non-goals (named skips)
 
 - No section/chapter/concept links, no "Related in sk.oto" chapter foot.
-- No wiki-to-OKSAT backlinks ("Learn this" lines) and no change to `wiki/sync/`, `policy.json`, or the gate.
+- No wiki-to-OKSAT backlinks ("Learn this" lines) and no change to what the wiki publishes.
 - No graph, search, or fetch of wiki content at runtime. No embedded wiki text, titles or summaries.
 - No link on the hub, the one-pager, or `unlisted` pages beyond what the viewer already shows for them.
-- Not building the wiki: Bootstrap (`wiki/README.md`) stays the owner's step.
 
 ## 4. Gate: while it is closed
 
-`live: false` is the shipped state and stays so until the owner has (a) bootstrapped and deployed `skflx/ent-wiki`, (b) opened one map in a browser and confirmed the URL, and (c) decided that linking the `#unvetted` maps is acceptable (Q1). While closed: no anchor, no header change, no request, no visible difference to a reader. The table and the check still run in CI, so the data cannot rot meanwhile. Flipping `live` is a one-line owner PR; merging is deploy.
+`live: false` is the shipped state and stays so until the owner has (a) deployed the wiki, (b) opened one map in a browser and confirmed the URL, and (c) decided that linking the `#unvetted` maps is acceptable (Q1). While closed: no anchor, no header change, no request, no visible difference to a reader. The table and the check still run in CI, so the data cannot rot meanwhile. Flipping `live` is a one-line owner PR; merging is deploy.
 
 ## 5. Acceptance checks (each is a command or an assertion in `node tools/check-data.mjs`)
 
@@ -76,11 +72,10 @@ Why subspecialty-keyed and module-level is enough: the public set is six maps, o
 - **R1: Published slugs.** Resolved 2026-11-10: the paths in `maps` are the URLs the live site serves (HTTP 200). If the wiki renames a map, the link 404s and CI cannot see it; recheck with curl after a wiki rebuild.
 - **R2: Linking unvetted pages.** Every public map carries `vetted: ""` and the warning banner. The link is honest only if the reader meets that banner, which the wiki puts at the top of each page. Owner decision (Q1).
 - **R3: Wrong map for a module.** `pediatrics` also covers sleep surgery, but a `sleep` module would have no link. Mapping is subspecialty-level, so a module in the "wrong" subspecialty links to the wrong map; fix by correcting its `subspecialty`, never by adding a per-entry override.
-- **R4: Gate widening later.** When the owner opens the gate past phase 1, `.vault-sync.json` grows and A1 keeps working; a future section-level feature would need its own spec then.
+- **R4: Gate widening later.** When the wiki publishes more than the maps, A1 keeps working; a future section-level feature would need its own spec then.
 - **R5: Vetting boundary.** sk.oto pages are the owner's; the repo carries paths only. Medical correctness of linked pages is not asserted by OKSAT (`docs/decisions.md` §7).
 
 ## Open questions for the owner
 
 1. Link to maps that are `#unvetted` at all, or wait until at least one map has `vetted:` set? (Spec assumes: link only after `live` is flipped, which you control.)
 2. `endocrine`, `sleep` and `fundamentals` have no map: leave them unlinked (spec default), or map `endocrine` to `Head_and_Neck` and `sleep` to `Pediatrics`?
-3. Ready to bootstrap `skflx/ent-wiki`, so there is a real URL to verify (R1)? Until then this spec ships with `live: false`.

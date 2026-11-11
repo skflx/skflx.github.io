@@ -267,4 +267,22 @@ window.OKSAT_GUIDES = [
       { id: 'appraisal', k: 13, short: 'Evidence & controversies', min: 25, sections: 3, data: 'js/oksat/guides/ear-anatomy/appraisal.js' },
     ],
   },
+  {
+    slug: 'jc-whisking-auditory-cortex',
+    title: 'Journal Club: Auditory Cortex, Spontaneous vs Sound-Evoked Movements',
+    kicker: 'Otology / Neurotology · Journal club',
+    subspecialty: 'otology',
+    accent: '#2F6E6A',
+    draft: true,
+    desc: 'Zimmer-Harwood et al., J Neurosci 2026, read figure by figure: how whisking, body twitches and pupil dilation mark brain state in the mouse, how pure tones trigger the same whisk, and why auditory cortex neurons tell the two apart. Ends with an appraisal.',
+    chapters: [
+      { id: 'start', short: 'Start here', data: 'js/oksat/guides/jc-whisking-auditory-cortex/start.js' },
+      { id: 'question', k: 1, short: 'Question & background', min: 15, sections: 3, data: 'js/oksat/guides/jc-whisking-auditory-cortex/question.js' },
+      { id: 'methods', k: 2, short: 'Methods', min: 25, sections: 5, data: 'js/oksat/guides/jc-whisking-auditory-cortex/methods.js' },
+      { id: 'behavior', k: 3, short: 'Fig 1: whisking & pupil', min: 20, sections: 3, data: 'js/oksat/guides/jc-whisking-auditory-cortex/behavior.js' },
+      { id: 'sound', k: 4, short: 'Fig 2: tones trigger whisking', min: 20, sections: 3, data: 'js/oksat/guides/jc-whisking-auditory-cortex/sound.js' },
+      { id: 'neurons', k: 5, short: 'Figs 3–6: the neurons', min: 35, sections: 5, data: 'js/oksat/guides/jc-whisking-auditory-cortex/neurons.js' },
+      { id: 'appraisal', k: 6, short: 'Conclusions & appraisal', min: 25, sections: 4, data: 'js/oksat/guides/jc-whisking-auditory-cortex/appraisal.js' },
+    ],
+  },
 ];

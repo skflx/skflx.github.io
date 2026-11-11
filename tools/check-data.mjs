@@ -155,13 +155,40 @@ function checkOlsbVolume(O) {
   checkOlsbTruth(V, vol, byId);
 }
 
-/* "olsb truth (tbone landmarks)" (plan 2026-11-09-ear-truth-concordance, WP E3, report-only). For each UW label tip in
+/* "olsb truth (tbone landmarks)" (plan 2026-11-09-ear-truth-concordance, WP E3). For each UW label tip in
    tbone/geometry/landmarks.json whose glossary id OLSB draws: the distance from the tip to the NEAREST voxel centre
    labelled with that id in the same coarse volume built above (0 inside the structure; below half a voxel diagonal
    counts as 0). A tip marks a place on a structure, so this measures placement, not extent. Both data sets are in the
    OLSB frame (tbone/ct/ct.json "frame"; mm, right ear, x lateral, y anterior, z superior, origin = oval-window
    centre), so no transform. Vector = landmark -> nearest voxel (where the OLSB structure lies relative to the tip).
-   Never fails on a residual; OLSB_TRUTH=1 prints the full table. */
+   Gate (MVP, owner 2026-11-11): an id fails when its median distance exceeds base(class) + 10 % of the landmark
+   median's distance from the origin (the inferred scale is +-10 %). Classes: compact middle-ear parts 2.5 mm,
+   labyrinth and canals 2.5 mm, extended regions 3.5 mm (blur about 0.7 mm, the coarse voxel and where a tip sits on a
+   structure). Every compared id needs a class; each id in TRUTH_EXCEPT is reported, not failed, until the owner vets
+   it, and fails once it is back inside its limit (so the list cannot go stale). One specimen: catches gross error
+   only. OLSB_TRUTH=1 prints the full table. */
+const TRUTH_CLASS = {
+  compact: ['stapes', 'incus', 'malleus', 'tm', 'rw', 'promontory', 'stapedius', 'tensor', 'pyramid', 'recess', 'sinustymp',
+    'prussak', 'fn-tymp', 'fn-lab', 'geniculate'],
+  labyrinth: ['cochlea', 'vestibule', 'lscc', 'pscc', 'ssc', 'iac'],
+  extended: ['fn', 'eac', 'annulus', 'scutum', 'epitympanum', 'hypotympanum', 'tegment', 'aditus', 'antrum', 'mastoidcells',
+    'sigmoid', 'jb', 'ica', 'et', 'tip'],
+};
+const TRUTH_BASE = { compact: 2.5, labyrinth: 2.5, extended: 3.5 };
+/* Outside the limit at the first enforcing run (2026-11-11); each is the owner's to vet (#250): move the anchor, or keep. */
+const TRUTH_EXCEPT = {
+  incus: 'OLSB incus about 3 mm posterior to the tips; tips may mark the body while OLSB centres the long process',
+  ssc: 'OLSB superior canal about 2.5 mm inferior to the tips along the arc',
+  annulus: 'about 5 mm from 2 tips while tm agrees within 1.1 mm: likely where the label tip sits, not geometry',
+  aditus: 'one tip; OLSB aditus about 5 mm medial',
+  antrum: 'mastoid group about 6 mm medial in OLSB',
+  mastoidcells: 'mastoid group about 7 mm medial in OLSB',
+  sigmoid: 'mastoid group about 5.5 mm medial in OLSB',
+  ica: 'OLSB carotid about 4-5 mm lateral and anterior to the tips',
+  et: 'OLSB Eustachian tube about 5.5 mm lateral to the tips',
+  tip: 'one tip, 28 mm from the origin; OLSB mastoid tip about 7 mm medial and superior',
+};
+
 function checkOlsbTruth(V, vol, byId) {
   console.log('\nolsb truth (tbone landmarks)');
   let lm;
@@ -195,13 +222,26 @@ function checkOlsbTruth(V, vol, byId) {
   }
   rows.sort((a, b) => b.med - a.med || b.max - a.max);
   const f = (x) => (x >= 0 ? '+' : '') + x.toFixed(1);
-  const meds = rows.map((r) => r.med), zeros = rows.filter((r) => r.med === 0).length;
-  const summary = rows.length ? `${rows.length} ids compared, ${zeros} with median d 0, median of per-id medians ${med(meds).toFixed(1)} mm, worst ${rows[0].id} (median ${rows[0].med.toFixed(1)} mm)` : 'no ids in common';
-  if (process.env.OLSB_TRUTH === '1') {
-    console.log('  id | n | n inside | median d | max d | median vector landmark->OLSB structure, non-zero only (dx dy dz mm)');
-    for (const r of rows) console.log(`  ${r.id} | ${r.n} | ${r.inside} | ${r.med.toFixed(1)} | ${r.max.toFixed(1)} | ${r.vec ? r.vec.map(f).join(' ') : '-'}`);
+  const clsOf = {};
+  for (const [c, ids] of Object.entries(TRUTH_CLASS)) for (const id of ids) clsOf[id] = c;
+  for (const r of rows) {
+    r.cls = clsOf[r.id];
+    const c = [0, 1, 2].map((k) => med(tb[r.id].map((l) => l.point_mm[k])));
+    r.lim = r.cls ? TRUTH_BASE[r.cls] + 0.1 * Math.hypot(...c) : NaN;
   }
-  ok(rows.length > 0, `olsb truth (report-only): ${summary}; one specimen, inferred scale +-10 %, noise floor about 3 mm: catches gross errors, proves nothing finer`, 'olsb truth: no glossary id is both drawn and in tbone landmarks');
+  if (process.env.OLSB_TRUTH === '1') {
+    console.log('  id | class | n | n inside | median d | limit | max d | median vector landmark->OLSB structure, non-zero only (dx dy dz mm)');
+    for (const r of rows) console.log(`  ${r.id}${TRUTH_EXCEPT[r.id] ? ' (exception)' : ''} | ${r.cls || '?'} | ${r.n} | ${r.inside} | ${r.med.toFixed(1)} | ${r.lim.toFixed(1)} | ${r.max.toFixed(1)} | ${r.vec ? r.vec.map(f).join(' ') : '-'}`);
+  }
+  const noCls = rows.filter((r) => !r.cls).map((r) => r.id);
+  ok(rows.length > 0 && noCls.length === 0, `olsb truth: ${rows.length} ids compared, each with a tolerance class`,
+    rows.length ? `olsb truth: no tolerance class (TRUTH_CLASS) for ${noCls.join(', ')}` : 'olsb truth: no glossary id is both drawn and in tbone landmarks');
+  const over = rows.filter((r) => r.cls && r.med > r.lim);
+  const bad = over.filter((r) => !TRUTH_EXCEPT[r.id]);
+  ok(bad.length === 0, `olsb truth: ${rows.length - over.length} ids within limit, ${over.length} listed exceptions (owner to vet, #250)`,
+    `olsb truth: OLSB is off the CT landmarks beyond the limit (one specimen, inferred scale +-10 %, so this is gross error): ${bad.map((r) => `${r.id} ${r.med.toFixed(1)} > ${r.lim.toFixed(1)} mm`).join('; ')}`);
+  const stale = Object.keys(TRUTH_EXCEPT).filter((id) => { const r = rows.find((x) => x.id === id); return !r || !(r.med > r.lim); });
+  ok(stale.length === 0, 'olsb truth: every exception is still outside its limit', `olsb truth: drop from TRUTH_EXCEPT (now within limit or not compared): ${stale.join(', ')}`);
   console.log('  (per-id table: OLSB_TRUTH=1 node tools/check-data.mjs)');
 }
 
@@ -272,7 +312,7 @@ function checkOksat() {
 const DIRS6 = ['sup', 'inf', 'ant', 'post', 'lat', 'med'];
 const REVERSE_DIR = { sup: 'inf', inf: 'sup', ant: 'post', post: 'ant', med: 'lat', lat: 'med' };
 /* Slugs whose non-SVG files must all be listed in images/oksat/<slug>/ATTRIBUTION.md (rule 8). */
-const ATTRIBUTED = ['ear-anatomy'];
+const ATTRIBUTED = ['ear-anatomy', 'jc-whisking-auditory-cortex'];
 /* Graded blocks share the check id key space (rule 1) and store a grade. */
 const GRADED_BLOCKS = new Set(['hotspot', 'neighbors', 'sequence']);
 const NEW_BLOCKS = new Set(['hotspot', 'layers', 'neighbors', 'sequence']);

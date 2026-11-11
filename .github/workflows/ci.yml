@@ -22,7 +22,6 @@ jobs:
     outputs:
       ssb: ${{ steps.changes.outputs.ssb }}
       oksat: ${{ steps.changes.outputs.oksat }}
-      wiki: ${{ steps.changes.outputs.wiki }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,7 +45,6 @@ jobs:
           # never runs here; its outputs are committed under ssb/, which this already matches.
           flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-content|ssb-fixture-ct)\.mjs|tools/ssb-pipeline/uw/dissection\.json|docs/authoring-ssb\.md'
           flag oksat 'js/oksat/|images/oksat/|js/vendor/(react|htm)|css/oksat(-learn)?\.css|oksat(-study|-learn)?\.html|tools/test-oksat-(engine|learn)'
-          flag wiki  'wiki/|tools/test-wiki-sync'
           cat "$GITHUB_OUTPUT"
 
   verify:
@@ -75,12 +73,6 @@ jobs:
       # House skills: structure, evals schema, registration; zero deps.
       - name: Lint skills
         run: node tools/lint-skills.mjs --self-test && node tools/lint-skills.mjs
-
-      # The wiki sync is the privacy boundary for the Obsidian vault;
-      # zero deps, synthetic fixtures only.
-      - name: Wiki sync behavior tests
-        if: needs.changes.outputs.wiki == 'true'
-        run: node tools/test-wiki-sync.mjs
 
       - name: Install dev dependencies
         run: npm ci

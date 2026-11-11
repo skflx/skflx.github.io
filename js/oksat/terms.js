@@ -196,6 +196,22 @@
         'ECP': 'eosinophil cationic protein',
         'FCER1A': 'gene for the FcεRI α chain',
         'MS4A2': 'gene for the FcεRI β chain',
+
+        /* ---- journal club: auditory neuroscience ---- */
+        'SPL': 'sound pressure level',
+        'A1': 'primary auditory cortex',
+        'AAF': 'anterior auditory field',
+        'ROC': 'receiver operating characteristic',
+        'AUC': 'area under the curve',
+        'GCaMP': 'genetically encoded calcium indicator (green fluorescent protein, calmodulin, M13 peptide)',
+        'GCaMP6': 'GCaMP, generation 6 (genetically encoded calcium indicator)',
+        'CaMKIIα': 'calcium/calmodulin-dependent protein kinase II alpha',
+        'DeepLabCut': 'DeepLabCut (markerless pose-estimation software)',
+        'ES': 'excited by spontaneous whisking, suppressed by sound-triggered whisking',
+        'EE': 'excited by spontaneous whisking, excited by sound-triggered whisking',
+        'SS': 'suppressed by spontaneous whisking, suppressed by sound-triggered whisking',
+        'SE': 'suppressed by spontaneous whisking, excited by sound-triggered whisking',
+        'C57BL': 'C57 black (inbred laboratory mouse strain)',
     };
 
     const PLAIN = new Set([
@@ -208,9 +224,11 @@
         'QOL', 'RCT', 'RF', 'RR', 'SABA', 'SES', 'sGC', 'SSRI', 't-PA', 'T1', 'T2', 'TCA', 'TGF-β', 'Th1',
         'Th17', 'Th2', 'Treg', 'UK', 'URI', 'URTI', 'US', 'VAS',
         'C2', 'C3', 'CN', 'dB', 'TMJ', 'V3',
+        /* journal club: units, citation tokens, general statistics */
+        'kHz', 'DOI', 'CC', 'BY', 'SD', 'JNEUROSCI', 'ANOVA',
     ]);
-    /* Roman numerals (Draf IIa, type III), interleukins and their chains by number. */
-    const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4)$/;
+    /* Roman numerals (Draf IIa, type III), interleukins and their chains by number, figure panels (1A, S4). */
+    const PLAIN_RE = /^(?:(?:I{1,3}|IV|VI{0,3}|IX|XI{0,3})[ab]?|IL-\d+[A-F]?|[DE]4|S?\d[A-J]?)$/;
 
     /* A word with internal hyphens; split on them for the longest match. */
     const WORD = /[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*/gu;

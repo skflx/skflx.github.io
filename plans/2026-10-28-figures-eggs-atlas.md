@@ -282,7 +282,7 @@ node tools/ascii3d.mjs bake && git diff --exit-code -- '*.html'   # bake fresh
 node tools/atlas.mjs check
 node tools/smoke-pages.mjs
 node tools/test-oksat-engine.mjs && node tools/test-oksat-learn.mjs   # Leitner removal regression
-node tools/test-wiki-sync.mjs && node tools/lint-oksat.mjs
+node tools/lint-oksat.mjs
 ```
 
 Manual, on a phone-width viewport:
