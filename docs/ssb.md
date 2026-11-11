@@ -7,8 +7,8 @@ validator `tools/ssb-content.mjs`) and four stages, the `data-stage` buttons in 
 page: the reference specimen reconstructed from the UW atlas (Specimen, §5.1), the
 variant lab (Lab, §6), CT (§3, §5.6; no WebGL needed) and the endoscope on the
 specimen (Scope, §3; the procedure player runs there). **What is done and what is
-next, task by task, with who does it: `docs/ssb-roadmap.md`.** This file is the
-design; the roadmap is the board.
+next, task by task, with who does it: GitHub issue #266 (SSB parent) and its sub-issues; the specs are in `plans/2026-10-07-ssb-roadmap.md`.** This file is the
+design; the issues are the board.
 
 ## 0. What it is
 
@@ -1212,7 +1212,7 @@ grid at 0.5 mm, as the frontal-recess rules are; none written in):
 
 ### 6.2 The `nasal-framework` diorama (ST7 spec)
 
-The `nasal-framework` diorama spec (ST7) is in `plans/2026-11-10-ssb-nasal-framework.md`; it is not built (status: `docs/ssb-roadmap.md` ST7a).
+The `nasal-framework` diorama spec (ST7) is in `plans/2026-11-10-ssb-nasal-framework.md`; it is not built (status: GitHub issue #267).
 
 ## 7. Runtime architecture
 
@@ -1484,7 +1484,7 @@ are a phase-8 refinement, not a dependency.
 Each phase ends green on `tools/check-data.mjs` and the smoke suite, and
 leaves the page useful. Model tier = who does the work best per token
 (`docs/delegation.md`). This table is the plan's shape; **status, work
-packages, checkpoints and order live in `docs/ssb-roadmap.md`.**
+packages, checkpoints and order live in GitHub issue #266 and its sub-issues (specs: `plans/2026-10-07-ssb-roadmap.md`).**
 
 | Phase | Deliverable | Who |
 |---|---|---|
@@ -1502,8 +1502,8 @@ packages, checkpoints and order live in `docs/ssb-roadmap.md`.**
 
 ## 13. Owner decisions
 
-The board is `docs/ssb-roadmap.md` §2: one line per decision, plus the owner's
-open actions. This section keeps the options and rationale that shape the code,
+The decision record is `plans/2026-10-07-ssb-roadmap.md` §1: one line per decision; the owner's
+open actions are GitHub issues under #266. This section keeps the options and rationale that shape the code,
 and the decisions still open.
 
 ### Decided
@@ -1534,7 +1534,7 @@ and the decisions still open.
 
 ## 14. Realistic anatomy
 
-Moved from `docs/realistic-anatomy.md` on 2026-10-11, as that plan asked once accepted. Sources, limits and owner decisions stay there (its §4, §5, §13). Its work packages and handoff are in `docs/ssb-roadmap.md` §3a–§4. Sections here are numbered `R…` so they do not collide with §1–§13 above; the plan's own `§` references were rewritten to match.
+Moved from `docs/realistic-anatomy.md` on 2026-10-11, as that plan asked once accepted. Sources, limits and owner decisions stay there (its §4, §5, §13). Its work packages and handoff are in `plans/2026-10-07-ssb-roadmap.md` §3 and GitHub issue #266. Sections here are numbered `R…` so they do not collide with §1–§13 above; the plan's own `§` references were rewritten to match.
 
 ### R1. Goal, and what "realistic" means here
 
@@ -1629,7 +1629,7 @@ ships (WP RA3a's docs pass).
 
 ### R3. What exists now (2026-10-07)
 
-Current state: `docs/wip.md` and `docs/ssb-roadmap.md`.
+Current state: `docs/wip.md` and GitHub issue #266.
 ---
 
 ### R6. Architecture
@@ -2060,4 +2060,4 @@ URL with one id removed from `index.json` must drop cleanly.
 | Radiopaedia access or licence friction | batch 2 thin | small owner-curated list; numbers only; UW and head B cover batch 1 |
 | Repo growth from bases | slow clones | re-export at checkpoints; patches small; a third base only with an owner decision |
 | Two bases double every downstream test | CI time | tests parameterized by base; the slow ones run on `standard` in CI and on all bases at checkpoints |
-| Merge churn with lane B | rework | resegmentation scheduled after ST5 or folded into its checkpoint (docs/ssb-roadmap.md §3) |
+| Merge churn with lane B | rework | resegmentation scheduled after ST5 or folded into its checkpoint (`plans/2026-10-07-ssb-roadmap.md` §3) |

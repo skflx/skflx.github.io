@@ -25,7 +25,7 @@ topology and gross position, not OLSB's 0.1 mm detail. Finer truth waits for DIC
 | C4 | **No shared framework.** OLSB imports the generic functions of `js/ssb/volume.js`; nothing is moved or renamed. The glossary and the SSB graph stay separate. The two offline pipelines are not de-duplicated. |
 | C5 | **Guide CT figures are generated**, crops and hotspot regions both, from the pipeline's own tips. Hand SVGs stay labelled schematic. |
 | C6 | **#244 is cut to OpenEar and the owner's institutional DICOM** (`plans/2026-11-04-tbone-sources.md`). |
-| C7 | **SSB:** RS2c finishes, then SSB runs in parallel with this plan. Its board stays `docs/ssb-roadmap.md` (`AGENTS.md` exemption). |
+| C7 | **SSB:** RS2c finishes, then SSB runs in parallel with this plan. Its status is GitHub issue #266 (spec `plans/2026-10-07-ssb-roadmap.md`). |
 
 ## 2. Work packages
 
@@ -35,7 +35,7 @@ topology and gross position, not OLSB's 0.1 mm detail. Finer truth waits for DIC
 | E2 | OLSB real-CT slice view: axial, coronal, sagittal slices of `tbone` with landmarks and sweeps drawn over them, coded detected / labelled / inferred, glossary names, attribution line | Opus specs the UI contract in the issue, Haiku builds | E1 | `js/olsb/ct.js` (new ES module importing `../ssb/volume.js`), `OLSB.html`, `css/olsb.css`, `js/olsb/main.js` or `3d.js` (mode switch only), `tools/stamp-assets.mjs` (stamp `tbone/`), `tools/smoke-pages.mjs` | smoke test opens the view against a synthetic volume routed by Playwright (no fixture in `tbone/`), a slice draws, a landmark click selects its glossary id; volume fetched only on entering the view; CSP unchanged |
 | E3 | Truth check: `check-data` compares each OLSB anchor to the median `tbone` landmark of the same glossary id | Opus | E1 | `tools/check-data.mjs`, `js/olsb/volume.js` (constants only) | residual table printed per id; first run report-only; Opus moves the outliers it can justify, then the rule fails above a per-structure limit (see Status) with a listed, reasoned exception per id it leaves; glossary `rel` checks still pass |
 | E4 | Guide slices from the pipeline: a script writes the ten crops and each slice's hotspot `poly` regions from `landmarks.json` tips | Haiku, Opus reviews every region | none | `tools/tbone-pipeline/slices.py` (new), `images/oksat/ear-anatomy/ct/`, `js/oksat/guides/ear-anatomy/imaging.js`, `images/oksat/ear-anatomy/ATTRIBUTION.md` | rerun reproduces the committed crops byte for byte; every region's `g` is a glossary id; `lint-oksat-guide` and `test-oksat-learn` pass. Escalate: a tip that does not sit on its structure |
-| E5 | Docs pass: `docs/ssb.md` stale sections (status header, file list, pack list, decisions duplicated in the roadmap), `docs/ssb-roadmap.md` stale statuses, `README.md` test list, `docs/wip.md`, `docs/verification.md` (`test-search`, `test-airway-resume`) | Haiku | E1-E4 | those files | no doc names a file that `ls` does not find; `check-data` passes. Escalate: executor name (Sonnet in the roadmap, Haiku in `AGENTS.md`) |
+| E5 | Docs pass: `docs/ssb.md` stale sections (status header, file list, pack list, decisions duplicated in the roadmap), `README.md` test list, `docs/wip.md`, `docs/verification.md` (`test-search`, `test-airway-resume`) | Haiku | E1-E4 | those files | no doc names a file that `ls` does not find; `check-data` passes. Escalate: executor name (Sonnet in the roadmap, Haiku in `AGENTS.md`) |
 
 Review: Opus reviews E2 and E4 diffs; the owner vets every anatomical claim (regions, moved anchors).
 

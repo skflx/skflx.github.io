@@ -9,7 +9,7 @@ radius, the E3b midline rule, lm.choanal-arch.M), its tip lies in an airway labe
 s.nasal-vestibule: mucosa, not a space the scope sits in), and its target is inside the field. This file ports
 scope.js (shaft_dir, frame_of, clearance) and checks it against the committed poses (`check`).
 
-Method. Each row of TABLE (P3's table in docs/ssb-roadmap.md: station, state reached at, P1's prototype pose,
+Method. Each row of TABLE (P3's table in plans/2026-10-07-ssb-roadmap.md: station, state reached at, P1's prototype pose,
 lens, target, what should fill the image) is solved on the state's volume (the base with its patch applied):
   1. the prototype pose is tested first; if it is free, the tip is in air and the target is within OFF_MAX of the
      view axis it is kept (its numbers are re-measured here);
@@ -257,7 +257,7 @@ def cast(vol, tip, v, up, right, air, prominence=False):
 
 
 # ---------------------------------------------------------------------------------------------- the rows
-# Targets are as P1 used them (docs/ssb-roadmap.md P3, "Targets"): a graph id, or a label's voxel centroid with a
+# Targets are as P1 used them (plans/2026-10-07-ssb-roadmap.md P3, "Targets"): a graph id, or a label's voxel centroid with a
 # bound on A / S / R. `side` is the target's side; `via` the nostril when it is not the target's own.
 def _bounded(label, **b):
     return {'label': label, **b}

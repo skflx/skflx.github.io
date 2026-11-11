@@ -42,7 +42,7 @@ standard one (same names, same indices, append only), so an index means the same
 ssb/anatomy/scanned/ is regenerated in full by this command, and ssb/anatomy/index.json's `scanned` entry is written from
 the numbers it prints (volumes, asymmetry indices, NasalSeg percentiles).
 
-Owner decisions of 2026-10-05 that shape this script (the first run escalated, docs/ssb-roadmap.md N1):
+Owner decisions of 2026-10-05 that shape this script (the first run escalated, plans/2026-10-07-ssb-roadmap.md N1):
   * The midline gate is the fitted plane's R at the septum centroid and over its extent, not its extrapolation to
     the origin; the tilt is printed, not gated. The mirror plane is R = 0, not the fitted plane.
   * Mirror at R = 0 plainly. The right frontal tables cross R = 0 by up to 5 mm in the as-scanned head; the two
