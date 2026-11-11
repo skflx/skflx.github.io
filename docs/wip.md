@@ -137,6 +137,8 @@ ICA, ET and superior canal moved; only `incus` and `annulus` remain in `TRUTH_EX
 notes and relations are draft (owner, `docs/decisions.md` §7). Architecture: `AGENTS.md`.
 Real CT has a "Model outline" toggle (key M, `#m=ct&ov=1&ovo=0-100`) that draws the model's label edges over the slice, built on first use.
 Measured fit is poor: model air and bone are not dark and bright where the UW CT is, even after a 4 mm best shift.
+Bone envelope: `tools/olsb-ct-fit.mjs` scores it against the CT (bone Dice, CT level under model bone and air) and `--tune` fits the `FIT` object at the top of `js/olsb/volume.js`, bounded to +-4 mm / +-25 %.
+Bounded tuning only moved bone Dice from 0.39 to 0.43: the model is a solid block over soft tissue (medial, anterior, inferior) and its air-cell foam sits lower than the CT's pneumatization, which is a topology change, not a parameter. Owner decision: derive the envelope from the CT directly?
 
 **Next:** owner review of the anatomy, notes and relations, 3D geometry first.
 Candidates: segmenting a real temporal bone CT into the same labels (SSB's

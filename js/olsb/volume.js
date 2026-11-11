@@ -89,14 +89,23 @@
     var C_COCHCAP = LABELS.filter(function (l) { return l && l.cochlear; })[0].code;
 
     /* ---------- the anatomy (mm) ---------- */
+    /* Bone envelope parameters, fitted to the UW CT by tools/olsb-ct-fit.mjs (--tune writes these; TUNE names the ones it may move).
+       Read at build time, so the tuner changes them without editing code. */
+    var FIT = {
+        cortex: 19.4, cortexBump: 1.5, floor: 8.8, base: -13.28125, tipDrop: 7,
+        SPEC_C: [2.5, -3.9375, -4.6], SPEC_R: [20, 17, 15.9], PF_A: [-18.75, 1.5, 0],
+        cellCortex: 1.1, cellFloor: 0.9, cellPf: 0.8, cellSeptum: 0.525, pneu: 0.75,
+        TUNE: ['cortex', 'cortexBump', 'floor', 'base', 'tipDrop', 'SPEC_C.0', 'SPEC_C.1', 'SPEC_C.2', 'SPEC_R.0', 'SPEC_R.1', 'SPEC_R.2',
+            'PF_A.0', 'cellCortex', 'cellFloor', 'cellPf', 'cellSeptum', 'pneu']
+    };
     /* Lateral surface of the skull: flat over the mastoid, curving in at the tip. */
     function cortexX(y, z) {
         var dy = (y + 11) / 8, dz = (z + 3) / 9;
-        return 17.4 + 1.5 * Math.exp(-dy * dy - dz * dz) - (z < -8 ? 0.015 * (z + 8) * (z + 8) : 0) - (y > 9 ? 0.25 * (y - 9) : 0)
+        return FIT.cortex + FIT.cortexBump * Math.exp(-dy * dy - dz * dz) - (z < -8 ? 0.015 * (z + 8) * (z + 8) : 0) - (y > 9 ? 0.25 * (y - 9) : 0)
             + 0.08 * Math.sin(0.9 * y + 1.3) * Math.sin(0.7 * z);
     }
     /* The specimen: a rounded block cut out of the skull around the ear. */
-    var SPEC_C = [2.5, -3.5, -4.6], SPEC_R = [18, 21, 15.9];
+    var SPEC_C = FIT.SPEC_C, SPEC_R = FIT.SPEC_R;
     function inSpecimen(x, y, z) {
         var a = (x - SPEC_C[0]) / SPEC_R[0], b = (y - SPEC_C[1]) / SPEC_R[1], c = (z - SPEC_C[2]) / SPEC_R[2];
         return a * a * a * a + b * b * b * b + c * c * c * c <= 1;
@@ -104,16 +113,16 @@
     /* Middle fossa floor: high over the attic, lower anteromedially, a bump over the superior canal. */
     function floorZ(x, y) {
         var dx = x + 2.4, dy = y + 0.8;
-        return 8.8 + 0.1 * x - 0.22 * Math.max(0, y - 3) + 0.12 * Math.max(0, -y - 14)
+        return FIT.floor + 0.1 * x - 0.22 * Math.max(0, y - 3) + 0.12 * Math.max(0, -y - 14)
             + 0.55 * Math.exp(-(dx * dx + dy * dy) / 5);
     }
     /* Skull base underside; the mastoid tip hangs below it posterolaterally. */
     function baseZ(x, y) {
         var t = clamp((x - 3) / 4, 0, 1), dy = (y + 12) / 6;
-        return -12.5 - 7 * Math.exp(-dy * dy) * t;
+        return FIT.base - FIT.tipDrop * Math.exp(-dy * dy) * t;
     }
     /* Posterior face of the petrous bone: a plane parallel to the posterior canal. */
-    var PF_N = nrm([-0.63, -0.78, 0]), PF_A = [-15, 1.5, 0];
+    var PF_N = nrm([-0.63, -0.78, 0]), PF_A = FIT.PF_A;
     function pfSide(p) { return dot(PF_N, sub(p, PF_A)); }
 
     /* External canal: elliptical, axis tilting anteroinferiorly as it goes medially. */
@@ -325,7 +334,7 @@
         });
 
         /* 2. Mastoid air cells: a jittered Voronoi foam with thin septa, inside the mastoid. */
-        var pneu = opts.pneu == null ? 1 : opts.pneu;
+        var pneu = opts.pneu == null ? FIT.pneu : opts.pneu;
         function hash(a, b, c, s) {
             var h = (a * 374761393 + b * 668265263 + c * 2147483647 + s * 1274126177) | 0;
             h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -371,9 +380,9 @@
             });
         }
         if (pneu > 0) {
-            cells([-1.5, -24.5, -20.5, 19.5, -4.6, 10], 2.7, 0.42, function (x, y, z) {
-                if (x > cortexX(y, z) - 1.1 || z > floorZ(x, y) - 0.9 || z < baseZ(x, y) + 0.9) return false;
-                if (pfSide([x, y, z]) > -0.8) return false;
+            cells([-1.5, -24.5, -20.5, 19.5, -4.6, 10], 2.7, FIT.cellSeptum, function (x, y, z) {
+                if (x > cortexX(y, z) - FIT.cellCortex || z > floorZ(x, y) - FIT.cellFloor || z < baseZ(x, y) + 0.9) return false;
+                if (pfSide([x, y, z]) > -FIT.cellPf) return false;
                 return eacRho(x, y, z) > 1.45 && !(x < 1 && y > -6 && z < -6);
             }, C.mastoidcells, 11);
             cells([-1.6, -3.5, -9.6, 3.2, 3.6, -7.2], 1.3, 0.3, function () { return true; }, C.hypocells, 23);
@@ -839,7 +848,7 @@
     /* Three grids: the whole specimen; the tympanic cavity and labyrinth at a third of the
        voxel size; and a movable detail cube at half that again. Each sits on the boundaries of
        the grid it refines, so the meshes meet edge to edge. */
-    O.volume = { build: build, carve: carve, LEVELS: LEVELS, LABELS: LABELS, LAYERS: LAYERS, STATES: STATES, VIEWS: VIEWS, TOURS: TOURS, codes: C };
+    O.volume = { FIT: FIT, build: build, carve: carve, LEVELS: LEVELS, LABELS: LABELS, LAYERS: LAYERS, STATES: STATES, VIEWS: VIEWS, TOURS: TOURS, codes: C };
 
     /* As a Web Worker: build a level (the micro level with the box it is asked for), carve its
        states, and mesh them (with js/olsb/mesh.js, whose stamped URL the page sends first).

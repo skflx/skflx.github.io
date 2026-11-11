@@ -48,6 +48,8 @@ for p in coronal parallel perpendicular; do .venv/bin/python -I $P/register.py $
 .venv/bin/python -I $P/contactsheet.py DIR --only facial-nerve --tag fn   # review sheets (not committed)
 ```
 
+`node tools/olsb-ct-fit.mjs` scores OLSB's bone envelope against `ct/` (Dice, CT level under model bone and air) and `--tune` fits `FIT` in `js/olsb/volume.js`; it reads only this folder.
+
 OpenEar sources: `tools/tbone-pipeline/fetch_openear.py` and `ingest.py` fetch and resample one
 OpenEar specimen into the git-ignored `tools/tbone-pipeline/incoming/` only. Nothing from OpenEar is
 committed to this folder. `tools/tbone-pipeline/frame.py` computes that volume's placement; its
