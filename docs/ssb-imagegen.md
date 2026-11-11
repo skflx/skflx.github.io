@@ -6,9 +6,9 @@ owner runs these in the Gemini app and drops the results where each brief
 says. Why these and nothing else: `docs/ssb.md` §11. The rule that governs
 all of them: **generated pixels never carry an anatomical claim.**
 
-## 1. Endoscope-mode surface textures (phase 8)
+## 1. Endoscope-mode surface textures
 
-Procedural shaders ship first; these refine them. One image per prompt.
+Procedural shaders come first (`js/ssb/materials.js`); these refine them. One image per prompt.
 Save as `tools/ssb-pipeline/incoming/<name>.png`; the pipeline's texture
 ingest step checks and converts them to `ssb/textures/<name>.webp`.
 
