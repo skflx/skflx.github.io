@@ -42,24 +42,22 @@
         syncButtons();
     }
 
-    /* ---------- global search hotkey (Cmd-K / Ctrl-K) ---------- */
+    /* ---------- global search hotkey (Cmd-K / Ctrl-K) ----------
+       Opt-out: a page sets data-no-hotkey on <html> or <body> to keep the
+       shortcut off (game, tool, or page with its own text input). */
     window.addEventListener('keydown', function (e) {
         if (e.defaultPrevented || e.shiftKey || e.altKey) return;
-        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-            var active = document.activeElement;
-            var searchInput = document.getElementById('srch-input');
-            if (active && active !== searchInput && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) {
-                return;
-            }
-            e.preventDefault();
-            if (searchInput) {
-                searchInput.focus();
-                searchInput.select();
-            } else {
-                var path = window.location.pathname;
-                if (/airway-jeopardy|oksat-study|oksat-learn|ssb|atlas|OLSB|pdf-chapter/.test(path)) return;
-                window.location.href = 'search.html';
-            }
+        if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'k') return;
+        if (document.documentElement.hasAttribute('data-no-hotkey') || (document.body && document.body.hasAttribute('data-no-hotkey'))) return;
+        var searchInput = document.getElementById('srch-input');
+        var active = document.activeElement;
+        if (active && active !== searchInput && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) return;
+        e.preventDefault();
+        if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+        } else {
+            window.location.href = 'search.html';
         }
     });
 

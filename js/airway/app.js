@@ -536,7 +536,7 @@
         quizOpts.map(function (n) {
           var on = S.quizCount === n;
           var label = n === poolSize ? 'All (' + n + ')' : String(n);
-          return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '" style="' + (on ? '--chip-bg:rgba(224,42,56,.12);--chip-text:#E02A38;--chip-border:#941B1B' : '') + '" data-action="set-quiz-count" data-n="' + n + '">' + label + '</button>';
+          return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '" style="' + (on ? '--chip-bg:rgba(240,62,77,.12);--chip-text:#F03E4D;--chip-border:#941B1B' : '') + '" data-action="set-quiz-count" data-n="' + n + '">' + label + '</button>';
         }).join('') + '</div></div>';
       body += '<div class="aw-section"><div class="aw-howto"><p>Solo self-study. Answer, see the full explanation + pearl, move on. Results show your % and a review of anything missed.</p></div></div>';
       var canStartQuiz = poolSize > 0;
@@ -789,7 +789,7 @@
 
     var html = '<div class="aw-modal-backdrop"><div class="aw-modal"><div class="aw-card">';
     html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) +
-      '<span class="aw-badge" style="--b-bg:transparent;--b-text:#E02A38;--b-border:#941B1B">' + m.cell.value + ' pts</span></div>' +
+      '<span class="aw-badge" style="--b-bg:transparent;--b-text:#F03E4D;--b-border:#941B1B">' + m.cell.value + ' pts</span></div>' +
       (m.phase === 'steal-pick' || m.phase === 'steal-verdict' ? '<span class="aw-steal-flag">⇄ Steal · ' + m.cell.value + ' pts</span>' : '') + '</div>';
 
     html += '<div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';

@@ -46,19 +46,23 @@ only tokens, never raw values, so a retheme is a one-block edit.
 
 ## 2. Color tokens
 
-| Token | Light | Dark | Role |
-|---|---|---|---|
-| `--ok-bg` | `#F1F1EC` | `#0D0E10` | canvas (paper / ink) |
-| `--ok-surface` | `#FAFAF7` | `#16181B` | cards, modal |
-| `--ok-text` | `#121418` | `#ECEBE6` | primary text; primary buttons |
-| `--ok-accent` | `#2445B0` | `#8EA7FF` | actions, focus, progress (audiogram blue) |
-| `--ok-ochre` | `#941B1B` | `#E02A38` | kickers, review-due (audiogram red; historical token name) |
-| `--ok-correct` | `#1F7A52` | `#5FD3A0` | pass |
-| `--ok-incorrect` | `#B0243A` | `#FF7A8A` | miss |
-
-Subspecialty hues (module identity) are unchanged and live only in
+The values live in `css/oksat.css` (light and dark blocks); this section names
+the roles only. Subspecialty hues (module identity) live in
 `OKSAT_SUBSPECIALTIES` (`js/oksat/manifest.js`); changing them is an owner
 decision.
+
+| Token | Role |
+|---|---|
+| `--ok-bg` | canvas (paper / ink) |
+| `--ok-surface` | cards, modal |
+| `--ok-text` | primary text; primary buttons |
+| `--ok-accent` | actions, focus, progress (audiogram blue) |
+| `--ok-ochre` | kickers, review-due (audiogram red; historical token name) |
+| `--ok-correct` | pass |
+| `--ok-incorrect` | miss |
+
+Text on a signal fill is `--on-signal`, defined in `css/site.css`. In dark it
+is `#FAFAF7` (it was `#0D0E10`).
 
 ## 3. Typography — font themes
 
