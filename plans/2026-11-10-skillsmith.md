@@ -109,61 +109,9 @@ functions take parsed input so they are testable without the filesystem.
 CI: one step `Lint skills` in `.github/workflows/ci.yml`, beside the OKSAT lints, running
 `node tools/lint-skills.mjs --self-test && node tools/lint-skills.mjs`.
 
-## 4. The playbook's content (`SKILL.md` and references)
+## 4. The playbook's content
 
-Frontmatter description: what it does, then `Use when` asked for a new skill, to improve, audit or
-shorten one, after a skill-guided task went wrong, or when the model roster changes. Not for
-editing `AGENTS.md` rules or third-party skills.
-
-**Anatomy of a good skill** (`SKILL.md`, brief):
-- Description is the trigger: what it produces, `Use when …` with the owner's real phrasings, and
-  the near-miss it must not take.
-- Body order: owning doc pointer; constraints with reasons; acceptance commands; escalation
-  conditions; scaffold last, each step naming the eval case it serves.
-- State the goal and the constraint, not the keystrokes. Deterministic work is a script under
-  `tools/`, not prose. Detail a task needs only sometimes goes in `reference/`, loaded on demand.
-- A rule every agent needs goes in `AGENTS.md`, not in a skill.
-
-**Modes:**
-
-1. `new <name>`: evidence (three real requests or failures from git log, PRs, issues, or the
-   owner's words; else stop and say so) → write `evals.json` → baseline the `dev` tasks with no
-   skill at the executor tier → write the minimal `SKILL.md` covering only what failed plus
-   constraints → rerun → accept rule → register in `AGENTS.md`, lint, stamp.
-2. `audit [<name>|--due]`: lint → trigger evals → task evals → scorecard → edit only for failing
-   cases → rerun → stamp. Without a name, audits what `node tools/lint-skills.mjs --due` lists.
-3. `upgrade` (roster changed): edit `roster.json`; per skill, baseline with no skill on the new
-   executor; delete scaffold no case needs; then tier descent (try the skill one tier cheaper) and
-   record `floor`. Knowledge and constraints are never ablated away.
-4. `retro` (a skill-guided task was corrected by the owner, a reviewer, or CI): write the incident
-   as a task case (`origin: incident: …`) → confirm it fails → smallest edit → accept rule. If the
-   cause was a missing repo-wide rule, propose the `AGENTS.md` line instead.
-
-**How evals run** (`reference/evals.md`):
-- Trigger evals: one scout call for all skills at once. It receives every skill's `name` and
-  `description` only, and every trigger prompt, and returns which skill (or none) it would invoke
-  per prompt. Scored against `expect`. A miss is fixed in the description, never the body.
-- Task evals: one executor subagent per run, `isolation: worktree`, prompt = the case prompt
-  alone (the skill is discovered, not pasted), k=3 runs per case. Command checks run in that
-  worktree; `judge:` checks go to a scout-tier judge that sees the diff and the statement, not
-  which arm produced it. Worktrees are discarded.
-- Scorecard: a table of case × runs passed (`3/3`, `1/3`), nothing else.
-- **Accept rule**: an edit lands only if (a) the targeted case goes from at most 1/3 to 3/3,
-  (b) no case that was 3/3 drops, holdout included, (c) the body grew by at most 10 lines per
-  fixed case, else move detail to `reference/`. 3/3 against 0/3 is the weakest result worth acting
-  on (Fisher exact, one-sided p = 0.05); anything less is noise, so rerun or leave it.
-- An eval case that the frontier model fails with and without the skill is a bad case or an
-  owner question, not a skill defect.
-
-**Token rules** (`reference/tiers.md`):
-- Planner writes specs and case rubrics and reads scorecards only. Orchestrator dispatches and
-  adjudicates. Executor edits skills and is the task-eval subject. Scout runs trigger evals,
-  judging, lint and docs passes.
-- Order of spend: lint (free) → trigger evals (one scout call) → task evals only for due or
-  changed skills. Stop at the first stage that fails and fix there.
-- Every subagent reports at most 150 words plus the scorecard table; never file contents.
-- A dispatch prompt names Goal, Read, Touch, Accept, Report (the WP format of
-  `docs/delegation.md`), and gives templates for the three calls (trigger run, task run, judge).
+Lives in `.claude/skills/skillsmith/SKILL.md` and `reference/`; the accept rule is in `reference/evals.md`. Read those, not this section.
 
 ## 5. Work packages
 
