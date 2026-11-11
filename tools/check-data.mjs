@@ -177,16 +177,8 @@ const TRUTH_CLASS = {
 const TRUTH_BASE = { compact: 2.5, labyrinth: 2.5, extended: 3.5 };
 /* Outside the limit at the first enforcing run (2026-11-11); each is the owner's to vet (#250): move the anchor, or keep. */
 const TRUTH_EXCEPT = {
-  incus: 'OLSB incus about 3 mm posterior to the tips; tips may mark the body while OLSB centres the long process',
-  ssc: 'OLSB superior canal about 2.5 mm inferior to the tips along the arc',
-  annulus: 'about 5 mm from 2 tips while tm agrees within 1.1 mm: likely where the label tip sits, not geometry',
-  aditus: 'one tip; OLSB aditus about 5 mm medial',
-  antrum: 'mastoid group about 6 mm medial in OLSB',
-  mastoidcells: 'mastoid group about 7 mm medial in OLSB',
-  sigmoid: 'mastoid group about 5.5 mm medial in OLSB',
-  ica: 'OLSB carotid about 4-5 mm lateral and anterior to the tips',
-  et: 'OLSB Eustachian tube about 5.5 mm lateral to the tips',
-  tip: 'one tip, 28 mm from the origin; OLSB mastoid tip about 7 mm medial and superior',
+  incus: 'tips mark the body about 3 mm anterior to where OLSB places it, but they sit at the long-process height and conflict with the malleus tips; not moved, owner to vet',
+  annulus: 'about 5 mm from 2 tips while tm agrees within 1.1 mm: likely where the label tip sits, not geometry; not moved',
 };
 
 function checkOlsbTruth(V, vol, byId) {

@@ -16,6 +16,8 @@
    Surgical states carve the built volume (carve()), keeping protective
    margins round the hazards the way the drill would.
 
+   Fitted to UW landmark medians (tbone/geometry/landmarks.json); one specimen; scale +-10 %.
+
    Geometry is a schematic reconstruction, not a scan: positions are
    about right, shapes are idealized. Draft content: medical correctness
    is the owner's to verify (docs/decisions.md section 7).
@@ -90,11 +92,11 @@
     /* Lateral surface of the skull: flat over the mastoid, curving in at the tip. */
     function cortexX(y, z) {
         var dy = (y + 11) / 8, dz = (z + 3) / 9;
-        return 11.9 + 1.5 * Math.exp(-dy * dy - dz * dz) - (z < -8 ? 0.09 * (z + 8) * (z + 8) : 0) - (y > 9 ? 0.25 * (y - 9) : 0)
+        return 17.4 + 1.5 * Math.exp(-dy * dy - dz * dz) - (z < -8 ? 0.015 * (z + 8) * (z + 8) : 0) - (y > 9 ? 0.25 * (y - 9) : 0)
             + 0.08 * Math.sin(0.9 * y + 1.3) * Math.sin(0.7 * z);
     }
     /* The specimen: a rounded block cut out of the skull around the ear. */
-    var SPEC_C = [0, -3.5, -3], SPEC_R = [15.5, 21, 14.6];
+    var SPEC_C = [2.5, -3.5, -4.6], SPEC_R = [18, 21, 15.9];
     function inSpecimen(x, y, z) {
         var a = (x - SPEC_C[0]) / SPEC_R[0], b = (y - SPEC_C[1]) / SPEC_R[1], c = (z - SPEC_C[2]) / SPEC_R[2];
         return a * a * a * a + b * b * b * b + c * c * c * c <= 1;
@@ -138,19 +140,19 @@
     var GENICULATE = [-1.4, 3.6, 3.1];
     var CHORDA = [[2.2, -5.9, -8.5], [3.4, -5.4, -4.0], [4.6, -4.6, -0.5], [5.5, -3.7, 1.8], [5.35, -1.5, 3.1],
         [5.3, 0.8, 3.4], [5.6, 3.4, 3.1], [6.0, 5.2, 2.6], [6.6, 8.0, 1.5]];
-    var SIGMOID = [[4.6, -25.5, 7.4, 3.6], [5.2, -21.5, 3.5, 3.8], [4.6, -18.5, -1.5, 3.8], [2.8, -14.5, -6.0, 3.5],
+    var SIGMOID = [[11.5, -25.5, 7.4, 3.6], [12.0, -21.5, 3.5, 3.8], [11.0, -18.5, -1.5, 3.8], [6.5, -14.5, -6.0, 3.5],
         [-0.8, -10.5, -9.0, 3.1], [-1.0, -5.5, -10.6, 3.0]];
     var JB = [-1.0, -3.0, -10.6], JB_R = 3.0;
-    var ICA = [[-2.0, 7.4, -19, 2.3], [-2.2, 7.6, -9, 2.3], [-2.8, 8.2, -6.2, 2.3], [-5.2, 10.4, -5.6, 2.3],
-        [-12.5, 16, -5.2, 2.3], [-17, 19.5, -5, 2.3]];
-    var ET = [[2.6, 4.6, -1.0, 1.6], [1.5, 8, -1.8, 1.35], [-0.8, 12, -3.4, 1.1], [-3.5, 16.5, -5.2, 1.0], [-6, 20, -6.8, 1.0]];
+    var ICA = [[-2.0, 7.4, -19, 2.3], [-2.2, 7.4, -9, 2.3], [-3.2, 7.2, -6.0, 2.3], [-8.5, 8.0, -4.4, 2.3],
+        [-13.0, 8.4, -3.6, 2.3], [-17.5, 9.2, -3.2, 2.3]];
+    var ET = [[2.6, 4.6, -1.0, 1.6], [0.4, 6.4, -1.4, 1.4], [-3.2, 8.6, -1.7, 1.2], [-8.0, 10.8, -2.0, 1.1], [-11.5, 14, -3.8, 1.0]];
     var TENSOR = [[0.3, 2.7, 0.6, 0.7], [-0.9, 6, -0.4, 0.8], [-3.6, 11.5, -1.8, 0.8], [-6, 16, -3.2, 0.7]];
     var IAC_AX = [[-5.6, 1.4, -0.1], [-16.5, 1.7, -0.3]], IAC_R = 2.0;
     var VESTIBULE = { c: [-2.0, -0.7, 0.4], r: [1.3, 2.1, 1.6] };
     /* Canals: centre, plane normal, radius, two vestibular ends (the first ampullated). */
     var SCC = {
         lscc: { c: [-0.5, -2.6, 3.3], n: nrm([0, -0.5, 0.87]), R: 2.6, a: [-1.3, 0.6, 1.7], b: [-1.8, -2.4, 1.3] },
-        ssc: { c: [-2.4, -0.8, 3.9], n: nrm([-0.78, 0.63, 0]), R: 2.7, a: [-1.8, 0.9, 1.9], b: [-3.0, -1.9, 1.9] },
+        ssc: { c: [-2.4, -0.8, 5.0], n: nrm([-0.78, 0.63, 0]), R: 3.1, a: [-1.8, 0.9, 1.9], b: [-3.0, -1.9, 1.9] },
         pscc: { c: [-1.9, -3.7, 0.2], n: nrm([-0.63, -0.78, 0]), R: 2.6, a: [-2.3, -2.3, -0.9], b: [-3.0, -1.9, 1.9] }
     };
     /* Cochlea: base centre, axis toward the apex (anterolateral, inferior), the round window it hooks to. */
@@ -162,7 +164,7 @@
 
     /* ---------- grid and painting ---------- */
     var LEVELS = {
-        coarse: { vox: 0.3, box: [-16, -25, -18, 16, 18, 12] },
+        coarse: { vox: 0.3, box: [-16, -25, -21, 21, 18, 12] },
         fine: { vox: 0.1, box: [-7.6, -10, -5.4, 8.6, 5.9, 9.3] },
         /* a cube of this many mm, rebuilt round wherever you look closely inside the fine box */
         micro: { vox: 0.05, size: 8 }
@@ -369,7 +371,7 @@
             });
         }
         if (pneu > 0) {
-            cells([-1.5, -24.5, -20, 13, -4.6, 10], 2.7, 0.42, function (x, y, z) {
+            cells([-1.5, -24.5, -20.5, 19.5, -4.6, 10], 2.7, 0.42, function (x, y, z) {
                 if (x > cortexX(y, z) - 1.1 || z > floorZ(x, y) - 0.9 || z < baseZ(x, y) + 0.9) return false;
                 if (pfSide([x, y, z]) > -0.8) return false;
                 return eacRho(x, y, z) > 1.45 && !(x < 1 && y > -6 && z < -6);
@@ -379,7 +381,7 @@
 
         /* 3. Air spaces of the ear, then the bone that bounds them. */
         var EAC_SKIN = 0.35;
-        g.each([2, -4.5, -6, 16, 6, 5.5], function (x, y, z, i) {
+        g.each([2, -4.5, -6, 22, 6, 5.5], function (x, y, z, i) {
             if (x > cortexX(y, z)) return;
             var rho = eacRho(x, y, z);
             var t = tmX(y, z);
@@ -391,7 +393,7 @@
             D(i, Math.min(rho > skinAt ? Math.min((rho - skinAt) * mr, (1 - rho) * mr) : (skinAt - rho) * mr, tmEnd));
         });
         /* Posterior canal wall: the bone behind the canal, lateral to the drum. */
-        g.each([2, -8, -6, 14, 1, 5], function (x, y, z, i) {
+        g.each([2, -8, -6, 20, 1, 5], function (x, y, z, i) {
             if (!BONY[lab[i]] || lab[i] === C.mastoidcells) return;
             var a = eacAxis(x);
             if (eacRho(x, y, z) < 1.75 && y < a[0] - 1.2 && x > tmFlat(y, z) - 1.2) lab[i] = C.pcw;
@@ -415,8 +417,8 @@
             }
             if (code) IN(i, code, dd);
         });
-        tube([[4.1, -3.9, 6.3, 1.4], [3.6, -5.6, 5.7, 1.4], [3.2, -6.4, 5.4, 1.5]], C.aditus, null, 0, BONY);
-        blob([3.0, -8.6, 5.0], [3.0, 3.3, 2.5], C.antrum, BONY);
+        tube([[7.0, -1.8, 5.6, 1.4], [8.4, -3.9, 5.7, 1.4], [9.0, -6.0, 5.4, 1.5]], C.aditus, null, 0, BONY);
+        blob([9.0, -8.6, 5.0], [3.0, 3.3, 2.5], C.antrum, BONY);
         tube(ET, C.et, null, 0, BONY);
         blob([3.2, -4.0, 0.4], [0.9, 0.75, 1.7], C.recess, BONY);
         blob([0.5, -4.0, -1.7], [0.9, 1.25, 1.1], C.sinustymp, BONY);
@@ -535,7 +537,7 @@
         tube([JB.concat(3.0), [-0.8, -3.0, -19, 3.4]], C.jb);
 
         /* 9. Surface marks on the cortex. */
-        g.each([10, -14, -2, 16, 18, 10], function (x, y, z, i) {
+        g.each([15, -14, -2, 22, 18, 10], function (x, y, z, i) {
             if (lab[i] !== C.cortex) return;
             var u = y + 3.6, w = z - 1.6;    /* Macewen's triangle: behind and above the meatus */
             if (u < 0 && w > 0 && z < 7.0 && w > -u * 0.72) lab[i] = C.macewen;
@@ -544,7 +546,7 @@
         var crest = [];
         for (var cy = 3; cy >= -15; cy -= 1.5) crest.push([cortexX(cy, 7.3) - 0.35, cy, 7.3 + 0.012 * (cy + 3) * (cy + 3) * -0.4, 0.75]);
         tube(crest, C.templine, null, 0, mask([0, C.cortex, C.macewen]));
-        blob([12.9, -3.3, 2.4], [0.9, 0.7, 0.8], C.henle, mask([0, C.cortex, C.macewen]));
+        blob([cortexX(-3.3, 2.4) - 0.1, -3.3, 2.4], [0.9, 0.7, 0.8], C.henle, mask([0, C.cortex, C.macewen]));
         tube([[cortexX(3.6, 4.6) - 0.6, 3.6, 4.6, 1.1], [cortexX(10, 4.1) - 0.5, 10, 4.1, 1.3], [cortexX(16, 3.6) - 0.5, 16, 3.6, 1.3]], C.zygroot, null, 0, mask([0, C.cortex, C.tbone]));
 
         /* Anchors for names: the voxel of each label nearest its centroid. */
@@ -672,19 +674,19 @@
                 });
             }
             if (st === 'cortical') {
-                each([-1.2, -25, -16, 14, -3.4, 10], function (x, y, z, i) {
+                each([-1.2, -25, -16.5, 20, -3.4, 10], function (x, y, z, i) {
                     if (!cut[lab[i]] || lab[i] === C.pcw) return;
                     if (z > floorZ(x, y) - 0.8 || pfSide([x, y, z]) > -0.6) return;
                     /* saucerize: widest at the cortex, narrowing to the antrum and the deep landmarks */
                     var depth = cortexX(y, z) - x, ry = (y + 9.5) / 11.5, rz = (z - 0.5) / 11, r2 = ry * ry + rz * rz;
-                    if (r2 >= 1 || depth > 15.5 * Math.pow(1 - r2, 0.55)) return;
+                    if (r2 >= 1 || depth > 21 * Math.pow(1 - r2, 0.55)) return;
                     if (z < baseZ(x, y) + 2.2) return;
                     var p = [x, y, z];
                     if (nearFn(p, 1.3) || nearCh(p, 0.6)) return;
                     lab[i] = CAV;
                 });
                 /* Koerner's septum and the antrum's lateral wall go with it; open the antrum into the cavity. */
-                each([-1, -12.5, 1.5, 7, -4.2, 8.5], function (x, y, z, i) { if (lab[i] === C.antrum) lab[i] = CAV; });
+                each([4, -12.5, 1.5, 13, -4.2, 8.5], function (x, y, z, i) { if (lab[i] === C.antrum) lab[i] = CAV; });
             }
             if (st === 'recess') {
                 each([1.5, -6.6, -4.5, 6.5, -3.0, 3.4], function (x, y, z, i) {
@@ -698,7 +700,7 @@
                 });
             }
             if (st === 'cwd') {
-                each([1.4, -13, -5.5, 14, 3.4, 9.5], function (x, y, z, i) {
+                each([1.4, -13, -5.5, 20, 3.4, 9.5], function (x, y, z, i) {
                     var c = lab[i];
                     if (!(cut[c] || c === C.fcanal || c === C.eac)) return;
                     if (z > floorZ(x, y) - 0.8) return;
@@ -730,7 +732,7 @@
             }
             if (st === 'mcf') {
                 var ssc = vol.lines.ssc;
-                each([5, -9, 6, 14, 13, 12], function (x, y, z, i) {         /* the craniotomy: squama above the floor */
+                each([5, -9, 6, 20, 13, 12], function (x, y, z, i) {         /* the craniotomy: squama above the floor */
                     if (cut[lab[i]] && z > floorZ(x, y) - 0.6) lab[i] = CAV;
                 });
                 each([-16, -6, -1.2, 4, 12, 12], function (x, y, z, i) {
