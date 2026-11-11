@@ -46,7 +46,7 @@ GitHub Pages cannot send response headers, so there is no `frame-ancestors`
 to hijack. A host with header control (for example Cloudflare in front) would close this.
 
 Everything committed is public: the whole repository is served, including `docs/`,
-`tools/` and `archive/`. Nothing secret may be committed, ever (`AGENTS.md`).
+`tools/` and `archive/`. Nothing secret may be committed, ever (`AGENTS.md`). E-mail addresses may not be committed either: `tools/check-data.mjs` `checkNoEmails` fails on any in tracked text, allowing only GitHub no-reply and reserved example addresses (`docs/decisions.md` §11).
 
 ## Residual risk
 

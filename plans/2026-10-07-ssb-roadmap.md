@@ -27,12 +27,12 @@ Each as recommended, unless noted. Rationale: `docs/ssb.md` §13.
 - **O13** (2026-10-08) Mucosa toggle: decongested · as scanned · congested. Inflammatory edema is a condition.
 - **O14** Where the nasal framework is drawn: **both, lab first** (variant lab, then fitted under the specimen's skin and nasal bones). Decided 2026-10-11, as recommended. Unblocks the fit, ST7e, after ST7c and ST7d.
 - **RA-O8** (realistic anatomy): batch 3 is planned only after batches 1–2 are verified. Decided 2026-10-11, as recommended.
+- **RA-O7** (2026-11-11, #295): author names may stay in the tree and in git history (history is not rewritten); citations are fine; e-mail addresses are not (`checkNoEmails`; `docs/decisions.md` §11).
+- **RP3** (2026-11-11, owner delegated the defaults): no Radiopaedia case material is served, and Radiopaedia entries are not pooled into `ssb/anatomy/population.json` (its share-alike licence would bind that file).
+- **OpenEar** (2026-11-11): derived (resampled, cropped) OpenEar data may be committed with the attribution line; raw archives, NRRD, DICOM and donor metadata never (`docs/decisions.md` §11).
 
 ### Open
 
-- **RA-O7** Author names remain in git history before 2026-10-07. Recommended: leave history; rewrite only if the authors ask. (`docs/realistic-anatomy.md` §13.)
-- **RP3, serve case material?** Whether any Radiopaedia volume or image is ever served. RP3 commits none. (WP RP3, Owner line, below.)
-- **RP3, pool into the population file?** Whether Radiopaedia entries may go into `ssb/anatomy/population.json`. Its share-alike licence (CC BY-NC-SA 3.0) would then cover that file.
 - **Carried from `docs/ssb.md` §13:**
   - Strict CSP. Recommended: keep it; gzip first, then Draco's JS decoder. `'wasm-unsafe-eval'` only if the budgets fail.
   - Publish while `draft`. Recommended: yes, with visible unverified markers.
@@ -435,16 +435,12 @@ Format: `docs/delegation.md` §2. Lanes: **P** pipeline/data, **V** viewer,
 ### Wave RA-0 — scoping, credit
 
 ```
-### RA0d — Name guard in check-data
-Goal:     check-data fails if an atlas author's name or e-mail local part appears in any
-          tracked text file, without the names being in the repo.
-Touch:    tools/check-data.mjs; docs/security.md (rule line).
-Steps:    store SHA-256 of lower-case tokens (surnames, full-name bigrams, e-mail local parts —
-          the owner supplies them out of band, Opus hashes them); tokenize tracked text files
-          (git ls-files), hash each token and adjacent bigram, fail on a match with the file and
-          line, printing no name. Bigram-only for any common surname, to avoid false positives
-          on unrelated authors.
-Accept:   check-data passes on master; a scratch file containing one name fails it (not committed).
+### RA0d — E-mail guard in check-data
+Goal:     check-data fails if a tracked text file contains an e-mail address. Author names are allowed (`docs/decisions.md` §11).
+Touch:    tools/check-data.mjs (`checkNoEmails`); docs/security.md (rule line).
+Steps:    scan git ls-files text files (skip binary, js/vendor/, *.min.js, ssb/ct, tbone/ct, openear/); match e-mail-shaped
+          tokens; allow @users.noreply.github.com and the reserved example domains; print file:line only, never the address.
+Accept:   check-data passes on master; a scratch file with an address fails it (not committed).
 Escalate: runtime > 2 s on the repo.
 ```
 

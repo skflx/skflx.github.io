@@ -680,7 +680,7 @@ Orbital and intracranial complications (`dz.orbital-cellulitis`, `dz.subperioste
 
 #### R12.1 Automatic (every PR)
 
-`node tools/check-data.mjs` (graph ids in every label table and patch; licence ledger: every file under `ssb/anatomy/` and `ssb/exemplars/` maps to a licence entry; the name guard) · `node tools/smoke-pages.mjs` · `node tools/test-ssb.mjs` with sections `--only anatomy`, `--only variants`, `--only pathology` · pipeline self-tests (`ops.py --selftest`, `score.py`). Thresholds are set in the work package that introduces them and change only at a checkpoint, with the reason written down.
+`node tools/check-data.mjs` (graph ids in every label table and patch; licence ledger: every file under `ssb/anatomy/` and `ssb/exemplars/` maps to a licence entry; the e-mail guard) · `node tools/smoke-pages.mjs` · `node tools/test-ssb.mjs` with sections `--only anatomy`, `--only variants`, `--only pathology` · pipeline self-tests (`ops.py --selftest`, `score.py`). Thresholds are set in the work package that introduces them and change only at a checkpoint, with the reason written down.
 
 #### R12.2 Checkpoint checklist (Opus, each checkpoint)
 

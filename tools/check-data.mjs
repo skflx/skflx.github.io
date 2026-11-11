@@ -27,6 +27,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import zlib from 'zlib';
 import path from 'path';
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'url';
 import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
 import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
@@ -1198,6 +1199,32 @@ async function checkTboneHeader() {
   ok(err === null, 'tbone: ct.json passes js/ssb/volume.js parseHeader', 'tbone: ' + err);
 }
 
+/* No e-mail addresses in tracked text (owner decision 2026-11-11, docs/decisions.md §11). Author names may
+   appear; e-mail addresses may not. Reports file:line only, never the address. Allowed: GitHub no-reply
+   addresses and the reserved example domains. An npm-style "@scope/pkg" has no dot-TLD domain, so it never matches. */
+function checkNoEmails() {
+  console.log('\nsecurity: no e-mail addresses in tracked text');
+  const EMAIL = /[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,})\b/g;
+  const ALLOW = /(^|\.)(users\.noreply\.github\.com|example\.(com|org|net)|test)$/i;
+  const SKIP = /^(js\/vendor\/|node_modules\/|ssb\/ct\/|tbone\/ct\/|openear\/)|\.min\.js$/;
+  const files = execFileSync('git', ['ls-files', '-z'], { cwd: ROOT, maxBuffer: 1 << 28 }).toString('utf8').split('\0').filter(Boolean);
+  const hits = [];
+  let scanned = 0;
+  for (const file of files) {
+    if (SKIP.test(file) || !fs.existsSync(rel(file))) continue;
+    const buf = fs.readFileSync(rel(file));
+    if (buf.subarray(0, 8000).includes(0)) continue; /* binary */
+    scanned++;
+    const lines = buf.toString('utf8').split('\n');
+    lines.forEach((line, i) => {
+      for (const m of line.matchAll(EMAIL)) {
+        if (!ALLOW.test(m[1])) { hits.push(`${file}:${i + 1}`); break; }
+      }
+    });
+  }
+  ok(hits.length === 0, `no e-mail addresses in ${scanned} tracked text files`, 'e-mail address shape at ' + hits.join(', '));
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkAgents();
@@ -1210,6 +1237,7 @@ checkSsb();
 checkFigures();
 checkOlsb();
 checkAtlasAndUnlisted();
+checkNoEmails();
 await checkTboneHeader();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);

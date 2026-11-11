@@ -28,7 +28,7 @@ Rejected: any model-generated or "enhanced" image as an anatomical source (`AGEN
 | B-3 | **Same frame as UW**: mm, right ear, x lateral, y anterior, z superior, origin at the centre of the oval window, so OLSB and every specimen register to each other. A left bone is mirrored and `mirrored: true` is recorded. |
 | B-4 | **Real spacing replaces inferred scale.** DICOM `PixelSpacing`/`SliceThickness`/`ImagePositionPatient` are read, not guessed; HU is kept (stored as int16 gz, then windowed for display). |
 | B-5 | **One folder per specimen**: `tbone/<source-id>-<n>/` with the UW file layout. The existing UW files stay where they are (moving them is out of scope). Each has its own README row and provenance. |
-| B-6 | **No PHI.** DICOM header tags are dropped at ingest by an allowlist (spacing, orientation, modality, kVp, slice thickness); for NRRD, geometry only, with `space` accepted from a closed vocabulary; a test fails if any other tag text reaches a committed file. Owner-institution data additionally needs the owner's written go-ahead recorded in `LICENSE-data.md`. |
+| B-6 | **No PHI, no raw OpenEar.** OpenEar: only derived data is committed, with the attribution line; raw archives, NRRD, DICOM and donor metadata never (owner, 2026-11-11). **No PHI.** DICOM header tags are dropped at ingest by an allowlist (spacing, orientation, modality, kVp, slice thickness); for NRRD, geometry only, with `space` accepted from a closed vocabulary; a test fails if any other tag text reaches a committed file. Owner-institution data additionally needs the owner's written go-ahead recorded in `LICENSE-data.md`. |
 | B-7 | **Still internal** (as UW T8): no page loads `tbone/` until a WP says so. |
 | B-8 | **Size budget** stated in B1 per specimen (a cropped, gzipped volume must be small enough to live in git; target decided from the first real crop, not guessed here). |
 | B-9 | **Medical claims stay the owner's**: sweeps are `detected | labelled | inferred`, content `draft`; segmentations supplied by a source are cited as such, not re-labelled as ours. |
@@ -64,6 +64,6 @@ Review: Opus reviews each sweep overlay; the owner vets anatomy (`review: draft`
 - **Start with specimen ZETA** (right ear, both scans, registered `CBCT_Unembedded.nrrd` at 0.125 mm, int16). Second: THETA. Not ALPHA, BETA, ETA.
 - **Intensities are scanner grey values, not HU**: B-4's "HU is kept" reads "source values are kept" for OpenEar, and B5's thresholds are relative.
 - **Labels**: 13 segments; no semicircular canals, vestibule, Eustachian tube, jugular bulb or IAC; sinus and dura are one label. Those ids need B5.
-- **Never committed**: any OpenEar NRRD, DICOM, TIFF, PLY or segmentation file. Donor sex and dates in the DICOM headers are never copied.
+- **Never committed**: raw OpenEar archives, NRRD, DICOM, TIFF, PLY or segmentation files, and donor metadata (sex and dates in the DICOM headers). Derived data (resampled, cropped) may be committed with the attribution line (owner, 2026-11-11; `docs/decisions.md` §11).
 - **Unverified until B4 opens the volume**: completeness of the mastoid tip, petrous apex and Eustachian tube; the committed crop's size (B-8).
 
