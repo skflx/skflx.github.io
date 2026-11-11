@@ -24,7 +24,9 @@
             angle `half` radians facing d (a dehiscence), mesh and test alike
    strip  { pts, wdir, w, t, seg? }  a thickened polyline (a ribbon: a cartilage plate, a flap); the
             section is a rectangle in the plane across its tangent, with an implicit test that
-            needs the in-plane curvature below 0.5 / max width (stripInside throws past it)
+            needs the in-plane curvature below 0.5 / max width (stripInside throws past it).
+            inside() and the mesh agree to 0.1 mm only while the turn per vertex is small; at a
+            sharp polyline corner they differ by up to about 0.3 mm, so densify the centreline
    three.js is passed in (build(THREE, params)), never imported, so every
    diorama module stays loadable without WebGL — graph mode reads their
    PARAMS for the URL whitelist.

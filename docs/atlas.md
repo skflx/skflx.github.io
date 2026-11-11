@@ -63,7 +63,7 @@ node tools/atlas.mjs check
 
 ## Sources
 
-Opus drew the control points in 2E (#190). The owner vetted the numbers below at checkpoint #199 (confirmed 2026-11-11). None was re-checked against the printed source in that session; the citations name the
+Opus drew the control points in 2E (#190). Every number below is a draft for the owner to vet. That vetting was owner checkpoint #199, which was closed without being done. None was re-checked against the printed source in that session; the citations name the
 works the values come from, not page-level verification.
 
 **Frame.** `anatomy.json` `_frame`: mm from the centre of the sella, `a` anterior, `s` superior,
