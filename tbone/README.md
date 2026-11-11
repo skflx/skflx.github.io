@@ -55,6 +55,15 @@ OpenEar specimen into the git-ignored `tools/tbone-pipeline/incoming/` only. Not
 committed to this folder. `tools/tbone-pipeline/frame.py` computes that volume's placement; its
 output stays under `incoming/`.
 
+## OpenEar review page (ZETA)
+
+Frame check for an OpenEar specimen, not a build step. Needs `fetch_openear.py`, `ingest.py`, `frame.py` and `olsb-centroids.mjs` outputs in `incoming/` first (see `openear-review.py` header).
+
+```bash
+node tools/tbone-pipeline/olsb-centroids.mjs . > tools/tbone-pipeline/incoming/olsb-centroids.json
+python3 -I tools/tbone-pipeline/openear-review.py ZETA   # -> incoming/review-zeta/index.html (not committed)
+```
+
 ## How it was made, and what it can say
 
 - **Inputs.** All four normal planes at the best resolution served (512 x 512): axial, coronal,
