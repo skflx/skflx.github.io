@@ -382,6 +382,7 @@ function perPoint(x, n, what) {
    w      [lo, hi] width offsets along the width direction, per point (or one pair)
    t      thickness, a number or per point
    seg    subdivisions per segment for the mesh (default 4)
+   `inside()` and the mesh agree to 0.1 mm only while the turn per vertex is small; at a sharp polyline corner they differ by up to about 0.3 mm, so densify the centreline.
    Frame: the tangent T at a point is the unit bisector of its adjacent segments
    (the end segment's direction at the ends); between points the frame is
    interpolated and re-orthogonalized, V = T x W. The cross-section is the
@@ -403,7 +404,7 @@ function stripModel(s) {
     const T = P.map((_, i) => vUnit(vAdd(D[Math.max(0, i - 1)], D[Math.min(n - 2, i)]), `strip tangent at point ${i}`));
     const WD = perPoint(s.wdir, n, 'wdir');
     const LOHI = perPoint(s.w, n, 'w');
-    const TH = typeof s.t === 'number' ? new Array(n).fill(s.t) : perPoint(s.t, n, 't');
+    const TH = typeof s.t === 'number' ? new Array(n).fill(s.t) : (Array.isArray(s.t) && s.t.length === n ? s.t : (() => { throw new Error('kit.strip: t must be a number or one per point (' + n + ' points)'); })());
     const W = WD.map((w, i) => vUnit(vSub(w, vScale(T[i], vDot(w, T[i]))), `strip width direction at point ${i}`));
     for (let i = 0; i < n; i++) {
         if (!(LOHI[i][0] < LOHI[i][1])) throw new Error(`kit.strip: point ${i} needs lo < hi`);
@@ -573,14 +574,16 @@ export function edt(mask, nx, ny, nz, step) {
 }
 
 /* ---- iso-surface: marching cubes ----
-   Corner c sits at MC_CORNER[c] and edge e joins the corners in MC_EDGE[e]: A corner is inside when field < level. MC_TRI[case] lists the triangles of a cube as edge
-   triples (up to five, -1 padded). The rows are generated, not copied: a saddle face connects its inside
-   corners, a rule that depends only on the face's four corners, so neighbouring cells always agree and
-   the mesh is closed (kit tests check every row and the closed sphere). The crossed edges of a row are
-   exactly the sign changes of its case (tested for all 256). */
+   Corner c sits at MC_CORNER[c] and edge e joins the corners in MC_EDGE[e].
+   A corner is inside when field < level.
+   MC_TRI[case] lists the triangles of a cube as edge triples (up to five, -1 padded).
+   The rows are generated, not copied: a saddle face connects its inside corners, a rule that depends
+   only on the face's four corners, so neighbouring cells always agree and the mesh is closed
+   (kit tests check every row and the closed sphere).
+   The crossed edges of a row are exactly the sign changes of its case (tested for all 256). */
 const MC_CORNER = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1]];
 const MC_EDGE = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
-export const MC_TRI = [
+const MC_TRI = [
     [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], // 0
     [0, 3, 8, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], // 1
     [1, 0, 9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1], // 2

@@ -1039,7 +1039,7 @@ literally), profile extrusions (prisms) for plates and the skull base, cylinders
 for vessels and pathways — each kind has one implicit `inside()` test and
 one mesh builder, so anything computed over a diorama sees exactly what is
 drawn. Three more primitives (ST7b, `kit.js`), DOM-free and tested in Node (`node tools/test-ssb.mjs --only kit`):
-- `strip` `{ pts, wdir, w, t, seg? }`: a thickened polyline (a ribbon, a cartilage plate); the section is a rectangle across the tangent, the implicit test is the nearest-point frame, and it throws past an in-plane curvature of 0.5 / max width.
+- `strip` `{ pts, wdir, w, t, seg? }`: a thickened polyline (a ribbon, a cartilage plate); the section is a rectangle across the tangent, the implicit test is the nearest-point frame, and it throws past an in-plane curvature of 0.5 / max width. `inside()` and the mesh agree to 0.1 mm only while the turn per vertex is small; at a sharp polyline corner they differ by up to about 0.3 mm, so densify the centreline.
 - `edt(mask, nx, ny, nz, step)`: the exact separable Euclidean distance transform, in mm, of a voxel mask (Felzenszwalb–Huttenlocher).
 - `isoGeometry` and `isoInside(field, nx, ny, nz, origin, step, level)`: marching cubes over a grid field, with its trilinear inside test (a grid helper, not a solid kind).
 

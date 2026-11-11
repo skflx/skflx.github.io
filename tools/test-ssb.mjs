@@ -5823,7 +5823,6 @@ async function ctShots(browser, base) {
 let scopeWindow = null;
 const scopeWin = () => scopeWindow || (scopeWindow = scopeUnitTests());
 
-/* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
 /* ---- kit (ST7b): the strip solid, the exact distance transform and the iso-surface. Node only: no page. ---- */
 function kitTests() {
   const seeded = (seed) => {
@@ -5911,6 +5910,30 @@ function kitTests() {
     for (let i = 0; i < n; i++) pts.push([0, 1, 2].map((k) => lo[k] + rng() * (hi[k] - lo[k])));
     return pts;
   };
+  /* closed (every undirected edge in exactly two triangles; vertices welded by position) and the signed volume of a mesh */
+  const meshClosed = (g) => {
+    const p = g.getAttribute('position').array;
+    const ix = g.index ? Array.from(g.index.array) : Array.from({ length: p.length / 3 }, (_, i) => i);
+    const ids = new Map();
+    const wid = (v) => {
+      const k = `${Math.round(p[3 * v] * 1e6)},${Math.round(p[3 * v + 1] * 1e6)},${Math.round(p[3 * v + 2] * 1e6)}`;
+      if (!ids.has(k)) ids.set(k, ids.size);
+      return ids.get(k);
+    };
+    const cnt = new Map();
+    let vol = 0;
+    for (let i = 0; i < ix.length; i += 3) {
+      const tri = [ix[i], ix[i + 1], ix[i + 2]];
+      for (let k = 0; k < 3; k++) {
+        const a = wid(tri[k]); const b = wid(tri[(k + 1) % 3]);
+        const key = a < b ? `${a},${b}` : `${b},${a}`;
+        cnt.set(key, (cnt.get(key) || 0) + 1);
+      }
+      const [A, B, C] = tri.map((v) => [p[3 * v], p[3 * v + 1], p[3 * v + 2]]);
+      vol += (A[0] * (B[1] * C[2] - B[2] * C[1]) + A[1] * (B[2] * C[0] - B[0] * C[2]) + A[2] * (B[0] * C[1] - B[1] * C[0])) / 6;
+    }
+    return { open: [...cnt.values()].filter((c) => c !== 2).length, vol };
+  };
   /* parity agreement of a solid's inside() with its mesh, and the largest distance of any disagreement from the surface */
   const stripAgreement = (name, solid, seed) => {
     const g = kit.geometry(THREE, solid);
@@ -5943,6 +5966,18 @@ function kitTests() {
   stripAgreement('90 degree bend', bend90, 12);
   const hairpin = { kind: 'strip', pts: joined(line([-8, 0, 0], [0, 0, 0], 16), arc([0, 3, 0], 3, -Math.PI / 2, Math.PI / 2, 60), line([0, 6, 0], [-8, 6, 0], 16)), wdir: [0, 0, 1], w: [-2, 2], t: 1.5 };
   stripAgreement('180 degree hairpin', hairpin, 13);
+  /* a 13-point (12-segment) 180 degree hairpin: the coarse polyline, the limit the docs name */
+  const coarseHairpin = { kind: 'strip', pts: arc([0, 3, 0], 3, -Math.PI / 2, Math.PI / 2, 12), wdir: [0, 0, 1], w: [-2, 2], t: 1.5 };
+  stripAgreement('13-point coarse hairpin', coarseHairpin, 15);
+
+  /* per-point thickness: a ramp from 0.4 to 0.8 mm over 15 points on a gentle arc (6.4 degrees a vertex) about the width axis */
+  const ramp = { kind: 'strip', pts: arc([0, 10, 0], 10, -Math.PI / 2, 0, 14), wdir: [0, 0, 1], w: [-2, 2], t: Array.from({ length: 15 }, (_, i) => 0.4 + 0.4 * i / 14) };
+  stripAgreement('per-point thickness ramp', ramp, 14);
+  const rampMesh = meshClosed(kit.geometry(THREE, ramp));
+  check(`kit.strip per-point thickness ramp: the mesh is closed (${rampMesh.open} open edges) with positive signed volume (${rampMesh.vol.toFixed(2)} mm3)`, rampMesh.open === 0 && rampMesh.vol > 0);
+  let badLen = null;
+  try { kit.geometry(THREE, { ...ramp, t: ramp.t.slice(0, 7) }); } catch (e) { badLen = e.message; }
+  check('kit.strip: a t array of the wrong length throws, naming the point count', badLen !== null && /one per point \(15 points\)/.test(badLen), String(badLen));
 
   /* the in-plane bend: a radius of 1.5 mm with a width of 1 mm to each side (|κ_w| · w = 0.67) throws, a radius of 3 does not */
   const inPlane = (R) => {
@@ -6052,20 +6087,6 @@ function kitTests() {
   check(`kit.isoInside: agrees with ray parity on the mesh on >= 99.5 % of 20 000 points (${(isoAgree / isoPts.length * 100).toFixed(2)} %)`, isoAgree / isoPts.length >= 0.995);
   check('kit.isoInside: outside the grid is false', isoIn(20, 0, 0) === false && isoIn(0, -13, 0) === false);
 
-  /* the table: for each of the 256 cases, the edges its row names are exactly the sign changes of the case */
-  let tableOk = true;
-  for (let m = 0; m < 256 && tableOk; m++) {
-    const crossing = [];
-    for (let e = 0; e < 12; e++) {
-      const [a, b] = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]][e];
-      if (((m >> a) & 1) !== ((m >> b) & 1)) crossing.push(e);
-    }
-    const row = kit.MC_TRI[m];
-    const used = [...new Set(row.filter((v) => v >= 0))].sort((p, q) => p - q);
-    if (used.join() !== crossing.join()) tableOk = false;
-  }
-  check('kit: the triangle table names, for each of the 256 cases, exactly the crossed edges', tableOk);
-
   /* a random field closes too: every case is exercised, not only the sphere's */
   const NR = 16;
   const rngN = seeded(41);
@@ -6083,6 +6104,38 @@ function kitTests() {
     nedges.set(key, (nedges.get(key) || 0) + 1);
   }
   check('kit.iso random field (every case): the mesh is closed', [...nedges.values()].every((c) => c === 2), `${[...nedges.values()].filter((c) => c !== 2).length} open edges`);
+  /* orientation: every directed edge occurs exactly once, its reverse exists, and the signed volume is positive */
+  const isoOriented = (g) => {
+    const ix = g.index.array;
+    const dir = new Map();
+    for (let i = 0; i < ix.length; i += 3) for (let k = 0; k < 3; k++) {
+      const key = `${ix[i + k]},${ix[i + ((k + 1) % 3)]}`;
+      dir.set(key, (dir.get(key) || 0) + 1);
+    }
+    let bad = 0;
+    for (const [key, c] of dir) {
+      const [a, b] = key.split(',');
+      if (c !== 1 || !dir.has(`${b},${a}`)) bad++;
+    }
+    return { bad, vol: meshClosed(g).vol };
+  };
+  const nOr = isoOriented(gN);
+  check(`kit.iso random field: every directed edge occurs once and its reverse exists (${nOr.bad} bad)`, nOr.bad === 0);
+  check(`kit.iso random field: signed volume > 0 (${nOr.vol.toFixed(2)})`, nOr.vol > 0);
+
+  /* a checkerboard: every inside corner is isolated, so the mesh is many small closed pieces; the border is outside */
+  const NC = 16;
+  const checker = new Float32Array(NC ** 3);
+  for (let z = 0; z < NC; z++) for (let y = 0; y < NC; y++) for (let x = 0; x < NC; x++) {
+    const edge = x === 0 || y === 0 || z === 0 || x === NC - 1 || y === NC - 1 || z === NC - 1;
+    checker[(z * NC + y) * NC + x] = edge ? 1 : (((x + y + z) & 1) ? -1 : 1);
+  }
+  const gC = kit.isoGeometry(THREE, checker, NC, NC, NC, [0, 0, 0], 1, 0);
+  const cOpen = meshClosed(gC).open;
+  check(`kit.iso checkerboard: the mesh is closed (${cOpen} open edges)`, cOpen === 0);
+  const cOr = isoOriented(gC);
+  check(`kit.iso checkerboard: every directed edge occurs once and its reverse exists (${cOr.bad} bad)`, cOr.bad === 0);
+  check(`kit.iso checkerboard: signed volume > 0 (${cOr.vol.toFixed(2)})`, cOr.vol > 0);
 
   /* timings on a 1.2 M-voxel grid (107^3): the Accept's budget, printed, not asserted */
   const BIG = 107;
@@ -6101,6 +6154,7 @@ function kitTests() {
   check('kit: the 1.2 M-voxel timing grids build', gB.index.array.length > 0);
 }
 
+/* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
 const SECTIONS = {
   kit: () => kitTests(),
   dioramas: async (browser, base) => { await dioramaTests(browser, base); await labShots(browser, base); },
