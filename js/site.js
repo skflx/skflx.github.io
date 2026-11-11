@@ -42,6 +42,24 @@
         syncButtons();
     }
 
+    /* ---------- global search hotkey (Cmd-K / Ctrl-K) ---------- */
+    window.addEventListener('keydown', function (e) {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+            var active = document.activeElement;
+            var searchInput = document.getElementById('srch-input');
+            if (active && active !== searchInput && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) {
+                return;
+            }
+            e.preventDefault();
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            } else {
+                window.location.href = 'search.html';
+            }
+        }
+    });
+
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
     else wire();
 })();
