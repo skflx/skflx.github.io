@@ -6,7 +6,11 @@
 The reference file is OLSB's voxel-model centroids, made once by:
     node tools/tbone-pipeline/olsb-centroids.mjs . > tools/tbone-pipeline/incoming/olsb-centroids.json
 
-Writes <out>/frame.json (matrix RAS mm -> OLSB mm, residuals, Bone bounding box). Numbers and fixed rule strings only:
+The rotation is a Kabsch fit (proper rotation, no scale) on the centroids of every segment whose id is also in the
+reference file; the origin is the stapes footplate, and the Kabsch translation is discarded.
+
+Writes <out>/frame.json (matrix RAS mm -> OLSB mm, residuals, Bone bounding box, conditioning numbers of the fit:
+singular values, unconstrained determinant, leave-one-out rotation angles). Numbers and fixed rule strings only:
 segment names are printed for local reading and never stored (ingest.py's rule, B-6).
 numpy and scipy only.
 """
@@ -22,16 +26,17 @@ SEED = 0
 SAMPLE = 200_000
 FOOTPLATE_RADIUS_MM = 0.5
 COCHLEA = ('Scala Tympani', 'Scala Vestibuli')           # union -> glossary id `cochlea`
-# (segment, glossary id) for the residual table; the four FITTED ids drive the rotation
+# (segment, glossary id) for the residual table; every row whose id is in the reference drives the rotation
 ROWS = [('Malleus', 'malleus'), ('Incus', 'incus'), ('Stapes', 'stapes'), ('cochlea', 'cochlea'),
         ('Tympanic Membrane', 'tm'), ('External Auditory Canal', 'eac'), ('Carotis Interna', 'ica'),
         ('Facial Nerve', 'fn'), ('Chorda Tympani', 'chorda'), ('Cochleovestibular nerve', 'cn8')]
-FITTED = ('malleus', 'incus', 'stapes', 'cochlea')
 ORIGIN_RULE = ('stapes footplate: first PCA axis of Stapes voxel centres (mm); the footplate is the axis end farther from '
                'the Incus centroid; origin = centroid of Stapes voxels within 0.5 mm of that end')
-ROTATION_RULE = ('Kabsch on centred centroids of Malleus, Incus, Stapes and cochlea against olsb-centroids ids malleus, '
-                 'incus, stapes, cochlea; rotation only (det +1); no scale; the Kabsch translation is discarded')
-LIMITS = "rotation is fitted to OLSB's procedural model; one specimen"
+ROTATION_RULE = ('Kabsch on centred centroids of every segment whose id is in olsb-centroids (ROWS ids); rotation only '
+                 '(det +1); no scale; the Kabsch translation is discarded')
+LIMITS = ("rotation is fitted to every shared structure of OLSB's procedural model, so residuals against OLSB understate "
+          "disagreement; one specimen")
+MIN_SHARED = 3
 
 
 def _flip(geo):
@@ -69,15 +74,36 @@ def mask_ras(geo, mask):
     return grid_to_ras(geo, np.stack(np.nonzero(mask), 1))
 
 
-def kabsch(src, tgt, reflect=False):
-    """(R, rms): R maps centred src onto centred tgt (R @ (s - mean_s) ~ t - mean_t); det +1 unless reflect."""
+def _kabsch(src, tgt, reflect=False):
+    """(R, rms, det_raw): as kabsch, and det_raw is the determinant of the orthogonal fit before the sign fix."""
     ps, pt = src.mean(0), tgt.mean(0)
     u, _, vt = np.linalg.svd((src - ps).T @ (tgt - pt))
     r = vt.T @ u.T
+    det_raw = float(np.linalg.det(r))
     if not reflect:
-        r = vt.T @ np.diag([1.0, 1.0, np.sign(np.linalg.det(r))]) @ u.T
+        r = vt.T @ np.diag([1.0, 1.0, 1.0 if np.linalg.det(r) >= 0 else -1.0]) @ u.T
     res = (src - ps) @ r.T - (tgt - pt)
-    return r, float(np.sqrt((res ** 2).sum(1).mean()))
+    return r, float(np.sqrt((res ** 2).sum(1).mean())), det_raw
+
+
+def kabsch(src, tgt, reflect=False):
+    """(R, rms): R maps centred src onto centred tgt (R @ (s - mean_s) ~ t - mean_t); det +1 unless reflect."""
+    r, rms, _ = _kabsch(src, tgt, reflect)
+    return r, rms
+
+
+def rot_angle_deg(a, b):
+    """Rotation angle (degrees) of a^T b."""
+    return float(np.degrees(np.arccos(np.clip((np.trace(a.T @ b) - 1) / 2, -1.0, 1.0))))
+
+
+def loo_angles(src, tgt, r):
+    """Leave-one-out: angle (degrees) between the full fit r and the fit without each point, in point order."""
+    out = []
+    for k in range(len(src)):
+        keep = np.arange(len(src)) != k
+        out.append(rot_angle_deg(kabsch(src[keep], tgt[keep])[0], r))
+    return out
 
 
 def footplate_origin(stapes_pts, incus_c):
@@ -131,11 +157,13 @@ def fmt(v):
 def run(a):
     out = I.out_dir_inside(a.out)
     ref = json.load(open(a.ref))
-    missing = [i for i in FITTED if i not in ref]
-    if missing:
-        raise ValueError(f'reference lacks fitted ids {missing}')
-    seg_geo = I.geometry(I.read_nrrd(a.seg)[1])
-    masks = I.read_segments(a.seg)
+    shared = [(name, gid) for name, gid in ROWS if gid in ref]
+    if len(shared) < MIN_SHARED:
+        raise ValueError(f'reference shares {len(shared)} ids with the segmentation; need at least {MIN_SHARED}')
+    loaded = I.read_nrrd(a.seg)
+    seg_geo = I.geometry(loaded[1])
+    masks = I.read_segments(a.seg, loaded)
+    del loaded
     ct, ct_hdr = I.read_nrrd(a.ct)
     ct_geo = I.geometry(ct_hdr)
     if ct_geo['dims'] != list(ct.shape):
@@ -159,11 +187,18 @@ def run(a):
     print(f'origin (footplate): {fmt(origin)}  end={fp["footplate_end"]} n={fp["n_within_0_5mm"]} '
           f'dist low {fp["dist_low_mm"]:.3f} high {fp["dist_high_mm"]:.3f} mm')
 
-    src = np.array([cent[k] for k in ('Malleus', 'Incus', 'Stapes', 'cochlea')])
-    tgt = np.array([ref[i] for i in FITTED], float)
-    r, rms_fit = kabsch(src, tgt)
+    src = np.array([cent[name] for name, _ in shared])
+    tgt = np.array([ref[gid] for _, gid in shared], float)
+    r, rms_fit, det_raw = _kabsch(src, tgt)
     _, rms_refl = kabsch(src, tgt, reflect=True)
+    sv = np.linalg.svd(src - src.mean(0), compute_uv=False)
+    loo = {gid: ang for (_, gid), ang in zip(shared, loo_angles(src, tgt, r))}
+    loo_max = max(loo.values())
+    print(f'fitted on {len(shared)} ids: {[gid for _, gid in shared]}')
     print(f'rotation (det +1): rms_fit {rms_fit:.4f} mm; with reflection allowed rms {rms_refl:.4f} mm')
+    print(f'conditioning: singular values {fmt(sv)}; det before sign fix {det_raw:.6f}; '
+          f'leave-one-out max angle {loo_max:.3f} deg')
+    print('  leave-one-out angle (deg): ' + ', '.join(f'{gid} {ang:.3f}' for gid, ang in loo.items()))
     print('rotation matrix:')
     for row in r:
         print('  ' + fmt(row))
@@ -177,7 +212,7 @@ def run(a):
 
     lm = json.load(open(LANDMARKS))['landmarks']
     lm_med = {}
-    for g in {x['g'] for x in lm}:
+    for g in {x['g'] for x in lm if x['g'] is not None}:
         lm_med[g] = np.median([x['point_mm'] for x in lm if x['g'] == g], axis=0)
 
     print('residuals (OLSB mm; * = fitted):  T = transformed centroid, D = T - ref, d = |D|')
@@ -189,7 +224,7 @@ def run(a):
         t = to_olsb(cent[name])
         rf = np.asarray(ref[gid], float)
         diff = t - rf
-        row = {'id': gid, 'fitted': gid in FITTED, 'transformed': t.tolist(), 'ref': rf.tolist(),
+        row = {'id': gid, 'fitted': True, 'transformed': t.tolist(), 'ref': rf.tolist(),
                'diff': diff.tolist(), 'distance_mm': float(np.linalg.norm(diff)),
                'landmark_median': None, 'landmark_distance_mm': None}
         line = (f'  {"*" if row["fitted"] else " "} {gid:8s} {name:26s} T={fmt(t)} ref={fmt(rf)} '
@@ -207,8 +242,10 @@ def run(a):
     print('Sinus Dura centroid (OLSB mm): ' + fmt(to_olsb(cent['Sinus Dura'])))
 
     frame = {'source': a.source, 'method': {'origin': ORIGIN_RULE, 'rotation': ROTATION_RULE},
-             'matrix': m.tolist(), 'origin_ras': origin.tolist(), 'fitted': list(FITTED),
-             'rms_fit_mm': rms_fit, 'rms_reflected_mm': rms_refl, 'residuals': rows,
+             'matrix': m.tolist(), 'origin_ras': origin.tolist(), 'fitted': [gid for _, gid in shared],
+             'rms_fit_mm': rms_fit, 'rms_reflected_mm': rms_refl,
+             'fit_singular_values': sv.tolist(), 'det_unconstrained': det_raw,
+             'loo_max_angle_deg': loo_max, 'loo_angles_deg': loo, 'residuals': rows,
              'bone_bbox_mm': bbox, 'limits': LIMITS}
     os.makedirs(out, exist_ok=True)
     json.dump(frame, open(os.path.join(out, 'frame.json'), 'w'), indent=1)

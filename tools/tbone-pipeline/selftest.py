@@ -202,6 +202,22 @@ def _test_segments_shared_layer(tmp):
     print('  read_segments 4D shared layer: masks split by LabelValue')
 
 
+def _test_measurement_frame(tmp):
+    arr = np.zeros((4, 4, 4), 'int16')
+    ok = os.path.join(tmp, 'mf-identity.nrrd')
+    _write_nrrd(ok, arr, 'int16', extra=['measurement frame: (1,0,0) (0,1,0) (0,0,1)'])
+    I.geometry(I.read_nrrd(ok)[1])
+    bad = os.path.join(tmp, 'mf-rotated.nrrd')
+    _write_nrrd(bad, arr, 'int16', extra=['measurement frame: (0,1,0) (-1,0,0) (0,0,1)'])
+    try:
+        I.geometry(I.read_nrrd(bad)[1])
+    except ValueError as e:
+        assert 'measurement frame' in str(e), f'wrong refusal: {e}'
+    else:
+        raise AssertionError('accepted a non-identity measurement frame')
+    print('  measurement frame: identity accepted, rotated frame refused')
+
+
 def _test_space(tmp):
     arr = np.zeros((4, 4, 4), 'int16')
     for value, want in [('RAS', 'right-anterior-superior'), ('lps', 'left-posterior-superior'),
@@ -235,6 +251,7 @@ def ingest_tests():
         _test_segments_4d_defaults(tmp)
         _test_segments_shared_layer(tmp)
         _test_space(tmp)
+        _test_measurement_frame(tmp)
 
 
 def _test_kabsch(tmp):
@@ -283,12 +300,34 @@ def _test_lps_to_ras(tmp):
     print(f'  LPS to RAS: index (2,4,6) -> {got.tolist()} mm; LAS refused')
 
 
+def _test_conditioning(tmp):
+    from scipy.spatial.transform import Rotation
+    rng = np.random.default_rng(3)
+    r_true = Rotation.from_rotvec([0.3, -0.5, 0.8]).as_matrix()
+    # nearly collinear: four points on a line with 0.02 mm off-axis; 0.05 mm noise on one target point
+    line = np.array([[0, 0, 0], [10, 0, 0], [20, 0.02, 0], [30, 0, 0.02]], float)
+    tgt = line @ r_true.T
+    tgt[2] += rng.normal(0, 0.05, 3)
+    r, _, _ = F._kabsch(line, tgt)
+    worst = max(F.loo_angles(line, tgt, r))
+    assert worst > 10, f'collinear set: leave-one-out max {worst:.2f} deg, expected > 10'
+    # well spread: eight non-coplanar points, the same noise
+    spread = np.array([[0, 0, 0], [10, 0, 0], [0, 8, 0], [0, 0, 6], [3, 4, 5], [-7, 2, -3], [5, -6, 4], [-2, -5, -6]], float)
+    tgt = spread @ r_true.T
+    tgt[2] += rng.normal(0, 0.05, 3)
+    r, _, _ = F._kabsch(spread, tgt)
+    well = max(F.loo_angles(spread, tgt, r))
+    assert well < 1, f'spread set: leave-one-out max {well:.3f} deg, expected < 1'
+    print(f'  conditioning: leave-one-out max {worst:.1f} deg (collinear 4) vs {well:.3f} deg (spread 8)')
+
+
 def frame_tests():
     print('frame (WP B4):')
     with tempfile.TemporaryDirectory() as tmp:
         _test_kabsch(tmp)
         _test_footplate(tmp)
         _test_lps_to_ras(tmp)
+        _test_conditioning(tmp)
 
 
 def main():
