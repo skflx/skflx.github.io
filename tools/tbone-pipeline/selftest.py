@@ -76,6 +76,29 @@ def _test_resample(tmp):
     d = np.abs((idx + 0.5) * target - (np.array(mark) + 0.5) * np.array(sp))
     assert (d <= target + 1e-9).all(), f'marker moved by {d} mm'
     print(f'  resample dims {new}, marker moved {np.round(d, 3).tolist()} mm (limit {target})')
+    # output origin (B3): the marker's physical position from the output meta agrees with the source's, within 0.05 mm.
+    # A single voxel is too small to locate to 0.05 mm after resampling (centroid aliasing gives 0.075 mm even with
+    # the origin right), so the marker is a 5x5x5 block centred on `mark`; the unshifted origin would be 0.1 mm off in z.
+    mk = np.zeros(shape, np.int16)
+    mk[5:10, 9:14, 2:7] = 1000
+    src = os.path.join(tmp, 'marker.nrrd')
+    _write_nrrd(src, mk, 'int16')
+    root = os.path.join(tmp, 'marker-incoming')
+    meta, real = I.ingest(src, 'MARKER', target, os.path.join(root, 'marker'), root=root)
+    dims = meta['geometry']['dims']
+    q = np.frombuffer(gzip.decompress(open(os.path.join(real, 'volume.i16.gz'), 'rb').read()), '<i2')
+    q = q.reshape(dims, order='F').astype(float).clip(0)
+    ijk = np.indices(dims)
+    c = np.array([(q * ijk[a]).sum() / q.sum() for a in range(3)])     # intensity-weighted centre, output index
+    d_out, o_out = np.array(meta['geometry']['direction']), np.array(meta['geometry']['origin'])
+    p_out = o_out + sum(c[a] * target * d_out[a] for a in range(3))
+    _, hdr = I.read_nrrd(src)
+    g_src = I.geometry(hdr)
+    d_src, o_src = np.array(g_src['direction']), np.array(g_src['origin'])
+    p_src = o_src + sum(mark[a] * sp[a] * d_src[a] for a in range(3))
+    err = np.abs(p_out - p_src).max()
+    assert err <= 0.05, f'output origin off by {err} mm'
+    print(f'  output origin: marker at {np.round(p_out, 3).tolist()} (output) vs {np.round(p_src, 3).tolist()} (source), err {err:.3f} mm')
 
 
 def _test_ingest_allowlist(tmp):
@@ -88,7 +111,7 @@ def _test_ingest_allowlist(tmp):
     out = os.path.join(root, 'fixture-out')
     meta, real = I.ingest(src, 'FIXTURE', 0.3, out, root=root)
     assert set(meta) == {'source', 'geometry', 'source_dims', 'source_spacing_mm', 'values'}, 'meta keys'
-    assert set(meta['geometry']) == {'dims', 'spacing_mm', 'direction', 'origin', 'dtype'}, 'geometry keys'
+    assert set(meta['geometry']) == {'dims', 'spacing_mm', 'direction', 'origin', 'space', 'dtype'}, 'geometry keys'
     blobs = []
     for dp, _, fs in os.walk(real):
         for f in fs:
@@ -146,6 +169,60 @@ def _test_segments(tmp):
     print('  read_segments: 4D layer masks and 3D labelmap masks by name')
 
 
+def _test_segments_4d_defaults(tmp):
+    lay = np.zeros((3, 6, 5, 4), np.uint8)       # old Slicer 4D: one 0/1 layer per segment, no Layer or LabelValue keys
+    lay[0, :3] = 1
+    lay[1, 3:, 2:, 1:] = 1
+    lay[2, :, :, :2] = 1
+    path = os.path.join(tmp, 'seg4d-defaults.seg.nrrd')
+    names = ['Liver', 'Spleen', 'Kidney']
+    _write_nrrd(path, lay, 'uchar', dirs='none (0.5,0,0) (0,0.5,0) (0,0,0.5)',
+                extra=[f'Segment{n}_Name:={name}' for n, name in enumerate(names)])
+    got = I.read_segments(path)
+    assert list(got) == names, 'segment names'
+    for n, name in enumerate(names):
+        assert np.array_equal(got[name], lay[n] == 1), f'{name} is not layer {n}'
+    print('  read_segments 4D defaults: segment N read from layer N, label 1')
+
+
+def _test_segments_shared_layer(tmp):
+    lay = np.zeros((1, 6, 5, 4), np.uint8)       # one layer holding two segments, told apart by LabelValue
+    lay[0, :3] = 1
+    lay[0, 3:, 2:] = 2
+    path = os.path.join(tmp, 'seg4d-shared.seg.nrrd')
+    _write_nrrd(path, lay, 'uchar', dirs='none (0.5,0,0) (0,0.5,0) (0,0,0.5)',
+                extra=['Segment0_Name:=A', 'Segment0_Layer:=0', 'Segment0_LabelValue:=1',
+                       'Segment1_Name:=B', 'Segment1_Layer:=0', 'Segment1_LabelValue:=2'])
+    got = I.read_segments(path)
+    a, b = got['A'], got['B']
+    assert np.array_equal(a, lay[0] == 1) and np.array_equal(b, lay[0] == 2), 'masks are not == LabelValue'
+    assert not np.array_equal(a, b), 'two segments in one layer gave equal masks'
+    assert not np.array_equal(a, lay[0] > 0) and not np.array_equal(b, lay[0] > 0), 'mask is layer > 0'
+    print('  read_segments 4D shared layer: masks split by LabelValue')
+
+
+def _test_space(tmp):
+    arr = np.zeros((4, 4, 4), 'int16')
+    for value, want in [('RAS', 'right-anterior-superior'), ('lps', 'left-posterior-superior'),
+                        ('Right-Posterior-Superior', 'right-posterior-superior')]:
+        path = os.path.join(tmp, 'space-ok.nrrd')
+        _write_nrrd(path, arr, 'int16', extra=[f'space: {value}'])
+        _, header = I.read_nrrd(path)
+        assert I.geometry(header)['space'] == want, f'{value} did not normalise to {want}'
+    src = os.path.join(tmp, 'space-bad.nrrd')
+    _write_nrrd(src, arr, 'int16', extra=['space: SECRETSPACE'])
+    root = os.path.join(tmp, 'space-incoming')
+    out = os.path.join(root, 'x')
+    try:
+        I.ingest(src, 'X', 0.3, out, root=root)
+    except ValueError as e:
+        assert 'SECRETSPACE' not in str(e), 'refusal message echoes the space value'
+    else:
+        raise AssertionError('accepted a space outside the closed vocabulary')
+    assert not os.path.exists(out), 'refused space still created an output folder'
+    print('  space: short and long forms normalise; SECRETSPACE refused and not echoed')
+
+
 def ingest_tests():
     print('ingest (WP B3):')
     with tempfile.TemporaryDirectory() as tmp:
@@ -154,6 +231,9 @@ def ingest_tests():
         _test_ingest_allowlist(tmp)
         _test_out_refusal(tmp)
         _test_segments(tmp)
+        _test_segments_4d_defaults(tmp)
+        _test_segments_shared_layer(tmp)
+        _test_space(tmp)
 
 
 def main():

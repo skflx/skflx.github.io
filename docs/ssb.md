@@ -19,7 +19,7 @@ data, ever.
 
 1. **One graph, many views.** Every fact is a typed node in a knowledge graph
    (`docs/authoring-ssb.md`) with edges and sources. The 3D scene, panels, CT
-   overlay, procedures are renderings of that graph; geometry
+   overlay and procedures are renderings of that graph; geometry
    is keyed by the same ids. A fact is written once and cannot disagree with
    itself across views.
 2. **Label the kind of truth.** Four kinds, never blurred:
@@ -197,7 +197,7 @@ never reloads.
 - **Self-test.** Planned, not built: `plans/2026-10-07-ssb-roadmap.md` T1 (issue #294).
 
 **Depth (tier) and truth badges are always visible.** Tier filters labels,
-panel sections, hazards; it never hides geometry needed
+panel sections and hazards; it never hides geometry needed
 for orientation.
 
 ## 4. Coordinate frame and units

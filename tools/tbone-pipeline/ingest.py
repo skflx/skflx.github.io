@@ -4,7 +4,7 @@ B-2, B-6, §6; issue #299).
     python3 -I tools/tbone-pipeline/ingest.py <in.nrrd> --source <id> --spacing 0.3 --out <dir>
 
 numpy and scipy only (no pynrrd, no pydicom). The whole header is read, but only the geometry allowlist
-(`geometry()`: dims, spacing_mm, direction, origin, dtype) and the source id reach an output; no other header
+(`geometry()`: dims, spacing_mm, direction, origin, space, dtype) and the source id reach an output; no other header
 key or value is written anywhere (B-6). `<dir>` must resolve inside tools/tbone-pipeline/incoming/, which is
 git-ignored, so derived volumes never leave it unless the orchestrator says so (B-2).
 
@@ -30,6 +30,14 @@ TYPES = {
     'int64': 'i8', 'int64_t': 'i8', 'long': 'i8', 'long int': 'i8', 'signed long': 'i8', 'signed long int': 'i8',
     'uint64': 'u8', 'uint64_t': 'u8', 'ulong': 'u8', 'unsigned long': 'u8', 'unsigned long int': 'u8',
     'float': 'f4', 'float32': 'f4', 'double': 'f8', 'float64': 'f8',
+}
+
+# NRRD `space` values accepted by geometry(): a closed vocabulary; anything else is refused and not echoed
+SPACES = {
+    'left-posterior-superior': 'left-posterior-superior', 'lps': 'left-posterior-superior',
+    'right-anterior-superior': 'right-anterior-superior', 'ras': 'right-anterior-superior',
+    'left-anterior-superior': 'left-anterior-superior', 'las': 'left-anterior-superior',
+    'right-posterior-superior': 'right-posterior-superior', 'rps': 'right-posterior-superior',
 }
 
 
@@ -115,12 +123,16 @@ def _spatial(header):
 
 def geometry(header):
     """The header allowlist (B-6): spatial dims, spacing_mm, unit direction rows (one per spatial axis, as NRRD
-    lists them), origin and dtype. Spacing is read from space directions, never inferred."""
+    lists them), origin, space (closed vocabulary) and dtype. Spacing is read from space directions, never inferred."""
     sizes, dirs = _spatial(header)
     axes = [i for i, d in enumerate(dirs) if d is not None]
     origin = _vectors(_field(header, 'space origin'))[0]
     if origin is None or len(origin) != 3:
         raise ValueError('space origin must be a 3-vector')
+    space = SPACES.get(_field(header, 'space').strip().lower())
+    if space is None:
+        raise ValueError('NRRD space must be left-posterior-superior, right-anterior-superior, '
+                         'left-anterior-superior or right-posterior-superior (or LPS, RAS, LAS, RPS); refused')
     norms = [float(np.linalg.norm(dirs[i])) for i in axes]
     if min(norms) == 0:
         raise ValueError('zero-length space direction')
@@ -129,13 +141,15 @@ def geometry(header):
         'spacing_mm': norms,
         'direction': [(dirs[i] / n).tolist() for i, n in zip(axes, norms)],
         'origin': [float(x) for x in origin],
+        'space': space,
         'dtype': _dtype(header).name,
     }
 
 
 def read_segments(path):
-    """{segment name: boolean 3D mask} for a Slicer .seg.nrrd. A 4D file has a layer axis (space direction
-    `none`): mask = layer > 0, selected by Segment<N>_Layer. A 3D labelmap: mask = data == Segment<N>_LabelValue.
+    """{segment name: boolean 3D mask} for a Slicer .seg.nrrd. A 4D file has a layer axis (space direction `none`).
+    4D: layer = Segment<N>_Layer, default N (old Slicer); mask = layer == Segment<N>_LabelValue, default 1.
+    3D labelmap: mask = data == Segment<N>_LabelValue (required).
     Names are returned for local measurement only."""
     arr, header = read_nrrd(path)
     _, dirs = _spatial(header)
@@ -155,12 +169,12 @@ def read_segments(path):
         name = names[n]
         if name in out:
             raise ValueError(f'duplicate segment name {name!r}')
-        layer, label = header.get(f'segment{n} layer'), header.get(f'segment{n} labelvalue')
         if layer_axis is not None:
-            if layer is None:
-                raise ValueError(f'segment {n}: 4D segmentation needs Segment{n}_Layer')
-            out[name] = np.take(arr, int(layer), axis=layer_axis) > 0
+            layer = int(header.get(f'segment{n} layer', n))
+            label = int(header.get(f'segment{n} labelvalue', 1))
+            out[name] = np.take(arr, layer, axis=layer_axis) == label
         else:
+            label = header.get(f'segment{n} labelvalue')
             if label is None:
                 raise ValueError(f'segment {n}: 3D labelmap needs Segment{n}_LabelValue')
             out[name] = arr == int(label)
@@ -169,7 +183,8 @@ def read_segments(path):
 
 def resample_iso(vol, spacing_mm, target_mm):
     """Order-1 resampling to isotropic target_mm voxels. grid_mode keeps each voxel centre at its physical
-    position. Returns (float32 array, new dims), new dims = round(size * spacing / target)."""
+    position. Returns (float32 array, new dims), new dims = round(size * spacing / target).
+    Dims are rounded, so the effective spacing can differ from target_mm by a fraction of a percent."""
     new = [int(round(n * s / target_mm)) for n, s in zip(vol.shape, spacing_mm)]
     zoom = [m / n for m, n in zip(new, vol.shape)]
     out = ndi.zoom(vol.astype(np.float32), zoom, order=1, mode='nearest', grid_mode=True)
@@ -198,6 +213,8 @@ def ingest(src, source, target_mm, out_dir, root=INCOMING):
     if vol.min() < -32768 or vol.max() > 32767:
         raise ValueError('source values do not fit int16')
     res, new = resample_iso(vol, geo['spacing_mm'], target_mm)
+    # grid_mode keeps voxel centres: output voxel 0 sits 0.5*(target - spacing) along each axis from the source origin
+    origin_out = np.array(geo['origin']) + sum(np.array(geo['direction'][i]) * 0.5 * (target_mm - geo['spacing_mm'][i]) for i in range(3))
     q = np.clip(np.rint(res), -32768, 32767).astype('<i2')
     os.makedirs(out, exist_ok=True)
     with gzip.GzipFile(os.path.join(out, 'volume.i16.gz'), 'wb', 9, mtime=0) as f:
@@ -205,7 +222,7 @@ def ingest(src, source, target_mm, out_dir, root=INCOMING):
     meta = {
         'source': source,
         'geometry': {'dims': new, 'spacing_mm': [float(target_mm)] * 3, 'direction': geo['direction'],
-                     'origin': geo['origin'], 'dtype': 'int16'},
+                     'origin': [float(x) for x in origin_out], 'space': geo['space'], 'dtype': 'int16'},
         'source_dims': geo['dims'],
         'source_spacing_mm': geo['spacing_mm'],
         'values': {'min': int(q.min()), 'max': int(q.max()),

@@ -130,6 +130,8 @@ def read_central_directory(url, size):
 
 def extract(url, ent, outdir):
     name = os.path.basename(ent['name'])
+    if name in ('', '.', '..'):
+        raise Fail('unsafe member name')
     dest = os.path.join(outdir, name)
     if os.path.exists(dest) and os.path.getsize(dest) == ent['usize']:
         print(f'skip {name}: already present ({ent["usize"]} bytes)')
