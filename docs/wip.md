@@ -135,6 +135,8 @@ diagrams (the fallback without WebGL and every `#d=`/`#p=` link), and Real CT. T
 ICA, ET and superior canal moved; only `incus` and `annulus` remain in `TRUTH_EXCEPT`
 (`tools/check-data.mjs`) as probable tip artefacts. Anatomy,
 notes and relations are draft (owner, `docs/decisions.md` §7). Architecture: `AGENTS.md`.
+Real CT has a "Model outline" toggle (key M, `#m=ct&ov=1&ovo=0-100`) that draws the model's label edges over the slice, built on first use.
+Measured fit is poor: model air and bone are not dark and bright where the UW CT is, even after a 4 mm best shift.
 
 **Next:** owner review of the anatomy, notes and relations, 3D geometry first.
 Candidates: segmenting a real temporal bone CT into the same labels (SSB's

@@ -418,6 +418,12 @@ html[data-theme="dark"] {
 #olsb-ct-canvas:focus-visible { outline: 2px solid var(--signal-2); outline-offset: -2px; }
 .olsb-ct-stage .olsb-orient { color: var(--olsb-ct-orient-ink); background: var(--olsb-ct-orient-bg); padding: 0.15rem 0.4rem; border-radius: 2px; }
 #olsb-ct-slider { flex: 1 1 10rem; min-width: 0; }
+.olsb-ct-view { position: relative; }
+.olsb-ct-overlay { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.olsb-ct-overlay[hidden] { display: none; }
+.olsb-ct-ovo { display: inline-flex; align-items: center; gap: 0.4rem; }
+.olsb-ct-ovo[hidden] { display: none; }
+.olsb-ct-ovo input { width: 7rem; }
 .olsb-ct-legend { margin: 0; }
 #olsb-ct-list { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.4rem 0 1rem; }
 .olsb-ct-limits { margin: 1rem 0 0; max-width: 60rem; }
