@@ -201,7 +201,7 @@ Keep each line of text to about 20 characters.
 | `ghost` | occludes, draws nothing (hidden-line fill) | — | — |
 
 A page with its own ground remaps the `--a3d-*` variables in its scope.
-Airway's dark stage does this in its page `<style>`. Shading follows the
+Airway's stage does this per theme in its page `<style>`. Shading follows the
 ground actually under the figure: dark text means paper, so denser glyphs
 mark shadow; light text means a dark stage, so denser glyphs mark light.
 

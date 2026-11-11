@@ -19,26 +19,26 @@
   // ─── Color maps (inline-style driven — keeps CSS structural-only) ───
 
   var TOPIC_COLORS = {
-    basics:        { bg: 'rgba(30,58,138,.45)',  text: '#93c5fd', border: '#1d4ed8' },
-    emergencies:   { bg: 'rgba(127,29,29,.45)',   text: '#fca5a5', border: '#b91c1c' },
-    valves:        { bg: 'rgba(76,29,149,.45)',   text: '#c4b5fd', border: '#6d28d9' },
-    complications: { bg: 'rgba(120,53,15,.45)',   text: '#fcd34d', border: '#b45309' },
-    daily:         { bg: 'rgba(19,78,74,.45)',    text: '#5eead4', border: '#0f766e' },
+    basics:        { bg: 'var(--k-basics-bg)', text: 'var(--k-basics-text)', border: '#1d4ed8' },
+    emergencies:   { bg: 'var(--k-emergencies-bg)', text: 'var(--k-emergencies-text)', border: '#b91c1c' },
+    valves:        { bg: 'var(--k-valves-bg)', text: 'var(--k-valves-text)', border: '#6d28d9' },
+    complications: { bg: 'var(--k-complications-bg)', text: 'var(--k-complications-text)', border: '#b45309' },
+    daily:         { bg: 'var(--k-daily-bg)', text: 'var(--k-daily-text)', border: '#0f766e' },
   };
 
   var DIFF_COLORS = {
-    easy:   { bg: 'rgba(6,78,59,.55)',   text: '#6ee7b7', border: '#047857', pip: '#34d399' },
-    medium: { bg: 'rgba(113,63,18,.55)', text: '#fde047', border: '#a16207', pip: '#facc15' },
-    hard:   { bg: 'rgba(127,29,29,.55)', text: '#fca5a5', border: '#b91c1c', pip: '#f87171' },
+    easy:   { bg: 'var(--k-easy-bg)', text: 'var(--k-easy-text)', border: '#047857', pip: 'var(--k-easy-pip)' },
+    medium: { bg: 'var(--k-medium-bg)', text: 'var(--k-medium-text)', border: '#a16207', pip: 'var(--k-medium-pip)' },
+    hard:   { bg: 'var(--k-hard-bg)', text: 'var(--k-hard-text)', border: '#b91c1c', pip: 'var(--k-hard-pip)' },
   };
 
   var TEAM_COLORS = {
-    cyan:    { bg: '#06b6d4', text: '#22d3ee', border: '#06b6d4', dim: 'rgba(8,51,68,.55)' },
-    rose:    { bg: '#f43f5e', text: '#fb7185', border: '#f43f5e', dim: 'rgba(76,5,25,.55)' },
-    amber:   { bg: '#f59e0b', text: '#fbbf24', border: '#f59e0b', dim: 'rgba(69,26,3,.55)' },
-    emerald: { bg: '#10b981', text: '#34d399', border: '#10b981', dim: 'rgba(2,44,34,.55)' },
-    violet:  { bg: '#8b5cf6', text: '#a78bfa', border: '#8b5cf6', dim: 'rgba(46,16,101,.55)' },
-    orange:  { bg: '#f97316', text: '#fb923c', border: '#f97316', dim: 'rgba(67,20,7,.55)' },
+    cyan:    { bg: '#06b6d4', text: 'var(--k-cyan-text)', border: '#06b6d4', dim: 'var(--k-cyan-dim)' },
+    rose:    { bg: '#f43f5e', text: 'var(--k-rose-text)', border: '#f43f5e', dim: 'var(--k-rose-dim)' },
+    amber:   { bg: '#f59e0b', text: 'var(--k-amber-text)', border: '#f59e0b', dim: 'var(--k-amber-dim)' },
+    emerald: { bg: '#10b981', text: 'var(--k-emerald-text)', border: '#10b981', dim: 'var(--k-emerald-dim)' },
+    violet:  { bg: '#8b5cf6', text: 'var(--k-violet-text)', border: '#8b5cf6', dim: 'var(--k-violet-dim)' },
+    orange:  { bg: '#f97316', text: 'var(--k-orange-text)', border: '#f97316', dim: 'var(--k-orange-dim)' },
   };
 
   var MODES = [
@@ -503,10 +503,10 @@
       body += '</div>';
 
       body += '<div class="aw-section"><div class="aw-howto">' +
-        '<p style="margin:0 0 0.4rem;color:#ECEBE6;font-weight:700;">How to play</p>' +
+        '<p style="margin:0 0 0.4rem;color:var(--aw-text);font-weight:700;">How to play</p>' +
         '<p>Host reads the question aloud. A team buzzes in — tap their button, then mark Correct or Wrong.</p>' +
-        '<p>Wrong answer opens a <strong style="color:#fbbf24">steal window</strong> for the other teams at half points, no penalty on a miss.</p>' +
-        '<p>3 correct in a row earns a <strong style="color:#fde047">+50 streak bonus</strong>.</p>' +
+        '<p>Wrong answer opens a <strong style="color:var(--aw-warn)">steal window</strong> for the other teams at half points, no penalty on a miss.</p>' +
+        '<p>3 correct in a row earns a <strong style="color:var(--aw-streak-text)">+50 streak bonus</strong>.</p>' +
         '</div></div>';
 
       var canStart = poolSize > 0;
@@ -518,9 +518,9 @@
       body += renderTeamEditor(S.teams);
       var topicCount = S.filters.topics.size;
       body += '<div class="aw-section"><div class="aw-howto">' +
-        '<p style="margin:0 0 0.4rem;color:#ECEBE6;font-weight:700;">How to play</p>' +
+        '<p style="margin:0 0 0.4rem;color:var(--aw-text);font-weight:700;">How to play</p>' +
         '<p>Each selected topic becomes a column of 5 clues (100–500 pts). Teams take turns picking a cell.</p>' +
-        '<p>Correct keeps control. Wrong opens a steal to the other teams at <strong style="color:#fbbf24">full value</strong>, no penalty on a miss.</p>' +
+        '<p>Correct keeps control. Wrong opens a steal to the other teams at <strong style="color:var(--aw-warn)">full value</strong>, no penalty on a miss.</p>' +
         '<p>Board clears out → results.</p>' +
         '</div></div>';
       var canStartBoard = topicCount >= 2 && poolSize > 0;
@@ -536,7 +536,7 @@
         quizOpts.map(function (n) {
           var on = S.quizCount === n;
           var label = n === poolSize ? 'All (' + n + ')' : String(n);
-          return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '" style="' + (on ? '--chip-bg:rgba(240,62,77,.12);--chip-text:#F03E4D;--chip-border:#941B1B' : '') + '" data-action="set-quiz-count" data-n="' + n + '">' + label + '</button>';
+          return '<button type="button" class="aw-chip' + (on ? ' active' : '') + '" style="' + (on ? '--chip-bg:var(--aw-accent-soft);--chip-text:var(--aw-accent);--chip-border:var(--aw-accent-line)' : '') + '" data-action="set-quiz-count" data-n="' + n + '">' + label + '</button>';
         }).join('') + '</div></div>';
       body += '<div class="aw-section"><div class="aw-howto"><p>Solo self-study. Answer, see the full explanation + pearl, move on. Results show your % and a review of anything missed.</p></div></div>';
       var canStartQuiz = poolSize > 0;
@@ -608,7 +608,7 @@
     html += scoreboard(r.teams, r.activeTeamId);
 
     html += '<div class="aw-game-body"><div class="aw-card">';
-    html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) + '<span class="aw-badge" style="--b-bg:transparent;--b-text:#7E838C;--b-border:#2C2F35">' + diff.pts + ' pts</span></div>';
+    html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) + '<span class="aw-badge" style="--b-bg:transparent;--b-text:var(--aw-faint);--b-border:var(--aw-border)">' + diff.pts + ' pts</span></div>';
     if (r.qPhase === 'steal') html += '<span class="aw-steal-flag">⇄ Steal · ' + diff.steal + ' pts</span>';
     html += '</div>';
 
@@ -637,7 +637,7 @@
         '<button type="button" class="aw-verdict-btn aw-verdict-wrong" data-action="r-wrong">✗ Wrong' + (diff.penalty < 0 ? '<span class="aw-btn-sub">' + diff.penalty + ' pts</span>' : '') + '</button>' +
         '</div>';
     } else if (r.qPhase === 'steal' && !r.activeTeamId) {
-      html += '<p class="aw-panel-hint" style="color:#fbbf24;font-weight:700;">⇄ Steal for ' + diff.steal + ' pts — who goes?</p>' +
+      html += '<p class="aw-panel-hint" style="color:var(--aw-warn);font-weight:700;">⇄ Steal for ' + diff.steal + ' pts — who goes?</p>' +
         '<div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(availForSteal.length, 3) + ',1fr)">' +
         availForSteal.map(function (t) {
           var c = TEAM_COLORS[t.color];
@@ -789,7 +789,7 @@
 
     var html = '<div class="aw-modal-backdrop"><div class="aw-modal"><div class="aw-card">';
     html += '<div class="aw-card-head"><div class="aw-badges">' + topicBadge(q.topic) + diffBadge(q.difficulty) +
-      '<span class="aw-badge" style="--b-bg:transparent;--b-text:#F03E4D;--b-border:#941B1B">' + m.cell.value + ' pts</span></div>' +
+      '<span class="aw-badge" style="--b-bg:transparent;--b-text:var(--aw-accent);--b-border:var(--aw-accent-line)">' + m.cell.value + ' pts</span></div>' +
       (m.phase === 'steal-pick' || m.phase === 'steal-verdict' ? '<span class="aw-steal-flag">⇄ Steal · ' + m.cell.value + ' pts</span>' : '') + '</div>';
 
     html += '<div class="aw-qbody"><p class="aw-qtext">' + esc(q.q) + '</p>';
@@ -814,7 +814,7 @@
       }
     } else if (m.phase === 'steal-pick') {
       var stealers = ENGINE.board.availableStealers(b.teams, m.pickerId, m.excludedIds);
-      html += '<p class="aw-panel-hint" style="color:#fbbf24;font-weight:700;">⇄ Steal for ' + m.cell.value + ' pts — who goes?</p>' +
+      html += '<p class="aw-panel-hint" style="color:var(--aw-warn);font-weight:700;">⇄ Steal for ' + m.cell.value + ' pts — who goes?</p>' +
         '<div class="aw-buzz-grid" style="grid-template-columns:repeat(' + Math.min(stealers.length, 3) + ',1fr)">' +
         stealers.map(function (t) {
           var stc = TEAM_COLORS[t.color];

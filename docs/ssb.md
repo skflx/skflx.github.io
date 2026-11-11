@@ -1378,7 +1378,7 @@ the flap's own tier (3) or whenever an overlay is on.
   the tissue looks like; its relief and gloss are flattened under the
   stripes) + text in the HUD. `--signal` marks UI emphasis only.
 - Explore stage follows the site theme; the endoscope and CT stages are
-  dark in both themes (like Airway's stage; CT's views use the `--ssb-ct-*`
+  dark in both themes (projector stages; Airway's stage follows the site theme now; CT's views use the `--ssb-ct-*`
   tokens, its info cell and truth strip follow the theme).
 - Labels: DOM overlay with SVG leader lines, few at a time (selection,
   step, tour), decluttered by tier and priority; never "label everything".

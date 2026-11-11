@@ -18,18 +18,63 @@
     html, body { margin: 0; padding: 0; }
     #aw-app { min-height: calc(100vh - 53px); }
 
-    /* ─── Scope: the game area stays dark in both site themes ─── */
-    /* Stage palette = the site's night tokens (css/site.css), fixed dark in
-       both themes because this runs on projectors. */
+    /* ─── Scope: the game stage follows the site theme ─── */
+    /* Light (default) maps to the site's paper/ink tokens (css/site.css).
+       Dark keeps the night palette the stage has always used, so projectors
+       still get the dark stage. Both themes are one token set on .aw. */
     .aw {
-      --aw-bg: #0D0E10; --aw-surface: #16181B; --aw-border: #2C2F35; --aw-border-strong: #3A3E45;
-      --aw-faint: #7E838C; --aw-muted: #A6AAB2; --aw-text: #ECEBE6; --aw-strong: #FFFFFF;
-      --aw-accent: #F03E4D; --aw-accent-line: #941B1B; --aw-accent-soft: rgba(240, 62, 77, 0.12);
+      --aw-bg: var(--bg); --aw-surface: var(--surface); --aw-tint: var(--wash);
+      --aw-border: var(--rule); --aw-border-strong: var(--rule-strong); --aw-hint: var(--ink-faint);
+      --aw-faint: var(--ink-faint); --aw-muted: var(--ink-muted); --aw-text: var(--ink); --aw-strong: var(--ink);
+      --aw-accent: var(--signal); --aw-accent-line: var(--signal); --aw-accent-soft: rgba(148, 27, 27, 0.08);
+      --aw-on-solid: #FFFFFF; --aw-on-team: #000000; --aw-warn: #92400e;
+      --aw-streak-text: #854d0e; --aw-streak-bg: rgba(202, 138, 4, 0.16);
+      --aw-ok-text: #166534; --aw-ok-soft: rgba(31, 122, 82, 0.12);
+      --aw-bad-text: #B0243A; --aw-bad-choice: #9F1239; --aw-bad-soft: rgba(176, 36, 58, 0.1);
+      --k-basics-bg: rgba(30, 58, 138, 0.12); --k-basics-text: #1e3a8a;
+      --k-emergencies-bg: rgba(185, 28, 28, 0.11); --k-emergencies-text: #991b1b;
+      --k-valves-bg: rgba(109, 40, 217, 0.12); --k-valves-text: #5b21b6;
+      --k-complications-bg: rgba(180, 83, 9, 0.13); --k-complications-text: #92400e;
+      --k-daily-bg: rgba(15, 118, 110, 0.13); --k-daily-text: #115e59;
+      --k-easy-bg: rgba(4, 120, 87, 0.13); --k-easy-text: #065f46; --k-easy-pip: #059669;
+      --k-medium-bg: rgba(161, 98, 7, 0.16); --k-medium-text: #854d0e; --k-medium-pip: #ca8a04;
+      --k-hard-bg: rgba(185, 28, 28, 0.12); --k-hard-text: #991b1b; --k-hard-pip: #dc2626;
+      --k-cyan-dim: rgba(6, 182, 212, 0.14); --k-cyan-text: #155e75;
+      --k-rose-dim: rgba(244, 63, 94, 0.13); --k-rose-text: #9f1239;
+      --k-amber-dim: rgba(245, 158, 11, 0.18); --k-amber-text: #92400e;
+      --k-emerald-dim: rgba(16, 185, 129, 0.14); --k-emerald-text: #065f46;
+      --k-violet-dim: rgba(139, 92, 246, 0.13); --k-violet-text: #5b21b6;
+      --k-orange-dim: rgba(249, 115, 22, 0.15); --k-orange-text: #9a3412;
       background: var(--aw-bg);
       color: var(--aw-text);
       font-family: var(--font-sans);
       min-height: calc(100vh - 53px);
       box-sizing: border-box;
+    }
+    /* Dark stage: the night palette (css/site.css dark tokens), for projectors. */
+    html[data-theme="dark"] .aw {
+      --aw-bg: #0D0E10; --aw-surface: #16181B; --aw-tint: #1C1F23;
+      --aw-border: #2C2F35; --aw-border-strong: #3A3E45; --aw-hint: #3A3E45;
+      --aw-faint: #7E838C; --aw-muted: #A6AAB2; --aw-text: #ECEBE6; --aw-strong: #FFFFFF;
+      --aw-accent: #F03E4D; --aw-accent-line: #941B1B; --aw-accent-soft: rgba(240, 62, 77, 0.12);
+      --aw-on-solid: #FFFFFF; --aw-on-team: #0D0E10; --aw-warn: #fbbf24;
+      --aw-streak-text: #fde047; --aw-streak-bg: rgba(120, 53, 15, 0.35);
+      --aw-ok-text: #5FD3A0; --aw-ok-soft: rgba(95, 211, 160, 0.14);
+      --aw-bad-text: #FF7A8A; --aw-bad-choice: #FF9DA9; --aw-bad-soft: rgba(255, 122, 138, 0.14);
+      --k-basics-bg: rgba(30,58,138,.45); --k-basics-text: #93c5fd;
+      --k-emergencies-bg: rgba(127,29,29,.45); --k-emergencies-text: #fca5a5;
+      --k-valves-bg: rgba(76,29,149,.45); --k-valves-text: #c4b5fd;
+      --k-complications-bg: rgba(120,53,15,.45); --k-complications-text: #fcd34d;
+      --k-daily-bg: rgba(19,78,74,.45); --k-daily-text: #5eead4;
+      --k-easy-bg: rgba(6,78,59,.55); --k-easy-text: #6ee7b7; --k-easy-pip: #34d399;
+      --k-medium-bg: rgba(113,63,18,.55); --k-medium-text: #fde047; --k-medium-pip: #facc15;
+      --k-hard-bg: rgba(127,29,29,.55); --k-hard-text: #fca5a5; --k-hard-pip: #f87171;
+      --k-cyan-dim: rgba(8,51,68,.55); --k-cyan-text: #22d3ee;
+      --k-rose-dim: rgba(76,5,25,.55); --k-rose-text: #fb7185;
+      --k-amber-dim: rgba(69,26,3,.55); --k-amber-text: #fbbf24;
+      --k-emerald-dim: rgba(2,44,34,.55); --k-emerald-text: #34d399;
+      --k-violet-dim: rgba(46,16,101,.55); --k-violet-text: #a78bfa;
+      --k-orange-dim: rgba(67,20,7,.55); --k-orange-text: #fb923c;
     }
     .aw *, .aw *::before, .aw *::after { box-sizing: border-box; }
     .aw select option { background: var(--aw-surface); color: var(--aw-text); }
@@ -113,7 +158,7 @@
     .aw-pip { width: 7px; height: 7px; border-radius: 50%; background: var(--aw-border); }
     .aw-pip.on { background: var(--pip-color); }
 
-    .aw-count-note { color: var(--aw-border-strong); font-size: 0.72rem; text-align: right; margin: 0.4rem 0 0; }
+    .aw-count-note { color: var(--aw-hint); font-size: 0.72rem; text-align: right; margin: 0.4rem 0 0; }
 
     /* Team editor */
     .aw-team-row {
@@ -125,15 +170,15 @@
       flex: 1; min-width: 0; background: transparent; border: none; outline: none;
       color: var(--aw-strong); font-size: 0.85rem; font-weight: 500;
     }
-    .aw-team-input::placeholder { color: var(--aw-border-strong); }
+    .aw-team-input::placeholder { color: var(--aw-hint); }
     .aw-team-remove {
-      background: none; border: none; color: var(--aw-border-strong); cursor: pointer; font-size: 0.85rem;
+      background: none; border: none; color: var(--aw-hint); cursor: pointer; font-size: 0.85rem;
       line-height: 1; padding: 0.2rem;
     }
-    .aw-team-remove:hover { color: #FF7A8A; }
+    .aw-team-remove:hover { color: var(--aw-bad-text); }
     .aw-add-team {
       width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px dashed var(--aw-border);
-      background: transparent; color: var(--aw-border-strong); font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+      background: transparent; color: var(--aw-hint); font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
     }
     .aw-add-team:hover { color: var(--aw-muted); border-color: var(--aw-faint); }
 
@@ -148,12 +193,12 @@
     .aw-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .aw-btn-primary { background: var(--aw-accent); border-color: var(--aw-accent); color: var(--aw-bg); }
     .aw-btn-primary:hover { background: var(--aw-accent); border-color: var(--aw-accent); }
-    .aw-btn-primary:disabled { background: var(--aw-surface); border-color: var(--aw-border); color: var(--aw-border-strong); }
+    .aw-btn-primary:disabled { background: var(--aw-surface); border-color: var(--aw-border); color: var(--aw-hint); }
     .aw-btn-ghost { background: transparent; color: var(--aw-faint); }
     .aw-btn-ghost:hover { color: var(--aw-muted); border-color: var(--aw-faint); }
-    .aw-btn-success { background: #1F7A52; border-color: #1F7A52; color: var(--aw-strong); }
+    .aw-btn-success { background: #1F7A52; border-color: #1F7A52; color: var(--aw-on-solid); }
     .aw-btn-success:hover { background: #3FB483; border-color: #3FB483; }
-    .aw-btn-danger { background: #B0243A; border-color: #B0243A; color: var(--aw-strong); }
+    .aw-btn-danger { background: #B0243A; border-color: #B0243A; color: var(--aw-on-solid); }
     .aw-btn-danger:hover { background: #E0485E; border-color: #E0485E; }
     .aw-btn-block { width: 100%; }
     .aw-btn-lg { padding: 0.95rem 1rem; border-radius: 6px; font-size: 1rem; }
@@ -167,44 +212,44 @@
     }
 
     .aw-howto {
-      background: rgba(28,31,35,0.6); border: 1px solid var(--aw-border); border-radius: 6px;
+      background: color-mix(in srgb, var(--aw-tint) 60%, transparent); border: 1px solid var(--aw-border); border-radius: 6px;
       padding: 0.85rem 1rem; font-size: 0.75rem; color: var(--aw-muted); line-height: 1.55;
     }
     .aw-howto strong { color: var(--aw-muted); }
 
     .aw-history-row {
-      display: flex; align-items: center; gap: 0.6rem; background: rgba(28,31,35,0.5);
+      display: flex; align-items: center; gap: 0.6rem; background: color-mix(in srgb, var(--aw-tint) 50%, transparent);
       border-radius: 4px; padding: 0.45rem 0.7rem; font-size: 0.72rem; margin-bottom: 0.35rem; flex-wrap: wrap;
     }
     .aw-history-mode {
       font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
       color: var(--aw-accent); background: var(--aw-accent-soft); border-radius: 999px; padding: 0.1rem 0.5rem;
     }
-    .aw-history-date { color: var(--aw-border-strong); flex-shrink: 0; }
+    .aw-history-date { color: var(--aw-hint); flex-shrink: 0; }
     .aw-history-winner { color: var(--aw-strong); font-weight: 600; flex-shrink: 0; }
     .aw-history-detail { color: var(--aw-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     /* In-game menu link */
     .aw-topline {
       position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between;
-      background: rgba(13,14,16,0.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--aw-surface);
+      background: color-mix(in srgb, var(--aw-bg) 95%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--aw-surface);
       padding: 0.5rem 1rem;
     }
     .aw-menu-link {
       background: none; border: none; color: var(--aw-faint); font-size: 0.72rem; cursor: pointer; padding: 0.2rem 0;
     }
     .aw-menu-link:hover { color: var(--aw-muted); }
-    .aw-topline-right { color: var(--aw-border-strong); font-size: 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
-    .aw-end-now { background: none; border: none; color: var(--aw-border-strong); font-size: 0.68rem; cursor: pointer; }
+    .aw-topline-right { color: var(--aw-hint); font-size: 0.7rem; display: flex; align-items: center; gap: 0.6rem; }
+    .aw-end-now { background: none; border: none; color: var(--aw-hint); font-size: 0.68rem; cursor: pointer; }
     .aw-end-now:hover { color: var(--aw-muted); }
 
     /* Scoreboard */
-    .aw-scoreboard { position: sticky; top: 33px; z-index: 25; background: rgba(13,14,16,0.97); backdrop-filter: blur(6px); border-bottom: 1px solid var(--aw-surface); padding: 0.5rem 1rem; }
+    .aw-scoreboard { position: sticky; top: 33px; z-index: 25; background: color-mix(in srgb, var(--aw-bg) 97%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--aw-surface); padding: 0.5rem 1rem; }
     .aw-scoreboard-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 0.6rem; }
     .aw-team-tiles { display: flex; gap: 0.4rem; flex-wrap: wrap; flex: 1; min-width: 0; }
     .aw-team-tile {
       display: flex; flex-direction: column; align-items: center; min-width: 58px; padding: 0.3rem 0.55rem;
-      border-radius: 4px; border: 1px solid var(--aw-border); background: rgba(28,31,35,0.5); transition: all 0.15s;
+      border-radius: 4px; border: 1px solid var(--aw-border); background: color-mix(in srgb, var(--aw-tint) 50%, transparent); transition: all 0.15s;
     }
     .aw-team-tile.active { border-color: var(--team-border); background: var(--team-dim); box-shadow: 0 0 0 1px var(--team-border) inset; }
     .aw-team-tile-name { font-size: 0.62rem; font-weight: 700; color: var(--aw-faint); max-width: 76px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -216,25 +261,25 @@
     /* Question card */
     .aw-game-body { max-width: 760px; margin: 0 auto; padding: 1.1rem 1rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
     .aw-card { background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 1.1rem; overflow: hidden; }
-    .aw-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.65rem 1.1rem; border-bottom: 1px solid rgba(58,62,69,0.7); background: rgba(28,31,35,0.6); }
+    .aw-card-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.65rem 1.1rem; border-bottom: 1px solid color-mix(in srgb, var(--aw-border-strong) 70%, transparent); background: color-mix(in srgb, var(--aw-tint) 60%, transparent); }
     .aw-badges { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
     .aw-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; font-weight: 700; padding: 0.18rem 0.6rem; border-radius: 999px; border: 1px solid var(--b-border); background: var(--b-bg); color: var(--b-text); }
-    .aw-steal-flag { font-size: 0.72rem; font-weight: 700; color: #fbbf24; }
+    .aw-steal-flag { font-size: 0.72rem; font-weight: 700; color: var(--aw-warn); }
 
     .aw-qbody { padding: 1.8rem 1.3rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
     .aw-qtext { color: var(--aw-strong); font-size: 1.25rem; font-weight: 500; line-height: 1.5; margin: 0; }
     .aw-reveal-btn { background: var(--aw-border); border: 1px solid var(--aw-border-strong); color: var(--aw-muted); padding: 0.55rem 1.2rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
     .aw-reveal-btn:hover { background: var(--aw-border-strong); color: var(--aw-strong); }
     .aw-answer-block { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 0.7rem; }
-    .aw-answer-box { background: rgba(13,14,16,0.6); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.9rem 1.1rem; color: var(--aw-text); font-size: 0.85rem; line-height: 1.55; }
+    .aw-answer-box { background: color-mix(in srgb, var(--aw-bg) 60%, transparent); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.9rem 1.1rem; color: var(--aw-text); font-size: 0.85rem; line-height: 1.55; }
     .aw-pearl-box { background: var(--aw-accent-soft); border: 1px solid var(--aw-accent-line); border-radius: 6px; padding: 0.75rem 1.1rem; display: flex; gap: 0.7rem; }
     .aw-pearl-tag { color: var(--aw-accent); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; flex-shrink: 0; padding-top: 0.1rem; }
     .aw-pearl-text { color: var(--aw-accent); font-size: 0.83rem; font-style: italic; margin: 0; }
 
     .aw-panel { display: flex; flex-direction: column; gap: 0.6rem; }
-    .aw-panel-hint { text-align: center; color: var(--aw-border-strong); font-size: 0.72rem; margin: 0; }
+    .aw-panel-hint { text-align: center; color: var(--aw-hint); font-size: 0.72rem; margin: 0; }
     .aw-buzz-grid { display: grid; gap: 0.5rem; }
-    .aw-buzz-btn { padding: 0.9rem 0.5rem; border-radius: 6px; border: none; background: var(--team-bg); color: var(--aw-bg); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+    .aw-buzz-btn { padding: 0.9rem 0.5rem; border-radius: 6px; border: none; background: var(--team-bg); color: var(--aw-on-team); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
     .aw-buzz-btn:hover { opacity: 0.9; }
     .aw-buzz-btn:active { transform: scale(0.97); }
     .aw-steal-btn { padding: 0.75rem 0.5rem; border-radius: 6px; border: 2px solid var(--team-border); background: var(--team-dim); color: var(--team-text); font-weight: 700; font-size: 0.82rem; cursor: pointer; }
@@ -243,7 +288,7 @@
     .aw-verdict-name { text-align: center; font-size: 0.85rem; color: var(--aw-muted); margin: 0 0 0.15rem; }
     .aw-verdict-name strong { color: var(--team-text); }
     .aw-verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
-    .aw-verdict-btn { padding: 0.9rem 0.5rem; border-radius: 6px; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--aw-strong); }
+    .aw-verdict-btn { padding: 0.9rem 0.5rem; border-radius: 6px; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; color: var(--aw-on-solid); }
     .aw-verdict-correct { background: #1F7A52; }
     .aw-verdict-correct:hover { background: #3FB483; }
     .aw-verdict-wrong { background: #8A1C2E; }
@@ -260,8 +305,8 @@
       font-size: 0.95rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
     .aw-board-cell:hover { border-color: var(--aw-accent); background: var(--aw-accent-soft); }
-    .aw-board-cell--done { background: rgba(28,31,35,0.4); color: var(--aw-border); cursor: default; border-style: dashed; }
-    .aw-board-cell--empty { background: rgba(28,31,35,0.2); color: var(--aw-border); cursor: default; border-style: dashed; }
+    .aw-board-cell--done { background: color-mix(in srgb, var(--aw-tint) 40%, transparent); color: var(--aw-hint); cursor: default; border-style: dashed; }
+    .aw-board-cell--empty { background: color-mix(in srgb, var(--aw-tint) 20%, transparent); color: var(--aw-hint); cursor: default; border-style: dashed; }
     @media (min-width: 700px) { .aw-board-col { width: auto; flex: 1 1 0; } }
 
     /* Modal */
@@ -278,8 +323,8 @@
     }
     .aw-choice:hover:not(:disabled) { border-color: var(--aw-faint); }
     .aw-choice:disabled { cursor: default; }
-    .aw-choice.correct { border-color: #1F7A52; background: rgba(95,211,160,0.14); color: #5FD3A0; }
-    .aw-choice.wrong { border-color: #B0243A; background: rgba(255,122,138,0.14); color: #FF9DA9; }
+    .aw-choice.correct { border-color: #1F7A52; background: var(--aw-ok-soft); color: var(--aw-ok-text); }
+    .aw-choice.wrong { border-color: #B0243A; background: var(--aw-bad-soft); color: var(--aw-bad-choice); }
     .aw-choice.dim { opacity: 0.5; }
 
     .aw-bar-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.75rem; }
@@ -292,13 +337,13 @@
     .aw-browse-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
     .aw-browse-controls .aw-select { width: auto; flex: 1 1 130px; }
     .aw-search { flex: 1 1 100%; background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.55rem 0.85rem; color: var(--aw-strong); font-size: 0.82rem; outline: none; }
-    .aw-search::placeholder { color: var(--aw-border-strong); }
-    .aw-browse-count { color: var(--aw-border-strong); font-size: 0.72rem; margin: -0.5rem 0 0.8rem; text-align: right; }
+    .aw-search::placeholder { color: var(--aw-hint); }
+    .aw-browse-count { color: var(--aw-hint); font-size: 0.72rem; margin: -0.5rem 0 0.8rem; text-align: right; }
     .aw-browse-row { background: var(--aw-surface); border: 1px solid var(--aw-border); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.5rem; cursor: pointer; }
     .aw-browse-row:hover { border-color: var(--aw-border-strong); }
     .aw-browse-q { color: var(--aw-text); font-size: 0.85rem; margin: 0.5rem 0 0; line-height: 1.45; }
     .aw-browse-expand { margin-top: 0.75rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .aw-empty-note { text-align: center; color: var(--aw-border-strong); font-size: 0.82rem; padding: 2rem 1rem; }
+    .aw-empty-note { text-align: center; color: var(--aw-hint); font-size: 0.82rem; padding: 2rem 1rem; }
 
     /* Results */
     .aw-result-hero { text-align: center; margin-bottom: 1.75rem; }
@@ -307,7 +352,7 @@
     .aw-result-sub { color: var(--aw-faint); font-size: 0.82rem; margin: 0; }
     .aw-leaderboard-row {
       display: flex; align-items: center; gap: 0.7rem; border-radius: 6px; border: 1px solid var(--aw-border);
-      background: rgba(28,31,35,0.4); padding: 0.85rem 1rem; margin-bottom: 0.5rem;
+      background: color-mix(in srgb, var(--aw-tint) 40%, transparent); padding: 0.85rem 1rem; margin-bottom: 0.5rem;
     }
     .aw-leaderboard-row.first { border-color: var(--team-border); background: var(--team-dim); }
     .aw-medal { font-size: 1.35rem; width: 2rem; text-align: center; flex-shrink: 0; }
@@ -317,7 +362,7 @@
     .aw-lb-score { font-size: 1.4rem; font-weight: 800; color: var(--aw-strong); font-variant-numeric: tabular-nums; }
     .aw-leaderboard-row.first .aw-lb-score { color: var(--team-text); }
     .aw-lb-stats { font-size: 0.65rem; color: var(--aw-faint); }
-    .aw-streak-banner { background: rgba(120,53,15,0.35); border: 1px solid #a16207; border-radius: 6px; padding: 0.7rem 1rem; text-align: center; color: #fde047; font-size: 0.82rem; margin-bottom: 1.25rem; }
+    .aw-streak-banner { background: var(--aw-streak-bg); border: 1px solid #a16207; border-radius: 6px; padding: 0.7rem 1rem; text-align: center; color: var(--aw-streak-text); font-size: 0.82rem; margin-bottom: 1.25rem; }
     .aw-result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
     .aw-pct-hero { font-size: 3rem; font-weight: 800; color: var(--aw-accent); }
 
@@ -346,7 +391,7 @@
   <script src="js/diagrams/larynx.js?v=43a3fa22"></script>
   <script src="js/airway/questions.js?v=8df5bace"></script>
   <script src="js/airway/engine.js?v=d1dc8f79"></script>
-  <script src="js/airway/app.js?v=2d4e60fc"></script>
+  <script src="js/airway/app.js?v=b219318a"></script>
 
   <script src="js/site.js?v=8733326e"></script>
 </body>

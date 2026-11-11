@@ -12,7 +12,7 @@ Last reviewed: 2026-11-10.
 
 **State:** One system: paper and ink, hairline rules, Archivo and IBM Plex
 Mono (self-hosted), two audiogram signal colours with fixed meanings. OKSAT
-mirrors it as `--ok-*` tokens; Airway's dark stage uses its night palette.
+mirrors it as `--ok-*` tokens; Airway's stage follows the site theme (paper in light, night palette in dark).
 
 **Next:** nothing scheduled.
 
@@ -144,7 +144,8 @@ modules. The AO CMF content is still to be folded into the facial-trauma modules
 
 **State:** Complete and self-contained: a question bank with Rounds, Jeopardy
 board, quick quiz and browse modes. No external requests by design, enforced by
-its CSP, so it runs on bad conference-room wifi or none.
+its CSP, so it runs on bad conference-room wifi or none. The stage follows the
+site theme: light for rooms, dark for projectors.
 
 Unfinished games survive a reload, one per tab (`sk_airway_games`, keyed by the
 per-tab id `sk_airway_tab`, 24 h, at most 5): the setup screen lists each and
