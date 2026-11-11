@@ -16,6 +16,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import ingest as I  # noqa: E402
+import frame as F  # noqa: E402
 OUT = os.path.join(HERE, '..', '..', 'tbone')
 
 AIR = {'epitympanum', 'hypotympanum', 'aditus', 'mastoid-antrum', 'eac', 'eustachian-tube-entrance', 'facial-recess',
@@ -236,6 +237,60 @@ def ingest_tests():
         _test_space(tmp)
 
 
+def _test_kabsch(tmp):
+    from scipy.spatial.transform import Rotation
+    ref = np.array([[0, 0, 0], [10, 0, 0], [0, 8, 0], [0, 0, 6], [3, 4, 5]], float)     # non-coplanar
+    r_true = Rotation.from_rotvec([0.3, -0.5, 0.8]).as_matrix()
+    t = np.array([5, -3, 12.0])
+    src = ref @ r_true.T + t                                  # src = R_true ref + t
+    r, rms = F.kabsch(src, ref)
+    assert np.abs(r - r_true.T).max() < 1e-6, 'recovered rotation differs'
+    assert rms < 1e-9, 'proper fit residual'
+    got = (src - src.mean(0)) @ r.T + ref.mean(0)
+    assert np.abs(got - ref).max() < 1e-6, 'transformed points miss the reference'
+    mirror = ref * np.array([-1.0, 1.0, 1.0])                 # mirrored source: no proper rotation can match it
+    _, rms_p = F.kabsch(mirror, ref)
+    _, rms_r = F.kabsch(mirror, ref, reflect=True)
+    assert rms_r < 1e-6 and rms_p > 0.5, f'mirror: proper {rms_p} reflected {rms_r}'
+    print(f'  kabsch: recovered R to {np.abs(r - r_true.T).max():.1e}; mirror proper rms {rms_p:.2f}, reflected {rms_r:.1e}')
+
+
+def _test_footplate(tmp):
+    pts = np.array([(x, y, z) for x in np.linspace(0, 4, 41) for y in (-0.2, 0, 0.2) for z in (-0.2, 0, 0.2)])
+    o, info = F.footplate_origin(pts, np.array([10.0, 0, 0]))     # incus beyond the x = 4 end
+    assert o[0] < 0.5 and info['footplate_end'] == 'low', f'far end (x=0) not picked: {o}'
+    o2, _ = F.footplate_origin(pts, np.array([-10.0, 0, 0]))     # incus beyond the x = 0 end
+    assert o2[0] > 3.5, f'far end (x=4) not picked: {o2}'
+    print(f'  footplate: origin {np.round(o, 3).tolist()} with incus at +x, {np.round(o2, 3).tolist()} at -x')
+
+
+def _test_lps_to_ras(tmp):
+    arr = np.zeros((5, 5, 5), 'int16')
+    path = os.path.join(tmp, 'lps.nrrd')
+    _write_nrrd(path, arr, 'int16', dirs='(0.5,0,0) (0,0.5,0) (0,0,0.5)', origin='(10,20,30)')
+    geo = I.geometry(I.read_nrrd(path)[1])
+    got = F.grid_to_ras(geo, [[2, 4, 6]])[0]
+    assert np.allclose(got, [-11, -22, 33]), f'LPS to RAS gave {got}'
+    assert np.allclose(F.ras_to_grid(geo, [got])[0], [2, 4, 6]), 'inverse'
+    las = os.path.join(tmp, 'las.nrrd')
+    _write_nrrd(las, arr, 'int16', dirs='(0.5,0,0) (0,0.5,0) (0,0,0.5)', extra=['space: left-anterior-superior'])
+    try:
+        F.grid_to_ras(I.geometry(I.read_nrrd(las)[1]), [[0, 0, 0]])
+    except ValueError:
+        pass
+    else:
+        raise AssertionError('LAS accepted')
+    print(f'  LPS to RAS: index (2,4,6) -> {got.tolist()} mm; LAS refused')
+
+
+def frame_tests():
+    print('frame (WP B4):')
+    with tempfile.TemporaryDirectory() as tmp:
+        _test_kabsch(tmp)
+        _test_footplate(tmp)
+        _test_lps_to_ras(tmp)
+
+
 def main():
     meta = json.load(open(os.path.join(OUT, 'ct', 'ct.json')))
     nx, ny, nz = meta['dims']
@@ -287,6 +342,7 @@ def main():
     for c, (a, n) in stats.items():
         assert n > 0 and a / n >= FLOOR[c], f'{c} landmarks do not land on {c}'
     ingest_tests()
+    frame_tests()
     print('selftest OK')
 
 
