@@ -6,7 +6,7 @@
    tree. Enter opens the best match; Down moves into the list; Escape clears.
    Everything reaches the DOM through textContent.
    ============================================================= */
-import { TYPE_LABEL, REGION_LABEL } from './graph.js?v=4c9ee329';
+import { TYPE_LABEL, REGION_LABEL } from './graph.js?v=463d294a';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -43,7 +43,14 @@ export function mountSearch({ input, results, tree, graph, store }) {
                 const e = graph.get(h.id);
                 const meta = [TYPE_LABEL[h.type], e && e.region ? REGION_LABEL[e.region] : null, 'T' + h.tier]
                     .filter(Boolean).join(' · ');
-                b.append(el('span', 'ssb-leaf-name', h.name), el('span', 'ssb-hit-meta', meta));
+                const name = el('span', 'ssb-leaf-name', h.name);
+                if (graph.hasSurface(h.id)) {
+                    const badge = el('span', 'ssb-3d', '3D');
+                    badge.setAttribute('role', 'img');
+                    badge.setAttribute('aria-label', 'has a 3D surface');
+                    name.append(' ', badge);
+                }
+                b.append(name, el('span', 'ssb-hit-meta', meta));
                 li.append(b);
                 ul.append(li);
             }
@@ -53,6 +60,7 @@ export function mountSearch({ input, results, tree, graph, store }) {
     }
 
     input.addEventListener('input', render);
+    graph.onSurfaces(render);
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
             const first = results.querySelector('button[data-id]');

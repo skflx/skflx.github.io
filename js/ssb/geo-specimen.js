@@ -252,6 +252,7 @@ export function createSpecimen({ graph, fetchFn = (url) => fetch(url), warn = (.
             return status;
         }
         if (!list.length) { status = 'error'; problem('packs.json lists no usable pack.'); return status; }
+        graph.setSurfaces(list.flatMap((p) => p.nodes));
         for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, nodes: [], expected: p.nodes.map((k) => (p.lining ? LINING_PREFIX : '') + String(k)) });
 
         /* the first pack (core) alone, then a paint, then the rest fetched together; the lining waits for loadLining() */

@@ -217,6 +217,12 @@ html[data-theme="dark"] {
   font: 500 0.65rem/1 var(--font-mono); color: var(--ink-faint);
   border: 1px solid var(--rule-strong); border-radius: var(--radius);
 }
+/* a row whose entry has a 3D surface: the text mark is the signal, the colour only its emphasis */
+.ssb-3d {
+  flex: none; display: inline-block; padding: 0.1rem 0.25rem; vertical-align: 0.1em;
+  font: 600 0.65rem/1 var(--font-mono); color: var(--ink); letter-spacing: 0.04em;
+  border: 1px solid var(--ink); border-radius: var(--radius);
+}
 
 /* ===== CENTRE: toolbar over the stage ===== */
 .ssb-center { display: flex; flex-direction: column; min-width: 0; min-height: 0; }

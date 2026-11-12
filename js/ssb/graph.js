@@ -101,10 +101,21 @@ export function buildGraph(docs) {
         }
     }
 
+    /* Ids with a 3D surface. Empty until the model pack list is read: geo-specimen.js
+       calls setSurfaces with its node keys ("<id>.<side>"), then every listener runs. */
+    const surfaced = new Set();
+    const surfaceListeners = new Set();
+
     const graph = {
         index,
         byType,
         has: (id) => typeof id === 'string' && index.has(id),
+        hasSurface: (id) => surfaced.has(id),
+        setSurfaces(nodeKeys) {
+            for (const k of nodeKeys) surfaced.add(String(k).replace(/\.[LRM]$/, ''));
+            for (const fn of surfaceListeners) fn();
+        },
+        onSurfaces: (fn) => { surfaceListeners.add(fn); },
         get: (id) => (index.has(id) ? index.get(id).entity : null),
         typeOf: (id) => (index.has(id) ? index.get(id).type : null),
         tierOf,

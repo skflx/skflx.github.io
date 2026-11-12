@@ -14,11 +14,11 @@
    { frames, selection, caps, hash, specimen, scope, materials } (specimen, scope: the
    stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=4c9ee329';
+import { loadGraph } from './graph.js?v=463d294a';
 import { createStore, parseHash } from './state.js?v=a8ca025a';
-import { mountTree } from './ui-tree.js?v=465179df';
-import { mountSearch } from './ui-search.js?v=870f10a8';
-import { mountPanel } from './ui-panel.js?v=94d7de48';
+import { mountTree } from './ui-tree.js?v=30bca207';
+import { mountSearch } from './ui-search.js?v=f4f21e9e';
+import { mountPanel } from './ui-panel.js?v=6c8f1b23';
 
 const $ = (id) => document.getElementById(id);
 
@@ -222,7 +222,7 @@ async function bootStage() {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=91dc94af'), import('./ui-specimen.js?v=97ab00c8')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=70970495'), import('./ui-specimen.js?v=97ab00c8')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -245,7 +245,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=116075ae'), import('./ui-endoscope.js?v=3b9b4734')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=8c00b2f5'), import('./ui-endoscope.js?v=3b9b4734')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {
