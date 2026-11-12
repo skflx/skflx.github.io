@@ -121,33 +121,24 @@ Reconstruction, stage E (the external nose, ST6; needs the raw crawl, because th
     .venv/bin/python tools/ssb-pipeline/uw/normalize.py all # patches and centres the nose, measures the valve, labels the vestibule, then nose.py pack
     .venv/bin/python tools/ssb-pipeline/uw/nose.py pack     # the `nose` pack from the committed volume and incoming/_recon/nose-region.npz (written by normalize.py)
 
-The head as scanned (not mirrored, WP RA3b) is a separate build into `ssb/anatomy/scanned/`:
-
-    .venv/bin/python tools/ssb-pipeline/uw/normalize.py --base scanned   # about three minutes; deterministic
-
-It runs `walls`, `meshes`, `sdf`, `softtissue --per-side`, `lining` and `nose pack` from a scratch copy of this directory under
-`incoming/_recon/scanned-root/`, so the standard specimen's files are never read or written, and writes the `scanned` entry of
-`ssb/anatomy/index.json` from the numbers it prints. A stage-D product that fails its gate on a side is left out and listed as `absent`
-(nothing is loosened); the vestibule keeps each side's largest component. It prints a label transition table (as-scanned label -> scanned label, voxel counts, per step) and stops if tissue became an air label or the reverse. Method: the `normalize.py` docstring.
-
 `normalize.py all` needs `fetch.py` to have run (the raw stack) and takes about four minutes. The region, the centring offset, the valve
 plane and the vestibule are described in `nose.py`'s docstring and printed as the `ST6 1..5, 7` lines. `nose.py` with no argument is E1b's
 nostril landmark (`--write` stores it).
 
-Station poses (P3; needs only the committed `ssb/`):
+Station poses (the intact standard specimen; needs only the committed `ssb/`):
 
-    python3 tools/ssb-pipeline/uw/stations.py check    # re-test every committed pose (intact and byState), change nothing
+    python3 tools/ssb-pipeline/uw/stations.py check    # re-test every committed pose in the stations table, change nothing
     python3 tools/ssb-pipeline/uw/stations.py solve    # print the table (--search forces the search, --only=<station id>)
-    python3 tools/ssb-pipeline/uw/stations.py write    # rewrite `byState` and the two 2.7 mm poses in ssb/geometry/stations.json
+    python3 tools/ssb-pipeline/uw/stations.py write    # rewrite the two 2.7 mm poses in ssb/geometry/stations.json
 
-Ports `js/ssb/scope.js` (shaft direction, `frameOf`, `shaftClearance`) onto each state's volume (the base with its patch applied) and
-solves P3's table in `plans/2026-10-07-ssb-roadmap.md`: the prototype pose first; if it is not free, tip-in-air and in view, a grid over depth, yaw and
+Ports `js/ssb/scope.js` (shaft direction, `frameOf`, `shaftClearance`) onto the standard specimen's volume and
+solves the two rows of TABLE in `stations.py`: the prototype pose first; if it is not free, tip-in-air and in view, a grid over depth, yaw and
 pitch (2 units, then 0.5) with roll in 15 degree steps, ranked by the share of 161 rays that hit a wanted label or pass through a wanted
 air space, then by less mucosal contact. Left is the mirrored right pose and is verified on the left. Needs numpy, scipy and the
 `meshes.py` imports. A station that cannot be posed is reported, never forced. `solve` takes about a minute.
 
-`relate.py` needs only `slices.json`, so the graph's spatial claims can be re-tested after any content change
-without the images. `orient.json` records the verified image orientation; `vocab-extra.json` maps terms the
+`relate.py` needs `slices.json`, `labels.json` and `crosswalk.json` (in `uw/reference/uw-sinusanatomy2/`) and the graph in
+`ssb/content/`, so the graph's spatial claims can be re-tested after any content change without the images. `orient.json` records the verified image orientation; `vocab-extra.json` maps terms the
 crosswalk lacks to graph ids. Its `canon()` is imported by `labels3d.py` and `score.py`, so it stays.
 
 ## `intake/` — 16-bit heads (WP IN1)

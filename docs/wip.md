@@ -141,14 +141,13 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen (pick, tree and search identify structures) and the Scope (the endoscope, traversal). Phase 2 removed the flap overlay, the mucosal and anatomy states, the population data and the dissection states; the page loads only what the two stages draw (`docs/ssb.md` §5, §6.1).
+**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen (pick, tree and search identify structures) and the Scope (the endoscope, traversal). The page loads only what the two stages draw (`docs/ssb.md` §5, §6.1).
 
 **Gaps, owner decisions needed:**
 - `ssb/geometry/sweeps.json` is not fetched by the page: the sweep loader and layer are gone. It stays as the input of `tools/ssb-pipeline/uw/sdf.py` (the Scope HUD's ICA, optic nerve and AEA fields) and of `normalize.py`. Deleting it is an owner call; it also needs the `sdf.py` input changed.
 - Selecting a vessel or nerve in the Specimen no longer draws its tube: the sweep layer was the only 3D geometry for those ids. Owner call: restore a selected-vessel display (which brings the fetch back) or leave them as text in the panel.
 - The UW ground truth the pipeline reads (`slices.json`, `labels.json`, `crosswalk.json`, `split.json`) is in `tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/`, restored from b4b213c. `split.json` is the held-out tip division; `score.py split` rewrites it, and a rewrite is not checked against the committed file.
-- `tools/ssb-pipeline/uw/normalize.py --base scanned` (and its NasalSeg check) reads `ssb/anatomy/`, and `stations.py` reads `ssb/states/`; both were deleted with their phases. Pipeline prune needed.
-- `ssb/geometry/stations.json` still carries the `byState` tables (keys are removed dissection states), `overviews` and `uncovered`; the `tools/ssb-pipeline/uw/stations.py` that writes them still does.
+- `ssb/geometry/stations.json` still carries `byState` (keys are dissection states that no longer exist), `overviews` and `uncovered`. `stations.py` writes only the `stations` table and solves no `byState`; `tools/test-ssb.mjs` still reads its ids. A regeneration that drops `byState` must first move its ids into `uncovered` or `overviews`, or the coverage check fails (owner call).
 - `content`: the procedure, hazard, principle and condition collections are still shown in the tree.
 - Picking: the opaque external nose and any opaque skin yield to what is behind them. On the 20 by 16 grid of the default view the nose was first over a structure on 10 of 59 visible points; it is now 0 (`tools/test-ssb.mjs`, "picks: ... skin"). A solid envelope still occludes.
 - Scope, unlabelled white patch (left of centre at the default pose, `#scope=R,30,0,0,0,30`): no tagged geometry is hit by its ray, and hiding the bone envelope does not remove it. Not identified and not labelled, so as not to label a guess; next step is to enumerate the visible meshes under that ray in the browser. Held by the owner: Scope is not changed until the owner says so.

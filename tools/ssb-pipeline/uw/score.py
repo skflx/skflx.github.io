@@ -350,16 +350,6 @@ def print_declared_identity(rows, cov):
     return {'hit': k, 'n': n, 'ci': [lo, hi], 'below_90_n_ge_10': below}
 
 
-def graph_consistency():
-    p = os.path.join(REF, 'specimen-relations.json')
-    if not os.path.exists(p):
-        return None
-    c = json.load(open(p)).get('counts')
-    print('\n== graph consistency (relate3d.py, removed in phase 4; its last run is in git history) ==\n%s\n'
-          'the IFAC drainage rules are pinned by tools/test-ssb.mjs' % c)
-    return c
-
-
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('cmd', nargs='?', default='score', choices=['score', 'split'])
@@ -394,7 +384,6 @@ def main():
         if a.declared:
             results['coverage'] = coverage(a.declared, lab, table)
             results[which]['declared_identity'] = print_declared_identity(rows, results['coverage'])
-    results['graph'] = graph_consistency()
     reg = json.load(open(os.path.join(HERE, 'registration.json')))['labels']['axial_vs_sagittal']
     print('context: axial-vs-sagittal tip disagreement, median %.2f mm all tips, %.2f mm point-like structures (labels3d.py)' % (
         reg['median_mm_all_tips'], reg['median_mm_pointlike']))

@@ -1,16 +1,16 @@
-"""Endoscope station poses on the dissected states (WP P3): `byState` in ssb/geometry/stations.json, and the two
-2.7 mm poses on the intact specimen.
+"""Endoscope station poses on the standard specimen: the `stations` table of ssb/geometry/stations.json.
 
-Why a committed script. E5's poses were solved by a scratch script; after a regeneration of the states (dissect.py,
-a new base, DC1's decongested volume) the poses must be re-checkable and re-posable by one command.
+The dissected-state poses (`byState`, WP P3) were solved here until ssb/states was deleted (3148f00). They stay in the committed
+file as they were; nothing here solves or checks them, and tools/test-ssb.mjs still reads their ids.
+
+Why a committed script. E5's poses were solved by a scratch script; the poses must be re-checkable and re-posable by one command.
 
 Rule (E5's, from the `rule` string of stations.json): a pose is free under js/ssb/scope.js shaftClearance (the shaft's
-radius, the E3b midline rule, lm.choanal-arch.M), its tip lies in an airway label of THAT state's volume (not
+radius, the E3b midline rule, lm.choanal-arch.M), its tip lies in an airway label (not
 s.nasal-vestibule: mucosa, not a space the scope sits in), and its target is inside the field. This file ports
 scope.js (shaft_dir, frame_of, clearance) and checks it against the committed poses (`check`).
 
-Method. Each row of TABLE (P3's table in plans/2026-10-07-ssb-roadmap.md: station, state reached at, P1's prototype pose,
-lens, target, what should fill the image) is solved on the state's volume (the base with its patch applied):
+Method. Each row of TABLE (station, prototype pose, lens, target, what should fill the image) is solved on the standard specimen's volume:
   1. the prototype pose is tested first; if it is free, the tip is in air and the target is within OFF_MAX of the
      view axis it is kept (its numbers are re-measured here);
   2. otherwise (or with --search) a grid over depth, yaw and pitch (2-unit steps) keeps the poses that are free with
@@ -19,14 +19,14 @@ lens, target, what should fill the image) is solved on the state's volume (the b
      through a wanted air label, then the shorter mucosal contact.
 A station that cannot be posed is reported with its best candidate's numbers, never forced.
 Left = right mirrored (the same depth, yaw, pitch, lens; roll -> 360 - roll); the mirrored pose is CHECKED on the same
-state's volume, not assumed. A midline station is posed from the right nostril; a station posed through the
+volume, not assumed. A midline station is posed from the right nostril; a station posed through the
 contralateral nostril is keyed by its target's side.
 
     python3 tools/ssb-pipeline/uw/stations.py check            # re-test every committed pose, change nothing
     python3 tools/ssb-pipeline/uw/stations.py solve            # print the table, write nothing
-    python3 tools/ssb-pipeline/uw/stations.py write [--search] # rewrite byState and the 2.7 mm poses in stations.json
+    python3 tools/ssb-pipeline/uw/stations.py write [--search] # rewrite the solved poses in stations.json
 """
-import gzip, json, math, os, struct, sys
+import json, os, sys
 import numpy as np
 from scipy import ndimage as ndi
 
@@ -37,7 +37,6 @@ from walls import read_volume  # noqa: E402
 
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 STATIONS = os.path.join(REPO, 'ssb/geometry/stations.json')
-INDEX = os.path.join(REPO, 'ssb/states/index.json')
 
 # scope.js constants
 BONE, SOFT, STEP, START = 150, 78, 0.5, 2.0
@@ -87,33 +86,6 @@ def load_base():
     hdr, ct, lab, table = read_volume()
     names = {int(k): v for k, v in table.items()}
     return hdr, Vol(hdr, ct, lab, names)
-
-
-def read_patch(path):
-    raw = gzip.open(path).read()
-    n = struct.unpack('<I', raw[:4])[0]
-    head = json.loads(raw[4:4 + n])
-    pos = 4 + n
-    boxes = []
-    for b in head['boxes']:
-        i0, j0, k0 = b['ijk0']
-        nx, ny, nz = b['dims']
-        arr = np.frombuffer(raw[pos:pos + nx * ny * nz * 2], '<u2').reshape(nz, ny, nx)
-        pos += nx * ny * nz * 2
-        boxes.append((i0, j0, k0, arr))
-    return head, boxes
-
-
-def state_vol(hdr, base, key):
-    head, boxes = read_patch(os.path.join(REPO, 'ssb/states', f'{key}.ssbp.gz'))
-    ct, lab = base.ct.copy(), base.lab.copy()
-    for i0, j0, k0, arr in boxes:
-        nz, ny, nx = arr.shape
-        sl = (slice(k0, k0 + nz), slice(j0, j0 + ny), slice(i0, i0 + nx))
-        m = arr != 0
-        ct[sl][m] = head['ctFill']
-        lab[sl][m] = arr[m]
-    return Vol(hdr, ct, lab, base.names)
 
 
 def airway_ids(names):
@@ -264,62 +236,12 @@ def _bounded(label, **b):
 
 
 TABLE = [
-    # The order is the order of a state's views: the first is what the state opens, where the player lands (WP P4).
-    # station, state reached at, prototype pose (depth, yaw, pitch, roll, lens), target, wanted (hit) labels, wanted (air passed)
-    dict(id='t.infundibulum-45', at='p.uncinectomy#1', proto=(32, 4, 30, 270, 45), target=_bounded('s.maxillary-medial-wall', a=(-31, -19), s=(18, None)),
-         want=['s.maxillary-medial-wall'], air=[]),
-    dict(id='t.ethmoid-bulla-0', at='p.uncinectomy#1', proto=(36, 4, 38, 0, 0), target=_bounded('s.ethmoid-bulla'),
-         want=['s.ethmoid-bulla', 's.lamina-papyracea', 's.basal-lamella'], air=['s.ethmoid-bulla']),
-    dict(id='t.maxillary-antrum-70', at='p.maxillary-antrostomy#1', proto=(30, 4, 28, 240, 70), target=_bounded('s.maxillary-sinus'),
-         want=['s.maxillary-medial-wall', 's.maxillary-posterior-wall', 's.orbital-floor'], air=['s.maxillary-sinus']),
-    dict(id='t.medial-orbital-floor-30', at='p.maxillary-antrostomy#1', proto=(30, 6, 34, 270, 30), target=_bounded('s.orbital-floor', r=(None, 22)),
-         want=['s.orbital-floor', 's.lamina-papyracea'], air=['s.maxillary-sinus']),
-    dict(id='t.basal-lamella-0', at='p.anterior-ethmoidectomy#1', proto=(48, 2, 40, 0, 0), target=_bounded('s.basal-lamella', inView=True),
-         want=['s.lamina-papyracea', 's.fovea-ethmoidalis', 's.basal-lamella'], air=[]),
-    dict(id='t.ethmoid-roof-30', at='p.anterior-ethmoidectomy#4', proto=(44, -2, 44, 15, 30), target=_bounded('s.fovea-ethmoidalis', a=(-40, None)),
-         want=['s.lateral-lamella', 's.fovea-ethmoidalis'], air=[]),
-    dict(id='t.posterior-ethmoid-roof-0', at='p.posterior-ethmoidectomy#1', proto=(58, 0, 34, 0, 0), target=_bounded('s.fovea-ethmoidalis', a=(None, -40)),
-         want=['s.fovea-ethmoidalis', 's.sphenoid-face'], air=[]),
-    dict(id='t.optic-canal-0', at='p.transethmoidal-sphenoidotomy#2', proto=(62, 4, 24, 0, 0), target=_bounded('s.sphenoid-lateral-wall', s=(28, None)),
-         want=['s.sphenoid-lateral-wall', 's.planum-sphenoidale', 's.sella-turcica'], air=[]),
-    dict(id='t.medial-orbital-wall-0', at='p.transethmoidal-sphenoidotomy#2', proto=(38, 4, 38, 0, 0), target=_bounded('s.lamina-papyracea'),
-         want=['s.lamina-papyracea', 's.fovea-ethmoidalis', 's.lateral-lamella'], air=[]),
-    dict(id='t.frontal-recess-45', at='p.draf-i#1', proto=(34, 2, 42, 0, 45), target={'id': 'lm.frontal-ostium'},
-         want=['s.middle-turbinate', 's.lamina-papyracea'], air=['s.agger-nasi-cell', 's.frontal-recess']),
-    dict(id='t.frontal-sinus-70', at='p.draf-iia#2', proto=(42, -4, 44, 0, 70), target=_bounded('s.frontal-sinus'),
-         want=[], air=['s.frontal-sinus', 's.frontal-recess']),
-    # P4 re-poses both sphenoid-face rows for a recognizable posterior wall: target the sella floor, ranked by the share of rays that hit
-    # the sella, planum, clivus and carotid prominences together, then by lower mucosal contact (CP-3 finding 3).
-    dict(id='t.sphenoid-face-0', at='p.transsellar-approach#2', proto=(62, -2, 24, 0, 0), target={'lm': 'lm.sella-floor-center.M'}, side='M',
-         want=['s.sella-turcica', 's.planum-sphenoidale', 's.clivus', 'carotid-prominence'], air=[], prominence=True, both=3, search=True, tipIn=['s.sphenoid-sinus']),
-    dict(id='t.sphenoid-face-0', at='p.sphenoidotomy#4', proto=(72, -2, 20, 0, 0), target={'lm': 'lm.sella-floor-center.M'},
-         want=['s.sella-turcica', 's.planum-sphenoidale', 's.clivus', 'carotid-prominence'], air=[], prominence=True, search=True, tipIn=['s.sphenoid-sinus']),
-    dict(id='t.sphenoid-lateral-recess-45', at='p.transsellar-approach#2', proto=(62, -4, 14, 60, 45), target=_bounded('s.sphenoid-lateral-wall'), side='L', via='R',
-         want=['s.sphenoid-lateral-wall', 's.sella-turcica'], air=[]),
-    dict(id='t.sella-open-30', at='p.transsellar-approach#4', proto=(74, -2, 20, 60, 30), target={'id': 'lm.sella-floor-center'}, side='M',
-         want=['s.sella-turcica', 'tissue'], air=[]),
-    dict(id='t.cavernous-sinus-30', at='p.transsellar-approach#4', proto=(68, 2, 16, 300, 30), target=_bounded('s.sphenoid-lateral-wall', s=(24, None), a=(None, -62)),
-         want=['s.sphenoid-lateral-wall'], air=[]),
-    # P4: the four corridor positions that had no view of their own. The agger uncapped (Draf I step 3), the posterior ethmoid through the
-    # perforated basal lamella, the rostrum out and the sphenoid face widened, the clival recess drilled (both the EEA corridor's state and
-    # the standalone transclival procedure's).
-    dict(id='t.frontal-recess-45', at='p.draf-i#2', proto=(34, 2, 42, 0, 45), target={'id': 'lm.frontal-ostium'},
-         want=['s.middle-turbinate', 's.lamina-papyracea'], air=['s.agger-nasi-cell', 's.frontal-recess']),
-    dict(id='t.posterior-ethmoid-roof-0', at='p.posterior-ethmoidectomy#0', proto=(58, 0, 34, 0, 0), target=_bounded('s.fovea-ethmoidalis', a=(None, -40)),
-         want=['s.fovea-ethmoidalis', 's.sphenoid-face'], air=[]),
-    dict(id='t.ser-0', at='p.transsellar-approach#1', proto=(49, -3, 18, 0, 0), target={'id': 'lm.sphenoid-ostium'},
-         want=['s.sphenoid-floor', 's.sella-turcica', 's.clivus', 's.sphenoid-lateral-wall'], air=['s.sphenoid-sinus']),
-    dict(id='t.clivus-0', at='eea-sellar-clival:p.transclival-approach#2', proto=(68, 2, 16, 0, 0), side='M',
-         target={'carvedDiff': ('eea-sellar-clival:p.transclival-approach#2', 'eea-sellar-clival:p.transclival-approach#0')},
-         note='centroid of the voxels s.clivus.M@clival-recess carves (the extradural part of the clival opening; the prepontine cistern behind it is intradural and not in the specimen)',
-         want=['s.clivus', 's.dorsum-sellae', 'tissue'], air=[], tipIn=['s.sphenoid-sinus']),
-    dict(id='t.clivus-0', at='p.transclival-approach#2', proto=(68, 2, 16, 0, 0), side='M',
-         target={'carvedDiff': ('p.transclival-approach#2', 'p.transclival-approach#0')},
-         note='centroid of the voxels s.clivus.M@clival-recess carves (the extradural part of the clival opening; the prepontine cistern behind it is intradural and not in the specimen)',
-         want=['s.clivus', 's.dorsum-sellae', 'tissue'], air=[], tipIn=['s.sphenoid-sinus']),
-    dict(id='t.olfactory-cleft-0', at=None, shaft='2.7', proto=(48, -8, 40, 0, 0), target=_bounded('s.cribriform-plate'),
+    # The intact standard specimen's rows, for the 2.7 mm telescope. Dissected-state rows (WP P3, `at=` a state) were
+    # removed with ssb/states (3148f00).
+    # station, prototype pose (depth, yaw, pitch, roll, lens), target, wanted (hit) labels, wanted (air passed)
+    dict(id='t.olfactory-cleft-0', shaft='2.7', proto=(48, -8, 40, 0, 0), target=_bounded('s.cribriform-plate'),
          want=['s.cribriform-plate'], air=[]),
-    dict(id='t.inferior-meatus-45', at=None, shaft='2.7', proto=(22, 6, -4, 300, 45), target={'point': (12, -25, 6)},
+    dict(id='t.inferior-meatus-45', shaft='2.7', proto=(22, 6, -4, 300, 45), target={'point': (12, -25, 6)},
          want=['s.nasal-floor', 's.inferior-turbinate', 's.maxillary-medial-wall'], air=[]),
 ]
 
@@ -333,43 +255,10 @@ class Solver:
         self.hdr, self.base = load_base()
         self.names = self.base.names
         self.ids = {n: i for i, n in self.names.items()}
-        self.index = json.load(open(INDEX))
         self.lm = json.load(open(os.path.join(REPO, 'ssb/geometry/landmarks.json')))
         self.arch = (self.lm['lm.choanal-arch.M'][1], self.lm['lm.choanal-arch.M'][2])
-        self.vols = {}
         self.air = airway_ids(self.names)
         self.ras = None
-
-    def volume(self, key):
-        if key is None:
-            return self.base
-        if key not in self.vols:
-            self.vols[key] = state_vol(self.hdr, self.base, key)
-        return self.vols[key]
-
-    def state_key(self, at):
-        """`p.<id>#<n>` (the procedure alone) or `<corridor>:p.<id>#<n>` (that position of a corridor) -> a state key."""
-        if at is None:
-            return None
-        cor, _, pos = at.rpartition(':')
-        proc, step = pos.split('#')
-        if cor:
-            for q in self.index['corridors'][cor]['positions']:
-                if q['procedure'] == proc and q['step'] == step:
-                    return q['state']
-            raise SystemExit(f'{at}: not a position of corridor {cor}')
-        steps = self.index['procedures'][proc]['steps']
-        if step not in steps:
-            raise SystemExit(f'{at}: not a step with a state in ssb/states/index.json')
-        return steps[step]
-
-    def carved(self, key):
-        """The voxels a state's patch carves (a boolean array on the base grid)."""
-        m = np.zeros(self.base.lab.shape, bool)
-        for i0, j0, k0, arr in read_patch(os.path.join(REPO, 'ssb/states', f'{key}.ssbp.gz'))[1]:
-            nz, ny, nx = arr.shape
-            m[k0:k0 + nz, j0:j0 + ny, i0:i0 + nx] |= arr != 0
-        return m
 
     def centroid(self, spec, side):
         """The target point of a row for `side` (R, L or M): a graph id's landmark, a label centroid within bounds, or a fixed point."""
@@ -378,11 +267,6 @@ class Solver:
             return p if side != 'L' else np.array(mirror(p))
         if 'lm' in spec:                                    # an exact landmark id, whatever the row's side
             return np.array(self.lm[spec['lm']], float)
-        if 'carvedDiff' in spec:                            # the centroid of what a state carves beyond an earlier one
-            a, b = (self.state_key(x) for x in spec['carvedDiff'])
-            k, j, i = np.nonzero(self.carved(a) & ~self.carved(b))
-            o = self.base.o
-            return np.array([o[0] + i.mean() * 0.5, o[1] + j.mean() * 0.5, o[2] + k.mean() * 0.5])
         if 'id' in spec:
             ident = spec['id'] + ('.M' if side == 'M' else f'.{side}')
             return np.array(self.lm.get(ident) or self.lm[spec['id'] + '.R' if side != 'L' else spec['id'] + '.L'], float)
@@ -499,11 +383,10 @@ class Solver:
         return P[inside].mean(0) if inside.any() else None
 
     def solve_row(self, row, force_search=False, log=say):
-        """-> (state key, {target side: (nostril, pose, target, evaluation, ok, how)}). A sided row is solved for its first
+        """-> {target side: (nostril, pose, target, evaluation, ok, how)}. A sided row is solved for its first
         target side and mirrored for the other, which is verified on its own side; a midline row has one entry."""
         shaft = row.get('shaft', '4')
-        skey = self.state_key(row['at'])
-        vol = self.volume(skey)
+        vol = self.base
         first = row.get('side', 'R')
         sides = ['M'] if first == 'M' else [first, 'L' if first == 'R' else 'R']
         nostril0 = 'R' if first == 'M' else row.get('via', first)
@@ -540,7 +423,7 @@ class Solver:
                 e = self.evaluate(vol, nostril, pose, target, shaft, row)
                 ok = ok0 and e['free'] and e['tipAir'] and e['off'] <= OFF_MAX
                 results[tside] = (nostril, pose, target, e, ok, 'mirror')
-        return skey, results
+        return results
 
 
 def measured(e):
@@ -558,8 +441,6 @@ def entry(nostril, pose, target, e, row, tside):
     t = row['target']
     if 'lm' in t:
         st['target'] = {'id': t['lm']}
-    elif 'carvedDiff' in t:
-        st['target'] = {'at': [round(float(x), 2) for x in target], 'note': row['note']}
     elif 'id' in t:
         st['target'] = {'id': f"{t['id']}.{tside}"}
     elif 'label' in t and not any(k in t for k in ('r', 'a', 's', 'inView')):
@@ -577,60 +458,38 @@ def entry(nostril, pose, target, e, row, tside):
 def report(s, rows, force=False):
     table = {}
     for row in rows:
-        say(f"{row['id']} @ {row['at'] or 'intact'}")
-        skey, res = s.solve_row(row, force)
+        say(f"{row['id']}")
+        res = s.solve_row(row, force)
         for tside, (nost, pose, target, e, ok, src) in res.items():
             say(f"  {tside}: {src:9s} {'OK ' if ok else 'FAIL'} {nost},{','.join(str(round(x, 1)) for x in pose)}  off {e['off']:.1f}  free {e['free']}  tipIn {e['tipIn']}  contact {e['contact']:.1f}  hit {dict(list(e['shares'].items())[:4])}  through {dict(list(e['through'].items())[:3])}")
-            table.setdefault(skey, {})[(row['id'], tside)] = (row, nost, pose, target, e, ok)
+            table[(row['id'], tside)] = (row, nost, pose, target, e, ok)
     return table
 
 
-RULE_P3 = ("WP P3 (2026-10): `byState` holds poses for dissected states, key = a state of ssb/states/index.json, then \"t.<id>.<side>\" "
-           "as above; each is held to this rule on THAT state's volume (the base with its patch applied), and its tip lies in an airway "
-           "label of the state (s.nasal-cavity, s.nasopharynx, a sinus, an ethmoid cell, the frontal recess; not s.nasal-vestibule). "
-           "`shaft`: \"2.7\" when the pose is free only for the 2.7 mm telescope (the olfactory cleft, the inferior meatus); absent = 4 mm. "
-           "A station posed through the contralateral nostril is keyed by its target's side. Solved by tools/ssb-pipeline/uw/stations.py "
-           "(prototype pose first, then a search), left = right mirrored and verified on the mirrored state.")
-
-
 def write(table, doc):
-    by = {}
     stations = doc['stations']
     unc = doc['uncovered']
-    for skey, items in table.items():
-        for (sid, tside), (row, nost, pose, target, e, ok) in items.items():
-            if not ok:
-                continue
-            ent = entry(nost, pose, target, e, row, tside)
-            if skey is None:
-                stations[f'{sid}.{tside}'] = ent
-            else:
-                by.setdefault(skey, {})[f'{sid}.{tside}'] = ent
-            unc.pop(sid, None)
-    doc['byState'] = {k: v for k, v in sorted(by.items())}      # a state's views stay in TABLE order: the first is what the state opens (WP P4)
-    if RULE_P3 not in doc['rule']:
-        doc['rule'] = doc['rule'].rstrip() + ' ' + RULE_P3
+    for (sid, tside), (row, nost, pose, target, e, ok) in table.items():
+        if not ok:
+            continue
+        stations[f'{sid}.{tside}'] = entry(nost, pose, target, e, row, tside)
+        unc.pop(sid, None)
     return doc
 
 
 def check_committed(s):
-    """Re-test every committed pose: the intact `stations` on the base (their own shaft), every `byState` pose on its state."""
+    """Re-test every committed pose in the `stations` table on the standard specimen (their own shaft)."""
     doc = json.load(open(STATIONS))
     bad = 0
-    groups = [(None, doc['stations'])] + list(doc.get('byState', {}).items())
-    for skey, table in groups:
-        if skey is not None and skey not in s.index['states']:
-            say(f'FAIL byState key {skey} is not a state'); bad += 1; continue
-        vol = s.volume(skey)
-        for key, st in table.items():
-            p = st['pose']
-            F = s.lm[f"lm.naris.{p['side']}"]
-            free, _ = clearance(vol, F, p['side'], [p['depth']], [p['yaw']], [p['pitch']], RADII[st.get('shaft', '4')], s.arch)
-            tip = tip_of(F, p['side'], np.array([p['depth']], float), np.array([p['yaw']], float), np.array([p['pitch']], float))[0]
-            tair = int(vol.label(tip[None])[0]) in s.air or s.names.get(int(vol.label(tip[None])[0])) in ('s.nasal-vestibule',)
-            if not (free[0] and tair):
-                bad += 1
-                say(f'FAIL {skey} {key}: free {bool(free[0])}, tip in air {tair}')
+    for key, st in doc['stations'].items():
+        p = st['pose']
+        F = s.lm[f"lm.naris.{p['side']}"]
+        free, _ = clearance(s.base, F, p['side'], [p['depth']], [p['yaw']], [p['pitch']], RADII[st.get('shaft', '4')], s.arch)
+        tip = tip_of(F, p['side'], np.array([p['depth']], float), np.array([p['yaw']], float), np.array([p['pitch']], float))[0]
+        tair = int(s.base.label(tip[None])[0]) in s.air or s.names.get(int(s.base.label(tip[None])[0])) in ('s.nasal-vestibule',)
+        if not (free[0] and tair):
+            bad += 1
+            say(f'FAIL {key}: free {bool(free[0])}, tip in air {tair}')
     say('committed poses: ' + ('all pass the port' if not bad else f'{bad} fail'))
     return bad
 
