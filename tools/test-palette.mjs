@@ -33,6 +33,7 @@
    ============================================================= */
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { startServer, launchBrowser, collectErrors, loadAllowlist } from './smoke-lib.mjs';
 
 const args = process.argv.slice(2);
@@ -77,7 +78,7 @@ async function openPage(browser, { path: pagePath, viewport, mobile = false, wik
     const counts = { wiki: 0, palette: 0 };
     p.on('request', (r) => {
         if (r.url().includes('contentIndex.json')) counts.wiki++;
-        if (r.url().includes('/js/palette.js')) counts.palette++;
+        if (r.url().includes('/js/palette.js')) { counts.palette++; counts.paletteUrl = r.url(); }
     });
     await p.route(WIKI_PATH, (route) => (wiki === 'fail' ? route.abort() : route.fulfill({
         status: 200, contentType: 'application/json', body: JSON.stringify(STUB),
@@ -116,6 +117,9 @@ try {
         check(focusId === 'cmdk-input', 'focus lands in the palette box', `active=${focusId}`);
         check(counts.wiki === 1 && counts.palette === 1, 'the first open fetches palette.js and the wiki index once',
             `wiki=${counts.wiki} palette.js=${counts.palette}`);
+        const palHash = crypto.createHash('sha256').update(fs.readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), '..', 'js', 'palette.js'))).digest('hex').slice(0, 8);
+        check(counts.paletteUrl && new URL(counts.paletteUrl).search === '?v=' + palHash,
+            'palette.js is requested with its own file hash as ?v=', `url=${counts.paletteUrl} want ?v=${palHash}`);
 
         await corporaIn(p);
         await wikiSettled(p);

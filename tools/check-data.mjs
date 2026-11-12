@@ -28,7 +28,7 @@ import zlib from 'zlib';
 import path from 'path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'url';
-import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
+import { stampHtml, stampSsb, stampPalette, rootPages } from './stamp-assets.mjs';
 import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
 import { loadEngine, bakeAll } from './ascii3d.mjs';
 import { checkAtlas } from './atlas.mjs';
@@ -839,6 +839,10 @@ function checkStamps() {
   ok(ssb.errors.length === 0, 'js/ssb: imports resolve, no cycle', `js/ssb: ${ssb.errors.join(' ; ')}`);
   ok(ssb.stale.length === 0, 'js/ssb: module specifiers and stamps.js current',
     `js/ssb: stale (run node tools/stamp-assets.mjs):\n        ` + ssb.stale.join('\n        '));
+  /* js/palette.js is fetched by js/site.js; its URL stamp is the PALETTE_V constant there. */
+  const pal = stampPalette();
+  ok(pal.errors.length === 0 && pal.stale.length === 0, 'js/site.js: PALETTE_V stamps js/palette.js',
+    `${[...pal.errors, ...pal.stale].join(' ; ')} (run node tools/stamp-assets.mjs)`);
 }
 
 /* ====================================================   5. SSB knowledge graph (ssb/content/*.json)
