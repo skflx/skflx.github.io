@@ -54,6 +54,8 @@ OpenEar sources: `tools/tbone-pipeline/fetch_openear.py` and `ingest.py` fetch a
 OpenEar specimen into the git-ignored `tools/tbone-pipeline/incoming/` only. Nothing from OpenEar is
 committed to this folder. `tools/tbone-pipeline/frame.py` computes that volume's placement; its
 output stays under `incoming/`.
+The derived ZETA display volume (resampled and cropped, CC BY 4.0) is committed under `openear/zeta/`, written by `tools/tbone-pipeline/openear-export.py`; attribution in `openear/LICENSE-data.md`.
+No page reads `openear/`; `tools/check-data.mjs` (`checkOpenear`) enforces its size, header allowlist and attribution.
 
 ## OpenEar review page (ZETA)
 
