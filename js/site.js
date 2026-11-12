@@ -42,9 +42,40 @@
         syncButtons();
     }
 
-    /* ---------- global search hotkey (Cmd-K / Ctrl-K) ----------
+    /* ---------- global command palette hotkey (Cmd-K / Ctrl-K) ----------
+       Opens the palette (js/palette.js), which is fetched on the first press
+       and not before. On search.html the page's own box takes the key. If the
+       palette cannot load, the key goes to search.html, as before.
        Opt-out: a page sets data-no-hotkey on <html> or <body> to keep the
        shortcut off (game, tool, or page with its own text input). */
+    var palette = { state: 'idle', ret: null };   /* idle | loading | ready | failed */
+
+    function paletteSrc() {
+        /* palette.js is not in the HTML, so it takes this script's ?v= stamp and changes with site.js */
+        var me = document.querySelector('script[src*="js/site.js"]');
+        var q = me ? (me.getAttribute('src') || '').split('?')[1] : '';
+        return 'js/palette.js' + (q ? '?' + q : '');
+    }
+
+    function openPalette(ret) {
+        if (window.SKPalette) { window.SKPalette.open(ret); return; }
+        palette.ret = ret;   /* the latest press wins while loading */
+        if (palette.state === 'failed') { window.location.href = 'search.html'; return; }
+        if (palette.state === 'loading') return;
+        palette.state = 'loading';
+        var s = document.createElement('script');
+        s.src = paletteSrc();
+        s.onload = function () {
+            if (!window.SKPalette) { palette.state = 'failed'; window.location.href = 'search.html'; return; }
+            palette.state = 'ready';
+            var back = palette.ret;
+            palette.ret = null;
+            window.SKPalette.open(back);
+        };
+        s.onerror = function () { palette.state = 'failed'; window.location.href = 'search.html'; };
+        document.body.appendChild(s);
+    }
+
     window.addEventListener('keydown', function (e) {
         if (e.defaultPrevented || e.shiftKey || e.altKey) return;
         if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'k') return;
@@ -56,9 +87,9 @@
         if (searchInput) {
             searchInput.focus();
             searchInput.select();
-        } else {
-            window.location.href = 'search.html';
+            return;
         }
+        openPalette(active);
     });
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);

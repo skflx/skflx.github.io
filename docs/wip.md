@@ -53,8 +53,9 @@ app pages (`airway-jeopardy.html`, `oksat-study.html`, `oksat-learn.html`,
 `pdf-chapter-splitter.html`) opt out via `data-no-hotkey` on `<html>` or `<body>`
 to prevent state loss.
 
-**Next:** in-place `<dialog id="cmd-k-palette">` modal with on-demand loading,
-searching site pages, OKSAT guides, CPT codes, and `sk.oto` clinical notes.
+**Palette:** `Cmd/Ctrl+K` opens `<dialog id="cmd-k-palette">` (`js/palette.js`, loaded on the
+first press) over site pages, OKSAT guides and modules, CPT codes and wiki notes. The wiki index
+is fetched on the first open only. If the palette cannot load, the key goes to `search.html`.
 
 ---
 

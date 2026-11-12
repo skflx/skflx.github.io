@@ -42,6 +42,7 @@ node tools/smoke-pages.mjs       # every page boots, zero real console errors
 node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, review attempts, keyboard, navigation
 node tools/test-oksat-learn.mjs  # Interactive learning viewer: prompts, checkers, inline module questions, step/core, deck, hub, term popover
 node tools/test-search.mjs       # search.html and the CPT deep link, desktop and phone, real browser
+node tools/test-palette.mjs      # Cmd/Ctrl-K command palette: lazy load, filter, Enter/Esc, opt-outs, wiki failing
 node tools/test-airway-resume.mjs # Airway Rounds saved games: per-tab saves, resume, zero external requests
 node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
 node tools/lint-oksat-guide.mjs [slug]  # OKSAT guide teaching-shape lint (no slug: every guide; CI runs it)

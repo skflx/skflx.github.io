@@ -11,6 +11,7 @@ node tools/smoke-pages.mjs                 # every page boots, zero real console
 node tools/test-oksat-engine.mjs           # OKSAT engine (answer lock, SRS, keyboard)
 node tools/test-oksat-learn.mjs            # Interactive learning viewer
 node tools/test-search.mjs                 # search.html and the CPT deep link
+node tools/test-palette.mjs                # Cmd/Ctrl-K palette: lazy load, filter, Enter, Esc, opt-outs, wiki failing
 node tools/test-airway-resume.mjs          # Airway Rounds saved games
 node tools/lint-oksat.mjs [slug ...]       # OKSAT modules vs the quality spec (no slug: all)
 node tools/lint-oksat-guide.mjs [slug ...] # OKSAT guides vs the teaching-shape spec (no slug: all)
@@ -164,6 +165,10 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   flips the button to **Copied**; `<img src=x onerror=…>` renders as text.
 - `test-search.mjs` (covers `search.html`): a module-title query links to
   `?m=<slug>`; a CPT hit lands on its row, on desktop and phone.
+- `test-palette.mjs` (the Cmd/Ctrl-K palette, `js/palette.js`): the wiki index
+  is route-stubbed; nothing is fetched before the first press; opt-out pages stay
+  off; Enter opens a wiki note, module and CPT row; the wiki failing still leaves a
+  working palette.
 
 ### PDF chapter splitter (`pdf-chapter-splitter.html`)
 - Zero console errors, with `PDFLib` and `JSZip` defined (smoke).
