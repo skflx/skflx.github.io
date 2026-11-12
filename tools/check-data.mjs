@@ -1115,6 +1115,41 @@ function checkReviewItems() {
   ok(problems.length === 0, `review-items: ${items.length} items, ids unique, every href resolves`, 'review-items: ' + problems.join('; '));
 }
 
+/* ---- pipeline inputs (tools/ssb-pipeline) ----
+   A pipeline script reads its inputs by path. Commit 3148f00 deleted ssb/reference/ and broke four of them, with no
+   check to say so. Every input is listed here; every `uw/reference/uw-sinusanatomy2/<name>.json` literal in a script
+   must exist; and no script may name the deleted ssb/reference/ directory. Pipeline inputs live under
+   tools/ssb-pipeline, never under the served ssb/ tree. */
+const PIPELINE_INPUTS = [
+  'tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/slices.json',
+  'tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/labels.json',
+  'tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/crosswalk.json',
+  'tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/split.json',
+  'tools/ssb-pipeline/uw/vocab-extra.json',
+  'tools/ssb-pipeline/uw/registration.json',
+  'ssb/geometry/landmarks.json',
+  'ssb/geometry/labels.json',
+];
+function checkPipelineInputs() {
+  console.log('\npipeline inputs: tools/ssb-pipeline reads exist');
+  const problems = [];
+  for (const f of PIPELINE_INPUTS) if (!fs.existsSync(rel(f))) problems.push(`listed input ${f} is missing`);
+  const LITERAL = /uw\/reference\/uw-sinusanatomy2\/[\w.-]+\.json/g;
+  let literals = 0;
+  for (const f of fs.readdirSync(rel('tools/ssb-pipeline'), { recursive: true })) {
+    if (!String(f).endsWith('.py')) continue;
+    const src = fs.readFileSync(rel(path.join('tools/ssb-pipeline', String(f))), 'utf8');
+    for (const m of src.matchAll(LITERAL)) {
+      literals++;
+      if (!fs.existsSync(rel('tools/ssb-pipeline/' + m[0]))) problems.push(`${f} names missing ${m[0]}`);
+    }
+    if (src.includes('ssb/reference/')) problems.push(`${f} names the deleted ssb/reference/ directory`);
+  }
+  ok(problems.length === 0,
+    `pipeline inputs: ${PIPELINE_INPUTS.length} listed and ${literals} script literals exist; none names ssb/reference/`,
+    'pipeline inputs: ' + problems.join('; '));
+}
+
 /* ---- run ---- */
 console.log('=== check-data.mjs ===');
 checkAgents();
@@ -1129,6 +1164,7 @@ checkOlsb();
 checkAtlasAndUnlisted();
 checkNoEmails();
 checkReviewItems();
+checkPipelineInputs();
 await checkTboneHeader();
 checkOpenear();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
