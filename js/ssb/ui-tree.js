@@ -21,6 +21,7 @@ const byName = (a, b) => String(a.name).localeCompare(String(b.name));
 
 export function mountTree({ root, graph, store }) {
     const open = new Set();   /* group keys the reader has opened */
+    const chainOf = new Map();   /* structure or entity id -> the group keys above its row, outermost first */
 
     function leaf(entity) {
         const li = el('li');
@@ -33,7 +34,8 @@ export function mountTree({ root, graph, store }) {
         return li;
     }
 
-    function group(key, label, count, items) {
+    /* A group's rows are built when it first opens: a closed group costs one summary, not its leaves (docs/ssb.md 6.5). */
+    function group(key, label, count, build) {
         const li = el('li');
         const d = el('details', 'ssb-group');
         d.dataset.key = key;
@@ -41,9 +43,11 @@ export function mountTree({ root, graph, store }) {
         const sum = el('summary');
         sum.append(el('span', 'ssb-group-name', label), el('span', 'ssb-count', String(count)));
         const ul = el('ul', 'ssb-tree-list');
-        ul.append(...items);
+        let built = false;
+        d._fill = () => { if (!built) { built = true; ul.append(...build()); } };
+        if (d.open) d._fill();
         d.append(sum, ul);
-        d.addEventListener('toggle', () => { if (d.open) open.add(key); else open.delete(key); });
+        d.addEventListener('toggle', () => { if (d.open) { open.add(key); d._fill(); } else open.delete(key); });
         li.append(d);
         return li;
     }
@@ -54,6 +58,7 @@ export function mountTree({ root, graph, store }) {
         root.textContent = '';
 
         /* Structures: region > kind > structure. */
+        chainOf.clear();
         const regions = new Map();
         for (const e of graph.byType.structures.filter(shown)) {
             const r = regions.get(e.region) || new Map();
@@ -64,18 +69,22 @@ export function mountTree({ root, graph, store }) {
         const regionItems = [...regions.keys()].sort((a, b) => rank(REGION_ORDER, a) - rank(REGION_ORDER, b)).map((region) => {
             const kinds = regions.get(region);
             let total = 0;
-            const kindItems = [...kinds.keys()].sort((a, b) => rank(KIND_ORDER, a) - rank(KIND_ORDER, b)).map((kind) => {
+            const kindKeys = [...kinds.keys()].sort((a, b) => rank(KIND_ORDER, a) - rank(KIND_ORDER, b));
+            for (const kind of kindKeys) for (const e of kinds.get(kind)) chainOf.set(e.id, [`s:${region}`, `s:${region}:${kind}`]);
+            const kindItems = () => kindKeys.map((kind) => {
                 const list = kinds.get(kind).sort(byName);
-                total += list.length;
-                return group(`s:${region}:${kind}`, KIND_LABEL[kind] || String(kind), list.length, list.map(leaf));
+                return group(`s:${region}:${kind}`, KIND_LABEL[kind] || String(kind), list.length, () => list.map(leaf));
             });
+            for (const kind of kindKeys) total += kinds.get(kind).length;
             return group(`s:${region}`, REGION_LABEL[region] || String(region), total, kindItems);
         });
 
         /* Everything else: one flat group per type. */
         const otherItems = OTHER_GROUPS.map(([type, label]) => {
             const list = graph.byType[type].filter(shown).sort(byName);
-            return list.length ? group(`o:${type}`, label, list.length, list.map(leaf)) : null;
+            if (!list.length) return null;
+            for (const e of list) chainOf.set(e.id, [`o:${type}`]);
+            return group(`o:${type}`, label, list.length, () => list.map(leaf));
         }).filter(Boolean);
 
         if (!regionItems.length && !otherItems.length) {
@@ -100,19 +109,21 @@ export function mountTree({ root, graph, store }) {
     /* Highlight the selected leaf; open its groups and bring it into view. */
     function markSelection(reveal) {
         const { selection } = store.get();
-        let target = null;
         for (const b of root.querySelectorAll('button[aria-current]')) b.removeAttribute('aria-current');
-        for (const b of root.querySelectorAll('button[data-id]')) {
-            if (b.dataset.id === selection) { target = b; break; }
+        if (reveal) {
+            /* open the path to the selection, outermost group first (each one's rows must exist before the next is reached) */
+            for (const key of chainOf.get(selection) || []) {
+                const d = root.querySelector(`details[data-key="${key}"]`);
+                if (!d) break;
+                d.open = true;
+                open.add(key);
+                d._fill();
+            }
         }
+        const target = selection ? root.querySelector(`button[data-id="${CSS.escape(selection)}"]`) : null;
         if (!target) return;
         target.setAttribute('aria-current', 'true');
-        if (!reveal) return;
-        for (let d = target.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) {
-            d.open = true;
-            open.add(d.dataset.key);
-        }
-        target.scrollIntoView({ block: 'nearest' });
+        if (reveal) target.scrollIntoView({ block: 'nearest' });
     }
 
     root.addEventListener('click', (e) => {

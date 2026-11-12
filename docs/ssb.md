@@ -34,9 +34,9 @@ Content lives in `ssb/content/*.json`: structures, landmarks, variants, classifi
 
 Both stages share one scene, one selection and one URL state; switching stage never reloads.
 
-- **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks; clicking the same pixel again steps deeper through what is under the cursor. The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels, and vessel and nerve sweeps, are layers.
+- **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks (the order is §6.4); clicking the same pixel again steps deeper through what is under the cursor. The camera is in the URL (`cam`, §6.3). The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels are a layer. Its vessel and nerve sweeps have no control in the page (phase 3, `docs/wip.md`).
 - **Scope.** First-person through a rigid scope that **pivots at the nostril**. Pose = insertion depth, shaft yaw and pitch about the nostril fulcrum, roll, and lens angle (0/30/45/70°). The horizon stays upright. Lighting is a spotlight at the tip with inverse-square falloff and an automatic exposure.
-  - Collision: the shaft is sampled against the CT display volume (§5.5). Bone blocks; a blocked pose is clamped to the last free depth. Mucosa does not block; the shaft length in mucosa is reported as mucosal contact. At the midline the shaft is clamped at R = 0, except in the nasopharynx.
+  - Collision: the shaft is sampled against the CT display volume (§5.5). Bone blocks; a blocked pose is clamped to the last free depth, and while the clamp holds the stage says why in one line (`.ssb-scope-block`). Mucosa does not block; the shaft length in mucosa is reported as mucosal contact. At the midline the shaft is clamped at R = 0, except in the nasopharynx.
   - The fulcrum `lm.naris` is the centroid of the vestibule lumen at the alar-rim band.
   - A proximity HUD gives the distance from the tip to each critical structure (ICA, optic nerve, skull base, orbit, AEA) from precomputed distance fields, and marks those within 3 mm.
   - Stations: `ssb/geometry/stations.json` stores an endoscope pose per station and side (a midline `.M` station is posed from the right nostril). Picking one flies the pose there over about 600 ms; reduced motion cuts. `#scope=t.<id>[.<side>]` opens a station (side R when absent); an unknown id is ignored. A station may need the 2.7 mm telescope (`shaft`).
@@ -151,8 +151,9 @@ Dependencies are one-way: `main -> mode-* -> {scene, geo-specimen, volume, ui-*}
 
 One store; everything else subscribes. The URL hash is the shareable state, e.g. `#s=s.uncinate-process&tier=2`, `#scope=R,40,10,-5,90,45`, `#scope=t.frontal-recess-70.R`, `#at=12.5,31,48`, and `q=full|lite`. Parsing is whitelist-only: ids must exist in the graph index, numbers are parsed and clamped, unknown keys are ignored, and nothing from the URL reaches markup except through `textContent`.
 
-- **Keys:** `s` (selected id), `tier` (1–3), `at` (the 3D cursor, `r,a,s` in RAS mm, clamped to the volume's bounds), `scope` (a pose, or a station link), `q` (§6.4). Earlier keys (`lab`, `ct`, `p`, `step`, `cor`, `pop`, and the phase 2 removals `mu`, `flap`, `anat`, `v`, `dz`) are unknown and ignored.
+- **Keys:** `s` (selected id), `tier` (1–3), `at` (the 3D cursor, `r,a,s` in RAS mm, clamped to the volume's bounds), `cam` (the Specimen's orbit view: camera position then target, `px,py,pz,tx,ty,tz` in RAS mm, one decimal; written only while the Specimen owns the camera, never with `scope`; a sane distance of 5 to 2000 mm between them or it is ignored), `scope` (a pose, or a station link), `q` (§6.4). Earlier keys (`lab`, `ct`, `p`, `step`, `cor`, `pop`, and the phase 2 removals `mu`, `flap`, `anat`, `v`, `dz`) are unknown and ignored.
 - **Stage:** `scope=` opens the Scope; without it the stage is the Specimen.
+- **Tree:** every group starts closed and builds its rows on first open (`ui-tree.js`); a link or selection opens the path to its row. A closed group costs one summary in the DOM.
 
 ### 6.4 Rendering
 
@@ -163,7 +164,7 @@ One store; everything else subscribes. The URL hash is the shareable state, e.g.
   - **Quality** `full` or `lite`, chosen at boot from device hints; the hash key `q` overrides it.
 - The Specimen stage follows the site theme. The endoscope stage is dark in both themes (a projector stage).
 - Labels: DOM overlay with SVG leader lines, few at a time, decluttered by tier.
-- Picking: raycast on click, all intersections kept for click-to-go-deeper; no hover picking on touch devices.
+- Picking: raycast on click, all intersections kept for click-to-go-deeper, in the order a click takes them (`collectHits`, `mode-specimen.js`): a landmark marker first; then the nearest surface, except that a see-through envelope (the bone in X-ray) yields to what it hides, so a small structure behind it is picked first. A solid envelope, and an opaque skin, keep their place. Hover (mouse only) names the first pick beside the pointer; touch has no hover.
 - Camera flights respect `prefers-reduced-motion` (cut instead of fly).
 
 ### 6.5 Degradation, accessibility, mobile

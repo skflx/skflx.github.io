@@ -84,6 +84,28 @@ function sameAt(a, b) {
     return !!a && !!b && a.every((v, n) => v === b[n]);
 }
 
+/* ---------------- the Specimen camera ---------------- */
+
+const CAM_MAX = 2000;   /* mm: a camera or target farther than this from the origin is not a view of the head */
+
+/* 'px,py,pz,tx,ty,tz' (RAS mm: the camera position, then its target) -> the six numbers rounded to 0.1 mm, or null
+   when it is anything else or the two points are not a sane distance apart. */
+export function parseCam(raw) {
+    if (typeof raw !== 'string' || raw.length > 128) return null;
+    const parts = raw.split(',');
+    if (parts.length !== 6) return null;
+    const v = parts.map((x) => (x.trim() === '' ? NaN : Number(x)));
+    if (!v.every((n) => Number.isFinite(n) && Math.abs(n) <= CAM_MAX)) return null;
+    const d = Math.hypot(v[0] - v[3], v[1] - v[4], v[2] - v[5]);
+    if (!(d >= 5 && d <= CAM_MAX)) return null;
+    return v.map((n) => Math.round(n * 10) / 10);
+}
+
+/* Six numbers (RAS mm) -> the hash text. */
+export function camText(cam) {
+    return cam.map((v) => String(Number(Number(v).toFixed(1)))).join(',');
+}
+
 /* ---------------- guarded storage ---------------- */
 
 function store() {
@@ -125,6 +147,8 @@ export function parseHash(hash, has) {
     else if (parseStationLink(scopeText)) out.station = scopeText;
     const at = parseCtAt(params.get('at'));
     if (at) out.cursor = at;
+    const cam = parseCam(params.get('cam'));
+    if (cam) out.camera = cam;
     const quality = clampQuality(params.get('q'));
     if (quality) out.quality = quality;
     return out;
@@ -142,13 +166,14 @@ export function formatHash(state) {
     if (state.scope) parts.push('scope=' + formatScope(state.scope));
     else if (state.station && parseStationLink(state.station)) parts.push('scope=' + state.station);      /* a link not yet resolved to a pose survives a rewrite of the address bar */
     else if (state.cursor) parts.push('at=' + atText(state.cursor));
+    if (state.camera && !state.scope && !state.station) parts.push('cam=' + camText(state.camera));
     if (clampQuality(state.quality)) parts.push('q=' + state.quality);
     return parts.length ? '#' + parts.join('&') : '';
 }
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, scope, station, cursor, quality }. Invariant: the
+/* state = { tier, selection, scope, station, cursor, camera, quality }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
    stage is the specimen, or the endoscope (`scope`: a whole pose, scope.js, shown on the specimen).
@@ -169,6 +194,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs() }) {
         scope: fromUrl.scope || null,
         station: fromUrl.scope ? null : fromUrl.station || null,
         cursor: clampAt(fromUrl.cursor, ctBounds),
+        camera: fromUrl.camera || null,
         quality: fromUrl.quality || null,
     });
     const subs = new Set();
@@ -177,9 +203,10 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs() }) {
         const prev = state;
         const next = { ...prev, ...patch };
         if (next.tier === prev.tier && next.selection === prev.selection
-            && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality) return false;
+            && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && sameAt(next.camera, prev.camera) && next.quality === prev.quality) return false;
         if (samePose(next.scope, prev.scope)) next.scope = prev.scope;
         if (sameAt(next.cursor, prev.cursor)) next.cursor = prev.cursor;
+        if (sameAt(next.camera, prev.camera)) next.camera = prev.camera;
         state = Object.freeze(next);
         for (const fn of [...subs]) {
             try { fn(state, prev, meta); } catch (e) { console.error(e); }
@@ -220,6 +247,12 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs() }) {
             if (at !== null && !p) return false;
             return set({ cursor: p }, meta);
         },
+        /* The Specimen's camera (RAS mm: position, then target), or null for the default view. Never changes the stage. */
+        setCamera(cam, meta = { source: 'camera' }) {
+            const c = cam === null ? null : parseCam(camText(cam));
+            if (cam !== null && !c) return false;
+            return set({ camera: c }, meta);
+        },
         /* The loaded volume's RAS box ({ min, max }): later cursors clamp to it, and the current one is re-clamped now. */
         setCtBounds(bounds) {
             ctBounds = bounds && ctLimits(bounds) === bounds ? bounds : null;
@@ -234,7 +267,7 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs() }) {
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
             return set({
                 selection, tier, scope: p.scope || null, station: p.scope ? null : p.station || null,
-                cursor: clampAt(p.cursor, ctBounds), quality: p.quality || null,
+                cursor: clampAt(p.cursor, ctBounds), camera: p.camera || null, quality: p.quality || null,
             }, { source: 'url' });
         },
         /* The canonical hash for the current state. */

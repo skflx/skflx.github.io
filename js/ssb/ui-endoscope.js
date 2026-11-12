@@ -20,7 +20,7 @@ function el(tag, cls, text) {
 const fmt = (v) => String(Number(Number(v).toFixed(1)));
 
 /* The overlay on the stage: a vignette whose clear circle is the 70 degree field of view,
-   the light-post indicator on its rim, and a one-line readout. Created hidden. */
+   the light-post indicator on its rim, a one-line readout, and the one-line reason the depth is blocked. Created hidden. */
 export function buildScopeOverlay(stageHost) {
     const root = el('div', 'ssb-scope');
     root.id = 'ssb-scope';
@@ -30,9 +30,12 @@ export function buildScopeOverlay(stageHost) {
     const post = el('span', 'ssb-scope-post');
     post.title = 'Light post';
     const readout = el('p', 'ssb-scope-readout');
-    root.append(mask, post, readout);
+    const block = el('p', 'ssb-scope-block');
+    block.hidden = true;
+    block.setAttribute('role', 'status');
+    root.append(mask, post, readout, block);
     stageHost.append(root);
-    return { root, post, readout };
+    return { root, post, readout, block };
 }
 
 export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwitch }) {
@@ -201,6 +204,8 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
     const NEAR_MM = 3;
     function renderHud() {
         const h = endo.hud;
+        overlay.block.hidden = !h.limited;
+        overlay.block.textContent = h.limitedBy === 'septum' ? 'The septum stops the scope here: turn it, or pull back with \u2212.' : 'Bone stops the scope here: turn it, or pull back with \u2212.';
         hudSec.hidden = !h.rows.length;
         hudList.replaceChildren();
         if (!h.rows.length) return;
@@ -214,7 +219,6 @@ export function mountEndoscopeControls({ body, stageHost, endo, store, stageSwit
         }
         const contact = el('p', 'ssb-param-src ssb-scope-hud-contact', `Mucosal contact: ${fmt(h.contactMm)} mm of shaft`);
         hudList.append(contact);
-        if (h.limited) hudList.append(el('p', 'ssb-param-src ssb-scope-hud-limit', h.limitedBy === 'septum' ? 'The septum or bone limits the depth.' : 'Bone limits the depth.'));
     }
 
     /* ---- follow the pose ---- */

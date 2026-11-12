@@ -40,7 +40,7 @@ import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-s
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=2789cac7';
 import { PLANES } from './volume.js?v=4837556e';
-import { CT_PLANES } from './state.js?v=29c16ab3';
+import { CT_PLANES } from './state.js?v=a8ca025a';
 import { REGION_LABEL } from './graph.js?v=4c9ee329';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
@@ -278,6 +278,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
                 look = { ...look, space: false, translucent: true, onTop: true, ...(partner ? { opacity: 0.3 } : {}) };
             }
             u.drawn = look.kind;
+            u.seeThrough = !!(look.space || look.ghost || look.translucent || look.xray);     /* as drawn: X-ray and the see-through air spaces (scene.pickHits) */
             mesh.material = stage.materialsFor(look, { selected: primary, partner });
             mesh.renderOrder = isSel ? 5 : 0;
             mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : u.group === 'nose' ? layers.nose : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
@@ -571,7 +572,27 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (orient && active()) orient.show(true);
         specimen.root.updateMatrixWorld(true);
         if (active()) setView(VIEW_DEFAULT, 0);
+        if (active() && !store.get().scope && store.get().camera) restoreCamera(store.get().camera);
         syncCursor();
+    }
+
+    /* The camera in the URL (`cam=`, RAS mm: position, then target) -> the view; the orbit view is written back as it moves. */
+    function restoreCamera(cam) {
+        framed = true;
+        stage.setPose({ position: rasToScene(cam.slice(0, 3)), target: rasToScene(cam.slice(3)) });
+    }
+
+    /* The orbit view, written to the store once it has settled: only after the reader has moved the view (or while a
+       cam= is already in the URL, so it follows later flights), never during a flight and never in the scope. */
+    let moved = false;
+    function captureCamera() {
+        if (!installed || !active() || store.get().scope || stage.info().flying) return;
+        if (!moved && !store.get().camera) return;
+        const p = stage.pose();
+        const cam = [...sceneToRas(p.position), ...sceneToRas(p.target)];
+        const cur = store.get().camera;
+        if (cur && cur.every((v, n) => Math.abs(v - cam[n]) < 0.05)) return;
+        store.setCamera(cam, { source: 'camera' });
     }
 
     function onPack(pack) {
@@ -679,23 +700,55 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     /* ---------------- picking ---------------- */
 
-    /* Everything under a client point, nearest first (a landmark marker, which
-       is small, ahead of what lies behind it): [{ key, id, point (RAS), marker, object }]. */
+    /* Everything under a client point, in the order a click takes them: { key, id, point (RAS), marker, big, distance }.
+       A landmark marker (small) comes first. Then the nearest surface, except that a see-through envelope (the bone
+       in X-ray) is passed over for anything small it hides, so a sinus behind the ghosted bone is picked before the
+       bone that encloses it. A solid envelope, or an opaque skin, keeps its place: occlusion stands. */
     function collectHits(x, y) {
         if (!installed) return [];
         const hits = stage.pickHits(x, y, specimen.root);
         const out = hits.map((h) => ({
             key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
+            big: !!h.part.userData.envelope || (h.part.userData.look || {}).kind === 'skin', clear: h.clear,
             point: sceneToRas(h.point.toArray()), distance: h.distance,
         }));
         /* what the section cut away is not there to be picked */
-        return out.filter((h) => !clipped(h.point)).sort((a, b) => (b.marker - a.marker) || (a.distance - b.distance));
+        const rank = (h) => (h.marker ? 0 : h.big && h.clear ? 2 : 1);
+        return out.filter((h) => !clipped(h.point)).sort((a, b) => (rank(a) - rank(b)) || (a.distance - b.distance));
     }
 
     const canvas = stage.canvas;
     let down = null;
     let last = null;
-    canvas.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; });
+
+    /* Hover (mouse only): the name of what a click would pick first, beside the pointer. */
+    const hoverLabel = el('span', 'ssb-part-label ssb-hover-label');
+    hoverLabel.hidden = true;
+    dom.labels.append(hoverLabel);
+    let hoverFrame = 0;
+    let hoverAt = null;
+    let pressed = false;                 /* a button is down: an orbit drag, no hover */
+    function paintHover() {
+        hoverFrame = 0;
+        const hit = hoverAt && installed && active() ? collectHits(hoverAt.x, hoverAt.y)[0] : null;
+        if (!hit || hit.marker || pressed) { hoverLabel.hidden = true; return; }
+        const r = canvas.getBoundingClientRect();
+        hoverLabel.textContent = graph.nameOf(hit.id);
+        hoverLabel.style.left = `${Math.min(hoverAt.x - r.left + 14, r.width - hoverLabel.offsetWidth - 4)}px`;
+        hoverLabel.style.top = `${hoverAt.y - r.top + 14}px`;
+        hoverLabel.hidden = false;
+    }
+    canvas.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        hoverAt = { x: e.clientX, y: e.clientY };
+        if (!hoverFrame) hoverFrame = requestAnimationFrame(paintHover);
+    });
+    canvas.addEventListener('pointerleave', () => { hoverAt = null; hoverLabel.hidden = true; });
+    canvas.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; pressed = true; hoverLabel.hidden = true; moved = true; });
+    canvas.addEventListener('wheel', () => { moved = true; }, { passive: true });
+    canvas.addEventListener('keydown', () => { moved = true; });
+    canvas.addEventListener('pointerup', () => { pressed = false; });
+    canvas.addEventListener('pointercancel', () => { pressed = false; });
     canvas.addEventListener('click', (e) => {
         if (!active() || !installed || !down) return;
         if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > DRAG_PX) return;     /* that was an orbit drag */
@@ -791,6 +844,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     function onFrame() {
         renders += 1;
+        captureCamera();
         stage.camera.updateMatrixWorld();
         if (orient) orient.update(stage.camera.quaternion);
         checkInside();
@@ -934,7 +988,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             stage.camera.updateMatrixWorld();
             return stage.toClient(new THREE.Vector3(...rasToScene(ras)));
         },
-        hits: (x, y) => collectHits(x, y).map((h) => ({ key: h.key, id: h.id, marker: h.marker, point: h.point, distance: h.distance })),
+        hits: (x, y) => collectHits(x, y).map((h) => ({ key: h.key, id: h.id, marker: h.marker, big: h.big, clear: h.clear, point: h.point, distance: h.distance })),
         /* a client point where a click picks `key` first, or null */
         screenOf(key) {
             const m = nodes().get(key) || (markers.get(key) && markers.get(key).object);

@@ -149,6 +149,9 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 - `materials.js` keeps the `ghost` kind and its token, reached by nothing in the page now (the population ghost is gone).
 - `docs/realistic-anatomy.md` and `plans/` describe the removed anatomy states.
 - `content`: the procedure, hazard, principle and condition collections are still shown in the tree.
+- Phase 3 left these for the owner: the Landmarks layer (markers and labels) stays in the Specimen; the "Keep the other side" section flip and the vessels-and-nerves sweeps have no control now (`ui-specimen.js`), so `flipSection`, `setSweeps` and the sweep loader are unreachable code to delete or restore.
+- Phase 3 picking: a click on the X-ray bone envelope no longer wins over a small structure it hides (`docs/ssb.md` §6.4). A solid envelope and the opaque external nose still occlude what is behind them; on a 20 by 16 grid of the default view 13 of 150 canvas points still pick the nose over a structure behind it. Owner call: whether the solid bone and the skin should yield too.
+- Scope, unlabelled white patch (left of centre at the default pose, `#scope=R,30,0,0,0,30`): no tagged geometry is hit by its ray, and hiding the bone envelope does not remove it. Not identified and not labelled, so as not to label a guess; next step is to enumerate the visible meshes under that ray in the browser.
 
 **Next:** status is GitHub issue #266 and its sub-issues; the spec is
 `plans/2026-10-07-ssb-roadmap.md`.

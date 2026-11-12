@@ -17,7 +17,7 @@
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
 import { PLANES, stamped } from './volume.js?v=4837556e';
-import { CT_PLANES } from './state.js?v=29c16ab3';
+import { CT_PLANES } from './state.js?v=a8ca025a';
 
 /* The standardized-specimen note (docs/ssb.md 5.1, O6): shown wherever the volume is shown, when ct.json has
    a `standard` block. Resolves false when the header is absent or unreadable. */
@@ -175,11 +175,6 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     lmBox.type = 'checkbox';
     lmBox.id = 'ssb-spec-landmarks';
     lmLabel.append(lmBox, el('span', null, 'Show markers and labels'));
-    const swLabel = el('label', 'ssb-ct-check');
-    const swBox = el('input');
-    swBox.type = 'checkbox';
-    swBox.id = 'ssb-spec-sweeps';
-    swLabel.append(swBox, el('span', null, 'Show vessels and nerves (partly inferred)'));
     const mucLabel = el('label', 'ssb-ct-check');
     const mucBox = el('input');
     mucBox.type = 'checkbox';
@@ -191,7 +186,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     noseBox.id = 'ssb-spec-nose';
     noseLabel.append(noseBox, el('span', null, 'Nose (the specimen\'s own skin; the face stays masked)'));
     airSec.append(mucLabel, noseLabel);
-    lmSec.append(lmLabel, swLabel);
+    lmSec.append(lmLabel);
 
     /* ---- section ---- */
     const secSec = section('Section');
@@ -210,13 +205,8 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     range.id = 'ssb-spec-section';
     range.step = '0.5';
     slider.append(head, range);
-    const flipLabel = el('label', 'ssb-ct-check');
-    const flipBox = el('input');
-    flipBox.type = 'checkbox';
-    flipBox.id = 'ssb-spec-flip';
-    flipLabel.append(flipBox, el('span', null, 'Keep the other side'));
     const secNote = el('p', 'ssb-param-src', 'The cut position is the 3D cursor, the same point as the CT crosshair. Click a surface to move it.');
-    secSec.append(secRow, slider, flipLabel, secNote);
+    secSec.append(secRow, slider, secNote);
 
     /* ---- what could not load ---- */
     const statusSec = section('Specimen');
@@ -258,14 +248,10 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         lmBox.checked = specimen.landmarksOn;
         lmBox.disabled = !specimen.hasLandmarks;
         lmLabel.classList.toggle('is-off', !specimen.hasLandmarks);
-        swBox.checked = specimen.sweepsOn;
-        swBox.disabled = !specimen.hasSweeps;
-        swLabel.classList.toggle('is-off', !specimen.hasSweeps);
 
         const sec = specimen.section;
         mark(secRow, 'section', sec.axis || 'off');
         slider.hidden = !sec.axis;
-        flipLabel.hidden = !sec.axis;
         secNote.hidden = !sec.axis;
         if (sec.axis) {
             const [lo, hi] = specimen.sectionRange(sec.axis);
@@ -275,7 +261,6 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
             const side = PLANES[sec.axis].sign;
             out.textContent = `${sec.at >= 0 ? side[0] : side[1]} ${fmt(Math.abs(sec.at))} mm`;
             range.setAttribute('aria-valuetext', out.textContent);
-            flipBox.checked = sec.flip;
         }
         const note = specimen.problem;
         statusText.textContent = specimen.status === 'partial' ? note : '';
@@ -298,8 +283,6 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         if (t === lmBox) specimen.setLandmarks(lmBox.checked);
         else if (t === mucBox) specimen.setMucosa(mucBox.checked);
         else if (t === noseBox) specimen.setNose(noseBox.checked);
-        else if (t === swBox) specimen.setSweeps(swBox.checked);
-        else if (t === flipBox) specimen.flipSection();
         else if (t.matches('input[data-region]')) specimen.setRegion(t.dataset.region, t.checked);
     });
     range.addEventListener('input', () => specimen.setSectionAt(Number(range.value)));

@@ -107,7 +107,7 @@ export const PAGES = [
       && /<img/.test(document.querySelector('.ok-notice').textContent)) },
   /* SSB: the tree is built from the graph and the WebGL stage has drawn a
      frame (window.__ssb is the read-only test window, js/ssb/main.js). */
-  { path: 'ssb.html', ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree button[data-id]').length > 0
+  { path: 'ssb.html', ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree summary').length > 0
       && !!window.__ssb && window.__ssb.frames > 0) },
   /* The Specimen stage (the default one): every pack listed in packs.json is
      loaded and drawn under SwiftShader; behaviour is tools/test-ssb.mjs. */
@@ -117,7 +117,7 @@ export const PAGES = [
      payload in #s= must not become an element, must not run, and must not
      select anything (ids are matched against the graph index). */
   { path: 'ssb.html#s=' + encodeURIComponent('<img src=x id=pwn onerror=window.__pwned=1>'),
-    ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree button[data-id]').length > 0
+    ready: (p) => wait(p, () => document.querySelectorAll('#ssb-tree summary').length > 0
       && !!window.__ssb && window.__ssb.selection === null
       && !document.getElementById('pwn') && !window.__pwned
       && !document.querySelector('#ssb-panel-body [data-entity]')) },

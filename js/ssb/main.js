@@ -15,10 +15,10 @@
    stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
 import { loadGraph } from './graph.js?v=4c9ee329';
-import { createStore, parseHash } from './state.js?v=29c16ab3';
-import { mountTree } from './ui-tree.js?v=2f18f5d0';
+import { createStore, parseHash } from './state.js?v=a8ca025a';
+import { mountTree } from './ui-tree.js?v=465179df';
 import { mountSearch } from './ui-search.js?v=870f10a8';
-import { mountPanel } from './ui-panel.js?v=5414ebd7';
+import { mountPanel } from './ui-panel.js?v=94d7de48';
 
 const $ = (id) => document.getElementById(id);
 
@@ -142,7 +142,7 @@ function wireUrl() {
     let settle = 0;
     store.subscribe((state, prev, meta) => {
         clearTimeout(settle);
-        if ((meta.source === 'slider' || meta.source === 'cursor' || meta.source === 'scope') && state.selection === prev.selection) { settle = setTimeout(() => write('replace'), 250); return; }
+        if ((meta.source === 'slider' || meta.source === 'cursor' || meta.source === 'scope' || meta.source === 'camera') && state.selection === prev.selection) { settle = setTimeout(() => write('replace'), 250); return; }
         write(meta.source !== 'url' && state.selection !== prev.selection ? 'push' : 'replace');
     });
     const adopt = () => store.applyHash(location.hash);
@@ -202,7 +202,7 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=0c25fb2b');
+        const { createScene } = await import('./scene.js?v=93963dd6');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
             quality: parseHash(location.hash, () => false).quality || null,
@@ -222,7 +222,7 @@ async function bootStage() {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=8a469610'), import('./ui-specimen.js?v=a99774b6')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=0340b88d'), import('./ui-specimen.js?v=97ab00c8')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -245,7 +245,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=13b1c72c'), import('./ui-endoscope.js?v=f6352c24')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=13b1c72c'), import('./ui-endoscope.js?v=3b9b4734')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {

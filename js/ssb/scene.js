@@ -393,7 +393,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
             if (!part || seen.has(part) || !shown(hit.object, root)) continue;
             seen.add(part);
             const look = part.userData.look || {};
-            hits.push({ part, object: hit.object, point: hit.point.clone(), distance: hit.distance, clear: !!(look.space || look.ghost || look.translucent || look.xray) });
+            hits.push({ part, object: hit.object, point: hit.point.clone(), distance: hit.distance, clear: !!(part.userData.seeThrough || look.space || look.ghost || look.translucent || look.xray) });
         }
         return hits;
     }

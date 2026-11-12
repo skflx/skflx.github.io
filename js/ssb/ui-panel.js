@@ -350,7 +350,7 @@ export function mountPanel({ panel, body, handle, title, live, graph, store, ann
         shownId = id;
 
         if (!id) {
-            body.append(el('p', 'ssb-empty', 'Select a structure in the list, or search. Links inside a description open the thing they name.'));
+            body.append(el('p', 'ssb-empty', 'Click a structure or search'));
             title.textContent = 'Details';
             handle.setAttribute('aria-expanded', 'false');
             panel.dataset.sheet = 'closed';
