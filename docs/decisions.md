@@ -162,4 +162,4 @@ progress. Removing `draft` is the owner's call.
 
 ## 12. Open decisions awaiting the owner
 
-- **axe-core as a dev dependency (pending owner approval).** `axe-core@4.10.2` is added as a pinned devDependency for `tools/test-a11y.mjs`, which runs in CI as a report-only step (`continue-on-error`). Baseline: `tools/a11y-baseline.json`. Owner to approve the dependency or drop the scan. Branch `a11y-axe`, not merged.
+- **axe-core is a dev dependency (owner approved 2026-11-12).** Pinned `axe-core@4.10.2` for `tools/test-a11y.mjs`: one scan per page file and mode, light and dark, in CI as a report-only step (`continue-on-error`). It fails only on violations outside `tools/a11y-baseline.json`; the baseline shrinks as pages are fixed and never grows.
