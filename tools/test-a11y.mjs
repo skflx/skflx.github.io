@@ -102,11 +102,12 @@ function baselineKey(e) { return `${e.page}\u0000${e.theme}\u0000${e.rule}`; }
 async function main() {
     const server = await startServer();
     const browser = await launchBrowser();
-    /* One scan per HTML file: the first PAGES entry for each file (its hash
-       variants are not scanned separately). */
-    const seenFile = new Set();
+    /* One scan per HTML file and mode: the first PAGES entry for each (file, m=/d= hash key). The other
+       hash variants are hostile-input smoke cases, not distinct DOMs. */
+    const seen = new Set();
+    const key = (path) => path.split(/[?#]/)[0] + ((path.match(/[#&]([md]=[a-z0-9]+)/) || [])[1] || '');
     const specs = (ONLY ? PAGES.filter((p) => p.path.startsWith(ONLY)) : PAGES)
-        .filter((p) => { const f = p.path.split('#')[0]; if (seenFile.has(f)) return false; seenFile.add(f); return true; });
+        .filter((p) => { const k = key(p.path); if (seen.has(k)) return false; seen.add(k); return true; });
     const started = Date.now();
     const results = [];
     try {
