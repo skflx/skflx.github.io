@@ -252,40 +252,14 @@ the test names what it pins, and the human checks are listed here.
   unit table (voxels against `dissection.json`'s `measured`, within 5 %) and carve,
   guard and budget figures; a rerun is byte-identical. `check-data` checks the
   `dissection.json` ↔ graph rule and each label against `labels.json`.
-- **Page and variant lab** (`--only lab`): `ssb.html` boots in graph mode with a
-  WebGL frame (software WebGL; flags in `tools/smoke-lib.mjs`); `#lab=frontal-recess`
-  builds; a hostile `#lab=` is clamped, snapped or dropped. Through the read-only
-  `window.__ssb.lab` hook the suite reads part names, hazards, bounding boxes and
-  the computed pathway. Each diorama loads on its lesson's view; presets satisfy
-  the graph's criteria; the ethmoid roof, frontal recess (uncinate attachments 1, 5,
-  6) and sphenoid geometry match their pinned rules (`docs/ssb.md` §5.7–§6.1);
-  clicking a part selects its entity; the dock never covers the canvas; phones
-  have no horizontal scroll; reduced motion stops particles and continuous rendering.
 - **Materials** (`js/ssb/materials.js`): every kind in the vocabulary of
   `docs/authoring-ssb.md` compiles and draws without WebGL error at `#q=full` and
   `#q=lite`; programs are shared per kind; a hostile `q` is ignored; every colour
   token exists for both themes in `css/ssb.css`.
-- **CT mode** (`js/ssb/volume.js`, `mode-ct.js`, `ui-ct.js`; `docs/ssb.md` §3, §5.6)
-  runs on a synthetic phantom, never the real volume: `tools/ssb-fixture-ct.mjs`
-  builds it in the `ssb/ct/` format and Playwright routes the page's requests to
-  it. Nothing is written into `ssb/`; the suite passes with or without the real
-  volume. `--only ct` runs it; add `--int16` (with `ct` or `scope`) to serve the
-  same phantom as a 16-bit HU head. `node tools/ssb-fixture-ct.mjs [dir]` writes
-  the files for a manual look. The intake self-test (numpy and scipy, not in CI):
-  `.venv/bin/python -I tools/ssb-pipeline/intake/intake.py selftest`.
-  Without WebGL the stage still loads, draws and selects.
-- **Procedure player** (`--only procedure`): `parsePatch`/`applyPatch` round-trip
-  and refusals; exactly the box's voxels change; the `#p=` codec and store reject
-  hostile input; on a fixture index, a hole through the septum plate is free at
-  step 1 and clamps at step 0. The real-data section runs once `ssb/states/index.json` exists.
 - **Mucosal state** (`--only mucosa`, `docs/ssb.md` §5.9): the decongested patch
   changes only erectile tissue, adds no bone voxels, keeps the midplane, and raises
   the measured cross-section by 1.35–1.45; the congested patch stays within 0.04
   of POP1's median. Human check: how the lining looks.
-- **Population** (`--only population`, `docs/ssb.md` §5.10): the pack is at most
-  300 kB, flagged `population` and never loaded at boot; its numbers match its
-  file; off gives the pack back. Re-running `meanshape.py` reproduces the pack
-  byte for byte. Human check: how the ghost reads beside the sinus.
 - **Endoscope** (`js/ssb/scope.js`, `--only scope`, `docs/ssb.md` §3): scope
   geometry (lens angle, orthonormal image-up through the zenith, tip at depth 0);
   the `#scope=` codec; the camera equals the pose; keys, drag and wheel move the

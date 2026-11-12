@@ -141,13 +141,9 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State:** unlisted (only `atlas.html` links to it). Graph mode and these stages
-work: Specimen, Endoscope (with station flights), CT, the variant lab (sphenoid
-diorama done; `lateral-wall` later), and Procedure mode (dissection states, player,
-stations, the decongested · as scanned · congested toggle, flap overlay, population
-panel). The reference specimen is the UW head, standardized. Normal asymmetry is
-live; variants and pathology wait, and their Anatomy pills stay hidden until
-`ssb/anatomy/index.json` lists an entry. All content is `draft`.
+**State (phase 1, owner order 2026-11-12, branch `ssb-phase1`):** unlisted (only `atlas.html` links to it). Two features: the Specimen with the Endoscope (traversal), and the tree, search and panel (identifying structures). The CT stage, the Procedure player, the variant lab, the population panel and the dioramas are removed from the UI, JS and tests. The data files they used (`ssb/states/`, `lining-*` packs, `ssb/anatomy/population/`, `ssb/reference/`, `population.glb.gz`) are still in the repo: the generated indexes (`ssb/models/packs.json`, `ssb/states/index.json`, `ssb/anatomy/index.json`) list them and only the raw-crawl pipeline can regenerate those. The flap overlay, mucosal states and anatomy bases stay (phase 2).
+
+**Deferred in phase 1:** `tools/test-ssb.mjs` sections still hold checks that drive the removed CT and procedure hooks (scope state and page tests, mucosa page tests, anatomy and scanned page tests); they fail until rewritten. `mode-specimen.js` and `geo-specimen.js` keep the dissected-state and population loaders, now dead code. `docs/ssb.md` §5.8 and §7 still describe the removed modes.
 
 **Next:** status is GitHub issue #266 and its sub-issues; the spec is
 `plans/2026-10-07-ssb-roadmap.md`. Realistic anatomy's design is `docs/ssb.md` §14.
