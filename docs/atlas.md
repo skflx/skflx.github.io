@@ -40,7 +40,7 @@ or `ssb.html` outside `atlas.html`.
 
 - `<svg class="at-svg" viewBox …>`; one element per group: `<a class="at-group" href>` when linked,
   otherwise `<g class="at-group">`, with `data-group`, `data-sub` (when set) and `aria-label`. An
-  unlinked interactive `<g>` has `tabindex="0"`; a non-interactive group is `aria-hidden`.
+  unlinked interactive `<g>` has `role="group"` (no `aria-label` on a bare `<g>`) and `tabindex="0"`; a non-interactive group is `aria-hidden`.
 - Each shape is `<path class="at-shape at-<tissue>[ at-dashed]" data-shape="<id>" [data-shade]>`.
 - **Paint order.** A group is one element, so groups are placed by their lowest `z` (declaration
   order breaks ties) and shapes by `z` inside them (file order breaks ties). A shape that must paint
