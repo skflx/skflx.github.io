@@ -69,7 +69,10 @@
             label.appendChild(box);
             var body = el('div', 'rv-body');
             var title = el('p', 'rv-title');
-            title.appendChild(el('span', 'rv-name', it.title));
+            var name = el('span', 'rv-name', it.title);
+            name.id = 'rv-t-' + it.id;
+            box.setAttribute('aria-labelledby', name.id);
+            title.appendChild(name);
             if (it.issue) title.appendChild(el('span', 'rv-issue', it.issue));
             body.appendChild(title);
             body.appendChild(el('p', 'rv-look', it.look));

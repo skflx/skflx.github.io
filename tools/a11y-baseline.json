@@ -1,0 +1,53 @@
+{
+  "axe": "4.10.2",
+  "tags": [
+    "wcag2a",
+    "wcag2aa",
+    "wcag21aa"
+  ],
+  "note": "rule id, page, theme and node count only; regenerate with --write-baseline",
+  "entries": [
+    {
+      "page": "airway-jeopardy.html",
+      "theme": "dark",
+      "rule": "color-contrast",
+      "count": 3
+    },
+    {
+      "page": "airway-jeopardy.html",
+      "theme": "light",
+      "rule": "color-contrast",
+      "count": 3
+    },
+    {
+      "page": "atlas.html",
+      "theme": "dark",
+      "rule": "aria-prohibited-attr",
+      "count": 6
+    },
+    {
+      "page": "atlas.html",
+      "theme": "light",
+      "rule": "aria-prohibited-attr",
+      "count": 6
+    },
+    {
+      "page": "pdf-chapter-splitter.html",
+      "theme": "dark",
+      "rule": "color-contrast",
+      "count": 3
+    },
+    {
+      "page": "pdf-chapter-splitter.html",
+      "theme": "light",
+      "rule": "color-contrast",
+      "count": 4
+    },
+    {
+      "page": "ssb.html",
+      "theme": "dark",
+      "rule": "color-contrast",
+      "count": 1
+    }
+  ]
+}
