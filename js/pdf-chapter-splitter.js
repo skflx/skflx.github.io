@@ -1,15 +1,3 @@
-// Theme toggle
-const themeToggleBtn = document.getElementById('themeToggle');
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('sk_theme', next);
-    themeToggleBtn.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
-  });
-}
-
 // State
 let rawPdfBytes = null;
 let loadedPdfDoc = null;
