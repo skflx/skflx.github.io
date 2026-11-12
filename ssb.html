@@ -12,7 +12,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=be7fe5cd">
-    <link rel="stylesheet" href="css/ssb.css?v=76f22a27">
+    <link rel="stylesheet" href="css/ssb.css?v=dc8f99c3">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -66,29 +66,18 @@
                 <div class="ssb-stage-mode" id="ssb-stage-mode" role="group" aria-label="Stage">
                     <span class="site-kicker">Stage</span>
                     <button class="site-pill active" type="button" data-stage="specimen" aria-pressed="true" disabled title="The reference specimen: layers, picking, section">Specimen</button>
-                    <button class="site-pill" type="button" data-stage="lab" aria-pressed="false" disabled title="Variant lab: parametric dioramas">Lab</button>
-                    <button class="site-pill" type="button" data-stage="ct" aria-pressed="false" disabled title="Triplanar CT of the reference specimen">CT</button>
                     <button class="site-pill" type="button" data-stage="scope" aria-pressed="false" disabled title="Endoscope: first-person view through a rigid scope">Scope</button>
                 </div>
             </div>
             <div class="ssb-stage" id="ssb-stage">
-                <canvas id="ssb-canvas" tabindex="0" aria-label="3D stage: the reference specimen or a variant-lab diorama. Drag to orbit, scroll to zoom, arrow keys to pan; click a structure to open it, click the same spot again to step to the next one under it."></canvas>
+                <canvas id="ssb-canvas" tabindex="0" aria-label="3D stage: the reference specimen. Drag to orbit, scroll to zoom, arrow keys to pan; click a structure to open it, click the same spot again to step to the next one under it."></canvas>
                 <div class="ssb-labels" id="ssb-labels" aria-hidden="true"><span class="ssb-part-label" id="ssb-part-label" hidden></span></div>
-                <div class="ssb-lab-dock" id="ssb-lab-dock" data-collapsed="false" hidden>
-                    <button class="ssb-dock-toggle" id="ssb-dock-toggle" type="button" aria-expanded="true" aria-controls="ssb-dock-body">Hide controls</button>
-                    <div class="ssb-dock-body" id="ssb-dock-body">
-                        <section class="ssb-lab" id="ssb-lab" aria-label="Variant lab controls" hidden></section>
-                    </div>
-                </div>
                 <div class="ssb-spec-dock" id="ssb-spec-dock" data-collapsed="false" hidden>
                     <button class="ssb-dock-toggle" id="ssb-spec-toggle" type="button" aria-expanded="true" aria-controls="ssb-spec-body">Hide layers</button>
                     <div class="ssb-dock-body" id="ssb-spec-body"></div>
                 </div>
                 <div class="ssb-orient" id="ssb-orient" aria-hidden="true" hidden></div>
-                <div class="ssb-hud" id="ssb-hud" hidden></div>
                 <p class="ssb-stage-msg" id="ssb-stage-msg" hidden></p>
-                <section class="ssb-ct" id="ssb-ct" aria-label="CT: axial, coronal and sagittal slices" hidden></section>
-                <span class="ssb-truth" id="ssb-truth" hidden></span>
                 <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Reference specimen &middot; from Interactive CT Sinus Anatomy, Univ. of Washington Radiology &middot; draft</span>
             </div>
         </div>
@@ -98,11 +87,6 @@
                 <span class="ssb-grabber" aria-hidden="true"></span>
                 <span class="ssb-sheet-title" id="ssb-sheet-title">Details</span>
             </button>
-            <div class="ssb-sheet-tabs" id="ssb-sheet-tabs" role="group" aria-label="Sheet shows" hidden>
-                <button class="site-pill" type="button" data-view="controls" aria-pressed="false">Lab controls</button>
-                <button class="site-pill active" type="button" data-view="details" aria-pressed="true">Details</button>
-            </div>
-            <div class="ssb-lab-sheet" id="ssb-lab-sheet"></div>
             <div class="ssb-panel-body" id="ssb-panel-body"><p class="ssb-empty">Loading&hellip;</p></div>
             <p class="ssb-credit" id="ssb-credit">Credits: specimen CT derived from <a href="http://uwmsk.org/sinusanatomy2/" target="_blank" rel="noopener">Interactive CT Sinus Anatomy</a>, University of Washington Department of Radiology, used with the authors&rsquo; permission.</p>
         </aside>
@@ -110,7 +94,7 @@
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=9fbcdd85"></script>
+    <script type="module" src="js/ssb/main.js?v=bdc61d75"></script>
     <script src="js/site.js?v=19c561b2"></script>
 </body>
 </html>

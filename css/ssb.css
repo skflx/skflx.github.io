@@ -296,7 +296,7 @@ html[data-theme="dark"] {
 .ssb-anatomy[data-edited="true"] .site-kicker::after { content: " \00b7  edited"; color: var(--signal); }
 
 /* ===== VARIANT LAB: dock (desktop), controls, HUD, badge ===== */
-.ssb-lab-dock, .ssb-spec-dock {
+.ssb-spec-dock {
   position: absolute; z-index: 3; top: 0; bottom: 0; left: 0; width: var(--ssb-dock-w);
   display: flex; flex-direction: column;
   background: var(--surface); border-right: 1px solid var(--rule-strong);
@@ -312,25 +312,19 @@ html[data-theme="dark"] {
 .ssb-dock-toggle:hover { color: var(--ink); background: var(--wash); }
 .ssb-dock-toggle:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
 /* Collapsed: a rail with a vertical label; the model gets the whole width. */
-.ssb-lab-dock[data-collapsed="true"], .ssb-spec-dock[data-collapsed="true"] { width: var(--ssb-dock-rail); }
-.ssb-lab-dock[data-collapsed="true"] .ssb-dock-body, .ssb-spec-dock[data-collapsed="true"] .ssb-dock-body { display: none; }
-.ssb-lab-dock[data-collapsed="true"] .ssb-dock-toggle, .ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle {
+.ssb-spec-dock[data-collapsed="true"] { width: var(--ssb-dock-rail); }
+.ssb-spec-dock[data-collapsed="true"] .ssb-dock-body { display: none; }
+.ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle {
   flex: 1; justify-content: flex-start; padding: 0.75rem 0; border-bottom: 0;
   writing-mode: vertical-rl;
 }
-.ssb-lab-dock[data-collapsed="true"] .ssb-dock-toggle::after, .ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle::after { content: '\203A'; margin-top: 0.4rem; }
-.ssb-lab { padding: 0 1rem 1rem; }
+.ssb-spec-dock[data-collapsed="true"] .ssb-dock-toggle::after { content: '\203A'; margin-top: 0.4rem; }
+
 .ssb-lab-sec { padding: 0.8rem 0 0.4rem; border-top: 1px solid var(--rule); }
 .ssb-lab-sec:first-child { border-top: 0; }
 .ssb-lab-kicker { margin: 0 0 0.5rem; }
-.ssb-lab-pick, .ssb-preset-row, .ssb-choice, .ssb-view-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.ssb-view-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .ssb-view-row .site-pill { min-width: 2.5rem; justify-content: center; }
-.ssb-preset-group { margin-bottom: 0.65rem; }
-.ssb-preset-title { margin: 0 0 0.3rem; font-size: 0.8125rem; font-weight: 500; }
-.ssb-lab .site-pill { white-space: normal; text-align: left; line-height: 1.25; }
-.ssb-lab .site-pill .ssb-code { border: 0; padding: 0; font-size: 0.75rem; font-weight: 600; }
-.ssb-preset-label { font: 400 0.78rem/1.25 var(--font-sans); }
-.ssb-lab .site-pill.active .ssb-preset-label, .ssb-lab .site-pill.active .ssb-code { color: inherit; }
 
 .ssb-param { padding: 0.4rem 0; }
 .ssb-param-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; }
@@ -338,49 +332,14 @@ html[data-theme="dark"] {
 .ssb-param-value { flex: none; font: 500 0.78rem/1 var(--font-mono); color: var(--ink); }
 .ssb-range { display: block; width: 100%; margin: 0.35rem 0 0.1rem; accent-color: var(--ink); }
 .ssb-param-src { margin: 0.15rem 0 0; font-size: 0.72rem; color: var(--ink-faint); }
-.ssb-param-toggle { display: flex; align-items: center; gap: 0.5rem; padding-top: 0.55rem; }
-.ssb-param-toggle input { flex: none; width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--ink); }
-.ssb-param-toggle .ssb-param-label { flex: 1; font-weight: 500; }
-.ssb-param-info { flex: none; font: 400 0.72rem/1 var(--font-mono); color: var(--ink-faint); }
-.ssb-param-sub { padding: 0 0 0.35rem 1.55rem; }
-.ssb-param-sub .ssb-param-label { font-size: 0.78rem; color: var(--ink-muted); }
+
 .ssb-param.is-off { opacity: 0.45; }
-.ssb-param-choice .ssb-param-label { margin-bottom: 0.35rem; }
 
 /* The stage's truth badge (docs/ssb.md principle 2): always visible in the lab. */
-.ssb-truth {
-  position: absolute; z-index: 2; top: 0.6rem; right: 0.75rem; max-width: calc(100% - 1.5rem);
-  padding: 0.25rem 0.5rem; pointer-events: none;
-  font: 500 0.68rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--signal-2); background: color-mix(in srgb, var(--surface) 88%, transparent);
-  border: 1px solid var(--signal-2); border-radius: var(--radius);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
 
 /* HUD: classification of the current parameters + the hazards that are hatched. */
-.ssb-hud {
-  position: absolute; z-index: 2; right: 0.75rem; bottom: 0.6rem;
-  max-width: min(30rem, calc(100% - 1.5rem));
-  padding: 0.45rem 0.65rem;
-  background: color-mix(in srgb, var(--surface) 90%, transparent);
-  border: 1px solid var(--rule-strong); border-radius: var(--radius);
-  font: 400 0.75rem/1.45 var(--font-mono); color: var(--ink-muted);
-}
+
 /* Desktop: the readout heads the dock; phones: the open controls sheet. */
-.ssb-dock-body .ssb-hud, .ssb-lab-sheet .ssb-hud {
-  position: static; max-width: none; margin: 0.75rem 0.75rem 0;
-  background: var(--wash); border-color: var(--rule);
-}
-.ssb-lab-sheet .ssb-hud { margin: 0 var(--gutter) 0.25rem; }
-.ssb-hud-line { margin: 0; }
-.ssb-hud-line strong { font-weight: 600; color: var(--ink); }
-.ssb-hud .ssb-ref { font-weight: 500; color: var(--ink); }
-.ssb-hatch-key {
-  display: inline-block; width: 0.95em; height: 0.95em; margin-right: 0.4em; vertical-align: -0.12em;
-  border: 1px solid var(--ssb-hazard);
-  background: repeating-linear-gradient(135deg, var(--ssb-hazard) 0 2px, var(--ssb-bone) 2px 5px);
-}
-.ssb[data-stage="lab"] .ssb-stage-note { display: none; }
 
 /* ===== SPECIMEN STAGE: layers dock, orientation widget, labels, notes ===== */
 .ssb-spec { padding: 0 1rem 1rem; }
@@ -397,28 +356,7 @@ html[data-theme="dark"] {
 .ssb-flap-notes:empty { display: none; }
 
 /* ===== population panel (WP POP2a): ink for the population, --signal for the head it is read against ===== */
-.ssb-pop { margin: 0 1rem 1rem; padding-top: 0.8rem; border-top: 1px solid var(--rule); }
-.ssb-pop > summary { cursor: pointer; margin: 0; }
-.ssb-pop-body { margin-top: 0.5rem; }
-.ssb-pop-block { margin-top: 0.7rem; }
-.ssb-pop-h { margin: 0 0 0.25rem; font-size: 0.8rem; font-weight: 600; color: var(--ink); }
-.ssb-pop-dl { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 0.6rem; margin: 0; font-size: 0.75rem; }
-.ssb-pop-dl dt { color: var(--ink-muted); }
-.ssb-pop-dl dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
-.ssb-pop-chart { display: block; width: 100%; height: auto; margin-top: 0.5rem; }
-.ssb-pop-grid { stroke: var(--rule); stroke-width: 0.5; }
-.ssb-pop-tick, .ssb-pop-axis { fill: var(--ink-faint); font: 7px var(--font-mono, monospace); }
-.ssb-pop-band-less { fill: var(--ink); fill-opacity: 0.12; }
-.ssb-pop-band-more { fill: var(--ink-muted); fill-opacity: 0.12; }
-.ssb-pop-line { fill: none; stroke-width: 1.4; }
-.ssb-pop-less { stroke: var(--ink); }
-.ssb-pop-more { stroke: var(--ink-muted); stroke-dasharray: 3 2; }
-.ssb-pop-std { stroke: var(--signal); }
-.ssb-pop-pt { fill: var(--signal); }
-.ssb-pop-key { list-style: none; margin: 0.3rem 0 0; padding: 0; font-size: 0.7rem; color: var(--ink-muted); }
-.ssb-pop-key li::before { content: ''; display: inline-block; width: 1.1rem; margin-right: 0.4rem; vertical-align: middle; border-top: 2px solid var(--ink); }
-.ssb-pop-key li[data-swatch="ssb-pop-more"]::before { border-top: 2px dashed var(--ink-muted); }
-.ssb-pop-key li[data-swatch="ssb-pop-std"]::before { border-top-color: var(--signal); }
+
 .ssb-geo-note {
   margin: 0 0 0.75rem; padding: 0.4rem 0.6rem;
   background: var(--wash); border-left: 2px solid var(--signal-2);
@@ -437,7 +375,6 @@ html[data-theme="dark"] {
 .ssb-orient-r line { stroke: var(--ssb-axis-r); } .ssb-orient-r text { fill: var(--ssb-axis-r); }
 .ssb-orient-a line { stroke: var(--ssb-axis-a); } .ssb-orient-a text { fill: var(--ssb-axis-a); }
 .ssb-orient-s line { stroke: var(--ssb-axis-s); } .ssb-orient-s text { fill: var(--ssb-axis-s); }
-.ssb[data-stage="lab"] .ssb-orient, .ssb[data-stage="ct"] .ssb-orient { display: none; }
 
 /* Phones: the layers dock sits under the model, closed until asked for; open, it takes the
    lower part of the stage and the canvas gives way (so the model stays in sight). */
@@ -465,123 +402,37 @@ html[data-theme="dark"] {
 }
 
 /* Sheet tabs + the lab controls' phone host (inert on desktop). */
-.ssb-sheet-tabs { flex: none; display: flex; gap: 0.35rem; padding: 0 var(--gutter) 0.55rem; }
-.ssb-lab-sheet { display: none; }
 
 /* ===== CT STAGE: three linked slice views + an info cell (docs/ssb.md 3, 5.6) ===== */
-.ssb-ct {
-  position: absolute; inset: 0; z-index: 4;
-  display: flex; flex-direction: column; background: var(--ssb-ct-bg);
-}
-.ssb[data-stage="ct"] .ssb-stage-note { display: none; }
-.ssb-ct-grid {
-  flex: 1; min-height: 0; display: grid; gap: 1px; background: var(--rule-strong);
-  grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto;
-}
-.ssb-ct:not([data-status="ready"]) .ssb-ct-grid { visibility: hidden; }
-
-.ssb-ct-view {
-  position: relative; margin: 0; min-width: 0; min-height: 0;
-  background: var(--ssb-ct-bg); color: var(--ssb-ct-ink);
-}
-.ssb-ct-canvas {
-  position: absolute; inset: 0; display: block; width: 100%; height: 100%;
-  touch-action: none; cursor: crosshair;
-}
-.ssb-ct-canvas:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
-.ssb-ct-view[data-active="true"]::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none; border: 1px solid var(--signal);
-}
 
 /* Orientation letters at the four edges, in the gizmo's axis hues. */
-.ssb-ct-o {
-  position: absolute; pointer-events: none;
-  font: 600 0.8rem/1 var(--font-mono); color: var(--ssb-ct-ink-muted);
-}
-.ssb-ct-o[data-edge="left"] { left: 0.5rem; top: 50%; transform: translateY(-50%); }
-.ssb-ct-o[data-edge="right"] { right: 0.5rem; top: 50%; transform: translateY(-50%); }
-.ssb-ct-o[data-edge="top"] { top: 0.4rem; left: 50%; transform: translateX(-50%); }
-.ssb-ct-o[data-edge="bottom"] { bottom: 0.4rem; left: 50%; transform: translateX(-50%); }
-.ssb-ct-o[data-letter="R"], .ssb-ct-o[data-letter="L"] { color: var(--ssb-ct-axis-r); }
-.ssb-ct-o[data-letter="A"], .ssb-ct-o[data-letter="P"] { color: var(--ssb-ct-axis-a); }
-.ssb-ct-o[data-letter="S"], .ssb-ct-o[data-letter="I"] { color: var(--ssb-ct-axis-s); }
-
-.ssb-ct-cap {
-  position: absolute; left: 0.5rem; top: 0.4rem; pointer-events: none;
-  display: flex; flex-direction: column; gap: 0.3rem; font: 500 0.7rem/1 var(--font-mono); letter-spacing: 0.04em;
-}
-.ssb-ct-name { text-transform: uppercase; letter-spacing: 0.08em; color: var(--ssb-ct-ink-muted); }
-.ssb-ct-pos { color: var(--ssb-ct-ink); }
-
-.ssb-ct-tip {
-  position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; white-space: nowrap;
-  padding: 0.2rem 0.45rem; font: 500 0.72rem/1.25 var(--font-sans);
-  color: var(--ssb-ct-ink); background: color-mix(in srgb, var(--ssb-ct-bg) 88%, transparent);
-  border: 1px solid var(--ssb-ct-ink-muted); border-radius: var(--radius);
-}
 
 /* The truth badge: a strip under the views (kept on one line; the title has the note). */
-.ssb-ct .ssb-ct-truth {
-  position: static; flex: none; max-width: none; margin: 0; padding: 0.3rem var(--gutter);
-  color: var(--signal-2); background: var(--surface); border: 0; border-top: 1px solid var(--rule-strong); border-radius: 0;
-  pointer-events: auto;
-}
-
-.ssb-ct-msg {
-  position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 2rem;
-  text-align: center; color: var(--ssb-ct-ink-muted); background: var(--ssb-ct-bg);
-}
 
 /* The info cell follows the page theme. */
-.ssb-ct-info {
-  min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
-  padding: 0.35rem var(--gutter) 0.75rem; background: var(--surface); color: var(--ink);
-}
-.ssb-ct-sec { padding: 0.55rem 0 0.25rem; }
-.ssb-ct-kicker { margin: 0 0 0.4rem; }
-.ssb-ct-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-.ssb-ct-sliders { margin-top: 0.4rem; }
-.ssb-ct-sliders > summary { cursor: pointer; font-size: 0.8rem; color: var(--ink-muted); }
-.ssb-ct-sliders[open] > summary { margin-bottom: 0.2rem; }
-.ssb-ct-slider { display: grid; grid-template-columns: 3rem minmax(0, 1fr) 2.2rem; align-items: center; gap: 0.5rem; }
-.ssb-ct-slider-label { font-size: 0.8rem; color: var(--ink-muted); }
-.ssb-ct-slider-value { font: 500 0.75rem/1 var(--font-mono); text-align: right; }
-.ssb-ct-slider .ssb-range { margin: 0.2rem 0; }
+
 .ssb-ct-check { display: flex; align-items: center; gap: 0.5rem; font-size: 0.84rem; cursor: pointer; }
 .ssb-ct-check input { flex: none; width: 1.05rem; height: 1.05rem; margin: 0; accent-color: var(--ink); }
 .ssb-ct-check.is-off { opacity: 0.45; cursor: default; }
-.ssb-ct-readout { margin: 0; font: 400 0.75rem/1.5 var(--font-mono); color: var(--ink-muted); }
-.ssb-ct-readout-what { color: var(--ink); font-weight: 500; }
-.ssb-ct-keys { margin: 0; max-width: 28rem; font-size: 0.75rem; line-height: 1.45; color: var(--ink-muted); }
-.ssb-ct-legend { margin-top: 0.35rem; font-size: 0.8rem; }
-.ssb-ct-legend > summary { cursor: pointer; color: var(--ink-muted); }
-.ssb-ct-legend-list { list-style: none; margin: 0.3rem 0 0; padding: 0; max-height: 8rem; overflow-y: auto; }
-.ssb-ct-legend-list li { display: flex; align-items: center; gap: 0.45rem; padding: 0.1rem 0; }
-.ssb-ct-swatch { flex: none; width: 0.7rem; height: 0.7rem; border: 1px solid var(--rule-strong); border-radius: 1px; }
-.ssb-ct-legend-item {
-  margin: 0; padding: 0; background: none; border: 0; cursor: pointer; text-align: left;
-  font: inherit; color: inherit; text-decoration: underline; text-decoration-color: var(--ink-faint); text-underline-offset: 0.2em;
-}
-span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
 
 /* Phones: one plane at a time (the switcher picks it), the info cell below. */
 @media (max-width: 959px) {
-  .ssb-ct-view:not([data-active="true"]) { display: none; }
-  .ssb-ct-info { max-height: 15rem; }
-  .ssb-ct-sec { padding: 0.3rem 0 0.15rem; }
-  .ssb-ct-kicker, .ssb-ct-sec-keys { display: none; }
-  .ssb-ct-sec-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1.25rem; }
-  .ssb-ct-sec-labels .ssb-ct-legend { margin-top: 0; }
-  .ssb-ct-sec-labels .ssb-ct-legend[open] { flex: 1 1 100%; }
+  
+  
+  
+  
+  
+  
+  
 }
 
 @media (min-width: 960px) {
-  .ssb-ct-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
-  .ssb-ct-view[data-plane="axial"] { grid-area: 1 / 1; }
-  .ssb-ct-view[data-plane="coronal"] { grid-area: 1 / 2; }
-  .ssb-ct-view[data-plane="sagittal"] { grid-area: 2 / 1; }
-  .ssb-ct-info { grid-area: 2 / 2; }
-  .ssb-ct-sec-planes { display: none; }
+  
+  
+  
+  
+  
+  
 }
 
 /* ===== PANEL: bottom sheet on phones, right column on desktop ===== */
@@ -651,24 +502,13 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
 }
 .ssb-ref:hover { text-decoration-color: var(--signal); }
 
-/* Phones only: a closed sheet shows just its handle; in the lab the open
-   sheet shows either the lab controls or the details. */
+/* Phones only: a closed sheet shows just its handle. */
 @media (max-width: 959px) {
   .ssb-panel[data-sheet="closed"] .ssb-panel-body,
-  .ssb-panel[data-sheet="closed"] .ssb-credit,
-  .ssb-panel[data-sheet="closed"] .ssb-sheet-tabs { display: none; }
-  /* CT hides the stage note, so on a phone its closed sheet keeps the credit */
-  .ssb[data-stage="ct"] .ssb-panel[data-sheet="closed"] .ssb-credit { display: block; }
-  .ssb[data-stage="lab"] .ssb-panel[data-sheet="open"][data-view="controls"] .ssb-lab-sheet {
-    display: block; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
-  }
-  .ssb[data-stage="lab"] .ssb-panel[data-view="controls"] .ssb-panel-body { display: none; }
-  .ssb-lab-sheet .ssb-lab { padding: 0 var(--gutter) 1.5rem; }
+  .ssb-panel[data-sheet="closed"] .ssb-credit { display: none; }
 
   .ssb-toolbar { flex-wrap: wrap; row-gap: 0.4rem; }
   .ssb-toolbar .site-kicker { display: none; }
-  .ssb-hud { left: 0.6rem; right: 0.6rem; bottom: 0.5rem; max-width: none; font-size: 0.68rem; padding: 0.35rem 0.5rem; }
-  .ssb-truth { top: 0.5rem; left: 0.6rem; right: auto; font-size: 0.62rem; }
 }
 
 /* The depth names (Junior, Senior, Fellow) only where the toolbar keeps a wide margin: with four stage
@@ -726,22 +566,4 @@ span.ssb-ct-legend-item { cursor: default; text-decoration: none; }
 .ssb-scope-station-lens { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.04em; opacity: 0.75; flex: none; }
 
 /* ---------- procedure player (WP P2) ---------- */
-.ssb-proc { padding: 0 1rem 1rem; }
-.ssb-proc[hidden] { display: none; }
-.ssb-proc-title { margin: 0.2rem 0 0; font-weight: 600; }
-.ssb-proc-badge[data-state="dissected"] { color: var(--ink); font-weight: 500; }
-.ssb-proc-nav { margin: 0.5rem 0; }
-.ssb-proc-cor { margin-top: 0.4rem; }
-.ssb-proc-steps { list-style: none; margin: 0.5rem 0 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
-.ssb-proc-step { padding: 0.35rem 0.5rem; border-left: 2px solid var(--rule); }
-.ssb-proc-step.active { border-left-color: var(--signal); background: var(--paper-2, transparent); }
-.ssb-proc-go { all: unset; cursor: pointer; font: 500 0.72rem/1.2 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); }
-.ssb-proc-go:hover, .ssb-proc-step.active .ssb-proc-go { color: var(--ink); }
-.ssb-proc-go:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
-.ssb-proc-do { margin-top: 0.15rem; font-size: 0.85rem; }
-.ssb-proc-more { margin-top: 0.35rem; }
-.ssb-proc-think-toggle { margin-top: 0.4rem; }
-.ssb-proc-think { margin: 0.35rem 0 0; }
-.ssb-proc-think[hidden] { display: none; }
-.ssb-play-note { margin-top: 0.35rem; }
-.ssb-play-note[hidden] { display: none; }
+

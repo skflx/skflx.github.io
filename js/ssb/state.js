@@ -4,16 +4,16 @@
    Everything else subscribes to this store. It imports only scope.js and flap.js (pure
    math, no imports of their own: the `#scope=` codec, the flap overlay's parameters): the graph is injected
    (`has`, `tierOf`), which keeps the module graph one-way (docs/ssb.md 7.1).
+   The variant lab, the CT stage and the procedure player were removed (SSB phase 1): their keys (`lab=`, `ct=`,
+   `p=`, `step=`, `cor=`, `pop=`) are unknown now and ignored like any other.
 
    The URL hash is the shareable state (`#s=s.uncinate-process&tier=2`,
-   `#lab=ethmoid-roof&keros=12&q=lite`, `#ct=cor&at=12.5,31,48`) and is
+   `#scope=t.frontal-recess-70.R&q=lite`) and is
    untrusted input (docs/security.md rule 4): parsing is whitelist-only, ids
-   must exist in the graph index, a diorama name must be in the injected
-   registry and its keys in that diorama's PARAMS, a CT plane is one of
-   three names and its crosshair is three finite numbers clamped to the
+   must exist in the graph index, the 3D cursor is three finite numbers clamped to the
    volume's bounds, an endoscope pose is six fields with a whitelisted side
    and lens and clamped numbers, or a station link `t.<id>[.<side>]` that only
-   names a lookup key (scope.js), numbers are parsed, clamped and snapped to the step,
+   names a lookup key (scope.js), numbers are parsed and clamped,
    unknown keys are ignored, and nothing here ever produces markup.
 
    The anatomy state (`anat=`, `v=`, `dz=`, docs/ssb.md §14, R6.4) is whitelisted against a registry built from
@@ -26,7 +26,7 @@
    a no-op, never an exception (docs/decisions.md section 3).
    ============================================================= */
 
-import { parseScope, parseStationLink, formatScope, clampPose, samePose, POSE_DEFAULT } from './scope.js?v=c2522180';
+import { parseScope, parseStationLink, formatScope, clampPose, samePose } from './scope.js?v=c2522180';
 import { DESIGNS, SIDES, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 export const TIER_MIN = 1;
@@ -233,13 +233,9 @@ export function formatAnatomy(a) {
     return parts;
 }
 
-/* ---------------- variant lab parameters ---------------- */
 
-const own = (o, k) => o !== null && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k);
+/* ---------------- parameters (flap overlay) ---------------- */
 
-/* One diorama PARAMS entry + any input -> an allowed value, or null when the
-   input is not a finite number. Ranges clamp to [min, max] and snap to the
-   step; a param with `options` snaps to the nearest option value. */
 export function clampParam(p, raw) {
     if (raw === null || raw === undefined || typeof raw === 'boolean') return null;
     if (typeof raw === 'string' && raw.trim() === '') return null;
@@ -253,33 +249,6 @@ export function clampParam(p, raw) {
     let v = Math.min(p.max, Math.max(p.min, n));
     if (p.step > 0) v = Math.min(p.max, Math.max(p.min, p.min + Math.round((v - p.min) / p.step) * p.step));
     return Number(v.toFixed(6));
-}
-
-/* Every key of a diorama's PARAMS at its default. */
-export function labDefaults(params) {
-    const out = {};
-    for (const p of params) out[p.key] = p.default;
-    return out;
-}
-
-/* { name, params } -> the same with every value whitelisted and clamped, or
-   null when the diorama is unknown. Missing keys take their defaults. */
-export function normalizeLab(lab, labs) {
-    if (!lab || typeof lab.name !== 'string' || !own(labs, lab.name)) return null;
-    const spec = labs[lab.name];
-    const params = labDefaults(spec.params);
-    for (const p of spec.params) {
-        const v = own(lab.params, p.key) ? clampParam(p, lab.params[p.key]) : null;
-        if (v !== null) params[p.key] = v;
-    }
-    return { name: lab.name, params };
-}
-
-function sameLab(a, b) {
-    if (a === b) return true;
-    if (!a || !b || a.name !== b.name) return false;
-    const keys = Object.keys(a.params);
-    return keys.length === Object.keys(b.params).length && keys.every((k) => a.params[k] === b.params[k]);
 }
 
 /* ---------------- flap overlay ---------------- */
@@ -317,155 +286,11 @@ function parseFlap(params) {
     return normalizeFlap({ design: m[1], side: m[2] || 'R', params: values });
 }
 
-/* ---------------- procedure player ---------------- */
+/* ---------------- CT (the cursor only) ---------------- */
 
-/* The procedure hash `p=<p-id>&step=<n>[&cor=<corridor>]` (docs/ssb.md 7.3). The store only knows the shape and the
-   graph; whether the id is in ssb/states/index.json, how many steps it has and which corridors list it are the
-   player's to check once the index has loaded (mode-procedure.js), which clamps `step` and drops an unknown `cor`. */
-export const STEP_MAX = 99;
-const PROCEDURE_ID = /^p\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const CORRIDOR_KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
-/* Any input -> an integer step in [0, STEP_MAX], or null when it is not a number. */
-export function clampStep(value) {
-    if (typeof value === 'string' && value.trim() === '') return null;
-    if (value === null || value === undefined || typeof value === 'boolean') return null;
-    const n = Number(value);
-    if (!Number.isFinite(n)) return null;
-    return Math.min(STEP_MAX, Math.max(0, Math.round(n)));
-}
-
-/* { id, step, cor } -> the same whitelisted (id must match the p-id shape and be in the graph, `has`), or null. */
-export function normalizeProcedure(proc, has) {
-    if (!proc || typeof proc.id !== 'string' || !PROCEDURE_ID.test(proc.id) || !has(proc.id)) return null;
-    const cor = typeof proc.cor === 'string' && proc.cor.length <= 48 && CORRIDOR_KEY.test(proc.cor) ? proc.cor : null;
-    return { id: proc.id, step: clampStep(proc.step) ?? 0, cor };
-}
-
-function sameProcedure(a, b) {
-    if (a === b) return true;
-    return !!a && !!b && a.id === b.id && a.step === b.step && a.cor === b.cor;
-}
-
-/* '#s=<id>&tier=<n>&lab=<name>&<key>=<v>&ct=<plane>&at=<r,a,s>&scope=<pose>&q=<full|lite>'
-   -> { selection?, tier?, lab?, ct?, scope?, station?, cursor?, quality? } (a lab wins over
-   a ct, a ct over a scope; `at` without a plane is the specimen's 3D cursor,
-   `cursor`; `scope=t.<id>` is a station link, `station`, kept as text until the
-   endoscope has read the station table and calls resolveStation).
-   `anat`/`v`/`dz` -> `anatomy`: resolved against the registry (the 4th argument; the whole key is dropped if any part is
-   not allowed), or, before the index has loaded (none given), kept as `{ ..., pending: true }` after a shape check.
-   Only whitelisted keys, only valid values; anything else is dropped.
-   `has(id)` is the graph's index lookup; `labs` maps a diorama name to its
-   { params: PARAMS, presets: PRESETS }. A classification id naming a preset
-   (`c.keros=III`) is applied first, then explicit parameters over it. */
-export function parseHash(hash, has, labs = {}, registry = null) {
-    const out = {};
-    if (typeof hash !== 'string' || hash.length > HASH_MAX) return out;
-    let params;
-    try { params = new URLSearchParams(hash.replace(/^#/, '')); } catch (e) { return out; }
-    const s = params.get('s');
-    if (s !== null && has(s)) out.selection = s;
-    const t = params.get('tier');
-    if (t !== null) {
-        const tier = clampTier(t);
-        if (tier !== null) out.tier = tier;
-    }
-    const name = params.get('lab');
-    if (name !== null && own(labs, name)) {
-        const spec = labs[name];
-        const values = {};
-        for (const [cid, classes] of Object.entries(spec.presets || {})) {
-            const code = params.get(cid);
-            if (code !== null && own(classes, code)) Object.assign(values, classes[code]);
-        }
-        for (const p of spec.params) {
-            const raw = params.get(p.key);
-            if (raw !== null) values[p.key] = raw;
-        }
-        out.lab = normalizeLab({ name, params: values }, labs);
-    }
-    const plane = out.lab ? null : clampCtPlane(params.get('ct'));
-    const at = parseCtAt(params.get('at'));
-    const scopeText = out.lab || plane ? null : params.get('scope');
-    const procedure = out.lab || plane ? null : normalizeProcedure({ id: params.get('p'), step: params.get('step'), cor: params.get('cor') }, has);
-    if (procedure) out.procedure = procedure;
-    const scope = parseScope(scopeText);
-    if (scope) out.scope = scope;
-    else if (parseStationLink(scopeText)) out.station = scopeText;
-    if (plane) out.ct = { plane, at };
-    else if (at && !out.lab && params.get('ct') === null) out.cursor = at;     /* a bad `ct` still ignores the whole stage */
-    const quality = clampQuality(params.get('q'));
-    if (quality) out.quality = quality;
-    const mu = clampMu(params.get('mu'));
-    if (mu) out.mu = mu;
-    const anatomy = parseAnatomyRaw(params);
-    if (anatomy) {
-        if (registry) {
-            const resolved = resolveAnatomy(anatomy, registry);
-            if (resolved) out.anatomy = resolved;
-        } else out.anatomy = { base: anatomy.base, variants: anatomy.variants, conditions: anatomy.conditions, pending: true };
-    }
-    const flap = out.lab || plane ? null : parseFlap(params);      /* an overlay on the specimen: a lab or CT link ignores it */
-    if (flap) out.flap = flap;
-    return out;
-}
-
-const num = (v) => String(Number(Number(v).toFixed(3)));
-const atText = (at) => at.map((v) => String(Number(Number(v).toFixed(2)))).join(',');
-
-/* State -> the canonical hash ('' when there is nothing to share). A lab
-   writes its name and every parameter that differs from its default; the CT
-   stage its plane and crosshair; the specimen its 3D cursor alone (`at=`);
-   a quality override is written last. */
-export function formatHash(state, labs = {}) {
-    const parts = [];
-    if (state.selection) parts.push('s=' + encodeURIComponent(state.selection));
-    if (state.selection || state.tier !== TIER_DEFAULT) parts.push('tier=' + state.tier);
-    if (state.lab && own(labs, state.lab.name)) {
-        parts.push('lab=' + state.lab.name);
-        for (const p of labs[state.lab.name].params) {
-            const v = state.lab.params[p.key];
-            if (v !== undefined && v !== p.default) parts.push(p.key + '=' + num(v));
-        }
-    }
-    if (state.procedure && !state.lab && !state.ct) {
-        parts.push('p=' + state.procedure.id, 'step=' + state.procedure.step);
-        if (state.procedure.cor) parts.push('cor=' + state.procedure.cor);
-    }
-    if (state.ct && !state.lab && clampCtPlane(state.ct.plane)) {
-        parts.push('ct=' + CT_CODE[state.ct.plane]);
-        if (state.ct.at) parts.push('at=' + atText(state.ct.at));
-    } else if (!state.lab && state.scope) parts.push('scope=' + formatScope(state.scope));      /* the link is the pose alone: the shared cursor (`at`) is deliberately not written, so a reload opens CT at the volume centre */
-    else if (!state.lab && state.station && parseStationLink(state.station)) parts.push('scope=' + state.station);      /* a link not yet resolved to a pose survives a rewrite of the address bar */
-    else if (!state.lab && state.cursor) parts.push('at=' + atText(state.cursor));
-    if (state.flap && !state.lab && !state.ct) {
-        const f = normalizeFlap(state.flap);
-        if (f) {
-            parts.push(`flap=${f.design}.${f.side}`);
-            for (const p of PARAMS) if (p.designs.includes(f.design) && f.params[p.key] !== p.default) parts.push(p.hash + '=' + num(f.params[p.key]));
-        }
-    }
-    parts.push(...formatAnatomy(state.anatomy));        /* orthogonal to the stage: it rides along with any of them */
-    if (clampMu(state.mu) && state.mu !== MU_DEFAULT && !state.procedure) parts.push('mu=' + state.mu);      /* a procedure forces decongested: nothing to share */
-    if (clampQuality(state.quality)) parts.push('q=' + state.quality);
-    return parts.length ? '#' + parts.join('&') : '';
-}
-
-/* ---------------- CT ---------------- */
-
-/* The CT stage: a plane (the one that scrolls and is shown on phones) and the
-   crosshair in RAS mm. `at` is null until the reader moves it (the viewer
-   then sits at the volume's centre). */
+/* The three section planes (the Specimen's section control). */
 export const CT_PLANES = Object.freeze(['axial', 'coronal', 'sagittal']);
-const CT_CODE = Object.freeze({ axial: 'ax', coronal: 'cor', sagittal: 'sag' });
 export const CT_SANE = 1000;   /* mm: the limit until the volume's own bounds are known */
-
-/* 'ax' | 'cor' | 'sag' (or the full name), exactly -> the plane name, else null. */
-export function clampCtPlane(value) {
-    if (typeof value !== 'string') return null;
-    for (const [plane, code] of Object.entries(CT_CODE)) if (value === code || value === plane) return plane;
-    return null;
-}
 
 /* 'r,a,s' -> [r, a, s] (three finite numbers), or null when it is anything else. */
 export function parseCtAt(raw) {
@@ -496,23 +321,12 @@ export function clampAt(at, bounds = null) {
     return at.map((v, n) => Math.round(Math.min(max[n], Math.max(min[n], v)) * 1000) / 1000);
 }
 
-/* { plane, at } -> the same with the plane whitelisted and `at` clamped to the
-   bounds, or null when the plane is not one of the three. */
-export function normalizeCt(ct, bounds = null) {
-    const plane = ct && clampCtPlane(ct.plane);
-    return plane ? { plane, at: clampAt(ct.at, bounds) } : null;
-}
 
 function sameAt(a, b) {
     if (a === b) return true;
     return !!a && !!b && a.every((v, n) => v === b[n]);
 }
 
-function sameCt(a, b) {
-    if (a === b) return true;
-    if (!a || !b || a.plane !== b.plane) return false;
-    return sameAt(a.at, b.at);
-}
 
 /* ---------------- guarded storage ---------------- */
 
@@ -532,56 +346,103 @@ export function loadPrefs() {
 export function savePrefs(prefs) {
     try { store().setItem(PREFS_KEY, JSON.stringify({ v: 1, tier: prefs.tier })); } catch (e) { /* no-op */ }
 }
+/* '#s=<id>&tier=<n>&scope=<pose>&at=<r,a,s>&q=<full|lite>&mu=<dec|scan|cong>&anat…&flap…'
+   -> { selection?, tier?, scope?, station?, cursor?, quality?, mu?, anatomy?, flap? } (`scope=t.<id>` is a station
+   link, `station`, kept as text until the endoscope has read the station table and calls resolveStation; `at` is
+   the 3D cursor, `cursor`). Unknown keys (including the removed `lab=`, `ct=`, `p=`) are ignored.
+   `anat`/`v`/`dz` -> `anatomy`: resolved against the registry (the 4th argument; the whole key is dropped if any part is
+   not allowed), or, before the index has loaded (none given), kept as `{ ..., pending: true }` after a shape check.
+   Only whitelisted keys, only valid values; anything else is dropped. `has(id)` is the graph's index lookup. */
+export function parseHash(hash, has, registry = null) {
+    const out = {};
+    if (typeof hash !== 'string' || hash.length > HASH_MAX) return out;
+    let params;
+    try { params = new URLSearchParams(hash.replace(/^#/, '')); } catch (e) { return out; }
+    const s = params.get('s');
+    if (s !== null && has(s)) out.selection = s;
+    const t = params.get('tier');
+    if (t !== null) {
+        const tier = clampTier(t);
+        if (tier !== null) out.tier = tier;
+    }
+    const scopeText = params.get('scope');
+    const scope = parseScope(scopeText);
+    if (scope) out.scope = scope;
+    else if (parseStationLink(scopeText)) out.station = scopeText;
+    const at = parseCtAt(params.get('at'));
+    if (at) out.cursor = at;
+    const quality = clampQuality(params.get('q'));
+    if (quality) out.quality = quality;
+    const mu = clampMu(params.get('mu'));
+    if (mu) out.mu = mu;
+    const anatomy = parseAnatomyRaw(params);
+    if (anatomy) {
+        if (registry) {
+            const resolved = resolveAnatomy(anatomy, registry);
+            if (resolved) out.anatomy = resolved;
+        } else out.anatomy = { base: anatomy.base, variants: anatomy.variants, conditions: anatomy.conditions, pending: true };
+    }
+    const flap = parseFlap(params);
+    if (flap) out.flap = flap;
+    return out;
+}
+
+const num = (v) => String(Number(Number(v).toFixed(3)));
+const atText = (at) => at.map((v) => String(Number(Number(v).toFixed(2)))).join(',');
+
+/* State -> the canonical hash ('' when there is nothing to share). The endoscope writes its pose alone (the shared
+   cursor, `at`, is deliberately not written then, so a reload opens the specimen at its default cut); the specimen its
+   3D cursor alone (`at=`). */
+export function formatHash(state) {
+    const parts = [];
+    if (state.selection) parts.push('s=' + encodeURIComponent(state.selection));
+    if (state.selection || state.tier !== TIER_DEFAULT) parts.push('tier=' + state.tier);
+    if (state.scope) parts.push('scope=' + formatScope(state.scope));
+    else if (state.station && parseStationLink(state.station)) parts.push('scope=' + state.station);      /* a link not yet resolved to a pose survives a rewrite of the address bar */
+    else if (state.cursor) parts.push('at=' + atText(state.cursor));
+    if (state.flap) {
+        const f = normalizeFlap(state.flap);
+        if (f) {
+            parts.push(`flap=${f.design}.${f.side}`);
+            for (const p of PARAMS) if (p.designs.includes(f.design) && f.params[p.key] !== p.default) parts.push(p.hash + '=' + num(f.params[p.key]));
+        }
+    }
+    parts.push(...formatAnatomy(state.anatomy));        /* orthogonal to the stage: it rides along with any of them */
+    if (clampMu(state.mu) && state.mu !== MU_DEFAULT) parts.push('mu=' + state.mu);
+    if (clampQuality(state.quality)) parts.push('q=' + state.quality);
+    return parts.length ? '#' + parts.join('&') : '';
+}
 
 /* ---------------- the store ---------------- */
 
-/* state = { tier, selection, lab, ct, scope, station, cursor, quality, procedure, mu, flap, anatomy, anatomyIndex }. Invariant: the
+/* state = { tier, selection, scope, station, cursor, quality, mu, flap, anatomy, anatomyIndex }. Invariant: the
    selected entity's tier is never above `tier` (selecting a deeper entity
    raises the depth; lowering the depth below the selection closes it). The
-   stage is one of four: the specimen (lab, ct and scope all null), the variant lab
-   (`lab`: { name, params } with every parameter present and clamped,
-   normalizeLab), CT (`ct`: { plane, at }, normalizeCt), or the endoscope
-   (`scope`: a whole pose, scope.js, shown on the specimen); entering one
-   leaves the others. `station` is a station link (`t.<id>[.<side>]`) waiting for
-   the endoscope to turn it into a pose (resolveStation); it is never set with a
-   scope pose, a lab or CT.
-   `cursor` is the one 3D cursor in RAS mm, shared by CT and the specimen: the
-   CT crosshair is `ct.at`, which the store keeps equal to `cursor` while the
-   CT stage shows, and `cursor` is what survives in the specimen stage (where
-   `ct` is null) so a click on a 3D surface can land the CT crosshair there.
-   `procedure` ({ id, step, cor }, normalizeProcedure) is the procedure player (mode-procedure.js): not a fifth stage but
-   the scope stage with a dissection state behind it, so it implies a scope pose (the default one when none is given) and
-   ends with the scope, the lab or CT. `quality` is the rendering override from the hash ('full' | 'lite'), null
-   for the device's choice. `mu` is the mucosal state ('dec' | 'scan' | 'cong', default 'scan'), independent of the stage: the
-   procedure player (mode-procedure.js) loads its patch and lining, and a procedure overrides it with decongested. `flap` ({ design, side, params }, normalizeFlap) is the nasoseptal flap overlay on the specimen (flap.js), independent of the stage. The cursor is clamped to the volume's bounds,
-   `anatomy` ({ base, variants, conditions }, resolveAnatomy; ANATOMY_DEFAULT is the standard head) is the layer stack
-   over the volume and the packs, independent of the stage; while the index has not loaded it is `pending` (shape-checked,
-   not yet whitelisted) and every consumer treats it as the standard head. `anatomyIndex` is the registry
-   (buildAnatomyRegistry) once setAnatomyRegistry has been called, else null; the UI reads what can be picked from it.
-   The cursor is clamped to the volume's bounds,
-   which only the loaded volume knows: setCtBounds() hands them in and
-   re-clamps, and until then the limit is a sanity range.
+   stage is the specimen, or the endoscope (`scope`: a whole pose, scope.js, shown on the specimen).
+   `station` is a station link (`t.<id>[.<side>]`) waiting for the endoscope to turn it into a pose (resolveStation);
+   it is never set with a scope pose.
+   `cursor` is the one 3D cursor in RAS mm, clamped to the volume's bounds (setCtBounds hands them in; until then a
+   sanity range). `quality` is the rendering override from the hash ('full' | 'lite'), null for the device's choice.
+   `mu` is the mucosal state ('dec' | 'scan' | 'cong', default 'scan'). `flap` ({ design, side, params }, normalizeFlap)
+   is the nasoseptal flap overlay on the specimen (flap.js). `anatomy` ({ base, variants, conditions }, resolveAnatomy;
+   ANATOMY_DEFAULT is the standard head) is the layer stack over the volume, independent of the stage; while the index
+   has not loaded it is `pending` (shape-checked, not yet whitelisted). `anatomyIndex` is the registry
+   (buildAnatomyRegistry) once setAnatomyRegistry has been called, else null.
    Subscribers get (state, previous, meta); meta.source names the origin
-   ('url', 'tree', 'search', 'panel', 'tier', 'scene', 'lab', 'slider', 'ct', 'scope',
-   'cursor', 'ct-bounds') so the URL sync can tell a hash-driven change from
-   a click, and a slider or crosshair drag from a deliberate step. */
-export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs = {}, anatomyDoc = null }) {
+   ('url', 'tree', 'search', 'panel', 'tier', 'scene', 'slider', 'scope', 'cursor', 'ct-bounds', …) so the URL sync can tell
+   a hash-driven change from a click, and a slider drag from a deliberate step. */
+export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), anatomyDoc = null }) {
     let registry = anatomyDoc ? buildAnatomyRegistry(anatomyDoc, has) : null;
-    const fromUrl = parseHash(hash, has, labs, registry);
+    const fromUrl = parseHash(hash, has, registry);
     const selection = fromUrl.selection || null;
     let ctBounds = null;
-    const ct0 = fromUrl.ct ? normalizeCt(fromUrl.ct, ctBounds) : null;
-    const procedure0 = ct0 ? null : fromUrl.procedure || null;
     let state = Object.freeze({
         selection,
         tier: Math.max(fromUrl.tier || prefs.tier || TIER_DEFAULT, selection ? tierOf(selection) : TIER_MIN),
-        lab: fromUrl.lab || null,
-        ct: ct0,
-        scope: ct0 ? null : fromUrl.scope || (procedure0 && !fromUrl.station ? clampPose(POSE_DEFAULT) : null),
-        station: ct0 || fromUrl.scope ? null : fromUrl.station || null,
-        cursor: ct0 ? ct0.at : clampAt(fromUrl.cursor, ctBounds),
+        scope: fromUrl.scope || null,
+        station: fromUrl.scope ? null : fromUrl.station || null,
+        cursor: clampAt(fromUrl.cursor, ctBounds),
         quality: fromUrl.quality || null,
-        procedure: procedure0,
         mu: fromUrl.mu || MU_DEFAULT,
         flap: fromUrl.flap || null,
         anatomy: fromUrl.anatomy || ANATOMY_DEFAULT,
@@ -592,22 +453,18 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
     function set(patch, meta = {}) {
         const prev = state;
         const next = { ...prev, ...patch };
-        /* The endoscope and the procedure player read the standard head's volume only, so a non-standard base never
-           rides with them: the later choice wins. Picking a base leaves the scope; entering the scope (or a procedure)
-           goes back to the standard head. */
-        if (next.anatomy && !next.anatomy.pending && next.anatomy.base !== ANAT_STANDARD && (next.scope || next.station || next.procedure)) {
-            if (own(patch, 'anatomy') && !sameAnatomy(next.anatomy, prev.anatomy)) Object.assign(next, { scope: null, station: null, procedure: null });
+        /* The endoscope reads the standard head's volume only, so a non-standard base never rides with it: the later
+           choice wins. Picking a base leaves the scope; entering the scope goes back to the standard head. */
+        if (next.anatomy && !next.anatomy.pending && next.anatomy.base !== ANAT_STANDARD && (next.scope || next.station)) {
+            if (own(patch, 'anatomy') && !sameAnatomy(next.anatomy, prev.anatomy)) Object.assign(next, { scope: null, station: null });
             else next.anatomy = ANATOMY_DEFAULT;
         }
-        if (next.tier === prev.tier && next.selection === prev.selection && sameLab(next.lab, prev.lab) && sameCt(next.ct, prev.ct)
+        if (next.tier === prev.tier && next.selection === prev.selection
             && samePose(next.scope, prev.scope) && next.station === prev.station && sameAt(next.cursor, prev.cursor) && next.quality === prev.quality
-            && sameProcedure(next.procedure, prev.procedure) && next.mu === prev.mu && sameFlap(next.flap, prev.flap)
+            && next.mu === prev.mu && sameFlap(next.flap, prev.flap)
             && sameAnatomy(next.anatomy, prev.anatomy) && next.anatomyIndex === prev.anatomyIndex) return false;
         if (sameAnatomy(next.anatomy, prev.anatomy)) next.anatomy = prev.anatomy;
-        if (sameProcedure(next.procedure, prev.procedure)) next.procedure = prev.procedure;
-        if (sameLab(next.lab, prev.lab)) next.lab = prev.lab;
         if (sameFlap(next.flap, prev.flap)) next.flap = prev.flap;
-        if (sameCt(next.ct, prev.ct)) next.ct = prev.ct;
         if (samePose(next.scope, prev.scope)) next.scope = prev.scope;
         if (sameAt(next.cursor, prev.cursor)) next.cursor = prev.cursor;
         state = Object.freeze(next);
@@ -632,81 +489,42 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             const closes = state.selection && tierOf(state.selection) > tier;
             return set(closes ? { tier, selection: null } : { tier }, meta);
         },
-        /* Enter or change the variant lab ({ name, params }), or leave it
-           (null). Parameters are whitelisted and clamped here too, so a UI
-           bug cannot put an out-of-range value in the state or the URL.
-           Entering the lab leaves CT. */
-        setLab(lab, meta = { source: 'lab' }) {
-            if (lab === null) return set({ lab: null }, meta);
-            const next = normalizeLab(lab, labs);
-            return next ? set({ lab: next, ct: null, scope: null, station: null, procedure: null }, meta) : false;
-        },
-        /* Enter or change the CT stage ({ plane, at }), or leave it (null):
-           the plane is whitelisted and the crosshair clamped to the bounds;
-           entering without one (`at: null`) keeps the 3D cursor. Entering CT
-           leaves the lab. */
-        setCt(ct, meta = { source: 'ct' }) {
-            if (ct === null) return set({ ct: null }, meta);
-            const next = normalizeCt(ct, ctBounds);
-            if (!next) return false;
-            const at = next.at || state.cursor;
-            return set({ ct: { plane: next.plane, at }, cursor: at, lab: null, scope: null, station: null, procedure: null }, meta);
-        },
-        /* Enter or change the endoscope ({ side, depth, yaw, pitch, roll, lens },
-           clamped here too), or leave it (null, back to the specimen). Entering
-           leaves the lab and CT. */
+        /* Enter or change the endoscope (a whole pose, clamped here too), or leave it (null, back to the specimen). */
         setScope(pose, meta = { source: 'scope' }) {
-            if (pose === null) return set({ scope: null, procedure: null }, meta);
+            if (pose === null) return set({ scope: null }, meta);
             const next = clampPose(pose);
-            return next ? set({ scope: next, lab: null, ct: null, station: null }, meta) : false;
-        },
-        /* Start, change or end (null) the procedure player. Starting puts the scope on `pose` (a whole pose; else the pose it
-           has, else the default) and leaves the lab and CT; the step is only bounded by STEP_MAX here (the player knows the
-           procedure's steps and clamps through this same method). */
-        setProcedure(proc, meta = { source: 'procedure' }, pose = null) {
-            if (proc === null) return set({ procedure: null }, meta);
-            const next = normalizeProcedure(proc, has);
-            if (!next) return false;
-            const start = (pose ? clampPose(pose) : null) || state.scope || (state.station ? null : clampPose(POSE_DEFAULT));
-            return set({ procedure: next, scope: start, station: start ? null : state.station, lab: null, ct: null }, meta);
+            return next ? set({ scope: next, station: null }, meta) : false;
         },
         /* Turn a pending station link into its pose (a whole pose) or drop it (null: an unknown station, or no
            table). The one writer of `station` besides the hash. */
         resolveStation(pose, meta = { source: 'url' }) {
             if (!state.station) return false;
-            const next = (pose ? clampPose(pose) : null) || (state.procedure ? clampPose(POSE_DEFAULT) : null);      /* a procedure always has a pose */
-            return set({ station: null, scope: next, lab: null, ct: null }, meta);
+            return set({ station: null, scope: pose ? clampPose(pose) : null }, meta);
         },
-        /* Move the 3D cursor (RAS mm, clamped), or clear it (null). In the CT
-           stage this is the crosshair; elsewhere it is remembered for the
-           next visit. Never changes the stage. */
+        /* Move the 3D cursor (RAS mm, clamped), or clear it (null). Never changes the stage. */
         setCursor(at, meta = { source: 'cursor' }) {
             const p = at === null ? null : clampAt(at, ctBounds);
             if (at !== null && !p) return false;
-            return set(state.ct ? { cursor: p, ct: { plane: state.ct.plane, at: p } } : { cursor: p }, meta);
+            return set({ cursor: p }, meta);
         },
-        /* The loaded volume's RAS box ({ min, max }): later cursors clamp to
-           it, and the current one is re-clamped now. */
+        /* The loaded volume's RAS box ({ min, max }): later cursors clamp to it, and the current one is re-clamped now. */
         setCtBounds(bounds) {
             ctBounds = bounds && ctLimits(bounds) === bounds ? bounds : null;
-            const cursor = clampAt(state.cursor, ctBounds);
-            return set(state.ct ? { cursor, ct: { plane: state.ct.plane, at: cursor } } : { cursor }, { source: 'ct-bounds' });
+            return set({ cursor: clampAt(state.cursor, ctBounds) }, { source: 'ct-bounds' });
         },
         /* The mucosal state (decongested | as scanned | congested): any other value is ignored. Never changes the stage. */
         setMu(mu, meta = { source: 'mu' }) {
             const next = clampMu(mu);
             return next ? set({ mu: next }, meta) : false;
         },
-        /* The nasoseptal flap overlay ({ design, side, params }, whitelisted and clamped here too), or off (null). Never
-           changes the stage. */
+        /* The nasoseptal flap overlay ({ design, side, params }, whitelisted and clamped here too), or off (null). */
         setFlap(flap, meta = { source: 'flap' }) {
             if (flap === null) return set({ flap: null }, meta);
             const next = normalizeFlap(flap);
             return next ? set({ flap: next }, meta) : false;
         },
         /* The anatomy stack ({ base, variants, conditions }), or null for the standard head. Whitelisted against the
-           registry here too: anything the registry does not allow is refused (false) and the state is left as it was.
-           Never changes the stage. */
+           registry here too: anything the registry does not allow is refused (false) and the state is left as it was. */
         setAnatomy(anatomy, meta = { source: 'anatomy' }) {
             if (anatomy === null) return set({ anatomy: ANATOMY_DEFAULT }, meta);
             const next = registry ? resolveAnatomy(anatomy, registry) : null;
@@ -721,19 +539,19 @@ export function createStore({ has, tierOf, hash = '', prefs = loadPrefs(), labs 
             return set({ anatomyIndex: registry, anatomy: resolved || ANATOMY_DEFAULT }, meta);
         },
         /* Back to the specimen stage. */
-        leaveStage(meta = { source: 'stage' }) { return set({ lab: null, ct: null, scope: null, station: null, procedure: null }, meta); },
+        leaveStage(meta = { source: 'stage' }) { return set({ scope: null, station: null }, meta); },
         /* Adopt a location.hash (Back/Forward, a pasted link, a hand edit). */
         applyHash(next) {
-            const p = parseHash(next, has, labs, registry);
+            const p = parseHash(next, has, registry);
             const selection = p.selection || null;
             const tier = Math.max(p.tier || state.tier, selection ? tierOf(selection) : TIER_MIN);
-            const ct = p.ct ? normalizeCt(p.ct, ctBounds) : null;
-            const cursor = ct ? ct.at : clampAt(p.cursor, ctBounds);
-            const procedure = ct ? null : p.procedure || null;
-            const scope = ct ? null : p.scope || (procedure && !p.station ? state.scope || clampPose(POSE_DEFAULT) : null);
-            return set({ selection, tier, lab: p.lab || null, ct, scope, station: ct || p.scope ? null : p.station || null, cursor, quality: p.quality || null, procedure, mu: p.mu || MU_DEFAULT, flap: p.flap || null, anatomy: p.anatomy || ANATOMY_DEFAULT }, { source: 'url' });
+            return set({
+                selection, tier, scope: p.scope || null, station: p.scope ? null : p.station || null,
+                cursor: clampAt(p.cursor, ctBounds), quality: p.quality || null, mu: p.mu || MU_DEFAULT,
+                flap: p.flap || null, anatomy: p.anatomy || ANATOMY_DEFAULT,
+            }, { source: 'url' });
         },
         /* The canonical hash for the current state. */
-        hash: () => formatHash(state, labs),
+        hash: () => formatHash(state),
     };
 }

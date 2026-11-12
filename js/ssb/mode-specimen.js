@@ -45,7 +45,7 @@ import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=34e04a58';
 import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=b0877fd4';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
-import { CT_PLANES } from './state.js?v=893232f8';
+import { CT_PLANES } from './state.js?v=6d465d65';
 import { REGION_LABEL } from './graph.js?v=7e5865a2';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
@@ -111,7 +111,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false, nose: true, population: false };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false, nose: true };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
     let liningAsked = false;        /* the deferred lining pack has been requested (ST1c): the first look from within asks once */
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
@@ -124,7 +124,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let dissect = null;             /* the procedure player's state (P2): { key, hides: Set of base node keys } while a dissected state is shown */
     let emphasis = { see: new Set(), hazard: new Set() };     /* graph ids the player marks: a step's `see` structures, and the `at` structures of its `risk` hazards (hatched) */
 
-    const active = () => { const s = store.get(); return !s.lab && !s.ct; };
+    const active = () => true;      /* the specimen is the only stage with a mesh to draw (the lab and CT are gone) */
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
 
     /* ---------------- scene furniture: markers, cursor ---------------- */
@@ -305,13 +305,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
                 mesh.material = stage.materialsFor(look, { selected: false, partner: false });
                 mesh.renderOrder = 0;
                 mesh.visible = openLining && (u.state ? true : !ownLining) && !layers.hidden.has(regionOf(mesh));
-                continue;
-            }
-            if (u.group === 'ghost') {                  /* the population sinus (POP2b): one translucent unlit tint, never selected or emphasised */
-                u.drawn = look.kind;
-                mesh.material = stage.materialsFor(look, { selected: false, partner: false });
-                mesh.renderOrder = 6;
-                mesh.visible = layers.population;
                 continue;
             }
             const seen = emphasis.see.has(u.id);
@@ -614,23 +607,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
-    /* The population sinus (POP2b): on loads the deferred pack and shows it, off hides it and gives the pack back. */
-    async function setPopulation(on) {
-        if (!specimen || !!on === layers.population) return false;
-        layers.population = !!on;
-        if (on) {
-            paint();
-            emit();
-            await specimen.loadPopulationPack();
-            if (!layers.population) specimen.unloadPopulationPack();       /* switched off while it was loading */
-        } else {
-            specimen.unloadPopulationPack();
-        }
-        paint();
-        emit();
-        return true;
-    }
-
     function setLandmarks(on) {
         if (!!on === layers.landmarks) return false;
         layers.landmarks = !!on;
@@ -651,7 +627,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     function regions() {
         const out = new Map();
         for (const mesh of nodes().values()) {
-            if (mesh.userData.group === 'bone' || mesh.userData.group === 'nose' || mesh.userData.lining || mesh.userData.population) continue;
+            if (mesh.userData.group === 'bone' || mesh.userData.group === 'nose' || mesh.userData.lining) continue;
             const r = regionOf(mesh);
             if (!out.has(r)) out.set(r, { region: r, label: own(REGION_LABEL, r) ? REGION_LABEL[r] : r, count: 0, on: !layers.hidden.has(r) });
             out.get(r).count += 1;
@@ -1028,11 +1004,11 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (!installed) return [];
         const hits = stage.pickHits(x, y, specimen.root);
         const out = hits.map((h) => ({
-            key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker, population: !!h.part.userData.population,
+            key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
             point: sceneToRas(h.point.toArray()), distance: h.distance,
         }));
         /* what the section cut away is not there to be picked */
-        return out.filter((h) => !clipped(h.point) && !h.population).sort((a, b) => (b.marker - a.marker) || (a.distance - b.distance));
+        return out.filter((h) => !clipped(h.point)).sort((a, b) => (b.marker - a.marker) || (a.distance - b.distance));
     }
 
     const canvas = stage.canvas;
@@ -1143,7 +1119,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     /* ---------------- follow the store ---------------- */
 
     store.subscribe((state, prev, meta) => {
-        const now = !state.lab && !state.ct;
+        const now = active();
         if (now !== wasActive) { if (now) enter(); else leave(); }
         if (state.selection !== prev.selection) {
             if (meta.source !== 'scene') focusKey = null;
@@ -1211,7 +1187,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
-        get populationOn() { return layers.population; },
         /* the edited anatomy on show: its status, the base nodes it hides and the override nodes standing in for them */
         get anatomy() {
             return {
@@ -1246,7 +1221,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             material: m.material.type, transparent: !!m.material.transparent, depthWrite: m.material.depthWrite,
             lining: !!m.userData.lining, state: m.userData.state || '', remnant: !!m.userData.remnant,
             hazard: !!m.userData.hazard, emphasis: m.userData.emphasis || '',
-            highlight: !m.userData.lining && !m.userData.population && store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
+            highlight: !m.userData.lining && store.get().selection === m.userData.id ? (key === primaryKey ? 'primary' : 'partner') : null,
             emissive: m.material.emissiveIntensity,
         })) : []),
         /* the mean of a node's vertices, in RAS mm (the world transform applied) */
@@ -1322,7 +1297,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setState, setMuNote, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setPopulation, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setState, setMuNote, setEmphasis, loadState, unloadState, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
@@ -1336,8 +1311,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
-        get populationOn() { return layers.population; },
-        get hasPopulation() { return !!specimen && [...specimen.packs.values()].some((p) => p.population); },
         get stateKey() { return dissect ? dissect.key : null; },
         get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
         get hasSweeps() { return sweeps.size > 0; },

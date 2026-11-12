@@ -16,9 +16,23 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES, loadAnatomyIndex } from './volume.js?v=b0877fd4';
-import { CT_PLANES, anatomyIsDefault } from './state.js?v=893232f8';
-import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=ea57f437';
+import { PLANES, loadAnatomyIndex, stamped } from './volume.js?v=b0877fd4';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=6d465d65';
+
+/* The standard-specimen note (docs/ssb.md 5.1, O6): shown wherever the volume is shown, when ct.json has
+   a `standard` block. Resolves false when the header is absent or unreadable. */
+const STANDARD_NOTE = 'Standardized specimen: one head\u2019s right half, mirrored, with the septum centred \u2014 symmetric by construction, not a real head.';
+let standardAnswer = null;
+function isStandardSpecimen() {
+    if (!standardAnswer) {
+        standardAnswer = Promise.resolve()
+            .then(() => fetch(stamped('ssb/ct/ct.json')))
+            .then((res) => (res.ok ? res.json() : null))
+            .then((meta) => !!(meta && typeof meta === 'object' && meta.standard))
+            .catch(() => false);
+    }
+    return standardAnswer;
+}
 import { DESIGNS, DESIGN_LABEL, PARAMS, PARAM_DEFAULTS } from './flap.js?v=09a0f730';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -169,7 +183,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     for (const mode of specimen.BONE_MODES) boneRow.append(pill(BONE[mode], { bone: mode }));
     boneSec.append(boneRow);
 
-    /* ---- mucosal state (docs/ssb.md 5.9): the player loads it; a procedure forces decongested ---- */
+    /* ---- mucosal state (docs/ssb.md 5.9) ---- */
     const muSec = section('Mucosal state');
     const muRow = row('Mucosal state');
     const MU = [
@@ -347,16 +361,10 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         syncAnatomyNote();
         mark(viewRow, 'view', specimen.view || '');
         mark(boneRow, 'bone', specimen.bone);
-        const st = store.get();
-        const forced = !!st.procedure;
-        const mu = forced ? 'dec' : st.mu;
+        const mu = store.get().mu;
         mark(muRow, 'mu', mu);
-        for (const b of muRow.querySelectorAll('button[data-mu]')) {
-            b.disabled = forced;
-            b.title = forced ? 'A procedure always plays on the decongested mucosa.' : '';
-        }
-        const line = MU.find((m) => m[0] === mu)[2] + (forced ? ' (procedure)' : '');
-        muText.textContent = specimen.muNote && !forced ? `${line}. ${specimen.muNote}` : line;
+        const line = MU.find((m) => m[0] === mu)[2];
+        muText.textContent = specimen.muNote ? `${line}. ${specimen.muNote}` : line;
 
         const regions = specimen.regions();
         const key = regions.map((r) => `${r.region}:${r.count}`).join('|');
@@ -447,7 +455,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     /* ---- where the controls live ---- */
     function place() {
         /* no controls for a stage that is not there: another stage showing, or no specimen to control */
-        const on = !store.get().lab && !store.get().ct && !['error', 'absent'].includes(specimen.status);
+        const on = !['error', 'absent'].includes(specimen.status);
         dock.hidden = !on;
         if (on) stageHost.dataset.specDock = collapsed ? 'collapsed' : 'open';
         else delete stageHost.dataset.specDock;
@@ -460,8 +468,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
 
     specimen.onChange(sync);
     store.subscribe((state, prev) => {
-        if (state.lab !== prev.lab || state.ct !== prev.ct) place();
-        if (state.mu !== prev.mu || state.procedure !== prev.procedure || state.flap !== prev.flap || state.tier !== prev.tier || state.anatomy !== prev.anatomy) sync();
+        if (state.mu !== prev.mu || state.flap !== prev.flap || state.tier !== prev.tier || state.anatomy !== prev.anatomy) sync();
     });
     mountAnatomyPills(store);
     sync();
