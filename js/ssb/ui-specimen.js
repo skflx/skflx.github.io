@@ -17,7 +17,7 @@
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
 import { PLANES, loadAnatomyIndex, stamped } from './volume.js?v=b0877fd4';
-import { CT_PLANES, anatomyIsDefault } from './state.js?v=6d465d65';
+import { CT_PLANES, anatomyIsDefault } from './state.js?v=3aec5ac2';
 
 /* The standard-specimen note (docs/ssb.md 5.1, O6): shown wherever the volume is shown, when ct.json has
    a `standard` block. Resolves false when the header is absent or unreadable. */

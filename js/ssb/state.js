@@ -34,6 +34,7 @@ export const TIER_MAX = 3;
 export const TIER_DEFAULT = 1;
 export const PREFS_KEY = 'ssb:prefs';
 const HASH_MAX = 2048;
+const own = (o, k) => o !== null && typeof o === 'object' && Object.prototype.hasOwnProperty.call(o, k);
 
 /* Rendering quality (`q=` in the hash): an exact, case-sensitive whitelist.
    Anything else is ignored, so the device's own choice stands (materials.js). */

@@ -4,14 +4,14 @@
    the endoscope (Scope) and the mucosal, flap, anatomy and scanned-base layers.
 
    Drives ssb.html in headless Chromium (software WebGL, smoke-lib.mjs) and
-   reads the scene back through the read-only test windows (window.__ssb.lab,
-   .ct, .specimen). One section per system, listed under Usage; each check's
-   name says what it pins. CT and Specimen run on the synthetic volume of
-   tools/ssb-fixture-ct.mjs, served by routing the page's ssb/ requests to it
-   (nothing is written into ssb/); the Specimen packs, landmarks and CT header
-   are the real ones. Zero real console errors throughout.
+   reads the scene back through the read-only test window (window.__ssb:
+   .specimen, .scope). One section per system, listed under Usage; each check's
+   name says what it pins. The anatomy pages run on the synthetic volume of
+   tools/ssb-fixture-ct.mjs, served by routing the page's ssb/anatomy requests to
+   it (nothing is written into ssb/); the Specimen packs and landmarks are the
+   real ones. Zero real console errors throughout.
 
-   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only <section>[,...] | --shard i/N] [--int16]
+   Usage:  node tools/test-ssb.mjs [--base <url>] [--headed] [--shots <dir>] [--only <section>[,...] | --shard i/N]
            sections: specimen scope mucosa flap anatomy scanned
            (SECTIONS, near the end); --shard is CI's split (SHARDS), each section in exactly one.
            --shots writes desktop + phone screenshots of the Specimen stage (spec-*.png).
@@ -23,7 +23,7 @@ import zlib from 'zlib';
 import { execFileSync } from 'child_process';
 import { startServer, launchBrowser, collectErrors, ROOT } from './smoke-lib.mjs';
 import { validate, contentFiles } from './ssb-content.mjs';
-import { buildFixture, displayToHU, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE } from './ssb-fixture-ct.mjs';
+import { buildFixture, fixtureFiles, SDF_SPHERE as SDF_FX_SPHERE } from './ssb-fixture-ct.mjs';
 
 /* The browser modules under js/ have no package "type", so Node would reparse
    them and warn. Import them as data: URLs instead. The three below need
@@ -91,7 +91,6 @@ function decodePng(buf) {
   }
   return { width, height, at: (x, y) => [out[y * stride + x * bpp], out[y * stride + x * bpp + 1], out[y * stride + x * bpp + 2]] };
 }
-const luma = ([r, g, b]) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
 /* ---------------- page helpers ---------------- */
 
@@ -113,30 +112,11 @@ function meanIn(points, axis, lo, hi) {
   return pts.reduce((s, p) => s + p[axis], 0) / (pts.length || 1);
 }
 const AP = (path) => meanIn(path.points, 1, -12, 3);   /* recess + ostium: anteroposterior */
-const ML = (path) => meanIn(path.points, 0, -3, 3);    /* ostium level: mediolateral (right side: +x lateral) */
-
-/* ---------------- criteria parsing (the graph's own text) ---------------- */
-
-/* "Olfactory fossa depth 1–3 mm." -> [1, 3]; "greater than 80°" -> (80, inf); "less than 45°" -> (-inf, 45) */
-function criterionRange(text) {
-  const range = text.match(/(\d+(?:\.\d+)?)\s*[–-]\s*(\d+(?:\.\d+)?)/);
-  if (range) return { lo: Number(range[1]), hi: Number(range[2]), closed: true };
-  const gt = text.match(/greater than\s+(\d+(?:\.\d+)?)/i);
-  if (gt) return { lo: Number(gt[1]), hi: Infinity, closed: false };
-  const lt = text.match(/less than\s+(\d+(?:\.\d+)?)/i);
-  if (lt) return { lo: -Infinity, hi: Number(lt[1]), closed: false };
-  return null;
-}
-const inRange = (v, r) => (r.closed ? v >= r.lo && v <= r.hi : v > r.lo && v < r.hi);
 
 /* ---------------- CT: the synthetic fixture (tools/ssb-fixture-ct.mjs) ---------------- */
 
 const FX = buildFixture();
 const FX_U8_FILES = fixtureFiles(FX);
-/* --int16 serves the page tests the same phantom as a 16-bit HU head (WP IN1): `--only ct --int16`, `--only scope --int16` */
-const INT16 = args.includes('--int16');
-const FX_FILES = INT16 ? fixtureFiles(buildFixture({ dtype: 'int16' })) : FX_U8_FILES;
-const SOFT_WIN = JSON.parse(FX_FILES['ssb/ct/ct.json']).windows.soft;      /* centre 60, width 40 on the u8 head; the same window in HU on the 16-bit one */
 const VOLUME_URL = dataUrl(sourceOf('js/ssb/volume.js').replace(/from '\.\/stamps\.js[^']*'/, `from '${dataUrl('export const STAMPS = {};')}'`));
 const { createVolume, parseHeader, parseTable, loadVolume, decode, isGzip, PLANES, VolumeError, parsePatch, applyPatch, parseAnatomyPatch, checkAnatomyPatch, applyAnatomyPatch, anatomyVolume, anatomyPatchFile, anatomyOverrideFile, baseRoot, loadAnatomyIndex, forgetAnatomy } = await import(VOLUME_URL);
 const arrEq = (a, b, tol = 1e-9) => a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= tol);
@@ -455,7 +435,6 @@ const specNodes = (page) => page.evaluate(() => window.__ssb.specimen.nodes());
 const nextFrames = (page, n = 2) => page.evaluate((k) => new Promise((res) => { let i = 0; const f = () => (++i >= k ? res() : requestAnimationFrame(f)); requestAnimationFrame(f); }), n);
 const clickView = async (page, view) => { await page.click(`#ssb-spec button[data-view="${view}"]`); await page.waitForFunction(() => !window.__ssb.specimen.camera().flying, null, { timeout: 5000 }); await nextFrames(page, 3); };
 const project = (page, ras) => page.evaluate((r) => window.__ssb.specimen.project(r), ras);
-const sceneMsg = (page) => page.evaluate(() => { const m = document.getElementById('ssb-stage-msg'); return { hidden: m.hidden, text: m.textContent }; });
 
 /* The canvas as an image, with the corner widgets (orientation, dock) left to the caller to ignore. */
 async function canvasImage(page) {
@@ -739,22 +718,13 @@ async function specimenTests(browser, base) {
     check('cursor: the 3D crosshair marker is at the cursor and the URL carries it as #at= (no stage change)',
       got.marker && arrEq(got.marker, got.cursor, 1e-6) && /(^|&)at=/.test(got.hash.slice(1)) && !/ct=/.test(got.hash), got.hash);
 
-    /* the CT stage opens there, on the real volume */
-    await page.click('#ssb-stage-mode [data-stage="ct"]');
-    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready' && Object.values(window.__ssb.ct.renders).some((n) => n > 0), null, { timeout: 30000 });
-    const ctAt = await page.evaluate(() => ({ cursor: window.__ssb.ct.cursor, hash: location.hash, stage: document.getElementById('ssb-app').dataset.stage, bounds: window.__ssb.ct.bounds }));
-    check('cursor: switching to CT lands the crosshair on the clicked surface point (within one 0.5 mm voxel)', ctAt.stage === 'ct' && Math.hypot(...ctAt.cursor.map((v, i) => v - got.cursor[i])) <= 0.5, JSON.stringify(ctAt));
-    check('cursor: the CT bounds the specimen clamped to (read from ct.json alone) are the volume\'s own', arrEq(ctAt.bounds.min, ctBox.min, 1e-6) && arrEq(ctAt.bounds.max, ctBox.max, 1e-6));
-    const specBounds = await spec(page, () => window.__ssb.specimen.ctBounds);
-    check('cursor: the specimen read the same bounds before the volume was downloaded', specBounds && arrEq(specBounds.min, ctBox.min, 1e-6));
-    /* and back: the crosshair is the cursor; a new crosshair shows in 3D */
+    /* a cursor set from the hash is the 3D crosshair, and the URL keeps it as #at= */
     const move = [12, -30, 22];
-    await page.evaluate((m) => { location.hash = `#ct=cor&at=${m.join(',')}`; }, move);
-    await page.waitForFunction((m) => window.__ssb.ct.cursor && Math.abs(window.__ssb.ct.cursor[0] - m[0]) < 1e-6, move);
-    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    await page.evaluate((m) => { location.hash = `#at=${m.join(',')}`; }, move);
+    await page.waitForFunction((m) => window.__ssb.specimen.cursor && Math.abs(window.__ssb.specimen.cursor[0] - m[0]) < 1e-6, move);
     await nextFrames(page, 3);
     const back = await page.evaluate(() => ({ marker: window.__ssb.specimen.cursorMarker, cursor: window.__ssb.specimen.cursor, hash: location.hash, active: window.__ssb.specimen.active }));
-    check('cursor: the CT crosshair shows in the specimen as the 3D crosshair marker, and the URL is #at= again', back.active && back.marker && arrEq(back.marker, move, 1e-6) && back.hash.includes('at=12,-30,22') && !back.hash.includes('ct='), JSON.stringify(back));
+    check('cursor: a cursor set in the hash shows in the specimen as the 3D crosshair marker, and the URL is #at=', back.active && back.marker && arrEq(back.marker, move, 1e-6) && back.hash.includes('at=12,-30,22') && !back.hash.includes('ct='), JSON.stringify(back));
     const proj = await project(page, move);
     check('cursor: the marker is drawn on screen (it shows through the bone)', proj.front && proj.x > 0 && proj.y > 0);
     await context.close();
@@ -861,13 +831,6 @@ async function specimenTests(browser, base) {
     await page.click('#ssb-spec button[data-section="coronal"]');
     await page.click('#ssb-spec button[data-section="sagittal"]');
     check('section: only one plane at a time (the section follows its axis)', (await spec(page, () => window.__ssb.specimen.section.axis)) === 'sagittal' && (await spec(page, () => window.__ssb.specimen.info().clipping)) === 1);
-    /* the CT stage and the lab never see the cut */
-    await page.click('#ssb-stage-mode [data-stage="ct"]');
-    await nextFrames(page, 2);
-    check('section: leaving the specimen removes the clip (the lab and CT are never cut)', (await spec(page, () => window.__ssb.specimen.info().clipping)) === 0);
-    await page.click('#ssb-stage-mode [data-stage="specimen"]');
-    await nextFrames(page, 2);
-    check('section: …and returning restores it at the cursor', (await spec(page, () => window.__ssb.specimen.info().clipping)) === 1 && (await spec(page, () => window.__ssb.specimen.section.axis)) === 'sagittal');
     await page.click('#ssb-spec button[data-section="off"]');
     check('section: Off removes the cut', (await spec(page, () => window.__ssb.specimen.info().clipping)) === 0);
     await context.close();
@@ -930,19 +893,24 @@ async function specimenTests(browser, base) {
     await clickView(page, 'right');
     const camA = await spec(page, () => window.__ssb.specimen.camera());
     const geo0 = await spec(page, () => window.__ssb.specimen.info().geometries);
+    const nodes0 = (await specNodes(page)).length;
+    let geoOne = null;
+    let nodesOne = 0;
     for (let i = 0; i < 3; i++) {
-      await page.click('#ssb-stage-mode [data-stage="lab"]');
-      await page.waitForFunction(() => window.__ssb.lab && window.__ssb.lab.builds > 0 && !window.__ssb.specimen.active);
+      await page.waitForFunction(() => !document.querySelector('#ssb-stage-mode [data-stage="scope"]').disabled);
+      await page.click('#ssb-stage-mode [data-stage="scope"]');
+      await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'scope');
       await nextFrames(page, 3);
       await page.click('#ssb-stage-mode [data-stage="specimen"]');
       await page.waitForFunction(() => window.__ssb.specimen.active);
       await nextFrames(page, 4);
+      if (i === 0) { geoOne = await spec(page, () => window.__ssb.specimen.info().geometries); nodesOne = (await specNodes(page)).length; }
     }
     const camB = await spec(page, () => window.__ssb.specimen.camera());
     const geo1 = await spec(page, () => window.__ssb.specimen.info().geometries);
-    check('stages: after three trips through the lab the specimen is back with the camera where the reader left it', arrEq(camA.position, camB.position, 1e-3) && arrEq(camA.target, camB.target, 1e-3), JSON.stringify([camA.position, camB.position]));
-    check('stages: no geometry leaks across stage switches (GPU geometry count is back to what it was)', geo1 <= geo0, `${geo0} -> ${geo1}`);
-    check('stages: the lab did not dispose the specimen (every node is still there and drawn)', (await specNodes(page)).length === truth.size && (await spec(page, () => window.__ssb.specimen.info().triangles)) > 100000);
+    check('stages: after three trips through the scope the specimen is back with the camera where the reader left it', arrEq(camA.position, camB.position, 1e-3) && arrEq(camA.target, camB.target, 1e-3), JSON.stringify([camA.position, camB.position]));
+    check('stages: no geometry leaks across stage switches (the GPU geometry count after three trips is what it was after the first; the scope\'s own meshes are cached once)', geo1 === geoOne, `${geoOne} -> ${geo1} (was ${geo0})`);
+    check('stages: the scope did not dispose the specimen (every node is still there after the trips and drawn)', (await specNodes(page)).length === nodesOne && nodesOne >= nodes0 && (await spec(page, () => window.__ssb.specimen.info().triangles)) > 100000);
     /* and a pick still works after the round trip */
     const aim = await spec(page, () => window.__ssb.specimen.screenOf('s.skull-base-region.M'));
     check('stages: picking still works after the round trip', aim && (await spec(page, ([x, y]) => window.__ssb.specimen.hits(x, y).length, [aim.x, aim.y])) >= 1);
@@ -1460,17 +1428,14 @@ function scopeUnitTests() {
   check('scope: a bad side, a lens off the whitelist, the wrong field count, NaN, empty fields, markup or an overlong value is ignored entirely',
     bad.slice(0, -1).every((v) => SC.parseScope(v) === null) && SC.parseScope(bad[bad.length - 1]) === null, bad.filter((v) => SC.parseScope(v) !== null).join(' | '));
   const has = (id) => GRAPH.has(id);
-  check('state: #scope= is the endoscope stage; a lab wins over it and a ct plane wins over it; hostile values are dropped',
-    parseHash('#scope=R,40,10,-5,90,45', has).scope.lens === 45 && !parseHash('#lab=ethmoid-roof&scope=R,40,0,0,0,0', has, { 'ethmoid-roof': { params: [], presets: {} } }).scope
-      && !parseHash('#ct=ax&scope=R,40,0,0,0,0', has).scope && parseHash('#scope=R,40,0,0,0,31', has).scope === undefined);
+  check('state: #scope= is the endoscope stage; hostile values are dropped',
+    parseHash('#scope=R,40,10,-5,90,45', has).scope.lens === 45 && parseHash('#scope=R,40,0,0,0,31', has).scope === undefined);
   const st = createStore({ has, tierOf: () => 1, hash: '#scope=L,30,10,0,0,30', prefs: {}, labs: {} });
   check('state: the store takes the pose from the URL and writes the same canonical hash back', st.get().scope.side === 'L' && st.get().scope.lens === 30 && st.hash() === '#scope=L,30,10,0,0,30', st.hash());
   st.setScope({ side: 'R', depth: 5000, yaw: 0, pitch: 0, roll: 0, lens: 0 });
-  check('state: setScope clamps (depth 5000 -> 120) and entering the scope leaves CT and the lab', st.get().scope.depth === 120 && st.get().ct === null && st.get().lab === null);
-  st.setCt({ plane: 'axial', at: null });
-  check('state: entering CT leaves the scope (the stages are exclusive) and the hash is the CT\'s', st.get().scope === null && st.get().ct && !/scope=/.test(st.hash()), st.hash());
+  check('state: setScope clamps (depth 5000 -> 120)', st.get().scope.depth === 120);
   st.setScope(SC.POSE_DEFAULT);
-  check('state: entering the scope leaves CT; leaveStage() clears it', st.get().ct === null && st.get().scope && (st.leaveStage(), st.get().scope === null && st.hash() === ''), st.hash());
+  check('state: leaveStage() clears the scope and the hash', st.get().scope && (st.leaveStage(), st.get().scope === null && st.hash() === ''), st.hash());
   st.applyHash('#scope=R,40,0,0,0,0');
   check('state: applyHash adopts a pasted scope link and drops it when the hash has none', st.get().scope && (st.applyHash(''), st.get().scope === null));
 
@@ -1790,14 +1755,14 @@ function stationUnitTests() {
   const un = mk('#scope=t.nope');
   un.resolveStation(null);
   check('station link (store): an unknown station resolves to nothing — no pose, no link, an empty hash (ignored like any hostile link)', un.get().station === null && un.get().scope === null && un.hash() === '', JSON.stringify(un.get()));
-  check('station link (store): a pose wins over a link, a lab and a CT plane win over both, and hostile text is not a link',
-    mk('#scope=R,40,0,0,0,0').get().station === null && mk('#lab=sphenoid&scope=t.ser-0').get().station === null && mk('#ct=ax&scope=t.ser-0').get().station === null && mk('#scope=t.ser-0.X').get().station === null && mk('#scope=t.ser-0%0A').get().station === null);
+  check('station link (store): a pose wins over a link, and hostile text is not a link',
+    mk('#scope=R,40,0,0,0,0').get().station === null && mk('#scope=t.ser-0.X').get().station === null && mk('#scope=t.ser-0%0A').get().station === null);
   const ap = mk('');
   ap.applyHash('#scope=t.ser-0');
   const pend = ap.get().station;
   ap.setScope(pose70);
-  check('station link (store): a pasted link while on the specimen is pending; entering a pose, a lab or CT clears it; resolveStation with nothing pending is a no-op',
-    pend === 't.ser-0' && ap.get().station === null && ap.resolveStation(pose70) === false && (ap.applyHash('#scope=t.ser-0'), ap.setCt({ plane: 'ax', at: null }), ap.get().station === null));
+  check('station link (store): a pasted link while on the specimen is pending; entering a pose clears it; resolveStation with nothing pending is a no-op',
+    pend === 't.ser-0' && ap.get().station === null && ap.resolveStation(pose70) === false && (ap.applyHash('#scope=t.ser-0'), ap.get().station === 't.ser-0'));
 
   /* ---- the flight: depth, yaw, pitch straight; roll the short way round; side at the start, lens at the end ---- */
   const a = { side: 'R', depth: 40, yaw: 10, pitch: -4, roll: 350, lens: 0 };
@@ -1836,10 +1801,7 @@ async function scopeTests(browser, base) {
     await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
     seen.push(await credit());
-    await page.evaluate(() => { location.hash = '#ct=ax'; });
-    await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'ct', null, { timeout: 30000 });
-    seen.push(await credit());
-    check('credit: the full UW attribution and its link show, in view without scrolling, in the Specimen, Scope and CT stages', seen.length === 3 && seen.every(okCredit), JSON.stringify(seen));
+    check('credit: the full UW attribution and its link show, in view without scrolling, in the Specimen and Scope stages', seen.length === 2 && seen.every(okCredit), JSON.stringify(seen));
     const ni = await page.evaluate(() => ['Washington', 'Radiology'].every((w) => document.getElementById('ssb-stage-note').textContent.includes(w)));
     check('credit: the stage note names the institution', ni);
     await context.close();
@@ -1855,29 +1817,8 @@ async function scopeTests(browser, base) {
     await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged, null, { timeout: 30000 });
     notes.push(await note());
     check('credit: at phone width the stage note names the University of Washington in full, in view, in Specimen and Scope', notes.every((n) => n.whole && n.inView && /University of Washington|Univ\. of Washington/.test(n.text)), JSON.stringify(notes));
-    await page.evaluate(() => { location.hash = '#ct=ax'; });
-    await page.waitForFunction(() => document.getElementById('ssb-app').dataset.stage === 'ct', null, { timeout: 30000 });
-    const ct = await page.evaluate(() => { const el = document.getElementById('ssb-credit'); const r = el.getBoundingClientRect();
-      return { sheet: document.getElementById('ssb-panel').dataset.sheet, inView: r.height > 0 && r.top >= 0 && r.bottom <= innerHeight, whole: el.scrollWidth <= el.clientWidth + 1, text: el.textContent }; });
-    check('credit: at phone width the CT stage, which hides the stage note, keeps the full credit line in view with the sheet closed', ct.sheet === 'closed' && ct.inView && ct.whole && /University of Washington Department of Radiology/.test(ct.text), JSON.stringify(ct));
     await context.close();
   }
-  /* ===== the CT volume loads only when asked, and once per page (CP-2a) ===== */
-  {
-    const { context, page } = await openSpecimen(browser, base, '');
-    const asked = [];
-    page.on('request', (r) => { if (/\/ssb\/ct\/ct\.u8\.gz/.test(r.url())) asked.push(r.url()); });
-    await nextFrames(page, 4);
-    await page.waitForTimeout(500);
-    check('scope: a specimen page that never opens the scope or CT does not fetch the CT volume', asked.length === 0, `${asked.length} requests`);
-    await page.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
-    await page.waitForFunction(() => window.__ssb.scope && window.__ssb.scope.engaged && window.__ssb.scope.collision, null, { timeout: 30000 });
-    await page.evaluate(() => { location.hash = '#ct=ax'; });
-    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready', null, { timeout: 30000 });
-    check('scope: opening the scope and then CT fetches the CT volume once (one shared copy)', asked.length === 1, `${asked.length} requests`);
-    await context.close();
-  }
-
   /* ===== the lining pack loads only when the mucosa is first seen from within (ST1c) ===== */
   {
     const { context, page } = await openSpecimen(browser, base, '');
@@ -2296,11 +2237,6 @@ async function scopeTests(browser, base) {
     const runsSettled = (await page.evaluate(() => window.__ssb.scope.exposeRuns)) - runs0;
     check('scope: during a 30-frame drag the exposure runs at most twice, and the settled pose is exposed once more', runsDrag <= 2 && runsSettled >= 1 && runsSettled <= 3, `${runsDrag} during (${dragFrames} frames), ${runsSettled} after`);
     check('scope: the HUD near colour is a class, not an inline style (E4)', !(await page.evaluate(() => [...document.querySelectorAll('.ssb-scope-hud-row')].some((e) => e.style.color))) && (await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--signal'))).length > 0);
-    const tipEnd = await page.evaluate(() => window.__ssb.scope.tip);
-    await page.click('#ssb-stage-mode [data-stage="ct"]');
-    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready', null, { timeout: 30000 });
-    const cc = await page.evaluate(() => window.__ssb.ct.cursor);
-    check('scope CT: leaving the scope for CT keeps the cursor where the tip was', cc && Math.hypot(...cc.map((v, i) => v - tipEnd[i])) <= voxel, JSON.stringify([cc, tipEnd]));
     await context.close();
   }
   {
@@ -2396,14 +2332,13 @@ async function scopeTests(browser, base) {
     await page.evaluate(() => { document.querySelector('#ssb-tree button[data-id]').click(); });
     await nextFrames(page, 3);
     check('scope: selecting a structure while in the scope starts no camera flight (the scope owns the camera)', (await spec(page, () => window.__ssb.specimen.camera().flying)) === false);
-    await page.click('#ssb-stage-mode [data-stage="ct"]');
+    await page.click('#ssb-stage-mode [data-stage="specimen"]');
     await nextFrames(page, 2);
     const ct = await page.evaluate(() => ({ stage: document.getElementById('ssb-app').dataset.stage, active: window.__ssb.scope.active, engaged: window.__ssb.scope.engaged, hash: location.hash, controls: window.__ssb.scope.controlsEnabled(), bone: window.__ssb.specimen.bone }));
-    check('scope: entering CT from the scope leaves it cleanly (stage, hash, orbit controls and the specimen\'s layers restored)', ct.stage === 'ct' && !ct.active && !ct.engaged && !/scope=/.test(ct.hash) && ct.controls && ct.bone === 'xray', JSON.stringify(ct));
-    await page.click('#ssb-stage-mode [data-stage="specimen"]');
+    check('scope: leaving the scope for the specimen is clean (stage, hash, orbit controls and the specimen\'s layers restored)', ct.stage === 'specimen' && !ct.active && !ct.engaged && !/scope=/.test(ct.hash) && ct.controls && ct.bone === 'xray', JSON.stringify(ct));
     await nextFrames(page, 3);
     const back = await spec(page, () => window.__ssb.specimen.camera());
-    check('scope: coming back to the specimen after CT shows the orbit view, not the scope\'s tip (the camera is outside the head, a normal distance from its target)', back.distance > 60 && back.position.some((v) => Math.abs(v) > 40), JSON.stringify(back));
+    check('scope: coming back to the specimen from the scope shows the orbit view, not the scope\'s tip (the camera is outside the head, a normal distance from its target)', back.distance > 60 && back.position.some((v) => Math.abs(v) > 40), JSON.stringify(back));
     await context.close();
   }
   {
@@ -2471,8 +2406,7 @@ async function mucosaUnitTests(w) {
   if (!fs.existsSync(path.join(ROOT, 'ssb/states/mucosa.json'))) { console.log('  (mucosa: ssb/states/mucosa.json is not in this build — skipped)'); return; }
   const index = json('ssb/states/index.json');
   const rec = json('ssb/states/mucosa.json');
-  const parsed = parseIndex(index);
-  check('mucosa: the index lists a decongested and a congested state, units-free, and the page-side parser reads them', ['dec', 'cong'].every((m) => parsed.mucosa[m] && parsed.states.get(parsed.mucosa[m]).units.length === 0 && index.states[parsed.mucosa[m]].mucosa === m), JSON.stringify(parsed.mucosa));
+  check('mucosa: the index lists a decongested and a congested state, units-free', ['dec', 'cong'].every((m) => index.mucosa[m] && index.states[index.mucosa[m].state] && index.states[index.mucosa[m].state].units.length === 0 && index.states[index.mucosa[m].state].mucosa === m), JSON.stringify(index.mucosa));
   check('mucosa: every dissection state is built on the decongested mucosa', Object.values(index.states).filter((st) => st.units.length).every((st) => st.mucosa === 'dec'));
 
   const vol = w.vol;
@@ -2510,7 +2444,7 @@ async function mucosaUnitTests(w) {
 
   const patches = {};
   for (const mode of ['dec', 'cong']) {
-    const key = parsed.mucosa[mode];
+    const key = index.mucosa[mode].state;
     patches[mode] = await parsePatch(read(`ssb/states/${index.states[key].patch}`), vol, index.base);
   }
   const target = json('ssb/anatomy/population/nasalseg.json').profiles.summary.restricted['10-90'].moreCongestedOverMean.p50;
@@ -2628,48 +2562,16 @@ async function mucosaUnitTests(w) {
   check('mucosa (cong): the failures of the congested volume are listed (a narrow view may close; the others stay)', congFail.length < keys.length);
 }
 
-/* The page: the toggle loads the patch and the lining; a procedure forces decongested and gives the choice back. */
+/* The page: a mucosal state in the hash is ignored when hostile. The toggle's own loading is not tested here: the procedure
+   player that loaded the decongested and congested states was removed (docs/ssb.md 5.8), so nothing loads them now. */
 async function mucosaTests(browser, base) {
   if (!fs.existsSync(path.join(ROOT, 'ssb/states/mucosa.json'))) return;
-  const index = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/states/index.json'), 'utf8'));
-  const decKey = index.mucosa.dec.state;
-  const congKey = index.mucosa.cong.state;
-  const settle = (page, mode, key) => page.waitForFunction(([m, k]) => { const p = window.__ssb.procedure; return p && p.mucosa === m && !p.busy && window.__ssb.scope && window.__ssb.scope.stateKey === k; }, [mode, key], { timeout: 90000 });
-  const pills = (page) => page.$$eval('#ssb-spec button[data-mu]', (bs) => bs.map((b) => [b.dataset.mu, b.getAttribute('aria-pressed'), b.disabled]));
-
-  const { context, page, errors } = await openProc(browser, base, '#scope=R,40,0,0,0,0&mu=dec', { real: true });
-  await settle(page, 'dec', decKey);
-  await nextFrames(page, 4);
-  check('mucosa (page): `#mu=dec` loads the decongested patch into the scope and the specimen (state key on both), the base lining hides, and the hash keeps mu', (await page.evaluate(() => window.__ssb.specimen.stateKey)) === decKey && /mu=dec/.test(await page.evaluate(() => window.__ssb.hash)));
-  const nodes = await specNodes(page);
-  check('mucosa (page): the decongested lining pack is on show, with the turbinate and septum remnants', nodes.filter((n) => n.lining && n.state === decKey).length > 3 && nodes.filter((n) => n.lining && n.state === decKey && n.visible).length > 0 && nodes.filter((n) => n.lining && !n.state).every((n) => !n.visible) && nodes.some((n) => n.state === decKey && /^s\.inferior-turbinate\.R@decongested$/.test(n.key.replace(/^state:[0-9a-f]+:/, ''))), JSON.stringify(nodes.filter((n) => n.state === decKey).map((n) => n.key)));
-  check('mucosa (page): the three pills show Decongested pressed, with the badge naming the calibration', JSON.stringify(await pills(page)) === JSON.stringify([['dec', 'true', false], ['scan', 'false', false], ['cong', 'false', false]]) && /Mucosa: decongested \(calibrated, Xiao 2021\)/.test(await page.textContent('#ssb-spec')), JSON.stringify(await pills(page)));
-  await page.$eval('#ssb-spec button[data-mu="cong"]', (b) => b.click());
-  await settle(page, 'cong', congKey);
-  check('mucosa (page): Congested swaps the state (the scope reads the congested volume), the hash says mu=cong', /mu=cong/.test(await page.evaluate(() => window.__ssb.hash)) && /physiological/.test(await page.textContent('#ssb-spec')));
-  await page.$eval('#ssb-spec button[data-mu="scan"]', (b) => b.click());
-  await page.waitForFunction(() => window.__ssb.procedure.mucosa === null && window.__ssb.scope.stateKey === null && window.__ssb.specimen.stateKey === null, null, { timeout: 30000 });
-  await nextFrames(page, 3);
-  check('mucosa (page): As scanned puts the base back (no state key; the base lining shows) and drops mu from the hash', !/mu=/.test(await page.evaluate(() => window.__ssb.hash)) && (await specNodes(page)).filter((n) => n.lining && !n.state).some((n) => n.visible));
-  check('mucosa (page): no real console errors across the three states', errors.length === 0, JSON.stringify(errors));
-  await context.close();
-
-  /* a procedure forces decongested and greys the toggle; ending it brings the reader's choice back */
-  const second = await openProc(browser, base, '#p=p.uncinectomy&step=1&mu=cong', { real: true });
-  const p2 = second.page;
-  await p2.waitForFunction(() => window.__ssb.procedure && window.__ssb.procedure.shown && !window.__ssb.procedure.busy, null, { timeout: 90000 });
-  check('mucosa (procedure): a procedure plays decongested whatever `mu` says; the toggle is greyed with Decongested pressed and the hash carries no mu',
-    (await p2.evaluate(() => window.__ssb.procedure.mucosa)) === 'dec' && JSON.stringify(await pills(p2)) === JSON.stringify([['dec', 'true', true], ['scan', 'false', true], ['cong', 'false', true]]) && !/mu=/.test(await p2.evaluate(() => window.__ssb.hash)));
-  await p2.evaluate(() => { location.hash = '#scope=R,40,0,0,0,0'; });
-  await p2.waitForFunction(() => !window.__ssb.procedure.shown, null, { timeout: 30000 });
-  check('mucosa (procedure): with the procedure ended the toggle is live again', (await pills(p2)).every((x) => x[2] === false));
-  await second.context.close();
 
   /* hostile and unknown values */
   for (const bad of ['mu=%3Cimg%20src%3Dx%20onerror%3D1%3E', 'mu=DEC', 'mu=', 'mu=dec%20scan']) {
-    const { context: c3, page: p3, errors: e3 } = await openProc(browser, base, `#scope=R,40,0,0,0,0&${bad}`, { real: true });
+    const { context: c3, page: p3, errors: e3 } = await openSpecimen(browser, base, `#scope=R,40,0,0,0,0&${bad}`);
     await nextFrames(p3, 3);
-    check(`mucosa (hostile): ${bad} is ignored — as scanned, no mu in the hash, nothing executes`, (await p3.evaluate(() => window.__ssb.procedure.mucosa)) === null && !/mu=/.test(await p3.evaluate(() => window.__ssb.hash)) && e3.length === 0, JSON.stringify(e3));
+    check(`mucosa (hostile): ${bad} is ignored — as scanned, no mu in the hash, nothing executes`, (await p3.evaluate(() => window.__ssb.specimen.stateKey)) === null && !/mu=/.test(await p3.evaluate(() => window.__ssb.hash)) && e3.length === 0, JSON.stringify(e3));
     await c3.close();
   }
 }
@@ -2824,7 +2726,6 @@ function flapUnitTests() {
   })());
   check('flap (hash): an unknown design, a bad side, prototype keys and over-long values are ignored', ['#flap=bogus', '#flap=full.X', '#flap=__proto__', '#flap=constructor.R', '#flap=', '#flap=' + 'a'.repeat(5000), '#flap=full.R.R', '#flap=%3Cimg%20src%3Dx%3E', '#flap=FULL'].every((x) => parse(x).flap === undefined)
     && parse('#flap=full.R&top=%3Cscript%3E').flap.params.top_margin === 15);
-  check('flap (hash): a lab or a CT link ignores the overlay, and the overlay is not written with one', parseHash('#lab=sphenoid&flap=full.R', has, { sphenoid: { params: [], presets: {} } }).flap === undefined && parse('#ct=ax&flap=full.R').flap === undefined && !/flap/.test(formatHash({ tier: 1, flap: { design: 'full', side: 'R', params: { ...FL.PARAM_DEFAULTS } }, ct: { plane: 'axial', at: [0, 0, 0] } })));
   const store = createStore({ has, tierOf: () => 1, hash: '#flap=short.R', prefs: {} });
   check('flap (store): setFlap whitelists and clamps, null clears, and a new object with the same values is no change', store.get().flap.design === 'short'
     && store.setFlap({ design: 'extended', side: 'L', params: { top_margin: 999, floor_width: -3, nope: 1 } }) && store.get().flap.params.top_margin === 20 && store.get().flap.params.floor_width === 0
@@ -2901,12 +2802,6 @@ async function flapTests(browser, base, nodes) {
     check(`flap (hostile): #${bad} clamps or is ignored — nothing executes, no console errors`, okState && !got.pwned && h.errors.length === 0, JSON.stringify(got) + JSON.stringify(h.errors));
     await h.context.close();
   }
-
-  /* a lab or CT link carrying the overlay does not draw it */
-  const lab = await openSpecimen(browser, base, '#ct=ax&at=0,0,0&flap=full.R', { wait: 'none' });
-  await lab.page.waitForFunction(() => window.__ssb && window.__ssb.hash !== undefined, null, { timeout: 20000 });
-  check('flap (page): a CT link ignores the overlay', !/flap/.test(await lab.page.evaluate(() => window.__ssb.hash)));
-  await lab.context.close();
 
   /* the same overlay at the phone width: the control is reachable from the Layers panel */
   const phone = await openSpecimen(browser, base, '#flap=short.R', { viewport: { width: 390, height: 844 } });
@@ -3085,7 +2980,7 @@ async function anatomyUnitTests() {
   /* ---- state.js: registry, whitelist, hash ---- */
   const has = (id) => GRAPH.has(id);
   const REG = buildAnatomyRegistry(ANAT_INDEX, has);
-  const A = (h, reg = REG) => parseHash(h, has, {}, reg).anatomy || null;
+  const A = (h, reg = REG) => parseHash(h, has, reg).anatomy || null;
   check('anatomy registry: built from the index and the graph — the listed base, variants (with defaults) and conditions, and only those',
     REG.bases.has('scanned') && REG.defaultBase === 'scanned' && REG.variants.size === 3 && REG.conditions.size === 2 && REG.variants.get('v.concha-bullosa').default === 'typical'
     && buildAnatomyRegistry({ ...ANAT_INDEX, variants: { 'v.not-in-the-graph': ANAT_INDEX.variants['v.concha-bullosa'], 'x.bad': {}, 'v.concha-bullosa': { sides: [], presets: ['typical'] } } }, has).variants.size === 0
@@ -3113,8 +3008,8 @@ async function anatomyUnitTests() {
     A('#anat=scanned&v=v.concha-bullosa.R,v.concha-bullosa.L,v.suprabullar-cell.R') !== null && A('#anat=scanned&v=v.concha-bullosa.R,v.suprabullar-cell.R') !== null && A('#anat=scanned&v=v.concha-bullosa.R&dz=dz.mucocele.R') !== null);
   const st = createStore({ has, tierOf: () => 1, hash: '#s=s.maxillary-sinus&tier=2&anat=scanned&v=v.nope.R&q=lite', prefs: {}, anatomyDoc: ANAT_INDEX });
   check('anatomy hash: a dropped anatomy leaves every other key alone and the hash is rewritten canonical', st.get().anatomy === ANATOMY_DEFAULT && st.hash() === '#s=s.maxillary-sinus&tier=2&q=lite', st.hash());
-  const ordered = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R&mu=cong&q=full&ct=ax&at=1,2,3', prefs: {}, anatomyDoc: ANAT_INDEX }).hash();
-  check('anatomy hash: the anatomy rides along with a CT stage, after the stage and before mu and q', ordered === '#ct=ax&at=1,2,3&anat=scanned&v=v.concha-bullosa.R:typical&mu=cong&q=full', ordered);
+  const ordered = createStore({ has, tierOf: () => 1, hash: '#anat=scanned&v=v.concha-bullosa.R&mu=cong&q=full&at=1,2,3', prefs: {}, anatomyDoc: ANAT_INDEX }).hash();
+  check('anatomy hash: the anatomy rides along with the cursor, after the cursor and before mu and q', ordered === '#at=1,2,3&anat=scanned&v=v.concha-bullosa.R:typical&mu=cong&q=full', ordered);
   const rt = createStore({ has, tierOf: () => 1, hash: ordered, prefs: {}, anatomyDoc: ANAT_INDEX });
   check('anatomy hash: a canonical hash parses back to the same state and the same hash', rt.hash() === ordered && JSON.stringify(rt.get().anatomy) === JSON.stringify(st.get().anatomy === ANATOMY_DEFAULT ? rt.get().anatomy : null));
 
@@ -3140,11 +3035,10 @@ async function anatomyUnitTests() {
     && live.setAnatomy({ base: 'scanned', variants: [{ id: 'v.nope', side: 'R', preset: 'x' }], conditions: [] }) === false && live.hash() === '#anat=scanned&v=v.concha-bullosa.R:typical'
     && live.setAnatomy({ base: 'scanned', variants: [], conditions: [] }) === true && live.hash() === '#anat=scanned' && live.setAnatomy(null) === true && live.hash() === '');
   live.setAnatomy({ base: 'scanned', variants: [], conditions: [] });
-  live.setCt({ plane: 'axial', at: null });
   live.leaveStage();
   const keptCt = live.get().anatomy.base;
   live.setScope({ side: 'R', depth: 20, yaw: 0, pitch: 0, roll: 0, lens: 0 });
-  check('anatomy store: the anatomy is orthogonal to CT and the specimen (entering and leaving keeps it); the scope, which reads the standard head only, takes the page back to it',
+  check('anatomy store: the anatomy is orthogonal to the specimen (leaving the specimen keeps it); the scope, which reads the standard head only, takes the page back to it',
     keptCt === 'scanned' && live.get().anatomy.base === 'standard' && !!live.get().scope, JSON.stringify({ keptCt, base: live.get().anatomy.base }));
   live.leaveStage();
   live.applyHash('#anat=scanned-b');
@@ -3156,6 +3050,7 @@ async function anatomyUnitTests() {
 
 /* The page on the fixture, with an anatomy index: `index` is a body, 'absent' (stamps.js without it: the page must not ask) or 'fixture'.
    The scanned base is the same synthetic volume served under ssb/anatomy/scanned/; the override pack is a box named for the middle turbinate. */
+const FX_ROUTE = /\/ssb\/(ct\/[^?#]+|geometry\/labels\.json)(?:[?#].*)?$/;     /* the fixture's CT files, served to the anatomy pages */
 const ANAT_ROUTE = /\/ssb\/anatomy\/[^?#]+(?:[?#].*)?$/;
 async function openAnat(browser, base, hash, { index = 'fixture', patches = null, overrideNodes = [{ id: 's.middle-turbinate', side: 'R', center: [-6, 4, -2], half: 2 }], wait = 'specimen', track = true } = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
@@ -3193,7 +3088,6 @@ async function openAnat(browser, base, hash, { index = 'fixture', patches = null
   await page.goto(`${base}/ssb.html${hash}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
   await page.waitForFunction(() => document.querySelectorAll('#ssb-tree button[data-id]').length > 0, null, { timeout: 20000 });
   if (wait === 'specimen') await page.waitForFunction(() => window.__ssb.specimen && !['idle', 'loading'].includes(window.__ssb.specimen.status), null, { timeout: 40000 });
-  if (wait === 'ct') await page.waitForFunction(() => window.__ssb.ct && !['idle', 'loading'].includes(window.__ssb.ct.status), null, { timeout: 20000 });
   return { context, page, errors, asked };
 }
 const anatPills = (page) => page.evaluate(() => [...document.querySelectorAll('#ssb-anatomy button[data-anat]')].map((b) => ({ k: b.dataset.anat, disabled: b.disabled, pressed: b.getAttribute('aria-pressed'), text: b.textContent, hidden: b.hidden })));
@@ -3223,34 +3117,24 @@ async function anatomyTests(browser, base) {
     await context.close();
   }
 
-  /* ===== with an index: the pills enable, a link applies, the CT shows exactly the patch's box ===== */
+  /* ===== with an index: the pills enable, a link applies its patch, the Symmetric and Normal asymmetry pills clear and set it ===== */
   {
-    const { context, page, errors, asked } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R&ct=ax`, { wait: 'ct' });
-    await page.waitForFunction(() => !document.querySelector('#ssb-anatomy button[data-anat="scanned"]').disabled, null, { timeout: 30000 });
+    const { context, page, errors, asked } = await openAnat(browser, base, `#anat=scanned&v=v.concha-bullosa.R`);
+    await waitAnat(page, 'ready');
     const pills = Object.fromEntries((await anatPills(page)).map((p) => [p.k, p]));
     check('anatomy page: with an index the pills enable for what it lists (Normal asymmetry, Variants, Pathology) and Variants is the pressed one',
       ['standard', 'scanned', 'variants', 'pathology'].every((k) => !pills[k].disabled && !pills[k].hidden) && pills.variants.pressed === 'true' && pills.standard.pressed === 'false' && pills.scanned.pressed === 'false', JSON.stringify(pills));
     check('anatomy page: the canonical hash has the preset the link left out; the stage kicker says "edited"',
-      (await page.evaluate(() => location.hash)) === `#ct=ax&anat=scanned&v=v.concha-bullosa.R:typical` && (await page.evaluate(() => document.getElementById('ssb-anatomy').dataset.edited)) === 'true');
-    check('anatomy page: the CT is the scanned base from ssb/anatomy/scanned/ with the patch fetched from patches/scanned/; the standard ssb/ct/ct.json is not what the stage loaded',
-      asked.includes('ssb/anatomy/scanned/ct/ct.json') && asked.includes(`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`) && (await page.evaluate(() => window.__ssb.ct.anatomy.key)) === `scanned|${ANAT_STEM}`, JSON.stringify(asked));
-    const inside = [await page.evaluate(() => window.__ssb.ct.anatomy)];
-    const vox = (i, j, k) => [0.75 * i - 24, 20.25 - 0.75 * j, k - 18];
-    const probes = { inside: vox(22, 20, 15), corner: vox(25, 22, 17), outside: vox(19, 20, 15), above: vox(22, 20, 18) };
-    const got = await page.evaluate((p) => Object.fromEntries(Object.entries(p).map(([k, r]) => [k, { label: window.__ssb.ct.labelAt(r), patched: window.__ssb.ct.patchedAt(r), value: window.__ssb.ct.sampleAt(r) }])), probes);
-    check('anatomy page (CT): inside the patch\'s box the label is the patch\'s and the display value is its own; one voxel outside it is the base', got.inside.label === ANAT_LABEL && got.corner.label === ANAT_LABEL && got.inside.patched && got.corner.patched && got.inside.value >= 100 && !got.outside.patched && !got.above.patched && got.outside.label !== ANAT_LABEL && got.above.label !== ANAT_LABEL, JSON.stringify(got));
-    check('anatomy page (CT): the patch voxel count is exactly the box and the truth badge names the edit as a composite, schematic',
-      inside[0].patchedVoxels === ANAT_BOX.dims[0] * ANAT_BOX.dims[1] * ANAT_BOX.dims[2] && /edited: .*Concha bullosa.* R \(typical\) · composite, schematic/i.test(await page.evaluate(() => document.querySelector('.ssb-ct-truth').textContent)), await page.evaluate(() => document.querySelector('.ssb-ct-truth').textContent));
-    // the Symmetric pill puts the standard volume back, and the hash is empty of anatomy
+      (await page.evaluate(() => location.hash)).includes('anat=scanned&v=v.concha-bullosa.R:typical') && (await page.evaluate(() => document.getElementById('ssb-anatomy').dataset.edited)) === 'true');
+    check('anatomy page: the patch is fetched from patches/scanned/', asked.includes(`ssb/anatomy/patches/scanned/${ANAT_STEM}.ssbp.gz`), JSON.stringify(asked));
     await page.click('#ssb-anatomy button[data-anat="standard"]');
-    await page.waitForFunction(() => window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === '' && window.__ssb.ct.anatomy.patchedVoxels === 0, null, { timeout: 20000 });
-    const back = await page.evaluate((r) => ({ label: window.__ssb.ct.labelAt(r), hash: location.hash }), probes.inside);
-    check('anatomy page (CT): Symmetric reloads the standard volume — the patched voxel is the base\'s again — and the hash loses the anatomy', back.label !== ANAT_LABEL && back.hash === '#ct=ax', JSON.stringify(back));
+    await page.waitForFunction(() => !/anat=/.test(location.hash) && window.__ssb.specimen.anatomy.status === 'none', null, { timeout: 20000 });
+    check('anatomy page: Symmetric clears the anatomy from the hash and the specimen', !/anat=|v=/.test(await page.evaluate(() => location.hash)));
     await page.click('#ssb-anatomy button[data-anat="scanned"]');
-    await page.waitForFunction(() => window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === 'scanned|', null, { timeout: 20000 });
-    const asym = await page.evaluate((r) => ({ label: window.__ssb.ct.labelAt(r), patched: window.__ssb.ct.anatomy.patchedVoxels, hash: location.hash, pressed: document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') }), probes.inside);
-    check('anatomy page (CT): Normal asymmetry loads the bare scanned base — no patch — and presses its pill', asym.label !== ANAT_LABEL && asym.patched === 0 && asym.hash === '#ct=ax&anat=scanned' && asym.pressed === 'true', JSON.stringify(asym));
-    check('anatomy page (CT): zero console errors through the switches', errors.length === 0, JSON.stringify(errors));
+    await page.waitForFunction(() => /anat=scanned/.test(location.hash) && !/v=/.test(location.hash), null, { timeout: 20000 });
+    const asym = await page.evaluate(() => ({ hash: location.hash, pressed: document.querySelector('#ssb-anatomy button[data-anat="scanned"]').getAttribute('aria-pressed') }));
+    check('anatomy page: Normal asymmetry sets the bare scanned base — no patch — and presses its pill', /anat=scanned/.test(asym.hash) && !/v=/.test(asym.hash) && asym.pressed === 'true', JSON.stringify(asym));
+    check('anatomy page: zero console errors through the switches', errors.length === 0, JSON.stringify(errors));
     await context.close();
   }
 
@@ -3444,31 +3328,6 @@ async function scannedBaseTests(browser, base) {
     check('scanned page: a plain visit stays on the standard head — Symmetric pressed, Normal asymmetry enabled and not pressed, no anatomy in the address, the standard note shown',
       pills.standard.pressed === 'true' && !pills.scanned.disabled && pills.scanned.pressed === 'false' && st.hash === '' && st.base === '' && !/as scanned/i.test(await page.evaluate(() => document.getElementById('ssb-stage-note').textContent)), JSON.stringify({ pills, st }));
     check('scanned page: zero console errors on a plain visit with the index present', errors.length === 0, JSON.stringify(errors));
-    await context.close();
-  }
-  /* CT on the scanned base: the volume is the base's, a point in each cavity picks that side's label (laterality, picking), and the left is not the right mirrored */
-  {
-    const { context, page, errors } = await openSpecimen(browser, base, '#ct=ax&anat=scanned', { wait: 'none' });
-    await page.waitForFunction(() => window.__ssb.ct && window.__ssb.ct.status === 'ready' && window.__ssb.ct.anatomy.key === 'scanned|', null, { timeout: 30000 });
-    const probe = {};
-    for (const name of ['s.nasal-cavity.R', 's.nasal-cavity.L', 's.maxillary-sinus.R', 's.maxillary-sinus.L', 's.inferior-turbinate.L']) {
-      const c = L.centroid(name);
-      let ras = L.ras(c.mean.map(Math.round));
-      // the centroid of a curved space may fall outside it: take the nearest member voxel of the label along the rows through the centroid
-      const want = L.byName[name], [nx, ny, nz] = L.hdr.dims;
-      let best = null;
-      for (let dk = -3; dk <= 3 && !best; dk++) for (let dj = -6; dj <= 6 && !best; dj++) for (let di = -6; di <= 6; di++) {
-        const i = Math.round(c.mean[0]) + di, j = Math.round(c.mean[1]) + dj, k = Math.round(c.mean[2]) + dk;
-        if (i >= 0 && j >= 0 && k >= 0 && i < nx && j < ny && k < nz && L.lab[k * nx * ny + j * nx + i] === want) { best = [i, j, k]; break; }
-      }
-      probe[name] = { want, ras: best ? L.ras(best) : ras };
-    }
-    const got = await page.evaluate((p) => Object.fromEntries(Object.entries(p).map(([k, v]) => [k, window.__ssb.ct.labelAt(v.ras)])), probe);
-    check('scanned page (CT): the stage loads ssb/anatomy/scanned/ and a point inside each structure picks that structure and side (cavity R and L, maxillary R and L, left inferior turbinate)',
-      Object.entries(probe).every(([k, v]) => got[k] === v.want), JSON.stringify({ got, probe }));
-    const sides = probe['s.nasal-cavity.R'].ras[0] > 0 && probe['s.nasal-cavity.L'].ras[0] < 0 && probe['s.maxillary-sinus.R'].ras[0] > 0 && probe['s.maxillary-sinus.L'].ras[0] < 0;
-    check('scanned page (CT, laterality): the points picked for .R lie at x > 0 and for .L at x < 0 in the page\'s frame', sides, JSON.stringify(probe));
-    check('scanned page (CT): zero console errors', errors.length === 0, JSON.stringify(errors));
     await context.close();
   }
   /* the Specimen stage on the scanned base (ruling 2): its own packs, never the mirrored head; placement, picking and laterality on screen */
