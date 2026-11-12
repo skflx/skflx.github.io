@@ -61,7 +61,7 @@ import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
 import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=b0877fd4';
-import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=34e04a58';
+import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=f55b307c';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
 /* A base's data root (volume.js baseRoot): the standard head is ssb/ itself, every other base a full copy of that layout in

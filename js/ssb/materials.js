@@ -560,8 +560,7 @@ const GHOST_OPACITY = 0.38;
 const GHOST_HAZARD_OPACITY = 0.85;
 
 /* The --ssb-* token (without the prefix) a material kind is coloured by, or
-   null for an unknown kind. The CT label overlay colours its outlines the
-   same way (mode-ct.js), so a structure is one colour in 3D and on CT. */
+   null for an unknown kind. */
 export function kindToken(kind) {
     return Object.prototype.hasOwnProperty.call(SPEC, kind) ? SPEC[kind].token : null;
 }

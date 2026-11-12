@@ -141,9 +141,12 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State (phase 1, owner order 2026-11-12, branch `ssb-phase1`):** unlisted (only `atlas.html` links to it). Two features: the Specimen with the Endoscope (traversal), and the tree, search and panel (identifying structures). The CT stage, the Procedure player, the variant lab, the population panel and the dioramas are removed from the UI, JS and tests. The data files they used (`ssb/states/`, `lining-*` packs, `ssb/anatomy/population/`, `ssb/reference/`, `population.glb.gz`) are still in the repo: the generated indexes (`ssb/models/packs.json`, `ssb/states/index.json`, `ssb/anatomy/index.json`) list them and only the raw-crawl pipeline can regenerate those. The flap overlay, mucosal states and anatomy bases stay (phase 2).
+**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen with the Endoscope (Scope), and the tree, search and panel for identifying structures. The flap overlay, the anatomy bases and the mucosal states are kept.
 
-**Deferred in phase 1:** `tools/test-ssb.mjs` sections still hold checks that drive the removed CT and procedure hooks (scope state and page tests, mucosa page tests, anatomy and scanned page tests); they fail until rewritten. `mode-specimen.js` and `geo-specimen.js` keep the dissected-state and population loaders, now dead code. `docs/ssb.md` §5.8 and §7 still describe the removed modes.
+**Gaps, owner decisions needed:**
+- The Mucosa pills (`mu=`) change the store only. Nothing loads a mucosal state pack now, so they show no change. Keep the pills (and the state loader) for the mucosal work, or remove them.
+- `geo-specimen.js` `loadState`/`unloadState`, `mode-specimen.js` `setState` and `dissect`, `mode-endoscope.js` `setStateVolume`, `setViews` and `viewChain` have no caller in core. They are the mucosal-state path and stay until that decision.
+- `materials.js` keeps the hazard hatch and the ghost look, now reached by nothing in core.
 
 **Next:** status is GitHub issue #266 and its sub-issues; the spec is
 `plans/2026-10-07-ssb-roadmap.md`. Realistic anatomy's design is `docs/ssb.md` §14.

@@ -205,7 +205,7 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=77fe3d92');
+        const { createScene } = await import('./scene.js?v=096d9d8a');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
             quality: parseHash(location.hash, () => false).quality || null,
@@ -225,7 +225,7 @@ async function bootStage() {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=e4abcf33'), import('./ui-specimen.js?v=3ae70db4')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=0430c001'), import('./ui-specimen.js?v=3ae70db4')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -248,7 +248,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=192e9abf'), import('./ui-endoscope.js?v=8b4a9720')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=05a97f50'), import('./ui-endoscope.js?v=8b4a9720')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {

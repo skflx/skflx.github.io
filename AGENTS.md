@@ -102,7 +102,7 @@ Unlisted (`noindex`; the only page that links to `ssb.html`; `OLSB.html` is also
 - `ssb.html`, `ssb/`: see SSB below.
 
 ### SSB — Sinus & Skull Base 3D (`ssb.html`)
-**Unlisted**: only `atlas.html` links to it. Phase 1 (owner order 2026-11-12) keeps two features: the Specimen with the Endoscope (traversal), and the tree, search and panel (identifying structures). The CT stage, the Procedure player, the variant lab (dioramas) and the population panel are removed. A 3D atlas of the sinuses and ventral skull base, driven by a typed knowledge graph (`ssb/content/`): every fact is a node with typed edges and sources, and geometry is keyed by the same ids. **Read `docs/ssb.md` before any SSB work** (architecture, URL keys in §7.3). Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; anatomy states beyond the standard head are designed in `docs/ssb.md` §14 (sources in `docs/realistic-anatomy.md`); content rules are `docs/authoring-ssb.md`.
+**Unlisted**: only `atlas.html` links to it. Two stages: the Specimen with the Endoscope (Scope, traversal), and the tree, search and panel (identifying structures). A 3D atlas of the sinuses and ventral skull base, driven by a typed knowledge graph (`ssb/content/`): every fact is a node with typed edges and sources, and geometry is keyed by the same ids. **Read `docs/ssb.md` before any SSB work** (architecture, URL keys in §7.3). Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; anatomy states beyond the standard head are designed in `docs/ssb.md` §14 (sources in `docs/realistic-anatomy.md`); content rules are `docs/authoring-ssb.md`.
 
 Rules that bite:
 - **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/`, `ssb/models/`, `ssb/states/`, `ssb/anatomy/`, `ssb/reference/*/figures.json` and `ssb/geometry/stations.json` come from `tools/ssb-pipeline/uw/` and `tools/ssb-pipeline/nasalseg/`. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
@@ -110,7 +110,7 @@ Rules that bite:
 - **Ids are never renamed; coordinates never go in content.** Every name in geometry is a graph id; parts are `<graph id>.<side>`. `tools/check-data.mjs` enforces both.
 - **Content is `review: "draft"`; only the owner sets `verified`** (medical correctness, `docs/decisions.md` §7). `verified` on a source means exists-as-cited, not supports-the-claim.
 - **Credit the UW atlas and its institution, never its authors by name** (`ssb/LICENSE-data.md`).
-- **Pinned rules.** Before tuning a flap or a dissection state, rerun its section (`docs/ssb.md` §5.7–§5.8).
+- **Pinned rules.** Before tuning the flap overlay, rerun its section (`docs/ssb.md` §5.7).
 - **Page code** is ES modules in `js/ssb/`, on three.js vendored in `js/vendor/three-0.186.1/`. Materials are procedural from `--ssb-*` tokens (`js/ssb/materials.js`), never textures. After any change under `js/ssb/` or `ssb/`, run `node tools/stamp-assets.mjs` (it also regenerates `js/ssb/stamps.js`).
 - **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`specimen`, `scope`, `mucosa`, `flap`, `anatomy`, `scanned`). The section names are in `docs/verification.md`. CI runs `--shard i/4`, split by `SHARDS` in the file: a new section goes in one shard.
 - **Image generation** runs outside the repo (`docs/ssb-imagegen.md`); generated pixels never carry an anatomical claim.

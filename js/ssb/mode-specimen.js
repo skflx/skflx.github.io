@@ -40,9 +40,9 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=98c87ca2';
+import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=88c3312f';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { token } from './materials.js?v=34e04a58';
+import { token } from './materials.js?v=f55b307c';
 import { PLANES, stamped, loadAnatomyPatch, anatomyOverrideFile, baseRoot } from './volume.js?v=b0877fd4';
 import { computeFlap, meshArea, projectSeptal, projectFloor, septalPoint, floorPoint, densify } from './flap.js?v=09a0f730';
 import { CT_PLANES } from './state.js?v=c97ad27b';

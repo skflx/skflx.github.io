@@ -270,7 +270,7 @@ the test names what it pins, and the human checks are listed here.
   air, target within 35° of the view, `.L` the mirror of `.R`. A station that
   fails is reported to the orchestrator, never edited. `python3 tools/ssb-pipeline/uw/stations.py check`
   re-tests the file. Human check: a screenshot of `#scope=R,45,6,4,0,0`.
-- **Specimen** (`--only specimen`, `docs/ssb.md` §3 Explore): every pack is a
+- **Specimen** (`--only specimen`, `docs/ssb.md` §3): every pack is a
   quantized glTF whose nodes match `ssb/models/packs.json`, named `<graph id>.<side>`;
   every mesh lies in the CT bounds; laterality holds three ways (data, scene,
   screen); picking and the shared cursor agree with an independent ray cast within
@@ -281,6 +281,9 @@ the test names what it pins, and the human checks are listed here.
 - **Anatomy states** (`--only anatomy`, `docs/ssb.md` §5.11): the suite builds its
   own patches and index inside the test; a patch changes exactly its box; refusals
   and the hash whitelist hold; with no index, Variants and Pathology are hidden.
+- **Scanned base** (`--only scanned`, `docs/ssb.md` §5.11): the scanned specimen loads
+  its own packs, each placed where its data says, with laterality on screen and the
+  registry of its nodes checked against an independent read of `ssb/anatomy/scanned/models`.
 - **Flap overlay** (`--only flap`, `docs/ssb.md` §5.7): areas against an
   independent point-in-polygon and Heron sum (2 %); the short < full < extended
   ladder; the `#flap=` codec on hostile input. The suite prints each design's area per side.

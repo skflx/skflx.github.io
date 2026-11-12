@@ -2,7 +2,7 @@
 
 Status, work packages and order: GitHub issue #266 and its sub-issues. Specs and the decision record: `plans/2026-10-07-ssb-roadmap.md`. This file is the design. Data shape and editorial rules: `docs/authoring-ssb.md`. Realistic-anatomy sources and limits: `docs/realistic-anatomy.md`. Image briefs: `docs/ssb-imagegen.md`.
 
-`ssb.html` runs four stages (the `data-stage` buttons) over the knowledge graph (`ssb/content/`, validated by `tools/ssb-content.mjs`): Specimen (§5.1), the variant lab (Lab, §6), CT (§3, §5.6; no WebGL needed) and the endoscope on the specimen (Scope, §3; the procedure player runs there).
+`ssb.html` runs two stages (the `data-stage` buttons) over the knowledge graph (`ssb/content/`, validated by `tools/ssb-content.mjs`): the Specimen (§5.1) and the endoscope on it (Scope, §3).
 
 ## 0. What it is
 
@@ -12,10 +12,9 @@ Not a navigation system, not a surgical simulator (no haptics, no free-form dril
 
 ## 1. Principles
 
-1. **One graph, many views.** Every fact is a typed node with edges and sources. The 3D scene, panels, CT overlay and procedures render the graph, and geometry is keyed by the same ids. A fact is written once and cannot disagree with itself across views.
+1. **One graph, many views.** Every fact is a typed node with edges and sources. The 3D scene and the panels render the graph, and geometry is keyed by the same ids. A fact is written once and cannot disagree with itself across views.
 2. **Label the kind of truth.** Four kinds, never blurred:
    *specimen* — one real adult anatomy, CT-derived (n = 1);
-   *diorama* — an idealized parametric model that shows a variant or a classification cleanly;
    *population* — literature values with their spread, method and denominator;
    *composite* — a real specimen with a declared edit (owner RA-O2; §14 R2.2). The badge names the edit, its parameters and the exemplars it was calibrated on; picking an edited voxel or mesh reports that it is edited.
    Every view carries a badge saying which kind it is, and every measurement shows the specimen's own value beside the population range.
@@ -35,7 +34,7 @@ Not a navigation system, not a surgical simulator (no haptics, no free-form dril
 
 **Pathology** is a layer over that anatomy, not a separate atlas. Each condition (`dz.*`: inflammatory and fungal disease and their orbital and intracranial complications, CSF leak and encephalocele, benign and malignant sinonasal and skull base tumors) names the structures it involves, its imaging discriminators and mimics, its staging systems and what it changes at the table. In the scene a condition is an overlay on the specimen; in CT mode, its findings.
 
-**The external nose** is in scope to the full rhinoplasty framework: tier 1 names the bones, cartilages, envelope and subunits; tier 2 adds ligaments, tip support, envelope layers and dissection planes, valves, and the vessels and nerves an open approach meets; tier 3 adds quantitative anatomy and variant classes. It is built as the `nasal-framework` diorama (§6.2) and later fitted under the specimen's skin. Beyond anatomy it is the substrate of a rhinoplasty model (`plans/2026-11-10-ssb-nasal-framework.md`).
+**The external nose** is in scope to the full rhinoplasty framework: tier 1 names the bones, cartilages, envelope and subunits; tier 2 adds ligaments, tip support, envelope layers and dissection planes, valves, and the vessels and nerves an open approach meets; tier 3 adds quantitative anatomy and variant classes. It is fitted under the specimen's skin. Beyond anatomy it is the substrate of a rhinoplasty model (`plans/2026-11-10-ssb-nasal-framework.md`).
 
 Region ownership and the full inventory live in the graph (`ssb/content/*.json`), not here.
 
@@ -43,13 +42,12 @@ Region ownership and the full inventory live in the graph (`ssb/content/*.json`)
 
 **UW Interactive CT Sinus Anatomy** (credit the atlas and its institution, never its authors by name; `ssb/reference/uw-sinusanatomy2/`, terms in `ssb/LICENSE-data.md`): labeled axial, coronal and sagittal stacks of a normal sinus CT, unlabeled/labeled slice pairs, and normal-variant and disease pages. Its label vocabulary is crosswalked to graph ids (`crosswalk.json`). Labeled frames are extracted to label positions (`slices.json`), and within-slice relations test the graph's `rel` claims (`relations.json`, `tools/ssb-pipeline/uw/relate.py`), with the limits its README states. Its images may be served from this origin, credited (§14 RA-O1). UW's host is HTTP-only, so an HTTPS page cannot hotlink them.
 
-## 3. Modes
+## 3. Stages
 
-All modes share one scene, one selection and one URL state; switching mode never reloads.
+Both stages share one scene, one selection and one URL state; switching stage never reloads.
 
-> **Phase 1 (2026-11-12, owner order):** only **Explore** (the Specimen) and **Endoscope** (Scope) remain, plus the tree, search and panel for identifying structures. The CT stage, the Procedure player, the variant lab (dioramas, §6) and the population panel (§5.10) were removed; their code, tests and fixtures are gone. Their data files (`ssb/states/`, the `lining-*` packs, `ssb/reference/`, `ssb/anatomy/population/`) are kept until the owner decides, and §5.8 and §7 still describe them.
 
-- **Explore.** Orbit, pan and zoom around the specimen. Layer toggles by tissue kind and region; *peel* removes resection units in anatomical order; X-ray draws occluders as fresnel ghosts (no sorted transparency); section planes with solid caps register a cut to the CT slice. Click picks; clicking the same pixel again steps deeper through what is under the cursor.
+- **Specimen.** Orbit, pan and zoom around the specimen. Layer toggles by tissue kind and region; *peel* removes resection units in anatomical order; X-ray draws occluders as fresnel ghosts (no sorted transparency); section planes with solid caps register a cut to the CT slice. Click picks; clicking the same pixel again steps deeper through what is under the cursor.
 - **Endoscope.** First-person through a rigid scope that **pivots at the nostril**. Pose = insertion depth, shaft yaw and pitch about the nostril fulcrum, roll, and lens angle (0/30/45/70°). The view deflects from the shaft by the lens angle toward the roll; the horizon stays upright, as the real technique does. A light-post indicator sits opposite the view direction.
   - Illumination is a spotlight at the tip with inverse-square falloff. Its intensity follows an automatic exposure (K·D², D the median distance to the lining over five rays), as a camera control unit does.
   - Collision: the shaft is sampled every 0.5 mm, on its axis and on a ring of four points at the shaft radius (4 mm or 2.7 mm scope, chosen in the controls, never in the URL), against the CT display volume (§5.6). Bone (display ≥ 150) blocks; a pose that would block is clamped to the last free depth. The shaft length lying in mucosa is reported as mucosal contact, because the specimen is not decongested. At the midline the shaft is clamped at R = 0, except in the nasopharynx, behind and below `lm.choanal-arch.M`. The HUD reports which limit fired.
@@ -75,7 +73,6 @@ Three classes, chosen per structure by its `geo` field.
 |---|---|---|---|
 | `specimen` | segmented from the reference CT | bone resection units, air cells (as solid "blocks"), mucosa surface, orbit contents, brain surfaces | quantized glTF packs |
 | `sweep` | centerline + radius profile authored in RAS mm | arteries, veins, nerves, ducts, flow pathways | tubes generated at load |
-| `diorama` | parameters | variants and classifications | generated at load from presets and sliders |
 
 ### 5.1 Reference specimen
 
@@ -148,7 +145,7 @@ The bone-window specimen is 8-bit display values: air and bone separate cleanly,
 
 Pipeline: stage D (`tools/ssb-pipeline/uw/softtissue.py`) reads the committed `ssb/ct/` volume, not the raw crawl, so it reruns in any session. It writes a `soft` pack and `ssb/geometry/charts.json`, and merges its landmarks and sweeps into the shared geometry files without dropping other steps' keys. Method per point is in the `*.meta.json` files. The sagittal chart is single-valued only where the surface does not fold back: `charts.json` lists the cells that do under `unreliable`. Where the septum is thicker than the wall unit's cap, or a turbinate abuts it, the patch is completed from the airway lining's medial-most sheet; those cells are `filled` (lower confidence). Waypoint specs live in `tools/ssb-pipeline/uw/sweeps-soft.json`: anatomy as data, authored with sources, never hand-placed coordinates in content.
 
-Overlays share the diorama contract's spirit (§6): parameters with ranges from the graph, presets from the procedure's own design ladder, parts named `<graph id>.<side>`, a *schematic on specimen* badge, and rules pinned in `tools/test-ssb.mjs`.
+Overlays take parameters with ranges from the graph, presets from the procedure's own design ladder, parts named `<graph id>.<side>`, a *schematic on specimen* badge, and rules pinned in `tools/test-ssb.mjs`.
 
 #### Flap overlay contract (nasoseptal flap; `js/ssb/flap.js`, `#flap=`)
 
@@ -195,43 +192,9 @@ Overlays share the diorama contract's spirit (§6): parameters with ranges from 
 
 **Not in this contract**: the inferior meatus, the inferior and middle turbinate flaps, the lateral nasal wall flaps, regional flaps, and the contralateral reverse flap.
 
-### 5.8 Dissection states
-
-**Why the volume, not the meshes.** A station needs its tip in an air label, the scope's collision samples the CT display volume, and the proximity HUD reads distance fields. Hiding a resected structure's mesh changes none of these. A dissection state is therefore a change to the CT display and label arrays: every removed voxel becomes air (display `air.fill`, label the nearest air space the unit opens into), and the lining is re-meshed on the opened air.
-
-**Anatomy as data.** `tools/ssb-pipeline/uw/dissection.json` holds the units, their rules and which procedure step applies which unit. A unit is a **rule over the base's own labels, landmarks and distance fields**, never a hand-drawn voxel set, so it reruns on any base (§5.10). `realizes` lists the content ids it stands for. Three operators:
-
-| `op` | Removes | Used for |
-|---|---|---|
-| `window` | voxels in the box with d(a) + d(b) ≤ `sumMm`, where a and b are two air-space sets. This is the rule `walls.py` uses to define a wall, so a resection is a window in what two compartments share. `shell` keeps a wall of given mm around named air spaces (opened by a later unit) | uncinectomy, antrostomy, basal lamella, sphenoidotomy, Draf IIa |
-| `exenterate` | the morphological closing (ball of `closeMm`) of a group of air spaces, inside the box: partitions thinner than about 2 × `closeMm` go; thicker walls stay | bulla, anterior and posterior ethmoid, agger and frontal recess cells |
-| `region` | every voxel of the named labels (or any non-air voxel) in the box, optionally only within `nearAirMm` of named air | posterior septectomy, rostrum, intersinus septum, sellar opening, clival recess |
-
-Boxes are side-relative (r = σR). Every bound is a number or an anchor on a label's extent or a landmark (`"s.ethmoid-bulla.amax - 5"`), resolved on the base. Common rules: a `keep` list (lamina, skull base, turbinates, septum for FESS; posterior ethmoid and planum for the EEA corridor) is never carved, on either side. The **guard** keeps every carved voxel ≥ 1 mm from the ICA, optic nerve, AEA tubes and orbital contents, and is re-applied after mirroring. On the standard specimen the right side is computed and mirrored; midline units are computed whole.
-
-**Procedures, states, corridors.** `procedures` maps each step to its units; `entry` lists the procedures assumed complete before step 0. A **state** is the cumulative unit list at a step (the entry chain, then the steps up to it) or at a corridor position; identical lists are one state. Checked in CI: every id a step `removes` is realized by a unit on that step or before it, or is listed under the procedure's `unrealized` with a reason; every unit on a step realizes at least one id that step removes; every unit name is a graph id. Unrealized in v1: the frontal beak (inseparable from the anterior table wall unit), the accessory sphenoid septum (not segmented), and the dorsum and posterior clinoids.
-
-**Truth kind.** A dissected state is *specimen, dissected (rule-based cut)*. The cut is schematic even where the bone is real: several units stand in for structures the specimen does not segment (uncinate, bullar lamella, rostrum; the basal lamella is a proxy plane). Each unit's `truth` says which. The uncinate is fused into the maxillary medial wall unit, so the uncinectomy opens the infundibular trough and the hiatus and leaves the wall; the natural ostium appears with the antrostomy.
-
-**Pipeline outputs** (`tools/ssb-pipeline/uw/dissect.py`):
-- `ssb/states/index.json`: `version`, `base` (the first 10 hex of the SHA-256 of the base CT display and labels), `ctFill`, `states`, `procedures`, `corridors`, and unit voxel counts against `measured`. Per state key (the first 10 hex of the SHA-256 of its unit list in application order, one unit per line): `units`, `usedBy` (`"p.draf-i#2"`, or `"fess:p.draf-i#2"` for a corridor position), `patch`, `lining`, `hides` (wall nodes removed entirely), `remnants` (wall node → the remnant that replaces it in the lining pack) and `measured`. `procedures[p]` is `{entry, steps: {step: key}}` (`entry` null when the procedure starts on the intact head). `corridors[c]` copies the data's entry and adds `positions: [{procedure, step, state}]`.
-- `ssb/states/<key>.ssbp.gz`: a **patch**. A u32 header length, a JSON header (`version`, `base`, `state`, `units`, `ctFill`, `boxes: [{side, ijk0, dims}]`), then per box a u16 array, x fastest: 0 = unchanged, else the voxel's new label (its display becomes `ctFill`). Each patch is whole from the base, so any step is reachable at random. At most one box per side: `R` (voxels right of R = 0), `L`, and `M` (the R = 0 plane).
-- `ssb/models/lining-<key>.glb.gz` (and `lining.glb.gz`): `lining.py`'s method on the state's air, plus remnant meshes `<id>.<side>@<cut>` (the node's `extras.cut`) for each wall label a state cuts partly. Every lining pack is cleaned by `meshes.py` `clean_lining` (zero-thickness fins and twin faces go; their normals are rebuilt). `tools/check-data.mjs` fails on a twin face or a zero normal in any `lining*.glb.gz`. State linings are **not listed in `packs.json`**; they load on demand from the index.
-- Distance fields are not recomputed: the guard keeps every cut away from the structures they measure.
-- Budgets (checked by `tools/check-data.mjs`): a state lining ≤ 350 kB gzip, all state linings ≤ 6 MB, a patch ≤ 100 kB.
-- Evaluation notes: anchors read voxel centres; a right-side unit's box never reaches r < 0, and its result is mirrored per unit with the guard applied again; the air sets of a right-side unit are its `.R` and `.M` labels, of a midline unit all three sides; `exenterate` is the closing by Euclidean thresholds; the working air is the cumulative state, so a later unit sees the earlier carves.
-
-**Runtime.** `volume.js` has a pure `parsePatch(bytes, volume)`, which refuses (with a `VolumeError`) a wrong `base`, a box outside `dims`, a label the table does not name, a body that is not the boxes' size, or a version other than 1; and `applyPatch(volume, patch)`, a derived volume with the same API plus `carvedAt`. The base is never touched. `js/ssb/mode-procedure.js` plays a procedure as the scope stage with `state.procedure = { id, step, cor }` behind it (§7.3), not as a fifth stage. The endoscope's collision, tip label and exposure read the state volume (`setStateVolume`). The CT stage and the scope's CT inset keep the base image, and the CT stage outlines the carved voxels (`mode-ct.js` `setCarved`). The specimen stage swaps in the state's pack by key (`geo-specimen.js` `loadState` / `unloadState`), draws a step's `see` structures and the `at` of its `risk` hazards through what hides them, and hatches the hazards. Hazards exclude the walls the state cuts: a thin rim of one, drawn through the lining, reads as a detached slab. `ui-procedure.js` is the step list, the `think` prompt ("Think first", click or `T`), Previous / Next / `[` `]`, the corridor picker and the state badge.
-
-**Step numbering.** Step 0 is the start (the entry state, or the intact specimen); n ≥ 1 is the state after step n. N is the highest step the index lists for the procedure. A step the index does not list takes the nearest lower one. A step that removes nothing is the same state. A step lands on what its state opened: the scope flies (a step the reader takes) or jumps (a `#p=…&step=n` link with no `scope=`) to a view of the state, by the landing rule below. The index is fetched only when `js/ssb/stamps.js` lists `ssb/states/index.json`, so a build without states makes no request. A state pack (`packs.json` entry with `"state": <key>`) holds the state's lining nodes and remnants. Remnants replace the base wall of the same id and side; `hides` hides base nodes by key.
-
-**Stations.** `ssb/geometry/stations.json` gains `byState: {<state key>: {"t.<id>.<side>": {pose, target, measured}}}`, posed by the E5 rule on the committed state (`tools/ssb-pipeline/uw/stations.py`; `check` retests every committed pose, `write` reposes after a regeneration). The tip must lie in an airway label *of that state* (a space, an ethmoid cell, the frontal recess; not the vestibule). A station the contralateral nostril reaches is keyed by its target's side. A pose posed for state A is free in every state B whose units include A's, because carving and decongestion only turn tissue into air (`--only scope` tests every such pair). So the **views of a state** are its own `byState` poses, then those of each state whose units are a proper subset of its own (most units first; a key posed by a nearer state shadows a farther one), then the intact `stations`.
-
-The **landing** of a step: the step's own station if the state's own poses have one for it; else the first of the state's own views (what the state opens comes first); else the nearest inherited view; else the intact pose of the step's station; else the pose stays and a note says so. A procedure also lands on step 0 of a position that has a state. A row of `stations.py` may name its state as `<corridor>:<p-id>#<n>`, a target as `lm` (an exact landmark), `carvedDiff` (the centroid of what one state carves beyond another), or a `prominence` ranking. A 0° lens is searched with the roll fixed at 0. A pose may carry `"shaft": "2.7"` when only the 2.7 mm telescope reaches it (the olfactory cleft and inferior meatus, §5.9); flying there switches the shaft, and the controls say so.
-
 ### 5.9 Mucosal state: decongested · as scanned · congested
 
-The as-scanned specimen is not decongested: its per-side nasal-cavity cross-section averages 1.6 cm² between the middle turbinate head and the choana, and the as-scanned left side 0.65 cm². A three-way toggle shows the mucosa decongested, as scanned or congested, as a patch on the base (the §5.8 format), applied before any dissection. Procedure mode always plays on the decongested state.
+The as-scanned specimen is not decongested: its per-side nasal-cavity cross-section averages 1.6 cm² between the middle turbinate head and the choana, and the as-scanned left side 0.65 cm². A three-way toggle shows the mucosa decongested, as scanned or congested, as a patch on the base (a patch, laid out as in §5.11), applied before any dissection. Procedure mode always plays on the decongested state.
 
 - **Operator** (`tools/ssb-pipeline/uw/mucosa.py`): soft tissue (display 78 ≤ v < 120) of the erectile labels (inferior and middle turbinate, and the side's half of the septum), within d mm of that side's nasal-cavity air, recedes to air. It never comes closer than 0.5 mm to bone (display ≥ 120), and acts only between the choana and the internal valve. The congested state grows the same tissue into the air.
 - **Decongested, calibrated on the ratio** of Xiao et al. 2021 (MRI of 10 healthy adults before and 10 minutes after xylometazoline 0.1%): the mean cross-section between the first vertical plane and the posterior septum rose 34.8 % (2.8 → 3.8 cm²), least in the superior third and around the valve, with surface area unchanged. d is the smallest 0.25 mm step that raises the specimen's mean per-side CSA over that span by at least the same ratio. The prototype gives d = 1.0 mm (× 1.39). The ratio, not Xiao's absolute values, is used: the specimen's label is a bone-window threshold and Xiao's an MRI segmentation. The calibration record is `ssb/states/mucosa.json`. The operator never changes the septum's midplane (R = 0), so decongestion cannot perforate it.
@@ -249,7 +212,6 @@ A **head** is a base: a CT and a label volume (every name a graph id) in the §4
 - **Label conventions.** NasalSeg's labels differ from ours in convention more than in quality. Its nasal cavity runs from the nostril to the choana (vestibule included) and takes in the partial-volume rim, so a median 26 % of its voxels lie above our air threshold. Compared at one convention (our threshold, cavity plus vestibule), head A's cavity sits at the 42nd percentile of NasalSeg's clear subjects and its maxillary sinus at the 51st. Our labels leave less adjacent air unlabelled, so for the five structures NasalSeg labels, the approximated segmentation holds. NasalSeg does not label what the FESS units stand on (uncinate, ethmoid partitions, infundibulum); that is the resegmentation's job (§14 R7). A voxel-level check (a model trained on NasalSeg, run on head A) waits on owner decision O12.
 - **Head A's nasal asymmetry** lies beyond every clear NasalSeg subject on the cavity index (`ssb/anatomy/population/`; the owner's reading in `docs/realistic-anatomy.md` §4.4). Until resegmentation settles whether the septal bow and turbinate congestion or segmentation explains it, the `scanned` state describes this head as at the edge of normal, not typical.
 - **Cross-section profiles.** Per clear subject and side, the cavity label's section profile along its own anteroposterior axis (1 mm sections, mean from 10 to 90 % of the length), restricted to our air threshold. Only the restricted rows compare like with like. The 10–90 % span is the one used; the JSON keeps all three spans.
-- **Population panel.** The Specimen dock's "Population (NasalSeg)" section (`js/ssb/population.js`, `js/ssb/ui-population.js`) reads the JSON and nothing else. It hides itself when the file is missing or malformed.
 - **Population sinus.** `tools/ssb-pipeline/nasalseg/meanshape.py` aligns each clear subject rigidly (no scale; four label centroids onto the standard specimen's) and votes: the region at least half the aligned maxillary labels occupy is the shape. It writes `ssb/models/population.glb.gz` (nodes `s.maxillary-sinus.<side>@nasalseg-majority`, `extras.kind` "ghost"; `packs.json` `"population": true`, so never loaded at boot). It is an aligned majority, not any one person's sinus, and runs a little under the median volume. The cavity and nasopharynx are not drawn from the population, because a rigid fit cannot register a thin convoluted passage. The ghost is registered as `population:<id>.<side>`: never selected, picked or counted among the regions.
 - **Variants from NasalSeg.** Subjects at chosen percentiles are real 16-bit CTs: exemplars that calibrate the variant layer, and bases of their own once resegmented (their five labels do not include the ethmoid that FESS units need).
 - **16-bit intake.** `ct.json` takes `dtype: "int16"` with `values.kind: "HU"` (windows in HU, no LUT; data in `ct.i16.gz`, little-endian) and optional per-head `levels: {air, bone}`. `volume.js` reads both dtypes; `toHU` is the identity on an HU head. The scope's collision takes `levels` as `shaftClearance`'s last argument, defaulting to `BONE_LEVEL` 150 and `SOFT_LEVEL` 78, so collision behaves the same on any head. Outside the volume is "no data" on any scale. `tools/ssb-pipeline/intake/intake.py` reads NIfTI-1 and NRRD (DICOM would need `pydicom`, an owner decision), fits a rigid transform to the §4 frame from landmark correspondences, resamples isotropically and writes `incoming/<name>/` only. Shipping a head under `ssb/` is a separate decision. Head A stays 8-bit.
@@ -277,21 +239,20 @@ js/ssb/main.js               entry (type="module"): feature detection, boot, err
 js/ssb/frame.js              the one RAS <-> scene conversion (§4)
 js/ssb/stamps.js             GENERATED: data-asset path → hash (for fetch URLs)
 js/ssb/graph.js              load, index, search, render text for the knowledge graph
-js/ssb/state.js             the one store (mode, tier, layers, selection, camera, step); URL-hash codec; ssb:* storage (guarded); anatomy registry
+js/ssb/state.js              the one store (stage, tier, layers, selection, camera, cursor); URL-hash codec; ssb:* storage (guarded); anatomy registry
 js/ssb/flap.js               the nasoseptal flap overlay's geometry (§5.7): pure, no DOM, no three.js
 js/ssb/scope.js              the rigid endoscope's geometry: pure math, no DOM, no three.js
 js/ssb/scene.js              the 3D stage: renderer, camera, controls, lights, picking, on-demand loop
 js/ssb/materials.js          procedural tissue-material library, one factory per tissue kind
-js/ssb/geo-specimen.js       the specimen's geometry: model packs → one scene graph, registry, dissection states, patches
-js/ssb/population.js         NasalSeg's population facts about the five structures it labels (§5.10)
+js/ssb/geo-specimen.js       the specimen's geometry: model packs → one scene graph, registry, state and anatomy patches
 js/ssb/volume.js             the CT and label volumes as typed arrays: loading, affine, slicing, lookup, patches
-js/ssb/mode-specimen.js      the Specimen stage: Explore mode
-js/ssb/mode-endoscope.js     the Endoscope stage: a first-person rigid scope
-js/ssb/mode-procedure.js     the procedure player: steps played in the scope on a dissected state
-js/ssb/mode-lab.js           the variant lab stage: builds the named diorama with its parameters
-js/ssb/mode-ct.js            the CT stage: three linked slice canvases, no WebGL needed
-js/ssb/ui-*.js               panel, tree, search, and the Specimen, endoscope, procedure, population, lab and CT controls
-js/ssb/dioramas/*.js         parametric models (index.js registry, kit.js primitives)
+js/ssb/mode-specimen.js      the Specimen stage
+js/ssb/mode-endoscope.js     the Scope stage: a first-person rigid scope
+js/ssb/ui-specimen.js        the Specimen controls (layers, section, flap, anatomy pills)
+js/ssb/ui-endoscope.js       the Scope controls (pose, lens, stations, proximity HUD)
+js/ssb/ui-tree.js            the structure tree
+js/ssb/ui-search.js          search over the graph
+js/ssb/ui-panel.js           the panel that identifies a structure
 js/vendor/three-<version>/   three.js module build + the addons used (§8)
 ssb/content/*.json           the knowledge graph
 ssb/geometry/*.json          labels, landmarks, sweeps, station poses (stations.json: its `rule` string says how each pose was checked; `uncovered` lists stations the intact specimen cannot show)
@@ -301,7 +262,7 @@ tools/ssb-pipeline/          offline geometry/CT pipeline
 tools/ssb-fixture-ct.mjs     a synthetic volume in the same format, for tests (never written into ssb/)
 ```
 
-Dependencies are one-way and acyclic: `main → mode-* → {scene, geo-*, volume, ui-*} → {graph, state} → stamps`; `scene → materials`; `mode-ct → {volume, materials}`; `main → dioramas → {frame, materials}`. Only `scene` and `geo-*` import three.js. The dioramas and `materials` receive it as an argument, so they load without WebGL. `mode-ct` and `ui-ct` mount from the graph alone, which is why CT works where WebGL does not. `mode-specimen` loads by dynamic import, so a failure there leaves graph mode and CT alone.
+Dependencies are one-way and acyclic: `main → mode-* → {scene, geo-*, volume, ui-*} → {graph, state} → stamps`; `scene → materials`. Only `scene` and `geo-*` import three.js, and `materials` receives it as an argument. `mode-specimen` loads by dynamic import, so a failure there leaves graph mode alone.
 
 ### 7.2 Cache-busting an ES-module graph
 
@@ -315,15 +276,13 @@ Stamps cover `<link>`/`<script>` in root HTML only. A module graph defeats that:
 
 ### 7.3 State and URL
 
-One store; everything else subscribes. The URL hash is the shareable state, e.g. `#s=s.lateral-lamella&tier=2`, `#p=p.draf-iia&step=4`, `#lab=ethmoid-roof&c.keros=III`, `#ct=cor&at=12.5,31,48`, and the quality override `q=full|lite` (§7.4). Parsing is whitelist-only: ids must exist in the graph index, numbers are parsed and clamped, unknown keys are ignored, and nothing from the URL reaches markup except through `textContent` (`docs/security.md`).
+One store; everything else subscribes. The URL hash is the shareable state, e.g. `#s=s.lateral-lamella&tier=2`, `#scope=R,40,10,-5,90,45`, `#at=12.5,31,48`, and the quality override `q=full|lite` (§7.4). Parsing is whitelist-only: ids must exist in the graph index, numbers are parsed and clamped, unknown keys are ignored, and nothing from the URL reaches markup except through `textContent` (`docs/security.md`).
 
-- **Lab** `#lab=<diorama>&<key>=<value>…`: the diorama must be in the registry; keys must be in its `PARAMS` (values clamped and snapped to the step; a `choice` snaps to an option). A classification id naming a preset (`c.keros=III`) is applied before explicit parameters. The canonical form lists only parameters that differ from their defaults. Slider drags update it once they settle.
-- **CT** `#ct=<ax|cor|sag>&at=<r>,<a>,<s>`: the plane is one of those names (or `axial`, `coronal`, `sagittal`); anything else ignores the whole stage. `at` is the crosshair in RAS mm and must be three finite numbers, else it is dropped and the viewer sits at the volume's centre. The store clamps it to a sanity range until the volume loads, then to the volume's bounds (`setCtBounds`). A crosshair drag settles before the URL is replaced.
-- The stage is one of specimen, lab or CT. A hash with both `lab` and `ct` keeps the lab.
+- **Keys:** `s` (the selected graph id), `tier` (1–3), `at` (the 3D cursor, `r,a,s` in RAS mm, clamped to the volume's bounds), `q` (§7.4), `mu` (§5.9), `flap` (below), `anat`, `v`, `dz` (below). Unknown keys, including the removed `lab`, `ct`, `p`, `step`, `cor` and `pop`, are ignored.
+- **Stage:** `scope=` opens the Scope (a pose `R,depth,yaw,pitch,roll,lens`, or a station link `t.<id>[.<side>]`, §3); without it the stage is the Specimen.
 - **Anatomy** `#anat=<base>&v=<ref>,…&dz=<ref>,…` (§5.11; `<ref>` is `<id>.<R|L|M>[:<preset>]`): whitelisted against `ssb/anatomy/index.json` and the graph. An unknown id, side, preset or base, a disallowed pair, a malformed value or more than eight entries drops the **whole** anatomy key, and the hash is rewritten canonical. Until the index arrives the link's anatomy is `pending`, and every consumer treats it as the standard head. `v` or `dz` without `anat` takes the index's default base (`scanned` when listed).
-- **Procedure** `#p=<p-id>&step=<n>[&cor=<corridor>]` (the pose follows as `scope=`): the store keeps a well-formed `p-id` and clamps `step` to 0..99. Once the index has loaded, the player drops a procedure the index does not list and clamps `step` to its steps. `cor` (a corridor key that lists the procedure) makes the state accumulate the corridor's earlier procedures instead of the procedure's own `entry`. It implies the scope stage on the decongested mucosa.
-- **Mucosa** `mu=dec|scan|cong` (§5.9; default `scan`, not written when `scan`): ignored and not written while a procedure plays; an unknown value is dropped.
-- **Flap** `flap=<short|full|extended|rescue>[.<R|L>]` with `top`, `ant`, `fw`, `win` for its sliders (`state.flap`; side defaults to `R`; values clamped and snapped; default parameters not written). It is an overlay on the specimen, not a stage: a lab or CT link ignores it. Its controls are offered from its own tier (3) or whenever an overlay is on.
+- **Mucosa** `mu=dec|scan|cong` (§5.9; default `scan`, not written when `scan`); an unknown value is dropped.
+- **Flap** `flap=<short|full|extended|rescue>[.<R|L>]` with `top`, `ant`, `fw`, `win` for its sliders (`state.flap`; side defaults to `R`; values clamped and snapped; default parameters not written). It is an overlay on the specimen, not a stage. Its controls are offered from its own tier (3) or whenever an overlay is on.
 
 ### 7.4 Rendering
 
@@ -334,14 +293,14 @@ One store; everything else subscribes. The URL hash is the shareable state, e.g.
   - **Quality** `full` or `lite` (fewer octaves, no domain warp, at most two projection planes, a plain-noise stand-in for lobules). Chosen at boot from device hints (a software rasterizer or old mobile GPU, Save-Data, a small-memory or dual-core device, or a phone-sized touch screen means `lite`); the hash key `q` overrides it (exactly `full` or `lite`). A change of `q` recompiles in place.
   - Nothing is animated, so `prefers-reduced-motion` needs no special case in materials.
 - **Hazards are never colour alone**: a hatched shader overlay plus text in the HUD. `--signal` marks UI emphasis only.
-- The Explore stage follows the site theme. The endoscope and CT stages are dark in both themes (projector stages). CT's views use the `--ssb-ct-*` tokens.
+- The Specimen stage follows the site theme. The endoscope stage is dark in both themes (a projector stage).
 - Labels: DOM overlay with SVG leader lines, few at a time, decluttered by tier and priority; never "label everything".
 - Picking: raycast on click, all intersections kept for click-to-go-deeper; no hover picking on touch devices.
 - Camera flights respect `prefers-reduced-motion` (cut instead of fly).
 
 ### 7.5 Degradation, accessibility, mobile
 
-- No WebGL2 → graph mode: tree, search, panels, procedures as text, and CT mode (CPU-rendered) intact. Feature detection is in `main.js`; the page never throws to a blank screen.
+- No WebGL2 → graph mode: tree, search and panels as text. Feature detection is in `main.js`; the page never throws to a blank screen.
 - The structure tree is a real DOM list mirroring the scene: keyboard navigable, selection synced both ways, announced via `aria-live`. Every fact reachable in 3D is reachable in the DOM.
 - Phones: bottom-sheet panel, one-finger orbit, pinch zoom. Endoscope mode steps between stations with drag-to-look rather than free flight.
 
@@ -369,7 +328,7 @@ Escape first, then transform the two allowed inline forms (`[[id]]`, `*em*`). An
 | Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match. **`verified` means the work exists as cited, not that it supports the claim**; claim support is the reviewer's and owner's job. Match against the PubMed record itself (NCBI E-utilities), never a search snippet; sources PubMed does not index are confirmed by hand. | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 
-Test sections (`node tools/test-ssb.mjs --only <section>[,<section>…]`): `specimen`, `scope`, `mucosa`, `flap`, `anatomy`, `scanned` (phase 1 removed `kit`, `dioramas`, `lab`, `ct`, `procedure`, `population`; their remaining checks in the kept sections are DEFERRED, see `docs/wip.md`).
+Test sections (`node tools/test-ssb.mjs --only <section>[,<section>…]`): `specimen`, `scope`, `mucosa`, `flap`, `anatomy`, `scanned`.
 
 ## 10. Storage
 
