@@ -159,3 +159,7 @@ progress. Removing `draft` is the owner's call.
 
 - **OpenEar (CC BY 4.0).** Derived data (resampled, cropped) may be committed with the attribution line in `tbone/LICENSE-data.md`. Raw archives, NRRD and DICOM files, and donor metadata (sex, dates) are never committed. Owner, 2026-11-11; `plans/2026-11-04-tbone-sources.md`.
 - **Author names and e-mail addresses.** Author names may appear in the tree and in git history; history is not rewritten (`docs/realistic-anatomy.md` §13, RA-O7). E-mail addresses may not: `checkNoEmails` in `tools/check-data.mjs` fails on any in tracked text (`docs/security.md`). Owner, 2026-11-11.
+
+## 12. Open decisions awaiting the owner
+
+- **axe-core as a dev dependency (pending owner approval).** `axe-core@4.10.2` is added as a pinned devDependency for `tools/test-a11y.mjs`, which runs in CI as a report-only step (`continue-on-error`). Baseline: `tools/a11y-baseline.json`. Owner to approve the dependency or drop the scan. Branch `a11y-axe`, not merged.

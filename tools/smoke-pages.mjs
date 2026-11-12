@@ -20,6 +20,7 @@
    Prints PASS/FAIL per page; exits nonzero if any page failed.
    ============================================================= */
 import zlib from 'zlib';
+import { fileURLToPath } from 'url';
 import { startServer, launchBrowser, collectErrors } from './smoke-lib.mjs';
 
 /* A synthetic temporal-bone volume for OLSB's Real CT view, routed over tbone/** (nothing is written into the repo):
@@ -66,7 +67,8 @@ const OFFLINE = args.includes('--offline');
    when the page has rendered its core content. Checks poll internally. */
 const wait = (page, fn, arg = null, timeout = 12000) => page.waitForFunction(fn, arg, { timeout }).then(() => true);
 
-const PAGES = [
+/* Exported so tools/test-a11y.mjs walks the same pages in the same states. */
+export const PAGES = [
   { path: 'index.html', ready: async (p) => {
     await wait(p, () => !!document.querySelector('.hero-name') && /PGY-\d/.test(document.getElementById('pgy-status').textContent));
     /* all five sections start folded; a head tap opens one */
@@ -310,4 +312,5 @@ async function main() {
   process.exit(failed ? 1 : 0);
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+/* Run only when executed directly: test-a11y.mjs imports PAGES. */
+if (process.argv[1] === fileURLToPath(import.meta.url)) main().catch((e) => { console.error(e); process.exit(1); });

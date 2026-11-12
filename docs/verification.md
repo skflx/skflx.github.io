@@ -17,6 +17,7 @@ node tools/lint-oksat.mjs [slug ...]       # OKSAT modules vs the quality spec (
 node tools/lint-oksat-guide.mjs [slug ...] # OKSAT guides vs the teaching-shape spec (no slug: all)
 node tools/lint-skills.mjs                 # house skills: structure, evals.json, registration
 node tools/test-ssb.mjs [--only a,b]       # SSB sections (names: SECTIONS in the file)
+node tools/test-a11y.mjs [--check]         # axe-core scan, every page, light and dark (report-only unless --check)
 ```
 
 CI always runs `check-data`, `lint-oksat`, `lint-oksat-guide` and the page
@@ -27,6 +28,8 @@ in no shard or two; a new section goes in the lightest shard, and the workflow
 matrix and the `/4` change with it. A push to `master`, or a change to the
 workflow or the shared harness, runs everything. Changes under
 `tools/ssb-pipeline/` start the SSB suite only if they touch `dissection.json`.
+
+The axe scan (`test-a11y.mjs`) is report-only in CI (`continue-on-error`). Its `--check` mode fails on any violation not in `tools/a11y-baseline.json` (rule, page, theme, node count); regenerate that file with `--write-baseline` only when a fix or an accepted exception changes it. It inspects the top document only.
 
 The browser suites need only a real Chromium: every page script is
 same-origin (React/htm are vendored), so they run without network. The only

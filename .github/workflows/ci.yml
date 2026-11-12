@@ -86,6 +86,12 @@ jobs:
       - name: Smoke-test every page
         run: node tools/smoke-pages.mjs
 
+      # axe-core scan, report-only: fails only on violations missing from
+      # tools/a11y-baseline.json. Advisory until the owner decides (docs/decisions.md §12).
+      - name: Accessibility scan (report-only)
+        continue-on-error: true
+        run: node tools/test-a11y.mjs --check
+
       - name: Search page behavior tests
         run: node tools/test-search.mjs
 

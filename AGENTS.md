@@ -25,7 +25,7 @@ The owner decides the roster for each wave. Protocol: `docs/delegation.md`.
 
 ## What this is
 
-A static GitHub Pages site (skflx.github.io): a personal one-pager for an otolaryngology resident plus a small set of self-contained clinical study tools. **There is no build step, no framework build, no bundler, ever.** Every page is plain HTML, CSS and vanilla JS served as-is. The only npm dependency is dev-only test tooling (`playwright`); nothing shipped touches `node_modules`.
+A static GitHub Pages site (skflx.github.io): a personal one-pager for an otolaryngology resident plus a small set of self-contained clinical study tools. **There is no build step, no framework build, no bundler, ever.** Every page is plain HTML, CSS and vanilla JS served as-is. The only npm dependencies are dev-only test tooling: `playwright`, and `axe-core` (pinned to 4.10.2 for the accessibility scan; pending owner approval, `docs/decisions.md` §12). Nothing shipped touches `node_modules`.
 
 ## Commands
 
@@ -39,6 +39,7 @@ node tools/stamp-assets.mjs      # rewrites stale stamps in every root *.html
 # Verify a change before pushing (also run in CI on every PR)
 node tools/check-data.mjs        # data + security invariants + asset stamps (deps-free, instant)
 node tools/smoke-pages.mjs       # every page boots, zero real console errors
+node tools/test-a11y.mjs         # axe-core accessibility scan, report-only (--check: fail on new violations vs tools/a11y-baseline.json)
 node tools/test-oksat-engine.mjs # engine behavior: answer-lock, SRS, review attempts, keyboard, navigation
 node tools/test-oksat-learn.mjs  # Interactive learning viewer: prompts, checkers, inline module questions, step/core, deck, hub, term popover
 node tools/test-search.mjs       # search.html and the CPT deep link, desktop and phone, real browser
