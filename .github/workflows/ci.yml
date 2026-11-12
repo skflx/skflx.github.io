@@ -40,10 +40,10 @@ jobs:
           shared='css/site\.css|js/site\.js|js/theme-boot\.js|tools/smoke-lib\.mjs|tools/console-allowlist\.json|package(-lock)?\.json|\.github/workflows/'
           match() { [ "$changed" = "ALL" ] || echo "$changed" | grep -Eq "^($1|$shared)"; echo $?; }
           flag() { if [ "$(match "$2")" = "0" ]; then echo "$1=true" >> "$GITHUB_OUTPUT"; else echo "$1=false" >> "$GITHUB_OUTPUT"; fi; }
-          # SSB: the page, its data, and the only files outside them test-ssb reads (the pipeline's
-          # dissection rules, the materials vocabulary in authoring-ssb.md). The rest of tools/ssb-pipeline/
+          # SSB: the page, its data, and the only files outside them test-ssb reads (the materials vocabulary
+          # in authoring-ssb.md). The rest of tools/ssb-pipeline/
           # never runs here; its outputs are committed under ssb/, which this already matches.
-          flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-content|ssb-fixture-ct)\.mjs|tools/ssb-pipeline/uw/dissection\.json|docs/authoring-ssb\.md'
+          flag ssb   'js/ssb/|ssb/|ssb\.html|css/ssb\.css|js/vendor/three|tools/(test-ssb|ssb-content|ssb-fixture-ct)\.mjs|docs/authoring-ssb\.md'
           flag oksat 'js/oksat/|images/oksat/|js/vendor/(react|htm)|css/oksat(-learn)?\.css|oksat(-study|-learn)?\.html|tools/test-oksat-(engine|learn)'
           cat "$GITHUB_OUTPUT"
 
@@ -115,18 +115,15 @@ jobs:
   ssb:
     needs: changes
     if: needs.changes.outputs.ssb == 'true'
-    name: ssb (shard ${{ matrix.shard }}/4)
+    name: ssb (shard ${{ matrix.shard }}/2)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@v4
-        with:
-          # The standard-specimen checks `git show` the as-scanned commit.
-          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -140,4 +137,4 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: SSB behavior tests
-        run: node tools/test-ssb.mjs --shard ${{ matrix.shard }}/4
+        run: node tools/test-ssb.mjs --shard ${{ matrix.shard }}/2

@@ -48,7 +48,7 @@ node tools/test-airway-resume.mjs # Airway Rounds saved games: per-tab saves, re
 node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
 node tools/lint-oksat-guide.mjs [slug]  # OKSAT guide teaching-shape lint (no slug: every guide; CI runs it)
 node tools/lint-skills.mjs       # house skills: structure, evals.json schema, registration
-node tools/test-ssb.mjs          # SSB: every section; --only a,b for some; CI runs it as --shard i/4
+node tools/test-ssb.mjs          # SSB: every section; --only a,b for some; CI runs it as --shard i/2
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 node tools/ssb-content.mjs --queue # SSB owner review queue: draft nodes whose cited sources are all verified
 
@@ -102,17 +102,16 @@ Unlisted (`noindex`; the only page that links to `ssb.html`; `OLSB.html` is also
 - `ssb.html`, `ssb/`: see SSB below.
 
 ### SSB — Sinus & Skull Base 3D (`ssb.html`)
-**Unlisted**: only `atlas.html` links to it. Two stages: the Specimen with the Endoscope (Scope, traversal), and the tree, search and panel (identifying structures). A 3D atlas of the sinuses and ventral skull base, driven by a typed knowledge graph (`ssb/content/`): every fact is a node with typed edges and sources, and geometry is keyed by the same ids. **Read `docs/ssb.md` before any SSB work** (architecture, URL keys in §7.3). Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; anatomy states beyond the standard head are designed in `docs/ssb.md` §14 (sources in `docs/realistic-anatomy.md`); content rules are `docs/authoring-ssb.md`.
+**Unlisted**: only `atlas.html` links to it. Two stages over one typed knowledge graph (`ssb/content/`), every fact a node with typed edges and sources, geometry keyed by the same ids: **Specimen** (pick, tree and search identify structures) and **Scope** (a rigid endoscope through the specimen, for traversal). **Read `docs/ssb.md` before any SSB work.** Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; content rules are `docs/authoring-ssb.md`.
 
 Rules that bite:
-- **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/`, `ssb/models/`, `ssb/states/`, `ssb/anatomy/`, `ssb/reference/*/figures.json` and `ssb/geometry/stations.json` come from `tools/ssb-pipeline/uw/` and `tools/ssb-pipeline/nasalseg/`. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
-- **Never write fixture files into `ssb/`.** Tests build synthetic data (`tools/ssb-fixture-ct.mjs`, routed by Playwright).
+- **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/`, `ssb/models/` and `ssb/reference/*/figures.json` come from `tools/ssb-pipeline/`. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
+- **Never write fixture files into `ssb/`.** Tests build synthetic data (`tools/ssb-fixture-ct.mjs`), routed by Playwright.
 - **Ids are never renamed; coordinates never go in content.** Every name in geometry is a graph id; parts are `<graph id>.<side>`. `tools/check-data.mjs` enforces both.
 - **Content is `review: "draft"`; only the owner sets `verified`** (medical correctness, `docs/decisions.md` §7). `verified` on a source means exists-as-cited, not supports-the-claim.
 - **Credit the UW atlas and its institution, never its authors by name** (`ssb/LICENSE-data.md`).
-- **Pinned rules.** Before tuning the flap overlay, rerun its section (`docs/ssb.md` §5.7).
-- **Page code** is ES modules in `js/ssb/`, on three.js vendored in `js/vendor/three-0.186.1/`. Materials are procedural from `--ssb-*` tokens (`js/ssb/materials.js`), never textures. After any change under `js/ssb/` or `ssb/`, run `node tools/stamp-assets.mjs` (it also regenerates `js/ssb/stamps.js`).
-- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`specimen`, `scope`, `mucosa`, `flap`, `anatomy`, `scanned`). The section names are in `docs/verification.md`. CI runs `--shard i/4`, split by `SHARDS` in the file: a new section goes in one shard.
+- **Page code** is ES modules in `js/ssb/`, on three.js vendored in `js/vendor/three-0.186.1/`. Materials are procedural from `--ssb-*` tokens (`js/ssb/materials.js`), never textures. After any change under `js/ssb/` or `ssb/`, run `node tools/stamp-assets.mjs`.
+- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`specimen`, `scope`). CI runs `--shard i/2`; `SHARDS` in the file holds the split.
 - **Image generation** runs outside the repo (`docs/ssb-imagegen.md`); generated pixels never carry an anatomical claim.
 
 ### sk.oto wiki

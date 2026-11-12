@@ -14,7 +14,7 @@
      the `look` a part carries (kind + flags), coloured from CSS tokens
      (--ssb-* in css/ssb.css) read at boot and again whenever html[data-theme]
      changes. A hazard site is hatched in the shader, never marked by colour
-     alone (docs/ssb.md 7.4). Quality is 'full' or 'lite': the #q= hash
+     alone (docs/ssb.md 6.4). Quality is 'full' or 'lite': the #q= hash
      override, else chosen from device hints at boot.
    - Rendering is on demand: a frame is drawn only when something changed
      (orbit, resize, theme, specimen), except during a camera flight.
@@ -27,7 +27,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { OrbitControls } from '../vendor/three-0.186.1/examples/jsm/controls/OrbitControls.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=f55b307c';
+import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=2789cac7';
 
 export { rasToScene };
 
@@ -266,7 +266,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     /* Aim the camera at `obj` from RAS direction `view.dir` (up `view.up`),
        far enough that `focus` ({ center: RAS, radius } in the object's frame)
        or else its bounding sphere fits the canvas. Always a cut, never a
-       flight — which also honours prefers-reduced-motion (docs/ssb.md 7.4). */
+       flight — which also honours prefers-reduced-motion (docs/ssb.md 6.4). */
     function frame(obj, view, focus) {
         resize();
         const sphere = new THREE.Sphere();

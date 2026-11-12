@@ -3,7 +3,7 @@
 
    Plain fields go in through textContent; the two content fields that may
    carry [[id]] / *em* / **strong** go through graph.renderText, which
-   escapes first (docs/ssb.md 7.6). A [[id]] link inside the panel selects
+   escapes first (docs/ssb.md 6.6). A [[id]] link inside the panel selects
    that entity. The pearls shown follow the depth (tier) setting.
 
    `annotate(id)` (optional) may return one more node for the entry's head: the
@@ -15,7 +15,7 @@
    On phones the panel is a bottom sheet (ssb.css): the handle button
    toggles data-sheet; on desktop that attribute is inert.
    ============================================================= */
-import { renderText, TYPE_LABEL, REGION_LABEL, KIND_LABEL } from './graph.js?v=7e5865a2';
+import { renderText, TYPE_LABEL, REGION_LABEL, KIND_LABEL } from './graph.js?v=4c9ee329';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

@@ -141,15 +141,17 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen with the Endoscope (Scope), and the tree, search and panel for identifying structures. The flap overlay, the anatomy bases and the mucosal states are kept.
+**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen (pick, tree and search identify structures) and the Scope (the endoscope, traversal). Phase 2 removed the flap overlay, the mucosal and anatomy states, the population data and the dissection states; the page loads only what the two stages draw (`docs/ssb.md` §5, §6.1).
 
 **Gaps, owner decisions needed:**
-- The Mucosa pills (`mu=`) change the store only. Nothing loads a mucosal state pack now, so they show no change. Keep the pills (and the state loader) for the mucosal work, or remove them.
-- `geo-specimen.js` `loadState`/`unloadState`, `mode-specimen.js` `setState` and `dissect`, `mode-endoscope.js` `setStateVolume`, `setViews` and `viewChain` have no caller in core. They are the mucosal-state path and stay until that decision.
-- `materials.js` keeps the hazard hatch and the ghost look, now reached by nothing in core.
+- `ssb/reference/` (the UW atlas crosswalk, figures, slices and relations) is not loaded by the page. Keep it as the source of the reference labels, or delete it.
+- `ssb/geometry/stations.json` still carries the `byState` tables (keys are removed dissection states), `overviews` and `uncovered`; `ssb/geometry/charts.json`, `*.meta.json` and the `lining-<key>` packs were deleted. The generated files and the `tools/ssb-pipeline/` scripts that wrote them still do, and need a pipeline change to match.
+- `materials.js` keeps the `ghost` kind and its token, reached by nothing in the page now (the population ghost is gone).
+- `docs/realistic-anatomy.md` and `plans/` describe the removed anatomy states.
+- `content`: the procedure, hazard, principle and condition collections are still shown in the tree.
 
 **Next:** status is GitHub issue #266 and its sub-issues; the spec is
-`plans/2026-10-07-ssb-roadmap.md`. Realistic anatomy's design is `docs/ssb.md` §14.
+`plans/2026-10-07-ssb-roadmap.md`.
 
 ---
 
@@ -177,7 +179,7 @@ temporal-bone seed set is owner-vetted.
 ## Verification
 
 **State:** suites are listed in `docs/verification.md`; CI runs the fast tier on
-every PR and the SSB suite as four shards. Security model: `docs/security.md`.
+every PR and the SSB suite as two shards. Security model: `docs/security.md`.
 
 **Next:** GitHub Pages cannot send headers, so `frame-ancestors` and HSTS are out of
 reach without a proxy host. Whether that matters is the owner's call.

@@ -1,5 +1,5 @@
 /* =============================================================
-   materials.js — the procedural tissue-material library (docs/ssb.md 7.4).
+   materials.js — the procedural tissue-material library (docs/ssb.md 6.4).
 
    One factory per tissue kind of the graph's `kind` vocabulary
    (docs/authoring-ssb.md 6): bone, bone-cut, mucosa, skin, cartilage, dura, fat,
@@ -32,7 +32,7 @@
      change (the #q= hash key) recompiles in place.
    - Nothing is animated: no time uniform, no continuous render. The
      library never asks for a frame, so prefers-reduced-motion needs no
-     special case (docs/ssb.md 7.4).
+     special case (docs/ssb.md 6.4).
    - A hazard site is hatched in the shader over whatever the tissue looks
      like (relief and gloss are flattened under the stripes), never by
      colour alone (the HUD names it).

@@ -22,12 +22,12 @@ node tools/test-a11y.mjs [--check]         # axe-core scan, every page, light an
 
 CI always runs `check-data`, `lint-oksat`, `lint-oksat-guide` and the page
 smoke test. The OKSAT engine and learning suites run when their files change;
-the SSB suite runs as four parallel jobs (`node tools/test-ssb.mjs --shard i/4`).
+the SSB suite runs as two parallel jobs (`node tools/test-ssb.mjs --shard i/2`).
 `SHARDS` in `tools/test-ssb.mjs` holds the split and refuses a section that is
 in no shard or two; a new section goes in the lightest shard, and the workflow
-matrix and the `/4` change with it. A push to `master`, or a change to the
+matrix and the `/2` change with it. A push to `master`, or a change to the
 workflow or the shared harness, runs everything. Changes under
-`tools/ssb-pipeline/` start the SSB suite only if they touch `dissection.json`.
+`tools/ssb-pipeline/` do not start the SSB suite.
 
 The axe scan (`test-a11y.mjs`) is report-only in CI (`continue-on-error`). Its `--check` mode fails on any violation not in `tools/a11y-baseline.json` (rule, page, theme, node count); regenerate that file with `--write-baseline` only when a fix or an accepted exception changes it. It inspects the top document only.
 
@@ -247,51 +247,28 @@ the test names what it pins, and the human checks are listed here.
   in text; a `verified` entity must cite only `verified` sources. Drafting one
   region file: `--allow-dangling <file>` turns unresolved refs into warnings.
   It cannot check medical correctness or whether a source supports its claim.
-- **Dissection states** (offline; needs `pip install scipy scikit-image
-  fast-simplification`): `python3 tools/ssb-pipeline/uw/dissect.py` prints the
-  unit table (voxels against `dissection.json`'s `measured`, within 5 %) and carve,
-  guard and budget figures; a rerun is byte-identical. `check-data` checks the
-  `dissection.json` ↔ graph rule and each label against `labels.json`.
 - **Materials** (`js/ssb/materials.js`): every kind in the vocabulary of
   `docs/authoring-ssb.md` compiles and draws without WebGL error at `#q=full` and
   `#q=lite`; programs are shared per kind; a hostile `q` is ignored; every colour
   token exists for both themes in `css/ssb.css`.
-- **Mucosal state** (`--only mucosa`, `docs/ssb.md` §5.9): the decongested patch
-  changes only erectile tissue, adds no bone voxels, keeps the midplane, and raises
-  the measured cross-section by 1.35–1.45; the congested patch stays within 0.04
-  of POP1's median. Human check: how the lining looks.
 - **Endoscope** (`js/ssb/scope.js`, `--only scope`, `docs/ssb.md` §3): scope
   geometry (lens angle, orthonormal image-up through the zenith, tip at depth 0);
   the `#scope=` codec; the camera equals the pose; keys, drag and wheel move the
   pose with the right signs; collision clamps to the last free 0.5 mm sample; the
-  midline rule (E3b) holds in air and on the real specimen; the searches on the
-  real specimen (a 1° grid) return the pinned poses. Station flights (E6) are
-  checked in Node on every station in `ssb/geometry/stations.json`: free, tip in
-  air, target within 35° of the view, `.L` the mirror of `.R`. A station that
-  fails is reported to the orchestrator, never edited. `python3 tools/ssb-pipeline/uw/stations.py check`
-  re-tests the file. Human check: a screenshot of `#scope=R,45,6,4,0,0`.
-- **Specimen** (`--only specimen`, `docs/ssb.md` §3): every pack is a
-  quantized glTF whose nodes match `ssb/models/packs.json`, named `<graph id>.<side>`;
-  every mesh lies in the CT bounds; laterality holds three ways (data, scene,
-  screen); picking and the shared cursor agree with an independent ray cast within
-  1 mm; the section plane clips on the cursor. The standard specimen is
-  mirror-symmetric about R = 0 (`standardSpecimenTests`, read with `git show` at
-  the commit `ct.json` names). The open lining (`liningTests`) and the floor mucosa
-  are pinned on their charts. Human check: `--shots` writes `spec-*.png`.
-- **Anatomy states** (`--only anatomy`, `docs/ssb.md` §5.11): the suite builds its
-  own patches and index inside the test; a patch changes exactly its box; refusals
-  and the hash whitelist hold; with no index, Variants and Pathology are hidden.
-- **Scanned base** (`--only scanned`, `docs/ssb.md` §5.11): the scanned specimen loads
-  its own packs, each placed where its data says, with laterality on screen and the
-  registry of its nodes checked against an independent read of `ssb/anatomy/scanned/models`.
-- **Flap overlay** (`--only flap`, `docs/ssb.md` §5.7): areas against an
-  independent point-in-polygon and Heron sum (2 %); the short < full < extended
-  ladder; the `#flap=` codec on hostile input. The suite prints each design's area per side.
+  midline rule holds in air and on the real specimen; the searches on the real
+  specimen (a 1° grid) return the pinned poses. Station flights are checked in
+  Node on every station in `ssb/geometry/stations.json`: free, tip in air, target
+  within 35° of the view, `.L` the mirror of `.R`. A station that fails is reported
+  to the orchestrator, never edited. Human check: a screenshot of `#scope=R,45,6,4,0,0`.
+- **Specimen** (`--only specimen`, `docs/ssb.md` §3): every pack is a quantized
+  glTF whose nodes match `ssb/models/packs.json`, named `<graph id>.<side>`; every
+  mesh lies in the CT bounds; laterality holds three ways (data, scene, screen);
+  picking and the shared cursor agree with an independent ray cast within 1 mm;
+  the section plane clips on the cursor. The standard specimen is mirror-symmetric
+  about R = 0 (`standardSpecimenTests`); the open lining (`liningTests`) is pinned
+  on its own packs. Human check: `--shots` writes `spec-*.png`.
 - **Reconstruction** (`tools/ssb-pipeline/uw/`) is offline and never runs in CI.
-  Its proof is the overlay PNGs each stage writes and
-  `ssb/reference/specimen-relations.json`. `check-data` pins only that every name in
-  the specimen data is a graph id; the figure inventory (`uw/figures.py`) is judged
-  on the overlay check images at a checkpoint.
+  `check-data` pins only that every name in the specimen data is a graph id.
 - `node tools/test-ssb.mjs --shots <dir>` writes desktop and phone screenshots for a
   visual check. How a material looks is a human check: compare `full` with `lite` in a scratch page.
 

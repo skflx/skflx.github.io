@@ -3,12 +3,12 @@
 
    Structures are grouped by region, then kind; every other entity type is a
    flat group under "Everything else", so every fact in the graph is
-   reachable here as well as through search and links (docs/ssb.md 7.5).
+   reachable here as well as through search and links (docs/ssb.md 6.5).
    Entities above the current depth (tier) are left out. Groups are native
    <details>; selecting an entity opens its ancestors and marks it
    aria-current.
    ============================================================= */
-import { OTHER_GROUPS, REGION_LABEL, REGION_ORDER, KIND_LABEL, KIND_ORDER } from './graph.js?v=7e5865a2';
+import { OTHER_GROUPS, REGION_LABEL, REGION_ORDER, KIND_LABEL, KIND_ORDER } from './graph.js?v=4c9ee329';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);

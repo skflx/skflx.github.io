@@ -198,7 +198,7 @@ function checkEnums(key, e, where, err) {
 
 /* Geometry must name graph entities: every "<id>.<side>" in the specimen's
    model packs, label table, landmarks and sweeps resolves to an id in the graph
-   (docs/ssb.md §9, geometry ↔ graph). Returns error strings. */
+   (docs/ssb.md §8, geometry ↔ graph). Returns error strings. */
 const GEO_REF = /^((?:s|lm|v|c|m|h|pr|p|t|pw|dz)\.[a-z0-9]+(?:-[a-z0-9]+)*)\.(R|L|M)$/;
 export function validateGeometry(index, root = ROOT) {
   const errors = [];

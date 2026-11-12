@@ -42,7 +42,7 @@ geometry and cross-checked against anatomy, with the method and uncertainty in
 `registration.json`. Segmentation is semi-automatic, grown from UW's arrow tips; it is
 `draft` like the rest of SSB, and the reconstruction method sets its limits. The scan has no
 contrast. Vessels and nerves show only where bone encloses them, or where orbital fat outlines
-them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` marks those points.
+them. Elsewhere their course is inferred, and the pipeline marks those points in its own output.
 
 ### Derived files
 
@@ -50,32 +50,13 @@ them. Elsewhere their course is inferred, and `ssb/geometry/sweeps.meta.json` ma
 |---|---|---|
 | `ssb/ct/ct.u8.gz`, `ssb/ct/ct.json` | the axial display volume resampled to 0.5 mm in the RAS frame (`docs/ssb.md` §4), cropped to the sinonasal / ventral skull base region, external face masked except the nose | `tools/ssb-pipeline/uw/specimen.py`, then `normalize.py` (the nose is unmasked from the raw stack by `nose.py`) |
 | `ssb/ct/labels.u16.gz`, `ssb/geometry/labels.json` | named air spaces on the same grid | `specimen.py` |
-| `ssb/geometry/landmarks.json`, `landmarks.meta.json` | landmark coordinates, RAS mm, with method per point | `specimen.py` |
+| `ssb/geometry/landmarks.json` | landmark coordinates, RAS mm | `specimen.py` |
 | `ssb/models/*.glb.gz`, `ssb/models/packs.json` | surfaces of the named air spaces and the bony envelope; the `walls` pack: bone resection units, septum, turbinates and orbital contents | `tools/ssb-pipeline/uw/meshes.py` |
 | `ssb/ct/labels.u16.gz` (indices from 19 on), `ssb/geometry/labels.json` | walls, septum, turbinates and orbits, added on voxels no air space holds | `tools/ssb-pipeline/uw/walls.py` |
-| `ssb/geometry/sweeps.json`, `sweeps.meta.json` | centrelines and radii of the ICA, optic, maxillary, vidian and infraorbital nerves, nasolacrimal duct, sphenopalatine and ethmoidal arteries; per point whether it was detected in the CT, labelled by UW or inferred | `tools/ssb-pipeline/uw/sweeps.py` |
+| `ssb/geometry/sweeps.json` | centrelines and radii of the ICA, optic, maxillary, vidian and infraorbital nerves, nasolacrimal duct, sphenopalatine and ethmoidal arteries | `tools/ssb-pipeline/uw/sweeps.py` |
 | `ssb/ct/sdf-*.u8.gz`, the `sdf` key of `ssb/ct/ct.json` | distance fields (mm) to the ICA, optic nerve, AEA, anterior skull base and orbit | `tools/ssb-pipeline/uw/sdf.py` |
-| `ssb/models/soft.glb.gz`, `ssb/geometry/charts.json`, `lm.choanal-arch.M` and `lm.naris.R/.L` in `ssb/geometry/landmarks.json` | the septal mucosa surfaces (the nasal cavities' lining facing the septum unit) and their sagittal charts; two landmarks derived from the labels and the volume (the nostrils are schematic offsets, method in `landmarks.meta.json`) | `tools/ssb-pipeline/uw/softtissue.py` |
-| `ssb/states/*.ssbp.gz`, `ssb/states/index.json`, `ssb/models/lining-<key>.glb.gz` | dissection states: patches to the standard specimen's CT display and labels, and the airway lining of each state, evaluated from the rules in `tools/ssb-pipeline/uw/dissection.json` (specimen, dissected: rule-based cuts, schematic) | `tools/ssb-pipeline/uw/dissect.py` (P1b) |
+| `ssb/models/soft.glb.gz`, `lm.choanal-arch.M` and `lm.naris.R/.L` in `ssb/geometry/landmarks.json` | the septal mucosa surfaces (the nasal cavities' lining facing the septum unit); two landmarks derived from the labels and the volume (the nostrils are schematic offsets) | `tools/ssb-pipeline/uw/softtissue.py` |
 | `ssb/models/nose.glb.gz`, `s.nasal-vestibule.<side>` in `ssb/ct/labels.u16.gz` and the `core` pack, `s.internal-nasal-valve.<side>` in `ssb/geometry/landmarks.json`, the `standard.nose` block of `ssb/ct/ct.json` | the specimen's own nose: the skin surface (tissue against outside air between the alar-facial grooves), the vestibule label, the internal valve (the narrowest coronal section of the airway) | `tools/ssb-pipeline/uw/nose.py`, `normalize.py` (ST6) |
-| `ssb/anatomy/scanned/{ct,geometry,models}/**`, `ssb/anatomy/index.json` (its `scanned` entry) | the same UW head as scanned (not mirrored, septum not centred, nose not centred): the volume, labels, landmarks, packs, distance fields and the soft-tissue products that passed their gates, with the products that failed listed as `absent` in the index entry. Derived from the same atlas stacks as the rows above (Interactive CT Sinus Anatomy, University of Washington Radiology); the entry's volumes and asymmetry indices are printed by the pipeline and compared with `ssb/anatomy/population/nasalseg.json` | `tools/ssb-pipeline/uw/normalize.py --base scanned` (RA3b) |
 | `ssb/reference/specimen-relations.json` | the graph's spatial claims tested against this specimen (numbers only) | `tools/ssb-pipeline/uw/relate3d.py` |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.
-
-## Population statistics `nasalseg`
-
-**Source.** *NasalSeg Dataset for Nasal Cavity and Paranasal Sinuses Segmentation from CT
-Images*, v2 (Zenodo, 2024-10-05, doi:10.5281/zenodo.13893419), described in *Scientific
-Data* (2024, doi:10.1038/s41597-024-04176-1). Creators: Zhang Y, Wang J, Pan T, Jiang Q, Ge J,
-Guo X, Jiang C, Lu J, Zhang J, Liu X, Tian M, Qi Y, Cheng Y, Zuo C.
-
-**Licence.** CC BY 4.0. Use approved by the owner, 2026-10-07 (`docs/realistic-anatomy.md`
-§13, RA-O6). No scan is redistributed; the archive stays in the gitignored drop zone.
-
-**Attribution** (show wherever these statistics are displayed): *Population data from the
-NasalSeg dataset (Zhang et al., 2024; CC BY 4.0), doi:10.5281/zenodo.13893419.*
-
-| File | What | Made by |
-|---|---|---|
-| `ssb/anatomy/population/nasalseg.json` | per-subject air volumes, extents, lining and completeness measures of the maxillary sinuses and nasal cavities; asymmetry summaries; the archive checks (duplicates, header corrections); head A placed in the distribution | `tools/ssb-pipeline/nasalseg/stats.py` with the visual review `tools/ssb-pipeline/nasalseg/review.json` |

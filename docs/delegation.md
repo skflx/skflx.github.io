@@ -16,7 +16,7 @@ A WP goes to the executor only when all of these hold:
 2. **Its acceptance is a command.** A test in `tools/test-*.mjs` (existing, or specified precisely
    enough to write), `check-data.mjs`, or a number the pipeline prints. "Looks right" is a
    checkpoint item, not an acceptance criterion.
-3. **It needs no open owner decision** (`docs/ssb.md` §13, `plans/2026-10-07-ssb-roadmap.md` §1).
+3. **It needs no open owner decision** (`docs/ssb.md` §12, `plans/2026-10-07-ssb-roadmap.md` §1).
 4. **Its read list fits.** The WP names the sections to read, not whole documents.
 
 If one fails, the WP is the orchestrator's, or it is split: the orchestrator does the judgment half,

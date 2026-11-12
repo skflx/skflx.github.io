@@ -14,12 +14,11 @@
    { frames, selection, caps, hash, specimen, scope, materials } (specimen, scope: the
    stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=7e5865a2';
-import { createStore, parseHash } from './state.js?v=c97ad27b';
-import { mountTree } from './ui-tree.js?v=3a9a4cd0';
-import { mountSearch } from './ui-search.js?v=42fff8a8';
-import { mountPanel } from './ui-panel.js?v=f52ad421';
-import { loadAnatomyIndex } from './volume.js?v=b0877fd4';
+import { loadGraph } from './graph.js?v=4c9ee329';
+import { createStore, parseHash } from './state.js?v=29c16ab3';
+import { mountTree } from './ui-tree.js?v=2f18f5d0';
+import { mountSearch } from './ui-search.js?v=870f10a8';
+import { mountPanel } from './ui-panel.js?v=5414ebd7';
 
 const $ = (id) => document.getElementById(id);
 
@@ -77,8 +76,6 @@ async function bootGraph() {
     }
 
     store = createStore({ has: graph.has, tierOf: graph.tierOf, hash: location.hash });
-    /* The anatomy index is read once; the store then whitelists the link's anatomy against it (no index: the standard head). */
-    loadAnatomyIndex().then((doc) => store.setAnatomyRegistry(doc));
     mountTree({ root: $('ssb-tree'), graph, store });
     mountSearch({ input: $('ssb-search'), results: $('ssb-results'), tree: $('ssb-tree'), graph, store });
     panelApi = mountPanel({
@@ -129,7 +126,7 @@ function wireNav() {
     toggle.setAttribute('aria-expanded', 'false');
 }
 
-/* The hash is the shareable state (docs/ssb.md 7.3). Selecting pushes a
+/* The hash is the shareable state (docs/ssb.md 6.3). Selecting pushes a
    history entry (Back returns to the last selection); a depth change, or a
    change that came from the URL itself, replaces. */
 function wireUrl() {
@@ -154,7 +151,7 @@ function wireUrl() {
 }
 
 /* The #q= override follows the store (a hand edit or Back/Forward re-applies
-   it); null means the device's own choice (docs/ssb.md 7.4). The stage may
+   it); null means the device's own choice (docs/ssb.md 6.4). The stage may
    not exist yet: bootStage reads the same key straight from the hash. */
 function wireQuality() {
     let seen = store.get().quality;
@@ -205,7 +202,7 @@ async function bootStage() {
         return;
     }
     try {
-        const { createScene } = await import('./scene.js?v=096d9d8a');
+        const { createScene } = await import('./scene.js?v=0c25fb2b');
         stage = createScene({
             canvas: $('ssb-canvas'), host, labels: $('ssb-labels'),
             quality: parseHash(location.hash, () => false).quality || null,
@@ -225,7 +222,7 @@ async function bootStage() {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=0430c001'), import('./ui-specimen.js?v=3ae70db4')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=8a469610'), import('./ui-specimen.js?v=a99774b6')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },
@@ -248,7 +245,7 @@ async function bootSpecimen(graph, stageHandle) {
    here leaves the specimen working and the Scope pill disabled. */
 async function bootEndoscope(graph, stageHandle) {
     try {
-        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=05a97f50'), import('./ui-endoscope.js?v=8b4a9720')]);
+        const [{ mountEndoscope }, { mountEndoscopeControls }] = await Promise.all([import('./mode-endoscope.js?v=13b1c72c'), import('./ui-endoscope.js?v=f6352c24')]);
         endo = mountEndoscope({ stage: stageHandle, store, graph, specimen });
         mountEndoscopeControls({ body: $('ssb-spec-body'), stageHost: $('ssb-stage'), endo, store, stageSwitch: $('ssb-stage-mode') });
     } catch (e) {

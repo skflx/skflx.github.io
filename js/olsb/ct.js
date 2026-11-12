@@ -12,7 +12,7 @@
    over the slice. The model is built only when first turned on: in a short-lived worker from the volume.js script,
    else on this thread. A failed build turns the toggle back off without a message.
    ============================================================= */
-import { loadVolume, stamped, PLANES } from '../ssb/volume.js?v=b0877fd4';
+import { loadVolume, stamped, PLANES } from '../ssb/volume.js?v=4837556e';
 
 const ROOT = 'tbone';
 const O = window.OLSB || { glossary: {} };

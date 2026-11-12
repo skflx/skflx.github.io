@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <!-- Self-contained: every fetch (ssb/**, js/**) is same-origin (docs/ssb.md section 8). -->
+    <!-- Self-contained: every fetch (ssb/**, js/**) is same-origin (docs/ssb.md section 7). -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>SSB Sinus &amp; Skull Base 3D | skflx.MD</title>
@@ -12,7 +12,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=be7fe5cd">
-    <link rel="stylesheet" href="css/ssb.css?v=dc8f99c3">
+    <link rel="stylesheet" href="css/ssb.css?v=c7d488cb">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -40,13 +40,6 @@
                 <label class="visually-hidden" for="ssb-search">Search structures, conditions and procedures</label>
                 <input class="ssb-search" id="ssb-search" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search"
                     placeholder="Search: uncinate, Keros, AEA&hellip;">
-                <div class="ssb-anatomy" id="ssb-anatomy" role="group" aria-label="Anatomy">
-                    <span class="site-kicker">Anatomy</span>
-                    <button class="site-pill active" type="button" data-anat="standard" aria-pressed="true" disabled title="The standardized head: one head&rsquo;s right half, mirrored, septum centred">Symmetric</button>
-                    <button class="site-pill" type="button" data-anat="scanned" aria-pressed="false" disabled title="The head as scanned, with its own asymmetry (not in this build yet)">Normal asymmetry</button>
-                    <button class="site-pill" type="button" data-anat="variants" aria-pressed="false" disabled hidden title="Anatomic variants">Variants</button>
-                    <button class="site-pill" type="button" data-anat="pathology" aria-pressed="false" disabled hidden title="Pathology">Pathology</button>
-                </div>
             </div>
             <div class="ssb-nav-scroll">
                 <div id="ssb-results" hidden></div>
@@ -94,7 +87,7 @@
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=998fc6e6"></script>
+    <script type="module" src="js/ssb/main.js?v=166bdbba"></script>
     <script src="js/site.js?v=19c561b2"></script>
 </body>
 </html>

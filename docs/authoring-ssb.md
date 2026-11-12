@@ -114,7 +114,7 @@ Required fields in **bold**.
 | Surgical | `landmark-for` (`to` may be a p-id) |
 
 Spatial edges are testable claims: once landmarks carry coordinates, the
-validator checks them against the geometry (`docs/ssb.md` §9).
+validator checks them against the geometry (`docs/ssb.md` §8).
 
 ## 7. Editorial rules
 

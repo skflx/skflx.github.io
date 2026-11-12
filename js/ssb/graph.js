@@ -6,10 +6,10 @@
    indexes entities by id, answers name/synonym/eponym search, and turns a
    content string into markup. Schema: docs/authoring-ssb.md.
 
-   Imports stamps.js only (docs/ssb.md 7.1). Everything here is pure data
+   Imports stamps.js only (docs/ssb.md 6.1). Everything here is pure data
    and strings; the DOM is never touched.
    ============================================================= */
-import { STAMPS } from './stamps.js?v=b2969855';
+import { STAMPS } from './stamps.js?v=76b70d32';
 
 /* Collection key -> id prefix (docs/authoring-ssb.md section 3). */
 export const COLLECTIONS = {
@@ -175,7 +175,7 @@ function inline(escaped) {
         .replace(/\*([^*\s](?:[^*]*[^*\s])?)\*/g, '<em>$1</em>');
 }
 
-/* Content string -> markup (docs/ssb.md 7.6). Escape first; only then the
+/* Content string -> markup (docs/ssb.md 6.6). Escape first; only then the
    two allowed inline forms. [[id]] / [[id|label]] become link buttons for
    ids that exist (the id charset is [a-z0-9.-], so it is safe in the
    attribute); an unknown id is plain text. Emphasis never spans a link. */
