@@ -1,0 +1,1013 @@
+[
+  {
+    "term": "\"bubbly\"/\"foamy\" sinus secretions",
+    "match": "none",
+    "ids": [],
+    "note": "General inflammatory-sinus-disease CT finding; SSB graph does not model non-surgical disease appearances."
+  },
+  {
+    "term": "C1 ring",
+    "match": "partial",
+    "ids": [
+      "s.anterior-arch-of-atlas"
+    ],
+    "note": "Graph models only the anterior arch of C1, not the ring as a whole."
+  },
+  {
+    "term": "Onodi air cell (sphenoethmoidal cell)",
+    "match": "exact",
+    "ids": [
+      "v.sphenoethmoidal-cell"
+    ],
+    "note": "Graph's own syn list includes \"Onodi cell\"."
+  },
+  {
+    "term": "acute sinusitis",
+    "match": "none",
+    "ids": [],
+    "note": "General inflammatory-disease entity, out of the current surgical-anatomy scope."
+  },
+  {
+    "term": "agger nasi cell",
+    "match": "exact",
+    "ids": [
+      "s.agger-nasi-cell"
+    ]
+  },
+  {
+    "term": "aggressive sinusitis with bony erosion",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "air-fluid level",
+    "match": "none",
+    "ids": [],
+    "note": "Imaging finding of acute sinusitis, not modeled."
+  },
+  {
+    "term": "alveolar ridge",
+    "match": "none",
+    "ids": [],
+    "note": "Dental/alveolar anatomy is out of scope."
+  },
+  {
+    "term": "anterior clinoid",
+    "match": "exact",
+    "ids": [
+      "s.anterior-clinoid-process"
+    ],
+    "note": "Same structure as \"anterior clinoid process\"."
+  },
+  {
+    "term": "anterior clinoid process",
+    "match": "exact",
+    "ids": [
+      "s.anterior-clinoid-process"
+    ]
+  },
+  {
+    "term": "anterior ethmoid",
+    "match": "exact",
+    "ids": [
+      "s.anterior-ethmoid-cells"
+    ]
+  },
+  {
+    "term": "anterior ethmoid air cells",
+    "match": "exact",
+    "ids": [
+      "s.anterior-ethmoid-cells"
+    ]
+  },
+  {
+    "term": "anterior ethmoidal artery canal",
+    "match": "exact",
+    "ids": [
+      "s.anterior-ethmoidal-canal"
+    ],
+    "note": "Graph syn list includes \"anterior ethmoidal canal\"."
+  },
+  {
+    "term": "anterior process maxilla",
+    "match": "synonym",
+    "ids": [
+      "s.frontal-process-maxilla"
+    ],
+    "note": "UW's \"anterior process of the maxilla\" is the frontal (ascending) process of the maxilla."
+  },
+  {
+    "term": "antrochoanal polyp",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "articular eminence",
+    "match": "none",
+    "ids": [],
+    "note": "TMJ anatomy is out of scope."
+  },
+  {
+    "term": "basal lamella of middle turbinate",
+    "match": "exact",
+    "ids": [
+      "s.basal-lamella"
+    ]
+  },
+  {
+    "term": "basiocciput",
+    "match": "partial",
+    "ids": [
+      "s.clivus"
+    ],
+    "note": "Basiocciput fuses into the lower clivus in the adult skeleton; not separately modeled."
+  },
+  {
+    "term": "basisphenoid",
+    "match": "partial",
+    "ids": [
+      "s.sphenoid-bone",
+      "s.clivus"
+    ],
+    "note": "Basisphenoid fuses into the sphenoid body/clivus; not separately modeled."
+  },
+  {
+    "term": "brain abscess (sinugenic)",
+    "match": "none",
+    "ids": [],
+    "note": "Intracranial complication of sinusitis, not modeled."
+  },
+  {
+    "term": "bulla ethmoidalis",
+    "match": "exact",
+    "ids": [
+      "s.ethmoid-bulla"
+    ],
+    "note": "Graph syn list includes \"bulla ethmoidalis\" verbatim."
+  },
+  {
+    "term": "carotid canal / carotid prominence",
+    "match": "synonym",
+    "ids": [
+      "s.carotid-prominence"
+    ],
+    "note": "UW's \"CC\" on the sphenoid-level axial view most likely denotes the bony carotid impression (prominence), not a separately named canal id."
+  },
+  {
+    "term": "cavernous sinus",
+    "match": "exact",
+    "ids": [
+      "s.cavernous-sinus"
+    ]
+  },
+  {
+    "term": "cavernous sinus thrombosis",
+    "match": "none",
+    "ids": [],
+    "note": "Graph models surgical bleeding hazards of the cavernous sinus, not thrombophlebitis as a disease."
+  },
+  {
+    "term": "clivus",
+    "match": "exact",
+    "ids": [
+      "s.clivus"
+    ]
+  },
+  {
+    "term": "cochlea",
+    "match": "none",
+    "ids": [],
+    "note": "Otologic structure, out of scope."
+  },
+  {
+    "term": "concha bullosa (pneumatized middle turbinate)",
+    "match": "exact",
+    "ids": [
+      "v.concha-bullosa"
+    ]
+  },
+  {
+    "term": "coronal suture",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault suture, out of scope for this ventral skull-base/sinus graph."
+  },
+  {
+    "term": "coronoid process",
+    "match": "none",
+    "ids": [],
+    "note": "Mandibular anatomy is out of scope."
+  },
+  {
+    "term": "cribriform plate",
+    "match": "exact",
+    "ids": [
+      "s.cribriform-plate"
+    ]
+  },
+  {
+    "term": "crista galli",
+    "match": "exact",
+    "ids": [
+      "s.crista-galli"
+    ]
+  },
+  {
+    "term": "dehiscent carotid canal",
+    "match": "exact",
+    "ids": [
+      "v.ica-dehiscence"
+    ],
+    "note": "Graph phrases it as \"Dehiscent ICA in the sphenoid sinus\" (artery-level), same finding."
+  },
+  {
+    "term": "dehiscent optic canal",
+    "match": "exact",
+    "ids": [
+      "v.optic-canal-dehiscence"
+    ]
+  },
+  {
+    "term": "dorsum sella",
+    "match": "exact",
+    "ids": [
+      "s.dorsum-sellae"
+    ]
+  },
+  {
+    "term": "epidural abscess",
+    "match": "none",
+    "ids": [],
+    "note": "Intracranial complication of sinusitis, not modeled."
+  },
+  {
+    "term": "ethmoid bone, vertical plate",
+    "match": "exact",
+    "ids": [
+      "s.perpendicular-plate"
+    ]
+  },
+  {
+    "term": "ethmoid bulla",
+    "match": "exact",
+    "ids": [
+      "s.ethmoid-bulla"
+    ]
+  },
+  {
+    "term": "ethmoid infundibulum",
+    "match": "exact",
+    "ids": [
+      "s.ethmoid-infundibulum"
+    ]
+  },
+  {
+    "term": "ethmoid plate",
+    "match": "synonym",
+    "ids": [
+      "s.perpendicular-plate"
+    ],
+    "note": "UW uses \"ethmoid plate\" loosely for the perpendicular/vertical plate seen at the septum on coronal/axial views."
+  },
+  {
+    "term": "ethmoid sinus",
+    "match": "exact",
+    "ids": [
+      "s.ethmoid-labyrinth"
+    ],
+    "note": "Graph's canonical name is \"Ethmoid labyrinth (ethmoid sinus)\", syn \"ethmoid sinus\"."
+  },
+  {
+    "term": "foramen ovale",
+    "match": "exact",
+    "ids": [
+      "s.foramen-ovale"
+    ]
+  },
+  {
+    "term": "foramen rotundum",
+    "match": "exact",
+    "ids": [
+      "s.foramen-rotundum"
+    ]
+  },
+  {
+    "term": "foramen spinosum",
+    "match": "none",
+    "ids": [],
+    "note": "Not modeled in the current graph."
+  },
+  {
+    "term": "fovea ethmoidalis",
+    "match": "exact",
+    "ids": [
+      "s.fovea-ethmoidalis"
+    ]
+  },
+  {
+    "term": "frontal bone",
+    "match": "exact",
+    "ids": [
+      "s.frontal-bone"
+    ]
+  },
+  {
+    "term": "frontal recess",
+    "match": "exact",
+    "ids": [
+      "s.frontal-recess"
+    ]
+  },
+  {
+    "term": "frontal sinus",
+    "match": "exact",
+    "ids": [
+      "s.frontal-sinus"
+    ]
+  },
+  {
+    "term": "frontal sinus drainage pathway",
+    "match": "synonym",
+    "ids": [
+      "s.frontal-recess"
+    ],
+    "note": "Graph's own syn list for s.frontal-recess includes \"frontal sinus drainage pathway\" and \"FSDP\"."
+  },
+  {
+    "term": "frontal sinus ostium",
+    "match": "exact",
+    "ids": [
+      "s.frontal-ostium"
+    ]
+  },
+  {
+    "term": "greater palatine foramen",
+    "match": "exact",
+    "ids": [
+      "s.greater-palatine-canal",
+      "lm.greater-palatine-foramen"
+    ],
+    "note": "Modeled both as the canal/foramen structure and as a dissection landmark."
+  },
+  {
+    "term": "greater sphenoid wing",
+    "match": "exact",
+    "ids": [
+      "s.greater-wing-of-sphenoid"
+    ]
+  },
+  {
+    "term": "hiatus semilunaris",
+    "match": "exact",
+    "ids": [
+      "s.hiatus-semilunaris"
+    ]
+  },
+  {
+    "term": "hypoglossal canal",
+    "match": "exact",
+    "ids": [
+      "s.hypoglossal-canal"
+    ]
+  },
+  {
+    "term": "hypoplastic frontal sinus",
+    "match": "exact",
+    "ids": [
+      "v.frontal-sinus-aplasia"
+    ],
+    "note": "Graph entity name is \"Frontal sinus aplasia or hypoplasia\", covers both degrees."
+  },
+  {
+    "term": "hypoplastic maxillary sinus",
+    "match": "exact",
+    "ids": [
+      "v.maxillary-sinus-hypoplasia"
+    ]
+  },
+  {
+    "term": "hypoplastic sphenoid sinus",
+    "match": "none",
+    "ids": [],
+    "note": "No sphenoid-hypoplasia variant entity exists yet (only maxillary and frontal hypoplasia are modeled)."
+  },
+  {
+    "term": "inferior alveolar foramen",
+    "match": "none",
+    "ids": [],
+    "note": "Mandibular canal entrance; mandible is out of scope."
+  },
+  {
+    "term": "inferior meatus",
+    "match": "exact",
+    "ids": [
+      "s.inferior-meatus"
+    ]
+  },
+  {
+    "term": "inferior orbital fissure",
+    "match": "exact",
+    "ids": [
+      "s.inferior-orbital-fissure"
+    ]
+  },
+  {
+    "term": "inferior orbital foramen",
+    "match": "synonym",
+    "ids": [
+      "s.infraorbital-foramen"
+    ],
+    "note": "Same structure as \"infraorbital foramen\"."
+  },
+  {
+    "term": "inferior turbinate",
+    "match": "exact",
+    "ids": [
+      "s.inferior-turbinate"
+    ]
+  },
+  {
+    "term": "infraorbital ethmoid air cell (Haller cell)",
+    "match": "exact",
+    "ids": [
+      "v.infraorbital-ethmoid-cell"
+    ]
+  },
+  {
+    "term": "infundibular pattern of sinus disease",
+    "match": "none",
+    "ids": [],
+    "note": "Rice/Zinreich inflammatory-disease-pattern classification, not modeled."
+  },
+  {
+    "term": "infundibulum",
+    "match": "exact",
+    "ids": [
+      "s.ethmoid-infundibulum"
+    ]
+  },
+  {
+    "term": "inspissated secretions",
+    "match": "none",
+    "ids": [],
+    "note": "Imaging differential for high-attenuation sinus contents, not modeled."
+  },
+  {
+    "term": "internal auditory canal",
+    "match": "none",
+    "ids": [],
+    "note": "Temporal bone/otologic structure, out of scope."
+  },
+  {
+    "term": "jugular bulb",
+    "match": "none",
+    "ids": [],
+    "note": "Not modeled in the current graph."
+  },
+  {
+    "term": "jugular foramen",
+    "match": "none",
+    "ids": [],
+    "note": "Not modeled in the current graph."
+  },
+  {
+    "term": "jugular tubercle",
+    "match": "none",
+    "ids": [],
+    "note": "Not modeled in the current graph."
+  },
+  {
+    "term": "lamina papyracea",
+    "match": "exact",
+    "ids": [
+      "s.lamina-papyracea"
+    ]
+  },
+  {
+    "term": "mandible",
+    "match": "none",
+    "ids": [],
+    "note": "Mandibular anatomy is out of scope."
+  },
+  {
+    "term": "mandibular condyle",
+    "match": "none",
+    "ids": [],
+    "note": "Mandibular/TMJ anatomy is out of scope."
+  },
+  {
+    "term": "mandibular fossa",
+    "match": "none",
+    "ids": [],
+    "note": "TMJ anatomy is out of scope."
+  },
+  {
+    "term": "mandibular head",
+    "match": "none",
+    "ids": [],
+    "note": "Mandibular/TMJ anatomy is out of scope."
+  },
+  {
+    "term": "mastoid air cells",
+    "match": "none",
+    "ids": [],
+    "note": "Temporal bone anatomy, out of scope."
+  },
+  {
+    "term": "maxillary sinus",
+    "match": "exact",
+    "ids": [
+      "s.maxillary-sinus"
+    ]
+  },
+  {
+    "term": "maxillary sinus ostium",
+    "match": "exact",
+    "ids": [
+      "s.maxillary-natural-ostium"
+    ]
+  },
+  {
+    "term": "maxillary sinus polyp",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "maxillary sinus septum (Underwood septa)",
+    "match": "exact",
+    "ids": [
+      "v.maxillary-sinus-septa"
+    ]
+  },
+  {
+    "term": "meningitis (sinugenic)",
+    "match": "none",
+    "ids": [],
+    "note": "Intracranial complication of sinusitis, not modeled."
+  },
+  {
+    "term": "middle meatus",
+    "match": "exact",
+    "ids": [
+      "s.middle-meatus"
+    ]
+  },
+  {
+    "term": "middle turbinate",
+    "match": "exact",
+    "ids": [
+      "s.middle-turbinate"
+    ]
+  },
+  {
+    "term": "mucocele",
+    "match": "partial",
+    "ids": [
+      "h.mucocele-after-obliteration"
+    ],
+    "note": "Graph only models mucocele as a late post-obliteration surgical complication, not the general primary-obstructive sinus mucocele UW teaches for frontal/ethmoid/sphenoid sinuses."
+  },
+  {
+    "term": "mucosal thickening",
+    "match": "none",
+    "ids": [],
+    "note": "Imaging finding, not modeled."
+  },
+  {
+    "term": "mucus retention cyst",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "mycetoma (fungal ball)",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "nasal bone",
+    "match": "none",
+    "ids": [],
+    "note": "Not modeled as a distinct id in the current graph."
+  },
+  {
+    "term": "nasal septal deviation",
+    "match": "exact",
+    "ids": [
+      "v.septal-deviation"
+    ]
+  },
+  {
+    "term": "nasal septal spur",
+    "match": "exact",
+    "ids": [
+      "v.septal-spur"
+    ]
+  },
+  {
+    "term": "nasal septum",
+    "match": "exact",
+    "ids": [
+      "s.nasal-septum"
+    ]
+  },
+  {
+    "term": "nasolacrimal duct",
+    "match": "exact",
+    "ids": [
+      "s.nasolacrimal-duct"
+    ]
+  },
+  {
+    "term": "nasopalatine foramen",
+    "match": "none",
+    "ids": [],
+    "note": "The bony incisive/nasopalatine canal of the hard palate is not modeled; graph only has the nasopalatine nerve."
+  },
+  {
+    "term": "nasopharynx",
+    "match": "exact",
+    "ids": [
+      "s.nasopharynx"
+    ]
+  },
+  {
+    "term": "occipital condyle",
+    "match": "exact",
+    "ids": [
+      "s.occipital-condyle"
+    ]
+  },
+  {
+    "term": "odontoid",
+    "match": "exact",
+    "ids": [
+      "s.odontoid-process"
+    ]
+  },
+  {
+    "term": "ophthalmic artery",
+    "match": "exact",
+    "ids": [
+      "s.ophthalmic-artery"
+    ]
+  },
+  {
+    "term": "ophthalmic vein thrombosis",
+    "match": "none",
+    "ids": [],
+    "note": "Orbital complication of sinusitis, not modeled."
+  },
+  {
+    "term": "optic canal",
+    "match": "exact",
+    "ids": [
+      "s.optic-canal"
+    ]
+  },
+  {
+    "term": "optic eminence",
+    "match": "synonym",
+    "ids": [
+      "s.optic-prominence"
+    ],
+    "note": "UW's quiz text \"optic eminence\" for the bulge of the optic canal/nerve into the sphenoid sinus wall is the same structure as the graph's \"optic prominence\" (syn \"optic protuberance\")."
+  },
+  {
+    "term": "optic neuritis",
+    "match": "none",
+    "ids": [],
+    "note": "Orbital complication of sinusitis, not modeled."
+  },
+  {
+    "term": "orbit",
+    "match": "exact",
+    "ids": [
+      "s.orbit"
+    ]
+  },
+  {
+    "term": "orbital apex",
+    "match": "exact",
+    "ids": [
+      "s.orbital-apex"
+    ]
+  },
+  {
+    "term": "orbital cellulitis / orbital extension of sinus disease",
+    "match": "partial",
+    "ids": [
+      "c.chandler"
+    ],
+    "note": "Graph has the Chandler classification of orbital complications of sinusitis as a reference classification, but not orbital cellulitis itself as a disease entity."
+  },
+  {
+    "term": "orbital roof",
+    "match": "exact",
+    "ids": [
+      "s.orbital-roof"
+    ]
+  },
+  {
+    "term": "ossicles",
+    "match": "none",
+    "ids": [],
+    "note": "Otologic structures, out of scope."
+  },
+  {
+    "term": "osteoma",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "ostiomeatal unit",
+    "match": "exact",
+    "ids": [
+      "s.ostiomeatal-complex"
+    ],
+    "note": "Graph syn list includes \"ostiomeatal unit\" and \"OMU\"."
+  },
+  {
+    "term": "ostiomeatal unit (OMU) pattern of sinus disease",
+    "match": "none",
+    "ids": [],
+    "note": "The structure (OMU) is modeled; the Rice/Zinreich inflammatory-disease-pattern classification built on it is not."
+  },
+  {
+    "term": "overly pneumatized frontal sinus",
+    "match": "none",
+    "ids": [],
+    "note": "Describes a degree of pneumatization of s.frontal-sinus, not a distinct graph entity."
+  },
+  {
+    "term": "palatine process maxilla",
+    "match": "none",
+    "ids": [],
+    "note": "The maxilla's palatine process (forming most of the hard palate) is not modeled as a distinct id."
+  },
+  {
+    "term": "paradoxical curvature of the middle turbinate",
+    "match": "exact",
+    "ids": [
+      "v.paradoxical-middle-turbinate"
+    ]
+  },
+  {
+    "term": "petrooccipital fissure",
+    "match": "synonym",
+    "ids": [
+      "s.petroclival-synchondrosis"
+    ],
+    "note": "\"Petro-occipital fissure\" and \"petroclival fissure/synchondrosis\" are used interchangeably for the suture between the petrous temporal bone and clivus."
+  },
+  {
+    "term": "petrous carotid canal",
+    "match": "partial",
+    "ids": [
+      "s.internal-carotid-artery",
+      "c.ica-bouthillier"
+    ],
+    "note": "The petrous ICA segment is covered via the artery and its classification ids; the surrounding bony canal has no separate id."
+  },
+  {
+    "term": "pneumatized anterior clinoid process",
+    "match": "exact",
+    "ids": [
+      "v.pneumatized-anterior-clinoid"
+    ]
+  },
+  {
+    "term": "pneumatized crista galli",
+    "match": "exact",
+    "ids": [
+      "v.crista-galli-pneumatization"
+    ]
+  },
+  {
+    "term": "pneumatized lateral recess of sphenoid sinus",
+    "match": "exact",
+    "ids": [
+      "v.lateral-recess-pneumatization"
+    ]
+  },
+  {
+    "term": "pneumatized middle turbinate",
+    "match": "exact",
+    "ids": [
+      "v.concha-bullosa"
+    ]
+  },
+  {
+    "term": "pneumatized pterygoid plates",
+    "match": "synonym",
+    "ids": [
+      "v.lateral-recess-pneumatization"
+    ],
+    "note": "Same variant as lateral sphenoid recess pneumatization extending into the pterygoid process (graph syn: \"pterygoid recess\")."
+  },
+  {
+    "term": "posterior ethmoid",
+    "match": "exact",
+    "ids": [
+      "s.posterior-ethmoid-cells"
+    ]
+  },
+  {
+    "term": "posterior ethmoid air cells",
+    "match": "exact",
+    "ids": [
+      "s.posterior-ethmoid-cells"
+    ]
+  },
+  {
+    "term": "posterior ethmoidal artery canal",
+    "match": "exact",
+    "ids": [
+      "s.posterior-ethmoidal-foramen"
+    ],
+    "note": "Graph models the foramen id rather than a separately named canal id."
+  },
+  {
+    "term": "pterygoid plates",
+    "match": "partial",
+    "ids": [
+      "s.pterygoid-process",
+      "s.medial-pterygoid-plate",
+      "s.lateral-pterygoid-plate"
+    ],
+    "note": "UW's single label doesn't distinguish medial/lateral; graph models them as separate ids under the parent pterygoid process."
+  },
+  {
+    "term": "pterygomaxillary fissure",
+    "match": "exact",
+    "ids": [
+      "s.pterygomaxillary-fissure"
+    ]
+  },
+  {
+    "term": "pterygopalatine fossa",
+    "match": "exact",
+    "ids": [
+      "s.pterygopalatine-fossa"
+    ]
+  },
+  {
+    "term": "retroantral fat pad",
+    "match": "none",
+    "ids": [],
+    "note": "Not modeled as a distinct id in the current graph."
+  },
+  {
+    "term": "retrobulbar abscess",
+    "match": "none",
+    "ids": [],
+    "note": "Orbital complication of sinusitis, not modeled."
+  },
+  {
+    "term": "sella",
+    "match": "exact",
+    "ids": [
+      "s.sella-turcica"
+    ]
+  },
+  {
+    "term": "sinonasal polyposis",
+    "match": "none",
+    "ids": [],
+    "note": "Disease entity, not modeled."
+  },
+  {
+    "term": "sinus hemorrhage",
+    "match": "none",
+    "ids": [],
+    "note": "Imaging differential, not modeled."
+  },
+  {
+    "term": "sphenoethmoidal recess",
+    "match": "exact",
+    "ids": [
+      "s.sphenoethmoidal-recess"
+    ]
+  },
+  {
+    "term": "sphenoethmoidal recess pattern of sinus disease",
+    "match": "none",
+    "ids": [],
+    "note": "Inflammatory-disease-pattern classification, not modeled."
+  },
+  {
+    "term": "sphenoid sinus",
+    "match": "exact",
+    "ids": [
+      "s.sphenoid-sinus"
+    ]
+  },
+  {
+    "term": "sphenoid sinus ostium",
+    "match": "exact",
+    "ids": [
+      "s.sphenoid-ostium"
+    ]
+  },
+  {
+    "term": "sphenooccipital synchondrosis",
+    "match": "none",
+    "ids": [],
+    "note": "Midline basisphenoid-basiocciput synchondrosis; not modeled (distinct from the graph's paramedian petroclival synchondrosis)."
+  },
+  {
+    "term": "sphenopalatine foramen",
+    "match": "exact",
+    "ids": [
+      "s.sphenopalatine-foramen"
+    ]
+  },
+  {
+    "term": "sphenotemporal suture",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault suture, out of scope."
+  },
+  {
+    "term": "sphenozygomatic suture",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault suture, out of scope."
+  },
+  {
+    "term": "squamosal suture",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault suture, out of scope."
+  },
+  {
+    "term": "subdural empyema",
+    "match": "none",
+    "ids": [],
+    "note": "Intracranial complication of sinusitis, not modeled."
+  },
+  {
+    "term": "subperiosteal abscess",
+    "match": "none",
+    "ids": [],
+    "note": "Orbital complication of sinusitis, not modeled."
+  },
+  {
+    "term": "superior meatus",
+    "match": "exact",
+    "ids": [
+      "s.superior-meatus"
+    ]
+  },
+  {
+    "term": "superior orbital fissure",
+    "match": "exact",
+    "ids": [
+      "s.superior-orbital-fissure"
+    ]
+  },
+  {
+    "term": "uncinate process",
+    "match": "exact",
+    "ids": [
+      "s.uncinate-process"
+    ]
+  },
+  {
+    "term": "vidian canal",
+    "match": "exact",
+    "ids": [
+      "s.vidian-canal"
+    ]
+  },
+  {
+    "term": "vomer",
+    "match": "exact",
+    "ids": [
+      "s.vomer"
+    ]
+  },
+  {
+    "term": "zygomatic arch",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault/facial buttress bone, out of scope."
+  },
+  {
+    "term": "zygomatic bone",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault/facial buttress bone, out of scope."
+  },
+  {
+    "term": "zygomaticofrontal suture",
+    "match": "none",
+    "ids": [],
+    "note": "Cranial vault suture, out of scope."
+  }
+]

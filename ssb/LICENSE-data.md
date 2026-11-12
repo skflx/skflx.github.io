@@ -58,3 +58,17 @@ them. Elsewhere their course is inferred, and the pipeline marks those points in
 | `ssb/models/nose.glb.gz`, `s.nasal-vestibule.<side>` in `ssb/ct/labels.u16.gz` and the `core` pack, `s.internal-nasal-valve.<side>` in `ssb/geometry/landmarks.json`, the `standard.nose` block of `ssb/ct/ct.json` | the specimen's own nose: the skin surface (tissue against outside air between the alar-facial grooves), the vestibule label, the internal valve (the narrowest coronal section of the airway) | `tools/ssb-pipeline/uw/nose.py`, `normalize.py` (ST6) |
 
 Regeneration steps and the order to run the scripts are in `tools/ssb-pipeline/README.md`.
+
+### Pipeline inputs (not served)
+
+The atlas's ground truth that the pipeline reads, from the same source and under the same
+permission and attribution as above. They are text (term labels, arrow tips, a term-to-graph-id
+crosswalk) and page references, never images. They live in `tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/`;
+no page fetches them.
+
+| File | What | Made by |
+|---|---|---|
+| `slices.json` | per labelled atlas slice: the annotation text and arrow tips | `tools/ssb-pipeline/uw/extract.py` (OCR of the atlas's labelled slices) |
+| `labels.json` | the 148 atlas terms, with kind and the page each appears on | hand-curated; no script writes it |
+| `crosswalk.json` | each atlas term mapped to SSB graph ids (or none), with a note | hand-curated; no script writes it |
+| `split.json` | the seeded 70/30 held-out division of the scorable arrow tips | `tools/ssb-pipeline/uw/score.py split` |

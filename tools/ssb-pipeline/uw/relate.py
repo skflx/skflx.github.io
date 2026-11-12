@@ -9,7 +9,7 @@ from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-REF = os.path.join(REPO, 'ssb/reference/uw-sinusanatomy2')
+REF = os.path.join(HERE, 'reference', 'uw-sinusanatomy2')
 MARGIN = 6          # px; smaller differences are not evidence
 MIN_SLICES = 3
 SAME_LEVEL = 20    # px; medial/lateral only between points at about the same height (coronal) or depth (axial)
