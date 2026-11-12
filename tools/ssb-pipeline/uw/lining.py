@@ -19,7 +19,7 @@ and lists it in packs.json as the pack "lining" with "lining": true (its node na
 packs' on purpose; the viewer keys them apart and draws them instead of the air shells when the
 mucosa layer is seen from within, docs/ssb.md 5.7).
 
-Each mesh is then cleaned (meshes.py clean_lining, WP L1, the same cleaner dissect.py applies to the state linings):
+Each mesh is then cleaned (meshes.py clean_lining, WP L1, the cleaner that the retired state linings used):
 both faces of a zero-thickness fin go and a vertex left with no normal gets one back.
 
 Checked here and asserted: no triangle centroid lies within 0.5 mm of an air | air label interface

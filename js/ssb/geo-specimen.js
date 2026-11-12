@@ -39,12 +39,11 @@ import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { GLTFLoader } from '../vendor/three-0.186.1/examples/jsm/loaders/GLTFLoader.js';
 import { rasToScene } from './frame.js?v=f554e767';
 import { decode, stamped, parseHeader, headerBounds } from './volume.js?v=4837556e';
-import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=2789cac7';
+import { kindForGraph, isKind, CELL_TINT } from './materials.js?v=59fdd0b2';
 
 export const PACKS_FILE = 'ssb/models/packs.json';
 export const LINING_PREFIX = 'lining:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
-export const SWEEPS_FILE = 'ssb/geometry/sweeps.json';
 export const CT_HEADER_FILE = 'ssb/ct/ct.json';
 /* The bony envelope of the region: its graph entity is a `region`, which has
    no material of its own, and it is the one region that is solid bone. */
@@ -349,34 +348,6 @@ export async function loadLandmarks({ graph, fetchFn = (url) => fetch(url), warn
         if (!m || !Array.isArray(ras) || ras.length !== 3 || !ras.every((v) => finite(v) && Math.abs(v) <= LIMIT_MM)) continue;
         if (!graph.has(m[1])) { warn(`SSB specimen: landmark ${key} names ${m[1]}, which is not in the knowledge graph; skipped.`); continue; }
         out.set(key, { id: m[1], side: m[2], ras: ras.slice() });
-    }
-    return out;
-}
-
-/* ---------------- sweeps ---------------- */
-
-/* { "<id>.<side>": { pts: [[r, a, s]...], radius: [mm...] } } -> Map("<id>.<side>"
-   -> { id, side, pts, radius }) for the entries whose id is in the graph and
-   whose points are finite, near the head and at least two. A radius list that
-   does not match the points falls back to 0.5 mm. Absent or unreadable: an
-   empty map (the layer is then just empty). */
-export async function loadSweeps({ graph, fetchFn = (url) => fetch(url), warn = (...a) => console.warn(...a) }) {
-    const out = new Map();
-    let doc;
-    try {
-        const res = await fetchFn(stamped(SWEEPS_FILE));
-        if (!res.ok) return out;
-        doc = await res.json();
-    } catch (e) { return out; }
-    if (!doc || typeof doc !== 'object') return out;
-    for (const [key, sw] of Object.entries(doc)) {
-        const m = /^([a-z]+\.[a-z0-9-]+)\.(R|L|M)$/.exec(key);
-        const pts = sw && sw.pts;
-        if (!m || !Array.isArray(pts) || pts.length < 2 || pts.length > 400) continue;
-        if (!pts.every((p) => Array.isArray(p) && p.length === 3 && p.every((v) => finite(v) && Math.abs(v) <= LIMIT_MM))) continue;
-        if (!graph.has(m[1])) { warn(`SSB specimen: sweep ${key} names ${m[1]}, which is not in the knowledge graph; skipped.`); continue; }
-        const r = Array.isArray(sw.radius) && sw.radius.length === pts.length && sw.radius.every((v) => finite(v) && v > 0 && v < 20) ? sw.radius.slice() : pts.map(() => 0.5);
-        out.set(key, { id: m[1], side: m[2], pts: pts.map((p) => p.slice()), radius: r });
     }
     return out;
 }

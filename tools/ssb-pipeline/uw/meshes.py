@@ -97,7 +97,7 @@ def normals(v, f):
 
 def mesh_node(cid, mask, aff, budget=None):
     """One node's mesh from its voxel mask: the thin plates of the walls pack at a lower iso-level, every other
-    node at the default; `budget` overrides the node's triangle budget (a dissection remnant, dissect.py)."""
+    node at the default; `budget` overrides the node's triangle budget."""
     if cid in THIN:
         return build(mask, aff, budget or WALL_BUDGET.get(cid, 2000), sigma=0.6, level=0.3)
     return build(mask, aff, budget or BUDGET.get(cid, WALL_BUDGET.get(cid, 3000)))
@@ -200,7 +200,7 @@ def write_glb(path, meshes):
         gl_meshes.append({'name': name, 'primitives': [{'attributes': {'POSITION': a0, 'NORMAL': a0 + 1},
                                                         'indices': a0 + 2, 'mode': 4}]})
         # three's GLTFLoader strips '.' from object names; extras land in userData intact
-        base, _, cut = name.partition('@')           # a dissection remnant is <id>.<side>@<cut> (dissect.py)
+        base, _, cut = name.partition('@')           # a remnant of a cut wall is <id>.<side>@<cut>
         cid, side = base.rsplit('.', 1)
         extras = {'id': cid, 'side': side, 'name': name}
         if cut:

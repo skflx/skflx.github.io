@@ -53,10 +53,8 @@
 export const TISSUE_KINDS = Object.freeze([
     'bone', 'bone-cut', 'mucosa', 'skin', 'cartilage', 'dura', 'fat', 'muscle', 'artery', 'vein', 'nerve', 'gland', 'brain',
 ]);
-/* Plain tinted kinds: categorical air-cell hues, see-through air spaces, and
-   the pathway roles (a computed flow tube and its particles), and the population ghost (POP2b: unlit, translucent,
-   depth-tested, one token colour; a shape drawn from a population, never a tissue). */
-const PLAIN_KINDS = ['air-cell', 'space', 'flow', 'flow-particle', 'ghost'];
+/* Plain tinted kinds: categorical air-cell hues, see-through air spaces, and the pathway roles (a computed flow tube and its particles). */
+const PLAIN_KINDS = ['air-cell', 'space', 'flow', 'flow-particle'];
 export const KINDS = Object.freeze([...TISSUE_KINDS, ...PLAIN_KINDS]);
 
 export function isKind(kind) { return KINDS.includes(kind); }
@@ -553,11 +551,8 @@ const SPEC = {
     space: { token: 'space' },
     flow: { token: 'flow' },
     'flow-particle': { token: 'flow-particle' },
-    ghost: { token: 'ghost' },
 };
 const PLAIN_ROUGHNESS = 0.78;
-const GHOST_OPACITY = 0.38;
-const GHOST_HAZARD_OPACITY = 0.85;
 
 /* The --ssb-* token (without the prefix) a material kind is coloured by, or
    null for an unknown kind. */
@@ -686,7 +681,6 @@ export function createMaterials(THREE, opts = {}) {
             return;
         }
         mat.color.set(swatch(name));
-        if (kind === 'ghost') return;      /* unlit: no emissive, no highlight */
         if (kind === 'flow' || kind === 'flow-particle') {
             mat.emissive.copy(mat.color);
             mat.emissiveIntensity = kind === 'flow' ? 0.35 : 0.8;
@@ -696,7 +690,7 @@ export function createMaterials(THREE, opts = {}) {
         }
     }
 
-    /* look: { kind, tint?, space?, ghost?, translucent?, doubleSide?, onTop?, opacity?, xray? }: kind
+    /* look: { kind, tint?, space?, translucent?, doubleSide?, onTop?, opacity?, xray? }: kind
        picks the tissue; onTop turns the depth test off; opacity overrides a
        see-through look's; xray draws the wall as
        a fresnel ghost (xrayMaterial); tint (else the kind's own) names the --ssb-* token,
@@ -709,24 +703,16 @@ export function createMaterials(THREE, opts = {}) {
     function material(look, { hazard = false, selected = false, partner = false } = {}) {
         const kind = SPEC[look.kind] ? look.kind : 'space';
         if (look.xray) return xrayMaterial(kind, look, { selected, partner });
-        /* The population ghost reads by its rim (fresnel), so the specimen's own structure stays visible inside it;
-           a hatched one stays flat so its stripes have something to show on. */
-        if (kind === 'ghost' && !hazard) return xrayMaterial(kind, look, { selected: false, partner: false });
-        const patterned = !!SPEC[kind].glsl && !look.ghost && !look.space;
+        const patterned = !!SPEC[kind].glsl && !look.space;
         const name = look.tint || SPEC[kind].token;
-        const key = [patterned ? kind : 'plain:' + kind, name, look.space ? 's' : '', look.ghost ? 'g' : '', look.translucent ? 't' : '',
+        const key = [patterned ? kind : 'plain:' + kind, name, look.space ? 's' : '', look.translucent ? 't' : '',
             look.doubleSide ? 'd' : '', look.onTop ? 'o' : '', look.opacity !== undefined ? 'a' + look.opacity : '', hazard ? 'h' : '', selected ? 'x' : '', partner ? 'p' : ''].join('|');
         if (cache.has(key)) return cache.get(key).mat;
-        const mat = kind === 'ghost' ? new THREE.MeshBasicMaterial() : new THREE.MeshStandardMaterial({ roughness: patterned ? SPEC[kind].rough : PLAIN_ROUGHNESS, metalness: 0 });
-        if (kind === 'ghost') {
+        const mat = new THREE.MeshStandardMaterial({ roughness: patterned ? SPEC[kind].rough : PLAIN_ROUGHNESS, metalness: 0 });
+        if (look.space || look.translucent) {
             mat.transparent = true;
             mat.depthWrite = false;
-            mat.opacity = hazard ? GHOST_HAZARD_OPACITY : GHOST_OPACITY;      /* stripes need something to show on */
-            mat.side = THREE.DoubleSide;
-        } else if (look.space || look.ghost || look.translucent) {
-            mat.transparent = true;
-            mat.depthWrite = false;
-            mat.opacity = look.space ? 0.16 : look.ghost ? 0.1 : 0.55;
+            mat.opacity = look.space ? 0.16 : 0.55;
             mat.side = THREE.DoubleSide;
         }
         if (look.doubleSide) mat.side = THREE.DoubleSide;

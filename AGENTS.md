@@ -105,7 +105,7 @@ Unlisted (`noindex`; the only page that links to `ssb.html`; `OLSB.html` is also
 **Unlisted**: only `atlas.html` links to it. Two stages over one typed knowledge graph (`ssb/content/`), every fact a node with typed edges and sources, geometry keyed by the same ids: **Specimen** (pick, tree and search identify structures) and **Scope** (a rigid endoscope through the specimen, for traversal). **Read `docs/ssb.md` before any SSB work.** Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; content rules are `docs/authoring-ssb.md`.
 
 Rules that bite:
-- **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/`, `ssb/models/` and `ssb/reference/*/figures.json` come from `tools/ssb-pipeline/`. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
+- **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/` and `ssb/models/` come from `tools/ssb-pipeline/`. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
 - **Never write fixture files into `ssb/`.** Tests build synthetic data (`tools/ssb-fixture-ct.mjs`), routed by Playwright.
 - **Ids are never renamed; coordinates never go in content.** Every name in geometry is a graph id; parts are `<graph id>.<side>`. `tools/check-data.mjs` enforces both.
 - **Content is `review: "draft"`; only the owner sets `verified`** (medical correctness, `docs/decisions.md` §7). `verified` on a source means exists-as-cited, not supports-the-claim.

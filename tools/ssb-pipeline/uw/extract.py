@@ -2,7 +2,7 @@
 arrows) by threshold, OCR the text locally, find each arrow's tip and tail,
 and attach arrows to the text box their tail starts from.
 
-Output: ssb/reference/uw-sinusanatomy2/slices.json = {plane: [{n, scout_rect, fov_center, labels: [
+Output: ssb/reference/uw-sinusanatomy2/slices.json (the directory is created; not committed) = {plane: [{n, scout_rect, fov_center, labels: [
   {text, conf, box:[x0,y0,x1,y1], tips:[[x,y],...], arrowless:bool}]}]}"""
 import json, os, sys
 import numpy as np
@@ -103,6 +103,7 @@ def analyse(lab_path, unlab_path):
 def main(planes):
     manifest = json.load(open(os.path.join(RAW, 'manifest.json')))
     out_path = OUT
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
     out = json.load(open(out_path)) if os.path.exists(out_path) else {}
     for plane in planes:
         rows = []

@@ -27,7 +27,7 @@
 import * as THREE from '../vendor/three-0.186.1/build/three.module.js';
 import { OrbitControls } from '../vendor/three-0.186.1/examples/jsm/controls/OrbitControls.js';
 import { rasToScene } from './frame.js?v=f554e767';
-import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=2789cac7';
+import { createMaterials, detectQuality, token, KINDS } from './materials.js?v=59fdd0b2';
 
 export { rasToScene };
 
@@ -144,7 +144,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     let requested = quality === 'lite' || quality === 'full' ? quality : null;
     const library = createMaterials(THREE, { pixelRatio, quality: requested || detected });
 
-    /* look: { kind, tint?, space?, ghost?, translucent?, doubleSide?, cut? }; a slab with
+    /* look: { kind, tint?, space?, translucent?, doubleSide?, cut? }; a slab with
        cut: true gets [cut faces, sides]. opts: { hazard, selected }. */
     const materialsFor = library.materialsFor;
 
@@ -393,7 +393,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
             if (!part || seen.has(part) || !shown(hit.object, root)) continue;
             seen.add(part);
             const look = part.userData.look || {};
-            hits.push({ part, object: hit.object, point: hit.point.clone(), distance: hit.distance, clear: !!(part.userData.seeThrough || look.space || look.ghost || look.translucent || look.xray) });
+            hits.push({ part, object: hit.object, point: hit.point.clone(), distance: hit.distance, clear: !!(part.userData.seeThrough || look.space || look.translucent || look.xray) });
         }
         return hits;
     }

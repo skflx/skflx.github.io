@@ -34,7 +34,7 @@ Content lives in `ssb/content/*.json`: structures, landmarks, variants, classifi
 
 Both stages share one scene, one selection and one URL state; switching stage never reloads.
 
-- **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks (the order is §6.4); clicking the same pixel again steps deeper through what is under the cursor. The camera is in the URL (`cam`, §6.3). The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels are a layer. Its vessel and nerve sweeps have no control in the page (phase 3, `docs/wip.md`).
+- **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks (the order is §6.4); clicking the same pixel again steps deeper through what is under the cursor. The camera is in the URL (`cam`, §6.3). The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels are a layer. Vessels and nerves are not drawn in the Specimen.
 - **Scope.** First-person through a rigid scope that **pivots at the nostril**. Pose = insertion depth, shaft yaw and pitch about the nostril fulcrum, roll, and lens angle (0/30/45/70°). The horizon stays upright. Lighting is a spotlight at the tip with inverse-square falloff and an automatic exposure.
   - Collision: the shaft is sampled against the CT display volume (§5.5). Bone blocks; a blocked pose is clamped to the last free depth, and while the clamp holds the stage says why in one line (`.ssb-scope-block`). Mucosa does not block; the shaft length in mucosa is reported as mucosal contact. At the midline the shaft is clamped at R = 0, except in the nasopharynx.
   - The fulcrum `lm.naris` is the centroid of the vestibule lumen at the alar-rim band.
@@ -89,17 +89,17 @@ The `lining` pack is not part of the boot. It is fetched the first time the muco
 
 The CT, label and distance volumes are typed arrays in JS (`js/ssb/volume.js`). Slices are CPU-sampled into a 2D canvas. The same arrays answer "what structure is here" (label lookup), "may the scope shaft pass" (label ≠ tissue along sampled points) and "how close is the ICA" (distance-field lookup). `ct.json` carries `dims`, `spacing`, the voxel → RAS `affine`, the value table, the windows and the label file; `loadVolume({ root })` also serves OLSB's Real CT mode from `tbone/`.
 
-### 5.6 Soft tissue and sweeps
+### 5.6 Soft tissue and vessels
 
 | Layer | Built as | Truth kind |
 |---|---|---|
 | Mucosa (sinus and nasal lining) | the air spaces' own surfaces; from inside, the `lining` pack (one surface over the union of every air label, split into nodes by label, so openings are open) | specimen |
 | External nose (skin, vestibule, valve) | the specimen's own skin and vestibule, unmasked from the UW axial stack; the internal valve is the centroid of the narrowest coronal section of the airway connected to `lm.naris` | specimen, measured |
-| Vessels and nerves | sweeps (§5.6) built from waypoints at a stated depth below the surface | specimen-placed, inferred |
+| Vessels and nerves | not drawn; their centrelines (`ssb/geometry/sweeps.json`, §5.2) feed the Scope's distance fields | inferred where marked |
 
 Cartilage, ligament, fat and SMAS are not resolvable on this bone-window CT and are not drawn.
 
-`ssb/geometry/sweeps.json`: `{ "<id>.<side>": { "pts": [[r,a,s]…], "radius": [mm…] | mm } }`, built at load as tubes along a centripetal Catmull-Rom curve. Pathways (`pw.*`) are sweeps rendered as moving particles along the curve.
+`ssb/geometry/sweeps.json`: `{ "<id>.<side>": { "pts": [[r,a,s]…], "radius": [mm…] | mm } }`. The page does not load it; `tools/ssb-pipeline/uw/sdf.py` builds the Scope HUD's distance fields from it.
 
 ## 6. Runtime architecture
 
@@ -116,7 +116,7 @@ js/ssb/state.js              the one store (stage, tier, selection, scope, curso
 js/ssb/scope.js              the rigid endoscope's geometry and the #scope= codec: pure math, no DOM, no three.js
 js/ssb/scene.js              the 3D stage: renderer, camera, controls, lights, picking, on-demand loop
 js/ssb/materials.js          procedural tissue-material library, one factory per tissue kind
-js/ssb/geo-specimen.js       the specimen's geometry: model packs -> one scene graph and registry; landmarks, sweeps, CT bounds
+js/ssb/geo-specimen.js       the specimen's geometry: model packs -> one scene graph and registry; landmarks, CT bounds
 js/ssb/volume.js             the CT and label volumes as typed arrays: loading, affine, slicing, lookup
 js/ssb/mode-specimen.js      the Specimen stage
 js/ssb/mode-endoscope.js     the Scope stage
@@ -129,7 +129,6 @@ js/vendor/three-<version>/   three.js module build + the addons used (§7)
 ssb/content/*.json           the knowledge graph
 ssb/geometry/*.json          labels, landmarks, sweeps, station poses
 ssb/models/, ssb/ct/         pipeline outputs the page loads
-ssb/reference/               UW atlas reference data (not loaded by the page)
 tools/ssb-content.mjs        graph validator (CI); `--queue` prints the owner's review queue
 tools/ssb-pipeline/          offline geometry/CT pipeline
 tools/ssb-fixture-ct.mjs     a synthetic volume in the same format, for tests (never written into ssb/)
@@ -164,7 +163,7 @@ One store; everything else subscribes. The URL hash is the shareable state, e.g.
   - **Quality** `full` or `lite`, chosen at boot from device hints; the hash key `q` overrides it.
 - The Specimen stage follows the site theme. The endoscope stage is dark in both themes (a projector stage).
 - Labels: DOM overlay with SVG leader lines, few at a time, decluttered by tier.
-- Picking: raycast on click, all intersections kept for click-to-go-deeper, in the order a click takes them (`collectHits`, `mode-specimen.js`): a landmark marker first; then the nearest surface, except that a see-through envelope (the bone in X-ray) yields to what it hides, so a small structure behind it is picked first. A solid envelope, and an opaque skin, keep their place. Hover (mouse only) names the first pick beside the pointer; touch has no hover.
+- Picking: raycast on click, all intersections kept for click-to-go-deeper, in the order a click takes them (`collectHits`, `mode-specimen.js`): a landmark marker first; then the nearest surface, except that what yields is passed over for what lies behind it: a see-through envelope (the bone in X-ray) and any opaque skin (the external nose, the vestibule's lining). A solid envelope keeps its place. Hover (mouse only) names the first pick beside the pointer; touch has no hover.
 - Camera flights respect `prefers-reduced-motion` (cut instead of fly).
 
 ### 6.5 Degradation, accessibility, mobile

@@ -355,8 +355,8 @@ def graph_consistency():
     if not os.path.exists(p):
         return None
     c = json.load(open(p)).get('counts')
-    print('\n== graph consistency (relate3d.py, committed run on the specimen) ==\n%s\n'
-          'rerun relate3d.py on candidate labels and compare; the IFAC drainage rules are pinned by tools/test-ssb.mjs' % c)
+    print('\n== graph consistency (relate3d.py, removed in phase 4; its last run is in git history) ==\n%s\n'
+          'the IFAC drainage rules are pinned by tools/test-ssb.mjs' % c)
     return c
 
 

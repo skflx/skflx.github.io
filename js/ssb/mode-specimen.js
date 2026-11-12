@@ -36,9 +36,9 @@
    failure to load three.js degrades to graph mode, never to a blank page.
    `hook` is the read-only test window (window.__ssb.specimen).
    ============================================================= */
-import { createSpecimen, loadLandmarks, loadSweeps, loadCtBounds } from './geo-specimen.js?v=4121263d';
+import { createSpecimen, loadLandmarks, loadCtBounds } from './geo-specimen.js?v=851e7b98';
 import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
-import { token } from './materials.js?v=2789cac7';
+import { token } from './materials.js?v=59fdd0b2';
 import { PLANES } from './volume.js?v=4837556e';
 import { CT_PLANES } from './state.js?v=a8ca025a';
 import { REGION_LABEL } from './graph.js?v=4c9ee329';
@@ -102,12 +102,12 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     let wasActive = false;
     let started = false;
     let framed = false;             /* the default view has been applied */
-    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, sweeps: false, mucosa: false, nose: true };
+    const layers = { bone: 'xray', hidden: new Set(), landmarks: false, mucosa: false, nose: true };
     let inside = false;             /* the camera is within the air spaces' box: the mucosa is then drawn as the lining seen from within */
     let liningAsked = false;        /* the deferred lining pack has been requested (ST1c): the first look from within asks once */
     let insideForced = false;       /* the endoscope sets this: its tip may sit outside the box (the fulcrum is in front of the masked cavity), but it always looks from within */
     let airBox = null;              /* the union box of the air nodes, cached until a pack arrives */
-    const section = { axis: null, flip: false };
+    const section = { axis: null };
 
     const active = () => true;      /* the specimen is the only stage with a mesh to draw (the lab and CT are gone) */
     const emit = () => { for (const fn of [...subs]) { try { fn(); } catch (e) { console.error(e); } } };
@@ -120,14 +120,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     const markerGeometry = new THREE.SphereGeometry(MARKER_MM, 14, 10);
     const markerFront = new THREE.MeshBasicMaterial();
     const markerBehind = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.3, depthFunc: THREE.GreaterDepth, depthWrite: false });
-
-    const sweepRoot = new THREE.Group();      /* vessels and nerves as tubes, RAS mm */
-    sweepRoot.name = 'sweeps';
-    const sweepList = new Map();              /* key -> { object, sw } */
-    const sweepFront = new THREE.MeshBasicMaterial();
-    const sweepArtery = new THREE.MeshBasicMaterial();
-    const sweepMaterials = [sweepFront, sweepArtery];
-    let sweeps = new Map();
 
     const cursorMarker = new THREE.Group();   /* a crosshair that shows through everything */
     cursorMarker.name = 'cursor';
@@ -160,8 +152,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         const landmark = token('--ssb-landmark', '#2445B0');
         markerFront.color.set(landmark);
         markerBehind.color.set(landmark);
-        sweepFront.color.set(token('--ssb-sweep-nerve', '#444444'));
-        sweepArtery.color.set(token('--ssb-sweep-artery', '#C0392B'));
         const cross = token('--ssb-ct-cross', '#FFB000');
         cursorLineMaterial.color.set(cross);
         cursorDotMaterial.color.set(cross);
@@ -182,23 +172,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             behind.visible = false;       /* the see-through trace of a hidden marker is for the selection only */
             markerRoot.add(group);
             markers.set(key, { object: group, behind, lm });
-        }
-    }
-
-    function buildSweeps() {
-        for (const [key, sw] of sweeps) {
-            if (sweepList.has(key)) continue;
-            const curve = new THREE.CatmullRomCurve3(sw.pts.map((p) => new THREE.Vector3(...p)));
-            const segs = Math.min(200, sw.pts.length * 4);
-            const radius = Math.max(0.2, sw.radius.reduce((a, b) => a + b, 0) / sw.radius.length);
-            const geometry = new THREE.TubeGeometry(curve, segs, radius, 8, false);
-            const artery = /artery/.test(sw.id);
-            const mesh = new THREE.Mesh(geometry, artery ? sweepArtery : sweepFront);
-            mesh.name = key;
-            mesh.userData = { id: sw.id, side: sw.side, key, sweep: true };
-            mesh.visible = false;
-            sweepRoot.add(mesh);
-            sweepList.set(key, { object: mesh, sw });
         }
     }
 
@@ -278,7 +251,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
                 look = { ...look, space: false, translucent: true, onTop: true, ...(partner ? { opacity: 0.3 } : {}) };
             }
             u.drawn = look.kind;
-            u.seeThrough = !!(look.space || look.ghost || look.translucent || look.xray);     /* as drawn: X-ray and the see-through air spaces (scene.pickHits) */
+            u.seeThrough = !!(look.space || look.translucent || look.xray);     /* as drawn: X-ray and the see-through air spaces (scene.pickHits) */
             mesh.material = stage.materialsFor(look, { selected: primary, partner });
             mesh.renderOrder = isSel ? 5 : 0;
             mesh.visible = isSel || (u.group === 'bone' ? layers.bone !== 'hidden' : u.group === 'nose' ? layers.nose : !(openLining && u.group === 'air') && !layers.hidden.has(regionOf(mesh)));
@@ -288,7 +261,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             m.object.visible = layers.landmarks || mine;
             m.behind.visible = mine;
         }
-        for (const [, m] of sweepList) m.object.visible = layers.sweeps || (!!sel && m.sw.id === sel);
         stage.requestRender();
     }
 
@@ -350,7 +322,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         if (!section.axis) return false;
         const n = PLANES[section.axis].normal;
         const at = sectionAt();
-        return section.flip ? ras[n] < at - SECTION_EPS : ras[n] > at + SECTION_EPS;
+        return ras[n] > at + SECTION_EPS;
     }
 
     /* The section's range on `axis` in mm: the CT volume's, else the specimen's. */
@@ -369,16 +341,15 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return (lo + hi) / 2;
     }
 
-    /* Keep the smaller coordinate (<= at), or the larger one when flipped: the
-       reader looks at the cut face from the side that was taken away. */
+    /* Keep the smaller coordinate (<= at): the reader looks at the cut face from the side that was taken away. */
     function applySection() {
         if (!installed || !active() || !section.axis) { stage.setClip([]); syncCap(); return; }
         const n = PLANES[section.axis].normal;
         const at = sectionAt();
         const dir = [0, 0, 0];
-        dir[n] = section.flip ? 1 : -1;
+        dir[n] = -1;
         const normal = new THREE.Vector3(...rasToScene(dir));
-        stage.setClip([new THREE.Plane(normal, section.flip ? -at + SECTION_EPS : at + SECTION_EPS)]);
+        stage.setClip([new THREE.Plane(normal, at + SECTION_EPS)]);
         syncCap();
     }
 
@@ -420,13 +391,12 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         for (const m of [cap.back, cap.front, cap.plane]) m.visible = want;
         if (!want) { stage.requestRender(); return; }
         const n = PLANES[section.axis].normal;
-        const sign = section.flip ? -1 : 1;                 /* the face looks toward the side that was cut away */
         const toward = [0, 0, 0];
-        toward[n] = sign;
+        toward[n] = 1;                                      /* the face looks toward the side that was cut away */
         cap.plane.quaternion.setFromUnitVectors(Z, new THREE.Vector3(...toward));
         const b = specimen.boundsOf();
         const at = [0, 1, 2].map((k) => (b.min[k] + b.max[k]) / 2);
-        at[n] = sectionAt() + sign * (SECTION_EPS - 0.01);   /* a hair inside what is kept, so the clip does not eat it */
+        at[n] = sectionAt() + (SECTION_EPS - 0.01);   /* a hair inside what is kept, so the clip does not eat it */
         cap.plane.position.set(...at);
         stage.requestRender();
     }
@@ -456,12 +426,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         }
         c[n] = mm;
         return store.setCursor(c, { source: 'slider' });
-    }
-
-    function flipSection() {
-        section.flip = !section.flip;
-        applySection();
-        emit();
     }
 
     /* ---------------- layers ---------------- */
@@ -525,14 +489,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         return true;
     }
 
-    function setSweeps(on) {
-        if (!!on === layers.sweeps) return false;
-        layers.sweeps = !!on;
-        paint();
-        emit();
-        return true;
-    }
-
     /* The regions of the air spaces and tissue on screen, with what they hold. */
     function regions() {
         const out = new Map();
@@ -563,8 +519,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     function install() {
         if (installed || !specimen) return;
-        specimen.root.add(markerRoot, sweepRoot, cursorMarker);
-        buildSweeps();
+        specimen.root.add(markerRoot, cursorMarker);
         installed = true;
         stage.setSpecimen(specimen.root);
         stage.setHome(home);
@@ -619,7 +574,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         await begin();
     }
 
-    /* Load the specimen: the packs, and the landmarks, sweeps and CT header beside them. */
+    /* Load the specimen: the packs, and the landmarks and CT header beside them. */
     async function begin() {
         status = 'loading';
         specimen = createSpecimen({ graph });
@@ -636,11 +591,6 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         loadLandmarks({ graph }).then((l) => {
             landmarks = l;
             if (installed) { buildMarkers(); paint(); }
-            emit();
-        });
-        loadSweeps({ graph }).then((w) => {
-            sweeps = w;
-            if (installed) { buildSweeps(); paint(); }
             emit();
         });
         const paintTwice = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -700,20 +650,24 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
 
     /* ---------------- picking ---------------- */
 
-    /* Everything under a client point, in the order a click takes them: { key, id, point (RAS), marker, big, distance }.
-       A landmark marker (small) comes first. Then the nearest surface, except that a see-through envelope (the bone
-       in X-ray) is passed over for anything small it hides, so a sinus behind the ghosted bone is picked before the
-       bone that encloses it. A solid envelope, or an opaque skin, keeps its place: occlusion stands. */
+    /* Everything under a client point, in the order a click takes them: { key, id, point (RAS), marker, big, yields, distance }.
+       A landmark marker (small) comes first. Then the nearest surface, except that what yields is passed over for
+       anything else under the pointer: a see-through envelope (the bone in X-ray) and any skin (the external nose, the
+       vestibule's lining), so a structure behind them is picked first. A solid envelope keeps its place: occlusion stands. */
     function collectHits(x, y) {
         if (!installed) return [];
         const hits = stage.pickHits(x, y, specimen.root);
-        const out = hits.map((h) => ({
-            key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
-            big: !!h.part.userData.envelope || (h.part.userData.look || {}).kind === 'skin', clear: h.clear,
-            point: sceneToRas(h.point.toArray()), distance: h.distance,
-        }));
+        const out = hits.map((h) => {
+            const envelope = !!h.part.userData.envelope;
+            const skin = (h.part.userData.drawn || (h.part.userData.look || {}).kind) === 'skin';
+            return {
+                key: h.part.userData.lining ? `${h.part.userData.id}.${h.part.userData.side}` : h.part.userData.key, id: h.part.userData.id, marker: !!h.part.userData.marker,
+                big: envelope || skin, clear: h.clear, yields: (envelope && h.clear) || skin,
+                point: sceneToRas(h.point.toArray()), distance: h.distance,
+            };
+        });
         /* what the section cut away is not there to be picked */
-        const rank = (h) => (h.marker ? 0 : h.big && h.clear ? 2 : 1);
+        const rank = (h) => (h.marker ? 0 : h.yields ? 2 : 1);
         return out.filter((h) => !clipped(h.point)).sort((a, b) => (rank(a) - rank(b)) || (a.distance - b.distance));
     }
 
@@ -874,9 +828,8 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     colours();
     /* Everything this stage made on the GPU side, given back (the page going away, or a caller that is done). */
     function dispose() {
-        for (const m of sweepList.values()) m.object.geometry.dispose();
         if (cap.plane) { cap.back.material.dispose(); cap.front.material.dispose(); cap.plane.geometry.dispose(); }
-        for (const o of [markerGeometry, markerFront, markerBehind, ...sweepMaterials, cursorLineMaterial, cursorDotMaterial]) o.dispose();
+        for (const o of [markerGeometry, markerFront, markerBehind, cursorLineMaterial, cursorDotMaterial]) o.dispose();
         if (specimen) specimen.dispose();
     }
     window.addEventListener('pagehide', dispose);
@@ -915,12 +868,10 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get bone() { return layers.bone; },
         get hiddenRegions() { return [...layers.hidden]; },
         get landmarksOn() { return layers.landmarks; },
-        get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get mucosaInside() { return inside; },
-        get sweeps() { return [...sweepList].filter(([, m]) => m.object.visible).map(([key]) => key); },
-        get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
+        get section() { return { axis: section.axis, at: sectionAt() }; },
         get cap() { return { shown: !!cap.plane && cap.plane.visible, plane: cap.plane ? cap.plane.position.toArray() : null }; },
         get view() { return view; },
         get ctBounds() { return ctBounds ? { min: ctBounds.min.slice(), max: ctBounds.max.slice() } : null; },
@@ -988,7 +939,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             stage.camera.updateMatrixWorld();
             return stage.toClient(new THREE.Vector3(...rasToScene(ras)));
         },
-        hits: (x, y) => collectHits(x, y).map((h) => ({ key: h.key, id: h.id, marker: h.marker, big: h.big, clear: h.clear, point: h.point, distance: h.distance })),
+        hits: (x, y) => collectHits(x, y).map((h) => ({ key: h.key, id: h.id, marker: h.marker, big: h.big, clear: h.clear, yields: h.yields, point: h.point, distance: h.distance })),
         /* a client point where a click picks `key` first, or null */
         screenOf(key) {
             const m = nodes().get(key) || (markers.get(key) && markers.get(key).object);
@@ -1017,21 +968,19 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
     });
 
     return {
-        hook, annotate, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSweeps, setSection, setSectionAt, flipSection, regions, sectionRange, frameSelection,
+        hook, annotate, setView, setBone, setRegion, setMucosa, setNose, setLandmarks, setSection, setSectionAt, regions, sectionRange, frameSelection,
         VIEWS, BONE_MODES,
         get status() { return status; },
         get problem() { return problem; },
         get view() { return view; },
         get bone() { return layers.bone; },
         get landmarksOn() { return layers.landmarks; },
-        get section() { return { axis: section.axis, flip: section.flip, at: sectionAt() }; },
+        get section() { return { axis: section.axis, at: sectionAt() }; },
         get ready() { return installed; },
         get hasLandmarks() { return landmarks.size > 0; },
-        get sweepsOn() { return layers.sweeps; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
-        get hasSweeps() { return sweeps.size > 0; },
         onChange(fn) { subs.add(fn); return () => subs.delete(fn); },
         dispose,
     };

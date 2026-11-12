@@ -690,11 +690,13 @@ async function specimenTests(browser, base) {
     /* the click's surface point is the 3D cursor: against an independent ray cast through the raw data */
     let best = -Infinity;
     let vtx = null;
-    for (const n of truth.values()) for (let i = 0; i < n.pts.length; i += 3) if (n.pts[i + 1] > best) { best = n.pts[i + 1]; vtx = [n.pts[i], n.pts[i + 1], n.pts[i + 2]]; }
+    /* opaque skin yields (phase 4), so the independent "first surface" is the first non-skin one */
+    const noSkin = new Map([...truth].filter(([, n]) => n.kind !== 'skin'));
+    for (const n of noSkin.values()) for (let i = 0; i < n.pts.length; i += 3) if (n.pts[i + 1] > best) { best = n.pts[i + 1]; vtx = [n.pts[i], n.pts[i + 1], n.pts[i + 2]]; }
     const camNow = await spec(page, () => window.__ssb.specimen.camera());
     const dir = vtx.map((v, i) => v - camNow.position[i]);
     const len = Math.hypot(...dir);
-    const ray = rayNearest(truth, camNow.position, dir.map((v) => v / len));
+    const ray = rayNearest(noSkin, camNow.position, dir.map((v) => v / len));
     const pv = await project(page, vtx);
     const before = await spec(page, () => window.__ssb.specimen.cursor);
     await page.mouse.click(pv.x, pv.y);
@@ -744,6 +746,29 @@ async function specimenTests(browser, base) {
       return out;
     });
     check('picks: at no point on the grid does the bone envelope (X-ray) win over a structure it hides', grid.envelopeFirstWithOther === 0, JSON.stringify(grid));
+
+    /* opaque skin yields like the see-through envelope: over a 20x16 grid the external nose is never first over a structure
+       behind it (10 of 59 visible points before), it still wins where it is the only surface, and a solid opaque hit
+       still occludes what lies behind it */
+    const skinGrid = await page.evaluate(() => {
+      const c = document.getElementById('ssb-canvas').getBoundingClientRect();
+      const out = { visible: 0, noseFirst: 0, noseFirstWithOther: 0, solidOccludes: 0 };
+      for (let i = 0; i < 20; i++) for (let j = 0; j < 16; j++) {
+        const x = c.left + ((i + 0.5) / 20) * c.width, y = c.top + ((j + 0.5) / 16) * c.height;
+        if (document.elementFromPoint(x, y) !== document.getElementById('ssb-canvas')) continue;
+        const hits = window.__ssb.specimen.hits(x, y);
+        if (!hits.length) continue;
+        out.visible += 1;
+        const first = hits[0];
+        const behind = hits.filter((h) => h.id !== first.id && !h.marker && h.distance > first.distance);
+        if (first.id === 's.external-nose') { out.noseFirst += 1; if (hits.some((h) => h.id !== 's.external-nose' && !h.marker)) out.noseFirstWithOther += 1; }
+        if (!first.marker && !first.big && !first.clear && behind.length) out.solidOccludes += 1;
+      }
+      return out;
+    });
+    check('picks: the external nose (opaque skin) is never first over a structure behind it on the grid', skinGrid.noseFirstWithOther === 0, JSON.stringify(skinGrid));
+    check('picks: the external nose still wins where it is the only surface under the pointer', skinGrid.noseFirst > 0, JSON.stringify(skinGrid));
+    check('picks: a solid opaque hit still occludes a structure behind it on the grid', skinGrid.solidOccludes > 0, JSON.stringify(skinGrid));
 
     /* hover names what a click would pick first (the same name the tree shows for that id) */
     await expandTree(page);

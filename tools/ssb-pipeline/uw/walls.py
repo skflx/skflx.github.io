@@ -5,7 +5,7 @@
 Reads the committed volume (ssb/ct/ct.u8.gz, labels.u16.gz, ssb/geometry/labels.json) and writes:
   ssb/ct/labels.u16.gz, ssb/geometry/labels.json   walls and turbinates added on voxels that were 0
                                                    (never over an air label; the table stays append-only)
-  incoming/uw-sinusanatomy2/_recon/walls-grid.npz  compartments + wall labels, for sweeps.py / relate3d.py
+  incoming/uw-sinusanatomy2/_recon/walls-grid.npz  compartments + wall labels, for sweeps.py
 and the "walls" section of registration.json (method, voxel counts, what is a proxy). meshes.py then
 turns the new labels into ssb/models/walls.glb.gz.
 
