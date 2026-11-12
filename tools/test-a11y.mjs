@@ -4,8 +4,9 @@
    tools/smoke-pages.mjs (PAGES), in light and dark theme.
 
    REPORT-ONLY by default: prints a table and exits 0. Nothing here
-   fixes a page. Coverage is the same as the smoke test: each PAGES
-   entry runs its setup and readiness steps (so folded sections and
+   fixes a page. Each HTML file is scanned once per theme, using its
+   first PAGES entry (hash variants of one file are not scanned again):
+   the entry runs its setup and readiness steps (so folded sections and
    eggs are open), then axe runs on the resulting document.
 
    axe-core is a pinned DEV dependency (package.json). Its file is
@@ -24,8 +25,7 @@
      node tools/test-a11y.mjs --write-baseline # regenerate the baseline
 
    Baseline entries are { page, theme, rule, count } (count = nodes),
-   with no HTML snippets. Page keys are PAGES paths; when one path
-   appears more than once, the largest count per rule is kept.
+   with no HTML snippets. Page keys are the HTML file names (no hash).
    ============================================================= */
 import fs from 'fs';
 import path from 'path';
@@ -102,7 +102,11 @@ function baselineKey(e) { return `${e.page}\u0000${e.theme}\u0000${e.rule}`; }
 async function main() {
     const server = await startServer();
     const browser = await launchBrowser();
-    const specs = ONLY ? PAGES.filter((p) => p.path.startsWith(ONLY)) : PAGES;
+    /* One scan per HTML file: the first PAGES entry for each file (its hash
+       variants are not scanned separately). */
+    const seenFile = new Set();
+    const specs = (ONLY ? PAGES.filter((p) => p.path.startsWith(ONLY)) : PAGES)
+        .filter((p) => { const f = p.path.split('#')[0]; if (seenFile.has(f)) return false; seenFile.add(f); return true; });
     const started = Date.now();
     const results = [];
     try {
