@@ -4,12 +4,7 @@ Task lists are GitHub Issues: one parent issue per plan, one sub-issue per work 
 a spec in `plans/`. Rules every model follows are in `AGENTS.md`. The owner sets the roster for each
 wave (`AGENTS.md`, Models & roles).
 
-| Party | Does | Never does |
-|---|---|---|
-| **Owner** | Decides (`docs/decisions.md` §7), vets medical content, merges to `master` (deploy), launches sessions | — |
-| **Orchestrator** | Plans and specs; anatomy and medical data; checkpoints; adjudicates reviews; keeps the plan honest | Routine wiring it could spec instead |
-| **Executor** | Executes a WP to its acceptance, inside its Touch list: code, tests, UI wiring, pipeline plumbing, docs passes | Anatomy or clinical judgment, owner decisions, files outside Touch, changing a plan's contracts, merging |
-| **Adversarial reviewer** (named per wave) | Reviews the wave's diff against its spec, as PR reviews | Pushing fixes, merging |
+The roles (owner, orchestrator, executor, adversarial reviewer) and what each never does are in `AGENTS.md`, Models & roles.
 
 ## 1. What makes a WP delegable
 

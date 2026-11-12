@@ -2,8 +2,7 @@
 /* =============================================================
    atlas.mjs — bake the atlas control points into inline SVG.
 
-   tools/atlas/anatomy.json (schema: spec §4.4 of
-   plans/2026-10-28-figures-eggs-atlas.md, docs/atlas.md) holds
+   tools/atlas/anatomy.json (schema: docs/atlas.md) holds
    every shape as control points. This tool turns them into
    Catmull-Rom curves written as cubic Béziers and bakes the SVG
    between the markers in atlas.html:

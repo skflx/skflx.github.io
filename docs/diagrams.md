@@ -73,7 +73,8 @@ A figure can be revealed from a word in the text (an *egg*), so it stays out of 
 ```
 
 `js/egg.js` delegates on `document`, so eggs rendered by a script work too. Click, Enter or Space
-toggles; Esc closes. `css/egg.css` hides the figure only under `(scripting: enabled)`.
+toggles; Esc closes. Selecting text that touches the trigger (150 ms debounce) also opens it; a deselect never closes.
+`css/egg.css` hides the figure only under `(scripting: enabled)`.
 `tools/smoke-pages.mjs` clicks the eggs in use; `check-data` does not check egg markup.
 
 ## Scene schema

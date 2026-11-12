@@ -6,7 +6,6 @@ lives here: each spec has a parent GitHub issue, with one sub-issue per work pac
 
 | Spec | Subject | Parent issue |
 |---|---|---|
-| [2026-10-28-figures-eggs-atlas](2026-10-28-figures-eggs-atlas.md) | ASCII figures as eggs; the unlisted atlas | #176 |
 | [2026-11-02-ear-anatomy-guide](2026-11-02-ear-anatomy-guide.md) | normal outer and middle ear: OKSAT guide and question module | #206 |
 | [2026-11-03-uw-temporal-bone-volume](2026-11-03-uw-temporal-bone-volume.md) | internal 3D reference volume from the UW temporal bone atlas | #225 |
 | [2026-11-04-skoto-links](2026-11-04-skoto-links.md) | OKSAT modules and guides linked to sk.oto maps, gated by `live` | #174 |

@@ -1130,7 +1130,7 @@ function checkAgents() {
   }
 }
 
-/* ---- atlas and unlisted pages (docs/atlas.md, plans/2026-10-28-figures-eggs-atlas.md) ----
+/* ---- atlas and unlisted pages (docs/atlas.md) ----
    atlas.html, OLSB.html and ssb.html are unlisted: noindex, and only atlas.html links to
    them. Nothing else links to atlas.html. A js/ file may name a page only as a quoted
    navigation target; js/atlas.js (the atlas's own script) is exempt. The guide viewer's hotspot

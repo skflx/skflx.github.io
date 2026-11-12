@@ -423,7 +423,7 @@ Design: `docs/ssb.md` §14. Sources and limits: `docs/realistic-anatomy.md` §4�
 
 Rules that still apply:
 
-- Critical path: resegmentation (RS) → OP1 → VB1/PB1. The `scanned` state (RA3b) is already shipped, so the owner sees *Normal asymmetry* before any edit exists.
+- Critical path: resegmentation (RS) → OP1 → VB1/PB1.
 - Re-export discipline: bases and patches are regenerated at checkpoints only (R6.6), deterministically (gzip mtime 0), never hand-edited.
 - Threshold re-checks: tests tuned on the old labels (E5 poses, the septum rule) are re-checked at CP-RA2, not moved silently.
 

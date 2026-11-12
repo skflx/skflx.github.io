@@ -1,8 +1,4 @@
-# Spec: link OKSAT modules and guides to sk.oto (2026-11-04, amended 2026-11-10)
-
-> **Amended 2026-11-10 (owner):** the wiki is live at `https://skflx.github.io/ohns-wiki-skflx/`. Map URLs below are the ones the live site serves (HTTP 200 checked), stored ready to append to `base`; there is no slug function; `live` ships `true`; the check against `.vault-sync.json` is dropped (live paths are lowercase slugs, not the vault file names). Section 4 describes the pre-launch state and is kept as history.
->
-> Ponytail spec. Supersedes `plans/2026-11-04-wiki-links.md` (branch `claude/issue-174-spec`). Status lives in GitHub Issues. Commits: one short line, no trailers.
+# Spec: link OKSAT modules and guides to sk.oto (2026-11-04)
 
 ## 0. Context (facts, read from the repo on 2026-11-04)
 
@@ -48,9 +44,9 @@ Why subspecialty-keyed and module-level is enough: the public set is six maps, o
 - No graph, search, or fetch of wiki content at runtime. No embedded wiki text, titles or summaries.
 - No link on the hub, the one-pager, or `unlisted` pages beyond what the viewer already shows for them.
 
-## 4. Gate: while it is closed
+## 4. Gate: `live`
 
-`live: false` is the shipped state and stays so until the owner has (a) deployed the wiki, (b) opened one map in a browser and confirmed the URL, and (c) decided that linking the `#unvetted` maps is acceptable (Q1). While closed: no anchor, no header change, no request, no visible difference to a reader. The table and the check still run in CI, so the data cannot rot meanwhile. Flipping `live` is a one-line owner PR; merging is deploy.
+`live` ships `true`. While it is `false`: no anchor, no header change, no request, no visible difference to a reader. The table and the check still run in CI, so the data cannot rot meanwhile. Flipping `live` is a one-line owner PR; merging is deploy.
 
 ## 5. Acceptance checks (each is a command or an assertion in `node tools/check-data.mjs`)
 

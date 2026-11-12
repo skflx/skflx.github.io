@@ -1,6 +1,6 @@
 # Atlas
 
-The unlisted skull-base atlas (`atlas.html`; spec `plans/2026-10-28-figures-eggs-atlas.md`): a
+The unlisted skull-base atlas (`atlas.html`;): a
 midsagittal right hemisection, medial view, face left, drawn as hand-authored SVG with no visible
 labels. Related structures light together as groups.
 
