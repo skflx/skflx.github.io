@@ -1,7 +1,6 @@
 """Reference specimen, stage D: soft-tissue surfaces, charts and landmarks, from the committed volume.
 
     .venv/bin/python tools/ssb-pipeline/uw/softtissue.py     # after specimen.py, walls.py, meshes.py
-    .venv/bin/python tools/ssb-pipeline/uw/softtissue.py --per-side   # a head that is not mirrored (normalize.py --base scanned)
 
 Reads only ssb/ (ct.u8.gz, labels.u16.gz, ct.json, geometry/labels.json), so any session can rerun it;
 nothing here needs the raw UW crawl. The specimen is a bone-window CT: soft tissue is not segmented,
@@ -435,8 +434,7 @@ def ostium_margin(lab, ct, table, aff, lm, side):
 def turbinate_heads(lab, table, aff):
     """lm.middle-turbinate-head.<side>: the anterior end of the middle turbinate wall unit (walls.py): the
     centroid of its voxels within 1 mm (A) of the anterior-most one. A proxy for the axilla, the turbinate's
-    attachment to the lateral wall, which a bone-window CT does not resolve. Used by the septal flap overlay
-    (short-flap anterior cut) and by the AEA septal-branch waypoints."""
+    attachment to the lateral wall, which a bone-window CT does not resolve. Used by the AEA septal-branch waypoints."""
     by = {v: int(k) for k, v in table.items()}
     A = np.array(aff)
     out, info = {}, {}

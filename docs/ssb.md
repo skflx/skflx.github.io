@@ -215,4 +215,4 @@ The decision record is `plans/2026-10-07-ssb-roadmap.md` §1. Decisions whose ra
 - **Vendor three.js:** same-origin and pinned (`js/vendor/README.md`).
 - **Reference specimen from the UW atlas:** bone window only, with vessels and nerves as sweeps. Written permission: `ssb/LICENSE-data.md`.
 - **Standard specimen:** the first release teaches normal anatomy on the standardized head; the as-scanned head is not shipped.
-- **Phase 2 (this page's scope):** only Specimen (pick, tree, search) and Scope (traversal) ship. The flap overlay, the mucosal and anatomy states, the population panel and the dissection states were removed.
+- **Phase 2 (this page's scope):** only Specimen (pick, tree, search) and Scope (traversal) ship.
