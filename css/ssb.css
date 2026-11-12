@@ -209,6 +209,12 @@ html[data-theme="dark"] {
 
 .ssb-results-list { list-style: none; margin: 0; padding: 0; }
 .ssb-results-note { margin: 0; padding: 0.6rem var(--ssb-pad); font: 400 0.72rem/1.4 var(--font-mono); color: var(--ink-faint); }
+.ssb-results-more {
+  display: block; width: 100%; margin: 0; padding: 0.6rem var(--ssb-pad); text-align: left;
+  background: none; border: 0; border-top: 1px solid var(--rule); cursor: pointer;
+  font: 400 0.72rem/1.4 var(--font-mono); color: var(--ink-muted); text-decoration: underline;
+}
+.ssb-results-more:hover { background: var(--wash); }
 .ssb-hit { flex-direction: column; align-items: flex-start; gap: 0.1rem; border-top: 1px solid var(--rule); }
 .ssb-hit-meta { font: 400 0.72rem/1.3 var(--font-mono); color: var(--ink-faint); }
 

@@ -2453,9 +2453,35 @@ async function treeBadgeTests(browser, base) {
   await context.close();
 }
 
+/* The search's "more at a higher depth" note is a button that raises the depth to show every match; search ranks
+   entries with a surface first. */
+async function searchDepthTests(browser, base) {
+  const { context, page } = await openSpecimen(browser, base, '');
+  const tierNow = () => page.evaluate(() => document.querySelector('#ssb-tier button[aria-pressed="true"]').dataset.tier);
+  const hitIds = () => page.evaluate(() => [...document.querySelectorAll('#ssb-results button[data-id]')].map((b) => b.dataset.id));
+  const tier0 = await tierNow();
+  await page.fill('#ssb-search', 'uncinate');
+  const before = await hitIds();
+  const note = await page.evaluate(() => { const b = document.querySelector('#ssb-results .ssb-results-more'); return b ? { tag: b.tagName, text: b.textContent } : null; });
+  check('search depth: at depth 1, "uncinate" shows 2 matches and the note for the 6 more is a button',
+    tier0 === '1' && before.length === 2 && !!note && note.tag === 'BUTTON' && /^6 more at a higher depth/.test(note.text), JSON.stringify({ tier0, before, note }));
+  await page.click('#ssb-results .ssb-results-more');
+  const after = await hitIds();
+  const tier1 = await tierNow();
+  const gone = await page.evaluate(() => !document.querySelector('#ssb-results .ssb-results-more'));
+  check('search depth: activating the note raises the depth control to 2 and shows all 8 matches, the note gone',
+    tier1 === '2' && after.length === 8 && gone && after.includes('h.retained-frontal-cells'), JSON.stringify({ tier1, n: after.length, gone }));
+
+  await page.fill('#ssb-search', 'sinus');
+  const ranked = await page.evaluate(() => [...document.querySelectorAll('#ssb-results button[data-id]')].map((b) => !!b.querySelector('.ssb-3d')));
+  const firstPlain = ranked.indexOf(false);
+  check('search: entries with a 3D surface rank before the rest', ranked.some(Boolean) && (firstPlain < 0 || ranked.lastIndexOf(true) < firstPlain), ranked.map((x) => (x ? 1 : 0)).join(''));
+  await context.close();
+}
+
 /* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
 const SECTIONS = {
-  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); await treeBadgeTests(browser, base); },
+  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); await treeBadgeTests(browser, base); await searchDepthTests(browser, base); },
   scope: async (browser, base) => { scopeWin(); await scopeTests(browser, base); },
 };
 

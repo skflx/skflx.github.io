@@ -6,7 +6,7 @@
    tree. Enter opens the best match; Down moves into the list; Escape clears.
    Everything reaches the DOM through textContent.
    ============================================================= */
-import { TYPE_LABEL, REGION_LABEL } from './graph.js?v=463d294a';
+import { TYPE_LABEL, REGION_LABEL } from './graph.js?v=727210a8';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -24,7 +24,7 @@ export function mountSearch({ input, results, tree, graph, store }) {
         if (!query) return;
 
         const { selection, tier } = store.get();
-        const { hits, hidden } = graph.search(query, { tier });
+        const { hits, hidden, tierAll } = graph.search(query, { tier });
         /* role=status: a polite live region, so the count is announced. */
         const status = el('p', 'ssb-results-note', hits.length
             ? `${hits.length}${hits.length >= 60 ? '+' : ''} match${hits.length === 1 ? '' : 'es'}`
@@ -56,7 +56,13 @@ export function mountSearch({ input, results, tree, graph, store }) {
             }
             results.append(ul);
         }
-        if (hidden) results.append(el('p', 'ssb-results-note', `${hidden} more at a higher depth.`));
+        if (hidden) {
+            /* raise the depth to the lowest one that shows every match; the depth control follows */
+            const more = el('button', 'ssb-results-more', `${hidden} more at a higher depth. Show them`);
+            more.type = 'button';
+            more.addEventListener('click', () => { store.setTier(tierAll); input.focus(); });
+            results.append(more);
+        }
     }
 
     input.addEventListener('input', render);
