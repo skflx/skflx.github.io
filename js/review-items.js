@@ -100,6 +100,19 @@ window.__REVIEW_ITEMS = [
       { label: 'Real CT, coronal', href: 'OLSB.html#m=ct&pl=cor' },
       { label: 'Real CT, sagittal', href: 'OLSB.html#m=ct&pl=sag' }
     ] },
+  { id: 'olsb-3d-landmark-fit', group: 'OLSB fit', issue: null,
+    title: 'OLSB 3D model against the UW landmarks',
+    look: 'Turn the 3D model and check that the structures sit where the CT puts them, the mastoid group and the ICA in particular.',
+    links: [{ label: 'OLSB 3D model', href: 'OLSB.html#m=3d' }] },
+  { id: 'olsb-ct-overlay', group: 'OLSB fit', issue: null,
+    title: 'OLSB real CT with the model outline overlay',
+    look: 'Check that the model outlines lie on the real anatomy in each plane; the bone envelope is still schematic and does not follow the cortex.',
+    links: [
+      { label: 'Axial, outline on', href: 'OLSB.html#m=ct&pl=ax&ov=1' },
+      { label: 'Coronal, outline on', href: 'OLSB.html#m=ct&pl=cor&ov=1' },
+      { label: 'Sagittal, outline on', href: 'OLSB.html#m=ct&pl=sag&ov=1' }
+    ],
+    note: 'The bone envelope does not follow the cortex yet; the ZETA frame review in the gate group is what unblocks it.' },
 
   /* ---- Site pages changed recently ---- */
   { id: 'site-index', group: 'Site pages', issue: null,
@@ -118,6 +131,39 @@ window.__REVIEW_ITEMS = [
     title: 'Airway Rounds stage in both themes',
     look: 'The game stage follows the site theme: light for rooms, dark for projectors.',
     links: [{ label: 'Airway Rounds', href: 'airway-jeopardy.html' }] },
+  { id: 'site-palette', group: 'Site pages', issue: null,
+    title: 'Command palette (Cmd/Ctrl-K)',
+    look: 'The palette groups its results, filters as you type, and Enter and Esc behave as expected, with the same reading at phone width.',
+    links: [{ label: 'One-pager', href: 'index.html' }],
+    note: 'Press Cmd/Ctrl-K on the page.' },
+  { id: 'site-airway-light', group: 'Site pages', issue: null,
+    title: 'Airway Rounds light mode',
+    look: 'In light mode the Quick Quiz right and wrong states and the Browse list read clearly, and the dark hint text has enough contrast on the light stage.',
+    links: [{ label: 'Airway Rounds', href: 'airway-jeopardy.html' }] },
+  { id: 'site-hero-portrait', group: 'Site pages', issue: null,
+    title: 'Hero portrait toggle (MD)',
+    look: 'Tab to the "MD" in the hero name, press Enter or Space to open the portrait, and check that a screen reader announces it as a button with its expanded state.',
+    links: [{ label: 'One-pager', href: 'index.html' }] },
+
+  /* ---- Visual review before content drafting: these gate later content work ---- */
+  { id: 'gate-openear-zeta-frame', group: 'Visual review before content drafting', issue: null,
+    title: 'OpenEar ZETA frame review',
+    look: 'Open the local ZETA review file and check the registration, the 4.9 mm facial-nerve residual, and a second independent fit.',
+    links: [],
+    note: 'Local file, not linked: /tmp/claude-0/-home-user-skflx-github-io/8d0bf0d8-a2a1-5cf9-af24-7621cc28528e/scratchpad/openear-zeta-review.html. Unblocks the OLSB bone envelope from ZETA.' },
+  { id: 'gate-ssb-flap-mucosa', group: 'Visual review before content drafting', issue: null,
+    title: 'SSB flap and scanned mucosa',
+    look: 'Is the baseline mucosa shredded by scan artefact on the scanned base, and does the full right flap sit cleanly on it?',
+    links: [
+      { label: 'Flap, tier 3, full R', href: 'ssb.html#tier=3&flap=full.R' },
+      { label: 'Scanned base', href: 'ssb.html#anat=scanned' }
+    ],
+    note: 'Unblocks the healthy-mucosa inference and the #297 flap node.' },
+  { id: 'gate-atlas', group: 'Visual review before content drafting', issue: null,
+    title: 'Atlas hover and focus',
+    look: 'Hover and tab through the midsagittal atlas and check that each group lights in its subspecialty hue with no visible labels.',
+    links: [],
+    note: 'Unblocks no content work. Open atlas.html directly: check-data forbids this list from naming atlas.html (BLOCKED for a link; owner to decide on REVIEW_LINKERS).' },
 
   /* ---- Not in the repo ---- */
   { id: 'ext-openear-zeta', group: 'Not in the repo', issue: null,
