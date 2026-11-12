@@ -169,6 +169,7 @@ One store; everything else subscribes. The URL hash is the shareable state, e.g.
 ### 6.5 Degradation, accessibility, mobile
 
 - No WebGL2 → graph mode: tree, search and panels as text. Feature detection is in `main.js`; the page never throws to a blank screen.
+- Tree and search rows mark entries that have a 3D surface with a text `3D` badge. The set is `graph.hasSurface`, filled from the pack list (`packs.json`) when the Specimen reads it, so the badges appear after the first paint.
 - The structure tree is a real DOM list mirroring the scene: keyboard navigable, selection synced both ways, announced via `aria-live`.
 - Phones: bottom-sheet panel, one-finger orbit, pinch zoom. Scope steps between stations with drag-to-look rather than free flight.
 

@@ -8,7 +8,7 @@
    <details>; selecting an entity opens its ancestors and marks it
    aria-current.
    ============================================================= */
-import { OTHER_GROUPS, REGION_LABEL, REGION_ORDER, KIND_LABEL, KIND_ORDER } from './graph.js?v=4c9ee329';
+import { OTHER_GROUPS, REGION_LABEL, REGION_ORDER, KIND_LABEL, KIND_ORDER } from './graph.js?v=463d294a';
 
 function el(tag, cls, text) {
     const node = document.createElement(tag);
@@ -23,6 +23,16 @@ export function mountTree({ root, graph, store }) {
     const open = new Set();   /* group keys the reader has opened */
     const chainOf = new Map();   /* structure or entity id -> the group keys above its row, outermost first */
 
+    /* The 3D badge: a text mark, not colour, for a row whose entry has a surface. */
+    function syncBadge(b) {
+        b.querySelector('.ssb-3d')?.remove();
+        if (!graph.hasSurface(b.dataset.id)) return;
+        const badge = el('span', 'ssb-3d', '3D');
+        badge.setAttribute('role', 'img');
+        badge.setAttribute('aria-label', 'has a 3D surface');
+        b.append(badge);
+    }
+
     function leaf(entity) {
         const li = el('li');
         const b = el('button', 'ssb-leaf');
@@ -30,6 +40,7 @@ export function mountTree({ root, graph, store }) {
         b.dataset.id = entity.id;
         b.append(el('span', 'ssb-leaf-name', String(entity.name)));
         if (entity.tier > 1) b.append(el('span', 'ssb-tier-tag', 'T' + entity.tier));
+        syncBadge(b);
         li.append(b);
         return li;
     }
@@ -160,6 +171,8 @@ export function mountTree({ root, graph, store }) {
         if (state.tier !== prev.tier) render();
         if (state.selection !== prev.selection) markSelection(true);
     });
+    /* the pack list arrives after the first paint: mark the rows already built */
+    graph.onSurfaces(() => { for (const b of root.querySelectorAll('button.ssb-leaf[data-id]')) syncBadge(b); });
 
     render();
     markSelection(true);

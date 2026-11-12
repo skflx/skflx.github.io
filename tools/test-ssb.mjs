@@ -2431,9 +2431,31 @@ async function scopeTests(browser, base) {
 let scopeWindow = null;
 const scopeWin = () => scopeWindow || (scopeWindow = scopeUnitTests());
 
+/* Tree and search rows carry the 3D badge exactly for entries that have a surface in packs.json. */
+async function treeBadgeTests(browser, base) {
+  const packs = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs;
+  const surfaced = new Set(Object.values(packs).flatMap((p) => Object.keys(p.nodes)).map((k) => k.replace(/\.[LRM]$/, '')));
+  const { context, page } = await openSpecimen(browser, base, '');
+  await expandTree(page);
+  const badged = (sel) => page.evaluate((s) => [...document.querySelectorAll(s)].map((b) => ({ id: b.dataset.id, badge: b.querySelector('.ssb-3d') ? b.querySelector('.ssb-3d').getAttribute('aria-label') : null })), sel);
+  const rows = await badged('#ssb-tree button.ssb-leaf[data-id]');
+  const wrong = rows.filter((r) => (r.badge === 'has a 3D surface') !== surfaced.has(r.id));
+  check('tree: a row carries the 3D badge (aria-label "has a 3D surface") exactly when its entry has a surface',
+    rows.length > 50 && wrong.length === 0 && rows.some((r) => r.badge) && rows.some((r) => !r.badge), `${rows.length} rows; wrong: ${wrong.map((r) => r.id).join(', ')}`);
+  const mt = rows.find((r) => r.id === 's.middle-turbinate');
+  const un = rows.find((r) => r.id === 's.uncinate-process');
+  check('tree: s.middle-turbinate (surfaced) shows the badge; s.uncinate-process (no surface) does not', !!mt && mt.badge === 'has a 3D surface' && !!un && un.badge === null, JSON.stringify([mt, un]));
+
+  await page.fill('#ssb-search', 'sinus');
+  const hits = await badged('#ssb-results button[data-id]');
+  const hitWrong = hits.filter((r) => (r.badge === 'has a 3D surface') !== surfaced.has(r.id));
+  check('search: a result row carries the 3D badge exactly when its entry has a surface', hits.length > 3 && hitWrong.length === 0 && hits.some((r) => r.badge), `${hits.length} hits; wrong: ${hitWrong.map((r) => r.id).join(', ')}`);
+  await context.close();
+}
+
 /* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
 const SECTIONS = {
-  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); },
+  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); await treeBadgeTests(browser, base); },
   scope: async (browser, base) => { scopeWin(); await scopeTests(browser, base); },
 };
 
