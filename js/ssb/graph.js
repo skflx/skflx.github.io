@@ -140,7 +140,7 @@ export function buildGraph(docs) {
                 if (best < Infinity) scored.push({ s, best, surf: surfaced.has(s.id) ? 0 : 1 });
             }
             const typeRank = Object.keys(COLLECTIONS);
-            scored.sort((a, b) => a.surf - b.surf || a.best - b.best || a.s.tier - b.s.tier
+            scored.sort((a, b) => a.best - b.best || a.surf - b.surf || a.s.tier - b.s.tier
                 || typeRank.indexOf(a.s.type) - typeRank.indexOf(b.s.type) || a.s.name.localeCompare(b.s.name));
             const visible = scored.filter((x) => x.s.tier <= tier);
             return {
