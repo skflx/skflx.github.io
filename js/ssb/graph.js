@@ -123,11 +123,12 @@ export function buildGraph(docs) {
             const e = graph.get(id);
             return e ? String(e.name || e.cite || id) : String(id);
         },
-        /* { hits, hidden }: hits at or below `tier`, best first; hidden counts
-           the matches above it. */
+        /* { hits, hidden, tierAll }: hits at or below `tier`, best first, entries
+           with a 3D surface before the rest; hidden counts the matches above
+           `tier`; tierAll is the lowest depth that shows every match. */
         search(query, { tier = 3, limit = 60 } = {}) {
             const q = norm(query).trim();
-            if (!q) return { hits: [], hidden: 0 };
+            if (!q) return { hits: [], hidden: 0, tierAll: tier };
             const tokens = q.split(/\s+/);
             const scored = [];
             for (const s of searchable) {
@@ -136,15 +137,16 @@ export function buildGraph(docs) {
                     const v = termScore(term, q, tokens);
                     if (v !== null) best = Math.min(best, v + (i ? 0.5 : 0));
                 });
-                if (best < Infinity) scored.push({ s, best });
+                if (best < Infinity) scored.push({ s, best, surf: surfaced.has(s.id) ? 0 : 1 });
             }
             const typeRank = Object.keys(COLLECTIONS);
-            scored.sort((a, b) => a.best - b.best || a.s.tier - b.s.tier
+            scored.sort((a, b) => a.surf - b.surf || a.best - b.best || a.s.tier - b.s.tier
                 || typeRank.indexOf(a.s.type) - typeRank.indexOf(b.s.type) || a.s.name.localeCompare(b.s.name));
             const visible = scored.filter((x) => x.s.tier <= tier);
             return {
                 hits: visible.slice(0, limit).map((x) => x.s),
                 hidden: scored.length - visible.length,
+                tierAll: scored.reduce((m, x) => Math.max(m, x.s.tier), 1),
             };
         },
     };
