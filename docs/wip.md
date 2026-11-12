@@ -8,10 +8,12 @@ changelog. Detail lives in the owning doc named under each heading. Last reviewe
 ## Design system (`css/site.css`, `css/oksat.css`)
 
 **State:** one token set. Paper and ink, hairline rules, Archivo and IBM Plex
-Mono (self-hosted), two signal colours with fixed meanings. OKSAT mirrors it as
-`--ok-*`; Airway's stage follows the site theme on `--aw-*` tokens (see `AGENTS.md`).
+Mono (self-hosted). Surgical red signal colours calibrated to `#941B1B` (light,
+WCAG AAA 7.62:1) and `#F03E4D` (dark, WCAG AA 5.06:1), synchronized with the
+`sk.oto` clinical wiki (`quartz.config.yaml`). OKSAT mirrors it as `--ok-*`;
+Airway's stage follows the site theme on `--aw-*` tokens (see `AGENTS.md`).
 
-**Next:** nothing scheduled.
+**Next:** single-source design token pipeline (`tokens/theme.json` + `tools/sync-tokens.mjs`).
 
 ---
 
@@ -33,13 +35,26 @@ semicircular canal planes.
 ## One-pager (`index.html`)
 
 **State:** an index. Name beside a hero that opens its portrait from the "MD"
-word (`docs/decisions.md` §10). Five numbered sections, all folded at load; each
-opens from its head or from a link into it; with no JavaScript all five are open.
-Sticky section heads on desktop. The residency year is computed in
-`js/onepager.js` and duplicated as a no-JS fallback in the HTML: change both or neither.
+word (`docs/decisions.md` §10) with an accessible toggle, guarded text selection,
+and an organic 0.5s decelerating glide curve. Five numbered sections, all folded
+at load; each opens from its head or from a link into it; with no JavaScript all
+five are open. Sticky section heads on desktop. The residency year is computed
+in `js/onepager.js` and duplicated as a no-JS fallback in the HTML: change both or neither.
 
 **Next (owner):** add the CV. The hero link stays removed until `documents/cv.pdf`
 exists; then add a `Curriculum vitae` item to `.hero-links` in `index.html`.
+
+---
+
+## Search and navigation (`js/site.js`, `search.html`)
+
+**State:** global `Cmd+K` / `Ctrl+K` shortcut. Form element focus and interactive
+app pages (`airway-jeopardy.html`, `oksat-study.html`, `oksat-learn.html`,
+`pdf-chapter-splitter.html`) opt out via `data-no-hotkey` on `<html>` or `<body>`
+to prevent state loss.
+
+**Next:** in-place `<dialog id="cmd-k-palette">` modal with on-demand loading,
+searching site pages, OKSAT guides, CPT codes, and `sk.oto` clinical notes.
 
 ---
 

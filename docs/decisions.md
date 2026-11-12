@@ -148,7 +148,12 @@ progress. Removing `draft` is the owner's call.
 
 - **Hero portrait.** The `index.html` hero portrait is hidden by default and opens from the "MD" word
   in the name (`.egg[data-egg="portrait"]`, `#hero-portrait`). The egg is hidden only under scripting,
-  so a reader without JavaScript sees the portrait.
+  so a reader without JavaScript sees the portrait. Text selection across the title is guarded in `js/egg.js`.
+- **Global search hotkey.** `Cmd+K` / `Ctrl+K` in `js/site.js` opens search. Form input elements ignore the
+  hotkey, and interactive tool pages opt out via `data-no-hotkey` on `<html>` or `<body>` (`airway-jeopardy`,
+  `oksat-study`, `oksat-learn`, `pdf-chapter-splitter`) so in-progress state is never discarded.
+- **Surgical red signal color.** `--signal` is calibrated to `#941B1B` (light, WCAG AAA 7.62:1) and `#F03E4D`
+  (dark, WCAG AA 5.06:1), eliminating terracotta orange drift while preserving perceptual lightness with `--signal-2`.
 
 ## 11. Open data we may commit
 
