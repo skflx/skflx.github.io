@@ -14,11 +14,11 @@
    { frames, selection, caps, hash, specimen, scope, materials } (specimen, scope: the
    stages' hooks; materials: scene.js's hook on the tissue-material library).
    ============================================================= */
-import { loadGraph } from './graph.js?v=727210a8';
+import { loadGraph } from './graph.js?v=e6c379e9';
 import { createStore, parseHash } from './state.js?v=a8ca025a';
-import { mountTree } from './ui-tree.js?v=f1c16c09';
-import { mountSearch } from './ui-search.js?v=1f198732';
-import { mountPanel } from './ui-panel.js?v=92f35aa2';
+import { mountTree } from './ui-tree.js?v=5718df3c';
+import { mountSearch } from './ui-search.js?v=908bdb22';
+import { mountPanel } from './ui-panel.js?v=1c277974';
 
 const $ = (id) => document.getElementById(id);
 
@@ -222,7 +222,7 @@ async function bootStage() {
 async function bootSpecimen(graph, stageHandle) {
     if (!graph || !stageHandle) return;
     try {
-        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=de30a7ab'), import('./ui-specimen.js?v=97ab00c8')]);
+        const [{ mountSpecimen }, { mountSpecimenControls, buildOrient }] = await Promise.all([import('./mode-specimen.js?v=23119ade'), import('./ui-specimen.js?v=97ab00c8')]);
         specimen = mountSpecimen({
             stage: stageHandle, store, graph,
             dom: { note: $('ssb-stage-note'), msg: $('ssb-stage-msg'), labels: $('ssb-labels') },

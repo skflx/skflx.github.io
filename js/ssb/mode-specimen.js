@@ -41,7 +41,7 @@ import { rasToScene, sceneToRas } from './frame.js?v=f554e767';
 import { token } from './materials.js?v=59fdd0b2';
 import { PLANES } from './volume.js?v=4837556e';
 import { CT_PLANES } from './state.js?v=a8ca025a';
-import { REGION_LABEL } from './graph.js?v=727210a8';
+import { REGION_LABEL } from './graph.js?v=e6c379e9';
 
 export const PROVENANCE = 'Reference specimen · from Interactive CT Sinus Anatomy, Univ. of Washington Radiology · draft';
 

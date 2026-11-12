@@ -2474,8 +2474,10 @@ async function searchDepthTests(browser, base) {
 
   await page.fill('#ssb-search', 'sinus');
   const ranked = await page.evaluate(() => [...document.querySelectorAll('#ssb-results button[data-id]')].map((b) => !!b.querySelector('.ssb-3d')));
-  const firstPlain = ranked.indexOf(false);
-  check('search: entries with a 3D surface rank before the rest', ranked.some(Boolean) && (firstPlain < 0 || ranked.lastIndexOf(true) < firstPlain), ranked.map((x) => (x ? 1 : 0)).join(''));
+  check('search: rows with a 3D surface appear in the results (relevance ranks first, a surface only breaks ties)', ranked.some(Boolean), ranked.map((x) => (x ? 1 : 0)).join(''));
+  await page.fill('#ssb-search', 'middle turbinate');
+  const firstHit = await page.evaluate(() => (document.querySelector('#ssb-results button[data-id]') || {}).dataset?.id);
+  check('search: an exact name match ranks first', /middle-turbinate/.test(firstHit || ''), firstHit);
   await context.close();
 }
 
