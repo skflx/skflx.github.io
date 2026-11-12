@@ -32,6 +32,7 @@ import { stampHtml, stampSsb, rootPages } from './stamp-assets.mjs';
 import { validate as validateSsb, contentFiles as ssbFiles, validateGeometry as validateSsbGeometry } from './ssb-content.mjs';
 import { loadEngine, bakeAll } from './ascii3d.mjs';
 import { checkAtlas } from './atlas.mjs';
+import { checkSync, contrastGate } from './sync-tokens.mjs';
 /* Resolve repo root from this file so the checker runs from anywhere. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => path.join(ROOT, p);
@@ -1183,6 +1184,18 @@ async function checkTboneHeader() {
   ok(err === null, 'tbone: ct.json passes js/ssb/volume.js parseHeader', 'tbone: ' + err);
 }
 
+/* tokens: tokens/theme.json is the one colour source. The generated CSS blocks and favicon fills must match it
+   (tools/sync-tokens.mjs --check), and every text pair must pass WCAG AA (4.5:1) or be a documented exception. */
+function checkTokens() {
+  console.log('\ntokens: theme.json -> generated blocks, favicon, WCAG contrast');
+  let stale = [];
+  try { stale = checkSync(); } catch (e) { fail('tokens: ' + e.message); return; }
+  ok(stale.length === 0, 'tokens: generated blocks and favicon match tokens/theme.json', `tokens: out of date: ${stale.join(', ')} (run node tools/sync-tokens.mjs)`);
+  const gate = contrastGate();
+  for (const r of gate.failures) fail(`tokens: contrast ${r.id} ${Number.isNaN(r.ratio) ? '' : r.ratio.toFixed(2) + ':1 '}is ${r.status}`);
+  ok(gate.failures.length === 0, `tokens: ${gate.rows.length - gate.exceptions} text pairs pass AA, ${gate.exceptions} documented exception(s)`, 'tokens: contrast gate failed (see above)');
+}
+
 /* openear/zeta: the committed derived OpenEar volume (owner decision 2026-11-11, docs/decisions.md §11). Folder <= 20 MB,
    ct.json keys within the exporter's ALLOW list (tools/tbone-pipeline/openear-export.py), the attribution in ct.json and
    LICENSE-data.md, and a proper placement rotation (det +1). No page reads it. */
@@ -1282,6 +1295,7 @@ checkGuides();
 checkAirway();
 checkSecurity();
 checkStamps();
+checkTokens();
 checkSsb();
 checkFigures();
 checkOlsb();

@@ -1,0 +1,83 @@
+{
+  "$comment": "Single source for the site's colours. Edit here, then run `node tools/sync-tokens.mjs` (it rewrites only the /* tokens:begin */ ... /* tokens:end */ blocks in css/site.css and css/oksat.css, and the fills in images/favicon.svg). Never hand-edit between the markers. `node tools/sync-tokens.mjs --check` fails when anything is out of date. Values are hex; keys are the site's token names without the leading --.",
+  "themes": {
+    "light": {
+      "bg": "#F1F1EC",
+      "surface": "#FAFAF7",
+      "ink": "#121418",
+      "ink-muted": "#4A4F57",
+      "ink-faint": "#646973",
+      "rule": "#D6D7D0",
+      "rule-strong": "#B4B6AE",
+      "wash": "#E7E8E1",
+      "plate": "#E1E2DA",
+      "signal": "#941B1B",
+      "signal-2": "#2445B0",
+      "on-signal": "#FAFAF7",
+      "ok": "#1F7A52",
+      "bad": "#B0243A"
+    },
+    "dark": {
+      "bg": "#0D0E10",
+      "surface": "#16181B",
+      "ink": "#ECEBE6",
+      "ink-muted": "#A6AAB2",
+      "ink-faint": "#7E838C",
+      "rule": "#26292E",
+      "rule-strong": "#3A3E45",
+      "wash": "#1C1F23",
+      "plate": "#2A2D33",
+      "signal": "#F03E4D",
+      "signal-2": "#8EA7FF",
+      "on-signal": "#FAFAF7",
+      "ok": "#5FD3A0",
+      "bad": "#FF7A8A"
+    }
+  },
+  "oksat": {
+    "$comment": "--ok-* mirror for css/oksat.css. A value is either a site token name (resolved in the same theme) or a literal #hex for OKSAT-only colours and for the one site-divergent value (dark --ok-border is not the site's rule).",
+    "light": {
+      "--ok-bg": "bg",
+      "--ok-surface": "surface",
+      "--ok-border": "rule",
+      "--ok-border-soft": "#E4E5DF",
+      "--ok-text": "ink",
+      "--ok-text-muted": "ink-muted",
+      "--ok-text-faint": "ink-faint",
+      "--ok-accent": "signal-2",
+      "--ok-accent-soft": "#3656C4",
+      "--ok-ochre": "signal",
+      "--ok-correct": "ok",
+      "--ok-correct-bg": "#DCEDE3",
+      "--ok-incorrect": "bad",
+      "--ok-incorrect-bg": "#F5DDE0"
+    },
+    "dark": {
+      "--ok-bg": "bg",
+      "--ok-surface": "surface",
+      "--ok-border": "#2C2F35",
+      "--ok-border-soft": "#22252A",
+      "--ok-text": "ink",
+      "--ok-text-muted": "ink-muted",
+      "--ok-text-faint": "ink-faint",
+      "--ok-accent": "signal-2",
+      "--ok-accent-soft": "#A9BCFF",
+      "--ok-ochre": "signal",
+      "--ok-correct": "ok",
+      "--ok-correct-bg": "#13291F",
+      "--ok-incorrect": "bad",
+      "--ok-incorrect-bg": "#33161B"
+    }
+  },
+  "favicon": {
+    "$comment": "images/favicon.svg: rect fill and circle stroke. dark signal is the mark, light ink the plate.",
+    "background": "light.ink",
+    "mark": "dark.signal"
+  },
+  "contrastExceptions": [
+    {
+      "id": "dark on-signal on signal",
+      "reason": "Fails WCAG AA (3.65:1, needs 4.5:1) in dark mode: #FAFAF7 text on the #F03E4D signal. Used by ::selection in css/site.css. Known and left as is; changing it is an owner decision, not this pipeline's."
+    }
+  ]
+}

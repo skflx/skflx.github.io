@@ -13,7 +13,7 @@ WCAG AAA 7.62:1) and `#F03E4D` (dark, WCAG AA 5.06:1), synchronized with the
 `sk.oto` clinical wiki (`quartz.config.yaml`). OKSAT mirrors it as `--ok-*`;
 Airway's stage follows the site theme on `--aw-*` tokens (see `AGENTS.md`).
 
-**Next:** single-source design token pipeline (`tokens/theme.json` + `tools/sync-tokens.mjs`).
+**Tokens:** single source is `tokens/theme.json`; `tools/sync-tokens.mjs` generates the marked colour blocks in `css/site.css` and `css/oksat.css` and the favicon fills, and gates WCAG AA on text pairs. One documented exception (dark `on-signal` on `signal`, used by selection text) is listed in `theme.json`.
 
 ---
 

@@ -37,6 +37,7 @@
 /* Paper + ink. Accent (blue) = act here; "ochre" is the historical token
    name for the second signal — vermilion — used for kickers and review. */
 [data-theme="light"] {
+  /* tokens:begin */
   --ok-bg: #F1F1EC;
   --ok-surface: #FAFAF7;
   --ok-border: #D6D7D0;
@@ -51,12 +52,14 @@
   --ok-correct-bg: #DCEDE3;
   --ok-incorrect: #B0243A;
   --ok-incorrect-bg: #F5DDE0;
+  /* tokens:end */
   --ok-glow: transparent;
   --ok-shadow: none;
   --ok-shadow-hover: 0 0 0 1px var(--ok-text);
 }
 
 [data-theme="dark"] {
+  /* tokens:begin */
   --ok-bg: #0D0E10;
   --ok-surface: #16181B;
   --ok-border: #2C2F35;
@@ -71,6 +74,7 @@
   --ok-correct-bg: #13291F;
   --ok-incorrect: #FF7A8A;
   --ok-incorrect-bg: #33161B;
+  /* tokens:end */
   --ok-glow: transparent;
   --ok-shadow: none;
   --ok-shadow-hover: 0 0 0 1px var(--ok-text);

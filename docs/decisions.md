@@ -102,6 +102,13 @@ Colour always means something. Site-wide there are exactly two signals, from the
 In OKSAT, one hue per subspecialty. Categorical colours that encode game state (Airway teams, topics,
 difficulty) are allowed; decorative colour is not.
 
+Colours are written once, in `tokens/theme.json`. Edit that file, then run `node tools/sync-tokens.mjs`: it
+rewrites only the `/* tokens:begin */` ... `/* tokens:end */` blocks in `css/site.css` and `css/oksat.css`, and
+the fills in `images/favicon.svg`. Never hand-edit between the markers; `node tools/sync-tokens.mjs --check`
+(run by `check-data`) fails when they drift. A text pair below WCAG AA (4.5:1) is listed in
+`contrastExceptions` in `theme.json` with a reason, never changed silently. The `sk.oto` wiki mirrors these
+colours through its own check; this repo does not touch the wiki.
+
 Do not reintroduce: pill "eyebrow" badges above headings, emoji as icons, icon fonts, gradient or glow
 backgrounds, soft drop shadows on cards, pastel rainbow tags, or a second visitor-selectable theme.
 

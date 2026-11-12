@@ -35,6 +35,7 @@ python3 -m http.server 8000    # http://localhost:8000/
 
 # After editing any css/ or js/ file: refresh the ?v= cache-busting stamps
 node tools/stamp-assets.mjs      # rewrites stale stamps in every root *.html
+node tools/sync-tokens.mjs       # colours: tokens/theme.json -> marked blocks in css/site.css, css/oksat.css, favicon; WCAG AA gate (--check: no writes)
 
 # Verify a change before pushing (also run in CI on every PR)
 node tools/check-data.mjs        # data + security invariants + asset stamps (deps-free, instant)
@@ -63,7 +64,7 @@ The browser suites need only a real Chromium: all page scripts are same-origin (
 Three independent systems share the repo, plus two in progress (the wiki scaffold, and SSB) and one shared component (the figures). They share no state, only the design tokens, the theme key, and the figure engine.
 
 ### Design system
-`css/site.css` is the one palette, type and chrome: paper and ink, hairline rules, Archivo and IBM Plex Mono self-hosted in `fonts/`, and two audiogram signal colours (`--signal` red = act/emphasis, `--signal-2` blue = science). `css/oksat.css` mirrors it as `--ok-*` tokens. Theme is `html[data-theme]`, applied pre-paint by `js/theme-boot.js` (every page, in `<head>`) and toggled by `js/site.js`, persisted as `sk_theme`. Rules: `docs/decisions.md` §5.
+`css/site.css` is the one palette, type and chrome: paper and ink, hairline rules, Archivo and IBM Plex Mono self-hosted in `fonts/`, and two audiogram signal colours (`--signal` red = act/emphasis, `--signal-2` blue = science). `css/oksat.css` mirrors it as `--ok-*` tokens. Theme is `html[data-theme]`, applied pre-paint by `js/theme-boot.js` (every page, in `<head>`) and toggled by `js/site.js`, persisted as `sk_theme`. Colours are written once in `tokens/theme.json`, and `tools/sync-tokens.mjs` regenerates the marked blocks in both sheets and the favicon. Rules: `docs/decisions.md` §5.
 
 ### 1. The one-pager (`index.html`)
 `css/site.css` + `css/onepager.css` + `js/site.js` + `js/onepager.js`. Five numbered sections (`.block[data-fold]`), all folded at load and opened from their heads (folded pre-paint by CSS under `@media (scripting: enabled)`; open without JS; a hash or link into one opens it). Sticky section heads at ≥960px; one column on phones. The hero's portrait (`images/portrait-cutout.webp`, on a `.cutout` plate) is hidden and opens from the "MD" word (`docs/decisions.md` §10). About shows a static 2D cochlea SVG; its ASCII 3D scene `js/diagrams/cochlea.js` (fitted to the owner's own CT and implant, FLEX28; those numbers change only on the owner's word) opens as an egg from the word "electrode". The residency year (`#pgy-status`) is computed in `js/onepager.js` (rolls over July 1, capped at PGY-5), with the current value duplicated in the HTML as a no-JS fallback: **change both together or neither.**
