@@ -32,18 +32,6 @@
       "count": 6
     },
     {
-      "page": "oksat-learn.html?g=ar-crs-aerd&c=aerd",
-      "theme": "dark",
-      "rule": "color-contrast",
-      "count": 1
-    },
-    {
-      "page": "oksat-learn.html?g=ar-crs-aerd&c=aerd",
-      "theme": "light",
-      "rule": "color-contrast",
-      "count": 1
-    },
-    {
       "page": "pdf-chapter-splitter.html",
       "theme": "dark",
       "rule": "color-contrast",
