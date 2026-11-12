@@ -1,0 +1,67 @@
+{
+ "version": 1,
+ "dims": [
+  207,
+  300,
+  242
+ ],
+ "dims_order": "x fastest; array index [k][j][i] = z, y, x",
+ "spacing": [
+  0.3,
+  0.3,
+  0.3
+ ],
+ "origin": [
+  -24.9,
+  -51.3,
+  -42.9
+ ],
+ "affine": [
+  [
+   0.3,
+   0,
+   0,
+   -24.9
+  ],
+  [
+   0,
+   0.3,
+   0,
+   -51.3
+  ],
+  [
+   0,
+   0,
+   0.3,
+   -42.9
+  ],
+  [
+   0,
+   0,
+   0,
+   1
+  ]
+ ],
+ "affineNote": "voxel (i,j,k,1) -> frame mm (x lateral, y anterior, z superior; origin = stapes footplate; a right ear), row-major; origin is the frame position of voxel [0,0,0]",
+ "frame": "OLSB (js/olsb/volume.js): mm, a right ear, x lateral, y anterior, z superior; (0,0,0) = the stapes footplate of this specimen (OLSB places its origin at the centre of the oval window; they differ by about 1 mm)",
+ "dtype": "uint8",
+ "window": {
+  "kind": "display",
+  "scanner_min": -500.0,
+  "scanner_max": 2500.0,
+  "note": "linear display levels over cone-beam CT grey values (not HU): level = 1 + 254 * (value - scanner_min) / (scanner_max - scanner_min), clipped to 1..255; 0 = outside the scan"
+ },
+ "method": "trilinear resampling of the source to a 0.3 mm grid, then sampling into the OLSB-frame box through the rotation of frame.json; box = the Bone bounding box of frame.json plus 2.0 mm; no other processing",
+ "source": {
+  "library": "OpenEar",
+  "record": "doi:10.5281/zenodo.1473724",
+  "paper": "doi:10.1038/sdata.2018.297",
+  "modality": "cone-beam CT",
+  "source_spacing_mm": [
+   0.125,
+   0.125,
+   0.125
+  ]
+ },
+ "attribution": "Temporal bone CT derived from the OpenEar library (Sieber et al., Sci Data 2019, doi:10.1038/sdata.2018.297; data doi:10.5281/zenodo.1473724), CC BY 4.0; resampled and cropped."
+}

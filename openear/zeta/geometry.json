@@ -1,0 +1,207 @@
+{
+ "frame": "OLSB (js/olsb/volume.js): mm, a right ear, x lateral, y anterior, z superior; (0,0,0) = the stapes footplate of this specimen (OLSB places its origin at the centre of the oval window; they differ by about 1 mm)",
+ "grid": "ct.json",
+ "structures": {
+  "malleus": {
+   "voxels": 582,
+   "volume_mm3": 15.71,
+   "centroid_mm": [
+    5.544,
+    2.37,
+    2.703
+   ],
+   "bbox_min_mm": [
+    4.2,
+    1.2,
+    -3.0
+   ],
+   "bbox_max_mm": [
+    7.2,
+    3.3,
+    5.4
+   ],
+   "fitted": true
+  },
+  "incus": {
+   "voxels": 625,
+   "volume_mm3": 16.87,
+   "centroid_mm": [
+    5.54,
+    0.141,
+    3.374
+   ],
+   "bbox_min_mm": [
+    3.9,
+    -2.7,
+    -0.9
+   ],
+   "bbox_max_mm": [
+    6.9,
+    2.1,
+    5.4
+   ],
+   "fitted": true
+  },
+  "stapes": {
+   "voxels": 131,
+   "volume_mm3": 3.54,
+   "centroid_mm": [
+    1.429,
+    -0.208,
+    -0.337
+   ],
+   "bbox_min_mm": [
+    -0.3,
+    -1.5,
+    -0.9
+   ],
+   "bbox_max_mm": [
+    3.9,
+    1.2,
+    0.6
+   ],
+   "fitted": true
+  },
+  "cochlea": {
+   "voxels": 6913,
+   "volume_mm3": 186.65,
+   "centroid_mm": [
+    -1.414,
+    -0.63,
+    0.041
+   ],
+   "bbox_min_mm": [
+    -5.7,
+    -10.2,
+    -5.4
+   ],
+   "bbox_max_mm": [
+    3.9,
+    6.3,
+    8.4
+   ],
+   "fitted": true
+  },
+  "tm": {
+   "voxels": 1544,
+   "volume_mm3": 41.69,
+   "centroid_mm": [
+    5.941,
+    2.081,
+    -2.791
+   ],
+   "bbox_min_mm": [
+    3.6,
+    -2.1,
+    -8.4
+   ],
+   "bbox_max_mm": [
+    8.7,
+    6.9,
+    2.4
+   ],
+   "fitted": true
+  },
+  "eac": {
+   "voxels": 27274,
+   "volume_mm3": 736.4,
+   "centroid_mm": [
+    13.501,
+    0.1,
+    -0.706
+   ],
+   "bbox_min_mm": [
+    3.9,
+    -6.9,
+    -8.4
+   ],
+   "bbox_max_mm": [
+    21.9,
+    6.9,
+    6.3
+   ],
+   "fitted": true
+  },
+  "fn": {
+   "voxels": 1752,
+   "volume_mm3": 47.3,
+   "centroid_mm": [
+    4.592,
+    -3.343,
+    -4.765
+   ],
+   "bbox_min_mm": [
+    -3.6,
+    -6.6,
+    -14.1
+   ],
+   "bbox_max_mm": [
+    9.3,
+    6.6,
+    3.3
+   ],
+   "fitted": true
+  },
+  "chorda": {
+   "voxels": 211,
+   "volume_mm3": 5.7,
+   "centroid_mm": [
+    7.305,
+    -2.828,
+    -3.916
+   ],
+   "bbox_min_mm": [
+    2.7,
+    -6.3,
+    -10.2
+   ],
+   "bbox_max_mm": [
+    8.7,
+    3.6,
+    1.5
+   ],
+   "fitted": true
+  },
+  "cn8": {
+   "voxels": 8438,
+   "volume_mm3": 227.83,
+   "centroid_mm": [
+    -9.415,
+    1.655,
+    -1.909
+   ],
+   "bbox_min_mm": [
+    -18.3,
+    -2.1,
+    -7.8
+   ],
+   "bbox_max_mm": [
+    -1.2,
+    5.4,
+    3.3
+   ],
+   "fitted": true
+  },
+  "ica": {
+   "voxels": 13546,
+   "volume_mm3": 365.74,
+   "centroid_mm": [
+    -4.45,
+    11.2,
+    -11.508
+   ],
+   "bbox_min_mm": [
+    -10.2,
+    6.9,
+    -15.9
+   ],
+   "bbox_max_mm": [
+    0.6,
+    16.8,
+    -5.4
+   ],
+   "fitted": true
+  }
+ },
+ "note": "glossary ids (js/olsb/glossary.js); cochlea = the two cochlear scalae together; computed from the segmentation sampled on the ct grid, before any display rounding; the specimen supplies no vestibule, canals, IAC or Eustachian tube"
+}

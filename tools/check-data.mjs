@@ -1183,6 +1183,39 @@ async function checkTboneHeader() {
   ok(err === null, 'tbone: ct.json passes js/ssb/volume.js parseHeader', 'tbone: ' + err);
 }
 
+/* openear/zeta: the committed derived OpenEar volume (owner decision 2026-11-11, docs/decisions.md §11). Folder <= 20 MB,
+   ct.json keys within the exporter's ALLOW list (tools/tbone-pipeline/openear-export.py), the attribution in ct.json and
+   LICENSE-data.md, and a proper placement rotation (det +1). No page reads it. */
+function checkOpenear() {
+  console.log('\nopenear: derived OpenEar volume (no page reads it)');
+  const CT_KEYS = ['version', 'dims', 'dims_order', 'spacing', 'origin', 'affine', 'affineNote', 'frame', 'dtype', 'window', 'method', 'source', 'attribution'];
+  const ATTRIB = 'Temporal bone CT derived from the OpenEar library (Sieber et al., Sci Data 2019, doi:10.1038/sdata.2018.297; data doi:10.5281/zenodo.1473724), CC BY 4.0; resampled and cropped.';
+  const MAX_BYTES = 20 * 1024 * 1024;
+  if (!fs.existsSync(rel('openear/zeta')) || !fs.statSync(rel('openear/zeta')).isDirectory()) { fail('openear/zeta/ is missing'); return; }
+  pass('openear/zeta/ exists');
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]));
+  const bytes = walk(rel('openear')).reduce((s, f) => s + fs.statSync(f).size, 0);
+  ok(bytes <= MAX_BYTES, `openear/: ${(bytes / 1048576).toFixed(2)} MB <= 20 MB`, `openear/: ${(bytes / 1048576).toFixed(2)} MB exceeds 20 MB`);
+  let ct = null;
+  let frame = null;
+  try { ct = JSON.parse(fs.readFileSync(rel('openear/zeta/ct.json'), 'utf8')); } catch (e) { fail('openear: ct.json unreadable: ' + e.message); }
+  try { frame = JSON.parse(fs.readFileSync(rel('openear/zeta/frame.json'), 'utf8')); } catch (e) { fail('openear: frame.json unreadable: ' + e.message); }
+  if (ct) {
+    const extra = Object.keys(ct).filter((k) => !CT_KEYS.includes(k));
+    ok(extra.length === 0, `openear: ct.json keys within the allowlist (${Object.keys(ct).length})`, 'openear: ct.json keys outside the allowlist: ' + extra.join(', '));
+    ok(ct.attribution === ATTRIB, 'openear: ct.json attribution is the required line', 'openear: ct.json attribution is not the required line');
+  }
+  const lic = fs.existsSync(rel('openear/LICENSE-data.md')) ? fs.readFileSync(rel('openear/LICENSE-data.md'), 'utf8') : '';
+  ok(lic.includes(ATTRIB), 'openear: LICENSE-data.md carries the attribution', 'openear: LICENSE-data.md lacks the attribution line');
+  if (frame && Array.isArray(frame.matrix)) {
+    const m = frame.matrix;
+    const det = m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1]) - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+    ok(Math.abs(det - 1) < 1e-6, `openear: frame determinant ${det.toFixed(9)} = +1`, `openear: frame determinant ${det} is not +1`);
+  } else {
+    fail('openear: frame.json has no matrix');
+  }
+}
+
 /* No e-mail addresses in tracked text (owner decision 2026-11-11, docs/decisions.md §11). Author names may
    appear; e-mail addresses may not. Reports file:line only, never the address. Allowed: GitHub no-reply
    addresses and the reserved example domains. An npm-style "@scope/pkg" has no dot-TLD domain, so it never matches. */
@@ -1256,5 +1289,6 @@ checkAtlasAndUnlisted();
 checkNoEmails();
 checkReviewItems();
 await checkTboneHeader();
+checkOpenear();
 console.log(`\n${failures ? 'FAILED' : 'OK'} — ${checks - failures}/${checks} checks passed.`);
 process.exit(failures ? 1 : 0);
