@@ -175,7 +175,7 @@ def main():
     mm = scale['adopted_mm_per_px']
     O, e1, e2, w, dz = sagittal_frame(reg)
     canon = load_canon()
-    S = json.load(open(os.path.join(REPO, 'ssb/reference/uw-sinusanatomy2/slices.json')))
+    S = json.load(open(os.path.join(HERE, 'reference', 'uw-sinusanatomy2', 'slices.json')))
 
     pts = defaultdict(lambda: defaultdict(list))   # term -> plane -> [(xyz axial px), ...]
     n_coronal = 0

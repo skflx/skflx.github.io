@@ -1,6 +1,6 @@
 """Held-out arrow-tip split and label scorer (docs/ssb.md §14, R7.1; work package RS0).
 
-    python3 tools/ssb-pipeline/uw/score.py split            # write ssb/reference/uw-sinusanatomy2/split.json (once)
+    python3 tools/ssb-pipeline/uw/score.py split            # write tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/split.json (once)
     python3 tools/ssb-pipeline/uw/score.py                  # score today's labels: the as-scanned head AND the served one
     python3 tools/ssb-pipeline/uw/score.py --labels DIR     # any labels: DIR holds ct.json, labels.u16.gz, labels.json
     python3 tools/ssb-pipeline/uw/score.py --labels as-scanned|served [--set heldout|seed|all] [--tol 1] [--json OUT]
@@ -44,7 +44,7 @@ from scipy import ndimage as ndi
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-REF = os.path.join(REPO, 'ssb/reference/uw-sinusanatomy2')
+REF = os.path.join(HERE, 'reference', 'uw-sinusanatomy2')
 SPLIT = os.path.join(REF, 'split.json')
 AS_SCANNED_COMMIT = '37fa476240afb7568d652814e82801e7f1cb7c97'     # normalize.py's input (master just before N1)
 SEED, FRACTION = 20261009, 0.30

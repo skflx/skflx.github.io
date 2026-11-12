@@ -146,7 +146,7 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 **Gaps, owner decisions needed:**
 - `ssb/geometry/sweeps.json` is not fetched by the page: the sweep loader and layer are gone. It stays as the input of `tools/ssb-pipeline/uw/sdf.py` (the Scope HUD's ICA, optic nerve and AEA fields) and of `normalize.py`. Deleting it is an owner call; it also needs the `sdf.py` input changed.
 - Selecting a vessel or nerve in the Specimen no longer draws its tube: the sweep layer was the only 3D geometry for those ids. Owner call: restore a selected-vessel display (which brings the fetch back) or leave them as text in the panel.
-- `ssb/reference/` is gone. It held `uw-sinusanatomy2/split.json`, the held-out tip division that `reseg.py` and `score.py` read. `score.py split` writes it again; the rewrite is not checked against the old file.
+- The UW ground truth the pipeline reads (`slices.json`, `labels.json`, `crosswalk.json`, `split.json`) is in `tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/`, restored from b4b213c. `split.json` is the held-out tip division; `score.py split` rewrites it, and a rewrite is not checked against the committed file.
 - `tools/ssb-pipeline/uw/normalize.py --base scanned` (and its NasalSeg check) reads `ssb/anatomy/`, and `stations.py` reads `ssb/states/`; both were deleted with their phases. Pipeline prune needed.
 - `ssb/geometry/stations.json` still carries the `byState` tables (keys are removed dissection states), `overviews` and `uncovered`; the `tools/ssb-pipeline/uw/stations.py` that writes them still does.
 - `content`: the procedure, hazard, principle and condition collections are still shown in the tree.

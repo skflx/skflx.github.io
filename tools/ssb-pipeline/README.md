@@ -24,7 +24,7 @@ from the axial and sagittal stacks (`registration.specimen_identity`).
 
 Resegmentation ground truth (WP RS0; numpy + scipy only, no crawl):
 
-    python3 -I tools/ssb-pipeline/uw/score.py split      # -> split.json (the held-out seed/tip division; committed until ssb/reference was retired)
+    python3 -I tools/ssb-pipeline/uw/score.py split      # -> split.json (the held-out seed/tip division; committed under tools/ssb-pipeline/uw/reference/)
     python3 -I tools/ssb-pipeline/uw/score.py            # baseline: today's labels, as-scanned and served; --labels DIR for candidates
 
 `split.json` is the fixed 70/30 seed/held-out division of the head-A arrow tips; segmentation reads seed tips only.
@@ -74,7 +74,8 @@ the file once it is committed. Both scripts write their report to `registration.
 (`specimen`, `meshes`). With `--png-dir DIR` they also write check images (label overlays,
 mesh renders). A native-resolution copy of the volume stays offline in
 `incoming/uw-sinusanatomy2/_recon/specimen-native.npz`. Provenance for everything under
-`ssb/ct`, `ssb/geometry` and `ssb/models` is in `ssb/LICENSE-data.md`.
+`ssb/ct`, `ssb/geometry` and `ssb/models` is in `ssb/LICENSE-data.md`, and so is the provenance of the
+UW ground-truth inputs in `tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/`.
 
 Reconstruction, stage C (resection units, neurovascular sweeps, proximity fields; run after stage B):
 

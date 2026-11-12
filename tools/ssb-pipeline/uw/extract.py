@@ -2,7 +2,7 @@
 arrows) by threshold, OCR the text locally, find each arrow's tip and tail,
 and attach arrows to the text box their tail starts from.
 
-Output: ssb/reference/uw-sinusanatomy2/slices.json (the directory is created; not committed) = {plane: [{n, scout_rect, fov_center, labels: [
+Output: tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/slices.json (committed; read by labels3d.py, relate.py, score.py) = {plane: [{n, scout_rect, fov_center, labels: [
   {text, conf, box:[x0,y0,x1,y1], tips:[[x,y],...], arrowless:bool}]}]}"""
 import json, os, sys
 import numpy as np
@@ -14,7 +14,7 @@ from rapidocr_onnxruntime import RapidOCR
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, '..', 'incoming', 'uw-sinusanatomy2')  # from fetch.py; gitignored
-OUT = os.path.join(HERE, '..', '..', '..', 'ssb', 'reference', 'uw-sinusanatomy2', 'slices.json')
+OUT = os.path.join(HERE, 'reference', 'uw-sinusanatomy2', 'slices.json')
 ocr = RapidOCR()
 
 def gray(path):
