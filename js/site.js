@@ -50,11 +50,11 @@
        shortcut off (game, tool, or page with its own text input). */
     var palette = { state: 'idle', ret: null };   /* idle | loading | ready | failed */
 
+    /* palette.js is fetched here, not in the HTML: its ?v= is this constant, which tools/stamp-assets.mjs rewrites to palette.js's own hash */
+    var PALETTE_V = '295a31d6'; /* stamp:js/palette.js */
+
     function paletteSrc() {
-        /* palette.js is not in the HTML, so it takes this script's ?v= stamp and changes with site.js */
-        var me = document.querySelector('script[src*="js/site.js"]');
-        var q = me ? (me.getAttribute('src') || '').split('?')[1] : '';
-        return 'js/palette.js' + (q ? '?' + q : '');
+        return 'js/palette.js?v=' + PALETTE_V;
     }
 
     function openPalette(ret) {

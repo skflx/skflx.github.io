@@ -16,7 +16,9 @@
 
    Covers <link href> and <script src> pointing into css/ or js/ in
    every root *.html. Fonts, images and the module files that
-   js/oksat/viewer.js injects at runtime are not stamped.
+   js/oksat/viewer.js injects at runtime are not stamped. js/palette.js,
+   which js/site.js fetches at runtime, is stamped through the marked
+   `const PALETTE_V` line in js/site.js (stampPalette, run before the HTML pass).
 
    SSB's ES-module graph (js/ssb, docs/ssb.md section 7.2) needs more
    than the HTML pass: main.js?v=... imports ./scene.js, which the CDN
@@ -192,6 +194,34 @@ export function stampSsb({ write = false } = {}) {
   return { stale, errors };
 }
 
+/* ---------------- palette.js (loaded by site.js, not by HTML) ---------------- */
+
+/* js/site.js fetches js/palette.js at runtime, so the HTML pass cannot stamp it.
+   The URL lives in one marked constant instead, which this tool rewrites to the
+   file's hash. site.js's own hash then changes too, so this runs BEFORE the HTML pass. */
+const PALETTE_FILE = 'js/palette.js';
+const PALETTE_HOST = 'js/site.js';
+const PALETTE_CONST = /(\b(?:const|var) PALETTE_V = ')[^']*(';\s*\/\* stamp:js\/palette\.js \*\/)/;
+
+export function stampPalette({ write = false } = {}) {
+  const stale = [];
+  const errors = [];
+  const abs = path.join(ROOT, PALETTE_HOST);
+  const src = fs.readFileSync(abs, 'utf8');
+  const hits = src.match(new RegExp(PALETTE_CONST.source, 'g')) || [];
+  if (hits.length !== 1) {
+    errors.push(`${PALETTE_HOST}: expected exactly one \`const PALETTE_V = '…'; /* stamp:js/palette.js */\` line, found ${hits.length}`);
+    return { stale, errors };
+  }
+  const want = '$1' + hashOf(PALETTE_FILE) + '$2';
+  const next = src.replace(PALETTE_CONST, want);
+  if (next !== src) {
+    stale.push(`${PALETTE_HOST}: PALETTE_V -> ${hashOf(PALETTE_FILE)} (${PALETTE_FILE})`);
+    if (write) fs.writeFileSync(abs, next);
+  }
+  return { stale, errors };
+}
+
 export function rootPages() {
   return fs.readdirSync(ROOT).filter((f) => f.endsWith('.html')).sort();
 }
@@ -205,6 +235,12 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   for (const s of ssb.stale) console.log(`${check ? 'stale ' : 'stamped'}  ${s}`);
   staleCount += ssb.stale.length;
   if (ssb.errors.length) process.exit(1);
+  /* palette constant in site.js before the HTML pass, so site.js's new hash reaches the pages in this run */
+  const pal = stampPalette({ write: !check });
+  for (const e of pal.errors) console.log(`error   ${e}`);
+  for (const s of pal.stale) console.log(`${check ? 'stale ' : 'stamped'}  ${s}`);
+  staleCount += pal.stale.length;
+  if (pal.errors.length) process.exit(1);
   for (const page of rootPages()) {
     const abs = path.join(ROOT, page);
     const { html, stale } = stampHtml(fs.readFileSync(abs, 'utf8'));
