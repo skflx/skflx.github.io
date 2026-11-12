@@ -106,6 +106,7 @@ Unlisted (`noindex`; the only page that links to `ssb.html`; `OLSB.html` is also
 
 Rules that bite:
 - **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/` and `ssb/models/` come from `tools/ssb-pipeline/`; the UW ground truth it reads is in `tools/ssb-pipeline/uw/reference/`, never served. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
+- **Before deleting a data file, grep `tools/` for its readers.** Pipeline inputs live under `tools/ssb-pipeline/`, never under the served `ssb/`.
 - **Never write fixture files into `ssb/`.** Tests build synthetic data (`tools/ssb-fixture-ct.mjs`), routed by Playwright.
 - **Ids are never renamed; coordinates never go in content.** Every name in geometry is a graph id; parts are `<graph id>.<side>`. `tools/check-data.mjs` enforces both.
 - **Content is `review: "draft"`; only the owner sets `verified`** (medical correctness, `docs/decisions.md` §7). `verified` on a source means exists-as-cited, not supports-the-claim.
