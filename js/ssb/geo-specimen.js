@@ -45,10 +45,8 @@
      whose name ends in "@<cut>", is a remnant "<id>.<side>@<cut>" of a base wall, drawn in its place: userData.remnant),
      so they never collide with the base nodes; the others are the state's lining (userData.lining, userData.state).
 
-   - A population pack (packs.json "population": true, POP2b) is the NasalSeg majority maxillary sinus, drawn as a ghost
-     beside the specimen's own: never loaded at boot or by loadLining(); the Population panel's toggle asks for it
-     (loadPopulationPack) and gives it back (unloadPopulationPack). Its nodes (extras kind "ghost") are registered as
-     "population:<id>.<side>" (group ghost, userData.population), so byId, picking and the region list never see them.
+   - A population pack (packs.json "population": true, POP2b) is never loaded: the population panel and its ghost were removed
+     (SSB phase 1), so no core path draws it. loadLining() skips it and it stays deferred.
 
    - An anatomy override pack (docs/ssb.md §14, R6.2, WP RA3a) is the whole-node replacement an edited state brings:
      ssb/anatomy/overrides/<base>/<entity>.<side>.<preset>.glb.gz, named by the patch it goes with (its `replacesNodes` and
@@ -71,7 +69,6 @@ export const PACKS_FILE = 'ssb/models/packs.json';
 const DATA_ROOT = /^ssb(?:\/anatomy\/(?:scanned|scanned-b))?$/;
 const rootOrStandard = (root) => (typeof root === 'string' && DATA_ROOT.test(root) ? root : 'ssb');
 export const LINING_PREFIX = 'lining:';
-export const POPULATION_PREFIX = 'population:';
 export const LANDMARKS_FILE = 'ssb/geometry/landmarks.json';
 export const SWEEPS_FILE = 'ssb/geometry/sweeps.json';
 export const CT_HEADER_FILE = 'ssb/ct/ct.json';
@@ -192,7 +189,6 @@ export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url
 
     const nodes = new Map();           /* "<id>.<side>" -> mesh */
     const packs = new Map();           /* name -> { name, file, state, error, nodes: [keys], expected: [keys] } */
-    let populationLoad = null;         /* loadPopulationPack()'s memoized promise, cleared by unloadPopulationPack() */
     const problems = [];
     let status = 'idle';               /* idle | loading | ready | partial | error | absent */
     let loadDone = null;               /* the promise of load(), awaited by loadLining() */
@@ -220,10 +216,9 @@ export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url
             const cut = isState && typeof u.cut === 'string' && CUT.test(u.cut) ? u.cut : (isState && /@([a-z0-9-]{1,40})$/.exec(nodeName) || [])[1] || '';
             const remnant = isState && cut !== '';
             const lined = !!pack.lining || (isState && !remnant);
-            const ghost = !!pack.population;
             const isOverride = !!pack.anatomyKey;
             if (isOverride && !pack.allowed.has(`${id}.${side}`)) { problem(`${label} (${id}.${side}) is not one of the nodes its patch replaces or adds; skipped.`); continue; }
-            const key = `${isOverride ? `anatomy:${pack.anatomyKey}:` : isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ghost ? POPULATION_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
+            const key = `${isOverride ? `anatomy:${pack.anatomyKey}:` : isState ? `state:${pack.stateKey}:` : pack.lining ? LINING_PREFIX : ''}${id}.${side}${cut ? '@' + cut : ''}`;
             if (nodes.has(key)) { problem(`${label} repeats ${key}; skipped.`); continue; }
             const g = mesh.geometry;
             const pos = g && g.attributes ? g.attributes.position : null;
@@ -239,12 +234,12 @@ export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url
             }
             const entity = graph.get(id);
             const extraKind = typeof u.kind === 'string' ? u.kind : '';
-            const { look, group, liningKind = '' } = ghost ? { look: { kind: 'ghost', ghost: true }, group: 'ghost' } : lined ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
+            const { look, group, liningKind = '' } = lined ? { look: { kind: isKind(extraKind) && extraKind !== 'space' ? extraKind : 'mucosa', doubleSide: true }, group: 'lining' } : lookFor(id, entity, extraKind);
             mesh.parent.remove(mesh);
             mesh.name = key;
             mesh.material.dispose();
             mesh.material = new THREE.MeshBasicMaterial();      /* replaced by mode-specimen per state */
-            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, population: ghost, state: pack.stateKey || '', remnant, cut, anatomy: pack.anatomyKey || '' };
+            mesh.userData = { id, side, key, pack: pack.name, look, group, liningKind, region: entity && entity.region ? String(entity.region) : '', triangles: tris, envelope: id === ENVELOPE_ID, lining: lined, state: pack.stateKey || '', remnant, cut, anatomy: pack.anatomyKey || '' };
             root.add(mesh);
             nodes.set(key, mesh);
             triangles += tris;
@@ -285,7 +280,7 @@ export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url
             return status;
         }
         if (!list.length) { status = 'error'; problem('packs.json lists no usable pack.'); return status; }
-        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, population: p.population, stateKey: p.stateKey, nodes: [], expected: p.nodes.map((k) => (p.stateKey ? `state:${p.stateKey}:` : p.lining ? LINING_PREFIX : p.population ? POPULATION_PREFIX : '') + String(k)) });
+        for (const p of list) packs.set(p.name, { name: p.name, file: p.file, state: 'pending', error: '', lining: p.lining, population: p.population, stateKey: p.stateKey, nodes: [], expected: p.nodes.map((k) => (p.stateKey ? `state:${p.stateKey}:` : p.lining ? LINING_PREFIX : '') + String(k)) });
 
         const take = async (p, bytesPromise) => {
             const pack = packs.get(p.name);
@@ -471,54 +466,6 @@ export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url
     let replaced = new Set();
     function setReplaced(keys) { replaced = new Set(keys); }
 
-    /* The population pack (the toggle): fetched once on request, adopted under "population:<id>.<side>" and kept until
-       unloadPopulationPack. Resolves with the nodes it added ([] when packs.json lists no population pack). Never
-       rejects: a pack that cannot be read is recorded as any other. */
-    function loadPopulationPack() {
-        const pack = [...packs.values()].find((p) => p.population);
-        if (!pack) return Promise.resolve([]);
-        if (populationLoad) return populationLoad;
-        populationLoad = (async () => {
-            try {
-                if (loadDone) await loadDone;
-                if (pack.state === 'deferred' || pack.state === 'failed') {
-                    pack.state = 'loading';
-                    try {
-                        const scene = await readPack(pack, await fetchPack(pack));
-                        if (disposed) return [];
-                        adopt(scene, pack);
-                        pack.state = 'loaded';
-                    } catch (e) {
-                        pack.state = 'failed';
-                        pack.error = e && e.message ? String(e.message) : 'The pack could not be read.';
-                        problem(pack.error);
-                    }
-                    try { onPackCb(pack); } catch (e) { console.error(e); }
-                }
-            } catch (e) { console.error(e); }
-            return pack.nodes.slice();
-        })();
-        return populationLoad;
-    }
-
-    /* Drop the population pack's meshes: the pack goes back to 'deferred'. */
-    function unloadPopulationPack() {
-        const pack = [...packs.values()].find((p) => p.population);
-        if (!pack || pack.state === 'loading') return false;
-        for (const [k, mesh] of [...nodes]) {
-            if (!mesh.userData.population) continue;
-            triangles -= mesh.userData.triangles || 0;
-            if (mesh.geometry) mesh.geometry.dispose();
-            if (mesh.material && typeof mesh.material.dispose === 'function') mesh.material.dispose();
-            root.remove(mesh);
-            nodes.delete(k);
-        }
-        pack.nodes = [];
-        pack.state = 'deferred';
-        populationLoad = null;
-        return true;
-    }
-
     /* The RAS box of the named nodes (or all): { min, max } in mm, or null. */
     function boundsOf(keys = null) {
         const box = new THREE.Box3();
@@ -543,10 +490,10 @@ export function createSpecimen({ graph, root: dataRootIn = 'ssb', fetchFn = (url
     }
 
     return {
-        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, loadOverride, unloadOverride, setReplaced, loadPopulationPack, unloadPopulationPack, boundsOf, dispose,
+        THREE, root, nodes, packs, problems, load, loadLining, loadState, unloadState, loadOverride, unloadOverride, setReplaced, boundsOf, dispose,
         get status() { return status; },
         get triangles() { return triangles; },
-        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant && !m.userData.population && !replaced.has(m.userData.key)),
+        byId: (id) => [...nodes.values()].filter((m) => m.userData.id === id && !m.userData.lining && !m.userData.remnant && !replaced.has(m.userData.key)),
     };
 }
 

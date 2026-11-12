@@ -52,7 +52,7 @@ export function clampTier(value) {
 }
 
 /* The mucosal state (`mu=` in the hash, docs/ssb.md 5.9): decongested, as scanned (the default) or congested. An exact,
-   case-sensitive whitelist, like the quality. A procedure always plays decongested, whatever this says. */
+   case-sensitive whitelist, like the quality. */
 export const MU_MODES = Object.freeze(['dec', 'scan', 'cong']);
 export const MU_DEFAULT = 'scan';
 export function clampMu(value) {

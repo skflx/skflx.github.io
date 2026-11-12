@@ -2,11 +2,9 @@
    scene.js — the 3D stage: renderer, camera, controls, lights, token
    tissue materials, picking, on-demand loop.
 
-   Two stages share one renderer, through two slots: the *specimen* slot
-   (setSpecimen / showSpecimen: the reference specimen, which mode-specimen.js
-   owns and disposes) and the *content* slot the variant lab fills with a
-   diorama (setContent, which disposes what it replaces). While neither holds
-   anything the stage shows a placeholder — an RAS axis gizmo and a neutral
+   The stage holds one slot, the *specimen* (setSpecimen / showSpecimen: the
+   reference specimen, which mode-specimen.js owns and disposes). While it is
+   empty the stage shows a placeholder — an RAS axis gizmo and a neutral
    10 mm grid — that makes no anatomical claim.
 
    - Coordinates: authored data is RAS millimetres; rasToScene() (frame.js,
@@ -19,8 +17,7 @@
      alone (docs/ssb.md 7.4). Quality is 'full' or 'lite': the #q= hash
      override, else chosen from device hints at boot.
    - Rendering is on demand: a frame is drawn only when something changed
-     (orbit, resize, theme, content), except while an animation is running
-     (setAnimating), e.g. the lab's flow particles, or a camera flight.
+     (orbit, resize, theme, specimen), except during a camera flight.
    - The camera's up is always +Y (OrbitControls fixes its orbit axis when it
      is built), so a view from above is aimed from slightly behind the target.
    - Only this module (and the dioramas, which receive THREE as an
@@ -58,7 +55,7 @@ function gridGeometry(major) {
 
 /* opts: { canvas, host, labels, onLost, quality }
      canvas  the WebGL canvas; CSS sizes it (the whole stage, or the stage
-             beside the lab's docked controls) and the renderer follows it
+             beside the docked controls) and the renderer follows it
      host    the stage element
      labels  overlay element that receives the axis letters (DOM text, not sprites)
      onLost  called when the graphics context is lost
@@ -83,7 +80,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     controls.listenToKeyEvents(canvas);  /* arrow keys pan while the canvas has focus */
     controls.update();
 
-    /* Lights for the content (the placeholder uses unlit materials): a soft
+    /* Lights for the specimen (the placeholder uses unlit materials): a soft
        ambient/hemisphere fill and a headlight that follows the camera. */
     const hemi = new THREE.HemisphereLight(0xffffff, 0x8a8a80, 1.1);
     const head = new THREE.DirectionalLight(0xffffff, 1.9);
@@ -91,7 +88,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     camera.add(head);
     scene.add(hemi);
 
-    /* ---- the placeholder: shown while the specimen and content slots are empty ---- */
+    /* ---- the placeholder: shown while the specimen slot is empty ---- */
 
     const placeholder = new THREE.Group();
     const gridMinor = new THREE.LineSegments(gridGeometry(false), new THREE.LineBasicMaterial());
@@ -121,16 +118,14 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     scene.add(placeholder);
     const placeholderView = { position: camera.position.clone(), target: controls.target.clone() };
 
-    /* ---- the content slot (the lab) and the specimen slot ---- */
+    /* ---- the specimen slot ---- */
 
-    const content = new THREE.Group();
-    scene.add(content);
     const specimenSlot = new THREE.Group();
     specimenSlot.visible = false;
     scene.add(specimenSlot);
 
     function syncPlaceholder() {
-        placeholder.visible = content.children.length === 0 && !(specimenSlot.visible && specimenSlot.children.length > 0);
+        placeholder.visible = !(specimenSlot.visible && specimenSlot.children.length > 0);
     }
 
     /* ---- tissue materials (materials.js), cached by look ---- */
@@ -187,7 +182,6 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     let queued = false;
     let width = 0;
     let height = 0;
-    let animating = false;
     const frameSubs = new Set();
     const probe = new THREE.Vector3();
 
@@ -221,7 +215,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         renderer.render(scene, camera);
         placeLabels();
         frames += 1;
-        if (animating || flight) requestRender();
+        if (flight) requestRender();
     }
 
     function requestRender() {
@@ -243,20 +237,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); if (onLost) onLost(); });
     canvas.addEventListener('webglcontextrestored', requestRender);
 
-    /* ---- content, framing, picking ---- */
-
-    function disposeTree(obj) {
-        obj.traverse((o) => { if (o.geometry) o.geometry.dispose(); });
-    }
-
-    /* Put `obj` in the content slot (null empties it) and show the
-       specimen placeholder only when the slot is empty. */
-    function setContent(obj) {
-        for (const child of [...content.children]) { content.remove(child); disposeTree(child); }
-        if (obj) content.add(obj);
-        syncPlaceholder();
-        requestRender();
-    }
+    /* ---- framing, picking ---- */
 
     /* Install the specimen (null removes it) and show or hide it; it is the
        caller's to dispose. */
@@ -307,7 +288,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         requestRender();
     }
 
-    /* ---- camera flights (the specimen stage; the lab only ever cuts) ---- */
+    /* ---- camera flights (the specimen stage) ---- */
 
     let flight = null;
     let home = null;
@@ -378,8 +359,7 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     }
 
     /* What "reset" means while a stage other than the placeholder owns the
-       camera: the lab resets on leaving (mode-lab.js), and the specimen, which
-       may be the stage it leaves for, installs its own view here. */
+       camera: the specimen installs its own view here. */
     function setHome(fn) { home = typeof fn === 'function' ? fn : null; }
 
     function resetView() {
@@ -398,11 +378,10 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
     const tagged = (o) => { for (let p = o; p; p = p.parent) if (p.userData && p.userData.id) return p; return null; };
     const shown = (o, root) => { for (let p = o; p && p !== root.parent; p = p.parent) if (!p.visible) return false; return true; };
 
-    /* Every tagged part under a client point that `root` (default: the lab's
-       content) holds, nearest first, one entry per part:
+    /* Every tagged part under a client point that `root` holds, nearest first, one entry per part:
        { part, object (the mesh hit), point (scene), distance, clear }.
        Hidden objects are skipped; `clear` marks see-through ones. */
-    function pickHits(clientX, clientY, root = content) {
+    function pickHits(clientX, clientY, root) {
         const r = canvas.getBoundingClientRect();
         ndc.set(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1);
         raycaster.setFromCamera(ndc, camera);
@@ -419,12 +398,6 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         return hits;
     }
 
-    /* The lab's order: solid parts before see-through ones (spaces, ghosted
-       walls), so a cell inside a sinus is picked through the sinus. */
-    function pick(clientX, clientY) {
-        return pickHits(clientX, clientY).sort((a, b) => a.clear - b.clear || a.distance - b.distance).map((h) => h.part);
-    }
-
     /* One section: the planes (THREE.Plane, scene units) every surface is cut
        by; an empty list removes the cut. */
     function setClip(planes) {
@@ -439,58 +412,10 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         return { x: r.left + (probe.x * 0.5 + 0.5) * r.width, y: r.top + (-probe.y * 0.5 + 0.5) * r.height, front: probe.z < 1 };
     }
 
-    function setAnimating(on) {
-        animating = !!on;
-        if (animating) requestRender();
-    }
     function onFrame(fn) { frameSubs.add(fn); return () => frameSubs.delete(fn); }
     function onTheme(fn) { themeSubs.add(fn); return () => themeSubs.delete(fn); }
 
     /* ---- the test window for materials (window.__ssb.materials) ---- */
-
-    const probeScene = new THREE.Scene();
-    probeScene.add(new THREE.HemisphereLight(0xffffff, 0x808080, 1.4));
-    const probeLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    probeLight.position.set(0.3, 0.4, 1);
-    probeScene.add(probeLight);
-    const probeCamera = new THREE.PerspectiveCamera(30, 1, 1, 100);
-    probeCamera.position.set(0, 0, 20);
-
-    /* Draw a sphere in the kind's material into a 24 px target: the GL error
-       state, the colour at its centre (a shader that compiled but draws
-       nothing, or NaN, reads black), and over its middle the relative
-       luminance range and the share of near-black pixels (a hatched kind has
-       stripes, a plain one hardly any). */
-    function probeKind(kind, hazard = false) {
-        const target = new THREE.WebGLRenderTarget(24, 24);
-        const ball = new THREE.Mesh(new THREE.SphereGeometry(5, 24, 16), library.material({ kind }, { hazard }));
-        probeScene.add(ball);
-        while (gl.getError() !== gl.NO_ERROR) { /* drain */ }
-        const before = renderer.getRenderTarget();
-        renderer.setRenderTarget(target);
-        renderer.render(probeScene, probeCamera);
-        const px = new Uint8Array(24 * 24 * 4);
-        renderer.readRenderTargetPixels(target, 0, 0, 24, 24, px);
-        renderer.setRenderTarget(before);
-        const glError = gl.getError();
-        let lo = 255;
-        let hi = 0;
-        let dark = 0;
-        for (let y = 6; y < 18; y++) {
-            for (let x = 6; x < 18; x++) {
-                const i = (y * 24 + x) * 4;
-                const l = 0.2126 * px[i] + 0.7152 * px[i + 1] + 0.0722 * px[i + 2];
-                lo = Math.min(lo, l);
-                hi = Math.max(hi, l);
-                if (l < 25) dark += 1;
-            }
-        }
-        const c = (12 * 24 + 12) * 4;
-        probeScene.remove(ball);
-        ball.geometry.dispose();
-        target.dispose();
-        return { kind, hazard, glError, rgb: [px[c], px[c + 1], px[c + 2]], contrast: hi > 0 ? (hi - lo) / hi : 0, dark: dark / 144 };
-    }
 
     const materialsHook = Object.freeze({
         kinds: KINDS,
@@ -500,20 +425,19 @@ export function createScene({ canvas, host, labels, onLost, quality = null }) {
         get materials() { return library.count; },
         get programs() { return renderer.info.programs.length; },
         programKeys: () => renderer.info.programs.map((p) => p.cacheKey),
-        probe: probeKind,
     });
 
     /* Renderer bookkeeping for tests: what is alive on the GPU side. */
     const info = () => ({
         geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures,
         programs: renderer.info.programs.length, calls: renderer.info.render.calls, triangles: renderer.info.render.triangles,
-        clipping: renderer.clippingPlanes.length, flying: !!flight, animating,
+        clipping: renderer.clippingPlanes.length, flying: !!flight,
     });
 
     refreshTheme();
     return {
         THREE, canvas, camera, scene, controls, lights: { hemi, head }, frames: () => frames, holdPose, requestRender, refreshTheme, info,
-        materialsFor, setQuality, materialsHook, outline, setContent, setSpecimen, showSpecimen, frame, look, pose, setPose, setHome,
-        resetView, pick, pickHits, setClip, toClient, setAnimating, onFrame, onTheme,
+        materialsFor, setQuality, materialsHook, outline, setSpecimen, showSpecimen, frame, look, pose, setPose, setHome,
+        resetView, pickHits, setClip, toClient, onFrame, onTheme,
     };
 }
