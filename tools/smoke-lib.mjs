@@ -1,6 +1,6 @@
 /* =============================================================
    smoke-lib.mjs — shared helpers for the browser-driven dev tools
-   (tools/smoke-pages.mjs, tools/test-oksat-engine.mjs, tools/repro.mjs).
+   (tools/smoke-pages.mjs, tools/test-oksat-engine.mjs).
 
    Provides: a dependency-free static file server (Node http only), a
    robust Chromium launcher that works both in this sandbox (pinned

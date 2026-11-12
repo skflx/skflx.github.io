@@ -89,6 +89,9 @@ jobs:
       - name: Search page behavior tests
         run: node tools/test-search.mjs
 
+      - name: Command palette behavior tests
+        run: node tools/test-palette.mjs
+
       - name: Airway Rounds saved-game tests
         run: node tools/test-airway-resume.mjs
 

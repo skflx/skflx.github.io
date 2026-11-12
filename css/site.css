@@ -156,7 +156,6 @@ a:hover { text-decoration-color: var(--signal); }
   overflow: hidden; text-overflow: ellipsis; min-width: 0;
 }
 .site-topbar-actions { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; flex-shrink: 0; }
-.site-topbar-spacer { flex: 1; min-width: 0; }
 
 .site-navlink {
   font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em;
@@ -205,7 +204,6 @@ html[data-theme="dark"] .site-theme-toggle svg { transform: rotate(180deg); }
 .site-pill:hover { color: var(--ink); border-color: var(--ink); }
 .site-pill.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 
-.site-card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); }
 
 /* ===== FOOTER (tool pages) ===== */
 .site-footer {
