@@ -135,7 +135,8 @@ export function toSVG(data) {
     let attrs = ` class="at-group" data-group="${esc(id)}"`;
     if (g.sub) attrs += ` data-sub="${esc(g.sub)}"`;
     if (g.href) attrs += ` href="${esc(g.href)}"`;
-    if (g.interactive) attrs += (g.href ? '' : ' tabindex="0"') + ` aria-label="${esc(g.ariaLabel)}"`;
+    if (g.interactive && !g.href) attrs += ` role="group" tabindex="0" aria-label="${esc(g.ariaLabel)}"`;
+    else if (g.interactive) attrs += ` aria-label="${esc(g.ariaLabel)}"`;
     else attrs += ' aria-hidden="true"';
     lines.push(`  <${tag}${attrs}>`);
     const shapes = byGroup.get(id).slice().sort((a, b) => a.s.z - b.s.z || a.i - b.i);

@@ -20,18 +20,6 @@
       "count": 3
     },
     {
-      "page": "atlas.html",
-      "theme": "dark",
-      "rule": "aria-prohibited-attr",
-      "count": 6
-    },
-    {
-      "page": "atlas.html",
-      "theme": "light",
-      "rule": "aria-prohibited-attr",
-      "count": 6
-    },
-    {
       "page": "pdf-chapter-splitter.html",
       "theme": "dark",
       "rule": "color-contrast",
