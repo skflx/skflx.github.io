@@ -335,5 +335,5 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-root h1 em, #root h1 em { font-style: normal; }
 
 /* Draft notice: any guide or module with `draft: true` (docs/decisions.md section 9). */
-.module-draft { margin-left: 0.5rem; padding: 1px 6px; border: 1px solid var(--ok-ochre); color: var(--ok-ochre); font-weight: 600; }
+.module-draft { display: inline-block; white-space: nowrap; margin-left: 0.5rem; padding: 1px 6px; border: 1px solid var(--ok-ochre); color: var(--ok-ochre); font-weight: 600; }
 .ok-draft-note { max-width: 46rem; margin: 1rem auto; padding: 0.6rem 0.9rem; border: 1px solid var(--ok-ochre); border-left-width: 4px; font-family: var(--ok-font-ui); font-size: 13px; line-height: 1.5; color: var(--ok-text); }
