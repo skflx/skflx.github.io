@@ -47,7 +47,7 @@ Values live in `css/oksat.css` (light and dark blocks). Subspecialty hues live i
 | `--ok-bg` | canvas (paper / ink) |
 | `--ok-surface` | cards, modal |
 | `--ok-text` | primary text; primary buttons |
-| `--ok-accent` | actions, focus, progress (audiogram blue) |
+| `--ok-accent` | actions, focus, progress (audiogram blue; not red, because red is a miss: `docs/decisions.md` §5) |
 | `--ok-ochre` | kickers, review-due (audiogram red) |
 | `--ok-correct` | pass |
 | `--ok-incorrect` | miss |

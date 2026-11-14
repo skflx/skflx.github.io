@@ -157,9 +157,9 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .module-card:hover .module-title { color: var(--ok-accent); }
 .module-accent { width: 4px; border-radius: 4px; flex-shrink: 0; align-self: stretch; }
 .module-body { flex: 1; }
-.module-label { font-family: var(--ok-font-ui); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--ok-text-faint); margin-bottom: 0.3rem; }
+.module-label { font-family: var(--ok-font-ui); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; color: var(--ok-text-faint); margin-bottom: 0.3rem; }
 .module-title { font-family: var(--ok-font-display); font-size: 1.2rem; font-weight: 640; letter-spacing: -0.01em; transition: color 0.15s; line-height: 1.25; margin-bottom: 0.35rem; }
-.module-desc { font-size: 0.88rem; line-height: 1.5; color: var(--ok-text-muted); }
+.module-desc { font-size: 0.88rem; line-height: 1.5; color: var(--ok-text-muted); max-width: 68ch; }
 .module-due { margin-top: 0.4rem; font-family: var(--ok-font-ui); font-size: 11px; font-weight: 600; color: var(--ok-ochre); }
 .module-arrow { font-family: var(--ok-font-ui); font-size: 12px; color: var(--ok-text-faint); flex-shrink: 0; transition: color 0.15s, transform 0.15s; }
 .module-card:hover .module-arrow { color: var(--ok-accent); transform: translateX(3px); }
@@ -335,5 +335,5 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-root h1 em, #root h1 em { font-style: normal; }
 
 /* Draft notice: any guide or module with `draft: true` (docs/decisions.md section 9). */
-.module-draft { margin-left: 0.5rem; padding: 1px 6px; border: 1px solid var(--ok-ochre); color: var(--ok-ochre); font-weight: 600; }
+.module-draft { display: inline-block; white-space: nowrap; margin-left: 0.5rem; padding: 1px 6px; border: 1px solid var(--ok-ochre); color: var(--ok-ochre); font-weight: 600; }
 .ok-draft-note { max-width: 46rem; margin: 1rem auto; padding: 0.6rem 0.9rem; border: 1px solid var(--ok-ochre); border-left-width: 4px; font-family: var(--ok-font-ui); font-size: 13px; line-height: 1.5; color: var(--ok-text); }

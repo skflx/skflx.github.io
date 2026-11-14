@@ -99,8 +99,15 @@ components.
 
 Colour always means something. Site-wide there are exactly two signals, from the audiogram:
 `--signal` (right-ear red) = act and emphasis; `--signal-2` (left-ear blue) = science and research.
-In OKSAT, one hue per subspecialty. Categorical colours that encode game state (Airway teams, topics,
+In OKSAT, one hue per subspecialty. OKSAT's one exception: its actions, focus ring and progress are
+blue (`--ok-accent`), because inside a quiz red already means a miss (`--ok-incorrect`) and an action
+must never read as a wrong answer; red stays for review-due and kickers (act). The sk.oto wiki
+(`skflx/ohns-wiki-skflx`, `quartz/styles/custom.scss`) follows the site rule: prose and navigation in
+ink, red only for hover, the current item and Active Recall, blue for science. Categorical colours that encode game state (Airway teams, topics,
 difficulty) are allowed; decorative colour is not.
+
+Cmd/Ctrl-K means "search where you are": on the site it opens the palette (`js/palette.js`, which also
+indexes the wiki's notes); inside the wiki it opens the wiki's own search. Neither surface rebinds it.
 
 Do not reintroduce: pill "eyebrow" badges above headings, emoji as icons, icon fonts, gradient or glow
 backgrounds, soft drop shadows on cards, pastel rainbow tags, or a second visitor-selectable theme.
