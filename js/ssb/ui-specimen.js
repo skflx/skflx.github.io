@@ -169,7 +169,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     airSec.append(airList);
 
     /* ---- landmarks, vessels, nose, lining ---- */
-    const lmSec = section('Landmarks');
+    const lmSec = section('Landmarks and vessels');
     const lmLabel = el('label', 'ssb-ct-check');
     const lmBox = el('input');
     lmBox.type = 'checkbox';
@@ -186,7 +186,12 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     noseBox.id = 'ssb-spec-nose';
     noseLabel.append(noseBox, el('span', null, 'Nose (the specimen\'s own skin; the face stays masked)'));
     airSec.append(mucLabel, noseLabel);
-    lmSec.append(lmLabel);
+    const vesLabel = el('label', 'ssb-ct-check');
+    const vesBox = el('input');
+    vesBox.type = 'checkbox';
+    vesBox.id = 'ssb-spec-vessels';
+    vesLabel.append(vesBox, el('span', null, 'Vessels and nerves as tubes (arteries red; course partly inferred)'));
+    lmSec.append(lmLabel, vesLabel);
 
     /* ---- section ---- */
     const secSec = section('Section');
@@ -248,6 +253,9 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
         lmBox.checked = specimen.landmarksOn;
         lmBox.disabled = !specimen.hasLandmarks;
         lmLabel.classList.toggle('is-off', !specimen.hasLandmarks);
+        vesBox.checked = specimen.vesselsOn;
+        vesBox.disabled = !specimen.hasVessels;
+        vesLabel.classList.toggle('is-off', !specimen.hasVessels);
 
         const sec = specimen.section;
         mark(secRow, 'section', sec.axis || 'off');
@@ -281,6 +289,7 @@ export function mountSpecimenControls({ dock, body, toggle, stageHost, specimen,
     root.addEventListener('change', (e) => {
         const t = e.target;
         if (t === lmBox) specimen.setLandmarks(lmBox.checked);
+        else if (t === vesBox) specimen.setVessels(vesBox.checked);
         else if (t === mucBox) specimen.setMucosa(mucBox.checked);
         else if (t === noseBox) specimen.setNose(noseBox.checked);
         else if (t.matches('input[data-region]')) specimen.setRegion(t.dataset.region, t.checked);

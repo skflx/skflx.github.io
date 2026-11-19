@@ -34,7 +34,7 @@ Content lives in `ssb/content/*.json`: structures, landmarks, variants, classifi
 
 The stages share one selection, one 3D cursor and one URL state; switching stage never reloads.
 
-- **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks (the order is §6.4); clicking the same pixel again steps deeper through what is under the cursor. The camera is in the URL (`cam`, §6.3). The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels are a layer. Vessels and nerves are not drawn in the Specimen.
+- **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks (the order is §6.4); clicking the same pixel again steps deeper through what is under the cursor. The camera is in the URL (`cam`, §6.3). The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels are a layer. Vessels and nerves are tubes along their centrelines (§5.6): a layer that follows the depth, and a selected one is always drawn, glowing, with a faint trace through what hides it. The selected structure carries its name label (a surface at its centre, a tube half way along, a landmark at its marker). The Scope draws no tubes.
 - **CT.** Axial, coronal and sagittal slices of the specimen volume (§5.5), linked by one crosshair, which is the Specimen's 3D cursor (`at`). CPU-drawn on 2D canvases, so it works without WebGL. Label outlines in the structure's colour; hover names the structure and gives the approximate HU; a click moves the crosshair, and a click that does not drag selects the structure under it. Window presets from `ct.json`, right-drag for level and width. Keys: arrows or wheel scroll, Shift+arrows move the crosshair, 1/2/3 the plane, W the window, O the outlines, U the tips.
   - The coronal plane is resliced from the axial acquisition (UW's coronal stack is another head, §5.1), and the left half is the mirrored right.
   - **UW arrow tips** (`ssb/geometry/uw-tips.json`, written by `tools/ssb-pipeline/uw/score.py tips`): the atlas's own labels, the right half only (R > 0, the same rule as the served score). Each tip is drawn on the slice it lies in and coloured by score.py's identity rule (a voxel within 1 voxel carries a label with one of the tip's ids): `--signal-2` our label agrees, `--signal` it disagrees, muted the structure is not segmented. The controls give the counts. The labels are draft; UW's arrows are the reference.
@@ -99,11 +99,11 @@ The CT, label and distance volumes are typed arrays in JS (`js/ssb/volume.js`). 
 |---|---|---|
 | Mucosa (sinus and nasal lining) | the air spaces' own surfaces; from inside, the `lining` pack (one surface over the union of every air label, split into nodes by label, so openings are open) | specimen |
 | External nose (skin, vestibule, valve) | the specimen's own skin and vestibule, unmasked from the UW axial stack; the internal valve is the centroid of the narrowest coronal section of the airway connected to `lm.naris` | specimen, measured |
-| Vessels and nerves | not drawn; their centrelines (`ssb/geometry/sweeps.json`, §5.2) feed the Scope's distance fields | inferred where marked |
+| Vessels and nerves | tubes along their centrelines (`ssb/geometry/sweeps.json`, §5.2) at each sweep's mean radius; the same centrelines feed the Scope's distance fields | inferred where marked; the panel says so |
 
 Cartilage, ligament, fat and SMAS are not resolvable on this bone-window CT and are not drawn.
 
-`ssb/geometry/sweeps.json`: `{ "<id>.<side>": { "pts": [[r,a,s]…], "radius": [mm…] | mm } }`. The page does not load it; `tools/ssb-pipeline/uw/sdf.py` builds the Scope HUD's distance fields from it.
+`ssb/geometry/sweeps.json`: `{ "<id>.<side>": { "pts": [[r,a,s]…], "radius": [mm…] | mm } }`. The Specimen draws each as a tube along a centripetal Catmull-Rom curve (`loadSweeps`, `js/ssb/geo-specimen.js`; arteries in `--ssb-sweep-artery`, nerves and the duct in `--ssb-sweep-nerve`), and the tree and search badge them as 3D. `tools/ssb-pipeline/uw/sdf.py` builds the Scope HUD's distance fields from the same file.
 
 ## 6. Runtime architecture
 
@@ -120,7 +120,7 @@ js/ssb/state.js              the one store (stage: ct or scope, tier, selection,
 js/ssb/scope.js              the rigid endoscope's geometry and the #scope= codec: pure math, no DOM, no three.js
 js/ssb/scene.js              the 3D stage: renderer, camera, controls, lights, picking, on-demand loop
 js/ssb/materials.js          procedural tissue-material library, one factory per tissue kind
-js/ssb/geo-specimen.js       the specimen's geometry: model packs -> one scene graph and registry; landmarks, CT bounds
+js/ssb/geo-specimen.js       the specimen's geometry: model packs -> one scene graph and registry; landmarks, sweeps, CT bounds
 js/ssb/volume.js             the CT and label volumes as typed arrays: loading, affine, slicing, lookup
 js/ssb/mode-specimen.js      the Specimen stage
 js/ssb/mode-ct.js            the CT stage: three linked slice canvases, label outlines, UW tips
@@ -176,7 +176,7 @@ One store; everything else subscribes. The URL hash is the shareable state, e.g.
 ### 6.5 Degradation, accessibility, mobile
 
 - No WebGL2 → graph mode: tree, search and panels as text. Feature detection is in `main.js`; the page never throws to a blank screen.
-- Tree and search rows mark entries that have a 3D surface with a text `3D` badge. The set is `graph.hasSurface`, filled from the pack list (`packs.json`) when the Specimen reads it, so the badges appear after the first paint.
+- Tree and search rows mark entries that have a 3D surface with a text `3D` badge. The set is `graph.hasSurface`, filled from the pack list (`packs.json`) and the sweeps (`sweeps.json`) when the Specimen reads them, so the badges appear after the first paint.
 - The structure tree is a real DOM list mirroring the scene: keyboard navigable, selection synced both ways, announced via `aria-live`.
 - Phones: bottom-sheet panel, one-finger orbit, pinch zoom. Scope steps between stations with drag-to-look rather than free flight.
 
