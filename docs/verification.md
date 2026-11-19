@@ -149,7 +149,7 @@ The highest-regression-risk code. `tools/test-oksat-engine.mjs` pins:
   SRS untouched. Two modules can load into one page.
 - **Deck and pearls** load every chapter; a card grade writes the same record.
 - **Untrusted input**: `?g=`, `?c=` and the hash match only known ids; a payload renders as text.
-- **sk.oto link**: one "Read the map in sk.oto" link with the exact `OKSAT_SKOTO`
+- **sk.oto link**: one "sk.oto map ↗" link (labelled "Read the map in sk.oto") with the exact `OKSAT_SKOTO`
   URL where the subspecialty has a map; none where it has none, or when `live` is false.
 - Manual: read each new chapter in both themes and at phone width. A green run
   proves structure, not that the page teaches.

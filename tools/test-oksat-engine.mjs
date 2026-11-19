@@ -249,7 +249,7 @@ async function main() {
     const { context, page } = await openStudy(browser, base, seed);
     await page.waitForTimeout(600);
     const txt = await page.evaluate(() => document.body.innerText);
-    check('5p: an old partial stored as true counts as partial, not correct', /1\s*correct on first attempt\s*·\s*1 partial/.test(txt), (txt.match(/.{0,30}correct on first attempt.{0,20}/) || [''])[0]);
+    check('5p: an old partial stored as true counts as partial, not correct', /1 right first time\s*·\s*1 partial/.test(txt), (txt.match(/.{0,30}right first time.{0,20}/) || [''])[0]);
     await context.close();
   }
 
@@ -366,6 +366,7 @@ async function main() {
     page.on('dialog', (d) => d.accept());
     await page.goto(base + '/oksat.html', { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#modules .module-card', { timeout: 8000 });
+    await page.click('#font-picker .ok-roundbtn');
     await page.click('#settings-btn');
     const [dl] = await Promise.all([page.waitForEvent('download'), page.click('#export-progress')]);
     const fs = await import('node:fs');
@@ -379,6 +380,7 @@ async function main() {
     await page.waitForTimeout(1800); // the import reloads the hub
     await page.waitForSelector('#modules .module-card', { timeout: 8000 });
     await page.evaluate(() => localStorage.clear());
+    await page.click('#font-picker .ok-roundbtn');
     await page.click('#settings-btn');
     const bad = [{ 'sk_theme': 'x' }, { 'oksat:x': 5 }, [1], 'nope'];
     for (const [i, b] of bad.entries()) {

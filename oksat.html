@@ -16,24 +16,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/oksat.css?v=60fa14b1">
+  <link rel="stylesheet" href="css/oksat.css?v=408fed6c">
 
 </head>
 <body>
-  <nav class="ok-topbar">
-    <a class="ok-back" href="index.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      skflx.MD
-    </a>
-    <div class="ok-topbar-actions">
-      <span id="font-picker"></span>
-      <button type="button" class="ok-roundbtn" id="settings-btn" aria-label="Settings">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32 2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-      </button>
-      <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
-      </button>
-    </div>
+  <nav class="ok-topbar" aria-label="Site">
+      <a class="ok-brand" href="index.html">skflx<span class="ok-brand-md">.MD</span></a>
+      <ol class="ok-crumbs">
+          <li><span aria-current="page"><span class="ok-crumb-long">Self-Assessment</span><span class="ok-crumb-short" aria-hidden="true">OKSAT</span></span></li>
+      </ol>
+      <div class="ok-topbar-actions">
+          <a class="ok-topbar-link" href="search.html">Search</a>
+          <span id="font-picker"></span>
+          <button type="button" class="ok-theme-toggle" id="theme-toggle" aria-label="Night mode" aria-pressed="false">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.25"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg>
+          </button>
+      </div>
   </nav>
 
   <div class="ok-root">
@@ -42,6 +40,13 @@
       <h1 class="hub-title">OHNS Knowledge<br><em>Self-Assessment</em></h1>
       <p class="hub-subtitle">Start with an interactive guide for a first pass, then drill the question modules: locked-first-attempt questions and free-response recall cards, all feeding one spaced-repetition schedule. Work a module linearly or jump straight to a concept. <a href="search.html">Search</a> the questions and CPT codes.</p>
 
+      <!-- Where you left off: the module or guide touched last, while unfinished -->
+      <a class="hub-resume" id="resume" href="oksat.html" hidden>
+        <span class="hub-resume-k">Resume</span>
+        <span class="hub-resume-title"></span>
+        <span class="hub-resume-meta"></span>
+        <span class="hub-resume-go" aria-hidden="true">&rarr;</span>
+      </a>
       <!-- What's due, if anything -->
       <div class="hub-review" id="review-banner" hidden>
         <div class="rv-text">
@@ -101,7 +106,7 @@
 
   <script src="js/oksat/manifest.js?v=e914fc26"></script>
   <script src="js/oksat/store.js?v=d3b0cd44"></script>
-  <script src="js/oksat/prefs.js?v=c9c374f2"></script>
-  <script src="js/oksat/hub.js?v=b0cd7595"></script>
+  <script src="js/oksat/prefs.js?v=6b2da9f4"></script>
+  <script src="js/oksat/hub.js?v=af538e9f"></script>
 </body>
 </html>

@@ -281,7 +281,8 @@
     const BLOCKS = {
         p: (b) => { const e = h('p', 'lr-p'); e.appendChild(inline(b.x)); return e; },
         why: (b) => { const e = h('p', 'lr-why'); e.appendChild(inline(b.x)); return e; },
-        h: (b) => { const e = h('h3', 'lr-h3'); e.appendChild(inline(b.x)); return e; },
+        /* a heading directly under the chapter title (intro, no section) is an h2, so no level is skipped */
+        h: (b, ctx) => { const e = h(ctx && ctx.sec && ctx.sec.id === 'intro' ? 'h2' : 'h3', 'lr-h3'); e.appendChild(inline(b.x)); return e; },
         ul: (b) => list('ul', b),
         ol: (b) => list('ol', b),
         table: tableBlock,
@@ -1260,7 +1261,8 @@
             const pct = a.querySelector('.lr-nav-pct');
             if (!e || !e.sections) return;
             const n = doneCount(e);
-            pct.textContent = n === e.sections ? '✓' : Math.round(100 * n / e.sections) + '%';
+            /* zero is not information: a chapter shows a figure only once begun */
+            pct.textContent = n === e.sections ? '✓' : n > 0 ? Math.round(100 * n / e.sections) + '%' : '';
             a.classList.toggle('is-full', n === e.sections);
         });
         const total = guide.chapters.reduce((s, c) => s + (c.sections || 0), 0);
@@ -1272,14 +1274,33 @@
         }
     }
 
+    /* How the guide works: a ruled definition list, not four boxes before any content. */
     function howTo() {
         const items = [
-            ['Predict, then reveal', 'Each prompt has a box: commit to an answer before you reveal. Then grade yourself honestly. The grade is a record for you, not a score.'],
-            ['Scroll or Step', 'Step shows one section at a time with Previous and Next (also the arrow keys). Use it when attention is thin.'],
-            ['Core only', 'Hides every “Go deeper” block. First pass: core. Second pass: open the depth.'],
-            ['Apply it, then drill', 'Some sections carry questions from the question modules, answered in place. Each section ends with links into the modules for the full set, on the spaced-repetition schedule.'],
+            ['Predict', 'Commit an answer in the box, then reveal and grade yourself. The grade is a record, not a score.'],
+            ['Scroll / Step', 'Step shows one section at a time (← →). Use it when attention is thin.'],
+            ['Core only', 'Hides every “Go deeper” block. First pass core, second pass depth.'],
+            ['Drill', 'Some sections carry module questions answered in place; each ends with links into the modules.'],
         ];
-        return h('div', 'lr-cards lr-cards--2', items.map((it) => h('div', 'lr-card', [txt('span', 'lr-card-h', it[0]), txt('p', 'lr-p', it[1])])));
+        const dl = h('dl', 'lr-how');
+        dl.setAttribute('aria-label', 'How this guide works');
+        items.forEach((it) => { dl.appendChild(txt('dt', '', it[0])); dl.appendChild(txt('dd', '', it[1])); });
+        return dl;
+    }
+
+    /* The start chapter's leading `cards` block is its source list: shown at the foot, behind a disclosure. */
+    function sourcesOf(entry, ch) {
+        const intro = ch.intro || [];
+        if (entry.id !== 'start' || !intro.length || intro[0].t !== 'cards') return { rest: intro, sources: null };
+        return { rest: intro.slice(1), sources: intro[0] };
+    }
+
+    function startAction() {
+        const first = guide.chapters.filter((c) => c.id !== 'start')[0];
+        if (!first) return null;
+        const row = h('div', 'lr-start');
+        row.appendChild(btn('ok-btn ok-btn--primary', 'Start: ' + first.short + ' →', () => navigate(first.id)));
+        return row;
     }
 
     function chapterEl(entry, ch) {
@@ -1304,16 +1325,41 @@
         }
         art.appendChild(head);
         if (entry.id === 'start' && guide.draft === true) art.appendChild(txt('p', 'ok-draft-note', 'Draft: this guide is still being built and checked. Content may change and is not yet verified by the owner; not a clinical reference.'));
-        if (entry.id === 'start') art.appendChild(howTo());
-        if (ch.intro) art.appendChild(renderBlocks(ch.intro, { ch: entry, sec: { id: 'intro', blocks: [] } }));
+        const split = sourcesOf(entry, ch);
+        if (entry.id === 'start') {
+            const go = startAction();
+            if (go) art.appendChild(go);
+            art.appendChild(howTo());
+        }
+        if (split.rest.length) art.appendChild(renderBlocks(split.rest, { ch: entry, sec: { id: 'intro', blocks: [] } }));
         if (ch.tldr && ch.tldr.length) {
             const t = h('section', 'lr-tldr', [txt('span', 'lr-label', '30-second version')]);
             t.appendChild(list('ul', { items: ch.tldr }));
             art.appendChild(t);
         }
         (ch.sections || []).forEach((s) => art.appendChild(sectionEl(ch, entry, s)));
+        if (split.sources) {
+            const n = (split.sources.items || []).length;
+            const d = h('details', 'lr-sources');
+            d.appendChild(txt('summary', '', 'Sources' + (n ? ' (' + n + ')' : '')));
+            d.appendChild(renderBlocks([split.sources], { ch: entry, sec: { id: 'intro', blocks: [] } }));
+            art.appendChild(d);
+        }
         art.appendChild(chapterFoot(entry));
+        quietRepeats(art);
         return art;
+    }
+
+    /* A term is marked at its first use in each section (and once in the chapter head and
+       intro); later uses keep the popover on hover but drop the underline and the tab stop. */
+    function quietRepeats(art) {
+        const seen = new Map();
+        art.querySelectorAll('.lr-term').forEach((t) => {
+            const scope = t.closest('.lr-sec') || art;
+            if (!seen.has(scope)) seen.set(scope, new Set());
+            const keys = seen.get(scope);
+            if (keys.has(t.dataset.term)) { t.classList.add('is-repeat'); t.tabIndex = -1; } else keys.add(t.dataset.term);
+        });
     }
 
     function navList() { return guide.chapters.map((c) => c.id).concat(['deck', 'pearls']); }
@@ -1486,7 +1532,7 @@
             a.addEventListener('click', (e) => { e.preventDefault(); navigate(id); });
             nav.appendChild(a);
         }
-        guide.chapters.forEach((c) => item(c.id, c.k ? String(c.k) : '·', c.short));
+        guide.chapters.forEach((c, i) => item(c.id, c.k ? String(c.k) : String(i), c.short));
         nav.appendChild(h('hr', 'lr-nav-rule'));
         item('deck', 'F', 'Flashcards');
         item('pearls', 'P', 'Pearls');
@@ -1608,17 +1654,8 @@
     document.title = guide.title + ' · Interactive learning · OKSAT | skflx.MD';
     const hue = (SUBS[guide.subspecialty] || {}).hue || guide.accent;
     if (/^#[0-9a-fA-F]{3,8}$/.test(hue || '')) root.style.setProperty('--lr-hue', hue);
-    const sk = window.OKSAT_SKOTO, bar = document.querySelector('.ok-topbar-actions');
-    if (sk && sk.live === true && sk.maps && sk.maps[guide.subspecialty] && bar) {
-        const a = document.createElement('a');
-        a.className = 'ok-back';
-        a.textContent = 'Read the map in sk.oto';
-        a.href = sk.base + sk.maps[guide.subspecialty];
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.style.marginRight = '0.5rem';
-        bar.insertBefore(a, bar.firstChild);
-    }
+    OKSATPrefs.mountSkoto(guide.subspecialty);
+    OKSATPrefs.setCrumb(guide.title);
     rec = OKSATStore.getLearn(guide.slug, reviewer);
     mount();
     const first = routeFromLocation();

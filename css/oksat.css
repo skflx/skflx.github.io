@@ -112,8 +112,8 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 /* ===== TOP BAR (shared by hub + viewer) ===== */
 .ok-topbar {
   position: fixed; inset: 0 0 auto 0; z-index: 50;
-  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
-  padding: 0.45rem 1.1rem;
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.45rem clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
   min-height: 52px;
   background: color-mix(in srgb, var(--ok-bg) 88%, transparent);
   -webkit-backdrop-filter: saturate(140%) blur(10px);
@@ -121,12 +121,41 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
   border-bottom: 1px solid var(--ok-border);
   font-family: var(--ok-font-ui); font-size: 12px; letter-spacing: 0.04em;
 }
-.ok-topbar a.ok-back {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  color: var(--ok-text-muted); text-decoration: none; transition: color 0.15s;
+/* One bar on every page (css/site.css .site-topbar): the wordmark, a
+   breadcrumb of where you are, then search, type and theme on the right. */
+.ok-brand {
+  display: inline-flex; align-items: baseline; gap: 0.05em; flex-shrink: 0;
+  font-family: 'Archivo', system-ui, sans-serif; font-weight: 750; font-stretch: 112%;
+  font-size: 1.05rem; letter-spacing: -0.02em; color: var(--ok-text); text-decoration: none;
 }
-.ok-topbar a.ok-back:hover { color: var(--ok-accent); }
-.ok-topbar a.ok-back svg { width: 12px; height: 12px; }
+.ok-brand-md { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-weight: 500; font-size: 0.72em; letter-spacing: 0.02em; color: var(--ok-ochre); }
+.ok-crumbs {
+  display: flex; align-items: center; min-width: 0; flex: 0 1 auto; list-style: none; overflow: hidden;
+  margin-left: 0.5rem; padding-left: 1rem; border-left: 1px solid var(--ok-border);
+  font-family: var(--ok-font-ui); font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ok-text-faint);
+}
+.ok-crumbs li { white-space: nowrap; flex-shrink: 0; }
+.ok-crumbs li + li { flex-shrink: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ok-crumbs li + li::before { content: '/'; margin: 0 0.6rem; color: var(--ok-border); }
+.ok-crumbs a { color: var(--ok-text-muted); text-decoration: none; }
+.ok-crumbs a:hover { color: var(--ok-accent); }
+.ok-crumbs [aria-current] { color: var(--ok-text-faint); }
+.ok-topbar-link {
+  font-family: var(--ok-font-ui); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ok-text-muted); text-decoration: none; padding: 0.5rem 0.55rem; white-space: nowrap;
+}
+.ok-topbar-link:hover { color: var(--ok-text); }
+.ok-skoto { text-transform: none; letter-spacing: 0.02em; }
+/* Phones: the page names itself below the bar, so the last crumb goes first. */
+.ok-crumb-short { display: none; }
+@media (max-width: 600px) {
+  .ok-crumbs li + li { display: none; }
+  .ok-crumb-long { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .ok-crumb-short { display: inline; }
+  .ok-crumbs { padding-left: 0.7rem; margin-left: 0.35rem; }
+  .ok-topbar-link { padding: 0.5rem 0.35rem; }
+}
+@media (max-width: 480px) { .ok-skoto { display: none; } }
 
 .ok-theme-toggle {
   width: 34px; height: 34px; flex: none; padding: 0;
@@ -270,7 +299,7 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 
 /* ===== POPOVER (font picker) ===== */
 .ok-popover {
-  position: absolute; top: 40px; right: 0; z-index: 60; min-width: 15rem;
+  position: absolute; top: 40px; right: 0; z-index: 60; min-width: 18rem;
   background: var(--ok-surface); border: 1px solid var(--ok-border);
   border-radius: var(--ok-radius); box-shadow: var(--ok-shadow-hover);
   padding: 0.4rem; display: flex; flex-direction: column; gap: 2px;
@@ -283,7 +312,8 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-popover-item:hover { background: var(--ok-border-soft); }
 .ok-popover-item.active { background: var(--ok-border-soft); box-shadow: inset 2px 0 0 var(--ok-accent); }
 .ok-popover-item .name { font-size: 0.95rem; }
-.ok-popover-item .hint { font-family: var(--ok-font-ui); font-size: 10px; color: var(--ok-text-faint); letter-spacing: 0.04em; }
+.ok-popover-item--action { border-top: 1px solid var(--ok-border-soft); border-radius: 0; margin-top: 0.25rem; padding-top: 0.6rem; }
+.ok-popover-item .hint { font-family: var(--ok-font-ui); font-size: 11px; color: var(--ok-text-faint); letter-spacing: 0.04em; }
 
 /* ===== MODAL (settings) ===== */
 .ok-modal-overlay {
@@ -311,7 +341,7 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-status.good { color: var(--ok-correct); }
 .ok-status.bad { color: var(--ok-incorrect); }
 
-.ok-topbar-actions { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; }
+.ok-topbar-actions { display: flex; align-items: center; gap: 0.25rem; margin-left: auto; flex-shrink: 0; }
 
 /* ===== HUB SIGNALS (oksat.html) ===== */
 /* Review banner — the one thing worth seeing before the module list. */
@@ -350,3 +380,78 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-lockbar-timer { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--ok-accent); transform-origin: left; animation: ok-lock-drain linear forwards; }
 @keyframes ok-lock-drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 @media (prefers-reduced-motion: reduce) { .ok-lockbar-timer { animation: none; opacity: 0.5; } }
+
+/* ===== MODULE LANDING (oksat-study.html, HomeView in js/oksat/engine.js) =====
+   Same grammar as the hub: left mono kicker, wide title, one facts line,
+   ruled rows. No meter until the first answer, and then only a 2px rule. */
+.ok-home-head { margin-bottom: 1.75rem; }
+.ok-home-kicker { font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--ok-ochre); margin-bottom: 0.75rem; }
+.ok-home-title { font-family: var(--ok-font-display); font-size: clamp(2rem, 6vw, 2.9rem); font-weight: 740; font-stretch: 118%; letter-spacing: -0.035em; line-height: 1; text-wrap: balance; }
+[data-font="clinical"] .ok-home-title, [data-font="atlas"] .ok-home-title, [data-font="hyperlegible"] .ok-home-title { font-stretch: 100%; }
+.ok-home-sub { margin-top: 0.9rem; font-size: 1rem; line-height: 1.6; color: var(--ok-text-muted); max-width: 62ch; }
+.ok-home-facts { display: flex; flex-wrap: wrap; gap: 0.15rem 0; margin-top: 1rem; font-family: var(--ok-font-ui); font-size: 12px; letter-spacing: 0.02em; color: var(--ok-text-faint); font-variant-numeric: tabular-nums; }
+.ok-home-facts span { white-space: nowrap; }
+.ok-home-facts span + span::before { content: '·'; margin: 0 0.55rem; }
+.ok-home-meter { margin-top: 0.6rem; height: 2px; background: var(--ok-border); }
+.ok-home-meter span { display: block; height: 100%; background: var(--ok-accent); transition: width 0.5s; }
+.ok-home-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2.5rem; }
+.ok-home-actions .ok-btn { padding: 0.7rem 1.1rem; font-family: var(--ok-font-display); font-weight: 500; }
+.ok-home-actions .ok-btn--primary { min-width: 11rem; }
+.ok-home-due { border-color: var(--ok-ochre); color: var(--ok-ochre); }
+.ok-kbd--inv { border-color: color-mix(in srgb, var(--ok-bg) 45%, transparent); color: inherit; opacity: 0.75; }
+.ok-home-label { font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; color: var(--ok-text); padding-bottom: 0.6rem; border-bottom: 1px solid var(--ok-text); }
+.ok-domains { list-style: none; }
+.ok-domain { border-bottom: 1px solid var(--ok-border); }
+.ok-domain-row {
+  display: grid; grid-template-columns: 4px minmax(0, 1fr) auto 16px; align-items: center; column-gap: 0.85rem;
+  width: 100%; padding: 0.85rem 0; min-height: 48px; border: 0; background: none; color: var(--ok-text); text-align: left;
+}
+.ok-domain-tick { align-self: stretch; border-radius: 2px; }
+.ok-domain-name { font-family: var(--ok-font-display); font-size: 1.02rem; font-weight: 600; }
+.ok-domain-meta { font-family: var(--ok-font-ui); font-size: 11px; color: var(--ok-text-faint); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ok-domain-chev { color: var(--ok-text-faint); transition: transform 0.2s; }
+.ok-domain-row:hover .ok-domain-name { color: var(--ok-accent); }
+.ok-domain-body { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0 0 1rem calc(4px + 0.85rem); }
+@media (max-width: 480px) {
+  .ok-domain-row { grid-template-columns: 4px minmax(0, 1fr) 16px; }
+  .ok-domain-meta { grid-column: 2; grid-row: 2; margin-top: 0.15rem; }
+  .ok-domain-chev { grid-column: 3; grid-row: 1 / span 2; }
+}
+
+/* ===== HUB: Resume row (js/oksat/hub.js) ===== */
+.hub-resume {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "k title go" "k meta go";
+  column-gap: 1rem; align-items: baseline; margin: 1.75rem 0 0.5rem; padding: 0.85rem 0;
+  border-top: 1px solid var(--ok-text); border-bottom: 1px solid var(--ok-border);
+  color: var(--ok-text); text-decoration: none;
+}
+.hub-resume[hidden] { display: none; }
+.hub-resume-k { grid-area: k; font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ok-accent); }
+.hub-resume-title { grid-area: title; font-family: var(--ok-font-display); font-weight: 640; font-size: 1.05rem; line-height: 1.3; }
+.hub-resume-meta { grid-area: meta; font-family: var(--ok-font-ui); font-size: 11px; color: var(--ok-text-faint); font-variant-numeric: tabular-nums; }
+.hub-resume-go { grid-area: go; color: var(--ok-accent); transition: transform 0.15s; }
+.hub-resume:hover .hub-resume-title { color: var(--ok-accent); }
+.hub-resume:hover .hub-resume-go { transform: translateX(3px); }
+
+/* ===== VIEWER: keyboard sheet ("?") and the recall grade row ===== */
+.ok-keys-btn {
+  width: 22px; height: 22px; padding: 0; border: 1px solid var(--ok-border); border-radius: 50%;
+  background: none; color: var(--ok-text-muted); font-family: var(--ok-font-ui); font-size: 11px; letter-spacing: 0; line-height: 1;
+}
+.ok-keys-btn:hover, .ok-keys-btn[aria-expanded="true"] { border-color: var(--ok-text); color: var(--ok-text); }
+.ok-keys { margin: -0.25rem 0 1.25rem; border-top: 1px solid var(--ok-text); border-bottom: 1px solid var(--ok-border); }
+.ok-keys dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 1rem; }
+.ok-keys dt, .ok-keys dd { padding: 0.4rem 0; border-top: 1px solid var(--ok-border-soft); font-size: 0.85rem; line-height: 1.4; }
+.ok-keys dt:first-of-type, .ok-keys dt:first-of-type + dd { border-top: 0; }
+.ok-keys dd { color: var(--ok-text-muted); }
+.ok-keys .ok-kbd { margin-left: 0; font-size: 11px; color: var(--ok-text); }
+/* Grades in one row; the two that send a card back sit apart from the two that move it on. */
+.ok-grades { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.5rem; }
+.ok-grades .ok-grade:nth-child(2) { margin-right: 0.75rem; }
+.ok-grade { flex-direction: column; align-items: flex-start; gap: 0.15rem; padding: 0.7rem 0.75rem; text-align: left; min-height: 52px; }
+@media (max-width: 520px) {
+  .ok-grades { gap: 0.35rem; }
+  .ok-grades .ok-grade:nth-child(2) { margin-right: 0.6rem; }
+  .ok-grade { padding: 0.55rem 0.5rem; }
+  .ok-grade span:last-child { font-size: 0.8rem !important; line-height: 1.2; }
+}

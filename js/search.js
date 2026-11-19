@@ -3,6 +3,8 @@
    modules and the CPT table. The index is built in memory on every
    load (nothing persisted); hits are in match order, grouped by
    corpus. Every piece of data reaches the DOM through textContent.
+   An empty box shows recent searches (sk_search_recent, this browser
+   only) and a few concepts to try, drawn from the loaded modules.
 
    Module files declare top-level `const`s, so each loads in its own
    hidden same-origin frame, is copied out as plain strings, and the
@@ -18,7 +20,12 @@
     var statusEl = document.getElementById('srch-status');
     var errorsEl = document.getElementById('srch-errors');
     var resultsEl = document.getElementById('srch-results');
+    var startEl = document.getElementById('srch-start');
     if (!input || !statusEl || !errorsEl || !resultsEl) return;
+
+    var RECENT_KEY = 'sk_search_recent';
+    var RECENT_MAX = 6;
+    var scope = 'all';       /* all | oksat | cpt */
 
     var GROUPS = [
         { id: 'oksat', title: 'OKSAT question modules' },
@@ -166,15 +173,118 @@
         return li;
     }
 
+    /* ---------- recent searches: the query, its scope and its hit count ---------- */
+    function readRecent() {
+        try {
+            var v = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+            return Array.isArray(v) ? v.filter(function (r) { return r && typeof r.q === 'string' && r.q; }).slice(0, RECENT_MAX) : [];
+        } catch (e) { return []; }
+    }
+
+    function remember(q, n) {
+        q = String(q || '').trim().slice(0, 80);
+        if (!q) return;
+        var list = readRecent().filter(function (r) { return r.q.toLowerCase() !== q.toLowerCase(); });
+        list.unshift({ q: q, scope: scope, n: n });
+        try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, RECENT_MAX))); } catch (e) { /* no-op */ }
+    }
+
+    function suggRow(text, meta, onPick) {
+        var li = document.createElement('li');
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'srch-sugg';
+        var t = document.createElement('span');
+        t.className = 'srch-sugg-q';
+        t.textContent = text;
+        var m = document.createElement('span');
+        m.className = 'srch-sugg-meta';
+        m.textContent = meta;
+        b.append(t, m);
+        b.addEventListener('click', onPick);
+        li.appendChild(b);
+        return li;
+    }
+
+    function pick(q, sc) {
+        if (sc) setScope(sc);
+        input.value = q;
+        run();
+        input.focus();
+    }
+
+    var tryList = null;      /* chosen once per load, after the modules arrive */
+    function concepts() {
+        if (tryList) return tryList;
+        var seen = {};
+        var all = index.filter(function (e) {
+            if (e.group !== 'oksat' || e.fields[0].name !== 'concept' || /^case\b/i.test(e.fields[0].text)) return false;
+            var k = e.fields[0].text.toLowerCase();
+            if (seen[k]) return false;
+            seen[k] = true;
+            return true;
+        });
+        for (var i = all.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = all[i]; all[i] = all[j]; all[j] = t;
+        }
+        tryList = all.slice(0, 4);
+        return tryList;
+    }
+
+    function drawStart(show) {
+        if (!startEl) return;
+        startEl.hidden = !show;
+        if (!show) return;
+        var recent = readRecent();
+        var rl = document.getElementById('srch-recent-list');
+        var rs = document.getElementById('srch-recent');
+        if (rl && rs) {
+            rl.replaceChildren();
+            recent.forEach(function (r) {
+                var where = r.scope === 'cpt' ? 'CPT' : r.scope === 'oksat' ? 'Questions' : 'All';
+                rl.appendChild(suggRow(r.q, where + (typeof r.n === 'number' ? ' · ' + r.n : ''), function () { pick(r.q, r.scope); }));
+            });
+            rs.hidden = !recent.length;
+        }
+        var tl = document.getElementById('srch-try-list');
+        var ts = document.getElementById('srch-try');
+        if (tl && ts) {
+            tl.replaceChildren();
+            var list = ready ? concepts() : [];
+            list.forEach(function (e) {
+                tl.appendChild(suggRow(e.fields[0].text, e.label, function () { pick(e.fields[0].text, 'oksat'); }));
+            });
+            ts.hidden = !list.length;
+        }
+    }
+
+    /* ---------- scope: All, Questions or CPT ---------- */
+    var scopeBtns = Array.prototype.slice.call(document.querySelectorAll('.srch-scope [data-scope]'));
+    function setScope(sc) {
+        scope = sc === 'oksat' || sc === 'cpt' ? sc : 'all';
+        scopeBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-scope') === scope ? 'true' : 'false'); });
+    }
+    scopeBtns.forEach(function (b) {
+        b.addEventListener('click', function () { setScope(b.getAttribute('data-scope')); run(); });
+    });
+
+    var lastQuery = '';
+    var lastCount = 0;
+
     function run() {
         var raw = input.value.trim();
         var q = raw.toLowerCase();
         resultsEl.replaceChildren();
         if (!q) {
-            statusEl.textContent = ready ? 'Type to search the question modules and the CPT table.' : 'Loading the index…';
+            statusEl.textContent = ready ? '' : 'Loading the index…';
+            drawStart(true);
             return;
         }
-        var hits = matches(q);
+        drawStart(false);
+        var hits = matches(q).filter(function (h) { return scope === 'all' || h.entry.group === scope; });
+        lastQuery = raw;
+        lastCount = hits.length;
         GROUPS.forEach(function (g) {
             var mine = hits.filter(function (h) { return h.entry.group === g.id; });
             if (!mine.length) return;
@@ -195,6 +305,7 @@
             resultsEl.appendChild(sec);
         });
         var msg = hits.length + (hits.length === 1 ? ' match' : ' matches') + ' for “' + raw + '”';
+        if (!hits.length && scope !== 'all') msg += ' in ' + (scope === 'cpt' ? 'CPT codes' : 'questions') + ' · try All';
         if (!ready) msg += ' · still loading the question modules';
         statusEl.textContent = msg;
     }
@@ -217,6 +328,14 @@
         }
     });
 
+    /* opening a hit (click, Enter, middle-click) records the query */
+    resultsEl.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('a.srch-hit')) remember(lastQuery, lastCount);
+    }, true);
+    resultsEl.addEventListener('auxclick', function (e) {
+        if (e.target.closest && e.target.closest('a.srch-hit')) remember(lastQuery, lastCount);
+    }, true);
+
     resultsEl.addEventListener('keydown', function (e) {
         var links = hitLinks();
         var i = links.indexOf(document.activeElement);
@@ -233,6 +352,7 @@
     /* ---------- boot: CPT is synchronous, OKSAT modules load in parallel frames ---------- */
     var cptIndex = buildCpt();
     index = cptIndex;
+    drawStart(true);
 
     loadOksat().then(function (oksat) {
         index = oksat.concat(cptIndex);

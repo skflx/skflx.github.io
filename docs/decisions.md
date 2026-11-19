@@ -24,6 +24,11 @@ Files: the page at the root (URLs do not move); one script as `js/<page>.js`; se
 There is one palette, in `css/site.css`, mirrored as `--ok-*` in `css/oksat.css`. Do not create a
 second token set.
 
+There is one top bar: the wordmark, then where you are (`.site-topbar-title` on tool pages; a
+breadcrumb, `.ok-crumbs`, on OKSAT pages, whose last crumb is set by `OKSATPrefs.setCrumb`), then
+links, type and theme on the right. OKSAT keeps display and data settings in one "Aa" menu
+(`OKSATPrefs.mountFontPicker(host, extra)`); do not add a second settings button.
+
 ## 2. Renaming or retiring a shipped page
 
 **Delete it.** No redirect stubs (owner decision). Remove the page from `PAGES` in
@@ -62,6 +67,7 @@ Key registry (`<rev>` = namespace code, `<slug>` = module, `<guide>` = guide slu
 | `oksat:learn:<guide>:<rev>` | `js/oksat/store.js` (`getLearn`/`saveLearn`), written by `js/oksat/learn.js` | guide record: sections done, grades, inline module answers, reading mode. Never a module's own progress |
 | `ssb:prefs` | `js/ssb/state.js` | SSB depth tier as `{v:1, tier}`; written only on an explicit pick, never from a shared link |
 | `cpt-history`, `cpt-analytics` | `js/cpt-search.js` | recent searches and counts; predate the namespaces |
+| `sk_search_recent` | `js/search.js` | the last few queries opened from `search.html`, with scope and hit count; this browser only |
 | `sk_review:<id>` | `js/review.js` | owner review: one tick per item in `js/review-items.js`; `1` when ticked, removed when not |
 
 Legacy keys no longer read are cleared by `OKSATStore.resetLocal`; do not write them.

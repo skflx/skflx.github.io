@@ -53,6 +53,9 @@ app pages (`airway-jeopardy.html`, `oksat-study.html`, `oksat-learn.html`,
 `pdf-chapter-splitter.html`) opt out via `data-no-hotkey` on `<html>` or `<body>`
 to prevent state loss.
 
+**Search page:** an empty box shows a scope switch (All, Questions, CPT), recent searches
+(`sk_search_recent`) and a few concepts to try, drawn from the loaded modules.
+
 **Palette:** `Cmd/Ctrl+K` opens `<dialog id="cmd-k-palette">` (`js/palette.js`, loaded on the
 first press) over site pages, OKSAT guides and modules, CPT codes and wiki notes. The wiki index
 is fetched on the first open only. If the palette cannot load, the key goes to `search.html`.
@@ -65,7 +68,10 @@ is fetched on the first open only. If the palette cannot load, the key goes to `
 has two segments: **Interactive learning** (guides) and **Question modules**.
 Modules are hand-authored data files in `js/oksat/modules/`, one manifest entry
 each; the engine renders all of them. Progress stays in the browser. Each module
-and guide links to its sk.oto map (`OKSAT_SKOTO`, `live: true`).
+and guide links to its sk.oto map (`OKSAT_SKOTO`, `live: true`). All three pages share
+the site's top bar (wordmark, breadcrumb, Search, Aa, theme); the hub's progress and
+backup dialog opens from the Aa menu, and a Resume row leads to the last unfinished
+module or guide.
 
 Interactive learning guides (`docs/authoring-oksat-guide.md`):
 

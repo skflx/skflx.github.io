@@ -31,7 +31,9 @@ tokens, never raw values, so a retheme is a one-block edit.
 6. **Keyboard first.** At the gate, space or enter reveals a memory attempt and
    `c` opens the choices; then 1–4 self-grade a revealed answer, or 1–9 and a–d
    select an option once the choices are open. ←/→ navigate, space/enter advance
-   once answered, `u` next unanswered (or due), `r` random, `h`/esc home. The
+   once answered, `u` next unanswered (or due), `r` random, `h`/esc home. On the
+   module landing, Enter begins (or continues; space still scrolls) and `r` opens a random
+   question. `?` (or the ? button by the question count) lists every key. The
    pointer is optional. A jump slider below the item previews any question
    (number, section, status) and jumps on release.
 7. **Token-driven theming.** Light and dark (`data-theme`) and font sets
@@ -88,6 +90,11 @@ here, so `em` in titles is set upright (no faux italic).
 - Radii 4px, except pills (999px). Square is the house style.
 - One content column, `--ok-maxw`, with generous bottom padding.
 - Hub modules are ruled rows under a subspecialty rule, not floating cards.
+- The module landing follows the hub: a left mono kicker, the wide title, one
+  mono facts line, then actions and the domains as ruled rows with the hue tick.
+  No meter until the first answer, and then a 2px rule, not a card.
+- Recall grades sit in one row, the two that send a card back set apart from the
+  two that move it on.
 - Motion 150–350ms ease; `fade-up` on view changes; everything honours
   `prefers-reduced-motion`.
 - No drop shadows; hover is a colour or border change.
@@ -102,6 +109,8 @@ nothing else:
 - **Launch or Resume** on the card's action.
 - **One review banner** above the list: total cards due, with a link to each
   module that has due items, most due first. Absent when nothing is due.
+- **Resume** (only when there is one): the module or guide touched last, while
+  unfinished, as one ruled row above the guides.
 - **Weak concepts** (only when there are any): the lowest-accuracy concepts tried
   at least three times with a miss, each linking to the concept in the viewer.
 
