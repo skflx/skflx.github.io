@@ -228,6 +228,28 @@ async function main() {
     check('5b: recall grade recorded as correct', id0 && prog.firstCorrect[id0] === true, `firstCorrect=${JSON.stringify(prog && prog.firstCorrect)}`);
     check('5c: recall answer tagged mode "recall"', id0 && prog.modes && prog.modes[id0] === 'recall', `modes=${JSON.stringify(prog && prog.modes)}`);
     check('5d: "knew it cold" jumps Leitner box to 3', id0 && srs.items[id0] && srs.items[id0].box === 3, `box=${id0 && srs.items[id0] && srs.items[id0].box}`);
+    // '3' self-grades "Got it partially" → neither pass nor miss: firstCorrect null, box holds at 1
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(400);
+    await page.keyboard.press(' ');
+    await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Got it partially/.test(b.textContent)), null, { timeout: 8000 });
+    await page.keyboard.press('3');
+    await page.waitForTimeout(LOCK_WAIT);
+    const prog2 = await ls(page, PROGRESS);
+    const srs2 = await ls(page, SRS);
+    const id1 = prog2 && Object.keys(prog2.answers).find((k) => k !== id0);
+    check('5e: "got it partially" is recorded as partial (null), not correct', id1 && prog2.answers[id1] === 'partial' && prog2.firstCorrect[id1] === null, `firstCorrect=${JSON.stringify(prog2 && prog2.firstCorrect)}`);
+    check('5f: a partial holds the Leitner box', id1 && srs2.items[id1] && srs2.items[id1].box === 1, `box=${id1 && srs2.items[id1] && srs2.items[id1].box}`);
+    await context.close();
+  }
+
+  /* ---- Case 5p: progress saved before partial existed reads back as partial ---- */
+  {
+    const seed = `try{localStorage.setItem('${PROGRESS}',JSON.stringify({v:1,answers:{q1:'partial',q2:'cold'},firstCorrect:{q1:true,q2:true},modes:{q1:'recall',q2:'recall'}}));}catch(e){}`;
+    const { context, page } = await openStudy(browser, base, seed);
+    await page.waitForTimeout(600);
+    const txt = await page.evaluate(() => document.body.innerText);
+    check('5p: an old partial stored as true counts as partial, not correct', /1\s*correct on first attempt\s*·\s*1 partial/.test(txt), (txt.match(/.{0,30}correct on first attempt.{0,20}/) || [''])[0]);
     await context.close();
   }
 

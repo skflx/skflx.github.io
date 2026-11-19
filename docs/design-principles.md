@@ -43,7 +43,9 @@ tokens, never raw values, so a retheme is a one-block edit.
    miss and green a pass; an option letter is ink until answered, the revealed
    answer is ruled in the accent, and a self-grade keeps its own colour
    ("Got it partially" is accent, "Guessed" ochre), never a pass card. Feedback
-   is a faint tint with a coloured left rule, not a filled panel.
+   is a faint tint with a coloured left rule, not a filled panel. A partial is
+   neither pass nor miss: it is not counted correct on first attempt, earns
+   half credit in concept mastery, and holds its Leitner box.
 
 ## 2. Colour tokens
 

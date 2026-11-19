@@ -55,11 +55,13 @@
 
   /* Recall (free-response) self-grade tiers → Leitner movement.
      `box` is a number (absolute) or fn(currentBox)→box; `correct`
-     feeds the "first attempt" accuracy stat. Keyboard 1–4 maps to order. */
+     feeds the "first attempt" accuracy stat: true a pass, false a miss, null a
+     partial (neither: half credit in concept mastery, and the box holds).
+     Keyboard 1–4 maps to order. */
   const RECALL_GRADES = [
     { id: 'unknown', label: "Didn't know", correct: false, color: 'incorrect', box: 1 },
     { id: 'guessed', label: 'Guessed', correct: false, color: 'ochre', box: 1 },
-    { id: 'partial', label: 'Got it partially', correct: true, color: 'accent', box: (cur) => Math.min(cur + 1, 5) },
+    { id: 'partial', label: 'Got it partially', correct: null, color: 'accent', box: (cur) => cur },
     { id: 'cold', label: 'Knew it cold', correct: true, color: 'correct', box: (cur) => Math.min(cur + 2, 5) },
   ];
 
@@ -123,7 +125,13 @@
     // attempt in `answers`/`firstCorrect` stays the locked, honest record.
     const [reviewAnswers, setReviewAnswers] = useState({});
     const [answers, setAnswers] = useState(() => load(PROGRESS_KEY, {}).answers || {});
-    const [firstCorrect, setFirstCorrect] = useState(() => load(PROGRESS_KEY, {}).firstCorrect || {});
+    // A self-graded partial is null (neither pass nor miss). Progress written
+    // before that stored it as true; read those back as partial.
+    const [firstCorrect, setFirstCorrect] = useState(() => {
+      const p = load(PROGRESS_KEY, {}), fc = { ...(p.firstCorrect || {}) }, md = p.modes || {};
+      Object.keys(p.answers || {}).forEach((q) => { if (p.answers[q] === 'partial' && md[q] !== 'mcq') fc[q] = null; });
+      return fc;
+    });
     const [modes, setModes] = useState(() => load(PROGRESS_KEY, {}).modes || {});
     const [srs, setSrs] = useState(() => load(SRS_KEY, { v: 1, items: {} }));
     const [showDetailed, setShowDetailed] = useState(false);
@@ -170,7 +178,8 @@
     const currentItem = useMemo(() => ITEMS.find((q) => q.id === currentId) || ITEMS[0], [currentId, ITEMS]);
     const currentIdx = filteredItems.findIndex((q) => q.id === currentId);
     const totalAnswered = Object.keys(answers).length;
-    const totalCorrect = Object.values(firstCorrect).filter(Boolean).length;
+    const totalCorrect = Object.values(firstCorrect).filter((v) => v === true).length;
+    const totalPartial = Object.keys(answers).filter((q) => firstCorrect[q] === null).length;
 
     const recordAnswer = (qId, value, correct, nextBox, mode) => {
       if (answers[qId]) {
@@ -368,7 +377,7 @@
                 meta=${meta} DOMAINS=${DOMAINS} CONCEPTS=${CONCEPTS} ITEMS=${ITEMS}
                 hasTaxonomy=${hasTaxonomy}
                 domainFilter=${domainFilter} setDomainFilter=${setDomainFilter}
-                totalAnswered=${totalAnswered} totalCorrect=${totalCorrect}
+                totalAnswered=${totalAnswered} totalCorrect=${totalCorrect} totalPartial=${totalPartial}
                 firstCorrect=${firstCorrect} answers=${answers}
                 dueCount=${dueIds.length} onReview=${startReview}
                 onStart=${() => { setReviewMode(false); setConceptFilter(null); const first = ITEMS.find((q) => isOpen(q.id)) || ITEMS[0]; first && goToItem(first.id); }}
@@ -397,7 +406,7 @@
   /* =========================================================
      HOME VIEW
      ========================================================= */
-  function HomeView({ meta, DOMAINS, CONCEPTS, ITEMS, hasTaxonomy, totalAnswered, totalCorrect, onStart, onJump, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter, dueCount, onReview }) {
+  function HomeView({ meta, DOMAINS, CONCEPTS, ITEMS, hasTaxonomy, totalAnswered, totalCorrect, totalPartial, onStart, onJump, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter, dueCount, onReview }) {
     const conceptsByDomain = useMemo(() => {
       const groups = {};
       Object.entries(CONCEPTS).forEach(([id, c]) => { (groups[c.domain] = groups[c.domain] || []).push({ id, ...c }); });
@@ -410,7 +419,7 @@
         counts[cId] = {
           total: ITEMS.filter((q) => q.concepts.includes(cId)).length,
           answered: ITEMS.filter((q) => q.concepts.includes(cId) && answers[q.id]).length,
-          correct: ITEMS.filter((q) => q.concepts.includes(cId) && firstCorrect[q.id]).length,
+          correct: ITEMS.filter((q) => q.concepts.includes(cId) && firstCorrect[q.id] === true).length,
         };
       });
       return counts;
@@ -447,7 +456,7 @@
           ${totalAnswered > 0 ? html`
             <div style=${{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: C.textMuted }}>
               <${Check} size=${14} style=${{ color: C.correct }} />
-              <span><span className="display-font" style=${{ color: C.correct, fontWeight: 500 }}>${totalCorrect}</span> correct on first attempt</span>
+              <span><span className="display-font" style=${{ color: C.correct, fontWeight: 500 }}>${totalCorrect}</span> correct on first attempt${totalPartial ? html`<span style=${{ color: C.accent }}> · ${totalPartial} partial</span>` : null}</span>
               <span style=${{ marginLeft: 'auto', fontSize: '0.78rem', color: C.textFaint }}>${Math.round((totalCorrect / Math.max(totalAnswered, 1)) * 100)}%</span>
             </div>` : null}
         </div>
@@ -685,7 +694,7 @@
             <div style=${{ padding: '1.25rem', borderRadius: '4px', backgroundColor: fbTint, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + fbColor }}>
               <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 ${recallGrade
-                  ? html`<${React.Fragment}><${passLike ? Check : X} size=${16} style=${{ color: C[recallGrade.color] }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C[recallGrade.color], fontWeight: 600 }}>${recallGrade.label}</span></${React.Fragment}>`
+                  ? html`<${React.Fragment}>${recallGrade.correct === null ? null : html`<${passLike ? Check : X} size=${16} style=${{ color: C[recallGrade.color] }} />`}<span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C[recallGrade.color], fontWeight: 600 }}>${recallGrade.label}</span></${React.Fragment}>`
                   : isCorrect
                   ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>Correct</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· with the choices</span></${React.Fragment}>`
                   : html`<${React.Fragment}><${X} size=${16} style=${{ color: C.incorrect }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600 }}>Not Quite</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· Answer: ${item.correct ? String(item.correct).toUpperCase() : '—'}</span></${React.Fragment}>`}
@@ -723,7 +732,7 @@
                       <button key=${q.id} onClick=${() => onRelatedClick(q.id)} style=${{ width: '100%', textAlign: 'left', padding: '0.75rem', borderRadius: '10px', display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, color: C.text }}>
                         <div style=${{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', flexShrink: 0, marginTop: '0.1rem' }}>
                           <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.05em', textTransform: 'uppercase', color: C.ochre, fontWeight: 600 }}>${String(q.id).replace(/^q/i, 'Q')}</div>
-                          ${isAns ? (wc ? html`<${Check} size=${11} style=${{ color: C.correct }} />` : html`<${X} size=${11} style=${{ color: C.incorrect }} />`) : null}
+                          ${isAns ? (wc === true ? html`<${Check} size=${11} style=${{ color: C.correct }} />` : wc === null ? html`<span aria-label="partial" style=${{ width: '7px', height: '7px', borderRadius: '50%', border: '1.5px solid ' + C.accent }}></span>` : html`<${X} size=${11} style=${{ color: C.incorrect }} />`) : null}
                         </div>
                         <div style=${{ flex: 1, lineHeight: 1.4, fontSize: '14.5px' }}>${q.stem}</div>
                         <${ArrowRight} size=${14} style=${{ color: C.textFaint, flexShrink: 0, marginTop: '0.25rem' }} />
@@ -766,7 +775,7 @@
             const isAns = answeredSet.includes(q.id);
             const wc = firstCorrect[q.id];
             let dot = C.borderSoft;
-            if (isAns) dot = wc ? C.correct : C.incorrect;
+            if (isAns) dot = wc === true ? C.correct : wc === null ? C.accent : C.incorrect;
             return html`<div key=${q.id} className="ok-dot" style=${{ width: isCurrent ? '18px' : '5px', backgroundColor: isCurrent ? C.accent : dot, opacity: isCurrent ? 1 : isAns ? 0.7 : 0.4 }}></div>`;
           })}
         </div>
