@@ -21,7 +21,7 @@ The owner decides the roster for each wave. Protocol: `docs/delegation.md`.
 
 ## Skills
 
-`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`, `skillsmith`). Claude invokes them as skills; any other agent reads the file and follows it as written. `/skillsmith` writes, audits and prunes skills against each skill's `evals.json`; spec `plans/2026-11-10-skillsmith.md`.
+`.claude/skills/<name>/SKILL.md` are task playbooks (`ascii-diagram`, `oksat-guide`, `oksat-module`). Claude invokes them as skills; any other agent reads the file and follows it as written.
 
 ## What this is
 
@@ -47,7 +47,6 @@ node tools/test-palette.mjs      # Cmd/Ctrl-K command palette: lazy load, filter
 node tools/test-airway-resume.mjs # Airway Rounds saved games: per-tab saves, resume, zero external requests
 node tools/lint-oksat.mjs [slug]  # OKSAT module quality spec (no slug: every module; CI runs it, so all must come back clean)
 node tools/lint-oksat-guide.mjs [slug]  # OKSAT guide teaching-shape lint (no slug: every guide; CI runs it)
-node tools/lint-skills.mjs       # house skills: structure, evals.json schema, registration
 node tools/test-ssb.mjs          # SSB: every section; --only a,b for some; CI runs it as --shard i/2
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 node tools/ssb-content.mjs --queue # SSB owner review queue: draft nodes whose cited sources are all verified

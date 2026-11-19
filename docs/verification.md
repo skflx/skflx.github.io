@@ -15,7 +15,6 @@ node tools/test-palette.mjs                # Cmd/Ctrl-K palette: lazy load, filt
 node tools/test-airway-resume.mjs          # Airway Rounds saved games
 node tools/lint-oksat.mjs [slug ...]       # OKSAT modules vs the quality spec (no slug: all)
 node tools/lint-oksat-guide.mjs [slug ...] # OKSAT guides vs the teaching-shape spec (no slug: all)
-node tools/lint-skills.mjs                 # house skills: structure, evals.json, registration
 node tools/test-ssb.mjs [--only a,b]       # SSB sections (names: SECTIONS in the file)
 node tools/test-a11y.mjs [--check]         # axe-core scan, every page, light and dark (report-only unless --check)
 ```

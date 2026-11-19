@@ -14,4 +14,3 @@ lives here: each spec has a parent GitHub issue, with one sub-issue per work pac
 | [2026-11-10-ssb-nasal-framework](2026-11-10-ssb-nasal-framework.md) | SSB `nasal-framework` diorama spec | #267 |
 | [2026-11-10-jc-whisking-auditory-cortex](2026-11-10-jc-whisking-auditory-cortex.md) | journal-club OKSAT guide on auditory cortex and whisking movements | none |
 | [2026-10-07-ssb-roadmap](2026-10-07-ssb-roadmap.md) | SSB decisions, work package specs, content backlog | #266 |
-| [2026-11-10-skillsmith](2026-11-10-skillsmith.md) | a skill that writes, audits and prunes skills against evals; lint in CI | #263 |
