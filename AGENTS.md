@@ -50,6 +50,7 @@ node tools/lint-oksat-guide.mjs [slug]  # OKSAT guide teaching-shape lint (no sl
 node tools/test-ssb.mjs          # SSB: every section; --only a,b for some; CI runs it as --shard i/2
 node tools/ssb-content.mjs       # SSB knowledge graph alone (check-data runs it too)
 node tools/ssb-content.mjs --queue # SSB owner review queue: draft nodes whose cited sources are all verified
+node tools/ssb-frames.mjs        # SSB: every CT slice as a labelled PNG + per-frame UW tip agreement vs the baseline
 
 # ASCII 3D figures: preview as text, then refresh the baked no-JS frames
 node tools/ascii3d.mjs render <id> --inks   # the exact frame + its ink map
@@ -101,7 +102,7 @@ Unlisted (`noindex`; the only page that links to `ssb.html`; `OLSB.html` is also
 - `ssb.html`, `ssb/`: see SSB below.
 
 ### SSB — Sinus & Skull Base 3D (`ssb.html`)
-**Unlisted**: only `atlas.html` links to it. Two stages over one typed knowledge graph (`ssb/content/`), every fact a node with typed edges and sources, geometry keyed by the same ids: **Specimen** (pick, tree and search identify structures) and **Scope** (a rigid endoscope through the specimen, for traversal). **Read `docs/ssb.md` before any SSB work.** Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; content rules are `docs/authoring-ssb.md`.
+**Unlisted**: only `atlas.html` links to it. Three stages over one typed knowledge graph (`ssb/content/`), every fact a node with typed edges and sources, geometry keyed by the same ids: **Specimen** (pick, tree and search identify structures), **CT** (labelled slices, UW's arrow tips as the reference) and **Scope** (a rigid endoscope through the specimen, for traversal). **Read `docs/ssb.md` before any SSB work.** Status is GitHub issue #266 and its sub-issues; the spec is `plans/2026-10-07-ssb-roadmap.md`; content rules are `docs/authoring-ssb.md`.
 
 Rules that bite:
 - **Generated data is never hand-edited.** `ssb/ct/`, `ssb/geometry/` and `ssb/models/` come from `tools/ssb-pipeline/`; the UW ground truth it reads is in `tools/ssb-pipeline/uw/reference/`, never served. Regenerate them; never hand-place a cut, a carved voxel, a pose or a mesh.
@@ -111,7 +112,7 @@ Rules that bite:
 - **Content is `review: "draft"`; only the owner sets `verified`** (medical correctness, `docs/decisions.md` §7). `verified` on a source means exists-as-cited, not supports-the-claim.
 - **Credit the UW atlas and its institution, never its authors by name** (`ssb/LICENSE-data.md`).
 - **Page code** is ES modules in `js/ssb/`, on three.js vendored in `js/vendor/three-0.186.1/`. Materials are procedural from `--ssb-*` tokens (`js/ssb/materials.js`), never textures. After any change under `js/ssb/` or `ssb/`, run `node tools/stamp-assets.mjs`.
-- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`specimen`, `scope`). CI runs `--shard i/2`; `SHARDS` in the file holds the split.
+- **Test sections:** `node tools/test-ssb.mjs --only <section>[,<section>…]` (`specimen`, `scope`, `ct`). CI runs `--shard i/2`; `SHARDS` in the file holds the split.
 - **Image generation** runs outside the repo (`docs/ssb-imagegen.md`); generated pixels never carry an anatomical claim.
 
 ### sk.oto wiki

@@ -26,6 +26,7 @@ Resegmentation ground truth (WP RS0; numpy + scipy only, no crawl):
 
     python3 -I tools/ssb-pipeline/uw/score.py split      # -> split.json (the held-out seed/tip division; committed under tools/ssb-pipeline/uw/reference/)
     python3 -I tools/ssb-pipeline/uw/score.py            # baseline: today's labels, as-scanned and served; --labels DIR for candidates
+    python3 -I tools/ssb-pipeline/uw/score.py tips       # -> ssb/geometry/uw-tips.json (the CT stage's reference overlay: right-half tips)
 
 `split.json` is the fixed 70/30 seed/held-out division of the head-A arrow tips; segmentation reads seed tips only.
 `score.py` prints the held-out tip hit rate per structure with Wilson CIs, and the topology checks. Do not rerun

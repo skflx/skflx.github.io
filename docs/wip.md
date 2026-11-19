@@ -147,11 +147,12 @@ anatomical variants (sclerotic mastoid, high jugular bulb, dehiscent tegmen or s
 
 ## SSB — Sinus & Skull Base 3D (`ssb.html`)
 
-**State:** unlisted (only `atlas.html` links to it). Two stages: the Specimen (pick, tree and search identify structures) and the Scope (the endoscope, traversal). The page loads only what the two stages draw (`docs/ssb.md` §5, §6.1).
+**State:** unlisted (only `atlas.html` links to it). Three stages: the Specimen (pick, tree and search identify structures), CT (labelled slices with UW's arrow tips as the reference) and the Scope (the endoscope, traversal). The page loads only what the stages draw (`docs/ssb.md` §5, §6.1).
+
+**CT baseline:** `tools/ssb-pipeline/uw/frames-baseline.json` is the per-frame UW tip agreement of today's labels (`tools/ssb-frames.mjs`). Rerun after any relabel; rewrite it with `--baseline` only when the new labels are accepted.
 
 **Gaps, owner decisions needed:**
-- `ssb/geometry/sweeps.json` is not fetched by the page: the sweep loader and layer are gone. It stays as the input of `tools/ssb-pipeline/uw/sdf.py` (the Scope HUD's ICA, optic nerve and AEA fields) and of `normalize.py`. Deleting it is an owner call; it also needs the `sdf.py` input changed.
-- Selecting a vessel or nerve in the Specimen no longer draws its tube: the sweep layer was the only 3D geometry for those ids. Owner call: restore a selected-vessel display (which brings the fetch back) or leave them as text in the panel.
+- Vessels and nerves are tubes on the Specimen (`ssb/geometry/sweeps.json`). Radii are stated defaults except the petrous ICA, and most courses are inferred (`tools/ssb-pipeline/uw/sweeps.py`); the per-point status that says which was deleted with `sweeps.meta.json` in phase 2, so the panel states it in general terms only.
 - The UW ground truth the pipeline reads (`slices.json`, `labels.json`, `crosswalk.json`, `split.json`) is in `tools/ssb-pipeline/uw/reference/uw-sinusanatomy2/`, restored from b4b213c. `split.json` is the held-out tip division; `score.py split` rewrites it, and a rewrite is not checked against the committed file.
 - `ssb/geometry/stations.json` still carries `byState` (keys are dissection states that no longer exist), `overviews` and `uncovered`. `stations.py` writes only the `stations` table and solves no `byState`; `tools/test-ssb.mjs` still reads its ids. A regeneration that drops `byState` must first move its ids into `uncovered` or `overviews`, or the coverage check fails (owner call).
 - `content`: the procedure, hazard, principle and condition collections are still shown in the tree.

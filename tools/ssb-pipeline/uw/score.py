@@ -350,9 +350,27 @@ def print_declared_identity(rows, cov):
     return {'hit': k, 'n': n, 'ci': [lo, hi], 'below_90_n_ge_10': below}
 
 
+# ---------------------------------------------------------------- the served tips
+TIPS = os.path.join(REPO, 'ssb', 'geometry', 'uw-tips.json')
+
+
+def write_tips(split):
+    """The CT stage's reference overlay: every scorable tip with R > 0 (the standard head is the right half mirrored, so
+    a left tip has no counterpart in it; the same rule as the served score), in RAS mm."""
+    tips = [{'term': t['term'], 'ids': t['ids'], 'plane': t['plane'], 'n': t['n'], 'ras': [round(v, 2) for v in t['ras']],
+             'heldout': t['set'] == 'heldout'} for t in split['tips'] if t['ras'][0] > 0]
+    doc = {'version': 1, 'source': 'UW Interactive CT Sinus Anatomy arrow tips, head A (axial and sagittal stacks); '
+           'tools/ssb-pipeline/uw/score.py tips from reference/uw-sinusanatomy2/split.json',
+           'frame': 'RAS mm, the served volume\'s frame; right half only (R > 0)', 'tips': tips}
+    with open(TIPS, 'w') as f:
+        json.dump(doc, f, separators=(',', ':'))
+        f.write('\n')
+    print('wrote %s: %d tips (%d held out)' % (os.path.relpath(TIPS, REPO), len(tips), sum(t['heldout'] for t in tips)))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('cmd', nargs='?', default='score', choices=['score', 'split'])
+    ap.add_argument('cmd', nargs='?', default='score', choices=['score', 'split', 'tips'])
     ap.add_argument('--labels', default='both', help='as-scanned | served | both (default) | a directory')
     ap.add_argument('--set', dest='subset', default='heldout', choices=['heldout', 'seed', 'all'])
     ap.add_argument('--tol', type=int, default=1, help='voxel tolerance (Chebyshev), default 1')
@@ -366,6 +384,9 @@ def main():
         open(SPLIT, 'a').write('\n')
         print('wrote %s: %d scorable tips, %d held out; unscorable (no graph id): %d' % (
             os.path.relpath(SPLIT, REPO), s['counts']['scorable'], s['counts']['heldout'], sum(s['unscorable']['no graph id'].values())))
+        return
+    if a.cmd == 'tips':
+        write_tips(json.load(open(SPLIT)))
         return
     split = json.load(open(SPLIT))
     for f, h in split['inputs'].items():
