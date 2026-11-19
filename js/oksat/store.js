@@ -98,7 +98,8 @@
       var c = conceptKeys[i];
       var cur = rec.concepts[c] || blankConcept();
       cur.seen = (cur.seen || 0) + 1;
-      if (correct) { cur.correct = (cur.correct || 0) + 1; cur.box = clampBox((cur.box || 1) + 1); }
+      if (correct === null) { cur.correct = (cur.correct || 0) + 0.5; } // partial: half credit, box holds
+      else if (correct) { cur.correct = (cur.correct || 0) + 1; cur.box = clampBox((cur.box || 1) + 1); }
       else { cur.lapses = (cur.lapses || 0) + 1; cur.box = clampBox((cur.box || 1) - 1); }
       cur.last = today();
       rec.concepts[c] = cur;
