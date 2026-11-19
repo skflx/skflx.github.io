@@ -32,7 +32,7 @@ tokens, never raw values, so a retheme is a one-block edit.
    `c` opens the choices; then 1–4 self-grade a revealed answer, or 1–9 and a–d
    select an option once the choices are open. ←/→ navigate, space/enter advance
    once answered, `u` next unanswered (or due), `r` random, `h`/esc home. On the
-   module landing, space or enter begins (or continues) and `r` opens a random
+   module landing, Enter begins (or continues; space still scrolls) and `r` opens a random
    question. `?` (or the ? button by the question count) lists every key. The
    pointer is optional. A jump slider below the item previews any question
    (number, section, status) and jumps on release.

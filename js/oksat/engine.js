@@ -317,10 +317,10 @@
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       const tgt = e.target;
       if (tgt && tgt.matches && tgt.matches('input, textarea, select, [contenteditable]')) return;
-      // Module landing: space/enter begins (or continues), r opens a random question.
+      // Module landing: Enter begins (or continues), r opens a random question. Space stays page scroll.
       if (view === 'home') {
         if (tgt && tgt.closest && tgt.closest('button, a, summary')) return;
-        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); startModule(); return; }
+        if (e.key === 'Enter') { e.preventDefault(); startModule(); return; }
         if (e.key === 'r') { e.preventDefault(); randomFromHome(); return; }
         return;
       }
@@ -464,7 +464,7 @@
 
         <div className="ok-home-actions">
           <button className="ok-btn ok-btn--primary" onClick=${onStart}>
-            <span>${startLabel}</span><kbd className="ok-kbd ok-kbd--inv">space</kbd>
+            <span>${startLabel}</span><kbd className="ok-kbd ok-kbd--inv">enter</kbd>
           </button>
           <button className="ok-btn" onClick=${onRandom}>
             <span>Random</span><kbd className="ok-kbd">r</kbd>
