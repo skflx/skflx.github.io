@@ -20,6 +20,7 @@
         var a = item.area.toLowerCase();
         var tp = item.type.toLowerCase();
         var k = item.ki.toLowerCase();
+        var kc = (item.cat || '').toLowerCase();
         var s = 0;
 
         if (c === t)            s += 1000;
@@ -28,6 +29,7 @@
 
         if (k === t)            s += 800;
         else if (k.includes(t)) s += 400;
+        if (kc.includes(t))     s += 200;
 
         if (d.includes(t))      s += 100;
         d.split(' ').forEach(function(w) {
@@ -144,7 +146,7 @@
             return '<div class="result-card" id="cpt-'+item._i+'" data-code="'+esc(item.code)+'" data-desc="'+esc(item.desc)+'">'
                  + '<div class="card-left">'
                  + '<div class="card-code">'+esc(item.code)+'</div>'
-                 + '<span class="ki-badge">'+esc(item.ki)+'</span>'
+                 + '<span class="ki-badge" title="'+esc(item.cat || item.ki)+'">'+esc(item.ki)+'</span>'
                  + '</div>'
                  + '<div class="card-body">'
                  + '<p class="card-desc">'+esc(item.desc)+'</p>'

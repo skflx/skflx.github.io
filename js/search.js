@@ -54,7 +54,7 @@
                     { name: 'procedure', text: String(r.desc || '') },
                     { name: 'area', text: String(r.area || '') },
                     { name: 'type', text: String(r.type || '') },
-                    { name: 'category', text: String(r.ki || '') },
+                    { name: 'category', text: String(r.ki || '') + ' ' + String(r.cat || '') },
                 ],
             };
         });
