@@ -44,6 +44,8 @@
 
   /* ---- Spaced repetition (Leitner) ---- */
   const LEITNER_INTERVALS = { 1: 1, 2: 3, 3: 7, 4: 14, 5: 30 };
+  // How long a pick waits, undoable, before it locks as the first attempt.
+  const LOCK_MS = 1500;
   const today = () => new Date().toISOString().split('T')[0];
   const addDays = (iso, n) => {
     const d = new Date(iso + 'T00:00:00');
@@ -53,11 +55,13 @@
 
   /* Recall (free-response) self-grade tiers → Leitner movement.
      `box` is a number (absolute) or fn(currentBox)→box; `correct`
-     feeds the "first attempt" accuracy stat. Keyboard 1–4 maps to order. */
+     feeds the "first attempt" accuracy stat: true a pass, false a miss, null a
+     partial (neither: half credit in concept mastery, and the box holds).
+     Keyboard 1–4 maps to order. */
   const RECALL_GRADES = [
     { id: 'unknown', label: "Didn't know", correct: false, color: 'incorrect', box: 1 },
     { id: 'guessed', label: 'Guessed', correct: false, color: 'ochre', box: 1 },
-    { id: 'partial', label: 'Got it partially', correct: true, color: 'accent', box: (cur) => Math.min(cur + 1, 5) },
+    { id: 'partial', label: 'Got it partially', correct: null, color: 'accent', box: (cur) => cur },
     { id: 'cold', label: 'Knew it cold', correct: true, color: 'correct', box: (cur) => Math.min(cur + 2, 5) },
   ];
 
@@ -121,13 +125,25 @@
     // attempt in `answers`/`firstCorrect` stays the locked, honest record.
     const [reviewAnswers, setReviewAnswers] = useState({});
     const [answers, setAnswers] = useState(() => load(PROGRESS_KEY, {}).answers || {});
-    const [firstCorrect, setFirstCorrect] = useState(() => load(PROGRESS_KEY, {}).firstCorrect || {});
+    // A self-graded partial is null (neither pass nor miss). Progress written
+    // before that stored it as true; read those back as partial.
+    const [firstCorrect, setFirstCorrect] = useState(() => {
+      const p = load(PROGRESS_KEY, {}), fc = { ...(p.firstCorrect || {}) }, md = p.modes || {};
+      Object.keys(p.answers || {}).forEach((q) => { if (p.answers[q] === 'partial' && md[q] !== 'mcq') fc[q] = null; });
+      return fc;
+    });
     const [modes, setModes] = useState(() => load(PROGRESS_KEY, {}).modes || {});
     const [srs, setSrs] = useState(() => load(SRS_KEY, { v: 1, items: {} }));
     const [showDetailed, setShowDetailed] = useState(false);
     const [revealed, setRevealed] = useState(false);   // recall path: answer shown, no choices
     const [choicesShown, setChoicesShown] = useState(false); // MCQ path: options revealed
     const [domainFilter, setDomainFilter] = useState(null);
+    // A pick or self-grade waits LOCK_MS before it becomes the record, with no
+    // feedback shown, so a slipped key or thumb can be undone (Esc) or changed.
+    // Space/Enter, leaving the item, or hiding the page commits it at once.
+    const [pending, setPending] = useState(null); // { qId, value, correct, box, mode }
+    const pendingRef = useRef(null);
+    pendingRef.current = pending;
     const cardRef = useRef(null);
 
     // Persist progress + SRS. `modes` records how each item was settled —
@@ -162,7 +178,8 @@
     const currentItem = useMemo(() => ITEMS.find((q) => q.id === currentId) || ITEMS[0], [currentId, ITEMS]);
     const currentIdx = filteredItems.findIndex((q) => q.id === currentId);
     const totalAnswered = Object.keys(answers).length;
-    const totalCorrect = Object.values(firstCorrect).filter(Boolean).length;
+    const totalCorrect = Object.values(firstCorrect).filter((v) => v === true).length;
+    const totalPartial = Object.keys(answers).filter((q) => firstCorrect[q] === null).length;
 
     const recordAnswer = (qId, value, correct, nextBox, mode) => {
       if (answers[qId]) {
@@ -189,17 +206,44 @@
       if (it && it.concepts.length) OKSATStore.recordConceptResult(slug, reviewer, it.concepts, correct);
     };
 
-    // MCQ path: the learner opened the choices and picked one.
-    const handleSelect = (optionId) => {
-      const wasCorrect = optionId === currentItem.correct;
-      recordAnswer(currentId, optionId, wasCorrect, undefined, 'mcq');
+    // Commit the waiting pick now (timer, Space/Enter, navigation, page hide).
+    const commitPending = () => {
+      const p = pendingRef.current;
+      if (!p) return;
+      pendingRef.current = null;
+      setPending(null);
+      recordAnswer(p.qId, p.value, p.correct, p.box, p.mode);
     };
+    const commitRef = useRef(commitPending);
+    commitRef.current = commitPending;
+    const undoPending = () => { pendingRef.current = null; setPending(null); };
+    useEffect(() => {
+      if (!pending) return undefined;
+      const t = setTimeout(() => commitRef.current(), LOCK_MS);
+      return () => clearTimeout(t);
+    }, [pending]);
+    useEffect(() => {
+      const flush = () => commitRef.current();
+      const onVis = () => { if (document.visibilityState === 'hidden') flush(); };
+      window.addEventListener('pagehide', flush);
+      document.addEventListener('visibilitychange', onVis);
+      return () => { window.removeEventListener('pagehide', flush); document.removeEventListener('visibilitychange', onVis); };
+    }, []);
+    // Picking again before the lock replaces the pick and restarts the wait.
+    const propose = (value, correct, box, mode) => {
+      if (shownAttempt(currentId)) return;
+      setPending({ qId: currentId, value, correct, box, mode });
+    };
+
+    // MCQ path: the learner opened the choices and picked one.
+    const handleSelect = (optionId) => propose(optionId, optionId === currentItem.correct, undefined, 'mcq');
     // Recall path: answered from memory, then self-graded (both recall-type
     // items and MCQ items settled without ever opening the choices).
-    const handleGrade = (grade) => recordAnswer(currentId, grade.id, grade.correct, grade.box, 'recall');
+    const handleGrade = (grade) => propose(grade.id, grade.correct, grade.box, 'recall');
     const showChoices = () => setChoicesShown(true);
 
     const goToItem = (qId) => {
+      commitPending();
       setCurrentId(qId); setShowDetailed(false); setRevealed(false); setChoicesShown(false); setView('item');
       setTimeout(() => cardRef.current?.scrollTo?.(0, 0), 50);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -235,7 +279,11 @@
     // Status for the jump slider's preview.
     const statusOf = (qId) => {
       const a = shownAttempt(qId);
-      if (a) return a.correct ? 'correct' : 'missed';
+      if (a) {
+        const g = a.mode === 'recall' ? RECALL_GRADES.find((x) => x.id === a.value) : null;
+        if (g) return g.label.toLowerCase();
+        return a.correct ? 'correct' : 'missed';
+      }
       return isDue(qId) ? 'due for review' : 'unanswered';
     };
     const handleConceptClick = (conceptId) => {
@@ -272,12 +320,19 @@
       const isRecall = currentItem.type === 'recall';
       const key = e.key;
 
+      // A pick is waiting to lock: Esc or Backspace undoes it, Space/Enter locks it now.
+      const p = pendingRef.current;
+      if (p && p.qId === currentId) {
+        if (key === 'Escape' || key === 'Backspace') { e.preventDefault(); undoPending(); return; }
+        if (key === ' ' || key === 'Enter') { e.preventDefault(); commitPending(); return; }
+      }
+
       if (key === 'ArrowLeft') { e.preventDefault(); handlePrev(); return; }
       if (key === 'ArrowRight') { e.preventDefault(); handleNext(); return; }
       if (key === 'h' || key === 'Escape') {
         e.preventDefault();
         if (key === 'Escape' && conceptFilter) { setConceptFilter(null); return; }
-        setView('home'); return;
+        commitPending(); setView('home'); return;
       }
       if (key === 'r') { e.preventDefault(); handleRandom(); return; }
       if (key === 'u') { e.preventDefault(); handleNextOpen(); return; }
@@ -322,7 +377,7 @@
                 meta=${meta} DOMAINS=${DOMAINS} CONCEPTS=${CONCEPTS} ITEMS=${ITEMS}
                 hasTaxonomy=${hasTaxonomy}
                 domainFilter=${domainFilter} setDomainFilter=${setDomainFilter}
-                totalAnswered=${totalAnswered} totalCorrect=${totalCorrect}
+                totalAnswered=${totalAnswered} totalCorrect=${totalCorrect} totalPartial=${totalPartial}
                 firstCorrect=${firstCorrect} answers=${answers}
                 dueCount=${dueIds.length} onReview=${startReview}
                 onStart=${() => { setReviewMode(false); setConceptFilter(null); const first = ITEMS.find((q) => isOpen(q.id)) || ITEMS[0]; first && goToItem(first.id); }}
@@ -335,7 +390,8 @@
                 onSelect=${handleSelect} revealed=${revealed} onReveal=${() => setRevealed(true)} onGrade=${handleGrade}
                 choicesShown=${choicesShown} onShowChoices=${showChoices}
                 showDetailed=${showDetailed} setShowDetailed=${setShowDetailed}
-                onNext=${handleNext} onPrev=${handlePrev} onRandom=${handleRandom} onHome=${() => setView('home')}
+                onNext=${handleNext} onPrev=${handlePrev} onRandom=${handleRandom} onHome=${() => { commitPending(); setView('home'); }}
+                pendingValue=${pending && pending.qId === currentId ? pending.value : null} onUndo=${undoPending}
                 openCount=${openCount} onNextOpen=${handleNextOpen} onJumpIdx=${jumpToIdx} statusOf=${statusOf}
                 currentIdx=${currentIdx} total=${filteredItems.length} globalTotal=${ITEMS.length}
                 conceptFilter=${conceptFilter} setConceptFilter=${setConceptFilter}
@@ -350,7 +406,7 @@
   /* =========================================================
      HOME VIEW
      ========================================================= */
-  function HomeView({ meta, DOMAINS, CONCEPTS, ITEMS, hasTaxonomy, totalAnswered, totalCorrect, onStart, onJump, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter, dueCount, onReview }) {
+  function HomeView({ meta, DOMAINS, CONCEPTS, ITEMS, hasTaxonomy, totalAnswered, totalCorrect, totalPartial, onStart, onJump, onConceptClick, answers, firstCorrect, domainFilter, setDomainFilter, dueCount, onReview }) {
     const conceptsByDomain = useMemo(() => {
       const groups = {};
       Object.entries(CONCEPTS).forEach(([id, c]) => { (groups[c.domain] = groups[c.domain] || []).push({ id, ...c }); });
@@ -363,7 +419,7 @@
         counts[cId] = {
           total: ITEMS.filter((q) => q.concepts.includes(cId)).length,
           answered: ITEMS.filter((q) => q.concepts.includes(cId) && answers[q.id]).length,
-          correct: ITEMS.filter((q) => q.concepts.includes(cId) && firstCorrect[q.id]).length,
+          correct: ITEMS.filter((q) => q.concepts.includes(cId) && firstCorrect[q.id] === true).length,
         };
       });
       return counts;
@@ -400,7 +456,7 @@
           ${totalAnswered > 0 ? html`
             <div style=${{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', color: C.textMuted }}>
               <${Check} size=${14} style=${{ color: C.correct }} />
-              <span><span className="display-font" style=${{ color: C.correct, fontWeight: 500 }}>${totalCorrect}</span> correct on first attempt</span>
+              <span><span className="display-font" style=${{ color: C.correct, fontWeight: 500 }}>${totalCorrect}</span> correct on first attempt${totalPartial ? html`<span style=${{ color: C.accent }}> · ${totalPartial} partial</span>` : null}</span>
               <span style=${{ marginLeft: 'auto', fontSize: '0.78rem', color: C.textFaint }}>${Math.round((totalCorrect / Math.max(totalAnswered, 1)) * 100)}%</span>
             </div>` : null}
         </div>
@@ -483,7 +539,7 @@
   /* =========================================================
      ITEM VIEW
      ========================================================= */
-  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect }) {
+  function ItemView({ DOMAINS, CONCEPTS, ITEMS, item, answer, isCorrect, mode, retake, pendingValue, onUndo, openCount, onNextOpen, onJumpIdx, statusOf, onSelect, revealed, onReveal, onGrade, choicesShown, onShowChoices, showDetailed, setShowDetailed, onNext, onPrev, onRandom, onHome, currentIdx, total, globalTotal, conceptFilter, setConceptFilter, reviewMode, exitReview, filteredItems, relatedItems, onConceptClick, onRelatedClick, answeredSet, firstCorrect }) {
     // Jump slider: the index being previewed while dragging (null = idle).
     // The jump commits on release so the page does not scroll mid-drag.
     const [scrub, setScrub] = useState(null);
@@ -502,6 +558,18 @@
     const answeredViaRecall = answered && (mode ? mode === 'recall' : isRecall);
     const recallGrade = answeredViaRecall ? RECALL_GRADES.find((g) => g.id === answer) : null;
     const passLike = recallGrade ? recallGrade.correct : isCorrect;
+    // Feedback colour: the grade's own (partial = accent, guessed = ochre), else pass/miss.
+    const fbColor = recallGrade ? C[recallGrade.color] : (isCorrect ? C.correct : C.incorrect);
+    const fbTint = recallGrade
+      ? (recallGrade.color === 'correct' ? C.correctBg : recallGrade.color === 'incorrect' ? C.incorrectBg : C.surface)
+      : (isCorrect ? C.correctBg : C.incorrectBg);
+    const pendingLabel = pendingValue == null ? '' : (RECALL_GRADES.find((g) => g.id === pendingValue) || {}).label || String(pendingValue).toUpperCase();
+    const lockBar = pendingValue == null ? null : html`
+      <div className="ok-lockbar fade-up" role="status" aria-live="polite">
+        <span className="ui-font">Locking <b>${pendingLabel}</b> as your first attempt</span>
+        <button type="button" className="ok-btn ok-btn--sm" onClick=${onUndo}>Undo <span className="ok-kbd">Esc</span></button>
+        <span className="ok-lockbar-timer" style=${{ animationDuration: LOCK_MS + 'ms' }}></span>
+      </div>`;
     // The recall path reveals the plain answer: a recall item's `answer` field,
     // or the correct option's text for an mcq item.
     const correctOption = item.options.find((o) => o.id === item.correct);
@@ -576,25 +644,30 @@
 
           ${showRecallBlock ? html`
             <div className="fade-up" style=${{ marginTop: '1.5rem' }}>
-              <div className="display-font" style=${{ fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.5rem', color: C.ochre, fontWeight: 600 }}>Answer</div>
-              <div style=${{ padding: '1rem', borderRadius: '10px', lineHeight: 1.6, backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.ochre, color: C.text, fontSize: '16px' }}>${renderText(revealAnswerText)}</div>
+              <div className="display-font" style=${{ fontSize: '11px', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: '0.5rem', color: C.accent, fontWeight: 600 }}>Answer</div>
+              <div style=${{ padding: '1rem', borderRadius: '10px', lineHeight: 1.6, backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + C.accent, color: C.text, fontSize: '16px' }}>${renderText(revealAnswerText)}</div>
               ${!answered ? html`
                 <div style=${{ marginTop: '0.85rem' }}>
                   <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.textFaint, marginBottom: '0.45rem' }}>Did you know it?</div>
-                  <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-                    ${RECALL_GRADES.map((g, i) => html`
-                      <button key=${g.id} className="ok-btn" onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: C[g.color] }}>
+                  <div style=${{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    ${RECALL_GRADES.map((g, i) => {
+                      const picked = pendingValue === g.id;
+                      return html`
+                      <button key=${g.id} className="ok-btn" aria-pressed=${picked} onClick=${() => onGrade(g)} style=${{ justifyContent: 'flex-start', gap: '0.5rem', borderColor: C[g.color], color: picked ? C.surface : C[g.color], backgroundColor: picked ? C[g.color] : undefined, opacity: pendingValue != null && !picked ? 0.55 : 1 }}>
                         <span className="display-font" style=${{ fontSize: '0.7rem', opacity: 0.6 }}>${i + 1}</span>
                         <span className="display-font" style=${{ fontWeight: 600, fontSize: '0.85rem' }}>${g.label}</span>
-                      </button>`)}
+                      </button>`;
+                    })}
                   </div>
+                  ${lockBar}
                 </div>` : null}
             </div>` : null}
 
           ${showOptions ? html`
             <div role="radiogroup" aria-label="Answer options" style=${{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1.5rem' }}>
               ${item.options.length ? item.options.map((opt) => {
-                const isSelected = answer === opt.id;
+                const isPending = !answered && pendingValue === opt.id;
+                const isSelected = answer === opt.id || isPending;
                 const isCorrectOption = opt.id === item.correct;
                 const showAsCorrect = answered && isCorrectOption;
                 const showAsIncorrect = answered && isSelected && !isCorrectOption;
@@ -602,24 +675,26 @@
                 if (showAsCorrect) { bg = C.correctBg; bd = C.correct; lc = C.correct; }
                 else if (showAsIncorrect) { bg = C.incorrectBg; bd = C.incorrect; lc = C.incorrect; }
                 else if (answered) { bg = C.bg; tc = C.textMuted; }
+                else if (isPending) { bd = C.accent; lc = C.accent; }
                 return html`
                   <button key=${opt.id} role="radio" aria-checked=${isSelected} onClick=${() => onSelect(opt.id)} disabled=${answered}
                           style=${{ width: '100%', textAlign: 'left', padding: '0.85rem', borderRadius: '10px', display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: bg, border: '1px solid ' + bd, borderLeft: '3px solid ' + lc, color: tc, cursor: answered ? 'default' : 'pointer', transition: 'all 0.15s' }}>
-                    <div className="display-font" style=${{ fontSize: '0.85rem', flexShrink: 0, width: '1.25rem', color: showAsCorrect ? C.correct : showAsIncorrect ? C.incorrect : C.ochre, fontWeight: 600 }}>${String(opt.id).toUpperCase()}</div>
+                    <div className="display-font" style=${{ fontSize: '0.85rem', flexShrink: 0, width: '1.25rem', color: showAsCorrect ? C.correct : showAsIncorrect ? C.incorrect : isPending ? C.accent : C.textMuted, fontWeight: 600 }}>${String(opt.id).toUpperCase()}</div>
                     <div style=${{ flex: 1, lineHeight: 1.4, fontSize: '15px' }}>${opt.text}</div>
                     ${showAsCorrect ? html`<${Check} size=${16} style=${{ color: C.correct, flexShrink: 0, marginTop: '2px' }} />` : null}
                     ${showAsIncorrect ? html`<${X} size=${16} style=${{ color: C.incorrect, flexShrink: 0, marginTop: '2px' }} />` : null}
                   </button>`;
               }) : html`<p style=${{ color: C.textFaint, fontStyle: 'italic', fontSize: '0.9rem' }}>No options provided for this question.</p>`}
+              ${lockBar}
             </div>` : null}
         </div>
 
         ${answered ? html`
           <div className="fade-up" aria-live="polite" style=${{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div style=${{ padding: '1.25rem', borderRadius: '14px', backgroundColor: passLike ? C.correctBg : C.incorrectBg, border: '1px solid ' + (passLike ? C.correct : C.incorrect) }}>
+            <div style=${{ padding: '1.25rem', borderRadius: '4px', backgroundColor: fbTint, border: '1px solid ' + C.borderSoft, borderLeft: '3px solid ' + fbColor }}>
               <div style=${{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                 ${recallGrade
-                  ? html`<${React.Fragment}><${passLike ? Check : X} size=${16} style=${{ color: C[recallGrade.color] }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C[recallGrade.color], fontWeight: 600 }}>${recallGrade.label}</span></${React.Fragment}>`
+                  ? html`<${React.Fragment}>${recallGrade.correct === null ? null : html`<${passLike ? Check : X} size=${16} style=${{ color: C[recallGrade.color] }} />`}<span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C[recallGrade.color], fontWeight: 600 }}>${recallGrade.label}</span></${React.Fragment}>`
                   : isCorrect
                   ? html`<${React.Fragment}><${Check} size=${16} style=${{ color: C.correct }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.correct, fontWeight: 600 }}>Correct</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· with the choices</span></${React.Fragment}>`
                   : html`<${React.Fragment}><${X} size=${16} style=${{ color: C.incorrect }} /><span className="display-font" style=${{ fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.incorrect, fontWeight: 600 }}>Not Quite</span><span style=${{ fontSize: '0.75rem', marginLeft: '0.25rem', color: C.textMuted }}>· Answer: ${item.correct ? String(item.correct).toUpperCase() : '—'}</span></${React.Fragment}>`}
@@ -657,7 +732,7 @@
                       <button key=${q.id} onClick=${() => onRelatedClick(q.id)} style=${{ width: '100%', textAlign: 'left', padding: '0.75rem', borderRadius: '10px', display: 'flex', alignItems: 'flex-start', gap: '0.75rem', backgroundColor: C.bg, border: '1px solid ' + C.borderSoft, color: C.text }}>
                         <div style=${{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', flexShrink: 0, marginTop: '0.1rem' }}>
                           <div className="display-font" style=${{ fontSize: '10px', letterSpacing: '0.05em', textTransform: 'uppercase', color: C.ochre, fontWeight: 600 }}>${String(q.id).replace(/^q/i, 'Q')}</div>
-                          ${isAns ? (wc ? html`<${Check} size=${11} style=${{ color: C.correct }} />` : html`<${X} size=${11} style=${{ color: C.incorrect }} />`) : null}
+                          ${isAns ? (wc === true ? html`<${Check} size=${11} style=${{ color: C.correct }} />` : wc === null ? html`<span aria-label="partial" style=${{ width: '7px', height: '7px', borderRadius: '50%', border: '1.5px solid ' + C.accent }}></span>` : html`<${X} size=${11} style=${{ color: C.incorrect }} />`) : null}
                         </div>
                         <div style=${{ flex: 1, lineHeight: 1.4, fontSize: '14.5px' }}>${q.stem}</div>
                         <${ArrowRight} size=${14} style=${{ color: C.textFaint, flexShrink: 0, marginTop: '0.25rem' }} />
@@ -700,7 +775,7 @@
             const isAns = answeredSet.includes(q.id);
             const wc = firstCorrect[q.id];
             let dot = C.borderSoft;
-            if (isAns) dot = wc ? C.correct : C.incorrect;
+            if (isAns) dot = wc === true ? C.correct : wc === null ? C.accent : C.incorrect;
             return html`<div key=${q.id} className="ok-dot" style=${{ width: isCurrent ? '18px' : '5px', backgroundColor: isCurrent ? C.accent : dot, opacity: isCurrent ? 1 : isAns ? 0.7 : 0.4 }}></div>`;
           })}
         </div>

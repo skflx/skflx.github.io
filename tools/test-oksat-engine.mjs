@@ -42,6 +42,7 @@ const HEADED = args.includes('--headed');
 const REVIEWER = 'smoke';                       // normalizes to 'smoke'
 const SLUG = 'pediatrics';
 const PROGRESS = `oksat:progress:${SLUG}:${REVIEWER}`;
+const LOCK_WAIT = 1800; // engine.js LOCK_MS (1500) plus margin
 const SRS = `oksat:srs:${SLUG}:${REVIEWER}`;
 
 let failures = 0;
@@ -101,7 +102,7 @@ async function main() {
     // pick a deliberately WRONG option: q1 correct is 'b', click option 1 ('a')
     const btns = await page.$$(optionButtons);
     await btns[0].click();
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(LOCK_WAIT); // a pick locks after LOCK_MS (engine.js)
     const prog1 = await ls(page, PROGRESS);
     const firstAnsweredId = prog1 && prog1.answers && Object.keys(prog1.answers)[0];
     const recorded = firstAnsweredId ? prog1.answers[firstAnsweredId] : null;
@@ -126,13 +127,49 @@ async function main() {
     await begin(page);
     await openChoices(page);
     await (await page.$$(optionButtons))[0].click();
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(LOCK_WAIT); // a pick locks after LOCK_MS (engine.js)
     const srs = await ls(page, SRS);
     const items = srs && srs.items ? Object.values(srs.items) : [];
     const one = items[0];
     check('2a: SRS entry written', !!one, `srs=${JSON.stringify(srs)}`);
     check('2b: Leitner box in 1..5', one && one.box >= 1 && one.box <= 5, `box=${one && one.box}`);
     check('2c: nextReview is a date', one && /^\d{4}-\d{2}-\d{2}$/.test(one.nextReview), `nextReview=${one && one.nextReview}`);
+    await context.close();
+  }
+
+  /* ---- Case 3u: the lock window (undo, change, commit on leave) ---- */
+  {
+    const { context, page } = await openStudy(browser, base);
+    await begin(page);
+    await page.keyboard.press('c');
+    await page.waitForFunction(() => document.querySelector('[role="radiogroup"]'), null, { timeout: 8000 });
+    await page.keyboard.press('1');
+    await page.waitForTimeout(200);
+    const bar = await page.evaluate(() => !!document.querySelector('.ok-lockbar'));
+    const noFeedback = await page.evaluate(() => !/Not Quite|with the choices/i.test(document.body.innerText));
+    check('3u-a: a pick shows the undo bar and no feedback yet', bar && noFeedback, `bar=${bar} noFeedback=${noFeedback}`);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(LOCK_WAIT);
+    let prog = await ls(page, PROGRESS);
+    check('3u-b: Esc in the window undoes the pick, nothing recorded', !prog || !Object.keys(prog.answers || {}).length, `answers=${JSON.stringify(prog && prog.answers)}`);
+    const stillItem = await page.evaluate(() => !!document.querySelector('[role="radiogroup"]'));
+    check('3u-c: Esc during the window stays on the question', stillItem, 'left the item');
+    await page.keyboard.press('1');
+    await page.waitForTimeout(150);
+    await page.keyboard.press('2');
+    await page.waitForTimeout(LOCK_WAIT);
+    prog = await ls(page, PROGRESS);
+    const id0 = prog && Object.keys(prog.answers || {})[0];
+    check('3u-d: a second pick in the window replaces the first', id0 && prog.answers[id0] === 'b', `answers=${JSON.stringify(prog && prog.answers)}`);
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(400);
+    await page.keyboard.press('c');
+    await page.waitForFunction(() => document.querySelector('[role="radiogroup"]'), null, { timeout: 8000 });
+    await page.keyboard.press('1');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(300);
+    prog = await ls(page, PROGRESS);
+    check('3u-e: leaving the item commits a waiting pick at once', prog && Object.keys(prog.answers || {}).length === 2, `answers=${JSON.stringify(prog && prog.answers)}`);
     await context.close();
   }
 
@@ -144,7 +181,7 @@ async function main() {
     await page.keyboard.press('c');
     await page.waitForFunction(() => document.querySelector('[role="radiogroup"]'), null, { timeout: 8000 });
     await page.keyboard.press('1');
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(LOCK_WAIT); // a pick locks after LOCK_MS (engine.js)
     const prog = await ls(page, PROGRESS);
     const id0 = prog && prog.answers && Object.keys(prog.answers)[0];
     check('3a: key "c" opens choices, "1" selects option a', id0 && prog.answers[id0] === 'a', `answers=${JSON.stringify(prog && prog.answers)}`);
@@ -184,13 +221,35 @@ async function main() {
     check('5a: recall path reveals answer without choices', noOptions, 'radiogroup appeared on recall path');
     // '4' self-grades "Knew it cold" → correct, mode 'recall', Leitner +2 (box 1→3)
     await page.keyboard.press('4');
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(LOCK_WAIT); // a pick locks after LOCK_MS (engine.js)
     const prog = await ls(page, PROGRESS);
     const srs = await ls(page, SRS);
     const id0 = prog && prog.answers && Object.keys(prog.answers)[0];
     check('5b: recall grade recorded as correct', id0 && prog.firstCorrect[id0] === true, `firstCorrect=${JSON.stringify(prog && prog.firstCorrect)}`);
     check('5c: recall answer tagged mode "recall"', id0 && prog.modes && prog.modes[id0] === 'recall', `modes=${JSON.stringify(prog && prog.modes)}`);
     check('5d: "knew it cold" jumps Leitner box to 3', id0 && srs.items[id0] && srs.items[id0].box === 3, `box=${id0 && srs.items[id0] && srs.items[id0].box}`);
+    // '3' self-grades "Got it partially" → neither pass nor miss: firstCorrect null, box holds at 1
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(400);
+    await page.keyboard.press(' ');
+    await page.waitForFunction(() => [...document.querySelectorAll('button')].some((b) => /Got it partially/.test(b.textContent)), null, { timeout: 8000 });
+    await page.keyboard.press('3');
+    await page.waitForTimeout(LOCK_WAIT);
+    const prog2 = await ls(page, PROGRESS);
+    const srs2 = await ls(page, SRS);
+    const id1 = prog2 && Object.keys(prog2.answers).find((k) => k !== id0);
+    check('5e: "got it partially" is recorded as partial (null), not correct', id1 && prog2.answers[id1] === 'partial' && prog2.firstCorrect[id1] === null, `firstCorrect=${JSON.stringify(prog2 && prog2.firstCorrect)}`);
+    check('5f: a partial holds the Leitner box', id1 && srs2.items[id1] && srs2.items[id1].box === 1, `box=${id1 && srs2.items[id1] && srs2.items[id1].box}`);
+    await context.close();
+  }
+
+  /* ---- Case 5p: progress saved before partial existed reads back as partial ---- */
+  {
+    const seed = `try{localStorage.setItem('${PROGRESS}',JSON.stringify({v:1,answers:{q1:'partial',q2:'cold'},firstCorrect:{q1:true,q2:true},modes:{q1:'recall',q2:'recall'}}));}catch(e){}`;
+    const { context, page } = await openStudy(browser, base, seed);
+    await page.waitForTimeout(600);
+    const txt = await page.evaluate(() => document.body.innerText);
+    check('5p: an old partial stored as true counts as partial, not correct', /1\s*correct on first attempt\s*·\s*1 partial/.test(txt), (txt.match(/.{0,30}correct on first attempt.{0,20}/) || [''])[0]);
     await context.close();
   }
 
@@ -210,14 +269,14 @@ async function main() {
     const anyLocked = await page.$$eval(optionButtons, (bs) => bs.some((b) => b.disabled));
     check('6b: review options are answerable (not locked)', !anyLocked, 'options disabled on a due item');
     await page.$$eval(optionButtons, (bs) => { const b = bs.find((x) => x.textContent.trim().startsWith('B')); b && b.click(); });
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(LOCK_WAIT); // a pick locks after LOCK_MS (engine.js)
     const prog = await ls(page, PROGRESS);
     const srs = await ls(page, SRS);
     const t = new Date().toISOString().split('T')[0];
     check('6c: first attempt unchanged by review', prog.answers.q1 === 'a' && prog.firstCorrect.q1 === false, `progress=${JSON.stringify(prog)}`);
     check('6d: correct review moves box 1→2, next review in the future', srs.items.q1.box === 2 && srs.items.q1.nextReview > t, `srs=${JSON.stringify(srs.items.q1)}`);
     await page.$$eval(optionButtons, (bs) => { const b = bs.find((x) => x.textContent.trim().startsWith('A')); b && b.click(); });
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(LOCK_WAIT); // a pick locks after LOCK_MS (engine.js)
     const srs2 = await ls(page, SRS);
     check('6e: one review attempt per due date', srs2.items.q1.box === 2, `box after 2nd click=${srs2.items.q1.box}`);
     await context.close();

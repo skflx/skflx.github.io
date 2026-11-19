@@ -11,6 +11,13 @@
 
   /* `draft: true` lists the entry with a visible Draft badge (docs/decisions.md section 9). */
   function draftTag(x) { return x.draft === true ? ' <span class="module-draft">Draft: in progress</span>' : ''; }
+  /* The row's meta line: its facts, each kept whole on one line. The kicker
+     drops a leading subspecialty name, which the group heading above already shows. */
+  function metaLine(x, subInfo, facts) {
+    var k = String(x.kicker || ''), lab = subInfo && subInfo.label ? String(subInfo.label) : '';
+    if (lab && k.toLowerCase().indexOf(lab.toLowerCase()) === 0) k = k.slice(lab.length).replace(/^\s*·\s*/, '');
+    return (k ? [k] : []).concat(facts).map(function (f) { return '<span>' + esc(f) + '</span>'; }).join(' · ');
+  }
   var today = new Date().toISOString().split('T')[0];
   var reviewer = OKSATStore.reviewer();
   /* `unlisted: true` keeps a module or guide reachable by its own URL but out of
@@ -50,8 +57,8 @@
     a.innerHTML =
       '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : m.accent) + '"></div>' +
       '<div class="module-body">' +
-        '<div class="module-label">' + esc(m.kicker) + ' · ' + esc(m.count) + ' questions' + draftTag(m) + '</div>' +
-        '<div class="module-title">' + esc(m.title) + '</div>' +
+        '<div class="module-label">' + metaLine(m, subInfo, [m.count + ' questions']) + '</div>' +
+        '<div class="module-title">' + esc(m.title) + draftTag(m) + '</div>' +
         '<p class="module-desc">' + esc(m.desc) + '</p>' +
         (st.due > 0 ? '<div class="module-due">' + st.due + ' due for review</div>' : '') +
         (st.answered > 0
@@ -78,8 +85,8 @@
     a.innerHTML =
       '<div class="module-accent" style="background:' + hue(subInfo ? subInfo.hue : g.accent) + '"></div>' +
       '<div class="module-body">' +
-        '<div class="module-label">' + esc(g.kicker) + ' · ' + chapters + ' chapters · ~' + Math.round(mins / 60 * 10) / 10 + ' h' + draftTag(g) + '</div>' +
-        '<div class="module-title">' + esc(g.title) + '</div>' +
+        '<div class="module-label">' + metaLine(g, subInfo, [chapters + ' chapters', '~' + Math.round(mins / 60 * 10) / 10 + ' h']) + '</div>' +
+        '<div class="module-title">' + esc(g.title) + draftTag(g) + '</div>' +
         '<p class="module-desc">' + esc(g.desc) + '</p>' +
         (done > 0
           ? '<div class="module-meter"><span class="bar"><span class="fill" style="width:' + pct + '%"></span></span>' +

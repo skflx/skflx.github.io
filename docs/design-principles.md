@@ -24,7 +24,10 @@ tokens, never raw values, so a retheme is a one-block edit.
    boxes) resurfaces misses. A review is a separate attempt: when an item comes
    due it reopens fresh at the gate, with the old answer hidden, and one attempt
    per due date moves only its box and next date. The first attempt is never
-   overwritten.
+   overwritten. A pick or self-grade waits 1.5 s (`LOCK_MS` in
+   `js/oksat/engine.js`) before it locks, with no feedback shown, so a slipped
+   key or thumb can be undone (Esc) or changed; Space/Enter or leaving the item
+   locks it at once.
 6. **Keyboard first.** At the gate, space or enter reveals a memory attempt and
    `c` opens the choices; then 1–4 self-grade a revealed answer, or 1–9 and a–d
    select an option once the choices are open. ←/→ navigate, space/enter advance
@@ -36,6 +39,13 @@ tokens, never raw values, so a retheme is a one-block edit.
 8. **Degrade gracefully.** The engine tolerates sparse modules (no taxonomy, no
    explanations): missing data removes UI rather than breaking it. Storage reads
    are fail-safe.
+9. **Feedback colour is state, never decoration.** Inside a question, red is a
+   miss and green a pass; an option letter is ink until answered, the revealed
+   answer is ruled in the accent, and a self-grade keeps its own colour
+   ("Got it partially" is accent, "Guessed" ochre), never a pass card. Feedback
+   is a faint tint with a coloured left rule, not a filled panel. A partial is
+   neither pass nor miss: it is not counted correct on first attempt, earns
+   half credit in concept mastery, and holds its Leitner box.
 
 ## 2. Colour tokens
 
