@@ -2,7 +2,7 @@
 
 Status and work packages: GitHub issue #266 and its sub-issues. Specs and the decision record: `plans/2026-10-07-ssb-roadmap.md`. This file is the design of what is shipped. Data shape and editorial rules: `docs/authoring-ssb.md`. Image briefs: `docs/ssb-imagegen.md`.
 
-`ssb.html` has two stages over one knowledge graph (`ssb/content/`, validated by `tools/ssb-content.mjs`): the **Specimen** (pick, tree and search identify structures on the reference specimen) and **Scope** (a rigid endoscope through the same specimen, for traversal). Phase 2 deleted everything else: the flap overlay, the mucosal and anatomy states, the population data, the dissection states and the variant lab.
+`ssb.html` has three stages over one knowledge graph (`ssb/content/`, validated by `tools/ssb-content.mjs`): the **Specimen** (pick, tree and search identify structures on the reference specimen), **CT** (the specimen's slices, labelled, with UW's own arrow tips as the reference) and **Scope** (a rigid endoscope through the same specimen, for traversal). Phase 2 deleted everything else: the flap overlay, the mucosal and anatomy states, the population data, the dissection states and the variant lab.
 
 ## 0. What it is
 
@@ -16,7 +16,7 @@ Not a navigation system and not a surgical simulator. Not a clinical reference w
 2. **Label the kind of truth.** The specimen is one real adult anatomy, CT-derived (n = 1), standardized (§5.1). Every view says so.
 3. **Surgical granularity.** Meshes are cut into the smallest unit a surgeon identifies (uncinate, bullar lamella, each frontal recess cell, sphenoid rostrum). A whole "ethmoid bone" mesh does not exist; it is a parent id in the graph.
 4. **Cognition is content.** Hazards, operating principles, preop CT checks and procedure steps are data. They are not rendered in the 3D view in phase 2.
-5. **CT is the native language.** Every 3D position is one keystroke from the CT slices through it, and every CT voxel knows which structure it belongs to.
+5. **CT is the native language.** The CT stage shows the slices through the shared 3D cursor, and every CT voxel knows which structure it belongs to.
 6. **Recall before reveal.** Panels can open as prompts with the answer collapsed.
 7. **The repo's rules do not bend.** No build step, same-origin everything, `script-src 'self'`, stamped assets, guarded storage, escaped text.
 
@@ -32,9 +32,13 @@ Content lives in `ssb/content/*.json`: structures, landmarks, variants, classifi
 
 ## 3. Stages
 
-Both stages share one scene, one selection and one URL state; switching stage never reloads.
+The stages share one selection, one 3D cursor and one URL state; switching stage never reloads.
 
 - **Specimen.** Orbit, pan and zoom. Layer toggles by tissue kind and region; section planes with solid caps register a cut to the CT slice. X-ray draws the bone envelope as fresnel ghosts. Click picks (the order is §6.4); clicking the same pixel again steps deeper through what is under the cursor. The camera is in the URL (`cam`, §6.3). The mucosa layer draws the air spaces as their lining, and from inside the lining pack (open openings) replaces the shells. Landmark markers and labels are a layer. Vessels and nerves are not drawn in the Specimen.
+- **CT.** Axial, coronal and sagittal slices of the specimen volume (§5.5), linked by one crosshair, which is the Specimen's 3D cursor (`at`). CPU-drawn on 2D canvases, so it works without WebGL. Label outlines in the structure's colour; hover names the structure and gives the approximate HU; a click moves the crosshair, and a click that does not drag selects the structure under it. Window presets from `ct.json`, right-drag for level and width. Keys: arrows or wheel scroll, Shift+arrows move the crosshair, 1/2/3 the plane, W the window, O the outlines, U the tips.
+  - The coronal plane is resliced from the axial acquisition (UW's coronal stack is another head, §5.1), and the left half is the mirrored right.
+  - **UW arrow tips** (`ssb/geometry/uw-tips.json`, written by `tools/ssb-pipeline/uw/score.py tips`): the atlas's own labels, the right half only (R > 0, the same rule as the served score). Each tip is drawn on the slice it lies in and coloured by score.py's identity rule (a voxel within 1 voxel carries a label with one of the tip's ids): `--signal-2` our label agrees, `--signal` it disagrees, muted the structure is not segmented. The controls give the counts. The labels are draft; UW's arrows are the reference.
+  - **Frames:** `node tools/ssb-frames.mjs` exports every slice of every plane as the stage draws it (PNG, gitignored `tools/ssb-pipeline/incoming/frames/`) with `frames.json` (per frame: position, structures by voxel count, tips and their states). `--baseline` rewrites `tools/ssb-pipeline/uw/frames-baseline.json` (per-frame tip counts, committed); every run prints its counts beside the baseline and the frames that changed, so a relabel is measured. The per-structure score with confidence intervals stays `score.py`.
 - **Scope.** First-person through a rigid scope that **pivots at the nostril**. Pose = insertion depth, shaft yaw and pitch about the nostril fulcrum, roll, and lens angle (0/30/45/70°). The horizon stays upright. Lighting is a spotlight at the tip with inverse-square falloff and an automatic exposure.
   - Collision: the shaft is sampled against the CT display volume (§5.5). Bone blocks; a blocked pose is clamped to the last free depth, and while the clamp holds the stage says why in one line (`.ssb-scope-block`). Mucosa does not block; the shaft length in mucosa is reported as mucosal contact. At the midline the shaft is clamped at R = 0, except in the nasopharynx.
   - The fulcrum `lm.naris` is the centroid of the vestibule lumen at the alar-rim band.
@@ -79,7 +83,7 @@ The served specimen is one adult head from the UW Interactive CT Sinus Anatomy a
 |---|---|
 | First render (graph + `core` pack) | small enough to paint quickly on a phone |
 | Triangles on screen | bounded per pack (`LIMIT_TRIANGLES` in `js/ssb/geo-specimen.js`) |
-| CT + labels + distance fields | loaded on first entry to Scope |
+| CT + labels + distance fields | loaded on first entry to CT or Scope |
 
 Rendering is on demand (a frame only when something changed), except during camera flights.
 
@@ -87,7 +91,7 @@ The `lining` pack is not part of the boot. It is fetched the first time the muco
 
 ### 5.5 Volumes at runtime
 
-The CT, label and distance volumes are typed arrays in JS (`js/ssb/volume.js`). Slices are CPU-sampled into a 2D canvas. The same arrays answer "what structure is here" (label lookup), "may the scope shaft pass" (label ≠ tissue along sampled points) and "how close is the ICA" (distance-field lookup). `ct.json` carries `dims`, `spacing`, the voxel → RAS `affine`, the value table, the windows and the label file; `loadVolume({ root })` also serves OLSB's Real CT mode from `tbone/`.
+The CT, label and distance volumes are typed arrays in JS (`js/ssb/volume.js`). Slices are CPU-sampled into a 2D canvas (the CT stage, the Scope's inset). The same arrays answer "what structure is here" (label lookup), "may the scope shaft pass" (label ≠ tissue along sampled points) and "how close is the ICA" (distance-field lookup). `ct.json` carries `dims`, `spacing`, the voxel → RAS `affine`, the value table, the windows and the label file; `loadVolume({ root })` also serves OLSB's Real CT mode from `tbone/`.
 
 ### 5.6 Soft tissue and vessels
 
@@ -112,13 +116,15 @@ js/ssb/main.js               entry (type="module"): feature detection, boot, err
 js/ssb/frame.js              the one RAS <-> scene conversion (§4)
 js/ssb/stamps.js             GENERATED: data-asset path -> hash (for fetch URLs)
 js/ssb/graph.js              load, index, search, render text for the knowledge graph
-js/ssb/state.js              the one store (stage, tier, selection, scope, cursor, quality); URL-hash codec; ssb:prefs (guarded)
+js/ssb/state.js              the one store (stage: ct or scope, tier, selection, cursor, quality); URL-hash codec; ssb:prefs (guarded)
 js/ssb/scope.js              the rigid endoscope's geometry and the #scope= codec: pure math, no DOM, no three.js
 js/ssb/scene.js              the 3D stage: renderer, camera, controls, lights, picking, on-demand loop
 js/ssb/materials.js          procedural tissue-material library, one factory per tissue kind
 js/ssb/geo-specimen.js       the specimen's geometry: model packs -> one scene graph and registry; landmarks, CT bounds
 js/ssb/volume.js             the CT and label volumes as typed arrays: loading, affine, slicing, lookup
 js/ssb/mode-specimen.js      the Specimen stage
+js/ssb/mode-ct.js            the CT stage: three linked slice canvases, label outlines, UW tips
+js/ssb/ui-ct.js              the CT controls (plane, window, outlines, tips, colour key)
 js/ssb/mode-endoscope.js     the Scope stage
 js/ssb/ui-specimen.js        the Specimen controls (view, bone, air-space layers, landmarks, section)
 js/ssb/ui-endoscope.js       the Scope controls (pose, lens, stations, proximity HUD)
@@ -127,11 +133,12 @@ js/ssb/ui-search.js          search over the graph
 js/ssb/ui-panel.js           the panel that identifies a structure
 js/vendor/three-<version>/   three.js module build + the addons used (§7)
 ssb/content/*.json           the knowledge graph
-ssb/geometry/*.json          labels, landmarks, sweeps, station poses
+ssb/geometry/*.json          labels, landmarks, sweeps, station poses, UW arrow tips
 ssb/models/, ssb/ct/         pipeline outputs the page loads
 tools/ssb-content.mjs        graph validator (CI); `--queue` prints the owner's review queue
 tools/ssb-pipeline/          offline geometry/CT pipeline
 tools/ssb-fixture-ct.mjs     a synthetic volume in the same format, for tests (never written into ssb/)
+tools/ssb-frames.mjs         every CT slice as a labelled PNG + manifest, and the per-frame tip baseline
 ```
 
 Dependencies are one-way: `main -> mode-* -> {scene, geo-specimen, volume, ui-*} -> {graph, state, scope} -> stamps`; `scene -> materials`. Only `scene` and `geo-specimen` import three.js, and `materials` receives it as an argument. `mode-specimen` and `mode-endoscope` load by dynamic import, so a failure there leaves graph mode alone.
@@ -150,8 +157,8 @@ Dependencies are one-way: `main -> mode-* -> {scene, geo-specimen, volume, ui-*}
 
 One store; everything else subscribes. The URL hash is the shareable state, e.g. `#s=s.uncinate-process&tier=2`, `#scope=R,40,10,-5,90,45`, `#scope=t.frontal-recess-70.R`, `#at=12.5,31,48`, and `q=full|lite`. Parsing is whitelist-only: ids must exist in the graph index, numbers are parsed and clamped, unknown keys are ignored, and nothing from the URL reaches markup except through `textContent`.
 
-- **Keys:** `s` (selected id), `tier` (1–3), `at` (the 3D cursor, `r,a,s` in RAS mm, clamped to the volume's bounds), `cam` (the Specimen's orbit view: camera position then target, `px,py,pz,tx,ty,tz` in RAS mm, one decimal; written only while the Specimen owns the camera, never with `scope`; a sane distance of 5 to 2000 mm between them or it is ignored), `scope` (a pose, or a station link), `q` (§6.4). Earlier keys (`lab`, `ct`, `p`, `step`, `cor`, `pop`, and the phase 2 removals `mu`, `flap`, `anat`, `v`, `dz`) are unknown and ignored.
-- **Stage:** `scope=` opens the Scope; without it the stage is the Specimen.
+- **Keys:** `s` (selected id), `tier` (1–3), `at` (the 3D cursor, `r,a,s` in RAS mm, clamped to the volume's bounds), `cam` (the Specimen's orbit view: camera position then target, `px,py,pz,tx,ty,tz` in RAS mm, one decimal; written only while the Specimen owns the camera, never with `scope`; a sane distance of 5 to 2000 mm between them or it is ignored), `ct` (`ax`, `cor` or `sag`: the CT stage and its active plane; wins over `scope`), `scope` (a pose, or a station link), `q` (§6.4). Earlier keys (`lab`, `p`, `step`, `cor`, `pop`, and the phase 2 removals `mu`, `flap`, `anat`, `v`, `dz`) are unknown and ignored.
+- **Stage:** `ct=` opens CT, `scope=` the Scope; without either the stage is the Specimen.
 - **Tree:** every group starts closed and builds its rows on first open (`ui-tree.js`); a link or selection opens the path to its row. A closed group costs one summary in the DOM.
 
 ### 6.4 Rendering
@@ -161,7 +168,7 @@ One store; everything else subscribes. The URL hash is the shareable state, e.g.
   - Colours come from `css/ssb.css`: one `--ssb-*` token per tissue kind and per cell category, read at boot and on every `html[data-theme]` change. There is no second palette in JS.
   - One compiled program per (kind, hazard, quality).
   - **Quality** `full` or `lite`, chosen at boot from device hints; the hash key `q` overrides it.
-- The Specimen stage follows the site theme. The endoscope stage is dark in both themes (a projector stage).
+- The Specimen stage follows the site theme. The CT views and the endoscope stage are dark in both themes.
 - Labels: DOM overlay with SVG leader lines, few at a time, decluttered by tier.
 - Picking: raycast on click, all intersections kept for click-to-go-deeper, in the order a click takes them (`collectHits`, `mode-specimen.js`): a landmark marker first; then the nearest surface, except that what yields is passed over for what lies behind it: a see-through envelope (the bone in X-ray) and any opaque skin (the external nose, the vestibule's lining). A solid envelope keeps its place. Hover (mouse only) names the first pick beside the pointer; touch has no hover.
 - Camera flights respect `prefers-reduced-motion` (cut instead of fly).
@@ -191,7 +198,7 @@ Escape first, then transform the two allowed inline forms (`[[id]]`, `*em*`). An
 | Graph schema, ids, refs, vocabularies, review gate | `tools/ssb-content.mjs` via `tools/check-data.mjs` | CI |
 | Geometry ↔ graph | every pack node, sweep and landmark resolves to a graph id | CI |
 | Page boots, renders, zero real console errors | `tools/smoke-pages.mjs` entry for `ssb.html` | CI |
-| Behaviour | `tools/test-ssb.mjs`: specimen and scope, unit and page level | CI (two shards) |
+| Behaviour | `tools/test-ssb.mjs`: specimen, scope and ct, unit and page level | CI (two shards) |
 | Citations | an agent matches every `src.*` against an authoritative record and sets `verified` only on a match. `verified` means the work exists as cited, not that it supports the claim | continuous |
 | Medical correctness | adversarial expert-model review, then **the owner** flips `review` to `verified` | continuous |
 

@@ -12,7 +12,7 @@
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
     <script src="js/theme-boot.js?v=61b69b81"></script>
     <link rel="stylesheet" href="css/site.css?v=be7fe5cd">
-    <link rel="stylesheet" href="css/ssb.css?v=f81458ee">
+    <link rel="stylesheet" href="css/ssb.css?v=191524bb">
 </head>
 <body class="ssb-body">
     <header class="site-topbar">
@@ -59,6 +59,7 @@
                 <div class="ssb-stage-mode" id="ssb-stage-mode" role="group" aria-label="Stage">
                     <span class="site-kicker">Stage</span>
                     <button class="site-pill active" type="button" data-stage="specimen" aria-pressed="true" disabled title="The reference specimen: layers, picking, section">Specimen</button>
+                    <button class="site-pill" type="button" data-stage="ct" aria-pressed="false" disabled title="Triplanar CT of the reference specimen, labelled">CT</button>
                     <button class="site-pill" type="button" data-stage="scope" aria-pressed="false" disabled title="Endoscope: first-person view through a rigid scope">Scope</button>
                 </div>
             </div>
@@ -71,6 +72,7 @@
                 </div>
                 <div class="ssb-orient" id="ssb-orient" aria-hidden="true" hidden></div>
                 <p class="ssb-stage-msg" id="ssb-stage-msg" hidden></p>
+                <section class="ssb-ct" id="ssb-ct" aria-label="CT: axial, coronal and sagittal slices" hidden></section>
                 <span class="site-kicker ssb-stage-note" id="ssb-stage-note">Reference specimen &middot; from Interactive CT Sinus Anatomy, Univ. of Washington Radiology &middot; draft</span>
             </div>
         </div>
@@ -87,7 +89,7 @@
         <p class="visually-hidden" id="ssb-live" aria-live="polite"></p>
     </main>
 
-    <script type="module" src="js/ssb/main.js?v=53a7777a"></script>
+    <script type="module" src="js/ssb/main.js?v=5bec7029"></script>
     <script src="js/site.js?v=1dc68e64"></script>
 </body>
 </html>

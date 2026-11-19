@@ -2481,16 +2481,150 @@ async function searchDepthTests(browser, base) {
   await context.close();
 }
 
+/* ---------------- CT: the stage on the synthetic fixture ---------------- */
+
+const FX_ROUTE = /\/ssb\/(ct\/[^?#]+|geometry\/(labels|uw-tips)\.json)(?:[?#].*)?$/;
+const [RSIN, LSIN] = [FX.sites[0].center, FX.sites[1].center];
+/* one tip per state, plus rows the loader must drop */
+const FX_TIPS = {
+  version: 1, tips: [
+    { term: 'maxillary sinus', ids: ['s.maxillary-sinus'], plane: 'axial', n: 1, ras: RSIN, heldout: true },
+    { term: 'nasopharynx', ids: ['s.nasopharynx'], plane: 'axial', n: 2, ras: FX.sites[2].center },
+    { term: 'frontal bone', ids: ['s.frontal-bone'], plane: 'sagittal', n: 3, ras: [5, 0, 0] },
+    { term: '<b>bad</b>', ids: 's.x', ras: [0, 0, 0] },
+    { term: 'nan', ids: [], ras: [0, 'x', 0] },
+  ],
+};
+
+async function openCt(browser, base, hash, { webgl = true } = {}) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  if (!webgl) {
+    await context.addInitScript(() => {
+      const real = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, ...rest) { return typeof type === 'string' && /webgl/i.test(type) ? null : real.call(this, type, ...rest); };
+    });
+  }
+  await context.route(FX_ROUTE, (route) => {
+    const name = new URL(route.request().url()).pathname.replace(/^\//, '');
+    const body = name === 'ssb/geometry/uw-tips.json' ? Buffer.from(JSON.stringify(FX_TIPS)) : FX_U8_FILES[name];
+    if (!body) return route.fulfill({ status: 404, body: 'not found' });
+    return route.fulfill({ status: 200, body, headers: { 'content-type': name.endsWith('.json') ? 'application/json' : 'application/octet-stream' } });
+  });
+  const page = await context.newPage();
+  const errors = collectErrors(page);
+  allErrors.push(errors);
+  await page.goto(`${base}/ssb.html${hash}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await page.waitForFunction(() => window.__ssb.ct && !['idle', 'loading'].includes(window.__ssb.ct.status), null, { timeout: 20000 });
+  await page.waitForFunction(() => Object.values(window.__ssb.ct.renders).every((n) => n > 0), null, { timeout: 20000 });
+  return { context, page, errors };
+}
+const cursorOf = (page) => page.evaluate(() => window.__ssb.ct.cursor);
+const clientOf = (page, plane, ras) => page.evaluate(([p, r]) => window.__ssb.ct.clientOf(p, r), [plane, ras]);
+const settle = (page) => page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+
+function ctStateTests() {
+  const has = () => true;
+  check('CT state: ct=ax|cor|sag (or the full name) parses to the plane; anything else is ignored',
+    parseHash('#ct=cor', has).ct === 'coronal' && parseHash('#ct=sagittal', has).ct === 'sagittal' && !('ct' in parseHash('#ct=COR', has)) && !('ct' in parseHash('#ct=x', has)));
+  check('CT state: a ct link wins over a scope pose in the same hash', parseHash('#ct=ax&scope=t.frontal-recess-45', has).station === undefined);
+  const store = createStore({ has, tierOf: () => 1, hash: '#ct=ax&at=1,2,3', prefs: {} });
+  check('CT state: the hash round-trips (ct, then the crosshair as at=)', store.hash() === '#ct=ax&at=1,2,3', store.hash());
+  store.setCt('sag');
+  const sag = store.hash();
+  store.leaveStage();
+  check('CT state: setCt changes the plane; leaving keeps the shared cursor', sag === '#ct=sag&at=1,2,3' && store.hash() === '#at=1,2,3', `${sag} | ${store.hash()}`);
+}
+
+async function ctTests(browser, base) {
+  {
+    const { context, page, errors } = await openCt(browser, base, `#ct=ax&at=${RSIN.join(',')}`);
+    const info = await page.evaluate(() => ({
+      stage: document.getElementById('ssb-app').dataset.stage,
+      pressed: document.querySelector('#ssb-stage-mode [data-stage="ct"]').getAttribute('aria-pressed'),
+      views: [...document.querySelectorAll('.ssb-ct-view')].map((v) => { const r = v.getBoundingClientRect(); return [r.width, r.height]; }),
+      dims: window.__ssb.ct.dims, cursor: window.__ssb.ct.cursor, hash: location.hash, truth: document.querySelector('.ssb-ct-truth').textContent,
+    }));
+    check('CT: #ct=ax&at=… opens the CT stage on the fixture (pill pressed, three views laid out, crosshair from the URL)',
+      info.stage === 'ct' && info.pressed === 'true' && info.views.length === 3 && info.views.every(([w, h]) => w > 150 && h > 120)
+      && info.dims.join() === '64,56,48' && arrEq(info.cursor, RSIN, 1e-6) && info.hash === `#ct=ax&at=${RSIN.join(',')}`, JSON.stringify(info));
+    check('CT: the truth badge says specimen CT, display values not HU, and draft labels', /Specimen CT/.test(info.truth) && /not HU/.test(info.truth) && /labels draft/.test(info.truth), info.truth);
+
+    const hits = await page.evaluate((sites) => sites.map((s) => window.__ssb.ct.describeAt(s.center)), FX.sites);
+    check('CT: label lookup returns the structure, its graph name and side', hits[0].label === 's.maxillary-sinus.R' && hits[0].graphId === 's.maxillary-sinus'
+      && hits[1].name === `${entity('s.maxillary-sinus').name} (left)` && hits[4].graphId === null, JSON.stringify(hits.map((h) => h.name)));
+
+    const target = [-9, -7, RSIN[2]];
+    const p1 = await clientOf(page, 'axial', target);
+    await page.mouse.click(p1.x, p1.y);
+    await settle(page);
+    const c1 = await cursorOf(page);
+    check('CT: a click in the axial view moves the crosshair in-plane only', Math.abs(c1[0] - target[0]) <= 0.75 && Math.abs(c1[1] - target[1]) <= 0.75 && c1[2] === RSIN[2], JSON.stringify(c1));
+
+    const hov = await clientOf(page, 'axial', LSIN.map((v, n) => (n === 2 ? RSIN[2] : v)));
+    await page.mouse.move(hov.x + 2, hov.y + 2);
+    await page.mouse.move(hov.x, hov.y);
+    await page.waitForFunction(() => !document.querySelector('.ssb-ct-view[data-plane="axial"] .ssb-ct-tip').hidden, null, { timeout: 4000 }).catch(() => {});
+    const tip = await page.evaluate(() => document.querySelector('.ssb-ct-view[data-plane="axial"] .ssb-ct-tip').textContent);
+    check('CT: hovering names the structure under the pointer with ≈ HU', /Maxillary sinus \(left\)/.test(tip) && /HU/.test(tip), tip);
+    await page.mouse.click(hov.x, hov.y);
+    await page.waitForFunction(() => window.__ssb.selection === 's.maxillary-sinus', null, { timeout: 5000 }).catch(() => {});
+    check('CT: clicking a labelled voxel selects its graph entity', (await page.evaluate(() => window.__ssb.selection)) === 's.maxillary-sinus');
+
+    await page.evaluate(() => { location.hash = '#ct=ax&at=0,0,0'; });
+    await page.waitForFunction(() => window.__ssb.ct.cursor[2] === 0);
+    await page.focus('.ssb-ct-view[data-plane="axial"] canvas');
+    await page.keyboard.press('ArrowUp');
+    const up = await cursorOf(page);
+    await page.keyboard.press('2');
+    check('CT keys: ArrowUp scrolls the axial plane one voxel; 2 picks the coronal plane', arrEq(up, [0, 0, 1], 1e-6) && (await page.evaluate(() => window.__ssb.ct.plane)) === 'coronal', JSON.stringify(up));
+
+    /* UW tips: one per state; malformed rows dropped */
+    await page.evaluate((r) => { location.hash = `#ct=ax&at=${r.join(',')}`; }, RSIN);
+    await page.waitForFunction((r) => window.__ssb.ct.cursor.every((v, n) => Math.abs(v - r[n]) < 1e-6), RSIN);
+    await settle(page);
+    const t = await page.evaluate(() => ({ counts: window.__ssb.ct.tips, axial: window.__ssb.ct.tipsOn('axial'), note: document.querySelector('#ssb-ct .ssb-ct-sec-labels').textContent }));
+    check('CT tips: the loader keeps well-formed rows only, and each tip gets its state (agree, disagree, not segmented)',
+      t.counts.total === 3 && t.counts.hit === 1 && t.counts.miss === 1 && t.counts.unlabelled === 1, JSON.stringify(t.counts));
+    check('CT tips: the tip on the current axial slice is drawn, and the controls say how many agree', t.axial.length === 1 && t.axial[0].state === 'hit' && /1 land on the matching label/.test(t.note), JSON.stringify(t));
+    const tp = await page.evaluate(() => { const c = document.querySelector('.ssb-ct-view[data-plane="axial"] canvas').getBoundingClientRect(); const d = window.__ssb.ct.tipsOn('axial')[0]; const k = c.width / document.querySelector('.ssb-ct-view[data-plane="axial"] canvas').width; return { x: c.left + d.x * k, y: c.top + d.y * k }; });
+    await page.mouse.move(tp.x + 1, tp.y + 1);
+    await page.mouse.move(tp.x, tp.y);
+    await settle(page);
+    const tipText = await page.evaluate(() => document.querySelector('.ssb-ct-view[data-plane="axial"] .ssb-ct-tip').textContent);
+    check('CT tips: hovering a tip names UW\'s term and whether our label agrees', tipText === 'UW: maxillary sinus · our label agrees', tipText);
+    await page.focus('.ssb-ct-view[data-plane="axial"] canvas');
+    await page.keyboard.press('u');
+    await settle(page);
+    check('CT tips: U hides them', (await page.evaluate(() => window.__ssb.ct.tipsOn('axial').length)) === 0 && !(await page.isChecked('#ssb-ct-tips')));
+
+    await page.click('#ssb-stage-mode button[data-stage="specimen"]');
+    const back = await page.evaluate(() => ({ hash: location.hash, hidden: document.getElementById('ssb-ct').hidden, stage: document.getElementById('ssb-app').dataset.stage }));
+    await page.click('#ssb-stage-mode button[data-stage="ct"]');
+    const again = await page.evaluate(() => location.hash);
+    check('CT: the Specimen pill leaves CT (the crosshair stays as the shared cursor); the CT pill comes back on the axial plane',
+      !/ct=/.test(back.hash) && /at=/.test(back.hash) && back.hidden && back.stage === 'specimen' && /^#(s=[^&]+&tier=\d&)?ct=ax&at=/.test(again), JSON.stringify({ back, again }));
+    await context.close();
+    check('CT: no console errors', errors.length === 0, JSON.stringify(errors.slice(0, 2)));
+  }
+  {
+    const { context, page } = await openCt(browser, base, '#ct=sag', { webgl: false });
+    const ok = await page.evaluate(() => ({ status: window.__ssb.ct.status, renders: window.__ssb.ct.renders, plane: window.__ssb.ct.plane }));
+    check('CT: works without WebGL (the slices are drawn on 2D canvases)', ok.status === 'ready' && ok.plane === 'sagittal' && Object.values(ok.renders).every((n) => n > 0), JSON.stringify(ok));
+    await context.close();
+  }
+}
+
 /* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
 const SECTIONS = {
   specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); await treeBadgeTests(browser, base); await searchDepthTests(browser, base); },
   scope: async (browser, base) => { scopeWin(); await scopeTests(browser, base); },
+  ct: async (browser, base) => { ctStateTests(); await ctTests(browser, base); },
 };
 
 /* CI runs one shard per job (`--shard i/N`), balanced on measured section times. Every section is in exactly
    one shard, checked here, so a new section cannot be left out of CI: put it in the lightest shard. */
 const SHARDS = [
-  ['scope'],
+  ['scope', 'ct'],
   ['specimen'],
 ];
 {
