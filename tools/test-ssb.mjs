@@ -852,7 +852,8 @@ async function specimenTests(browser, base) {
     /* an entry with no geometry leaves the camera alone and says so */
     const ids = new Set((await specNodes(page)).map((n) => n.id));
     const lmIds = new Set((await spec(page, () => window.__ssb.specimen.landmarks)).map((l) => l.id));
-    const bare = [...GRAPH.values()].map((v) => v.entity).find((e) => e.id.startsWith('s.') && !ids.has(e.id) && !lmIds.has(e.id));
+    const swIds = new Set(Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/sweeps.json'), 'utf8'))).map((k) => k.replace(/\.[LRM]$/, '')));
+    const bare = [...GRAPH.values()].map((v) => v.entity).find((e) => e.id.startsWith('s.') && !ids.has(e.id) && !lmIds.has(e.id) && !swIds.has(e.id));
     const camA = await spec(page, () => window.__ssb.specimen.camera());
     await page.evaluate((id) => { location.hash = `#s=${id}`; }, bare.id);
     await nextFrames(page, 3);
@@ -2434,7 +2435,8 @@ const scopeWin = () => scopeWindow || (scopeWindow = scopeUnitTests());
 /* Tree and search rows carry the 3D badge exactly for entries that have a surface in packs.json. */
 async function treeBadgeTests(browser, base) {
   const packs = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/models/packs.json'), 'utf8')).packs;
-  const surfaced = new Set(Object.values(packs).flatMap((p) => Object.keys(p.nodes)).map((k) => k.replace(/\.[LRM]$/, '')));
+  const sweeps = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/sweeps.json'), 'utf8'));
+  const surfaced = new Set([...Object.values(packs).flatMap((p) => Object.keys(p.nodes)), ...Object.keys(sweeps)].map((k) => k.replace(/\.[LRM]$/, '')));
   const { context, page } = await openSpecimen(browser, base, '');
   await expandTree(page);
   const badged = (sel) => page.evaluate((s) => [...document.querySelectorAll(s)].map((b) => ({ id: b.dataset.id, badge: b.querySelector('.ssb-3d') ? b.querySelector('.ssb-3d').getAttribute('aria-label') : null })), sel);
@@ -2445,6 +2447,8 @@ async function treeBadgeTests(browser, base) {
   const mt = rows.find((r) => r.id === 's.middle-turbinate');
   const un = rows.find((r) => r.id === 's.uncinate-process');
   check('tree: s.middle-turbinate (surfaced) shows the badge; s.uncinate-process (no surface) does not', !!mt && mt.badge === 'has a 3D surface' && !!un && un.badge === null, JSON.stringify([mt, un]));
+  const ica = rows.find((r) => r.id === 's.internal-carotid-artery');
+  check('tree: s.internal-carotid-artery (a tube) shows the badge', !!ica && ica.badge === 'has a 3D surface', JSON.stringify(ica));
 
   await page.fill('#ssb-search', 'sinus');
   const hits = await badged('#ssb-results button[data-id]');
@@ -2614,9 +2618,56 @@ async function ctTests(browser, base) {
   }
 }
 
+/* Vessels and nerves: tubes along the centrelines of sweeps.json. A selected one is drawn and labelled; the layer
+   follows the depth; a click on a tube picks it. */
+async function vesselTests(browser, base) {
+  const sweeps = JSON.parse(fs.readFileSync(path.join(ROOT, 'ssb/geometry/sweeps.json'), 'utf8'));
+  const keys = Object.keys(sweeps).filter((k) => GRAPH.has(k.replace(/\.[LRM]$/, '')));
+  const tierOf = (k) => entity(k.replace(/\.[LRM]$/, '')).tier || 1;
+  const { context, page } = await openSpecimen(browser, base, '');
+  await page.waitForFunction(() => document.querySelector('#ssb-spec-vessels') && !document.querySelector('#ssb-spec-vessels').disabled);
+  check('vessels: no tube is drawn until the layer is on or one is selected', (await spec(page, () => window.__ssb.specimen.tubes.length)) === 0);
+
+  const camA = await spec(page, () => window.__ssb.specimen.camera());
+  await page.evaluate(() => { location.hash = '#s=s.internal-carotid-artery'; });
+  await page.waitForFunction(() => !window.__ssb.specimen.camera().flying);
+  await nextFrames(page, 3);
+  const sel = await spec(page, () => ({ tubes: window.__ssb.specimen.tubes, primary: window.__ssb.specimen.primary, labels: window.__ssb.specimen.labels, cam: window.__ssb.specimen.camera() }));
+  const note = await page.evaluate(() => { const n = document.querySelector('#ssb-panel-body .ssb-geo-note'); return n ? { geo: n.dataset.geo, text: n.textContent } : null; });
+  check('vessels: selecting the ICA draws both sides as tubes, the nearer one primary, and flies to them',
+    sel.tubes.length === 2 && sel.tubes.every((k) => k.startsWith('s.internal-carotid-artery.')) && sel.tubes.includes(sel.primary) && !arrEq(camA.position, sel.cam.position, 0.5), JSON.stringify(sel));
+  check('vessels: the selected tube carries its name label', sel.labels.some((l) => l.id === 's.internal-carotid-artery' && l.text === 'Internal carotid artery'), JSON.stringify(sel.labels));
+  check('vessels: the panel says it is a tube along a traced, partly inferred centreline', !!note && note.geo === 'tube' && /inferred/.test(note.text), JSON.stringify(note));
+
+  const aim = await spec(page, (k) => window.__ssb.specimen.screenOf(k), sel.primary);
+  await page.evaluate(() => { location.hash = '#s=s.maxillary-sinus'; });
+  await page.waitForFunction(() => !window.__ssb.specimen.camera().flying);
+  check('vessels: selecting something else hides the ICA again', (await spec(page, () => window.__ssb.specimen.tubes.length)) === 0);
+
+  await page.click('#ssb-spec-vessels');
+  await nextFrames(page, 2);
+  const t1 = await spec(page, () => window.__ssb.specimen.tubes);
+  const want1 = keys.filter((k) => tierOf(k) <= 1);
+  check('vessels: at depth 1 the layer draws exactly the tier-1 vessels and nerves', t1.length === want1.length && want1.every((k) => t1.includes(k)), `${t1.length} of ${want1.length}`);
+  await page.click('#ssb-tier button[data-tier="3"]');
+  await nextFrames(page, 2);
+  const t3 = await spec(page, () => window.__ssb.specimen.tubes);
+  check('vessels: at depth 3 the layer draws every sweep', t3.length === keys.length && keys.length >= 20, `${t3.length} of ${keys.length}`);
+
+  /* the ICA's screen point from its own selection, the view since unchanged except the selection's flight: re-aim */
+  const aim2 = await spec(page, (k) => window.__ssb.specimen.screenOf(k), sel.primary) || aim;
+  if (aim2) {
+    await page.mouse.click(aim2.x, aim2.y);
+    await nextFrames(page, 2);
+    const picked = await page.evaluate(() => window.__ssb.selection);
+    check('vessels: a click on a tube selects its structure', picked === 's.internal-carotid-artery', String(picked));
+  } else check('vessels: the ICA tube has a clickable point on screen', false);
+  await context.close();
+}
+
 /* Every section, in the order a full run takes them. Each opens its own pages, so any subset runs alone. */
 const SECTIONS = {
-  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); await treeBadgeTests(browser, base); await searchDepthTests(browser, base); },
+  specimen: async (browser, base) => { await specimenUnitTests(); standardSpecimenTests(); liningTests(); await specimenTests(browser, base); await treeBadgeTests(browser, base); await searchDepthTests(browser, base); await vesselTests(browser, base); },
   scope: async (browser, base) => { scopeWin(); await scopeTests(browser, base); },
   ct: async (browser, base) => { ctStateTests(); await ctTests(browser, base); },
 };
