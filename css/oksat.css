@@ -94,6 +94,9 @@ body {
 img { max-width: 100%; display: block; }
 button { font: inherit; cursor: pointer; }
 
+/* Links read as ink with a quiet rule, as in css/site.css (OKSAT pages do not load it). */
+a { color: inherit; text-decoration-color: var(--ok-border); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-color: var(--ok-accent); }
 a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:focus-visible {
   outline: 2px solid var(--ok-accent);
   outline-offset: 3px;
@@ -335,5 +338,15 @@ a:focus-visible, button:focus-visible, [role="radio"]:focus-visible, summary:foc
 .ok-root h1 em, #root h1 em { font-style: normal; }
 
 /* Draft notice: any guide or module with `draft: true` (docs/decisions.md section 9). */
-.module-draft { display: inline-block; white-space: nowrap; margin-left: 0.5rem; padding: 1px 6px; border: 1px solid var(--ok-ochre); color: var(--ok-ochre); font-weight: 600; }
+.module-draft { display: inline-block; white-space: nowrap; margin-left: 0.5rem; padding: 0 6px; border: 1px solid var(--ok-ochre); color: var(--ok-ochre); font-family: var(--ok-font-ui); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; vertical-align: 0.2em; line-height: 1.6; }
+.module-label span { white-space: nowrap; }
 .ok-draft-note { max-width: 46rem; margin: 1rem auto; padding: 0.6rem 0.9rem; border: 1px solid var(--ok-ochre); border-left-width: 4px; font-family: var(--ok-font-ui); font-size: 13px; line-height: 1.5; color: var(--ok-text); }
+
+/* Pending lock (js/oksat/engine.js LOCK_MS): a pick waits, undoable, before it
+   becomes the first attempt. No feedback until it locks. */
+.ok-lockbar { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.75rem; padding: 0.55rem 0.75rem 0.65rem; border: 1px solid var(--ok-border); border-radius: var(--ok-radius); background: var(--ok-surface); font-size: 12px; color: var(--ok-text-muted); overflow: hidden; }
+.ok-lockbar b { color: var(--ok-text); font-weight: 600; }
+.ok-kbd { font-family: var(--ok-font-ui); font-size: 10px; margin-left: 0.35rem; padding: 0 4px; border: 1px solid var(--ok-border); border-radius: 3px; color: var(--ok-text-faint); }
+.ok-lockbar-timer { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--ok-accent); transform-origin: left; animation: ok-lock-drain linear forwards; }
+@keyframes ok-lock-drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .ok-lockbar-timer { animation: none; opacity: 0.5; } }
