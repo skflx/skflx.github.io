@@ -117,7 +117,7 @@
             if (!r || !r.code) return;
             /* cpt-search.js gives each row id cpt-<index> (the same convention search.js uses) */
             var it = makeItem('cpt', String(r.code) + ' ' + String(r.desc || ''), 'CPT · ' + String(r.area || ''),
-                'cpt-search.html#cpt-' + i, [r.code, r.area, r.type, r.ki].join(' '));
+                'cpt-search.html#cpt-' + i, [r.code, r.area, r.type, r.ki, r.cat].join(' '));
             if (it) out.push(it);
         });
         data.cpt = out;

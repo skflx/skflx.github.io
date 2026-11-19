@@ -739,6 +739,31 @@ function checkAirway() {
     `${bad.length} malformed (e.g. ${bad.slice(0, 3).join(' ; ')})`);
 }
 
+/* ====================================================   CPT table (cpt-search.html, search.html, palette)
+   Every row is a 5-digit code listed once, with every field filled,
+   and each key-indicator abbreviation names exactly one category.
+   =========================================================== */
+function checkCpt() {
+  console.log('\nCPT table');
+  let db;
+  try { db = loadWindow(rel('js/cpt-data.js')).CPT_DB; } catch (e) { fail('js/cpt-data.js load: ' + e.message); return; }
+  if (!Array.isArray(db) || !db.length) { fail('CPT_DB is not a non-empty array'); return; }
+  const problems = [];
+  const seen = new Set();
+  const catOf = new Map();
+  db.forEach((r, i) => {
+    const at = `row ${i} (${r && r.code})`;
+    if (!/^\d{5}$/.test(String(r && r.code))) problems.push(`${at}: code is not 5 digits`);
+    ['desc', 'area', 'type', 'ki', 'cat'].forEach((f) => { if (!r || !String(r[f] || '').trim()) problems.push(`${at}: empty ${f}`); });
+    if (seen.has(r.code)) problems.push(`${at}: duplicate code`);
+    seen.add(r.code);
+    if (/[;,]\s*$/.test(String(r.desc))) problems.push(`${at}: desc ends in a dangling separator`);
+    if (catOf.has(r.ki) && catOf.get(r.ki) !== r.cat) problems.push(`${at}: ki ${r.ki} has two categories`);
+    catOf.set(r.ki, r.cat);
+  });
+  ok(!problems.length, `CPT_DB: ${db.length} rows, unique codes, ${catOf.size} key indicators`, 'CPT_DB: ' + problems.join('; '));
+}
+
 /* ====================================================   3. Security invariants (docs/security.md)
    Static checks over every shipped page, so a regression fails CI
    instead of waiting for someone to notice. Regex, not a parser:
@@ -1161,6 +1186,7 @@ checkStamps();
 checkSsb();
 checkFigures();
 checkOlsb();
+checkCpt();
 checkAtlasAndUnlisted();
 checkNoEmails();
 checkReviewItems();
