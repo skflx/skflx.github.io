@@ -760,9 +760,12 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
             };
         });
         /* what the section cut away is not there to be picked */
-        /* a tube is thin: where the ray meets it, it comes before the surfaces, after a marker */
-        const rank = (h) => (h.marker ? 0 : h.tube ? 0.5 : h.yields ? 2 : 1);
-        return out.filter((h) => !clipped(h.point)).sort((a, b) => (rank(a) - rank(b)) || (a.distance - b.distance));
+        /* a tube is thin: where the ray meets it, it comes before the surfaces (after a marker), unless an opaque
+           surface lies in front of it — a solid bone hides the vessel in it, and occlusion stands */
+        const kept = out.filter((h) => !clipped(h.point));
+        const opaque = Math.min(Infinity, ...kept.filter((h) => !h.marker && !h.tube && !h.clear && !h.yields).map((h) => h.distance));
+        const rank = (h) => (h.marker ? 0 : h.tube && h.distance < opaque ? 0.5 : h.yields ? 2 : 1);
+        return kept.sort((a, b) => (rank(a) - rank(b)) || (a.distance - b.distance));
     }
 
     const canvas = stage.canvas;
@@ -1082,7 +1085,7 @@ export function mountSpecimen({ stage, store, graph, dom, orient = null, panel =
         get ready() { return installed; },
         get hasLandmarks() { return landmarks.size > 0; },
         get vesselsOn() { return layers.vessels; },
-        get hasVessels() { return tubes.size > 0 || sweeps.size > 0; },
+        get hasVessels() { return sweeps.size > 0; },
         get mucosaOn() { return layers.mucosa; },
         get noseOn() { return layers.nose; },
         get hasNose() { return !!specimen && [...specimen.nodes.values()].some((m) => m.userData.group === 'nose'); },
