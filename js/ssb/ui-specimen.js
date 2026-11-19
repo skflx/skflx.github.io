@@ -16,23 +16,9 @@
    screen, in the anatomical hues of the axis gizmo.
    ============================================================= */
 import { rasToScene } from './frame.js?v=f554e767';
-import { PLANES, stamped } from './volume.js?v=5cc64ceb';
+import { PLANES } from './volume.js?v=5cc64ceb';
 import { CT_PLANES } from './state.js?v=126b3403';
-
-/* The standardized-specimen note (docs/ssb.md 5.1, O6): shown wherever the volume is shown, when ct.json has
-   a `standard` block. Resolves false when the header is absent or unreadable. */
-const STANDARD_NOTE = 'Standardized specimen: one head’s right half, mirrored, with the septum centred — symmetric by construction, not a real head.';
-let standardAnswer = null;
-function isStandardSpecimen() {
-    if (!standardAnswer) {
-        standardAnswer = Promise.resolve()
-            .then(() => fetch(stamped('ssb/ct/ct.json')))
-            .then((res) => (res.ok ? res.json() : null))
-            .then((meta) => !!(meta && typeof meta === 'object' && meta.standard))
-            .catch(() => false);
-    }
-    return standardAnswer;
-}
+import { STANDARD_NOTE, isStandardSpecimen } from './ui-ct.js?v=8e33ad21';
 
 const SVG = 'http://www.w3.org/2000/svg';
 
